@@ -17,6 +17,12 @@ All tooling MUST use the latest versions, use `pnpm outdated` to check for updat
 - [Notion TypeScript SDK](https://www.npmjs.com/package/@notionhq/client)
 - [Zod](https://www.npmjs.com/package/zod)
 - [tsup](https://tsup.egoist.dev) [package at](https://www.npmjs.com/package/tsup)
+- [commitlint](https://commitlint.js.org)
+
+## Publishing
+
+- [npm](https://www.npmjs.com) - Packages are published to npm with semantic versions.
+- [semantic-release](https://github.com/semantic-release/semantic-release) - Semantic Release is used to AUTOMATICALLY publish packages to npm.
 
 ## Validation
 

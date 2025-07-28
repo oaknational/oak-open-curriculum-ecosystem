@@ -1,5 +1,11 @@
 {
   "no-inline-html": false,
   "line-length": false,
-  "no-duplicate-heading": false
+  "no-duplicate-heading": false,
+  "no-emphasis-as-heading": false,
+  "code-block-style": false,
+  "MD025": false,
+  "MD026": false,
+  "no-alt-text": false,
+  "ol-prefix": false
 }

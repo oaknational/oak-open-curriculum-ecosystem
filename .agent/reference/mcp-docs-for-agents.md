@@ -2307,19 +2307,19 @@ Tools enable AI applications to perform actions on behalf of users. In a travel 
 
 First, it searches for flights using
 
-```
+```typescript
 searchFlights(origin: "NYC", destination: "Barcelona", date: "2024-06-15")
 ```
 
 `searchFlights` queries multiple airlines and returns structured flight options. Once flights are selected, it creates a calendar event with
 
-```
+```typescript
 createCalendarEvent(title: "Barcelona Trip", startDate: "2024-06-15", endDate: "2024-06-22")
 ```
 
 to mark the travel dates. Finally, it sends an out-of-office notification using
 
-```
+```typescript
 sendEmail(to: "team@work.com", subject: "Out of Office", body: "...")
 ```
 
@@ -4731,7 +4731,7 @@ Get started building your own server to use in Claude for Desktop and other clie
 
 In this tutorial, we'll build a simple MCP weather server and connect it to a host, Claude for Desktop. We'll start with a basic setup, and then progress to more complex use cases.
 
-### What we'll be building
+## What we'll be building
 
 Many LLMs do not currently have the ability to fetch the forecast and severe weather alerts. Let's use MCP to solve that!
 
@@ -7263,7 +7263,7 @@ Examples of invalid canonical URIs:
 
 For example, if accessing an MCP server at `https://mcp.example.com`, the authorization request would include:
 
-```
+```http
 &resource=https%3A%2F%2Fmcp.example.com
 ```
 
@@ -7280,7 +7280,7 @@ Specifically:
 1. MCP client **MUST** use the Authorization request header field defined in
    [OAuth 2.1 Section 5.1.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13#section-5.1.1):
 
-```
+```http
 Authorization: Bearer <access-token>
 ```
 
@@ -8115,7 +8115,7 @@ The server **MUST** provide a single HTTP endpoint path (hereafter referred to a
 **MCP endpoint**) that supports both POST and GET methods. For example, this could be a
 URL like `https://example.com/mcp`.
 
-#### Security Warning
+### Security Warning
 
 When implementing Streamable HTTP transport:
 
