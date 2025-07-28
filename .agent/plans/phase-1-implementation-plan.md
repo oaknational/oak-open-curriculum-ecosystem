@@ -46,7 +46,8 @@ Set up a complete development environment with all quality gates operational, en
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./src",
@@ -79,37 +80,53 @@ Set up a complete development environment with all quality gates operational, en
 
 #### 3.1 Create ESLint Configuration
 
-**Task**: Set up ESLint with TypeScript and Prettier
-**File**: `.eslintrc.js`
+**Task**: Set up ESLint 9 with flat config for TypeScript and Prettier
+**File**: `eslint.config.js`
 **Content**:
 
 ```javascript
-module.exports = {
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    ecmaVersion: 2022,
-    sourceType: 'module',
-    project: './tsconfig.json',
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
+
+export default tseslint.config(
+  {
+    ignores: [
+      'dist/',
+      'node_modules/',
+      'coverage/',
+      '**/*.d.ts',
+      '.eslintrc.js',
+      'commitlint.config.js',
+    ],
   },
-  plugins: ['@typescript-eslint', 'prettier'],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'prettier',
-  ],
-  rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-explicit-any': 'error',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/explicit-module-boundary-types': 'error',
-    '@typescript-eslint/no-non-null-assertion': 'error',
-    '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
-    '@typescript-eslint/no-unsafe-assignment': 'error',
-    '@typescript-eslint/no-unsafe-return': 'error',
+  eslint.configs.recommended,
+  ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
+  prettierRecommended,
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
+      '@typescript-eslint/no-unsafe-assignment': 'error',
+      '@typescript-eslint/no-unsafe-return': 'error',
+    },
   },
-  ignorePatterns: ['dist', 'coverage', 'node_modules', '.eslintrc.js'],
-};
+  {
+    files: ['**/*.config.js', '**/*.config.ts'],
+    extends: [tseslint.configs.disableTypeChecked],
+  },
+);
 ```
 
 **Verification**: `pnpm eslint src` runs (may have errors initially)
@@ -199,12 +216,23 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  format: ['cjs', 'esm'],
+  format: ['esm'], // ESM only as requested
   dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
-  minify: false,
+  minify: false, // Keep readable for development
+  target: 'es2022', // Match our tsconfig target
+  platform: 'node',
+  tsconfig: './tsconfig.json',
+  shims: false, // No CJS shims needed for ESM-only
+  external: [
+    // Don't bundle these dependencies
+    '@modelcontextprotocol/sdk',
+    '@notionhq/client',
+    'dotenv',
+    'zod',
+  ],
 });
 ```
 
@@ -229,30 +257,72 @@ export default defineConfig({
 
 ```bash
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-pnpm lint-staged
+echo "🔍 Running pre-commit checks..."
+
+echo "🔤 Running type checks..."
+pnpm type-check
+
+echo "📝 Formatting and linting staged files..."
+pnpm exec lint-staged
+
+echo "🧪 Running tests on changed files..."
+pnpm test:changed
+
+echo "✅ Pre-commit checks completed!"
 ```
 
 **Verification**: File is executable
 
-#### 6.3 Configure Commit Message Hook
+#### 6.3 Configure Pre-push Hook
+
+**Task**: Set up comprehensive pre-push validation
+**File**: `.husky/pre-push`
+**Content**:
+
+```bash
+#!/usr/bin/env sh
+
+echo "🚀 Running pre-push checks..."
+
+# Check formatting (don't modify files)
+echo "📝 Checking formatting..."
+if ! pnpm format:check; then
+  echo "❌ Formatting issues found!"
+  echo "💡 Run 'pnpm format' to fix formatting issues, then commit the changes"
+  exit 1
+fi
+
+# Run full lint (without --fix to avoid modifications)
+echo "🔍 Running full lint..."
+pnpm lint
+
+# Run full type-check
+echo "🔤 Running full type-check..."
+pnpm type-check
+
+# Run full (in-process) test suite
+echo "🧪 Running full test suite..."
+pnpm test
+
+echo "✅ All pre-push checks passed!"
+```
+
+**Verification**: File is executable
+
+#### 6.4 Configure Commit Message Hook
 
 **Task**: Enforce conventional commits
 **File**: `.husky/commit-msg`
 **Content**:
 
 ```bash
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-pnpm commitlint --edit $1
+pnpm dlx commitlint --edit $1
 ```
 
-**Command**: `chmod +x .husky/commit-msg`
 **Verification**: File is executable
 
-#### 6.4 Create lint-staged Configuration
+#### 6.5 Create lint-staged Configuration
 
 **Task**: Configure files to check on commit
 **File**: `.lintstagedrc.json`
@@ -267,14 +337,14 @@ pnpm commitlint --edit $1
 
 **Verification**: Configuration file exists
 
-#### 6.5 Create commitlint Configuration
+#### 6.6 Create commitlint Configuration
 
 **Task**: Configure conventional commit rules
 **File**: `commitlint.config.js`
 **Content**:
 
 ```javascript
-module.exports = {
+export default {
   extends: ['@commitlint/config-conventional'],
 };
 ```
@@ -299,12 +369,13 @@ module.exports = {
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
+    "test:changed": "vitest run --changed",
     "lint": "eslint . --ext .ts,.tsx",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
-    "prepare": "husky install"
+    "prepare": "husky"
   }
 }
 ```
@@ -348,7 +419,8 @@ export async function main(): Promise<void> {
   await server.connect(transport);
 }
 
-if (require.main === module) {
+// Only run if this is the main module
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((error) => {
     console.error('Server error:', error);
     process.exit(1);
@@ -497,7 +569,22 @@ NOTION_API_KEY=your_notion_api_key_here
 
 ```json
 {
+  "name": "oak-notion-mcp",
+  "version": "0.0.0-development",
   "description": "Model Context Protocol server for Notion integration",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "bin": {
+    "oak-notion-mcp": "./dist/index.js"
+  },
+  "files": ["dist"],
   "keywords": ["mcp", "notion", "ai", "llm", "claude"],
   "author": "Oak National Academy",
   "repository": {
@@ -506,11 +593,7 @@ NOTION_API_KEY=your_notion_api_key_here
   },
   "engines": {
     "node": ">=22.0.0"
-  },
-  "bin": {
-    "oak-notion-mcp": "./dist/index.js"
-  },
-  "files": ["dist"]
+  }
 }
 ```
 
@@ -529,7 +612,12 @@ NOTION_API_KEY=your_notion_api_key_here
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
-    "@semantic-release/npm",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
     "@semantic-release/git",
     "@semantic-release/github"
   ]
@@ -611,21 +699,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Verification**: File exists
 
+### 12. GitHub Actions Setup
+
+#### 12.1 Create CI Workflow
+
+**Task**: Set up continuous integration
+**File**: `.github/workflows/ci.yml`
+**Purpose**: Run quality gates on every push and pull request
+
+#### 12.2 Create Release Workflow
+
+**Task**: Set up automated releases
+**File**: `.github/workflows/release.yml`
+**Purpose**: Run semantic-release on push to main branch
+
 ## Completion Checklist
 
-- [ ] All dependencies installed via pnpm
-- [ ] TypeScript configured with strict mode
-- [ ] ESLint and Prettier configured and working
-- [ ] Vitest configured for all test types (E2E tests separated)
-- [ ] Build tool (tsup) configured with proper entry points
-- [ ] Git hooks preventing non-compliant commits
-- [ ] All quality gate scripts working
-- [ ] Initial MCP server skeleton with stdio transport
-- [ ] Server capabilities for resources, tools, and prompts
-- [ ] First unit tests passing
-- [ ] Project builds successfully
-- [ ] Package.json ready for npm publishing
-- [ ] Documentation updated
+- [x] All dependencies installed via pnpm
+- [x] TypeScript configured with strict mode (ESM-only)
+- [x] ESLint 9 flat config and Prettier configured and working
+- [x] Vitest configured for all test types (E2E tests separated)
+- [x] Build tool (tsup) configured with ESM-only output
+- [x] Git hooks preventing non-compliant commits
+- [x] All quality gate scripts working
+- [x] Initial MCP server skeleton with stdio transport
+- [x] Server capabilities for resources, tools, and prompts
+- [x] First unit tests passing
+- [x] Project builds successfully
+- [x] Package.json ready for npm publishing
+- [x] Documentation updated
+- [x] GitHub Actions for CI/CD
 
 ## Next Steps
 
