@@ -28,7 +28,7 @@ Set up a complete development environment with all quality gates operational, en
 #### 1.2 Install Development Dependencies
 
 **Task**: Install all development tools
-**Command**: `pnpm add -D typescript @types/node tsx tsup vitest @vitest/coverage-v8 supertest @types/supertest eslint prettier eslint-config-prettier eslint-plugin-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin husky lint-staged @commitlint/cli @commitlint/config-conventional`
+**Command**: `pnpm add -D typescript @types/node tsx tsup vitest @vitest/coverage-v8 supertest @types/supertest eslint prettier eslint-config-prettier eslint-plugin-prettier @typescript-eslint/parser @typescript-eslint/eslint-plugin husky lint-staged @commitlint/cli @commitlint/config-conventional semantic-release @semantic-release/git @semantic-release/changelog`
 **Verification**:
 
 - All dev dependencies listed in `package.json`
@@ -104,6 +104,9 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-module-boundary-types': 'error',
     '@typescript-eslint/no-non-null-assertion': 'error',
+    '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
+    '@typescript-eslint/no-unsafe-assignment': 'error',
+    '@typescript-eslint/no-unsafe-return': 'error',
   },
   ignorePatterns: ['dist', 'coverage', 'node_modules', '.eslintrc.js'],
 };
@@ -167,8 +170,12 @@ export default defineConfig({
         '**/*.spec.*',
       ],
     },
-    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: ['**/*.e2e.test.*', 'e2e-tests/**'],
+    include: [
+      '**/*.unit.test.ts',
+      '**/*.integration.test.ts', 
+      '**/*.api.test.ts'
+    ],
+    exclude: ['node_modules', 'dist', 'coverage', 'e2e-tests/**'],
     watchExclude: ['node_modules', 'dist', 'coverage'],
   },
 });
@@ -176,11 +183,11 @@ export default defineConfig({
 
 **Verification**: `pnpm vitest run` executes (no tests yet)
 
-**Note**: The default vitest config excludes E2E tests. E2E tests require manual execution with `pnpm test:e2e` because they:
-- Trigger real IO operations
-- May incur API costs
-- Have side effects
-- Should not run in CI/CD pipelines
+**Note**: The vitest config follows the test naming conventions:
+- Unit tests: `*.unit.test.ts` (no IO, no mocks, pure functions only)
+- Integration tests: `*.integration.test.ts` (no IO, simple mocks allowed)
+- API tests: `*.api.test.ts` (no IO, mocks allowed, uses Supertest)
+- E2E tests: `*.e2e.test.ts` (in `e2e-tests/` directory, real IO allowed)
 
 ### 5. Configure Build Tool
 
@@ -319,6 +326,7 @@ module.exports = {
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
+// Pure function - no side effects, returns the same result for same input
 export function createServer(): Server {
   const server = new Server(
     {
@@ -326,7 +334,11 @@ export function createServer(): Server {
       version: '0.0.0-development',
     },
     {
-      capabilities: {},
+      capabilities: {
+        resources: {},
+        tools: {},
+        prompts: {},
+      },
     },
   );
 
@@ -352,7 +364,7 @@ if (require.main === module) {
 #### 8.2 Create Initial Unit Test
 
 **Task**: Write first unit test
-**File**: `src/index.test.ts`
+**File**: `src/index.unit.test.ts`
 **Content**:
 
 ```typescript
@@ -368,15 +380,50 @@ describe('createServer', () => {
     expect(server.serverInfo.version).toBe('0.0.0-development');
   });
 
-  it('should create a server with empty capabilities', () => {
+  it('should create a server with MCP capabilities', () => {
     const server = createServer();
     
-    expect(server.serverInfo.capabilities).toEqual({});
+    expect(server.serverInfo.capabilities).toHaveProperty('resources');
+    expect(server.serverInfo.capabilities).toHaveProperty('tools');
+    expect(server.serverInfo.capabilities).toHaveProperty('prompts');
   });
 });
 ```
 
 **Verification**: `pnpm test:run` shows 2 passing tests
+
+#### 8.3 Create E2E Test Configuration
+
+**Task**: Set up separate Vitest config for E2E tests
+**File**: `vitest.e2e.config.ts`
+**Content**:
+
+```typescript
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['e2e-tests/**/*.e2e.test.ts'],
+    testTimeout: 30000, // E2E tests may take longer
+    hookTimeout: 30000,
+  },
+});
+```
+
+**Verification**: Configuration file exists
+
+#### 8.4 Create E2E Tests Directory
+
+**Task**: Create directory structure for E2E tests
+**Commands**:
+```bash
+mkdir -p e2e-tests
+echo "# E2E Tests\n\nEnd-to-end tests that use real IO operations." > e2e-tests/README.md
+```
+
+**Verification**: `e2e-tests/` directory exists
 
 ### 9. Create Project Configuration Files
 
@@ -436,6 +483,61 @@ pnpm-debug.log*
 ```text
 # Notion API Configuration
 NOTION_API_KEY=your_notion_api_key_here
+
+# Optional: MCP Server Configuration
+# MCP_TIMEOUT=30000
+# MCP_LOG_LEVEL=info
+```
+
+**Verification**: File exists
+
+#### 9.3 Update package.json metadata
+
+**Task**: Add proper package metadata for npm publishing
+**Update**: `package.json`
+**Additional fields to add**:
+
+```json
+{
+  "description": "Model Context Protocol server for Notion integration",
+  "keywords": ["mcp", "notion", "ai", "llm", "claude"],
+  "author": "Oak National Academy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-notion-mcp.git"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "bin": {
+    "oak-notion-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ]
+}
+```
+
+**Verification**: Package metadata is complete
+
+#### 9.4 Create semantic-release configuration
+
+**Task**: Configure automated releases
+**File**: `.releaserc.json`
+**Content**:
+
+```json
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/npm",
+    "@semantic-release/git",
+    "@semantic-release/github"
+  ]
+}
 ```
 
 **Verification**: File exists
@@ -517,13 +619,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] All dependencies installed via pnpm
 - [ ] TypeScript configured with strict mode
 - [ ] ESLint and Prettier configured and working
-- [ ] Vitest configured for all test types
-- [ ] Build tool (tsup) configured
+- [ ] Vitest configured for all test types (E2E tests separated)
+- [ ] Build tool (tsup) configured with proper entry points
 - [ ] Git hooks preventing non-compliant commits
 - [ ] All quality gate scripts working
-- [ ] Initial MCP server skeleton created
+- [ ] Initial MCP server skeleton with stdio transport
+- [ ] Server capabilities for resources, tools, and prompts
 - [ ] First unit tests passing
 - [ ] Project builds successfully
+- [ ] Package.json ready for npm publishing
 - [ ] Documentation updated
 
 ## Next Steps
@@ -533,3 +637,15 @@ Once Phase 1 is complete:
 1. Confirm all quality gates pass
 2. Make initial commit with conventional message
 3. Begin Phase 2: Core MCP Implementation using TDD
+
+## Testing Philosophy Reminder
+
+As per our testing strategy:
+- **Always use TDD and BDD in parallel**
+- **Prefer pure functions** - Design code to minimize side effects
+- **Test hierarchy**: Unit > Integration > API > E2E
+- **No IO in tests** except E2E tests
+- **No mocks in unit tests** - Unit tests verify pure functions only
+- **Co-locate tests** with the code they test (except E2E)
+
+Remember: Write tests FIRST, then write the minimal code to make them pass.
