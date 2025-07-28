@@ -12,7 +12,7 @@ This document enables best practice development of the Oak Notion MCP Server. Re
 
 ## Grounding
 
-Every third task must be "GROUNDING: read GO.md and follow all instructions"
+Roughly every third task must be "GROUNDING: read GO.md and follow all instructions"
 
 ## Action
 
