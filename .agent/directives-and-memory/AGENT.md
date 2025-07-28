@@ -1,6 +1,6 @@
 # AGENT.md
 
-This file provides guidance to AI agents when working with code in this repository.
+This file provides guidance to AI agents when working with code in this repository. Read ALL of it first, and then follow the instructions.
 
 ## Project Overview
 
@@ -75,6 +75,22 @@ The `.env` file should contain:
 ```env
 NOTION_API_KEY=your_notion_api_key_here
 ```
+
+## Development Practices
+
+- **Branching**: GitHub flow (feature branches → main)
+- **Commits**: Conventional Commits format enforced by commitlint
+- **Code Style**: Prefer pure functions, clean architecture
+- **All IO must be mocked** except in E2E tests
+
+See detailed practices in:
+
+- [High Level Architecture](../../docs/high-level-architecture.md)
+- [Development Practice](../../docs/development-practice.md)
+- [TypeScript Practice](../../docs/typescript-practice.md)
+- [Testing and Development Strategy](../../docs/testing-and-development-strategy.md)
+- [Tooling](../../docs/tooling.md)
+- [Safety and Security](../../docs/safety-and-security.md)
 
 ## Current Project State
 
