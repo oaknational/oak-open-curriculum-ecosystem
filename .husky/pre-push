@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+echo "🚀 Running pre-push checks..."
+
+# Check formatting (don't modify files)
+echo "📝 Checking formatting..."
+if ! pnpm format:check; then
+  echo "❌ Formatting issues found!"
+  echo "💡 Run 'pnpm format' to fix formatting issues, then commit the changes"
+  exit 1
+fi
+
+# Run full lint (without --fix to avoid modifications)
+echo "🔍 Running full lint..."
+pnpm lint
+
+# Run full type-check
+echo "🔤 Running full type-check..."
+pnpm type-check
+
+# Run full (in-process) test suite
+echo "🧪 Running full test suite..."
+pnpm test
+
+echo "✅ All pre-push checks passed!"
