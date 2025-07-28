@@ -10,12 +10,14 @@ The quality gates must be run after all major changes, and before each commit:
 - `pnpm test` - Testing (Vitest - excludes E2E tests)
 - `pnpm build` - Build verification (tsup)
 
+Where the quality gates reveal an issue, the issue must be fixed, regardless of the location or cause. There is no such thing as an acceptable failure, ever.
+
 ## Design Principles
 
 ### Code Level
 
+- **Prefer PURE functions** - almost all code should be pure functions with NO SIDE EFFECTS
 - **DRY, KISS, and YAGNI** - Avoid duplication, keep it simple, build only what's needed
-- **Pure functions** - Prefer functions without side effects for testability
 - **Mockable IO** - All external interactions must be injectable/mockable
 
 ### Architecture Level

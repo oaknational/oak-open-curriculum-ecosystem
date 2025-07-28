@@ -126,6 +126,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
   - [ ] Security best practices guide
 - [ ] **Example Configurations**:
   - [ ] Example `.mcp.json` for Claude Desktop:
+
     ```json
     {
       "mcpServers": {
@@ -139,8 +140,10 @@ Create a production-ready MCP server that safely exposes Notion resources and to
       }
     }
     ```
+
   - [ ] Example configurations for other MCP clients
   - [ ] Sample Notion workspace setup guide
+
 - [ ] **Distribution**:
   - [ ] NPM package configuration
   - [ ] Semantic versioning with conventional commits
@@ -219,21 +222,25 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 ## Development Standards
 
 ### Code Design
+
 - **DRY, KISS, YAGNI** - Avoid duplication, keep it simple, build only what's needed
 - **Pure functions preferred** - Minimize side effects for testability
 - **Clear boundaries** - Well-defined interfaces between modules
 
 ### Architecture
+
 - **SOLID principles** (loosely) - Focus on single responsibility
 - **Clean Architecture** - Separate concerns into layers
 - **Mockable IO** - All external interactions must be injectable
 
 ### Version Control
+
 - **GitHub flow** - Feature branches merge to main
 - **Conventional commits** - Enforced by commitlint
 - **Semantic versioning** - Automated releases via semantic-release
 
 ### Tooling
+
 - **Latest versions** - All tools must use latest versions (check with `pnpm outdated`)
 - **Node.js 22+** - Required runtime version
 - **pnpm only** - No npm or yarn allowed
@@ -241,18 +248,21 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 ## Expected User Experience
 
 ### Installation (< 5 minutes)
+
 1. User creates Notion integration and gets API key
 2. User adds server to Claude Desktop via `.mcp.json`
 3. User sets `NOTION_API_KEY` environment variable
 4. Server automatically connects when Claude Desktop starts
 
 ### Usage Examples
+
 - **Reading**: "Show me all tasks due this week from my project database"
 - **Searching**: "Find all pages mentioning 'Q4 planning'"
 - **Writing** (with confirmation): "Add a new task to my database for reviewing the sales report"
 - **Analysis**: "Summarize the key decisions from yesterday's meeting notes"
 
 ### Safety Features
+
 - All write operations show preview and require explicit confirmation
 - Clear indication of what will be modified
 - Audit trail of all operations performed

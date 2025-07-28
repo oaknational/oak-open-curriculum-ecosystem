@@ -1,0 +1,1 @@
+great! As you install things 1) use pnpm, and add pnpm as a devdependency of the project, 2) use `pnpm outdated` _before_ you write any config, and use the internet to check that the config you write is correct for the latest version of each tool
