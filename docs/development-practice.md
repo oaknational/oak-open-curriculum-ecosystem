@@ -12,6 +12,8 @@ The quality gates must be run after all major changes, and before each commit:
 
 Where the quality gates reveal an issue, the issue must be fixed, regardless of the location or cause. There is no such thing as an acceptable failure, ever.
 
+NEVER disable any quality gates or Git hooks.
+
 ## Design Principles
 
 ### Code Level

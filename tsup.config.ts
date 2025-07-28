@@ -12,11 +12,7 @@ export default defineConfig({
   platform: 'node',
   tsconfig: './tsconfig.json',
   shims: false, // No CJS shims needed for ESM-only
-  external: [
-    // Don't bundle these dependencies
-    '@modelcontextprotocol/sdk',
-    '@notionhq/client',
-    'dotenv',
-    'zod',
-  ],
+  // Bundle all dependencies for standalone execution
+  // Only mark Node.js built-ins as external
+  noExternal: [/@modelcontextprotocol\/sdk/, /@notionhq\/client/, /dotenv/, /zod/],
 });
