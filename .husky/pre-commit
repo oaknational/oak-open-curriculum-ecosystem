@@ -8,6 +8,7 @@ pnpm type-check
 echo "📝 Formatting and linting staged files..."
 pnpm exec lint-staged
 
+# This may not find any relevant tests, that is fine.
 echo "🧪 Running tests on changed files..."
 pnpm test:changed
 
