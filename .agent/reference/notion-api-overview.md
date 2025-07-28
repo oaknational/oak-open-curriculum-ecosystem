@@ -117,13 +117,13 @@ Create integrations that allow for the customization of how shared links are pre
 > 🔑
 >
 > Link Preview Integrations differ from public integrations. Review the [Link Preview guide](https://developers.notion.com/docs/build-a-link-preview-integration).
-
+>
 > 🛑
 >
 > To build a Link Preview integration, developers must first apply for access to the feature through the [Notion Link Preview API request form](https://notionup.typeform.com/to/BXheLK4Z?typeform-source=developers.notion.com).
 >
 > Link Preview integrations published for distribution require a review from Notion's platform and security teams.
-
+>
 > 🔗 Quick Links
 >
 > - [Introduction to Link Preview integrations](https://developers.notion.com/docs/link-previews)
