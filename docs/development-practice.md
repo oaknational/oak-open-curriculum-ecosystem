@@ -2,21 +2,46 @@
 
 ## Quality Gates
 
-The quality gates are
+The quality gates must be run after all major changes, and before each commit:
 
-- `pnpm format` - Prettier
-- `pnpm type-check` - TypeScript
-- `pnpm lint` - ESLint
-- `pnpm test` - Jest
-- `pnpm build` - tsup
+- `pnpm format` - Code formatting (Prettier)
+- `pnpm type-check` - Type checking (TypeScript strict mode)
+- `pnpm lint` - Linting (ESLint)
+- `pnpm test` - Testing (Vitest - excludes E2E tests)
+- `pnpm build` - Build verification (tsup)
 
-The quality gates must be run after all major changes, and before each commit.
+## Design Principles
 
-## Branching Strategy
+### Code Level
 
-- We use the [Github flow branching strategy](https://docs.github.com/en/get-started/using-github/github-flow).
-- All changes must be made in feature branches, and merged into the main branch.
+- **DRY, KISS, and YAGNI** - Avoid duplication, keep it simple, build only what's needed
+- **Pure functions** - Prefer functions without side effects for testability
+- **Mockable IO** - All external interactions must be injectable/mockable
 
-## Commit Messages
+### Architecture Level
 
-- We use the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format, enforced with `commitlint`.
+- **SOLID principles** (loosely) - Focus on single responsibility and dependency inversion
+- **Clean Architecture** (loosely) - Separate concerns into layers
+- **Strict boundaries** - Clear interfaces between modules, no leaky abstractions
+- **Single responsibility** - Each module/class/function does one thing well
+- **TypeScript best practices** - See [TypeScript Practice](typescript-practice.md)
+
+## Git Workflow
+
+### Branching Strategy
+
+- [GitHub flow](https://docs.github.com/en/get-started/using-github/github-flow) - feature branches merge to main
+- All changes via pull requests
+- Main branch must always be deployable
+
+### Commit Messages
+
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format
+- Enforced by `commitlint` pre-commit hook
+- Examples: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
+
+## Related Documentation
+
+- [Testing Strategy](testing-and-development-strategy.md) - TDD/BDD approach
+- [TypeScript Practice](typescript-practice.md) - Type safety rules
+- [Tooling](tooling.md) - Development tools and versions
