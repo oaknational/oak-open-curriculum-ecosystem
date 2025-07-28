@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+echo "🔍 Running pre-commit checks..."
+
+echo "🔤 Running type checks..."
+pnpm type-check
+
+echo "📝 Formatting and linting staged files..."
+pnpm exec lint-staged
+
+echo "🧪 Running tests on changed files..."
+pnpm test:changed
+
+echo "✅ Pre-commit checks completed!"
