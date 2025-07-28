@@ -1,6 +1,7 @@
 <!-- cspell:disable -->
 <!-- https://github.com/makenotion/notion-sdk-js -->
 <!-- https://www.npmjs.com/package/@notionhq/client -->
+
 # Notion SDK for JavaScript
 
 A simple and easy to use client for the [Notion API](https://developers.notion.com).
@@ -40,12 +41,12 @@ npm install @notionhq/client
 Import and initialize a client using an **integration token** or an OAuth **access token**.
 
 ```js
-const { Client } = require("@notionhq/client")
+const { Client } = require('@notionhq/client');
 
 // Initializing a client
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
-})
+});
 ```
 
 Make a request to any Notion API endpoint.
@@ -53,15 +54,15 @@ Make a request to any Notion API endpoint.
 > See the complete list of endpoints in the [API reference](https://developers.notion.com/reference).
 
 ```js
-;(async () => {
-  const listUsersResponse = await notion.users.list({})
-})()
+(async () => {
+  const listUsersResponse = await notion.users.list({});
+})();
 ```
 
 Each method returns a `Promise` which resolves the response.
 
 ```js
-console.log(listUsersResponse)
+console.log(listUsersResponse);
 ```
 
 ```js
@@ -86,14 +87,14 @@ Endpoint parameters are grouped into a single object. You don't need to remember
 
 ```js
 const myPage = await notion.databases.query({
-  database_id: "897e5a76-ae52-4b48-9fdf-e71f5945d1af",
+  database_id: '897e5a76-ae52-4b48-9fdf-e71f5945d1af',
   filter: {
-    property: "Landmark",
+    property: 'Landmark',
     rich_text: {
-      contains: "Bridge",
+      contains: 'Bridge',
     },
   },
-})
+});
 ```
 
 ### Handling errors
@@ -103,19 +104,19 @@ If the API returns an unsuccessful response, the returned `Promise` rejects with
 The error contains properties from the response, and the most helpful is `code`. You can compare `code` to the values in the `APIErrorCode` object to avoid misspelling error codes.
 
 ```js
-const { Client, APIErrorCode } = require("@notionhq/client")
+const { Client, APIErrorCode } = require('@notionhq/client');
 
 try {
-  const notion = new Client({ auth: process.env.NOTION_TOKEN })
+  const notion = new Client({ auth: process.env.NOTION_TOKEN });
   const myPage = await notion.databases.query({
     database_id: databaseId,
     filter: {
-      property: "Landmark",
+      property: 'Landmark',
       rich_text: {
-        contains: "Bridge",
+        contains: 'Bridge',
       },
     },
-  })
+  });
 } catch (error) {
   if (error.code === APIErrorCode.ObjectNotFound) {
     //
@@ -123,7 +124,7 @@ try {
     //
   } else {
     // Other error handling code
-    console.error(error)
+    console.error(error);
   }
 }
 ```
@@ -135,12 +136,12 @@ The client emits useful information to a logger. By default, it only emits warni
 If you're debugging an application, and would like the client to log response bodies, set the `logLevel` option to `LogLevel.DEBUG`.
 
 ```js
-const { Client, LogLevel } = require("@notionhq/client")
+const { Client, LogLevel } = require('@notionhq/client');
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
   logLevel: LogLevel.DEBUG,
-})
+});
 ```
 
 You may also set a custom `logger` to emit logs to a destination other than `stdout`. A custom logger is a function which is called with 3 parameters: `logLevel`, `message`, and `extraInfo`. The custom logger should not return a value.
@@ -173,24 +174,24 @@ the `APIErrorCode` enum are returned from the server. Codes in the
 try {
   const response = await notion.databases.query({
     /* ... */
-  })
+  });
 } catch (error: unknown) {
   if (isNotionClientError(error)) {
     // error is now strongly typed to NotionClientError
     switch (error.code) {
       case ClientErrorCode.RequestTimeout:
         // ...
-        break
+        break;
       case APIErrorCode.ObjectNotFound:
         // ...
-        break
+        break;
       case APIErrorCode.Unauthorized:
         // ...
-        break
+        break;
       // ...
       default:
         // you could even take advantage of exhaustiveness checking
-        assertNever(error.code)
+        assertNever(error.code);
     }
   }
 }
@@ -214,17 +215,17 @@ Here is an example of using a type guard:
 
 ```typescript
 const fullOrPartialPages = await notion.databases.query({
-  database_id: "897e5a76-ae52-4b48-9fdf-e71f5945d1af",
-})
+  database_id: '897e5a76-ae52-4b48-9fdf-e71f5945d1af',
+});
 for (const page of fullOrPartialPages.results) {
   if (!isFullPageOrDatabase(page)) {
-    continue
+    continue;
   }
   // The page variable has been narrowed from
   //      PageObjectResponse | PartialPageObjectResponse | DatabaseObjectResponse | PartialDatabaseObjectResponse
   // to
   //      PageObjectResponse | DatabaseObjectResponse.
-  console.log("Created at:", page.created_time)
+  console.log('Created at:', page.created_time);
 }
 ```
 
@@ -283,7 +284,7 @@ An array with results from the API.
 ```javascript
 const blocks = await collectPaginatedAPI(notion.blocks.children.list, {
   block_id: parentBlockId,
-})
+});
 // Do something with blocks.
 ```
 

@@ -1,4 +1,5 @@
 <!-- cSpell:disable -->
+
 # Model Context Protocol (MCP)
 
 > Learn how to set up MCP with Claude Code.
@@ -65,16 +66,16 @@ claude mcp remove my-server
 
 > **💡 Tips**
 >
-> * Use the `-s` or `--scope` flag to specify where the configuration is stored:
->   * `local` (default): Available only to you in the current project (was called `project` in older versions)
->   * `project`: Shared with everyone in the project via `.mcp.json` file
->   * `user`: Available to you across all projects (was called `global` in older versions)
-> * Set environment variables with `-e` or `--env` flags (e.g., `-e KEY=value`)
-> * Configure MCP server startup timeout using the MCP\_TIMEOUT environment variable (e.g., `MCP_TIMEOUT=10000 claude` sets a 10-second timeout)
-> * Check MCP server status any time using the `/mcp` command within Claude Code
-> * MCP follows a client-server architecture where Claude Code (the client) can connect to multiple specialized servers
-> * Claude Code supports SSE (Server-Sent Events) and streamable HTTP servers for real-time communication
-> * Use `/mcp` to authenticate with remote servers that require OAuth 2.0 authentication
+> - Use the `-s` or `--scope` flag to specify where the configuration is stored:
+>   - `local` (default): Available only to you in the current project (was called `project` in older versions)
+>   - `project`: Shared with everyone in the project via `.mcp.json` file
+>   - `user`: Available to you across all projects (was called `global` in older versions)
+> - Set environment variables with `-e` or `--env` flags (e.g., `-e KEY=value`)
+> - Configure MCP server startup timeout using the MCP_TIMEOUT environment variable (e.g., `MCP_TIMEOUT=10000 claude` sets a 10-second timeout)
+> - Check MCP server status any time using the `/mcp` command within Claude Code
+> - MCP follows a client-server architecture where Claude Code (the client) can connect to multiple specialized servers
+> - Claude Code supports SSE (Server-Sent Events) and streamable HTTP servers for real-time communication
+> - Use `/mcp` to authenticate with remote servers that require OAuth 2.0 authentication
 >
 > **⚠️ Warning - Windows Users**
 >
@@ -145,9 +146,9 @@ claude mcp add my-user-server -s user /path/to/server
 
 Select your scope based on:
 
-* **Local scope**: Personal servers, experimental configurations, or sensitive credentials specific to one project
-* **Project scope**: Team-shared servers, project-specific tools, or services required for collaboration
-* **User scope**: Personal utilities needed across multiple projects, development tools, or frequently-used services
+- **Local scope**: Personal servers, experimental configurations, or sensitive credentials specific to one project
+- **Project scope**: Team-shared servers, project-specific tools, or services required for collaboration
+- **User scope**: Personal utilities needed across multiple projects, development tools, or frequently-used services
 
 ### Environment variable expansion in `.mcp.json`
 
@@ -155,17 +156,17 @@ Claude Code supports environment variable expansion in `.mcp.json` files, allowi
 
 **Supported syntax:**
 
-* `${VAR}` - Expands to the value of environment variable `VAR`
-* `${VAR:-default}` - Expands to `VAR` if set, otherwise uses `default`
+- `${VAR}` - Expands to the value of environment variable `VAR`
+- `${VAR:-default}` - Expands to `VAR` if set, otherwise uses `default`
 
 **Expansion locations:**
 Environment variables can be expanded in:
 
-* `command` - The server executable path
-* `args` - Command-line arguments
-* `env` - Environment variables passed to the server
-* `url` - For SSE/HTTP server types
-* `headers` - For SSE/HTTP server authentication
+- `command` - The server executable path
+- `args` - Command-line arguments
+- `env` - Environment variables passed to the server
+- `url` - For SSE/HTTP server types
+- `headers` - For SSE/HTTP server authentication
 
 **Example with variable expansion:**
 
@@ -206,10 +207,10 @@ Within Claude Code, use the `/mcp` command to manage authentication:
 
 This opens an interactive menu where you can:
 
-* View connection status for all servers
-* Authenticate with servers requiring OAuth
-* Clear existing authentication
-* View server capabilities
+- View connection status for all servers
+- Authenticate with servers requiring OAuth
+- Clear existing authentication
+- View server capabilities
 
 ### Complete the OAuth flow
 
@@ -222,10 +223,10 @@ When you select "Authenticate" for a server:
 
 > **💡 Tips**
 >
-> * Authentication tokens are stored securely and refreshed automatically
-> * Use "Clear authentication" in the `/mcp` menu to revoke access
-> * If your browser doesn't open automatically, copy the provided URL
-> * OAuth authentication works with both SSE and HTTP transports
+> - Authentication tokens are stored securely and refreshed automatically
+> - Use "Clear authentication" in the `/mcp` menu to revoke access
+> - If your browser doesn't open automatically, copy the provided URL
+> - OAuth authentication works with both SSE and HTTP transports
 
 ## Connect to a Postgres MCP server
 
@@ -253,10 +254,10 @@ claude mcp add postgres-server /path/to/postgres-mcp-server --connection-string 
 
 > **💡 Tips**
 >
-> * The Postgres MCP server provides read-only access for safety
-> * Claude can help you explore database structure and run analytical queries
-> * You can use this to quickly understand database schemas in unfamiliar projects
-> * Make sure your connection string uses appropriate credentials with minimum required permissions
+> - The Postgres MCP server provides read-only access for safety
+> - Claude can help you explore database structure and run analytical queries
+> - You can use this to quickly understand database schemas in unfamiliar projects
+> - Make sure your connection string uses appropriate credentials with minimum required permissions
 
 ## Add MCP servers from JSON configuration
 
@@ -280,9 +281,9 @@ claude mcp get weather-api
 
 > **💡 Tips**
 >
-> * Make sure the JSON is properly escaped in your shell
-> * The JSON must conform to the MCP server configuration schema
-> * You can use `-s global` to add the server to your global configuration instead of the project-specific one
+> - Make sure the JSON is properly escaped in your shell
+> - The JSON must conform to the MCP server configuration schema
+> - You can use `-s global` to add the server to your global configuration instead of the project-specific one
 
 ## Import MCP servers from Claude Desktop
 
@@ -307,11 +308,11 @@ claude mcp list
 
 > **💡 Tips**
 >
-> * This feature only works on macOS and Windows Subsystem for Linux (WSL)
-> * It reads the Claude Desktop configuration file from its standard location on those platforms
-> * Use the `-s global` flag to add servers to your global configuration
-> * Imported servers will have the same names as in Claude Desktop
-> * If servers with the same names already exist, they will get a numerical suffix (e.g., `server_1`)
+> - This feature only works on macOS and Windows Subsystem for Linux (WSL)
+> - It reads the Claude Desktop configuration file from its standard location on those platforms
+> - Use the `-s global` flag to add servers to your global configuration
+> - Imported servers will have the same names as in Claude Desktop
+> - If servers with the same names already exist, they will get a numerical suffix (e.g., `server_1`)
 
 ## Use Claude Code as an MCP server
 
@@ -338,9 +339,9 @@ You can connect to Claude Code MCP server from any MCP client, such as Claude De
 
 > **💡 Tips**
 >
-> * The server provides access to Claude's tools like View, Edit, LS, etc.
-> * In Claude Desktop, try asking Claude to read files in a directory, make edits, and more.
-> * Note that this MCP server is simply exposing Claude Code's tools to your MCP client, so your own client is responsible for implementing user confirmation for individual tool calls.
+> - The server provides access to Claude's tools like View, Edit, LS, etc.
+> - In Claude Desktop, try asking Claude to read files in a directory, make edits, and more.
+> - Note that this MCP server is simply exposing Claude Code's tools to your MCP client, so your own client is responsible for implementing user confirmation for individual tool calls.
 
 ## Use MCP resources
 
@@ -374,10 +375,10 @@ You can reference multiple resources in a single prompt:
 
 > **💡 Tips**
 >
-> * Resources are automatically fetched and included as attachments when referenced
-> * Resource paths are fuzzy-searchable in the @ mention autocomplete
-> * Claude Code automatically provides tools to list and read MCP resources when servers support them
-> * Resources can contain any type of content that the MCP server provides (text, JSON, structured data, etc.)
+> - Resources are automatically fetched and included as attachments when referenced
+> - Resource paths are fuzzy-searchable in the @ mention autocomplete
+> - Claude Code automatically provides tools to list and read MCP resources when servers support them
+> - Resources can contain any type of content that the MCP server provides (text, JSON, structured data, etc.)
 
 ## Use MCP prompts as slash commands
 
@@ -409,7 +410,7 @@ Many prompts accept arguments. Pass them space-separated after the command:
 
 > **💡 Tips**
 >
-> * MCP prompts are dynamically discovered from connected servers
-> * Arguments are parsed based on the prompt's defined parameters
-> * Prompt results are injected directly into the conversation
-> * Server and prompt names are normalized (spaces become underscores)
+> - MCP prompts are dynamically discovered from connected servers
+> - Arguments are parsed based on the prompt's defined parameters
+> - Prompt results are injected directly into the conversation
+> - Server and prompt names are normalized (spaces become underscores)

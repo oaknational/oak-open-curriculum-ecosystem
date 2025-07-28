@@ -170,11 +170,7 @@ export default defineConfig({
         '**/*.spec.*',
       ],
     },
-    include: [
-      '**/*.unit.test.ts',
-      '**/*.integration.test.ts', 
-      '**/*.api.test.ts'
-    ],
+    include: ['**/*.unit.test.ts', '**/*.integration.test.ts', '**/*.api.test.ts'],
     exclude: ['node_modules', 'dist', 'coverage', 'e2e-tests/**'],
     watchExclude: ['node_modules', 'dist', 'coverage'],
   },
@@ -184,6 +180,7 @@ export default defineConfig({
 **Verification**: `pnpm vitest run` executes (no tests yet)
 
 **Note**: The vitest config follows the test naming conventions:
+
 - Unit tests: `*.unit.test.ts` (no IO, no mocks, pure functions only)
 - Integration tests: `*.integration.test.ts` (no IO, simple mocks allowed)
 - API tests: `*.api.test.ts` (no IO, mocks allowed, uses Supertest)
@@ -374,7 +371,7 @@ import { createServer } from './index';
 describe('createServer', () => {
   it('should create a server with correct name and version', () => {
     const server = createServer();
-    
+
     expect(server).toBeDefined();
     expect(server.serverInfo.name).toBe('oak-notion-mcp');
     expect(server.serverInfo.version).toBe('0.0.0-development');
@@ -382,7 +379,7 @@ describe('createServer', () => {
 
   it('should create a server with MCP capabilities', () => {
     const server = createServer();
-    
+
     expect(server.serverInfo.capabilities).toHaveProperty('resources');
     expect(server.serverInfo.capabilities).toHaveProperty('tools');
     expect(server.serverInfo.capabilities).toHaveProperty('prompts');
@@ -418,6 +415,7 @@ export default defineConfig({
 
 **Task**: Create directory structure for E2E tests
 **Commands**:
+
 ```bash
 mkdir -p e2e-tests
 echo "# E2E Tests\n\nEnd-to-end tests that use real IO operations." > e2e-tests/README.md
@@ -512,9 +510,7 @@ NOTION_API_KEY=your_notion_api_key_here
   "bin": {
     "oak-notion-mcp": "./dist/index.js"
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"]
 }
 ```
 
@@ -603,6 +599,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial project setup with TypeScript
 - Quality gates configuration (ESLint, Prettier, TypeScript)
 - Testing framework setup (Vitest)
@@ -641,6 +638,7 @@ Once Phase 1 is complete:
 ## Testing Philosophy Reminder
 
 As per our testing strategy:
+
 - **Always use TDD and BDD in parallel**
 - **Prefer pure functions** - Design code to minimize side effects
 - **Test hierarchy**: Unit > Integration > API > E2E
