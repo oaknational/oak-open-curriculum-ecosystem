@@ -19,6 +19,11 @@ All tooling MUST use the latest versions, use `pnpm outdated` to check for updat
 - [tsup](https://tsup.egoist.dev) [package at](https://www.npmjs.com/package/tsup)
 - [commitlint](https://commitlint.js.org)
 
+## Running
+
+- [tsx](https://www.npmjs.com/package/tsx) for directly running the TypeScript
+- [Node.js](https://nodejs.org) 22+ for running the compiled JavaScript
+
 ## Publishing
 
 - [npm](https://www.npmjs.com) - Packages are published to npm with semantic versions.
