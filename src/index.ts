@@ -33,6 +33,10 @@ export function createServer(): Server {
 
 // Application entry point - orchestrates server startup (has side effects)
 export async function main(): Promise<void> {
+  // Load environment variables when running as CLI
+  const dotenv = await import('dotenv');
+  dotenv.config();
+
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
