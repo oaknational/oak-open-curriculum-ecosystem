@@ -1,6 +1,6 @@
-
 <!-- cspell:disable -->
 <!-- https://developers.notion.com/docs/getting-started -->
+
 # Using Notion's Public API for Integrations
 
 A Notion workspace is a collaborative environment where teams can organize work, manage projects, and store information in a highly customizable way. Notion's REST API facilitates direct interactions with workspace elements through programming. Key functionalities include:
@@ -32,17 +32,17 @@ Integrations are installed in Notion workspaces and require **explicit permissio
 
 [block:image]
 {
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/0f06356-notion_overview.jpg",
-        "notion_overview.jpg",
-        1800
-      ],
-      "align": "center",
-      "caption": "Create Notion integrations that unlock new possibilities for teams. "
-    }
-  ]
+"images": [
+{
+"image": [
+"https://files.readme.io/0f06356-notion_overview.jpg",
+"notion_overview.jpg",
+1800
+],
+"align": "center",
+"caption": "Create Notion integrations that unlock new possibilities for teams. "
+}
+]
 }
 [/block]
 
@@ -98,17 +98,17 @@ Enhance the sharing experience within Notion with Link preview integrations, off
 
 [block:image]
 {
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/ce5daa3-Screen_Shot_2023-06-27_at_3.48.22_PM.png",
-        null,
-        "Link preview of a GitHub PR"
-      ],
-      "align": "center",
-      "caption": "Link Preview of a GitHub PR."
-    }
-  ]
+"images": [
+{
+"image": [
+"https://files.readme.io/ce5daa3-Screen_Shot_2023-06-27_at_3.48.22_PM.png",
+null,
+"Link preview of a GitHub PR"
+],
+"align": "center",
+"caption": "Link Preview of a GitHub PR."
+}
+]
 }
 [/block]
 
