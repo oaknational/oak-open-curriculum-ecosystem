@@ -415,6 +415,15 @@ describe('E2E: Read Operations', () => {
 });
 ```
 
+### Phase 2.6: Code Review
+
+Review all code against the following references:
+
+- [../reference/notion-sdk-readme.md](../reference/notion-sdk-readme.md)
+- [../reference/mcp-typescript-sdk-readme.md](../reference/mcp-typescript-sdk-readme.md)
+- [../reference/notion-api-overview.md](../reference/notion-api-overview.md)
+- [../reference/mcp-docs-for-agents.md](../reference/mcp-docs-for-agents.md)
+
 ## Testing Strategy
 
 ### Test Execution Order
@@ -571,6 +580,7 @@ This allows testing changes immediately without rebuilding.
    ```
 
 3. **Pure Transform Functions**
+
    ```typescript
    export function transformNotionPageToMcpResource(page: NotionPage): McpResource;
    ```
