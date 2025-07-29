@@ -479,6 +479,27 @@ Run after each implementation:
 1. **Dev dependency**: `npm add -D oak-notion-mcp`
 2. **Global install**: `npm i -g oak-notion-mcp`
 3. **Direct execution**: `npx oak-notion-mcp`
+4. **Development mode**: `tsx src/index.ts` (hot reload)
+
+### Development Mode Testing
+
+Add to `.mcp.json` in this repository for immediate testing:
+
+```json
+{
+  "mcpServers": {
+    "notion-dev": {
+      "command": "tsx",
+      "args": ["src/index.ts"],
+      "env": {
+        "NOTION_API_KEY": "${NOTION_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+This allows testing changes immediately without rebuilding.
 
 ## Architecture Decisions
 
