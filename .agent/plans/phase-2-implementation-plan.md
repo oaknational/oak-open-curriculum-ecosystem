@@ -44,7 +44,43 @@ Build a functional MCP server with basic Notion read capabilities using strict T
 
 ### Phase 2.1: Core Infrastructure (Week 1)
 
-#### 2.1.1 Environment Configuration
+#### 2.1.1 Data Privacy & Security
+
+**File**: `src/utils/scrubbing.ts`
+
+**Pure Functions**:
+
+```typescript
+// Email scrubbing to prevent PII exposure
+export function scrubEmail(text: string): string {
+  return text.replace(
+    /([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g,
+    (match, localPart, domain) => `${localPart.substring(0, 3)}...@${domain}`,
+  );
+}
+
+// Recursive data scrubbing for objects/arrays
+export function scrubSensitiveData(data: unknown): unknown {
+  if (typeof data === 'string') {
+    return scrubEmail(data);
+  }
+  if (Array.isArray(data)) {
+    return data.map(scrubSensitiveData);
+  }
+  if (data && typeof data === 'object') {
+    const scrubbed: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(data)) {
+      scrubbed[key] = scrubSensitiveData(value);
+    }
+    return scrubbed;
+  }
+  return data;
+}
+```
+
+**Usage**: Apply to all data before logging or returning to MCP clients
+
+#### 2.1.2 Environment Configuration
 
 **Pure Functions to Create**:
 
