@@ -286,6 +286,11 @@ export function createMcpServer(deps: {
 **File**: `src/index.ts`
 
 ```typescript
+import dotenv from 'dotenv';
+
+// Load .env file from cwd (where npx is run from)
+dotenv.config();
+
 export async function main(): Promise<void> {
   // Load and validate environment
   const env = process.env;
@@ -307,6 +312,14 @@ export async function main(): Promise<void> {
 
   await server.connect(transport);
   logger.info('MCP server started');
+}
+
+// CLI entry point
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((error) => {
+    console.error('Server error:', error);
+    process.exit(1);
+  });
 }
 ```
 
@@ -446,6 +459,26 @@ Run after each implementation:
 # None needed - all core dependencies installed in Phase 1
 # (@modelcontextprotocol/sdk, @notionhq/client, zod, dotenv)
 ```
+
+## NPM Package Considerations
+
+### Package Entry Points
+
+- `bin` field already configured in package.json
+- Entry point handles both programmatic and CLI usage
+- Bundled with tsup for standalone execution
+
+### Environment Variable Handling
+
+- `dotenv.config()` loads from user's project directory
+- Supports both `.env` files and environment variables
+- Claude Desktop/Code handle variable expansion
+
+### Usage Patterns
+
+1. **Dev dependency**: `npm add -D oak-notion-mcp`
+2. **Global install**: `npm i -g oak-notion-mcp`
+3. **Direct execution**: `npx oak-notion-mcp`
 
 ## Architecture Decisions
 

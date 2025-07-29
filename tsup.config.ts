@@ -12,6 +12,9 @@ export default defineConfig({
   platform: 'node',
   tsconfig: './tsconfig.json',
   shims: false, // No CJS shims needed for ESM-only
+  banner: {
+    js: '#!/usr/bin/env node', // Add shebang for npm bin execution
+  },
   // Bundle all dependencies for standalone execution
   // Only mark Node.js built-ins as external
   noExternal: [/@modelcontextprotocol\/sdk/, /@notionhq\/client/, /dotenv/, /zod/],
