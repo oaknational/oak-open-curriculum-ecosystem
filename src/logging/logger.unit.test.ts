@@ -51,6 +51,26 @@ describe('formatLogMessage', () => {
     expect(result).toContain('No context');
     expect(result).not.toContain('undefined');
   });
+
+  it('should scrub email addresses in context', () => {
+    const context = { email: 'user@example.com', name: 'John' };
+    const result = formatLogMessage('info', 'User data', context);
+
+    expect(result).toContain('"email":"use...@example.com"');
+    expect(result).not.toContain('user@example.com');
+  });
+
+  it('should scrub nested email addresses', () => {
+    const context = {
+      users: [{ email: 'alice@example.com' }, { email: 'bob@test.org' }],
+    };
+    const result = formatLogMessage('debug', 'User list', context);
+
+    expect(result).toContain('ali...@example.com');
+    expect(result).toContain('bob...@test.org');
+    expect(result).not.toContain('alice@example.com');
+    expect(result).not.toContain('bob@test.org');
+  });
 });
 
 describe('shouldLog', () => {

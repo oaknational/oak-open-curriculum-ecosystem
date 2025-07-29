@@ -1,10 +1,9 @@
 {
   "mcpServers": {
     "notion-dev": {
-      "command": "tsx",
-      "args": ["src/index.ts"],
+      "command": "pnpm",
+      "args": ["exec", "tsx", "src/index.ts"],
       "env": {
-        "NOTION_API_KEY": "${NOTION_API_KEY}",
         "LOG_LEVEL": "debug"
       }
     }

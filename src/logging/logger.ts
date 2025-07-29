@@ -1,3 +1,5 @@
+import { scrubSensitiveData } from '../utils/scrubbing.js';
+
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 const LOG_LEVELS: Record<LogLevel, number> = {
@@ -14,7 +16,9 @@ export function formatLogMessage(level: LogLevel, message: string, context?: unk
   let contextStr = '';
   if (context !== undefined) {
     try {
-      contextStr = ` ${JSON.stringify(context)}`;
+      // Scrub sensitive data before logging
+      const scrubbed = scrubSensitiveData(context);
+      contextStr = ` ${JSON.stringify(scrubbed)}`;
     } catch {
       // Handle circular references
       contextStr = ' [Circular Reference]';
