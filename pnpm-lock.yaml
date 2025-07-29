@@ -14,6 +14,9 @@ importers:
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.1
+      consola:
+        specifier: ^3.4.2
+        version: 3.4.2
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1

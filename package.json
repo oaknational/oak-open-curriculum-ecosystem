@@ -53,6 +53,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.0",
     "@notionhq/client": "^4.0.1",
+    "consola": "^3.4.2",
     "dotenv": "^17.2.1",
     "zod": "^4.0.10"
   },

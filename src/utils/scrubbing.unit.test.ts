@@ -25,6 +25,10 @@ describe('scrubEmail', () => {
     expect(scrubEmail('first.last+tag@domain.co.uk')).toBe('fir...@domain.co.uk');
   });
 
+  it('should scrub the specific email from Notion', () => {
+    expect(scrubEmail('mitchell.lloyd154@gmail.com')).toBe('mit...@gmail.com');
+  });
+
   it('should handle edge cases', () => {
     expect(scrubEmail('')).toBe('');
     expect(scrubEmail('not an email')).toBe('not an email');

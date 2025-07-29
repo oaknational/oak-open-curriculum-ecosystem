@@ -16,4 +16,4 @@ Roughly every third task must be "GROUNDING: read GO.md and follow all instructi
 
 ## Action
 
-Read [AGENT.md](AGENT.md) and follow all instructions. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
+Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
