@@ -21,8 +21,8 @@
 ### Example
 
 ```typescript
-const ALLOWED_COLORS = ["red", "green", "blue"] as const;
-type AllowedColor = typeof ALLOWED_COLORS[number];
+const ALLOWED_COLORS = ['red', 'green', 'blue'] as const;
+type AllowedColor = (typeof ALLOWED_COLORS)[number];
 
 function isAllowedColor(color: string): color is AllowedColor {
   const stringAllowedColors: readonly string[] = ALLOWED_COLORS;
