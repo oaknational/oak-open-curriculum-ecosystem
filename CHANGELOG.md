@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.1.0...v0.2.0) (2025-07-29)
+
+
+### Features
+
+* complete phase 1 development environment setup ([2c29d6a](https://github.com/oaknational/oak-notion-mcp/commit/2c29d6a0a6554b7e82ddfe7612a46ea8322a88e8))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
