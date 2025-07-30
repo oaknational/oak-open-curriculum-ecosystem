@@ -86,6 +86,75 @@ oak-notion-mcp/
 └── coverage/         # Test coverage reports (gitignored)
 ```
 
+## Development & Testing
+
+### Running Tests
+
+The project has a comprehensive test suite with different test levels:
+
+```bash
+# Run all tests (unit, integration, API)
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run only changed tests
+pnpm test:changed
+
+# Run E2E tests (requires NOTION_API_KEY in .env)
+pnpm test:e2e
+```
+
+### E2E Testing
+
+End-to-end tests verify real integration with the Notion API. They are not run in CI/CD due to requiring API credentials.
+
+To run E2E tests:
+
+1. Ensure you have a valid `NOTION_API_KEY` in your `.env` file
+2. Run `pnpm test:e2e`
+
+The E2E tests will:
+
+- Build the project
+- Start the MCP server with real Notion API credentials
+- Verify connection, resource listing, tool execution, and error handling
+- Test PII scrubbing (emails are automatically redacted)
+
+### Development Workflow
+
+1. **Make changes** to source files
+2. **Run tests** to ensure nothing breaks: `pnpm test:changed`
+3. **Check types**: `pnpm type-check`
+4. **Fix linting**: `pnpm lint:fix`
+5. **Format code**: `pnpm format`
+6. **Build**: `pnpm build`
+7. **Test locally**: `pnpm dev`
+
+### Git Hooks
+
+The project uses Husky for Git hooks:
+
+- **pre-commit**: Runs lint-staged to format and lint changed files
+- **pre-push**: Runs type checking, linting, and tests
+- **commit-msg**: Validates commit messages follow conventional format
+
+If a hook fails, fix the issues and try again. Never bypass hooks with `--no-verify`.
+
+### Code Quality
+
+All code must pass strict TypeScript checking with no `any` types. The project enforces:
+
+- No unused variables or parameters
+- No implicit returns
+- No unchecked indexed access
+- Exhaustive switch statements
+- Consistent casing in file names
+
 ## Usage Example: Using with Claude Desktop or Claude Code
 
 Here's a complete example of how to use `oak-notion-mcp` in a development project with Claude Desktop or Claude Code.

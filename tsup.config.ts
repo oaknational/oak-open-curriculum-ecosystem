@@ -17,5 +17,6 @@ export default defineConfig({
   },
   // Bundle all dependencies for standalone execution
   // Only mark Node.js built-ins as external
-  noExternal: [/@modelcontextprotocol\/sdk/, /@notionhq\/client/, /dotenv/, /zod/],
+  noExternal: [/@modelcontextprotocol\/sdk/, /@notionhq\/client/, /zod/],
+  external: ['dotenv'],
 });
