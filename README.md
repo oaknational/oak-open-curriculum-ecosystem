@@ -157,77 +157,52 @@ All code must pass strict TypeScript checking with no `any` types. The project e
 
 ## Usage Example: Using with Claude Desktop or Claude Code
 
-Here's a complete example of how to use `oak-notion-mcp` in a development project with Claude Desktop or Claude Code.
+### For End Users (After npm install)
 
-### Step 1: Install the MCP Server
-
-In your development project, install `oak-notion-mcp` as a dev dependency:
+Install `oak-notion-mcp` in your project:
 
 ```bash
 npm add -D oak-notion-mcp@latest
 # or with pnpm
 pnpm add -D oak-notion-mcp@latest
+# or globally
+npm install -g oak-notion-mcp
 ```
 
-### Step 2: Set Up Your Notion API Key
+### Setting Up Your Notion API Key
 
-You have two options for handling the Notion API key securely:
+Since the package is installed via npm, you need to provide your own Notion API key. You have three options:
 
-#### Option A: Using a .env file (Recommended)
+#### Option 1: Direct Configuration (Simplest for local development)
 
-Create a `.env` file in your project root:
+Add directly to `.claude/settings.local.json` (create this file if it doesn't exist):
+
+```json
+{
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": ["oak-notion-mcp"],
+      "env": {
+        "NOTION_API_KEY": "secret_your_actual_key_here"
+      }
+    }
+  }
+}
+```
+
+**Note**: This file should NOT be committed to version control as it contains your secret key.
+
+#### Option 2: System Environment Variable (Recommended for security)
+
+Set the API key as a system environment variable:
 
 ```bash
-# .env
-NOTION_API_KEY=secret_abc123...
+# Add to your shell profile (.bashrc, .zshrc, etc.)
+export NOTION_API_KEY="secret_your_actual_key_here"
 ```
 
-Make sure to add `.env` to your `.gitignore` to avoid committing sensitive data.
-
-**Note**: When `oak-notion-mcp` runs via `npx` from your project directory, it will automatically load environment variables from your project's `.env` file using the `dotenv` package.
-
-#### Option B: Using Environment Variable Expansion
-
-Configure the API key in your shell environment:
-
-```bash
-export NOTION_API_KEY="secret_abc123..."
-```
-
-### Step 3: Configure Claude Desktop or Claude Code
-
-#### For Claude Code
-
-Use the Claude Code CLI to add the MCP server:
-
-```bash
-# Add to current project (local scope)
-claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mcp
-
-# Or add to project scope (shared with team via .mcp.json)
-claude mcp add notion -s project -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mcp
-
-# Or add globally (available in all projects)
-claude mcp add notion -s user -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mcp
-
-# For Windows users (not WSL), wrap with cmd:
-claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- cmd /c npx oak-notion-mcp
-```
-
-This creates a configuration that:
-
-- Uses `npx` to run the locally installed package
-- Passes the API key via environment variable
-- Can be scoped to local, project, or user level
-- Windows users need the `cmd /c` wrapper for npx to work correctly
-
-#### For Claude Desktop
-
-Add the MCP server to your Claude Desktop settings. You can configure it at different scopes:
-
-#### Project Scope (Shared with Team)
-
-Create or update `.claude/settings.json` in your project root:
+Then use environment variable expansion in `.claude/settings.json` (this file CAN be committed):
 
 ```json
 {
@@ -243,33 +218,32 @@ Create or update `.claude/settings.json` in your project root:
 }
 ```
 
-This configuration:
+#### Option 3: Project .env File
 
-- Uses `npx` to run the locally installed package
-- Uses environment variable expansion `${NOTION_API_KEY}` to read the API key
-- Can be committed to version control (the actual key is not stored)
+If you prefer using a `.env` file in your project root:
 
-#### Local Scope (Personal Use Only)
-
-For personal configuration, create `.claude/settings.local.json`:
-
-```json
-{
-  "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["oak-notion-mcp"],
-      "env": {
-        "NOTION_API_KEY": "${NOTION_API_KEY:-secret_default}"
-      }
-    }
-  }
-}
+```bash
+# .env in your project root
+NOTION_API_KEY=secret_your_actual_key_here
 ```
 
-This uses the syntax `${VAR:-default}` to provide a fallback value.
+The package will automatically load the `.env` file from your current working directory when run via `npx`.
 
-### Step 4: Verify the Configuration
+Make sure to add `.env` to your `.gitignore`.
+
+### Using with Claude Code
+
+The configurations above work with both Claude Desktop and Claude Code. For Claude Code specifically, you can also use the CLI:
+
+```bash
+# Add using whichever API key method you chose above
+claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mcp
+
+# For Windows users (not WSL), wrap with cmd:
+claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- cmd /c npx oak-notion-mcp
+```
+
+### Verify the Configuration
 
 #### In Claude Code
 
@@ -290,7 +264,7 @@ claude mcp get notion
 
 The server will start automatically when you open Claude Desktop. Check the logs if you encounter issues.
 
-### Step 5: Using the MCP Server
+### Using the MCP Server
 
 Once configured, you can interact with your Notion workspace through Claude:
 
