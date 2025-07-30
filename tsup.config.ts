@@ -10,7 +10,7 @@ export default defineConfig({
   minify: false, // Keep readable for development
   target: 'es2022', // Match our tsconfig target
   platform: 'node',
-  tsconfig: './tsconfig.json',
+  tsconfig: './tsconfig.build.json',
   shims: false, // No CJS shims needed for ESM-only
   banner: {
     js: '#!/usr/bin/env node', // Add shebang for npm bin execution
