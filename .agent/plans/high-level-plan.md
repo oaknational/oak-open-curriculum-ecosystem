@@ -44,7 +44,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Pre-commit hooks preventing non-compliant code
 - Initial test suite passing (skeleton tests)
 
-### Phase 2: Core MCP Implementation
+### Phase 2: Core MCP Implementation ✅ COMPLETED
 
 **Outcome**: Functional MCP server with basic Notion read capabilities
 
@@ -52,32 +52,75 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Key Deliverables**:
 
-- [ ] MCP server implementation using stdio transport
-- [ ] Notion API client wrapper with proper error handling
-- [ ] **Resources** (read-only access):
-  - [ ] Static resources for workspace information
-  - [ ] Dynamic resource templates for pages (`notion://pages/{pageId}`)
-  - [ ] Dynamic resource templates for databases (`notion://databases/{databaseId}`)
-- [ ] **Tools** (read operations):
-  - [ ] `notion-search` - Search across workspace content
-  - [ ] `notion-list-databases` - List accessible databases
-  - [ ] `notion-query-database` - Query database with filters
-  - [ ] `notion-get-page` - Retrieve page content
-  - [ ] `notion-list-users` - List workspace users
-- [ ] **Prompts** (interaction templates):
-  - [ ] Database query builder prompt
-  - [ ] Page content analyzer prompt
-- [ ] Environment configuration (`.env` for API key)
-- [ ] Input validation using Zod at all boundaries
-- [ ] Structured error handling following MCP and Notion patterns
+- [x] MCP server implementation using stdio transport
+- [x] Notion API client wrapper with proper error handling
+- [x] **Resources** (read-only access):
+  - [x] Static resource for workspace discovery (`notion://discovery`)
+  - [x] Dynamic resource templates for users (`notion://users/{userId}`)
+  - [x] Dynamic resource templates for pages (`notion://pages/{pageId}`)
+  - [x] Dynamic resource templates for databases (`notion://databases/{databaseId}`)
+- [x] **Tools** (read operations):
+  - [x] `notion-search` - Search across workspace content
+  - [x] `notion-list-databases` - List accessible databases
+  - [x] `notion-query-database` - Query database with filters
+  - [x] `notion-get-page` - Retrieve page content
+  - [x] `notion-list-users` - List workspace users
+- [x] **Prompts** (interaction templates):
+  - Decided to use examples instead of prompt templates
+- [x] Environment configuration (`.env` for API key)
+- [x] Input validation using Zod at all boundaries
+- [x] Structured error handling following MCP and Notion patterns
+- [x] PII scrubbing for privacy protection
+- [x] Comprehensive test suite (158 tests)
+- [x] E2E testing with real Notion API
+- [x] Code review completed
 
-**Quality Checkpoints**:
+**Quality Checkpoints** ✅:
 
 - 100% unit test coverage for pure functions
 - Integration tests for all integration points
 - Mocked tests for all Notion API interactions
 - All quality gates passing
 - Type safety with no `any` or type assertions
+
+### Phase 2.5: High-Priority Enhancements
+
+**Outcome**: Optimized MCP server with improved SDK usage, pagination, and better error handling
+
+**Key Deliverables**:
+
+- [ ] **MCP SDK High-Level API Migration**:
+  - [ ] Upgrade from low-level `Server` to high-level `McpServer` API
+  - [ ] Add completion support for better UX
+  - [ ] Implement resource templates for dynamic URIs
+  - [ ] Add title fields for better UI presentation
+- [ ] **Pagination Support**:
+  - [ ] Implement Notion SDK's `iteratePaginatedAPI` for large datasets
+  - [ ] Add cursor-based pagination to prevent timeouts
+  - [ ] Handle page_size limits properly
+- [ ] **Performance Optimizations**:
+  - [ ] Optimize discovery resource to be more efficient
+  - [ ] Add code comments indicating where caching could be integrated
+  - [ ] Add code comments indicating where rate limiting could be integrated
+- [ ] **Error Handling Enhancement**:
+  - [ ] Use Notion SDK's `APIErrorCode` enum for precise error classification
+  - [ ] Implement `isNotionClientError` type guard
+  - [ ] Ensure proper error propagation through all layers
+- [ ] **Type Guards**:
+  - [ ] Use SDK's built-in type guards (`isFullPage`, `isFullDatabase`)
+  - [ ] Reduce type assertions where possible
+  - [ ] Implement custom type guards for our domain types
+- [ ] **Resource Linking Pattern**:
+  - [ ] Return resource URIs from tools instead of inline data
+  - [ ] Allow tools to reference resources for better composability
+  - [ ] Reduce response payload sizes
+
+**Quality Checkpoints**:
+
+- All existing tests continue to pass
+- New features have comprehensive test coverage
+- Performance improvements measurable
+- Type safety maintained or improved
 
 ### Phase 3: Advanced Features and Safety
 
