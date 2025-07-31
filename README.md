@@ -8,6 +8,8 @@ The package will be built and deployed to npm, will be open source, and will be 
 
 Further documentation can be found in the [docs directory](docs/README.md)
 
+**New to MCP or AI agent development?** Follow our [Developer Onboarding Journey](docs/onboarding-journey.md) for a structured learning path.
+
 ## Development
 
 ### Prerequisites
@@ -33,7 +35,7 @@ pnpm dev
 # Build the project
 pnpm build
 
-# Run tests (unit, integration, API)
+# Run tests (unit, integration)
 pnpm test
 pnpm test:run      # Run once without watch
 pnpm test:coverage # Run with coverage report
@@ -68,9 +70,8 @@ This project uses the following quality gates:
 Tests follow a strict hierarchy:
 
 1. **Unit Tests** (`*.unit.test.ts`): Pure functions only, no IO, no mocks
-2. **Integration Tests** (`*.integration.test.ts`): No IO, simple mocks allowed
-3. **API Tests** (`*.api.test.ts`): No IO, mocks allowed, uses Supertest
-4. **E2E Tests** (`*.e2e.test.ts`): Real IO allowed, manual execution only
+2. **Integration Tests** (`*.integration.test.ts`): No IO, simple mocks allowed, includes MCP protocol testing
+3. **E2E Tests** (`*.e2e.test.ts`): Real IO allowed, manual execution only
 
 All tests except E2E are run automatically in CI/CD and pre-push hooks.
 
@@ -93,7 +94,7 @@ oak-notion-mcp/
 The project has a comprehensive test suite with different test levels:
 
 ```bash
-# Run all tests (unit, integration, API)
+# Run all tests (unit, integration)
 pnpm test
 
 # Run tests in watch mode
