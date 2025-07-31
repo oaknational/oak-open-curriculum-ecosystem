@@ -48,6 +48,8 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Outcome**: Functional MCP server with basic Notion read capabilities
 
+**Detailed Plan**: See [Phase 2 Implementation Plan](phase-2-implementation-plan.md) for week-by-week breakdown
+
 **Key Deliverables**:
 
 - [ ] MCP server implementation using stdio transport

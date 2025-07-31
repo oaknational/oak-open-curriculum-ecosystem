@@ -4,8 +4,8 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "rootDir": ".",
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -24,6 +24,6 @@
     "allowUnusedLabels": false,
     "allowUnreachableCode": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "e2e-tests/**/*"],
   "exclude": ["node_modules", "dist", "coverage"]
 }

@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm:*)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(test:*)",
+      "Bash(find:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(gh pr create:*)",
+      "Bash(grep:*)",
+      "Bash(node:*)",
+      "Bash(gh pr edit:*)"
+    ],
+    "deny": []
+  },
+  "enabledMcpjsonServers": ["notion-dev"],
+  "enableAllProjectMcpServers": true
+}
