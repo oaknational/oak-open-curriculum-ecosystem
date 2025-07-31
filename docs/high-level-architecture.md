@@ -12,10 +12,11 @@ The Oak Notion MCP Server follows a clean, layered architecture designed for tes
 4. **Test-Driven Development**: Tests written before implementation
 5. **Type Safety**: Strict TypeScript with no `any` types, validated boundaries using Zod
 6. **Fail-Safe Defaults**: Read-only operations by default, write operations require explicit confirmation
+7. **Privacy by Design**: Automatic PII scrubbing for sensitive data (emails)
 
 ## System Architecture
 
-```
+```text
 ┌─────────────────────────────────────────┐
 │            MCP Client                   │
 │    (Claude Desktop, Roo Cline, etc)     │
@@ -73,6 +74,7 @@ The Oak Notion MCP Server follows a clean, layered architecture designed for tes
   - Query builders
   - Validators
   - Text formatters and extractors
+  - PII scrubbing utilities
 - **Dependencies**: None (pure functions)
 - **Key Principle**: No side effects, fully testable with unit tests
 
@@ -101,7 +103,7 @@ The Oak Notion MCP Server follows a clean, layered architecture designed for tes
 
 ### Read Operation Example (Tool: notion-search)
 
-```
+```text
 1. MCP Client → MCP Server: Tool request "notion-search" with query
 2. Protocol Layer: Validates request format
 3. Business Logic: Validates input with Zod schema
@@ -118,9 +120,10 @@ The Oak Notion MCP Server follows a clean, layered architecture designed for tes
 
 Provide access to Notion content through URI-based addressing:
 
+- `notion://discovery` - Workspace discovery with summary of users, pages, and databases
+- `notion://users/{userId}` - Individual user information (with email scrubbing)
 - `notion://pages/{pageId}` - Individual page content
-- `notion://databases/{databaseId}` - Database schema and entries
-- `notion://workspace` - Workspace information
+- `notion://databases/{databaseId}` - Database schema and metadata
 
 ### Tools
 
@@ -134,20 +137,15 @@ Enable operations on Notion content:
 
 ### Prompts
 
-Pre-configured interaction templates:
-
-- Database query builder
-- Page content analyzer
+Not implemented in Phase 2. The team decided to use examples in documentation instead of prompt templates.
 
 ## Testing Architecture
 
 ### Test Pyramid
 
-```
+```text
         ┌─────┐
         │ E2E │ Manual execution, real Notion API
-        ├─────┤
-        │ API │ Automated, mocked external calls
         ├─────┤
         │ Int │ Automated, simple mocks only
         ├─────┤
@@ -161,21 +159,19 @@ Pre-configured interaction templates:
    - Test pure functions in isolation
    - No mocks, no I/O
    - Fast, reliable, comprehensive
+   - 100% coverage for pure functions
 
 2. **Integration Tests** (Adapter & Protocol Layers)
    - Test component integration
    - Simple mocks for external dependencies
    - Verify error handling and retries
+   - Test MCP protocol compliance with mocked Notion API
 
-3. **API Tests** (Full Protocol Stack)
-   - Test MCP protocol compliance
-   - Mock Notion API responses
-   - Verify end-to-end request handling
-
-4. **E2E Tests** (Complete System)
+3. **E2E Tests** (Complete System)
    - Test against real Notion workspace
-   - Manual execution only
+   - Manual execution only (not in CI/CD)
    - Verify actual API behavior
+   - Includes real MCP client connection tests
 
 ## Security Architecture
 
@@ -183,7 +179,8 @@ Pre-configured interaction templates:
 
 - API keys stored in environment variables
 - Never committed to version control
-- Validated on startup
+- Validated on startup with Zod
+- Keys never logged or exposed in errors
 
 ### Access Control
 
@@ -191,39 +188,47 @@ Pre-configured interaction templates:
 - No write operations in Phase 2
 - Future write operations require explicit confirmation
 
+### Privacy Protection
+
+- Automatic PII scrubbing for email addresses
+- Emails displayed as `abc...@domain.com` format
+- Applied consistently across all user data
+- Implemented as pure function for testability
+
 ### Input Validation
 
 - All external inputs validated with Zod schemas
 - Type-safe boundaries between layers
 - Sanitized error messages to prevent information leakage
+- Request validation before any processing
 
 ## Error Handling Strategy
 
 ### Error Classification
 
-```typescript
-type ErrorClass =
-  | 'ValidationError' // Invalid input
-  | 'NotFoundError' // Resource doesn't exist
-  | 'PermissionError' // Insufficient access
-  | 'RateLimitError' // API quota exceeded
-  | 'NetworkError' // Connection issues
-  | 'InternalError'; // Unexpected errors
-```
+The `ErrorHandler` class provides centralized error handling with proper classification:
+
+- **Validation Errors**: Invalid input, missing required fields
+- **Not Found Errors**: Resources that don't exist
+- **Permission Errors**: Insufficient access rights
+- **Rate Limit Errors**: API quota exceeded
+- **Network Errors**: Connection issues
+- **Internal Errors**: Unexpected errors
 
 ### Error Flow
 
-1. Errors caught at boundary (Notion Adapter)
-2. Classified by error type
-3. Converted to MCP-compliant error format
-4. Logged with appropriate detail level
+1. Errors caught at boundaries (Notion Adapter, MCP handlers)
+2. Classified by `ErrorHandler.handle()` method
+3. Converted to MCP-compliant error format with appropriate codes
+4. Logged with context but without exposing sensitive data
 5. User-friendly message returned to client
+6. Stack traces only included in development mode
 
 ## Deployment Architecture
 
 ### Package Structure
 
-```
+```text
 oak-notion-mcp/
 ├── dist/               # Bundled ESM output
 │   ├── index.js       # Entry point
@@ -319,6 +324,12 @@ oak-notion-mcp/
 **Decision**: Wrap Notion SDK behind interface
 **Rationale**: Isolates API changes, enables testing, provides upgrade path
 **Consequences**: Additional abstraction layer, need to maintain wrapper
+
+### ADR-005: Automatic PII Scrubbing
+
+**Decision**: Automatically scrub email addresses in all outputs
+**Rationale**: Privacy by design, prevent accidental PII exposure, compliance-ready
+**Consequences**: Email addresses shown as `abc...@domain.com`, implemented as pure function
 
 ## Monitoring and Observability
 

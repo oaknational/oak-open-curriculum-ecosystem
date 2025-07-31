@@ -1,10 +1,28 @@
 # Documentation for Oak Notion MCP
 
-## Rules and Best Practices
+## 🚀 Getting Started
 
-- [High Level Architecture](high-level-architecture.md)
-- [Development Practice](development-practice.md)
-- [TypeScript Practice](typescript-practice.md)
-- [Testing and Development Strategy](testing-and-development-strategy.md)
-- [Tooling](tooling.md)
-- [Safety and Security](safety-and-security.md)
+- **New to MCP?** → [Developer Onboarding Journey](onboarding-journey.md) - 5-day structured learning path
+- **Experienced?** → [Quick Reference](quick-reference.md) - Jump right in with code examples
+- **Working with AI?** → [Understanding Agent References](understanding-agent-references.md) - How to use curated docs
+
+## Architecture and Design
+
+- [High Level Architecture](high-level-architecture.md) - System design, layers, and components
+- [API Reference](api-reference.md) - Complete reference for all resources and tools
+
+## Development Guidelines
+
+- [Development Practice](development-practice.md) - Code standards and workflow
+- [TypeScript Practice](typescript-practice.md) - Type safety guidelines
+- [Testing and Development Strategy](testing-and-development-strategy.md) - TDD/BDD approach
+- [Tooling](tooling.md) - Development tools and versions
+
+## Operations
+
+- [Safety and Security](safety-and-security.md) - Security measures and privacy protection
+- [Troubleshooting](troubleshooting.md) - Common issues and solutions
+
+## Migration Guides
+
+- [Phase 2.5 Migration](migration-phase-2.5.md) - Preparing for upcoming enhancements
