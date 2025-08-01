@@ -1,3 +1,11 @@
+# [0.4.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.3.0...v0.4.0) (2025-08-01)
+
+
+### Features
+
+* add early startup logging to improve MCP server debuggability ([69afbfa](https://github.com/oaknational/oak-notion-mcp/commit/69afbfa2af2d0ae8156536e7394cd9f3b7c72865))
+* add file logging to Consola configuration and fix deprecated code ([660bbb3](https://github.com/oaknational/oak-notion-mcp/commit/660bbb3d52352a57492772081f0a4ab54938a955))
+
 # [0.3.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.2.0...v0.3.0) (2025-07-31)
 
 
