@@ -1,12 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers.js';
-import type { NotionClientWrapper } from '../../notion/client.js';
+import type { MinimalNotionClient } from '../../types/dependencies.js';
 import type { Logger } from '../../logging/logger.js';
 import {
   createMockPage,
   createMockDatabase,
   createMockUser,
 } from '../../test-helpers/notion-mocks.js';
+import {
+  createMockListUsersResponse,
+  createMockSearchResponse,
+} from '../../test-helpers/notion-api-mocks.js';
 
 describe('createResourceHandlers', () => {
   const mockLogger: Logger = {
@@ -16,13 +20,12 @@ describe('createResourceHandlers', () => {
     error: vi.fn(),
   };
 
-  const mockNotionClient: NotionClientWrapper = {
-    getPage: vi.fn(),
-    getDatabase: vi.fn(),
-    queryDatabase: vi.fn(),
+  const mockNotionClient: MinimalNotionClient = {
+    pages: { retrieve: vi.fn() },
+    databases: { retrieve: vi.fn(), query: vi.fn() },
     search: vi.fn(),
-    listUsers: vi.fn(),
-    getBlockChildren: vi.fn(),
+    users: { list: vi.fn() },
+    blocks: { children: { list: vi.fn() } },
   };
 
   beforeEach(() => {
@@ -116,8 +119,12 @@ describe('createResourceHandlers', () => {
         has_more: false,
       };
 
-      vi.mocked(mockNotionClient.listUsers).mockResolvedValueOnce([mockUser]);
-      vi.mocked(mockNotionClient.search).mockResolvedValueOnce(mockSearchResult);
+      vi.mocked(mockNotionClient.users.list).mockResolvedValueOnce(
+        createMockListUsersResponse([mockUser]),
+      );
+      vi.mocked(mockNotionClient.search).mockResolvedValueOnce(
+        createMockSearchResponse(mockSearchResult.results),
+      );
 
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
@@ -140,7 +147,7 @@ describe('createResourceHandlers', () => {
       expect(mockLogger.debug).toHaveBeenCalledWith('Reading resource', {
         uri: 'notion://discovery',
       });
-      expect(mockNotionClient.listUsers).toHaveBeenCalled();
+      expect(mockNotionClient.users.list).toHaveBeenCalled();
       expect(mockNotionClient.search).toHaveBeenCalled();
     });
 
@@ -172,7 +179,7 @@ describe('createResourceHandlers', () => {
         url: 'https://notion.so/page-123',
       });
 
-      vi.mocked(mockNotionClient.getPage).mockResolvedValueOnce(mockPage);
+      vi.mocked(mockNotionClient.pages.retrieve).mockResolvedValueOnce(mockPage);
 
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
@@ -191,7 +198,7 @@ describe('createResourceHandlers', () => {
         ],
       });
 
-      expect(mockNotionClient.getPage).toHaveBeenCalledWith('page-123');
+      expect(mockNotionClient.pages.retrieve).toHaveBeenCalledWith({ page_id: 'page-123' });
     });
 
     it('should read a specific database', async () => {
@@ -225,7 +232,7 @@ describe('createResourceHandlers', () => {
         url: 'https://notion.so/db-456',
       });
 
-      vi.mocked(mockNotionClient.getDatabase).mockResolvedValueOnce(mockDatabase);
+      vi.mocked(mockNotionClient.databases.retrieve).mockResolvedValueOnce(mockDatabase);
 
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
@@ -244,7 +251,7 @@ describe('createResourceHandlers', () => {
         ],
       });
 
-      expect(mockNotionClient.getDatabase).toHaveBeenCalledWith('db-456');
+      expect(mockNotionClient.databases.retrieve).toHaveBeenCalledWith({ database_id: 'db-456' });
     });
 
     it('should handle invalid URI', async () => {
@@ -275,7 +282,7 @@ describe('createResourceHandlers', () => {
 
     it('should handle Notion API errors', async () => {
       const notionError = new Error('API rate limited');
-      vi.mocked(mockNotionClient.getPage).mockRejectedValueOnce(notionError);
+      vi.mocked(mockNotionClient.pages.retrieve).mockRejectedValueOnce(notionError);
 
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,

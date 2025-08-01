@@ -2,10 +2,12 @@
 
 ## General
 
+- NEVER disable type checking
 - Never use `any`
 - Never use `as` NO TYPE ASSERTIONS, NO TYPE CASTING, JUST NO.
 - Only use `unknown` at the boundaries of the application
 - Use type guards/predicates to narrow types (functions with the `is` keyword)
+- There must be a SINGLE source of truth for each type
 
 ## External Types
 

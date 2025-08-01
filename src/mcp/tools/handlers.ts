@@ -1,22 +1,34 @@
-import type { Logger } from '../../logging/logger.js';
 import type {
-  NotionClientWrapper,
-  NotionSearchQuery,
-  NotionDatabaseQuery,
-} from '../../notion/client.js';
+  PageObjectResponse,
+  DatabaseObjectResponse,
+  BlockObjectResponse,
+} from '@notionhq/client';
+import type { CoreDependencies } from '../../types/dependencies.js';
 import {
   transformNotionPageToMcpResource,
   transformNotionDatabaseToMcpResource,
   transformNotionUserToMcpResource,
   extractTextFromNotionBlocks,
-  formatNotionRichText,
 } from '../../notion/transformers.js';
+import { isFullDatabase, isFullPage } from '../../notion/type-guards.js';
+import {
+  formatSearchResults,
+  formatDatabaseList,
+  formatDatabaseQueryResults,
+  formatPageDetails,
+  formatUserList,
+} from '../../notion/formatters.js';
 import type { McpTool, McpToolResult } from '../types.js';
+import {
+  notionSearchSchema,
+  notionListDatabasesSchema,
+  notionQueryDatabaseSchema,
+  notionGetPageSchema,
+  notionListUsersSchema,
+} from './schemas.js';
 
-interface ToolDependencies {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-}
+// Use CoreDependencies for consistency
+type ToolDependencies = CoreDependencies;
 
 export function createNotionSearchTool(deps: ToolDependencies): McpTool {
   return {
@@ -57,54 +69,42 @@ export function createNotionSearchTool(deps: ToolDependencies): McpTool {
       },
       required: ['query'],
     },
-    async handler(args: {
-      query: string;
-      filter?: { type: 'page' | 'database' };
-      sort?: {
-        timestamp: 'last_edited_time';
-        direction: 'ascending' | 'descending';
-      };
-    }): Promise<McpToolResult> {
+    async handler(args: unknown): Promise<McpToolResult> {
+      // Validate input using Zod schema
+      const validatedArgs = notionSearchSchema.parse(args);
       try {
-        deps.logger.debug('Searching Notion', { query: args.query });
+        deps.logger.debug('Searching Notion', { query: validatedArgs.query });
 
-        const searchParams: NotionSearchQuery = {
-          query: args.query,
+        const searchParams: Parameters<typeof deps.notionClient.search>[0] = {
+          query: validatedArgs.query,
         };
 
-        if (args.filter?.type) {
-          searchParams.filter = { property: 'object', value: args.filter.type };
+        if (validatedArgs.filter?.type) {
+          searchParams.filter = { property: 'object', value: validatedArgs.filter.type };
         }
 
-        if (args.sort) {
+        if (validatedArgs.sort) {
           searchParams.sort = {
-            timestamp: args.sort.timestamp,
-            direction: args.sort.direction,
+            timestamp: validatedArgs.sort.timestamp,
+            direction: validatedArgs.sort.direction,
           };
         }
 
-        const results = await deps.notionClient.search(searchParams);
+        const searchResponse = await deps.notionClient.search(searchParams);
+        const results = searchResponse.results.filter(
+          (result): result is PageObjectResponse | DatabaseObjectResponse =>
+            (result.object === 'page' || result.object === 'database') && 'id' in result,
+        );
 
-        if (!results || !results.results) {
-          throw new Error('Invalid search results');
-        }
-
-        let text = `Found ${results.results.length} results for "${args.query}"\n\n`;
-
-        for (const result of results.results) {
+        const resources = results.map((result) => {
           if (result.object === 'page') {
-            const resource = transformNotionPageToMcpResource(result);
-            text += `📄 Page: ${resource.name}\n`;
-            text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-            text += `   Last edited: ${resource.metadata?.['last_edited_time'] || 'N/A'}\n\n`;
-          } else if (result.object === 'database') {
-            const resource = transformNotionDatabaseToMcpResource(result);
-            text += `🗂️ Database: ${resource.name}\n`;
-            text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-            const props = resource.metadata?.['properties'];
-            text += `   Properties: ${Array.isArray(props) ? props.join(', ') : 'None'}\n\n`;
+            return transformNotionPageToMcpResource(result);
+          } else {
+            return transformNotionDatabaseToMcpResource(result);
           }
-        }
+        });
+
+        const text = formatSearchResults(results, validatedArgs.query, resources);
 
         return {
           content: [{ type: 'text', text }],
@@ -128,34 +128,23 @@ export function createNotionListDatabasesTool(deps: ToolDependencies): McpTool {
       type: 'object',
       properties: {},
     },
-    async handler(_args: Record<string, never>): Promise<McpToolResult> {
+    async handler(args: unknown): Promise<McpToolResult> {
+      // Validate input using Zod schema
+      notionListDatabasesSchema.parse(args);
       try {
         deps.logger.debug('Listing Notion databases');
 
-        const searchQuery: NotionSearchQuery = {
+        const searchResponse = await deps.notionClient.search({
           query: '',
           filter: { property: 'object', value: 'database' },
-        };
-        const results = await deps.notionClient.search(searchQuery);
+        });
+        const results = searchResponse.results.filter(
+          (result): result is DatabaseObjectResponse =>
+            result.object === 'database' && 'title' in result,
+        );
 
-        if (!results || !results.results) {
-          throw new Error('Invalid search results');
-        }
-
-        let text = `Found ${results.results.length} database${
-          results.results.length === 1 ? '' : 's'
-        }\n\n`;
-
-        for (const database of results.results) {
-          if (database.object === 'database') {
-            const resource = transformNotionDatabaseToMcpResource(database);
-            text += `🗂️ ${resource.name}\n`;
-            text += `   ID: ${database.id}\n`;
-            text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-            const props = resource.metadata?.['properties'];
-            text += `   Properties: ${Array.isArray(props) ? props.join(', ') : 'None'}\n\n`;
-          }
-        }
+        const resources = results.map(transformNotionDatabaseToMcpResource);
+        const text = formatDatabaseList(results, resources);
 
         return {
           content: [{ type: 'text', text }],
@@ -210,94 +199,46 @@ export function createNotionQueryDatabaseTool(deps: ToolDependencies): McpTool {
       },
       required: ['database_id'],
     },
-    async handler(args: {
-      database_id: string;
-      filter?: Record<string, unknown>;
-      sorts?: { property: string; direction: 'ascending' | 'descending' }[];
-      page_size?: number;
-    }): Promise<McpToolResult> {
+    async handler(args: unknown): Promise<McpToolResult> {
+      // Validate input using Zod schema
+      const validatedArgs = notionQueryDatabaseSchema.parse(args);
       try {
-        deps.logger.debug('Querying database', { database_id: args.database_id });
+        deps.logger.debug('Querying database', { database_id: validatedArgs.database_id });
 
         // Get database info first
-        const database = await deps.notionClient.getDatabase(args.database_id);
-        const dbResource = transformNotionDatabaseToMcpResource(database);
-
-        // Build the query - note that filter is not supported due to Notion SDK type limitations
-        const query: NotionDatabaseQuery = {};
-        // TODO: Add filter support when Notion SDK exports filter types
-        // For now, we can only support sorts and pagination
-        if (args.sorts) {
-          query.sorts = args.sorts;
+        const dbResponse = await deps.notionClient.databases.retrieve({
+          database_id: validatedArgs.database_id,
+        });
+        if (!isFullDatabase(dbResponse)) {
+          throw new Error('Invalid database response');
         }
-        query.page_size = args.page_size || 20;
+        const dbResource = transformNotionDatabaseToMcpResource(dbResponse);
 
-        const pages = await deps.notionClient.queryDatabase(args.database_id, query);
+        // Build the query
+        const queryParams: Parameters<typeof deps.notionClient.databases.query>[0] = {
+          database_id: validatedArgs.database_id,
+          page_size: validatedArgs.page_size || 20,
+        };
 
-        let text = `Database: ${dbResource.name}\n`;
-        text += `Found ${pages.length} page${pages.length === 1 ? '' : 's'}\n\n`;
-
-        for (const page of pages) {
-          const resource = transformNotionPageToMcpResource(page);
-          text += `📄 ${resource.name}\n`;
-
-          // Show key properties
-          for (const [key, value] of Object.entries(page.properties)) {
-            if (typeof value === 'object' && value !== null && 'type' in value) {
-              let displayValue = 'N/A';
-
-              switch (value.type) {
-                case 'select':
-                  if ('select' in value && value.select) {
-                    displayValue = value.select.name || 'N/A';
-                  }
-                  break;
-                case 'multi_select':
-                  if ('multi_select' in value && value.multi_select) {
-                    displayValue = value.multi_select.map((s) => s.name).join(', ') || 'N/A';
-                  }
-                  break;
-                case 'status':
-                  if ('status' in value && value.status) {
-                    displayValue = value.status.name || 'N/A';
-                  }
-                  break;
-                case 'number':
-                  if ('number' in value && value.number !== null) {
-                    displayValue = value.number.toString();
-                  }
-                  break;
-                case 'checkbox':
-                  if ('checkbox' in value) {
-                    displayValue = value.checkbox ? '✓' : '✗';
-                  }
-                  break;
-                case 'date':
-                  if ('date' in value && value.date) {
-                    displayValue = value.date.start || 'N/A';
-                  }
-                  break;
-                case 'people':
-                  if ('people' in value && value.people) {
-                    displayValue =
-                      value.people.map((p) => ('name' in p && p.name) || 'Unknown').join(', ') ||
-                      'N/A';
-                  }
-                  break;
-                case 'rich_text':
-                  if ('rich_text' in value && value.rich_text) {
-                    displayValue = formatNotionRichText(value.rich_text) || 'N/A';
-                  }
-                  break;
-              }
-
-              if (displayValue !== 'N/A' && key !== 'title' && key !== 'Name') {
-                text += `   ${key}: ${displayValue}\n`;
-              }
-            }
-          }
-          text += '\n';
+        if (validatedArgs.sorts) {
+          queryParams.sorts = validatedArgs.sorts;
         }
+
+        if (validatedArgs.filter) {
+          // The Notion SDK expects a specific filter type that we can't fully type
+          // without importing complex internal types. The filter is validated by Zod
+          // and will be runtime-checked by the Notion API.
+          Object.assign(queryParams, { filter: validatedArgs.filter });
+        }
+
+        const queryResponse = await deps.notionClient.databases.query(queryParams);
+        const pages = queryResponse.results.filter(
+          (result): result is PageObjectResponse =>
+            result.object === 'page' && 'properties' in result,
+        );
+
+        const pageResources = pages.map(transformNotionPageToMcpResource);
+        const text = formatDatabaseQueryResults(dbResource, pages, pageResources);
 
         return {
           content: [{ type: 'text', text }],
@@ -332,57 +273,33 @@ export function createNotionGetPageTool(deps: ToolDependencies): McpTool {
       },
       required: ['page_id'],
     },
-    async handler(args: { page_id: string; include_content?: boolean }): Promise<McpToolResult> {
+    async handler(args: unknown): Promise<McpToolResult> {
+      // Validate input using Zod schema
+      const validatedArgs = notionGetPageSchema.parse(args);
       try {
-        deps.logger.debug('Getting page', { page_id: args.page_id });
+        deps.logger.debug('Getting page', { page_id: validatedArgs.page_id });
 
-        const page = await deps.notionClient.getPage(args.page_id);
-        const resource = transformNotionPageToMcpResource(page);
+        const pageResponse = await deps.notionClient.pages.retrieve({
+          page_id: validatedArgs.page_id,
+        });
+        if (!isFullPage(pageResponse)) {
+          throw new Error('Invalid page response');
+        }
+        const resource = transformNotionPageToMcpResource(pageResponse);
 
-        let text = `📄 ${resource.name}\n\n`;
-        text += `URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-        text += `Created: ${resource.metadata?.['created_time'] || 'N/A'}\n`;
-        text += `Last edited: ${resource.metadata?.['last_edited_time'] || 'N/A'}\n`;
-        text += `Archived: ${resource.metadata?.['archived'] ? 'Yes' : 'No'}\n\n`;
-
-        // Show properties
-        text += 'Properties:\n';
-        for (const [key, value] of Object.entries(page.properties)) {
-          if (typeof value === 'object' && value !== null && 'type' in value) {
-            let displayValue = 'N/A';
-
-            switch (value.type) {
-              case 'title':
-                continue; // Skip title as it's already shown
-              case 'select':
-                if ('select' in value && value.select) {
-                  displayValue = value.select.name || 'N/A';
-                }
-                break;
-              case 'multi_select':
-                if ('multi_select' in value && value.multi_select) {
-                  displayValue = value.multi_select.map((s) => s.name).join(', ') || 'N/A';
-                }
-                break;
-              case 'rich_text':
-                if ('rich_text' in value && value.rich_text) {
-                  displayValue = formatNotionRichText(value.rich_text) || 'N/A';
-                }
-                break;
-              default:
-                continue;
-            }
-
-            text += `- ${key}: ${displayValue}\n`;
-          }
+        let content: string | undefined;
+        if (validatedArgs.include_content) {
+          const blocksResponse = await deps.notionClient.blocks.children.list({
+            block_id: validatedArgs.page_id,
+            page_size: 100,
+          });
+          const blocks = blocksResponse.results.filter(
+            (result): result is BlockObjectResponse => result.object === 'block',
+          );
+          content = extractTextFromNotionBlocks(blocks);
         }
 
-        if (args.include_content) {
-          text += '\nContent:\n';
-          const blocks = await deps.notionClient.getBlockChildren(args.page_id);
-          const content = extractTextFromNotionBlocks(blocks);
-          text += content || 'No content';
-        }
+        const text = formatPageDetails(resource, pageResponse, content);
 
         return {
           content: [{ type: 'text', text }],
@@ -406,26 +323,17 @@ export function createNotionListUsersTool(deps: ToolDependencies): McpTool {
       type: 'object',
       properties: {},
     },
-    async handler(_args: Record<string, never>): Promise<McpToolResult> {
+    async handler(args: unknown): Promise<McpToolResult> {
+      // Validate input using Zod schema
+      notionListUsersSchema.parse(args);
       try {
         deps.logger.debug('Listing Notion users');
 
-        const users = await deps.notionClient.listUsers();
+        const usersResponse = await deps.notionClient.users.list({});
+        const users = usersResponse.results;
 
-        let text = `Found ${users.length} user${users.length === 1 ? '' : 's'}\n\n`;
-
-        for (const user of users) {
-          const resource = transformNotionUserToMcpResource(user);
-          const emoji = user.type === 'bot' ? '🤖' : '👤';
-          text += `${emoji} ${resource.name}\n`;
-          text += `   Type: ${user.type === 'bot' ? 'Bot' : 'Person'}\n`;
-
-          if (user.type === 'person' && resource.metadata?.['email']) {
-            text += `   Email: ${resource.metadata['email']}\n`;
-          }
-
-          text += '\n';
-        }
+        const resources = users.map(transformNotionUserToMcpResource);
+        const text = formatUserList(users, resources);
 
         return {
           content: [{ type: 'text', text }],

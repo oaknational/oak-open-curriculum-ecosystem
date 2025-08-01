@@ -24,7 +24,38 @@ echo $NOTION_API_KEY
 
 ## Common Issues
 
-### 1. Server Won't Start
+### 1. MCP Server Not Working in Dev Mode
+
+#### Symptom
+
+```
+MCP tools fail with connection errors
+"Failed to connect" messages when using Notion tools
+```
+
+#### Cause
+
+The dev server uses `tsx` in `--watch` mode, which can crash and need restarting.
+
+#### Solutions
+
+1. **Check connection status**:
+
+   ```
+   /mcp
+   ```
+
+2. **If it shows "failed to connect"**:
+   - Exit the conversation session
+   - Restart with `claude --continue`
+   - Try the MCP command again
+
+3. **Monitor the dev server**:
+   - Check the terminal running `pnpm dev`
+   - Look for crash messages or errors
+   - Restart if needed with Ctrl+C then `pnpm dev`
+
+### 2. Server Won't Start
 
 #### Symptom
 

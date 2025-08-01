@@ -1,5 +1,6 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
+// Tool interface
 export interface McpTool {
   name: string;
   description: string;
@@ -8,8 +9,7 @@ export interface McpTool {
     properties: Record<string, unknown>;
     required?: string[];
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  handler: (args: any) => Promise<CallToolResult>;
+  handler: (args: unknown) => Promise<CallToolResult>;
 }
 
 export type McpToolResult = CallToolResult;

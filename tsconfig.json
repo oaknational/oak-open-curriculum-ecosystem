@@ -24,6 +24,6 @@
     "allowUnusedLabels": false,
     "allowUnreachableCode": false
   },
-  "include": ["src/**/*", "e2e-tests/**/*"],
+  "include": ["src/**/*", "*.config.ts", "e2e-tests/**/*"],
   "exclude": ["node_modules", "dist", "coverage"]
 }

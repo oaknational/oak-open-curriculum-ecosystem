@@ -245,7 +245,6 @@ claude mcp add test-notion -- node dist/index.js
 
 ## Getting Help
 
-- **Discord**: [Join our community](#) (link TBD)
 - **GitHub Issues**: Search existing or create new
 - **Documentation**: Check `/docs` folder
 

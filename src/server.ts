@@ -6,21 +6,11 @@ import {
   CallToolRequestSchema,
   ListPromptsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import type { NotionClientWrapper } from './notion/client.js';
-import type { Logger } from './logging/logger.js';
 import { createResourceHandlers } from './mcp/resources/handlers.js';
 import { createToolHandlers } from './mcp/tools/handlers.js';
+import type { ServerDependencies } from './types/dependencies.js';
 
-export interface ServerConfig {
-  name: string;
-  version: string;
-}
-
-export function createMcpServer(deps: {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-  config: ServerConfig;
-}): Server {
+export function createMcpServer(deps: ServerDependencies): Server {
   deps.logger.info('Creating MCP server', deps.config);
 
   const server = new Server(
