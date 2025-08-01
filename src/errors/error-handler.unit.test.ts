@@ -3,8 +3,8 @@ import {
   classifyNotionError,
   createMcpError,
   formatErrorForUser,
-  ErrorClassification,
-  McpError,
+  type ErrorClassification,
+  type McpError,
 } from './error-handler.js';
 
 describe('classifyNotionError', () => {

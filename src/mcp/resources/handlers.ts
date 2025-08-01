@@ -7,8 +7,9 @@ import type {
   ListResourcesResult,
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
-import type { NotionClientWrapper } from '../../notion/client.js';
-import type { Logger } from '../../logging/logger.js';
+import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
+import type { CoreDependencies } from '../../types/dependencies.js';
+import { isFullPage, isFullDatabase } from '../../notion/type-guards.js';
 import { parseResourceUri, validateResourceUri } from './uri-parser.js';
 import {
   transformNotionPageToMcpResource,
@@ -26,10 +27,7 @@ export interface ResourceHandlers {
 /**
  * Creates resource handlers with injected dependencies
  */
-export function createResourceHandlers(deps: {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-}): ResourceHandlers {
+export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers {
   const { notionClient, logger } = deps;
 
   return {
@@ -77,14 +75,20 @@ export function createResourceHandlers(deps: {
 
         switch (resourceId.type) {
           case 'pages': {
-            const page = await notionClient.getPage(resourceId.id);
-            content = page;
+            const response = await notionClient.pages.retrieve({ page_id: resourceId.id });
+            if (!isFullPage(response)) {
+              throw new Error('Invalid page response');
+            }
+            content = response;
             break;
           }
 
           case 'databases': {
-            const database = await notionClient.getDatabase(resourceId.id);
-            content = database;
+            const response = await notionClient.databases.retrieve({ database_id: resourceId.id });
+            if (!isFullDatabase(response)) {
+              throw new Error('Invalid database response');
+            }
+            content = response;
             break;
           }
 
@@ -121,24 +125,27 @@ export function createResourceHandlers(deps: {
 /**
  * Handles the special discovery resource
  */
-async function handleDiscoveryResource(deps: {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-}): Promise<ReadResourceResult> {
+async function handleDiscoveryResource(deps: CoreDependencies): Promise<ReadResourceResult> {
   const { notionClient, logger } = deps;
 
   try {
     logger.debug('Generating discovery resource');
 
     // Fetch available resources
-    const [users, searchResults] = await Promise.all([
-      notionClient.listUsers(),
+    const [usersResponse, searchResponse] = await Promise.all([
+      notionClient.users.list({}),
       notionClient.search({ query: '' }), // Empty query returns all
     ]);
 
+    const users = usersResponse.results;
+    const searchResults = searchResponse.results.filter(
+      (result): result is PageObjectResponse | DatabaseObjectResponse =>
+        (result.object === 'page' || result.object === 'database') && 'id' in result,
+    );
+
     // Transform to MCP resources
     const userResources = users.map(transformNotionUserToMcpResource);
-    const pageAndDbResources = searchResults.results
+    const pageAndDbResources = searchResults
       .map((item) => {
         if (item.object === 'page' && 'properties' in item) {
           return transformNotionPageToMcpResource(item);

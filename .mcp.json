@@ -2,7 +2,7 @@
   "mcpServers": {
     "notion-dev": {
       "command": "pnpm",
-      "args": ["exec", "tsx", "--watch", "src/index.ts"],
+      "args": ["exec", "tsx", "src/index.ts"],
       "env": {
         "LOG_LEVEL": "debug"
       }

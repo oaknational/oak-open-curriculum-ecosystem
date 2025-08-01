@@ -2,9 +2,58 @@
 
 This file provides guidance to AI agents when working with code in this repository. Read ALL of it first, and then follow the instructions.
 
+## Prime Directive
+
+**Ask: could it simpler without compromising quality?**
+
+## TL;DR
+
+### Design
+
+- ALWAYS use unit test TDD
+- ALWAYS use pure functions, and where that is not possible make sure all IO functions are passed as arguments from integration points
+- Use SOLID, DRY, KISS, YAGNI principles
+- Fail FAST, fail hard, with instructive, helpful error messages.
+- Do not fail open
+- Do not fail silently
+- Never swallow errors
+- Do not attempt to use "sensible defaults", if a required argument is missing, throw an error.
+- Always make code as simple and readable as possible, without sacrificing impact.
+
+### Development
+
+- Never use `as`
+- Never use `any` type
+- Never use `!` (non-null assertion)
+- Only use `unknown` at incoming boundaries from IO
+- Define types ONCE, there must be a SINGLE source of truth for each type
+- When dealing with a library, use the types from that library, do not make up new ones
+- Use MEANINGFUL type guards/predicates to narrow types (functions with the `is` keyword) OR use Zod schemas to validate incoming data
+- Always work to the highest software engineering principles
+
+### Testing
+
+- ALL IO MUST be mocked in tests, except in E2E tests
+- Mocks must always be simple fakes, passed as arguments to functions
+
+### Refactoring
+
+- NEVER create compatibility layers, replace old code with new code
+- Never maintain backward compatibility, we have versioning for that
+- If a function is too complex or too long, examine its responsibilities, reflect on the SOLID principles, and break it down into smaller PURE functions with no side effects
+
 ## Project Overview
 
 oak-notion-mcp is a Model Context Protocol (MCP) server that provides access to Notion via the Notion API. It allows AI clients like Claude or Gemini to interact with Notion workspaces.
+
+## Best Practice, Rules, and Conventions in Detail
+
+- [High Level Architecture](../../docs/high-level-architecture.md)
+- [Development Practice](../../docs/development-practice.md)
+- [TypeScript Practice](../../docs/typescript-practice.md)
+- [Testing and Development Strategy](../../docs/testing-and-development-strategy.md)
+- [Tooling](../../docs/tooling.md)
+- [Safety and Security](../../docs/safety-and-security.md)
 
 ## Development Commands
 
@@ -75,22 +124,6 @@ The `.env` file should contain:
 ```env
 NOTION_API_KEY=your_notion_api_key_here
 ```
-
-## Development Practices
-
-- **Branching**: GitHub flow (feature branches → main)
-- **Commits**: Conventional Commits format enforced by commitlint
-- **Code Style**: Prefer pure functions, clean architecture
-- **All IO must be mocked** except in E2E tests
-
-See detailed practices in:
-
-- [High Level Architecture](../../docs/high-level-architecture.md)
-- [Development Practice](../../docs/development-practice.md)
-- [TypeScript Practice](../../docs/typescript-practice.md)
-- [Testing and Development Strategy](../../docs/testing-and-development-strategy.md)
-- [Tooling](../../docs/tooling.md)
-- [Safety and Security](../../docs/safety-and-security.md)
 
 ## Current Project State
 

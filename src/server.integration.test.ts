@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMcpServer } from './server.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { NotionClientWrapper } from './notion/client.js';
 import type { Logger } from './logging/logger.js';
+import { createMockListUsersResponse } from './test-helpers/notion-api-mocks.js';
 
 describe('MCP Server', () => {
   const mockLogger: Logger = {
@@ -13,13 +13,24 @@ describe('MCP Server', () => {
     error: vi.fn(),
   };
 
-  const mockNotionClient: NotionClientWrapper = {
-    listUsers: vi.fn(),
-    getPage: vi.fn(),
-    getDatabase: vi.fn(),
-    queryDatabase: vi.fn(),
+  // Create a partial mock of NotionClient with only the methods we use
+  const mockNotionClient = {
+    users: {
+      list: vi.fn(),
+    },
+    pages: {
+      retrieve: vi.fn(),
+    },
+    databases: {
+      retrieve: vi.fn(),
+      query: vi.fn(),
+    },
+    blocks: {
+      children: {
+        list: vi.fn(),
+      },
+    },
     search: vi.fn(),
-    getBlockChildren: vi.fn(),
   };
 
   beforeEach(() => {
@@ -39,16 +50,18 @@ describe('MCP Server', () => {
     });
 
     // Setup mock to return users
-    vi.mocked(mockNotionClient.listUsers).mockResolvedValue([
-      {
-        id: 'user-1',
-        object: 'user',
-        type: 'person',
-        name: 'Test User',
-        avatar_url: null,
-        person: { email: 'test@example.com' },
-      },
-    ]);
+    vi.mocked(mockNotionClient.users.list).mockResolvedValue(
+      createMockListUsersResponse([
+        {
+          id: 'user-1',
+          object: 'user',
+          type: 'person',
+          name: 'Test User',
+          avatar_url: null,
+          person: { email: 'test@example.com' },
+        },
+      ]),
+    );
 
     // Create transport and connect
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -138,16 +151,18 @@ describe('MCP Server', () => {
     });
 
     // Setup mock to return users
-    vi.mocked(mockNotionClient.listUsers).mockResolvedValue([
-      {
-        id: 'user-1',
-        object: 'user',
-        type: 'person',
-        name: 'Test User',
-        avatar_url: null,
-        person: { email: 'test@example.com' },
-      },
-    ]);
+    vi.mocked(mockNotionClient.users.list).mockResolvedValue(
+      createMockListUsersResponse([
+        {
+          id: 'user-1',
+          object: 'user',
+          type: 'person',
+          name: 'Test User',
+          avatar_url: null,
+          person: { email: 'test@example.com' },
+        },
+      ]),
+    );
 
     // Create transport and connect
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();

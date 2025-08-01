@@ -144,6 +144,36 @@ pnpm test:watch    # Watch mode for TDD
 
 **Read** some E2E tests to see real usage patterns
 
+#### 4. Working with GO.md (Critical for AI Development)
+
+**Read**: [GO.md](../GO.md) - Essential grounding document
+
+**Key Concepts**:
+
+- **Intent**: Always identify the current plan and impact
+- **Grounding**: Read GO.md every third task for context
+- **Action**: Follow AGENT.md directives
+
+**Practice with AI Agents**:
+
+```
+Task: "Implement feature X. Read GO.md and follow all instructions"
+```
+
+This ensures agents:
+
+- Maintain atomic, actionable tasks
+- Regularly ground themselves in project context
+- Follow established rules and best practices
+- Include quality gates in their todo lists
+
+**Why GO.md Matters**:
+
+- Prevents agents from drifting off-task
+- Ensures consistent code quality
+- Maintains alignment with project vision
+- Enables efficient development within constraints
+
 ### Day 5: Advanced Topics (2-3 hours)
 
 #### 1. MCP Protocol Details
@@ -201,6 +231,8 @@ After each day, you should be able to answer:
 - [ ] How do you structure a good commit message?
 - [ ] Where would you add a new tool?
 - [ ] How do you test MCP handlers?
+- [ ] What is GO.md and why is it important for AI agents?
+- [ ] How does GO.md help maintain code quality?
 
 ### Day 5 Checkpoint
 
