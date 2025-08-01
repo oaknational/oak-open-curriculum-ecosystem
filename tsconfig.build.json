@@ -4,5 +4,13 @@
     "rootDir": "./src"
   },
   "include": ["src/**/*"],
-  "exclude": ["**/*.test.ts", "**/*.spec.ts", "node_modules", "dist", "coverage", "e2e-tests"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "node_modules",
+    "dist",
+    "coverage",
+    "e2e-tests",
+    "scripts/**/*.ts"
+  ]
 }
