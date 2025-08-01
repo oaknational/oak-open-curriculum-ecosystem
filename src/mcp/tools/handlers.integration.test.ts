@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '../../logging/logger.js';
-import type { NotionClientWrapper } from '../../notion/client.js';
+import type { MinimalNotionClient } from '../../types/dependencies.js';
+import { createMockPage } from '../../test-helpers/notion-mocks.js';
 import {
   createNotionSearchTool,
   createNotionListDatabasesTool,
@@ -9,6 +10,17 @@ import {
   createNotionListUsersTool,
   createToolHandlers,
 } from './handlers.js';
+
+// Helper to create a mock Notion client with all required methods
+function createMockNotionClient(): MinimalNotionClient {
+  return {
+    search: vi.fn(),
+    pages: { retrieve: vi.fn() },
+    databases: { retrieve: vi.fn(), query: vi.fn() },
+    users: { list: vi.fn() },
+    blocks: { children: { list: vi.fn() } },
+  };
+}
 
 describe('Tool Handlers', () => {
   const mockLogger: Logger = {
@@ -20,14 +32,7 @@ describe('Tool Handlers', () => {
 
   describe('createNotionSearchTool', () => {
     it('should create a search tool with correct metadata', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
 
@@ -115,13 +120,12 @@ describe('Tool Handlers', () => {
         next_cursor: null,
       };
 
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn().mockResolvedValue(mockSearchResults),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
@@ -146,13 +150,12 @@ describe('Tool Handlers', () => {
     });
 
     it('should apply type filter when provided', async () => {
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn().mockResolvedValue({ results: [], has_more: false }),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
@@ -166,13 +169,12 @@ describe('Tool Handlers', () => {
     });
 
     it('should handle search errors gracefully', async () => {
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn().mockRejectedValue(new Error('Search failed')),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
@@ -190,14 +192,7 @@ describe('Tool Handlers', () => {
 
   describe('createNotionListDatabasesTool', () => {
     it('should create a list databases tool with correct metadata', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const tool = createNotionListDatabasesTool({ notionClient: mockClient, logger: mockLogger });
 
@@ -233,13 +228,12 @@ describe('Tool Handlers', () => {
         next_cursor: null,
       };
 
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn().mockResolvedValue(mockDatabases),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionListDatabasesTool({ notionClient: mockClient, logger: mockLogger });
@@ -265,14 +259,7 @@ describe('Tool Handlers', () => {
 
   describe('createNotionQueryDatabaseTool', () => {
     it('should create a query database tool with correct metadata', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const tool = createNotionQueryDatabaseTool({
         notionClient: mockClient,
@@ -340,19 +327,33 @@ describe('Tool Handlers', () => {
         },
       ];
 
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn().mockResolvedValue({
-          object: 'database' as const,
-          id: 'db-123',
-          title: [{ type: 'text' as const, text: { content: 'Tasks' }, plain_text: 'Tasks' }],
-          description: [],
-          properties: {},
-        }),
-        queryDatabase: vi.fn().mockResolvedValue(mockPages),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: {
+          retrieve: vi.fn().mockResolvedValue({
+            object: 'database' as const,
+            id: 'db-123',
+            title: [{ type: 'text' as const, text: { content: 'Tasks' }, plain_text: 'Tasks' }],
+            description: [],
+            properties: {},
+            parent: { type: 'workspace' as const, workspace: true },
+            created_time: '2024-01-01T00:00:00Z',
+            last_edited_time: '2024-01-02T00:00:00Z',
+            created_by: { object: 'user' as const, id: 'user-123' },
+            last_edited_by: { object: 'user' as const, id: 'user-123' },
+            url: 'https://notion.so/db-123',
+            archived: false,
+            is_inline: false,
+            public_url: null,
+            icon: null,
+            cover: null,
+            in_trash: false,
+          }),
+          query: vi.fn().mockResolvedValue({ results: mockPages }),
+        },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionQueryDatabaseTool({
@@ -361,9 +362,8 @@ describe('Tool Handlers', () => {
       });
       const result = await tool.handler({ database_id: 'db-123' });
 
-      expect(mockClient.queryDatabase).toHaveBeenCalledWith('db-123', {
-        filter: undefined,
-        sorts: undefined,
+      expect(mockClient.databases.query).toHaveBeenCalledWith({
+        database_id: 'db-123',
         page_size: 20,
       });
 
@@ -382,14 +382,7 @@ describe('Tool Handlers', () => {
 
   describe('createNotionGetPageTool', () => {
     it('should create a get page tool with correct metadata', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const tool = createNotionGetPageTool({ notionClient: mockClient, logger: mockLogger });
 
@@ -413,20 +406,32 @@ describe('Tool Handlers', () => {
     });
 
     it('should get page with content when requested', async () => {
-      const mockPage = {
-        object: 'page' as const,
+      const mockPage = createMockPage({
         id: 'page-123',
-        created_time: '2024-01-01T00:00:00Z',
-        last_edited_time: '2024-01-02T00:00:00Z',
-        archived: false,
         url: 'https://notion.so/page-123',
         properties: {
           title: {
             type: 'title' as const,
-            title: [{ type: 'text' as const, text: { content: 'My Page' }, plain_text: 'My Page' }],
+            title: [
+              {
+                type: 'text' as const,
+                text: { content: 'My Page', link: null },
+                plain_text: 'My Page',
+                href: null,
+                annotations: {
+                  bold: false,
+                  italic: false,
+                  strikethrough: false,
+                  underline: false,
+                  code: false,
+                  color: 'default' as const,
+                },
+              },
+            ],
+            id: 'title',
           },
         },
-      };
+      });
 
       const mockBlocks = [
         {
@@ -437,28 +442,39 @@ describe('Tool Handlers', () => {
             rich_text: [
               {
                 type: 'text' as const,
-                text: { content: 'Page content' },
+                text: { content: 'Page content', link: null },
                 plain_text: 'Page content',
+                href: null,
+                annotations: {
+                  bold: false,
+                  italic: false,
+                  strikethrough: false,
+                  underline: false,
+                  code: false,
+                  color: 'default' as const,
+                },
               },
             ],
           },
         },
       ];
 
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn(),
-        getPage: vi.fn().mockResolvedValue(mockPage),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn().mockResolvedValue(mockBlocks),
+        pages: { retrieve: vi.fn().mockResolvedValue(mockPage) },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn() },
+        blocks: { children: { list: vi.fn().mockResolvedValue({ results: mockBlocks }) } },
       };
 
       const tool = createNotionGetPageTool({ notionClient: mockClient, logger: mockLogger });
       const result = await tool.handler({ page_id: 'page-123', include_content: true });
 
-      expect(mockClient.getPage).toHaveBeenCalledWith('page-123');
-      expect(mockClient.getBlockChildren).toHaveBeenCalledWith('page-123');
+      expect(mockClient.pages.retrieve).toHaveBeenCalledWith({ page_id: 'page-123' });
+      expect(mockClient.blocks.children.list).toHaveBeenCalledWith({
+        block_id: 'page-123',
+        page_size: 100,
+      });
 
       expect(result.content).toHaveLength(1);
       expect(result.content[0]).toHaveProperty('type', 'text');
@@ -474,14 +490,7 @@ describe('Tool Handlers', () => {
 
   describe('createNotionListUsersTool', () => {
     it('should create a list users tool with correct metadata', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const tool = createNotionListUsersTool({ notionClient: mockClient, logger: mockLogger });
 
@@ -513,19 +522,18 @@ describe('Tool Handlers', () => {
         },
       ];
 
-      const mockClient: NotionClientWrapper = {
+      const mockClient = {
         search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn().mockResolvedValue(mockUsers),
-        getBlockChildren: vi.fn(),
+        pages: { retrieve: vi.fn() },
+        databases: { retrieve: vi.fn(), query: vi.fn() },
+        users: { list: vi.fn().mockResolvedValue({ results: mockUsers }) },
+        blocks: { children: { list: vi.fn() } },
       };
 
       const tool = createNotionListUsersTool({ notionClient: mockClient, logger: mockLogger });
       const result = await tool.handler({});
 
-      expect(mockClient.listUsers).toHaveBeenCalled();
+      expect(mockClient.users.list).toHaveBeenCalled();
 
       expect(result.content).toHaveLength(1);
       expect(result.content[0]).toHaveProperty('type', 'text');
@@ -544,14 +552,7 @@ describe('Tool Handlers', () => {
 
   describe('createToolHandlers', () => {
     it('should return all tool handlers', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const handlers = createToolHandlers({ notionClient: mockClient, logger: mockLogger });
 
@@ -565,14 +566,7 @@ describe('Tool Handlers', () => {
     });
 
     it('should return tools array from getTools method', () => {
-      const mockClient: NotionClientWrapper = {
-        search: vi.fn(),
-        getPage: vi.fn(),
-        getDatabase: vi.fn(),
-        queryDatabase: vi.fn(),
-        listUsers: vi.fn(),
-        getBlockChildren: vi.fn(),
-      };
+      const mockClient = createMockNotionClient();
 
       const { getTools } = createToolHandlers({ notionClient: mockClient, logger: mockLogger });
       const tools = getTools();

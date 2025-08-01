@@ -1,5 +1,5 @@
-import type { NotionClientWrapper } from '../notion/client.js';
-import type { Logger } from '../logging/logger.js';
+import { scrubEmail } from '../utils/scrubbing.js';
+import type { CoreDependencies } from '../types/dependencies.js';
 
 export interface Resource {
   uri: string;
@@ -12,24 +12,26 @@ interface ResourceHandlers {
   handleListResources(): Promise<{ resources: Resource[] }>;
 }
 
-export function createResourceHandlers(deps: {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-}): ResourceHandlers {
+export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers {
   return {
     async handleListResources() {
       deps.logger.info('Listing resources');
 
       try {
-        const users = await deps.notionClient.listUsers();
-        deps.logger.debug('Found users', { count: users.length });
+        const response = await deps.notionClient.users.list({});
+        deps.logger.debug('Found users', { count: response.results.length });
 
-        const resources: Resource[] = users.map((user) => ({
-          uri: `notion://users/${user.id}`,
-          name: user.name || `User ${user.id}`,
-          description: 'Notion workspace user',
-          mimeType: 'application/json',
-        }));
+        const resources: Resource[] = response.results.map((user) => {
+          // Apply email scrubbing for privacy
+          const scrubbedName = user.name ? scrubEmail(user.name) : `User ${user.id}`;
+
+          return {
+            uri: `notion://users/${user.id}`,
+            name: scrubbedName,
+            description: 'Notion workspace user',
+            mimeType: 'application/json',
+          };
+        });
 
         return { resources };
       } catch (error) {
