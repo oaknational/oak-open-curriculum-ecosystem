@@ -51,7 +51,49 @@ pnpm format:check  # Check formatting
 
 # Type checking
 pnpm type-check
+
+# Architecture analysis
+pnpm analyze        # Run all analysis commands
+pnpm analyze:deps   # Generate dependency graph
+pnpm analyze:circular # Check for circular dependencies
+pnpm analyze:modules  # Classify modules for extraction
+pnpm analyze:loc      # Count lines of code
 ```
+
+### Architecture Analysis
+
+The project includes tools for analyzing the codebase architecture to identify components suitable for extraction into a shared library:
+
+```bash
+# Run complete architecture analysis
+pnpm analyze
+
+# Individual analysis commands:
+pnpm analyze:deps     # Creates visual dependency graph at .agent/analyses/dependency-graph.svg
+pnpm analyze:circular # Checks for circular dependencies
+pnpm analyze:modules  # Analyzes and classifies modules as generic/specific/mixed
+pnpm analyze:loc      # Generates lines of code metrics
+```
+
+**Note**: The dependency graph visualization (`analyze:deps`) requires [Graphviz](https://formulae.brew.sh/formula/graphviz) to be installed:
+
+```bash
+# Install on macOS
+brew install graphviz
+
+# Install on Ubuntu/Debian
+sudo apt-get install graphviz
+
+# Install on Windows
+# Download from https://graphviz.org/download/
+```
+
+The analysis results are stored in `.agent/analyses/` and help identify:
+
+- Generic MCP components that can be reused across projects
+- Notion-specific code that should remain in this package
+- Mixed modules that are candidates for refactoring
+- Node.js API usage for edge runtime compatibility planning
 
 ### Quality Gates
 

@@ -83,17 +83,33 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - All quality gates passing
 - Type safety with no `any` or type assertions
 
-### Phase 2.5: High-Priority Enhancements
+### Phase 2.9: Architectural Review & Modularization ✅ COMPLETED
+
+**Outcome**: Complete architectural analysis identifying generic MCP components for extraction into `oak-mcp-core`.
+
+**Key Findings**:
+
+- **36% generic components** (9 modules, 695 LoC) - immediately extractable
+- **40% mixed components** (10 modules, 1,114 LoC) - require refactoring
+- **24% Notion-specific** (6 modules, 1,195 LoC) - remain in this package
+- **80% edge compatibility** achievable with proper abstractions
+- **No circular dependencies** found in the codebase
+
+**Deliverables**: All analysis reports completed and available in [`.agent/generalisation-opportunities-analysis/`](../generalisation-opportunities-analysis/)
+
+**Next Steps**: Proceed with Phase 3 enhancements or begin oak-mcp-core extraction based on the analysis.
+
+### Phase 3: High-Priority Enhancements
 
 **Outcome**: Optimized MCP server with improved SDK usage, pagination, and better error handling
 
 **Key Deliverables**:
 
-- [ ] **MCP SDK High-Level API Migration**:
-  - [ ] Upgrade from low-level `Server` to high-level `McpServer` API
-  - [ ] Add completion support for better UX
-  - [ ] Implement resource templates for dynamic URIs
-  - [ ] Add title fields for better UI presentation
+- [x] **MCP SDK High-Level API Migration**:
+  - [x] Upgrade from low-level `Server` to high-level `McpServer` API
+  - [x] Add completion support for better UX
+  - [x] Implement resource templates for dynamic URIs
+  - [?] Add title fields for better UI presentation
 - [ ] **Pagination Support**:
   - [ ] Implement Notion SDK's `iteratePaginatedAPI` for large datasets
   - [ ] Add cursor-based pagination to prevent timeouts
@@ -122,43 +138,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Performance improvements measurable
 - Type safety maintained or improved
 
-### Phase 3: Advanced Features and Safety
-
-**Outcome**: Full-featured MCP server with write capabilities and safety controls
-
-**Key Deliverables**:
-
-- [ ] **Write Tools** (with mandatory confirmation):
-  - [ ] `notion-create-page` - Create new pages with confirmation
-  - [ ] `notion-update-page` - Update page content with confirmation
-  - [ ] `notion-create-database-entry` - Add database items with confirmation
-  - [ ] `notion-update-database-entry` - Modify database items with confirmation
-  - [ ] `notion-add-comment` - Add comments to pages with confirmation
-- [ ] **Safety Controls**:
-  - [ ] Human confirmation system for all write operations
-  - [ ] Operation preview before execution
-  - [ ] Rollback capability tracking
-  - [ ] Audit log of all operations
-- [ ] **Advanced Features**:
-  - [ ] Resource subscriptions for real-time updates
-  - [ ] Batch operations support
-  - [ ] Advanced database filtering with Notion's query language
-  - [ ] Template system for common operations
-- [ ] **Performance & Reliability**:
-  - [ ] Response caching for frequently accessed resources
-  - [ ] Rate limiting to respect Notion API quotas
-  - [ ] Exponential backoff for retries
-  - [ ] Graceful degradation on API errors
-- [ ] Configurable logging levels (following Notion SDK pattern)
-
-**Quality Checkpoints**:
-
-- E2E tests demonstrating safety controls
-- Performance benchmarks established
-- Security audit passed
-- All test types (unit, integration, API, E2E) passing
-
-### Phase 4: Production Readiness
+### Phase Future 1: Production Readiness
 
 **Outcome**: Published npm package ready for public use
 
@@ -208,6 +188,75 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Package installable via `npx oak-notion-mcp`
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
+
+### Phase Future 2: Refactoring and Generalisation of the Framework
+
+**Outcome**: Extract oak-mcp-core library based on Phase 2.9 analysis, with the intent of minimising the effort required to build new MCP servers.
+
+**Key Deliverables**:
+
+- [ ] **oak-mcp-core Library Creation**:
+  - [ ] Set up new repository and CI/CD pipeline
+  - [ ] Extract 695 LoC of generic components (Phase 1)
+  - [ ] Refactor and extract ~700 LoC from mixed components (Phase 2)
+  - [ ] Implement transport abstractions for edge runtime support
+  - [ ] Create plugin architecture for resources and tools
+  - [ ] Publish to npm as @oak-national/mcp-core
+
+- [ ] **oak-notion-mcp Migration**:
+  - [ ] Update imports to use @oak-national/mcp-core
+  - [ ] Extend base classes from core library
+  - [ ] Remove duplicated generic code
+  - [ ] Update tests to use core testing utilities
+
+- [ ] **Documentation and Examples**:
+  - [ ] API documentation for oak-mcp-core
+  - [ ] Migration guide from direct SDK usage
+  - [ ] Example MCP server using oak-mcp-core
+  - [ ] Edge deployment guides (CF Workers, Vercel, etc.)
+
+**Quality Checkpoints**:
+
+- 100% test coverage for oak-mcp-core
+- Zero breaking changes in oak-notion-mcp
+- Successfully deploy example server to CF Workers
+- Second MCP integration built using oak-mcp-core
+
+### Phase Future 3: Write Tools and Safety Controls
+
+**Outcome**: Full-featured MCP server with write capabilities and safety controls
+
+**Key Deliverables**:
+
+- [ ] **Write Tools** (with mandatory confirmation):
+  - [ ] `notion-create-page` - Create new pages with confirmation
+  - [ ] `notion-update-page` - Update page content with confirmation
+  - [ ] `notion-create-database-entry` - Add database items with confirmation
+  - [ ] `notion-update-database-entry` - Modify database items with confirmation
+  - [ ] `notion-add-comment` - Add comments to pages with confirmation
+- [ ] **Safety Controls**:
+  - [ ] Human confirmation system for all write operations
+  - [ ] Operation preview before execution
+  - [ ] Rollback capability tracking
+  - [ ] Audit log of all operations
+- [ ] **Advanced Features**:
+  - [ ] Resource subscriptions for real-time updates
+  - [ ] Batch operations support
+  - [ ] Advanced database filtering with Notion's query language
+  - [ ] Template system for common operations
+- [ ] **Performance & Reliability**:
+  - [ ] Response caching for frequently accessed resources
+  - [ ] Rate limiting to respect Notion API quotas
+  - [ ] Exponential backoff for retries
+  - [ ] Graceful degradation on API errors
+- [ ] Configurable logging levels (following Notion SDK pattern)
+
+**Quality Checkpoints**:
+
+- E2E tests demonstrating safety controls
+- Performance benchmarks established
+- Security audit passed
+- All test types (unit, integration, API, E2E) passing
 
 ## Success Metrics
 
