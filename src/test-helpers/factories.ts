@@ -4,7 +4,7 @@
  */
 
 import type { Logger } from '../logging/logger.js';
-import type { ServerConfig } from '../server.js';
+import type { ServerConfig } from '../types/dependencies.js';
 import { vi } from 'vitest';
 
 /**

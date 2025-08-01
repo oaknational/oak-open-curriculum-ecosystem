@@ -1,6 +1,10 @@
-import { writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import { tmpdir } from 'os';
+/**
+ * This is the startup logger for the MCP server, to track issues that happen before the proper logger is initialized.
+ */
+
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export interface StartupLoggerDependencies {
   console: Pick<Console, 'log' | 'error'>;
@@ -8,7 +12,11 @@ export interface StartupLoggerDependencies {
     writeFileSync: typeof writeFileSync;
     mkdirSync: typeof mkdirSync;
   };
-  tmpdir: () => string;
+  path: {
+    join: typeof join;
+    dirname: typeof dirname;
+  };
+  rootDir: string;
 }
 
 /**
@@ -20,25 +28,36 @@ export function createStartupLogger(
 ): (message: string, isError?: boolean) => void {
   return (message: string, isError = false): void => {
     const timestamp = new Date().toISOString();
-    const logMessage = `${timestamp} ${message}\n`;
+    const logMessage = `${timestamp}: [${isError ? 'ERROR' : 'INFO'}] ${message}\n`;
 
     // Always log to console for immediate visibility
     if (isError) {
-      deps.console.error(message);
+      deps.console.error(logMessage);
     } else {
-      deps.console.log(message);
+      deps.console.log(logMessage);
     }
 
     // Try to write to a file for persistence
     try {
-      const logDir = join(deps.tmpdir(), 'oak-notion-mcp');
+      const logDir = deps.path.join(deps.rootDir, '.logs', 'oak-notion-mcp-startup');
       deps.fs.mkdirSync(logDir, { recursive: true });
-      const logFile = join(logDir, 'startup.log');
+      const logFile = deps.path.join(logDir, 'startup.log');
       deps.fs.writeFileSync(logFile, logMessage, { flag: 'a' });
-    } catch {
-      // Silently fail - console.log is our fallback
+    } catch (error: unknown) {
+      deps.console.error(`Failed to write startup log file`, error);
     }
   };
+}
+
+/**
+ * Calculate the root directory from the current module
+ */
+function calculateRootDir(): string {
+  const thisFile = fileURLToPath(import.meta.url);
+  const thisDir = dirname(thisFile);
+  // We don't want to do clever things with finding the root of the repo, so it is done manually
+  // needs manual updating if the file is moved
+  return join(thisDir, '..');
 }
 
 /**
@@ -47,5 +66,6 @@ export function createStartupLogger(
 export const defaultStartupLoggerDeps: StartupLoggerDependencies = {
   console,
   fs: { writeFileSync, mkdirSync },
-  tmpdir,
+  path: { join, dirname },
+  rootDir: calculateRootDir(),
 };

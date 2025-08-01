@@ -12,7 +12,11 @@ describe('createStartupLogger', () => {
         writeFileSync: vi.fn(),
         mkdirSync: vi.fn(),
       },
-      tmpdir: () => '/tmp',
+      path: {
+        join: (...args: string[]) => args.join('/'),
+        dirname: (path: string) => path.split('/').slice(0, -1).join('/'),
+      },
+      rootDir: '/test/root',
     };
   }
 
@@ -22,7 +26,7 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith('Test message');
+    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
     expect(deps.console.error).not.toHaveBeenCalled();
   });
 
@@ -32,7 +36,9 @@ describe('createStartupLogger', () => {
 
     log('Error message', true);
 
-    expect(deps.console.error).toHaveBeenCalledWith('Error message');
+    expect(deps.console.error).toHaveBeenCalledWith(
+      expect.stringContaining('[ERROR] Error message'),
+    );
     expect(deps.console.log).not.toHaveBeenCalled();
   });
 
@@ -42,10 +48,18 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.fs.mkdirSync).toHaveBeenCalledWith('/tmp/oak-notion-mcp', { recursive: true });
+    // Check that mkdirSync was called with a path ending in oak-notion-mcp-startup
+    expect(deps.fs.mkdirSync).toHaveBeenCalledWith(
+      expect.stringMatching(/\.logs\/oak-notion-mcp-startup$/),
+      { recursive: true },
+    );
+
+    // Check that writeFileSync was called with a path ending in startup.log
     expect(deps.fs.writeFileSync).toHaveBeenCalledWith(
-      '/tmp/oak-notion-mcp/startup.log',
-      expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z Test message\n$/),
+      expect.stringMatching(/oak-notion-mcp-startup\/startup\.log$/),
+      expect.stringMatching(
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z: \[INFO\] Test message\n$/,
+      ),
       { flag: 'a' },
     );
   });
@@ -59,7 +73,11 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith('Test message');
+    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
+    expect(deps.console.error).toHaveBeenCalledWith(
+      'Failed to write startup log file',
+      expect.any(Error),
+    );
   });
 
   it('should still log to console when directory creation fails', () => {
@@ -71,8 +89,12 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith('Test message');
+    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
     expect(deps.fs.writeFileSync).not.toHaveBeenCalled();
+    expect(deps.console.error).toHaveBeenCalledWith(
+      'Failed to write startup log file',
+      expect.any(Error),
+    );
   });
 
   it('should append to existing log file', () => {
@@ -83,16 +105,20 @@ describe('createStartupLogger', () => {
     log('Second message');
 
     expect(deps.fs.writeFileSync).toHaveBeenCalledTimes(2);
+
+    // Check first call
     expect(deps.fs.writeFileSync).toHaveBeenNthCalledWith(
       1,
-      '/tmp/oak-notion-mcp/startup.log',
-      expect.stringContaining('First message'),
+      expect.stringMatching(/oak-notion-mcp-startup\/startup\.log$/),
+      expect.stringContaining('[INFO] First message'),
       { flag: 'a' },
     );
+
+    // Check second call
     expect(deps.fs.writeFileSync).toHaveBeenNthCalledWith(
       2,
-      '/tmp/oak-notion-mcp/startup.log',
-      expect.stringContaining('Second message'),
+      expect.stringMatching(/oak-notion-mcp-startup\/startup\.log$/),
+      expect.stringContaining('[INFO] Second message'),
       { flag: 'a' },
     );
   });

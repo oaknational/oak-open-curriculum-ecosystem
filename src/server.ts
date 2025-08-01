@@ -10,8 +10,6 @@ import { createResourceHandlers } from './mcp/resources/handlers.js';
 import { createToolHandlers } from './mcp/tools/handlers.js';
 import type { ServerDependencies } from './types/dependencies.js';
 
-export { ServerConfig } from './types/dependencies.js';
-
 export function createMcpServer(deps: ServerDependencies): Server {
   deps.logger.info('Creating MCP server', deps.config);
 
