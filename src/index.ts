@@ -11,7 +11,7 @@ export async function main(): Promise<void> {
     './config/environment.js'
   );
   const { createConsoleLogger } = await import('./logging/logger.js');
-  const { createNotionClient } = await import('./notion/client.js');
+  const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server.js');
 
   // Validate environment
@@ -37,7 +37,7 @@ export async function main(): Promise<void> {
     throw new Error('NOTION_API_KEY is required but not found');
   }
   const notionConfig = parseNotionConfig(apiKey);
-  const notionClient = createNotionClient(notionConfig.apiKey);
+  const notionClient = new Client({ auth: notionConfig.apiKey });
 
   const serverConfig = {
     name: 'oak-notion-mcp',

@@ -1,5 +1,7 @@
 # Development Practice
 
+NEVER disable checks of any kind, ever.
+
 ## Quality Gates
 
 The quality gates must be run after all major changes, and before each commit:

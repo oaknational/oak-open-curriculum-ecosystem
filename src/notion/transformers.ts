@@ -13,7 +13,11 @@ export interface McpResource {
   metadata?: Record<string, unknown>;
 }
 
-import type { NotionPage, NotionDatabase, NotionUser } from '../notion/client.js';
+import type {
+  PageObjectResponse as NotionPage,
+  DatabaseObjectResponse as NotionDatabase,
+  UserObjectResponse as NotionUser,
+} from '@notionhq/client';
 
 // Simplified Notion types (focusing on what we need)
 interface NotionRichText {
