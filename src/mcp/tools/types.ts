@@ -29,14 +29,14 @@ export type NotionGetPageHandler = ToolHandler<typeof notionGetPageSchema>;
 export type NotionListUsersHandler = ToolHandler<typeof notionListUsersSchema>;
 
 // Tool configuration type
-export interface ToolConfig<TSchema extends z.ZodSchema> {
+export interface ToolConfig<TSchema extends z.ZodType> {
   title: string;
   description: string;
   inputSchema: TSchema;
 }
 
 // Tool tuple type for McpServer.registerTool
-export type ToolTuple<TSchema extends z.ZodSchema> = [
+export type ToolTuple<TSchema extends z.ZodType> = [
   name: string,
   config: ToolConfig<TSchema>,
   handler: ToolHandler<TSchema>,

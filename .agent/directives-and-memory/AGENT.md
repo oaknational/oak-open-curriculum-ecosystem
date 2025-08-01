@@ -13,7 +13,10 @@ This file provides guidance to AI agents when working with code in this reposito
 - ALWAYS use unit test TDD
 - ALWAYS use pure functions, and where that is not possible make sure all IO functions are passed as arguments from integration points
 - Use SOLID, DRY, KISS, YAGNI principles
-- Fail FAST, fail hard, with instructive, helpful error messages. Do not fail open, do not fail silently.
+- Fail FAST, fail hard, with instructive, helpful error messages.
+- Do not fail open
+- Do not fail silently
+- Never swallow errors
 - Do not attempt to use "sensible defaults", if a required argument is missing, throw an error.
 - Always make code as simple and readable as possible, without sacrificing impact.
 
@@ -21,6 +24,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 - Never use `as`
 - Never use `any` type
+- Never use `!` (non-null assertion)
 - Only use `unknown` at incoming boundaries from IO
 - Define types ONCE, there must be a SINGLE source of truth for each type
 - When dealing with a library, use the types from that library, do not make up new ones

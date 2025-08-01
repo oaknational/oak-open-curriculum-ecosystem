@@ -1,5 +1,7 @@
 import { createConsola, type ConsolaInstance } from 'consola';
+import { join } from 'node:path';
 import { scrubSensitiveData } from '../utils/scrubbing.js';
+import { createFileReporter } from './file-reporter.js';
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
@@ -22,6 +24,10 @@ export function createConsoleLogger(level: LogLevel = 'info'): Logger {
     error: 1,
   }[level];
 
+  // Create file reporter for persistent logging
+  const logDir = join(process.cwd(), '.logs', 'oak-notion-mcp');
+  const fileReporter = createFileReporter({ logDir });
+
   // Create a custom Consola instance with our configuration
   const logger: ConsolaInstance = createConsola({
     level: consolaLevel,
@@ -29,6 +35,12 @@ export function createConsoleLogger(level: LogLevel = 'info'): Logger {
       date: true,
       colors: true,
     },
+    reporters: [
+      // Default reporter for console output
+      ...createConsola().options.reporters,
+      // File reporter for persistent logs
+      fileReporter,
+    ],
   });
 
   // Wrap Consola methods to add automatic scrubbing
@@ -50,41 +62,4 @@ export function createConsoleLogger(level: LogLevel = 'info'): Logger {
       logger.error(message, scrubbed);
     },
   };
-}
-
-/**
- * Legacy pure functions for testing log formatting logic
- * @deprecated Use Consola directly
- */
-export function formatLogMessage(level: LogLevel, message: string, context?: unknown): string {
-  const timestamp = new Date().toISOString();
-  const levelStr = `[${level.toUpperCase()}]`;
-
-  let contextStr = '';
-  if (context !== undefined) {
-    try {
-      // Scrub sensitive data before logging
-      const scrubbed = scrubSensitiveData(context);
-      contextStr = ` ${JSON.stringify(scrubbed)}`;
-    } catch {
-      // Handle circular references
-      contextStr = ' [Circular Reference]';
-    }
-  }
-
-  return `${timestamp} ${levelStr} ${message}${contextStr}`;
-}
-
-/**
- * Legacy function for testing log level filtering
- * @deprecated Consola handles this internally
- */
-export function shouldLog(currentLevel: LogLevel, messageLevel: LogLevel): boolean {
-  const LOG_LEVELS: Record<LogLevel, number> = {
-    debug: 0,
-    info: 1,
-    warn: 2,
-    error: 3,
-  };
-  return LOG_LEVELS[messageLevel] >= LOG_LEVELS[currentLevel];
 }
