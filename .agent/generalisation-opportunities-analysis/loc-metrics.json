@@ -1,0 +1,245 @@
+{
+  "header": {
+    "cloc_url": "github.com/AlDanial/cloc",
+    "cloc_version": "2.06",
+    "elapsed_seconds": 0.0758399963378906,
+    "n_files": 38,
+    "n_lines": 6999,
+    "files_per_second": 501.054876515266,
+    "lines_per_second": 92286.3968613249
+  },
+  "src/notion/transformers.unit.test.ts": {
+    "blank": 62,
+    "comment": 0,
+    "code": 633,
+    "language": "TypeScript"
+  },
+  "src/mcp/tools/handlers.integration.test.ts": {
+    "blank": 61,
+    "comment": 1,
+    "code": 522,
+    "language": "TypeScript"
+  },
+  "src/notion/query-builders.unit.test.ts": {
+    "blank": 67,
+    "comment": 0,
+    "code": 408,
+    "language": "TypeScript"
+  },
+  "src/notion/formatters.unit.test.ts": {
+    "blank": 37,
+    "comment": 4,
+    "code": 367,
+    "language": "TypeScript"
+  },
+  "src/errors/error-handler.unit.test.ts": {
+    "blank": 68,
+    "comment": 0,
+    "code": 357,
+    "language": "TypeScript"
+  },
+  "src/mcp/tools/handlers.ts": {
+    "blank": 34,
+    "comment": 11,
+    "code": 339,
+    "language": "TypeScript"
+  },
+  "src/notion/query-builders.ts": {
+    "blank": 61,
+    "comment": 43,
+    "code": 330,
+    "language": "TypeScript"
+  },
+  "src/mcp/resources/handlers.integration.test.ts": {
+    "blank": 37,
+    "comment": 1,
+    "code": 267,
+    "language": "TypeScript"
+  },
+  "src/notion/formatters.ts": {
+    "blank": 49,
+    "comment": 84,
+    "code": 249,
+    "language": "TypeScript"
+  },
+  "src/notion/transformers.ts": {
+    "blank": 37,
+    "comment": 26,
+    "code": 220,
+    "language": "TypeScript"
+  },
+  "src/logging/file-reporter.unit.test.ts": {
+    "blank": 35,
+    "comment": 2,
+    "code": 207,
+    "language": "TypeScript"
+  },
+  "src/server.integration.test.ts": {
+    "blank": 42,
+    "comment": 14,
+    "code": 195,
+    "language": "TypeScript"
+  },
+  "src/mcp/resources/handlers.ts": {
+    "blank": 28,
+    "comment": 24,
+    "code": 152,
+    "language": "TypeScript"
+  },
+  "src/errors/error-handler.ts": {
+    "blank": 20,
+    "comment": 20,
+    "code": 149,
+    "language": "TypeScript"
+  },
+  "src/mcp/resources/uri-parser.unit.test.ts": {
+    "blank": 44,
+    "comment": 0,
+    "code": 138,
+    "language": "TypeScript"
+  },
+  "src/config/environment.unit.test.ts": {
+    "blank": 34,
+    "comment": 0,
+    "code": 112,
+    "language": "TypeScript"
+  },
+  "src/startup-logger.unit.test.ts": {
+    "blank": 22,
+    "comment": 4,
+    "code": 99,
+    "language": "TypeScript"
+  },
+  "src/test-helpers/notion-mocks.ts": {
+    "blank": 7,
+    "comment": 8,
+    "code": 94,
+    "language": "TypeScript"
+  },
+  "src/utils/scrubbing.unit.test.ts": {
+    "blank": 13,
+    "comment": 0,
+    "code": 93,
+    "language": "TypeScript"
+  },
+  "src/mcp/resources/uri-parser.ts": {
+    "blank": 26,
+    "comment": 24,
+    "code": 72,
+    "language": "TypeScript"
+  },
+  "src/logging/file-reporter.ts": {
+    "blank": 10,
+    "comment": 18,
+    "code": 71,
+    "language": "TypeScript"
+  },
+  "src/server.ts": {
+    "blank": 12,
+    "comment": 4,
+    "code": 60,
+    "language": "TypeScript"
+  },
+  "src/mcp/tools/schemas.ts": {
+    "blank": 8,
+    "comment": 7,
+    "code": 58,
+    "language": "TypeScript"
+  },
+  "src/logging/file-logger.e2e.test.ts": {
+    "blank": 11,
+    "comment": 9,
+    "code": 54,
+    "language": "TypeScript"
+  },
+  "src/server-setup.ts": {
+    "blank": 10,
+    "comment": 11,
+    "code": 52,
+    "language": "TypeScript"
+  },
+  "src/logging/logger.ts": {
+    "blank": 6,
+    "comment": 9,
+    "code": 50,
+    "language": "TypeScript"
+  },
+  "src/startup-logger.ts": {
+    "blank": 7,
+    "comment": 17,
+    "code": 47,
+    "language": "TypeScript"
+  },
+  "src/mcp/tools/types.ts": {
+    "blank": 7,
+    "comment": 7,
+    "code": 43,
+    "language": "TypeScript"
+  },
+  "src/config/environment.ts": {
+    "blank": 8,
+    "comment": 1,
+    "code": 40,
+    "language": "TypeScript"
+  },
+  "src/mcp/handlers.ts": {
+    "blank": 7,
+    "comment": 1,
+    "code": 35,
+    "language": "TypeScript"
+  },
+  "src/types/dependencies.ts": {
+    "blank": 5,
+    "comment": 15,
+    "code": 31,
+    "language": "TypeScript"
+  },
+  "src/test-helpers/notion-api-mocks.ts": {
+    "blank": 3,
+    "comment": 10,
+    "code": 29,
+    "language": "TypeScript"
+  },
+  "src/index.ts": {
+    "blank": 7,
+    "comment": 5,
+    "code": 28,
+    "language": "TypeScript"
+  },
+  "src/notion/type-guards.ts": {
+    "blank": 3,
+    "comment": 10,
+    "code": 26,
+    "language": "TypeScript"
+  },
+  "src/utils/scrubbing.ts": {
+    "blank": 4,
+    "comment": 10,
+    "code": 25,
+    "language": "TypeScript"
+  },
+  "src/test-helpers/factories.ts": {
+    "blank": 3,
+    "comment": 10,
+    "code": 18,
+    "language": "TypeScript"
+  },
+  "src/mcp/types.ts": {
+    "blank": 2,
+    "comment": 1,
+    "code": 12,
+    "language": "TypeScript"
+  },
+  "src/types/environment.ts": {
+    "blank": 0,
+    "comment": 3,
+    "code": 6,
+    "language": "TypeScript"
+  },
+  "SUM": {
+    "blank": 897,
+    "comment": 414,
+    "code": 5688,
+    "nFiles": 38
+  }
+}
