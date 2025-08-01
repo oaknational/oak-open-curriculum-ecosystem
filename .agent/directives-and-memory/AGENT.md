@@ -34,7 +34,11 @@ This file provides guidance to AI agents when working with code in this reposito
 ### Testing
 
 - ALL IO MUST be mocked in tests, except in E2E tests
-- Mocks must always be simple fakes, passed as arguments to functions
+- Mocks must ALWAYS be simple fakes, passed as arguments to functions
+- Always ask what a test is proving. It should prove something about the code under test, not about the test itself.
+- Each proof should happen ONCE, repeated proofs are fragile and a waste of time.
+- Unit and integration tests prove engineering correctness
+- E2E tests prove behavioural impact
 
 ### Refactoring
 

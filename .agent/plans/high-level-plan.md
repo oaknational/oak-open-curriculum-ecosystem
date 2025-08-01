@@ -20,6 +20,9 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 4. **Quality Gates** - Automated checks prevent regressions
 5. **Best Practices** - Follow all documented standards rigorously
 6. **Type Safety** - No `any`, no type assertions, validate at boundaries with Zod
+7. **Dependency Injection** - All IO must be passed as arguments, never imported directly
+8. **Fail FAST** - Clear error messages, never fail silently or swallow errors
+9. **No Backward Compatibility Layers** - Use versioning, replace code directly
 
 ## Development Phases
 
@@ -99,44 +102,131 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Next Steps**: Proceed with Phase 3 enhancements or begin oak-mcp-core extraction based on the analysis.
 
-### Phase 3: High-Priority Enhancements
+### Phase 3: Strategic Enhancements (Framework-First Approach)
 
-**Outcome**: Optimized MCP server with improved SDK usage, pagination, and better error handling
+**Outcome**: Build generic MCP abstractions first, then specialize for Notion, preparing ~2,500 LoC for oak-mcp-core extraction
+
+**Strategy**: Every enhancement creates reusable abstractions that will form oak-mcp-core's foundation
 
 **Key Deliverables**:
 
-- [x] **MCP SDK High-Level API Migration**:
-  - [x] Upgrade from low-level `Server` to high-level `McpServer` API
-  - [x] Add completion support for better UX
-  - [x] Implement resource templates for dynamic URIs
-  - [?] Add title fields for better UI presentation
-- [ ] **Pagination Support**:
-  - [ ] Implement Notion SDK's `iteratePaginatedAPI` for large datasets
-  - [ ] Add cursor-based pagination to prevent timeouts
-  - [ ] Handle page_size limits properly
-- [ ] **Performance Optimizations**:
-  - [ ] Optimize discovery resource to be more efficient
-  - [ ] Add code comments indicating where caching could be integrated
-  - [ ] Add code comments indicating where rate limiting could be integrated
-- [ ] **Error Handling Enhancement**:
-  - [ ] Use Notion SDK's `APIErrorCode` enum for precise error classification
-  - [ ] Implement `isNotionClientError` type guard
-  - [ ] Ensure proper error propagation through all layers
-- [ ] **Type Guards**:
-  - [ ] Use SDK's built-in type guards (`isFullPage`, `isFullDatabase`)
-  - [ ] Reduce type assertions where possible
-  - [ ] Implement custom type guards for our domain types
+- [ ] **Enhanced Logging Framework** (foundation layer - no dependencies):
+  - [ ] Create zero-dependency `Logger` interface (~50 LoC extractable)
+  - [ ] Implement `ContextLogger` with AsyncLocalStorage correlation (~150 LoC)
+  - [ ] Add transport abstraction with console and file transports (~150 LoC)
+  - [ ] Create JSON and pretty formatters with error serialization (~100 LoC)
+  - [ ] Implement request tracing with correlation IDs (~50 LoC)
+  - [ ] Add performance logging integration (~50 LoC)
+  - [ ] Create buffered, async non-blocking transports
+  - [ ] Ensure edge-runtime compatibility (abstract file system)
+
+- [ ] **Generic MCP Server Base Class** (replaces direct SDK migration):
+  - [ ] Create abstract `McpServerBase<TConfig, TDeps>` class (~150 LoC extractable)
+  - [ ] Implement lifecycle management (start, stop, health checks)
+  - [ ] Add plugin architecture for handlers
+  - [ ] Create `NotionMcpServer extends McpServerBase`
+  - [ ] Migrate existing server.ts to use new base class
+
+- [ ] **Enhanced Error Framework** (generic first, Notion second):
+  - [ ] Create `ChainedError` class that preserves full error chain (~300 LoC extractable)
+  - [ ] Implement structured error types with categories and metadata
+  - [ ] Add `ErrorContext` with AsyncLocalStorage for context preservation
+  - [ ] Create `RecoveryStrategy` interface with exponential backoff
+  - [ ] Implement `ErrorReporter` for monitoring and metrics
+  - [ ] Add error boundaries for all handlers with context extraction
+  - [ ] Create `Result<T, E>` type for type-safe error handling
+  - [ ] Implement `ErrorSanitizer` for sensitive data protection
+  - [ ] Add `NotionErrorHandler` using SDK's `APIErrorCode` enum
+  - [ ] Ensure every error includes: cause, context, timestamp, unique ID
+
+- [ ] **Generic Pagination Framework**:
+  - [ ] Create `PaginationStrategy<T, TCursor>` interface (~100 LoC extractable)
+  - [ ] Implement `PaginationHandler` with AsyncGenerator support
+  - [ ] Add `NotionPaginationStrategy` using `iteratePaginatedAPI`
+  - [ ] Handle page_size limits generically
+  - [ ] Support both cursor and offset pagination patterns
+
+- [ ] **Type Guard Registry Framework**:
+  - [ ] Create `TypeGuardRegistry<T>` for composable guards (~80 LoC extractable)
+  - [ ] Implement composite guard creation
+  - [ ] Register SDK guards (`isFullPage`, `isFullDatabase`)
+  - [ ] Add custom domain type guards
+  - [ ] Zero type assertions policy
+
 - [ ] **Resource Linking Pattern**:
-  - [ ] Return resource URIs from tools instead of inline data
-  - [ ] Allow tools to reference resources for better composability
-  - [ ] Reduce response payload sizes
+  - [ ] Create `ResourceLinker` interface (~75 LoC extractable)
+  - [ ] Implement `ResourceLinkingHandler` for response transformation
+  - [ ] Add URI extraction and reference creation
+  - [ ] Reduce response payloads universally
+  - [ ] Enable cross-resource references
 
-**Quality Checkpoints**:
+- [ ] **Performance Instrumentation Layer**:
+  - [ ] Create `PerformanceMonitor` interface (~100 LoC extractable)
+  - [ ] Implement `PerformanceMiddleware` for handler wrapping
+  - [ ] Add pluggable metric backends
+  - [ ] Zero overhead when disabled
+  - [ ] Prepare for caching and rate limiting integration points
 
-- All existing tests continue to pass
-- New features have comprehensive test coverage
-- Performance improvements measurable
-- Type safety maintained or improved
+- [ ] **Configuration Management System**:
+  - [ ] Create `ConfigManager` with multi-source support (~200 LoC extractable)
+  - [ ] Implement `ConfigSchema` interface with validation
+  - [ ] Add environment and file config sources
+  - [ ] Integrate with Zod for schema validation
+  - [ ] Support config hot-reloading
+
+- [ ] **Testing Utilities Framework**:
+  - [ ] Create `TestMcpServer` for in-process testing (~200 LoC extractable)
+  - [ ] Implement `TestTransport` for mocking MCP communication
+  - [ ] Add `TestDataBuilder` for common test scenarios
+  - [ ] Create test assertion helpers
+  - [ ] Support snapshot testing for responses
+
+**Implementation Order** (3 weeks):
+
+1. **Week 1: Foundation Layers** (1,550 LoC extractable)
+   - Enhanced Logging Framework (no dependencies) - 550 LoC
+   - Enhanced Error Framework (depends on logger) - 300 LoC
+   - Configuration Management System - 200 LoC
+   - Testing Utilities Framework - 200 LoC
+   - Validation Framework - 150 LoC
+   - Generic MCP Server Base Class (depends on all) - 150 LoC
+
+2. **Week 2: Core Patterns** (950 LoC extractable)
+   - Middleware System - 150 LoC
+   - Registry System (resources/tools) - 200 LoC
+   - Type Guard Registry Framework - 80 LoC
+   - Generic Pagination Framework - 100 LoC
+   - Resource Linking Pattern - 75 LoC
+   - Performance Instrumentation - 100 LoC
+   - Lifecycle Management - 100 LoC
+   - Additional utilities (Result type, etc.) - 145 LoC
+
+3. **Week 3: Integration & Polish**
+   - Implement all Notion-specific versions
+   - Migrate existing code to new abstractions
+   - Create registry system for resources/tools
+   - Document patterns for oak-mcp-core
+   - Performance testing and optimization
+
+**Quality Checkpoints** (after each component):
+
+- `pnpm format && pnpm type-check && pnpm lint && pnpm test && pnpm build`
+- Verify zero integration-specific dependencies in generic components
+- Ensure 100% test coverage for new abstractions
+- Document extraction readiness in component headers
+- Benchmark performance impact (<5% overhead)
+
+**Success Metrics**:
+
+- **For Phase 3**: All existing tests pass, 20%+ performance improvement
+- **For Future 2 prep**: 1,805 additional LoC extractable (total ~2,500 LoC / 83% of codebase)
+- All abstractions follow SOLID principles and are runtime-agnostic
+- Clear separation between generic and Notion-specific code
+- Zero errors lost through propagation chain
+- 100% of errors include full context and are sanitized
+- All logging is structured, correlated, and edge-compatible
+- Configuration system supports multiple sources and hot-reloading
+- Test utilities enable rapid MCP server development
 
 ### Phase Future 1: Production Readiness
 
