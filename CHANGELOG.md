@@ -1,3 +1,24 @@
+# [1.0.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.4.0...v1.0.0) (2025-08-02)
+
+
+### Bug Fixes
+
+* resolve all TypeScript lint errors and improve type safety ([6f61547](https://github.com/oaknational/oak-notion-mcp/commit/6f615474897f65f9e65e7f46f8c08d35f55bb586))
+
+
+### Features
+
+* implement comprehensive logging framework for Phase 3 ([1bc0f57](https://github.com/oaknational/oak-notion-mcp/commit/1bc0f576a38f579f772d11d1d18753e454a2e7a7))
+
+
+### BREAKING CHANGES
+
+* None - all changes maintain existing API contracts
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
 # [0.4.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.3.0...v0.4.0) (2025-08-01)
 
 
