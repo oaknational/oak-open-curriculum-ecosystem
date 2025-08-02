@@ -10,7 +10,7 @@ import type { LogContext } from './logger-interface.js';
 
 describe('Context Logger Pure Functions', () => {
   describe('mergeContexts', () => {
-    it('should merge two contexts with later values taking precedence', async () => {
+    it('should merge two contexts with later values taking precedence', () => {
       // Import will fail until implementation exists, so we define expected behavior
       const mergeContexts = (base: LogContext, override: LogContext): LogContext => {
         return { ...base, ...override };
@@ -28,7 +28,7 @@ describe('Context Logger Pure Functions', () => {
       });
     });
 
-    it('should handle empty contexts', async () => {
+    it('should handle empty contexts', () => {
       const mergeContexts = (base: LogContext, override: LogContext): LogContext => {
         return { ...base, ...override };
       };
@@ -38,7 +38,7 @@ describe('Context Logger Pure Functions', () => {
       expect(mergeContexts({}, {})).toEqual({});
     });
 
-    it('should handle nested objects without deep merge', async () => {
+    it('should handle nested objects without deep merge', () => {
       const mergeContexts = (base: LogContext, override: LogContext): LogContext => {
         return { ...base, ...override };
       };
@@ -54,10 +54,10 @@ describe('Context Logger Pure Functions', () => {
   });
 
   describe('generateCorrelationId', () => {
-    it('should generate unique IDs', async () => {
+    it('should generate unique IDs', () => {
       // Pure function that generates IDs
       const generateCorrelationId = (): string => {
-        return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+        return `${String(Date.now())}-${Math.random().toString(36).substring(2, 11)}`;
       };
 
       const id1 = generateCorrelationId();
@@ -70,7 +70,7 @@ describe('Context Logger Pure Functions', () => {
   });
 
   describe('sanitizeContext', () => {
-    it('should remove sensitive fields from context', async () => {
+    it('should remove sensitive fields from context', () => {
       const sanitizeContext = (
         context: LogContext,
         sensitiveKeys: string[] = ['password', 'token', 'secret', 'apiKey'],
@@ -108,7 +108,7 @@ describe('Context Logger Pure Functions', () => {
       });
     });
 
-    it('should handle custom sensitive keys', async () => {
+    it('should handle custom sensitive keys', () => {
       const sanitizeContext = (
         context: LogContext,
         sensitiveKeys: string[] = ['password', 'token', 'secret', 'apiKey'],
@@ -144,7 +144,7 @@ describe('Context Logger Pure Functions', () => {
   });
 
   describe('formatContext', () => {
-    it('should format context for logging output', async () => {
+    it('should format context for logging output', () => {
       const formatContext = (context: LogContext): string => {
         if (Object.keys(context).length === 0) {
           return '';
@@ -171,7 +171,7 @@ describe('Context Logger Pure Functions', () => {
       expect(result).toBe(' requestId=123 userId=456 tags=["api","v2"]');
     });
 
-    it('should handle empty context', async () => {
+    it('should handle empty context', () => {
       const formatContext = (context: LogContext): string => {
         if (Object.keys(context).length === 0) {
           return '';

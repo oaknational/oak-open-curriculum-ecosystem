@@ -21,22 +21,25 @@ describe('File Transport Integration', () => {
     private _isOpen = true;
     private _flushCount = 0;
 
-    async write(data: string): Promise<void> {
+    write(data: string): Promise<void> {
       if (!this._isOpen) {
-        throw new Error('Writer is closed');
+        return Promise.reject(new Error('Writer is closed'));
       }
       this.buffer.push(data);
+      return Promise.resolve();
     }
 
-    async flush(): Promise<void> {
+    flush(): Promise<void> {
       if (!this._isOpen) {
-        throw new Error('Writer is closed');
+        return Promise.reject(new Error('Writer is closed'));
       }
       this._flushCount++;
+      return Promise.resolve();
     }
 
-    async close(): Promise<void> {
+    close(): Promise<void> {
       this._isOpen = false;
+      return Promise.resolve();
     }
 
     getContents(): string {
@@ -88,14 +91,24 @@ describe('File Transport Integration', () => {
             parts.push(JSON.stringify(context));
           }
 
-          if (error) {
-            parts.push(error instanceof Error ? error.stack || error.message : String(error));
+          if (error !== undefined && error !== null) {
+            if (error instanceof Error) {
+              parts.push(error.stack ?? error.message);
+            } else if (typeof error === 'string') {
+              parts.push(error);
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              parts.push(String(error));
+            } else if (typeof error === 'object') {
+              parts.push(JSON.stringify(error));
+            } else {
+              parts.push('[unknown error type]');
+            }
           }
 
           return parts.join(' ') + '\n';
         };
 
-        const formatter = options?.formatter || defaultFormatter;
+        const formatter = options?.formatter ?? defaultFormatter;
 
         return {
           log: async (
@@ -140,8 +153,21 @@ describe('File Transport Integration', () => {
         error?: unknown,
         context?: LogContext,
       ): string => {
-        const errorStr = error ? `|${error instanceof Error ? error.message : String(error)}` : '';
-        return `${LogLevel[level]}|${message}${errorStr}|${JSON.stringify(context || {})}\n`;
+        const errorStr =
+          error !== undefined && error !== null
+            ? `|${
+                error instanceof Error
+                  ? error.message
+                  : typeof error === 'string'
+                    ? error
+                    : typeof error === 'number' || typeof error === 'boolean'
+                      ? String(error)
+                      : typeof error === 'object'
+                        ? JSON.stringify(error)
+                        : '[unknown error type]'
+              }`
+            : '';
+        return `${LogLevel[level]}|${message}${errorStr}|${JSON.stringify(context ?? {})}\n`;
       };
 
       const createFileTransport = (
@@ -262,24 +288,27 @@ describe('File Transport Integration', () => {
             await this.rotate();
           }
 
-          const lines = this.files.get(this.currentFile) || [];
+          const lines = this.files.get(this.currentFile) ?? [];
           lines.push(data);
           this.files.set(this.currentFile, lines);
         }
 
-        async flush(): Promise<void> {
+        flush(): Promise<void> {
           // No-op for test
+          return Promise.resolve();
         }
 
-        async close(): Promise<void> {
+        close(): Promise<void> {
           // No-op for test
+          return Promise.resolve();
         }
 
-        private async rotate(): Promise<void> {
+        private rotate(): Promise<void> {
           const timestamp = Date.now();
-          this.currentFile = `log.${timestamp}.txt`;
+          this.currentFile = `log.${String(timestamp)}.txt`;
           this.files.set(this.currentFile, []);
           this.currentSize = 0;
+          return Promise.resolve();
         }
 
         getFiles(): string[] {
@@ -287,7 +316,7 @@ describe('File Transport Integration', () => {
         }
 
         getFileContents(filename: string): string[] {
-          return this.files.get(filename) || [];
+          return this.files.get(filename) ?? [];
         }
       }
 
@@ -317,20 +346,23 @@ describe('File Transport Integration', () => {
         let writeCount = 0;
 
         return {
-          write: async (data: string): Promise<void> => {
+          write: (data: string): Promise<void> => {
             if (!data || typeof data !== 'string') {
-              throw new Error('Invalid data passed to write');
+              return Promise.reject(new Error('Invalid data passed to write'));
             }
             writeCount++;
             if (writeCount > 2) {
-              throw new Error('Write failed: disk full');
+              return Promise.reject(new Error('Write failed: disk full'));
             }
+            return Promise.resolve();
           },
-          flush: async (): Promise<void> => {
+          flush: (): Promise<void> => {
             // No-op for this test - testing write failures only
+            return Promise.resolve();
           },
-          close: async (): Promise<void> => {
+          close: (): Promise<void> => {
             // No-op for this test - testing write failures only
+            return Promise.resolve();
           },
         };
       };

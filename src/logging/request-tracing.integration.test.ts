@@ -86,8 +86,7 @@ describe('Request Tracing Integration', () => {
       expect(mockLogger.logs).toHaveLength(5);
       expect(
         mockLogger.logs.every(
-          (log) =>
-            log.context?.['requestId'] === 'req-123' && log.context?.['userId'] === 'user-456',
+          (log) => log.context?.['requestId'] === 'req-123' && log.context['userId'] === 'user-456',
         ),
       ).toBe(true);
     });
@@ -138,6 +137,8 @@ describe('Request Tracing Integration', () => {
                 parentSpanId: 'span-002',
                 spanId: 'span-003',
               });
+              // Return a promise to satisfy the async function requirement
+              return Promise.resolve();
             });
           });
 
@@ -149,8 +150,8 @@ describe('Request Tracing Integration', () => {
       );
     });
 
-    it('should handle trace context updates', async () => {
-      await storage.run({ requestId: 'req-123', userId: 'guest' }, async () => {
+    it('should handle trace context updates', () => {
+      storage.run({ requestId: 'req-123', userId: 'guest' }, () => {
         const initial = storage.getStore();
         expect(initial?.userId).toBe('guest');
 
@@ -159,17 +160,19 @@ describe('Request Tracing Integration', () => {
         }
 
         // Simulate authentication
-        await storage.run(
+        const updateResult = storage.run(
           { ...initial, userId: 'user-789', sessionId: 'session-456' },
-          async () => {
+          () => {
             const updated = storage.getStore();
             expect(updated).toMatchObject({
               requestId: 'req-123',
               userId: 'user-789',
               sessionId: 'session-456',
             });
+            return true;
           },
         );
+        expect(updateResult).toBe(true);
       });
     });
 
@@ -201,7 +204,7 @@ describe('Request Tracing Integration', () => {
       ): Promise<void> => {
         const extractedTrace = extractTraceFromHeaders(headers);
         const context: TraceContext = {
-          requestId: extractedTrace.requestId || `req-${Date.now()}`,
+          requestId: extractedTrace.requestId ?? `req-${String(Date.now())}`,
           ...extractedTrace,
         };
 
@@ -221,10 +224,12 @@ describe('Request Tracing Integration', () => {
           traceId: 'external-trace-456',
           spanId: 'external-span-789',
         });
+        // Return void to complete the async function
+        return Promise.resolve();
       });
     });
 
-    it('should propagate trace context to child processes', async () => {
+    it('should propagate trace context to child processes', () => {
       const serializeTraceContext = (context: TraceContext): string => {
         return JSON.stringify({
           requestId: context.requestId,
@@ -271,34 +276,38 @@ describe('Request Tracing Integration', () => {
       // Simulate parent process
       let serializedContext = '';
 
-      await storage.run({ requestId: 'req-123', traceId: 'trace-456' }, async () => {
+      const parentResult = storage.run({ requestId: 'req-123', traceId: 'trace-456' }, () => {
         const context = storage.getStore();
         if (!context) {
           throw new Error('Expected trace context to exist in storage');
         }
         serializedContext = serializeTraceContext(context);
+        return true;
       });
+      expect(parentResult).toBe(true);
 
       // Simulate child process
       const childContext = deserializeTraceContext(serializedContext);
 
-      await storage.run(childContext, async () => {
+      const childResult = storage.run(childContext, () => {
         const context = storage.getStore();
         expect(context).toMatchObject({
           requestId: 'req-123',
           traceId: 'trace-456',
         });
+        return true;
       });
+      expect(childResult).toBe(true);
     });
 
-    it('should handle missing trace context gracefully', async () => {
+    it('should handle missing trace context gracefully', () => {
       const getTraceOrDefault = (): TraceContext => {
         const existing = storage.getStore();
         if (existing) return existing;
 
         // Generate new context if none exists
         return {
-          requestId: `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+          requestId: `req-${String(Date.now())}-${Math.random().toString(36).substring(2, 9)}`,
         };
       };
 
@@ -307,13 +316,15 @@ describe('Request Tracing Integration', () => {
       expect(context1.requestId).toMatch(/^req-\d+-[a-z0-9]+$/);
 
       // Inside context
-      await storage.run({ requestId: 'existing-123' }, async () => {
+      const existingResult = storage.run({ requestId: 'existing-123' }, () => {
         const context2 = getTraceOrDefault();
         expect(context2.requestId).toBe('existing-123');
+        return true;
       });
+      expect(existingResult).toBe(true);
     });
 
-    it('should support trace sampling decisions', async () => {
+    it('should support trace sampling decisions', () => {
       interface SampledTraceContext extends TraceContext {
         sampled: boolean;
         sampleRate?: number;
@@ -329,7 +340,7 @@ describe('Request Tracing Integration', () => {
       ): SampledTraceContext => {
         const sampled = shouldSample(sampleRate);
         return {
-          requestId: base.requestId || `req-${Date.now()}`,
+          requestId: base.requestId ?? `req-${String(Date.now())}`,
           ...base,
           sampled,
           sampleRate,

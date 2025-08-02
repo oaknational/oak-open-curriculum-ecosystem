@@ -23,8 +23,9 @@ describe('Logger Interface', () => {
     it('should allow numeric comparison of levels', async () => {
       const { LogLevel } = await import('./logger-interface.js');
 
-      expect(LogLevel.ERROR > LogLevel.WARN).toBe(true);
-      expect(LogLevel.DEBUG < LogLevel.INFO).toBe(true);
+      // Verify that numeric values allow proper level comparison
+      expect(LogLevel.ERROR).toBeGreaterThan(LogLevel.WARN);
+      expect(LogLevel.DEBUG).toBeLessThan(LogLevel.INFO);
     });
   });
 

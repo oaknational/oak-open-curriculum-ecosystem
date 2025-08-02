@@ -8,8 +8,8 @@ import type {
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
+import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
 import type { CoreDependencies } from '../../types/dependencies.js';
-import { isFullPage, isFullDatabase } from '../../notion/type-guards.js';
 import { parseResourceUri, validateResourceUri } from './uri-parser.js';
 import {
   transformNotionPageToMcpResource,
@@ -31,6 +31,7 @@ export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers
   const { notionClient, logger } = deps;
 
   return {
+    // eslint-disable-next-line @typescript-eslint/require-await
     async handleListResources(): Promise<ListResourcesResult> {
       logger.debug('Listing available resources');
 
@@ -99,7 +100,8 @@ export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers
           }
 
           default:
-            throw new Error(`Unsupported resource type: ${resourceId.type}`);
+            // TypeScript thinks this is never, but keep for runtime safety
+            throw new Error(`Unsupported resource type: ${String(resourceId.type)}`);
         }
 
         // Scrub sensitive data before returning
@@ -138,18 +140,29 @@ async function handleDiscoveryResource(deps: CoreDependencies): Promise<ReadReso
     ]);
 
     const users = usersResponse.results;
-    const searchResults = searchResponse.results.filter(
-      (result): result is PageObjectResponse | DatabaseObjectResponse =>
-        (result.object === 'page' || result.object === 'database') && 'id' in result,
-    );
+    // Filter only full pages and databases from search results
+    const searchResults: (PageObjectResponse | DatabaseObjectResponse)[] = [];
+    for (const result of searchResponse.results) {
+      // Search results can include pages, databases, blocks, and partial responses
+      // We only want full pages and databases
+      if (result.object === 'page' && isFullPage(result)) {
+        searchResults.push(result);
+      } else if (result.object === 'database' && isFullDatabase(result)) {
+        searchResults.push(result);
+      }
+      // Blocks, partial responses, and other types are ignored
+    }
 
     // Transform to MCP resources
     const userResources = users.map(transformNotionUserToMcpResource);
     const pageAndDbResources = searchResults
       .map((item) => {
-        if (item.object === 'page' && 'properties' in item) {
+        // Use SDK's built-in type guards to check for full responses
+        // isFullPage checks for 'url' property (full pages have: url, properties, parent, created_time, etc.)
+        // isFullDatabase checks for 'title' property (full DBs have: title, description, icon, cover, etc.)
+        if (isFullPage(item)) {
           return transformNotionPageToMcpResource(item);
-        } else if (item.object === 'database' && 'title' in item) {
+        } else if (isFullDatabase(item)) {
           return transformNotionDatabaseToMcpResource(item);
         }
         return null;
@@ -177,9 +190,9 @@ async function handleDiscoveryResource(deps: CoreDependencies): Promise<ReadReso
     const text = `# Notion Workspace Discovery
 
 ## Summary
-- Users: ${discovery.workspace.users}
-- Pages: ${discovery.workspace.pages}
-- Databases: ${discovery.workspace.databases}
+- Users: ${String(discovery.workspace.users)}
+- Pages: ${String(discovery.workspace.pages)}
+- Databases: ${String(discovery.workspace.databases)}
 
 ## Resources
 ${(() => {

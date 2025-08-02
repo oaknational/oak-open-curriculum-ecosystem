@@ -58,7 +58,7 @@ export function createMockDatabase(
 export function createMockUser(overrides: Partial<UserObjectResponse> = {}): UserObjectResponse {
   const baseUser = {
     object: 'user' as const,
-    id: overrides.id || 'user-123',
+    id: overrides.id ?? 'user-123',
     name: overrides.name !== undefined ? overrides.name : 'Test User',
     avatar_url: overrides.avatar_url !== undefined ? overrides.avatar_url : null,
   };
@@ -68,7 +68,7 @@ export function createMockUser(overrides: Partial<UserObjectResponse> = {}): Use
     const botUser: UserObjectResponse = {
       ...baseUser,
       type: 'bot' as const,
-      bot: overrides.bot || {},
+      bot: overrides.bot ?? {},
     };
     return botUser;
   }

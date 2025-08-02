@@ -100,7 +100,7 @@ export function validateResourceUri(uri: string): ValidationResult {
   const [type, id] = parts;
 
   if (!isValidResourceType(type)) {
-    errors.push(`Invalid resource type: ${type}. Must be pages, databases, or users`);
+    errors.push(`Invalid resource type: ${String(type)}. Must be pages, databases, or users`);
   }
 
   if (!id || id.trim() === '') {

@@ -14,8 +14,8 @@ const config: Config = tseslint.config(
     ],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.strict,
-  ...tseslint.configs.stylistic,
+  ...tseslint.configs.strictTypeChecked,
+  ...tseslint.configs.stylisticTypeChecked,
   prettierRecommended,
   {
     files: ['**/*.ts'],
@@ -51,6 +51,9 @@ const config: Config = tseslint.config(
       'no-empty-function': 'error',
       'no-constant-condition': 'error',
       '@typescript-eslint/no-deprecated': 'error',
+      // Note: you must disable the base rule as it can report incorrect errors
+      'consistent-return': 'off',
+      '@typescript-eslint/consistent-return': 'error',
     },
   },
   // Test files

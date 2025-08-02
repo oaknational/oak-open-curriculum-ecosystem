@@ -85,7 +85,7 @@ export function defaultFileFormatter(
   }
 
   // Add level
-  parts.push(`[${LogLevel[level] || 'UNKNOWN'}]`);
+  parts.push(`[${LogLevel[level]}]`);
 
   // Add message
   parts.push(message);
@@ -96,11 +96,19 @@ export function defaultFileFormatter(
   }
 
   // Add error if present
-  if (error) {
+  if (error !== undefined && error !== null) {
     if (error instanceof Error) {
-      parts.push(error.stack || error.message);
-    } else {
+      parts.push(error.stack ?? error.message);
+    } else if (typeof error === 'string') {
+      parts.push(error);
+    } else if (typeof error === 'number' || typeof error === 'boolean') {
       parts.push(String(error));
+    } else if (typeof error === 'object') {
+      // For non-Error objects, stringify to preserve structure
+      parts.push(JSON.stringify(error));
+    } else {
+      // This case handles symbols, functions, and other non-serializable types
+      parts.push('[unknown error type]');
     }
   }
 
@@ -122,12 +130,8 @@ export class FileTransport implements LogTransport {
   private isClosed = false;
 
   constructor(options: FileTransportOptions) {
-    if (!options.writer) {
-      throw new Error('FileTransport requires a writer');
-    }
-
     this.writer = options.writer;
-    this.formatter = options.formatter || this.createDefaultFormatter();
+    this.formatter = options.formatter ?? this.createDefaultFormatter();
     this.bufferSize = options.bufferSize ?? 0;
     this.includeTimestamp = options.includeTimestamp ?? true;
     this.includeStackTrace = options.includeStackTrace ?? true;
@@ -146,7 +150,7 @@ export class FileTransport implements LogTransport {
         timestamp?: Date,
       ): string => {
         // Use timestamp if includeTimestamp is true
-        const ts = this.includeTimestamp ? timestamp || new Date() : undefined;
+        const ts = this.includeTimestamp ? (timestamp ?? new Date()) : undefined;
 
         // Process error based on includeStackTrace option
         let processedError = error;
@@ -259,7 +263,7 @@ export function createSimpleFileFormatter(
       }
 
       if (includeLevel) {
-        parts.push(LogLevel[level] || 'UNKNOWN');
+        parts.push(LogLevel[level]);
       }
 
       parts.push(message);
@@ -268,8 +272,18 @@ export function createSimpleFileFormatter(
         parts.push(JSON.stringify(context));
       }
 
-      if (error) {
-        parts.push(error instanceof Error ? error.message : String(error));
+      if (error !== undefined && error !== null) {
+        if (error instanceof Error) {
+          parts.push(error.message);
+        } else if (typeof error === 'string') {
+          parts.push(error);
+        } else if (typeof error === 'number' || typeof error === 'boolean') {
+          parts.push(String(error));
+        } else if (typeof error === 'object') {
+          parts.push(JSON.stringify(error));
+        } else {
+          parts.push('[unknown error type]');
+        }
       }
 
       return parts.join(delimiter) + '\n';

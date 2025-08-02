@@ -6,7 +6,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 **Ask: could it simpler without compromising quality?**
 
-## TL;DR
+## Rules Summary
 
 ### Design
 

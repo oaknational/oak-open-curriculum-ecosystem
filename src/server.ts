@@ -32,14 +32,16 @@ export function createMcpServer(deps: ServerDependencies): Server {
   const toolHandlers = createToolHandlers(deps);
 
   // Resource handlers
-  server.setRequestHandler(ListResourcesRequestSchema, resourceHandlers.handleListResources);
+  server.setRequestHandler(ListResourcesRequestSchema, async () => {
+    return resourceHandlers.handleListResources();
+  });
 
   server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
     return resourceHandlers.handleReadResource(request.params.uri);
   });
 
   // Tool handlers
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
+  server.setRequestHandler(ListToolsRequestSchema, () => {
     deps.logger.debug('Listing available tools');
     const tools = toolHandlers.getTools();
     return {
@@ -65,7 +67,7 @@ export function createMcpServer(deps: ServerDependencies): Server {
   });
 
   // Prompt handlers (empty for now)
-  server.setRequestHandler(ListPromptsRequestSchema, async () => {
+  server.setRequestHandler(ListPromptsRequestSchema, () => {
     deps.logger.debug('Listing prompts (none available yet)');
     return { prompts: [] };
   });

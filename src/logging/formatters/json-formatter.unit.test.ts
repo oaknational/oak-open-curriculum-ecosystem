@@ -23,7 +23,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -40,7 +40,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -72,7 +81,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -89,7 +98,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -127,7 +145,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -144,7 +162,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -184,7 +211,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -201,7 +228,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -249,7 +285,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -266,7 +302,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -298,7 +343,7 @@ describe('JSON Formatter Pure Functions', () => {
       ): string => {
         const entry: Record<string, unknown> = {
           timestamp: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-          level: LogLevel[level] || 'UNKNOWN',
+          level: LogLevel[level],
           levelValue: level,
           message,
         };
@@ -315,7 +360,16 @@ describe('JSON Formatter Pure Functions', () => {
               stack: error.stack,
             };
           } else {
-            entry['error'] = String(error);
+            // For non-Error values, convert safely
+            if (typeof error === 'object') {
+              entry['error'] = '[object]';
+            } else if (typeof error === 'string') {
+              entry['error'] = error;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              entry['error'] = String(error);
+            } else {
+              entry['error'] = '[unknown]';
+            }
           }
         }
 
@@ -443,7 +497,7 @@ describe('JSON Formatter Pure Functions', () => {
         ): string => {
           const entry: Record<string, unknown> = {
             [timestampField]: timestamp ? timestamp.toISOString() : new Date().toISOString(),
-            [levelField]: LogLevel[level] || 'UNKNOWN',
+            [levelField]: LogLevel[level],
             [messageField]: message,
           };
 
@@ -452,7 +506,16 @@ describe('JSON Formatter Pure Functions', () => {
           }
 
           if (error) {
-            entry[errorField] = error instanceof Error ? error.message : String(error);
+            entry[errorField] =
+              error instanceof Error
+                ? error.message
+                : typeof error === 'object'
+                  ? JSON.stringify(error)
+                  : typeof error === 'string'
+                    ? error
+                    : typeof error === 'number' || typeof error === 'boolean'
+                      ? String(error)
+                      : '[unknown]';
           }
 
           return JSON.stringify(entry);

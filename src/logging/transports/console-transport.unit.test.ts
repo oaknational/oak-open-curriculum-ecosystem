@@ -94,7 +94,7 @@ describe('Console Transport Pure Functions', () => {
         }
 
         // Add level
-        const levelStr = LogLevel[level] || 'UNKNOWN';
+        const levelStr = LogLevel[level];
         args.push(`[${levelStr}]`);
 
         // Add message
@@ -151,7 +151,7 @@ describe('Console Transport Pure Functions', () => {
           args.push(`[${timestamp.toISOString()}]`);
         }
 
-        const levelStr = LogLevel[level] || 'UNKNOWN';
+        const levelStr = LogLevel[level];
         args.push(`[${levelStr}]`);
         args.push(message);
 
@@ -224,15 +224,14 @@ describe('Console Transport Pure Functions', () => {
   describe('colorizeLevel', () => {
     it('should wrap level string with color codes', () => {
       const colorizeLevel = (level: LogLevel, text: string): string => {
-        const colorCode =
-          {
-            [LogLevel.TRACE]: '\x1b[90m',
-            [LogLevel.DEBUG]: '\x1b[36m',
-            [LogLevel.INFO]: '\x1b[32m',
-            [LogLevel.WARN]: '\x1b[33m',
-            [LogLevel.ERROR]: '\x1b[31m',
-            [LogLevel.FATAL]: '\x1b[35m',
-          }[level] || '\x1b[0m';
+        const colorCode = {
+          [LogLevel.TRACE]: '\x1b[90m',
+          [LogLevel.DEBUG]: '\x1b[36m',
+          [LogLevel.INFO]: '\x1b[32m',
+          [LogLevel.WARN]: '\x1b[33m',
+          [LogLevel.ERROR]: '\x1b[31m',
+          [LogLevel.FATAL]: '\x1b[35m',
+        }[level];
 
         return `${colorCode}${text}\x1b[0m`;
       };

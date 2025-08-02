@@ -48,7 +48,7 @@ describe('Console Transport Integration', () => {
       mockConsole = createMockConsole();
     });
 
-    it('should log to appropriate console method based on level', async () => {
+    it('should log to appropriate console method based on level', () => {
       // Simulate ConsoleTransport behavior
       const createConsoleTransport = (console: MockConsole): LogTransport => {
         return {
@@ -87,7 +87,7 @@ describe('Console Transport Integration', () => {
         context?: LogContext,
       ): unknown[] => {
         const args: unknown[] = [];
-        const levelStr = LogLevel[level] || 'UNKNOWN';
+        const levelStr = LogLevel[level];
         args.push(`[${levelStr}]`);
         args.push(message);
 
@@ -104,9 +104,9 @@ describe('Console Transport Integration', () => {
 
       const transport = createConsoleTransport(mockConsole);
 
-      transport.log(LogLevel.INFO, 'Info message');
-      transport.log(LogLevel.ERROR, 'Error message', new Error('test'));
-      transport.log(LogLevel.DEBUG, 'Debug message', undefined, { userId: '123' });
+      void transport.log(LogLevel.INFO, 'Info message');
+      void transport.log(LogLevel.ERROR, 'Error message', new Error('test'));
+      void transport.log(LogLevel.DEBUG, 'Debug message', undefined, { userId: '123' });
 
       expect(mockConsole.calls).toHaveLength(3);
       expect(mockConsole.calls[0]).toEqual({
@@ -137,7 +137,7 @@ describe('Console Transport Integration', () => {
             }
 
             const method = level >= LogLevel.ERROR ? 'error' : 'info';
-            const levelStr = LogLevel[level] || 'UNKNOWN';
+            const levelStr = LogLevel[level];
             console[method](`[${levelStr}]`, message, context, error);
           },
         };
@@ -163,12 +163,12 @@ describe('Console Transport Integration', () => {
         return {
           log: (level: LogLevel, message: string, error?: unknown, context?: LogContext): void => {
             // This test focuses on flush behavior only
-            if (error || context) {
+            if (error ?? context) {
               throw new Error('Flush test should not use error or context parameters');
             }
 
             const logFn = () => {
-              const levelStr = LogLevel[level] || 'UNKNOWN';
+              const levelStr = LogLevel[level];
               console.info(`[${levelStr}]`, message);
             };
 
@@ -177,28 +177,33 @@ describe('Console Transport Integration', () => {
 
             // Auto-flush for this test
             if (pendingLogs.length >= 2) {
-              pendingLogs.forEach((fn) => fn());
+              pendingLogs.forEach((fn) => {
+                fn();
+              });
               pendingLogs.length = 0;
             }
           },
 
-          flush: async (): Promise<void> => {
+          flush: (): Promise<void> => {
             flushCalled = true;
-            pendingLogs.forEach((fn) => fn());
+            pendingLogs.forEach((fn) => {
+              fn();
+            });
             pendingLogs.length = 0;
+            return Promise.resolve();
           },
         };
       };
 
       const transport = createFlushableTransport(mockConsole);
 
-      transport.log(LogLevel.INFO, 'Message 1');
-      transport.log(LogLevel.INFO, 'Message 2');
+      void transport.log(LogLevel.INFO, 'Message 1');
+      void transport.log(LogLevel.INFO, 'Message 2');
 
       // Should auto-flush after 2 messages
       expect(mockConsole.calls).toHaveLength(2);
 
-      transport.log(LogLevel.INFO, 'Message 3');
+      void transport.log(LogLevel.INFO, 'Message 3');
       expect(mockConsole.calls).toHaveLength(2); // Not flushed yet
 
       if (transport.flush) {
@@ -218,7 +223,7 @@ describe('Console Transport Integration', () => {
         return {
           log: (level: LogLevel, message: string, error?: unknown, context?: LogContext): void => {
             // This test focuses on close behavior only
-            if (error || context) {
+            if (error ?? context) {
               throw new Error('Close test should not use error or context parameters');
             }
 
@@ -226,20 +231,21 @@ describe('Console Transport Integration', () => {
               throw new Error('Transport is closed');
             }
 
-            const levelStr = LogLevel[level] || 'UNKNOWN';
+            const levelStr = LogLevel[level];
             console.info(`[${levelStr}]`, message);
           },
 
-          close: async (): Promise<void> => {
+          close: (): Promise<void> => {
             closeCalled = true;
             isOpen = false;
+            return Promise.resolve();
           },
         };
       };
 
       const transport = createCloseableTransport(mockConsole);
 
-      transport.log(LogLevel.INFO, 'Before close');
+      void transport.log(LogLevel.INFO, 'Before close');
       expect(mockConsole.calls).toHaveLength(1);
 
       if (transport.close) {
@@ -250,7 +256,7 @@ describe('Console Transport Integration', () => {
 
       // Should throw after close
       expect(() => {
-        transport.log(LogLevel.INFO, 'After close');
+        void transport.log(LogLevel.INFO, 'After close');
       }).toThrow('Transport is closed');
     });
 
@@ -275,7 +281,7 @@ describe('Console Transport Integration', () => {
               parts.push(new Date().toISOString());
             }
 
-            const levelStr = LogLevel[level] || 'UNKNOWN';
+            const levelStr = LogLevel[level];
             parts.push(`[${options.uppercase ? levelStr : levelStr.toLowerCase()}]`);
 
             parts.push(message);
@@ -300,7 +306,7 @@ describe('Console Transport Integration', () => {
         uppercase: false,
       });
 
-      transport.log(LogLevel.WARN, 'Warning message', undefined, { module: 'auth' });
+      void transport.log(LogLevel.WARN, 'Warning message', undefined, { module: 'auth' });
 
       expect(mockConsole.calls).toHaveLength(1);
       const firstCall = mockConsole.calls[0];

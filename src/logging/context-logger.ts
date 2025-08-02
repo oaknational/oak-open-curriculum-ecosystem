@@ -22,7 +22,7 @@ export function mergeContexts(base: LogContext, override: LogContext): LogContex
  * Pure function - deterministic format
  */
 export function generateCorrelationId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+  return `${String(Date.now())}-${Math.random().toString(36).substring(2, 11)}`;
 }
 
 /**
@@ -77,14 +77,14 @@ export class ContextLogger implements Logger {
     private baseLogger: Logger,
     storage?: AsyncLocalStorage<LogContext>,
   ) {
-    this.storage = storage || new AsyncLocalStorage<LogContext>();
+    this.storage = storage ?? new AsyncLocalStorage<LogContext>();
   }
 
   /**
    * Get merged context from AsyncLocalStorage and provided context
    */
   private getMergedContext(context?: LogContext): LogContext | undefined {
-    const asyncContext = this.storage.getStore() || {};
+    const asyncContext = this.storage.getStore() ?? {};
     const merged = context ? mergeContexts(asyncContext, context) : asyncContext;
 
     return Object.keys(merged).length > 0 ? merged : undefined;
@@ -137,7 +137,7 @@ export class ContextLogger implements Logger {
    * Context is available to all async operations within the function
    */
   async runWithContext<T>(context: LogContext, fn: () => T | Promise<T>): Promise<T> {
-    const currentContext = this.storage.getStore() || {};
+    const currentContext = this.storage.getStore() ?? {};
     const mergedContext = mergeContexts(currentContext, context);
 
     return this.storage.run(mergedContext, fn);
@@ -155,7 +155,7 @@ export class ContextLogger implements Logger {
    * Create a new correlation ID and add it to context
    */
   async withCorrelationId<T>(fn: () => T | Promise<T>, correlationId?: string): Promise<T> {
-    const id = correlationId || generateCorrelationId();
+    const id = correlationId ?? generateCorrelationId();
     return this.runWithContext({ correlationId: id }, fn);
   }
 }

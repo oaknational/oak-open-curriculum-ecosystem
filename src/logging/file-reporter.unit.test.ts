@@ -159,7 +159,9 @@ describe('createFileReporter', () => {
     };
 
     // Should not throw
-    expect(() => reporter.log(logObj, { options: {} })).not.toThrow();
+    expect(() => {
+      reporter.log(logObj, { options: {} });
+    }).not.toThrow();
   });
 
   it('should format different argument types correctly', () => {
