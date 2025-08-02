@@ -162,6 +162,31 @@ export function extractRelationValue(property: PageObjectResponse['properties'][
 }
 
 /**
+ * Property type to extractor function mapping
+ */
+const PROPERTY_EXTRACTORS: Record<
+  string,
+  (property: PageObjectResponse['properties'][string]) => string
+> = {
+  title: extractTitleValue,
+  rich_text: extractRichTextValue,
+  select: extractSelectValue,
+  status: extractStatusValue,
+  multi_select: extractMultiSelectValue,
+  number: extractNumberValue,
+  checkbox: extractCheckboxValue,
+  date: extractDateValue,
+  url: extractUrlValue,
+  email: extractEmailValue,
+  phone_number: extractPhoneValue,
+  created_time: extractCreatedTimeValue,
+  last_edited_time: extractLastEditedTimeValue,
+  people: extractPeopleValue,
+  files: extractFilesValue,
+  relation: extractRelationValue,
+};
+
+/**
  * Extracts a display value from a Notion property
  *
  * Simplified approach: only handle common property types that users typically care about.
@@ -173,44 +198,16 @@ export function extractPropertyValue(property: PageObjectResponse['properties'][
     return 'N/A';
   }
 
-  // Handle each property type
-  switch (property.type) {
-    case 'title':
-      return extractTitleValue(property);
-    case 'rich_text':
-      return extractRichTextValue(property);
-    case 'select':
-      return extractSelectValue(property);
-    case 'status':
-      return extractStatusValue(property);
-    case 'multi_select':
-      return extractMultiSelectValue(property);
-    case 'number':
-      return extractNumberValue(property);
-    case 'checkbox':
-      return extractCheckboxValue(property);
-    case 'date':
-      return extractDateValue(property);
-    case 'url':
-      return extractUrlValue(property);
-    case 'email':
-      return extractEmailValue(property);
-    case 'phone_number':
-      return extractPhoneValue(property);
-    case 'created_time':
-      return extractCreatedTimeValue(property);
-    case 'last_edited_time':
-      return extractLastEditedTimeValue(property);
-    case 'people':
-      return extractPeopleValue(property);
-    case 'files':
-      return extractFilesValue(property);
-    case 'relation':
-      return extractRelationValue(property);
-    case 'formula':
-    case 'rollup':
-      return `[${property.type}]`;
-    default:
-      return 'N/A';
+  // Use extractor if available
+  const extractor = PROPERTY_EXTRACTORS[property.type];
+  if (extractor) {
+    return extractor(property);
   }
+
+  // Handle special cases
+  if (property.type === 'formula' || property.type === 'rollup') {
+    return `[${property.type}]`;
+  }
+
+  return 'N/A';
 }
