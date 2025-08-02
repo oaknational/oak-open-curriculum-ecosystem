@@ -25,10 +25,90 @@ export interface ResourceHandlers {
 }
 
 /**
+ * Handle reading a resource by URI
+ */
+async function handleReadResource(
+  uri: string,
+  deps: CoreDependencies,
+): Promise<ReadResourceResult> {
+  const { notionClient, logger } = deps;
+  logger.debug('Reading resource', { uri });
+
+  // Validate URI format
+  const validation = validateResourceUri(uri);
+  if (!validation.valid) {
+    logger.error('Invalid resource URI', { uri });
+    throw new Error(`Invalid resource URI: ${uri}`);
+  }
+
+  // Handle special discovery URI
+  if (uri === 'notion://discovery') {
+    return handleDiscoveryResource(deps);
+  }
+
+  // Parse resource identifier
+  const resourceId = parseResourceUri(uri);
+  if (!resourceId) {
+    logger.error('Failed to parse resource URI', { uri });
+    throw new Error(`Invalid resource URI: ${uri}`);
+  }
+
+  try {
+    let content: unknown;
+
+    switch (resourceId.type) {
+      case 'pages': {
+        const response = await notionClient.pages.retrieve({ page_id: resourceId.id });
+        if (!isFullPage(response)) {
+          throw new Error('Invalid page response');
+        }
+        content = response;
+        break;
+      }
+
+      case 'databases': {
+        const response = await notionClient.databases.retrieve({ database_id: resourceId.id });
+        if (!isFullDatabase(response)) {
+          throw new Error('Invalid database response');
+        }
+        content = response;
+        break;
+      }
+
+      case 'users': {
+        // For individual user, we'd need to list all and find by ID
+        // For now, we'll throw an error
+        throw new Error('Reading individual users is not yet supported');
+      }
+
+      default:
+        // TypeScript thinks this is never, but keep for runtime safety
+        throw new Error(`Unsupported resource type: ${String(resourceId.type)}`);
+    }
+
+    // Scrub sensitive data before returning
+    const scrubbedContent = scrubSensitiveData(content);
+
+    return {
+      contents: [
+        {
+          uri,
+          mimeType: 'application/json',
+          text: JSON.stringify(scrubbedContent, null, 2),
+        },
+      ],
+    };
+  } catch (error) {
+    logger.error('Error reading resource', { uri, error });
+    throw new Error(`Failed to read resource: ${uri}`);
+  }
+}
+
+/**
  * Creates resource handlers with injected dependencies
  */
 export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers {
-  const { notionClient, logger } = deps;
+  const { logger } = deps;
 
   return {
     handleListResources(): Promise<ListResourcesResult> {
@@ -48,78 +128,7 @@ export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers
       return Promise.resolve({ resources });
     },
 
-    async handleReadResource(uri: string): Promise<ReadResourceResult> {
-      logger.debug('Reading resource', { uri });
-
-      // Validate URI format
-      const validation = validateResourceUri(uri);
-      if (!validation.valid) {
-        logger.error('Invalid resource URI', { uri });
-        throw new Error(`Invalid resource URI: ${uri}`);
-      }
-
-      // Handle special discovery URI
-      if (uri === 'notion://discovery') {
-        return handleDiscoveryResource(deps);
-      }
-
-      // Parse resource identifier
-      const resourceId = parseResourceUri(uri);
-      if (!resourceId) {
-        logger.error('Failed to parse resource URI', { uri });
-        throw new Error(`Invalid resource URI: ${uri}`);
-      }
-
-      try {
-        let content: unknown;
-
-        switch (resourceId.type) {
-          case 'pages': {
-            const response = await notionClient.pages.retrieve({ page_id: resourceId.id });
-            if (!isFullPage(response)) {
-              throw new Error('Invalid page response');
-            }
-            content = response;
-            break;
-          }
-
-          case 'databases': {
-            const response = await notionClient.databases.retrieve({ database_id: resourceId.id });
-            if (!isFullDatabase(response)) {
-              throw new Error('Invalid database response');
-            }
-            content = response;
-            break;
-          }
-
-          case 'users': {
-            // For individual user, we'd need to list all and find by ID
-            // For now, we'll throw an error
-            throw new Error('Reading individual users is not yet supported');
-          }
-
-          default:
-            // TypeScript thinks this is never, but keep for runtime safety
-            throw new Error(`Unsupported resource type: ${String(resourceId.type)}`);
-        }
-
-        // Scrub sensitive data before returning
-        const scrubbedContent = scrubSensitiveData(content);
-
-        return {
-          contents: [
-            {
-              uri,
-              mimeType: 'application/json',
-              text: JSON.stringify(scrubbedContent, null, 2),
-            },
-          ],
-        };
-      } catch (error) {
-        logger.error('Error reading resource', { uri, error });
-        throw new Error(`Failed to read resource: ${uri}`);
-      }
-    },
+    handleReadResource: (uri: string) => handleReadResource(uri, deps),
   };
 }
 
