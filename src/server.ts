@@ -10,6 +10,40 @@ import { createResourceHandlers } from './mcp/resources/handlers/index.js';
 import { createToolHandlers } from './mcp/tools/handlers.js';
 import type { ServerDependencies } from './types/dependencies.js';
 
+/**
+ * Set up tool-related request handlers
+ */
+function setupToolHandlers(
+  server: Server,
+  toolHandlers: ReturnType<typeof createToolHandlers>,
+  deps: ServerDependencies,
+): void {
+  server.setRequestHandler(ListToolsRequestSchema, () => {
+    deps.logger.debug('Listing available tools');
+    const tools = toolHandlers.getTools();
+    return {
+      tools: tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description,
+        inputSchema: tool.inputSchema,
+      })),
+    };
+  });
+
+  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+    deps.logger.debug('Calling tool', { name, args });
+
+    const tool = name in toolHandlers && name !== 'getTools' ? toolHandlers[name] : undefined;
+    if (!tool || typeof tool !== 'object' || !('handler' in tool)) {
+      throw new Error(`Tool not found: ${name}`);
+    }
+
+    const result = await tool.handler(args);
+    return result;
+  });
+}
+
 export function createMcpServer(deps: ServerDependencies): Server {
   deps.logger.info('Creating MCP server', { config: deps.config });
 
@@ -41,30 +75,7 @@ export function createMcpServer(deps: ServerDependencies): Server {
   });
 
   // Tool handlers
-  server.setRequestHandler(ListToolsRequestSchema, () => {
-    deps.logger.debug('Listing available tools');
-    const tools = toolHandlers.getTools();
-    return {
-      tools: tools.map((tool) => ({
-        name: tool.name,
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-      })),
-    };
-  });
-
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
-    deps.logger.debug('Calling tool', { name, args });
-
-    const tool = name in toolHandlers && name !== 'getTools' ? toolHandlers[name] : undefined;
-    if (!tool || typeof tool !== 'object' || !('handler' in tool)) {
-      throw new Error(`Tool not found: ${name}`);
-    }
-
-    const result = await tool.handler(args);
-    return result;
-  });
+  setupToolHandlers(server, toolHandlers, deps);
 
   // Prompt handlers (empty for now)
   server.setRequestHandler(ListPromptsRequestSchema, () => {

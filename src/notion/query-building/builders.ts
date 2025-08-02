@@ -3,7 +3,71 @@
  * @module notion/query-building
  */
 
-import type { McpFilters, NotionDatabaseQuery, SearchOptions, NotionSearchQuery } from './types.js';
+import type {
+  McpFilters,
+  McpPropertyFilter,
+  NotionDatabaseQuery,
+  SearchOptions,
+  NotionSearchQuery,
+} from './types.js';
+
+/**
+ * Build filter condition for a single property
+ */
+function buildPropertyCondition(
+  propertyName: string,
+  filter: McpPropertyFilter,
+): Record<string, unknown> {
+  const condition: Record<string, unknown> = {
+    property: propertyName,
+  };
+
+  // Empty/not empty operators don't need a value
+  if (filter.operator === 'is_empty') {
+    condition[filter.type] = { is_empty: true };
+  } else if (filter.operator === 'is_not_empty') {
+    condition[filter.type] = { is_not_empty: true };
+  } else if (filter.value !== undefined) {
+    // Operators with values
+    const operator = filter.operator ?? 'equals';
+    condition[filter.type] = { [operator]: filter.value };
+  }
+
+  return condition;
+}
+
+/**
+ * Build filter clause from properties
+ */
+function buildFilterClause(
+  properties: McpFilters['properties'],
+): { and: Record<string, unknown>[] } | undefined {
+  if (!properties || Object.keys(properties).length === 0) {
+    return undefined;
+  }
+
+  const conditions = Object.entries(properties).map(([propertyName, filter]) =>
+    buildPropertyCondition(propertyName, filter),
+  );
+
+  return { and: conditions };
+}
+
+/**
+ * Add pagination parameters to query
+ */
+function addPaginationToQuery(
+  query: NotionDatabaseQuery,
+  pageSize?: number,
+  startCursor?: string,
+): void {
+  if (pageSize !== undefined) {
+    query.page_size = pageSize;
+  }
+  if (startCursor !== undefined) {
+    query.start_cursor = startCursor;
+  }
+}
 
 /**
  * Builds a Notion database query from MCP-style filters
@@ -14,31 +78,9 @@ export function buildDatabaseQuery(filters: McpFilters): NotionDatabaseQuery {
   const query: NotionDatabaseQuery = {};
 
   // Build property filters
-  if (filters.properties && Object.keys(filters.properties).length > 0) {
-    const conditions: Record<string, unknown>[] = [];
-
-    for (const [propertyName, filter] of Object.entries(filters.properties)) {
-      const condition: Record<string, unknown> = {
-        property: propertyName,
-      };
-
-      // Handle empty/not empty operators
-      if (filter.operator === 'is_empty') {
-        condition[filter.type] = { is_empty: true };
-      } else if (filter.operator === 'is_not_empty') {
-        condition[filter.type] = { is_not_empty: true };
-      } else if (filter.value !== undefined) {
-        // Handle operators with values
-        const operator = filter.operator ?? 'equals';
-        condition[filter.type] = {
-          [operator]: filter.value,
-        };
-      }
-
-      conditions.push(condition);
-    }
-
-    query.filter = { and: conditions };
+  const filterClause = buildFilterClause(filters.properties);
+  if (filterClause) {
+    query.filter = filterClause;
   }
 
   // Add sorts
@@ -50,13 +92,7 @@ export function buildDatabaseQuery(filters: McpFilters): NotionDatabaseQuery {
   }
 
   // Add pagination
-  if (filters.pageSize !== undefined) {
-    query.page_size = filters.pageSize;
-  }
-
-  if (filters.startCursor !== undefined) {
-    query.start_cursor = filters.startCursor;
-  }
+  addPaginationToQuery(query, filters.pageSize, filters.startCursor);
 
   return query;
 }

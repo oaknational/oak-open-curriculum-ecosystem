@@ -45,14 +45,12 @@ const config: Config = tsEslintConfig(
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/consistent-type-exports': 'error',
 
-      // Complexity. These are set to accommodate the current quality of the code.
-      // If we want to use this repo to demo best practices, we need to bring them down to the targets in dedicated PRs.
-      // That needs to be done gradually.
-      complexity: ['error', { max: 19 }], // Target 12, lowers cognitive load
+      // Complexity. These rules are intended to minimise cognitive load and enforce good code design.
+      complexity: ['error', { max: 10 }], // Target 10, lowers cognitive load
       'max-depth': ['error', 3], // Lowers cognitive load
-      'max-statements': ['error', 30], // Max statements per function, target 20, enforces single responsibility principle
-      'max-lines-per-function': ['error', 94], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
-      'max-lines': ['error', 213], // Requires well defined boundaries of responsibility
+      'max-statements': ['error', 20], // Max statements per function, target 20, enforces single responsibility principle
+      'max-lines-per-function': ['error', 60], // Target 50 (1 screen height), enforces single responsibility principle, lowers cognitive load
+      'max-lines': ['error', 190], // Requires well defined boundaries of responsibility
 
       // General good practices
       'no-empty': 'error',

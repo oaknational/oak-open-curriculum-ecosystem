@@ -164,67 +164,100 @@ function findNodeAPIs(sourceFile: SourceFile): string[] {
   return [...new Set(nodeAPIs)];
 }
 
+/**
+ * Analyzes import dependencies to determine domain coupling
+ * Pure function that evaluates how tightly coupled a module is to specific domains
+ */
+function analyzeDomainCoupling(imports: ModuleAnalysis['imports']): {
+  isDomainAgnostic: boolean;
+  hasSpecificDomainDependency: boolean;
+  reasoning: string;
+} {
+  const hasNotionDependency = imports.some((i) => i.isNotionSDK);
+  const hasOnlyUtilityImports = imports.every(
+    (i) => i.isLocal || i.isNodeBuiltin || ['zod', 'consola'].includes(i.module),
+  );
+
+  return {
+    isDomainAgnostic: !hasNotionDependency && hasOnlyUtilityImports,
+    hasSpecificDomainDependency: hasNotionDependency,
+    reasoning: hasNotionDependency
+      ? 'Has Notion SDK dependency'
+      : hasOnlyUtilityImports
+        ? 'Only utility/standard imports'
+        : 'Mixed dependencies',
+  };
+}
+
+/**
+ * Analyzes architectural location to determine module purpose
+ * Pure function that interprets directory structure as architectural intent
+ */
+function analyzeArchitecturalLocation(filePath: string): {
+  isInfrastructure: boolean;
+  isDomainSpecific: boolean;
+  isTypeDefinition: boolean;
+  reasoning: string;
+} {
+  const infrastructurePaths = ['/mcp/', '/logging/', '/errors/', '/utils/'];
+  const isInfrastructure = infrastructurePaths.some((path) => filePath.includes(path));
+  const isDomainSpecific = filePath.includes('/notion/');
+  const isTypeDefinition = filePath.includes('/types/');
+
+  const reasoning = isDomainSpecific
+    ? 'In domain-specific directory'
+    : isInfrastructure
+      ? 'In generic infrastructure directory'
+      : isTypeDefinition
+        ? 'Type definition file'
+        : 'In mixed location';
+
+  return { isInfrastructure, isDomainSpecific, isTypeDefinition, reasoning };
+}
+
+/**
+ * Analyzes platform dependencies to determine portability
+ * Pure function that evaluates how portable a module is across platforms
+ */
+function analyzePlatformDependencies(nodeAPIs: string[]): {
+  portabilityLevel: 'full' | 'partial' | 'limited';
+  reasoning: string;
+} {
+  if (nodeAPIs.length === 0) {
+    return { portabilityLevel: 'full', reasoning: 'No Node.js API usage' };
+  } else if (nodeAPIs.length <= 2) {
+    return { portabilityLevel: 'partial', reasoning: 'Minimal Node.js API usage' };
+  }
+  return { portabilityLevel: 'limited', reasoning: 'Heavy Node.js API usage' };
+}
+
+/**
+ * Classifies a module based on its reusability characteristics
+ * Orchestrates the analysis of different module aspects to determine classification
+ */
 function classifyModule(
   filePath: string,
   imports: ModuleAnalysis['imports'],
   nodeAPIs: string[],
 ): ModuleAnalysis['classification'] {
+  // Analyze different aspects of the module
+  const coupling = analyzeDomainCoupling(imports);
+  const location = analyzeArchitecturalLocation(filePath);
+  const platform = analyzePlatformDependencies(nodeAPIs);
+
+  // Build reasoning from analyses
+  const reasoning = [coupling.reasoning, location.reasoning, platform.reasoning].filter(Boolean);
+
+  // Calculate reusability score based on meaningful criteria
   let score = 0;
-  const reasoning: string[] = [];
+  if (coupling.isDomainAgnostic) score += 2;
+  if (location.isInfrastructure || location.isTypeDefinition) score += 1;
+  if (platform.portabilityLevel === 'full') score += 1;
+  else if (platform.portabilityLevel === 'partial') score += 0.5;
 
-  // Check imports (1 point each criteria)
-  const hasNotionImports = imports.some((i) => i.isNotionSDK);
-  const hasOnlyUtilityImports = imports.every(
-    (i) => i.isLocal || i.isNodeBuiltin || ['zod', 'consola'].includes(i.module),
-  );
-
-  if (!hasNotionImports) {
-    score += 1;
-    reasoning.push('No Notion SDK imports');
-  }
-
-  if (hasOnlyUtilityImports) {
-    score += 1;
-    reasoning.push('Only utility/standard imports');
-  }
-
-  // Check file path and purpose (1 point)
-  if (filePath.includes('/notion/')) {
-    reasoning.push('In Notion-specific directory');
-  } else if (
-    filePath.includes('/mcp/') ||
-    filePath.includes('/logging/') ||
-    filePath.includes('/errors/') ||
-    filePath.includes('/utils/')
-  ) {
-    score += 1;
-    reasoning.push('In generic infrastructure directory');
-  }
-
-  // Check Node.js API usage (1 point)
-  if (nodeAPIs.length === 0) {
-    score += 1;
-    reasoning.push('No Node.js API usage');
-  } else if (nodeAPIs.length <= 2) {
-    score += 0.5;
-    reasoning.push('Minimal Node.js API usage');
-  }
-
-  // Check if it's a pure type/interface file (1 point)
-  if (filePath.includes('/types/')) {
-    score += 1;
-    reasoning.push('Type definition file');
-  }
-
-  // Determine category
-  let category: 'generic' | 'mixed' | 'specific';
-  if (score >= 3.5) {
-    category = 'generic';
-  } else if (score >= 2) {
-    category = 'mixed';
-  } else {
-    category = 'specific';
-  }
+  // Determine category based on overall characteristics
+  const category: 'generic' | 'mixed' | 'specific' =
+    score >= 3.5 ? 'generic' : score >= 2 ? 'mixed' : 'specific';
 
   return { score, category, reasoning };
 }

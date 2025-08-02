@@ -14,14 +14,9 @@ export interface SerializedError {
 }
 
 /**
- * Serializes errors for JSON output
- * Ensures errors are properly stringified in JSON
+ * Extract standard error properties
  */
-export function serializeError(error: unknown): unknown {
-  if (!(error instanceof Error)) {
-    return error;
-  }
-
+function extractStandardProperties(error: Error): SerializedError {
   const serialized: SerializedError = {
     message: error.message,
   };
@@ -34,19 +29,45 @@ export function serializeError(error: unknown): unknown {
     serialized.name = error.name;
   }
 
-  // Copy any additional properties without type assertion
+  return serialized;
+}
+
+/**
+ * Check if a property should be included in serialization
+ */
+function shouldIncludeProperty(key: string, descriptor: PropertyDescriptor): boolean {
+  const standardProperties = ['message', 'stack', 'name'];
+  return (
+    !standardProperties.includes(key) &&
+    descriptor.enumerable === true &&
+    descriptor.value !== undefined
+  );
+}
+
+/**
+ * Copy custom enumerable properties from error
+ */
+function copyCustomProperties(error: Error, target: SerializedError): void {
   const descriptors = Object.getOwnPropertyDescriptors(error);
+
   for (const [key, descriptor] of Object.entries(descriptors)) {
-    if (
-      key !== 'message' &&
-      key !== 'stack' &&
-      key !== 'name' &&
-      descriptor.enumerable &&
-      descriptor.value !== undefined
-    ) {
-      serialized[key] = descriptor.value;
+    if (shouldIncludeProperty(key, descriptor)) {
+      target[key] = descriptor.value;
     }
   }
+}
+
+/**
+ * Serializes errors for JSON output
+ * Ensures errors are properly stringified in JSON
+ */
+export function serializeError(error: unknown): unknown {
+  if (!(error instanceof Error)) {
+    return error;
+  }
+
+  const serialized = extractStandardProperties(error);
+  copyCustomProperties(error, serialized);
 
   return serialized;
 }

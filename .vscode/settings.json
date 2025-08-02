@@ -6,6 +6,7 @@
     "Mcpjson",
     "modelcontextprotocol",
     "notionhq",
+    "retryable",
     "rigamarole"
   ]
 }
