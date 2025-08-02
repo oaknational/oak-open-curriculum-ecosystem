@@ -82,13 +82,15 @@ writeFileSync(
 );
 
 console.log('Module analysis complete!');
-console.log(`Total modules: ${summary.total}`);
+console.log(`Total modules: ${String(summary.total)}`);
 console.log(
-  `Generic: ${summary.generic} (${((summary.generic / summary.total) * 100).toFixed(1)}%)`,
+  `Generic: ${String(summary.generic)} (${((summary.generic / summary.total) * 100).toFixed(1)}%)`,
 );
-console.log(`Mixed: ${summary.mixed} (${((summary.mixed / summary.total) * 100).toFixed(1)}%)`);
 console.log(
-  `Specific: ${summary.specific} (${((summary.specific / summary.total) * 100).toFixed(1)}%)`,
+  `Mixed: ${String(summary.mixed)} (${((summary.mixed / summary.total) * 100).toFixed(1)}%)`,
+);
+console.log(
+  `Specific: ${String(summary.specific)} (${((summary.specific / summary.total) * 100).toFixed(1)}%)`,
 );
 
 // Analysis functions
@@ -230,13 +232,13 @@ function classifyModule(
 function writeReport(filename: string, modules: ModuleAnalysis[], title: string): void {
   const content = [`# ${title}\n`];
 
-  content.push(`Total modules: ${modules.length}\n`);
+  content.push(`Total modules: ${String(modules.length)}\n`);
   content.push('## Modules\n');
 
   modules.forEach((module) => {
     content.push(`### ${module.path}`);
-    content.push(`- **Lines**: ${module.lines}`);
-    content.push(`- **Score**: ${module.classification.score}/5`);
+    content.push(`- **Lines**: ${String(module.lines)}`);
+    content.push(`- **Score**: ${String(module.classification.score)}/5`);
     content.push(`- **Reasoning**: ${module.classification.reasoning.join(', ')}`);
 
     if (module.nodeAPIs.length > 0) {

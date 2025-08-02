@@ -13,11 +13,16 @@ import {
 } from '../../test-helpers/notion-api-mocks.js';
 
 describe('createResourceHandlers', () => {
+  const mockDebug = vi.fn();
+  const mockInfo = vi.fn();
+  const mockWarn = vi.fn();
+  const mockError = vi.fn();
+
   const mockLogger: Logger = {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
+    debug: mockDebug,
+    info: mockInfo,
+    warn: mockWarn,
+    error: mockError,
   };
 
   const mockNotionClient: MinimalNotionClient = {
@@ -52,7 +57,7 @@ describe('createResourceHandlers', () => {
         ],
       });
 
-      expect(mockLogger.debug).toHaveBeenCalledWith('Listing available resources');
+      expect(mockDebug).toHaveBeenCalledWith('Listing available resources');
     });
   });
 
@@ -144,7 +149,7 @@ describe('createResourceHandlers', () => {
         ],
       });
 
-      expect(mockLogger.debug).toHaveBeenCalledWith('Reading resource', {
+      expect(mockDebug).toHaveBeenCalledWith('Reading resource', {
         uri: 'notion://discovery',
       });
       expect(mockNotionClient.users.list).toHaveBeenCalled();
@@ -264,7 +269,7 @@ describe('createResourceHandlers', () => {
         'Invalid resource URI: invalid://uri',
       );
 
-      expect(mockLogger.error).toHaveBeenCalledWith('Invalid resource URI', {
+      expect(mockError).toHaveBeenCalledWith('Invalid resource URI', {
         uri: 'invalid://uri',
       });
     });
@@ -293,7 +298,7 @@ describe('createResourceHandlers', () => {
         'Failed to read resource',
       );
 
-      expect(mockLogger.error).toHaveBeenCalledWith(
+      expect(mockError).toHaveBeenCalledWith(
         'Error reading resource',
         expect.objectContaining({
           uri: 'notion://pages/page-123',

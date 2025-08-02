@@ -22,7 +22,7 @@ describe('File Logger E2E', () => {
 
   it('should create log files and write all log levels', async () => {
     // Override process.cwd to use test directory
-    const originalCwd = process.cwd;
+    const originalCwd = () => process.cwd();
     process.cwd = () => join(originalCwd(), '..', 'oak-notion-mcp-test');
 
     try {

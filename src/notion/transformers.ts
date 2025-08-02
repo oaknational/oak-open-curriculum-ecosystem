@@ -61,7 +61,6 @@ export function transformNotionPageToMcpResource(page: NotionPage): McpResource 
   for (const [, value] of Object.entries(page.properties)) {
     if (
       typeof value === 'object' &&
-      value !== null &&
       'type' in value &&
       value.type === 'title' &&
       'title' in value
@@ -124,7 +123,7 @@ export function transformNotionDatabaseToMcpResource(database: NotionDatabase): 
  * Transforms a Notion user object into an MCP resource
  */
 export function transformNotionUserToMcpResource(user: NotionUser): McpResource {
-  const name = user.name || 'Unknown User';
+  const name = user.name ?? 'Unknown User';
   const description = user.type === 'bot' ? 'Notion bot user' : 'Notion workspace user';
 
   const metadata: Record<string, unknown> = {
@@ -133,7 +132,7 @@ export function transformNotionUserToMcpResource(user: NotionUser): McpResource 
   };
 
   // Add email for person users (scrubbed)
-  if (user.type === 'person' && user.person?.email) {
+  if (user.type === 'person' && user.person.email) {
     metadata['email'] = scrubEmail(user.person.email);
   }
 
@@ -213,7 +212,7 @@ export function extractTextFromNotionBlocks(blocks: NotionBlock[]): string {
 
       case 'code':
         if (block.code?.rich_text) {
-          const lang = block.code.language || '';
+          const lang = block.code.language;
           const code = formatNotionRichText(block.code.rich_text);
           blockText = `\`\`\`${lang}\n${code}\n\`\`\``;
         }

@@ -18,14 +18,17 @@ export function formatSearchResults(
   query: string,
   resources: McpResource[],
 ): string {
-  let text = `Found ${results.length} results for "${query}"\n\n`;
+  let text = `Found ${String(results.length)} results for "${query}"\n\n`;
 
   results.forEach((result, index) => {
     const resource = resources[index];
     if (!resource) return;
 
+    // Discriminate between page and database in union type
+
     if (result.object === 'page') {
       text += formatPageSummary(resource);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     } else if (result.object === 'database') {
       text += formatDatabaseSummary(resource);
     }
@@ -39,8 +42,10 @@ export function formatSearchResults(
  */
 export function formatPageSummary(resource: McpResource): string {
   let text = `📄 Page: ${resource.name}\n`;
-  text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-  text += `   Last edited: ${resource.metadata?.['last_edited_time'] || 'N/A'}\n\n`;
+  const url = resource.metadata?.['url'];
+  text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
+  const lastEdited = resource.metadata?.['last_edited_time'];
+  text += `   Last edited: ${typeof lastEdited === 'string' ? lastEdited : 'N/A'}\n\n`;
   return text;
 }
 
@@ -49,7 +54,8 @@ export function formatPageSummary(resource: McpResource): string {
  */
 export function formatDatabaseSummary(resource: McpResource): string {
   let text = `🗂️ Database: ${resource.name}\n`;
-  text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
+  const url = resource.metadata?.['url'];
+  text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
   const props = resource.metadata?.['properties'];
   text += `   Properties: ${Array.isArray(props) && props.length > 0 ? props.join(', ') : 'None'}\n\n`;
   return text;
@@ -62,7 +68,7 @@ export function formatDatabaseList(
   databases: DatabaseObjectResponse[],
   resources: McpResource[],
 ): string {
-  let text = `Found ${databases.length} database${databases.length === 1 ? '' : 's'}\n\n`;
+  let text = `Found ${String(databases.length)} database${databases.length === 1 ? '' : 's'}\n\n`;
 
   databases.forEach((database, index) => {
     const resource = resources[index];
@@ -70,7 +76,8 @@ export function formatDatabaseList(
 
     text += `🗂️ ${resource.name}\n`;
     text += `   ID: ${database.id}\n`;
-    text += `   URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
+    const url = resource.metadata?.['url'];
+    text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
     const props = resource.metadata?.['properties'];
     text += `   Properties: ${Array.isArray(props) && props.length > 0 ? props.join(', ') : 'None'}\n\n`;
   });
@@ -87,7 +94,7 @@ export function formatDatabaseQueryResults(
   pageResources: McpResource[],
 ): string {
   let text = `Database: ${dbResource.name}\n`;
-  text += `Found ${pages.length} page${pages.length === 1 ? '' : 's'}\n\n`;
+  text += `Found ${String(pages.length)} page${pages.length === 1 ? '' : 's'}\n\n`;
 
   pages.forEach((page, index) => {
     const resource = pageResources[index];
@@ -108,11 +115,9 @@ export function formatPageProperties(page: PageObjectResponse): string {
   let text = '';
 
   for (const [key, value] of Object.entries(page.properties)) {
-    if (typeof value === 'object' && value !== null && 'type' in value) {
-      const displayValue = extractPropertyValue(value);
-      if (displayValue !== 'N/A' && key !== 'title' && key !== 'Name') {
-        text += `   ${key}: ${displayValue}\n`;
-      }
+    const displayValue = extractPropertyValue(value);
+    if (displayValue !== 'N/A' && key !== 'title' && key !== 'Name') {
+      text += `   ${key}: ${displayValue}\n`;
     }
   }
 
@@ -124,7 +129,7 @@ export function formatPageProperties(page: PageObjectResponse): string {
  */
 function extractTitleValue(property: PageObjectResponse['properties'][string]): string {
   if (!('title' in property) || !Array.isArray(property.title)) return 'N/A';
-  return formatNotionRichText(property.title) || 'N/A';
+  return formatNotionRichText(property.title);
 }
 
 /**
@@ -132,7 +137,7 @@ function extractTitleValue(property: PageObjectResponse['properties'][string]): 
  */
 function extractRichTextValue(property: PageObjectResponse['properties'][string]): string {
   if (!('rich_text' in property) || !Array.isArray(property.rich_text)) return 'N/A';
-  return formatNotionRichText(property.rich_text) || 'N/A';
+  return formatNotionRichText(property.rich_text);
 }
 
 /**
@@ -167,7 +172,7 @@ function extractMultiSelectValue(property: PageObjectResponse['properties'][stri
 
   const names: string[] = [];
   for (const item of property.multi_select) {
-    if (item && typeof item === 'object' && 'name' in item && typeof item.name === 'string') {
+    if (typeof item === 'object' && 'name' in item && typeof item.name === 'string') {
       names.push(item.name);
     }
   }
@@ -249,7 +254,7 @@ function extractLastEditedTimeValue(property: PageObjectResponse['properties'][s
  */
 function extractPeopleValue(property: PageObjectResponse['properties'][string]): string {
   if (!('people' in property) || !Array.isArray(property.people)) return 'N/A';
-  return `${property.people.length} person(s)`;
+  return `${String(property.people.length)} person(s)`;
 }
 
 /**
@@ -257,7 +262,7 @@ function extractPeopleValue(property: PageObjectResponse['properties'][string]):
  */
 function extractFilesValue(property: PageObjectResponse['properties'][string]): string {
   if (!('files' in property) || !Array.isArray(property.files)) return 'N/A';
-  return `${property.files.length} file(s)`;
+  return `${String(property.files.length)} file(s)`;
 }
 
 /**
@@ -265,7 +270,7 @@ function extractFilesValue(property: PageObjectResponse['properties'][string]): 
  */
 function extractRelationValue(property: PageObjectResponse['properties'][string]): string {
   if (!('relation' in property) || !Array.isArray(property.relation)) return 'N/A';
-  return `${property.relation.length} linked item(s)`;
+  return `${String(property.relation.length)} linked item(s)`;
 }
 
 /**
@@ -275,8 +280,8 @@ function extractRelationValue(property: PageObjectResponse['properties'][string]
  * For complex types (formula, rollup, etc.), we just show a basic representation.
  */
 function extractPropertyValue(property: PageObjectResponse['properties'][string]): string {
-  // Type guard - ensure we have a valid property object
-  if (!property || typeof property !== 'object' || !('type' in property)) {
+  // Type guard - ensure we have a valid property object with type
+  if (!('type' in property)) {
     return 'N/A';
   }
 
@@ -331,27 +336,28 @@ export function formatPageDetails(
   content?: string,
 ): string {
   let text = `📄 ${resource.name}\n\n`;
-  text += `URL: ${resource.metadata?.['url'] || 'N/A'}\n`;
-  text += `Created: ${resource.metadata?.['created_time'] || 'N/A'}\n`;
-  text += `Last edited: ${resource.metadata?.['last_edited_time'] || 'N/A'}\n`;
+  const url = resource.metadata?.['url'];
+  text += `URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
+  const createdTime = resource.metadata?.['created_time'];
+  text += `Created: ${typeof createdTime === 'string' ? createdTime : 'N/A'}\n`;
+  const lastEditedTime = resource.metadata?.['last_edited_time'];
+  text += `Last edited: ${typeof lastEditedTime === 'string' ? lastEditedTime : 'N/A'}\n`;
   text += `Archived: ${resource.metadata?.['archived'] ? 'Yes' : 'No'}\n\n`;
 
   // Show properties
   text += 'Properties:\n';
   for (const [key, value] of Object.entries(page.properties)) {
-    if (typeof value === 'object' && value !== null && 'type' in value) {
-      if (value.type === 'title') continue; // Skip title as it's already shown
+    if ('type' in value && value.type === 'title') continue; // Skip title as it's already shown
 
-      const displayValue = extractPropertyValue(value);
-      if (displayValue !== 'N/A') {
-        text += `- ${key}: ${displayValue}\n`;
-      }
+    const displayValue = extractPropertyValue(value);
+    if (displayValue !== 'N/A') {
+      text += `- ${key}: ${displayValue}\n`;
     }
   }
 
   if (content !== undefined) {
     text += '\nContent:\n';
-    text += content || 'No content';
+    text += content;
   }
 
   return text;
@@ -361,7 +367,7 @@ export function formatPageDetails(
  * Formats user list
  */
 export function formatUserList(users: UserObjectResponse[], resources: McpResource[]): string {
-  let text = `Found ${users.length} user${users.length === 1 ? '' : 's'}\n\n`;
+  let text = `Found ${String(users.length)} user${users.length === 1 ? '' : 's'}\n\n`;
 
   users.forEach((user, index) => {
     const resource = resources[index];
@@ -372,7 +378,8 @@ export function formatUserList(users: UserObjectResponse[], resources: McpResour
     text += `   Type: ${user.type === 'bot' ? 'Bot' : 'Person'}\n`;
 
     if (user.type === 'person' && resource.metadata?.['email']) {
-      text += `   Email: ${resource.metadata['email']}\n`;
+      const email = resource.metadata['email'];
+      text += `   Email: ${typeof email === 'string' ? email : '[email]'}\n`;
     }
 
     text += '\n';
