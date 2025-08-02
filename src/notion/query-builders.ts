@@ -205,7 +205,7 @@ export function buildDatabaseQuery(filters: McpFilters): NotionDatabaseQuery {
         condition[filter.type] = { is_not_empty: true };
       } else if (filter.value !== undefined) {
         // Handle operators with values
-        const operator = filter.operator || 'equals';
+        const operator = filter.operator ?? 'equals';
         condition[filter.type] = {
           [operator]: filter.value,
         };
@@ -259,7 +259,7 @@ function validateProperties(properties: unknown): {
     }
 
     if (!isValidPropertyType(value.type)) {
-      errors.push(`Invalid property type: ${value.type}`);
+      errors.push(`Invalid property type: ${String(value.type)}`);
       continue;
     }
 
@@ -270,7 +270,7 @@ function validateProperties(properties: unknown): {
         continue;
       }
 
-      const validOperators = VALID_OPERATORS[value.type] || ['equals'];
+      const validOperators = VALID_OPERATORS[value.type] ?? ['equals'];
       if (!validOperators.includes(value.operator)) {
         errors.push(`Invalid operator: ${value.operator} for type: ${value.type}`);
         continue;

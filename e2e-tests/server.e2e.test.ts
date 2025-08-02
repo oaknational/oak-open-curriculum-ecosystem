@@ -7,6 +7,17 @@ import { config } from 'dotenv';
 // Load environment variables
 config();
 
+// Type guard for object with property
+function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record<K, unknown> {
+  return typeof obj === 'object' && obj !== null && key in obj;
+}
+
+// Type guard for text content
+function isTextContent(c: unknown): c is { type: string; text?: string } {
+  if (!hasProperty(c, 'type')) return false;
+  return c.type === 'text';
+}
+
 // Skip E2E tests if no API key is provided
 const NOTION_API_KEY = process.env['NOTION_API_KEY'];
 const RUN_E2E = process.env['RUN_E2E'] === 'true';
@@ -20,7 +31,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
     serverProcess = spawn('node', ['dist/index.js'], {
       env: {
         ...process.env,
-        NOTION_API_KEY: NOTION_API_KEY || '',
+        NOTION_API_KEY: NOTION_API_KEY ?? '',
         LOG_LEVEL: 'error', // Reduce noise in tests
       },
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -32,7 +43,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
       args: ['dist/index.js'],
       env: {
         ...process.env,
-        NOTION_API_KEY: NOTION_API_KEY || '',
+        NOTION_API_KEY: NOTION_API_KEY ?? '',
         LOG_LEVEL: 'error',
       },
     });
@@ -55,9 +66,12 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
 
   afterAll(async () => {
     // Clean up
+    // Runtime checks needed: if beforeAll fails, these may be undefined
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (client) {
       await client.close();
     }
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (serverProcess) {
       serverProcess.kill();
       // Wait for process to exit
@@ -65,7 +79,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
     }
   });
 
-  it('should connect to the server', async () => {
+  it('should connect to the server', () => {
     // Server connection is verified by successful client initialization
     // The client is connected if we reach this point
     expect(client).toBeDefined();
@@ -125,10 +139,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
 
     expect(response.content.length).toBeGreaterThan(0);
 
-    const textContent = response.content.find(
-      (c): c is { type: string; text?: string } =>
-        typeof c === 'object' && c !== null && 'type' in c && c.type === 'text',
-    );
+    const textContent = response.content.find(isTextContent);
     expect(textContent).toBeDefined();
     if (textContent?.text) {
       expect(textContent.text).toContain('Found');
@@ -153,10 +164,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
       throw new Error('Expected content to be an array');
     }
 
-    const textContent = response.content.find(
-      (c): c is { type: string; text?: string } =>
-        typeof c === 'object' && c !== null && 'type' in c && c.type === 'text',
-    );
+    const textContent = response.content.find(isTextContent);
     expect(textContent).toBeDefined();
     if (textContent?.text) {
       expect(textContent.text).toContain('Found');
@@ -179,10 +187,7 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
       throw new Error('Expected content to be an array');
     }
 
-    const textContent = response.content.find(
-      (c): c is { type: string; text?: string } =>
-        typeof c === 'object' && c !== null && 'type' in c && c.type === 'text',
-    );
+    const textContent = response.content.find(isTextContent);
     expect(textContent).toBeDefined();
     if (textContent?.text) {
       expect(textContent.text).toContain('Error');

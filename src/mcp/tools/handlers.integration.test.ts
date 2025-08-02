@@ -144,7 +144,7 @@ describe('Tool Handlers', () => {
         expect(result.content[0].text).toContain('Found 2 results');
       }
 
-      const resultText = result.content[0]?.text || '';
+      const resultText = result.content[0]?.text ?? '';
       expect(resultText).toContain('Test Page');
       expect(resultText).toContain('Test Database');
     });

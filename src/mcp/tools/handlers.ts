@@ -1,8 +1,4 @@
-import type {
-  PageObjectResponse,
-  DatabaseObjectResponse,
-  BlockObjectResponse,
-} from '@notionhq/client';
+import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
 import type { CoreDependencies } from '../../types/dependencies.js';
 import {
   transformNotionPageToMcpResource,
@@ -10,7 +6,7 @@ import {
   transformNotionUserToMcpResource,
   extractTextFromNotionBlocks,
 } from '../../notion/transformers.js';
-import { isFullDatabase, isFullPage } from '../../notion/type-guards.js';
+import { isFullDatabase, isFullPage, isFullBlock } from '@notionhq/client/build/src/helpers';
 import {
   formatSearchResults,
   formatDatabaseList,
@@ -91,9 +87,9 @@ export function createNotionSearchTool(deps: ToolDependencies): McpTool {
         }
 
         const searchResponse = await deps.notionClient.search(searchParams);
+        // Filter to ensure we have full objects with id property
         const results = searchResponse.results.filter(
-          (result): result is PageObjectResponse | DatabaseObjectResponse =>
-            (result.object === 'page' || result.object === 'database') && 'id' in result,
+          (result): result is PageObjectResponse | DatabaseObjectResponse => 'id' in result,
         );
 
         const resources = results.map((result) => {
@@ -112,7 +108,7 @@ export function createNotionSearchTool(deps: ToolDependencies): McpTool {
       } catch (error) {
         deps.logger.error('Search failed', { error });
         return {
-          content: [{ type: 'text', text: `Error searching Notion: ${error}` }],
+          content: [{ type: 'text', text: `Error searching Notion: ${String(error)}` }],
           isError: true,
         };
       }
@@ -138,9 +134,9 @@ export function createNotionListDatabasesTool(deps: ToolDependencies): McpTool {
           query: '',
           filter: { property: 'object', value: 'database' },
         });
+        // Filter to ensure we have full database objects with title
         const results = searchResponse.results.filter(
-          (result): result is DatabaseObjectResponse =>
-            result.object === 'database' && 'title' in result,
+          (result): result is DatabaseObjectResponse => 'title' in result,
         );
 
         const resources = results.map(transformNotionDatabaseToMcpResource);
@@ -152,7 +148,7 @@ export function createNotionListDatabasesTool(deps: ToolDependencies): McpTool {
       } catch (error) {
         deps.logger.error('List databases failed', { error });
         return {
-          content: [{ type: 'text', text: `Error listing databases: ${error}` }],
+          content: [{ type: 'text', text: `Error listing databases: ${String(error)}` }],
           isError: true,
         };
       }
@@ -209,15 +205,20 @@ export function createNotionQueryDatabaseTool(deps: ToolDependencies): McpTool {
         const dbResponse = await deps.notionClient.databases.retrieve({
           database_id: validatedArgs.database_id,
         });
+        // Ensure we have a full database response with all properties
+        // Partial responses only have: object, id, properties (schema)
+        // Full responses also have: title, description, icon, cover, parent, created_time, etc.
         if (!isFullDatabase(dbResponse)) {
-          throw new Error('Invalid database response');
+          throw new Error(
+            'Invalid database response - missing required fields like title. The database may have restricted permissions.',
+          );
         }
         const dbResource = transformNotionDatabaseToMcpResource(dbResponse);
 
         // Build the query
         const queryParams: Parameters<typeof deps.notionClient.databases.query>[0] = {
           database_id: validatedArgs.database_id,
-          page_size: validatedArgs.page_size || 20,
+          page_size: validatedArgs.page_size ?? 20,
         };
 
         if (validatedArgs.sorts) {
@@ -246,7 +247,7 @@ export function createNotionQueryDatabaseTool(deps: ToolDependencies): McpTool {
       } catch (error) {
         deps.logger.error('Query database failed', { error });
         return {
-          content: [{ type: 'text', text: `Error querying database: ${error}` }],
+          content: [{ type: 'text', text: `Error querying database: ${String(error)}` }],
           isError: true,
         };
       }
@@ -282,8 +283,13 @@ export function createNotionGetPageTool(deps: ToolDependencies): McpTool {
         const pageResponse = await deps.notionClient.pages.retrieve({
           page_id: validatedArgs.page_id,
         });
+        // Ensure we have a full page response with all properties
+        // Partial responses only have: object, id
+        // Full responses also have: url, properties, parent, created_time, last_edited_time, etc.
         if (!isFullPage(pageResponse)) {
-          throw new Error('Invalid page response');
+          throw new Error(
+            'Invalid page response - missing required fields like url. The page may have restricted permissions.',
+          );
         }
         const resource = transformNotionPageToMcpResource(pageResponse);
 
@@ -293,9 +299,10 @@ export function createNotionGetPageTool(deps: ToolDependencies): McpTool {
             block_id: validatedArgs.page_id,
             page_size: 100,
           });
-          const blocks = blocksResponse.results.filter(
-            (result): result is BlockObjectResponse => result.object === 'block',
-          );
+          // Filter for full block responses that have type information
+          const fullBlocks = blocksResponse.results.filter(isFullBlock);
+          // Full blocks already have the correct format
+          const blocks = fullBlocks;
           content = extractTextFromNotionBlocks(blocks);
         }
 
@@ -307,7 +314,7 @@ export function createNotionGetPageTool(deps: ToolDependencies): McpTool {
       } catch (error) {
         deps.logger.error('Get page failed', { error });
         return {
-          content: [{ type: 'text', text: `Error getting page: ${error}` }],
+          content: [{ type: 'text', text: `Error getting page: ${String(error)}` }],
           isError: true,
         };
       }
@@ -341,7 +348,7 @@ export function createNotionListUsersTool(deps: ToolDependencies): McpTool {
       } catch (error) {
         deps.logger.error('List users failed', { error });
         return {
-          content: [{ type: 'text', text: `Error listing users: ${error}` }],
+          content: [{ type: 'text', text: `Error listing users: ${String(error)}` }],
           isError: true,
         };
       }
