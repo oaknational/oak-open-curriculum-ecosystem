@@ -1,361 +1,35 @@
-import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
+/**
+ * Tool handlers using Dependency Inversion Principle
+ * Assembles tools from clean abstractions
+ */
+
 import type { CoreDependencies } from '../../types/dependencies.js';
+import type { McpTool } from '../types.js';
 import {
-  transformNotionPageToMcpResource,
-  transformNotionDatabaseToMcpResource,
-  transformNotionUserToMcpResource,
-  extractTextFromNotionBlocks,
-} from '../../notion/transformers.js';
-import { isFullDatabase, isFullPage, isFullBlock } from '@notionhq/client/build/src/helpers';
+  createToolFactory,
+  createErrorHandler,
+  createToolRegistry,
+  type ToolRegistry,
+} from './core/index.js';
 import {
-  formatSearchResults,
-  formatDatabaseList,
-  formatDatabaseQueryResults,
-  formatPageDetails,
-  formatUserList,
-} from '../../notion/formatters.js';
-import type { McpTool, McpToolResult } from '../types.js';
+  searchToolDefinition,
+  listDatabasesToolDefinition,
+  queryDatabaseToolDefinition,
+  getPageToolDefinition,
+  listUsersToolDefinition,
+} from './definitions/index.js';
 import {
-  notionSearchSchema,
-  notionListDatabasesSchema,
-  notionQueryDatabaseSchema,
-  notionGetPageSchema,
-  notionListUsersSchema,
-} from './schemas.js';
+  createSearchExecutor,
+  createListDatabasesExecutor,
+  createQueryDatabaseExecutor,
+  createGetPageExecutor,
+  createListUsersExecutor,
+} from './notion-operations/index.js';
 
-// Use CoreDependencies for consistency
-type ToolDependencies = CoreDependencies;
-
-export function createNotionSearchTool(deps: ToolDependencies): McpTool {
-  return {
-    name: 'notion-search',
-    description: 'Search for pages and databases in Notion',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        query: {
-          type: 'string',
-          description: 'The search query',
-        },
-        filter: {
-          type: 'object',
-          properties: {
-            type: {
-              type: 'string',
-              enum: ['page', 'database'],
-              description: 'Filter results by type',
-            },
-          },
-        },
-        sort: {
-          type: 'object',
-          properties: {
-            timestamp: {
-              type: 'string',
-              enum: ['last_edited_time'],
-              description: 'Sort by timestamp',
-            },
-            direction: {
-              type: 'string',
-              enum: ['ascending', 'descending'],
-              description: 'Sort direction',
-            },
-          },
-        },
-      },
-      required: ['query'],
-    },
-    async handler(args: unknown): Promise<McpToolResult> {
-      // Validate input using Zod schema
-      const validatedArgs = notionSearchSchema.parse(args);
-      try {
-        deps.logger.debug('Searching Notion', { query: validatedArgs.query });
-
-        const searchParams: Parameters<typeof deps.notionClient.search>[0] = {
-          query: validatedArgs.query,
-        };
-
-        if (validatedArgs.filter?.type) {
-          searchParams.filter = { property: 'object', value: validatedArgs.filter.type };
-        }
-
-        if (validatedArgs.sort) {
-          searchParams.sort = {
-            timestamp: validatedArgs.sort.timestamp,
-            direction: validatedArgs.sort.direction,
-          };
-        }
-
-        const searchResponse = await deps.notionClient.search(searchParams);
-        // Filter to ensure we have full objects with id property
-        const results = searchResponse.results.filter(
-          (result): result is PageObjectResponse | DatabaseObjectResponse => 'id' in result,
-        );
-
-        const resources = results.map((result) => {
-          if (result.object === 'page') {
-            return transformNotionPageToMcpResource(result);
-          } else {
-            return transformNotionDatabaseToMcpResource(result);
-          }
-        });
-
-        const text = formatSearchResults(results, validatedArgs.query, resources);
-
-        return {
-          content: [{ type: 'text', text }],
-        };
-      } catch (error) {
-        deps.logger.error('Search failed', { error });
-        return {
-          content: [{ type: 'text', text: `Error searching Notion: ${String(error)}` }],
-          isError: true,
-        };
-      }
-    },
-  };
-}
-
-export function createNotionListDatabasesTool(deps: ToolDependencies): McpTool {
-  return {
-    name: 'notion-list-databases',
-    description: 'List all databases in the Notion workspace',
-    inputSchema: {
-      type: 'object',
-      properties: {},
-    },
-    async handler(args: unknown): Promise<McpToolResult> {
-      // Validate input using Zod schema
-      notionListDatabasesSchema.parse(args);
-      try {
-        deps.logger.debug('Listing Notion databases');
-
-        const searchResponse = await deps.notionClient.search({
-          query: '',
-          filter: { property: 'object', value: 'database' },
-        });
-        // Filter to ensure we have full database objects with title
-        const results = searchResponse.results.filter(
-          (result): result is DatabaseObjectResponse => 'title' in result,
-        );
-
-        const resources = results.map(transformNotionDatabaseToMcpResource);
-        const text = formatDatabaseList(results, resources);
-
-        return {
-          content: [{ type: 'text', text }],
-        };
-      } catch (error) {
-        deps.logger.error('List databases failed', { error });
-        return {
-          content: [{ type: 'text', text: `Error listing databases: ${String(error)}` }],
-          isError: true,
-        };
-      }
-    },
-  };
-}
-
-export function createNotionQueryDatabaseTool(deps: ToolDependencies): McpTool {
-  return {
-    name: 'notion-query-database',
-    description: 'Query a Notion database with filters and sorts',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        database_id: {
-          type: 'string',
-          description: 'The ID of the database to query',
-        },
-        filter: {
-          type: 'object',
-          description: 'Filter conditions (Notion filter format)',
-        },
-        sorts: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              property: { type: 'string' },
-              direction: {
-                type: 'string',
-                enum: ['ascending', 'descending'],
-              },
-            },
-          },
-          description: 'Sort criteria',
-        },
-        page_size: {
-          type: 'number',
-          minimum: 1,
-          maximum: 100,
-          default: 20,
-          description: 'Number of results to return',
-        },
-      },
-      required: ['database_id'],
-    },
-    async handler(args: unknown): Promise<McpToolResult> {
-      // Validate input using Zod schema
-      const validatedArgs = notionQueryDatabaseSchema.parse(args);
-      try {
-        deps.logger.debug('Querying database', { database_id: validatedArgs.database_id });
-
-        // Get database info first
-        const dbResponse = await deps.notionClient.databases.retrieve({
-          database_id: validatedArgs.database_id,
-        });
-        // Ensure we have a full database response with all properties
-        // Partial responses only have: object, id, properties (schema)
-        // Full responses also have: title, description, icon, cover, parent, created_time, etc.
-        if (!isFullDatabase(dbResponse)) {
-          throw new Error(
-            'Invalid database response - missing required fields like title. The database may have restricted permissions.',
-          );
-        }
-        const dbResource = transformNotionDatabaseToMcpResource(dbResponse);
-
-        // Build the query
-        const queryParams: Parameters<typeof deps.notionClient.databases.query>[0] = {
-          database_id: validatedArgs.database_id,
-          page_size: validatedArgs.page_size ?? 20,
-        };
-
-        if (validatedArgs.sorts) {
-          queryParams.sorts = validatedArgs.sorts;
-        }
-
-        if (validatedArgs.filter) {
-          // The Notion SDK expects a specific filter type that we can't fully type
-          // without importing complex internal types. The filter is validated by Zod
-          // and will be runtime-checked by the Notion API.
-          Object.assign(queryParams, { filter: validatedArgs.filter });
-        }
-
-        const queryResponse = await deps.notionClient.databases.query(queryParams);
-        const pages = queryResponse.results.filter(
-          (result): result is PageObjectResponse =>
-            result.object === 'page' && 'properties' in result,
-        );
-
-        const pageResources = pages.map(transformNotionPageToMcpResource);
-        const text = formatDatabaseQueryResults(dbResource, pages, pageResources);
-
-        return {
-          content: [{ type: 'text', text }],
-        };
-      } catch (error) {
-        deps.logger.error('Query database failed', { error });
-        return {
-          content: [{ type: 'text', text: `Error querying database: ${String(error)}` }],
-          isError: true,
-        };
-      }
-    },
-  };
-}
-
-export function createNotionGetPageTool(deps: ToolDependencies): McpTool {
-  return {
-    name: 'notion-get-page',
-    description: 'Get a specific Notion page by ID',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        page_id: {
-          type: 'string',
-          description: 'The ID of the page to retrieve',
-        },
-        include_content: {
-          type: 'boolean',
-          description: 'Include page content (blocks)',
-          default: false,
-        },
-      },
-      required: ['page_id'],
-    },
-    async handler(args: unknown): Promise<McpToolResult> {
-      // Validate input using Zod schema
-      const validatedArgs = notionGetPageSchema.parse(args);
-      try {
-        deps.logger.debug('Getting page', { page_id: validatedArgs.page_id });
-
-        const pageResponse = await deps.notionClient.pages.retrieve({
-          page_id: validatedArgs.page_id,
-        });
-        // Ensure we have a full page response with all properties
-        // Partial responses only have: object, id
-        // Full responses also have: url, properties, parent, created_time, last_edited_time, etc.
-        if (!isFullPage(pageResponse)) {
-          throw new Error(
-            'Invalid page response - missing required fields like url. The page may have restricted permissions.',
-          );
-        }
-        const resource = transformNotionPageToMcpResource(pageResponse);
-
-        let content: string | undefined;
-        if (validatedArgs.include_content) {
-          const blocksResponse = await deps.notionClient.blocks.children.list({
-            block_id: validatedArgs.page_id,
-            page_size: 100,
-          });
-          // Filter for full block responses that have type information
-          const fullBlocks = blocksResponse.results.filter(isFullBlock);
-          // Full blocks already have the correct format
-          const blocks = fullBlocks;
-          content = extractTextFromNotionBlocks(blocks);
-        }
-
-        const text = formatPageDetails(resource, pageResponse, content);
-
-        return {
-          content: [{ type: 'text', text }],
-        };
-      } catch (error) {
-        deps.logger.error('Get page failed', { error });
-        return {
-          content: [{ type: 'text', text: `Error getting page: ${String(error)}` }],
-          isError: true,
-        };
-      }
-    },
-  };
-}
-
-export function createNotionListUsersTool(deps: ToolDependencies): McpTool {
-  return {
-    name: 'notion-list-users',
-    description: 'List all users in the Notion workspace',
-    inputSchema: {
-      type: 'object',
-      properties: {},
-    },
-    async handler(args: unknown): Promise<McpToolResult> {
-      // Validate input using Zod schema
-      notionListUsersSchema.parse(args);
-      try {
-        deps.logger.debug('Listing Notion users');
-
-        const usersResponse = await deps.notionClient.users.list({});
-        const users = usersResponse.results;
-
-        const resources = users.map(transformNotionUserToMcpResource);
-        const text = formatUserList(users, resources);
-
-        return {
-          content: [{ type: 'text', text }],
-        };
-      } catch (error) {
-        deps.logger.error('List users failed', { error });
-        return {
-          content: [{ type: 'text', text: `Error listing users: ${String(error)}` }],
-          isError: true,
-        };
-      }
-    },
-  };
-}
-
+/**
+ * Tool handlers interface
+ * Provides access to individual tools and collection
+ */
 interface ToolHandlers extends Record<string, McpTool | (() => McpTool[])> {
   'notion-search': McpTool;
   'notion-list-databases': McpTool;
@@ -365,27 +39,149 @@ interface ToolHandlers extends Record<string, McpTool | (() => McpTool[])> {
   getTools: () => McpTool[];
 }
 
-export function createToolHandlers(deps: ToolDependencies): ToolHandlers {
-  const notionSearch = createNotionSearchTool(deps);
-  const notionListDatabases = createNotionListDatabasesTool(deps);
-  const notionQueryDatabase = createNotionQueryDatabaseTool(deps);
-  const notionGetPage = createNotionGetPageTool(deps);
-  const notionListUsers = createNotionListUsersTool(deps);
+/**
+ * Creates tool handlers using dependency injection
+ * Assembles tools from definitions and executors
+ */
+export function createToolHandlers(deps: CoreDependencies): ToolHandlers {
+  // Create shared infrastructure
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const registry = createToolRegistry();
 
-  const tools: McpTool[] = [
-    notionSearch,
-    notionListDatabases,
-    notionQueryDatabase,
-    notionGetPage,
-    notionListUsers,
-  ];
+  // Create and register tools
+  const tools = createAndRegisterTools(deps, toolFactory, errorHandler, registry);
+
+  // Return handlers interface
+  return {
+    'notion-search': tools.search,
+    'notion-list-databases': tools.listDatabases,
+    'notion-query-database': tools.queryDatabase,
+    'notion-get-page': tools.getPage,
+    'notion-list-users': tools.listUsers,
+    getTools: () => registry.getAll(),
+  };
+}
+
+/**
+ * Creates and registers all tools
+ * Separates tool creation from handler interface
+ */
+function createAndRegisterTools(
+  deps: CoreDependencies,
+  toolFactory: ReturnType<typeof createToolFactory>,
+  errorHandler: ReturnType<typeof createErrorHandler>,
+  registry: ToolRegistry,
+) {
+  // Create executors with dependencies
+  const searchExecutor = createSearchExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  const listDatabasesExecutor = createListDatabasesExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  const queryDatabaseExecutor = createQueryDatabaseExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  const getPageExecutor = createGetPageExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  const listUsersExecutor = createListUsersExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  // Create tools from definitions and executors
+  const search = toolFactory(searchToolDefinition, searchExecutor, errorHandler);
+  const listDatabases = toolFactory(
+    listDatabasesToolDefinition,
+    listDatabasesExecutor,
+    errorHandler,
+  );
+  const queryDatabase = toolFactory(
+    queryDatabaseToolDefinition,
+    queryDatabaseExecutor,
+    errorHandler,
+  );
+  const getPage = toolFactory(getPageToolDefinition, getPageExecutor, errorHandler);
+  const listUsers = toolFactory(listUsersToolDefinition, listUsersExecutor, errorHandler);
+
+  // Register all tools
+  registry.register(search);
+  registry.register(listDatabases);
+  registry.register(queryDatabase);
+  registry.register(getPage);
+  registry.register(listUsers);
 
   return {
-    'notion-search': notionSearch,
-    'notion-list-databases': notionListDatabases,
-    'notion-query-database': notionQueryDatabase,
-    'notion-get-page': notionGetPage,
-    'notion-list-users': notionListUsers,
-    getTools: () => tools,
+    search,
+    listDatabases,
+    queryDatabase,
+    getPage,
+    listUsers,
   };
+}
+
+// Export individual tool creators for backward compatibility with tests
+export function createNotionSearchTool(deps: CoreDependencies): McpTool {
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const executor = createSearchExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  return toolFactory(searchToolDefinition, executor, errorHandler);
+}
+
+export function createNotionListDatabasesTool(deps: CoreDependencies): McpTool {
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const executor = createListDatabasesExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  return toolFactory(listDatabasesToolDefinition, executor, errorHandler);
+}
+
+export function createNotionQueryDatabaseTool(deps: CoreDependencies): McpTool {
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const executor = createQueryDatabaseExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  return toolFactory(queryDatabaseToolDefinition, executor, errorHandler);
+}
+
+export function createNotionGetPageTool(deps: CoreDependencies): McpTool {
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const executor = createGetPageExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  return toolFactory(getPageToolDefinition, executor, errorHandler);
+}
+
+export function createNotionListUsersTool(deps: CoreDependencies): McpTool {
+  const toolFactory = createToolFactory();
+  const errorHandler = createErrorHandler(deps.logger);
+  const executor = createListUsersExecutor({
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  });
+
+  return toolFactory(listUsersToolDefinition, executor, errorHandler);
 }

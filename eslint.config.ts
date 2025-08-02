@@ -52,40 +52,39 @@ const config: Config = tsEslintConfig(
       'max-depth': ['error', 5], // Target 3, lowers cognitive load
       'max-statements': ['error', 50], // Max statements per function, target 20, enforces single responsibility principle
       'max-lines-per-function': ['error', 100], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
-      'max-lines': ['error', 1000], // Max lines per file, target 350, requires well defined boundaries of responsibility
+      'max-lines': ['error', 250], // Max lines per file, reduced from 350, target 250, requires well defined boundaries of responsibility
 
-      // Good practices
+      // General good practices
       'no-empty': 'error',
       'no-empty-function': 'error',
       'no-constant-condition': 'error',
       '@typescript-eslint/no-deprecated': 'error',
-      // Note: you must disable the base rule as it can report incorrect errors
-      'consistent-return': 'off',
+      'consistent-return': 'off', // Note: you must disable the base rule as it can report incorrect errors
       '@typescript-eslint/consistent-return': 'error',
+
+      // Import rules for tree shaking
+      'import-x/no-namespace': 'error', // Prevents import * as something
+
+      // Prevent export * from 'module' for better tree shaking
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'ExportAllDeclaration',
+          message:
+            'Avoid export * from "module" syntax to improve tree shaking. Use named exports instead.',
+        },
+      ],
+
+      // Enforce module boundaries - no reaching into parent directories, helps enforce dependency inversion principle
+      // TODO: Change to 'error' after architectural refactoring
+      // TEMPORARILY DISABLED to focus on other quality issues
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
-  // Test files
-  {
-    files: ['**/*.test.ts'],
-    rules: {
-      // The outer arrow functions in test files can get huge, but the inner functions
-      // should be small, one solution might be to improve encapsulation and separation
-      // of concerns in the file under test, forcing it to be broken down into smaller
-      // files and therefore smaller test files as well.
-      // Vitest does support more than one top-level define(), so maybe we just
-      // need to break with Jest compatibility and use that.
-      'max-lines-per-function': ['error', 1000],
-    },
-  },
-  // Config files (JS)
-  {
-    files: ['**/*.config.js'],
-    extends: [tsEslintConfigs.disableTypeChecked],
-  },
-  // Separation of concerns between core and individual servers, to make extraction into workspaces easier later
+  // Separation of concerns between the core framework and individual servers, to make it easier to extract the core framework into a workspace later
   // Restriction for app code
   {
-    files: ['src/oak-notion-mcp/**/*.{ts,tsx,js,jsx}'],
+    files: ['src/oak-notion-mcp/**/*.ts'],
     rules: {
       'import-x/no-internal-modules': [
         'error',
@@ -98,9 +97,37 @@ const config: Config = tsEslintConfig(
   },
   // Core MCP framework code itself cannot import from other folders/workspaces outside of oak-mcp-core
   {
-    files: ['src/oak-mcp-core/**/*.{ts,tsx,js,jsx}'],
+    files: ['src/oak-mcp-core/**/*.ts'],
     rules: {
       'import-x/no-internal-modules': 'error',
+    },
+  },
+  // Test files
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      // Allow test files to import from parent directories for testing utilities
+      'import-x/no-relative-parent-imports': 'off',
+      // The outer arrow functions in test files can get huge, but the inner functions
+      // should be small, one solution might be to improve encapsulation and separation
+      // of concerns in the file under test, forcing it to be broken down into smaller
+      // files and therefore smaller test files as well.
+      // Vitest does support more than one top-level define(), so maybe we just
+      // need to break with Jest compatibility and use that.
+      'max-lines': ['error', 700],
+      'max-lines-per-function': ['error', 1000],
+    },
+  },
+  // Config files (JS)
+  {
+    files: ['**/*.config.js'],
+    extends: [tsEslintConfigs.disableTypeChecked],
+  },
+  // Script files
+  {
+    files: ['**/scripts/*.ts'],
+    rules: {
+      'max-lines': ['error', 300],
     },
   },
 );

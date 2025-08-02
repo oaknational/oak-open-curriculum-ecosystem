@@ -2,16 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMcpServer } from './server.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { Logger } from './logging/logger.js';
+import type { Logger } from './logging/logger-interface.js';
 import { createMockListUsersResponse } from './test-helpers/notion-api-mocks.js';
+import { createMockLogger } from './test-helpers/factories.js';
 
 describe('MCP Server', () => {
-  const mockLogger: Logger = {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  };
+  const mockLogger: Logger = createMockLogger();
 
   // Create a partial mock of NotionClient with only the methods we use
   const mockNotionClient = {

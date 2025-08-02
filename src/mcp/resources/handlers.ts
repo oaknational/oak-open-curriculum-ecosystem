@@ -31,8 +31,7 @@ export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers
   const { notionClient, logger } = deps;
 
   return {
-    // eslint-disable-next-line @typescript-eslint/require-await
-    async handleListResources(): Promise<ListResourcesResult> {
+    handleListResources(): Promise<ListResourcesResult> {
       logger.debug('Listing available resources');
 
       // For now, we return a static discovery resource
@@ -46,7 +45,7 @@ export function createResourceHandlers(deps: CoreDependencies): ResourceHandlers
         },
       ];
 
-      return { resources };
+      return Promise.resolve({ resources });
     },
 
     async handleReadResource(uri: string): Promise<ReadResourceResult> {
@@ -183,7 +182,7 @@ async function handleDiscoveryResource(deps: CoreDependencies): Promise<ReadReso
       },
     };
 
-    // Scrub sensitive data
+    // Scrub sensitive data - we know it preserves structure
     const scrubbedDiscovery = scrubSensitiveData(discovery);
 
     // Format as readable text
@@ -195,11 +194,7 @@ async function handleDiscoveryResource(deps: CoreDependencies): Promise<ReadReso
 - Databases: ${String(discovery.workspace.databases)}
 
 ## Resources
-${(() => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const typed = scrubbedDiscovery as typeof discovery;
-  return JSON.stringify(typed.resources, null, 2);
-})()}`;
+${JSON.stringify(scrubbedDiscovery, null, 2)}`;
 
     return {
       contents: [

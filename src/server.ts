@@ -11,7 +11,7 @@ import { createToolHandlers } from './mcp/tools/handlers.js';
 import type { ServerDependencies } from './types/dependencies.js';
 
 export function createMcpServer(deps: ServerDependencies): Server {
-  deps.logger.info('Creating MCP server', deps.config);
+  deps.logger.info('Creating MCP server', { config: deps.config });
 
   const server = new Server(
     {
