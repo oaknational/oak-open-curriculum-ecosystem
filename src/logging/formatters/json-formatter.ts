@@ -6,7 +6,8 @@
  * Pure functions only - no side effects.
  */
 
-import { LogLevel, type LogFormatter, type LogContext } from '../logger-interface.js';
+import type { LogLevel, LogFormatter, LogContext } from '../logger-interface.js';
+import { getLogLevelName } from '../types/index.js';
 
 /**
  * JSON formatter options
@@ -138,7 +139,7 @@ export function formatJson(
     [fields.timestamp ?? 'timestamp']: timestamp
       ? timestamp.toISOString()
       : new Date().toISOString(),
-    [fields.level ?? 'level']: LogLevel[level],
+    [fields.level ?? 'level']: getLogLevelName(level),
     [fields.message ?? 'message']: message,
   };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Logger } from '../../logging/logger.js';
+import type { Logger } from '../../logging/logger-interface.js';
 import type { MinimalNotionClient } from '../../types/dependencies.js';
 import { createMockPage } from '../../test-helpers/notion-mocks.js';
 import {
@@ -24,10 +24,16 @@ function createMockNotionClient(): MinimalNotionClient {
 
 describe('Tool Handlers', () => {
   const mockLogger: Logger = {
+    trace: vi.fn(),
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
+    fatal: vi.fn(),
+    child: vi.fn().mockReturnThis(),
+    isLevelEnabled: vi.fn().mockReturnValue(true),
+    setLevel: vi.fn(),
+    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 
   describe('createNotionSearchTool', () => {
@@ -184,7 +190,7 @@ describe('Tool Handlers', () => {
       expect(result.content[0]).toHaveProperty('type', 'text');
       expect(result.content[0]).toHaveProperty('text');
       if (result.content[0] && 'text' in result.content[0]) {
-        expect(result.content[0].text).toContain('Error searching Notion');
+        expect(result.content[0].text).toContain('Error in notion-search: Search failed');
       }
       expect(result.isError).toBe(true);
     });

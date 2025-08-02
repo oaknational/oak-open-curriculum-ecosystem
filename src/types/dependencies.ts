@@ -3,7 +3,7 @@
  */
 
 import type { Client as NotionClient } from '@notionhq/client';
-import type { Logger } from '../logging/logger.js';
+import type { Logger } from '../logging/logger-interface.js';
 
 /**
  * Minimal Notion client interface - only the methods we actually use
