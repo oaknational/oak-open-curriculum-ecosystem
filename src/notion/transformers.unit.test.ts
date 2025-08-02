@@ -50,7 +50,7 @@ describe('transformNotionPageToMcpResource', () => {
       name: 'My Test Page',
       description: 'Notion page',
       mimeType: 'application/json',
-      metadata: {
+      _meta: {
         created_time: '2024-01-01T00:00:00.000Z',
         last_edited_time: '2024-01-02T00:00:00.000Z',
         archived: false,
@@ -109,7 +109,7 @@ describe('transformNotionPageToMcpResource', () => {
 
     expect(result.name).toBe('Archived Page');
     expect(result.description).toBe('Notion page (archived)');
-    expect(result.metadata?.['archived']).toBe(true);
+    expect(result._meta?.['archived']).toBe(true);
   });
 });
 
@@ -182,7 +182,7 @@ describe('transformNotionDatabaseToMcpResource', () => {
       name: 'My Database',
       description: 'A test database',
       mimeType: 'application/json',
-      metadata: {
+      _meta: {
         created_time: '2024-01-01T00:00:00.000Z',
         last_edited_time: '2024-01-02T00:00:00.000Z',
         archived: false,
@@ -230,10 +230,10 @@ describe('transformNotionUserToMcpResource', () => {
       name: 'John Doe',
       description: 'Notion workspace user',
       mimeType: 'application/json',
-      metadata: {
+      _meta: {
         type: 'person',
         avatar_url: 'https://example.com/avatar.jpg',
-        ['email']: 'joh...@example.com', // Email should be scrubbed
+        email: 'joh...@example.com', // Email should be scrubbed
       },
     });
   });
@@ -253,7 +253,7 @@ describe('transformNotionUserToMcpResource', () => {
       name: 'My Integration',
       description: 'Notion bot user',
       mimeType: 'application/json',
-      metadata: {
+      _meta: {
         type: 'bot',
         avatar_url: null,
       },
@@ -274,7 +274,7 @@ describe('transformNotionUserToMcpResource', () => {
     const result = transformNotionUserToMcpResource(notionUser);
 
     expect(result.name).toBe('Unknown User');
-    expect(result.metadata?.['email']).toBe('ano...@example.com');
+    expect(result._meta?.['email']).toBe('ano...@example.com');
   });
 });
 

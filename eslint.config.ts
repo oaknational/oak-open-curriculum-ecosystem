@@ -52,7 +52,7 @@ const config: Config = tsEslintConfig(
       'max-depth': ['error', 3], // Lowers cognitive load
       'max-statements': ['error', 30], // Max statements per function, target 20, enforces single responsibility principle
       'max-lines-per-function': ['error', 94], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
-      'max-lines': ['error', 240], // Requires well defined boundaries of responsibility
+      'max-lines': ['error', 213], // Requires well defined boundaries of responsibility
 
       // General good practices
       'no-empty': 'error',

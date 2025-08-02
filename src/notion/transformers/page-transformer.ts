@@ -4,14 +4,14 @@
  */
 
 import type { PageObjectResponse as NotionPage } from '@notionhq/client';
-import type { McpResource } from './types.js';
+import type { Resource } from './types.js';
 import { formatNotionRichText } from './rich-text-formatter.js';
 
 /**
  * Transforms a Notion page object into an MCP resource
  * Pure function - no side effects
  */
-export function transformNotionPageToMcpResource(page: NotionPage): McpResource {
+export function transformNotionPageToMcpResource(page: NotionPage): Resource {
   // Extract title from properties
   let title = 'Untitled';
 
@@ -36,7 +36,7 @@ export function transformNotionPageToMcpResource(page: NotionPage): McpResource 
     name: title,
     description: page.archived ? 'Notion page (archived)' : 'Notion page',
     mimeType: 'application/json',
-    metadata: {
+    _meta: {
       created_time: page.created_time,
       last_edited_time: page.last_edited_time,
       archived: page.archived,

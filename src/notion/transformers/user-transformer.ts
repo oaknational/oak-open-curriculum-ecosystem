@@ -4,7 +4,7 @@
  */
 
 import type { UserObjectResponse as NotionUser } from '@notionhq/client';
-import type { McpResource, EmailScrubber } from './types.js';
+import type { Resource, EmailScrubber } from './types.js';
 
 /**
  * Default email scrubber - redacts email addresses
@@ -30,19 +30,19 @@ export const defaultEmailScrubber: EmailScrubber = (email: string) => {
  */
 export function createUserTransformer(
   scrubEmail: EmailScrubber = defaultEmailScrubber,
-): (user: NotionUser) => McpResource {
-  return function transformNotionUserToMcpResource(user: NotionUser): McpResource {
+): (user: NotionUser) => Resource {
+  return function transformNotionUserToMcpResource(user: NotionUser): Resource {
     const name = user.name ?? 'Unknown User';
     const description = user.type === 'bot' ? 'Notion bot user' : 'Notion workspace user';
 
-    const metadata: Record<string, unknown> = {
+    const _meta: Record<string, unknown> = {
       type: user.type,
       avatar_url: user.avatar_url,
     };
 
     // Add email for person users (scrubbed)
     if (user.type === 'person' && user.person.email) {
-      metadata['email'] = scrubEmail(user.person.email);
+      _meta['email'] = scrubEmail(user.person.email);
     }
 
     return {
@@ -50,7 +50,7 @@ export function createUserTransformer(
       name,
       description,
       mimeType: 'application/json',
-      metadata,
+      _meta,
     };
   };
 }
