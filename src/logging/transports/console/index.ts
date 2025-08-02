@@ -16,6 +16,6 @@ export { createConsoleTransportAdapter } from './adapter.js';
 
 // Re-export utilities
 export { formatLogLevel, getConsoleMethod, formatTimestamp } from './level-formatter.js';
-export { getLevelColor, colorizeLevel, shouldColorize, detectTTY } from './colorizer.js';
+export { colorizeLevel, shouldColorize, detectTTY } from './colorizer.js';
 export { buildConsoleArgs, applyFormatting } from './argument-builder.js';
 export type { ArgumentBuilderOptions } from './argument-builder.js';
