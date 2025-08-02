@@ -156,8 +156,8 @@ describe('Request Tracing Pure Functions', () => {
         const context: Record<string, unknown> = {};
 
         // Required fields
-        context['requestId'] = options.requestId || generateRequestId();
-        context['traceId'] = options.traceId || context['requestId'];
+        context['requestId'] = options.requestId ?? generateRequestId();
+        context['traceId'] = options.traceId ?? context['requestId'];
 
         // Optional fields
         if (options.spanId) context['spanId'] = options.spanId;
@@ -174,7 +174,7 @@ describe('Request Tracing Pure Functions', () => {
       };
 
       const generateRequestId = (): string => {
-        return `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        return `req-${String(Date.now())}-${Math.random().toString(36).substring(2, 9)}`;
       };
 
       const context = createTraceContext({
@@ -201,11 +201,12 @@ describe('Request Tracing Pure Functions', () => {
           traceId?: string;
         } = {},
       ): Record<string, unknown> => {
-        const generateId = () => `req-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+        const generateId = () =>
+          `req-${String(Date.now())}-${Math.random().toString(36).substring(2, 9)}`;
 
         const context: Record<string, unknown> = {};
-        context['requestId'] = options.requestId || generateId();
-        context['traceId'] = options.traceId || context['requestId'];
+        context['requestId'] = options.requestId ?? generateId();
+        context['traceId'] = options.traceId ?? context['requestId'];
         context['timestamp'] = new Date().toISOString();
 
         return context;

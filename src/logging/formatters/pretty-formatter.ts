@@ -107,7 +107,7 @@ export function getLevelAbbreviation(level: LogLevel): string {
     [LogLevel.ERROR]: 'ERR',
     [LogLevel.FATAL]: 'FTL',
   };
-  return abbrevMap[level] || 'UNK';
+  return abbrevMap[level];
 }
 
 /**
@@ -186,9 +186,7 @@ export function formatPretty(
   }
 
   // Level
-  const levelStr = options.compact
-    ? getLevelAbbreviation(level)
-    : (LogLevel[level] || 'UNKNOWN').padEnd(5);
+  const levelStr = options.compact ? getLevelAbbreviation(level) : LogLevel[level].padEnd(5);
 
   if (useColor) {
     const levelColor = getLevelColor(level);
@@ -241,11 +239,21 @@ export function formatPretty(
         output += errorStr;
       }
     } else {
-      const errorStr = errorPrefix + String(error);
-      if (useColor) {
-        output += colorize(errorStr, Colors.red);
+      // Handle non-Error error values
+      let errorValue: string;
+      if (typeof error === 'object') {
+        errorValue = errorPrefix + JSON.stringify(error, null, 2);
+      } else if (typeof error === 'string') {
+        errorValue = errorPrefix + error;
+      } else if (typeof error === 'number' || typeof error === 'boolean') {
+        errorValue = errorPrefix + String(error);
       } else {
-        output += errorStr;
+        errorValue = errorPrefix + '[unknown]';
+      }
+      if (useColor) {
+        output += colorize(errorValue, Colors.red);
+      } else {
+        output += errorValue;
       }
     }
   }
@@ -289,7 +297,18 @@ export function formatCompact(
 
   // Inline error
   if (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
+    let errorMsg: string;
+    if (error instanceof Error) {
+      errorMsg = error.message;
+    } else if (typeof error === 'object') {
+      errorMsg = JSON.stringify(error);
+    } else if (typeof error === 'string') {
+      errorMsg = error;
+    } else if (typeof error === 'number' || typeof error === 'boolean') {
+      errorMsg = String(error);
+    } else {
+      errorMsg = '[unknown]';
+    }
     parts.push(`!${errorMsg}`);
   }
 
@@ -340,10 +359,8 @@ export function createColorizedFormatter(
   options: Omit<PrettyFormatterOptions, 'useColor'> = {},
 ): LogFormatter {
   // Detect TTY (Node.js specific, safe fallback for other environments)
-  const isTTY =
-    typeof process !== 'undefined' && process.stdout && typeof process.stdout.isTTY === 'boolean'
-      ? process.stdout.isTTY
-      : false;
+  // In Node.js environments, process.stdout will always exist if process exists
+  const isTTY = typeof process !== 'undefined' && Boolean(process.stdout.isTTY);
 
   return createPrettyFormatter({
     ...options,

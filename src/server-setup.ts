@@ -26,14 +26,14 @@ export async function setupAndStartServer(deps: ServerSetupDependencies): Promis
   const validation = validateEnvironmentVariables(deps.env);
   if (!validation.valid) {
     deps.log('[STARTUP ERROR] Environment validation failed:', true);
-    const errors = validation.errors || ['Unknown validation error'];
+    const errors = validation.errors ?? ['Unknown validation error'];
     deps.log('Configuration errors: ' + errors.join(', '), true);
     throw new Error('Environment validation failed: ' + errors.join(', '));
   }
 
   // Create logger
   deps.log('[STARTUP] Creating logger...');
-  const envLogLevel = deps.env['LOG_LEVEL'];
+  const envLogLevel = deps.env.LOG_LEVEL;
   const logLevel =
     envLogLevel === 'debug' ||
     envLogLevel === 'info' ||
@@ -45,7 +45,7 @@ export async function setupAndStartServer(deps: ServerSetupDependencies): Promis
 
   // Check API key
   deps.log('[STARTUP] Checking API key...');
-  const apiKey = deps.env['NOTION_API_KEY'];
+  const apiKey = deps.env.NOTION_API_KEY;
   if (!apiKey) {
     deps.log('[STARTUP ERROR] NOTION_API_KEY environment variable is not set', true);
     throw new Error('NOTION_API_KEY is required but not found');

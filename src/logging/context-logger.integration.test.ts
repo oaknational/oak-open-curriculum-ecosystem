@@ -72,7 +72,7 @@ describe('Context Logger Integration', () => {
       mockLogger = new MockLogger();
     });
 
-    it('should merge AsyncLocalStorage context with log context', async () => {
+    it('should merge AsyncLocalStorage context with log context', () => {
       // This tests the integration between AsyncLocalStorage and the logger
       const storage = new AsyncLocalStorage<LogContext>();
 
@@ -84,7 +84,7 @@ describe('Context Logger Integration', () => {
         message: string,
         logContext?: LogContext,
       ) => {
-        const asyncContext = storage.getStore() || {};
+        const asyncContext = storage.getStore() ?? {};
         const mergedContext = { ...asyncContext, ...logContext };
 
         if (level === 'info') {
@@ -94,9 +94,11 @@ describe('Context Logger Integration', () => {
         }
       };
 
-      await storage.run({ requestId: '123', userId: 'user1' }, async () => {
+      const result = storage.run({ requestId: '123', userId: 'user1' }, () => {
         logWithContext(mockLogger, storage, 'info', 'Test message', { action: 'test' });
+        return true;
       });
+      expect(result).toBe(true);
 
       expect(mockLogger.logs).toHaveLength(1);
       expect(mockLogger.logs[0]).toEqual({
@@ -110,7 +112,7 @@ describe('Context Logger Integration', () => {
       });
     });
 
-    it('should handle nested async contexts', async () => {
+    it('should handle nested async contexts', () => {
       const storage = new AsyncLocalStorage<LogContext>();
 
       const logWithContext = (
@@ -119,17 +121,19 @@ describe('Context Logger Integration', () => {
         message: string,
         logContext?: LogContext,
       ) => {
-        const asyncContext = storage.getStore() || {};
+        const asyncContext = storage.getStore() ?? {};
         const mergedContext = { ...asyncContext, ...logContext };
         logger.info(message, mergedContext);
       };
 
-      await storage.run({ requestId: '123' }, async () => {
+      storage.run({ requestId: '123' }, () => {
         logWithContext(mockLogger, storage, 'Outer context');
 
-        await storage.run({ requestId: '456', operation: 'nested' }, async () => {
+        const nestedResult = storage.run({ requestId: '456', operation: 'nested' }, () => {
           logWithContext(mockLogger, storage, 'Inner context');
+          return true;
         });
+        expect(nestedResult).toBe(true);
 
         logWithContext(mockLogger, storage, 'Back to outer');
       });
@@ -148,7 +152,7 @@ describe('Context Logger Integration', () => {
         storage: AsyncLocalStorage<LogContext>,
         message: string,
       ) => {
-        const asyncContext = storage.getStore() || {};
+        const asyncContext = storage.getStore() ?? {};
         logger.info(message, asyncContext);
       };
 
@@ -181,7 +185,7 @@ describe('Context Logger Integration', () => {
       );
     });
 
-    it('should handle missing async context gracefully', async () => {
+    it('should handle missing async context gracefully', () => {
       const storage = new AsyncLocalStorage<LogContext>();
 
       const logWithContext = (
@@ -190,7 +194,7 @@ describe('Context Logger Integration', () => {
         message: string,
         logContext?: LogContext,
       ) => {
-        const asyncContext = storage.getStore() || {};
+        const asyncContext = storage.getStore() ?? {};
         const mergedContext = { ...asyncContext, ...logContext };
         logger.info(message, Object.keys(mergedContext).length > 0 ? mergedContext : undefined);
       };
@@ -202,18 +206,20 @@ describe('Context Logger Integration', () => {
       expect(mockLogger.logs[0]?.context).toEqual({ manual: 'context' });
     });
 
-    it('should allow context updates within same async scope', async () => {
+    it('should allow context updates within same async scope', () => {
       const storage = new AsyncLocalStorage<LogContext>();
 
-      await storage.run({ requestId: '123', step: 1 }, async () => {
+      storage.run({ requestId: '123', step: 1 }, () => {
         const context1 = storage.getStore();
         expect(context1).toEqual({ requestId: '123', step: 1 });
 
         // Simulate context update
-        await storage.run({ ...context1, step: 2 }, async () => {
+        const result = storage.run({ ...context1, step: 2 }, () => {
           const context2 = storage.getStore();
           expect(context2).toEqual({ requestId: '123', step: 2 });
+          return true;
         });
+        expect(result).toBe(true);
       });
     });
   });

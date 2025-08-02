@@ -39,7 +39,7 @@ export function createFileReporter(
 ): FileReporter {
   const { logDir } = options;
   const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
-  const filename = options.filename || `oak-notion-mcp-${timestamp}.log`;
+  const filename = options.filename ?? `oak-notion-mcp-${timestamp}.log`;
   const logPath = deps.path.join(logDir, filename);
 
   // Ensure log directory exists
@@ -79,7 +79,25 @@ function formatArg(arg: unknown): string {
   try {
     return JSON.stringify(arg, null, 2);
   } catch {
-    return String(arg);
+    // For objects that can't be stringified (e.g., circular references)
+    if (typeof arg === 'object') {
+      return '[object: could not stringify]';
+    }
+    // For primitives that couldn't be stringified
+    if (typeof arg === 'number' || typeof arg === 'boolean') {
+      return String(arg);
+    }
+    if (typeof arg === 'function') {
+      return '[function]';
+    }
+    if (typeof arg === 'symbol') {
+      return arg.toString();
+    }
+    if (typeof arg === 'bigint') {
+      return arg.toString();
+    }
+    // Fallback - should never reach here
+    return '[unknown]';
   }
 }
 
@@ -95,5 +113,5 @@ function getLevelName(level: number): string {
     4: 'DEBUG',
     5: 'TRACE',
   };
-  return levels[level] || 'UNKNOWN';
+  return levels[level] ?? 'UNKNOWN';
 }

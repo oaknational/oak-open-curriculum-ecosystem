@@ -185,5 +185,5 @@ export function formatErrorForUser(error: McpError): string {
       'An unexpected error occurred. Please try again or contact support if the issue persists.',
   };
 
-  return userMessages[error.data.type] || userMessages.unknown;
+  return userMessages[error.data.type];
 }

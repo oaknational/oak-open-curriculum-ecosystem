@@ -198,13 +198,12 @@ export class ConsoleTransport implements LogTransport {
 
   constructor(options: ConsoleTransportOptions = {}) {
     this.options = options;
-    this.console = options.console || console;
+    this.console = options.console ?? console;
 
     // Detect TTY for colorization (in Node.js)
-    this.isTTY =
-      typeof process !== 'undefined' && process.stdout && typeof process.stdout.isTTY === 'boolean'
-        ? process.stdout.isTTY
-        : false;
+    // Runtime check needed for cross-platform compatibility (Node.js vs browser)
+    // In Node.js environments, process.stdout will always exist if process exists
+    this.isTTY = typeof process !== 'undefined' && Boolean(process.stdout.isTTY);
   }
 
   log(level: LogLevel, message: string, error?: unknown, context?: LogContext): void {
@@ -215,7 +214,7 @@ export class ConsoleTransport implements LogTransport {
 
     // Apply prefix if configured
     if (this.options.prefix && args.length > 0) {
-      args[0] = `${this.options.prefix} ${args[0]}`;
+      args[0] = `${this.options.prefix} ${String(args[0])}`;
     }
 
     // Apply colorization if enabled

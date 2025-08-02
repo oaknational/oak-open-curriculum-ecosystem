@@ -25,7 +25,7 @@ describe('Pretty Formatter Pure Functions', () => {
         }
 
         // Level with padding
-        const levelStr = (LogLevel[level] || 'UNKNOWN').padEnd(5);
+        const levelStr = LogLevel[level].padEnd(5);
         parts.push(levelStr);
 
         // Message
@@ -46,7 +46,11 @@ describe('Pretty Formatter Pure Functions', () => {
           const errorStr =
             error instanceof Error
               ? `\n  Error: ${error.message}${error.stack ? '\n' + error.stack : ''}`
-              : `\n  Error: ${String(error)}`;
+              : typeof error === 'string'
+                ? `\n  Error: ${error}`
+                : typeof error === 'number' || typeof error === 'boolean'
+                  ? `\n  Error: ${String(error)}`
+                  : `\n  Error: [unknown]`;
           output += errorStr;
         }
 
@@ -79,7 +83,7 @@ describe('Pretty Formatter Pure Functions', () => {
           parts.push(`[${timestamp.toISOString()}]`);
         }
 
-        const levelStr = (LogLevel[level] || 'UNKNOWN').padEnd(5);
+        const levelStr = LogLevel[level].padEnd(5);
         parts.push(levelStr);
         parts.push(message);
 
@@ -92,7 +96,13 @@ describe('Pretty Formatter Pure Functions', () => {
               output += `\n  Stack: ${error.stack.split('\n').join('\n  ')}`;
             }
           } else {
-            output += `\n  Error: ${String(error)}`;
+            if (typeof error === 'string') {
+              output += `\n  Error: ${error}`;
+            } else if (typeof error === 'number' || typeof error === 'boolean') {
+              output += `\n  Error: ${String(error)}`;
+            } else {
+              output += `\n  Error: [unknown]`;
+            }
           }
         }
 
@@ -143,7 +153,7 @@ describe('Pretty Formatter Pure Functions', () => {
           parts.push(`[${timestamp.toISOString()}]`);
         }
 
-        const levelStr = (LogLevel[level] || 'UNKNOWN').padEnd(5);
+        const levelStr = LogLevel[level].padEnd(5);
         parts.push(levelStr);
         parts.push(message);
 
@@ -153,7 +163,11 @@ describe('Pretty Formatter Pure Functions', () => {
           const errorStr =
             error instanceof Error
               ? `\n  Error: ${error.message}${error.stack ? '\n' + error.stack : ''}`
-              : `\n  Error: ${String(error)}`;
+              : typeof error === 'string'
+                ? `\n  Error: ${error}`
+                : typeof error === 'number' || typeof error === 'boolean'
+                  ? `\n  Error: ${String(error)}`
+                  : `\n  Error: [unknown]`;
           output += errorStr;
         }
 
@@ -273,7 +287,7 @@ describe('Pretty Formatter Pure Functions', () => {
         }
 
         // Level with color
-        const levelStr = (LogLevel[level] || 'UNKNOWN').padEnd(5);
+        const levelStr = LogLevel[level].padEnd(5);
         const levelColor = getLevelColor(level);
         parts.push(colorize(levelStr, levelColor));
 
@@ -298,7 +312,11 @@ describe('Pretty Formatter Pure Functions', () => {
           const errorStr =
             error instanceof Error
               ? `  Error: ${error.message}${error.stack ? '\n' + error.stack : ''}`
-              : `  Error: ${String(error)}`;
+              : typeof error === 'string'
+                ? `  Error: ${error}`
+                : typeof error === 'number' || typeof error === 'boolean'
+                  ? `  Error: ${String(error)}`
+                  : `  Error: [unknown]`;
           output += '\n' + colorize(errorStr, '\x1b[31m');
         }
 
@@ -359,7 +377,7 @@ describe('Pretty Formatter Pure Functions', () => {
           [LogLevel.ERROR]: 'ERR',
           [LogLevel.FATAL]: 'FTL',
         };
-        parts.push(levelMap[level] || 'UNK');
+        parts.push(levelMap[level]);
 
         // Message
         parts.push(message);
@@ -374,7 +392,14 @@ describe('Pretty Formatter Pure Functions', () => {
 
         // Inline error
         if (error) {
-          const errorMsg = error instanceof Error ? error.message : String(error);
+          const errorMsg =
+            error instanceof Error
+              ? error.message
+              : typeof error === 'string'
+                ? error
+                : typeof error === 'number' || typeof error === 'boolean'
+                  ? String(error)
+                  : '[unknown]';
           parts.push(`!${errorMsg}`);
         }
 

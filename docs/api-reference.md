@@ -107,6 +107,39 @@ Resources provide URI-based access to Notion content. Each resource returns data
 - Property configurations
 - Database metadata
 
+## Notion API Response Types
+
+The Notion API returns two types of responses for pages, databases, and blocks:
+
+### Partial vs Full Responses
+
+**Partial Responses** contain minimal information:
+
+- Pages: `object: "page"`, `id: string`
+- Databases: `object: "database"`, `id: string`, `properties` (schema only)
+- Blocks: `object: "block"`, `id: string`
+
+**Full Responses** contain all available information:
+
+- Pages: Includes `url`, `properties`, `parent`, `created_time`, `last_edited_time`, `icon`, `cover`, etc.
+- Databases: Includes `title`, `description`, `icon`, `cover`, `parent`, `created_time`, `last_edited_time`, etc.
+- Blocks: Includes `type`, block-specific content, `has_children`, `created_time`, etc.
+
+### Type Guards
+
+The `@notionhq/client` SDK provides built-in type guards to distinguish between partial and full responses:
+
+```typescript
+import { isFullPage, isFullDatabase, isFullBlock } from '@notionhq/client';
+
+// These functions check for the presence of discriminating properties:
+// - isFullPage: checks for 'url' property
+// - isFullDatabase: checks for 'title' property
+// - isFullBlock: checks for 'type' property
+```
+
+When you encounter permission errors or missing fields, it often means the API returned a partial response due to access restrictions.
+
 ## Tools
 
 Tools enable operations on Notion content. All tools return structured responses.

@@ -76,14 +76,11 @@ export function serializeError(error: unknown): unknown {
     }
 
     // Include any additional properties
-    // Type guard to check if error is an object with additional properties
-    if (typeof error === 'object' && error !== null) {
-      Object.entries(error).forEach(([key, value]) => {
-        if (key !== 'name' && key !== 'message' && key !== 'stack') {
-          serialized[key] = value;
-        }
-      });
-    }
+    Object.entries(error).forEach(([key, value]) => {
+      if (key !== 'name' && key !== 'message' && key !== 'stack') {
+        serialized[key] = value;
+      }
+    });
 
     return serialized;
   }
@@ -135,29 +132,29 @@ export function formatJson(
   timestamp?: Date,
   options: JsonFormatterOptions = {},
 ): string {
-  const fields = options.fields || {};
+  const fields = options.fields ?? {};
 
   const entry: Record<string, unknown> = {
-    [fields.timestamp || 'timestamp']: timestamp
+    [fields.timestamp ?? 'timestamp']: timestamp
       ? timestamp.toISOString()
       : new Date().toISOString(),
-    [fields.level || 'level']: LogLevel[level] || 'UNKNOWN',
-    [fields.message || 'message']: message,
+    [fields.level ?? 'level']: LogLevel[level],
+    [fields.message ?? 'message']: message,
   };
 
   if (options.includeLevelValue !== false) {
-    entry[fields.levelValue || 'levelValue'] = level;
+    entry[fields.levelValue ?? 'levelValue'] = level;
   }
 
   if (context && Object.keys(context).length > 0) {
-    const contextField = fields.context || 'context';
+    const contextField = fields.context ?? 'context';
     entry[contextField] = options.sensitiveKeys
       ? sanitizeJsonEntry(context, options.sensitiveKeys)
       : context;
   }
 
   if (error) {
-    entry[fields.error || 'error'] = serializeError(error);
+    entry[fields.error ?? 'error'] = serializeError(error);
   }
 
   // Sanitize the entire entry if needed
@@ -167,7 +164,7 @@ export function formatJson(
 
   let json: string;
   if (options.pretty) {
-    json = JSON.stringify(finalEntry, null, options.indent || 2);
+    json = JSON.stringify(finalEntry, null, options.indent ?? 2);
   } else {
     json = JSON.stringify(finalEntry);
   }

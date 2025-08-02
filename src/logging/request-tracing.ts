@@ -193,15 +193,15 @@ export function createTraceContext(options: {
   headers?: Record<string, string>;
   generateId?: () => string;
 }): TraceContext {
-  const genId = options.generateId || (() => generateRequestId());
+  const genId = options.generateId ?? (() => generateRequestId());
 
   const context: TraceContext = {
-    requestId: options.requestId || genId(),
+    requestId: options.requestId ?? genId(),
     timestamp: new Date().toISOString(),
   };
 
   // Set traceId (defaults to requestId)
-  context.traceId = options.traceId || context.requestId;
+  context.traceId = options.traceId ?? context.requestId;
 
   // Add optional fields
   if (options.spanId) context.spanId = options.spanId;
@@ -237,7 +237,7 @@ export function createSpanContext(parent: TraceContext, spanId?: string): TraceC
   return {
     ...parent,
     parentSpanId: parent.spanId,
-    spanId: spanId || generateSpanId(),
+    spanId: spanId ?? generateSpanId(),
   };
 }
 
@@ -318,7 +318,7 @@ export class RequestTracer {
   private options: RequestTracingOptions;
 
   constructor(storage?: AsyncLocalStorage<TraceContext>, options: RequestTracingOptions = {}) {
-    this.storage = storage || new AsyncLocalStorage<TraceContext>();
+    this.storage = storage ?? new AsyncLocalStorage<TraceContext>();
     this.options = options;
   }
 
@@ -360,7 +360,7 @@ export class RequestTracer {
     const existing = this.getTraceContext();
     if (existing) return existing;
 
-    return this.ensureFullContext(partial || {});
+    return this.ensureFullContext(partial ?? {});
   }
 
   /**
@@ -372,7 +372,7 @@ export class RequestTracer {
     url?: string;
     user?: { id?: string; sessionId?: string };
   }): TraceContext {
-    const headers = request.headers || {};
+    const headers = request.headers ?? {};
     const extracted = extractTraceHeaders(headers, this.options.traceHeaders);
 
     return createTraceContext({
@@ -391,7 +391,7 @@ export class RequestTracer {
    * Serialize trace context for propagation
    */
   serializeContext(context?: TraceContext): string {
-    const ctx = context || this.getTraceContext();
+    const ctx = context ?? this.getTraceContext();
     if (!ctx) return '';
 
     const sanitized = sanitizeTraceContext(
@@ -486,17 +486,15 @@ export class RequestTracer {
    * Ensure context has all required fields
    */
   private ensureFullContext(partial: Partial<TraceContext>): TraceContext {
-    const genId = this.options.generateId || (() => generateRequestId());
+    const genId = this.options.generateId ?? (() => generateRequestId());
 
     const context: TraceContext = {
-      requestId: partial.requestId || genId(),
+      requestId: partial.requestId ?? genId(),
       ...partial,
     };
 
     // Ensure traceId
-    if (!context.traceId) {
-      context.traceId = context.requestId;
-    }
+    context.traceId ??= context.requestId;
 
     // Add sampling decision
     if (context.sampled === undefined && this.options.sampleRate !== undefined) {
