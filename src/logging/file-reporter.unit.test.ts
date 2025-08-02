@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createFileReporter } from './file-reporter.js';
 import type { LogObject } from 'consola';
+import { LOG_LEVELS } from './types/index.js';
 
 // Create a mock context that satisfies the type requirements
 const mockContext = { options: undefined };
@@ -38,7 +39,7 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs', filename: 'test.log' }, deps);
 
     const logObj: LogObject = {
-      level: 3, // INFO
+      level: LOG_LEVELS.INFO.value,
       type: 'log',
       tag: '',
       args: ['Test message', { foo: 'bar' }],
@@ -75,10 +76,10 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs', filename: 'test.log' }, deps);
 
     const levels = [
-      { level: 1, expected: 'ERROR' },
-      { level: 2, expected: 'WARN' },
-      { level: 3, expected: 'INFO' },
-      { level: 4, expected: 'DEBUG' },
+      { level: LOG_LEVELS.ERROR.value, expected: 'ERROR' },
+      { level: LOG_LEVELS.WARN.value, expected: 'WARN' },
+      { level: LOG_LEVELS.INFO.value, expected: 'INFO' },
+      { level: LOG_LEVELS.DEBUG.value, expected: 'DEBUG' },
     ];
 
     levels.forEach(({ level, expected }) => {
@@ -117,7 +118,7 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs' }, deps);
 
     const logObj: LogObject = {
-      level: 3,
+      level: LOG_LEVELS.INFO.value,
       type: 'log',
       tag: '',
       args: ['Test'],
@@ -151,7 +152,7 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs' }, deps);
 
     const logObj: LogObject = {
-      level: 3,
+      level: LOG_LEVELS.INFO.value,
       type: 'log',
       tag: '',
       args: ['Test'],
@@ -179,7 +180,7 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs', filename: 'test.log' }, deps);
 
     const logObj: LogObject = {
-      level: 3,
+      level: LOG_LEVELS.INFO.value,
       type: 'log',
       tag: '',
       args: [
@@ -228,7 +229,7 @@ describe('createFileReporter', () => {
     const reporter = createFileReporter({ logDir: '/test/logs', filename: 'test.log' }, deps);
 
     const logObj: LogObject = {
-      level: 3,
+      level: LOG_LEVELS.INFO.value,
       type: 'log',
       tag: '',
       args: ['Test'],

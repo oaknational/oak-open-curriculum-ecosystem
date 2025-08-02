@@ -6,23 +6,11 @@
  * MUST remain free of any external dependencies.
  */
 
-/**
- * Log levels in ascending order of severity
- */
-export enum LogLevel {
-  TRACE = 0,
-  DEBUG = 10,
-  INFO = 20,
-  WARN = 30,
-  ERROR = 40,
-  FATAL = 50,
-}
+import type { LogLevel, LogContext, LogTransport, LogFormatter } from './types/index.js';
 
-/**
- * Context object for structured logging
- * Allows arbitrary key-value pairs for maximum flexibility
- */
-export type LogContext = Record<string, unknown>;
+// Re-export shared types
+export type { LogLevel, LogContext, LogTransport, LogFormatter };
+export { LOG_LEVELS, isLogLevel, getLogLevelName } from './types/index.js';
 
 /**
  * Core logger interface - zero dependencies
@@ -30,7 +18,7 @@ export type LogContext = Record<string, unknown>;
  */
 export interface Logger {
   /**
-   * Log a trace-level message (most verbose)
+   * Log a trace-level message
    */
   trace(message: string, context?: LogContext): void;
 
@@ -83,75 +71,38 @@ export interface Logger {
 }
 
 /**
- * Transport interface for log output
- * Implementations handle actual log delivery
- */
-export interface LogTransport {
-  /**
-   * Deliver a log entry
-   * Must not throw - handle errors internally
-   */
-  log(
-    level: LogLevel,
-    message: string,
-    error?: unknown,
-    context?: LogContext,
-  ): void | Promise<void>;
-
-  /**
-   * Flush any buffered logs
-   * Called on shutdown or when needed
-   */
-  flush?(): Promise<void>;
-
-  /**
-   * Close the transport and release resources
-   */
-  close?(): Promise<void>;
-}
-
-/**
- * Formatter interface for log serialization
- * Converts log data to string for output
- */
-export interface LogFormatter {
-  /**
-   * Format a log entry
-   * Pure function - no side effects
-   */
-  format(
-    level: LogLevel,
-    message: string,
-    error?: unknown,
-    context?: LogContext,
-    timestamp?: Date,
-  ): string;
-}
-
-/**
  * Configuration for logger creation
  * Used by logger factories
  */
 export interface LoggerConfig {
   /**
-   * Minimum log level to output
+   * Logger name/category
+   */
+  name?: string;
+
+  /**
+   * Minimum log level
    */
   level?: LogLevel;
 
   /**
-   * Optional context to include in all logs
-   */
-  defaultContext?: LogContext;
-
-  /**
-   * Transports for log output
-   * Multiple transports can be used simultaneously
+   * Log transports
    */
   transports?: LogTransport[];
 
   /**
-   * Formatter for log serialization
-   * If not provided, transport decides format
+   * Default context
    */
-  formatter?: LogFormatter;
+  context?: LogContext;
+}
+
+/**
+ * Factory interface for creating loggers
+ * Allows different implementations
+ */
+export interface LoggerFactory {
+  /**
+   * Create a new logger instance
+   */
+  create(config: LoggerConfig): Logger;
 }

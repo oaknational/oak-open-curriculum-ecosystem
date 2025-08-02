@@ -4,138 +4,78 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { Logger, LogContext } from './logger-interface.js';
-import { LogLevel } from './logger-interface.js';
+import { LOG_LEVELS, isLogLevel, getLogLevelName } from './logger-interface.js';
+import type { LogContext } from './logger-interface.js';
 
 describe('Logger Interface', () => {
-  describe('LogLevel enum', () => {
-    it('should define correct log levels in order', async () => {
-      const { LogLevel } = await import('./logger-interface.js');
-
-      expect(LogLevel.TRACE).toBe(0);
-      expect(LogLevel.DEBUG).toBe(10);
-      expect(LogLevel.INFO).toBe(20);
-      expect(LogLevel.WARN).toBe(30);
-      expect(LogLevel.ERROR).toBe(40);
-      expect(LogLevel.FATAL).toBe(50);
+  describe('LogLevel constants', () => {
+    it('should define correct log levels in ascending order', () => {
+      expect(LOG_LEVELS.TRACE.value).toBe(0);
+      expect(LOG_LEVELS.DEBUG.value).toBe(10);
+      expect(LOG_LEVELS.INFO.value).toBe(20);
+      expect(LOG_LEVELS.WARN.value).toBe(30);
+      expect(LOG_LEVELS.ERROR.value).toBe(40);
+      expect(LOG_LEVELS.FATAL.value).toBe(50);
     });
 
-    it('should allow numeric comparison of levels', async () => {
-      const { LogLevel } = await import('./logger-interface.js');
+    it('should allow numeric comparison for level hierarchy', () => {
+      expect(LOG_LEVELS.ERROR.value).toBeGreaterThan(LOG_LEVELS.WARN.value);
+      expect(LOG_LEVELS.DEBUG.value).toBeLessThan(LOG_LEVELS.INFO.value);
+      expect(LOG_LEVELS.FATAL.value).toBeGreaterThan(LOG_LEVELS.ERROR.value);
+    });
 
-      // Verify that numeric values allow proper level comparison
-      expect(LogLevel.ERROR).toBeGreaterThan(LogLevel.WARN);
-      expect(LogLevel.DEBUG).toBeLessThan(LogLevel.INFO);
+    it('should have correct level names', () => {
+      expect(LOG_LEVELS.TRACE.name).toBe('TRACE');
+      expect(LOG_LEVELS.DEBUG.name).toBe('DEBUG');
+      expect(LOG_LEVELS.INFO.name).toBe('INFO');
+      expect(LOG_LEVELS.WARN.name).toBe('WARN');
+      expect(LOG_LEVELS.ERROR.name).toBe('ERROR');
+      expect(LOG_LEVELS.FATAL.name).toBe('FATAL');
     });
   });
 
-  describe('Logger implementation contract', () => {
-    // Create a minimal test implementation to verify the interface
-    class TestLogger implements Logger {
-      calls: { method: string; args: unknown[] }[] = [];
-      currentLevel = LogLevel.INFO;
+  describe('isLogLevel type guard', () => {
+    it('should return true for valid log levels', () => {
+      expect(isLogLevel(LOG_LEVELS.TRACE.value)).toBe(true);
+      expect(isLogLevel(LOG_LEVELS.DEBUG.value)).toBe(true);
+      expect(isLogLevel(LOG_LEVELS.INFO.value)).toBe(true);
+      expect(isLogLevel(LOG_LEVELS.WARN.value)).toBe(true);
+      expect(isLogLevel(LOG_LEVELS.ERROR.value)).toBe(true);
+      expect(isLogLevel(LOG_LEVELS.FATAL.value)).toBe(true);
+    });
 
-      trace(message: string, context?: LogContext): void {
-        this.calls.push({ method: 'trace', args: [message, context] });
-      }
+    it('should return false for invalid values', () => {
+      // Test invalid numbers
+      const invalidNumbers: unknown[] = [-1, 5, 100, 3.14];
+      invalidNumbers.forEach((value) => {
+        expect(isLogLevel(value)).toBe(false);
+      });
 
-      debug(message: string, context?: LogContext): void {
-        this.calls.push({ method: 'debug', args: [message, context] });
-      }
-
-      info(message: string, context?: LogContext): void {
-        this.calls.push({ method: 'info', args: [message, context] });
-      }
-
-      warn(message: string, context?: LogContext): void {
-        this.calls.push({ method: 'warn', args: [message, context] });
-      }
-
-      error(message: string, error?: unknown, context?: LogContext): void {
-        this.calls.push({ method: 'error', args: [message, error, context] });
-      }
-
-      fatal(message: string, error?: unknown, context?: LogContext): void {
-        this.calls.push({ method: 'fatal', args: [message, error, context] });
-      }
-
-      child(context: LogContext): Logger {
-        const childLogger = new TestLogger();
-        childLogger.calls.push({ method: 'child', args: [context] });
-        return childLogger;
-      }
-
-      isLevelEnabled(level: LogLevel): boolean {
-        return level >= this.currentLevel;
-      }
-
-      setLevel(level: LogLevel): void {
-        this.currentLevel = level;
-      }
-
-      getLevel(): LogLevel {
-        return this.currentLevel;
-      }
-    }
-
-    it('should support all log methods', () => {
-      const logger = new TestLogger();
-      const context = { requestId: '123' };
-
-      logger.trace('trace message', context);
-      logger.debug('debug message', context);
-      logger.info('info message', context);
-      logger.warn('warn message', context);
-      logger.error('error message', new Error('test'), context);
-      logger.fatal('fatal message', new Error('fatal'), context);
-
-      expect(logger.calls).toHaveLength(6);
-      expect(logger.calls[0]).toEqual({ method: 'trace', args: ['trace message', context] });
-      expect(logger.calls[4]).toEqual({
-        method: 'error',
-        args: ['error message', new Error('test'), context],
+      // Test non-number types
+      const nonNumbers: unknown[] = ['debug', null, undefined, {}, [], true];
+      nonNumbers.forEach((value) => {
+        expect(isLogLevel(value)).toBe(false);
       });
     });
+  });
 
-    it('should support child logger creation', () => {
-      const logger = new TestLogger();
-      const childContext = { service: 'auth' };
-
-      const child = logger.child(childContext);
-
-      expect(child).toBeInstanceOf(TestLogger);
-      expect(child).not.toBe(logger);
-      // Type guard: we know child is TestLogger from instanceof check
-      if (child instanceof TestLogger) {
-        expect(child.calls[0]).toEqual({
-          method: 'child',
-          args: [childContext],
-        });
-      }
+  describe('getLogLevelName utility', () => {
+    it('should return correct names for valid levels', () => {
+      expect(getLogLevelName(LOG_LEVELS.TRACE.value)).toBe('TRACE');
+      expect(getLogLevelName(LOG_LEVELS.DEBUG.value)).toBe('DEBUG');
+      expect(getLogLevelName(LOG_LEVELS.INFO.value)).toBe('INFO');
+      expect(getLogLevelName(LOG_LEVELS.WARN.value)).toBe('WARN');
+      expect(getLogLevelName(LOG_LEVELS.ERROR.value)).toBe('ERROR');
+      expect(getLogLevelName(LOG_LEVELS.FATAL.value)).toBe('FATAL');
     });
 
-    it('should check if log level is enabled', async () => {
-      const { LogLevel } = await import('./logger-interface.js');
-      const logger = new TestLogger();
-
-      logger.setLevel(LogLevel.WARN);
-
-      expect(logger.isLevelEnabled(LogLevel.TRACE)).toBe(false);
-      expect(logger.isLevelEnabled(LogLevel.DEBUG)).toBe(false);
-      expect(logger.isLevelEnabled(LogLevel.INFO)).toBe(false);
-      expect(logger.isLevelEnabled(LogLevel.WARN)).toBe(true);
-      expect(logger.isLevelEnabled(LogLevel.ERROR)).toBe(true);
-      expect(logger.isLevelEnabled(LogLevel.FATAL)).toBe(true);
-    });
-
-    it('should get and set log level', async () => {
-      const { LogLevel } = await import('./logger-interface.js');
-      const logger = new TestLogger();
-
-      expect(logger.getLevel()).toBe(LogLevel.INFO);
-
-      logger.setLevel(LogLevel.DEBUG);
-      expect(logger.getLevel()).toBe(LogLevel.DEBUG);
+    it('should throw error for invalid levels', () => {
+      expect(() => getLogLevelName(-1)).toThrow(TypeError);
+      expect(() => getLogLevelName(-1)).toThrow(
+        'Invalid log level: -1. Valid levels are: TRACE=0, DEBUG=10, INFO=20, WARN=30, ERROR=40, FATAL=50',
+      );
+      expect(() => getLogLevelName(5)).toThrow('Invalid log level: 5');
+      expect(() => getLogLevelName(100)).toThrow('Invalid log level: 100');
     });
   });
 
@@ -149,8 +89,19 @@ describe('Logger Interface', () => {
         tags: ['api', 'v2'],
       };
 
-      // This test passes if TypeScript compiles it
+      // This test proves TypeScript compilation - interface is properly defined
       expect(context).toBeDefined();
+      expect(typeof context).toBe('object');
+    });
+
+    it('should accept optional context', () => {
+      const context: LogContext | undefined = undefined;
+      expect(context).toBeUndefined();
+    });
+
+    it('should accept empty context', () => {
+      const context: LogContext = {};
+      expect(context).toEqual({});
     });
   });
 });

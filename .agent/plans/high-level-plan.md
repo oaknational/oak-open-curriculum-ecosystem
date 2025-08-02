@@ -103,140 +103,116 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Next Steps**: Proceed with Phase 3 enhancements or begin oak-mcp-core extraction based on the analysis.
 
-### Phase 3: Strategic Enhancements (Framework-First Approach)
+### Phase 3: oak-mcp-core Framework Implementation
 
-**Outcome**: Build generic MCP abstractions first, then specialize for Notion, preparing ~3,050 LoC for oak-mcp-core extraction
+**Outcome**: Create oak-mcp-core as a comprehensive MCP server framework while simultaneously migrating oak-notion-mcp to use it
 
-**Strategy**: Every enhancement creates reusable abstractions that will form oak-mcp-core's foundation. All external data validation happens at boundaries using Zod schemas and type guards
+**Strategy**: Build generic components directly in oak-mcp-core from day one, validating them through real use in oak-notion-mcp. All external data validation happens at boundaries using Zod schemas and type guards
+
+**Detailed Plan**: See [Phase 3 oak-mcp-core Implementation Plan](phase-3-oak-mcp-core-implementation-plan.md) for week-by-week breakdown
+
+**Dependency Management Strategy**:
+
+- Zero external dependencies in core components
+- Runtime abstractions instead of polyfills (Timer, Storage interfaces)
+- TypeScript as peer dependency with version range 5.0+
+- Zod integration through adapters, not direct dependency
+- All dependencies injected, never imported directly
+- Graceful degradation for runtime-specific features
+
+**Testing Strategy**:
+
+- Unit tests (`*.unit.test.ts`) for all pure functions - TDD mandatory
+- Integration tests (`*.integration.test.ts`) for boundary validation
+- End-to-end tests for oak-notion-mcp using oak-mcp-core
+- Continuous integration testing during migration
+- Performance benchmarks tracked in CI
 
 **Key Deliverables**:
 
-- [ ] **Enhanced Logging Framework** (foundation layer - no dependencies):
-  - [ ] Create zero-dependency `Logger` interface (~50 LoC extractable)
-  - [ ] Implement `ContextLogger` with AsyncLocalStorage correlation (~150 LoC)
-  - [ ] Add transport abstraction with console and file transports (~150 LoC)
-  - [ ] Create JSON and pretty formatters with error serialization (~100 LoC)
-  - [ ] Implement request tracing with correlation IDs (~50 LoC)
-  - [ ] Add performance logging integration (~50 LoC)
-  - [ ] Create buffered, async non-blocking transports
-  - [ ] Ensure edge-runtime compatibility (abstract file system)
+- [ ] **oak-mcp-core Framework Creation**:
+  - [ ] Create `src/oak-mcp-core/` folder structure
+  - [ ] Single public API via `src/oak-mcp-core/index.ts`
+  - [ ] Build 3,050 LoC of generic MCP framework components
+  - [ ] Zero external dependencies in core components
+  - [ ] 100% test coverage using TDD (tests written first)
+  - [ ] Support for 4+ runtime environments via abstractions
+  - [ ] Prepare for future extraction to @oaknational/mcp-core
 
-- [ ] **Generic MCP Server Base Class** (replaces direct SDK migration):
-  - [ ] Create abstract `McpServerBase<TConfig, TDeps>` class (~150 LoC extractable)
-  - [ ] Implement lifecycle management (start, stop, health checks)
-  - [ ] Add plugin architecture for handlers
-  - [ ] Create `NotionMcpServer extends McpServerBase`
-  - [ ] Migrate existing server.ts to use new base class
+- [ ] **Core Framework Components**:
+  - [ ] Logging Framework - Zero-dependency with AsyncLocalStorage (550 LoC)
+  - [ ] Error Framework - ChainedError with full context preservation (300 LoC)
+  - [ ] Configuration Management - Multi-source with validation (200 LoC)
+  - [ ] Validation Framework - Composable validators with Zod (150 LoC)
+  - [ ] Testing Utilities - In-process server and mocks (200 LoC)
+  - [ ] MCP Server Base - Abstract class with lifecycle hooks (150 LoC)
+  - [ ] Middleware System - Next pattern with composition (150 LoC)
+  - [ ] Registry System - Generic with middleware support (200 LoC)
+  - [ ] Type Guards - Composable registry pattern (150 LoC)
+  - [ ] Pagination - AsyncGenerator with strategies (150 LoC)
+  - [ ] Performance Monitoring - <5% overhead (100 LoC)
+  - [ ] Lifecycle Management - Orchestration with rollback (100 LoC)
+  - [ ] Resource Linking - Cross-reference patterns (75 LoC)
+  - [ ] Additional Utilities - Result type, helpers (575 LoC)
 
-- [ ] **Enhanced Error Framework** (generic first, Notion second):
-  - [ ] Create `ChainedError` class that preserves full error chain (~300 LoC extractable)
-  - [ ] Implement structured error types with categories and metadata
-  - [ ] Add `ErrorContext` with AsyncLocalStorage for context preservation
-  - [ ] Create `RecoveryStrategy` interface with exponential backoff
-  - [ ] Implement `ErrorReporter` for monitoring and metrics
-  - [ ] Add error boundaries for all handlers with context extraction
-  - [ ] Create `Result<T, E>` type for type-safe error handling
-  - [ ] Implement `ErrorSanitizer` for sensitive data protection
-  - [ ] Add `NotionErrorHandler` using SDK's `APIErrorCode` enum
-  - [ ] Ensure every error includes: cause, context, timestamp, unique ID
+- [ ] **oak-notion-mcp Migration**:
+  - [ ] Move all current files to `src/oak-notion-mcp/` folder
+  - [ ] Progressively adopt oak-mcp-core components via imports
+  - [ ] Create NotionMcpServer extending base class
+  - [ ] Implement boundary validation for all Notion data
+  - [ ] Remove all generic code (3,050 LoC reduction)
+  - [ ] Final size: <1,000 LoC of Notion-specific code
 
-- [ ] **Generic Pagination Framework**:
-  - [ ] Create `PaginationStrategy<T, TCursor>` interface (~100 LoC extractable)
-  - [ ] Implement `PaginationHandler` with AsyncGenerator support
-  - [ ] Add `NotionPaginationStrategy` using `iteratePaginatedAPI`
-  - [ ] Handle page_size limits generically
-  - [ ] Support both cursor and offset pagination patterns
+- [ ] **Example Implementations**:
+  - [ ] Echo Server - Pure functions demonstration (100 LoC)
+  - [ ] File Browser - IO injection patterns (200 LoC)
+  - [ ] GitHub MCP - Real-world complexity (300 LoC)
+  - [ ] Each with full test coverage and documentation
 
-- [ ] **Type Guard Registry Framework**:
-  - [ ] Create `TypeGuardRegistry<T>` for composable guards (~80 LoC extractable)
-  - [ ] Implement composite guard creation
-  - [ ] Register SDK guards (`isFullPage`, `isFullDatabase`)
-  - [ ] Add custom domain type guards
-  - [ ] Zero type assertions policy
+- [ ] **Documentation**:
+  - [ ] Comprehensive API documentation
+  - [ ] Getting started guide
+  - [ ] Migration guide from direct SDK usage
+  - [ ] Pattern documentation with examples
+  - [ ] Troubleshooting guide
 
-- [ ] **Resource Linking Pattern**:
-  - [ ] Create `ResourceLinker` interface (~75 LoC extractable)
-  - [ ] Implement `ResourceLinkingHandler` for response transformation
-  - [ ] Add URI extraction and reference creation
-  - [ ] Reduce response payloads universally
-  - [ ] Enable cross-resource references
+**Implementation Sub-phases**:
 
-- [ ] **Performance Instrumentation Layer**:
-  - [ ] Create `PerformanceMonitor` interface (~100 LoC extractable)
-  - [ ] Implement `PerformanceMiddleware` for handler wrapping
-  - [ ] Add pluggable metric backends
-  - [ ] Zero overhead when disabled
-  - [ ] Prepare for caching and rate limiting integration points
-
-- [ ] **Configuration Management System**:
-  - [ ] Create `ConfigManager` with multi-source support (~200 LoC extractable)
-  - [ ] Implement `ConfigSchema` interface with validation
-  - [ ] Add environment and file config sources
-  - [ ] Integrate with Zod for schema validation
-  - [ ] Support config hot-reloading
-
-- [ ] **Testing Utilities Framework**:
-  - [ ] Create `TestMcpServer` for in-process testing (~200 LoC extractable)
-  - [ ] Implement `TestTransport` for mocking MCP communication
-  - [ ] Add `TestDataBuilder` for common test scenarios
-  - [ ] Create test assertion helpers
-  - [ ] Support snapshot testing for responses
-
-- [ ] **Middleware System**:
-  - [ ] Create composable middleware stack with Next pattern (~150 LoC extractable)
-  - [ ] Implement common middleware (logging, error handling, validation)
-  - [ ] Add timing and correlation middleware
-  - [ ] Support async middleware execution
-  - [ ] Create middleware composition utilities
-
-- [ ] **Registry System**:
-  - [ ] Create generic `Registry<T>` base class (~200 LoC extractable)
-  - [ ] Implement `ResourceRegistry` with URI matching
-  - [ ] Implement `ToolRegistry` with middleware support
-  - [ ] Add registry middleware composition
-  - [ ] Create dynamic registration and discovery
-
-- [ ] **Lifecycle Management**:
-  - [ ] Create `LifecycleManager` for component orchestration (~100 LoC extractable)
-  - [ ] Implement startup/shutdown sequences with rollback
-  - [ ] Add component dependency ordering
-  - [ ] Support graceful degradation
-  - [ ] Create health check integration
-
-- [ ] **Validation Framework**:
-  - [ ] Create `ValidationChain` for composable validators (~150 LoC extractable)
-  - [ ] Implement common validators (string, required, url, etc.)
-  - [ ] Add Zod integration adapter
-  - [ ] Support transform operations
-  - [ ] Create boundary validation helpers
-
-**Implementation Order** (3 weeks):
-
-1. **Week 1: Foundation Layers** (1,550 LoC extractable)
+1. **Foundation & Core Systems** (850 LoC)
+   - Create folder structure: `src/oak-mcp-core/` and `src/oak-notion-mcp/`
+   - Move existing files to `src/oak-notion-mcp/`
    - Enhanced Logging Framework (no dependencies) - 550 LoC
    - Enhanced Error Framework (depends on logger) - 300 LoC
+   - Update imports to use local oak-mcp-core
+   - Set up performance benchmarking baseline
+
+2. **Core Infrastructure** (550 LoC)
    - Configuration Management System - 200 LoC
+   - Validation Framework with boundary patterns - 150 LoC
    - Testing Utilities Framework - 200 LoC
-   - Validation Framework - 150 LoC
-   - Generic MCP Server Base Class (depends on all) - 150 LoC
+   - Update oak-notion-mcp to use all three
+   - API design review checkpoint
 
-2. **Week 2: Core Patterns** (1,450 LoC extractable)
-   - Middleware System - 150 LoC
+3. **MCP Core Patterns** (800 LoC)
+   - MCP Server Base Class & Middleware - 300 LoC
    - Registry System (resources/tools) - 200 LoC
-   - Type Guard Registry Framework - 80 LoC
-   - Generic Pagination Framework - 100 LoC
-   - Resource Linking Pattern - 75 LoC
-   - Performance Instrumentation - 100 LoC
-   - Lifecycle Management - 100 LoC
-   - Additional utilities (Result type, etc.) - 50 LoC
-   - Boundary validation patterns - 595 LoC
+   - Type Guards & Pagination - 300 LoC
+   - Migrate oak-notion-mcp to extend base
+   - Type safety audit
 
-3. **Week 3: Integration & Polish**
-   - Implement all Notion-specific versions with boundary validation
-   - Migrate existing code to new abstractions
-   - Apply validation at all external data entry points
-   - Document patterns for oak-mcp-core
-   - Performance testing and optimization
+4. **Advanced Patterns & Migration** (850 LoC)
+   - Performance Monitoring & Lifecycle - 300 LoC
+   - Resource Linking & Utilities - 200 LoC
+   - Complete oak-notion-mcp migration - 350 LoC
+   - Verify oak-notion-mcp <1,000 LoC
+   - Bundle size optimization
+
+5. **Documentation & Examples**
+   - Comprehensive API documentation
+   - 3-4 example MCP servers (100-300 LoC each)
+   - Migration guide and troubleshooting
+   - Beta release and feedback collection
+   - Prepare for future extraction to separate package
 
 **Quality Checkpoints** (after each component):
 
@@ -248,19 +224,30 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Success Metrics**:
 
-- **For Phase 3**: All existing tests pass, 20%+ performance improvement
-- **For Future 2 prep**: 3,050 LoC extractable (exceeding 100% of current codebase)
+- oak-mcp-core created with 3,050 LoC of generic framework code
+- oak-notion-mcp reduced to <1,000 LoC (validation + adapters only)
+- All existing tests pass with zero regressions
+- 100% test coverage on all pure functions (TDD enforced)
+- Test file naming: `*.unit.test.ts` for pure functions, `*.integration.test.ts` for boundaries
+- All quality gates passing (format, lint, type-check, test, build)
+- Pre-commit and pre-push hooks configured and working
+- CI/CD pipeline with automated releases via semantic-release
+- Performance benchmarks established:
+  - Logging overhead <1ms per operation
+  - Middleware processing <0.5ms per layer
+  - Memory usage <10MB base footprint
+  - Bundle size <50KB minified + gzipped
+- 4+ runtime environments supported (Node.js, Deno, Bun, edge)
+- 3+ example servers demonstrating patterns (<300 LoC each)
 - All abstractions follow SOLID principles and are runtime-agnostic
-- Clear separation between generic and Notion-specific code
+- Clear separation enforced by package boundaries
 - All external data validated at boundaries before entering core system
 - Zero errors lost through propagation chain
-- 100% of errors include full context and are sanitized
 - All logging is structured, correlated, and edge-compatible
-- Configuration system supports multiple sources and hot-reloading
-- Test utilities enable rapid MCP server development
-- Notion SDK types used consistently after boundary validation
+- Published to npm as @oaknational/mcp-core
+- Beta feedback incorporated before stable release
 
-### Phase Future 1: Production Readiness
+### Phase 4: Production Readiness
 
 **Outcome**: Published npm package ready for public use
 
@@ -311,53 +298,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
 
-### Phase Future 2: Framework Extraction
-
-**Outcome**: Extract oak-mcp-core library containing the generic MCP components built in Phase 3, creating a reusable framework for building MCP servers at Oak National and beyond.
-
-**Key Deliverables**:
-
-- [ ] **oak-mcp-core Library Creation** (3-week timeline):
-  - [ ] Week 1: Repository setup and core extraction
-    - [ ] Set up oak-mcp-core repository with TDD infrastructure
-    - [ ] Extract foundation layers (logging, errors, config) - 1,050 LoC
-    - [ ] Establish build and publishing pipeline
-    - [ ] Ensure all IO is injectable, no hardcoded imports
-  - [ ] Week 2: Pattern extraction and API design
-    - [ ] Extract remaining patterns and utilities - 2,000 LoC
-    - [ ] Design public API surface (pure functions preferred)
-    - [ ] Create plugin architecture with dependency injection
-    - [ ] Implement edge runtime abstractions
-  - [ ] Week 3: Migration and documentation
-    - [ ] Migrate oak-notion-mcp to use oak-mcp-core
-    - [ ] Create comprehensive documentation
-    - [ ] Build example MCP servers (echo, file browser, HTTP wrapper)
-    - [ ] Publish to npm as @oak-national/mcp-core
-
-- [ ] **oak-notion-mcp Migration**:
-  - [ ] Update imports to use @oak-national/mcp-core
-  - [ ] Extend base classes from core library
-  - [ ] Remove duplicated generic code (~3,050 LoC)
-  - [ ] Keep only Notion-specific validation and adapters
-  - [ ] Update tests to use core testing utilities
-  - [ ] Result: oak-notion-mcp becomes <1,000 LoC thin integration layer
-
-- [ ] **Documentation and Examples**:
-  - [ ] API documentation for oak-mcp-core
-  - [ ] Migration guide from direct SDK usage
-  - [ ] Example MCP server using oak-mcp-core
-  - [ ] Edge deployment guides (CF Workers, Vercel, etc.)
-
-**Quality Checkpoints**:
-
-- 100% test coverage for oak-mcp-core
-- Zero breaking changes in oak-notion-mcp
-- Successfully deploy example server to CF Workers
-- Second MCP integration built using oak-mcp-core in <500 LoC
-- All boundary validations properly separated from core logic
-- 4+ runtime environments supported (Node.js, Deno, Bun, edge)
-
-### Phase Future 3: Write Tools and Safety Controls
+### Phase 5: Write Tools and Safety Controls
 
 **Outcome**: Full-featured MCP server with write capabilities and safety controls
 

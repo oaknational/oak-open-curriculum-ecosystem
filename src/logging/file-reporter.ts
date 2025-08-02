@@ -1,6 +1,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { LogObject } from 'consola';
+import { getLogLevelName } from './types/index.js';
 
 export interface FileReporterOptions {
   logDir: string;
@@ -46,11 +47,10 @@ export function createFileReporter(
   deps.fs.mkdirSync(logDir, { recursive: true });
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    log(logObj: LogObject, _ctx: { options: unknown }): void {
+    log(logObj: LogObject): void {
       try {
         const timestamp = new Date().toISOString();
-        const level = getLevelName(logObj.level);
+        const level = getLogLevelName(logObj.level);
         const args = logObj.args.map(formatArg).join(' ');
         const logLine = `${timestamp} [${level}] ${args}\n`;
 
@@ -99,19 +99,4 @@ function formatArg(arg: unknown): string {
     // Fallback - should never reach here
     return '[unknown]';
   }
-}
-
-/**
- * Convert numeric log level to string
- * Based on testing, Consola uses these levels
- */
-function getLevelName(level: number): string {
-  const levels: Record<number, string> = {
-    1: 'ERROR',
-    2: 'WARN',
-    3: 'INFO',
-    4: 'DEBUG',
-    5: 'TRACE',
-  };
-  return levels[level] ?? 'UNKNOWN';
 }

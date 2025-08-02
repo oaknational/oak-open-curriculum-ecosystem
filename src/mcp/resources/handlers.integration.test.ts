@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers.js';
 import type { MinimalNotionClient } from '../../types/dependencies.js';
-import type { Logger } from '../../logging/logger.js';
+import type { Logger } from '../../logging/logger-interface.js';
 import {
   createMockPage,
   createMockDatabase,
@@ -19,10 +19,16 @@ describe('createResourceHandlers', () => {
   const mockError = vi.fn();
 
   const mockLogger: Logger = {
+    trace: vi.fn(),
     debug: mockDebug,
     info: mockInfo,
     warn: mockWarn,
     error: mockError,
+    fatal: vi.fn(),
+    child: vi.fn().mockReturnThis(),
+    isLevelEnabled: vi.fn().mockReturnValue(true),
+    setLevel: vi.fn(),
+    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 
   const mockNotionClient: MinimalNotionClient = {
@@ -138,16 +144,12 @@ describe('createResourceHandlers', () => {
 
       const result = await handlers.handleReadResource('notion://discovery');
 
-      expect(result).toEqual({
-        contents: [
-          {
-            uri: 'notion://discovery',
-            mimeType: 'application/json',
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            text: expect.stringContaining('# Notion Workspace Discovery') as string,
-          },
-        ],
+      expect(result.contents).toHaveLength(1);
+      expect(result.contents[0]).toMatchObject({
+        uri: 'notion://discovery',
+        mimeType: 'application/json',
       });
+      expect(result.contents[0]?.text).toContain('# Notion Workspace Discovery');
 
       expect(mockDebug).toHaveBeenCalledWith('Reading resource', {
         uri: 'notion://discovery',

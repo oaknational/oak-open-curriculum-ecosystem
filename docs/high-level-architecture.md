@@ -4,6 +4,8 @@
 
 The Oak Notion MCP Server follows a clean, layered architecture designed for testability, maintainability, and safety. The system provides read-only access to Notion workspaces through the Model Context Protocol (MCP), enabling AI assistants to query and analyze Notion content.
 
+The architecture now includes a generic MCP framework (oak-mcp-core) that provides reusable components for building MCP servers, with the Notion-specific implementation (oak-notion-mcp) built on top of this foundation.
+
 ## Core Design Principles
 
 1. **Pure Functions First**: Maximum business logic implemented as pure, side-effect-free functions
@@ -234,10 +236,19 @@ oak-notion-mcp/
 │   ├── index.js       # Entry point
 │   └── index.d.ts     # TypeScript declarations
 ├── src/               # Source code
-│   ├── mcp/           # Protocol layer
-│   ├── notion/        # Adapter layer
-│   ├── config/        # Infrastructure
-│   └── index.ts       # Main entry
+│   ├── oak-mcp-core/  # Generic MCP framework (~3,050 LoC)
+│   │   ├── errors/    # Error handling framework
+│   │   ├── logging/   # Logging abstraction
+│   │   ├── protocol/  # MCP protocol implementation
+│   │   ├── runtime/   # Runtime abstractions
+│   │   ├── types/     # Core TypeScript types
+│   │   └── index.ts   # Single public API export
+│   ├── oak-notion-mcp/ # Notion-specific implementation (<1,000 LoC)
+│   │   ├── adapters/  # Notion API adapters
+│   │   ├── resources/ # Notion resource definitions
+│   │   ├── tools/     # Notion-specific tools
+│   │   └── index.ts   # Notion MCP server entry
+│   └── index.ts       # Main application entry
 └── e2e-tests/         # E2E test suite
 ```
 
@@ -283,7 +294,70 @@ oak-notion-mcp/
 - Pagination for large result sets
 - Streaming responses for large documents
 
-## Future Architecture Extensions
+## Oak MCP Core Framework
+
+### Overview
+
+The `oak-mcp-core` framework provides a generic, reusable foundation for building MCP servers. This framework abstracts the common patterns, protocols, and infrastructure needed for MCP implementations, allowing domain-specific servers to focus on their unique logic.
+
+### Framework Design Principles
+
+1. **Zero External Dependencies**: The core framework has no external runtime dependencies
+2. **Runtime Abstractions**: Cross-platform support through abstracted I/O operations
+3. **Single Public API**: All framework components accessed through `index.ts` barrel export
+4. **Type Safety**: Full TypeScript support with strict type checking
+5. **Testability**: Dependency injection and pure functions throughout
+
+### Framework Architecture
+
+```text
+┌─────────────────────────────────────────┐
+│           oak-mcp-core                  │
+│        (Generic Framework)              │
+├─────────────────────────────────────────┤
+│ protocol/     │ Runtime Protocol Impl   │
+│ errors/       │ Error Classification    │
+│ logging/      │ Logging Abstraction     │
+│ runtime/      │ Platform Abstractions   │
+│ types/        │ Core TypeScript Types   │
+└─────────────────────────────────────────┘
+                 │ (implements)
+┌─────────────────────────────────────────┐
+│         oak-notion-mcp                  │
+│      (Domain Implementation)            │
+├─────────────────────────────────────────┤
+│ adapters/     │ Notion API Integration  │
+│ resources/    │ Notion Resource Defs    │
+│ tools/        │ Notion-specific Tools   │
+└─────────────────────────────────────────┘
+```
+
+### Framework Components
+
+#### Core Framework (~3,050 LoC)
+
+- **Protocol Layer**: Complete MCP protocol implementation with request/response handling
+- **Error Framework**: Hierarchical error classification and handling system
+- **Logging Abstraction**: Platform-agnostic logging with multiple output formats
+- **Runtime Abstractions**: Cross-platform I/O, process management, and environment handling
+- **Type System**: Comprehensive TypeScript definitions for MCP protocol and framework
+
+#### Notion Implementation (<1,000 LoC)
+
+- **Notion Adapters**: Integration with Notion API through clean interfaces
+- **Resource Definitions**: Notion-specific resource types and URI handlers
+- **Tool Implementations**: Search, query, and retrieval tools for Notion content
+- **Business Logic**: Pure functions for data transformation and validation
+
+### Framework Benefits
+
+1. **Rapid Development**: New MCP servers can be built in hours instead of days
+2. **Consistency**: All servers built on the framework follow the same patterns
+3. **Maintenance**: Bug fixes and improvements benefit all framework users
+4. **Testing**: Framework provides testing utilities and patterns
+5. **Documentation**: Common patterns documented once in the framework
+
+### Future Architecture Extensions
 
 ### Phase 3: Write Operations
 
@@ -298,6 +372,13 @@ oak-notion-mcp/
 - Plugin architecture for custom tools
 - Multi-workspace support
 - OAuth flow for user authentication
+
+### Phase 5: Framework Expansion
+
+- Extract oak-mcp-core as standalone npm package
+- Additional domain adapters (GitHub, Slack, etc.)
+- Visual MCP server builder
+- Framework marketplace and ecosystem
 
 ## Architecture Decision Records (ADRs)
 

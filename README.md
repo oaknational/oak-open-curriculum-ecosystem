@@ -6,6 +6,8 @@ API keys for notion are stored in a .env file, or passed to the client at initia
 
 The package will be built and deployed to npm, will be open source, and will be installed locally or globally, and then be usable by an MCP client such as Claude Desktop via the usual configuration process.
 
+**Architecture Note**: This project is being refactored to include `oak-mcp-core`, a generic MCP framework that will enable rapid development of MCP servers. The Notion-specific functionality will be built on top of this reusable framework, reducing code duplication and improving maintainability across MCP server implementations.
+
 Further documentation can be found in the [docs directory](docs/README.md)
 
 **New to MCP or AI agent development?** Follow our [Developer Onboarding Journey](docs/onboarding-journey.md) for a structured learning path.
@@ -121,13 +123,18 @@ All tests except E2E are run automatically in CI/CD and pre-push hooks.
 
 ```
 oak-notion-mcp/
-├── src/              # Source code
-├── dist/             # Built output (gitignored)
-├── e2e-tests/        # End-to-end tests (manual only)
-├── docs/             # Documentation
-├── .agent/           # AI agent directives and plans
-└── coverage/         # Test coverage reports (gitignored)
+├── src/                    # Source code
+│   ├── oak-mcp-core/      # Generic MCP framework (~3,050 LoC)
+│   │   └── index.ts       # Single public API export
+│   └── oak-notion-mcp/    # Notion-specific implementation (<1,000 LoC)
+├── dist/                   # Built output (gitignored)
+├── e2e-tests/             # End-to-end tests (manual only)
+├── docs/                  # Documentation
+├── .agent/                # AI agent directives and plans
+└── coverage/              # Test coverage reports (gitignored)
 ```
+
+The project is architected with a clear separation between the generic MCP framework (`oak-mcp-core`) and the Notion-specific implementation (`oak-notion-mcp`). This structure enables code reuse across different MCP server implementations while maintaining clean boundaries enforced by ESLint rules.
 
 ## Development & Testing
 

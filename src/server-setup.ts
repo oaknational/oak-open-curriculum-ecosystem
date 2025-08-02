@@ -18,6 +18,7 @@ export async function setupAndStartServer(deps: ServerSetupDependencies): Promis
     './config/environment.js'
   );
   const { createConsoleLogger } = await import('./logging/logger.js');
+  const { LOG_LEVELS } = await import('./logging/logger-interface.js');
   const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server.js');
 
@@ -34,13 +35,20 @@ export async function setupAndStartServer(deps: ServerSetupDependencies): Promis
   // Create logger
   deps.log('[STARTUP] Creating logger...');
   const envLogLevel = deps.env.LOG_LEVEL;
-  const logLevel =
-    envLogLevel === 'debug' ||
-    envLogLevel === 'info' ||
-    envLogLevel === 'warn' ||
-    envLogLevel === 'error'
-      ? envLogLevel
-      : 'info';
+  const logLevel = (() => {
+    switch (envLogLevel) {
+      case 'debug':
+        return LOG_LEVELS.DEBUG.value;
+      case 'info':
+        return LOG_LEVELS.INFO.value;
+      case 'warn':
+        return LOG_LEVELS.WARN.value;
+      case 'error':
+        return LOG_LEVELS.ERROR.value;
+      default:
+        return LOG_LEVELS.INFO.value;
+    }
+  })();
   const logger = createConsoleLogger(logLevel);
 
   // Check API key
