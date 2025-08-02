@@ -1,5 +1,5 @@
 {
-  "name": "oak-notion-mcp",
+  "name": "@oaknational/oak-notion-mcp",
   "version": "1.0.0",
   "description": "Model Context Protocol server for Notion integration",
   "type": "module",

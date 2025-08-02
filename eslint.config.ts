@@ -1,8 +1,14 @@
 import eslint from '@eslint/js';
-import tseslint, { type Config } from 'typescript-eslint';
+import {
+  config as tsEslintConfig,
+  configs as tsEslintConfigs,
+  parser as tsEslintParser,
+  type Config,
+} from 'typescript-eslint';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
+import { importX } from 'eslint-plugin-import-x';
 
-const config: Config = tseslint.config(
+const config: Config = tsEslintConfig(
   {
     ignores: [
       'dist/',
@@ -14,13 +20,15 @@ const config: Config = tseslint.config(
     ],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
+  ...tsEslintConfigs.strictTypeChecked,
+  ...tsEslintConfigs.stylisticTypeChecked,
   prettierRecommended,
   {
     files: ['**/*.ts'],
     languageOptions: {
-      parser: tseslint.parser,
+      parser: tsEslintParser,
       parserOptions: {
         project: './tsconfig.json',
       },
@@ -72,7 +80,28 @@ const config: Config = tseslint.config(
   // Config files (JS)
   {
     files: ['**/*.config.js'],
-    extends: [tseslint.configs.disableTypeChecked],
+    extends: [tsEslintConfigs.disableTypeChecked],
+  },
+  // Separation of concerns between core and individual servers, to make extraction into workspaces easier later
+  // Restriction for app code
+  {
+    files: ['src/oak-notion-mcp/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'import-x/no-internal-modules': [
+        'error',
+        {
+          forbid: ['oak-mcp-core/**'], // disallow deep imports
+          allow: ['oak-mcp-core'], // allow only the barrel
+        },
+      ],
+    },
+  },
+  // Core MCP framework code itself cannot import from other folders/workspaces outside of oak-mcp-core
+  {
+    files: ['src/oak-mcp-core/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'import-x/no-internal-modules': 'error',
+    },
   },
 );
 
