@@ -46,6 +46,10 @@ This file provides guidance to AI agents when working with code in this reposito
 - Never maintain backward compatibility, we have versioning for that
 - If a function is too complex or too long, examine its responsibilities, reflect on the SOLID principles, and break it down into smaller PURE functions with no side effects
 
+### Planning
+
+- Never refer to Chronos times or durations in plans, they are not accurate or relevant. Use Kairos based semantic milestones instead.
+
 ## Project Overview
 
 oak-notion-mcp is a Model Context Protocol (MCP) server that provides access to Notion via the Notion API. It allows AI clients like Claude or Gemini to interact with Notion workspaces.
