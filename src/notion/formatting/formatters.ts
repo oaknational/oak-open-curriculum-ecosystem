@@ -8,7 +8,7 @@ import type {
   DatabaseObjectResponse,
   UserObjectResponse,
 } from '@notionhq/client';
-import type { McpResource } from '../transformers.js';
+import type { Resource } from '../transformers.js';
 import { extractPropertyValue } from './property-extractors.js';
 
 /**
@@ -17,7 +17,7 @@ import { extractPropertyValue } from './property-extractors.js';
 export function formatSearchResults(
   results: (PageObjectResponse | DatabaseObjectResponse)[],
   query: string,
-  resources: McpResource[],
+  resources: Resource[],
 ): string {
   let text = `Found ${String(results.length)} results for "${query}"\n\n`;
 
@@ -40,11 +40,11 @@ export function formatSearchResults(
 /**
  * Formats a page summary
  */
-export function formatPageSummary(resource: McpResource): string {
+export function formatPageSummary(resource: Resource): string {
   let text = `📄 Page: ${resource.name}\n`;
-  const url = resource.metadata?.['url'];
+  const url = resource._meta?.['url'];
   text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
-  const lastEdited = resource.metadata?.['last_edited_time'];
+  const lastEdited = resource._meta?.['last_edited_time'];
   text += `   Last edited: ${typeof lastEdited === 'string' ? lastEdited : 'N/A'}\n\n`;
   return text;
 }
@@ -52,11 +52,11 @@ export function formatPageSummary(resource: McpResource): string {
 /**
  * Formats a database summary
  */
-export function formatDatabaseSummary(resource: McpResource): string {
+export function formatDatabaseSummary(resource: Resource): string {
   let text = `🗂️ Database: ${resource.name}\n`;
-  const url = resource.metadata?.['url'];
+  const url = resource._meta?.['url'];
   text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
-  const props = resource.metadata?.['properties'];
+  const props = resource._meta?.['properties'];
   text += `   Properties: ${Array.isArray(props) && props.length > 0 ? props.join(', ') : 'None'}\n\n`;
   return text;
 }
@@ -66,7 +66,7 @@ export function formatDatabaseSummary(resource: McpResource): string {
  */
 export function formatDatabaseList(
   databases: DatabaseObjectResponse[],
-  resources: McpResource[],
+  resources: Resource[],
 ): string {
   let text = `Found ${String(databases.length)} database${databases.length === 1 ? '' : 's'}\n\n`;
 
@@ -76,9 +76,9 @@ export function formatDatabaseList(
 
     text += `🗂️ ${resource.name}\n`;
     text += `   ID: ${database.id}\n`;
-    const url = resource.metadata?.['url'];
+    const url = resource._meta?.['url'];
     text += `   URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
-    const props = resource.metadata?.['properties'];
+    const props = resource._meta?.['properties'];
     text += `   Properties: ${Array.isArray(props) && props.length > 0 ? props.join(', ') : 'None'}\n\n`;
   });
 
@@ -89,9 +89,9 @@ export function formatDatabaseList(
  * Formats database query results
  */
 export function formatDatabaseQueryResults(
-  dbResource: McpResource,
+  dbResource: Resource,
   pages: PageObjectResponse[],
-  pageResources: McpResource[],
+  pageResources: Resource[],
 ): string {
   let text = `Database: ${dbResource.name}\n`;
   text += `Found ${String(pages.length)} page${pages.length === 1 ? '' : 's'}\n\n`;
@@ -128,18 +128,18 @@ export function formatPageProperties(page: PageObjectResponse): string {
  * Formats page details
  */
 export function formatPageDetails(
-  resource: McpResource,
+  resource: Resource,
   page: PageObjectResponse,
   content?: string,
 ): string {
   let text = `📄 ${resource.name}\n\n`;
-  const url = resource.metadata?.['url'];
+  const url = resource._meta?.['url'];
   text += `URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
-  const createdTime = resource.metadata?.['created_time'];
+  const createdTime = resource._meta?.['created_time'];
   text += `Created: ${typeof createdTime === 'string' ? createdTime : 'N/A'}\n`;
-  const lastEditedTime = resource.metadata?.['last_edited_time'];
+  const lastEditedTime = resource._meta?.['last_edited_time'];
   text += `Last edited: ${typeof lastEditedTime === 'string' ? lastEditedTime : 'N/A'}\n`;
-  text += `Archived: ${resource.metadata?.['archived'] ? 'Yes' : 'No'}\n\n`;
+  text += `Archived: ${resource._meta?.['archived'] ? 'Yes' : 'No'}\n\n`;
 
   // Show properties
   text += 'Properties:\n';
@@ -163,7 +163,7 @@ export function formatPageDetails(
 /**
  * Formats user list
  */
-export function formatUserList(users: UserObjectResponse[], resources: McpResource[]): string {
+export function formatUserList(users: UserObjectResponse[], resources: Resource[]): string {
   let text = `Found ${String(users.length)} user${users.length === 1 ? '' : 's'}\n\n`;
 
   users.forEach((user, index) => {
@@ -174,8 +174,8 @@ export function formatUserList(users: UserObjectResponse[], resources: McpResour
     text += `${emoji} ${resource.name}\n`;
     text += `   Type: ${user.type === 'bot' ? 'Bot' : 'Person'}\n`;
 
-    if (user.type === 'person' && resource.metadata?.['email']) {
-      const email = resource.metadata['email'];
+    if (user.type === 'person' && resource._meta?.['email']) {
+      const email = resource._meta['email'];
       text += `   Email: ${typeof email === 'string' ? email : '[email]'}\n`;
     }
 

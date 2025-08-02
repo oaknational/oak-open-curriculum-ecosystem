@@ -3,17 +3,11 @@
  * Core abstractions for transformation logic
  */
 
-/**
- * MCP Resource type
- * Represents a resource in the Model Context Protocol
- */
-export interface McpResource {
-  uri: string;
-  name: string;
-  description?: string;
-  mimeType?: string;
-  metadata?: Record<string, unknown>;
-}
+// Re-export Resource type from MCP SDK
+export type { Resource } from '@modelcontextprotocol/sdk/types.js';
+
+// For backward compatibility - will be removed
+export type { Resource as McpResource } from '@modelcontextprotocol/sdk/types.js';
 
 /**
  * Simplified Notion rich text interface

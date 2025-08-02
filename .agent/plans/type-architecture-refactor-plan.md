@@ -24,22 +24,28 @@
    - Removed all eslint-disable comments
    - Fixed unsafe any assignments
 
-5. **Module Refactoring (DIP)**
+5. **Environment Validation** ✅ NEW
+   - Created centralized env.ts as single access point to process.env
+   - Eliminated ALL type assertions from env handling
+   - Used existing type predicates (isLogLevelName) for validation
+   - Simplified from Zod to basic getter functions (KISS principle)
+
+6. **Module Refactoring (DIP)**
    - console-transport.ts: 275 → 75 lines (split into 7 modules)
    - file-transport.ts: 297 → 100 lines (split into 6 modules)
    - pretty-formatter.ts: 343 → 86 lines (split into 13 modules)
    - request-tracing.ts: 543 → 22 lines (split into 5 modules)
 
-### Current Issues (7 errors)
+### Current Issues
 
-1. **Complexity Issues**
-   - extractPropertyValue function: complexity 20 (max 19)
-2. **File Length Issues**
-   - 4 files exceed 200 line limit (237, 240, 212, 216 lines)
+1. **Complexity Issues** ✅ FIXED
+   - extractPropertyValue function: Reduced complexity by using lookup table pattern
+2. **File Length Issues** 🟡 PENDING
+   - Files exceeding 200 line limit need to be identified with new eslint config
 
-3. **Function Length Issues**
-   - createResourceHandlers: 95 lines (max 94)
-   - setupAndStartServer: 31 statements (max 30)
+3. **Function Length Issues** ✅ FIXED
+   - createResourceHandlers: Extracted handleReadResource as pure function
+   - setupAndStartServer: Simplified with centralized env validation
 
 ### Priority Tasks
 

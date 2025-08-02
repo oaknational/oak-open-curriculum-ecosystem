@@ -7,7 +7,7 @@ import { scrubEmail } from '../utils/scrubbing.js';
 import { createUserTransformer } from './transformers/user-transformer.js';
 
 // Re-export all types and functions from the modular structure
-export type { McpResource, NotionRichText, NotionBlock } from './transformers/index.js';
+export type { Resource, McpResource, NotionRichText, NotionBlock } from './transformers/index.js';
 
 export {
   transformNotionPageToMcpResource,
