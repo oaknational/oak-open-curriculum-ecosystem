@@ -6,11 +6,23 @@
  * MUST remain free of any external dependencies.
  */
 
-import type { LogLevel, LogContext, LogTransport, LogFormatter } from './types/index.js';
+import type {
+  LogLevel,
+  LogLevelName,
+  LogContext,
+  LogTransport,
+  LogFormatter,
+} from './types/index.js';
 
 // Re-export shared types
-export type { LogLevel, LogContext, LogTransport, LogFormatter };
-export { LOG_LEVELS, isLogLevel, getLogLevelName } from './types/index.js';
+export type { LogLevel, LogLevelName, LogContext, LogTransport, LogFormatter };
+export {
+  LOG_LEVELS,
+  isLogLevel,
+  isLogLevelName,
+  getLogLevelName,
+  getLogLevelValue,
+} from './types/index.js';
 
 /**
  * Core logger interface - zero dependencies

@@ -47,7 +47,6 @@ type LogLevelLookup = {
  * Log level type derived from const object
  */
 export type LogLevel = LogLevelLookup[keyof LogLevelLookup]['value'];
-export type LogLevelName = LogLevelLookup[keyof LogLevelLookup]['name'];
 
 /**
  * Type guard for numeric log level
@@ -59,6 +58,25 @@ export function isLogLevel(value: unknown): value is LogLevel {
   if (typeof value !== 'number') return false;
   const validLevels: readonly number[] = Object.values(LOG_LEVELS).map((level) => level.value);
   return validLevels.includes(value);
+}
+
+export type LogLevelName = LogLevelLookup[keyof LogLevelLookup]['name'];
+
+export function isLogLevelName(value: unknown): value is LogLevelName {
+  if (typeof value !== 'string') return false;
+  const validLevels: readonly string[] = Object.values(LOG_LEVELS).map((level) => level.name);
+  return validLevels.includes(value);
+}
+
+/**
+ * Given a log level name, return the corresponding numeric value
+ *
+ * @param levelName - The log level name to check
+ * @returns The corresponding numeric value
+ * @throws Error if the level name is not a valid log level name
+ */
+export function getLogLevelValue(levelName: LogLevelName): LogLevel {
+  return LOG_LEVELS[levelName].value;
 }
 
 /**
