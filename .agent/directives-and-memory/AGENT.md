@@ -12,13 +12,17 @@ This file provides guidance to AI agents when working with code in this reposito
 
 - ALWAYS use unit test TDD
 - ALWAYS use pure functions, and where that is not possible make sure all IO functions are passed as arguments from integration points
-- Use SOLID, DRY, KISS, YAGNI principles
+- ALWAYS use DIP, DRY, KISS, YAGNI principles
+- ALWAYS use SOLID principles
 - Fail FAST, fail hard, with instructive, helpful error messages.
 - Do not fail open
 - Do not fail silently
 - Never swallow errors
 - Do not attempt to use "sensible defaults", if a required argument is missing, throw an error.
 - Always make code as simple and readable as possible, without sacrificing impact.
+- NEVER create duplicate interfaces, types, or classes
+- NEVER create duplicate functions
+- NEVER create wrappers around functions if you can possibly use them directly
 
 ### Development
 
@@ -30,21 +34,41 @@ This file provides guidance to AI agents when working with code in this reposito
 - When dealing with a library, use the types from that library, do not make up new ones
 - Use MEANINGFUL type guards/predicates to narrow types (functions with the `is` keyword) OR use Zod schemas to validate incoming data
 - Always work to the highest software engineering principles
+- ALWAYS run the quality gates, one by one, after any major changes. Fix any issues, regardless of location or cause. Run the gates again after each fix to prevent regressions.
 
 ### Testing
 
 - ALL IO MUST be mocked in tests, except in E2E tests
+- Unit tests must NEVER contain mocks
+- Unit tests tests must only be of pure functions
+- Integration tests may contain mocks
 - Mocks must ALWAYS be simple fakes, passed as arguments to functions
-- Always ask what a test is proving. It should prove something about the code under test, not about the test itself.
+- Where creating an integration test is complex, STOP, refactor the code into pure functions, unit test the functions, and create a simple integration point that has a simple mockable interface and integration test that.
+- NEVER add complex logic to tests, it risks testing the test code rather than the code under test
+- Always ask what a test is proving. It should prove something useful about the code under test.
 - Each proof should happen ONCE, repeated proofs are fragile and a waste of time.
 - Unit and integration tests prove engineering correctness
 - E2E tests prove behavioural impact
 
+### Documentation
+
+- Always add JSDoc/TypeDoc comments to files, classes, functions, and types and anything else that needs reasoning about
+- Make sure that the markdown documentation is up to date [docs](../../docs/README.md)
+
 ### Refactoring
 
+The goal is never to simply "satisfy" the refactoring rules, but to make the code as simple, easy to reason about, and maintainable as possible, without sacrificing impact.
+
 - NEVER create compatibility layers, replace old code with new code
-- Never maintain backward compatibility, we have versioning for that
-- If a function is too complex or too long, examine its responsibilities, reflect on the SOLID principles, and break it down into smaller PURE functions with no side effects
+- Never maintain backward compatibility, we have versioning for that -- keep the system in a correct and fully functional state by replacing old approaches with new approaches
+- If a function is too complex or too long, examine its responsibilities, domains, reflect on the SOLID principles, and break it down into smaller PURE functions with no side effects
+- If a file is too long, examine its responsibilities, domains, reflect on the SOLID principles, and break it down into smaller files. If the new files will be domain related, create a folder for them, with an index.ts file that is the sole public API and the definitions of domain boundary.
+- Where refactoring for DIP causes complexity, take a step back and consider why, what is this teaching you about the architecture, what is the best way to address this? Refactoring the architecture is always an option.
+- Remember: single responsibility, single reason to change, single source of truth.
+
+### Planning
+
+- Never refer to Chronos times or durations in plans, they are not accurate or relevant. Use Kairos based semantic milestones instead.
 
 ## Project Overview
 

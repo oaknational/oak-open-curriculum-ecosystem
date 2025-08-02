@@ -3,7 +3,7 @@
  * Following testing strategy: simple mocks passed as arguments
  */
 
-import type { Logger } from '../logging/logger.js';
+import type { Logger } from '../logging/logger-interface.js';
 import type { ServerConfig } from '../types/dependencies.js';
 import { vi } from 'vitest';
 
@@ -12,10 +12,16 @@ import { vi } from 'vitest';
  */
 export function createMockLogger(): Logger {
   return {
+    trace: vi.fn(),
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
+    fatal: vi.fn(),
+    child: vi.fn().mockReturnThis(),
+    isLevelEnabled: vi.fn().mockReturnValue(true),
+    setLevel: vi.fn(),
+    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 }
 

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { rmSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createConsoleLogger } from './logger.js';
+import { LOG_LEVELS } from './logger-interface.js';
 
 describe('File Logger E2E', () => {
   const testLogDir = join(process.cwd(), '.logs', 'oak-notion-mcp-test');
@@ -26,7 +27,7 @@ describe('File Logger E2E', () => {
     process.cwd = () => join(originalCwd(), '..', 'oak-notion-mcp-test');
 
     try {
-      const logger = createConsoleLogger('debug');
+      const logger = createConsoleLogger(LOG_LEVELS.DEBUG.value);
 
       // Log messages at different levels
       logger.debug('Debug test message', { debugData: true });
