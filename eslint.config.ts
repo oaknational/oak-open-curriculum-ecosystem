@@ -48,11 +48,11 @@ const config: Config = tsEslintConfig(
       // Complexity. These are set to accommodate the current quality of the code.
       // If we want to use this repo to demo best practices, we need to bring them down to the targets in dedicated PRs.
       // That needs to be done gradually.
-      complexity: ['error', { max: 35 }], // Target 10, lowers cognitive load
-      'max-depth': ['error', 5], // Target 3, lowers cognitive load
-      'max-statements': ['error', 50], // Max statements per function, target 20, enforces single responsibility principle
-      'max-lines-per-function': ['error', 100], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
-      'max-lines': ['error', 250], // Max lines per file, reduced from 350, target 250, requires well defined boundaries of responsibility
+      complexity: ['error', { max: 19 }], // Target 12, lowers cognitive load
+      'max-depth': ['error', 3], // Lowers cognitive load
+      'max-statements': ['error', 30], // Max statements per function, target 20, enforces single responsibility principle
+      'max-lines-per-function': ['error', 94], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
+      'max-lines': ['error', 240], // Requires well defined boundaries of responsibility
 
       // General good practices
       'no-empty': 'error',
