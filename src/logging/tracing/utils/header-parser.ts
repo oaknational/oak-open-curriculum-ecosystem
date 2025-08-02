@@ -59,6 +59,32 @@ export function parseTraceparent(traceparent: string): {
 }
 
 /**
+ * Normalize a header value to string
+ */
+function normalizeHeaderValue(value: string | string[] | undefined): string | undefined {
+  if (!value) return undefined;
+  return Array.isArray(value) ? value[0] : value;
+}
+
+/**
+ * Extract a trace header with case-insensitive lookup
+ */
+function extractHeader(
+  headers: Record<string, string | string[] | undefined>,
+  headerName: string,
+): string | undefined {
+  // Try exact case first
+  const exactCase = normalizeHeaderValue(headers[headerName]);
+  if (exactCase) return exactCase;
+
+  // Try lowercase
+  const lowercase = normalizeHeaderValue(headers[headerName.toLowerCase()]);
+  if (lowercase) return lowercase;
+
+  return undefined;
+}
+
+/**
  * Extract trace headers from request headers
  * @param headers - Request headers object
  * @returns Trace headers if present
@@ -72,31 +98,14 @@ export function extractTraceHeaders(headers: Record<string, string | string[] | 
     tracestate?: string;
   } = {};
 
-  // Extract traceparent
-  const traceparent = headers['traceparent'];
+  const traceparent = extractHeader(headers, 'traceparent');
   if (traceparent) {
-    result.traceparent = Array.isArray(traceparent) ? traceparent[0] : traceparent;
+    result.traceparent = traceparent;
   }
 
-  // Extract tracestate
-  const tracestate = headers['tracestate'];
+  const tracestate = extractHeader(headers, 'tracestate');
   if (tracestate) {
-    result.tracestate = Array.isArray(tracestate) ? tracestate[0] : tracestate;
-  }
-
-  // Also check lowercase versions (some servers send lowercase)
-  if (!result.traceparent) {
-    const lowercase = headers['traceparent'];
-    if (lowercase) {
-      result.traceparent = Array.isArray(lowercase) ? lowercase[0] : lowercase;
-    }
-  }
-
-  if (!result.tracestate) {
-    const lowercase = headers['tracestate'];
-    if (lowercase) {
-      result.tracestate = Array.isArray(lowercase) ? lowercase[0] : lowercase;
-    }
+    result.tracestate = tracestate;
   }
 
   return result;

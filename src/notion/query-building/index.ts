@@ -22,6 +22,14 @@ export { buildDatabaseQuery, buildSearchQuery } from './builders.js';
 
 // Re-export validators
 export { validateDatabaseFilters } from './validators.js';
+export {
+  validateProperties,
+  validateSorts,
+  validatePageSize,
+  validateStartCursor,
+  validatePropertyFilter,
+  validateOperator,
+} from './field-validators.js';
 
 // Re-export type guards if needed externally
 export {

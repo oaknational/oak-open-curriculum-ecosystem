@@ -4,6 +4,29 @@ import { join } from 'node:path';
 import { createConsoleLogger } from './logger.js';
 import { LOG_LEVELS } from './logger-interface.js';
 
+/**
+ * Verify log content has expected messages and format
+ */
+function verifyLogContent(logContent: string): void {
+  // Verify all messages are present with correct levels
+  expect(logContent).toContain('[DEBUG] Debug test message');
+  expect(logContent).toContain('"debugData": true');
+  expect(logContent).toContain('[INFO] Info test message');
+  expect(logContent).toContain('"infoData": 123');
+  expect(logContent).toContain('[WARN] Warning test message');
+  expect(logContent).toContain('"warnData": "test"');
+  expect(logContent).toContain('[ERROR] Error test message');
+  expect(logContent).toContain('"nested": "value"');
+
+  // Verify ISO timestamps
+  const lines = logContent.split('\n').filter((line) => line.trim());
+  lines.forEach((line) => {
+    if (line) {
+      expect(line).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
+    }
+  });
+}
+
 describe('File Logger E2E', () => {
   const testLogDir = join(process.cwd(), '.logs', 'oak-notion-mcp-test');
 
@@ -50,23 +73,8 @@ describe('File Logger E2E', () => {
       const logPath = join(process.cwd(), '.logs', 'oak-notion-mcp', logFile);
       const logContent = readFileSync(logPath, 'utf-8');
 
-      // Verify all messages are present with correct levels
-      expect(logContent).toContain('[DEBUG] Debug test message');
-      expect(logContent).toContain('"debugData": true');
-      expect(logContent).toContain('[INFO] Info test message');
-      expect(logContent).toContain('"infoData": 123');
-      expect(logContent).toContain('[WARN] Warning test message');
-      expect(logContent).toContain('"warnData": "test"');
-      expect(logContent).toContain('[ERROR] Error test message');
-      expect(logContent).toContain('"nested": "value"');
-
-      // Verify ISO timestamps
-      const lines = logContent.split('\n').filter((line) => line.trim());
-      lines.forEach((line) => {
-        if (line) {
-          expect(line).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/);
-        }
-      });
+      // Verify log content
+      verifyLogContent(logContent);
     } finally {
       // Restore original cwd
       process.cwd = originalCwd;

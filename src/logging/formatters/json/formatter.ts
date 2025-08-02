@@ -45,6 +45,35 @@ function addContextToEntry(
 }
 
 /**
+ * Build the core log entry structure
+ */
+function buildLogEntry(
+  timestamp: Date,
+  level: LogLevel,
+  message: string,
+  fieldNames: ReturnType<typeof createFieldNames>,
+): Record<string, unknown> {
+  return {
+    [fieldNames.timestamp]: timestamp.toISOString(),
+    [fieldNames.level]: getLogLevelName(level),
+    [fieldNames.message]: message,
+  };
+}
+
+/**
+ * Serialize log entry to JSON string
+ */
+function serializeEntry(
+  entry: Record<string, unknown>,
+  pretty: boolean,
+  indent: number,
+  newline: boolean,
+): string {
+  const json = pretty ? JSON.stringify(entry, null, indent) : JSON.stringify(entry);
+  return newline ? json + '\n' : json;
+}
+
+/**
  * Formats a log entry as JSON
  */
 export function formatJson(
@@ -64,21 +93,13 @@ export function formatJson(
   } = options;
 
   const fieldNames = createFieldNames(fields);
-
-  const entry: Record<string, unknown> = {
-    [fieldNames.timestamp]: timestamp.toISOString(),
-    [fieldNames.level]: getLogLevelName(level),
-    [fieldNames.message]: message,
-  };
+  const entry = buildLogEntry(timestamp, level, message, fieldNames);
 
   if (includeLevelValue) {
     entry[fieldNames.levelValue] = level;
   }
 
-  // Context is always an object (Record<string, unknown>)
   addContextToEntry(entry, context, fieldNames, sensitiveKeys);
 
-  const json = pretty ? JSON.stringify(entry, null, indent) : JSON.stringify(entry);
-
-  return newline ? json + '\n' : json;
+  return serializeEntry(entry, pretty, indent, newline);
 }

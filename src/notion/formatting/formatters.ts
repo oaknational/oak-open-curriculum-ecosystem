@@ -10,6 +10,7 @@ import type {
 } from '@notionhq/client';
 import type { Resource } from '../transformers.js';
 import { extractPropertyValue } from './property-extractors.js';
+import { formatPageMetadata, formatPagePropertiesForDetails } from './formatters-helpers.js';
 
 /**
  * Formats search results into a text representation
@@ -132,29 +133,11 @@ export function formatPageDetails(
   page: PageObjectResponse,
   content?: string,
 ): string {
-  let text = `📄 ${resource.name}\n\n`;
-  const url = resource._meta?.['url'];
-  text += `URL: ${typeof url === 'string' ? url : 'N/A'}\n`;
-  const createdTime = resource._meta?.['created_time'];
-  text += `Created: ${typeof createdTime === 'string' ? createdTime : 'N/A'}\n`;
-  const lastEditedTime = resource._meta?.['last_edited_time'];
-  text += `Last edited: ${typeof lastEditedTime === 'string' ? lastEditedTime : 'N/A'}\n`;
-  text += `Archived: ${resource._meta?.['archived'] ? 'Yes' : 'No'}\n\n`;
-
-  // Show properties
-  text += 'Properties:\n';
-  for (const [key, value] of Object.entries(page.properties)) {
-    if ('type' in value && value.type === 'title') continue; // Skip title as it's already shown
-
-    const displayValue = extractPropertyValue(value);
-    if (displayValue !== 'N/A') {
-      text += `- ${key}: ${displayValue}\n`;
-    }
-  }
+  let text = formatPageMetadata(resource);
+  text += formatPagePropertiesForDetails(page);
 
   if (content !== undefined) {
-    text += '\nContent:\n';
-    text += content;
+    text += '\nContent:\n' + content;
   }
 
   return text;
