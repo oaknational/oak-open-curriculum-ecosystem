@@ -23,6 +23,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 7. **Dependency Injection** - All IO must be passed as arguments, never imported directly
 8. **Fail FAST** - Clear error messages, never fail silently or swallow errors
 9. **No Backward Compatibility Layers** - Use versioning, replace code directly
+10. **Validate at System Boundaries** - Use Zod schemas and type guards to validate external data at entry points, then use Notion SDK types directly throughout the codebase. This creates a clear separation: external data → validation layer → trusted types in our system
 
 ## Development Phases
 
@@ -104,9 +105,9 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 ### Phase 3: Strategic Enhancements (Framework-First Approach)
 
-**Outcome**: Build generic MCP abstractions first, then specialize for Notion, preparing ~2,500 LoC for oak-mcp-core extraction
+**Outcome**: Build generic MCP abstractions first, then specialize for Notion, preparing ~3,050 LoC for oak-mcp-core extraction
 
-**Strategy**: Every enhancement creates reusable abstractions that will form oak-mcp-core's foundation
+**Strategy**: Every enhancement creates reusable abstractions that will form oak-mcp-core's foundation. All external data validation happens at boundaries using Zod schemas and type guards
 
 **Key Deliverables**:
 
@@ -181,6 +182,34 @@ Create a production-ready MCP server that safely exposes Notion resources and to
   - [ ] Create test assertion helpers
   - [ ] Support snapshot testing for responses
 
+- [ ] **Middleware System**:
+  - [ ] Create composable middleware stack with Next pattern (~150 LoC extractable)
+  - [ ] Implement common middleware (logging, error handling, validation)
+  - [ ] Add timing and correlation middleware
+  - [ ] Support async middleware execution
+  - [ ] Create middleware composition utilities
+
+- [ ] **Registry System**:
+  - [ ] Create generic `Registry<T>` base class (~200 LoC extractable)
+  - [ ] Implement `ResourceRegistry` with URI matching
+  - [ ] Implement `ToolRegistry` with middleware support
+  - [ ] Add registry middleware composition
+  - [ ] Create dynamic registration and discovery
+
+- [ ] **Lifecycle Management**:
+  - [ ] Create `LifecycleManager` for component orchestration (~100 LoC extractable)
+  - [ ] Implement startup/shutdown sequences with rollback
+  - [ ] Add component dependency ordering
+  - [ ] Support graceful degradation
+  - [ ] Create health check integration
+
+- [ ] **Validation Framework**:
+  - [ ] Create `ValidationChain` for composable validators (~150 LoC extractable)
+  - [ ] Implement common validators (string, required, url, etc.)
+  - [ ] Add Zod integration adapter
+  - [ ] Support transform operations
+  - [ ] Create boundary validation helpers
+
 **Implementation Order** (3 weeks):
 
 1. **Week 1: Foundation Layers** (1,550 LoC extractable)
@@ -191,7 +220,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
    - Validation Framework - 150 LoC
    - Generic MCP Server Base Class (depends on all) - 150 LoC
 
-2. **Week 2: Core Patterns** (950 LoC extractable)
+2. **Week 2: Core Patterns** (1,450 LoC extractable)
    - Middleware System - 150 LoC
    - Registry System (resources/tools) - 200 LoC
    - Type Guard Registry Framework - 80 LoC
@@ -199,12 +228,13 @@ Create a production-ready MCP server that safely exposes Notion resources and to
    - Resource Linking Pattern - 75 LoC
    - Performance Instrumentation - 100 LoC
    - Lifecycle Management - 100 LoC
-   - Additional utilities (Result type, etc.) - 145 LoC
+   - Additional utilities (Result type, etc.) - 50 LoC
+   - Boundary validation patterns - 595 LoC
 
 3. **Week 3: Integration & Polish**
-   - Implement all Notion-specific versions
+   - Implement all Notion-specific versions with boundary validation
    - Migrate existing code to new abstractions
-   - Create registry system for resources/tools
+   - Apply validation at all external data entry points
    - Document patterns for oak-mcp-core
    - Performance testing and optimization
 
@@ -219,14 +249,16 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 **Success Metrics**:
 
 - **For Phase 3**: All existing tests pass, 20%+ performance improvement
-- **For Future 2 prep**: 1,805 additional LoC extractable (total ~2,500 LoC / 83% of codebase)
+- **For Future 2 prep**: 3,050 LoC extractable (exceeding 100% of current codebase)
 - All abstractions follow SOLID principles and are runtime-agnostic
 - Clear separation between generic and Notion-specific code
+- All external data validated at boundaries before entering core system
 - Zero errors lost through propagation chain
 - 100% of errors include full context and are sanitized
 - All logging is structured, correlated, and edge-compatible
 - Configuration system supports multiple sources and hot-reloading
 - Test utilities enable rapid MCP server development
+- Notion SDK types used consistently after boundary validation
 
 ### Phase Future 1: Production Readiness
 
@@ -279,25 +311,36 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
 
-### Phase Future 2: Refactoring and Generalisation of the Framework
+### Phase Future 2: Framework Extraction
 
-**Outcome**: Extract oak-mcp-core library based on Phase 2.9 analysis, with the intent of minimising the effort required to build new MCP servers.
+**Outcome**: Extract oak-mcp-core library containing the generic MCP components built in Phase 3, creating a reusable framework for building MCP servers at Oak National and beyond.
 
 **Key Deliverables**:
 
-- [ ] **oak-mcp-core Library Creation**:
-  - [ ] Set up new repository and CI/CD pipeline
-  - [ ] Extract 695 LoC of generic components (Phase 1)
-  - [ ] Refactor and extract ~700 LoC from mixed components (Phase 2)
-  - [ ] Implement transport abstractions for edge runtime support
-  - [ ] Create plugin architecture for resources and tools
-  - [ ] Publish to npm as @oak-national/mcp-core
+- [ ] **oak-mcp-core Library Creation** (3-week timeline):
+  - [ ] Week 1: Repository setup and core extraction
+    - [ ] Set up oak-mcp-core repository with TDD infrastructure
+    - [ ] Extract foundation layers (logging, errors, config) - 1,050 LoC
+    - [ ] Establish build and publishing pipeline
+    - [ ] Ensure all IO is injectable, no hardcoded imports
+  - [ ] Week 2: Pattern extraction and API design
+    - [ ] Extract remaining patterns and utilities - 2,000 LoC
+    - [ ] Design public API surface (pure functions preferred)
+    - [ ] Create plugin architecture with dependency injection
+    - [ ] Implement edge runtime abstractions
+  - [ ] Week 3: Migration and documentation
+    - [ ] Migrate oak-notion-mcp to use oak-mcp-core
+    - [ ] Create comprehensive documentation
+    - [ ] Build example MCP servers (echo, file browser, HTTP wrapper)
+    - [ ] Publish to npm as @oak-national/mcp-core
 
 - [ ] **oak-notion-mcp Migration**:
   - [ ] Update imports to use @oak-national/mcp-core
   - [ ] Extend base classes from core library
-  - [ ] Remove duplicated generic code
+  - [ ] Remove duplicated generic code (~3,050 LoC)
+  - [ ] Keep only Notion-specific validation and adapters
   - [ ] Update tests to use core testing utilities
+  - [ ] Result: oak-notion-mcp becomes <1,000 LoC thin integration layer
 
 - [ ] **Documentation and Examples**:
   - [ ] API documentation for oak-mcp-core
@@ -310,7 +353,9 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - 100% test coverage for oak-mcp-core
 - Zero breaking changes in oak-notion-mcp
 - Successfully deploy example server to CF Workers
-- Second MCP integration built using oak-mcp-core
+- Second MCP integration built using oak-mcp-core in <500 LoC
+- All boundary validations properly separated from core logic
+- 4+ runtime environments supported (Node.js, Deno, Bun, edge)
 
 ### Phase Future 3: Write Tools and Safety Controls
 
