@@ -1,3 +1,71 @@
+# [2.0.0](https://github.com/oaknational/oak-notion-mcp/compare/v1.0.0...v2.0.0) (2025-08-03)
+
+
+### Code Refactoring
+
+* centralize environment validation with type-safe boundary ([01d9b16](https://github.com/oaknational/oak-notion-mcp/commit/01d9b16e34e5b1ff44c941b3d6990df74c291661))
+* remove custom Notion type duplicates and fix complexity issues ([15eabfd](https://github.com/oaknational/oak-notion-mcp/commit/15eabfda4c72e1e800a2034ffa792e6bf8387aac))
+
+
+### Features
+
+* implement complete biological architecture with mathematical foundation ([6c4bc31](https://github.com/oaknational/oak-notion-mcp/commit/6c4bc31bcbcad7c9fe85536b10a6544928ad37d1))
+
+
+### BREAKING CHANGES
+
+* Major architectural restructuring to implement complete biological model
+
+This commit represents a fundamental evolution of our architecture based on complex systems
+theory and mathematical validation. The changes establish a complete biological model that
+distinguishes between substrate (foundation), systems (pervasive infrastructure), and organs
+(discrete business logic).
+
+## Key Changes
+
+### Architectural Evolution
+- Implemented complete 8-level biological architecture
+- Distinguished between pervasive systems and discrete organs
+- Added substrate layer for types, contracts, and event schemas
+- Created ADR-018 documenting the complete biological architecture
+
+### Mathematical Foundation
+- Integrated complex systems research (Meena 2023, Scheffer 2009, Beggs 2003)
+- Validated architecture operates at criticality for optimal performance
+- Reframed 103 import warnings as early warning signals
+- Added cross-disciplinary validation
+
+### Documentation Restructuring
+- Reorganized docs into specialized directories
+- Enhanced all ADRs with mathematical foundation references
+- Updated README with complete biological architecture explanation
+- Created comprehensive tissue and organ interface documentation
+
+### Experience Records
+- Documented key insights from the architectural evolution journey
+- Recorded transformation from biological metaphor to mathematical implementation
+- Captured the revelation about implementing universal principles
+
+### Plan Updates
+- Updated high-level plan with Phase 3 for biological architecture
+- Added Phase 4 plan for oak-mcp-core extraction
+- Incorporated early warning signals concept
+
+This represents a paradigm shift in how we understand and implement software architecture,
+grounded in mathematical principles that govern all complex systems.
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+* Functions now use SDK types directly instead of custom type aliases
+* Environment validation now happens on module load.
+Invalid environment variables will cause immediate failure with
+descriptive error messages.
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
 # [1.0.0](https://github.com/oaknational/oak-notion-mcp/compare/v0.4.0...v1.0.0) (2025-08-02)
 
 
