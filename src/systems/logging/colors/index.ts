@@ -32,9 +32,7 @@ export function getLevelColor(level: LogLevel): string {
       return ANSI_COLORS.magenta;
     default:
       throw new TypeError(
-        `Invalid log level: ${String(level)}. Valid levels are: ${Object.entries(LOG_LEVELS)
-          .map(([key, val]) => `${key}=${String(val.value)}`)
-          .join(', ')}`,
+        `Invalid log level: ${String(level)}. Valid levels are: TRACE=0, DEBUG=10, INFO=20, WARN=30, ERROR=40, FATAL=50`,
       );
   }
 }

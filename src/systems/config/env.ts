@@ -6,7 +6,7 @@
  * All other modules should import from here.
  */
 
-import { isLogLevelName, type LogLevelName } from '../types/logging.js';
+import { isLogLevelName, type LogLevelName } from '../../substrate/types/logging.js';
 
 /**
  * Parse environment variable as string

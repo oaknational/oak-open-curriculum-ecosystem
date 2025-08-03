@@ -204,11 +204,11 @@ When evolving to a monorepo with multiple workspaces:
                  ▲ Chemical Signals ▲
                  │ (Events/Messages)│
 ┌─────────────────────────────────────────────────────────┐
-│              Circulatory System                          │
-│              (Infrastructure)                            │
+│                   Systems Layer                          │
+│          (Pervasive Infrastructure)                      │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐             │
-│  │ Logging  │  │  Config  │  │  Errors  │             │
-│  │ (Blood)  │  │ (Hormones)│  │ (Immune) │             │
+│  │ Logging  │  │  Config  │  │  Events  │             │
+│  │ (Nervous)│  │(Endocrine)│  │(Hormonal)│             │
 │  └──────────┘  └──────────┘  └──────────┘             │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -309,37 +309,25 @@ Complex systems theory shows that systems approaching transitions exhibit univer
 
 This proves that our ecosystem vision isn't just metaphorical - it's grounded in universal mathematics of complex adaptive systems validated across multiple scientific disciplines.
 
-### Domain Structure Example
+### Target Architecture Structure
 
 ```txt
 src/
-├── domains/                    # Business domains
-│   ├── user-auth/
-│   │   ├── core/              # Pure business logic (DIP internally)
-│   │   │   ├── models.ts
-│   │   │   ├── rules.ts
-│   │   │   └── ports.ts       # Interfaces this domain needs
-│   │   ├── adapters/          # Implementations of ports
-│   │   │   ├── token-store.ts
-│   │   │   └── user-repo.ts
-│   │   └── api.ts             # Public interface of domain
-│   │
-│   └── workspace-discovery/
-│       ├── core/
-│       ├── adapters/
-│       └── api.ts
+├── substrate/                 # Compile-time foundation (types, contracts, schemas)
+│   ├── types/                # Pure type definitions
+│   ├── contracts/            # Interface definitions
+│   └── event-schemas/        # Event type definitions
 │
-├── infrastructure/            # Shared technical capabilities
-│   ├── logging/
-│   │   ├── types.ts          # LogLevel, LogContext
-│   │   ├── console/
-│   │   └── file/
-│   ├── config/
-│   └── errors/
+├── systems/                  # Pervasive runtime infrastructure
+│   ├── logging/              # Nervous system
+│   ├── events/               # Hormonal signaling
+│   └── config/               # Endocrine system
 │
-└── applications/             # Application entry points
-    ├── mcp-server/
-    └── cli/
+├── organs/                   # Discrete business logic
+│   ├── notion/               # Notion integration organ
+│   └── mcp/                  # MCP protocol organ
+│
+└── organism.ts               # Wires everything together
 ```
 
 ## Implementation Roadmap
@@ -533,23 +521,14 @@ export interface ConfigProvider {
    import { isLogLevel, type LogLevel } from '../substrate/types/logging.js';
    ```
 
-**Step 2: Extract Config as Foundation**
+**Step 2: Note on Config Placement**
 
-1. Config should be part of substrate (it's foundational):
+**Important**: During implementation, config was placed in `src/substrate/config/`. This needs correction in the Infrastructure Phase because:
 
-   ```bash
-   mkdir -p src/substrate/config
-   mv src/config/env.ts src/substrate/config/
-   mv src/config/environment.ts src/substrate/config/
-   ```
+- **Substrate**: Should contain ONLY compile-time constructs (types, interfaces)
+- **Systems**: Should contain runtime infrastructure like config implementation
 
-2. Update imports across codebase
-3. Run tests after each file move
-
-**Validation**:
-
-- ✅ Config no longer depends on logging
-- ✅ Import violations reduced by ~5
+The config module will be moved from substrate to systems in the Infrastructure Phase steps.
 
 #### Restructuring Phase: Flatten Deep Nesting ✅ COMPLETED
 
@@ -629,13 +608,46 @@ src/systems/logging/
 
 **Goal**: Establish pervasive systems separate from business logic
 
+**Critical Architectural Understanding**:
+
+**Systems** are pervasive infrastructure that flow throughout the organism:
+
+- **Logging**: Nervous system - carries signals everywhere
+- **Events**: Hormonal system - chemical messaging between organs
+- **Config**: Endocrine system - environmental settings affecting all organs
+
+Unlike organs (discrete, bounded), systems cannot be "located" - they permeate the entire organism.
+
 **Step 1: Establish Systems Structure**
 
 ```bash
 mkdir -p src/systems/{logging,events,config}
 ```
 
-**Step 2: Migrate Logging to Systems**
+**Step 2: Correct Config Placement (Move from Substrate to Systems)**
+
+Config was incorrectly placed in substrate. We must move it to systems:
+
+```bash
+# Move runtime config implementation to systems
+mkdir -p src/systems/config
+mv src/substrate/config/env.ts src/systems/config/
+mv src/substrate/config/environment.ts src/systems/config/
+mv src/substrate/config/environment.unit.test.ts src/systems/config/
+
+# Keep only config types/interfaces in substrate
+# src/substrate/contracts/config.ts - ConfigProvider interface (already exists)
+# src/substrate/types/config.ts - Config-related types only
+```
+
+Update imports:
+
+```typescript
+// Before: import { env } from './substrate/config/env.js';
+// After:  import { env } from './systems/config/env.js';
+```
+
+**Step 3: Migrate Logging to Systems**
 
 1. Move flattened logging:
 
@@ -651,7 +663,7 @@ mkdir -p src/systems/{logging,events,config}
    export type { Logger } from '../../substrate/contracts/logger.js';
    ```
 
-**Step 3: Create Event System**
+**Step 4: Create Event System**
 
 ```typescript
 // src/systems/events/index.ts
@@ -764,7 +776,7 @@ export class SearchHandler {
 // src/organism.ts
 import { createLogger } from './systems/logging/index.js';
 import { createEventBus } from './systems/events/index.js';
-import { createConfig } from './substrate/config/index.js';
+import { createConfig } from './systems/config/index.js'; // ✅ Config is a system
 import { createNotionOrgan } from './organs/notion/index.js';
 import { createMcpOrgan } from './organs/mcp/index.js';
 
@@ -1231,7 +1243,8 @@ The cellular architecture naturally extends to ecosystem thinking when scaling t
 
 ```text
 Monorepo Ecosystem
-├── Shared Environment (infrastructure/)
+├── Shared Environment (infrastructure/)  # Note: At ecosystem level, "infrastructure"
+│   │                                     # refers to build/deploy tools, not runtime systems
 │   ├── Atmosphere (build tools, linting, CI/CD)
 │   ├── Hydrosphere (data flow, event streams, shared types)
 │   └── Lithosphere (storage, databases, caches)
