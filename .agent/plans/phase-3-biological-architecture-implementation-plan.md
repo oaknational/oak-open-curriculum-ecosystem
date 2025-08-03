@@ -354,50 +354,560 @@ src/
 6. **Time as dimension** - Consider temporal patterns in design
 7. **Fractal patterns** - Same principles apply at every scale
 
-### Phase 0: Document and Stabilize (Current)
+### Subphase 3.0: Document and Stabilize (Completed)
 
-- ✅ Change lint rule to 'warn'
+- ✅ Change lint rule to 'error'
 - ✅ Document architectural learnings
 - ✅ Create this plan
-- Focus on not making it worse
+- Each change should improve the linting errors, althoguh sometimes it will get briefly worse before getting better
 
-### Phase 1: Extract Infrastructure (When Needed)
+### Subphase 3.1: Complete Biological Architecture Implementation
 
-**Trigger**: When we need to share logging/config with another project
+**Trigger**: Need to resolve 101 relative import warnings before extraction
 
-1. Create `infrastructure/` directory
-2. Move logging types and interfaces
-3. Move config management
-4. Update imports to use new paths
+**Overview**: Transform the codebase from traditional layers to complete biological model through careful, atomic steps that maintain system functionality throughout.
 
-### Phase 2: Define Domain Boundaries (Future)
+**Key Discoveries from Analysis**:
 
-**Trigger**: When we extract oak-mcp-core
+1. Config depends on logging (inverted dependency)
+2. MCP tools reach directly into Notion (organ boundary violation)
+3. Logging has 4-5 levels of nesting (forcing upward imports)
+4. 60 of 101 violations are in logging alone
+5. Cross-domain imports show where organs naturally want boundaries
 
-1. Identify true business domains
-2. Create domain directories
-3. Define ports for each domain
-4. Implement ACLs between domains
+### Before and After Example
 
-### Phase 3: Complete Biological Architecture (Current Phase)
+**BEFORE** (Current Structure):
 
-**Trigger**: Need to resolve 103 relative import warnings before extraction
+```typescript
+// src/config/env.ts
+import { isLogLevelName } from '../logging/logger-interface.js'; // ❌ Config depends on logging!
 
-1. Create substrate layer (types, contracts, event schemas)
-2. Separate systems (pervasive infrastructure) from organs (business logic)
-3. Organize organs with clear boundaries
-4. Wire everything in organism.ts
+// src/mcp/tools/notion-operations/search.ts
+import { transformNotionSearchResponse } from '../../../notion/transformers.js'; // ❌ Cross-domain!
 
-### Phase 4: oak-mcp-core Extraction (First Independent Organism)
+// src/logging/formatters/pretty/colors/utils.ts
+import { LogLevel } from '../../../../types/levels.js'; // ❌ 4 levels up!
+```
 
-**Trigger**: After biological architecture is implemented
+**AFTER** (Target Structure):
 
-1. Extract oak-mcp-core as pioneer organism (keystone species) to separate package
-2. Migrate oak-notion-mcp to use the framework
-3. Establish symbiotic relationship patterns
-4. Publish to npm as @oaknational/mcp-core
+```typescript
+// src/substrate/config/env.ts
+import { isLogLevel } from '../types/logging.js'; // ✅ Substrate is shared foundation
 
-### Phase 5: Full Domain Separation (Multiple Organisms)
+// src/organs/mcp/tools/search.ts
+constructor(private events: EventBus) {} // ✅ Communication via events
+this.events.emit('notion:transform:search', data);
+
+// src/systems/logging/formatters/pretty.ts
+import { LogLevel } from '../../substrate/types/logging.js'; // ✅ Max 2 levels, clear path
+```
+
+**The Transformation Journey**:
+
+```
+Current State (101 violations) → Foundation (90) → Flatten (30) → Systems (15) → Organs (5) → Organism (0)
+```
+
+#### Foundation Phase: Substrate Preparation
+
+**Goal**: Create substrate and prepare for migration without breaking anything
+
+**Step 1: Create Substrate Structure**
+
+```bash
+mkdir -p src/substrate/{types,contracts,event-schemas}
+touch src/substrate/index.ts
+touch src/substrate/types/index.ts
+touch src/substrate/contracts/index.ts
+touch src/substrate/event-schemas/index.ts
+```
+
+**Step 2: Extract Core Types**
+
+1. Identify types with zero dependencies:
+   - LogLevel, LogLevelName from logging
+   - Environment types
+   - Base error types
+   - Core MCP types
+
+2. Copy (don't move yet) to substrate/types/:
+
+   ```typescript
+   // substrate/types/logging.ts
+   export type LogLevel = 'fatal' | 'error' | 'warn' | 'info' | 'debug' | 'trace' | 'silent';
+   export type LogLevelName = LogLevel;
+
+   // substrate/types/core.ts
+   export interface Dependencies {
+     logger?: Logger;
+     config?: Config;
+   }
+   ```
+
+3. Create temporary dual exports:
+
+   ```typescript
+   // src/logging/types/levels.ts
+   export { LogLevel, LogLevelName } from '../../substrate/types/logging.js';
+   export { LogLevel as LegacyLogLevel } from './old-levels.js'; // temporary
+   ```
+
+**Step 3: Define Core Contracts**
+
+```typescript
+// substrate/contracts/logger.ts
+export interface Logger {
+  debug(message: string, context?: unknown): void;
+  info(message: string, context?: unknown): void;
+  warn(message: string, context?: unknown): void;
+  error(message: string, error?: Error, context?: unknown): void;
+}
+
+// substrate/contracts/config.ts
+export interface ConfigProvider {
+  get<T>(key: string, defaultValue?: T): T;
+  has(key: string): boolean;
+}
+```
+
+**Validation**:
+
+- ✅ All tests still pass
+- ✅ No new import violations
+- ✅ Substrate has zero runtime code (types only)
+
+#### Transformation Phase: Dependency Inversion
+
+**Goal**: Fix inverted dependencies starting with config→logging
+
+**Step 1: Break Config→Logging Dependency**
+
+1. Current problem:
+
+   ```typescript
+   // src/config/env.ts
+   import { isLogLevelName } from '../logging/logger-interface.js'; // WRONG!
+   ```
+
+2. Move LogLevel validation to substrate:
+
+   ```typescript
+   // substrate/types/logging.ts
+   export const LOG_LEVELS = [
+     'fatal',
+     'error',
+     'warn',
+     'info',
+     'debug',
+     'trace',
+     'silent',
+   ] as const;
+   export type LogLevel = (typeof LOG_LEVELS)[number];
+   export const isLogLevel = (value: unknown): value is LogLevel =>
+     LOG_LEVELS.includes(value as LogLevel);
+   ```
+
+3. Update config to use substrate:
+
+   ```typescript
+   // src/config/env.ts
+   import { isLogLevel, type LogLevel } from '../substrate/types/logging.js';
+   ```
+
+**Step 2: Extract Config as Foundation**
+
+1. Config should be part of substrate (it's foundational):
+
+   ```bash
+   mkdir -p src/substrate/config
+   mv src/config/env.ts src/substrate/config/
+   mv src/config/environment.ts src/substrate/config/
+   ```
+
+2. Update imports across codebase
+3. Run tests after each file move
+
+**Validation**:
+
+- ✅ Config no longer depends on logging
+- ✅ Import violations reduced by ~5
+
+#### Restructuring Phase: Flatten Deep Nesting
+
+**Goal**: Reduce 4-5 level nesting in logging to maximum 2 levels
+
+**Step 1: Analyze and Map Current Structure**
+
+```
+Current (BAD):
+src/logging/
+├── formatters/
+│   └── pretty/
+│       ├── colors/
+│       │   └── utils.ts (5 levels!)
+│       ├── levels/
+│       ├── layouts/
+│       └── serializers/
+
+Target (GOOD):
+src/systems/logging/
+├── formatters/
+├── transports/
+└── core/
+```
+
+**Step 2: Flatten Pretty Formatter**
+
+1. Create flattened structure:
+
+   ```bash
+   mkdir -p src/systems/logging/{core,formatters,transports}
+   ```
+
+2. Merge deep modules:
+
+   ```typescript
+   // Instead of: formatters/pretty/colors/utils.ts + levels/utils.ts
+   // Create: formatters/pretty-formatter.ts
+   export class PrettyFormatter {
+     private formatLevel(level: LogLevel): string { ... }
+     private colorize(text: string, color: string): string { ... }
+     format(record: LogRecord): string { ... }
+   }
+   ```
+
+3. Progressive migration:
+   - Move one formatter at a time
+   - Update imports
+   - Run tests
+   - Delete old files only after confirmation
+
+**Validation**:
+
+- ✅ Maximum nesting depth: 2
+- ✅ Import violations in logging reduced from 60 to <10
+
+#### Infrastructure Phase: Create Systems Layer
+
+**Goal**: Establish pervasive systems separate from business logic
+
+**Step 1: Establish Systems Structure**
+
+```bash
+mkdir -p src/systems/{logging,events,config}
+```
+
+**Step 2: Migrate Logging to Systems**
+
+1. Move flattened logging:
+
+   ```bash
+   mv src/logging/* src/systems/logging/
+   ```
+
+2. Create system interfaces:
+
+   ```typescript
+   // src/systems/logging/index.ts
+   export { createLogger } from './factory.js';
+   export type { Logger } from '../../substrate/contracts/logger.js';
+   ```
+
+**Step 3: Create Event System**
+
+```typescript
+// src/systems/events/index.ts
+export interface EventBus {
+  emit<T>(event: string, data: T): void;
+  on<T>(event: string, handler: (data: T) => void): void;
+  off(event: string, handler: Function): void;
+}
+
+// Simple implementation for now
+export function createEventBus(): EventBus {
+  const handlers = new Map<string, Set<Function>>();
+  return {
+    emit(event, data) {
+      handlers.get(event)?.forEach((h) => h(data));
+    },
+    on(event, handler) {
+      if (!handlers.has(event)) handlers.set(event, new Set());
+      handlers.get(event)!.add(handler);
+    },
+    off(event, handler) {
+      handlers.get(event)?.delete(handler);
+    },
+  };
+}
+```
+
+**Validation**:
+
+- ✅ Systems are separate from business logic
+- ✅ No cross-system imports
+
+#### Modularization Phase: Organ Boundary Enforcement
+
+**Goal**: Separate Notion and MCP into discrete organs with no cross-imports
+
+**Step 1: Create Organ Structure**
+
+```bash
+mkdir -p src/organs/{notion,mcp}
+```
+
+**Step 2: Fix MCP→Notion Direct Imports**
+
+Current problem:
+
+```typescript
+// src/mcp/tools/notion-operations/search.ts
+import { transformNotionSearchResponse } from '../../../notion/transformers.js'; // BAD!
+```
+
+Solution using events:
+
+```typescript
+// src/organs/mcp/tools/search.ts
+export class SearchTool {
+  constructor(private events: EventBus) {}
+
+  async execute(query: string) {
+    // Request transformation via event
+    const { response, promise } = this.createResponsePromise();
+    this.events.emit('notion:transform:search', { query, response });
+    return promise;
+  }
+}
+
+// src/organs/notion/handlers/search.ts
+export class SearchHandler {
+  constructor(private events: EventBus) {
+    events.on('notion:transform:search', this.handleSearch.bind(this));
+  }
+
+  private async handleSearch({ query, response }) {
+    const result = await this.searchNotion(query);
+    const transformed = this.transform(result);
+    response.resolve(transformed);
+  }
+}
+```
+
+**Step 3: Move Files to Organs**
+
+1. Move Notion files:
+
+   ```bash
+   mv src/notion/* src/organs/notion/
+   ```
+
+2. Move MCP files:
+
+   ```bash
+   mv src/mcp/* src/organs/mcp/
+   ```
+
+3. Update all imports
+
+**Validation**:
+
+- ✅ Zero cross-organ imports
+- ✅ All communication via events
+- ✅ Import violations reduced to <20
+
+#### Integration Phase: Organism Assembly
+
+**Goal**: Wire everything together in organism.ts
+
+**Step 1: Create Organism**
+
+```typescript
+// src/organism.ts
+import { createLogger } from './systems/logging/index.js';
+import { createEventBus } from './systems/events/index.js';
+import { createConfig } from './substrate/config/index.js';
+import { createNotionOrgan } from './organs/notion/index.js';
+import { createMcpOrgan } from './organs/mcp/index.js';
+
+export class Organism {
+  private systems: {
+    logger: Logger;
+    events: EventBus;
+    config: Config;
+  };
+
+  private organs: {
+    notion: NotionOrgan;
+    mcp: McpOrgan;
+  };
+
+  constructor() {
+    // Create systems (pervasive infrastructure)
+    this.systems = {
+      logger: createLogger(),
+      events: createEventBus(),
+      config: createConfig(),
+    };
+
+    // Create organs with injected systems
+    this.organs = {
+      notion: createNotionOrgan(this.systems),
+      mcp: createMcpOrgan(this.systems),
+    };
+
+    // Wire cross-organ communication
+    this.organs.notion.registerHandlers(this.systems.events);
+    this.organs.mcp.registerHandlers(this.systems.events);
+  }
+
+  async start() {
+    this.systems.logger.info('Organism starting...');
+    await this.organs.mcp.start();
+    this.systems.logger.info('Organism ready');
+  }
+}
+```
+
+**Step 2: Update Entry Points**
+
+```typescript
+// src/index.ts
+import { Organism } from './organism.js';
+
+const organism = new Organism();
+await organism.start();
+```
+
+**Step 3: Final Cleanup**
+
+1. Remove old directories
+2. Update all tests
+3. Run all quality gates
+
+**Final Validation**:
+
+- ✅ Zero relative import violations
+- ✅ All tests pass
+- ✅ Clear architectural boundaries
+- ✅ Ready for Phase 4 extraction
+
+### Migration Principles
+
+1. **Atomic Steps**: Each step must leave the system in a working state
+2. **Progressive Enhancement**: Add new structure before removing old
+3. **Continuous Validation**: Run tests after every change
+4. **Rollback Ready**: Git commit before each major step
+5. **Dual Exports**: Temporarily export from both locations during migration
+
+### Validation Criteria Per Step
+
+#### After Each File Move:
+
+```bash
+# Must all pass before proceeding
+pnpm type-check     # No type errors
+pnpm test          # All tests green
+pnpm build         # Build succeeds
+```
+
+#### After Each Sub-subphase:
+
+```bash
+# Check import violation reduction
+pnpm lint 2>&1 | grep -c "Relative imports from parent"
+# Should decrease each time
+```
+
+#### Final Validation Suite:
+
+```bash
+#!/bin/bash
+echo "=== Phase 3 Validation ==="
+
+# 1. No relative parent imports
+VIOLATIONS=$(pnpm lint 2>&1 | grep -c "Relative imports from parent")
+if [ $VIOLATIONS -eq 0 ]; then
+  echo "✅ No relative import violations"
+else
+  echo "❌ Still have $VIOLATIONS import violations"
+  exit 1
+fi
+
+# 2. All quality gates pass
+pnpm format --check && echo "✅ Format check passed" || exit 1
+pnpm type-check && echo "✅ Type check passed" || exit 1
+pnpm lint && echo "✅ Lint passed" || exit 1
+pnpm test && echo "✅ Tests passed" || exit 1
+pnpm build && echo "✅ Build passed" || exit 1
+
+# 3. Architecture validation
+[ -d "src/substrate" ] && echo "✅ Substrate exists" || exit 1
+[ -d "src/systems" ] && echo "✅ Systems exist" || exit 1
+[ -d "src/organs" ] && echo "✅ Organs exist" || exit 1
+[ -f "src/organism.ts" ] && echo "✅ Organism exists" || exit 1
+
+echo "=== All validations passed! ==="
+```
+
+### Rollback Strategies
+
+#### Git-Based Rollback:
+
+```bash
+# Before each sub-subphase
+git add -A && git commit -m "chore: checkpoint before [step-name]"
+
+# If something breaks
+git reset --hard HEAD^
+```
+
+#### Progressive Rollback:
+
+1. Keep old imports alongside new ones
+2. Use feature flags to switch between implementations
+3. Only delete old code after new code is proven
+
+#### Emergency Recovery:
+
+```typescript
+// Keep this file during migration
+// src/emergency-recovery.ts
+export { oldLogger as logger } from './old-logging/logger.js';
+export { oldConfig as config } from './old-config/config.js';
+// Can quickly revert by changing imports
+```
+
+### Common Pitfalls and Solutions
+
+1. **Circular Dependencies**
+   - Solution: Use events for cross-organ communication
+   - Never have organ A import from organ B
+
+2. **Test Breakage**
+   - Solution: Update test imports incrementally
+   - Use find-and-replace with verification
+
+3. **Type Errors During Migration**
+   - Solution: Temporary type assertions (to be removed)
+   - Document all temporary hacks for cleanup
+
+4. **Build Failures**
+   - Solution: Update tsconfig paths as you go
+   - Keep build working at each step
+
+### Success Metrics
+
+1. **Import Violations**: 101 → 0
+2. **Maximum Nesting**: 5 levels → 2 levels
+3. **Cross-Organ Imports**: Many → 0
+4. **Test Coverage**: Maintained at 100%
+5. **Build Time**: Should not increase significantly
+6. **Bundle Size**: Should decrease slightly (less duplication)
+
+### Subphase 3.2: Full Domain Separation (Multiple Organisms)
 
 **Trigger**: When we need independent deployment of domains
 
@@ -406,7 +916,7 @@ src/
 3. No relative imports between organisms
 4. Proper versioning and contracts
 
-### Phase 6: Ecosystem Evolution (Full Vision)
+### Subphase 3.3: Ecosystem Evolution (Full Vision)
 
 **Trigger**: When ecosystem reaches critical mass
 
@@ -805,4 +1315,4 @@ This transforms our understanding: what looks like technical debt might be the s
 
 ### References
 
-Meena, C., Hens, C., Acharyya, S. et al. Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042 (2023). https://doi.org/10.1038/s41567-023-02020-8
+Meena, C., Hens, C., Acharyya, S. et al. Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042 (2023). <https://doi.org/10.1038/s41567-023-02020-8>

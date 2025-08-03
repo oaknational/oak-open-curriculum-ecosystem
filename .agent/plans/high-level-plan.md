@@ -120,77 +120,70 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 
 **Outcome**: Restructure codebase following the complete biological model with substrate, systems, and organs
 
-**Rationale**: Our architectural evolution analysis, validated by complex systems research (Scheffer et al., 2009), reveals that our 103 relative import warnings are "early warning signals" - a universal phenomenon in systems approaching critical transitions. These warnings show where the architecture naturally wants to form boundaries. Before extracting oak-mcp-core, we need to establish proper architectural boundaries based on these signals.
+**Rationale**: Our architectural evolution analysis, validated by complex systems research (Scheffer et al., 2009), reveals that our 101 relative import warnings are "early warning signals" - a universal phenomenon in systems approaching critical transitions. These warnings show where the architecture naturally wants to form boundaries. Before extracting oak-mcp-core, we need to establish proper architectural boundaries based on these signals.
+
+**Approach**: Progressive transformation maintaining system functionality
 
 **Key Deliverables**:
 
-- [ ] **Substrate Layer** (Foundation):
-  - [ ] Create `src/substrate/` directory
-  - [ ] Move all shared types to `substrate/types/`
-  - [ ] Define all contracts in `substrate/contracts/`
+- [ ] **Foundation Phase: Substrate** (Types & Contracts):
+  - [ ] Create `src/substrate/` directory structure
+  - [ ] Extract 20+ shared types to `substrate/types/`
+  - [ ] Define service contracts in `substrate/contracts/`
   - [ ] Create event schemas in `substrate/event-schemas/`
   - [ ] Zero runtime code - compile-time only
+  - [ ] Target: 30% violation reduction (101→70)
 
-- [ ] **Systems Layer** (Pervasive Infrastructure):
+- [ ] **Infrastructure Phase: Core Systems** (Pervasive Infrastructure):
   - [ ] Create `src/systems/` directory
-  - [ ] Extract logging as a system to `systems/logging/`
-  - [ ] Extract event transport to `systems/event-transport/`
-  - [ ] Extract configuration to `systems/config/`
-  - [ ] Design for pervasive injection patterns
+  - [ ] Extract logging system (fix 60 violations in logging/)
+  - [ ] Extract event transport system
+  - [ ] Extract configuration system (fix config→logging dependency)
+  - [ ] Implement dependency injection patterns
+  - [ ] Target: 50% violation reduction (70→35)
 
-- [ ] **Organs Layer** (Discrete Business Logic):
-  - [ ] Create `src/organs/` directory
+- [ ] **Modularization Phase: Business Organs** (Discrete Logic):
+  - [ ] Create `src/organs/` directory structure
   - [ ] Move Notion integration to `organs/notion/`
   - [ ] Move MCP protocol to `organs/mcp/`
-  - [ ] Establish clear organ boundaries (no cross-organ imports)
-  - [ ] Each organ has tissues → cells → organelles structure
+  - [ ] Fix cross-organ imports (mcp→notion violations)
+  - [ ] Implement event-based communication
+  - [ ] Target: 80% violation reduction (35→20)
 
-- [ ] **Organism Assembly**:
-  - [ ] Update `src/organism.ts` as the wiring point
-  - [ ] Systems injected differently than organs
-  - [ ] Clear separation of concerns
-  - [ ] Event-based communication between organs
+- [ ] **Integration Phase: Organism Assembly**:
+  - [ ] Create `src/organism.ts` as assembly point
+  - [ ] Wire systems through dependency injection
+  - [ ] Connect organs via event bus
+  - [ ] Fix remaining violations
+  - [ ] Run full test suite
+  - [ ] Target: 100% violation elimination (20→0)
 
-**Implementation Sub-phases**:
+**Implementation approach**: See [Phase 3 Biological Architecture Implementation Plan](phase-3-biological-architecture-implementation-plan.md) for detailed phase-by-phase roadmap with specific examples and validation criteria.
 
-1. **Substrate Extraction** (2 days)
-   - Extract all shared types and contracts
-   - Define event schemas
-   - Update all imports
-   - Verify zero runtime code in substrate
+**Quality Checkpoints** (after each phase):
 
-2. **Systems Separation** (3 days)
-   - Extract logging system
-   - Extract event transport
-   - Extract configuration
-   - Design pervasive injection patterns
-
-3. **Organs Organization** (3 days)
-   - Create notion organ with internal tissues
-   - Create mcp organ with internal tissues
-   - Enforce no cross-organ imports
-   - Implement event-based communication
-
-4. **Integration & Testing** (2 days)
-   - Wire everything in organism.ts
-   - Update all tests for new structure
-   - Verify all quality gates pass
-   - Document new architecture
-
-**Quality Checkpoints**:
-
-- Substrate has zero runtime code
-- Systems are truly pervasive (no single location)
-- Organs have clear boundaries (no cross-imports)
-- Event schemas enable loose coupling
-- All existing tests pass with new structure
+- Run `pnpm lint` to verify violation count reduction
+- Run `pnpm test` to ensure no regressions
+- Verify dependency flow with `madge --circular src`
+- Check that substrate has zero runtime code
+- Confirm systems are injected, not imported
+- Validate organs communicate only via events
 
 **Success Metrics**:
 
-- 103 relative import warnings significantly reduced
-- Clear architectural boundaries established
-- Dependency flow matches biological model
-- Ready for oak-mcp-core extraction
+- 101 relative import violations → 0 (complete elimination)
+- Zero circular dependencies detected
+- All 158 existing tests passing
+- Clear substrate/systems/organs separation
+- Event-driven organ communication established
+- Ready for Phase 4 oak-mcp-core extraction
+
+**Risk Mitigation**:
+
+- Progressive transformation (system stays working)
+- Each step has validation criteria
+- Rollback strategy for each phase
+- Continuous testing throughout
 
 ### Phase 4: oak-mcp-core Framework Extraction (First Independent Organism)
 
