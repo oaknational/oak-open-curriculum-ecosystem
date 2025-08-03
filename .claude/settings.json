@@ -14,6 +14,13 @@
       "Bash(rm:*)",
       "Bash(gh pr create:*)",
       "Bash(grep:*)",
+      "Bash(sort:*)",
+      "Bash(sed:*)",
+      "Bash(awk:*)",
+      "Bash(cat:*)",
+      "Bash(tail:*)",
+      "Bash(head:*)",
+      "Bash(touch:*)",
       "Bash(node:*)",
       "Bash(gh pr edit:*)"
     ],
