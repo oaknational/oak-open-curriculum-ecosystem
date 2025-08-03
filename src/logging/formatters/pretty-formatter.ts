@@ -25,7 +25,7 @@ import {
   getLevelAbbreviation as getLevelAbbreviationInternal,
   indentMultiline,
   formatContext as formatContextInternal,
-} from './pretty/index.js';
+} from './pretty-index.js';
 
 // Re-export types with original names
 export type { InternalOptions as PrettyFormatterOptions };
@@ -160,6 +160,6 @@ export function createColorizedFormatter(
  * No colors, includes timestamp
  */
 export const defaultPrettyFormatter: LogFormatter = createPrettyFormatter({
-  includeTimestamp: true,
+  timestamp: true,
   useColor: false,
 });
