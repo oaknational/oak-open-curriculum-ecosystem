@@ -64,17 +64,33 @@ export function createFileReporter(
 }
 
 /**
+ * Formatters for each primitive type
+ */
+const PRIMITIVE_FORMATTERS: Record<string, (value: unknown) => string | null> = {
+  string: (v) => String(v),
+  number: (v) => String(v),
+  boolean: (v) => String(v),
+  bigint: (v) => {
+    // Type guard ensures v is bigint
+    if (typeof v === 'bigint') return v.toString();
+    return String(v);
+  },
+  symbol: (v) => {
+    // Type guard ensures v is symbol
+    if (typeof v === 'symbol') return v.toString();
+    return String(v);
+  },
+  function: () => '[function]',
+  undefined: () => 'undefined',
+};
+
+/**
  * Format primitive values directly
  */
 function formatPrimitive(value: unknown): string | null {
-  if (typeof value === 'string') return value;
-  if (value === undefined) return 'undefined';
   if (value === null) return 'null';
-  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
-  if (typeof value === 'bigint') return value.toString();
-  if (typeof value === 'symbol') return value.toString();
-  if (typeof value === 'function') return '[function]';
-  return null;
+  const formatter = PRIMITIVE_FORMATTERS[typeof value];
+  return formatter ? formatter(value) : null;
 }
 
 /**

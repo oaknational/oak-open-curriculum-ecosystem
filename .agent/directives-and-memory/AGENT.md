@@ -13,13 +13,15 @@ Read the [metacognitive prompt](./metacognition.md) and follow the instructions.
 ### Design & Development
 
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
+- **Never create compatibility layers** - replace old approaches with new approaches
 - **Pure functions first** - Use TDD to design, no side effects, no I/O (these are your "organelles")
 - **Build up through scales** - Functions → Modules (cells) → Systems (tissues/organs)
 - **Clear boundaries at each scale** - Use barrel files (index.ts) as public APIs for modules
 - **No shortcuts** - Never use `as`, `any`, `!`, or type assertions
 - **Single source of truth** - Define types ONCE, use library types directly
-- **Fail properly** - Fail fast with helpful errors, never silently
+- **Fail properly** - Fail fast and hard with helpful errors, never silently
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
+- **validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation
 
 ### Architecture (Complete Biological Model)
 

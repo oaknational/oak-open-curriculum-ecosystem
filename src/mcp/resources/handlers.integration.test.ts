@@ -5,7 +5,7 @@ import type { Logger } from '../../logging/logger-interface.js';
 import {
   createMockPage,
   createMockDatabase,
-  createMockUser,
+  createMockPersonUser,
 } from '../../test-helpers/notion-mocks.js';
 import {
   createMockListUsersResponse,
@@ -69,12 +69,12 @@ describe('createResourceHandlers', () => {
 
   describe('handleReadResource', () => {
     it('should handle discovery URI', async () => {
-      const mockUser = createMockUser({
+      const mockUser = {
+        ...createMockPersonUser(),
         id: 'user-1',
         name: 'Test User',
-        type: 'person',
         person: { email: 'test@example.com' },
-      });
+      };
 
       const mockPage = createMockPage({
         id: 'page-1',

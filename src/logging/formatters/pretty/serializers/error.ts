@@ -6,6 +6,28 @@
 import { indentMultiline } from '../text/index.js';
 
 /**
+ * Format error content based on type
+ */
+function formatErrorContent(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  const type = typeof error;
+  if (type === 'object') {
+    return JSON.stringify(error, null, 2);
+  }
+  if (type === 'string') {
+    return String(error);
+  }
+  if (type === 'number' || type === 'boolean') {
+    return String(error);
+  }
+
+  return '[unknown]';
+}
+
+/**
  * Format error for pretty display
  * Pure function
  */
@@ -16,31 +38,14 @@ export function formatError(
   compact: boolean,
 ): string {
   const errorPrefix = compact ? ' !' : '\n' + indent + 'Error: ';
+  const content = formatErrorContent(error);
 
-  if (error instanceof Error) {
-    const errorMsg = error.message;
-    const errorStr = compact
-      ? errorPrefix + errorMsg
-      : errorPrefix +
-        errorMsg +
-        (includeStack && error.stack ? '\n' + indentMultiline(error.stack, indent) : '');
-
-    return errorStr;
+  // Add stack trace for Error instances when not compact
+  if (!compact && includeStack && error instanceof Error && error.stack) {
+    return errorPrefix + content + '\n' + indentMultiline(error.stack, indent);
   }
 
-  // Handle non-Error error values
-  let errorValue: string;
-  if (typeof error === 'object') {
-    errorValue = errorPrefix + JSON.stringify(error, null, 2);
-  } else if (typeof error === 'string') {
-    errorValue = errorPrefix + error;
-  } else if (typeof error === 'number' || typeof error === 'boolean') {
-    errorValue = errorPrefix + String(error);
-  } else {
-    errorValue = errorPrefix + '[unknown]';
-  }
-
-  return errorValue;
+  return errorPrefix + content;
 }
 
 /**

@@ -4,6 +4,32 @@
  */
 
 /**
+ * Validation patterns for trace components
+ */
+const TRACE_PATTERNS = {
+  traceId: /^[0-9a-f]{32}$/,
+  parentId: /^[0-9a-f]{16}$/,
+  flags: /^[0-9a-f]{2}$/,
+};
+
+/**
+ * Validate trace components
+ */
+function validateTraceComponents(
+  version: string,
+  traceId: string,
+  parentId: string,
+  flags: string,
+): boolean {
+  return (
+    version === '00' &&
+    TRACE_PATTERNS.traceId.test(traceId) &&
+    TRACE_PATTERNS.parentId.test(parentId) &&
+    TRACE_PATTERNS.flags.test(flags)
+  );
+}
+
+/**
  * Parse W3C Traceparent header
  * @param traceparent - Traceparent header value
  * @returns Parsed trace information
@@ -16,46 +42,25 @@ export function parseTraceparent(traceparent: string): {
 } | null {
   // W3C Trace Context format: version-traceId-parentId-flags
   const parts = traceparent.split('-');
-  if (parts.length !== 4) {
-    return null;
-  }
+  if (parts.length !== 4) return null;
 
+  // Extract parts - TypeScript needs explicit checks even after length validation
   const version = parts[0];
   const traceId = parts[1];
   const parentId = parts[2];
   const flags = parts[3];
 
-  // Validate format - all parts are guaranteed to exist due to length check
+  // Ensure all parts exist (redundant but needed for TypeScript)
   if (!version || !traceId || !parentId || !flags) {
     return null;
   }
 
-  // Validate version (should be "00")
-  if (version !== '00') {
+  // Validate all components
+  if (!validateTraceComponents(version, traceId, parentId, flags)) {
     return null;
   }
 
-  // Validate trace ID (32 hex chars)
-  if (!/^[0-9a-f]{32}$/.test(traceId)) {
-    return null;
-  }
-
-  // Validate parent ID (16 hex chars)
-  if (!/^[0-9a-f]{16}$/.test(parentId)) {
-    return null;
-  }
-
-  // Validate flags (2 hex chars)
-  if (!/^[0-9a-f]{2}$/.test(flags)) {
-    return null;
-  }
-
-  return {
-    version,
-    traceId,
-    parentId,
-    flags,
-  };
+  return { version, traceId, parentId, flags };
 }
 
 /**

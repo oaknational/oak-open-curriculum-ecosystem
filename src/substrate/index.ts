@@ -8,10 +8,19 @@
  */
 
 // Re-export all types - the fundamental constants
-export * from './types/index.js';
+export {
+  LOG_LEVELS,
+  type LogLevel,
+  type LogLevelName,
+  isLogLevel,
+  isLogLevelName,
+  getLogLevelValue,
+  getLogLevelName,
+  type Dependencies,
+  type Context,
+} from './types/index.js';
 
 // Re-export all contracts - the cell membranes
-export * from './contracts/index.js';
+export type { Logger, ConfigProvider } from './contracts/index.js';
 
-// Re-export all event schemas - the signaling patterns
-export * from './event-schemas/index.js';
+// Event schemas will be added here as we define organ communication

@@ -5,31 +5,27 @@
 
 import type { PageObjectResponse as NotionPage } from '@notionhq/client';
 import type { Resource } from './types.js';
-import { formatNotionRichText } from './rich-text-formatter.js';
+
+/**
+ * Extracts title from page properties
+ */
+function extractPageTitle(properties: NotionPage['properties']): string {
+  // Properties from PageObjectResponse are already typed by Notion SDK
+  for (const [, prop] of Object.entries(properties)) {
+    if (prop.type === 'title') {
+      // Title is an array of RichTextItemResponse which has plain_text
+      return prop.title.map((item) => item.plain_text).join('') || 'Untitled';
+    }
+  }
+  return 'Untitled';
+}
 
 /**
  * Transforms a Notion page object into an MCP resource
  * Pure function - no side effects
  */
 export function transformNotionPageToMcpResource(page: NotionPage): Resource {
-  // Extract title from properties
-  let title = 'Untitled';
-
-  // Look for title property (could be named 'title', 'Title', or 'Name')
-  for (const [, value] of Object.entries(page.properties)) {
-    if (
-      typeof value === 'object' &&
-      'type' in value &&
-      value.type === 'title' &&
-      'title' in value
-    ) {
-      const titleArray = value.title;
-      if (Array.isArray(titleArray) && titleArray.length > 0) {
-        title = formatNotionRichText(titleArray);
-        break;
-      }
-    }
-  }
+  const title = extractPageTitle(page.properties);
 
   return {
     uri: `notion://pages/${page.id}`,

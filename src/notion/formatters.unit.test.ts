@@ -17,7 +17,8 @@ import type { Resource } from './transformers.js';
 import {
   createMockPage,
   createMockDatabase,
-  createMockUser,
+  createMockPersonUser,
+  createMockBotUser,
 } from '../test-helpers/notion-mocks.js';
 
 // Helper to create default annotations for rich text
@@ -356,18 +357,17 @@ describe('formatPageDetails', () => {
 describe('formatUserList', () => {
   it('should format mixed user types', () => {
     const users = [
-      createMockUser({
+      {
+        ...createMockPersonUser(),
         id: 'user-1',
         name: 'John Doe',
-        type: 'person',
         person: { email: 'joh...@example.com' },
-      }),
-      createMockUser({
+      },
+      {
+        ...createMockBotUser(),
         id: 'bot-1',
         name: 'Notion Bot',
-        type: 'bot',
-        bot: {},
-      }),
+      },
     ];
 
     const resources: Resource[] = [
@@ -394,7 +394,7 @@ describe('formatUserList', () => {
   });
 
   it('should handle singular user', () => {
-    const users = [createMockUser({ id: 'user-1', name: 'Solo User' })];
+    const users = [{ ...createMockPersonUser(), id: 'user-1', name: 'Solo User' }];
     const resources: Resource[] = [
       {
         uri: 'notion://users/user-1',
