@@ -2,7 +2,7 @@
 
 This file provides core directives for AI agents working with this codebase. Read ALL of it first, then follow the instructions.
 
-Read the [metacognitive prompt](./metacognition.md) and follow the instructions. Now read this document again; what has changed, why?
+Read the [metacognitive prompt](./metacognition.md) and follow the instructions. Now read this document again; what has changed, why? Would you like to update your todo list?
 
 ## Prime Directive
 

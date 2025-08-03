@@ -265,7 +265,7 @@ Recent research in complex systems (Meena et al., 2023) provides mathematical va
 
 For networked systems, stability can be predicted by:
 
-```
+```text
 S = β(s + ν + ρ - μ - η)
 ```
 
@@ -406,7 +406,7 @@ import { LogLevel } from '../../substrate/types/logging.js'; // ✅ Max 2 levels
 
 **The Transformation Journey**:
 
-```
+```text
 Current State (101 violations) → Foundation (90) → Flatten (30) → Systems (15) → Organs (5) → Organism (0)
 ```
 
@@ -540,7 +540,7 @@ export interface ConfigProvider {
 
 **Step 1: Analyze and Map Current Structure**
 
-```
+```text
 Current (BAD):
 src/logging/
 ├── formatters/
