@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMcpServer } from './server.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { Logger } from './logging/logger-interface.js';
+import type { Logger } from './systems/logging/logger-interface.js';
 import { createMockListUsersResponse } from './test-helpers/notion-api-mocks.js';
 import { createMockLogger } from './test-helpers/factories.js';
 

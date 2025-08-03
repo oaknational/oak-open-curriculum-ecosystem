@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Logger } from '../../logging/logger-interface.js';
+import type { Logger } from '../../systems/logging/logger-interface.js';
 import type { MinimalNotionClient } from '../../types/dependencies.js';
 import { createMockPage } from '../../test-helpers/notion-mocks.js';
 import {

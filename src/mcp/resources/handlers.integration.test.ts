@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers/index.js';
 import type { MinimalNotionClient } from '../../types/dependencies.js';
-import type { Logger } from '../../logging/logger-interface.js';
+import type { Logger } from '../../systems/logging/logger-interface.js';
 import {
   createMockPage,
   createMockDatabase,

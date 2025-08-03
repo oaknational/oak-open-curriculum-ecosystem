@@ -3,7 +3,7 @@
  * Following testing strategy: simple mocks passed as arguments
  */
 
-import type { Logger } from '../logging/logger-interface.js';
+import type { Logger } from '../systems/logging/logger-interface.js';
 import type { ServerConfig } from '../types/dependencies.js';
 import { vi } from 'vitest';
 
