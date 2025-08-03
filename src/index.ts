@@ -19,7 +19,6 @@ export async function main(): Promise<void> {
     const { setupAndStartServer } = await import('./server-setup.js');
 
     await setupAndStartServer({
-      env: process.env,
       transport: new StdioServerTransport(),
       log,
     });

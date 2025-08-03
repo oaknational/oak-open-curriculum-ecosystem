@@ -2,29 +2,45 @@
 
 ## 🚀 Getting Started
 
-- **New to MCP?** → [Developer Onboarding Journey](onboarding-journey.md) - 5-day structured learning path
+- **New to MCP?** → [Developer Onboarding Journey](development/onboarding-journey.md) - 5-day structured learning path
 - **Experienced?** → [Quick Reference](quick-reference.md) - Jump right in with code examples
-- **Working with AI?** → [AI Agent Guide](ai-agent-guide.md) - Essential GO.md patterns and practices
-- **Understanding Docs** → [Understanding Agent References](understanding-agent-references.md) - How to use curated docs
+- **Working with AI?** → [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Essential GO.md patterns and practices
 
-## Architecture and Design
+## Core Documentation
 
-- [High Level Architecture](high-level-architecture.md) - System design, layers, and components
-- [API Reference](api-reference.md) - Complete reference for all resources and tools
+- [Architecture Overview](architecture-overview.md) - High-level system overview
+- [API Reference](usage/api-reference.md) - Complete reference for all resources and tools
 
-## Development Guidelines
+## Detailed Documentation
 
-- [Development Practice](development-practice.md) - Code standards and workflow
-- [TypeScript Practice](typescript-practice.md) - Type safety guidelines
-- [Testing and Development Strategy](testing-and-development-strategy.md) - TDD/BDD approach
-- [Tooling](tooling.md) - Development tools and versions
+### Architecture
+
+- [High Level Architecture](architecture/high-level-architecture.md) - Detailed system design, layers, and components
+- [Tissue and Organ Interfaces](architecture/tissue-and-organ-interfaces.md) - Multi-scale interface patterns
+- [Architecture Decision Records](architecture/architectural-decisions/) - All architectural decisions
+
+### Development
+
+- [Onboarding Journey](development/onboarding-journey.md) - Structured learning path for new developers
+- [Tooling](development/tooling.md) - Development tools and versions
+- [Troubleshooting](development/troubleshooting.md) - Common issues and solutions
+
+### Usage
+
+- [API Reference](usage/api-reference.md) - Resources, tools, and prompts reference
+
+### AI Agent Guidance
+
+Comprehensive documentation for AI agents working with this codebase:
+
+- [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Primary guide for AI agents
+- [Experimental Architecture Quick Reference](agent-guidance/experimental-architecture-quick-reference.md) - Concrete examples of our approach
+- [Development Practice](agent-guidance/development-practice.md) - Code standards and workflow
+- [TypeScript Practice](agent-guidance/typescript-practice.md) - Type safety guidelines
+- [Testing Strategy](agent-guidance/testing-strategy.md) - TDD/BDD approach
+- [Safety and Security](agent-guidance/safety-and-security.md) - Security measures and privacy protection
+- [Understanding Agent References](agent-guidance/understanding-agent-references.md) - How to use curated docs
+
+## Additional Resources
+
 - [GO.md](../GO.md) - Grounding document for maintaining focus and quality (AI agents: read every 3rd task)
-
-## Operations
-
-- [Safety and Security](safety-and-security.md) - Security measures and privacy protection
-- [Troubleshooting](troubleshooting.md) - Common issues and solutions
-
-## Migration Guides
-
-- [Phase 2.5 Migration](migration-phase-2.5.md) - Preparing for upcoming enhancements

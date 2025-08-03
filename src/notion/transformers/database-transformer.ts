@@ -4,14 +4,14 @@
  */
 
 import type { DatabaseObjectResponse as NotionDatabase } from '@notionhq/client';
-import type { McpResource } from './types.js';
+import type { Resource } from './types.js';
 import { formatNotionRichText } from './rich-text-formatter.js';
 
-/**
+/* *
  * Transforms a Notion database object into an MCP resource
  * Pure function - no side effects
  */
-export function transformNotionDatabaseToMcpResource(database: NotionDatabase): McpResource {
+export function transformNotionDatabaseToMcpResource(database: NotionDatabase): Resource {
   const title =
     database.title.length > 0 ? formatNotionRichText(database.title) : 'Untitled Database';
 
@@ -29,7 +29,7 @@ export function transformNotionDatabaseToMcpResource(database: NotionDatabase): 
     name: title,
     description,
     mimeType: 'application/json',
-    metadata: {
+    _meta: {
       created_time: database.created_time,
       last_edited_time: database.last_edited_time,
       archived: database.archived,

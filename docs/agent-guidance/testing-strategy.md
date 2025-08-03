@@ -11,6 +11,9 @@
 - NEVER create complex mocks, use simple mocks passed as arguments to the function under test. Complex mocks 1) result in testing the mocks, 2) indicate a refactor is required.
 - ALL mocks MUST be simple fakes, passed as arguments to the function under test.
 - NEVER test external functionality, that is not under our control
+- NEVER add complex logic to tests - it risks testing the test code rather than the code under test
+- Always ask what a test is proving - it should prove something useful about the code under test
+- Each proof should happen ONCE - repeated proofs are fragile and waste time
 
 ## Definitions
 

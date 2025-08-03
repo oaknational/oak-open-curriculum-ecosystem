@@ -64,6 +64,24 @@ export function createToolHandlers(deps: CoreDependencies): ToolHandlers {
 }
 
 /**
+ * Create all executors with dependencies
+ */
+function createExecutors(deps: CoreDependencies) {
+  const executorDeps = {
+    notionClient: deps.notionClient,
+    logger: deps.logger,
+  };
+
+  return {
+    searchExecutor: createSearchExecutor(executorDeps),
+    listDatabasesExecutor: createListDatabasesExecutor(executorDeps),
+    queryDatabaseExecutor: createQueryDatabaseExecutor(executorDeps),
+    getPageExecutor: createGetPageExecutor(executorDeps),
+    listUsersExecutor: createListUsersExecutor(executorDeps),
+  };
+}
+
+/**
  * Creates and registers all tools
  * Separates tool creation from handler interface
  */
@@ -73,46 +91,23 @@ function createAndRegisterTools(
   errorHandler: ReturnType<typeof createErrorHandler>,
   registry: ToolRegistry,
 ) {
-  // Create executors with dependencies
-  const searchExecutor = createSearchExecutor({
-    notionClient: deps.notionClient,
-    logger: deps.logger,
-  });
-
-  const listDatabasesExecutor = createListDatabasesExecutor({
-    notionClient: deps.notionClient,
-    logger: deps.logger,
-  });
-
-  const queryDatabaseExecutor = createQueryDatabaseExecutor({
-    notionClient: deps.notionClient,
-    logger: deps.logger,
-  });
-
-  const getPageExecutor = createGetPageExecutor({
-    notionClient: deps.notionClient,
-    logger: deps.logger,
-  });
-
-  const listUsersExecutor = createListUsersExecutor({
-    notionClient: deps.notionClient,
-    logger: deps.logger,
-  });
+  // Create executors
+  const executors = createExecutors(deps);
 
   // Create tools from definitions and executors
-  const search = toolFactory(searchToolDefinition, searchExecutor, errorHandler);
+  const search = toolFactory(searchToolDefinition, executors.searchExecutor, errorHandler);
   const listDatabases = toolFactory(
     listDatabasesToolDefinition,
-    listDatabasesExecutor,
+    executors.listDatabasesExecutor,
     errorHandler,
   );
   const queryDatabase = toolFactory(
     queryDatabaseToolDefinition,
-    queryDatabaseExecutor,
+    executors.queryDatabaseExecutor,
     errorHandler,
   );
-  const getPage = toolFactory(getPageToolDefinition, getPageExecutor, errorHandler);
-  const listUsers = toolFactory(listUsersToolDefinition, listUsersExecutor, errorHandler);
+  const getPage = toolFactory(getPageToolDefinition, executors.getPageExecutor, errorHandler);
+  const listUsers = toolFactory(listUsersToolDefinition, executors.listUsersExecutor, errorHandler);
 
   // Register all tools
   registry.register(search);

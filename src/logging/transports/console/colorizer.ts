@@ -6,32 +6,7 @@
  */
 
 import type { LogLevel } from '../../types/index.js';
-import { LOG_LEVELS } from '../../types/index.js';
-
-/**
- * ANSI color codes for different log levels
- */
-const LEVEL_COLORS: Record<LogLevel, string> = {
-  [LOG_LEVELS.TRACE.value]: '\x1b[90m', // gray
-  [LOG_LEVELS.DEBUG.value]: '\x1b[36m', // cyan
-  [LOG_LEVELS.INFO.value]: '\x1b[32m', // green
-  [LOG_LEVELS.WARN.value]: '\x1b[33m', // yellow
-  [LOG_LEVELS.ERROR.value]: '\x1b[31m', // red
-  [LOG_LEVELS.FATAL.value]: '\x1b[35m', // magenta
-};
-
-/**
- * ANSI reset code
- */
-const RESET_CODE = '\x1b[0m';
-
-/**
- * Get ANSI color code for log level
- * Pure function
- */
-export function getLevelColor(level: LogLevel): string {
-  return LEVEL_COLORS[level] || RESET_CODE;
-}
+import { getLevelColor, ANSI_COLORS } from '../../colors/index.js';
 
 /**
  * Colorize text with ANSI codes
@@ -39,7 +14,7 @@ export function getLevelColor(level: LogLevel): string {
  */
 export function colorizeLevel(level: LogLevel, text: string): string {
   const colorCode = getLevelColor(level);
-  return `${colorCode}${text}${RESET_CODE}`;
+  return `${colorCode}${text}${ANSI_COLORS.reset}`;
 }
 
 /**

@@ -10,6 +10,15 @@ When given a task, always include "Read GO.md and follow all instructions" in yo
 2. **Regular Grounding**: You re-read GO.md every third task
 3. **Quality Maintenance**: You follow all rules and best practices
 
+## 🧪 Experimental Architecture
+
+This codebase follows an experimental approach. See [Experimental Architecture Quick Reference](./experimental-architecture-quick-reference.md) for concrete examples of how to:
+
+- Create small modules with clear interfaces
+- Use dependency injection instead of direct imports
+- Accept different patterns in different contexts
+- Use the 103 warnings as architectural insights
+
 ## 📋 Task Management
 
 ### TodoWrite Tool Usage
@@ -33,6 +42,24 @@ Always use the TodoWrite tool to:
 8. Update documentation
 9. GROUNDING: read GO.md and follow all instructions
 ```
+
+### Planning with Kairos Time
+
+When creating plans and estimates:
+
+- **Use semantic milestones**, not clock time
+- **Kairos time** (meaningful progress) over **Chronos time** (hours/days)
+- **Bad**: "This will take 2 hours"
+- **Good**: "Complete after unit tests pass and code review is addressed"
+
+Examples of semantic milestones:
+
+- "When all tests are green"
+- "After refactoring is complete"
+- "Once the API contract is defined"
+- "When the feature works end-to-end"
+
+This approach acknowledges that development time is highly variable and depends on discoveries made during implementation.
 
 ## 🔄 Development Workflow
 
@@ -127,8 +154,8 @@ TodoWrite:
 
 ### Documentation
 
-- `docs/api-reference.md` - All tools and resources
-- `docs/development-practice.md` - Code standards
+- `docs/usage/api-reference.md` - All tools and resources
+- `docs/agent-guidance/development-practice.md` - Code standards
 - `docs/troubleshooting.md` - Common issues
 
 ## ✅ Success Checklist
@@ -145,10 +172,10 @@ Before considering any task complete:
 
 ## 🎓 Learning Resources
 
-1. **Start Here**: [Developer Onboarding Journey](onboarding-journey.md)
-2. **Quick Tasks**: [Quick Reference](quick-reference.md)
-3. **Deep Dive**: [Understanding Agent References](understanding-agent-references.md)
-4. **Architecture**: [High Level Architecture](high-level-architecture.md)
+1. **Start Here**: [Developer Onboarding Journey](../development/onboarding-journey.md)
+2. **Quick Tasks**: [Quick Reference](../quick-reference.md)
+3. **Deep Dive**: [Understanding Agent References](./understanding-agent-references.md)
+4. **Architecture**: [High Level Architecture](../architecture/high-level-architecture.md)
 
 ## 💡 Pro Tips
 

@@ -20,6 +20,29 @@ export interface QueryDatabaseDependencies {
 }
 
 /**
+ * Builds query parameters for database query
+ */
+function buildQueryParams(validatedArgs: ReturnType<typeof notionQueryDatabaseSchema.parse>) {
+  const queryParams: Parameters<MinimalNotionClient['databases']['query']>[0] = {
+    database_id: validatedArgs.database_id,
+    page_size: validatedArgs.page_size ?? 20,
+  };
+
+  if (validatedArgs.sorts) {
+    queryParams.sorts = validatedArgs.sorts;
+  }
+
+  if (validatedArgs.filter) {
+    // The Notion SDK expects a specific filter type that we can't fully type
+    // without importing complex internal types. The filter is validated by Zod
+    // and will be runtime-checked by the Notion API.
+    Object.assign(queryParams, { filter: validatedArgs.filter });
+  }
+
+  return queryParams;
+}
+
+/**
  * Creates a query database executor
  * Handles Notion API interaction and formatting
  */
@@ -45,24 +68,8 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
 
       const dbResource = transformNotionDatabaseToMcpResource(dbResponse);
 
-      // Build the query
-      const queryParams: Parameters<typeof deps.notionClient.databases.query>[0] = {
-        database_id: validatedArgs.database_id,
-        page_size: validatedArgs.page_size ?? 20,
-      };
-
-      if (validatedArgs.sorts) {
-        queryParams.sorts = validatedArgs.sorts;
-      }
-
-      if (validatedArgs.filter) {
-        // The Notion SDK expects a specific filter type that we can't fully type
-        // without importing complex internal types. The filter is validated by Zod
-        // and will be runtime-checked by the Notion API.
-        Object.assign(queryParams, { filter: validatedArgs.filter });
-      }
-
-      // Execute query
+      // Build and execute query
+      const queryParams = buildQueryParams(validatedArgs);
       const queryResponse = await deps.notionClient.databases.query(queryParams);
 
       // Filter for full page responses

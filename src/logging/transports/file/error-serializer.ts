@@ -6,40 +6,58 @@
  */
 
 /**
+ * Convert Error instance to string representation
+ */
+function errorToString(error: Error, includeStackTrace: boolean): string {
+  if (includeStackTrace && error.stack) {
+    return error.stack;
+  }
+  return error.message;
+}
+
+/**
+ * Convert primitive values to string
+ */
+function primitiveToString(value: unknown): string | null {
+  if (value === undefined || value === null) return '';
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  return null;
+}
+
+/**
+ * Convert object to string with JSON fallback
+ */
+function objectToString(obj: object): string {
+  try {
+    return JSON.stringify(obj);
+  } catch {
+    return '[object with circular reference]';
+  }
+}
+
+/**
  * Serialize an unknown error value to string
  * Pure function - no side effects
  */
 export function serializeError(error: unknown, includeStackTrace = true): string {
-  if (error === undefined || error === null) {
-    return '';
-  }
-
+  // Handle Error instances
   if (error instanceof Error) {
-    if (includeStackTrace && error.stack) {
-      return error.stack;
-    }
-    return error.message;
+    return errorToString(error, includeStackTrace);
   }
 
-  if (typeof error === 'string') {
-    return error;
+  // Try primitive conversion
+  const primitiveResult = primitiveToString(error);
+  if (primitiveResult !== null) {
+    return primitiveResult;
   }
 
-  if (typeof error === 'number' || typeof error === 'boolean') {
-    return String(error);
+  // Handle objects
+  if (typeof error === 'object' && error !== null) {
+    return objectToString(error);
   }
 
-  if (typeof error === 'object') {
-    // For non-Error objects, stringify to preserve structure
-    try {
-      return JSON.stringify(error);
-    } catch {
-      // Handle circular references
-      return '[object with circular reference]';
-    }
-  }
-
-  // Handle symbols, functions, and other non-serializable types
+  // Handle non-serializable types
   return '[unknown error type]';
 }
 

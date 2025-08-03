@@ -34,6 +34,40 @@ function mapLogLevelToConsola(level: LogLevel): number {
 }
 
 /**
+ * Scrub context data if present
+ */
+function scrubContext(context?: LogContext): unknown {
+  return context !== undefined ? scrubSensitiveData(context) : undefined;
+}
+
+/**
+ * Create a log method that scrubs context
+ */
+function createLogMethod(
+  consolaMethod: (message: string, ...args: unknown[]) => void,
+): (message: string, context?: LogContext) => void {
+  return (message: string, context?: LogContext): void => {
+    consolaMethod(message, scrubContext(context));
+  };
+}
+
+/**
+ * Create an error log method that scrubs context
+ */
+function createErrorMethod(
+  consolaMethod: (message: string, ...args: unknown[]) => void,
+): (message: string, error?: unknown, context?: LogContext) => void {
+  return (message: string, error?: unknown, context?: LogContext): void => {
+    const scrubbed = scrubContext(context);
+    if (error) {
+      consolaMethod(message, error, scrubbed);
+    } else {
+      consolaMethod(message, scrubbed);
+    }
+  };
+}
+
+/**
  * Creates a logger instance using Consola with automatic data scrubbing
  */
 export function createConsoleLogger(level: LogLevel = LOG_LEVELS.INFO.value): Logger {
@@ -56,43 +90,12 @@ export function createConsoleLogger(level: LogLevel = LOG_LEVELS.INFO.value): Lo
   let currentLevel = level;
 
   return {
-    trace(message: string, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      consola.trace(message, scrubbed);
-    },
-
-    debug(message: string, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      consola.debug(message, scrubbed);
-    },
-
-    info(message: string, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      consola.info(message, scrubbed);
-    },
-
-    warn(message: string, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      consola.warn(message, scrubbed);
-    },
-
-    error(message: string, error?: unknown, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      if (error) {
-        consola.error(message, error, scrubbed);
-      } else {
-        consola.error(message, scrubbed);
-      }
-    },
-
-    fatal(message: string, error?: unknown, context?: LogContext): void {
-      const scrubbed = context !== undefined ? scrubSensitiveData(context) : undefined;
-      if (error) {
-        consola.fatal(message, error, scrubbed);
-      } else {
-        consola.fatal(message, scrubbed);
-      }
-    },
+    trace: createLogMethod(consola.trace.bind(consola)),
+    debug: createLogMethod(consola.debug.bind(consola)),
+    info: createLogMethod(consola.info.bind(consola)),
+    warn: createLogMethod(consola.warn.bind(consola)),
+    error: createErrorMethod(consola.error.bind(consola)),
+    fatal: createErrorMethod(consola.fatal.bind(consola)),
 
     child(context: LogContext): Logger {
       // Consola doesn't have built-in child logger support

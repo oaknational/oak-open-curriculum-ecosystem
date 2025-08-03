@@ -8,9 +8,48 @@ The package will be built and deployed to npm, will be open source, and will be 
 
 **Architecture Note**: This project is being refactored to include `oak-mcp-core`, a generic MCP framework that will enable rapid development of MCP servers. The Notion-specific functionality will be built on top of this reusable framework, reducing code duplication and improving maintainability across MCP server implementations.
 
+**🧪 Complete Biological Architecture**: We follow a comprehensive biological model for software architecture that distinguishes between:
+
+- **Substrate** (Foundation) - Types, contracts, and event schemas that form the "physics" of our system
+- **Systems** (Pervasive) - Infrastructure like logging and events that flow throughout the organism
+- **Organs** (Discrete) - Business logic units like Notion and MCP with clear boundaries
+- **Organisms** (Applications) - Complete applications that wire systems and organs together
+- **Ecosystems** (Multiple Apps) - Future vision of multiple organisms interacting symbiotically
+
+This approach is grounded in complex systems theory and recent mathematical research proving that:
+
+- Heterogeneous networks with cooperative interactions achieve greater stability (Meena et al., 2023)
+- Systems operate optimally at criticality - the edge of chaos (Beggs & Plenz, 2003)
+- Complex systems show universal early warning signals before transitions (Scheffer et al., 2009)
+
+Our 103 relative import warnings are such early warning signals, showing where architectural boundaries naturally want to form. Learn more in our [architectural documentation](docs/architecture/README.md), [mathematical foundation](docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md), and [evolution plan](.agent/plans/architectural-evolution-plan.md).
+
+## Architecture Decision Records
+
+Our architectural decisions are documented as ADRs (Architecture Decision Records):
+
+- [ADR-001: ESM-Only Package](docs/architecture/architectural-decisions/001-esm-only-package.md)
+- [ADR-002: Pure Functions First](docs/architecture/architectural-decisions/002-pure-functions-first.md)
+- [ADR-003: Zod for Runtime Validation](docs/architecture/architectural-decisions/003-zod-for-validation.md)
+- [ADR-004: Abstract Notion SDK Behind Interface](docs/architecture/architectural-decisions/004-no-direct-notion-sdk-usage.md)
+- [ADR-005: Automatic PII Scrubbing](docs/architecture/architectural-decisions/005-automatic-pii-scrubbing.md)
+- [ADR-006: Cellular Architecture Pattern](docs/architecture/architectural-decisions/006-cellular-architecture-pattern.md)
+- [ADR-007: Accept Current Technical Debt as Architectural Markers](docs/architecture/architectural-decisions/007-accept-current-technical-debt.md)
+- [ADR-008: Ecosystem Architecture Vision](docs/architecture/architectural-decisions/008-ecosystem-architecture-vision.md)
+- [ADR-009: Mathematical Foundation for Architecture](docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md)
+- [ADR-010: Use tsup for Bundling](docs/architecture/architectural-decisions/010-tsup-for-bundling.md)
+- [ADR-011: Use Vitest for Testing](docs/architecture/architectural-decisions/011-vitest-for-testing.md)
+- [ADR-012: Use pnpm as Package Manager](docs/architecture/architectural-decisions/012-pnpm-package-manager.md)
+- [ADR-013: Git Hooks with Husky and lint-staged](docs/architecture/architectural-decisions/013-husky-and-lint-staged.md)
+- [ADR-014: Conventional Commits Standard](docs/architecture/architectural-decisions/014-conventional-commits.md)
+- [ADR-015: Node.js 22+ Requirement](docs/architecture/architectural-decisions/015-node-22-minimum.md)
+- [ADR-016: Use dotenv for Environment Configuration](docs/architecture/architectural-decisions/016-dotenv-for-configuration.md)
+- [ADR-017: Use Consola for Logging](docs/architecture/architectural-decisions/017-consola-for-logging.md)
+- [ADR-018: Complete Biological Architecture](docs/architecture/architectural-decisions/018-complete-biological-architecture.md)
+
 Further documentation can be found in the [docs directory](docs/README.md)
 
-**New to MCP or AI agent development?** Follow our [Developer Onboarding Journey](docs/onboarding-journey.md) for a structured learning path.
+**New to MCP or AI agent development?** Follow our [Developer Onboarding Journey](docs/development/onboarding-journey.md) for a structured learning path.
 
 ## Development
 

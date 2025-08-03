@@ -2,7 +2,18 @@
 
 ## Vision
 
+### Immediate Goal
+
 Create a production-ready MCP server that safely exposes Notion resources and tools to LLMs, enabling AI agents to manage Notion workspaces with human oversight and confirmation.
+
+### Long-term Vision
+
+Evolve from a single MCP server into a thriving ecosystem of MCP implementations, following complete biological principles:
+
+- **Complete Biological Architecture**: Substrate (foundation) + Systems (pervasive) + Organs (discrete)
+- **Organism Evolution**: From monolithic app to multi-organism ecosystem
+- **oak-mcp-core Extraction**: Framework as first independent organism (keystone species)
+- **Ecosystem Formation**: Multiple MCP servers as organisms in symbiotic relationships
 
 ## Technical Overview
 
@@ -24,6 +35,8 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 8. **Fail FAST** - Clear error messages, never fail silently or swallow errors
 9. **No Backward Compatibility Layers** - Use versioning, replace code directly
 10. **Validate at System Boundaries** - Use Zod schemas and type guards to validate external data at entry points, then use Notion SDK types directly throughout the codebase. This creates a clear separation: external data → validation layer → trusted types in our system
+11. **Complete Biological Model** - Distinguish between substrate (types/contracts), systems (pervasive infrastructure), and organs (discrete business logic)
+12. **Multi-Scale Architecture** - Apply same principles from functions to ecosystems
 
 ## Development Phases
 
@@ -101,15 +114,93 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Deliverables**: All analysis reports completed and available in [`.agent/generalisation-opportunities-analysis/`](../generalisation-opportunities-analysis/)
 
-**Next Steps**: Proceed with Phase 3 enhancements or begin oak-mcp-core extraction based on the analysis.
+**Next Steps**: Proceed with Phase 3 architectural evolution before oak-mcp-core extraction.
 
-### Phase 3: oak-mcp-core Framework Implementation
+### Phase 3: Complete Biological Architecture Implementation
 
-**Outcome**: Create oak-mcp-core as a comprehensive MCP server framework while simultaneously migrating oak-notion-mcp to use it
+**Outcome**: Restructure codebase following the complete biological model with substrate, systems, and organs
 
-**Strategy**: Build generic components directly in oak-mcp-core from day one, validating them through real use in oak-notion-mcp. All external data validation happens at boundaries using Zod schemas and type guards
+**Rationale**: Our architectural evolution analysis, validated by complex systems research (Scheffer et al., 2009), reveals that our 103 relative import warnings are "early warning signals" - a universal phenomenon in systems approaching critical transitions. These warnings show where the architecture naturally wants to form boundaries. Before extracting oak-mcp-core, we need to establish proper architectural boundaries based on these signals.
 
-**Detailed Plan**: See [Phase 3 oak-mcp-core Implementation Plan](phase-3-oak-mcp-core-implementation-plan.md) for week-by-week breakdown
+**Key Deliverables**:
+
+- [ ] **Substrate Layer** (Foundation):
+  - [ ] Create `src/substrate/` directory
+  - [ ] Move all shared types to `substrate/types/`
+  - [ ] Define all contracts in `substrate/contracts/`
+  - [ ] Create event schemas in `substrate/event-schemas/`
+  - [ ] Zero runtime code - compile-time only
+
+- [ ] **Systems Layer** (Pervasive Infrastructure):
+  - [ ] Create `src/systems/` directory
+  - [ ] Extract logging as a system to `systems/logging/`
+  - [ ] Extract event transport to `systems/event-transport/`
+  - [ ] Extract configuration to `systems/config/`
+  - [ ] Design for pervasive injection patterns
+
+- [ ] **Organs Layer** (Discrete Business Logic):
+  - [ ] Create `src/organs/` directory
+  - [ ] Move Notion integration to `organs/notion/`
+  - [ ] Move MCP protocol to `organs/mcp/`
+  - [ ] Establish clear organ boundaries (no cross-organ imports)
+  - [ ] Each organ has tissues → cells → organelles structure
+
+- [ ] **Organism Assembly**:
+  - [ ] Update `src/organism.ts` as the wiring point
+  - [ ] Systems injected differently than organs
+  - [ ] Clear separation of concerns
+  - [ ] Event-based communication between organs
+
+**Implementation Sub-phases**:
+
+1. **Substrate Extraction** (2 days)
+   - Extract all shared types and contracts
+   - Define event schemas
+   - Update all imports
+   - Verify zero runtime code in substrate
+
+2. **Systems Separation** (3 days)
+   - Extract logging system
+   - Extract event transport
+   - Extract configuration
+   - Design pervasive injection patterns
+
+3. **Organs Organization** (3 days)
+   - Create notion organ with internal tissues
+   - Create mcp organ with internal tissues
+   - Enforce no cross-organ imports
+   - Implement event-based communication
+
+4. **Integration & Testing** (2 days)
+   - Wire everything in organism.ts
+   - Update all tests for new structure
+   - Verify all quality gates pass
+   - Document new architecture
+
+**Quality Checkpoints**:
+
+- Substrate has zero runtime code
+- Systems are truly pervasive (no single location)
+- Organs have clear boundaries (no cross-imports)
+- Event schemas enable loose coupling
+- All existing tests pass with new structure
+
+**Success Metrics**:
+
+- 103 relative import warnings significantly reduced
+- Clear architectural boundaries established
+- Dependency flow matches biological model
+- Ready for oak-mcp-core extraction
+
+### Phase 4: oak-mcp-core Framework Extraction (First Independent Organism)
+
+**Outcome**: Extract oak-mcp-core as the **pioneer organism** - a comprehensive MCP server framework in a separate workspace/package while migrating oak-notion-mcp to use it
+
+**Ecosystem Role**: oak-mcp-core will be a keystone species, providing essential services that future MCP organisms will depend on
+
+**Strategy**: Now that we have proper architectural boundaries from Phase 3, extract generic components to oak-mcp-core as a separate package. All external data validation happens at boundaries using Zod schemas and type guards
+
+**Detailed Plan**: See [Phase 4 oak-mcp-core Implementation Plan](phase-4-oak-mcp-core-implementation-plan.md) for week-by-week breakdown
 
 **Dependency Management Strategy**:
 
@@ -131,8 +222,8 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 **Key Deliverables**:
 
 - [ ] **oak-mcp-core Framework Creation**:
-  - [ ] Create `src/oak-mcp-core/` folder structure
-  - [ ] Single public API via `src/oak-mcp-core/index.ts`
+  - [ ] Create separate workspace/package for oak-mcp-core
+  - [ ] Single public API via `oak-mcp-core/src/index.ts`
   - [ ] Build 3,050 LoC of generic MCP framework components
   - [ ] Zero external dependencies in core components
   - [ ] 100% test coverage using TDD (tests written first)
@@ -156,7 +247,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
   - [ ] Additional Utilities - Result type, helpers (575 LoC)
 
 - [ ] **oak-notion-mcp Migration**:
-  - [ ] Move all current files to `src/oak-notion-mcp/` folder
+  - [ ] Update package.json to depend on oak-mcp-core
   - [ ] Progressively adopt oak-mcp-core components via imports
   - [ ] Create NotionMcpServer extending base class
   - [ ] Implement boundary validation for all Notion data
@@ -179,8 +270,8 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 **Implementation Sub-phases**:
 
 1. **Foundation & Core Systems** (850 LoC)
-   - Create folder structure: `src/oak-mcp-core/` and `src/oak-notion-mcp/`
-   - Move existing files to `src/oak-notion-mcp/`
+   - Create separate oak-mcp-core workspace/package
+   - Set up build and test infrastructure for oak-mcp-core
    - Enhanced Logging Framework (no dependencies) - 550 LoC
    - Enhanced Error Framework (depends on logger) - 300 LoC
    - Update imports to use local oak-mcp-core
@@ -206,13 +297,14 @@ Create a production-ready MCP server that safely exposes Notion resources and to
    - Complete oak-notion-mcp migration - 350 LoC
    - Verify oak-notion-mcp <1,000 LoC
    - Bundle size optimization
+   - Publish oak-mcp-core to npm registry
 
 5. **Documentation & Examples**
    - Comprehensive API documentation
    - 3-4 example MCP servers (100-300 LoC each)
    - Migration guide and troubleshooting
    - Beta release and feedback collection
-   - Prepare for future extraction to separate package
+   - Published as @oaknational/mcp-core
 
 **Quality Checkpoints** (after each component):
 
@@ -224,7 +316,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 **Success Metrics**:
 
-- oak-mcp-core created with 3,050 LoC of generic framework code
+- oak-mcp-core created with 3,050 LoC of generic framework code (pioneer organism)
 - oak-notion-mcp reduced to <1,000 LoC (validation + adapters only)
 - All existing tests pass with zero regressions
 - 100% test coverage on all pure functions (TDD enforced)
@@ -237,17 +329,18 @@ Create a production-ready MCP server that safely exposes Notion resources and to
   - Middleware processing <0.5ms per layer
   - Memory usage <10MB base footprint
   - Bundle size <50KB minified + gzipped
-- 4+ runtime environments supported (Node.js, Deno, Bun, edge)
-- 3+ example servers demonstrating patterns (<300 LoC each)
+- 4+ runtime environments supported (Node.js, Deno, Bun, edge) - environmental adaptation
+- 3+ example servers demonstrating patterns (<300 LoC each) - future organisms
 - All abstractions follow SOLID principles and are runtime-agnostic
-- Clear separation enforced by package boundaries
+- Clear separation enforced by package boundaries (cell membranes)
 - All external data validated at boundaries before entering core system
 - Zero errors lost through propagation chain
 - All logging is structured, correlated, and edge-compatible
 - Published to npm as @oaknational/mcp-core
 - Beta feedback incorporated before stable release
+- **Ecosystem readiness**: Designed for future symbiotic relationships
 
-### Phase 4: Production Readiness
+### Phase 5: Production Readiness
 
 **Outcome**: Published npm package ready for public use
 
@@ -298,9 +391,42 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
 
-### Phase 5: Write Tools and Safety Controls
+### Phase 6: Write Tools and Safety Controls
 
 **Outcome**: Full-featured MCP server with write capabilities and safety controls
+
+### Phase 7: Ecosystem Expansion (Future Vision)
+
+**Outcome**: Multiple MCP servers forming a symbiotic ecosystem
+
+**Key Deliverables**:
+
+- [ ] **Additional Organisms**:
+  - [ ] oak-github-mcp - GitHub integration (uses oak-mcp-core)
+  - [ ] oak-slack-mcp - Slack integration (uses oak-mcp-core)
+  - [ ] oak-jira-mcp - Jira integration (uses oak-mcp-core)
+- [ ] **Ecosystem Infrastructure**:
+  - [ ] Shared type definitions package
+  - [ ] Common utilities package
+  - [ ] Unified testing framework
+  - [ ] Monorepo tooling and governance
+- [ ] **Ecosystem Patterns**:
+  - [ ] Inter-organism communication protocols
+  - [ ] Resource sharing mechanisms
+  - [ ] Evolutionary pressure testing
+  - [ ] Health monitoring dashboard
+- [ ] **Temporal Architecture**:
+  - [ ] Release cycles coordination
+  - [ ] Deprecation lifecycle management
+  - [ ] Migration pattern library
+  - [ ] Seasonal refactoring schedules
+
+**Quality Checkpoints**:
+
+- Biodiversity index > 3 (different implementation approaches)
+- Build time efficiency across all packages
+- Zero cascading failures between organisms
+- Pattern propagation < 1 week
 
 **Key Deliverables**:
 
@@ -336,11 +462,21 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 
 ## Success Metrics
 
+### Organism-Level Metrics
+
 1. **Code Quality**
    - Zero TypeScript errors
    - Zero ESLint violations
    - 100% prettier compliance
    - No failing tests
+
+### Ecosystem-Level Metrics (Future)
+
+1. **Ecosystem Health**
+   - Biodiversity index (variety of approaches)
+   - Energy efficiency (build/deploy times)
+   - Resilience score (failure recovery)
+   - Adaptation rate (new feature adoption)
 
 2. **Test Coverage**
    - 100% unit test coverage for pure functions
@@ -398,6 +534,8 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 - **DRY, KISS, YAGNI** - Avoid duplication, keep it simple, build only what's needed
 - **Pure functions preferred** - Minimize side effects for testability
 - **Clear boundaries** - Well-defined interfaces between modules
+- **Fractal patterns** - Same principles at every scale (function → module → package → ecosystem)
+- **Temporal awareness** - Consider time dimension in all designs
 
 ### Architecture
 

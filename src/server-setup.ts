@@ -1,10 +1,67 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { ProcessEnv } from './types/environment.js';
+import type { Environment } from './config/env.js';
+import type { Client } from '@notionhq/client';
+import type { Logger } from './logging/logger-interface.js';
+import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 
 export interface ServerSetupDependencies {
-  env: ProcessEnv;
   transport: StdioServerTransport;
   log: (message: string, isError?: boolean) => void;
+}
+
+/**
+ * Loads environment configuration with error handling
+ */
+async function loadEnvironment(log: ServerSetupDependencies['log']): Promise<Environment> {
+  log('[STARTUP] Loading environment configuration...');
+  try {
+    const { env } = await import('./config/env.js');
+    return env;
+  } catch (error) {
+    log('[STARTUP ERROR] Environment validation failed:', true);
+    if (error instanceof Error) {
+      log(error.message, true);
+    }
+    throw error;
+  }
+}
+
+/**
+ * Creates all server dependencies
+ */
+async function createServerDependencies(
+  environment: Environment,
+  log: ServerSetupDependencies['log'],
+): Promise<{
+  logger: Logger;
+  notionClient: Client;
+  server: Server;
+}> {
+  log('[STARTUP] Importing dependencies...');
+
+  const { getNotionConfig } = await import('./config/environment.js');
+  const { createConsoleLogger } = await import('./logging/logger.js');
+  const { getLogLevelValue } = await import('./logging/logger-interface.js');
+  const { Client } = await import('@notionhq/client');
+  const { createMcpServer } = await import('./server.js');
+
+  log('[STARTUP] Creating logger...');
+  const logLevel = getLogLevelValue(environment.LOG_LEVEL);
+  const logger = createConsoleLogger(logLevel);
+
+  log('[STARTUP] Creating Notion client...');
+  const notionConfig = getNotionConfig();
+  const notionClient = new Client({ auth: notionConfig.apiKey });
+
+  const serverConfig = {
+    name: 'oak-notion-mcp',
+    version: '0.0.0-development',
+  };
+
+  log('[STARTUP] Creating MCP server...');
+  const server = createMcpServer({ notionClient, logger, config: serverConfig });
+
+  return { logger, notionClient, server };
 }
 
 /**
@@ -12,67 +69,8 @@ export interface ServerSetupDependencies {
  * This is an integration point that orchestrates the server startup
  */
 export async function setupAndStartServer(deps: ServerSetupDependencies): Promise<void> {
-  // Import dependencies
-  deps.log('[STARTUP] Importing dependencies...');
-  const { validateEnvironmentVariables, parseNotionConfig } = await import(
-    './config/environment.js'
-  );
-  const { createConsoleLogger } = await import('./logging/logger.js');
-  const { LOG_LEVELS } = await import('./logging/logger-interface.js');
-  const { Client } = await import('@notionhq/client');
-  const { createMcpServer } = await import('./server.js');
-
-  // Validate environment
-  deps.log('[STARTUP] Validating environment variables...');
-  const validation = validateEnvironmentVariables(deps.env);
-  if (!validation.valid) {
-    deps.log('[STARTUP ERROR] Environment validation failed:', true);
-    const errors = validation.errors ?? ['Unknown validation error'];
-    deps.log('Configuration errors: ' + errors.join(', '), true);
-    throw new Error('Environment validation failed: ' + errors.join(', '));
-  }
-
-  // Create logger
-  deps.log('[STARTUP] Creating logger...');
-  const envLogLevel = deps.env.LOG_LEVEL;
-  const logLevel = (() => {
-    switch (envLogLevel) {
-      case 'debug':
-        return LOG_LEVELS.DEBUG.value;
-      case 'info':
-        return LOG_LEVELS.INFO.value;
-      case 'warn':
-        return LOG_LEVELS.WARN.value;
-      case 'error':
-        return LOG_LEVELS.ERROR.value;
-      default:
-        return LOG_LEVELS.INFO.value;
-    }
-  })();
-  const logger = createConsoleLogger(logLevel);
-
-  // Check API key
-  deps.log('[STARTUP] Checking API key...');
-  const apiKey = deps.env.NOTION_API_KEY;
-  if (!apiKey) {
-    deps.log('[STARTUP ERROR] NOTION_API_KEY environment variable is not set', true);
-    throw new Error('NOTION_API_KEY is required but not found');
-  }
-
-  // Create Notion client
-  deps.log('[STARTUP] Creating Notion client...');
-  const notionConfig = parseNotionConfig(apiKey);
-  const notionClient = new Client({ auth: notionConfig.apiKey });
-
-  // Server configuration
-  const serverConfig = {
-    name: 'oak-notion-mcp',
-    version: '0.0.0-development',
-  };
-
-  // Create and connect server
-  deps.log('[STARTUP] Creating MCP server...');
-  const server = createMcpServer({ notionClient, logger, config: serverConfig });
+  const environment = await loadEnvironment(deps.log);
+  const { logger, server } = await createServerDependencies(environment, deps.log);
 
   deps.log('[STARTUP] Connecting to stdio transport...');
   await server.connect(deps.transport);

@@ -17,7 +17,6 @@ export {
   formatLogLevel,
   getConsoleMethod,
   formatTimestamp,
-  getLevelColor,
   colorizeLevel,
   shouldColorize,
   buildConsoleArgs,

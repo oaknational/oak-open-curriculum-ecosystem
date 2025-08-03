@@ -69,35 +69,32 @@ export function parseResourceUri(uri: string): ResourceIdentifier | null {
 }
 
 /**
- * Validates a resource URI and returns detailed error information
+ * Validate basic URI requirements
  */
-export function validateResourceUri(uri: string): ValidationResult {
-  const errors: string[] = [];
+function validateBasicUri(uri: string): string | null {
+  if (!uri) return 'URI is required';
+  if (!uri.startsWith('notion://')) return 'URI must use notion:// protocol';
+  return null;
+}
 
-  if (!uri) {
-    errors.push('URI is required');
-    return { valid: false, errors };
-  }
-
-  if (!uri.startsWith('notion://')) {
-    errors.push('URI must use notion:// protocol');
-    return { valid: false, errors };
-  }
-
-  // Special case for discovery URI
-  if (uri === 'notion://discovery') {
-    return { valid: true };
-  }
-
-  const pathPart = uri.slice(9);
+/**
+ * Validate URI path structure
+ */
+function validateUriPath(pathPart: string): { type: string; id: string; error?: string } {
   const parts = pathPart.split('/');
 
   if (parts.length !== 2) {
-    errors.push('Invalid URI format');
-    return { valid: false, errors };
+    return { type: '', id: '', error: 'Invalid URI format' };
   }
 
-  const [type, id] = parts;
+  return { type: parts[0] ?? '', id: parts[1] ?? '' };
+}
+
+/**
+ * Validate resource components
+ */
+function validateResourceComponents(type: string, id: string): string[] {
+  const errors: string[] = [];
 
   if (!isValidResourceType(type)) {
     errors.push(`Invalid resource type: ${String(type)}. Must be pages, databases, or users`);
@@ -107,8 +104,35 @@ export function validateResourceUri(uri: string): ValidationResult {
     errors.push('Resource ID is required');
   }
 
-  if (errors.length > 0) {
-    return { valid: false, errors };
+  return errors;
+}
+
+/**
+ * Validates a resource URI and returns detailed error information
+ */
+export function validateResourceUri(uri: string): ValidationResult {
+  // Basic validation
+  const basicError = validateBasicUri(uri);
+  if (basicError) {
+    return { valid: false, errors: [basicError] };
+  }
+
+  // Special case for discovery URI
+  if (uri === 'notion://discovery') {
+    return { valid: true };
+  }
+
+  // Path validation
+  const pathPart = uri.slice(9);
+  const { type, id, error: pathError } = validateUriPath(pathPart);
+  if (pathError) {
+    return { valid: false, errors: [pathError] };
+  }
+
+  // Component validation
+  const componentErrors = validateResourceComponents(type, id);
+  if (componentErrors.length > 0) {
+    return { valid: false, errors: componentErrors };
   }
 
   return { valid: true };

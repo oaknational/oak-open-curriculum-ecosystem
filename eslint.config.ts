@@ -45,14 +45,12 @@ const config: Config = tsEslintConfig(
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/consistent-type-exports': 'error',
 
-      // Complexity. These are set to accommodate the current quality of the code.
-      // If we want to use this repo to demo best practices, we need to bring them down to the targets in dedicated PRs.
-      // That needs to be done gradually.
-      complexity: ['error', { max: 35 }], // Target 10, lowers cognitive load
-      'max-depth': ['error', 5], // Target 3, lowers cognitive load
-      'max-statements': ['error', 50], // Max statements per function, target 20, enforces single responsibility principle
-      'max-lines-per-function': ['error', 100], // Target 40 (1 screen height), enforces single responsibility principle, lowers cognitive load
-      'max-lines': ['error', 250], // Max lines per file, reduced from 350, target 250, requires well defined boundaries of responsibility
+      // Complexity. These rules are intended to minimise cognitive load and enforce good code design.
+      complexity: ['error', { max: 10 }], // Cyclomatic complexity, lowers cognitive load
+      'max-depth': ['error', 3], // Max levels of nesting, lowers cognitive load
+      'max-statements': ['error', 20], // Max statements per function, enforces single responsibility principle
+      'max-lines-per-function': ['error', 50], // Target 50 (1 screen height), enforces single responsibility principle, lowers cognitive load
+      'max-lines': ['error', 190], // Requires well defined boundaries of responsibility
 
       // General good practices
       'no-empty': 'error',
@@ -76,9 +74,7 @@ const config: Config = tsEslintConfig(
       ],
 
       // Enforce module boundaries - no reaching into parent directories, helps enforce dependency inversion principle
-      // TODO: Change to 'error' after architectural refactoring
-      // TEMPORARILY DISABLED to focus on other quality issues
-      'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-relative-parent-imports': ['warn'],
     },
   },
   // Separation of concerns between the core framework and individual servers, to make it easier to extract the core framework into a workspace later
