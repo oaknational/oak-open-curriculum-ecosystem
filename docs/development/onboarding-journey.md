@@ -17,7 +17,7 @@ By the end of this journey, you'll understand:
 
 #### 1. Start with Why
 
-**Read**: [README.md](../README.md) - Get the project overview
+**Read**: [README.md](../../README.md) - Get the project overview
 
 - Focus on: What problem does this solve?
 - Key insight: AI assistants need safe, controlled access to external tools
@@ -26,7 +26,7 @@ By the end of this journey, you'll understand:
 
 **Read**: Start with our curated references
 
-- [MCP Documentation for Agents](../.agent/reference/mcp-docs-for-agents.md) - Curated overview
+- [MCP Documentation for Agents](../../.agent/reference/mcp-docs-for-agents.md) - Curated overview
 - [Quick Start Server Development](https://modelcontextprotocol.io/quickstart/server) - Official guide
 - [Building MCP with LLMs](https://modelcontextprotocol.io/tutorials/building-mcp-with-llms) - Human-friendly tutorial
 
@@ -45,7 +45,7 @@ cp .env.example .env  # Add a Notion API key
 pnpm dev
 ```
 
-**Try**: Use with Claude Desktop (if available) or review the [API Reference](api-reference.md)
+**Try**: Use with Claude Desktop (if available) or review the [API Reference](../usage/api-reference.md)
 
 - Make a few tool calls
 - Observe the request/response format
@@ -54,7 +54,7 @@ pnpm dev
 
 #### 1. System Architecture
 
-**Read**: [High Level Architecture](high-level-architecture.md)
+**Read**: [High Level Architecture](../architecture/high-level-architecture.md)
 
 - Focus on: The layer diagram and data flow
 - Key insight: Clean architecture with pure functions at the core
@@ -81,7 +81,7 @@ pnpm dev
 
 #### 3. Understanding Agentic Patterns
 
-**Read**: [Safety and Security](safety-and-security.md)
+**Read**: [Safety and Security](../agent-guidance/safety-and-security.md)
 
 - Focus on: Why read-only by default?
 - Key insight: Agents need guardrails, humans need control
@@ -90,7 +90,7 @@ pnpm dev
 
 #### 1. Testing Philosophy
 
-**Read**: [Testing and Development Strategy](testing-and-development-strategy.md)
+**Read**: [Testing Strategy](../agent-guidance/testing-strategy.md)
 
 - Focus on: Test pyramid and TDD approach
 - Key insight: Pure functions enable comprehensive testing
@@ -112,7 +112,7 @@ pnpm test:watch    # Watch mode for TDD
 
 #### 3. Development Workflow
 
-**Read**: [Development Practice](development-practice.md)
+**Read**: [Development Practice](../agent-guidance/development-practice.md)
 
 - Focus on: Quality gates and Git workflow
 - Try: Make a small change and run quality gates
@@ -121,7 +121,7 @@ pnpm test:watch    # Watch mode for TDD
 
 #### 1. Contribution Setup
 
-**Read**: [CONTRIBUTING.md](../CONTRIBUTING.md)
+**Read**: [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
 - Set up your development environment
 - Understand commit conventions
@@ -146,7 +146,7 @@ pnpm test:watch    # Watch mode for TDD
 
 #### 4. Working with GO.md (Critical for AI Development)
 
-**Read**: [GO.md](../GO.md) - Essential grounding document
+**Read**: [GO.md](../../GO.md) - Essential grounding document
 
 **Key Concepts**:
 
@@ -191,14 +191,14 @@ This ensures agents:
 
 #### 2. Future Enhancements
 
-**Read**: [Phase 2.5 Implementation Plan](../.agent/plans/phase-2.5-implementation-plan.md)
+**Read**: [Phase 2.5 Implementation Plan](../../.agent/plans/phase-2.5-implementation-plan.md)
 
 - Understand planned improvements
 - See where you could contribute
 
 #### 3. Architectural Decisions
 
-**Review**: ADRs in [High Level Architecture](high-level-architecture.md)
+**Review**: ADRs in [Architecture Decision Records](../architecture/architectural-decisions/)
 
 - Why ESM only?
 - Why wrap the Notion SDK?
@@ -264,22 +264,22 @@ After each day, you should be able to answer:
 
 ### MCP Deep Dives
 
-- **Start Here**: [Reference Documentation](../.agent/reference/README.md) - Curated links and guides
-- [MCP TypeScript SDK](../.agent/reference/mcp-typescript-sdk-readme.md) - SDK we're using
+- **Start Here**: [Reference Documentation](../../.agent/reference/README.md) - Curated links and guides
+- [MCP TypeScript SDK](../../.agent/reference/mcp-typescript-sdk-readme.md) - SDK we're using
 - [MCP Specification](https://spec.modelcontextprotocol.org) - Full protocol spec
 - [Building MCP Servers](https://modelcontextprotocol.org/tutorials) - More tutorials
 
 ### Notion API
 
-- [Notion API Overview](../.agent/reference/notion-api-overview.md) - Our curated guide
-- [Notion SDK Documentation](../.agent/reference/notion-sdk-readme.md) - SDK reference
+- [Notion API Overview](../../.agent/reference/notion-api-overview.md) - Our curated guide
+- [Notion SDK Documentation](../../.agent/reference/notion-sdk-readme.md) - SDK reference
 - [Notion API Reference](https://developers.notion.com) - Official docs
 - [Notion SDK Examples](https://github.com/makenotion/notion-sdk-js) - Code examples
 
 ### Agentic Workflows
 
-- [Claude Configuration Docs](../.agent/reference/claude-configuration-docs.md) - How to configure MCP in Claude
-- [Claude MCP Documentation](../.agent/reference/claude-mcp-docs.md) - Claude's MCP implementation
+- [Claude Configuration Docs](../../.agent/reference/claude-configuration-docs.md) - How to configure MCP in Claude
+- [Claude MCP Documentation](../../.agent/reference/claude-mcp-docs.md) - Claude's MCP implementation
 - [Anthropic's Claude Documentation](https://docs.anthropic.com) - General Claude docs
 - [Best Practices for Tool Use](https://docs.anthropic.com/claude/docs/tool-use) - AI tool usage patterns
 
@@ -293,7 +293,7 @@ After each day, you should be able to answer:
 
 ## 🤝 Getting Help
 
-- **Quick Questions**: Check [Troubleshooting](troubleshooting.md)
+- **Quick Questions**: Check [Troubleshooting](./troubleshooting.md)
 - **Design Decisions**: Review ADRs in architecture docs
 - **Code Questions**: Read the tests for that module
 - **Stuck?**: Create a GitHub issue with context
