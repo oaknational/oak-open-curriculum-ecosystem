@@ -119,19 +119,26 @@ export function calculateRelevance(query: string, content: string): number {
 **Where**: Individual module directories
 **Rules**:
 
-- index.ts acts as membrane
-- Contains organelles
-- Manages internal state
+- index.ts acts as membrane (barrel export)
+- Contains organelles (pure functions)
+- Single responsibility per file
+- Domain-driven boundaries (not size-driven)
+- 50-180 lines typical (natural emergence, not hard limit)
 
 ```typescript
-// cell structure
-src/search/scoring/
-├── index.ts         # Membrane - controls what enters/exits
-├── types.ts         # Cell-specific types
-├── relevance.ts     # Organelle 1
-├── boost.ts         # Organelle 2
-└── factory.ts       # Cell factory
+// cell structure - domain-driven splitting
+src/logging/formatters/
+├── index.ts              # Public API membrane
+├── pretty-types.ts       # Type definitions (102 lines)
+├── pretty-colors.ts      # Color management (77 lines)
+├── pretty-levels.ts      # Level formatting (39 lines)
+├── pretty-text.ts        # Text utilities (42 lines)
+├── pretty-serializers.ts # Serialization (180 lines)
+├── pretty-layouts.ts     # Layout logic (139 lines)
+└── pretty-factories.ts   # Factory functions (98 lines)
 ```
+
+**Key Insight**: Files split by responsibility, not arbitrary size limits. Each module is a specialized "cell" with its own clear purpose.
 
 ### 3. Tissues (Domain Groups)
 

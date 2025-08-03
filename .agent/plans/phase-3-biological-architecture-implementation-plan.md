@@ -407,12 +407,29 @@ import { LogLevel } from '../../substrate/types/logging.js'; // ✅ Max 2 levels
 **The Transformation Journey**:
 
 ```text
-Current State (101 violations) → Foundation (90) → Flatten (30) → Systems (15) → Organs (5) → Organism (0)
+Current State (101 violations) → Foundation (106) → Flatten (94) → Systems (15) → Organs (5) → Organism (0)
 ```
 
-#### Foundation Phase: Substrate Preparation
+**Progress Notes**:
+
+- Foundation Phase increased violations temporarily as we exposed hidden dependencies
+- Flatten Phase reduced violations to 94 (all parent imports showing natural boundaries)
+- Next: Systems Phase will dramatically reduce violations by establishing proper layers
+
+#### Foundation Phase: Substrate Preparation ✅ COMPLETED
 
 **Goal**: Create substrate and prepare for migration without breaking anything
+
+**Progress Update (2025-01-03)**:
+
+- ✅ Created substrate structure with types, contracts, and event-schemas directories
+- ✅ Extracted core types (LogLevel, LogLevelName) to substrate
+- ✅ Defined core contracts (Logger and ConfigProvider interfaces)
+- ✅ Fixed config→logging dependency by moving LogLevel validation to substrate
+- ✅ Extracted entire config module to substrate as foundational infrastructure
+- ✅ All tests passing, build successful
+
+**Note**: After initial consolidation, we discovered that merging too many files created overly large modules (400-600+ lines). We're now applying domain-driven splitting to find the right balance - see [ADR-019: Domain-Driven File Splitting](../../docs/architecture/architectural-decisions/019-domain-driven-file-splitting.md). Each file should have a single responsibility while maintaining the 2-level depth limit.
 
 **Step 1: Create Substrate Structure**
 
@@ -534,9 +551,28 @@ export interface ConfigProvider {
 - ✅ Config no longer depends on logging
 - ✅ Import violations reduced by ~5
 
-#### Restructuring Phase: Flatten Deep Nesting
+#### Restructuring Phase: Flatten Deep Nesting ✅ COMPLETED
 
 **Goal**: Reduce 4-5 level nesting in logging to maximum 2 levels
+
+**Progress Update (2025-01-03)**:
+
+- ✅ Flattened entire logging module from 5 levels to 2 levels
+- ✅ Applied domain-driven splitting when consolidated files became too large:
+  - Pretty formatter: 621 lines → 8 focused files (max 180 lines)
+  - Console transport: 309 lines → 7 focused files (max ~80 lines)
+  - File transport: 380 lines → 6 focused files
+  - Tracing utils: 349 lines → 6 focused files
+- ✅ Fixed all lint errors: 0 errors, 94 warnings (all parent imports)
+- ✅ Each file now has single responsibility following cellular architecture
+- ✅ All tests passing (173/173), build successful
+
+**Key Decisions**:
+
+- Initial consolidation created files that were too large (400-600+ lines)
+- Applied domain-driven splitting to break files along responsibility boundaries
+- Each resulting "cell" has clear membrane (barrel export) and single purpose
+- The 94 parent import warnings are architectural insights showing natural boundaries
 
 **Step 1: Analyze and Map Current Structure**
 

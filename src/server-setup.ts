@@ -1,5 +1,5 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Environment } from './config/env.js';
+import type { Environment } from './substrate/config/env.js';
 import type { Client } from '@notionhq/client';
 import type { Logger } from './logging/logger-interface.js';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -15,7 +15,7 @@ export interface ServerSetupDependencies {
 async function loadEnvironment(log: ServerSetupDependencies['log']): Promise<Environment> {
   log('[STARTUP] Loading environment configuration...');
   try {
-    const { env } = await import('./config/env.js');
+    const { env } = await import('./substrate/config/env.js');
     return env;
   } catch (error) {
     log('[STARTUP ERROR] Environment validation failed:', true);
@@ -39,7 +39,7 @@ async function createServerDependencies(
 }> {
   log('[STARTUP] Importing dependencies...');
 
-  const { getNotionConfig } = await import('./config/environment.js');
+  const { getNotionConfig } = await import('./substrate/config/environment.js');
   const { createConsoleLogger } = await import('./logging/logger.js');
   const { getLogLevelValue } = await import('./logging/logger-interface.js');
   const { Client } = await import('@notionhq/client');

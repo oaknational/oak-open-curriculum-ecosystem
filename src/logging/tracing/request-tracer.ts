@@ -11,7 +11,7 @@ import {
   createTraceContext,
   createSpanContext,
   shouldSample,
-} from './utils/index.js';
+} from './utils-index.js';
 
 /**
  * Request tracer for managing trace context lifecycle

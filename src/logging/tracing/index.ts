@@ -15,6 +15,6 @@ export {
   formatTraceInfo,
   sanitizeTraceContext,
   shouldSample,
-} from './utils/index.js';
+} from './utils-index.js';
 export { RequestTracer } from './request-tracer.js';
 export { createRequestTracer, globalTracer } from './tracer-factory.js';
