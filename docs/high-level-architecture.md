@@ -15,8 +15,13 @@ The architecture now includes a generic MCP framework (oak-mcp-core) that provid
 5. **Type Safety**: Strict TypeScript with no `any` types, validated boundaries using Zod
 6. **Fail-Safe Defaults**: Read-only operations by default, write operations require explicit confirmation
 7. **Privacy by Design**: Automatic PII scrubbing for sensitive data (emails)
+8. **Cellular Architecture**: Inspired by biological systems with cells, tissues, and organs
+9. **Dependency Inversion Within Domains**: DIP works within domains, not between them
+10. **Anti-Corruption Layers Between Domains**: Clean interfaces prevent cross-domain contamination
 
 ## System Architecture
+
+### Current Layered Architecture
 
 ```text
 ┌─────────────────────────────────────────┐
@@ -55,6 +60,74 @@ The architecture now includes a generic MCP framework (oak-mcp-core) that provid
 │         (Notion API, File I/O)          │
 └─────────────────────────────────────────┘
 ```
+
+### Future Cellular Architecture Vision
+
+Inspired by biological systems, we envision evolving toward a cellular architecture pattern:
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│                    External Environment                  │
+│                  (Users, APIs, CLIs)                     │
+└────────────────┬────────────────┬───────────────────────┘
+                 │ Nutrients       │ Signals
+                 │ (Validate)      │ (Parse)
+                 ▼                 ▼
+┌─────────────────────────────────────────────────────────┐
+│                    Organism (Application)                │
+│  ┌─────────────────────────────────────────────┐        │
+│  │            Organ: Notion System              │        │
+│  │  ┌─────────────────┐  ┌─────────────────┐  │        │
+│  │  │ Tissue: Search  │  │ Tissue: Query   │  │        │
+│  │  │ & Discovery     │  │ Management      │  │        │
+│  │  │ ┌─────────────┐ │  │ ┌─────────────┐ │  │        │
+│  │  │ │Cell: Search │ │  │ │Cell: Query  │ │  │        │
+│  │  │ │Engine       │ │  │ │Builder      │ │  │        │
+│  │  │ │┌──────────┐ │ │  │ │┌──────────┐ │ │  │        │
+│  │  │ ││Organelle:│ │ │  │ ││Organelle:│ │ │  │        │
+│  │  │ ││Validator │ │ │  │ ││Parser    │ │ │  │        │
+│  │  │ │└──────────┘ │ │  │ │└──────────┘ │ │  │        │
+│  │  │ │ Membrane────┼─┼──┼─┼─Membrane    │ │  │        │
+│  │  │ └─────────────┘ │  │ └─────────────┘ │  │        │
+│  │  └─────────────────┘  └─────────────────┘  │        │
+│  └─────────────────────────────────────────────┘        │
+│                                                          │
+│  ┌─────────────────────────────────────────────┐        │
+│  │            Organ: MCP Protocol              │        │
+│  │  ┌─────────────────┐  ┌─────────────────┐  │        │
+│  │  │ Tissue: Tool    │  │ Tissue: Resource│  │        │
+│  │  │ Management      │  │ Management      │  │        │
+│  │  └─────────────────┘  └─────────────────┘  │        │
+│  └─────────────────────────────────────────────┘        │
+└─────────────────────────────────────────────────────────┘
+                 ▲ Chemical Signals ▲
+                 │ (Events/Messages)│
+┌─────────────────────────────────────────────────────────┐
+│              Circulatory System                          │
+│              (Infrastructure)                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐             │
+│  │ Logging  │  │  Config  │  │  Errors  │             │
+│  │ (Blood)  │  │ (Hormones)│  │ (Immune) │             │
+│  └──────────┘  └──────────┘  └──────────┘             │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Cellular Architecture Principles
+
+1. **Cellular Autonomy (DIP Within Cells)**
+   - Each cell has a membrane (interface) controlling what enters/exits
+   - Organelles (internal components) work within the cell
+   - Cells maintain their own internal environment
+
+2. **Tissue Coordination (Between Cells)**
+   - Cells communicate through chemical signals (events/messages)
+   - No cell directly manipulates another's internals
+   - Specialized cells form tissues for specific functions
+
+3. **Environmental Interface (System Boundaries)**
+   - Organism has protective barriers (validation)
+   - Nutrients (data) are processed at entry points
+   - Waste (errors) are expelled systematically
 
 ## Layer Responsibilities
 
@@ -357,28 +430,92 @@ The `oak-mcp-core` framework provides a generic, reusable foundation for buildin
 4. **Testing**: Framework provides testing utilities and patterns
 5. **Documentation**: Common patterns documented once in the framework
 
-### Future Architecture Extensions
+### Architectural Evolution Roadmap
 
-### Phase 3: Write Operations
+### Current State: Technical Debt Awareness
+
+We currently have 103 relative parent import warnings that serve as **architectural truth detectors**, revealing misalignments between our directory structure and dependency relationships. These are not immediate problems but markers for future refactoring.
+
+### Phase 0: Document and Stabilize (Current) ✅
+
+- Changed lint rule from 'error' to 'warn'
+- Documented architectural learnings
+- Focus on not making architecture worse
+- Maintain working system while planning evolution
+
+### Phase 1: Extract Infrastructure (When Needed)
+
+**Trigger**: When we need to share logging/config with another project
+
+- Create `infrastructure/` directory for cross-cutting concerns
+- Move logging types and interfaces to shared location
+- Update imports to use new paths
+- Eliminate upward dependencies
+
+### Phase 2: Define Domain Boundaries (When Extracting Core)
+
+**Trigger**: When we extract oak-mcp-core as standalone package
+
+- Identify true business domains
+- Create domain directories with clear boundaries
+- Define ports (interfaces) for each domain
+- Implement Anti-Corruption Layers between domains
+
+### Phase 3: Full Domain Separation (Long Term)
+
+**Trigger**: When we need independent deployment
+
+- Each domain becomes a workspace package
+- Shared infrastructure as packages
+- No relative imports between packages
+- Proper versioning and contracts
+
+### Phase 4: Write Operations & Advanced Features
 
 - Confirmation UI component
-- Audit log storage
-- Rollback tracking
-- Two-phase commit pattern
-
-### Phase 4: Advanced Features
-
+- Audit log storage with rollback tracking
 - WebSocket support for real-time updates
 - Plugin architecture for custom tools
 - Multi-workspace support
 - OAuth flow for user authentication
 
-### Phase 5: Framework Expansion
+### Phase 5: Framework Ecosystem
 
 - Extract oak-mcp-core as standalone npm package
 - Additional domain adapters (GitHub, Slack, etc.)
 - Visual MCP server builder
 - Framework marketplace and ecosystem
+
+## Future Architecture Extensions
+
+## Technical Debt Inventory
+
+### High Priority (Address Soon)
+
+1. **Duplicate Functions** (Anti-information)
+   - Multiple `getLevelColor` implementations
+   - Multiple `getLevelAbbreviation` functions
+   - Duplicate error serialization logic
+
+2. **Cross-Domain Coupling**
+   - MCP tools directly importing Notion transformers
+   - Config depending on logging interfaces
+
+### Medium Priority (Address Eventually)
+
+1. **Deep Nesting in Logging**
+   - 4+ levels deep in formatters
+   - Shared utilities scattered across modules
+
+2. **Missing Abstractions**
+   - No clear ports for external dependencies
+   - Direct SDK usage throughout
+
+### Low Priority (Nice to Have)
+
+1. **Module Organization**
+   - Group by feature vs technical layer
+   - Clearer public APIs
 
 ## Architecture Decision Records (ADRs)
 
@@ -411,6 +548,18 @@ The `oak-mcp-core` framework provides a generic, reusable foundation for buildin
 **Decision**: Automatically scrub email addresses in all outputs
 **Rationale**: Privacy by design, prevent accidental PII exposure, compliance-ready
 **Consequences**: Email addresses shown as `abc...@domain.com`, implemented as pure function
+
+### ADR-006: Cellular Architecture Pattern
+
+**Decision**: Adopt biological metaphor for future architecture evolution
+**Rationale**: Natural hierarchy (organelles → cells → tissues → organs) matches software composition patterns
+**Consequences**: Clear boundaries, better separation of concerns, natural migration path
+
+### ADR-007: Accept Current Technical Debt
+
+**Decision**: Keep relative import violations as warnings, not errors
+**Rationale**: Complete refactoring would require significant effort without immediate business value
+**Consequences**: 103 warnings serve as markers for future refactoring opportunities
 
 ## Monitoring and Observability
 
