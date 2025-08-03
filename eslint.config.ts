@@ -46,7 +46,7 @@ const config: Config = tsEslintConfig(
       '@typescript-eslint/consistent-type-exports': 'error',
 
       // Complexity. These rules are intended to minimise cognitive load and enforce good code design.
-      complexity: ['error', { max: 10 }], // Cyclomatic complexity, lowers cognitive load
+      complexity: ['error', { max: 8 }], // Cyclomatic complexity, lowers cognitive load
       'max-depth': ['error', 3], // Max levels of nesting, lowers cognitive load
       'max-statements': ['error', 20], // Max statements per function, enforces single responsibility principle
       'max-lines-per-function': ['error', 50], // Target 50 (1 screen height), enforces single responsibility principle, lowers cognitive load
@@ -74,7 +74,7 @@ const config: Config = tsEslintConfig(
       ],
 
       // Enforce module boundaries - no reaching into parent directories, helps enforce dependency inversion principle
-      'import-x/no-relative-parent-imports': ['warn'],
+      'import-x/no-relative-parent-imports': ['error'],
     },
   },
   // Separation of concerns between the core framework and individual servers, to make it easier to extract the core framework into a workspace later

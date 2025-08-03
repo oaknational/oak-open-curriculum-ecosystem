@@ -2,7 +2,12 @@
 
 ## Overview
 
-Extract oak-mcp-core as the **first independent organism** in our future ecosystem - a comprehensive MCP server framework in a separate workspace/package, while simultaneously migrating oak-notion-mcp to use it. This follows the complete biological architecture established in Phase 3, where we've already organized the codebase into substrate, systems, and organs.
+Extract oak-mcp-core as the **first independent organism** in our future ecosystem through a two-stage process:
+
+1. **Stage 1: Folder Separation** - Move generic MCP components to `src/oak-mcp-core/` within the existing repository
+2. **Stage 2: Workspace Extraction** - Extract oak-mcp-core to a separate workspace/package
+
+This follows the complete biological architecture established in Phase 3, where we've already organized the codebase into substrate, systems, and organs.
 
 **Ecosystem Vision**: oak-mcp-core will be the pioneer organism that establishes patterns for future MCP servers. It's designed as a keystone species - many future packages will depend on it, making it critical to get the architecture right from the start.
 
@@ -97,7 +102,7 @@ This ensures oak-mcp-core and its ecosystem will naturally self-organize into st
 - All quality gates passing (format, lint, type-check, test, build)
 - Pre-commit and pre-push hooks working
 - CI/CD with automated releases
-- Migration time: 2-3 weeks (vs original 4-5 week estimate)
+- Migration approach: Progressive transformation maintaining functionality
 
 ### Ecosystem Readiness Metrics
 
@@ -208,11 +213,15 @@ This environmental adaptation ensures oak-mcp-core can thrive in diverse runtime
 
 ## Updated Implementation Sub-phases
 
-### Sub-phase 1: Foundation Restructuring (Priority: IMMEDIATE)
+### Stage 1: Folder Separation (Within Repository)
 
-**Deliverables**: ~850 LoC | **Timeline**: 3-5 hours
+**Goal**: Reorganize code into separate folders within the existing repository to prepare for extraction
 
-#### Project Structure Setup (2-3 hours)
+#### Sub-phase 1.1: Foundation Restructuring
+
+**Deliverables**: ~850 LoC | **Scope**: Foundation Setup
+
+#### Project Structure Setup
 
 - [ ] Create folder structure:
 
@@ -240,13 +249,13 @@ This environmental adaptation ensures oak-mcp-core can thrive in diverse runtime
 - [ ] Configure TypeScript paths for clean imports
 - [ ] Update README with new structure
 
-#### Dependency Removal (1-2 hours)
+#### Dependency Removal
 
 - [ ] Remove consola dependency from oak-mcp-core components
 - [ ] Create abstraction layer for any remaining external dependencies
 - [ ] Verify zero dependencies in oak-mcp-core
 
-#### Logging Framework Completion (2-3 hours)
+#### Logging Framework Completion
 
 **In oak-mcp-core (Circulatory System):**
 
@@ -266,7 +275,7 @@ This environmental adaptation ensures oak-mcp-core can thrive in diverse runtime
 - [ ] Remove consola usage
 - [ ] Verify logging in integration tests
 
-#### Error Framework Completion (4-5 hours)
+#### Error Framework Completion
 
 **In oak-mcp-core:**
 
@@ -289,11 +298,11 @@ This environmental adaptation ensures oak-mcp-core can thrive in diverse runtime
 - [ ] Extend to use oak-mcp-core error framework
 - [ ] Update all error handling to use framework
 
-### Sub-phase 2: Core Infrastructure Completion
+#### Sub-phase 1.2: Core Infrastructure Completion
 
-**Deliverables**: ~550 LoC | **Timeline**: 1-2 days
+**Deliverables**: ~550 LoC | **Scope**: Core Infrastructure
 
-#### Configuration Management Completion (3-4 hours)
+#### Configuration Management Completion
 
 **In oak-mcp-core:**
 
@@ -356,9 +365,9 @@ export interface BoundaryValidator<TExternal, TInternal> {
 - [ ] Migrate tests to use new utilities
 - [ ] Simplify test setup significantly
 
-### Sub-phase 3: MCP Core Patterns
+#### Sub-phase 1.3: MCP Core Patterns
 
-**Deliverables**: ~800 LoC | **Timeline**: 2-3 days
+**Deliverables**: ~800 LoC | **Scope**: MCP Patterns
 
 #### MCP Server Base & Middleware (300 LoC)
 
@@ -416,9 +425,9 @@ export interface BoundaryValidator<TExternal, TInternal> {
 - [ ] Implement NotionPaginationStrategy
 - [ ] Use pagination for all list operations
 
-### Sub-phase 4: Advanced Patterns & Migration
+#### Sub-phase 1.4: Advanced Patterns & Migration
 
-**Deliverables**: ~850 LoC | **Timeline**: 2-3 days
+**Deliverables**: ~850 LoC | **Scope**: Advanced Patterns
 
 #### Performance & Monitoring (200 LoC)
 
@@ -492,9 +501,9 @@ export interface BoundaryValidator<TExternal, TInternal> {
 - [ ] Verify <1,000 LoC remaining
 - [ ] Update all documentation
 
-### Sub-phase 5: Documentation & Examples
+#### Sub-phase 1.5: Documentation & Examples
 
-**Deliverables**: Documentation + 3-4 example servers | **Timeline**: 2-3 days
+**Deliverables**: Documentation + 3-4 example servers | **Scope**: Documentation & Polish
 
 #### Documentation
 
@@ -539,12 +548,66 @@ export interface BoundaryValidator<TExternal, TInternal> {
 - [ ] Update oak-notion-mcp README
 - [ ] Community engagement plan
 
+### Stage 2: Workspace Extraction (Separate Package)
+
+**Goal**: Extract oak-mcp-core into a separate workspace/package that can be published to npm
+
+**Trigger**: After Stage 1 is complete and folder separation is working
+
+#### Sub-phase 2.1: Workspace Setup
+
+1. **Create separate workspace**
+   - [ ] Initialize new workspace/package directory
+   - [ ] Set up package.json with proper metadata
+   - [ ] Configure TypeScript for package development
+   - [ ] Set up build tooling (tsup or similar)
+   - [ ] Configure testing infrastructure
+
+2. **Move code from folders**
+   - [ ] Copy oak-mcp-core folder to new workspace
+   - [ ] Update import paths
+   - [ ] Ensure zero external dependencies
+   - [ ] Verify all tests pass in new location
+
+#### Sub-phase 2.2: Package Configuration
+
+1. **npm Package Setup**
+   - [ ] Configure package.json for publication
+   - [ ] Set up semantic versioning
+   - [ ] Create proper entry points
+   - [ ] Configure TypeScript declarations
+   - [ ] Add README and LICENSE
+
+2. **Integration with oak-notion-mcp**
+   - [ ] Update oak-notion-mcp to use oak-mcp-core as dependency
+   - [ ] Replace folder imports with package imports
+   - [ ] Verify all functionality works
+   - [ ] Update CI/CD for multi-package setup
+
+#### Sub-phase 2.3: Publication and Release
+
+1. **Prepare for publication**
+   - [ ] Final API review
+   - [ ] Documentation completeness check
+   - [ ] Security audit
+   - [ ] Bundle size optimization
+   - [ ] Create changelog
+
+2. **Publish to npm**
+   - [ ] Publish beta version to npm
+   - [ ] Test installation in clean environment
+   - [ ] Gather feedback from early adopters
+   - [ ] Publish stable version
+   - [ ] Announce release
+
 ## Immediate Next Steps
 
-1. **Hour 1-2**: Create folder structure and move files
-2. **Hour 3**: Remove consola dependency from logging components
-3. **Hour 4**: Update imports and verify tests pass
-4. **Hour 5+**: Complete error framework with TDD approach
+For Stage 1:
+
+1. **Initial Setup**: Create folder structure and move files
+2. **Dependency Cleanup**: Remove consola dependency from logging components
+3. **Import Migration**: Update imports and verify tests pass
+4. **Error Framework**: Complete error framework with TDD approach
 
 ## Risk Mitigation (Updated)
 
@@ -615,10 +678,10 @@ By the end:
 
 ```text
 Ecosystem Evolution:
-├── Phase 3: Pioneer organism (oak-mcp-core)
-├── Phase 4: Specialized organisms (oak-notion-mcp, oak-github-mcp)
-├── Phase 5: Ecosystem services (shared types, utilities)
-└── Phase 6: Full ecosystem (multiple biomes, natural selection)
+├── Pioneer organism (oak-mcp-core)
+├── Specialized organisms (oak-notion-mcp, oak-github-mcp)
+├── Ecosystem services (shared types, utilities)
+└── Full ecosystem (multiple biomes, natural selection)
 ```
 
 The key remains building in the right place from day one, with continuous validation through real use, while preparing for future ecosystem evolution.
@@ -636,4 +699,4 @@ This isn't just metaphor - it's proven mathematics (Meena et al., 2023).
 
 ### References
 
-Meena, C., Hens, C., Acharyya, S. et al. Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042 (2023). https://doi.org/10.1038/s41567-023-02020-8
+Meena, C., Hens, C., Acharyya, S. et al. Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042 (2023). <https://doi.org/10.1038/s41567-023-02020-8>

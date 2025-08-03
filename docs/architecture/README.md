@@ -1,18 +1,35 @@
 # Architecture
 
+## Start Here
+
+**→ [Master Architecture Document](./master-architecture.md)** - Complete architectural vision and guide
+
 ## Reference Documentation
 
-- [architecture overview](../architecture-overview.md)
-- [high-level architecture](./high-level-architecture.md)
-- [tissue and organ interfaces](./tissue-and-organ-interfaces.md)
-- [architectural decisions records](./architectural-decisions/)
+### Core Architecture
+
+- [Master Architecture](./master-architecture.md) - **START HERE** - Single comprehensive guide
+- [High-Level Architecture](./high-level-architecture.md) - Detailed technical architecture with diagrams
+- [Architecture Overview](../architecture-overview.md) - Quick introduction for newcomers
+
+### Implementation Guides
+
+- [Tissue and Organ Interfaces](./tissue-and-organ-interfaces.md) - Interface patterns and code templates
+- [Tissue and Organ Example](./tissue-organ-example.md) - Complete implementation example
+
+### Architectural Decisions
+
+- [ADR-018: Complete Biological Architecture](./architectural-decisions/018-complete-biological-architecture.md) - Substrate, systems, and organs
+- [ADR-009: Mathematical Foundation](./architectural-decisions/009-mathematical-foundation-for-architecture.md) - Complex systems theory
+- [All ADRs](./architectural-decisions/) - Complete decision record
 
 ## Related Agent Guidance
 
-- [development practice](../agent-guidance/development-practice.md)
-- [testing strategy](../agent-guidance/testing-strategy.md)
-- [typescript practice](../agent-guidance/typescript-practice.md)
+- [Development Practice](../agent-guidance/development-practice.md)
+- [Testing Strategy](../agent-guidance/testing-strategy.md)
+- [TypeScript Practice](../agent-guidance/typescript-practice.md)
 
-## Related Plans
+## Implementation Plans
 
-- [architectural evolution plan](../../.agent/plans/architectural-evolution-plan.md)
+- [Phase 3: Biological Architecture](../../.agent/plans/phase-3-biological-architecture-implementation-plan.md) - Current implementation
+- [Phase 4: oak-mcp-core Extraction](../../.agent/plans/phase-4-oak-mcp-core-implementation-plan.md) - Next phase
