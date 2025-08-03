@@ -1,32 +1,21 @@
-// Pure function for validation
-export interface ValidationResult {
-  valid: boolean;
-  errors?: string[];
-}
+/**
+ * @fileoverview Notion-specific configuration
+ * @module @notion-mcp/config
+ */
+
+import { env } from './env.js';
 
 export interface NotionConfig {
   apiKey: string;
   version: string;
 }
 
-export function validateEnvironmentVariables(
-  env: Record<string, string | undefined>,
-): ValidationResult {
-  const errors: string[] = [];
-
-  if (!env['NOTION_API_KEY'] || env['NOTION_API_KEY'].trim() === '') {
-    errors.push('NOTION_API_KEY is required');
-  }
-
+/**
+ * Create Notion client configuration from validated environment
+ */
+export function getNotionConfig(): NotionConfig {
   return {
-    valid: errors.length === 0,
-    errors: errors.length > 0 ? errors : undefined,
-  };
-}
-
-export function parseNotionConfig(apiKey: string): NotionConfig {
-  return {
-    apiKey: apiKey.trim(),
+    apiKey: env.NOTION_API_KEY,
     version: '2022-06-28', // Latest stable Notion API version
   };
 }

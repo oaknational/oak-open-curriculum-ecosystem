@@ -6,7 +6,13 @@
  */
 
 // Re-export level types and utilities
-export { LOG_LEVELS, isLogLevel, getLogLevelName } from './levels.js';
+export {
+  LOG_LEVELS,
+  isLogLevel,
+  isLogLevelName,
+  getLogLevelName,
+  getLogLevelValue,
+} from './levels.js';
 export type { LogLevel, LogLevelName } from './levels.js';
 
 // Re-export transport types

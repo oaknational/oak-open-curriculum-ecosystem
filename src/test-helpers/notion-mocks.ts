@@ -7,7 +7,6 @@ import type {
   PageObjectResponse,
   DatabaseObjectResponse,
   UserObjectResponse,
-  BlockObjectResponse,
 } from '@notionhq/client';
 
 export function createMockPage(overrides: Partial<PageObjectResponse> = {}): PageObjectResponse {
@@ -83,27 +82,4 @@ export function createMockUser(overrides: Partial<UserObjectResponse> = {}): Use
         : { email: 'test@example.com' },
   };
   return personUser;
-}
-
-export function createMockBlock(): BlockObjectResponse {
-  // For now, only support paragraph blocks to maintain type safety
-  // Can be extended to support other block types with proper type guards
-  const paragraphBlock: BlockObjectResponse = {
-    object: 'block' as const,
-    id: 'block-123',
-    parent: { type: 'page_id' as const, page_id: 'page-123' },
-    created_time: '2024-01-01T00:00:00Z',
-    last_edited_time: '2024-01-02T00:00:00Z',
-    created_by: { object: 'user' as const, id: 'user-123' },
-    last_edited_by: { object: 'user' as const, id: 'user-123' },
-    has_children: false,
-    archived: false,
-    in_trash: false,
-    type: 'paragraph' as const,
-    paragraph: {
-      rich_text: [],
-      color: 'default' as const,
-    },
-  };
-  return paragraphBlock;
 }

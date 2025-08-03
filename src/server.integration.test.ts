@@ -134,19 +134,26 @@ describe('MCP Server', () => {
     expect(toolNames).toContain('notion-list-users');
   });
 
-  it('should handle tool call requests', async () => {
-    const config = {
-      name: 'test-server',
-      version: '1.0.0',
-    };
+  /**
+   * Setup server and client for testing
+   */
+  async function setupServerAndClient() {
+    const config = { name: 'test-server', version: '1.0.0' };
+    const server = createMcpServer({ notionClient: mockNotionClient, logger: mockLogger, config });
 
-    const server = createMcpServer({
-      notionClient: mockNotionClient,
-      logger: mockLogger,
-      config,
-    });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await server.connect(serverTransport);
 
-    // Setup mock to return users
+    const client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });
+    await client.connect(clientTransport);
+
+    return { server, client };
+  }
+
+  /**
+   * Setup mock for list users response
+   */
+  function setupListUsersMock() {
     vi.mocked(mockNotionClient.users.list).mockResolvedValue(
       createMockListUsersResponse([
         {
@@ -159,25 +166,12 @@ describe('MCP Server', () => {
         },
       ]),
     );
+  }
 
-    // Create transport and connect
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+  it('should handle tool call requests', async () => {
+    setupListUsersMock();
+    const { client } = await setupServerAndClient();
 
-    await server.connect(serverTransport);
-
-    const client = new Client(
-      {
-        name: 'test-client',
-        version: '1.0.0',
-      },
-      {
-        capabilities: {},
-      },
-    );
-
-    await client.connect(clientTransport);
-
-    // Test behavior: when we call a tool, it should return results
     const response = await client.callTool({
       name: 'notion-list-users',
       arguments: {},
@@ -186,15 +180,13 @@ describe('MCP Server', () => {
     expect(response.content).toBeDefined();
     expect(Array.isArray(response.content)).toBe(true);
 
-    // Type guard for content array
     if (!Array.isArray(response.content)) {
       throw new Error('Expected content to be an array');
     }
 
-    const content = response.content;
-    expect(content.length).toBeGreaterThan(0);
+    expect(response.content.length).toBeGreaterThan(0);
 
-    const firstItem: unknown = content[0];
+    const firstItem: unknown = response.content[0];
     if (!firstItem || typeof firstItem !== 'object' || !('type' in firstItem)) {
       throw new Error('Expected first content item to have type property');
     }

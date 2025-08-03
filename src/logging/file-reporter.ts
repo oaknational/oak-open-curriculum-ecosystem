@@ -64,39 +64,35 @@ export function createFileReporter(
 }
 
 /**
+ * Format primitive values directly
+ */
+function formatPrimitive(value: unknown): string | null {
+  if (typeof value === 'string') return value;
+  if (value === undefined) return 'undefined';
+  if (value === null) return 'null';
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (typeof value === 'bigint') return value.toString();
+  if (typeof value === 'symbol') return value.toString();
+  if (typeof value === 'function') return '[function]';
+  return null;
+}
+
+/**
+ * Format object values with JSON stringification
+ */
+function formatObject(value: unknown): string {
+  try {
+    return JSON.stringify(value, null, 2);
+  } catch {
+    return typeof value === 'object' ? '[object: could not stringify]' : '[unknown]';
+  }
+}
+
+/**
  * Format log arguments for file output
+ * Delegates to appropriate formatter based on value type
  */
 function formatArg(arg: unknown): string {
-  if (typeof arg === 'string') {
-    return arg;
-  }
-  if (arg === undefined) {
-    return 'undefined';
-  }
-  if (arg === null) {
-    return 'null';
-  }
-  try {
-    return JSON.stringify(arg, null, 2);
-  } catch {
-    // For objects that can't be stringified (e.g., circular references)
-    if (typeof arg === 'object') {
-      return '[object: could not stringify]';
-    }
-    // For primitives that couldn't be stringified
-    if (typeof arg === 'number' || typeof arg === 'boolean') {
-      return String(arg);
-    }
-    if (typeof arg === 'function') {
-      return '[function]';
-    }
-    if (typeof arg === 'symbol') {
-      return arg.toString();
-    }
-    if (typeof arg === 'bigint') {
-      return arg.toString();
-    }
-    // Fallback - should never reach here
-    return '[unknown]';
-  }
+  const primitiveResult = formatPrimitive(arg);
+  return primitiveResult ?? formatObject(arg);
 }

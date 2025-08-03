@@ -1,99 +1,19 @@
-import { describe, it, expect } from 'vitest';
-import {
-  validateEnvironmentVariables,
-  parseNotionConfig,
-  createMcpServerInfo,
-} from './environment.js';
+import { describe, it, expect, vi } from 'vitest';
+import { createMcpServerInfo, getNotionConfig } from './environment.js';
 
-describe('validateEnvironmentVariables', () => {
-  it('should return valid when all required variables present', () => {
-    const result = validateEnvironmentVariables({
-      NOTION_API_KEY: 'secret_abc123',
-    });
+// Mock the env module to avoid validation during tests
+vi.mock('./env.js', () => ({
+  env: {
+    NOTION_API_KEY: 'test_key_123',
+  },
+}));
 
-    expect(result.valid).toBe(true);
-    expect(result.errors).toBeUndefined();
-  });
+describe('getNotionConfig', () => {
+  it('should return config with API key from env', () => {
+    const config = getNotionConfig();
 
-  it('should return errors when NOTION_API_KEY missing', () => {
-    const result = validateEnvironmentVariables({});
-
-    expect(result.valid).toBe(false);
-    expect(result.errors).toContain('NOTION_API_KEY is required');
-  });
-
-  it('should return errors when NOTION_API_KEY is undefined', () => {
-    const result = validateEnvironmentVariables({
-      NOTION_API_KEY: undefined,
-    });
-
-    expect(result.valid).toBe(false);
-    expect(result.errors).toContain('NOTION_API_KEY is required');
-  });
-
-  it('should return errors when NOTION_API_KEY is empty string', () => {
-    const result = validateEnvironmentVariables({
-      NOTION_API_KEY: '',
-    });
-
-    expect(result.valid).toBe(false);
-    expect(result.errors).toContain('NOTION_API_KEY is required');
-  });
-
-  it('should accept API key with special characters', () => {
-    const result = validateEnvironmentVariables({
-      NOTION_API_KEY: 'secret_123-ABC/xyz+==',
-    });
-
-    expect(result.valid).toBe(true);
-    expect(result.errors).toBeUndefined();
-  });
-
-  it('should ignore extra environment variables', () => {
-    const result = validateEnvironmentVariables({
-      NOTION_API_KEY: 'secret_abc123',
-      OTHER_VAR: 'some value',
-      NODE_ENV: 'production',
-    });
-
-    expect(result.valid).toBe(true);
-    expect(result.errors).toBeUndefined();
-  });
-});
-
-describe('parseNotionConfig', () => {
-  it('should parse a valid Notion API key', () => {
-    const apiKey = 'secret_abc123';
-    const config = parseNotionConfig(apiKey);
-
-    expect(config.apiKey).toBe(apiKey);
+    expect(config.apiKey).toBe('test_key_123');
     expect(config.version).toBe('2022-06-28');
-  });
-
-  it('should trim whitespace from API key', () => {
-    const config = parseNotionConfig('  secret_abc123  ');
-
-    expect(config.apiKey).toBe('secret_abc123');
-  });
-
-  it('should handle API keys with special characters', () => {
-    const apiKey = 'secret_123-ABC/xyz+==';
-    const config = parseNotionConfig(apiKey);
-
-    expect(config.apiKey).toBe(apiKey);
-  });
-
-  it('should set default Notion API version', () => {
-    const config = parseNotionConfig('secret_abc123');
-
-    expect(config.version).toBe('2022-06-28');
-  });
-
-  it('should handle very long API keys', () => {
-    const longKey = 'secret_' + 'a'.repeat(100);
-    const config = parseNotionConfig(longKey);
-
-    expect(config.apiKey).toBe(longKey);
   });
 });
 

@@ -31,21 +31,36 @@ export interface McpError {
 }
 
 /**
- * Classifies a Notion API error into a standardized error type
+ * Error classification mappings
  */
-export function classifyNotionError(error: unknown): ErrorClassification {
-  // Handle null/undefined
+const ERROR_CLASSIFICATIONS: Record<string, Omit<ErrorClassification, 'code' | 'message'>> = {
+  rate_limited: { type: 'rate_limit', retryable: true, statusCode: 429 },
+  unauthorized: { type: 'authentication', retryable: false, statusCode: 401 },
+  object_not_found: { type: 'not_found', retryable: false, statusCode: 404 },
+  validation_error: { type: 'validation', retryable: false, statusCode: 400 },
+  restricted_resource: { type: 'permission', retryable: false, statusCode: 403 },
+  internal_server_error: { type: 'server_error', retryable: true, statusCode: 500 },
+};
+
+/**
+ * Default error classification
+ */
+const DEFAULT_CLASSIFICATION: ErrorClassification = {
+  type: 'unknown',
+  code: 'unknown_error',
+  message: 'An unknown error occurred',
+  retryable: false,
+  statusCode: 500,
+};
+
+/**
+ * Extracts error code and message from unknown error
+ */
+function extractErrorInfo(error: unknown): { code: string; message: string } {
   if (!error) {
-    return {
-      type: 'unknown',
-      code: 'unknown_error',
-      message: 'An unknown error occurred',
-      retryable: false,
-      statusCode: 500,
-    };
+    return { code: 'unknown_error', message: 'An unknown error occurred' };
   }
 
-  // Extract error properties
   let code = 'unknown_error';
   let message = 'An unknown error occurred';
 
@@ -59,71 +74,29 @@ export function classifyNotionError(error: unknown): ErrorClassification {
     message = error.message;
   }
 
-  // Classify based on error code
-  switch (code) {
-    case 'rate_limited':
-      return {
-        type: 'rate_limit',
-        code,
-        message,
-        retryable: true,
-        statusCode: 429,
-      };
+  return { code, message };
+}
 
-    case 'unauthorized':
-      return {
-        type: 'authentication',
-        code,
-        message,
-        retryable: false,
-        statusCode: 401,
-      };
-
-    case 'object_not_found':
-      return {
-        type: 'not_found',
-        code,
-        message,
-        retryable: false,
-        statusCode: 404,
-      };
-
-    case 'validation_error':
-      return {
-        type: 'validation',
-        code,
-        message,
-        retryable: false,
-        statusCode: 400,
-      };
-
-    case 'restricted_resource':
-      return {
-        type: 'permission',
-        code,
-        message,
-        retryable: false,
-        statusCode: 403,
-      };
-
-    case 'internal_server_error':
-      return {
-        type: 'server_error',
-        code,
-        message,
-        retryable: true,
-        statusCode: 500,
-      };
-
-    default:
-      return {
-        type: 'unknown',
-        code,
-        message,
-        retryable: false,
-        statusCode: 500,
-      };
+/**
+ * Classifies a Notion API error into a standardized error type
+ */
+export function classifyNotionError(error: unknown): ErrorClassification {
+  if (!error) {
+    return DEFAULT_CLASSIFICATION;
   }
+
+  const { code, message } = extractErrorInfo(error);
+  const classification = ERROR_CLASSIFICATIONS[code];
+
+  if (!classification) {
+    return { ...DEFAULT_CLASSIFICATION, code, message };
+  }
+
+  return {
+    ...classification,
+    code,
+    message,
+  };
 }
 
 /**

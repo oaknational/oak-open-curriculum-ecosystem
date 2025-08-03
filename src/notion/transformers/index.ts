@@ -4,7 +4,7 @@
  */
 
 // Re-export types
-export type { McpResource, NotionRichText, NotionBlock, EmailScrubber } from './types.js';
+export type { Resource, McpResource, NotionRichText, NotionBlock, EmailScrubber } from './types.js';
 
 // Re-export page transformer
 export { transformNotionPageToMcpResource } from './page-transformer.js';

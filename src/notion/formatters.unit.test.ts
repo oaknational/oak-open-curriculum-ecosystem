@@ -13,7 +13,7 @@ import {
   formatPageDetails,
   formatUserList,
 } from './formatters.js';
-import type { McpResource } from './transformers.js';
+import type { Resource } from './transformers.js';
 import {
   createMockPage,
   createMockDatabase,
@@ -41,11 +41,11 @@ describe('formatSearchResults', () => {
     const database = createMockDatabase({ id: 'db-1' });
     const results = [page, database];
 
-    const resources: McpResource[] = [
+    const resources: Resource[] = [
       {
         uri: 'notion://pages/page-1',
         name: 'Test Page',
-        metadata: {
+        _meta: {
           url: 'https://notion.so/page-1',
           last_edited_time: '2024-01-02T00:00:00Z',
         },
@@ -53,7 +53,7 @@ describe('formatSearchResults', () => {
       {
         uri: 'notion://databases/db-1',
         name: 'Test Database',
-        metadata: {
+        _meta: {
           url: 'https://notion.so/db-1',
           properties: ['Name', 'Status'],
         },
@@ -69,10 +69,10 @@ describe('formatSearchResults', () => {
 
 describe('formatPageSummary', () => {
   it('should format page with all metadata', () => {
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://pages/page-1',
       name: 'My Page',
-      metadata: {
+      _meta: {
         url: 'https://notion.so/page-1',
         last_edited_time: '2024-01-02T00:00:00Z',
       },
@@ -85,7 +85,7 @@ describe('formatPageSummary', () => {
   });
 
   it('should handle missing metadata', () => {
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://pages/page-1',
       name: 'My Page',
     };
@@ -98,10 +98,10 @@ describe('formatPageSummary', () => {
 
 describe('formatDatabaseSummary', () => {
   it('should format database with properties', () => {
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://databases/db-1',
       name: 'Tasks',
-      metadata: {
+      _meta: {
         url: 'https://notion.so/db-1',
         properties: ['Name', 'Status', 'Due Date'],
       },
@@ -114,10 +114,10 @@ describe('formatDatabaseSummary', () => {
   });
 
   it('should handle empty properties', () => {
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://databases/db-1',
       name: 'Empty DB',
-      metadata: {
+      _meta: {
         properties: [],
       },
     };
@@ -129,7 +129,7 @@ describe('formatDatabaseSummary', () => {
 
 describe('formatDatabaseQueryResults', () => {
   it('should format query results with pages', () => {
-    const dbResource: McpResource = {
+    const dbResource: Resource = {
       uri: 'notion://databases/db-1',
       name: 'Tasks Database',
     };
@@ -160,7 +160,7 @@ describe('formatDatabaseQueryResults', () => {
       }),
     ];
 
-    const pageResources: McpResource[] = [
+    const pageResources: Resource[] = [
       {
         uri: 'notion://pages/page-1',
         name: 'Task 1',
@@ -179,11 +179,11 @@ describe('formatDatabaseList', () => {
   it('should format multiple databases', () => {
     const databases = [createMockDatabase({ id: 'db-1' }), createMockDatabase({ id: 'db-2' })];
 
-    const resources: McpResource[] = [
+    const resources: Resource[] = [
       {
         uri: 'notion://databases/db-1',
         name: 'Tasks',
-        metadata: {
+        _meta: {
           url: 'https://notion.so/db-1',
           properties: ['Name', 'Status'],
         },
@@ -191,7 +191,7 @@ describe('formatDatabaseList', () => {
       {
         uri: 'notion://databases/db-2',
         name: 'Projects',
-        metadata: {
+        _meta: {
           url: 'https://notion.so/db-2',
           properties: ['Title', 'Owner'],
         },
@@ -208,7 +208,7 @@ describe('formatDatabaseList', () => {
 
   it('should handle singular database', () => {
     const databases = [createMockDatabase({ id: 'db-1' })];
-    const resources: McpResource[] = [
+    const resources: Resource[] = [
       {
         uri: 'notion://databases/db-1',
         name: 'Tasks',
@@ -321,10 +321,10 @@ describe('formatPageDetails', () => {
       },
     });
 
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://pages/page-1',
       name: 'My Page',
-      metadata: {
+      _meta: {
         url: 'https://notion.so/page-1',
         created_time: '2024-01-01T00:00:00Z',
         last_edited_time: '2024-01-02T00:00:00Z',
@@ -343,7 +343,7 @@ describe('formatPageDetails', () => {
 
   it('should handle missing content', () => {
     const page = createMockPage();
-    const resource: McpResource = {
+    const resource: Resource = {
       uri: 'notion://pages/page-1',
       name: 'My Page',
     };
@@ -370,11 +370,11 @@ describe('formatUserList', () => {
       }),
     ];
 
-    const resources: McpResource[] = [
+    const resources: Resource[] = [
       {
         uri: 'notion://users/user-1',
         name: 'John Doe',
-        metadata: {
+        _meta: {
           email: 'joh...@example.com',
         },
       },
@@ -395,7 +395,7 @@ describe('formatUserList', () => {
 
   it('should handle singular user', () => {
     const users = [createMockUser({ id: 'user-1', name: 'Solo User' })];
-    const resources: McpResource[] = [
+    const resources: Resource[] = [
       {
         uri: 'notion://users/user-1',
         name: 'Solo User',

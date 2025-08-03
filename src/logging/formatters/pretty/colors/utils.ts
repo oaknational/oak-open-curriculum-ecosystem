@@ -4,30 +4,14 @@
  */
 
 import type { FormatterLogLevel } from '../types.js';
-import { LOG_LEVELS } from '../../../types/index.js';
-import { Colors } from './constants.js';
+import { getLevelColor as getConsolidatedLevelColor, ANSI_COLORS } from '../../../colors/index.js';
 
 /**
  * Get color for log level
  * Pure function
  */
 export function getLevelColor(level: FormatterLogLevel): string {
-  switch (level) {
-    case LOG_LEVELS.TRACE.value:
-      return Colors.gray;
-    case LOG_LEVELS.DEBUG.value:
-      return Colors.cyan;
-    case LOG_LEVELS.INFO.value:
-      return Colors.green;
-    case LOG_LEVELS.WARN.value:
-      return Colors.yellow;
-    case LOG_LEVELS.ERROR.value:
-      return Colors.red;
-    case LOG_LEVELS.FATAL.value:
-      return Colors.magenta;
-    default:
-      return Colors.reset;
-  }
+  return getConsolidatedLevelColor(level);
 }
 
 /**
@@ -35,5 +19,5 @@ export function getLevelColor(level: FormatterLogLevel): string {
  * Pure function
  */
 export function colorize(text: string, colorCode: string): string {
-  return `${colorCode}${text}${Colors.reset}`;
+  return `${colorCode}${text}${ANSI_COLORS.reset}`;
 }
