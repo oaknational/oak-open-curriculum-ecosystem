@@ -1,26 +1,16 @@
 /**
- * @fileoverview Shared log level definitions for logging system
- * @module @oak-mcp-core/logging
+ * @fileoverview Logging physics - fundamental constants and laws for logging
+ * @module substrate/types/logging
  *
- * Single source of truth for log levels
- *
- * @note JC: this file is an exemplar for my preferred approach to type derivation from data structures
- * @note MIGRATION: Temporarily re-exporting from substrate during Phase 3 migration
+ * This is the single source of truth for log levels in the system.
+ * Types are derived from the data structure following the exemplar pattern.
+ * Zero dependencies - this is foundational physics.
  */
 
-// MIGRATION: Re-export from substrate to maintain compatibility
-export {
-  LOG_LEVELS,
-  type LogLevel,
-  type LogLevelName,
-  isLogLevel,
-  isLogLevelName,
-  getLogLevelValue,
-  getLogLevelName,
-} from '../../substrate/types/logging.js';
-
-/* LEGACY: Original implementation preserved for reference during migration
-
+/**
+ * Log levels as const object for runtime access
+ * This data structure is the source from which all types are derived
+ */
 export const LOG_LEVELS = {
   TRACE: {
     value: 0,
@@ -56,26 +46,58 @@ type LogLevelLookup = {
     : never;
 };
 
+/**
+ * Log level type derived from const object - numeric values
+ */
 export type LogLevel = LogLevelLookup[keyof LogLevelLookup]['value'];
 
+/**
+ * Log level name type derived from const object - string names
+ */
+export type LogLevelName = LogLevelLookup[keyof LogLevelLookup]['name'];
+
+/**
+ * Type guard for numeric log level
+ *
+ * @param value - The value to check
+ * @returns {boolean} True if the value is a valid log level, false otherwise
+ */
 export function isLogLevel(value: unknown): value is LogLevel {
   if (typeof value !== 'number') return false;
   const validLevels: readonly number[] = Object.values(LOG_LEVELS).map((level) => level.value);
   return validLevels.includes(value);
 }
 
-export type LogLevelName = LogLevelLookup[keyof LogLevelLookup]['name'];
-
+/**
+ * Type guard for log level name
+ *
+ * @param value - The value to check
+ * @returns {boolean} True if the value is a valid log level name, false otherwise
+ */
 export function isLogLevelName(value: unknown): value is LogLevelName {
   if (typeof value !== 'string') return false;
   const validLevels: readonly string[] = Object.values(LOG_LEVELS).map((level) => level.name);
   return validLevels.includes(value);
 }
 
+/**
+ * Given a log level name, return the corresponding numeric value
+ *
+ * @param levelName - The log level name to check
+ * @returns The corresponding numeric value
+ * @throws Error if the level name is not a valid log level name
+ */
 export function getLogLevelValue(levelName: LogLevelName): LogLevel {
   return LOG_LEVELS[levelName].value;
 }
 
+/**
+ * Given a numeric log level, return the corresponding name (reverse lookup)
+ *
+ * @param level - The numeric value to check
+ * @returns The corresponding log level name
+ * @throws Error if the level is not a valid log level
+ */
 export function getLogLevelName(level: number): LogLevelName {
   const levelName = Object.values(LOG_LEVELS).find((l) => l.value === level)?.name;
   if (!levelName) {
@@ -87,4 +109,3 @@ export function getLogLevelName(level: number): LogLevelName {
   }
   return levelName;
 }
-*/
