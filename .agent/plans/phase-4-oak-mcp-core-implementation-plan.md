@@ -1,8 +1,8 @@
-# Phase 3: oak-mcp-core Framework Implementation Plan
+# Phase 4: oak-mcp-core Framework Extraction Plan
 
 ## Overview
 
-Create oak-mcp-core as the **first organism** in our future ecosystem - a comprehensive MCP server framework within the existing repository using a folder structure, while simultaneously migrating oak-notion-mcp to use it. This approach builds generic components in their final location, validating them through real use.
+Extract oak-mcp-core as the **first independent organism** in our future ecosystem - a comprehensive MCP server framework in a separate workspace/package, while simultaneously migrating oak-notion-mcp to use it. This follows the complete biological architecture established in Phase 3, where we've already organized the codebase into substrate, systems, and organs.
 
 **Ecosystem Vision**: oak-mcp-core will be the pioneer organism that establishes patterns for future MCP servers. It's designed as a keystone species - many future packages will depend on it, making it critical to get the architecture right from the start.
 

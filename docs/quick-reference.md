@@ -10,7 +10,7 @@ When assigning tasks to AI agents, always include:
 "[Task description]. Read GO.md and follow all instructions"
 ```
 
-This ensures the agent maintains focus, quality, and regular grounding. See [AI Agent Guide](ai-agent-guide.md) for details.
+This ensures the agent maintains focus, quality, and regular grounding. See [AI Agent Guide](agent-guidance/ai-agent-guide.md) for details.
 
 ## Architecture TL;DR
 
