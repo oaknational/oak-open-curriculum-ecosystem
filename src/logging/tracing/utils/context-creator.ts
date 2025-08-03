@@ -12,6 +12,43 @@ import { parseTraceparent } from './header-parser.js';
  * @param options - Trace context options
  * @returns New trace context
  */
+/**
+ * Create context from parsed traceparent
+ */
+function createFromTraceparent(
+  parsed: { traceId: string; parentId: string; flags: string },
+  options: { requestId?: string; spanId?: string; baggage?: Record<string, string> },
+): TraceContext {
+  return {
+    requestId: options.requestId ?? generateRequestId(),
+    traceId: parsed.traceId,
+    spanId: options.spanId ?? generateSpanId(),
+    parentSpanId: parsed.parentId,
+    sampled: (parseInt(parsed.flags, 16) & 0x01) === 1,
+    baggage: options.baggage ?? {},
+  };
+}
+
+/**
+ * Create new trace context with defaults
+ */
+function createNewContext(options: {
+  requestId?: string;
+  traceId?: string;
+  spanId?: string;
+  parentSpanId?: string;
+  baggage?: Record<string, string>;
+}): TraceContext {
+  return {
+    requestId: options.requestId ?? generateRequestId(),
+    traceId: options.traceId ?? generateSpanId() + generateSpanId(), // 32 chars
+    spanId: options.spanId ?? generateSpanId(),
+    parentSpanId: options.parentSpanId,
+    sampled: true,
+    baggage: options.baggage ?? {},
+  };
+}
+
 export function createTraceContext(options: {
   requestId?: string;
   traceId?: string;
@@ -21,30 +58,16 @@ export function createTraceContext(options: {
   tracestate?: string;
   baggage?: Record<string, string>;
 }): TraceContext {
-  // If traceparent is provided, parse it
+  // Try to use traceparent if provided
   if (options.traceparent) {
     const parsed = parseTraceparent(options.traceparent);
     if (parsed) {
-      return {
-        requestId: options.requestId ?? generateRequestId(),
-        traceId: parsed.traceId,
-        spanId: options.spanId ?? generateSpanId(),
-        parentSpanId: parsed.parentId,
-        sampled: (parseInt(parsed.flags, 16) & 0x01) === 1,
-        baggage: options.baggage ?? {},
-      };
+      return createFromTraceparent(parsed, options);
     }
   }
 
   // Otherwise create new context
-  return {
-    requestId: options.requestId ?? generateRequestId(),
-    traceId: options.traceId ?? generateSpanId() + generateSpanId(), // 32 chars
-    spanId: options.spanId ?? generateSpanId(),
-    parentSpanId: options.parentSpanId,
-    sampled: true,
-    baggage: options.baggage ?? {},
-  };
+  return createNewContext(options);
 }
 
 /**

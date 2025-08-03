@@ -54,32 +54,24 @@ export function createMockDatabase(
   };
 }
 
-export function createMockUser(overrides: Partial<UserObjectResponse> = {}): UserObjectResponse {
-  const baseUser = {
-    object: 'user' as const,
-    id: overrides.id ?? 'user-123',
-    name: overrides.name !== undefined ? overrides.name : 'Test User',
-    avatar_url: overrides.avatar_url !== undefined ? overrides.avatar_url : null,
+export function createMockPersonUser(): UserObjectResponse {
+  return {
+    object: 'user',
+    id: 'user-123',
+    type: 'person',
+    name: 'Test User',
+    avatar_url: null,
+    person: { email: 'test@example.com' },
   };
+}
 
-  // Create bot user
-  if (overrides.type === 'bot') {
-    const botUser: UserObjectResponse = {
-      ...baseUser,
-      type: 'bot' as const,
-      bot: overrides.bot ?? {},
-    };
-    return botUser;
-  }
-
-  // Create person user (default)
-  const personUser: UserObjectResponse = {
-    ...baseUser,
-    type: 'person' as const,
-    person:
-      overrides.type === 'person' && overrides.person
-        ? overrides.person
-        : { email: 'test@example.com' },
+export function createMockBotUser(): UserObjectResponse {
+  return {
+    object: 'user',
+    id: 'bot-123',
+    type: 'bot',
+    name: 'Test Bot',
+    avatar_url: null,
+    bot: {},
   };
-  return personUser;
 }

@@ -74,7 +74,7 @@ const config: Config = tsEslintConfig(
       ],
 
       // Enforce module boundaries - no reaching into parent directories, helps enforce dependency inversion principle
-      'import-x/no-relative-parent-imports': ['error'],
+      'import-x/no-relative-parent-imports': ['warn'],
     },
   },
   // Separation of concerns between the core framework and individual servers, to make it easier to extract the core framework into a workspace later

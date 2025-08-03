@@ -74,6 +74,21 @@ function serializeEntry(
 }
 
 /**
+ * Apply default options
+ */
+function applyDefaults(options: JsonFormatterOptions): Required<JsonFormatterOptions> {
+  return {
+    pretty: options.pretty ?? false,
+    indent: options.indent ?? 2,
+    newline: options.newline ?? true,
+    fields: options.fields ?? {},
+    includeLevelValue: options.includeLevelValue ?? false,
+    sensitiveKeys: options.sensitiveKeys ?? [],
+    maxDepth: options.maxDepth ?? 10,
+  };
+}
+
+/**
  * Formats a log entry as JSON
  */
 export function formatJson(
@@ -83,23 +98,15 @@ export function formatJson(
   context: LogContext,
   options: JsonFormatterOptions = {},
 ): string {
-  const {
-    pretty = false,
-    indent = 2,
-    newline = true,
-    fields = {},
-    includeLevelValue = false,
-    sensitiveKeys = [],
-  } = options;
-
-  const fieldNames = createFieldNames(fields);
+  const opts = applyDefaults(options);
+  const fieldNames = createFieldNames(opts.fields);
   const entry = buildLogEntry(timestamp, level, message, fieldNames);
 
-  if (includeLevelValue) {
+  if (opts.includeLevelValue) {
     entry[fieldNames.levelValue] = level;
   }
 
-  addContextToEntry(entry, context, fieldNames, sensitiveKeys);
+  addContextToEntry(entry, context, fieldNames, opts.sensitiveKeys);
 
-  return serializeEntry(entry, pretty, indent, newline);
+  return serializeEntry(entry, opts.pretty, opts.indent, opts.newline);
 }
