@@ -177,11 +177,11 @@ Create .claude/agents/architectural-review.md based on code-review-architect.md 
   - Refactoring that moves code between layers
   - Any changes that affect architectural boundaries
 
-### Sub-Phase 2: Identify Non-Conforming Elements 🔄 READY TO START
+### Sub-Phase 2: Identify Non-Conforming Elements ✅ COMPLETED
 
 **Goal**: Audit what doesn't fit the nomenclature and why
 
-#### Step 2.1: Document Utilities
+#### Step 2.1: Document Utilities ✅ COMPLETED
 
 These are tools, not life:
 
@@ -190,7 +190,7 @@ These are tools, not life:
 - src/errors/
   → Document: These remain pragmatically named
 
-#### Step 2.2: Document Build/Config
+#### Step 2.2: Document Build/Config ✅ COMPLETED
 
 These are environmental, not organismal:
 
@@ -199,7 +199,7 @@ These are environmental, not organismal:
 - Various config files
   → Document: Outside the organism boundary
 
-#### Step 2.3: Create Migration Map
+#### Step 2.3: Create Migration Map ✅ COMPLETED
 
 Document what moves where:
 substrate/ → chora/stroma/
@@ -209,7 +209,13 @@ systems/config/ → chora/phaneron/config/
 organa/ (already renamed from organs/)
 Create psychon.ts (new)
 
-### Sub-Phase 3: Chora Transformation ⏳ PENDING
+**Analysis Deliverables**:
+
+- `.agent/plans/phase-3-sub-phase-2-analysis.md` - Detailed analysis of 91 import warnings
+- `.agent/plans/phase-3-warning-resolution-plan.md` - Plan for resolving warnings
+- `.agent/plans/phase-3-pragmatic-naming-rationale.md` - What stays pragmatically named
+
+### Sub-Phase 3: Chora Transformation 🔄 READY TO START
 
 **Goal**: Restructure cross-cutting concerns into chorai
 
