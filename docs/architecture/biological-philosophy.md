@@ -1,8 +1,10 @@
-# Biological Architecture Reference
+# Biological Architecture: Philosophy and Implementation
 
 ## Overview
 
-This document defines our complete architectural nomenclature based on ancient Greek terminology, distinguishing between discrete hierarchical components and cross-cutting fields (chorai).
+This document provides the philosophical foundation and implementation guidance for our biological architecture. While the [Naming Guide](../naming.md) explains what each term means, this document explains WHY we make the distinctions we do and HOW to apply them in practice.
+
+> **For**: Both humans and AI agents who need to understand the deeper principles behind our architectural choices.
 
 ## Core Philosophy
 

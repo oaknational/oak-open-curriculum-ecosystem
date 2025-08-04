@@ -2,7 +2,9 @@
 
 This document explains our naming conventions and the complete biological hierarchy used in our architecture, from molecular syntax features to ecosystem-level abstractions.
 
-> **Quick Reference**: See [Architecture Overview](./architecture-overview.md) for how this naming system is implemented in practice.
+> **Quick Reference**: See [Architecture Overview](./architecture-overview.md) for implementation details.
+>
+> **Philosophy**: See [Biological Philosophy](./architecture/biological-philosophy.md) for the deeper principles and the Actions vs Access distinction.
 
 ## Overview
 
