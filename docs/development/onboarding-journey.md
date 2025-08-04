@@ -59,25 +59,31 @@ pnpm dev
 - Focus on: The layer diagram and data flow
 - Key insight: Clean architecture with pure functions at the core
 
+**Read**: [Naming Guide](../naming.md)
+
+- Focus on: Understanding our biological architecture with Greek nomenclature
+- Key insight: Each term has precise meaning and architectural purpose
+
 #### 2. Code Exploration
 
 **Explore** the codebase in this order:
 
-1. **Entry Point**: `src/index.ts`
-   - How does the server start?
-   - What's stdio transport?
+1. **The Soul**: `src/psychon.ts`
+   - How does everything come to life?
+   - What gets wired together?
 
-2. **Server Setup**: `src/server.ts`
-   - How are handlers registered?
-   - What's the MCP protocol layer?
+2. **Pervasive Fields**: `src/chora/`
+   - `stroma/` - Structural types and contracts
+   - `aither/` - Logging, events, errors flowing through
+   - `phaneron/` - Configuration that manifests at runtime
 
-3. **Pure Business Logic**: `src/notion/transformers.ts`
-   - Notice: No side effects, fully testable
-   - Example: How PII scrubbing works
+3. **Business Organs**: `src/organa/`
+   - `notion/` - Pure functions for Notion integration
+   - `mcp/` - Protocol handling and tool definitions
 
-4. **Integration Points**: `src/notion/client.ts`
-   - How is the Notion SDK wrapped?
-   - Why abstraction matters
+4. **Test Phantoms**: `src/chora/eidola/`
+   - How test doubles mirror the living system
+   - Why phantoms enable testing without external dependencies
 
 #### 3. Understanding Agentic Patterns
 

@@ -1,6 +1,8 @@
-# Quick Reference
+# Quick Start Guide
 
 For experienced developers who want to jump straight in.
+
+> **New to our Architecture?** See our [Naming Guide](./naming.md) to understand our biological architecture with Greek nomenclature.
 
 ## 🤖 Working with AI Agents
 
@@ -32,19 +34,22 @@ Claude/AI Agent → MCP Protocol → Our Server → Notion API
 
 ```
 src/
-├── index.ts          # Entry point - starts server
+├── psychon.ts        # The ensouled whole - wires everything together
 ├── server.ts         # MCP server setup, handler registration
-├── mcp/
-│   ├── handlers.ts   # Top-level request routing
-│   ├── resources/    # Resource handlers (notion://...)
-│   └── tools/        # Tool handlers (notion-search, etc.)
-├── notion/
-│   ├── client.ts     # Notion SDK wrapper
-│   ├── transformers.ts # Pure functions: Notion → MCP format
-│   └── query-builders.ts # Pure functions: Build Notion queries
-└── utils/
-    └── scrubbing.ts  # PII protection (email scrubbing)
+├── chora/            # Cross-cutting fields (pervasive infrastructure)
+│   ├── stroma/       # Structural matrix (types, contracts)
+│   ├── aither/       # Divine flows (logging, events, errors, immunity)
+│   ├── phaneron/     # Visible manifestation (configuration)
+│   └── eidola/       # Phantoms for testing
+├── organa/           # Discrete organs (bounded business logic)
+│   ├── notion/       # Notion integration organ
+│   └── mcp/          # MCP protocol organ
+│       ├── resources/    # Resource handlers (notion://...)
+│       └── tools/        # Tool handlers (notion-search, etc.)
+└── [old structure being migrated]
 ```
+
+> **Full Hierarchy**: See [Naming Guide](./naming.md) for the complete biological hierarchy from molecules to biosphere.
 
 ## Quick Start
 
