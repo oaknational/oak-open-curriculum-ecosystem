@@ -8,55 +8,68 @@ The Oak Notion MCP Server provides read-only access to Notion workspaces through
 
 ## Core Architecture
 
-The system implements a **Complete Biological Architecture** - a mathematically-grounded approach validated by complex systems research.
+The system implements a **Biological Architecture with Greek Nomenclature** - a living systems model that distinguishes between:
+
+- **Chora (Χώρα)**: Cross-cutting fields that pervade the entire system
+- **Organa (Ὄργανα)**: Discrete, bounded organs with specific functions
+- **Psychon (Ψυχόν)**: The ensouled whole that brings everything to life
+
+This approach is mathematically-grounded and validated by complex systems research.
 
 ### Current Implementation (Phase 3 - In Progress)
 
-We've successfully transitioned from traditional layers to a complete biological model:
+We're transitioning to a biological model with Greek nomenclature for conceptual clarity:
 
 ```
 src/
-├── substrate/         # Foundation (types & contracts) ✅
-│   ├── types/        # Pure type definitions
-│   ├── contracts/    # Logger, Config, EventBus, NotionOperations
-│   └── event-schemas/# Event type definitions
-├── systems/          # Pervasive Infrastructure ✅
-│   ├── logging/      # Nervous system (flattened to 2 levels)
-│   ├── events/       # Hormonal signaling (edge-compatible)
-│   └── config/       # Endocrine system
-├── organa/           # Discrete Business Logic ✅
-│   ├── notion/       # Notion integration (with public API)
-│   └── mcp/          # MCP protocol (uses dependency injection)
-└── (organism.ts)     # Future: Assembly point
+├── chora/             # Cross-cutting fields (pervasive infrastructure)
+│   ├── stroma/        # Structural matrix (types, contracts, schemas)
+│   │   ├── types/     # Pure type definitions
+│   │   ├── contracts/ # Interface definitions
+│   │   └── schemas/   # Event and data schemas
+│   ├── aither/        # Divine flows (infrastructure that moves)
+│   │   ├── logging/   # Logging throughout the system
+│   │   └── events/    # Event propagation
+│   └── phaneron/      # Visible manifestation
+│       └── config/    # Runtime configuration
+├── organa/            # Discrete organs (bounded business logic)
+│   ├── notion/        # Notion integration organ
+│   └── mcp/           # MCP protocol organ
+└── psychon.ts         # The ensouled whole (wires everything together)
 ```
 
 ### Architectural Components
 
-#### 1. Substrate (Foundation) ✅ COMPLETED
+#### 1. Chora/Stroma (Structural Matrix) - Foundation
 
-- Types, contracts, and event schemas
-- The "physics" of our application
-- Zero runtime code
+- Types, contracts, and schemas that form the "physics" of our system
+- Zero runtime code - pure compile-time structures
 - Key contracts: Logger, ConfigProvider, EventBus, NotionOperations
+- **Current**: `substrate/` → **Target**: `chora/stroma/`
 
-#### 2. Systems (Pervasive Infrastructure) ✅ COMPLETED
+#### 2. Chora/Aither (Divine Flows) - Pervasive Infrastructure
 
-- **Logging**: Nervous system (flattened from 5 to 2 levels, domain-driven splitting)
-- **Events**: Edge-compatible event bus for hormonal signaling
-- **Config**: Endocrine system (moved from substrate to correct location)
+- **Logging**: Flows throughout like a nervous system
+- **Events**: Propagate like hormonal signals
+- **Current**: `systems/logging/`, `systems/events/` → **Target**: `chora/aither/`
 
-#### 3. Organa (Discrete Business Logic) ✅ COMPLETED
+#### 3. Chora/Phaneron (Visible Manifestation) - Configuration
 
-- **Notion Organ**: Complete integration with public API (createNotionOperations)
-- **MCP Organ**: Protocol handling with dependency injection
-- Zero cross-organ imports achieved
-- Communication via dependency injection, not events
+- Runtime configuration that makes the system's state visible
+- **Current**: `systems/config/` → **Target**: `chora/phaneron/`
 
-#### 4. Organism (Assembly) ⏳ PENDING
+#### 4. Organa (Discrete Organs) - Bounded Business Logic
 
-- Will wire systems and organa together
-- Entry point for the application
-- Next step in Phase 3
+- **Notion Organ**: Integration with Notion API
+- **MCP Organ**: Protocol handling
+- Zero cross-organ imports - communicate via dependency injection
+- **Already renamed**: `organs/` → `organa/`
+
+#### 5. Psychon (The Ensouled Whole) - Assembly
+
+- Wires all chorai and organa together
+- The living, breathing application
+- **Current**: Future `organism.ts` → **Target**: `psychon.ts`
 
 #### 5. Oak MCP Core (Future Keystone Species)
 
@@ -66,24 +79,30 @@ src/
 
 ## Key Architectural Principles
 
-1. **Complete Biological Model** - Substrate + Systems + Organs
+1. **Biological Model with Greek Nomenclature** - Chora + Organa + Psychon
 2. **Pure Functions First** - Organelles with no side effects
-3. **Clear Boundaries** - Natural separation, not forced
+3. **Clear Boundaries** - Chorai pervade, organa are discrete
 4. **Operating at Criticality** - Edge of chaos for optimal performance
 5. **Mathematical Grounding** - Validated by complex systems theory
-6. **Early Warning Signals** - 103 import warnings show natural boundaries
+6. **Early Warning Signals** - Import warnings show natural boundaries
+
+### Why Greek Nomenclature?
+
+1. **Avoids Overloaded Terms** - "System", "service", "component" mean too many things
+2. **Precise Philosophical Meaning** - Each Greek term has specific philosophical heritage
+3. **Cognitive Distance** - Foreign terms force clear thinking about distinctions
 
 ## Architectural Evolution
 
-### Phase 3: Current - Biological Restructuring ⏳ IN PROGRESS
+### Phase 3: Current - Biological Architecture with Greek Nomenclature ⏳ IN PROGRESS
 
-**Progress**: Foundation, Infrastructure, and Modularization phases completed. Integration phase pending.
+**Progress**: Transitioning to chora/organa/psychon structure
 
-- ✅ Substrate layer with types and contracts
-- ✅ Systems layer with logging, events, and config
-- ✅ Organa layer with Notion and MCP (zero cross-imports)
-- ⏳ Organism assembly to wire everything together
-- 91 import warnings remain (all expected architectural boundaries)
+- ✅ Renamed `organs/` → `organa/`
+- ⏳ Transform `substrate/` → `chora/stroma/`
+- ⏳ Transform `systems/` → `chora/aither/` + `chora/phaneron/`
+- ⏳ Create `psychon.ts` to wire everything together
+- Import warnings show where boundaries naturally want to form
 
 ### Phase 4: Next - Oak MCP Core Extraction
 

@@ -55,13 +55,11 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
 
 ## Implementation Phases
 
-### Phase 1: Documentation Foundation (Days 1-2)
+### Sub-Phase 1: Documentation Foundation 🔄 IN PROGRESS
 
 **Goal**: Update all architectural documentation with new nomenclature
 
-**Critical Ordering**: Steps 1.1-1.4 and 1.6 must complete before 1.5 (architectural review sub-agent) to ensure the authoritative architectural document exists first.
-
-#### Step 1.1: Update Root Documentation
+#### Step 1.1: Update Root Documentation ✅ COMPLETED
 
 Update README.md incorporating biological architecture concepts
 
@@ -72,7 +70,7 @@ Update README.md incorporating biological architecture concepts
 - Update project structure diagram to show chora/organa/psychon structure
 - Explain the living system metaphor and its benefits
 
-#### Step 1.2: Update Architecture Overview
+#### Step 1.2: Update Architecture Overview ✅ COMPLETED
 
 Update docs/architecture-overview.md with biological architecture concepts
 
@@ -86,20 +84,20 @@ Update docs/architecture-overview.md with biological architecture concepts
 - Revise architectural diagrams to illustrate the living system
 - Explain why Greek nomenclature resolves conceptual confusion
 
-#### Step 1.3: Consolidate Architecture Documents
+#### Step 1.3: Consolidate Architecture Documents 🔄 IN PROGRESS
 
 Merge and update docs/architecture/
 
-- Review master-architecture.md and high-level-architecture.md for redundancies
-- Merge into single consolidated architecture document
+- ✅ Review master-architecture.md and high-level-architecture.md for redundancies
+- ⏳ Merge into single consolidated architecture document
   (remove duplicates, keep best explanations from both)
-- Update all content with biological architecture terminology
-- Archive outdated docs to docs/archive/:
+- ⏳ Update all content with biological architecture terminology
+- ✅ Archive outdated docs to docs/archive/:
   - tissue-and-organ-interfaces.md (tissues concept simplified out)
   - tissue-organ-example.md (tissues concept simplified out)
   - Any redundant architecture docs after merge
 
-#### Step 1.4: Create New ADR
+#### Step 1.4: Create New ADR ✅ COMPLETED
 
 Create docs/architecture/architectural-decisions/020-biological-architecture.md
 
@@ -117,30 +115,11 @@ Create docs/architecture/architectural-decisions/020-biological-architecture.md
   - Aither (Αἰθήρ): Divine substance that flows (logs, events)
   - Phaneron (Φανερόν): What appears/is manifest (config)
 
-#### Step 1.5: Create Architectural Review Sub-Agent
-
-Create .claude/agents/architectural-review.md based on code-review-architect.md pattern:
-
-- Model the structure after code-review-architect.md
-- Configure to reference docs/agent-guidance/architecture.md as authoritative source
-- Core responsibilities:
-  - Verify architectural compliance with biological architecture
-  - Ensure proper chora/organa/psychon categorization
-  - Catch cross-cutting concerns placed in organs
-  - Identify organs trying to be pervasive
-  - Validate dependency injection patterns
-  - Review for conceptual clarity and naming consistency
-- Should be invoked for:
-  - Major structural changes
-  - New module/component creation
-  - Refactoring that moves code between layers
-  - Any changes that affect architectural boundaries
-
-#### Step 1.6: Update Agent Guidance Documentation
+#### Step 1.5: Update Agent Guidance Documentation 🔄 IN PROGRESS
 
 Update all docs/agent-guidance/ files for consistency:
 
-1. **docs/agent-guidance/architecture.md** (new) - **CRITICAL: This will be the authoritative reference**
+1. **docs/agent-guidance/architecture.md** (new) - **CRITICAL: This will be the authoritative reference** ✅ COMPLETED
    - Write as THE definitive architectural guide for AI agents
    - Structure it to be easily referenceable by sub-agents
    - Include:
@@ -188,7 +167,26 @@ Update all docs/agent-guidance/ files for consistency:
    - Add biological architecture to key concepts
    - Update any architectural references
 
-### Phase 2: Identify Non-Conforming Elements (Day 3)
+#### Step 1.6: Create Architectural Review Sub-Agent ✅ COMPLETED
+
+Create .claude/agents/architectural-review.md based on code-review-architect.md pattern:
+
+- Model the structure after code-review-architect.md
+- Configure to reference docs/agent-guidance/architecture.md as authoritative source
+- Core responsibilities:
+  - Verify architectural compliance with biological architecture
+  - Ensure proper chora/organa/psychon categorization
+  - Catch cross-cutting concerns placed in organs
+  - Identify organs trying to be pervasive
+  - Validate dependency injection patterns
+  - Review for conceptual clarity and naming consistency
+- Should be invoked for:
+  - Major structural changes
+  - New module/component creation
+  - Refactoring that moves code between layers
+  - Any changes that affect architectural boundaries
+
+### Sub-Phase 2: Identify Non-Conforming Elements (Day 3)
 
 **Goal**: Audit what doesn't fit the nomenclature and why
 
@@ -220,7 +218,7 @@ systems/config/ → chora/phaneron/config/
 organa/ (already renamed from organs/)
 Create psychon.ts (new)
 
-### Phase 3: Chora Transformation (Days 4-5)
+### Sub-Phase 3: Chora Transformation
 
 **Goal**: Restructure cross-cutting concerns into chorai
 
@@ -265,7 +263,7 @@ rmdir src/systems
 # systems/config/ → chora/phaneron/config/
 ```
 
-### Phase 4: Psychon Integration (Days 6-7)
+### Sub-Phase 4: Psychon Integration
 
 **Goal**: Create the ensouled whole that wires all components together
 
@@ -338,7 +336,7 @@ export class Psychon {
 # Update any external-facing APIs
 ```
 
-### Phase 5: Validation & Cleanup (Day 8)
+### Sub-Phase 5: Validation & Cleanup (Day 8)
 
 **Goal**: Ensure everything works perfectly
 
@@ -399,12 +397,10 @@ pnpm build
 - **Kratos** (Κράτος) - Authorization/permissions
 - **Nomos** (Νόμος) - Rules/policies
 
-## Timeline Summary
+## Roadmap Summary
 
-- **Days 1-2**: Documentation foundation
-- **Day 3**: Identify non-conforming elements
-- **Days 4-5**: Chora transformation (substrate→stroma, systems→aither/phaneron)
-- **Days 6-7**: Psychon integration (create the ensouled whole)
-- **Day 8**: Validation & clean-up
-
-Total: 8 days to complete biological architecture implementation
+- **Now**: Documentation foundation
+- **Next**: Identify non-conforming elements
+- **Later**: Chora transformation (substrate→stroma, systems→aither/phaneron)
+- **Later**: Psychon integration (create the ensouled whole)
+- **Later**: Validation & clean-up

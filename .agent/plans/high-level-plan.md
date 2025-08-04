@@ -124,7 +124,7 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 
 **Approach**: Progressive transformation maintaining system functionality
 
-**Progress Update (2025-01-05)**:
+**Progress Update (2025-01-08)**:
 
 - Started with 101 relative parent import violations
 - Currently at 91 warnings (all expected architectural boundaries)
@@ -132,6 +132,17 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 - Substrate, systems, and organa layers established
 - Dependency injection implemented, eliminating cross-organ imports
 - Renamed organs to organa
+
+**Sub-Phase 1 Documentation Progress**:
+
+- ✅ README.md updated with biological architecture
+- ✅ docs/architecture-overview.md updated with Greek nomenclature
+- ✅ Created ADR-020 for biological architecture decision
+- ✅ Created authoritative architecture guide for agents
+- ✅ Created architecture-reviewer sub-agent
+- ✅ Updated both reviewer agents with Greek nomenclature
+- ✅ Updated AGENT.md to reference new architecture
+- 🔄 Remaining: Update other agent-guidance docs, merge architecture docs
 
 **Key Deliverables**:
 

@@ -8,21 +8,44 @@ The package will be built and deployed to npm, will be open source, and will be 
 
 **Architecture Note**: This project is being refactored to include `oak-mcp-core`, a generic MCP framework that will enable rapid development of MCP servers. The Notion-specific functionality will be built on top of this reusable framework, reducing code duplication and improving maintainability across MCP server implementations.
 
-**🧪 Complete Biological Architecture**: We follow a comprehensive biological model for software architecture that distinguishes between:
+**🧪 Biological Architecture with Greek Nomenclature**: We use a living systems model with Greek terms for conceptual clarity:
 
-- **Substrate** (Foundation) - Types, contracts, and event schemas that form the "physics" of our system
-- **Systems** (Pervasive) - Infrastructure like logging and events that flow throughout the organism
-- **Organa** (Discrete) - Business logic units like Notion and MCP with clear boundaries
-- **Organisms** (Applications) - Complete applications that wire systems and organs together
-- **Ecosystems** (Multiple Apps) - Future vision of multiple organisms interacting symbiotically
+### Core Concepts
 
-This approach is grounded in complex systems theory and recent mathematical research proving that:
+- **Chora (Χώρα)** - Cross-cutting fields that pervade the entire system
+  - `chora/stroma/` - Structural matrix (types, contracts, schemas)
+  - `chora/aither/` - Divine flows (logging, events)
+  - `chora/phaneron/` - Visible manifestation (configuration)
+- **Organa (Ὄργανα)** - Discrete, bounded organs with specific functions
+  - `organa/notion/` - Notion integration organ
+  - `organa/mcp/` - MCP protocol organ
+- **Psychon (Ψυχόν)** - The ensouled whole that brings everything to life
+  - Wires all chorai and organa together
+  - The living, breathing application
 
-- Heterogeneous networks with cooperative interactions achieve greater stability (Meena et al., 2023)
-- Systems operate optimally at criticality - the edge of chaos (Beggs & Plenz, 2003)
-- Complex systems show universal early warning signals before transitions (Scheffer et al., 2009)
+### Why Greek Nomenclature?
 
-Our 103 relative import warnings are such early warning signals, showing where architectural boundaries naturally want to form. Learn more in our [architectural documentation](docs/architecture/README.md), [mathematical foundation](docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md), and [evolution plan](.agent/plans/architectural-evolution-plan.md).
+1. **Avoids Overloaded Terms** - English words like "system", "service", "component" have too many meanings
+2. **Precise Philosophical Meaning** - Each Greek term has a specific philosophical heritage
+3. **Cognitive Distance** - Foreign terms force us to think clearly about distinctions
+
+### Architectural Evolution
+
+- **Current**: `substrate/` → `chora/stroma/`, `systems/` → `chora/aither+phaneron/`
+- **Already Done**: Renamed `organs/` → `organa/`
+- **Coming**: Create `psychon.ts` to unify everything
+
+### The Living System Metaphor
+
+Our biological architecture treats software as a living organism:
+
+1. **Natural Boundaries** - Just as organs have membranes, our modules have clear interfaces
+2. **Cooperative Interaction** - Components work together like organs in a body
+3. **Emergent Behavior** - The whole system exhibits properties beyond individual parts
+4. **Self-Organization** - Architecture evolves naturally along stress lines (import warnings show where boundaries want to form)
+5. **Resilience** - Like biological systems, heterogeneous architectures are more stable
+
+This approach is grounded in complex systems theory and recent mathematical research proving that heterogeneous networks with cooperative interactions achieve greater stability (Meena et al., 2023). Learn more in our [architectural documentation](docs/architecture/README.md) and [mathematical foundation](docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md).
 
 ## Architecture Decision Records
 
@@ -163,18 +186,20 @@ All tests except E2E are run automatically in CI/CD and pre-push hooks.
 ```
 oak-notion-mcp/
 ├── src/                    # Source code
-│   ├── substrate/         # Foundation layer (types & contracts)
-│   │   ├── types/         # Pure type definitions
-│   │   ├── contracts/     # Interface definitions
-│   │   └── event-schemas/ # Event type definitions
-│   ├── systems/           # Pervasive infrastructure
-│   │   ├── logging/       # Nervous system
-│   │   ├── events/        # Hormonal signaling
-│   │   └── config/        # Endocrine system
-│   ├── organa/            # Discrete business logic
+│   ├── chora/             # Cross-cutting fields (pervasive infrastructure)
+│   │   ├── stroma/        # Structural matrix (types, contracts, schemas)
+│   │   │   ├── types/     # Pure type definitions
+│   │   │   ├── contracts/ # Interface definitions
+│   │   │   └── schemas/   # Event and data schemas
+│   │   ├── aither/        # Divine flows (infrastructure that moves)
+│   │   │   ├── logging/   # Logging throughout the system
+│   │   │   └── events/    # Event propagation
+│   │   └── phaneron/      # Visible manifestation
+│   │       └── config/    # Runtime configuration
+│   ├── organa/            # Discrete organs (bounded business logic)
 │   │   ├── notion/        # Notion integration organ
 │   │   └── mcp/           # MCP protocol organ
-│   └── (organism.ts)      # Future: Assembly point
+│   └── psychon.ts         # The ensouled whole (wires everything together)
 ├── dist/                   # Built output (gitignored)
 ├── e2e-tests/             # End-to-end tests (manual only)
 ├── docs/                  # Documentation
@@ -182,12 +207,14 @@ oak-notion-mcp/
 └── coverage/              # Test coverage reports (gitignored)
 ```
 
-The project follows a **complete biological architecture** with clear separation between:
+The project follows a **biological architecture with Greek nomenclature** for clarity:
 
-- **Substrate**: Compile-time foundation (types, contracts)
-- **Systems**: Pervasive runtime infrastructure that flows throughout
-- **Organa**: Discrete business logic units with no cross-imports
-- **Organism**: (Future) Wires everything together
+- **Chora (Χώρα)**: Cross-cutting fields that pervade everything
+  - **Stroma**: Structural foundation (compile-time)
+  - **Aither**: Flowing infrastructure (runtime)
+  - **Phaneron**: What becomes visible (config)
+- **Organa (Ὄργανα)**: Discrete organs with clear boundaries
+- **Psychon (Ψυχόν)**: The living application that unifies all parts
 
 This structure will enable extraction of `oak-mcp-core` as a separate package in Phase 4.
 
