@@ -17,6 +17,7 @@ const config: Config = tsEslintConfig(
       '**/*.d.ts',
       '.eslintrc.js',
       'commitlint.config.js',
+      'scripts/**/*.mjs',
     ],
   },
   eslint.configs.recommended,
