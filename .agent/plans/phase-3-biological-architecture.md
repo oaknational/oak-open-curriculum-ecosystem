@@ -59,6 +59,8 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
 
 **Goal**: Update all architectural documentation with new nomenclature
 
+**Critical Ordering**: Steps 1.1-1.4 and 1.6 must complete before 1.5 (architectural review sub-agent) to ensure the authoritative architectural document exists first.
+
 #### Step 1.1: Update Root Documentation
 
 Update README.md incorporating biological architecture concepts
@@ -115,15 +117,41 @@ Create docs/architecture/architectural-decisions/020-biological-architecture.md
   - Aither (Αἰθήρ): Divine substance that flows (logs, events)
   - Phaneron (Φανερόν): What appears/is manifest (config)
 
-#### Step 1.5: Update Agent Guidance Documentation
+#### Step 1.5: Create Architectural Review Sub-Agent
+
+Create .claude/agents/architectural-review.md based on code-review-architect.md pattern:
+
+- Model the structure after code-review-architect.md
+- Configure to reference docs/agent-guidance/architecture.md as authoritative source
+- Core responsibilities:
+  - Verify architectural compliance with biological architecture
+  - Ensure proper chora/organa/psychon categorization
+  - Catch cross-cutting concerns placed in organs
+  - Identify organs trying to be pervasive
+  - Validate dependency injection patterns
+  - Review for conceptual clarity and naming consistency
+- Should be invoked for:
+  - Major structural changes
+  - New module/component creation
+  - Refactoring that moves code between layers
+  - Any changes that affect architectural boundaries
+
+#### Step 1.6: Update Agent Guidance Documentation
 
 Update all docs/agent-guidance/ files for consistency:
 
-1. **docs/agent-guidance/architecture.md** (new)
-   - Summarise the biological architecture and its intent
-   - Explain chora/organa/psychon structure for AI agents
-   - Provide clear examples of what belongs where
-   - Include decision tree for categorizing new code
+1. **docs/agent-guidance/architecture.md** (new) - **CRITICAL: This will be the authoritative reference**
+   - Write as THE definitive architectural guide for AI agents
+   - Structure it to be easily referenceable by sub-agents
+   - Include:
+     - Executive summary of biological architecture
+     - Philosophical grounding and rationale
+     - Detailed chora/organa/psychon structure explanation
+     - Clear categorization rules (what goes where and why)
+     - Decision trees and flowcharts for architectural decisions
+     - Examples of correct vs incorrect patterns
+     - Cross-references to related documents
+   - This document will be referenced by future architectural-review sub-agent
 
 2. **docs/agent-guidance/ai-agent-guide.md**
    - Update all references to old structure (substrate/systems/organs)
