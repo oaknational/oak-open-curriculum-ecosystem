@@ -6,8 +6,8 @@ import {
   CallToolRequestSchema,
   ListPromptsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { createResourceHandlers } from './mcp/resources/handlers/index.js';
-import { createToolHandlers } from './mcp/tools/handlers.js';
+import { createResourceHandlers } from './organs/mcp/resources/handlers/index.js';
+import { createToolHandlers } from './organs/mcp/tools/handlers.js';
 import type { ServerDependencies } from './types/dependencies.js';
 
 /**

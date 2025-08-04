@@ -5,7 +5,7 @@
 
 import type { ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
 import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
-import type { CoreDependencies } from '../../../types/dependencies.js';
+import type { CoreDependencies } from '../../../../types/dependencies.js';
 import { parseResourceUri, validateResourceUri, type ResourceIdentifier } from '../uri-parser.js';
 import { handleDiscoveryResource } from './discovery.js';
 

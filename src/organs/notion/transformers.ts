@@ -3,7 +3,7 @@
  * Re-exports functionality from modular structure
  */
 
-import { scrubEmail } from '../utils/scrubbing.js';
+import { scrubEmail } from '../../utils/scrubbing.js';
 import { createUserTransformer } from './transformers/user-transformer.js';
 
 // Re-export all types and functions from the modular structure

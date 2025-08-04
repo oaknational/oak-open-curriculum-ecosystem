@@ -3,19 +3,16 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import { isFullPage, isFullBlock } from '@notionhq/client/build/src/helpers.js';
+import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
 import { notionGetPageSchema } from '../schemas.js';
-import {
-  transformNotionPageToMcpResource,
-  extractTextFromNotionBlocks,
-} from '../../../notion/transformers.js';
-import { formatPageDetails } from '../../../notion/formatters.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 
 export interface GetPageDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
+  notionOperations: NotionOperations;
 }
 
 /**
@@ -42,7 +39,8 @@ export function createGetPageExecutor(deps: GetPageDependencies): ToolExecutor {
         );
       }
 
-      const resource = transformNotionPageToMcpResource(pageResponse);
+      const resource =
+        deps.notionOperations.transformers.transformNotionPageToMcpResource(pageResponse);
 
       // Get content if requested
       let content: string | undefined;
@@ -54,11 +52,11 @@ export function createGetPageExecutor(deps: GetPageDependencies): ToolExecutor {
 
         // Filter for full block responses
         const fullBlocks = blocksResponse.results.filter(isFullBlock);
-        content = extractTextFromNotionBlocks(fullBlocks);
+        content = deps.notionOperations.transformers.extractTextFromNotionBlocks(fullBlocks);
       }
 
       // Format for output
-      return formatPageDetails(resource, pageResponse, content);
+      return deps.notionOperations.formatters.formatPageDetails(resource, pageResponse, content);
     },
   };
 }

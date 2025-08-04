@@ -3,15 +3,15 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../types/dependencies.js';
+import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
 import { notionListUsersSchema } from '../schemas.js';
-import { transformNotionUserToMcpResource } from '../../../notion/transformers.js';
-import { formatUserList } from '../../../notion/formatters.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 
 export interface ListUsersDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
+  notionOperations: NotionOperations;
 }
 
 /**
@@ -31,10 +31,12 @@ export function createListUsersExecutor(deps: ListUsersDependencies): ToolExecut
       const users = usersResponse.results;
 
       // Transform results
-      const resources = users.map(transformNotionUserToMcpResource);
+      const resources = users.map((user) =>
+        deps.notionOperations.transformers.transformNotionUserToMcpResource(user),
+      );
 
       // Format for output
-      return formatUserList(users, resources);
+      return deps.notionOperations.formatters.formatUserList(users, resources);
     },
   };
 }

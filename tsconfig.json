@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "erasableSyntaxOnly": false,
     "rootDir": ".",
     "outDir": "./dist",
     "strict": true,

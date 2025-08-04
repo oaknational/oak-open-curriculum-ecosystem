@@ -1,5 +1,5 @@
-import { scrubEmail } from '../utils/scrubbing.js';
-import type { CoreDependencies } from '../types/dependencies.js';
+import { scrubEmail } from '../../utils/scrubbing.js';
+import type { CoreDependencies } from '../../types/dependencies.js';
 
 export interface Resource {
   uri: string;

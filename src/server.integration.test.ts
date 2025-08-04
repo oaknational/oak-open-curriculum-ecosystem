@@ -4,7 +4,7 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { Logger } from './systems/logging/logger-interface.js';
 import { createMockListUsersResponse } from './test-helpers/notion-api-mocks.js';
-import { createMockLogger } from './test-helpers/factories.js';
+import { createMockLogger, createMockNotionOperations } from './test-helpers/factories.js';
 
 describe('MCP Server', () => {
   const mockLogger: Logger = createMockLogger();
@@ -42,6 +42,7 @@ describe('MCP Server', () => {
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
+      notionOperations: createMockNotionOperations(),
       config,
     });
 
@@ -98,6 +99,7 @@ describe('MCP Server', () => {
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
+      notionOperations: createMockNotionOperations(),
       config,
     });
 
@@ -139,7 +141,12 @@ describe('MCP Server', () => {
    */
   async function setupServerAndClient() {
     const config = { name: 'test-server', version: '1.0.0' };
-    const server = createMcpServer({ notionClient: mockNotionClient, logger: mockLogger, config });
+    const server = createMcpServer({
+      notionClient: mockNotionClient,
+      logger: mockLogger,
+      notionOperations: createMockNotionOperations(),
+      config,
+    });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await server.connect(serverTransport);
@@ -208,6 +215,7 @@ describe('MCP Server', () => {
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
+      notionOperations: createMockNotionOperations(),
       config,
     });
 

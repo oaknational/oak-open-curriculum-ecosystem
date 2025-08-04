@@ -3,7 +3,7 @@
  * Assembles tools from clean abstractions
  */
 
-import type { CoreDependencies } from '../../types/dependencies.js';
+import type { CoreDependencies } from '../../../types/dependencies.js';
 import type { McpTool } from '../types.js';
 import {
   createToolFactory,
@@ -70,6 +70,7 @@ function createExecutors(deps: CoreDependencies) {
   const executorDeps = {
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   };
 
   return {
@@ -132,6 +133,7 @@ export function createNotionSearchTool(deps: CoreDependencies): McpTool {
   const executor = createSearchExecutor({
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   });
 
   return toolFactory(searchToolDefinition, executor, errorHandler);
@@ -143,6 +145,7 @@ export function createNotionListDatabasesTool(deps: CoreDependencies): McpTool {
   const executor = createListDatabasesExecutor({
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   });
 
   return toolFactory(listDatabasesToolDefinition, executor, errorHandler);
@@ -154,6 +157,7 @@ export function createNotionQueryDatabaseTool(deps: CoreDependencies): McpTool {
   const executor = createQueryDatabaseExecutor({
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   });
 
   return toolFactory(queryDatabaseToolDefinition, executor, errorHandler);
@@ -165,6 +169,7 @@ export function createNotionGetPageTool(deps: CoreDependencies): McpTool {
   const executor = createGetPageExecutor({
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   });
 
   return toolFactory(getPageToolDefinition, executor, errorHandler);
@@ -176,6 +181,7 @@ export function createNotionListUsersTool(deps: CoreDependencies): McpTool {
   const executor = createListUsersExecutor({
     notionClient: deps.notionClient,
     logger: deps.logger,
+    notionOperations: deps.notionOperations,
   });
 
   return toolFactory(listUsersToolDefinition, executor, errorHandler);
