@@ -116,8 +116,17 @@ const config: Config = tsEslintConfig(
   },
   // Config files (JS)
   {
-    files: ['**/*.config.js'],
+    files: ['**/*.config.js', '.releaserc.js'],
     extends: [tsEslintConfigs.disableTypeChecked],
+    languageOptions: {
+      globals: {
+        module: 'readonly',
+        require: 'readonly',
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
   },
   // Script files
   {
