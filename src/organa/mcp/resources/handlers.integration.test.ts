@@ -6,12 +6,12 @@ import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
-} from '../../../test-helpers/notion-mocks.js';
+} from '../../../chora/eidola/notion-mocks.js';
 import {
   createMockListUsersResponse,
   createMockSearchResponse,
-} from '../../../test-helpers/notion-api-mocks.js';
-import { createMockNotionOperations } from '../../../test-helpers/factories.js';
+} from '../../../chora/eidola/notion-api-mocks.js';
+import { createMockNotionOperations } from '../../../chora/eidola/factories.js';
 
 describe('createResourceHandlers', () => {
   const mockDebug = vi.fn();

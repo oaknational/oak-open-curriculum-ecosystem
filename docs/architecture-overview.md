@@ -32,16 +32,19 @@ src/
 │   │   ├── events/    # Event propagation
 │   │   ├── errors/    # Alert/pain system of the organism
 │   │   └── immunity/  # Immune system (PII scrubbing protection)
-│   └── phaneron/      # Visible manifestation
-│       └── config/    # Runtime configuration
+│   ├── phaneron/      # Visible manifestation
+│   │   └── config/    # Runtime configuration
+│   └── eidola/        # Phantoms/simulacra for testing
+│       ├── factories.ts        # Mock factory functions
+│       ├── notion-mocks.ts     # Notion-specific test doubles
+│       └── notion-api-mocks.ts # API response simulacra
 ├── organa/            # Discrete organs (bounded business logic)
 │   ├── notion/        # Notion integration organ
 │   └── mcp/           # MCP protocol organ
-├── psychon.ts         # The ensouled whole (wires everything together)
-└── test-helpers/      # Laboratory equipment (remains external)
+└── psychon.ts         # The ensouled whole (wires everything together)
 ```
 
-The organism is now complete and self-contained with all essential life functions integrated.
+The organism is now complete and self-contained with all essential life functions integrated, including eidola for testing.
 
 ### Architectural Components
 
@@ -63,22 +66,29 @@ The organism is now complete and self-contained with all essential life function
 #### 3. Chora/Phaneron (Visible Manifestation) - Configuration
 
 - Runtime configuration that makes the system's state visible
-- **Current**: `systems/config/` → **Target**: `chora/phaneron/`
+- **Completed**: Fully integrated into `chora/phaneron/`
 
-#### 4. Organa (Discrete Organs) - Bounded Business Logic
+#### 4. Chora/Eidola (Phantoms/Simulacra) - Testing Infrastructure
+
+- **Eidōlon** (εἴδωλον): "phantom" or "simulacrum" - perfect for test doubles
+- Mock factories, test doubles, and API response simulacra
+- Part of chora as they pervade testing throughout the organism
+- **Completed**: Integrated from `test-helpers/` into `chora/eidola/`
+
+#### 5. Organa (Discrete Organs) - Bounded Business Logic
 
 - **Notion Organ**: Integration with Notion API
 - **MCP Organ**: Protocol handling
 - Zero cross-organ imports - communicate via dependency injection
-- **Already renamed**: `organs/` → `organa/`
+- **Completed**: Already using `organa/` structure
 
-#### 5. Psychon (The Ensouled Whole) - Assembly
+#### 6. Psychon (The Ensouled Whole) - Assembly
 
 - Wires all chorai and organa together
 - The living, breathing application
-- **Current**: Future `organism.ts` → **Target**: `psychon.ts`
+- **Completed**: `psychon.ts` created and functioning
 
-#### 5. Oak MCP Core (Future Keystone Species)
+#### 7. Oak MCP Core (Future Keystone Species)
 
 - Generic MCP framework (~3,050 LoC)
 - Will be extracted as separate organism

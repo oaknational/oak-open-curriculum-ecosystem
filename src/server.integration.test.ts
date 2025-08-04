@@ -3,8 +3,8 @@ import { createMcpServer } from './server.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { Logger } from './chora/aither/logging/logger-interface.js';
-import { createMockListUsersResponse } from './test-helpers/notion-api-mocks.js';
-import { createMockLogger, createMockNotionOperations } from './test-helpers/factories.js';
+import { createMockListUsersResponse } from './chora/eidola/notion-api-mocks.js';
+import { createMockLogger, createMockNotionOperations } from './chora/eidola/factories.js';
 
 describe('MCP Server', () => {
   const mockLogger: Logger = createMockLogger();
