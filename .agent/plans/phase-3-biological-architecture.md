@@ -61,27 +61,33 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
 
 #### Step 1.1: Update Root Documentation
 
-```bash
-# Update README.md using .agent/plans/biological-architecture-reference.md
-- Replace biological architecture section with content from reference
-- Update project structure diagram to show chora/organa structure
-- Add link to biological architecture reference
-```
+Update README.md incorporating biological architecture concepts
+
+- Replace biological architecture section with clear explanation of:
+  - Chora (cross-cutting fields) vs Organa (discrete organs)
+  - Greek nomenclature providing conceptual clarity
+  - How substrate→chora/stroma, systems→chora/aither+phaneron
+- Update project structure diagram to show chora/organa/psychon structure
+- Explain the living system metaphor and its benefits
 
 #### Step 1.2: Update Architecture Overview
 
-```bash
-# Update docs/architecture-overview.md using biological-architecture-reference.md
-- Introduce chora vs discrete distinction from reference
-- Update all terminology (organism → psychon, etc.)
-- Revise architectural diagrams to match reference
-- Ensure consistency with biological architecture concepts
-```
+Update docs/architecture-overview.md with biological architecture concepts
+
+- Introduce chora vs organa distinction:
+  - Chora: pervasive fields that flow through everything (logging, events, config)
+  - Organa: discrete, bounded organs with specific functions (notion, mcp)
+- Update all terminology:
+  - organism → psychon (the ensouled whole)
+  - substrate → chora/stroma (structural matrix)
+  - systems → chora/aither+phaneron (divine flows + visible config)
+- Revise architectural diagrams to illustrate the living system
+- Explain why Greek nomenclature resolves conceptual confusion
 
 #### Step 1.3: Consolidate Architecture Documents
 
-```bash
-# Merge and update docs/architecture/
+Merge and update docs/architecture/
+
 - Review master-architecture.md and high-level-architecture.md for redundancies
 - Merge into single consolidated architecture document
   (remove duplicates, keep best explanations from both)
@@ -90,17 +96,69 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
   - tissue-and-organ-interfaces.md (tissues concept simplified out)
   - tissue-organ-example.md (tissues concept simplified out)
   - Any redundant architecture docs after merge
-```
 
 #### Step 1.4: Create New ADR
 
-```bash
-# Create docs/architecture/architectural-decisions/020-biological-architecture.md
+Create docs/architecture/architectural-decisions/020-biological-architecture.md
+
 - Document the philosophical grounding of biological architecture
 - Explain chora vs discrete distinction (cross-cutting vs bounded)
-- Reference .agent/plans/biological-architecture-reference.md
-- Explain why Greek nomenclature provides clarity
-```
+- Explain why Greek nomenclature provides clarity:
+  - Avoids overloaded English terms (system, service, component)
+  - Each term has precise philosophical meaning
+  - Creates cognitive distance that forces clear thinking
+- Document the key concepts:
+  - Chora (Χώρα): Space/field that pervades and enables
+  - Organon (Ὄργανον): Tool/instrument with specific function
+  - Psychon (Ψυχόν): The ensouled, animated whole
+  - Stroma (Στρῶμα): Supporting matrix/foundation
+  - Aither (Αἰθήρ): Divine substance that flows (logs, events)
+  - Phaneron (Φανερόν): What appears/is manifest (config)
+
+#### Step 1.5: Update Agent Guidance Documentation
+
+Update all docs/agent-guidance/ files for consistency:
+
+1. **docs/agent-guidance/architecture.md** (new)
+   - Summarise the biological architecture and its intent
+   - Explain chora/organa/psychon structure for AI agents
+   - Provide clear examples of what belongs where
+   - Include decision tree for categorizing new code
+
+2. **docs/agent-guidance/ai-agent-guide.md**
+   - Update all references to old structure (substrate/systems/organs)
+   - Add section on biological architecture principles
+   - Update code organization guidelines
+
+3. **docs/agent-guidance/development-practice.md**
+   - Update import guidelines for new structure
+   - Add examples of proper chora/organa separation
+   - Update best practices for dependency injection
+
+4. **docs/agent-guidance/experimental-architecture-quick-reference.md**
+   - Complete rewrite with new nomenclature
+   - Add visual diagram of chora/organa/psychon
+   - Include quick lookup table for old→new mappings
+
+5. **docs/agent-guidance/README.md**
+   - Update overview to mention biological architecture
+   - Add link to new architecture.md file
+
+6. **docs/agent-guidance/safety-and-security.md**
+   - Ensure security guidelines work with new structure
+   - Update any path-specific recommendations
+
+7. **docs/agent-guidance/testing-strategy.md**
+   - Update test organization for new structure
+   - Add guidelines for testing chorai vs organa
+
+8. **docs/agent-guidance/typescript-practice.md**
+   - Update import examples
+   - Add section on typing for biological architecture
+
+9. **docs/agent-guidance/understanding-agent-references.md**
+   - Add biological architecture to key concepts
+   - Update any architectural references
 
 ### Phase 2: Identify Non-Conforming Elements (Day 3)
 
@@ -108,35 +166,31 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
 
 #### Step 2.1: Document Utilities
 
-```bash
-# These are tools, not life:
+These are tools, not life:
+
 - src/utils/ (scrubbing, helpers)
 - src/test-helpers/
 - src/errors/
-→ Document: These remain pragmatically named
-```
+  → Document: These remain pragmatically named
 
 #### Step 2.2: Document Build/Config
 
-```bash
-# These are environmental, not organismal:
+These are environmental, not organismal:
+
 - scripts/
 - e2e-tests/
 - Various config files
-→ Document: Outside the organism boundary
-```
+  → Document: Outside the organism boundary
 
 #### Step 2.3: Create Migration Map
 
-```bash
-# Document what moves where:
+Document what moves where:
 substrate/ → chora/stroma/
 systems/logging/ → chora/aither/logging/
 systems/events/ → chora/aither/events/
 systems/config/ → chora/phaneron/config/
 organa/ (already renamed from organs/)
 Create psychon.ts (new)
-```
 
 ### Phase 3: Chora Transformation (Days 4-5)
 
