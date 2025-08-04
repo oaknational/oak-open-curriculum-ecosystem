@@ -12,7 +12,7 @@ The package will be built and deployed to npm, will be open source, and will be 
 
 - **Substrate** (Foundation) - Types, contracts, and event schemas that form the "physics" of our system
 - **Systems** (Pervasive) - Infrastructure like logging and events that flow throughout the organism
-- **Organs** (Discrete) - Business logic units like Notion and MCP with clear boundaries
+- **Organa** (Discrete) - Business logic units like Notion and MCP with clear boundaries
 - **Organisms** (Applications) - Complete applications that wire systems and organs together
 - **Ecosystems** (Multiple Apps) - Future vision of multiple organisms interacting symbiotically
 
@@ -163,9 +163,18 @@ All tests except E2E are run automatically in CI/CD and pre-push hooks.
 ```
 oak-notion-mcp/
 ├── src/                    # Source code
-│   ├── oak-mcp-core/      # Generic MCP framework (~3,050 LoC)
-│   │   └── index.ts       # Single public API export
-│   └── oak-notion-mcp/    # Notion-specific implementation (<1,000 LoC)
+│   ├── substrate/         # Foundation layer (types & contracts)
+│   │   ├── types/         # Pure type definitions
+│   │   ├── contracts/     # Interface definitions
+│   │   └── event-schemas/ # Event type definitions
+│   ├── systems/           # Pervasive infrastructure
+│   │   ├── logging/       # Nervous system
+│   │   ├── events/        # Hormonal signaling
+│   │   └── config/        # Endocrine system
+│   ├── organa/            # Discrete business logic
+│   │   ├── notion/        # Notion integration organ
+│   │   └── mcp/           # MCP protocol organ
+│   └── (organism.ts)      # Future: Assembly point
 ├── dist/                   # Built output (gitignored)
 ├── e2e-tests/             # End-to-end tests (manual only)
 ├── docs/                  # Documentation
@@ -173,7 +182,14 @@ oak-notion-mcp/
 └── coverage/              # Test coverage reports (gitignored)
 ```
 
-The project is architected with a clear separation between the generic MCP framework (`oak-mcp-core`) and the Notion-specific implementation (`oak-notion-mcp`). This structure enables code reuse across different MCP server implementations while maintaining clean boundaries enforced by ESLint rules.
+The project follows a **complete biological architecture** with clear separation between:
+
+- **Substrate**: Compile-time foundation (types, contracts)
+- **Systems**: Pervasive runtime infrastructure that flows throughout
+- **Organa**: Discrete business logic units with no cross-imports
+- **Organism**: (Future) Wires everything together
+
+This structure will enable extraction of `oak-mcp-core` as a separate package in Phase 4.
 
 ## Development & Testing
 

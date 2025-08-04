@@ -15,9 +15,9 @@ The architecture is based on a complete biological model with multiple scales - 
 5. **Type Safety**: Strict TypeScript with no `any` types, validated boundaries using Zod
 6. **Fail-Safe Defaults**: Read-only operations by default, write operations require explicit confirmation
 7. **Privacy by Design**: Automatic PII scrubbing for sensitive data (emails)
-8. **Complete Biological Architecture**: Systems (pervasive infrastructure) vs Organs (discrete business logic)
+8. **Complete Biological Architecture**: Systems (pervasive infrastructure) vs Organa (discrete business logic)
 9. **Substrate Foundation**: Shared types and contracts form the "physics" of the system
-10. **Multi-Scale Design**: Organelles → Cells → Tissues → Systems/Organs → Organism → Ecosystem
+10. **Multi-Scale Design**: Organelles → Cells → Tissues → Systems/Organa → Organism → Ecosystem
 11. **Operating at Criticality**: Like the brain, we aim for the edge of chaos - stable enough for reliability, flexible enough for evolution
 12. **Mathematical Grounding**: Architecture decisions based on proven complex systems principles
 
@@ -63,45 +63,48 @@ The architecture is based on a complete biological model with multiple scales - 
 └─────────────────────────────────────────┘
 ```
 
-### Complete Biological Architecture
+### Complete Biological Architecture (Phase 3 - In Progress)
 
 Our architecture follows a complete biological model with multiple scales and types of components:
 
 ```text
 ┌─────────────────────────────────────────────────────────┐
-│                    Ecosystem                             │
+│                    Ecosystem (Future)                    │
 │          (Multiple Organisms Interacting)                │
 └────────────────┬────────────────┬───────────────────────┘
                  │                │
 ┌────────────────▼────────┐  ┌───▼─────────────────────────┐
-│  Notion MCP Organism  │  │  Future: Indexer Organism   │
-│  (Current Monolith)   │  │  (Separate Service)         │
+│  oak-notion-mcp       │  │  Future: oak-github-mcp     │
+│  (Current Focus)      │  │  (Using oak-mcp-core)       │
 └────────────┬───────────┘  └─────────────────────────────┘
              │
 ┌────────────▼────────────────────────────────────────────┐
-│                 Organism (Application)                   │
+│           Current Implementation Status                  │
 │ ┌─────────────────────────────────────────────────────┐ │
-│ │              Substrate (Foundation)                  │ │
-│ │   Types, Contracts, Event Schemas (Physics)         │ │
+│ │         Substrate (Foundation) ✅ COMPLETED          │ │
+│ │   • types/: LogLevel, core types                    │ │
+│ │   • contracts/: Logger, Config, EventBus,           │ │
+│ │                 NotionOperations                     │ │
+│ │   • event-schemas/: Event type definitions          │ │
 │ └─────────────────────────────────────────────────────┘ │
 │                                                          │
 │ ┌─────────────────┐  ┌────────────────────────────────┐ │
-│ │Systems (Pervasive)│ │    Organs (Discrete)          │ │
+│ │Systems ✅ DONE   │  │    Organa ✅ DONE              │ │
 │ │ ┌───────────────┐ │ │ ┌────────────────────────────┐│ │
 │ │ │Logging System │ │ │ │    Notion Organ            ││ │
-│ │ │(Nervous)      │ │ │ │ ┌──────────┐ ┌──────────┐ ││ │
-│ │ └───────────────┘ │ │ │ │ Tissue:  │ │ Tissue:  │ ││ │
-│ │ ┌───────────────┐ │ │ │ │ Client   │ │Transform │ ││ │
-│ │ │Event Transport│ │ │ │ └──────────┘ └──────────┘ ││ │
-│ │ │(Signaling)    │ │ │ └────────────────────────────┘│ │
-│ │ └───────────────┘ │ │ ┌────────────────────────────┐│ │
-│ │ ┌───────────────┐ │ │ │     MCP Organ              ││ │
-│ │ │Config System  │ │ │ │ ┌──────────┐ ┌──────────┐ ││ │
-│ │ │(Endocrine)    │ │ │ │ │ Tissue:  │ │ Tissue:  │ ││ │
-│ │ └───────────────┘ │ │ │ │ Protocol │ │ Handlers │ ││ │
-│ └─────────────────┘ │ │ │ └──────────┘ └──────────┘ ││ │
-│                      │ │ └────────────────────────────┘│ │
-│                      │ └────────────────────────────────┘ │
+│ │ │(2 levels max) │ │ │ │ • Transformers             ││ │
+│ │ └───────────────┘ │ │ │ • Formatters               ││ │
+│ │ ┌───────────────┐ │ │ │ • Public API via index.ts  ││ │
+│ │ │Event System   │ │ │ └────────────────────────────┘│ │
+│ │ │(Edge-compat)  │ │ │ ┌────────────────────────────┐│ │
+│ │ └───────────────┘ │ │ │     MCP Organ              ││ │
+│ │ ┌───────────────┐ │ │ │ • Tool handlers            ││ │
+│ │ │Config System  │ │ │ │ • Resource handlers        ││ │
+│ │ │(From systems) │ │ │ │ • Uses dependency injection││ │
+│ │ └───────────────┘ │ │ └────────────────────────────┘│ │
+│ └─────────────────┘ │ └────────────────────────────────┘ │
+│                                                          │
+│ ⏳ Next: organism.ts to wire everything together         │
 └──────────────────────────────────────────────────────────┘
 
                     Detail: Cell Structure
@@ -145,14 +148,14 @@ Our architecture follows a complete biological model with multiple scales and ty
    - Cross-cutting concerns (logging, events)
    - Like nervous or circulatory systems
 
-6. **Organs** (Discrete Business Logic)
+6. **Organa** (Discrete Business Logic)
    - Complete functional units
    - Clear boundaries
    - Business-specific (Notion, MCP)
 
 7. **Organism** (Application)
    - Complete application
-   - Coordinates systems and organs
+   - Coordinates systems and organa
    - Single process
 
 8. **Ecosystem** (Multiple Applications)
@@ -237,7 +240,7 @@ The system uses different testing approaches at each architectural scale:
 | Cells      | Integration tests with injected dependencies |
 | Tissues    | Domain integration tests                     |
 | Systems    | Infrastructure tests with test doubles       |
-| Organs     | Business logic tests with mocked systems     |
+| Organa     | Business logic tests with mocked systems     |
 | Organism   | E2E tests with real I/O                      |
 | Ecosystem  | Contract tests between organisms             |
 

@@ -687,17 +687,22 @@ Created a simple, edge-compatible event bus that works across all JavaScript run
 - ✅ Event system created and type-checked
 - ✅ Final validation complete - no cross-system imports
 
-#### Modularization Phase: Organ Boundary Enforcement ⏳ IN PROGRESS
+#### Modularization Phase: Organ Boundary Enforcement ✅ COMPLETED
 
 **Goal**: Separate Notion and MCP into discrete organs with no cross-imports
 
-**Progress Update (2025-01-03)**:
+**Progress Update (2025-01-04)**:
 
 - ✅ Created organ directory structure (src/organs/{notion,mcp})
 - ✅ Moved src/notion to src/organs/notion
 - ✅ Moved src/mcp to src/organs/mcp
-- ⏳ Need to update all imports for new organ locations
-- ⏳ Need to replace direct MCP→Notion imports with event-based communication
+- ✅ Updated all imports for new organ locations throughout codebase
+- ✅ Replaced direct MCP→Notion imports with dependency injection
+- ✅ Created NotionOperations contract in substrate/contracts
+- ✅ Implemented createNotionOperations() in organs/notion for public API
+- ✅ Updated all MCP tool operations to receive NotionOperations via dependencies
+- ✅ Zero cross-organ imports between MCP and Notion
+- ✅ All quality gates passing
 
 **Step 1: Create Organ Structure** ✅ COMPLETED
 
@@ -705,38 +710,49 @@ Created a simple, edge-compatible event bus that works across all JavaScript run
 mkdir -p src/organs/{notion,mcp}
 ```
 
-**Step 2: Fix MCP→Notion Direct Imports** ⏳ IN PROGRESS
+**Step 2: Fix MCP→Notion Direct Imports** ✅ COMPLETED
 
-Current problem:
+**Solution Implemented**: Dependency Injection
+
+After careful analysis, we chose dependency injection over event-based communication for these synchronous operations. This follows the KISS principle and biological architecture where organs receive what they need through the organism's circulatory system.
+
+**What We Did**:
+
+1. **Created NotionOperations Contract** in substrate/contracts/notion-operations.ts
+   - Defined interfaces for transformers and formatters
+   - Used proper Notion SDK types instead of `unknown` to avoid type assertions
+
+2. **Implemented Public API** in organs/notion/index.ts
+   - Created createNotionOperations() function that returns all operations
+   - Exposed transformers and formatters through clean interface
+
+3. **Updated MCP Tools** to use dependency injection
+   - Each tool operation now receives notionOperations in dependencies
+   - No more direct imports from Notion organ
+   - Clean separation maintained
 
 ```typescript
-// src/organs/mcp/tools/notion-operations/search.ts
-import { transformNotionPageToMcpResource } from '../../../../organs/notion/transformers.js'; // BAD!
-import { formatSearchResults } from '../../../../organs/notion/formatters.js'; // BAD!
-```
-
-**Revised Solution (Simpler Approach)**:
-
-After analysis, the "notion-operations" files in MCP are actually Notion-specific business logic that MCP happens to use. Following KISS principle and biological architecture:
-
-1. **Move notion-operations to Notion organ** - They belong with Notion as they contain Notion-specific logic
-2. **Expose through Notion's public API** - Add to Notion organ's index.ts as public interface
-3. **Use dependency injection** - MCP receives these operations through dependency injection, not direct imports
-
-This is much simpler than event-based request/response for synchronous operations and follows the biological principle: organs receive what they need through the organism's circulatory system (dependency injection).
-
-```typescript
-// src/organs/notion/operations/search.ts (moved from MCP)
-export function createSearchOperation(deps: NotionDependencies): SearchOperation {
-  // Notion-specific search logic using local transformers
+// substrate/contracts/notion-operations.ts
+export interface NotionOperations {
+  transformers: NotionTransformers;
+  formatters: NotionFormatters;
 }
 
-// src/organs/notion/index.ts (public API)
-export { createSearchOperation } from './operations/search.js';
+// organs/notion/index.ts
+export function createNotionOperations(): NotionOperations {
+  return {
+    transformers: {
+      /* all transformer functions */
+    },
+    formatters: {
+      /* all formatter functions */
+    },
+  };
+}
 
-// src/organs/mcp/tools/handlers.ts (dependency injection)
-export function createToolHandlers(deps: Dependencies & { notionOperations: NotionOperations }) {
-  // Use injected Notion operations instead of direct imports
+// organs/mcp/tools/notion-operations/search.ts
+export function createSearchExecutor(deps: SearchDependencies): ToolExecutor {
+  // Uses deps.notionOperations instead of direct imports
 }
 ```
 
@@ -754,13 +770,13 @@ export function createToolHandlers(deps: Dependencies & { notionOperations: Noti
    mv src/mcp/* src/organs/mcp/
    ```
 
-3. Update all imports ⏳ IN PROGRESS
+3. Update all imports ✅ COMPLETED
 
 **Validation**:
 
-- ⏳ Zero cross-organ imports (pending event-based refactoring)
-- ⏳ All communication via events (pending implementation)
-- ⏳ Import violations reduced (currently many broken imports)
+- ✅ Zero cross-organ imports achieved
+- ✅ All organ communication via dependency injection
+- ✅ Import violations maintained at 91 warnings (all expected architectural boundaries)
 
 #### Integration Phase: Organism Assembly
 

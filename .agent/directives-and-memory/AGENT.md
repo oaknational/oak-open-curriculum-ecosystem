@@ -22,7 +22,7 @@ Read [the rules](./rules.md); reflect on them, they MUST be followed at all time
 
 **Important**:
 
-These documents must be read before making any nontrivial changes to the codebase.
+These documents must be read before making any non-trivial changes to the codebase.
 
 - [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) - TDD/BDD approach

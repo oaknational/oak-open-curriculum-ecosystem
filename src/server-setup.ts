@@ -44,7 +44,7 @@ async function createServerDependencies(
   const { getLogLevelValue } = await import('./systems/logging/logger-interface.js');
   const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server.js');
-  const { createNotionOperations } = await import('./organs/notion/index.js');
+  const { createNotionOperations } = await import('./organa/notion/index.js');
 
   log('[STARTUP] Creating logger...');
   const logLevel = getLogLevelValue(environment.LOG_LEVEL);

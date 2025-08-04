@@ -80,7 +80,7 @@ export type { NotionServices } from './types';
 ### Testing
 
 - **Pure functions (organelles)**: Unit test with no mocks, no side effects, no I/O
-- **Module integration (cells)**: Test with simple injected mocks, verify membrane behavior
+- **Module integration (cells)**: Test with simple injected mocks, verify membrane behaviour
 - **System integration (tissues/organs)**: Test component interactions with mocked boundaries
 - **Real I/O**: Only in E2E tests
 - **Each test proves ONE thing** - No duplicate proofs
