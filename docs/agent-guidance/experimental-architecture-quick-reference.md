@@ -1,210 +1,241 @@
-# Experimental Architecture Quick Reference
+# Biological Architecture Quick Reference
 
-## Complete Biological Model
-
-### Architecture Scales
+## Visual Architecture
 
 ```
-0. Substrate (Foundation) - Types, contracts, event schemas
-1. Organelles (Pure Functions) - No side effects, single responsibility
-2. Cells (Modules) - Self-contained with membrane (index.ts)
-3. Tissues (Domain Groups) - Related cells working together
-4. Systems (Pervasive) - Infrastructure like logging (everywhere)
-5. Organs (Discrete) - Business logic with clear boundaries
-6. Organism (Application) - Complete app wiring everything together
-7. Ecosystem (Multiple Apps) - Organisms interacting via contracts
+┌─────────────────────────── PSYCHON ───────────────────────────┐
+│                    (The Ensouled Whole)                        │
+│                                                                │
+│  ┌─────────────────── CHORAI ────────────────────┐           │
+│  │         (Pervasive Fields - Flow Everywhere)   │           │
+│  │                                                 │           │
+│  │  ┌──── Stroma ────┐  ┌──── Aither ────┐       │           │
+│  │  │ Types/Contracts│  │ Logging/Events │       │           │
+│  │  │ (Compile-time) │  │ (Divine Flows) │       │           │
+│  │  └────────────────┘  └────────────────┘       │           │
+│  │                                                 │           │
+│  │  ┌────────── Phaneron ──────────┐             │           │
+│  │  │      Configuration            │             │           │
+│  │  │   (What Appears/Manifest)    │             │           │
+│  │  └───────────────────────────────┘             │           │
+│  └─────────────────────────────────────────────────┘           │
+│                                                                │
+│  ┌─────────────────── ORGANA ─────────────────────┐           │
+│  │      (Discrete Organs - Bounded Logic)         │           │
+│  │                                                 │           │
+│  │  ┌──── Notion ────┐    ┌───── MCP ─────┐     │           │
+│  │  │ Notion API     │    │ MCP Protocol  │     │           │
+│  │  │ Integration    │    │ Server Logic  │     │           │
+│  │  └────────────────┘    └────────────────┘     │           │
+│  │         ⚡ No Cross-Organ Imports ⚡           │           │
+│  └─────────────────────────────────────────────────┘           │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-### Key Distinctions
+## Greek Nomenclature & Meaning
 
-**Systems vs Organs**
+| Greek Term             | Pronunciation | Meaning                     | Code Location         |
+| ---------------------- | ------------- | --------------------------- | --------------------- |
+| **Chora** (Χώρα)       | KHO-rah       | Space/field that pervades   | `src/chora/`          |
+| **Stroma** (Στρῶμα)    | STRO-mah      | Supporting matrix           | `src/chora/stroma/`   |
+| **Aither** (Αἰθήρ)     | eye-THAIR     | Divine substance that flows | `src/chora/aither/`   |
+| **Phaneron** (Φανερόν) | fa-ne-RON     | What appears/is manifest    | `src/chora/phaneron/` |
+| **Organa** (Ὄργανα)    | OR-ga-na      | Tools/instruments (plural)  | `src/organa/`         |
+| **Psychon** (Ψυχόν)    | psoo-KHON     | The ensouled/animated whole | `src/psychon.ts`      |
 
-- **Systems** (logging, events): Flow everywhere, no single location
-- **Organs** (Notion, MCP): Discrete boundaries, specific location
+## Quick Decision Tree
 
-**Substrate vs Runtime**
+```
+Is it a type, contract, or schema?
+  └─ YES → chora/stroma/ (compile-time structure)
 
-- **Substrate**: Types, contracts, schemas - compile-time only
-- **Runtime**: Actual code that executes
+Does it need to flow everywhere?
+  ├─ Logging/Events? → chora/aither/ (divine flows)
+  └─ Configuration? → chora/phaneron/ (visible state)
 
-## When Writing Code
+Is it discrete business logic?
+  └─ YES → organa/{name}/ (bounded organ)
 
-### ✅ DO
+Are you wiring everything together?
+  └─ YES → psychon.ts (the living whole)
+```
+
+## Code Examples
+
+### ✅ CORRECT Patterns
 
 ```typescript
-// Define types in substrate
-// substrate/types/search.ts
-export interface SearchQuery { /* ... */ }
-
-// Create systems that flow everywhere
-// systems/logging/index.ts
-export function createLoggingSystem() {
-  return { createLogger: (context) => /* ... */ };
-}
-
-// Build organs with clear boundaries
-// organs/notion/index.ts
-export function createNotionOrgan(deps: {
-  logger: Logger;  // From system
-  events: EventChannel;  // From system
-}) {
-  // Organ implementation
-}
-
-// Wire in organism
-// organism.ts
-const logging = createLoggingSystem();
-const notion = createNotionOrgan({
-  logger: logging.createLogger('notion')
-});
-```
-
-### ❌ DON'T
-
-```typescript
-// Don't import across organs
-import { searchService } from '../mcp-organ'; // ❌
-
-// Don't put runtime code in substrate
-// substrate/types/helper.ts
-export function processData() {
-  /* ... */
-} // ❌
-
-// Don't treat systems like organs
-// systems/logging/singleton.ts
-export const logger = new Logger(); // ❌
-```
-
-## Quick Decision Guide
-
-**Q: Where does this type/contract go?**  
-A: In `substrate/` - it's the physics everyone follows
-
-**Q: Is this infrastructure that needs to be everywhere?**  
-A: Make it a system in `systems/` with pervasive injection
-
-**Q: Is this business logic with clear boundaries?**  
-A: Make it an organ in `organs/` with no cross-organ imports
-
-**Q: How do organs communicate?**  
-A: Through events (via event system) or dependency injection at organism level
-
-**Q: Should I fix relative import warnings?**  
-A: They're showing you architectural boundaries - use them as guides
-
-## Architecture Patterns
-
-### Substrate Pattern
-
-```typescript
-// substrate/contracts/search.ts
+// chora/stroma/contracts/search.ts - Structural contract
 export interface SearchService {
   search(query: string): Promise<Result[]>;
 }
 
-// substrate/event-schemas/notion.ts
-export interface PageIndexedSchema {
-  type: 'notion.page.indexed';
-  pageId: string;
+// chora/aither/logging/index.ts - Pervasive logger
+export function createLogger(context: string): Logger {
+  // Logger that flows through everything
+}
+
+// chora/phaneron/config/index.ts - Configuration
+export interface Config {
+  notionApiKey: string;
+  logLevel: LogLevel;
+}
+
+// organa/notion/index.ts - Discrete organ
+export function createNotionOperations(deps: {
+  logger: Logger; // From aither
+  config: Config; // From phaneron
+}): NotionOperations {
+  // Business logic, no imports from other organa
+}
+
+// psychon.ts - Wires everything together
+import { createLogger } from './chora/aither/logging/index.js';
+import { createConfig } from './chora/phaneron/config/index.js';
+import { createNotionOperations } from './organa/notion/index.js';
+import { createMcpServer } from './organa/mcp/index.js';
+
+export class Psychon {
+  constructor() {
+    const logger = createLogger('psychon');
+    const config = createConfig();
+
+    const notion = createNotionOperations({ logger, config });
+    const mcp = createMcpServer({
+      logger,
+      config,
+      notionOperations: notion, // Dependency injection
+    });
+  }
 }
 ```
 
-### System Pattern
+### ❌ INCORRECT Patterns
 
 ```typescript
-// systems/logging/index.ts
-export interface LoggingSystem {
-  createLogger(context: string): Logger;
-  setLevel(level: LogLevel): void;
+// ❌ Cross-organ import
+// organa/mcp/handler.ts
+import { searchService } from '../notion/search.js';
+
+// ❌ Runtime code in stroma
+// chora/stroma/helpers.ts
+export function processData() {
+  /* runtime logic */
 }
 
-// Injected pervasively throughout organs
+// ❌ Treating chorai like singletons
+// chora/aither/logging/singleton.ts
+export const logger = new Logger();
+
+// ❌ Business logic in chorai
+// chora/aither/notion-logger.ts
+export function logNotionPage(page: Page) {
+  /* too specific */
+}
 ```
 
-### Organ Pattern
+## Import Rules
+
+### Allowed Imports ✅
 
 ```typescript
-// organs/notion/index.ts
-export function createNotionOrgan(deps: {
-  // Systems injected
-  logger: Logger;
-  events: EventChannel;
-  // Other organs NEVER imported
-}): NotionOrgan {
-  // Clear boundary - no imports from other organs
-}
+// Chorai can import from same chora field
+import { LogLevel } from '../types.js'; // within aither
+
+// Organa can import from any chora
+import { Logger } from '../../chora/aither/logging/index.js';
+import { Config } from '../../chora/phaneron/config/index.js';
+import type { Contract } from '../../chora/stroma/contracts/index.js';
+
+// Psychon can import from anywhere
+import { createNotionOperations } from './organa/notion/index.js';
+import { createLogger } from './chora/aither/logging/index.js';
 ```
 
-### Event Communication
+### Forbidden Imports ❌
 
 ```typescript
-// Events have three facets:
+// ❌ Cross-organ imports
+// organa/notion/ → organa/mcp/
 
-// 1. Schema (substrate)
-interface PageIndexedSchema {
-  /* ... */
-}
+// ❌ Upward imports
+import { something } from '../../../other.js';
 
-// 2. Transport (system)
-const events = createEventTransport();
-
-// 3. Instance (runtime)
-events.send({ type: 'page.indexed', pageId: '123' });
+// ❌ Deep imports (use public APIs)
+import { internal } from './chora/aither/logging/internal/helper.js';
 ```
+
+## The 91 Warnings as Insights
+
+Those relative import warnings? They're architectural truth detectors:
+
+- **Cross-organ attempts**: Show where organs want to communicate
+- **Upward reaches**: Reveal missing abstractions
+- **Deep coupling**: Indicate unclear boundaries
+
+After implementing biological architecture, these warnings guide us to natural boundaries.
 
 ## Biological Principles
 
-1. **Substrate is shared** - Like physics, available everywhere
-2. **Systems are pervasive** - Like blood vessels, flow everywhere
-3. **Organs are discrete** - Like heart/liver, clear boundaries
-4. **No organ-to-organ imports** - Communication via organism
-5. **Events are multi-level** - Schema + transport + instances
-6. **Same patterns at every scale** - Fractal architecture
+1. **Chorai are fields** - Like electromagnetic fields, they pervade everything
+2. **Organa are discrete** - Like organs in a body, clear boundaries
+3. **No organ-to-organ imports** - Heart doesn't import from liver
+4. **Psychon integrates** - Like consciousness emerges from parts
+5. **Greek clarity** - Each term has ONE precise meaning
 
 ## Migration Strategy
 
 ### Current State
 
-- Mixed concerns in src/
-- 103 relative import warnings
-- No clear system/organ distinction
+```
+src/
+├── mixed concerns
+├── substrate/systems/organa confusion
+└── 91 relative import warnings
+```
 
 ### Target State
 
 ```
 src/
-├── substrate/      # Foundation (compile-time)
-├── systems/        # Pervasive infrastructure
-├── organs/         # Discrete business logic
-└── organism.ts     # Wiring point
+├── chora/          # Pervasive fields
+│   ├── stroma/     # Types, contracts (compile-time)
+│   ├── aither/     # Logging, events (runtime flows)
+│   └── phaneron/   # Configuration (visible state)
+├── organa/         # Discrete organs
+│   ├── notion/     # Notion integration
+│   └── mcp/        # MCP server
+└── psychon.ts      # The living whole
 ```
 
-### Phase 3 Goals
+## Common Questions
 
-1. Extract substrate (types, contracts, schemas)
-2. Separate systems (logging, events, config)
-3. Organize organs (notion, mcp)
-4. Wire in organism.ts
+**Q: Is configuration a chora or organon?**  
+A: Chora (phaneron) - it needs to be accessible everywhere
+
+**Q: Where do utilities go?**  
+A: If pure functions → organelles within appropriate organ/chora  
+If cross-cutting → create appropriate chora subdivision
+
+**Q: How do organs communicate?**  
+A: Through dependency injection in psychon OR events via aither
+
+**Q: What about errors and exceptions?**  
+A: Error types → stroma, error handling → appropriate organ/chora
 
 ## Remember
 
-1. **Biological accuracy matters** - Real organisms have both systems AND organs
-2. **Heterogeneity = Stability** - Different patterns in different contexts is good
-3. **Let warnings guide you** - They show natural boundaries
-4. **Think in scales** - Apply same principles from functions to ecosystems
-5. **Events enable evolution** - Loose coupling allows change
-
-## The 103 Warnings
-
-Those relative import warnings? They're architectural truth detectors showing where boundaries naturally want to form. After Phase 3's biological restructuring, most will disappear naturally.
+1. **Greek terms = precision** - No ambiguity about what goes where
+2. **Chorai flow, organa bound** - Fundamental distinction
+3. **Warnings guide architecture** - Listen to what code wants
+4. **Psychon emerges** - The whole is greater than parts
 
 ## Scientific Foundation
 
-This architecture isn't just intuition - it's based on:
+This isn't arbitrary - it's based on:
 
-- **Mathematical proof** that heterogeneity creates stability (Meena et al., 2023)
-- **Empirical evidence** from neuroscience showing brains operate at criticality (Beggs & Plenz, 2003)
-- **Universal patterns** of early warning signals in complex systems (Scheffer et al., 2009)
+- Complex systems theory (heterogeneity = stability)
+- Biological organization (real organisms have this structure)
+- Empirical validation across domains
 
-See `.agent/reference/complex-systems-dynamics/` for the research papers that validate our approach.
+See [ADR-020](../architecture/architectural-decisions/020-biological-architecture.md) for philosophical grounding.

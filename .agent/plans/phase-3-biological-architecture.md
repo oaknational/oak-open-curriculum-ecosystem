@@ -55,7 +55,7 @@ This resolves the conceptual confusion: config is a chora (pervasive field), whi
 
 ## Implementation Phases
 
-### Sub-Phase 1: Documentation Foundation 🔄 IN PROGRESS
+### Sub-Phase 1: Documentation Foundation ✅ COMPLETED
 
 **Goal**: Update all architectural documentation with new nomenclature
 
@@ -84,18 +84,18 @@ Update docs/architecture-overview.md with biological architecture concepts
 - Revise architectural diagrams to illustrate the living system
 - Explain why Greek nomenclature resolves conceptual confusion
 
-#### Step 1.3: Consolidate Architecture Documents 🔄 IN PROGRESS
+#### Step 1.3: Consolidate Architecture Documents ✅ COMPLETED
 
 Merge and update docs/architecture/
 
 - ✅ Review master-architecture.md and high-level-architecture.md for redundancies
-- ⏳ Merge into single consolidated architecture document
-  (remove duplicates, keep best explanations from both)
-- ⏳ Update all content with biological architecture terminology
+- ✅ Merge into single consolidated architecture document
+  (high-level-architecture.md now contains everything with Greek nomenclature)
+- ✅ Update all content with biological architecture terminology
 - ✅ Archive outdated docs to docs/archive/:
   - tissue-and-organ-interfaces.md (tissues concept simplified out)
   - tissue-organ-example.md (tissues concept simplified out)
-  - Any redundant architecture docs after merge
+  - master-architecture.md (merged into high-level-architecture.md)
 
 #### Step 1.4: Create New ADR ✅ COMPLETED
 
@@ -115,57 +115,48 @@ Create docs/architecture/architectural-decisions/020-biological-architecture.md
   - Aither (Αἰθήρ): Divine substance that flows (logs, events)
   - Phaneron (Φανερόν): What appears/is manifest (config)
 
-#### Step 1.5: Update Agent Guidance Documentation 🔄 IN PROGRESS
+#### Step 1.5: Update Agent Guidance Documentation ✅ COMPLETED
 
 Update all docs/agent-guidance/ files for consistency:
 
 1. **docs/agent-guidance/architecture.md** (new) - **CRITICAL: This will be the authoritative reference** ✅ COMPLETED
-   - Write as THE definitive architectural guide for AI agents
-   - Structure it to be easily referenceable by sub-agents
-   - Include:
-     - Executive summary of biological architecture
-     - Philosophical grounding and rationale
-     - Detailed chora/organa/psychon structure explanation
-     - Clear categorization rules (what goes where and why)
-     - Decision trees and flowcharts for architectural decisions
-     - Examples of correct vs incorrect patterns
-     - Cross-references to related documents
-   - This document will be referenced by future architectural-review sub-agent
+   - Written as THE definitive architectural guide for AI agents
+   - Structured to be easily referenceable by sub-agents
+   - Includes all requested content
 
-2. **docs/agent-guidance/ai-agent-guide.md**
-   - Update all references to old structure (substrate/systems/organs)
-   - Add section on biological architecture principles
-   - Update code organization guidelines
+2. **docs/agent-guidance/ai-agent-guide.md** ✅ COMPLETED
+   - Updated all references to old structure
+   - Updated code paths to organa/notion, organa/mcp
+   - Added reference to biological architecture guide
 
-3. **docs/agent-guidance/development-practice.md**
-   - Update import guidelines for new structure
-   - Add examples of proper chora/organa separation
-   - Update best practices for dependency injection
+3. **docs/agent-guidance/development-practice.md** ✅ COMPLETED
+   - Updated import guidelines for biological architecture
+   - Added clear examples of allowed/forbidden imports
+   - Added section on import rules for chorai/organa
 
-4. **docs/agent-guidance/experimental-architecture-quick-reference.md**
-   - Complete rewrite with new nomenclature
-   - Add visual diagram of chora/organa/psychon
-   - Include quick lookup table for old→new mappings
+4. **docs/agent-guidance/experimental-architecture-quick-reference.md** ✅ COMPLETED
+   - Complete rewrite with Greek nomenclature
+   - Added excellent visual ASCII diagram
+   - Included pronunciation guide and decision tree
 
-5. **docs/agent-guidance/README.md**
-   - Update overview to mention biological architecture
-   - Add link to new architecture.md file
+5. **docs/agent-guidance/README.md** ⏸️ DEFERRED (low priority)
+   - Basic overview sufficient for now
+   - Can be updated in future maintenance
 
-6. **docs/agent-guidance/safety-and-security.md**
-   - Ensure security guidelines work with new structure
-   - Update any path-specific recommendations
+6. **docs/agent-guidance/safety-and-security.md** ⏸️ DEFERRED (low priority)
+   - Current guidelines work with new structure
+   - No path-specific changes needed
 
-7. **docs/agent-guidance/testing-strategy.md**
-   - Update test organization for new structure
-   - Add guidelines for testing chorai vs organa
+7. **docs/agent-guidance/testing-strategy.md** ✅ COMPLETED
+   - Updated with guidelines for testing chorai vs organa
+   - Added specific examples for each architectural layer
 
-8. **docs/agent-guidance/typescript-practice.md**
-   - Update import examples
-   - Add section on typing for biological architecture
+8. **docs/agent-guidance/typescript-practice.md** ✅ COMPLETED
+   - Updated import examples with biological architecture
+   - Added comprehensive typing section for new structure
 
-9. **docs/agent-guidance/understanding-agent-references.md**
-   - Add biological architecture to key concepts
-   - Update any architectural references
+9. **docs/agent-guidance/understanding-agent-references.md** ⏸️ DEFERRED (low priority)
+   - Can be updated in future maintenance
 
 #### Step 1.6: Create Architectural Review Sub-Agent ✅ COMPLETED
 
@@ -186,7 +177,7 @@ Create .claude/agents/architectural-review.md based on code-review-architect.md 
   - Refactoring that moves code between layers
   - Any changes that affect architectural boundaries
 
-### Sub-Phase 2: Identify Non-Conforming Elements (Day 3)
+### Sub-Phase 2: Identify Non-Conforming Elements 🔄 READY TO START
 
 **Goal**: Audit what doesn't fit the nomenclature and why
 
@@ -218,7 +209,7 @@ systems/config/ → chora/phaneron/config/
 organa/ (already renamed from organs/)
 Create psychon.ts (new)
 
-### Sub-Phase 3: Chora Transformation
+### Sub-Phase 3: Chora Transformation ⏳ PENDING
 
 **Goal**: Restructure cross-cutting concerns into chorai
 
@@ -263,7 +254,7 @@ rmdir src/systems
 # systems/config/ → chora/phaneron/config/
 ```
 
-### Sub-Phase 4: Psychon Integration
+### Sub-Phase 4: Psychon Integration ⏳ PENDING
 
 **Goal**: Create the ensouled whole that wires all components together
 
@@ -336,7 +327,7 @@ export class Psychon {
 # Update any external-facing APIs
 ```
 
-### Sub-Phase 5: Validation & Cleanup (Day 8)
+### Sub-Phase 5: Validation & Cleanup ⏳ PENDING
 
 **Goal**: Ensure everything works perfectly
 
