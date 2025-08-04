@@ -3,8 +3,8 @@
  */
 
 import type { Client as NotionClient } from '@notionhq/client';
-import type { Logger } from '../systems/logging/logger-interface.js';
-import type { NotionOperations } from '../substrate/contracts/notion-operations.js';
+import type { Logger } from '../chora/aither/logging/logger-interface.js';
+import type { NotionOperations } from '../chora/stroma/contracts/notion-operations.js';
 
 /**
  * Minimal Notion client interface - only the methods we actually use

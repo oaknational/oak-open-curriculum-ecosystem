@@ -11,4 +11,4 @@
 export { createEventBus } from './event-bus.js';
 
 // Re-export contracts from substrate
-export type { EventBus } from '../../substrate/contracts/event-bus.js';
+export type { EventBus } from '../../stroma/contracts/event-bus.js';

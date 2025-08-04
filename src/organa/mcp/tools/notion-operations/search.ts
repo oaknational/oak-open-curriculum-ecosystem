@@ -8,7 +8,7 @@ import type {
   PageObjectResponse,
   DatabaseObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints.js';
-import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
+import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionSearchSchema } from '../schemas.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 

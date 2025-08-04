@@ -7,7 +7,7 @@
  * to maintain full compatibility with our EventBus interface.
  */
 
-import type { EventBus } from '../../substrate/contracts/event-bus.js';
+import type { EventBus } from '../../stroma/contracts/event-bus.js';
 
 type Handler = (...args: unknown[]) => void;
 
