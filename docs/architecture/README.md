@@ -12,6 +12,7 @@
 - [High-Level Architecture](./high-level-architecture.md) - Detailed technical architecture with diagrams
 - [Architecture Overview](../architecture-overview.md) - Quick introduction for newcomers
 - [Naming Guide](../naming.md) - Complete biological hierarchy and Greek nomenclature
+- [Biological Philosophy](./biological-philosophy.md) - Deep principles and Actions vs Access distinction
 
 ### Implementation Guides
 

@@ -22,8 +22,9 @@ src/
 src/
 ├── chora/              # Cross-cutting fields (pervasive infrastructure)
 │   ├── stroma/         # Structural matrix (types, contracts, schemas)
-│   ├── aither/         # Divine flows (logging, events)
-│   └── phaneron/       # Visible config (runtime settings)
+│   ├── aither/         # Divine flows (logging, events, errors, immunity)
+│   ├── phaneron/       # Visible config (runtime settings)
+│   └── eidola/         # Phantoms/simulacra (test infrastructure)
 ├── organa/             # Discrete organs (notion, mcp)
 └── psychon.ts          # The ensouled whole (wires everything together)
 ```
@@ -267,7 +268,42 @@ rmdir src/systems
 - Remaining warnings are architecturally allowed chora imports
 - See `.agent/plans/phase-3-sub-phase-3-results.md` for detailed analysis
 
-### Sub-Phase 4: Psychon Integration 🔄 READY TO START
+### Sub-Phase 4: Complete Organism Integration ✅ COMPLETED
+
+**Goal**: Integrate all remaining essential life functions into the organism
+
+#### Step 4.1: Analysis of Remaining Components ✅ COMPLETED
+
+Identified directories outside the biological architecture:
+
+- `errors/` - Error handling system (organism's alert/pain system)
+- `utils/` - PII scrubbing utilities (organism's immune system)
+- `types/` - Dependency interfaces (structural interfaces for environment)
+- `test-helpers/` - Test factories and mocks (laboratory equipment)
+
+#### Step 4.2: Integration Implementation ✅ COMPLETED
+
+**Moves executed**:
+
+1. `src/errors/` → `src/chora/aither/errors/` (alert/pain system)
+2. `src/utils/` → `src/chora/aither/immunity/` (immune system)
+3. `src/types/` → `src/chora/stroma/types/` (structural interfaces)
+4. `src/test-helpers/` → `src/chora/eidola/` (phantoms/simulacra)
+
+**Import Resolution**:
+
+- Created and ran update script: 52 imports updated across 40 files
+- Fixed TypeScript compilation issues with proper type imports
+- All tests passing after integration
+
+#### Step 4.3: Documentation Updates ✅ COMPLETED
+
+- Created comprehensive naming guide (docs/naming.md)
+- Added READMEs in each biological directory explaining etymology
+- Updated ADR-020 to reflect complete biological architecture
+- Linked naming guide from all major documentation entry points
+
+### Sub-Phase 5: Psychon Integration ✅ COMPLETED
 
 **Goal**: Create the ensouled whole that wires all components together
 
@@ -340,7 +376,7 @@ export class Psychon {
 # Update any external-facing APIs
 ```
 
-### Sub-Phase 5: Validation & Cleanup ⏳ PENDING
+### Sub-Phase 6: Validation & Cleanup ✅ COMPLETED
 
 **Goal**: Ensure everything works perfectly
 
@@ -372,13 +408,49 @@ pnpm build
 - Create migration guide for future reference
 - Document lessons learned
 
+## Import Warning Resolution
+
+**Initial State**: 91 import warnings showing architectural violations
+
+**Resolution Summary**:
+
+- **73 warnings (80%)**: Automatically resolved by directory restructuring
+- **18 warnings (20%)**: Required dependency injection or consolidation
+- **Final State**: All remaining warnings are architecturally allowed (chora imports)
+
+**Key Categories Resolved**:
+
+1. Substrate → Chora/Stroma transformation (15 warnings)
+2. Systems → Chora transformation (25 warnings)
+3. Internal MCP tool structure (15 warnings)
+4. Organa isolation achieved (0 warnings in organa/)
+
+## ESLint Configuration for Enforcement
+
+To enforce biological architecture boundaries, ESLint can be configured with zones:
+
+```typescript
+// Example configuration (see eslint-zones-biological-architecture.md for full details)
+'import-x/no-restricted-paths': ['error', {
+  zones: [
+    // No cross-organ imports
+    {
+      target: 'src/organa/notion/**',
+      from: 'src/organa/mcp/**',
+      message: 'Organa must not import from other organa. Use dependency injection.'
+    }
+  ]
+}]
+```
+
 ## Success Metrics
 
-1. **Zero Errors**: All quality gates pass
-2. **Clear Separation**: Chorai and organa have distinct roles
-3. **Import Discipline**: No cross-chora or cross-organ imports
-4. **Architectural Coherence**: Greek nomenclature used consistently
-5. **Documentation Complete**: All docs reflect new architecture
+1. **Zero Errors**: All quality gates pass ✅
+2. **Clear Separation**: Chorai and organa have distinct roles ✅
+3. **Import Discipline**: No cross-chora or cross-organ imports ✅
+4. **Architectural Coherence**: Biological architecture used consistently ✅
+5. **Documentation Complete**: All docs reflect new architecture ✅
+6. **Complete Organism**: All essential life functions integrated ✅
 
 ## Risk Mitigation
 
