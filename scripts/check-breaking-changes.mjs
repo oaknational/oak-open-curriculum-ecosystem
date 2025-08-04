@@ -24,12 +24,12 @@ const RESET = '\x1b[0m';
 function getCommitMessage() {
   // Get the commit message file from command line argument
   const commitMsgFile = process.argv[2];
-  
+
   if (!commitMsgFile) {
     console.error('Error: No commit message file provided');
     process.exit(1);
   }
-  
+
   try {
     return execSync(`cat ${commitMsgFile}`, { encoding: 'utf8' });
   } catch (error) {
@@ -40,13 +40,13 @@ function getCommitMessage() {
 
 function checkForBreakingChanges(message) {
   const upperMessage = message.toUpperCase();
-  
+
   for (const indicator of BREAKING_CHANGE_INDICATORS) {
     if (upperMessage.includes(indicator)) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -57,29 +57,33 @@ function checkForBangCommit(message) {
 
 function main() {
   const commitMessage = getCommitMessage();
-  
+
   if (!commitMessage) {
     // No commit message yet, this is fine
     process.exit(0);
   }
-  
+
   const hasBreakingChange = checkForBreakingChanges(commitMessage);
   const hasBangCommit = checkForBangCommit(commitMessage);
-  
+
   if (hasBreakingChange || hasBangCommit) {
-    console.error(`${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`);
+    console.error(
+      `${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`,
+    );
     console.error(`${RED}⚠️  MAJOR VERSION BUMP DETECTED!${RESET}`);
-    console.error(`${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`);
+    console.error(
+      `${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`,
+    );
     console.error('');
-    
+
     if (hasBreakingChange) {
       console.error(`Your commit message contains a BREAKING CHANGE indicator.`);
     }
-    
+
     if (hasBangCommit) {
       console.error(`Your commit uses the '!' syntax (e.g., feat!, fix!).`);
     }
-    
+
     console.error(`This would trigger a major version bump (to 1.0.0 or higher).`);
     console.error('');
     console.error(`${YELLOW}Since this package is still in pre-1.0 development:${RESET}`);
@@ -90,14 +94,18 @@ function main() {
     console.error('');
     console.error(`${YELLOW}If you really need to indicate breaking changes:${RESET}`);
     console.error(`1. Use a regular commit type without !`);
-    console.error(`2. Document breaking changes in the commit body (without the BREAKING CHANGE footer)`);
+    console.error(
+      `2. Document breaking changes in the commit body (without the BREAKING CHANGE footer)`,
+    );
     console.error(`3. Update CHANGELOG.md manually if needed`);
     console.error('');
     console.error(`${RED}Commit blocked. Please modify your commit message and try again.${RESET}`);
-    console.error(`${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`);
+    console.error(
+      `${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}`,
+    );
     process.exit(1);
   }
-  
+
   process.exit(0);
 }
 
