@@ -4,6 +4,8 @@
 
 **Biological Heritage**: In biology, organs are collections of tissues that work together for a specific function - discrete, bounded units with clear purposes (heart, liver, lungs).
 
+> **Complete Biological Hierarchy**: See our [Naming Guide](/docs/naming.md) for how organs fit into the larger hierarchy from molecules to biosphere.
+
 ## Why Organa?
 
 We chose Organa for our business logic components because they are:

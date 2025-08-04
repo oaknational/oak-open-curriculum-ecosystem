@@ -8,26 +8,27 @@ The package will be built and deployed to npm, will be open source, and will be 
 
 **Architecture Note**: This project is being refactored to include `oak-mcp-core`, a generic MCP framework that will enable rapid development of MCP servers. The Notion-specific functionality will be built on top of this reusable framework, reducing code duplication and improving maintainability across MCP server implementations.
 
-**🧪 Biological Architecture with Greek Nomenclature**: We use a living systems model with Greek terms for conceptual clarity:
+**🧪 Biological Architecture with Greek Nomenclature**: We use a living systems model with Greek terms for conceptual clarity. See our comprehensive [Naming Guide](docs/naming.md) for the complete biological hierarchy and etymology.
 
 ### Core Concepts
 
 - **Chora (Χώρα)** - Cross-cutting fields that pervade the entire system
   - `chora/stroma/` - Structural matrix (types, contracts, schemas)
-  - `chora/aither/` - Divine flows (logging, events)
+  - `chora/aither/` - Divine flows (logging, events, errors, immunity)
   - `chora/phaneron/` - Visible manifestation (configuration)
+  - `chora/eidola/` - Phantoms/simulacra (testing infrastructure)
 - **Organa (Ὄργανα)** - Discrete, bounded organs with specific functions
   - `organa/notion/` - Notion integration organ
   - `organa/mcp/` - MCP protocol organ
 - **Psychon (Ψυχόν)** - The ensouled whole that brings everything to life
-  - Wires all chorai and organa together
-  - The living, breathing application
 
 ### Why Greek Nomenclature?
 
 1. **Avoids Overloaded Terms** - English words like "system", "service", "component" have too many meanings
 2. **Precise Philosophical Meaning** - Each Greek term has a specific philosophical heritage
 3. **Cognitive Distance** - Foreign terms force us to think clearly about distinctions
+
+> **Learn More**: Read our [Naming Guide](docs/naming.md) for the complete hierarchy from molecules (Moria) to biosphere, including future architectural layers.
 
 ### Architectural Evolution
 

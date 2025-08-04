@@ -1,6 +1,8 @@
-# Biological Architecture Phylogeny
+# Naming: Biological Architecture with Greek Nomenclature
 
-This document explains the complete biological hierarchy used in our architecture, from molecular syntax features to ecosystem-level abstractions.
+This document explains our naming conventions and the complete biological hierarchy used in our architecture, from molecular syntax features to ecosystem-level abstractions.
+
+> **Quick Reference**: See [Architecture Overview](./architecture-overview.md) for how this naming system is implemented in practice.
 
 ## Overview
 

@@ -19,6 +19,15 @@ This codebase follows an experimental approach. See [Experimental Architecture Q
 - Accept different patterns in different contexts
 - Use the 91 warnings as architectural insights showing natural boundaries
 
+### Biological Architecture with Greek Nomenclature
+
+We use a living systems model with Greek terms for conceptual clarity. See our [Naming Guide](../naming.md) to understand:
+
+- The complete biological hierarchy (molecules → biosphere)
+- Why each Greek term was chosen (etymology and philosophy)
+- How components relate biologically
+- Current and future architectural layers
+
 ## 📋 Task Management
 
 ### TodoWrite Tool Usage

@@ -11,6 +11,7 @@
 - [Master Architecture](./master-architecture.md) - **START HERE** - Single comprehensive guide
 - [High-Level Architecture](./high-level-architecture.md) - Detailed technical architecture with diagrams
 - [Architecture Overview](../architecture-overview.md) - Quick introduction for newcomers
+- [Naming Guide](../naming.md) - Complete biological hierarchy and Greek nomenclature
 
 ### Implementation Guides
 
