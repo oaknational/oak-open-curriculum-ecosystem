@@ -6,13 +6,9 @@
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
 import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
-import type { CoreDependencies } from '../../../types/dependencies.js';
-import {
-  transformNotionPageToMcpResource,
-  transformNotionDatabaseToMcpResource,
-  transformNotionUserToMcpResource,
-} from '../../../notion/transformers.js';
-import { scrubSensitiveData } from '../../../utils/scrubbing.js';
+import type { CoreDependencies } from '../../../../types/dependencies.js';
+// Transformers will be accessed through deps.notionOperations
+import { scrubSensitiveData } from '../../../../utils/scrubbing.js';
 
 /**
  * Handles the special discovery resource
@@ -34,8 +30,10 @@ export async function handleDiscoveryResource(deps: CoreDependencies): Promise<R
     const searchResults = filterFullResponses(searchResponse);
 
     // Transform to MCP resources
-    const userResources = users.map(transformNotionUserToMcpResource);
-    const pageAndDbResources = transformSearchResults(searchResults);
+    const userResources = users.map((user) =>
+      deps.notionOperations.transformers.transformNotionUserToMcpResource(user),
+    );
+    const pageAndDbResources = transformSearchResults(searchResults, deps);
 
     // Create discovery document
     const discovery = createDiscoveryDocument(userResources, pageAndDbResources);
@@ -85,14 +83,15 @@ function filterFullResponses(
  */
 function transformSearchResults(
   results: (PageObjectResponse | DatabaseObjectResponse)[],
+  deps: CoreDependencies,
 ): Resource[] {
   return results
     .map((item) => {
       // Use SDK's built-in type guards to check for full responses
       if (isFullPage(item)) {
-        return transformNotionPageToMcpResource(item);
+        return deps.notionOperations.transformers.transformNotionPageToMcpResource(item);
       } else if (isFullDatabase(item)) {
-        return transformNotionDatabaseToMcpResource(item);
+        return deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(item);
       }
       return null;
     })

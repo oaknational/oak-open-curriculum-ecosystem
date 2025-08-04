@@ -4,6 +4,7 @@
 
 import type { Client as NotionClient } from '@notionhq/client';
 import type { Logger } from '../systems/logging/logger-interface.js';
+import type { NotionOperations } from '../substrate/contracts/notion-operations.js';
 
 /**
  * Minimal Notion client interface - only the methods we actually use
@@ -33,6 +34,7 @@ export interface MinimalNotionClient {
 export interface CoreDependencies {
   notionClient: MinimalNotionClient;
   logger: Logger;
+  notionOperations: NotionOperations;
 }
 
 /**

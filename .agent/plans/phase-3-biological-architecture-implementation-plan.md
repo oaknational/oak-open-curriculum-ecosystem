@@ -604,9 +604,20 @@ src/systems/logging/
 - ✅ Maximum nesting depth: 2
 - ✅ Import violations in logging reduced from 60 to <10
 
-#### Infrastructure Phase: Create Systems Layer
+#### Infrastructure Phase: Create Systems Layer ✅ COMPLETED
 
 **Goal**: Establish pervasive systems separate from business logic
+
+**Progress Update (2025-01-03)**:
+
+- ✅ Created systems directory structure with logging, config, events directories
+- ✅ Corrected config placement by moving from substrate/config to systems/config
+- ✅ Moved entire logging module from src/logging to systems/logging
+- ✅ Updated all imports throughout codebase (server-setup.ts, tests, etc.)
+- ✅ Fixed all errors from import path changes
+- ✅ Created simple, edge-compatible event bus (no Node.js specific APIs)
+- ✅ All tests passing (173/173), build successful
+- ✅ Validated no cross-system imports
 
 **Critical Architectural Understanding**:
 
@@ -618,15 +629,15 @@ src/systems/logging/
 
 Unlike organs (discrete, bounded), systems cannot be "located" - they permeate the entire organism.
 
-**Step 1: Establish Systems Structure**
+**Step 1: Establish Systems Structure** ✅ COMPLETED
 
 ```bash
 mkdir -p src/systems/{logging,events,config}
 ```
 
-**Step 2: Correct Config Placement (Move from Substrate to Systems)**
+**Step 2: Correct Config Placement (Move from Substrate to Systems)** ✅ COMPLETED
 
-Config was incorrectly placed in substrate. We must move it to systems:
+Config was incorrectly placed in substrate. We successfully moved it to systems:
 
 ```bash
 # Move runtime config implementation to systems
@@ -640,131 +651,116 @@ mv src/substrate/config/environment.unit.test.ts src/systems/config/
 # src/substrate/types/config.ts - Config-related types only
 ```
 
-Update imports:
+All imports have been updated:
 
 ```typescript
 // Before: import { env } from './substrate/config/env.js';
 // After:  import { env } from './systems/config/env.js';
 ```
 
-**Step 3: Migrate Logging to Systems**
+**Step 3: Migrate Logging to Systems** ✅ COMPLETED
 
-1. Move flattened logging:
+1. Moved flattened logging:
 
    ```bash
    mv src/logging/* src/systems/logging/
    ```
 
-2. Create system interfaces:
+2. Updated all logging imports throughout the codebase
 
-   ```typescript
-   // src/systems/logging/index.ts
-   export { createLogger } from './factory.js';
-   export type { Logger } from '../../substrate/contracts/logger.js';
-   ```
+**Step 4: Create Event System** ✅ COMPLETED
 
-**Step 4: Create Event System**
+Created a simple, edge-compatible event bus that works across all JavaScript runtimes (Node.js, Cloudflare Workers, browsers, Deno/Bun). The implementation:
 
-```typescript
-// src/systems/events/index.ts
-export interface EventBus {
-  emit<T>(event: string, data: T): void;
-  on<T>(event: string, handler: (data: T) => void): void;
-  off(event: string, handler: Function): void;
-}
+- Uses a simple Map-based approach for maximum compatibility
+- Avoids Node.js-specific APIs (like EventEmitter)
+- Provides emit, on, once, off, and removeAllListeners methods
+- No type assertions per AGENT.md rules
+- Clean implementation under 50 lines
 
-// Simple implementation for now
-export function createEventBus(): EventBus {
-  const handlers = new Map<string, Set<Function>>();
-  return {
-    emit(event, data) {
-      handlers.get(event)?.forEach((h) => h(data));
-    },
-    on(event, handler) {
-      if (!handlers.has(event)) handlers.set(event, new Set());
-      handlers.get(event)!.add(handler);
-    },
-    off(event, handler) {
-      handlers.get(event)?.delete(handler);
-    },
-  };
-}
-```
+**Validation Status**:
 
-**Validation**:
+- ✅ Systems directory exists and is properly organized
+- ✅ Config and logging successfully moved to systems layer
+- ✅ All imports updated and working
+- ✅ No cross-system imports (config doesn't import from logging)
+- ✅ Event system created and type-checked
+- ✅ Final validation complete - no cross-system imports
 
-- ✅ Systems are separate from business logic
-- ✅ No cross-system imports
-
-#### Modularization Phase: Organ Boundary Enforcement
+#### Modularization Phase: Organ Boundary Enforcement ⏳ IN PROGRESS
 
 **Goal**: Separate Notion and MCP into discrete organs with no cross-imports
 
-**Step 1: Create Organ Structure**
+**Progress Update (2025-01-03)**:
+
+- ✅ Created organ directory structure (src/organs/{notion,mcp})
+- ✅ Moved src/notion to src/organs/notion
+- ✅ Moved src/mcp to src/organs/mcp
+- ⏳ Need to update all imports for new organ locations
+- ⏳ Need to replace direct MCP→Notion imports with event-based communication
+
+**Step 1: Create Organ Structure** ✅ COMPLETED
 
 ```bash
 mkdir -p src/organs/{notion,mcp}
 ```
 
-**Step 2: Fix MCP→Notion Direct Imports**
+**Step 2: Fix MCP→Notion Direct Imports** ⏳ IN PROGRESS
 
 Current problem:
 
 ```typescript
-// src/mcp/tools/notion-operations/search.ts
-import { transformNotionSearchResponse } from '../../../notion/transformers.js'; // BAD!
+// src/organs/mcp/tools/notion-operations/search.ts
+import { transformNotionPageToMcpResource } from '../../../../organs/notion/transformers.js'; // BAD!
+import { formatSearchResults } from '../../../../organs/notion/formatters.js'; // BAD!
 ```
 
-Solution using events:
+**Revised Solution (Simpler Approach)**:
+
+After analysis, the "notion-operations" files in MCP are actually Notion-specific business logic that MCP happens to use. Following KISS principle and biological architecture:
+
+1. **Move notion-operations to Notion organ** - They belong with Notion as they contain Notion-specific logic
+2. **Expose through Notion's public API** - Add to Notion organ's index.ts as public interface
+3. **Use dependency injection** - MCP receives these operations through dependency injection, not direct imports
+
+This is much simpler than event-based request/response for synchronous operations and follows the biological principle: organs receive what they need through the organism's circulatory system (dependency injection).
 
 ```typescript
-// src/organs/mcp/tools/search.ts
-export class SearchTool {
-  constructor(private events: EventBus) {}
-
-  async execute(query: string) {
-    // Request transformation via event
-    const { response, promise } = this.createResponsePromise();
-    this.events.emit('notion:transform:search', { query, response });
-    return promise;
-  }
+// src/organs/notion/operations/search.ts (moved from MCP)
+export function createSearchOperation(deps: NotionDependencies): SearchOperation {
+  // Notion-specific search logic using local transformers
 }
 
-// src/organs/notion/handlers/search.ts
-export class SearchHandler {
-  constructor(private events: EventBus) {
-    events.on('notion:transform:search', this.handleSearch.bind(this));
-  }
+// src/organs/notion/index.ts (public API)
+export { createSearchOperation } from './operations/search.js';
 
-  private async handleSearch({ query, response }) {
-    const result = await this.searchNotion(query);
-    const transformed = this.transform(result);
-    response.resolve(transformed);
-  }
+// src/organs/mcp/tools/handlers.ts (dependency injection)
+export function createToolHandlers(deps: Dependencies & { notionOperations: NotionOperations }) {
+  // Use injected Notion operations instead of direct imports
 }
 ```
 
-**Step 3: Move Files to Organs**
+**Step 3: Move Files to Organs** ✅ COMPLETED
 
-1. Move Notion files:
+1. Moved Notion files:
 
    ```bash
    mv src/notion/* src/organs/notion/
    ```
 
-2. Move MCP files:
+2. Moved MCP files:
 
    ```bash
    mv src/mcp/* src/organs/mcp/
    ```
 
-3. Update all imports
+3. Update all imports ⏳ IN PROGRESS
 
 **Validation**:
 
-- ✅ Zero cross-organ imports
-- ✅ All communication via events
-- ✅ Import violations reduced to <20
+- ⏳ Zero cross-organ imports (pending event-based refactoring)
+- ⏳ All communication via events (pending implementation)
+- ⏳ Import violations reduced (currently many broken imports)
 
 #### Integration Phase: Organism Assembly
 

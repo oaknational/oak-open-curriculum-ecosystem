@@ -3,20 +3,17 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
 import { isFullDatabase } from '@notionhq/client/build/src/helpers.js';
+import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
 import { notionQueryDatabaseSchema } from '../schemas.js';
-import {
-  transformNotionDatabaseToMcpResource,
-  transformNotionPageToMcpResource,
-} from '../../../notion/transformers.js';
-import { formatDatabaseQueryResults } from '../../../notion/formatters.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 
 export interface QueryDatabaseDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
+  notionOperations: NotionOperations;
 }
 
 /**
@@ -66,7 +63,8 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
         );
       }
 
-      const dbResource = transformNotionDatabaseToMcpResource(dbResponse);
+      const dbResource =
+        deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(dbResponse);
 
       // Build and execute query
       const queryParams = buildQueryParams(validatedArgs);
@@ -79,10 +77,16 @@ export function createQueryDatabaseExecutor(deps: QueryDatabaseDependencies): To
       );
 
       // Transform results
-      const pageResources = pages.map(transformNotionPageToMcpResource);
+      const pageResources = pages.map((page) =>
+        deps.notionOperations.transformers.transformNotionPageToMcpResource(page),
+      );
 
       // Format for output
-      return formatDatabaseQueryResults(dbResource, pages, pageResources);
+      return deps.notionOperations.formatters.formatDatabaseQueryResults(
+        dbResource,
+        pages,
+        pageResources,
+      );
     },
   };
 }

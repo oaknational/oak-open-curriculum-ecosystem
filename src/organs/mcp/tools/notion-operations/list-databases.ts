@@ -3,16 +3,16 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
+import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
 import { notionListDatabasesSchema } from '../schemas.js';
-import { transformNotionDatabaseToMcpResource } from '../../../notion/transformers.js';
-import { formatDatabaseList } from '../../../notion/formatters.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 
 export interface ListDatabasesDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
+  notionOperations: NotionOperations;
 }
 
 /**
@@ -39,10 +39,12 @@ export function createListDatabasesExecutor(deps: ListDatabasesDependencies): To
       );
 
       // Transform results
-      const resources = results.map(transformNotionDatabaseToMcpResource);
+      const resources = results.map((database) =>
+        deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(database),
+      );
 
       // Format for output
-      return formatDatabaseList(results, resources);
+      return deps.notionOperations.formatters.formatDatabaseList(results, resources);
     },
   };
 }

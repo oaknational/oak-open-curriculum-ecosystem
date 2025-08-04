@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers/index.js';
-import type { MinimalNotionClient } from '../../types/dependencies.js';
-import type { Logger } from '../../systems/logging/logger-interface.js';
+import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { Logger } from '../../../systems/logging/logger-interface.js';
 import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
-} from '../../test-helpers/notion-mocks.js';
+} from '../../../test-helpers/notion-mocks.js';
 import {
   createMockListUsersResponse,
   createMockSearchResponse,
-} from '../../test-helpers/notion-api-mocks.js';
+} from '../../../test-helpers/notion-api-mocks.js';
+import { createMockNotionOperations } from '../../../test-helpers/factories.js';
 
 describe('createResourceHandlers', () => {
   const mockDebug = vi.fn();
@@ -48,6 +49,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       const result = await handlers.handleListResources();
@@ -140,6 +142,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       const result = await handlers.handleReadResource('notion://discovery');
@@ -191,6 +194,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       const result = await handlers.handleReadResource('notion://pages/page-123');
@@ -244,6 +248,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       const result = await handlers.handleReadResource('notion://databases/db-456');
@@ -265,6 +270,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       await expect(handlers.handleReadResource('invalid://uri')).rejects.toThrow(
@@ -280,6 +286,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       await expect(handlers.handleReadResource('notion://unknown/123')).rejects.toThrow(
@@ -294,6 +301,7 @@ describe('createResourceHandlers', () => {
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       await expect(handlers.handleReadResource('notion://pages/page-123')).rejects.toThrow(

@@ -6,5 +6,5 @@
  * between organs, enabling loose coupling and self-organization.
  */
 
-// Event schemas will be added here as we define organ communication
+// Event schemas will be added as we define organ communication
 export {};

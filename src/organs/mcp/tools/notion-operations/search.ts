@@ -3,22 +3,19 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import type {
   PageObjectResponse,
   DatabaseObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints.js';
+import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
 import { notionSearchSchema } from '../schemas.js';
-import {
-  transformNotionPageToMcpResource,
-  transformNotionDatabaseToMcpResource,
-} from '../../../notion/transformers.js';
-import { formatSearchResults } from '../../../notion/formatters.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 
 export interface SearchDependencies {
   notionClient: MinimalNotionClient;
   logger: ToolLogger;
+  notionOperations: NotionOperations;
 }
 
 /**
@@ -57,17 +54,21 @@ export function createSearchExecutor(deps: SearchDependencies): ToolExecutor {
         (result): result is PageObjectResponse | DatabaseObjectResponse => 'id' in result,
       );
 
-      // Transform results
+      // Transform results using injected operations
       const resources = results.map((result) => {
         if (result.object === 'page') {
-          return transformNotionPageToMcpResource(result);
+          return deps.notionOperations.transformers.transformNotionPageToMcpResource(result);
         } else {
-          return transformNotionDatabaseToMcpResource(result);
+          return deps.notionOperations.transformers.transformNotionDatabaseToMcpResource(result);
         }
       });
 
-      // Format for output
-      return formatSearchResults(results, validatedArgs.query, resources);
+      // Format for output using injected operations
+      return deps.notionOperations.formatters.formatSearchResults(
+        results,
+        validatedArgs.query,
+        resources,
+      );
     },
   };
 }

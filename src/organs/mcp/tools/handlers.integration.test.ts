@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Logger } from '../../systems/logging/logger-interface.js';
-import type { MinimalNotionClient } from '../../types/dependencies.js';
-import { createMockPage } from '../../test-helpers/notion-mocks.js';
+import type { Logger } from '../../../systems/logging/logger-interface.js';
+import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import { createMockPage } from '../../../test-helpers/notion-mocks.js';
+import { createMockNotionOperations } from '../../../test-helpers/factories.js';
 import {
   createNotionSearchTool,
   createNotionListDatabasesTool,
@@ -40,7 +41,11 @@ describe('Tool Handlers', () => {
     it('should create a search tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
-      const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionSearchTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
 
       expect(tool.name).toBe('notion-search');
       expect(tool.description).toContain('Search');
@@ -134,7 +139,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
-      const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionSearchTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const result = await tool.handler({ query: 'test' });
 
       expect(mockClient.search).toHaveBeenCalledWith({
@@ -164,7 +173,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
-      const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionSearchTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       await tool.handler({ query: 'test', filter: { type: 'page' } });
 
       expect(mockClient.search).toHaveBeenCalledWith({
@@ -183,7 +196,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
-      const tool = createNotionSearchTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionSearchTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const result = await tool.handler({ query: 'test' });
 
       expect(result.content).toHaveLength(1);
@@ -200,7 +217,11 @@ describe('Tool Handlers', () => {
     it('should create a list databases tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
-      const tool = createNotionListDatabasesTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionListDatabasesTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
 
       expect(tool.name).toBe('notion-list-databases');
       expect(tool.description).toContain('List all databases');
@@ -242,7 +263,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
-      const tool = createNotionListDatabasesTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionListDatabasesTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const result = await tool.handler({});
 
       expect(mockClient.search).toHaveBeenCalledWith({
@@ -270,6 +295,7 @@ describe('Tool Handlers', () => {
       const tool = createNotionQueryDatabaseTool({
         notionClient: mockClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
 
       expect(tool.name).toBe('notion-query-database');
@@ -365,6 +391,7 @@ describe('Tool Handlers', () => {
       const tool = createNotionQueryDatabaseTool({
         notionClient: mockClient,
         logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
       });
       const result = await tool.handler({ database_id: 'db-123' });
 
@@ -390,7 +417,11 @@ describe('Tool Handlers', () => {
     it('should create a get page tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
-      const tool = createNotionGetPageTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionGetPageTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
 
       expect(tool.name).toBe('notion-get-page');
       expect(tool.description).toContain('Get a specific Notion page');
@@ -473,7 +504,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn().mockResolvedValue({ results: mockBlocks }) } },
       };
 
-      const tool = createNotionGetPageTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionGetPageTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const result = await tool.handler({ page_id: 'page-123', include_content: true });
 
       expect(mockClient.pages.retrieve).toHaveBeenCalledWith({ page_id: 'page-123' });
@@ -498,7 +533,11 @@ describe('Tool Handlers', () => {
     it('should create a list users tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
-      const tool = createNotionListUsersTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionListUsersTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
 
       expect(tool.name).toBe('notion-list-users');
       expect(tool.description).toContain('List all users');
@@ -536,7 +575,11 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
-      const tool = createNotionListUsersTool({ notionClient: mockClient, logger: mockLogger });
+      const tool = createNotionListUsersTool({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const result = await tool.handler({});
 
       expect(mockClient.users.list).toHaveBeenCalled();
@@ -560,7 +603,11 @@ describe('Tool Handlers', () => {
     it('should return all tool handlers', () => {
       const mockClient = createMockNotionClient();
 
-      const handlers = createToolHandlers({ notionClient: mockClient, logger: mockLogger });
+      const handlers = createToolHandlers({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
 
       expect(handlers).toHaveProperty('notion-search');
       expect(handlers).toHaveProperty('notion-list-databases');
@@ -574,7 +621,11 @@ describe('Tool Handlers', () => {
     it('should return tools array from getTools method', () => {
       const mockClient = createMockNotionClient();
 
-      const { getTools } = createToolHandlers({ notionClient: mockClient, logger: mockLogger });
+      const { getTools } = createToolHandlers({
+        notionClient: mockClient,
+        logger: mockLogger,
+        notionOperations: createMockNotionOperations(),
+      });
       const tools = getTools();
 
       expect(tools).toHaveLength(5);

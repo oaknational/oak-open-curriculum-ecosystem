@@ -19,7 +19,7 @@ import {
   createMockDatabase,
   createMockPersonUser,
   createMockBotUser,
-} from '../test-helpers/notion-mocks.js';
+} from '../../test-helpers/notion-mocks.js';
 
 // Helper to create default annotations for rich text
 const defaultAnnotations = {
