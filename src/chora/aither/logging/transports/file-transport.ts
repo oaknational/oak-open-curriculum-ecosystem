@@ -9,13 +9,8 @@
 // =============================================================================
 // IMPORTS
 // =============================================================================
-import type {
-  LogLevel,
-  LogContext,
-  LogFormatter,
-  FileWriter,
-  FileTransportOptions,
-} from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogContext, LogFormatter, FileWriter, FileTransportOptions } from '../types/index.js';
 import type { FileLogTransport } from './file-types.js';
 import { createDefaultFormatter } from './file-formatters.js';
 

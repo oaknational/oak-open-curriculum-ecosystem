@@ -3,7 +3,7 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/types/dependencies.js';
 import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
 import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionListDatabasesSchema } from '../schemas.js';

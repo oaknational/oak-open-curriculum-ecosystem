@@ -19,3 +19,14 @@ export {
 
 // Core physics - dependency injection patterns
 export type { Dependencies, Context } from './core.js';
+
+// Dependency interfaces - how the organism interfaces with its environment
+export type {
+  MinimalNotionClient,
+  CoreDependencies,
+  ServerConfig,
+  ServerDependencies,
+} from './dependencies.js';
+
+// Environment types - the organism's environmental awareness
+export type { ProcessEnv } from './environment.js';

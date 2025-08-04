@@ -4,7 +4,7 @@
  */
 
 import type { LogLevel, LogContext } from '../../logger-interface.js';
-import { getLogLevelName } from '../../types/index.js';
+import { getLogLevelName } from '../../../../stroma/types/index.js';
 import { sanitizeJsonEntry } from './sanitizer.js';
 import type { JsonFormatterOptions } from './types.js';
 

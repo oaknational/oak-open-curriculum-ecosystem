@@ -3,8 +3,8 @@
  * @module @oak-mcp-core/logging/formatters
  */
 
-import type { LogLevel } from '../types/index.js';
-import { LOG_LEVELS } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/index.js';
+import { LOG_LEVELS } from '../../../stroma/types/index.js';
 import type { FormatterFunction, PrettyFormatterOptions, LogLevelMapping } from './pretty-types.js';
 import { formatPretty, formatCompact } from './pretty-layouts.js';
 

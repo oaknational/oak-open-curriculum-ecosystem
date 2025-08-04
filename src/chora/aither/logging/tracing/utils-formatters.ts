@@ -55,12 +55,12 @@ export function sanitizeTraceContext(
   context: TraceContext,
   sensitiveKeys: string[] = [],
 ): TraceContext {
-  if (sensitiveKeys.length === 0 || !context['baggage']) {
+  if (sensitiveKeys.length === 0 || !context.baggage) {
     return context;
   }
 
   const sanitizedBaggage: Record<string, string> = {};
-  for (const [key, value] of Object.entries(context['baggage'])) {
+  for (const [key, value] of Object.entries(context.baggage)) {
     if (sensitiveKeys.includes(key)) {
       sanitizedBaggage[key] = '[REDACTED]';
     } else {

@@ -1,5 +1,5 @@
-import type { LogLevel } from '../types/levels.js';
-import { LOG_LEVELS } from '../types/levels.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import { LOG_LEVELS } from '../../../stroma/types/logging.js';
 
 // ANSI color codes - single source of truth
 export const ANSI_COLORS = {

@@ -3,7 +3,7 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/types/dependencies.js';
 import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionListUsersSchema } from '../schemas.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';

@@ -9,7 +9,7 @@
 // IMPORTS
 // ============================================================================
 
-import type { LogLevel } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
 import { getLevelColor, ANSI_COLORS } from '../colors/index.js';
 
 // ============================================================================

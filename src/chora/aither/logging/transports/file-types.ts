@@ -9,7 +9,8 @@
 // =============================================================================
 // IMPORTS
 // =============================================================================
-import type { LogLevel, LogContext } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogContext } from '../types/index.js';
 
 // =============================================================================
 // INTERFACES
@@ -30,5 +31,5 @@ export interface FileLogTransport {
 // =============================================================================
 
 // Re-export shared types for this module
-export type { FileWriter, FileTransportOptions } from '../types/index.js';
-export type { LogLevel, LogContext } from '../types/index.js';
+export type { FileWriter, FileTransportOptions, LogContext } from '../types/index.js';
+export type { LogLevel } from '../../../stroma/types/logging.js';

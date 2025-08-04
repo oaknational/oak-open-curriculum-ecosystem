@@ -1,7 +1,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import type { LogObject } from 'consola';
-import { getLogLevelName } from './types/index.js';
+import { getLogLevelName } from '../../stroma/types/index.js';
 
 export interface FileReporterOptions {
   logDir: string;

@@ -6,13 +6,9 @@
  * MUST remain free of any external dependencies.
  */
 
-import type {
-  LogLevel,
-  LogLevelName,
-  LogContext,
-  LogTransport,
-  LogFormatter,
-} from './types/index.js';
+import type { LogLevel, LogLevelName } from '../../stroma/types/logging.js';
+
+import type { LogContext, LogTransport, LogFormatter } from './types/index.js';
 
 // Re-export shared types
 export type { LogLevel, LogLevelName, LogContext, LogTransport, LogFormatter };
@@ -22,7 +18,7 @@ export {
   isLogLevelName,
   getLogLevelName,
   getLogLevelValue,
-} from './types/index.js';
+} from '../../stroma/types/logging.js';
 
 /**
  * Core logger interface - zero dependencies

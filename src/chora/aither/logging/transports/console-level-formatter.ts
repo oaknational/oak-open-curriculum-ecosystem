@@ -9,8 +9,8 @@
 // IMPORTS
 // ============================================================================
 
-import type { LogLevel } from '../types/index.js';
-import { LOG_LEVELS, getLogLevelName } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import { LOG_LEVELS, getLogLevelName } from '../../../stroma/types/logging.js';
 import type { ConsoleInterface } from './console-types.js';
 
 // ============================================================================

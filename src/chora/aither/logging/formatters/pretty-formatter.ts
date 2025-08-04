@@ -10,7 +10,7 @@
  */
 
 import type { LogLevel, LogFormatter, LogContext } from '../logger-interface.js';
-import { LOG_LEVELS } from '../types/index.js';
+import { LOG_LEVELS } from '../../../stroma/types/index.js';
 import {
   type PrettyFormatterOptions as InternalOptions,
   createPrettyFormatter as createInternal,

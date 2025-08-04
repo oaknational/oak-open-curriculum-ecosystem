@@ -3,7 +3,7 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/types/dependencies.js';
 import type {
   PageObjectResponse,
   DatabaseObjectResponse,
