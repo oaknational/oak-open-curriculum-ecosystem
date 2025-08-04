@@ -4,6 +4,8 @@
 
 **Philosophical Heritage**: In Plato's Timaeus, the Chora is the receptacle or space in which all things come to be - neither being nor non-being, but the field that allows existence.
 
+> **Complete Biological Hierarchy**: See our [Naming Guide](/docs/naming.md) for the full architectural hierarchy and etymology of all terms.
+
 ## Why Chora?
 
 We chose Chora for our cross-cutting infrastructure because these components:

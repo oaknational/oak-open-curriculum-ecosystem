@@ -141,6 +141,8 @@ Our architecture follows a complete biological hierarchy:
 2. **Precise Philosophical Meaning** - Each Greek term has specific philosophical heritage
 3. **Cognitive Distance** - Foreign terms force clear thinking about distinctions
 
+> **Complete Etymology**: See our [Naming Guide](./naming.md) for detailed explanations of each term's etymology, philosophical heritage, and architectural meaning.
+
 ## Architectural Evolution
 
 ### Phase 3: Current - Biological Architecture with Greek Nomenclature ✅ COMPLETE

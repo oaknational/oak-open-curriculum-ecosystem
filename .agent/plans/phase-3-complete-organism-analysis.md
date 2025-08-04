@@ -4,7 +4,7 @@
 
 We have directories sitting outside the biological architecture that are actually integral parts of the organism:
 
-```
+```text
 src/
 ├── errors/          # Error handling system
 ├── utils/           # PII scrubbing utilities

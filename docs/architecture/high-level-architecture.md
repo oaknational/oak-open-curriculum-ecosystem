@@ -34,6 +34,8 @@ The Oak Notion MCP Server implements a **Biological Architecture with Greek Nome
 - **Cognitive Distance**: Forces clear thinking about architectural boundaries
 - **Philosophical Grounding**: Terms chosen for their original meanings in Greek philosophy
 
+> **Learn More**: See our [Naming Guide](../naming.md) for the complete biological hierarchy, etymology, and architectural meanings of all Greek terms.
+
 ## Core Design Principles
 
 1. **Pure Functions First**: Maximum business logic implemented as pure, side-effect-free functions
