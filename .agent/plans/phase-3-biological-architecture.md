@@ -215,52 +215,59 @@ Create psychon.ts (new)
 - `.agent/plans/phase-3-warning-resolution-plan.md` - Plan for resolving warnings
 - `.agent/plans/phase-3-pragmatic-naming-rationale.md` - What stays pragmatically named
 
-### Sub-Phase 3: Chora Transformation 🔄 READY TO START
+### Sub-Phase 3: Chora Transformation ✅ COMPLETED
 
 **Goal**: Restructure cross-cutting concerns into chorai
 
-#### Step 3.1: Create Chora Structure
+#### Step 3.1: Create Chora Structure ✅ COMPLETED
 
 ```bash
 mkdir -p src/chora/{stroma,aither,phaneron}
 ```
 
-#### Step 3.2: Move Stroma (Structural Matrix)
+#### Step 3.2: Move Stroma (Structural Matrix) ✅ COMPLETED
 
 ```bash
 # Move substrate to chora/stroma
-mv src/substrate/* src/chora/stroma/
+git mv src/substrate/* src/chora/stroma/
 rmdir src/substrate
 
 # Update all imports:
 # substrate/ → chora/stroma/
 ```
 
-#### Step 3.3: Move Aither (Divine Flows)
+#### Step 3.3: Move Aither (Divine Flows) ✅ COMPLETED
 
 ```bash
-# Move most of systems to chora/aither
-mv src/systems/logging src/chora/aither/
-mv src/systems/events src/chora/aither/
+# Move systems to chora/aither
+git mv src/systems/logging src/chora/aither/
+git mv src/systems/events src/chora/aither/
 
 # Update all imports:
 # systems/logging/ → chora/aither/logging/
 # systems/events/ → chora/aither/events/
 ```
 
-#### Step 3.4: Move Phaneron (Visible Config)
+#### Step 3.4: Move Phaneron (Visible Config) ✅ COMPLETED
 
 ```bash
 # Move config to its own chora
-mkdir -p src/chora/phaneron
-mv src/systems/config src/chora/phaneron/
+git mv src/systems/config src/chora/phaneron/
 rmdir src/systems
 
 # Update all imports:
 # systems/config/ → chora/phaneron/config/
 ```
 
-### Sub-Phase 4: Psychon Integration ⏳ PENDING
+**Results**:
+
+- Created import update script that automated 23 import updates
+- **0 warnings in organa/** - complete isolation achieved!
+- All quality gates passing
+- Remaining warnings are architecturally allowed chora imports
+- See `.agent/plans/phase-3-sub-phase-3-results.md` for detailed analysis
+
+### Sub-Phase 4: Psychon Integration 🔄 READY TO START
 
 **Goal**: Create the ensouled whole that wires all components together
 

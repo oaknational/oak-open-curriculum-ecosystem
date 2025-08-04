@@ -5,7 +5,7 @@
 
 import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import { isFullPage, isFullBlock } from '@notionhq/client/build/src/helpers.js';
-import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
+import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionGetPageSchema } from '../schemas.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 

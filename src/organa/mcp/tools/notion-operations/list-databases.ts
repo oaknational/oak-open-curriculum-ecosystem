@@ -5,7 +5,7 @@
 
 import type { MinimalNotionClient } from '../../../../types/dependencies.js';
 import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
-import type { NotionOperations } from '../../../../substrate/contracts/notion-operations.js';
+import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionListDatabasesSchema } from '../schemas.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 

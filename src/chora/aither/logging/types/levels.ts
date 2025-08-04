@@ -17,7 +17,7 @@ export {
   isLogLevelName,
   getLogLevelValue,
   getLogLevelName,
-} from '../../../substrate/types/logging.js';
+} from '../../../stroma/types/logging.js';
 
 /* LEGACY: Original implementation preserved for reference during migration
 

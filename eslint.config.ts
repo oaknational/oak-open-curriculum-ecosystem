@@ -73,6 +73,9 @@ const config: Config = tsEslintConfig(
         },
       ],
 
+      'import-x/no-cycle': ['error'], // Prevent circular dependencies, they are a symptom of weakening boundaries
+      'import-x/no-useless-path-segments': ['error'], // Reduce confused import paths
+
       // Enforce module boundaries - no reaching into parent directories, helps enforce dependency inversion principle
       'import-x/no-relative-parent-imports': ['warn'],
     },

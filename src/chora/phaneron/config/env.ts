@@ -6,7 +6,7 @@
  * All other modules should import from here.
  */
 
-import { isLogLevelName, type LogLevelName } from '../../substrate/types/logging.js';
+import { isLogLevelName, type LogLevelName } from '../../stroma/types/logging.js';
 
 /**
  * Parse environment variable as string
