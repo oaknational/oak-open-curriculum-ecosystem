@@ -9,7 +9,8 @@
 // IMPORTS
 // ============================================================================
 
-import type { LogLevel, LogContext } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogContext } from '../types/index.js';
 import type { ArgumentBuilderOptions } from './console-types.js';
 import { formatLogLevel, formatTimestamp } from './console-level-formatter.js';
 import { colorizeLevel } from './console-colorizer.js';

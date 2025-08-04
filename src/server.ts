@@ -8,7 +8,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { createResourceHandlers } from './organa/mcp/resources/handlers/index.js';
 import { createToolHandlers } from './organa/mcp/tools/handlers.js';
-import type { ServerDependencies } from './types/dependencies.js';
+import type { ServerDependencies } from './chora/stroma/types/dependencies.js';
 
 /**
  * Set up tool-related request handlers

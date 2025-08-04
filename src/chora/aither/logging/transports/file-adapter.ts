@@ -9,7 +9,8 @@
 // =============================================================================
 // IMPORTS
 // =============================================================================
-import type { LogTransport, FileTransportOptions } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogTransport, FileTransportOptions, LogContext } from '../types/index.js';
 import { createFileTransport } from './file-transport.js';
 
 // =============================================================================
@@ -25,7 +26,12 @@ export function createFileTransportAdapter(options: FileTransportOptions): LogTr
 
   // Return transport that implements LogTransport
   return {
-    async log(level, message, error, context): Promise<void> {
+    async log(
+      level: LogLevel,
+      message: string,
+      error?: Error,
+      context?: LogContext,
+    ): Promise<void> {
       await transport.log(level, message, error, context);
     },
 

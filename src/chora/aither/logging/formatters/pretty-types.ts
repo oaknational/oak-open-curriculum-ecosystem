@@ -3,7 +3,8 @@
  * @module @oak-mcp-core/logging/formatters
  */
 
-import type { LogLevel, LogContext } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogContext } from '../types/index.js';
 
 // Re-export shared types for this module
 export type { LogLevel as FormatterLogLevel, LogContext as FormatterLogContext };

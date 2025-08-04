@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createFileReporter } from './file-reporter.js';
 import type { LogObject } from 'consola';
-import { LOG_LEVELS } from './types/index.js';
+import { LOG_LEVELS } from '../../stroma/types/index.js';
 
 // Create a mock context that satisfies the type requirements
 const mockContext = { options: undefined };

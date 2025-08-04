@@ -9,7 +9,8 @@
 // IMPORTS
 // ============================================================================
 
-import type { LogLevel, LogContext, ConsoleTransportOptions } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import type { LogContext, ConsoleTransportOptions } from '../types/index.js';
 
 // ============================================================================
 // TYPES

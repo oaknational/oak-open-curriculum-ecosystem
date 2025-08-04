@@ -63,6 +63,16 @@ export interface TraceContext extends LogContext {
    * Additional trace metadata
    */
   metadata?: Record<string, unknown>;
+
+  /**
+   * Whether this trace is sampled
+   */
+  sampled?: boolean;
+
+  /**
+   * Trace baggage for propagation
+   */
+  baggage?: Record<string, string>;
 }
 
 /**

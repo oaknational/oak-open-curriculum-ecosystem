@@ -16,7 +16,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 import type { Logger } from '../chora/aither/logging/logger-interface.js';
-import type { ServerConfig } from '../types/dependencies.js';
+import type { ServerConfig } from '../chora/stroma/types/dependencies.js';
 import type { NotionOperations } from '../chora/stroma/contracts/notion-operations.js';
 import type {
   PageObjectResponse,

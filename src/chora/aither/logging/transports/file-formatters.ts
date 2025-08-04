@@ -9,8 +9,9 @@
 // =============================================================================
 // IMPORTS
 // =============================================================================
-import type { LogLevel, LogContext, LogFormatter } from '../types/index.js';
-import { getLogLevelName } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import { getLogLevelName } from '../../../stroma/types/logging.js';
+import type { LogContext, LogFormatter } from '../types/index.js';
 import { serializeError } from './file-error-serializer.js';
 
 // =============================================================================

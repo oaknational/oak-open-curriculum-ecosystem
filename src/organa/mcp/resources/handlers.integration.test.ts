@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers/index.js';
-import type { MinimalNotionClient } from '../../../types/dependencies.js';
+import type { MinimalNotionClient } from '../../../chora/stroma/types/dependencies.js';
 import type { Logger } from '../../../chora/aither/logging/logger-interface.js';
 import {
   createMockPage,

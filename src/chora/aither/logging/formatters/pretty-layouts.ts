@@ -3,8 +3,9 @@
  * @module @oak-mcp-core/logging/formatters
  */
 
-import type { LogLevel, LogContext } from '../types/index.js';
-import { getLogLevelName } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/logging.js';
+import { getLogLevelName } from '../../../stroma/types/logging.js';
+import type { LogContext } from '../types/index.js';
 
 import type { PrettyFormatterOptions } from './pretty-types.js';
 import { Colors, getLevelColor, colorize } from './pretty-colors.js';

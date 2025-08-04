@@ -3,8 +3,8 @@
  * @module @oak-mcp-core/logging/formatters
  */
 
-import type { LogLevel } from '../types/index.js';
-import { LOG_LEVELS, getLogLevelName } from '../types/index.js';
+import type { LogLevel } from '../../../stroma/types/index.js';
+import { LOG_LEVELS, getLogLevelName } from '../../../stroma/types/index.js';
 
 /**
  * Get abbreviated form of log level

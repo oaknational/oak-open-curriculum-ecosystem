@@ -3,7 +3,7 @@
  * Assembles tools from clean abstractions
  */
 
-import type { CoreDependencies } from '../../../types/dependencies.js';
+import type { CoreDependencies } from '../../../chora/stroma/types/dependencies.js';
 import type { McpTool } from '../types.js';
 import {
   createToolFactory,
