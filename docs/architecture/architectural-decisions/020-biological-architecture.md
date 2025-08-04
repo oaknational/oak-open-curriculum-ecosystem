@@ -8,12 +8,12 @@ Accepted and Implemented
 
 Our codebase had directories (`errors/`, `utils/`, `types/`, `test-helpers/`) sitting outside the main architectural pattern. This created conceptual confusion about where functionality belonged and resulted in an incomplete organism that relied on external "tools" for essential life functions.
 
-The realization: these aren't external tools - they're integral parts of the organism:
+The realization: these aren't external tools - they're ALL integral parts of the organism:
 
 - Error handling is the organism's alert/pain system
 - PII scrubbing is the immune system
 - Type definitions are structural interfaces for environmental interaction
-- Only test helpers should remain external as laboratory equipment
+- Test helpers are eidola (phantoms/simulacra) - the phantoms we use to test the living organism
 
 ## Decision
 
@@ -31,13 +31,16 @@ src/
 │   │   ├── events/     # Hormonal signaling
 │   │   ├── errors/     # Alert/pain system (formerly external)
 │   │   └── immunity/   # Protective system (formerly utils/scrubbing)
-│   └── phaneron/       # Visible manifestation
-│       └── config/     # Runtime configuration
+│   ├── phaneron/       # Visible manifestation
+│   │   └── config/     # Runtime configuration
+│   └── eidola/         # Phantoms/simulacra (formerly test-helpers)
+│       ├── factories.ts        # Mock factory functions
+│       ├── notion-mocks.ts     # Notion-specific test doubles
+│       └── notion-api-mocks.ts # API response simulacra
 ├── organa/             # Discrete organs
 │   ├── notion/         # Notion integration
 │   └── mcp/            # MCP protocol handling
-├── psychon.ts          # The ensouled whole
-└── test-helpers/       # Laboratory equipment (remains external)
+└── psychon.ts          # The ensouled whole
 ```
 
 ## Consequences
@@ -57,7 +60,7 @@ src/
 ### Neutral
 
 1. **Import Warnings**: ESLint warnings about parent imports are expected and show natural boundaries
-2. **Test Isolation**: Test helpers remain external as they're not part of the living system
+2. **Eidola Integration**: Test helpers are now part of chora as phantoms used throughout testing
 
 ## Implementation Notes
 

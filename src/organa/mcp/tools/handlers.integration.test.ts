@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '../../../chora/aither/logging/logger-interface.js';
 import type { MinimalNotionClient } from '../../../chora/stroma/types/dependencies.js';
-import { createMockPage } from '../../../test-helpers/notion-mocks.js';
-import { createMockNotionOperations } from '../../../test-helpers/factories.js';
+import { createMockPage } from '../../../chora/eidola/notion-mocks.js';
+import { createMockNotionOperations } from '../../../chora/eidola/factories.js';
 import {
   createNotionSearchTool,
   createNotionListDatabasesTool,
