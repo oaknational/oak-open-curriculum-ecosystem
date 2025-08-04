@@ -112,7 +112,7 @@ pnpm test:watch    # Watch mode for TDD
 
 **Try**: Write a simple test
 
-1. Pick a pure function in `src/utils/`
+1. Pick a pure function in `src/chora/aither/immunity/` (PII scrubbing utilities)
 2. Write a test following existing patterns
 3. Use TDD: Red → Green → Refactor
 
@@ -186,8 +186,8 @@ This ensures agents:
 
 **Explore**:
 
-- `src/mcp/handlers.ts` - Protocol handling
-- `src/mcp/types.ts` - Type definitions
+- `src/organa/mcp/handlers.ts` - Protocol handling
+- `src/organa/mcp/types.ts` - Type definitions
 
 **Exercise**: Trace a request
 
