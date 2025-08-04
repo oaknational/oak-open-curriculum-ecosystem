@@ -17,7 +17,7 @@ This codebase follows an experimental approach. See [Experimental Architecture Q
 - Create small modules with clear interfaces
 - Use dependency injection instead of direct imports
 - Accept different patterns in different contexts
-- Use the 103 warnings as architectural insights
+- Use the 91 warnings as architectural insights showing natural boundaries
 
 ## 📋 Task Management
 
@@ -143,8 +143,10 @@ TodoWrite:
 ### Core Implementation
 
 - `src/server.ts` - Main server setup
-- `src/notion/client.ts` - Notion API wrapper
-- `src/mcp/handlers/` - Tool implementations
+- `src/organa/notion/` - Notion organ (business logic)
+- `src/organa/mcp/` - MCP organ (protocol handling)
+- `src/substrate/` - Types and contracts (compile-time)
+- `src/systems/` - Pervasive infrastructure (logging, events, config)
 
 ### Configuration
 
@@ -175,7 +177,8 @@ Before considering any task complete:
 1. **Start Here**: [Developer Onboarding Journey](../development/onboarding-journey.md)
 2. **Quick Tasks**: [Quick Reference](../quick-reference.md)
 3. **Deep Dive**: [Understanding Agent References](./understanding-agent-references.md)
-4. **Architecture**: [High Level Architecture](../architecture/high-level-architecture.md)
+4. **Architecture**: [Biological Architecture Guide](./architecture.md) - THE authoritative reference
+5. **System Design**: [High Level Architecture](../architecture/high-level-architecture.md)
 
 ## 💡 Pro Tips
 
