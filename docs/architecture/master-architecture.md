@@ -45,7 +45,7 @@ The Oak Notion MCP Server implements a **Complete Biological Architecture** - a 
 ### For AI Agents
 
 1. **Read AGENT.md**: `.agent/directives-and-memory/AGENT.md` contains your primary directives
-2. **Understand Boundaries**: Systems flow everywhere, organs have clear boundaries
+2. **Understand Boundaries**: Systems flow everywhere, organa have clear boundaries
 3. **Follow Patterns**: Use tissue/organ examples as templates
 4. **Check Phase 3 Plan**: Current implementation in `.agent/plans/phase-3-biological-architecture-implementation-plan.md`
 
@@ -58,8 +58,8 @@ From Chemistry to Ecosystems:
 ├── Substrate (Foundation) - Types, contracts, event schemas
 ├── Organelles (Chemistry) - Pure functions, no side effects
 ├── Cells (Life Units) - Modules with membranes (index.ts)
-├── Tissues (Cooperation) - Related cells working together
-├── Systems/Organs (Specialization) - Infrastructure vs business logic
+├── [Tissues - Conceptual only, not implemented]
+├── Systems/Organa (Specialization) - Infrastructure vs business logic
 ├── Organism (Individual) - Complete application
 └── Ecosystem (Community) - Multiple organisms interacting
 ```
@@ -140,15 +140,12 @@ src/logging/formatters/
 
 **Key Insight**: Files split by responsibility, not arbitrary size limits. Each module is a specialized "cell" with its own clear purpose.
 
-### 3. Tissues (Domain Groups)
+### 3. Tissues (Domain Groups) - SIMPLIFIED IN IMPLEMENTATION
 
-**What**: Multiple cells working together for shared purpose
-**Where**: Domain directories
-**Rules**:
+**Note**: While conceptually useful, we simplified our implementation to avoid over-engineering. What we might call "tissues" are simply subdirectories within organa (e.g., `notion/formatters/`, `notion/transformers/`). These groupings emerge naturally without needing a formal architectural layer.
 
-- Shared types across cells
-- Coordinated behavior
-- Domain boundary
+**Original Concept**: Multiple cells working together for shared purpose
+**In Practice**: Just well-organized subdirectories
 
 ```typescript
 // tissue structure
@@ -208,7 +205,7 @@ export interface NotionOrgan {
 **Where**: The entire running process
 **Rules**:
 
-- Coordinates all systems and organs
+- Coordinates all systems and organa
 - Single deployment unit
 - Has lifecycle (birth, growth, death)
 
@@ -219,12 +216,12 @@ export function createOrganism(config: OrganismConfig): Organism {
   const logger = createLoggingSystem(config.logging);
   const events = createEventSystem(config.events);
 
-  // Create organs (discrete)
+  // Create organa (discrete)
   const notion = createNotionOrgan({ logger, events });
   const mcp = createMcpOrgan({ logger, events });
 
   // Wire together
-  return new Organism({ systems: { logger, events }, organs: { notion, mcp } });
+  return new Organism({ systems: { logger, events }, organa: { notion, mcp } });
 }
 ```
 
@@ -378,7 +375,7 @@ export function createSearchTissue(deps: TissueDependencies): SearchTissue {
 ### Creating an Organ
 
 ```typescript
-// src/organs/notion/index.ts - Organ boundary
+// src/organa/notion/index.ts - Organ boundary
 export interface NotionOrgan {
   search(query: NotionQuery): Promise<NotionResults>;
   fetch(id: string): Promise<NotionDocument>;
@@ -417,15 +414,15 @@ export function createOrganism(config: OrganismConfig): Organism {
     config: createConfigManager(config.config),
   };
 
-  // Organs are created with systems already injected
-  const organs = {
+  // Organa are created with systems already injected
+  const organa = {
     notion: createNotionOrgan(systems),
     mcp: createMcpOrgan(systems),
   };
 
   // Systems are like blood - already in every organ
-  // Organs are discrete - they don't directly touch
-  return new Organism({ systems, organs });
+  // Organa are discrete - they don't directly touch
+  return new Organism({ systems, organa });
 }
 ```
 
@@ -446,7 +443,7 @@ Where:
 - S < 0: System is stable
 ```
 
-**What this means**: Our different patterns (systems vs organs) create mathematical stability.
+**What this means**: Our different patterns (systems vs organa) create mathematical stability.
 
 ### Operating at Criticality
 
@@ -470,31 +467,38 @@ Scheffer et al. (2009) identified universal signals before system transitions:
 
 ## Current State vs Target State
 
-### Where We Are Now
+### Where We Are Now (Phase 3 - 90% Complete)
 
 ```typescript
-// Current: Everything mixed together
+// Current: Biological architecture implemented
 src/
-├── config/           # Config depends on logging (?!)
-├── logging/          # 60 relative import violations
-│   └── formatters/   # 4 levels deep
-├── mcp/              # Cross-domain imports
-└── notion/           # Mixed with MCP concerns
+├── substrate/        # ✅ Foundation layer complete
+│   ├── types/       # Core types (LogLevel, etc.)
+│   ├── contracts/   # Logger, Config, EventBus, NotionOperations
+│   └── event-schemas/
+├── systems/         # ✅ Pervasive infrastructure complete
+│   ├── logging/     # Flattened to 2 levels (was 5)
+│   ├── events/      # Edge-compatible event bus
+│   └── config/      # Moved from substrate
+├── organa/          # ✅ Business logic separated
+│   ├── notion/      # Public API via createNotionOperations()
+│   └── mcp/         # Uses dependency injection
+└── (organism.ts)    # ⏳ Next: Wire everything together
 ```
 
-**Problems**:
+**Progress**:
 
-- 103 relative import warnings
-- No clear infrastructure vs business separation
-- Deep nesting creating upward dependencies
-- Cross-domain coupling
+- Started with 103 relative import warnings
+- Now at 91 warnings (all expected architectural boundaries)
+- Zero cross-organ imports achieved
+- All quality gates passing
 
-### Where We're Going
+### Where We're Going (Integration Phase)
 
 ```typescript
-// Target: Complete biological architecture
+// Target: Complete organism assembly
 src/
-├── substrate/        # Shared foundation (0 runtime)
+├── substrate/        # ✅ Complete
 │   ├── types/
 │   ├── contracts/
 │   └── event-schemas/
@@ -502,7 +506,7 @@ src/
 │   ├── logging/      # Flows everywhere
 │   ├── events/       # Signaling system
 │   └── config/       # Configuration
-├── organs/           # Discrete business logic
+├── organa/           # Discrete business logic
 │   ├── notion/       # Clear boundaries
 │   └── mcp/          # No cross-imports
 └── organism.ts       # Assembly point
@@ -522,7 +526,7 @@ src/
 See [Phase 3 Plan](../../.agent/plans/phase-3-biological-architecture-implementation-plan.md) for details.
 
 **Timeline**: 10 days
-**Goal**: Restructure to substrate/systems/organs model
+**Goal**: Restructure to substrate/systems/organa model
 
 #### Sub-phases
 
@@ -553,7 +557,7 @@ See [Phase 4 Plan](../../.agent/plans/phase-4-oak-mcp-core-implementation-plan.m
 ### Core Architecture Documents
 
 1. **[ADR-018: Complete Biological Architecture](architectural-decisions/018-complete-biological-architecture.md)**
-   - The definitive source on substrate/systems/organs
+   - The definitive source on substrate/systems/organa
    - Mathematical validation
    - Implementation guidance
 
