@@ -8,11 +8,13 @@ The Oak Notion MCP Server provides read-only access to Notion workspaces through
 
 ## Core Architecture
 
-The system implements a **Biological Architecture with Greek Nomenclature** - a living systems model that distinguishes between:
+The system implements a **Biological Architecture with Greek Nomenclature** - a living systems model with a complete hierarchy from molecules to ecosystems.
 
-- **Chora (Χώρα)**: Cross-cutting fields that pervade the entire system
-- **Organa (Ὄργανα)**: Discrete, bounded organs with specific functions
-- **Psychon (Ψυχόν)**: The ensouled whole that brings everything to life
+### Three Fundamental Categories
+
+1. **Discrete Hierarchy**: Bounded assemblies that nest hierarchically (molecules → organisms)
+2. **Cross-Cutting Chōra**: Pervasive fields that flow through all levels
+3. **Parallel Phantom Layer**: Testing infrastructure (eidola) that mirrors the living system
 
 This approach is mathematically-grounded and validated by complex systems research.
 
@@ -94,9 +96,39 @@ The organism is now complete and self-contained with all essential life function
 - Will be extracted as separate organism
 - Foundation for ecosystem growth
 
+## Complete Biological Hierarchy
+
+Our architecture follows a complete biological hierarchy:
+
+### Discrete Hierarchy (Bounded Assemblies)
+
+- **Morion → Moria**: Molecules (syntax features) - _future_
+- **Organelle → Organelles**: Pure functions (no side effects)
+- **Kytos → Kytia**: Cells (individual modules)
+- **Histos → Histoi**: Tissues (related modules in directories)
+- **Organon → Organa**: Organs (services like notion/, mcp/)
+- **Systema → Systemata**: Systems (grouped organs) - _future_
+- **Psychon → Psycha**: Organisms (complete applications)
+- **Ecosystema → Ecosystemata**: Ecosystems - _future_
+- **Biosphaera → Biosphaerae**: Biospheres - _future_
+
+### Cross-Cutting Chōra (Pervasive Fields)
+
+- **Aither**: Divine flows (logging, events, errors, immunity)
+- **Stroma**: Structural matrix (types, contracts, schemas)
+- **Phaneron**: Visible manifestation (configuration)
+- **Krypton**: Hidden values (secrets) - _future_
+- **Kanōn**: Canonical rules (tooling config) - _future_
+- **Kratos**: Power/control (authorization) - _future_
+- **Nomos**: Laws (policies) - _future_
+
+### Parallel Layer
+
+- **Eidōlon → Eidōla**: Phantoms (test doubles, mocks)
+
 ## Key Architectural Principles
 
-1. **Biological Model with Greek Nomenclature** - Chora + Organa + Psychon
+1. **Biological Model with Greek Nomenclature** - Complete hierarchy from molecules to biosphere
 2. **Pure Functions First** - Organelles with no side effects
 3. **Clear Boundaries** - Chorai pervade, organa are discrete
 4. **Operating at Criticality** - Edge of chaos for optimal performance
