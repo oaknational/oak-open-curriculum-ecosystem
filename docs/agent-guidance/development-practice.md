@@ -43,25 +43,32 @@ NEVER disable any quality gates or Git hooks.
 - **Single responsibility** - Each module/class/function does one thing well
 - **TypeScript best practices** - See [TypeScript Practice](./typescript-practice.md)
 
-### Experimental Architecture Practices
+### Biological Architecture Practices
 
 - **Module boundaries over file organization** - Focus on interfaces, not folder structure
 - **Heterogeneous patterns** - Different parts of the system can work differently if it's simpler
-- **Events between domains** - Major components communicate through events/messages, not direct imports
-- **Warnings as architecture insights** - The 103 relative import warnings show where boundaries naturally form
+- **Dependency injection between organa** - Organs receive dependencies, never import from other organs
+- **Warnings as architecture insights** - The 91 relative import warnings show where boundaries naturally form
 - **No forced consistency** - If a pattern works well in one place but adds complexity elsewhere, don't force it
+- **Chorai are pervasive** - Infrastructure (logging, events, config) flows through everything
+- **Organa are discrete** - Business logic organs have clear boundaries with no cross-imports
 
-Example of good module structure:
+Example of good module structure following biological architecture:
 
 ```typescript
-// src/notion/search/index.ts - Public API
+// src/organa/notion/search/index.ts - Public API (cell membrane)
 export { createSearchService } from './factory';
 export type { SearchService, SearchResult } from './types';
 
-// src/notion/search/factory.ts
+// src/organa/notion/search/factory.ts - Cell assembly
 export function createSearchService(deps: Dependencies): SearchService {
-  // Create and wire up the service
+  // Dependencies include chorai (logger, config) and other services
+  // but NEVER direct imports from other organa
 }
+
+// src/chora/aither/logging/index.ts - Chora public API
+export { createLogger } from './logger';
+export type { Logger } from './types';
 ```
 
 ## Refactoring Principles
@@ -87,8 +94,24 @@ export function createSearchService(deps: Dependencies): SearchService {
 - Enforced by `commitlint` pre-commit hook
 - Examples: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
 
+### Import Guidelines for Biological Architecture
+
+**Allowed imports:**
+
+- ✅ Chorai can import from other chorai (within same field)
+- ✅ Organa can import from chorai (infrastructure flows everywhere)
+- ✅ Everything can import from stroma (types/contracts)
+- ✅ Psychon can import from all layers (it wires everything)
+
+**Forbidden imports:**
+
+- ❌ Cross-organ imports (organa/notion → organa/mcp)
+- ❌ Upward imports (../)
+- ❌ Deep imports into internal modules (use public APIs)
+
 ## Related Documentation
 
+- [Biological Architecture Guide](./architecture.md) - THE authoritative reference
 - [Testing Strategy](./testing-strategy.md) - TDD/BDD approach
 - [TypeScript Practice](./typescript-practice.md) - Type safety rules
 - [Tooling](../development/tooling.md) - Development tools and versions

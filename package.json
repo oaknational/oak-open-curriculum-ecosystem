@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/oak-notion-mcp",
-  "version": "2.0.0",
+  "version": "0.5.0",
   "description": "Model Context Protocol server for Notion integration",
   "type": "module",
   "main": "./dist/index.js",
@@ -80,6 +80,7 @@
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-prettier": "^5.5.3",
     "husky": "^9.1.7",
+    "jiti": "^2.5.1",
     "lint-staged": "^16.1.2",
     "madge": "^8.0.0",
     "pnpm": "^10.13.1",

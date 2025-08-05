@@ -1,10 +1,42 @@
 # High Level Architecture
 
-## Overview
+> 🗺️ **Quick Navigation**: [Architecture Map](../ARCHITECTURE_MAP.md) | [Architecture Overview](../architecture-overview.md) | [Naming Guide](../naming.md)
 
-The Oak Notion MCP Server follows a clean, layered architecture designed for testability, maintainability, and safety. The system provides read-only access to Notion workspaces through the Model Context Protocol (MCP), enabling AI assistants to query and analyze Notion content.
+> "Architecture is not about files and folders, but about relationships and boundaries. Our 91 relative import warnings aren't bugs - they're architectural truth detectors showing us where natural boundaries want to form."
 
-The architecture is based on a complete biological model with multiple scales - from pure functions (organelles) to complete applications (organisms) that can form ecosystems. This approach is mathematically grounded in complex systems theory, with proven stability properties validated across neuroscience, ecology, and machine learning (Meena et al., 2023; Scheffer et al., 2009).
+## Table of Contents
+
+1. [Executive Summary](#executive-summary)
+2. [Core Design Principles](#core-design-principles)
+3. [System Architecture](#system-architecture)
+4. [Architectural Scales](#architectural-scales)
+5. [Layer Responsibilities](#layer-responsibilities)
+6. [Security Model](#security-model)
+7. [Testing Strategy](#testing-strategy)
+8. [Error Handling](#error-handling)
+9. [Mathematical Foundation](#mathematical-foundation)
+10. [Migration Roadmap](#migration-roadmap)
+11. [Reference Documents](#reference-documents)
+
+## Executive Summary
+
+The Oak Notion MCP Server implements a **Biological Architecture with Greek Nomenclature** - a mathematically-grounded approach to software design inspired by how biological systems achieve stability, resilience, and evolution at scale.
+
+### Key Innovations
+
+1. **Chora/Stroma Layer**: Shared types and contracts form the structural matrix of our application
+2. **Chorai vs Organa**: Pervasive infrastructure (logging, events) is fundamentally different from discrete business logic (Notion, MCP)
+3. **Psychon Integration**: The living whole that emerges from properly wired components
+4. **Multi-Scale Design**: From pure functions (organelles) to distributed systems (ecosystems)
+5. **Mathematical Validation**: Our patterns are proven by complex systems theory across multiple disciplines
+
+### Why Greek Nomenclature?
+
+- **Precision**: Each term has ONE specific meaning, no ambiguity
+- **Cognitive Distance**: Forces clear thinking about architectural boundaries
+- **Philosophical Grounding**: Terms chosen for their original meanings in Greek philosophy
+
+> **Learn More**: See our [Naming Guide](../naming.md) for the complete biological hierarchy, etymology, and architectural meanings of all Greek terms.
 
 ## Core Design Principles
 
@@ -15,15 +47,15 @@ The architecture is based on a complete biological model with multiple scales - 
 5. **Type Safety**: Strict TypeScript with no `any` types, validated boundaries using Zod
 6. **Fail-Safe Defaults**: Read-only operations by default, write operations require explicit confirmation
 7. **Privacy by Design**: Automatic PII scrubbing for sensitive data (emails)
-8. **Complete Biological Architecture**: Systems (pervasive infrastructure) vs Organs (discrete business logic)
-9. **Substrate Foundation**: Shared types and contracts form the "physics" of the system
-10. **Multi-Scale Design**: Organelles → Cells → Tissues → Systems/Organs → Organism → Ecosystem
-11. **Operating at Criticality**: Like the brain, we aim for the edge of chaos - stable enough for reliability, flexible enough for evolution
+8. **Biological Architecture**: Chorai (pervasive fields) vs Organa (discrete organs)
+9. **Stroma Foundation**: Shared types and contracts form the structural matrix
+10. **Multi-Scale Design**: Organelles → Cells → Chorai/Organa → Psychon → Ecosystem
+11. **Operating at Criticality**: Like the brain, we aim for the edge of chaos
 12. **Mathematical Grounding**: Architecture decisions based on proven complex systems principles
 
 ## System Architecture
 
-### Current Layered Architecture
+### Current Layered View
 
 ```text
 ┌─────────────────────────────────────────┐
@@ -56,154 +88,233 @@ The architecture is based on a complete biological model with multiple scales - 
 │    │ Config │ Logging │ Errors   │      │
 │    └─────────────────────────────┘      │
 └─────────────────────────────────────────┘
-                 │
-┌────────────────┴────────────────────────┐
-│           External Systems              │
-│         (Notion API, File I/O)          │
-└─────────────────────────────────────────┘
 ```
 
-### Complete Biological Architecture
-
-Our architecture follows a complete biological model with multiple scales and types of components:
+### Target Biological Architecture
 
 ```text
-┌─────────────────────────────────────────────────────────┐
-│                    Ecosystem                             │
-│          (Multiple Organisms Interacting)                │
-└────────────────┬────────────────┬───────────────────────┘
-                 │                │
-┌────────────────▼────────┐  ┌───▼─────────────────────────┐
-│  Notion MCP Organism  │  │  Future: Indexer Organism   │
-│  (Current Monolith)   │  │  (Separate Service)         │
-└────────────┬───────────┘  └─────────────────────────────┘
-             │
-┌────────────▼────────────────────────────────────────────┐
-│                 Organism (Application)                   │
-│ ┌─────────────────────────────────────────────────────┐ │
-│ │              Substrate (Foundation)                  │ │
-│ │   Types, Contracts, Event Schemas (Physics)         │ │
-│ └─────────────────────────────────────────────────────┘ │
-│                                                          │
-│ ┌─────────────────┐  ┌────────────────────────────────┐ │
-│ │Systems (Pervasive)│ │    Organs (Discrete)          │ │
-│ │ ┌───────────────┐ │ │ ┌────────────────────────────┐│ │
-│ │ │Logging System │ │ │ │    Notion Organ            ││ │
-│ │ │(Nervous)      │ │ │ │ ┌──────────┐ ┌──────────┐ ││ │
-│ │ └───────────────┘ │ │ │ │ Tissue:  │ │ Tissue:  │ ││ │
-│ │ ┌───────────────┐ │ │ │ │ Client   │ │Transform │ ││ │
-│ │ │Event Transport│ │ │ │ └──────────┘ └──────────┘ ││ │
-│ │ │(Signaling)    │ │ │ └────────────────────────────┘│ │
-│ │ └───────────────┘ │ │ ┌────────────────────────────┐│ │
-│ │ ┌───────────────┐ │ │ │     MCP Organ              ││ │
-│ │ │Config System  │ │ │ │ ┌──────────┐ ┌──────────┐ ││ │
-│ │ │(Endocrine)    │ │ │ │ │ Tissue:  │ │ Tissue:  │ ││ │
-│ │ └───────────────┘ │ │ │ │ Protocol │ │ Handlers │ ││ │
-│ └─────────────────┘ │ │ │ └──────────┘ └──────────┘ ││ │
-│                      │ │ └────────────────────────────┘│ │
-│                      │ └────────────────────────────────┘ │
-└──────────────────────────────────────────────────────────┘
-
-                    Detail: Cell Structure
-┌─────────────────────────────────────────────────────────┐
-│                    Cell (Module)                         │
-│  ┌─────────────────────────────────────────────────┐  │
-│  │            Cell Membrane (index.ts)               │  │
-│  │         Public API - Controls Access              │  │
-│  └─────────────────────────────────────────────────┘  │
-│  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐    │
-│  │ Organelle:  │  │ Organelle:  │  │ Organelle:   │    │
-│  │ Pure Func 1 │  │ Pure Func 2 │  │ Pure Func 3  │    │
-│  └─────────────┘  └─────────────┘  └──────────────┘    │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────── PSYCHON ───────────────────────────┐
+│                    (The Ensouled Whole)                        │
+│                                                                │
+│  ┌─────────────────── CHORAI ────────────────────┐           │
+│  │         (Pervasive Fields - Flow Everywhere)   │           │
+│  │                                                 │           │
+│  │  ┌──── Stroma ────┐  ┌──── Aither ────┐       │           │
+│  │  │ Types/Contracts│  │ Logging/Events │       │           │
+│  │  │ (Compile-time) │  │ (Divine Flows) │       │           │
+│  │  └────────────────┘  └────────────────┘       │           │
+│  │                                                 │           │
+│  │  ┌────────── Phaneron ──────────┐             │           │
+│  │  │      Configuration            │             │           │
+│  │  │   (What Appears/Manifest)    │             │           │
+│  │  └───────────────────────────────┘             │           │
+│  └─────────────────────────────────────────────────┘           │
+│                                                                │
+│  ┌─────────────────── ORGANA ─────────────────────┐           │
+│  │      (Discrete Organs - Bounded Logic)         │           │
+│  │                                                 │           │
+│  │  ┌──── Notion ────┐    ┌───── MCP ─────┐     │           │
+│  │  │ Notion API     │    │ MCP Protocol  │     │           │
+│  │  │ Integration    │    │ Server Logic  │     │           │
+│  │  └────────────────┘    └────────────────┘     │           │
+│  │         ⚡ No Cross-Organ Imports ⚡           │           │
+│  └─────────────────────────────────────────────────┘           │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-### Architectural Scales
+### Current Implementation Status
 
-1. **Substrate** (Foundation)
-   - Types, contracts, event schemas
-   - The "physics" of our application
-   - Compile-time only, no runtime
+```text
+┌────────────────────────────────────────────────────────────────┐
+│           Current Implementation (Phase 3 - 90% Complete)       │
+│ ┌─────────────────────────────────────────────────────────────┐│
+│ │         Substrate → Chora/Stroma ✅ COMPLETED                ││
+│ │   • types/: LogLevel, core types                             ││
+│ │   • contracts/: Logger, Config, EventBus, NotionOperations   ││
+│ │   • event-schemas/: Event type definitions                   ││
+│ └─────────────────────────────────────────────────────────────┘│
+│                                                                 │
+│ ┌─────────────────────┐  ┌─────────────────────────────────────┐│
+│ │Systems → Chorai ✅   │  │    Organs → Organa ✅               ││
+│ │ ┌─────────────────┐ │  │ ┌─────────────────────────────────┐││
+│ │ │Logging → Aither │ │  │ │    Notion Organ                 │││
+│ │ │(2 levels max)   │ │  │ │ • Transformers                  │││
+│ │ └─────────────────┘ │  │ │ • Formatters                    │││
+│ │ ┌─────────────────┐ │  │ │ • Public API via index.ts       │││
+│ │ │Events → Aither  │ │  │ └─────────────────────────────────┘││
+│ │ │(Edge-compat)    │ │  │ ┌─────────────────────────────────┐││
+│ │ └─────────────────┘ │  │ │     MCP Organ                   │││
+│ │ ┌─────────────────┐ │  │ │ • Tool handlers                 │││
+│ │ │Config→Phaneron  │ │  │ │ • Resource handlers             │││
+│ │ │(From systems)   │ │  │ │ • Uses dependency injection     │││
+│ │ └─────────────────┘ │  │ └─────────────────────────────────┘││
+│ └─────────────────────┘  └─────────────────────────────────────┘│
+│                                                                 │
+│ ⏳ Next: psychon.ts to wire everything together                 │
+└────────────────────────────────────────────────────────────────┘
+```
 
-2. **Organelles** (Pure Functions)
-   - Smallest units of functionality
-   - No side effects, no I/O
-   - Highly testable
+## Architectural Scales
 
-3. **Cells** (Modules)
-   - Self-contained units with clear boundaries
-   - Public API via index.ts (membrane)
-   - Contains organelles
+### 0. Chora/Stroma (Foundation)
 
-4. **Tissues** (Domain Groups)
-   - Related cells working together
-   - Shared purpose within domain
-   - Local coordination
+**What**: Types, contracts, event schemas - the structural matrix
+**Where**: `src/chora/stroma/`
+**Rules**:
 
-5. **Systems** (Pervasive Infrastructure)
-   - Distributed throughout organism
-   - Cross-cutting concerns (logging, events)
-   - Like nervous or circulatory systems
+- Zero runtime code
+- Compile-time only
+- Shared by everything
 
-6. **Organs** (Discrete Business Logic)
-   - Complete functional units
-   - Clear boundaries
-   - Business-specific (Notion, MCP)
+```typescript
+// chora/stroma/types/core.ts
+export interface Entity {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-7. **Organism** (Application)
-   - Complete application
-   - Coordinates systems and organs
-   - Single process
+// chora/stroma/contracts/repository.ts
+export interface Repository<T extends Entity> {
+  findById(id: string): Promise<T | null>;
+  save(entity: T): Promise<T>;
+}
+```
 
-8. **Ecosystem** (Multiple Applications)
-   - Multiple organisms interacting
-   - Communicate via contracts
-   - Distributed system
+### 1. Organelles (Pure Functions)
+
+**What**: Side-effect free functions - the basic units
+**Where**: Throughout the codebase
+**Rules**:
+
+- No I/O, no state
+- Single responsibility
+- Highly testable
+
+```typescript
+// Pure function - an organelle
+export function calculateRelevance(query: string, content: string): number {
+  const queryTerms = query.toLowerCase().split(' ');
+  const contentLower = content.toLowerCase();
+  const matches = queryTerms.filter((term) => contentLower.includes(term));
+  return matches.length / queryTerms.length;
+}
+```
+
+### 2. Cells (Modules)
+
+**What**: Self-contained units with clear boundaries
+**Where**: Individual module directories
+**Rules**:
+
+- index.ts acts as membrane (barrel export)
+- Contains organelles (pure functions)
+- Single responsibility per file
+
+### 3. Chorai (Pervasive Fields)
+
+The infrastructure that flows through everything:
+
+#### 3a. Chora/Aither (Divine Flows)
+
+**What**: Logging and events - the flows that animate the system
+**Where**: `src/chora/aither/`
+**Examples**: Logger, EventBus
+
+#### 3b. Chora/Phaneron (Visible Manifestation)
+
+**What**: Configuration - what appears to the system
+**Where**: `src/chora/phaneron/`
+**Examples**: Config management, environment settings
+
+### 4. Organa (Discrete Organs)
+
+**What**: Complete functional units with clear boundaries
+**Where**: `src/organa/`
+**Examples**: Notion integration, MCP protocol handler
+**Rules**:
+
+- Clear boundaries
+- Specific business function
+- No cross-organ imports
+
+```typescript
+// organa/notion/index.ts - Organ boundary
+export interface NotionOperations {
+  search(query: string): Promise<SearchResults>;
+  fetch(id: string): Promise<Document>;
+  transform(raw: RawData): ProcessedData;
+}
+```
+
+### 5. Psychon (The Living Whole)
+
+**What**: Complete, living application
+**Where**: `src/psychon.ts`
+**Rules**:
+
+- Wires all chorai and organa together
+- Single deployment unit
+- The consciousness that emerges
+
+```typescript
+// src/psychon.ts - where everything comes together
+export class Psychon {
+  constructor() {
+    // Create chorai (pervasive fields)
+    const logger = createLogger();
+    const events = createEventBus();
+    const config = createConfig();
+
+    // Create organa with injected chorai
+    const notion = createNotionOperations({ logger, events, config });
+    const mcp = createMcpServer({
+      logger,
+      events,
+      config,
+      notionOperations: notion, // Dependency injection
+    });
+  }
+}
+```
+
+### 6. Ecosystem (Future - Multiple Applications)
+
+**What**: Multiple psycha (organisms) interacting
+**Where**: Distributed system / monorepo
+**Rules**:
+
+- Organisms communicate via contracts only
+- Natural selection (what works survives)
 
 ## Layer Responsibilities
 
-### MCP Protocol Layer
+### MCP Protocol Layer (→ Organa/MCP)
 
 - **Purpose**: Handle MCP protocol communication and request routing
-- **Components**:
-  - Request handlers for resources, tools, and prompts
-  - Response formatters
-  - Protocol-specific error handling
-- **Dependencies**: Business Logic Layer
+- **Components**: Request handlers, response formatters, protocol error handling
 - **Key Principle**: Thin layer that delegates to business logic
 
-### Business Logic Layer
+### Business Logic Layer (→ Organelles in Organa)
 
-- **Purpose**: Core application logic implemented as pure functions
-- **Components**:
-  - Data transformers (Notion → MCP format)
-  - Query builders
-  - Validators
-  - Text formatters and extractors
-  - PII scrubbing utilities
-- **Dependencies**: None (pure functions)
-- **Key Principle**: No side effects, fully testable with unit tests
+- **Purpose**: Core application logic as pure functions
+- **Components**: Transformers, validators, formatters, scrubbing utilities
+- **Key Principle**: No side effects, fully testable
 
-### Notion Adapter Layer
+### Notion Adapter Layer (→ Organa/Notion)
 
-- **Purpose**: Abstract Notion API interactions behind a clean interface
-- **Components**:
-  - NotionClientWrapper with injected Notion SDK client
-  - Request builders
-  - Response mappers
-- **Dependencies**: Notion SDK (injected)
+- **Purpose**: Abstract Notion API interactions
+- **Components**: NotionClientWrapper, request builders, response mappers
 - **Key Principle**: Single point of integration with external API
 
-### Infrastructure Layer
+### Infrastructure Layer (→ Chorai)
 
-- **Purpose**: Cross-cutting system concerns
+- **Purpose**: Cross-cutting pervasive concerns
 - **Components**:
-  - Configuration management
-  - Logging with OpenTelemetry support
-  - Error handling and recovery
-  - Event transport
-- **Dependencies**: External libraries (dotenv, consola, etc.)
-- **Key Principle**: Pervasive systems that flow throughout the application
+  - Logging (→ Aither): Flows through everything
+  - Events (→ Aither): System-wide signaling
+  - Config (→ Phaneron): Visible configuration
+- **Key Principle**: Fields that pervade the entire system
 
 ## Security Model
 
@@ -222,24 +333,24 @@ Our architecture follows a complete biological model with multiple scales and ty
 
 ### Input Validation
 
-- All inputs validated with Zod schemas
+- All inputs validated with Zod schemas at boundaries
 - Type-safe boundaries between layers
-- Explicit error messages for invalid inputs
+- Once validated, types are trusted internally
 
 ## Testing Strategy
 
 The system uses different testing approaches at each architectural scale:
 
-| Level      | Testing Approach                             |
-| ---------- | -------------------------------------------- |
-| Substrate  | Compile-time type checking                   |
-| Organelles | Pure unit tests, no mocks                    |
-| Cells      | Integration tests with injected dependencies |
-| Tissues    | Domain integration tests                     |
-| Systems    | Infrastructure tests with test doubles       |
-| Organs     | Business logic tests with mocked systems     |
-| Organism   | E2E tests with real I/O                      |
-| Ecosystem  | Contract tests between organisms             |
+| Level          | Greek Term   | Testing Approach                             |
+| -------------- | ------------ | -------------------------------------------- |
+| Foundation     | Chora/Stroma | Compile-time type checking                   |
+| Pure Functions | Organelles   | Pure unit tests, no mocks                    |
+| Modules        | Cells        | Integration tests with injected dependencies |
+| Infrastructure | Chorai       | Infrastructure tests with test doubles       |
+| Business Logic | Organa       | Business logic tests with mocked chorai      |
+| Application    | Psychon      | Integration tests verifying wiring           |
+| System         | Full Psychon | E2E tests with real I/O                      |
+| Multi-App      | Ecosystem    | Contract tests between organisms             |
 
 ## Error Handling
 
@@ -261,66 +372,91 @@ The system uses different testing approaches at each architectural scale:
 - Circuit breakers for external services
 - Graceful degradation where possible
 
-## Performance Considerations
+## Mathematical Foundation
 
-### Caching Strategy
+Our architecture isn't just biologically inspired - it's mathematically validated by complex systems research.
 
-- No caching in current implementation
-- Future: Response caching at MCP layer
-- Cache invalidation via Notion webhooks
+### Stability Through Heterogeneity
 
-### Pagination
+Research by Meena et al. (2023) proves that heterogeneous networks naturally self-organize into stable configurations:
 
-- Built-in support for Notion's pagination
-- Transparent to MCP clients
-- Configurable page sizes
+```
+Stability Classifier: S = β(s + ν + ρ - μ - η)
 
-### Resource Limits
+Where:
+- β > 0: Degree heterogeneity (variety in connections)
+- s: Cooperation factor (1 for collaborative)
+- S < 0: System is stable
+```
 
-- Memory-efficient streaming where possible
-- Bounded concurrency for API calls
-- Request timeout configuration
+**What this means**: Our different patterns (chorai vs organa) create mathematical stability.
 
-## Future Enhancements
+### Operating at Criticality
 
-### oak-mcp-core Extraction
+Like the brain, optimal systems operate at the "edge of chaos" (Beggs & Plenz, 2003):
 
-Extract generic MCP server components:
+- Too rigid = brittle, can't adapt
+- Too chaotic = unstable, can't function
+- Criticality = maximum information processing
 
-- Protocol handlers
-- Tool/Resource registration
-- Transport abstractions
-- Common utilities
+**What this means**: Our 91 import warnings show we're at a phase transition - exactly where we should be.
 
-### Multi-Organism Ecosystem
+### Early Warning Signals
 
-- Separate indexing service
-- Search optimization service
-- Analytics and monitoring service
-- Each as independent organism
+Scheffer et al. (2009) identified universal signals before system transitions:
 
-### Enhanced Security
+- Increasing autocorrelation (dependencies coupling)
+- Rising variance (fluctuating relationships)
+- Slower recovery (changes propagating slowly)
 
-- OAuth support for user-specific access
-- Fine-grained permission models
-- Audit logging for compliance
+**What this means**: Our import warnings are early warning signals showing natural boundaries.
 
-### Performance Optimizations
+## Migration Roadmap
 
-- Response caching layer
-- Query optimization
-- Parallel request processing
+### Phase 3: Biological Architecture Implementation (Current)
 
-## Architectural Decisions
+**Progress**: 90% Complete
 
-Key decisions are documented in ADRs:
+- ✅ Substrate → Chora/Stroma extraction complete
+- ✅ Systems → Chorai separation complete
+- ✅ Organs → Organa with dependency injection
+- ⏳ Next: Create psychon.ts to wire everything
 
-- [ADR-006: Cellular Architecture Pattern](architectural-decisions/006-cellular-architecture-pattern.md)
-- [ADR-018: Complete Biological Architecture](architectural-decisions/018-complete-biological-architecture.md)
-- [All ADRs](architectural-decisions/)
+**Metrics**:
 
-## References
+- Started: 101 relative import warnings
+- Current: 91 warnings (all expected boundaries)
+- Target: 0 warnings after psychon integration
 
-- [Tissue and Organ Interfaces](tissue-and-organ-interfaces.md)
-- [MCP Specification](https://modelcontextprotocol.io)
-- [Notion API Documentation](https://developers.notion.com)
+### Phase 4: oak-mcp-core Extraction
+
+**Goal**: Extract generic MCP framework as pioneer organism
+**Timeline**: 2-3 weeks after Phase 3
+
+### Future Phases
+
+- **Phase 5**: Multiple organisms (ecosystem)
+- **Phase 6**: Full distributed system
+
+## Reference Documents
+
+### Core Architecture
+
+1. **[Biological Architecture Guide](../agent-guidance/architecture.md)** - THE authoritative reference
+2. **[ADR-020: Biological Architecture](architectural-decisions/020-biological-architecture.md)** - Greek nomenclature decision
+3. **[Quick Reference](../agent-guidance/experimental-architecture-quick-reference.md)** - Visual guide with examples
+
+### Supporting Documents
+
+4. **[ADR-009: Mathematical Foundation](architectural-decisions/009-mathematical-foundation-for-architecture.md)** - Complex systems theory
+5. **[Phase 3 Implementation Plan](../../.agent/plans/phase-3-biological-architecture.md)** - Current work
+6. **[AGENT.md](../../.agent/directives-and-memory/AGENT.md)** - AI agent guidance
+
+### Getting Started
+
+7. **[Architecture Overview](../architecture-overview.md)** - High-level introduction
+8. **[Onboarding Journey](../development/onboarding-journey.md)** - Developer setup
+
+---
+
+_"Like nature itself, our architecture evolves through selection pressure. The 91 import warnings aren't failures - they're the system telling us where it wants to grow."_

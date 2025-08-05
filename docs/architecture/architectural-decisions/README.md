@@ -1,5 +1,7 @@
 # Architectural Decisions Records
 
+> 🗺️ **Quick Navigation**: [Architecture Map](../../ARCHITECTURE_MAP.md) | [Architecture Overview](../../architecture-overview.md) | [Architecture Home](../README.md)
+
 This file is an index of architectural decisions made during the development of this repository.
 
 ## Index
@@ -22,6 +24,17 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-016: Use dotenv for Environment Configuration](016-dotenv-for-configuration.md)
 - [ADR-017: Use Consola for Logging](017-consola-for-logging.md)
 - [ADR-018: Complete Biological Architecture](018-complete-biological-architecture.md)
+- [ADR-019: Domain-Driven File Splitting](019-domain-driven-file-splitting.md)
+- [ADR-020: Biological Architecture Pattern](020-biological-architecture.md)
+
+## Key Architectural Decisions
+
+For understanding our biological architecture, these ADRs are most important:
+
+- **[ADR-020](020-biological-architecture.md)** - Current biological architecture with Greek nomenclature
+- **[ADR-018](018-complete-biological-architecture.md)** - Evolution to complete biological model
+- **[ADR-009](009-mathematical-foundation-for-architecture.md)** - Mathematical grounding from complex systems theory
+- **[ADR-006](006-cellular-architecture-pattern.md)** - Original cellular architecture inspiration
 
 ## About ADRs
 

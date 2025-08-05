@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "erasableSyntaxOnly": false,
     "rootDir": ".",
     "outDir": "./dist",
     "strict": true,
@@ -22,7 +23,20 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "allowUnusedLabels": false,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "paths": {
+      "@chora/stroma": ["./src/chora/stroma/index.ts"],
+      "@chora/stroma/*": ["./src/chora/stroma/*"],
+      "@chora/aither": ["./src/chora/aither/index.ts"],
+      "@chora/aither/*": ["./src/chora/aither/*"],
+      "@chora/phaneron": ["./src/chora/phaneron/index.ts"],
+      "@chora/phaneron/*": ["./src/chora/phaneron/*"],
+      "@chora/eidola": ["./src/chora/eidola/index.ts"],
+      "@chora/eidola/*": ["./src/chora/eidola/*"],
+      "@organa/notion": ["./src/organa/notion/index.ts"],
+      "@organa/mcp": ["./src/organa/mcp/index.ts"]
+    },
+    "baseUrl": "."
   },
   "include": ["src/**/*", "*.config.ts", "e2e-tests/**/*", "scripts/**/*.ts"],
   "exclude": ["node_modules", "dist", "coverage"]
