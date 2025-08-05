@@ -15,7 +15,11 @@
  * - Remove the prerelease configuration from main branch
  * - Or create a separate 'stable' branch
  */
-module.exports = {
+
+/**
+ * @type {import('semantic-release').GlobalConfig}
+ */
+export default {
   branches: [
     {
       name: 'main',

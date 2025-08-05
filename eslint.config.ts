@@ -240,9 +240,15 @@ const config: Config = tsEslintConfig(
       'max-lines-per-function': ['error', 1000],
     },
   },
-  // Config files (JS)
+  // Config files (JS and MJS)
   {
-    files: ['**/*.config.js', '.releaserc.js'],
+    files: [
+      '**/*.config.js',
+      '**/*.config.mjs',
+      '.releaserc.js',
+      '.releaserc.mjs',
+      'commitlint.config.mjs',
+    ],
     extends: [tsEslintConfigs.disableTypeChecked],
     languageOptions: {
       globals: {
