@@ -34,8 +34,12 @@ function createMockOperations() {
     formatters: {
       formatSearchResults: vi.fn().mockReturnValue('Found 2 results\nTest Page\nTest Database'),
       formatDatabaseList: vi.fn().mockReturnValue('Found 1 database\nProjects\nStatus, Priority'),
-      formatUserList: vi.fn().mockReturnValue('Found 2 users\nJohn Doe\njoh...@example.com\nTest Bot\nBot'),
-      formatDatabaseQueryResults: vi.fn().mockReturnValue('Database: Tasks\nTask 1\nStatus: In Progress'),
+      formatUserList: vi
+        .fn()
+        .mockReturnValue('Found 2 users\nJohn Doe\njoh...@example.com\nTest Bot\nBot'),
+      formatDatabaseQueryResults: vi
+        .fn()
+        .mockReturnValue('Database: Tasks\nTask 1\nStatus: In Progress'),
       formatPageDetails: vi.fn().mockReturnValue('My Page\nPage content'),
     },
   };
