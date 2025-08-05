@@ -1,5 +1,7 @@
 # Biological Architecture: Philosophy and Implementation
 
+> 🗺️ **Quick Navigation**: [Architecture Map](../ARCHITECTURE_MAP.md) | [Architecture Overview](../architecture-overview.md) | [High-Level Architecture](high-level-architecture.md)
+
 ## Overview
 
 This document provides the philosophical foundation and implementation guidance for our biological architecture. While the [Naming Guide](../naming.md) explains what each term means, this document explains WHY we make the distinctions we do and HOW to apply them in practice.

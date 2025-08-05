@@ -2,15 +2,17 @@
 
 ## Start Here
 
-**→ [Master Architecture Document](./master-architecture.md)** - Complete architectural vision and guide
+1. **→ [Architecture Map](../ARCHITECTURE_MAP.md)** - Visual guide to finding what you need
+2. **→ [Architecture Overview](../architecture-overview.md)** - High-level introduction
+3. **→ [High-Level Architecture](./high-level-architecture.md)** - Detailed technical design
 
 ## Reference Documentation
 
 ### Core Architecture
 
-- [Master Architecture](./master-architecture.md) - **START HERE** - Single comprehensive guide
+- [Architecture Map](../ARCHITECTURE_MAP.md) - 🗺️ Quick reference for navigation
+- [Architecture Overview](../architecture-overview.md) - System purpose and core concepts
 - [High-Level Architecture](./high-level-architecture.md) - Detailed technical architecture with diagrams
-- [Architecture Overview](../architecture-overview.md) - Quick introduction for newcomers
 - [Naming Guide](../naming.md) - Complete biological hierarchy and Greek nomenclature
 - [Biological Philosophy](./biological-philosophy.md) - Deep principles and Actions vs Access distinction
 
