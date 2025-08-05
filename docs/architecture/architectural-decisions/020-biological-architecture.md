@@ -1,5 +1,7 @@
 # ADR-020: Biological Architecture Pattern
 
+> 🗺️ **Related**: [Architecture Map](../../ARCHITECTURE_MAP.md) | [Architecture Overview](../../architecture-overview.md) | [Biological Philosophy](../biological-philosophy.md)
+
 ## Status
 
 Accepted and Implemented

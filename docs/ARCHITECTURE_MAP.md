@@ -93,6 +93,8 @@ import { createMcpHandlers } from '@organa/mcp';
 
 ## Further Reading
 
-- [Full Architecture Overview](docs/architecture-overview.md) - Detailed explanation of the biological architecture
-- [Naming Guide](docs/naming.md) - Complete Greek nomenclature reference
-- [Development Guide](docs/development/README.md) - How to work with this codebase
+- [Architecture Overview](architecture-overview.md) - High-level system introduction
+- [High-Level Architecture](architecture/high-level-architecture.md) - Detailed technical design with diagrams
+- [Biological Philosophy](architecture/biological-philosophy.md) - Deep principles behind the architecture
+- [Naming Guide](naming.md) - Complete Greek nomenclature reference
+- [Development Guide](development/README.md) - How to work with this codebase

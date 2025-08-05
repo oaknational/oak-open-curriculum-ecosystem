@@ -1,5 +1,7 @@
 # High Level Architecture
 
+> 🗺️ **Quick Navigation**: [Architecture Map](../ARCHITECTURE_MAP.md) | [Architecture Overview](../architecture-overview.md) | [Naming Guide](../naming.md)
+
 > "Architecture is not about files and folders, but about relationships and boundaries. Our 91 relative import warnings aren't bugs - they're architectural truth detectors showing us where natural boundaries want to form."
 
 ## Table of Contents

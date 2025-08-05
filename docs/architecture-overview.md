@@ -2,7 +2,7 @@
 
 > 🗺️ **Looking for a quick reference?** See the [Architecture Map](ARCHITECTURE_MAP.md) for a visual guide to finding what you need.
 
-This document provides a high-level overview of the Oak Notion MCP Server architecture. For the comprehensive architectural vision, see the [Master Architecture Document](./architecture/master-architecture.md).
+This document provides a high-level overview of the Oak Notion MCP Server architecture. For detailed technical design, see the [High-Level Architecture](./architecture/high-level-architecture.md).
 
 ## System Purpose
 
@@ -11,6 +11,8 @@ The Oak Notion MCP Server provides read-only access to Notion workspaces through
 ## Core Architecture
 
 The system implements a **Biological Architecture with Greek Nomenclature** - a living systems model with a complete hierarchy from molecules to ecosystems.
+
+> 🗺️ **Need to find something quickly?** The [Architecture Map](ARCHITECTURE_MAP.md) provides a visual guide to all directories and their purposes.
 
 ### Three Fundamental Categories
 
