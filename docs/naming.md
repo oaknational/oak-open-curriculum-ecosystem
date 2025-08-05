@@ -8,11 +8,25 @@ This document explains our naming conventions and the complete biological hierar
 
 ## Overview
 
-Our architecture follows a biological model with three fundamental categories:
+Our architecture follows a biological model with three fundamental categories, organized in a **genotype/phenotype** workspace structure:
 
 1. **Discrete Hierarchy** - Bounded assemblies that nest hierarchically
 2. **Cross-Cutting Chōra** - Pervasive fields that flow through all levels
 3. **Parallel Phantom Layer** - Testing infrastructure that mirrors the living system
+
+### Genotype/Phenotype Model
+
+The architecture separates abstract patterns from concrete implementations:
+
+- **Genotype** (`ecosystem/oak-mcp-core/`) - The genetic blueprint
+  - Contains morphai (abstract patterns) and core chorai
+  - Zero runtime dependencies
+  - Pure abstractions and utilities
+
+- **Phenotype** (`ecosystem/oak-notion-mcp/`) - The environmental expression
+  - Instantiates morphai patterns in organa
+  - Contains domain-specific implementations
+  - The living, breathing application
 
 ## Discrete Hierarchy (Bounded Assemblies)
 
@@ -87,11 +101,24 @@ The discrete hierarchy represents bounded, nestable components - from molecular 
 
 Chōra represents pervasive infrastructure that cuts across all hierarchical levels:
 
+### Morphai (Μορφαί) → Morphai (Μορφαί) [Forms → Forms]
+
+**Meaning**: The hidden forms - Platonic ideals that organs aspire to instantiate
+
+- **Location**: `ecosystem/oak-mcp-core/src/chora/morphai/` (genotype only)
+- **Nature**: Pure abstract patterns with zero implementation
+- **Contents**:
+  - `tools/` - Tool execution patterns (`ToolExecutor`, `ToolDefinition`)
+  - `handlers/` - Request handling patterns (`RequestHandler`, `ResourceHandler`)
+  - `errors/` - Error handling patterns (`ErrorHandler`, `CircuitBreaker`)
+  - `registries/` - Collection management patterns (`Registry`, `ObservableRegistry`)
+- **Philosophy**: Define potential; organs express actuality
+
 ### Aither (Αἰθήρ) → Aitheres (Αἰθέρες) [Ether → Ethers]
 
 **Meaning**: Divine flows that move through everything
 
-- **Current Implementation**: `src/chora/aither/`
+- **Current Implementation**: `*/src/chora/aither/`
   - `logging/` - Nervous system carrying signals
   - `events/` - Hormonal messaging between components
   - `errors/` - Pain/alert system warning of problems
@@ -101,7 +128,7 @@ Chōra represents pervasive infrastructure that cuts across all hierarchical lev
 
 **Meaning**: Structural matrix - the "physics" of the system
 
-- **Current Implementation**: `src/chora/stroma/`
+- **Current Implementation**: `*/src/chora/stroma/`
   - `types/` - Pure type definitions
   - `contracts/` - Interface definitions
   - `schemas/` - Data structure schemas
@@ -110,7 +137,7 @@ Chōra represents pervasive infrastructure that cuts across all hierarchical lev
 
 **Meaning**: What's visible and manifest at runtime
 
-- **Current Implementation**: `src/chora/phaneron/`
+- **Current Implementation**: `*/src/chora/phaneron/`
   - `config/` - Runtime configuration
 
 ### Krypton (Κρυπτόν) → Krypta (Κρυπτά) [Hidden → Hiddens]

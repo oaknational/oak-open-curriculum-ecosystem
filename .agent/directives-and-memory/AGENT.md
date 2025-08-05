@@ -2,9 +2,11 @@
 
 This file provides core directives for AI agents working with this codebase. Read ALL of it first, then follow all instructions.
 
-Read the [metacognitive prompt](./metacognition.md) and follow all instructions.
+## Grounding
 
-Now read this document again; what has changed, why? Would you like to update your todo list?
+Read the [metacognitive prompt](./metacognition.md) and follow all instructions, reflect on it.
+
+Now reflect on what you are doing. Would you like to update your todo list or the plan?
 
 ## Prime Directive
 
@@ -71,11 +73,53 @@ pnpm build          # 5. Build
 
 Run quality gates 1-5 in order after changes and before commits.
 
+## Architectural Understanding
+
+### The Four Types of Chorai
+
+The biological architecture now recognizes **four types of chorai** (pervasive infrastructure):
+
+1. **Morphai (μορφαί)** - The hidden forms, Platonic ideals that cast shadows (organa) in the manifest world
+   - Abstract patterns and interfaces (ToolExecutor, RequestHandler, etc.)
+   - Live in the genotype (oak-mcp-core) as pure types
+   - Define the essence of what organs aspire to be
+   - No implementation, only potential
+
+2. **Stroma** - The connective tissue, structural support
+   - Core types and contracts
+   - Dependency interfaces
+   - Event schemas
+
+3. **Aither** - The breathable air, life-giving essence
+   - Logging and observability
+   - Error handling
+   - Event bus
+
+4. **Phaneron** - The manifest environment, perceivable world
+   - Configuration and environment
+   - External integrations
+   - Runtime context
+
+### Genotype/Phenotype Model
+
+The workspace structure follows a biological inheritance model:
+
+- **Genotype** (`ecosystem/oak-mcp-core`): The genetic blueprint
+  - Contains morphai, stroma, aither, phaneron
+  - Zero runtime dependencies
+  - Pure abstractions and utilities
+  
+- **Phenotype** (`ecosystem/oak-notion-mcp`): The environmental expression
+  - Implements the abstract patterns from morphai
+  - Contains organa that instantiate the forms
+  - Specific to Notion integration
+
 ## Remember
 
 1. Read GO.md every 3rd task for grounding
 2. Use TodoWrite to track complex work
 3. General documentation lives in docs/, only context-specific documentation should be inline
 4. When in doubt, make it simpler
-5. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure) → organa (discrete business logic) → psychon (living whole)
-6. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues
+5. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
+6. Morphai define potential, organa express actuality
+7. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues

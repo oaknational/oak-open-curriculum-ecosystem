@@ -19,30 +19,44 @@ The realization: these aren't external tools - they're ALL integral parts of the
 
 ## Decision
 
-We adopt a complete biological architecture where ALL essential life functions are integrated into the organism:
+We adopt a complete biological architecture where ALL essential life functions are integrated into the organism, following a genotype/phenotype model:
+
+### Genotype (oak-mcp-core) - The Genetic Blueprint
 
 ```
-src/
+ecosystem/oak-mcp-core/src/
 ├── chora/              # Cross-cutting fields (pervasive infrastructure)
+│   ├── morphai/        # Abstract patterns (Platonic forms)
+│   │   ├── tools/      # Tool execution patterns
+│   │   ├── handlers/   # Request handling patterns
+│   │   ├── errors/     # Error handling patterns
+│   │   └── registries/ # Collection management patterns
 │   ├── stroma/         # Structural matrix
-│   │   ├── types/      # Including environment interfaces (formerly external)
-│   │   ├── contracts/  # Interface definitions
-│   │   └── schemas/    # Event and data schemas
+│   │   ├── types/      # Core type definitions
+│   │   └── contracts/  # Interface definitions
 │   ├── aither/         # Divine flows
 │   │   ├── logging/    # Nervous system
 │   │   ├── events/     # Hormonal signaling
-│   │   ├── errors/     # Alert/pain system (formerly external)
-│   │   └── sensitive-data/   # Protective system (formerly utils/scrubbing)
-│   ├── phaneron/       # Visible manifestation
-│   │   └── config/     # Runtime configuration
-│   └── eidola/         # Phantoms/simulacra (formerly test-helpers)
+│   │   ├── errors/     # Alert/pain system
+│   │   └── sensitive-data/   # Protective system
+│   └── phaneron/       # Base configuration patterns
+│       └── config/     # Configuration abstractions
+```
+
+### Phenotype (oak-notion-mcp) - The Environmental Expression
+
+```
+ecosystem/oak-notion-mcp/src/
+├── chora/              # Phenotype-specific chorai
+│   └── eidola/         # Phantoms/simulacra (test helpers)
 │       ├── factories.ts        # Mock factory functions
 │       ├── notion-mocks.ts     # Notion-specific test doubles
 │       └── notion-api-mocks.ts # API response simulacra
-├── organa/             # Discrete organs
+├── organa/             # Discrete organs (instantiate morphai)
 │   ├── notion/         # Notion integration
 │   └── mcp/            # MCP protocol handling
-└── psychon.ts          # The ensouled whole
+└── psychon/            # The ensouled whole
+    └── index.ts        # Living application
 ```
 
 ## Consequences

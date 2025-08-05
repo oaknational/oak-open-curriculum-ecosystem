@@ -18,44 +18,54 @@ The system implements a **Biological Architecture with Greek Nomenclature** - a 
 
 1. **Discrete Hierarchy**: Bounded assemblies that nest hierarchically (molecules → organisms)
 2. **Cross-Cutting Chōra**: Pervasive fields that flow through all levels
+   - **Morphai** (μορφαί): Abstract patterns - Platonic forms that organs instantiate
+   - **Stroma** (στρῶμα): Structural matrix - types, contracts, schemas
+   - **Aither** (αἰθήρ): Divine flows - logging, events, errors
+   - **Phaneron** (φανερόν): The visible - configuration, runtime settings
+   - **Eidola** (εἴδωλα): Phantoms - test mocks and fixtures
 3. **Parallel Phantom Layer**: Testing infrastructure (eidola) that mirrors the living system
 
 This approach is mathematically-grounded and validated by complex systems research.
 
-### Current Implementation (Phase 3 - Complete)
+### Current Implementation (Phase 4 - Genotype/Phenotype Model)
 
-We have successfully transitioned to a complete biological model with Greek nomenclature:
+We have successfully evolved to a **genotype/phenotype model** with workspace structure:
 
 ```text
-src/
-├── index.ts           # Entry point (delegates to psychon)
-├── psychon/           # The soul - wiring and orchestration layer
-│   ├── index.ts       # Main orchestration
-│   ├── server.ts      # MCP server creation
-│   ├── startup.ts     # Initialization sequence
-│   └── wiring.ts      # Dependency injection
-├── chora/             # Cross-cutting fields (pervasive infrastructure)
-│   ├── stroma/        # Structural matrix (types, contracts, schemas)
-│   │   ├── types/     # Pure type definitions including environment interfaces
-│   │   ├── contracts/ # Interface definitions
-│   │   └── schemas/   # Event and data schemas
-│   ├── aither/        # Divine flows (infrastructure that moves)
-│   │   ├── logging/   # Logging throughout the system
-│   │   ├── events/    # Event propagation
-│   │   ├── errors/    # Alert/pain system of the organism
-│   │   └── sensitive-data/  # Protection system (PII scrubbing)
-│   ├── phaneron/      # Visible manifestation
-│   │   └── config/    # Runtime configuration
-│   └── eidola/        # Phantoms/simulacra for testing
-│       ├── factories.ts        # Mock factory functions
-│       ├── notion-mocks.ts     # Notion-specific test doubles
-│       └── notion-api-mocks.ts # API response simulacra
-└── organa/            # Discrete organs (bounded business logic)
-    ├── notion/        # Notion integration organ
-    └── mcp/           # MCP protocol organ
+ecosystem/
+├── oak-mcp-core/      # GENOTYPE - Genetic blueprint for all MCP servers
+│   └── src/chora/     # Cross-cutting genetic traits
+│       ├── morphai/   # Abstract patterns (Platonic forms)
+│       │   ├── tools/      # Tool creation patterns
+│       │   ├── handlers/   # Request handling patterns
+│       │   ├── errors/     # Error handling patterns
+│       │   └── registries/ # Collection management patterns
+│       ├── stroma/    # Structural matrix (types, contracts)
+│       ├── aither/    # Divine flows (logging, events, errors)
+│       ├── phaneron/  # Visible manifestation (configuration)
+│       └── eidola/    # Phantoms/simulacra for testing
+│
+└── oak-notion-mcp/    # PHENOTYPE - Notion-specific expression
+    └── src/
+        ├── psychon/   # The soul - wiring and orchestration
+        ├── organa/    # Organs - business logic units
+        │   ├── mcp/   # MCP protocol handling
+        │   └── notion/# Notion-specific logic
+        └── chora/     # Phenotype-specific infrastructure
+            └── (notion-specific extensions)
 ```
 
-The organism is now complete and self-contained with all essential life functions integrated, including eidola for testing.
+### The Morphai: Completing the Biological Model
+
+**Morphai (μορφαί)** represent the Platonic forms - the perfect, abstract patterns that exist in the genotype. They are the "genetic code" that defines:
+
+- **What it means to be** a tool, handler, or registry (essence)
+- **How patterns compose** to form complex behaviors
+- **Universal shapes** that all phenotypes can instantiate
+
+Organs in phenotypes are the "shadows" of these perfect forms, implementing them in specific contexts.
+
+The organism is now complete with a true genetic inheritance model.
 
 ## Import Relationship Rules
 

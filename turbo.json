@@ -1,0 +1,79 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
+  "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts"
+      ]
+    },
+    "clean": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "format": {
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        ".prettierrc",
+        "../../.prettierrc",
+        "../../prettier.config.js"
+      ]
+    },
+    "format:check": {
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        ".prettierrc",
+        "../../.prettierrc",
+        "../../prettier.config.js"
+      ]
+    },
+    "lint": {
+      "cache": false,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.ts",
+        "$TURBO_ROOT$/eslint.config.base.ts",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "eslint.config.ts",
+        "eslint.config.base.ts"
+      ]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "inputs": ["$TURBO_DEFAULT$", "src/**/*.ts", "vitest.config.ts", "../../vitest.config.ts"]
+    },
+    "test:unit": {},
+    "test:integration": {
+      "outputs": ["coverage/**"]
+    },
+    "test:e2e": {
+      "outputs": [],
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
+      "env": ["NOTION_API_KEY", "RUN_E2E"]
+    },
+    "type-check": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/tsconfig.base.json",
+        "tsconfig.json",
+        "tsconfig.build.json",
+        "tsup.config.ts"
+      ]
+    }
+  }
+}

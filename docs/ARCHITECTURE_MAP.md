@@ -1,18 +1,26 @@
 # 🗺️ Architecture Map
 
-> **First time here?** This map shows you exactly where to find what you need in our Greek-inspired biological architecture.
+> **First time here?** This map shows you exactly where to find what you need in our Greek-inspired biological architecture, organized in a **genotype/phenotype** model.
+
+## Workspace Structure
+
+The project uses a **pnpm workspace** with biological inheritance:
+
+- **Genotype** (`ecosystem/oak-mcp-core/`) - The genetic blueprint with abstract patterns
+- **Phenotype** (`ecosystem/oak-notion-mcp/`) - The environmental expression with Notion implementation
 
 ## Quick Navigation Guide
 
-| What you're looking for             | Where to find it            | Directory                                    | Greek meaning                  |
-| ----------------------------------- | --------------------------- | -------------------------------------------- | ------------------------------ |
-| **Types, interfaces, contracts**    | The foundational layer      | [`src/chora/stroma/`](src/chora/stroma/)     | στρῶμα: substrate, foundation  |
-| **Logging, events, error handling** | System flows and signals    | [`src/chora/aither/`](src/chora/aither/)     | αἰθήρ: divine air that flows   |
-| **Configuration, settings**         | Runtime configuration       | [`src/chora/phaneron/`](src/chora/phaneron/) | φανερόν: the visible, manifest |
-| **Test mocks, fixtures**            | Testing utilities           | [`src/chora/eidola/`](src/chora/eidola/)     | εἴδωλα: phantoms, simulacra    |
-| **Notion API integration**          | Notion-specific logic       | [`src/organa/notion/`](src/organa/notion/)   | ὄργανον: organ, instrument     |
-| **MCP server handlers**             | MCP protocol implementation | [`src/organa/mcp/`](src/organa/mcp/)         | ὄργανον: organ, instrument     |
-| **App startup & wiring**            | Main application entry      | [`src/psychon/`](src/psychon/)               | ψυχόν: soul, animating force   |
+| What you're looking for             | Where to find it            | Directory                                                          | Greek meaning                       |
+| ----------------------------------- | --------------------------- | ------------------------------------------------------------------ | ----------------------------------- |
+| **Abstract patterns**               | Platonic forms (genotype)   | [`oak-mcp-core/src/chora/morphai/`](oak-mcp-core/src/chora/morphai/) | μορφαί: forms, Platonic ideals     |
+| **Types, interfaces, contracts**    | The foundational layer      | [`*/src/chora/stroma/`](*/src/chora/stroma/)                     | στρῶμα: substrate, foundation      |
+| **Logging, events, error handling** | System flows and signals    | [`*/src/chora/aither/`](*/src/chora/aither/)                     | αἰθήρ: divine air that flows       |
+| **Configuration, settings**         | Runtime configuration       | [`*/src/chora/phaneron/`](*/src/chora/phaneron/)                 | φανερόν: the visible, manifest     |
+| **Test mocks, fixtures**            | Testing utilities           | [`oak-notion-mcp/src/chora/eidola/`](oak-notion-mcp/src/chora/eidola/) | εἴδωλα: phantoms, simulacra        |
+| **Notion API integration**          | Notion-specific logic       | [`oak-notion-mcp/src/organa/notion/`](oak-notion-mcp/src/organa/notion/) | ὄργανον: organ, instrument         |
+| **MCP server handlers**             | MCP protocol implementation | [`oak-notion-mcp/src/organa/mcp/`](oak-notion-mcp/src/organa/mcp/) | ὄργανον: organ, instrument         |
+| **App startup & wiring**            | Main application entry      | [`oak-notion-mcp/src/psychon/`](oak-notion-mcp/src/psychon/)     | ψυχόν: soul, animating force       |
 
 ## Architecture Concepts
 
@@ -20,10 +28,11 @@
 
 These are the "fields" that flow through the entire system, like infrastructure concerns:
 
+- **morphai** - Abstract patterns (Platonic forms that organs instantiate) - **genotype only**
 - **stroma** - Types and contracts (the physics of our universe)
 - **aither** - Logging, events, errors (the nervous system)
 - **phaneron** - Configuration (what's visible at runtime)
-- **eidola** - Test infrastructure (phantom doubles for testing)
+- **eidola** - Test infrastructure (phantom doubles for testing) - **phenotype only**
 
 ### 🫀 Organa (Ὄργανα) - Discrete Organs
 

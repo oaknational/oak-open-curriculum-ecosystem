@@ -1,43 +1,26 @@
 {
-  "name": "@oaknational/oak-notion-mcp",
+  "name": "@oaknational/mcp-ecosystem",
   "version": "0.5.0",
-  "description": "Model Context Protocol server for Notion integration",
+  "private": true,
+  "description": "MCP ecosystem - genotype and phenotypes for Model Context Protocol servers",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "bin": {
-    "oak-notion-mcp": "./dist/index.js"
-  },
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:changed": "vitest run --changed",
-    "test:coverage": "vitest run --coverage",
-    "test:e2e": "./e2e-tests/run-e2e.sh",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "check-types": "tsc --noEmit",
-    "type-check": "tsc --noEmit",
+    "build": "turbo run --continue build",
+    "clean": "turbo run --continue clean",
+    "dev": "turbo run --continue dev",
+    "format": "turbo run --continue format",
+    "format:check": "turbo run --continue format:check",
+    "lint": "turbo run --continue lint",
+    "test": "turbo run --continue test",
+    "test:e2e": "turbo run --continue test:e2e",
+    "type-check": "turbo run --continue type-check",
     "prepare": "husky",
+    "publish:dry": "pnpm -r publish --dry-run",
+    "publish:packages": "pnpm -r publish",
     "analyze": "pnpm run analyze:deps && pnpm run analyze:modules",
-    "analyze:deps": "madge src/ --circular --image .agent/generalisation-opportunities-analysis/dependency-graph.svg --ts-config ./tsconfig.json",
-    "analyze:circular": "madge src/ --circular",
-    "analyze:modules": "tsx scripts/analyze-modules.ts",
-    "analyze:loc": "cloc src --by-file --json > .agent/generalisation-opportunities-analysis/loc-metrics.json"
+    "analyze:deps": "madge ecosystem/ --circular --image .agent/generalisation-opportunities-analysis/dependency-graph.svg",
+    "analyze:circular": "madge ecosystem/ --circular",
+    "analyze:modules": "tsx scripts/analyze-modules.ts"
   },
   "keywords": [
     "mcp",
@@ -54,24 +37,18 @@
   "engines": {
     "node": ">=22.0.0"
   },
+  "packageManager": "pnpm@10.14.0",
   "license": "MIT",
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.0",
-    "@notionhq/client": "^4.0.1",
-    "consola": "^3.4.2",
-    "dotenv": "^17.2.1",
-    "zod": "^4.0.10"
-  },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/js": "^9.32.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.2.0",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "@typescript-eslint/parser": "^8.38.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
     "@vitest/coverage-v8": "^3.2.4",
     "cloc": "2.6.0-cloc",
     "eslint": "^9.32.0",
@@ -81,17 +58,17 @@
     "eslint-plugin-prettier": "^5.5.3",
     "husky": "^9.1.7",
     "jiti": "^2.5.1",
-    "lint-staged": "^16.1.2",
     "madge": "^8.0.0",
-    "pnpm": "^10.13.1",
+    "pnpm": "^10.14.0",
     "prettier": "^3.6.2",
     "semantic-release": "^24.2.7",
     "supertest": "^7.1.4",
     "ts-morph": "^26.0.0",
     "tsup": "^8.5.0",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.38.0",
+    "turbo": "^2.5.5",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0",
     "vitest": "^3.2.4"
   }
 }

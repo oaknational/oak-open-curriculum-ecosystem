@@ -163,15 +163,28 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 - Developer onboarding enhanced with documentation
 - Ready for Phase 4 oak-mcp-core extraction
 
-### Phase 4: oak-mcp-core Shared Biosphere Extraction
+### Phase 4: oak-mcp-core Genotype Extraction
 
-**Outcome**: Extract oak-mcp-core as the **shared biosphere** - the atmospheric layers (chorai) that all MCP psycha breathe, in a separate workspace/package
+**Outcome**: Extract oak-mcp-core as the **MCP genotype** - the genetic blueprint that all MCP organisms inherit, organized as a pnpm workspace with Turbo
 
-**Ecosystem Role**: oak-mcp-core provides the shared chorai (aither, stroma, phaneron) that multiple psycha inhabit - not another organism, but the fields themselves
+**Ecosystem Role**: oak-mcp-core provides the genetic code (implemented as chorai) that defines what makes something an "MCP server". Each phenotype (oak-notion-mcp, oak-github-mcp, etc.) expresses these genes differently based on its environment.
 
-**Strategy**: Now that Phase 3 clarified the chora/organa/psychon architecture, extract the universal chorai that multiple psycha can share. Each MCP server maintains its own psychon while breathing common air.
+**Strategy**: Create a pnpm workspace structure where oak-mcp-core contains the genotype (shared genetic traits implemented as chorai), and each specific MCP server is a phenotype expressing those genes in its environment.
 
-**Detailed Plan**: See [Phase 4 oak-mcp-core Biosphere Plan](phase-4-oak-mcp-core-implementation-plan.md) for the philosophical and technical journey
+**Detailed Plan**: See [Phase 4 oak-mcp-core Implementation Plan](phase-4-oak-mcp-core-implementation-plan.md) for the complete journey
+
+**Workspace Structure**:
+```
+oak-notion-mcp/                 # Repository root
+├── ecosystem/                  # Where organisms evolve
+│   ├── oak-mcp-core/          # The MCP genotype
+│   │   └── src/chora/         # Genetic traits as chorai
+│   └── oak-notion-mcp/        # Notion phenotype
+│       └── src/               # Expressed organism
+├── pnpm-workspace.yaml        # Workspace configuration
+├── turbo.json                 # Task orchestration
+└── package.json               # Root workspace package
+```
 
 **Dependency Management Strategy**:
 

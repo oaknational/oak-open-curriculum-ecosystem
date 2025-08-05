@@ -1,47 +1,61 @@
-# Phase 4: oak-mcp-core Shared Biosphere Extraction Plan
+# Phase 4: oak-mcp-core Genotype Extraction Plan
 
 ## Executive Summary
 
-Phase 4 represents a profound architectural evolution: creating a **shared biosphere** where multiple psycha (souls) can thrive. oak-mcp-core is not merely a utility library but the atmospheric layers (chorai) that all MCP organisms breathe. This extraction enables a world of multiple psycha - each MCP server with its own soul, yet sharing common life-giving fields.
+Phase 4 represents a profound architectural evolution: extracting the **MCP genotype** - the genetic blueprint that defines what makes something an "MCP server". oak-mcp-core is not merely a utility library but the genetic code that all MCP organisms inherit, while each phenotype (oak-notion-mcp, oak-github-mcp, etc.) expresses these genes differently based on its environment.
 
-**Philosophical Foundation**: Just as organisms in nature share air, water, and light while maintaining individual souls, our MCP servers will share chorai (aither for flows, stroma for structure, phaneron for environment) while each maintains its own psychon. This creates a true ecosystem where diversity and unity coexist.
+**Philosophical Foundation**: The genotype/phenotype model perfectly captures our architecture. oak-mcp-core contains the genetic instructions (implemented as chorai), while each specific MCP server is a phenotypic expression shaped by genotype + environment. This enables true diversity while maintaining genetic unity.
 
-**Technical Realization**: Through zero-dependency shared chorai, we enable multiple MCP servers to breathe the same air while singing their unique songs.
+**Technical Realization**: Through a pnpm workspace with Turbo orchestration, we create a monorepo where the genotype (oak-mcp-core) and phenotypes (oak-notion-mcp, etc.) can evolve together while maintaining clear boundaries.
 
 ## Overview
 
-Extract oak-mcp-core as the **shared biosphere** for our ecosystem through a two-stage process:
+Extract oak-mcp-core as the **MCP genotype** through a workspace restructuring:
 
-1. **Stage 1: Biosphere Separation** - Identify and isolate shared chorai into `src/oak-mcp-core/`
-2. **Stage 2: Biosphere Independence** - Extract the shared biosphere as a separate package
+1. **Stage 1: Workspace Setup** - Create pnpm workspace with ecosystem/ directory
+2. **Stage 2: Genotype Extraction** - Move shared genetic traits (chorai) to oak-mcp-core
+3. **Stage 3: Phenotype Migration** - Reorganize oak-notion-mcp as a phenotype
 
-This follows the complete biological architecture established in Phase 3, where we transformed our codebase into chora/organa/psychon.
+**Workspace Structure**:
+```
+oak-notion-mcp/                 # Repository root
+├── ecosystem/                  # Where organisms evolve
+│   ├── oak-mcp-core/          # The MCP genotype
+│   │   ├── src/chora/         # Genetic traits as chorai
+│   │   ├── package.json       # Genotype package
+│   │   └── tsconfig.json      # Genotype build config
+│   └── oak-notion-mcp/        # Notion phenotype
+│       ├── src/               # Expressed organism
+│       ├── package.json       # Phenotype package
+│       └── tsconfig.json      # Phenotype build config
+├── pnpm-workspace.yaml        # Workspace configuration
+├── turbo.json                 # Task orchestration
+└── package.json               # Root workspace package
+```
 
-**Ecosystem Vision**: oak-mcp-core provides the shared chorai (fields) that multiple psycha inhabit. Each future MCP server will have its own psychon (soul) but breathe through common chorai - creating true symbiosis.
-
-**Current Status**: Phase 3's biological transformation has clarified which components are shared chorai versus organism-specific organa.
+**Current Status**: Phase 3's biological transformation has clarified which components are genetic traits (shared chorai) versus phenotypic expressions (organism-specific).
 
 ## Core Philosophy
 
-**Shared fields, individual souls.** oak-mcp-core contains the chorai (fields) that multiple psycha (souls) can inhabit. This ensures:
+**Genotype defines potential, phenotype expresses reality.** oak-mcp-core contains the genetic blueprint (chorai) that all MCP servers inherit. This ensures:
 
-- **Shared Aither**: Common flows (logging, events) that all organisms breathe
-- **Shared Stroma**: Universal structures (types, contracts) that support all life
-- **Shared Phaneron**: Environmental interfaces that all organisms sense
-- **Individual Psycha**: Each MCP server maintains its own soul/wiring
-- **Natural Boundaries**: Chorai naturally separate from organa through use
+- **Genetic Aither**: Core flow patterns (logging, events) encoded in DNA
+- **Genetic Stroma**: Fundamental structures (types, contracts) all organisms inherit
+- **Genetic Phaneron**: Environmental sensing capabilities in the genome
+- **Phenotypic Expression**: Each MCP server expresses genes based on its environment
+- **Natural Selection**: Successful patterns propagate, unsuccessful ones evolve
 
-### Biosphere Design Principles
+### Genotype Design Principles
 
-As the shared atmosphere for multiple psycha:
+As the genetic blueprint for all MCP organisms:
 
-1. **Field Independence**: Chorai exist without requiring specific psycha
-2. **Multi-Psychon Support**: Designed for multiple souls to inhabit
-3. **Environmental Universality**: Works across all runtime environments
-4. **Temporal Flows**: Natural cycles and rhythms built in
-5. **Health as Emergence**: Vitality emerges from field interactions
-6. **Diversity through Unity**: Same fields, different manifestations
-7. **Resonance over Coupling**: Fields resonate rather than bind
+1. **Genetic Independence**: Genes exist without requiring specific expression
+2. **Multi-Phenotype Support**: Same genes, different expressions
+3. **Environmental Adaptation**: Genes work across all runtime environments
+4. **Evolutionary Cycles**: Natural selection and mutation patterns
+5. **Health through Diversity**: Genetic diversity ensures ecosystem resilience
+6. **Unity in Code**: Same genotype, different phenotypes
+7. **Inheritance over Coupling**: Genes are inherited, not imported
 
 ### Philosophical and Mathematical Grounding
 
@@ -73,6 +87,45 @@ This dual grounding - philosophical and mathematical - ensures our biosphere wil
 10. **Resonant Design** - Fields that naturally harmonize across psycha
 
 **Meta-Principle**: These principles themselves exhibit the pattern - they apply equally to code, architecture, and thought.
+
+## Workspace Tooling
+
+### pnpm Workspaces
+- Efficient dependency management with single lockfile
+- Workspace protocol for internal dependencies
+- Automatic linking between workspace packages
+- Shared dependencies hoisted to root
+
+### Turbo
+- Intelligent task orchestration across packages
+- Incremental builds with caching
+- Parallel task execution
+- Pipeline definitions for complex workflows
+
+### Configuration
+```yaml
+# pnpm-workspace.yaml
+packages:
+  - 'ecosystem/*'
+```
+
+```json
+// turbo.json
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "lint": {},
+    "type-check": {}
+  }
+}
+```
 
 ## Current State Assessment (Post-Phase 3)
 
@@ -632,6 +685,209 @@ For Stage 1 - Biosphere Creation:
 4. **Field Completion**: Manifest remaining chorai (error flows, validation fields)
 
 **Meditation Before Action**: Before each step, reflect on whether we're creating a shared field that multiple psycha can inhabit, or an organism-specific function. This distinction is crucial.
+
+## Current Implementation Status: Workspace Created
+
+### Completed:
+1. Created pnpm workspace with ecosystem/ directory
+2. Moved all chorai to oak-mcp-core (genotype)
+3. Moved psychon and organa to oak-notion-mcp (phenotype)
+4. Updated imports from @chora/* to @oaknational/mcp-core
+5. Removed consola dependency from logger
+6. Set up proper TypeScript and ESLint configuration hierarchy
+7. Build system working with Turbo
+
+### Current Issue: Architectural Purity
+
+**Problem**: During rapid implementation, non-biological names have crept in:
+- `types/` → should be in stroma
+- `contracts/` → should be in stroma or syntheke
+- `test-utils/` → should be in eidola
+- `config/` → should be in phaneron or oikos
+
+**Also**: The genotype (oak-mcp-core) currently has Notion-specific knowledge:
+- MinimalNotionClient in stroma/types
+- NotionOperations contracts
+- Notion-specific configuration (NOTION_API_KEY, getNotionConfig)
+- Notion mocks in eidola
+
+**Solution Strategy**:
+1. Move misnamed directories back into their proper chorai
+2. Extract Notion-specific elements to the phenotype
+3. Keep only truly generic MCP patterns in the genotype
+
+### Refactoring Plan:
+
+#### 1. Restore Biological Names
+**In oak-notion-mcp phenotype**:
+- `src/types/` → `src/chora/stroma/notion-types/`
+- `src/contracts/` → `src/chora/stroma/notion-contracts/`
+- `src/test-utils/` → `src/chora/eidola/notion-mocks/`
+- `src/config/` → `src/chora/phaneron/notion-config/`
+
+#### 2. Make Genotype Generic
+**In oak-mcp-core genotype**:
+- Replace MinimalNotionClient with GenericDataClient interface
+- Move NotionOperations contract to phenotype
+- Extract Notion-specific config (NOTION_API_KEY) to phenotype
+- Move Notion mocks to phenotype's eidola
+- Keep only generic MCP server patterns
+
+#### 3. Consider Morphai
+**Future consideration**: Add morphai as a new chora for abstract patterns:
+- Hidden forms that organs cast as shadows
+- Proto-organa patterns that guide organ development
+- Morphogenetic fields for MCP patterns
+
+### Philosophical Reflection:
+
+The genotype should be like DNA - it contains instructions for building ANY MCP server, not specific to Notion. The phenotype is where those generic instructions meet the Notion environment and express themselves specifically.
+
+This maintains our biological metaphor while solving the practical coupling problem.
+
+### Resolution Status: ✅ COMPLETED
+
+Successfully achieved complete decoupling:
+
+1. **Removed all Notion-specific elements from oak-mcp-core**:
+   - Removed `NOTION_API_KEY` from environment
+   - Removed `getNotionConfig` function
+   - Removed `MinimalNotionClient` type
+   - Removed `NotionOperations` contract
+   - Removed all Notion mocks from eidola
+
+2. **Created proper phenotype-specific types in oak-notion-mcp**:
+   - `src/chora/stroma/notion-types/` - Notion-specific types
+   - `src/chora/stroma/notion-contracts/` - Notion operations contract
+   - `src/chora/eidola/` - Notion-specific test utilities
+   - `src/chora/phaneron/notion-config/` - Notion configuration
+
+3. **Updated all imports to use local types**:
+   - All handlers now use `NotionDependencies` instead of `CoreDependencies`
+   - All operations use local `NotionOperations` contract
+   - Configuration uses local `getNotionConfig` with proper environment
+
+4. **Build verification**: ✅ Both packages build successfully
+
+5. **Achieved true genotype purity** (Latest update):
+   - Removed unnecessary TypeScript peer dependency
+   - Zero runtime dependencies ✅
+   - Zero peer dependencies ✅
+   - Zero dev dependencies (all inherited from root) ✅
+   - Package version aligned with semantic-release (0.0.0-development)
+
+6. **Workspace dependency configuration** (Latest):
+   - Changed from `workspace:*` to `workspace:^` for proper publishing
+   - Created `.npmrc` with workspace linking configuration
+   - Verified both local development and future publishing will work correctly
+
+### Current Technical Status:
+
+**Lint and Type-check Issues**:
+- **oak-mcp-core**: 4 lint errors (type assertions, function length)
+- **oak-notion-mcp**: 126 lint errors (unsafe assignments, import restrictions, unresolved modules)
+- Both packages have functioning build systems despite lint errors
+- Turbo correctly orchestrates tasks with `--continue` flag for seeing all errors
+
+**Test Scripts Philosophy**:
+- Removed separate `test:unit` and `test:integration` scripts
+- Single `test` command runs both for comprehensive coverage
+- Files still use `.unit.test.ts` and `.integration.test.ts` naming for clarity
+- E2E tests remain separate (`test:e2e`) as they use real credentials
+
+The genotype is now truly generic, containing only the DNA for building MCP servers. The Notion phenotype expresses these genes in its specific environment.
+
+### Critical Architectural Discovery: Membranes and Type Safety
+
+**The Membrane Principle**: The lint analysis revealed a profound truth - **the membrane between external chaos and internal order must be properly typed**. When this membrane fails, type information is lost and the entire organism becomes unsafe.
+
+#### The Problem Revealed
+
+130 lint errors tell a story of membrane failure:
+- **85% of errors** stem from test utilities (eidola) that don't properly type their mock data
+- The eidola create "external chaos" that crosses the membrane without transformation
+- TypeScript marks everything as `error` typed when it can't track transformations
+- The organism loses its ability to sense types through the membrane
+
+#### The Deep Insight
+
+**External chaos → Membrane transformation → Internal order**
+
+```typescript
+// WRONG: Chaos crosses the membrane untransformed
+const mockClient = createMockNotionClient();  // Returns 'any' or 'error' type
+const server = await createServer({ client: mockClient }); // Unsafe, chaos propagates
+
+// RIGHT: Membrane transforms chaos into order
+const mockClient: NotionClient = createTypedMockClient();  // Properly typed
+const server = await createServer({ client: mockClient }); // Safe, order maintained
+```
+
+#### Biological Implications
+
+1. **Eidola are sensory organs for tests** - They must properly simulate reality
+2. **Type assertions are membrane failures** - Forcing types means the membrane isn't working
+3. **Unsafe assignments are chaos leaking in** - External disorder penetrating internal order
+4. **Import violations are organs reaching beyond their environment** - Breaking biological boundaries
+
+#### Resolution Strategy Based on Membrane Principle
+
+**Phase 1: Repair the Test Membrane** (Resolves 110+ errors)
+- Create properly typed eidola (test forms) that match reality
+- Ensure all mock factories return correctly typed data
+- The membrane must transform test chaos into typed order
+
+**Phase 2: Fix Type Narrowing** (Resolves type assertions)
+- Replace type assertions with proper type guards
+- Let TypeScript track transformations naturally
+- The genotype should encode knowledge, not force it
+
+**Phase 3: Restore Architectural Boundaries** (Resolves import violations)
+- Organs must only access what exists in their environment
+- Fix module resolution to respect biological boundaries
+- Each layer has its own membrane
+
+**Phase 4: Complete Type Safety** (Resolves remaining issues)
+- Template literals with explicit conversions
+- Remove unnecessary conditionals through better guards
+- The organism must properly sense its entire environment
+
+#### The Fundamental Realization
+
+**The type system IS the organism's sensory system**. When types flow properly through well-defined membranes, the organism can sense its environment and maintain internal order. When membranes fail, chaos enters and the organism becomes blind (untyped).
+
+### Next Phase: Morphai Implementation
+
+**Morphai (μορφαί)** - The hidden forms, the Platonic ideals that cast shadows (organa) in the manifest world.
+
+#### Architectural Discovery
+Found abstract patterns currently scattered in the phenotype that belong in the genotype:
+- Tool abstractions (`ToolExecutor`, `ToolDefinition`, `ErrorHandler`)
+- Handler patterns (`ResourceHandlers`)
+- Registry patterns (`ToolRegistry`)
+- MCP type patterns (`McpTool`)
+
+These are the "hidden forms" that guide organ development - they should be genetic traits inherited by all phenotypes.
+
+#### Implementation Plan
+1. **Create morphai chora in oak-mcp-core**
+   - `src/chora/morphai/tools/` - Abstract tool patterns
+   - `src/chora/morphai/handlers/` - Abstract handler patterns
+   - `src/chora/morphai/registries/` - Collection management patterns
+   - `src/chora/morphai/errors/` - Error handling patterns
+
+2. **Migrate abstract patterns from phenotype to genotype**
+   - Move interfaces and types that define "how" organs work
+   - Keep concrete implementations in phenotype
+   - Ensure zero coupling to specific data sources
+
+3. **Update all documentation**
+   - Define morphai in architectural documents
+   - Update onboarding materials
+   - Extend biological metaphor explanations
+
+#### Philosophical Significance
+Morphai complete our biological architecture by providing the abstract forms that organs instantiate. Like Plato's forms, they exist in the genotype as perfect patterns, while organs in phenotypes are their imperfect but functional shadows.
 
 ## Risk Mitigation (Updated)
 

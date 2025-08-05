@@ -1,0 +1,122 @@
+/**
+ * ESLint Configuration for oak-notion-mcp
+ *
+ * The Notion phenotype - enforces biological architecture pattern
+ */
+
+import { config as tsEslintConfig } from 'typescript-eslint';
+import { baseConfig } from '../../eslint.config.base.js';
+
+const config = tsEslintConfig(
+  ...baseConfig,
+  {
+    files: ['**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.lint.json',
+      },
+    },
+    settings: {
+      'import-x/resolver': {
+        typescript: {
+          project: './tsconfig.lint.json',
+          alwaysTryTypes: true,
+        },
+      },
+    },
+    rules: {
+      // Enforce module boundaries
+      'import-x/no-relative-parent-imports': 'off',
+
+      // Biological Architecture Enforcement
+      'import-x/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            // Organa isolation - organs cannot import from other organs
+            {
+              target: 'src/organa/notion/**',
+              from: 'src/organa/mcp/**',
+              message:
+                'Organs cannot import from other organs. Use dependency injection via psychon.',
+            },
+            {
+              target: 'src/organa/mcp/**',
+              from: 'src/organa/notion/**',
+              message:
+                'Organs cannot import from other organs. Use dependency injection via psychon.',
+            },
+          ],
+        },
+      ],
+
+      // Force use of path aliases for cross-boundary imports
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['../../*'],
+              message:
+                'Use path aliases for cross-boundary imports (e.g., @organa/mcp instead of ../../mcp).',
+            },
+            {
+              group: ['**/internal/**', '**/internals/**', '**/private/**'],
+              message: 'Cannot import from internal/private modules.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  // Organa modules - Allow imports within the same organ
+  {
+    files: ['src/organa/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': 'off',
+    },
+  },
+  // Psychon layer can import from any organ
+  {
+    files: ['src/index.ts', 'src/psychon/**/*.ts'],
+    rules: {
+      'import-x/no-restricted-paths': 'off',
+      'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-internal-modules': 'off',
+      '@typescript-eslint/no-restricted-imports': 'off',
+    },
+  },
+  // Entry point can import psychon
+  {
+    files: ['src/index.ts'],
+    rules: {
+      'import-x/no-internal-modules': 'off',
+    },
+  },
+  // Test files can break boundaries
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts'],
+    rules: {
+      'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-restricted-paths': 'off',
+      '@typescript-eslint/no-restricted-imports': 'off',
+    },
+  },
+  // Configuration for config files
+  {
+    files: ['*.config.ts', '*.config.js', 'eslint.config.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.lint.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      // Config files can use CommonJS and have looser import rules
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-restricted-imports': 'off',
+    },
+  },
+);
+
+export default config;
