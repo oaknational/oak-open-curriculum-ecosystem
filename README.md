@@ -161,7 +161,7 @@ pnpm analyze      # Run all analysis tools
 
 ### Project Structure
 
-```
+```text
 src/
 ├── chora/          # Cross-cutting infrastructure layers
 │   ├── stroma/     # Types, contracts, schemas (foundation)
