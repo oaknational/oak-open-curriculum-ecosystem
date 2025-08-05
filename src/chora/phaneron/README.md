@@ -39,3 +39,47 @@ Like how an organism's phenotype is the visible manifestation of its genotype ex
 - Allows adaptation without code changes
 
 The phaneron is where the abstract becomes concrete, where possibilities become actualities, where the organism reveals its current form to the world.
+
+## 🗺️ Developer Quick Reference
+
+**You're looking for configuration and environment settings!**
+
+| What you need        | Where to find it | Example                 |
+| -------------------- | ---------------- | ----------------------- |
+| Get Notion config    | `config/`        | `getNotionConfig()`     |
+| Access env vars      | `config/env.ts`  | `env.NOTION_API_KEY`    |
+| Server configuration | `config/`        | `createMcpServerInfo()` |
+
+### Common Imports
+
+```typescript
+// Configuration
+import { getNotionConfig, createMcpServerInfo, env } from '@chora/phaneron';
+
+// Types (from exports)
+import type { NotionConfig, ServerConfig } from '@chora/phaneron';
+```
+
+### Quick Examples
+
+```typescript
+// Get Notion configuration
+const config = getNotionConfig();
+console.log(config.apiKey); // Safely accessed
+
+// Access environment variables
+const logLevel = env.LOG_LEVEL || 'info';
+
+// Create server info for MCP
+const serverInfo = createMcpServerInfo();
+```
+
+### Environment Variables
+
+The following environment variables are recognized:
+
+- `NOTION_API_KEY` - Your Notion integration token (required)
+- `LOG_LEVEL` - Logging level: debug, info, warn, error (default: info)
+- `NODE_ENV` - Environment: development, production, test
+
+💡 **Remember**: Phaneron makes the invisible visible - it's where your app's configuration becomes manifest!

@@ -1,5 +1,7 @@
 # Architecture Overview
 
+> 🗺️ **Looking for a quick reference?** See the [Architecture Map](ARCHITECTURE_MAP.md) for a visual guide to finding what you need.
+
 This document provides a high-level overview of the Oak Notion MCP Server architecture. For the comprehensive architectural vision, see the [Master Architecture Document](./architecture/master-architecture.md).
 
 ## System Purpose
@@ -22,7 +24,7 @@ This approach is mathematically-grounded and validated by complex systems resear
 
 We have successfully transitioned to a complete biological model with Greek nomenclature:
 
-```
+```text
 src/
 ├── index.ts           # Entry point (delegates to psychon)
 ├── psychon/           # The soul - wiring and orchestration layer

@@ -8,6 +8,7 @@
 
 ## Core Documentation
 
+- [Architecture Map](ARCHITECTURE_MAP.md) - 🗺️ Visual guide to finding what you need
 - [Architecture Overview](architecture-overview.md) - High-level system overview
 - [API Reference](usage/api-reference.md) - Complete reference for all resources and tools
 
