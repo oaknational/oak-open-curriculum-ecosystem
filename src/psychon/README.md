@@ -55,3 +55,73 @@ The deepest mystery in biology is how life emerges from non-life. Similarly, the
 - Components become organism
 
 This is why we don't distribute the wiring throughout the codebase - the soul is indivisible. You cannot have half a soul. The psychon must be whole, must be one, must be the single place where life enters the system.
+
+## 🗺️ Developer Quick Reference
+
+**You're in the application wiring and startup directory!**
+
+| What you need     | Where to find it | Purpose                             |
+| ----------------- | ---------------- | ----------------------------------- |
+| Main entry point  | `index.ts`       | Exports the startServer function    |
+| Server setup      | `server.ts`      | MCP server initialization           |
+| Dependency wiring | `wiring.ts`      | Creates and connects all components |
+| Startup logging   | `startup.ts`     | Beautiful startup messages          |
+
+### Key Files
+
+```typescript
+// Main entry - what external code uses
+import { startServer } from '@psychon';
+
+// The wiring - how everything connects
+// wiring.ts shows:
+// - How to create loggers
+// - How to get configuration
+// - How to wire organs together
+// - How to inject dependencies
+```
+
+### The Wiring Pattern
+
+```typescript
+// In wiring.ts, you'll see:
+export async function createWiredDependencies() {
+  // 1. Create infrastructure (chora)
+  const logger = createConsoleLogger({ level });
+  const config = getNotionConfig();
+
+  // 2. Create organs with dependencies
+  const notionOperations = createNotionOperations();
+  const notionClient = new Client({ auth: config.apiKey });
+
+  // 3. Wire everything together
+  const dependencies: ServerDependencies = {
+    config,
+    logger,
+    notionClient,
+    notionOperations,
+  };
+
+  // 4. Create handlers
+  const handlers = createMcpHandlers(dependencies);
+
+  return { dependencies, handlers };
+}
+```
+
+### Starting the Server
+
+The server can be started in different ways:
+
+```typescript
+// For production (via npx/CLI)
+await startServer();
+
+// For testing with custom options
+await startServer({
+  notionApiKey: 'test-key',
+  logLevel: 'debug',
+});
+```
+
+💡 **Remember**: Psychon is pure wiring - no business logic! It's where the organism comes to life through proper connection of all its parts.

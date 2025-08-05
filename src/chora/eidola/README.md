@@ -40,3 +40,59 @@ Like the eidola in ancient atomism that allowed vision by carrying images throug
 In Plato's cave, the prisoners mistake shadows (eidola) for reality. In our tests, our code interacts with these shadows, allowing us to verify behavior without the complexity and unpredictability of real external systems.
 
 The eidola are not alive, but they allow us to test life.
+
+## 🗺️ Developer Quick Reference
+
+**You're looking for test mocks, stubs, and fixtures!**
+
+| What you need      | Where to find it      | Example                        |
+| ------------------ | --------------------- | ------------------------------ |
+| Mock a logger      | `factories.ts`        | `createMockLogger()`           |
+| Mock Notion client | `factories.ts`        | `createMockNotionOperations()` |
+| Create test pages  | `notion-mocks.ts`     | `createMockPage()`             |
+| Mock API responses | `notion-api-mocks.ts` | `createMockSearchResponse()`   |
+
+### Common Imports
+
+```typescript
+// Factory functions
+import {
+  createMockLogger,
+  createMockServerConfig,
+  createMockNotionOperations,
+} from '@chora/eidola';
+
+// Notion object mocks
+import {
+  createMockPage,
+  createMockDatabase,
+  createMockPersonUser,
+  createMockBotUser,
+} from '@chora/eidola';
+
+// API response mocks
+import { createMockListUsersResponse, createMockSearchResponse } from '@chora/eidola';
+```
+
+### Quick Examples
+
+```typescript
+// In your test file
+import { createMockLogger, createMockPage } from '@chora/eidola';
+
+describe('MyComponent', () => {
+  it('should handle pages', () => {
+    const mockLogger = createMockLogger();
+    const mockPage = createMockPage({
+      properties: {
+        title: { title: [{ plain_text: 'Test Page' }] },
+      },
+    });
+
+    // Use your mocks in tests
+    expect(mockPage.properties.title).toBeDefined();
+  });
+});
+```
+
+💡 **Remember**: Eidola are phantoms - they exist only in tests, never in production code!

@@ -8,7 +8,7 @@
 - [x] Add plans to define boundaries between external systems (Notion), and our code. Make that boundary explicit and simple. Use Notion types and type-guards/predicates at that boundary to properly validate the data, we will use the same types in our codebase. Consider using Zod schemas to validate incoming data, but do not create new types where the Notion SDK types are already available.
 - [x] Add Claude custom commands for quality gates, stepping back, commit and push
 - [x] Think about how best to use subagents
-- [ ] tweak the names, e.g. from chora to chora_cross_cutting, from stroma to stroma_foundations
+- [ ] tweak the names, e.g. from chora to chora_collective_concerns, aither to aither_system_state, eidola to eidola_mocks, phaneron to phaneron_config, stroma to stroma_foundational_definitions, organa to organa_parts, psychon to psychon_whole
 - [ ] Add mutation testing to the test suite
 - [ ] Turn it into a pnpm workspace and Turbo monorepo
 
@@ -26,10 +26,10 @@ Morion (Μόριον) → Moria (Μόρια)             Eidōlon → Eidōla   
   [Molecule → Molecules / syntax atoms]     [Phantom molecules?]      [collective fields]
 
 Organelle → Organelles                      Eidōlon → Eidōla          ├─ Aither (Αἰθήρ) → Aitheres (Αἰθέρες)
-  [Organelle / pure functions]              [Phantom functions]       │    [Ether: flows, events, logging, app config]
+  [Organelle / pure functions]              [Phantom functions]       │    [Ether: flows, events, error handling, logging]
                                                                       │
 Kytos (Κύτος) → Kytia (Κύτια)               Eidōlon → Eidōla          ├─ Stroma (Στρῶμα) → Stromata (Στρώματα)
-  [Cell → Cells / modules]                  [Phantom modules]         │    [Matrix/Layer: types, schemas, contracts]
+  [Cell → Cells / modules]                  [Phantom modules]         │    [Matrix/Layer/Foundation: types, schemas, contracts]
                                                                       │
 Histos (Ἱστός) → Histoi (Ἱστοί)             Eidōlon → Eidōla          ├─ Krypton (Κρυπτόν) → Krypta (Κρυπτά)
   [Tissue → Tissues / libraries]            [Phantom libraries]       │    [Hidden: secrets, keys, tokens]

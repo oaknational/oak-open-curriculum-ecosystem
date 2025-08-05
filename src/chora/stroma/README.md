@@ -37,3 +37,34 @@ Like the extracellular matrix in biology that provides structural and biochemica
 - Validates structural integrity (schemas)
 
 Without stroma, our organism would collapse into an untyped, unstructured mass. The stroma provides the rigid framework that allows the fluid aither to flow in organized channels, and gives organs their defined shapes and interfaces.
+
+## 🗺️ Developer Quick Reference
+
+**You're looking for types, contracts, and schemas!**
+
+| What you need         | Where to find it | Example                         |
+| --------------------- | ---------------- | ------------------------------- |
+| Core type definitions | `types/`         | `LogLevel`, `Dependencies`      |
+| Interface contracts   | `contracts/`     | `Logger`, `NotionOperations`    |
+| Event schemas         | `event-schemas/` | Event definitions (coming soon) |
+
+### Common Imports
+
+```typescript
+// Types
+import type { CoreDependencies, MinimalNotionClient } from '@chora/stroma';
+
+// Contracts
+import type { Logger, EventBus, NotionOperations } from '@chora/stroma';
+
+// Type utilities
+import { isLogLevel, getLogLevelValue } from '@chora/stroma';
+```
+
+### What Goes Where?
+
+- **Need a new type?** → Add to `types/`
+- **Defining an interface?** → Add to `contracts/`
+- **Creating event types?** → Add to `event-schemas/`
+
+💡 **Remember**: Stroma is compile-time only - no runtime code, no logic, just pure structure!
