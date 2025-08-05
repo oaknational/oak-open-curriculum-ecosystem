@@ -20,4 +20,4 @@ Please make sure that the todo list includes invoking the code reviewer sub-agen
 
 ## Action
 
-Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
+Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions in that file and in the files it leads to. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
