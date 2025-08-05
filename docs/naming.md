@@ -65,7 +65,11 @@ The discrete hierarchy represents bounded, nestable components - from molecular 
 **Meaning**: The ensouled whole - complete, living applications
 
 - **Examples**: The oak-notion-mcp server
-- **Current Implementation**: `src/psychon.ts` - wires everything together
+- **Current Implementation**: `src/psychon/` - the wiring layer that brings everything to life
+  - `index.ts` - main orchestration
+  - `wiring.ts` - dependency injection
+  - `server.ts` - server creation
+  - Entry point: `src/index.ts` delegates to psychon layer
 
 ### Ecosystema (Οἰκοσύστημα) → Ecosystemata (Οἰκοσυστήματα) [Ecosystem → Ecosystems]
 
@@ -91,7 +95,7 @@ Chōra represents pervasive infrastructure that cuts across all hierarchical lev
   - `logging/` - Nervous system carrying signals
   - `events/` - Hormonal messaging between components
   - `errors/` - Pain/alert system warning of problems
-  - `immunity/` - Protective system (PII scrubbing)
+  - `sensitive-data/` - Protective system (PII scrubbing)
 
 ### Stroma (Στρώμα) → Stromata (Στρώματα) [Layer → Layers]
 
@@ -187,7 +191,7 @@ Chōra represents pervasive infrastructure that cuts across all hierarchical lev
 3. **Group into Histoi**: Related cells form tissues
 4. **Identify Chōra**: Extract truly cross-cutting concerns
 5. **Create Eidōla**: Build phantoms for testing
-6. **Wire via Psychon**: Connect everything in the organism
+6. **Wire via Psychon layer**: Connect everything in the organism
 
 ## Why Greek Nomenclature?
 

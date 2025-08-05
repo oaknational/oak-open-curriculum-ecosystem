@@ -18,9 +18,21 @@ export {
   getLogLevelName,
   type Dependencies,
   type Context,
+  type MinimalNotionClient,
+  type CoreDependencies,
+  type ServerConfig,
+  type ServerDependencies,
+  type ProcessEnv,
 } from './types/index.js';
 
 // Re-export all contracts - the cell membranes
-export type { Logger, ConfigProvider } from './contracts/index.js';
+export type {
+  Logger,
+  ConfigProvider,
+  EventBus,
+  NotionOperations,
+  NotionTransformers,
+  NotionFormatters,
+} from './contracts/index.js';
 
 // Event schemas will be added here as we define organ communication

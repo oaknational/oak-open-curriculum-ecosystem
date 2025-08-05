@@ -459,6 +459,133 @@ To enforce biological architecture boundaries, ESLint can be configured with zon
 3. **Documentation First**: Update docs before code
 4. **Git Commits**: Clear commits at each step for rollback
 
+## Sub-Phase 7: Architectural Enforcement Through ESLint ⏳ IN PROGRESS
+
+**Goal**: Make the biological architecture self-enforcing through tooling
+
+### Current State
+
+- 104 ESLint warnings from `import-x/no-relative-parent-imports`
+- These warnings reveal architectural violations
+- The biological metaphor exists conceptually but isn't enforced
+
+### Deep Insights
+
+1. **Architecture without enforcement is merely aspiration**
+2. **The "no parent imports" rule is too crude** - it doesn't understand chorai legitimately reference other chorai
+3. **We need sophisticated zones** that mirror biological reality:
+   - Chorai can import other chorai (through public APIs)
+   - Organa cannot import other organa (only through psychon)
+   - Deep internal imports are forbidden
+   - Clear membranes at every level
+
+### Implementation Strategy
+
+#### Step 7.1: Configure Path Aliases
+
+Enable clean imports that express intent:
+
+```typescript
+// Instead of: ../../stroma/types
+// Use: @chora/stroma
+```
+
+Update tsconfig.json:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@chora/stroma": ["./src/chora/stroma/index.ts"],
+      "@chora/stroma/*": ["./src/chora/stroma/*"],
+      "@chora/aither": ["./src/chora/aither/index.ts"],
+      "@chora/aither/*": ["./src/chora/aither/*"],
+      "@chora/phaneron": ["./src/chora/phaneron/index.ts"],
+      "@chora/phaneron/*": ["./src/chora/phaneron/*"],
+      "@chora/eidola": ["./src/chora/eidola/index.ts"],
+      "@chora/eidola/*": ["./src/chora/eidola/*"],
+      "@organa/notion": ["./src/organa/notion/index.ts"],
+      "@organa/mcp": ["./src/organa/mcp/index.ts"]
+    }
+  }
+}
+```
+
+#### Step 7.2: Define ESLint Zones
+
+Configure biological boundaries in eslint.config.ts:
+
+```typescript
+// 1. Cross-chora imports allowed (but only through public APIs)
+'import-x/no-restricted-paths': ['error', {
+  zones: [
+    // Organa isolation
+    {
+      target: 'src/organa/notion/**',
+      from: 'src/organa/mcp/**',
+      message: 'Organs cannot import from other organs. Use dependency injection via psychon.'
+    },
+    {
+      target: 'src/organa/mcp/**',
+      from: 'src/organa/notion/**',
+      message: 'Organs cannot import from other organs. Use dependency injection via psychon.'
+    },
+    // Chorai cannot import from organa (infrastructure doesn't know business logic)
+    {
+      target: 'src/chora/**',
+      from: 'src/organa/**',
+      message: 'Chorai (infrastructure) cannot import from organa (business logic).'
+    }
+  ]
+}],
+
+// 2. Enforce public API usage
+'no-restricted-imports': ['error', {
+  patterns: [
+    // Block deep imports into chorai internals
+    '@chora/*/internal/*',
+    '@chora/*/*/**', // More than 2 levels deep
+    // But allow public APIs
+    '!@chora/stroma',
+    '!@chora/stroma/types',
+    '!@chora/stroma/contracts',
+    '!@chora/aither',
+    '!@chora/aither/logging',
+    '!@chora/aither/events',
+    '!@chora/aither/errors',
+    '!@chora/aither/immunity',
+    '!@chora/phaneron',
+    '!@chora/phaneron/config',
+    '!@chora/eidola'
+  ]
+}],
+
+// 3. Within each chora/organ, maintain hierarchy
+'import-x/no-relative-parent-imports': ['error'] // Change from warn to error
+```
+
+#### Step 7.3: Fix All Violations
+
+1. Convert relative imports to path aliases
+2. Ensure all cross-chora imports use public APIs
+3. Remove any cross-organ imports
+4. Run quality gates to verify
+
+#### Step 7.4: Document Enforcement
+
+Update biological architecture documentation to include:
+
+- How ESLint zones mirror biological boundaries
+- Examples of allowed vs forbidden imports
+- Rationale for each rule
+
+### Success Metrics
+
+1. **Zero ESLint warnings** - All 104 violations resolved
+2. **Self-enforcing architecture** - New violations caught immediately
+3. **Clear error messages** - Developers understand why imports are forbidden
+4. **Biological integrity** - Code structure mirrors living systems
+
 ## Future Considerations
 
 ### When Scaling to Multiple Packages
@@ -475,8 +602,49 @@ To enforce biological architecture boundaries, ESLint can be configured with zon
 
 ## Roadmap Summary
 
-- **Now**: Documentation foundation
-- **Next**: Identify non-conforming elements
-- **Later**: Chora transformation (substrate→stroma, systems→aither/phaneron)
-- **Later**: Psychon integration (create the ensouled whole)
-- **Later**: Validation & clean-up
+- **Now**: Documentation foundation ✅
+- **Next**: Identify non-conforming elements ✅
+- **Then**: Chora transformation ✅
+- **Then**: Psychon integration ✅
+- **Then**: Complete organism integration ✅
+- **Then**: Validation & cleanup ✅
+- **Now**: Architectural enforcement through ESLint ⏳
+
+## Sub-Phase 7 Update: Psychon Transformation ✅ COMPLETE
+
+### Completed Today:
+
+1. **Psychon as Directory**: Transformed psychon from single file to directory structure:
+   - `src/psychon/index.ts` - Main orchestration
+   - `src/psychon/server.ts` - MCP server creation
+   - `src/psychon/wiring.ts` - Dependency injection
+   - `src/psychon/startup.ts` - Initialization
+2. **Entry Point Preservation**: Kept `src/index.ts` as minimal entry point, delegating to psychon
+
+3. **Public API Creation**:
+   - Created `src/organa/mcp/index.ts` with public exports
+   - Verified `src/organa/notion/index.ts` already had public API
+
+4. **ESLint Configuration**:
+   - Updated rules to allow psychon to import from anywhere
+   - Added path aliases to allowed internal modules
+   - Added architecture documentation links to ESLint config
+   - Configured psychon-specific exceptions while maintaining boundaries
+
+5. **Additional Improvements**:
+   - Renamed `immunity/` to `sensitive-data/` throughout codebase
+   - Updated all documentation references
+   - Fixed vitest configuration for path alias resolution
+
+### Quality Gates:
+
+- ✅ All tests passing (173 tests)
+- ✅ Build successful
+- ✅ Type checking clean
+- ⚠️ Linting has remaining issues (mostly within chora using relative imports)
+
+### Remaining Work:
+
+- Fix remaining ESLint issues within chora modules (they should use path aliases)
+- Consider splitting large files to meet line limits
+- Complete monorepo preparation for future extraction

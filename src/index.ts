@@ -1,33 +1,15 @@
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createStartupLogger, defaultStartupLoggerDeps } from './startup-logger.js';
+/**
+ * Entry point - delegates to the psychon (soul) layer
+ *
+ * This file remains minimal and only bootstraps the organism.
+ * All orchestration happens in the psychon layer.
+ */
 
-// Create early logging function
-const log = createStartupLogger(defaultStartupLoggerDeps);
+import { startOrganism } from './psychon/index.js';
 
-// Application entry point - minimal orchestration
+// Application entry point - minimal delegation
 export async function main(): Promise<void> {
-  log('[STARTUP] Starting MCP server...');
-
-  try {
-    // Load environment variables
-    log('[STARTUP] Loading environment variables...');
-    const dotenv = await import('dotenv');
-    dotenv.config();
-
-    // Import and run server setup
-    log('[STARTUP] Setting up server...');
-    const { setupAndStartServer } = await import('./server-setup.js');
-
-    await setupAndStartServer({
-      transport: new StdioServerTransport(),
-      log,
-    });
-
-    log('[STARTUP] MCP server started successfully');
-  } catch (error) {
-    log('[STARTUP ERROR] Failed during initialization: ' + String(error), true);
-    throw error;
-  }
+  await startOrganism();
 }
 
 // Only run if this is the main module

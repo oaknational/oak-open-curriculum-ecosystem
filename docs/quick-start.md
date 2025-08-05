@@ -38,7 +38,7 @@ src/
 ├── server.ts         # MCP server setup, handler registration
 ├── chora/            # Cross-cutting fields (pervasive infrastructure)
 │   ├── stroma/       # Structural matrix (types, contracts)
-│   ├── aither/       # Divine flows (logging, events, errors, immunity)
+│   ├── aither/       # Divine flows (logging, events, errors, sensitive data)
 │   ├── phaneron/     # Visible manifestation (configuration)
 │   └── eidola/       # Phantoms for testing
 ├── organa/           # Discrete organs (bounded business logic)

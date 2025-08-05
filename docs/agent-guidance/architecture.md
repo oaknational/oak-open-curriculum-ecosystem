@@ -88,7 +88,7 @@ Software is not a machine - it's a living organism:
 
 **Definition**: The living application that emerges from all parts.
 
-- Location: `psychon.ts` (future, currently missing)
+- Location: `psychon/` directory (wiring layer)
 - Purpose: Wires all chorai and organa together
 - Nature: More than sum of parts - the life force
 
@@ -172,7 +172,7 @@ Current → Target:
 - `systems/events/` → `chora/aither/events/`
 - `systems/config/` → `chora/phaneron/config/`
 - `organs/` → `organa/` (already done)
-- Create `psychon.ts` to wire everything
+- `server*.ts` + wiring → `psychon/` directory (the soul layer)
 
 ## References
 

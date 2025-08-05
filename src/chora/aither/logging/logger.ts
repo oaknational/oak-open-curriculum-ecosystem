@@ -7,7 +7,7 @@ import { createConsola, type ConsolaInstance } from 'consola';
 import { join } from 'node:path';
 import type { Logger, LogContext, LogLevel } from './logger-interface.js';
 import { LOG_LEVELS } from './logger-interface.js';
-import { scrubSensitiveData } from '../immunity/scrubbing.js';
+import { scrubSensitiveData } from '../sensitive-data/scrubbing.js';
 import { createFileReporter } from './file-reporter.js';
 
 /**

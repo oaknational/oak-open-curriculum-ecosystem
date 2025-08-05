@@ -78,6 +78,12 @@ Nomos (Νόμος)       → Nomoi (Νόμοι)                    Rules: govern
 
 ```text
 src/
+├── index.ts                    # Entry point (delegates to psychon)
+├── psychon/                    # The soul - wiring layer
+│   ├── index.ts                # Main orchestration
+│   ├── wiring.ts               # Dependency injection
+│   ├── server.ts               # Server setup
+│   └── startup.ts              # Initialization
 ├── chora/                      # Cross-cutting fields
 │   ├── stroma/                 # Structural matrix
 │   │   ├── types/              # Type definitions
@@ -89,10 +95,9 @@ src/
 │   │   └── messaging/          # Future: async communication
 │   └── phaneron/               # Visible configuration
 │       └── config/             # Runtime configuration
-├── organa/                     # Discrete organs
-│   ├── notion/                 # Notion integration organ
-│   └── mcp/                    # MCP protocol organ
-└── psychon.ts                  # The ensouled whole (main entry)
+└── organa/                     # Discrete organs
+    ├── notion/                 # Notion integration organ
+    └── mcp/                    # MCP protocol organ
 ```
 
 ### Light-Touch Systemata
@@ -127,7 +132,7 @@ organa/
 
 - **Aither (Αἰθήρ)**: The fifth element, the divine medium. Appropriate for the flows (logging, events) that animate our static structures.
 
-- **Psychon (Ψυχόν)**: The ensouled, animated whole. More philosophically accurate than "organism" - it emphasizes the emergent consciousness when code becomes alive.
+- **Psychon (Ψυχόν)**: The ensouled, animated whole. More philosophically accurate than "organism" - it emphasizes the emergent consciousness when code becomes alive. In practice, this is the wiring layer (psychon/) that brings all components to life.
 
 ## Migration Notes
 
@@ -140,7 +145,7 @@ substrate/                  →   chora/stroma/
 systems/                    →   chora/aither/
 systems/config/             →   chora/phaneron/config/
 organs/                     →   organa/ (already done!)
-organism.ts                 →   psychon.ts
+server*.ts + index.ts       →   psychon/ (wiring layer)
 ```
 
 ### What Doesn't Fit

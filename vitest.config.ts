@@ -1,6 +1,20 @@
 import { defineConfig } from 'vitest/config';
+import { fileURLToPath } from 'node:url';
+import { resolve, dirname } from 'node:path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@chora/stroma': resolve(__dirname, './src/chora/stroma'),
+      '@chora/aither': resolve(__dirname, './src/chora/aither'),
+      '@chora/phaneron': resolve(__dirname, './src/chora/phaneron'),
+      '@chora/eidola': resolve(__dirname, './src/chora/eidola'),
+      '@organa/notion': resolve(__dirname, './src/organa/notion'),
+      '@organa/mcp': resolve(__dirname, './src/organa/mcp'),
+    },
+  },
   test: {
     globals: true,
     passWithNoTests: true,

@@ -20,7 +20,7 @@ The divine flows that animate our organism:
 - **logging/** - The nervous system carrying signals throughout
 - **events/** - Hormonal messaging enabling organ coordination
 - **errors/** - The pain/alert system warning of problems
-- **immunity/** - The protective system preventing data contamination
+- **sensitive-data/** - The protective system preventing data contamination
 
 ## Architectural Principles
 
