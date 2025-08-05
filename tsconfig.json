@@ -38,6 +38,13 @@
     },
     "baseUrl": "."
   },
-  "include": ["src/**/*", "*.config.ts", "e2e-tests/**/*", "scripts/**/*.ts"],
+  "include": [
+    "src/**/*",
+    "**/*.config.ts",
+    "**/*.config.mjs",
+    ".releaserc.mjs",
+    "e2e-tests/**/*",
+    "scripts/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist", "coverage"]
 }
