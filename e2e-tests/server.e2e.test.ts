@@ -144,8 +144,8 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
     if (textContent?.text) {
       expect(textContent.text).toContain('Found');
       expect(textContent.text).toContain('user');
-      // Check for email scrubbing
-      expect(textContent.text).toMatch(/[a-z]{3}\.{3}@[a-z]+\.[a-z]+/);
+      // Check for email scrubbing - format: first letter + asterisks + last letter @ domain
+      expect(textContent.text).toMatch(/[a-z]\*+[a-z]@[a-z]+\.[a-z]+/);
     }
   });
 

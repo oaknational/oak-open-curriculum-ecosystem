@@ -1,1 +1,6 @@
+# Check for breaking changes first, we want to block accidental major version bumps
+pnpm exec tsx scripts/prevent-accidental-major-version.ts $1 || exit 1
+
+# Then run commitlint
 pnpm dlx commitlint --edit $1
+

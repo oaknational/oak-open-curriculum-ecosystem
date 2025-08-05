@@ -23,6 +23,14 @@
 - Integration point: A point in the code where multiple units are brought together to effect change in the larger system. Typically this is where IO interfaces are injected as arguments to functions, and where other configuration occurs. Integration points define boundaries of responsibility. Integration points have integration tests.
 - System: The complete MCP server exposed via stdio transport. Systems have E2E tests.
 
+### Biological Architecture Components
+
+- **Chora/Stroma**: Types and contracts (compile-time only) - Test with TypeScript compiler, no runtime tests needed
+- **Chora/Aither**: Logging and events (pervasive flows) - Test with unit tests for pure transformations, integration tests for flow behavior
+- **Chora/Phaneron**: Configuration (visible state) - Test with integration tests for validation and defaults
+- **Organa**: Discrete business logic organs - Test with unit tests for pure functions, integration tests at organ boundaries
+- **Psychon**: The wiring layer - Test with integration tests to verify proper assembly and dependency injection
+
 ### Test Types
 
 #### In-process tests
@@ -42,6 +50,93 @@ Out-of-process tests are tests that validate a running _system_, the tests and t
 
 - Test Driven Development (TDD): Write UNIT tests before writing code. Unit tests PROVE engineering correctness. Unit tests can ONLY test pure functions with no side effects.
 - Behaviour Driven Development (BDD): Write integration tests before writing code. Integration tests PROVE we are creating the **desired behaviour and impact** at the integration point level and above.
+
+## Testing Biological Architecture
+
+### Testing Chorai (Pervasive Fields)
+
+**Chora/Stroma (Types/Contracts)**:
+
+- No runtime tests needed - TypeScript compiler validates
+- Test type exports are accessible from other layers
+
+**Chora/Aither (Logging/Events)**:
+
+```typescript
+// chora/aither/logging/formatter.unit.test.ts
+describe('log formatter', () => {
+  it('formats log entries consistently', () => {
+    // Test pure formatting logic
+  });
+});
+
+// chora/aither/logging/logger.integration.test.ts
+describe('logger integration', () => {
+  it('flows through all layers when injected', () => {
+    // Test pervasive behavior with simple mocks
+  });
+});
+```
+
+**Chora/Phaneron (Configuration)**:
+
+```typescript
+// chora/phaneron/config/validator.unit.test.ts
+describe('config validator', () => {
+  it('validates required fields', () => {
+    // Test pure validation logic
+  });
+});
+```
+
+### Testing Organa (Discrete Organs)
+
+**Key Principle**: Test organs in isolation, mock dependencies from other organs
+
+```typescript
+// organa/notion/search/transform.unit.test.ts
+describe('search result transformer', () => {
+  it('transforms Notion responses to our format', () => {
+    // Pure transformation, no mocks needed
+  });
+});
+
+// organa/notion/index.integration.test.ts
+describe('Notion organ integration', () => {
+  it('exposes operations through public API', () => {
+    const mockLogger = createMockLogger();
+    const mockConfig = { notionApiKey: 'test' };
+    const notion = createNotionOperations({ logger: mockLogger, config: mockConfig });
+    // Test public API behavior
+  });
+});
+```
+
+### Testing Psychon (The Whole)
+
+```typescript
+// psychon.integration.test.ts
+describe('Psychon assembly', () => {
+  it('wires all components correctly', () => {
+    const psychon = new Psychon();
+    // Verify all organs receive correct dependencies
+    // Verify no cross-organ imports exist
+  });
+});
+```
+
+### Testing Anti-Patterns to Avoid
+
+```typescript
+// ❌ DON'T test cross-organ communication directly
+// organa/mcp/mcp-calls-notion.test.ts
+
+// ❌ DON'T test chora implementations in organ tests
+// organa/notion/tests-logging.test.ts
+
+// ❌ DON'T create complex mocks of other organs
+// Instead, use simple interfaces injected as dependencies
+```
 
 ## Development
 
