@@ -112,7 +112,7 @@ pnpm test:watch    # Watch mode for TDD
 
 **Try**: Write a simple test
 
-1. Pick a pure function in `src/chora/aither/immunity/` (PII scrubbing utilities)
+1. Pick a pure function in `src/chora/aither/sensitive-data/` (PII scrubbing utilities)
 2. Write a test following existing patterns
 3. Use TDD: Red → Green → Refactor
 

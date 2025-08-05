@@ -8,7 +8,7 @@ import type {
   ListResourcesResult,
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
-import type { CoreDependencies } from '../../../../chora/stroma/types/dependencies.js';
+import type { CoreDependencies } from '@chora/stroma';
 import { handleReadResource } from './read-resource.js';
 
 // Handler functions interface

@@ -41,7 +41,7 @@
 | **Aither** (Αἰθήρ)     | eye-THAIR     | Divine substance that flows | `src/chora/aither/`   |
 | **Phaneron** (Φανερόν) | fa-ne-RON     | What appears/is manifest    | `src/chora/phaneron/` |
 | **Organa** (Ὄργανα)    | OR-ga-na      | Tools/instruments (plural)  | `src/organa/`         |
-| **Psychon** (Ψυχόν)    | psoo-KHON     | The ensouled/animated whole | `src/psychon.ts`      |
+| **Psychon** (Ψυχόν)    | psoo-KHON     | The ensouled/animated whole | `src/psychon/`        |
 
 ## Quick Decision Tree
 
@@ -57,7 +57,7 @@ Is it discrete business logic?
   └─ YES → organa/{name}/ (bounded organ)
 
 Are you wiring everything together?
-  └─ YES → psychon.ts (the living whole)
+  └─ YES → psychon/ (the soul/wiring layer)
 ```
 
 ## Code Examples
@@ -89,7 +89,7 @@ export function createNotionOperations(deps: {
   // Business logic, no imports from other organa
 }
 
-// psychon.ts - Wires everything together
+// psychon/wiring.ts - Dependency injection
 import { createLogger } from './chora/aither/logging/index.js';
 import { createConfig } from './chora/phaneron/config/index.js';
 import { createNotionOperations } from './organa/notion/index.js';
@@ -198,14 +198,18 @@ src/
 
 ```
 src/
+├── index.ts        # Entry point
+├── psychon/        # The soul/wiring layer
+│   ├── index.ts    # Orchestration
+│   ├── wiring.ts   # Dependency injection
+│   └── server.ts   # Server setup
 ├── chora/          # Pervasive fields
 │   ├── stroma/     # Types, contracts (compile-time)
 │   ├── aither/     # Logging, events (runtime flows)
 │   └── phaneron/   # Configuration (visible state)
-├── organa/         # Discrete organs
-│   ├── notion/     # Notion integration
-│   └── mcp/        # MCP server
-└── psychon.ts      # The living whole
+└── organa/         # Discrete organs
+    ├── notion/     # Notion integration
+    └── mcp/        # MCP server
 ```
 
 ## Common Questions

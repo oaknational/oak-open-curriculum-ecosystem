@@ -18,7 +18,7 @@ We chose Chora for our cross-cutting infrastructure because these components:
 
 Chora contains all the pervasive fields that flow through our organism:
 
-- **aither/** - Divine flows (logging, events, errors, immunity)
+- **aither/** - Divine flows (logging, events, errors, sensitive data)
 - **stroma/** - Structural matrix (types, contracts, schemas)
 - **phaneron/** - Visible manifestation (configuration)
 - **eidola/** - Phantoms for testing (test doubles, mocks)

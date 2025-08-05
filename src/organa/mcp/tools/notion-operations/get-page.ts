@@ -3,9 +3,8 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../chora/stroma/types/dependencies.js';
+import type { MinimalNotionClient, NotionOperations } from '@chora/stroma';
 import { isFullPage, isFullBlock } from '@notionhq/client/build/src/helpers.js';
-import type { NotionOperations } from '../../../../chora/stroma/contracts/notion-operations.js';
 import { notionGetPageSchema } from '../schemas.js';
 import type { ToolExecutor, ToolLogger } from '../core/types.js';
 

@@ -1,7 +1,7 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Environment } from './chora/phaneron/config/env.js';
+import type { Environment } from '@chora/phaneron/config/env.js';
 import type { Client } from '@notionhq/client';
-import type { Logger } from './chora/aither/logging/logger-interface.js';
+import type { Logger } from '@chora/aither/logging';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 
 export interface ServerSetupDependencies {
@@ -15,7 +15,7 @@ export interface ServerSetupDependencies {
 async function loadEnvironment(log: ServerSetupDependencies['log']): Promise<Environment> {
   log('[STARTUP] Loading environment configuration...');
   try {
-    const { env } = await import('./chora/phaneron/config/env.js');
+    const { env } = await import('@chora/phaneron/config/env.js');
     return env;
   } catch (error) {
     log('[STARTUP ERROR] Environment validation failed:', true);
@@ -39,12 +39,12 @@ async function createServerDependencies(
 }> {
   log('[STARTUP] Importing dependencies...');
 
-  const { getNotionConfig } = await import('./chora/phaneron/config/environment.js');
-  const { createConsoleLogger } = await import('./chora/aither/logging/logger.js');
-  const { getLogLevelValue } = await import('./chora/aither/logging/logger-interface.js');
+  const { getNotionConfig } = await import('@chora/phaneron/config');
+  const { createConsoleLogger } = await import('@chora/aither/logging');
+  const { getLogLevelValue } = await import('@chora/aither/logging');
   const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server.js');
-  const { createNotionOperations } = await import('./organa/notion/index.js');
+  const { createNotionOperations } = await import('@organa/notion');
 
   log('[STARTUP] Creating logger...');
   const logLevel = getLogLevelValue(environment.LOG_LEVEL);

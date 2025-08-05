@@ -30,7 +30,7 @@ src/
 │   │   ├── logging/    # Nervous system
 │   │   ├── events/     # Hormonal signaling
 │   │   ├── errors/     # Alert/pain system (formerly external)
-│   │   └── immunity/   # Protective system (formerly utils/scrubbing)
+│   │   └── sensitive-data/   # Protective system (formerly utils/scrubbing)
 │   ├── phaneron/       # Visible manifestation
 │   │   └── config/     # Runtime configuration
 │   └── eidola/         # Phantoms/simulacra (formerly test-helpers)
@@ -54,7 +54,7 @@ src/
 
 ### Negative
 
-1. **Deep Nesting**: Some import paths become longer (e.g., `chora/aither/immunity/scrubbing.js`)
+1. **Deep Nesting**: Some import paths become longer (e.g., `chora/aither/sensitive-data/scrubbing.js`)
 2. **Learning Curve**: Developers need to understand the biological metaphors
 
 ### Neutral

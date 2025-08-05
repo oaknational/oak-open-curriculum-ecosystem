@@ -24,6 +24,12 @@ We have successfully transitioned to a complete biological model with Greek nome
 
 ```
 src/
+├── index.ts           # Entry point (delegates to psychon)
+├── psychon/           # The soul - wiring and orchestration layer
+│   ├── index.ts       # Main orchestration
+│   ├── server.ts      # MCP server creation
+│   ├── startup.ts     # Initialization sequence
+│   └── wiring.ts      # Dependency injection
 ├── chora/             # Cross-cutting fields (pervasive infrastructure)
 │   ├── stroma/        # Structural matrix (types, contracts, schemas)
 │   │   ├── types/     # Pure type definitions including environment interfaces
@@ -33,20 +39,187 @@ src/
 │   │   ├── logging/   # Logging throughout the system
 │   │   ├── events/    # Event propagation
 │   │   ├── errors/    # Alert/pain system of the organism
-│   │   └── immunity/  # Immune system (PII scrubbing protection)
+│   │   └── sensitive-data/  # Protection system (PII scrubbing)
 │   ├── phaneron/      # Visible manifestation
 │   │   └── config/    # Runtime configuration
 │   └── eidola/        # Phantoms/simulacra for testing
 │       ├── factories.ts        # Mock factory functions
 │       ├── notion-mocks.ts     # Notion-specific test doubles
 │       └── notion-api-mocks.ts # API response simulacra
-├── organa/            # Discrete organs (bounded business logic)
-│   ├── notion/        # Notion integration organ
-│   └── mcp/           # MCP protocol organ
-└── psychon.ts         # The ensouled whole (wires everything together)
+└── organa/            # Discrete organs (bounded business logic)
+    ├── notion/        # Notion integration organ
+    └── mcp/           # MCP protocol organ
 ```
 
 The organism is now complete and self-contained with all essential life functions integrated, including eidola for testing.
+
+## Import Relationship Rules
+
+### Core Principle: ALL Cross-Boundary Imports Must Use Public APIs
+
+The following diagram shows the complete import relationship model for our biological architecture:
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      WHOLE SYSTEM IMPORT ARCHITECTURE                        │
+│                                                                              │
+│  FUNDAMENTAL RULE: Any import between organizational structures              │
+│                    MUST be via public API (index.ts)                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PSYCHON/ - The Soul Layer (Wires Everything)                                │
+│ ┌─────────────────────────────────────────────────────────────────────────┐ │
+│ │ // src/psychon/wiring.ts                                                 │ │
+│ │ import { createConsoleLogger } from '@chora/aither/logging';  ✅        │ │
+│ │ import { getNotionConfig } from '@chora/phaneron/config';     ✅        │ │
+│ │ import { createNotionOrgan } from '@organa/notion';           ✅        │ │
+│ │ import { createMcpOrgan } from '@organa/mcp';                 ✅        │ │
+│ └─────────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘
+                    │                                      │
+                    ▼                                      ▼
+┌─────────────────────────────┐          ┌─────────────────────────────┐
+│      ORGANA (Organs)        │          │    CHORAI (Infrastructure)   │
+├─────────────────────────────┤          ├─────────────────────────────┤
+│                             │          │                             │
+│  ┌───────────────────────┐  │          │  ┌────────────────────┐    │
+│  │ organa/notion/        │  │          │  │ chora/stroma/      │    │
+│  │  ├── index.ts  [API]  │  │          │  │  ├── index.ts [API]│    │
+│  │  ├── client.ts        │  │          │  │  ├── types/        │    │
+│  │  ├── search/          │  │          │  │  │   └── index.ts  │    │
+│  │  │   ├── index.ts     │  │          │  │  └── contracts/    │    │
+│  │  │   └── searcher.ts  │  │          │  │      └── index.ts  │    │
+│  │  └── query/           │  │          │  └────────────────────┘    │
+│  │      ├── index.ts     │  │          │                             │
+│  │      └── querier.ts   │  │          │  ┌────────────────────┐    │
+│  └───────────────────────┘  │          │  │ chora/aither/      │    │
+│            ❌                │          │  │  ├── index.ts [API]│    │
+│  ┌───────────────────────┐  │          │  │  ├── logging/      │    │
+│  │ organa/mcp/           │  │          │  │  │   └── index.ts  │    │
+│  │  ├── index.ts  [API]  │  │          │  │  ├── events/       │    │
+│  │  ├── server.ts        │  │          │  │  │   └── index.ts  │    │
+│  │  └── handlers/        │  │          │  │  └── errors/       │    │
+│  │      └── index.ts     │  │          │  │      └── index.ts  │    │
+│  └───────────────────────┘  │          │  └────────────────────┘    │
+│                             │          │                             │
+└─────────────────────────────┘          └─────────────────────────────┘
+
+IMPORT EXAMPLES WITHIN EACH STRUCTURE:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ WITHIN organa/notion/ (Linear Hierarchy)                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  notion/client.ts:                                                          │
+│    import { search } from './search/index.js';        ✅ (child via API)   │
+│    import { Logger } from '@chora/aither/logging';    ✅ (chora via API)   │
+│                                                                              │
+│  notion/search/searcher.ts:                                                 │
+│    import { formatResults } from './formatter.js';    ✅ (sibling)         │
+│    import { client } from '../client.js';             ❌ (parent import)   │
+│    import { EventBus } from '@chora/aither/events';   ✅ (chora via API)   │
+│    import { querier } from '../query/querier.js';     ❌ (reach into peer)│
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ WITHIN chora/aither/ (Linear Hierarchy)                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  aither/logging/logger.ts:                                                  │
+│    import { formatter } from './formatters/index.js';  ✅ (child via API)  │
+│    import type { LogLevel } from '@chora/stroma';      ✅ (chora via API) │
+│    import { sanitize } from '../sensitive-data/scrubbing.js'; ✅ (within aither) │
+│                                                                              │
+│  aither/logging/formatters/json.ts:                                         │
+│    import { colors } from '../colors/palette.js';     ✅ (within aither)   │
+│    import { sanitize } from './sanitizer.js';         ✅ (sibling)        │
+│    import type { Contract } from '@chora/stroma';      ✅ (chora via API)  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ CROSS-BOUNDARY IMPORTS (Always via Public API)                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✅ CORRECT:                                                                │
+│  // In organa/notion/client.ts                                              │
+│  import { createConsoleLogger } from '@chora/aither/logging';               │
+│  import type { NotionConfig } from '@chora/phaneron/config';                │
+│                                                                              │
+│  // In chora/aither/events/event-bus.ts                                     │
+│  import type { EventContract } from '@chora/stroma/contracts';              │
+│  import { scrubSensitiveData } from '@chora/aither/sensitive-data';               │
+│                                                                              │
+│  ❌ INCORRECT:                                                              │
+│  // In organa/notion/search.ts                                              │
+│  import { McpHandler } from '@organa/mcp/handlers/base';    // Cross-organ  │
+│  import { JsonFormatter } from '@chora/aither/logging/formatters/json';     │
+│  import { configLoader } from '../../chora/phaneron/config/loader';         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SPECIAL CASES                                                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  1. PSYCHON LAYER: Can import from any organ/chora (but via public APIs)    │
+│     - src/index.ts (entry point)                                            │
+│     - src/psychon/** (all wiring components)                                │
+│                                                                              │
+│  2. EIDOLA: Can access internals for mocking                                │
+│     import { InternalClient } from '@organa/notion/client';  ✅ (testing)   │
+│                                                                              │
+│  3. TEST FILES: Can break boundaries for testing                            │
+│     import { privateHelper } from '../src/internal/helper';  ✅ (in tests)  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Visual Summary of Import Rules
+
+```text
+                    ┌─────────────┐
+                    │  PSYCHON/   │ ← Wiring layer (via public APIs)
+                    │  ┌───────┐  │
+                    │  │ index │  │
+                    │  ├───────┤  │
+                    │  │wiring │  │
+                    │  ├───────┤  │
+                    │  │server │  │
+                    │  └───────┘  │
+                    └──────┬──────┘
+                           │
+        ┌──────────────────┴──────────────────┐
+        ▼                                     ▼
+┌───────────────┐                    ┌───────────────┐
+│    ORGANA     │                    │    CHORAI     │
+├───────────────┤                    ├───────────────┤
+│               │                    │               │
+│   notion ──┐  │                    │  stroma ←──┐  │
+│            ▼  │                    │     ↕ API  │  │
+│   mcp    [API]│ ← via public API   │  aither ←──┤  │
+│     ↕          │                    │     ↕ API  │  │
+│  [Linear      │                    │  phaneron ←┘  │
+│   Hierarchy]  │                    │               │
+│               │                    │  [All via API]│
+└───────┬───────┘                    └───────┬───────┘
+        │                                     │
+        └─────────────► ✅ ◄─────────────────┘
+              Import chorai via public API only
+```
+
+### Summary of ALL Import Rules
+
+1. **Cross-boundary imports**: ALWAYS via public API (index.ts)
+2. **Within a structure**: Linear hierarchy (no parent imports)
+3. **Organa → Organa**: FORBIDDEN (use psychon for wiring)
+4. **Chorai → Organa**: FORBIDDEN (infrastructure has no business knowledge)
+5. **Organa → Chorai**: ALLOWED (via public API only)
+6. **Chorai → Chorai**: ALLOWED (via public API only)
+7. **Internal structure**: Can import siblings and children, never parents
+8. **Special exemptions**: Psychon layer (wiring), Eidola (mocking), and test files
 
 ### Architectural Components
 
@@ -102,20 +275,20 @@ Our architecture follows a complete biological hierarchy:
 
 ### Discrete Hierarchy (Bounded Assemblies)
 
-- **Morion → Moria**: Molecules (syntax features) - _future_
+- **Morion → Moria**: Molecules (language syntax features)
 - **Organelle → Organelles**: Pure functions (no side effects)
 - **Kytos → Kytia**: Cells (individual modules)
 - **Histos → Histoi**: Tissues (related modules in directories)
 - **Organon → Organa**: Organs (services like notion/, mcp/)
-- **Systema → Systemata**: Systems (grouped organs) - _future_
+- **Systema → Systemata**: Systems (grouped organs) - potentially useful later
 - **Psychon → Psycha**: Organisms (complete applications)
-- **Ecosystema → Ecosystemata**: Ecosystems - _future_
-- **Biosphaera → Biosphaerae**: Biospheres - _future_
+- **Ecosystema → Ecosystemata**: Ecosystems - collections of applications, libraries, etc (monorepo)
+- **Biosphaera → Biosphaerae**: Biospheres - collections of ecosystems?
 
 ### Cross-Cutting Chōra (Pervasive Fields)
 
-- **Aither**: Divine flows (logging, events, errors, immunity)
-- **Stroma**: Structural matrix (types, contracts, schemas)
+- **Aither**: Flows that touch everything (logging, events, errors)
+- **Stroma**: Foundational matrix (types, contracts, schemas)
 - **Phaneron**: Visible manifestation (configuration)
 - **Krypton**: Hidden values (secrets) - _future_
 - **Kanōn**: Canonical rules (tooling config) - _future_
@@ -153,7 +326,7 @@ Our architecture follows a complete biological hierarchy:
 - ✅ Transformed `substrate/` → `chora/stroma/`
 - ✅ Transformed `systems/` → `chora/aither/` + `chora/phaneron/`
 - ✅ Created `psychon.ts` to wire everything together
-- ✅ Integrated all essential life functions (errors, immunity, types)
+- ✅ Integrated all essential life functions (errors, sensitive data protection, types)
 - ✅ The organism is now complete and self-contained
 
 ### Phase 4: Next - Oak MCP Core Extraction
@@ -170,6 +343,47 @@ Multiple organisms (oak-notion-mcp, oak-github-mcp) in shared environment.
 - [Architecture Decision Records](./architecture/architectural-decisions/) - All architectural decisions
 - [API Reference](./usage/api-reference.md) - Technical API documentation
 - [Onboarding Journey](./development/onboarding-journey.md) - Getting started guide
+
+## Import Rules Within and Between Chorai
+
+### Critical Distinction: Within vs Between
+
+1. **Within a Chora** (e.g., within aither):
+   - Components can access each other directly
+   - Example: `aither/logging/logger.ts` can import from `aither/logging/formatters/pretty.ts`
+   - Rationale: Components within a chora form a cohesive substrate
+
+2. **Between Chorai** (e.g., aither → stroma):
+   - MUST use public APIs only (index.ts files)
+   - Example: `aither/logging/logger.ts` must import from `@chora/stroma`, not `@chora/stroma/types/logging.js`
+   - Rationale: Maintains proper boundaries between different infrastructure concerns
+
+3. **Index.ts Files** (Public API aggregators):
+   - Can import from their immediate children to create the public API
+   - Example: `aither/index.ts` can import from `./logging/index.js`
+   - This is how public APIs are constructed from internal components
+
+### Examples:
+
+```typescript
+// ✅ CORRECT - Within aither, direct access allowed
+// In aither/logging/formatters/pretty.ts
+import { colors } from '../colors/palette.js';
+import { LogLevel } from '../types/levels.js';
+
+// ✅ CORRECT - Between chorai, use public API
+// In aither/logging/logger.ts
+import type { Contract } from '@chora/stroma'; // Via public API
+
+// ❌ INCORRECT - Between chorai, reaching into internals
+// In aither/events/event-bus.ts
+import type { EventContract } from '../../stroma/contracts/event-bus.js';
+
+// ✅ CORRECT - Index.ts aggregating child exports
+// In aither/index.ts
+export { createLogger } from './logging/index.js';
+export { EventBus } from './events/index.js';
+```
 
 ## Architecture Decision Records
 

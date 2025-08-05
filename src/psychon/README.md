@@ -43,7 +43,7 @@ The psychon doesn't DO anything in the business sense - it simply IS. By existin
 - Respond to requests
 - Process information
 - Maintain state
-- Exhibit behavior
+- Exhibit behaviour
 
 ## The Mystery of Life
 
