@@ -1,6 +1,6 @@
 # Metacognition
 
-The metacognitive prompt is:
+Read the following, and reflect on all of it.
 
 Consider the impact you have been asked to bring about.
 

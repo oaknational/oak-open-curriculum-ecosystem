@@ -1,0 +1,6 @@
+# pnpm workspace configuration
+# This defines the ecosystem where our MCP organisms evolve
+
+packages:
+  # All packages in the ecosystem directory
+  - 'ecosystem/*'

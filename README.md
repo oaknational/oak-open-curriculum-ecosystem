@@ -18,16 +18,26 @@ export NOTION_API_KEY="secret_your_actual_key_here"
 
 ## 🏛️ Architecture: Greek-Inspired Biological Design
 
-This project uses Greek philosophical terms to create clear conceptual boundaries. Each term has specific meaning:
+This project uses Greek philosophical terms to create clear conceptual boundaries. The architecture follows a **genotype/phenotype** model:
 
-| Greek Term             | English           | Purpose                   | Location                                     |
-| ---------------------- | ----------------- | ------------------------- | -------------------------------------------- |
-| **Stroma** (στρῶμα)    | Foundation/Matrix | Types, contracts, schemas | [`src/chora/stroma/`](src/chora/stroma/)     |
-| **Aither** (αἰθήρ)     | Divine Air        | Logging, events, errors   | [`src/chora/aither/`](src/chora/aither/)     |
-| **Phaneron** (φανερόν) | The Visible       | Configuration, settings   | [`src/chora/phaneron/`](src/chora/phaneron/) |
-| **Eidola** (εἴδωλα)    | Phantoms          | Test mocks and fixtures   | [`src/chora/eidola/`](src/chora/eidola/)     |
-| **Organa** (ὄργανα)    | Organs            | Business logic units      | [`src/organa/`](src/organa/)                 |
-| **Psychon** (ψυχόν)    | Soul              | App wiring and startup    | [`src/psychon/`](src/psychon/)               |
+## Genotype (oak-mcp-core)
+The genetic blueprint - abstract patterns all MCP servers inherit:
+
+| Greek Term             | English           | Purpose                        | Location                                            |
+| ---------------------- | ----------------- | ------------------------------ | --------------------------------------------------- |
+| **Morphai** (μορφαί)   | Hidden Forms      | Abstract patterns (Platonic)   | [`ecosystem/oak-mcp-core/src/chora/morphai/`]      |
+| **Stroma** (στρῶμα)    | Foundation/Matrix | Types, contracts, schemas      | [`ecosystem/oak-mcp-core/src/chora/stroma/`]       |
+| **Aither** (αἰθήρ)     | Divine Air        | Logging, events, errors        | [`ecosystem/oak-mcp-core/src/chora/aither/`]       |
+| **Phaneron** (φανερόν) | The Visible       | Configuration, settings        | [`ecosystem/oak-mcp-core/src/chora/phaneron/`]     |
+| **Eidola** (εἴδωλα)    | Phantoms          | Test mocks and fixtures        | [`ecosystem/oak-mcp-core/src/chora/eidola/`]       |
+
+## Phenotype (oak-notion-mcp)
+The expressed organism - concrete implementation for Notion:
+
+| Greek Term             | English           | Purpose                        | Location                                            |
+| ---------------------- | ----------------- | ------------------------------ | --------------------------------------------------- |
+| **Organa** (ὄργανα)    | Organs            | Business logic units           | [`ecosystem/oak-notion-mcp/src/organa/`]           |
+| **Psychon** (ψυχόν)    | Soul              | App wiring and startup         | [`ecosystem/oak-notion-mcp/src/psychon/`]          |
 
 ### Why Greek Terms?
 
@@ -35,7 +45,15 @@ This project uses Greek philosophical terms to create clear conceptual boundarie
 2. **Precision** - Each term has specific philosophical meaning
 3. **Memorability** - Unique names create stronger mental models
 
-> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md)
+### The Morphai: Platonic Forms in Code
+
+**Morphai (μορφαί)** are the hidden forms - abstract patterns that organs instantiate. Like Plato's theory of forms, morphai represent the perfect, eternal patterns that exist in the genotype, while organs are their imperfect but functional shadows in the phenomenal world.
+
+- **Morphai define potential** - What it means to be a tool, handler, or registry
+- **Organs express actuality** - How those patterns work in a specific context
+- **Inheritance through genetics** - All phenotypes inherit the same morphai from the genotype
+
+> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md) | [Morphai Philosophy](ecosystem/oak-mcp-core/src/chora/morphai/README.md)
 
 ## Features
 
@@ -185,7 +203,7 @@ Key architectural decisions are documented as ADRs:
 
 ## Contributing
 
-We welcome contributions! Please:
+This is a pre-release version of the project, as such we are not accepting contributions at this time. Please watch the repository for updates.
 
 1. Read our [Contributing Guide](CONTRIBUTING.md)
 2. Follow the [Development Guide](docs/development/README.md)
@@ -194,10 +212,11 @@ We welcome contributions! Please:
 
 ## Security
 
-- API keys are never logged or exposed
-- All PII (emails, names) is automatically scrubbed
-- Read-only access to Notion (no write operations)
-- See our [Security Policy](SECURITY.md) for reporting vulnerabilities
+We aim to avoid security and privacy issues by trying to:
+
+- Never log or expose API keys
+- Automatically scrub PII (emails)
+- Ensure read-only access to Notion (no write operations)
 
 ## License
 

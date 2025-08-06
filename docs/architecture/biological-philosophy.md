@@ -45,10 +45,13 @@ Chora (Χώρα) → Chorai (Χῶραι) - The collective of cross-cutting laye
 ```text
 Name                Singular → Plural                   Purpose
 ─────────────────────────────────────────────────────────────────────
+Morphai (Μορφαί)    → Morphai (Μορφαί)                 Abstract patterns: Platonic forms
 Stroma (Στρῶμα)     → Stromata (Στρώματα)              Types, schemas, contracts
 Aither (Αἰθήρ)      → Aitheres (Αἰθέρες)               Flows: logging, events, messaging
 Phaneron (Φανερόν)  → Phanera (Φανερά)                 Visible config: runtime settings
 ```
+
+> **Note on Morphai**: The hidden forms (μορφαί) are the Platonic ideals - abstract patterns that organs aspire to instantiate. They exist only in the genotype as pure types with no implementation.
 
 ### Future Chorai (Noted for Completeness)
 
@@ -76,28 +79,40 @@ Nomos (Νόμος)       → Nomoi (Νόμοι)                    Rules: govern
 - Example: "The psychon (Ψυχόν) represents the ensouled application"
 - Use provided singular/plural forms consistently
 
-### Directory Structure
+### Genotype/Phenotype Model
+
+The architecture follows a biological inheritance model with workspace separation:
+
+#### Genotype (oak-mcp-core)
+The genetic blueprint containing abstract patterns and utilities:
 
 ```text
-src/
+ecosystem/oak-mcp-core/src/
+├── chora/                      # Cross-cutting fields
+│   ├── morphai/                # Abstract patterns (Platonic forms)
+│   │   ├── tools/              # Tool execution patterns
+│   │   ├── handlers/           # Request handling patterns
+│   │   ├── errors/             # Error handling patterns
+│   │   └── registries/         # Collection management patterns
+│   ├── stroma/                 # Structural matrix
+│   ├── aither/                 # Divine flows
+│   └── phaneron/               # Base configuration patterns
+```
+
+#### Phenotype (oak-notion-mcp)
+The environmental expression that instantiates the abstract patterns:
+
+```text
+ecosystem/oak-notion-mcp/src/
 ├── index.ts                    # Entry point (delegates to psychon)
 ├── psychon/                    # The soul - wiring layer
 │   ├── index.ts                # Main orchestration
 │   ├── wiring.ts               # Dependency injection
 │   ├── server.ts               # Server setup
 │   └── startup.ts              # Initialization
-├── chora/                      # Cross-cutting fields
-│   ├── stroma/                 # Structural matrix
-│   │   ├── types/              # Type definitions
-│   │   ├── contracts/          # Interface contracts
-│   │   └── schemas/            # Event schemas
-│   ├── aither/                 # Divine flows
-│   │   ├── logging/            # Nervous system
-│   │   ├── events/             # Signaling
-│   │   └── messaging/          # Future: async communication
-│   └── phaneron/               # Visible configuration
-│       └── config/             # Runtime configuration
-└── organa/                     # Discrete organs
+├── chora/                      # Phenotype-specific chorai
+│   └── eidola/                 # Test doubles and mocks
+└── organa/                     # Discrete organs (instantiate morphai)
     ├── notion/                 # Notion integration organ
     └── mcp/                    # MCP protocol organ
 ```

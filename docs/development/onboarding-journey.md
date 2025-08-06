@@ -66,22 +66,44 @@ pnpm dev
 
 #### 2. Code Exploration
 
+**Important**: The project now uses a **pnpm workspace** structure with two packages:
+
+1. **Genotype** (`ecosystem/oak-mcp-core/`): The genetic blueprint
+   - Pure abstractions and utilities
+   - Zero runtime dependencies
+   - Contains the morphai (abstract patterns)
+
+2. **Phenotype** (`ecosystem/oak-notion-mcp/`): The environmental expression
+   - Notion-specific implementation
+   - Instantiates the abstract patterns from morphai
+
 **Explore** the codebase in this order:
 
-1. **The Soul**: `src/psychon.ts`
+1. **The Soul**: `ecosystem/oak-notion-mcp/src/psychon.ts`
    - How does everything come to life?
    - What gets wired together?
 
-2. **Pervasive Fields**: `src/chora/`
+2. **Pervasive Fields (Chorai)**: 
+   
+   **In the Genotype** (`ecosystem/oak-mcp-core/src/chora/`):
+   - `morphai/` - **The hidden forms** - Platonic ideals (ToolExecutor, RequestHandler, etc.)
+     - Abstract patterns that organs aspire to instantiate
+     - Pure types with no implementation
+     - Define the essence of tools, handlers, errors, and registries
    - `stroma/` - Structural types and contracts
    - `aither/` - Logging, events, errors flowing through
-   - `phaneron/` - Configuration that manifests at runtime
+   - `phaneron/` - Base configuration patterns
+   
+   **In the Phenotype** (`ecosystem/oak-notion-mcp/src/chora/`):
+   - `eidola/` - Test phantoms and mocks
+   - Notion-specific extensions of base chorai
 
-3. **Business Organs**: `src/organa/`
+3. **Business Organs**: `ecosystem/oak-notion-mcp/src/organa/`
    - `notion/` - Pure functions for Notion integration
    - `mcp/` - Protocol handling and tool definitions
+   - These organs **instantiate the morphai** from the genotype
 
-4. **Test Phantoms**: `src/chora/eidola/`
+4. **Test Phantoms**: `ecosystem/oak-notion-mcp/src/chora/eidola/`
    - How test doubles mirror the living system
    - Why phantoms enable testing without external dependencies
 
@@ -225,6 +247,8 @@ After each day, you should be able to answer:
 - [ ] How does data flow through the architecture layers?
 - [ ] Why are most functions pure?
 - [ ] How does the server ensure safety?
+- [ ] What are morphai and how do they relate to organa?
+- [ ] How does the genotype/phenotype model work in this architecture?
 
 ### Day 3 Checkpoint
 

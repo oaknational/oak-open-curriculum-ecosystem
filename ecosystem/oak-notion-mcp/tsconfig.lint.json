@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true
+  },
+  "include": ["src/**/*", "e2e-tests/**/*", "*.config.ts", "*.config.js", "eslint.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

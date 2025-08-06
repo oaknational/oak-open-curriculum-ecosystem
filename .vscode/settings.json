@@ -9,6 +9,7 @@
     "chorai",
     "Chronos",
     "Cleanup",
+    "cloc",
     "commitlint",
     "Dynamis",
     "Ecosystema",
@@ -29,6 +30,7 @@
     "metacognition",
     "metacognitive",
     "modelcontextprotocol",
+    "morphai",
     "Nomoi",
     "Nomos",
     "notionhq",
@@ -44,12 +46,14 @@
     "Signaling",
     "Systema",
     "Systemata",
+    "Turborepo",
     "ultrathinking",
     "Αἰθέρες",
     "Αἰθήρ",
     "Βιοσφαῖρα",
     "Βιοσφαῖραι",
     "δύναμις",
+    "εἴδωλα",
     "ἐνέργεια",
     "Ἱστοί",
     "Ἱστός",
@@ -77,5 +81,11 @@
     "Χῶραι",
     "Ψυχά",
     "Ψυχόν"
+  ],
+  "eslint.workingDirectories": [
+  
+    {"directory": "/"},
+    { "directory": "ecosystem/oak-mcp-core", "changeProcessCWD": true },
+    { "directory": "ecosystem/oak-notion-mcp", "changeProcessCWD": true }
   ]
 }

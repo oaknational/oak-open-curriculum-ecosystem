@@ -5,11 +5,16 @@ echo "🔍 Running pre-commit checks..."
 echo "🔤 Running type checks..."
 pnpm type-check
 
-echo "📝 Formatting and linting staged files..."
-pnpm exec lint-staged
+# Run lint-staged for formatting only
+echo "📝 Formatting changed files..."
+pnpm format --affected
+
+echo "🔍 Running lint for changed files..."
+pnpm lint --affected
 
 # This may not find any relevant tests, that is fine.
 echo "🧪 Running tests on changed files..."
-pnpm test:changed
+pnpm test --affected
 
 echo "✅ Pre-commit checks completed!"
+

@@ -2,7 +2,7 @@
   "mcpServers": {
     "notion-dev": {
       "command": "pnpm",
-      "args": ["exec", "tsx", "src/index.ts"],
+      "args": ["exec", "tsx", "ecosystem/oak-notion-mcp/src/index.ts"],
       "env": {
         "LOG_LEVEL": "debug"
       }
