@@ -12,6 +12,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +23,6 @@ jobs:
         name: Install pnpm
         with:
           run_install: false
-          version: 10.13.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

@@ -22,6 +22,11 @@
 export default {
   branches: [
     {
+      // Semantic release needs at least one "production" branch, so for pre-alpha development we use a placeholder
+      name: 'release_placeholder_ignore_me',
+    },
+    {
+      // This will eventually be the production branch
       name: 'main',
       prerelease: 'alpha',
     },

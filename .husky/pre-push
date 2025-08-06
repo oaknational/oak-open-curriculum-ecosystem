@@ -22,4 +22,8 @@ pnpm type-check
 echo "🧪 Running full test suite..."
 pnpm test
 
+# Build the project
+echo "📦 Building project..."
+pnpm build
+
 echo "✅ All pre-push checks passed!"

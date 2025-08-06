@@ -4,11 +4,17 @@
 
 ## Executive Summary
 
-This codebase implements a **Biological Architecture with Greek Nomenclature**. We model software as a living organism with:
+This codebase implements a **Biological Architecture with Greek Nomenclature**, organized in a **genotype/phenotype model**:
 
-- **Chora (Χώρα)**: Cross-cutting fields that pervade everything
-- **Organa (Ὄργανα)**: Discrete, bounded organs with specific functions
+**Genotype** (`oak-mcp-core`): The genetic blueprint
+- **Morphai (Μορφαί)**: Abstract patterns (Platonic forms) that define essence
+- **Core Chorai**: Universal infrastructure (stroma, aither, phaneron)
+- Zero hard dependencies (conditional dependencies with graceful degradation permitted - see ADR-022)
+
+**Phenotype** (`oak-notion-mcp`): The environmental expression
+- **Organa (Ὄργανα)**: Discrete organs that instantiate morphai patterns
 - **Psychon (Ψυχόν)**: The ensouled whole that brings everything to life
+- Domain-specific implementations
 
 This is not metaphor - it's mathematically grounded in complex systems theory. The Greek terms eliminate confusion and create precise architectural boundaries.
 
@@ -52,26 +58,41 @@ Software is not a machine - it's a living organism:
 
 **Definition**: Infrastructure that pervades the entire system, cannot be contained.
 
+#### Morphai (Μορφαί) - The Hidden Forms
+
+- Location: `chora/morphai/` (genotype only)
+- Contains: Abstract patterns with zero implementation
+- Nature: Platonic ideals that organs aspire to instantiate
+- Example: `ToolExecutor<TInput, TOutput>`, `RequestHandler<TRequest, TResponse>`
+- Philosophy: Define potential, organs express actuality
+
 #### Stroma (Στρῶμα) - Structural Matrix
 
-- Location: `chora/stroma/` (currently `substrate/`)
+- Location: `chora/stroma/`
 - Contains: Types, contracts, schemas
 - Nature: Compile-time only, zero runtime code
 - Example: Interface definitions, type declarations
 
 #### Aither (Αἰθήρ) - Divine Flows
 
-- Location: `chora/aither/` (currently `systems/logging/`, `systems/events/`)
-- Contains: Logging, event propagation
+- Location: `chora/aither/`
+- Contains: Logging, event propagation, error handling
 - Nature: Flows throughout like nervous system
 - Example: Logger that every component uses
 
 #### Phaneron (Φανερόν) - Visible Manifestation
 
-- Location: `chora/phaneron/` (currently `systems/config/`)
+- Location: `chora/phaneron/`
 - Contains: Runtime configuration
 - Nature: Makes system state visible
 - Example: Environment config, feature flags
+
+#### Eidola (Εἴδωλα) - Phantoms/Simulacra
+
+- Location: `chora/eidola/` (phenotype only)
+- Contains: Test doubles, mocks, factories
+- Nature: Shadows of the living system for testing
+- Example: Mock Notion client, test factories
 
 ### Organa - Discrete Organs
 

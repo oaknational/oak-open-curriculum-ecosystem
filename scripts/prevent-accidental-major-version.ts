@@ -5,8 +5,6 @@
  * Checks commit messages for breaking change indicators
  */
 
-/* eslint-disable max-statements, @typescript-eslint/consistent-return */
-
 import { readFileSync } from 'node:fs';
 import { argv, exit } from 'node:process';
 
