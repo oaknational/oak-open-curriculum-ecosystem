@@ -35,8 +35,9 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 8. **Fail FAST** - Clear error messages, never fail silently or swallow errors
 9. **No Backward Compatibility Layers** - Use versioning, replace code directly
 10. **Validate at System Boundaries** - Use Zod schemas and type guards to validate external data at entry points, then use Notion SDK types directly throughout the codebase. This creates a clear separation: external data → validation layer → trusted types in our system
-11. **Complete Biological Model** - Distinguish between chora (shared fields), organa (discrete functions), and psychon (soul/wiring)
+11. **Complete Biological Model** - Distinguish between chora (shared fields), organa (discrete functions), and psychon (soul/wiring - the moment where components become alive)
 12. **Multi-Scale Architecture** - Apply same principles from functions to ecosystems
+13. **Listen to Early Warning Signals** - Import violations and architectural friction are the system telling us where boundaries want to form, not problems to suppress
 
 ## Development Phases
 
@@ -168,6 +169,12 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 **Outcome**: Extract oak-mcp-core as the **MCP genotype** - the genetic blueprint that all MCP organisms inherit, organized as a pnpm workspace with Turbo
 
 **Ecosystem Role**: oak-mcp-core provides the genetic code (implemented as chorai) that defines what makes something an "MCP server". Each phenotype (oak-notion-mcp, oak-github-mcp, etc.) expresses these genes differently based on its environment.
+
+**Architectural Principles**:
+- **Morphai as Platonic Forms**: Abstract patterns in the genotype are the perfect, eternal forms that organs in phenotypes instantiate as imperfect but functional shadows
+- **Distributed Chorai**: Both genotype and phenotype have chorai - genotype contains universal traits, phenotypes add environmental adaptations (see ADR-021)
+- **Operating at Criticality**: The architecture deliberately operates at the edge of chaos for optimal information processing, following principles from neuroscience and complex systems theory
+- **Mathematical Foundation**: Implementing the stability classifier S = β(s + ν + ρ - μ - η) from complex systems research (ADR-009)
 
 **Strategy**: Create a pnpm workspace structure where oak-mcp-core contains the genotype (shared genetic traits implemented as chorai), and each specific MCP server is a phenotype expressing those genes in its environment.
 
