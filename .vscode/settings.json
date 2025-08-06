@@ -81,5 +81,11 @@
     "Χῶραι",
     "Ψυχά",
     "Ψυχόν"
+  ],
+  "eslint.workingDirectories": [
+  
+    {"directory": "/"},
+    { "directory": "ecosystem/oak-mcp-core", "changeProcessCWD": true },
+    { "directory": "ecosystem/oak-notion-mcp", "changeProcessCWD": true }
   ]
 }

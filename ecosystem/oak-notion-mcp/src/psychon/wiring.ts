@@ -73,6 +73,12 @@ async function createServerDependencies(
  * This is an integration point that orchestrates the server startup
  */
 export async function setupAndStartServer(deps: ServerSetupDependencies): Promise<void> {
+  // Initialize Node.js-specific context storage
+  deps.log('[STARTUP] Initializing context storage...');
+  const { registerContextStorageFactory } = await import('@oaknational/mcp-core');
+  const { initializeNodeContextStorage } = await import('../chora/aither/context-storage-node.js');
+  initializeNodeContextStorage(registerContextStorageFactory);
+
   const environment = await loadEnvironment(deps.log);
   const { logger, server } = await createServerDependencies(environment, deps.log);
 

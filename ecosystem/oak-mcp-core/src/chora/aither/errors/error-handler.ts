@@ -3,6 +3,9 @@
  * into MCP-compliant error responses
  */
 
+import { ChainedError } from './chained-error.js';
+import { Result } from './result.js';
+
 export type ErrorType =
   | 'rate_limit'
   | 'authentication'
@@ -161,4 +164,41 @@ export function formatErrorForUser(error: McpError): string {
   };
 
   return userMessages[error.data.type];
+}
+
+/**
+ * Creates a ChainedError from a Notion API error with classification context
+ */
+export function createChainedNotionError(
+  error: unknown,
+  operation: string,
+  context?: Record<string, unknown>,
+): ChainedError {
+  const classification = classifyNotionError(error);
+
+  return new ChainedError(`${operation} failed: ${classification.message}`, error, {
+    ...context,
+    operation,
+    errorType: classification.type,
+    errorCode: classification.code,
+    retryable: classification.retryable,
+    statusCode: classification.statusCode,
+  });
+}
+
+/**
+ * Wraps a Notion API operation in Result type with error classification
+ */
+export async function wrapNotionOperation<T>(
+  operation: () => Promise<T>,
+  operationName: string,
+  context?: Record<string, unknown>,
+): Promise<Result<T, ChainedError>> {
+  try {
+    const value = await operation();
+    return Result.ok(value);
+  } catch (error) {
+    const chainedError = createChainedNotionError(error, operationName, context);
+    return Result.err(chainedError);
+  }
 }

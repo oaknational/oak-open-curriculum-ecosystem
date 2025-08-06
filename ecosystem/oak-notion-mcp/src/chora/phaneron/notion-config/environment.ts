@@ -11,6 +11,8 @@ import {
   type BaseEnvironment,
 } from '@oaknational/mcp-core';
 
+import { loadDotenvIfNeeded } from '@oaknational/mcp-core';
+
 /**
  * Notion-specific environment variables
  */
@@ -18,6 +20,10 @@ export interface NotionEnvironment extends BaseEnvironment {
   NOTION_API_KEY: string;
   MAX_SEARCH_RESULTS: number;
 }
+
+// Load .env file if environment variables are not already set
+// This uses synchronous loading to ensure vars are available before we read them
+await loadDotenvIfNeeded();
 
 /**
  * Environment configuration for Notion MCP - validated once on module load

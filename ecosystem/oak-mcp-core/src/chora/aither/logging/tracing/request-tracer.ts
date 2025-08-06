@@ -3,7 +3,8 @@
  * @module @oak-mcp-core/logging/tracing
  */
 
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { ContextStorage } from '../../errors/context-storage.js';
+import { createContextStorage } from '../../errors/context-storage.js';
 import type { TraceContext, RequestTracingOptions } from './types.js';
 import {
   generateRequestId,
@@ -17,11 +18,11 @@ import {
  * Request tracer for managing trace context lifecycle
  */
 export class RequestTracer {
-  private readonly storage: AsyncLocalStorage<TraceContext>;
+  private readonly storage: ContextStorage<TraceContext>;
   private readonly options: Required<RequestTracingOptions>;
 
   constructor(options: RequestTracingOptions = {}) {
-    this.storage = new AsyncLocalStorage<TraceContext>();
+    this.storage = createContextStorage<TraceContext>('tracer');
     this.options = {
       enabled: options.enabled ?? true,
       sampleRate: options.sampleRate ?? 1.0,
@@ -146,27 +147,23 @@ export class RequestTracer {
   /**
    * Update current trace context
    * @param updates - Context updates
+   * Note: In genotype, context updates are not supported mid-trace
    */
-  updateContext(updates: Partial<TraceContext>): void {
-    const current = this.getContext();
-    if (!current) {
-      return;
-    }
-
-    const updated: TraceContext = {
-      ...current,
-      ...updates,
-    };
-
-    // Need to re-enter the context with updates
-    this.storage.enterWith(updated);
+  updateContext(_updates: Partial<TraceContext>): void {
+    // ContextStorage doesn't support updating context mid-execution
+    // Updates should be done at trace creation or in phenotype with AsyncLocalStorage
+    console.warn(
+      `Updating trace context mid-execution requires AsyncLocalStorage. Ignoring: ${JSON.stringify(_updates)}`,
+    );
   }
 
   /**
    * Clear current trace context
+   * Note: Context automatically clears when run() completes
    */
   clearContext(): void {
-    this.storage.disable();
+    // ContextStorage doesn't have disable method
+    // Context automatically clears when run() completes
   }
 
   /**

@@ -3,11 +3,36 @@ import { spawn, type ChildProcess } from 'child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { config } from 'dotenv';
-import { join } from 'path';
+import { join, resolve } from 'path';
+import { existsSync } from 'fs';
+import { createConsoleLogger } from '@oaknational/mcp-core';
 
-// Load environment variables from root .env if it exists, otherwise from local
-config({ path: join(process.cwd(), '../../.env') });
-config(); // Also try local .env as fallback
+// Create logger for E2E tests
+const logger = createConsoleLogger({
+  name: 'e2e-tests',
+  level:
+    process.env.LOG_LEVEL === 'debug' ||
+    process.env.LOG_LEVEL === 'info' ||
+    process.env.LOG_LEVEL === 'warn' ||
+    process.env.LOG_LEVEL === 'error'
+      ? process.env.LOG_LEVEL
+      : 'info',
+});
+
+// Find and load the .env file from the repo root
+// __dirname is e2e-tests, so we go up: e2e-tests -> oak-notion-mcp -> ecosystem -> repo root
+const repoRoot = resolve(__dirname, '../../..');
+const envPath = join(repoRoot, '.env');
+
+if (existsSync(envPath)) {
+  config({ path: envPath });
+  logger.debug('Loaded .env file', { path: envPath });
+} else {
+  // Try fallback locations
+  logger.debug('.env not found at repo root, trying fallbacks', { tried: envPath });
+  config({ path: join(process.cwd(), '../../.env') });
+  config(); // Also try local .env as fallback
+}
 
 // Type guard for object with property
 function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record<K, unknown> {
@@ -24,12 +49,21 @@ function isTextContent(c: unknown): c is { type: string; text?: string } {
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
 const RUN_E2E = process.env.RUN_E2E === 'true';
 
-// Log why tests might be skipped
-if (!NOTION_API_KEY) {
-  console.log('E2E tests skipped: NOTION_API_KEY not found in environment');
-}
-if (!RUN_E2E) {
-  console.log('E2E tests skipped: RUN_E2E is not set to "true"');
+// Log test environment status
+if (!NOTION_API_KEY || !RUN_E2E) {
+  logger.info('E2E Test Environment', {
+    RUN_E2E: process.env.RUN_E2E,
+    NOTION_API_KEY: NOTION_API_KEY ? 'Found' : 'Not found',
+  });
+
+  if (!NOTION_API_KEY) {
+    logger.warn('E2E tests will be skipped: NOTION_API_KEY not found');
+  }
+  if (!RUN_E2E) {
+    logger.info('E2E tests will be skipped: Set RUN_E2E=true to run');
+  }
+} else {
+  logger.info('Running E2E tests with Notion API');
 }
 
 describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion API', () => {

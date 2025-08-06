@@ -9,7 +9,7 @@ This codebase implements a **Biological Architecture with Greek Nomenclature**, 
 **Genotype** (`oak-mcp-core`): The genetic blueprint
 - **Morphai (Μορφαί)**: Abstract patterns (Platonic forms) that define essence
 - **Core Chorai**: Universal infrastructure (stroma, aither, phaneron)
-- Zero runtime dependencies
+- Zero hard dependencies (conditional dependencies with graceful degradation permitted - see ADR-022)
 
 **Phenotype** (`oak-notion-mcp`): The environmental expression
 - **Organa (Ὄργανα)**: Discrete organs that instantiate morphai patterns

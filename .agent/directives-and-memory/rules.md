@@ -86,3 +86,4 @@ export type { NotionServices } from './types';
 - **Each test proves ONE thing** - No duplicate proofs
 - **No useless tests** - Each test must prove something useful about the product code
 - **No complex logic in tests** - Complexity in tests means refactoring is needed
+- **No skipped tests** - Fix it or delete it

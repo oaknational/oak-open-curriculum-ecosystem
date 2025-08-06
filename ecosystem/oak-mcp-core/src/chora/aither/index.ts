@@ -40,8 +40,26 @@ export { createEventBus } from './events/index.js';
 export type { EventBus } from '../stroma/contracts/event-bus.js';
 
 // Errors exports
-export { classifyNotionError, createMcpError, formatErrorForUser } from './errors/index.js';
-export type { ErrorType, ErrorClassification, McpError } from './errors/index.js';
+export {
+  classifyNotionError,
+  createMcpError,
+  formatErrorForUser,
+  ChainedError,
+  Result,
+  ErrorContextManager,
+  getDefaultErrorContextManager,
+  createContextStorage,
+  getErrorContextStorage,
+} from './errors/index.js';
+export type {
+  ErrorType,
+  ErrorClassification,
+  McpError,
+  ResultType,
+  ValidationResult,
+  ErrorContext,
+  ContextStorage,
+} from './errors/index.js';
 
 // Sensitive data exports
 export { scrubSensitiveData, scrubEmail } from './sensitive-data/index.js';

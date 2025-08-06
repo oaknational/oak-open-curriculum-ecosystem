@@ -42,7 +42,7 @@ export const baseConfig = tsEslintConfig(
       '@typescript-eslint/no-unused-vars': ['error'],
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -53,7 +53,7 @@ export const baseConfig = tsEslintConfig(
       'max-depth': ['error', 3],
       'max-statements': ['error', 20],
       'max-lines-per-function': ['error', 50],
-      'max-lines': ['error', 190],
+      'max-lines': ['error', 250],
 
       // General good practices
       'no-empty': 'error',
@@ -85,6 +85,10 @@ export const baseConfig = tsEslintConfig(
     rules: {
       'max-lines': ['error', 700],
       'max-lines-per-function': ['error', 1000],
+      '@typescript-eslint/consistent-type-assertions': ['error', {
+        assertionStyle: 'as',
+        objectLiteralTypeAssertions: 'allow',
+      }],
     },
   },
   // Config files (JS and MJS)

@@ -7,13 +7,22 @@
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base.js';
 
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+const thisDir = dirname(fileURLToPath(import.meta.url));
+
 const config = tsEslintConfig(
   ...baseConfig,
+  {
+    ignores: ['dist/**', '*.log', '.turbo/**', '.logs/**'],
+  },
   {
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.lint.json',
+        tsconfigRootDir: thisDir,
       },
     },
     settings: {
@@ -93,7 +102,7 @@ const config = tsEslintConfig(
       'import-x/no-internal-modules': 'off',
     },
   },
-  // Test files can break boundaries
+  // Test files can break boundaries but should maintain type safety
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {
@@ -102,19 +111,12 @@ const config = tsEslintConfig(
       '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
-  // Configuration for config files
+  // Config files (TS)
   {
-    files: ['*.config.ts', '*.config.js', 'eslint.config.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: './tsconfig.lint.json',
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
+    files: ['**/*.config.ts', 'eslint.config.ts', 'eslint.config.base.ts'],
     rules: {
-      // Config files can use CommonJS and have looser import rules
-      '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
 );

@@ -1,12 +1,13 @@
 /**
- * @fileoverview Context-aware logger implementation using AsyncLocalStorage
+ * @fileoverview Context-aware logger implementation using ContextStorage abstraction
  * @module @oak-mcp-core/logging
  *
- * This module will be extracted to oak-mcp-core.
- * Uses AsyncLocalStorage for correlation ID tracking across async boundaries.
+ * Uses the ContextStorage abstraction for correlation ID tracking across async boundaries.
+ * This allows the logger to work in any runtime environment.
  */
 
-import { AsyncLocalStorage } from 'node:async_hooks';
+import type { ContextStorage } from '../errors/context-storage.js';
+import { createContextStorage } from '../errors/context-storage.js';
 import type { Logger, LogContext, LogLevel } from './logger-interface.js';
 
 /**
@@ -67,21 +68,21 @@ export function formatContext(context: LogContext): string {
 }
 
 /**
- * Context-aware logger that merges AsyncLocalStorage context
+ * Context-aware logger that merges context from ContextStorage
  * Wraps a base logger with automatic context injection
  */
 export class ContextLogger implements Logger {
-  private storage: AsyncLocalStorage<LogContext>;
+  private storage: ContextStorage<LogContext>;
 
   constructor(
     private baseLogger: Logger,
-    storage?: AsyncLocalStorage<LogContext>,
+    storage?: ContextStorage<LogContext>,
   ) {
-    this.storage = storage ?? new AsyncLocalStorage<LogContext>();
+    this.storage = storage ?? createContextStorage<LogContext>('logger');
   }
 
   /**
-   * Get merged context from AsyncLocalStorage and provided context
+   * Get merged context from ContextStorage and provided context
    */
   private getMergedContext(context?: LogContext): LogContext | undefined {
     const asyncContext = this.storage.getStore() ?? {};
@@ -166,7 +167,7 @@ export class ContextLogger implements Logger {
  */
 export function createContextLogger(
   baseLogger: Logger,
-  storage?: AsyncLocalStorage<LogContext>,
+  storage?: ContextStorage<LogContext>,
 ): ContextLogger {
   return new ContextLogger(baseLogger, storage);
 }

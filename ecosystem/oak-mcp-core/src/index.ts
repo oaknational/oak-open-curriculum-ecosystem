@@ -11,15 +11,46 @@ export { scrubEmail, scrubSensitiveData } from './chora/aither/index.js';
 export { createConsoleLogger, getLogLevelValue } from './chora/aither/logging/index.js';
 export type { Logger, LogLevel } from './chora/aither/logging/index.js';
 
+// New error framework exports
+export {
+  ChainedError,
+  Result,
+  ErrorContextManager,
+  getDefaultErrorContextManager,
+  createContextStorage,
+  getErrorContextStorage,
+  registerContextStorageFactory,
+} from './chora/aither/errors/index.js';
+export type {
+  ResultType,
+  ValidationResult,
+  ErrorContext as AitherErrorContext,
+  ContextStorage,
+} from './chora/aither/errors/index.js';
+
 // Phaneron exports - manifest world layer (configuration)
 export { createMcpServerInfo, env } from './chora/phaneron/index.js';
 export { getString, getBoolean, getNumber, getLogLevel, getEnum } from './chora/phaneron/index.js';
+// Environment loading
+export {
+  ensureEnvironmentLoaded,
+  loadEnvironmentIfAvailable,
+  loadDotenvIfNeeded,
+} from './chora/phaneron/config/env-loader.js';
+// Runtime detection
+export {
+  detectRuntimeFeatures,
+  getRuntimeFeatures,
+  canAccessFilesystem,
+  canAccessEnvVars,
+} from './chora/phaneron/runtime-detection/features.js';
 export type {
   Environment,
   ServerConfig,
   McpServerInfo,
   BaseEnvironment,
 } from './chora/phaneron/index.js';
+export type { RuntimeFeatures } from './chora/phaneron/runtime-detection/features.js';
 
 // Stroma exports - types and contracts
 export type {

@@ -113,6 +113,6 @@ During Phase 4 Sub-phase 1, we successfully:
 1. Extracted universal chorai to oak-mcp-core (genotype)
 2. Kept Notion-specific chorai in oak-notion-mcp (phenotype)
 3. Established import patterns from phenotype to genotype
-4. Achieved zero dependencies in the genotype
+4. Achieved zero hard dependencies in the genotype (conditional dependencies with graceful degradation are permitted - see ADR-022)
 
 This pattern is now the architectural standard for all future phenotypes.

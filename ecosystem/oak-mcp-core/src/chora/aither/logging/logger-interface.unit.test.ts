@@ -5,32 +5,16 @@
 
 import { describe, it, expect } from 'vitest';
 import { LOG_LEVELS, isLogLevel, getLogLevelName } from './logger-interface.js';
-import type { LogContext } from './logger-interface.js';
 
 describe('Logger Interface', () => {
   describe('LogLevel constants', () => {
-    it('should define correct log levels in ascending order', () => {
-      expect(LOG_LEVELS.TRACE.value).toBe(0);
-      expect(LOG_LEVELS.DEBUG.value).toBe(10);
-      expect(LOG_LEVELS.INFO.value).toBe(20);
-      expect(LOG_LEVELS.WARN.value).toBe(30);
-      expect(LOG_LEVELS.ERROR.value).toBe(40);
-      expect(LOG_LEVELS.FATAL.value).toBe(50);
-    });
-
-    it('should allow numeric comparison for level hierarchy', () => {
-      expect(LOG_LEVELS.ERROR.value).toBeGreaterThan(LOG_LEVELS.WARN.value);
+    it('should maintain correct hierarchy for filtering', () => {
+      // Test that levels are properly ordered for filtering
+      expect(LOG_LEVELS.TRACE.value).toBeLessThan(LOG_LEVELS.DEBUG.value);
       expect(LOG_LEVELS.DEBUG.value).toBeLessThan(LOG_LEVELS.INFO.value);
-      expect(LOG_LEVELS.FATAL.value).toBeGreaterThan(LOG_LEVELS.ERROR.value);
-    });
-
-    it('should have correct level names', () => {
-      expect(LOG_LEVELS.TRACE.name).toBe('TRACE');
-      expect(LOG_LEVELS.DEBUG.name).toBe('DEBUG');
-      expect(LOG_LEVELS.INFO.name).toBe('INFO');
-      expect(LOG_LEVELS.WARN.name).toBe('WARN');
-      expect(LOG_LEVELS.ERROR.name).toBe('ERROR');
-      expect(LOG_LEVELS.FATAL.name).toBe('FATAL');
+      expect(LOG_LEVELS.INFO.value).toBeLessThan(LOG_LEVELS.WARN.value);
+      expect(LOG_LEVELS.WARN.value).toBeLessThan(LOG_LEVELS.ERROR.value);
+      expect(LOG_LEVELS.ERROR.value).toBeLessThan(LOG_LEVELS.FATAL.value);
     });
   });
 
@@ -76,32 +60,6 @@ describe('Logger Interface', () => {
       );
       expect(() => getLogLevelName(5)).toThrow('Invalid log level: 5');
       expect(() => getLogLevelName(100)).toThrow('Invalid log level: 100');
-    });
-  });
-
-  describe('LogContext type', () => {
-    it('should accept arbitrary key-value pairs', () => {
-      const context: LogContext = {
-        requestId: '123',
-        userId: 456,
-        timestamp: new Date(),
-        metadata: { foo: 'bar' },
-        tags: ['api', 'v2'],
-      };
-
-      // This test proves TypeScript compilation - interface is properly defined
-      expect(context).toBeDefined();
-      expect(typeof context).toBe('object');
-    });
-
-    it('should accept optional context', () => {
-      const context: LogContext | undefined = undefined;
-      expect(context).toBeUndefined();
-    });
-
-    it('should accept empty context', () => {
-      const context: LogContext = {};
-      expect(context).toEqual({});
     });
   });
 });

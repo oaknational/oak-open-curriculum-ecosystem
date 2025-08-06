@@ -50,6 +50,7 @@
       ]
     },
     "lint": {
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [".eslintcache"],
       "inputs": [
@@ -99,9 +100,11 @@
       "outputs": [],
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", "e2e-tests/**/*.ts", "vitest.e2e.config.ts"],
-      "env": ["NOTION_API_KEY", "RUN_E2E"]
+      "env": ["NOTION_API_KEY", "RUN_E2E", "LOG_LEVEL"],
+      "passThroughEnv": ["RUN_E2E", "NOTION_API_KEY", "LOG_LEVEL"]
     },
     "type-check": {
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [],
       "inputs": [

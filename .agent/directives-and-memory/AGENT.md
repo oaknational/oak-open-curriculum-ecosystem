@@ -106,8 +106,8 @@ The workspace structure follows a biological inheritance model:
 
 - **Genotype** (`ecosystem/oak-mcp-core`): The genetic blueprint
   - Contains morphai, stroma, aither, phaneron
-  - Zero runtime dependencies
-  - Pure abstractions and utilities
+  - Zero hard dependencies (conditional deps with graceful degradation allowed - see ADR-022)
+  - Pure abstractions and runtime-adaptive utilities
   
 - **Phenotype** (`ecosystem/oak-notion-mcp`): The environmental expression
   - Implements the abstract patterns from morphai

@@ -17,11 +17,6 @@ export async function startOrganism(): Promise<void> {
   log('[PSYCHON] Awakening the organism...');
 
   try {
-    // Load environment variables
-    log('[PSYCHON] Loading environment...');
-    const dotenv = await import('dotenv');
-    dotenv.config();
-
     // Import and run wiring
     log('[PSYCHON] Wiring components...');
     const { setupAndStartServer } = await import('./wiring.js');
