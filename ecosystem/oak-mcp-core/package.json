@@ -8,7 +8,6 @@
     "genotype",
     "framework"
   ],
-  "author": "Oak National Academy",
   "license": "MIT",
   "type": "module",
   "exports": {
