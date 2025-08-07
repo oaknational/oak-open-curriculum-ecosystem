@@ -6,35 +6,35 @@
 
 Create a production-ready MCP server that safely exposes Notion resources and tools to LLMs, enabling AI agents to manage Notion workspaces with human oversight and confirmation.
 
-### Evolved Vision - The Morphai/Organa/Psycha Architecture
+### Evolved Vision - The Moria/Histoi/Psycha Architecture
 
 Transform from monolithic genotype/phenotype model to a three-tier biological ecosystem:
 
-- **Morphai (Pure Forms)**: Abstract patterns and interfaces - the Platonic forms
-- **Organa (Transplantable Organs)**: Adaptive implementations that work across organisms
-- **Psycha (Living Organisms)**: Complete applications composed from morphai and organa
-- **Ecosystem Formation**: Multiple organisms sharing transplantable organs
+- **Moria (Molecules/Atoms)**: Abstract patterns and interfaces - the smallest building blocks
+- **Histoi (Transplantable Tissues)**: Adaptive implementations that work across organisms
+- **Psycha (Living Organisms)**: Complete applications composed from moria and histoi
+- **Ecosystem Formation**: Multiple organisms sharing transplantable tissues
 
 ## Target Architecture Overview
 
 ### Three Biological Categories
 
-1. **Morphai** (`ecosystem/morphai/`)
+1. **Moria** (`ecosystem/moria/`)
    - Pure abstractions, interfaces, and patterns
    - No runtime code, no dependencies, no IO
-   - Package: `@oaknational/mcp-morphai`
+   - Package: `@oaknational/mcp-moria`
 
-2. **Organa** (`ecosystem/organa/`)
+2. **Histoi** (`ecosystem/histoi/`)
    - Transplantable, adaptive implementations
    - Runtime adaptation (Node.js, Edge, Browser)
-   - Packages: `@oaknational/mcp-organ-logger`, `@oaknational/mcp-organ-storage`, `@oaknational/mcp-organ-transport`, etc.
+   - Packages: `@oaknational/mcp-histos-logger`, `@oaknational/mcp-histos-storage`, `@oaknational/mcp-histos-transport`, etc.
    - Tree-shakeable through conditional exports
-   - Transport organ supports both stdio (local) and Streamable HTTP (remote)
+   - Transport tissue supports both stdio (local) and Streamable HTTP (remote)
 
 3. **Psycha** (`ecosystem/psycha/`)
    - Complete living applications
    - Packages: `@oaknational/notion-mcp-server`, `@oaknational/github-mcp-server`, etc.
-   - Compose morphai + selected organs
+   - Compose moria + selected histoi
 
 ### Key Architectural Properties
 
@@ -363,25 +363,25 @@ oak-notion-mcp/                 # Repository root
 - Beta feedback incorporated before stable release
 - **Ecosystem readiness**: Designed for future symbiotic relationships
 
-### Phase 5: Ecosystem Evolution to Morphai/Organa/Psycha
+### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha
 
-**Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable organs
+**Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues
 
 **Core Insight**: Different kinds of shared code want to live in different places. Oak-mcp-core violates the Single Responsibility Principle by trying to be three things: pure abstractions, runtime capabilities, AND development conveniences. This creates fundamental architectural tension.
 
 **Rationale**: Phase 4's success revealed this tension - the genotype tries to contain both DNA (pure forms) AND organ implementations (runtime-specific code). The solution separates these into three biologically-coherent categories.
 
-**Target Architecture**: See [ADR-023](../docs/architecture/architectural-decisions/023-morphai-organa-psycha-architecture.md) and [Phase 5 Plan](phase-5-morphai-organa-psycha-evolution.md) for complete vision
+**Target Architecture**: See [ADR-023](../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) and [Phase 5 Plan](phase-5-moria-histoi-psycha-evolution.md) for complete vision
 
 **Biological Alignment**:
 
-- **Morphai = DNA/Genome**: Pure information, instructions, potential
-- **Organa = Universal Organs**: Like organs that can work across species (xenotransplantation)
-- **Psycha = Complete Organisms**: Living applications composed from genetic patterns and organs
+- **Moria = Molecules/Atoms**: The smallest building blocks - pure patterns
+- **Histoi = Connective Tissues**: Like tissues that can be transplanted between organisms
+- **Psycha = Complete Organisms**: Living applications composed from molecules and connected by tissues
 
-**Architectural Resolution**: This resolves the Library vs Framework tension - morphai provides libraries (tools), organa provides adaptive capabilities, and psycha compose what they need. Consumer truly becomes responsible for IO.
+**Architectural Resolution**: This resolves the Library vs Framework tension - moria provides libraries (tools), histoi provides adaptive capabilities, and psycha compose what they need. Consumer truly becomes responsible for IO.
 
-**Deployment Flexibility**: The transport organ enables the same MCP server to run either:
+**Deployment Flexibility**: The transport tissue enables the same MCP server to run either:
 
 - **Locally**: As a subprocess using stdio transport (current implementation)
 - **Remotely**: On edge runtimes using Streamable HTTP transport (future implementation)
@@ -390,18 +390,18 @@ oak-notion-mcp/                 # Repository root
 **Key Transformations**:
 
 1. **Split oak-mcp-core** into:
-   - `@oaknational/mcp-morphai`: Pure abstractions and interfaces (the DNA)
-   - Multiple organ packages: Adaptive, transplantable implementations
+   - `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms)
+   - Multiple tissue packages: Adaptive, transplantable implementations
 
-2. **Create Organ Packages**:
-   - `@oaknational/mcp-organ-logger`: Adaptive logging (Node/Edge/Browser)
-   - `@oaknational/mcp-organ-storage`: Adaptive storage (FileSystem/KV Store)
-   - `@oaknational/mcp-organ-env`: Adaptive environment (process.env/context)
+2. **Create Tissue Packages**:
+   - `@oaknational/mcp-histos-logger`: Adaptive logging (Node/Edge/Browser)
+   - `@oaknational/mcp-histos-storage`: Adaptive storage (FileSystem/KV Store)
+   - `@oaknational/mcp-histos-env`: Adaptive environment (process.env/context)
    - Each with tree-shakeable runtime adaptations
 
 3. **Reorganize into Biological Directories**:
-   - `ecosystem/morphai/`: Pure forms
-   - `ecosystem/organa/`: Transplantable organs
+   - `ecosystem/moria/`: Pure molecules/atoms
+   - `ecosystem/histoi/`: Transplantable tissues
    - `ecosystem/psycha/`: Living organisms
 
 4. **Enable Runtime Adaptation** (Three Patterns):
@@ -410,23 +410,23 @@ oak-notion-mcp/                 # Repository root
    - **Bundler**: Configure bundler to force specific runtime
    - Tree-shaking via conditional exports and dynamic imports
 
-5. **Create Transport Organ** for deployment flexibility:
-   - `@oaknational/mcp-organ-transport` with stdio and Streamable HTTP
+5. **Create Transport Tissue** for deployment flexibility:
+   - `@oaknational/mcp-histos-transport` with stdio and Streamable HTTP
    - Session management for stateful remote operations
    - Automatic transport selection based on deployment context
 
 **Documentation Updates Required**:
 
 - [ ] Update architecture-overview.md with new model
-- [ ] Update all ADRs to reference morphai/organa/psycha
+- [ ] Update all ADRs to reference moria/histoi/psycha
 - [ ] Create migration guide from current to target
 - [ ] Update developer onboarding documentation
 - [ ] Update all README files in affected directories
 
 **Success Metrics**:
 
-- Zero bundled dependencies in morphai
-- <10KB bundle addition per organ
+- Zero bundled dependencies in moria
+- <10KB bundle addition per tissue
 - Tree-shaking removes unused runtimes
 - Type safety maintained across all environments
 - Existing tests continue to pass
@@ -434,10 +434,13 @@ oak-notion-mcp/                 # Repository root
 **Critical Success Factors** (Ongoing Practices):
 
 1. **Maintain strict boundaries** - No cross-organism imports
-2. **Keep morphai pure** - No runtime code in abstractions
+2. **Keep moria pure** - No runtime code in abstractions (zero dependencies)
 3. **Ensure tree-shaking** - Use dynamic imports and conditional exports
-4. **Document adaptation** - Clear docs on how organs adapt
-5. **Version carefully** - Organs are shared dependencies
+4. **Document adaptation** - Clear docs on how tissues adapt
+5. **Version carefully** - Tissues are shared dependencies
+6. **Use TDD throughout** - Design with tests first, especially for pure functions
+7. **Run quality gates** - After each sub-phase: format → type-check → lint → test → build
+8. **No compatibility layers** - Direct migration, not gradual transition
 
 **Future Evolution Enabled**:
 

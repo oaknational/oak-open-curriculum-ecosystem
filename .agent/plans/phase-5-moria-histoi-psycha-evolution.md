@@ -1,8 +1,8 @@
-# Phase 5: Morphai/Organa/Psycha Evolution Plan
+# Phase 5: Moria/Histoi/Psycha Evolution Plan
 
 ## Overview
 
-Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable organs, based on [ADR-023](../../docs/architecture/architectural-decisions/023-morphai-organa-psycha-architecture.md).
+Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues, based on [ADR-023](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md).
 
 ## Core Insight
 
@@ -14,27 +14,30 @@ Different kinds of shared code want to live in different places. The current oak
 
 ## Implementation Sub-phases
 
-### Sub-phase 5.1: Create Morphai Package
+### Sub-phase 5.1: Create Moria Package
 
-**Complexity**: Foundation - Extracting pure abstractions  
-**Outcome**: Pure forms package with zero dependencies
+**Complexity**: Foundation - Extracting pure molecules/atoms  
+**Outcome**: Pure building blocks package with zero dependencies
 
 **Tasks**:
 
-- [ ] Create `ecosystem/morphai/@oaknational/mcp-morphai/` directory structure
+- [ ] Create `ecosystem/moria/@oaknational/mcp-moria/` directory structure
+- [ ] Write tests FIRST for all pure interfaces (TDD approach)
 - [ ] Extract pure interfaces from oak-mcp-core:
   - [ ] Logger, StorageProvider, EnvironmentProvider, EventBus interfaces
   - [ ] Tool, Handler, Registry abstract patterns
   - [ ] Pure TypeScript types
+- [ ] Write tests FIRST for pure algorithms (TDD approach)
 - [ ] Extract pure algorithms:
   - [ ] Validation functions (no Zod dependency)
   - [ ] Parsing functions (pure transformations)
   - [ ] Transformation utilities
 - [ ] Configure package.json with zero dependencies
-- [ ] Set package naming: `@oaknational/mcp-morphai`
-- [ ] Set up build pipeline for morphai
-- [ ] Write tests for all pure functions
-- [ ] Update oak-mcp-core to depend on morphai
+- [ ] Set package naming: `@oaknational/mcp-moria`
+- [ ] Set up build pipeline for moria
+- [ ] Verify 100% test coverage for all pure functions
+- [ ] Update oak-mcp-core to depend on moria
+- [ ] Run quality gates: format → type-check → lint → test → build
 
 **Success Criteria**:
 
@@ -43,15 +46,15 @@ Different kinds of shared code want to live in different places. The current oak
 - All interfaces well-documented
 - Package builds and publishes successfully
 
-### Sub-phase 5.2: Create Logger Organ
+### Sub-phase 5.2: Create Logger Tissue
 
-**Complexity**: First Organ - Multi-runtime implementation  
-**Sequential**: Follows morphai creation  
+**Complexity**: First Tissue - Multi-runtime implementation  
+**Sequential**: Follows moria creation  
 **Outcome**: Adaptive logging that works in any environment
 
 **Tasks**:
 
-- [ ] Create `ecosystem/organa/@oaknational/mcp-organ-logger/` structure
+- [ ] Create `ecosystem/histoi/@oaknational/mcp-histos-logger/` structure
 - [ ] Implement adaptive logger:
   - [ ] `node.ts` - Node.js implementation with full features
   - [ ] `edge.ts` - Edge implementation with constraints
@@ -83,10 +86,10 @@ Different kinds of shared code want to live in different places. The current oak
   }
   ```
 
-- [ ] Implement Logger interface from morphai
+- [ ] Implement Logger interface from moria
 - [ ] Add tree-shaking tests
 - [ ] Performance benchmarks (<1ms overhead)
-- [ ] Update oak-mcp-core and oak-notion-mcp to use organ
+- [ ] Update oak-mcp-core and oak-notion-mcp to use tissue
 
 **Success Criteria**:
 
@@ -95,24 +98,24 @@ Different kinds of shared code want to live in different places. The current oak
 - <1ms logging overhead
 - Type-safe across all environments
 
-### Sub-phase 5.3: Create Storage Organ
+### Sub-phase 5.3: Create Storage Tissue
 
-**Complexity**: Second Organ - Multi-backend abstraction  
-**Sequential**: Follows logger organ to establish patterns  
+**Complexity**: Second Tissue - Multi-backend abstraction  
+**Sequential**: Follows logger tissue to establish patterns  
 **Outcome**: Adaptive storage for different runtimes
 
 **Tasks**:
 
-- [ ] Create `ecosystem/organa/@oaknational/mcp-organ-storage/` structure
+- [ ] Create `ecosystem/histoi/@oaknational/mcp-histos-storage/` structure
 - [ ] Implement adaptive storage:
   - [ ] `node.ts` - FileSystem-based storage
   - [ ] `edge.ts` - KV store-based storage
   - [ ] `adaptive.ts` - Runtime detection
-- [ ] Implement StorageProvider interface from morphai
+- [ ] Implement StorageProvider interface from moria
 - [ ] Add migration utilities for data portability
 - [ ] Configure conditional exports
 - [ ] Write comprehensive tests
-- [ ] Update consumers to use storage organ
+- [ ] Update consumers to use storage tissue
 
 **Success Criteria**:
 
@@ -121,15 +124,15 @@ Different kinds of shared code want to live in different places. The current oak
 - Zero data loss during operations
 - <10ms operation overhead
 
-### Sub-phase 5.4: Create Environment Organ
+### Sub-phase 5.4: Create Environment Tissue
 
-**Complexity**: Simple Organ - Environment abstraction  
+**Complexity**: Simple Tissue - Environment abstraction  
 **Sequential**: Quick implementation after storage  
 **Outcome**: Adaptive environment variable access
 
 **Tasks**:
 
-- [ ] Create `ecosystem/organa/@oaknational/mcp-organ-env/` structure
+- [ ] Create `ecosystem/histoi/@oaknational/mcp-histos-env/` structure
 - [ ] Implement adaptive environment:
   - [ ] `node.ts` - process.env + dotenv support
   - [ ] `edge.ts` - Context-based env vars
@@ -137,8 +140,8 @@ Different kinds of shared code want to live in different places. The current oak
 - [ ] Graceful degradation when dotenv unavailable
 - [ ] Type-safe environment variable access
 - [ ] Configure conditional exports
-- [ ] Update consumers to use env organ
-- [ ] Use `workspace:^` protocol for morphai dependency
+- [ ] Update consumers to use env tissue
+- [ ] Use `workspace:^` protocol for moria dependency
 
 **Success Criteria**:
 
@@ -147,20 +150,22 @@ Different kinds of shared code want to live in different places. The current oak
 - Type-safe environment access
 - Zero runtime errors from missing env
 
-### Sub-phase 5.5: Create Transport Organ
+### Sub-phase 5.5: Create Transport Tissue
 
-**Complexity**: Complex Organ - Network protocols and session management  
-**Sequential**: Final organ, building on established patterns  
+**Complexity**: Complex Tissue - Network protocols and session management  
+**Sequential**: Final tissue, building on established patterns  
 **Outcome**: Adaptive transport for local and remote MCP servers
 
 **Tasks**:
 
-- [ ] Create `ecosystem/organa/@oaknational/mcp-organ-transport/` structure
+- [ ] Create `ecosystem/histoi/@oaknational/mcp-histos-transport/` structure
+- [ ] Write tests FIRST for transport interfaces (TDD approach)
 - [ ] Implement transport mechanisms:
   - [ ] `stdio.ts` - Local subprocess transport
   - [ ] `http-streamable.ts` - Remote Streamable HTTP (NOT SSE)
   - [ ] `session.ts` - Session management for stateful remote
   - [ ] `adaptive.ts` - Transport selection based on config
+- [ ] Add validation at ALL boundaries (Zod schemas for external signals)
 - [ ] Design transport abstraction interface
 - [ ] Define RemoteSession interface for stateful operations
 - [ ] Implement connection pooling for remote
@@ -168,6 +173,7 @@ Different kinds of shared code want to live in different places. The current oak
 - [ ] Configure conditional exports
 - [ ] Write integration tests for both transports
 - [ ] Document SSE deprecation clearly
+- [ ] Run quality gates after implementation
 
 **Success Criteria**:
 
@@ -189,13 +195,13 @@ Different kinds of shared code want to live in different places. The current oak
 
   ```text
   ecosystem/
-  ├── morphai/
-  │   └── @oaknational/mcp-morphai/
-  ├── organa/
-  │   ├── @oaknational/mcp-organ-logger/
-  │   ├── @oaknational/mcp-organ-storage/
-  │   ├── @oaknational/mcp-organ-env/
-  │   └── @oaknational/mcp-organ-transport/
+  ├── moria/
+  │   └── @oaknational/mcp-moria/
+  ├── histoi/
+  │   ├── @oaknational/mcp-histos-logger/
+  │   ├── @oaknational/mcp-histos-storage/
+  │   ├── @oaknational/mcp-histos-env/
+  │   └── @oaknational/mcp-histos-transport/
   └── psycha/
       └── @oaknational/notion-mcp-server/
   ```
@@ -220,17 +226,18 @@ Different kinds of shared code want to live in different places. The current oak
 
 **Complexity**: Decomposition - Breaking monolith into parts  
 **Sequential**: After restructuring  
-**Outcome**: oak-mcp-core split into morphai and organs
+**Outcome**: oak-mcp-core completely replaced (NOT wrapped)
 
 **Tasks**:
 
 - [ ] Identify remaining value in oak-mcp-core
-- [ ] Move pure abstractions to morphai
-- [ ] Move runtime capabilities to appropriate organs
-- [ ] Create migration guide for existing consumers
-- [ ] Deprecate oak-mcp-core package
-- [ ] Update all dependencies
-- [ ] Clean up redundant code
+- [ ] Move pure abstractions to moria
+- [ ] Move runtime capabilities to appropriate tissues
+- [ ] Create REPLACEMENT guide (not compatibility layer)
+- [ ] DELETE oak-mcp-core package entirely
+- [ ] Update all dependencies to use new packages directly
+- [ ] Clean up ALL redundant code
+- [ ] Ensure NO backward compatibility code remains
 
 **Success Criteria**:
 
@@ -258,7 +265,7 @@ Different kinds of shared code want to live in different places. The current oak
 
 **Success Criteria**:
 
-- <10KB per organ when tree-shaken
+- <10KB per tissue when tree-shaken
 - Zero unused code in production bundles
 - Bundle size regression tests in CI
 - Clear documentation for bundler setup
@@ -271,15 +278,21 @@ Different kinds of shared code want to live in different places. The current oak
 
 **Tasks**:
 
-- [ ] Update architecture-overview.md
-- [ ] Create morphai/organa/psycha concept guide
-- [ ] Write migration guide from old to new architecture
-- [ ] Create example organisms using shared organs
-- [ ] Update all README files
+- [ ] Update architecture-overview.md with moria/histoi/psycha model
+- [ ] Update ARCHITECTURE_MAP.md with new workspace structure
+- [ ] Update biological-philosophy.md with workspace architecture
+- [ ] Update high-level-architecture.md with new model
+- [ ] Update README.md to reflect new architecture
+- [ ] Update docs/naming.md with moria/histoi/psycha terms
+- [ ] Update all agent-guidance/*.md files for new architecture
+- [ ] Create moria/histoi/psycha concept guide
+- [ ] Write migration guide from genotype/phenotype to moria/histoi/psycha
+- [ ] Create example organisms using shared histoi
+- [ ] Update all package README files
 - [ ] Create troubleshooting guide
 - [ ] Document package naming convention:
-  - Morphai: `@oaknational/mcp-morphai`
-  - Organs: `@oaknational/mcp-organ-{name}`
+  - Moria: `@oaknational/mcp-moria`
+  - Tissues: `@oaknational/mcp-histos-{name}`
   - Organisms: `@oaknational/{service}-mcp-server`
 - [ ] Document runtime adaptation patterns:
   - Pattern 1: Automatic runtime detection
@@ -294,7 +307,34 @@ Different kinds of shared code want to live in different places. The current oak
 - Migration path documented
 - Troubleshooting guide complete
 
-### Sub-phase 5.10: Performance Validation
+### Sub-phase 5.10: ESLint Configuration Updates
+
+**Complexity**: Architectural Enforcement - Import boundary rules  
+**Sequential**: After documentation, before performance validation  
+**Outcome**: ESLint enforces moria/histoi/psycha boundaries
+
+**Tasks**:
+
+- [ ] Implement workspace-eslint-rules.md configuration in eslint.config.base.ts
+- [ ] Add import-x/no-restricted-paths zones for moria isolation (zero dependencies)
+- [ ] Add import-x/no-restricted-paths zones for histoi independence (no cross-tissue imports)
+- [ ] Add import-x/no-restricted-paths zones for psycha isolation (no cross-organism imports)
+- [ ] Update ecosystem/oak-mcp-core/eslint.config.ts for moria rules
+- [ ] Update ecosystem/oak-notion-mcp/eslint.config.ts for psycha rules
+- [ ] Create ecosystem/histoi/*/eslint.config.ts templates for tissue packages
+- [ ] Test ESLint rules with example violations to ensure they catch errors
+- [ ] Add ESLint rule documentation to developer guide
+- [ ] Configure IDE integration for real-time import violation feedback
+
+**Success Criteria**:
+
+- ESLint prevents moria from importing anything external
+- ESLint prevents histoi from importing other histoi or psycha
+- ESLint prevents psycha from importing other psycha
+- All legitimate imports still work correctly
+- Clear error messages guide developers to correct patterns
+
+### Sub-phase 5.11: Performance Validation
 
 **Complexity**: Quality Assurance - Cross-environment testing  
 **Sequential**: Final validation step  
@@ -329,15 +369,20 @@ Different kinds of shared code want to live in different places. The current oak
 ## Critical Success Factors
 
 1. **Maintain strict boundaries** - No cross-organism imports
-2. **Keep morphai pure** - No runtime code in abstractions
+2. **Keep moria pure** - No runtime code in abstractions (zero dependencies)
 3. **Ensure tree-shaking** - Use dynamic imports and conditional exports
-4. **Document adaptation** - Clear docs on how organs adapt
-5. **Version carefully** - Organs are shared dependencies
+4. **Document adaptation** - Clear docs on how tissues adapt
+5. **Version carefully** - Tissues are shared dependencies
+6. **Follow TDD rigorously** - Write tests first, especially for pure functions
+7. **Run quality gates** - After EVERY sub-phase completion
+8. **No compatibility layers** - Clean replacement, never gradual migration
+9. **Keep it simple** - Always ask: could it be simpler without compromising quality?
+10. **Validate at boundaries** - All external signals must be validated with Zod
 
 ## Success Metrics
 
 - **Architecture**: Three-tier separation achieved
-- **Bundle Size**: <10KB per organ, <50KB total for minimal setup
+- **Bundle Size**: <10KB per tissue, <50KB total for minimal setup
 - **Performance**: <1ms overhead for adaptations
 - **Type Safety**: 100% type coverage across environments
 - **Tree-Shaking**: Zero unused code in production
@@ -353,22 +398,24 @@ Different kinds of shared code want to live in different places. The current oak
 ## Linear Implementation Order
 
 **Sequential Phases**:
-1. **Foundation**: Create morphai package (5.1)
-2. **First Organ**: Logger establishes organ patterns (5.2)
-3. **Core Organs**: Storage (5.3) then Environment (5.4)
-4. **Complex Organ**: Transport with session management (5.5)
+1. **Foundation**: Create moria package (5.1)
+2. **First Tissue**: Logger establishes tissue patterns (5.2)
+3. **Core Tissues**: Storage (5.3) then Environment (5.4)
+4. **Complex Tissue**: Transport with session management (5.5)
 5. **Restructure**: Directory reorganization (5.6)
 6. **Decompose**: Split oak-mcp-core (5.7)
 7. **Optimize**: Tree-shaking and bundle size (5.8)
 8. **Document**: Comprehensive guides (5.9)
-9. **Validate**: Performance testing (5.10)
+9. **Enforce**: ESLint boundary rules (5.10)
+10. **Validate**: Performance testing (5.11)
 
 **Why This Order**:
-- Morphai first establishes the pure interfaces
-- Logger organ creates the pattern for other organs
-- Simple organs before complex ones
+- Moria first establishes the pure interfaces
+- Logger tissue creates the pattern for other tissues
+- Simple tissues before complex ones
 - Restructure only after all pieces exist
 - Optimize and document the stable architecture
+- Enforce boundaries through ESLint configuration
 - Validate everything works as expected
 
 ## Next Steps After Phase 5

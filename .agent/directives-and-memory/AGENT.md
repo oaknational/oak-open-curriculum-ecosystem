@@ -75,9 +75,28 @@ Run quality gates 1-5 in order after changes and before commits.
 
 ## Architectural Understanding
 
-### The Four Types of Chorai
+### Two Complementary Models
 
-The biological architecture now recognizes **four types of chorai** (pervasive infrastructure):
+The architecture operates at two different scales:
+
+#### Workspace Architecture (Package Organization)
+
+**Moria → Histoi → Psycha**
+
+- **Moria** (`ecosystem/moria/`): Pure atoms/molecules - interfaces, types, algorithms with zero dependencies
+- **Histoi** (`ecosystem/histoi/`): Transplantable tissues - runtime-adaptive components that can work across organisms
+- **Psycha** (`ecosystem/psycha/`): Living organisms - complete applications
+
+#### Psychon Architecture (Within Each Organism)
+
+Each psychon contains both:
+
+1. **Linear Hierarchy**: Organelles → Cells (Kytia) → Organs (Organa)
+2. **Cross-Cutting Chorai**: Four types of pervasive infrastructure
+
+### The Four Types of Chorai (Within Psychon)
+
+The biological architecture recognizes **four types of chorai** (pervasive infrastructure within each psychon):
 
 1. **Morphai (μορφαί)** - The hidden forms, Platonic ideals that cast shadows (organa) in the manifest world
    - Abstract patterns and interfaces (ToolExecutor, RequestHandler, etc.)
@@ -102,17 +121,19 @@ The biological architecture now recognizes **four types of chorai** (pervasive i
 
 ### Genotype/Phenotype Model
 
-The workspace structure follows a biological inheritance model:
+The genotype/phenotype model continues within the workspace:
 
 - **Genotype** (`ecosystem/oak-mcp-core`): The genetic blueprint
-  - Contains morphai, stroma, aither, phaneron
+  - Contains the four chorai (morphai, stroma, aither, phaneron)
   - Zero hard dependencies (conditional deps with graceful degradation allowed - see ADR-022)
   - Pure abstractions and runtime-adaptive utilities
+  - Will export packages to moria and histoi workspace levels
   
 - **Phenotype** (`ecosystem/oak-notion-mcp`): The environmental expression
   - Implements the abstract patterns from morphai
   - Contains organa that instantiate the forms
   - Specific to Notion integration
+  - Lives in psycha workspace level
 
 ## Remember
 
