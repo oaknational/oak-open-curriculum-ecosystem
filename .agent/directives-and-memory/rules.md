@@ -23,7 +23,43 @@ All of these rules MUST be followed at all times.
 
 ### Architecture (Biological Model with Greek Nomenclature)
 
-Think in biological scales:
+Think in biological scales at two levels:
+
+#### Workspace-Level Architecture (Package Organization)
+
+**Moria → Histoi → Psycha** - The three-tier ecosystem:
+
+- **Moria (Molecules/Atoms)** = Pure abstractions with zero dependencies
+  - Interfaces, types, pure algorithms
+  - NO external dependencies, NO I/O
+  - Example: `Logger` interface, `StorageProvider` interface
+  
+- **Histoi (Tissues/Matrices)** = Runtime-adaptive connective tissues
+  - Bind organisms together, provide connectivity
+  - Adapt to runtime environment (Node.js vs Edge vs Browser)
+  - Example: Adaptive logger, adaptive storage
+  
+- **Psycha (Living Organisms)** = Complete applications
+  - Compose moria abstractions + histoi tissues
+  - Full MCP servers or other complete apps
+  - Example: `oak-notion-mcp`, `github-mcp`
+
+Key principles:
+
+- **Moria has ZERO dependencies** - Not even TypeScript utility libraries
+- **Histoi are transplantable** - Same tissue works across different organisms
+- **Psycha compose, not inherit** - Pull in what they need from moria/histoi
+- **No circular dependencies** - Strict hierarchy: Psycha → Histoi → Moria
+
+Import rules:
+
+- **Moria**: Cannot import ANYTHING external (zero dependencies)
+- **Histoi**: Can import from Moria, cannot import from other Histoi or Psycha
+- **Psycha**: Can import from Moria and Histoi, cannot import from other Psycha
+
+#### Psychon-Level Architecture (Within Each Organism)
+
+Think in biological scales within each psychon:
 
 - **Chora/Stroma** = Structural matrix (types, contracts, schemas - compile-time only)
 - **Pure functions** = Organelles (smallest units of functionality)
@@ -79,11 +115,23 @@ export type { NotionServices } from './types';
 
 ### Testing
 
+#### Workspace-Level Testing
+
+- **Moria (pure abstractions)**: Unit tests only, no mocks, no I/O, test files named `*.test.ts`
+- **Histoi (adaptive tissues)**: Unit tests for pure logic, integration tests for runtime adaptation
+- **Psycha (complete apps)**: Integration tests for assembly, E2E tests for full behavior
+
+#### Psychon-Level Testing
+
 - **Pure functions (organelles)**: Unit test with no mocks, no side effects, no I/O
 - **Module integration (cells)**: Test with simple injected mocks, verify membrane behaviour
 - **System integration (chorai/organa)**: Test component interactions with mocked boundaries
 - **Real I/O**: Only in E2E tests
+
+#### Universal Testing Rules
+
 - **Each test proves ONE thing** - No duplicate proofs
 - **No useless tests** - Each test must prove something useful about the product code
 - **No complex logic in tests** - Complexity in tests means refactoring is needed
 - **No skipped tests** - Fix it or delete it
+- **TDD for Moria** - Write tests FIRST for all pure abstractions

@@ -27,7 +27,7 @@ The Moria/Histoi/Psycha workspace architecture requires specific ESLint rules to
 }
 ```
 
-### 2. Histoi (Transplantable Tissues)
+### 2. Histoi (Tissues/Matrices)
 
 **Location**: `ecosystem/histoi/`  
 **Packages**: `@oaknational/mcp-histos-*`

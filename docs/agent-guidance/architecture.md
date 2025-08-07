@@ -1,202 +1,320 @@
-# Biological Architecture Guide for AI Agents
+# Biological Architecture Guide
 
-**THIS IS THE AUTHORITATIVE ARCHITECTURAL REFERENCE FOR AI AGENTS**
+**THIS IS THE AUTHORITATIVE ARCHITECTURAL REFERENCE**
 
 ## Executive Summary
 
-This codebase implements a **Biological Architecture with Greek Nomenclature**, organized in a **genotype/phenotype model**:
+This codebase implements a **Biological Architecture with Greek Nomenclature**, organized at two complementary scales:
 
-**Genotype** (`oak-mcp-core`): The genetic blueprint
-- **Morphai (Μορφαί)**: Abstract patterns (Platonic forms) that define essence
-- **Core Chorai**: Universal infrastructure (stroma, aither, phaneron)
-- Zero hard dependencies (conditional dependencies with graceful degradation permitted - see ADR-022)
+### Workspace Architecture (Package Organization)
+**Moria → Histoi → Psycha** - The three-tier ecosystem:
 
-**Phenotype** (`oak-notion-mcp`): The environmental expression
-- **Organa (Ὄργανα)**: Discrete organs that instantiate morphai patterns
-- **Psychon (Ψυχόν)**: The ensouled whole that brings everything to life
-- Domain-specific implementations
+- **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies
+  - *Example*: `Logger` interface, `StorageProvider` interface, pure algorithms
+- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms
+  - *Example*: Adaptive logger (console vs pino), adaptive storage (localStorage vs fs)
+- **Psycha (Living Organisms)**: Complete applications
+  - *Example*: `oak-notion-mcp` server, `github-mcp` server
+
+### Psychon Architecture (Within Each Organism)
+**Chorai + Organa → Psychon** - The internal structure:
+
+- **Chorai**: Pervasive infrastructure fields that flow everywhere
+- **Organa**: Discrete business logic organs with clear boundaries
+- **Psychon**: The ensouled whole that emerges from integration
 
 This is not metaphor - it's mathematically grounded in complex systems theory. The Greek terms eliminate confusion and create precise architectural boundaries.
 
-## Quick Reference
+## Visual Architecture
 
-When working with code, ask yourself:
-
-1. **Is this cross-cutting or discrete?**
-   - Cross-cutting → Goes in `chora/`
-   - Discrete → Goes in `organa/`
-
-2. **For cross-cutting concerns, what type?**
-   - Types/contracts → `chora/stroma/`
-   - Logging/events → `chora/aither/`
-   - Configuration → `chora/phaneron/`
-
-3. **For discrete components:**
-   - Each organ in `organa/` must have NO imports from other organs
-   - Communication happens via dependency injection
-
-## Philosophical Grounding
-
-### Why Greek Nomenclature?
-
-1. **Precision**: Each Greek term has specific philosophical meaning
-2. **No Baggage**: Unlike "system", "service", "component" which mean too many things
-3. **Cognitive Distance**: Foreign terms force clear thinking
-
-### The Living System Model
-
-Software is not a machine - it's a living organism:
-
-- It grows and evolves
-- It has natural boundaries (membranes)
-- Components cooperate like organs
-- Infrastructure flows like blood/nerves
-
-## Detailed Architecture
-
-### Chora - Cross-Cutting Fields
-
-**Definition**: Infrastructure that pervades the entire system, cannot be contained.
-
-#### Morphai (Μορφαί) - The Hidden Forms
-
-- Location: `chora/morphai/` (genotype only)
-- Contains: Abstract patterns with zero implementation
-- Nature: Platonic ideals that organs aspire to instantiate
-- Example: `ToolExecutor<TInput, TOutput>`, `RequestHandler<TRequest, TResponse>`
-- Philosophy: Define potential, organs express actuality
-
-#### Stroma (Στρῶμα) - Structural Matrix
-
-- Location: `chora/stroma/`
-- Contains: Types, contracts, schemas
-- Nature: Compile-time only, zero runtime code
-- Example: Interface definitions, type declarations
-
-#### Aither (Αἰθήρ) - Divine Flows
-
-- Location: `chora/aither/`
-- Contains: Logging, event propagation, error handling
-- Nature: Flows throughout like nervous system
-- Example: Logger that every component uses
-
-#### Phaneron (Φανερόν) - Visible Manifestation
-
-- Location: `chora/phaneron/`
-- Contains: Runtime configuration
-- Nature: Makes system state visible
-- Example: Environment config, feature flags
-
-#### Eidola (Εἴδωλα) - Phantoms/Simulacra
-
-- Location: `chora/eidola/` (phenotype only)
-- Contains: Test doubles, mocks, factories
-- Nature: Shadows of the living system for testing
-- Example: Mock Notion client, test factories
-
-### Organa - Discrete Organs
-
-**Definition**: Bounded business logic components with specific functions.
-
-- Location: `organa/*/`
-- Current organs: `notion/`, `mcp/`
-- Rules:
-  - NO cross-organ imports
-  - Clear public API via `index.ts`
-  - Dependencies injected, not imported
-
-### Psychon - The Ensouled Whole
-
-**Definition**: The living application that emerges from all parts.
-
-- Location: `psychon/` directory (wiring layer)
-- Purpose: Wires all chorai and organa together
-- Nature: More than sum of parts - the life force
-
-## Categorization Decision Tree
-
-```text
-Is this code cross-cutting (used everywhere)?
-├─ YES: Goes in chora/
-│   ├─ Is it compile-time structure?
-│   │   └─ YES: chora/stroma/
-│   ├─ Does it flow/propagate at runtime?
-│   │   └─ YES: chora/aither/
-│   └─ Is it runtime configuration?
-│       └─ YES: chora/phaneron/
-└─ NO: Goes in organa/
-    └─ Create new organ with clear boundaries
+### Workspace Level
+```
+┌─────────────────── ECOSYSTEM ───────────────────┐
+│                                                  │
+│  ┌─────────── MORIA ───────────┐                │
+│  │   Pure Abstractions          │                │
+│  │   Zero Dependencies          │                │
+│  │   Interfaces & Algorithms    │                │
+│  └──────────────────────────────┘                │
+│              ↓                                   │
+│  ┌─────────── HISTOI ──────────┐                │
+│  │   Connective Tissues/Matrices│                │
+│  │   Runtime-Adaptive           │                │
+│  │   Transplantable             │                │
+│  └──────────────────────────────┘                │
+│              ↓                                   │
+│  ┌─────────── PSYCHA ──────────┐                │
+│  │   Living Organisms           │                │
+│  │   Complete Applications      │                │
+│  │   (Contains Psychon)         │                │
+│  └──────────────────────────────┘                │
+└──────────────────────────────────────────────────┘
 ```
 
-## Examples
-
-### Correct Patterns
-
-```typescript
-// ✅ CORRECT: Organ using injected dependencies
-// organa/notion/index.ts
-export function createNotionOperations(deps: { logger: Logger; config: Config }) {
-  // Use injected dependencies
-}
+### Psychon Level (Within Each Organism)
+```
+┌─────────────────────────── PSYCHON ───────────────────────────┐
+│                    (The Ensouled Whole)                        │
+│                                                                │
+│  ┌─────────────────── CHORAI ────────────────────┐           │
+│  │         (Pervasive Fields - Flow Everywhere)   │           │
+│  │                                                 │           │
+│  │  ┌─── Morphai ────┐  ┌──── Stroma ────┐      │           │
+│  │  │ Hidden Forms   │  │ Types/Contracts│      │           │
+│  │  │ (Platonic)     │  │ (Compile-time) │      │           │
+│  │  └────────────────┘  └────────────────┘      │           │
+│  │                                                 │           │
+│  │  ┌──── Aither ────┐  ┌─── Phaneron ───┐      │           │
+│  │  │ Logging/Events │  │ Configuration  │      │           │
+│  │  │ (Divine Flows) │  │ (Manifestation)│      │           │
+│  │  └────────────────┘  └────────────────┘      │           │
+│  └─────────────────────────────────────────────────┘           │
+│                                                                │
+│  ┌─────────────────── ORGANA ─────────────────────┐           │
+│  │      (Discrete Organs - Bounded Logic)         │           │
+│  │                                                 │           │
+│  │  ┌──── Notion ────┐    ┌───── MCP ─────┐     │           │
+│  │  │ Notion API     │    │ MCP Protocol  │     │           │
+│  │  │ Integration    │    │ Server Logic  │     │           │
+│  │  └────────────────┘    └────────────────┘     │           │
+│  │         ⚡ No Cross-Organ Imports ⚡           │           │
+│  └─────────────────────────────────────────────────┘           │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-```typescript
-// ✅ CORRECT: Chora type definition
-// chora/stroma/contracts/logger.ts
-export interface Logger {
-  info(message: string): void;
-  error(message: string, error?: Error): void;
-}
+## Greek Nomenclature & Definitions
+
+### Workspace Level Terms
+
+| Greek Term | Pronunciation | Translation | Definition | Example |
+|------------|---------------|-------------|------------|---------|
+| **Moria** (Μόρια) | MO-ree-ah | Molecules/Atoms | Pure abstractions, zero dependencies | `Logger` interface |
+| **Histoi** (Ἱστοί) | hee-STOY | Tissues/Matrices | Runtime-adaptive connective tissues | Adaptive logger tissue |
+| **Psycha** (ψυχά) | psoo-KHA | Living Organisms | Complete applications | `oak-notion-mcp` server |
+
+### Psychon Level Terms
+
+| Greek Term | Pronunciation | Translation | Definition | Example |
+|------------|---------------|-------------|------------|---------|
+| **Morphai** (Μορφαί) | mor-FAI | Forms | Hidden forms, Platonic ideals | `ToolExecutor` pattern |
+| **Stroma** (Στρῶμα) | STRO-mah | Support/Foundation | Types and contracts (compile-time) | `NotionBlock` type |
+| **Aither** (Αἰθήρ) | eye-THAIR | Air/Essence | Logging and events (pervasive flows) | Logger flowing through layers |
+| **Phaneron** (Φανερόν) | fa-ne-RON | Manifestation | Configuration and environment | `.env` configuration |
+| **Organa** (Ὄργανα) | OR-ga-na | Organs | Discrete business logic | Notion search organ |
+| **Psychon** (Ψυχόν) | psoo-KHON | Soul/Living Whole | The wiring layer | Main application class |
+
+## Quick Decision Trees
+
+### Workspace Level: Which Package?
+```
+Is it a pure abstraction with zero dependencies?
+  └─ YES → ecosystem/moria/ (molecules/atoms)
+
+Does it adapt to different runtime environments?
+  └─ YES → ecosystem/histoi/ (tissues/matrices)
+
+Is it a complete application?
+  └─ YES → ecosystem/psycha/ (living organisms)
 ```
 
-### Incorrect Patterns
+### Psychon Level: Where in the Organism?
+```
+Is it a type, contract, or schema?
+  └─ YES → chora/stroma/ (compile-time structure)
 
-```typescript
-// ❌ WRONG: Cross-organ import
-// organa/mcp/handler.ts
-import { notionClient } from '../notion/client.js';
-// FIX: Inject notion operations via dependencies
+Is it an abstract pattern or interface?
+  └─ YES → chora/morphai/ (Platonic forms)
 
-// ❌ WRONG: Business logic in chora
-// chora/aither/logging/notion-formatter.ts
-function formatNotionPage(page: Page) {}
-// FIX: Move to organa/notion/formatters/
+Does it need to flow everywhere?
+  ├─ Logging/Events? → chora/aither/ (divine flows)
+  └─ Configuration? → chora/phaneron/ (visible state)
 
-// ❌ WRONG: Infrastructure in organ
-// organa/notion/logger.ts
-export class NotionLogger {}
-// FIX: Use injected logger from chora/aither/
+Is it discrete business logic?
+  └─ YES → organa/{name}/ (bounded organ)
+
+Are you wiring everything together?
+  └─ YES → psychon/ (the soul/wiring layer)
 ```
 
 ## Import Rules
+
+### Workspace Level Import Rules
+
+```typescript
+// ✅ ALLOWED
+// Psycha can import from Histoi and Moria
+import { Logger } from '@oaknational/mcp-moria';
+import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+
+// Histoi can import from Moria
+import { StorageProvider } from '@oaknational/mcp-moria';
+
+// ❌ FORBIDDEN
+// Moria cannot import anything external
+import something from 'any-package'; // NO!
+
+// Histoi cannot import from other Histoi
+import { logger } from '@oaknational/mcp-histos-logger'; // NO!
+
+// Psycha cannot import from other Psycha
+import { service } from '@oaknational/github-mcp'; // NO!
+```
+
+### Psychon Level Import Rules
 
 1. **Chorai can import from chorai** (infrastructure builds on infrastructure)
 2. **Organa CANNOT import from other organa** (organs are independent)
 3. **Organa can import from chora** (organs use infrastructure)
 4. **Everything can import from stroma** (types are foundational)
 
+## Code Examples
+
+### Workspace Level Examples
+
+```typescript
+// ecosystem/moria/@oaknational/mcp-moria/src/interfaces/logger.ts
+// Pure abstraction - zero dependencies
+export interface Logger {
+  trace(message: string, context?: unknown): void;
+  debug(message: string, context?: unknown): void;
+  info(message: string, context?: unknown): void;
+  warn(message: string, context?: unknown): void;
+  error(message: string, error?: unknown, context?: unknown): void;
+}
+
+// ecosystem/histoi/@oaknational/mcp-histos-logger/src/adaptive.ts
+// Runtime-adaptive tissue
+import { Logger } from '@oaknational/mcp-moria';
+
+export function createAdaptiveLogger(): Logger {
+  if (typeof window !== 'undefined') {
+    return createBrowserLogger(); // Uses console
+  } else if (typeof process !== 'undefined') {
+    return createNodeLogger(); // Uses pino
+  } else {
+    return createEdgeLogger(); // Uses edge-compatible logger
+  }
+}
+
+// ecosystem/psycha/oak-notion-mcp/src/index.ts
+// Complete organism
+import { Logger } from '@oaknational/mcp-moria';
+import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { createNotionOperations } from './organa/notion/index.js';
+
+const logger = createAdaptiveLogger();
+const notion = createNotionOperations({ logger });
+```
+
+### Psychon Level Examples
+
+```typescript
+// ✅ CORRECT: Organ using injected dependencies
+// organa/notion/index.ts
+export function createNotionOperations(deps: { 
+  logger: Logger; // From aither
+  config: Config; // From phaneron
+}) {
+  // Use injected dependencies, no cross-organ imports
+}
+
+// ✅ CORRECT: Chora type definition
+// chora/stroma/contracts/logger.ts
+export interface Logger {
+  info(message: string): void;
+  error(message: string, error?: Error): void;
+}
+
+// ❌ WRONG: Cross-organ import
+// organa/mcp/handler.ts
+import { notionClient } from '../notion/client.js'; // NO!
+// FIX: Inject notion operations via dependencies
+
+// ❌ WRONG: Business logic in chora
+// chora/aither/logging/notion-formatter.ts
+function formatNotionPage(page: Page) {} // Too specific!
+// FIX: Move to organa/notion/formatters/
+```
+
+## Testing Strategy
+
+### Workspace Level Testing
+- **Moria**: Unit tests only, no mocks, no I/O (`*.test.ts`)
+- **Histoi**: Unit tests for pure logic, integration tests for runtime adaptation
+- **Psycha**: Integration tests for assembly, E2E tests for full behavior
+
+### Psychon Level Testing
+- **Pure functions (organelles)**: Unit test with no mocks
+- **Module integration (cells)**: Test with simple injected mocks
+- **System integration (chorai/organa)**: Test component interactions
+- **Real I/O**: Only in E2E tests
+
+## Biological Principles
+
+1. **Two complementary scales** - Workspace (Moria/Histoi/Psycha) and Psychon (Chorai/Organa)
+2. **Zero dependencies in Moria** - Pure abstractions must remain pure
+3. **Histoi are transplantable** - Same tissue works across different organisms
+4. **Chorai are fields** - Like electromagnetic fields, they pervade everything
+5. **Organa are discrete** - Like organs in a body, clear boundaries
+6. **No organ-to-organ imports** - Heart doesn't import from liver
+7. **Psychon integrates** - Like consciousness emerges from parts
+8. **Greek clarity** - Each term has ONE precise meaning
+
 ## For Architectural Review
 
 When reviewing architecture:
 
-1. **Check import directions** - Are boundaries respected?
-2. **Verify categorization** - Is each component in the right place?
-3. **Ensure independence** - Can organs function without each other?
-4. **Validate pervasiveness** - Do chorai truly flow everywhere?
+1. **Check workspace hierarchy** - Psycha → Histoi → Moria (never reverse)
+2. **Verify Moria purity** - Zero external dependencies
+3. **Confirm Histoi adaptability** - Runtime detection working?
+4. **Check import directions** - Are boundaries respected?
+5. **Verify categorization** - Is each component in the right place?
+6. **Ensure independence** - Can organs function without each other?
+7. **Validate pervasiveness** - Do chorai truly flow everywhere?
+
+## Common Questions
+
+**Q: What's the difference between Moria and Morphai?**  
+A: Moria is a workspace-level package (pure abstractions), Morphai is a type of chora within a psychon (Platonic forms)
+
+**Q: Can Histoi packages depend on each other?**  
+A: No, each tissue must be independent and transplantable
+
+**Q: Where do utilities go?**  
+A: Pure utilities → Moria. Runtime-adaptive utilities → Histoi. Domain-specific → appropriate organ
+
+**Q: How do organs communicate?**  
+A: Through dependency injection in psychon OR events via aither
+
+**Q: What about shared business logic?**  
+A: If truly shared → create a tissue in Histoi. If domain-specific → keep in organ
 
 ## Migration Path
 
-Current → Target:
+### Phase 4 → Phase 5
+- `oak-mcp-core` → Split into `moria` + multiple `histoi` packages
+- Genotype/Phenotype → Workspace tiers (Moria/Histoi/Psycha)
+- Monolithic core → Distributed responsibilities
 
+### Current Psychon Structure → Target
 - `substrate/` → `chora/stroma/`
 - `systems/logging/` → `chora/aither/logging/`
 - `systems/events/` → `chora/aither/events/`
 - `systems/config/` → `chora/phaneron/config/`
-- `organs/` → `organa/` (already done)
-- `server*.ts` + wiring → `psychon/` directory (the soul layer)
+- `server*.ts` + wiring → `psychon/` directory
+
+## Scientific Foundation
+
+This architecture is based on:
+
+- **Complex systems theory** - Heterogeneity = stability (Meena et al., 2023)
+- **Biological organization** - Real organisms have this multi-scale structure
+- **Empirical validation** - Proven across neuroscience, ecology, and ML domains
 
 ## References
 
+- [ADR-023: Moria/Histoi/Psycha Architecture](../architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md)
 - [ADR-020: Biological Architecture](../architecture/architectural-decisions/020-biological-architecture.md)
-- [Phase 3 Implementation Plan](../../.agent/plans/phase-3-biological-architecture.md)
-- [Boundary Enforcement with ESLint](../../.agent/reference/architecture/boundary-enforcement-with-eslint.md)
+- [Phase 5: Moria/Histoi/Psycha Evolution](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md)
+- [Testing Strategy](testing-strategy.md)
+- [Workspace ESLint Rules](../architecture/workspace-eslint-rules.md)

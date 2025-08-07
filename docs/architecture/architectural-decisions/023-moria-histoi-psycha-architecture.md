@@ -32,11 +32,11 @@ How packages relate to each other in the workspace:
    - Contents: Abstract patterns with zero dependencies, no IO
    - Metaphor: Like molecules that form the basic building blocks
 
-2. **Histoi (Ἱστοί) - Tissues**
+2. **Histoi (Ἱστοί) - Tissues/Matrices**
    - Location: `ecosystem/histoi/`  
    - Packages: Multiple tissue packages (`@oaknational/mcp-histos-*`)
-   - Nature: Connective tissue that can be transplanted between organisms
-   - Key Features: Runtime adaptation, tree-shaking, reusable across organisms
+   - Nature: Connective tissues/matrices that bind and connect organisms
+   - Key Features: Runtime adaptation, tree-shaking, transplantable across organisms
    - Examples:
      - `@oaknational/mcp-histos-logger` - Adaptive logging tissue
      - `@oaknational/mcp-histos-storage` - Adaptive storage tissue  
@@ -59,7 +59,7 @@ This dual model avoids naming conflicts - 'organa' remains as organs within psyc
 ### Biological Metaphor Alignment
 
 - **Moria = Molecules/Atoms**: The smallest building blocks - pure patterns with no implementation
-- **Histoi = Connective Tissues**: Like tissues that can be transplanted between organisms - adapt to their host environment, provide connections
+- **Histoi = Connective Tissues/Matrices**: Like tissues that form the connective matrix between organisms - transplantable, adaptive, binding
 - **Psycha = Complete Organisms**: Living, breathing applications composed of molecules and connected by tissues
 - **Chorai (within psychon) = Pervasive Infrastructure**: The four types (morphai, stroma, aither, phaneron) that flow through all levels
 

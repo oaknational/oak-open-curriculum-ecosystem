@@ -23,13 +23,36 @@
 - Integration point: A point in the code where multiple units are brought together to effect change in the larger system. Typically this is where IO interfaces are injected as arguments to functions, and where other configuration occurs. Integration points define boundaries of responsibility. Integration points have integration tests.
 - System: The complete MCP server exposed via stdio transport. Systems have E2E tests.
 
-### Biological Architecture Components
+### Workspace Architecture Components (Moria/Histoi/Psycha)
 
-- **Chora/Stroma**: Types and contracts (compile-time only) - Test with TypeScript compiler, no runtime tests needed
-- **Chora/Aither**: Logging and events (pervasive flows) - Test with unit tests for pure transformations, integration tests for flow behavior
-- **Chora/Phaneron**: Configuration (visible state) - Test with integration tests for validation and defaults
-- **Organa**: Discrete business logic organs - Test with unit tests for pure functions, integration tests at organ boundaries
-- **Psychon**: The wiring layer - Test with integration tests to verify proper assembly and dependency injection
+- **Moria (Molecules/Atoms)**: Pure abstractions (zero dependencies) - Test with unit tests only, no IO or mocks allowed
+  - *Example*: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
+  
+- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms - Test with unit tests for pure logic, integration tests for runtime adaptation
+  - *Example*: Adaptive logger that uses `console` in browser but `pino` in Node.js, storage tissue that uses `localStorage` in browser but `fs` in Node.js
+  
+- **Psycha (Living Organisms)**: Complete applications - Test with integration tests for assembly, E2E tests for full behaviour
+  - *Example*: `oak-notion-mcp` server, `github-mcp` server - complete MCP applications
+
+### Psychon Architecture Components (Within Each Organism)
+
+- **Chora/Morphai (Forms)**: Hidden forms and Platonic ideals - Test with unit tests for pure patterns
+  - *Example*: Abstract `ToolExecutor` pattern, `RequestHandler` interface that all tools implement
+  
+- **Chora/Stroma (Support/Foundation)**: Types and contracts (compile-time only) - Test with TypeScript compiler, no runtime tests needed
+  - *Example*: `NotionBlock` type, `MCPRequest` interface, `ToolResult` type
+  
+- **Chora/Aither (Air/Essence)**: Logging and events (pervasive flows) - Test with unit tests for pure transformations, integration tests for flow behaviour
+  - *Example*: Logger that flows through all layers, event bus for tool execution events
+  
+- **Chora/Phaneron (Manifestation)**: Configuration and perceivable environment - Test with integration tests for validation and defaults
+  - *Example*: `.env` configuration, runtime feature flags, API keys management
+  
+- **Organa (Organs)**: Discrete business logic organs - Test with unit tests for pure functions, integration tests at organ boundaries
+  - *Example*: Notion search organ, database query organ, page creation organ
+  
+- **Psychon (Soul/Living Whole)**: The wiring layer - Test with integration tests to verify proper assembly and dependency injection
+  - *Example*: Main application class that wires all organs together, dependency injection container
 
 ### Test Types
 
@@ -42,7 +65,7 @@ In-process tests are tests that validate code imported into the test process. Th
 
 #### Out-of-process tests
 
-Out-of-process tests are tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
+Out-of-process tests are tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
 - E2E test: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
 
@@ -51,9 +74,89 @@ Out-of-process tests are tests that validate a running _system_, the tests and t
 - Test Driven Development (TDD): Write UNIT tests before writing code. Unit tests PROVE engineering correctness. Unit tests can ONLY test pure functions with no side effects.
 - Behaviour Driven Development (BDD): Write integration tests before writing code. Integration tests PROVE we are creating the **desired behaviour and impact** at the integration point level and above.
 
-## Testing Biological Architecture
+## Testing Workspace Architecture (Moria/Histoi/Psycha)
+
+### Testing Moria (Pure Abstractions)
+
+**Key Principle**: Zero dependencies, pure abstractions only, test-first development
+
+```typescript
+// ecosystem/moria/@oaknational/mcp-moria/src/interfaces/logger.test.ts
+describe('Logger interface', () => {
+  it('defines logging contract', () => {
+    // Test that interface can be implemented
+    const mockLogger: Logger = {
+      trace: jest.fn(),
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      fatal: jest.fn(),
+    };
+    // Verify contract completeness
+  });
+});
+
+// ecosystem/moria/@oaknational/mcp-moria/src/algorithms/sort.test.ts
+describe('pure sorting algorithm', () => {
+  it('sorts arrays deterministically', () => {
+    // Test pure algorithm with no dependencies
+  });
+});
+```
+
+### Testing Histoi (Runtime-Adaptive Tissues)
+
+**Key Principle**: Test runtime adaptation, conditional exports, tree-shaking
+
+```typescript
+// ecosystem/histoi/logger/src/adapter.unit.test.ts
+describe('logger adapter', () => {
+  it('selects console logger in browser', () => {
+    // Test pure selection logic
+  });
+});
+
+// ecosystem/histoi/logger/src/index.integration.test.ts
+describe('logger tissue integration', () => {
+  it('adapts to runtime environment', () => {
+    // Test with mocked runtime detection
+  });
+});
+```
+
+### Testing Psycha (Complete Organisms)
+
+```typescript
+// ecosystem/psycha/oak-notion-mcp/psychon.integration.test.ts
+describe('Oak Notion MCP assembly', () => {
+  it('wires all components from moria and histoi', () => {
+    // Verify proper assembly of all layers
+  });
+});
+
+// e2e-tests/oak-notion-mcp.e2e.test.ts
+describe('Oak Notion MCP E2E', () => {
+  it('responds to MCP protocol requests', () => {
+    // Test complete system behavior
+  });
+});
+```
+
+## Testing Psychon Architecture (Within Each Organism)
 
 ### Testing Chorai (Pervasive Fields)
+
+**Chora/Morphai (Foundational Structures)**:
+
+```typescript
+// psychon/chora/morphai/transform.unit.test.ts
+describe('foundational transformations', () => {
+  it('transforms data structures purely', () => {
+    // Test pure transformation logic
+  });
+});
+```
 
 **Chora/Stroma (Types/Contracts)**:
 
@@ -128,6 +231,15 @@ describe('Psychon assembly', () => {
 ### Testing Anti-Patterns to Avoid
 
 ```typescript
+// ❌ DON'T add dependencies to moria packages
+// ecosystem/moria/@oaknational/mcp-moria/src/uses-external-lib.ts
+
+// ❌ DON'T test implementation details in moria
+// Only test that interfaces can be implemented
+
+// ❌ DON'T import psycha from histoi
+// Histoi must remain transplantable between organisms
+
 // ❌ DON'T test cross-organ communication directly
 // organa/mcp/mcp-calls-notion.test.ts
 
@@ -145,6 +257,6 @@ describe('Psychon assembly', () => {
 - Use the MCP client SDK for E2E tests
 - Use the canonical mocking approaches for the testing tools in use for a given test.
 - Tests live next to to code they test, not in a `test` directory.
-  - Unit tests live next to the pure function file containing the functions they test. They MUST end in `*.unit.test.ts`.
+  - Unit tests live next to the pure function file containing the functions they test. They MUST end in `*.unit.test.ts` or `*.test.ts` for moria packages (which contain only unit tests).
   - Integration tests live next to the integration point file containing the integration points they test. They MUST end in `*.integration.test.ts`.
-  - E2E tests are an exception and live in the `e2e-tests` directory. This is because they test a running _system_ rather than importing code to test. They MUST end in `*.e2e.test.ts`.
+  - E2E tests are an exception and live in the `e2e-tests` directory. This is because they test a running *system* rather than importing code to test. They MUST end in `*.e2e.test.ts`.

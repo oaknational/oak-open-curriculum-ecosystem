@@ -4,13 +4,26 @@
 
 Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues, based on [ADR-023](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md).
 
+## Architecture Definitions
+
+### Workspace Architecture (Package Organization)
+
+- **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies - interfaces, types, algorithms
+  - *Example*: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
+  
+- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms
+  - *Example*: Adaptive logger using console/pino, storage tissue using localStorage/fs
+  
+- **Psycha (Living Organisms)**: Complete applications composed from moria and connected by histoi
+  - *Example*: `oak-notion-mcp` server, `github-mcp` server
+
 ## Core Insight
 
 Different kinds of shared code want to live in different places. The current oak-mcp-core violates the Single Responsibility Principle by trying to be three things simultaneously:
 
-1. Pure abstractions (no IO)
-2. Runtime capabilities (need IO)
-3. Development conveniences (opinionated patterns)
+1. Pure abstractions (no IO) → Will become **Moria**
+2. Runtime capabilities (need IO) → Will become **Histoi**
+3. Development conveniences (opinionated patterns) → Will be distributed appropriately
 
 ## Implementation Sub-phases
 
@@ -398,6 +411,7 @@ Different kinds of shared code want to live in different places. The current oak
 ## Linear Implementation Order
 
 **Sequential Phases**:
+
 1. **Foundation**: Create moria package (5.1)
 2. **First Tissue**: Logger establishes tissue patterns (5.2)
 3. **Core Tissues**: Storage (5.3) then Environment (5.4)
@@ -410,6 +424,7 @@ Different kinds of shared code want to live in different places. The current oak
 10. **Validate**: Performance testing (5.11)
 
 **Why This Order**:
+
 - Moria first establishes the pure interfaces
 - Logger tissue creates the pattern for other tissues
 - Simple tissues before complex ones

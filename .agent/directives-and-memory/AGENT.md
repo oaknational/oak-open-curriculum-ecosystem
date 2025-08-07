@@ -83,9 +83,12 @@ The architecture operates at two different scales:
 
 **Moria → Histoi → Psycha**
 
-- **Moria** (`ecosystem/moria/`): Pure atoms/molecules - interfaces, types, algorithms with zero dependencies
-- **Histoi** (`ecosystem/histoi/`): Transplantable tissues - runtime-adaptive components that can work across organisms
-- **Psycha** (`ecosystem/psycha/`): Living organisms - complete applications
+- **Moria (Molecules/Atoms)** (`ecosystem/moria/`): Pure abstractions - interfaces, types, algorithms with zero dependencies
+  - *Example*: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
+- **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`): Runtime-adaptive connective tissues that bind organisms
+  - *Example*: Adaptive logger using console/pino, storage tissue using localStorage/fs
+- **Psycha (Living Organisms)** (`ecosystem/psycha/`): Complete applications
+  - *Example*: `oak-notion-mcp` server, `github-mcp` server
 
 #### Psychon Architecture (Within Each Organism)
 
@@ -98,26 +101,30 @@ Each psychon contains both:
 
 The biological architecture recognizes **four types of chorai** (pervasive infrastructure within each psychon):
 
-1. **Morphai (μορφαί)** - The hidden forms, Platonic ideals that cast shadows (organa) in the manifest world
+1. **Morphai (μορφαί) - Forms** - Hidden forms and Platonic ideals that cast shadows (organa) in the manifest world
    - Abstract patterns and interfaces (ToolExecutor, RequestHandler, etc.)
    - Live in the genotype (oak-mcp-core) as pure types
    - Define the essence of what organs aspire to be
    - No implementation, only potential
+   - *Example*: Abstract `ToolExecutor` pattern that all tools implement
 
-2. **Stroma** - The connective tissue, structural support
-   - Core types and contracts
+2. **Stroma - Support/Foundation** - The connective tissue, structural support
+   - Core types and contracts (compile-time only)
    - Dependency interfaces
    - Event schemas
+   - *Example*: `NotionBlock` type, `MCPRequest` interface
 
-3. **Aither** - The breathable air, life-giving essence
-   - Logging and observability
+3. **Aither - Air/Essence** - The breathable air, life-giving essence
+   - Logging and observability (pervasive flows)
    - Error handling
    - Event bus
+   - *Example*: Logger that flows through all layers
 
-4. **Phaneron** - The manifest environment, perceivable world
+4. **Phaneron - Manifestation** - The manifest environment, perceivable world
    - Configuration and environment
    - External integrations
    - Runtime context
+   - *Example*: `.env` configuration, API keys management
 
 ### Genotype/Phenotype Model
 

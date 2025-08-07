@@ -11,7 +11,7 @@ Create a production-ready MCP server that safely exposes Notion resources and to
 Transform from monolithic genotype/phenotype model to a three-tier biological ecosystem:
 
 - **Moria (Molecules/Atoms)**: Abstract patterns and interfaces - the smallest building blocks
-- **Histoi (Transplantable Tissues)**: Adaptive implementations that work across organisms
+- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms
 - **Psycha (Living Organisms)**: Complete applications composed from moria and histoi
 - **Ecosystem Formation**: Multiple organisms sharing transplantable tissues
 
@@ -376,7 +376,7 @@ oak-notion-mcp/                 # Repository root
 **Biological Alignment**:
 
 - **Moria = Molecules/Atoms**: The smallest building blocks - pure patterns
-- **Histoi = Connective Tissues**: Like tissues that can be transplanted between organisms
+- **Histoi = Connective Tissues/Matrices**: Like tissues that form the connective matrix between organisms - transplantable, adaptive, binding
 - **Psycha = Complete Organisms**: Living applications composed from molecules and connected by tissues
 
 **Architectural Resolution**: This resolves the Library vs Framework tension - moria provides libraries (tools), histoi provides adaptive capabilities, and psycha compose what they need. Consumer truly becomes responsible for IO.
