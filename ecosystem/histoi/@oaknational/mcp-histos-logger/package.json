@@ -1,0 +1,77 @@
+{
+  "name": "@oaknational/mcp-histos-logger",
+  "version": "0.1.0",
+  "description": "Adaptive logging tissue for multi-runtime MCP applications",
+  "type": "module",
+  "main": "./dist/adaptive.js",
+  "module": "./dist/adaptive.js",
+  "types": "./dist/types.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "node": {
+        "import": "./dist/node.mjs",
+        "require": "./dist/node.cjs"
+      },
+      "edge-light": "./dist/edge.mjs",
+      "worker": "./dist/edge.mjs",
+      "browser": "./dist/edge.mjs",
+      "default": "./dist/adaptive.mjs"
+    },
+    "./node": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/node.mjs"
+    },
+    "./edge": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/edge.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,json,md}\"",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@oaknational/mcp-moria": "workspace:^",
+    "consola": "^3.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "rimraf": "^6.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oak-national/oak-ai-experiments.git",
+    "directory": "ecosystem/histoi/@oaknational/mcp-histos-logger"
+  },
+  "keywords": [
+    "mcp",
+    "logging",
+    "tissue",
+    "adaptive",
+    "multi-runtime"
+  ],
+  "license": "MIT",
+  "author": "Oak National Academy",
+  "sideEffects": false
+}

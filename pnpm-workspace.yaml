@@ -6,3 +6,5 @@ packages:
   - 'ecosystem/*'
   # Moria packages (pure abstractions)
   - 'ecosystem/moria/@oaknational/*'
+  # Histoi packages (runtime-adaptive tissues)
+  - 'ecosystem/histoi/@oaknational/*'

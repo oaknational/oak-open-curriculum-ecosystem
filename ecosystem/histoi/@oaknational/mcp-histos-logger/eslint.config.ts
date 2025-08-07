@@ -1,0 +1,31 @@
+/**
+ * ESLint Configuration for mcp-histos-logger
+ *
+ * Logger tissue for multi-runtime support
+ */
+
+import { config as tsEslintConfig } from 'typescript-eslint';
+import { baseConfig } from '../../../../eslint.config.base.js';
+
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+const thisDir = dirname(fileURLToPath(import.meta.url));
+
+const config = tsEslintConfig(
+  ...baseConfig,
+  {
+    ignores: ['dist/**', 'coverage/**', '*.log', '.turbo/**'],
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.lint.json',
+        tsconfigRootDir: thisDir,
+      },
+    },
+  },
+);
+
+export default config;
