@@ -1,6 +1,7 @@
 /**
  * Node.js implementation of the Logger interface
- * Full-featured logging with rich formatting and file output support
+ * Uses Consola with the ability to add file transports and other Node.js-specific features
+ * The base Consola functionality works everywhere, but this version can leverage Node.js APIs
  */
 
 import { createConsola } from 'consola';
@@ -11,6 +12,8 @@ export class NodeLogger implements Logger {
   private contextData: Record<string, unknown>;
 
   constructor(options?: { level?: number; name?: string; context?: Record<string, unknown> }) {
+    // Create Consola with richer formatting options
+    // In Node.js we can also add file transports, use colors, etc.
     this.consola = createConsola({
       level: options?.level ?? 3,
       formatOptions: {

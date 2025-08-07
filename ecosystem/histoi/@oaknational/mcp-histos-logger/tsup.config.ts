@@ -3,6 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: {
     adaptive: 'src/adaptive.ts',
+    'consola-logger': 'src/consola-logger.ts',
     node: 'src/node.ts',
     edge: 'src/edge.ts',
     index: 'src/index.ts',
