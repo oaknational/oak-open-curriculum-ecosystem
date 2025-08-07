@@ -37,6 +37,32 @@ export interface Registry<TKey = string, TValue = unknown> {
 }
 
 /**
+ * Registry interface for plugin management
+ * Extends base Registry with plugin-specific functionality
+ */
+export interface PluginRegistry<T> extends Registry<string, T> {
+  /**
+   * Load a plugin with name property
+   */
+  load(plugin: T & { name: string }): void;
+
+  /**
+   * Unload a plugin by name
+   */
+  unload(name: string): void;
+
+  /**
+   * Check if a plugin is loaded
+   */
+  isLoaded(name: string): boolean;
+
+  /**
+   * Get metadata for a plugin
+   */
+  getMetadata(name: string): Record<string, unknown> | undefined;
+}
+
+/**
  * Registry that enforces type constraints
  */
 export interface TypedRegistry<T> {

@@ -17,6 +17,12 @@ export interface Handler<TInput = unknown, TOutput = unknown> {
 }
 
 /**
+ * Alias for Handler to maintain compatibility with event processing terminology
+ * Used in systems that prefer event-driven naming conventions
+ */
+export type EventProcessor<TEvent, TResult> = Handler<TEvent, TResult>;
+
+/**
  * Handler for asynchronous operations
  */
 export interface AsyncHandler<TInput = unknown, TOutput = unknown> {
@@ -71,6 +77,17 @@ export interface HandlerContext<TInput = unknown, TContext = unknown> {
    * Additional context for processing
    */
   context: TContext;
+
+  /**
+   * Optional abort signal for cancellation support
+   * Using unknown to avoid dependency on DOM types
+   */
+  signal?: unknown;
+
+  /**
+   * Optional metadata for extensibility
+   */
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -246,6 +263,16 @@ export interface LifecycleHandler<TInput = unknown, TOutput = unknown>
    * Called on error
    */
   onError?(input: TInput, error: Error): void;
+
+  /**
+   * Called on state change
+   */
+  onStateChange?(from: unknown, to: unknown): void;
+
+  /**
+   * Check if state transition is allowed
+   */
+  canTransition?(from: unknown, to: unknown): boolean;
 }
 
 /**

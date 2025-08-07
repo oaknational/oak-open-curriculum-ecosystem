@@ -23,6 +23,8 @@ Transform from monolithic genotype/phenotype model to a three-tier biological ec
    - Pure abstractions, interfaces, and patterns
    - No runtime code, no dependencies, no IO
    - Package: `@oaknational/mcp-moria`
+   - Designed for cross-repository sharing and reusability
+   - Compatible abstractions: EventProcessor, Handler, Registry, Result types
 
 2. **Histoi** (`ecosystem/histoi/`)
    - Transplantable, adaptive implementations

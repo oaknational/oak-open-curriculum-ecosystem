@@ -40,11 +40,18 @@ Different kinds of shared code want to live in different places. The current oak
   - [ ] Logger, StorageProvider, EnvironmentProvider, EventBus interfaces
   - [ ] Tool, Handler, Registry abstract patterns
   - [ ] Pure TypeScript types
+  - [ ] Add EventProcessor alias for Handler compatibility
+  - [ ] Enhanced LifecycleHandler with state transitions
+  - [ ] PluginRegistry interface for plugin patterns
+  - [ ] Enhanced HandlerContext with signal and metadata
 - [ ] Write tests FIRST for pure algorithms (TDD approach)
 - [ ] Extract pure algorithms:
   - [ ] Validation functions (no Zod dependency)
   - [ ] Parsing functions (pure transformations)
   - [ ] Transformation utilities
+  - [ ] Result helper functions (Ok, Err)
+  - [ ] State machine types and utilities
+  - [ ] Boundary pattern types (Pure, Effect, Boundary)
 - [ ] Configure package.json with zero dependencies
 - [ ] Set package naming: `@oaknational/mcp-moria`
 - [ ] Set up build pipeline for moria
