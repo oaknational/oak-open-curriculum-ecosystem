@@ -365,7 +365,10 @@ oak-notion-mcp/                 # Repository root
 - Beta feedback incorporated before stable release
 - **Ecosystem readiness**: Designed for future symbiotic relationships
 
-### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha
+### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
+
+**Status**: Sub-phase 5.1 (Moria Package) ✅ COMPLETED  
+**Last Updated**: 2025-01-07
 
 **Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues
 
@@ -389,11 +392,28 @@ oak-notion-mcp/                 # Repository root
 - **Remotely**: On edge runtimes using Streamable HTTP transport (future implementation)
 - Session management handles stateful operations for remote deployments
 
-**Key Transformations**:
+**Completed in Sub-phase 5.1**:
+
+✅ **Moria Package Created** (`@oaknational/mcp-moria`):
+- 242 tests passing with 100% coverage
+- Zero external dependencies achieved
+- Comprehensive utilities implemented:
+  - Result types for functional error handling (Ok, Err, isOk, isErr, etc.)
+  - Tool, Handler, Registry patterns with EventProcessor alias
+  - State machine types and utilities
+  - Boundary pattern types (Pure, Effect, Boundary)
+  - Validation utilities without external dependencies
+  - Parsing utilities for JSON, numbers, dates, URLs, emails, UUIDs, CSV
+  - Transformation utilities (mapObject, deepClone, pipe, compose, etc.)
+- oak-mcp-core successfully updated to depend on moria
+- Workspace configuration updated to include moria packages
+- All quality gates passing (format, type-check, lint, test, build)
+
+**Key Transformations** (Remaining):
 
 1. **Split oak-mcp-core** into:
-   - `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms)
-   - Multiple tissue packages: Adaptive, transplantable implementations
+   - ✅ `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms) - COMPLETED
+   - ⏳ Multiple tissue packages: Adaptive, transplantable implementations - NEXT
 
 2. **Create Tissue Packages**:
    - `@oaknational/mcp-histos-logger`: Adaptive logging (Node/Edge/Browser)

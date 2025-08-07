@@ -35,6 +35,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@oaknational/mcp-moria": "workspace:*",
     "dotenv": "^17.2.1"
   },
   "devDependencies": {

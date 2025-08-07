@@ -1,5 +1,9 @@
 # Phase 5: Moria/Histoi/Psycha Evolution Plan
 
+**Status**: IN PROGRESS  
+**Progress**: Sub-phase 5.1 (Moria Package) ✅ COMPLETED  
+**Last Updated**: 2025-01-07
+
 ## Overview
 
 Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues, based on [ADR-023](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md).
@@ -27,44 +31,72 @@ Different kinds of shared code want to live in different places. The current oak
 
 ## Implementation Sub-phases
 
-### Sub-phase 5.1: Create Moria Package
+### Sub-phase 5.1: Create Moria Package ✅ COMPLETED
 
 **Complexity**: Foundation - Extracting pure molecules/atoms  
 **Outcome**: Pure building blocks package with zero dependencies
 
 **Tasks**:
 
-- [ ] Create `ecosystem/moria/@oaknational/mcp-moria/` directory structure
-- [ ] Write tests FIRST for all pure interfaces (TDD approach)
-- [ ] Extract pure interfaces from oak-mcp-core:
-  - [ ] Logger, StorageProvider, EnvironmentProvider, EventBus interfaces
-  - [ ] Tool, Handler, Registry abstract patterns
-  - [ ] Pure TypeScript types
-  - [ ] Add EventProcessor alias for Handler compatibility
-  - [ ] Enhanced LifecycleHandler with state transitions
-  - [ ] PluginRegistry interface for plugin patterns
-  - [ ] Enhanced HandlerContext with signal and metadata
-- [ ] Write tests FIRST for pure algorithms (TDD approach)
-- [ ] Extract pure algorithms:
-  - [ ] Validation functions (no Zod dependency)
-  - [ ] Parsing functions (pure transformations)
-  - [ ] Transformation utilities
-  - [ ] Result helper functions (Ok, Err)
-  - [ ] State machine types and utilities
-  - [ ] Boundary pattern types (Pure, Effect, Boundary)
-- [ ] Configure package.json with zero dependencies
-- [ ] Set package naming: `@oaknational/mcp-moria`
-- [ ] Set up build pipeline for moria
-- [ ] Verify 100% test coverage for all pure functions
-- [ ] Update oak-mcp-core to depend on moria
-- [ ] Run quality gates: format → type-check → lint → test → build
+- [x] Create `ecosystem/moria/@oaknational/mcp-moria/` directory structure
+- [x] Write tests FIRST for all pure interfaces (TDD approach)
+- [x] Extract pure interfaces from oak-mcp-core:
+  - [x] Tool, Handler, Registry abstract patterns
+  - [x] Pure TypeScript types
+  - [x] Add EventProcessor alias for Handler compatibility
+  - [x] PluginRegistry interface for plugin patterns
+  - [x] Enhanced HandlerContext with signal and metadata
+  - [ ] Logger, StorageProvider, EnvironmentProvider, EventBus interfaces (deferred to histoi)
+  - [ ] Enhanced LifecycleHandler with state transitions (moved to future iteration)
+- [x] Write tests FIRST for pure algorithms (TDD approach)
+- [x] Extract pure algorithms:
+  - [x] Validation functions (no Zod dependency)
+  - [x] Parsing functions (pure transformations)
+  - [x] Transformation utilities
+  - [x] Result helper functions (Ok, Err)
+  - [x] State machine types and utilities
+  - [x] Boundary pattern types (Pure, Effect, Boundary)
+- [x] Configure package.json with zero dependencies
+- [x] Set package naming: `@oaknational/mcp-moria`
+- [x] Set up build pipeline for moria
+- [x] Verify 100% test coverage for all pure functions (242 tests passing)
+- [x] Update oak-mcp-core to depend on moria
+- [x] Run quality gates: format → type-check → lint → test → build
 
 **Success Criteria**:
 
-- Zero runtime dependencies
-- 100% test coverage for pure functions
-- All interfaces well-documented
-- Package builds and publishes successfully
+- ✅ Zero runtime dependencies achieved
+- ✅ 100% test coverage for pure functions (242 tests)
+- ✅ All interfaces well-documented
+- ✅ Package builds successfully
+- Ready for publishing to npm
+
+**Lessons Learned & RFC Insights**:
+
+- Result<T,E> with `ok` convention confirmed as correct choice
+- EventProcessor alias successfully maintains compatibility
+- Zero dependencies proven feasible for pure abstractions
+- Test-driven development essential for quality
+
+### Sub-phase 5.1.5: Moria Phase 2 Enhancements (NEW - from RFC)
+
+**Complexity**: Minor enhancements to existing package
+**Outcome**: Complete functional toolkit based on RFC feedback
+
+**Tasks** (from RFC discussion):
+
+- [ ] Add Maybe<T>/Option<T> type for nullable value handling
+- [ ] Implement Promise<Result<T,E>> pattern helpers for async operations
+- [ ] Extract test factory patterns from oak-mcp-core
+- [ ] Consider extracting deduplication module as suggested by Poirot
+- [ ] Add example migrations showing adoption patterns
+- [ ] Prepare for npm publishing with semantic versioning (0.x initially)
+
+**Success Criteria**:
+
+- Complete functional programming toolkit
+- Migration examples documented
+- Ready for external consumption
 
 ### Sub-phase 5.2: Create Logger Tissue
 
@@ -440,9 +472,29 @@ Different kinds of shared code want to live in different places. The current oak
 - Enforce boundaries through ESLint configuration
 - Validate everything works as expected
 
+## Cross-Repository Collaboration (NEW)
+
+Based on RFC-001 discussions, we should consider:
+
+1. **Shared Package Strategy**:
+   - Publish Moria to npm as `@shared/abstractions` or similar neutral namespace
+   - Enable both MCP framework and event processing systems to adopt
+   - Maintain backward compatibility through semantic versioning
+
+2. **Collaboration Model**:
+   - Use GitHub Gist for RFC discussions (currently private, consider making public)
+   - Multiple contributors (Poirot, Marple, others) can provide feedback
+   - Sync script enables distributed collaboration
+
+3. **Migration Path**:
+   - Create example migrations for both frameworks
+   - Show gradual adoption of shared abstractions
+   - Document benefits and trade-offs
+
 ## Next Steps After Phase 5
 
 - Phase 6: Oak Open Curriculum API MCP implementation
 - Phase 7: Production readiness and publishing
 - Phase 8: Safety controls for write operations
 - Phase 9: Ecosystem expansion with additional organisms
+- **NEW**: Consider publishing Moria as shared package for broader ecosystem

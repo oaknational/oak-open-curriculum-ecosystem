@@ -4,3 +4,5 @@
 packages:
   # All packages in the ecosystem directory
   - 'ecosystem/*'
+  # Moria packages (pure abstractions)
+  - 'ecosystem/moria/@oaknational/*'

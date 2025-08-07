@@ -96,8 +96,13 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.2.0)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.0)
 
+  ecosystem/moria/@oaknational/mcp-moria: {}
+
   ecosystem/oak-mcp-core:
     dependencies:
+      '@oaknational/mcp-moria':
+        specifier: workspace:*
+        version: link:../moria/@oaknational/mcp-moria
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1

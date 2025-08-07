@@ -66,6 +66,43 @@ export type { EventBus } from './chora/stroma/contracts/index.js';
 // Note: Eidola (test utilities) are intentionally not exported from the main package
 // They should only be imported directly in test files when needed
 
+// Re-export selected utilities from Moria for convenience
+// These are pure abstractions with zero dependencies
+export {
+  // Result utilities for functional error handling
+  Ok as MoriaOk,
+  Err as MoriaErr,
+  isOk as isMoriaOk,
+  isErr as isMoriaErr,
+  // Validation utilities
+  isString,
+  isNumber,
+  isBoolean,
+  isArray,
+  isObject,
+  isDefined,
+  isNonNullable,
+  // Parsing utilities
+  parseJSON,
+  parseNumber,
+  parseBoolean,
+  parseDate,
+  parseURL,
+  parseEmail,
+  // Transform utilities
+  mapObject,
+  filterObject,
+  pickKeys,
+  omitKeys,
+  deepClone,
+  deepMerge,
+  pipe,
+  compose,
+  memoize,
+  debounce,
+  throttle,
+} from '@oaknational/mcp-moria';
+
 // Morphai exports - abstract patterns (the hidden forms)
 export type {
   // Tool morphai

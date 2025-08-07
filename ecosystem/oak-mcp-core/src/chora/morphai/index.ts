@@ -9,9 +9,12 @@
  * Like the forms in Plato's cave allegory, morphai are the true reality
  * that organs imperfectly reflect. They define not what organs are,
  * but what organs aspire to be.
+ *
+ * NOTE: Core patterns have been moved to @oaknational/mcp-moria for cross-repo alignment.
+ * This module now re-exports from moria and adds any oak-mcp-core specific patterns.
  */
 
-// Tool morphai - the forms of tool creation
+// Tool morphai - re-exported from moria
 export type {
   ToolExecutor,
   ToolDefinition,
@@ -19,9 +22,10 @@ export type {
   ToolFactory,
   ToolRegistry,
   ToolValidator,
-} from './tools/types.js';
+} from '@oaknational/mcp-moria';
 
-// Handler morphai - the forms of request handling
+// Handler morphai - local patterns specific to oak-mcp-core
+// These extend beyond the basic Handler patterns in moria
 export type {
   RequestHandler,
   ResourceHandler,
@@ -42,7 +46,8 @@ export type {
   ErrorAggregator,
 } from './errors/types.js';
 
-// Registry morphai - the forms of collection management
+// Registry morphai - local patterns specific to oak-mcp-core
+// These patterns are more specialized than the base Registry in moria
 export type {
   Registry,
   FactoryRegistry,
@@ -52,3 +57,6 @@ export type {
   FilteredRegistry,
   MetadataRegistry,
 } from './registries/types.js';
+
+// Also re-export base Registry and PluginRegistry from moria as aliases
+export type { Registry as MoriaRegistry, PluginRegistry } from '@oaknational/mcp-moria';
