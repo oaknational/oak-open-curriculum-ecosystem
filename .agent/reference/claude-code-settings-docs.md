@@ -1,4 +1,5 @@
 <!-- cSpell:disable -->
+<!-- https://docs.anthropic.com/en/docs/claude-code/settings -->
 
 # Claude Code settings
 
@@ -11,17 +12,17 @@ Claude Code offers a variety of settings to configure its behavior to meet your 
 The `settings.json` file is our official mechanism for configuring Claude
 Code through hierarchical settings:
 
-- **User settings** are defined in `~/.claude/settings.json` and apply to all
+* **User settings** are defined in `~/.claude/settings.json` and apply to all
   projects.
-- **Project settings** are saved in your project directory:
-  - `.claude/settings.json` for settings that are checked into source control and shared with your team
-  - `.claude/settings.local.json` for settings that are not checked in, useful for personal preferences and experimentation. Claude Code will configure git to ignore `.claude/settings.local.json` when it is created.
-- For enterprise deployments of Claude Code, we also support **enterprise
+* **Project settings** are saved in your project directory:
+  * `.claude/settings.json` for settings that are checked into source control and shared with your team
+  * `.claude/settings.local.json` for settings that are not checked in, useful for personal preferences and experimentation. Claude Code will configure git to ignore `.claude/settings.local.json` when it is created.
+* For enterprise deployments of Claude Code, we also support **enterprise
   managed policy settings**. These take precedence over user and project
   settings. System administrators can deploy policies to:
-  - macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
-  - Linux and WSL: `/etc/claude-code/managed-settings.json`
-  - Windows: `C:\ProgramData\ClaudeCode\managed-settings.json`
+  * macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
+  * Linux and WSL: `/etc/claude-code/managed-settings.json`
+  * Windows: `C:\ProgramData\ClaudeCode\managed-settings.json`
 
 ```JSON Example settings.json
 {
@@ -74,33 +75,56 @@ Code through hierarchical settings:
 
 ### Settings precedence
 
-Settings are applied in order of precedence:
+Settings are applied in order of precedence (highest to lowest):
 
-1. Enterprise policies (see [IAM documentation](/en/docs/claude-code/iam#enterprise-managed-policy-settings))
-2. Command line arguments
-3. Local project settings
-4. Shared project settings
-5. User settings
+1. **Enterprise managed policies** (`managed-settings.json`)
+   * Deployed by IT/DevOps
+   * Cannot be overridden
 
-## Sub agent configuration
+2. **Command line arguments**
+   * Temporary overrides for a specific session
 
-Claude Code supports custom AI sub agents that can be configured at both user and project levels. These sub agents are stored as Markdown files with YAML frontmatter:
+3. **Local project settings** (`.claude/settings.local.json`)
+   * Personal project-specific settings
 
-- **User sub agents**: `~/.claude/agents/` - Available across all your projects
-- **Project sub agents**: `.claude/agents/` - Specific to your project and can be shared with your team
+4. **Shared project settings** (`.claude/settings.json`)
+   * Team-shared project settings in source control
 
-Sub agent files define specialized AI assistants with custom prompts and tool permissions. Learn more about creating and using sub agents in the [sub agents documentation](/en/docs/claude-code/sub-agents).
+5. **User settings** (`~/.claude/settings.json`)
+   * Personal global settings
+
+This hierarchy ensures that enterprise security policies are always enforced while still allowing teams and individuals to customize their experience.
+
+### Key points about the configuration system
+
+* **Memory files (CLAUDE.md)**: Contain instructions and context that Claude loads at startup
+* **Settings files (JSON)**: Configure permissions, environment variables, and tool behavior
+* **Slash commands**: Custom commands that can be invoked during a session with `/command-name`
+* **MCP servers**: Extend Claude Code with additional tools and integrations
+* **Precedence**: Higher-level configurations (Enterprise) override lower-level ones (User/Project)
+* **Inheritance**: Settings are merged, with more specific settings adding to or overriding broader ones
+
+## Subagent configuration
+
+Claude Code supports custom AI subagents that can be configured at both user and project levels. These subagents are stored as Markdown files with YAML frontmatter:
+
+* **User subagents**: `~/.claude/agents/` - Available across all your projects
+* **Project subagents**: `.claude/agents/` - Specific to your project and can be shared with your team
+
+Subagent files define specialized AI assistants with custom prompts and tool permissions. Learn more about creating and using subagents in the [subagents documentation](/en/docs/claude-code/sub-agents).
 
 ## Environment variables
 
 Claude Code supports the following environment variables to control its behavior:
 
-> All environment variables can also be configured in [`settings.json`](#available-settings). This is useful as a way to automatically set environment variables for each session, or to roll out a set of environment variables for your whole team or organization.
+<Note>
+  All environment variables can also be configured in [`settings.json`](#available-settings). This is useful as a way to automatically set environment variables for each session, or to roll out a set of environment variables for your whole team or organization.
+</Note>
 
 | Variable                                   | Purpose                                                                                                                                                            |
 | :----------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ANTHROPIC_API_KEY`                        | API key sent as `X-Api-Key` header, typically for the Claude SDK (for interactive usage, run `/login`)                                                             |
-| `ANTHROPIC_AUTH_TOKEN`                     | Custom value for the `Authorization` header (the value you set here will be prefixed with `Bearer`)                                                                |
+| `ANTHROPIC_AUTH_TOKEN`                     | Custom value for the `Authorization` header (the value you set here will be prefixed with `Bearer`)                                                               |
 | `ANTHROPIC_CUSTOM_HEADERS`                 | Custom headers you want to add to the request (in `Name: Value` format)                                                                                            |
 | `ANTHROPIC_MODEL`                          | Name of custom model to use (see [Model Configuration](/en/docs/claude-code/bedrock-vertex-proxies#model-configuration))                                           |
 | `ANTHROPIC_SMALL_FAST_MODEL`               | Name of [Haiku-class model for background tasks](/en/docs/claude-code/costs)                                                                                       |
@@ -136,16 +160,17 @@ Claude Code supports the following environment variables to control its behavior
 | `VERTEX_REGION_CLAUDE_3_7_SONNET`          | Override region for Claude 3.7 Sonnet when using Vertex AI                                                                                                         |
 | `VERTEX_REGION_CLAUDE_4_0_OPUS`            | Override region for Claude 4.0 Opus when using Vertex AI                                                                                                           |
 | `VERTEX_REGION_CLAUDE_4_0_SONNET`          | Override region for Claude 4.0 Sonnet when using Vertex AI                                                                                                         |
+| `VERTEX_REGION_CLAUDE_4_1_OPUS`            | Override region for Claude 4.1 Opus when using Vertex AI                                                                                                           |
 
 ## Configuration options
 
 To manage your configurations, use the following commands:
 
-- List settings: `claude config list`
-- See a setting: `claude config get <key>`
-- Change a setting: `claude config set <key> <value>`
-- Push to a setting (for lists): `claude config add <key> <value>`
-- Remove from a setting (for lists): `claude config remove <key> <value>`
+* List settings: `claude config list`
+* See a setting: `claude config get <key>`
+* Change a setting: `claude config set <key> <value>`
+* Push to a setting (for lists): `claude config add <key> <value>`
+* Remove from a setting (for lists): `claude config remove <key> <value>`
 
 By default `config` changes your project configuration. To manage your global configuration, use the `--global` (or `-g`) flag.
 
@@ -194,6 +219,6 @@ files by blocking Write operations to certain paths.
 
 ## See also
 
-- [Identity and Access Management](/en/docs/claude-code/iam#configuring-permissions) - Learn about Claude Code's permission system
-- [IAM and access control](/en/docs/claude-code/iam#enterprise-managed-policy-settings) - Enterprise policy management
-- [Troubleshooting](/en/docs/claude-code/troubleshooting#auto-updater-issues) - Solutions for common configuration issues
+* [Identity and Access Management](/en/docs/claude-code/iam#configuring-permissions) - Learn about Claude Code's permission system
+* [IAM and access control](/en/docs/claude-code/iam#enterprise-managed-policy-settings) - Enterprise policy management
+* [Troubleshooting](/en/docs/claude-code/troubleshooting#auto-updater-issues) - Solutions for common configuration issues

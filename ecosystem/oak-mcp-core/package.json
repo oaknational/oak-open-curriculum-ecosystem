@@ -35,7 +35,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "dotenv": "^16.5.0"
+    "dotenv": "^17.2.1"
   },
   "devDependencies": {
     "pnpm": "^10.14.0"

@@ -6,21 +6,54 @@
 
 Create a production-ready MCP server that safely exposes Notion resources and tools to LLMs, enabling AI agents to manage Notion workspaces with human oversight and confirmation.
 
-### Long-term Vision
+### Evolved Vision - The Morphai/Organa/Psycha Architecture
 
-Evolve from a single MCP server into a thriving ecosystem of MCP implementations, following complete biological principles:
+Transform from monolithic genotype/phenotype model to a three-tier biological ecosystem:
 
-- **Complete Biological Architecture**: Chora (shared fields) + Organa (discrete functions) + Psychon (soul/wiring)
-- **Multi-Psychon Evolution**: From single soul to multiple souls sharing common fields
-- **oak-mcp-core as Biosphere**: Shared chorai that multiple psycha can inhabit
-- **Ecosystem Formation**: Multiple MCP servers as distinct psycha breathing shared air
+- **Morphai (Pure Forms)**: Abstract patterns and interfaces - the Platonic forms
+- **Organa (Transplantable Organs)**: Adaptive implementations that work across organisms
+- **Psycha (Living Organisms)**: Complete applications composed from morphai and organa
+- **Ecosystem Formation**: Multiple organisms sharing transplantable organs
+
+## Target Architecture Overview
+
+### Three Biological Categories
+
+1. **Morphai** (`ecosystem/morphai/`)
+   - Pure abstractions, interfaces, and patterns
+   - No runtime code, no dependencies, no IO
+   - Package: `@oaknational/mcp-morphai`
+
+2. **Organa** (`ecosystem/organa/`)
+   - Transplantable, adaptive implementations
+   - Runtime adaptation (Node.js, Edge, Browser)
+   - Packages: `@oaknational/mcp-organ-logger`, `@oaknational/mcp-organ-storage`, `@oaknational/mcp-organ-transport`, etc.
+   - Tree-shakeable through conditional exports
+   - Transport organ supports both stdio (local) and Streamable HTTP (remote)
+
+3. **Psycha** (`ecosystem/psycha/`)
+   - Complete living applications
+   - Packages: `@oaknational/notion-mcp-server`, `@oaknational/github-mcp-server`, etc.
+   - Compose morphai + selected organs
+
+### Key Architectural Properties
+
+- **Runtime Adaptation, Not Degradation**: Different environments have different capabilities
+- **Tree-Shaking Through Dynamic Imports**: Only needed code included in bundles
+- **Consumer Responsibility for IO**: Organisms choose their environment
+- **Type Safety Across Environments**: Same interfaces regardless of runtime
 
 ## Technical Overview
 
-**MCP Transport**: stdio (for local execution as a subprocess)  
+**MCP Transport**:
+
+- **Local**: stdio (for execution as a subprocess) - Current implementation
+- **Remote**: Streamable HTTP (for edge deployment) - Future implementation
+- **DEPRECATED**: SSE (Server-Sent Events) - Do not use
+
 **Integration Type**: Internal Notion integration (API key based)  
 **Core MCP Features**: Resources, Tools, and Prompts  
-**Runtime**: Node.js 22+ (required)  
+**Runtime**: Node.js 22+ (current), Edge runtimes (future)  
 **Package Manager**: pnpm (exclusively)
 
 ## Core Principles
@@ -164,13 +197,16 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 - Developer onboarding enhanced with documentation
 - Ready for Phase 4 oak-mcp-core extraction
 
-### Phase 4: oak-mcp-core Genotype Extraction
+### Phase 4: oak-mcp-core Genotype Extraction ✅ COMPLETED
 
-**Outcome**: Extract oak-mcp-core as the **MCP genotype** - the genetic blueprint that all MCP organisms inherit, organized as a pnpm workspace with Turbo
+**Outcome**: Successfully extracted oak-mcp-core as the **MCP genotype** - the genetic blueprint that all MCP organisms inherit, organized as a pnpm workspace with Turborepo
 
-**Ecosystem Role**: oak-mcp-core provides the genetic code (implemented as chorai) that defines what makes something an "MCP server". Each phenotype (oak-notion-mcp, oak-github-mcp, etc.) expresses these genes differently based on its environment.
+**Completion Date**: 2025-01-06
+
+**Ecosystem Role**: oak-mcp-core now provides the genetic code (implemented as chorai) that defines what makes something an "MCP server". The oak-notion-mcp phenotype successfully expresses these genes in the Node.js environment.
 
 **Architectural Principles**:
+
 - **Morphai as Platonic Forms**: Abstract patterns in the genotype are the perfect, eternal forms that organs in phenotypes instantiate as imperfect but functional shadows
 - **Distributed Chorai**: Both genotype and phenotype have chorai - genotype contains universal traits, phenotypes add environmental adaptations (see ADR-021)
 - **Operating at Criticality**: The architecture deliberately operates at the edge of chaos for optimal information processing, following principles from neuroscience and complex systems theory
@@ -178,10 +214,11 @@ Evolve from a single MCP server into a thriving ecosystem of MCP implementations
 
 **Strategy**: Create a pnpm workspace structure where oak-mcp-core contains the genotype (shared genetic traits implemented as chorai), and each specific MCP server is a phenotype expressing those genes in its environment.
 
-**Detailed Plan**: See [Phase 4 oak-mcp-core Implementation Plan](phase-4-oak-mcp-core-implementation-plan.md) for the complete journey
+**Completed**: See [Archived Phase 4 Plan](archive/phase-4-consolidated-plan.md) for implementation details
 
 **Workspace Structure**:
-```
+
+```text
 oak-notion-mcp/                 # Repository root
 ├── ecosystem/                  # Where organisms evolve
 │   ├── oak-mcp-core/          # The MCP genotype
@@ -210,40 +247,35 @@ oak-notion-mcp/                 # Repository root
 - Continuous integration testing during migration
 - Performance benchmarks tracked in CI
 
-**Key Deliverables**:
+**Key Achievements**:
 
-- [ ] **oak-mcp-core Framework Creation**:
-  - [ ] Create separate workspace/package for oak-mcp-core
-  - [ ] Single public API via `oak-mcp-core/src/index.ts`
-  - [ ] Build 3,050 LoC of generic MCP framework components
-  - [ ] Zero external dependencies in core components
-  - [ ] 100% test coverage using TDD (tests written first)
-  - [ ] Support for 4+ runtime environments via abstractions
-  - [ ] Prepare for future extraction to @oaknational/mcp-core
+- [x] **oak-mcp-core Framework Created**:
+  - [x] Separate workspace package at `ecosystem/oak-mcp-core`
+  - [x] Single public API via comprehensive `index.ts`
+  - [x] 3,500+ LoC of generic MCP framework components
+  - [x] Conditional dependencies with graceful degradation (ADR-022)
+  - [x] 106 meaningful tests (removed 300+ lines of useless tests)
+  - [x] Runtime detection for Node.js/Bun/Deno/Edge environments
+  - [x] Ready for extraction to @oaknational/mcp-core
 
-- [ ] **Core Framework Components**:
-  - [ ] Logging Framework - Zero-dependency with AsyncLocalStorage (550 LoC)
-  - [ ] Error Framework - ChainedError with full context preservation (300 LoC)
-  - [ ] Configuration Management - Multi-source with validation (200 LoC)
-  - [ ] Validation Framework - Composable validators with Zod (150 LoC)
-  - [ ] Testing Utilities - In-process server and mocks (200 LoC)
-  - [ ] MCP Server Base - Abstract class with lifecycle hooks (150 LoC)
-  - [ ] Middleware System - Next pattern with composition (150 LoC)
-  - [ ] Registry System - Generic with middleware support (200 LoC)
-  - [ ] Type Guards - Composable registry pattern (150 LoC)
-  - [ ] Pagination - AsyncGenerator with strategies (150 LoC)
-  - [ ] Performance Monitoring - <5% overhead (100 LoC)
-  - [ ] Lifecycle Management - Orchestration with rollback (100 LoC)
-  - [ ] Resource Linking - Cross-reference patterns (75 LoC)
-  - [ ] Additional Utilities - Result type, helpers (575 LoC)
+- [x] **Core Framework Components Delivered**:
+  - [x] Logging Framework - Complete with runtime detection (600+ LoC)
+  - [x] Error Framework - ChainedError, Result<T,E>, ErrorContext (500+ LoC)
+  - [x] Configuration Management - Environment loader with graceful degradation (300+ LoC)
+  - [x] Runtime Detection - Feature detection for all environments (100+ LoC)
+  - [x] Context Storage - Runtime-agnostic with AsyncLocalStorage support (200+ LoC)
+  - [x] Sensitive Data Scrubbing - PII protection utilities (100+ LoC)
+  - [x] Event Bus - Pub/sub system for decoupled communication (100+ LoC)
+  - [x] Type System - Comprehensive types and contracts (400+ LoC)
+  - [x] Test Factories - Mock creation utilities (100+ LoC)
 
-- [ ] **oak-notion-mcp Migration**:
-  - [ ] Update package.json to depend on oak-mcp-core
-  - [ ] Progressively adopt oak-mcp-core components via imports
-  - [ ] Create NotionMcpServer extending base class
-  - [ ] Implement boundary validation for all Notion data
-  - [ ] Remove all generic code (3,050 LoC reduction)
-  - [ ] Final size: <1,000 LoC of Notion-specific code
+- [x] **oak-notion-mcp Migration Completed**:
+  - [x] Updated to depend on @oaknational/mcp-core workspace package
+  - [x] Successfully importing and using core components
+  - [x] Moved generic infrastructure to core (env-loader, runtime-detection)
+  - [x] Proper phenotype implementation with Node.js specifics
+  - [x] 116 tests passing with core integration
+  - [x] Clean architectural separation achieved
 
 - [ ] **Example Implementations**:
   - [ ] Echo Server - Pure functions demonstration (100 LoC)
@@ -305,16 +337,16 @@ oak-notion-mcp/                 # Repository root
 - Document extraction readiness in component headers
 - Benchmark performance impact (<5% overhead)
 
-**Success Metrics**:
+**Success Metrics Achieved**:
 
-- oak-mcp-core created with 3,050 LoC of shared chorai (the biosphere)
-- oak-notion-mcp reduced to <1,000 LoC (validation + adapters only)
-- All existing tests pass with zero regressions
-- 100% test coverage on all pure functions (TDD enforced)
-- Test file naming: `*.unit.test.ts` for pure functions, `*.integration.test.ts` for boundaries
-- All quality gates passing (format, lint, type-check, test, build)
-- Pre-commit and pre-push hooks configured and working
-- CI/CD pipeline with automated releases via semantic-release
+- [x] oak-mcp-core created with 3,500+ LoC of shared infrastructure
+- [x] Proper genotype/phenotype separation with conditional dependencies  
+- [x] 222 total tests passing (106 oak-mcp-core, 116 oak-notion-mcp)
+- [x] Every test proves something meaningful (300+ lines of useless tests removed)
+- [x] Test file naming convention followed consistently
+- [x] All quality gates passing (0 lint errors, 0 type errors)
+- [x] Pre-commit and pre-push hooks working perfectly
+- [x] CI/CD pipeline with Turborepo remote caching enabled
 - Performance benchmarks established:
   - Logging overhead <1ms per operation
   - Middleware processing <0.5ms per layer
@@ -331,9 +363,110 @@ oak-notion-mcp/                 # Repository root
 - Beta feedback incorporated before stable release
 - **Ecosystem readiness**: Designed for future symbiotic relationships
 
-### Phase 5: Production Readiness
+### Phase 5: Ecosystem Evolution to Morphai/Organa/Psycha
 
-**Outcome**: Published npm package ready for public use
+**Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable organs
+
+**Core Insight**: Different kinds of shared code want to live in different places. Oak-mcp-core violates the Single Responsibility Principle by trying to be three things: pure abstractions, runtime capabilities, AND development conveniences. This creates fundamental architectural tension.
+
+**Rationale**: Phase 4's success revealed this tension - the genotype tries to contain both DNA (pure forms) AND organ implementations (runtime-specific code). The solution separates these into three biologically-coherent categories.
+
+**Target Architecture**: See [Target Architecture Document](./../architecture/target-architecture.md) for complete vision
+
+**Biological Alignment**:
+
+- **Morphai = DNA/Genome**: Pure information, instructions, potential
+- **Organa = Universal Organs**: Like organs that can work across species (xenotransplantation)
+- **Psycha = Complete Organisms**: Living applications composed from genetic patterns and organs
+
+**Architectural Resolution**: This resolves the Library vs Framework tension - morphai provides libraries (tools), organa provides adaptive capabilities, and psycha compose what they need. Consumer truly becomes responsible for IO.
+
+**Deployment Flexibility**: The transport organ enables the same MCP server to run either:
+
+- **Locally**: As a subprocess using stdio transport (current implementation)
+- **Remotely**: On edge runtimes using Streamable HTTP transport (future implementation)
+- Session management handles stateful operations for remote deployments
+
+**Key Transformations**:
+
+1. **Split oak-mcp-core** into:
+   - `@oaknational/mcp-morphai`: Pure abstractions and interfaces (the DNA)
+   - Multiple organ packages: Adaptive, transplantable implementations
+
+2. **Create Organ Packages**:
+   - `@oaknational/mcp-organ-logger`: Adaptive logging (Node/Edge/Browser)
+   - `@oaknational/mcp-organ-storage`: Adaptive storage (FileSystem/KV Store)
+   - `@oaknational/mcp-organ-env`: Adaptive environment (process.env/context)
+   - Each with tree-shakeable runtime adaptations
+
+3. **Reorganize into Biological Directories**:
+   - `ecosystem/morphai/`: Pure forms
+   - `ecosystem/organa/`: Transplantable organs
+   - `ecosystem/psycha/`: Living organisms
+
+4. **Enable Runtime Adaptation** (Three Patterns):
+   - **Automatic**: Runtime detection chooses implementation
+   - **Explicit**: Import specific runtime (e.g., `/node` or `/edge`)
+   - **Bundler**: Configure bundler to force specific runtime
+   - Tree-shaking via conditional exports and dynamic imports
+
+5. **Create Transport Organ** for deployment flexibility:
+   - `@oaknational/mcp-organ-transport` with stdio and Streamable HTTP
+   - Session management for stateful remote operations
+   - Automatic transport selection based on deployment context
+
+**Documentation Updates Required**:
+
+- [ ] Update architecture-overview.md with new model
+- [ ] Update all ADRs to reference morphai/organa/psycha
+- [ ] Create migration guide from current to target
+- [ ] Update developer onboarding documentation
+- [ ] Update all README files in affected directories
+
+**Success Metrics**:
+
+- Zero bundled dependencies in morphai
+- <10KB bundle addition per organ
+- Tree-shaking removes unused runtimes
+- Type safety maintained across all environments
+- Existing tests continue to pass
+
+**Critical Success Factors** (Ongoing Practices):
+
+1. **Maintain strict boundaries** - No cross-organism imports
+2. **Keep morphai pure** - No runtime code in abstractions
+3. **Ensure tree-shaking** - Use dynamic imports and conditional exports
+4. **Document adaptation** - Clear docs on how organs adapt
+5. **Version carefully** - Organs are shared dependencies
+
+**Future Evolution Enabled**:
+
+- New organisms can be created using existing organs
+- New organs can be added for all organisms to use
+- New runtimes can be supported (e.g., Deno, Bun)
+- Ecosystem can grow with multiple organisms sharing organs
+
+### Phase 6: Oak Open Curriculum API MCP
+
+This will be the first practical demonstration of the ecosystem vision - multiple organisms breathing in the same biosphere, sharing transplantable organs while maintaining their unique business logic (their own internal organa for curriculum-specific operations).
+
+Sub-phase 6.0: Creating the Oak Open Curriculum API SDK
+
+- Create a new, type-safe SDK for the Open Curriculum API. The work is 80% done [in the oak-curriculum-api-client repo](https://github.com/oaknational/oak-curriculum-api-client), but it needs bringing into this repo and refactoring to fully integrate into the MCP ecosystem.
+
+Sub-phase 6.1: MCP Server
+
+- A fully functional MCP server for accessing the Open Curriculum API
+
+Sub-phase 6.2: Elastic Search Index with Lexical and Semantic Search Capabilities
+
+- An elastic search index for the Open Curriculum API with both lexical and semantic search capabilities (work happens outside this repo, blocks rest of phase 6)
+- Additional MCP tools for interacting with the elastic search index
+- MCP server workflows for carrying out a search operation, and then fetching Open Curriculum API data based on the search results
+
+### Phase 7: Production Readiness
+
+**Outcome**: Published npm packages ready for public use
 
 **Key Deliverables**:
 
@@ -351,7 +484,7 @@ oak-notion-mcp/                 # Repository root
       "mcpServers": {
         "notion": {
           "command": "npx",
-          "args": ["-y", "oak-notion-mcp"],
+          "args": ["-y", "@oaknational/notion-mcp-server"],
           "env": {
             "NOTION_API_KEY": "${NOTION_API_KEY}"
           }
@@ -378,15 +511,26 @@ oak-notion-mcp/                 # Repository root
 **Quality Checkpoints**:
 
 - Documentation review completed
-- Package installable via `npx oak-notion-mcp`
+- Package installable via `npx @oaknational/notion-mcp-server`
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
 
-### Phase 6: Write Tools and Safety Controls
+### Phase 8: Safety Controls
 
-**Outcome**: Full-featured MCP server with write capabilities and safety controls
+**Outcome**: Comprehensive safety controls for MCP servers
 
-### Phase 7: Ecosystem Expansion (Future Vision)
+**Key Deliverables**:
+
+- [ ] **Safety Controls**:
+  - [ ] Human confirmation system for all write operations
+  - [ ] Operation preview before execution
+  - [ ] Rollback capability tracking
+  - [ ] Audit log of all operations
+- [ ] **Advanced Features**:
+  - [ ] Resource subscriptions for real-time updates - not possible until MCP clients support push notifications
+  - [ ] Batch operations support
+
+### Phase 9: Ecosystem Expansion
 
 **Outcome**: Multiple MCP psycha sharing the same biosphere
 
@@ -395,7 +539,6 @@ oak-notion-mcp/                 # Repository root
 - [ ] **Additional Psycha**:
   - [ ] oak-github-mcp - GitHub psychon breathing shared chorai
   - [ ] oak-slack-mcp - Slack psychon in the same atmosphere
-  - [ ] oak-jira-mcp - Jira psychon sharing common fields
 - [ ] **Ecosystem Infrastructure**:
   - [ ] Shared type definitions package
   - [ ] Common utilities package
@@ -418,38 +561,6 @@ oak-notion-mcp/                 # Repository root
 - Build time efficiency across all packages
 - Zero cascading failures between organisms
 - Pattern propagation < 1 week
-
-**Key Deliverables**:
-
-- [ ] **Write Tools** (with mandatory confirmation):
-  - [ ] `notion-create-page` - Create new pages with confirmation
-  - [ ] `notion-update-page` - Update page content with confirmation
-  - [ ] `notion-create-database-entry` - Add database items with confirmation
-  - [ ] `notion-update-database-entry` - Modify database items with confirmation
-  - [ ] `notion-add-comment` - Add comments to pages with confirmation
-- [ ] **Safety Controls**:
-  - [ ] Human confirmation system for all write operations
-  - [ ] Operation preview before execution
-  - [ ] Rollback capability tracking
-  - [ ] Audit log of all operations
-- [ ] **Advanced Features**:
-  - [ ] Resource subscriptions for real-time updates
-  - [ ] Batch operations support
-  - [ ] Advanced database filtering with Notion's query language
-  - [ ] Template system for common operations
-- [ ] **Performance & Reliability**:
-  - [ ] Response caching for frequently accessed resources
-  - [ ] Rate limiting to respect Notion API quotas
-  - [ ] Exponential backoff for retries
-  - [ ] Graceful degradation on API errors
-- [ ] Configurable logging levels (following Notion SDK pattern)
-
-**Quality Checkpoints**:
-
-- E2E tests demonstrating safety controls
-- Performance benchmarks established
-- Security audit passed
-- All test types (unit, integration, API, E2E) passing
 
 ## Success Metrics
 
