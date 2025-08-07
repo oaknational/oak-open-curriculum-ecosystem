@@ -75,7 +75,7 @@ export interface Tool<TInput = unknown, TOutput = unknown> {
 export type ToolFactory<TContext = unknown> = (
   definition: ToolDefinition,
   executor: ToolExecutor,
-  context: TContext,
+  context: TContext
 ) => Tool;
 
 /**

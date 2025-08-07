@@ -4,7 +4,13 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { ToolExecutor, ToolDefinition, Tool, ToolRegistry, ToolValidator } from './tool';
+import type {
+  ToolExecutor,
+  ToolDefinition,
+  Tool,
+  ToolRegistry,
+  ToolValidator,
+} from './tool';
 
 describe('Tool patterns', () => {
   describe('ToolExecutor interface', () => {

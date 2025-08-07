@@ -99,7 +99,9 @@ describe('EventBus interface', () => {
     };
 
     expect(mockEventBusWithRemoveAll.removeAllListeners).toBeDefined();
-    expect(typeof mockEventBusWithRemoveAll.removeAllListeners).toBe('function');
+    expect(typeof mockEventBusWithRemoveAll.removeAllListeners).toBe(
+      'function'
+    );
   });
 
   it('should support optional listenerCount method', () => {
