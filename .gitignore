@@ -143,4 +143,3 @@ vite.config.ts.timestamp-*
 # Turbo cache
 .turbo
 
-scratch
