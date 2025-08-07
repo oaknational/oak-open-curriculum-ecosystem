@@ -46,6 +46,12 @@ We will evolve from the two-tier genotype/phenotype model to a three-tier biolog
    - Nature: Complete, living applications - the ensouled wholes
    - Composition: Uses morphai forms, incorporates organa, has own business logic
 
+### Biological Metaphor Alignment
+
+- **Morphai = DNA/Genome**: Pure information, instructions, potential - no implementation, just patterns
+- **Organa = Universal Organs**: Like organs that can work in different species (xenotransplantation) - adapt to their host environment, can be shared across organisms
+- **Psycha = Complete Organisms**: Living, breathing applications composed of selected organs
+
 ### Transport Architecture
 
 **Local Deployment** (Current):
@@ -69,17 +75,43 @@ We will evolve from the two-tier genotype/phenotype model to a three-tier biolog
 
 All achieved through conditional exports and dynamic imports for optimal tree-shaking.
 
+## Key Principles
+
+### Runtime Adaptation, Not Degradation
+Edge runtimes aren't "limited" - they have different capabilities:
+- **Node.js**: `fs`, `process.env`, `AsyncLocalStorage`, `EventEmitter`
+- **Edge**: `KV Store`, `env context`, `AsyncLocalStorage`, `EventTarget`
+
+Organs adapt to use the available capabilities, not degrade to lowest common denominator.
+
+### Consumer Responsibility for IO
+The organism (psychon) is responsible for choosing its environment and wiring IO, while organs provide the capabilities.
+
+### Phenotypic Plasticity
+The adaptive organs demonstrate phenotypic plasticity - the same genetic code (interface) expressing differently based on environment (runtime).
+
 ## Consequences
 
 ### Positive
 
-- **Resolves architectural tension** - Each type of code has its proper place
+**Technical Benefits**:
 - **Optimal bundle sizes** - Tree-shaking removes unused runtime code
+- **Zero configuration** in most cases (automatic runtime detection)
+- **Full control** when needed (explicit imports)
 - **Type safety** - Same interfaces across all environments
-- **Clear boundaries** - Package structure enforces separation
-- **Future flexibility** - Easy to add new organs, organisms, or runtimes
-- **Deployment flexibility** - Same organism can run locally or remotely
-- **Philosophically coherent** - Aligns perfectly with biological model
+- **Clean dependency graph** - No circular dependencies possible
+
+**Organizational Benefits**:
+- **Clear ownership** - Each package has single responsibility
+- **Independent deployment** - Organs can be versioned separately
+- **Parallel development** - Teams can work on different organs
+- **Easy testing** - Each organ is self-contained
+
+**Philosophical Coherence**:
+- **Aligns with biological model** perfectly
+- **Follows Greek nomenclature** consistently
+- **Resolves architectural tensions** completely
+- **Enables future evolution** naturally
 
 ### Negative
 
@@ -105,7 +137,7 @@ All achieved through conditional exports and dynamic imports for optimal tree-sh
 ## References
 
 - Phase 4 completion insights about architectural tension
-- Target Architecture document (`.agent/architecture/target-architecture.md`)
+- Phase 5 Implementation Plan (`.agent/plans/phase-5-morphai-organa-psycha-evolution.md`)
 - ADR-021: Genotype/Phenotype with Distributed Chorai
 - ADR-022: Conditional Dependencies Pattern
 - Complex systems research on early warning signals (Scheffer et al., 2009)

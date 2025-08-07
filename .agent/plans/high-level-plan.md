@@ -371,7 +371,7 @@ oak-notion-mcp/                 # Repository root
 
 **Rationale**: Phase 4's success revealed this tension - the genotype tries to contain both DNA (pure forms) AND organ implementations (runtime-specific code). The solution separates these into three biologically-coherent categories.
 
-**Target Architecture**: See [Target Architecture Document](./../architecture/target-architecture.md) for complete vision
+**Target Architecture**: See [ADR-023](../docs/architecture/architectural-decisions/023-morphai-organa-psycha-architecture.md) and [Phase 5 Plan](phase-5-morphai-organa-psycha-evolution.md) for complete vision
 
 **Biological Alignment**:
 

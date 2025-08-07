@@ -119,6 +119,6 @@ This represents the natural next step in our biological architecture evolution.
 ## Documentation
 
 For details on the new architecture direction, see:
-- [Target Architecture](./../architecture/target-architecture.md)
+- [ADR-023: Morphai/Organa/Psycha Architecture](../../docs/architecture/architectural-decisions/023-morphai-organa-psycha-architecture.md)
 - [Phase 4 Experience Documents](./../experience/)
 - [ADR-022: Conditional Dependencies](./../../../docs/architecture/architectural-decisions/022-conditional-dependencies-genotype.md)
