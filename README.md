@@ -142,8 +142,8 @@ Once configured, you can ask Claude:
 
 ```bash
 # Clone and install
-git clone https://github.com/oaknational/oak-notion-mcp.git
-cd oak-notion-mcp
+git clone https://github.com/oaknational/oak-mcp-ecosystem.git
+cd oak-mcp-ecosystem
 pnpm install
 
 # Set up environment
@@ -226,8 +226,8 @@ MIT - see [LICENSE](LICENSE) for details
 ## Support
 
 - 📖 [Documentation](docs/README.md)
-- 🐛 [Report Issues](https://github.com/oaknational/oak-notion-mcp/issues)
-- 💬 [Discussions](https://github.com/oaknational/oak-notion-mcp/discussions)
+- 🐛 [Report Issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
+- 💬 [Discussions](https://github.com/oaknational/oak-mcp-ecosystem/discussions)
 
 ---
 

@@ -38,8 +38,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-notion-mcp.git",
-    "directory": "ecosystem/moria/mcp"
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "ecosystem/moria/moria-mcp"
   },
   "engines": {
     "node": ">=22.0.0"

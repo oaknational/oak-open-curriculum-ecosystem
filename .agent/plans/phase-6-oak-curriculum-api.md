@@ -45,6 +45,7 @@ ecosystem/
 ### Key Components
 
 #### 1. Oak API Client (`organa/oak-api`)
+
 - Curriculum search
 - Lesson fetching
 - Unit/Programme navigation
@@ -52,6 +53,7 @@ ecosystem/
 - Response caching
 
 #### 2. MCP Tools (`organa/mcp/tools`)
+
 - `oak-search-lessons`: Search for lessons by subject/key stage
 - `oak-get-lesson`: Get detailed lesson content
 - `oak-list-units`: List units in a programme
@@ -59,6 +61,7 @@ ecosystem/
 - `oak-search-resources`: Search teaching resources
 
 #### 3. MCP Resources (`organa/mcp/resources`)
+
 - `lesson://{id}`: Individual lesson content
 - `unit://{id}`: Unit overview and lessons
 - `programme://{subject}/{keystage}`: Programme structure
@@ -67,6 +70,7 @@ ecosystem/
 ## 📊 Implementation Plan
 
 ### Sub-phase 6.1: Project Setup
+
 **Duration**: 2 hours  
 **Priority**: CRITICAL
 
@@ -77,6 +81,7 @@ ecosystem/
 5. Add to workspace
 
 ### Sub-phase 6.2: Oak API Client
+
 **Duration**: 4 hours  
 **Priority**: HIGH
 
@@ -87,6 +92,7 @@ ecosystem/
 5. Write integration tests
 
 ### Sub-phase 6.3: MCP Tool Implementation
+
 **Duration**: 6 hours  
 **Priority**: HIGH
 
@@ -97,6 +103,7 @@ ecosystem/
 5. Write unit tests
 
 ### Sub-phase 6.4: MCP Resource Handlers
+
 **Duration**: 4 hours  
 **Priority**: MEDIUM
 
@@ -107,6 +114,7 @@ ecosystem/
 5. Write integration tests
 
 ### Sub-phase 6.5: Server Integration
+
 **Duration**: 3 hours  
 **Priority**: HIGH
 
@@ -117,6 +125,7 @@ ecosystem/
 5. Create CLI entry point
 
 ### Sub-phase 6.6: Testing & Documentation
+
 **Duration**: 3 hours  
 **Priority**: MEDIUM
 
@@ -127,6 +136,7 @@ ecosystem/
 5. Update main docs
 
 ### Sub-phase 6.7: Multi-Server Support
+
 **Duration**: 2 hours  
 **Priority**: LOW
 
@@ -184,6 +194,7 @@ interface OakAPIConfig {
 ## 📈 Success Criteria
 
 ### Functional Requirements
+
 - [ ] Search lessons by subject and key stage
 - [ ] Retrieve full lesson content
 - [ ] Navigate curriculum structure
@@ -191,6 +202,7 @@ interface OakAPIConfig {
 - [ ] Handle API errors gracefully
 
 ### Non-Functional Requirements
+
 - [ ] Response time < 2 seconds
 - [ ] Cache hit rate > 80%
 - [ ] 100% test coverage for core logic
@@ -198,6 +210,7 @@ interface OakAPIConfig {
 - [ ] All quality gates passing
 
 ### Integration Requirements
+
 - [ ] Works with Claude Desktop
 - [ ] Works with Claude Code
 - [ ] Runs alongside Notion MCP
@@ -234,12 +247,14 @@ CLAUDE_API_KEY=xxx pnpm start
 ## 📚 Dependencies
 
 ### Required Histoi Tissues
+
 - `@oaknational/mcp-histos-logger` ✅
 - `@oaknational/mcp-histos-env` ✅
 - `@oaknational/mcp-histos-storage` ✅
 - `@oaknational/mcp-histos-transport` ✅
 
 ### External Dependencies
+
 - `@modelcontextprotocol/sdk` (MCP SDK)
 - `node-fetch` or native fetch (HTTP client)
 - `zod` (Schema validation)
@@ -269,30 +284,35 @@ CLAUDE_API_KEY=xxx pnpm start
 ## 📋 Implementation Checklist
 
 ### Day 1: Foundation
+
 - [ ] Create package structure
 - [ ] Set up build configuration
 - [ ] Define API types
 - [ ] Implement basic HTTP client
 
 ### Day 2: Core Features
+
 - [ ] Build Oak API client
 - [ ] Implement caching layer
 - [ ] Create search tools
 - [ ] Add content retrieval
 
 ### Day 3: MCP Integration
+
 - [ ] Wire up MCP server
 - [ ] Implement tool handlers
 - [ ] Add resource handlers
 - [ ] Create CLI entry
 
 ### Day 4: Testing & Polish
+
 - [ ] Write comprehensive tests
 - [ ] Add documentation
 - [ ] Performance optimization
 - [ ] Error handling improvements
 
 ### Day 5: Deployment
+
 - [ ] Final testing
 - [ ] Update main docs
 - [ ] Create release

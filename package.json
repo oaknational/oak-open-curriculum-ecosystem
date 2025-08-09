@@ -2,7 +2,7 @@
   "name": "@oaknational/mcp-ecosystem",
   "version": "0.5.0",
   "private": true,
-  "description": "MCP ecosystem - genotype and phenotypes for Model Context Protocol servers",
+  "description": "MCP ecosystem - A collection of MCP servers and supporting framework and libraries",
   "type": "module",
   "scripts": {
     "build": "turbo run --continue build",
@@ -32,7 +32,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-notion-mcp.git"
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git"
   },
   "engines": {
     "node": ">=22.0.0"
