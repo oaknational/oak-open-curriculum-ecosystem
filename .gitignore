@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 dist
 **/*.d.ts
 **/*.d.ts.map
+
+# File system artifacts
+.DS_Store
