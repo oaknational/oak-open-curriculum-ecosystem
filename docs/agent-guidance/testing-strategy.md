@@ -38,16 +38,50 @@
 
 #### In-process tests
 
-In-process tests are tests that validate code imported into the test process. They are fast, specific, and do not produce side effects.
+In-process tests are tests that validate **code imported into the test process**. The code under test runs in the same process as the test runner. They are fast, specific, and do not produce side effects. These tests are about testing CODE, not testing RUNNING SYSTEMS.
 
 - **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD.
-- **Integration test**: A test that verifies the behaviour of a collection of units. Integration tests DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing.
+- **Integration test**: A test that verifies the behaviour of a collection of units **working together as code**, NOT a running system. Integration tests still import and test code directly within the test process. They DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing. **Important**: Integration tests are NOT about testing a deployed or running system - they test how multiple code units integrate when imported and called directly.
 
 #### Out-of-process tests
 
 Out-of-process tests are tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
 - **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
+
+#### Common Misconception: Integration Tests
+
+**WRONG Understanding (Common but Incorrect):**
+```typescript
+// ❌ This is NOT an integration test - it's an E2E test
+describe('API Integration Test', () => {
+  it('should call the deployed API', async () => {
+    const response = await fetch('http://localhost:3000/api/users');
+    // Testing a RUNNING SYSTEM over HTTP
+  });
+});
+```
+
+**CORRECT Understanding (Our Definition):**
+```typescript
+// ✅ This IS an integration test - testing code units working together
+import { UserService } from './user-service';
+import { DatabaseAdapter } from './database-adapter';
+
+describe('UserService Integration Test', () => {
+  it('should retrieve users through the adapter', () => {
+    const mockDb = { query: () => [{ id: 1, name: 'Alice' }] };
+    const adapter = new DatabaseAdapter(mockDb); // Simple mock injected
+    const service = new UserService(adapter);
+    
+    const users = service.getAllUsers();
+    // Testing how CODE UNITS integrate, not a running system
+    expect(users).toHaveLength(1);
+  });
+});
+```
+
+The key distinction: Integration tests import and test code directly. They never spawn processes, make network calls, or test deployed systems.
 
 ### Workspace Architecture Components (Moria/Histoi/Psycha)
 

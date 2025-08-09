@@ -77,11 +77,16 @@ Phase 5 transforms our monolithic genotype/phenotype model into a three-tier bio
    - Useless tests in histos-logger (entire test file)
    - Skipped tests in histos-storage (violates rules)
    - Complex mocks in storage tests (signals design problem)
-   - Wrong test file naming (missing .unit/.integration suffix)
+   - Wrong test file naming (missing .unit/.integration suffix) ✅ FIXED
 
 2. **Configuration Issues** (SHOULD FIX):
    - Missing cross-references in some package.json files
    - Inconsistent script naming across packages
+
+3. **Test Terminology Issues** (FIXED):
+   - Integration test definition was ambiguous ✅ FIXED
+   - Common misconception about integration tests (testing running systems vs code) ✅ CLARIFIED
+   - In-process vs out-of-process terminology not standard but internally consistent ✅ DOCUMENTED
 
 ### Rule Violations Detected
 
