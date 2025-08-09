@@ -12,27 +12,23 @@ import {
   extractUrlValue,
   extractEmailValue,
   extractPhoneValue,
-} from './text-extractors.js';
+} from './text-extractors';
 
 import {
   extractSelectValue,
   extractStatusValue,
   extractMultiSelectValue,
-} from './select-extractors.js';
+} from './select-extractors';
 
-import { extractNumberValue, extractCheckboxValue } from './numeric-extractors.js';
+import { extractNumberValue, extractCheckboxValue } from './numeric-extractors';
 
 import {
   extractDateValue,
   extractCreatedTimeValue,
   extractLastEditedTimeValue,
-} from './date-extractors.js';
+} from './date-extractors';
 
-import {
-  extractPeopleValue,
-  extractFilesValue,
-  extractRelationValue,
-} from './relation-extractors.js';
+import { extractPeopleValue, extractFilesValue, extractRelationValue } from './relation-extractors';
 
 /**
  * Property type to extractor function mapping

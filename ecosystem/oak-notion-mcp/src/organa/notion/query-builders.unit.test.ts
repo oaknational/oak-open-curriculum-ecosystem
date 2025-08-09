@@ -5,7 +5,7 @@ import {
   buildSearchQuery,
   type McpFilters,
   type SearchOptions,
-} from './query-builders.js';
+} from './query-builders';
 
 describe('buildDatabaseQuery', () => {
   it('should build query with property filters', () => {

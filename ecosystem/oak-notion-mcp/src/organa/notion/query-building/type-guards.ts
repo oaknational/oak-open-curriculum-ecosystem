@@ -3,9 +3,9 @@
  * @module notion/query-building
  */
 
-import type { McpPropertyFilter, McpSort } from './types.js';
-import type { SortDirection } from './constants.js';
-import { validSortDirectionsArray, validPropertyTypesArray } from './constants.js';
+import type { McpPropertyFilter, McpSort } from './types';
+import type { SortDirection } from './constants';
+import { validSortDirectionsArray, validPropertyTypesArray } from './constants';
 
 /**
  * Type guard for record objects

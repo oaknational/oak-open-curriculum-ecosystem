@@ -7,6 +7,7 @@
 This codebase implements a **Biological Architecture with Greek Nomenclature**, organized at two complementary scales:
 
 ### Workspace Architecture (Package Organization)
+
 **Moria → Histoi → Psycha** - The three-tier ecosystem:
 
 - **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies
@@ -17,6 +18,7 @@ This codebase implements a **Biological Architecture with Greek Nomenclature**, 
   - *Example*: `oak-notion-mcp` server, `github-mcp` server
 
 ### Psychon Architecture (Within Each Organism)
+
 **Chorai + Organa → Psychon** - The internal structure:
 
 - **Chorai**: Pervasive infrastructure fields that flow everywhere
@@ -28,6 +30,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 ## Visual Architecture
 
 ### Workspace Level
+
 ```
 ┌─────────────────── ECOSYSTEM ───────────────────┐
 │                                                  │
@@ -52,6 +55,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 ```
 
 ### Psychon Level (Within Each Organism)
+
 ```
 ┌─────────────────────────── PSYCHON ───────────────────────────┐
 │                    (The Ensouled Whole)                        │
@@ -106,6 +110,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 ## Quick Decision Trees
 
 ### Workspace Level: Which Package?
+
 ```
 Is it a pure abstraction with zero dependencies?
   └─ YES → ecosystem/moria/ (molecules/atoms)
@@ -118,6 +123,7 @@ Is it a complete application?
 ```
 
 ### Psychon Level: Where in the Organism?
+
 ```
 Is it a type, contract, or schema?
   └─ YES → chora/stroma/ (compile-time structure)
@@ -239,11 +245,13 @@ function formatNotionPage(page: Page) {} // Too specific!
 ## Testing Strategy
 
 ### Workspace Level Testing
+
 - **Moria**: Unit tests only, no mocks, no I/O (`*.test.ts`)
 - **Histoi**: Unit tests for pure logic, integration tests for runtime adaptation
 - **Psycha**: Integration tests for assembly, E2E tests for full behavior
 
 ### Psychon Level Testing
+
 - **Pure functions (organelles)**: Unit test with no mocks
 - **Module integration (cells)**: Test with simple injected mocks
 - **System integration (chorai/organa)**: Test component interactions
@@ -292,11 +300,13 @@ A: If truly shared → create a tissue in Histoi. If domain-specific → keep in
 ## Migration Path
 
 ### Phase 4 → Phase 5
+
 - `oak-mcp-core` → Split into `moria` + multiple `histoi` packages
 - Genotype/Phenotype → Workspace tiers (Moria/Histoi/Psycha)
 - Monolithic core → Distributed responsibilities
 
 ### Current Psychon Structure → Target
+
 - `substrate/` → `chora/stroma/`
 - `systems/logging/` → `chora/aither/logging/`
 - `systems/events/` → `chora/aither/events/`

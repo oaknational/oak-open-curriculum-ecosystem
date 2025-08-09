@@ -5,9 +5,11 @@ import {
   ListToolsRequestSchema,
   CallToolRequestSchema,
   ListPromptsRequestSchema,
+  type CallToolRequest,
+  type ReadResourceRequest,
 } from '@modelcontextprotocol/sdk/types.js';
-import { createResourceHandlers, createToolHandlers } from '../organa/mcp/index.js';
-import type { NotionServerDependencies } from '../chora/stroma/notion-types/dependencies.js';
+import { createResourceHandlers, createToolHandlers } from '../organa/mcp';
+import type { NotionServerDependencies } from '../chora/stroma/notion-types/dependencies';
 
 /**
  * Set up tool-related request handlers
@@ -29,7 +31,7 @@ function setupToolHandlers(
     };
   });
 
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest) => {
     const { name, arguments: args } = request.params;
     deps.logger.debug('Calling tool', { name, args });
 
@@ -69,7 +71,7 @@ export function createMcpServer(deps: NotionServerDependencies): Server {
     return resourceHandlers.handleListResources();
   });
 
-  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+  server.setRequestHandler(ReadResourceRequestSchema, async (request: ReadResourceRequest) => {
     return resourceHandlers.handleReadResource(request.params.uri);
   });
 

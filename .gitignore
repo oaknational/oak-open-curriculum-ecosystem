@@ -143,3 +143,7 @@ vite.config.ts.timestamp-*
 # Turbo cache
 .turbo
 
+# Type declarations
+dist
+**/*.d.ts
+**/*.d.ts.map

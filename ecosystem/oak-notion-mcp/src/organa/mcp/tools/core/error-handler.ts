@@ -3,7 +3,7 @@
  * Converts errors into user-friendly MCP responses
  */
 
-import type { ErrorHandler, ErrorContext, ToolResult, ToolLogger } from './types.js';
+import type { ErrorHandler, ErrorContext, ToolResult, ToolLogger } from './types';
 
 /**
  * Creates a default error handler with logging
@@ -30,10 +30,6 @@ export function createErrorHandler(logger: ToolLogger): ErrorHandler {
         ],
         isError: true,
       };
-    },
-    canHandle(): boolean {
-      // This handler can handle any error
-      return true;
     },
   };
 }

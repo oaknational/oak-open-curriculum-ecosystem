@@ -3,7 +3,7 @@
  * Pure metadata with no implementation
  */
 
-import type { ToolDefinition } from '../core/types.js';
+import type { ToolDefinition } from '../core/types';
 
 export const searchToolDefinition: ToolDefinition = {
   name: 'notion-search',

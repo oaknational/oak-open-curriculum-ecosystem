@@ -22,4 +22,4 @@ export {
   extractPeopleValue,
   extractFilesValue,
   extractRelationValue,
-} from './property-extractors/index.js';
+} from './property-extractors/index';

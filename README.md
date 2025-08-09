@@ -20,16 +20,13 @@ export NOTION_API_KEY="secret_your_actual_key_here"
 
 This project uses Greek philosophical terms to create clear conceptual boundaries. The architecture follows a **genotype/phenotype** model:
 
-## Genotype (oak-mcp-core)
-The genetic blueprint - abstract patterns all MCP servers inherit:
+## Architecture Foundation
+The project now uses **Moria** (abstract patterns) and **Histoi** (tissue layers) instead of a monolithic genotype:
 
-| Greek Term             | English           | Purpose                        | Location                                            |
-| ---------------------- | ----------------- | ------------------------------ | --------------------------------------------------- |
-| **Morphai** (μορφαί)   | Hidden Forms      | Abstract patterns (Platonic)   | [`ecosystem/oak-mcp-core/src/chora/morphai/`]      |
-| **Stroma** (στρῶμα)    | Foundation/Matrix | Types, contracts, schemas      | [`ecosystem/oak-mcp-core/src/chora/stroma/`]       |
-| **Aither** (αἰθήρ)     | Divine Air        | Logging, events, errors        | [`ecosystem/oak-mcp-core/src/chora/aither/`]       |
-| **Phaneron** (φανερόν) | The Visible       | Configuration, settings        | [`ecosystem/oak-mcp-core/src/chora/phaneron/`]     |
-| **Eidola** (εἴδωλα)    | Phantoms          | Test mocks and fixtures        | [`ecosystem/oak-mcp-core/src/chora/eidola/`]       |
+| Component              | Purpose                        | Location                                            |
+| ---------------------- | ------------------------------ | --------------------------------------------------- |
+| **Moria** (Μόρια)      | Core abstractions & patterns   | [`ecosystem/moria/mcp/`]                          |
+| **Histoi** (Ἱστοί)     | Tissue layers (env, logger, storage) | [`ecosystem/histoi/`]                       |
 
 ## Phenotype (oak-notion-mcp)
 The expressed organism - concrete implementation for Notion:
@@ -53,7 +50,7 @@ The expressed organism - concrete implementation for Notion:
 - **Organs express actuality** - How those patterns work in a specific context
 - **Inheritance through genetics** - All phenotypes inherit the same morphai from the genotype
 
-> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md) | [Morphai Philosophy](ecosystem/oak-mcp-core/src/chora/morphai/README.md)
+> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md)
 
 ## Features
 

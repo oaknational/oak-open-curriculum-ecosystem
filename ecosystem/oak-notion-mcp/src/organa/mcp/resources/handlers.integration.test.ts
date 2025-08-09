@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createResourceHandlers } from './handlers/index.js';
-import type { MinimalNotionClient } from '../../../chora/stroma/notion-types/notion-client.js';
-import type { Logger } from '@oaknational/mcp-core';
+import { createResourceHandlers } from './handlers';
+import type { MinimalNotionClient } from '../../../chora/stroma/notion-types/notion-client';
+import type { Logger } from '@oaknational/mcp-moria';
 import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
-} from '../../../chora/eidola/notion-mocks.js';
+} from '../../../chora/eidola/notion-mocks';
 import {
   createMockListUsersResponse,
   createMockSearchResponse,
-} from '../../../chora/eidola/notion-api-mocks.js';
+} from '../../../chora/eidola/notion-api-mocks';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {
@@ -61,8 +61,6 @@ describe('createResourceHandlers', () => {
     fatal: vi.fn(),
     child: vi.fn().mockReturnThis(),
     isLevelEnabled: vi.fn().mockReturnValue(true),
-    setLevel: vi.fn(),
-    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 
   const mockNotionClient: MinimalNotionClient = {

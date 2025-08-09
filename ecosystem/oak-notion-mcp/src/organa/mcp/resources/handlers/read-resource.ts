@@ -4,10 +4,10 @@
  */
 
 import type { ReadResourceResult } from '@modelcontextprotocol/sdk/types.js';
-import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers.js';
-import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies.js';
-import { parseResourceUri, validateResourceUri, type ResourceIdentifier } from '../uri-parser.js';
-import { handleDiscoveryResource } from './discovery.js';
+import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
+import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies';
+import { parseResourceUri, validateResourceUri, type ResourceIdentifier } from '../uri-parser';
+import { handleDiscoveryResource } from './discovery';
 
 /**
  * Fetch resource content by type

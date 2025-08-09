@@ -2,9 +2,9 @@
  * Notion-specific dependencies for the phenotype
  */
 
-import type { Logger } from '@oaknational/mcp-core';
-import type { MinimalNotionClient } from './notion-client.js';
-import type { NotionOperations } from '../notion-contracts/notion-operations.js';
+import type { Logger } from '@oaknational/mcp-moria';
+import type { MinimalNotionClient } from './notion-client';
+import type { NotionOperations } from '../notion-contracts/notion-operations';
 
 /**
  * Core dependencies required by Notion MCP handlers

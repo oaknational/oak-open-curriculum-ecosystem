@@ -3,10 +3,10 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client.js';
-import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations.js';
-import { notionListUsersSchema } from '../schemas.js';
-import type { ToolExecutor, ToolLogger } from '../core/types.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client';
+import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations';
+import { notionListUsersSchema } from '../schemas';
+import type { ToolExecutor, ToolLogger } from '../core/types';
 
 export interface ListUsersDependencies {
   notionClient: MinimalNotionClient;

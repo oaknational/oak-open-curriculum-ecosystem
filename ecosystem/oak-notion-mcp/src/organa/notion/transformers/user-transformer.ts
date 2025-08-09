@@ -4,7 +4,7 @@
  */
 
 import type { UserObjectResponse as NotionUser } from '@notionhq/client';
-import type { Resource, EmailScrubber } from './types.js';
+import type { Resource, EmailScrubber } from './types';
 
 /**
  * Default email scrubber - redacts email addresses

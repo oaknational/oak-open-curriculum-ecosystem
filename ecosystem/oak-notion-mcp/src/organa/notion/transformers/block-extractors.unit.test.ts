@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractTextFromNotionBlocks } from './block-extractors.js';
+import { extractTextFromNotionBlocks } from './block-extractors';
 import type { BlockObjectResponse } from '@notionhq/client';
 
 describe('extractTextFromNotionBlocks', () => {

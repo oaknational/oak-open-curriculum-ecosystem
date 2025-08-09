@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-core';
-import type { MinimalNotionClient } from '../../../chora/stroma/notion-types/notion-client.js';
-import { createMockPage } from '../../../chora/eidola/notion-mocks.js';
+import type { Logger } from '@oaknational/mcp-moria';
+import type { MinimalNotionClient } from '../../../chora/stroma/notion-types/notion-client';
+import { createMockPage } from '../../../chora/eidola/notion-mocks';
 import {
   createNotionSearchTool,
   createNotionListDatabasesTool,
@@ -9,7 +9,7 @@ import {
   createNotionGetPageTool,
   createNotionListUsersTool,
   createToolHandlers,
-} from './handlers.js';
+} from './handlers';
 
 // Helper to create a mock Notion client with all required methods
 function createMockNotionClient(): MinimalNotionClient {
@@ -55,8 +55,6 @@ describe('Tool Handlers', () => {
     fatal: vi.fn(),
     child: vi.fn().mockReturnThis(),
     isLevelEnabled: vi.fn().mockReturnValue(true),
-    setLevel: vi.fn(),
-    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 
   describe('createNotionSearchTool', () => {

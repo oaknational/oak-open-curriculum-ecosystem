@@ -7,7 +7,7 @@
  * rather than importing directly from Notion internals.
  */
 
-import type { NotionOperations } from '../../chora/stroma/notion-contracts/notion-operations.js';
+import type { NotionOperations } from '../../chora/stroma/notion-contracts/notion-operations';
 
 // Import transformers
 import {
@@ -15,7 +15,7 @@ import {
   transformNotionDatabaseToMcpResource,
   transformNotionUserToMcpResource,
   extractTextFromNotionBlocks,
-} from './transformers/index.js';
+} from './transformers/index';
 
 // Import formatters
 import {
@@ -24,7 +24,7 @@ import {
   formatUserList,
   formatDatabaseQueryResults,
   formatPageDetails,
-} from './formatters.js';
+} from './formatters';
 
 /**
  * Creates Notion operations for dependency injection

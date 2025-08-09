@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "noEmit": true
-  },
-  "include": ["src/**/*", "*.config.ts", "*.config.js", "eslint.config.js"],
-  "exclude": ["node_modules", "dist"]
-}

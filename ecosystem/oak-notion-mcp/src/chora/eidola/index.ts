@@ -12,7 +12,7 @@ export {
   createMockDatabase,
   createMockPersonUser,
   createMockBotUser,
-} from './notion-mocks.js';
+} from './notion-mocks';
 
 // Export API response mocks - simulated external responses
-export { createMockListUsersResponse, createMockSearchResponse } from './notion-api-mocks.js';
+export { createMockListUsersResponse, createMockSearchResponse } from './notion-api-mocks';

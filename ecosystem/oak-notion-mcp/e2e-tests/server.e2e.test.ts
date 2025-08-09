@@ -5,18 +5,12 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { config } from 'dotenv';
 import { join, resolve } from 'path';
 import { existsSync } from 'fs';
-import { createConsoleLogger } from '@oaknational/mcp-core';
+import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
 
 // Create logger for E2E tests
-const logger = createConsoleLogger({
+const logger = await createAdaptiveLogger({
   name: 'e2e-tests',
-  level:
-    process.env.LOG_LEVEL === 'debug' ||
-    process.env.LOG_LEVEL === 'info' ||
-    process.env.LOG_LEVEL === 'warn' ||
-    process.env.LOG_LEVEL === 'error'
-      ? process.env.LOG_LEVEL
-      : 'info',
+  level: 20, // Info level
 });
 
 // Find and load the .env file from the repo root
@@ -111,10 +105,9 @@ describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion A
   afterAll(async () => {
     // Clean up
     // Runtime checks needed: if beforeAll fails, these may be undefined
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (client) {
-      await client.close();
-    }
+
+    await client.close();
+
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (serverProcess) {
       serverProcess.kill();

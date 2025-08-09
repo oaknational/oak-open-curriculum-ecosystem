@@ -12,14 +12,14 @@ import {
   formatPageProperties,
   formatPageDetails,
   formatUserList,
-} from './formatters.js';
-import type { Resource } from './transformers.js';
+} from './formatters';
+import type { Resource } from './transformers';
 import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
   createMockBotUser,
-} from '../../chora/eidola/notion-mocks.js';
+} from '../../chora/eidola/notion-mocks';
 
 // Helper to create default annotations for rich text
 const defaultAnnotations = {

@@ -6,7 +6,7 @@
  */
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createStartupLogger, defaultStartupLoggerDeps } from './startup.js';
+import { createStartupLogger, defaultStartupLoggerDeps } from './startup';
 
 /**
  * Start the organism - bring everything to life
@@ -19,7 +19,7 @@ export async function startOrganism(): Promise<void> {
   try {
     // Import and run wiring
     log('[PSYCHON] Wiring components...');
-    const { setupAndStartServer } = await import('./wiring.js');
+    const { setupAndStartServer } = await import('./wiring');
 
     const transport = new StdioServerTransport();
 
@@ -38,5 +38,5 @@ export async function startOrganism(): Promise<void> {
 /**
  * Export wiring utilities for testing
  */
-export { createStartupLogger } from './startup.js';
-export type { ServerSetupDependencies } from './wiring.js';
+export { createStartupLogger } from './startup';
+export type { ServerSetupDependencies } from './wiring';

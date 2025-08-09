@@ -3,8 +3,8 @@
  * @module notion/query-building
  */
 
-import type { McpPropertyFilter, McpSort } from './types.js';
-import { VALID_OPERATORS } from './constants.js';
+import type { McpPropertyFilter, McpSort } from './types';
+import { VALID_OPERATORS } from './constants';
 import {
   isRecord,
   isString,
@@ -12,7 +12,7 @@ import {
   isPropertyFilter,
   isSort,
   isValidPropertyType,
-} from './type-guards.js';
+} from './type-guards';
 
 /**
  * Validate operator for a property type

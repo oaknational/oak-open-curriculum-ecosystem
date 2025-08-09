@@ -13,7 +13,7 @@ export {
   formatPageProperties,
   formatPageDetails,
   formatUserList,
-} from './formatters.js';
+} from './formatters';
 
 // Re-export property extractors
 export {
@@ -34,4 +34,4 @@ export {
   extractFilesValue,
   extractRelationValue,
   extractPropertyValue,
-} from './property-extractors.js';
+} from './property-extractors';

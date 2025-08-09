@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatNotionRichText } from './rich-text-formatter.js';
+import { formatNotionRichText } from './rich-text-formatter';
 
 describe('formatNotionRichText', () => {
   it('should format plain text', () => {

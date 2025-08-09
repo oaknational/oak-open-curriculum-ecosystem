@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { transformNotionDatabaseToMcpResource } from './database-transformer.js';
+import { transformNotionDatabaseToMcpResource } from './database-transformer';
 import type { DatabaseObjectResponse } from '@notionhq/client';
 
 describe('transformNotionDatabaseToMcpResource', () => {

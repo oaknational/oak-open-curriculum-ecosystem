@@ -8,8 +8,8 @@ import type {
   ListResourcesResult,
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
-import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies.js';
-import { handleReadResource } from './read-resource.js';
+import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies';
+import { handleReadResource } from './read-resource';
 
 // Handler functions interface
 export interface ResourceHandlers {
@@ -45,5 +45,5 @@ export function createResourceHandlers(deps: NotionDependencies): ResourceHandle
 }
 
 // Re-export for convenience
-export { handleReadResource } from './read-resource.js';
-export { handleDiscoveryResource } from './discovery.js';
+export { handleReadResource } from './read-resource';
+export { handleDiscoveryResource } from './discovery';

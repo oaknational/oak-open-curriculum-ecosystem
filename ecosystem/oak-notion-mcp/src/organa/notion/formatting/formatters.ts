@@ -8,9 +8,9 @@ import type {
   DatabaseObjectResponse,
   UserObjectResponse,
 } from '@notionhq/client';
-import type { Resource } from '../transformers.js';
-import { extractPropertyValue } from './property-extractors.js';
-import { formatPageMetadata, formatPagePropertiesForDetails } from './formatters-helpers.js';
+import type { Resource } from '../transformers';
+import { extractPropertyValue } from './property-extractors';
+import { formatPageMetadata, formatPagePropertiesForDetails } from './formatters-helpers';
 
 /**
  * Formats search results into a text representation

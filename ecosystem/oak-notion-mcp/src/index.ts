@@ -5,7 +5,7 @@
  * All orchestration happens in the psychon layer.
  */
 
-import { startOrganism } from './psychon/index.js';
+import { startOrganism } from './psychon';
 
 // Application entry point - minimal delegation
 export async function main(): Promise<void> {

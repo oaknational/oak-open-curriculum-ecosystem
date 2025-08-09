@@ -5,7 +5,7 @@
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
-import { baseConfig } from '../../eslint.config.base.js';
+import { baseConfig } from '../../eslint.config.base';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -114,6 +114,12 @@ const config = tsEslintConfig(
   // Config files (TS)
   {
     files: ['**/*.config.ts', 'eslint.config.ts', 'eslint.config.base.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: thisDir,
+      },
+    },
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
       'import-x/no-relative-parent-imports': 'off',

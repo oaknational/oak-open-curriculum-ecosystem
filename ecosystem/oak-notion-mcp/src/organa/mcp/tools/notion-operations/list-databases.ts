@@ -3,11 +3,11 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client.js';
-import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations.js';
-import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
-import { notionListDatabasesSchema } from '../schemas.js';
-import type { ToolExecutor, ToolLogger } from '../core/types.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client';
+import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations';
+import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { notionListDatabasesSchema } from '../schemas';
+import type { ToolExecutor, ToolLogger } from '../core/types';
 
 export interface ListDatabasesDependencies {
   notionClient: MinimalNotionClient;

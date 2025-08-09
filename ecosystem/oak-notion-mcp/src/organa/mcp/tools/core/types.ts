@@ -1,14 +1,12 @@
 /**
  * Core abstractions for MCP tools following Dependency Inversion Principle
- * These now inherit from the morphai in the genotype
+ * These now inherit from the pure abstractions in Moria
  */
 
 import type {
   ToolExecutor as MorphaiToolExecutor,
   ToolDefinition as MorphaiToolDefinition,
-  ErrorHandler as MorphaiErrorHandler,
-  ErrorContext as MorphaiErrorContext,
-} from '@oaknational/mcp-core';
+} from '@oaknational/mcp-moria';
 
 /**
  * Re-export morphai patterns for backward compatibility
@@ -18,23 +16,26 @@ export type ToolExecutor<TOutput = string> = MorphaiToolExecutor<unknown, TOutpu
 export type ToolDefinition = MorphaiToolDefinition;
 
 /**
- * Error handler extends morphai pattern with MCP-specific result type
+ * Error context for tool-specific error handling
  */
-export interface ErrorHandler extends MorphaiErrorHandler<unknown, ToolResult> {
-  handle(error: unknown, context?: ErrorContext): ToolResult;
+export interface ErrorContext {
+  readonly toolName: string;
+  readonly operation?: string;
+  readonly metadata?: Record<string, unknown>;
 }
 
 /**
- * Error context extends morphai with tool-specific fields
+ * Error handler for MCP tools
+ * Returns ToolResult instead of HandlerResult for MCP compatibility
  */
-export interface ErrorContext extends MorphaiErrorContext {
-  readonly toolName: string;
+export interface ErrorHandler {
+  handle(error: unknown, context?: ErrorContext): ToolResult;
 }
 
 /**
  * Import existing MCP types - single source of truth
  */
-import type { McpTool, McpToolResult } from '../../types.js';
+import type { McpTool, McpToolResult } from '../../types';
 
 /**
  * Tool result structure

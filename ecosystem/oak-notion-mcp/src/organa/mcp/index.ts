@@ -5,10 +5,10 @@
  */
 
 // Resource handlers
-export { createResourceHandlers } from './resources/handlers/index.js';
+export { createResourceHandlers } from './resources/handlers/index';
 
 // Tool handlers
-export { createToolHandlers } from './tools/handlers.js';
+export { createToolHandlers } from './tools/handlers';
 
 // Types
-export type { McpTool, McpToolResult } from './types.js';
+export type { McpTool, McpToolResult } from './types';

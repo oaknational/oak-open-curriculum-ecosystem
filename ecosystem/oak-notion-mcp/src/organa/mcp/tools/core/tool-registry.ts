@@ -3,8 +3,8 @@
  * Manages collection of MCP tools
  */
 
-import type { ToolRegistry } from './types.js';
-import type { McpTool } from '../../types.js';
+import type { ToolRegistry } from './types';
+import type { McpTool } from '../../types';
 
 /**
  * Creates a tool registry for managing MCP tools

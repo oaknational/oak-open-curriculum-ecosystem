@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseResourceUri, validateResourceUri, buildResourceUri } from './uri-parser.js';
+import { parseResourceUri, validateResourceUri, buildResourceUri } from './uri-parser';
 
 describe('parseResourceUri', () => {
   it('should parse page URI correctly', () => {

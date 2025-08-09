@@ -1,7 +1,8 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Environment, Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-moria';
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import type { BaseEnvironment } from '../chora/phaneron/notion-config/env-utils';
 
 export interface ServerSetupDependencies {
   transport: StdioServerTransport;
@@ -11,10 +12,10 @@ export interface ServerSetupDependencies {
 /**
  * Loads environment configuration with error handling
  */
-async function loadEnvironment(log: ServerSetupDependencies['log']): Promise<Environment> {
+async function loadEnvironment(log: ServerSetupDependencies['log']) {
   log('[STARTUP] Loading environment configuration...');
   try {
-    const { env } = await import('@oaknational/mcp-core');
+    const { env } = await import('../chora/phaneron/notion-config/environment');
     return env;
   } catch (error) {
     log('[STARTUP ERROR] Environment validation failed:', true);
@@ -29,7 +30,7 @@ async function loadEnvironment(log: ServerSetupDependencies['log']): Promise<Env
  * Creates all server dependencies
  */
 async function createServerDependencies(
-  environment: Environment,
+  environment: BaseEnvironment,
   log: ServerSetupDependencies['log'],
 ): Promise<{
   logger: Logger;
@@ -38,17 +39,19 @@ async function createServerDependencies(
 }> {
   log('[STARTUP] Importing dependencies...');
 
-  const { createConsoleLogger } = await import('@oaknational/mcp-core');
-  const { getLogLevelValue } = await import('@oaknational/mcp-core');
-  const { getNotionConfig } = await import('../chora/phaneron/notion-config/notion-config.js');
-  const { env: notionEnv } = await import('../chora/phaneron/notion-config/environment.js');
+  const { createAdaptiveLogger } = await import('@oaknational/mcp-histos-logger');
+  const { getNotionConfig } = await import('../chora/phaneron/notion-config/notion-config');
+  const { env: notionEnv } = await import('../chora/phaneron/notion-config/environment');
   const { Client } = await import('@notionhq/client');
-  const { createMcpServer } = await import('./server.js');
-  const { createNotionOperations } = await import('../organa/notion/index.js');
+  const { createMcpServer } = await import('./server');
+  const { createNotionOperations } = await import('../organa/notion');
 
   log('[STARTUP] Creating logger...');
-  const logLevel = getLogLevelValue(environment.LOG_LEVEL);
-  const logger = createConsoleLogger(logLevel);
+  // Can now pass the LOG_LEVEL string directly (e.g., "INFO", "DEBUG", "ERROR")
+  const logger = await createAdaptiveLogger({
+    level: environment.LOG_LEVEL,
+    name: 'oak-notion-mcp',
+  });
 
   log('[STARTUP] Creating Notion client...');
   const notionConfig = getNotionConfig(notionEnv);
@@ -73,12 +76,6 @@ async function createServerDependencies(
  * This is an integration point that orchestrates the server startup
  */
 export async function setupAndStartServer(deps: ServerSetupDependencies): Promise<void> {
-  // Initialize Node.js-specific context storage
-  deps.log('[STARTUP] Initializing context storage...');
-  const { registerContextStorageFactory } = await import('@oaknational/mcp-core');
-  const { initializeNodeContextStorage } = await import('../chora/aither/context-storage-node.js');
-  initializeNodeContextStorage(registerContextStorageFactory);
-
   const environment = await loadEnvironment(deps.log);
   const { logger, server } = await createServerDependencies(environment, deps.log);
 

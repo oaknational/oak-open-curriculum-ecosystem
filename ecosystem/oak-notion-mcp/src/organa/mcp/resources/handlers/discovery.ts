@@ -5,10 +5,10 @@
 
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
-import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers.js';
-import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies.js';
+import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
+import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies';
 // Transformers will be accessed through deps.notionOperations
-import { scrubSensitiveData } from '@oaknational/mcp-core';
+import { scrubSensitiveData } from '../../../../chora/aither/scrubbing';
 
 /**
  * Handles the special discovery resource
@@ -146,8 +146,9 @@ function formatDiscoveryText(discovery: {
   };
   resources: unknown;
 }): string {
-  // Scrub sensitive data - we know it preserves structure
-  const scrubbedDiscovery = scrubSensitiveData(discovery);
+  // Convert to string first, then scrub sensitive data
+  const discoveryString = JSON.stringify(discovery, null, 2);
+  const scrubbedDiscovery = scrubSensitiveData(discoveryString);
 
   return `# Notion Workspace Discovery
 

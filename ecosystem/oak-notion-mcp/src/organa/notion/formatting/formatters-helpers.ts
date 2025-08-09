@@ -3,9 +3,9 @@
  * @module notion/formatting
  */
 
-import type { Resource } from '../transformers.js';
-import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js';
-import { extractPropertyValue } from './property-extractors/index.js';
+import type { Resource } from '../transformers';
+import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { extractPropertyValue } from './property-extractors';
 
 /**
  * Format page metadata section

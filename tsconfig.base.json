@@ -15,6 +15,17 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true
+    "paths": {
+      "@oaknational/oak-notion-mcp": ["./ecosystem/oak-notion-mcp/src"],
+      "@oaknational/oak-notion-mcp/*": ["./ecosystem/oak-notion-mcp/src/*"],
+      "@oaknational/mcp-moria": ["./ecosystem/moria/moria-mcp/src"],
+      "@oaknational/mcp-moria/*": ["./ecosystem/moria/moria-mcp/src/*"],
+      "@oaknational/mcp-histos-env": ["./ecosystem/histoi/histos-env/src"],
+      "@oaknational/mcp-histos-env/*": ["./ecosystem/histoi/histos-env/src/*"],
+      "@oaknational/mcp-histos-logger": ["./ecosystem/histoi/histos-logger/src"],
+      "@oaknational/mcp-histos-logger/*": ["./ecosystem/histoi/histos-logger/src/*"],
+      "@oaknational/mcp-histos-storage": ["./ecosystem/histoi/histos-storage/src"],
+      "@oaknational/mcp-histos-storage/*": ["./ecosystem/histoi/histos-storage/src/*"]
+    }
   }
 }

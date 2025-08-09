@@ -3,14 +3,14 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client.js';
-import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations.js';
+import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client';
+import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations';
 import type {
   PageObjectResponse,
   DatabaseObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints.js';
-import { notionSearchSchema } from '../schemas.js';
-import type { ToolExecutor, ToolLogger } from '../core/types.js';
+} from '@notionhq/client/build/src/api-endpoints';
+import { notionSearchSchema } from '../schemas';
+import type { ToolExecutor, ToolLogger } from '../core/types';
 
 export interface SearchDependencies {
   notionClient: MinimalNotionClient;

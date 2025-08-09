@@ -13,7 +13,7 @@ export type { Resource as McpResource } from '@modelcontextprotocol/sdk/types.js
 export type {
   RichTextItemResponse as NotionRichText,
   BlockObjectResponse as NotionBlock,
-} from '@notionhq/client/build/src/api-endpoints.js';
+} from '@notionhq/client';
 
 /**
  * Email scrubbing function type

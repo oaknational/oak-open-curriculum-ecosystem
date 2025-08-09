@@ -33,6 +33,7 @@
     "modelcontextprotocol",
     "Moria",
     "morphai",
+    "nodenext",
     "Nomoi",
     "Nomos",
     "notionhq",
@@ -51,6 +52,7 @@
     "Systemata",
     "Turborepo",
     "ultrathinking",
+    "unstub",
     "xenotransplantation",
     "Αἰθέρες",
     "Αἰθήρ",
@@ -84,14 +86,18 @@
     "Φανερά",
     "Φανερόν",
     "Χώρα",
+    "Χώραι",
     "Χῶραι",
     "Ψυχά",
     "Ψυχόν"
   ],
   "eslint.workingDirectories": [
-  
-    {"directory": "/"},
-    { "directory": "ecosystem/oak-mcp-core", "changeProcessCWD": true },
-    { "directory": "ecosystem/oak-notion-mcp", "changeProcessCWD": true }
-  ]
+    
+    { "directory": "ecosystem/oak-notion-mcp", "changeProcessCWD": true },
+    { "directory": "ecosystem/moria/moria-mcp", "changeProcessCWD": true },
+    { "directory": "ecosystem/histoi/histos-env", "changeProcessCWD": true },
+    { "directory": "ecosystem/histoi/histos-logger", "changeProcessCWD": true },
+    { "directory": "ecosystem/histoi/histos-storage", "changeProcessCWD": true }
+  ],
+  "vitest.disableWorkspaceWarning": true
 }

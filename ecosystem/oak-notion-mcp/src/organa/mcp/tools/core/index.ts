@@ -13,12 +13,12 @@ export type {
   ToolLogger,
   ToolFactory,
   ToolRegistry,
-} from './types.js';
+} from './types';
 
 // Re-export McpTool from its single source of truth
-export type { McpTool } from '../../types.js';
+export type { McpTool } from '../../types';
 
 // Re-export implementations
-export { createErrorHandler } from './error-handler.js';
-export { createToolFactory } from './tool-factory.js';
-export { createToolRegistry } from './tool-registry.js';
+export { createErrorHandler } from './error-handler';
+export { createToolFactory } from './tool-factory';
+export { createToolRegistry } from './tool-registry';

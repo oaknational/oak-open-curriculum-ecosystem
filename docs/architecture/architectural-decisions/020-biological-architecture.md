@@ -24,7 +24,7 @@ We adopt a complete biological architecture where ALL essential life functions a
 ### Genotype (oak-mcp-core) - The Genetic Blueprint
 
 ```
-ecosystem/oak-mcp-core/src/
+ecosystem/moria/moria-mcp/src/
 ├── chora/              # Cross-cutting fields (pervasive infrastructure)
 │   ├── morphai/        # Abstract patterns (Platonic forms)
 │   │   ├── tools/      # Tool execution patterns

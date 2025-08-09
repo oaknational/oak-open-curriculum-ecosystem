@@ -1,14 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "baseUrl": "./src",
-    "paths": {
-      "@/*": ["*"],
-      "@organa/*": ["organa/*"],
-      "@psychon/*": ["psychon/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+  "include": ["src/**/*.ts", "**/*.test.ts", "e2e-tests/**/*.ts", "*.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

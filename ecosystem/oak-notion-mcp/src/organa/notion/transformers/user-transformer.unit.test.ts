@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { transformNotionUserToMcpResource } from './user-transformer.js';
+import { transformNotionUserToMcpResource } from './user-transformer';
 import type { UserObjectResponse } from '@notionhq/client';
 
 describe('transformNotionUserToMcpResource', () => {

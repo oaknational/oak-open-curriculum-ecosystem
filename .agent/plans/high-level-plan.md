@@ -138,7 +138,7 @@ Transform from monolithic genotype/phenotype model to a three-tier biological ec
 
 ### Phase 2.9: Architectural Review & Modularization ✅ COMPLETED
 
-**Outcome**: Complete architectural analysis identifying generic MCP components for extraction into `oak-mcp-core`.
+**Outcome**: Complete architectural analysis identifying generic MCP components (now extracted to Moria/Histoi).
 
 **Key Findings**:
 
@@ -258,7 +258,7 @@ oak-notion-mcp/                 # Repository root
   - [x] Conditional dependencies with graceful degradation (ADR-022)
   - [x] 106 meaningful tests (removed 300+ lines of useless tests)
   - [x] Runtime detection for Node.js/Bun/Deno/Edge environments
-  - [x] Ready for extraction to @oaknational/mcp-core
+  - [x] Ready for extraction (now in Moria/Histoi packages)
 
 - [x] **Core Framework Components Delivered**:
   - [x] Logging Framework - Complete with runtime detection (600+ LoC)
@@ -272,7 +272,7 @@ oak-notion-mcp/                 # Repository root
   - [x] Test Factories - Mock creation utilities (100+ LoC)
 
 - [x] **oak-notion-mcp Migration Completed**:
-  - [x] Updated to depend on @oaknational/mcp-core workspace package
+  - [x] Updated to depend on Moria/Histoi workspace packages
   - [x] Successfully importing and using core components
   - [x] Moved generic infrastructure to core (env-loader, runtime-detection)
   - [x] Proper phenotype implementation with Node.js specifics
@@ -329,7 +329,7 @@ oak-notion-mcp/                 # Repository root
    - 3-4 example MCP servers (100-300 LoC each)
    - Migration guide and troubleshooting
    - Beta release and feedback collection
-   - Published as @oaknational/mcp-core
+   - Published as @oaknational/mcp-moria and Histoi tissues
 
 **Quality Checkpoints** (after each component):
 
@@ -361,14 +361,16 @@ oak-notion-mcp/                 # Repository root
 - All external data validated at boundaries before entering core system
 - Zero errors lost through propagation chain
 - All logging is structured, correlated, and edge-compatible
-- Published to npm as @oaknational/mcp-core
+- Published to npm as @oaknational/mcp-moria and Histoi tissues
 - Beta feedback incorporated before stable release
 - **Ecosystem readiness**: Designed for future symbiotic relationships
 
 ### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
 
 **Status**: Sub-phase 5.1 (Moria Package) ✅ COMPLETED  
-**Last Updated**: 2025-01-07
+**Last Updated**: 2025-01-08
+
+**Critical Issue Identified**: Node.js-specific code is spread throughout the codebase, violating edge runtime compatibility. This must be addressed before Phase 6.
 
 **Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues
 
@@ -470,6 +472,47 @@ oak-notion-mcp/                 # Repository root
 - New organs can be added for all organisms to use
 - New runtimes can be supported (e.g., Deno, Bun)
 - Ecosystem can grow with multiple organisms sharing organs
+
+### Phase 5.5: Runtime Isolation for Edge Compatibility 🆕 PLANNED
+
+**Status**: Not Started  
+**Priority**: HIGH - Must complete before Phase 6
+
+**Problem Statement**: Node.js globals (`process`, `console`, `setTimeout`, `__dirname`) are spread throughout the codebase, violating our edge runtime compatibility goal. The current ESLint configuration allows Node.js globals everywhere, which masks the architectural problem.
+
+**Outcome**: Achieve true runtime isolation with Node.js-specific code confined to specific locations
+
+**Strategy**:
+1. **Identify Runtime-Specific Code**:
+   - Audit all uses of Node.js globals
+   - Map dependencies on Node.js-specific APIs
+   - Identify edge-incompatible patterns
+
+2. **Create Runtime Boundaries**:
+   - Designate specific directories for Node.js-specific code (e.g., `/node` subdirectories)
+   - Create runtime abstraction interfaces in moria
+   - Implement adapters in histoi tissues
+
+3. **Update ESLint Configuration**:
+   - Remove Node.js globals from base configuration
+   - Add Node.js globals ONLY to Node.js-specific directories
+   - Use ESLint to enforce runtime boundaries
+
+4. **Refactor Code**:
+   - Move all Node.js-specific code to designated areas
+   - Replace direct global usage with injected dependencies
+   - Ensure all core logic is runtime-agnostic
+
+**Success Metrics**:
+- Zero Node.js globals in core business logic
+- ESLint enforces runtime boundaries
+- Code runs in both Node.js and edge runtimes
+- Clear separation between runtime-specific and runtime-agnostic code
+
+**Implementation Notes**:
+- This is architectural debt from initial development
+- Must be resolved before ecosystem can truly support multiple runtimes
+- Aligns with histoi tissue philosophy of runtime adaptation
 
 ### Phase 6: Oak Open Curriculum API MCP
 

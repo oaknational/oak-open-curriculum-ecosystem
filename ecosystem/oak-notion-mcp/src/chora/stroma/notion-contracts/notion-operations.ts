@@ -11,7 +11,7 @@ import type {
   DatabaseObjectResponse,
   UserObjectResponse,
   BlockObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints.js';
+} from '@notionhq/client/build/src/api-endpoints';
 import type { Resource } from '@modelcontextprotocol/sdk/types.js';
 
 /**

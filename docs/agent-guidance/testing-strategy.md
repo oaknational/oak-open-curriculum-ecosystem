@@ -23,6 +23,21 @@
 - Integration point: A point in the code where multiple units are brought together to effect change in the larger system. Typically this is where IO interfaces are injected as arguments to functions, and where other configuration occurs. Integration points define boundaries of responsibility. Integration points have integration tests.
 - System: The complete MCP server exposed via stdio transport. Systems have E2E tests.
 
+### Test Types
+
+#### In-process tests
+
+In-process tests are tests that validate code imported into the test process. They are fast, specific, and do not produce side effects.
+
+- **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD.
+- **Integration test**: A test that verifies the behaviour of a collection of units. Integration tests DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing.
+
+#### Out-of-process tests
+
+Out-of-process tests are tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
+
+- **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
+
 ### Workspace Architecture Components (Moria/Histoi/Psycha)
 
 - **Moria (Molecules/Atoms)**: Pure abstractions (zero dependencies) - Test with unit tests only, no IO or mocks allowed
@@ -53,21 +68,6 @@
   
 - **Psychon (Soul/Living Whole)**: The wiring layer - Test with integration tests to verify proper assembly and dependency injection
   - *Example*: Main application class that wires all organs together, dependency injection container
-
-### Test Types
-
-#### In-process tests
-
-In-process tests are tests that validate code imported into the test process. They are fast, specific, and do not produce side effects.
-
-- Unit test: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD.
-- Integration test: A test that verifies the behaviour of a collection of units. Integration tests DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing.
-
-#### Out-of-process tests
-
-Out-of-process tests are tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
-
-- E2E test: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
 
 ### Design Approaches
 

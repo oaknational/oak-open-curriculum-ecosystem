@@ -4,23 +4,23 @@
  */
 
 // Re-export types
-export type { Resource, McpResource, NotionRichText, NotionBlock, EmailScrubber } from './types.js';
+export type { Resource, McpResource, NotionRichText, NotionBlock, EmailScrubber } from './types';
 
 // Re-export page transformer
-export { transformNotionPageToMcpResource } from './page-transformer.js';
+export { transformNotionPageToMcpResource } from './page-transformer';
 
 // Re-export database transformer
-export { transformNotionDatabaseToMcpResource } from './database-transformer.js';
+export { transformNotionDatabaseToMcpResource } from './database-transformer';
 
 // Re-export user transformer
 export {
   transformNotionUserToMcpResource,
   createUserTransformer,
   defaultEmailScrubber,
-} from './user-transformer.js';
+} from './user-transformer';
 
 // Re-export block text extraction
-export { extractTextFromNotionBlocks } from './block-extractors.js';
+export { extractTextFromNotionBlocks } from './block-extractors';
 
 // Re-export rich text formatting
-export { formatNotionRichText } from './rich-text-formatter.js';
+export { formatNotionRichText } from './rich-text-formatter';

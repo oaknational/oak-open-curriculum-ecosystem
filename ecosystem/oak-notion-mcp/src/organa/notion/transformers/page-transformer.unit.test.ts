@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { transformNotionPageToMcpResource } from './page-transformer.js';
+import { transformNotionPageToMcpResource } from './page-transformer';
 import type { PageObjectResponse } from '@notionhq/client';
 
 describe('transformNotionPageToMcpResource', () => {

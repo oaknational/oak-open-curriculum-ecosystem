@@ -5,9 +5,5 @@
  * that extend the genotype's abstract patterns.
  */
 
-// Node.js-specific context storage
-export {
-  AsyncLocalStorageAdapter,
-  createNodeContextStorage,
-  initializeNodeContextStorage,
-} from './context-storage-node.js';
+// Data scrubbing utilities (required for PII protection)
+export { scrubEmail, scrubSensitiveData } from './scrubbing';

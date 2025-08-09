@@ -4,7 +4,7 @@
  */
 
 import type { PageObjectResponse } from '@notionhq/client';
-import { formatNotionRichText } from '../../transformers.js';
+import { formatNotionRichText } from '../../transformers';
 
 /**
  * Extract display value from title property

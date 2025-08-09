@@ -3,17 +3,17 @@
  * Business logic executors for Notion API interactions
  */
 
-export { createSearchExecutor } from './search.js';
-export type { SearchDependencies } from './search.js';
+export { createSearchExecutor } from './search';
+export type { SearchDependencies } from './search';
 
-export { createListDatabasesExecutor } from './list-databases.js';
-export type { ListDatabasesDependencies } from './list-databases.js';
+export { createListDatabasesExecutor } from './list-databases';
+export type { ListDatabasesDependencies } from './list-databases';
 
-export { createQueryDatabaseExecutor } from './query-database.js';
-export type { QueryDatabaseDependencies } from './query-database.js';
+export { createQueryDatabaseExecutor } from './query-database';
+export type { QueryDatabaseDependencies } from './query-database';
 
-export { createGetPageExecutor } from './get-page.js';
-export type { GetPageDependencies } from './get-page.js';
+export { createGetPageExecutor } from './get-page';
+export type { GetPageDependencies } from './get-page';
 
-export { createListUsersExecutor } from './list-users.js';
-export type { ListUsersDependencies } from './list-users.js';
+export { createListUsersExecutor } from './list-users';
+export type { ListUsersDependencies } from './list-users';

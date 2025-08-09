@@ -3,8 +3,8 @@
  * Creates MCP tools from clean abstractions
  */
 
-import type { ToolDefinition, ToolExecutor, ErrorHandler, ToolFactory } from './types.js';
-import type { McpTool } from '../../types.js';
+import type { ToolDefinition, ToolExecutor, ErrorHandler, ToolFactory } from './types';
+import type { McpTool } from '../../types';
 
 /**
  * Creates a generic tool factory

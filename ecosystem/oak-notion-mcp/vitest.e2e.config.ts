@@ -1,11 +1,6 @@
-import { defineConfig } from 'vitest/config';
+import { mergeConfig } from 'vitest/config';
+import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-    include: ['e2e-tests/**/*.e2e.test.ts'],
-    testTimeout: 30000, // E2E tests may take longer
-    hookTimeout: 30000,
-  },
+export default mergeConfig(baseE2EConfig, {
+  // oak-notion-mcp uses all defaults from base E2E config
 });

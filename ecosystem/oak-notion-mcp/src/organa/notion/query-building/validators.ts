@@ -3,14 +3,14 @@
  * @module notion/query-building
  */
 
-import type { McpFilters, ValidationResult } from './types.js';
-import { isRecord } from './type-guards.js';
+import type { McpFilters, ValidationResult } from './types';
+import { isRecord } from './type-guards';
 import {
   validateProperties,
   validateSorts,
   validatePageSize,
   validateStartCursor,
-} from './field-validators.js';
+} from './field-validators';
 
 /**
  * Validates database filters to ensure they're compatible with Notion API

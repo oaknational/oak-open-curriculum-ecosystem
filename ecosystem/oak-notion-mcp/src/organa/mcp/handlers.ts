@@ -1,5 +1,5 @@
-import { scrubEmail } from '@oaknational/mcp-core';
-import type { NotionDependencies } from '../../chora/stroma/notion-types/dependencies.js';
+import type { NotionDependencies } from '../../chora/stroma/notion-types/dependencies';
+import { scrubEmail } from '../../chora/aither/scrubbing';
 
 export interface Resource {
   uri: string;

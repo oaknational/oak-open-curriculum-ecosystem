@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { createStartupLogger, type StartupLoggerDependencies } from './startup.js';
+import { createStartupLogger, type StartupLoggerDependencies } from './startup';
 
 describe('createStartupLogger', () => {
   function createMockDeps(): StartupLoggerDependencies {

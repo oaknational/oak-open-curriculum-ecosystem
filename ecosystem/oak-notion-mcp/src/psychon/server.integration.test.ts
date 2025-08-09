@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createMcpServer } from './server.js';
+import { createMcpServer } from './server';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { Logger } from '@oaknational/mcp-core';
-import { createMockListUsersResponse } from '../chora/eidola/index.js';
+import type { Logger } from '@oaknational/mcp-moria';
+import { createMockListUsersResponse } from '../chora/eidola';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {
@@ -34,8 +34,6 @@ describe('MCP Server', () => {
     fatal: vi.fn(),
     child: vi.fn().mockReturnThis(),
     isLevelEnabled: vi.fn().mockReturnValue(true),
-    setLevel: vi.fn(),
-    getLevel: vi.fn().mockReturnValue(20), // INFO level
   };
 
   // Create a partial mock of NotionClient with only the methods we use

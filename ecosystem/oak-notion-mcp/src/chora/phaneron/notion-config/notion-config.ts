@@ -2,7 +2,7 @@
  * Notion-specific configuration for the phenotype
  */
 
-import type { NotionEnvironment } from './environment.js';
+import type { NotionEnvironment } from './environment';
 
 export interface NotionConfig {
   apiKey: string;

@@ -3,28 +3,28 @@
  * Assembles tools from clean abstractions
  */
 
-import type { NotionDependencies } from '../../../chora/stroma/notion-types/dependencies.js';
-import type { McpTool } from '../types.js';
+import type { NotionDependencies } from '../../../chora/stroma/notion-types/dependencies';
+import type { McpTool } from '../types';
 import {
   createToolFactory,
   createErrorHandler,
   createToolRegistry,
   type ToolRegistry,
-} from './core/index.js';
+} from './core/index';
 import {
   searchToolDefinition,
   listDatabasesToolDefinition,
   queryDatabaseToolDefinition,
   getPageToolDefinition,
   listUsersToolDefinition,
-} from './definitions/index.js';
+} from './definitions/index';
 import {
   createSearchExecutor,
   createListDatabasesExecutor,
   createQueryDatabaseExecutor,
   createGetPageExecutor,
   createListUsersExecutor,
-} from './notion-operations/index.js';
+} from './notion-operations/index';
 
 /**
  * Tool handlers interface

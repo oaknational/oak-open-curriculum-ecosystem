@@ -4,7 +4,7 @@
  */
 
 import type { PageObjectResponse as NotionPage } from '@notionhq/client';
-import type { Resource } from './types.js';
+import type { Resource } from './types';
 
 /**
  * Extracts title from page properties

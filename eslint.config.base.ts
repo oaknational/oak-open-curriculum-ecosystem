@@ -13,6 +13,7 @@ import {
 } from 'typescript-eslint';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
+import globals from 'globals';
 
 export const baseConfig = tsEslintConfig(
   {
@@ -35,6 +36,16 @@ export const baseConfig = tsEslintConfig(
     files: ['**/*.ts'],
     languageOptions: {
       parser: tsEslintParser,
+      parserOptions: {
+        projectService: true,
+      },
+      /**
+       * @todo the code base is supposed to be edge compatible, so we need to remove these globals, move the Node reliant code to a specific space, and add the Node globals there
+       */
+      globals: {
+        ...globals.node,
+        ...globals.es2021,
+      },
     },
     rules: {
       // Types
@@ -42,7 +53,10 @@ export const baseConfig = tsEslintConfig(
       '@typescript-eslint/no-unused-vars': ['error'],
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' }],
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' },
+      ],
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -56,6 +70,8 @@ export const baseConfig = tsEslintConfig(
       'max-lines': ['error', 250],
 
       // General good practices
+      // TypeScript handles undefined variables better than ESLint
+      'no-undef': 'off',
       'no-empty': 'error',
       'no-empty-function': 'error',
       'no-constant-condition': 'error',
@@ -67,6 +83,7 @@ export const baseConfig = tsEslintConfig(
       'import-x/no-namespace': 'error',
       'import-x/no-cycle': ['error'],
       'import-x/no-useless-path-segments': ['error'],
+      'import-x/no-named-as-default': 'error',
 
       // Prevent export * for better tree shaking
       'no-restricted-syntax': [
@@ -85,15 +102,24 @@ export const baseConfig = tsEslintConfig(
     rules: {
       'max-lines': ['error', 700],
       'max-lines-per-function': ['error', 1000],
-      '@typescript-eslint/consistent-type-assertions': ['error', {
-        assertionStyle: 'as',
-        objectLiteralTypeAssertions: 'allow',
-      }],
+      '@typescript-eslint/consistent-type-assertions': [
+        'error',
+        {
+          assertionStyle: 'as',
+          objectLiteralTypeAssertions: 'allow',
+        },
+      ],
     },
   },
-  // Config files (JS and MJS)
+  // Config files need their own tsconfig
   {
-    files: ['**/*.config.mjs', '.releaserc.mjs', 'commitlint.config.mjs'],
-    extends: [tsEslintConfigs.disableTypeChecked],
+    files: ['**/*.config.ts', '**/eslint.config.ts', 'eslint.config.base.ts'],
+    languageOptions: {
+      parser: tsEslintParser,
+      parserOptions: {
+        project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
   },
 );

@@ -15,20 +15,20 @@ export type {
   SearchOptions,
   NotionSearchQuery,
   ValidationResult,
-} from './query-building/index.js';
+} from './query-building/index';
 
 // Re-export constants
 export {
   VALID_PROPERTY_TYPES,
   VALID_OPERATORS,
   VALID_SORT_DIRECTIONS,
-} from './query-building/index.js';
+} from './query-building/index';
 
 // Re-export query builders
-export { buildDatabaseQuery, buildSearchQuery } from './query-building/index.js';
+export { buildDatabaseQuery, buildSearchQuery } from './query-building/index';
 
 // Re-export validators
-export { validateDatabaseFilters } from './query-building/index.js';
+export { validateDatabaseFilters } from './query-building/index';
 
 // Re-export type guards
 export {
@@ -39,4 +39,4 @@ export {
   isValidPropertyType,
   isPropertyFilter,
   isSort,
-} from './query-building/index.js';
+} from './query-building/index';

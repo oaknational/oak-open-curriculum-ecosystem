@@ -9,7 +9,7 @@ import type {
   NotionDatabaseQuery,
   SearchOptions,
   NotionSearchQuery,
-} from './types.js';
+} from './types';
 
 /**
  * Build filter condition for a single property

@@ -12,16 +12,16 @@ export type {
   SearchOptions,
   NotionSearchQuery,
   ValidationResult,
-} from './types.js';
+} from './types';
 
 // Re-export constants for external use
-export { VALID_PROPERTY_TYPES, VALID_OPERATORS, VALID_SORT_DIRECTIONS } from './constants.js';
+export { VALID_PROPERTY_TYPES, VALID_OPERATORS, VALID_SORT_DIRECTIONS } from './constants';
 
 // Re-export query builders
-export { buildDatabaseQuery, buildSearchQuery } from './builders.js';
+export { buildDatabaseQuery, buildSearchQuery } from './builders';
 
 // Re-export validators
-export { validateDatabaseFilters } from './validators.js';
+export { validateDatabaseFilters } from './validators';
 export {
   validateProperties,
   validateSorts,
@@ -29,7 +29,7 @@ export {
   validateStartCursor,
   validatePropertyFilter,
   validateOperator,
-} from './field-validators.js';
+} from './field-validators';
 
 // Re-export type guards if needed externally
 export {
@@ -40,4 +40,4 @@ export {
   isValidPropertyType,
   isPropertyFilter,
   isSort,
-} from './type-guards.js';
+} from './type-guards';

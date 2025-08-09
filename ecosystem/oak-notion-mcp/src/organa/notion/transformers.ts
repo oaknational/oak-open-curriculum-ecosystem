@@ -3,18 +3,18 @@
  * Re-exports functionality from modular structure
  */
 
-import { scrubEmail } from '@oaknational/mcp-core';
-import { createUserTransformer } from './transformers/user-transformer.js';
+import { scrubEmail } from '../../chora/aither/scrubbing';
+import { createUserTransformer } from './transformers/user-transformer';
 
 // Re-export all types and functions from the modular structure
-export type { Resource, McpResource, NotionRichText, NotionBlock } from './transformers/index.js';
+export type { Resource, McpResource, NotionRichText, NotionBlock } from './transformers/index';
 
 export {
   transformNotionPageToMcpResource,
   transformNotionDatabaseToMcpResource,
   extractTextFromNotionBlocks,
   formatNotionRichText,
-} from './transformers/index.js';
+} from './transformers/index';
 
 // Create user transformer with the imported scrubEmail function
 export const transformNotionUserToMcpResource = createUserTransformer(scrubEmail);

@@ -5,7 +5,7 @@ import {
   transformNotionUserToMcpResource,
   extractTextFromNotionBlocks,
   formatNotionRichText,
-} from './transformers.js';
+} from './transformers';
 
 // Re-export tests from individual test files
 describe('transformers module exports', () => {

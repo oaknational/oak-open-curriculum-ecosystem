@@ -48,7 +48,7 @@ These documents must be read before making any non-trivial changes to the codeba
 These documents provide a deep dive into the architecture of the system. Read them before making any architectural changes.
 
 - [Biological Architecture Guide](../../docs/agent-guidance/architecture.md) - THE AUTHORITATIVE ARCHITECTURAL REFERENCE
-- [Biological Architecture ADR](../../docs/architecture/architectural-decisions/020-biological-architecture.md) - Greek nomenclature decision
+- [Biological Architecture ADR](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) - Biological architecture
 - [High Level Architecture](../../docs/architecture/high-level-architecture.md) - Complete system design
 - [Cellular Architecture Pattern](../../docs/architecture/architectural-decisions/006-cellular-architecture-pattern.md) - Multi-scale approach
 - [Mathematical Foundation](../../docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md) - Why heterogeneity works
@@ -145,9 +145,7 @@ The genotype/phenotype model continues within the workspace:
 ## Remember
 
 1. Read GO.md every 3rd task for grounding
-2. Use TodoWrite to track complex work
-3. General documentation lives in docs/, only context-specific documentation should be inline
-4. When in doubt, make it simpler
-5. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
-6. Morphai define potential, organa express actuality
-7. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues
+2. When in doubt, make it simpler
+3. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
+4. You can call on the sub-agents at any time, the code reviewer and architecture reviewer, and the monorepo config auditor.
+5. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues

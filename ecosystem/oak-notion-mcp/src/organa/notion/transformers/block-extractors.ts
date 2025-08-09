@@ -3,8 +3,8 @@
  * Strategy pattern for extracting text from different block types
  */
 
-import type { NotionBlock } from './types.js';
-import { formatNotionRichText } from './rich-text-formatter.js';
+import type { NotionBlock } from './types';
+import { formatNotionRichText } from './rich-text-formatter';
 
 /**
  * Type guards for block types

@@ -4,8 +4,8 @@
  */
 
 import type { DatabaseObjectResponse as NotionDatabase } from '@notionhq/client';
-import type { Resource } from './types.js';
-import { formatNotionRichText } from './rich-text-formatter.js';
+import type { Resource } from './types';
+import { formatNotionRichText } from './rich-text-formatter';
 
 /* *
  * Transforms a Notion database object into an MCP resource

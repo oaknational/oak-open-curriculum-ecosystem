@@ -8,10 +8,9 @@ import {
   getNumber,
   getLogLevel,
   getEnum,
+  loadDotenvIfNeeded,
   type BaseEnvironment,
-} from '@oaknational/mcp-core';
-
-import { loadDotenvIfNeeded } from '@oaknational/mcp-core';
+} from './env-utils';
 
 /**
  * Notion-specific environment variables
