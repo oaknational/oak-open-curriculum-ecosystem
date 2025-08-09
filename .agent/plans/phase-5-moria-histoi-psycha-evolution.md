@@ -1,7 +1,7 @@
 # Phase 5: Moria/Histoi/Psycha Evolution Plan
 
 **Status**: IN PROGRESS  
-**Progress**: Sub-phases 5.1-5.4 ✅ COMPLETED | 5.5-5.10 ⏳ PENDING  
+**Progress**: Sub-phases 5.1-5.5 ✅ COMPLETED | 5.6-5.11 ⏳ PENDING  
 **Last Updated**: 2025-08-09  
 **Last Comprehensive Review**: 2025-08-09
 
@@ -14,11 +14,14 @@ Phase 5 transforms our monolithic genotype/phenotype model into a three-tier bio
 - **Moria Package**: ✅ Zero dependencies, pure abstractions (A+ implementation)
 - **Histoi Tissues**: ✅ Three adaptive tissues operational
 - **Integration**: ✅ Critical ESM build issues resolved
-- **Quality**: 152 tests passing, 0 lint errors, 0 type errors
+- **Quality**: 149 tests passing, 0 lint errors, 0 type errors
+- **Test Violations**: ✅ All fixed (useless tests deleted, skipped tests replaced)
+- **Directory Structure**: ✅ Reorganized to ecosystem/psycha/oak-notion-mcp
+- **Dist Exclusion**: ✅ All packages have .prettierignore files
 
 ### Next Immediate Action
 
-**Fix test violations** then **Restructure directories** to prepare for proper tooling enforcement
+**Implement ESLint boundary rules** to enforce architectural constraints programmatically
 
 ---
 
@@ -139,45 +142,41 @@ Environment abstraction with:
 
 ---
 
-## 📋 Immediate Action Items (MUST DO NOW)
+## 📋 Immediate Action Items ✅ COMPLETED (2025-08-09)
 
-### 1. Fix Test Violations (Priority: CRITICAL)
+### 1. Fix Test Violations ✅ COMPLETED
+- Deleted useless test file from histos-logger
+- Renamed test files with proper .unit/.integration suffixes
+- Replaced skipped tests with real integration tests
+- Removed complex mocks in favor of real filesystem tests
 
-```bash
-# Delete useless test file
-rm ecosystem/histoi/histos-logger/tests/adaptive.test.ts
+### 2. Directory Restructure ✅ COMPLETED
+- Created ecosystem/psycha/ directory
+- Moved oak-notion-mcp to psycha/oak-notion-mcp
+- Updated all import paths and configurations
+- All quality gates passing
 
-# Rename test files with proper suffixes
-mv ecosystem/moria/moria-mcp/src/types/result.test.ts \
-   ecosystem/moria/moria-mcp/src/types/result.unit.test.ts
-
-# Fix storage tests - remove skipped blocks and complex mocks
-```
-
-### 2. Rewrite Histoi Tests (Priority: HIGH)
-- Focus on integration points, not type checking
-- Use simple dependency injection instead of complex mocks
-- Each test must prove ONE useful thing
+### 3. Dist File Exclusion ✅ COMPLETED
+- Added .prettierignore to all packages
+- Ensured dist/ is excluded from all quality checks
+- Verified with successful prettier format:check
 
 ---
 
 ## 🚀 Remaining Sub-phases (Reordered for Optimal Flow)
 
-### Sub-phase 5.5: Restructure Directory Layout ⏳ NEXT
+### Sub-phase 5.5: Restructure Directory Layout ✅ COMPLETED
+**Grade: A** | **Status: Production Ready**
+
+Successfully reorganized the ecosystem structure:
+- Created `ecosystem/psycha/` directory
+- Moved `oak-notion-mcp` → `psycha/oak-notion-mcp`
+- Updated all import paths (30+ files)
+- Updated workspace configurations
+- All quality gates passing (149 tests, 0 errors)
+
+### Sub-phase 5.6: ESLint Architectural Enforcement ⏳ NEXT
 **Complexity: MEDIUM** | **Estimated: 1 day**
-
-#### Rationale
-Get the structure right before enforcing it with tooling
-
-#### Tasks
-1. Create `ecosystem/psycha/` directory
-2. Move `oak-notion-mcp` → `psycha/oak-notion-mcp`
-3. Update all import paths
-4. Update workspace configurations
-5. Run full quality gates
-
-### Sub-phase 5.6: ESLint Architectural Enforcement ⏳
-**Complexity: LOW** | **Estimated: 1 day**
 
 #### Rationale
 Enforce the new structure immediately after creating it (no point building more without proper tooling)
@@ -330,10 +329,10 @@ Measure and validate optimizations
 
 ## 🎬 Next Steps (In Priority Order)
 
-1. **NOW**: Fix all test violations (delete useless, fix naming, remove skips)
-2. **TODAY**: Begin directory restructuring (Sub-phase 5.5)
-3. **TOMORROW**: Implement ESLint enforcement (Sub-phase 5.6)
-4. **THIS WEEK**: Create STDIO transport (Sub-phase 5.7)
+1. **NOW**: Implement ESLint boundary rules (Sub-phase 5.6)
+2. **TODAY**: Test ESLint rules with intentional violations
+3. **TOMORROW**: Create STDIO transport tissue (Sub-phase 5.7)
+4. **THIS WEEK**: Update architecture documentation (Sub-phase 5.8)
 5. **NEXT**: Move to Phase 6 for Oak API MCP
 6. **LATER**: Add HTTP transport, optimize performance
 
@@ -388,8 +387,8 @@ Measure and validate optimizations
 Phase 5 will be complete when:
 - [x] Moria package with zero dependencies
 - [x] Core Histoi tissues (Logger, Storage, Environment)
-- [ ] All test violations fixed
-- [ ] Directory structure reorganized to psycha/
+- [x] All test violations fixed
+- [x] Directory structure reorganized to psycha/
 - [ ] ESLint boundaries enforced
 - [ ] STDIO transport operational
 - [ ] Documentation updated

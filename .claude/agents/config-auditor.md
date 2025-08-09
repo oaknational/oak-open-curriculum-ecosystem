@@ -18,14 +18,16 @@ You understand that checks must never be bypassed or disabled, that warnings sho
 
 Where reasonable, we should use standard, well-documented tooling and configurations, and avoid custom solutions. We must always use the latest versions of tools, and we must always use the latest versions of configurations, configuration syntax, and conventions.
 
-## Base and Root Configs
+## Configs
 
-- `tsconfig.base.json` - The shared config file
-- `eslint.config.base.ts` - The shared config file
+- `tsconfig.base.json` - The shared config file, extended by workspace configs
+- `tsconfig.json` - The root config file, extends the base config
+- `eslint.config.base.ts` - The shared config file, extended by workspace configs
 - `eslint.config.ts` - The root config file, extends the base config
 - `.prettierrc.json`
-- `.prettierignore`
-- vitest - There is no base config, we never want to run vitest from the root, however all workspaces should have consistent vitest configs
+- `.prettierignore` - The root prettier ignore file. There are also prettier ignore files in each workspace.
+- `vitest.config.base.ts` - The shared config file for unit and integration tests, extended by workspace configs
+- `vitest.e2e.config.base.ts` - The shared config file for end-to-end tests, extended by workspace configs
 - `package.json` - the root package.json scripts use Turborepo commands, and should be consistent with the workspace package.json scripts which invoke the actual tools
 
 ## Core Responsibilities

@@ -6,6 +6,11 @@
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
+import {
+  createHistoiBoundaryRules,
+  getOtherTissues,
+  commonSettings,
+} from '../../../eslint-rules/index.js';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -25,6 +30,17 @@ const config = tsEslintConfig(
         tsconfigRootDir: thisDir,
       },
     },
+    settings: {
+      ...commonSettings,
+      'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
+        typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
+          project: './tsconfig.lint.json',
+        },
+      },
+    },
+    rules: createHistoiBoundaryRules('histos-logger', getOtherTissues('histos-logger')),
   },
   // Config files
   {

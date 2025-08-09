@@ -6,6 +6,11 @@
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
+import {
+  psychaBoundaryRules,
+  psychonArchitectureRules,
+  commonSettings,
+} from '../../../eslint-rules/index.js';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -26,56 +31,20 @@ const config = tsEslintConfig(
       },
     },
     settings: {
+      ...commonSettings,
       'import-x/resolver': {
+        ...commonSettings['import-x/resolver'],
         typescript: {
+          ...commonSettings['import-x/resolver'].typescript,
           project: './tsconfig.lint.json',
-          alwaysTryTypes: true,
         },
       },
     },
     rules: {
       // Enforce module boundaries
       'import-x/no-relative-parent-imports': 'off',
-
-      // Biological Architecture Enforcement
-      'import-x/no-restricted-paths': [
-        'error',
-        {
-          zones: [
-            // Organa isolation - organs cannot import from other organs
-            {
-              target: 'src/organa/notion/**',
-              from: 'src/organa/mcp/**',
-              message:
-                'Organs cannot import from other organs. Use dependency injection via psychon.',
-            },
-            {
-              target: 'src/organa/mcp/**',
-              from: 'src/organa/notion/**',
-              message:
-                'Organs cannot import from other organs. Use dependency injection via psychon.',
-            },
-          ],
-        },
-      ],
-
-      // Force use of path aliases for cross-boundary imports
-      '@typescript-eslint/no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['../../*'],
-              message:
-                'Use path aliases for cross-boundary imports (e.g., @organa/mcp instead of ../../mcp).',
-            },
-            {
-              group: ['**/internal/**', '**/internals/**', '**/private/**'],
-              message: 'Cannot import from internal/private modules.',
-            },
-          ],
-        },
-      ],
+      ...psychaBoundaryRules,
+      ...psychonArchitectureRules,
     },
   },
   // Organa modules - Allow imports within the same organ
