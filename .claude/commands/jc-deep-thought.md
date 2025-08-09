@@ -9,7 +9,7 @@ The question/request is:
 $ARGUMENT
 ```
 
-Think hard about the question/request, these are your thoughts. Reflect deeply on those thoughts, these are your reflections. Comprehensively consider those reflections, these are your insights. Think hard about what the insights tell you about the original question/request, and the context.
+Think hard about the question/request, these are your thoughts. Reflect deeply on those thoughts, these are your reflections. Comprehensively consider those reflections, these are your insights. Think hard about what the insights tell you about the original question/request, and the context. What has changed? _Why?_
 
 Then, using your thoughts, reflections, and insights, work through this step-by-step, thinking really hard at each point:
 
