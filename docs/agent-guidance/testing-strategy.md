@@ -18,9 +18,10 @@
 ## Rules
 
 - **TDD** - ALWAYS use TDD. Write tests **FIRST**
-- **Each test proves ONE thing** - No duplicate proofs
+- **Test real behaviour, not implementation details** - We should be able to change *how* something works without breaking the test that proves *that* it works.
+- **Test to interfaces, not internals** - Tests should be written to the interfaces, not the internals. Closely related to test behaviour not implementation.
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
-- **No testing types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
+- **Do not test types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it

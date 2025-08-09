@@ -1,0 +1,63 @@
+{
+  "name": "@oaknational/mcp-histos-transport",
+  "version": "0.0.0-development",
+  "description": "Histoi transport tissue - adaptive transport layer for MCP servers",
+  "keywords": [
+    "mcp",
+    "transport",
+    "stdio",
+    "histoi",
+    "tissue"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@oaknational/mcp-moria": "workspace:^"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.2",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.19.0",
+    "prettier": "^3.4.2",
+    "tsup": "^8.3.6",
+    "typescript": "^5.9.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-notion-mcp.git",
+    "directory": "ecosystem/histoi/histos-transport"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

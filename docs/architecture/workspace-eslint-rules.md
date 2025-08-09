@@ -40,12 +40,30 @@ The Moria/Histoi/Psycha workspace architecture requires specific ESLint rules to
 - ✅ **CAN** import runtime-specific packages (with conditional exports)
 - ✅ **CAN** use workspace protocol for Moria dependency
 
+**Critical IO Rule**:
+
+- ❌ **CANNOT** access Node.js globals directly (`process`, `__dirname`, `__filename`)
+- ❌ **CANNOT** directly use IO operations (stdin, stdout, fs, network)
+- ✅ **MUST** receive all IO interfaces as injected dependencies
+- ✅ **MUST** be transplantable - work in any runtime with proper interfaces
+
 ```javascript
 // ESLint zone configuration for Histoi
 {
   target: 'ecosystem/histoi/mcp-histos-logger/**',
   from: ['ecosystem/histoi/mcp-histos-storage/**', 'ecosystem/psycha/**'],
   message: 'Tissues cannot depend on other tissues or organisms. They can only depend on Moria.'
+}
+
+// Prevent direct IO access in Histoi
+{
+  'no-restricted-globals': [
+    'error',
+    {
+      name: 'process',
+      message: 'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies.'
+    }
+  ]
 }
 ```
 
@@ -122,22 +140,65 @@ To make imports cleaner and enforce boundaries:
 }
 ```
 
+## Psychon Internal Architecture Rules
+
+Within each Psycha organism, we enforce the biological architecture pattern at the cellular level:
+
+### Chora/Organa Separation
+
+```javascript
+// Prevent cross-organ imports
+{
+  'import-x/no-restricted-paths': [
+    'error',
+    {
+      zones: [
+        // Organa cannot import from other Organa
+        {
+          target: 'src/organa/notion/**',
+          from: 'src/organa/mcp/**',
+          message: 'Organs cannot import from other organs. Use dependency injection via psychon.',
+        },
+        {
+          target: 'src/organa/mcp/**',
+          from: 'src/organa/notion/**',
+          message: 'Organs cannot import from other organs. Use dependency injection via psychon.',
+        },
+      ],
+    },
+  ],
+}
+```
+
+### Path Alias Enforcement
+
+```javascript
+// Force use of path aliases for cross-boundary imports
+{
+  '@typescript-eslint/no-restricted-imports': [
+    'error',
+    {
+      patterns: [
+        {
+          group: ['../../*'],
+          message: 'Use path aliases for cross-boundary imports (e.g., @organa/mcp instead of ../../mcp).',
+        },
+        {
+          group: ['**/internal/**', '**/internals/**', '**/private/**'],
+          message: 'Cannot import from internal/private modules.',
+        },
+      ],
+    },
+  ],
+}
+```
+
 ## Enforcement Strategy
 
 1. **Pre-commit hooks**: Run ESLint to catch violations before commit
 2. **CI/CD pipeline**: Fail builds on import violations
 3. **IDE integration**: Show errors in real-time during development
 4. **Custom ESLint plugin**: Consider creating a plugin specifically for the biological architecture
-
-## Migration from Current Architecture
-
-When migrating from the current genotype/phenotype model to Moria/Histoi/Psycha:
-
-1. Start by identifying pure abstractions → Move to Moria
-2. Identify runtime-adaptive components → Move to Histoi
-3. Keep application-specific code → Remains in Psycha
-4. Update import paths to use new structure
-5. Enable ESLint rules progressively to catch violations
 
 ## Benefits of These Rules
 

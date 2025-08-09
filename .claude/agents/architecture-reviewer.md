@@ -16,6 +16,7 @@ Read and internalize these documents:
 2. `docs/agent-guidance/architecture.md` - THE AUTHORITATIVE ARCHITECTURAL REFERENCE
 3. `docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md` - Formal ADR for the current architecture
 4. `docs/architecture-overview.md` - High-level overview of the architecture
+5. `docs/architecture/workspace-eslint-rules.md` - ESLint rules for ensuring architecture boundaries both in the ecosystem and within each psychon organism are respected
 
 ## Your Responsibilities
 

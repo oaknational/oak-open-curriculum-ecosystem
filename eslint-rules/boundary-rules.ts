@@ -108,6 +108,23 @@ export function createHistoiBoundaryRules(
         ],
       },
     ],
+    
+    // Prevent direct access to Node.js globals - IO must be injected
+    'no-restricted-globals': [
+      'error',
+      {
+        name: 'process',
+        message: 'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies from the consuming organism.',
+      },
+      {
+        name: '__dirname',
+        message: 'Histoi tissues must not access __dirname directly. File paths must be injected as dependencies.',
+      },
+      {
+        name: '__filename', 
+        message: 'Histoi tissues must not access __filename directly. File paths must be injected as dependencies.',
+      },
+    ],
   };
 }
 
@@ -182,12 +199,7 @@ export const HISTOI_TISSUES = [
   'histos-logger',
   'histos-storage',
   'histos-env',
+  'histos-transport',
   // Add new tissues here as they are created
 ] as const;
 
-/**
- * Helper to get other tissues for a given tissue
- */
-export function getOtherTissues(currentTissue: string): string[] {
-  return HISTOI_TISSUES.filter(tissue => tissue !== currentTissue);
-}

@@ -4,6 +4,7 @@ packages:
   - ecosystem/histoi/histos-env
   - ecosystem/histoi/histos-logger
   - ecosystem/histoi/histos-storage
+  - ecosystem/histoi/histos-transport
 
 onlyBuiltDependencies:
   - esbuild
