@@ -85,7 +85,7 @@ pnpm dev
 
 2. **Pervasive Fields (Chorai)**: 
    
-   **In the Genotype** (`ecosystem/oak-mcp-core/src/chora/`):
+   **In Moria** (`ecosystem/moria/moria-mcp/src/`):
    - `morphai/` - **The hidden forms** - Platonic ideals (ToolExecutor, RequestHandler, etc.)
      - Abstract patterns that organs aspire to instantiate
      - Pure types with no implementation

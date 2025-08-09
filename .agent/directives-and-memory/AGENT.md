@@ -12,59 +12,48 @@ Now reflect on what you are doing. Would you like to update your todo list or th
 
 **Ask: could it be simpler without compromising quality?**
 
-## Rules
-
-Read [the rules](./rules.md); reflect on them, they MUST be followed at all times.
-
-## Team
-
-You must invoke the appropriate sub-agent or sub-agents after each task.
-
-- User
-- Primary developer and architect (you)
-- Sub-agents
-  - code-reviewer
-  - architecture-reviewer
-
 ## Project Context
 
 **What**: oak-notion-mcp - MCP server for Notion API access  
 **Package Manager**: pnpm (REQUIRED - never npm/yarn)  
 **Commands**: See [Development Commands](#development-commands) below
 
+## **RULES**
+
+Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
+
+## Use of Sub-agents
+
+You MUST invoke the appropriate sub-agent or sub-agents to review changes. They are mostly used in two ways:
+
+1. To review small, focussed changes. This should be done OFTEN. The sub-agents work best when they have a tight focus.
+2. To holistically review larger changes at the end of significant milestones. This gives the broader view needed to ensure the codebase is on the right path.
+
+The sub-agents are:
+
+- code-reviewer
+- architecture-reviewer
+- config-auditor
+- test-auditor
+
+Use them **A LOT**. Insert them into the todo list, at regular intervals, and at the end of significant milestones. If in doubt, use them more.
+
 ## Essential Links
 
 **Important**:
 
-These documents must be read before making any non-trivial changes to the codebase.
+These documents must be read.
 
 - [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) - TDD/BDD approach
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
-- [Experimental Architecture](../../docs/agent-guidance/experimental-architecture-quick-reference.md) - Quick patterns
-
-**Architecture Deep Dive**:
-
-These documents provide a deep dive into the architecture of the system. Read them before making any architectural changes.
-
-- [Biological Architecture Guide](../../docs/agent-guidance/architecture.md) - THE AUTHORITATIVE ARCHITECTURAL REFERENCE
-- [Biological Architecture ADR](../../docs/architecture/architectural-decisions/020-biological-architecture.md) - Greek nomenclature decision
-- [High Level Architecture](../../docs/architecture/high-level-architecture.md) - Complete system design
-- [Cellular Architecture Pattern](../../docs/architecture/architectural-decisions/006-cellular-architecture-pattern.md) - Multi-scale approach
-- [Mathematical Foundation](../../docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md) - Why heterogeneity works
-- [Safety and Security](../../docs/agent-guidance/safety-and-security.md)
-
-**Reference**:
-
-These documents provide additional context and information about the system.
-
-- [Project Setup](../../docs/development/project-setup.md) - Environment & dependencies
+- [Architecture](../../docs/agent-guidance/architecture.md) - Quick patterns
 
 ## Development Commands
 
 ```bash
 pnpm install        # Setup
-pnpm format         # 1. Format code
+pnpm format         # 1. Format (not check) code
 pnpm type-check     # 2. Check types
 pnpm lint           # 3. Lint
 pnpm test           # 4. Test
@@ -75,51 +64,27 @@ Run quality gates 1-5 in order after changes and before commits.
 
 ## Architectural Understanding
 
-### The Four Types of Chorai
+First, read ALL of [the architecture](../../docs/agent-guidance/architecture.md).
 
-The biological architecture now recognizes **four types of chorai** (pervasive infrastructure):
+### Two Complementary Models
 
-1. **Morphai (μορφαί)** - The hidden forms, Platonic ideals that cast shadows (organa) in the manifest world
-   - Abstract patterns and interfaces (ToolExecutor, RequestHandler, etc.)
-   - Live in the genotype (oak-mcp-core) as pure types
-   - Define the essence of what organs aspire to be
-   - No implementation, only potential
+The architecture operates at two different scales:
 
-2. **Stroma** - The connective tissue, structural support
-   - Core types and contracts
-   - Dependency interfaces
-   - Event schemas
+#### Workspace Architecture (Package Organization)
 
-3. **Aither** - The breathable air, life-giving essence
-   - Logging and observability
-   - Error handling
-   - Event bus
+**Moria → Histoi → Psycha**
 
-4. **Phaneron** - The manifest environment, perceivable world
-   - Configuration and environment
-   - External integrations
-   - Runtime context
-
-### Genotype/Phenotype Model
-
-The workspace structure follows a biological inheritance model:
-
-- **Genotype** (`ecosystem/oak-mcp-core`): The genetic blueprint
-  - Contains morphai, stroma, aither, phaneron
-  - Zero hard dependencies (conditional deps with graceful degradation allowed - see ADR-022)
-  - Pure abstractions and runtime-adaptive utilities
-  
-- **Phenotype** (`ecosystem/oak-notion-mcp`): The environmental expression
-  - Implements the abstract patterns from morphai
-  - Contains organa that instantiate the forms
-  - Specific to Notion integration
+- **Moria (Molecules/Atoms)** (`ecosystem/moria/`): Pure abstractions - interfaces, types, algorithms with zero dependencies
+  - _Example_: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
+- **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`): Runtime-adaptive connective tissues that bind organisms
+  - _Example_: Adaptive logger using console/pino, storage tissue using localStorage/fs
+- **Psycha (Living Organisms)** (`ecosystem/psycha/`): Complete applications
+  - _Example_: `oak-notion-mcp` server, `github-mcp` server
 
 ## Remember
 
 1. Read GO.md every 3rd task for grounding
-2. Use TodoWrite to track complex work
-3. General documentation lives in docs/, only context-specific documentation should be inline
-4. When in doubt, make it simpler
-5. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
-6. Morphai define potential, organa express actuality
-7. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues
+2. When in doubt, make it simpler
+3. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
+4. You can call on the sub-agents at any time, the code reviewer and architecture reviewer, and the monorepo config auditor.
+5. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues

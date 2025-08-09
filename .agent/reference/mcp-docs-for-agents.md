@@ -1,4 +1,5 @@
 <!-- cSpell:disable -->
+<!-- https://modelcontextprotocol.io/llms-full.txt -->
 
 # Example Clients
 
@@ -13,171 +14,252 @@ This page provides an overview of applications that support the Model Context Pr
 <div id="feature-support-matrix-wrapper">
   {/* prettier-ignore-start */}
 
-| Client                                                     | [Resources] | [Prompts] | [Tools] | [Discovery] | [Sampling] | [Roots] | [Elicitation] |
-| ---------------------------------------------------------- | ----------- | --------- | ------- | ----------- | ---------- | ------- | ------------- |
-| [5ire][5ire]                                               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [AgentAI][AgentAI]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [AgenticFlow][AgenticFlow]                                 | ✅          | ✅        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [AIQL TUUI][AIQL TUUI]                                     | ✅          | ✅        | ✅      | ✅          | ✅         | ❌      | ❓            |
-| [Amazon Q CLI][Amazon Q CLI]                               | ❌          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Amazon Q IDE][Amazon Q IDE]                               | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Apify MCP Tester][Apify MCP Tester]                       | ❌          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Augment Code][AugmentCode]                                | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [BeeAI Framework][BeeAI Framework]                         | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [BoltAI][BoltAI]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [ChatGPT][ChatGPT]                                         | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [ChatWise][ChatWise]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Claude.ai][Claude.ai]                                     | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Claude Code][Claude Code]                                 | ✅          | ✅        | ✅      | ❌          | ❌         | ✅      | ❓            |
-| [Claude Desktop App][Claude Desktop]                       | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Chorus][Chorus]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Cline][Cline]                                             | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [CodeGPT][CodeGPT]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Continue][Continue]                                       | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Copilot-MCP][CopilotMCP]                                  | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Cursor][Cursor]                                           | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Daydreams Agents][Daydreams]                              | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Emacs Mcp][Mcp.el]                                        | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [fast-agent][fast-agent]                                   | ✅          | ✅        | ✅      | ✅          | ✅         | ✅      | ✅            |
-| [FlowDown][FlowDown]                                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❌            |
-| [FLUJO][FLUJO]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Genkit][Genkit]                                           | ⚠️          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Glama][Glama]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Gemini CLI][Gemini CLI]                                   | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [GenAIScript][GenAIScript]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [GitHub Copilot coding agent][GitHubCopilotCodingAgent]    | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❌            |
-| [Goose][Goose]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [gptme][gptme]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [HyperAgent][HyperAgent]                                   | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [JetBrains AI Assistant][JetBrains AI Assistant]           | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Kilo Code][Kilo Code]                                     | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Klavis AI Slack/Discord/Web][Klavis AI]                   | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [LibreChat][LibreChat]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [LM Studio][LM Studio]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Lutra][Lutra]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [mcp-agent][mcp-agent]                                     | ✅          | ✅        | ✅      | ❓          | ⚠️         | ✅      | ✅            |
-| [mcp-client-chatbot][mcp-client-chatbot]                   | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [mcp-use][mcp-use]                                         | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [modelcontextchat.com][modelcontextchat.com]               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MCPHub][MCPHub]                                           | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MCPOmni-Connect][MCPOmni-Connect]                         | ✅          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Memex][Memex]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Microsoft Copilot Studio]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MindPal][MindPal]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MooPoint][MooPoint]                                       | ❌          | ❌        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Msty Studio][Msty Studio]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [NVIDIA Agent Intelligence toolkit][AIQ toolkit]           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [OpenSumi][OpenSumi]                                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [oterm][oterm]                                             | ❌          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Postman][postman]                                         | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [RecurseChat][RecurseChat]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Roo Code][Roo Code]                                       | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Shortwave][Shortwave]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Slack MCP Client][Slack MCP Client]                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Sourcegraph Cody][Cody]                                   | ✅          | ❌        | ❌      | ❓          | ❌         | ❌      | ❓            |
-| [SpinAI][SpinAI]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Superinterface][Superinterface]                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Superjoin][Superjoin]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [systemprompt][systemprompt]                               | ✅          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Tambo][Tambo]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Tencent CloudBase AI DevKit][Tencent CloudBase AI DevKit] | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [TheiaAI/TheiaIDE][TheiaAI/TheiaIDE]                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Tome][Tome]                                               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [TypingMind App][TypingMind App]                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [VS Code GitHub Copilot][VS Code]                          | ✅          | ✅        | ✅      | ✅          | ✅         | ✅      | ✅            |
-| [Warp][Warp]                                               | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [WhatsMCP][WhatsMCP]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Windsurf Editor][Windsurf]                                | ❌          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Witsy][Witsy]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Zed][Zed]                                                 | ❌          | ✅        | ❌      | ❌          | ❌         | ❌      | ❓            |
-| [Zencoder][Zencoder]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
+  | Client                                                     | [Resources] | [Prompts] | [Tools] | [Discovery] | [Sampling] | [Roots] | [Elicitation] |
+  | ---------------------------------------------------------- | ----------- | --------- | ------- | ----------- | ---------- | ------- | ------------- |
+  | [5ire][5ire]                                               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [AgentAI][AgentAI]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [AgenticFlow][AgenticFlow]                                 | ✅           | ✅         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [AIQL TUUI][AIQL TUUI]                                     | ✅           | ✅         | ✅       | ✅           | ✅          | ❌       | ❓             |
+  | [Amazon Q CLI][Amazon Q CLI]                               | ❌           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Amazon Q IDE][Amazon Q IDE]                               | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Apify MCP Tester][Apify MCP Tester]                       | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Augment Code][AugmentCode]                                | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [BeeAI Framework][BeeAI Framework]                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [BoltAI][BoltAI]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [ChatGPT][ChatGPT]                                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [ChatWise][ChatWise]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Claude.ai][Claude.ai]                                     | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Claude Code][Claude Code]                                 | ✅           | ✅         | ✅       | ❌           | ❌          | ✅       | ❓             |
+  | [Claude Desktop App][Claude Desktop]                       | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Chorus][Chorus]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Cline][Cline]                                             | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [CodeGPT][CodeGPT]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Continue][Continue]                                       | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Copilot-MCP][CopilotMCP]                                  | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Cursor][Cursor]                                           | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Daydreams Agents][Daydreams]                              | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Emacs Mcp][Mcp.el]                                        | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [fast-agent][fast-agent]                                   | ✅           | ✅         | ✅       | ✅           | ✅          | ✅       | ✅             |
+  | [FlowDown][FlowDown]                                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❌             |
+  | [FLUJO][FLUJO]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Genkit][Genkit]                                           | ⚠️          | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Glama][Glama]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Gemini CLI][Gemini CLI]                                   | ❌           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [GenAIScript][GenAIScript]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [GitHub Copilot coding agent][GitHubCopilotCodingAgent]    | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❌             |
+  | [Goose][Goose]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [gptme][gptme]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [HyperAgent][HyperAgent]                                   | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [JetBrains AI Assistant][JetBrains AI Assistant]           | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Kilo Code][Kilo Code]                                     | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Klavis AI Slack/Discord/Web][Klavis AI]                   | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [LibreChat][LibreChat]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [LM Studio][LM Studio]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Lutra][Lutra]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [mcp-agent][mcp-agent]                                     | ✅           | ✅         | ✅       | ❓           | ⚠️         | ✅       | ✅             |
+  | [mcp-client-chatbot][mcp-client-chatbot]                   | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [mcp-use][mcp-use]                                         | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [modelcontextchat.com][modelcontextchat.com]               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MCPHub][MCPHub]                                           | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MCPOmni-Connect][MCPOmni-Connect]                         | ✅           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Memex][Memex]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Microsoft Copilot Studio]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MindPal][MindPal]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MooPoint][MooPoint]                                       | ❌           | ❌         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Msty Studio][Msty Studio]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [NVIDIA Agent Intelligence toolkit][AIQ toolkit]           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [OpenSumi][OpenSumi]                                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [oterm][oterm]                                             | ❌           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Postman][postman]                                         | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [RecurseChat][RecurseChat]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Roo Code][Roo Code]                                       | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Shortwave][Shortwave]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Slack MCP Client][Slack MCP Client]                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Sourcegraph Cody][Cody]                                   | ✅           | ❌         | ❌       | ❓           | ❌          | ❌       | ❓             |
+  | [SpinAI][SpinAI]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Superinterface][Superinterface]                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Superjoin][Superjoin]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [systemprompt][systemprompt]                               | ✅           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Tambo][Tambo]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Tencent CloudBase AI DevKit][Tencent CloudBase AI DevKit] | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [TheiaAI/TheiaIDE][TheiaAI/TheiaIDE]                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Tome][Tome]                                               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [TypingMind App][TypingMind App]                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [VS Code GitHub Copilot][VS Code]                          | ✅           | ✅         | ✅       | ✅           | ✅          | ✅       | ✅             |
+  | [Warp][Warp]                                               | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [WhatsMCP][WhatsMCP]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Windsurf Editor][Windsurf]                                | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Witsy][Witsy]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Zed][Zed]                                                 | ❌           | ✅         | ❌       | ❌           | ❌          | ❌       | ❓             |
+  | [Zencoder][Zencoder]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
 
-{/_prettier-ignore-end_/}
+  {/*prettier-ignore-end*/}
 
-[Resources]: /docs/concepts/resources
-[Prompts]: /docs/concepts/prompts
-[Tools]: /docs/concepts/tools
-[Discovery]: /docs/concepts/tools#tool-discovery-and-updates
-[Sampling]: /docs/concepts/sampling
-[Roots]: /docs/concepts/roots
-[Elicitation]: /docs/concepts/elicitation
-[5ire]: https://github.com/nanbingxyz/5ire
-[AgentAI]: https://github.com/AdamStrojek/rust-agentai
-[AgenticFlow]: https://agenticflow.ai/mcp
-[AIQ toolkit]: https://github.com/NVIDIA/AIQToolkit
-[AIQL TUUI]: https://github.com/AI-QL/tuui
-[Amazon Q CLI]: https://github.com/aws/amazon-q-developer-cli
-[Amazon Q IDE]: https://aws.amazon.com/q/developer
-[Apify MCP Tester]: https://apify.com/jiri.spilka/tester-mcp-client
-[AugmentCode]: https://augmentcode.com
-[BeeAI Framework]: https://i-am-bee.github.io/beeai-framework
-[BoltAI]: https://boltai.com
-[ChatGPT]: https://chatgpt.com
-[ChatWise]: https://chatwise.app
-[Claude.ai]: https://claude.ai
-[Claude Code]: https://claude.ai/code
-[Claude Desktop]: https://claude.ai/download
-[Chorus]: https://chorus.sh
-[Cline]: https://github.com/cline/cline
-[CodeGPT]: https://codegpt.co
-[Continue]: https://github.com/continuedev/continue
-[CopilotMCP]: https://github.com/VikashLoomba/copilot-mcp
-[Cursor]: https://cursor.com
-[Daydreams]: https://github.com/daydreamsai/daydreams
-[Klavis AI]: https://www.klavis.ai/
-[Mcp.el]: https://github.com/lizqwerscott/mcp.el
-[fast-agent]: https://github.com/evalstate/fast-agent
-[FlowDown]: https://github.com/Lakr233/FlowDown
-[FLUJO]: https://github.com/mario-andreschak/flujo
-[Glama]: https://glama.ai/chat
-[Gemini CLI]: https://goo.gle/gemini-cli
-[Genkit]: https://github.com/firebase/genkit
-[GenAIScript]: https://microsoft.github.io/genaiscript/reference/scripts/mcp-tools/
-[GitHubCopilotCodingAgent]: https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/about-copilot-coding-agent
-[Goose]: https://block.github.io/goose/docs/goose-architecture/#interoperability-with-extensions
-[JetBrains AI Assistant]: https://plugins.jetbrains.com/plugin/22282-jetbrains-ai-assistant
-[Kilo Code]: https://github.com/Kilo-Org/kilocode
-[LibreChat]: https://github.com/danny-avila/LibreChat
-[LM Studio]: https://lmstudio.ai
-[Lutra]: https://lutra.ai
-[mcp-agent]: https://github.com/lastmile-ai/mcp-agent
-[mcp-client-chatbot]: https://github.com/cgoinglove/mcp-client-chatbot
-[mcp-use]: https://github.com/pietrozullo/mcp-use
-[modelcontextchat.com]: https://modelcontextchat.com
-[MCPHub]: https://github.com/ravitemer/mcphub.nvim
-[MCPOmni-Connect]: https://github.com/Abiorh001/mcp_omni_connect
-[Memex]: https://memex.tech/
-[Microsoft Copilot Studio]: https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp
-[MindPal]: https://mindpal.io
-[MooPoint]: https://moopoint.io
-[Msty Studio]: https://msty.ai
-[OpenSumi]: https://github.com/opensumi/core
-[oterm]: https://github.com/ggozad/oterm
-[Postman]: https://postman.com/downloads
-[RecurseChat]: https://recurse.chat/
-[Roo Code]: https://roocode.com
-[Shortwave]: https://www.shortwave.com
-[Slack MCP Client]: https://github.com/tuannvm/slack-mcp-client
-[Cody]: https://sourcegraph.com/cody
-[SpinAI]: https://spinai.dev
-[Superinterface]: https://superinterface.ai
-[Superjoin]: https://superjoin.ai
-[systemprompt]: https://systemprompt.io
-[Tambo]: https://tambo.co
-[Tencent CloudBase AI DevKit]: https://docs.cloudbase.net/ai/agent/mcp
-[TheiaAI/TheiaIDE]: https://eclipsesource.com/blogs/2024/12/19/theia-ide-and-theia-ai-support-mcp/
-[Tome]: https://github.com/runebookai/tome
-[TypingMind App]: https://www.typingmind.com
-[VS Code]: https://code.visualstudio.com/
-[Windsurf]: https://codeium.com/windsurf
-[gptme]: https://github.com/gptme/gptme
-[Warp]: https://www.warp.dev/
-[WhatsMCP]: https://wassist.app/mcp/
-[Witsy]: https://github.com/nbonamy/witsy
-[Zed]: https://zed.dev
-[Zencoder]: https://zencoder.ai
-[HyperAgent]: https://github.com/hyperbrowserai/HyperAgent
+  [Resources]: /docs/concepts/resources
 
+  [Prompts]: /docs/concepts/prompts
+
+  [Tools]: /docs/concepts/tools
+
+  [Discovery]: /docs/concepts/tools#tool-discovery-and-updates
+
+  [Sampling]: /docs/concepts/sampling
+
+  [Roots]: /docs/concepts/roots
+
+  [Elicitation]: /docs/concepts/elicitation
+
+  [5ire]: https://github.com/nanbingxyz/5ire
+
+  [AgentAI]: https://github.com/AdamStrojek/rust-agentai
+
+  [AgenticFlow]: https://agenticflow.ai/mcp
+
+  [AIQ toolkit]: https://github.com/NVIDIA/AIQToolkit
+
+  [AIQL TUUI]: https://github.com/AI-QL/tuui
+
+  [Amazon Q CLI]: https://github.com/aws/amazon-q-developer-cli
+
+  [Amazon Q IDE]: https://aws.amazon.com/q/developer
+
+  [Apify MCP Tester]: https://apify.com/jiri.spilka/tester-mcp-client
+
+  [AugmentCode]: https://augmentcode.com
+
+  [BeeAI Framework]: https://i-am-bee.github.io/beeai-framework
+
+  [BoltAI]: https://boltai.com
+
+  [ChatGPT]: https://chatgpt.com
+
+  [ChatWise]: https://chatwise.app
+
+  [Claude.ai]: https://claude.ai
+
+  [Claude Code]: https://claude.ai/code
+
+  [Claude Desktop]: https://claude.ai/download
+
+  [Chorus]: https://chorus.sh
+
+  [Cline]: https://github.com/cline/cline
+
+  [CodeGPT]: https://codegpt.co
+
+  [Continue]: https://github.com/continuedev/continue
+
+  [CopilotMCP]: https://github.com/VikashLoomba/copilot-mcp
+
+  [Cursor]: https://cursor.com
+
+  [Daydreams]: https://github.com/daydreamsai/daydreams
+
+  [Klavis AI]: https://www.klavis.ai/
+
+  [Mcp.el]: https://github.com/lizqwerscott/mcp.el
+
+  [fast-agent]: https://github.com/evalstate/fast-agent
+
+  [FlowDown]: https://github.com/Lakr233/FlowDown
+
+  [FLUJO]: https://github.com/mario-andreschak/flujo
+
+  [Glama]: https://glama.ai/chat
+
+  [Gemini CLI]: https://goo.gle/gemini-cli
+
+  [Genkit]: https://github.com/firebase/genkit
+
+  [GenAIScript]: https://microsoft.github.io/genaiscript/reference/scripts/mcp-tools/
+
+  [GitHubCopilotCodingAgent]: https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/about-copilot-coding-agent
+
+  [Goose]: https://block.github.io/goose/docs/goose-architecture/#interoperability-with-extensions
+
+  [JetBrains AI Assistant]: https://plugins.jetbrains.com/plugin/22282-jetbrains-ai-assistant
+
+  [Kilo Code]: https://github.com/Kilo-Org/kilocode
+
+  [LibreChat]: https://github.com/danny-avila/LibreChat
+
+  [LM Studio]: https://lmstudio.ai
+
+  [Lutra]: https://lutra.ai
+
+  [mcp-agent]: https://github.com/lastmile-ai/mcp-agent
+
+  [mcp-client-chatbot]: https://github.com/cgoinglove/mcp-client-chatbot
+
+  [mcp-use]: https://github.com/pietrozullo/mcp-use
+
+  [modelcontextchat.com]: https://modelcontextchat.com
+
+  [MCPHub]: https://github.com/ravitemer/mcphub.nvim
+
+  [MCPOmni-Connect]: https://github.com/Abiorh001/mcp_omni_connect
+
+  [Memex]: https://memex.tech/
+
+  [Microsoft Copilot Studio]: https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp
+
+  [MindPal]: https://mindpal.io
+
+  [MooPoint]: https://moopoint.io
+
+  [Msty Studio]: https://msty.ai
+
+  [OpenSumi]: https://github.com/opensumi/core
+
+  [oterm]: https://github.com/ggozad/oterm
+
+  [Postman]: https://postman.com/downloads
+
+  [RecurseChat]: https://recurse.chat/
+
+  [Roo Code]: https://roocode.com
+
+  [Shortwave]: https://www.shortwave.com
+
+  [Slack MCP Client]: https://github.com/tuannvm/slack-mcp-client
+
+  [Cody]: https://sourcegraph.com/cody
+
+  [SpinAI]: https://spinai.dev
+
+  [Superinterface]: https://superinterface.ai
+
+  [Superjoin]: https://superjoin.ai
+
+  [systemprompt]: https://systemprompt.io
+
+  [Tambo]: https://tambo.co
+
+  [Tencent CloudBase AI DevKit]: https://docs.cloudbase.net/ai/agent/mcp
+
+  [TheiaAI/TheiaIDE]: https://eclipsesource.com/blogs/2024/12/19/theia-ide-and-theia-ai-support-mcp/
+
+  [Tome]: https://github.com/runebookai/tome
+
+  [TypingMind App]: https://www.typingmind.com
+
+  [VS Code]: https://code.visualstudio.com/
+
+  [Windsurf]: https://codeium.com/windsurf
+
+  [gptme]: https://github.com/gptme/gptme
+
+  [Warp]: https://www.warp.dev/
+
+  [WhatsMCP]: https://wassist.app/mcp/
+
+  [Witsy]: https://github.com/nbonamy/witsy
+
+  [Zed]: https://zed.dev
+
+  [Zencoder]: https://zencoder.ai
+
+  [HyperAgent]: https://github.com/hyperbrowserai/HyperAgent
 </div>
 
 ## Client details
@@ -188,10 +270,10 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Key features:**
 
-- Built-in MCP servers can be quickly enabled and disabled.
-- Users can add more servers by modifying the configuration file.
-- It is open-source and user-friendly, suitable for beginners.
-- Future support for MCP will be continuously improved.
+* Built-in MCP servers can be quickly enabled and disabled.
+* Users can add more servers by modifying the configuration file.
+* It is open-source and user-friendly, suitable for beginners.
+* Future support for MCP will be continuously improved.
 
 ### AgentAI
 
@@ -201,9 +283,9 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Key features:**
 
-- Multi-LLM – We support most LLM APIs (OpenAI, Anthropic, Gemini, Ollama, and all OpenAI API Compatible).
-- Built-in support for MCP Servers.
-- Create agentic flows in a type- and memory-safe language like Rust.
+* Multi-LLM – We support most LLM APIs (OpenAI, Anthropic, Gemini, Ollama, and all OpenAI API Compatible).
+* Built-in support for MCP Servers.
+* Create agentic flows in a type- and memory-safe language like Rust.
 
 ### AgenticFlow
 
@@ -211,14 +293,14 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Key features:**
 
-- No-code AI agent creation and workflow building.
-- Access a vast library of 10,000+ tools and 2,500+ APIs through MCP.
-- Simple 3-step process to connect MCP servers.
-- Securely manage connections and revoke access anytime.
+* No-code AI agent creation and workflow building.
+* Access a vast library of 10,000+ tools and 2,500+ APIs through MCP.
+* Simple 3-step process to connect MCP servers.
+* Securely manage connections and revoke access anytime.
 
 **Learn more:**
 
-- [AgenticFlow MCP Integration](https://agenticflow.ai/mcp)
+* [AgenticFlow MCP Integration](https://agenticflow.ai/mcp)
 
 ### AIQL TUUI
 
@@ -226,17 +308,17 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Key features:**
 
-- **Dynamic LLM API & Agent Switching**: Seamlessly toggle between different LLM APIs and agents on the fly.
-- **Comprehensive Capabilities Support**: Built-in support for tools, prompts, resources, and sampling methods.
-- **Configurable Agents**: Enhanced flexibility with selectable and customizable tools via agent settings.
-- **Advanced Sampling Control**: Modify sampling parameters and leverage multi-round sampling for optimal results.
-- **Cross-Platform Compatibility**: Fully compatible with macOS, Windows, and Linux.
-- **Free & Open-Source (FOSS)**: Permissive licensing allows modifications and custom app bundling.
+* **Dynamic LLM API & Agent Switching**: Seamlessly toggle between different LLM APIs and agents on the fly.
+* **Comprehensive Capabilities Support**: Built-in support for tools, prompts, resources, and sampling methods.
+* **Configurable Agents**: Enhanced flexibility with selectable and customizable tools via agent settings.
+* **Advanced Sampling Control**: Modify sampling parameters and leverage multi-round sampling for optimal results.
+* **Cross-Platform Compatibility**: Fully compatible with macOS, Windows, and Linux.
+* **Free & Open-Source (FOSS)**: Permissive licensing allows modifications and custom app bundling.
 
 **Learn more:**
 
-- [TUUI document](https://www.tuui.com/)
-- [AIQL GitHub repository](https://github.com/AI-QL)
+* [TUUI document](https://www.tuui.com/)
+* [AIQL GitHub repository](https://github.com/AI-QL)
 
 ### Amazon Q CLI
 
@@ -244,11 +326,11 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Key features:**
 
-- Full support for MCP servers.
-- Edit prompts using your preferred text editor.
-- Access saved prompts instantly with `@`.
-- Control and organize AWS resources directly from your terminal.
-- Tools, profiles, context management, auto-compact, and so much more!
+* Full support for MCP servers.
+* Edit prompts using your preferred text editor.
+* Access saved prompts instantly with `@`.
+* Control and organize AWS resources directly from your terminal.
+* Tools, profiles, context management, auto-compact, and so much more!
 
 **Get Started**
 
@@ -262,9 +344,9 @@ brew install amazon-q
 
 **Key features:**
 
-- Support for the VSCode, JetBrains, Visual Studio, and Eclipse IDEs.
-- Control and organize AWS resources directly from your IDE.
-- Manage permissions for each MCP tool via the IDE user interface.
+* Support for the VSCode, JetBrains, Visual Studio, and Eclipse IDEs.
+* Control and organize AWS resources directly from your IDE.
+* Manage permissions for each MCP tool via the IDE user interface.
 
 ### Apify MCP Tester
 
@@ -274,9 +356,9 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 
 **Key features:**
 
-- Connects to any MCP server via SSE.
-- Works with the [Apify MCP Server](https://apify.com/apify/actors-mcp-server) to interact with one or more Apify [Actors](https://apify.com/store).
-- Dynamically utilizes tools based on context and user queries (if supported by the server).
+* Connects to any MCP server via SSE.
+* Works with the [Apify MCP Server](https://apify.com/apify/actors-mcp-server) to interact with one or more Apify [Actors](https://apify.com/store).
+* Dynamically utilizes tools based on context and user queries (if supported by the server).
 
 ### Augment Code
 
@@ -284,10 +366,10 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 
 **Key features:**
 
-- Full MCP support in local and remote agents.
-- Add additional context through MCP servers.
-- Automate your development workflows with MCP tools.
-- Works in VS Code and JetBrains IDEs.
+* Full MCP support in local and remote agents.
+* Add additional context through MCP servers.
+* Automate your development workflows with MCP tools.
+* Works in VS Code and JetBrains IDEs.
 
 ### BeeAI Framework
 
@@ -295,13 +377,13 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 
 **Key features:**
 
-- Seamlessly incorporate MCP tools into agentic workflows.
-- Quickly instantiate framework-native tools from connected MCP client(s).
-- Planned future support for agentic MCP capabilities.
+* Seamlessly incorporate MCP tools into agentic workflows.
+* Quickly instantiate framework-native tools from connected MCP client(s).
+* Planned future support for agentic MCP capabilities.
 
 **Learn more:**
 
-- [Example of using MCP tools in agentic workflow](https://i-am-bee.github.io/beeai-framework/#/typescript/tools?id=using-the-mcptool-class)
+* [Example of using MCP tools in agentic workflow](https://i-am-bee.github.io/beeai-framework/#/typescript/tools?id=using-the-mcptool-class)
 
 ### BoltAI
 
@@ -309,15 +391,15 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 
 **Key features:**
 
-- MCP Tool integrations: once configured, user can enable individual MCP server in each chat
-- MCP quick setup: import configuration from Claude Desktop app or Cursor editor
-- Invoke MCP tools inside any app with AI Command feature
-- Integrate with remote MCP servers in the mobile app
+* MCP Tool integrations: once configured, user can enable individual MCP server in each chat
+* MCP quick setup: import configuration from Claude Desktop app or Cursor editor
+* Invoke MCP tools inside any app with AI Command feature
+* Integrate with remote MCP servers in the mobile app
 
 **Learn more:**
 
-- [BoltAI docs](https://boltai.com/docs/plugins/mcp-servers)
-- [BoltAI website](https://boltai.com)
+* [BoltAI docs](https://boltai.com/docs/plugins/mcp-servers)
+* [BoltAI website](https://boltai.com)
 
 ### ChatGPT
 
@@ -325,9 +407,9 @@ ChatGPT is OpenAI's AI assistant that provides MCP support for remote servers to
 
 **Key features:**
 
-- Support for MCP via connections UI in settings
-- Access to search tools from configured MCP servers for deep research
-- Enterprise-grade security and compliance features
+* Support for MCP via connections UI in settings
+* Access to search tools from configured MCP servers for deep research
+* Enterprise-grade security and compliance features
 
 ### ChatWise
 
@@ -335,8 +417,8 @@ ChatWise is a desktop-optimized, high-performance chat application that lets you
 
 **Key features:**
 
-- Tools support for MCP servers
-- Offer built-in tools like web search, artifacts and image generation.
+* Tools support for MCP servers
+* Offer built-in tools like web search, artifacts and image generation.
 
 ### Claude Code
 
@@ -344,8 +426,8 @@ Claude Code is an interactive agentic coding tool from Anthropic that helps you 
 
 **Key features:**
 
-- Full support for resources, prompts, tools, and roots from MCP servers
-- Offers its own tools through an MCP server for integrating with other MCP clients
+* Full support for resources, prompts, tools, and roots from MCP servers
+* Offers its own tools through an MCP server for integrating with other MCP clients
 
 ### Claude.ai
 
@@ -353,10 +435,10 @@ Claude Code is an interactive agentic coding tool from Anthropic that helps you 
 
 **Key features:**
 
-- Support for remote MCP servers via integrations UI in settings
-- Access to tools, prompts, and resources from configured MCP servers
-- Seamless integration with Claude's conversational interface
-- Enterprise-grade security and compliance features
+* Support for remote MCP servers via integrations UI in settings
+* Access to tools, prompts, and resources from configured MCP servers
+* Seamless integration with Claude's conversational interface
+* Enterprise-grade security and compliance features
 
 ### Claude Desktop App
 
@@ -364,10 +446,10 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Full support for resources, allowing attachment of local files and data
-- Support for prompt templates
-- Tool integration for executing commands and scripts
-- Local server connections for enhanced privacy and security
+* Full support for resources, allowing attachment of local files and data
+* Support for prompt templates
+* Tool integration for executing commands and scripts
+* Local server connections for enhanced privacy and security
 
 ### Chorus
 
@@ -375,11 +457,11 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- MCP support with one-click install
-- Built in tools, like web search, terminal, and image generation
-- Chat with multiple models at once (cloud or local)
-- Create projects with scoped memory
-- Quick chat with an AI that can see your screen
+* MCP support with one-click install
+* Built in tools, like web search, terminal, and image generation
+* Chat with multiple models at once (cloud or local)
+* Create projects with scoped memory
+* Quick chat with an AI that can see your screen
 
 ### Cline
 
@@ -387,9 +469,9 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Create and add tools through natural language (e.g. "add a tool that searches the web")
-- Share custom MCP servers Cline creates with others via the `~/Documents/Cline/MCP` directory
-- Displays configured MCP servers along with their tools, resources, and any error logs
+* Create and add tools through natural language (e.g. "add a tool that searches the web")
+* Share custom MCP servers Cline creates with others via the `~/Documents/Cline/MCP` directory
+* Displays configured MCP servers along with their tools, resources, and any error logs
 
 ### CodeGPT
 
@@ -397,13 +479,13 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Use MCP tools from any configured MCP server
-- Seamless integration with VS Code and Jetbrains UI
-- Supports multiple LLM providers and custom endpoints
+* Use MCP tools from any configured MCP server
+* Seamless integration with VS Code and Jetbrains UI
+* Supports multiple LLM providers and custom endpoints
 
 **Learn more:**
 
-- [CodeGPT Documentation](https://docs.codegpt.co/)
+* [CodeGPT Documentation](https://docs.codegpt.co/)
 
 ### Continue
 
@@ -411,10 +493,10 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Type "@" to mention MCP resources
-- Prompt templates surface as slash commands
-- Use both built-in and MCP tools directly in chat
-- Supports VS Code and JetBrains IDEs, with any LLM
+* Type "@" to mention MCP resources
+* Prompt templates surface as slash commands
+* Use both built-in and MCP tools directly in chat
+* Supports VS Code and JetBrains IDEs, with any LLM
 
 ### Copilot-MCP
 
@@ -422,9 +504,9 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Support for MCP tools and resources
-- Integration with development workflows
-- Extensible AI capabilities
+* Support for MCP tools and resources
+* Integration with development workflows
+* Extensible AI capabilities
 
 ### Cursor
 
@@ -432,8 +514,8 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Support for MCP tools in Cursor Composer
-- Support for both STDIO and SSE
+* Support for MCP tools in Cursor Composer
+* Support for both STDIO and SSE
 
 ### Daydreams
 
@@ -441,8 +523,8 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Supports MCP Servers in config
-- Exposes MCP Client
+* Supports MCP Servers in config
+* Exposes MCP Client
 
 ### Emacs Mcp
 
@@ -450,7 +532,7 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- Provides MCP tool support for Emacs.
+* Provides MCP tool support for Emacs.
 
 ### fast-agent
 
@@ -458,10 +540,10 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- PDF and Image support, based on MCP Native types
-- Interactive front-end to develop and diagnose Agent applications, including passthrough and playback simulators
-- Built in support for "Building Effective Agents" workflows.
-- Deploy Agents as MCP Servers
+* PDF and Image support, based on MCP Native types
+* Interactive front-end to develop and diagnose Agent applications, including passthrough and playback simulators
+* Built in support for "Building Effective Agents" workflows.
+* Deploy Agents as MCP Servers
 
 ### FlowDown
 
@@ -469,16 +551,16 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 **Key features:**
 
-- **Seamless MCP Integration**: Easily connect to MCP servers to utilize a wide range of external tools.
-- **Privacy-First Design**: Your data stays on your device. We don't collect any user data, ensuring complete privacy.
-- **Lightweight & Efficient**: A compact and optimized design ensures a smooth and responsive experience with any AI model.
-- **Broad Compatibility**: Works with all OpenAI-compatible service providers and supports local offline models through MLX.
-- **Rich User Experience**: Features beautifully formatted Markdown, blazing-fast text rendering, and intelligent, automated chat titling.
+* **Seamless MCP Integration**: Easily connect to MCP servers to utilize a wide range of external tools.
+* **Privacy-First Design**: Your data stays on your device. We don't collect any user data, ensuring complete privacy.
+* **Lightweight & Efficient**: A compact and optimized design ensures a smooth and responsive experience with any AI model.
+* **Broad Compatibility**: Works with all OpenAI-compatible service providers and supports local offline models through MLX.
+* **Rich User Experience**: Features beautifully formatted Markdown, blazing-fast text rendering, and intelligent, automated chat titling.
 
 **Learn more:**
 
-- [FlowDown website](https://flowdown.ai/)
-- [FlowDown documentation](https://apps.qaq.wiki/docs/flowdown/)
+* [FlowDown website](https://flowdown.ai/)
+* [FlowDown documentation](https://apps.qaq.wiki/docs/flowdown/)
 
 ### FLUJO
 
@@ -486,11 +568,11 @@ Think n8n + ChatGPT. FLUJO is an desktop application that integrates with MCP to
 
 **Key features:**
 
-- Environment & API Key Management
-- Model Management
-- MCP Server Integration
-- Workflow Orchestration
-- Chat Interface
+* Environment & API Key Management
+* Model Management
+* MCP Server Integration
+* Workflow Orchestration
+* Chat Interface
 
 ### Genkit
 
@@ -498,10 +580,10 @@ Think n8n + ChatGPT. FLUJO is an desktop application that integrates with MCP to
 
 **Key features:**
 
-- Client support for tools and prompts (resources partially supported)
-- Rich discovery with support in Genkit's Dev UI playground
-- Seamless interoperability with Genkit's existing tools and prompts
-- Works across a wide variety of GenAI models from top providers
+* Client support for tools and prompts (resources partially supported)
+* Rich discovery with support in Genkit's Dev UI playground
+* Seamless interoperability with Genkit's existing tools and prompts
+* Works across a wide variety of GenAI models from top providers
 
 ### Glama
 
@@ -509,12 +591,12 @@ Think n8n + ChatGPT. FLUJO is an desktop application that integrates with MCP to
 
 **Key features:**
 
-- Integrated [MCP Server Directory](https://glama.ai/mcp/servers)
-- Integrated [MCP Tool Directory](https://glama.ai/mcp/tools)
-- Host MCP servers and access them via the Chat or SSE endpoints
+* Integrated [MCP Server Directory](https://glama.ai/mcp/servers)
+* Integrated [MCP Tool Directory](https://glama.ai/mcp/tools)
+* Host MCP servers and access them via the Chat or SSE endpoints
   – Ability to chat with multiple LLMs and MCP servers at once
-- Upload and analyze local files and data
-- Full-text search across all your chats and data
+* Upload and analyze local files and data
+* Full-text search across all your chats and data
 
 ### GenAIScript
 
@@ -522,9 +604,9 @@ Programmatically assemble prompts for LLMs using [GenAIScript](https://microsoft
 
 **Key features:**
 
-- JavaScript toolbox to work with prompts
-- Abstraction to make it easy and productive
-- Seamless Visual Studio Code integration
+* JavaScript toolbox to work with prompts
+* Abstraction to make it easy and productive
+* Seamless Visual Studio Code integration
 
 ### Goose
 
@@ -532,10 +614,10 @@ Programmatically assemble prompts for LLMs using [GenAIScript](https://microsoft
 
 **Key features:**
 
-- Expose MCP functionality to Goose through tools.
-- MCPs can be installed directly via the [extensions directory](https://block.github.io/goose/v1/extensions/), CLI, or UI.
-- Goose allows you to extend its functionality by [building your own MCP servers](https://block.github.io/goose/docs/tutorials/custom-extensions).
-- Includes built-in tools for development, web scraping, automation, memory, and integrations with JetBrains and Google Drive.
+* Expose MCP functionality to Goose through tools.
+* MCPs can be installed directly via the [extensions directory](https://block.github.io/goose/v1/extensions/), CLI, or UI.
+* Goose allows you to extend its functionality by [building your own MCP servers](https://block.github.io/goose/docs/tutorials/custom-extensions).
+* Includes built-in tools for development, web scraping, automation, memory, and integrations with JetBrains and Google Drive.
 
 ### GitHub Copilot coding agent
 
@@ -543,9 +625,9 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Delegate tasks to Copilot from GitHub Issues, Visual Studio Code, GitHub Copilot Chat or from your favorite MCP host using the GitHub MCP Server
-- Tailor Copilot to your project by [customizing the agent's development environment](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/customizing-the-development-environment-for-copilot-coding-agent#preinstalling-tools-or-dependencies-in-copilots-environment) or [writing custom instructions](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks#adding-custom-instructions-to-your-repository)
-- [Augment Copilot's context and capabilities with MCP tools](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/extending-copilot-coding-agent-with-mcp), with support for both local and remote MCP servers
+* Delegate tasks to Copilot from GitHub Issues, Visual Studio Code, GitHub Copilot Chat or from your favorite MCP host using the GitHub MCP Server
+* Tailor Copilot to your project by [customizing the agent's development environment](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/customizing-the-development-environment-for-copilot-coding-agent#preinstalling-tools-or-dependencies-in-copilots-environment) or [writing custom instructions](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/best-practices-for-using-copilot-to-work-on-tasks#adding-custom-instructions-to-your-repository)
+* [Augment Copilot's context and capabilities with MCP tools](https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/agents/copilot-coding-agent/extending-copilot-coding-agent-with-mcp), with support for both local and remote MCP servers
 
 ### gptme
 
@@ -553,10 +635,10 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- CLI-first design with a focus on simplicity and ease of use
-- Rich set of built-in tools for shell commands, Python execution, file operations, and web browsing
-- Local-first approach with support for multiple LLM providers
-- Open-source, built to be extensible and easy to modify
+* CLI-first design with a focus on simplicity and ease of use
+* Rich set of built-in tools for shell commands, Python execution, file operations, and web browsing
+* Local-first approach with support for multiple LLM providers
+* Open-source, built to be extensible and easy to modify
 
 ### HyperAgent
 
@@ -564,11 +646,11 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- AI Commands: Simple APIs like page.ai(), page.extract() and executeTask() for any AI automation
-- Fallback to Regular Playwright: Use regular Playwright when AI isn't needed
-- Stealth Mode – Avoid detection with built-in anti-bot patches
-- Cloud Ready – Instantly scale to hundreds of sessions via [Hyperbrowser](https://www.hyperbrowser.ai/)
-- MCP Client – Connect to tools like Composio for full workflows (e.g. writing web data to Google Sheets)
+* AI Commands: Simple APIs like page.ai(), page.extract() and executeTask() for any AI automation
+* Fallback to Regular Playwright: Use regular Playwright when AI isn't needed
+* Stealth Mode – Avoid detection with built-in anti-bot patches
+* Cloud Ready – Instantly scale to hundreds of sessions via [Hyperbrowser](https://www.hyperbrowser.ai/)
+* MCP Client – Connect to tools like Composio for full workflows (e.g. writing web data to Google Sheets)
 
 ### JetBrains AI Assistant
 
@@ -576,11 +658,11 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Unlimited code completion powered by Mellum, JetBrains’ proprietary AI model.
-- Context-aware AI chat that understands your code and helps you in real time.
-- Access to top-tier models from OpenAI, Anthropic, and Google.
-- Offline mode with connected local LLMs via Ollama or LM Studio.
-- Deep integration into IDE workflows, including code suggestions in the editor, VCS assistance, runtime error explanation, and more.
+* Unlimited code completion powered by Mellum, JetBrains’ proprietary AI model.
+* Context-aware AI chat that understands your code and helps you in real time.
+* Access to top-tier models from OpenAI, Anthropic, and Google.
+* Offline mode with connected local LLMs via Ollama or LM Studio.
+* Deep integration into IDE workflows, including code suggestions in the editor, VCS assistance, runtime error explanation, and more.
 
 ### Kilo Code
 
@@ -588,10 +670,10 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Create and add tools through natural language (e.g. "add a tool that searches the web")
-- Discover MCP servers via the MCP Marketplace
-- One click MCP server installs via MCP Marketplace
-- Displays configured MCP servers along with their tools, resources, and any error logs
+* Create and add tools through natural language (e.g. "add a tool that searches the web")
+* Discover MCP servers via the MCP Marketplace
+* One click MCP server installs via MCP Marketplace
+* Displays configured MCP servers along with their tools, resources, and any error logs
 
 ### Klavis AI Slack/Discord/Web
 
@@ -599,15 +681,15 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Slack/Discord/Web MCP clients for using MCPs directly
-- Simple web UI dashboard for easy MCP configuration
-- Direct OAuth integration with Slack & Discord Clients and MCP Servers for secure user authentication
-- SSE transport support
-- Open-source infrastructure ([GitHub repository](https://github.com/Klavis-AI/klavis))
+* Slack/Discord/Web MCP clients for using MCPs directly
+* Simple web UI dashboard for easy MCP configuration
+* Direct OAuth integration with Slack & Discord Clients and MCP Servers for secure user authentication
+* SSE transport support
+* Open-source infrastructure ([GitHub repository](https://github.com/Klavis-AI/klavis))
 
 **Learn more:**
 
-- [Demo video showing MCP usage in Slack/Discord](https://youtu.be/9-QQAhrQWw8)
+* [Demo video showing MCP usage in Slack/Discord](https://youtu.be/9-QQAhrQWw8)
 
 ### LibreChat
 
@@ -615,10 +697,10 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Extend current tool ecosystem, including [Code Interpreter](https://www.librechat.ai/docs/features/code_interpreter) and Image generation tools, through MCP servers
-- Add tools to customizable [Agents](https://www.librechat.ai/docs/features/agents), using a variety of LLMs from top providers
-- Open-source and self-hostable, with secure multi-user support
-- Future roadmap includes expanded MCP feature support
+* Extend current tool ecosystem, including [Code Interpreter](https://www.librechat.ai/docs/features/code_interpreter) and Image generation tools, through MCP servers
+* Add tools to customizable [Agents](https://www.librechat.ai/docs/features/agents), using a variety of LLMs from top providers
+* Open-source and self-hostable, with secure multi-user support
+* Future roadmap includes expanded MCP feature support
 
 ### LM Studio
 
@@ -626,17 +708,17 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Use MCP servers with local models on your computer. Add entries to `mcp.json` and save to get started.
-- Tool confirmation UI: when a model calls a tool, you can confirm the call in the LM Studio app.
-- Cross-platform: runs on macOS, Windows, and Linux, one-click installer with no need to fiddle in the command line
-- Supports GGUF (llama.cpp) or MLX models with GPU acceleration
-- GUI & terminal mode: use the LM Studio app or CLI (lms) for scripting and automation
+* Use MCP servers with local models on your computer. Add entries to `mcp.json` and save to get started.
+* Tool confirmation UI: when a model calls a tool, you can confirm the call in the LM Studio app.
+* Cross-platform: runs on macOS, Windows, and Linux, one-click installer with no need to fiddle in the command line
+* Supports GGUF (llama.cpp) or MLX models with GPU acceleration
+* GUI & terminal mode: use the LM Studio app or CLI (lms) for scripting and automation
 
 **Learn more:**
 
-- [Docs: Using MCP in LM Studio](https://lmstudio.ai/docs/app/plugins/mcp)
-- [Create a 'Add to LM Studio' button for your server](https://lmstudio.ai/docs/app/plugins/mcp/deeplink)
-- [Announcement blog: LM Studio + MCP](https://lmstudio.ai/blog/mcp)
+* [Docs: Using MCP in LM Studio](https://lmstudio.ai/docs/app/plugins/mcp)
+* [Create a 'Add to LM Studio' button for your server](https://lmstudio.ai/docs/app/plugins/mcp/deeplink)
+* [Announcement blog: LM Studio + MCP](https://lmstudio.ai/blog/mcp)
 
 ### Lutra
 
@@ -644,14 +726,14 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Easy MCP Integration: Connecting Lutra to MCP servers is as simple as providing the server URL; Lutra handles the rest behind the scenes.
-- Chat to Take Action: Lutra understands your conversational context and goals, automatically integrating with your existing apps to perform tasks.
-- Reusable Playbooks: After completing a task, save the steps as reusable, automated workflows—simplifying repeatable processes and reducing manual effort.
-- Shareable Automations: Easily share your saved playbooks with teammates to standardize best practices and accelerate collaborative workflows.
+* Easy MCP Integration: Connecting Lutra to MCP servers is as simple as providing the server URL; Lutra handles the rest behind the scenes.
+* Chat to Take Action: Lutra understands your conversational context and goals, automatically integrating with your existing apps to perform tasks.
+* Reusable Playbooks: After completing a task, save the steps as reusable, automated workflows—simplifying repeatable processes and reducing manual effort.
+* Shareable Automations: Easily share your saved playbooks with teammates to standardize best practices and accelerate collaborative workflows.
 
 **Learn more:**
 
-- [Lutra AI agent explained](https://www.youtube.com/watch?v=W5ZpN0cMY70)
+* [Lutra AI agent explained](https://www.youtube.com/watch?v=W5ZpN0cMY70)
 
 ### mcp-agent
 
@@ -659,10 +741,10 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Automatic connection management of MCP servers.
-- Expose tools from multiple servers to an LLM.
-- Implements every pattern defined in [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents).
-- Supports workflow pause/resume signals, such as waiting for human feedback.
+* Automatic connection management of MCP servers.
+* Expose tools from multiple servers to an LLM.
+* Implements every pattern defined in [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents).
+* Supports workflow pause/resume signals, such as waiting for human feedback.
 
 ### mcp-client-chatbot
 
@@ -670,9 +752,9 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- It supports standard MCP tool calling and includes both a custom MCP server and a standalone UI for testing MCP tools outside the chat flow.
-- All MCP tools are provided to the LLM by default, but the project also includes an optional `@toolname` mention feature to make tool invocation more explicit—particularly useful when connecting to multiple MCP servers with many tools.
-- Visual workflow builder that lets you create custom tools by chaining LLM nodes and MCP tools together. Published workflows become callable as `@workflow_name` tools in chat, enabling complex multi-step automation sequences.
+* It supports standard MCP tool calling and includes both a custom MCP server and a standalone UI for testing MCP tools outside the chat flow.
+* All MCP tools are provided to the LLM by default, but the project also includes an optional `@toolname` mention feature to make tool invocation more explicit—particularly useful when connecting to multiple MCP servers with many tools.
+* Visual workflow builder that lets you create custom tools by chaining LLM nodes and MCP tools together. Published workflows become callable as `@workflow_name` tools in chat, enabling complex multi-step automation sequences.
 
 ### mcp-use
 
@@ -680,11 +762,11 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Very simple interface to connect any LLM to any MCP.
-- Support the creation of custom agents, workflows.
-- Supports connection to multiple MCP servers simultaneously.
-- Supports all langchain supported models, also locally.
-- Offers efficient tool orchestration and search functionalities.
+* Very simple interface to connect any LLM to any MCP.
+* Support the creation of custom agents, workflows.
+* Supports connection to multiple MCP servers simultaneously.
+* Supports all langchain supported models, also locally.
+* Offers efficient tool orchestration and search functionalities.
 
 ### modelcontextchat.com
 
@@ -692,11 +774,11 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Web-based interface for remote MCP server connections
-- Header-based Authorization support for secure server access
-- OAuth authentication integration
-- OpenRouter API Key support for accessing various LLM providers
-- No installation required - accessible from any web browser
+* Web-based interface for remote MCP server connections
+* Header-based Authorization support for secure server access
+* OAuth authentication integration
+* OpenRouter API Key support for accessing various LLM providers
+* No installation required - accessible from any web browser
 
 ### MCPHub
 
@@ -704,10 +786,10 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Install, configure and manage MCP servers with an intuitive UI.
-- Built-in Neovim MCP server with support for file operations (read, write, search, replace), command execution, terminal integration, LSP integration, buffers, and diagnostics.
-- Create Lua-based MCP servers directly in Neovim.
-- Inegrates with popular Neovim chat plugins Avante.nvim and CodeCompanion.nvim
+* Install, configure and manage MCP servers with an intuitive UI.
+* Built-in Neovim MCP server with support for file operations (read, write, search, replace), command execution, terminal integration, LSP integration, buffers, and diagnostics.
+* Create Lua-based MCP servers directly in Neovim.
+* Inegrates with popular Neovim chat plugins Avante.nvim and CodeCompanion.nvim
 
 ### MCPOmni-Connect
 
@@ -715,12 +797,12 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Support for resources, prompts, tools, and sampling
-- Agentic mode with ReAct and orchestrator capabilities
-- Seamless integration with OpenAI models and other LLMs
-- Dynamic tool and resource management across multiple servers
-- Support for both stdio and SSE transport protocols
-- Comprehensive tool orchestration and resource analysis capabilities
+* Support for resources, prompts, tools, and sampling
+* Agentic mode with ReAct and orchestrator capabilities
+* Seamless integration with OpenAI models and other LLMs
+* Dynamic tool and resource management across multiple servers
+* Support for both stdio and SSE transport protocols
+* Comprehensive tool orchestration and resource analysis capabilities
 
 ### Memex
 
@@ -728,15 +810,15 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- **Prompt-to-MCP Server**: Generate fully functional MCP servers from natural language descriptions
-- **Self-Testing & Debugging**: Autonomously test, debug, and improve created MCP servers
-- **Universal MCP Client**: Works with any MCP server through intuitive, natural language integration
-- **Curated MCP Directory**: Access to tested, one-click installable MCP servers (Neon, Netlify, GitHub, Context7, and more)
-- **Multi-Server Orchestration**: Leverage multiple MCP servers simultaneously for complex workflows
+* **Prompt-to-MCP Server**: Generate fully functional MCP servers from natural language descriptions
+* **Self-Testing & Debugging**: Autonomously test, debug, and improve created MCP servers
+* **Universal MCP Client**: Works with any MCP server through intuitive, natural language integration
+* **Curated MCP Directory**: Access to tested, one-click installable MCP servers (Neon, Netlify, GitHub, Context7, and more)
+* **Multi-Server Orchestration**: Leverage multiple MCP servers simultaneously for complex workflows
 
 **Learn more:**
 
-- [Memex Launch 2: MCP Teams and Agent API](https://memex.tech/blog/memex-launch-2-mcp-teams-and-agent-api-private-preview-125f)
+* [Memex Launch 2: MCP Teams and Agent API](https://memex.tech/blog/memex-launch-2-mcp-teams-and-agent-api-private-preview-125f)
 
 ### Microsoft Copilot Studio
 
@@ -744,9 +826,9 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Support for MCP tools
-- Extend Copilot Studio agents with MCP servers
-- Leveraging Microsoft unified, governed, and secure API management solutions
+* Support for MCP tools
+* Extend Copilot Studio agents with MCP servers
+* Leveraging Microsoft unified, governed, and secure API management solutions
 
 ### MindPal
 
@@ -754,15 +836,15 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 
 **Key features:**
 
-- Build custom AI agents with no-code
-- Connect any SSE MCP server to extend agent tools
-- Create multi-agent workflows for complex business processes
-- User-friendly for both technical and non-technical professionals
-- Ongoing development with continuous improvement of MCP support
+* Build custom AI agents with no-code
+* Connect any SSE MCP server to extend agent tools
+* Create multi-agent workflows for complex business processes
+* User-friendly for both technical and non-technical professionals
+* Ongoing development with continuous improvement of MCP support
 
 **Learn more:**
 
-- [MindPal MCP Documentation](https://docs.mindpal.io/agent/mcp)
+* [MindPal MCP Documentation](https://docs.mindpal.io/agent/mcp)
 
 ### MooPoint
 
@@ -772,11 +854,11 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Accessible from any PC or smartphone—no installation required
-- Choose your preferred LLM provider
-- Supports `SSE`, `Streamable HTTP`, `npx`, and `uvx` MCP servers
-- OAuth and sampling support
-- New features added daily
+* Accessible from any PC or smartphone—no installation required
+* Choose your preferred LLM provider
+* Supports `SSE`, `Streamable HTTP`, `npx`, and `uvx` MCP servers
+* OAuth and sampling support
+* New features added daily
 
 ### Msty Studio
 
@@ -784,14 +866,14 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- **Toolbox & Toolsets**: Connect AI models to local tools and scripts using MCP-compliant configurations. Group tools into Toolsets to enable dynamic, multi-step workflows within conversations.
-- **Turnstiles**: Create automated, multi-step AI interactions, allowing for complex data processing and decision-making flows.
-- **Real-Time Data Integration**: Enhance AI responses with up-to-date information by integrating real-time web search capabilities.
-- **Split Chats & Branching**: Engage in parallel conversations with multiple models simultaneously, enabling comparative analysis and diverse perspectives.
+* **Toolbox & Toolsets**: Connect AI models to local tools and scripts using MCP-compliant configurations. Group tools into Toolsets to enable dynamic, multi-step workflows within conversations.
+* **Turnstiles**: Create automated, multi-step AI interactions, allowing for complex data processing and decision-making flows.
+* **Real-Time Data Integration**: Enhance AI responses with up-to-date information by integrating real-time web search capabilities.
+* **Split Chats & Branching**: Engage in parallel conversations with multiple models simultaneously, enabling comparative analysis and diverse perspectives.
 
 **Learn more:**
 
-- [Msty Studio Documentation](https://docs.msty.studio/features/toolbox/tools)
+* [Msty Studio Documentation](https://docs.msty.studio/features/toolbox/tools)
 
 ### NVIDIA Agent Intelligence (AIQ) toolkit
 
@@ -799,15 +881,15 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Acts as an MCP **client** to consume remote tools
-- Acts as an MCP **server** to expose tools
-- Framework agnostic and compatible with LangChain, CrewAI, Semantic Kernel, and custom agents
-- Includes built-in observability and evaluation tools
+* Acts as an MCP **client** to consume remote tools
+* Acts as an MCP **server** to expose tools
+* Framework agnostic and compatible with LangChain, CrewAI, Semantic Kernel, and custom agents
+* Includes built-in observability and evaluation tools
 
 **Learn more:**
 
-- [AIQ toolkit GitHub repository](https://github.com/NVIDIA/AIQToolkit)
-- [AIQ toolkit MCP documentation](https://docs.nvidia.com/aiqtoolkit/latest/workflows/mcp/index.html)
+* [AIQ toolkit GitHub repository](https://github.com/NVIDIA/AIQToolkit)
+* [AIQ toolkit MCP documentation](https://docs.nvidia.com/aiqtoolkit/latest/workflows/mcp/index.html)
 
 ### OpenSumi
 
@@ -815,8 +897,8 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Supports MCP tools in OpenSumi
-- Supports built-in IDE MCP servers and custom MCP servers
+* Supports MCP tools in OpenSumi
+* Supports built-in IDE MCP servers and custom MCP servers
 
 ### oterm
 
@@ -824,8 +906,8 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Support for multiple fully customizable chat sessions with Ollama connected with tools.
-- Support for MCP tools.
+* Support for multiple fully customizable chat sessions with Ollama connected with tools.
+* Support for MCP tools.
 
 ### Roo Code
 
@@ -833,9 +915,9 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Support for MCP tools and resources
-- Integration with development workflows
-- Extensible AI capabilities
+* Support for MCP tools and resources
+* Integration with development workflows
+* Extensible AI capabilities
 
 ### Postman
 
@@ -843,10 +925,10 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Full support of all major MCP features (tools, prompts, resources, and subscriptions)
-- Fast, seamless UI for debugging MCP capabilities
-- MCP config integration (Claude, VSCode, etc.) for fast first-time experience in testing MCPs
-- Integration with history, variables, and collections for reuse and collaboration
+* Full support of all major MCP features (tools, prompts, resources, and subscriptions)
+* Fast, seamless UI for debugging MCP capabilities
+* MCP config integration (Claude, VSCode, etc.) for fast first-time experience in testing MCPs
+* Integration with history, variables, and collections for reuse and collaboration
 
 ### RecurseChat
 
@@ -854,13 +936,13 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Local AI: Support MCP with Ollama models.
-- MCP Tools: Individual MCP server management. Easily visualize the connection states of MCP servers.
-- MCP Import: Import configuration from Claude Desktop app or JSON
+* Local AI: Support MCP with Ollama models.
+* MCP Tools: Individual MCP server management. Easily visualize the connection states of MCP servers.
+* MCP Import: Import configuration from Claude Desktop app or JSON
 
 **Learn more:**
 
-- [RecurseChat docs](https://recurse.chat/docs/features/mcp/)
+* [RecurseChat docs](https://recurse.chat/docs/features/mcp/)
 
 ### Shortwave
 
@@ -868,10 +950,10 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- MCP tool integration for enhanced email workflows
-- Rich UI for adding, managing and interacting with a wide range of MCP servers
-- Support for both remote (Streamable HTTP and SSE) and local (Stdio) MCP servers
-- AI assistance for managing your emails, calendar, tasks and other third-party services
+* MCP tool integration for enhanced email workflows
+* Rich UI for adding, managing and interacting with a wide range of MCP servers
+* Support for both remote (Streamable HTTP and SSE) and local (Stdio) MCP servers
+* AI assistance for managing your emails, calendar, tasks and other third-party services
 
 ### Slack MCP Client
 
@@ -879,9 +961,9 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- **Supports Popular LLM Providers:** Integrates seamlessly with leading large language model providers such as OpenAI, Anthropic, and Ollama, allowing users to leverage advanced conversational AI and orchestration capabilities within Slack.
-- **Dynamic and Secure Integration:** Supports dynamic registration of MCP tools, works in both channels and direct messages and manages credentials securely via environment variables or Kubernetes secrets.
-- **Easy Deployment and Extensibility:** Offers official Docker images, a Helm chart for Kubernetes, and Docker Compose for local development, making it simple to deploy, configure, and extend with additional MCP servers or tools.
+* **Supports Popular LLM Providers:** Integrates seamlessly with leading large language model providers such as OpenAI, Anthropic, and Ollama, allowing users to leverage advanced conversational AI and orchestration capabilities within Slack.
+* **Dynamic and Secure Integration:** Supports dynamic registration of MCP tools, works in both channels and direct messages and manages credentials securely via environment variables or Kubernetes secrets.
+* **Easy Deployment and Extensibility:** Offers official Docker images, a Helm chart for Kubernetes, and Docker Compose for local development, making it simple to deploy, configure, and extend with additional MCP servers or tools.
 
 ### Sourcegraph Cody
 
@@ -889,10 +971,10 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Support for MCP resources
-- Integration with Sourcegraph's code intelligence
-- Uses OpenCTX as an abstraction layer
-- Future support planned for additional MCP features
+* Support for MCP resources
+* Integration with Sourcegraph's code intelligence
+* Uses OpenCTX as an abstraction layer
+* Future support planned for additional MCP features
 
 ### SpinAI
 
@@ -900,10 +982,10 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Built-in MCP compatibility for AI agents
-- Open-source TypeScript framework
-- Observable agent architecture
-- Native support for MCP tools integration
+* Built-in MCP compatibility for AI agents
+* Open-source TypeScript framework
+* Observable agent architecture
+* Native support for MCP tools integration
 
 ### Superinterface
 
@@ -911,9 +993,9 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Use tools from MCP servers in assistants embedded via React components or script tags
-- SSE transport support
-- Use any AI model from any AI provider (OpenAI, Anthropic, Ollama, others)
+* Use tools from MCP servers in assistants embedded via React components or script tags
+* SSE transport support
+* Use any AI model from any AI provider (OpenAI, Anthropic, Ollama, others)
 
 ### Superjoin
 
@@ -921,10 +1003,10 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Native Google Sheets add-on providing effortless access to MCP capabilities
-- Supports OAuth 2.1 and header-based authentication for secure and flexible connections
-- Compatible with both SSE and Streamable HTTP transport for efficient, real-time streaming communication
-- Fully web-based, cross-platform client requiring no additional software installation
+* Native Google Sheets add-on providing effortless access to MCP capabilities
+* Supports OAuth 2.1 and header-based authentication for secure and flexible connections
+* Compatible with both SSE and Streamable HTTP transport for efficient, real-time streaming communication
+* Fully web-based, cross-platform client requiring no additional software installation
 
 ### systemprompt
 
@@ -932,9 +1014,9 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- **Native Mobile Experience**: Access and manage your MCP servers anytime, anywhere on both Android and iOS devices
-- **Advanced AI-Powered Voice Recognition**: Sophisticated voice recognition engine enhanced with cutting-edge AI and Natural Language Processing (NLP), specifically tuned to understand complex developer terminology and command structures
-- **Unified Multi-MCP Server Management**: Effortlessly manage and interact with multiple Model Context Protocol (MCP) servers from a single, centralized mobile application
+* **Native Mobile Experience**: Access and manage your MCP servers anytime, anywhere on both Android and iOS devices
+* **Advanced AI-Powered Voice Recognition**: Sophisticated voice recognition engine enhanced with cutting-edge AI and Natural Language Processing (NLP), specifically tuned to understand complex developer terminology and command structures
+* **Unified Multi-MCP Server Management**: Effortlessly manage and interact with multiple Model Context Protocol (MCP) servers from a single, centralized mobile application
 
 ### Tambo
 
@@ -942,11 +1024,11 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Hosted platform with React SDK for integrating chat or other LLM-based experiences into your own app.
-- Support for selection of arbitrary React components in the chat experience, with state management and tool calling.
-- Support for MCP servers, from Tambo's servers or directly from the browser.
-- Supports OAuth 2.1 and custom header-based authentication.
-- Support for MCP tools, with additional MCP features coming soon.
+* Hosted platform with React SDK for integrating chat or other LLM-based experiences into your own app.
+* Support for selection of arbitrary React components in the chat experience, with state management and tool calling.
+* Support for MCP servers, from Tambo's servers or directly from the browser.
+* Supports OAuth 2.1 and custom header-based authentication.
+* Support for MCP tools, with additional MCP features coming soon.
 
 ### Tencent CloudBase AI DevKit
 
@@ -954,9 +1036,9 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- Support for MCP tools
-- Extend agents with MCP servers
-- MCP servers hosting: serverless hosting and authentication support
+* Support for MCP tools
+* Extend agents with MCP servers
+* MCP servers hosting: serverless hosting and authentication support
 
 ### TheiaAI/TheiaIDE
 
@@ -964,16 +1046,16 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 
 **Key features:**
 
-- **Tool Integration**: Theia AI enables AI agents, including those in the Theia IDE, to utilize MCP servers for seamless tool interaction.
-- **Customizable Prompts**: The Theia IDE allows users to define and adapt prompts, dynamically integrating MCP servers for tailored workflows.
-- **Custom agents**: The Theia IDE supports creating custom agents that leverage MCP capabilities, enabling users to design dedicated workflows on the fly.
+* **Tool Integration**: Theia AI enables AI agents, including those in the Theia IDE, to utilize MCP servers for seamless tool interaction.
+* **Customizable Prompts**: The Theia IDE allows users to define and adapt prompts, dynamically integrating MCP servers for tailored workflows.
+* **Custom agents**: The Theia IDE supports creating custom agents that leverage MCP capabilities, enabling users to design dedicated workflows on the fly.
 
 Theia AI and Theia IDE's MCP integration provide users with flexibility, making them powerful platforms for exploring and adapting MCP.
 
 **Learn more:**
 
-- [Theia IDE and Theia AI MCP Announcement](https://eclipsesource.com/blogs/2024/12/19/theia-ide-and-theia-ai-support-mcp/)
-- [Download the AI-powered Theia IDE](https://theia-ide.org/)
+* [Theia IDE and Theia AI MCP Announcement](https://eclipsesource.com/blogs/2024/12/19/theia-ide-and-theia-ai-support-mcp/)
+* [Download the AI-powered Theia IDE](https://theia-ide.org/)
 
 ### Tome
 
@@ -981,9 +1063,9 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- MCP servers are managed by Tome so there is no need to install uv or npm or configure JSON
-- Users can quickly add or remove MCP servers via UI
-- Any tool-supported local model on Ollama is compatible
+* MCP servers are managed by Tome so there is no need to install uv or npm or configure JSON
+* Users can quickly add or remove MCP servers via UI
+* Any tool-supported local model on Ollama is compatible
 
 ### TypingMind App
 
@@ -991,14 +1073,14 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- **MCP Tool Integration**: Once MCP is configured, MCP tools will show up as plugins that can be enabled/disabled easily via the main app interface.
-- **Assign MCP Tools to Agents**: TypingMind allows users to create AI agents that have a set of MCP servers assigned.
-- **Remote MCP servers**: Allows users to customize where to run the MCP servers via its MCP Connector configuration, allowing the use of MCP tools across multiple devices (laptop, mobile devices, etc.) or control MCP servers from a remote private server.
+* **MCP Tool Integration**: Once MCP is configured, MCP tools will show up as plugins that can be enabled/disabled easily via the main app interface.
+* **Assign MCP Tools to Agents**: TypingMind allows users to create AI agents that have a set of MCP servers assigned.
+* **Remote MCP servers**: Allows users to customize where to run the MCP servers via its MCP Connector configuration, allowing the use of MCP tools across multiple devices (laptop, mobile devices, etc.) or control MCP servers from a remote private server.
 
 **Learn more:**
 
-- [TypingMind MCP Document](https://www.typingmind.com/mcp)
-- [Download TypingMind (PWA)](https://www.typingmind.com/)
+* [TypingMind MCP Document](https://www.typingmind.com/mcp)
+* [Download TypingMind (PWA)](https://www.typingmind.com/)
 
 ### VS Code GitHub Copilot
 
@@ -1006,11 +1088,11 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- Support for stdio and server-sent events (SSE) transport
-- Per-session selection of tools per agent session for optimal performance
-- Easy server debugging with restart commands and output logging
-- Tool calls with editable inputs and always-allow toggle
-- Integration with existing VS Code extension system to register MCP servers from extensions
+* Support for stdio and server-sent events (SSE) transport
+* Per-session selection of tools per agent session for optimal performance
+* Easy server debugging with restart commands and output logging
+* Tool calls with editable inputs and always-allow toggle
+* Integration with existing VS Code extension system to register MCP servers from extensions
 
 ### Warp
 
@@ -1018,10 +1100,10 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- **Agent Mode with MCP support**: invoke tools and access data from MCP servers using natural language prompts
-- **Flexible server management**: add and manage CLI or SSE-based MCP servers via Warp's built-in UI
-- **Live tool/resource discovery**: view tools and resources from each running MCP server
-- **Configurable startup**: set MCP servers to start automatically with Warp or launch them manually as needed
+* **Agent Mode with MCP support**: invoke tools and access data from MCP servers using natural language prompts
+* **Flexible server management**: add and manage CLI or SSE-based MCP servers via Warp's built-in UI
+* **Live tool/resource discovery**: view tools and resources from each running MCP server
+* **Configurable startup**: set MCP servers to start automatically with Warp or launch them manually as needed
 
 ### WhatsMCP
 
@@ -1029,12 +1111,12 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- Supports MCP tools
-- SSE transport, full OAuth2 support
-- Chat flow management for WhatsApp messages
-- One click setup for connecting to your MCP servers
-- In chat management of MCP servers
-- Oauth flow natively supported in WhatsApp
+* Supports MCP tools
+* SSE transport, full OAuth2 support
+* Chat flow management for WhatsApp messages
+* One click setup for connecting to your MCP servers
+* In chat management of MCP servers
+* Oauth flow natively supported in WhatsApp
 
 ### Windsurf Editor
 
@@ -1042,9 +1124,9 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- Revolutionary AI Flow paradigm for human-AI collaboration
-- Intelligent code generation and understanding
-- Rich development tools with multi-model support
+* Revolutionary AI Flow paradigm for human-AI collaboration
+* Intelligent code generation and understanding
+* Rich development tools with multi-model support
 
 ### Witsy
 
@@ -1052,11 +1134,11 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- Multiple MCP servers support
-- Tool integration for executing commands and scripts
-- Local server connections for enhanced privacy and security
-- Easy-install from Smithery.ai
-- Open-source, available for macOS, Windows and Linux
+* Multiple MCP servers support
+* Tool integration for executing commands and scripts
+* Local server connections for enhanced privacy and security
+* Easy-install from Smithery.ai
+* Open-source, available for macOS, Windows and Linux
 
 ### Zed
 
@@ -1064,10 +1146,10 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- Prompt templates surface as slash commands in the editor
-- Tool integration for enhanced coding workflows
-- Tight integration with editor features and workspace context
-- Does not support MCP resources
+* Prompt templates surface as slash commands in the editor
+* Tool integration for enhanced coding workflows
+* Tight integration with editor features and workspace context
+* Does not support MCP resources
 
 ### Zencoder
 
@@ -1075,15 +1157,15 @@ Theia AI and Theia IDE's MCP integration provide users with flexibility, making 
 
 **Key features:**
 
-- RepoGrokking - deep contextual understanding of codebases
-- Agentic pipeline - runs, tests, and executes code before outputting it
-- Zen Agents platform - ability to build and create custom agents and share with the team
-- Integrated MCP tool library with one-click installations
-- Specialized agents for Unit and E2E Testing
+* RepoGrokking - deep contextual understanding of codebases
+* Agentic pipeline - runs, tests, and executes code before outputting it
+* Zen Agents platform - ability to build and create custom agents and share with the team
+* Integrated MCP tool library with one-click installations
+* Specialized agents for Unit and E2E Testing
 
 **Learn more:**
 
-- [Zencoder Documentation](https://docs.zencoder.ai)
+* [Zencoder Documentation](https://docs.zencoder.ai)
 
 ## Adding MCP support to your application
 
@@ -1091,16 +1173,120 @@ If you've added MCP support to your application, we encourage you to submit a pu
 
 Benefits of adding MCP support:
 
-- Enable users to bring their own context and tools
-- Join a growing ecosystem of interoperable AI applications
-- Provide users with flexible integration options
-- Support local-first AI workflows
+* Enable users to bring their own context and tools
+* Join a growing ecosystem of interoperable AI applications
+* Provide users with flexible integration options
+* Support local-first AI workflows
 
 To get started with implementing MCP in your application, check out our [Python](https://github.com/modelcontextprotocol/python-sdk) or [TypeScript SDK Documentation](https://github.com/modelcontextprotocol/typescript-sdk)
 
 ## Updates and corrections
 
 This list is maintained by the community. If you notice any inaccuracies or would like to update information about MCP support in your application, please submit a pull request or [open an issue in our documentation repository](https://github.com/modelcontextprotocol/modelcontextprotocol/issues).
+
+# Contributor Communication
+
+Source: <https://modelcontextprotocol.io/community/communication>
+
+Communication strategy and framework for the Model Context Protocol community
+
+This document provides practical guidance for communicating and collaborating within the Model Context Protocol (MCP) project. It outlines the communication channels, workflows, and processes used by the MCP community.
+
+All communication within the MCP community is governed by our [Code of Conduct](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/CODE_OF_CONDUCT.md). We expect all participants to maintain respectful, professional, and inclusive interactions across all channels.
+
+## Communication Channels
+
+We support three primary communication channels: the [public Discord server][discord-join], [GitHub Issues](https://github.com/modelcontextprotocol/modelcontextprotocol/issues), and [GitHub Discussions](https://github.com/modelcontextprotocol/modelcontextprotocol/discussions) in the [main project repository](https://github.com/modelcontextprotocol/modelcontextprotocol).
+
+### Discord
+
+For real-time contributor discussion and collaboration. The server is designed around **MCP contributors** and is not intended
+to be a place for general MCP support.
+
+The Discord server will have both public and private channels.
+
+[Join the Discord server here][discord-join].
+
+#### Public Channels (Default)
+
+* **Purpose**: Open community engagement, collaborative development, and transparent project coordination.
+* Primary use cases:
+  * **Public SDK and tooling development**: All development, from ideation to release planning, happens in public channels (e.g., `#typescript-sdk-dev`, `#inspector-dev`).
+  * **Working and interest group discussions** (`#client-implementors`, `#agents-wg`, etc.)
+    * **Working Group**: Some specific goal or project in mind (such as an SDK, inspector, registry, server-identity, load-balancing, etc).
+    * **Interest Group**: An abstract gathering of folks that might raise a range of various topics. Some might get actioned on as one-offs, others might spin into Working Groups.
+  * **Community onboarding** and contribution guidance.
+  * **Community feedback** and collaborative brainstorming.
+  * Public **office hours** and **maintainer availability**.
+* Avoid:
+  * MCP user support: participants are expected to read official documentation and start new GitHub Discussions for questions or support.
+  * Service or product marketing: interactions on this Discord are expected to be vendor-neutral and not used for brand-building or sales. Mentions of brands or products are discouraged outside of being used as examples or responses to conversations that start off focused on the specification.
+
+#### Private channels (Exceptions)
+
+* **Purpose**: Confidential coordination and sensitive matters that cannot be discussed publicly. Access will be restricted to designated maintainers.
+* **Strict criteria for private use**:
+  * **Security incidents** (CVEs, protocol vulnerabilities).
+  * **People matters** (maintainer-related discussions, code of conduct policies).
+  * Select channels will be configured to be **read-only**. This can be good for example for maintainer decision making.
+  * Coordination requiring **immediate** or otherwise **focused response** with a limited audience.
+* **Transparency**:
+  * **All technical and governance decisions** affecting the community **must be documented** in GitHub Discussions and/or Issues, and will be labeled with `notes`.
+  * **Some matters related to individual contributors** may remain private when appropriate (e.g., personal circumstances, disciplinary actions, or other sensitive individual matters).
+  * Private channels are to be used as **temporary "incident rooms,"** not for routine development.
+
+Any significant discussion on Discord that leads to a potential decision or proposal must be moved to a GitHub Discussion or GitHub Issue to create a persistent, searchable record. Proposals will then be promoted to full-fledged PRs with associated work items (GitHub Issues) as needed.
+
+### GitHub Discussions
+
+For structured, long-form discussion and debate on project direction, features, improvements, and community topics.
+
+When to use:
+
+* Project roadmap planning and milestone discussions
+* Announcements and release communications
+* Community polls and consensus-building processes
+* Feature requests with context and rationale
+  * If a particular repository does not have GitHub Discussions enabled, feel free to open a GitHub Issue instead.
+
+### GitHub Issues
+
+For bug reports, feature tracking, and actionable development tasks.
+
+When to use:
+
+* Submit SEP proposals (following the [SEP guidelines](./sep-guidelines))
+* Bug reports with reproducible steps
+* Documentation improvements with specific scope
+* CI/CD problems and infrastructure issues
+* Release tasks and milestone tracking
+
+### Security Issues
+
+**Do not post security issues publicly.** Instead:
+
+1. Use the private security reporting process. For protocol-level security issues, follow the process in [SECURITY.md in the modelcontextprotocol GitHub repository](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/SECURITY.md).
+2. Contact lead and/or [core maintainers](./governance#current-core-maintainers) directly.
+3. Follow responsible disclosure guidelines.
+
+## Decision Records
+
+All MCP decisions are documented and captured in public channels.
+
+* **Technical decisions**: [GitHub Issues](https://github.com/modelcontextprotocol/modelcontextprotocol/issues) and SEPs.
+* **Specification changes**: [On the Model Context Protocol website](https://modelcontextprotocol.io/specification/draft/changelog).
+* **Process changes**: [Community documentation](https://modelcontextprotocol.io/community/governance).
+* **Governance decisions and updates**: [GitHub Issues](https://github.com/modelcontextprotocol/modelcontextprotocol/issues) and SEPs.
+
+When documenting decisions, we will retain as much context as possible:
+
+* Decision makers
+* Background context and motivation
+* Options that were considered
+* Rationale for the chosen approach
+* Implementation steps
+
+[discord-join]: https://discord.gg/6CSzBmMkjX
 
 # Governance and Stewardship
 
@@ -1114,17 +1300,17 @@ The Model Context Protocol (MCP) follows a formal governance model to ensure tra
 
 The MCP project adopts a hierarchical structure, similar to Python, PyTorch and other open source projects:
 
-- A community of **contributors** who file issues, make pull requests, and contribute to the project.
-- A small set of **maintainers** drive components within the MCP project, such as SDKs, documentation, and others.
-- Contributors and maintainers are overseen by **core maintainers**, who drive the overall project direction.
-- The core maintainers have two **lead core maintainers** who are the catch-all decision makers.
-- Maintainers, core maintainers, and lead core maintainers form the **MCP steering group**.
+* A community of **contributors** who file issues, make pull requests, and contribute to the project.
+* A small set of **maintainers** drive components within the MCP project, such as SDKs, documentation, and others.
+* Contributors and maintainers are overseen by **core maintainers**, who drive the overall project direction.
+* The core maintainers have two **lead core maintainers** who are the catch-all decision makers.
+* Maintainers, core maintainers, and lead core maintainers form the **MCP steering group**.
 
 All maintainers are expected to have a strong bias towards MCP's design philosophy. Membership in the technical governance process is for individuals, not companies. That is, there are no seats reserved for specific companies, and membership is associated with the person rather than the company employing that person. This ensures that maintainers act in the best interests of the protocol itself and the open source community.
 
 ### Channels
 
-Technical Governance is facilitated through a shared Discord server of all **maintainers, core maintainers** and **lead maintainers**. Each maintainer group can choose additional communication channels, but all decisions and their supporting discussions must be recorded and made transparently available on the core group Discord server.
+Technical Governance is facilitated through a shared [Discord server](/community/communication#discord) of all **maintainers, core maintainers** and **lead maintainers**. Each maintainer group can choose additional communication channels, but all decisions and their supporting discussions must be recorded and made transparently available on the Discord server.
 
 ### Maintainers
 
@@ -1132,10 +1318,10 @@ Maintainers are responsible for individual projects or technical working groups 
 
 Maintainers are responsible for the:
 
-- Thoughtful and productive engagement with community contributors,
-- Maintaining and improving their respective area of the MCP project,
-- Supporting documentation, roadmaps and other adjacent parts of the MCP project,
-- Present ideas from community to core.
+* Thoughtful and productive engagement with community contributors,
+* Maintaining and improving their respective area of the MCP project,
+* Supporting documentation, roadmaps and other adjacent parts of the MCP project,
+* Present ideas from community to core.
 
 Maintainers are encouraged to propose additional maintainers when needed. Maintainers can only be appointed and removed by core maintainers or lead core maintainers at any time and without reason.
 
@@ -1145,11 +1331,11 @@ Maintainers have write and/or admin access to their respective repositories.
 
 The core maintainers are expected to have a deep understanding of the Model Context Protocol and its specification. Their responsibilities include:
 
-- Designing, reviewing and steering the evolution of the MCP specification, as well as all other parts of the MCP project, such as documentation,
-- Articulating a cohesive long-term vision for the project,
-- Mediating and resolving contentious issues with fairness and transparency, seeking consensus where possible while making decisive choices when necessary,
-- Appoint or remove maintainers,
-- Stewardship of the MCP project in the best interest of MCP.
+* Designing, reviewing and steering the evolution of the MCP specification, as well as all other parts of the MCP project, such as documentation,
+* Articulating a cohesive long-term vision for the project,
+* Mediating and resolving contentious issues with fairness and transparency, seeking consensus where possible while making decisive choices when necessary,
+* Appoint or remove maintainers,
+* Stewardship of the MCP project in the best interest of MCP.
 
 The core maintainers as a group have the power to veto any decisions made by maintainers by majority vote. The core maintainers have power to resolve disputes as they see fit. The core maintainers should publicly articulate their decision-making. The core group is responsible for adopting their own procedures for making decisions.
 
@@ -1190,14 +1376,14 @@ All projects and working groups are self-governed while adhering to these core p
 
 Both must:
 
-- Document their contribution process
-- Maintain transparent communication
-- Make decisions publicly (working groups must publish meeting notes and proposals)
+* Document their contribution process
+* Maintain transparent communication
+* Make decisions publicly (working groups must publish meeting notes and proposals)
 
 Projects and working groups without specified processes default to:
 
-- GitHub pull requests and issues for contributions
-- A public channel in the official MCP Discord (TBD)
+* GitHub pull requests and issues for contributions
+* A public channel in the official [MCP Contributor Discord](/community/communication#discord)
 
 #### Maintenance Responsibilities
 
@@ -1223,32 +1409,32 @@ The core maintainer group meets on a bi-weekly basis to discuss proposals and th
 
 ### Public Chat
 
-The MCP project maintains a public Discord server with open chats for interest groups. The MCP project may have private channels for certain communications.
+The MCP project maintains a [public Discord server](/community/communication#discord) with open chats for interest groups. The MCP project may have private channels for certain communications.
 
 ## Nominating, Confirming and Removing Maintainers
 
 ### The Principles
 
-- Membership in module maintainer groups is given to **individuals** on merit basis after they demonstrated strong expertise of their area of work through contributions, reviews, and discussions and are aligned with the overall MCP direction.
-- For membership in the **maintainer** group the individual has to demonstrate strong and continued alignment with the overall MCP principles.
-- No term limits for module maintainers or core maintainers
-- Light criteria of moving working-group or sub-project maintenance to 'emeritus' status if they don't actively participate over long periods of time. Each maintainer group may define the inactive period that's appropriate for their area.
-- The membership is for an individual, not a company.
+* Membership in module maintainer groups is given to **individuals** on merit basis after they demonstrated strong expertise of their area of work through contributions, reviews, and discussions and are aligned with the overall MCP direction.
+* For membership in the **maintainer** group the individual has to demonstrate strong and continued alignment with the overall MCP principles.
+* No term limits for module maintainers or core maintainers
+* Light criteria of moving working-group or sub-project maintenance to 'emeritus' status if they don't actively participate over long periods of time. Each maintainer group may define the inactive period that's appropriate for their area.
+* The membership is for an individual, not a company.
 
 ### Nomination and Removal
 
-- Core Maintainers are responsible for adding and removing maintainers. They will take the consideration of existing maintainers into account.
-- The lead maintainers are responsible for adding and removing core maintainers.
+* Core Maintainers are responsible for adding and removing maintainers. They will take the consideration of existing maintainers into account.
+* The lead maintainers are responsible for adding and removing core maintainers.
 
 ## Current Core Maintainers
 
-- Inna Harper
-- Basil Hosmer
-- Paul Carleton
-- Nick Cooper
-- Nick Aldridge
-- Che Liu
-- Den Delimarsky
+* Inna Harper
+* Basil Hosmer
+* Paul Carleton
+* Nick Cooper
+* Nick Aldridge
+* Che Liu
+* Den Delimarsky
 
 ## Current Maintainers and Working Groups
 
@@ -1274,14 +1460,14 @@ The goal is to reserve the SEP process for changes that are substantial enough t
 
 Consider proposing a SEP if your change involves any of the following:
 
-- **A New Feature or Protocol Change**: Any change that adds, modifies, or removes features in the Model Context Protocol. This includes:
-  - Adding new API endpoints or methods.
-  - Changing the syntax or semantics of existing data structures or messages.
-  - Introducing a new standard for interoperability between different MCP-compatible tools.
-  - Significant changes to how the specification itself is defined, presented, or validated.
-- **A Breaking Change**: Any change that is not backwards-compatible.
-- **A Change to Governance or Process**: Any proposal that alters the project's decision-making, contribution guidelines (like this document itself).
-- **A Complex or Controversial Topic**: If a change is likely to have multiple valid solutions or generate significant debate, the SEP process provides the necessary framework to explore alternatives, document the rationale, and build community consensus before implementation begins.
+* **A New Feature or Protocol Change**: Any change that adds, modifies, or removes features in the Model Context Protocol. This includes:
+  * Adding new API endpoints or methods.
+  * Changing the syntax or semantics of existing data structures or messages.
+  * Introducing a new standard for interoperability between different MCP-compatible tools.
+  * Significant changes to how the specification itself is defined, presented, or validated.
+* **A Breaking Change**: Any change that is not backwards-compatible.
+* **A Change to Governance or Process**: Any proposal that alters the project's decision-making, contribution guidelines (like this document itself).
+* **A Complex or Controversial Topic**: If a change is likely to have multiple valid solutions or generate significant debate, the SEP process provides the necessary framework to explore alternatives, document the rationale, and build community consensus before implementation begins.
 
 ## SEP Types
 
@@ -1325,15 +1511,15 @@ Each SEP should have the following parts:
 
 SEPs can be one one of the following states
 
-- `proposal`: SEP proposal without a sponsor.
-- `draft`: SEP proposal with a sponsor.
-- `in-review`: SEP proposal ready for review.
-- `accepted`: SEP accepted by Core Maintainers, but still requires final wording and reference implementation.
-- `rejected`: SEP rejected by Core Maintainers.
-- `withdrawn`: SEP withdrawn.
-- `final`: SEP finalized.
-- `superseded`: SEP has been replaced by a newer SEP.
-- `dormant`: SEP that has not found sponsors and was subsequently closed.
+* `proposal`: SEP proposal without a sponsor.
+* `draft`: SEP proposal with a sponsor.
+* `in-review`: SEP proposal ready for review.
+* `accepted`: SEP accepted by Core Maintainers, but still requires final wording and reference implementation.
+* `rejected`: SEP rejected by Core Maintainers.
+* `withdrawn`: SEP withdrawn.
+* `final`: SEP finalized.
+* `superseded`: SEP has been replaced by a newer SEP.
+* `dormant`: SEP that has not found sponsors and was subsequently closed.
 
 ### SEP Review & Resolution
 
@@ -1341,9 +1527,9 @@ SEPs are reviewed by the MCP Core Maintainers team on a bi-weekly basis.
 
 For a SEP to be accepted it must meet certain minimum criteria:
 
-- A prototype implementation demonstrating the proposal
-- Clear benefit to the MCP ecosystem
-- Community support and consensus
+* A prototype implementation demonstrating the proposal
+* Clear benefit to the MCP ecosystem
+* Community support and consensus
 
 Once a SEP has been accepted, the reference implementation must be completed. When the reference implementation is complete and incorporated into the main source code repository, the status will be changed to "Final".
 
@@ -1395,25 +1581,25 @@ For a technical view of our standardization process, visit the [Standards Track]
 
 As MCP increasingly becomes part of agentic workflows, we're focusing on key improvements:
 
-- **Asynchronous Operations**: supporting long-running operations that may take extended periods, with resilient handling of disconnections and reconnections
+* **Asynchronous Operations**: supporting long-running operations that may take extended periods, with resilient handling of disconnections and reconnections
 
 ## Authentication and Security
 
 We're evolving our authorization and security resources to improve user safety and provide a better developer experience:
 
-- **Guides and Best Practices**: documenting specifics about deploying MCP securely in the form of guides and best practices to help developers avoid common pitfalls.
-- **Alternatives to Dynamic Client Registration (DCR)**: exploring alternatives to DCR, attempting to address operational challenges while preserving a smooth user experience.
-- **Fine-grained Authorization**: developing mechanisms and guidelines for primitive authorization for sensitive actions
-- **Enterprise Managed Authorization**: adding the capability for enterprises to simplify MCP server authorization with the help of Single Sign-On (SSO)
-- **Secure Authorization Elicitation**: enable developers to integrate secure authorization flows for downstream APIs outside the main MCP server authorization
+* **Guides and Best Practices**: documenting specifics about deploying MCP securely in the form of guides and best practices to help developers avoid common pitfalls.
+* **Alternatives to Dynamic Client Registration (DCR)**: exploring alternatives to DCR, attempting to address operational challenges while preserving a smooth user experience.
+* **Fine-grained Authorization**: developing mechanisms and guidelines for primitive authorization for sensitive actions
+* **Enterprise Managed Authorization**: adding the capability for enterprises to simplify MCP server authorization with the help of Single Sign-On (SSO)
+* **Secure Authorization Elicitation**: enable developers to integrate secure authorization flows for downstream APIs outside the main MCP server authorization
 
 ## Validation
 
 To foster a robust developer ecosystem, we plan to invest in:
 
-- **Reference Client Implementations**: demonstrating protocol features with high-quality AI applications
-- **Reference Server Implementation**: showcasing authentication patterns and remote deployment best practices
-- **Compliance Test Suites**: automated verification that clients, servers, and SDKs properly implement the specification
+* **Reference Client Implementations**: demonstrating protocol features with high-quality AI applications
+* **Reference Server Implementation**: showcasing authentication patterns and remote deployment best practices
+* **Compliance Test Suites**: automated verification that clients, servers, and SDKs properly implement the specification
 
 These tools will help developers confidently implement MCP while ensuring consistent behavior across the ecosystem.
 
@@ -1427,8 +1613,8 @@ We plan to develop an [**MCP Registry**](https://github.com/orgs/modelcontextpro
 
 Supporting the full spectrum of AI capabilities in MCP, including:
 
-- **Additional Modalities**: video and other media types
-- **[Streaming](https://github.com/modelcontextprotocol/specification/issues/117)**: multipart, chunked messages, and bidirectional communication for interactive experiences
+* **Additional Modalities**: video and other media types
+* **[Streaming](https://github.com/modelcontextprotocol/specification/issues/117)**: multipart, chunked messages, and bidirectional communication for interactive experiences
 
 ## Get Involved
 
@@ -1444,10 +1630,10 @@ MCP is an open protocol that standardizes how applications provide context to la
 
 MCP provides:
 
-- **A growing list of pre-built integrations** that your LLM can directly plug into
-- **A standardized way** to build custom integrations for AI applications
-- **An open protocol** that everyone is free to implement and use
-- **The flexibility to change** between different apps and take your context with you
+* **A growing list of pre-built integrations** that your LLM can directly plug into
+* **A standardized way** to build custom integrations for AI applications
+* **An open protocol** that everyone is free to implement and use
+* **The flexibility to change** between different apps and take your context with you
 
 ## Choose Your Path
 
@@ -1456,13 +1642,13 @@ MCP provides:
     Learn the core concepts and architecture of MCP
   </Card>
 
-{" "}
+  {" "}
 
   <Card title="Use MCP" icon="plug" href="/docs/tutorials/use-remote-mcp-server">
     Connect to existing MCP servers and start using them
   </Card>
 
-{" "}
+  {" "}
 
   <Card title="Build Servers" icon="server" href="/quickstart/server">
     Create MCP servers to expose your data and tools
@@ -1491,10 +1677,10 @@ For specific implementation details, please refer to the documentation for your 
 
 The Model Context Protocol includes the following projects:
 
-- [MCP Specification](https://modelcontextprotocol.io/specification/latest): A specification of MCP that outlines the implementation requirements for clients and servers.
-- [MCP SDKs](/docs/sdk): SDKs for different programming languages that implement MCP.
-- **MCP Development Tools**: Tools for developing MCP servers and clients, including the [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
-- [MCP Reference Server Implementations](https://github.com/modelcontextprotocol/servers): Reference implementations of MCP servers.
+* [MCP Specification](https://modelcontextprotocol.io/specification/latest): A specification of MCP that outlines the implementation requirements for clients and servers.
+* [MCP SDKs](/docs/sdk): SDKs for different programming languages that implement MCP.
+* **MCP Development Tools**: Tools for developing MCP servers and clients, including the [MCP Inspector](https://github.com/modelcontextprotocol/inspector)
+* [MCP Reference Server Implementations](https://github.com/modelcontextprotocol/servers): Reference implementations of MCP servers.
 
 <Note>
   MCP focuses solely on the protocol for context exchange—it does not dictate
@@ -1509,9 +1695,9 @@ MCP follows a client-server architecture where an MCP host — an AI application
 
 The key participants in the MCP architecture are:
 
-- **MCP Host**: The AI application that coordinates and manages one or multiple MCP clients
-- **MCP Client**: A component that maintains a connection to an MCP server and obtains context from an MCP server for the MCP host to use
-- **MCP Server**: A program that provides context to MCP clients
+* **MCP Host**: The AI application that coordinates and manages one or multiple MCP clients
+* **MCP Client**: A component that maintains a connection to an MCP server and obtains context from an MCP server for the MCP host to use
+* **MCP Server**: A program that provides context to MCP clients
 
 **For example**: Visual Studio Code acts as an MCP host. When Visual Studio Code establishes a connection to an MCP server, such as the [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/), the Visual Studio Code runtime instantiates an MCP client object that maintains the connection to the Sentry MCP server.
 When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one
@@ -1546,7 +1732,7 @@ where it runs. MCP servers can execute locally or remotely. For example, when
 Claude Desktop launches the [filesystem
 server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem),
 the server runs locally on the same machine because it uses the STDIO
-transport. This is commonly referred to as a "local" MCP server. The offical
+transport. This is commonly referred to as a "local" MCP server. The official
 [Sentry MCP server](https://docs.sentry.io/product/sentry-mcp/) runs on the
 Sentry platform, and uses the Streamable HTTP transport. This is commonly
 referred to as a "remote" MCP server.
@@ -1555,8 +1741,8 @@ referred to as a "remote" MCP server.
 
 MCP consists of two layers:
 
-- **Data layer**: Defines the JSON-RPC based protocol for client-server communication, including lifecycle management, core primitives, such as tools, resources, and prompts, and notifications,
-- **Transport layer**: Defines the communication mechanisms and channels that enable data exchange between clients and servers, including transport-specific connection establishment, message framing, and authorization.
+* **Data layer**: Defines the JSON-RPC based protocol for client-server communication, including lifecycle management, and core primitives, such as tools, resources, prompts and notifications.
+* **Transport layer**: Defines the communication mechanisms and channels that enable data exchange between clients and servers, including transport-specific connection establishment, message framing, and authorization.
 
 Conceptually the data layer is the inner layer, while the transport layer is the outer layer.
 
@@ -1565,10 +1751,10 @@ Conceptually the data layer is the inner layer, while the transport layer is the
 The data layer implements a [JSON-RPC 2.0](https://www.jsonrpc.org/) based exchange protocol that defines the message structure and semantics.
 This layer includes:
 
-- **Lifecycle management**: Handles connection initialization, capability negotiation, and connection termination between clients and servers
-- **Server features**: Enables servers to provides core functionality including tools for AI actions, resources for context data, and prompts for interaction templates from to the client
-- **Client features**: Enables servers to ask the client to sample from the host LLM, elicit input from the user, and log messages to the client
-- **Utility features**: Supports additional capabilities like notifications for real-time updates and progress tracking for long-running operations
+* **Lifecycle management**: Handles connection initialization, capability negotiation, and connection termination between clients and servers
+* **Server features**: Enables servers to provides core functionality including tools for AI actions, resources for context data, and prompts for interaction templates from and to the client
+* **Client features**: Enables servers to ask the client to sample from the host LLM, elicit input from the user, and log messages to the client
+* **Utility features**: Supports additional capabilities like notifications for real-time updates and progress tracking for long-running operations
 
 #### Transport layer
 
@@ -1576,16 +1762,16 @@ The transport layer manages communication channels and authentication between cl
 
 MCP supports two transport mechanisms:
 
-- **Stdio transport**: Uses standard input/output streams for direct process communication between local processes on the same machine, providing optimal performance with no network overhead.
-- **Streamable HTTP transport**: Uses HTTP POST for client-to-server messages with optional Server-Sent Events for streaming capabilities. This transport enables remote server communication and supports standard HTTP authentication methods including bearer tokens, API keys, and custom headers. MCP recommends using OAuth to obtain authentication tokens.
+* **Stdio transport**: Uses standard input/output streams for direct process communication between local processes on the same machine, providing optimal performance with no network overhead.
+* **Streamable HTTP transport**: Uses HTTP POST for client-to-server messages with optional Server-Sent Events for streaming capabilities. This transport enables remote server communication and supports standard HTTP authentication methods including bearer tokens, API keys, and custom headers. MCP recommends using OAuth to obtain authentication tokens.
 
 The transport layer abstracts communication details from the protocol layer, enabling the same JSON-RPC 2.0 message format across all transport mechanisms.
 
 ### Data Layer Protocol
 
-A core part of MCP is defining the schema and semantics between MCP clients and MCP servers. Developers will likely find the the data layer — in particular, the set of [primitives](#primitives) — to be the most interesting part of MCP. It is the part of MCP that defines the ways developers can share context from MCP servers to MCP clients.
+A core part of MCP is defining the schema and semantics between MCP clients and MCP servers. Developers will likely find the data layer — in particular, the set of [primitives](#primitives) — to be the most interesting part of MCP. It is the part of MCP that defines the ways developers can share context from MCP servers to MCP clients.
 
-MCP uses [JSON-RPC 2.0](https://www.jsonrpc.org/) as it's underlying RPC protocol. Client and servers send requests to each other and respond accordingly. Notifications can be used when no response is required.
+MCP uses [JSON-RPC 2.0](https://www.jsonrpc.org/) as its underlying RPC protocol. Client and servers send requests to each other and respond accordingly. Notifications can be used when no response is required.
 
 #### Lifecycle management
 
@@ -1595,11 +1781,11 @@ MCP is a <Tooltip tip="A subset of MCP can be made stateless using the Streamabl
 
 MCP primitives are the most important concept within MCP. They define what clients and servers can offer each other. These primitives specify the types of contextual information that can be shared with AI applications and the range of actions that can be performed.
 
-MCP defines three core primitives that _servers_ can expose:
+MCP defines three core primitives that *servers* can expose:
 
-- **Tools**: Executable functions that AI applications can invoke to perform actions (e.g., file operations, API calls, database queries)
-- **Resources**: Data sources that provide contextual information to AI applications (e.g., file contents, database records, API responses)
-- **Prompts**: Reusable templates that help structure interactions with language models (e.g., system prompts, few-shot examples)
+* **Tools**: Executable functions that AI applications can invoke to perform actions (e.g., file operations, API calls, database queries)
+* **Resources**: Data sources that provide contextual information to AI applications (e.g., file contents, database records, API responses)
+* **Prompts**: Reusable templates that help structure interactions with language models (e.g., system prompts, few-shot examples)
 
 Each primitive type has associated methods for discovery (`*/list`), retrieval (`*/get`), and in some cases, execution (`tools/call`).
 MCP clients will use the `*/list` methods to discover available primitives. For example, a client can first list all available tools (`tools/list`) and then execute them. This design allows listings to be dynamic.
@@ -1608,11 +1794,11 @@ As a concrete example, consider an MCP server that provides context about a data
 
 For more details about server primitives see [server concepts](./server-concepts).
 
-MCP also defines primitives that _clients_ can expose. These primitives allow MCP server authors to build richer interactions.
+MCP also defines primitives that *clients* can expose. These primitives allow MCP server authors to build richer interactions.
 
-- **Sampling**: Allows servers to request language model completions from the client's AI application. This is useful when servers authors want access to a language model, but want to stay model independent and not include a language model SDK in their MCP server. They can use the `sampling/complete` method to request a language model completion from the client's AI application.
-- **Elicitation**: Allows servers to request additional information from users. This is useful when servers authors want to get more information from the user, or ask for confirmation of an action. They can use the `elicitation/request` method to request additional information from the user.
-- **Logging**: Enables servers to send log messages to clients for debugging and monitoring purposes.
+* **Sampling**: Allows servers to request language model completions from the client's AI application. This is useful when servers' authors want access to a language model, but want to stay model independent and not include a language model SDK in their MCP server. They can use the `sampling/complete` method to request a language model completion from the client's AI application.
+* **Elicitation**: Allows servers to request additional information from users. This is useful when servers' authors want to get more information from the user, or ask for confirmation of an action. They can use the `elicitation/request` method to request additional information from the user.
+* **Logging**: Enables servers to send log messages to clients for debugging and monitoring purposes.
 
 For more details about client primitives see [client concepts](./client-concepts).
 
@@ -1713,7 +1899,6 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
                 app.register_mcp_server(session, supports_tools=True)
             app.set_server_ready(session)
     ```
-
   </Step>
 
   <Step title="Tool Discovery (Primitives)">
@@ -1803,7 +1988,6 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
         available_tools.extend(tools_response.tools)
     conversation.register_available_tools(available_tools)
     ```
-
   </Step>
 
   <Step title="Tool Execution (Primitives)">
@@ -1881,7 +2065,6 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
         result = await session.call_tool(tool_name, arguments)
         conversation.add_tool_result(result.content)
     ```
-
   </Step>
 
   <Step title="Real-time Updates (Notifications)">
@@ -1941,7 +2124,6 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
         if app.conversation.is_active():
             app.conversation.notify_llm_of_new_capabilities()
     ```
-
   </Step>
 </Steps>
 
@@ -1953,7 +2135,7 @@ Understanding MCP client concepts
 
 MCP clients are instantiated by host applications to communicate with particular MCP servers. The host application, like Claude.ai or an IDE, manages the overall user experience and coordinates multiple clients. Each client handles one direct communication with one server.
 
-Understanding the distinction is important: the _host_ is the application users interact with, while _clients_ are the protocol-level components that enable server connections.
+Understanding the distinction is important: the *host* is the application users interact with, while *clients* are the protocol-level components that enable server connections.
 
 ## Core Client Features
 
@@ -2071,9 +2253,9 @@ A travel agent working with multiple client trips benefits from roots to organiz
 
 The client provides filesystem roots to the travel planning server:
 
-- `file:///Users/agent/travel-planning` - Main workspace containing all travel files
-- `file:///Users/agent/travel-templates` - Reusable itinerary templates and resources
-- `file:///Users/agent/client-documents` - Client passports and travel documents
+* `file:///Users/agent/travel-planning` - Main workspace containing all travel files
+* `file:///Users/agent/travel-templates` - Reusable itinerary templates and resources
+* `file:///Users/agent/client-documents` - Client passports and travel documents
 
 When the agent creates a Barcelona itinerary, the server works within these boundaries—accessing templates, saving the new itinerary, and referencing client documents. It cannot access files outside these roots. Servers typically access files within roots by using relative paths from the root directories or by utilizing file search tools that respect the root boundaries.
 
@@ -2231,19 +2413,19 @@ Tools enable AI applications to perform actions on behalf of users. In a travel 
 
 First, it searches for flights using
 
-```typescript
+```
 searchFlights(origin: "NYC", destination: "Barcelona", date: "2024-06-15")
 ```
 
 `searchFlights` queries multiple airlines and returns structured flight options. Once flights are selected, it creates a calendar event with
 
-```typescript
+```
 createCalendarEvent(title: "Barcelona Trip", startDate: "2024-06-15", endDate: "2024-06-22")
 ```
 
 to mark the travel dates. Finally, it sends an out-of-office notification using
 
-```typescript
+```
 sendEmail(to: "team@work.com", subject: "Out of Office", body: "...")
 ```
 
@@ -2282,9 +2464,9 @@ Resources use URI-based identification, with each resource having a unique URI s
 
 Continuing with the travel planning example, resources provide the AI application with access to relevant information:
 
-- **Calendar data** (`calendar://events/2024`) - To check availability
-- **Travel documents** (`file:///Documents/Travel/passport.pdf`) - For important information
-- **Previous itineraries** (`trips://history/barcelona-2023`) - User selects which past trip style to follow
+* **Calendar data** (`calendar://events/2024`) - To check availability
+* **Travel documents** (`file:///Documents/Travel/passport.pdf`) - For important information
+* **Previous itineraries** (`trips://history/barcelona-2023`) - User selects which past trip style to follow
 
 Instead of manually copying this information, resources provide raw information to AI applications. The application can choose how to best handle the data. Applications might choose to select a subset of data, using embeddings or keyword search, or pass the raw data from a resource directly to a model. In our example, during the planning phase, the AI application can pass the calendar data, weather data and travel preferences, so that the model can check availability, look up weather patterns, and reference travel preferences.
 
@@ -2314,8 +2496,8 @@ These templates enable flexible queries. For weather data, users can access fore
 
 Dynamic resources support parameter completion. For example:
 
-- Typing "Par" as input for `weather://forecast/{city}` might suggest "Paris" or "Park City"
-- The system helps discover valid values without requiring exact format knowledge
+* Typing "Par" as input for `weather://forecast/{city}` might suggest "Paris" or "Park City"
+* The system helps discover valid values without requiring exact format knowledge
 
 #### User Interaction Model
 
@@ -2400,9 +2582,10 @@ Consider an AI application with three connected servers:
    ```
 
 2. **User selects resources to include:**
-   - `calendar://my-calendar/June-2024` (from Calendar Server)
-   - `travel://preferences/europe` (from Travel Server)
-   - `travel://past-trips/Spain-2023` (from Travel Server)
+
+   * `calendar://my-calendar/June-2024` (from Calendar Server)
+   * `travel://preferences/europe` (from Travel Server)
+   * `travel://past-trips/Spain-2023` (from Travel Server)
 
 3. **AI processes the request:**
 
@@ -2444,10 +2627,10 @@ Build MCP servers and clients using our official SDKs. Choose the SDK that match
 
 Each SDK provides the same functionality but follows the idioms and best practices of its language. All SDKs support:
 
-- Creating MCP servers that expose tools, resources, and prompts
-- Building MCP clients that can connect to any MCP server
-- Local and Remote transport protocols
-- Protocol compliance with type safety
+* Creating MCP servers that expose tools, resources, and prompts
+* Building MCP clients that can connect to any MCP server
+* Local and Remote transport protocols
+* Protocol compliance with type safety
 
 Visit the SDK page for your chosen language to find installation instructions, documentation, and examples.
 
@@ -2495,8 +2678,8 @@ Custom Connectors serve as the bridge between Claude and remote MCP servers. The
 
 With Custom Connectors, you can:
 
-- [Connect Claude to existing remote MCP servers](https://support.anthropic.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp) provided by third-party developers
-- [Build your own remote MCP servers to connect with any tool](https://support.anthropic.com/en/articles/11503834-building-custom-connectors-via-remote-mcp-servers)
+* [Connect Claude to existing remote MCP servers](https://support.anthropic.com/en/articles/11175166-getting-started-with-custom-connectors-using-remote-mcp) provided by third-party developers
+* [Build your own remote MCP servers to connect with any tool](https://support.anthropic.com/en/articles/11503834-building-custom-connectors-via-remote-mcp-servers)
 
 ## Connecting to a Remote MCP Server
 
@@ -2507,7 +2690,6 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     Open Claude in your browser and navigate to the settings page. You can access this by clicking on your profile icon and selecting "Settings" from the dropdown menu. Once in settings, locate and click on the "Connectors" section in the sidebar.
 
     This will display your currently configured connectors and provide options to add new ones.
-
   </Step>
 
   <Step title="Add a Custom Connector">
@@ -2524,7 +2706,6 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     </Frame>
 
     After entering the URL, click "Add" to proceed with the connection.
-
   </Step>
 
   <Step title="Complete Authentication">
@@ -2535,7 +2716,6 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     </Frame>
 
     Follow the authentication prompts provided by the server. This may redirect you to a third-party authentication provider or display a form within Claude. Once authentication is complete, Claude will establish a secure connection to the remote server.
-
   </Step>
 
   <Step title="Access Resources and Prompts">
@@ -2550,7 +2730,6 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     <Frame>
       <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-remote/5-select-prompts-resources.png" alt="Selecting specific resources and prompts from the menu" />
     </Frame>
-
   </Step>
 
   <Step title="Configure Tool Permissions">
@@ -2561,7 +2740,6 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     </Frame>
 
     Navigate back to the Connectors settings and click on your connected server. Here you can enable or disable specific tools, set usage limits, and configure other security parameters according to your needs.
-
   </Step>
 </Steps>
 
@@ -2613,10 +2791,10 @@ These official reference servers demonstrate core MCP features and SDK usage:
 
 ### Current reference servers
 
-- **[Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)** - Secure file operations with configurable access controls
-- **[Fetch](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)** - Web content fetching and conversion optimized for LLM usage
-- **[Memory](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)** - Knowledge graph-based persistent memory system
-- **[Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)** - Dynamic problem-solving through thought sequences
+* **[Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)** - Secure file operations with configurable access controls
+* **[Fetch](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)** - Web content fetching and conversion optimized for LLM usage
+* **[Memory](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)** - Knowledge graph-based persistent memory system
+* **[Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)** - Dynamic problem-solving through thought sequences
 
 ### Archived servers (historical reference)
 
@@ -2624,31 +2802,31 @@ These official reference servers demonstrate core MCP features and SDK usage:
 
 #### Data and file systems
 
-- **[PostgreSQL](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)** - Read-only database access with schema inspection capabilities
-- **[SQLite](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite)** - Database interaction and business intelligence features
-- **[Google Drive](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive)** - File access and search capabilities for Google Drive
+* **[PostgreSQL](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)** - Read-only database access with schema inspection capabilities
+* **[SQLite](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite)** - Database interaction and business intelligence features
+* **[Google Drive](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive)** - File access and search capabilities for Google Drive
 
 #### Development tools
 
-- **[Git](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
-- **[GitHub](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)** - Repository management, file operations, and GitHub API integration
-- **[GitLab](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gitlab)** - GitLab API integration enabling project management
-- **[Sentry](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sentry)** - Retrieving and analyzing issues from Sentry.io
+* **[Git](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
+* **[GitHub](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)** - Repository management, file operations, and GitHub API integration
+* **[GitLab](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gitlab)** - GitLab API integration enabling project management
+* **[Sentry](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sentry)** - Retrieving and analyzing issues from Sentry.io
 
 #### Web and browser automation
 
-- **[Brave Search](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search)** - Web and local search using Brave's Search API
-- **[Puppeteer](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer)** - Browser automation and web scraping capabilities
+* **[Brave Search](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search)** - Web and local search using Brave's Search API
+* **[Puppeteer](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer)** - Browser automation and web scraping capabilities
 
 #### Productivity and communication
 
-- **[Slack](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)** - Channel management and messaging capabilities
-- **[Google Maps](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps)** - Location services, directions, and place details
+* **[Slack](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)** - Channel management and messaging capabilities
+* **[Google Maps](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps)** - Location services, directions, and place details
 
 #### AI and specialized tools
 
-- **[EverArt](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/everart)** - AI image generation using various models
-- **[AWS KB Retrieval](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/aws-kb-retrieval-server)** - Retrieval from AWS Knowledge Base using Bedrock Agent Runtime
+* **[EverArt](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/everart)** - AI image generation using various models
+* **[AWS KB Retrieval](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/aws-kb-retrieval-server)** - Retrieval from AWS Knowledge Base using Bedrock Agent Runtime
 
 ## Official integrations
 
@@ -2692,7 +2870,11 @@ To use an MCP server with Claude, add it to your configuration:
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/files"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/allowed/files"
+      ]
     },
     "github": {
       "command": "npx",
@@ -2737,9 +2919,9 @@ Imagine asking an AI assistant: "Summarize last week's team meeting notes and sc
 
 By using connections to data sources powered by MCP, the AI assistant can:
 
-- Connect to your Google Drive through an MCP server to read meeting notes
-- Understand who needs follow-ups based on the notes
-- Connect to your calendar through another MCP server to schedule the meetings automatically
+* Connect to your Google Drive through an MCP server to read meeting notes
+* Understand who needs follow-ups based on the notes
+* Connect to your calendar through another MCP server to schedule the meetings automatically
 
 ### For developers
 
@@ -2759,10 +2941,10 @@ This open source ecosystem of MCP servers means developers can leverage existing
 
 MCP creates a bridge between your AI applications and your data through a straightforward system:
 
-- **MCP servers** connect to your data sources and tools (like Google Drive or Slack)
-- **MCP clients** are run by AI applications (like Claude Desktop) to connect them to these servers
-- When you give permission, your AI application discovers available MCP servers
-- The AI model can then use these connections to read information and take actions
+* **MCP servers** connect to your data sources and tools (like Google Drive or Slack)
+* **MCP clients** are run by AI applications (like Claude Desktop) to connect them to these servers
+* When you give permission, your AI application discovers available MCP servers
+* The AI model can then use these connections to read information and take actions
 
 This modular system means new capabilities can be added without changing AI applications themselves—just like adding new accessories to your computer without upgrading your entire system.
 
@@ -2770,10 +2952,10 @@ This modular system means new capabilities can be added without changing AI appl
 
 MCP servers are developed and maintained by:
 
-- Developers at Anthropic who build servers for common tools and data sources
-- Open source contributors who create servers for tools they use
-- Enterprise development teams building servers for their internal systems
-- Software providers making their applications AI-ready
+* Developers at Anthropic who build servers for common tools and data sources
+* Open source contributors who create servers for tools they use
+* Enterprise development teams building servers for their internal systems
+* Software providers making their applications AI-ready
 
 Once an open source MCP server is created for a data source, it can be used by any MCP-compatible AI application, creating a growing ecosystem of connections. See our [list of example servers](/examples), or [get started building your own server](/quickstart/server).
 
@@ -2857,56 +3039,58 @@ The Inspector provides several features for interacting with your MCP server:
 
 ### Server connection pane
 
-- Allows selecting the [transport](/legacy/concepts/transports) for connecting to the server
-- For local servers, supports customizing the command-line arguments and environment
+* Allows selecting the [transport](/legacy/concepts/transports) for connecting to the server
+* For local servers, supports customizing the command-line arguments and environment
 
 ### Resources tab
 
-- Lists all available resources
-- Shows resource metadata (MIME types, descriptions)
-- Allows resource content inspection
-- Supports subscription testing
+* Lists all available resources
+* Shows resource metadata (MIME types, descriptions)
+* Allows resource content inspection
+* Supports subscription testing
 
 ### Prompts tab
 
-- Displays available prompt templates
-- Shows prompt arguments and descriptions
-- Enables prompt testing with custom arguments
-- Previews generated messages
+* Displays available prompt templates
+* Shows prompt arguments and descriptions
+* Enables prompt testing with custom arguments
+* Previews generated messages
 
 ### Tools tab
 
-- Lists available tools
-- Shows tool schemas and descriptions
-- Enables tool testing with custom inputs
-- Displays tool execution results
+* Lists available tools
+* Shows tool schemas and descriptions
+* Enables tool testing with custom inputs
+* Displays tool execution results
 
 ### Notifications pane
 
-- Presents all logs recorded from the server
-- Shows notifications received from the server
+* Presents all logs recorded from the server
+* Shows notifications received from the server
 
 ## Best practices
 
 ### Development workflow
 
 1. Start Development
-   - Launch Inspector with your server
-   - Verify basic connectivity
-   - Check capability negotiation
+
+   * Launch Inspector with your server
+   * Verify basic connectivity
+   * Check capability negotiation
 
 2. Iterative testing
-   - Make server changes
-   - Rebuild the server
-   - Reconnect the Inspector
-   - Test affected features
-   - Monitor messages
+
+   * Make server changes
+   * Rebuild the server
+   * Reconnect the Inspector
+   * Test affected features
+   * Monitor messages
 
 3. Test edge cases
-   - Invalid inputs
-   - Missing prompt arguments
-   - Concurrent operations
-   - Verify error handling and error responses
+   * Invalid inputs
+   * Missing prompt arguments
+   * Concurrent operations
+   * Verify error handling and error responses
 
 ## Next steps
 
@@ -2931,14 +3115,20 @@ The open protocol that connects AI applications to the systems where context liv
     <div className="intro-video-section">
       <div className="intro-content-wrapper">
         <div className="intro-content left-aligned">
-          <h2 className="intro-title">Connect your AI applications to the world</h2>
+          <h2 className="intro-title">
+            Connect your AI applications to the world
+          </h2>
 
           <p className="intro-description">
-            AI-enabled tools are powerful, but they're often limited to the information you manually provide or require bespoke integrations.
+            AI-enabled tools are powerful, but they're often limited to the
+            information you manually provide or require bespoke integrations.
           </p>
 
           <p className="intro-description">
-            Whether it's reading files from your computer, searching through an internal or external knowledge base, or updating tasks in an project management tool, MCP provides a secure, standardized, *simple* way to give AI systems the context they need.
+            Whether it's reading files from your computer, searching through an
+            internal or external knowledge base, or updating tasks in an project
+            management tool, MCP provides a secure, standardized, *simple* way
+            to give AI systems the context they need.
           </p>
         </div>
 
@@ -2954,8 +3144,16 @@ The open protocol that connects AI applications to the systems where context liv
       <div className="steps-container">
         <div className="step-item">
           <div className="step-content">
-            <h3><span className="step-number">1</span> Choose MCP servers</h3>
-            <p>Pick from pre-built servers for popular tools like GitHub, Google Drive, Slack and hundreds of others. Combine multiple servers for complete workflows, or easily build your own for custom integrations.</p>
+            <h3>
+              <span className="step-number">1</span> Choose MCP servers
+            </h3>
+
+            <p>
+              Pick from pre-built servers for popular tools like GitHub, Google
+              Drive, Slack and hundreds of others. Combine multiple servers for
+              complete workflows, or easily build your own for custom
+              integrations.
+            </p>
           </div>
         </div>
 
@@ -2963,8 +3161,15 @@ The open protocol that connects AI applications to the systems where context liv
 
         <div className="step-item">
           <div className="step-content">
-            <h3><span className="step-number">2</span> Connect your AI application</h3>
-            <p>Configure your AI application (like Claude, VS Code, or ChatGPT) to connect to your MCP servers. The application can now see available tools, resources and prompts from all connected servers.</p>
+            <h3>
+              <span className="step-number">2</span> Connect your AI application
+            </h3>
+
+            <p>
+              Configure your AI application (like Claude, VS Code, or ChatGPT)
+              to connect to your MCP servers. The application can now see
+              available tools, resources and prompts from all connected servers.
+            </p>
           </div>
         </div>
 
@@ -2972,8 +3177,15 @@ The open protocol that connects AI applications to the systems where context liv
 
         <div className="step-item">
           <div className="step-content">
-            <h3><span className="step-number">3</span> Work with context</h3>
-            <p>Your AI-powered application can now access real data, execute actions, and provide more helpful responses based on your actual context.</p>
+            <h3>
+              <span className="step-number">3</span> Work with context
+            </h3>
+
+            <p>
+              Your AI-powered application can now access real data, execute
+              actions, and provide more helpful responses based on your actual
+              context.
+            </p>
           </div>
         </div>
       </div>
@@ -2984,24 +3196,23 @@ The open protocol that connects AI applications to the systems where context liv
 
       <div className="stats-container">
         <div className="stats-grid">
-          <div className="stat-card">
+          <a href="/docs/sdk" target="_blank" className="stat-card">
             <div className="stat-number">9</div>
             <div className="stat-label">Official SDKs</div>
-          </div>
+          </a>
 
-          <div className="stat-card">
+          <a href="https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#%EF%B8%8F-official-integrations" target="_blank" rel="noopener noreferrer" className="stat-card">
             <div className="stat-number">1000+</div>
             <div className="stat-label">Available Servers</div>
-          </div>
+          </a>
 
-          <div className="stat-card">
+          <a href="/clients" target="_blank" className="stat-card">
             <div className="stat-number">70+</div>
             <div className="stat-label">Compatible Clients</div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
-
   </div>
 
   <div className="cta-buttons">
@@ -3046,7 +3257,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     # Activate virtual environment
     # On Windows:
     .venv\Scripts\activate
-    # On Unix or MacOS:
+    # On Unix or macOS:
     source .venv/bin/activate
 
     # Install required packages
@@ -3055,7 +3266,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     # Remove boilerplate files
     # On Windows:
     del main.py
-    # On Unix or MacOS:
+    # On Unix or macOS:
     rm main.py
 
     # Create our main file
@@ -3432,7 +3643,6 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * `Connection refused`: Ensure the server is running and the path is correct
     * `Tool execution failed`: Verify the tool's required environment variables are set
     * `Timeout error`: Consider increasing the timeout in your client configuration
-
   </Tab>
 
   <Tab title="Node">
@@ -3452,7 +3662,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     First, let's create and set up our project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create project directory
       mkdir mcp-client-typescript
       cd mcp-client-typescript
@@ -3831,7 +4041,6 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * `Tool execution failed`: Verify the tool's required environment variables are set
     * `ANTHROPIC_API_KEY is not set`: Check your .env file and environment variables
     * `TypeError`: Ensure you're using the correct types for tool arguments
-
   </Tab>
 
   <Tab title="Java">
@@ -4016,7 +4225,6 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     ```
 
     This provides similar functionality but uses a WebFlux-based SSE transport implementation, recommended for production deployments.
-
   </Tab>
 
   <Tab title="Kotlin">
@@ -4042,7 +4250,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create a new directory for our project
       mkdir kotlin-mcp-client
       cd kotlin-mcp-client
@@ -4426,7 +4634,6 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     * `Connection refused`: Ensure the server is running and the path is correct
     * `Tool execution failed`: Verify the tool's required environment variables are set
     * `ANTHROPIC_API_KEY is not set`: Check your environment variables
-
   </Tab>
 
   <Tab title="C#">
@@ -4438,7 +4645,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
 
     * .NET 8.0 or higher
     * Anthropic API key (Claude)
-    * Windows, Linux, or MacOS
+    * Windows, Linux, or macOS
 
     ## Setting up your environment
 
@@ -4627,7 +4834,6 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     <Frame>
       <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/quickstart-dotnet-client.png" />
     </Frame>
-
   </Tab>
 </Tabs>
 
@@ -4659,7 +4865,7 @@ Get started building your own server to use in Claude for Desktop and other clie
 
 In this tutorial, we'll build a simple MCP weather server and connect it to a host, Claude for Desktop. We'll start with a basic setup, and then progress to more complex use cases.
 
-## What we'll be building
+### What we'll be building
 
 Many LLMs do not currently have the ability to fetch the forecast and severe weather alerts. Let's use MCP to solve that!
 
@@ -4738,7 +4944,7 @@ This tutorial will primarily focus on tools.
     First, let's install `uv` and set up our Python project and environment:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       curl -LsSf https://astral.sh/uv/install.sh | sh
       ```
 
@@ -4752,7 +4958,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up our project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create a new directory for our project
       uv init weather
       cd weather
@@ -4910,7 +5116,7 @@ This tutorial will primarily focus on tools.
         mcp.run(transport='stdio')
     ```
 
-    Your server is complete! Run `uv run weather.py` to confirm that everything's working.
+    Your server is complete! Run `uv run weather.py` to start the MCP server, which will listen for messages from MCP hosts.
 
     Let's now test your server from an existing MCP host, Claude for Desktop.
 
@@ -4928,7 +5134,7 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
@@ -4942,7 +5148,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json MacOS/Linux
+      ```json macOS/Linux
       {
         "mcpServers": {
           "weather": {
@@ -4976,11 +5182,11 @@ This tutorial will primarily focus on tools.
     </CodeGroup>
 
     <Warning>
-      You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on MacOS/Linux or `where uv` on Windows.
+      You may need to put the full path to the `uv` executable in the `command` field. You can get this by running `which uv` on macOS/Linux or `where uv` on Windows.
     </Warning>
 
     <Note>
-      Make sure you pass in the absolute path to your server.
+      Make sure you pass in the absolute path to your server. You can get this by running `pwd` on macOS/Linux or `cd` on Windows Command Prompt. On Windows, remember to use double backslashes (`\\`) or forward slashes (`/`) in the JSON path.
     </Note>
 
     This tells Claude for Desktop:
@@ -4989,7 +5195,6 @@ This tutorial will primarily focus on tools.
     2. To launch it by running `uv --directory /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather run weather.py`
 
     Save the file, and restart **Claude for Desktop**.
-
   </Tab>
 
   <Tab title="Node">
@@ -5051,7 +5256,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up our project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -5399,7 +5604,7 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
@@ -5413,7 +5618,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json MacOS/Linux
+      ```json macOS/Linux
       {
         "mcpServers": {
           "weather": {
@@ -5442,7 +5647,6 @@ This tutorial will primarily focus on tools.
     2. Launch it by running `node /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather/build/index.js`
 
     Save the file, and restart **Claude for Desktop**.
-
   </Tab>
 
   <Tab title="Java">
@@ -5632,7 +5836,7 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
@@ -5647,7 +5851,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json MacOS/Linux
+      ```json macOS/Linux
       {
         "mcpServers": {
           "spring-ai-mcp-weather": {
@@ -5744,7 +5948,6 @@ This tutorial will primarily focus on tools.
 
     The [starter-webflux-server](https://github.com/spring-projects/spring-ai-examples/tree/main/model-context-protocol/weather/starter-webflux-server) demonstrates how to create a MCP server using SSE transport.
     It showcases how to define and register MCP Tools, Resources, and Prompts, using the Spring Boot's auto-configuration capabilities.
-
   </Tab>
 
   <Tab title="Kotlin">
@@ -5774,7 +5977,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -6063,7 +6266,7 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
@@ -6078,7 +6281,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json MacOS/Linux
+      ```json macOS/Linux
       {
         "mcpServers": {
           "weather": {
@@ -6113,7 +6316,6 @@ This tutorial will primarily focus on tools.
     2. Launch it by running `java -jar /ABSOLUTE/PATH/TO/PARENT/FOLDER/weather/build/libs/weather-0.1.0-all.jar`
 
     Save the file, and restart **Claude for Desktop**.
-
   </Tab>
 
   <Tab title="C#">
@@ -6161,7 +6363,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -6330,7 +6532,7 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
@@ -6343,7 +6545,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json MacOS/Linux
+      ```json macOS/Linux
       {
         "mcpServers": {
           "weather": {
@@ -6376,7 +6578,6 @@ This tutorial will primarily focus on tools.
     1. There's an MCP server named "weather"
     2. Launch it by running `dotnet run /ABSOLUTE/PATH/TO/PROJECT`
        Save the file, and restart **Claude for Desktop**.
-
   </Tab>
 </Tabs>
 
@@ -6398,8 +6599,8 @@ If your server isn't being picked up by Claude for Desktop, proceed to the [Trou
 
 If the tool settings icon has shown up, you can now test your server by running the following commands in Claude for Desktop:
 
-- What's the weather in Sacramento?
-- What are the active weather alerts in Texas?
+* What's the weather in Sacramento?
+* What are the active weather alerts in Texas?
 
 <Frame>
   <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/current-weather.png" />
@@ -6459,7 +6660,6 @@ When you ask a question:
     **None of this is working. What do I do?**
 
     Please refer to our [debugging guide](/legacy/tools/debugging) for better debugging tools and more detailed guidance.
-
   </Accordion>
 
   <Accordion title="Weather API Issues">
@@ -6480,7 +6680,6 @@ When you ask a question:
     **Error: No active alerts for \[STATE]**
 
     This isn't an error - it just means there are no current weather alerts for that state. Try a different state or check during severe weather.
-
   </Accordion>
 </AccordionGroup>
 
@@ -6546,10 +6745,10 @@ If Node.js is not installed, download it from [nodejs.org](https://nodejs.org/).
 
 MCP servers are programs that run on your computer and provide specific capabilities to Claude Desktop through a standardized protocol. Each server exposes tools that Claude can use to perform actions, with your approval. The Filesystem Server we'll install provides tools for:
 
-- Reading file contents and directory structures
-- Creating new files and directories
-- Moving and renaming files
-- Searching for files by name or content
+* Reading file contents and directory structures
+* Creating new files and directories
+* Moving and renaming files
+* Searching for files by name or content
 
 All actions require your explicit approval before execution, ensuring you maintain full control over what Claude can access and modify.
 
@@ -6568,7 +6767,6 @@ The process involves configuring Claude Desktop to automatically start the Files
     </Frame>
 
     This opens the Claude Desktop configuration window, which is separate from your Claude account settings.
-
   </Step>
 
   <Step title="Access Developer Settings">
@@ -6584,7 +6782,6 @@ The process involves configuring Claude Desktop to automatically start the Files
 
     * **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
     * **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
   </Step>
 
   <Step title="Configure the Filesystem Server">
@@ -6641,7 +6838,6 @@ The process involves configuring Claude Desktop to automatically start the Files
 
       Only grant access to directories you're comfortable with Claude reading and modifying. The server runs with your user account permissions, so it can perform any file operations you can perform manually.
     </Warning>
-
   </Step>
 
   <Step title="Restart Claude Desktop">
@@ -6660,7 +6856,6 @@ The process involves configuring Claude Desktop to automatically start the Files
     </Frame>
 
     If the server indicator doesn't appear, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
-
   </Step>
 </Steps>
 
@@ -6670,9 +6865,9 @@ With the Filesystem Server connected, Claude can now interact with your file sys
 
 ### File Management Examples
 
-- **"Can you write a poem and save it to my desktop?"** - Claude will compose a poem and create a new text file on your desktop
-- **"What work-related files are in my downloads folder?"** - Claude will scan your downloads and identify work-related documents
-- **"Please organize all images on my desktop into a new folder called 'Images'"** - Claude will create a folder and move image files into it
+* **"Can you write a poem and save it to my desktop?"** - Claude will compose a poem and create a new text file on your desktop
+* **"What work-related files are in my downloads folder?"** - Claude will scan your downloads and identify work-related documents
+* **"Please organize all images on my desktop into a new folder called 'Images'"** - Claude will create a folder and move image files into it
 
 ### How Approval Works
 
@@ -6697,7 +6892,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     5. In your command line, try manually running the server (replacing `username` as you did in `claude_desktop_config.json`) to see if you get any errors:
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/username/Downloads
       ```
 
@@ -6705,7 +6900,6 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
       npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
       ```
     </CodeGroup>
-
   </Accordion>
 
   <Accordion title="Getting logs from Claude Desktop">
@@ -6722,7 +6916,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     You can run the following command to list recent logs and follow along with any new ones (on Windows, it will only show recent logs):
 
     <CodeGroup>
-      ```bash MacOS/Linux
+      ```bash macOS/Linux
       tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
       ```
 
@@ -6730,7 +6924,6 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
       type "%APPDATA%\Claude\logs\mcp*.log"
       ```
     </CodeGroup>
-
   </Accordion>
 
   <Accordion title="Tool calls failing silently">
@@ -6739,7 +6932,6 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     1. Check Claude's logs for errors
     2. Verify your server builds and runs without errors
     3. Try restarting Claude Desktop
-
   </Accordion>
 
   <Accordion title="None of this is working. What do I do?">
@@ -6773,7 +6965,6 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
       npm install -g npm
       ```
     </Warning>
-
   </Accordion>
 </AccordionGroup>
 
@@ -6853,22 +7044,22 @@ graph LR
 
 The host process acts as the container and coordinator:
 
-- Creates and manages multiple client instances
-- Controls client connection permissions and lifecycle
-- Enforces security policies and consent requirements
-- Handles user authorization decisions
-- Coordinates AI/LLM integration and sampling
-- Manages context aggregation across clients
+* Creates and manages multiple client instances
+* Controls client connection permissions and lifecycle
+* Enforces security policies and consent requirements
+* Handles user authorization decisions
+* Coordinates AI/LLM integration and sampling
+* Manages context aggregation across clients
 
 ### Clients
 
 Each client is created by the host and maintains an isolated server connection:
 
-- Establishes one stateful session per server
-- Handles protocol negotiation and capability exchange
-- Routes protocol messages bidirectionally
-- Manages subscriptions and notifications
-- Maintains security boundaries between servers
+* Establishes one stateful session per server
+* Handles protocol negotiation and capability exchange
+* Routes protocol messages bidirectionally
+* Manages subscriptions and notifications
+* Maintains security boundaries between servers
 
 A host application creates and manages multiple clients, with each client having a 1:1
 relationship with a particular server.
@@ -6877,11 +7068,11 @@ relationship with a particular server.
 
 Servers provide specialized context and capabilities:
 
-- Expose resources, tools and prompts via MCP primitives
-- Operate independently with focused responsibilities
-- Request sampling through client interfaces
-- Must respect security constraints
-- Can be local processes or remote services
+* Expose resources, tools and prompts via MCP primitives
+* Operate independently with focused responsibilities
+* Request sampling through client interfaces
+* Must respect security constraints
+* Can be local processes or remote services
 
 ## Design Principles
 
@@ -6889,31 +7080,34 @@ MCP is built on several key design principles that inform its architecture and
 implementation:
 
 1. **Servers should be extremely easy to build**
-   - Host applications handle complex orchestration responsibilities
-   - Servers focus on specific, well-defined capabilities
-   - Simple interfaces minimize implementation overhead
-   - Clear separation enables maintainable code
+
+   * Host applications handle complex orchestration responsibilities
+   * Servers focus on specific, well-defined capabilities
+   * Simple interfaces minimize implementation overhead
+   * Clear separation enables maintainable code
 
 2. **Servers should be highly composable**
-   - Each server provides focused functionality in isolation
-   - Multiple servers can be combined seamlessly
-   - Shared protocol enables interoperability
-   - Modular design supports extensibility
+
+   * Each server provides focused functionality in isolation
+   * Multiple servers can be combined seamlessly
+   * Shared protocol enables interoperability
+   * Modular design supports extensibility
 
 3. **Servers should not be able to read the whole conversation, nor "see into" other
    servers**
-   - Servers receive only necessary contextual information
-   - Full conversation history stays with the host
-   - Each server connection maintains isolation
-   - Cross-server interactions are controlled by the host
-   - Host process enforces security boundaries
+
+   * Servers receive only necessary contextual information
+   * Full conversation history stays with the host
+   * Each server connection maintains isolation
+   * Cross-server interactions are controlled by the host
+   * Host process enforces security boundaries
 
 4. **Features can be added to servers and clients progressively**
-   - Core protocol provides minimal required functionality
-   - Additional capabilities can be negotiated as needed
-   - Servers and clients evolve independently
-   - Protocol designed for future extensibility
-   - Backwards compatibility is maintained
+   * Core protocol provides minimal required functionality
+   * Additional capabilities can be negotiated as needed
+   * Servers and clients evolve independently
+   * Protocol designed for future extensibility
+   * Backwards compatibility is maintained
 
 ## Capability Negotiation
 
@@ -6921,11 +7115,11 @@ The Model Context Protocol uses a capability-based negotiation system where clie
 servers explicitly declare their supported features during initialization. Capabilities
 determine which protocol features and primitives are available during a session.
 
-- Servers declare capabilities like resource subscriptions, tool support, and prompt
+* Servers declare capabilities like resource subscriptions, tool support, and prompt
   templates
-- Clients declare capabilities like sampling support and notification handling
-- Both parties must respect declared capabilities throughout the session
-- Additional capabilities can be negotiated through extensions to the protocol
+* Clients declare capabilities like sampling support and notification handling
+* Both parties must respect declared capabilities throughout the session
+* Additional capabilities can be negotiated through extensions to the protocol
 
 ```mermaid
 sequenceDiagram
@@ -6966,12 +7160,12 @@ sequenceDiagram
 Each capability unlocks specific protocol features for use during the session. For
 example:
 
-- Implemented [server features](/specification/2025-06-18/server) must be advertised in the
+* Implemented [server features](/specification/2025-06-18/server) must be advertised in the
   server's capabilities
-- Emitting resource subscription notifications requires the server to declare
+* Emitting resource subscription notifications requires the server to declare
   subscription support
-- Tool invocation requires the server to declare tool capabilities
-- [Sampling](/specification/2025-06-18/client) requires the client to declare support in its
+* Tool invocation requires the server to declare tool capabilities
+* [Sampling](/specification/2025-06-18/client) requires the client to declare support in its
   capabilities
 
 This capability negotiation ensures clients and servers have a clear understanding of
@@ -6997,10 +7191,10 @@ owners. This specification defines the authorization flow for HTTP-based transpo
 
 Authorization is **OPTIONAL** for MCP implementations. When supported:
 
-- Implementations using an HTTP-based transport **SHOULD** conform to this specification.
-- Implementations using an STDIO transport **SHOULD NOT** follow this specification, and
+* Implementations using an HTTP-based transport **SHOULD** conform to this specification.
+* Implementations using an STDIO transport **SHOULD NOT** follow this specification, and
   instead retrieve credentials from the environment.
-- Implementations using alternative transports **MUST** follow established security best
+* Implementations using alternative transports **MUST** follow established security best
   practices for their protocol.
 
 ### Standards Compliance
@@ -7009,24 +7203,24 @@ This authorization mechanism is based on established specifications listed below
 implements a selected subset of their features to ensure security and interoperability
 while maintaining simplicity:
 
-- OAuth 2.1 IETF DRAFT ([draft-ietf-oauth-v2-1-13](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13))
-- OAuth 2.0 Authorization Server Metadata
+* OAuth 2.1 IETF DRAFT ([draft-ietf-oauth-v2-1-13](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13))
+* OAuth 2.0 Authorization Server Metadata
   ([RFC8414](https://datatracker.ietf.org/doc/html/rfc8414))
-- OAuth 2.0 Dynamic Client Registration Protocol
+* OAuth 2.0 Dynamic Client Registration Protocol
   ([RFC7591](https://datatracker.ietf.org/doc/html/rfc7591))
-- OAuth 2.0 Protected Resource Metadata ([RFC9728](https://datatracker.ietf.org/doc/html/rfc9728))
+* OAuth 2.0 Protected Resource Metadata ([RFC9728](https://datatracker.ietf.org/doc/html/rfc9728))
 
 ## Authorization Flow
 
 ### Roles
 
-A protected _MCP server_ acts as an [OAuth 2.1 resource server](https://www.ietf.org/archive/id/draft-ietf-oauth-v2-1-13.html#name-roles),
+A protected *MCP server* acts as an [OAuth 2.1 resource server](https://www.ietf.org/archive/id/draft-ietf-oauth-v2-1-13.html#name-roles),
 capable of accepting and responding to protected resource requests using access tokens.
 
-An _MCP client_ acts as an [OAuth 2.1 client](https://www.ietf.org/archive/id/draft-ietf-oauth-v2-1-13.html#name-roles),
+An *MCP client* acts as an [OAuth 2.1 client](https://www.ietf.org/archive/id/draft-ietf-oauth-v2-1-13.html#name-roles),
 making protected resource requests on behalf of a resource owner.
 
-The _authorization server_ is responsible for interacting with the user (if necessary) and issuing access tokens for use at the MCP server.
+The *authorization server* is responsible for interacting with the user (if necessary) and issuing access tokens for use at the MCP server.
 The implementation details of the authorization server are beyond the scope of this specification. It may be hosted with the
 resource server or a separate entity. The [Authorization Server Discovery section](#authorization-server-discovery)
 specifies how an MCP server indicates the location of its corresponding authorization server to a client.
@@ -7065,7 +7259,7 @@ guidance on implementation details.
 Implementors should note that Protected Resource Metadata documents can define multiple authorization servers. The responsibility for selecting which authorization server to use lies with the MCP client, following the guidelines specified in
 [RFC9728 Section 7.6 "Authorization Servers"](https://datatracker.ietf.org/doc/html/rfc9728#name-authorization-servers).
 
-MCP servers **MUST** use the HTTP header `WWW-Authenticate` when returning a _401 Unauthorized_ to indicate the location of the resource server metadata URL
+MCP servers **MUST** use the HTTP header `WWW-Authenticate` when returning a *401 Unauthorized* to indicate the location of the resource server metadata URL
 as described in [RFC9728 Section 5.1 "WWW-Authenticate Response"](https://datatracker.ietf.org/doc/html/rfc9728#name-www-authenticate-response).
 
 MCP clients **MUST** be able to parse `WWW-Authenticate` headers and respond appropriately to `HTTP 401 Unauthorized` responses from the MCP server.
@@ -7114,12 +7308,12 @@ to allow MCP clients to obtain OAuth client IDs without user interaction. This p
 standardized way for clients to automatically register with new authorization servers, which is crucial
 for MCP because:
 
-- Clients may not know all possible MCP servers and their authorization servers in advance.
-- Manual registration would create friction for users.
-- It enables seamless connection to new MCP servers and their authorization servers.
-- Authorization servers can implement their own registration policies.
+* Clients may not know all possible MCP servers and their authorization servers in advance.
+* Manual registration would create friction for users.
+* It enables seamless connection to new MCP servers and their authorization servers.
+* Authorization servers can implement their own registration policies.
 
-Any authorization servers that _do not_ support Dynamic Client Registration need to provide
+Any authorization servers that *do not* support Dynamic Client Registration need to provide
 alternative ways to obtain a client ID (and, if applicable, client credentials). For one of
 these authorization servers, MCP clients will have to either:
 
@@ -7189,21 +7383,21 @@ MCP clients **SHOULD** provide the most specific URI that they can for the MCP s
 
 Examples of valid canonical URIs:
 
-- `https://mcp.example.com/mcp`
-- `https://mcp.example.com`
-- `https://mcp.example.com:8443`
-- `https://mcp.example.com/server/mcp` (when path component is necessary to identify individual MCP server)
+* `https://mcp.example.com/mcp`
+* `https://mcp.example.com`
+* `https://mcp.example.com:8443`
+* `https://mcp.example.com/server/mcp` (when path component is necessary to identify individual MCP server)
 
 Examples of invalid canonical URIs:
 
-- `mcp.example.com` (missing scheme)
-- `https://mcp.example.com#fragment` (contains fragment)
+* `mcp.example.com` (missing scheme)
+* `https://mcp.example.com#fragment` (contains fragment)
 
 > **Note:** While both `https://mcp.example.com/` (with trailing slash) and `https://mcp.example.com` (without trailing slash) are technically valid absolute URIs according to [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986), implementations **SHOULD** consistently use the form without the trailing slash for better interoperability unless the trailing slash is semantically significant for the specific resource.
 
 For example, if accessing an MCP server at `https://mcp.example.com`, the authorization request would include:
 
-```http
+```
 &resource=https%3A%2F%2Fmcp.example.com
 ```
 
@@ -7220,7 +7414,7 @@ Specifically:
 1. MCP client **MUST** use the Authorization request header field defined in
    [OAuth 2.1 Section 5.1.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13#section-5.1.1):
 
-```http
+```
 Authorization: Bearer <access-token>
 ```
 
@@ -7274,8 +7468,8 @@ Implementations **MUST** follow OAuth 2.1 security best practices as laid out in
 [RFC 8707](https://www.rfc-editor.org/rfc/rfc8707.html) Resource Indicators provide critical security benefits by binding tokens to their intended
 audiences **when the Authorization Server supports the capability**. To enable current and future adoption:
 
-- MCP clients **MUST** include the `resource` parameter in authorization and token requests as specified in the [Resource Parameter Implementation](#resource-parameter-implementation) section
-- MCP servers **MUST** validate that tokens presented to them were specifically issued for their use
+* MCP clients **MUST** include the `resource` parameter in authorization and token requests as specified in the [Resource Parameter Implementation](#resource-parameter-implementation) section
+* MCP servers **MUST** validate that tokens presented to them were specifically issued for their use
 
 The [Security Best Practices document](/specification/2025-06-18/basic/security_best_practices#token-passthrough)
 outlines why token audience validation is crucial and why token passthrough is explicitly forbidden.
@@ -7346,7 +7540,7 @@ A MCP server **MUST** follow the guidelines in [OAuth 2.1 - Section 5.2](https:/
 
 MCP servers **MUST** only accept tokens specifically intended for themselves and **MUST** reject tokens that do not include them in the audience claim or otherwise verify that they are the intended recipient of the token. See the [Security Best Practices Token Passthrough section](/specification/2025-06-18/basic/security_best_practices#token-passthrough) for details.
 
-If the MCP server makes requests to upstream APIs, it may act as an OAuth client to them. The access token used at the upstream API is a seperate token, issued by the upstream authorization server. The MCP server **MUST NOT** pass through the token it received from the MCP client.
+If the MCP server makes requests to upstream APIs, it may act as an OAuth client to them. The access token used at the upstream API is a separate token, issued by the upstream authorization server. The MCP server **MUST NOT** pass through the token it received from the MCP client.
 
 MCP clients **MUST** implement and use the `resource` parameter as defined in [RFC 8707 - Resource Indicators for OAuth 2.0](https://www.rfc-editor.org/rfc/rfc8707.html)
 to explicitly specify the target resource for which the token is being requested. This requirement aligns with the recommendation in
@@ -7363,13 +7557,13 @@ Source: <https://modelcontextprotocol.io/specification/2025-06-18/basic/index>
 
 The Model Context Protocol consists of several key components that work together:
 
-- **Base Protocol**: Core JSON-RPC message types
-- **Lifecycle Management**: Connection initialization, capability negotiation, and
+* **Base Protocol**: Core JSON-RPC message types
+* **Lifecycle Management**: Connection initialization, capability negotiation, and
   session control
-- **Authorization**: Authentication and authorization framework for HTTP-based transports
-- **Server Features**: Resources, prompts, and tools exposed by servers
-- **Client Features**: Sampling and root directory lists provided by clients
-- **Utilities**: Cross-cutting concerns like logging and argument completion
+* **Authorization**: Authentication and authorization framework for HTTP-based transports
+* **Server Features**: Resources, prompts, and tools exposed by servers
+* **Client Features**: Sampling and root directory lists provided by clients
+* **Utilities**: Cross-cutting concerns like logging and argument completion
 
 All implementations **MUST** support the base protocol and lifecycle management
 components. Other components **MAY** be implemented based on the specific needs of the
@@ -7400,9 +7594,9 @@ Requests are sent from the client to the server or vice versa, to initiate an op
 }
 ```
 
-- Requests **MUST** include a string or integer ID.
-- Unlike base JSON-RPC, the ID **MUST NOT** be `null`.
-- The request ID **MUST NOT** have been previously used by the requestor within the same
+* Requests **MUST** include a string or integer ID.
+* Unlike base JSON-RPC, the ID **MUST NOT** be `null`.
+* The request ID **MUST NOT** have been previously used by the requestor within the same
   session.
 
 ### Responses
@@ -7424,13 +7618,13 @@ Responses are sent in reply to requests, containing the result or error of the o
 }
 ```
 
-- Responses **MUST** include the same ID as the request they correspond to.
-- **Responses** are further sub-categorized as either **successful results** or
+* Responses **MUST** include the same ID as the request they correspond to.
+* **Responses** are further sub-categorized as either **successful results** or
   **errors**. Either a `result` or an `error` **MUST** be set. A response **MUST NOT**
   set both.
-- Results **MAY** follow any JSON object structure, while errors **MUST** include an
+* Results **MAY** follow any JSON object structure, while errors **MUST** include an
   error code and message at minimum.
-- Error codes **MUST** be integers.
+* Error codes **MUST** be integers.
 
 ### Notifications
 
@@ -7447,7 +7641,7 @@ The receiver **MUST NOT** send a response.
 }
 ```
 
-- Notifications **MUST NOT** include an ID.
+* Notifications **MUST NOT** include an ID.
 
 ## Auth
 
@@ -7492,16 +7686,16 @@ may reserve particular names for purpose-specific metadata, as declared in those
 
 **Prefix:**
 
-- If specified, MUST be a series of labels separated by dots (`.`), followed by a slash (`/`).
-  - Labels MUST start with a letter and end with a letter or digit; interior characters can be letters, digits, or hyphens (`-`).
-- Any prefix beginning with zero or more valid labels, followed by `modelcontextprotocol` or `mcp`, followed by any valid label,
+* If specified, MUST be a series of labels separated by dots (`.`), followed by a slash (`/`).
+  * Labels MUST start with a letter and end with a letter or digit; interior characters can be letters, digits, or hyphens (`-`).
+* Any prefix beginning with zero or more valid labels, followed by `modelcontextprotocol` or `mcp`, followed by any valid label,
   is **reserved** for MCP use.
-  - For example: `modelcontextprotocol.io/`, `mcp.dev/`, `api.modelcontextprotocol.org/`, and `tools.mcp.com/` are all reserved.
+  * For example: `modelcontextprotocol.io/`, `mcp.dev/`, `api.modelcontextprotocol.org/`, and `tools.mcp.com/` are all reserved.
 
 **Name:**
 
-- Unless empty, MUST begin and end with an alphanumeric character (`[a-z0-9A-Z]`).
-- MAY contain hyphens (`-`), underscores (`_`), dots (`.`), and alphanumerics in between.
+* Unless empty, MUST begin and end with an alphanumeric character (`[a-z0-9A-Z]`).
+* MAY contain hyphens (`-`), underscores (`_`), dots (`.`), and alphanumerics in between.
 
 # Lifecycle
 
@@ -7547,15 +7741,15 @@ sequenceDiagram
 The initialization phase **MUST** be the first interaction between client and server.
 During this phase, the client and server:
 
-- Establish protocol version compatibility
-- Exchange and negotiate capabilities
-- Share implementation details
+* Establish protocol version compatibility
+* Exchange and negotiate capabilities
+* Share implementation details
 
 The client **MUST** initiate this phase by sending an `initialize` request containing:
 
-- Protocol version supported
-- Client capabilities
-- Client implementation information
+* Protocol version supported
+* Client capabilities
+* Client implementation information
 
 ```json
 {
@@ -7621,10 +7815,10 @@ to indicate it is ready to begin normal operations:
 }
 ```
 
-- The client **SHOULD NOT** send requests other than
+* The client **SHOULD NOT** send requests other than
   [pings](/specification/2025-06-18/basic/utilities/ping) before the server has responded to the
   `initialize` request.
-- The server **SHOULD NOT** send requests other than
+* The server **SHOULD NOT** send requests other than
   [pings](/specification/2025-06-18/basic/utilities/ping) and
   [logging](/specification/2025-06-18/server/utilities/logging) before receiving the `initialized`
   notification.
@@ -7632,11 +7826,11 @@ to indicate it is ready to begin normal operations:
 #### Version Negotiation
 
 In the `initialize` request, the client **MUST** send a protocol version it supports.
-This **SHOULD** be the _latest_ version supported by the client.
+This **SHOULD** be the *latest* version supported by the client.
 
 If the server supports the requested protocol version, it **MUST** respond with the same
 version. Otherwise, the server **MUST** respond with another protocol version it
-supports. This **SHOULD** be the _latest_ version supported by the server.
+supports. This **SHOULD** be the *latest* version supported by the server.
 
 If the client does not support the version in the server's response, it **SHOULD**
 disconnect.
@@ -7669,9 +7863,9 @@ Key capabilities include:
 
 Capability objects can describe sub-capabilities like:
 
-- `listChanged`: Support for list change notifications (for prompts, resources, and
+* `listChanged`: Support for list change notifications (for prompts, resources, and
   tools)
-- `subscribe`: Support for subscribing to individual items' changes (resources only)
+* `subscribe`: Support for subscribing to individual items' changes (resources only)
 
 ### Operation
 
@@ -7680,8 +7874,8 @@ negotiated capabilities.
 
 Both parties **MUST**:
 
-- Respect the negotiated protocol version
-- Only use capabilities that were successfully negotiated
+* Respect the negotiated protocol version
+* Only use capabilities that were successfully negotiated
 
 ### Shutdown
 
@@ -7728,9 +7922,9 @@ misbehaving client or server.
 
 Implementations **SHOULD** be prepared to handle these error cases:
 
-- Protocol version mismatch
-- Failure to negotiate required capabilities
-- Request [timeouts](#timeouts)
+* Protocol version mismatch
+* Failure to negotiate required capabilities
+* Request [timeouts](#timeouts)
 
 Example initialization error:
 
@@ -7859,7 +8053,7 @@ attack becomes possible:
 3. An attacker later sends the user a malicious link containing a crafted authorization request which contains a malicious redirect URI along with a new dynamically registered client ID
 4. When the user clicks the link, their browser still has the consent cookie from the previous legitimate request
 5. The third-party authorization server detects the cookie and skips the consent screen
-6. The MCP authorization code is redirected to the attacker's server (specified in the crafted redirect_uri during dynamic client registration)
+6. The MCP authorization code is redirected to the attacker's server (specified in the crafted redirect\_uri during dynamic client registration)
 7. The attacker exchanges the stolen authorization code for access tokens for the MCP server without the user's explicit approval
 8. Attacker now has access to the third-party API as the compromised user
 
@@ -7870,24 +8064,24 @@ registered client before forwarding to third-party authorization servers (which 
 
 ### Token Passthrough
 
-"Token passthrough" is an anti-pattern where an MCP server accepts tokens from an MCP client without validating that the tokens were properly issued _to the MCP server_ and "passing them through" to the downstream API.
+"Token passthrough" is an anti-pattern where an MCP server accepts tokens from an MCP client without validating that the tokens were properly issued *to the MCP server* and "passing them through" to the downstream API.
 
 #### Risks
 
 Token passthrough is explicitly forbidden in the [authorization specification](/specification/2025-06-18/basic/authorization) as it introduces a number of security risks, that include:
 
-- **Security Control Circumvention**
-  - The MCP Server or downstream APIs might implement important security controls like rate limiting, request validation, or traffic monitoring, that depend on the token audience or other credential constraints. If clients can obtain and use tokens directly with the downstream APIs without the MCP server validating them properly or ensuring that the tokens are issued for the right service, they bypass these controls.
-- **Accountability and Audit Trail Issues**
-  - The MCP Server will be unable to identify or distinguish between MCP Clients when clients are calling with an upstream-issued access token which may be opaque to the MCP Server.
-  - The downstream Resource Server’s logs may show requests that appear to come from a different source with a different identity, rather than the MCP server that is actually forwarding the tokens.
-  - Both factors make incident investigation, controls, and auditing more difficult.
-  - If the MCP Server passes tokens without validating their claims (e.g., roles, privileges, or audience) or other metadata, a malicious actor in possession of a stolen token can use the server as a proxy for data exfiltration.
-- **Trust Boundary Issues**
-  - The downstream Resource Server grants trust to specific entities. This trust might include assumptions about origin or client behavior patterns. Breaking this trust boundary could lead to unexpected issues.
-  - If the token is accepted by multiple services without proper validation, an attacker compromising one service can use the token to access other connected services.
-- **Future Compatibility Risk**
-  - Even if an MCP Server starts as a "pure proxy" today, it might need to add security controls later. Starting with proper token audience separation makes it easier to evolve the security model.
+* **Security Control Circumvention**
+  * The MCP Server or downstream APIs might implement important security controls like rate limiting, request validation, or traffic monitoring, that depend on the token audience or other credential constraints. If clients can obtain and use tokens directly with the downstream APIs without the MCP server validating them properly or ensuring that the tokens are issued for the right service, they bypass these controls.
+* **Accountability and Audit Trail Issues**
+  * The MCP Server will be unable to identify or distinguish between MCP Clients when clients are calling with an upstream-issued access token which may be opaque to the MCP Server.
+  * The downstream Resource Server’s logs may show requests that appear to come from a different source with a different identity, rather than the MCP server that is actually forwarding the tokens.
+  * Both factors make incident investigation, controls, and auditing more difficult.
+  * If the MCP Server passes tokens without validating their claims (e.g., roles, privileges, or audience) or other metadata, a malicious actor in possession of a stolen token can use the server as a proxy for data exfiltration.
+* **Trust Boundary Issues**
+  * The downstream Resource Server grants trust to specific entities. This trust might include assumptions about origin or client behavior patterns. Breaking this trust boundary could lead to unexpected issues.
+  * If the token is accepted by multiple services without proper validation, an attacker compromising one service can use the token to access other connected services.
+* **Future Compatibility Risk**
+  * Even if an MCP Server starts as a "pure proxy" today, it might need to add security controls later. Starting with proper token audience separation makes it easier to evolve the security model.
 
 #### Mitigation
 
@@ -7950,8 +8144,9 @@ When you have multiple stateful HTTP servers that handle MCP requests, the follo
 1. The client connects to **Server A** and receives a session ID.
 
 2. The attacker obtains an existing session ID and sends a malicious event to **Server B** with said session ID.
-   - When a server supports [redelivery/resumable streams](/specification/2025-06-18/basic/transports#resumability-and-redelivery), deliberately terminating the request before receiving the response could lead to it being resumed by the original client via the GET request for server sent events.
-   - If a particular server initiates server sent events as a consequence of a tool call such as a `notifications/tools/list_changed`, where it is possible to affect the tools that are offered by the server, a client could end up with tools that they were not aware were enabled.
+
+   * When a server supports [redelivery/resumable streams](/specification/2025-06-18/basic/transports#resumability-and-redelivery), deliberately terminating the request before receiving the response could lead to it being resumed by the original client via the GET request for server sent events.
+   * If a particular server initiates server sent events as a consequence of a tool call such as a `notifications/tools/list_changed`, where it is possible to affect the tools that are offered by the server, a client could end up with tools that they were not aware were enabled.
 
 3. **Server B** enqueues the event (associated with session ID) into a shared queue.
 
@@ -8008,15 +8203,15 @@ It is also possible for clients and servers to implement
 
 In the **stdio** transport:
 
-- The client launches the MCP server as a subprocess.
-- The server reads JSON-RPC messages from its standard input (`stdin`) and sends messages
+* The client launches the MCP server as a subprocess.
+* The server reads JSON-RPC messages from its standard input (`stdin`) and sends messages
   to its standard output (`stdout`).
-- Messages are individual JSON-RPC requests, notifications, or responses.
-- Messages are delimited by newlines, and **MUST NOT** contain embedded newlines.
-- The server **MAY** write UTF-8 strings to its standard error (`stderr`) for logging
+* Messages are individual JSON-RPC requests, notifications, or responses.
+* Messages are delimited by newlines, and **MUST NOT** contain embedded newlines.
+* The server **MAY** write UTF-8 strings to its standard error (`stderr`) for logging
   purposes. Clients **MAY** capture, forward, or ignore this logging.
-- The server **MUST NOT** write anything to its `stdout` that is not a valid MCP message.
-- The client **MUST NOT** write anything to the server's `stdin` that is not a valid MCP
+* The server **MUST NOT** write anything to its `stdout` that is not a valid MCP message.
+* The client **MUST NOT** write anything to the server's `stdin` that is not a valid MCP
   message.
 
 ```mermaid
@@ -8054,7 +8249,7 @@ The server **MUST** provide a single HTTP endpoint path (hereafter referred to a
 **MCP endpoint**) that supports both POST and GET methods. For example, this could be a
 URL like `https://example.com/mcp`.
 
-### Security Warning
+#### Security Warning
 
 When implementing Streamable HTTP transport:
 
@@ -8072,33 +8267,33 @@ MCP endpoint.
 1. The client **MUST** use HTTP POST to send JSON-RPC messages to the MCP endpoint.
 2. The client **MUST** include an `Accept` header, listing both `application/json` and
    `text/event-stream` as supported content types.
-3. The body of the POST request **MUST** be a single JSON-RPC _request_, _notification_, or _response_.
-4. If the input is a JSON-RPC _response_ or _notification_:
-   - If the server accepts the input, the server **MUST** return HTTP status code 202
+3. The body of the POST request **MUST** be a single JSON-RPC *request*, *notification*, or *response*.
+4. If the input is a JSON-RPC *response* or *notification*:
+   * If the server accepts the input, the server **MUST** return HTTP status code 202
      Accepted with no body.
-   - If the server cannot accept the input, it **MUST** return an HTTP error status code
-     (e.g., 400 Bad Request). The HTTP response body **MAY** comprise a JSON-RPC _error
-     response_ that has no `id`.
-5. If the input is a JSON-RPC _request_, the server **MUST** either
+   * If the server cannot accept the input, it **MUST** return an HTTP error status code
+     (e.g., 400 Bad Request). The HTTP response body **MAY** comprise a JSON-RPC *error
+     response* that has no `id`.
+5. If the input is a JSON-RPC *request*, the server **MUST** either
    return `Content-Type: text/event-stream`, to initiate an SSE stream, or
    `Content-Type: application/json`, to return one JSON object. The client **MUST**
    support both these cases.
 6. If the server initiates an SSE stream:
-   - The SSE stream **SHOULD** eventually include JSON-RPC _response_ for the
-     JSON-RPC _request_ sent in the POST body.
-   - The server **MAY** send JSON-RPC _requests_ and _notifications_ before sending the
-     JSON-RPC _response_. These messages **SHOULD** relate to the originating client
-     _request_.
-   - The server **SHOULD NOT** close the SSE stream before sending the JSON-RPC _response_
-     for the received JSON-RPC _request_, unless the [session](#session-management)
+   * The SSE stream **SHOULD** eventually include JSON-RPC *response* for the
+     JSON-RPC *request* sent in the POST body.
+   * The server **MAY** send JSON-RPC *requests* and *notifications* before sending the
+     JSON-RPC *response*. These messages **SHOULD** relate to the originating client
+     *request*.
+   * The server **SHOULD NOT** close the SSE stream before sending the JSON-RPC *response*
+     for the received JSON-RPC *request*, unless the [session](#session-management)
      expires.
-   - After the JSON-RPC _response_ has been sent, the server **SHOULD** close the SSE
+   * After the JSON-RPC *response* has been sent, the server **SHOULD** close the SSE
      stream.
-   - Disconnection **MAY** occur at any time (e.g., due to network conditions).
+   * Disconnection **MAY** occur at any time (e.g., due to network conditions).
      Therefore:
-     - Disconnection **SHOULD NOT** be interpreted as the client cancelling its request.
-     - To cancel, the client **SHOULD** explicitly send an MCP `CancelledNotification`.
-     - To avoid message loss due to disconnection, the server **MAY** make the stream
+     * Disconnection **SHOULD NOT** be interpreted as the client cancelling its request.
+     * To cancel, the client **SHOULD** explicitly send an MCP `CancelledNotification`.
+     * To avoid message loss due to disconnection, the server **MAY** make the stream
        [resumable](#resumability-and-redelivery).
 
 ### Listening for Messages from the Server
@@ -8112,21 +8307,21 @@ MCP endpoint.
    this HTTP GET, or else return HTTP 405 Method Not Allowed, indicating that the server
    does not offer an SSE stream at this endpoint.
 4. If the server initiates an SSE stream:
-   - The server **MAY** send JSON-RPC _requests_ and _notifications_ on the stream.
-   - These messages **SHOULD** be unrelated to any concurrently-running JSON-RPC
-     _request_ from the client.
-   - The server **MUST NOT** send a JSON-RPC _response_ on the stream **unless**
+   * The server **MAY** send JSON-RPC *requests* and *notifications* on the stream.
+   * These messages **SHOULD** be unrelated to any concurrently-running JSON-RPC
+     *request* from the client.
+   * The server **MUST NOT** send a JSON-RPC *response* on the stream **unless**
      [resuming](#resumability-and-redelivery) a stream associated with a previous client
      request.
-   - The server **MAY** close the SSE stream at any time.
-   - The client **MAY** close the SSE stream at any time.
+   * The server **MAY** close the SSE stream at any time.
+   * The client **MAY** close the SSE stream at any time.
 
 ### Multiple Connections
 
 1. The client **MAY** remain connected to multiple SSE streams simultaneously.
 2. The server **MUST** send each of its JSON-RPC messages on only one of the connected
    streams; that is, it **MUST NOT** broadcast the same message across multiple streams.
-   - The risk of message loss **MAY** be mitigated by making the stream
+   * The risk of message loss **MAY** be mitigated by making the stream
      [resumable](#resumability-and-redelivery).
 
 ### Resumability and Redelivery
@@ -8136,20 +8331,20 @@ lost:
 
 1. Servers **MAY** attach an `id` field to their SSE events, as described in the
    [SSE standard](https://html.spec.whatwg.org/multipage/server-sent-events.html#event-stream-interpretation).
-   - If present, the ID **MUST** be globally unique across all streams within that
+   * If present, the ID **MUST** be globally unique across all streams within that
      [session](#session-management)—or all streams with that specific client, if session
      management is not in use.
 2. If the client wishes to resume after a broken connection, it **SHOULD** issue an HTTP
    GET to the MCP endpoint, and include the
    [`Last-Event-ID`](https://html.spec.whatwg.org/multipage/server-sent-events.html#the-last-event-id-header)
    header to indicate the last event ID it received.
-   - The server **MAY** use this header to replay messages that would have been sent
-     after the last event ID, _on the stream that was disconnected_, and to resume the
+   * The server **MAY** use this header to replay messages that would have been sent
+     after the last event ID, *on the stream that was disconnected*, and to resume the
      stream from that point.
-   - The server **MUST NOT** replay messages that would have been delivered on a
+   * The server **MUST NOT** replay messages that would have been delivered on a
      different stream.
 
-In other words, these event IDs should be assigned by servers on a _per-stream_ basis, to
+In other words, these event IDs should be assigned by servers on a *per-stream* basis, to
 act as a cursor within that particular stream.
 
 ### Session Management
@@ -8161,14 +8356,14 @@ servers which want to establish stateful sessions:
 1. A server using the Streamable HTTP transport **MAY** assign a session ID at
    initialization time, by including it in an `Mcp-Session-Id` header on the HTTP
    response containing the `InitializeResult`.
-   - The session ID **SHOULD** be globally unique and cryptographically secure (e.g., a
+   * The session ID **SHOULD** be globally unique and cryptographically secure (e.g., a
      securely generated UUID, a JWT, or a cryptographic hash).
-   - The session ID **MUST** only contain visible ASCII characters (ranging from 0x21 to
+   * The session ID **MUST** only contain visible ASCII characters (ranging from 0x21 to
      0x7E).
 2. If an `Mcp-Session-Id` is returned by the server during initialization, clients using
    the Streamable HTTP transport **MUST** include it in the `Mcp-Session-Id` header on
    all of their subsequent HTTP requests.
-   - Servers that require a session ID **SHOULD** respond to requests without an
+   * Servers that require a session ID **SHOULD** respond to requests without an
      `Mcp-Session-Id` header (other than initialization) with HTTP 400 Bad Request.
 3. The server **MAY** terminate the session at any time, after which it **MUST** respond
    to requests containing that session ID with HTTP 404 Not Found.
@@ -8178,7 +8373,7 @@ servers which want to establish stateful sessions:
 5. Clients that no longer need a particular session (e.g., because the user is leaving
    the client application) **SHOULD** send an HTTP DELETE to the MCP endpoint with the
    `Mcp-Session-Id` header, to explicitly terminate the session.
-   - The server **MAY** respond to this request with HTTP 405 Method Not Allowed,
+   * The server **MAY** respond to this request with HTTP 405 Method Not Allowed,
      indicating that the server does not allow clients to terminate sessions.
 
 ### Sequence Diagram
@@ -8232,7 +8427,7 @@ For example: `MCP-Protocol-Version: 2025-06-18`
 The protocol version sent by the client **SHOULD** be the one [negotiated during
 initialization](/specification/2025-06-18/basic/lifecycle#version-negotiation).
 
-For backwards compatibility, if the server does _not_ receive an `MCP-Protocol-Version`
+For backwards compatibility, if the server does *not* receive an `MCP-Protocol-Version`
 header, and has no other way to identify the version - for example, by relying on the
 protocol version negotiated during initialization - the server **SHOULD** assume protocol
 version `2025-03-26`.
@@ -8248,9 +8443,9 @@ protocol version 2024-11-05) as follows:
 
 **Servers** wanting to support older clients should:
 
-- Continue to host both the SSE and POST endpoints of the old transport, alongside the
+* Continue to host both the SSE and POST endpoints of the old transport, alongside the
   new "MCP endpoint" defined for the Streamable HTTP transport.
-  - It is also possible to combine the old POST endpoint and the new MCP endpoint, but
+  * It is also possible to combine the old POST endpoint and the new MCP endpoint, but
     this may introduce unneeded complexity.
 
 **Clients** wanting to support older servers should:
@@ -8259,13 +8454,13 @@ protocol version 2024-11-05) as follows:
    old transport or the new transport.
 2. Attempt to POST an `InitializeRequest` to the server URL, with an `Accept` header as
    defined above:
-   - If it succeeds, the client can assume this is a server supporting the new Streamable
+   * If it succeeds, the client can assume this is a server supporting the new Streamable
      HTTP transport.
-   - If it fails with an HTTP 4xx status code (e.g., 405 Method Not Allowed or 404 Not
+   * If it fails with an HTTP 4xx status code (e.g., 405 Method Not Allowed or 404 Not
      Found):
-     - Issue a GET request to the server URL, expecting that this will open an SSE stream
+     * Issue a GET request to the server URL, expecting that this will open an SSE stream
        and return an `endpoint` event as the first event.
-     - When the `endpoint` event arrives, the client can assume this is a server running
+     * When the `endpoint` event arrives, the client can assume this is a server running
        the old HTTP+SSE transport, and should use that transport for all subsequent
        communication.
 
@@ -8297,8 +8492,8 @@ indicate that a previously-issued request should be terminated.
 When a party wants to cancel an in-progress request, it sends a `notifications/cancelled`
 notification containing:
 
-- The ID of the request to cancel
-- An optional reason string that can be logged or displayed
+* The ID of the request to cancel
+* An optional reason string that can be logged or displayed
 
 ```json
 {
@@ -8314,17 +8509,17 @@ notification containing:
 ## Behavior Requirements
 
 1. Cancellation notifications **MUST** only reference requests that:
-   - Were previously issued in the same direction
-   - Are believed to still be in-progress
+   * Were previously issued in the same direction
+   * Are believed to still be in-progress
 2. The `initialize` request **MUST NOT** be cancelled by clients
 3. Receivers of cancellation notifications **SHOULD**:
-   - Stop processing the cancelled request
-   - Free associated resources
-   - Not send a response for the cancelled request
+   * Stop processing the cancelled request
+   * Free associated resources
+   * Not send a response for the cancelled request
 4. Receivers **MAY** ignore cancellation notifications if:
-   - The referenced request is unknown
-   - Processing has already completed
-   - The request cannot be cancelled
+   * The referenced request is unknown
+   * Processing has already completed
+   * The request cannot be cancelled
 5. The sender of the cancellation notification **SHOULD** ignore any response to the
    request that arrives afterward
 
@@ -8352,16 +8547,16 @@ sequenceDiagram
 
 ## Implementation Notes
 
-- Both parties **SHOULD** log cancellation reasons for debugging
-- Application UIs **SHOULD** indicate when cancellation is requested
+* Both parties **SHOULD** log cancellation reasons for debugging
+* Application UIs **SHOULD** indicate when cancellation is requested
 
 ## Error Handling
 
 Invalid cancellation notifications **SHOULD** be ignored:
 
-- Unknown request IDs
-- Already completed requests
-- Malformed notifications
+* Unknown request IDs
+* Already completed requests
+* Malformed notifications
 
 This maintains the "fire and forget" nature of notifications while allowing for race
 conditions in asynchronous communication.
@@ -8407,9 +8602,9 @@ A ping request is a standard JSON-RPC request with no parameters:
 ```
 
 2. If no response is received within a reasonable timeout period, the sender **MAY**:
-   - Consider the connection stale
-   - Terminate the connection
-   - Attempt reconnection procedures
+   * Consider the connection stale
+   * Terminate the connection
+   * Attempt reconnection procedures
 
 ## Usage Patterns
 
@@ -8424,16 +8619,16 @@ sequenceDiagram
 
 ## Implementation Considerations
 
-- Implementations **SHOULD** periodically issue pings to detect connection health
-- The frequency of pings **SHOULD** be configurable
-- Timeouts **SHOULD** be appropriate for the network environment
-- Excessive pinging **SHOULD** be avoided to reduce network overhead
+* Implementations **SHOULD** periodically issue pings to detect connection health
+* The frequency of pings **SHOULD** be configurable
+* Timeouts **SHOULD** be appropriate for the network environment
+* Excessive pinging **SHOULD** be avoided to reduce network overhead
 
 ## Error Handling
 
-- Timeouts **SHOULD** be treated as connection failures
-- Multiple failed pings **MAY** trigger connection reset
-- Implementations **SHOULD** log ping failures for diagnostics
+* Timeouts **SHOULD** be treated as connection failures
+* Multiple failed pings **MAY** trigger connection reset
+* Implementations **SHOULD** log ping failures for diagnostics
 
 # Progress
 
@@ -8449,11 +8644,11 @@ provide updates about operation status.
 
 ## Progress Flow
 
-When a party wants to _receive_ progress updates for a request, it includes a
+When a party wants to *receive* progress updates for a request, it includes a
 `progressToken` in the request metadata.
 
-- Progress tokens **MUST** be a string or integer value
-- Progress tokens can be chosen by the sender using any means, but **MUST** be unique
+* Progress tokens **MUST** be a string or integer value
+* Progress tokens can be chosen by the sender using any means, but **MUST** be unique
   across all active requests.
 
 ```json
@@ -8471,10 +8666,10 @@ When a party wants to _receive_ progress updates for a request, it includes a
 
 The receiver **MAY** then send progress notifications containing:
 
-- The original progress token
-- The current progress value so far
-- An optional "total" value
-- An optional "message" value
+* The original progress token
+* The current progress value so far
+* An optional "total" value
+* An optional "message" value
 
 ```json
 {
@@ -8489,21 +8684,22 @@ The receiver **MAY** then send progress notifications containing:
 }
 ```
 
-- The `progress` value **MUST** increase with each notification, even if the total is
+* The `progress` value **MUST** increase with each notification, even if the total is
   unknown.
-- The `progress` and the `total` values **MAY** be floating point.
-- The `message` field **SHOULD** provide relevant human readable progress information.
+* The `progress` and the `total` values **MAY** be floating point.
+* The `message` field **SHOULD** provide relevant human readable progress information.
 
 ## Behavior Requirements
 
 1. Progress notifications **MUST** only reference tokens that:
-   - Were provided in an active request
-   - Are associated with an in-progress operation
+
+   * Were provided in an active request
+   * Are associated with an in-progress operation
 
 2. Receivers of progress requests **MAY**:
-   - Choose not to send any progress notifications
-   - Send notifications at whatever frequency they deem appropriate
-   - Omit the total value if unknown
+   * Choose not to send any progress notifications
+   * Send notifications at whatever frequency they deem appropriate
+   * Omit the total value if unknown
 
 ```mermaid
 sequenceDiagram
@@ -8524,9 +8720,9 @@ sequenceDiagram
 
 ## Implementation Notes
 
-- Senders and receivers **SHOULD** track active progress tokens
-- Both parties **SHOULD** implement rate limiting to prevent flooding
-- Progress notifications **MUST** stop after completion
+* Senders and receivers **SHOULD** track active progress tokens
+* Both parties **SHOULD** implement rate limiting to prevent flooding
+* Progress notifications **MUST** stop after completion
 
 # Key Changes
 
@@ -8595,7 +8791,7 @@ Servers request structured data from users with JSON schemas to validate respons
 ## User Interaction Model
 
 Elicitation in MCP allows servers to implement interactive workflows by enabling user input
-requests to occur _nested_ inside other MCP server features.
+requests to occur *nested* inside other MCP server features.
 
 Implementations are free to expose elicitation through any interface pattern that suits
 their needs—the protocol itself does not mandate any specific user interaction
@@ -8604,14 +8800,14 @@ model.
 <Warning>
   For trust & safety and security:
 
-- Servers **MUST NOT** use elicitation to request sensitive information.
+* Servers **MUST NOT** use elicitation to request sensitive information.
 
   Applications **SHOULD**:
 
-- Provide UI that makes it clear which server is requesting information
-- Allow users to review and modify their responses before sending
-- Respect user privacy and provide clear decline and cancel options
-  </Warning>
+* Provide UI that makes it clear which server is requesting information
+* Allow users to review and modify their responses before sending
+* Respect user privacy and provide clear decline and cancel options
+</Warning>
 
 ## Capabilities
 
@@ -8874,22 +9070,24 @@ Elicitation responses use a three-action model to clearly distinguish between di
 The three response actions are:
 
 1. **Accept** (`action: "accept"`): User explicitly approved and submitted with data
-   - The `content` field contains the submitted data matching the requested schema
-   - Example: User clicked "Submit", "OK", "Confirm", etc.
+
+   * The `content` field contains the submitted data matching the requested schema
+   * Example: User clicked "Submit", "OK", "Confirm", etc.
 
 2. **Decline** (`action: "decline"`): User explicitly declined the request
-   - The `content` field is typically omitted
-   - Example: User clicked "Reject", "Decline", "No", etc.
+
+   * The `content` field is typically omitted
+   * Example: User clicked "Reject", "Decline", "No", etc.
 
 3. **Cancel** (`action: "cancel"`): User dismissed without making an explicit choice
-   - The `content` field is typically omitted
-   - Example: User closed the dialog, clicked outside, pressed Escape, etc.
+   * The `content` field is typically omitted
+   * Example: User closed the dialog, clicked outside, pressed Escape, etc.
 
 Servers should handle each state appropriately:
 
-- **Accept**: Process the submitted data
-- **Decline**: Handle explicit decline (e.g., offer alternatives)
-- **Cancel**: Handle dismissal (e.g., prompt again later)
+* **Accept**: Process the submitted data
+* **Decline**: Handle explicit decline (e.g., offer alternatives)
+* **Cancel**: Handle dismissal (e.g., prompt again later)
 
 ## Security Considerations
 
@@ -9012,9 +9210,9 @@ sequenceDiagram
 
 A root definition includes:
 
-- `uri`: Unique identifier for the root. This **MUST** be a `file://` URI in the current
+* `uri`: Unique identifier for the root. This **MUST** be a `file://` URI in the current
   specification.
-- `name`: Optional human-readable name for display purposes.
+* `name`: Optional human-readable name for display purposes.
 
 Example roots for different use cases:
 
@@ -9046,8 +9244,8 @@ Example roots for different use cases:
 
 Clients **SHOULD** return standard JSON-RPC errors for common failure cases:
 
-- Client does not support roots: `-32601` (Method not found)
-- Internal errors: `-32603`
+* Client does not support roots: `-32601` (Method not found)
+* Internal errors: `-32603`
 
 Example error:
 
@@ -9068,29 +9266,31 @@ Example error:
 ## Security Considerations
 
 1. Clients **MUST**:
-   - Only expose roots with appropriate permissions
-   - Validate all root URIs to prevent path traversal
-   - Implement proper access controls
-   - Monitor root accessibility
+
+   * Only expose roots with appropriate permissions
+   * Validate all root URIs to prevent path traversal
+   * Implement proper access controls
+   * Monitor root accessibility
 
 2. Servers **SHOULD**:
-   - Handle cases where roots become unavailable
-   - Respect root boundaries during operations
-   - Validate all paths against provided roots
+   * Handle cases where roots become unavailable
+   * Respect root boundaries during operations
+   * Validate all paths against provided roots
 
 ## Implementation Guidelines
 
 1. Clients **SHOULD**:
-   - Prompt users for consent before exposing roots to servers
-   - Provide clear user interfaces for root management
-   - Validate root accessibility before exposing
-   - Monitor for root changes
+
+   * Prompt users for consent before exposing roots to servers
+   * Provide clear user interfaces for root management
+   * Validate root accessibility before exposing
+   * Monitor for root changes
 
 2. Servers **SHOULD**:
-   - Check for roots capability before usage
-   - Handle root list changes gracefully
-   - Respect root boundaries in operations
-   - Cache root information appropriately
+   * Check for roots capability before usage
+   * Handle root list changes gracefully
+   * Respect root boundaries in operations
+   * Cache root information appropriately
 
 # Sampling
 
@@ -9110,7 +9310,7 @@ context from MCP servers in their prompts.
 ## User Interaction Model
 
 Sampling in MCP allows servers to implement agentic behaviors, by enabling LLM calls to
-occur _nested_ inside other MCP server features.
+occur *nested* inside other MCP server features.
 
 Implementations are free to expose sampling through any interface pattern that suits
 their needs—the protocol itself does not mandate any specific user interaction
@@ -9120,12 +9320,12 @@ model.
   For trust & safety and security, there **SHOULD** always
   be a human in the loop with the ability to deny sampling requests.
 
-Applications **SHOULD**:
+  Applications **SHOULD**:
 
-- Provide UI that makes it easy and intuitive to review sampling requests
-- Allow users to view and edit prompts before sending
-- Present generated responses for review before delivery
-  </Warning>
+* Provide UI that makes it easy and intuitive to review sampling requests
+* Allow users to view and edit prompts before sending
+* Present generated responses for review before delivery
+</Warning>
 
 ## Capabilities
 
@@ -9273,9 +9473,9 @@ priorities with optional model hints:
 
 Servers express their needs through three normalized priority values (0-1):
 
-- `costPriority`: How important is minimizing costs? Higher values prefer cheaper models.
-- `speedPriority`: How important is low latency? Higher values prefer faster models.
-- `intelligencePriority`: How important are advanced capabilities? Higher values prefer
+* `costPriority`: How important is minimizing costs? Higher values prefer cheaper models.
+* `speedPriority`: How important is low latency? Higher values prefer faster models.
+* `intelligencePriority`: How important are advanced capabilities? Higher values prefer
   more capable models.
 
 #### Model Hints
@@ -9283,10 +9483,10 @@ Servers express their needs through three normalized priority values (0-1):
 While priorities help select models based on characteristics, `hints` allow servers to
 suggest specific models or model families:
 
-- Hints are treated as substrings that can match model names flexibly
-- Multiple hints are evaluated in order of preference
-- Clients **MAY** map hints to equivalent models from different providers
-- Hints are advisory—clients make final model selection
+* Hints are treated as substrings that can match model names flexibly
+* Multiple hints are evaluated in order of preference
+* Clients **MAY** map hints to equivalent models from different providers
+* Hints are advisory—clients make final model selection
 
 For example:
 
@@ -9361,16 +9561,16 @@ appear in all capitals, as shown here.
 
 MCP provides a standardized way for applications to:
 
-- Share contextual information with language models
-- Expose tools and capabilities to AI systems
-- Build composable integrations and workflows
+* Share contextual information with language models
+* Expose tools and capabilities to AI systems
+* Build composable integrations and workflows
 
 The protocol uses [JSON-RPC](https://www.jsonrpc.org/) 2.0 messages to establish
 communication between:
 
-- **Hosts**: LLM applications that initiate connections
-- **Clients**: Connectors within the host application
-- **Servers**: Services that provide context and capabilities
+* **Hosts**: LLM applications that initiate connections
+* **Clients**: Connectors within the host application
+* **Servers**: Services that provide context and capabilities
 
 MCP takes some inspiration from the
 [Language Server Protocol](https://microsoft.github.io/language-server-protocol/), which
@@ -9382,31 +9582,31 @@ and tools into the ecosystem of AI applications.
 
 ### Base Protocol
 
-- [JSON-RPC](https://www.jsonrpc.org/) message format
-- Stateful connections
-- Server and client capability negotiation
+* [JSON-RPC](https://www.jsonrpc.org/) message format
+* Stateful connections
+* Server and client capability negotiation
 
 ### Features
 
 Servers offer any of the following features to clients:
 
-- **Resources**: Context and data, for the user or the AI model to use
-- **Prompts**: Templated messages and workflows for users
-- **Tools**: Functions for the AI model to execute
+* **Resources**: Context and data, for the user or the AI model to use
+* **Prompts**: Templated messages and workflows for users
+* **Tools**: Functions for the AI model to execute
 
 Clients may offer the following features to servers:
 
-- **Sampling**: Server-initiated agentic behaviors and recursive LLM interactions
-- **Roots**: Server-initiated inquiries into uri or filesystem boundaries to operate in
-- **Elicitation**: Server-initiated requests for additional information from users
+* **Sampling**: Server-initiated agentic behaviors and recursive LLM interactions
+* **Roots**: Server-initiated inquiries into uri or filesystem boundaries to operate in
+* **Elicitation**: Server-initiated requests for additional information from users
 
 ### Additional Utilities
 
-- Configuration
-- Progress tracking
-- Cancellation
-- Error reporting
-- Logging
+* Configuration
+* Progress tracking
+* Cancellation
+* Error reporting
+* Logging
 
 ## Security and Trust & Safety
 
@@ -9417,30 +9617,33 @@ considerations that all implementors must carefully address.
 ### Key Principles
 
 1. **User Consent and Control**
-   - Users must explicitly consent to and understand all data access and operations
-   - Users must retain control over what data is shared and what actions are taken
-   - Implementors should provide clear UIs for reviewing and authorizing activities
+
+   * Users must explicitly consent to and understand all data access and operations
+   * Users must retain control over what data is shared and what actions are taken
+   * Implementors should provide clear UIs for reviewing and authorizing activities
 
 2. **Data Privacy**
-   - Hosts must obtain explicit user consent before exposing user data to servers
-   - Hosts must not transmit resource data elsewhere without user consent
-   - User data should be protected with appropriate access controls
+
+   * Hosts must obtain explicit user consent before exposing user data to servers
+   * Hosts must not transmit resource data elsewhere without user consent
+   * User data should be protected with appropriate access controls
 
 3. **Tool Safety**
-   - Tools represent arbitrary code execution and must be treated with appropriate
+
+   * Tools represent arbitrary code execution and must be treated with appropriate
      caution.
-     - In particular, descriptions of tool behavior such as annotations should be
+     * In particular, descriptions of tool behavior such as annotations should be
        considered untrusted, unless obtained from a trusted server.
-   - Hosts must obtain explicit user consent before invoking any tool
-   - Users should understand what each tool does before authorizing its use
+   * Hosts must obtain explicit user consent before invoking any tool
+   * Users should understand what each tool does before authorizing its use
 
 4. **LLM Sampling Controls**
-   - Users must explicitly approve any LLM sampling requests
-   - Users should control:
-     - Whether sampling occurs at all
-     - The actual prompt that will be sent
-     - What results the server can see
-   - The protocol intentionally limits server visibility into prompts
+   * Users must explicitly approve any LLM sampling requests
+   * Users should control:
+     * Whether sampling occurs at all
+     * The actual prompt that will be sent
+     * What results the server can see
+   * The protocol intentionally limits server visibility into prompts
 
 ### Implementation Guidelines
 
@@ -9934,10 +10137,10 @@ Servers provide the fundamental building blocks for adding context to language m
 MCP. These primitives enable rich interactions between clients, servers, and language
 models:
 
-- **Prompts**: Pre-defined templates or instructions that guide language model
+* **Prompts**: Pre-defined templates or instructions that guide language model
   interactions
-- **Resources**: Structured data or content that provides additional context to the model
-- **Tools**: Executable functions that allow models to perform actions or retrieve
+* **Resources**: Structured data or content that provides additional context to the model
+* **Tools**: Executable functions that allow models to perform actions or retrieve
   information
 
 Each primitive can be summarized in the following control hierarchy:
@@ -10134,17 +10337,17 @@ sequenceDiagram
 
 A prompt definition includes:
 
-- `name`: Unique identifier for the prompt
-- `title`: Optional human-readable name of the prompt for display purposes.
-- `description`: Optional human-readable description
-- `arguments`: Optional list of arguments for customization
+* `name`: Unique identifier for the prompt
+* `title`: Optional human-readable name of the prompt for display purposes.
+* `description`: Optional human-readable description
+* `arguments`: Optional list of arguments for customization
 
 ### PromptMessage
 
 Messages in a prompt can contain:
 
-- `role`: Either "user" or "assistant" to indicate the speaker
-- `content`: One of the following content types:
+* `role`: Either "user" or "assistant" to indicate the speaker
+* `content`: One of the following content types:
 
 <Note>
   All content types in prompt messages support optional
@@ -10214,9 +10417,9 @@ Embedded resources allow referencing server-side resources directly in messages:
 
 Resources can contain either text or binary (blob) data and **MUST** include:
 
-- A valid resource URI
-- The appropriate MIME type
-- Either text content or base64-encoded blob data
+* A valid resource URI
+* The appropriate MIME type
+* Either text content or base64-encoded blob data
 
 Embedded resources enable prompts to seamlessly incorporate server-managed content like
 documentation, code samples, or other reference materials directly into the conversation
@@ -10226,9 +10429,9 @@ flow.
 
 Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
-- Invalid prompt name: `-32602` (Invalid params)
-- Missing required arguments: `-32602` (Invalid params)
-- Internal errors: `-32603` (Internal error)
+* Invalid prompt name: `-32602` (Invalid params)
+* Missing required arguments: `-32602` (Invalid params)
+* Internal errors: `-32603` (Internal error)
 
 ## Implementation Considerations
 
@@ -10262,9 +10465,9 @@ determining how to incorporate context based on their needs.
 
 For example, applications could:
 
-- Expose resources through UI elements for explicit selection, in a tree or list view
-- Allow the user to search through and filter available resources
-- Implement automatic context inclusion, based on heuristics or the AI model's selection
+* Expose resources through UI elements for explicit selection, in a tree or list view
+* Allow the user to search through and filter available resources
+* Implement automatic context inclusion, based on heuristics or the AI model's selection
 
 ![Example of resource context picker](https://mintlify.s3.us-west-1.amazonaws.com/mcp/specification/2025-06-18/server/resource-picker.png)
 
@@ -10289,9 +10492,9 @@ Servers that support resources **MUST** declare the `resources` capability:
 
 The capability supports two optional features:
 
-- `subscribe`: whether the client can subscribe to be notified of changes to individual
+* `subscribe`: whether the client can subscribe to be notified of changes to individual
   resources.
-- `listChanged`: whether the server will emit notifications when the list of available
+* `listChanged`: whether the server will emit notifications when the list of available
   resources changes.
 
 Both `subscribe` and `listChanged` are optional—servers can support neither,
@@ -10513,12 +10716,12 @@ sequenceDiagram
 
 A resource definition includes:
 
-- `uri`: Unique identifier for the resource
-- `name`: The name of the resource.
-- `title`: Optional human-readable name of the resource for display purposes.
-- `description`: Optional description
-- `mimeType`: Optional MIME type
-- `size`: Optional size in bytes
+* `uri`: Unique identifier for the resource
+* `name`: The name of the resource.
+* `title`: Optional human-readable name of the resource for display purposes.
+* `description`: Optional description
+* `mimeType`: Optional MIME type
+* `size`: Optional size in bytes
 
 ### Resource Contents
 
@@ -10552,9 +10755,9 @@ Resources can contain either text or binary data:
 
 Resources, resource templates and content blocks support optional annotations that provide hints to clients about how to use or display the resource:
 
-- **`audience`**: An array indicating the intended audience(s) for this resource. Valid values are `"user"` and `"assistant"`. For example, `["user", "assistant"]` indicates content useful for both.
-- **`priority`**: A number from 0.0 to 1.0 indicating the importance of this resource. A value of 1 means "most important" (effectively required), while 0 means "least important" (entirely optional).
-- **`lastModified`**: An ISO 8601 formatted timestamp indicating when the resource was last modified (e.g., `"2025-01-12T15:00:58Z"`).
+* **`audience`**: An array indicating the intended audience(s) for this resource. Valid values are `"user"` and `"assistant"`. For example, `["user", "assistant"]` indicates content useful for both.
+* **`priority`**: A number from 0.0 to 1.0 indicating the importance of this resource. A value of 1 means "most important" (effectively required), while 0 means "least important" (entirely optional).
+* **`lastModified`**: An ISO 8601 formatted timestamp indicating when the resource was last modified (e.g., `"2025-01-12T15:00:58Z"`).
 
 Example resource with annotations:
 
@@ -10574,9 +10777,9 @@ Example resource with annotations:
 
 Clients can use these annotations to:
 
-- Filter resources based on their intended audience
-- Prioritize which resources to include in context
-- Display modification times or sort by recency
+* Filter resources based on their intended audience
+* Prioritize which resources to include in context
+* Display modification times or sort by recency
 
 ## Common URI Schemes
 
@@ -10618,8 +10821,8 @@ taking the above guidance in to account.
 
 Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
-- Resource not found: `-32002`
-- Internal errors: `-32603`
+* Resource not found: `-32002`
+* Internal errors: `-32603`
 
 Example error:
 
@@ -10671,13 +10874,13 @@ interaction model.
   For trust & safety and security, there **SHOULD** always
   be a human in the loop with the ability to deny tool invocations.
 
-Applications **SHOULD**:
+  Applications **SHOULD**:
 
-- Provide UI that makes clear which tools are being exposed to the AI model
-- Insert clear visual indicators when tools are invoked
-- Present confirmation prompts to the user for operations, to ensure a human is in the
-  loop
-  </Warning>
+* Provide UI that makes clear which tools are being exposed to the AI model
+* Insert clear visual indicators when tools are invoked
+* Present confirmation prompts to the user for operations, to ensure a human is in the
+    loop
+</Warning>
 
 ## Capabilities
 
@@ -10827,12 +11030,12 @@ sequenceDiagram
 
 A tool definition includes:
 
-- `name`: Unique identifier for the tool
-- `title`: Optional human-readable name of the tool for display purposes.
-- `description`: Human-readable description of functionality
-- `inputSchema`: JSON Schema defining expected parameters
-- `outputSchema`: Optional JSON Schema defining expected output structure
-- `annotations`: optional properties describing tool behavior
+* `name`: Unique identifier for the tool
+* `title`: Optional human-readable name of the tool for display purposes.
+* `description`: Human-readable description of functionality
+* `inputSchema`: JSON Schema defining expected parameters
+* `outputSchema`: Optional JSON Schema defining expected output structure
+* `annotations`: optional properties describing tool behavior
 
 <Warning>
   For trust & safety and security, clients **MUST** consider
@@ -10950,8 +11153,8 @@ For backwards compatibility, a tool that returns structured content SHOULD also 
 Tools may also provide an output schema for validation of structured results.
 If an output schema is provided:
 
-- Servers **MUST** provide structured results that conform to this schema.
-- Clients **SHOULD** validate structured results against this schema.
+* Servers **MUST** provide structured results that conform to this schema.
+* Clients **SHOULD** validate structured results against this schema.
 
 Example tool with output schema:
 
@@ -11015,24 +11218,25 @@ Example valid response for this tool:
 
 Providing an output schema helps clients and LLMs understand and properly handle structured tool outputs by:
 
-- Enabling strict schema validation of responses
-- Providing type information for better integration with programming languages
-- Guiding clients and LLMs to properly parse and utilize the returned data
-- Supporting better documentation and developer experience
+* Enabling strict schema validation of responses
+* Providing type information for better integration with programming languages
+* Guiding clients and LLMs to properly parse and utilize the returned data
+* Supporting better documentation and developer experience
 
 ## Error Handling
 
 Tools use two error reporting mechanisms:
 
 1. **Protocol Errors**: Standard JSON-RPC errors for issues like:
-   - Unknown tools
-   - Invalid arguments
-   - Server errors
+
+   * Unknown tools
+   * Invalid arguments
+   * Server errors
 
 2. **Tool Execution Errors**: Reported in tool results with `isError: true`:
-   - API failures
-   - Invalid input data
-   - Business logic errors
+   * API failures
+   * Invalid input data
+   * Business logic errors
 
 Example protocol error:
 
@@ -11068,18 +11272,19 @@ Example tool execution error:
 ## Security Considerations
 
 1. Servers **MUST**:
-   - Validate all tool inputs
-   - Implement proper access controls
-   - Rate limit tool invocations
-   - Sanitize tool outputs
+
+   * Validate all tool inputs
+   * Implement proper access controls
+   * Rate limit tool invocations
+   * Sanitize tool outputs
 
 2. Clients **SHOULD**:
-   - Prompt for user confirmation on sensitive operations
-   - Show tool inputs to the user before calling the server, to avoid malicious or
+   * Prompt for user confirmation on sensitive operations
+   * Show tool inputs to the user before calling the server, to avoid malicious or
      accidental data exfiltration
-   - Validate tool results before passing to LLM
-   - Implement timeouts for tool calls
-   - Log tool usage for audit purposes
+   * Validate tool results before passing to LLM
+   * Implement timeouts for tool calls
+   * Log tool usage for audit purposes
 
 # Completion
 
@@ -11217,9 +11422,9 @@ The protocol supports two types of completion references:
 
 Servers return an array of completion values ranked by relevance, with:
 
-- Maximum 100 items per response
-- Optional total number of available matches
-- Boolean indicating if additional results exist
+* Maximum 100 items per response
+* Optional total number of available matches
+* Boolean indicating if additional results exist
 
 ## Message Flow
 
@@ -11241,50 +11446,51 @@ sequenceDiagram
 
 ### CompleteRequest
 
-- `ref`: A `PromptReference` or `ResourceReference`
-- `argument`: Object containing:
-  - `name`: Argument name
-  - `value`: Current value
-- `context`: Object containing:
-  - `arguments`: A mapping of already-resolved argument names to their values.
+* `ref`: A `PromptReference` or `ResourceReference`
+* `argument`: Object containing:
+  * `name`: Argument name
+  * `value`: Current value
+* `context`: Object containing:
+  * `arguments`: A mapping of already-resolved argument names to their values.
 
 ### CompleteResult
 
-- `completion`: Object containing:
-  - `values`: Array of suggestions (max 100)
-  - `total`: Optional total matches
-  - `hasMore`: Additional results flag
+* `completion`: Object containing:
+  * `values`: Array of suggestions (max 100)
+  * `total`: Optional total matches
+  * `hasMore`: Additional results flag
 
 ## Error Handling
 
 Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
-- Method not found: `-32601` (Capability not supported)
-- Invalid prompt name: `-32602` (Invalid params)
-- Missing required arguments: `-32602` (Invalid params)
-- Internal errors: `-32603` (Internal error)
+* Method not found: `-32601` (Capability not supported)
+* Invalid prompt name: `-32602` (Invalid params)
+* Missing required arguments: `-32602` (Invalid params)
+* Internal errors: `-32603` (Internal error)
 
 ## Implementation Considerations
 
 1. Servers **SHOULD**:
-   - Return suggestions sorted by relevance
-   - Implement fuzzy matching where appropriate
-   - Rate limit completion requests
-   - Validate all inputs
+
+   * Return suggestions sorted by relevance
+   * Implement fuzzy matching where appropriate
+   * Rate limit completion requests
+   * Validate all inputs
 
 2. Clients **SHOULD**:
-   - Debounce rapid completion requests
-   - Cache completion results where appropriate
-   - Handle missing or partial results gracefully
+   * Debounce rapid completion requests
+   * Cache completion results where appropriate
+   * Handle missing or partial results gracefully
 
 ## Security
 
 Implementations **MUST**:
 
-- Validate all completion inputs
-- Implement appropriate rate limiting
-- Control access to sensitive suggestions
-- Prevent completion-based information disclosure
+* Validate all completion inputs
+* Implement appropriate rate limiting
+* Control access to sensitive suggestions
+* Prevent completion-based information disclosure
 
 # Logging
 
@@ -11399,35 +11605,37 @@ sequenceDiagram
 
 Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
-- Invalid log level: `-32602` (Invalid params)
-- Configuration errors: `-32603` (Internal error)
+* Invalid log level: `-32602` (Invalid params)
+* Configuration errors: `-32603` (Internal error)
 
 ## Implementation Considerations
 
 1. Servers **SHOULD**:
-   - Rate limit log messages
-   - Include relevant context in data field
-   - Use consistent logger names
-   - Remove sensitive information
+
+   * Rate limit log messages
+   * Include relevant context in data field
+   * Use consistent logger names
+   * Remove sensitive information
 
 2. Clients **MAY**:
-   - Present log messages in the UI
-   - Implement log filtering/search
-   - Display severity visually
-   - Persist log messages
+   * Present log messages in the UI
+   * Implement log filtering/search
+   * Display severity visually
+   * Persist log messages
 
 ## Security
 
 1. Log messages **MUST NOT** contain:
-   - Credentials or secrets
-   - Personal identifying information
-   - Internal system details that could aid attacks
+
+   * Credentials or secrets
+   * Personal identifying information
+   * Internal system details that could aid attacks
 
 2. Implementations **SHOULD**:
-   - Rate limit messages
-   - Validate all data fields
-   - Control log access
-   - Monitor for sensitive content
+   * Rate limit messages
+   * Validate all data fields
+   * Control log access
+   * Monitor for sensitive content
 
 # Pagination
 
@@ -11449,16 +11657,16 @@ data sets.
 
 Pagination in MCP uses an opaque cursor-based approach, instead of numbered pages.
 
-- The **cursor** is an opaque string token, representing a position in the result set
-- **Page size** is determined by the server, and clients **MUST NOT** assume a fixed page
+* The **cursor** is an opaque string token, representing a position in the result set
+* **Page size** is determined by the server, and clients **MUST NOT** assume a fixed page
   size
 
 ## Response Format
 
 Pagination starts when the server sends a **response** that includes:
 
-- The current page of results
-- An optional `nextCursor` field if more results exist
+* The current page of results
+* An optional `nextCursor` field if more results exist
 
 ```json
 {
@@ -11473,7 +11681,7 @@ Pagination starts when the server sends a **response** that includes:
 
 ## Request Format
 
-After receiving a cursor, the client can _continue_ paginating by issuing a request
+After receiving a cursor, the client can *continue* paginating by issuing a request
 including that cursor:
 
 ```json
@@ -11504,25 +11712,27 @@ sequenceDiagram
 
 The following MCP operations support pagination:
 
-- `resources/list` - List available resources
-- `resources/templates/list` - List resource templates
-- `prompts/list` - List available prompts
-- `tools/list` - List available tools
+* `resources/list` - List available resources
+* `resources/templates/list` - List resource templates
+* `prompts/list` - List available prompts
+* `tools/list` - List available tools
 
 ## Implementation Guidelines
 
 1. Servers **SHOULD**:
-   - Provide stable cursors
-   - Handle invalid cursors gracefully
+
+   * Provide stable cursors
+   * Handle invalid cursors gracefully
 
 2. Clients **SHOULD**:
-   - Treat a missing `nextCursor` as the end of results
-   - Support both paginated and non-paginated flows
+
+   * Treat a missing `nextCursor` as the end of results
+   * Support both paginated and non-paginated flows
 
 3. Clients **MUST** treat cursors as opaque tokens:
-   - Don't make assumptions about cursor format
-   - Don't attempt to parse or modify cursors
-   - Don't persist cursors across sessions
+   * Don't make assumptions about cursor format
+   * Don't attempt to parse or modify cursors
+   * Don't persist cursors across sessions
 
 ## Error Handling
 
@@ -11545,10 +11755,10 @@ The Model Context Protocol uses string-based version identifiers following the f
 
 Revisions may be marked as:
 
-- **Draft**: in-progress specifications, not yet ready for consumption.
-- **Current**: the current protocol version, which is ready for use and may continue to
+* **Draft**: in-progress specifications, not yet ready for consumption.
+* **Current**: the current protocol version, which is ready for use and may continue to
   receive backwards compatible changes.
-- **Final**: past, complete specifications that will not be changed.
+* **Final**: past, complete specifications that will not be changed.
 
 The **current** protocol version is [**2025-06-18**](/specification/2025-06-18/).
 

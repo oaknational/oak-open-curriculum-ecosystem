@@ -20,7 +20,19 @@ This reflects the distinction between:
 - **Energeia (ἐνέργεια)** - Activities/actions (what components DO)
 - **Dynamis (δύναμις)** - Potentialities/access (what fields PROVIDE)
 
-## Discrete Hierarchy (Bounded, Nested)
+## Architectural Scales
+
+### Workspace Architecture (Package Organization)
+
+```text
+Level               Singular → Plural                   Description
+─────────────────────────────────────────────────────────────────────
+Moria (Μόρια)       → Moria                            Molecules/Atoms - Pure abstractions
+Histoi (Ἱστοί)      → Histoi                           Tissues/Matrices - Connective runtime-adaptive
+Psycha (Ψυχά)       → Psycha                           Living Organisms - Complete applications
+```
+
+### Psychon Architecture (Within Each Organism)
 
 ```text
 Level               Singular → Plural                   Description
@@ -28,30 +40,26 @@ Level               Singular → Plural                   Description
 Molecule            → Molecules                         Language syntax (not our control)
 Organelle           → Organelles                        Pure functions
 Kytos (Κύτος)       → Kytia (Κύτια)                    Cell → Cells (modules)
-Histos (Ἱστός)      → Histoi (Ἱστοί)                   Tissue → Tissues (optional)
 Organon (ὄργανον)   → Organa (ὄργανα)                  Organ → Organs
-Systema (Σύστημα)   → Systemata (Συστήματα)            Organ System → Organ Systems
-Psychon (Ψυχόν)     → Psycha (Ψυχά)                    Organism → Organisms (the ensouled)
-Ecosystema (Οἰκοσύστημα) → Ecosystemata (Οἰκοσυστήματα) Ecosystem → Ecosystems
-Biosphaera (Βιοσφαῖρα) → Biosphaerae (Βιοσφαῖραι)     Biosphere → Biospheres
+Psychon (Ψυχόν)     → Psycha (Ψυχά)                    Soul/Living Whole → Complete organisms
 ```
 
 ## Cross-Cutting Chorai (Χῶραι) - Fields/Substrates
 
 Chora (Χώρα) → Chorai (Χῶραι) - The collective of cross-cutting layers
 
-### Currently Relevant Chorai
+### Currently Relevant Chorai (Within Psychon)
 
 ```text
 Name                Singular → Plural                   Purpose
 ─────────────────────────────────────────────────────────────────────
-Morphai (Μορφαί)    → Morphai (Μορφαί)                 Abstract patterns: Platonic forms
-Stroma (Στρῶμα)     → Stromata (Στρώματα)              Types, schemas, contracts
-Aither (Αἰθήρ)      → Aitheres (Αἰθέρες)               Flows: logging, events, messaging
-Phaneron (Φανερόν)  → Phanera (Φανερά)                 Visible config: runtime settings
+Morphai (Μορφαί)    → Morphai (Μορφαί)                 Forms - Hidden Platonic ideals
+Stroma (Στρῶμα)     → Stromata (Στρώματα)              Support/Foundation - Types, contracts
+Aither (Αἰθήρ)      → Aitheres (Αἰθέρες)               Air/Essence - Logging, events, flows
+Phaneron (Φανερόν)  → Phanera (Φανερά)                 Manifestation - Configuration, environment
 ```
 
-> **Note on Morphai**: The hidden forms (μορφαί) are the Platonic ideals - abstract patterns that organs aspire to instantiate. They exist only in the genotype as pure types with no implementation.
+> **Note on Morphai**: The hidden forms (μορφαί) are the Platonic ideals - abstract patterns that organs aspire to instantiate. Example: `ToolExecutor` pattern that all tools implement.
 
 ### Future Chorai (Noted for Completeness)
 
@@ -79,54 +87,50 @@ Nomos (Νόμος)       → Nomoi (Νόμοι)                    Rules: govern
 - Example: "The psychon (Ψυχόν) represents the ensouled application"
 - Use provided singular/plural forms consistently
 
-### Genotype/Phenotype Model
+### Evolution to Moria/Histoi/Psycha Model
 
-The architecture follows a biological inheritance model with workspace separation:
+The architecture is evolving from genotype/phenotype to a three-tier workspace model:
 
-#### Genotype (oak-mcp-core)
-The genetic blueprint containing abstract patterns and utilities:
+#### Moria (Pure Abstractions)
 
 ```text
-ecosystem/oak-mcp-core/src/
-├── chora/                      # Cross-cutting fields
-│   ├── morphai/                # Abstract patterns (Platonic forms)
-│   │   ├── tools/              # Tool execution patterns
-│   │   ├── handlers/           # Request handling patterns
-│   │   ├── errors/             # Error handling patterns
-│   │   └── registries/         # Collection management patterns
-│   ├── stroma/                 # Structural matrix
-│   ├── aither/                 # Divine flows
-│   └── phaneron/               # Base configuration patterns
+ecosystem/moria/@oaknational/mcp-moria/
+├── src/
+│   ├── interfaces/             # Pure interfaces (Logger, StorageProvider, etc.)
+│   ├── types/                  # Pure type definitions
+│   └── algorithms/             # Pure algorithms (no dependencies)
 ```
 
-#### Phenotype (oak-notion-mcp)
-The environmental expression that instantiates the abstract patterns:
+#### Histoi (Runtime-Adaptive Tissues)
 
 ```text
-ecosystem/oak-notion-mcp/src/
-├── index.ts                    # Entry point (delegates to psychon)
-├── psychon/                    # The soul - wiring layer
-│   ├── index.ts                # Main orchestration
-│   ├── wiring.ts               # Dependency injection
-│   ├── server.ts               # Server setup
-│   └── startup.ts              # Initialization
-├── chora/                      # Phenotype-specific chorai
-│   └── eidola/                 # Test doubles and mocks
-└── organa/                     # Discrete organs (instantiate morphai)
-    ├── notion/                 # Notion integration organ
-    └── mcp/                    # MCP protocol organ
+ecosystem/histoi/
+├── @oaknational/mcp-histos-logger/     # Adaptive logging tissue
+├── @oaknational/mcp-histos-storage/    # Adaptive storage tissue
+└── @oaknational/mcp-histos-transport/  # Transport tissue (stdio, HTTP)
 ```
 
-### Light-Touch Systemata
-
-Systemata (organ systems) should only be added when multiple organa naturally group together:
+#### Psycha (Complete Organisms)
 
 ```text
-organa/
-├── data-systema/               # Example: Data Processing System
-│   ├── index.ts                # Simple re-exports
-│   ├── notion/                 # Notion organ
-│   └── database/               # Future: Database organ
+ecosystem/psycha/
+├── oak-notion-mcp/             # Complete Notion MCP server
+│   ├── src/
+│   │   ├── index.ts            # Entry point
+│   │   ├── psychon/            # The soul - wiring layer
+│   │   │   ├── index.ts        # Main orchestration
+│   │   │   ├── wiring.ts       # Dependency injection
+│   │   │   └── server.ts       # Server setup
+│   │   ├── chora/              # Pervasive fields within organism
+│   │   │   ├── morphai/        # Abstract patterns (Platonic forms)
+│   │   │   ├── stroma/         # Types and contracts
+│   │   │   ├── aither/         # Logging and events
+│   │   │   └── phaneron/       # Configuration
+│   │   └── organa/             # Discrete organs
+│   │       ├── notion/         # Notion integration organ
+│   │       └── mcp/            # MCP protocol organ
+│   └── package.json
+└── github-mcp/                 # Future: GitHub MCP server
 ```
 
 ## Key Distinctions

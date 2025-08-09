@@ -105,7 +105,7 @@ Chōra represents pervasive infrastructure that cuts across all hierarchical lev
 
 **Meaning**: The hidden forms - Platonic ideals that organs aspire to instantiate
 
-- **Location**: `ecosystem/oak-mcp-core/src/chora/morphai/` (genotype only)
+- **Location**: `ecosystem/moria/moria-mcp/src/patterns/` (pure abstractions)
 - **Nature**: Pure abstract patterns with zero implementation
 - **Contents**:
   - `tools/` - Tool execution patterns (`ToolExecutor`, `ToolDefinition`)

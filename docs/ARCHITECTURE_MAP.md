@@ -1,109 +1,145 @@
 # 🗺️ Architecture Map
 
-> **First time here?** This map shows you exactly where to find what you need in our Greek-inspired biological architecture, organized in a **genotype/phenotype** model.
+> **First time here?** This map shows you exactly where to find what you need in our two-scale biological architecture.
 
-## Workspace Structure
+## Architecture Evolution
 
-The project uses a **pnpm workspace** with biological inheritance:
+The project is evolving from a **genotype/phenotype** model to a **three-tier workspace** architecture:
 
-- **Genotype** (`ecosystem/oak-mcp-core/`) - The genetic blueprint with abstract patterns
-- **Phenotype** (`ecosystem/oak-notion-mcp/`) - The environmental expression with Notion implementation
+### Current State (Phase 4)
+- **Genotype** (`ecosystem/oak-mcp-core/`) - The genetic blueprint
+- **Phenotype** (`ecosystem/oak-notion-mcp/`) - The environmental expression
+
+### Target State (Phase 5)
+- **Moria (Molecules/Atoms)** (`ecosystem/moria/`) - Pure abstractions, zero dependencies
+- **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`) - Runtime-adaptive connective tissues
+- **Psycha (Living Organisms)** (`ecosystem/psycha/`) - Complete applications
 
 ## Quick Navigation Guide
 
-| What you're looking for             | Where to find it            | Directory                                                          | Greek meaning                       |
-| ----------------------------------- | --------------------------- | ------------------------------------------------------------------ | ----------------------------------- |
-| **Abstract patterns**               | Platonic forms (genotype)   | [`oak-mcp-core/src/chora/morphai/`](oak-mcp-core/src/chora/morphai/) | μορφαί: forms, Platonic ideals     |
-| **Types, interfaces, contracts**    | The foundational layer      | [`*/src/chora/stroma/`](*/src/chora/stroma/)                     | στρῶμα: substrate, foundation      |
-| **Logging, events, error handling** | System flows and signals    | [`*/src/chora/aither/`](*/src/chora/aither/)                     | αἰθήρ: divine air that flows       |
-| **Configuration, settings**         | Runtime configuration       | [`*/src/chora/phaneron/`](*/src/chora/phaneron/)                 | φανερόν: the visible, manifest     |
-| **Test mocks, fixtures**            | Testing utilities           | [`oak-notion-mcp/src/chora/eidola/`](oak-notion-mcp/src/chora/eidola/) | εἴδωλα: phantoms, simulacra        |
-| **Notion API integration**          | Notion-specific logic       | [`oak-notion-mcp/src/organa/notion/`](oak-notion-mcp/src/organa/notion/) | ὄργανον: organ, instrument         |
-| **MCP server handlers**             | MCP protocol implementation | [`oak-notion-mcp/src/organa/mcp/`](oak-notion-mcp/src/organa/mcp/) | ὄργανον: organ, instrument         |
-| **App startup & wiring**            | Main application entry      | [`oak-notion-mcp/src/psychon/`](oak-notion-mcp/src/psychon/)     | ψυχόν: soul, animating force       |
+### Workspace Level (Package Organization)
+
+| What you're looking for | Where to find it | Location | Description |
+|-------------------------|------------------|----------|-------------|
+| **Pure interfaces** | Moria tier | `ecosystem/moria/@oaknational/mcp-moria/src/interfaces/` | Logger, StorageProvider, etc. |
+| **Pure types** | Moria tier | `ecosystem/moria/@oaknational/mcp-moria/src/types/` | Zero-dependency type definitions |
+| **Pure algorithms** | Moria tier | `ecosystem/moria/@oaknational/mcp-moria/src/algorithms/` | Sorting, validation, etc. |
+| **Adaptive logger** | Histoi tier | `ecosystem/histoi/@oaknational/mcp-histos-logger/` | Console/pino/edge adaptive |
+| **Adaptive storage** | Histoi tier | `ecosystem/histoi/@oaknational/mcp-histos-storage/` | localStorage/fs adaptive |
+| **Transport tissue** | Histoi tier | `ecosystem/histoi/@oaknational/mcp-histos-transport/` | stdio/HTTP adaptive |
+| **Notion MCP server** | Psycha tier | `ecosystem/psycha/oak-notion-mcp/` | Complete application |
+
+### Psychon Level (Within Each Organism)
+
+| What you're looking for | Where to find it | Directory | Greek meaning |
+|-------------------------|------------------|-----------|---------------|
+| **Abstract patterns** | Platonic forms | `src/chora/morphai/` | μορφαί: Forms, hidden ideals |
+| **Types, interfaces** | Foundation layer | `src/chora/stroma/` | στρῶμα: Support/Foundation |
+| **Logging, events** | System flows | `src/chora/aither/` | αἰθήρ: Air/Essence that flows |
+| **Configuration** | Runtime settings | `src/chora/phaneron/` | φανερόν: Manifestation |
+| **Notion integration** | Business logic | `src/organa/notion/` | ὄργανον: Organ |
+| **MCP protocol** | Protocol handler | `src/organa/mcp/` | ὄργανον: Organ |
+| **App wiring** | Main application | `src/psychon/` | ψυχόν: Soul/Living Whole |
 
 ## Architecture Concepts
 
-### 🌊 Chorai (Χῶραι) - Cross-cutting Concerns
+### Two Complementary Scales
 
-These are the "fields" that flow through the entire system, like infrastructure concerns:
+#### Workspace Architecture (Moria → Histoi → Psycha)
+How packages relate in the workspace:
 
-- **morphai** - Abstract patterns (Platonic forms that organs instantiate) - **genotype only**
-- **stroma** - Types and contracts (the physics of our universe)
-- **aither** - Logging, events, errors (the nervous system)
-- **phaneron** - Configuration (what's visible at runtime)
-- **eidola** - Test infrastructure (phantom doubles for testing) - **phenotype only**
+- **Moria** - Pure abstractions (interfaces, types, algorithms)
+  - Zero dependencies, absolute purity
+  - Example: `Logger` interface
+  
+- **Histoi** - Runtime-adaptive tissues that connect organisms
+  - Adapt to Node.js vs Edge vs Browser
+  - Example: Adaptive logger using console or pino
+  
+- **Psycha** - Complete living applications
+  - Compose from moria and histoi
+  - Example: oak-notion-mcp server
 
-### 🫀 Organa (Ὄργανα) - Discrete Organs
+#### Psychon Architecture (Chorai + Organa → Psychon)
+How components organize within each organism:
 
-Self-contained functional units with specific responsibilities:
+##### 🌊 Chorai (Χῶραι) - Pervasive Fields
+Infrastructure that flows through everything:
 
-- **notion** - Everything related to Notion API
-- **mcp** - Everything related to MCP protocol
+- **morphai** - Hidden forms and Platonic ideals
+- **stroma** - Types and contracts (compile-time only)
+- **aither** - Logging and events (pervasive flows)
+- **phaneron** - Configuration and environment
 
-### 🎭 Psychon (Ψυχόν) - The Soul
+##### 🫀 Organa (Ὄργανα) - Discrete Organs
+Bounded business logic units:
 
-The animating force that brings everything to life through dependency injection and wiring.
+- **notion** - Notion API integration
+- **mcp** - MCP protocol handling
+
+##### 🎭 Psychon (Ψυχόν) - The Soul
+The wiring layer that brings everything to life.
 
 ## Common Tasks
 
-### "I want to add logging"
+### "I want to add a pure interface"
+→ Go to `ecosystem/moria/@oaknational/mcp-moria/src/interfaces/`
 
-→ Go to [`src/chora/aither/logging/`](src/chora/aither/logging/)
+### "I need runtime-adaptive behavior"
+→ Create a new tissue in `ecosystem/histoi/`
+
+### "I want to add logging to my organism"
+→ Go to `src/chora/aither/logging/`
 
 ### "I need to add a new type"
+→ For pure types: `ecosystem/moria/@oaknational/mcp-moria/src/types/`
+→ For organism-specific: `src/chora/stroma/types/`
 
-→ Go to [`src/chora/stroma/types/`](src/chora/stroma/types/)
-
-### "I want to modify the Notion integration"
-
-→ Go to [`src/organa/notion/`](src/organa/notion/)
+### "I want to modify Notion integration"
+→ Go to `src/organa/notion/`
 
 ### "I need to add a new MCP tool"
+→ Go to `src/organa/mcp/tools/`
 
-→ Go to [`src/organa/mcp/tools/`](src/organa/mcp/tools/)
+## Import Rules
 
-### "I want to change configuration"
-
-→ Go to [`src/chora/phaneron/config/`](src/chora/phaneron/config/)
-
-### "I need to write tests"
-
-→ Test mocks are in [`src/chora/eidola/`](src/chora/eidola/)
-
-## Import Examples
-
+### Workspace Level
 ```typescript
-// Types and contracts
-import type { CoreDependencies } from '@chora/stroma';
+// ✅ ALLOWED
+// Psycha imports from Moria and Histoi
+import { Logger } from '@oaknational/mcp-moria';
+import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
 
-// Logging
-import { createConsoleLogger } from '@chora/aither';
+// ❌ FORBIDDEN
+// Moria cannot import anything
+import something from 'any-package'; // NO!
 
-// Configuration
-import { getNotionConfig } from '@chora/phaneron';
-
-// Test mocks
-import { createMockNotionClient } from '@chora/eidola';
-
-// Notion operations
-import { createNotionOperations } from '@organa/notion';
-
-// MCP handlers
-import { createMcpHandlers } from '@organa/mcp';
+// Histoi cannot import from other Histoi
+import { storage } from '@oaknational/mcp-histos-storage'; // NO!
 ```
 
-## VS Code Tips
+### Psychon Level
+```typescript
+// ✅ ALLOWED
+// Organa can import from chorai
+import type { Config } from '@chora/phaneron';
+import { createLogger } from '@chora/aither';
 
-1. **Quick file search**: Press `Cmd+P` (Mac) or `Ctrl+P` (Windows/Linux)
-2. **Search by English terms**: The READMEs in each directory contain English keywords
-3. **Go to symbol**: Press `Cmd+Shift+O` to navigate within a file
-4. **Find all references**: Right-click on any import to see where it's used
+// ❌ FORBIDDEN
+// Cross-organ imports
+import { notionClient } from '@organa/notion'; // NO!
+```
 
-## Further Reading
+## Migration Status
 
-- [Architecture Overview](architecture-overview.md) - High-level system introduction
-- [High-Level Architecture](architecture/high-level-architecture.md) - Detailed technical design with diagrams
-- [Biological Philosophy](architecture/biological-philosophy.md) - Deep principles behind the architecture
-- [Naming Guide](naming.md) - Complete Greek nomenclature reference
-- [Development Guide](development/README.md) - How to work with this codebase
+- **Phase 4**: ✅ Genotype/Phenotype model established
+- **Phase 5**: 🚧 Moria/Histoi/Psycha evolution in progress
+  - Moria package: In development
+  - Histoi tissues: Planned
+  - Psycha migration: Planned
+
+## Learn More
+
+- [Biological Architecture Guide](agent-guidance/architecture.md) - Authoritative reference
+- [High-Level Architecture](architecture/high-level-architecture.md) - Technical details
+- [Phase 5 Plan](.agent/plans/phase-5-moria-histoi-psycha-evolution.md) - Current work

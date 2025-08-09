@@ -586,7 +586,6 @@ NOTION_API_KEY=your_notion_api_key_here
   },
   "files": ["dist"],
   "keywords": ["mcp", "notion", "ai", "llm", "claude"],
-  "author": "Oak National Academy",
   "repository": {
     "type": "git",
     "url": "https://github.com/oaknational/oak-notion-mcp.git"
