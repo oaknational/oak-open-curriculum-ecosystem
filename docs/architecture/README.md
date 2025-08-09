@@ -2,19 +2,19 @@
 
 ## Start Here
 
-1. **→ [Architecture Map](../ARCHITECTURE_MAP.md)** - Visual guide to finding what you need
-2. **→ [Architecture Overview](../architecture-overview.md)** - High-level introduction
-3. **→ [High-Level Architecture](./high-level-architecture.md)** - Detailed technical design
+1. **→ [Biological Architecture Guide](../agent-guidance/architecture.md)** - THE authoritative reference for the two-scale architecture
+2. **→ [High-Level Architecture](./high-level-architecture.md)** - Detailed technical design with Moria/Histoi/Psycha
+3. **→ [Architecture Overview](../architecture-overview.md)** - Introduction to biological concepts
 
 ## Reference Documentation
 
 ### Core Architecture
 
-- [Architecture Map](../ARCHITECTURE_MAP.md) - 🗺️ Quick reference for navigation
-- [Architecture Overview](../architecture-overview.md) - System purpose and core concepts
-- [High-Level Architecture](./high-level-architecture.md) - Detailed technical architecture with diagrams
+- [Biological Architecture Guide](../agent-guidance/architecture.md) - Authoritative two-scale architecture reference
+- [High-Level Architecture](./high-level-architecture.md) - Moria/Histoi/Psycha three-tier design
+- [Architecture Overview](../architecture-overview.md) - Introduction to biological concepts
 - [Naming Guide](../naming.md) - Complete biological hierarchy and Greek nomenclature
-- [Biological Philosophy](./biological-philosophy.md) - Deep principles and Actions vs Access distinction
+- [Biological Philosophy](./biological-philosophy.md) - Deep principles and evolution to three-tier model
 
 ### Implementation Guides
 
@@ -23,7 +23,8 @@
 
 ### Architectural Decisions
 
-- [ADR-018: Complete Biological Architecture](./architectural-decisions/018-complete-biological-architecture.md) - Substrate, systems, and organs
+- [ADR-023: Moria/Histoi/Psycha Architecture](./architectural-decisions/023-moria-histoi-psycha-architecture.md) - Three-tier workspace model
+- [ADR-020: Biological Architecture](./architectural-decisions/020-biological-architecture.md) - Greek nomenclature and biological model
 - [ADR-009: Mathematical Foundation](./architectural-decisions/009-mathematical-foundation-for-architecture.md) - Complex systems theory
 - [All ADRs](./architectural-decisions/) - Complete decision record
 
@@ -35,5 +36,6 @@
 
 ## Implementation Plans
 
-- [Phase 3: Biological Architecture](../../.agent/plans/phase-3-biological-architecture-implementation-plan.md) - Current implementation
-- [Phase 4: oak-mcp-core Extraction](../../.agent/plans/phase-4-oak-mcp-core-implementation-plan.md) - Next phase
+- [Phase 5: Moria/Histoi/Psycha Evolution](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md) - Current implementation
+- [Phase 4: Genotype/Phenotype](../../.agent/plans/archive/phase-4-oak-mcp-core-implementation-plan.md) - Completed phase
+- [High-Level Plan](../../.agent/plans/high-level-plan.md) - Overall evolution roadmap

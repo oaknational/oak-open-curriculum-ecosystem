@@ -20,24 +20,25 @@ export NOTION_API_KEY="secret_your_actual_key_here"
 
 This project uses Greek philosophical terms to create clear conceptual boundaries. The architecture follows a **genotype/phenotype** model:
 
-## Genotype (oak-mcp-core)
-The genetic blueprint - abstract patterns all MCP servers inherit:
+## Architecture: Three-Tier Biological Ecosystem ✅
 
-| Greek Term             | English           | Purpose                        | Location                                            |
-| ---------------------- | ----------------- | ------------------------------ | --------------------------------------------------- |
-| **Morphai** (μορφαί)   | Hidden Forms      | Abstract patterns (Platonic)   | [`ecosystem/oak-mcp-core/src/chora/morphai/`]      |
-| **Stroma** (στρῶμα)    | Foundation/Matrix | Types, contracts, schemas      | [`ecosystem/oak-mcp-core/src/chora/stroma/`]       |
-| **Aither** (αἰθήρ)     | Divine Air        | Logging, events, errors        | [`ecosystem/oak-mcp-core/src/chora/aither/`]       |
-| **Phaneron** (φανερόν) | The Visible       | Configuration, settings        | [`ecosystem/oak-mcp-core/src/chora/phaneron/`]     |
-| **Eidola** (εἴδωλα)    | Phantoms          | Test mocks and fixtures        | [`ecosystem/oak-mcp-core/src/chora/eidola/`]       |
+The project implements a **Moria/Histoi/Psycha** architecture (Phase 5 completed!):
 
-## Phenotype (oak-notion-mcp)
-The expressed organism - concrete implementation for Notion:
+### Ecosystem Layers
 
-| Greek Term             | English           | Purpose                        | Location                                            |
-| ---------------------- | ----------------- | ------------------------------ | --------------------------------------------------- |
-| **Organa** (ὄργανα)    | Organs            | Business logic units           | [`ecosystem/oak-notion-mcp/src/organa/`]           |
-| **Psychon** (ψυχόν)    | Soul              | App wiring and startup         | [`ecosystem/oak-notion-mcp/src/psychon/`]          |
+| Layer | Purpose | Packages |
+|-------|---------|----------|
+| **Moria** (Μόρια) | Pure abstractions, zero dependencies | `@oaknational/mcp-moria` |
+| **Histoi** (Ἱστοί) | Transplantable runtime-adaptive tissues | `@oaknational/mcp-histos-logger`<br>`@oaknational/mcp-histos-storage`<br>`@oaknational/mcp-histos-env`<br>`@oaknational/mcp-histos-transport` |
+| **Psycha** (Ψυχά) | Living organisms (complete applications) | `@oaknational/oak-notion-mcp` |
+
+### Within Each Psycha Organism
+
+| Greek Term | English | Purpose | Location |
+|------------|---------|---------|----------|
+| **Chorai** (χώραι) | Fields | Pervasive infrastructure | Cross-cutting concerns |
+| **Organa** (ὄργανα) | Organs | Discrete business logic | [`ecosystem/psycha/oak-notion-mcp/src/organa/`] |
+| **Psychon** (ψυχόν) | Soul | Integration & wiring | [`ecosystem/psycha/oak-notion-mcp/src/psychon/`] |
 
 ### Why Greek Terms?
 
@@ -53,7 +54,7 @@ The expressed organism - concrete implementation for Notion:
 - **Organs express actuality** - How those patterns work in a specific context
 - **Inheritance through genetics** - All phenotypes inherit the same morphai from the genotype
 
-> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md) | [Morphai Philosophy](ecosystem/oak-mcp-core/src/chora/morphai/README.md)
+> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md)
 
 ## Features
 

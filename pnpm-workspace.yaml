@@ -1,6 +1,11 @@
-# pnpm workspace configuration
-# This defines the ecosystem where our MCP organisms evolve
-
 packages:
-  # All packages in the ecosystem directory
-  - 'ecosystem/*'
+  - ecosystem/psycha/oak-notion-mcp
+  - ecosystem/moria/moria-mcp
+  - ecosystem/histoi/histos-env
+  - ecosystem/histoi/histos-logger
+  - ecosystem/histoi/histos-storage
+  - ecosystem/histoi/histos-transport
+
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver

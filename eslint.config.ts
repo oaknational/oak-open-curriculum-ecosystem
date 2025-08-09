@@ -5,6 +5,7 @@
  * Each workspace has its own eslint.config.js that extends eslint.config.base.js
  */
 
-import { baseConfig } from './eslint.config.base.js';
+import { baseConfig } from './eslint.config.base';
+import { defineConfig, mergeConfig } from 'vitest/config';
 
-export default baseConfig;
+export default mergeConfig(baseConfig, defineConfig({}));

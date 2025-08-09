@@ -64,7 +64,7 @@ export interface CoreDependencies {
 
 // In oak-notion-mcp (phenotype)
 // chora/stroma/notion-types/dependencies.ts
-import type { Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-moria';
 import type { MinimalNotionClient } from './notion-client.js';
 
 export interface NotionDependencies {
