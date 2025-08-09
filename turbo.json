@@ -52,7 +52,7 @@
     "lint": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": [".eslintcache"],
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.ts",
@@ -61,39 +61,45 @@
         "eslint.config.ts",
         "tsconfig.lint.json",
         "src/**/*.ts",
+        "tests/**/*.ts",
         "**/*.test.ts",
         "**/*.spec.ts"
       ]
     },
     "test": {
       "cache": true,
-      "outputs": ["coverage/**", ".vitest/**"],
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.ts",
+        "tests/**/*.ts",
         "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.ts"
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
     "test:unit": {
       "cache": true,
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.ts",
+        "tests/**/*.ts",
         "!src/**/*.integration.test.ts",
         "!src/**/*.e2e.test.ts",
-        "vitest.config.ts"
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
     "test:integration": {
       "cache": true,
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.integration.test.ts",
         "src/**/*.ts",
-        "vitest.config.ts"
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
     "test:e2e": {

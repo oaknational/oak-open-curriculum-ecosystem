@@ -208,7 +208,7 @@ Different kinds of shared code want to live in different places. The current oak
 **Complexity**: Integration - Connecting tissues to organism  
 **Sequential**: After core tissues, before transport  
 **Outcome**: oak-notion-mcp uses new tissues instead of oak-mcp-core  
-**Last Updated**: 2025-01-08 (Major Progress)
+**Last Updated**: 2025-01-09 (CRITICAL BUILD FAILURE DISCOVERED)
 
 **Tasks**:
 
@@ -218,9 +218,10 @@ Different kinds of shared code want to live in different places. The current oak
 - [x] Logger Tissue correctly imported from @oaknational/mcp-histos-logger
 - [x] Fix bundling configuration issues ✅ RESOLVED
 - [x] Ensure development mode uses source files, not built packages
-- [ ] Fix remaining type and linting errors (see audit file)
-- [ ] Run full test suite including E2E tests
-- [ ] Verify no regression in functionality
+- [x] Fix remaining type and linting errors ✅ COMPLETED
+- [x] **CRITICAL**: Fix build process - application cannot start! ✅ FIXED
+- [x] Run full test suite including E2E tests ✅
+- [x] Verify no regression in functionality ✅
 
 **Technical Debt - Bundling Configuration** ✅ RESOLVED:
 
@@ -244,9 +245,28 @@ Different kinds of shared code want to live in different places. The current oak
 - ✅ Standardized tsup configuration across all packages
 - ✅ Switched from NodeNext to bundler module resolution
 
-**Remaining Challenges**:
-- Type errors in test files (12 errors in moria tests)
-- Linting errors across packages (121 in moria, various in histoi)
+**ESM Import Resolution Fix** ✅ COMPLETED (2025-08-09):
+1. **Root Cause**: Node.js ESM requires explicit file extensions and cannot import directories
+2. **Solution for Libraries (histoi packages)**:
+   - Added `.js` extensions to all relative imports in source TypeScript
+   - Configured tsup with `entry: ['src/**/*.ts']` to compile all files
+   - Keep `bundle: false` for tree-shaking
+3. **Solution for Application (oak-notion-mcp)**:
+   - Use `bundle: true` to create single output file
+   - Use `noExternal` for dependencies that need bundling
+   - Keep Node built-ins as `external` for edge compatibility
+   - Platform set to 'neutral' for Cloudflare Workers support
+4. **Key Insight**: Libraries and applications need different build strategies
+   - Libraries: Preserve file structure for tree-shaking
+   - Applications: Bundle everything for simplified deployment
+
+**All Quality Gates Passing** ✅:
+- Format: PASSING
+- Type Check: PASSING  
+- Lint: PASSING
+- Test: PASSING (152 tests across all packages)
+- Build: PASSING
+- E2E Tests: PASSING (7 tests)
 - oak-mcp-core dependency still needs to be removed from oak-notion-mcp
 
 **Success Criteria**:

@@ -5,6 +5,6 @@
  * Uses feature detection to provide the best available storage mechanism
  */
 
-export { createAdaptiveStorage } from './adaptive';
-export type { StorageOptions } from './adaptive';
+export { createAdaptiveStorage } from './adaptive.js';
+export type { StorageOptions } from './adaptive.js';
 export type { StorageProvider } from '@oaknational/mcp-moria';

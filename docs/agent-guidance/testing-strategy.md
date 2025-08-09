@@ -8,20 +8,30 @@
 - Prefer unit tests over integration tests
 - Prefer integration tests over E2E tests
 - ALL IO MUST BE MOCKED, except in E2E tests
-- NEVER create complex mocks, use simple mocks passed as arguments to the function under test. Complex mocks 1) result in testing the mocks, 2) indicate a refactor is required.
+- NEVER create complex mocks, use simple mocks passed as arguments to the function under test. Complex mocks result in testing the mocks, and indicate that product code needs refactoring and simplification in order to be easily testable.
 - ALL mocks MUST be simple fakes, passed as arguments to the function under test.
 - NEVER test external functionality, that is not under our control
 - NEVER add complex logic to tests - it risks testing the test code rather than the code under test
 - Always ask what a test is proving - it should prove something useful about the code under test
 - Each proof should happen ONCE - repeated proofs are fragile and waste time
 
+## Rules
+
+- **TDD** - ALWAYS use TDD. Write tests **FIRST**
+- **Each test proves ONE thing** - No duplicate proofs
+- **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
+- **No testing types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
+- **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
+- **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
+- **No skipped tests** - Fix it or delete it
+
 ## Definitions
 
 ### System Architecture Components
 
-- Pure function: A function that has no side effects and returns the same result for the same input. Pure functions are the building blocks of all code. Pure functions have unit tests.
-- Integration point: A point in the code where multiple units are brought together to effect change in the larger system. Typically this is where IO interfaces are injected as arguments to functions, and where other configuration occurs. Integration points define boundaries of responsibility. Integration points have integration tests.
-- System: The complete MCP server exposed via stdio transport. Systems have E2E tests.
+- Pure function: A function that has no side effects and returns the same result for the same input. Pure functions are the building blocks of all code. Pure functions have unit tests. Naming convention: `*.unit.test.ts`.
+- Integration point: A point in the code where multiple units are brought together to effect change in the larger system. Typically this is where IO interfaces are injected as arguments to functions, and where other configuration occurs. Integration points define boundaries of responsibility. Integration points have integration tests. Naming convention: `*.integration.test.ts`.
+- System: The complete MCP server exposed via stdio transport. Systems have E2E tests. Naming convention: `*.e2e.test.ts`.
 
 ### Test Types
 
@@ -252,7 +262,7 @@ describe('Psychon assembly', () => {
 
 ## Development
 
-- ALWAYS USE TDD and BDD in parallel
+- ALWAYS USE TDD
 - Use Vitest for all tests
 - Use the MCP client SDK for E2E tests
 - Use the canonical mocking approaches for the testing tools in use for a given test.

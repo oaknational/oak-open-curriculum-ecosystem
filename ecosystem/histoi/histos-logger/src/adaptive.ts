@@ -4,8 +4,8 @@
  */
 
 import type { Logger } from '@oaknational/mcp-moria';
-import type { LoggerOptions } from './types';
-import { ConsolaLogger } from './consola-logger';
+import type { LoggerOptions } from './types.js';
+import { ConsolaLogger } from './consola-logger.js';
 
 /**
  * Creates a logger using Consola which works in any environment

@@ -47,8 +47,7 @@ async function createServerDependencies(
   const { createNotionOperations } = await import('../organa/notion');
 
   log('[STARTUP] Creating logger...');
-  // Can now pass the LOG_LEVEL string directly (e.g., "INFO", "DEBUG", "ERROR")
-  const logger = await createAdaptiveLogger({
+  const logger = createAdaptiveLogger({
     level: environment.LOG_LEVEL,
     name: 'oak-notion-mcp',
   });

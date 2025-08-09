@@ -4,7 +4,7 @@
 
 import type { StorageProvider } from '@oaknational/mcp-moria';
 
-import { detectStorageOptions, STORAGE_OPTIONS, type GThis } from './detect-storage-options';
+import { detectStorageOptions, STORAGE_OPTIONS, type GThis } from './detect-storage-options.js';
 
 export interface StorageOptions {
   namespace?: string;
@@ -22,72 +22,76 @@ class StorageNotSupportedError extends Error {
   }
 }
 
+interface FSModule {
+  readFile: (path: string, encoding: string) => Promise<string>;
+  writeFile: (path: string, data: string, encoding: string) => Promise<void>;
+  unlink: (path: string) => Promise<void>;
+  access: (path: string) => Promise<void>;
+  readdir: (path: string) => Promise<string[]>;
+  mkdir: (path: string, options: { recursive: boolean }) => Promise<string | undefined>;
+}
+
+interface PathModule {
+  join: (...paths: string[]) => string;
+}
+
 /**
- * Creates file-based storage provider
+ * Creates read/write operations for file storage
  */
-async function createFileStorage(options?: StorageOptions): Promise<StorageProvider> {
-  const fs = await import('node:fs/promises');
-  const path = await import('node:path');
-
-  const basePath = options?.basePath ?? '.storage';
-  const namespace = options?.namespace ?? 'default';
-  const dir = path.join(basePath, namespace);
-
-  // Ensure directory exists
-  await fs.mkdir(dir, { recursive: true });
+function createFileOps(dir: string, fs: FSModule, path: PathModule) {
+  const getFilePath = (key: string): string => path.join(dir, `${key}.json`);
 
   return {
     async get(key: string): Promise<string | null> {
       try {
-        const filePath = path.join(dir, `${key}.json`);
-        const content = await fs.readFile(filePath, 'utf-8');
-        return JSON.parse(content);
+        const content = await fs.readFile(getFilePath(key), 'utf-8');
+        return JSON.parse(content) as string;
       } catch {
         return null;
       }
     },
-
     async set(key: string, value: string): Promise<void> {
-      const filePath = path.join(dir, `${key}.json`);
-      await fs.writeFile(filePath, JSON.stringify(value), 'utf-8');
+      await fs.writeFile(getFilePath(key), JSON.stringify(value), 'utf-8');
     },
-
     async delete(key: string): Promise<void> {
       try {
-        const filePath = path.join(dir, `${key}.json`);
-        await fs.unlink(filePath);
+        await fs.unlink(getFilePath(key));
       } catch {
         // File doesn't exist, that's okay
       }
     },
-
     async has(key: string): Promise<boolean> {
       try {
-        const filePath = path.join(dir, `${key}.json`);
-        await fs.access(filePath);
+        await fs.access(getFilePath(key));
         return true;
       } catch {
         return false;
       }
     },
+  };
+}
 
+/**
+ * Creates bulk operations for file storage
+ */
+function createBulkOps(dir: string, fs: FSModule, path: PathModule) {
+  return {
     async clear(): Promise<void> {
       try {
         const files = await fs.readdir(dir);
         await Promise.all(
           files
-            .filter((f) => f.endsWith('.json'))
-            .map((f) => fs.unlink(path.join(dir, f)))
+            .filter((f: string) => f.endsWith('.json'))
+            .map((f: string) => fs.unlink(path.join(dir, f))),
         );
       } catch {
         // Directory might not exist
       }
     },
-
     async keys(): Promise<string[]> {
       try {
         const files = await fs.readdir(dir);
-        return files.filter((f) => f.endsWith('.json')).map((f) => f.slice(0, -5)); // Remove .json extension
+        return files.filter((f: string) => f.endsWith('.json')).map((f: string) => f.slice(0, -5));
       } catch {
         return [];
       }
@@ -96,12 +100,55 @@ async function createFileStorage(options?: StorageOptions): Promise<StorageProvi
 }
 
 /**
+ * Creates file storage methods
+ */
+function createFileStorageMethods(dir: string, fs: FSModule, path: PathModule): StorageProvider {
+  return {
+    ...createFileOps(dir, fs, path),
+    ...createBulkOps(dir, fs, path),
+  };
+}
+
+/**
+ * Creates file-based storage provider
+ *
+ * @param options - Storage options
+ * @returns StorageProvider
+ *
+ * @throws TypeError if the Node.js file system is not available, can only happen through improper flow control.
+ */
+async function createFileStorage(options?: StorageOptions): Promise<StorageProvider> {
+  const fsModule = await import('node:fs/promises');
+  const pathModule = await import('node:path');
+
+  const basePath = options?.basePath ?? '.storage';
+  const namespace = options?.namespace ?? 'default';
+  const dir = pathModule.join(basePath, namespace);
+
+  // Ensure directory exists
+  await fsModule.mkdir(dir, { recursive: true });
+
+  // Cast to our interface type
+  const fs: FSModule = {
+    readFile: fsModule.readFile as FSModule['readFile'],
+    writeFile: fsModule.writeFile as FSModule['writeFile'],
+    unlink: fsModule.unlink as FSModule['unlink'],
+    access: fsModule.access as FSModule['access'],
+    readdir: fsModule.readdir as FSModule['readdir'],
+    mkdir: fsModule.mkdir as FSModule['mkdir'],
+  };
+
+  const path: PathModule = {
+    join: (...paths: string[]) => pathModule.join(...paths),
+  };
+
+  return createFileStorageMethods(dir, fs, path);
+}
+
+/**
  * Creates Cloudflare KV storage provider
  */
-async function createKVStorage(
-  gThis: GThis,
-  options?: StorageOptions,
-): Promise<StorageProvider> {
+async function createKVStorage(gThis: GThis, options?: StorageOptions): Promise<StorageProvider> {
   if (!gThis.env?.KV || typeof gThis.env.KV !== 'object') {
     throw new TypeError('Cloudflare KV confusingly not available');
   }

@@ -31,6 +31,7 @@ NOTION_API_KEY=your_notion_api_key_here
 2. **Copy environment file**: `cp .env.example .env`
 3. **Add your Notion API key** to the `.env` file
 4. **Run quality gates** to verify setup:
+
    ```bash
    pnpm format
    pnpm type-check

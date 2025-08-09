@@ -3,19 +3,21 @@ import { spawn, type ChildProcess } from 'child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { config } from 'dotenv';
-import { join, resolve } from 'path';
+import { join, dirname, resolve } from 'path';
 import { existsSync } from 'fs';
 import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { fileURLToPath } from 'url';
+
+const thisDir = dirname(fileURLToPath(import.meta.url));
 
 // Create logger for E2E tests
-const logger = await createAdaptiveLogger({
+const logger = createAdaptiveLogger({
   name: 'e2e-tests',
   level: 20, // Info level
 });
 
 // Find and load the .env file from the repo root
-// __dirname is e2e-tests, so we go up: e2e-tests -> oak-notion-mcp -> ecosystem -> repo root
-const repoRoot = resolve(__dirname, '../../..');
+const repoRoot = resolve(thisDir, '../../..');
 const envPath = join(repoRoot, '.env');
 
 if (existsSync(envPath)) {

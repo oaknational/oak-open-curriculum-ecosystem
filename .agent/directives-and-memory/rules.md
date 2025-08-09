@@ -10,14 +10,19 @@ All of these rules MUST be followed at all times.
 
 ### Design & Development
 
+#### Structure
+
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
-- **Never create compatibility layers** - replace old approaches with new approaches
+- **NEVER create compatibility layers** - replace old approaches with new approaches
 - **Pure functions first** - Use TDD to design, no side effects, no I/O (these are your "organelles")
 - **Build up through scales** - Functions → Modules (cells) → Chorai/Organa
-- **Clear boundaries at each scale** - Use barrel files (index.ts) as public APIs for modules
-- **Never disable checks** - Never disable any quality gates, never disable any linting, never disable any formatting, never disable any tests
-- **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript, do not attempt to prefix the variable with an underscore. ALWAYS fix the root cause, never work around it.
+- **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
+
+#### Code Quality
+
+- **NEVER disable checks** - Never disable any quality gates, never disable any linting, never disable any formatting, never disable any tests
+- **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript, do not attempt to prefix the variable with a `_`. ALWAYS fix the root cause, never work around it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
 
@@ -34,55 +39,30 @@ All of these rules MUST be followed at all times.
 #### Test Types
 
 - **In-process tests**: Tests that validate code imported into the test process. They are fast, specific, and do not produce side effects.
-  - **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD.
-  - **Integration test**: A test that verifies the behaviour of a collection of units. Integration tests DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing.
+  - **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD. Must be named `*.unit.test.ts`.
+  - **Integration test**: A test that verifies the behaviour of a collection of units. Integration tests DO NOT trigger IO, have NO side effects and can contain SIMPLE mocks which must be injected as arguments to the function under test. Integration tests are automatically run in CI/CD and include MCP protocol compliance testing. Must be named `*.integration.test.ts`.
 - **Out-of-process tests**: Tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
-  - **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
-
-#### Workspace-Level Testing
-
-- **Moria (pure abstractions)**: Unit tests only, no mocks, no I/O, test files named `*.test.ts`
-- **Histoi (adaptive tissues)**: Unit tests for pure logic, integration tests for runtime adaptation
-- **Psycha (complete apps)**: Integration tests for assembly, E2E tests for full behavior
-
-#### Psychon-Level Testing
-
-- **Pure functions (organelles)**: Unit test with no mocks, no side effects, no I/O
-- **Module integration (cells)**: Test with simple injected mocks, verify membrane behaviour
-- **System integration (chorai/organa)**: Test component interactions with mocked boundaries
-- **Real I/O**: Only in E2E tests
+  - **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs. Must be named `*.e2e.test.ts`.
 
 #### Universal Testing Rules
 
+- **TDD** - ALWAYS use TDD. Write tests **FIRST**
 - **Each test proves ONE thing** - No duplicate proofs
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
+- **No testing types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
 - **KISS: No complex logic in tests** - Complexity in tests is a signal that we need to step back and simplify, the code and the test.
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it
-- **TDD for Moria** - Write tests FIRST for all pure abstractions
 
 ### Biological Model Architecture
 
-Think in biological scales at two levels:
+Think in biological scales at two levels, workspace (ecosystem) and psychon (organism).
 
-#### Workspace-Level Architecture (Package Organization)
+Import patterns between categories are enforced by [ESLint Rules](../architecture/workspace-eslint-rules.md), but they can only do so much, we must be disciplined and follow the rules.
+
+#### Workspace-Level Architecture (Ecosystem Package Organisation)
 
 **Moria → Histoi → Psycha** - The three-tier ecosystem:
-
-- **Moria (Molecules/Atoms)** = Pure abstractions with zero dependencies
-  - Interfaces, types, pure algorithms
-  - NO external dependencies, NO I/O
-  - Example: `Logger` interface, `StorageProvider` interface
-  
-- **Histoi (Tissues/Matrices)** = Runtime-adaptive connective tissues
-  - Bind organisms together, provide connectivity
-  - Adapt to runtime environment (Node.js vs Edge vs Browser)
-  - Example: Adaptive logger, adaptive storage
-  
-- **Psycha (Living Organisms)** = Complete applications
-  - Compose moria abstractions + histoi tissues
-  - Full MCP servers or other complete apps
-  - Example: `oak-notion-mcp`, `github-mcp`
 
 Key principles:
 
@@ -99,17 +79,6 @@ Import rules:
 
 #### Psychon-Level Architecture (Within Each Organism)
 
-Think in biological scales within each psychon:
-
-- **Chora/Stroma** = Structural matrix (types, contracts, schemas - compile-time only)
-- **Pure functions** = Organelles (smallest units of functionality)
-- **Modules** = Cells (self-contained units with clear membrane/interface)
-- **Chora/Aither** = Divine flows (logging, events - pervasive runtime infrastructure)
-- **Chora/Phaneron** = Visible manifestation (configuration - what appears)
-- **Organa** = Discrete organs with specific functions (notion, mcp)
-- **Psychon** = The ensouled whole (complete living application)
-- **Multiple psycha** = Ecosystem (organisms interacting via contracts)
-
 Key principles:
 
 - **Stroma is foundational** - Types/contracts are the structural matrix everything follows
@@ -118,37 +87,5 @@ Key principles:
 - **Each module is a cell** - Has a membrane (index.ts), contains organelles (pure functions)
 - **Inject dependencies** - Never import across organa, chorai flow everywhere
 - **Events are multi-level** - Schemas (stroma) + Transport (aither) + Instances (runtime)
-- **Warnings are insights** - Linter warnings reveal natural architectural boundaries
 
-See [Biological Architecture Guide](../../docs/agent-guidance/architecture.md) for authoritative reference and [ADR-023](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) for the philosophical grounding.
-
-**Mathematical Foundation**: These principles are grounded in complex systems theory (Meena et al., 2023; Scheffer et al., 2009) and validated across neuroscience, ecology, and machine learning. See [ADR-009](../../docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md) for details.
-
-Example structure:
-
-```typescript
-// src/organa/notion/search/index.ts - Cell membrane (public API)
-export { createSearchService } from './factory';
-export type { SearchService, SearchResult } from './types';
-
-// src/organa/notion/search/transform.ts - Organelle (pure function)
-export function transformResults(raw: RawData): SearchResult[] {
-  // Pure transformation, no side effects
-}
-
-// src/organa/notion/search/factory.ts - Cell assembly
-export function createSearchService(deps: Dependencies): SearchService {
-  // Wire up the cell's internals
-  return {
-    search: async (query) => {
-      const raw = await deps.client.search(query);
-      return transformResults(raw); // Use organelle
-    },
-  };
-}
-
-// src/organa/notion/index.ts - Organ boundary (groups related cells)
-export { createSearchService } from './search';
-export { createQueryService } from './query';
-export type { NotionServices } from './types';
-```
+See [Architecture Guide](../../docs/agent-guidance/architecture.md) for authoritative reference and [ADR-023](../../docs/architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md) for the philosophical grounding, and [ADR-009](../../docs/architecture/architectural-decisions/009-mathematical-foundation-for-architecture.md) for the mathematical foundation -- these principles are grounded in complex systems theory and validated across neuroscience, ecology, and machine learning (Meena et al., 2023; Scheffer et al., 2009).

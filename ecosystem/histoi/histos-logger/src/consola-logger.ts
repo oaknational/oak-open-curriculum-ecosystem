@@ -5,8 +5,8 @@
 
 import { createConsola, type ConsolaOptions } from 'consola';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { LoggerOptions } from './types';
-import { levelToNumber } from './types';
+import type { LoggerOptions } from './types.js';
+import { levelToNumber } from './types.js';
 
 export class ConsolaLogger implements Logger {
   private consola: ReturnType<typeof createConsola>;

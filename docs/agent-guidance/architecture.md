@@ -31,7 +31,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 
 ### Workspace Level
 
-```
+```text
 ┌─────────────────── ECOSYSTEM ───────────────────┐
 │                                                  │
 │  ┌─────────── MORIA ───────────┐                │
@@ -56,7 +56,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 
 ### Psychon Level (Within Each Organism)
 
-```
+```text
 ┌─────────────────────────── PSYCHON ───────────────────────────┐
 │                    (The Ensouled Whole)                        │
 │                                                                │
@@ -111,7 +111,7 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 
 ### Workspace Level: Which Package?
 
-```
+```text
 Is it a pure abstraction with zero dependencies?
   └─ YES → ecosystem/moria/ (molecules/atoms)
 
@@ -124,7 +124,7 @@ Is it a complete application?
 
 ### Psychon Level: Where in the Organism?
 
-```
+```text
 Is it a type, contract, or schema?
   └─ YES → chora/stroma/ (compile-time structure)
 
@@ -324,7 +324,6 @@ This architecture is based on:
 ## References
 
 - [ADR-023: Moria/Histoi/Psycha Architecture](../architecture/architectural-decisions/023-moria-histoi-psycha-architecture.md)
-- [ADR-020: Biological Architecture](../architecture/architectural-decisions/020-biological-architecture.md)
 - [Phase 5: Moria/Histoi/Psycha Evolution](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md)
 - [Testing Strategy](testing-strategy.md)
 - [Workspace ESLint Rules](../architecture/workspace-eslint-rules.md)
