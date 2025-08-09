@@ -145,6 +145,7 @@ vite.config.ts.timestamp-*
 
 # Type declarations
 dist
+**/dist
 **/*.d.ts
 **/*.d.ts.map
 
