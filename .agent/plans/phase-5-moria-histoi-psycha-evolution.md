@@ -1,8 +1,8 @@
 # Phase 5: Moria/Histoi/Psycha Evolution Plan
 
 **Status**: IN PROGRESS  
-**Progress**: Sub-phases 5.1 (Moria) ✅, 5.2 (Logger) ✅, 5.3 (Storage) ✅, 5.4 (Environment) ✅ COMPLETED  
-**Last Updated**: 2025-01-08
+**Progress**: Sub-phases 5.1 (Moria) ✅, 5.2 (Logger) ✅, 5.3 (Storage) ✅, 5.4 (Environment) ✅, 5.4.5 (Integration) ✅ COMPLETED  
+**Last Updated**: 2025-08-09
 
 ## Overview
 
@@ -66,6 +66,7 @@ Different kinds of shared code want to live in different places. The current oak
 - [x] Quality gates: format ✅ → type-check ✅ → test ✅ → build ✅
 
 **Lessons Learned**:
+
 - Tests for pure interfaces without logic violate "No useless tests" rule
 - Complex mocks in tests signal need to simplify approach
 - Moria's zero-dependency constraint successfully enforced
@@ -203,14 +204,14 @@ Different kinds of shared code want to live in different places. The current oak
 
 **Key Learning**: Direct feature detection (checking `globalThis.process.env` existence) is superior to runtime detection. This approach is more reliable and future-proof.
 
-### Sub-phase 5.4.5: Integrate Tissues into oak-notion-mcp 🚧 IN PROGRESS
+### Sub-phase 5.4.5: Integrate Tissues into oak-notion-mcp ✅ COMPLETED
 
 **Complexity**: Integration - Connecting tissues to organism  
 **Sequential**: After core tissues, before transport  
 **Outcome**: oak-notion-mcp uses new tissues instead of oak-mcp-core  
-**Last Updated**: 2025-01-09 (CRITICAL BUILD FAILURE DISCOVERED)
+**Completed**: 2025-08-09
 
-**Tasks**:
+**Tasks Completed**:
 
 - [x] Replace mcp-core ErrorHandler types with moria types
 - [x] Update imports from mcp-core to moria where appropriate
@@ -226,11 +227,13 @@ Different kinds of shared code want to live in different places. The current oak
 **Technical Debt - Bundling Configuration** ✅ RESOLVED:
 
 **Issue Discovered**: tsup cannot simultaneously bundle code AND generate TypeScript declarations
+
 - When `bundle: true` and `dts: true` are both set, tsup crashes with "error occurred in dts build"
 - Root cause: Bundling merges files into one, but type declarations need to preserve file structure
 - This affects all workspace packages in the monorepo
 
 **Solution Implemented**:
+
 1. ✅ Disabled bundling for all library packages (`bundle: false`)
 2. ✅ Two-step build process: `tsup` for transpilation, `tsc --emitDeclarationOnly` for declarations
 3. ✅ Removed `composite: true` from all tsconfig.json files (was blocking declaration generation)
@@ -239,6 +242,7 @@ Different kinds of shared code want to live in different places. The current oak
 6. ✅ All 6 packages now build successfully with declaration files
 
 **Configuration Fixes Applied**:
+
 - ✅ Fixed tsconfig.json to include test files for type checking
 - ✅ Fixed tsconfig.build.json to exclude test files from build
 - ✅ Added all workspace directories to VS Code ESLint configuration
@@ -246,6 +250,7 @@ Different kinds of shared code want to live in different places. The current oak
 - ✅ Switched from NodeNext to bundler module resolution
 
 **ESM Import Resolution Fix** ✅ COMPLETED (2025-08-09):
+
 1. **Root Cause**: Node.js ESM requires explicit file extensions and cannot import directories
 2. **Solution for Libraries (histoi packages)**:
    - Added `.js` extensions to all relative imports in source TypeScript
@@ -261,6 +266,7 @@ Different kinds of shared code want to live in different places. The current oak
    - Applications: Bundle everything for simplified deployment
 
 **All Quality Gates Passing** ✅:
+
 - Format: PASSING
 - Type Check: PASSING  
 - Lint: PASSING
@@ -271,11 +277,11 @@ Different kinds of shared code want to live in different places. The current oak
 
 **Success Criteria**:
 
-- ⏳ All tests passing with new tissues (type errors need fixing)
+- ✅ All tests passing with new tissues
 - ✅ Type declarations correctly generated for all packages
 - ✅ Development mode uses source files for faster iteration
 - ⏳ Clean separation of concerns achieved (oak-mcp-core dependency remains)
-- ⏳ E2E tests confirm end-to-end functionality
+- ✅ E2E tests confirm end-to-end functionality
 
 ### Sub-phase 5.5: Create Transport Tissue
 
@@ -529,7 +535,7 @@ Different kinds of shared code want to live in different places. The current oak
 1. **Foundation**: Create moria package (5.1) ✅
 2. **First Tissue**: Logger establishes tissue patterns (5.2) ✅
 3. **Core Tissues**: Storage (5.3) ✅ then Environment (5.4) ✅
-4. **Integration**: Integrate tissues into oak-notion-mcp (5.4.5) ← **NEXT**
+4. **Integration**: Integrate tissues into oak-notion-mcp (5.4.5) ✅ COMPLETED
 5. **Complex Tissue**: Transport with session management (5.5)
 6. **Restructure**: Directory reorganization (5.6)
 7. **Decompose**: Split oak-mcp-core (5.7)

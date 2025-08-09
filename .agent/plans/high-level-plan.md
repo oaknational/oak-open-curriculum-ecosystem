@@ -367,10 +367,10 @@ oak-notion-mcp/                 # Repository root
 
 ### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
 
-**Status**: Sub-phase 5.1 (Moria Package) ✅ COMPLETED  
-**Last Updated**: 2025-01-08
+**Status**: Sub-phases 5.1-5.4.5 ✅ COMPLETED (Moria, Logger, Storage, Environment tissues integrated)  
+**Last Updated**: 2025-08-09
 
-**Critical Issue Identified**: Node.js-specific code is spread throughout the codebase, violating edge runtime compatibility. This must be addressed before Phase 6.
+**Critical Build Issue**: ✅ RESOLVED - Fixed ESM import issues and tsup configuration for both libraries and applications
 
 **Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues
 
@@ -394,22 +394,33 @@ oak-notion-mcp/                 # Repository root
 - **Remotely**: On edge runtimes using Streamable HTTP transport (future implementation)
 - Session management handles stateful operations for remote deployments
 
-**Completed in Sub-phase 5.1**:
+**Completed Sub-phases**:
 
-✅ **Moria Package Created** (`@oaknational/mcp-moria`):
-- 242 tests passing with 100% coverage
-- Zero external dependencies achieved
-- Comprehensive utilities implemented:
-  - Result types for functional error handling (Ok, Err, isOk, isErr, etc.)
-  - Tool, Handler, Registry patterns with EventProcessor alias
-  - State machine types and utilities
-  - Boundary pattern types (Pure, Effect, Boundary)
-  - Validation utilities without external dependencies
-  - Parsing utilities for JSON, numbers, dates, URLs, emails, UUIDs, CSV
-  - Transformation utilities (mapObject, deepClone, pipe, compose, etc.)
-- oak-mcp-core successfully updated to depend on moria
-- Workspace configuration updated to include moria packages
-- All quality gates passing (format, type-check, lint, test, build)
+✅ **5.1 - Moria Package** (`@oaknational/mcp-moria`):
+- 170 tests passing with zero dependencies
+- Pure abstractions: Result types, Tool/Handler/Registry patterns, validation/parsing utilities
+- Successfully integrated into oak-mcp-core
+
+✅ **5.2 - Logger Tissue** (`@oaknational/mcp-histos-logger`):
+- Unified Consola-based implementation with feature detection
+- 20 tests passing, works across all environments
+
+✅ **5.3 - Storage Tissue** (`@oaknational/mcp-histos-storage`):
+- Three implementations: FileSystem, LocalStorage, Memory
+- Feature detection for automatic backend selection
+- 17 tests passing
+
+✅ **5.4 - Environment Tissue** (`@oaknational/mcp-histos-env`):
+- Node, Edge, and Memory environment implementations
+- Graceful dotenv fallback
+- 37 tests passing
+
+✅ **5.4.5 - Integration** (2025-08-09):
+- Fixed critical ESM build issues
+- Configured tsup differently for libraries (preserve structure) vs applications (bundle)
+- Added `.js` extensions to all histoi package imports
+- All quality gates passing: 152 tests, 7 E2E tests
+- Application successfully starts and runs
 
 **Key Transformations** (Remaining):
 
@@ -483,6 +494,7 @@ oak-notion-mcp/                 # Repository root
 **Outcome**: Achieve true runtime isolation with Node.js-specific code confined to specific locations
 
 **Strategy**:
+
 1. **Identify Runtime-Specific Code**:
    - Audit all uses of Node.js globals
    - Map dependencies on Node.js-specific APIs
@@ -504,12 +516,14 @@ oak-notion-mcp/                 # Repository root
    - Ensure all core logic is runtime-agnostic
 
 **Success Metrics**:
+
 - Zero Node.js globals in core business logic
 - ESLint enforces runtime boundaries
 - Code runs in both Node.js and edge runtimes
 - Clear separation between runtime-specific and runtime-agnostic code
 
 **Implementation Notes**:
+
 - This is architectural debt from initial development
 - Must be resolved before ecosystem can truly support multiple runtimes
 - Aligns with histoi tissue philosophy of runtime adaptation
