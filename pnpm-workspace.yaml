@@ -1,5 +1,5 @@
 packages:
-  - ecosystem/oak-notion-mcp
+  - ecosystem/psycha/oak-notion-mcp
   - ecosystem/moria/moria-mcp
   - ecosystem/histoi/histos-env
   - ecosystem/histoi/histos-logger

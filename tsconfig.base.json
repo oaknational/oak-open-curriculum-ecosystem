@@ -16,8 +16,8 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
-      "@oaknational/oak-notion-mcp": ["./ecosystem/oak-notion-mcp/src"],
-      "@oaknational/oak-notion-mcp/*": ["./ecosystem/oak-notion-mcp/src/*"],
+      "@oaknational/oak-notion-mcp": ["./ecosystem/psycha/oak-notion-mcp/src"],
+      "@oaknational/oak-notion-mcp/*": ["./ecosystem/psycha/oak-notion-mcp/src/*"],
       "@oaknational/mcp-moria": ["./ecosystem/moria/moria-mcp/src"],
       "@oaknational/mcp-moria/*": ["./ecosystem/moria/moria-mcp/src/*"],
       "@oaknational/mcp-histos-env": ["./ecosystem/histoi/histos-env/src"],

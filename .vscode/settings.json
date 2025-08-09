@@ -93,7 +93,7 @@
   ],
   "eslint.workingDirectories": [
     
-    { "directory": "ecosystem/oak-notion-mcp", "changeProcessCWD": true },
+    { "directory": "ecosystem/psycha/oak-notion-mcp", "changeProcessCWD": true },
     { "directory": "ecosystem/moria/moria-mcp", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-env", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-logger", "changeProcessCWD": true },

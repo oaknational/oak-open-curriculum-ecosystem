@@ -150,7 +150,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  ecosystem/oak-notion-mcp:
+  ecosystem/psycha/oak-notion-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
@@ -160,10 +160,10 @@ importers:
         version: 4.0.1
       '@oaknational/mcp-histos-logger':
         specifier: workspace:^
-        version: link:../histoi/histos-logger
+        version: link:../../histoi/histos-logger
       '@oaknational/mcp-moria':
         specifier: workspace:^
-        version: link:../moria/moria-mcp
+        version: link:../../moria/moria-mcp
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1

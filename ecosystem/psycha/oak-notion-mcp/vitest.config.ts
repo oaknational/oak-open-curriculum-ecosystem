@@ -1,7 +1,7 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
-import { baseTestConfig } from '../../vitest.config.base';
+import { baseTestConfig } from '../../../vitest.config.base';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
