@@ -93,10 +93,7 @@ const level = convertLogLevel('DEBUG'); // Returns 10
 const enabled = isLevelEnabled(20, 10); // true (INFO enabled for DEBUG)
 
 // Merge contexts
-const merged = mergeLogContext(
-  { app: 'test' },
-  { user: 'alice' },
-); // { app: 'test', user: 'alice' }
+const merged = mergeLogContext({ app: 'test' }, { user: 'alice' }); // { app: 'test', user: 'alice' }
 ```
 
 ## Architecture
@@ -115,6 +112,7 @@ export class ConsolaLogger implements Logger {
 ### Pure Functions
 
 All business logic is extracted into pure functions:
+
 - `convertLogLevel`: Convert semantic levels to numeric
 - `toConsolaLevel`: Map to Consola's scale
 - `mergeLogContext`: Combine context objects
@@ -123,14 +121,14 @@ All business logic is extracted into pure functions:
 
 ## Log Levels
 
-| Level | Numeric | Description |
-|-------|---------|-------------|
-| TRACE | 0 | Detailed debugging information |
-| DEBUG | 10 | Debug information |
-| INFO | 20 | General information |
-| WARN | 30 | Warning messages |
-| ERROR | 40 | Error messages |
-| FATAL | 50 | Fatal errors |
+| Level | Numeric | Description                    |
+| ----- | ------- | ------------------------------ |
+| TRACE | 0       | Detailed debugging information |
+| DEBUG | 10      | Debug information              |
+| INFO  | 20      | General information            |
+| WARN  | 30      | Warning messages               |
+| ERROR | 40      | Error messages                 |
+| FATAL | 50      | Fatal errors                   |
 
 ## Testing
 

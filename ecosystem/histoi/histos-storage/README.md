@@ -54,11 +54,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
 // Explicitly use filesystem backend with injected dependencies
-const storage = createFileStorage(
-  fs,
-  path,
-  './data/storage',
-);
+const storage = createFileStorage(fs, path, './data/storage');
 
 await storage.set('config', { theme: 'dark' });
 ```
@@ -82,10 +78,10 @@ const value = await storage.get('key');
 ```typescript
 // FileSystem storage with injected dependencies
 export function createFileStorage(
-  fs: FileSystemInterface,    // Injected filesystem
-  path: PathInterface,        // Injected path module
-  dir: string,               // Storage directory
-): StorageProvider
+  fs: FileSystemInterface, // Injected filesystem
+  path: PathInterface, // Injected path module
+  dir: string, // Storage directory
+): StorageProvider;
 ```
 
 ### Backend Detection
@@ -144,9 +140,7 @@ interface StorageProvider {
 ### createAdaptiveStorage
 
 ```typescript
-async function createAdaptiveStorage(
-  options: StorageOptions,
-): Promise<StorageProvider>;
+async function createAdaptiveStorage(options: StorageOptions): Promise<StorageProvider>;
 ```
 
 ### File Storage
@@ -190,8 +184,8 @@ pnpm test tests/adaptive.e2e.test.ts
 ## Error Handling
 
 ```typescript
-const storage = await createAdaptiveStorage({ 
-  namespace: 'app' 
+const storage = await createAdaptiveStorage({
+  namespace: 'app',
 });
 
 try {

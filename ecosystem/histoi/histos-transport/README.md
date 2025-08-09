@@ -27,11 +27,7 @@ import { StdioTransport } from '@oaknational/mcp-histos-transport';
 import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
 
 // Create transport with injected dependencies
-const transport = new StdioTransport(
-  process.stdin,
-  process.stdout,
-  createAdaptiveLogger(),
-);
+const transport = new StdioTransport(process.stdin, process.stdout, createAdaptiveLogger());
 
 // Send a message
 await transport.send({
@@ -52,8 +48,8 @@ for await (const message of transport.receive()) {
 The transport tissue exports pure functions for message handling:
 
 ```typescript
-import { 
-  formatJsonRpcMessage, 
+import {
+  formatJsonRpcMessage,
   parseJsonRpcMessage,
   MessageBuffer,
 } from '@oaknational/mcp-histos-transport';
@@ -117,12 +113,8 @@ pnpm test tests/stdio-transport.integration.test.ts
 
 ```typescript
 class StdioTransport implements Transport {
-  constructor(
-    stdin: NodeJS.ReadStream,
-    stdout: NodeJS.WriteStream, 
-    logger: Logger,
-  );
-  
+  constructor(stdin: NodeJS.ReadStream, stdout: NodeJS.WriteStream, logger: Logger);
+
   send(message: JsonRpcMessage): Promise<void>;
   receive(): AsyncIterableIterator<JsonRpcMessage>;
   close(): Promise<void>;
