@@ -9,29 +9,3 @@ export interface LoggerOptions {
   name?: string;
   context?: Record<string, unknown>;
 }
-
-/**
- * Converts semantic log level names to numeric values
- */
-export function levelToNumber(level: LogLevel | number): number {
-  if (typeof level === 'number') {
-    return level;
-  }
-
-  switch (level) {
-    case 'TRACE':
-      return 0;
-    case 'DEBUG':
-      return 10;
-    case 'INFO':
-      return 20;
-    case 'WARN':
-      return 30;
-    case 'ERROR':
-      return 40;
-    case 'FATAL':
-      return 50;
-    default:
-      return 20; // Default to INFO
-  }
-}

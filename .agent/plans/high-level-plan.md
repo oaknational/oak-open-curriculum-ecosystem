@@ -367,7 +367,7 @@ oak-notion-mcp/                 # Repository root
 
 ### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
 
-**Status**: Sub-phases 5.1-5.7 ✅ COMPLETED | 5.8 ⏳ IN PROGRESS  
+**Status**: Sub-phases 5.1-5.8 ✅ COMPLETED | 5.9 (Documentation) ⏳ REMAINING  
 **Last Updated**: 2025-01-09
 
 **Critical Build Issue**: ✅ RESOLVED - Fixed ESM import issues and tsup configuration for both libraries and applications
@@ -421,13 +421,42 @@ oak-notion-mcp/                 # Repository root
 - Graceful dotenv fallback
 - 37 tests passing
 
-✅ **5.4.5 - Integration** (2025-08-09):
+✅ **5.4.5 - Integration** (2025-01-09):
 
 - Fixed critical ESM build issues
 - Configured tsup differently for libraries (preserve structure) vs applications (bundle)
 - Added `.js` extensions to all histoi package imports
 - All quality gates passing: 152 tests, 7 E2E tests
 - Application successfully starts and runs
+
+✅ **5.5 - Directory Restructure**:
+
+- Created `ecosystem/psycha/` directory
+- Moved `oak-notion-mcp` → `psycha/oak-notion-mcp`
+- Updated all import paths and configurations
+- All quality gates passing
+
+✅ **5.6 - ESLint Architectural Enforcement**:
+
+- Implemented boundary rules to prevent cross-tissue imports
+- No direct Node.js globals in Histoi tissues
+- Clear error messages for violations
+
+✅ **5.7 - STDIO Transport Tissue**:
+
+- Created `@oaknational/mcp-histos-transport`
+- Full dependency injection pattern
+- Pure functions extracted (MessageBuffer, formatMessage, parseMessage)
+- Gold standard implementation
+
+✅ **5.8 - Histoi Tissue Standardization** (2025-01-09):
+
+- Refactored histos-logger with pure functions and dependency injection
+- Refactored histos-storage with file-storage module
+- All tissues follow consistent patterns
+- All quality gates passing (format, type-check, lint, test, build)
+- Test auditor confirmed "gold standard" test quality
+- Code reviewer gave A/A+ grades
 
 **Key Transformations**:
 
@@ -450,22 +479,11 @@ oak-notion-mcp/                 # Repository root
 
 ⏳ **Remaining** (Phase 5):
 
-1. **Complete Directory Restructure**:
-   - Move oak-notion-mcp to `ecosystem/psycha/`
-   - Update all import paths and configurations
-
-2. **Enforce Architecture with ESLint**:
-   - Implement boundary rules
-   - Prevent cross-tissue and cross-organism imports
-
-3. **Create STDIO Transport Tissue**:
-   - `@oaknational/mcp-histos-transport` with stdio support
-   - Foundation for future HTTP transport (Phase 7)
-
-4. **Update Documentation**:
-   - Architecture overview with final structure
-   - Tissue adaptation patterns
-   - Troubleshooting guide
+1. **Update Documentation (Sub-phase 5.9)**:
+   - Update `/docs/architecture/high-level-architecture.md` with Moria/Histoi/Psycha model
+   - Create `/docs/architecture/tissue-adaptation-patterns.md` using histos-transport as reference
+   - Update all Histoi package README files
+   - Create `/docs/troubleshooting/histoi-tissues.md`
 
 **Documentation Updates Required**:
 

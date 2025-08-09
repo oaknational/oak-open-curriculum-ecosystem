@@ -39,11 +39,10 @@ describe('Result utilities', () => {
 
     it('should work with custom error types', () => {
       class CustomError extends Error {
-        constructor(
-          public code: number,
-          message: string,
-        ) {
+        public code: number;
+        constructor(code: number, message: string) {
           super(message);
+          this.code = code;
         }
       }
 

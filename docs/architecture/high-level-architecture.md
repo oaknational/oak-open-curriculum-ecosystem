@@ -22,14 +22,18 @@
 
 The Oak Notion MCP Server implements a **Biological Architecture with Greek Nomenclature** - a mathematically-grounded approach to software design inspired by how biological systems achieve stability, resilience, and evolution at scale.
 
-### Architecture Evolution
+### Architecture Evolution ✅ COMPLETED (Phase 5)
 
-We are evolving from a two-tier genotype/phenotype model to a three-tier workspace architecture:
+We have successfully evolved from a two-tier genotype/phenotype model to a three-tier workspace architecture:
 
-#### Workspace Architecture (Moria/Histoi/Psycha)
-- **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies
-- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms
-- **Psycha (Living Organisms)**: Complete applications composed from moria and histoi
+#### Workspace Architecture (Moria/Histoi/Psycha) ✅ IMPLEMENTED
+- **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies - `@oaknational/mcp-moria` package
+- **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues:
+  - `@oaknational/mcp-histos-logger` - Adaptive logging with Consola
+  - `@oaknational/mcp-histos-storage` - FileSystem/LocalStorage/Memory storage
+  - `@oaknational/mcp-histos-env` - Environment abstraction
+  - `@oaknational/mcp-histos-transport` - STDIO transport (gold standard implementation)
+- **Psycha (Living Organisms)**: Complete applications - `@oaknational/oak-notion-mcp`
 
 #### Psychon Architecture (Within Each Organism)
 - **Chorai**: Pervasive infrastructure fields (morphai, stroma, aither, phaneron)
@@ -54,10 +58,10 @@ We are evolving from a two-tier genotype/phenotype model to a three-tier workspa
 ## Core Design Principles
 
 1. **Pure Functions First**: Maximum business logic as pure, side-effect-free functions
-2. **Zero Dependencies in Moria**: Absolute purity for foundational abstractions
-3. **Runtime Adaptation in Histoi**: Tissues adapt to their host environment
-4. **Dependency Injection**: All I/O operations are injected
-5. **Clear Boundaries**: Well-defined interfaces between all layers
+2. **Zero Dependencies in Moria**: Absolute purity for foundational abstractions ✅
+3. **Runtime Adaptation in Histoi**: Tissues adapt to their host environment ✅
+4. **Dependency Injection**: All I/O operations are injected (see ADR-024) ✅
+5. **Clear Boundaries**: ESLint-enforced interfaces between all layers ✅
 6. **Test-Driven Development**: Tests written before implementation
 7. **Type Safety**: Strict TypeScript with no `any` types
 8. **Fail-Safe Defaults**: Read-only operations by default

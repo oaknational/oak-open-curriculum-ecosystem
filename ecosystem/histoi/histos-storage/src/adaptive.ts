@@ -5,6 +5,11 @@
 import type { StorageProvider } from '@oaknational/mcp-moria';
 
 import { detectStorageOptions, STORAGE_OPTIONS, type GThis } from './detect-storage-options.js';
+import {
+  createFileStorage as createFileStorageImpl,
+  type FileSystemInterface,
+  type PathInterface,
+} from './file-storage.js';
 
 export interface StorageOptions {
   namespace?: string;
@@ -22,92 +27,7 @@ class StorageNotSupportedError extends Error {
   }
 }
 
-interface FSModule {
-  readFile: (path: string, encoding: string) => Promise<string>;
-  writeFile: (path: string, data: string, encoding: string) => Promise<void>;
-  unlink: (path: string) => Promise<void>;
-  access: (path: string) => Promise<void>;
-  readdir: (path: string) => Promise<string[]>;
-  mkdir: (path: string, options: { recursive: boolean }) => Promise<string | undefined>;
-}
-
-interface PathModule {
-  join: (...paths: string[]) => string;
-}
-
-/**
- * Creates read/write operations for file storage
- */
-function createFileOps(dir: string, fs: FSModule, path: PathModule) {
-  const getFilePath = (key: string): string => path.join(dir, `${key}.json`);
-
-  return {
-    async get(key: string): Promise<string | null> {
-      try {
-        const content = await fs.readFile(getFilePath(key), 'utf-8');
-        return JSON.parse(content) as string;
-      } catch {
-        return null;
-      }
-    },
-    async set(key: string, value: string): Promise<void> {
-      await fs.writeFile(getFilePath(key), JSON.stringify(value), 'utf-8');
-    },
-    async delete(key: string): Promise<void> {
-      try {
-        await fs.unlink(getFilePath(key));
-      } catch {
-        // File doesn't exist, that's okay
-      }
-    },
-    async has(key: string): Promise<boolean> {
-      try {
-        await fs.access(getFilePath(key));
-        return true;
-      } catch {
-        return false;
-      }
-    },
-  };
-}
-
-/**
- * Creates bulk operations for file storage
- */
-function createBulkOps(dir: string, fs: FSModule, path: PathModule) {
-  return {
-    async clear(): Promise<void> {
-      try {
-        const files = await fs.readdir(dir);
-        await Promise.all(
-          files
-            .filter((f: string) => f.endsWith('.json'))
-            .map((f: string) => fs.unlink(path.join(dir, f))),
-        );
-      } catch {
-        // Directory might not exist
-      }
-    },
-    async keys(): Promise<string[]> {
-      try {
-        const files = await fs.readdir(dir);
-        return files.filter((f: string) => f.endsWith('.json')).map((f: string) => f.slice(0, -5));
-      } catch {
-        return [];
-      }
-    },
-  };
-}
-
-/**
- * Creates file storage methods
- */
-function createFileStorageMethods(dir: string, fs: FSModule, path: PathModule): StorageProvider {
-  return {
-    ...createFileOps(dir, fs, path),
-    ...createBulkOps(dir, fs, path),
-  };
-}
+// Removed - now using createFileStorage from file-storage.ts
 
 /**
  * Creates file-based storage provider
@@ -129,20 +49,20 @@ async function createFileStorage(options?: StorageOptions): Promise<StorageProvi
   await fsModule.mkdir(dir, { recursive: true });
 
   // Cast to our interface type
-  const fs: FSModule = {
-    readFile: fsModule.readFile as FSModule['readFile'],
-    writeFile: fsModule.writeFile as FSModule['writeFile'],
-    unlink: fsModule.unlink as FSModule['unlink'],
-    access: fsModule.access as FSModule['access'],
-    readdir: fsModule.readdir as FSModule['readdir'],
-    mkdir: fsModule.mkdir as FSModule['mkdir'],
+  const fs: FileSystemInterface = {
+    readFile: fsModule.readFile as FileSystemInterface['readFile'],
+    writeFile: fsModule.writeFile as FileSystemInterface['writeFile'],
+    unlink: fsModule.unlink as FileSystemInterface['unlink'],
+    access: fsModule.access as FileSystemInterface['access'],
+    readdir: fsModule.readdir as FileSystemInterface['readdir'],
+    mkdir: fsModule.mkdir as FileSystemInterface['mkdir'],
   };
 
-  const path: PathModule = {
+  const path: PathInterface = {
     join: (...paths: string[]) => pathModule.join(...paths),
   };
 
-  return createFileStorageMethods(dir, fs, path);
+  return createFileStorageImpl(fs, path, dir);
 }
 
 /**

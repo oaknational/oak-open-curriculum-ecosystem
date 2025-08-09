@@ -3,62 +3,43 @@
  * Adapts configuration based on available features
  */
 
-import { createConsola, type ConsolaOptions } from 'consola';
+import type { ConsolaInstance } from 'consola';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { LoggerOptions } from './types.js';
-import { levelToNumber } from './types.js';
+import { mergeLogContext, normalizeError } from './pure-functions.js';
 
 export class ConsolaLogger implements Logger {
-  private consola: ReturnType<typeof createConsola>;
-  private contextData: Record<string, unknown>;
+  private readonly consola: ConsolaInstance;
+  private readonly contextData: Record<string, unknown>;
 
-  constructor(
-    options?: LoggerOptions & {
-      consolaOptions?: Partial<ConsolaOptions>;
-    },
-  ) {
-    // Convert semantic level to numeric if needed
-    const numericLevel = options?.level ? levelToNumber(options.level) : 20; // Default to INFO (20)
-
-    // Consola uses 0-5 scale, so we need to map our 0-50 scale
-    const consolaLevel = Math.floor(numericLevel / 10);
-
-    this.consola = createConsola({
-      level: consolaLevel,
-      ...options?.consolaOptions,
-    });
-
-    if (options?.name) {
-      this.consola = this.consola.withTag(options.name);
-    }
-
-    this.contextData = options?.context ?? {};
+  constructor(consola: ConsolaInstance, contextData: Record<string, unknown> = {}) {
+    this.consola = consola;
+    this.contextData = contextData;
   }
 
   trace(message: string, context?: unknown): void {
-    this.consola.trace(message, this.mergeContext(context));
+    this.consola.trace(message, mergeLogContext(this.contextData, context));
   }
 
   debug(message: string, context?: unknown): void {
-    this.consola.debug(message, this.mergeContext(context));
+    this.consola.debug(message, mergeLogContext(this.contextData, context));
   }
 
   info(message: string, context?: unknown): void {
-    this.consola.info(message, this.mergeContext(context));
+    this.consola.info(message, mergeLogContext(this.contextData, context));
   }
 
   warn(message: string, context?: unknown): void {
-    this.consola.warn(message, this.mergeContext(context));
+    this.consola.warn(message, mergeLogContext(this.contextData, context));
   }
 
   error(message: string, error?: unknown, context?: unknown): void {
-    const errorObj = error instanceof Error ? error : new Error(String(error));
-    this.consola.error(message, errorObj, this.mergeContext(context));
+    const errorObj = error ? normalizeError(error) : undefined;
+    this.consola.error(message, errorObj, mergeLogContext(this.contextData, context));
   }
 
   fatal(message: string, error?: unknown, context?: unknown): void {
-    const errorObj = error instanceof Error ? error : new Error(String(error));
-    this.consola.fatal(message, errorObj, this.mergeContext(context));
+    const errorObj = error ? normalizeError(error) : undefined;
+    this.consola.fatal(message, errorObj, mergeLogContext(this.contextData, context));
   }
 
   isLevelEnabled?(level: number): boolean {
@@ -66,17 +47,6 @@ export class ConsolaLogger implements Logger {
   }
 
   child?(context: Record<string, unknown>): Logger {
-    return new ConsolaLogger({
-      level: this.consola.level,
-      context: { ...this.contextData, ...context },
-    });
-  }
-
-  private mergeContext(context?: unknown): Record<string, unknown> {
-    if (!context) return this.contextData;
-    if (typeof context === 'object' && !Array.isArray(context)) {
-      return { ...this.contextData, ...(context as Record<string, unknown>) };
-    }
-    return { ...this.contextData, value: context };
+    return new ConsolaLogger(this.consola, mergeLogContext(this.contextData, context));
   }
 }

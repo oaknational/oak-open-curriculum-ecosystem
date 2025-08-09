@@ -7,6 +7,12 @@
 
 export { createAdaptiveLogger } from './adaptive.js';
 export { ConsolaLogger } from './consola-logger.js';
-export { levelToNumber } from './types.js';
+export {
+  convertLogLevel,
+  toConsolaLevel,
+  mergeLogContext,
+  normalizeError,
+  isLevelEnabled,
+} from './pure-functions.js';
 export type { LoggerOptions, LogLevel } from './types.js';
 export type { Logger } from '@oaknational/mcp-moria';
