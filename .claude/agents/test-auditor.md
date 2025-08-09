@@ -22,6 +22,8 @@ You will audit test files by:
 - **Reject complex test setups** - if a test requires elaborate configuration, flag it for refactoring
 - **Reject complex mocks** - mocks should be dead simple; complexity indicates the code under test needs refactoring
 - **View all complexity as a code smell** - when you encounter complex tests, your primary recommendation should be to refactor the product code to be more testable
+- **Reject any unit test that contains a mock** - Unit tests must be of pure functions. The answer is to refactor the code into pure functions and integration points.
+- **Reject ALL IO in unit and integration tests** - Unit test and integration tests must not perform any file, network, or other IO operations (stdio is sometimes allowable in integration tests). The answer is to refactor the code into pure functions and integration points that take IO interfaces as mockable arguments.
 
 ### Test Value Assessment
 

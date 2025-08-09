@@ -9,7 +9,9 @@ The question/request is:
 $ARGUMENT
 ```
 
-Before answering, work through this step-by-step, thinking really hard at each point:
+Think hard about the question/request, these are your thoughts. Reflect deeply on those thoughts, these are your reflections. Comprehensively consider those reflections, these are your insights. Think hard about what the insights tell you about the original question/request, and the context.
+
+Then, using your thoughts, reflections, and insights, work through this step-by-step, thinking really hard at each point:
 
 1. UNDERSTAND: What is the core question being asked?
 2. ANALYZE: What are the key factors/components involved?

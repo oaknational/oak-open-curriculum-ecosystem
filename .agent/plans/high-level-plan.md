@@ -367,12 +367,14 @@ oak-notion-mcp/                 # Repository root
 
 ### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
 
-**Status**: Sub-phases 5.1-5.4.5 ✅ COMPLETED (Moria, Logger, Storage, Environment tissues integrated)  
+**Status**: Sub-phases 5.1-5.4.5 ✅ COMPLETED | 5.5-5.8 ⏳ PENDING  
 **Last Updated**: 2025-08-09
 
 **Critical Build Issue**: ✅ RESOLVED - Fixed ESM import issues and tsup configuration for both libraries and applications
 
 **Outcome**: Transform the monolithic genotype/phenotype model into a three-tier biological ecosystem with transplantable tissues
+
+**Note**: Performance optimization sub-phases (5.9-5.11) have been moved to Phase 7 to prioritize Oak API functionality
 
 **Core Insight**: Different kinds of shared code want to live in different places. Oak-mcp-core violates the Single Responsibility Principle by trying to be three things: pure abstractions, runtime capabilities, AND development conveniences. This creates fundamental architectural tension.
 
@@ -397,58 +399,71 @@ oak-notion-mcp/                 # Repository root
 **Completed Sub-phases**:
 
 ✅ **5.1 - Moria Package** (`@oaknational/mcp-moria`):
+
 - 170 tests passing with zero dependencies
 - Pure abstractions: Result types, Tool/Handler/Registry patterns, validation/parsing utilities
 - Successfully integrated into oak-mcp-core
 
 ✅ **5.2 - Logger Tissue** (`@oaknational/mcp-histos-logger`):
+
 - Unified Consola-based implementation with feature detection
 - 20 tests passing, works across all environments
 
 ✅ **5.3 - Storage Tissue** (`@oaknational/mcp-histos-storage`):
+
 - Three implementations: FileSystem, LocalStorage, Memory
 - Feature detection for automatic backend selection
 - 17 tests passing
 
 ✅ **5.4 - Environment Tissue** (`@oaknational/mcp-histos-env`):
+
 - Node, Edge, and Memory environment implementations
 - Graceful dotenv fallback
 - 37 tests passing
 
 ✅ **5.4.5 - Integration** (2025-08-09):
+
 - Fixed critical ESM build issues
 - Configured tsup differently for libraries (preserve structure) vs applications (bundle)
 - Added `.js` extensions to all histoi package imports
 - All quality gates passing: 152 tests, 7 E2E tests
 - Application successfully starts and runs
 
-**Key Transformations** (Remaining):
+**Key Transformations**:
 
+✅ **Completed**:
 1. **Split oak-mcp-core** into:
-   - ✅ `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms) - COMPLETED
-   - ⏳ Multiple tissue packages: Adaptive, transplantable implementations - NEXT
+   - `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms)
+   - Three tissue packages: Logger, Storage, Environment (all operational)
 
-2. **Create Tissue Packages**:
-   - `@oaknational/mcp-histos-logger`: Adaptive logging (Node/Edge/Browser)
-   - `@oaknational/mcp-histos-storage`: Adaptive storage (FileSystem/KV Store)
-   - `@oaknational/mcp-histos-env`: Adaptive environment (process.env/context)
-   - Each with tree-shakeable runtime adaptations
+2. **Created Tissue Packages**:
+   - `@oaknational/mcp-histos-logger`: Adaptive logging (Consola-based)
+   - `@oaknational/mcp-histos-storage`: Adaptive storage (FileSystem/LocalStorage/Memory)
+   - `@oaknational/mcp-histos-env`: Adaptive environment (Node/Edge/Memory)
+   - Each with feature detection and graceful degradation
 
-3. **Reorganize into Biological Directories**:
-   - `ecosystem/moria/`: Pure molecules/atoms
-   - `ecosystem/histoi/`: Transplantable tissues
-   - `ecosystem/psycha/`: Living organisms
+3. **Reorganized into Biological Directories**:
+   - `ecosystem/moria/`: Pure molecules/atoms ✅
+   - `ecosystem/histoi/`: Transplantable tissues ✅
+   - `ecosystem/psycha/`: Living organisms ⏳ (needs directory move)
 
-4. **Enable Runtime Adaptation** (Three Patterns):
-   - **Automatic**: Runtime detection chooses implementation
-   - **Explicit**: Import specific runtime (e.g., `/node` or `/edge`)
-   - **Bundler**: Configure bundler to force specific runtime
-   - Tree-shaking via conditional exports and dynamic imports
+⏳ **Remaining** (Phase 5):
+1. **Complete Directory Restructure**:
+   - Move oak-notion-mcp to `ecosystem/psycha/`
+   - Update all import paths and configurations
 
-5. **Create Transport Tissue** for deployment flexibility:
-   - `@oaknational/mcp-histos-transport` with stdio and Streamable HTTP
-   - Session management for stateful remote operations
-   - Automatic transport selection based on deployment context
+2. **Enforce Architecture with ESLint**:
+   - Implement boundary rules
+   - Prevent cross-tissue and cross-organism imports
+
+3. **Create STDIO Transport Tissue**:
+   - `@oaknational/mcp-histos-transport` with stdio support
+   - Foundation for future HTTP transport (Phase 7)
+
+4. **Update Documentation**:
+   - Architecture overview with final structure
+   - Tissue adaptation patterns
+   - Troubleshooting guide
 
 **Documentation Updates Required**:
 
@@ -546,7 +561,47 @@ Sub-phase 6.2: Elastic Search Index with Lexical and Semantic Search Capabilitie
 - Additional MCP tools for interacting with the elastic search index
 - MCP server workflows for carrying out a search operation, and then fetching Open Curriculum API data based on the search results
 
-### Phase 7: Production Readiness
+### Phase 7: Post-Oak API Optimization and Performance
+
+**Outcome**: Complete HTTP transport support, tree-shaking optimization, and performance validation
+
+**Rationale**: These improvements enhance the ecosystem but are not required for Oak API functionality. Separating them allows us to deliver working Oak API sooner while maintaining our architectural vision.
+
+**Key Deliverables**:
+
+- [ ] **HTTP Transport Addition** (Sub-phase 5.9 from Phase 5):
+  - [ ] Streamable HTTP transport implementation (NOT SSE) 
+  - [ ] Session management for stateful remote operations
+  - [ ] Retry logic with exponential backoff
+  - [ ] Automatic transport selection based on deployment context
+  - [ ] Remote deployment capability for edge runtimes
+  - [ ] Integration with existing STDIO transport in histos-transport tissue
+
+- [ ] **Tree-Shaking Optimization** (Sub-phase 5.10 from Phase 5):
+  - [ ] Audit all packages for side effects
+  - [ ] Add `"sideEffects": false` to package.json files
+  - [ ] Test bundle sizes with different import patterns
+  - [ ] Bundle size CI checks
+  - [ ] Target: <10KB per tissue when tree-shaken
+  - [ ] Documentation of tree-shaking patterns
+
+- [ ] **Performance Validation** (Sub-phase 5.11 from Phase 5):
+  - [ ] Comprehensive benchmark suite
+  - [ ] Testing across Node.js, Edge, Browser environments
+  - [ ] Memory and startup time measurements
+  - [ ] Performance regression tests in CI
+  - [ ] Performance characteristics documentation
+  - [ ] Bundle size tracking over time
+
+**Quality Checkpoints**:
+
+- Transport works for both local (stdio) and remote (HTTP) deployments
+- Bundle sizes meet targets (<10KB per tissue)
+- Performance benchmarks established and documented
+- No performance regressions in CI
+- Remote MCP servers deployable to edge runtimes
+
+### Phase 8: Production Readiness
 
 **Outcome**: Published npm packages ready for public use
 
@@ -597,7 +652,7 @@ Sub-phase 6.2: Elastic Search Index with Lexical and Semantic Search Capabilitie
 - Example integrations working with Claude Desktop
 - Community feedback incorporated
 
-### Phase 8: Safety Controls
+### Phase 9: Safety Controls
 
 **Outcome**: Comprehensive safety controls for MCP servers
 
@@ -612,7 +667,7 @@ Sub-phase 6.2: Elastic Search Index with Lexical and Semantic Search Capabilitie
   - [ ] Resource subscriptions for real-time updates - not possible until MCP clients support push notifications
   - [ ] Batch operations support
 
-### Phase 9: Ecosystem Expansion
+### Phase 10: Ecosystem Expansion
 
 **Outcome**: Multiple MCP psycha sharing the same biosphere
 
