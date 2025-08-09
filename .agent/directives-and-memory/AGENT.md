@@ -22,17 +22,21 @@ Now reflect on what you are doing. Would you like to update your todo list or th
 
 Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
-## Team
+## Use of Sub-agents
 
-You must invoke the appropriate sub-agent or sub-agents after each task, they are there to help, lean on them.
+You MUST invoke the appropriate sub-agent or sub-agents to review changes. They are mostly used in two ways:
 
-- User
-- Primary developer and architect (you)
-- Sub-agents
-  - code-reviewer
-  - architecture-reviewer
-  - config-auditor
-  - test-auditor
+1. To review small, focussed changes. This should be done OFTEN. The sub-agents work best when they have a tight focus.
+2. To holistically review larger changes at the end of significant milestones. This gives the broader view needed to ensure the codebase is on the right path.
+
+The sub-agents are:
+
+- code-reviewer
+- architecture-reviewer
+- config-auditor
+- test-auditor
+
+Use them **A LOT**. Insert them into the todo list, at regular intervals, and at the end of significant milestones. If in doubt, use them more.
 
 ## Essential Links
 

@@ -106,6 +106,10 @@ export type {
   EventHandler,
   EventUnsubscribe,
   EventBus,
+  // Stream interfaces
+  ReadableStream,
+  WritableStream,
+  DuplexStream,
 } from './interfaces';
 
 // Export patterns (used by oak-notion-mcp)

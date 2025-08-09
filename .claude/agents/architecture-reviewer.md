@@ -81,6 +81,8 @@ Valid patterns:
 
 ## Output Format
 
+Your report MUST be specific, actionable, and helpful. Provide context or examples to support your feedback.
+
 Structure your review as:
 
 ```text

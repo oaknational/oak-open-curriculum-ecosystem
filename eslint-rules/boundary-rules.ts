@@ -203,3 +203,11 @@ export const HISTOI_TISSUES = [
   // Add new tissues here as they are created
 ] as const;
 
+/**
+ * Get all other Histoi tissues (excluding the current one)
+ * Used to prevent cross-tissue imports
+ */
+export function getOtherTissues(currentTissue: string): string[] {
+  return HISTOI_TISSUES.filter(tissue => tissue !== currentTissue);
+}
+

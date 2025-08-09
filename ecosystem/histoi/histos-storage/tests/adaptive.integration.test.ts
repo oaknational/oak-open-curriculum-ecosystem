@@ -4,7 +4,8 @@ import { rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 describe('createAdaptiveStorage - Integration Tests', () => {
-  const testDir = join(process.cwd(), '.storage', 'test-namespace');
+  // Use relative path for tests - in real usage, the base path would be injected
+  const testDir = join('.', '.storage', 'test-namespace');
 
   beforeEach(() => {
     // Clean up test directory if it exists

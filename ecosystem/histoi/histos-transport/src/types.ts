@@ -2,14 +2,14 @@
  * Types for the STDIO transport tissue
  */
 
-import type { Logger } from '@oaknational/mcp-moria';
+import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-moria';
 
 /**
  * JSON-RPC message structure
  */
 export interface JsonRpcMessage {
   jsonrpc: string;
-  id?: string | number;
+  id?: string | number | null;
   method?: string;
   params?: unknown;
   result?: unknown;
@@ -22,11 +22,12 @@ export interface JsonRpcMessage {
 
 /**
  * Options for creating STDIO transport
+ * Uses generic stream interfaces for transplantability
  */
 export interface StdioTransportOptions {
   logger: Logger;
-  stdin: NodeJS.ReadStream;
-  stdout: NodeJS.WriteStream;
+  stdin?: ReadableStream;
+  stdout?: WritableStream;
   onMessage?: (message: JsonRpcMessage) => void;
 }
 

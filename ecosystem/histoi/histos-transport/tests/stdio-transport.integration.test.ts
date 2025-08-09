@@ -1,210 +1,244 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-moria';
+import type { ReadableStream, WritableStream, Logger } from '@oaknational/mcp-moria';
 import type { JsonRpcMessage } from '../src/types.js';
 
-describe('STDIO Transport', () => {
-  function createMockStreams() {
-    const dataHandlers: Array<(chunk: Buffer) => void> = [];
-    const writtenData: string[] = [];
+describe('StdioTransport Integration', () => {
+  function createMinimalMocks() {
+    // Store state for behavior testing
+    let writtenData = '';
+    const handlers = new Map<string, Set<(...args: unknown[]) => void>>();
 
-    const stdin = {
-      on: vi.fn((event: string, handler: (chunk: Buffer) => void) => {
-        if (event === 'data') {
-          dataHandlers.push(handler);
+    // Minimal mock for stdin - stores handlers for later simulation
+    const stdin: ReadableStream = {
+      on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+        if (!handlers.has(event)) {
+          handlers.set(event, new Set());
         }
+        handlers.get(event)?.add(handler);
       }),
-      resume: vi.fn(),
+      removeListener: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
+        handlers.get(event)?.delete(handler);
+        return stdin;
+      }),
       pause: vi.fn(),
-      removeListener: vi.fn(),
-      // Helper to simulate incoming data
-      simulateData: (data: string) => {
-        dataHandlers.forEach((handler) => handler(Buffer.from(data)));
-      },
+      resume: vi.fn(),
     };
 
-    const stdout = {
+    // Minimal mock for stdout that captures output
+    const stdout: WritableStream = {
       write: vi.fn((data: string | Buffer, callback?: (error?: Error | null) => void) => {
-        writtenData.push(data.toString());
+        writtenData += data.toString();
         if (callback) callback();
         return true;
       }),
+      end: vi.fn(),
     };
 
-    return { stdin, stdout, writtenData, dataHandlers };
-  }
-
-  function createLogger(): Logger {
-    return {
+    // Minimal logger
+    const logger: Logger = {
+      trace: vi.fn(),
+      debug: vi.fn(),
       info: vi.fn(),
       warn: vi.fn(),
       error: vi.fn(),
-      debug: vi.fn(),
+      fatal: vi.fn(),
     };
+
+    // Helper to simulate input - calls all data handlers
+    const simulateInput = (data: string | Buffer) => {
+      const dataHandlers = handlers.get('data');
+      if (dataHandlers) {
+        dataHandlers.forEach((handler) => {
+          handler(data);
+        });
+      }
+    };
+
+    // Helper to get written output
+    const getWrittenData = () => writtenData;
+    const clearWrittenData = () => {
+      writtenData = '';
+    };
+
+    return { stdin, stdout, logger, simulateInput, getWrittenData, clearWrittenData };
   }
 
-  describe('Message Sending', () => {
-    it('sends JSON-RPC messages as newline-delimited JSON', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout, writtenData } = createMockStreams();
-      const logger = createLogger();
+  describe('Transport Lifecycle', () => {
+    it('should start and stop without errors', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, stdout, logger } = createMinimalMocks();
 
       const transport = createStdioTransport({
         logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
+        stdin,
+        stdout,
       });
 
-      const message = { jsonrpc: '2.0', method: 'test', params: { value: 42 } };
-      await transport.send(message);
+      // Test behavior: starts without throwing
+      expect(() => {
+        transport.start();
+      }).not.toThrow();
 
-      expect(writtenData).toEqual([JSON.stringify(message) + '\n']);
+      // Test behavior: stops without throwing
+      expect(() => {
+        transport.close();
+      }).not.toThrow();
     });
 
-    it('propagates write errors', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin } = createMockStreams();
-      const logger = createLogger();
+    it('should require stdin and stdout', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { logger } = createMinimalMocks();
 
-      const failingStdout = {
+      // Test behavior: throws when required dependencies are missing
+      expect(() =>
+        createStdioTransport({
+          logger,
+          stdin: undefined,
+          stdout: undefined,
+        }),
+      ).toThrow();
+    });
+  });
+
+  describe('Message Sending', () => {
+    it('should format and send messages correctly', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, stdout, logger, getWrittenData } = createMinimalMocks();
+
+      const transport = createStdioTransport({
+        logger,
+        stdin,
+        stdout,
+      });
+
+      const message: JsonRpcMessage = {
+        jsonrpc: '2.0',
+        method: 'test',
+        id: 1,
+      };
+
+      // Test behavior: sends formatted message
+      await transport.send(message);
+
+      // Verify the output behavior, not the implementation
+      const output = getWrittenData();
+      expect(output).toBe('{"jsonrpc":"2.0","method":"test","id":1}\n');
+    });
+
+    it('should handle write errors gracefully', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, logger } = createMinimalMocks();
+
+      // Create a stdout that always fails
+      const stdout: WritableStream = {
         write: vi.fn((_data: string | Buffer, callback?: (error?: Error | null) => void) => {
           if (callback) callback(new Error('Write failed'));
           return false;
         }),
+        end: vi.fn(),
       };
 
       const transport = createStdioTransport({
         logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: failingStdout as unknown as NodeJS.WriteStream,
+        stdin,
+        stdout,
       });
 
-      await expect(transport.send({ jsonrpc: '2.0', method: 'test' })).rejects.toThrow(
-        'Write failed',
-      );
+      const message: JsonRpcMessage = {
+        jsonrpc: '2.0',
+        method: 'test',
+        id: 1,
+      };
+
+      // Test behavior: rejects with error when write fails
+      await expect(transport.send(message)).rejects.toThrow('Write failed');
     });
   });
 
   describe('Message Receiving', () => {
-    it('parses newline-delimited JSON messages', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout } = createMockStreams();
-      const logger = createLogger();
+    it('should parse and deliver messages', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, stdout, logger, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
 
       const transport = createStdioTransport({
         logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
+        stdin,
+        stdout,
         onMessage: (msg) => receivedMessages.push(msg),
       });
 
+      // Start the transport to enable message receiving
       transport.start();
 
-      const message = { jsonrpc: '2.0', method: 'test', id: 1 };
-      stdin.simulateData(JSON.stringify(message) + '\n');
+      // Test behavior: processes incoming JSON-RPC messages
+      simulateInput('{"jsonrpc":"2.0","method":"test","id":1}\n');
 
-      expect(receivedMessages).toEqual([message]);
+      // Verify the message was processed correctly
+      expect(receivedMessages).toEqual([{ jsonrpc: '2.0', method: 'test', id: 1 }]);
     });
 
-    it('buffers partial messages', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout } = createMockStreams();
-      const logger = createLogger();
+    it('should handle partial messages correctly', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, stdout, logger, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
 
       const transport = createStdioTransport({
         logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
+        stdin,
+        stdout,
         onMessage: (msg) => receivedMessages.push(msg),
       });
 
       transport.start();
 
-      const message = { jsonrpc: '2.0', method: 'test' };
-      const json = JSON.stringify(message);
+      // Test behavior: buffers partial messages and processes complete ones
+      simulateInput('{"jsonrpc":"2.0",');
+      simulateInput('"method":"test1","id":1}\n');
+      simulateInput('{"jsonrpc":"2.0","method":"test2","id":2}\n');
 
-      // Send first part - should not trigger message
-      stdin.simulateData(json.slice(0, 10));
-      expect(receivedMessages).toEqual([]);
-
-      // Send rest with newline - should trigger message
-      stdin.simulateData(json.slice(10) + '\n');
-      expect(receivedMessages).toEqual([message]);
+      // Verify both complete messages were processed
+      expect(receivedMessages).toEqual([
+        { jsonrpc: '2.0', method: 'test1', id: 1 },
+        { jsonrpc: '2.0', method: 'test2', id: 2 },
+      ]);
     });
 
-    it('handles multiple messages in one chunk', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout } = createMockStreams();
-      const logger = createLogger();
+    it('should ignore invalid JSON', async () => {
+      const { createStdioTransport } = await import('../src/index.js');
+      const { stdin, stdout, simulateInput } = createMinimalMocks();
       const receivedMessages: JsonRpcMessage[] = [];
+      let errorCount = 0;
+
+      // Create logger with tracking
+      const trackingLogger: Logger = {
+        trace: vi.fn(),
+        debug: vi.fn(),
+        info: vi.fn(),
+        warn: vi.fn(),
+        error: vi.fn(() => {
+          errorCount++;
+        }),
+        fatal: vi.fn(),
+      };
 
       const transport = createStdioTransport({
-        logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
+        logger: trackingLogger,
+        stdin,
+        stdout,
         onMessage: (msg) => receivedMessages.push(msg),
       });
 
       transport.start();
 
-      const msg1 = { jsonrpc: '2.0', method: 'test1' };
-      const msg2 = { jsonrpc: '2.0', method: 'test2' };
+      // Test behavior: skips invalid JSON and continues processing
+      simulateInput('not valid json\n');
+      simulateInput('{"jsonrpc":"2.0","method":"test"}\n');
 
-      stdin.simulateData(JSON.stringify(msg1) + '\n' + JSON.stringify(msg2) + '\n');
-
-      expect(receivedMessages).toEqual([msg1, msg2]);
-    });
-
-    it('handles invalid JSON without crashing', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout } = createMockStreams();
-      const logger = createLogger();
-      const receivedMessages: JsonRpcMessage[] = [];
-
-      const transport = createStdioTransport({
-        logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
-        onMessage: (msg) => receivedMessages.push(msg),
-      });
-
-      transport.start();
-
-      // Send invalid JSON - transport should handle it gracefully
-      stdin.simulateData('not valid json\n');
-      
-      // Valid message should still work after invalid one
-      stdin.simulateData('{"jsonrpc":"2.0","method":"test"}\n');
-
-      expect(receivedMessages).toHaveLength(1);
-      expect(receivedMessages[0]).toEqual({ jsonrpc: '2.0', method: 'test' });
-    });
-  });
-
-  describe('Lifecycle', () => {
-    it('starts and stops cleanly', async () => {
-      const { createStdioTransport } = await import('../src/index');
-      const { stdin, stdout } = createMockStreams();
-      const logger = createLogger();
-      const receivedMessages: JsonRpcMessage[] = [];
-
-      const transport = createStdioTransport({
-        logger,
-        stdin: stdin as unknown as NodeJS.ReadStream,
-        stdout: stdout as unknown as NodeJS.WriteStream,
-        onMessage: (msg) => receivedMessages.push(msg),
-      });
-
-      transport.start();
-
-      stdin.simulateData('{"jsonrpc":"2.0","method":"test"}\n');
-      expect(receivedMessages).toHaveLength(1);
-
-      transport.close();
-
-      // After close, new messages should not be processed
-      // (but we can't easily test this without knowing implementation details)
+      // Verify only valid message was processed
+      expect(receivedMessages).toEqual([{ jsonrpc: '2.0', method: 'test' }]);
+      // Verify that invalid JSON triggered an error log (behavior, not implementation)
+      expect(errorCount).toBeGreaterThan(0);
     });
   });
 });

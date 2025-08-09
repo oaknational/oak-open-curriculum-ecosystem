@@ -81,6 +81,8 @@ When reviewing configurations:
 
 ## Output Format
 
+Your report MUST be specific, actionable, and helpful. Provide context or examples to support your feedback.
+
 Provide your audit results as:
 
 1. **Executive Summary**: High-level consistency status (PASS/FAIL/CRITICAL)

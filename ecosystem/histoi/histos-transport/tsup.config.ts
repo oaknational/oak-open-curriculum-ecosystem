@@ -1,14 +1,17 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: ['src/**/*.ts'],
   format: ['esm'],
-  dts: false,
+  dts: false, // Let TypeScript handle declarations
+  splitting: false,
   sourcemap: true,
   clean: true,
-  minify: false,
-  shims: true,
-  external: ['@oaknational/mcp-moria'],
-  platform: 'node',
   target: 'node22',
+  minify: false,
+  bundle: false,
+  tsconfig: './tsconfig.build.json',
+  // Exclude test files from build
+  ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
+  outDir: 'dist',
 });

@@ -14,3 +14,6 @@ export type { EnvironmentProvider } from './environment';
 
 // Event bus interface exports
 export type { EventHandler, EventUnsubscribe, EventBus } from './event-bus';
+
+// Stream interface exports
+export type { ReadableStream, WritableStream, DuplexStream } from './streams';

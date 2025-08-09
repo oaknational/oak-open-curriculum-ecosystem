@@ -8,9 +8,7 @@ All of these rules MUST be followed at all times.
 
 ## Core Rules
 
-### Design & Development
-
-#### Structure
+### Code Patterns and Architectural Principles
 
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers** - replace old approaches with new approaches
@@ -19,14 +17,27 @@ All of these rules MUST be followed at all times.
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
 
-#### Code Quality
+See also [Biological Model Architecture](#biological-model-architecture) below.
+
+### Tooling
+
+Use the right tool for the job:
+
+- **Turborepo** for monorepo operations
+- **pnpm** for monorepo definitions and package management
+- **Vitest** for testing **runtime logic**
+- **TypeScript** for compiler time types
+- **ESLint** for syntax correctness, code-style adherence, **architectural boundary adherence**
+- **Prettier** for code-style adherence
+
+### Code Quality
 
 - **NEVER disable checks** - Never disable any quality gates, never disable any linting, never disable any formatting, never disable any tests
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript, do not attempt to prefix the variable with a `_`. ALWAYS fix the root cause, never work around it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
 
-### Types and Validation
+### Compiler Time Types and Runtime Validation
 
 - **No type shortcuts** - Never use `as`, `any`, `!`, or type assertions
 - **Single source of truth for types** - Define types ONCE, and import them consistently
@@ -37,6 +48,8 @@ All of these rules MUST be followed at all times.
 ### Testing
 
 #### Test Types
+
+Tests prove the correctness of runtime logic. If you want to validate types, use TypeScript, if you want to validate architectural structure, use ESLint.
 
 - **In-process tests**: Tests that validate code imported into the test process. They are fast, specific, and do not produce side effects.
   - **Unit test**: A test that verifies the behaviour of a single PURE function in isolation. Unit tests DO NOT trigger IO, have NO side effects, and contain NO MOCKS. Unit tests are automatically run in CI/CD. Must be named `*.unit.test.ts`.

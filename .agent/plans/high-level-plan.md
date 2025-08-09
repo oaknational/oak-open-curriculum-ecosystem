@@ -367,8 +367,8 @@ oak-notion-mcp/                 # Repository root
 
 ### Phase 5: Ecosystem Evolution to Moria/Histoi/Psycha 🚧 IN PROGRESS
 
-**Status**: Sub-phases 5.1-5.4.5 ✅ COMPLETED | 5.5-5.8 ⏳ PENDING  
-**Last Updated**: 2025-08-09
+**Status**: Sub-phases 5.1-5.7 ✅ COMPLETED | 5.8 ⏳ IN PROGRESS  
+**Last Updated**: 2025-01-09
 
 **Critical Build Issue**: ✅ RESOLVED - Fixed ESM import issues and tsup configuration for both libraries and applications
 
@@ -432,6 +432,7 @@ oak-notion-mcp/                 # Repository root
 **Key Transformations**:
 
 ✅ **Completed**:
+
 1. **Split oak-mcp-core** into:
    - `@oaknational/mcp-moria`: Pure abstractions and interfaces (molecules/atoms)
    - Three tissue packages: Logger, Storage, Environment (all operational)
@@ -448,6 +449,7 @@ oak-notion-mcp/                 # Repository root
    - `ecosystem/psycha/`: Living organisms ⏳ (needs directory move)
 
 ⏳ **Remaining** (Phase 5):
+
 1. **Complete Directory Restructure**:
    - Move oak-notion-mcp to `ecosystem/psycha/`
    - Update all import paths and configurations
@@ -570,7 +572,7 @@ Sub-phase 6.2: Elastic Search Index with Lexical and Semantic Search Capabilitie
 **Key Deliverables**:
 
 - [ ] **HTTP Transport Addition** (Sub-phase 5.9 from Phase 5):
-  - [ ] Streamable HTTP transport implementation (NOT SSE) 
+  - [ ] Streamable HTTP transport implementation (NOT SSE)
   - [ ] Session management for stateful remote operations
   - [ ] Retry logic with exponential backoff
   - [ ] Automatic transport selection based on deployment context

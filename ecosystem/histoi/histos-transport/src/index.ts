@@ -19,8 +19,12 @@ export function createStdioTransport(options: StdioTransportOptions): StdioTrans
   return new StdioTransportImpl(options);
 }
 
+// Export pure functions for message processing
+export { MessageBuffer } from './message-buffer.js';
+export { formatMessage, parseMessage } from './message-formatter.js';
+
 // Export types
 export type { StdioTransport, StdioTransportOptions, JsonRpcMessage } from './types.js';
 
-// Re-export Logger type from Moria for convenience
-export type { Logger } from '@oaknational/mcp-moria';
+// Re-export stream and logger types from Moria for convenience
+export type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-moria';

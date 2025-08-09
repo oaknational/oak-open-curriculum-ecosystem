@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-histos-transport",
-  "version": "0.0.0-development",
+  "version": "0.1.0",
   "description": "Histoi transport tissue - adaptive transport layer for MCP servers",
   "keywords": [
     "mcp",
@@ -25,7 +25,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist",
     "dev": "tsup --watch",
     "format": "prettier --write .",
@@ -37,17 +37,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.2",
     "@oaknational/mcp-moria": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^22.12.2",
-    "@vitest/coverage-v8": "^2.1.8",
-    "eslint": "^9.19.0",
-    "prettier": "^3.4.2",
-    "tsup": "^8.3.6",
-    "typescript": "^5.9.2",
-    "vitest": "^2.1.8"
+    "pnpm": "^10.14.0",
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=22.0.0"
