@@ -42,7 +42,7 @@ const config = tsEslintConfig(
   },
   // Config files
   {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'tsup.config.ts'],
+    files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',

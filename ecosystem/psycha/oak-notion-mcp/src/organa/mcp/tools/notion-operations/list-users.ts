@@ -3,8 +3,8 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../../chora/stroma/notion-types/notion-client';
-import type { NotionOperations } from '../../../../chora/stroma/notion-contracts/notion-operations';
+import type { MinimalNotionClient } from '../../../../chorai/stroma/notion-types/notion-client';
+import type { NotionOperations } from '../../../../chorai/stroma/notion-contracts/notion-operations';
 import { notionListUsersSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';
 

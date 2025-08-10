@@ -1,6 +1,6 @@
 # GO GO GO
 
-This document enables best practice development of the Oak Notion MCP Server. Read ALL of it first, and then follow the instructions.
+This document enables best practice development of the Oak Notion MCP Server. Read ALL of it first, and then follow the instructions. After that you MUST carry out the action in the [action](#action) section.
 
 ## Intent
 
@@ -12,12 +12,15 @@ This document enables best practice development of the Oak Notion MCP Server. Re
 
 ## Grounding
 
-Roughly every third task must be "GROUNDING: read GO.md and follow all instructions"
+Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions in that file and in the files it leads to. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
 
-## Internal Reviews
+Make any adjustments to the todo list that you feel are beneficial.
 
-Please make sure that the todo list includes invoking the code reviewer sub-agent and the architecture reviewer sub-agent after any relevant changes.
+## Todo List Finalisation
+
+- Roughly every third task must be "GROUNDING: read GO.md and follow all instructions"
+- Please make sure that the todo list includes invoking the sub-agents after any relevant changes.
 
 ## Action
 
-Read [AGENT.md](.agent/directives-and-memory/AGENT.md) and follow all instructions in that file and in the files it leads to. Read and reflect on the [rules and best practices](docs/README.md#rules-and-best-practices) it links to. Consider how those rules and best practices apply to the current tasks.
+Please start the next task in the todo list, and carry on.

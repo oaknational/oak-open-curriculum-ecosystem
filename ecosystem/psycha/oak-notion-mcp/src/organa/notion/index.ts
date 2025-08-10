@@ -7,7 +7,7 @@
  * rather than importing directly from Notion internals.
  */
 
-import type { NotionOperations } from '../../chora/stroma/notion-contracts/notion-operations';
+import type { NotionOperations } from '../../chorai/stroma/notion-contracts/notion-operations';
 
 // Import transformers
 import {

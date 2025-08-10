@@ -8,7 +8,7 @@ import type {
   ListResourcesResult,
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
-import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies';
+import type { NotionDependencies } from '../../../../chorai/stroma/notion-types/dependencies';
 import { handleReadResource } from './read-resource';
 
 // Handler functions interface

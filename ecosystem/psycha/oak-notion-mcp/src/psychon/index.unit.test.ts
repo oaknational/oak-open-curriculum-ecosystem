@@ -40,7 +40,7 @@ describe('environment configuration', () => {
     }));
 
     // Mock the getString function to track when env is read
-    vi.doMock('../chora/phaneron/notion-config/env-utils', () => ({
+    vi.doMock('../chorai/phaneron/notion-config/env-utils', () => ({
       getString: (key: string) => {
         if (key === 'NOTION_API_KEY') {
           envReadAttempted = true;
@@ -61,7 +61,7 @@ describe('environment configuration', () => {
 
     // Act - Import the environment module using dynamic import
     // This should trigger dotenv.config() then read env vars
-    await import('../chora/phaneron/notion-config/environment');
+    await import('../chorai/phaneron/notion-config/environment');
 
     // Assert
     expect(dotenvCalledBeforeEnvRead).toBe(true);

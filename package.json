@@ -13,7 +13,6 @@
     "lint": "turbo run --continue lint",
     "test": "turbo run --continue test",
     "test:e2e": "RUN_E2E=true turbo run --continue test:e2e",
-    "test:e2e:skip": "turbo run --continue test:e2e",
     "type-check": "turbo run --continue type-check",
     "prepare": "husky",
     "publish:dry": "pnpm -r publish --dry-run",

@@ -20,12 +20,15 @@
   },
   "scripts": {
     "build": "tsup",
+    "prebuild": "pnpm generate:types",
+    "generate:types": "tsx scripts/generate-types.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "test:e2e": "vitest run --config vitest.config.e2e.ts"
   },
   "dependencies": {
     "@oaknational/mcp-moria": "workspace:*",
@@ -34,6 +37,7 @@
   "devDependencies": {
     "@types/node": "^22.10.5",
     "tsup": "^8.3.5",
+    "tsx": "^4.20.3",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },

@@ -2,6 +2,8 @@
  * Type definitions for Oak Curriculum API
  */
 
+export type { OpenAPI3, OpenAPISchema } from './openapi';
+
 export interface Lesson {
   id: string;
   title: string;

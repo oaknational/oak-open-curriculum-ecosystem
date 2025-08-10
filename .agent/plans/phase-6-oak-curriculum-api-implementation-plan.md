@@ -58,6 +58,7 @@ ecosystem/psycha/
    - Version tracking in package.json
 
 3. **Programmatic Zod Generation**
+
    ```typescript
    // Generate Zod schemas alongside TypeScript types
    function generateZodSchema(openApiSchema: OpenAPISchemaObject): string {
@@ -78,7 +79,8 @@ ecosystem/psycha/
    ```
 
 4. **Generated Files Structure**
-   ```
+
+   ```text
    src/types/generated/
    ├── types.ts         # TypeScript interfaces
    ├── validators.ts    # Zod schemas
@@ -138,17 +140,25 @@ describe('Type Generation Integration', () => {
 
 **Tasks**:
 
-1. **Core Client Logic**
+1. **Reference Analysis** (Do this FIRST)
+   - Map reference structure: `src/api/`, `src/types/`, `src/utils/`
+   - Identify pure functions (data transforms, validators, formatters)
+   - List Node.js dependencies (fs, path, crypto, etc.)
+   - Create mapping document: reference path → SDK path
+
+2. **Core Client Logic**
    - Transplant from `reference/oak-curriculum-api-client/src/`
+   - Preserve pure functions unchanged where possible
    - Remove direct Node.js dependencies
    - Create pure TypeScript core
 
-2. **Boundary Adapters with Runtime Validation**
+3. **Boundary Adapters with Runtime Validation**
    - Node.js fetch adapter with Zod validation of API responses
    - Browser fetch adapter (future)
    - Edge runtime adapter (future)
-   
+
    **SDK validates ALL external data**:
+
    ```typescript
    // In SDK adapters - validate API responses
    import { z } from 'zod';
@@ -172,7 +182,7 @@ describe('Type Generation Integration', () => {
    }
    ```
 
-3. **Dependency Injection Setup**
+4. **Dependency Injection Setup**
 
    ```typescript
    // Pure core with runtime-agnostic types
@@ -472,6 +482,7 @@ describe('MCP Tools', () => {
    - Trusts SDK outputs (already validated by SDK)
 
 This separation ensures:
+
 - SDK is a trustworthy source of validated data
 - No duplicate validation between layers
 - Clear ownership of validation responsibilities
@@ -792,6 +803,10 @@ async function generateFromOpenAPI() {
 
 ### Milestone 2: SDK Core Implementation
 
+- [ ] Map reference implementation structure to our architecture
+  - [ ] Identify pure functions to preserve unchanged
+  - [ ] List Node.js dependencies to isolate
+  - [ ] Document which reference modules map to which SDK modules
 - [ ] Transplant reference implementation
 - [ ] Integrate generated validators at boundaries
 - [ ] Isolate Node.js dependencies to adapters

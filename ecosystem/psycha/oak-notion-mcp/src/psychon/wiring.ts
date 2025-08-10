@@ -2,7 +2,7 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Logger } from '@oaknational/mcp-moria';
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import type { BaseEnvironment } from '../chora/phaneron/notion-config/env-utils';
+import type { BaseEnvironment } from '../chorai/phaneron/notion-config/env-utils';
 
 export interface ServerSetupDependencies {
   transport: StdioServerTransport;
@@ -15,7 +15,7 @@ export interface ServerSetupDependencies {
 async function loadEnvironment(log: ServerSetupDependencies['log']) {
   log('[STARTUP] Loading environment configuration...');
   try {
-    const { env } = await import('../chora/phaneron/notion-config/environment');
+    const { env } = await import('../chorai/phaneron/notion-config/environment');
     return env;
   } catch (error) {
     log('[STARTUP ERROR] Environment validation failed:', true);
@@ -40,8 +40,8 @@ async function createServerDependencies(
   log('[STARTUP] Importing dependencies...');
 
   const { createAdaptiveLogger } = await import('@oaknational/mcp-histos-logger');
-  const { getNotionConfig } = await import('../chora/phaneron/notion-config/notion-config');
-  const { env: notionEnv } = await import('../chora/phaneron/notion-config/environment');
+  const { getNotionConfig } = await import('../chorai/phaneron/notion-config/notion-config');
+  const { env: notionEnv } = await import('../chorai/phaneron/notion-config/environment');
   const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server');
   const { createNotionOperations } = await import('../organa/notion');

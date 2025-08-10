@@ -8,9 +8,10 @@
 - [x] Add plans to define boundaries between external systems (Notion), and our code. Make that boundary explicit and simple. Use Notion types and type-guards/predicates at that boundary to properly validate the data, we will use the same types in our codebase. Consider using Zod schemas to validate incoming data, but do not create new types where the Notion SDK types are already available.
 - [x] Add Claude custom commands for quality gates, stepping back, commit and push
 - [x] Think about how best to use subagents
-- [ ] tweak the names, e.g. from chora to chora_collective_concerns, aither to aither_system_state, eidola to eidola_mocks, phaneron to phaneron_config, stroma to stroma_foundational_definitions, organa to organa_parts, psychon to psychon_whole
+- [x] Turn it into a pnpm workspace and Turbo monorepo
 - [ ] Add mutation testing to the test suite
-- [ ] Turn it into a pnpm workspace and Turbo monorepo
+- [ ] Create a sub-agent specifically for creating new sub-agents
+- [ ] Create a sub-agent specifically for creating new workspaces
 
 ## MCP server ideas
 
