@@ -4,7 +4,7 @@
  * This file contains Zod validators automatically generated from the Oak Curriculum API OpenAPI schema.
  * To regenerate, run: pnpm generate:types
  *
- * Last generated: 2025-08-10T11:40:46.697Z
+ * Last generated: 2025-08-10T12:10:57.693Z
  */
 
 import { z } from 'zod';
