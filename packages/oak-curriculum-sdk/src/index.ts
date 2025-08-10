@@ -2,25 +2,15 @@
  * Oak Curriculum SDK
  *
  * TypeScript SDK for accessing Oak National Academy's Curriculum API.
- * This SDK provides a type-safe, runtime-agnostic client with dependency injection.
+ * This SDK provides a type-safe client using openapi-fetch with generated types.
  */
 
-// Main client factory
-export { createOakClient } from './client/index.js';
-export type { OakCurriculumClient } from './client/index.js';
+// Main client factories
+export { createOakClient, createOakPathBasedClient } from './client/index.js';
+export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
 
-// Types
-export type { Lesson, Unit, Programme, SearchParams, SearchResults } from './client/types.js';
+// Generated types
+export type { paths } from './types/generated/api-schema/api-paths-types.js';
 
-// Adapters for different runtimes
-export { nodeHttpAdapter } from './adapters/index.js';
-export type {
-  HttpAdapter,
-  HttpOptions,
-  HttpResponse,
-  OakClientConfig,
-  OakClientDependencies,
-} from './adapters/index.js';
-
-// Endpoints
-export { endpoints } from './endpoints/index.js';
+// Configuration
+export { apiUrl, apiSchemaUrl } from './config/index.js';

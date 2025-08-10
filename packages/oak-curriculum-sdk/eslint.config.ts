@@ -16,7 +16,18 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const config = tsEslintConfig(
   ...baseConfig,
   {
-    ignores: ['dist/**', 'coverage/**', '*.log', '.turbo/**'],
+    ignores: [
+      'dist/**',
+      'coverage/**',
+      '*.log',
+      '.turbo/**',
+      // Generated files
+      'src/types/generated/**',
+      // Examples
+      'examples/**',
+      // Copied from reference - do not modify
+      'scripts/typegen-core.ts',
+    ],
   },
   {
     files: ['**/*.ts'],

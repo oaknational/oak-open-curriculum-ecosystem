@@ -4,5 +4,6 @@
 
 export type { OpenAPI3, OpenAPISchema } from './openapi';
 
-// Re-export domain types from client
-export type { Lesson, Unit, Programme, SearchParams, SearchResults } from '../client/types';
+// Re-export generated types
+export type { paths } from './generated/api-schema/api-paths-types';
+export type { components } from './generated/api-schema/api-paths-types';

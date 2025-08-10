@@ -107,48 +107,81 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
    - Will be added as enhancement after core functionality is proven
    - Simplifies initial implementation significantly
 
-3. **Type Generation Strategy**
-   - Transplant `typegen.ts` from reference
-   - Generate types from OpenAPI schema on build
-   - Types in `src/types/generated/` (never manually edited)
-   - All other types derive from generated types
+3. **Type Generation Strategy (CORRECTED)**
+   - Use `openapi-typescript` package to generate complete API types
+   - Copy original's two-stage pipeline:
+     - Stage 1: openapi-typescript generates paths & operations
+     - Stage 2: Custom processing extracts runtime constants, type guards
+   - Generated files in `src/types/generated/api-schema/`:
+     - `api-paths-types.ts` - Complete paths interface
+     - `api-schema.ts` - Runtime schema object
+     - `path-parameters.ts` - Extracted values and type guards
+   - ONLY manual step when API changes: regenerate types
+   - Zod validators will be added to same automatic pipeline later
 
-4. **Code Reuse Strategy**
-   - Transplant reference implementation wholesale
-   - Wrap with our architectural patterns
-   - Ensure clean boundaries
-   - Internal improvements can be incremental
+4. **Code Reuse Strategy (CORRECTED)**
+   - Copy original implementation wholesale where possible
+   - Minimal modifications only for paths and package names
+   - Remove incompatible existing code that doesn't align
+   - Everything must be automatic - no manual type maintenance
 
-### Implementation Approach
+### Implementation Progress
 
-#### Sub-phase 6.1: SDK Foundation
+#### Sub-phase 6.1: SDK Foundation ✅ COMPLETED
 
 - **Location**: `packages/oak-curriculum-sdk`
-- **Pattern**: Conventional TypeScript package
-- **Strategy**: Transplant and wrap reference implementation
-- **Testing**: TDD with transplanted tests
+- **Pattern**: Conventional TypeScript package using openapi-fetch
+- **Strategy**: Copy original implementation wholesale
+- **Testing**: Use generated types for full type safety
 
-#### Sub-phase 6.2: MCP Server Structure
+**Achievements**:
+- ✅ Successfully copied reference's two-stage type generation pipeline
+- ✅ Generated all 4 files with complete type safety:
+  - `api-paths-types.ts` - Complete paths interface from openapi-typescript
+  - `api-schema.ts` - Runtime schema object
+  - `api-schema.json` - Cached OpenAPI spec
+  - `path-parameters.ts` - Extracted constants and type guards
+- ✅ Implemented openapi-fetch client pattern (BaseApiClient)
+- ✅ Added auth middleware for Bearer token injection
+- ✅ Created factory functions for both client types
+- ✅ All quality gates passing (format, lint, type-check, test, build)
+- ✅ Removed all incompatible custom implementation
+
+**Key Learning**: The reference implementation's sophistication was in the two-stage pipeline - not just using openapi-typescript, but also extracting runtime constants and type guards automatically.
+
+**Key Insight**:
+- Original implementation doesn't just generate types
+- It extracts runtime constants, type guards, and mappings
+- Everything needed for a fully typed client is generated automatically
+
+#### Sub-phase 6.2: MCP Server Structure 📋 PLANNED
+
+**CRITICAL NEXT STEP**: Research existing MCP server implementations to copy patterns from before creating custom implementation.
 
 - **Location**: `ecosystem/psycha/oak-curriculum-mcp`
 - **Pattern**: Biological architecture (chorai/organa/psychon)
 - **Integration**: SDK wrapped as organ
 - **Testing**: Integration and E2E tests
 
-#### Sub-phase 6.3: Multi-Server Coexistence
+**Note**: Directory structure fixed from `chora` to `chorai` (plural form)
+
+#### Sub-phase 6.3: Multi-Server Coexistence 📋 PLANNED
 
 - **Goal**: oak-notion-mcp and oak-curriculum-mcp running together
 - **Configuration**: Independent but compatible
 - **Testing**: Cross-server interaction tests
 
-### Success Criteria
+### Success Criteria (UPDATED)
 
-- [ ] SDK generates types AND Zod validators from OpenAPI schema
-- [ ] All Node.js dependencies at boundaries only
-- [ ] TDD/BDD tests prove functionality
-- [ ] MCP server follows biological architecture
+- [✅] SDK uses openapi-typescript for complete type automation
+- [✅] Original's type generation pipeline successfully copied
+- [✅] Runtime constants and type guards automatically extracted
+- [✅] Client implementation uses openapi-fetch pattern
+- [✅] Tests adapted to use generated types
+- [✅] Quality gates passing (format, lint, type-check, test, build)
+- [ ] MCP server implementation (researching references first)
 - [ ] Both servers can run simultaneously
-- [ ] Quality gates passing (format, lint, type-check, test)
+- [ ] Full system integration tested
 
 ### Implementation Sequence
 
