@@ -5,5 +5,5 @@
     "baseUrl": "."
   },
   "include": ["*.config.ts", "*.config.base.ts"],
-  "exclude": ["node_modules", "dist", "ecosystem/**"]
+  "exclude": ["node_modules", "dist", "ecosystem/**", "reference/**"]
 }

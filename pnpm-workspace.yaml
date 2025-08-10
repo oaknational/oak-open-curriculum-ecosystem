@@ -1,10 +1,12 @@
 packages:
   - ecosystem/psycha/oak-notion-mcp
+  - ecosystem/psycha/oak-curriculum-mcp
   - ecosystem/moria/moria-mcp
   - ecosystem/histoi/histos-env
   - ecosystem/histoi/histos-logger
   - ecosystem/histoi/histos-storage
   - ecosystem/histoi/histos-transport
+  - packages/oak-curriculum-sdk
 
 onlyBuiltDependencies:
   - esbuild

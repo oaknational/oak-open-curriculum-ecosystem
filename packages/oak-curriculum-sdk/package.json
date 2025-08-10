@@ -1,0 +1,55 @@
+{
+  "name": "@oaknational/oak-curriculum-sdk",
+  "version": "0.0.1",
+  "description": "TypeScript SDK for Oak National Academy Curriculum API",
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@oaknational/mcp-moria": "workspace:*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/oak-curriculum-sdk"
+  },
+  "keywords": [
+    "oak",
+    "curriculum",
+    "api",
+    "sdk",
+    "education",
+    "typescript"
+  ],
+  "author": "Oak National Academy",
+  "license": "MIT"
+}

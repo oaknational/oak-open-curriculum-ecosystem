@@ -1,5 +1,11 @@
 # Testing and Development Strategy
 
+## Tooling
+
+- Vitest
+- TypeScript
+- Supertest if needed
+
 ## Philosophy
 
 - ALWAYS test behaviour, NEVER test implementation
@@ -52,6 +58,7 @@ Out-of-process tests are tests that validate a running *system*, the tests and t
 #### Common Misconception: Integration Tests
 
 **WRONG Understanding (Common but Incorrect):**
+
 ```typescript
 // ❌ This is NOT an integration test - it's an E2E test
 describe('API Integration Test', () => {
@@ -63,6 +70,7 @@ describe('API Integration Test', () => {
 ```
 
 **CORRECT Understanding (Our Definition):**
+
 ```typescript
 // ✅ This IS an integration test - testing code units working together
 import { UserService } from './user-service';

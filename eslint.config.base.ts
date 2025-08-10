@@ -24,6 +24,7 @@ export const baseConfig = tsEslintConfig(
       '**/*.d.ts',
       '.eslintrc.js',
       'commitlint.config.js',
+      'reference/',
     ],
   },
   eslint.configs.recommended,

@@ -1,0 +1,65 @@
+{
+  "name": "@oaknational/oak-curriculum-mcp",
+  "version": "0.0.1",
+  "description": "MCP server for Oak National Academy Curriculum API",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "oak-curriculum-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.6",
+    "@oaknational/mcp-moria": "workspace:*",
+    "@oaknational/mcp-histos-logger": "workspace:*",
+    "@oaknational/mcp-histos-env": "workspace:*",
+    "@oaknational/mcp-histos-storage": "workspace:*",
+    "@oaknational/mcp-histos-transport": "workspace:*",
+    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "ecosystem/psycha/oak-curriculum-mcp"
+  },
+  "keywords": [
+    "mcp",
+    "ai",
+    "oak",
+    "curriculum",
+    "education"
+  ],
+  "author": "Oak National Academy",
+  "license": "MIT"
+}

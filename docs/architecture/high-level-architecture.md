@@ -27,6 +27,7 @@ The Oak Notion MCP Server implements a **Biological Architecture with Greek Nome
 We have successfully evolved from a two-tier genotype/phenotype model to a three-tier workspace architecture:
 
 #### Workspace Architecture (Moria/Histoi/Psycha) ✅ IMPLEMENTED
+
 - **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies - `@oaknational/mcp-moria` package
 - **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues:
   - `@oaknational/mcp-histos-logger` - Adaptive logging with Consola
@@ -36,6 +37,7 @@ We have successfully evolved from a two-tier genotype/phenotype model to a three
 - **Psycha (Living Organisms)**: Complete applications - `@oaknational/oak-notion-mcp`
 
 #### Psychon Architecture (Within Each Organism)
+
 - **Chorai**: Pervasive infrastructure fields (morphai, stroma, aither, phaneron)
 - **Organa**: Discrete business logic organs with clear boundaries
 - **Psychon**: The ensouled whole that emerges from integration
@@ -132,10 +134,12 @@ We have successfully evolved from a two-tier genotype/phenotype model to a three
 ### Implementation Phases
 
 #### Phase 4: Genotype/Phenotype Model (Completed)
+
 - Extracted oak-mcp-core as genotype
 - oak-notion-mcp as phenotype
 
 #### Phase 5: Moria/Histoi/Psycha Evolution (Current)
+
 - Split oak-mcp-core into:
   - **Moria**: Pure abstractions (Logger, StorageProvider interfaces)
   - **Histoi**: Runtime-adaptive tissues (adaptive logger, storage)
@@ -146,9 +150,11 @@ We have successfully evolved from a two-tier genotype/phenotype model to a three
 ### Workspace Level
 
 #### 0. Moria (Molecules/Atoms)
+
 **What**: Pure abstractions with zero dependencies
 **Where**: `ecosystem/moria/@oaknational/mcp-moria/`
-**Examples**: 
+**Examples**:
+
 - Logger interface
 - StorageProvider interface
 - Pure algorithms
@@ -165,9 +171,11 @@ export interface Logger {
 ```
 
 #### 1. Histoi (Tissues/Matrices)
+
 **What**: Runtime-adaptive connective tissues
 **Where**: `ecosystem/histoi/@oaknational/mcp-histos-*/`
 **Examples**:
+
 - Adaptive logger (console in browser, pino in Node.js)
 - Adaptive storage (localStorage in browser, fs in Node.js)
 
@@ -187,6 +195,7 @@ export function createAdaptiveLogger(): Logger {
 ```
 
 #### 2. Psycha (Living Organisms)
+
 **What**: Complete applications
 **Where**: `ecosystem/psycha/*/`
 **Examples**: oak-notion-mcp, github-mcp
@@ -194,31 +203,39 @@ export function createAdaptiveLogger(): Logger {
 ### Psychon Level (Within Each Organism)
 
 #### 0. Chora/Stroma (Foundation)
+
 **What**: Types, contracts, event schemas - the structural matrix
 **Where**: `src/chora/stroma/`
 **Rules**: Zero runtime code, compile-time only
 
 #### 1. Chora/Morphai (Forms)
+
 **What**: Hidden forms and Platonic ideals
 **Where**: `src/chora/morphai/`
 **Examples**: ToolExecutor pattern, RequestHandler interface
 
 #### 2. Chora/Aither (Air/Essence)
+
 **What**: Logging and events - pervasive flows
 **Where**: `src/chora/aither/`
 **Examples**: Logger that flows through all layers, event bus
 
 #### 3. Chora/Phaneron (Manifestation)
+
 **What**: Configuration and perceivable environment
 **Where**: `src/chora/phaneron/`
 **Examples**: .env configuration, API keys management
 
 #### 4. Organa (Organs)
+
 **What**: Discrete business logic organs
 **Where**: `src/organa/*/`
-**Examples**: Notion integration organ, MCP protocol organ
+**Examples**: Notion integration organ, MCP protocol organ, Curriculum API organ
+
+**Important**: External service connectors (like Notion or Curriculum API clients) are **organs that process external data**, not passive connectors. They actively transform, validate, and enrich external data, making them functional units (organs) rather than structural connectors (ligaments). This follows the biological pattern where organs like lungs interface with external air while remaining organs.
 
 #### 5. Psychon (Soul/Living Whole)
+
 **What**: The wiring layer that brings everything to life
 **Where**: `src/psychon/`
 **Example**: Main application class, dependency injection
@@ -253,16 +270,19 @@ export class Psychon {
 ### Workspace Level Responsibilities
 
 #### Moria Layer
+
 - **Purpose**: Define pure contracts and algorithms
 - **Components**: Interfaces, types, pure functions
 - **Key Principle**: Zero dependencies, absolute purity
 
 #### Histoi Layer
+
 - **Purpose**: Provide runtime-adaptive capabilities
 - **Components**: Adaptive implementations, conditional exports
 - **Key Principle**: Transplantable between organisms
 
 #### Psycha Layer
+
 - **Purpose**: Complete, functioning applications
 - **Components**: Full MCP servers, complete systems
 - **Key Principle**: Compose from moria and histoi
@@ -270,16 +290,19 @@ export class Psychon {
 ### Psychon Level Responsibilities
 
 #### MCP Protocol Layer (→ Organa/MCP)
+
 - **Purpose**: Handle MCP protocol communication
 - **Components**: Request handlers, response formatters
 - **Key Principle**: Thin layer delegating to business logic
 
 #### Business Logic Layer (→ Organelles in Organa)
+
 - **Purpose**: Core application logic as pure functions
 - **Components**: Transformers, validators, formatters
 - **Key Principle**: No side effects, fully testable
 
 #### Infrastructure Layer (→ Chorai)
+
 - **Purpose**: Cross-cutting pervasive concerns
 - **Components**: Logging, events, configuration
 - **Key Principle**: Fields that pervade the entire system
@@ -287,17 +310,20 @@ export class Psychon {
 ## Security Model
 
 ### Read-Only by Default
+
 - All operations are read-only
 - No write, update, or delete operations exposed
 - API key requires only read permissions
 
 ### Data Privacy
+
 - Automatic email scrubbing in all text content
 - Configurable PII detection patterns
 - No caching of sensitive data
 - Clear audit trail through logging
 
 ### Input Validation
+
 - All inputs validated with Zod schemas at boundaries
 - Type-safe boundaries between layers
 - Once validated, types are trusted internally
@@ -305,6 +331,7 @@ export class Psychon {
 ## Testing Strategy
 
 ### Workspace Level Testing
+
 | Level | Testing Approach | Example |
 |-------|-----------------|---------|
 | Moria | Unit tests only, no mocks, no I/O | Interface implementation tests |
@@ -312,6 +339,7 @@ export class Psychon {
 | Psycha | Integration tests for assembly, E2E for full behavior | MCP protocol tests |
 
 ### Psychon Level Testing
+
 | Level | Greek Term | Testing Approach |
 |-------|------------|------------------|
 | Foundation | Chora/Stroma | Compile-time type checking |
@@ -323,16 +351,19 @@ export class Psychon {
 ## Error Handling
 
 ### Fail-Fast Principle
+
 - Validate inputs early
 - Clear, actionable error messages
 - No silent failures
 
 ### Error Propagation
+
 - Errors bubble up through layers
 - Each layer can add context
 - MCP protocol layer formats for client
 
 ### Recovery Strategies
+
 - Retry logic for transient failures
 - Circuit breakers for external services
 - Graceful degradation where possible
@@ -342,6 +373,7 @@ export class Psychon {
 Our architecture is mathematically validated by complex systems research.
 
 ### Stability Through Heterogeneity
+
 Research by Meena et al. (2023) proves heterogeneous networks self-organize into stable configurations:
 
 ```
@@ -352,11 +384,13 @@ Where β > 0 (degree heterogeneity) and S < 0 (stable)
 **Application**: Different patterns (moria vs histoi vs psycha) create mathematical stability.
 
 ### Operating at Criticality
+
 Like the brain, optimal systems operate at the "edge of chaos" (Beggs & Plenz, 2003).
 
 **Application**: Import warnings show we're at a phase transition - exactly where we should be.
 
 ### Early Warning Signals
+
 Scheffer et al. (2009) identified universal signals before system transitions.
 
 **Application**: Import warnings are early warning signals showing natural boundaries.
@@ -364,31 +398,37 @@ Scheffer et al. (2009) identified universal signals before system transitions.
 ## Migration Roadmap
 
 ### Phase 4: Genotype/Phenotype (Completed)
+
 - ✅ Extracted oak-mcp-core
 - ✅ Established genotype/phenotype model
 
 ### Phase 5: Moria/Histoi/Psycha Evolution (Current)
+
 **Goal**: Transform to three-tier architecture
 **Status**: Implementation in progress
 
 Sub-phases:
+
 1. Create Moria package (in progress)
 2. Create Histoi tissues
 3. Migrate oak-notion-mcp to Psycha
 4. Delete oak-mcp-core
 
 ### Future Phases
+
 - **Phase 6**: Multiple organisms (ecosystem)
 - **Phase 7**: Full distributed system
 
 ## Reference Documents
 
 ### Core Architecture
+
 1. **[Biological Architecture Guide](../agent-guidance/architecture.md)** - Authoritative reference
 2. **[ADR-023: Moria/Histoi/Psycha](architectural-decisions/023-moria-histoi-psycha-architecture.md)** - Three-tier decision
 3. **[Phase 5 Plan](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md)** - Current implementation
 
 ### Supporting Documents
+
 4. **[Testing Strategy](../agent-guidance/testing-strategy.md)** - TDD approach
 5. **[Workspace ESLint Rules](workspace-eslint-rules.md)** - Import enforcement
 6. **[AGENT.md](../../.agent/directives-and-memory/AGENT.md)** - AI agent guidance

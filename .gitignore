@@ -1,3 +1,19 @@
+# Turbo cache
+.turbo
+
+# Type declarations
+dist
+**/dist
+**/*.d.ts
+**/*.d.ts.map
+
+# File system artifacts
+.DS_Store
+
+# Reference material
+reference
+
+
 # Logs
 logs
 *.log
@@ -140,14 +156,4 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Turbo cache
-.turbo
 
-# Type declarations
-dist
-**/dist
-**/*.d.ts
-**/*.d.ts.map
-
-# File system artifacts
-.DS_Store
