@@ -2,42 +2,25 @@
  * Oak Curriculum SDK
  *
  * TypeScript SDK for accessing Oak National Academy's Curriculum API.
- * This SDK provides a type-safe, runtime-agnostic client.
+ * This SDK provides a type-safe, runtime-agnostic client with dependency injection.
  */
 
-export interface OakCurriculumClientConfig {
-  apiKey?: string;
-  baseUrl: string;
-  timeout?: number;
-  retries?: number;
-}
+// Main client factory
+export { createOakClient } from './client/index.js';
+export type { OakCurriculumClient } from './client/index.js';
 
-export class OakCurriculumClient {
-  private config: OakCurriculumClientConfig;
+// Types
+export type { Lesson, Unit, Programme, SearchParams, SearchResults } from './client/types.js';
 
-  constructor(config: OakCurriculumClientConfig) {
-    this.config = config;
-    // TODO: Implement client initialization
-    // Config will be used for API calls
-    void this.config; // Temporary - remove when implementing
-  }
+// Adapters for different runtimes
+export { nodeHttpAdapter } from './adapters/index.js';
+export type {
+  HttpAdapter,
+  HttpOptions,
+  HttpResponse,
+  OakClientConfig,
+  OakClientDependencies,
+} from './adapters/index.js';
 
-  searchLessons(_params: {
-    query?: string;
-    subject?: string;
-    keyStage?: string;
-    limit?: number;
-  }): Promise<{ id: string; title: string }[]> {
-    // TODO: Implement lesson search using this.config and params
-    void _params; // Will be used when implementing
-    return Promise.resolve([]);
-  }
-
-  getLesson(id: string): Promise<{ id: string; title: string; content?: string }> {
-    // TODO: Implement lesson retrieval
-    return Promise.resolve({ id, title: 'Placeholder' });
-  }
-}
-
-export type { Lesson, Unit, Programme } from './types/index.js';
+// Endpoints
 export { endpoints } from './endpoints/index.js';
