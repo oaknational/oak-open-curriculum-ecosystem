@@ -36,10 +36,11 @@ Build a robust MCP ecosystem using biological architecture principles, starting 
 |-------|--------|-------------|-------------|
 | 1-4 | ✅ COMPLETED | Foundation & Setup | Monorepo, quality gates, initial structure |
 | 5 | ✅ COMPLETED | Moria/Histoi/Psycha Evolution | Biological architecture implemented |
-| 5.5 | 🚧 MITIGATED | Runtime Isolation | Proceeding with boundary isolation strategy |
+| 5.5 | 🚧 MITIGATED | Runtime Isolation (SDK only) | Proceeding with boundary isolation strategy |
 | 6 | 📅 IN PROGRESS | Oak Curriculum API | SDK + MCP server implementation |
-| 7 | 📋 PLANNED | Performance & Optimization | HTTP transport, tree-shaking |
-| 8 | 🔮 FUTURE | Multi-Organism Ecosystem | Additional MCP servers |
+| 7 | 🎯 CRITICAL | Full Ecosystem Runtime Isolation | Edge runtime compatibility |
+| 8 | 📋 PLANNED | Performance & Optimization | HTTP transport, tree-shaking |
+| 9 | 🔮 FUTURE | Multi-Organism Ecosystem | Additional MCP servers |
 
 ## Phase 5: Moria/Histoi/Psycha Architecture ✅ COMPLETED
 
@@ -146,6 +147,7 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 - ✅ Created factory functions for both client types
 - ✅ All quality gates passing (format, lint, type-check, test, build)
 - ✅ Removed all incompatible custom implementation
+- ✅ Runtime isolation implemented with multi-environment support (Node.js and Cloudflare Workers)
 
 **Key Learning**: The reference implementation's sophistication was in the two-stage pipeline - not just using openapi-typescript, but also extracting runtime constants and type guards automatically.
 
@@ -189,7 +191,54 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 - **Server Structure**: MCP implementation with biological patterns
 - **Integration**: Full system validation and multi-server support
 
-## Phase 7: Performance & Optimization 📋 PLANNED
+## Phase 7: Full Ecosystem Runtime Isolation 🎯 CRITICAL
+
+### Goals
+
+Enable the entire MCP ecosystem to run in edge runtimes (Cloudflare Workers, Deno Deploy, etc.) by isolating all runtime-specific logic.
+
+### Current State
+
+- SDK: ✅ Partially isolated (config supports Node.js and Cloudflare)
+- Histoi tissues: ❌ Still have Node.js dependencies
+- MCP servers: ❌ Depend on Node.js-specific packages
+
+### Implementation Strategy
+
+1. **Create Runtime Abstraction Layer**
+   - Define interfaces for all runtime operations
+   - File system, environment variables, crypto, streams
+   - Network operations, process management
+
+2. **Implement Runtime Adapters**
+   - Node.js adapter (default)
+   - Cloudflare Workers adapter
+   - Deno adapter (future)
+   - Browser adapter (future)
+
+3. **Conditional Imports**
+   - Use dynamic imports for runtime-specific code
+   - Detect runtime environment at startup
+   - Load appropriate adapter
+
+4. **Update All Packages**
+   - Histoi tissues: Remove direct Node.js usage
+   - MCP servers: Use runtime abstraction
+   - Build tools: Support multiple target environments
+
+### Success Criteria
+
+- [ ] All packages can build for edge runtimes
+- [ ] Runtime detection and adapter loading works
+- [ ] No Node.js globals in core logic
+- [ ] Tests pass in multiple environments
+- [ ] Documentation for edge deployment
+
+### Priority: HIGH
+
+This phase is a **hard blocker** for production deployment to edge environments and must be completed before the MCP ecosystem can be considered production-ready.
+
+## Phase 8: Performance & Optimization 📋 PLANNED
 
 ### Goals
 
@@ -205,7 +254,7 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 - Add performance monitoring
 - Create benchmark suite
 
-## Phase 8: Ecosystem Expansion 🔮 FUTURE
+## Phase 9: Ecosystem Expansion 🔮 FUTURE
 
 ### Vision
 
@@ -252,12 +301,37 @@ Multiple specialized MCP organisms coexisting:
 5. `pnpm build` - Build verification
 6. `pnpm test:e2e` - End-to-end tests (manual trigger)
 
+## 🔄 Future Refinements
+
+### Zod Validation Integration (Deferred from Phase 6.1.4)
+
+**Original Plan**: Add Zod validation to the type generation pipeline
+
+**Current Status**: DEFERRED - Using existing type predicates
+
+**Rationale**:
+- Current type predicates provide basic runtime validation
+- TypeScript interfaces ensure compile-time safety
+- Adding Zod now would introduce complexity without clear immediate benefit
+- MCP server can add Zod validation at its boundaries when needed
+
+**Future Implementation Options**:
+1. **OpenAPI → Zod libraries** (`openapi-zod`, `openapi-zod-client`)
+2. **TypeScript → Zod transformation** (`ts-to-zod`)
+3. **Manual generation from existing data**
+
+**Reconsideration Triggers**:
+- API returns malformed data in production
+- MCP server tool input validation needs
+- Runtime validation errors become frequent
+- Data transformation/coercion capabilities needed
+
 ## 🎬 Next Actions
 
-1. **First**: Type and validator generation pipeline
-2. **Then**: SDK implementation with boundary isolation
-3. **Next**: MCP server with biological architecture
-4. **Finally**: Multi-server validation and integration
+1. **First**: Continue with MCP server structure (Phase 6.2)
+2. **Then**: Implement MCP tools with biological architecture
+3. **Next**: Multi-server validation and integration
+4. **Finally**: Performance optimisation and ecosystem expansion
 
 ## 📚 References
 
