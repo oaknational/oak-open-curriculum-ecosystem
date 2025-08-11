@@ -4,13 +4,8 @@
 
 ## Architecture Evolution
 
-The project is evolving from a **genotype/phenotype** model to a **three-tier workspace** architecture:
+### Current State
 
-### Current State (Phase 4)
-- **Genotype** (`ecosystem/oak-mcp-core/`) - The genetic blueprint
-- **Phenotype** (`ecosystem/oak-notion-mcp/`) - The environmental expression
-
-### Target State (Phase 5)
 - **Moria (Molecules/Atoms)** (`ecosystem/moria/`) - Pure abstractions, zero dependencies
 - **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`) - Runtime-adaptive connective tissues
 - **Psycha (Living Organisms)** (`ecosystem/psycha/`) - Complete applications
@@ -33,7 +28,7 @@ The project is evolving from a **genotype/phenotype** model to a **three-tier wo
 
 | What you're looking for | Where to find it | Directory | Greek meaning |
 |-------------------------|------------------|-----------|---------------|
-| **Abstract patterns** | Platonic forms | `src/chora/morphai/` | μορφαί: Forms, hidden ideals |
+| **Mocks** | Platonic forms | `src/chora/eidola/` | εἴδολα: Phantoms |
 | **Types, interfaces** | Foundation layer | `src/chora/stroma/` | στρῶμα: Support/Foundation |
 | **Logging, events** | System flows | `src/chora/aither/` | αἰθήρ: Air/Essence that flows |
 | **Configuration** | Runtime settings | `src/chora/phaneron/` | φανερόν: Manifestation |
@@ -46,6 +41,7 @@ The project is evolving from a **genotype/phenotype** model to a **three-tier wo
 ### Two Complementary Scales
 
 #### Workspace Architecture (Moria → Histoi → Psycha)
+
 How packages relate in the workspace:
 
 - **Moria** - Pure abstractions (interfaces, types, algorithms)
@@ -61,49 +57,60 @@ How packages relate in the workspace:
   - Example: oak-notion-mcp server
 
 #### Psychon Architecture (Chorai + Organa → Psychon)
+
 How components organize within each organism:
 
 ##### 🌊 Chorai (Χῶραι) - Pervasive Fields
+
 Infrastructure that flows through everything:
 
-- **morphai** - Hidden forms and Platonic ideals
+- **eidola** - Mocks, testing helpers
 - **stroma** - Types and contracts (compile-time only)
 - **aither** - Logging and events (pervasive flows)
 - **phaneron** - Configuration and environment
 
 ##### 🫀 Organa (Ὄργανα) - Discrete Organs
+
 Bounded business logic units:
 
 - **notion** - Notion API integration
 - **mcp** - MCP protocol handling
 
 ##### 🎭 Psychon (Ψυχόν) - The Soul
+
 The wiring layer that brings everything to life.
 
 ## Common Tasks
 
 ### "I want to add a pure interface"
+
 → Go to `ecosystem/moria/@oaknational/mcp-moria/src/interfaces/`
 
 ### "I need runtime-adaptive behavior"
+
 → Create a new tissue in `ecosystem/histoi/`
 
 ### "I want to add logging to my organism"
+
 → Go to `src/chora/aither/logging/`
 
 ### "I need to add a new type"
+
 → For pure types: `ecosystem/moria/@oaknational/mcp-moria/src/types/`
 → For organism-specific: `src/chora/stroma/types/`
 
 ### "I want to modify Notion integration"
+
 → Go to `src/organa/notion/`
 
 ### "I need to add a new MCP tool"
+
 → Go to `src/organa/mcp/tools/`
 
 ## Import Rules
 
 ### Workspace Level
+
 ```typescript
 // ✅ ALLOWED
 // Psycha imports from Moria and Histoi
@@ -119,6 +126,7 @@ import { storage } from '@oaknational/mcp-histos-storage'; // NO!
 ```
 
 ### Psychon Level
+
 ```typescript
 // ✅ ALLOWED
 // Organa can import from chorai

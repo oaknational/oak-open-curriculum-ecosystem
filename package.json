@@ -20,7 +20,8 @@
     "analyze": "pnpm run analyze:deps && pnpm run analyze:modules",
     "analyze:deps": "madge ecosystem/ --circular --image .agent/generalisation-opportunities-analysis/dependency-graph.svg",
     "analyze:circular": "madge ecosystem/ --circular",
-    "analyze:modules": "tsx scripts/analyze-modules.ts"
+    "analyze:modules": "tsx scripts/analyze-modules.ts",
+    "analyze:outdated": "pnpm outdated -r"
   },
   "keywords": [
     "mcp",

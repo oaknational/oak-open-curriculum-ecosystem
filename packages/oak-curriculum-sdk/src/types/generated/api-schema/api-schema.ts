@@ -5,4689 +5,5412 @@
  */
 
 export const schema = {
-  openapi: '3.0.3',
-  info: {
-    title: 'Oak OpenAPI',
-    version: '0.5.0-e3db20ebe5a6edd3c0e781b01e90a1db11f46a2f',
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Oak OpenAPI",
+    "version": "0.5.0-2fa4d6b75f9887c334981434cf933a10b5834766"
   },
-  servers: [
+  "servers": [
     {
-      url: 'https://open-api.thenational.academy/api/v0',
-    },
+      "url": "https://open-api.thenational.academy/api/v0"
+    }
   ],
-  tags: [
+  "tags": [
     {
-      name: 'internal',
+      "name": "internal"
     },
     {
-      name: 'lists',
+      "name": "lists"
     },
     {
-      name: 'assets',
+      "name": "assets"
     },
     {
-      name: 'lessons',
+      "name": "lessons"
     },
     {
-      name: 'questions',
+      "name": "questions"
     },
     {
-      name: 'units',
+      "name": "units"
     },
     {
-      name: 'search',
+      "name": "search"
     },
     {
-      name: 'sequences',
-    },
+      "name": "sequences"
+    }
   ],
-  externalDocs: {
-    url: 'https://open-api.thenational.academy/api/v0/swagger.json',
+  "externalDocs": {
+    "url": "https://open-api.thenational.academy/api/v0/swagger.json"
   },
-  paths: {
-    '/sequences/{sequence}/units': {
-      get: {
-        operationId: 'getSequences-getSequenceUnits',
-        description: '',
-        tags: ['lists', 'units', 'sequences'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+  "paths": {
+    "/sequences/{sequence}/units": {
+      "get": {
+        "operationId": "getSequences-getSequenceUnits",
+        "description": "",
+        "tags": [
+          "lists",
+          "units",
+          "sequences"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'sequence',
-            schema: {
-              type: 'string',
-              example: 'english-primary',
-            },
-            required: true,
-          },
-          {
-            in: 'query',
-            name: 'year',
-            schema: {
-              type: 'string',
-              enum: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'all-years'],
-            },
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SequenceUnitsResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sequence",
+            "schema": {
+              "type": "string",
+              "example": "english-primary"
             },
+            "required": true
           },
-        },
-      },
+          {
+            "in": "query",
+            "name": "year",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "all-years"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SequenceUnitsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/lessons/{lesson}/transcript': {
-      get: {
-        operationId: 'getLessonTranscript-getLessonTranscript',
-        description: 'This endpoint returns the transcript from the video from a lesson',
-        tags: ['lessons'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/lessons/{lesson}/transcript": {
+      "get": {
+        "operationId": "getLessonTranscript-getLessonTranscript",
+        "description": "This endpoint returns the transcript from the video from a lesson",
+        "tags": [
+          "lessons"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'lesson',
-            description: 'The slug of the lesson',
-            schema: {
-              type: 'string',
-              example: 'checking-understanding-of-basic-transformations',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/TranscriptResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson",
+            "description": "The slug of the lesson",
+            "schema": {
+              "type": "string",
+              "example": "checking-understanding-of-basic-transformations"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranscriptResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/search/transcripts': {
-      get: {
-        operationId: 'searchTranscripts-searchTranscripts',
-        description:
-          'Search for a term and find lessons that contain similar text in their video transcripts',
-        tags: ['search'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/search/transcripts": {
+      "get": {
+        "operationId": "searchTranscripts-searchTranscripts",
+        "description": "Search for a term and find lessons that contain similar text in their video transcripts",
+        "tags": [
+          "search"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'query',
-            name: 'q',
-            description: 'A snippet of text to search for in the lesson video transcripts',
-            schema: {
-              type: 'string',
-              example: 'Who were the romans?',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SearchTranscriptResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "description": "A snippet of text to search for in the lesson video transcripts",
+            "schema": {
+              "type": "string",
+              "example": "Who were the romans?"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchTranscriptResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/sequences/{sequence}/assets': {
-      get: {
-        operationId: 'getAssets-getSequenceAssets',
-        description:
-          'This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence',
-        tags: ['assets', 'sequences'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/sequences/{sequence}/assets": {
+      "get": {
+        "operationId": "getAssets-getSequenceAssets",
+        "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence",
+        "tags": [
+          "assets",
+          "sequences"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'sequence',
-            schema: {
-              type: 'string',
-              example: 'maths-secondary',
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sequence",
+            "schema": {
+              "type": "string",
+              "example": "maths-secondary"
             },
-            required: true,
+            "required": true
           },
           {
-            in: 'query',
-            name: 'year',
-            schema: {
-              type: 'number',
-            },
+            "in": "query",
+            "name": "year",
+            "schema": {
+              "type": "number"
+            }
           },
           {
-            in: 'query',
-            name: 'type',
-            description:
-              'Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint',
-            schema: {
-              type: 'string',
-              enum: [
-                'slideDeck',
-                'exitQuiz',
-                'exitQuizAnswers',
-                'starterQuiz',
-                'starterQuizAnswers',
-                'supplementaryResource',
-                'video',
-                'worksheet',
-                'worksheetAnswers',
+            "in": "query",
+            "name": "type",
+            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "slideDeck",
+                "exitQuiz",
+                "exitQuizAnswers",
+                "starterQuiz",
+                "starterQuizAnswers",
+                "supplementaryResource",
+                "video",
+                "worksheet",
+                "worksheetAnswers"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SequenceAssetsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/key-stages/{keyStage}/subject/{subject}/assets": {
+      "get": {
+        "operationId": "getAssets-getSubjectAssets",
+        "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson",
+        "tags": [
+          "assets"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyStage",
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
               ],
+              "example": "ks1"
             },
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SequenceAssetsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/key-stages/{keyStage}/subject/{subject}/assets': {
-      get: {
-        operationId: 'getAssets-getSubjectAssets',
-        description:
-          'This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson',
-        tags: ['assets'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'keyStage',
-            description:
-              "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: ['ks1', 'ks2', 'ks3', 'ks4'],
-              example: 'ks1',
-            },
-            required: true,
+            "required": true
           },
           {
-            in: 'path',
-            name: 'subject',
-            description:
-              "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
-            schema: {
-              type: 'string',
-              enum: [
-                'art',
-                'citizenship',
-                'computing',
-                'cooking-nutrition',
-                'design-technology',
-                'english',
-                'french',
-                'geography',
-                'german',
-                'history',
-                'maths',
-                'music',
-                'physical-education',
-                'religious-education',
-                'rshe-pshe',
-                'science',
-                'spanish',
+            "in": "path",
+            "name": "subject",
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
               ],
-              example: 'english',
+              "example": "english"
             },
-            required: true,
+            "required": true
           },
           {
-            in: 'query',
-            name: 'type',
-            description:
-              'Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint',
-            schema: {
-              type: 'string',
-              enum: [
-                'slideDeck',
-                'exitQuiz',
-                'exitQuizAnswers',
-                'starterQuiz',
-                'starterQuizAnswers',
-                'supplementaryResource',
-                'video',
-                'worksheet',
-                'worksheetAnswers',
+            "in": "query",
+            "name": "type",
+            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "slideDeck",
+                "exitQuiz",
+                "exitQuizAnswers",
+                "starterQuiz",
+                "starterQuizAnswers",
+                "supplementaryResource",
+                "video",
+                "worksheet",
+                "worksheetAnswers"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "unit",
+            "description": "Optional unit slug to additionally filter by",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectAssetsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lessons/{lesson}/assets": {
+      "get": {
+        "operationId": "getAssets-getLessonAssets",
+        "description": "This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson",
+        "tags": [
+          "assets",
+          "lessons"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson",
+            "description": "The lesson slug",
+            "schema": {
+              "type": "string",
+              "example": "child-workers-in-the-victorian-era"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "slideDeck",
+                "exitQuiz",
+                "exitQuizAnswers",
+                "starterQuiz",
+                "starterQuizAnswers",
+                "supplementaryResource",
+                "video",
+                "worksheet",
+                "worksheetAnswers"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonAssetsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lessons/{lesson}/assets/{type}": {
+      "get": {
+        "operationId": "getAssets-getLessonAsset",
+        "description": "This endpoint will stream the downloadable asset for the given lesson and type",
+        "tags": [
+          "assets",
+          "lessons"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson",
+            "description": "The lesson slug",
+            "schema": {
+              "type": "string",
+              "example": "child-workers-in-the-victorian-era"
+            },
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "type",
+            "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "slideDeck",
+                "exitQuiz",
+                "exitQuizAnswers",
+                "starterQuiz",
+                "starterQuizAnswers",
+                "supplementaryResource",
+                "video",
+                "worksheet",
+                "worksheetAnswers"
               ],
+              "example": "slideDeck"
             },
-          },
-          {
-            in: 'query',
-            name: 'unit',
-            description: 'Optional unit slug to additionally filter by',
-            schema: {
-              type: 'string',
-            },
-          },
+            "required": true
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SubjectAssetsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonAssetResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/lessons/{lesson}/assets': {
-      get: {
-        operationId: 'getAssets-getLessonAssets',
-        description:
-          'This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson',
-        tags: ['assets', 'lessons'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/subjects": {
+      "get": {
+        "operationId": "getSubjects-getAllSubjects",
+        "description": "This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak",
+        "tags": [
+          "lists"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'lesson',
-            description: 'The lesson slug',
-            schema: {
-              type: 'string',
-              example: 'child-workers-in-the-victorian-era',
-            },
-            required: true,
-          },
-          {
-            in: 'query',
-            name: 'type',
-            description:
-              'Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint',
-            schema: {
-              type: 'string',
-              enum: [
-                'slideDeck',
-                'exitQuiz',
-                'exitQuizAnswers',
-                'starterQuiz',
-                'starterQuizAnswers',
-                'supplementaryResource',
-                'video',
-                'worksheet',
-                'worksheetAnswers',
-              ],
-            },
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/LessonAssetsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllSubjectsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/lessons/{lesson}/assets/{type}': {
-      get: {
-        operationId: 'getAssets-getLessonAsset',
-        description:
-          'This endpoint will stream the downloadable asset for the given lesson and type',
-        tags: ['assets', 'lessons'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/subjects/{subject}": {
+      "get": {
+        "operationId": "getSubjects-getSubject",
+        "description": "This endpoint returns a single subject and associated sequences, key stages and years.",
+        "tags": [
+          "lists"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'lesson',
-            description: 'The lesson slug',
-            schema: {
-              type: 'string',
-              example: 'child-workers-in-the-victorian-era',
-            },
-            required: true,
-          },
-          {
-            in: 'path',
-            name: 'type',
-            description:
-              'Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint',
-            schema: {
-              type: 'string',
-              enum: [
-                'slideDeck',
-                'exitQuiz',
-                'exitQuizAnswers',
-                'starterQuiz',
-                'starterQuizAnswers',
-                'supplementaryResource',
-                'video',
-                'worksheet',
-                'worksheetAnswers',
-              ],
-              example: 'slideDeck',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/LessonAssetResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "schema": {
+              "type": "string",
+              "example": "art"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/subjects': {
-      get: {
-        operationId: 'getSubjects-getAllSubjects',
-        description:
-          'This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/subjects/{subject}/sequences": {
+      "get": {
+        "operationId": "getSubjects-getSubjectSequence",
+        "description": "List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.",
+        "tags": [
+          "lists",
+          "sequences"
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/AllSubjectsResponseSchema',
-                },
-              },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "schema": {
+              "type": "string",
+              "example": "art"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectSequenceResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/subjects/{subject}': {
-      get: {
-        operationId: 'getSubjects-getSubject',
-        description:
-          'This endpoint returns a single subject and associated sequences, key stages and years.',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/subjects/{subject}/key-stages": {
+      "get": {
+        "operationId": "getSubjects-getSubjectKeyStages",
+        "description": "List of the key stages a subject is taught in.",
+        "tags": [
+          "lists"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'subject',
-            schema: {
-              type: 'string',
-              example: 'art',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SubjectResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "schema": {
+              "type": "string",
+              "example": "art"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectKeyStagesResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/subjects/{subject}/sequences': {
-      get: {
-        operationId: 'getSubjects-getSubjectSequence',
-        description:
-          'List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.',
-        tags: ['lists', 'sequences'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/subjects/{subject}/years": {
+      "get": {
+        "operationId": "getSubjects-getSubjectYears",
+        "description": "List of the years a subject is taught in.",
+        "tags": [
+          "lists"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'subject',
-            schema: {
-              type: 'string',
-              example: 'art',
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "subject",
+            "schema": {
+              "type": "string",
+              "example": "art"
             },
-            required: true,
-          },
+            "required": true
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SubjectSequenceResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/subjects/{subject}/key-stages': {
-      get: {
-        operationId: 'getSubjects-getSubjectKeyStages',
-        description: 'List of the key stages a subject is taught in.',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'subject',
-            schema: {
-              type: 'string',
-              example: 'art',
-            },
-            required: true,
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/SubjectKeyStagesResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/subjects/{subject}/years': {
-      get: {
-        operationId: 'getSubjects-getSubjectYears',
-        description: 'List of the years a subject is taught in.',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'subject',
-            schema: {
-              type: 'string',
-              example: 'art',
-            },
-            required: true,
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'array',
-                  items: {
-                    type: 'number',
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
                   },
-                  example: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-                },
-              },
-            },
-          },
-        },
-      },
+                  "example": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/key-stages': {
-      get: {
-        operationId: 'getKeyStages-getKeyStages',
-        description:
-          'This endpoint returns all the key stages (titles and slugs) that are currently available on Oak',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/key-stages": {
+      "get": {
+        "operationId": "getKeyStages-getKeyStages",
+        "description": "This endpoint returns all the key stages (titles and slugs) that are currently available on Oak",
+        "tags": [
+          "lists"
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/KeyStageResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyStageResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/key-stages/{keyStage}/subject/{subject}/lessons': {
-      get: {
-        operationId: 'getKeyStageSubjectLessons-getKeyStageSubjectLessons',
-        description:
-          'This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit',
-        tags: ['lists', 'lessons'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/key-stages/{keyStage}/subject/{subject}/lessons": {
+      "get": {
+        "operationId": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
+        "description": "This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit",
+        "tags": [
+          "lists",
+          "lessons"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'keyStage',
-            description:
-              "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: ['ks1', 'ks2', 'ks3', 'ks4'],
-              example: 'ks1',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
           {
-            in: 'path',
-            name: 'subject',
-            description:
-              "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: [
-                'art',
-                'citizenship',
-                'computing',
-                'cooking-nutrition',
-                'design-technology',
-                'english',
-                'french',
-                'geography',
-                'german',
-                'history',
-                'maths',
-                'music',
-                'physical-education',
-                'religious-education',
-                'rshe-pshe',
-                'science',
-                'spanish',
+            "in": "path",
+            "name": "keyStage",
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
               ],
-              example: 'english',
+              "example": "ks1"
             },
-            required: true,
+            "required": true
           },
           {
-            in: 'query',
-            name: 'unit',
-            description: 'Optional unit slug to additionally filter by',
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            in: 'query',
-            name: 'offset',
-            schema: {
-              type: 'number',
-              default: 0,
-            },
-          },
-          {
-            in: 'query',
-            name: 'limit',
-            description: 'Limit the number of results returned, max 100',
-            schema: {
-              type: 'number',
-              maximum: 100,
-              default: 10,
-            },
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/KeyStageSubjectLessonsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/key-stages/{keyStage}/subject/{subject}/units': {
-      get: {
-        operationId: 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits',
-        description:
-          'This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage',
-        tags: ['lists', 'units'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'keyStage',
-            description: "Key stage slug to filter by, e.g. 'ks2'",
-            schema: {
-              type: 'string',
-              enum: ['ks1', 'ks2', 'ks3', 'ks4'],
-              example: 'ks1',
-            },
-            required: true,
-          },
-          {
-            in: 'path',
-            name: 'subject',
-            description:
-              "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
-            schema: {
-              type: 'string',
-              enum: [
-                'art',
-                'citizenship',
-                'computing',
-                'cooking-nutrition',
-                'design-technology',
-                'english',
-                'french',
-                'geography',
-                'german',
-                'history',
-                'maths',
-                'music',
-                'physical-education',
-                'religious-education',
-                'rshe-pshe',
-                'science',
-                'spanish',
+            "in": "path",
+            "name": "subject",
+            "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
               ],
-              example: 'art',
+              "example": "english"
             },
-            required: true,
+            "required": true
           },
+          {
+            "in": "query",
+            "name": "unit",
+            "description": "Optional unit slug to additionally filter by",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit the number of results returned, max 100",
+            "schema": {
+              "type": "number",
+              "maximum": 100,
+              "default": 10
+            }
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/AllKeyStageAndSubjectUnitsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeyStageSubjectLessonsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/lessons/{lesson}/quiz': {
-      get: {
-        operationId: 'getQuestions-getQuestionsForLessons',
-        description:
-          'The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.',
-        tags: ['lessons', 'questions'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/key-stages/{keyStage}/subject/{subject}/units": {
+      "get": {
+        "operationId": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
+        "description": "This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage",
+        "tags": [
+          "lists",
+          "units"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'lesson',
-            schema: {
-              type: 'string',
-              example: 'joining-using-and',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/QuestionForLessonsResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/sequences/{sequence}/questions': {
-      get: {
-        operationId: 'getQuestions-getQuestionsForSequence',
-        description:
-          'This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence',
-        tags: ['questions', 'sequences'],
-        security: [
+        "parameters": [
           {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'sequence',
-            schema: {
-              type: 'string',
-              example: 'maths-secondary',
-            },
-            required: true,
-          },
-          {
-            in: 'query',
-            name: 'year',
-            schema: {
-              type: 'number',
-            },
-          },
-          {
-            in: 'query',
-            name: 'offset',
-            schema: {
-              type: 'number',
-              default: 0,
-            },
-          },
-          {
-            in: 'query',
-            name: 'limit',
-            description: 'Limit the number of results returned, max 100',
-            schema: {
-              type: 'number',
-              maximum: 100,
-              default: 10,
-            },
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/QuestionsForSequenceResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/key-stages/{keyStage}/subject/{subject}/questions': {
-      get: {
-        operationId: 'getQuestions-getQuestionsForKeyStageAndSubject',
-        description:
-          'This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject',
-        tags: ['questions'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'keyStage',
-            description:
-              "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: ['ks1', 'ks2', 'ks3', 'ks4'],
-              example: 'ks1',
-            },
-            required: true,
-          },
-          {
-            in: 'path',
-            name: 'subject',
-            description:
-              "Subject slug to search by, e.g. 'science' - note that casing is important here",
-            schema: {
-              type: 'string',
-              enum: [
-                'art',
-                'citizenship',
-                'computing',
-                'cooking-nutrition',
-                'design-technology',
-                'english',
-                'french',
-                'geography',
-                'german',
-                'history',
-                'maths',
-                'music',
-                'physical-education',
-                'religious-education',
-                'rshe-pshe',
-                'science',
-                'spanish',
+            "in": "path",
+            "name": "keyStage",
+            "description": "Key stage slug to filter by, e.g. 'ks2'",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
               ],
-              example: 'art',
+              "example": "ks1"
             },
-            required: true,
+            "required": true
           },
           {
-            in: 'query',
-            name: 'offset',
-            schema: {
-              type: 'number',
-              default: 0,
-            },
-          },
-          {
-            in: 'query',
-            name: 'limit',
-            description: 'Limit the number of results returned, max 100',
-            schema: {
-              type: 'number',
-              maximum: 100,
-              default: 10,
-              example: 10,
-            },
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/QuestionsForKeyStageAndSubjectResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/lessons/{lesson}/summary': {
-      get: {
-        operationId: 'getLessons-getLesson',
-        description: 'This endpoint returns a summary for a given lesson',
-        tags: ['lessons'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'path',
-            name: 'lesson',
-            description: 'The slug of the lesson',
-            schema: {
-              type: 'string',
-              example: 'joining-using-and',
-            },
-            required: true,
-          },
-        ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/LessonSummaryResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/search/lessons': {
-      get: {
-        operationId: 'getLessons-searchByTextSimilarity',
-        description:
-          'This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in',
-        tags: ['lessons', 'search'],
-        security: [
-          {
-            bearerAuth: [],
-          },
-        ],
-        parameters: [
-          {
-            in: 'query',
-            name: 'q',
-            schema: {
-              type: 'string',
-              example: 'gothic',
-            },
-            required: true,
-          },
-          {
-            in: 'query',
-            name: 'keyStage',
-            description:
-              "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: ['ks1', 'ks2', 'ks3', 'ks4'],
-            },
-          },
-          {
-            in: 'query',
-            name: 'subject',
-            description:
-              "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
-            schema: {
-              type: 'string',
-              enum: [
-                'art',
-                'citizenship',
-                'computing',
-                'cooking-nutrition',
-                'design-technology',
-                'english',
-                'french',
-                'geography',
-                'german',
-                'history',
-                'maths',
-                'music',
-                'physical-education',
-                'religious-education',
-                'rshe-pshe',
-                'science',
-                'spanish',
+            "in": "path",
+            "name": "subject",
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
               ],
+              "example": "art"
             },
-          },
-          {
-            in: 'query',
-            name: 'unit',
-            description: 'Optional unit slug to additionally filter by',
-            schema: {
-              type: 'string',
-            },
-          },
+            "required": true
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/LessonSearchResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllKeyStageAndSubjectUnitsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/units/{unit}/summary': {
-      get: {
-        operationId: 'getUnits-getUnit',
-        description:
-          'This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit',
-        tags: ['units'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/lessons/{lesson}/quiz": {
+      "get": {
+        "operationId": "getQuestions-getQuestionsForLessons",
+        "description": "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
+        "tags": [
+          "lessons",
+          "questions"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'unit',
-            description: 'The unit slug',
-            schema: {
-              type: 'string',
-              example: 'simple-compound-and-adverbial-complex-sentences',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/UnitSummaryResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson",
+            "schema": {
+              "type": "string",
+              "example": "joining-using-and"
             },
-          },
-        },
-      },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionForLessonsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/threads': {
-      get: {
-        operationId: 'getThreads-getAllThreads',
-        description: 'Get all threads that can be used as sequence filters.',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/sequences/{sequence}/questions": {
+      "get": {
+        "operationId": "getQuestions-getQuestionsForSequence",
+        "description": "This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence",
+        "tags": [
+          "questions",
+          "sequences"
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/AllThreadsResponseSchema',
-                },
-              },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sequence",
+            "schema": {
+              "type": "string",
+              "example": "maths-secondary"
             },
+            "required": true
           },
-          '401': {
-            description: 'Authorization not provided',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/error.UNAUTHORIZED',
-                },
-              },
-            },
+          {
+            "in": "query",
+            "name": "year",
+            "schema": {
+              "type": "number"
+            }
           },
-          '403': {
-            description: 'Insufficient access',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/error.FORBIDDEN',
-                },
-              },
-            },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
           },
-          '500': {
-            description: 'Internal server error',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/error.INTERNAL_SERVER_ERROR',
-                },
-              },
-            },
-          },
-        },
-      },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit the number of results returned, max 100",
+            "schema": {
+              "type": "number",
+              "maximum": 100,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionsForSequenceResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/threads/{threadSlug}/units': {
-      get: {
-        operationId: 'getThreads-getThreadUnits',
-        description: 'Get all units for a specific thread filter.',
-        tags: ['lists'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/key-stages/{keyStage}/subject/{subject}/questions": {
+      "get": {
+        "operationId": "getQuestions-getQuestionsForKeyStageAndSubject",
+        "description": "This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject",
+        "tags": [
+          "questions"
         ],
-        parameters: [
+        "security": [
           {
-            in: 'path',
-            name: 'threadSlug',
-            schema: {
-              type: 'string',
-              example: 'a-midsummer-nights-dream-72',
-            },
-            required: true,
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/ThreadUnitsResponseSchema',
-                },
-              },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyStage",
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ],
+              "example": "ks1"
             },
+            "required": true
           },
-        },
-      },
+          {
+            "in": "path",
+            "name": "subject",
+            "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
+              ],
+              "example": "art"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit the number of results returned, max 100",
+            "schema": {
+              "type": "number",
+              "maximum": 100,
+              "default": 10,
+              "example": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionsForKeyStageAndSubjectResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/changelog': {
-      get: {
-        operationId: 'changelog-changelog',
-        description: 'History of significant changes to the API with associated dates and versions',
-        tags: ['internal'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/lessons/{lesson}/summary": {
+      "get": {
+        "operationId": "getLessons-getLesson",
+        "description": "This endpoint returns a summary for a given lesson",
+        "tags": [
+          "lessons"
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      version: {
-                        type: 'string',
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "lesson",
+            "description": "The slug of the lesson",
+            "schema": {
+              "type": "string",
+              "example": "joining-using-and"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonSummaryResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/lessons": {
+      "get": {
+        "operationId": "getLessons-searchByTextSimilarity",
+        "description": "This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in",
+        "tags": [
+          "lessons",
+          "search"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string",
+              "example": "gothic"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "keyStage",
+            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "subject",
+            "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "art",
+                "citizenship",
+                "computing",
+                "cooking-nutrition",
+                "design-technology",
+                "english",
+                "french",
+                "geography",
+                "german",
+                "history",
+                "maths",
+                "music",
+                "physical-education",
+                "religious-education",
+                "rshe-pshe",
+                "science",
+                "spanish"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "unit",
+            "description": "Optional unit slug to additionally filter by",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LessonSearchResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/units/{unit}/summary": {
+      "get": {
+        "operationId": "getUnits-getUnit",
+        "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+        "tags": [
+          "units"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "unit",
+            "description": "The unit slug",
+            "schema": {
+              "type": "string",
+              "example": "simple-compound-and-adverbial-complex-sentences"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnitSummaryResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/threads": {
+      "get": {
+        "operationId": "getThreads-getAllThreads",
+        "description": "Get all threads that can be used as sequence filters.",
+        "tags": [
+          "lists"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllThreadsResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization not provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient access",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.FORBIDDEN"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/threads/{threadSlug}/units": {
+      "get": {
+        "operationId": "getThreads-getThreadUnits",
+        "description": "Get all units for a specific thread filter.",
+        "tags": [
+          "lists"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "threadSlug",
+            "schema": {
+              "type": "string",
+              "example": "a-midsummer-nights-dream-72"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ThreadUnitsResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changelog": {
+      "get": {
+        "operationId": "changelog-changelog",
+        "description": "History of significant changes to the API with associated dates and versions",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "version": {
+                        "type": "string"
                       },
-                      date: {
-                        type: 'string',
+                      "date": {
+                        "type": "string"
                       },
-                      changes: {
-                        type: 'array',
-                        items: {
-                          type: 'string',
-                        },
-                      },
+                      "changes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
                     },
-                    required: ['version', 'date', 'changes'],
+                    "required": [
+                      "version",
+                      "date",
+                      "changes"
+                    ]
                   },
-                  example: [
+                  "example": [
                     {
-                      version: '0.5.0',
-                      date: '2025-03-06',
-                      changes: [
-                        'PPTX used for slideDeck assets',
-                        'All video assets now fully downloadable in mp4 format',
-                        'New /threads/* endpoints',
-                      ],
+                      "version": "0.5.0",
+                      "date": "2025-03-06",
+                      "changes": [
+                        "PPTX used for slideDeck assets",
+                        "All video assets now fully downloadable in mp4 format",
+                        "New /threads/* endpoints"
+                      ]
                     },
                     {
-                      version: '0.4.0',
-                      date: '2025-02-07',
-                      changes: [
-                        'Added /sequences/* and /subjects/* endpoints, and add support for unit optionality',
-                      ],
+                      "version": "0.4.0",
+                      "date": "2025-02-07",
+                      "changes": [
+                        "Added /sequences/* and /subjects/* endpoints, and add support for unit optionality"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/changelog/latest": {
+      "get": {
+        "operationId": "changelog-latest",
+        "description": "Get the latest version and latest change note for the API",
+        "tags": [
+          "internal"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string"
                     },
+                    "date": {
+                      "type": "string"
+                    },
+                    "changes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "version",
+                    "date",
+                    "changes"
                   ],
-                },
-              },
-            },
-          },
-        },
-      },
+                  "example": {
+                    "version": "0.5.0",
+                    "date": "2025-03-06",
+                    "changes": [
+                      "PPTX used for slideDeck assets",
+                      "All video assets now fully downloadable in mp4 format",
+                      "New /threads/* endpoints"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    '/changelog/latest': {
-      get: {
-        operationId: 'changelog-latest',
-        description: 'Get the latest version and latest change note for the API',
-        tags: ['internal'],
-        security: [
-          {
-            bearerAuth: [],
-          },
+    "/rate-limit": {
+      "get": {
+        "operationId": "getRateLimit-getRateLimit",
+        "description": "Check your current rate limit status (note that your rate limit is also included in the headers of every response).\n\nThis specific endpoint does not cost any requests.",
+        "tags": [
+          "internal"
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    version: {
-                      type: 'string',
-                    },
-                    date: {
-                      type: 'string',
-                    },
-                    changes: {
-                      type: 'array',
-                      items: {
-                        type: 'string',
-                      },
-                    },
-                  },
-                  required: ['version', 'date', 'changes'],
-                  example: {
-                    version: '0.5.0',
-                    date: '2025-03-06',
-                    changes: [
-                      'PPTX used for slideDeck assets',
-                      'All video assets now fully downloadable in mp4 format',
-                      'New /threads/* endpoints',
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/rate-limit': {
-      get: {
-        operationId: 'getRateLimit-getRateLimit',
-        description:
-          'Check your current rate limit status (note that your rate limit is also included in the headers of every response).\n\nThis specific endpoint does not cost any requests.',
-        tags: ['internal'],
-        security: [
+        "security": [
           {
-            bearerAuth: [],
-          },
+            "bearerAuth": []
+          }
         ],
-        responses: {
-          '200': {
-            description: 'Successful response',
-            content: {
-              'application/json': {
-                schema: {
-                  $ref: '#/components/schemas/RateLimitResponseSchema',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   },
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-      },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     },
-    schemas: {
-      SequenceUnitsResponseSchema: {
-        type: 'array',
-        items: {
-          anyOf: [
+    "schemas": {
+      "SequenceUnitsResponseSchema": {
+        "type": "array",
+        "items": {
+          "anyOf": [
             {
-              type: 'object',
-              properties: {
-                year: {
-                  anyOf: [
+              "type": "object",
+              "properties": {
+                "year": {
+                  "anyOf": [
                     {
-                      type: 'number',
+                      "type": "number"
                     },
                     {
-                      type: 'string',
-                      enum: ['all-years'],
-                    },
-                  ],
+                      "type": "string",
+                      "enum": [
+                        "all-years"
+                      ]
+                    }
+                  ]
                 },
-                title: {
-                  type: 'string',
+                "title": {
+                  "type": "string"
                 },
-                units: {
-                  type: 'array',
-                  items: {
-                    anyOf: [
+                "units": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
                       {
-                        type: 'object',
-                        properties: {
-                          unitTitle: {
-                            type: 'string',
+                        "type": "object",
+                        "properties": {
+                          "unitTitle": {
+                            "type": "string"
                           },
-                          unitOrder: {
-                            type: 'number',
+                          "unitOrder": {
+                            "type": "number"
                           },
-                          unitOptions: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                unitTitle: {
-                                  type: 'string',
+                          "unitOptions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "unitTitle": {
+                                  "type": "string"
                                 },
-                                unitSlug: {
-                                  type: 'string',
-                                },
+                                "unitSlug": {
+                                  "type": "string"
+                                }
                               },
-                              required: ['unitTitle', 'unitSlug'],
-                            },
+                              "required": [
+                                "unitTitle",
+                                "unitSlug"
+                              ]
+                            }
                           },
-                          categories: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                categoryTitle: {
-                                  type: 'string',
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "categoryTitle": {
+                                  "type": "string"
                                 },
-                                categorySlug: {
-                                  type: 'string',
-                                },
+                                "categorySlug": {
+                                  "type": "string"
+                                }
                               },
-                              required: ['categoryTitle'],
-                            },
+                              "required": [
+                                "categoryTitle"
+                              ]
+                            }
                           },
-                          threads: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                threadTitle: {
-                                  type: 'string',
+                          "threads": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "threadTitle": {
+                                  "type": "string"
                                 },
-                                threadSlug: {
-                                  type: 'string',
+                                "threadSlug": {
+                                  "type": "string"
                                 },
-                                order: {
-                                  type: 'number',
-                                },
+                                "order": {
+                                  "type": "number"
+                                }
                               },
-                              required: ['threadTitle', 'threadSlug', 'order'],
-                            },
-                          },
+                              "required": [
+                                "threadTitle",
+                                "threadSlug",
+                                "order"
+                              ]
+                            }
+                          }
                         },
-                        required: ['unitTitle', 'unitOrder', 'unitOptions'],
+                        "required": [
+                          "unitTitle",
+                          "unitOrder",
+                          "unitOptions"
+                        ]
                       },
                       {
-                        type: 'object',
-                        properties: {
-                          unitTitle: {
-                            type: 'string',
+                        "type": "object",
+                        "properties": {
+                          "unitTitle": {
+                            "type": "string"
                           },
-                          unitOrder: {
-                            type: 'number',
+                          "unitOrder": {
+                            "type": "number"
                           },
-                          unitSlug: {
-                            type: 'string',
+                          "unitSlug": {
+                            "type": "string"
                           },
-                          categories: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                categoryTitle: {
-                                  type: 'string',
+                          "categories": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "categoryTitle": {
+                                  "type": "string"
                                 },
-                                categorySlug: {
-                                  type: 'string',
-                                },
+                                "categorySlug": {
+                                  "type": "string"
+                                }
                               },
-                              required: ['categoryTitle'],
-                            },
+                              "required": [
+                                "categoryTitle"
+                              ]
+                            }
                           },
-                          threads: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                threadTitle: {
-                                  type: 'string',
+                          "threads": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "threadTitle": {
+                                  "type": "string"
                                 },
-                                threadSlug: {
-                                  type: 'string',
+                                "threadSlug": {
+                                  "type": "string"
                                 },
-                                order: {
-                                  type: 'number',
-                                },
+                                "order": {
+                                  "type": "number"
+                                }
                               },
-                              required: ['threadTitle', 'threadSlug', 'order'],
-                            },
-                          },
+                              "required": [
+                                "threadTitle",
+                                "threadSlug",
+                                "order"
+                              ]
+                            }
+                          }
                         },
-                        required: ['unitTitle', 'unitOrder', 'unitSlug'],
-                      },
-                    ],
-                  },
-                },
+                        "required": [
+                          "unitTitle",
+                          "unitOrder",
+                          "unitSlug"
+                        ]
+                      }
+                    ]
+                  }
+                }
               },
-              required: ['year', 'units'],
+              "required": [
+                "year",
+                "units"
+              ]
             },
             {
-              type: 'object',
-              properties: {
-                year: {
-                  type: 'number',
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "number"
                 },
-                title: {
-                  type: 'string',
+                "title": {
+                  "type": "string"
                 },
-                examSubjects: {
-                  type: 'array',
-                  items: {
-                    anyOf: [
+                "examSubjects": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
                       {
-                        type: 'object',
-                        properties: {
-                          examSubjectTitle: {
-                            type: 'string',
+                        "type": "object",
+                        "properties": {
+                          "examSubjectTitle": {
+                            "type": "string"
                           },
-                          examSubjectSlug: {
-                            type: 'string',
+                          "examSubjectSlug": {
+                            "type": "string"
                           },
-                          tiers: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                tierTitle: {
-                                  type: 'string',
+                          "tiers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "tierTitle": {
+                                  "type": "string"
                                 },
-                                tierSlug: {
-                                  type: 'string',
+                                "tierSlug": {
+                                  "type": "string"
                                 },
-                                units: {
-                                  type: 'array',
-                                  items: {
-                                    anyOf: [
+                                "units": {
+                                  "type": "array",
+                                  "items": {
+                                    "anyOf": [
                                       {
-                                        type: 'object',
-                                        properties: {
-                                          unitTitle: {
-                                            type: 'string',
+                                        "type": "object",
+                                        "properties": {
+                                          "unitTitle": {
+                                            "type": "string"
                                           },
-                                          unitOrder: {
-                                            type: 'number',
+                                          "unitOrder": {
+                                            "type": "number"
                                           },
-                                          unitOptions: {
-                                            type: 'array',
-                                            items: {
-                                              type: 'object',
-                                              properties: {
-                                                unitTitle: {
-                                                  type: 'string',
+                                          "unitOptions": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "unitTitle": {
+                                                  "type": "string"
                                                 },
-                                                unitSlug: {
-                                                  type: 'string',
-                                                },
+                                                "unitSlug": {
+                                                  "type": "string"
+                                                }
                                               },
-                                              required: ['unitTitle', 'unitSlug'],
-                                            },
+                                              "required": [
+                                                "unitTitle",
+                                                "unitSlug"
+                                              ]
+                                            }
                                           },
-                                          categories: {
-                                            type: 'array',
-                                            items: {
-                                              type: 'object',
-                                              properties: {
-                                                categoryTitle: {
-                                                  type: 'string',
+                                          "categories": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "categoryTitle": {
+                                                  "type": "string"
                                                 },
-                                                categorySlug: {
-                                                  type: 'string',
-                                                },
+                                                "categorySlug": {
+                                                  "type": "string"
+                                                }
                                               },
-                                              required: ['categoryTitle'],
-                                            },
+                                              "required": [
+                                                "categoryTitle"
+                                              ]
+                                            }
                                           },
-                                          threads: {
-                                            type: 'array',
-                                            items: {
-                                              type: 'object',
-                                              properties: {
-                                                threadTitle: {
-                                                  type: 'string',
+                                          "threads": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "threadTitle": {
+                                                  "type": "string"
                                                 },
-                                                threadSlug: {
-                                                  type: 'string',
+                                                "threadSlug": {
+                                                  "type": "string"
                                                 },
-                                                order: {
-                                                  type: 'number',
-                                                },
+                                                "order": {
+                                                  "type": "number"
+                                                }
                                               },
-                                              required: ['threadTitle', 'threadSlug', 'order'],
-                                            },
-                                          },
+                                              "required": [
+                                                "threadTitle",
+                                                "threadSlug",
+                                                "order"
+                                              ]
+                                            }
+                                          }
                                         },
-                                        required: ['unitTitle', 'unitOrder', 'unitOptions'],
+                                        "required": [
+                                          "unitTitle",
+                                          "unitOrder",
+                                          "unitOptions"
+                                        ]
                                       },
                                       {
-                                        type: 'object',
-                                        properties: {
-                                          unitTitle: {
-                                            type: 'string',
+                                        "type": "object",
+                                        "properties": {
+                                          "unitTitle": {
+                                            "type": "string"
                                           },
-                                          unitOrder: {
-                                            type: 'number',
+                                          "unitOrder": {
+                                            "type": "number"
                                           },
-                                          unitSlug: {
-                                            type: 'string',
+                                          "unitSlug": {
+                                            "type": "string"
                                           },
-                                          categories: {
-                                            type: 'array',
-                                            items: {
-                                              type: 'object',
-                                              properties: {
-                                                categoryTitle: {
-                                                  type: 'string',
+                                          "categories": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "categoryTitle": {
+                                                  "type": "string"
                                                 },
-                                                categorySlug: {
-                                                  type: 'string',
-                                                },
+                                                "categorySlug": {
+                                                  "type": "string"
+                                                }
                                               },
-                                              required: ['categoryTitle'],
-                                            },
+                                              "required": [
+                                                "categoryTitle"
+                                              ]
+                                            }
                                           },
-                                          threads: {
-                                            type: 'array',
-                                            items: {
-                                              type: 'object',
-                                              properties: {
-                                                threadTitle: {
-                                                  type: 'string',
+                                          "threads": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "threadTitle": {
+                                                  "type": "string"
                                                 },
-                                                threadSlug: {
-                                                  type: 'string',
+                                                "threadSlug": {
+                                                  "type": "string"
                                                 },
-                                                order: {
-                                                  type: 'number',
-                                                },
+                                                "order": {
+                                                  "type": "number"
+                                                }
                                               },
-                                              required: ['threadTitle', 'threadSlug', 'order'],
-                                            },
-                                          },
+                                              "required": [
+                                                "threadTitle",
+                                                "threadSlug",
+                                                "order"
+                                              ]
+                                            }
+                                          }
                                         },
-                                        required: ['unitTitle', 'unitOrder', 'unitSlug'],
-                                      },
-                                    ],
-                                  },
-                                },
+                                        "required": [
+                                          "unitTitle",
+                                          "unitOrder",
+                                          "unitSlug"
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                }
                               },
-                              required: ['tierTitle', 'tierSlug', 'units'],
-                            },
-                          },
+                              "required": [
+                                "tierTitle",
+                                "tierSlug",
+                                "units"
+                              ]
+                            }
+                          }
                         },
-                        required: ['examSubjectTitle', 'tiers'],
+                        "required": [
+                          "examSubjectTitle",
+                          "tiers"
+                        ]
                       },
                       {
-                        type: 'object',
-                        properties: {
-                          examSubjectTitle: {
-                            type: 'string',
+                        "type": "object",
+                        "properties": {
+                          "examSubjectTitle": {
+                            "type": "string"
                           },
-                          examSubjectSlug: {
-                            type: 'string',
+                          "examSubjectSlug": {
+                            "type": "string"
                           },
-                          units: {
-                            type: 'array',
-                            items: {
-                              anyOf: [
+                          "units": {
+                            "type": "array",
+                            "items": {
+                              "anyOf": [
                                 {
-                                  type: 'object',
-                                  properties: {
-                                    unitTitle: {
-                                      type: 'string',
+                                  "type": "object",
+                                  "properties": {
+                                    "unitTitle": {
+                                      "type": "string"
                                     },
-                                    unitOrder: {
-                                      type: 'number',
+                                    "unitOrder": {
+                                      "type": "number"
                                     },
-                                    unitOptions: {
-                                      type: 'array',
-                                      items: {
-                                        type: 'object',
-                                        properties: {
-                                          unitTitle: {
-                                            type: 'string',
+                                    "unitOptions": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "unitTitle": {
+                                            "type": "string"
                                           },
-                                          unitSlug: {
-                                            type: 'string',
-                                          },
+                                          "unitSlug": {
+                                            "type": "string"
+                                          }
                                         },
-                                        required: ['unitTitle', 'unitSlug'],
-                                      },
+                                        "required": [
+                                          "unitTitle",
+                                          "unitSlug"
+                                        ]
+                                      }
                                     },
-                                    categories: {
-                                      type: 'array',
-                                      items: {
-                                        type: 'object',
-                                        properties: {
-                                          categoryTitle: {
-                                            type: 'string',
+                                    "categories": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "categoryTitle": {
+                                            "type": "string"
                                           },
-                                          categorySlug: {
-                                            type: 'string',
-                                          },
+                                          "categorySlug": {
+                                            "type": "string"
+                                          }
                                         },
-                                        required: ['categoryTitle'],
-                                      },
+                                        "required": [
+                                          "categoryTitle"
+                                        ]
+                                      }
                                     },
-                                    threads: {
-                                      type: 'array',
-                                      items: {
-                                        type: 'object',
-                                        properties: {
-                                          threadTitle: {
-                                            type: 'string',
+                                    "threads": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "threadTitle": {
+                                            "type": "string"
                                           },
-                                          threadSlug: {
-                                            type: 'string',
+                                          "threadSlug": {
+                                            "type": "string"
                                           },
-                                          order: {
-                                            type: 'number',
-                                          },
+                                          "order": {
+                                            "type": "number"
+                                          }
                                         },
-                                        required: ['threadTitle', 'threadSlug', 'order'],
-                                      },
-                                    },
+                                        "required": [
+                                          "threadTitle",
+                                          "threadSlug",
+                                          "order"
+                                        ]
+                                      }
+                                    }
                                   },
-                                  required: ['unitTitle', 'unitOrder', 'unitOptions'],
+                                  "required": [
+                                    "unitTitle",
+                                    "unitOrder",
+                                    "unitOptions"
+                                  ]
                                 },
                                 {
-                                  type: 'object',
-                                  properties: {
-                                    unitTitle: {
-                                      type: 'string',
+                                  "type": "object",
+                                  "properties": {
+                                    "unitTitle": {
+                                      "type": "string"
                                     },
-                                    unitOrder: {
-                                      type: 'number',
+                                    "unitOrder": {
+                                      "type": "number"
                                     },
-                                    unitSlug: {
-                                      type: 'string',
+                                    "unitSlug": {
+                                      "type": "string"
                                     },
-                                    categories: {
-                                      type: 'array',
-                                      items: {
-                                        type: 'object',
-                                        properties: {
-                                          categoryTitle: {
-                                            type: 'string',
+                                    "categories": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "categoryTitle": {
+                                            "type": "string"
                                           },
-                                          categorySlug: {
-                                            type: 'string',
-                                          },
+                                          "categorySlug": {
+                                            "type": "string"
+                                          }
                                         },
-                                        required: ['categoryTitle'],
-                                      },
+                                        "required": [
+                                          "categoryTitle"
+                                        ]
+                                      }
                                     },
-                                    threads: {
-                                      type: 'array',
-                                      items: {
-                                        type: 'object',
-                                        properties: {
-                                          threadTitle: {
-                                            type: 'string',
+                                    "threads": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "threadTitle": {
+                                            "type": "string"
                                           },
-                                          threadSlug: {
-                                            type: 'string',
+                                          "threadSlug": {
+                                            "type": "string"
                                           },
-                                          order: {
-                                            type: 'number',
-                                          },
+                                          "order": {
+                                            "type": "number"
+                                          }
                                         },
-                                        required: ['threadTitle', 'threadSlug', 'order'],
-                                      },
-                                    },
+                                        "required": [
+                                          "threadTitle",
+                                          "threadSlug",
+                                          "order"
+                                        ]
+                                      }
+                                    }
                                   },
-                                  required: ['unitTitle', 'unitOrder', 'unitSlug'],
-                                },
-                              ],
-                            },
-                          },
+                                  "required": [
+                                    "unitTitle",
+                                    "unitOrder",
+                                    "unitSlug"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
                         },
-                        required: ['examSubjectTitle', 'units'],
-                      },
-                    ],
-                  },
-                },
+                        "required": [
+                          "examSubjectTitle",
+                          "units"
+                        ]
+                      }
+                    ]
+                  }
+                }
               },
-              required: ['year', 'examSubjects'],
+              "required": [
+                "year",
+                "examSubjects"
+              ]
             },
             {
-              type: 'object',
-              properties: {
-                year: {
-                  type: 'number',
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "number"
                 },
-                title: {
-                  type: 'string',
+                "title": {
+                  "type": "string"
                 },
-                tiers: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      tierTitle: {
-                        type: 'string',
+                "tiers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "tierTitle": {
+                        "type": "string"
                       },
-                      tierSlug: {
-                        type: 'string',
+                      "tierSlug": {
+                        "type": "string"
                       },
-                      units: {
-                        type: 'array',
-                        items: {
-                          anyOf: [
+                      "units": {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
                             {
-                              type: 'object',
-                              properties: {
-                                unitTitle: {
-                                  type: 'string',
+                              "type": "object",
+                              "properties": {
+                                "unitTitle": {
+                                  "type": "string"
                                 },
-                                unitOrder: {
-                                  type: 'number',
+                                "unitOrder": {
+                                  "type": "number"
                                 },
-                                unitOptions: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      unitTitle: {
-                                        type: 'string',
+                                "unitOptions": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "unitTitle": {
+                                        "type": "string"
                                       },
-                                      unitSlug: {
-                                        type: 'string',
-                                      },
+                                      "unitSlug": {
+                                        "type": "string"
+                                      }
                                     },
-                                    required: ['unitTitle', 'unitSlug'],
-                                  },
+                                    "required": [
+                                      "unitTitle",
+                                      "unitSlug"
+                                    ]
+                                  }
                                 },
-                                categories: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      categoryTitle: {
-                                        type: 'string',
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "categoryTitle": {
+                                        "type": "string"
                                       },
-                                      categorySlug: {
-                                        type: 'string',
-                                      },
+                                      "categorySlug": {
+                                        "type": "string"
+                                      }
                                     },
-                                    required: ['categoryTitle'],
-                                  },
+                                    "required": [
+                                      "categoryTitle"
+                                    ]
+                                  }
                                 },
-                                threads: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      threadTitle: {
-                                        type: 'string',
+                                "threads": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "threadTitle": {
+                                        "type": "string"
                                       },
-                                      threadSlug: {
-                                        type: 'string',
+                                      "threadSlug": {
+                                        "type": "string"
                                       },
-                                      order: {
-                                        type: 'number',
-                                      },
+                                      "order": {
+                                        "type": "number"
+                                      }
                                     },
-                                    required: ['threadTitle', 'threadSlug', 'order'],
-                                  },
-                                },
+                                    "required": [
+                                      "threadTitle",
+                                      "threadSlug",
+                                      "order"
+                                    ]
+                                  }
+                                }
                               },
-                              required: ['unitTitle', 'unitOrder', 'unitOptions'],
+                              "required": [
+                                "unitTitle",
+                                "unitOrder",
+                                "unitOptions"
+                              ]
                             },
                             {
-                              type: 'object',
-                              properties: {
-                                unitTitle: {
-                                  type: 'string',
+                              "type": "object",
+                              "properties": {
+                                "unitTitle": {
+                                  "type": "string"
                                 },
-                                unitOrder: {
-                                  type: 'number',
+                                "unitOrder": {
+                                  "type": "number"
                                 },
-                                unitSlug: {
-                                  type: 'string',
+                                "unitSlug": {
+                                  "type": "string"
                                 },
-                                categories: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      categoryTitle: {
-                                        type: 'string',
+                                "categories": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "categoryTitle": {
+                                        "type": "string"
                                       },
-                                      categorySlug: {
-                                        type: 'string',
-                                      },
+                                      "categorySlug": {
+                                        "type": "string"
+                                      }
                                     },
-                                    required: ['categoryTitle'],
-                                  },
+                                    "required": [
+                                      "categoryTitle"
+                                    ]
+                                  }
                                 },
-                                threads: {
-                                  type: 'array',
-                                  items: {
-                                    type: 'object',
-                                    properties: {
-                                      threadTitle: {
-                                        type: 'string',
+                                "threads": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "threadTitle": {
+                                        "type": "string"
                                       },
-                                      threadSlug: {
-                                        type: 'string',
+                                      "threadSlug": {
+                                        "type": "string"
                                       },
-                                      order: {
-                                        type: 'number',
-                                      },
+                                      "order": {
+                                        "type": "number"
+                                      }
                                     },
-                                    required: ['threadTitle', 'threadSlug', 'order'],
-                                  },
-                                },
+                                    "required": [
+                                      "threadTitle",
+                                      "threadSlug",
+                                      "order"
+                                    ]
+                                  }
+                                }
                               },
-                              required: ['unitTitle', 'unitOrder', 'unitSlug'],
-                            },
-                          ],
-                        },
-                      },
+                              "required": [
+                                "unitTitle",
+                                "unitOrder",
+                                "unitSlug"
+                              ]
+                            }
+                          ]
+                        }
+                      }
                     },
-                    required: ['tierTitle', 'tierSlug', 'units'],
-                  },
-                },
+                    "required": [
+                      "tierTitle",
+                      "tierSlug",
+                      "units"
+                    ]
+                  }
+                }
               },
-              required: ['year', 'tiers'],
+              "required": [
+                "year",
+                "tiers"
+              ]
+            }
+          ]
+        },
+        "example": [
+          {
+            "year": 1,
+            "units": [
+              {
+                "unitTitle": "Speaking and Listening",
+                "unitOrder": 1,
+                "unitSlug": "speaking-and-listening",
+                "categories": [
+                  {
+                    "categoryTitle": "Reading, writing & oracy"
+                  }
+                ],
+                "threads": [
+                  {
+                    "threadTitle": "Developing spoken language",
+                    "threadSlug": "developing-spoken-language",
+                    "order": 8
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "TranscriptResponseSchema": {
+        "type": "object",
+        "properties": {
+          "transcript": {
+            "type": "string"
+          },
+          "vtt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "transcript",
+          "vtt"
+        ],
+        "example": {
+          "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
+          "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
+        }
+      },
+      "SearchTranscriptResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonTitle": {
+              "type": "string"
             },
+            "lessonSlug": {
+              "type": "string"
+            },
+            "transcriptSnippet": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "lessonTitle",
+            "lessonSlug"
+          ]
+        },
+        "example": [
+          {
+            "lessonTitle": "The Roman invasion of Britain ",
+            "lessonSlug": "the-roman-invasion-of-britain",
+            "transcriptSnippet": "The Romans were ready,"
+          },
+          {
+            "lessonTitle": "The changes to life brought about by Roman settlement",
+            "lessonSlug": "the-changes-to-life-brought-about-by-roman-settlement",
+            "transcriptSnippet": "when the Romans came."
+          },
+          {
+            "lessonTitle": "Boudica's rebellion against Roman rule",
+            "lessonSlug": "boudicas-rebellion-against-roman-rule",
+            "transcriptSnippet": "kings who resisted the Romans were,"
+          },
+          {
+            "lessonTitle": "How far religion changed under Roman rule",
+            "lessonSlug": "how-far-religion-changed-under-roman-rule",
+            "transcriptSnippet": "for the Romans."
+          }
+        ]
+      },
+      "SequenceAssetsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonSlug": {
+              "type": "string"
+            },
+            "lessonTitle": {
+              "type": "string"
+            },
+            "attribution": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "assets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "slideDeck",
+                      "exitQuiz",
+                      "exitQuizAnswers",
+                      "starterQuiz",
+                      "starterQuizAnswers",
+                      "supplementaryResource",
+                      "video",
+                      "worksheet",
+                      "worksheetAnswers"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "label",
+                  "url"
+                ]
+              }
+            }
+          },
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "assets"
+          ]
+        },
+        "example": [
+          {
+            "lessonSlug": "using-numerals",
+            "lessonTitle": "Using numerals",
+            "assets": [
+              {
+                "label": "Worksheet",
+                "type": "worksheet",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet"
+              },
+              {
+                "label": "Worksheet Answers",
+                "type": "worksheetAnswers",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers"
+              },
+              {
+                "label": "Video",
+                "type": "video",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video"
+              }
+            ]
+          }
+        ]
+      },
+      "SubjectAssetsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonSlug": {
+              "type": "string"
+            },
+            "lessonTitle": {
+              "type": "string"
+            },
+            "attribution": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "assets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "slideDeck",
+                      "exitQuiz",
+                      "exitQuizAnswers",
+                      "starterQuiz",
+                      "starterQuizAnswers",
+                      "supplementaryResource",
+                      "video",
+                      "worksheet",
+                      "worksheetAnswers"
+                    ]
+                  },
+                  "label": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "type",
+                  "label",
+                  "url"
+                ]
+              }
+            }
+          },
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "assets"
+          ]
+        },
+        "example": [
+          {
+            "lessonSlug": "using-numerals",
+            "lessonTitle": "Using numerals",
+            "assets": [
+              {
+                "label": "Worksheet",
+                "type": "worksheet",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet"
+              },
+              {
+                "label": "Worksheet Answers",
+                "type": "worksheetAnswers",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers"
+              },
+              {
+                "label": "Video",
+                "type": "video",
+                "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video"
+              }
+            ]
+          }
+        ]
+      },
+      "LessonAssetsResponseSchema": {
+        "type": "object",
+        "properties": {
+          "attribution": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "slideDeck",
+                    "exitQuiz",
+                    "exitQuizAnswers",
+                    "starterQuiz",
+                    "starterQuizAnswers",
+                    "supplementaryResource",
+                    "video",
+                    "worksheet",
+                    "worksheetAnswers"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "label",
+                "url"
+              ]
+            }
+          }
+        },
+        "example": {
+          "attribution": [
+            "Copyright XYZ Authors",
+            "Creative Commons Attribution Example 4.0"
           ],
-        },
-        example: [
-          {
-            year: 1,
-            units: [
-              {
-                unitTitle: 'Speaking and Listening',
-                unitOrder: 1,
-                unitSlug: 'speaking-and-listening',
-                categories: [
-                  {
-                    categoryTitle: 'Reading, writing & oracy',
-                  },
-                ],
-                threads: [
-                  {
-                    threadTitle: 'Developing spoken language',
-                    threadSlug: 'developing-spoken-language',
-                    order: 8,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      TranscriptResponseSchema: {
-        type: 'object',
-        properties: {
-          transcript: {
-            type: 'string',
-          },
-          vtt: {
-            type: 'string',
-          },
-        },
-        required: ['transcript', 'vtt'],
-        example: {
-          transcript:
-            "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
-          vtt: "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today...",
-        },
-      },
-      SearchTranscriptResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            lessonTitle: {
-              type: 'string',
-            },
-            lessonSlug: {
-              type: 'string',
-            },
-            transcriptSnippet: {
-              type: 'string',
-            },
-          },
-          required: ['lessonTitle', 'lessonSlug'],
-        },
-        example: [
-          {
-            lessonTitle: 'The Roman invasion of Britain ',
-            lessonSlug: 'the-roman-invasion-of-britain',
-            transcriptSnippet: 'The Romans were ready,',
-          },
-          {
-            lessonTitle: 'The changes to life brought about by Roman settlement',
-            lessonSlug: 'the-changes-to-life-brought-about-by-roman-settlement',
-            transcriptSnippet: 'when the Romans came.',
-          },
-          {
-            lessonTitle: "Boudica's rebellion against Roman rule",
-            lessonSlug: 'boudicas-rebellion-against-roman-rule',
-            transcriptSnippet: 'kings who resisted the Romans were,',
-          },
-          {
-            lessonTitle: 'How far religion changed under Roman rule',
-            lessonSlug: 'how-far-religion-changed-under-roman-rule',
-            transcriptSnippet: 'for the Romans.',
-          },
-        ],
-      },
-      SequenceAssetsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            lessonSlug: {
-              type: 'string',
-            },
-            lessonTitle: {
-              type: 'string',
-            },
-            attribution: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
-            },
-            assets: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  type: {
-                    type: 'string',
-                    enum: [
-                      'slideDeck',
-                      'exitQuiz',
-                      'exitQuizAnswers',
-                      'starterQuiz',
-                      'starterQuizAnswers',
-                      'supplementaryResource',
-                      'video',
-                      'worksheet',
-                      'worksheetAnswers',
-                    ],
-                  },
-                  label: {
-                    type: 'string',
-                  },
-                  url: {
-                    type: 'string',
-                  },
-                },
-                required: ['type', 'label', 'url'],
-              },
-            },
-          },
-          required: ['lessonSlug', 'lessonTitle', 'assets'],
-        },
-        example: [
-          {
-            lessonSlug: 'using-numerals',
-            lessonTitle: 'Using numerals',
-            assets: [
-              {
-                label: 'Worksheet',
-                type: 'worksheet',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet',
-              },
-              {
-                label: 'Worksheet Answers',
-                type: 'worksheetAnswers',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers',
-              },
-              {
-                label: 'Video',
-                type: 'video',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video',
-              },
-            ],
-          },
-        ],
-      },
-      SubjectAssetsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            lessonSlug: {
-              type: 'string',
-            },
-            lessonTitle: {
-              type: 'string',
-            },
-            attribution: {
-              type: 'array',
-              items: {
-                type: 'string',
-              },
-            },
-            assets: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  type: {
-                    type: 'string',
-                    enum: [
-                      'slideDeck',
-                      'exitQuiz',
-                      'exitQuizAnswers',
-                      'starterQuiz',
-                      'starterQuizAnswers',
-                      'supplementaryResource',
-                      'video',
-                      'worksheet',
-                      'worksheetAnswers',
-                    ],
-                  },
-                  label: {
-                    type: 'string',
-                  },
-                  url: {
-                    type: 'string',
-                  },
-                },
-                required: ['type', 'label', 'url'],
-              },
-            },
-          },
-          required: ['lessonSlug', 'lessonTitle', 'assets'],
-        },
-        example: [
-          {
-            lessonSlug: 'using-numerals',
-            lessonTitle: 'Using numerals',
-            assets: [
-              {
-                label: 'Worksheet',
-                type: 'worksheet',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet',
-              },
-              {
-                label: 'Worksheet Answers',
-                type: 'worksheetAnswers',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers',
-              },
-              {
-                label: 'Video',
-                type: 'video',
-                url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video',
-              },
-            ],
-          },
-        ],
-      },
-      LessonAssetsResponseSchema: {
-        type: 'object',
-        properties: {
-          attribution: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-          assets: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string',
-                  enum: [
-                    'slideDeck',
-                    'exitQuiz',
-                    'exitQuizAnswers',
-                    'starterQuiz',
-                    'starterQuizAnswers',
-                    'supplementaryResource',
-                    'video',
-                    'worksheet',
-                    'worksheetAnswers',
-                  ],
-                },
-                label: {
-                  type: 'string',
-                },
-                url: {
-                  type: 'string',
-                },
-              },
-              required: ['type', 'label', 'url'],
-            },
-          },
-        },
-        example: {
-          attribution: ['Copyright XYZ Authors', 'Creative Commons Attribution Example 4.0'],
-          assets: [
+          "assets": [
             {
-              label: 'Worksheet',
-              type: 'worksheet',
-              url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet',
+              "label": "Worksheet",
+              "type": "worksheet",
+              "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheet"
             },
             {
-              label: 'Worksheet Answers',
-              type: 'worksheetAnswers',
-              url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers',
+              "label": "Worksheet Answers",
+              "type": "worksheetAnswers",
+              "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/worksheetAnswers"
             },
             {
-              label: 'Video',
-              type: 'video',
-              url: 'https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video',
-            },
-          ],
-        },
+              "label": "Video",
+              "type": "video",
+              "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video"
+            }
+          ]
+        }
       },
-      LessonAssetResponseSchema: {
-        example: {
-          '200': 'application/octet-stream',
-        },
+      "LessonAssetResponseSchema": {
+        "example": {
+          "200": "application/octet-stream"
+        }
       },
-      AllSubjectsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            subjectTitle: {
-              type: 'string',
+      "AllSubjectsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "subjectTitle": {
+              "type": "string"
             },
-            subjectSlug: {
-              type: 'string',
+            "subjectSlug": {
+              "type": "string"
             },
-            sequenceSlugs: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  sequenceSlug: {
-                    type: 'string',
+            "sequenceSlugs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sequenceSlug": {
+                    "type": "string"
                   },
-                  years: {
-                    type: 'array',
-                    items: {
-                      type: 'number',
-                    },
+                  "years": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    }
                   },
-                  keyStages: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      properties: {
-                        keyStageTitle: {
-                          type: 'string',
+                  "keyStages": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "keyStageTitle": {
+                          "type": "string"
                         },
-                        keyStageSlug: {
-                          type: 'string',
-                        },
+                        "keyStageSlug": {
+                          "type": "string"
+                        }
                       },
-                      required: ['keyStageTitle', 'keyStageSlug'],
+                      "required": [
+                        "keyStageTitle",
+                        "keyStageSlug"
+                      ]
+                    }
+                  },
+                  "phaseSlug": {
+                    "type": "string"
+                  },
+                  "phaseTitle": {
+                    "type": "string"
+                  },
+                  "ks4Options": {
+                    "type": "object",
+                    "nullable": true,
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "slug": {
+                        "type": "string"
+                      }
                     },
-                  },
-                  phaseSlug: {
-                    type: 'string',
-                  },
-                  phaseTitle: {
-                    type: 'string',
-                  },
-                  ks4Options: {
-                    type: 'object',
-                    nullable: true,
-                    properties: {
-                      title: {
-                        type: 'string',
-                      },
-                      slug: {
-                        type: 'string',
-                      },
-                    },
-                    required: ['title', 'slug'],
-                  },
+                    "required": [
+                      "title",
+                      "slug"
+                    ]
+                  }
                 },
-                required: [
-                  'sequenceSlug',
-                  'years',
-                  'keyStages',
-                  'phaseSlug',
-                  'phaseTitle',
-                  'ks4Options',
-                ],
-              },
+                "required": [
+                  "sequenceSlug",
+                  "years",
+                  "keyStages",
+                  "phaseSlug",
+                  "phaseTitle",
+                  "ks4Options"
+                ]
+              }
             },
-            years: {
-              type: 'array',
-              items: {
-                type: 'number',
-              },
+            "years": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
             },
-            keyStages: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  keyStageTitle: {
-                    type: 'string',
+            "keyStages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyStageTitle": {
+                    "type": "string"
                   },
-                  keyStageSlug: {
-                    type: 'string',
-                  },
+                  "keyStageSlug": {
+                    "type": "string"
+                  }
                 },
-                required: ['keyStageTitle', 'keyStageSlug'],
-              },
-            },
+                "required": [
+                  "keyStageTitle",
+                  "keyStageSlug"
+                ]
+              }
+            }
           },
-          required: ['subjectTitle', 'subjectSlug', 'sequenceSlugs', 'years', 'keyStages'],
+          "required": [
+            "subjectTitle",
+            "subjectSlug",
+            "sequenceSlugs",
+            "years",
+            "keyStages"
+          ]
         },
-        example: [
+        "example": [
           {
-            subjectTitle: 'Art and design',
-            subjectSlug: 'art',
-            sequenceSlugs: [
+            "subjectTitle": "Art and design",
+            "subjectSlug": "art",
+            "sequenceSlugs": [
               {
-                sequenceSlug: 'art-primary',
-                years: [1, 2, 3, 4, 5, 6],
-                keyStages: [
-                  {
-                    keyStageTitle: 'Key Stage 1',
-                    keyStageSlug: 'ks1',
-                  },
-                  {
-                    keyStageTitle: 'Key Stage 2',
-                    keyStageSlug: 'ks2',
-                  },
+                "sequenceSlug": "art-primary",
+                "years": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
                 ],
-                phaseSlug: 'primary',
-                phaseTitle: 'Primary',
-                ks4Options: null,
-              },
-              {
-                sequenceSlug: 'art-secondary',
-                years: [7, 8, 9, 10, 11],
-                keyStages: [
+                "keyStages": [
                   {
-                    keyStageTitle: 'Key Stage 3',
-                    keyStageSlug: 'ks3',
+                    "keyStageTitle": "Key Stage 1",
+                    "keyStageSlug": "ks1"
                   },
                   {
-                    keyStageTitle: 'Key Stage 4',
-                    keyStageSlug: 'ks4',
-                  },
+                    "keyStageTitle": "Key Stage 2",
+                    "keyStageSlug": "ks2"
+                  }
                 ],
-                phaseSlug: 'secondary',
-                phaseTitle: 'Secondary',
-                ks4Options: null,
+                "phaseSlug": "primary",
+                "phaseTitle": "Primary",
+                "ks4Options": null
               },
+              {
+                "sequenceSlug": "art-secondary",
+                "years": [
+                  7,
+                  8,
+                  9,
+                  10,
+                  11
+                ],
+                "keyStages": [
+                  {
+                    "keyStageTitle": "Key Stage 3",
+                    "keyStageSlug": "ks3"
+                  },
+                  {
+                    "keyStageTitle": "Key Stage 4",
+                    "keyStageSlug": "ks4"
+                  }
+                ],
+                "phaseSlug": "secondary",
+                "phaseTitle": "Secondary",
+                "ks4Options": null
+              }
             ],
-            years: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            keyStages: [
-              {
-                keyStageTitle: 'Key Stage 1',
-                keyStageSlug: 'ks1',
-              },
-              {
-                keyStageTitle: 'Key Stage 2',
-                keyStageSlug: 'ks2',
-              },
-              {
-                keyStageTitle: 'Key Stage 3',
-                keyStageSlug: 'ks3',
-              },
-              {
-                keyStageTitle: 'Key Stage 4',
-                keyStageSlug: 'ks4',
-              },
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
             ],
-          },
-        ],
+            "keyStages": [
+              {
+                "keyStageTitle": "Key Stage 1",
+                "keyStageSlug": "ks1"
+              },
+              {
+                "keyStageTitle": "Key Stage 2",
+                "keyStageSlug": "ks2"
+              },
+              {
+                "keyStageTitle": "Key Stage 3",
+                "keyStageSlug": "ks3"
+              },
+              {
+                "keyStageTitle": "Key Stage 4",
+                "keyStageSlug": "ks4"
+              }
+            ]
+          }
+        ]
       },
-      SubjectResponseSchema: {
-        type: 'object',
-        properties: {
-          subjectTitle: {
-            type: 'string',
+      "SubjectResponseSchema": {
+        "type": "object",
+        "properties": {
+          "subjectTitle": {
+            "type": "string"
           },
-          subjectSlug: {
-            type: 'string',
+          "subjectSlug": {
+            "type": "string"
           },
-          sequenceSlugs: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                sequenceSlug: {
-                  type: 'string',
+          "sequenceSlugs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "sequenceSlug": {
+                  "type": "string"
                 },
-                years: {
-                  type: 'array',
-                  items: {
-                    type: 'number',
-                  },
+                "years": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
                 },
-                keyStages: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      keyStageTitle: {
-                        type: 'string',
+                "keyStages": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "keyStageTitle": {
+                        "type": "string"
                       },
-                      keyStageSlug: {
-                        type: 'string',
-                      },
+                      "keyStageSlug": {
+                        "type": "string"
+                      }
                     },
-                    required: ['keyStageTitle', 'keyStageSlug'],
+                    "required": [
+                      "keyStageTitle",
+                      "keyStageSlug"
+                    ]
+                  }
+                },
+                "phaseSlug": {
+                  "type": "string"
+                },
+                "phaseTitle": {
+                  "type": "string"
+                },
+                "ks4Options": {
+                  "type": "object",
+                  "nullable": true,
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    }
                   },
-                },
-                phaseSlug: {
-                  type: 'string',
-                },
-                phaseTitle: {
-                  type: 'string',
-                },
-                ks4Options: {
-                  type: 'object',
-                  nullable: true,
-                  properties: {
-                    title: {
-                      type: 'string',
-                    },
-                    slug: {
-                      type: 'string',
-                    },
-                  },
-                  required: ['title', 'slug'],
-                },
+                  "required": [
+                    "title",
+                    "slug"
+                  ]
+                }
               },
-              required: [
-                'sequenceSlug',
-                'years',
-                'keyStages',
-                'phaseSlug',
-                'phaseTitle',
-                'ks4Options',
+              "required": [
+                "sequenceSlug",
+                "years",
+                "keyStages",
+                "phaseSlug",
+                "phaseTitle",
+                "ks4Options"
+              ]
+            }
+          },
+          "years": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "keyStages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyStageTitle": {
+                  "type": "string"
+                },
+                "keyStageSlug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "keyStageTitle",
+                "keyStageSlug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "subjectTitle",
+          "subjectSlug",
+          "sequenceSlugs",
+          "years",
+          "keyStages"
+        ],
+        "example": {
+          "subjectTitle": "Art and design",
+          "subjectSlug": "art",
+          "sequenceSlugs": [
+            {
+              "sequenceSlug": "art-primary",
+              "years": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
               ],
-            },
-          },
-          years: {
-            type: 'array',
-            items: {
-              type: 'number',
-            },
-          },
-          keyStages: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                keyStageTitle: {
-                  type: 'string',
-                },
-                keyStageSlug: {
-                  type: 'string',
-                },
-              },
-              required: ['keyStageTitle', 'keyStageSlug'],
-            },
-          },
-        },
-        required: ['subjectTitle', 'subjectSlug', 'sequenceSlugs', 'years', 'keyStages'],
-        example: {
-          subjectTitle: 'Art and design',
-          subjectSlug: 'art',
-          sequenceSlugs: [
-            {
-              sequenceSlug: 'art-primary',
-              years: [1, 2, 3, 4, 5, 6],
-              keyStages: [
+              "keyStages": [
                 {
-                  keyStageTitle: 'Key Stage 1',
-                  keyStageSlug: 'ks1',
+                  "keyStageTitle": "Key Stage 1",
+                  "keyStageSlug": "ks1"
                 },
                 {
-                  keyStageTitle: 'Key Stage 2',
-                  keyStageSlug: 'ks2',
-                },
+                  "keyStageTitle": "Key Stage 2",
+                  "keyStageSlug": "ks2"
+                }
               ],
-              phaseSlug: 'primary',
-              phaseTitle: 'Primary',
-              ks4Options: null,
+              "phaseSlug": "primary",
+              "phaseTitle": "Primary",
+              "ks4Options": null
             },
             {
-              sequenceSlug: 'art-secondary',
-              years: [1, 2, 3, 4, 5, 6],
-              keyStages: [
-                {
-                  keyStageTitle: 'Key Stage 1',
-                  keyStageSlug: 'ks1',
-                },
-                {
-                  keyStageTitle: 'Key Stage 2',
-                  keyStageSlug: 'ks2',
-                },
+              "sequenceSlug": "art-secondary",
+              "years": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
               ],
-              phaseSlug: 'secondary',
-              phaseTitle: 'Secondary',
-              ks4Options: null,
-            },
-          ],
-          years: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-          keyStages: [
-            {
-              keyStageTitle: 'Key Stage 1',
-              keyStageSlug: 'ks1',
-            },
-            {
-              keyStageTitle: 'Key Stage 2',
-              keyStageSlug: 'ks2',
-            },
-            {
-              keyStageTitle: 'Key Stage 3',
-              keyStageSlug: 'ks3',
-            },
-            {
-              keyStageTitle: 'Key Stage 4',
-              keyStageSlug: 'ks4',
-            },
-          ],
-        },
-      },
-      SubjectSequenceResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            sequenceSlug: {
-              type: 'string',
-            },
-            years: {
-              type: 'array',
-              items: {
-                type: 'number',
-              },
-            },
-            keyStages: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  keyStageTitle: {
-                    type: 'string',
-                  },
-                  keyStageSlug: {
-                    type: 'string',
-                  },
-                },
-                required: ['keyStageTitle', 'keyStageSlug'],
-              },
-            },
-            phaseSlug: {
-              type: 'string',
-            },
-            phaseTitle: {
-              type: 'string',
-            },
-            ks4Options: {
-              type: 'object',
-              nullable: true,
-              properties: {
-                title: {
-                  type: 'string',
-                },
-                slug: {
-                  type: 'string',
-                },
-              },
-              required: ['title', 'slug'],
-            },
-          },
-          required: ['sequenceSlug', 'years', 'keyStages', 'phaseSlug', 'phaseTitle', 'ks4Options'],
-        },
-        example: [
-          {
-            sequenceSlug: 'art-primary',
-            years: [1, 2, 3, 4, 5, 6],
-            keyStages: [
-              {
-                keyStageTitle: 'Key Stage 1',
-                keyStageSlug: 'ks1',
-              },
-              {
-                keyStageTitle: 'Key Stage 2',
-                keyStageSlug: 'ks2',
-              },
-            ],
-            phaseSlug: 'primary',
-            phaseTitle: 'Primary',
-            ks4Options: null,
-          },
-          {
-            sequenceSlug: 'art-secondary',
-            years: [1, 2, 3, 4, 5, 6],
-            keyStages: [
-              {
-                keyStageTitle: 'Key Stage 1',
-                keyStageSlug: 'ks1',
-              },
-              {
-                keyStageTitle: 'Key Stage 2',
-                keyStageSlug: 'ks2',
-              },
-            ],
-            phaseSlug: 'secondary',
-            phaseTitle: 'Secondary',
-            ks4Options: null,
-          },
-        ],
-      },
-      SubjectKeyStagesResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            keyStageTitle: {
-              type: 'string',
-            },
-            keyStageSlug: {
-              type: 'string',
-            },
-          },
-          required: ['keyStageTitle', 'keyStageSlug'],
-        },
-        example: [
-          {
-            keyStageTitle: 'Key Stage 1',
-            keyStageSlug: 'ks1',
-          },
-          {
-            keyStageTitle: 'Key Stage 2',
-            keyStageSlug: 'ks2',
-          },
-          {
-            keyStageTitle: 'Key Stage 3',
-            keyStageSlug: 'ks3',
-          },
-          {
-            keyStageTitle: 'Key Stage 4',
-            keyStageSlug: 'ks4',
-          },
-        ],
-      },
-      KeyStageResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            slug: {
-              type: 'string',
-            },
-            title: {
-              type: 'string',
-            },
-          },
-          required: ['slug', 'title'],
-        },
-        example: [
-          {
-            slug: 'ks1',
-            title: 'Key Stage 1',
-          },
-        ],
-      },
-      KeyStageSubjectLessonsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            unitSlug: {
-              type: 'string',
-            },
-            unitTitle: {
-              type: 'string',
-            },
-            lessons: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  lessonSlug: {
-                    type: 'string',
-                  },
-                  lessonTitle: {
-                    type: 'string',
-                  },
-                },
-                required: ['lessonSlug', 'lessonTitle'],
-              },
-            },
-          },
-          required: ['unitSlug', 'unitTitle', 'lessons'],
-        },
-        example: [
-          {
-            unitSlug: 'simple-compound-and-adverbial-complex-sentences',
-            unitTitle: 'Simple, compound and adverbial complex sentences',
-            lessons: [
-              {
-                lessonSlug: 'four-types-of-simple-sentence',
-                lessonTitle: 'Four types of simple sentence',
-              },
-              {
-                lessonSlug: 'three-ways-for-co-ordination-in-compound-sentences',
-                lessonTitle: 'Three ways for co-ordination in compound sentences',
-              },
-            ],
-          },
-        ],
-      },
-      AllKeyStageAndSubjectUnitsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            yearSlug: {
-              type: 'string',
-            },
-            yearTitle: {
-              type: 'string',
-            },
-            units: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  unitSlug: {
-                    type: 'string',
-                  },
-                  unitTitle: {
-                    type: 'string',
-                  },
-                },
-                required: ['unitSlug', 'unitTitle'],
-              },
-            },
-          },
-          required: ['yearSlug', 'yearTitle', 'units'],
-        },
-        example: [
-          {
-            units: [
-              {
-                unitSlug: '2-4-and-8-times-tables-using-times-tables-to-solve-problems',
-                unitTitle: '2, 4 and 8 times tables: using times tables to solve problems',
-              },
-              {
-                unitSlug:
-                  'bridging-100-counting-on-and-back-in-10s-adding-subtracting-multiples-of-10',
-                unitTitle:
-                  'Bridging 100: counting on and back in 10s, adding/subtracting multiples of 10',
-              },
-            ],
-            yearSlug: 'year-3',
-            yearTitle: 'Year 3',
-          },
-        ],
-      },
-      QuestionForLessonsResponseSchema: {
-        type: 'object',
-        properties: {
-          starterQuiz: {
-            type: 'array',
-            items: {
-              allOf: [
+              "keyStages": [
                 {
-                  type: 'object',
-                  properties: {
-                    question: {
-                      type: 'string',
+                  "keyStageTitle": "Key Stage 1",
+                  "keyStageSlug": "ks1"
+                },
+                {
+                  "keyStageTitle": "Key Stage 2",
+                  "keyStageSlug": "ks2"
+                }
+              ],
+              "phaseSlug": "secondary",
+              "phaseTitle": "Secondary",
+              "ks4Options": null
+            }
+          ],
+          "years": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "keyStages": [
+            {
+              "keyStageTitle": "Key Stage 1",
+              "keyStageSlug": "ks1"
+            },
+            {
+              "keyStageTitle": "Key Stage 2",
+              "keyStageSlug": "ks2"
+            },
+            {
+              "keyStageTitle": "Key Stage 3",
+              "keyStageSlug": "ks3"
+            },
+            {
+              "keyStageTitle": "Key Stage 4",
+              "keyStageSlug": "ks4"
+            }
+          ]
+        }
+      },
+      "SubjectSequenceResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "sequenceSlug": {
+              "type": "string"
+            },
+            "years": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "keyStages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "keyStageTitle": {
+                    "type": "string"
+                  },
+                  "keyStageSlug": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "keyStageTitle",
+                  "keyStageSlug"
+                ]
+              }
+            },
+            "phaseSlug": {
+              "type": "string"
+            },
+            "phaseTitle": {
+              "type": "string"
+            },
+            "ks4Options": {
+              "type": "object",
+              "nullable": true,
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "slug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "slug"
+              ]
+            }
+          },
+          "required": [
+            "sequenceSlug",
+            "years",
+            "keyStages",
+            "phaseSlug",
+            "phaseTitle",
+            "ks4Options"
+          ]
+        },
+        "example": [
+          {
+            "sequenceSlug": "art-primary",
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "keyStages": [
+              {
+                "keyStageTitle": "Key Stage 1",
+                "keyStageSlug": "ks1"
+              },
+              {
+                "keyStageTitle": "Key Stage 2",
+                "keyStageSlug": "ks2"
+              }
+            ],
+            "phaseSlug": "primary",
+            "phaseTitle": "Primary",
+            "ks4Options": null
+          },
+          {
+            "sequenceSlug": "art-secondary",
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "keyStages": [
+              {
+                "keyStageTitle": "Key Stage 1",
+                "keyStageSlug": "ks1"
+              },
+              {
+                "keyStageTitle": "Key Stage 2",
+                "keyStageSlug": "ks2"
+              }
+            ],
+            "phaseSlug": "secondary",
+            "phaseTitle": "Secondary",
+            "ks4Options": null
+          }
+        ]
+      },
+      "SubjectKeyStagesResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "keyStageTitle": {
+              "type": "string"
+            },
+            "keyStageSlug": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "keyStageTitle",
+            "keyStageSlug"
+          ]
+        },
+        "example": [
+          {
+            "keyStageTitle": "Key Stage 1",
+            "keyStageSlug": "ks1"
+          },
+          {
+            "keyStageTitle": "Key Stage 2",
+            "keyStageSlug": "ks2"
+          },
+          {
+            "keyStageTitle": "Key Stage 3",
+            "keyStageSlug": "ks3"
+          },
+          {
+            "keyStageTitle": "Key Stage 4",
+            "keyStageSlug": "ks4"
+          }
+        ]
+      },
+      "KeyStageResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "slug",
+            "title"
+          ]
+        },
+        "example": [
+          {
+            "slug": "ks1",
+            "title": "Key Stage 1"
+          }
+        ]
+      },
+      "KeyStageSubjectLessonsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "unitSlug": {
+              "type": "string"
+            },
+            "unitTitle": {
+              "type": "string"
+            },
+            "lessons": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lessonSlug": {
+                    "type": "string"
+                  },
+                  "lessonTitle": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "lessonSlug",
+                  "lessonTitle"
+                ]
+              }
+            }
+          },
+          "required": [
+            "unitSlug",
+            "unitTitle",
+            "lessons"
+          ]
+        },
+        "example": [
+          {
+            "unitSlug": "simple-compound-and-adverbial-complex-sentences",
+            "unitTitle": "Simple, compound and adverbial complex sentences",
+            "lessons": [
+              {
+                "lessonSlug": "four-types-of-simple-sentence",
+                "lessonTitle": "Four types of simple sentence"
+              },
+              {
+                "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
+                "lessonTitle": "Three ways for co-ordination in compound sentences"
+              }
+            ]
+          }
+        ]
+      },
+      "AllKeyStageAndSubjectUnitsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "yearSlug": {
+              "type": "string"
+            },
+            "yearTitle": {
+              "type": "string"
+            },
+            "units": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "unitSlug": {
+                    "type": "string"
+                  },
+                  "unitTitle": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "unitSlug",
+                  "unitTitle"
+                ]
+              }
+            }
+          },
+          "required": [
+            "yearSlug",
+            "yearTitle",
+            "units"
+          ]
+        },
+        "example": [
+          {
+            "units": [
+              {
+                "unitSlug": "2-4-and-8-times-tables-using-times-tables-to-solve-problems",
+                "unitTitle": "2, 4 and 8 times tables: using times tables to solve problems"
+              },
+              {
+                "unitSlug": "bridging-100-counting-on-and-back-in-10s-adding-subtracting-multiples-of-10",
+                "unitTitle": "Bridging 100: counting on and back in 10s, adding/subtracting multiples of 10"
+              }
+            ],
+            "yearSlug": "year-3",
+            "yearTitle": "Year 3"
+          }
+        ]
+      },
+      "QuestionForLessonsResponseSchema": {
+        "type": "object",
+        "properties": {
+          "starterQuiz": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string"
                     },
-                    questionType: {
-                      anyOf: [
+                    "questionType": {
+                      "anyOf": [
                         {
-                          type: 'string',
-                          enum: ['multiple-choice'],
+                          "type": "string",
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
                         {
-                          type: 'string',
-                          enum: ['short-answer'],
+                          "type": "string",
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
                         {
-                          type: 'string',
-                          enum: ['match'],
+                          "type": "string",
+                          "enum": [
+                            "match"
+                          ]
                         },
                         {
-                          type: 'string',
-                          enum: ['order'],
-                        },
-                      ],
+                          "type": "string",
+                          "enum": [
+                            "order"
+                          ]
+                        }
+                      ]
                     },
-                    questionImage: {
-                      type: 'object',
-                      properties: {
-                        url: {
-                          type: 'string',
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
                         },
-                        width: {
-                          type: 'number',
+                        "width": {
+                          "type": "number"
                         },
-                        height: {
-                          type: 'number',
+                        "height": {
+                          "type": "number"
                         },
-                        alt: {
-                          type: 'string',
+                        "alt": {
+                          "type": "string"
                         },
-                        text: {
-                          type: 'string',
+                        "text": {
+                          "type": "string"
                         },
-                        attribution: {
-                          type: 'string',
-                        },
+                        "attribution": {
+                          "type": "string"
+                        }
                       },
-                      required: ['url', 'width', 'height'],
-                    },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ]
+                    }
                   },
-                  required: ['question', 'questionType'],
+                  "required": [
+                    "question",
+                    "questionType"
+                  ]
                 },
                 {
-                  oneOf: [
+                  "oneOf": [
                     {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['multiple-choice'],
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            allOf: [
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
                               {
-                                type: 'object',
-                                properties: {
-                                  distractor: {
-                                    type: 'boolean',
-                                  },
+                                "type": "object",
+                                "properties": {
+                                  "distractor": {
+                                    "type": "boolean"
+                                  }
                                 },
-                                required: ['distractor'],
+                                "required": [
+                                  "distractor"
+                                ]
                               },
                               {
-                                anyOf: [
+                                "anyOf": [
                                   {
-                                    type: 'object',
-                                    properties: {
-                                      type: {
-                                        type: 'string',
-                                        enum: ['text'],
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "text"
+                                        ]
                                       },
-                                      content: {
-                                        type: 'string',
-                                      },
+                                      "content": {
+                                        "type": "string"
+                                      }
                                     },
-                                    required: ['type', 'content'],
-                                  },
-                                  {
-                                    type: 'object',
-                                    properties: {
-                                      type: {
-                                        type: 'string',
-                                        enum: ['image'],
-                                      },
-                                      content: {
-                                        type: 'object',
-                                        properties: {
-                                          url: {
-                                            type: 'string',
-                                          },
-                                          width: {
-                                            type: 'number',
-                                          },
-                                          height: {
-                                            type: 'number',
-                                          },
-                                          alt: {
-                                            type: 'string',
-                                          },
-                                          text: {
-                                            type: 'string',
-                                          },
-                                          attribution: {
-                                            type: 'string',
-                                          },
-                                        },
-                                        required: ['url', 'width', 'height'],
-                                      },
-                                    },
-                                    required: ['type', 'content'],
-                                  },
-                                ],
-                              },
-                            ],
-                          },
-                        },
-                      },
-                      required: ['questionType', 'answers'],
-                    },
-                    {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['short-answer'],
-                        },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              type: {
-                                type: 'string',
-                                enum: ['text'],
-                              },
-                              content: {
-                                type: 'string',
-                              },
-                            },
-                            required: ['type', 'content'],
-                          },
-                        },
-                      },
-                      required: ['questionType', 'answers'],
-                    },
-                    {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['match'],
-                        },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              matchOption: {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
-                                  },
-                                  content: {
-                                    type: 'string',
-                                  },
-                                },
-                                required: ['type', 'content'],
-                              },
-                              correctChoice: {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
-                                  },
-                                  content: {
-                                    type: 'string',
-                                  },
-                                },
-                                required: ['type', 'content'],
-                              },
-                            },
-                            required: ['matchOption', 'correctChoice'],
-                          },
-                        },
-                      },
-                      required: ['questionType', 'answers'],
-                    },
-                    {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['order'],
-                        },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            allOf: [
-                              {
-                                type: 'object',
-                                properties: {
-                                  order: {
-                                    type: 'number',
-                                  },
-                                },
-                                required: ['order'],
-                              },
-                              {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
-                                  },
-                                  content: {
-                                    type: 'string',
-                                  },
-                                },
-                                required: ['type', 'content'],
-                              },
-                            ],
-                          },
-                        },
-                      },
-                      required: ['questionType', 'answers'],
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-          exitQuiz: {
-            type: 'array',
-            items: {
-              allOf: [
-                {
-                  type: 'object',
-                  properties: {
-                    question: {
-                      type: 'string',
-                    },
-                    questionType: {
-                      anyOf: [
-                        {
-                          type: 'string',
-                          enum: ['multiple-choice'],
-                        },
-                        {
-                          type: 'string',
-                          enum: ['short-answer'],
-                        },
-                        {
-                          type: 'string',
-                          enum: ['match'],
-                        },
-                        {
-                          type: 'string',
-                          enum: ['order'],
-                        },
-                      ],
-                    },
-                    questionImage: {
-                      type: 'object',
-                      properties: {
-                        url: {
-                          type: 'string',
-                        },
-                        width: {
-                          type: 'number',
-                        },
-                        height: {
-                          type: 'number',
-                        },
-                        alt: {
-                          type: 'string',
-                        },
-                        text: {
-                          type: 'string',
-                        },
-                        attribution: {
-                          type: 'string',
-                        },
-                      },
-                      required: ['url', 'width', 'height'],
-                    },
-                  },
-                  required: ['question', 'questionType'],
-                },
-                {
-                  oneOf: [
-                    {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['multiple-choice'],
-                        },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            allOf: [
-                              {
-                                type: 'object',
-                                properties: {
-                                  distractor: {
-                                    type: 'boolean',
-                                  },
-                                },
-                                required: ['distractor'],
-                              },
-                              {
-                                anyOf: [
-                                  {
-                                    type: 'object',
-                                    properties: {
-                                      type: {
-                                        type: 'string',
-                                        enum: ['text'],
-                                      },
-                                      content: {
-                                        type: 'string',
-                                      },
-                                    },
-                                    required: ['type', 'content'],
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
                                   },
                                   {
-                                    type: 'object',
-                                    properties: {
-                                      type: {
-                                        type: 'string',
-                                        enum: ['image'],
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "image"
+                                        ]
                                       },
-                                      content: {
-                                        type: 'object',
-                                        properties: {
-                                          url: {
-                                            type: 'string',
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "url": {
+                                            "type": "string"
                                           },
-                                          width: {
-                                            type: 'number',
+                                          "width": {
+                                            "type": "number"
                                           },
-                                          height: {
-                                            type: 'number',
+                                          "height": {
+                                            "type": "number"
                                           },
-                                          alt: {
-                                            type: 'string',
+                                          "alt": {
+                                            "type": "string"
                                           },
-                                          text: {
-                                            type: 'string',
+                                          "text": {
+                                            "type": "string"
                                           },
-                                          attribution: {
-                                            type: 'string',
-                                          },
+                                          "attribution": {
+                                            "type": "string"
+                                          }
                                         },
-                                        required: ['url', 'width', 'height'],
-                                      },
+                                        "required": [
+                                          "url",
+                                          "width",
+                                          "height"
+                                        ]
+                                      }
                                     },
-                                    required: ['type', 'content'],
-                                  },
-                                ],
-                              },
-                            ],
-                          },
-                        },
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
                       },
-                      required: ['questionType', 'answers'],
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['short-answer'],
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              type: {
-                                type: 'string',
-                                enum: ['text'],
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "text"
+                                ]
                               },
-                              content: {
-                                type: 'string',
-                              },
+                              "content": {
+                                "type": "string"
+                              }
                             },
-                            required: ['type', 'content'],
-                          },
-                        },
+                            "required": [
+                              "type",
+                              "content"
+                            ]
+                          }
+                        }
                       },
-                      required: ['questionType', 'answers'],
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['match'],
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "match"
+                          ]
                         },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            type: 'object',
-                            properties: {
-                              matchOption: {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "matchOption": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
-                                  content: {
-                                    type: 'string',
-                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
                                 },
-                                required: ['type', 'content'],
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               },
-                              correctChoice: {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
+                              "correctChoice": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
-                                  content: {
-                                    type: 'string',
-                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
                                 },
-                                required: ['type', 'content'],
-                              },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              }
                             },
-                            required: ['matchOption', 'correctChoice'],
-                          },
-                        },
+                            "required": [
+                              "matchOption",
+                              "correctChoice"
+                            ]
+                          }
+                        }
                       },
-                      required: ['questionType', 'answers'],
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
-                      type: 'object',
-                      properties: {
-                        questionType: {
-                          type: 'string',
-                          enum: ['order'],
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "order"
+                          ]
                         },
-                        answers: {
-                          type: 'array',
-                          items: {
-                            allOf: [
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
                               {
-                                type: 'object',
-                                properties: {
-                                  order: {
-                                    type: 'number',
-                                  },
+                                "type": "object",
+                                "properties": {
+                                  "order": {
+                                    "type": "number"
+                                  }
                                 },
-                                required: ['order'],
+                                "required": [
+                                  "order"
+                                ]
                               },
                               {
-                                type: 'object',
-                                properties: {
-                                  type: {
-                                    type: 'string',
-                                    enum: ['text'],
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
-                                  content: {
-                                    type: 'string',
-                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
                                 },
-                                required: ['type', 'content'],
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "exitQuiz": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "question": {
+                      "type": "string"
+                    },
+                    "questionType": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "multiple-choice"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "short-answer"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "match"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "enum": [
+                            "order"
+                          ]
+                        }
+                      ]
+                    },
+                    "questionImage": {
+                      "type": "object",
+                      "properties": {
+                        "url": {
+                          "type": "string"
+                        },
+                        "width": {
+                          "type": "number"
+                        },
+                        "height": {
+                          "type": "number"
+                        },
+                        "alt": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string"
+                        },
+                        "attribution": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "question",
+                    "questionType"
+                  ]
+                },
+                {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "multiple-choice"
+                          ]
+                        },
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "distractor": {
+                                    "type": "boolean"
+                                  }
+                                },
+                                "required": [
+                                  "distractor"
+                                ]
                               },
-                            ],
-                          },
-                        },
-                      },
-                      required: ['questionType', 'answers'],
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        },
-        required: ['starterQuiz', 'exitQuiz'],
-        example: {
-          starterQuiz: [
-            {
-              question: 'Tick the sentence with the correct punctuation.',
-              questionType: 'multiple-choice',
-              answers: [
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'the baby cried',
-                },
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'The baby cried',
-                },
-                {
-                  distractor: false,
-                  type: 'text',
-                  content: 'The baby cried.',
-                },
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'the baby cried.',
-                },
-              ],
-            },
-          ],
-          exitQuiz: [
-            {
-              question: 'Which word is a verb?',
-              questionType: 'multiple-choice',
-              answers: [
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'shops',
-                },
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'Jun',
-                },
-                {
-                  distractor: true,
-                  type: 'text',
-                  content: 'I',
-                },
-                {
-                  distractor: false,
-                  type: 'text',
-                  content: 'shout',
-                },
-              ],
-            },
-          ],
-        },
-      },
-      QuestionsForSequenceResponseSchema: {
-        example: [
-          {
-            lessonTitle: '3D shapes can be composed from 2D nets',
-            lessonSlug: '3d-shapes-can-be-composed-from-2d-nets',
-            starterQuiz: [
-              {
-                question: 'Select all of the names of shapes that are polygons.',
-                questionType: 'multiple-choice',
-                answers: [
-                  {
-                    type: 'text',
-                    content: 'Cube ',
-                    distractor: true,
-                  },
-                  {
-                    type: 'text',
-                    content: ' Square',
-                    distractor: false,
-                  },
-                  {
-                    type: 'text',
-                    content: 'Triangle',
-                    distractor: false,
-                  },
-                  {
-                    type: 'text',
-                    content: 'Semi-circle',
-                    distractor: true,
-                  },
-                ],
-              },
-            ],
-            exitQuiz: [
-              {
-                question: 'What is a net?',
-                questionType: 'multiple-choice',
-                answers: [
-                  {
-                    type: 'text',
-                    content: 'A 3D shape made of 2D shapes folded together. ',
-                    distractor: false,
-                  },
-                  {
-                    type: 'text',
-                    content: 'A 2D shape made of 3D shapes folded togehther.',
-                    distractor: true,
-                  },
-                  {
-                    type: 'text',
-                    content: 'A type of cube.',
-                    distractor: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      QuestionsForKeyStageAndSubjectResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            lessonSlug: {
-              type: 'string',
-            },
-            lessonTitle: {
-              type: 'string',
-            },
-            starterQuiz: {
-              type: 'array',
-              items: {
-                allOf: [
-                  {
-                    type: 'object',
-                    properties: {
-                      question: {
-                        type: 'string',
-                      },
-                      questionType: {
-                        anyOf: [
-                          {
-                            type: 'string',
-                            enum: ['multiple-choice'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['short-answer'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['match'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['order'],
-                          },
-                        ],
-                      },
-                      questionImage: {
-                        type: 'object',
-                        properties: {
-                          url: {
-                            type: 'string',
-                          },
-                          width: {
-                            type: 'number',
-                          },
-                          height: {
-                            type: 'number',
-                          },
-                          alt: {
-                            type: 'string',
-                          },
-                          text: {
-                            type: 'string',
-                          },
-                          attribution: {
-                            type: 'string',
-                          },
-                        },
-                        required: ['url', 'width', 'height'],
-                      },
-                    },
-                    required: ['question', 'questionType'],
-                  },
-                  {
-                    oneOf: [
-                      {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['multiple-choice'],
-                          },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              allOf: [
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    distractor: {
-                                      type: 'boolean',
-                                    },
-                                  },
-                                  required: ['distractor'],
-                                },
-                                {
-                                  anyOf: [
-                                    {
-                                      type: 'object',
-                                      properties: {
-                                        type: {
-                                          type: 'string',
-                                          enum: ['text'],
-                                        },
-                                        content: {
-                                          type: 'string',
-                                        },
+                              {
+                                "anyOf": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "text"
+                                        ]
                                       },
-                                      required: ['type', 'content'],
+                                      "content": {
+                                        "type": "string"
+                                      }
                                     },
-                                    {
-                                      type: 'object',
-                                      properties: {
-                                        type: {
-                                          type: 'string',
-                                          enum: ['image'],
-                                        },
-                                        content: {
-                                          type: 'object',
-                                          properties: {
-                                            url: {
-                                              type: 'string',
-                                            },
-                                            width: {
-                                              type: 'number',
-                                            },
-                                            height: {
-                                              type: 'number',
-                                            },
-                                            alt: {
-                                              type: 'string',
-                                            },
-                                            text: {
-                                              type: 'string',
-                                            },
-                                            attribution: {
-                                              type: 'string',
-                                            },
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
+                                  },
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "type": {
+                                        "type": "string",
+                                        "enum": [
+                                          "image"
+                                        ]
+                                      },
+                                      "content": {
+                                        "type": "object",
+                                        "properties": {
+                                          "url": {
+                                            "type": "string"
                                           },
-                                          required: ['url', 'width', 'height'],
-                                        },
-                                      },
-                                      required: ['type', 'content'],
-                                    },
-                                  ],
-                                },
-                              ],
-                            },
-                          },
-                        },
-                        required: ['questionType', 'answers'],
-                      },
-                      {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['short-answer'],
-                          },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                type: {
-                                  type: 'string',
-                                  enum: ['text'],
-                                },
-                                content: {
-                                  type: 'string',
-                                },
-                              },
-                              required: ['type', 'content'],
-                            },
-                          },
-                        },
-                        required: ['questionType', 'answers'],
-                      },
-                      {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['match'],
-                          },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                matchOption: {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
-                                    },
-                                    content: {
-                                      type: 'string',
-                                    },
-                                  },
-                                  required: ['type', 'content'],
-                                },
-                                correctChoice: {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
-                                    },
-                                    content: {
-                                      type: 'string',
-                                    },
-                                  },
-                                  required: ['type', 'content'],
-                                },
-                              },
-                              required: ['matchOption', 'correctChoice'],
-                            },
-                          },
-                        },
-                        required: ['questionType', 'answers'],
-                      },
-                      {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['order'],
-                          },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              allOf: [
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    order: {
-                                      type: 'number',
-                                    },
-                                  },
-                                  required: ['order'],
-                                },
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
-                                    },
-                                    content: {
-                                      type: 'string',
-                                    },
-                                  },
-                                  required: ['type', 'content'],
-                                },
-                              ],
-                            },
-                          },
-                        },
-                        required: ['questionType', 'answers'],
-                      },
-                    ],
-                  },
-                ],
-              },
-            },
-            exitQuiz: {
-              type: 'array',
-              items: {
-                allOf: [
-                  {
-                    type: 'object',
-                    properties: {
-                      question: {
-                        type: 'string',
-                      },
-                      questionType: {
-                        anyOf: [
-                          {
-                            type: 'string',
-                            enum: ['multiple-choice'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['short-answer'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['match'],
-                          },
-                          {
-                            type: 'string',
-                            enum: ['order'],
-                          },
-                        ],
-                      },
-                      questionImage: {
-                        type: 'object',
-                        properties: {
-                          url: {
-                            type: 'string',
-                          },
-                          width: {
-                            type: 'number',
-                          },
-                          height: {
-                            type: 'number',
-                          },
-                          alt: {
-                            type: 'string',
-                          },
-                          text: {
-                            type: 'string',
-                          },
-                          attribution: {
-                            type: 'string',
-                          },
-                        },
-                        required: ['url', 'width', 'height'],
-                      },
-                    },
-                    required: ['question', 'questionType'],
-                  },
-                  {
-                    oneOf: [
-                      {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['multiple-choice'],
-                          },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              allOf: [
-                                {
-                                  type: 'object',
-                                  properties: {
-                                    distractor: {
-                                      type: 'boolean',
-                                    },
-                                  },
-                                  required: ['distractor'],
-                                },
-                                {
-                                  anyOf: [
-                                    {
-                                      type: 'object',
-                                      properties: {
-                                        type: {
-                                          type: 'string',
-                                          enum: ['text'],
-                                        },
-                                        content: {
-                                          type: 'string',
-                                        },
-                                      },
-                                      required: ['type', 'content'],
-                                    },
-                                    {
-                                      type: 'object',
-                                      properties: {
-                                        type: {
-                                          type: 'string',
-                                          enum: ['image'],
-                                        },
-                                        content: {
-                                          type: 'object',
-                                          properties: {
-                                            url: {
-                                              type: 'string',
-                                            },
-                                            width: {
-                                              type: 'number',
-                                            },
-                                            height: {
-                                              type: 'number',
-                                            },
-                                            alt: {
-                                              type: 'string',
-                                            },
-                                            text: {
-                                              type: 'string',
-                                            },
-                                            attribution: {
-                                              type: 'string',
-                                            },
+                                          "width": {
+                                            "type": "number"
                                           },
-                                          required: ['url', 'width', 'height'],
+                                          "height": {
+                                            "type": "number"
+                                          },
+                                          "alt": {
+                                            "type": "string"
+                                          },
+                                          "text": {
+                                            "type": "string"
+                                          },
+                                          "attribution": {
+                                            "type": "string"
+                                          }
                                         },
+                                        "required": [
+                                          "url",
+                                          "width",
+                                          "height"
+                                        ]
+                                      }
+                                    },
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "short-answer"
+                          ]
+                        },
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "text"
+                                ]
+                              },
+                              "content": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "content"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "match"
+                          ]
+                        },
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "matchOption": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
+                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              },
+                              "correctChoice": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
+                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "matchOption",
+                              "correctChoice"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "questionType": {
+                          "type": "string",
+                          "enum": [
+                            "order"
+                          ]
+                        },
+                        "answers": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "order": {
+                                    "type": "number"
+                                  }
+                                },
+                                "required": [
+                                  "order"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text"
+                                    ]
+                                  },
+                                  "content": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "starterQuiz",
+          "exitQuiz"
+        ],
+        "example": {
+          "starterQuiz": [
+            {
+              "question": "Tick the sentence with the correct punctuation.",
+              "questionType": "multiple-choice",
+              "answers": [
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "the baby cried"
+                },
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "The baby cried"
+                },
+                {
+                  "distractor": false,
+                  "type": "text",
+                  "content": "The baby cried."
+                },
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "the baby cried."
+                }
+              ]
+            }
+          ],
+          "exitQuiz": [
+            {
+              "question": "Which word is a verb?",
+              "questionType": "multiple-choice",
+              "answers": [
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "shops"
+                },
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "Jun"
+                },
+                {
+                  "distractor": true,
+                  "type": "text",
+                  "content": "I"
+                },
+                {
+                  "distractor": false,
+                  "type": "text",
+                  "content": "shout"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "QuestionsForSequenceResponseSchema": {
+        "example": [
+          {
+            "lessonTitle": "3D shapes can be composed from 2D nets",
+            "lessonSlug": "3d-shapes-can-be-composed-from-2d-nets",
+            "starterQuiz": [
+              {
+                "question": "Select all of the names of shapes that are polygons.",
+                "questionType": "multiple-choice",
+                "answers": [
+                  {
+                    "type": "text",
+                    "content": "Cube ",
+                    "distractor": true
+                  },
+                  {
+                    "type": "text",
+                    "content": " Square",
+                    "distractor": false
+                  },
+                  {
+                    "type": "text",
+                    "content": "Triangle",
+                    "distractor": false
+                  },
+                  {
+                    "type": "text",
+                    "content": "Semi-circle",
+                    "distractor": true
+                  }
+                ]
+              }
+            ],
+            "exitQuiz": [
+              {
+                "question": "What is a net?",
+                "questionType": "multiple-choice",
+                "answers": [
+                  {
+                    "type": "text",
+                    "content": "A 3D shape made of 2D shapes folded together. ",
+                    "distractor": false
+                  },
+                  {
+                    "type": "text",
+                    "content": "A 2D shape made of 3D shapes folded togehther.",
+                    "distractor": true
+                  },
+                  {
+                    "type": "text",
+                    "content": "A type of cube.",
+                    "distractor": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "QuestionsForKeyStageAndSubjectResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonSlug": {
+              "type": "string"
+            },
+            "lessonTitle": {
+              "type": "string"
+            },
+            "starterQuiz": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string"
+                      },
+                      "questionType": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          }
+                        ]
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "distractor": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "distractor"
+                                  ]
+                                },
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "string"
+                                        }
                                       },
-                                      required: ['type', 'content'],
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
                                     },
-                                  ],
-                                },
-                              ],
-                            },
-                          },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "image"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            },
+                                            "alt": {
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "attribution": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
                         },
-                        required: ['questionType', 'answers'],
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['short-answer'],
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
                           },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                type: {
-                                  type: 'string',
-                                  enum: ['text'],
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text"
+                                  ]
                                 },
-                                content: {
-                                  type: 'string',
-                                },
+                                "content": {
+                                  "type": "string"
+                                }
                               },
-                              required: ['type', 'content'],
-                            },
-                          },
+                              "required": [
+                                "type",
+                                "content"
+                              ]
+                            }
+                          }
                         },
-                        required: ['questionType', 'answers'],
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['match'],
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
                           },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              type: 'object',
-                              properties: {
-                                matchOption: {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "matchOption": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
-                                    content: {
-                                      type: 'string',
-                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
                                   },
-                                  required: ['type', 'content'],
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 },
-                                correctChoice: {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
+                                "correctChoice": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
-                                    content: {
-                                      type: 'string',
-                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
                                   },
-                                  required: ['type', 'content'],
-                                },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
                               },
-                              required: ['matchOption', 'correctChoice'],
-                            },
-                          },
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
+                            }
+                          }
                         },
-                        required: ['questionType', 'answers'],
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
-                        type: 'object',
-                        properties: {
-                          questionType: {
-                            type: 'string',
-                            enum: ['order'],
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
                           },
-                          answers: {
-                            type: 'array',
-                            items: {
-                              allOf: [
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
                                 {
-                                  type: 'object',
-                                  properties: {
-                                    order: {
-                                      type: 'number',
-                                    },
+                                  "type": "object",
+                                  "properties": {
+                                    "order": {
+                                      "type": "number"
+                                    }
                                   },
-                                  required: ['order'],
+                                  "required": [
+                                    "order"
+                                  ]
                                 },
                                 {
-                                  type: 'object',
-                                  properties: {
-                                    type: {
-                                      type: 'string',
-                                      enum: ['text'],
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
-                                    content: {
-                                      type: 'string',
-                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
                                   },
-                                  required: ['type', 'content'],
-                                },
-                              ],
-                            },
-                          },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
                         },
-                        required: ['questionType', 'answers'],
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "exitQuiz": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string"
                       },
-                    ],
-                  },
-                ],
-              },
-            },
-          },
-          required: ['lessonSlug', 'lessonTitle', 'starterQuiz', 'exitQuiz'],
-        },
-        example: [
-          {
-            lessonSlug: 'predicting-the-size-of-a-product',
-            lessonTitle: 'Predicting the size of a product',
-            starterQuiz: [
-              {
-                question: 'Match the number to its written representation.',
-                questionType: 'match',
-                answers: [
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: 'seven tenths',
+                      "questionType": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          }
+                        ]
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
+                      }
                     },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0.7',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: 'nine tenths',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0.9',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: 'seven ones',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '7',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: 'seven hundredths',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0.07',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: 'nine hundredths',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0.09',
-                    },
-                  },
-                ],
-              },
-            ],
-            exitQuiz: [
-              {
-                question:
-                  'Use the fact that 9 × 8 = 72, to match the expressions to their product.',
-                questionType: 'match',
-                answers: [
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: '9 × 80',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '720',
-                    },
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
                   },
                   {
-                    matchOption: {
-                      type: 'text',
-                      content: '9 × 800 ',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '7,200',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: '9 × 0.8',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '7.2',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: '9 × 0',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0',
-                    },
-                  },
-                  {
-                    matchOption: {
-                      type: 'text',
-                      content: '9 × 0.08',
-                    },
-                    correctChoice: {
-                      type: 'text',
-                      content: '0.72',
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-      LessonSummaryResponseSchema: {
-        type: 'object',
-        properties: {
-          lessonTitle: {
-            type: 'string',
-          },
-          unitSlug: {
-            type: 'string',
-          },
-          unitTitle: {
-            type: 'string',
-          },
-          subjectSlug: {
-            type: 'string',
-          },
-          subjectTitle: {
-            type: 'string',
-          },
-          keyStageSlug: {
-            type: 'string',
-          },
-          keyStageTitle: {
-            type: 'string',
-          },
-          lessonKeywords: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                keyword: {
-                  type: 'string',
-                },
-                description: {
-                  type: 'string',
-                },
-              },
-              required: ['keyword', 'description'],
-            },
-          },
-          keyLearningPoints: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                keyLearningPoint: {
-                  type: 'string',
-                },
-              },
-              required: ['keyLearningPoint'],
-            },
-          },
-          misconceptionsAndCommonMistakes: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                misconception: {
-                  type: 'string',
-                },
-                response: {
-                  type: 'string',
-                },
-              },
-              required: ['misconception', 'response'],
-            },
-          },
-          pupilLessonOutcome: {
-            type: 'string',
-          },
-          teacherTips: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                teacherTip: {
-                  type: 'string',
-                },
-              },
-              required: ['teacherTip'],
-            },
-          },
-          contentGuidance: {
-            anyOf: [
-              {
-                type: 'array',
-                items: {
-                  type: 'object',
-                  properties: {
-                    contentGuidanceArea: {
-                      type: 'string',
-                    },
-                    supervisionlevel_id: {
-                      type: 'number',
-                    },
-                    contentGuidanceLabel: {
-                      type: 'string',
-                    },
-                    contentGuidanceDescription: {
-                      type: 'string',
-                    },
-                  },
-                  required: [
-                    'contentGuidanceArea',
-                    'supervisionlevel_id',
-                    'contentGuidanceLabel',
-                    'contentGuidanceDescription',
-                  ],
-                },
-              },
-              {
-                type: 'null',
-              },
-            ],
-          },
-          supervisionLevel: {
-            anyOf: [
-              {
-                type: 'string',
-              },
-              {
-                type: 'null',
-              },
-            ],
-          },
-          downloadsAvailable: {
-            type: 'boolean',
-          },
-        },
-        required: [
-          'lessonTitle',
-          'unitSlug',
-          'unitTitle',
-          'subjectSlug',
-          'subjectTitle',
-          'keyStageSlug',
-          'keyStageTitle',
-          'lessonKeywords',
-          'keyLearningPoints',
-          'misconceptionsAndCommonMistakes',
-          'teacherTips',
-          'contentGuidance',
-          'supervisionLevel',
-          'downloadsAvailable',
-        ],
-        example: {
-          lessonTitle: "Joining using 'and'",
-          unitSlug: 'simple-sentences',
-          unitTitle: 'Simple sentences',
-          subjectSlug: 'english',
-          subjectTitle: 'English',
-          keyStageSlug: 'ks1',
-          keyStageTitle: 'Key Stage 1',
-          lessonKeywords: [
-            {
-              keyword: 'joining word',
-              description: 'a word that joins words or ideas',
-            },
-            {
-              keyword: 'build on',
-              description: 'add to',
-            },
-            {
-              keyword: 'related',
-              description: 'linked to',
-            },
-          ],
-          keyLearningPoints: [
-            {
-              keyLearningPoint: 'And is a type of joining word.',
-            },
-            {
-              keyLearningPoint: 'A joining word can join two simple sentences.',
-            },
-            {
-              keyLearningPoint: 'Each simple sentence is about one idea and makes complete sense.',
-            },
-            {
-              keyLearningPoint:
-                'The second idea builds on to the first idea if ‘and’ is used to join them.',
-            },
-            {
-              keyLearningPoint:
-                'Grammatically accurate sentences start with capital letters and most often end with full stops.',
-            },
-          ],
-          misconceptionsAndCommonMistakes: [
-            {
-              misconception: 'Pupils may struggle to link related ideas together.',
-              response:
-                'Give some non-examples to show what it sounds like when two ideas are unrelated e.g. Dad baked bread and she missed her sister.',
-            },
-          ],
-          pupilLessonOutcome: "I can join two simple sentences with 'and'.",
-          teacherTips: [
-            {
-              teacherTip:
-                'In Learning Cycle 1, make sure pupils are given plenty of opportunities to say sentences orally and hear that they make complete sense.',
-            },
-          ],
-          contentGuidance: null,
-          supervisionLevel: null,
-          downloadsAvailable: true,
-        },
-      },
-      LessonSearchResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            lessonSlug: {
-              type: 'string',
-            },
-            lessonTitle: {
-              type: 'string',
-            },
-            similarity: {
-              type: 'number',
-            },
-            units: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  unitSlug: {
-                    type: 'string',
-                  },
-                  unitTitle: {
-                    type: 'string',
-                  },
-                  examBoardTitle: {
-                    anyOf: [
+                    "oneOf": [
                       {
-                        type: 'string',
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "distractor": {
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "required": [
+                                    "distractor"
+                                  ]
+                                },
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "image"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            },
+                                            "alt": {
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "type": "string"
+                                            },
+                                            "attribution": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
-                        type: 'null',
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text"
+                                  ]
+                                },
+                                "content": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
-                    ],
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "matchOption": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
+                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                },
+                                "correctChoice": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
+                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "order": {
+                                      "type": "number"
+                                    }
+                                  },
+                                  "required": [
+                                    "order"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ]
+                                    },
+                                    "content": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "starterQuiz",
+            "exitQuiz"
+          ]
+        },
+        "example": [
+          {
+            "lessonSlug": "predicting-the-size-of-a-product",
+            "lessonTitle": "Predicting the size of a product",
+            "starterQuiz": [
+              {
+                "question": "Match the number to its written representation.",
+                "questionType": "match",
+                "answers": [
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "seven tenths"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0.7"
+                    }
                   },
-                  keyStageSlug: {
-                    type: 'string',
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "nine tenths"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0.9"
+                    }
                   },
-                  subjectSlug: {
-                    type: 'string',
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "seven ones"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "7"
+                    }
                   },
-                },
-                required: [
-                  'unitSlug',
-                  'unitTitle',
-                  'examBoardTitle',
-                  'keyStageSlug',
-                  'subjectSlug',
-                ],
-              },
-            },
-          },
-          required: ['lessonSlug', 'lessonTitle', 'similarity', 'units'],
-        },
-        example: [
-          {
-            lessonSlug: 'descriptive-writing-about-a-small-detail',
-            lessonTitle: 'Writing a gothic description',
-            similarity: 0.2413793,
-            units: [
-              {
-                unitSlug: 'a-monster-within-reading-gothic-fiction',
-                unitTitle: 'A monster within: reading and writing Gothic fiction',
-                examBoardTitle: null,
-                keyStageSlug: 'ks3',
-                subjectSlug: 'english',
-              },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "seven hundredths"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0.07"
+                    }
+                  },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "nine hundredths"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0.09"
+                    }
+                  }
+                ]
+              }
             ],
-          },
-          {
-            lessonSlug: 'performing-your-chosen-gothic-poem',
-            lessonTitle: 'Performing your chosen Gothic poem',
-            similarity: 0.20588236,
-            units: [
+            "exitQuiz": [
               {
-                unitSlug: 'gothic-poetry',
-                unitTitle: 'Gothic poetry',
-                examBoardTitle: null,
-                keyStageSlug: 'ks3',
-                subjectSlug: 'english',
-              },
-            ],
-          },
-          {
-            lessonSlug: 'the-twisted-tree-the-novel-as-a-gothic-text',
-            lessonTitle: "'The Twisted Tree': the novel as a Gothic text",
-            similarity: 0.19444445,
-            units: [
-              {
-                unitSlug: 'the-twisted-tree-fiction-reading',
-                unitTitle: "'The Twisted Tree': fiction reading",
-                examBoardTitle: null,
-                keyStageSlug: 'ks3',
-                subjectSlug: 'english',
-              },
-            ],
-          },
-        ],
+                "question": "Use the fact that 9 × 8 = 72, to match the expressions to their product.",
+                "questionType": "match",
+                "answers": [
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "9 × 80"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "720"
+                    }
+                  },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "9 × 800 "
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "7,200"
+                    }
+                  },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "9 × 0.8"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "7.2"
+                    }
+                  },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "9 × 0"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0"
+                    }
+                  },
+                  {
+                    "matchOption": {
+                      "type": "text",
+                      "content": "9 × 0.08"
+                    },
+                    "correctChoice": {
+                      "type": "text",
+                      "content": "0.72"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
-      UnitSummaryResponseSchema: {
-        type: 'object',
-        properties: {
-          unitSlug: {
-            type: 'string',
+      "LessonSummaryResponseSchema": {
+        "type": "object",
+        "properties": {
+          "lessonTitle": {
+            "type": "string"
           },
-          unitTitle: {
-            type: 'string',
+          "unitSlug": {
+            "type": "string"
           },
-          yearSlug: {
-            type: 'string',
+          "unitTitle": {
+            "type": "string"
           },
-          year: {
-            anyOf: [
+          "subjectSlug": {
+            "type": "string"
+          },
+          "subjectTitle": {
+            "type": "string"
+          },
+          "keyStageSlug": {
+            "type": "string"
+          },
+          "keyStageTitle": {
+            "type": "string"
+          },
+          "lessonKeywords": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyword": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "keyword",
+                "description"
+              ]
+            }
+          },
+          "keyLearningPoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "keyLearningPoint": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "keyLearningPoint"
+              ]
+            }
+          },
+          "misconceptionsAndCommonMistakes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "misconception": {
+                  "type": "string"
+                },
+                "response": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "misconception",
+                "response"
+              ]
+            }
+          },
+          "pupilLessonOutcome": {
+            "type": "string"
+          },
+          "teacherTips": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "teacherTip": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "teacherTip"
+              ]
+            }
+          },
+          "contentGuidance": {
+            "anyOf": [
               {
-                type: 'number',
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "contentGuidanceArea": {
+                      "type": "string"
+                    },
+                    "supervisionlevel_id": {
+                      "type": "number"
+                    },
+                    "contentGuidanceLabel": {
+                      "type": "string"
+                    },
+                    "contentGuidanceDescription": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "contentGuidanceArea",
+                    "supervisionlevel_id",
+                    "contentGuidanceLabel",
+                    "contentGuidanceDescription"
+                  ]
+                }
               },
               {
-                type: 'string',
+                "type": "null"
+              }
+            ]
+          },
+          "supervisionLevel": {
+            "anyOf": [
+              {
+                "type": "string"
               },
-            ],
+              {
+                "type": "null"
+              }
+            ]
           },
-          phaseSlug: {
-            type: 'string',
-          },
-          subjectSlug: {
-            type: 'string',
-          },
-          keyStageSlug: {
-            type: 'string',
-          },
-          notes: {
-            type: 'string',
-          },
-          description: {
-            type: 'string',
-          },
-          priorKnowledgeRequirements: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-          nationalCurriculumContent: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-          whyThisWhyNow: {
-            type: 'string',
-          },
-          threads: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                slug: {
-                  type: 'string',
-                },
-                title: {
-                  type: 'string',
-                },
-                order: {
-                  type: 'number',
-                },
-              },
-              required: ['slug', 'title', 'order'],
-            },
-          },
-          categories: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                categoryTitle: {
-                  type: 'string',
-                },
-                categorySlug: {
-                  type: 'string',
-                },
-              },
-              required: ['categoryTitle'],
-            },
-          },
-          unitLessons: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                lessonSlug: {
-                  type: 'string',
-                },
-                lessonTitle: {
-                  type: 'string',
-                },
-                lessonOrder: {
-                  type: 'number',
-                },
-                state: {
-                  type: 'string',
-                  enum: ['published', 'new'],
-                },
-              },
-              required: ['lessonSlug', 'lessonTitle', 'state'],
-            },
-          },
+          "downloadsAvailable": {
+            "type": "boolean"
+          }
         },
-        required: [
-          'unitSlug',
-          'unitTitle',
-          'yearSlug',
-          'year',
-          'phaseSlug',
-          'subjectSlug',
-          'keyStageSlug',
-          'priorKnowledgeRequirements',
-          'nationalCurriculumContent',
-          'unitLessons',
+        "required": [
+          "lessonTitle",
+          "unitSlug",
+          "unitTitle",
+          "subjectSlug",
+          "subjectTitle",
+          "keyStageSlug",
+          "keyStageTitle",
+          "lessonKeywords",
+          "keyLearningPoints",
+          "misconceptionsAndCommonMistakes",
+          "teacherTips",
+          "contentGuidance",
+          "supervisionLevel",
+          "downloadsAvailable"
         ],
-        example: {
-          unitSlug: 'simple-compound-and-adverbial-complex-sentences',
-          unitTitle: 'Simple, compound and adverbial complex sentences',
-          yearSlug: 'year-3',
-          year: 3,
-          phaseSlug: 'primary',
-          subjectSlug: 'english',
-          keyStageSlug: 'ks2',
-          priorKnowledgeRequirements: [
-            'A simple sentence is about one idea and makes complete sense.',
-            'Any simple sentence contains one verb and at least one noun.',
-            'Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence.',
-          ],
-          nationalCurriculumContent: [
-            'Ask relevant questions to extend their understanding and knowledge',
-            'Articulate and justify answers, arguments and opinions',
-            'Speak audibly and fluently with an increasing command of Standard English',
-          ],
-          threads: [
+        "example": {
+          "lessonTitle": "Joining using 'and'",
+          "unitSlug": "simple-sentences",
+          "unitTitle": "Simple sentences",
+          "subjectSlug": "english",
+          "subjectTitle": "English",
+          "keyStageSlug": "ks1",
+          "keyStageTitle": "Key Stage 1",
+          "lessonKeywords": [
             {
-              slug: 'developing-grammatical-knowledge',
-              title: 'Developing grammatical knowledge',
-              order: 10,
-            },
-          ],
-          unitLessons: [
-            {
-              lessonSlug: 'four-types-of-simple-sentence',
-              lessonTitle: 'Four types of simple sentence',
-              lessonOrder: 1,
-              state: 'published',
+              "keyword": "joining word",
+              "description": "a word that joins words or ideas"
             },
             {
-              lessonSlug: 'three-ways-for-co-ordination-in-compound-sentences',
-              lessonTitle: 'Three ways for co-ordination in compound sentences',
-              lessonOrder: 2,
-              state: 'new',
+              "keyword": "build on",
+              "description": "add to"
             },
+            {
+              "keyword": "related",
+              "description": "linked to"
+            }
           ],
-        },
+          "keyLearningPoints": [
+            {
+              "keyLearningPoint": "And is a type of joining word."
+            },
+            {
+              "keyLearningPoint": "A joining word can join two simple sentences."
+            },
+            {
+              "keyLearningPoint": "Each simple sentence is about one idea and makes complete sense."
+            },
+            {
+              "keyLearningPoint": "The second idea builds on to the first idea if ‘and’ is used to join them."
+            },
+            {
+              "keyLearningPoint": "Grammatically accurate sentences start with capital letters and most often end with full stops."
+            }
+          ],
+          "misconceptionsAndCommonMistakes": [
+            {
+              "misconception": "Pupils may struggle to link related ideas together.",
+              "response": "Give some non-examples to show what it sounds like when two ideas are unrelated e.g. Dad baked bread and she missed her sister."
+            }
+          ],
+          "pupilLessonOutcome": "I can join two simple sentences with 'and'.",
+          "teacherTips": [
+            {
+              "teacherTip": "In Learning Cycle 1, make sure pupils are given plenty of opportunities to say sentences orally and hear that they make complete sense."
+            }
+          ],
+          "contentGuidance": null,
+          "supervisionLevel": null,
+          "downloadsAvailable": true
+        }
       },
-      AllThreadsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            title: {
-              type: 'string',
+      "LessonSearchResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonSlug": {
+              "type": "string"
             },
-            slug: {
-              type: 'string',
+            "lessonTitle": {
+              "type": "string"
             },
+            "similarity": {
+              "type": "number"
+            },
+            "units": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "unitSlug": {
+                    "type": "string"
+                  },
+                  "unitTitle": {
+                    "type": "string"
+                  },
+                  "examBoardTitle": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "keyStageSlug": {
+                    "type": "string"
+                  },
+                  "subjectSlug": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "unitSlug",
+                  "unitTitle",
+                  "examBoardTitle",
+                  "keyStageSlug",
+                  "subjectSlug"
+                ]
+              }
+            }
           },
-          required: ['title', 'slug'],
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "similarity",
+            "units"
+          ]
         },
-        example: [
+        "example": [
           {
-            title: 'A Midsummer Night’s Dream',
-            slug: 'a-midsummer-nights-dream-72',
+            "lessonSlug": "descriptive-writing-about-a-small-detail",
+            "lessonTitle": "Writing a gothic description",
+            "similarity": 0.2413793,
+            "units": [
+              {
+                "unitSlug": "a-monster-within-reading-gothic-fiction",
+                "unitTitle": "A monster within: reading and writing Gothic fiction",
+                "examBoardTitle": null,
+                "keyStageSlug": "ks3",
+                "subjectSlug": "english"
+              }
+            ]
           },
+          {
+            "lessonSlug": "performing-your-chosen-gothic-poem",
+            "lessonTitle": "Performing your chosen Gothic poem",
+            "similarity": 0.20588236,
+            "units": [
+              {
+                "unitSlug": "gothic-poetry",
+                "unitTitle": "Gothic poetry",
+                "examBoardTitle": null,
+                "keyStageSlug": "ks3",
+                "subjectSlug": "english"
+              }
+            ]
+          },
+          {
+            "lessonSlug": "the-twisted-tree-the-novel-as-a-gothic-text",
+            "lessonTitle": "'The Twisted Tree': the novel as a Gothic text",
+            "similarity": 0.19444445,
+            "units": [
+              {
+                "unitSlug": "the-twisted-tree-fiction-reading",
+                "unitTitle": "'The Twisted Tree': fiction reading",
+                "examBoardTitle": null,
+                "keyStageSlug": "ks3",
+                "subjectSlug": "english"
+              }
+            ]
+          }
+        ]
+      },
+      "UnitSummaryResponseSchema": {
+        "type": "object",
+        "properties": {
+          "unitSlug": {
+            "type": "string"
+          },
+          "unitTitle": {
+            "type": "string"
+          },
+          "yearSlug": {
+            "type": "string"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "phaseSlug": {
+            "type": "string"
+          },
+          "subjectSlug": {
+            "type": "string"
+          },
+          "keyStageSlug": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "priorKnowledgeRequirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nationalCurriculumContent": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "whyThisWhyNow": {
+            "type": "string"
+          },
+          "threads": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "slug": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "order": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "slug",
+                "title",
+                "order"
+              ]
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "categoryTitle": {
+                  "type": "string"
+                },
+                "categorySlug": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "categoryTitle"
+              ]
+            }
+          },
+          "unitLessons": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lessonSlug": {
+                  "type": "string"
+                },
+                "lessonTitle": {
+                  "type": "string"
+                },
+                "lessonOrder": {
+                  "type": "number"
+                },
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "published",
+                    "new"
+                  ]
+                }
+              },
+              "required": [
+                "lessonSlug",
+                "lessonTitle",
+                "state"
+              ]
+            }
+          }
+        },
+        "required": [
+          "unitSlug",
+          "unitTitle",
+          "yearSlug",
+          "year",
+          "phaseSlug",
+          "subjectSlug",
+          "keyStageSlug",
+          "priorKnowledgeRequirements",
+          "nationalCurriculumContent",
+          "unitLessons"
         ],
+        "example": {
+          "unitSlug": "simple-compound-and-adverbial-complex-sentences",
+          "unitTitle": "Simple, compound and adverbial complex sentences",
+          "yearSlug": "year-3",
+          "year": 3,
+          "phaseSlug": "primary",
+          "subjectSlug": "english",
+          "keyStageSlug": "ks2",
+          "priorKnowledgeRequirements": [
+            "A simple sentence is about one idea and makes complete sense.",
+            "Any simple sentence contains one verb and at least one noun.",
+            "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+          ],
+          "nationalCurriculumContent": [
+            "Ask relevant questions to extend their understanding and knowledge",
+            "Articulate and justify answers, arguments and opinions",
+            "Speak audibly and fluently with an increasing command of Standard English"
+          ],
+          "threads": [
+            {
+              "slug": "developing-grammatical-knowledge",
+              "title": "Developing grammatical knowledge",
+              "order": 10
+            }
+          ],
+          "unitLessons": [
+            {
+              "lessonSlug": "four-types-of-simple-sentence",
+              "lessonTitle": "Four types of simple sentence",
+              "lessonOrder": 1,
+              "state": "published"
+            },
+            {
+              "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
+              "lessonTitle": "Three ways for co-ordination in compound sentences",
+              "lessonOrder": 2,
+              "state": "new"
+            }
+          ]
+        }
       },
-      'error.UNAUTHORIZED': {
-        type: 'object',
-        properties: {
-          message: {
-            type: 'string',
-            description: 'The error message',
-            example: 'Authorization not provided',
-          },
-          code: {
-            type: 'string',
-            description: 'The error code',
-            example: 'UNAUTHORIZED',
-          },
-          issues: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                message: {
-                  type: 'string',
-                },
-              },
-              required: ['message'],
+      "AllThreadsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
             },
-            description: 'An array of issues that were responsible for the error',
-            example: [],
+            "slug": {
+              "type": "string"
+            }
           },
+          "required": [
+            "title",
+            "slug"
+          ]
         },
-        required: ['message', 'code'],
-        title: 'Authorization not provided error (401)',
-        description: 'The error information',
-        example: {
-          code: 'UNAUTHORIZED',
-          message: 'Authorization not provided',
-          issues: [],
-        },
-      },
-      'error.FORBIDDEN': {
-        type: 'object',
-        properties: {
-          message: {
-            type: 'string',
-            description: 'The error message',
-            example: 'Insufficient access',
-          },
-          code: {
-            type: 'string',
-            description: 'The error code',
-            example: 'FORBIDDEN',
-          },
-          issues: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                message: {
-                  type: 'string',
-                },
-              },
-              required: ['message'],
-            },
-            description: 'An array of issues that were responsible for the error',
-            example: [],
-          },
-        },
-        required: ['message', 'code'],
-        title: 'Insufficient access error (403)',
-        description: 'The error information',
-        example: {
-          code: 'FORBIDDEN',
-          message: 'Insufficient access',
-          issues: [],
-        },
-      },
-      'error.INTERNAL_SERVER_ERROR': {
-        type: 'object',
-        properties: {
-          message: {
-            type: 'string',
-            description: 'The error message',
-            example: 'Internal server error',
-          },
-          code: {
-            type: 'string',
-            description: 'The error code',
-            example: 'INTERNAL_SERVER_ERROR',
-          },
-          issues: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                message: {
-                  type: 'string',
-                },
-              },
-              required: ['message'],
-            },
-            description: 'An array of issues that were responsible for the error',
-            example: [],
-          },
-        },
-        required: ['message', 'code'],
-        title: 'Internal server error error (500)',
-        description: 'The error information',
-        example: {
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Internal server error',
-          issues: [],
-        },
-      },
-      ThreadUnitsResponseSchema: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            unitTitle: {
-              type: 'string',
-            },
-            unitSlug: {
-              type: 'string',
-            },
-            unitOrder: {
-              type: 'number',
-            },
-          },
-          required: ['unitTitle', 'unitSlug', 'unitOrder'],
-        },
-        example: [
+        "example": [
           {
-            unitTitle: "A Midsummer Night's Dream, Shakespeare (Introduction and Act 1)",
-            unitSlug: 'a-midsummer-nights-dream-shakespeare-introduction-and-act-1-2912',
-            unitOrder: 1,
+            "title": "A Midsummer Night’s Dream",
+            "slug": "a-midsummer-nights-dream-72"
+          }
+        ]
+      },
+      "error.UNAUTHORIZED": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Authorization not provided"
           },
-          {
-            unitTitle: "A Midsummer Night's Dream, Shakespeare (Act 2)",
-            unitSlug: 'a-midsummer-nights-dream-shakespeare-act-2-3c74',
-            unitOrder: 2,
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "UNAUTHORIZED"
           },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            },
+            "description": "An array of issues that were responsible for the error",
+            "example": []
+          }
+        },
+        "required": [
+          "message",
+          "code"
         ],
+        "title": "Authorization not provided error (401)",
+        "description": "The error information",
+        "example": {
+          "code": "UNAUTHORIZED",
+          "message": "Authorization not provided",
+          "issues": []
+        }
       },
-      RateLimitResponseSchema: {
-        type: 'object',
-        properties: {
-          limit: {
-            type: 'number',
+      "error.FORBIDDEN": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Insufficient access"
           },
-          remaining: {
-            type: 'number',
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "FORBIDDEN"
           },
-          reset: {
-            type: 'number',
-          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            },
+            "description": "An array of issues that were responsible for the error",
+            "example": []
+          }
         },
-        required: ['limit', 'remaining', 'reset'],
-        example: {
-          limit: 1000,
-          remaining: 953,
-          reset: 1740164400000,
-        },
+        "required": [
+          "message",
+          "code"
+        ],
+        "title": "Insufficient access error (403)",
+        "description": "The error information",
+        "example": {
+          "code": "FORBIDDEN",
+          "message": "Insufficient access",
+          "issues": []
+        }
       },
-    },
-  },
+      "error.INTERNAL_SERVER_ERROR": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Internal server error"
+          },
+          "code": {
+            "type": "string",
+            "description": "The error code",
+            "example": "INTERNAL_SERVER_ERROR"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ]
+            },
+            "description": "An array of issues that were responsible for the error",
+            "example": []
+          }
+        },
+        "required": [
+          "message",
+          "code"
+        ],
+        "title": "Internal server error error (500)",
+        "description": "The error information",
+        "example": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error",
+          "issues": []
+        }
+      },
+      "ThreadUnitsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "unitTitle": {
+              "type": "string"
+            },
+            "unitSlug": {
+              "type": "string"
+            },
+            "unitOrder": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "unitTitle",
+            "unitSlug",
+            "unitOrder"
+          ]
+        },
+        "example": [
+          {
+            "unitTitle": "A Midsummer Night's Dream, Shakespeare (Introduction and Act 1)",
+            "unitSlug": "a-midsummer-nights-dream-shakespeare-introduction-and-act-1-2912",
+            "unitOrder": 1
+          },
+          {
+            "unitTitle": "A Midsummer Night's Dream, Shakespeare (Act 2)",
+            "unitSlug": "a-midsummer-nights-dream-shakespeare-act-2-3c74",
+            "unitOrder": 2
+          }
+        ]
+      },
+      "RateLimitResponseSchema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "number"
+          },
+          "remaining": {
+            "type": "number"
+          },
+          "reset": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "limit",
+          "remaining",
+          "reset"
+        ],
+        "example": {
+          "limit": 1000,
+          "remaining": 953,
+          "reset": 1740164400000
+        }
+      }
+    }
+  }
 } as const;
 
 export type Schema = typeof schema;

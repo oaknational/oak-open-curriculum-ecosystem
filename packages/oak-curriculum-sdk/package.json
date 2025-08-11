@@ -19,11 +19,11 @@
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "prebuild": "pnpm generate:types",
     "generate:types": "tsx scripts/typegen.ts",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

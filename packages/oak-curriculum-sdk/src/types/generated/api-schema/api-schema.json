@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-e3db20ebe5a6edd3c0e781b01e90a1db11f46a2f"
+    "version": "0.5.0-2fa4d6b75f9887c334981434cf933a10b5834766"
   },
   "servers": [
     {
@@ -43,7 +43,11 @@
       "get": {
         "operationId": "getSequences-getSequenceUnits",
         "description": "",
-        "tags": ["lists", "units", "sequences"],
+        "tags": [
+          "lists",
+          "units",
+          "sequences"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -64,7 +68,20 @@
             "name": "year",
             "schema": {
               "type": "string",
-              "enum": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"]
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "all-years"
+              ]
             }
           }
         ],
@@ -86,7 +103,9 @@
       "get": {
         "operationId": "getLessonTranscript-getLessonTranscript",
         "description": "This endpoint returns the transcript from the video from a lesson",
-        "tags": ["lessons"],
+        "tags": [
+          "lessons"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -122,7 +141,9 @@
       "get": {
         "operationId": "searchTranscripts-searchTranscripts",
         "description": "Search for a term and find lessons that contain similar text in their video transcripts",
-        "tags": ["search"],
+        "tags": [
+          "search"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -158,7 +179,10 @@
       "get": {
         "operationId": "getAssets-getSequenceAssets",
         "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence",
-        "tags": ["assets", "sequences"],
+        "tags": [
+          "assets",
+          "sequences"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -219,7 +243,9 @@
       "get": {
         "operationId": "getAssets-getSubjectAssets",
         "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson",
-        "tags": ["assets"],
+        "tags": [
+          "assets"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -232,7 +258,12 @@
             "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
-              "enum": ["ks1", "ks2", "ks3", "ks4"],
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ],
               "example": "ks1"
             },
             "required": true
@@ -312,7 +343,10 @@
       "get": {
         "operationId": "getAssets-getLessonAssets",
         "description": "This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson",
-        "tags": ["assets", "lessons"],
+        "tags": [
+          "assets",
+          "lessons"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -367,7 +401,10 @@
       "get": {
         "operationId": "getAssets-getLessonAsset",
         "description": "This endpoint will stream the downloadable asset for the given lesson and type",
-        "tags": ["assets", "lessons"],
+        "tags": [
+          "assets",
+          "lessons"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -424,7 +461,9 @@
       "get": {
         "operationId": "getSubjects-getAllSubjects",
         "description": "This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -448,7 +487,9 @@
       "get": {
         "operationId": "getSubjects-getSubject",
         "description": "This endpoint returns a single subject and associated sequences, key stages and years.",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -483,7 +524,10 @@
       "get": {
         "operationId": "getSubjects-getSubjectSequence",
         "description": "List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.",
-        "tags": ["lists", "sequences"],
+        "tags": [
+          "lists",
+          "sequences"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -518,7 +562,9 @@
       "get": {
         "operationId": "getSubjects-getSubjectKeyStages",
         "description": "List of the key stages a subject is taught in.",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -553,7 +599,9 @@
       "get": {
         "operationId": "getSubjects-getSubjectYears",
         "description": "List of the years a subject is taught in.",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -580,7 +628,19 @@
                   "items": {
                     "type": "number"
                   },
-                  "example": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                  "example": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11
+                  ]
                 }
               }
             }
@@ -592,7 +652,9 @@
       "get": {
         "operationId": "getKeyStages-getKeyStages",
         "description": "This endpoint returns all the key stages (titles and slugs) that are currently available on Oak",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -616,7 +678,10 @@
       "get": {
         "operationId": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
         "description": "This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit",
-        "tags": ["lists", "lessons"],
+        "tags": [
+          "lists",
+          "lessons"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -629,7 +694,12 @@
             "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
-              "enum": ["ks1", "ks2", "ks3", "ks4"],
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ],
               "example": "ks1"
             },
             "required": true
@@ -708,7 +778,10 @@
       "get": {
         "operationId": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
         "description": "This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage",
-        "tags": ["lists", "units"],
+        "tags": [
+          "lists",
+          "units"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -721,7 +794,12 @@
             "description": "Key stage slug to filter by, e.g. 'ks2'",
             "schema": {
               "type": "string",
-              "enum": ["ks1", "ks2", "ks3", "ks4"],
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ],
               "example": "ks1"
             },
             "required": true
@@ -774,7 +852,10 @@
       "get": {
         "operationId": "getQuestions-getQuestionsForLessons",
         "description": "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
-        "tags": ["lessons", "questions"],
+        "tags": [
+          "lessons",
+          "questions"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -809,7 +890,10 @@
       "get": {
         "operationId": "getQuestions-getQuestionsForSequence",
         "description": "This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence",
-        "tags": ["questions", "sequences"],
+        "tags": [
+          "questions",
+          "sequences"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -869,7 +953,9 @@
       "get": {
         "operationId": "getQuestions-getQuestionsForKeyStageAndSubject",
         "description": "This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject",
-        "tags": ["questions"],
+        "tags": [
+          "questions"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -882,7 +968,12 @@
             "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
-              "enum": ["ks1", "ks2", "ks3", "ks4"],
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ],
               "example": "ks1"
             },
             "required": true
@@ -954,7 +1045,9 @@
       "get": {
         "operationId": "getLessons-getLesson",
         "description": "This endpoint returns a summary for a given lesson",
-        "tags": ["lessons"],
+        "tags": [
+          "lessons"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -990,7 +1083,10 @@
       "get": {
         "operationId": "getLessons-searchByTextSimilarity",
         "description": "This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in",
-        "tags": ["lessons", "search"],
+        "tags": [
+          "lessons",
+          "search"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1012,7 +1108,12 @@
             "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
-              "enum": ["ks1", "ks2", "ks3", "ks4"]
+              "enum": [
+                "ks1",
+                "ks2",
+                "ks3",
+                "ks4"
+              ]
             }
           },
           {
@@ -1069,7 +1170,9 @@
       "get": {
         "operationId": "getUnits-getUnit",
         "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
-        "tags": ["units"],
+        "tags": [
+          "units"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1105,7 +1208,9 @@
       "get": {
         "operationId": "getThreads-getAllThreads",
         "description": "Get all threads that can be used as sequence filters.",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1159,7 +1264,9 @@
       "get": {
         "operationId": "getThreads-getThreadUnits",
         "description": "Get all units for a specific thread filter.",
-        "tags": ["lists"],
+        "tags": [
+          "lists"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1194,7 +1301,9 @@
       "get": {
         "operationId": "changelog-changelog",
         "description": "History of significant changes to the API with associated dates and versions",
-        "tags": ["internal"],
+        "tags": [
+          "internal"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1223,7 +1332,11 @@
                         }
                       }
                     },
-                    "required": ["version", "date", "changes"]
+                    "required": [
+                      "version",
+                      "date",
+                      "changes"
+                    ]
                   },
                   "example": [
                     {
@@ -1254,7 +1367,9 @@
       "get": {
         "operationId": "changelog-latest",
         "description": "Get the latest version and latest change note for the API",
-        "tags": ["internal"],
+        "tags": [
+          "internal"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1281,7 +1396,11 @@
                       }
                     }
                   },
-                  "required": ["version", "date", "changes"],
+                  "required": [
+                    "version",
+                    "date",
+                    "changes"
+                  ],
                   "example": {
                     "version": "0.5.0",
                     "date": "2025-03-06",
@@ -1302,7 +1421,9 @@
       "get": {
         "operationId": "getRateLimit-getRateLimit",
         "description": "Check your current rate limit status (note that your rate limit is also included in the headers of every response).\n\nThis specific endpoint does not cost any requests.",
-        "tags": ["internal"],
+        "tags": [
+          "internal"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1346,7 +1467,9 @@
                     },
                     {
                       "type": "string",
-                      "enum": ["all-years"]
+                      "enum": [
+                        "all-years"
+                      ]
                     }
                   ]
                 },
@@ -1378,7 +1501,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["unitTitle", "unitSlug"]
+                              "required": [
+                                "unitTitle",
+                                "unitSlug"
+                              ]
                             }
                           },
                           "categories": {
@@ -1393,7 +1519,9 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["categoryTitle"]
+                              "required": [
+                                "categoryTitle"
+                              ]
                             }
                           },
                           "threads": {
@@ -1411,11 +1539,19 @@
                                   "type": "number"
                                 }
                               },
-                              "required": ["threadTitle", "threadSlug", "order"]
+                              "required": [
+                                "threadTitle",
+                                "threadSlug",
+                                "order"
+                              ]
                             }
                           }
                         },
-                        "required": ["unitTitle", "unitOrder", "unitOptions"]
+                        "required": [
+                          "unitTitle",
+                          "unitOrder",
+                          "unitOptions"
+                        ]
                       },
                       {
                         "type": "object",
@@ -1441,7 +1577,9 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["categoryTitle"]
+                              "required": [
+                                "categoryTitle"
+                              ]
                             }
                           },
                           "threads": {
@@ -1459,17 +1597,28 @@
                                   "type": "number"
                                 }
                               },
-                              "required": ["threadTitle", "threadSlug", "order"]
+                              "required": [
+                                "threadTitle",
+                                "threadSlug",
+                                "order"
+                              ]
                             }
                           }
                         },
-                        "required": ["unitTitle", "unitOrder", "unitSlug"]
+                        "required": [
+                          "unitTitle",
+                          "unitOrder",
+                          "unitSlug"
+                        ]
                       }
                     ]
                   }
                 }
               },
-              "required": ["year", "units"]
+              "required": [
+                "year",
+                "units"
+              ]
             },
             {
               "type": "object",
@@ -1529,7 +1678,10 @@
                                                   "type": "string"
                                                 }
                                               },
-                                              "required": ["unitTitle", "unitSlug"]
+                                              "required": [
+                                                "unitTitle",
+                                                "unitSlug"
+                                              ]
                                             }
                                           },
                                           "categories": {
@@ -1544,7 +1696,9 @@
                                                   "type": "string"
                                                 }
                                               },
-                                              "required": ["categoryTitle"]
+                                              "required": [
+                                                "categoryTitle"
+                                              ]
                                             }
                                           },
                                           "threads": {
@@ -1562,11 +1716,19 @@
                                                   "type": "number"
                                                 }
                                               },
-                                              "required": ["threadTitle", "threadSlug", "order"]
+                                              "required": [
+                                                "threadTitle",
+                                                "threadSlug",
+                                                "order"
+                                              ]
                                             }
                                           }
                                         },
-                                        "required": ["unitTitle", "unitOrder", "unitOptions"]
+                                        "required": [
+                                          "unitTitle",
+                                          "unitOrder",
+                                          "unitOptions"
+                                        ]
                                       },
                                       {
                                         "type": "object",
@@ -1592,7 +1754,9 @@
                                                   "type": "string"
                                                 }
                                               },
-                                              "required": ["categoryTitle"]
+                                              "required": [
+                                                "categoryTitle"
+                                              ]
                                             }
                                           },
                                           "threads": {
@@ -1610,21 +1774,36 @@
                                                   "type": "number"
                                                 }
                                               },
-                                              "required": ["threadTitle", "threadSlug", "order"]
+                                              "required": [
+                                                "threadTitle",
+                                                "threadSlug",
+                                                "order"
+                                              ]
                                             }
                                           }
                                         },
-                                        "required": ["unitTitle", "unitOrder", "unitSlug"]
+                                        "required": [
+                                          "unitTitle",
+                                          "unitOrder",
+                                          "unitSlug"
+                                        ]
                                       }
                                     ]
                                   }
                                 }
                               },
-                              "required": ["tierTitle", "tierSlug", "units"]
+                              "required": [
+                                "tierTitle",
+                                "tierSlug",
+                                "units"
+                              ]
                             }
                           }
                         },
-                        "required": ["examSubjectTitle", "tiers"]
+                        "required": [
+                          "examSubjectTitle",
+                          "tiers"
+                        ]
                       },
                       {
                         "type": "object",
@@ -1660,7 +1839,10 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": ["unitTitle", "unitSlug"]
+                                        "required": [
+                                          "unitTitle",
+                                          "unitSlug"
+                                        ]
                                       }
                                     },
                                     "categories": {
@@ -1675,7 +1857,9 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": ["categoryTitle"]
+                                        "required": [
+                                          "categoryTitle"
+                                        ]
                                       }
                                     },
                                     "threads": {
@@ -1693,11 +1877,19 @@
                                             "type": "number"
                                           }
                                         },
-                                        "required": ["threadTitle", "threadSlug", "order"]
+                                        "required": [
+                                          "threadTitle",
+                                          "threadSlug",
+                                          "order"
+                                        ]
                                       }
                                     }
                                   },
-                                  "required": ["unitTitle", "unitOrder", "unitOptions"]
+                                  "required": [
+                                    "unitTitle",
+                                    "unitOrder",
+                                    "unitOptions"
+                                  ]
                                 },
                                 {
                                   "type": "object",
@@ -1723,7 +1915,9 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": ["categoryTitle"]
+                                        "required": [
+                                          "categoryTitle"
+                                        ]
                                       }
                                     },
                                     "threads": {
@@ -1741,23 +1935,37 @@
                                             "type": "number"
                                           }
                                         },
-                                        "required": ["threadTitle", "threadSlug", "order"]
+                                        "required": [
+                                          "threadTitle",
+                                          "threadSlug",
+                                          "order"
+                                        ]
                                       }
                                     }
                                   },
-                                  "required": ["unitTitle", "unitOrder", "unitSlug"]
+                                  "required": [
+                                    "unitTitle",
+                                    "unitOrder",
+                                    "unitSlug"
+                                  ]
                                 }
                               ]
                             }
                           }
                         },
-                        "required": ["examSubjectTitle", "units"]
+                        "required": [
+                          "examSubjectTitle",
+                          "units"
+                        ]
                       }
                     ]
                   }
                 }
               },
-              "required": ["year", "examSubjects"]
+              "required": [
+                "year",
+                "examSubjects"
+              ]
             },
             {
               "type": "object",
@@ -1804,7 +2012,10 @@
                                         "type": "string"
                                       }
                                     },
-                                    "required": ["unitTitle", "unitSlug"]
+                                    "required": [
+                                      "unitTitle",
+                                      "unitSlug"
+                                    ]
                                   }
                                 },
                                 "categories": {
@@ -1819,7 +2030,9 @@
                                         "type": "string"
                                       }
                                     },
-                                    "required": ["categoryTitle"]
+                                    "required": [
+                                      "categoryTitle"
+                                    ]
                                   }
                                 },
                                 "threads": {
@@ -1837,11 +2050,19 @@
                                         "type": "number"
                                       }
                                     },
-                                    "required": ["threadTitle", "threadSlug", "order"]
+                                    "required": [
+                                      "threadTitle",
+                                      "threadSlug",
+                                      "order"
+                                    ]
                                   }
                                 }
                               },
-                              "required": ["unitTitle", "unitOrder", "unitOptions"]
+                              "required": [
+                                "unitTitle",
+                                "unitOrder",
+                                "unitOptions"
+                              ]
                             },
                             {
                               "type": "object",
@@ -1867,7 +2088,9 @@
                                         "type": "string"
                                       }
                                     },
-                                    "required": ["categoryTitle"]
+                                    "required": [
+                                      "categoryTitle"
+                                    ]
                                   }
                                 },
                                 "threads": {
@@ -1885,21 +2108,36 @@
                                         "type": "number"
                                       }
                                     },
-                                    "required": ["threadTitle", "threadSlug", "order"]
+                                    "required": [
+                                      "threadTitle",
+                                      "threadSlug",
+                                      "order"
+                                    ]
                                   }
                                 }
                               },
-                              "required": ["unitTitle", "unitOrder", "unitSlug"]
+                              "required": [
+                                "unitTitle",
+                                "unitOrder",
+                                "unitSlug"
+                              ]
                             }
                           ]
                         }
                       }
                     },
-                    "required": ["tierTitle", "tierSlug", "units"]
+                    "required": [
+                      "tierTitle",
+                      "tierSlug",
+                      "units"
+                    ]
                   }
                 }
               },
-              "required": ["year", "tiers"]
+              "required": [
+                "year",
+                "tiers"
+              ]
             }
           ]
         },
@@ -1938,7 +2176,10 @@
             "type": "string"
           }
         },
-        "required": ["transcript", "vtt"],
+        "required": [
+          "transcript",
+          "vtt"
+        ],
         "example": {
           "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
           "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
@@ -1959,7 +2200,10 @@
               "type": "string"
             }
           },
-          "required": ["lessonTitle", "lessonSlug"]
+          "required": [
+            "lessonTitle",
+            "lessonSlug"
+          ]
         },
         "example": [
           {
@@ -2027,11 +2271,19 @@
                     "type": "string"
                   }
                 },
-                "required": ["type", "label", "url"]
+                "required": [
+                  "type",
+                  "label",
+                  "url"
+                ]
               }
             }
           },
-          "required": ["lessonSlug", "lessonTitle", "assets"]
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "assets"
+          ]
         },
         "example": [
           {
@@ -2100,11 +2352,19 @@
                     "type": "string"
                   }
                 },
-                "required": ["type", "label", "url"]
+                "required": [
+                  "type",
+                  "label",
+                  "url"
+                ]
               }
             }
           },
-          "required": ["lessonSlug", "lessonTitle", "assets"]
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "assets"
+          ]
         },
         "example": [
           {
@@ -2165,12 +2425,19 @@
                   "type": "string"
                 }
               },
-              "required": ["type", "label", "url"]
+              "required": [
+                "type",
+                "label",
+                "url"
+              ]
             }
           }
         },
         "example": {
-          "attribution": ["Copyright XYZ Authors", "Creative Commons Attribution Example 4.0"],
+          "attribution": [
+            "Copyright XYZ Authors",
+            "Creative Commons Attribution Example 4.0"
+          ],
           "assets": [
             {
               "label": "Worksheet",
@@ -2232,7 +2499,10 @@
                           "type": "string"
                         }
                       },
-                      "required": ["keyStageTitle", "keyStageSlug"]
+                      "required": [
+                        "keyStageTitle",
+                        "keyStageSlug"
+                      ]
                     }
                   },
                   "phaseSlug": {
@@ -2252,7 +2522,10 @@
                         "type": "string"
                       }
                     },
-                    "required": ["title", "slug"]
+                    "required": [
+                      "title",
+                      "slug"
+                    ]
                   }
                 },
                 "required": [
@@ -2283,11 +2556,20 @@
                     "type": "string"
                   }
                 },
-                "required": ["keyStageTitle", "keyStageSlug"]
+                "required": [
+                  "keyStageTitle",
+                  "keyStageSlug"
+                ]
               }
             }
           },
-          "required": ["subjectTitle", "subjectSlug", "sequenceSlugs", "years", "keyStages"]
+          "required": [
+            "subjectTitle",
+            "subjectSlug",
+            "sequenceSlugs",
+            "years",
+            "keyStages"
+          ]
         },
         "example": [
           {
@@ -2296,7 +2578,14 @@
             "sequenceSlugs": [
               {
                 "sequenceSlug": "art-primary",
-                "years": [1, 2, 3, 4, 5, 6],
+                "years": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6
+                ],
                 "keyStages": [
                   {
                     "keyStageTitle": "Key Stage 1",
@@ -2313,7 +2602,13 @@
               },
               {
                 "sequenceSlug": "art-secondary",
-                "years": [7, 8, 9, 10, 11],
+                "years": [
+                  7,
+                  8,
+                  9,
+                  10,
+                  11
+                ],
                 "keyStages": [
                   {
                     "keyStageTitle": "Key Stage 3",
@@ -2329,7 +2624,19 @@
                 "ks4Options": null
               }
             ],
-            "years": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11
+            ],
             "keyStages": [
               {
                 "keyStageTitle": "Key Stage 1",
@@ -2386,7 +2693,10 @@
                         "type": "string"
                       }
                     },
-                    "required": ["keyStageTitle", "keyStageSlug"]
+                    "required": [
+                      "keyStageTitle",
+                      "keyStageSlug"
+                    ]
                   }
                 },
                 "phaseSlug": {
@@ -2406,7 +2716,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["title", "slug"]
+                  "required": [
+                    "title",
+                    "slug"
+                  ]
                 }
               },
               "required": [
@@ -2437,18 +2750,34 @@
                   "type": "string"
                 }
               },
-              "required": ["keyStageTitle", "keyStageSlug"]
+              "required": [
+                "keyStageTitle",
+                "keyStageSlug"
+              ]
             }
           }
         },
-        "required": ["subjectTitle", "subjectSlug", "sequenceSlugs", "years", "keyStages"],
+        "required": [
+          "subjectTitle",
+          "subjectSlug",
+          "sequenceSlugs",
+          "years",
+          "keyStages"
+        ],
         "example": {
           "subjectTitle": "Art and design",
           "subjectSlug": "art",
           "sequenceSlugs": [
             {
               "sequenceSlug": "art-primary",
-              "years": [1, 2, 3, 4, 5, 6],
+              "years": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
               "keyStages": [
                 {
                   "keyStageTitle": "Key Stage 1",
@@ -2465,7 +2794,14 @@
             },
             {
               "sequenceSlug": "art-secondary",
-              "years": [1, 2, 3, 4, 5, 6],
+              "years": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
               "keyStages": [
                 {
                   "keyStageTitle": "Key Stage 1",
@@ -2481,7 +2817,19 @@
               "ks4Options": null
             }
           ],
-          "years": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+          "years": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
           "keyStages": [
             {
               "keyStageTitle": "Key Stage 1",
@@ -2528,7 +2876,10 @@
                     "type": "string"
                   }
                 },
-                "required": ["keyStageTitle", "keyStageSlug"]
+                "required": [
+                  "keyStageTitle",
+                  "keyStageSlug"
+                ]
               }
             },
             "phaseSlug": {
@@ -2548,7 +2899,10 @@
                   "type": "string"
                 }
               },
-              "required": ["title", "slug"]
+              "required": [
+                "title",
+                "slug"
+              ]
             }
           },
           "required": [
@@ -2563,7 +2917,14 @@
         "example": [
           {
             "sequenceSlug": "art-primary",
-            "years": [1, 2, 3, 4, 5, 6],
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
             "keyStages": [
               {
                 "keyStageTitle": "Key Stage 1",
@@ -2580,7 +2941,14 @@
           },
           {
             "sequenceSlug": "art-secondary",
-            "years": [1, 2, 3, 4, 5, 6],
+            "years": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
             "keyStages": [
               {
                 "keyStageTitle": "Key Stage 1",
@@ -2609,7 +2977,10 @@
               "type": "string"
             }
           },
-          "required": ["keyStageTitle", "keyStageSlug"]
+          "required": [
+            "keyStageTitle",
+            "keyStageSlug"
+          ]
         },
         "example": [
           {
@@ -2642,7 +3013,10 @@
               "type": "string"
             }
           },
-          "required": ["slug", "title"]
+          "required": [
+            "slug",
+            "title"
+          ]
         },
         "example": [
           {
@@ -2674,11 +3048,18 @@
                     "type": "string"
                   }
                 },
-                "required": ["lessonSlug", "lessonTitle"]
+                "required": [
+                  "lessonSlug",
+                  "lessonTitle"
+                ]
               }
             }
           },
-          "required": ["unitSlug", "unitTitle", "lessons"]
+          "required": [
+            "unitSlug",
+            "unitTitle",
+            "lessons"
+          ]
         },
         "example": [
           {
@@ -2720,11 +3101,18 @@
                     "type": "string"
                   }
                 },
-                "required": ["unitSlug", "unitTitle"]
+                "required": [
+                  "unitSlug",
+                  "unitTitle"
+                ]
               }
             }
           },
-          "required": ["yearSlug", "yearTitle", "units"]
+          "required": [
+            "yearSlug",
+            "yearTitle",
+            "units"
+          ]
         },
         "example": [
           {
@@ -2760,19 +3148,27 @@
                       "anyOf": [
                         {
                           "type": "string",
-                          "enum": ["multiple-choice"]
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["short-answer"]
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["match"]
+                          "enum": [
+                            "match"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["order"]
+                          "enum": [
+                            "order"
+                          ]
                         }
                       ]
                     },
@@ -2798,10 +3194,17 @@
                           "type": "string"
                         }
                       },
-                      "required": ["url", "width", "height"]
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ]
                     }
                   },
-                  "required": ["question", "questionType"]
+                  "required": [
+                    "question",
+                    "questionType"
+                  ]
                 },
                 {
                   "oneOf": [
@@ -2810,7 +3213,9 @@
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["multiple-choice"]
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -2823,7 +3228,9 @@
                                     "type": "boolean"
                                   }
                                 },
-                                "required": ["distractor"]
+                                "required": [
+                                  "distractor"
+                                ]
                               },
                               {
                                 "anyOf": [
@@ -2832,20 +3239,27 @@
                                     "properties": {
                                       "type": {
                                         "type": "string",
-                                        "enum": ["text"]
+                                        "enum": [
+                                          "text"
+                                        ]
                                       },
                                       "content": {
                                         "type": "string"
                                       }
                                     },
-                                    "required": ["type", "content"]
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
                                   },
                                   {
                                     "type": "object",
                                     "properties": {
                                       "type": {
                                         "type": "string",
-                                        "enum": ["image"]
+                                        "enum": [
+                                          "image"
+                                        ]
                                       },
                                       "content": {
                                         "type": "object",
@@ -2869,10 +3283,17 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": ["url", "width", "height"]
+                                        "required": [
+                                          "url",
+                                          "width",
+                                          "height"
+                                        ]
                                       }
                                     },
-                                    "required": ["type", "content"]
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
                                   }
                                 ]
                               }
@@ -2880,14 +3301,19 @@
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["short-answer"]
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -2896,24 +3322,34 @@
                             "properties": {
                               "type": {
                                 "type": "string",
-                                "enum": ["text"]
+                                "enum": [
+                                  "text"
+                                ]
                               },
                               "content": {
                                 "type": "string"
                               }
                             },
-                            "required": ["type", "content"]
+                            "required": [
+                              "type",
+                              "content"
+                            ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["match"]
+                          "enum": [
+                            "match"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -2925,40 +3361,58 @@
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               },
                               "correctChoice": {
                                 "type": "object",
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               }
                             },
-                            "required": ["matchOption", "correctChoice"]
+                            "required": [
+                              "matchOption",
+                              "correctChoice"
+                            ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["order"]
+                          "enum": [
+                            "order"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -2971,26 +3425,36 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": ["order"]
+                                "required": [
+                                  "order"
+                                ]
                               },
                               {
                                 "type": "object",
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               }
                             ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     }
                   ]
                 }
@@ -3011,19 +3475,27 @@
                       "anyOf": [
                         {
                           "type": "string",
-                          "enum": ["multiple-choice"]
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["short-answer"]
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["match"]
+                          "enum": [
+                            "match"
+                          ]
                         },
                         {
                           "type": "string",
-                          "enum": ["order"]
+                          "enum": [
+                            "order"
+                          ]
                         }
                       ]
                     },
@@ -3049,10 +3521,17 @@
                           "type": "string"
                         }
                       },
-                      "required": ["url", "width", "height"]
+                      "required": [
+                        "url",
+                        "width",
+                        "height"
+                      ]
                     }
                   },
-                  "required": ["question", "questionType"]
+                  "required": [
+                    "question",
+                    "questionType"
+                  ]
                 },
                 {
                   "oneOf": [
@@ -3061,7 +3540,9 @@
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["multiple-choice"]
+                          "enum": [
+                            "multiple-choice"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -3074,7 +3555,9 @@
                                     "type": "boolean"
                                   }
                                 },
-                                "required": ["distractor"]
+                                "required": [
+                                  "distractor"
+                                ]
                               },
                               {
                                 "anyOf": [
@@ -3083,20 +3566,27 @@
                                     "properties": {
                                       "type": {
                                         "type": "string",
-                                        "enum": ["text"]
+                                        "enum": [
+                                          "text"
+                                        ]
                                       },
                                       "content": {
                                         "type": "string"
                                       }
                                     },
-                                    "required": ["type", "content"]
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
                                   },
                                   {
                                     "type": "object",
                                     "properties": {
                                       "type": {
                                         "type": "string",
-                                        "enum": ["image"]
+                                        "enum": [
+                                          "image"
+                                        ]
                                       },
                                       "content": {
                                         "type": "object",
@@ -3120,10 +3610,17 @@
                                             "type": "string"
                                           }
                                         },
-                                        "required": ["url", "width", "height"]
+                                        "required": [
+                                          "url",
+                                          "width",
+                                          "height"
+                                        ]
                                       }
                                     },
-                                    "required": ["type", "content"]
+                                    "required": [
+                                      "type",
+                                      "content"
+                                    ]
                                   }
                                 ]
                               }
@@ -3131,14 +3628,19 @@
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["short-answer"]
+                          "enum": [
+                            "short-answer"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -3147,24 +3649,34 @@
                             "properties": {
                               "type": {
                                 "type": "string",
-                                "enum": ["text"]
+                                "enum": [
+                                  "text"
+                                ]
                               },
                               "content": {
                                 "type": "string"
                               }
                             },
-                            "required": ["type", "content"]
+                            "required": [
+                              "type",
+                              "content"
+                            ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["match"]
+                          "enum": [
+                            "match"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -3176,40 +3688,58 @@
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               },
                               "correctChoice": {
                                 "type": "object",
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               }
                             },
-                            "required": ["matchOption", "correctChoice"]
+                            "required": [
+                              "matchOption",
+                              "correctChoice"
+                            ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     },
                     {
                       "type": "object",
                       "properties": {
                         "questionType": {
                           "type": "string",
-                          "enum": ["order"]
+                          "enum": [
+                            "order"
+                          ]
                         },
                         "answers": {
                           "type": "array",
@@ -3222,26 +3752,36 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": ["order"]
+                                "required": [
+                                  "order"
+                                ]
                               },
                               {
                                 "type": "object",
                                 "properties": {
                                   "type": {
                                     "type": "string",
-                                    "enum": ["text"]
+                                    "enum": [
+                                      "text"
+                                    ]
                                   },
                                   "content": {
                                     "type": "string"
                                   }
                                 },
-                                "required": ["type", "content"]
+                                "required": [
+                                  "type",
+                                  "content"
+                                ]
                               }
                             ]
                           }
                         }
                       },
-                      "required": ["questionType", "answers"]
+                      "required": [
+                        "questionType",
+                        "answers"
+                      ]
                     }
                   ]
                 }
@@ -3249,7 +3789,10 @@
             }
           }
         },
-        "required": ["starterQuiz", "exitQuiz"],
+        "required": [
+          "starterQuiz",
+          "exitQuiz"
+        ],
         "example": {
           "starterQuiz": [
             {
@@ -3393,19 +3936,27 @@
                         "anyOf": [
                           {
                             "type": "string",
-                            "enum": ["multiple-choice"]
+                            "enum": [
+                              "multiple-choice"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["short-answer"]
+                            "enum": [
+                              "short-answer"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["match"]
+                            "enum": [
+                              "match"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["order"]
+                            "enum": [
+                              "order"
+                            ]
                           }
                         ]
                       },
@@ -3431,10 +3982,17 @@
                             "type": "string"
                           }
                         },
-                        "required": ["url", "width", "height"]
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
                       }
                     },
-                    "required": ["question", "questionType"]
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
                   },
                   {
                     "oneOf": [
@@ -3443,7 +4001,9 @@
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["multiple-choice"]
+                            "enum": [
+                              "multiple-choice"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3456,7 +4016,9 @@
                                       "type": "boolean"
                                     }
                                   },
-                                  "required": ["distractor"]
+                                  "required": [
+                                    "distractor"
+                                  ]
                                 },
                                 {
                                   "anyOf": [
@@ -3465,20 +4027,27 @@
                                       "properties": {
                                         "type": {
                                           "type": "string",
-                                          "enum": ["text"]
+                                          "enum": [
+                                            "text"
+                                          ]
                                         },
                                         "content": {
                                           "type": "string"
                                         }
                                       },
-                                      "required": ["type", "content"]
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
                                     },
                                     {
                                       "type": "object",
                                       "properties": {
                                         "type": {
                                           "type": "string",
-                                          "enum": ["image"]
+                                          "enum": [
+                                            "image"
+                                          ]
                                         },
                                         "content": {
                                           "type": "object",
@@ -3502,10 +4071,17 @@
                                               "type": "string"
                                             }
                                           },
-                                          "required": ["url", "width", "height"]
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
                                         }
                                       },
-                                      "required": ["type", "content"]
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
                                     }
                                   ]
                                 }
@@ -3513,14 +4089,19 @@
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["short-answer"]
+                            "enum": [
+                              "short-answer"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3529,24 +4110,34 @@
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": ["text"]
+                                  "enum": [
+                                    "text"
+                                  ]
                                 },
                                 "content": {
                                   "type": "string"
                                 }
                               },
-                              "required": ["type", "content"]
+                              "required": [
+                                "type",
+                                "content"
+                              ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["match"]
+                            "enum": [
+                              "match"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3558,40 +4149,58 @@
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 },
                                 "correctChoice": {
                                   "type": "object",
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 }
                               },
-                              "required": ["matchOption", "correctChoice"]
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["order"]
+                            "enum": [
+                              "order"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3604,26 +4213,36 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": ["order"]
+                                  "required": [
+                                    "order"
+                                  ]
                                 },
                                 {
                                   "type": "object",
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 }
                               ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       }
                     ]
                   }
@@ -3644,19 +4263,27 @@
                         "anyOf": [
                           {
                             "type": "string",
-                            "enum": ["multiple-choice"]
+                            "enum": [
+                              "multiple-choice"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["short-answer"]
+                            "enum": [
+                              "short-answer"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["match"]
+                            "enum": [
+                              "match"
+                            ]
                           },
                           {
                             "type": "string",
-                            "enum": ["order"]
+                            "enum": [
+                              "order"
+                            ]
                           }
                         ]
                       },
@@ -3682,10 +4309,17 @@
                             "type": "string"
                           }
                         },
-                        "required": ["url", "width", "height"]
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
                       }
                     },
-                    "required": ["question", "questionType"]
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
                   },
                   {
                     "oneOf": [
@@ -3694,7 +4328,9 @@
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["multiple-choice"]
+                            "enum": [
+                              "multiple-choice"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3707,7 +4343,9 @@
                                       "type": "boolean"
                                     }
                                   },
-                                  "required": ["distractor"]
+                                  "required": [
+                                    "distractor"
+                                  ]
                                 },
                                 {
                                   "anyOf": [
@@ -3716,20 +4354,27 @@
                                       "properties": {
                                         "type": {
                                           "type": "string",
-                                          "enum": ["text"]
+                                          "enum": [
+                                            "text"
+                                          ]
                                         },
                                         "content": {
                                           "type": "string"
                                         }
                                       },
-                                      "required": ["type", "content"]
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
                                     },
                                     {
                                       "type": "object",
                                       "properties": {
                                         "type": {
                                           "type": "string",
-                                          "enum": ["image"]
+                                          "enum": [
+                                            "image"
+                                          ]
                                         },
                                         "content": {
                                           "type": "object",
@@ -3753,10 +4398,17 @@
                                               "type": "string"
                                             }
                                           },
-                                          "required": ["url", "width", "height"]
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
                                         }
                                       },
-                                      "required": ["type", "content"]
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
                                     }
                                   ]
                                 }
@@ -3764,14 +4416,19 @@
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["short-answer"]
+                            "enum": [
+                              "short-answer"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3780,24 +4437,34 @@
                               "properties": {
                                 "type": {
                                   "type": "string",
-                                  "enum": ["text"]
+                                  "enum": [
+                                    "text"
+                                  ]
                                 },
                                 "content": {
                                   "type": "string"
                                 }
                               },
-                              "required": ["type", "content"]
+                              "required": [
+                                "type",
+                                "content"
+                              ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["match"]
+                            "enum": [
+                              "match"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3809,40 +4476,58 @@
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 },
                                 "correctChoice": {
                                   "type": "object",
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 }
                               },
-                              "required": ["matchOption", "correctChoice"]
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       },
                       {
                         "type": "object",
                         "properties": {
                           "questionType": {
                             "type": "string",
-                            "enum": ["order"]
+                            "enum": [
+                              "order"
+                            ]
                           },
                           "answers": {
                             "type": "array",
@@ -3855,26 +4540,36 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": ["order"]
+                                  "required": [
+                                    "order"
+                                  ]
                                 },
                                 {
                                   "type": "object",
                                   "properties": {
                                     "type": {
                                       "type": "string",
-                                      "enum": ["text"]
+                                      "enum": [
+                                        "text"
+                                      ]
                                     },
                                     "content": {
                                       "type": "string"
                                     }
                                   },
-                                  "required": ["type", "content"]
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
                                 }
                               ]
                             }
                           }
                         },
-                        "required": ["questionType", "answers"]
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
                       }
                     ]
                   }
@@ -3882,7 +4577,12 @@
               }
             }
           },
-          "required": ["lessonSlug", "lessonTitle", "starterQuiz", "exitQuiz"]
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "starterQuiz",
+            "exitQuiz"
+          ]
         },
         "example": [
           {
@@ -4043,7 +4743,10 @@
                   "type": "string"
                 }
               },
-              "required": ["keyword", "description"]
+              "required": [
+                "keyword",
+                "description"
+              ]
             }
           },
           "keyLearningPoints": {
@@ -4055,7 +4758,9 @@
                   "type": "string"
                 }
               },
-              "required": ["keyLearningPoint"]
+              "required": [
+                "keyLearningPoint"
+              ]
             }
           },
           "misconceptionsAndCommonMistakes": {
@@ -4070,7 +4775,10 @@
                   "type": "string"
                 }
               },
-              "required": ["misconception", "response"]
+              "required": [
+                "misconception",
+                "response"
+              ]
             }
           },
           "pupilLessonOutcome": {
@@ -4085,7 +4793,9 @@
                   "type": "string"
                 }
               },
-              "required": ["teacherTip"]
+              "required": [
+                "teacherTip"
+              ]
             }
           },
           "contentGuidance": {
@@ -4259,7 +4969,12 @@
               }
             }
           },
-          "required": ["lessonSlug", "lessonTitle", "similarity", "units"]
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "similarity",
+            "units"
+          ]
         },
         "example": [
           {
@@ -4373,7 +5088,11 @@
                   "type": "number"
                 }
               },
-              "required": ["slug", "title", "order"]
+              "required": [
+                "slug",
+                "title",
+                "order"
+              ]
             }
           },
           "categories": {
@@ -4388,7 +5107,9 @@
                   "type": "string"
                 }
               },
-              "required": ["categoryTitle"]
+              "required": [
+                "categoryTitle"
+              ]
             }
           },
           "unitLessons": {
@@ -4407,10 +5128,17 @@
                 },
                 "state": {
                   "type": "string",
-                  "enum": ["published", "new"]
+                  "enum": [
+                    "published",
+                    "new"
+                  ]
                 }
               },
-              "required": ["lessonSlug", "lessonTitle", "state"]
+              "required": [
+                "lessonSlug",
+                "lessonTitle",
+                "state"
+              ]
             }
           }
         },
@@ -4479,7 +5207,10 @@
               "type": "string"
             }
           },
-          "required": ["title", "slug"]
+          "required": [
+            "title",
+            "slug"
+          ]
         },
         "example": [
           {
@@ -4510,13 +5241,18 @@
                   "type": "string"
                 }
               },
-              "required": ["message"]
+              "required": [
+                "message"
+              ]
             },
             "description": "An array of issues that were responsible for the error",
             "example": []
           }
         },
-        "required": ["message", "code"],
+        "required": [
+          "message",
+          "code"
+        ],
         "title": "Authorization not provided error (401)",
         "description": "The error information",
         "example": {
@@ -4547,13 +5283,18 @@
                   "type": "string"
                 }
               },
-              "required": ["message"]
+              "required": [
+                "message"
+              ]
             },
             "description": "An array of issues that were responsible for the error",
             "example": []
           }
         },
-        "required": ["message", "code"],
+        "required": [
+          "message",
+          "code"
+        ],
         "title": "Insufficient access error (403)",
         "description": "The error information",
         "example": {
@@ -4584,13 +5325,18 @@
                   "type": "string"
                 }
               },
-              "required": ["message"]
+              "required": [
+                "message"
+              ]
             },
             "description": "An array of issues that were responsible for the error",
             "example": []
           }
         },
-        "required": ["message", "code"],
+        "required": [
+          "message",
+          "code"
+        ],
         "title": "Internal server error error (500)",
         "description": "The error information",
         "example": {
@@ -4614,7 +5360,11 @@
               "type": "number"
             }
           },
-          "required": ["unitTitle", "unitSlug", "unitOrder"]
+          "required": [
+            "unitTitle",
+            "unitSlug",
+            "unitOrder"
+          ]
         },
         "example": [
           {
@@ -4642,7 +5392,11 @@
             "type": "number"
           }
         },
-        "required": ["limit", "remaining", "reset"],
+        "required": [
+          "limit",
+          "remaining",
+          "reset"
+        ],
         "example": {
           "limit": 1000,
           "remaining": 953,

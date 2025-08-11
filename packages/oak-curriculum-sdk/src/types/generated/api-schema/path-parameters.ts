@@ -1,63 +1,60 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * This file is generated from the API schema during type generation.
- *
+ * 
  * This file contains the tuples, types and type guards for the path parameters, for use in dynamically constructing API requests.
- *
+ * 
  * It also contains the valid parameter combinations for different paths.
  */
 
 // Link to the processed schema for use with the OpenAPI-Fetch client.
-import type { paths as Paths } from './api-paths-types';
+import type { paths as Paths } from "./api-paths-types";
 // Link to the schema runtime object file.
 /**
  * The Schema["paths"] keys are the same as the Paths type keys, but the types are different.
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
-import type { Schema } from './api-schema';
-import { schema } from './api-schema';
+import type { Schema } from "./api-schema";
+import { schema } from "./api-schema";
+
 
 type ValidPath = keyof Paths;
 /**
  * Convenience map for all the paths
  */
 export const PATHS = {
-  '/changelog': '/changelog',
-  '/changelog/latest': '/changelog/latest',
-  '/key-stages': '/key-stages',
-  '/key-stages/{keyStage}/subject/{subject}/assets':
-    '/key-stages/{keyStage}/subject/{subject}/assets',
-  '/key-stages/{keyStage}/subject/{subject}/lessons':
-    '/key-stages/{keyStage}/subject/{subject}/lessons',
-  '/key-stages/{keyStage}/subject/{subject}/questions':
-    '/key-stages/{keyStage}/subject/{subject}/questions',
-  '/key-stages/{keyStage}/subject/{subject}/units':
-    '/key-stages/{keyStage}/subject/{subject}/units',
-  '/lessons/{lesson}/assets': '/lessons/{lesson}/assets',
-  '/lessons/{lesson}/assets/{type}': '/lessons/{lesson}/assets/{type}',
-  '/lessons/{lesson}/quiz': '/lessons/{lesson}/quiz',
-  '/lessons/{lesson}/summary': '/lessons/{lesson}/summary',
-  '/lessons/{lesson}/transcript': '/lessons/{lesson}/transcript',
-  '/rate-limit': '/rate-limit',
-  '/search/lessons': '/search/lessons',
-  '/search/transcripts': '/search/transcripts',
-  '/sequences/{sequence}/assets': '/sequences/{sequence}/assets',
-  '/sequences/{sequence}/questions': '/sequences/{sequence}/questions',
-  '/sequences/{sequence}/units': '/sequences/{sequence}/units',
-  '/subjects': '/subjects',
-  '/subjects/{subject}': '/subjects/{subject}',
-  '/subjects/{subject}/key-stages': '/subjects/{subject}/key-stages',
-  '/subjects/{subject}/sequences': '/subjects/{subject}/sequences',
-  '/subjects/{subject}/years': '/subjects/{subject}/years',
-  '/threads': '/threads',
-  '/threads/{threadSlug}/units': '/threads/{threadSlug}/units',
-  '/units/{unit}/summary': '/units/{unit}/summary',
+"/changelog": "/changelog",
+"/changelog/latest": "/changelog/latest",
+"/key-stages": "/key-stages",
+"/key-stages/{keyStage}/subject/{subject}/assets": "/key-stages/{keyStage}/subject/{subject}/assets",
+"/key-stages/{keyStage}/subject/{subject}/lessons": "/key-stages/{keyStage}/subject/{subject}/lessons",
+"/key-stages/{keyStage}/subject/{subject}/questions": "/key-stages/{keyStage}/subject/{subject}/questions",
+"/key-stages/{keyStage}/subject/{subject}/units": "/key-stages/{keyStage}/subject/{subject}/units",
+"/lessons/{lesson}/assets": "/lessons/{lesson}/assets",
+"/lessons/{lesson}/assets/{type}": "/lessons/{lesson}/assets/{type}",
+"/lessons/{lesson}/quiz": "/lessons/{lesson}/quiz",
+"/lessons/{lesson}/summary": "/lessons/{lesson}/summary",
+"/lessons/{lesson}/transcript": "/lessons/{lesson}/transcript",
+"/rate-limit": "/rate-limit",
+"/search/lessons": "/search/lessons",
+"/search/transcripts": "/search/transcripts",
+"/sequences/{sequence}/assets": "/sequences/{sequence}/assets",
+"/sequences/{sequence}/questions": "/sequences/{sequence}/questions",
+"/sequences/{sequence}/units": "/sequences/{sequence}/units",
+"/subjects": "/subjects",
+"/subjects/{subject}": "/subjects/{subject}",
+"/subjects/{subject}/key-stages": "/subjects/{subject}/key-stages",
+"/subjects/{subject}/sequences": "/subjects/{subject}/sequences",
+"/subjects/{subject}/years": "/subjects/{subject}/years",
+"/threads": "/threads",
+"/threads/{threadSlug}/units": "/threads/{threadSlug}/units",
+"/units/{unit}/summary": "/units/{unit}/summary"
 } as const;
 
 /**
  * Types derived from the runtime schema object.
- */
-type RawPaths = Schema['paths'];
+*/
+type RawPaths = Schema["paths"];
 
 export function isValidPath(value: string): value is ValidPath {
   const paths = Object.keys(schema.paths);
@@ -66,7 +63,7 @@ export function isValidPath(value: string): value is ValidPath {
 export const apiPaths: RawPaths = schema.paths;
 
 // A union type of the allowed methods for all paths
-type AllowedMethods = keyof RawPaths[keyof RawPaths];
+type AllowedMethods = keyof (RawPaths[keyof RawPaths]);
 
 const allowedMethodsSet = new Set<AllowedMethods>();
 for (const path in schema.paths) {
@@ -81,7 +78,9 @@ for (const path in schema.paths) {
 
 // The full set of allowed methods for all paths.
 export const allowedMethods: AllowedMethods[] = [...allowedMethodsSet];
-export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMethods {
+export function isAllowedMethod(
+  maybeMethod: string
+): maybeMethod is AllowedMethods {
   const methods: readonly string[] = allowedMethods;
   return methods.includes(maybeMethod);
 }
@@ -89,19 +88,25 @@ export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMeth
 /**
  * For each path, and each method within that path,
  * map to the return type of a 200 response.
- *
+ * 
  * This works because the raw schema type and the OpenAPI-TS type use the path as the key.
  */
 export type PathReturnTypes = {
   [P in ValidPath]: {
-    get: Paths[P]['get']['responses'][200]['content']['application/json'];
-  };
+    "get": Paths[P]["get"]["responses"][200]["content"]["application/json"];
+  }
 };
+
 
 /**
  * Key stages extracted from the API schema
  */
-export const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+export const KEY_STAGES = [
+  "ks1",
+  "ks2",
+  "ks3",
+  "ks4"
+] as const;
 type KeyStages = typeof KEY_STAGES;
 export type KeyStage = KeyStages[number];
 export function isKeyStage(value: string): value is KeyStage {
@@ -113,23 +118,23 @@ export function isKeyStage(value: string): value is KeyStage {
  * Subjects extracted from the API schema
  */
 export const SUBJECTS = [
-  'art',
-  'citizenship',
-  'computing',
-  'cooking-nutrition',
-  'design-technology',
-  'english',
-  'french',
-  'geography',
-  'german',
-  'history',
-  'maths',
-  'music',
-  'physical-education',
-  'religious-education',
-  'rshe-pshe',
-  'science',
-  'spanish',
+  "art",
+  "citizenship",
+  "computing",
+  "cooking-nutrition",
+  "design-technology",
+  "english",
+  "french",
+  "geography",
+  "german",
+  "history",
+  "maths",
+  "music",
+  "physical-education",
+  "religious-education",
+  "rshe-pshe",
+  "science",
+  "spanish"
 ] as const;
 type Subjects = typeof SUBJECTS;
 export type Subject = Subjects[number];
@@ -153,22 +158,22 @@ export function isLesson(value: string): value is Lesson {
  * Asset types extracted from the API schema
  */
 export const ASSET_TYPES = [
-  'slideDeck',
-  'exitQuiz',
-  'exitQuizAnswers',
-  'starterQuiz',
-  'starterQuizAnswers',
-  'supplementaryResource',
-  'video',
-  'worksheet',
-  'worksheetAnswers',
+  "slideDeck",
+  "exitQuiz",
+  "exitQuizAnswers",
+  "starterQuiz",
+  "starterQuizAnswers",
+  "supplementaryResource",
+  "video",
+  "worksheet",
+  "worksheetAnswers"
 ] as const;
 type AssetTypes = typeof ASSET_TYPES;
 export type AssetType = AssetTypes[number];
 export function isAssetType(value: string): value is AssetType {
   const assetTypes: readonly string[] = ASSET_TYPES;
   return assetTypes.includes(value);
-}
+} 
 
 /**
  * Sequence types extracted from the API schema
@@ -237,7 +242,7 @@ export type PathParameterValues = {
  * Type guard for parameter types
  */
 export function isValidParameterType(
-  parameterType: string,
+  parameterType: string
 ): parameterType is keyof PathParameterValues {
   return parameterType in PATH_PARAMETERS;
 }
@@ -247,30 +252,26 @@ export function isValidParameterType(
  */
 export function isValidPathParameter<K extends keyof PathParameterValues>(
   parameterType: K,
-  value: string,
+  value: string
 ): value is PathParameterValues[K] {
-  const allowedValues: readonly string[] = PATH_PARAMETERS[parameterType];
-  return allowedValues.length === 0 ? typeof value === 'string' : allowedValues.includes(value);
-}
+  const allowedValues: readonly string[] = PATH_PARAMETERS[parameterType]
+  return allowedValues.length === 0 ? typeof value === "string" : allowedValues.includes(value)
+};
 
 /**
  * Path grouping keys
  */
-type PathGroupingKeys =
-  | 'NO_PARAMS'
-  | 'keyStage_AND_subject'
-  | 'lesson'
-  | 'lesson_AND_type'
-  | 'sequence'
-  | 'subject'
-  | 'threadSlug'
-  | 'unit';
+type PathGroupingKeys = "NO_PARAMS" | "keyStage_AND_subject" | "lesson" | "lesson_AND_type" | "sequence" | "subject" | "threadSlug" | "unit"  ;
+
 
 /**
  * Type for a valid parameter combination, linking to the paths types file.
  */
 // Parametrise ValidParameterCombination with both the path and the path key
-interface ValidParameterCombination<P extends ValidPath, K extends PathGroupingKeys> {
+interface ValidParameterCombination<
+  P extends ValidPath,
+  K extends PathGroupingKeys
+> {
   params?: string;
   path: P;
   paramsKey: K; // This ensures paramsKey matches the K type parameter, enabling type narrowing based on the path key
@@ -287,154 +288,149 @@ type ValidPathGroupings = {
   [K in PathGroupingKeys]: ValidPathAndParameters<K>;
 };
 
+
+
 /**
  * Valid combinations of parameters for different paths
  */
 export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
-  keyStage_AND_subject: {
-    '/key-stages/{keyStage}/subject/{subject}/assets': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/assets',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/lessons': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/lessons',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/questions': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/questions',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/units': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/units',
-      paramsKey: 'keyStage_AND_subject',
-    },
+"keyStage_AND_subject": {
+  "/key-stages/{keyStage}/subject/{subject}/assets": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/assets",
+    "paramsKey": "keyStage_AND_subject"
   },
-  lesson: {
-    '/lessons/{lesson}/assets': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/assets',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/quiz': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/quiz',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/summary': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/summary',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/transcript': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/transcript',
-      paramsKey: 'lesson',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/lessons": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
+    "paramsKey": "keyStage_AND_subject"
   },
-  lesson_AND_type: {
-    '/lessons/{lesson}/assets/{type}': {
-      params: 'lesson, type',
-      path: '/lessons/{lesson}/assets/{type}',
-      paramsKey: 'lesson_AND_type',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/questions": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/questions",
+    "paramsKey": "keyStage_AND_subject"
   },
-  NO_PARAMS: {
-    '/changelog': {
-      params: '',
-      path: '/changelog',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/changelog/latest': {
-      params: '',
-      path: '/changelog/latest',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/key-stages': {
-      params: '',
-      path: '/key-stages',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/rate-limit': {
-      params: '',
-      path: '/rate-limit',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/search/lessons': {
-      params: '',
-      path: '/search/lessons',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/search/transcripts': {
-      params: '',
-      path: '/search/transcripts',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/subjects': {
-      params: '',
-      path: '/subjects',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/threads': {
-      params: '',
-      path: '/threads',
-      paramsKey: 'NO_PARAMS',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/units": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/units",
+    "paramsKey": "keyStage_AND_subject"
+  }
+}, "lesson": {
+  "/lessons/{lesson}/assets": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/assets",
+    "paramsKey": "lesson"
   },
-  sequence: {
-    '/sequences/{sequence}/assets': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/assets',
-      paramsKey: 'sequence',
-    },
-    '/sequences/{sequence}/questions': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/questions',
-      paramsKey: 'sequence',
-    },
-    '/sequences/{sequence}/units': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/units',
-      paramsKey: 'sequence',
-    },
+  "/lessons/{lesson}/quiz": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/quiz",
+    "paramsKey": "lesson"
   },
-  subject: {
-    '/subjects/{subject}': {
-      params: 'subject',
-      path: '/subjects/{subject}',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/key-stages': {
-      params: 'subject',
-      path: '/subjects/{subject}/key-stages',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/sequences': {
-      params: 'subject',
-      path: '/subjects/{subject}/sequences',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/years': {
-      params: 'subject',
-      path: '/subjects/{subject}/years',
-      paramsKey: 'subject',
-    },
+  "/lessons/{lesson}/summary": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/summary",
+    "paramsKey": "lesson"
   },
-  threadSlug: {
-    '/threads/{threadSlug}/units': {
-      params: 'threadSlug',
-      path: '/threads/{threadSlug}/units',
-      paramsKey: 'threadSlug',
-    },
+  "/lessons/{lesson}/transcript": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/transcript",
+    "paramsKey": "lesson"
+  }
+}, "lesson_AND_type": {
+  "/lessons/{lesson}/assets/{type}": {
+    "params": "lesson, type",
+    "path": "/lessons/{lesson}/assets/{type}",
+    "paramsKey": "lesson_AND_type"
+  }
+}, "NO_PARAMS": {
+  "/changelog": {
+    "params": "",
+    "path": "/changelog",
+    "paramsKey": "NO_PARAMS"
   },
-  unit: {
-    '/units/{unit}/summary': {
-      params: 'unit',
-      path: '/units/{unit}/summary',
-      paramsKey: 'unit',
-    },
+  "/changelog/latest": {
+    "params": "",
+    "path": "/changelog/latest",
+    "paramsKey": "NO_PARAMS"
   },
+  "/key-stages": {
+    "params": "",
+    "path": "/key-stages",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/rate-limit": {
+    "params": "",
+    "path": "/rate-limit",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/search/lessons": {
+    "params": "",
+    "path": "/search/lessons",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/search/transcripts": {
+    "params": "",
+    "path": "/search/transcripts",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/subjects": {
+    "params": "",
+    "path": "/subjects",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/threads": {
+    "params": "",
+    "path": "/threads",
+    "paramsKey": "NO_PARAMS"
+  }
+}, "sequence": {
+  "/sequences/{sequence}/assets": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/assets",
+    "paramsKey": "sequence"
+  },
+  "/sequences/{sequence}/questions": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/questions",
+    "paramsKey": "sequence"
+  },
+  "/sequences/{sequence}/units": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/units",
+    "paramsKey": "sequence"
+  }
+}, "subject": {
+  "/subjects/{subject}": {
+    "params": "subject",
+    "path": "/subjects/{subject}",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/key-stages": {
+    "params": "subject",
+    "path": "/subjects/{subject}/key-stages",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/sequences": {
+    "params": "subject",
+    "path": "/subjects/{subject}/sequences",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/years": {
+    "params": "subject",
+    "path": "/subjects/{subject}/years",
+    "paramsKey": "subject"
+  }
+}, "threadSlug": {
+  "/threads/{threadSlug}/units": {
+    "params": "threadSlug",
+    "path": "/threads/{threadSlug}/units",
+    "paramsKey": "threadSlug"
+  }
+}, "unit": {
+  "/units/{unit}/summary": {
+    "params": "unit",
+    "path": "/units/{unit}/summary",
+    "paramsKey": "unit"
+  }
+}
 };
