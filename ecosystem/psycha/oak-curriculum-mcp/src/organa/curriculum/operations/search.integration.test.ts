@@ -1,0 +1,113 @@
+/**
+ * Integration tests for search operations
+ * Tests the integration between curriculum organ and SDK
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import type { Logger } from '@oaknational/mcp-moria';
+import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import { searchLessons } from './search';
+import type { SearchLessonsParams } from './search';
+
+describe('searchLessons', () => {
+  let mockSdk: OakApiClient;
+  let mockLogger: Logger;
+
+  beforeEach(() => {
+    // Create mock SDK client
+    mockSdk = {
+      GET: vi.fn(),
+    } as unknown as OakApiClient;
+
+    // Create mock logger
+    mockLogger = {
+      info: vi.fn(),
+      debug: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      child: vi.fn(() => mockLogger),
+    } as unknown as Logger;
+  });
+
+  it('should search for lessons using SDK and return results', async () => {
+    // Given: Mock SDK returns search results
+    const mockResults = [
+      {
+        lessonSlug: 'introduction-to-fractions-2h6t8',
+        lessonTitle: 'Introduction to Fractions',
+        subjectSlug: 'maths',
+        subjectTitle: 'Mathematics',
+        keyStageSlug: 'ks2',
+        keyStageTitle: 'Key Stage 2',
+      },
+    ];
+
+    vi.mocked(mockSdk.GET).mockResolvedValue({
+      data: mockResults,
+      error: undefined,
+    });
+
+    // When: Search for lessons
+    const params = {
+      q: 'fractions',
+      keyStage: 'ks2' as const,
+      subject: 'maths' as const,
+    };
+    const results = await searchLessons(mockSdk, mockLogger, params);
+
+    // Then: SDK is called with correct parameters
+    expect(mockSdk.GET).toHaveBeenCalledWith('/search/lessons', {
+      params: {
+        query: {
+          q: 'fractions',
+          keyStage: 'ks2',
+          subject: 'maths',
+        },
+      },
+    });
+
+    // And: Results are returned
+    expect(results).toEqual(mockResults);
+
+    // And: Logger logs the operation
+    expect(mockLogger.info).toHaveBeenCalledWith('Searching lessons', params);
+    expect(mockLogger.debug).toHaveBeenCalledWith('Found 1 lesson');
+  });
+
+  it('should handle SDK errors gracefully', async () => {
+    // Given: SDK returns an error
+    vi.mocked(mockSdk.GET).mockResolvedValue({
+      data: undefined,
+      error: { status: 500, message: 'Internal server error' },
+    });
+
+    // When: Search for lessons
+    const params = { q: 'fractions' };
+
+    // Then: Error is thrown with context
+    await expect(searchLessons(mockSdk, mockLogger, params)).rejects.toThrow(
+      'Curriculum searchLessons failed',
+    );
+
+    // And: Error is logged
+    expect(mockLogger.error).toHaveBeenCalled();
+  });
+
+  it('should handle empty search results', async () => {
+    // Given: SDK returns empty results
+    vi.mocked(mockSdk.GET).mockResolvedValue({
+      data: [],
+      error: undefined,
+    });
+
+    // When: Search for lessons
+    const params = { q: 'nonexistent' };
+    const results = await searchLessons(mockSdk, mockLogger, params);
+
+    // Then: Empty array is returned
+    expect(results).toEqual([]);
+
+    // And: Logger indicates no results
+    expect(mockLogger.debug).toHaveBeenCalledWith('No lessons found');
+  });
+});

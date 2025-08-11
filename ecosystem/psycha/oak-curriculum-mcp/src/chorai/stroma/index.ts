@@ -25,3 +25,10 @@ export type {
   ProgrammeOperations,
   CurriculumOperations,
 } from './curriculum-contracts';
+
+// Export SDK client factory
+export { createSdkClient } from './sdk-client';
+export type { SdkClientConfig } from './sdk-client';
+
+// Export shared operation types
+export type { SearchLessonsParams } from './operation-types';

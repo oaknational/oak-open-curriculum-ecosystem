@@ -6,11 +6,15 @@
  */
 
 // Main client factories
-export { createOakClient, createOakPathBasedClient } from './client/index.js';
-export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
+export { createOakClient, createOakPathBasedClient } from './client/index';
+export type { OakApiClient, OakApiPathBasedClient } from './client/index';
 
 // Generated types
-export type { paths } from './types/generated/api-schema/api-paths-types.js';
+export type { paths } from './types/generated/api-schema/api-paths-types';
+export type { components } from './types/generated/api-schema/api-paths-types';
 
 // Configuration
-export { apiUrl, apiSchemaUrl } from './config/index.js';
+export { apiUrl, apiSchemaUrl } from './config/index';
+
+// Create a convenience export for createApiClient (alias for createOakClient)
+export { createOakClient as createApiClient } from './client/index';

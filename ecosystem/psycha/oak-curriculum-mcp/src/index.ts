@@ -5,12 +5,22 @@
  * It provides AI assistants with access to Oak National Academy's curriculum content.
  */
 
-export async function main(): Promise<void> {
-  await Promise.resolve(); // Placeholder await
-  console.log('Oak Curriculum MCP Server - Placeholder');
-  // TODO: Implement server initialization
-}
+import { createServer } from './psychon/server';
 
+export { createServer } from './psychon/server';
+export type { ServerConfig } from './psychon/wiring';
+
+// Re-export types for external use
+export type { CurriculumOrgan } from './organa/curriculum';
+export type { McpOrgan } from './organa/mcp';
+
+// Main entry point when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch(console.error);
+  createServer({
+    apiKey: process.env.OAK_API_KEY,
+    logLevel: (process.env.LOG_LEVEL as any) ?? 'info',
+  }).catch((error) => {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  });
 }

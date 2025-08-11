@@ -1,0 +1,62 @@
+/**
+ * Curriculum Organ Membrane
+ *
+ * This is the boundary of the curriculum organ, providing a clean interface
+ * to all curriculum operations. The organ wraps the Oak Curriculum SDK
+ * and provides business logic for the MCP server.
+ */
+
+import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { Logger } from '@oaknational/mcp-moria';
+import type { components } from '@oaknational/oak-curriculum-sdk';
+
+// Import operations
+import { searchLessons, type SearchLessonsParams } from './operations/search';
+import { getLesson } from './operations/lesson';
+import { listKeyStages } from './operations/key-stages';
+import { listSubjects } from './operations/subjects';
+
+// Re-export types using generated SDK types
+export type KeyStage = components['schemas']['KeyStageResponseSchema'][number];
+export type Subject = components['schemas']['AllSubjectsResponseSchema'][number];
+export type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
+export type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
+
+// Re-export operation parameter types
+export type { SearchLessonsParams };
+
+/**
+ * Dependencies required by the curriculum organ
+ */
+export interface CurriculumOrganDeps {
+  sdk: OakApiClient;
+  logger: Logger;
+}
+
+/**
+ * The curriculum organ interface
+ * Provides all operations related to the Oak curriculum
+ */
+export interface CurriculumOrgan {
+  searchLessons(params: SearchLessonsParams): Promise<SearchResult[]>;
+  getLesson(lessonSlug: string): Promise<LessonSummary>;
+  listKeyStages(): Promise<KeyStage[]>;
+  listSubjects(): Promise<Subject[]>;
+}
+
+/**
+ * Create a curriculum organ with the given dependencies
+ */
+export function createCurriculumOrgan(deps: CurriculumOrganDeps): CurriculumOrgan {
+  const { sdk, logger } = deps;
+
+  // Create a child logger for this organ
+  const organLogger = logger.child({ organ: 'curriculum' });
+
+  return {
+    searchLessons: (params) => searchLessons(sdk, organLogger, params),
+    getLesson: (lessonSlug) => getLesson(sdk, organLogger, lessonSlug),
+    listKeyStages: () => listKeyStages(sdk, organLogger),
+    listSubjects: () => listSubjects(sdk, organLogger),
+  };
+}
