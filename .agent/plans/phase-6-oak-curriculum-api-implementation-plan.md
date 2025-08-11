@@ -46,6 +46,8 @@ ecosystem/psycha/
 
 **Principle**: The ONLY manual step when API changes is running type generation. Everything else is automatic.
 
+**Architecture Decision**: [ADR-026: OpenAPI Type Generation Strategy](../../docs/architecture/architectural-decisions/026-openapi-type-generation-strategy.md)
+
 **Implementation Completed**:
 
 1. **Copied Complete Type Generation Pipeline** ✅
@@ -357,6 +359,8 @@ describe('Search Integration', () => {
 
 **Status**: DEFERRED - Moved to Future Refinements section in high-level plan
 
+**Architecture Decision**: [ADR-028: Deferring Zod Validation](../../docs/architecture/architectural-decisions/028-zod-validation-deferral.md)
+
 This sub-phase has been deferred as the current type predicates and TypeScript interfaces provide sufficient validation for the MVP. Zod integration will be reconsidered when:
 
 - API returns malformed data in production
@@ -369,6 +373,8 @@ See the Future Refinements section in the high-level plan for full details.
 #### 6.1.5 Runtime Isolation Assessment ✅ COMPLETED
 
 **Objective**: Isolate Node.js runtime dependencies for multi-environment support
+
+**Architecture Decision**: [ADR-027: Runtime Isolation Strategy](../../docs/architecture/architectural-decisions/027-runtime-isolation-strategy.md)
 
 **Implementation Completed**:
 
@@ -400,146 +406,380 @@ try {
 - ✅ No hard dependency on Node.js globals
 - ✅ Ready for deployment to edge environments
 
-### Sub-phase 6.2: MCP Server Implementation
+### Sub-phase 6.2: MCP Server Implementation 🎯 CURRENT FOCUS
 
-#### 6.2.1 MCP Implementation Pattern Research (COMPLETED)
+**Location**: `ecosystem/psycha/oak-curriculum-mcp`  
+**Architecture**: Biological (Chorai/Organa/Psychon)
 
-**Objective**: Research official MCP implementations to inform approach
+#### Directory Structure
 
-**Findings from Official MCP Servers**:
-
-1. **Repository Structure**: Simple, flat structure
-   - Single `index.ts` file for simple servers
-   - Helper modules for complex logic
-   - Direct tool definitions in main file
-
-2. **Key Dependencies**:
-   - `@modelcontextprotocol/sdk/server` - Server implementation
-   - `@modelcontextprotocol/sdk/server/stdio` - Transport layer
-   - `zod` - Input validation
-   - `zod-to-json-schema` - Schema generation
-
-3. **Pattern Example** (from filesystem server):
-
-   ```typescript
-   import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-   import { z } from "zod";
-   
-   const server = new Server({
-     name: "oak-curriculum",
-     version: "1.0.0"
-   });
-   
-   // Define tool schemas with Zod
-   const SearchLessonsSchema = z.object({
-     subject: z.string().optional(),
-     keyStage: z.string().optional()
-   });
-   
-   // Register tools
-   server.setRequestHandler(ListToolsRequestSchema, () => ({
-     tools: [{
-       name: "oak-search-lessons",
-       inputSchema: zodToJsonSchema(SearchLessonsSchema)
-     }]
-   }));
-   ```
-
-**How to Apply Biological Architecture**:
-
-- Use official MCP SDK patterns as the foundation
-- Wrap SDK logic in organs for separation of concerns
-- Keep MCP protocol handling simple and direct
-- Biological architecture for internal organisation, not protocol
-
-#### 6.2.2 Biological Architecture Implementation
-
-**Objective**: Create MCP server following biological architecture
-
-**Tasks**:
-
-1. **Chorai Layer (Pervasive Fields)**
-   - `stroma/`: Import SDK types, define MCP contracts
-   - `aither/`: Logging setup with adaptive logger from histoi
-   - `phaneron/`: Configuration for API keys and endpoints
-   - Each chora has membrane (index.ts) for clear boundaries
-
-2. **Organa Layer (Business Logic)**
-   - `curriculum/`: Organ that wraps SDK and transforms for MCP
-   - Has membrane (index.ts) exposing only public interface
-   - No cross-organ imports (follows biological rules)
-   - Receives chorai via dependency injection
-
-3. **Psychon Layer (Wiring)**
-   - Dependency injection container with fail-fast validation
-   - MCP server initialization
-   - Tool registration with proper error handling
-   - **Zod validation at MCP boundaries** for all tool inputs
-
-**Structure**:
-
-```typescript
-// organa/curriculum/index.ts
-export function createCurriculumOrgan(deps: {
-  sdk: OakCurriculumClient;
-  logger: Logger;
-}) {
-  return {
-    searchLessons: async (params) => {
-      deps.logger.info('Searching lessons', params);
-      return deps.sdk.searchLessons(params);
-    }
-  };
-}
-
-// psychon/index.ts
-const sdk = new OakCurriculumClient(httpAdapter, config);
-const organ = createCurriculumOrgan({ sdk, logger });
-const server = new MCPServer({ organs: { curriculum: organ } });
+```text
+ecosystem/psycha/oak-curriculum-mcp/
+├── src/
+│   ├── chorai/                 # Pervasive fields (plural)
+│   │   ├── stroma/             # Types and contracts
+│   │   │   ├── curriculum-contracts/  # Operation contracts
+│   │   │   ├── curriculum-types/      # Type definitions
+│   │   │   ├── mcp-contracts/         # MCP-specific contracts
+│   │   │   └── index.ts               # Stroma membrane
+│   │   ├── aither/             # Logging
+│   │   │   └── index.ts
+│   │   ├── phaneron/           # Configuration
+│   │   │   ├── curriculum-config/
+│   │   │   └── index.ts
+│   │   └── eidola/             # Test mocks (if needed)
+│   │       └── index.ts
+│   ├── organa/                 # Business logic organs
+│   │   ├── curriculum/         # Main curriculum organ
+│   │   │   ├── operations/    # Business operations
+│   │   │   ├── transformers/  # Data transformations
+│   │   │   ├── errors/        # Error handling
+│   │   │   └── index.ts       # Organ membrane
+│   │   └── mcp/               # MCP protocol organ
+│   │       ├── tools/         # Tool definitions
+│   │       ├── handlers/      # Tool handlers
+│   │       └── index.ts
+│   └── psychon/                # Wiring layer
+│       ├── server.ts           # MCP server setup
+│       ├── wiring.ts          # Dependency injection
+│       └── index.ts           # Entry point
+├── e2e-tests/
+│   └── server.e2e.test.ts
+├── vitest.e2e.config.ts
+└── package.json
 ```
 
-#### 6.2.3 MCP Tool Definitions
+#### Implementation Steps
 
-**Objective**: Define MCP tools for curriculum operations
+##### Step 1: Project Setup
 
-**Tools to Implement**:
+```json
+// package.json dependencies
+{
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/mcp-moria": "workspace:*",
+    "@oaknational/mcp-histos-logger": "workspace:*",
+    "@oaknational/mcp-histos-env": "workspace:*",
+    "dotenv": "^17.2.1",
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.24.1"
+  },
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:e2e": "vitest run --config vitest.e2e.config.ts"
+  }
+}
+```
+
+##### Step 2: Chorai Layer
+
+**Stroma (Types and Contracts)**:
 
 ```typescript
-// MCP validates tool inputs only - SDK handles API response validation
+// src/chorai/stroma/curriculum-contracts/operations.ts
+export interface CurriculumOperations {
+  searchLessons(params: SearchLessonsParams): Promise<Lesson[]>;
+  getLesson(slug: string): Promise<Lesson>;
+  listProgrammes(): Promise<Programme[]>;
+  getUnit(slug: string): Promise<Unit>;
+  browseCurriculum(params: BrowseParams): Promise<CurriculumStructure>;
+}
+```
+
+**Aither (Logging)**:
+
+```typescript
+// src/chorai/aither/index.ts
+import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+
+export const logger = createAdaptiveLogger({
+  name: 'oak-curriculum-mcp',
+  level: process.env.LOG_LEVEL || 'info'
+});
+```
+
+**Phaneron (Configuration)**:
+
+```typescript
+// src/chorai/phaneron/curriculum-config/config.ts
 import { z } from 'zod';
 
-// Tool input schemas for MCP protocol validation
-const searchLessonsInputSchema = z.object({
-  subject: z.string().optional(),
-  keyStage: z.string().optional(),
-  limit: z.number().int().positive().max(100).default(10)
+// MCP-specific configuration only
+// SDK handles its own configuration per ADR-027
+const ConfigSchema = z.object({
+  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+  MCP_SERVER_NAME: z.string().default('oak-curriculum-mcp')
 });
 
-const getLessonInputSchema = z.object({
-  lessonSlug: z.string().min(1)
-});
-
-// MCP validates tool inputs before passing to SDK
-function validateToolInput<T>(schema: z.ZodSchema<T>, input: unknown): T {
-  const result = schema.safeParse(input);
+export function loadConfig() {
+  const result = ConfigSchema.safeParse(process.env);
   if (!result.success) {
-    throw new Error(`Invalid tool input: ${result.error.message}`);
+    throw new Error(`Invalid configuration: ${result.error.message}`);
   }
   return result.data;
 }
+```
 
-const tools = {
+##### Step 3: Organa Layer
+
+**Curriculum Organ**:
+
+```typescript
+// src/organa/curriculum/errors/curriculum-errors.ts
+export class CurriculumOperationError extends Error {
+  constructor(
+    operation: string,
+    cause: unknown,
+    public readonly context?: Record<string, unknown>
+  ) {
+    super(`Curriculum ${operation} failed: ${String(cause)}`);
+    this.name = 'CurriculumOperationError';
+  }
+}
+
+// src/organa/curriculum/operations/search.ts
+import type { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import type { Logger } from '@oaknational/mcp-moria';
+import { CurriculumOperationError } from '../errors/curriculum-errors';
+
+export async function searchLessons(
+  sdk: OakCurriculumClient,
+  logger: Logger,
+  params: SearchLessonsParams
+) {
+  logger.info('Searching lessons', params);
+  
+  try {
+    const results = await sdk.searchLessons(params);
+    logger.debug(`Found ${results.length} lessons`);
+    return results;
+  } catch (error) {
+    logger.error('Search failed', error);
+    throw new CurriculumOperationError(
+      'searchLessons',
+      error,
+      { params }
+    );
+  }
+}
+
+// src/organa/curriculum/index.ts (Membrane)
+import type { CurriculumOperations } from '../../chorai/stroma/curriculum-contracts/operations';
+
+export function createCurriculumOrgan(deps: CurriculumOrganDeps): CurriculumOperations {
+  return {
+    searchLessons: (params) => 
+      operations.searchLessons(deps.sdk, deps.logger, params),
+    getLesson: (slug) => 
+      operations.getLesson(deps.sdk, deps.logger, slug),
+    listProgrammes: () =>
+      operations.listProgrammes(deps.sdk, deps.logger),
+    getUnit: (slug) =>
+      operations.getUnit(deps.sdk, deps.logger, slug),
+    browseCurriculum: (params) =>
+      operations.browseCurriculum(deps.sdk, deps.logger, params)
+  };
+}
+```
+
+**MCP Organ**:
+
+```typescript
+// src/organa/mcp/tools/definitions.ts
+import { z } from 'zod';
+import { zodToJsonSchema } from 'zod-to-json-schema';
+
+export const TOOL_DEFINITIONS = {
   'oak-search-lessons': {
-    description: 'Search Oak lessons by subject and key stage',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        subject: { type: 'string' },
-        keyStage: { type: 'string' },
-        limit: { type: 'number', default: 10 }
-      }
-    }
+    description: 'Search Oak National Academy lessons',
+    inputSchema: zodToJsonSchema(z.object({
+      subject: z.string().optional(),
+      keyStage: z.string().optional(),
+      limit: z.number().int().positive().max(100).default(10)
+    }))
   },
+  'oak-get-lesson': {
+    description: 'Get detailed lesson information',
+    inputSchema: zodToJsonSchema(z.object({
+      lessonSlug: z.string().min(1)
+    }))
+  },
+  // ... other tools
+};
+
+// src/organa/mcp/handlers/tool-handler.ts
+import type { CurriculumOperations } from '../../../chorai/stroma/curriculum-contracts/operations';
+
+export function createToolHandler(curriculumOps: CurriculumOperations) {
+  return async (toolName: string, input: unknown) => {
+    switch (toolName) {
+      case 'oak-search-lessons': {
+        const params = SearchLessonsSchema.parse(input);
+        return await curriculumOps.searchLessons(params);
+      }
+      // ... other tools
+    }
+  };
+}
+```
+
+##### Step 4: Psychon Layer
+
+```typescript
+// src/psychon/wiring.ts
+import { createOakClient } from '@oaknational/oak-curriculum-sdk';
+import { createCurriculumOrgan } from '../organa/curriculum';
+import type { CurriculumOperations } from '../chorai/stroma/curriculum-contracts/operations';
+
+export function wireApplication() {
+  const config = loadConfig();
+  
+  // SDK handles its own env config per ADR-027
+  const sdk = createOakClient();
+  
+  const curriculumOrgan = createCurriculumOrgan({
+    sdk,
+    logger: logger.child({ module: 'curriculum' })
+  });
+  
+  // Interface abstraction, not direct organ
+  const curriculumOps: CurriculumOperations = curriculumOrgan;
+  
+  const mcpOrgan = createMCPOrgan({
+    curriculumOps,
+    logger: logger.child({ module: 'mcp' })
+  });
+  
+  return { mcpOrgan, config, logger };
+}
+
+// src/psychon/server.ts
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+
+export async function createServer() {
+  const { mcpOrgan, logger } = wireApplication();
+  
+  const server = new Server({
+    name: 'oak-curriculum-mcp',
+    version: '1.0.0'
+  }, {
+    capabilities: { tools: {} }
+  });
+  
+  // Register handlers...
+  
+  return server;
+}
+```
+
+##### Step 5: Testing Strategy
+
+**Unit Tests** (Pure Functions Only):
+
+```typescript
+// src/organa/curriculum/transformers/lesson-transformer.unit.test.ts
+describe('transformLesson', () => {
+  it('transforms SDK lesson to MCP format', () => {
+    const sdkLesson = { slug: 'test', title: 'Test', subject: 'maths' };
+    const result = transformLesson(sdkLesson);
+    expect(result).toEqual({
+      id: 'test',
+      name: 'Test',
+      metadata: { subject: 'maths' }
+    });
+  });
+});
+```
+
+**Integration Tests** (Simple Injected Dependencies):
+
+```typescript
+// src/organa/curriculum/operations/search.integration.test.ts
+describe('Curriculum Operations Integration', () => {
+  it('integrates SDK with error handling', async () => {
+    const sdk = {
+      searchLessons: vi.fn().mockResolvedValue([{ slug: 'lesson-1' }])
+    };
+    const logger = { info: vi.fn(), debug: vi.fn(), error: vi.fn() };
+    
+    const organ = createCurriculumOrgan({ sdk, logger });
+    const result = await organ.searchLessons({ subject: 'maths' });
+    
+    expect(result).toHaveLength(1);
+    expect(logger.info).toHaveBeenCalled();
+  });
+});
+```
+
+**E2E Tests** (Conditional Execution):
+
+```typescript
+// e2e-tests/server.e2e.test.ts
+const shouldRunE2E = process.env.OAK_API_KEY && process.env.RUN_E2E === 'true';
+
+describe.skipIf(!shouldRunE2E)('Oak Curriculum MCP Server E2E', () => {
+  // Use real MCP client and real API
+  let server: ChildProcess;
+  let client: Client;
+  
+  beforeAll(async () => {
+    server = spawn('node', ['dist/index.js'], { env: process.env });
+    const transport = new StdioClientTransport({
+      stdin: server.stdin!,
+      stdout: server.stdout!
+    });
+    client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });
+    await client.connect(transport);
+  });
+  
+  it('lists available tools', async () => {
+    const response = await client.request({ method: 'tools/list' });
+    expect(response.tools).toContainEqual(
+      expect.objectContaining({ name: 'oak-search-lessons' })
+    );
+  });
+});
+```
+
+### Sub-phase 6.3: Multi-Server Coexistence
+
+**Objective**: Enable oak-notion-mcp and oak-curriculum-mcp to run together
+
+**Tasks**:
+
+1. **Independent Configuration**:
+   - Separate environment variables for each server
+   - Non-conflicting server names in MCP protocol
+   - Independent logging namespaces
+
+2. **Claude Configuration**:
+   ```json
+   // claude_desktop_config.json
+   {
+     "mcpServers": {
+       "oak-notion": {
+         "command": "node",
+         "args": ["ecosystem/psycha/oak-notion-mcp/dist/index.js"],
+         "env": { "NOTION_API_KEY": "..." }
+       },
+       "oak-curriculum": {
+         "command": "node",
+         "args": ["ecosystem/psycha/oak-curriculum-mcp/dist/index.js"],
+         "env": { "OAK_API_KEY": "..." }
+       }
+     }
+   }
+   ```
+
+3. **Testing**:
+   - Test each server independently
+   - Test both servers running simultaneously
+   - Verify no port conflicts or resource contention
   
   'oak-get-lesson': {
     description: 'Get detailed lesson content',

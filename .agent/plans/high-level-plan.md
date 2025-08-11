@@ -69,7 +69,9 @@ ecosystem/
     └── oak-notion-mcp/
 ```
 
-## Phase 5.5: Runtime Isolation 🚧 MITIGATION STRATEGY
+## Phase 5.5: Runtime Isolation
+
+### For SDK COMPLETE, for Repo as a whole, superseded by Phase 7
 
 **Original Goal**: Remove all Node.js globals from core logic  
 **Current Status**: MITIGATED through boundary isolation  
@@ -136,6 +138,7 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 - **Testing**: Use generated types for full type safety
 
 **Achievements**:
+
 - ✅ Successfully copied reference's two-stage type generation pipeline
 - ✅ Generated all 4 files with complete type safety:
   - `api-paths-types.ts` - Complete paths interface from openapi-typescript
@@ -152,6 +155,7 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 **Key Learning**: The reference implementation's sophistication was in the two-stage pipeline - not just using openapi-typescript, but also extracting runtime constants and type guards automatically.
 
 **Key Insight**:
+
 - Original implementation doesn't just generate types
 - It extracts runtime constants, type guards, and mappings
 - Everything needed for a fully typed client is generated automatically
@@ -310,17 +314,20 @@ Multiple specialized MCP organisms coexisting:
 **Current Status**: DEFERRED - Using existing type predicates
 
 **Rationale**:
+
 - Current type predicates provide basic runtime validation
 - TypeScript interfaces ensure compile-time safety
 - Adding Zod now would introduce complexity without clear immediate benefit
 - MCP server can add Zod validation at its boundaries when needed
 
 **Future Implementation Options**:
+
 1. **OpenAPI → Zod libraries** (`openapi-zod`, `openapi-zod-client`)
 2. **TypeScript → Zod transformation** (`ts-to-zod`)
 3. **Manual generation from existing data**
 
 **Reconsideration Triggers**:
+
 - API returns malformed data in production
 - MCP server tool input validation needs
 - Runtime validation errors become frequent
