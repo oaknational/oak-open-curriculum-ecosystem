@@ -10,8 +10,20 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
+import { config } from 'dotenv';
 import { createOakClient } from '../../src/client/index';
 import type { OakApiClient } from '../../src/client/index';
+import type { components } from '../../src/types/generated/api-schema/api-paths-types';
+
+// Type aliases for better readability and compile-time checking
+type KeyStage = components['schemas']['KeyStageResponseSchema'][number];
+type Subject = components['schemas']['AllSubjectsResponseSchema'][number];
+type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
+type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
+type TranscriptSearchResult = components['schemas']['SearchTranscriptResponseSchema'][number];
+
+// Load environment variables from .env file
+config({ path: '../../.env' });
 
 const shouldRunE2E = process.env.RUN_E2E === 'true';
 const apiKey = process.env.OAK_API_KEY ?? '';
@@ -33,10 +45,12 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
       if (result.data) {
         expect(Array.isArray(result.data)).toBe(true);
         if (result.data.length > 0) {
-          const keyStage = result.data[0];
-          expect(keyStage).toHaveProperty('slug');
-          expect(keyStage).toHaveProperty('title');
-          expect(keyStage).toHaveProperty('shortCode');
+          const keyStage: KeyStage = result.data[0];
+          // TypeScript ensures these properties exist at compile time
+          expect(keyStage.slug).toBeDefined();
+          expect(keyStage.title).toBeDefined();
+          // The following would cause a TypeScript error at compile time:
+          // expect(keyStage.shortCode).toBeDefined(); // TS2339: Property 'shortCode' does not exist
         }
       }
     }, 10000);
@@ -52,9 +66,10 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
       if (result.data) {
         expect(Array.isArray(result.data)).toBe(true);
         if (result.data.length > 0) {
-          const subject = result.data[0];
-          expect(subject).toHaveProperty('subjectSlug');
-          expect(subject).toHaveProperty('subjectTitle');
+          const subject: Subject = result.data[0];
+          // TypeScript ensures these properties exist at compile time
+          expect(subject.subjectSlug).toBeDefined();
+          expect(subject.subjectTitle).toBeDefined();
         }
       }
     }, 10000);
@@ -142,8 +157,14 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
         expect(result.data).toBeDefined();
 
         if (result.data) {
-          expect(result.data).toHaveProperty('slug');
-          expect(result.data).toHaveProperty('title');
+          const lessonSummary: LessonSummary = result.data;
+          // TypeScript ensures these properties exist at compile time
+          expect(lessonSummary.lessonTitle).toBeDefined();
+          expect(lessonSummary.unitSlug).toBeDefined();
+          expect(lessonSummary.unitTitle).toBeDefined();
+          expect(lessonSummary.subjectSlug).toBeDefined();
+          expect(lessonSummary.subjectTitle).toBeDefined();
+          // If we tried to access lessonSummary.slug here, TypeScript would error
         }
       }
     }, 10000);
@@ -165,9 +186,10 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
       if (result.data) {
         expect(Array.isArray(result.data)).toBe(true);
         if (result.data.length > 0) {
-          const searchResult = result.data[0];
-          expect(searchResult).toHaveProperty('lessonSlug');
-          expect(searchResult).toHaveProperty('lessonTitle');
+          const searchResult: SearchResult = result.data[0];
+          // TypeScript ensures these properties exist at compile time
+          expect(searchResult.lessonSlug).toBeDefined();
+          expect(searchResult.lessonTitle).toBeDefined();
         }
       }
     }, 10000);
@@ -187,9 +209,10 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
       if (result.data) {
         expect(Array.isArray(result.data)).toBe(true);
         if (result.data.length > 0) {
-          const transcript = result.data[0];
-          expect(transcript).toHaveProperty('lessonTitle');
-          expect(transcript).toHaveProperty('lessonSlug');
+          const transcript: TranscriptSearchResult = result.data[0];
+          // TypeScript ensures these properties exist at compile time
+          expect(transcript.lessonTitle).toBeDefined();
+          expect(transcript.lessonSlug).toBeDefined();
         }
       }
     }, 10000);
