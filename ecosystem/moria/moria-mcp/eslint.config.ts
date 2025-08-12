@@ -5,7 +5,7 @@
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
-import { baseConfig } from '../../../eslint.config.base';
+import { baseConfig } from '../../../eslint.config.base.js';
 import {
   moriaBoundaryRules,
   moriaTestConfigRules,
