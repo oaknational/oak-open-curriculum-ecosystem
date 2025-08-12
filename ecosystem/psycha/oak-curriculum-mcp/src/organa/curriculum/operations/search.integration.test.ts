@@ -7,23 +7,35 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-moria';
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { searchLessons } from './search';
-import type { SearchLessonsParams } from './search';
+import { createMockSdkSuccessResponse, createMockSdkErrorResponse } from '../test-utils';
 
 describe('searchLessons', () => {
   let mockSdk: OakApiClient;
   let mockLogger: Logger;
 
+  // Store mock functions for easier access
+  let mockSdkGet: ReturnType<typeof vi.fn>;
+  let mockLoggerInfo: ReturnType<typeof vi.fn>;
+  let mockLoggerDebug: ReturnType<typeof vi.fn>;
+  let mockLoggerError: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    // Create mock functions
+    mockSdkGet = vi.fn();
+    mockLoggerInfo = vi.fn();
+    mockLoggerDebug = vi.fn();
+    mockLoggerError = vi.fn();
+
     // Create mock SDK client
     mockSdk = {
-      GET: vi.fn(),
+      GET: mockSdkGet,
     } as unknown as OakApiClient;
 
     // Create mock logger
     mockLogger = {
-      info: vi.fn(),
-      debug: vi.fn(),
-      error: vi.fn(),
+      info: mockLoggerInfo,
+      debug: mockLoggerDebug,
+      error: mockLoggerError,
       warn: vi.fn(),
       child: vi.fn(() => mockLogger),
     } as unknown as Logger;
@@ -42,10 +54,7 @@ describe('searchLessons', () => {
       },
     ];
 
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: mockResults,
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse(mockResults));
 
     // When: Search for lessons
     const params = {
@@ -70,16 +79,15 @@ describe('searchLessons', () => {
     expect(results).toEqual(mockResults);
 
     // And: Logger logs the operation
-    expect(mockLogger.info).toHaveBeenCalledWith('Searching lessons', params);
-    expect(mockLogger.debug).toHaveBeenCalledWith('Found 1 lesson');
+    expect(mockLoggerInfo).toHaveBeenCalledWith('Searching lessons', params);
+    expect(mockLoggerDebug).toHaveBeenCalledWith('Found 1 lesson');
   });
 
   it('should handle SDK errors gracefully', async () => {
     // Given: SDK returns an error
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: undefined,
-      error: { status: 500, message: 'Internal server error' },
-    });
+    mockSdkGet.mockResolvedValue(
+      createMockSdkErrorResponse({ status: 500, message: 'Internal server error' }),
+    );
 
     // When: Search for lessons
     const params = { q: 'fractions' };
@@ -90,15 +98,12 @@ describe('searchLessons', () => {
     );
 
     // And: Error is logged
-    expect(mockLogger.error).toHaveBeenCalled();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 
   it('should handle empty search results', async () => {
     // Given: SDK returns empty results
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: [],
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse([]));
 
     // When: Search for lessons
     const params = { q: 'nonexistent' };
@@ -108,6 +113,6 @@ describe('searchLessons', () => {
     expect(results).toEqual([]);
 
     // And: Logger indicates no results
-    expect(mockLogger.debug).toHaveBeenCalledWith('No lessons found');
+    expect(mockLoggerDebug).toHaveBeenCalledWith('No lessons found');
   });
 });

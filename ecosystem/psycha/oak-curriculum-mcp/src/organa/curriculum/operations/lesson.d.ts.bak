@@ -1,0 +1,17 @@
+/**
+ * Lesson operations for the curriculum organ
+ * Uses the Oak Curriculum SDK to retrieve lesson information
+ */
+import type { OakApiClient, components } from '@oaknational/oak-curriculum-sdk';
+import type { Logger } from '@oaknational/mcp-moria';
+type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
+/**
+ * Get lesson summary by slug
+ */
+export declare function getLesson(
+  sdk: OakApiClient,
+  logger: Logger,
+  lessonSlug: string,
+): Promise<LessonSummary>;
+export {};
+//# sourceMappingURL=lesson.d.ts.map

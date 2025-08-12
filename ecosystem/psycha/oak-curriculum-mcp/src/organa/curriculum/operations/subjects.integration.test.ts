@@ -1,5 +1,6 @@
 /**
- * Unit tests for subject operations
+ * Integration tests for subjects operations
+ * Tests the integration between curriculum organ and SDK
  * Following TDD - test written before implementation
  */
 
@@ -7,40 +8,50 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-moria';
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { listSubjects } from './subjects';
+import { createMockSdkSuccessResponse, createMockSdkErrorResponse } from '../test-utils';
 
 describe('listSubjects', () => {
   let mockSdk: OakApiClient;
   let mockLogger: Logger;
 
+  // Store mock functions for easier access
+  let mockSdkGet: ReturnType<typeof vi.fn>;
+  let mockLoggerInfo: ReturnType<typeof vi.fn>;
+  let mockLoggerDebug: ReturnType<typeof vi.fn>;
+  let mockLoggerError: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    // Create mock functions
+    mockSdkGet = vi.fn();
+    mockLoggerInfo = vi.fn();
+    mockLoggerDebug = vi.fn();
+    mockLoggerError = vi.fn();
+
     // Create mock SDK client
     mockSdk = {
-      GET: vi.fn(),
+      GET: mockSdkGet,
     } as unknown as OakApiClient;
 
     // Create mock logger
     mockLogger = {
-      info: vi.fn(),
-      debug: vi.fn(),
-      error: vi.fn(),
+      info: mockLoggerInfo,
+      debug: mockLoggerDebug,
+      error: mockLoggerError,
       warn: vi.fn(),
       child: vi.fn(() => mockLogger),
     } as unknown as Logger;
   });
 
-  it('should list all subjects using SDK', async () => {
+  it('should list subjects using SDK and return results', async () => {
     // Given: Mock SDK returns subjects
     const mockSubjects = [
-      { subjectSlug: 'english', subjectTitle: 'English' },
       { subjectSlug: 'maths', subjectTitle: 'Mathematics' },
+      { subjectSlug: 'english', subjectTitle: 'English' },
       { subjectSlug: 'science', subjectTitle: 'Science' },
       { subjectSlug: 'history', subjectTitle: 'History' },
     ];
 
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: mockSubjects,
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse(mockSubjects));
 
     // When: List subjects
     const result = await listSubjects(mockSdk, mockLogger);
@@ -52,16 +63,15 @@ describe('listSubjects', () => {
     expect(result).toEqual(mockSubjects);
 
     // And: Logger logs the operation
-    expect(mockLogger.info).toHaveBeenCalledWith('Listing subjects');
-    expect(mockLogger.debug).toHaveBeenCalledWith('Found 4 subjects');
+    expect(mockLoggerInfo).toHaveBeenCalledWith('Listing subjects');
+    expect(mockLoggerDebug).toHaveBeenCalledWith('Found 4 subjects');
   });
 
   it('should handle SDK errors gracefully', async () => {
     // Given: SDK returns an error
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: undefined,
-      error: { status: 503, message: 'Service unavailable' },
-    });
+    mockSdkGet.mockResolvedValue(
+      createMockSdkErrorResponse({ status: 500, message: 'Internal server error' }),
+    );
 
     // When: List subjects
     // Then: Error is thrown with context
@@ -70,6 +80,6 @@ describe('listSubjects', () => {
     );
 
     // And: Error is logged
-    expect(mockLogger.error).toHaveBeenCalled();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 });

@@ -24,7 +24,7 @@ Now reflect on what you are doing. Would you like to update your todo list or th
 
 Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
-## Use of Sub-agents
+## Use of Sub-agents [Claude only, other agents should ignore this section]
 
 You MUST invoke the appropriate sub-agent or sub-agents to review changes.
 
@@ -41,6 +41,7 @@ The sub-agents are:
 - architecture-reviewer
 - config-auditor
 - test-auditor
+- type-reviewer
 
 Use them **A LOT**. Insert them into the todo list, at regular intervals, and at the end of significant milestones. If in doubt, use them more.
 

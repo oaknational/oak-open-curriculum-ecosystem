@@ -29,7 +29,7 @@ export interface McpOrgan {
  * Creates MCP organ that provides tools and handlers
  */
 export function createMcpOrgan(curriculumOrgan: CurriculumOrgan, logger: Logger): McpOrgan {
-  const mcpLogger = logger.child({ organ: 'mcp' });
+  const mcpLogger = logger.child ? logger.child({ organ: 'mcp' }) : logger;
 
   return {
     tools,

@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 
 import type {
   OpenAPI3,
@@ -533,4 +534,15 @@ ${Object.keys(validCombinations)
 `;
 
   fs.writeFileSync(outFilePathParameters, pathParameterFileContent);
+
+  // Format the generated files with prettier
+  try {
+    const filesToFormat = [outFileJson, outFileTs, outFileTsTypes, outFilePathParameters];
+    for (const file of filesToFormat) {
+      execSync(`npx prettier --write "${file}"`, { stdio: 'inherit', cwd: path.dirname(file) });
+    }
+  } catch (error) {
+    console.warn('Warning: Failed to format generated files with prettier:', error);
+    // Don't fail the generation if prettier fails
+  }
 }

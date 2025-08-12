@@ -3,13 +3,14 @@
  * Uses the Oak Curriculum SDK to retrieve subject information
  */
 
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient, components } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { components } from '@oaknational/oak-curriculum-sdk';
 import { CurriculumOperationError } from '../errors/curriculum-errors';
+import { processSdkResponse } from '../sdk-utils';
 
 // Use generated types from SDK
 type Subject = components['schemas']['AllSubjectsResponseSchema'][number];
+type SubjectArray = Subject[];
 
 /**
  * List all available subjects
@@ -21,13 +22,9 @@ export async function listSubjects(sdk: OakApiClient, logger: Logger): Promise<S
     // Call SDK to get subjects
     const result = await sdk.GET('/subjects');
 
-    // Handle SDK response
-    if (result.error) {
-      throw new Error(`SDK error: ${result.error.message ?? 'Unknown error'}`);
-    }
-
-    const subjects = result.data ?? [];
-    logger.debug(`Found ${subjects.length} subjects`);
+    // Process SDK response with type safety
+    const subjects = processSdkResponse<SubjectArray>(result, 'listSubjects');
+    logger.debug(`Found ${String(subjects.length)} subjects`);
 
     return subjects;
   } catch (error) {

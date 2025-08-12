@@ -20,8 +20,10 @@ export interface SdkClientConfig {
  * Creates configured Oak API client
  */
 export function createSdkClient(config: SdkClientConfig): OakApiClient {
-  return createApiClient({
-    apiKey: config.apiKey || process.env.OAK_API_KEY,
-    baseUrl: config.baseUrl,
-  });
+  const apiKey = config.apiKey ?? process.env.OAK_API_KEY ?? '';
+  if (!apiKey) {
+    throw new Error('OAK_API_KEY is required');
+  }
+  // Note: baseUrl is not supported by the SDK, it uses a fixed URL
+  return createApiClient(apiKey);
 }

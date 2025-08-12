@@ -1,0 +1,16 @@
+/**
+ * Pure functions for search operations
+ * These can be unit tested without mocks
+ */
+import type { SearchLessonsParams } from '../../../chorai/stroma';
+/**
+ * Validate search parameters
+ * Pure function - no side effects
+ */
+export declare function validateSearchParams(params: SearchLessonsParams): SearchLessonsParams;
+/**
+ * Format search results for logging
+ * Pure function - no side effects
+ */
+export declare function formatSearchResultsForLog(results: unknown[]): string;
+//# sourceMappingURL=search-pure.d.ts.map

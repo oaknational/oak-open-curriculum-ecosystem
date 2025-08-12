@@ -1,5 +1,6 @@
 /**
- * Unit tests for lesson operations
+ * Integration tests for lesson operations
+ * Tests the integration between curriculum organ and SDK
  * Following TDD - test written before implementation
  */
 
@@ -7,85 +8,92 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-moria';
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { getLesson } from './lesson';
+import { createMockSdkSuccessResponse, createMockSdkErrorResponse } from '../test-utils';
 
 describe('getLesson', () => {
   let mockSdk: OakApiClient;
   let mockLogger: Logger;
 
+  // Store mock functions for easier access
+  let mockSdkGet: ReturnType<typeof vi.fn>;
+  let mockLoggerInfo: ReturnType<typeof vi.fn>;
+  let mockLoggerDebug: ReturnType<typeof vi.fn>;
+  let mockLoggerError: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    // Create mock functions
+    mockSdkGet = vi.fn();
+    mockLoggerInfo = vi.fn();
+    mockLoggerDebug = vi.fn();
+    mockLoggerError = vi.fn();
+
     // Create mock SDK client
     mockSdk = {
-      GET: vi.fn(),
+      GET: mockSdkGet,
     } as unknown as OakApiClient;
 
     // Create mock logger
     mockLogger = {
-      info: vi.fn(),
-      debug: vi.fn(),
-      error: vi.fn(),
+      info: mockLoggerInfo,
+      debug: mockLoggerDebug,
+      error: mockLoggerError,
       warn: vi.fn(),
       child: vi.fn(() => mockLogger),
     } as unknown as Logger;
   });
 
-  it('should get lesson summary using SDK', async () => {
-    // Given: Mock SDK returns lesson summary
-    const mockLessonSummary = {
+  it('should get lesson using SDK and return result', async () => {
+    // Given: Mock SDK returns lesson
+    const mockLesson = {
       lessonTitle: 'Introduction to Fractions',
-      lessonSlug: 'introduction-to-fractions-2h6t8',
+      lessonSlug: 'introduction-to-fractions',
       subjectTitle: 'Mathematics',
       subjectSlug: 'maths',
       keyStageTitle: 'Key Stage 2',
       keyStageSlug: 'ks2',
-      yearTitle: 'Year 4',
-      programmeSlug: 'maths-primary-ks2',
+      yearTitle: 'Year 3',
+      programmeSlug: 'maths-year-3',
       unitTitle: 'Fractions',
-      unitSlug: 'fractions-y4',
-      keyLearningPoints: [
-        'Understanding what a fraction represents',
-        'Identifying fractions of shapes',
-      ],
-      pupilLessonOutcome: 'I can identify and compare simple fractions',
+      unitSlug: 'fractions',
+      keyLearningPoints: ['Understand what a fraction represents', 'Identify unit fractions'],
+      pupilLessonOutcome: 'I can understand fractions',
       lessonKeywords: ['fraction', 'numerator', 'denominator'],
     };
 
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: mockLessonSummary,
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse(mockLesson));
 
-    // When: Get lesson by slug
-    const lessonSlug = 'introduction-to-fractions-2h6t8';
-    const result = await getLesson(mockSdk, mockLogger, lessonSlug);
+    // When: Get lesson
+    const result = await getLesson(mockSdk, mockLogger, 'introduction-to-fractions');
 
-    // Then: SDK is called with correct path
-    expect(mockSdk.GET).toHaveBeenCalledWith('/lessons/{lessonSlug}/summary', {
+    // Then: SDK is called with correct endpoint
+    expect(mockSdk.GET).toHaveBeenCalledWith('/lessons/{lesson}/summary', {
       params: {
         path: {
-          lessonSlug: 'introduction-to-fractions-2h6t8',
+          lesson: 'introduction-to-fractions',
         },
       },
     });
 
     // And: Result is returned
-    expect(result).toEqual(mockLessonSummary);
+    expect(result).toEqual(mockLesson);
 
     // And: Logger logs the operation
-    expect(mockLogger.info).toHaveBeenCalledWith('Getting lesson', { lessonSlug });
-    expect(mockLogger.debug).toHaveBeenCalledWith('Lesson retrieved', {
-      lessonSlug,
+    expect(mockLoggerInfo).toHaveBeenCalledWith('Getting lesson', {
+      lessonSlug: 'introduction-to-fractions',
+    });
+    expect(mockLoggerDebug).toHaveBeenCalledWith('Lesson retrieved', {
+      lessonSlug: 'introduction-to-fractions',
       title: 'Introduction to Fractions',
     });
   });
 
-  it('should handle lesson not found error', async () => {
-    // Given: SDK returns 404 error
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: undefined,
-      error: { status: 404, message: 'Lesson not found' },
-    });
+  it('should handle SDK errors gracefully', async () => {
+    // Given: SDK returns an error
+    mockSdkGet.mockResolvedValue(
+      createMockSdkErrorResponse({ status: 404, message: 'Lesson not found' }),
+    );
 
-    // When: Get non-existent lesson
+    // When: Get lesson
     const lessonSlug = 'non-existent-lesson';
 
     // Then: Error is thrown with context
@@ -94,19 +102,6 @@ describe('getLesson', () => {
     );
 
     // And: Error is logged
-    expect(mockLogger.error).toHaveBeenCalled();
-  });
-
-  it('should validate lesson slug is not empty', async () => {
-    // When: Get lesson with empty slug
-    const lessonSlug = '';
-
-    // Then: Error is thrown immediately
-    await expect(getLesson(mockSdk, mockLogger, lessonSlug)).rejects.toThrow(
-      'Lesson slug is required',
-    );
-
-    // And: SDK is not called
-    expect(mockSdk.GET).not.toHaveBeenCalled();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 });

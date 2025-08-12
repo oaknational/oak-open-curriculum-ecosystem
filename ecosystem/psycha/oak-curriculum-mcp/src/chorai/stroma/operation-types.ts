@@ -10,24 +10,26 @@ export interface SearchLessonsParams {
   /** Search query text */
   q: string;
   /** Optional key stage filter */
-  keyStage?: 'eyfs' | 'ks1' | 'ks2' | 'ks3' | 'ks4' | 'ks5';
+  keyStage?: 'ks1' | 'ks2' | 'ks3' | 'ks4';
   /** Optional subject filter */
   subject?:
-    | 'english'
-    | 'maths'
-    | 'science'
-    | 'history'
-    | 'geography'
-    | 'religious-education'
-    | 'computing'
-    | 'music'
     | 'art'
-    | 'physical-education'
-    | 'design-technology'
-    | 'french'
-    | 'spanish'
-    | 'german'
-    | 'latin'
     | 'citizenship'
-    | 'rshe-pshe';
+    | 'computing'
+    | 'cooking-nutrition'
+    | 'design-technology'
+    | 'english'
+    | 'french'
+    | 'geography'
+    | 'german'
+    | 'history'
+    | 'maths'
+    | 'music'
+    | 'physical-education'
+    | 'religious-education'
+    | 'rshe-pshe'
+    | 'science'
+    | 'spanish';
+  /** Optional unit filter */
+  unit?: string;
 }

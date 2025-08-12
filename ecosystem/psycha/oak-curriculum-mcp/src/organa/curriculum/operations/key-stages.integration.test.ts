@@ -1,5 +1,6 @@
 /**
- * Unit tests for key stage operations
+ * Integration tests for key stages operations
+ * Tests the integration between curriculum organ and SDK
  * Following TDD - test written before implementation
  */
 
@@ -7,62 +8,68 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-moria';
 import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { listKeyStages } from './key-stages';
+import { createMockSdkSuccessResponse, createMockSdkErrorResponse } from '../test-utils';
 
 describe('listKeyStages', () => {
   let mockSdk: OakApiClient;
   let mockLogger: Logger;
 
+  // Store mock functions for easier access
+  let mockSdkGet: ReturnType<typeof vi.fn>;
+  let mockLoggerInfo: ReturnType<typeof vi.fn>;
+  let mockLoggerDebug: ReturnType<typeof vi.fn>;
+  let mockLoggerError: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    // Create mock functions
+    mockSdkGet = vi.fn();
+    mockLoggerInfo = vi.fn();
+    mockLoggerDebug = vi.fn();
+    mockLoggerError = vi.fn();
+
     // Create mock SDK client
     mockSdk = {
-      GET: vi.fn(),
+      GET: mockSdkGet,
     } as unknown as OakApiClient;
 
     // Create mock logger
     mockLogger = {
-      info: vi.fn(),
-      debug: vi.fn(),
-      error: vi.fn(),
+      info: mockLoggerInfo,
+      debug: mockLoggerDebug,
+      error: mockLoggerError,
       warn: vi.fn(),
       child: vi.fn(() => mockLogger),
     } as unknown as Logger;
   });
 
-  it('should list all key stages using SDK', async () => {
+  it('should list key stages using SDK and return results', async () => {
     // Given: Mock SDK returns key stages
     const mockKeyStages = [
-      { slug: 'eyfs', title: 'Early Years Foundation Stage' },
       { slug: 'ks1', title: 'Key Stage 1' },
       { slug: 'ks2', title: 'Key Stage 2' },
       { slug: 'ks3', title: 'Key Stage 3' },
       { slug: 'ks4', title: 'Key Stage 4' },
     ];
 
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: mockKeyStages,
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse(mockKeyStages));
 
     // When: List key stages
     const result = await listKeyStages(mockSdk, mockLogger);
 
     // Then: SDK is called with correct endpoint
-    expect(mockSdk.GET).toHaveBeenCalledWith('/key-stages');
+    expect(mockSdkGet).toHaveBeenCalledWith('/key-stages');
 
     // And: Results are returned
     expect(result).toEqual(mockKeyStages);
 
     // And: Logger logs the operation
-    expect(mockLogger.info).toHaveBeenCalledWith('Listing key stages');
-    expect(mockLogger.debug).toHaveBeenCalledWith('Found 5 key stages');
+    expect(mockLoggerInfo).toHaveBeenCalledWith('Listing key stages');
+    expect(mockLoggerDebug).toHaveBeenCalledWith('Found 4 key stages');
   });
 
   it('should handle empty key stages list', async () => {
     // Given: SDK returns empty array
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: [],
-      error: undefined,
-    });
+    mockSdkGet.mockResolvedValue(createMockSdkSuccessResponse([]));
 
     // When: List key stages
     const result = await listKeyStages(mockSdk, mockLogger);
@@ -71,15 +78,14 @@ describe('listKeyStages', () => {
     expect(result).toEqual([]);
 
     // And: Logger indicates no results
-    expect(mockLogger.debug).toHaveBeenCalledWith('Found 0 key stages');
+    expect(mockLoggerDebug).toHaveBeenCalledWith('Found 0 key stages');
   });
 
   it('should handle SDK errors gracefully', async () => {
     // Given: SDK returns an error
-    vi.mocked(mockSdk.GET).mockResolvedValue({
-      data: undefined,
-      error: { status: 500, message: 'Internal server error' },
-    });
+    mockSdkGet.mockResolvedValue(
+      createMockSdkErrorResponse({ status: 500, message: 'Internal server error' }),
+    );
 
     // When: List key stages
     // Then: Error is thrown with context
@@ -88,6 +94,6 @@ describe('listKeyStages', () => {
     );
 
     // And: Error is logged
-    expect(mockLogger.error).toHaveBeenCalled();
+    expect(mockLoggerError).toHaveBeenCalled();
   });
 });

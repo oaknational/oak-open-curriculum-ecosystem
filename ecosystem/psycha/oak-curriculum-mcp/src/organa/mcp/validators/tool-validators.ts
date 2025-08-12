@@ -3,7 +3,7 @@
  * Ensures type safety at runtime boundaries
  */
 
-import type { SearchLessonsParams } from '../../curriculum/operations/search';
+import type { OrganSearchLessonsParams } from '../../../chorai/stroma';
 
 /**
  * Valid key stages from the Oak API
@@ -34,23 +34,47 @@ const VALID_SUBJECTS = [
 ] as const;
 
 /**
+ * Type for valid key stages
+ */
+type ValidKeyStage = (typeof VALID_KEY_STAGES)[number];
+
+/**
+ * Type for valid subjects
+ */
+type ValidSubject = (typeof VALID_SUBJECTS)[number];
+
+/**
+ * Check if a value is a valid key stage
+ */
+function isValidKeyStage(value: string): value is ValidKeyStage {
+  return VALID_KEY_STAGES.some((ks) => ks === value);
+}
+
+/**
+ * Check if a value is a valid subject
+ */
+function isValidSubject(value: string): value is ValidSubject {
+  return VALID_SUBJECTS.some((s) => s === value);
+}
+
+/**
  * Validates key stage parameter
  */
-export function validateKeyStage(keyStage: string): SearchLessonsParams['keyStage'] {
-  if (!VALID_KEY_STAGES.includes(keyStage as any)) {
+export function validateKeyStage(keyStage: string): OrganSearchLessonsParams['keyStage'] {
+  if (!isValidKeyStage(keyStage)) {
     throw new Error(`Invalid key stage: ${keyStage}. Valid values: ${VALID_KEY_STAGES.join(', ')}`);
   }
-  return keyStage as SearchLessonsParams['keyStage'];
+  return keyStage;
 }
 
 /**
  * Validates subject parameter
  */
-export function validateSubject(subject: string): SearchLessonsParams['subject'] {
-  if (!VALID_SUBJECTS.includes(subject as any)) {
+export function validateSubject(subject: string): OrganSearchLessonsParams['subject'] {
+  if (!isValidSubject(subject)) {
     throw new Error(`Invalid subject: ${subject}. Valid values: ${VALID_SUBJECTS.join(', ')}`);
   }
-  return subject as SearchLessonsParams['subject'];
+  return subject;
 }
 
 /**

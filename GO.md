@@ -6,8 +6,9 @@ This document enables best practice development of the Oak Notion MCP Server. Re
 
 - Identify and state the current plan you are working to. What impact does the plan seek to bring about?
 - What are you trying to achieve? Take a step back and consider the big picture, think hard about it, and then reflect on your thoughts. Has anything changed? Why?
-- Make sure that your todo list contains atomic, specific, measurable, provable, and ACTIONABLE tasks. Make each task small enough for the result to be easily and comprehensibly reviewed.
-- Make sure your todo list includes running the quality gates.
+- Make sure that your todo list contains atomic, specific, measurable, provable, and ACTIONABLE tasks. Make each task small enough for the result to be easily and comprehensibly reviewed. Make sure that all actions are prefixed with `ACTION:`.
+- Make sure that after each `ACTION:` you have a `REVIEW:` where you invoke the appropriate sub-agent or sub-agents to review the changes and actions.
+- Make sure your todo list includes running the quality gates. These items should be prefixed with `QUALITY-GATE:` and happen reasonable often.
 - Remove any items from your todo list that are no longer relevant.
 
 ## Grounding

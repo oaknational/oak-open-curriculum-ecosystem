@@ -1,0 +1,14 @@
+/**
+ * Custom error classes for curriculum operations
+ */
+/**
+ * Error thrown when a curriculum operation fails
+ */
+export declare class CurriculumOperationError extends Error {
+  readonly context?: Record<string, unknown>;
+  /**
+   * Create a new curriculum operation error
+   */
+  constructor(operation: string, cause: unknown, context?: Record<string, unknown>);
+}
+//# sourceMappingURL=curriculum-errors.d.ts.map

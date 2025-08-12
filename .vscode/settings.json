@@ -94,12 +94,13 @@
     "Ψυχόν"
   ],
   "eslint.workingDirectories": [
-    
     { "directory": "ecosystem/psycha/oak-notion-mcp", "changeProcessCWD": true },
+    { "directory": "ecosystem/psycha/oak-curriculum-mcp", "changeProcessCWD": true },
     { "directory": "ecosystem/moria/moria-mcp", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-env", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-logger", "changeProcessCWD": true },
-    { "directory": "ecosystem/histoi/histos-storage", "changeProcessCWD": true }
+    { "directory": "ecosystem/histoi/histos-storage", "changeProcessCWD": true },
+    { "directory": "ecosystem/histoi/histos-transport", "changeProcessCWD": true },
+    { "directory": "packages/oak-curriculum-sdk", "changeProcessCWD": true },
   ],
-  "vitest.disableWorkspaceWarning": true
 }

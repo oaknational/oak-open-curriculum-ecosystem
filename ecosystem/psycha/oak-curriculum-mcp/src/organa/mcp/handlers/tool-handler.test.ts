@@ -13,13 +13,25 @@ describe('createToolHandler', () => {
   let mockLogger: Logger;
   let toolHandler: ReturnType<typeof createToolHandler>;
 
+  // Store mock functions for easier access
+  let mockSearchLessons: ReturnType<typeof vi.fn>;
+  let mockGetLesson: ReturnType<typeof vi.fn>;
+  let mockListKeyStages: ReturnType<typeof vi.fn>;
+  let mockListSubjects: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    // Create mock functions
+    mockSearchLessons = vi.fn();
+    mockGetLesson = vi.fn();
+    mockListKeyStages = vi.fn();
+    mockListSubjects = vi.fn();
+
     // Create mock curriculum organ
     mockCurriculumOrgan = {
-      searchLessons: vi.fn(),
-      getLesson: vi.fn(),
-      listKeyStages: vi.fn(),
-      listSubjects: vi.fn(),
+      searchLessons: mockSearchLessons,
+      getLesson: mockGetLesson,
+      listKeyStages: mockListKeyStages,
+      listSubjects: mockListSubjects,
     };
 
     // Create mock logger
@@ -42,13 +54,19 @@ describe('createToolHandler', () => {
         {
           lessonSlug: 'intro-fractions',
           lessonTitle: 'Introduction to Fractions',
-          subjectSlug: 'maths',
-          subjectTitle: 'Mathematics',
-          keyStageSlug: 'ks2',
-          keyStageTitle: 'Key Stage 2',
+          similarity: 0.95,
+          units: [
+            {
+              unitSlug: 'fractions-unit-1',
+              unitTitle: 'Fractions Unit 1',
+              examBoardTitle: null,
+              keyStageSlug: 'ks2',
+              subjectSlug: 'maths',
+            },
+          ],
         },
       ];
-      vi.mocked(mockCurriculumOrgan.searchLessons).mockResolvedValue(mockResults);
+      mockSearchLessons.mockResolvedValue(mockResults);
 
       // When: Execute tool
       const result = await toolHandler('oak-search-lessons', {
@@ -58,7 +76,7 @@ describe('createToolHandler', () => {
       });
 
       // Then: Curriculum organ is called correctly
-      expect(mockCurriculumOrgan.searchLessons).toHaveBeenCalledWith({
+      expect(mockSearchLessons).toHaveBeenCalledWith({
         q: 'fractions',
         keyStage: 'ks2',
         subject: 'maths',
@@ -70,7 +88,7 @@ describe('createToolHandler', () => {
 
     it('should handle missing optional parameters', async () => {
       // Given: Only required parameter
-      vi.mocked(mockCurriculumOrgan.searchLessons).mockResolvedValue([]);
+      mockSearchLessons.mockResolvedValue([]);
 
       // When: Execute tool with minimal params
       const result = await toolHandler('oak-search-lessons', {
@@ -78,7 +96,7 @@ describe('createToolHandler', () => {
       });
 
       // Then: Curriculum organ is called with only query
-      expect(mockCurriculumOrgan.searchLessons).toHaveBeenCalledWith({
+      expect(mockSearchLessons).toHaveBeenCalledWith({
         q: 'algebra',
       });
 
@@ -91,13 +109,22 @@ describe('createToolHandler', () => {
       // Given: Mock curriculum organ returns lesson
       const mockLesson = {
         lessonTitle: 'Introduction to Fractions',
-        lessonSlug: 'intro-fractions',
-        subjectTitle: 'Mathematics',
+        unitSlug: 'fractions-unit-1',
+        unitTitle: 'Fractions Unit 1',
         subjectSlug: 'maths',
-        keyStageTitle: 'Key Stage 2',
+        subjectTitle: 'Mathematics',
         keyStageSlug: 'ks2',
+        keyStageTitle: 'Key Stage 2',
+        lessonKeywords: [{ keyword: 'fractions', description: 'Parts of a whole' }],
+        keyLearningPoints: [{ keyLearningPoint: 'Understand what fractions represent' }],
+        misconceptionsAndCommonMistakes: [],
+        pupilLessonOutcome: 'Students will understand basic fractions',
+        teacherTips: [{ teacherTip: 'Use visual aids to help explain fractions' }],
+        contentGuidance: null,
+        supervisionLevel: null,
+        downloadsAvailable: true,
       };
-      vi.mocked(mockCurriculumOrgan.getLesson).mockResolvedValue(mockLesson);
+      mockGetLesson.mockResolvedValue(mockLesson);
 
       // When: Execute tool
       const result = await toolHandler('oak-get-lesson', {
@@ -105,7 +132,7 @@ describe('createToolHandler', () => {
       });
 
       // Then: Curriculum organ is called correctly
-      expect(mockCurriculumOrgan.getLesson).toHaveBeenCalledWith('intro-fractions');
+      expect(mockGetLesson).toHaveBeenCalledWith('intro-fractions');
 
       // And: Lesson is returned
       expect(result).toEqual(mockLesson);
@@ -119,13 +146,13 @@ describe('createToolHandler', () => {
         { slug: 'ks1', title: 'Key Stage 1' },
         { slug: 'ks2', title: 'Key Stage 2' },
       ];
-      vi.mocked(mockCurriculumOrgan.listKeyStages).mockResolvedValue(mockKeyStages);
+      mockListKeyStages.mockResolvedValue(mockKeyStages);
 
       // When: Execute tool (no parameters needed)
       const result = await toolHandler('oak-list-key-stages', {});
 
       // Then: Curriculum organ is called
-      expect(mockCurriculumOrgan.listKeyStages).toHaveBeenCalled();
+      expect(mockListKeyStages).toHaveBeenCalled();
 
       // And: Key stages are returned
       expect(result).toEqual(mockKeyStages);
@@ -136,16 +163,58 @@ describe('createToolHandler', () => {
     it('should list all subjects', async () => {
       // Given: Mock curriculum organ returns subjects
       const mockSubjects = [
-        { subjectSlug: 'english', subjectTitle: 'English' },
-        { subjectSlug: 'maths', subjectTitle: 'Mathematics' },
+        {
+          subjectSlug: 'english',
+          subjectTitle: 'English',
+          sequenceSlugs: [
+            {
+              sequenceSlug: 'english-primary',
+              years: [1, 2, 3, 4, 5, 6],
+              keyStages: [
+                { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+                { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+              ],
+              phaseSlug: 'primary',
+              phaseTitle: 'Primary',
+              ks4Options: null,
+            },
+          ],
+          years: [1, 2, 3, 4, 5, 6],
+          keyStages: [
+            { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+            { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+          ],
+        },
+        {
+          subjectSlug: 'maths',
+          subjectTitle: 'Mathematics',
+          sequenceSlugs: [
+            {
+              sequenceSlug: 'maths-primary',
+              years: [1, 2, 3, 4, 5, 6],
+              keyStages: [
+                { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+                { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+              ],
+              phaseSlug: 'primary',
+              phaseTitle: 'Primary',
+              ks4Options: null,
+            },
+          ],
+          years: [1, 2, 3, 4, 5, 6],
+          keyStages: [
+            { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+            { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+          ],
+        },
       ];
-      vi.mocked(mockCurriculumOrgan.listSubjects).mockResolvedValue(mockSubjects);
+      mockListSubjects.mockResolvedValue(mockSubjects);
 
       // When: Execute tool (no parameters needed)
       const result = await toolHandler('oak-list-subjects', {});
 
       // Then: Curriculum organ is called
-      expect(mockCurriculumOrgan.listSubjects).toHaveBeenCalled();
+      expect(mockListSubjects).toHaveBeenCalled();
 
       // And: Subjects are returned
       expect(result).toEqual(mockSubjects);
@@ -155,16 +224,17 @@ describe('createToolHandler', () => {
   describe('error handling', () => {
     it('should throw error for unknown tool', async () => {
       // When/Then: Unknown tool throws McpOperationError
+      // @ts-expect-error Testing invalid tool name
       await expect(toolHandler('unknown-tool', {})).rejects.toThrow('MCP tool unknown-tool failed');
     });
 
     it('should wrap curriculum organ errors', async () => {
       // Given: Curriculum organ throws error
       const originalError = new Error('API unavailable');
-      vi.mocked(mockCurriculumOrgan.searchLessons).mockRejectedValue(originalError);
+      mockSearchLessons.mockRejectedValue(originalError);
 
       // When: Call the tool
-      let caughtError: any;
+      let caughtError: unknown;
       try {
         await toolHandler('oak-search-lessons', { query: 'test' });
       } catch (error) {
@@ -173,9 +243,11 @@ describe('createToolHandler', () => {
 
       // Then: Error is wrapped in McpOperationError
       expect(caughtError).toBeInstanceOf(McpOperationError);
-      expect(caughtError.message).toBe('MCP tool oak-search-lessons failed');
-      expect(caughtError.operation).toBe('oak-search-lessons');
-      expect(caughtError.cause).toBe(originalError);
+      if (caughtError instanceof McpOperationError) {
+        expect(caughtError.message).toBe('MCP tool oak-search-lessons failed');
+        expect(caughtError.operation).toBe('oak-search-lessons');
+        expect(caughtError.cause).toBe(originalError);
+      }
     });
   });
 });

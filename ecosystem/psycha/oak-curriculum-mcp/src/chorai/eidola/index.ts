@@ -27,9 +27,72 @@ export const mockKeyStages: KeyStage[] = [
  * Mock subject data using actual API schema types
  */
 export const mockSubjects: Subject[] = [
-  { subjectSlug: 'english', subjectTitle: 'English' },
-  { subjectSlug: 'maths', subjectTitle: 'Mathematics' },
-  { subjectSlug: 'science', subjectTitle: 'Science' },
+  {
+    subjectSlug: 'english',
+    subjectTitle: 'English',
+    sequenceSlugs: [
+      {
+        sequenceSlug: 'english-primary',
+        years: [1, 2, 3, 4, 5, 6],
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
+        phaseSlug: 'primary',
+        phaseTitle: 'Primary',
+        ks4Options: null,
+      },
+    ],
+    years: [1, 2, 3, 4, 5, 6],
+    keyStages: [
+      { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+      { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+    ],
+  },
+  {
+    subjectSlug: 'maths',
+    subjectTitle: 'Mathematics',
+    sequenceSlugs: [
+      {
+        sequenceSlug: 'maths-primary',
+        years: [1, 2, 3, 4, 5, 6],
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
+        phaseSlug: 'primary',
+        phaseTitle: 'Primary',
+        ks4Options: null,
+      },
+    ],
+    years: [1, 2, 3, 4, 5, 6],
+    keyStages: [
+      { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+      { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+    ],
+  },
+  {
+    subjectSlug: 'science',
+    subjectTitle: 'Science',
+    sequenceSlugs: [
+      {
+        sequenceSlug: 'science-primary',
+        years: [1, 2, 3, 4, 5, 6],
+        keyStages: [
+          { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+          { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+        ],
+        phaseSlug: 'primary',
+        phaseTitle: 'Primary',
+        ks4Options: null,
+      },
+    ],
+    years: [1, 2, 3, 4, 5, 6],
+    keyStages: [
+      { keyStageSlug: 'ks1', keyStageTitle: 'Key Stage 1' },
+      { keyStageSlug: 'ks2', keyStageTitle: 'Key Stage 2' },
+    ],
+  },
 ];
 
 /**
@@ -37,22 +100,28 @@ export const mockSubjects: Subject[] = [
  */
 export const mockLessonSummary: LessonSummary = {
   lessonTitle: 'Introduction to Fractions',
-  lessonSlug: 'introduction-to-fractions-2h6t8',
-  subjectTitle: 'Mathematics',
-  subjectSlug: 'maths',
-  keyStageTitle: 'Key Stage 2',
-  keyStageSlug: 'ks2',
-  yearTitle: 'Year 4',
-  programmeSlug: 'maths-primary-ks2',
-  unitTitle: 'Fractions',
   unitSlug: 'fractions-y4',
-  keyLearningPoints: [
-    'Understanding what a fraction represents',
-    'Identifying fractions of shapes',
-    'Comparing simple fractions',
+  unitTitle: 'Fractions',
+  subjectSlug: 'maths',
+  subjectTitle: 'Mathematics',
+  keyStageSlug: 'ks2',
+  keyStageTitle: 'Key Stage 2',
+  lessonKeywords: [
+    { keyword: 'fraction', description: 'A part of a whole number' },
+    { keyword: 'numerator', description: 'The top number in a fraction' },
+    { keyword: 'denominator', description: 'The bottom number in a fraction' },
   ],
+  keyLearningPoints: [
+    { keyLearningPoint: 'Understanding what a fraction represents' },
+    { keyLearningPoint: 'Identifying fractions of shapes' },
+    { keyLearningPoint: 'Comparing simple fractions' },
+  ],
+  misconceptionsAndCommonMistakes: [],
   pupilLessonOutcome: 'I can identify and compare simple fractions',
-  lessonKeywords: ['fraction', 'numerator', 'denominator', 'whole', 'part'],
+  teacherTips: [{ teacherTip: 'Use visual aids to help students understand fractions' }],
+  contentGuidance: null,
+  supervisionLevel: null,
+  downloadsAvailable: true,
 };
 
 /**
@@ -62,30 +131,30 @@ export const mockSearchResults: SearchResult[] = [
   {
     lessonSlug: 'introduction-to-fractions-2h6t8',
     lessonTitle: 'Introduction to Fractions',
-    subjectSlug: 'maths',
-    subjectTitle: 'Mathematics',
-    keyStageSlug: 'ks2',
-    keyStageTitle: 'Key Stage 2',
-    yearTitle: 'Year 4',
-    unitSlug: 'fractions-y4',
-    unitTitle: 'Fractions',
-    programmeSlug: 'maths-primary-ks2',
-    _id: 'lesson-1',
-    _score: 0.95,
+    similarity: 0.95,
+    units: [
+      {
+        unitSlug: 'fractions-y4',
+        unitTitle: 'Fractions',
+        examBoardTitle: null,
+        keyStageSlug: 'ks2',
+        subjectSlug: 'maths',
+      },
+    ],
   },
   {
     lessonSlug: 'adding-fractions-3k9m2',
     lessonTitle: 'Adding Fractions',
-    subjectSlug: 'maths',
-    subjectTitle: 'Mathematics',
-    keyStageSlug: 'ks2',
-    keyStageTitle: 'Key Stage 2',
-    yearTitle: 'Year 5',
-    unitSlug: 'fractions-y5',
-    unitTitle: 'Fractions',
-    programmeSlug: 'maths-primary-ks2',
-    _id: 'lesson-2',
-    _score: 0.89,
+    similarity: 0.89,
+    units: [
+      {
+        unitSlug: 'fractions-y5',
+        unitTitle: 'Fractions Advanced',
+        examBoardTitle: null,
+        keyStageSlug: 'ks2',
+        subjectSlug: 'maths',
+      },
+    ],
   },
 ];
 
@@ -93,7 +162,7 @@ export const mockSearchResults: SearchResult[] = [
  * Create a mock SDK client for testing
  * Uses the actual generated types from the SDK
  */
-export function createMockSdkClient() {
+export function createMockSdkClient(): unknown {
   // Import vi from vitest when used in tests
   // This is a factory function that returns the mock structure
   return {

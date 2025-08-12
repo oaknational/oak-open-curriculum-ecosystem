@@ -3,13 +3,14 @@
  * Uses the Oak Curriculum SDK to retrieve key stage information
  */
 
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient, components } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { components } from '@oaknational/oak-curriculum-sdk';
 import { CurriculumOperationError } from '../errors/curriculum-errors';
+import { processSdkResponse } from '../sdk-utils';
 
 // Use generated types from SDK
 type KeyStage = components['schemas']['KeyStageResponseSchema'][number];
+type KeyStageArray = KeyStage[];
 
 /**
  * List all available key stages
@@ -21,13 +22,9 @@ export async function listKeyStages(sdk: OakApiClient, logger: Logger): Promise<
     // Call SDK to get key stages
     const result = await sdk.GET('/key-stages');
 
-    // Handle SDK response
-    if (result.error) {
-      throw new Error(`SDK error: ${result.error.message ?? 'Unknown error'}`);
-    }
-
-    const keyStages = result.data ?? [];
-    logger.debug(`Found ${keyStages.length} key stages`);
+    // Process SDK response with type safety
+    const keyStages = processSdkResponse<KeyStageArray>(result, 'listKeyStages');
+    logger.debug(`Found ${String(keyStages.length)} key stages`);
 
     return keyStages;
   } catch (error) {

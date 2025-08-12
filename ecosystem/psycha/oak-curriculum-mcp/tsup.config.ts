@@ -1,17 +1,15 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: {
-    index: 'src/index.ts',
-  },
+  entry: ['src/index.ts', 'src/organa/curriculum/operations/*.ts', 'src/organa/mcp/tools/*.ts'],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
-  splitting: false,
+  splitting: true, // Enable code splitting for multi-entry
   sourcemap: true,
   clean: true,
   target: 'node22',
   minify: false,
-  bundle: true, // Bundle to avoid ESM directory import issues
+  bundle: false, // Unbundled for better tree-shaking with multi-entry
   platform: 'neutral', // Use 'neutral' for edge compatibility
   // Force bundling of all dependencies except workspace packages and Node built-ins
   noExternal: ['@modelcontextprotocol/sdk', 'zod', 'consola'],

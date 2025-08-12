@@ -1,4 +1,9 @@
 import { defineConfig } from 'vitest/config';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load environment variables from repo root
+config({ path: resolve(__dirname, '../../../.env') });
 
 export default defineConfig({
   test: {
@@ -14,6 +19,5 @@ export default defineConfig({
         singleFork: true,
       },
     },
-    setupFiles: ['dotenv/config'],
   },
 });

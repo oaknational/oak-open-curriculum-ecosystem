@@ -4,8 +4,7 @@
  */
 
 import type { Logger } from '@oaknational/mcp-moria';
-import type { CurriculumOrgan } from '../../curriculum';
-import type { SearchLessonsParams } from '../../../chorai/stroma';
+import type { CurriculumOrganContract, OrganSearchLessonsParams } from '../../../chorai/stroma';
 import {
   validateKeyStage,
   validateSubject,
@@ -16,14 +15,36 @@ import {
  * MCP operation error for consistent error handling
  */
 export class McpOperationError extends Error {
-  constructor(
-    message: string,
-    public readonly operation: string,
-    public readonly cause?: unknown,
-  ) {
+  readonly operation: string;
+  readonly cause?: unknown;
+
+  constructor(message: string, operation: string, cause?: unknown) {
     super(message);
     this.name = 'McpOperationError';
+    this.operation = operation;
+    this.cause = cause;
   }
+}
+
+/**
+ * Helper to check if value has property
+ */
+function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record<K, unknown> {
+  return typeof obj === 'object' && obj !== null && key in obj;
+}
+
+/**
+ * Type guard for search lessons parameters
+ */
+function isSearchLessonsParams(params: unknown): params is ToolParameters['oak-search-lessons'] {
+  return hasProperty(params, 'query') && typeof params.query === 'string';
+}
+
+/**
+ * Type guard for get lesson parameters
+ */
+function isGetLessonParams(params: unknown): params is ToolParameters['oak-get-lesson'] {
+  return hasProperty(params, 'lessonSlug') && typeof params.lessonSlug === 'string';
 }
 
 /**
@@ -52,10 +73,74 @@ export interface ToolParameters {
 }
 
 /**
+ * Handle search lessons tool
+ */
+async function handleSearchLessons(
+  params: unknown,
+  curriculumOrgan: CurriculumOrganContract,
+): Promise<unknown> {
+  if (!isSearchLessonsParams(params)) {
+    throw new Error('Invalid parameters for oak-search-lessons');
+  }
+  const searchLessonsParams: OrganSearchLessonsParams = {
+    q: params.query,
+  };
+
+  // Validate and add optional parameters
+  if (params.keyStage) {
+    searchLessonsParams.keyStage = validateKeyStage(params.keyStage);
+  }
+
+  if (params.subject) {
+    searchLessonsParams.subject = validateSubject(params.subject);
+  }
+
+  return await curriculumOrgan.searchLessons(searchLessonsParams);
+}
+
+/**
+ * Handle get lesson tool
+ */
+async function handleGetLesson(
+  params: unknown,
+  curriculumOrgan: CurriculumOrganContract,
+): Promise<unknown> {
+  if (!isGetLessonParams(params)) {
+    throw new Error('Invalid parameters for oak-get-lesson');
+  }
+  const validatedSlug = validateLessonSlug(params.lessonSlug);
+  return await curriculumOrgan.getLesson(validatedSlug);
+}
+
+/**
+ * Execute tool based on name
+ */
+async function executeToolOperation<T extends ToolName>(
+  toolName: T,
+  params: ToolParameters[T],
+  curriculumOrgan: CurriculumOrganContract,
+): Promise<unknown> {
+  switch (toolName) {
+    case 'oak-search-lessons':
+      return await handleSearchLessons(params, curriculumOrgan);
+    case 'oak-get-lesson':
+      return await handleGetLesson(params, curriculumOrgan);
+    case 'oak-list-key-stages':
+      return await curriculumOrgan.listKeyStages();
+    case 'oak-list-subjects':
+      return await curriculumOrgan.listSubjects();
+    default: {
+      const exhaustiveCheck: never = toolName;
+      throw new Error(`Unknown tool: ${String(exhaustiveCheck)}`);
+    }
+  }
+}
+
+/**
  * Creates MCP tool handler that integrates with curriculum organ
  */
-export function createToolHandler(curriculumOrgan: CurriculumOrgan, logger: Logger) {
-  const toolLogger = logger.child({ component: 'mcp-tool-handler' });
+export function createToolHandler(curriculumOrgan: CurriculumOrganContract, logger: Logger) {
+  const toolLogger = logger.child ? logger.child({ component: 'mcp-tool-handler' }) : logger;
 
   return async function handleTool<T extends ToolName>(
     toolName: T,
@@ -64,44 +149,7 @@ export function createToolHandler(curriculumOrgan: CurriculumOrgan, logger: Logg
     toolLogger.debug('Executing tool', { toolName, params });
 
     try {
-      switch (toolName) {
-        case 'oak-search-lessons': {
-          const searchParams = params as ToolParameters['oak-search-lessons'];
-          const searchLessonsParams: SearchLessonsParams = {
-            q: searchParams.query,
-          };
-
-          // Validate and add optional parameters
-          if (searchParams.keyStage) {
-            searchLessonsParams.keyStage = validateKeyStage(searchParams.keyStage);
-          }
-
-          if (searchParams.subject) {
-            searchLessonsParams.subject = validateSubject(searchParams.subject);
-          }
-
-          return await curriculumOrgan.searchLessons(searchLessonsParams);
-        }
-
-        case 'oak-get-lesson': {
-          const lessonParams = params as ToolParameters['oak-get-lesson'];
-          const validatedSlug = validateLessonSlug(lessonParams.lessonSlug);
-          return await curriculumOrgan.getLesson(validatedSlug);
-        }
-
-        case 'oak-list-key-stages': {
-          return await curriculumOrgan.listKeyStages();
-        }
-
-        case 'oak-list-subjects': {
-          return await curriculumOrgan.listSubjects();
-        }
-
-        default: {
-          const exhaustiveCheck: never = toolName;
-          throw new Error(`Unknown tool: ${exhaustiveCheck}`);
-        }
-      }
+      return await executeToolOperation(toolName, params, curriculumOrgan);
     } catch (error) {
       toolLogger.error('Tool execution failed', { toolName, error });
       throw new McpOperationError(`MCP tool ${toolName} failed`, toolName, error);

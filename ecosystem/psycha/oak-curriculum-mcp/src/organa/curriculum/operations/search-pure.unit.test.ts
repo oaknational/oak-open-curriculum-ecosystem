@@ -12,8 +12,7 @@ describe('validateSearchParams', () => {
     const params = {
       q: 'fractions',
       keyStage: 'ks2' as const,
-      subject: 'maths',
-      limit: 10,
+      subject: 'maths' as const,
     };
 
     // When: Validate
@@ -52,9 +51,9 @@ describe('validateSearchParams', () => {
 
   it('should reject invalid key stage', () => {
     // Given: Invalid key stage
-    const params = {
+    const params: unknown = {
       q: 'fractions',
-      keyStage: 'invalid' as any,
+      keyStage: 'invalid',
     };
 
     // When/Then: Validation throws
@@ -63,7 +62,7 @@ describe('validateSearchParams', () => {
 
   it('should accept valid key stages', () => {
     // Given: Each valid key stage
-    const validStages = ['eyfs', 'ks1', 'ks2', 'ks3', 'ks4', 'ks5'] as const;
+    const validStages = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
 
     validStages.forEach((keyStage) => {
       const params = { q: 'test', keyStage };
@@ -72,25 +71,9 @@ describe('validateSearchParams', () => {
     });
   });
 
-  it('should reject limit below 1', () => {
-    // Given: Limit too low
-    const params = { q: 'fractions', limit: 0 };
-
-    // When/Then: Validation throws
-    expect(() => validateSearchParams(params)).toThrow('Limit must be between 1 and 100');
-  });
-
-  it('should reject limit above 100', () => {
-    // Given: Limit too high
-    const params = { q: 'fractions', limit: 101 };
-
-    // When/Then: Validation throws
-    expect(() => validateSearchParams(params)).toThrow('Limit must be between 1 and 100');
-  });
-
   it('should trim subject if provided', () => {
     // Given: Subject with whitespace
-    const params = { q: 'fractions', subject: '  maths  ' };
+    const params: unknown = { q: 'fractions', subject: '  maths  ' };
 
     // When: Validate
     const result = validateSearchParams(params);

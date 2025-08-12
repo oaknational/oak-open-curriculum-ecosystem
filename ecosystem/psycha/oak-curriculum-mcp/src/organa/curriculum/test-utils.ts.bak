@@ -1,0 +1,42 @@
+/**
+ * Test utilities for curriculum organ integration tests
+ * Provides pragmatic mocks that work with openapi-fetch types in test scenarios
+ */
+
+/**
+ * Create a mock Response object for integration tests
+ * This creates a minimal Response instance that passes instanceof checks
+ */
+export function createMockResponse(status = 200, statusText = 'OK'): Response {
+  // Create a minimal Response object that satisfies instanceof checks
+  // This is needed because the SDK response type guard checks `response instanceof Response`
+  return new Response(null, {
+    status,
+    statusText,
+  });
+}
+
+/**
+ * Create a successful mock SDK response
+ * Returns `any` to work with openapi-fetch's complex generated types in tests
+ * NOTE: This is acceptable in test utilities where we need to balance type safety with practicality
+ */
+export function createMockSdkSuccessResponse<TData>(data: TData): any {
+  return {
+    data,
+    response: createMockResponse(),
+  };
+}
+
+/**
+ * Create an error mock SDK response
+ * Returns `any` to work with openapi-fetch's complex generated types in tests
+ * NOTE: This is acceptable in test utilities where we need to balance type safety with practicality
+ */
+export function createMockSdkErrorResponse(error: unknown): any {
+  return {
+    error,
+    response: createMockResponse(500, 'Internal Server Error'),
+  };
+}
+EOF < /dev/null

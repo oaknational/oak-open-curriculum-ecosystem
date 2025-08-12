@@ -10,6 +10,7 @@ import { createMcpOrgan } from '../organa/mcp';
 import type { Logger } from '@oaknational/mcp-moria';
 import type { CurriculumOrgan } from '../organa/curriculum';
 import type { McpOrgan } from '../organa/mcp';
+import type { LogLevel } from '@oaknational/mcp-histos-logger';
 
 /**
  * Configuration for the Oak Curriculum MCP server
@@ -26,6 +27,24 @@ export interface ServerConfig {
 }
 
 /**
+ * Map server config log level to LogLevel
+ */
+function mapLogLevel(level?: 'debug' | 'info' | 'warn' | 'error'): LogLevel {
+  switch (level) {
+    case 'debug':
+      return 'DEBUG';
+    case 'info':
+      return 'INFO';
+    case 'warn':
+      return 'WARN';
+    case 'error':
+      return 'ERROR';
+    default:
+      return 'INFO';
+  }
+}
+
+/**
  * Wired dependencies for the server
  */
 export interface WiredDependencies {
@@ -36,18 +55,48 @@ export interface WiredDependencies {
 }
 
 /**
+ * Default server configuration values
+ */
+const DEFAULT_CONFIG: Required<ServerConfig> = {
+  logLevel: 'info',
+  apiKey: '',
+  serverName: 'oak-curriculum-mcp',
+  serverVersion: '0.0.1',
+};
+
+/**
+ * Build complete server configuration with defaults
+ */
+function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
+  if (!config) {
+    return DEFAULT_CONFIG;
+  }
+
+  return {
+    logLevel: config.logLevel ?? DEFAULT_CONFIG.logLevel,
+    apiKey: config.apiKey ?? DEFAULT_CONFIG.apiKey,
+    serverName: config.serverName ?? DEFAULT_CONFIG.serverName,
+    serverVersion: config.serverVersion ?? DEFAULT_CONFIG.serverVersion,
+  };
+}
+
+/**
  * Wires all dependencies together
  */
 export function wireDependencies(config?: ServerConfig): WiredDependencies {
+  // Build complete config with defaults
+  const serverConfig = buildServerConfig(config);
+
   // Create logger with config
   const logger = createLogger({
     name: 'oak-curriculum-mcp',
-    level: config?.logLevel ?? 'info',
+    level: mapLogLevel(serverConfig.logLevel),
+    enableFileLogging: true,
   });
 
   // Create SDK client
   const sdk = createSdkClient({
-    apiKey: config?.apiKey,
+    apiKey: serverConfig.apiKey,
   });
 
   // Create curriculum organ
@@ -61,11 +110,6 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
     logger,
     curriculumOrgan,
     mcpOrgan,
-    config: {
-      logLevel: config?.logLevel ?? 'info',
-      apiKey: config?.apiKey ?? '',
-      serverName: config?.serverName ?? 'oak-curriculum-mcp',
-      serverVersion: config?.serverVersion ?? '0.0.1',
-    },
+    config: serverConfig,
   };
 }

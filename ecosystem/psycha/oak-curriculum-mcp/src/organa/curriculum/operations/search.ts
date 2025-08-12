@@ -3,15 +3,16 @@
  * Uses the Oak Curriculum SDK to perform searches
  */
 
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import type { OakApiClient, components } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { components } from '@oaknational/oak-curriculum-sdk';
 import type { SearchLessonsParams } from '../../../chorai/stroma';
 import { CurriculumOperationError } from '../errors/curriculum-errors';
 import { validateSearchParams, formatSearchResultsForLog } from './search-pure';
+import { processSdkResponse } from '../sdk-utils';
 
 // Use generated types from SDK
 type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
+type SearchResultArray = SearchResult[];
 
 // Re-export SearchLessonsParams for backward compatibility
 export type { SearchLessonsParams };
@@ -38,17 +39,13 @@ export async function searchLessons(
           q: validParams.q,
           keyStage: validParams.keyStage,
           subject: validParams.subject,
-          limit: validParams.limit,
+          unit: validParams.unit,
         },
       },
     });
 
-    // Handle SDK response
-    if (result.error) {
-      throw new Error(`SDK error: ${result.error.message ?? 'Unknown error'}`);
-    }
-
-    const lessons = result.data ?? [];
+    // Process SDK response with type safety
+    const lessons = processSdkResponse<SearchResultArray>(result, 'searchLessons');
 
     // Use pure function for formatting log message
     logger.debug(formatSearchResultsForLog(lessons));

@@ -1,0 +1,37 @@
+/**
+ * Curriculum Organ Membrane
+ *
+ * This is the boundary of the curriculum organ, providing a clean interface
+ * to all curriculum operations. The organ wraps the Oak Curriculum SDK
+ * and provides business logic for the MCP server.
+ */
+import type { OakApiClient, components } from '@oaknational/oak-curriculum-sdk';
+import type { Logger } from '@oaknational/mcp-moria';
+import { type SearchLessonsParams } from './operations/search';
+export type KeyStage = components['schemas']['KeyStageResponseSchema'][number];
+export type Subject = components['schemas']['AllSubjectsResponseSchema'][number];
+export type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
+export type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
+export type { SearchLessonsParams };
+/**
+ * Dependencies required by the curriculum organ
+ */
+export interface CurriculumOrganDeps {
+  sdk: OakApiClient;
+  logger: Logger;
+}
+/**
+ * The curriculum organ interface
+ * Provides all operations related to the Oak curriculum
+ */
+export interface CurriculumOrgan {
+  searchLessons(params: SearchLessonsParams): Promise<SearchResult[]>;
+  getLesson(lessonSlug: string): Promise<LessonSummary>;
+  listKeyStages(): Promise<KeyStage[]>;
+  listSubjects(): Promise<Subject[]>;
+}
+/**
+ * Create a curriculum organ with the given dependencies
+ */
+export declare function createCurriculumOrgan(deps: CurriculumOrganDeps): CurriculumOrgan;
+//# sourceMappingURL=index.d.ts.map
