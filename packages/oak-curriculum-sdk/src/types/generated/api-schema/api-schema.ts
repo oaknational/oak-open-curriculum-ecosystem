@@ -8,7 +8,7 @@ export const schema = {
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-2fa4d6b75f9887c334981434cf933a10b5834766"
+    "version": "0.5.0-8b4203d4b991dbdf673f851bbc6b87298d8ca5b5"
   },
   "servers": [
     {

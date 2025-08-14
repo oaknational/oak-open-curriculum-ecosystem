@@ -24,22 +24,29 @@ import {
 function toMcpTools(enrichedTools: readonly EnrichedTool[]): Tool[] {
   return enrichedTools.map((tool) => ({
     name: tool.mcpName,
-    description: tool.decoration?.description ?? tool.description,
+    description: tool.decoration?.description ?? tool.description ?? `${tool.method.toUpperCase()} ${tool.path}`,
     inputSchema: {
       type: 'object',
-      properties: tool.parameters.reduce<Record<string, unknown>>((acc, param) => {
-        const paramName = param.name;
-        if (param.in === 'path' || param.in === 'query') {
+      properties: {
+        // Include all path parameters (always required)
+        ...tool.pathParams.reduce<Record<string, unknown>>((acc, paramName) => {
           acc[paramName] = {
-            ...param.schema,
-            ...('description' in param && param.description
-              ? { description: param.description }
-              : {}),
+            type: 'string',
+            description: `Path parameter: ${paramName}`,
           };
-        }
-        return acc;
-      }, {}),
-      required: tool.parameters.filter((p) => 'required' in p && p.required).map((p) => p.name),
+          return acc;
+        }, {}),
+        // Include all query parameters (optional)
+        ...tool.queryParams.reduce<Record<string, unknown>>((acc, paramName) => {
+          acc[paramName] = {
+            type: 'string',
+            description: `Query parameter: ${paramName}`,
+          };
+          return acc;
+        }, {}),
+      },
+      // Path parameters are always required
+      required: tool.pathParams as string[],
     },
   }));
 }

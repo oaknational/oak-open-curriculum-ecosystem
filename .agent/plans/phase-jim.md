@@ -11,10 +11,12 @@
 - [x] Turn it into a pnpm workspace and Turbo monorepo
 - [ ] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.  
 - [ ] Remove any dead code from the refactoring
+- [ ] Standardise and improve the sub-agents
 - [ ] Add mutation testing to the test suite
-- [ ] Update Zod to Zod 4 everywhere
+- [ ] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, requires data structures with reference IDs on both sides
 - [ ] Enforce logger usage with eslint no-console rule
-- [ ] Create a sub-agent specifically for creating new workspaces
+- [ ] Update Zod to Zod 4 everywhere
+- [ ] Import hooks library from @engraph
 
 ## MCP server ideas
 

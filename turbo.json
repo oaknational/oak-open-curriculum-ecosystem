@@ -6,12 +6,8 @@
     "type-gen": {
       "dependsOn": ["^type-gen"],
       "cache": true,
-      "outputs": ["src/types/generated/**", "src/organa/mcp/generated/**"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "scripts/**/*.ts",
-        "src/chorai/tool-metadata/**"
-      ]
+      "outputs": ["**/generated/**"],
+      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"]
     },
     "build": {
       "dependsOn": ["^build", "type-gen"],

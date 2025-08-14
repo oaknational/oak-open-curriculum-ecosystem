@@ -15,42 +15,10 @@
 
 import {
   MCP_TOOLS_DATA,
-  PATH_OPERATIONS,
   type McpToolName,
-  type PathOperation,
 } from '@oaknational/oak-curriculum-sdk';
 import { TOOL_DECORATIONS } from '../../../chorai/tool-metadata/tool-decorations';
 import type { ToolDecoration } from '../../../chorai/tool-metadata/types.js';
-
-/**
- * Parameter definition from OpenAPI schema
- */
-interface OperationParameter {
-  in: 'path' | 'query' | 'header' | 'cookie';
-  name: string;
-  required?: boolean;
-  description?: string;
-  schema?: {
-    type?: string;
-    enum?: readonly string[];
-    example?: string;
-    format?: string;
-    default?: unknown;
-  };
-}
-
-/**
- * Extended PathOperation type with all properties we need
- */
-interface ExtendedPathOperation {
-  path: string;
-  method: string;
-  operationId: string;
-  description?: string;
-  parameters?: readonly OperationParameter[];
-  pathParams?: readonly string[];
-  queryParams?: readonly string[];
-}
 
 /**
  * Enriched tool type combining SDK data with optional decorations
@@ -72,8 +40,6 @@ export interface EnrichedTool {
   queryParams: readonly string[];
   /** Optional decorative metadata */
   decoration?: ToolDecoration;
-  /** Full parameter definitions from PATH_OPERATIONS */
-  parameters: readonly OperationParameter[];
 }
 
 /**
@@ -84,29 +50,19 @@ function createEnrichedTools(): readonly EnrichedTool[] {
 
   // Iterate through all tools from the SDK
   for (const [mcpName, toolData] of Object.entries(MCP_TOOLS_DATA)) {
-    // Find the full operation data from PATH_OPERATIONS
-    const operation = PATH_OPERATIONS.find(
-      (op: PathOperation) => op.operationId === toolData.operationId,
-    ) as ExtendedPathOperation | undefined;
-
-    if (!operation) {
-      console.warn(`No operation found for ${mcpName} with operationId ${toolData.operationId}`);
-      continue;
-    }
-
     // Get optional decoration for this operation
     const decoration = TOOL_DECORATIONS[toolData.operationId];
 
     // Combine SDK data with decoration
+    // All data comes from MCP_TOOLS_DATA which is generated from the SDK
     const enrichedTool: EnrichedTool = {
       mcpName: mcpName as McpToolName,
       path: toolData.path,
       method: toolData.method,
       operationId: toolData.operationId,
-      description: toolData.description ?? operation.description,
+      description: (toolData as any).description,
       pathParams: toolData.pathParams,
       queryParams: toolData.queryParams,
-      parameters: operation.parameters ?? [],
       ...(decoration && { decoration }),
     };
 

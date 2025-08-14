@@ -65,17 +65,24 @@ async function executeToolOperation(
   const pathParams: Record<string, unknown> = {};
   const queryParams: Record<string, unknown> = {};
 
-  for (const param of enrichedTool.parameters) {
-    const value = params[param.name];
+  // Process path parameters
+  for (const paramName of enrichedTool.pathParams) {
+    const value = params[paramName];
     if (value !== undefined) {
-      if (param.in === 'path') {
-        pathParams[param.name] = value;
-      } else if (param.in === 'query') {
-        queryParams[param.name] = value;
-      }
-    } else if ('required' in param && param.required) {
-      throw new Error(`Missing required parameter: ${param.name}`);
+      pathParams[paramName] = value;
+    } else {
+      // Path parameters are always required
+      throw new Error(`Missing required path parameter: ${paramName}`);
     }
+  }
+
+  // Process query parameters
+  for (const paramName of enrichedTool.queryParams) {
+    const value = params[paramName];
+    if (value !== undefined) {
+      queryParams[paramName] = value;
+    }
+    // Query parameters are optional unless we add validation later
   }
 
   logger.debug('Calling SDK HTTP method', {
