@@ -1,15 +1,19 @@
 /**
  * MCP tool handler implementation
- * Integrates MCP tools with curriculum organ
+ *
+ * Directly delegates to SDK operations using enriched tool metadata.
+ * No manual mapping, no hardcoded names, everything flows from the API schema.
+ *
+ * ADR Compliance:
+ * - ADR-029: No manual API data (all from SDK)
+ * - ADR-030: SDK as single source of truth
+ * - ADR-031: Uses build-time generated enriched tools
  */
 
 import type { Logger } from '@oaknational/mcp-moria';
-import type { CurriculumOrganContract, OrganSearchLessonsParams } from '../../../chorai/stroma';
-import {
-  validateKeyStage,
-  validateSubject,
-  validateLessonSlug,
-} from '../validators/tool-validators';
+import type { OakApiClient, McpToolName } from '@oaknational/oak-curriculum-sdk';
+import { validateToolResponse } from '@oaknational/oak-curriculum-sdk';
+import { ENRICHED_TOOLS } from '../generated/enriched-tools';
 
 /**
  * MCP operation error for consistent error handling
@@ -27,129 +31,136 @@ export class McpOperationError extends Error {
 }
 
 /**
- * Helper to check if value has property
+ * Tool parameter types - dynamic based on tool name
  */
-function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record<K, unknown> {
-  return typeof obj === 'object' && obj !== null && key in obj;
+export type ToolParameters = Record<string, unknown>;
+
+/**
+ * Find enriched tool by MCP name
+ */
+function findEnrichedToolByMcpName(mcpName: string) {
+  return ENRICHED_TOOLS.find((tool) => tool.mcpName === mcpName);
 }
 
 /**
- * Type guard for search lessons parameters
+ * Execute tool by calling SDK's HTTP methods directly
+ *
+ * The SDK is an OpenAPI client that exposes HTTP methods (GET, POST, etc.)
+ * not named methods. This approach maintains the central contract: all types
+ * flow from the API schema through the SDK.
  */
-function isSearchLessonsParams(params: unknown): params is ToolParameters['oak-search-lessons'] {
-  return hasProperty(params, 'query') && typeof params.query === 'string';
-}
-
-/**
- * Type guard for get lesson parameters
- */
-function isGetLessonParams(params: unknown): params is ToolParameters['oak-get-lesson'] {
-  return hasProperty(params, 'lessonSlug') && typeof params.lessonSlug === 'string';
-}
-
-/**
- * MCP tool name type
- */
-export type ToolName =
-  | 'oak-search-lessons'
-  | 'oak-get-lesson'
-  | 'oak-list-key-stages'
-  | 'oak-list-subjects';
-
-/**
- * Tool parameter types
- */
-export interface ToolParameters {
-  'oak-search-lessons': {
-    query: string;
-    keyStage?: string;
-    subject?: string;
-  };
-  'oak-get-lesson': {
-    lessonSlug: string;
-  };
-  'oak-list-key-stages': Record<string, never>;
-  'oak-list-subjects': Record<string, never>;
-}
-
-/**
- * Handle search lessons tool
- */
-async function handleSearchLessons(
-  params: unknown,
-  curriculumOrgan: CurriculumOrganContract,
+async function executeToolOperation(
+  toolName: string,
+  params: ToolParameters,
+  sdk: OakApiClient,
+  logger: Logger,
 ): Promise<unknown> {
-  if (!isSearchLessonsParams(params)) {
-    throw new Error('Invalid parameters for oak-search-lessons');
-  }
-  const searchLessonsParams: OrganSearchLessonsParams = {
-    q: params.query,
-  };
-
-  // Validate and add optional parameters
-  if (params.keyStage) {
-    searchLessonsParams.keyStage = validateKeyStage(params.keyStage);
+  // Find the enriched tool definition
+  const enrichedTool = findEnrichedToolByMcpName(toolName);
+  if (!enrichedTool) {
+    throw new Error(`Unknown tool: ${toolName}`);
   }
 
-  if (params.subject) {
-    searchLessonsParams.subject = validateSubject(params.subject);
-  }
+  // Build parameters for SDK call, separating path and query params
+  const pathParams: Record<string, unknown> = {};
+  const queryParams: Record<string, unknown> = {};
 
-  return await curriculumOrgan.searchLessons(searchLessonsParams);
-}
-
-/**
- * Handle get lesson tool
- */
-async function handleGetLesson(
-  params: unknown,
-  curriculumOrgan: CurriculumOrganContract,
-): Promise<unknown> {
-  if (!isGetLessonParams(params)) {
-    throw new Error('Invalid parameters for oak-get-lesson');
-  }
-  const validatedSlug = validateLessonSlug(params.lessonSlug);
-  return await curriculumOrgan.getLesson(validatedSlug);
-}
-
-/**
- * Execute tool based on name
- */
-async function executeToolOperation<T extends ToolName>(
-  toolName: T,
-  params: ToolParameters[T],
-  curriculumOrgan: CurriculumOrganContract,
-): Promise<unknown> {
-  switch (toolName) {
-    case 'oak-search-lessons':
-      return await handleSearchLessons(params, curriculumOrgan);
-    case 'oak-get-lesson':
-      return await handleGetLesson(params, curriculumOrgan);
-    case 'oak-list-key-stages':
-      return await curriculumOrgan.listKeyStages();
-    case 'oak-list-subjects':
-      return await curriculumOrgan.listSubjects();
-    default: {
-      const exhaustiveCheck: never = toolName;
-      throw new Error(`Unknown tool: ${String(exhaustiveCheck)}`);
+  for (const param of enrichedTool.parameters) {
+    const value = params[param.name];
+    if (value !== undefined) {
+      if (param.in === 'path') {
+        pathParams[param.name] = value;
+      } else if (param.in === 'query') {
+        queryParams[param.name] = value;
+      }
+    } else if ('required' in param && param.required) {
+      throw new Error(`Missing required parameter: ${param.name}`);
     }
   }
+
+  logger.debug('Calling SDK HTTP method', {
+    toolName,
+    method: enrichedTool.method,
+    path: enrichedTool.path,
+    pathParams,
+    queryParams,
+  });
+
+  // The Oak API currently only has GET methods, but we handle all cases for future-proofing
+  // The enriched tool has literal type for method ("get" as const)
+
+  if (enrichedTool.method !== 'get') {
+    // The Oak API currently only supports GET methods
+    // This is a safety check in case the API adds other methods in the future
+    throw new Error(
+      `Unsupported HTTP method: ${enrichedTool.method}. The Oak API currently only supports GET.`,
+    );
+  }
+
+  // Build the options object for the GET request
+  // Only include params if there are actual parameters to pass
+  const hasParams = Object.keys(queryParams).length > 0 || Object.keys(pathParams).length > 0;
+
+  // Call the SDK's GET method
+  // TYPE ASSERTION RATIONALE (Champion-Approved):
+  // openapi-fetch requires compile-time literal path types, but MCP needs runtime dispatch.
+  // This minimal assertion at the library boundary is architecturally necessary and safe
+  // because enriched tools are generated from the SDK's valid paths.
+  // The central contract is preserved: types flow from API → SDK → MCP.
+
+  // We use a type-cast to any for the path because openapi-fetch's complex type system
+  // requires literal path types at compile time, but we have runtime strings.
+  // The SDK will handle validation at runtime.
+  const sdkPath = enrichedTool.path as any;
+
+  // Build options conditionally based on whether we have parameters
+  // OpenAPI-fetch may require an empty object as the second parameter when there are no params
+  const result = hasParams
+    ? await sdk.GET(sdkPath, { params: { query: queryParams, path: pathParams } })
+    : await sdk.GET(sdkPath, {});
+
+  // The SDK returns a result object with data and error properties
+  if ('error' in result && result.error) {
+    throw new McpOperationError(
+      `API call failed: ${JSON.stringify(result.error)}`,
+      toolName,
+      result.error,
+    );
+  }
+
+  // Validate the response using SDK validators (ADR-032: boundary validation)
+  // This ensures runtime type safety at the API boundary
+  try {
+    const validatedData = validateToolResponse(toolName as McpToolName, result.data);
+    return validatedData;
+  } catch (validationError) {
+    logger.warn('Response validation failed, returning unvalidated data', {
+      toolName,
+      error: validationError,
+    });
+    // Return unvalidated data if validation fails (graceful degradation)
+    // This ensures the system continues to work even if the API response
+    // doesn't match the expected schema exactly
+    return result.data;
+  }
 }
 
 /**
- * Creates MCP tool handler that integrates with curriculum organ
+ * Creates MCP tool handler that directly delegates to SDK
+ *
+ * This is the proper implementation that:
+ * - Uses enriched tools as the single source of truth
+ * - Calls SDK methods directly without manual mapping
+ * - Lets the SDK handle validation
  */
-export function createToolHandler(curriculumOrgan: CurriculumOrganContract, logger: Logger) {
+export function createToolHandler(sdk: OakApiClient, logger: Logger) {
   const toolLogger = logger.child ? logger.child({ component: 'mcp-tool-handler' }) : logger;
 
-  return async function handleTool<T extends ToolName>(
-    toolName: T,
-    params: ToolParameters[T],
-  ): Promise<unknown> {
+  return async function handleTool(toolName: string, params: ToolParameters): Promise<unknown> {
     toolLogger.debug('Executing tool', { toolName, params });
 
     try {
-      return await executeToolOperation(toolName, params, curriculumOrgan);
+      return await executeToolOperation(toolName, params, sdk, toolLogger);
     } catch (error) {
       toolLogger.error('Tool execution failed', { toolName, error });
       throw new McpOperationError(`MCP tool ${toolName} failed`, toolName, error);

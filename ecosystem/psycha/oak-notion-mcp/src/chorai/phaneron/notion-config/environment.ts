@@ -2,36 +2,32 @@
  * Notion-specific environment configuration
  */
 
+import { getString, getBoolean, getNumber } from './env-utils';
+
 import {
-  getString,
-  getBoolean,
-  getNumber,
-  getLogLevel,
-  getEnum,
-  loadDotenvIfNeeded,
-  type BaseEnvironment,
-} from './env-utils';
+  parseLogLevel,
+  LOG_LEVEL_KEY,
+  ENABLE_DEBUG_LOGGING_KEY,
+  type BaseLoggingEnvironment,
+} from '@oaknational/mcp-histos-logger';
 
 /**
  * Notion-specific environment variables
  */
-export interface NotionEnvironment extends BaseEnvironment {
+export interface NotionEnvironment extends BaseLoggingEnvironment {
   NOTION_API_KEY: string;
   MAX_SEARCH_RESULTS: number;
 }
 
-// Load .env file if environment variables are not already set
-// This uses synchronous loading to ensure vars are available before we read them
-await loadDotenvIfNeeded();
+// Note: dotenv loading should be handled by the consuming application explicitly
 
 /**
  * Environment configuration for Notion MCP - validated once on module load
  */
 export const env: NotionEnvironment = {
   // Base environment
-  LOG_LEVEL: getLogLevel('LOG_LEVEL', 'INFO'),
-  NODE_ENV: getEnum('NODE_ENV', ['development', 'production', 'test'] as const, 'production'),
-  ENABLE_DEBUG_LOGGING: getBoolean('ENABLE_DEBUG_LOGGING', false),
+  LOG_LEVEL: parseLogLevel(process.env[LOG_LEVEL_KEY]),
+  ENABLE_DEBUG_LOGGING: getBoolean(ENABLE_DEBUG_LOGGING_KEY, false),
 
   // Notion-specific
   NOTION_API_KEY: getString('NOTION_API_KEY'),

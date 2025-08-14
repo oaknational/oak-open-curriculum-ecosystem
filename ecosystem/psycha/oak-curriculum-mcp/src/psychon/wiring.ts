@@ -5,10 +5,8 @@
 
 import { createLogger } from '../chorai/aither';
 import { createSdkClient } from '../chorai/stroma';
-import { createCurriculumOrgan } from '../organa/curriculum';
 import { createMcpOrgan } from '../organa/mcp';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { CurriculumOrgan } from '../organa/curriculum';
 import type { McpOrgan } from '../organa/mcp';
 import type { LogLevel } from '@oaknational/mcp-histos-logger';
 
@@ -49,7 +47,6 @@ function mapLogLevel(level?: 'debug' | 'info' | 'warn' | 'error'): LogLevel {
  */
 export interface WiredDependencies {
   logger: Logger;
-  curriculumOrgan: CurriculumOrgan;
   mcpOrgan: McpOrgan;
   config: Required<ServerConfig>;
 }
@@ -99,16 +96,12 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
     apiKey: serverConfig.apiKey,
   });
 
-  // Create curriculum organ
-  const curriculumOrgan = createCurriculumOrgan({ sdk, logger });
-
-  // Create MCP organ
-  const mcpOrgan = createMcpOrgan(curriculumOrgan, logger);
+  // Create MCP organ - now uses SDK directly
+  const mcpOrgan = createMcpOrgan(sdk, logger);
 
   // Return wired dependencies
   return {
     logger,
-    curriculumOrgan,
     mcpOrgan,
     config: serverConfig,
   };

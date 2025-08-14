@@ -1,38 +1,23 @@
 /**
  * Integration tests for MCP tool handler
- * Tests the integration between MCP tools and curriculum organ
+ * Tests the integration between MCP tools and SDK client
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-moria';
-import type { CurriculumOrgan } from '../../curriculum';
-import { createToolHandler, McpOperationError } from './tool-handler';
+import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+import { createToolHandler, McpOperationError } from './tool-handler.js';
 
 describe('createToolHandler', () => {
-  let mockCurriculumOrgan: CurriculumOrgan;
+  let mockSdkClient: OakApiClient;
   let mockLogger: Logger;
   let toolHandler: ReturnType<typeof createToolHandler>;
 
-  // Store mock functions for easier access
-  let mockSearchLessons: ReturnType<typeof vi.fn>;
-  let mockGetLesson: ReturnType<typeof vi.fn>;
-  let mockListKeyStages: ReturnType<typeof vi.fn>;
-  let mockListSubjects: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
-    // Create mock functions
-    mockSearchLessons = vi.fn();
-    mockGetLesson = vi.fn();
-    mockListKeyStages = vi.fn();
-    mockListSubjects = vi.fn();
-
-    // Create mock curriculum organ
-    mockCurriculumOrgan = {
-      searchLessons: mockSearchLessons,
-      getLesson: mockGetLesson,
-      listKeyStages: mockListKeyStages,
-      listSubjects: mockListSubjects,
-    };
+    // Create mock SDK client with GET method
+    mockSdkClient = {
+      GET: vi.fn(),
+    } as unknown as OakApiClient;
 
     // Create mock logger
     mockLogger = {
@@ -44,12 +29,12 @@ describe('createToolHandler', () => {
     } as unknown as Logger;
 
     // Create tool handler
-    toolHandler = createToolHandler(mockCurriculumOrgan, mockLogger);
+    toolHandler = createToolHandler(mockSdkClient, mockLogger);
   });
 
   describe('oak-search-lessons tool', () => {
     it('should search lessons with valid parameters', async () => {
-      // Given: Mock curriculum organ returns results
+      // Given: Mock SDK returns results
       const mockResults = [
         {
           lessonSlug: 'intro-fractions',
@@ -66,20 +51,29 @@ describe('createToolHandler', () => {
           ],
         },
       ];
-      mockSearchLessons.mockResolvedValue(mockResults);
+
+      vi.mocked(mockSdkClient.GET).mockResolvedValue({
+        data: mockResults,
+        response: {} as Response,
+      });
 
       // When: Execute tool
       const result = await toolHandler('oak-search-lessons', {
-        query: 'fractions',
+        q: 'fractions',
         keyStage: 'ks2',
         subject: 'maths',
       });
 
-      // Then: Curriculum organ is called correctly
-      expect(mockSearchLessons).toHaveBeenCalledWith({
-        q: 'fractions',
-        keyStage: 'ks2',
-        subject: 'maths',
+      // Then: SDK is called correctly with the enriched tool path
+      expect(mockSdkClient.GET).toHaveBeenCalledWith('/search/lessons', {
+        params: {
+          query: {
+            q: 'fractions',
+            keyStage: 'ks2',
+            subject: 'maths',
+          },
+          path: {},
+        },
       });
 
       // And: Results are returned
@@ -88,25 +82,33 @@ describe('createToolHandler', () => {
 
     it('should handle missing optional parameters', async () => {
       // Given: Only required parameter
-      mockSearchLessons.mockResolvedValue([]);
+      vi.mocked(mockSdkClient.GET).mockResolvedValue({
+        data: [],
+        response: {} as Response,
+      });
 
       // When: Execute tool with minimal params
       const result = await toolHandler('oak-search-lessons', {
-        query: 'algebra',
+        q: 'algebra',
       });
 
-      // Then: Curriculum organ is called with only query
-      expect(mockSearchLessons).toHaveBeenCalledWith({
-        q: 'algebra',
+      // Then: SDK is called with only query parameter
+      expect(mockSdkClient.GET).toHaveBeenCalledWith('/search/lessons', {
+        params: {
+          query: {
+            q: 'algebra',
+          },
+          path: {},
+        },
       });
 
       expect(result).toEqual([]);
     });
   });
 
-  describe('oak-get-lesson tool', () => {
-    it('should get lesson by slug', async () => {
-      // Given: Mock curriculum organ returns lesson
+  describe('oak-get-lessons-summary tool', () => {
+    it('should get lesson summary by slug', async () => {
+      // Given: Mock SDK returns lesson summary
       const mockLesson = {
         lessonTitle: 'Introduction to Fractions',
         unitSlug: 'fractions-unit-1',
@@ -124,44 +126,59 @@ describe('createToolHandler', () => {
         supervisionLevel: null,
         downloadsAvailable: true,
       };
-      mockGetLesson.mockResolvedValue(mockLesson);
 
-      // When: Execute tool
-      const result = await toolHandler('oak-get-lesson', {
-        lessonSlug: 'intro-fractions',
+      vi.mocked(mockSdkClient.GET).mockResolvedValue({
+        data: mockLesson,
+        response: {} as Response,
       });
 
-      // Then: Curriculum organ is called correctly
-      expect(mockGetLesson).toHaveBeenCalledWith('intro-fractions');
+      // When: Execute tool
+      const result = await toolHandler('oak-get-lessons-summary', {
+        lesson: 'intro-fractions',
+      });
+
+      // Then: SDK is called correctly with path parameters
+      expect(mockSdkClient.GET).toHaveBeenCalledWith('/lessons/{lesson}/summary', {
+        params: {
+          query: {},
+          path: {
+            lesson: 'intro-fractions',
+          },
+        },
+      });
 
       // And: Lesson is returned
       expect(result).toEqual(mockLesson);
     });
   });
 
-  describe('oak-list-key-stages tool', () => {
+  describe('oak-get-key-stages tool', () => {
     it('should list all key stages', async () => {
-      // Given: Mock curriculum organ returns key stages
+      // Given: Mock SDK returns key stages
       const mockKeyStages = [
         { slug: 'ks1', title: 'Key Stage 1' },
         { slug: 'ks2', title: 'Key Stage 2' },
       ];
-      mockListKeyStages.mockResolvedValue(mockKeyStages);
+
+      vi.mocked(mockSdkClient.GET).mockResolvedValue({
+        data: mockKeyStages,
+        response: {} as Response,
+      });
 
       // When: Execute tool (no parameters needed)
-      const result = await toolHandler('oak-list-key-stages', {});
+      const result = await toolHandler('oak-get-key-stages', {});
 
-      // Then: Curriculum organ is called
-      expect(mockListKeyStages).toHaveBeenCalled();
+      // Then: SDK is called with empty options object
+      expect(mockSdkClient.GET).toHaveBeenCalledWith('/key-stages', {});
 
       // And: Key stages are returned
       expect(result).toEqual(mockKeyStages);
     });
   });
 
-  describe('oak-list-subjects tool', () => {
+  describe('oak-get-subjects tool', () => {
     it('should list all subjects', async () => {
-      // Given: Mock curriculum organ returns subjects
+      // Given: Mock SDK returns subjects
       const mockSubjects = [
         {
           subjectSlug: 'english',
@@ -208,13 +225,17 @@ describe('createToolHandler', () => {
           ],
         },
       ];
-      mockListSubjects.mockResolvedValue(mockSubjects);
+
+      vi.mocked(mockSdkClient.GET).mockResolvedValue({
+        data: mockSubjects,
+        response: {} as Response,
+      });
 
       // When: Execute tool (no parameters needed)
-      const result = await toolHandler('oak-list-subjects', {});
+      const result = await toolHandler('oak-get-subjects', {});
 
-      // Then: Curriculum organ is called
-      expect(mockListSubjects).toHaveBeenCalled();
+      // Then: SDK is called with empty options object
+      expect(mockSdkClient.GET).toHaveBeenCalledWith('/subjects', {});
 
       // And: Subjects are returned
       expect(result).toEqual(mockSubjects);
@@ -224,19 +245,18 @@ describe('createToolHandler', () => {
   describe('error handling', () => {
     it('should throw error for unknown tool', async () => {
       // When/Then: Unknown tool throws McpOperationError
-      // @ts-expect-error Testing invalid tool name
       await expect(toolHandler('unknown-tool', {})).rejects.toThrow('MCP tool unknown-tool failed');
     });
 
-    it('should wrap curriculum organ errors', async () => {
-      // Given: Curriculum organ throws error
+    it('should wrap SDK errors', async () => {
+      // Given: SDK throws error
       const originalError = new Error('API unavailable');
-      mockSearchLessons.mockRejectedValue(originalError);
+      vi.mocked(mockSdkClient.GET).mockRejectedValue(originalError);
 
       // When: Call the tool
       let caughtError: unknown;
       try {
-        await toolHandler('oak-search-lessons', { query: 'test' });
+        await toolHandler('oak-search-lessons', { q: 'test' });
       } catch (error) {
         caughtError = error;
       }
@@ -247,6 +267,46 @@ describe('createToolHandler', () => {
         expect(caughtError.message).toBe('MCP tool oak-search-lessons failed');
         expect(caughtError.operation).toBe('oak-search-lessons');
         expect(caughtError.cause).toBe(originalError);
+      }
+    });
+
+    it('should handle API error responses', async () => {
+      // Given: SDK returns error response
+      // TEST MOCK ASSERTION RATIONALE:
+      // In tests, we need to mock complex runtime types from external libraries.
+      // The actual error type depends on the API's OpenAPI schema which is runtime-determined.
+      // Using type assertion in test mocks is acceptable as we're not disabling the type system
+      // in production code, just creating test fixtures.
+      const apiError = {
+        statusCode: 400,
+        message: 'Bad Request',
+      };
+
+      // Mock the SDK's response shape - this matches openapi-fetch's error response structure
+      const errorResponse = {
+        error: apiError,
+        response: {} as Response,
+        data: undefined,
+      };
+
+      vi.mocked(mockSdkClient.GET).mockResolvedValue(
+        errorResponse as Awaited<ReturnType<typeof mockSdkClient.GET>>,
+      );
+
+      // When: Call the tool
+      let caughtError: unknown;
+      try {
+        await toolHandler('oak-get-subjects', {});
+      } catch (error) {
+        caughtError = error;
+      }
+
+      // Then: Error is wrapped in McpOperationError
+      expect(caughtError).toBeInstanceOf(McpOperationError);
+      if (caughtError instanceof McpOperationError) {
+        expect(caughtError.message).toContain('API call failed');
+        expect(caughtError.operation).toBe('oak-get-subjects');
+        expect(caughtError.cause).toEqual(apiError);
       }
     });
   });

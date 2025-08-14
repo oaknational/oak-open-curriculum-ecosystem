@@ -9,9 +9,6 @@ import type { paths } from '../types/generated/api-schema/api-paths-types';
 
 import { createAuthMiddleware } from './middleware';
 
-// The API key is set in the constructor.
-let _apiKey: string | undefined;
-
 /**
  * The base OpenAPI-Fetch client.
  *
@@ -41,12 +38,14 @@ export type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 export class BaseApiClient {
   private readonly _client: OakApiClient;
   private readonly _pathBasedClient: OakApiPathBasedClient;
+  private readonly _apiKey: string;
+
   constructor(apiKey: string) {
-    _apiKey = apiKey;
-    if (!_apiKey) {
+    if (!apiKey) {
       throw new TypeError('You must pass an API key to the OakApiClient constructor.');
     }
-    const authMiddleware = createAuthMiddleware(_apiKey);
+    this._apiKey = apiKey;
+    const authMiddleware = createAuthMiddleware(this._apiKey);
     this._client = createClient<paths>({ baseUrl: apiUrl });
     this._client.use(authMiddleware);
 

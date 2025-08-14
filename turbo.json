@@ -3,8 +3,18 @@
   "ui": "tui",
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
+    "type-gen": {
+      "dependsOn": ["^type-gen"],
+      "cache": true,
+      "outputs": ["src/types/generated/**", "src/organa/mcp/generated/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "scripts/**/*.ts",
+        "src/chorai/tool-metadata/**"
+      ]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "type-gen"],
       "cache": true,
       "outputs": ["dist/**", ".tsup/**"],
       "inputs": [

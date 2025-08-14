@@ -1,0 +1,40 @@
+name: SDK Docs Verification
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate and verify SDK docs
+        run: pnpm -F @oaknational/oak-curriculum-sdk docs:all
+
+      - name: Fail if docs changed (uncommitted diffs)
+        shell: bash
+        run: |
+          git diff --name-only --exit-code -- packages/oak-curriculum-sdk/docs \
+            || (echo "::error title=Docs changed::The SDK docs changed after generation. Run 'pnpm -F @oaknational/oak-curriculum-sdk docs:all' locally and commit the results." && exit 1)

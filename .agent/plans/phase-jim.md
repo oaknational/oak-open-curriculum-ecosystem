@@ -9,8 +9,11 @@
 - [x] Add Claude custom commands for quality gates, stepping back, commit and push
 - [x] Think about how best to use subagents
 - [x] Turn it into a pnpm workspace and Turbo monorepo
+- [ ] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.  
+- [ ] Remove any dead code from the refactoring
 - [ ] Add mutation testing to the test suite
-- [ ] Create a sub-agent specifically for creating new sub-agents
+- [ ] Update Zod to Zod 4 everywhere
+- [ ] Enforce logger usage with eslint no-console rule
 - [ ] Create a sub-agent specifically for creating new workspaces
 
 ## MCP server ideas

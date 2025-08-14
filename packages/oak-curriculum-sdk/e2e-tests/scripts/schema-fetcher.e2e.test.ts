@@ -1,20 +1,11 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import type { OpenAPI3 } from '../../src/types/openapi';
-import { existsSync, readFileSync } from 'node:fs';
 
 // Mock the fetch function for testing
 const mockFetch = vi.fn();
 global.fetch = mockFetch as typeof fetch;
 
-// Mock fs module
-vi.mock('node:fs', () => ({
-  existsSync: vi.fn(),
-  readFileSync: vi.fn(),
-  writeFileSync: vi.fn(),
-  mkdirSync: vi.fn(),
-}));
-
-// Function we'll implement
+// Function we'll test
 import { fetchOpenAPISchema } from '../../scripts/schema-fetcher';
 
 describe('OpenAPI Schema Fetcher Integration', () => {
@@ -36,17 +27,6 @@ describe('OpenAPI Schema Fetcher Integration', () => {
           version: '1.0.0',
         },
         paths: {},
-        components: {
-          schemas: {
-            Lesson: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                title: { type: 'string' },
-              },
-            },
-          },
-        },
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -62,45 +42,32 @@ describe('OpenAPI Schema Fetcher Integration', () => {
       expect(mockFetch).toHaveBeenCalledWith('https://api.oak.com/openapi.json');
     });
 
-    it('falls back to cached schema when fetch fails', async () => {
-      // Given: Fetch fails and cache exists
-      const cachedSchema: OpenAPI3 = {
-        openapi: '3.0.0',
-        info: {
-          title: 'Cached API',
-          version: '1.0.0',
-        },
-        paths: {},
-      };
-
+    it('throws error when fetch fails', async () => {
+      // Given: Fetch fails
       mockFetch.mockRejectedValueOnce(new Error('Network error'));
-      vi.mocked(existsSync).mockReturnValue(true);
-      vi.mocked(readFileSync).mockReturnValue(JSON.stringify(cachedSchema));
-
-      // When: Fetching with fallback
-      const result = await fetchOpenAPISchema(
-        'https://api.oak.com/openapi.json',
-        '/path/to/cached/schema.json',
-      );
-
-      // Then: Should return cached schema
-      expect(result).toEqual(cachedSchema);
-      expect(vi.mocked(readFileSync)).toHaveBeenCalledWith('/path/to/cached/schema.json', 'utf-8');
-    });
-
-    it('throws error when both remote and cache fail', async () => {
-      // Given: Both fetch and cache fail
-      mockFetch.mockRejectedValueOnce(new Error('Network error'));
-      vi.mocked(existsSync).mockReturnValue(false);
 
       // When/Then: Should throw error
-      await expect(
-        fetchOpenAPISchema('https://api.oak.com/openapi.json', '/nonexistent/path'),
-      ).rejects.toThrow('Failed to fetch OpenAPI schema');
+      await expect(fetchOpenAPISchema('https://api.oak.com/openapi.json')).rejects.toThrow(
+        'Network error',
+      );
+    });
+
+    it('throws error when response is not ok', async () => {
+      // Given: Server returns error
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 404,
+        statusText: 'Not Found',
+      });
+
+      // When/Then: Should throw error
+      await expect(fetchOpenAPISchema('https://api.oak.com/openapi.json')).rejects.toThrow(
+        'HTTP 404: Not Found',
+      );
     });
 
     it('validates schema structure', async () => {
-      // Given: Invalid schema response with no cache
+      // Given: Invalid schema response
       const invalidSchema = {
         // Missing required fields
         info: { title: 'Test' },
@@ -110,23 +77,33 @@ describe('OpenAPI Schema Fetcher Integration', () => {
         ok: true,
         json: () => Promise.resolve(invalidSchema),
       });
-      vi.mocked(existsSync).mockReturnValue(false);
 
-      // When/Then: Should throw error about failed fetch (since validation fails and no cache)
+      // When/Then: Should throw error about invalid schema
       await expect(fetchOpenAPISchema('https://api.oak.com/openapi.json')).rejects.toThrow(
-        'Failed to fetch OpenAPI schema',
+        'Invalid OpenAPI schema',
       );
     });
 
-    it('caches fetched schema to disk', async () => {
-      // Given: Successful fetch
+    it('accepts valid OpenAPI 3.x schema', async () => {
+      // Given: Valid OpenAPI 3.1 schema
       const mockSchema: OpenAPI3 = {
-        openapi: '3.0.0',
+        openapi: '3.1.0',
         info: {
-          title: 'Oak Curriculum API',
-          version: '1.0.0',
+          title: 'Test API',
+          version: '2.0.0',
         },
-        paths: {},
+        paths: {
+          '/test': {
+            get: {
+              operationId: 'getTest',
+              responses: {
+                '200': {
+                  description: 'Success',
+                },
+              },
+            },
+          },
+        },
       };
 
       mockFetch.mockResolvedValueOnce({
@@ -134,13 +111,10 @@ describe('OpenAPI Schema Fetcher Integration', () => {
         json: () => Promise.resolve(mockSchema),
       });
 
-      // When: Fetching with cache path
-      const result = await fetchOpenAPISchema(
-        'https://api.oak.com/openapi.json',
-        './test-cache/schema.json',
-      );
+      // When: Fetching the schema
+      const result = await fetchOpenAPISchema('https://api.oak.com/openapi.json');
 
-      // Then: Should save to cache (we'll verify file write was called)
+      // Then: Should return the parsed schema
       expect(result).toEqual(mockSchema);
     });
   });

@@ -11,3 +11,7 @@ coverage/
 
 # Cache
 .turbo/
+
+# Generated files
+test-cache/
+src/types/generated/

@@ -1,87 +1,67 @@
 /**
  * MCP tool definitions for Oak Curriculum API
- * Defines the interface between MCP and curriculum organ
+ *
+ * Uses build-time generated tools that combine SDK operations with decorative metadata.
+ *
+ * ADR Compliance:
+ * - ADR-029: No manual API data (all from SDK)
+ * - ADR-030: SDK as single source of truth
+ * - ADR-031: Generation at build time (not runtime)
  */
 
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { TOOL_SCHEMA_ENUMS } from '../validators/tool-validators';
+import {
+  ENRICHED_TOOLS,
+  getEnrichedToolById,
+  getDecoratedTools,
+  getToolsByCategory,
+  type EnrichedTool,
+} from '../generated/enriched-tools';
 
 /**
- * Search lessons tool definition
+ * Convert enriched tools to MCP SDK Tool format
  */
-export const searchLessonsTool: Tool = {
-  name: 'oak-search-lessons',
-  description: 'Search for lessons in the Oak Curriculum',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      query: {
-        type: 'string',
-        description: 'Search query text',
-      },
-      keyStage: {
-        type: 'string',
-        enum: [...TOOL_SCHEMA_ENUMS.keyStages],
-        description: 'Optional key stage filter',
-      },
-      subject: {
-        type: 'string',
-        enum: [...TOOL_SCHEMA_ENUMS.subjects],
-        description: 'Optional subject filter',
-      },
+function toMcpTools(enrichedTools: readonly EnrichedTool[]): Tool[] {
+  return enrichedTools.map((tool) => ({
+    name: tool.mcpName,
+    description: tool.decoration?.description ?? tool.description,
+    inputSchema: {
+      type: 'object',
+      properties: tool.parameters.reduce<Record<string, unknown>>((acc, param) => {
+        const paramName = param.name;
+        if (param.in === 'path' || param.in === 'query') {
+          acc[paramName] = {
+            ...param.schema,
+            ...('description' in param && param.description
+              ? { description: param.description }
+              : {}),
+          };
+        }
+        return acc;
+      }, {}),
+      required: tool.parameters.filter((p) => 'required' in p && p.required).map((p) => p.name),
     },
-    required: ['query'],
-  },
-};
-
-/**
- * Get lesson tool definition
- */
-export const getLessonTool: Tool = {
-  name: 'oak-get-lesson',
-  description: 'Get detailed information about a specific lesson',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      lessonSlug: {
-        type: 'string',
-        description: 'The unique slug identifier for the lesson',
-      },
-    },
-    required: ['lessonSlug'],
-  },
-};
-
-/**
- * List key stages tool definition
- */
-export const listKeyStages: Tool = {
-  name: 'oak-list-key-stages',
-  description: 'List all available key stages',
-  inputSchema: {
-    type: 'object',
-    properties: {},
-  },
-};
-
-/**
- * List subjects tool definition
- */
-export const listSubjects: Tool = {
-  name: 'oak-list-subjects',
-  description: 'List all available subjects',
-  inputSchema: {
-    type: 'object',
-    properties: {},
-  },
-};
+  }));
+}
 
 /**
  * All available MCP tools
+ * Generated at build time from SDK operations + decorations
  */
-export const tools = [searchLessonsTool, getLessonTool, listKeyStages, listSubjects] as const;
+export const tools = toMcpTools(ENRICHED_TOOLS);
+
+/**
+ * Export convenience functions
+ */
+export { getEnrichedToolById, getDecoratedTools, getToolsByCategory };
+
+/**
+ * Export tool type
+ */
+export type { EnrichedTool };
 
 /**
  * Export tool names type
+ * Derived from generated tools
  */
-export type ToolName = (typeof tools)[number]['name'];
+export type ToolName = EnrichedTool['mcpName'];

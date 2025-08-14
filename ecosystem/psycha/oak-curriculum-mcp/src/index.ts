@@ -12,7 +12,6 @@ export { createServer } from './psychon/server';
 export type { ServerConfig } from './psychon/wiring';
 
 // Re-export types for external use
-export type { CurriculumOrgan } from './organa/curriculum';
 export type { McpOrgan } from './organa/mcp';
 
 // Main entry point when run directly
@@ -23,9 +22,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // Parse log level from environment
   const logLevel = process.env.LOG_LEVEL;
   const validLogLevels = ['debug', 'info', 'warn', 'error'] as const;
-  const parsedLogLevel = validLogLevels.includes(logLevel as (typeof validLogLevels)[number])
-    ? (logLevel as (typeof validLogLevels)[number])
-    : 'info';
+  type ValidLogLevel = (typeof validLogLevels)[number];
+
+  function isValidLogLevel(value: unknown): value is ValidLogLevel {
+    if (typeof value !== 'string') return false;
+    const stringValidLogLevels: readonly string[] = validLogLevels;
+    return stringValidLogLevels.includes(value);
+  }
+
+  const parsedLogLevel = isValidLogLevel(logLevel) ? logLevel : 'info';
 
   startupLog(`[STARTUP] Log level: ${parsedLogLevel}`);
   startupLog(`[STARTUP] API key configured: ${process.env.OAK_API_KEY ? 'Yes' : 'No'}`);

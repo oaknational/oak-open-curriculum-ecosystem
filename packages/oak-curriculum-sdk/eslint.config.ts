@@ -21,12 +21,13 @@ const config = tsEslintConfig(
       'coverage/**',
       '*.log',
       '.turbo/**',
-      // Generated files
-      'src/types/generated/**',
       // Examples
       'examples/**',
-      // Copied from reference - do not modify
-      'scripts/typegen-core.ts',
+      // Generated files
+      'src/types/generated/**',
+      'test-cache/**',
+      // Documentation
+      'docs/**',
     ],
   },
   {
@@ -46,9 +47,6 @@ const config = tsEslintConfig(
           project: './tsconfig.lint.json',
         },
       },
-    },
-    rules: {
-      // Standard package - no special architectural rules
     },
   },
   // Config files

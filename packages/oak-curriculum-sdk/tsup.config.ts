@@ -12,6 +12,13 @@ export default defineConfig({
     'src/types/generated/api-schema/api-paths-types.ts',
     'src/types/generated/api-schema/api-schema.ts',
     'src/types/generated/api-schema/path-parameters.ts',
+    'src/tool-generation/index.ts',
+    'src/validation/index.ts',
+    'src/validation/request-validators.ts',
+    'src/validation/response-validators.ts',
+    'src/validation/types.ts',
+    'src/types/generated/zod/endpoints.ts',
+    'src/types/generated/zod/schemas.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations

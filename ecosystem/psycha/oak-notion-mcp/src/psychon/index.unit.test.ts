@@ -22,49 +22,34 @@ describe('environment configuration', () => {
     }
   });
 
-  it('should load dotenv config before reading environment variables', async () => {
-    // This test verifies that the environment module loads dotenv
-    // before trying to read NOTION_API_KEY
+  it('should read environment variables directly without dotenv loading', async () => {
+    // This test verifies that the environment module reads env vars directly
+    // dotenv loading should be handled by the consuming application
 
     // Arrange
-    let dotenvCalledBeforeEnvRead = false;
-    let envReadAttempted = false;
-
-    // Mock dotenv to set the env var when config is called
-    vi.doMock('dotenv', () => ({
-      config: () => {
-        process.env.NOTION_API_KEY = 'test_key_from_dotenv';
-        dotenvCalledBeforeEnvRead = !envReadAttempted;
-        return {};
-      },
-    }));
+    process.env.NOTION_API_KEY = 'test_key_direct';
 
     // Mock the getString function to track when env is read
     vi.doMock('../chorai/phaneron/notion-config/env-utils', () => ({
       getString: (key: string) => {
-        if (key === 'NOTION_API_KEY') {
-          envReadAttempted = true;
-        }
         return process.env[key];
       },
       getBoolean: vi.fn(() => false),
       getNumber: vi.fn(() => 100),
-      getLogLevel: vi.fn(() => 'INFO'),
-      getEnum: vi.fn(() => 'production'),
-      BaseEnvironment: {},
-      loadDotenvIfNeeded: vi.fn(async () => {
-        // Simulate loading dotenv
-        const dotenv = await import('dotenv');
-        dotenv.config();
-      }),
+    }));
+
+    // Mock histos-logger
+    vi.doMock('@oaknational/mcp-histos-logger', () => ({
+      parseLogLevel: vi.fn(() => 'INFO'),
+      LOG_LEVEL_KEY: 'LOG_LEVEL',
+      ENABLE_DEBUG_LOGGING_KEY: 'ENABLE_DEBUG_LOGGING',
+      BaseLoggingEnvironment: {},
     }));
 
     // Act - Import the environment module using dynamic import
-    // This should trigger dotenv.config() then read env vars
     await import('../chorai/phaneron/notion-config/environment');
 
-    // Assert
-    expect(dotenvCalledBeforeEnvRead).toBe(true);
-    expect(process.env.NOTION_API_KEY).toBe('test_key_from_dotenv');
+    // Assert - Environment should read the value directly
+    expect(process.env.NOTION_API_KEY).toBe('test_key_direct');
   });
 });

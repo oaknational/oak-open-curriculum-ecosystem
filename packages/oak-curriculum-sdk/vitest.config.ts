@@ -1,3 +1,33 @@
-import { baseTestConfig } from '../../vitest.config.base';
+import { defineConfig } from 'vitest/config';
 
-export default baseTestConfig;
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'dist/',
+        'coverage/',
+        '**/*.d.ts',
+        '**/*.d.ts.map',
+        '**/*.config.*',
+        '**/*.test.*',
+        '**/*.spec.*',
+        '**/index.ts', // Often just re-exports
+      ],
+    },
+    include: [
+      'src/**/*.test.ts',
+      'src/**/*.spec.ts',
+      'tests/**/*.test.ts',
+      'tests/**/*.spec.ts',
+      'scripts/**/*.test.ts', // Add scripts directory
+      'scripts/**/*.spec.ts',
+    ],
+    exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
+  },
+});

@@ -3,6 +3,7 @@
  */
 
 import type { LogLevel } from './types.js';
+import { isObject } from '@oaknational/mcp-moria';
 
 /**
  * Converts semantic log level to numeric value
@@ -46,8 +47,10 @@ export function mergeLogContext(
 ): Record<string, unknown> {
   if (context === undefined) return base;
 
-  if (typeof context === 'object' && context !== null && !Array.isArray(context)) {
-    return { ...base, ...(context as Record<string, unknown>) };
+  // Use the centrally defined isObject type guard from Moria
+  if (isObject(context)) {
+    // context is now ValidatedObject (which is Record<string, unknown>)
+    return { ...base, ...context };
   }
 
   return { ...base, value: context };

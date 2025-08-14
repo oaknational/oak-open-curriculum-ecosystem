@@ -23,7 +23,7 @@
 
 ## Rules
 
-- **TDD** - ALWAYS use TDD. Write tests **FIRST**
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (failing *test*), Green (passing test, because product code is created at this point, *not before*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
 - **Test real behaviour, not implementation details** - We should be able to change *how* something works without breaking the test that proves *that* it works.
 - **Test to interfaces, not internals** - Tests should be written to the interfaces, not the internals. Closely related to test behaviour not implementation.
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
@@ -191,7 +191,7 @@ describe('Oak Notion MCP assembly', () => {
 // e2e-tests/oak-notion-mcp.e2e.test.ts
 describe('Oak Notion MCP E2E', () => {
   it('responds to MCP protocol requests', () => {
-    // Test complete system behavior
+    // Test complete system behaviour
   });
 });
 ```
@@ -229,7 +229,7 @@ describe('log formatter', () => {
 // chora/aither/logging/logger.integration.test.ts
 describe('logger integration', () => {
   it('flows through all layers when injected', () => {
-    // Test pervasive behavior with simple mocks
+    // Test pervasive behaviour with simple mocks
   });
 });
 ```
@@ -263,7 +263,7 @@ describe('Notion organ integration', () => {
     const mockLogger = createMockLogger();
     const mockConfig = { notionApiKey: 'test' };
     const notion = createNotionOperations({ logger: mockLogger, config: mockConfig });
-    // Test public API behavior
+    // Test public API behaviour
   });
 });
 ```

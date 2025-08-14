@@ -56,7 +56,9 @@ export const baseConfig = tsEslintConfig(
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': [
         'error',
-        { assertionStyle: 'as', objectLiteralTypeAssertions: 'never' },
+        {
+          assertionStyle: 'never',
+        },
       ],
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
@@ -106,8 +108,8 @@ export const baseConfig = tsEslintConfig(
       '@typescript-eslint/consistent-type-assertions': [
         'error',
         {
+          // Remove when possible.
           assertionStyle: 'as',
-          objectLiteralTypeAssertions: 'allow',
         },
       ],
     },

@@ -3,14 +3,6 @@
  * These were previously in oak-mcp-core but are now local to oak-notion-mcp
  */
 
-export type LogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-
-export interface BaseEnvironment {
-  LOG_LEVEL: LogLevel;
-  NODE_ENV: 'development' | 'production' | 'test';
-  ENABLE_DEBUG_LOGGING: boolean;
-}
-
 /**
  * Get a string value from environment variables
  */
@@ -74,25 +66,6 @@ export function getNumber(key: string, defaultValue?: number, min?: number, max?
 }
 
 /**
- * Get a log level from environment variables
- */
-export function getLogLevel(key: string, defaultValue: LogLevel = 'INFO'): LogLevel {
-  const value = process.env[key];
-  if (value === undefined) {
-    return defaultValue;
-  }
-
-  const upperValue = value.toUpperCase();
-  if (!['DEBUG', 'INFO', 'WARN', 'ERROR'].includes(upperValue)) {
-    throw new Error(
-      `Environment variable ${key} must be one of: DEBUG, INFO, WARN, ERROR, got: ${value}`,
-    );
-  }
-
-  return upperValue as LogLevel;
-}
-
-/**
  * Get an enum value from environment variables
  */
 export function getEnum<T extends readonly string[]>(
@@ -115,18 +88,4 @@ export function getEnum<T extends readonly string[]>(
   }
 
   return value;
-}
-
-/**
- * Load .env file if needed (in development)
- */
-export async function loadDotenvIfNeeded(): Promise<void> {
-  if (process.env.NODE_ENV !== 'production' && !process.env.NOTION_API_KEY) {
-    try {
-      const { config } = await import('dotenv');
-      config();
-    } catch {
-      // dotenv not available, ignore
-    }
-  }
 }

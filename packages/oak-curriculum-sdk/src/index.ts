@@ -28,7 +28,7 @@ export {
   isSubject,
   isLesson,
   isAssetType,
-  isSequenceType,
+  isSequence,
   isThreadSlug,
   isUnit,
   isValidParameterType,
@@ -39,8 +39,41 @@ export {
   SUBJECTS,
   LESSONS,
   ASSET_TYPES,
-  SEQUENCE_TYPES,
+  SEQUENCES,
   THREAD_SLUGS,
   UNITS,
   VALID_PATHS_BY_PARAMETERS,
 } from './types/generated/api-schema/path-parameters';
+
+// Programmatic exports for tool generation and raw schema access (additive)
+export { schema } from './types/generated/api-schema/api-schema';
+export { toolGeneration } from './tool-generation';
+export type { PathOperation } from './tool-generation';
+
+// Validation module exports (explicit for tree-shaking)
+export { validateRequest, validateResponse } from './validation/index';
+export type {
+  ValidationResult,
+  ValidationIssue,
+  ValidatedClientOptions,
+  HttpMethod,
+} from './validation/index';
+
+// MCP (Model Context Protocol) Tool Support
+// These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
+export { MCP_TOOLS_DATA, isMcpToolName, getMcpTool } from './types/generated/api-schema/mcp-tools';
+export type { McpToolName } from './types/generated/api-schema/mcp-tools';
+
+export { validateToolParameters } from './types/generated/api-schema/mcp-parameters';
+export type {
+  ToolParameters,
+  GetToolParameters,
+  GetToolResponse,
+  ToolResponseMap,
+} from './types/generated/api-schema/mcp-parameters';
+
+export {
+  MCP_TOOL_VALIDATORS,
+  validateToolResponse,
+} from './types/generated/api-schema/mcp-validators';
+export type { GetToolValidatedResponse } from './types/generated/api-schema/mcp-validators';

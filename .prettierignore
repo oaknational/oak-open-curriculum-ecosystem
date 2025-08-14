@@ -7,3 +7,49 @@ coverage
 pnpm-lock.yaml
 CHANGELOG.md
 reference
+
+# Generated files (DO NOT FORMAT)
+*.generated.ts
+*.generated.js
+*.generated.json
+*.generated.yaml
+*.generated.yml
+
+# All generated directories and their contents
+**/generated/**
+**/generated/
+*/generated/*
+
+# SDK generated types (explicitly listed for clarity)
+packages/oak-curriculum-sdk/src/types/generated/
+packages/oak-curriculum-sdk/src/schemas/generated/
+packages/oak-curriculum-sdk/src/validation/generated/
+
+# MCP generated tools
+ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/generated/
+ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/generation/
+ecosystem/psycha/oak-curriculum-mcp/src/chorai/generated/
+
+# API schema files
+**/*.api.json
+**/*.schema.json
+**/api-schema.json
+**/api-schema.ts
+**/api-schema.d.ts
+**/api-paths-types.ts
+**/api-paths-types.d.ts
+**/path-parameters.ts
+**/path-parameters.d.ts
+
+# Zod generated schemas
+**/zod/schemas.ts
+**/zod/endpoints.ts
+
+# Test output and cache
+test-results/
+test-cache/
+.turbo/
+
+# Agent artifacts
+.agent/cache/
+.agent/artifacts/

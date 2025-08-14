@@ -55,69 +55,13 @@ function validateArgsObject(args: unknown): Record<string, unknown> {
 }
 
 /**
- * Extract optional string field
- */
-function getOptionalStringField(obj: Record<string, unknown>, field: string): string | undefined {
-  if (hasProperty(obj, field) && typeof obj[field] === 'string') {
-    return obj[field];
-  }
-  return undefined;
-}
-
-/**
- * Parse and validate search lesson arguments
- */
-function parseSearchLessonArgs(args: unknown): {
-  query: string;
-  keyStage?: string;
-  subject?: string;
-} {
-  const searchArgs = validateArgsObject(args ?? {});
-
-  if (!hasProperty(searchArgs, 'query') || typeof searchArgs.query !== 'string') {
-    throw new Error('Missing or invalid required parameter: query');
-  }
-
-  return {
-    query: searchArgs.query,
-    keyStage: getOptionalStringField(searchArgs, 'keyStage'),
-    subject: getOptionalStringField(searchArgs, 'subject'),
-  };
-}
-
-/**
- * Parse and validate get lesson arguments
- */
-function parseGetLessonArgs(args: unknown): { lessonSlug: string } {
-  const lessonArgs = validateArgsObject(args ?? {});
-
-  if (!hasProperty(lessonArgs, 'lessonSlug') || typeof lessonArgs.lessonSlug !== 'string') {
-    throw new Error('Missing or invalid required parameter: lessonSlug');
-  }
-
-  return { lessonSlug: lessonArgs.lessonSlug };
-}
-
-/**
  * Execute a tool based on its name
  */
 async function executeTool(toolName: string, args: unknown, mcpOrgan: McpOrgan): Promise<unknown> {
-  switch (toolName) {
-    case 'oak-search-lessons': {
-      const params = parseSearchLessonArgs(args);
-      return await mcpOrgan.handleTool('oak-search-lessons', params);
-    }
-    case 'oak-get-lesson': {
-      const params = parseGetLessonArgs(args);
-      return await mcpOrgan.handleTool('oak-get-lesson', params);
-    }
-    case 'oak-list-key-stages':
-      return await mcpOrgan.handleTool('oak-list-key-stages', {});
-    case 'oak-list-subjects':
-      return await mcpOrgan.handleTool('oak-list-subjects', {});
-    default:
-      throw new Error(`Unknown tool: ${toolName}`);
-  }
+  // For now, delegate all tools to the generic handler
+  // The handler will be responsible for routing to the correct implementation
+  const validatedArgs = validateArgsObject(args ?? {});
+  return await mcpOrgan.handleTool(toolName, validatedArgs);
 }
 
 /**
@@ -230,9 +174,15 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   // Parse log level from environment
   const logLevel = process.env.LOG_LEVEL;
   const validLogLevels = ['debug', 'info', 'warn', 'error'] as const;
-  const parsedLogLevel = validLogLevels.includes(logLevel as (typeof validLogLevels)[number])
-    ? (logLevel as (typeof validLogLevels)[number])
-    : 'info';
+  type ValidLogLevel = (typeof validLogLevels)[number];
+
+  function isValidLogLevel(value: unknown): value is ValidLogLevel {
+    if (typeof value !== 'string') return false;
+    const stringValidLogLevels: readonly string[] = validLogLevels;
+    return stringValidLogLevels.includes(value);
+  }
+
+  const parsedLogLevel = isValidLogLevel(logLevel) ? logLevel : 'info';
 
   createServer({
     apiKey: process.env.OAK_API_KEY,

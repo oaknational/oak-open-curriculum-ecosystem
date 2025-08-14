@@ -5,6 +5,7 @@
   "description": "MCP ecosystem - A collection of MCP servers and supporting framework and libraries",
   "type": "module",
   "scripts": {
+    "type-gen": "turbo run --continue type-gen",
     "build": "turbo run --continue build",
     "clean": "turbo run --continue clean",
     "dev": "turbo run --continue dev",

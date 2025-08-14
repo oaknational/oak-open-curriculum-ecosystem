@@ -2,7 +2,9 @@
  * Shared types and utilities for the logger module
  */
 
-export type LogLevel = 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL';
+import type { LogLevel } from './log-levels.js';
+
+export type { LogLevel };
 
 export interface LoggerOptions {
   level?: number | LogLevel;

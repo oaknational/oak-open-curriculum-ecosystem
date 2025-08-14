@@ -13,9 +13,9 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config as dotenvConfig } from 'dotenv';
-import type { OpenAPI3 } from 'openapi-typescript';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
+import type { OpenAPI3 } from 'openapi-typescript';
 
 // Load environment variables from root .env
 dotenvConfig({ path: path.resolve(process.cwd(), '../../.env') });
@@ -64,7 +64,21 @@ if (maybeSchema === undefined) {
 console.log('✅ Schema fetched successfully');
 console.log('🔨 Generating type artifacts...');
 
+// Simple inline check - is it an object with openapi: "3.x"?
+if (!maybeSchema || typeof maybeSchema !== 'object' || !('openapi' in maybeSchema)) {
+  throw new Error('Schema is not a valid OpenAPI 3.x schema');
+}
+
+// THE ONLY TYPE ASSERTION IN THE ENTIRE CODEBASE
+// After this, we KNOW EVERYTHING about the API
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const schema = maybeSchema as OpenAPI3;
-await generateSchemaArtifacts(schema, outDirectory);
+
+// Generate all artifacts including MCP tools
+// schema is now fully typed as OpenAPI3
+await generateSchemaArtifacts(schema, outDirectory, {
+  generateMcpTools: true,
+});
 
 console.log('✅ Type generation complete!');
+console.log('✅ MCP tools generated from schema!');

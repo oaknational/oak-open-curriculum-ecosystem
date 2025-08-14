@@ -1,27 +1,26 @@
 /**
- * Minimal OpenAPI 3.0 type definitions needed for type generation
+ * Re-export OpenAPI types from openapi-typescript
  *
- * These are a subset of the full OpenAPI specification,
- * focused on what we need for the Oak Curriculum API
+ * We use the library types directly instead of defining our own.
+ * This ensures we have complete type information after schema validation.
  */
 
-export interface OpenAPISchema {
-  type?: string;
-  properties?: Record<string, OpenAPISchema>;
-  items?: OpenAPISchema;
-  enum?: string[];
-  required?: string[];
-  nullable?: boolean;
-}
-
-export interface OpenAPI3 {
-  openapi: string;
-  info: {
-    title: string;
-    version: string;
-  };
-  paths: Record<string, unknown>;
-  components?: {
-    schemas?: Record<string, OpenAPISchema>;
-  };
-}
+export type {
+  OpenAPI3,
+  PathsObject,
+  PathItemObject,
+  OperationObject,
+  ParameterObject,
+  ResponseObject,
+  RequestBodyObject,
+  SchemaObject,
+  ComponentsObject,
+  ReferenceObject,
+  ResponsesObject,
+  MediaTypeObject,
+  HeaderObject,
+  SecurityRequirementObject,
+  ServerObject,
+  ExternalDocumentationObject,
+  TagObject,
+} from 'openapi-typescript';

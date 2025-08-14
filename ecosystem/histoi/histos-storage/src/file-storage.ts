@@ -4,9 +4,10 @@
 
 import type { StorageProvider } from '@oaknational/mcp-moria';
 
+// BufferEncoding is a global type from Node.js
 export interface FileSystemInterface {
-  readFile(path: string, encoding: string): Promise<string>;
-  writeFile(path: string, data: string, encoding: string): Promise<void>;
+  readFile(path: string, encoding: BufferEncoding): Promise<string>;
+  writeFile(path: string, data: string, encoding?: BufferEncoding): Promise<void>;
   unlink(path: string): Promise<void>;
   access(path: string): Promise<void>;
   readdir(path: string): Promise<string[]>;
@@ -27,7 +28,14 @@ function createFileOps(fs: FileSystemInterface, path: PathInterface, dir: string
     async get(key: string): Promise<string | null> {
       try {
         const content = await fs.readFile(getFilePath(key), 'utf-8');
-        return JSON.parse(content) as string;
+        // EXTERNAL BOUNDARY: Validate JSON content from file system
+        const parsed: unknown = JSON.parse(content);
+        // We expect the stored value to be a string
+        if (typeof parsed === 'string') {
+          return parsed;
+        }
+        // If not a string, return null (invalid data)
+        return null;
       } catch {
         return null;
       }

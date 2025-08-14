@@ -2,7 +2,6 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Logger } from '@oaknational/mcp-moria';
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import type { BaseEnvironment } from '../chorai/phaneron/notion-config/env-utils';
 
 export interface ServerSetupDependencies {
   transport: StdioServerTransport;
@@ -30,7 +29,7 @@ async function loadEnvironment(log: ServerSetupDependencies['log']) {
  * Creates all server dependencies
  */
 async function createServerDependencies(
-  environment: BaseEnvironment,
+  environment: Awaited<ReturnType<typeof loadEnvironment>>,
   log: ServerSetupDependencies['log'],
 ): Promise<{
   logger: Logger;

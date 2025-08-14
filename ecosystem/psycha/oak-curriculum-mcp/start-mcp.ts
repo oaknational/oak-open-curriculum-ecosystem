@@ -38,9 +38,15 @@ try {
   // Parse log level from environment
   const logLevel = process.env.LOG_LEVEL;
   const validLogLevels = ['debug', 'info', 'warn', 'error'] as const;
-  const parsedLogLevel = validLogLevels.includes(logLevel as (typeof validLogLevels)[number])
-    ? (logLevel as (typeof validLogLevels)[number])
-    : 'info';
+  type ValidLogLevel = (typeof validLogLevels)[number];
+
+  function isValidLogLevel(value: unknown): value is ValidLogLevel {
+    if (typeof value !== 'string') return false;
+    const stringValidLogLevels: readonly string[] = validLogLevels;
+    return stringValidLogLevels.includes(value);
+  }
+
+  const parsedLogLevel = isValidLogLevel(logLevel) ? logLevel : 'info';
 
   log(`[START-MCP] Starting server with log level: ${parsedLogLevel}`);
 

@@ -67,7 +67,7 @@ export type {
   AsyncQuery,
   IO,
   Computation,
-} from './types';
+} from './types/index.js';
 
 export {
   // Result utilities
@@ -91,7 +91,14 @@ export {
   chainEffect,
   combineEffects,
   sequenceEffects,
-} from './types';
+  // External boundary utilities - ONLY for validating external data
+  isObject,
+  isEnvironmentObject,
+  hasProperty,
+  hasNestedProperty,
+  extractProperty,
+  extractNestedProperty,
+} from './types/index.js';
 
 // Export all interfaces
 export type {
@@ -110,7 +117,7 @@ export type {
   ReadableStream,
   WritableStream,
   DuplexStream,
-} from './interfaces';
+} from './interfaces/index.js';
 
 // Export patterns (used by oak-notion-mcp)
 export type {
@@ -132,4 +139,4 @@ export type {
   Tool,
   ToolRegistry,
   ToolValidator,
-} from './patterns';
+} from './patterns/index.js';

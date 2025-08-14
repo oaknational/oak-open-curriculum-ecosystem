@@ -1,21 +1,22 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * This file is generated from the API schema during type generation.
- *
+ * 
  * This file contains the tuples, types and type guards for the path parameters, for use in dynamically constructing API requests.
- *
+ * 
  * It also contains the valid parameter combinations for different paths.
  */
 
 // Link to the processed schema for use with the OpenAPI-Fetch client.
-import type { paths as Paths } from './api-paths-types';
+import type { paths as Paths } from "./api-paths-types";
 // Link to the schema runtime object file.
 /**
  * The Schema["paths"] keys are the same as the Paths type keys, but the types are different.
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
-import type { Schema } from './api-schema';
-import { schema } from './api-schema';
+import type { Schema } from "./api-schema";
+import { schema } from "./api-schema";
+
 
 type ValidPath = keyof Paths;
 /**
@@ -25,14 +26,10 @@ export const PATHS = {
   '/changelog': '/changelog',
   '/changelog/latest': '/changelog/latest',
   '/key-stages': '/key-stages',
-  '/key-stages/{keyStage}/subject/{subject}/assets':
-    '/key-stages/{keyStage}/subject/{subject}/assets',
-  '/key-stages/{keyStage}/subject/{subject}/lessons':
-    '/key-stages/{keyStage}/subject/{subject}/lessons',
-  '/key-stages/{keyStage}/subject/{subject}/questions':
-    '/key-stages/{keyStage}/subject/{subject}/questions',
-  '/key-stages/{keyStage}/subject/{subject}/units':
-    '/key-stages/{keyStage}/subject/{subject}/units',
+  '/key-stages/{keyStage}/subject/{subject}/assets': '/key-stages/{keyStage}/subject/{subject}/assets',
+  '/key-stages/{keyStage}/subject/{subject}/lessons': '/key-stages/{keyStage}/subject/{subject}/lessons',
+  '/key-stages/{keyStage}/subject/{subject}/questions': '/key-stages/{keyStage}/subject/{subject}/questions',
+  '/key-stages/{keyStage}/subject/{subject}/units': '/key-stages/{keyStage}/subject/{subject}/units',
   '/lessons/{lesson}/assets': '/lessons/{lesson}/assets',
   '/lessons/{lesson}/assets/{type}': '/lessons/{lesson}/assets/{type}',
   '/lessons/{lesson}/quiz': '/lessons/{lesson}/quiz',
@@ -51,13 +48,13 @@ export const PATHS = {
   '/subjects/{subject}/years': '/subjects/{subject}/years',
   '/threads': '/threads',
   '/threads/{threadSlug}/units': '/threads/{threadSlug}/units',
-  '/units/{unit}/summary': '/units/{unit}/summary',
+  '/units/{unit}/summary': '/units/{unit}/summary'
 } as const;
 
 /**
  * Types derived from the runtime schema object.
- */
-type RawPaths = Schema['paths'];
+*/
+type RawPaths = Schema["paths"];
 
 export function isValidPath(value: string): value is ValidPath {
   const paths = Object.keys(schema.paths);
@@ -66,7 +63,7 @@ export function isValidPath(value: string): value is ValidPath {
 export const apiPaths: RawPaths = schema.paths;
 
 // A union type of the allowed methods for all paths
-type AllowedMethods = keyof RawPaths[keyof RawPaths];
+type AllowedMethods = keyof (RawPaths[keyof RawPaths]);
 
 const allowedMethodsSet = new Set<AllowedMethods>();
 for (const path in schema.paths) {
@@ -75,13 +72,19 @@ for (const path in schema.paths) {
   }
   const methods = Object.keys(schema.paths[path]);
   for (const method of methods) {
-    allowedMethodsSet.add(method as AllowedMethods);
+    // TypeScript has already determined what AllowedMethods can be
+    // We just need to add it with proper type assertion since we know it's valid
+    if (method === 'get' || method === 'post' || method === 'put' || method === 'delete' || method === 'patch' || method === 'head' || method === 'options') {
+      allowedMethodsSet.add(method as AllowedMethods);
+    }
   }
 }
 
 // The full set of allowed methods for all paths.
 export const allowedMethods: AllowedMethods[] = [...allowedMethodsSet];
-export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMethods {
+export function isAllowedMethod(
+  maybeMethod: string
+): maybeMethod is AllowedMethods {
   const methods: readonly string[] = allowedMethods;
   return methods.includes(maybeMethod);
 }
@@ -89,19 +92,24 @@ export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMeth
 /**
  * For each path, and each method within that path,
  * map to the return type of a 200 response.
- *
+ * 
  * This works because the raw schema type and the OpenAPI-TS type use the path as the key.
  */
 export type PathReturnTypes = {
   [P in ValidPath]: {
-    get: Paths[P]['get']['responses'][200]['content']['application/json'];
-  };
+    "get": Paths[P]["get"]["responses"][200]["content"]["application/json"];
+  }
 };
 
 /**
- * Key stages extracted from the API schema
+ * KeyStages extracted from the API schema
  */
-export const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+export const KEY_STAGES = [
+  "ks1",
+  "ks2",
+  "ks3",
+  "ks4"
+] as const;
 type KeyStages = typeof KEY_STAGES;
 export type KeyStage = KeyStages[number];
 export function isKeyStage(value: string): value is KeyStage {
@@ -113,23 +121,23 @@ export function isKeyStage(value: string): value is KeyStage {
  * Subjects extracted from the API schema
  */
 export const SUBJECTS = [
-  'art',
-  'citizenship',
-  'computing',
-  'cooking-nutrition',
-  'design-technology',
-  'english',
-  'french',
-  'geography',
-  'german',
-  'history',
-  'maths',
-  'music',
-  'physical-education',
-  'religious-education',
-  'rshe-pshe',
-  'science',
-  'spanish',
+  "art",
+  "citizenship",
+  "computing",
+  "cooking-nutrition",
+  "design-technology",
+  "english",
+  "french",
+  "geography",
+  "german",
+  "history",
+  "maths",
+  "music",
+  "physical-education",
+  "religious-education",
+  "rshe-pshe",
+  "science",
+  "spanish"
 ] as const;
 type Subjects = typeof SUBJECTS;
 export type Subject = Subjects[number];
@@ -150,18 +158,18 @@ export function isLesson(value: string): value is Lesson {
 }
 
 /**
- * Asset types extracted from the API schema
+ * AssetTypes extracted from the API schema
  */
 export const ASSET_TYPES = [
-  'slideDeck',
-  'exitQuiz',
-  'exitQuizAnswers',
-  'starterQuiz',
-  'starterQuizAnswers',
-  'supplementaryResource',
-  'video',
-  'worksheet',
-  'worksheetAnswers',
+  "slideDeck",
+  "exitQuiz",
+  "exitQuizAnswers",
+  "starterQuiz",
+  "starterQuizAnswers",
+  "supplementaryResource",
+  "video",
+  "worksheet",
+  "worksheetAnswers"
 ] as const;
 type AssetTypes = typeof ASSET_TYPES;
 export type AssetType = AssetTypes[number];
@@ -171,18 +179,18 @@ export function isAssetType(value: string): value is AssetType {
 }
 
 /**
- * Sequence types extracted from the API schema
+ * Sequences extracted from the API schema
  */
-export const SEQUENCE_TYPES = [] as const;
-type SequenceTypes = typeof SEQUENCE_TYPES;
-export type SequenceType = SequenceTypes[number];
-export function isSequenceType(value: string): value is SequenceType {
-  const sequenceTypes: readonly string[] = SEQUENCE_TYPES;
-  return sequenceTypes.includes(value);
+export const SEQUENCES = [] as const;
+type Sequences = typeof SEQUENCES;
+export type Sequence = Sequences[number];
+export function isSequence(value: string): value is Sequence {
+  const sequences: readonly string[] = SEQUENCES;
+  return sequences.includes(value);
 }
 
 /**
- * Thread slugs extracted from the API schema
+ * ThreadSlugs extracted from the API schema
  */
 export const THREAD_SLUGS = [] as const;
 type ThreadSlugs = typeof THREAD_SLUGS;
@@ -211,7 +219,7 @@ interface PathParameters {
   subject: Subjects;
   lesson: Lessons;
   type: AssetTypes;
-  sequence: SequenceTypes;
+  sequence: Sequences;
   threadSlug: ThreadSlugs;
   unit: Units;
 }
@@ -221,7 +229,7 @@ export const PATH_PARAMETERS: PathParameters = {
   subject: SUBJECTS,
   lesson: LESSONS,
   type: ASSET_TYPES,
-  sequence: SEQUENCE_TYPES,
+  sequence: SEQUENCES,
   threadSlug: THREAD_SLUGS,
   unit: UNITS,
 } as const;
@@ -237,7 +245,7 @@ export type PathParameterValues = {
  * Type guard for parameter types
  */
 export function isValidParameterType(
-  parameterType: string,
+  parameterType: string
 ): parameterType is keyof PathParameterValues {
   return parameterType in PATH_PARAMETERS;
 }
@@ -247,30 +255,26 @@ export function isValidParameterType(
  */
 export function isValidPathParameter<K extends keyof PathParameterValues>(
   parameterType: K,
-  value: string,
+  value: string
 ): value is PathParameterValues[K] {
-  const allowedValues: readonly string[] = PATH_PARAMETERS[parameterType];
-  return allowedValues.length === 0 ? typeof value === 'string' : allowedValues.includes(value);
-}
+  const allowedValues: readonly string[] = PATH_PARAMETERS[parameterType]
+  return allowedValues.length === 0 ? typeof value === "string" : allowedValues.includes(value)
+};
 
 /**
  * Path grouping keys
  */
-type PathGroupingKeys =
-  | 'NO_PARAMS'
-  | 'keyStage_AND_subject'
-  | 'lesson'
-  | 'lesson_AND_type'
-  | 'sequence'
-  | 'subject'
-  | 'threadSlug'
-  | 'unit';
+type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "subject" | "threadSlug" | "unit";
+
 
 /**
  * Type for a valid parameter combination, linking to the paths types file.
  */
 // Parametrise ValidParameterCombination with both the path and the path key
-interface ValidParameterCombination<P extends ValidPath, K extends PathGroupingKeys> {
+interface ValidParameterCombination<
+  P extends ValidPath,
+  K extends PathGroupingKeys
+> {
   params?: string;
   path: P;
   paramsKey: K; // This ensures paramsKey matches the K type parameter, enabling type narrowing based on the path key
@@ -287,154 +291,951 @@ type ValidPathGroupings = {
   [K in PathGroupingKeys]: ValidPathAndParameters<K>;
 };
 
+
+
 /**
  * Valid combinations of parameters for different paths
  */
 export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
-  keyStage_AND_subject: {
-    '/key-stages/{keyStage}/subject/{subject}/assets': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/assets',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/lessons': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/lessons',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/questions': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/questions',
-      paramsKey: 'keyStage_AND_subject',
-    },
-    '/key-stages/{keyStage}/subject/{subject}/units': {
-      params: 'keyStage, subject',
-      path: '/key-stages/{keyStage}/subject/{subject}/units',
-      paramsKey: 'keyStage_AND_subject',
-    },
+"keyStage_subject": {
+  "/key-stages/{keyStage}/subject/{subject}/assets": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/assets",
+    "paramsKey": "keyStage_subject"
   },
-  lesson: {
-    '/lessons/{lesson}/assets': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/assets',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/quiz': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/quiz',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/summary': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/summary',
-      paramsKey: 'lesson',
-    },
-    '/lessons/{lesson}/transcript': {
-      params: 'lesson',
-      path: '/lessons/{lesson}/transcript',
-      paramsKey: 'lesson',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/lessons": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
+    "paramsKey": "keyStage_subject"
   },
-  lesson_AND_type: {
-    '/lessons/{lesson}/assets/{type}': {
-      params: 'lesson, type',
-      path: '/lessons/{lesson}/assets/{type}',
-      paramsKey: 'lesson_AND_type',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/questions": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/questions",
+    "paramsKey": "keyStage_subject"
   },
-  NO_PARAMS: {
-    '/changelog': {
-      params: '',
-      path: '/changelog',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/changelog/latest': {
-      params: '',
-      path: '/changelog/latest',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/key-stages': {
-      params: '',
-      path: '/key-stages',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/rate-limit': {
-      params: '',
-      path: '/rate-limit',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/search/lessons': {
-      params: '',
-      path: '/search/lessons',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/search/transcripts': {
-      params: '',
-      path: '/search/transcripts',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/subjects': {
-      params: '',
-      path: '/subjects',
-      paramsKey: 'NO_PARAMS',
-    },
-    '/threads': {
-      params: '',
-      path: '/threads',
-      paramsKey: 'NO_PARAMS',
-    },
+  "/key-stages/{keyStage}/subject/{subject}/units": {
+    "params": "keyStage, subject",
+    "path": "/key-stages/{keyStage}/subject/{subject}/units",
+    "paramsKey": "keyStage_subject"
+  }
+}, "lesson": {
+  "/lessons/{lesson}/assets": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/assets",
+    "paramsKey": "lesson"
   },
-  sequence: {
-    '/sequences/{sequence}/assets': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/assets',
-      paramsKey: 'sequence',
-    },
-    '/sequences/{sequence}/questions': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/questions',
-      paramsKey: 'sequence',
-    },
-    '/sequences/{sequence}/units': {
-      params: 'sequence',
-      path: '/sequences/{sequence}/units',
-      paramsKey: 'sequence',
-    },
+  "/lessons/{lesson}/quiz": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/quiz",
+    "paramsKey": "lesson"
   },
-  subject: {
-    '/subjects/{subject}': {
-      params: 'subject',
-      path: '/subjects/{subject}',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/key-stages': {
-      params: 'subject',
-      path: '/subjects/{subject}/key-stages',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/sequences': {
-      params: 'subject',
-      path: '/subjects/{subject}/sequences',
-      paramsKey: 'subject',
-    },
-    '/subjects/{subject}/years': {
-      params: 'subject',
-      path: '/subjects/{subject}/years',
-      paramsKey: 'subject',
-    },
+  "/lessons/{lesson}/summary": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/summary",
+    "paramsKey": "lesson"
   },
-  threadSlug: {
-    '/threads/{threadSlug}/units': {
-      params: 'threadSlug',
-      path: '/threads/{threadSlug}/units',
-      paramsKey: 'threadSlug',
-    },
+  "/lessons/{lesson}/transcript": {
+    "params": "lesson",
+    "path": "/lessons/{lesson}/transcript",
+    "paramsKey": "lesson"
+  }
+}, "lesson_type": {
+  "/lessons/{lesson}/assets/{type}": {
+    "params": "lesson, type",
+    "path": "/lessons/{lesson}/assets/{type}",
+    "paramsKey": "lesson_type"
+  }
+}, "NO_PARAMS": {
+  "/changelog": {
+    "path": "/changelog",
+    "paramsKey": "NO_PARAMS"
   },
-  unit: {
-    '/units/{unit}/summary': {
-      params: 'unit',
-      path: '/units/{unit}/summary',
-      paramsKey: 'unit',
-    },
+  "/changelog/latest": {
+    "path": "/changelog/latest",
+    "paramsKey": "NO_PARAMS"
   },
+  "/key-stages": {
+    "path": "/key-stages",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/rate-limit": {
+    "path": "/rate-limit",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/search/lessons": {
+    "path": "/search/lessons",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/search/transcripts": {
+    "path": "/search/transcripts",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/subjects": {
+    "path": "/subjects",
+    "paramsKey": "NO_PARAMS"
+  },
+  "/threads": {
+    "path": "/threads",
+    "paramsKey": "NO_PARAMS"
+  }
+}, "sequence": {
+  "/sequences/{sequence}/assets": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/assets",
+    "paramsKey": "sequence"
+  },
+  "/sequences/{sequence}/questions": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/questions",
+    "paramsKey": "sequence"
+  },
+  "/sequences/{sequence}/units": {
+    "params": "sequence",
+    "path": "/sequences/{sequence}/units",
+    "paramsKey": "sequence"
+  }
+}, "subject": {
+  "/subjects/{subject}": {
+    "params": "subject",
+    "path": "/subjects/{subject}",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/key-stages": {
+    "params": "subject",
+    "path": "/subjects/{subject}/key-stages",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/sequences": {
+    "params": "subject",
+    "path": "/subjects/{subject}/sequences",
+    "paramsKey": "subject"
+  },
+  "/subjects/{subject}/years": {
+    "params": "subject",
+    "path": "/subjects/{subject}/years",
+    "paramsKey": "subject"
+  }
+}, "threadSlug": {
+  "/threads/{threadSlug}/units": {
+    "params": "threadSlug",
+    "path": "/threads/{threadSlug}/units",
+    "paramsKey": "threadSlug"
+  }
+}, "unit": {
+  "/units/{unit}/summary": {
+    "params": "unit",
+    "path": "/units/{unit}/summary",
+    "paramsKey": "unit"
+  }
+}
 };
+
+/**
+ * All path operations extracted from the OpenAPI schema
+ * Generated at build time for runtime use
+ */
+export const PATH_OPERATIONS = [
+  {
+    "path": "/sequences/{sequence}/units",
+    "method": "get",
+    "operationId": "getSequences-getSequenceUnits",
+    "description": "",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "sequence",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "english-primary"
+        }
+      },
+      {
+        "in": "query",
+        "name": "year",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "all-years"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "path": "/lessons/{lesson}/transcript",
+    "method": "get",
+    "operationId": "getLessonTranscript-getLessonTranscript",
+    "description": "This endpoint returns the transcript from the video from a lesson",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lesson",
+        "description": "The slug of the lesson",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "checking-understanding-of-basic-transformations"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/search/transcripts",
+    "method": "get",
+    "operationId": "searchTranscripts-searchTranscripts",
+    "description": "Search for a term and find lessons that contain similar text in their video transcripts",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "q",
+        "description": "A snippet of text to search for in the lesson video transcripts",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "Who were the romans?"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/sequences/{sequence}/assets",
+    "method": "get",
+    "operationId": "getAssets-getSequenceAssets",
+    "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "sequence",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "maths-secondary"
+        }
+      },
+      {
+        "in": "query",
+        "name": "year",
+        "schema": {
+          "type": "number"
+        }
+      },
+      {
+        "in": "query",
+        "name": "type",
+        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "slideDeck",
+            "exitQuiz",
+            "exitQuizAnswers",
+            "starterQuiz",
+            "starterQuizAnswers",
+            "supplementaryResource",
+            "video",
+            "worksheet",
+            "worksheetAnswers"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "path": "/key-stages/{keyStage}/subject/{subject}/assets",
+    "method": "get",
+    "operationId": "getAssets-getSubjectAssets",
+    "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "keyStage",
+        "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ],
+          "example": "ks1"
+        }
+      },
+      {
+        "in": "path",
+        "name": "subject",
+        "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ],
+          "example": "english"
+        }
+      },
+      {
+        "in": "query",
+        "name": "type",
+        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "slideDeck",
+            "exitQuiz",
+            "exitQuizAnswers",
+            "starterQuiz",
+            "starterQuizAnswers",
+            "supplementaryResource",
+            "video",
+            "worksheet",
+            "worksheetAnswers"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "unit",
+        "description": "Optional unit slug to additionally filter by",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/lessons/{lesson}/assets",
+    "method": "get",
+    "operationId": "getAssets-getLessonAssets",
+    "description": "This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lesson",
+        "description": "The lesson slug",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "child-workers-in-the-victorian-era"
+        }
+      },
+      {
+        "in": "query",
+        "name": "type",
+        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "slideDeck",
+            "exitQuiz",
+            "exitQuizAnswers",
+            "starterQuiz",
+            "starterQuizAnswers",
+            "supplementaryResource",
+            "video",
+            "worksheet",
+            "worksheetAnswers"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "path": "/lessons/{lesson}/assets/{type}",
+    "method": "get",
+    "operationId": "getAssets-getLessonAsset",
+    "description": "This endpoint will stream the downloadable asset for the given lesson and type",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lesson",
+        "description": "The lesson slug",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "child-workers-in-the-victorian-era"
+        }
+      },
+      {
+        "in": "path",
+        "name": "type",
+        "description": "Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "slideDeck",
+            "exitQuiz",
+            "exitQuizAnswers",
+            "starterQuiz",
+            "starterQuizAnswers",
+            "supplementaryResource",
+            "video",
+            "worksheet",
+            "worksheetAnswers"
+          ],
+          "example": "slideDeck"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/subjects",
+    "method": "get",
+    "operationId": "getSubjects-getAllSubjects",
+    "description": "This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak",
+    "parameters": []
+  },
+  {
+    "path": "/subjects/{subject}",
+    "method": "get",
+    "operationId": "getSubjects-getSubject",
+    "description": "This endpoint returns a single subject and associated sequences, key stages and years.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "subject",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "art"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/subjects/{subject}/sequences",
+    "method": "get",
+    "operationId": "getSubjects-getSubjectSequence",
+    "description": "List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "subject",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "art"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/subjects/{subject}/key-stages",
+    "method": "get",
+    "operationId": "getSubjects-getSubjectKeyStages",
+    "description": "List of the key stages a subject is taught in.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "subject",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "art"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/subjects/{subject}/years",
+    "method": "get",
+    "operationId": "getSubjects-getSubjectYears",
+    "description": "List of the years a subject is taught in.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "subject",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "art"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/key-stages",
+    "method": "get",
+    "operationId": "getKeyStages-getKeyStages",
+    "description": "This endpoint returns all the key stages (titles and slugs) that are currently available on Oak",
+    "parameters": []
+  },
+  {
+    "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
+    "method": "get",
+    "operationId": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
+    "description": "This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "keyStage",
+        "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ],
+          "example": "ks1"
+        }
+      },
+      {
+        "in": "path",
+        "name": "subject",
+        "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ],
+          "example": "english"
+        }
+      },
+      {
+        "in": "query",
+        "name": "unit",
+        "description": "Optional unit slug to additionally filter by",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "offset",
+        "schema": {
+          "type": "number",
+          "default": 0
+        }
+      },
+      {
+        "in": "query",
+        "name": "limit",
+        "description": "Limit the number of results returned, max 100",
+        "schema": {
+          "type": "number",
+          "maximum": 100,
+          "default": 10
+        }
+      }
+    ]
+  },
+  {
+    "path": "/key-stages/{keyStage}/subject/{subject}/units",
+    "method": "get",
+    "operationId": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
+    "description": "This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "keyStage",
+        "description": "Key stage slug to filter by, e.g. 'ks2'",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ],
+          "example": "ks1"
+        }
+      },
+      {
+        "in": "path",
+        "name": "subject",
+        "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ],
+          "example": "art"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/lessons/{lesson}/quiz",
+    "method": "get",
+    "operationId": "getQuestions-getQuestionsForLessons",
+    "description": "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lesson",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "joining-using-and"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/sequences/{sequence}/questions",
+    "method": "get",
+    "operationId": "getQuestions-getQuestionsForSequence",
+    "description": "This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "sequence",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "maths-secondary"
+        }
+      },
+      {
+        "in": "query",
+        "name": "year",
+        "schema": {
+          "type": "number"
+        }
+      },
+      {
+        "in": "query",
+        "name": "offset",
+        "schema": {
+          "type": "number",
+          "default": 0
+        }
+      },
+      {
+        "in": "query",
+        "name": "limit",
+        "description": "Limit the number of results returned, max 100",
+        "schema": {
+          "type": "number",
+          "maximum": 100,
+          "default": 10
+        }
+      }
+    ]
+  },
+  {
+    "path": "/key-stages/{keyStage}/subject/{subject}/questions",
+    "method": "get",
+    "operationId": "getQuestions-getQuestionsForKeyStageAndSubject",
+    "description": "This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "keyStage",
+        "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ],
+          "example": "ks1"
+        }
+      },
+      {
+        "in": "path",
+        "name": "subject",
+        "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ],
+          "example": "art"
+        }
+      },
+      {
+        "in": "query",
+        "name": "offset",
+        "schema": {
+          "type": "number",
+          "default": 0
+        }
+      },
+      {
+        "in": "query",
+        "name": "limit",
+        "description": "Limit the number of results returned, max 100",
+        "schema": {
+          "type": "number",
+          "maximum": 100,
+          "default": 10,
+          "example": 10
+        }
+      }
+    ]
+  },
+  {
+    "path": "/lessons/{lesson}/summary",
+    "method": "get",
+    "operationId": "getLessons-getLesson",
+    "description": "This endpoint returns a summary for a given lesson",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "lesson",
+        "description": "The slug of the lesson",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "joining-using-and"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/search/lessons",
+    "method": "get",
+    "operationId": "getLessons-searchByTextSimilarity",
+    "description": "This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in",
+    "parameters": [
+      {
+        "in": "query",
+        "name": "q",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "gothic"
+        }
+      },
+      {
+        "in": "query",
+        "name": "keyStage",
+        "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ks1",
+            "ks2",
+            "ks3",
+            "ks4"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "subject",
+        "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "art",
+            "citizenship",
+            "computing",
+            "cooking-nutrition",
+            "design-technology",
+            "english",
+            "french",
+            "geography",
+            "german",
+            "history",
+            "maths",
+            "music",
+            "physical-education",
+            "religious-education",
+            "rshe-pshe",
+            "science",
+            "spanish"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "unit",
+        "description": "Optional unit slug to additionally filter by",
+        "schema": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/units/{unit}/summary",
+    "method": "get",
+    "operationId": "getUnits-getUnit",
+    "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "unit",
+        "description": "The unit slug",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "simple-compound-and-adverbial-complex-sentences"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/threads",
+    "method": "get",
+    "operationId": "getThreads-getAllThreads",
+    "description": "Get all threads that can be used as sequence filters.",
+    "parameters": []
+  },
+  {
+    "path": "/threads/{threadSlug}/units",
+    "method": "get",
+    "operationId": "getThreads-getThreadUnits",
+    "description": "Get all units for a specific thread filter.",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "threadSlug",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "a-midsummer-nights-dream-72"
+        }
+      }
+    ]
+  },
+  {
+    "path": "/changelog",
+    "method": "get",
+    "operationId": "changelog-changelog",
+    "description": "History of significant changes to the API with associated dates and versions",
+    "parameters": []
+  },
+  {
+    "path": "/changelog/latest",
+    "method": "get",
+    "operationId": "changelog-latest",
+    "description": "Get the latest version and latest change note for the API",
+    "parameters": []
+  },
+  {
+    "path": "/rate-limit",
+    "method": "get",
+    "operationId": "getRateLimit-getRateLimit",
+    "description": "Check your current rate limit status (note that your rate limit is also included in the headers of every response).\n\nThis specific endpoint does not cost any requests.",
+    "parameters": []
+  }
+] as const;
+
+export type PathOperation = (typeof PATH_OPERATIONS)[number];
+
+
+/**
+ * Map of operations by their operationId
+ * Generated at build time for runtime use
+ */
+export const OPERATIONS_BY_ID = {
+  "getSequences-getSequenceUnits": PATH_OPERATIONS[0],
+  "getLessonTranscript-getLessonTranscript": PATH_OPERATIONS[1],
+  "searchTranscripts-searchTranscripts": PATH_OPERATIONS[2],
+  "getAssets-getSequenceAssets": PATH_OPERATIONS[3],
+  "getAssets-getSubjectAssets": PATH_OPERATIONS[4],
+  "getAssets-getLessonAssets": PATH_OPERATIONS[5],
+  "getAssets-getLessonAsset": PATH_OPERATIONS[6],
+  "getSubjects-getAllSubjects": PATH_OPERATIONS[7],
+  "getSubjects-getSubject": PATH_OPERATIONS[8],
+  "getSubjects-getSubjectSequence": PATH_OPERATIONS[9],
+  "getSubjects-getSubjectKeyStages": PATH_OPERATIONS[10],
+  "getSubjects-getSubjectYears": PATH_OPERATIONS[11],
+  "getKeyStages-getKeyStages": PATH_OPERATIONS[12],
+  "getKeyStageSubjectLessons-getKeyStageSubjectLessons": PATH_OPERATIONS[13],
+  "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": PATH_OPERATIONS[14],
+  "getQuestions-getQuestionsForLessons": PATH_OPERATIONS[15],
+  "getQuestions-getQuestionsForSequence": PATH_OPERATIONS[16],
+  "getQuestions-getQuestionsForKeyStageAndSubject": PATH_OPERATIONS[17],
+  "getLessons-getLesson": PATH_OPERATIONS[18],
+  "getLessons-searchByTextSimilarity": PATH_OPERATIONS[19],
+  "getUnits-getUnit": PATH_OPERATIONS[20],
+  "getThreads-getAllThreads": PATH_OPERATIONS[21],
+  "getThreads-getThreadUnits": PATH_OPERATIONS[22],
+  "changelog-changelog": PATH_OPERATIONS[23],
+  "changelog-latest": PATH_OPERATIONS[24],
+  "getRateLimit-getRateLimit": PATH_OPERATIONS[25]
+} as const;
+
+export type OperationId = "getSequences-getSequenceUnits" | "getLessonTranscript-getLessonTranscript" | "searchTranscripts-searchTranscripts" | "getAssets-getSequenceAssets" | "getAssets-getSubjectAssets" | "getAssets-getLessonAssets" | "getAssets-getLessonAsset" | "getSubjects-getAllSubjects" | "getSubjects-getSubject" | "getSubjects-getSubjectSequence" | "getSubjects-getSubjectKeyStages" | "getSubjects-getSubjectYears" | "getKeyStages-getKeyStages" | "getKeyStageSubjectLessons-getKeyStageSubjectLessons" | "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits" | "getQuestions-getQuestionsForLessons" | "getQuestions-getQuestionsForSequence" | "getQuestions-getQuestionsForKeyStageAndSubject" | "getLessons-getLesson" | "getLessons-searchByTextSimilarity" | "getUnits-getUnit" | "getThreads-getAllThreads" | "getThreads-getThreadUnits" | "changelog-changelog" | "changelog-latest" | "getRateLimit-getRateLimit";

@@ -17,7 +17,7 @@ const logger = createAdaptiveLogger({
 });
 
 // Find and load the .env file from the repo root
-const repoRoot = resolve(thisDir, '../../..');
+const repoRoot = resolve(thisDir, '../../../..');
 const envPath = join(repoRoot, '.env');
 
 if (existsSync(envPath)) {
