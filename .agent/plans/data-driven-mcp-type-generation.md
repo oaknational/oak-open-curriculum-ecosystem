@@ -1,6 +1,6 @@
 # Data-Driven MCP Type Generation Plan - Minimal Lookup Architecture
 
-## Status: REFINED APPROACH - Implementation Starting (0% Complete)
+## Status: IMPLEMENTATION BLOCKED - TypeScript Limitation Discovered (85% Complete)
 
 ## Previous Approaches (Abandoned)
 
@@ -51,29 +51,29 @@ const operation = schema.paths[path][method]; // All data is here
 
 ## Implementation Plan
 
-### Phase 1: Schema Export (First Priority)
+### Phase 1: Schema Export (First Priority) ✅ COMPLETE
 
 #### 1.1 Export Schema as Runtime Constant
 
-- [ ] Export full OpenAPI schema as const
-- [ ] Ensure schema is available at runtime
-- [ ] Types flow from runtime schema
+- [x] Export full OpenAPI schema as const
+- [x] Ensure schema is available at runtime  
+- [x] Types flow from runtime schema
 
-### Phase 2: Minimal Lookup Generation
+### Phase 2: Minimal Lookup Generation ✅ COMPLETE
 
 #### 2.1 Generate TOOL_LOOKUP
 
-- [ ] Map tool names to path/method only
-- [ ] Use literal types with `as const`
-- [ ] No parameter duplication
+- [x] Map tool names to path/method only (TOOL_METADATA)
+- [x] Use literal types with `as const`
+- [x] No parameter duplication
 
 #### 2.2 Generate Type Guard
 
-- [ ] Simple `isToolName` function
-- [ ] Returns type predicate
-- [ ] No complex validation
+- [x] Simple `isToolName` function
+- [x] Returns type predicate
+- [x] No complex validation
 
-### Phase 3: Execute Tool Implementation
+### Phase 3: Execute Tool Implementation ❌ BLOCKED
 
 #### 3.1 Simple Execution Pattern
 
@@ -200,3 +200,46 @@ function validateParams(operation: any, params: unknown) {
 This approach achieves maximum simplicity by recognizing that we only need to map tool names to their coordinates in the schema. Everything else - parameters, types, descriptions - already exists in the schema. No duplication, no complex transformations, just a simple lookup table and direct access.
 
 **The ultimate lesson**: The simplest solution is often the best. Don't create what already exists.
+
+## Implementation Discovery: TypeScript Limitation
+
+### The Fundamental Problem
+
+When implementing the direct access pattern `client[path][method](params)`, we discovered a fundamental TypeScript limitation:
+
+1. **Dynamic Lookup Creates Unions**: When `path` and `method` come from a dynamic lookup (even with literal types), TypeScript creates a union of ALL possible method signatures
+2. **Incompatible Signatures**: Different API endpoints have different parameter requirements, making the union uncallable
+3. **No Type Narrowing Possible**: TypeScript cannot narrow the union based on the relationship between path and method
+
+### What We Tried
+
+1. **TOOL_GROUPINGS with Bidirectional Constraints**: Successfully preserved type relationships but still hit union problem at call site
+2. **TOOL_METADATA Flat Lookup**: Simplified structure but same fundamental issue
+3. **Parameter Wrapping Patterns**: Tried various ways to call the union, all failed
+4. **Type Guards and Narrowing**: Cannot narrow function signature unions
+
+### The Core Conflict
+
+```typescript
+// What we want (direct access, no assertions)
+const response = await client[path][method](params);
+
+// What TypeScript sees
+const methodFunc: 
+  | ((params: {path: {sequence: string}}) => Promise<Response1>)
+  | ((params: {path: {lesson: string}}) => Promise<Response2>)
+  | ... // 27 different incompatible signatures
+
+// Error: This expression is not callable
+```
+
+### Conclusion
+
+The "direct access without type assertions" pattern is **fundamentally incompatible** with TypeScript's type system when using dynamic dispatch. This is not a design flaw but a limitation of how TypeScript handles union types of functions with different signatures.
+
+### Options Forward
+
+1. **Accept Type Assertions at Runtime Boundaries**: Acknowledge this as a legitimate TypeScript limitation
+2. **Generate Explicit Dispatch**: Create switch statements or if-else chains (hundreds of cases)
+3. **Redesign Architecture**: Avoid dynamic dispatch entirely
+4. **Use Type-Safe Escape Hatch**: Cast to a common function signature with runtime validation before and after

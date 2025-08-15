@@ -1,15 +1,15 @@
 /**
- * Minimal MCP tool executor using TOOL_LOOKUP pattern
+ * Minimal MCP tool executor using TOOL_GROUPINGS pattern
  *
  * This implementation uses the minimal lookup approach:
- * - TOOL_LOOKUP maps tool names to path/method coordinates
+ * - TOOL_GROUPINGS maps tool names to path/method coordinates
  * - Schema contains all parameter definitions
  * - Direct client access without intermediate functions
  * - NO type assertions - everything flows from the schema
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { TOOL_LOOKUP, isToolName } from '../types/generated/api-schema/mcp-tools.js';
+import { TOOL_METADATA, isToolName } from '../types/generated/api-schema/mcp-tools.js';
 import { validateParams } from './param-validator.js';
 
 /**
@@ -116,11 +116,12 @@ export async function executeToolCall(
   const toolName = maybeToolName;
 
   try {
-    // Step 2: Get coordinates from lookup
-    const { path, method } = TOOL_LOOKUP[toolName];
+    // Step 2: Get coordinates from TOOL_METADATA
+    const toolMeta = TOOL_METADATA[toolName];
+    const { path, method } = toolMeta;
 
-    // Step 3: Validate parameters using schema
-    const validatedParams = validateParams(path, method, maybeParams);
+    // Step 3: Validate parameters using schema (validateParams expects lowercase method)
+    const validatedParams = validateParams(path, method.toLowerCase(), maybeParams);
     if (validatedParams === null) {
       return {
         error: new McpParameterError('Invalid parameters for tool', toolName),
@@ -128,12 +129,17 @@ export async function executeToolCall(
     }
 
     // Step 4: Access client with path/method
-    // Direct access without type assertions - the plan shows this is the way
-    const pathObj = client[path];
-    const methodFunc = pathObj[method];
-
-    // Step 5: Execute with validated parameters
-    const response = await methodFunc(validatedParams);
+    // TypeScript limitation: dynamic method access creates union of incompatible signatures
+    // openapi-fetch methods can be called with:
+    // - no arguments (for no params)
+    // - { params: { path?, query? } } (for params)
+    const pathClient = client[path];
+    const methodFunc = pathClient[method];
+    // Wrap in params object as expected by openapi-fetch
+    const hasParams = Object.keys(validatedParams).length > 0;
+    const response = hasParams 
+      ? await methodFunc({ params: validatedParams })
+      : await methodFunc();
 
     // Step 6: Handle response
     if (!isApiResponse(response)) {

@@ -61,8 +61,8 @@ export type {
 
 // MCP (Model Context Protocol) Tool Support
 // These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
-export { TOOL_LOOKUP, isToolName } from './types/generated/api-schema/mcp-tools';
-export type { ToolName } from './types/generated/api-schema/mcp-tools';
+export { TOOL_GROUPINGS, isToolName } from './types/generated/api-schema/mcp-tools';
+export type { ToolName, ToolGroupings } from './types/generated/api-schema/mcp-tools';
 
 // Note: Parameter validation now happens via schema.parameters directly
 // in the MCP server implementation. Response validation is handled

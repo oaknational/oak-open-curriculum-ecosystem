@@ -1,7 +1,7 @@
 # ADR-037: Minimal Tool Lookup Architecture
 
 ## Status
-Accepted
+Blocked - TypeScript Limitation Discovered
 
 ## Context
 
@@ -110,3 +110,47 @@ Accept type assertions at validated runtime boundaries.
 This decision represents the ultimate simplification: we only generate what's truly new (tool names) and map them to coordinates in the existing schema. Everything else - parameters, types, descriptions - already exists.
 
 The pattern follows the reference implementation's approach of exporting the schema as a runtime constant and using minimal helper structures. This is the simplest possible solution that maintains type safety and performance.
+
+## Implementation Update: TypeScript Limitation Discovered
+
+During implementation, we discovered a fundamental TypeScript limitation that blocks the direct access pattern:
+
+### The Problem
+
+```typescript
+// Given perfect type preservation:
+const TOOL_METADATA = {
+  'tool1': { path: '/path1' as const, method: 'GET' as const },
+  'tool2': { path: '/path2' as const, method: 'POST' as const }
+} as const;
+
+// Dynamic access creates uncallable union:
+const { path, method } = TOOL_METADATA[toolName]; // toolName is union
+const response = await client[path][method](params);
+// ERROR: Union of incompatible function signatures
+```
+
+### Root Cause
+
+TypeScript cannot narrow correlated union types through dynamic dispatch. When accessing `client[path][method]` where path and method come from a dynamic lookup, TypeScript creates a union of ALL possible method signatures. Since different API endpoints have different parameter requirements, these signatures are incompatible and the union becomes uncallable.
+
+### What We Achieved
+
+1. ✅ Embedded tool information in schema
+2. ✅ Generated TOOL_GROUPINGS with bidirectional type constraints  
+3. ✅ Created TOOL_METADATA flat lookup
+4. ✅ Preserved all literal types with `as const`
+5. ✅ Eliminated `as any` from generation scripts
+6. ❌ Cannot call dynamically dispatched methods without type assertions
+
+### Options Forward
+
+1. **Accept Type Assertions**: Acknowledge this as a legitimate TypeScript limitation where assertions are unavoidable
+2. **Generate Static Dispatch**: Create explicit switch/if-else chains (requires generating hundreds of cases)
+3. **Redesign Architecture**: Move away from dynamic dispatch pattern entirely
+4. **Common Function Signature**: Find or create a common signature that all methods can accept
+
+This represents a fundamental conflict between:
+- **The Rules**: Zero type assertions allowed
+- **The Pattern**: Direct access without intermediate functions
+- **TypeScript's Capabilities**: Cannot handle dynamic dispatch with union signatures

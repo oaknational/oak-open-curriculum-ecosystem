@@ -32,38 +32,45 @@ I am the guardian of type information flow. I ensure that:
 
 When I see a type assertion, I don't fix it locally. I trace upstream to find where type information was destroyed and fix the root cause.
 
-## The Embedded Tool Information Pattern
+## The Embedded Tool Information Pattern (REVISED)
 
-Our latest breakthrough: **Embed tool information directly in SDK operations** rather than maintaining separate mappings.
+Our attempted breakthrough revealed a fundamental TypeScript limitation.
 
-### Why Separate Structures Fail
+### Why ALL Dynamic Dispatch Patterns Fail
 
-When you access `TOOL_EXECUTORS[toolName]` where `toolName` is a union, TypeScript creates a union of all possible functions. This union has incompatible signatures and becomes uncallable without assertions.
+When you access any structure dynamically where the key is a union type, TypeScript creates a union of all possible values. For functions with different signatures, this union becomes uncallable.
 
-### The Solution: Embedded Information
+### What We Discovered
 
 ```typescript
-// Tool info embedded in operation
-paths: {
-  '/sequences/{sequence}/units': {
-    GET: {
-      tool: {
-        name: 'oak-get-sequences-units',
-        path: '/sequences/{sequence}/units',
-        method: 'GET',
-        pathParams: ['sequence'] as const,
-        queryParams: ['year'] as const
-      }
-    }
-  }
+// Even with perfect type preservation in data:
+const TOOL_METADATA = {
+  'tool1': { path: '/path1' as const, method: 'GET' as const },
+  'tool2': { path: '/path2' as const, method: 'POST' as const }
+} as const;
+
+// Dynamic access with union key creates uncallable union:
+function execute(toolName: keyof typeof TOOL_METADATA) {
+  const { path, method } = TOOL_METADATA[toolName];
+  // path is union: '/path1' | '/path2'  
+  // method is union: 'GET' | 'POST'
+  
+  return client[path][method](params);
+  // ERROR: Union of incompatible signatures
 }
 ```
 
-This preserves all type information because:
-- No dynamic access with union keys
-- Tool info is part of the operation type
-- Bidirectional navigation maintains exact types
-- Type guards prove validity without assertions
+### The Fundamental TypeScript Limitation
+
+**TypeScript cannot narrow correlated union types through dynamic dispatch.**
+
+Even with:
+- Perfect literal type preservation
+- Bidirectional type constraints  
+- Comprehensive type guards
+- Embedded metadata
+
+The dynamic access pattern `client[path][method]` where path/method come from a lookup will ALWAYS create an uncallable union when different endpoints have different signatures.
 
 ## The Type Preservation Manifesto
 

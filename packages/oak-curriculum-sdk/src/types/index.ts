@@ -9,8 +9,8 @@ export type { paths } from './generated/api-schema/api-paths-types';
 export type { components } from './generated/api-schema/api-paths-types';
 
 // Re-export MCP tools data and types
-export { TOOL_LOOKUP, isToolName } from './generated/api-schema/mcp-tools';
-export type { ToolName } from './generated/api-schema/mcp-tools';
+export { TOOL_GROUPINGS, isToolName } from './generated/api-schema/mcp-tools';
+export type { ToolName, ToolGroupings } from './generated/api-schema/mcp-tools';
 
 // Note: Validators removed - validation now happens via schema directly
 

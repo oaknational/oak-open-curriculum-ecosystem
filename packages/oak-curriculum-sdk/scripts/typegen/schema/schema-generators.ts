@@ -25,14 +25,19 @@ export function generateJsonContent(schema: OpenAPI3): string {
         const operation = pathItem[method];
         if (!operation || typeof operation !== 'object') continue;
         
+        // Check if it's a reference or an operation
+        if ('$ref' in operation) continue;
+        
         // Add the MCP tool name to the operation
         const toolName = generateMcpToolName(path, method);
-        (operation as any).operationToolName = toolName;
+        // Use Object.assign to add properties without type assertions
+        Object.assign(operation, { operationToolName: toolName });
         
         // Extract parameter metadata
         const pathParams: string[] = [];
         const queryParams: string[] = [];
         
+        // Now TypeScript knows operation is OperationObject, not ReferenceObject
         if (operation.parameters && Array.isArray(operation.parameters)) {
           for (const param of operation.parameters) {
             // Skip reference objects
@@ -47,13 +52,15 @@ export function generateJsonContent(schema: OpenAPI3): string {
         }
         
         // Add comprehensive tool metadata
-        (operation as any).operationToolMetadata = {
-          name: toolName,
-          path: path,
-          method: method.toUpperCase(),
-          pathParams: pathParams,
-          queryParams: queryParams,
-        };
+        Object.assign(operation, {
+          operationToolMetadata: {
+            name: toolName,
+            path: path,
+            method: method.toUpperCase(),
+            pathParams: pathParams,
+            queryParams: queryParams,
+          }
+        });
       }
     }
   }

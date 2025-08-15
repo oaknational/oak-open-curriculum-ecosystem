@@ -9,6 +9,7 @@
 
 // Import schema for type extraction
 import { schema } from "./api-schema";
+import {OakApiPathBasedClient} from "../types"
 
 /**
  * Tool groupings data structure
@@ -20,60 +21,66 @@ const TOOL_GROUPINGS_DATA = {
       toolName: 'oak-get-subjects' as const,
       path: '/subjects' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/subjects']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
     'oak-get-key-stages': {
       toolName: 'oak-get-key-stages' as const,
       path: '/key-stages' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/key-stages']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
     'oak-get-threads': {
       toolName: 'oak-get-threads' as const,
       path: '/threads' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/threads']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
     'oak-get-changelog': {
       toolName: 'oak-get-changelog' as const,
       path: '/changelog' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/changelog']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
     'oak-get-changelog-latest': {
       toolName: 'oak-get-changelog-latest' as const,
       path: '/changelog/latest' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/changelog/latest']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
     'oak-get-rate-limit': {
       toolName: 'oak-get-rate-limit' as const,
       path: '/rate-limit' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {}) => client['/rate-limit']['GET']({pathParams, queryParams}),
       grouping: 'GET_NO_PARAMS' as const,
     },
   },
@@ -82,94 +89,213 @@ const TOOL_GROUPINGS_DATA = {
       toolName: 'oak-get-sequences-units' as const,
       path: '/sequences/{sequence}/units' as const,
       method: 'GET' as const,
-      pathParams: [
-        'sequence',
-      ] as const,
-      queryParams: [
-        'year',
-      ] as const,
+      pathParams: {
+        sequence: 'string' as const,
+      } as const,
+      queryParams: {
+        year: [
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          '11',
+          'all-years',
+        ] as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {sequence: string}, queryParams: {year?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | 'all-years'}) => client['/sequences/{sequence}/units']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-sequences-assets': {
       toolName: 'oak-get-sequences-assets' as const,
       path: '/sequences/{sequence}/assets' as const,
       method: 'GET' as const,
-      pathParams: [
-        'sequence',
-      ] as const,
-      queryParams: [
-        'year',
-        'type',
-      ] as const,
+      pathParams: {
+        sequence: 'string' as const,
+      } as const,
+      queryParams: {
+        year: 'number' as const,
+        type: [
+          'slideDeck',
+          'exitQuiz',
+          'exitQuizAnswers',
+          'starterQuiz',
+          'starterQuizAnswers',
+          'supplementaryResource',
+          'video',
+          'worksheet',
+          'worksheetAnswers',
+        ] as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {sequence: string}, queryParams: {year?: number, type?: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers'}) => client['/sequences/{sequence}/assets']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-key-stages-subject-assets': {
       toolName: 'oak-get-key-stages-subject-assets' as const,
       path: '/key-stages/{keyStage}/subject/{subject}/assets' as const,
       method: 'GET' as const,
-      pathParams: [
-        'keyStage',
-        'subject',
-      ] as const,
-      queryParams: [
-        'type',
-        'unit',
-      ] as const,
+      pathParams: {
+        keyStage: [
+          'ks1',
+          'ks2',
+          'ks3',
+          'ks4',
+        ] as const,
+        subject: [
+          'art',
+          'citizenship',
+          'computing',
+          'cooking-nutrition',
+          'design-technology',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'maths',
+          'music',
+          'physical-education',
+          'religious-education',
+          'rshe-pshe',
+          'science',
+          'spanish',
+        ] as const,
+      } as const,
+      queryParams: {
+        type: [
+          'slideDeck',
+          'exitQuiz',
+          'exitQuizAnswers',
+          'starterQuiz',
+          'starterQuizAnswers',
+          'supplementaryResource',
+          'video',
+          'worksheet',
+          'worksheetAnswers',
+        ] as const,
+        unit: 'string' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4', subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish'}, queryParams: {type?: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers', unit?: string}) => client['/key-stages/{keyStage}/subject/{subject}/assets']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-lessons-assets': {
       toolName: 'oak-get-lessons-assets' as const,
       path: '/lessons/{lesson}/assets' as const,
       method: 'GET' as const,
-      pathParams: [
-        'lesson',
-      ] as const,
-      queryParams: [
-        'type',
-      ] as const,
+      pathParams: {
+        lesson: 'string' as const,
+      } as const,
+      queryParams: {
+        type: [
+          'slideDeck',
+          'exitQuiz',
+          'exitQuizAnswers',
+          'starterQuiz',
+          'starterQuizAnswers',
+          'supplementaryResource',
+          'video',
+          'worksheet',
+          'worksheetAnswers',
+        ] as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {lesson: string}, queryParams: {type?: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers'}) => client['/lessons/{lesson}/assets']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-key-stages-subject-lessons': {
       toolName: 'oak-get-key-stages-subject-lessons' as const,
       path: '/key-stages/{keyStage}/subject/{subject}/lessons' as const,
       method: 'GET' as const,
-      pathParams: [
-        'keyStage',
-        'subject',
-      ] as const,
-      queryParams: [
-        'unit',
-        'offset',
-        'limit',
-      ] as const,
+      pathParams: {
+        keyStage: [
+          'ks1',
+          'ks2',
+          'ks3',
+          'ks4',
+        ] as const,
+        subject: [
+          'art',
+          'citizenship',
+          'computing',
+          'cooking-nutrition',
+          'design-technology',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'maths',
+          'music',
+          'physical-education',
+          'religious-education',
+          'rshe-pshe',
+          'science',
+          'spanish',
+        ] as const,
+      } as const,
+      queryParams: {
+        unit: 'string' as const,
+        offset: 'number' as const,
+        limit: 'number' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4', subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish'}, queryParams: {unit?: string, offset?: number, limit?: number}) => client['/key-stages/{keyStage}/subject/{subject}/lessons']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-sequences-questions': {
       toolName: 'oak-get-sequences-questions' as const,
       path: '/sequences/{sequence}/questions' as const,
       method: 'GET' as const,
-      pathParams: [
-        'sequence',
-      ] as const,
-      queryParams: [
-        'year',
-        'offset',
-        'limit',
-      ] as const,
+      pathParams: {
+        sequence: 'string' as const,
+      } as const,
+      queryParams: {
+        year: 'number' as const,
+        offset: 'number' as const,
+        limit: 'number' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {sequence: string}, queryParams: {year?: number, offset?: number, limit?: number}) => client['/sequences/{sequence}/questions']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
     'oak-get-key-stages-subject-questions': {
       toolName: 'oak-get-key-stages-subject-questions' as const,
       path: '/key-stages/{keyStage}/subject/{subject}/questions' as const,
       method: 'GET' as const,
-      pathParams: [
-        'keyStage',
-        'subject',
-      ] as const,
-      queryParams: [
-        'offset',
-        'limit',
-      ] as const,
+      pathParams: {
+        keyStage: [
+          'ks1',
+          'ks2',
+          'ks3',
+          'ks4',
+        ] as const,
+        subject: [
+          'art',
+          'citizenship',
+          'computing',
+          'cooking-nutrition',
+          'design-technology',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'maths',
+          'music',
+          'physical-education',
+          'religious-education',
+          'rshe-pshe',
+          'science',
+          'spanish',
+        ] as const,
+      } as const,
+      queryParams: {
+        offset: 'number' as const,
+        limit: 'number' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4', subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish'}, queryParams: {offset?: number, limit?: number}) => client['/key-stages/{keyStage}/subject/{subject}/questions']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_ALL_PARAMS' as const,
     },
   },
@@ -178,123 +304,167 @@ const TOOL_GROUPINGS_DATA = {
       toolName: 'oak-get-lessons-transcript' as const,
       path: '/lessons/{lesson}/transcript' as const,
       method: 'GET' as const,
-      pathParams: [
-        'lesson',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        lesson: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {lesson: string}, queryParams: {}) => client['/lessons/{lesson}/transcript']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-lessons-assets-by-type': {
       toolName: 'oak-get-lessons-assets-by-type' as const,
       path: '/lessons/{lesson}/assets/{type}' as const,
       method: 'GET' as const,
-      pathParams: [
-        'lesson',
-        'type',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        lesson: 'string' as const,
+        type: [
+          'slideDeck',
+          'exitQuiz',
+          'exitQuizAnswers',
+          'starterQuiz',
+          'starterQuizAnswers',
+          'supplementaryResource',
+          'video',
+          'worksheet',
+          'worksheetAnswers',
+        ] as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {lesson: string, type: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers'}, queryParams: {}) => client['/lessons/{lesson}/assets/{type}']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-subject-detail': {
       toolName: 'oak-get-subject-detail' as const,
       path: '/subjects/{subject}' as const,
       method: 'GET' as const,
-      pathParams: [
-        'subject',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        subject: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {subject: string}, queryParams: {}) => client['/subjects/{subject}']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-subjects-sequences': {
       toolName: 'oak-get-subjects-sequences' as const,
       path: '/subjects/{subject}/sequences' as const,
       method: 'GET' as const,
-      pathParams: [
-        'subject',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        subject: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {subject: string}, queryParams: {}) => client['/subjects/{subject}/sequences']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-subjects-key-stages': {
       toolName: 'oak-get-subjects-key-stages' as const,
       path: '/subjects/{subject}/key-stages' as const,
       method: 'GET' as const,
-      pathParams: [
-        'subject',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        subject: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {subject: string}, queryParams: {}) => client['/subjects/{subject}/key-stages']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-subjects-years': {
       toolName: 'oak-get-subjects-years' as const,
       path: '/subjects/{subject}/years' as const,
       method: 'GET' as const,
-      pathParams: [
-        'subject',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        subject: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {subject: string}, queryParams: {}) => client['/subjects/{subject}/years']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-key-stages-subject-units': {
       toolName: 'oak-get-key-stages-subject-units' as const,
       path: '/key-stages/{keyStage}/subject/{subject}/units' as const,
       method: 'GET' as const,
-      pathParams: [
-        'keyStage',
-        'subject',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        keyStage: [
+          'ks1',
+          'ks2',
+          'ks3',
+          'ks4',
+        ] as const,
+        subject: [
+          'art',
+          'citizenship',
+          'computing',
+          'cooking-nutrition',
+          'design-technology',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'maths',
+          'music',
+          'physical-education',
+          'religious-education',
+          'rshe-pshe',
+          'science',
+          'spanish',
+        ] as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4', subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish'}, queryParams: {}) => client['/key-stages/{keyStage}/subject/{subject}/units']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-lessons-quiz': {
       toolName: 'oak-get-lessons-quiz' as const,
       path: '/lessons/{lesson}/quiz' as const,
       method: 'GET' as const,
-      pathParams: [
-        'lesson',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        lesson: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {lesson: string}, queryParams: {}) => client['/lessons/{lesson}/quiz']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-lessons-summary': {
       toolName: 'oak-get-lessons-summary' as const,
       path: '/lessons/{lesson}/summary' as const,
       method: 'GET' as const,
-      pathParams: [
-        'lesson',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        lesson: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {lesson: string}, queryParams: {}) => client['/lessons/{lesson}/summary']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-units-summary': {
       toolName: 'oak-get-units-summary' as const,
       path: '/units/{unit}/summary' as const,
       method: 'GET' as const,
-      pathParams: [
-        'unit',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        unit: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {unit: string}, queryParams: {}) => client['/units/{unit}/summary']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
     'oak-get-threads-units': {
       toolName: 'oak-get-threads-units' as const,
       path: '/threads/{threadSlug}/units' as const,
       method: 'GET' as const,
-      pathParams: [
-        'threadSlug',
-      ] as const,
-      queryParams: [
-      ] as const,
+      pathParams: {
+        threadSlug: 'string' as const,
+      } as const,
+      queryParams: {
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {threadSlug: string}, queryParams: {}) => client['/threads/{threadSlug}/units']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_PATH_PARAMS' as const,
     },
   },
@@ -303,25 +473,50 @@ const TOOL_GROUPINGS_DATA = {
       toolName: 'oak-get-search-transcripts' as const,
       path: '/search/transcripts' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-        'q',
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+        q: 'string' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {q: string}) => client['/search/transcripts']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_QUERY_PARAMS' as const,
     },
     'oak-get-search-lessons': {
       toolName: 'oak-get-search-lessons' as const,
       path: '/search/lessons' as const,
       method: 'GET' as const,
-      pathParams: [
-      ] as const,
-      queryParams: [
-        'q',
-        'keyStage',
-        'subject',
-        'unit',
-      ] as const,
+      pathParams: {
+      } as const,
+      queryParams: {
+        q: 'string' as const,
+        keyStage: [
+          'ks1',
+          'ks2',
+          'ks3',
+          'ks4',
+        ] as const,
+        subject: [
+          'art',
+          'citizenship',
+          'computing',
+          'cooking-nutrition',
+          'design-technology',
+          'english',
+          'french',
+          'geography',
+          'german',
+          'history',
+          'maths',
+          'music',
+          'physical-education',
+          'religious-education',
+          'rshe-pshe',
+          'science',
+          'spanish',
+        ] as const,
+        unit: 'string' as const,
+      } as const,
+      executor: (client: OakApiPathBasedClient, pathParams: {}, queryParams: {q: string, keyStage?: 'ks1' | 'ks2' | 'ks3' | 'ks4', subject?: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish', unit?: string}) => client['/search/lessons']['GET']({pathParams, queryParams}),
       grouping: 'GET_WITH_QUERY_PARAMS' as const,
     },
   },
@@ -401,6 +596,117 @@ type ToolGroupingStructure = {
 export const TOOL_GROUPINGS: ToolGroupingStructure = TOOL_GROUPINGS_DATA;
 
 export type ToolGroupings = typeof TOOL_GROUPINGS;
+
+/**
+ * Flat tool metadata for direct runtime access
+ * Maps tool names directly to their metadata
+ */
+export const TOOL_METADATA = {
+  'oak-get-sequences-units': {
+    path: '/sequences/{sequence}/units' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-lessons-transcript': {
+    path: '/lessons/{lesson}/transcript' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-search-transcripts': {
+    path: '/search/transcripts' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-sequences-assets': {
+    path: '/sequences/{sequence}/assets' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-key-stages-subject-assets': {
+    path: '/key-stages/{keyStage}/subject/{subject}/assets' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-lessons-assets': {
+    path: '/lessons/{lesson}/assets' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-lessons-assets-by-type': {
+    path: '/lessons/{lesson}/assets/{type}' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-subjects': {
+    path: '/subjects' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-subject-detail': {
+    path: '/subjects/{subject}' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-subjects-sequences': {
+    path: '/subjects/{subject}/sequences' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-subjects-key-stages': {
+    path: '/subjects/{subject}/key-stages' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-subjects-years': {
+    path: '/subjects/{subject}/years' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-key-stages': {
+    path: '/key-stages' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-key-stages-subject-lessons': {
+    path: '/key-stages/{keyStage}/subject/{subject}/lessons' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-key-stages-subject-units': {
+    path: '/key-stages/{keyStage}/subject/{subject}/units' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-lessons-quiz': {
+    path: '/lessons/{lesson}/quiz' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-sequences-questions': {
+    path: '/sequences/{sequence}/questions' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-key-stages-subject-questions': {
+    path: '/key-stages/{keyStage}/subject/{subject}/questions' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-lessons-summary': {
+    path: '/lessons/{lesson}/summary' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-search-lessons': {
+    path: '/search/lessons' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-units-summary': {
+    path: '/units/{unit}/summary' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-threads': {
+    path: '/threads' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-threads-units': {
+    path: '/threads/{threadSlug}/units' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-changelog': {
+    path: '/changelog' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-changelog-latest': {
+    path: '/changelog/latest' as const,
+    method: 'GET' as const,
+  },
+  'oak-get-rate-limit': {
+    path: '/rate-limit' as const,
+    method: 'GET' as const,
+  },
+} as const;
 
 /**
  * Type guard for tool names
