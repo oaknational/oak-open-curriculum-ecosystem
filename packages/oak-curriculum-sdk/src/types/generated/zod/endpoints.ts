@@ -502,6 +502,7 @@ const SubjectKeyStagesResponseSchema = z.array(
     .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
     .passthrough()
 );
+const SubjectYearsResponseSchema = z.array(z.number());
 const KeyStageResponseSchema = z.array(
   z.object({ slug: z.string(), title: z.string() }).passthrough()
 );
@@ -761,7 +762,242 @@ const QuestionForLessonsResponseSchema = z
     ),
   })
   .passthrough();
-const QuestionsForSequenceResponseSchema = z.unknown();
+const QuestionsForSequenceResponseSchema = z.array(
+  z
+    .object({
+      lessonSlug: z.string(),
+      lessonTitle: z.string(),
+      starterQuiz: z.array(
+        z
+          .object({
+            question: z.string(),
+            questionType: z.union([
+              z.literal("multiple-choice"),
+              z.literal("short-answer"),
+              z.literal("match"),
+              z.literal("order"),
+            ]),
+            questionImage: z
+              .object({
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
+              })
+              .passthrough()
+              .optional(),
+          })
+          .passthrough()
+          .and(
+            z.union([
+              z
+                .object({
+                  questionType: z.literal("multiple-choice"),
+                  answers: z.array(
+                    z
+                      .object({ distractor: z.boolean() })
+                      .passthrough()
+                      .and(
+                        z.union([
+                          z
+                            .object({
+                              type: z.literal("text"),
+                              content: z.string(),
+                            })
+                            .passthrough(),
+                          z
+                            .object({
+                              type: z.literal("image"),
+                              content: z
+                                .object({
+                                  url: z.string(),
+                                  width: z.number(),
+                                  height: z.number(),
+                                  alt: z.string().optional(),
+                                  text: z.string().optional(),
+                                  attribution: z.string().optional(),
+                                })
+                                .passthrough(),
+                            })
+                            .passthrough(),
+                        ])
+                      )
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("short-answer"),
+                  answers: z.array(
+                    z
+                      .object({ type: z.literal("text"), content: z.string() })
+                      .passthrough()
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("match"),
+                  answers: z.array(
+                    z
+                      .object({
+                        matchOption: z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough(),
+                        correctChoice: z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough(),
+                      })
+                      .passthrough()
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("order"),
+                  answers: z.array(
+                    z
+                      .object({ order: z.number() })
+                      .passthrough()
+                      .and(
+                        z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough()
+                      )
+                  ),
+                })
+                .passthrough(),
+            ])
+          )
+      ),
+      exitQuiz: z.array(
+        z
+          .object({
+            question: z.string(),
+            questionType: z.union([
+              z.literal("multiple-choice"),
+              z.literal("short-answer"),
+              z.literal("match"),
+              z.literal("order"),
+            ]),
+            questionImage: z
+              .object({
+                url: z.string(),
+                width: z.number(),
+                height: z.number(),
+                alt: z.string().optional(),
+                text: z.string().optional(),
+                attribution: z.string().optional(),
+              })
+              .passthrough()
+              .optional(),
+          })
+          .passthrough()
+          .and(
+            z.union([
+              z
+                .object({
+                  questionType: z.literal("multiple-choice"),
+                  answers: z.array(
+                    z
+                      .object({ distractor: z.boolean() })
+                      .passthrough()
+                      .and(
+                        z.union([
+                          z
+                            .object({
+                              type: z.literal("text"),
+                              content: z.string(),
+                            })
+                            .passthrough(),
+                          z
+                            .object({
+                              type: z.literal("image"),
+                              content: z
+                                .object({
+                                  url: z.string(),
+                                  width: z.number(),
+                                  height: z.number(),
+                                  alt: z.string().optional(),
+                                  text: z.string().optional(),
+                                  attribution: z.string().optional(),
+                                })
+                                .passthrough(),
+                            })
+                            .passthrough(),
+                        ])
+                      )
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("short-answer"),
+                  answers: z.array(
+                    z
+                      .object({ type: z.literal("text"), content: z.string() })
+                      .passthrough()
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("match"),
+                  answers: z.array(
+                    z
+                      .object({
+                        matchOption: z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough(),
+                        correctChoice: z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough(),
+                      })
+                      .passthrough()
+                  ),
+                })
+                .passthrough(),
+              z
+                .object({
+                  questionType: z.literal("order"),
+                  answers: z.array(
+                    z
+                      .object({ order: z.number() })
+                      .passthrough()
+                      .and(
+                        z
+                          .object({
+                            type: z.literal("text"),
+                            content: z.string(),
+                          })
+                          .passthrough()
+                      )
+                  ),
+                })
+                .passthrough(),
+            ])
+          )
+      ),
+    })
+    .passthrough()
+);
 const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
   z
     .object({
@@ -1103,27 +1339,6 @@ const UnitSummaryResponseSchema = z
 const AllThreadsResponseSchema = z.array(
   z.object({ title: z.string(), slug: z.string() }).passthrough()
 );
-const error_UNAUTHORIZED = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).passthrough()).optional(),
-  })
-  .passthrough();
-const error_FORBIDDEN = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).passthrough()).optional(),
-  })
-  .passthrough();
-const error_INTERNAL_SERVER_ERROR = z
-  .object({
-    message: z.string(),
-    code: z.string(),
-    issues: z.array(z.object({ message: z.string() }).passthrough()).optional(),
-  })
-  .passthrough();
 const ThreadUnitsResponseSchema = z.array(
   z
     .object({
@@ -1149,6 +1364,7 @@ export const schemas = {
   SubjectResponseSchema,
   SubjectSequenceResponseSchema,
   SubjectKeyStagesResponseSchema,
+  SubjectYearsResponseSchema,
   KeyStageResponseSchema,
   KeyStageSubjectLessonsResponseSchema,
   AllKeyStageAndSubjectUnitsResponseSchema,
@@ -1159,9 +1375,6 @@ export const schemas = {
   LessonSearchResponseSchema,
   UnitSummaryResponseSchema,
   AllThreadsResponseSchema,
-  error_UNAUTHORIZED,
-  error_FORBIDDEN,
-  error_INTERNAL_SERVER_ERROR,
   ThreadUnitsResponseSchema,
   RateLimitResponseSchema,
 };
@@ -1205,7 +1418,7 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/key-stages/:keyStage/subject/:subject/assets",
-    description: `This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson`,
+    description: `This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1264,7 +1477,7 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/key-stages/:keyStage/subject/:subject/lessons",
-    description: `This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit`,
+    description: `This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1316,7 +1529,7 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/key-stages/:keyStage/subject/:subject/questions",
-    description: `This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject`,
+    description: `This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1363,7 +1576,7 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/key-stages/:keyStage/subject/:subject/units",
-    description: `This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage`,
+    description: `This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1400,7 +1613,9 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/lessons/:lesson/assets",
-    description: `This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson`,
+    description: `This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. 
+        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+          `,
     requestFormat: "json",
     parameters: [
       {
@@ -1431,7 +1646,8 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/lessons/:lesson/assets/:type",
-    description: `This endpoint will stream the downloadable asset for the given lesson and type`,
+    description: `This endpoint will stream the downloadable asset for the given lesson and type. 
+There is no response returned for this endpoint as it returns a content attachment.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1488,7 +1704,7 @@ export const endpoints = makeApi([
   {
     method: "get",
     path: "/lessons/:lesson/transcript",
-    description: `This endpoint returns the transcript from the video from a lesson`,
+    description: `This endpoint returns the video transcript and video captions file for a given lesson.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1511,7 +1727,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/search/lessons",
-    description: `This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in`,
+    description: `Search for a term and find the 20 most similar lessons with titles that contain similar text.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1560,7 +1776,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/search/transcripts",
-    description: `Search for a term and find lessons that contain similar text in their video transcripts`,
+    description: `Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1574,7 +1790,8 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/sequences/:sequence/assets",
-    description: `This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence`,
+    description: `This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
+This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1610,7 +1827,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/sequences/:sequence/questions",
-    description: `This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence`,
+    description: `This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1634,11 +1851,12 @@ This specific endpoint does not cost any requests.`,
         schema: z.number().lte(100).optional().default(10),
       },
     ],
-    response: z.unknown(),
+    response: QuestionsForSequenceResponseSchema,
   },
   {
     method: "get",
     path: "/sequences/:sequence/units",
+    description: `This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1672,14 +1890,14 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/subjects",
-    description: `This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak`,
+    description: `This endpoint returns an array of all available subjects and their associated sequences, key stages and years.`,
     requestFormat: "json",
     response: AllSubjectsResponseSchema,
   },
   {
     method: "get",
     path: "/subjects/:subject",
-    description: `This endpoint returns a single subject and associated sequences, key stages and years.`,
+    description: `This endpoint returns the sequences, key stages and years that are currently available for a given subject.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1693,7 +1911,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/subjects/:subject/key-stages",
-    description: `List of the key stages a subject is taught in.`,
+    description: `This endpoint returns a list of key stages that are currently available for a given subject.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1707,7 +1925,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/subjects/:subject/sequences",
-    description: `List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.`,
+    description: `This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1721,7 +1939,7 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/subjects/:subject/years",
-    description: `List of the years a subject is taught in.`,
+    description: `This endpoint returns an array of years that are currently available for a given subject.`,
     requestFormat: "json",
     parameters: [
       {
@@ -1735,31 +1953,14 @@ This specific endpoint does not cost any requests.`,
   {
     method: "get",
     path: "/threads",
-    description: `Get all threads that can be used as sequence filters.`,
+    description: `This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.`,
     requestFormat: "json",
     response: AllThreadsResponseSchema,
-    errors: [
-      {
-        status: 401,
-        description: `Authorization not provided`,
-        schema: error_UNAUTHORIZED,
-      },
-      {
-        status: 403,
-        description: `Insufficient access`,
-        schema: error_FORBIDDEN,
-      },
-      {
-        status: 500,
-        description: `Internal server error`,
-        schema: error_INTERNAL_SERVER_ERROR,
-      },
-    ],
   },
   {
     method: "get",
     path: "/threads/:threadSlug/units",
-    description: `Get all units for a specific thread filter.`,
+    description: `This endpoint returns all of the units that belong to a given thread.`,
     requestFormat: "json",
     parameters: [
       {

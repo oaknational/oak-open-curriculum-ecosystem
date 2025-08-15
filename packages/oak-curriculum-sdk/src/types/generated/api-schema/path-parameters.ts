@@ -439,14 +439,17 @@ export const PATH_OPERATIONS = [
     "path": "/sequences/{sequence}/units",
     "method": "get",
     "operationId": "getSequences-getSequenceUnits",
-    "description": "",
+    "summary": "Units within a sequence",
+    "description": "This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.",
     "parameters": [
       {
         "in": "path",
         "name": "sequence",
+        "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
           "example": "english-primary"
         }
       },
@@ -468,7 +471,9 @@ export const PATH_OPERATIONS = [
             "10",
             "11",
             "all-years"
-          ]
+          ],
+          "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+          "example": "1"
         }
       }
     ]
@@ -477,7 +482,8 @@ export const PATH_OPERATIONS = [
     "path": "/lessons/{lesson}/transcript",
     "method": "get",
     "operationId": "getLessonTranscript-getLessonTranscript",
-    "description": "This endpoint returns the transcript from the video from a lesson",
+    "summary": "Lesson transcript",
+    "description": "This endpoint returns the video transcript and video captions file for a given lesson.",
     "parameters": [
       {
         "in": "path",
@@ -486,6 +492,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The slug of the lesson",
           "example": "checking-understanding-of-basic-transformations"
         }
       }
@@ -495,7 +502,8 @@ export const PATH_OPERATIONS = [
     "path": "/search/transcripts",
     "method": "get",
     "operationId": "searchTranscripts-searchTranscripts",
-    "description": "Search for a term and find lessons that contain similar text in their video transcripts",
+    "summary": "Lesson search using lesson video transcripts",
+    "description": "Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
     "parameters": [
       {
         "in": "query",
@@ -504,6 +512,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "description": "A snippet of text to search for in the lesson video transcripts",
           "example": "Who were the romans?"
         }
       }
@@ -513,22 +522,27 @@ export const PATH_OPERATIONS = [
     "path": "/sequences/{sequence}/assets",
     "method": "get",
     "operationId": "getAssets-getSequenceAssets",
-    "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence",
+    "summary": "Assets within a sequence",
+    "description": "This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.\nThis endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.",
     "parameters": [
       {
         "in": "path",
         "name": "sequence",
+        "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
         "required": true,
         "schema": {
           "type": "string",
-          "example": "maths-secondary"
+          "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
+          "example": "english-primary"
         }
       },
       {
         "in": "query",
         "name": "year",
         "schema": {
-          "type": "number"
+          "type": "number",
+          "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+          "example": 3
         }
       },
       {
@@ -547,7 +561,9 @@ export const PATH_OPERATIONS = [
             "video",
             "worksheet",
             "worksheetAnswers"
-          ]
+          ],
+          "example": "slideDeck",
+          "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers"
         }
       }
     ]
@@ -556,7 +572,8 @@ export const PATH_OPERATIONS = [
     "path": "/key-stages/{keyStage}/subject/{subject}/assets",
     "method": "get",
     "operationId": "getAssets-getSubjectAssets",
-    "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson",
+    "summary": "Assets",
+    "description": "This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.",
     "parameters": [
       {
         "in": "path",
@@ -571,6 +588,7 @@ export const PATH_OPERATIONS = [
             "ks3",
             "ks4"
           ],
+          "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
           "example": "ks1"
         }
       },
@@ -600,6 +618,7 @@ export const PATH_OPERATIONS = [
             "science",
             "spanish"
           ],
+          "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
           "example": "english"
         }
       },
@@ -619,15 +638,17 @@ export const PATH_OPERATIONS = [
             "video",
             "worksheet",
             "worksheetAnswers"
-          ]
+          ],
+          "example": "slideDeck"
         }
       },
       {
         "in": "query",
         "name": "unit",
-        "description": "Optional unit slug to additionally filter by",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "description": "Optional unit slug to additionally filter by",
+          "example": "word-class"
         }
       }
     ]
@@ -636,15 +657,17 @@ export const PATH_OPERATIONS = [
     "path": "/lessons/{lesson}/assets",
     "method": "get",
     "operationId": "getAssets-getLessonAssets",
-    "description": "This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson",
+    "summary": "Downloadable lesson assets",
+    "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. \n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
     "parameters": [
       {
         "in": "path",
         "name": "lesson",
-        "description": "The lesson slug",
+        "description": "The lesson slug identifier",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The lesson slug identifier",
           "example": "child-workers-in-the-victorian-era"
         }
       },
@@ -664,7 +687,8 @@ export const PATH_OPERATIONS = [
             "video",
             "worksheet",
             "worksheetAnswers"
-          ]
+          ],
+          "example": "slideDeck"
         }
       }
     ]
@@ -673,7 +697,8 @@ export const PATH_OPERATIONS = [
     "path": "/lessons/{lesson}/assets/{type}",
     "method": "get",
     "operationId": "getAssets-getLessonAsset",
-    "description": "This endpoint will stream the downloadable asset for the given lesson and type",
+    "summary": "Lesson asset by type",
+    "description": "This endpoint will stream the downloadable asset for the given lesson and type. \nThere is no response returned for this endpoint as it returns a content attachment.",
     "parameters": [
       {
         "in": "path",
@@ -682,6 +707,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The lesson slug",
           "example": "child-workers-in-the-victorian-era"
         }
       },
@@ -712,21 +738,25 @@ export const PATH_OPERATIONS = [
     "path": "/subjects",
     "method": "get",
     "operationId": "getSubjects-getAllSubjects",
-    "description": "This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak",
+    "summary": "Subjects",
+    "description": "This endpoint returns an array of all available subjects and their associated sequences, key stages and years.",
     "parameters": []
   },
   {
     "path": "/subjects/{subject}",
     "method": "get",
     "operationId": "getSubjects-getSubject",
-    "description": "This endpoint returns a single subject and associated sequences, key stages and years.",
+    "summary": "Subject",
+    "description": "This endpoint returns the sequences, key stages and years that are currently available for a given subject.",
     "parameters": [
       {
         "in": "path",
         "name": "subject",
+        "description": "The slug identifier for the subject",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The slug identifier for the subject",
           "example": "art"
         }
       }
@@ -736,14 +766,17 @@ export const PATH_OPERATIONS = [
     "path": "/subjects/{subject}/sequences",
     "method": "get",
     "operationId": "getSubjects-getSubjectSequence",
-    "description": "List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.",
+    "summary": "Sequencing information for a given subject",
+    "description": "This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
     "parameters": [
       {
         "in": "path",
         "name": "subject",
+        "description": "The slug identifier for the subject",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The slug identifier for the subject",
           "example": "art"
         }
       }
@@ -753,14 +786,17 @@ export const PATH_OPERATIONS = [
     "path": "/subjects/{subject}/key-stages",
     "method": "get",
     "operationId": "getSubjects-getSubjectKeyStages",
-    "description": "List of the key stages a subject is taught in.",
+    "summary": "Key stages within a subject",
+    "description": "This endpoint returns a list of key stages that are currently available for a given subject.",
     "parameters": [
       {
         "in": "path",
         "name": "subject",
+        "description": "The subject slug identifier",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The subject slug identifier",
           "example": "art"
         }
       }
@@ -770,15 +806,18 @@ export const PATH_OPERATIONS = [
     "path": "/subjects/{subject}/years",
     "method": "get",
     "operationId": "getSubjects-getSubjectYears",
-    "description": "List of the years a subject is taught in.",
+    "summary": "Year groups for a given subject",
+    "description": "This endpoint returns an array of years that are currently available for a given subject.",
     "parameters": [
       {
         "in": "path",
         "name": "subject",
+        "description": "Subject slug to filter by",
         "required": true,
         "schema": {
           "type": "string",
-          "example": "art"
+          "example": "cooking-nutrition",
+          "description": "Subject slug to filter by"
         }
       }
     ]
@@ -787,6 +826,7 @@ export const PATH_OPERATIONS = [
     "path": "/key-stages",
     "method": "get",
     "operationId": "getKeyStages-getKeyStages",
+    "summary": "Key stages",
     "description": "This endpoint returns all the key stages (titles and slugs) that are currently available on Oak",
     "parameters": []
   },
@@ -794,7 +834,8 @@ export const PATH_OPERATIONS = [
     "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
     "method": "get",
     "operationId": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
-    "description": "This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit",
+    "summary": "Lessons",
+    "description": "This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.",
     "parameters": [
       {
         "in": "path",
@@ -809,6 +850,7 @@ export const PATH_OPERATIONS = [
             "ks3",
             "ks4"
           ],
+          "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
           "example": "ks1"
         }
       },
@@ -838,32 +880,37 @@ export const PATH_OPERATIONS = [
             "science",
             "spanish"
           ],
+          "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
           "example": "english"
         }
       },
       {
         "in": "query",
         "name": "unit",
-        "description": "Optional unit slug to additionally filter by",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "description": "Optional unit slug to additionally filter by",
+          "example": "word-class"
         }
       },
       {
         "in": "query",
         "name": "offset",
+        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
         "schema": {
           "type": "number",
+          "example": 50,
           "default": 0
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of results returned, max 100",
+        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
         "schema": {
           "type": "number",
           "maximum": 100,
+          "example": 10,
           "default": 10
         }
       }
@@ -873,7 +920,8 @@ export const PATH_OPERATIONS = [
     "path": "/key-stages/{keyStage}/subject/{subject}/units",
     "method": "get",
     "operationId": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
-    "description": "This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage",
+    "summary": "Units",
+    "description": "This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.",
     "parameters": [
       {
         "in": "path",
@@ -888,6 +936,7 @@ export const PATH_OPERATIONS = [
             "ks3",
             "ks4"
           ],
+          "description": "Key stage slug to filter by, e.g. 'ks2'",
           "example": "ks1"
         }
       },
@@ -917,6 +966,7 @@ export const PATH_OPERATIONS = [
             "science",
             "spanish"
           ],
+          "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
           "example": "art"
         }
       }
@@ -926,15 +976,18 @@ export const PATH_OPERATIONS = [
     "path": "/lessons/{lesson}/quiz",
     "method": "get",
     "operationId": "getQuestions-getQuestionsForLessons",
+    "summary": "Quiz questions by lesson",
     "description": "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
     "parameters": [
       {
         "in": "path",
         "name": "lesson",
+        "description": "The lesson slug identifier",
         "required": true,
         "schema": {
           "type": "string",
-          "example": "joining-using-and"
+          "description": "The lesson slug identifier",
+          "example": "imagining-you-are-the-characters-the-three-billy-goats-gruff"
         }
       }
     ]
@@ -943,39 +996,47 @@ export const PATH_OPERATIONS = [
     "path": "/sequences/{sequence}/questions",
     "method": "get",
     "operationId": "getQuestions-getQuestionsForSequence",
-    "description": "This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence",
+    "summary": "Questions within a sequence",
+    "description": "This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
     "parameters": [
       {
         "in": "path",
         "name": "sequence",
+        "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
         "required": true,
         "schema": {
           "type": "string",
-          "example": "maths-secondary"
+          "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
+          "example": "english-primary"
         }
       },
       {
         "in": "query",
         "name": "year",
         "schema": {
-          "type": "number"
+          "type": "number",
+          "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+          "example": 3
         }
       },
       {
         "in": "query",
         "name": "offset",
+        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
         "schema": {
           "type": "number",
+          "example": 50,
           "default": 0
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of results returned, max 100",
+        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
         "schema": {
           "type": "number",
           "maximum": 100,
+          "example": 10,
           "default": 10
         }
       }
@@ -985,7 +1046,8 @@ export const PATH_OPERATIONS = [
     "path": "/key-stages/{keyStage}/subject/{subject}/questions",
     "method": "get",
     "operationId": "getQuestions-getQuestionsForKeyStageAndSubject",
-    "description": "This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject",
+    "summary": "Quiz questions by subject and key stage",
+    "description": "This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.",
     "parameters": [
       {
         "in": "path",
@@ -1000,6 +1062,7 @@ export const PATH_OPERATIONS = [
             "ks3",
             "ks4"
           ],
+          "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
           "example": "ks1"
         }
       },
@@ -1029,26 +1092,29 @@ export const PATH_OPERATIONS = [
             "science",
             "spanish"
           ],
+          "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
           "example": "art"
         }
       },
       {
         "in": "query",
         "name": "offset",
+        "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
         "schema": {
           "type": "number",
+          "example": 50,
           "default": 0
         }
       },
       {
         "in": "query",
         "name": "limit",
-        "description": "Limit the number of results returned, max 100",
+        "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
         "schema": {
           "type": "number",
           "maximum": 100,
-          "default": 10,
-          "example": 10
+          "example": 10,
+          "default": 10
         }
       }
     ]
@@ -1057,6 +1123,7 @@ export const PATH_OPERATIONS = [
     "path": "/lessons/{lesson}/summary",
     "method": "get",
     "operationId": "getLessons-getLesson",
+    "summary": "Lesson summary",
     "description": "This endpoint returns a summary for a given lesson",
     "parameters": [
       {
@@ -1066,6 +1133,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The slug of the lesson",
           "example": "joining-using-and"
         }
       }
@@ -1075,21 +1143,23 @@ export const PATH_OPERATIONS = [
     "path": "/search/lessons",
     "method": "get",
     "operationId": "getLessons-searchByTextSimilarity",
-    "description": "This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in",
+    "summary": "Lesson search using lesson title",
+    "description": "Search for a term and find the 20 most similar lessons with titles that contain similar text.",
     "parameters": [
       {
         "in": "query",
         "name": "q",
+        "description": "Search query text snippet",
         "required": true,
         "schema": {
           "type": "string",
+          "description": "Search query text snippet",
           "example": "gothic"
         }
       },
       {
         "in": "query",
         "name": "keyStage",
-        "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
         "schema": {
           "type": "string",
           "enum": [
@@ -1097,13 +1167,14 @@ export const PATH_OPERATIONS = [
             "ks2",
             "ks3",
             "ks4"
-          ]
+          ],
+          "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+          "example": "ks2"
         }
       },
       {
         "in": "query",
         "name": "subject",
-        "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
         "schema": {
           "type": "string",
           "enum": [
@@ -1124,15 +1195,18 @@ export const PATH_OPERATIONS = [
             "rshe-pshe",
             "science",
             "spanish"
-          ]
+          ],
+          "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+          "example": "english"
         }
       },
       {
         "in": "query",
         "name": "unit",
-        "description": "Optional unit slug to additionally filter by",
         "schema": {
-          "type": "string"
+          "type": "string",
+          "description": "Optional unit slug to additionally filter by",
+          "example": "Gothic poetry"
         }
       }
     ]
@@ -1141,6 +1215,7 @@ export const PATH_OPERATIONS = [
     "path": "/units/{unit}/summary",
     "method": "get",
     "operationId": "getUnits-getUnit",
+    "summary": "Unit summary",
     "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
     "parameters": [
       {
@@ -1150,6 +1225,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
+          "description": "The unit slug",
           "example": "simple-compound-and-adverbial-complex-sentences"
         }
       }
@@ -1159,14 +1235,16 @@ export const PATH_OPERATIONS = [
     "path": "/threads",
     "method": "get",
     "operationId": "getThreads-getAllThreads",
-    "description": "Get all threads that can be used as sequence filters.",
+    "summary": "Threads",
+    "description": "This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.",
     "parameters": []
   },
   {
     "path": "/threads/{threadSlug}/units",
     "method": "get",
     "operationId": "getThreads-getThreadUnits",
-    "description": "Get all units for a specific thread filter.",
+    "summary": "Units belonging to a given thread",
+    "description": "This endpoint returns all of the units that belong to a given thread.",
     "parameters": [
       {
         "in": "path",
@@ -1174,7 +1252,7 @@ export const PATH_OPERATIONS = [
         "required": true,
         "schema": {
           "type": "string",
-          "example": "a-midsummer-nights-dream-72"
+          "example": "number-multiplication-and-division"
         }
       }
     ]

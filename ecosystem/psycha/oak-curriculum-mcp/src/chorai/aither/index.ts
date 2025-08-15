@@ -61,29 +61,34 @@ function wrapWithFileLogging(baseLogger: Logger, options?: LoggerOptions): Logge
   return {
     ...baseLogger,
     debug: (message: string, context?: Record<string, unknown>) => {
+      const args = context ? [message, JSON.stringify(context)] : [message];
       fileReporter.log(
-        { level: 0, type: 'debug', tag, args: [message], date: new Date() },
+        { level: 0, type: 'debug', tag, args, date: new Date() },
         { options: consolaOptions },
       );
       baseLogger.debug(message, context);
     },
     info: (message: string, context?: Record<string, unknown>) => {
+      const args = context ? [message, JSON.stringify(context)] : [message];
       fileReporter.log(
-        { level: 1, type: 'info', tag, args: [message], date: new Date() },
+        { level: 1, type: 'info', tag, args, date: new Date() },
         { options: consolaOptions },
       );
       baseLogger.info(message, context);
     },
     warn: (message: string, context?: Record<string, unknown>) => {
+      const args = context ? [message, JSON.stringify(context)] : [message];
       fileReporter.log(
-        { level: 2, type: 'warn', tag, args: [message], date: new Date() },
+        { level: 2, type: 'warn', tag, args, date: new Date() },
         { options: consolaOptions },
       );
       baseLogger.warn(message, context);
     },
     error: (message: string, context?: Record<string, unknown>) => {
+      // Include context in the log message for file reporter
+      const args = context ? [message, JSON.stringify(context, null, 2)] : [message];
       fileReporter.log(
-        { level: 3, type: 'error', tag, args: [message], date: new Date() },
+        { level: 3, type: 'error', tag, args, date: new Date() },
         { options: consolaOptions },
       );
       baseLogger.error(message, context);

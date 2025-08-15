@@ -23,9 +23,7 @@ import {
   generateOperationConstants,
 } from './typegen/index.js';
 import type { FileMap } from './typegen/extraction-types.js';
-import { generateMcpToolsModule, extractMcpTools } from './typegen/mcp-tools/index.js';
-import { generateParametersModule } from './typegen/mcp-tools/parameters.js';
-import { generateValidatorsModule } from './typegen/mcp-tools/validators.js';
+import { generateMinimalToolLookup } from './typegen/mcp-tools/minimal-tool-generator.js';
 
 /**
  * Create a map of filenames to their content
@@ -36,8 +34,6 @@ export function createFileMap(
   tsTypesContent: string,
   pathParameterContent: string,
   mcpToolsContent?: string,
-  mcpParametersContent?: string,
-  mcpValidatorsContent?: string,
 ): FileMap {
   const baseFiles: FileMap = {
     'api-schema.json': jsonStringSchema,
@@ -46,15 +42,9 @@ export function createFileMap(
     'path-parameters.ts': pathParameterContent,
   };
 
-  // Add MCP files if content is provided
+  // Add MCP file if content is provided
   if (mcpToolsContent) {
     baseFiles['mcp-tools.ts'] = mcpToolsContent;
-  }
-  if (mcpParametersContent) {
-    baseFiles['mcp-parameters.ts'] = mcpParametersContent;
-  }
-  if (mcpValidatorsContent) {
-    baseFiles['mcp-validators.ts'] = mcpValidatorsContent;
   }
 
   return baseFiles;
@@ -97,33 +87,32 @@ export function generatePathParametersContent(
 }
 
 export async function generateSchemaArtifacts(
-  schema: OpenAPI3,
+  sourceSchema: OpenAPI3,
   outDirectory: string,
   options: { generateMcpTools?: boolean } = {},
 ): Promise<void> {
   fs.mkdirSync(outDirectory, { recursive: true });
 
-  // Generate TypeScript types from OpenAPI
+  // Generate enriched schema with embedded MCP tool metadata
+  const jsonStringSchema = generateJsonContent(sourceSchema);
+  const schema = JSON.parse(jsonStringSchema) as OpenAPI3;
+
+  // Generate TypeScript types from enriched schema
   const ast = await openapiTS(schema);
   const tsTypesContent = astToString(ast);
 
-  // Extract path parameters and valid combinations
+  // Extract path parameters and valid combinations from enriched schema
   const { parameters, validCombinations } = extractPathParameters(schema);
 
-  // Generate all content using pure functions
-  const jsonStringSchema = generateJsonContent(schema);
+  // Generate all content using enriched schema
   const pathParameterContent = generatePathParametersContent(schema, parameters, validCombinations);
 
   // Generate MCP tools if requested
   let mcpToolsContent: string | undefined;
-  let mcpParametersContent: string | undefined;
-  let mcpValidatorsContent: string | undefined;
 
   if (options.generateMcpTools) {
-    const mcpTools = extractMcpTools(schema);
-    mcpToolsContent = generateMcpToolsModule(schema);
-    mcpParametersContent = generateParametersModule(mcpTools);
-    mcpValidatorsContent = generateValidatorsModule(schema, mcpTools);
+    // Use the enriched schema for tool generation
+    mcpToolsContent = generateMinimalToolLookup(schema);
   }
 
   const fileMap = createFileMap(
@@ -131,24 +120,8 @@ export async function generateSchemaArtifacts(
     tsTypesContent,
     pathParameterContent,
     mcpToolsContent,
-    mcpParametersContent,
-    mcpValidatorsContent,
   );
 
   // Write all files (side effect)
   writeFiles(outDirectory, fileMap);
-}
-
-export async function generateSchema(schemaPath: string, outDirectory: string): Promise<void> {
-  const schemaContent = fs.readFileSync(schemaPath, 'utf8');
-  const schemaRaw: unknown = JSON.parse(schemaContent);
-
-  // Simple check for file-based schema
-  if (!schemaRaw || typeof schemaRaw !== 'object' || !('openapi' in schemaRaw)) {
-    throw new Error('Schema file does not contain a valid OpenAPI 3.x schema');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  const schema = schemaRaw as OpenAPI3;
-  await generateSchemaArtifacts(schema, outDirectory);
 }

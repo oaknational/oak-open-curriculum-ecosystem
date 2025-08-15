@@ -65,9 +65,10 @@ responseSchemaMap.set('getThreads-getThreadUnits:200', schemas.ThreadUnitsRespon
 responseSchemaMap.set('getRateLimit-getRateLimit:200', schemas.RateLimitResponseSchema);
 
 // Error schemas for common status codes
-responseSchemaMap.set('*:401', schemas.error_UNAUTHORIZED);
-responseSchemaMap.set('*:403', schemas.error_FORBIDDEN);
-responseSchemaMap.set('*:500', schemas.error_INTERNAL_SERVER_ERROR);
+// TODO: Generate error schemas from OpenAPI spec
+// responseSchemaMap.set('*:401', schemas.error_UNAUTHORIZED);
+// responseSchemaMap.set('*:403', schemas.error_FORBIDDEN);
+// responseSchemaMap.set('*:500', schemas.error_INTERNAL_SERVER_ERROR);
 
 /**
  * Find the operation ID for a given path and method

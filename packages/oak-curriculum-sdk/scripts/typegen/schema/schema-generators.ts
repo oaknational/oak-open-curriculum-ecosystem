@@ -4,14 +4,61 @@
  */
 
 import type { OpenAPI3 } from 'openapi-typescript';
+import { generateMcpToolName } from '../mcp-tools/name-generator.js';
 
 /**
  * Generate JSON schema file content
  * @param schema - The OpenAPI schema object
- * @returns Formatted JSON string
+ * @returns Formatted JSON string with MCP tool names and metadata embedded
  */
 export function generateJsonContent(schema: OpenAPI3): string {
-  return JSON.stringify(schema, undefined, 2);
+  // Create a deep copy to avoid mutating the original
+  const schemaWithTools = JSON.parse(JSON.stringify(schema)) as OpenAPI3;
+  
+  if (schemaWithTools.paths) {
+    const methods = ['get', 'post', 'put', 'delete', 'patch'] as const;
+    
+    for (const [path, pathItem] of Object.entries(schemaWithTools.paths)) {
+      if (typeof pathItem !== 'object' || '$ref' in pathItem) continue;
+      
+      for (const method of methods) {
+        const operation = pathItem[method];
+        if (!operation || typeof operation !== 'object') continue;
+        
+        // Add the MCP tool name to the operation
+        const toolName = generateMcpToolName(path, method);
+        (operation as any).operationToolName = toolName;
+        
+        // Extract parameter metadata
+        const pathParams: string[] = [];
+        const queryParams: string[] = [];
+        
+        if (operation.parameters && Array.isArray(operation.parameters)) {
+          for (const param of operation.parameters) {
+            // Skip reference objects
+            if ('$ref' in param) continue;
+            
+            if (param.in === 'path') {
+              pathParams.push(param.name);
+            } else if (param.in === 'query') {
+              queryParams.push(param.name);
+            }
+          }
+        }
+        
+        // Add comprehensive tool metadata
+        (operation as any).operationToolMetadata = {
+          name: toolName,
+          path: path,
+          method: method.toUpperCase(),
+          pathParams: pathParams,
+          queryParams: queryParams,
+        };
+      }
+    }
+  }
+  
+  return JSON.stringify(schemaWithTools, undefined, 2);
 }
 
 /**

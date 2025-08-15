@@ -14,7 +14,7 @@
  * - /search/lessons + GET → oak-get-search-lessons
  * - /lessons/{lesson}/assets/{type} + GET → oak-get-lessons-asset-type (special case to avoid duplicate)
  */
-export function generateMcpToolName(path: string, method: string, operationId?: string): string {
+export function generateMcpToolName(path: string, method: string): string {
   // Special cases to avoid duplicates and reserved words
   // 'type' is a TypeScript keyword, so we use 'assetType' instead
   if (path === '/lessons/{lesson}/assets/{type}') {

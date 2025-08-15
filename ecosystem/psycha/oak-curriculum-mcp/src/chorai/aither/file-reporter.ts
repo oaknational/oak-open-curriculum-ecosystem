@@ -24,8 +24,6 @@ export function createFileReporter(logFilePath: string): ConsolaReporter {
 
       const logLine = `${timestamp}: ${level} ${tag} ${message}\n`;
 
-      console.debug(`[FILE-REPORTER] called with context: ${JSON.stringify(_ctx)}`);
-
       try {
         writeFileSync(logFilePath, logLine, { flag: 'a' });
       } catch (error) {

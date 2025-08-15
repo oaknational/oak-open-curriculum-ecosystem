@@ -61,19 +61,25 @@ export type {
 
 // MCP (Model Context Protocol) Tool Support
 // These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
-export { MCP_TOOLS_DATA, isMcpToolName, getMcpTool } from './types/generated/api-schema/mcp-tools';
-export type { McpToolName } from './types/generated/api-schema/mcp-tools';
+export { TOOL_LOOKUP, isToolName } from './types/generated/api-schema/mcp-tools';
+export type { ToolName } from './types/generated/api-schema/mcp-tools';
 
-export { validateToolParameters } from './types/generated/api-schema/mcp-parameters';
-export type {
-  ToolParameters,
-  GetToolParameters,
-  GetToolResponse,
-  ToolResponseMap,
-} from './types/generated/api-schema/mcp-parameters';
+// Note: Parameter validation now happens via schema.parameters directly
+// in the MCP server implementation. Response validation is handled
+// via the SDK's built-in response structures.
 
+// MCP executor - static function using path-based client
+export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call';
+
+// Export the type-safe object helpers
 export {
-  MCP_TOOL_VALIDATORS,
-  validateToolResponse,
-} from './types/generated/api-schema/mcp-validators';
-export type { GetToolValidatedResponse } from './types/generated/api-schema/mcp-validators';
+  typeSafeKeys,
+  typeSafeValues,
+  typeSafeEntries,
+  typeSafeFromEntries,
+  typeSafeGet,
+  typeSafeSet,
+  typeSafeHas,
+  typeSafeHasOwn,
+  typeSafeOwnKeys,
+} from './types/helpers';

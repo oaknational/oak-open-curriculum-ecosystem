@@ -2,7 +2,8 @@
  * Enriched Tools Module for Oak Curriculum MCP
  *
  * This file imports tool definitions from the SDK and enriches them with
- * optional decorative metadata. ALL API data comes from the SDK.
+ * optional decorative metadata. Tool names and coordinates come from TOOL_LOOKUP.
+ * Parameters and descriptions come from the schema.
  *
  * Data Flow:
  * OpenAPI Schema → SDK Type Generation → This Module → MCP Server
@@ -13,10 +14,8 @@
  * - ADR-035: Unified SDK-MCP type generation
  */
 
-import {
-  MCP_TOOLS_DATA,
-  type McpToolName,
-} from '@oaknational/oak-curriculum-sdk';
+import { TOOL_LOOKUP, isToolName, type ToolName } from '@oaknational/oak-curriculum-sdk';
+import { schema } from '@oaknational/oak-curriculum-sdk';
 import { TOOL_DECORATIONS } from '../../../chorai/tool-metadata/tool-decorations';
 import type { ToolDecoration } from '../../../chorai/tool-metadata/types.js';
 
@@ -25,45 +24,87 @@ import type { ToolDecoration } from '../../../chorai/tool-metadata/types.js';
  */
 export interface EnrichedTool {
   /** MCP tool name from SDK */
-  mcpName: McpToolName;
+  mcpName: ToolName;
   /** Path from SDK */
   path: string;
   /** HTTP method from SDK */
   method: string;
-  /** Operation ID from SDK */
-  operationId: string;
-  /** Description from SDK */
+  /** Description from schema */
   description?: string;
-  /** Path parameters from SDK */
-  pathParams: readonly string[];
-  /** Query parameters from SDK */
-  queryParams: readonly string[];
   /** Optional decorative metadata */
   decoration?: ToolDecoration;
 }
 
 /**
- * Create enriched tools by combining SDK data with decorations
+ * Extract description from schema operation
+ */
+function getOperationDescription(path: string, method: string): string | undefined {
+  const pathItem = schema.paths?.[path as keyof typeof schema.paths];
+  if (!pathItem) return undefined;
+
+  const operation = pathItem[method.toLowerCase() as keyof typeof pathItem];
+  if (!operation || typeof operation !== 'object') return undefined;
+
+  // Check for description property
+  if ('description' in operation) {
+    const desc = operation.description;
+    if (typeof desc === 'string') return desc;
+  }
+
+  // Check for summary property (some OpenAPI specs use this)
+  if ('summary' in operation) {
+    const sum = (operation as Record<string, unknown>).summary;
+    if (typeof sum === 'string') return sum;
+  }
+
+  return undefined;
+}
+
+/**
+ * Get operation ID from schema
+ */
+function getOperationId(path: string, method: string): string | undefined {
+  const pathItem = schema.paths?.[path as keyof typeof schema.paths];
+  if (!pathItem) return undefined;
+
+  const operation = pathItem[method.toLowerCase() as keyof typeof pathItem];
+  if (!operation || typeof operation !== 'object') return undefined;
+
+  if ('operationId' in operation && typeof operation.operationId === 'string') {
+    return operation.operationId;
+  }
+
+  return undefined;
+}
+
+/**
+ * Create enriched tools by combining TOOL_LOOKUP with schema data and decorations
  */
 function createEnrichedTools(): readonly EnrichedTool[] {
   const tools: EnrichedTool[] = [];
 
-  // Iterate through all tools from the SDK
-  for (const [mcpName, toolData] of Object.entries(MCP_TOOLS_DATA)) {
-    // Get optional decoration for this operation
-    const decoration = TOOL_DECORATIONS[toolData.operationId];
+  // Iterate through all tools from TOOL_LOOKUP
+  for (const [mcpName, coordinates] of Object.entries(TOOL_LOOKUP)) {
+    // Use type guard to ensure mcpName is valid
+    if (!isToolName(mcpName)) {
+      // This should never happen since we're iterating over TOOL_LOOKUP
+      // but TypeScript needs the check for type safety
+      continue;
+    }
 
-    // Combine SDK data with decoration
-    // All data comes from MCP_TOOLS_DATA which is generated from the SDK
+    const { path, method } = coordinates;
+
+    // Get operation ID for decoration lookup
+    const operationId = getOperationId(path, method);
+    const decoration = operationId ? TOOL_DECORATIONS[operationId] : undefined;
+
+    // Combine lookup data with schema description and decoration
     const enrichedTool: EnrichedTool = {
-      mcpName: mcpName as McpToolName,
-      path: toolData.path,
-      method: toolData.method,
-      operationId: toolData.operationId,
-      description: (toolData as any).description,
-      pathParams: toolData.pathParams,
-      queryParams: toolData.queryParams,
-      ...(decoration && { decoration }),
+      mcpName, // Now typed as ToolName thanks to type guard
+      path,
+      method,
+      description: getOperationDescription(path, method),
+      ...(decoration ? { decoration } : {}),
     };
 
     tools.push(enrichedTool);
@@ -74,34 +115,23 @@ function createEnrichedTools(): readonly EnrichedTool[] {
 
 /**
  * All enriched tools for the Oak Curriculum MCP
- * Generated from SDK operations with optional decorations
+ * Created once at module load time
  */
-export const ENRICHED_TOOLS = createEnrichedTools();
+export const ENRICHED_TOOLS: readonly EnrichedTool[] = createEnrichedTools();
 
 /**
- * Get enriched tool by operation ID
+ * Map of tool names to enriched tools for O(1) lookup
  */
-export function getEnrichedToolById(operationId: string): EnrichedTool | undefined {
-  return ENRICHED_TOOLS.find((tool) => tool.operationId === operationId);
-}
+export const ENRICHED_TOOLS_MAP: ReadonlyMap<ToolName, EnrichedTool> = new Map(
+  ENRICHED_TOOLS.map((tool) => [tool.mcpName, tool]),
+);
 
 /**
- * Get enriched tool by MCP name
+ * Get an enriched tool by name
  */
-export function getEnrichedToolByName(mcpName: McpToolName): EnrichedTool | undefined {
-  return ENRICHED_TOOLS.find((tool) => tool.mcpName === mcpName);
-}
-
-/**
- * Get only tools with decorations
- */
-export function getDecoratedTools(): readonly EnrichedTool[] {
-  return ENRICHED_TOOLS.filter((tool) => tool.decoration !== undefined);
-}
-
-/**
- * Get tools by category
- */
-export function getToolsByCategory(category: string): readonly EnrichedTool[] {
-  return ENRICHED_TOOLS.filter((tool) => tool.decoration?.category === category);
+export function getEnrichedTool(mcpName: string): EnrichedTool | undefined {
+  if (!isToolName(mcpName)) {
+    return undefined;
+  }
+  return ENRICHED_TOOLS_MAP.get(mcpName);
 }

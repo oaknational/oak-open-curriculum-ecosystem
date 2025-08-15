@@ -1,19 +1,25 @@
 /**
- * MCP tool handler implementation
+ * Clean MCP tool handler implementation
  *
- * Directly delegates to SDK operations using enriched tool metadata.
- * No manual mapping, no hardcoded names, everything flows from the API schema.
+ * Uses generated executor from SDK with type predicates.
+ * NO type assertions, NO any, everything flows from the schema.
  *
  * ADR Compliance:
  * - ADR-029: No manual API data (all from SDK)
  * - ADR-030: SDK as single source of truth
- * - ADR-031: Uses build-time generated enriched tools
+ * - ADR-032: Runtime validation at boundaries
+ * - ADR-035: Unified SDK-MCP type generation
  */
 
 import type { Logger } from '@oaknational/mcp-moria';
-import type { OakApiClient, McpToolName } from '@oaknational/oak-curriculum-sdk';
-import { validateToolResponse } from '@oaknational/oak-curriculum-sdk';
-import { ENRICHED_TOOLS } from '../generated/enriched-tools';
+// CRITICAL: Import ONLY the path-based client type, NEVER OakApiClient
+import type { OakApiPathBasedClient } from '@oaknational/oak-curriculum-sdk';
+import {
+  isToolName,
+  executeToolCall,
+  McpToolError,
+  McpParameterError,
+} from '@oaknational/oak-curriculum-sdk';
 
 /**
  * MCP operation error for consistent error handling
@@ -36,140 +42,122 @@ export class McpOperationError extends Error {
 export type ToolParameters = Record<string, unknown>;
 
 /**
- * Find enriched tool by MCP name
- */
-function findEnrichedToolByMcpName(mcpName: string) {
-  return ENRICHED_TOOLS.find((tool) => tool.mcpName === mcpName);
-}
-
-/**
- * Execute tool by calling SDK's HTTP methods directly
+ * Execute tool using SDK's data-driven executeToolCall
  *
- * The SDK is an OpenAPI client that exposes HTTP methods (GET, POST, etc.)
- * not named methods. This approach maintains the central contract: all types
- * flow from the API schema through the SDK.
+ * This delegates to the SDK's static executeToolCall function
+ * which uses the path-based client for pure data-driven execution.
+ * CRITICAL: MUST use OakApiPathBasedClient, NEVER OakApiClient
  */
 async function executeToolOperation(
   toolName: string,
   params: ToolParameters,
-  sdk: OakApiClient,
+  sdk: OakApiPathBasedClient, // MUST be path-based client
   logger: Logger,
 ): Promise<unknown> {
-  // Find the enriched tool definition
-  const enrichedTool = findEnrichedToolByMcpName(toolName);
-  if (!enrichedTool) {
-    throw new Error(`Unknown tool: ${toolName}`);
+  // Validate tool name first for better error messages
+  if (!isToolName(toolName)) {
+    throw new McpOperationError(`Unknown tool: ${toolName}`, toolName);
   }
 
-  // Build parameters for SDK call, separating path and query params
-  const pathParams: Record<string, unknown> = {};
-  const queryParams: Record<string, unknown> = {};
+  logger.debug('Executing tool via SDK', { toolName, params });
 
-  // Process path parameters
-  for (const paramName of enrichedTool.pathParams) {
-    const value = params[paramName];
-    if (value !== undefined) {
-      pathParams[paramName] = value;
+  // Delegate to SDK's executeToolCall which handles:
+  // 1. Parameter validation
+  // 2. Path-based client routing
+  // 3. Response validation
+  const result = await executeToolCall(toolName, params, sdk);
+
+  if (result.error) {
+    // Log different error types with appropriate context
+    if (result.error instanceof McpParameterError) {
+      logger.error('Parameter validation failed', {
+        toolName,
+        parameterName: result.error.parameterName,
+        error: result.error.message,
+      });
+    } else if (result.error instanceof McpToolError) {
+      // Extract full cause chain for logging
+      const causeChain: string[] = [result.error.message];
+      let currentCause = result.error.cause;
+      while (currentCause) {
+        if (currentCause instanceof Error) {
+          causeChain.push(`Caused by: ${currentCause.message}`);
+          currentCause = (currentCause as unknown).cause;
+        } else {
+          causeChain.push(`Caused by: ${String(currentCause)}`);
+          break;
+        }
+      }
+
+      logger.error('Tool execution failed', {
+        toolName,
+        code: result.error.code,
+        error: result.error.message,
+        causeChain: causeChain.join(' -> '),
+        fullCause: result.error.cause,
+      });
     } else {
-      // Path parameters are always required
-      throw new Error(`Missing required path parameter: ${paramName}`);
+      logger.error('Unknown error', {
+        toolName,
+        error: result.error,
+      });
     }
-  }
 
-  // Process query parameters
-  for (const paramName of enrichedTool.queryParams) {
-    const value = params[paramName];
-    if (value !== undefined) {
-      queryParams[paramName] = value;
-    }
-    // Query parameters are optional unless we add validation later
-  }
-
-  logger.debug('Calling SDK HTTP method', {
-    toolName,
-    method: enrichedTool.method,
-    path: enrichedTool.path,
-    pathParams,
-    queryParams,
-  });
-
-  // The Oak API currently only has GET methods, but we handle all cases for future-proofing
-  // The enriched tool has literal type for method ("get" as const)
-
-  if (enrichedTool.method !== 'get') {
-    // The Oak API currently only supports GET methods
-    // This is a safety check in case the API adds other methods in the future
-    throw new Error(
-      `Unsupported HTTP method: ${enrichedTool.method}. The Oak API currently only supports GET.`,
-    );
-  }
-
-  // Build the options object for the GET request
-  // Only include params if there are actual parameters to pass
-  const hasParams = Object.keys(queryParams).length > 0 || Object.keys(pathParams).length > 0;
-
-  // Call the SDK's GET method
-  // TYPE ASSERTION RATIONALE (Champion-Approved):
-  // openapi-fetch requires compile-time literal path types, but MCP needs runtime dispatch.
-  // This minimal assertion at the library boundary is architecturally necessary and safe
-  // because enriched tools are generated from the SDK's valid paths.
-  // The central contract is preserved: types flow from API → SDK → MCP.
-
-  // We use a type-cast to any for the path because openapi-fetch's complex type system
-  // requires literal path types at compile time, but we have runtime strings.
-  // The SDK will handle validation at runtime.
-  const sdkPath = enrichedTool.path as any;
-
-  // Build options conditionally based on whether we have parameters
-  // OpenAPI-fetch may require an empty object as the second parameter when there are no params
-  const result = hasParams
-    ? await sdk.GET(sdkPath, { params: { query: queryParams, path: pathParams } })
-    : await sdk.GET(sdkPath, {});
-
-  // The SDK returns a result object with data and error properties
-  if ('error' in result && result.error) {
+    // Re-throw with MCP operation error wrapper
     throw new McpOperationError(
-      `API call failed: ${JSON.stringify(result.error)}`,
+      result.error instanceof Error ? result.error.message : `Tool ${toolName} failed`,
       toolName,
       result.error,
     );
   }
 
-  // Validate the response using SDK validators (ADR-032: boundary validation)
-  // This ensures runtime type safety at the API boundary
-  try {
-    const validatedData = validateToolResponse(toolName as McpToolName, result.data);
-    return validatedData;
-  } catch (validationError) {
-    logger.warn('Response validation failed, returning unvalidated data', {
-      toolName,
-      error: validationError,
-    });
-    // Return unvalidated data if validation fails (graceful degradation)
-    // This ensures the system continues to work even if the API response
-    // doesn't match the expected schema exactly
-    return result.data;
-  }
+  logger.debug('Tool execution successful', { toolName });
+  return result.data;
 }
 
 /**
- * Creates MCP tool handler that directly delegates to SDK
+ * Creates MCP tool handler using PATH-BASED CLIENT
  *
- * This is the proper implementation that:
- * - Uses enriched tools as the single source of truth
- * - Calls SDK methods directly without manual mapping
- * - Lets the SDK handle validation
+ * This implementation:
+ * - Uses PATH-BASED CLIENT for pure data-driven execution
+ * - Routes requests via client[path][method](params)
+ * - Uses type predicates instead of assertions
+ * - Maintains the central principle: everything flows from the schema
+ * CRITICAL: MUST use OakApiPathBasedClient, NEVER OakApiClient
  */
-export function createToolHandler(sdk: OakApiClient, logger: Logger) {
+export function createToolHandler(sdk: OakApiPathBasedClient, logger: Logger) {
   const toolLogger = logger.child ? logger.child({ component: 'mcp-tool-handler' }) : logger;
 
   return async function handleTool(toolName: string, params: ToolParameters): Promise<unknown> {
-    toolLogger.debug('Executing tool', { toolName, params });
+    toolLogger.debug('Handling tool request', { toolName, params });
 
     try {
       return await executeToolOperation(toolName, params, sdk, toolLogger);
     } catch (error) {
-      toolLogger.error('Tool execution failed', { toolName, error });
+      // Extract cause chain for better error logging
+      const errorDetails: Record<string, unknown> = { toolName };
+      if (error instanceof Error) {
+        errorDetails.message = error.message;
+        errorDetails.stack = error.stack;
+
+        // Build cause chain
+        const causeChain: string[] = [error.message];
+        let currentCause = (error as unknown).cause;
+        while (currentCause) {
+          if (currentCause instanceof Error) {
+            causeChain.push(`Caused by: ${currentCause.message}`);
+            currentCause = (currentCause as unknown).cause;
+          } else {
+            causeChain.push(`Caused by: ${String(currentCause)}`);
+            break;
+          }
+        }
+        errorDetails.causeChain = causeChain.join(' -> ');
+      } else {
+        errorDetails.error = error;
+      }
+
+      toolLogger.error('Tool execution failed', errorDetails);
       throw new McpOperationError(`MCP tool ${toolName} failed`, toolName, error);
     }
   };

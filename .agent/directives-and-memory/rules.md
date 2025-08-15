@@ -29,6 +29,7 @@ See also [Biological Model Architecture](#biological-model-architecture) below.
 - **Splitting long functions** - If a function is too long, split it into smaller, pure functions with a single responsibility, using TDD.
 - **Reducing complexity in functions** - If a function is too complex, identify distinct responsibilities and split it into smaller, pure functions with a single responsibility, using TDD.
 - **Removing unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
+- **Version with git, not with names** - Fix files in place, or replace old approaches with new approaches, NEVER create parallel versions using naming. Incorrect example: `execute-tool-call.ts` and `execute-tool-call.v2.ts`, correct example: `execute-tool-call.ts` and `execute-tool-call.ts` with a git history showing the evolution of the file. Incorrect example: `execute-tool-call.ts` and `execute-tool-call-correct.ts`, correct example: `execute-tool-call.ts` and `execute-tool-call.ts` with a git history showing the evolution of the file.
 
 ### Tooling
 
@@ -45,15 +46,15 @@ Use the right tool for the job:
 ### Code Quality
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to *prove it fails*), Green (run the test to prove it passes, *because product code exists now*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
-- **NEVER disable checks** - Never disable any quality gates, never disable any linting, never disable any formatting, never disable any tests
+- **NEVER disable checks** - Never disable any quality gates, never disable type checks, never disable any linting, never disable any formatting, never disable any tests, never disable Git hooks (`--no-verify`)
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript, do not attempt to prefix the variable with a `_`. ALWAYS fix the root cause, never work around it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>` - they all disable the type system
-- **Do not use Object methods** - Object methods change the data type to `unknown`, this is *throwing away* type information, removing awareness. Do not use Object methods.
+- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `Object.*` methods, or `Reflect.*` methods - they ALL disable the type system
+- **Preserve type information** - NEVER widen types by assigning to broader types like `string` or `number`. If you have a literal type `'/api/path'`, keep it as that literal, don't accept it as `string`. Type information flows from data structures with `as const` through to usage. Every `: string` or `: number` parameter destroys type information irreversibly
 - **Single source of truth for types** - Define types ONCE, and import them consistently
 - **Use library types directly where possible** - don't make up a type when you can use a library type
 - **Validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation, use Zod where appropriate

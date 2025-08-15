@@ -138,9 +138,11 @@ export function isMcpToolName(value: unknown): value is McpToolName {
 - ADR-031: Generation-time extraction
 - ADR-032: External boundary validation
 - ADR-034: System boundaries and type assertions
+- ADR-036: Data-driven type generation pattern (refinement of this ADR)
 
 ## References
 
 - Implementation plan: `.agent/plans/unified-sdk-mcp-type-generation.md`
+- Data-driven refinement: `.agent/plans/data-driven-mcp-type-generation.md`
 - Logger pattern: `ecosystem/histoi/histos-logger/src/log-levels.ts`
 - MCP server: `ecosystem/psycha/oak-curriculum-mcp/`

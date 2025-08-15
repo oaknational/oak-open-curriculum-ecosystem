@@ -48,7 +48,85 @@ const config = tsEslintConfig(
         },
       },
     },
+    rules: {
+      '@typescript-eslint/no-restricted-types': [
+        // temp disable until we have allow in error handling
+        'off',
+        {
+          types: {
+            unknown: {
+              message:
+                'Avoid `unknown`. Prefer a specific union, a domain model, or a generic parameter (e.g. <T>), so callers/implementations have a concrete type. The only exception is incoming data from network requests, or data read from files, which should be validated.',
+            },
+          },
+        },
+      ],
+      // Disallow specific Object.* properties, they lose type information
+      'no-restricted-properties': [
+        'error',
+        {
+          object: 'Object',
+          property: 'keys',
+          message: 'Use typeSafeKeys<T>() for typed keys.',
+        },
+        {
+          object: 'Object',
+          property: 'values',
+          message: 'Use typeSafeValues<T>() for typed values.',
+        },
+        {
+          object: 'Object',
+          property: 'entries',
+          message: 'Use typeSafeEntries<T>() for typed entries.',
+        },
+        {
+          object: 'Object',
+          property: 'fromEntries',
+          message: 'Use typeSafeFromEntries<K,V>().',
+        },
+        {
+          object: 'Object',
+          property: 'getOwnPropertyNames',
+          message: 'Use typeSafeOwnKeys<T>() if you truly need all own keys.',
+        },
+        {
+          object: 'Object',
+          property: 'getOwnPropertySymbols',
+          message: 'Use typeSafeOwnKeys<T>() if you truly need all own keys.',
+        },
+
+        // Disallow Reflect.* methods for key/value access, they lose type information
+        {
+          object: 'Reflect',
+          property: 'get',
+          message: 'Prefer typed property access or typeSafeGet().',
+        },
+        {
+          object: 'Reflect',
+          property: 'set',
+          message: 'Prefer typed property assignment or typeSafeSet().',
+        },
+        {
+          object: 'Reflect',
+          property: 'has',
+          message: 'Prefer the `in` operator or typeSafeHas().',
+        },
+        {
+          object: 'Reflect',
+          property: 'ownKeys',
+          message: 'Use typeSafeOwnKeys<T>() for a typed result.',
+        },
+      ],
+    },
   },
+  // Allow the type helper file to use restricted APIs internally
+  {
+    files: ['src/types/helpers.ts'],
+    rules: {
+      'no-restricted-properties': 'off',
+    },
+  },
+
   // Config files
   {
     files: ['eslint.config.ts', 'vitest.config.ts', 'vitest.config.e2e.ts', 'tsup.config.ts'],

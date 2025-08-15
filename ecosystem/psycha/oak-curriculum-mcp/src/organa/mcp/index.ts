@@ -11,7 +11,8 @@
  */
 
 import type { Logger } from '@oaknational/mcp-moria';
-import type { OakApiClient } from '@oaknational/oak-curriculum-sdk';
+// CRITICAL: Import ONLY the path-based client type, NEVER OakApiClient
+import type { OakApiPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 import { createToolHandler } from './handlers/tool-handler';
 import { tools } from './tools';
 
@@ -33,10 +34,11 @@ export interface McpOrgan {
 }
 
 /**
- * Creates MCP organ that provides tools and handlers
- * Now uses SDK directly instead of going through curriculum organ
+ * Creates MCP organ using PATH-BASED CLIENT
+ * Uses SDK path-based client for pure data-driven execution
+ * CRITICAL: MUST use OakApiPathBasedClient, NEVER OakApiClient
  */
-export function createMcpOrgan(sdk: OakApiClient, logger: Logger): McpOrgan {
+export function createMcpOrgan(sdk: OakApiPathBasedClient, logger: Logger): McpOrgan {
   const mcpLogger = logger.child ? logger.child({ organ: 'mcp' }) : logger;
 
   return {

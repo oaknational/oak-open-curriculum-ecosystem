@@ -40,7 +40,7 @@ export function getToolMetadata(operationId: string): ToolDecoration | undefined
  */
 export function getToolsByCategory(category: string): string[] {
   return Object.entries(TOOL_METADATA)
-    .filter(([_, metadata]) => metadata.category === category)
+    .filter(([, metadata]) => metadata.category === category)
     .map(([operationId]) => operationId);
 }
 
@@ -49,7 +49,7 @@ export function getToolsByCategory(category: string): string[] {
  */
 export function getToolsByTag(tag: string): string[] {
   return Object.entries(TOOL_METADATA)
-    .filter(([_, metadata]) => metadata.tags?.includes(tag))
+    .filter(([, metadata]) => metadata.tags?.includes(tag))
     .map(([operationId]) => operationId);
 }
 

@@ -8,7 +8,7 @@ export const schema = {
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
-    "version": "0.5.0-8b4203d4b991dbdf673f851bbc6b87298d8ca5b5"
+    "version": "0.5.0-0b5e168d09162c1ee97dedd194aa094e4fac7c72"
   },
   "servers": [
     {
@@ -48,9 +48,9 @@ export const schema = {
     "/sequences/{sequence}/units": {
       "get": {
         "operationId": "getSequences-getSequenceUnits",
-        "description": "",
+        "summary": "Units within a sequence",
+        "description": "This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.",
         "tags": [
-          "lists",
           "units",
           "sequences"
         ],
@@ -63,8 +63,10 @@ export const schema = {
           {
             "in": "path",
             "name": "sequence",
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
+              "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
               "example": "english-primary"
             },
             "required": true
@@ -87,7 +89,9 @@ export const schema = {
                 "10",
                 "11",
                 "all-years"
-              ]
+              ],
+              "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+              "example": "1"
             }
           }
         ],
@@ -102,13 +106,26 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-sequences-units",
+        "operationToolMetadata": {
+          "name": "oak-get-sequences-units",
+          "path": "/sequences/{sequence}/units",
+          "method": "GET",
+          "pathParams": [
+            "sequence"
+          ],
+          "queryParams": [
+            "year"
+          ]
         }
       }
     },
     "/lessons/{lesson}/transcript": {
       "get": {
         "operationId": "getLessonTranscript-getLessonTranscript",
-        "description": "This endpoint returns the transcript from the video from a lesson",
+        "summary": "Lesson transcript",
+        "description": "This endpoint returns the video transcript and video captions file for a given lesson.",
         "tags": [
           "lessons"
         ],
@@ -124,6 +141,7 @@ export const schema = {
             "description": "The slug of the lesson",
             "schema": {
               "type": "string",
+              "description": "The slug of the lesson",
               "example": "checking-understanding-of-basic-transformations"
             },
             "required": true
@@ -140,13 +158,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-lessons-transcript",
+        "operationToolMetadata": {
+          "name": "oak-get-lessons-transcript",
+          "path": "/lessons/{lesson}/transcript",
+          "method": "GET",
+          "pathParams": [
+            "lesson"
+          ],
+          "queryParams": []
         }
       }
     },
     "/search/transcripts": {
       "get": {
         "operationId": "searchTranscripts-searchTranscripts",
-        "description": "Search for a term and find lessons that contain similar text in their video transcripts",
+        "summary": "Lesson search using lesson video transcripts",
+        "description": "Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.",
         "tags": [
           "search"
         ],
@@ -162,6 +191,7 @@ export const schema = {
             "description": "A snippet of text to search for in the lesson video transcripts",
             "schema": {
               "type": "string",
+              "description": "A snippet of text to search for in the lesson video transcripts",
               "example": "Who were the romans?"
             },
             "required": true
@@ -178,13 +208,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-search-transcripts",
+        "operationToolMetadata": {
+          "name": "oak-get-search-transcripts",
+          "path": "/search/transcripts",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": [
+            "q"
+          ]
         }
       }
     },
     "/sequences/{sequence}/assets": {
       "get": {
         "operationId": "getAssets-getSequenceAssets",
-        "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence",
+        "summary": "Assets within a sequence",
+        "description": "This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.\nThis endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.",
         "tags": [
           "assets",
           "sequences"
@@ -198,9 +239,11 @@ export const schema = {
           {
             "in": "path",
             "name": "sequence",
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
-              "example": "maths-secondary"
+              "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
+              "example": "english-primary"
             },
             "required": true
           },
@@ -208,7 +251,9 @@ export const schema = {
             "in": "query",
             "name": "year",
             "schema": {
-              "type": "number"
+              "type": "number",
+              "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+              "example": 3
             }
           },
           {
@@ -227,7 +272,9 @@ export const schema = {
                 "video",
                 "worksheet",
                 "worksheetAnswers"
-              ]
+              ],
+              "example": "slideDeck",
+              "description": "Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers"
             }
           }
         ],
@@ -242,13 +289,27 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-sequences-assets",
+        "operationToolMetadata": {
+          "name": "oak-get-sequences-assets",
+          "path": "/sequences/{sequence}/assets",
+          "method": "GET",
+          "pathParams": [
+            "sequence"
+          ],
+          "queryParams": [
+            "year",
+            "type"
+          ]
         }
       }
     },
     "/key-stages/{keyStage}/subject/{subject}/assets": {
       "get": {
         "operationId": "getAssets-getSubjectAssets",
-        "description": "This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson",
+        "summary": "Assets",
+        "description": "This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.",
         "tags": [
           "assets"
         ],
@@ -270,6 +331,7 @@ export const schema = {
                 "ks3",
                 "ks4"
               ],
+              "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
             "required": true
@@ -299,6 +361,7 @@ export const schema = {
                 "science",
                 "spanish"
               ],
+              "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
               "example": "english"
             },
             "required": true
@@ -319,15 +382,17 @@ export const schema = {
                 "video",
                 "worksheet",
                 "worksheetAnswers"
-              ]
+              ],
+              "example": "slideDeck"
             }
           },
           {
             "in": "query",
             "name": "unit",
-            "description": "Optional unit slug to additionally filter by",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Optional unit slug to additionally filter by",
+              "example": "word-class"
             }
           }
         ],
@@ -342,13 +407,28 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-key-stages-subject-assets",
+        "operationToolMetadata": {
+          "name": "oak-get-key-stages-subject-assets",
+          "path": "/key-stages/{keyStage}/subject/{subject}/assets",
+          "method": "GET",
+          "pathParams": [
+            "keyStage",
+            "subject"
+          ],
+          "queryParams": [
+            "type",
+            "unit"
+          ]
         }
       }
     },
     "/lessons/{lesson}/assets": {
       "get": {
         "operationId": "getAssets-getLessonAssets",
-        "description": "This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson",
+        "summary": "Downloadable lesson assets",
+        "description": "This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. \n        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.\n          ",
         "tags": [
           "assets",
           "lessons"
@@ -362,9 +442,10 @@ export const schema = {
           {
             "in": "path",
             "name": "lesson",
-            "description": "The lesson slug",
+            "description": "The lesson slug identifier",
             "schema": {
               "type": "string",
+              "description": "The lesson slug identifier",
               "example": "child-workers-in-the-victorian-era"
             },
             "required": true
@@ -385,7 +466,8 @@ export const schema = {
                 "video",
                 "worksheet",
                 "worksheetAnswers"
-              ]
+              ],
+              "example": "slideDeck"
             }
           }
         ],
@@ -400,13 +482,26 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-lessons-assets",
+        "operationToolMetadata": {
+          "name": "oak-get-lessons-assets",
+          "path": "/lessons/{lesson}/assets",
+          "method": "GET",
+          "pathParams": [
+            "lesson"
+          ],
+          "queryParams": [
+            "type"
+          ]
         }
       }
     },
     "/lessons/{lesson}/assets/{type}": {
       "get": {
         "operationId": "getAssets-getLessonAsset",
-        "description": "This endpoint will stream the downloadable asset for the given lesson and type",
+        "summary": "Lesson asset by type",
+        "description": "This endpoint will stream the downloadable asset for the given lesson and type. \nThere is no response returned for this endpoint as it returns a content attachment.",
         "tags": [
           "assets",
           "lessons"
@@ -423,6 +518,7 @@ export const schema = {
             "description": "The lesson slug",
             "schema": {
               "type": "string",
+              "description": "The lesson slug",
               "example": "child-workers-in-the-victorian-era"
             },
             "required": true
@@ -460,13 +556,25 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-lessons-assets-by-type",
+        "operationToolMetadata": {
+          "name": "oak-get-lessons-assets-by-type",
+          "path": "/lessons/{lesson}/assets/{type}",
+          "method": "GET",
+          "pathParams": [
+            "lesson",
+            "type"
+          ],
+          "queryParams": []
         }
       }
     },
     "/subjects": {
       "get": {
         "operationId": "getSubjects-getAllSubjects",
-        "description": "This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak",
+        "summary": "Subjects",
+        "description": "This endpoint returns an array of all available subjects and their associated sequences, key stages and years.",
         "tags": [
           "lists"
         ],
@@ -486,13 +594,22 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-subjects",
+        "operationToolMetadata": {
+          "name": "oak-get-subjects",
+          "path": "/subjects",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     },
     "/subjects/{subject}": {
       "get": {
         "operationId": "getSubjects-getSubject",
-        "description": "This endpoint returns a single subject and associated sequences, key stages and years.",
+        "summary": "Subject",
+        "description": "This endpoint returns the sequences, key stages and years that are currently available for a given subject.",
         "tags": [
           "lists"
         ],
@@ -505,8 +622,10 @@ export const schema = {
           {
             "in": "path",
             "name": "subject",
+            "description": "The slug identifier for the subject",
             "schema": {
               "type": "string",
+              "description": "The slug identifier for the subject",
               "example": "art"
             },
             "required": true
@@ -523,13 +642,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-subject-detail",
+        "operationToolMetadata": {
+          "name": "oak-get-subject-detail",
+          "path": "/subjects/{subject}",
+          "method": "GET",
+          "pathParams": [
+            "subject"
+          ],
+          "queryParams": []
         }
       }
     },
     "/subjects/{subject}/sequences": {
       "get": {
         "operationId": "getSubjects-getSubjectSequence",
-        "description": "List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject.",
+        "summary": "Sequencing information for a given subject",
+        "description": "This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.",
         "tags": [
           "lists",
           "sequences"
@@ -543,8 +673,10 @@ export const schema = {
           {
             "in": "path",
             "name": "subject",
+            "description": "The slug identifier for the subject",
             "schema": {
               "type": "string",
+              "description": "The slug identifier for the subject",
               "example": "art"
             },
             "required": true
@@ -561,13 +693,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-subjects-sequences",
+        "operationToolMetadata": {
+          "name": "oak-get-subjects-sequences",
+          "path": "/subjects/{subject}/sequences",
+          "method": "GET",
+          "pathParams": [
+            "subject"
+          ],
+          "queryParams": []
         }
       }
     },
     "/subjects/{subject}/key-stages": {
       "get": {
         "operationId": "getSubjects-getSubjectKeyStages",
-        "description": "List of the key stages a subject is taught in.",
+        "summary": "Key stages within a subject",
+        "description": "This endpoint returns a list of key stages that are currently available for a given subject.",
         "tags": [
           "lists"
         ],
@@ -580,8 +723,10 @@ export const schema = {
           {
             "in": "path",
             "name": "subject",
+            "description": "The subject slug identifier",
             "schema": {
               "type": "string",
+              "description": "The subject slug identifier",
               "example": "art"
             },
             "required": true
@@ -598,13 +743,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-subjects-key-stages",
+        "operationToolMetadata": {
+          "name": "oak-get-subjects-key-stages",
+          "path": "/subjects/{subject}/key-stages",
+          "method": "GET",
+          "pathParams": [
+            "subject"
+          ],
+          "queryParams": []
         }
       }
     },
     "/subjects/{subject}/years": {
       "get": {
         "operationId": "getSubjects-getSubjectYears",
-        "description": "List of the years a subject is taught in.",
+        "summary": "Year groups for a given subject",
+        "description": "This endpoint returns an array of years that are currently available for a given subject.",
         "tags": [
           "lists"
         ],
@@ -617,9 +773,11 @@ export const schema = {
           {
             "in": "path",
             "name": "subject",
+            "description": "Subject slug to filter by",
             "schema": {
               "type": "string",
-              "example": "art"
+              "example": "cooking-nutrition",
+              "description": "Subject slug to filter by"
             },
             "required": true
           }
@@ -630,33 +788,28 @@ export const schema = {
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "number"
-                  },
-                  "example": [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11
-                  ]
+                  "$ref": "#/components/schemas/SubjectYearsResponseSchema"
                 }
               }
             }
           }
+        },
+        "operationToolName": "oak-get-subjects-years",
+        "operationToolMetadata": {
+          "name": "oak-get-subjects-years",
+          "path": "/subjects/{subject}/years",
+          "method": "GET",
+          "pathParams": [
+            "subject"
+          ],
+          "queryParams": []
         }
       }
     },
     "/key-stages": {
       "get": {
         "operationId": "getKeyStages-getKeyStages",
+        "summary": "Key stages",
         "description": "This endpoint returns all the key stages (titles and slugs) that are currently available on Oak",
         "tags": [
           "lists"
@@ -677,13 +830,22 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-key-stages",
+        "operationToolMetadata": {
+          "name": "oak-get-key-stages",
+          "path": "/key-stages",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     },
     "/key-stages/{keyStage}/subject/{subject}/lessons": {
       "get": {
         "operationId": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
-        "description": "This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit",
+        "summary": "Lessons",
+        "description": "This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.",
         "tags": [
           "lists",
           "lessons"
@@ -706,6 +868,7 @@ export const schema = {
                 "ks3",
                 "ks4"
               ],
+              "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
             "required": true
@@ -735,6 +898,7 @@ export const schema = {
                 "science",
                 "spanish"
               ],
+              "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
               "example": "english"
             },
             "required": true
@@ -742,26 +906,30 @@ export const schema = {
           {
             "in": "query",
             "name": "unit",
-            "description": "Optional unit slug to additionally filter by",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Optional unit slug to additionally filter by",
+              "example": "word-class"
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
             "schema": {
               "type": "number",
+              "example": 50,
               "default": 0
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of results returned, max 100",
+            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
             "schema": {
               "type": "number",
               "maximum": 100,
+              "example": 10,
               "default": 10
             }
           }
@@ -777,13 +945,29 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-key-stages-subject-lessons",
+        "operationToolMetadata": {
+          "name": "oak-get-key-stages-subject-lessons",
+          "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
+          "method": "GET",
+          "pathParams": [
+            "keyStage",
+            "subject"
+          ],
+          "queryParams": [
+            "unit",
+            "offset",
+            "limit"
+          ]
         }
       }
     },
     "/key-stages/{keyStage}/subject/{subject}/units": {
       "get": {
         "operationId": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
-        "description": "This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage",
+        "summary": "Units",
+        "description": "This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.",
         "tags": [
           "lists",
           "units"
@@ -806,6 +990,7 @@ export const schema = {
                 "ks3",
                 "ks4"
               ],
+              "description": "Key stage slug to filter by, e.g. 'ks2'",
               "example": "ks1"
             },
             "required": true
@@ -835,6 +1020,7 @@ export const schema = {
                 "science",
                 "spanish"
               ],
+              "description": "Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)",
               "example": "art"
             },
             "required": true
@@ -851,12 +1037,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-key-stages-subject-units",
+        "operationToolMetadata": {
+          "name": "oak-get-key-stages-subject-units",
+          "path": "/key-stages/{keyStage}/subject/{subject}/units",
+          "method": "GET",
+          "pathParams": [
+            "keyStage",
+            "subject"
+          ],
+          "queryParams": []
         }
       }
     },
     "/lessons/{lesson}/quiz": {
       "get": {
         "operationId": "getQuestions-getQuestionsForLessons",
+        "summary": "Quiz questions by lesson",
         "description": "The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.",
         "tags": [
           "lessons",
@@ -871,9 +1069,11 @@ export const schema = {
           {
             "in": "path",
             "name": "lesson",
+            "description": "The lesson slug identifier",
             "schema": {
               "type": "string",
-              "example": "joining-using-and"
+              "description": "The lesson slug identifier",
+              "example": "imagining-you-are-the-characters-the-three-billy-goats-gruff"
             },
             "required": true
           }
@@ -889,13 +1089,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-lessons-quiz",
+        "operationToolMetadata": {
+          "name": "oak-get-lessons-quiz",
+          "path": "/lessons/{lesson}/quiz",
+          "method": "GET",
+          "pathParams": [
+            "lesson"
+          ],
+          "queryParams": []
         }
       }
     },
     "/sequences/{sequence}/questions": {
       "get": {
         "operationId": "getQuestions-getQuestionsForSequence",
-        "description": "This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence",
+        "summary": "Questions within a sequence",
+        "description": "This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.",
         "tags": [
           "questions",
           "sequences"
@@ -909,9 +1120,11 @@ export const schema = {
           {
             "in": "path",
             "name": "sequence",
+            "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
             "schema": {
               "type": "string",
-              "example": "maths-secondary"
+              "description": "The sequence slug identifier, including the key stage 4 option where relevant.",
+              "example": "english-primary"
             },
             "required": true
           },
@@ -919,24 +1132,29 @@ export const schema = {
             "in": "query",
             "name": "year",
             "schema": {
-              "type": "number"
+              "type": "number",
+              "description": "The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.",
+              "example": 3
             }
           },
           {
             "in": "query",
             "name": "offset",
+            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
             "schema": {
               "type": "number",
+              "example": 50,
               "default": 0
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of results returned, max 100",
+            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
             "schema": {
               "type": "number",
               "maximum": 100,
+              "example": 10,
               "default": 10
             }
           }
@@ -952,13 +1170,28 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-sequences-questions",
+        "operationToolMetadata": {
+          "name": "oak-get-sequences-questions",
+          "path": "/sequences/{sequence}/questions",
+          "method": "GET",
+          "pathParams": [
+            "sequence"
+          ],
+          "queryParams": [
+            "year",
+            "offset",
+            "limit"
+          ]
         }
       }
     },
     "/key-stages/{keyStage}/subject/{subject}/questions": {
       "get": {
         "operationId": "getQuestions-getQuestionsForKeyStageAndSubject",
-        "description": "This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject",
+        "summary": "Quiz questions by subject and key stage",
+        "description": "This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.",
         "tags": [
           "questions"
         ],
@@ -980,6 +1213,7 @@ export const schema = {
                 "ks3",
                 "ks4"
               ],
+              "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
               "example": "ks1"
             },
             "required": true
@@ -1009,6 +1243,7 @@ export const schema = {
                 "science",
                 "spanish"
               ],
+              "description": "Subject slug to search by, e.g. 'science' - note that casing is important here",
               "example": "art"
             },
             "required": true
@@ -1016,20 +1251,22 @@ export const schema = {
           {
             "in": "query",
             "name": "offset",
+            "description": "If limiting results returned, this allows you to return the next set of results, starting at the given offset point",
             "schema": {
               "type": "number",
+              "example": 50,
               "default": 0
             }
           },
           {
             "in": "query",
             "name": "limit",
-            "description": "Limit the number of results returned, max 100",
+            "description": "Limit the number of lessons, e.g. return a maximum of 100 lessons",
             "schema": {
               "type": "number",
               "maximum": 100,
-              "default": 10,
-              "example": 10
+              "example": 10,
+              "default": 10
             }
           }
         ],
@@ -1044,12 +1281,27 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-key-stages-subject-questions",
+        "operationToolMetadata": {
+          "name": "oak-get-key-stages-subject-questions",
+          "path": "/key-stages/{keyStage}/subject/{subject}/questions",
+          "method": "GET",
+          "pathParams": [
+            "keyStage",
+            "subject"
+          ],
+          "queryParams": [
+            "offset",
+            "limit"
+          ]
         }
       }
     },
     "/lessons/{lesson}/summary": {
       "get": {
         "operationId": "getLessons-getLesson",
+        "summary": "Lesson summary",
         "description": "This endpoint returns a summary for a given lesson",
         "tags": [
           "lessons"
@@ -1066,6 +1318,7 @@ export const schema = {
             "description": "The slug of the lesson",
             "schema": {
               "type": "string",
+              "description": "The slug of the lesson",
               "example": "joining-using-and"
             },
             "required": true
@@ -1082,13 +1335,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-lessons-summary",
+        "operationToolMetadata": {
+          "name": "oak-get-lessons-summary",
+          "path": "/lessons/{lesson}/summary",
+          "method": "GET",
+          "pathParams": [
+            "lesson"
+          ],
+          "queryParams": []
         }
       }
     },
     "/search/lessons": {
       "get": {
         "operationId": "getLessons-searchByTextSimilarity",
-        "description": "This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in",
+        "summary": "Lesson search using lesson title",
+        "description": "Search for a term and find the 20 most similar lessons with titles that contain similar text.",
         "tags": [
           "lessons",
           "search"
@@ -1102,8 +1366,10 @@ export const schema = {
           {
             "in": "query",
             "name": "q",
+            "description": "Search query text snippet",
             "schema": {
               "type": "string",
+              "description": "Search query text snippet",
               "example": "gothic"
             },
             "required": true
@@ -1111,7 +1377,6 @@ export const schema = {
           {
             "in": "query",
             "name": "keyStage",
-            "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -1119,13 +1384,14 @@ export const schema = {
                 "ks2",
                 "ks3",
                 "ks4"
-              ]
+              ],
+              "description": "Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase",
+              "example": "ks2"
             }
           },
           {
             "in": "query",
             "name": "subject",
-            "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
             "schema": {
               "type": "string",
               "enum": [
@@ -1146,15 +1412,18 @@ export const schema = {
                 "rshe-pshe",
                 "science",
                 "spanish"
-              ]
+              ],
+              "description": "Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase",
+              "example": "english"
             }
           },
           {
             "in": "query",
             "name": "unit",
-            "description": "Optional unit slug to additionally filter by",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Optional unit slug to additionally filter by",
+              "example": "Gothic poetry"
             }
           }
         ],
@@ -1169,12 +1438,26 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-search-lessons",
+        "operationToolMetadata": {
+          "name": "oak-get-search-lessons",
+          "path": "/search/lessons",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": [
+            "q",
+            "keyStage",
+            "subject",
+            "unit"
+          ]
         }
       }
     },
     "/units/{unit}/summary": {
       "get": {
         "operationId": "getUnits-getUnit",
+        "summary": "Unit summary",
         "description": "This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit",
         "tags": [
           "units"
@@ -1191,6 +1474,7 @@ export const schema = {
             "description": "The unit slug",
             "schema": {
               "type": "string",
+              "description": "The unit slug",
               "example": "simple-compound-and-adverbial-complex-sentences"
             },
             "required": true
@@ -1207,13 +1491,24 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-units-summary",
+        "operationToolMetadata": {
+          "name": "oak-get-units-summary",
+          "path": "/units/{unit}/summary",
+          "method": "GET",
+          "pathParams": [
+            "unit"
+          ],
+          "queryParams": []
         }
       }
     },
     "/threads": {
       "get": {
         "operationId": "getThreads-getAllThreads",
-        "description": "Get all threads that can be used as sequence filters.",
+        "summary": "Threads",
+        "description": "This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.",
         "tags": [
           "lists"
         ],
@@ -1232,44 +1527,23 @@ export const schema = {
                 }
               }
             }
-          },
-          "401": {
-            "description": "Authorization not provided",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.UNAUTHORIZED"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient access",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.FORBIDDEN"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR"
-                }
-              }
-            }
           }
+        },
+        "operationToolName": "oak-get-threads",
+        "operationToolMetadata": {
+          "name": "oak-get-threads",
+          "path": "/threads",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     },
     "/threads/{threadSlug}/units": {
       "get": {
         "operationId": "getThreads-getThreadUnits",
-        "description": "Get all units for a specific thread filter.",
+        "summary": "Units belonging to a given thread",
+        "description": "This endpoint returns all of the units that belong to a given thread.",
         "tags": [
           "lists"
         ],
@@ -1284,7 +1558,7 @@ export const schema = {
             "name": "threadSlug",
             "schema": {
               "type": "string",
-              "example": "a-midsummer-nights-dream-72"
+              "example": "number-multiplication-and-division"
             },
             "required": true
           }
@@ -1300,6 +1574,16 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-threads-units",
+        "operationToolMetadata": {
+          "name": "oak-get-threads-units",
+          "path": "/threads/{threadSlug}/units",
+          "method": "GET",
+          "pathParams": [
+            "threadSlug"
+          ],
+          "queryParams": []
         }
       }
     },
@@ -1366,6 +1650,14 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-changelog",
+        "operationToolMetadata": {
+          "name": "oak-get-changelog",
+          "path": "/changelog",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     },
@@ -1420,6 +1712,14 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-changelog-latest",
+        "operationToolMetadata": {
+          "name": "oak-get-changelog-latest",
+          "path": "/changelog/latest",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     },
@@ -1446,6 +1746,14 @@ export const schema = {
               }
             }
           }
+        },
+        "operationToolName": "oak-get-rate-limit",
+        "operationToolMetadata": {
+          "name": "oak-get-rate-limit",
+          "path": "/rate-limit",
+          "method": "GET",
+          "pathParams": [],
+          "queryParams": []
         }
       }
     }
@@ -1477,10 +1785,12 @@ export const schema = {
                         "all-years"
                       ]
                     }
-                  ]
+                  ],
+                  "description": "The year group"
                 },
                 "title": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "An optional alternative title for the year sequence"
                 },
                 "units": {
                   "type": "array",
@@ -1490,10 +1800,12 @@ export const schema = {
                         "type": "object",
                         "properties": {
                           "unitTitle": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "The title of the unit"
                           },
                           "unitOrder": {
-                            "type": "number"
+                            "type": "number",
+                            "description": "The position of the unit within the sequence."
                           },
                           "unitOptions": {
                             "type": "array",
@@ -1511,7 +1823,8 @@ export const schema = {
                                 "unitTitle",
                                 "unitSlug"
                               ]
-                            }
+                            },
+                            "description": "The unique slug identifier for the unit"
                           },
                           "categories": {
                             "type": "array",
@@ -1519,16 +1832,19 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "categoryTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the category"
                                 },
                                 "categorySlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The unique identifier for the category"
                                 }
                               },
                               "required": [
                                 "categoryTitle"
                               ]
-                            }
+                            },
+                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                           },
                           "threads": {
                             "type": "array",
@@ -1536,13 +1852,16 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "threadTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the category"
                                 },
                                 "threadSlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The unique identifier for the thread"
                                 },
                                 "order": {
-                                  "type": "number"
+                                  "type": "number",
+                                  "description": "Deprecated"
                                 }
                               },
                               "required": [
@@ -1550,7 +1869,8 @@ export const schema = {
                                 "threadSlug",
                                 "order"
                               ]
-                            }
+                            },
+                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                           }
                         },
                         "required": [
@@ -1569,7 +1889,8 @@ export const schema = {
                             "type": "number"
                           },
                           "unitSlug": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "The unique slug identifier for the unit"
                           },
                           "categories": {
                             "type": "array",
@@ -1577,10 +1898,12 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "categoryTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the category"
                                 },
                                 "categorySlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The unique identifier for the category"
                                 }
                               },
                               "required": [
@@ -1594,13 +1917,16 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "threadTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the category"
                                 },
                                 "threadSlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The unique identifier for the thread"
                                 },
                                 "order": {
-                                  "type": "number"
+                                  "type": "number",
+                                  "description": "Deprecated"
                                 }
                               },
                               "required": [
@@ -1618,7 +1944,8 @@ export const schema = {
                         ]
                       }
                     ]
-                  }
+                  },
+                  "description": "A list of units that make up a full sequence, grouped by year."
                 }
               },
               "required": [
@@ -1654,10 +1981,12 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "tierTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the tier"
                                 },
                                 "tierSlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The tier identifier"
                                 },
                                 "units": {
                                   "type": "array",
@@ -1667,10 +1996,12 @@ export const schema = {
                                         "type": "object",
                                         "properties": {
                                           "unitTitle": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The title of the unit"
                                           },
                                           "unitOrder": {
-                                            "type": "number"
+                                            "type": "number",
+                                            "description": "The position of the unit within the sequence."
                                           },
                                           "unitOptions": {
                                             "type": "array",
@@ -1688,7 +2019,8 @@ export const schema = {
                                                 "unitTitle",
                                                 "unitSlug"
                                               ]
-                                            }
+                                            },
+                                            "description": "The unique slug identifier for the unit"
                                           },
                                           "categories": {
                                             "type": "array",
@@ -1696,16 +2028,19 @@ export const schema = {
                                               "type": "object",
                                               "properties": {
                                                 "categoryTitle": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The title of the category"
                                                 },
                                                 "categorySlug": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The unique identifier for the category"
                                                 }
                                               },
                                               "required": [
                                                 "categoryTitle"
                                               ]
-                                            }
+                                            },
+                                            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                           },
                                           "threads": {
                                             "type": "array",
@@ -1713,13 +2048,16 @@ export const schema = {
                                               "type": "object",
                                               "properties": {
                                                 "threadTitle": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The title of the category"
                                                 },
                                                 "threadSlug": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The unique identifier for the thread"
                                                 },
                                                 "order": {
-                                                  "type": "number"
+                                                  "type": "number",
+                                                  "description": "Deprecated"
                                                 }
                                               },
                                               "required": [
@@ -1727,7 +2065,8 @@ export const schema = {
                                                 "threadSlug",
                                                 "order"
                                               ]
-                                            }
+                                            },
+                                            "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                           }
                                         },
                                         "required": [
@@ -1746,7 +2085,8 @@ export const schema = {
                                             "type": "number"
                                           },
                                           "unitSlug": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The unique slug identifier for the unit"
                                           },
                                           "categories": {
                                             "type": "array",
@@ -1754,10 +2094,12 @@ export const schema = {
                                               "type": "object",
                                               "properties": {
                                                 "categoryTitle": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The title of the category"
                                                 },
                                                 "categorySlug": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The unique identifier for the category"
                                                 }
                                               },
                                               "required": [
@@ -1771,13 +2113,16 @@ export const schema = {
                                               "type": "object",
                                               "properties": {
                                                 "threadTitle": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The title of the category"
                                                 },
                                                 "threadSlug": {
-                                                  "type": "string"
+                                                  "type": "string",
+                                                  "description": "The unique identifier for the thread"
                                                 },
                                                 "order": {
-                                                  "type": "number"
+                                                  "type": "number",
+                                                  "description": "Deprecated"
                                                 }
                                               },
                                               "required": [
@@ -1828,10 +2173,12 @@ export const schema = {
                                   "type": "object",
                                   "properties": {
                                     "unitTitle": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "The title of the unit"
                                     },
                                     "unitOrder": {
-                                      "type": "number"
+                                      "type": "number",
+                                      "description": "The position of the unit within the sequence."
                                     },
                                     "unitOptions": {
                                       "type": "array",
@@ -1849,7 +2196,8 @@ export const schema = {
                                           "unitTitle",
                                           "unitSlug"
                                         ]
-                                      }
+                                      },
+                                      "description": "The unique slug identifier for the unit"
                                     },
                                     "categories": {
                                       "type": "array",
@@ -1857,16 +2205,19 @@ export const schema = {
                                         "type": "object",
                                         "properties": {
                                           "categoryTitle": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The title of the category"
                                           },
                                           "categorySlug": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The unique identifier for the category"
                                           }
                                         },
                                         "required": [
                                           "categoryTitle"
                                         ]
-                                      }
+                                      },
+                                      "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                     },
                                     "threads": {
                                       "type": "array",
@@ -1874,13 +2225,16 @@ export const schema = {
                                         "type": "object",
                                         "properties": {
                                           "threadTitle": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The title of the category"
                                           },
                                           "threadSlug": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The unique identifier for the thread"
                                           },
                                           "order": {
-                                            "type": "number"
+                                            "type": "number",
+                                            "description": "Deprecated"
                                           }
                                         },
                                         "required": [
@@ -1888,7 +2242,8 @@ export const schema = {
                                           "threadSlug",
                                           "order"
                                         ]
-                                      }
+                                      },
+                                      "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                     }
                                   },
                                   "required": [
@@ -1907,7 +2262,8 @@ export const schema = {
                                       "type": "number"
                                     },
                                     "unitSlug": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "The unique slug identifier for the unit"
                                     },
                                     "categories": {
                                       "type": "array",
@@ -1915,10 +2271,12 @@ export const schema = {
                                         "type": "object",
                                         "properties": {
                                           "categoryTitle": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The title of the category"
                                           },
                                           "categorySlug": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The unique identifier for the category"
                                           }
                                         },
                                         "required": [
@@ -1932,13 +2290,16 @@ export const schema = {
                                         "type": "object",
                                         "properties": {
                                           "threadTitle": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The title of the category"
                                           },
                                           "threadSlug": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "The unique identifier for the thread"
                                           },
                                           "order": {
-                                            "type": "number"
+                                            "type": "number",
+                                            "description": "Deprecated"
                                           }
                                         },
                                         "required": [
@@ -1965,7 +2326,8 @@ export const schema = {
                         ]
                       }
                     ]
-                  }
+                  },
+                  "description": "Only used in secondary science. Contains a full year's unit sequences based on which subject is being studied at KS4."
                 }
               },
               "required": [
@@ -1988,10 +2350,12 @@ export const schema = {
                     "type": "object",
                     "properties": {
                       "tierTitle": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The title of the tier"
                       },
                       "tierSlug": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The tier identifier"
                       },
                       "units": {
                         "type": "array",
@@ -2001,10 +2365,12 @@ export const schema = {
                               "type": "object",
                               "properties": {
                                 "unitTitle": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The title of the unit"
                                 },
                                 "unitOrder": {
-                                  "type": "number"
+                                  "type": "number",
+                                  "description": "The position of the unit within the sequence."
                                 },
                                 "unitOptions": {
                                   "type": "array",
@@ -2022,7 +2388,8 @@ export const schema = {
                                       "unitTitle",
                                       "unitSlug"
                                     ]
-                                  }
+                                  },
+                                  "description": "The unique slug identifier for the unit"
                                 },
                                 "categories": {
                                   "type": "array",
@@ -2030,16 +2397,19 @@ export const schema = {
                                     "type": "object",
                                     "properties": {
                                       "categoryTitle": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The title of the category"
                                       },
                                       "categorySlug": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The unique identifier for the category"
                                       }
                                     },
                                     "required": [
                                       "categoryTitle"
                                     ]
-                                  }
+                                  },
+                                  "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                 },
                                 "threads": {
                                   "type": "array",
@@ -2047,13 +2417,16 @@ export const schema = {
                                     "type": "object",
                                     "properties": {
                                       "threadTitle": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The title of the category"
                                       },
                                       "threadSlug": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The unique identifier for the thread"
                                       },
                                       "order": {
-                                        "type": "number"
+                                        "type": "number",
+                                        "description": "Deprecated"
                                       }
                                     },
                                     "required": [
@@ -2061,7 +2434,8 @@ export const schema = {
                                       "threadSlug",
                                       "order"
                                     ]
-                                  }
+                                  },
+                                  "description": "A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
                                 }
                               },
                               "required": [
@@ -2080,7 +2454,8 @@ export const schema = {
                                   "type": "number"
                                 },
                                 "unitSlug": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "The unique slug identifier for the unit"
                                 },
                                 "categories": {
                                   "type": "array",
@@ -2088,10 +2463,12 @@ export const schema = {
                                     "type": "object",
                                     "properties": {
                                       "categoryTitle": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The title of the category"
                                       },
                                       "categorySlug": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The unique identifier for the category"
                                       }
                                     },
                                     "required": [
@@ -2105,13 +2482,16 @@ export const schema = {
                                     "type": "object",
                                     "properties": {
                                       "threadTitle": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The title of the category"
                                       },
                                       "threadSlug": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "The unique identifier for the thread"
                                       },
                                       "order": {
-                                        "type": "number"
+                                        "type": "number",
+                                        "description": "Deprecated"
                                       }
                                     },
                                     "required": [
@@ -2176,10 +2556,12 @@ export const schema = {
         "type": "object",
         "properties": {
           "transcript": {
-            "type": "string"
+            "type": "string",
+            "description": "The transcript for the lesson video"
           },
           "vtt": {
-            "type": "string"
+            "type": "string",
+            "description": "The contents of the .vtt file for the lesson video, which maps captions to video timestamps."
           }
         },
         "required": [
@@ -2197,13 +2579,19 @@ export const schema = {
           "type": "object",
           "properties": {
             "lessonTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The lesson title",
+              "example": "The Roman invasion of Britain "
             },
             "lessonSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The lesson slug identifier",
+              "example": "the-roman-invasion-of-britain"
             },
             "transcriptSnippet": {
-              "type": "string"
+              "type": "string",
+              "description": "The snippet of the transcript that matched the search term",
+              "example": "The Romans were ready,"
             }
           },
           "required": [
@@ -2240,16 +2628,19 @@ export const schema = {
           "type": "object",
           "properties": {
             "lessonSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique slug identifier for the lesson"
             },
             "lessonTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The title for the lesson"
             },
             "attribution": {
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
             },
             "assets": {
               "type": "array",
@@ -2268,13 +2659,16 @@ export const schema = {
                       "video",
                       "worksheet",
                       "worksheetAnswers"
-                    ]
+                    ],
+                    "example": "slideDeck"
                   },
                   "label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The label for the asset"
                   },
                   "url": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The download endpoint for the asset."
                   }
                 },
                 "required": [
@@ -2282,7 +2676,8 @@ export const schema = {
                   "label",
                   "url"
                 ]
-              }
+              },
+              "description": "List of assets"
             }
           },
           "required": [
@@ -2321,16 +2716,19 @@ export const schema = {
           "type": "object",
           "properties": {
             "lessonSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique slug identifier for the lesson"
             },
             "lessonTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The title for the lesson"
             },
             "attribution": {
               "type": "array",
               "items": {
                 "type": "string"
-              }
+              },
+              "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
             },
             "assets": {
               "type": "array",
@@ -2349,13 +2747,16 @@ export const schema = {
                       "video",
                       "worksheet",
                       "worksheetAnswers"
-                    ]
+                    ],
+                    "example": "slideDeck"
                   },
                   "label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The label for the asset"
                   },
                   "url": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The download endpoint for the asset."
                   }
                 },
                 "required": [
@@ -2363,7 +2764,8 @@ export const schema = {
                   "label",
                   "url"
                 ]
-              }
+              },
+              "description": "List of assets"
             }
           },
           "required": [
@@ -2403,7 +2805,8 @@ export const schema = {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Licence information for any third-party content contained in the lessons' downloadable resources"
           },
           "assets": {
             "type": "array",
@@ -2422,13 +2825,16 @@ export const schema = {
                     "video",
                     "worksheet",
                     "worksheetAnswers"
-                  ]
+                  ],
+                  "example": "slideDeck"
                 },
                 "label": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The label for the asset"
                 },
                 "url": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The download endpoint for the asset."
                 }
               },
               "required": [
@@ -2436,7 +2842,8 @@ export const schema = {
                 "label",
                 "url"
               ]
-            }
+            },
+            "description": "List of assets"
           }
         },
         "example": {
@@ -2464,9 +2871,7 @@ export const schema = {
         }
       },
       "LessonAssetResponseSchema": {
-        "example": {
-          "200": "application/octet-stream"
-        }
+        "example": {}
       },
       "AllSubjectsResponseSchema": {
         "type": "array",
@@ -2474,10 +2879,12 @@ export const schema = {
           "type": "object",
           "properties": {
             "subjectTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The subject title"
             },
             "subjectSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The subject slug identifier"
             },
             "sequenceSlugs": {
               "type": "array",
@@ -2485,13 +2892,15 @@ export const schema = {
                 "type": "object",
                 "properties": {
                   "sequenceSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unique identifier for each sequence"
                   },
                   "years": {
                     "type": "array",
                     "items": {
                       "type": "number"
-                    }
+                    },
+                    "description": "The years for which this subject has content available for"
                   },
                   "keyStages": {
                     "type": "array",
@@ -2499,23 +2908,28 @@ export const schema = {
                       "type": "object",
                       "properties": {
                         "keyStageTitle": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "The key stage title for the given key stage"
                         },
                         "keyStageSlug": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "The unique identifier for a given key stage"
                         }
                       },
                       "required": [
                         "keyStageTitle",
                         "keyStageSlug"
                       ]
-                    }
+                    },
+                    "description": "The key stage slug identifiers for which this subject has content available for."
                   },
                   "phaseSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unique identifier for the phase to which this sequence belongs"
                   },
                   "phaseTitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The title for the phase to which this sequence belongs"
                   },
                   "ks4Options": {
                     "type": "object",
@@ -2531,7 +2945,8 @@ export const schema = {
                     "required": [
                       "title",
                       "slug"
-                    ]
+                    ],
+                    "description": "The key stage 4 study pathway that this sequence represents. May be null."
                   }
                 },
                 "required": [
@@ -2542,13 +2957,15 @@ export const schema = {
                   "phaseTitle",
                   "ks4Options"
                 ]
-              }
+              },
+              "description": "Information about the years, key stages and key stage 4 variance for each sequence"
             },
             "years": {
               "type": "array",
               "items": {
                 "type": "number"
-              }
+              },
+              "description": "The years for which this subject has content available for"
             },
             "keyStages": {
               "type": "array",
@@ -2556,17 +2973,20 @@ export const schema = {
                 "type": "object",
                 "properties": {
                   "keyStageTitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The key stage title for the given key stage"
                   },
                   "keyStageSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unique identifier for a given key stage"
                   }
                 },
                 "required": [
                   "keyStageTitle",
                   "keyStageSlug"
                 ]
-              }
+              },
+              "description": "The key stage slug identifiers for which this subject has content available for."
             }
           },
           "required": [
@@ -2668,10 +3088,12 @@ export const schema = {
         "type": "object",
         "properties": {
           "subjectTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The subject title"
           },
           "subjectSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The subject slug identifier"
           },
           "sequenceSlugs": {
             "type": "array",
@@ -2679,13 +3101,15 @@ export const schema = {
               "type": "object",
               "properties": {
                 "sequenceSlug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The unique identifier for each sequence"
                 },
                 "years": {
                   "type": "array",
                   "items": {
                     "type": "number"
-                  }
+                  },
+                  "description": "The years for which this subject has content available for"
                 },
                 "keyStages": {
                   "type": "array",
@@ -2693,23 +3117,28 @@ export const schema = {
                     "type": "object",
                     "properties": {
                       "keyStageTitle": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The key stage title for the given key stage"
                       },
                       "keyStageSlug": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The unique identifier for a given key stage"
                       }
                     },
                     "required": [
                       "keyStageTitle",
                       "keyStageSlug"
                     ]
-                  }
+                  },
+                  "description": "The key stage slug identifiers for which this subject has content available for."
                 },
                 "phaseSlug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The unique identifier for the phase to which this sequence belongs"
                 },
                 "phaseTitle": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The title for the phase to which this sequence belongs"
                 },
                 "ks4Options": {
                   "type": "object",
@@ -2725,7 +3154,8 @@ export const schema = {
                   "required": [
                     "title",
                     "slug"
-                  ]
+                  ],
+                  "description": "The key stage 4 study pathway that this sequence represents. May be null."
                 }
               },
               "required": [
@@ -2736,13 +3166,15 @@ export const schema = {
                 "phaseTitle",
                 "ks4Options"
               ]
-            }
+            },
+            "description": "Information about the years, key stages and key stage 4 variance for each sequence"
           },
           "years": {
             "type": "array",
             "items": {
               "type": "number"
-            }
+            },
+            "description": "The years for which this subject has content available for"
           },
           "keyStages": {
             "type": "array",
@@ -2750,17 +3182,20 @@ export const schema = {
               "type": "object",
               "properties": {
                 "keyStageTitle": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The key stage title for the given key stage"
                 },
                 "keyStageSlug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The unique identifier for a given key stage"
                 }
               },
               "required": [
                 "keyStageTitle",
                 "keyStageSlug"
               ]
-            }
+            },
+            "description": "The key stage slug identifiers for which this subject has content available for."
           }
         },
         "required": [
@@ -2862,13 +3297,15 @@ export const schema = {
           "type": "object",
           "properties": {
             "sequenceSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique identifier for each sequence"
             },
             "years": {
               "type": "array",
               "items": {
                 "type": "number"
-              }
+              },
+              "description": "The years for which this subject has content available for"
             },
             "keyStages": {
               "type": "array",
@@ -2876,23 +3313,28 @@ export const schema = {
                 "type": "object",
                 "properties": {
                   "keyStageTitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The key stage title for the given key stage"
                   },
                   "keyStageSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The unique identifier for a given key stage"
                   }
                 },
                 "required": [
                   "keyStageTitle",
                   "keyStageSlug"
                 ]
-              }
+              },
+              "description": "The key stage slug identifiers for which this subject has content available for."
             },
             "phaseSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique identifier for the phase to which this sequence belongs"
             },
             "phaseTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The title for the phase to which this sequence belongs"
             },
             "ks4Options": {
               "type": "object",
@@ -2908,7 +3350,8 @@ export const schema = {
               "required": [
                 "title",
                 "slug"
-              ]
+              ],
+              "description": "The key stage 4 study pathway that this sequence represents. May be null."
             }
           },
           "required": [
@@ -2977,10 +3420,12 @@ export const schema = {
           "type": "object",
           "properties": {
             "keyStageTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The key stage title for the given key stage"
             },
             "keyStageSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unique identifier for a given key stage"
             }
           },
           "required": [
@@ -2988,6 +3433,7 @@ export const schema = {
             "keyStageSlug"
           ]
         },
+        "description": "The key stage slug identifiers for which this subject has content available for",
         "example": [
           {
             "keyStageTitle": "Key Stage 1",
@@ -3007,16 +3453,38 @@ export const schema = {
           }
         ]
       },
+      "SubjectYearsResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "description": "The years for which this sequence has content available for",
+        "example": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
       "KeyStageResponseSchema": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
             "slug": {
-              "type": "string"
+              "type": "string",
+              "description": "The key stage slug identifier",
+              "example": "ks1"
             },
             "title": {
-              "type": "string"
+              "type": "string",
+              "description": "The key stage title",
+              "example": "Key Stage 1"
             }
           },
           "required": [
@@ -3037,10 +3505,14 @@ export const schema = {
           "type": "object",
           "properties": {
             "unitSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unit slug identifier",
+              "example": "simple-compound-and-adverbial-complex-sentences"
             },
             "unitTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The unit title",
+              "example": "Simple, compound and adverbial complex sentences"
             },
             "lessons": {
               "type": "array",
@@ -3048,17 +3520,32 @@ export const schema = {
                 "type": "object",
                 "properties": {
                   "lessonSlug": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The lesson slug identifier",
+                    "example": "four-types-of-simple-sentence"
                   },
                   "lessonTitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The lesson title",
+                    "example": "Four types of simple sentence"
                   }
                 },
                 "required": [
                   "lessonSlug",
                   "lessonTitle"
                 ]
-              }
+              },
+              "description": "List of lessons for the specified unit",
+              "example": [
+                {
+                  "lessonSlug": "four-types-of-simple-sentence",
+                  "lessonTitle": "Four types of simple sentence"
+                },
+                {
+                  "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
+                  "lessonTitle": "Three ways for co-ordination in compound sentences"
+                }
+              ]
             }
           },
           "required": [
@@ -3090,10 +3577,14 @@ export const schema = {
           "type": "object",
           "properties": {
             "yearSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The year identifier",
+              "example": "year-3"
             },
             "yearTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The year title",
+              "example": "Year 3"
             },
             "units": {
               "type": "array",
@@ -3111,7 +3602,8 @@ export const schema = {
                   "unitSlug",
                   "unitTitle"
                 ]
-              }
+              },
+              "description": "List of units for the specified year"
             }
           },
           "required": [
@@ -3148,7 +3640,8 @@ export const schema = {
                   "type": "object",
                   "properties": {
                     "question": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "The question text"
                     },
                     "questionType": {
                       "anyOf": [
@@ -3176,7 +3669,8 @@ export const schema = {
                             "order"
                           ]
                         }
-                      ]
+                      ],
+                      "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
                     },
                     "questionImage": {
                       "type": "object",
@@ -3194,7 +3688,8 @@ export const schema = {
                           "type": "string"
                         },
                         "text": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
                         },
                         "attribution": {
                           "type": "string"
@@ -3231,7 +3726,8 @@ export const schema = {
                                 "type": "object",
                                 "properties": {
                                   "distractor": {
-                                    "type": "boolean"
+                                    "type": "boolean",
+                                    "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
                                   }
                                 },
                                 "required": [
@@ -3247,10 +3743,12 @@ export const schema = {
                                         "type": "string",
                                         "enum": [
                                           "text"
-                                        ]
+                                        ],
+                                        "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                       },
                                       "content": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "Quiz question answer"
                                       }
                                     },
                                     "required": [
@@ -3283,7 +3781,8 @@ export const schema = {
                                             "type": "string"
                                           },
                                           "text": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "Supplementary text for the image, if any"
                                           },
                                           "attribution": {
                                             "type": "string"
@@ -3330,10 +3829,12 @@ export const schema = {
                                 "type": "string",
                                 "enum": [
                                   "text"
-                                ]
+                                ],
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
                               "content": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Quiz question answer"
                               }
                             },
                             "required": [
@@ -3369,16 +3870,19 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
                                   "type",
                                   "content"
-                                ]
+                                ],
+                                "description": "Matching options (LHS)"
                               },
                               "correctChoice": {
                                 "type": "object",
@@ -3387,16 +3891,19 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
                                   "type",
                                   "content"
-                                ]
+                                ],
+                                "description": "Matching options (RHS), indicating the correct choice"
                               }
                             },
                             "required": [
@@ -3428,7 +3935,8 @@ export const schema = {
                                 "type": "object",
                                 "properties": {
                                   "order": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "Indicates the correct ordering of the response"
                                   }
                                 },
                                 "required": [
@@ -3442,10 +3950,12 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
@@ -3465,7 +3975,8 @@ export const schema = {
                   ]
                 }
               ]
-            }
+            },
+            "description": "The starter quiz questions - which test prior knowledge"
           },
           "exitQuiz": {
             "type": "array",
@@ -3475,7 +3986,8 @@ export const schema = {
                   "type": "object",
                   "properties": {
                     "question": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "The question text"
                     },
                     "questionType": {
                       "anyOf": [
@@ -3503,7 +4015,8 @@ export const schema = {
                             "order"
                           ]
                         }
-                      ]
+                      ],
+                      "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
                     },
                     "questionImage": {
                       "type": "object",
@@ -3521,7 +4034,8 @@ export const schema = {
                           "type": "string"
                         },
                         "text": {
-                          "type": "string"
+                          "type": "string",
+                          "description": "Supplementary text for the image, if any"
                         },
                         "attribution": {
                           "type": "string"
@@ -3558,7 +4072,8 @@ export const schema = {
                                 "type": "object",
                                 "properties": {
                                   "distractor": {
-                                    "type": "boolean"
+                                    "type": "boolean",
+                                    "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
                                   }
                                 },
                                 "required": [
@@ -3574,10 +4089,12 @@ export const schema = {
                                         "type": "string",
                                         "enum": [
                                           "text"
-                                        ]
+                                        ],
+                                        "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                       },
                                       "content": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "description": "Quiz question answer"
                                       }
                                     },
                                     "required": [
@@ -3610,7 +4127,8 @@ export const schema = {
                                             "type": "string"
                                           },
                                           "text": {
-                                            "type": "string"
+                                            "type": "string",
+                                            "description": "Supplementary text for the image, if any"
                                           },
                                           "attribution": {
                                             "type": "string"
@@ -3657,10 +4175,12 @@ export const schema = {
                                 "type": "string",
                                 "enum": [
                                   "text"
-                                ]
+                                ],
+                                "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                               },
                               "content": {
-                                "type": "string"
+                                "type": "string",
+                                "description": "Quiz question answer"
                               }
                             },
                             "required": [
@@ -3696,16 +4216,19 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
                                   "type",
                                   "content"
-                                ]
+                                ],
+                                "description": "Matching options (LHS)"
                               },
                               "correctChoice": {
                                 "type": "object",
@@ -3714,16 +4237,19 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
                                   "type",
                                   "content"
-                                ]
+                                ],
+                                "description": "Matching options (RHS), indicating the correct choice"
                               }
                             },
                             "required": [
@@ -3755,7 +4281,8 @@ export const schema = {
                                 "type": "object",
                                 "properties": {
                                   "order": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "Indicates the correct ordering of the response"
                                   }
                                 },
                                 "required": [
@@ -3769,10 +4296,12 @@ export const schema = {
                                     "type": "string",
                                     "enum": [
                                       "text"
-                                    ]
+                                    ],
+                                    "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                   },
                                   "content": {
-                                    "type": "string"
+                                    "type": "string",
+                                    "description": "Quiz question answer"
                                   }
                                 },
                                 "required": [
@@ -3792,7 +4321,8 @@ export const schema = {
                   ]
                 }
               ]
-            }
+            },
+            "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
           }
         },
         "required": [
@@ -3859,6 +4389,718 @@ export const schema = {
         }
       },
       "QuestionsForSequenceResponseSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "lessonSlug": {
+              "type": "string",
+              "description": "The lesson slug identifier"
+            },
+            "lessonTitle": {
+              "type": "string",
+              "description": "The title of the lesson"
+            },
+            "starterQuiz": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          }
+                        ],
+                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "distractor": {
+                                      "type": "boolean",
+                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                    }
+                                  },
+                                  "required": [
+                                    "distractor"
+                                  ]
+                                },
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text"
+                                          ],
+                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                        },
+                                        "content": {
+                                          "type": "string",
+                                          "description": "Quiz question answer"
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "image"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            },
+                                            "alt": {
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "type": "string",
+                                              "description": "Supplementary text for the image, if any"
+                                            },
+                                            "attribution": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text"
+                                  ],
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "matchOption": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ],
+                                  "description": "Matching options (LHS)"
+                                },
+                                "correctChoice": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ],
+                                  "description": "Matching options (RHS), indicating the correct choice"
+                                }
+                              },
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "order": {
+                                      "type": "number",
+                                      "description": "Indicates the correct ordering of the response"
+                                    }
+                                  },
+                                  "required": [
+                                    "order"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "description": "The starter quiz questions - which test prior knowledge"
+            },
+            "exitQuiz": {
+              "type": "array",
+              "items": {
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "question": {
+                        "type": "string",
+                        "description": "The question text"
+                      },
+                      "questionType": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          }
+                        ],
+                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
+                      },
+                      "questionImage": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string"
+                          },
+                          "width": {
+                            "type": "number"
+                          },
+                          "height": {
+                            "type": "number"
+                          },
+                          "alt": {
+                            "type": "string"
+                          },
+                          "text": {
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
+                          },
+                          "attribution": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "url",
+                          "width",
+                          "height"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "question",
+                      "questionType"
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "multiple-choice"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "distractor": {
+                                      "type": "boolean",
+                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
+                                    }
+                                  },
+                                  "required": [
+                                    "distractor"
+                                  ]
+                                },
+                                {
+                                  "anyOf": [
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "text"
+                                          ],
+                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                        },
+                                        "content": {
+                                          "type": "string",
+                                          "description": "Quiz question answer"
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    },
+                                    {
+                                      "type": "object",
+                                      "properties": {
+                                        "type": {
+                                          "type": "string",
+                                          "enum": [
+                                            "image"
+                                          ]
+                                        },
+                                        "content": {
+                                          "type": "object",
+                                          "properties": {
+                                            "url": {
+                                              "type": "string"
+                                            },
+                                            "width": {
+                                              "type": "number"
+                                            },
+                                            "height": {
+                                              "type": "number"
+                                            },
+                                            "alt": {
+                                              "type": "string"
+                                            },
+                                            "text": {
+                                              "type": "string",
+                                              "description": "Supplementary text for the image, if any"
+                                            },
+                                            "attribution": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "url",
+                                            "width",
+                                            "height"
+                                          ]
+                                        }
+                                      },
+                                      "required": [
+                                        "type",
+                                        "content"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "short-answer"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "enum": [
+                                    "text"
+                                  ],
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                },
+                                "content": {
+                                  "type": "string",
+                                  "description": "Quiz question answer"
+                                }
+                              },
+                              "required": [
+                                "type",
+                                "content"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "match"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "matchOption": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ],
+                                  "description": "Matching options (LHS)"
+                                },
+                                "correctChoice": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ],
+                                  "description": "Matching options (RHS), indicating the correct choice"
+                                }
+                              },
+                              "required": [
+                                "matchOption",
+                                "correctChoice"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "questionType": {
+                            "type": "string",
+                            "enum": [
+                              "order"
+                            ]
+                          },
+                          "answers": {
+                            "type": "array",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "order": {
+                                      "type": "number",
+                                      "description": "Indicates the correct ordering of the response"
+                                    }
+                                  },
+                                  "required": [
+                                    "order"
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "enum": [
+                                        "text"
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
+                                    },
+                                    "content": {
+                                      "type": "string",
+                                      "description": "Quiz question answer"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "content"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "questionType",
+                          "answers"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
+            }
+          },
+          "required": [
+            "lessonSlug",
+            "lessonTitle",
+            "starterQuiz",
+            "exitQuiz"
+          ]
+        },
         "example": [
           {
             "lessonTitle": "3D shapes can be composed from 2D nets",
@@ -3923,10 +5165,12 @@ export const schema = {
           "type": "object",
           "properties": {
             "lessonSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The lesson slug identifier"
             },
             "lessonTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The title of the lesson"
             },
             "starterQuiz": {
               "type": "array",
@@ -3936,7 +5180,8 @@ export const schema = {
                     "type": "object",
                     "properties": {
                       "question": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The question text"
                       },
                       "questionType": {
                         "anyOf": [
@@ -3964,7 +5209,8 @@ export const schema = {
                               "order"
                             ]
                           }
-                        ]
+                        ],
+                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
                       },
                       "questionImage": {
                         "type": "object",
@@ -3982,7 +5228,8 @@ export const schema = {
                             "type": "string"
                           },
                           "text": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
                           },
                           "attribution": {
                             "type": "string"
@@ -4019,7 +5266,8 @@ export const schema = {
                                   "type": "object",
                                   "properties": {
                                     "distractor": {
-                                      "type": "boolean"
+                                      "type": "boolean",
+                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
                                     }
                                   },
                                   "required": [
@@ -4035,10 +5283,12 @@ export const schema = {
                                           "type": "string",
                                           "enum": [
                                             "text"
-                                          ]
+                                          ],
+                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                         },
                                         "content": {
-                                          "type": "string"
+                                          "type": "string",
+                                          "description": "Quiz question answer"
                                         }
                                       },
                                       "required": [
@@ -4071,7 +5321,8 @@ export const schema = {
                                               "type": "string"
                                             },
                                             "text": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "description": "Supplementary text for the image, if any"
                                             },
                                             "attribution": {
                                               "type": "string"
@@ -4118,10 +5369,12 @@ export const schema = {
                                   "type": "string",
                                   "enum": [
                                     "text"
-                                  ]
+                                  ],
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
@@ -4157,16 +5410,19 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
                                     "type",
                                     "content"
-                                  ]
+                                  ],
+                                  "description": "Matching options (LHS)"
                                 },
                                 "correctChoice": {
                                   "type": "object",
@@ -4175,16 +5431,19 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
                                     "type",
                                     "content"
-                                  ]
+                                  ],
+                                  "description": "Matching options (RHS), indicating the correct choice"
                                 }
                               },
                               "required": [
@@ -4216,7 +5475,8 @@ export const schema = {
                                   "type": "object",
                                   "properties": {
                                     "order": {
-                                      "type": "number"
+                                      "type": "number",
+                                      "description": "Indicates the correct ordering of the response"
                                     }
                                   },
                                   "required": [
@@ -4230,10 +5490,12 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
@@ -4253,7 +5515,8 @@ export const schema = {
                     ]
                   }
                 ]
-              }
+              },
+              "description": "The starter quiz questions - which test prior knowledge"
             },
             "exitQuiz": {
               "type": "array",
@@ -4263,7 +5526,8 @@ export const schema = {
                     "type": "object",
                     "properties": {
                       "question": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The question text"
                       },
                       "questionType": {
                         "anyOf": [
@@ -4291,7 +5555,8 @@ export const schema = {
                               "order"
                             ]
                           }
-                        ]
+                        ],
+                        "description": "The type of quiz question which could be one of the following:\n- multiple-choice\n- order\n- match\n- explanatory-text\n- short-answer"
                       },
                       "questionImage": {
                         "type": "object",
@@ -4309,7 +5574,8 @@ export const schema = {
                             "type": "string"
                           },
                           "text": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Supplementary text for the image, if any"
                           },
                           "attribution": {
                             "type": "string"
@@ -4346,7 +5612,8 @@ export const schema = {
                                   "type": "object",
                                   "properties": {
                                     "distractor": {
-                                      "type": "boolean"
+                                      "type": "boolean",
+                                      "description": "Whether the multiple choice question response is the correct answer (false) or is a distractor (true)"
                                     }
                                   },
                                   "required": [
@@ -4362,10 +5629,12 @@ export const schema = {
                                           "type": "string",
                                           "enum": [
                                             "text"
-                                          ]
+                                          ],
+                                          "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                         },
                                         "content": {
-                                          "type": "string"
+                                          "type": "string",
+                                          "description": "Quiz question answer"
                                         }
                                       },
                                       "required": [
@@ -4398,7 +5667,8 @@ export const schema = {
                                               "type": "string"
                                             },
                                             "text": {
-                                              "type": "string"
+                                              "type": "string",
+                                              "description": "Supplementary text for the image, if any"
                                             },
                                             "attribution": {
                                               "type": "string"
@@ -4445,10 +5715,12 @@ export const schema = {
                                   "type": "string",
                                   "enum": [
                                     "text"
-                                  ]
+                                  ],
+                                  "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                 },
                                 "content": {
-                                  "type": "string"
+                                  "type": "string",
+                                  "description": "Quiz question answer"
                                 }
                               },
                               "required": [
@@ -4484,16 +5756,19 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
                                     "type",
                                     "content"
-                                  ]
+                                  ],
+                                  "description": "Matching options (LHS)"
                                 },
                                 "correctChoice": {
                                   "type": "object",
@@ -4502,16 +5777,19 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
                                     "type",
                                     "content"
-                                  ]
+                                  ],
+                                  "description": "Matching options (RHS), indicating the correct choice"
                                 }
                               },
                               "required": [
@@ -4543,7 +5821,8 @@ export const schema = {
                                   "type": "object",
                                   "properties": {
                                     "order": {
-                                      "type": "number"
+                                      "type": "number",
+                                      "description": "Indicates the correct ordering of the response"
                                     }
                                   },
                                   "required": [
@@ -4557,10 +5836,12 @@ export const schema = {
                                       "type": "string",
                                       "enum": [
                                         "text"
-                                      ]
+                                      ],
+                                      "description": "The format of the quiz answer \nNote: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available."
                                     },
                                     "content": {
-                                      "type": "string"
+                                      "type": "string",
+                                      "description": "Quiz question answer"
                                     }
                                   },
                                   "required": [
@@ -4580,7 +5861,8 @@ export const schema = {
                     ]
                   }
                 ]
-              }
+              },
+              "description": "The exit quiz questions - which test on the knowledge learned in the lesson"
             }
           },
           "required": [
@@ -4717,25 +5999,32 @@ export const schema = {
         "type": "object",
         "properties": {
           "lessonTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The lesson title"
           },
           "unitSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The unit slug identifier"
           },
           "unitTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The unit title"
           },
           "subjectSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The subject slug identifier"
           },
           "subjectTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The subject slug identifier"
           },
           "keyStageSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The key stage slug identifier"
           },
           "keyStageTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The key stage title"
           },
           "lessonKeywords": {
             "type": "array",
@@ -4743,17 +6032,20 @@ export const schema = {
               "type": "object",
               "properties": {
                 "keyword": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The keyword"
                 },
                 "description": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "A definition of the keyword"
                 }
               },
               "required": [
                 "keyword",
                 "description"
               ]
-            }
+            },
+            "description": "The lesson's keywords and their descriptions"
           },
           "keyLearningPoints": {
             "type": "array",
@@ -4761,13 +6053,15 @@ export const schema = {
               "type": "object",
               "properties": {
                 "keyLearningPoint": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "A key learning point"
                 }
               },
               "required": [
                 "keyLearningPoint"
               ]
-            }
+            },
+            "description": "The lesson's key learning points"
           },
           "misconceptionsAndCommonMistakes": {
             "type": "array",
@@ -4775,7 +6069,8 @@ export const schema = {
               "type": "object",
               "properties": {
                 "misconception": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "A common misconception"
                 },
                 "response": {
                   "type": "string"
@@ -4785,10 +6080,12 @@ export const schema = {
                 "misconception",
                 "response"
               ]
-            }
+            },
+            "description": "The lesson’s anticipated common misconceptions and suggested teacher responses"
           },
           "pupilLessonOutcome": {
-            "type": "string"
+            "type": "string",
+            "description": "Suggested teacher response to a common misconception"
           },
           "teacherTips": {
             "type": "array",
@@ -4801,8 +6098,10 @@ export const schema = {
               },
               "required": [
                 "teacherTip"
-              ]
-            }
+              ],
+              "description": "A teaching tip"
+            },
+            "description": "Helpful teaching tips for the lesson"
           },
           "contentGuidance": {
             "anyOf": [
@@ -4812,16 +6111,20 @@ export const schema = {
                   "type": "object",
                   "properties": {
                     "contentGuidanceArea": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Category of content guidance"
                     },
                     "supervisionlevel_id": {
-                      "type": "number"
+                      "type": "number",
+                      "description": "The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information."
                     },
                     "contentGuidanceLabel": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "Content guidance label"
                     },
                     "contentGuidanceDescription": {
-                      "type": "string"
+                      "type": "string",
+                      "description": "A detailed description of the type of content that we suggest needs guidance."
                     }
                   },
                   "required": [
@@ -4835,7 +6138,8 @@ export const schema = {
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "Full guidance about the types of lesson content for the teacher to consider (where appropriate)"
           },
           "supervisionLevel": {
             "anyOf": [
@@ -4845,10 +6149,12 @@ export const schema = {
               {
                 "type": "null"
               }
-            ]
+            ],
+            "description": "The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information."
           },
           "downloadsAvailable": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the lesson currently has any downloadable assets availableNote: this field reflects the current availability of downloadable assets, which reflects the availability of early-release content available for the hackathon. All lessons will eventually have downloadable assets available."
           }
         },
         "required": [
@@ -4929,13 +6235,16 @@ export const schema = {
           "type": "object",
           "properties": {
             "lessonSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The lesson slug identifier"
             },
             "lessonTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The lesson title"
             },
             "similarity": {
-              "type": "number"
+              "type": "number",
+              "description": "The snippet of the transcript that matched the search term"
             },
             "units": {
               "type": "array",
@@ -4972,7 +6281,8 @@ export const schema = {
                   "keyStageSlug",
                   "subjectSlug"
                 ]
-              }
+              },
+              "description": "The units that the lesson is part of. See sample response below"
             }
           },
           "required": [
@@ -4983,20 +6293,6 @@ export const schema = {
           ]
         },
         "example": [
-          {
-            "lessonSlug": "descriptive-writing-about-a-small-detail",
-            "lessonTitle": "Writing a gothic description",
-            "similarity": 0.2413793,
-            "units": [
-              {
-                "unitSlug": "a-monster-within-reading-gothic-fiction",
-                "unitTitle": "A monster within: reading and writing Gothic fiction",
-                "examBoardTitle": null,
-                "keyStageSlug": "ks3",
-                "subjectSlug": "english"
-              }
-            ]
-          },
           {
             "lessonSlug": "performing-your-chosen-gothic-poem",
             "lessonTitle": "Performing your chosen Gothic poem",
@@ -5031,13 +6327,19 @@ export const schema = {
         "type": "object",
         "properties": {
           "unitSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The unit slug identifier",
+            "example": "simple-compound-and-adverbial-complex-sentences"
           },
           "unitTitle": {
-            "type": "string"
+            "type": "string",
+            "description": "The unit title",
+            "example": "Simple, compound and adverbial complex sentences"
           },
           "yearSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The slug identifier for the year to which the unit belongs",
+            "example": "year-3"
           },
           "year": {
             "anyOf": [
@@ -5047,37 +6349,60 @@ export const schema = {
               {
                 "type": "string"
               }
-            ]
+            ],
+            "description": "The year to which the unit belongs",
+            "example": 3
           },
           "phaseSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The slug identifier for the phase to which the unit belongs",
+            "example": "primary"
           },
           "subjectSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The subject identifier",
+            "example": "english"
           },
           "keyStageSlug": {
-            "type": "string"
+            "type": "string",
+            "description": "The slug identifier for the the key stage to which the unit belongs",
+            "example": "ks2"
           },
           "notes": {
-            "type": "string"
+            "type": "string",
+            "description": "Unit summary notes"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "description": "A short description of the unit. Not yet available for all subjects."
           },
           "priorKnowledgeRequirements": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "The prior knowledge required for the unit",
+            "example": [
+              "A simple sentence is about one idea and makes complete sense.",
+              "Any simple sentence contains one verb and at least one noun.",
+              "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+            ]
           },
           "nationalCurriculumContent": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "National curriculum attainment statements covered in this unit",
+            "example": [
+              "Ask relevant questions to extend their understanding and knowledge",
+              "Articulate and justify answers, arguments and opinions",
+              "Speak audibly and fluently with an increasing command of Standard English"
+            ]
           },
           "whyThisWhyNow": {
-            "type": "string"
+            "type": "string",
+            "description": "An explanation of where the unit sits within the sequence and why it has been placed there."
           },
           "threads": {
             "type": "array",
@@ -5099,7 +6424,15 @@ export const schema = {
                 "title",
                 "order"
               ]
-            }
+            },
+            "description": "The threads that are associated with the unit",
+            "example": [
+              {
+                "slug": "developing-grammatical-knowledge",
+                "title": "Developing grammatical knowledge",
+                "order": 10
+              }
+            ]
           },
           "categories": {
             "type": "array",
@@ -5116,7 +6449,8 @@ export const schema = {
               "required": [
                 "categoryTitle"
               ]
-            }
+            },
+            "description": "The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted."
           },
           "unitLessons": {
             "type": "array",
@@ -5124,27 +6458,36 @@ export const schema = {
               "type": "object",
               "properties": {
                 "lessonSlug": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The lesson slug identifier",
+                  "example": "four-types-of-simple-sentence"
                 },
                 "lessonTitle": {
-                  "type": "string"
+                  "type": "string",
+                  "description": "The title for the lesson",
+                  "example": "Four types of simple sentence"
                 },
                 "lessonOrder": {
-                  "type": "number"
+                  "type": "number",
+                  "description": "Indicates the ordering of the lesson",
+                  "example": 1
                 },
                 "state": {
                   "type": "string",
                   "enum": [
                     "published",
                     "new"
-                  ]
+                  ],
+                  "description": "If the state is 'published' then it is also available on the /lessons/* endpoints. If the state is 'new' then it's not available yet.",
+                  "example": "published"
                 }
               },
               "required": [
                 "lessonSlug",
                 "lessonTitle",
                 "state"
-              ]
+              ],
+              "description": "All the lessons contained in the unit"
             }
           }
         },
@@ -5207,10 +6550,12 @@ export const schema = {
           "type": "object",
           "properties": {
             "title": {
-              "type": "string"
+              "type": "string",
+              "description": "The thread title"
             },
             "slug": {
-              "type": "string"
+              "type": "string",
+              "description": "The thread slug identifier"
             }
           },
           "required": [
@@ -5220,136 +6565,10 @@ export const schema = {
         },
         "example": [
           {
-            "title": "A Midsummer Night’s Dream",
-            "slug": "a-midsummer-nights-dream-72"
+            "title": "Number: Multiplication and division",
+            "slug": "number-multiplication-and-division"
           }
         ]
-      },
-      "error.UNAUTHORIZED": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "Authorization not provided"
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "UNAUTHORIZED"
-          },
-          "issues": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "message"
-              ]
-            },
-            "description": "An array of issues that were responsible for the error",
-            "example": []
-          }
-        },
-        "required": [
-          "message",
-          "code"
-        ],
-        "title": "Authorization not provided error (401)",
-        "description": "The error information",
-        "example": {
-          "code": "UNAUTHORIZED",
-          "message": "Authorization not provided",
-          "issues": []
-        }
-      },
-      "error.FORBIDDEN": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "Insufficient access"
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "FORBIDDEN"
-          },
-          "issues": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "message"
-              ]
-            },
-            "description": "An array of issues that were responsible for the error",
-            "example": []
-          }
-        },
-        "required": [
-          "message",
-          "code"
-        ],
-        "title": "Insufficient access error (403)",
-        "description": "The error information",
-        "example": {
-          "code": "FORBIDDEN",
-          "message": "Insufficient access",
-          "issues": []
-        }
-      },
-      "error.INTERNAL_SERVER_ERROR": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "description": "The error message",
-            "example": "Internal server error"
-          },
-          "code": {
-            "type": "string",
-            "description": "The error code",
-            "example": "INTERNAL_SERVER_ERROR"
-          },
-          "issues": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "message"
-              ]
-            },
-            "description": "An array of issues that were responsible for the error",
-            "example": []
-          }
-        },
-        "required": [
-          "message",
-          "code"
-        ],
-        "title": "Internal server error error (500)",
-        "description": "The error information",
-        "example": {
-          "code": "INTERNAL_SERVER_ERROR",
-          "message": "Internal server error",
-          "issues": []
-        }
       },
       "ThreadUnitsResponseSchema": {
         "type": "array",
@@ -5357,13 +6576,16 @@ export const schema = {
           "type": "object",
           "properties": {
             "unitTitle": {
-              "type": "string"
+              "type": "string",
+              "description": "The unit title"
             },
             "unitSlug": {
-              "type": "string"
+              "type": "string",
+              "description": "The unit slug identifier"
             },
             "unitOrder": {
-              "type": "number"
+              "type": "number",
+              "description": "The position of the unit within the thread"
             }
           },
           "required": [
@@ -5374,13 +6596,13 @@ export const schema = {
         },
         "example": [
           {
-            "unitTitle": "A Midsummer Night's Dream, Shakespeare (Introduction and Act 1)",
-            "unitSlug": "a-midsummer-nights-dream-shakespeare-introduction-and-act-1-2912",
+            "unitTitle": "Unitising and coin recognition - counting in 2s, 5s and 10s",
+            "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s",
             "unitOrder": 1
           },
           {
-            "unitTitle": "A Midsummer Night's Dream, Shakespeare (Act 2)",
-            "unitSlug": "a-midsummer-nights-dream-shakespeare-act-2-3c74",
+            "unitTitle": "Solving problems in a range of contexts",
+            "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money",
             "unitOrder": 2
           }
         ]
@@ -5389,13 +6611,19 @@ export const schema = {
         "type": "object",
         "properties": {
           "limit": {
-            "type": "number"
+            "type": "number",
+            "description": "The maximum number of requests you can make in the current window.",
+            "example": 1000
           },
           "remaining": {
-            "type": "number"
+            "type": "number",
+            "description": "The number of requests remaining in the current window.",
+            "example": 953
           },
           "reset": {
-            "type": "number"
+            "type": "number",
+            "description": "The time at which the current window resets, in milliseconds since the Unix epoch.",
+            "example": 1740164400000
           }
         },
         "required": [

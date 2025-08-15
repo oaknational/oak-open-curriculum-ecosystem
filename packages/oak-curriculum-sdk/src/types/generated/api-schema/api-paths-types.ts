@@ -6,6 +6,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
+        /**
+         * Units within a sequence
+         * @description This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
+         */
         get: operations["getSequences-getSequenceUnits"];
         put?: never;
         post?: never;
@@ -22,7 +26,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns the transcript from the video from a lesson */
+        /**
+         * Lesson transcript
+         * @description This endpoint returns the video transcript and video captions file for a given lesson.
+         */
         get: operations["getLessonTranscript-getLessonTranscript"];
         put?: never;
         post?: never;
@@ -39,7 +46,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Search for a term and find lessons that contain similar text in their video transcripts */
+        /**
+         * Lesson search using lesson video transcripts
+         * @description Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
+         */
         get: operations["searchTranscripts-searchTranscripts"];
         put?: never;
         post?: never;
@@ -56,7 +66,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns signed download URLs and types for the assets currently available on Oak for a given sequence */
+        /**
+         * Assets within a sequence
+         * @description This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
+         *     This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+         */
         get: operations["getAssets-getSequenceAssets"];
         put?: never;
         post?: never;
@@ -73,7 +87,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns signed download URLs and types for the assets currently available on Oak for a given key stage and subject, optionally filtered by type and unit, grouped by lesson */
+        /**
+         * Assets
+         * @description This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
+         */
         get: operations["getAssets-getSubjectAssets"];
         put?: never;
         post?: never;
@@ -90,7 +107,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns signed download URLS and types for the assets currently available on Oak for a given lesson */
+        /**
+         * Downloadable lesson assets
+         * @description This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
+         *             This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+         *
+         */
         get: operations["getAssets-getLessonAssets"];
         put?: never;
         post?: never;
@@ -107,7 +129,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint will stream the downloadable asset for the given lesson and type */
+        /**
+         * Lesson asset by type
+         * @description This endpoint will stream the downloadable asset for the given lesson and type.
+         *     There is no response returned for this endpoint as it returns a content attachment.
+         */
         get: operations["getAssets-getLessonAsset"];
         put?: never;
         post?: never;
@@ -124,7 +150,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns an array of all subjects and associated sequences, key stages and years that are currently available on Oak */
+        /**
+         * Subjects
+         * @description This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
+         */
         get: operations["getSubjects-getAllSubjects"];
         put?: never;
         post?: never;
@@ -141,7 +170,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns a single subject and associated sequences, key stages and years. */
+        /**
+         * Subject
+         * @description This endpoint returns the sequences, key stages and years that are currently available for a given subject.
+         */
         get: operations["getSubjects-getSubject"];
         put?: never;
         post?: never;
@@ -158,7 +190,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description List of the sequences, including phase, key stage 4 options, years and key stages the sequence applies to for a subject. */
+        /**
+         * Sequencing information for a given subject
+         * @description This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
+         */
         get: operations["getSubjects-getSubjectSequence"];
         put?: never;
         post?: never;
@@ -175,7 +210,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description List of the key stages a subject is taught in. */
+        /**
+         * Key stages within a subject
+         * @description This endpoint returns a list of key stages that are currently available for a given subject.
+         */
         get: operations["getSubjects-getSubjectKeyStages"];
         put?: never;
         post?: never;
@@ -192,7 +230,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description List of the years a subject is taught in. */
+        /**
+         * Year groups for a given subject
+         * @description This endpoint returns an array of years that are currently available for a given subject.
+         */
         get: operations["getSubjects-getSubjectYears"];
         put?: never;
         post?: never;
@@ -209,7 +250,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns all the key stages (titles and slugs) that are currently available on Oak */
+        /**
+         * Key stages
+         * @description This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
+         */
         get: operations["getKeyStages-getKeyStages"];
         put?: never;
         post?: never;
@@ -226,7 +270,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns all the lessons (titles and slugs) that are currently available on Oak for a given subject and key stage, grouped by unit */
+        /**
+         * Lessons
+         * @description This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
+         */
         get: operations["getKeyStageSubjectLessons-getKeyStageSubjectLessons"];
         put?: never;
         post?: never;
@@ -243,7 +290,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns all the units (titles and slugs) that are currently available on Oak for a given subject and key stage */
+        /**
+         * Units
+         * @description This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
+         */
         get: operations["getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits"];
         put?: never;
         post?: never;
@@ -260,7 +310,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors. */
+        /**
+         * Quiz questions by lesson
+         * @description The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
+         */
         get: operations["getQuestions-getQuestionsForLessons"];
         put?: never;
         post?: never;
@@ -277,7 +330,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns the quiz questions and answers (and indicates which answers are correct and which are distractors) for a given sequence */
+        /**
+         * Questions within a sequence
+         * @description This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
+         */
         get: operations["getQuestions-getQuestionsForSequence"];
         put?: never;
         post?: never;
@@ -294,7 +350,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns all the quiz questions and answers (and indicates which answers are correct and which are distractors), grouped by lesson, for a given key stage and subject */
+        /**
+         * Quiz questions by subject and key stage
+         * @description This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
+         */
         get: operations["getQuestions-getQuestionsForKeyStageAndSubject"];
         put?: never;
         post?: never;
@@ -311,7 +370,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns a summary for a given lesson */
+        /**
+         * Lesson summary
+         * @description This endpoint returns a summary for a given lesson
+         */
         get: operations["getLessons-getLesson"];
         put?: never;
         post?: never;
@@ -328,7 +390,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns lessons that are similar to the search criteria, including a similarity score, and details of the unit that it is in */
+        /**
+         * Lesson search using lesson title
+         * @description Search for a term and find the 20 most similar lessons with titles that contain similar text.
+         */
         get: operations["getLessons-searchByTextSimilarity"];
         put?: never;
         post?: never;
@@ -345,7 +410,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit */
+        /**
+         * Unit summary
+         * @description This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
+         */
         get: operations["getUnits-getUnit"];
         put?: never;
         post?: never;
@@ -362,7 +430,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get all threads that can be used as sequence filters. */
+        /**
+         * Threads
+         * @description This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
+         */
         get: operations["getThreads-getAllThreads"];
         put?: never;
         post?: never;
@@ -379,7 +450,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get all units for a specific thread filter. */
+        /**
+         * Units belonging to a given thread
+         * @description This endpoint returns all of the units that belong to a given thread.
+         */
         get: operations["getThreads-getThreadUnits"];
         put?: never;
         post?: never;
@@ -471,74 +545,112 @@ export interface components {
          *       }
          *     ] */
         SequenceUnitsResponseSchema: ({
+            /** @description The year group */
             year: number | "all-years";
+            /** @description An optional alternative title for the year sequence */
             title?: string;
+            /** @description A list of units that make up a full sequence, grouped by year. */
             units: ({
+                /** @description The title of the unit */
                 unitTitle: string;
+                /** @description The position of the unit within the sequence. */
                 unitOrder: number;
+                /** @description The unique slug identifier for the unit */
                 unitOptions: {
                     unitTitle: string;
                     unitSlug: string;
                 }[];
+                /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                 categories?: {
+                    /** @description The title of the category */
                     categoryTitle: string;
+                    /** @description The unique identifier for the category */
                     categorySlug?: string;
                 }[];
+                /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                 threads?: {
+                    /** @description The title of the category */
                     threadTitle: string;
+                    /** @description The unique identifier for the thread */
                     threadSlug: string;
+                    /** @description Deprecated */
                     order: number;
                 }[];
             } | {
                 unitTitle: string;
                 unitOrder: number;
+                /** @description The unique slug identifier for the unit */
                 unitSlug: string;
                 categories?: {
+                    /** @description The title of the category */
                     categoryTitle: string;
+                    /** @description The unique identifier for the category */
                     categorySlug?: string;
                 }[];
                 threads?: {
+                    /** @description The title of the category */
                     threadTitle: string;
+                    /** @description The unique identifier for the thread */
                     threadSlug: string;
+                    /** @description Deprecated */
                     order: number;
                 }[];
             })[];
         } | {
             year: number;
             title?: string;
+            /** @description Only used in secondary science. Contains a full year's unit sequences based on which subject is being studied at KS4. */
             examSubjects: ({
                 examSubjectTitle: string;
                 examSubjectSlug?: string;
                 tiers: {
+                    /** @description The title of the tier */
                     tierTitle: string;
+                    /** @description The tier identifier */
                     tierSlug: string;
                     units: ({
+                        /** @description The title of the unit */
                         unitTitle: string;
+                        /** @description The position of the unit within the sequence. */
                         unitOrder: number;
+                        /** @description The unique slug identifier for the unit */
                         unitOptions: {
                             unitTitle: string;
                             unitSlug: string;
                         }[];
+                        /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                         categories?: {
+                            /** @description The title of the category */
                             categoryTitle: string;
+                            /** @description The unique identifier for the category */
                             categorySlug?: string;
                         }[];
+                        /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                         threads?: {
+                            /** @description The title of the category */
                             threadTitle: string;
+                            /** @description The unique identifier for the thread */
                             threadSlug: string;
+                            /** @description Deprecated */
                             order: number;
                         }[];
                     } | {
                         unitTitle: string;
                         unitOrder: number;
+                        /** @description The unique slug identifier for the unit */
                         unitSlug: string;
                         categories?: {
+                            /** @description The title of the category */
                             categoryTitle: string;
+                            /** @description The unique identifier for the category */
                             categorySlug?: string;
                         }[];
                         threads?: {
+                            /** @description The title of the category */
                             threadTitle: string;
+                            /** @description The unique identifier for the thread */
                             threadSlug: string;
+                            /** @description Deprecated */
                             order: number;
                         }[];
                     })[];
@@ -547,32 +659,48 @@ export interface components {
                 examSubjectTitle: string;
                 examSubjectSlug?: string;
                 units: ({
+                    /** @description The title of the unit */
                     unitTitle: string;
+                    /** @description The position of the unit within the sequence. */
                     unitOrder: number;
+                    /** @description The unique slug identifier for the unit */
                     unitOptions: {
                         unitTitle: string;
                         unitSlug: string;
                     }[];
+                    /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     categories?: {
+                        /** @description The title of the category */
                         categoryTitle: string;
+                        /** @description The unique identifier for the category */
                         categorySlug?: string;
                     }[];
+                    /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     threads?: {
+                        /** @description The title of the category */
                         threadTitle: string;
+                        /** @description The unique identifier for the thread */
                         threadSlug: string;
+                        /** @description Deprecated */
                         order: number;
                     }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
+                    /** @description The unique slug identifier for the unit */
                     unitSlug: string;
                     categories?: {
+                        /** @description The title of the category */
                         categoryTitle: string;
+                        /** @description The unique identifier for the category */
                         categorySlug?: string;
                     }[];
                     threads?: {
+                        /** @description The title of the category */
                         threadTitle: string;
+                        /** @description The unique identifier for the thread */
                         threadSlug: string;
+                        /** @description Deprecated */
                         order: number;
                     }[];
                 })[];
@@ -581,35 +709,53 @@ export interface components {
             year: number;
             title?: string;
             tiers: {
+                /** @description The title of the tier */
                 tierTitle: string;
+                /** @description The tier identifier */
                 tierSlug: string;
                 units: ({
+                    /** @description The title of the unit */
                     unitTitle: string;
+                    /** @description The position of the unit within the sequence. */
                     unitOrder: number;
+                    /** @description The unique slug identifier for the unit */
                     unitOptions: {
                         unitTitle: string;
                         unitSlug: string;
                     }[];
+                    /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     categories?: {
+                        /** @description The title of the category */
                         categoryTitle: string;
+                        /** @description The unique identifier for the category */
                         categorySlug?: string;
                     }[];
+                    /** @description A list of threads (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
                     threads?: {
+                        /** @description The title of the category */
                         threadTitle: string;
+                        /** @description The unique identifier for the thread */
                         threadSlug: string;
+                        /** @description Deprecated */
                         order: number;
                     }[];
                 } | {
                     unitTitle: string;
                     unitOrder: number;
+                    /** @description The unique slug identifier for the unit */
                     unitSlug: string;
                     categories?: {
+                        /** @description The title of the category */
                         categoryTitle: string;
+                        /** @description The unique identifier for the category */
                         categorySlug?: string;
                     }[];
                     threads?: {
+                        /** @description The title of the category */
                         threadTitle: string;
+                        /** @description The unique identifier for the thread */
                         threadSlug: string;
+                        /** @description Deprecated */
                         order: number;
                     }[];
                 })[];
@@ -620,7 +766,9 @@ export interface components {
          *       "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
          *     } */
         TranscriptResponseSchema: {
+            /** @description The transcript for the lesson video */
             transcript: string;
+            /** @description The contents of the .vtt file for the lesson video, which maps captions to video timestamps. */
             vtt: string;
         };
         /** @example [
@@ -646,8 +794,20 @@ export interface components {
          *       }
          *     ] */
         SearchTranscriptResponseSchema: {
+            /**
+             * @description The lesson title
+             * @example The Roman invasion of Britain
+             */
             lessonTitle: string;
+            /**
+             * @description The lesson slug identifier
+             * @example the-roman-invasion-of-britain
+             */
             lessonSlug: string;
+            /**
+             * @description The snippet of the transcript that matched the search term
+             * @example The Romans were ready,
+             */
             transcriptSnippet?: string;
         }[];
         /** @example [
@@ -674,13 +834,22 @@ export interface components {
          *       }
          *     ] */
         SequenceAssetsResponseSchema: {
+            /** @description The unique slug identifier for the lesson */
             lessonSlug: string;
+            /** @description The title for the lesson */
             lessonTitle: string;
+            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
+            /** @description List of assets */
             assets: {
-                /** @enum {string} */
+                /**
+                 * @example slideDeck
+                 * @enum {string}
+                 */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                /** @description The label for the asset */
                 label: string;
+                /** @description The download endpoint for the asset. */
                 url: string;
             }[];
         }[];
@@ -708,13 +877,22 @@ export interface components {
          *       }
          *     ] */
         SubjectAssetsResponseSchema: {
+            /** @description The unique slug identifier for the lesson */
             lessonSlug: string;
+            /** @description The title for the lesson */
             lessonTitle: string;
+            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
+            /** @description List of assets */
             assets: {
-                /** @enum {string} */
+                /**
+                 * @example slideDeck
+                 * @enum {string}
+                 */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                /** @description The label for the asset */
                 label: string;
+                /** @description The download endpoint for the asset. */
                 url: string;
             }[];
         }[];
@@ -742,17 +920,22 @@ export interface components {
          *       ]
          *     } */
         LessonAssetsResponseSchema: {
+            /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
+            /** @description List of assets */
             assets?: {
-                /** @enum {string} */
+                /**
+                 * @example slideDeck
+                 * @enum {string}
+                 */
                 type: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
+                /** @description The label for the asset */
                 label: string;
+                /** @description The download endpoint for the asset. */
                 url: string;
             }[];
         };
-        /** @example {
-         *       "200": "application/octet-stream"
-         *     } */
+        /** @example {} */
         LessonAssetResponseSchema: unknown;
         /** @example [
          *       {
@@ -841,25 +1024,40 @@ export interface components {
          *       }
          *     ] */
         AllSubjectsResponseSchema: {
+            /** @description The subject title */
             subjectTitle: string;
+            /** @description The subject slug identifier */
             subjectSlug: string;
+            /** @description Information about the years, key stages and key stage 4 variance for each sequence */
             sequenceSlugs: {
+                /** @description The unique identifier for each sequence */
                 sequenceSlug: string;
+                /** @description The years for which this subject has content available for */
                 years: number[];
+                /** @description The key stage slug identifiers for which this subject has content available for. */
                 keyStages: {
+                    /** @description The key stage title for the given key stage */
                     keyStageTitle: string;
+                    /** @description The unique identifier for a given key stage */
                     keyStageSlug: string;
                 }[];
+                /** @description The unique identifier for the phase to which this sequence belongs */
                 phaseSlug: string;
+                /** @description The title for the phase to which this sequence belongs */
                 phaseTitle: string;
+                /** @description The key stage 4 study pathway that this sequence represents. May be null. */
                 ks4Options: {
                     title: string;
                     slug: string;
                 } | null;
             }[];
+            /** @description The years for which this subject has content available for */
             years: number[];
+            /** @description The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
+                /** @description The key stage title for the given key stage */
                 keyStageTitle: string;
+                /** @description The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
         }[];
@@ -949,25 +1147,40 @@ export interface components {
          *       ]
          *     } */
         SubjectResponseSchema: {
+            /** @description The subject title */
             subjectTitle: string;
+            /** @description The subject slug identifier */
             subjectSlug: string;
+            /** @description Information about the years, key stages and key stage 4 variance for each sequence */
             sequenceSlugs: {
+                /** @description The unique identifier for each sequence */
                 sequenceSlug: string;
+                /** @description The years for which this subject has content available for */
                 years: number[];
+                /** @description The key stage slug identifiers for which this subject has content available for. */
                 keyStages: {
+                    /** @description The key stage title for the given key stage */
                     keyStageTitle: string;
+                    /** @description The unique identifier for a given key stage */
                     keyStageSlug: string;
                 }[];
+                /** @description The unique identifier for the phase to which this sequence belongs */
                 phaseSlug: string;
+                /** @description The title for the phase to which this sequence belongs */
                 phaseTitle: string;
+                /** @description The key stage 4 study pathway that this sequence represents. May be null. */
                 ks4Options: {
                     title: string;
                     slug: string;
                 } | null;
             }[];
+            /** @description The years for which this subject has content available for */
             years: number[];
+            /** @description The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
+                /** @description The key stage title for the given key stage */
                 keyStageTitle: string;
+                /** @description The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
         };
@@ -1022,20 +1235,30 @@ export interface components {
          *       }
          *     ] */
         SubjectSequenceResponseSchema: {
+            /** @description The unique identifier for each sequence */
             sequenceSlug: string;
+            /** @description The years for which this subject has content available for */
             years: number[];
+            /** @description The key stage slug identifiers for which this subject has content available for. */
             keyStages: {
+                /** @description The key stage title for the given key stage */
                 keyStageTitle: string;
+                /** @description The unique identifier for a given key stage */
                 keyStageSlug: string;
             }[];
+            /** @description The unique identifier for the phase to which this sequence belongs */
             phaseSlug: string;
+            /** @description The title for the phase to which this sequence belongs */
             phaseTitle: string;
+            /** @description The key stage 4 study pathway that this sequence represents. May be null. */
             ks4Options: {
                 title: string;
                 slug: string;
             } | null;
         }[];
-        /** @example [
+        /**
+         * @description The key stage slug identifiers for which this subject has content available for
+         * @example [
          *       {
          *         "keyStageTitle": "Key Stage 1",
          *         "keyStageSlug": "ks1"
@@ -1052,11 +1275,29 @@ export interface components {
          *         "keyStageTitle": "Key Stage 4",
          *         "keyStageSlug": "ks4"
          *       }
-         *     ] */
+         *     ]
+         */
         SubjectKeyStagesResponseSchema: {
+            /** @description The key stage title for the given key stage */
             keyStageTitle: string;
+            /** @description The unique identifier for a given key stage */
             keyStageSlug: string;
         }[];
+        /**
+         * @description The years for which this sequence has content available for
+         * @example [
+         *       1,
+         *       2,
+         *       3,
+         *       4,
+         *       5,
+         *       6,
+         *       7,
+         *       8,
+         *       9
+         *     ]
+         */
+        SubjectYearsResponseSchema: number[];
         /** @example [
          *       {
          *         "slug": "ks1",
@@ -1064,7 +1305,15 @@ export interface components {
          *       }
          *     ] */
         KeyStageResponseSchema: {
+            /**
+             * @description The key stage slug identifier
+             * @example ks1
+             */
             slug: string;
+            /**
+             * @description The key stage title
+             * @example Key Stage 1
+             */
             title: string;
         }[];
         /** @example [
@@ -1084,10 +1333,39 @@ export interface components {
          *       }
          *     ] */
         KeyStageSubjectLessonsResponseSchema: {
+            /**
+             * @description The unit slug identifier
+             * @example simple-compound-and-adverbial-complex-sentences
+             */
             unitSlug: string;
+            /**
+             * @description The unit title
+             * @example Simple, compound and adverbial complex sentences
+             */
             unitTitle: string;
+            /**
+             * @description List of lessons for the specified unit
+             * @example [
+             *       {
+             *         "lessonSlug": "four-types-of-simple-sentence",
+             *         "lessonTitle": "Four types of simple sentence"
+             *       },
+             *       {
+             *         "lessonSlug": "three-ways-for-co-ordination-in-compound-sentences",
+             *         "lessonTitle": "Three ways for co-ordination in compound sentences"
+             *       }
+             *     ]
+             */
             lessons: {
+                /**
+                 * @description The lesson slug identifier
+                 * @example four-types-of-simple-sentence
+                 */
                 lessonSlug: string;
+                /**
+                 * @description The lesson title
+                 * @example Four types of simple sentence
+                 */
                 lessonTitle: string;
             }[];
         }[];
@@ -1108,8 +1386,17 @@ export interface components {
          *       }
          *     ] */
         AllKeyStageAndSubjectUnitsResponseSchema: {
+            /**
+             * @description The year identifier
+             * @example year-3
+             */
             yearSlug: string;
+            /**
+             * @description The year title
+             * @example Year 3
+             */
             yearTitle: string;
+            /** @description List of units for the specified year */
             units: {
                 unitSlug: string;
                 unitTitle: string;
@@ -1174,14 +1461,23 @@ export interface components {
          *       ]
          *     } */
         QuestionForLessonsResponseSchema: {
+            /** @description The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
+                /** @description The question text */
                 question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
+                    /** @description Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
@@ -1189,10 +1485,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "multiple-choice";
                 answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } & ({
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 } | {
                     /** @enum {string} */
@@ -1202,6 +1504,7 @@ export interface components {
                         width: number;
                         height: number;
                         alt?: string;
+                        /** @description Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
@@ -1210,22 +1513,39 @@ export interface components {
                 /** @enum {string} */
                 questionType: "short-answer";
                 answers: {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
                 /** @enum {string} */
                 questionType: "match";
                 answers: {
+                    /** @description Matching options (LHS) */
                     matchOption: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
+                    /** @description Matching options (RHS), indicating the correct choice */
                     correctChoice: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
                 }[];
@@ -1233,21 +1553,36 @@ export interface components {
                 /** @enum {string} */
                 questionType: "order";
                 answers: ({
+                    /** @description Indicates the correct ordering of the response */
                     order: number;
                 } & {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 })[];
             }))[];
+            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
+                /** @description The question text */
                 question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
+                    /** @description Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
@@ -1255,10 +1590,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "multiple-choice";
                 answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } & ({
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 } | {
                     /** @enum {string} */
@@ -1268,6 +1609,7 @@ export interface components {
                         width: number;
                         height: number;
                         alt?: string;
+                        /** @description Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
@@ -1276,22 +1618,39 @@ export interface components {
                 /** @enum {string} */
                 questionType: "short-answer";
                 answers: {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
                 /** @enum {string} */
                 questionType: "match";
                 answers: {
+                    /** @description Matching options (LHS) */
                     matchOption: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
+                    /** @description Matching options (RHS), indicating the correct choice */
                     correctChoice: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
                 }[];
@@ -1299,10 +1658,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "order";
                 answers: ({
+                    /** @description Indicates the correct ordering of the response */
                     order: number;
                 } & {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 })[];
             }))[];
@@ -1364,7 +1729,222 @@ export interface components {
          *         ]
          *       }
          *     ] */
-        QuestionsForSequenceResponseSchema: unknown;
+        QuestionsForSequenceResponseSchema: {
+            /** @description The lesson slug identifier */
+            lessonSlug: string;
+            /** @description The title of the lesson */
+            lessonTitle: string;
+            /** @description The starter quiz questions - which test prior knowledge */
+            starterQuiz: ({
+                /** @description The question text */
+                question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
+                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+            } & ({
+                /** @enum {string} */
+                questionType: "multiple-choice";
+                answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                } & ({
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                } | {
+                    /** @enum {string} */
+                    type: "image";
+                    content: {
+                        url: string;
+                        width: number;
+                        height: number;
+                        alt?: string;
+                        /** @description Supplementary text for the image, if any */
+                        text?: string;
+                        attribution?: string;
+                    };
+                }))[];
+            } | {
+                /** @enum {string} */
+                questionType: "short-answer";
+                answers: {
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                }[];
+            } | {
+                /** @enum {string} */
+                questionType: "match";
+                answers: {
+                    /** @description Matching options (LHS) */
+                    matchOption: {
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
+                        type: "text";
+                        /** @description Quiz question answer */
+                        content: string;
+                    };
+                    /** @description Matching options (RHS), indicating the correct choice */
+                    correctChoice: {
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
+                        type: "text";
+                        /** @description Quiz question answer */
+                        content: string;
+                    };
+                }[];
+            } | {
+                /** @enum {string} */
+                questionType: "order";
+                answers: ({
+                    /** @description Indicates the correct ordering of the response */
+                    order: number;
+                } & {
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                })[];
+            }))[];
+            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
+            exitQuiz: ({
+                /** @description The question text */
+                question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
+                questionType: "multiple-choice" | "short-answer" | "match" | "order";
+                questionImage?: {
+                    url: string;
+                    width: number;
+                    height: number;
+                    alt?: string;
+                    /** @description Supplementary text for the image, if any */
+                    text?: string;
+                    attribution?: string;
+                };
+            } & ({
+                /** @enum {string} */
+                questionType: "multiple-choice";
+                answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
+                    distractor: boolean;
+                } & ({
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                } | {
+                    /** @enum {string} */
+                    type: "image";
+                    content: {
+                        url: string;
+                        width: number;
+                        height: number;
+                        alt?: string;
+                        /** @description Supplementary text for the image, if any */
+                        text?: string;
+                        attribution?: string;
+                    };
+                }))[];
+            } | {
+                /** @enum {string} */
+                questionType: "short-answer";
+                answers: {
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                }[];
+            } | {
+                /** @enum {string} */
+                questionType: "match";
+                answers: {
+                    /** @description Matching options (LHS) */
+                    matchOption: {
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
+                        type: "text";
+                        /** @description Quiz question answer */
+                        content: string;
+                    };
+                    /** @description Matching options (RHS), indicating the correct choice */
+                    correctChoice: {
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
+                        type: "text";
+                        /** @description Quiz question answer */
+                        content: string;
+                    };
+                }[];
+            } | {
+                /** @enum {string} */
+                questionType: "order";
+                answers: ({
+                    /** @description Indicates the correct ordering of the response */
+                    order: number;
+                } & {
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
+                    type: "text";
+                    /** @description Quiz question answer */
+                    content: string;
+                })[];
+            }))[];
+        }[];
         /** @example [
          *       {
          *         "lessonSlug": "predicting-the-size-of-a-product",
@@ -1488,16 +2068,27 @@ export interface components {
          *       }
          *     ] */
         QuestionsForKeyStageAndSubjectResponseSchema: {
+            /** @description The lesson slug identifier */
             lessonSlug: string;
+            /** @description The title of the lesson */
             lessonTitle: string;
+            /** @description The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
+                /** @description The question text */
                 question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
+                    /** @description Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
@@ -1505,10 +2096,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "multiple-choice";
                 answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } & ({
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 } | {
                     /** @enum {string} */
@@ -1518,6 +2115,7 @@ export interface components {
                         width: number;
                         height: number;
                         alt?: string;
+                        /** @description Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
@@ -1526,22 +2124,39 @@ export interface components {
                 /** @enum {string} */
                 questionType: "short-answer";
                 answers: {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
                 /** @enum {string} */
                 questionType: "match";
                 answers: {
+                    /** @description Matching options (LHS) */
                     matchOption: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
+                    /** @description Matching options (RHS), indicating the correct choice */
                     correctChoice: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
                 }[];
@@ -1549,21 +2164,36 @@ export interface components {
                 /** @enum {string} */
                 questionType: "order";
                 answers: ({
+                    /** @description Indicates the correct ordering of the response */
                     order: number;
                 } & {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 })[];
             }))[];
+            /** @description The exit quiz questions - which test on the knowledge learned in the lesson */
             exitQuiz: ({
+                /** @description The question text */
                 question: string;
+                /** @description The type of quiz question which could be one of the following:
+                 *     - multiple-choice
+                 *     - order
+                 *     - match
+                 *     - explanatory-text
+                 *     - short-answer */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
                     width: number;
                     height: number;
                     alt?: string;
+                    /** @description Supplementary text for the image, if any */
                     text?: string;
                     attribution?: string;
                 };
@@ -1571,10 +2201,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "multiple-choice";
                 answers: ({
+                    /** @description Whether the multiple choice question response is the correct answer (false) or is a distractor (true) */
                     distractor: boolean;
                 } & ({
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 } | {
                     /** @enum {string} */
@@ -1584,6 +2220,7 @@ export interface components {
                         width: number;
                         height: number;
                         alt?: string;
+                        /** @description Supplementary text for the image, if any */
                         text?: string;
                         attribution?: string;
                     };
@@ -1592,22 +2229,39 @@ export interface components {
                 /** @enum {string} */
                 questionType: "short-answer";
                 answers: {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 }[];
             } | {
                 /** @enum {string} */
                 questionType: "match";
                 answers: {
+                    /** @description Matching options (LHS) */
                     matchOption: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
+                    /** @description Matching options (RHS), indicating the correct choice */
                     correctChoice: {
-                        /** @enum {string} */
+                        /**
+                         * @description The format of the quiz answer
+                         *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                         * @enum {string}
+                         */
                         type: "text";
+                        /** @description Quiz question answer */
                         content: string;
                     };
                 }[];
@@ -1615,10 +2269,16 @@ export interface components {
                 /** @enum {string} */
                 questionType: "order";
                 answers: ({
+                    /** @description Indicates the correct ordering of the response */
                     order: number;
                 } & {
-                    /** @enum {string} */
+                    /**
+                     * @description The format of the quiz answer
+                     *     Note: currently, we are only returning text-based quiz answers. In the future, we will also have image-based questions available.
+                     * @enum {string}
+                     */
                     type: "text";
+                    /** @description Quiz question answer */
                     content: string;
                 })[];
             }))[];
@@ -1679,52 +2339,61 @@ export interface components {
          *       "downloadsAvailable": true
          *     } */
         LessonSummaryResponseSchema: {
+            /** @description The lesson title */
             lessonTitle: string;
+            /** @description The unit slug identifier */
             unitSlug: string;
+            /** @description The unit title */
             unitTitle: string;
+            /** @description The subject slug identifier */
             subjectSlug: string;
+            /** @description The subject slug identifier */
             subjectTitle: string;
+            /** @description The key stage slug identifier */
             keyStageSlug: string;
+            /** @description The key stage title */
             keyStageTitle: string;
+            /** @description The lesson's keywords and their descriptions */
             lessonKeywords: {
+                /** @description The keyword */
                 keyword: string;
+                /** @description A definition of the keyword */
                 description: string;
             }[];
+            /** @description The lesson's key learning points */
             keyLearningPoints: {
+                /** @description A key learning point */
                 keyLearningPoint: string;
             }[];
+            /** @description The lesson’s anticipated common misconceptions and suggested teacher responses */
             misconceptionsAndCommonMistakes: {
+                /** @description A common misconception */
                 misconception: string;
                 response: string;
             }[];
+            /** @description Suggested teacher response to a common misconception */
             pupilLessonOutcome?: string;
+            /** @description Helpful teaching tips for the lesson */
             teacherTips: {
                 teacherTip: string;
             }[];
+            /** @description Full guidance about the types of lesson content for the teacher to consider (where appropriate) */
             contentGuidance: {
+                /** @description Category of content guidance */
                 contentGuidanceArea: string;
+                /** @description The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
                 supervisionlevel_id: number;
+                /** @description Content guidance label */
                 contentGuidanceLabel: string;
+                /** @description A detailed description of the type of content that we suggest needs guidance. */
                 contentGuidanceDescription: string;
             }[] | null;
+            /** @description The ID of the supervision level for the identified type of content. See ‘What are the types of content guidance?’ for more information. */
             supervisionLevel: string | null;
+            /** @description Whether the lesson currently has any downloadable assets availableNote: this field reflects the current availability of downloadable assets, which reflects the availability of early-release content available for the hackathon. All lessons will eventually have downloadable assets available. */
             downloadsAvailable: boolean;
         };
         /** @example [
-         *       {
-         *         "lessonSlug": "descriptive-writing-about-a-small-detail",
-         *         "lessonTitle": "Writing a gothic description",
-         *         "similarity": 0.2413793,
-         *         "units": [
-         *           {
-         *             "unitSlug": "a-monster-within-reading-gothic-fiction",
-         *             "unitTitle": "A monster within: reading and writing Gothic fiction",
-         *             "examBoardTitle": null,
-         *             "keyStageSlug": "ks3",
-         *             "subjectSlug": "english"
-         *           }
-         *         ]
-         *       },
          *       {
          *         "lessonSlug": "performing-your-chosen-gothic-poem",
          *         "lessonTitle": "Performing your chosen Gothic poem",
@@ -1755,9 +2424,13 @@ export interface components {
          *       }
          *     ] */
         LessonSearchResponseSchema: {
+            /** @description The lesson slug identifier */
             lessonSlug: string;
+            /** @description The lesson title */
             lessonTitle: string;
+            /** @description The snippet of the transcript that matched the search term */
             similarity: number;
+            /** @description The units that the lesson is part of. See sample response below */
             units: {
                 unitSlug: string;
                 unitTitle: string;
@@ -1807,144 +2480,139 @@ export interface components {
          *       ]
          *     } */
         UnitSummaryResponseSchema: {
+            /**
+             * @description The unit slug identifier
+             * @example simple-compound-and-adverbial-complex-sentences
+             */
             unitSlug: string;
+            /**
+             * @description The unit title
+             * @example Simple, compound and adverbial complex sentences
+             */
             unitTitle: string;
+            /**
+             * @description The slug identifier for the year to which the unit belongs
+             * @example year-3
+             */
             yearSlug: string;
+            /**
+             * @description The year to which the unit belongs
+             * @example 3
+             */
             year: number | string;
+            /**
+             * @description The slug identifier for the phase to which the unit belongs
+             * @example primary
+             */
             phaseSlug: string;
+            /**
+             * @description The subject identifier
+             * @example english
+             */
             subjectSlug: string;
+            /**
+             * @description The slug identifier for the the key stage to which the unit belongs
+             * @example ks2
+             */
             keyStageSlug: string;
+            /** @description Unit summary notes */
             notes?: string;
+            /** @description A short description of the unit. Not yet available for all subjects. */
             description?: string;
+            /**
+             * @description The prior knowledge required for the unit
+             * @example [
+             *       "A simple sentence is about one idea and makes complete sense.",
+             *       "Any simple sentence contains one verb and at least one noun.",
+             *       "Two simple sentences can be joined with a co-ordinating conjunction to form a compound sentence."
+             *     ]
+             */
             priorKnowledgeRequirements: string[];
+            /**
+             * @description National curriculum attainment statements covered in this unit
+             * @example [
+             *       "Ask relevant questions to extend their understanding and knowledge",
+             *       "Articulate and justify answers, arguments and opinions",
+             *       "Speak audibly and fluently with an increasing command of Standard English"
+             *     ]
+             */
             nationalCurriculumContent: string[];
+            /** @description An explanation of where the unit sits within the sequence and why it has been placed there. */
             whyThisWhyNow?: string;
+            /**
+             * @description The threads that are associated with the unit
+             * @example [
+             *       {
+             *         "slug": "developing-grammatical-knowledge",
+             *         "title": "Developing grammatical knowledge",
+             *         "order": 10
+             *       }
+             *     ]
+             */
             threads?: {
                 slug: string;
                 title: string;
                 order: number;
             }[];
+            /** @description The categories (if any) that are assigned to the unit. If the unit does not have any categories, this property is omitted. */
             categories?: {
                 categoryTitle: string;
                 categorySlug?: string;
             }[];
             unitLessons: {
+                /**
+                 * @description The lesson slug identifier
+                 * @example four-types-of-simple-sentence
+                 */
                 lessonSlug: string;
+                /**
+                 * @description The title for the lesson
+                 * @example Four types of simple sentence
+                 */
                 lessonTitle: string;
+                /**
+                 * @description Indicates the ordering of the lesson
+                 * @example 1
+                 */
                 lessonOrder?: number;
-                /** @enum {string} */
+                /**
+                 * @description If the state is 'published' then it is also available on the /lessons/* endpoints. If the state is 'new' then it's not available yet.
+                 * @example published
+                 * @enum {string}
+                 */
                 state: "published" | "new";
             }[];
         };
         /** @example [
          *       {
-         *         "title": "A Midsummer Night’s Dream",
-         *         "slug": "a-midsummer-nights-dream-72"
+         *         "title": "Number: Multiplication and division",
+         *         "slug": "number-multiplication-and-division"
          *       }
          *     ] */
         AllThreadsResponseSchema: {
+            /** @description The thread title */
             title: string;
+            /** @description The thread slug identifier */
             slug: string;
         }[];
-        /**
-         * Authorization not provided error (401)
-         * @description The error information
-         * @example {
-         *       "code": "UNAUTHORIZED",
-         *       "message": "Authorization not provided",
-         *       "issues": []
-         *     }
-         */
-        "error.UNAUTHORIZED": {
-            /**
-             * @description The error message
-             * @example Authorization not provided
-             */
-            message: string;
-            /**
-             * @description The error code
-             * @example UNAUTHORIZED
-             */
-            code: string;
-            /**
-             * @description An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
-        /**
-         * Insufficient access error (403)
-         * @description The error information
-         * @example {
-         *       "code": "FORBIDDEN",
-         *       "message": "Insufficient access",
-         *       "issues": []
-         *     }
-         */
-        "error.FORBIDDEN": {
-            /**
-             * @description The error message
-             * @example Insufficient access
-             */
-            message: string;
-            /**
-             * @description The error code
-             * @example FORBIDDEN
-             */
-            code: string;
-            /**
-             * @description An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
-        /**
-         * Internal server error error (500)
-         * @description The error information
-         * @example {
-         *       "code": "INTERNAL_SERVER_ERROR",
-         *       "message": "Internal server error",
-         *       "issues": []
-         *     }
-         */
-        "error.INTERNAL_SERVER_ERROR": {
-            /**
-             * @description The error message
-             * @example Internal server error
-             */
-            message: string;
-            /**
-             * @description The error code
-             * @example INTERNAL_SERVER_ERROR
-             */
-            code: string;
-            /**
-             * @description An array of issues that were responsible for the error
-             * @example []
-             */
-            issues?: {
-                message: string;
-            }[];
-        };
         /** @example [
          *       {
-         *         "unitTitle": "A Midsummer Night's Dream, Shakespeare (Introduction and Act 1)",
-         *         "unitSlug": "a-midsummer-nights-dream-shakespeare-introduction-and-act-1-2912",
+         *         "unitTitle": "Unitising and coin recognition - counting in 2s, 5s and 10s",
+         *         "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s",
          *         "unitOrder": 1
          *       },
          *       {
-         *         "unitTitle": "A Midsummer Night's Dream, Shakespeare (Act 2)",
-         *         "unitSlug": "a-midsummer-nights-dream-shakespeare-act-2-3c74",
+         *         "unitTitle": "Solving problems in a range of contexts",
+         *         "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money",
          *         "unitOrder": 2
          *       }
          *     ] */
         ThreadUnitsResponseSchema: {
+            /** @description The unit title */
             unitTitle: string;
+            /** @description The unit slug identifier */
             unitSlug: string;
+            /** @description The position of the unit within the thread */
             unitOrder: number;
         }[];
         /** @example {
@@ -1953,8 +2621,20 @@ export interface components {
          *       "reset": 1740164400000
          *     } */
         RateLimitResponseSchema: {
+            /**
+             * @description The maximum number of requests you can make in the current window.
+             * @example 1000
+             */
             limit: number;
+            /**
+             * @description The number of requests remaining in the current window.
+             * @example 953
+             */
             remaining: number;
+            /**
+             * @description The time at which the current window resets, in milliseconds since the Unix epoch.
+             * @example 1740164400000
+             */
             reset: number;
         };
     };
@@ -1973,6 +2653,7 @@ export interface operations {
             };
             header?: never;
             path: {
+                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
@@ -2045,6 +2726,7 @@ export interface operations {
             };
             header?: never;
             path: {
+                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
@@ -2067,7 +2749,6 @@ export interface operations {
             query?: {
                 /** @description Use the this type and the lesson slug in conjunction to get a signed download URL to the asset type from the /api/lessons/{slug}/asset/{type} endpoint */
                 type?: "slideDeck" | "exitQuiz" | "exitQuizAnswers" | "starterQuiz" | "starterQuizAnswers" | "supplementaryResource" | "video" | "worksheet" | "worksheetAnswers";
-                /** @description Optional unit slug to additionally filter by */
                 unit?: string;
             };
             header?: never;
@@ -2100,7 +2781,7 @@ export interface operations {
             };
             header?: never;
             path: {
-                /** @description The lesson slug */
+                /** @description The lesson slug identifier */
                 lesson: string;
             };
             cookie?: never;
@@ -2168,6 +2849,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The slug identifier for the subject */
                 subject: string;
             };
             cookie?: never;
@@ -2190,6 +2872,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The slug identifier for the subject */
                 subject: string;
             };
             cookie?: never;
@@ -2212,6 +2895,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The subject slug identifier */
                 subject: string;
             };
             cookie?: never;
@@ -2234,6 +2918,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description Subject slug to filter by */
                 subject: string;
             };
             cookie?: never;
@@ -2246,7 +2931,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": number[];
+                    "application/json": components["schemas"]["SubjectYearsResponseSchema"];
                 };
             };
         };
@@ -2274,10 +2959,10 @@ export interface operations {
     "getKeyStageSubjectLessons-getKeyStageSubjectLessons": {
         parameters: {
             query?: {
-                /** @description Optional unit slug to additionally filter by */
                 unit?: string;
+                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
                 offset?: number;
-                /** @description Limit the number of results returned, max 100 */
+                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
                 limit?: number;
             };
             header?: never;
@@ -2332,6 +3017,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
+                /** @description The lesson slug identifier */
                 lesson: string;
             };
             cookie?: never;
@@ -2353,12 +3039,14 @@ export interface operations {
         parameters: {
             query?: {
                 year?: number;
+                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
                 offset?: number;
-                /** @description Limit the number of results returned, max 100 */
+                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
                 limit?: number;
             };
             header?: never;
             path: {
+                /** @description The sequence slug identifier, including the key stage 4 option where relevant. */
                 sequence: string;
             };
             cookie?: never;
@@ -2379,8 +3067,9 @@ export interface operations {
     "getQuestions-getQuestionsForKeyStageAndSubject": {
         parameters: {
             query?: {
+                /** @description If limiting results returned, this allows you to return the next set of results, starting at the given offset point */
                 offset?: number;
-                /** @description Limit the number of results returned, max 100 */
+                /** @description Limit the number of lessons, e.g. return a maximum of 100 lessons */
                 limit?: number;
             };
             header?: never;
@@ -2431,12 +3120,10 @@ export interface operations {
     "getLessons-searchByTextSimilarity": {
         parameters: {
             query: {
+                /** @description Search query text snippet */
                 q: string;
-                /** @description Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase */
                 keyStage?: "ks1" | "ks2" | "ks3" | "ks4";
-                /** @description Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase */
                 subject?: "art" | "citizenship" | "computing" | "cooking-nutrition" | "design-technology" | "english" | "french" | "geography" | "german" | "history" | "maths" | "music" | "physical-education" | "religious-education" | "rshe-pshe" | "science" | "spanish";
-                /** @description Optional unit slug to additionally filter by */
                 unit?: string;
             };
             header?: never;
@@ -2495,33 +3182,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AllThreadsResponseSchema"];
-                };
-            };
-            /** @description Authorization not provided */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.UNAUTHORIZED"];
-                };
-            };
-            /** @description Insufficient access */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.FORBIDDEN"];
-                };
-            };
-            /** @description Internal server error */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["error.INTERNAL_SERVER_ERROR"];
                 };
             };
         };

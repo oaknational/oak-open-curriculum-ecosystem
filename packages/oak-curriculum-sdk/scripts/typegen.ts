@@ -40,10 +40,11 @@ try {
     Accept: 'application/json',
   };
 
-  // Add API key if available
-  if (apiKey) {
-    headers.Authorization = `Bearer ${apiKey}`;
+  if (!apiKey) {
+    throw new TypeError('API key not found');
   }
+
+  headers.Authorization = `Bearer ${apiKey}`;
 
   response = await fetch(apiSchemaUrl, { headers });
 

@@ -11,9 +11,10 @@
 - [x] Turn it into a pnpm workspace and Turbo monorepo
 - [ ] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.  
 - [ ] Remove any dead code from the refactoring
-- [ ] Standardise and improve the sub-agents
+- [ ] Improve the documentation, the rules file is now too large to be consistently applied by the agent, and we have other "agent guidance" docs... we need to consolidate and refine. Fewer, better, more consistent.
+- [ ] Standardise and improve the sub-agents, sort out the rules/guidance first.
 - [ ] Add mutation testing to the test suite
-- [ ] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, requires data structures with reference IDs on both sides
+- [ ] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides
 - [ ] Enforce logger usage with eslint no-console rule
 - [ ] Update Zod to Zod 4 everywhere
 - [ ] Import hooks library from @engraph
