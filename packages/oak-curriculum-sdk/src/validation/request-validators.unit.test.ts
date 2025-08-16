@@ -4,9 +4,9 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { validateRequest } from './request-validators';
-import type { HttpMethod } from './types';
-import { isRecord } from './types';
+import { validateRequest } from './request-validators.js';
+import type { HttpMethod } from './types.js';
+import { isRecord } from './types.js';
 
 describe('validateRequest', () => {
   describe('for GET /lessons/{lesson}/transcript', () => {

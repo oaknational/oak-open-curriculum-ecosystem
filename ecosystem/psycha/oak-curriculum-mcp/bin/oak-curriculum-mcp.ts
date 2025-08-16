@@ -2,10 +2,21 @@
 import { config } from 'dotenv';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createStartupLogger, defaultStartupLoggerDeps } from './src/psychon/startup.js';
+import { createStartupLogger, defaultStartupLoggerDeps } from '../src/psychon/startup.js';
+function safeStringify(value: unknown): string {
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return '[unserializable]';
+  }
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const rootDir = resolve(__dirname, '../../..');
+// Detect if running from source (bin/) or built (dist/bin/)
+// Source: ecosystem/psycha/oak-curriculum-mcp/bin -> 4 levels up
+// Built: ecosystem/psycha/oak-curriculum-mcp/dist/bin -> 5 levels up
+const isBuilt = __dirname.includes('/dist/bin');
+const rootDir = resolve(__dirname, isBuilt ? '../../../../..' : '../../../..');
 
 // Create logger with ROOT directory for logs
 // Override console to only write to stderr to keep stdout clean for MCP protocol
@@ -27,7 +38,10 @@ log(`[START-MCP] Loading .env from: ${envPath}`);
 
 // Suppress dotenv's debug output to keep stdout clean for MCP protocol
 const originalConsoleLog = console.log;
-console.log = () => {};
+const noop = (): void => {
+  /* intentionally no-op to keep MCP stdout clean */
+};
+console.log = noop;
 const result = config({ path: envPath });
 console.log = originalConsoleLog;
 
@@ -42,7 +56,7 @@ if (result.error) {
 // Now import and start the server
 log('[START-MCP] Importing server module...');
 try {
-  const { createServer } = await import('./src/index.js');
+  const { createServer } = await import('../src/index.js');
   log('[START-MCP] Server module imported successfully');
 
   // Parse log level from environment
@@ -71,22 +85,25 @@ try {
 
   // Log full error details including stack trace to startup log
   if (error instanceof Error) {
-    log(`[START-MCP ERROR] Stack trace: ${error.stack}`, true);
-
-    // Extract cause chain if present
-    let currentCause = (error as unknown).cause;
-    while (currentCause) {
-      if (currentCause instanceof Error) {
-        log(`[START-MCP ERROR] Caused by: ${currentCause.message}`, true);
-        currentCause = (currentCause as unknown).cause;
-      } else {
-        log(`[START-MCP ERROR] Caused by: ${String(currentCause)}`, true);
-        break;
-      }
-    }
+    log(`[START-MCP ERROR] Stack trace: ${String(error.stack)}`, true);
+    logCauseChain(error);
   }
 
   // Also output to stderr for immediate visibility
   console.error('Server error details:', error);
   process.exit(1);
+}
+
+// helper added by lint refactor
+function logCauseChain(err: Error): void {
+  let currentCause = err.cause;
+  for (let i = 0; i < 3 && currentCause; i += 1) {
+    if (currentCause instanceof Error) {
+      console.error(`[START-MCP ERROR] Caused by: ${currentCause.message}`);
+      currentCause = currentCause.cause;
+    } else {
+      console.error(`[START-MCP ERROR] Caused by: ${safeStringify(currentCause)}`);
+      break;
+    }
+  }
 }

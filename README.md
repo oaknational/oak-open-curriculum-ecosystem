@@ -176,7 +176,7 @@ cp .env.example .env
 "format": "turbo run --continue format -- --cache",
 "lint": "turbo run --continue lint",
 "test": "turbo run --continue test",
-"test:e2e": "RUN_E2E=true turbo run --continue test:e2e",
+"test:e2e": "turbo run --continue test:e2e",
 "type-check": "turbo run --continue type-check",
 
 # Analysis

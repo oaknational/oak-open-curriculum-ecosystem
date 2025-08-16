@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { typeSafeKeys } from '../src/types/helpers.js';
 import { sortObjectKeys, createSortedEntries } from './typegen-helpers';
 
 describe('sortObjectKeys', () => {
@@ -25,7 +26,7 @@ describe('createSortedEntries', () => {
 
     const result = createSortedEntries(group);
 
-    expect(Object.keys(result)).toEqual(['a', 'b', 'c']);
+    expect(typeSafeKeys(result)).toEqual(['a', 'b', 'c']);
     expect(result.a).toEqual({ path: '/a', paramsKey: 'aKey', params: 'string' });
     expect(result.b).toEqual({ path: '/b', paramsKey: 'bKey' });
     expect(result.c).toEqual({ path: '/c', paramsKey: 'cKey' });

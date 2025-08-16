@@ -1,131 +1,67 @@
 /**
- * MCP tool definitions for Oak Curriculum API
+ * MCP Tool Listing - Generated from SDK
  *
- * Uses build-time generated tools that combine SDK operations with decorative metadata.
- *
- * ADR Compliance:
- * - ADR-029: No manual API data (all from SDK)
- * - ADR-030: SDK as single source of truth
- * - ADR-031: Generation at build time (not runtime)
+ * Lists all available tools by reading from the SDK's MCP_TOOLS.
+ * Converts SDK metadata to MCP's JSON Schema format.
  */
 
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { schema } from '@oaknational/oak-curriculum-sdk';
-import { ENRICHED_TOOLS, getEnrichedTool, type EnrichedTool } from '../generated/enriched-tools';
+import type { JsonObject } from '@oaknational/mcp-moria';
+import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 
 /**
- * Extract parameters from schema for a specific path/method
+ * Convert SDK parameter metadata to JSON Schema for MCP
  */
-function getOperationParameters(
-  path: string,
-  method: string,
-): {
-  pathParams: string[];
-  queryParams: string[];
-  requiredParams: string[];
-} {
-  const pathItem = schema.paths?.[path as keyof typeof schema.paths];
-  if (!pathItem) {
-    return { pathParams: [], queryParams: [], requiredParams: [] };
+function toJsonSchemaProperty(meta: {
+  typePrimitive: string;
+  valueConstraint: boolean;
+  required: boolean;
+}): JsonObject {
+  const schema: JsonObject = {
+    type: meta.typePrimitive === 'number' ? 'number' : 'string',
+  };
+  if (meta.valueConstraint) {
+    const d = Object.getOwnPropertyDescriptor(meta, 'allowedValues');
+    const valuesList = Array.isArray(d?.value) ? d.value.map((v: unknown) => String(v)) : undefined;
+    if (valuesList) schema.description = `One of: ${valuesList.join(', ')}`;
   }
+  return schema;
+}
 
-  const operation = pathItem[method.toLowerCase() as keyof typeof pathItem];
-  if (!operation || typeof operation !== 'object' || !('parameters' in operation)) {
-    return { pathParams: [], queryParams: [], requiredParams: [] };
-  }
+function generateInputSchema(tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS]) {
+  const properties: JsonObject = {};
+  const required: string[] = [];
 
-  const pathParams: string[] = [];
-  const queryParams: string[] = [];
-  const requiredParams: string[] = [];
+  const accumulate = (
+    name: string,
+    meta: { typePrimitive: string; valueConstraint: boolean; required: boolean },
+  ): void => {
+    properties[name] = toJsonSchemaProperty(meta);
+    if (meta.required) required.push(name);
+  };
 
-  if (Array.isArray(operation.parameters)) {
-    for (const param of operation.parameters) {
-      if (typeof param !== 'object' || !param) continue;
+  for (const [name, meta] of Object.entries(tool.pathParams)) accumulate(name, meta);
+  for (const [name, meta] of Object.entries(tool.queryParams)) accumulate(name, meta);
 
-      const p = param as {
-        name: string;
-        in: string;
-        required?: boolean;
-      };
-
-      if (p.in === 'path') {
-        pathParams.push(p.name);
-        // Path parameters are always required
-        requiredParams.push(p.name);
-      } else if (p.in === 'query') {
-        queryParams.push(p.name);
-        if (p.required) {
-          requiredParams.push(p.name);
-        }
-      }
-    }
-  }
-
-  return { pathParams, queryParams, requiredParams };
+  return {
+    type: 'object' as const,
+    properties,
+    required: required.length > 0 ? required : undefined,
+  };
 }
 
 /**
- * Convert enriched tools to MCP SDK Tool format
+ * Get all MCP tools from SDK
  */
-function toMcpTools(enrichedTools: readonly EnrichedTool[]): Tool[] {
-  return enrichedTools.map((tool) => {
-    // Get parameters from schema
-    const { pathParams, queryParams, requiredParams } = getOperationParameters(
-      tool.path,
-      tool.method,
-    );
-
-    return {
-      name: tool.mcpName,
-      description:
-        tool.decoration?.description ??
-        tool.description ??
-        `${tool.method.toUpperCase()} ${tool.path}`,
-      inputSchema: {
-        type: 'object',
-        properties: {
-          // Include all path parameters (always required)
-          ...pathParams.reduce<Record<string, unknown>>((acc, paramName) => {
-            acc[paramName] = {
-              type: 'string',
-              description: `Path parameter: ${paramName}`,
-            };
-            return acc;
-          }, {}),
-          // Include all query parameters (optional unless marked required)
-          ...queryParams.reduce<Record<string, unknown>>((acc, paramName) => {
-            acc[paramName] = {
-              type: 'string',
-              description: `Query parameter: ${paramName}`,
-            };
-            return acc;
-          }, {}),
-        },
-        // Include all required parameters
-        required: requiredParams,
-      },
-    };
-  });
+export function getMcpTools(): Tool[] {
+  return Object.entries(MCP_TOOLS).map(([name, tool]) => ({
+    name,
+    description: `${tool.method.toUpperCase()} ${tool.path} - ${tool.operationId}`,
+    inputSchema: generateInputSchema(tool),
+  }));
 }
 
 /**
- * All available MCP tools
- * Generated at build time from SDK operations + decorations
+ * Export for backwards compatibility
  */
-export const tools = toMcpTools(ENRICHED_TOOLS);
-
-/**
- * Export convenience function
- */
-export { getEnrichedTool };
-
-/**
- * Export tool type
- */
-export type { EnrichedTool };
-
-/**
- * Export tool names type
- * Derived from generated tools
- */
-export type ToolName = EnrichedTool['mcpName'];
+export const tools = getMcpTools();

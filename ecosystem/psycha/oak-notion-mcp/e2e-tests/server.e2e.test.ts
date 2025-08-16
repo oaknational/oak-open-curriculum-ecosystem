@@ -43,26 +43,15 @@ function isTextContent(c: unknown): c is { type: string; text?: string } {
 
 // Skip E2E tests if no API key is provided
 const NOTION_API_KEY = process.env.NOTION_API_KEY;
-const RUN_E2E = process.env.RUN_E2E === 'true';
 
 // Log test environment status
-if (!NOTION_API_KEY || !RUN_E2E) {
-  logger.info('E2E Test Environment', {
-    RUN_E2E: process.env.RUN_E2E,
-    NOTION_API_KEY: NOTION_API_KEY ? 'Found' : 'Not found',
-  });
-
-  if (!NOTION_API_KEY) {
-    logger.warn('E2E tests will be skipped: NOTION_API_KEY not found');
-  }
-  if (!RUN_E2E) {
-    logger.info('E2E tests will be skipped: Set RUN_E2E=true to run');
-  }
+if (!NOTION_API_KEY) {
+  logger.warn('E2E tests will be skipped: NOTION_API_KEY not found', {});
 } else {
   logger.info('Running E2E tests with Notion API');
 }
 
-describe.skipIf(!NOTION_API_KEY || !RUN_E2E)('E2E: MCP Server with Real Notion API', () => {
+describe.skipIf(!NOTION_API_KEY)('E2E: MCP Server with Real Notion API', () => {
   let serverProcess: ChildProcess;
   let client: Client;
 

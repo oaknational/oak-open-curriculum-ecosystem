@@ -30,12 +30,9 @@ export function createStartupLogger(
     const timestamp = new Date().toISOString();
     const logMessage = `${timestamp}: [${isError ? 'ERROR' : 'INFO'}] ${message}\n`;
 
-    // Always log to console for immediate visibility
-    if (isError) {
-      deps.console.error(logMessage);
-    } else {
-      deps.console.log(logMessage);
-    }
+    // Always log to stderr to keep stdout clean for MCP protocol
+    // MCP servers must only output JSON-RPC messages to stdout
+    deps.console.error(logMessage);
 
     // Try to write to a file for persistence
     try {

@@ -1,48 +1,79 @@
 /**
- * MCP organ membrane - public interface
+ * MCP organ - minimal bridge to SDK
  *
- * Provides MCP tools and handlers for Oak Curriculum API.
- * Uses SDK directly - no intermediate organ layer needed.
- *
- * ADR Compliance:
- * - All data flows from API schema through SDK
- * - No manual mapping or compatibility layers
- * - Direct SDK delegation for all operations
+ * Provides MCP tools and handlers by delegating to SDK.
+ * All tool logic and validation is handled by the SDK.
  */
 
-import type { Logger } from '@oaknational/mcp-moria';
-// CRITICAL: Import ONLY the path-based client type, NEVER OakApiClient
-import type { OakApiPathBasedClient } from '@oaknational/oak-curriculum-sdk';
-import { createToolHandler } from './handlers/tool-handler';
-import { tools } from './tools';
-
-// Re-export tool definitions
-export { tools } from './tools';
-export type { ToolName } from './tools';
-
-// Re-export handler types
-export type { ToolParameters } from './handlers/tool-handler';
+import { handleToolCall } from './handlers/tool-handler.js';
+import { getMcpTools } from './tools/index.js';
+import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
 /**
  * MCP organ interface
  */
 export interface McpOrgan {
   /** Available MCP tools */
-  readonly tools: typeof tools;
+  readonly tools: Tool[];
   /** Handle tool execution */
-  handleTool: ReturnType<typeof createToolHandler>;
+  handleTool: (name: string, args: unknown) => Promise<unknown>;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function getProperty(obj: unknown, key: string): unknown {
+  if (!isRecord(obj)) return undefined;
+  const desc = Object.getOwnPropertyDescriptor(obj, key);
+  return desc?.value;
+}
+
+function extractTextContent(result: unknown): string | undefined {
+  const content: unknown = getProperty(result, 'content');
+  const firstOf = (v: unknown): unknown => (Array.isArray(v) ? v[0] : undefined);
+  const first = firstOf(content);
+  if (!isRecord(first)) return undefined;
+  const text: unknown = getProperty(first, 'text');
+  return typeof text === 'string' ? text : undefined;
 }
 
 /**
- * Creates MCP organ using PATH-BASED CLIENT
- * Uses SDK path-based client for pure data-driven execution
- * CRITICAL: MUST use OakApiPathBasedClient, NEVER OakApiClient
+ * Creates MCP organ that delegates to SDK
  */
-export function createMcpOrgan(sdk: OakApiPathBasedClient, logger: Logger): McpOrgan {
-  const mcpLogger = logger.child ? logger.child({ organ: 'mcp' }) : logger;
-
+export function createMcpOrgan(): McpOrgan {
   return {
-    tools,
-    handleTool: createToolHandler(sdk, mcpLogger),
+    tools: getMcpTools(),
+    handleTool: async (name: string, args: unknown) => {
+      const request = {
+        method: 'tools/call',
+        params: {
+          name,
+          arguments: isRecord(args) ? args : undefined,
+        },
+      } as const;
+      const result = await handleToolCall(request);
+      // If the underlying handler signals an error, pass through untouched
+      if (isRecord(result) && result.isError === true && 'content' in result) {
+        return result;
+      }
+      // Extract the text content from the MCP response
+      const textContent = extractTextContent(result);
+      if (textContent !== undefined) {
+        try {
+          const parsed: unknown = JSON.parse(textContent);
+          return parsed;
+        } catch {
+          return textContent;
+        }
+      }
+      // Fallback: return a JSON-safe clone to avoid unsafe any propagation
+      try {
+        const safe: unknown = JSON.parse(JSON.stringify(result));
+        return safe;
+      } catch {
+        return { content: [] };
+      }
+    },
   };
 }

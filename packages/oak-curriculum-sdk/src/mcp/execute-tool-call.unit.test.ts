@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { executeToolCall } from './execute-tool-call';
+import { executeToolCall } from './execute-tool-call.js';
 import type { OakApiPathBasedClient } from '../client/oak-base-client';
 
 describe('executeToolCall with TOOL_GROUPINGS executors', () => {
@@ -72,7 +72,9 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       );
 
       expect(result).toHaveProperty('error');
-      expect(result.error?.message).toContain('Invalid year');
+      expect(result.error?.message).toContain(
+        'Invalid request parameters. Please match the following schema:',
+      );
     });
 
     it('accepts valid enum values', async () => {

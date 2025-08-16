@@ -115,23 +115,21 @@ const operationIdToToolName = {
 } as const;
 
 const allToolNames = Object.values(operationIdToToolName).map(v => v.toolName);
-
 export type AllOperationIds = keyof typeof operationIdToToolName;
 export type AllToolNames = typeof allToolNames[number];
 
 /**
- * Type guard for tool names
- */
+* Type guard for tool names
+*/
 export function isToolName(value: unknown): value is AllToolNames {
   if (typeof value !== 'string') return false;
-  // Runtime check against the operation mapping
   const validToolNames: readonly string[] = allToolNames;
   return validToolNames.includes(value);
 }
 
 /**
- * Type guard for operation IDs
- */
+* Type guard for operation IDs
+*/
 function isOperationId(operationId: string): operationId is AllOperationIds {
   return operationId in operationIdToToolName;
 }

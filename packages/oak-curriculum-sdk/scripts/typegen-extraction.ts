@@ -9,6 +9,7 @@ import type {
   PathItemObject,
   ReferenceObject,
 } from 'openapi-typescript';
+import { typeSafeKeys } from '../src/types/helpers.js';
 import type {
   PathEntry,
   ValidCombinations,
@@ -200,7 +201,7 @@ export function extractPathParameters(schema: OpenAPI3): ExtractedPathData {
   const pathParameters: ParameterValueSets = {};
   const validCombinations: ValidCombinations = {};
 
-  const sortedPathNames = Object.keys(paths ?? {}).sort((a, b) => a.localeCompare(b));
+  const sortedPathNames = typeSafeKeys(paths ?? {}).sort((a, b) => a.localeCompare(b));
   for (const pathName of sortedPathNames) {
     const pathItem = paths?.[pathName];
     if (!isPathItemObject(pathItem)) {

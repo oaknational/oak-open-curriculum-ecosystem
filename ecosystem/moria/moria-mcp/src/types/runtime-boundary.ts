@@ -1,3 +1,5 @@
+import type { JsonObject } from './core.js';
+
 /**
  * @fileoverview External boundary type utilities for EXTERNAL DATA ONLY
  * @module moria/types/runtime-boundary
@@ -24,7 +26,7 @@
  * @param value - Unknown value from an EXTERNAL source
  * @returns Type predicate confirming value is an object
  */
-export function isObject(value: unknown): value is Record<string, unknown> {
+export function isObject(value: unknown): value is JsonObject {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
@@ -44,9 +46,7 @@ export function isEnvironmentObject(value: unknown): value is Record<string, str
 
   // Validate all values are strings or undefined
   for (const val of Object.values(value)) {
-    if (val !== undefined && typeof val !== 'string') {
-      return false;
-    }
+    if (typeof val !== 'string') return false;
   }
 
   return true;
@@ -64,7 +64,7 @@ export function isEnvironmentObject(value: unknown): value is Record<string, str
 export function hasProperty<K extends string>(
   value: unknown,
   property: K,
-): value is Record<K, unknown> {
+): value is JsonObject & Record<K, unknown> {
   if (!isObject(value)) {
     return false;
   }

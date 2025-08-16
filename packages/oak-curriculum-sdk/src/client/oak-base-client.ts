@@ -4,10 +4,10 @@ import type {
 } from 'openapi-fetch';
 import createClient, { wrapAsPathBasedClient } from 'openapi-fetch';
 
-import { apiUrl } from '../config';
+import { apiUrl } from '../config/index.js';
 import type { paths } from '../types/generated/api-schema/api-paths-types';
 
-import { createAuthMiddleware } from './middleware';
+import { createAuthMiddleware } from './middleware/index.js';
 
 /**
  * The base OpenAPI-Fetch client.

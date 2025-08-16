@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { validateResponse } from './response-validators';
+import { validateResponse } from './response-validators.js';
 
 describe('validateResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {

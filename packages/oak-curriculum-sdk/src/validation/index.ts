@@ -9,11 +9,11 @@ export type {
   ValidationIssue,
   ValidatedClientOptions,
   HttpMethod,
-} from './types';
+} from './types.js';
 
 // Function exports
-export { validateRequest } from './request-validators';
-export { validateResponse } from './response-validators';
+export { validateRequest } from './request-validators.js';
+export { validateResponse } from './response-validators.js';
 
 // Type predicate exports for better type narrowing
-export { isValidationSuccess, isValidationFailure, isRecord, parseWithSchema } from './types';
+export { isValidationSuccess, isValidationFailure, isRecord, parseWithSchema } from './types.js';

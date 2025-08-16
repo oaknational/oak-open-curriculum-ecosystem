@@ -13,8 +13,6 @@ const name= 'oak-get-lessons-assets-by-type' as const;
 const path= '/lessons/{lesson}/assets/{type}' as const;
 const method= 'GET' as const;
 
-type Client = OakApiPathBasedClient['/lessons/{lesson}/assets/{type}']['GET'];
-
 
 // Path parameters
 const allowedTypeValues= ["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"] as const;
@@ -24,90 +22,98 @@ function isTypeValue(value: string): value is TypeValue {
   return stringTypeValue.includes(value);
 }
 
+
 const pathParams= {
 "lesson":{"typePrimitive":"string","valueConstraint":false,"required":true},
-"type":{"typePrimitive":"string","valueConstraint":true,"allowedValues":allowedTypeValues, typeguard: isTypeValue},
+"type":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedTypeValues, typeguard: isTypeValue},
 };
+
 const queryParams= {
 };
 
+void pathParams;
+void queryParams;
 type ValidRequestParams= {params: {
-path: {
-lesson: string, 
-type: string, 
-}
-}};
-function isValidRequestParams(requestParams: {params: {path?: Record<string, unknown>, query?: Record<string, unknown>}}): requestParams is ValidRequestParams {
-  // Required
-  const lesson= requestParams.params.path?.lesson;
-  const type= requestParams.params.path?.type;
-  if(typeof lesson !== 'string' || typeof type !== 'string') {
-    return false;
+  path?: Record<string, unknown>;
+  query?: Record<string, unknown>;
+}}
+
+function isValidRequestParams(value: unknown): value is ValidRequestParams {
+  if (value === null || typeof value !== "object") return false;
+  const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
+  const params = paramsDesc?.value;
+  if (params !== undefined && (params === null || typeof params !== "object")) return false;
+  const path = params?.path;
+  const query = params?.query;
+  if (path !== undefined && (path === null || typeof path !== "object" || Array.isArray(path))) return false;
+  if (query !== undefined && (query === null || typeof query !== "object" || Array.isArray(query))) return false;
+  for (const [name, meta] of Object.entries(pathParams)) {
+    if (meta && (meta as { required?: boolean }).required === true) {
+      const has = Boolean(path && Object.prototype.hasOwnProperty.call(path, name));
+      if (!has) return false;
+    }
   }
-  if(!isTypeValue(type)) {
-    return false;
+  for (const [name, meta] of Object.entries(queryParams)) {
+    if (meta && (meta as { required?: boolean }).required === true) {
+      const has = Boolean(query && Object.prototype.hasOwnProperty.call(query, name));
+      if (!has) return false;
+    }
+  }
+  const validateValue = (meta: unknown, value: unknown): boolean => {
+    if (!meta || typeof meta !== "object") return true;
+    const m = meta as {
+      valueConstraint?: boolean;
+      typeguard?: (v: unknown) => boolean
+    };
+    if (m.valueConstraint && typeof m.typeguard === "function") {
+      return m.typeguard(value);
+    }
+    return true;
+  };
+  if (path) {
+    for (const [k, v] of Object.entries(path)) {
+      if (!validateValue((pathParams as Record<string, unknown>)[k], v)) return false;
+    }
+  }
+  if (query) {
+    for (const [k, v] of Object.entries(query)) {
+      if (!validateValue((queryParams as Record<string, unknown>)[k], v)) return false;
+    }
   }
   return true;
 }
+
 const getValidRequestParamsDescription= () => {
-  return `{
-    params: {
+  return 'Invalid request parameters. Please match the following schema:';
+};
+void [operationId, name, path, method];
+void [pathParams, queryParams];
+void [isValidRequestParams, getValidRequestParamsDescription];
+const executor= (client: OakApiPathBasedClient) => {
+  return async (params: ValidRequestParams): Promise<unknown> => {
+    if (!isValidRequestParams(params)) {
+      throw new TypeError(getValidRequestParamsDescription());
+    }
+    const ep = (client as Record<string, unknown>)["/lessons/{lesson}/assets/{type}"];
+    const call = ep && typeof ep === "object" ? (ep as Record<string, (p: ValidRequestParams) => Promise<unknown>>)["GET"] : undefined;
+    if (typeof call !== "function") {
+      throw new TypeError('Invalid method on endpoint: GET for /lessons/{lesson}/assets/{type}');
+    }
+    return call(params);
+  };
+};
 
-      path: {
-
-        lesson: any string
-
-        type: one of ${allowedTypeValues.join(', ')}
-
-      },
-
-    },
-  }`;
-}
-
-
-const executor= (client: OakApiPathBasedClient, requestParams: ValidRequestParams): ReturnType<Client> => {
-  const lessonPathParam = requestParams.params.path.lesson;
-  const typePathParam = requestParams.params.path.type;
-
-  // The allowed value for lesson is any string, so we don't need a type guard for it.
-  if (!isTypeValue(typePathParam)) {
-    throw new TypeError(`Invalid type: ${typePathParam}. Must be one of: ${allowedTypeValues.join(', ')}`);
-  }
-  
-  return client['/lessons/{lesson}/assets/{type}']['GET']({
-    params: {
-
-      path: {
-
-        lesson: lessonPathParam,
-
-        type: typePathParam,
-
-      },
-
-    },
-  });
-}
-
-const getExecutorFromGenericRequestParams = (client: OakApiPathBasedClient, requestParams: {params: {path?: Record<string, unknown>, query?: Record<string, unknown>}}) => {
-
-  // The checks are specific to the tool
-  if(!isValidRequestParams(requestParams)) {
-    const validRequestParamsDescription = getValidRequestParamsDescription();
-    throw new TypeError(`Invalid request parameters. Please match the following schema: ${validRequestParamsDescription}`);
-  }
-  
-  return executor(client, requestParams);
-}
+const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient, _params: ValidRequestParams) => {
+  return executor(client)(_params);
+};
 
 export const oakGetLessonsAssetsByType = {
+  executor,
+  getExecutorFromGenericRequestParams,
+  pathParams,
+  queryParams,
+  operationId,
   name,
   path,
   method,
-  operationId,
-  pathParams,
-  queryParams,
-  getExecutorFromGenericRequestParams,
-  executor,
-} as const;
+};

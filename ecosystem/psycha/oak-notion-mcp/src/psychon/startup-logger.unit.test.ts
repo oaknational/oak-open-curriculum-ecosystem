@@ -26,8 +26,9 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
-    expect(deps.console.error).not.toHaveBeenCalled();
+    // Startup logger writes to stderr to keep stdout clean for MCP JSON-RPC
+    expect(deps.console.error).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
+    expect(deps.console.log).not.toHaveBeenCalled();
   });
 
   it('should log errors to console.error', () => {
@@ -73,7 +74,8 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
+    // Even on file write failure, we still log to stderr
+    expect(deps.console.error).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
     expect(deps.console.error).toHaveBeenCalledWith(
       'Failed to write startup log file',
       expect.any(Error),
@@ -89,7 +91,8 @@ describe('createStartupLogger', () => {
 
     log('Test message');
 
-    expect(deps.console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
+    // Even on directory creation failure, we still log to stderr
+    expect(deps.console.error).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
     expect(deps.fs.writeFileSync).not.toHaveBeenCalled();
     expect(deps.console.error).toHaveBeenCalledWith(
       'Failed to write startup log file',

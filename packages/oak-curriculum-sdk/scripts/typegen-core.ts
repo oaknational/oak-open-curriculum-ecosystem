@@ -27,6 +27,7 @@ import {
   generateCompleteMcpTools,
   type GeneratedMcpToolFiles,
 } from './typegen/mcp-tools/mcp-tool-generator.js';
+import { typeSafeEntries } from '../src/types/helpers.js';
 
 /**
  * Create a map of filenames to their content
@@ -53,7 +54,7 @@ export function createFileMap(
  * Side effect function - separated from pure logic
  */
 function writeFiles(outDirectory: string, fileMap: FileMap): void {
-  for (const [filename, content] of Object.entries(fileMap)) {
+  for (const [filename, content] of typeSafeEntries(fileMap)) {
     fs.writeFileSync(path.resolve(outDirectory, filename), content);
   }
 }
@@ -75,7 +76,7 @@ function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpTool
   fs.writeFileSync(path.resolve(mcpToolsDir, 'lib.ts'), mcpTools['lib.ts']);
 
   // Write tool files
-  for (const [filename, content] of Object.entries(mcpTools.tools)) {
+  for (const [filename, content] of typeSafeEntries(mcpTools.tools)) {
     fs.writeFileSync(path.resolve(toolsDir, filename), content);
   }
 }

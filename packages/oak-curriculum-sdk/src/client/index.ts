@@ -1,5 +1,5 @@
-import { BaseApiClient } from './oak-base-client';
-import type { OakApiClient, OakApiPathBasedClient } from './oak-base-client';
+import { BaseApiClient } from './oak-base-client.js';
+import type { OakApiClient, OakApiPathBasedClient } from './oak-base-client.js';
 
 /**
  * Create an Oak API client using the OpenAPI-Fetch style interface.
@@ -34,5 +34,5 @@ export function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient 
 // Do not export classes, access is through the factory functions only.
 
 // Re-export types for convenience
-export type { OakApiClient, OakApiPathBasedClient } from './oak-base-client';
+export type { OakApiClient, OakApiPathBasedClient } from './oak-base-client.js';
 export type { paths } from '../types/generated/api-schema/api-paths-types';

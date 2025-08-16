@@ -66,6 +66,8 @@ export interface ChainableHandler<TInput = unknown, TOutput = unknown> {
 /**
  * Context passed to handlers
  */
+import type { JsonObject } from '../types/core.js';
+
 export interface HandlerContext {
   /**
    * Request ID or trace ID
@@ -80,7 +82,7 @@ export interface HandlerContext {
   /**
    * Additional metadata
    */
-  metadata?: Record<string, unknown>;
+  metadata?: JsonObject;
 }
 
 /**

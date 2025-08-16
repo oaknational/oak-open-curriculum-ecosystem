@@ -4,9 +4,10 @@
  */
 
 import { z } from 'zod';
-import type { ValidationResult, HttpMethod } from './types';
-import { parseWithSchema } from './types';
-import { endpoints } from '../types/generated/zod/endpoints';
+import type { ValidationResult, HttpMethod } from './types.js';
+import { parseWithSchema } from './types.js';
+import { endpoints } from '../types/generated/zod/endpoints.js';
+import { typeSafeFromEntries } from '../types/helpers.js';
 
 // Runtime type utilities (no assertions)
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -72,7 +73,10 @@ function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
   const schemaMap = new Map<string, z.ZodSchema>();
 
   function paramsToSchema(parameters: readonly ParamDefinition[]): z.ZodSchema {
-    const entries = Object.fromEntries(parameters.map((p) => [p.name, p.schema] as const));
+    const pairs: readonly (readonly [string, z.ZodSchema])[] = parameters.map(
+      (p) => [p.name, p.schema] as const,
+    );
+    const entries = typeSafeFromEntries(pairs);
     return z.object(entries);
   }
 

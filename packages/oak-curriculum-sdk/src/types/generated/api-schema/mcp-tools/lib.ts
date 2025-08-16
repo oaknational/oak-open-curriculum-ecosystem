@@ -4,8 +4,8 @@
  * Library functions for MCP tools
  */
 
-import { MCP_TOOLS } from './index';
-import { getToolNameFromOperationId, type AllOperationIds, type AllToolNames } from './types';
+import { MCP_TOOLS } from './index.js';
+import { getToolNameFromOperationId, type AllOperationIds, type AllToolNames } from './types.js';
 
 /**
  * Get tool by name

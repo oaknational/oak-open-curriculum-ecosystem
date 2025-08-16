@@ -1,12 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: [
-    'src/index.ts',
-    'src/organa/mcp/tools/*.ts',
-    '!src/organa/mcp/tools/*.test.ts',
-    '!src/organa/mcp/tools/*.spec.ts',
-  ],
+  entry: ['src/**/*.ts', '!src/**/*.test.ts', '!src/**/*.spec.ts', 'bin/oak-curriculum-mcp.ts'],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
   splitting: true, // Enable code splitting for multi-entry

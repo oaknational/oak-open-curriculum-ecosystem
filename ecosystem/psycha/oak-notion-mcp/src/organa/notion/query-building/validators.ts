@@ -55,8 +55,9 @@ export function validateDatabaseFilters(filters: unknown): ValidationResult<McpF
 
   // Validate each field if present
   for (const [field, validator] of Object.entries(fieldValidators)) {
-    if (field in filters && filters[field] !== undefined) {
-      errors.push(...validator(filters[field]));
+    const desc = Object.getOwnPropertyDescriptor(filters, field);
+    if (desc && desc.value !== undefined) {
+      errors.push(...validator(desc.value));
     }
   }
 

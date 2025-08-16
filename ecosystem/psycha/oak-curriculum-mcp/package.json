@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "MCP server for Oak National Academy Curriculum API",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "bin": {
-    "oak-curriculum-mcp": "./dist/index.js"
+    "oak-curriculum-mcp": "./dist/bin/oak-curriculum-mcp.js"
   },
   "files": [
     "dist",
@@ -18,7 +18,7 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/src/index.js"
     }
   },
   "scripts": {

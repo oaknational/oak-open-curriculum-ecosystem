@@ -5,33 +5,36 @@
  * Aggregates all tool definitions and provides the MCP_TOOLS mapping
  */
 
+// Import type helpers to satisfy TS2742 portable type naming
+import type {} from 'openapi-typescript-helpers';
+
 // Import all tool definitions
-import { oakGetSequencesUnits } from './tools/oak-get-sequences-units';
-import { oakGetLessonsTranscript } from './tools/oak-get-lessons-transcript';
-import { oakGetSearchTranscripts } from './tools/oak-get-search-transcripts';
-import { oakGetSequencesAssets } from './tools/oak-get-sequences-assets';
-import { oakGetKeyStagesSubjectAssets } from './tools/oak-get-key-stages-subject-assets';
-import { oakGetLessonsAssets } from './tools/oak-get-lessons-assets';
-import { oakGetLessonsAssetsByType } from './tools/oak-get-lessons-assets-by-type';
-import { oakGetSubjects } from './tools/oak-get-subjects';
-import { oakGetSubjectDetail } from './tools/oak-get-subject-detail';
-import { oakGetSubjectsSequences } from './tools/oak-get-subjects-sequences';
-import { oakGetSubjectsKeyStages } from './tools/oak-get-subjects-key-stages';
-import { oakGetSubjectsYears } from './tools/oak-get-subjects-years';
-import { oakGetKeyStages } from './tools/oak-get-key-stages';
-import { oakGetKeyStagesSubjectLessons } from './tools/oak-get-key-stages-subject-lessons';
-import { oakGetKeyStagesSubjectUnits } from './tools/oak-get-key-stages-subject-units';
-import { oakGetLessonsQuiz } from './tools/oak-get-lessons-quiz';
-import { oakGetSequencesQuestions } from './tools/oak-get-sequences-questions';
-import { oakGetKeyStagesSubjectQuestions } from './tools/oak-get-key-stages-subject-questions';
-import { oakGetLessonsSummary } from './tools/oak-get-lessons-summary';
-import { oakGetSearchLessons } from './tools/oak-get-search-lessons';
-import { oakGetUnitsSummary } from './tools/oak-get-units-summary';
-import { oakGetThreads } from './tools/oak-get-threads';
-import { oakGetThreadsUnits } from './tools/oak-get-threads-units';
-import { oakGetChangelog } from './tools/oak-get-changelog';
-import { oakGetChangelogLatest } from './tools/oak-get-changelog-latest';
-import { oakGetRateLimit } from './tools/oak-get-rate-limit';
+import { oakGetSequencesUnits } from './tools/oak-get-sequences-units.js';
+import { oakGetLessonsTranscript } from './tools/oak-get-lessons-transcript.js';
+import { oakGetSearchTranscripts } from './tools/oak-get-search-transcripts.js';
+import { oakGetSequencesAssets } from './tools/oak-get-sequences-assets.js';
+import { oakGetKeyStagesSubjectAssets } from './tools/oak-get-key-stages-subject-assets.js';
+import { oakGetLessonsAssets } from './tools/oak-get-lessons-assets.js';
+import { oakGetLessonsAssetsByType } from './tools/oak-get-lessons-assets-by-type.js';
+import { oakGetSubjects } from './tools/oak-get-subjects.js';
+import { oakGetSubjectDetail } from './tools/oak-get-subject-detail.js';
+import { oakGetSubjectsSequences } from './tools/oak-get-subjects-sequences.js';
+import { oakGetSubjectsKeyStages } from './tools/oak-get-subjects-key-stages.js';
+import { oakGetSubjectsYears } from './tools/oak-get-subjects-years.js';
+import { oakGetKeyStages } from './tools/oak-get-key-stages.js';
+import { oakGetKeyStagesSubjectLessons } from './tools/oak-get-key-stages-subject-lessons.js';
+import { oakGetKeyStagesSubjectUnits } from './tools/oak-get-key-stages-subject-units.js';
+import { oakGetLessonsQuiz } from './tools/oak-get-lessons-quiz.js';
+import { oakGetSequencesQuestions } from './tools/oak-get-sequences-questions.js';
+import { oakGetKeyStagesSubjectQuestions } from './tools/oak-get-key-stages-subject-questions.js';
+import { oakGetLessonsSummary } from './tools/oak-get-lessons-summary.js';
+import { oakGetSearchLessons } from './tools/oak-get-search-lessons.js';
+import { oakGetUnitsSummary } from './tools/oak-get-units-summary.js';
+import { oakGetThreads } from './tools/oak-get-threads.js';
+import { oakGetThreadsUnits } from './tools/oak-get-threads-units.js';
+import { oakGetChangelog } from './tools/oak-get-changelog.js';
+import { oakGetChangelogLatest } from './tools/oak-get-changelog-latest.js';
+import { oakGetRateLimit } from './tools/oak-get-rate-limit.js';
 
 // Tool name to tool mapping
 export const MCP_TOOLS = {
@@ -69,10 +72,10 @@ export {
   type AllToolNames,
   isToolName,
   getToolNameFromOperationId
-} from './types';
+} from './types.js';
 
 // Re-export lib functions with explicit names
 export {
   getToolFromToolName,
   getToolFromOperationId,
-} from './lib';
+} from './lib.js';

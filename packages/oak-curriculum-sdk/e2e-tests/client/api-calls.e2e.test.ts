@@ -4,9 +4,7 @@
  * These tests verify that the SDK can successfully make real API calls
  * to the Oak Curriculum API and handle responses correctly.
  *
- * Tests are conditionally run when:
- * - RUN_E2E=true environment variable is set
- * - OAK_API_KEY is available
+ * Tests are conditionally run when OAK_API_KEY is available
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
@@ -22,13 +20,12 @@ type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
 type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
 type TranscriptSearchResult = components['schemas']['SearchTranscriptResponseSchema'][number];
 
-// Load environment variables from .env file
-config({ path: '../../.env' });
+// Load environment variables from .env file at repo root
+config({ path: '../../../../.env' });
 
-const shouldRunE2E = process.env.RUN_E2E === 'true';
 const apiKey = process.env.OAK_API_KEY ?? '';
 
-describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => {
+describe.skipIf(!apiKey)('Oak Curriculum SDK E2E Tests', () => {
   let client: OakApiClient;
 
   beforeAll(() => {
@@ -284,9 +281,7 @@ describe.skipIf(!shouldRunE2E || !apiKey)('Oak Curriculum SDK E2E Tests', () => 
 // Helper test to verify environment setup
 describe('E2E Test Environment', () => {
   it('should report E2E test status', () => {
-    if (!shouldRunE2E) {
-      console.log('E2E tests skipped. Set RUN_E2E=true to run them.');
-    } else if (!apiKey) {
+    if (!apiKey) {
       console.log('E2E tests skipped. OAK_API_KEY not configured.');
     } else {
       console.log('E2E tests enabled and configured.');

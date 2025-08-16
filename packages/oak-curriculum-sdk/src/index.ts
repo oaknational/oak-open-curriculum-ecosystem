@@ -6,18 +6,18 @@
  */
 
 // Main client factories
-export { createOakClient, createOakPathBasedClient } from './client/index';
-export type { OakApiClient, OakApiPathBasedClient } from './client/index';
+export { createOakClient, createOakPathBasedClient } from './client/index.js';
+export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
 
 // Generated types
-export type { paths } from './types/generated/api-schema/api-paths-types';
-export type { components } from './types/generated/api-schema/api-paths-types';
+export type { paths } from './types/generated/api-schema/api-paths-types.js';
+export type { components } from './types/generated/api-schema/api-paths-types.js';
 
 // Configuration
-export { apiUrl, apiSchemaUrl } from './config/index';
+export { apiUrl, apiSchemaUrl } from './config/index.js';
 
 // Create a convenience export for createApiClient (alias for createOakClient)
-export { createOakClient as createApiClient } from './client/index';
+export { createOakClient as createApiClient } from './client/index.js';
 
 // Type guards and allowed-values constants (additive public API exports)
 export {
@@ -43,33 +43,33 @@ export {
   THREAD_SLUGS,
   UNITS,
   VALID_PATHS_BY_PARAMETERS,
-} from './types/generated/api-schema/path-parameters';
+} from './types/generated/api-schema/path-parameters.js';
 
 // Schema and operation exports
-export { schemaBase as schema } from './types/generated/api-schema/api-schema-base';
-export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters';
-export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters';
+export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters.js';
+export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters.js';
 
 // Validation module exports (explicit for tree-shaking)
-export { validateRequest, validateResponse } from './validation/index';
+export { validateRequest, validateResponse } from './validation/index.js';
 export type {
   ValidationResult,
   ValidationIssue,
   ValidatedClientOptions,
   HttpMethod,
-} from './validation/index';
+} from './validation/index.js';
 
 // MCP (Model Context Protocol) Tool Support
 // These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
-export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools';
-export type { AllToolNames } from './types/generated/api-schema/mcp-tools';
+export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
+export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index.js';
 
 // Note: Parameter validation now happens via schema.parameters directly
 // in the MCP server implementation. Response validation is handled
 // via the SDK's built-in response structures.
 
 // MCP executor - static function using path-based client
-export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call';
+export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
 
 // Export the type-safe object helpers
 export {
@@ -82,4 +82,4 @@ export {
   typeSafeHas,
   typeSafeHasOwn,
   typeSafeOwnKeys,
-} from './types/helpers';
+} from './types/helpers.js';

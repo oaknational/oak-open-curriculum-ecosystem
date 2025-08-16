@@ -7,9 +7,9 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
-import { wireDependencies } from './wiring';
-import type { ServerConfig } from './wiring';
-import type { McpOrgan } from '../organa/mcp';
+import { wireDependencies } from './wiring.js';
+import type { ServerConfig } from './wiring.js';
+import type { McpOrgan } from '../organa/mcp/index.js';
 import type { Logger } from '@oaknational/mcp-moria';
 
 /**
@@ -109,7 +109,16 @@ function registerHandlers(server: Server, mcpOrgan: McpOrgan, logger: Logger): v
       // Execute the tool
       const result = await executeTool(name, args, mcpOrgan);
 
-      // Format and return success response
+      // If handler returned a CallToolResult-like error, pass through
+      if (typeof result === 'object' && result !== null) {
+        const isError = Object.getOwnPropertyDescriptor(result, 'isError')?.value === true;
+        const content: unknown = Object.getOwnPropertyDescriptor(result, 'content')?.value;
+        if (isError && content !== undefined) {
+          return { isError: true, content };
+        }
+      }
+
+      // Otherwise, format as success response
       return formatToolResponse(result);
     } catch (error) {
       logger.error('Tool execution failed', { tool: name, error });

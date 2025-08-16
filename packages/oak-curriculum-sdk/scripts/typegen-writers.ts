@@ -4,6 +4,7 @@
  */
 
 import type { ValidCombinations } from './typegen/extraction-types.js';
+import { typeSafeEntries } from '../src/types/helpers.js';
 import { formatPathGrouping } from './typegen-helpers.js';
 import {
   generatePathGroupingKeysType,
@@ -15,7 +16,7 @@ import {
  * Generate path groupings section
  */
 export function generatePathGroupingsSection(pathGroupings: ValidCombinations): string {
-  const groupEntries = Object.entries(pathGroupings)
+  const groupEntries = typeSafeEntries(pathGroupings)
     .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
     .map(([pathGroupingKey, group]) => formatPathGrouping(pathGroupingKey, group ?? {}))
     .join(', ');

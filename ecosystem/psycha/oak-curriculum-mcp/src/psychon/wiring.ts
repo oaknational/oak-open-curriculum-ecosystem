@@ -1,14 +1,63 @@
 /**
  * Psychon wiring - dependency injection and composition
- * Assembles all organs into a living whole
+ * Assembles all components into a working MCP server
  */
 
-import { createLogger } from '../chorai/aither';
-import { createSdkClient } from '../chorai/stroma';
-import { createMcpOrgan } from '../organa/mcp';
-import type { Logger } from '@oaknational/mcp-moria';
-import type { McpOrgan } from '../organa/mcp';
-import type { LogLevel } from '@oaknational/mcp-histos-logger';
+import { createMcpOrgan } from '../organa/mcp/index.js';
+import type { McpOrgan } from '../organa/mcp/index.js';
+import { appendToLogFile, getLogFilePath } from './file-reporter.js';
+
+function mapLogLevelToIndex(level: string): number {
+  if (level === 'trace') return 0;
+  if (level === 'debug') return 1;
+  if (level === 'info') return 2;
+  if (level === 'warn') return 3;
+  if (level === 'error') return 4;
+  if (level === 'fatal') return 5;
+  return 2; // default INFO
+}
+
+function formatLogMessage(lvl: string, message: string, data?: unknown): string {
+  const timestamp = new Date().toISOString();
+  const dataStr = data ? ` ${JSON.stringify(data)}` : '';
+  return `${timestamp}: [${lvl}] ${message}${dataStr}`;
+}
+
+function makeLoggerMethods(currentLevelIndex: number, logFilePath: string | null): Logger {
+  const shouldLog = (idx: number): boolean => currentLevelIndex <= idx;
+  const logToFile = (lvl: string, message: string, data?: unknown): void => {
+    if (logFilePath) appendToLogFile(logFilePath, formatLogMessage(lvl, message, data));
+  };
+  const consoleErr = (tag: string, message: string, data?: unknown): void => {
+    console.error(`${tag} ${message}`, data ?? '');
+  };
+  const makeStdErrMethod =
+    (tag: string, idx: number) =>
+    (message: string, data?: unknown): void => {
+      if (shouldLog(idx)) {
+        consoleErr(tag, message, data);
+        const label = tag.replace(/\[|\]/g, '');
+        logToFile(label, message, data);
+      }
+    };
+  const warnMethod = (message: string, data?: unknown): void => {
+    if (shouldLog(3)) {
+      console.warn(`[WARN] ${message}`, data ?? '');
+      logToFile('WARN', message, data);
+    }
+  };
+  return {
+    trace: makeStdErrMethod('[TRACE]', 0),
+    debug: makeStdErrMethod('[DEBUG]', 1),
+    info: makeStdErrMethod('[INFO]', 2),
+    warn: warnMethod,
+    error: makeStdErrMethod('[ERROR]', 4),
+    fatal: (message: string, data?: unknown): void => {
+      consoleErr('[FATAL]', message, data);
+      logToFile('FATAL', message, data);
+    },
+  };
+}
 
 /**
  * Configuration for the Oak Curriculum MCP server
@@ -25,21 +74,24 @@ export interface ServerConfig {
 }
 
 /**
- * Map server config log level to LogLevel
+ * Simple logger interface (matches Moria's Logger)
  */
-function mapLogLevel(level?: 'debug' | 'info' | 'warn' | 'error'): LogLevel {
-  switch (level) {
-    case 'debug':
-      return 'DEBUG';
-    case 'info':
-      return 'INFO';
-    case 'warn':
-      return 'WARN';
-    case 'error':
-      return 'ERROR';
-    default:
-      return 'INFO';
-  }
+export interface Logger {
+  trace(message: string, data?: unknown): void;
+  debug(message: string, data?: unknown): void;
+  info(message: string, data?: unknown): void;
+  warn(message: string, data?: unknown): void;
+  error(message: string, data?: unknown): void;
+  fatal(message: string, data?: unknown): void;
+}
+
+/**
+ * Create a logger with console and file output
+ */
+function createLogger(level: string, enableFileLogging = true): Logger {
+  const currentLevelIndex = mapLogLevelToIndex(level);
+  const logFilePath = enableFileLogging ? getLogFilePath() : null;
+  return makeLoggerMethods(currentLevelIndex, logFilePath);
 }
 
 /**
@@ -56,7 +108,7 @@ export interface WiredDependencies {
  */
 const DEFAULT_CONFIG: Required<ServerConfig> = {
   logLevel: 'info',
-  apiKey: '',
+  apiKey: process.env.OAK_API_KEY ?? '',
   serverName: 'oak-curriculum-mcp',
   serverVersion: '0.0.1',
 };
@@ -78,28 +130,15 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
 }
 
 /**
- * Wires all dependencies together
+ * Wire all dependencies together
  */
 export function wireDependencies(config?: ServerConfig): WiredDependencies {
-  // Build complete config with defaults
   const serverConfig = buildServerConfig(config);
+  const logger = createLogger(serverConfig.logLevel);
 
-  // Create logger with config
-  const logger = createLogger({
-    name: 'oak-curriculum-mcp',
-    level: mapLogLevel(serverConfig.logLevel),
-    enableFileLogging: true,
-  });
+  // Create MCP organ with SDK delegation
+  const mcpOrgan = createMcpOrgan();
 
-  // Create SDK client
-  const sdk = createSdkClient({
-    apiKey: serverConfig.apiKey,
-  });
-
-  // Create MCP organ - now uses SDK directly
-  const mcpOrgan = createMcpOrgan(sdk, logger);
-
-  // Return wired dependencies
   return {
     logger,
     mcpOrgan,

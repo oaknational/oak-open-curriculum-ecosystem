@@ -16,10 +16,18 @@ export function createErrorHandler(logger: ToolLogger): ErrorHandler {
         ? ` in ${context.toolName}${context.operation ? `: ${context.operation}` : ''}`
         : '';
 
-      logger.error(`Error${contextInfo}`, {
-        error: errorMessage,
-        context,
-      });
+      if (context) {
+        logger.error(`Error${contextInfo}`, {
+          error: errorMessage,
+          context: {
+            toolName: context.toolName,
+            ...(context.operation ? { operation: context.operation } : {}),
+            ...(context.metadata ? { metadata: context.metadata } : {}),
+          },
+        });
+      } else {
+        logger.error(`Error${contextInfo}`, { error: errorMessage });
+      }
 
       return {
         content: [

@@ -49,6 +49,11 @@ async function createServerDependencies(
   const logger = createAdaptiveLogger({
     level: environment.LOG_LEVEL,
     name: 'oak-notion-mcp',
+    consolaOptions: {
+      // MCP servers must use stderr for ALL logs to keep stdout clean for JSON-RPC
+      stdout: process.stderr,
+      stderr: process.stderr,
+    },
   });
 
   log('[STARTUP] Creating Notion client...');

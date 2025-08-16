@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createOakClient, createOakPathBasedClient } from './index';
+import { createOakClient, createOakPathBasedClient } from './index.js';
 
 describe('Oak Client Integration', () => {
   describe('createOakClient', () => {

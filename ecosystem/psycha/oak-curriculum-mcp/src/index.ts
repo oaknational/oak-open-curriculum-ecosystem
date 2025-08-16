@@ -5,14 +5,14 @@
  * It provides AI assistants with access to Oak National Academy's curriculum content.
  */
 
-import { createServer } from './psychon/server';
-import { createStartupLogger, defaultStartupLoggerDeps } from './psychon/startup';
+import { createServer } from './psychon/server.js';
+import { createStartupLogger, defaultStartupLoggerDeps } from './psychon/startup.js';
 
-export { createServer } from './psychon/server';
-export type { ServerConfig } from './psychon/wiring';
+export { createServer } from './psychon/server.js';
+export type { ServerConfig } from './psychon/wiring.js';
 
 // Re-export types for external use
-export type { McpOrgan } from './organa/mcp';
+export type { McpOrgan } from './organa/mcp/index.js';
 
 // Main entry point when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {

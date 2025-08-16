@@ -9,7 +9,8 @@
 - [x] Add Claude custom commands for quality gates, stepping back, commit and push
 - [x] Think about how best to use subagents
 - [x] Turn it into a pnpm workspace and Turbo monorepo
-- [ ] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.  
+- [ ] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.
+- [ ] Sort out the flawed type propagation from getting the thing working fast.
 - [ ] Remove any dead code from the refactoring
 - [ ] Improve the documentation, the rules file is now too large to be consistently applied by the agent, and we have other "agent guidance" docs... we need to consolidate and refine. Fewer, better, more consistent.
 - [ ] Standardise and improve the sub-agents, sort out the rules/guidance first.

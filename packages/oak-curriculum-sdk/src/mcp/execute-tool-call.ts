@@ -1,4 +1,4 @@
-/* eslint-disable complexity, max-depth, max-lines-per-function, max-statements */
+/* eslint-disable complexity, max-lines-per-function, max-statements */
 /**
  * Ultra-thin MCP tool executor using MCP_TOOLS executors
  *
@@ -10,7 +10,8 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools';
+import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import { typeSafeKeys } from '../types/helpers.js';
 
 /**
  * Error types with proper cause chains
@@ -66,9 +67,9 @@ type ToolExecutionResult =
 function buildGenericRequestParams(
   tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS],
   args: unknown,
-): unknown {
-  const hasPathParams = Object.keys(tool.pathParams).length > 0;
-  const hasQueryParams = Object.keys(tool.queryParams).length > 0;
+): { params: { path?: Record<string, unknown>; query?: Record<string, unknown> } } {
+  const hasPathParams = typeSafeKeys(tool.pathParams).length > 0;
+  const hasQueryParams = typeSafeKeys(tool.queryParams).length > 0;
 
   // For tools with no parameters at all, return the expected structure
   if (!hasPathParams && !hasQueryParams) {
@@ -91,20 +92,18 @@ function buildGenericRequestParams(
   // Build path params if needed
   if (hasPathParams) {
     params.path = {};
-    for (const paramName of Object.keys(tool.pathParams)) {
-      if (paramName in args) {
-        params.path[paramName] = (args as Record<string, unknown>)[paramName];
-      }
+    for (const paramName of typeSafeKeys(tool.pathParams)) {
+      const d = Object.getOwnPropertyDescriptor(args, paramName);
+      if (d) params.path[paramName] = d.value;
     }
   }
 
   // Build query params if needed
   if (hasQueryParams) {
     params.query = {};
-    for (const paramName of Object.keys(tool.queryParams)) {
-      if (paramName in args) {
-        params.query[paramName] = (args as Record<string, unknown>)[paramName];
-      }
+    for (const paramName of typeSafeKeys(tool.queryParams)) {
+      const d = Object.getOwnPropertyDescriptor(args, paramName);
+      if (d) params.query[paramName] = d.value;
     }
   }
 
@@ -135,9 +134,7 @@ export async function executeToolCall(
     const tool = MCP_TOOLS[toolName];
 
     // Step 3: Build request params in the structure expected by the executor
-    const genericRequestParams = buildGenericRequestParams(tool, maybeParams) as {
-      params: { path?: Record<string, unknown>; query?: Record<string, unknown> };
-    };
+    const genericRequestParams = buildGenericRequestParams(tool, maybeParams);
 
     // Step 4: Call the embedded executor
     // The executor handles all validation and type narrowing internally
@@ -156,7 +153,7 @@ export async function executeToolCall(
       (error.message.includes('Invalid') || error.message.includes('Must be one of'))
     ) {
       // Extract parameter name from error message if possible
-      const match = error.message.match(/Invalid (\w+):/);
+      const match = /Invalid (\w+):/.exec(error.message);
       const paramName = match ? match[1] : undefined;
       return {
         error: new McpParameterError(error.message, toolName, paramName, undefined, {

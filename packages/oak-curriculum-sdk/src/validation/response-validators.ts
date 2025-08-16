@@ -4,10 +4,10 @@
  */
 
 import type { z } from 'zod';
-import type { ValidationResult, HttpMethod } from './types';
-import { PATH_OPERATIONS } from '../types/generated/api-schema/path-parameters';
-import { parseWithSchema } from './types';
-import { schemas } from '../types/generated/zod/schemas';
+import type { ValidationResult, HttpMethod } from './types.js';
+import { PATH_OPERATIONS } from '../types/generated/api-schema/path-parameters.js';
+import { parseWithSchema } from './types.js';
+import { schemas } from '../types/generated/zod/schemas.js';
 
 /**
  * Map of operation IDs to their response schemas

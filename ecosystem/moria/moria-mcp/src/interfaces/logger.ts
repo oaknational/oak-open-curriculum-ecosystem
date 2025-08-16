@@ -13,6 +13,8 @@
  * operations that any logging system must support. It avoids implementation
  * details and runtime-specific features.
  */
+import type { JsonObject } from '../types/core.js';
+
 export interface Logger {
   /**
    * Log a trace-level message (most verbose)
@@ -70,5 +72,5 @@ export interface Logger {
    * @param context - Context to be included with all log messages from the child
    * @returns A new logger instance with the additional context
    */
-  child?(context: Record<string, unknown>): Logger;
+  child?(context: JsonObject): Logger;
 }

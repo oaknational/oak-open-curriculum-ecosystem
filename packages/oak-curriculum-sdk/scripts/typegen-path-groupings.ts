@@ -3,13 +3,14 @@
  */
 
 import type { ValidCombinations } from './typegen/extraction-types.js';
+import { typeSafeKeys } from '../src/types/helpers.js';
 import { createSortedEntries } from './typegen-helpers.js';
 
 /**
  * Generate the path grouping keys type union
  */
 export function generatePathGroupingKeysType(validCombinations: ValidCombinations): string {
-  const otherKeys = Object.keys(validCombinations)
+  const otherKeys = typeSafeKeys(validCombinations)
     .filter((key) => key !== 'NO_PARAMS')
     .sort()
     .map((key) => `"${key}"`);
@@ -57,7 +58,7 @@ type ValidPathGroupings = {
  * Generate the VALID_PATHS_BY_PARAMETERS constant entries
  */
 export function generateValidPathsEntries(validCombinations: ValidCombinations): string {
-  return Object.keys(validCombinations)
+  return typeSafeKeys(validCombinations)
     .sort((a, b) => a.localeCompare(b))
     .map((pathGroupingKey) => {
       const group = validCombinations[pathGroupingKey] ?? {};
