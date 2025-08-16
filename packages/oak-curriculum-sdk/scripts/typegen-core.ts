@@ -11,7 +11,7 @@ import type { OpenAPI3 } from 'openapi-typescript';
 import openapiTS, { astToString } from 'openapi-typescript';
 import {
   generateJsonContent,
-  generateTsSchemaContent,
+  generateBaseSchemaContent,
   generatePathParametersHeader,
   generatePathsConstant,
   generateRuntimeSchemaChecks,
@@ -23,29 +23,27 @@ import {
   generateOperationConstants,
 } from './typegen/index.js';
 import type { FileMap } from './typegen/extraction-types.js';
-import { generateMinimalToolLookup } from './typegen/mcp-tools/minimal-tool-generator.js';
+import {
+  generateCompleteMcpTools,
+  type GeneratedMcpToolFiles,
+} from './typegen/mcp-tools/mcp-tool-generator.js';
 
 /**
  * Create a map of filenames to their content
  * Pure function - no side effects
  */
 export function createFileMap(
+  sourceSchema: OpenAPI3,
   jsonStringSchema: string,
   tsTypesContent: string,
   pathParameterContent: string,
-  mcpToolsContent?: string,
 ): FileMap {
   const baseFiles: FileMap = {
     'api-schema.json': jsonStringSchema,
-    'api-schema.ts': generateTsSchemaContent(jsonStringSchema),
+    'api-schema-base.ts': generateBaseSchemaContent(sourceSchema),
     'api-paths-types.ts': tsTypesContent,
     'path-parameters.ts': pathParameterContent,
   };
-
-  // Add MCP file if content is provided
-  if (mcpToolsContent) {
-    baseFiles['mcp-tools.ts'] = mcpToolsContent;
-  }
 
   return baseFiles;
 }
@@ -57,6 +55,28 @@ export function createFileMap(
 function writeFiles(outDirectory: string, fileMap: FileMap): void {
   for (const [filename, content] of Object.entries(fileMap)) {
     fs.writeFileSync(path.resolve(outDirectory, filename), content);
+  }
+}
+
+/**
+ * Write MCP tools directory structure to disk
+ */
+function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpToolFiles): void {
+  const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
+  const toolsDir = path.resolve(mcpToolsDir, 'tools');
+
+  // Create directories
+  fs.mkdirSync(mcpToolsDir, { recursive: true });
+  fs.mkdirSync(toolsDir, { recursive: true });
+
+  // Write main files
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools['index.ts']);
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'types.ts'), mcpTools['types.ts']);
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'lib.ts'), mcpTools['lib.ts']);
+
+  // Write tool files
+  for (const [filename, content] of Object.entries(mcpTools.tools)) {
+    fs.writeFileSync(path.resolve(toolsDir, filename), content);
   }
 }
 
@@ -93,35 +113,36 @@ export async function generateSchemaArtifacts(
 ): Promise<void> {
   fs.mkdirSync(outDirectory, { recursive: true });
 
-  // Generate enriched schema with embedded MCP tool metadata
+  // Generate pure JSON schema without tool metadata
   const jsonStringSchema = generateJsonContent(sourceSchema);
-  const schema = JSON.parse(jsonStringSchema) as OpenAPI3;
 
-  // Generate TypeScript types from enriched schema
-  const ast = await openapiTS(schema);
+  // Generate TypeScript types from original schema
+  const ast = await openapiTS(sourceSchema);
   const tsTypesContent = astToString(ast);
 
-  // Extract path parameters and valid combinations from enriched schema
-  const { parameters, validCombinations } = extractPathParameters(schema);
+  // Extract path parameters and valid combinations from original schema
+  const { parameters, validCombinations } = extractPathParameters(sourceSchema);
 
-  // Generate all content using enriched schema
-  const pathParameterContent = generatePathParametersContent(schema, parameters, validCombinations);
-
-  // Generate MCP tools if requested
-  let mcpToolsContent: string | undefined;
-
-  if (options.generateMcpTools) {
-    // Use the enriched schema for tool generation
-    mcpToolsContent = generateMinimalToolLookup(schema);
-  }
+  // Generate all content using original schema
+  const pathParameterContent = generatePathParametersContent(
+    sourceSchema,
+    parameters,
+    validCombinations,
+  );
 
   const fileMap = createFileMap(
+    sourceSchema,
     jsonStringSchema,
     tsTypesContent,
     pathParameterContent,
-    mcpToolsContent,
   );
 
   // Write all files (side effect)
   writeFiles(outDirectory, fileMap);
+
+  // Generate and write MCP tools if requested
+  if (options.generateMcpTools) {
+    const mcpTools = generateCompleteMcpTools(sourceSchema);
+    writeMcpToolsDirectory(outDirectory, mcpTools);
+  }
 }

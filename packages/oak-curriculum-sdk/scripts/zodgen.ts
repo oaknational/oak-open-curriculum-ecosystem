@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 import { generateZodSchemasArtifacts, generateZodEndpointsArtifacts } from './zodgen-core.js';
 // Import the generated runtime OpenAPI schema object
-import { schema } from '../src/types/generated/api-schema/api-schema';
+import { schemaBase as schema } from '../src/types/generated/api-schema/api-schema-base';
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');

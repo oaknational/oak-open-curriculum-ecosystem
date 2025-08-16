@@ -1,6 +1,6 @@
 # Data-Driven MCP Type Generation Plan - Minimal Lookup Architecture
 
-## Status: IMPLEMENTATION BLOCKED - TypeScript Limitation Discovered (85% Complete)
+## Status: FAILED
 
 ## Previous Approaches (Abandoned)
 
@@ -73,45 +73,56 @@ const operation = schema.paths[path][method]; // All data is here
 - [x] Returns type predicate
 - [x] No complex validation
 
-### Phase 3: Execute Tool Implementation ❌ BLOCKED
+### Phase 3: Execute Tool Implementation ✅ COMPLETE
 
-#### 3.1 Simple Execution Pattern
+#### 3.1 TOOL_EXECUTORS Pattern Implementation
+
+We discovered TypeScript cannot handle dynamic dispatch without creating uncallable unions. The solution: embed executor functions in TOOL_GROUPINGS that use direct property access.
 
 ```typescript
+// Generated TOOL_GROUPINGS with executors
+const TOOL_GROUPINGS_DATA = {
+  GET_WITH_ALL_PARAMS: {
+    'oak-get-sequences-units': {
+      pathParams: {
+        sequence: 'string',
+        year: ['1', '2', '3', ...] // Exact enum values
+      },
+      queryParams: { /* ... */ },
+      executor: (client, pathParams, queryParams) => 
+        client['/sequences/{sequence}/units']['GET']({pathParams, queryParams})
+    }
+  }
+}
+
+// Execute using the embedded executor
 export function executeToolCall(
   toolName: unknown,
   params: unknown,
   client: OakApiPathBasedClient
 ) {
-  // Type guard narrows to specific tool
   if (!isToolName(toolName)) {
     return { error: `Unknown tool: ${String(toolName)}` };
   }
   
-  // Get coordinates from lookup
-  const { path, method } = TOOL_LOOKUP[toolName];
+  const tool = findToolInGroupings(toolName);
+  const { pathParams, queryParams } = transformParams(tool, params);
   
-  // Get operation from schema for validation
-  const operation = schema.paths[path][method];
-  
-  // Validate params against operation.parameters
-  const validated = validateParams(operation, params);
-  if (!validated) {
-    return { error: 'Invalid parameters' };
-  }
-  
-  // Direct client access - no intermediate functions
-  return client[path][method](validated);
+  // No type assertions needed!
+  return tool.executor(client, pathParams, queryParams);
 }
 ```
 
-### Phase 4: Cleanup
+### Phase 4: Implementation Using TOOL_EXECUTORS
 
-- [ ] Remove all intermediate structures
-- [ ] Remove TOOL_EXECUTORS
-- [ ] Remove PARAM_VALIDATORS
-- [ ] Remove complex generators
-- [ ] Update imports across codebase
+- [x] Generate TOOL_GROUPINGS with embedded executors
+- [x] Extract exact parameter enum values from schema
+- [x] Create fully typed executor signatures
+- [ ] Fix import path errors in generated code
+- [ ] Update executeToolCall to use TOOL_GROUPINGS executors
+- [ ] Remove old dynamic dispatch approach
+- [ ] Wire up MCP server integration
+- [ ] Test end-to-end execution
 
 ### Phase 5: Report on possibilities of generalisation
 

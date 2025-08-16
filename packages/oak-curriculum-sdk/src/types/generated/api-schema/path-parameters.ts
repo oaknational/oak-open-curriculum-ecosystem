@@ -14,8 +14,8 @@ import type { paths as Paths } from "./api-paths-types";
  * The Schema["paths"] keys are the same as the Paths type keys, but the types are different.
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
-import type { Schema } from "./api-schema";
-import { schema } from "./api-schema";
+import type { SchemaBase as Schema } from "./api-schema-base";
+import { schemaBase as schema } from "./api-schema-base";
 
 
 type ValidPath = keyof Paths;

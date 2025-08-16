@@ -5,14 +5,19 @@ import { createFileMap, generatePathParametersContent } from './typegen-core';
 describe('typegen-core', () => {
   describe('createFileMap', () => {
     it('should create a map of filenames to content', () => {
+      const sourceSchema: OpenAPI3 = {
+        openapi: '3.0.0',
+        info: { title: 'Test', version: '1.0.0' },
+        paths: {},
+      };
       const jsonSchema = '{"test": "value"}';
       const tsTypesContent = 'export type Test = string;';
       const pathParameterContent = 'export const PATHS = {};';
 
-      const result = createFileMap(jsonSchema, tsTypesContent, pathParameterContent);
+      const result = createFileMap(sourceSchema, jsonSchema, tsTypesContent, pathParameterContent);
 
       expect(result).toHaveProperty('api-schema.json');
-      expect(result).toHaveProperty('api-schema.ts');
+      expect(result).toHaveProperty('api-schema-base.ts');
       expect(result).toHaveProperty('api-paths-types.ts');
       expect(result).toHaveProperty('path-parameters.ts');
 
@@ -21,16 +26,21 @@ describe('typegen-core', () => {
       expect(result['path-parameters.ts']).toBe(pathParameterContent);
     });
 
-    it('should generate TypeScript schema content for api-schema.ts', () => {
+    it('should generate TypeScript schema content for api-schema-base.ts', () => {
+      const sourceSchema: OpenAPI3 = {
+        openapi: '3.0.0',
+        info: { title: 'Test', version: '1.0.0' },
+        paths: {},
+      };
       const jsonSchema = '{"openapi": "3.0.0"}';
       const tsTypesContent = 'types';
       const pathParameterContent = 'parameters';
 
-      const result = createFileMap(jsonSchema, tsTypesContent, pathParameterContent);
+      const result = createFileMap(sourceSchema, jsonSchema, tsTypesContent, pathParameterContent);
 
-      expect(result['api-schema.ts']).toContain('export const schema =');
-      expect(result['api-schema.ts']).toContain(jsonSchema);
-      expect(result['api-schema.ts']).toContain('as const');
+      expect(result['api-schema-base.ts']).toContain('export const schemaBase =');
+      expect(result['api-schema-base.ts']).toContain('as const');
+      expect(result['api-schema-base.ts']).toContain('export type SchemaBase = typeof schemaBase');
     });
   });
 

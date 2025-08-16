@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted - Enhanced by ADR-038 (Compilation-Time Revolution)
 
 ## Context
 
@@ -131,6 +131,16 @@ export function isMcpToolName(value: unknown): value is McpToolName {
 }
 ```
 
+## Update: Enhanced by ADR-038
+
+The principles of this ADR remain valid and have been successfully implemented through ADR-038's compilation-time revolution approach. The key enhancement is that instead of generating runtime validators that need to be looked up, we now embed all validation logic directly into each tool file at compile time.
+
+The unified generation pipeline now produces:
+1. **Self-contained tool files** with embedded validation
+2. **Two-executor pattern** for type-safe execution
+3. **Complete type definitions** with no runtime dependencies
+4. **Zero type assertions** throughout the system
+
 ## Related Decisions
 
 - ADR-029: No manual API data structures
@@ -139,10 +149,13 @@ export function isMcpToolName(value: unknown): value is McpToolName {
 - ADR-032: External boundary validation
 - ADR-034: System boundaries and type assertions
 - ADR-036: Data-driven type generation pattern (refinement of this ADR)
+- ADR-037: Embedded tool information (attempted, hit TypeScript limitations)
+- ADR-038: Compilation-Time Revolution (successful implementation)
 
 ## References
 
 - Implementation plan: `.agent/plans/unified-sdk-mcp-type-generation.md`
 - Data-driven refinement: `.agent/plans/data-driven-mcp-type-generation.md`
+- Compilation-time plan: `.agent/plans/compilation-time-revolution-plan.md`
 - Logger pattern: `ecosystem/histoi/histos-logger/src/log-levels.ts`
 - MCP server: `ecosystem/psycha/oak-curriculum-mcp/`

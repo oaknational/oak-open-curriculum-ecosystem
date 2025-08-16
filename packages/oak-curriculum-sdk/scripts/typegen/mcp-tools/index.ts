@@ -1,9 +1,10 @@
 /**
  * MCP Tool Generation from OpenAPI Schema
  *
- * Minimal tool generation - only creates tool name to path/method mapping.
- * Everything else (parameters, types, descriptions) lives in the schema.
+ * Complete tool generation with compile-time embedded validation.
+ * All parameter metadata, type guards, and validation logic is extracted
+ * from the schema at generation time, creating fully self-contained tools.
  */
 
-export { generateMinimalToolLookup } from './minimal-tool-generator.js';
+export { generateCompleteMcpTools } from './mcp-tool-generator.js';
 export { generateMcpToolName } from './name-generator.js';

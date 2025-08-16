@@ -6,7 +6,11 @@
  */
 
 // Schema generation
-export { generateJsonContent, generateTsSchemaContent } from './schema/index.js';
+export {
+  generateJsonContent,
+  generateTsSchemaContent,
+  generateBaseSchemaContent,
+} from './schema/index.js';
 
 // Path generation
 export {

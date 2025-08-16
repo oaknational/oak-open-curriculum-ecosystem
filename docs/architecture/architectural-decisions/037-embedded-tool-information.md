@@ -1,7 +1,7 @@
 # ADR-037: Minimal Tool Lookup Architecture
 
 ## Status
-Blocked - TypeScript Limitation Discovered
+Superseded by ADR-038 - Compilation-Time Revolution
 
 ## Context
 
@@ -143,14 +143,15 @@ TypeScript cannot narrow correlated union types through dynamic dispatch. When a
 5. ✅ Eliminated `as any` from generation scripts
 6. ❌ Cannot call dynamically dispatched methods without type assertions
 
-### Options Forward
+### Resolution
 
-1. **Accept Type Assertions**: Acknowledge this as a legitimate TypeScript limitation where assertions are unavoidable
-2. **Generate Static Dispatch**: Create explicit switch/if-else chains (requires generating hundreds of cases)
-3. **Redesign Architecture**: Move away from dynamic dispatch pattern entirely
-4. **Common Function Signature**: Find or create a common signature that all methods can accept
+This ADR has been superseded by ADR-038: Compilation-Time Revolution, which solves the TypeScript limitation by:
 
-This represents a fundamental conflict between:
-- **The Rules**: Zero type assertions allowed
-- **The Pattern**: Direct access without intermediate functions
-- **TypeScript's Capabilities**: Cannot handle dynamic dispatch with union signatures
+1. **Embedding all validation logic** at compile time into each tool file
+2. **Using a two-executor pattern** that handles unknown → validated → executed flow
+3. **Eliminating dynamic dispatch** entirely - each tool knows its exact path/method
+4. **Achieving zero type assertions** through compile-time code generation
+
+The compilation-time approach inverts the problem: instead of trying to preserve types through runtime dispatch, we generate self-contained tools with all validation embedded. This represents a paradigm shift from runtime flexibility to compile-time completeness.
+
+See ADR-038 for the successful implementation of this pattern.

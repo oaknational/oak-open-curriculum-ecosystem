@@ -1,4 +1,4 @@
-# ADR-033: Generation-Time Extraction Pattern
+# ADR-031: Generation-Time Extraction Pattern
 
 **Status**: Accepted  
 **Date**: 2025-08-12  
@@ -147,9 +147,14 @@ Don't use `as const` on the generated schema.
 Generate some things, process others at runtime.
 - **Rejected**: Confusing and inconsistent. All or nothing is clearer.
 
+## Extension: Compilation-Time Revolution
+
+ADR-038 takes this pattern to its logical extreme by embedding ALL validation and execution logic at generation time. Where this ADR focused on extracting constants, ADR-038 generates complete, self-contained tool implementations with embedded validation logic, achieving true zero-runtime-dependency execution.
+
 ## Related
 
 - [ADR-029: No Manual API Data Structures](029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
+- [ADR-038: Compilation-Time Revolution](038-compilation-time-revolution.md) - Takes this to the extreme
 - [Programmatic Tool Generation Architecture](../programmatic-tool-generation.md)
 - [Reference Implementation](../../../reference/oak-curriculum-api-client/scripts/api-types/typegen.ts)

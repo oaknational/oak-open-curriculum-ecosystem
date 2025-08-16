@@ -45,10 +45,10 @@ export {
   VALID_PATHS_BY_PARAMETERS,
 } from './types/generated/api-schema/path-parameters';
 
-// Programmatic exports for tool generation and raw schema access (additive)
-export { schema } from './types/generated/api-schema/api-schema';
-export { toolGeneration } from './tool-generation';
-export type { PathOperation } from './tool-generation';
+// Schema and operation exports
+export { schemaBase as schema } from './types/generated/api-schema/api-schema-base';
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters';
+export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters';
 
 // Validation module exports (explicit for tree-shaking)
 export { validateRequest, validateResponse } from './validation/index';
@@ -61,8 +61,8 @@ export type {
 
 // MCP (Model Context Protocol) Tool Support
 // These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
-export { TOOL_GROUPINGS, isToolName } from './types/generated/api-schema/mcp-tools';
-export type { ToolName, ToolGroupings } from './types/generated/api-schema/mcp-tools';
+export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools';
+export type { AllToolNames } from './types/generated/api-schema/mcp-tools';
 
 // Note: Parameter validation now happens via schema.parameters directly
 // in the MCP server implementation. Response validation is handled

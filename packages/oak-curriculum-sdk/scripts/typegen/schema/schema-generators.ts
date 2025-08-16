@@ -4,68 +4,15 @@
  */
 
 import type { OpenAPI3 } from 'openapi-typescript';
-import { generateMcpToolName } from '../mcp-tools/name-generator.js';
 
 /**
  * Generate JSON schema file content
  * @param schema - The OpenAPI schema object
- * @returns Formatted JSON string with MCP tool names and metadata embedded
+ * @returns Formatted JSON string (pure OpenAPI without tool metadata)
  */
 export function generateJsonContent(schema: OpenAPI3): string {
-  // Create a deep copy to avoid mutating the original
-  const schemaWithTools = JSON.parse(JSON.stringify(schema)) as OpenAPI3;
-  
-  if (schemaWithTools.paths) {
-    const methods = ['get', 'post', 'put', 'delete', 'patch'] as const;
-    
-    for (const [path, pathItem] of Object.entries(schemaWithTools.paths)) {
-      if (typeof pathItem !== 'object' || '$ref' in pathItem) continue;
-      
-      for (const method of methods) {
-        const operation = pathItem[method];
-        if (!operation || typeof operation !== 'object') continue;
-        
-        // Check if it's a reference or an operation
-        if ('$ref' in operation) continue;
-        
-        // Add the MCP tool name to the operation
-        const toolName = generateMcpToolName(path, method);
-        // Use Object.assign to add properties without type assertions
-        Object.assign(operation, { operationToolName: toolName });
-        
-        // Extract parameter metadata
-        const pathParams: string[] = [];
-        const queryParams: string[] = [];
-        
-        // Now TypeScript knows operation is OperationObject, not ReferenceObject
-        if (operation.parameters && Array.isArray(operation.parameters)) {
-          for (const param of operation.parameters) {
-            // Skip reference objects
-            if ('$ref' in param) continue;
-            
-            if (param.in === 'path') {
-              pathParams.push(param.name);
-            } else if (param.in === 'query') {
-              queryParams.push(param.name);
-            }
-          }
-        }
-        
-        // Add comprehensive tool metadata
-        Object.assign(operation, {
-          operationToolMetadata: {
-            name: toolName,
-            path: path,
-            method: method.toUpperCase(),
-            pathParams: pathParams,
-            queryParams: queryParams,
-          }
-        });
-      }
-    }
-  }
-  
-  return JSON.stringify(schemaWithTools, undefined, 2);
+  // Return the schema as-is, without any tool metadata
+  return JSON.stringify(schema, undefined, 2);
 }
 
 /**
@@ -83,5 +30,27 @@ export function generateTsSchemaContent(jsonSchema: string): string {
 export const schema = ${jsonSchema} as const;
 
 export type Schema = typeof schema;
+`;
+}
+
+/**
+ * Generate base TypeScript schema file content (without tools)
+ * @param schema - The OpenAPI schema object
+ * @returns TypeScript file content with base schema export
+ */
+export function generateBaseSchemaContent(schema: OpenAPI3): string {
+  // We serialize directly without creating an intermediate copy
+  // since we're just re-serializing the same data
+  const jsonSchema = JSON.stringify(schema, undefined, 2);
+
+  return `/**
+ * The base API schema.
+ *
+ * This is the original OpenAPI schema without any tool enrichments.
+ */
+
+export const schemaBase = ${jsonSchema} as const;
+
+export type SchemaBase = typeof schemaBase;
 `;
 }

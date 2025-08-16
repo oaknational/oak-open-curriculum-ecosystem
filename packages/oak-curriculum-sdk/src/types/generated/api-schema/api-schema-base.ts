@@ -1,10 +1,10 @@
 /**
- * The API schema.
+ * The base API schema.
  *
- * This is a runtime object that can be used to access the API definition programmatically.
+ * This is the original OpenAPI schema without any tool enrichments.
  */
 
-export const schema = {
+export const schemaBase = {
   "openapi": "3.0.3",
   "info": {
     "title": "Oak OpenAPI",
@@ -106,18 +106,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-sequences-units",
-        "operationToolMetadata": {
-          "name": "oak-get-sequences-units",
-          "path": "/sequences/{sequence}/units",
-          "method": "GET",
-          "pathParams": [
-            "sequence"
-          ],
-          "queryParams": [
-            "year"
-          ]
         }
       }
     },
@@ -158,16 +146,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-lessons-transcript",
-        "operationToolMetadata": {
-          "name": "oak-get-lessons-transcript",
-          "path": "/lessons/{lesson}/transcript",
-          "method": "GET",
-          "pathParams": [
-            "lesson"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -208,16 +186,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-search-transcripts",
-        "operationToolMetadata": {
-          "name": "oak-get-search-transcripts",
-          "path": "/search/transcripts",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": [
-            "q"
-          ]
         }
       }
     },
@@ -289,19 +257,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-sequences-assets",
-        "operationToolMetadata": {
-          "name": "oak-get-sequences-assets",
-          "path": "/sequences/{sequence}/assets",
-          "method": "GET",
-          "pathParams": [
-            "sequence"
-          ],
-          "queryParams": [
-            "year",
-            "type"
-          ]
         }
       }
     },
@@ -407,20 +362,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-key-stages-subject-assets",
-        "operationToolMetadata": {
-          "name": "oak-get-key-stages-subject-assets",
-          "path": "/key-stages/{keyStage}/subject/{subject}/assets",
-          "method": "GET",
-          "pathParams": [
-            "keyStage",
-            "subject"
-          ],
-          "queryParams": [
-            "type",
-            "unit"
-          ]
         }
       }
     },
@@ -482,18 +423,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-lessons-assets",
-        "operationToolMetadata": {
-          "name": "oak-get-lessons-assets",
-          "path": "/lessons/{lesson}/assets",
-          "method": "GET",
-          "pathParams": [
-            "lesson"
-          ],
-          "queryParams": [
-            "type"
-          ]
         }
       }
     },
@@ -556,17 +485,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-lessons-assets-by-type",
-        "operationToolMetadata": {
-          "name": "oak-get-lessons-assets-by-type",
-          "path": "/lessons/{lesson}/assets/{type}",
-          "method": "GET",
-          "pathParams": [
-            "lesson",
-            "type"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -594,14 +512,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-subjects",
-        "operationToolMetadata": {
-          "name": "oak-get-subjects",
-          "path": "/subjects",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     },
@@ -642,16 +552,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-subject-detail",
-        "operationToolMetadata": {
-          "name": "oak-get-subject-detail",
-          "path": "/subjects/{subject}",
-          "method": "GET",
-          "pathParams": [
-            "subject"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -693,16 +593,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-subjects-sequences",
-        "operationToolMetadata": {
-          "name": "oak-get-subjects-sequences",
-          "path": "/subjects/{subject}/sequences",
-          "method": "GET",
-          "pathParams": [
-            "subject"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -743,16 +633,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-subjects-key-stages",
-        "operationToolMetadata": {
-          "name": "oak-get-subjects-key-stages",
-          "path": "/subjects/{subject}/key-stages",
-          "method": "GET",
-          "pathParams": [
-            "subject"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -793,16 +673,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-subjects-years",
-        "operationToolMetadata": {
-          "name": "oak-get-subjects-years",
-          "path": "/subjects/{subject}/years",
-          "method": "GET",
-          "pathParams": [
-            "subject"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -830,14 +700,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-key-stages",
-        "operationToolMetadata": {
-          "name": "oak-get-key-stages",
-          "path": "/key-stages",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     },
@@ -945,21 +807,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-key-stages-subject-lessons",
-        "operationToolMetadata": {
-          "name": "oak-get-key-stages-subject-lessons",
-          "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
-          "method": "GET",
-          "pathParams": [
-            "keyStage",
-            "subject"
-          ],
-          "queryParams": [
-            "unit",
-            "offset",
-            "limit"
-          ]
         }
       }
     },
@@ -1037,17 +884,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-key-stages-subject-units",
-        "operationToolMetadata": {
-          "name": "oak-get-key-stages-subject-units",
-          "path": "/key-stages/{keyStage}/subject/{subject}/units",
-          "method": "GET",
-          "pathParams": [
-            "keyStage",
-            "subject"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -1089,16 +925,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-lessons-quiz",
-        "operationToolMetadata": {
-          "name": "oak-get-lessons-quiz",
-          "path": "/lessons/{lesson}/quiz",
-          "method": "GET",
-          "pathParams": [
-            "lesson"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -1170,20 +996,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-sequences-questions",
-        "operationToolMetadata": {
-          "name": "oak-get-sequences-questions",
-          "path": "/sequences/{sequence}/questions",
-          "method": "GET",
-          "pathParams": [
-            "sequence"
-          ],
-          "queryParams": [
-            "year",
-            "offset",
-            "limit"
-          ]
         }
       }
     },
@@ -1281,20 +1093,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-key-stages-subject-questions",
-        "operationToolMetadata": {
-          "name": "oak-get-key-stages-subject-questions",
-          "path": "/key-stages/{keyStage}/subject/{subject}/questions",
-          "method": "GET",
-          "pathParams": [
-            "keyStage",
-            "subject"
-          ],
-          "queryParams": [
-            "offset",
-            "limit"
-          ]
         }
       }
     },
@@ -1335,16 +1133,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-lessons-summary",
-        "operationToolMetadata": {
-          "name": "oak-get-lessons-summary",
-          "path": "/lessons/{lesson}/summary",
-          "method": "GET",
-          "pathParams": [
-            "lesson"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -1438,19 +1226,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-search-lessons",
-        "operationToolMetadata": {
-          "name": "oak-get-search-lessons",
-          "path": "/search/lessons",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": [
-            "q",
-            "keyStage",
-            "subject",
-            "unit"
-          ]
         }
       }
     },
@@ -1491,16 +1266,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-units-summary",
-        "operationToolMetadata": {
-          "name": "oak-get-units-summary",
-          "path": "/units/{unit}/summary",
-          "method": "GET",
-          "pathParams": [
-            "unit"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -1528,14 +1293,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-threads",
-        "operationToolMetadata": {
-          "name": "oak-get-threads",
-          "path": "/threads",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     },
@@ -1574,16 +1331,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-threads-units",
-        "operationToolMetadata": {
-          "name": "oak-get-threads-units",
-          "path": "/threads/{threadSlug}/units",
-          "method": "GET",
-          "pathParams": [
-            "threadSlug"
-          ],
-          "queryParams": []
         }
       }
     },
@@ -1650,14 +1397,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-changelog",
-        "operationToolMetadata": {
-          "name": "oak-get-changelog",
-          "path": "/changelog",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     },
@@ -1712,14 +1451,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-changelog-latest",
-        "operationToolMetadata": {
-          "name": "oak-get-changelog-latest",
-          "path": "/changelog/latest",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     },
@@ -1746,14 +1477,6 @@ export const schema = {
               }
             }
           }
-        },
-        "operationToolName": "oak-get-rate-limit",
-        "operationToolMetadata": {
-          "name": "oak-get-rate-limit",
-          "path": "/rate-limit",
-          "method": "GET",
-          "pathParams": [],
-          "queryParams": []
         }
       }
     }
@@ -6641,4 +6364,4 @@ export const schema = {
   }
 } as const;
 
-export type Schema = typeof schema;
+export type SchemaBase = typeof schemaBase;

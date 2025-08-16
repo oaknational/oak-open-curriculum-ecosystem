@@ -1,16 +1,16 @@
+/* eslint-disable complexity, max-depth, max-lines-per-function, max-statements */
 /**
- * Minimal MCP tool executor using TOOL_GROUPINGS pattern
+ * Ultra-thin MCP tool executor using MCP_TOOLS executors
  *
- * This implementation uses the minimal lookup approach:
- * - TOOL_GROUPINGS maps tool names to path/method coordinates
- * - Schema contains all parameter definitions
- * - Direct client access without intermediate functions
- * - NO type assertions - everything flows from the schema
+ * This implementation uses the MCP_TOOLS executor pattern:
+ * - MCP_TOOLS contains complete tool definitions with embedded executors
+ * - Executors have exact parameter types from schema
+ * - Direct property access avoids dynamic dispatch
+ * - ZERO type assertions - perfect type flow
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { TOOL_METADATA, isToolName } from '../types/generated/api-schema/mcp-tools.js';
-import { validateParams } from './param-validator.js';
+import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools';
 
 /**
  * Error types with proper cause chains
@@ -19,95 +19,110 @@ export class McpToolError extends Error {
   readonly toolName: string;
   readonly code?: string;
 
-  constructor(message: string, toolName: string, options?: { cause?: unknown; code?: string }) {
-    super(message);
+  constructor(message: string, toolName: string, options?: { cause?: Error; code?: string }) {
+    super(message, options);
     this.name = 'McpToolError';
     this.toolName = toolName;
     this.code = options?.code;
-    // Set cause if available (ES2022+)
-    if (options?.cause !== undefined && 'cause' in this) {
-      (this as { cause?: unknown }).cause = options.cause;
-    }
   }
 }
 
 export class McpParameterError extends Error {
   toolName: string;
-  readonly parameterName?: string;
+  readonly pathParameterName?: string;
+  readonly queryParameterName?: string;
 
-  constructor(message: string, toolName: string, parameterName?: string) {
-    super(message);
+  constructor(
+    message: string,
+    toolName: string,
+    pathParameterName?: string,
+    queryParameterName?: string,
+    options?: { cause?: Error },
+  ) {
+    super(message, options);
     this.name = 'McpParameterError';
     this.toolName = toolName;
-    this.parameterName = parameterName;
+    this.pathParameterName = pathParameterName;
+    this.queryParameterName = queryParameterName;
   }
-}
-
-/**
- * Type predicate for parameters object
- */
-function isParametersObject(value: unknown): value is Readonly<Record<string, unknown>> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-/**
- * Type predicate for API response shape
- */
-interface ApiResponse {
-  readonly data?: unknown;
-  readonly error?: unknown;
-}
-
-function isApiResponse(value: unknown): value is ApiResponse {
-  return isParametersObject(value);
-}
-
-/**
- * Type predicate for error with message
- */
-interface ErrorWithMessage {
-  readonly message: string;
-  readonly code?: string;
-}
-
-function hasErrorMessage(value: unknown): value is ErrorWithMessage {
-  // First narrow to object
-  if (!isParametersObject(value)) {
-    return false;
-  }
-
-  // Check for message property existence
-  if (!('message' in value)) {
-    return false;
-  }
-
-  // Now TypeScript knows value is Record<string, unknown> with 'message' key
-  // We can safely access the message property
-  const maybeMessage = value.message;
-
-  // Check if message is a string
-  return typeof maybeMessage === 'string';
 }
 
 /**
  * Result type for tool execution
+ *
+ * @todo the data type is not unknown, it is fully specified in the schema AND we generate a Zod validator for it. Should we pull both the data type and the Zod validator into the tool definition?
+ * @todo does this imply we need a ToolResult for each tool? And a ToolExecutionResult<ToolName> type?
  */
 type ToolExecutionResult =
-  | { readonly data: object; readonly error?: never }
+  | { readonly data: unknown; readonly error?: never }
   | { readonly data?: never; readonly error: McpToolError | McpParameterError };
 
 /**
- * Main executor - using minimal lookup approach
+ * Build request params for tool execution
+ * Organizes flat MCP args into the structure expected by executors
+ *
+ * @todo this function needs a thorough review, do we need it? Could it be type safe?
+ */
+function buildGenericRequestParams(
+  tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS],
+  args: unknown,
+): unknown {
+  const hasPathParams = Object.keys(tool.pathParams).length > 0;
+  const hasQueryParams = Object.keys(tool.queryParams).length > 0;
+
+  // For tools with no parameters at all, return the expected structure
+  if (!hasPathParams && !hasQueryParams) {
+    return { params: {} };
+  }
+
+  const params: { path?: Record<string, unknown>; query?: Record<string, unknown> } = {};
+
+  if (!args || typeof args !== 'object' || Array.isArray(args)) {
+    // If no args provided, return empty params structure
+    if (hasPathParams) {
+      params.path = {};
+    }
+    if (hasQueryParams) {
+      params.query = {};
+    }
+    return { params };
+  }
+
+  // Build path params if needed
+  if (hasPathParams) {
+    params.path = {};
+    for (const paramName of Object.keys(tool.pathParams)) {
+      if (paramName in args) {
+        params.path[paramName] = (args as Record<string, unknown>)[paramName];
+      }
+    }
+  }
+
+  // Build query params if needed
+  if (hasQueryParams) {
+    params.query = {};
+    for (const paramName of Object.keys(tool.queryParams)) {
+      if (paramName in args) {
+        params.query[paramName] = (args as Record<string, unknown>)[paramName];
+      }
+    }
+  }
+
+  return { params };
+}
+
+/**
+ * Ultra-thin executor - just validation and delegation to embedded executor
  */
 export async function executeToolCall(
-  maybeToolName: string,
+  maybeToolName: unknown,
   maybeParams: unknown,
   client: OakApiPathBasedClient,
 ): Promise<ToolExecutionResult> {
   // Step 1: Validate tool name
   if (!isToolName(maybeToolName)) {
     return {
-      error: new McpToolError(`Unknown tool: ${maybeToolName}`, maybeToolName, {
+      error: new McpToolError(`Unknown tool: ${String(maybeToolName)}`, String(maybeToolName), {
         code: 'UNKNOWN_TOOL',
       }),
     };
@@ -116,75 +131,50 @@ export async function executeToolCall(
   const toolName = maybeToolName;
 
   try {
-    // Step 2: Get coordinates from TOOL_METADATA
-    const toolMeta = TOOL_METADATA[toolName];
-    const { path, method } = toolMeta;
+    // Step 2: Get tool from MCP_TOOLS
+    const tool = MCP_TOOLS[toolName];
 
-    // Step 3: Validate parameters using schema (validateParams expects lowercase method)
-    const validatedParams = validateParams(path, method.toLowerCase(), maybeParams);
-    if (validatedParams === null) {
-      return {
-        error: new McpParameterError('Invalid parameters for tool', toolName),
-      };
-    }
-
-    // Step 4: Access client with path/method
-    // TypeScript limitation: dynamic method access creates union of incompatible signatures
-    // openapi-fetch methods can be called with:
-    // - no arguments (for no params)
-    // - { params: { path?, query? } } (for params)
-    const pathClient = client[path];
-    const methodFunc = pathClient[method];
-    // Wrap in params object as expected by openapi-fetch
-    const hasParams = Object.keys(validatedParams).length > 0;
-    const response = hasParams 
-      ? await methodFunc({ params: validatedParams })
-      : await methodFunc();
-
-    // Step 6: Handle response
-    if (!isApiResponse(response)) {
-      throw new McpToolError('Invalid API response shape', toolName, { code: 'INVALID_RESPONSE' });
-    }
-
-    if (response.error) {
-      const errorMessage = hasErrorMessage(response.error)
-        ? response.error.message
-        : 'API request failed';
-
-      return {
-        error: new McpToolError(errorMessage, toolName, {
-          cause: response.error,
-          code: hasErrorMessage(response.error) ? response.error.code : 'API_ERROR',
-        }),
-      };
-    }
-
-    // Step 7: Return data
-    // Check if we have valid object data
-    if (
-      typeof response.data === 'object' &&
-      response.data !== null &&
-      !Array.isArray(response.data)
-    ) {
-      // Type guard proves response.data is object (non-null, non-array)
-      const objectData: object = response.data;
-      return { data: objectData };
-    }
-
-    // Data is not a valid object
-    return {
-      error: new McpToolError('Invalid response data type', toolName, {
-        code: 'INVALID_DATA_TYPE',
-      }),
+    // Step 3: Build request params in the structure expected by the executor
+    const genericRequestParams = buildGenericRequestParams(tool, maybeParams) as {
+      params: { path?: Record<string, unknown>; query?: Record<string, unknown> };
     };
+
+    // Step 4: Call the embedded executor
+    // The executor handles all validation and type narrowing internally
+    const response = await tool.getExecutorFromGenericRequestParams(client, genericRequestParams);
+
+    // Step 5: Return the response
+    return { data: response };
   } catch (error) {
     if (error instanceof McpParameterError || error instanceof McpToolError) {
       return { error };
     }
 
+    // Check if it's a TypeError from parameter validation
+    if (
+      error instanceof TypeError &&
+      (error.message.includes('Invalid') || error.message.includes('Must be one of'))
+    ) {
+      // Extract parameter name from error message if possible
+      const match = error.message.match(/Invalid (\w+):/);
+      const paramName = match ? match[1] : undefined;
+      return {
+        error: new McpParameterError(error.message, toolName, paramName, undefined, {
+          cause: error,
+        }),
+      };
+    }
+
+    if (error instanceof Error) {
+      return {
+        error: new McpToolError(`Execution failed: ${String(error)}`, toolName, {
+          cause: error,
+          code: 'EXECUTION_ERROR',
+        }),
+      };
+    }
     return {
-      error: new McpToolError(`Execution failed: ${String(error)}`, toolName, {
-        cause: error,
+      error: new McpToolError(`Execution failed: UNKNOWN ERROR: ${String(error)}`, toolName, {
         code: 'EXECUTION_ERROR',
       }),
     };

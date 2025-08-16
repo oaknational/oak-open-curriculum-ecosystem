@@ -2,4 +2,8 @@
  * Schema generation module public API
  */
 
-export { generateJsonContent, generateTsSchemaContent } from './schema-generators.js';
+export {
+  generateJsonContent,
+  generateTsSchemaContent,
+  generateBaseSchemaContent,
+} from './schema-generators.js';
