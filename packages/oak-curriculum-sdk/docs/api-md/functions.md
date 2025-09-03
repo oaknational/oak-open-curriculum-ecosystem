@@ -3,7 +3,7 @@
 ### createOakClient
 
 ```ts
-function createOakClient(apiKey: string): OakApiClient;
+function createOakClient(apiKey: string): OakApiClient
 ```
 
 Create an Oak API client using the OpenAPI-Fetch style interface.
@@ -14,7 +14,7 @@ Always pass the API key explicitly.
 ### createOakPathBasedClient
 
 ```ts
-function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient;
+function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient
 ```
 
 Create an Oak API client using the path-indexed interface.
@@ -105,11 +105,7 @@ Typed values (Object.values)
 ### validateRequest
 
 ```ts
-function validateRequest(
-  path: string,
-  method: HttpMethod,
-  args: unknown,
-): ValidationResult<unknown>;
+function validateRequest(path: string, method: HttpMethod, args: unknown): ValidationResult<unknown>
 ```
 
 Validates request parameters against the schema for the given path and method
@@ -118,12 +114,7 @@ Uses generated schemas from the endpoints file
 ### validateResponse
 
 ```ts
-function validateResponse(
-  path: string,
-  method: HttpMethod,
-  statusCode: number,
-  response: unknown,
-): ValidationResult<Record<string, unknown>>;
+function validateResponse(path: string, method: HttpMethod, statusCode: number, response: unknown): ValidationResult<Record<string, unknown>>
 ```
 
 Validates response data for an API operation

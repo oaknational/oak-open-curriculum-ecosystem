@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-03T15:13:51.354Z
+Generated: 2025-09-03T16:43:21.235Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -46,46 +46,41 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 }
 ```
 
-## Conventions
 
+## Conventions
 - Authorization: pass API key to `createOakClient(apiKey)`; the SDK never reads env vars.
 - Base URL: defaults to the production API; override via `OAK_API_URL` if needed.
 - Responses: every call returns `{ data, error, response }` from openapi-fetch.
 - Rate limits: see `/rate-limit` endpoint; headers expose remaining/limit.
 
 ## Endpoint Catalog
-
 ### GET /changelog/latest
-
 - operationId: changelog-latest
 - description: Get the latest version and latest change note for the API
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /changelog
-
 - operationId: changelog-changelog
 - description: History of significant changes to the API with associated dates and versions
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /key-stages/{keyStage}/subject/{subject}/assets
-
 - operationId: getAssets-getSubjectAssets
 - summary: Assets
 - description: This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query type (string enum:9)
 - query unit (string)
 
 ### GET /key-stages/{keyStage}/subject/{subject}/lessons
-
 - operationId: getKeyStageSubjectLessons-getKeyStageSubjectLessons
 - summary: Lessons
 - description: This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query unit (string)
@@ -93,81 +88,71 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - query limit (number)
 
 ### GET /key-stages/{keyStage}/subject/{subject}/questions
-
 - operationId: getQuestions-getQuestionsForKeyStageAndSubject
 - summary: Quiz questions by subject and key stage
 - description: This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query offset (number)
 - query limit (number)
 
 ### GET /key-stages/{keyStage}/subject/{subject}/units
-
 - operationId: getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits
 - summary: Units
 - description: This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 
 ### GET /key-stages
-
 - operationId: getKeyStages-getKeyStages
 - summary: Key stages
 - description: This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /lessons/{lesson}/assets/{type}
-
 - operationId: getAssets-getLessonAsset
 - summary: Lesson asset by type
-- description: This endpoint will stream the downloadable asset for the given lesson and type.
-  There is no response returned for this endpoint as it returns a content attachment.
-  Parameters:
+- description: This endpoint will stream the downloadable asset for the given lesson and type. 
+There is no response returned for this endpoint as it returns a content attachment.
+Parameters:
 - path lesson (string) — required
 - path type (string enum:9) — required
 
 ### GET /lessons/{lesson}/assets
-
 - operationId: getAssets-getLessonAssets
 - summary: Downloadable lesson assets
-- description: This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
-  This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
-
+- description: This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. 
+        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+          
 Parameters:
-
 - path lesson (string) — required
 - query type (string enum:9)
 
 ### GET /lessons/{lesson}/quiz
-
 - operationId: getQuestions-getQuestionsForLessons
 - summary: Quiz questions by lesson
 - description: The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /lessons/{lesson}/summary
-
 - operationId: getLessons-getLesson
 - summary: Lesson summary
 - description: This endpoint returns a summary for a given lesson
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /lessons/{lesson}/transcript
-
 - operationId: getLessonTranscript-getLessonTranscript
 - summary: Lesson transcript
 - description: This endpoint returns the video transcript and video captions file for a given lesson.
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /rate-limit
-
 - operationId: getRateLimit-getRateLimit
 - description: Check your current rate limit status (note that your rate limit is also included in the headers of every response).
 
@@ -176,123 +161,109 @@ Parameters:
 _No parameters_
 
 ### GET /search/lessons
-
 - operationId: getLessons-searchByTextSimilarity
 - summary: Lesson search using lesson title
 - description: Search for a term and find the 20 most similar lessons with titles that contain similar text.
-  Parameters:
+Parameters:
 - query q (string) — required
 - query keyStage (string enum:4)
 - query subject (string enum:17)
 - query unit (string)
 
 ### GET /search/transcripts
-
 - operationId: searchTranscripts-searchTranscripts
 - summary: Lesson search using lesson video transcripts
 - description: Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
-  Parameters:
+Parameters:
 - query q (string) — required
 
 ### GET /sequences/{sequence}/assets
-
 - operationId: getAssets-getSequenceAssets
 - summary: Assets within a sequence
 - description: This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
-  This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
-  Parameters:
+This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+Parameters:
 - path sequence (string) — required
 - query year (number)
 - query type (string enum:9)
 
 ### GET /sequences/{sequence}/questions
-
 - operationId: getQuestions-getQuestionsForSequence
 - summary: Questions within a sequence
 - description: This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
-  Parameters:
+Parameters:
 - path sequence (string) — required
 - query year (number)
 - query offset (number)
 - query limit (number)
 
 ### GET /sequences/{sequence}/units
-
 - operationId: getSequences-getSequenceUnits
 - summary: Units within a sequence
 - description: This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
-  Parameters:
+Parameters:
 - path sequence (string) — required
 - query year (string enum:12)
 
 ### GET /subjects/{subject}/key-stages
-
 - operationId: getSubjects-getSubjectKeyStages
 - summary: Key stages within a subject
 - description: This endpoint returns a list of key stages that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}/sequences
-
 - operationId: getSubjects-getSubjectSequence
 - summary: Sequencing information for a given subject
 - description: This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}/years
-
 - operationId: getSubjects-getSubjectYears
 - summary: Year groups for a given subject
 - description: This endpoint returns an array of years that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}
-
 - operationId: getSubjects-getSubject
 - summary: Subject
 - description: This endpoint returns the sequences, key stages and years that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects
-
 - operationId: getSubjects-getAllSubjects
 - summary: Subjects
 - description: This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /threads/{threadSlug}/units
-
 - operationId: getThreads-getThreadUnits
 - summary: Units belonging to a given thread
 - description: This endpoint returns all of the units that belong to a given thread.
-  Parameters:
+Parameters:
 - path threadSlug (string) — required
 
 ### GET /threads
-
 - operationId: getThreads-getAllThreads
 - summary: Threads
 - description: This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /units/{unit}/summary
-
 - operationId: getUnits-getUnit
 - summary: Unit summary
 - description: This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
-  Parameters:
+Parameters:
 - path unit (string) — required
 
+
 ## MCP Tool Catalog
-
 ### oak-get-changelog
-
 - path: /changelog
 - method: GET
 - operationId: changelog-changelog
@@ -300,7 +271,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-changelog-latest
-
 - path: /changelog/latest
 - method: GET
 - operationId: changelog-latest
@@ -308,7 +278,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-key-stages
-
 - path: /key-stages
 - method: GET
 - operationId: getKeyStages-getKeyStages
@@ -316,7 +285,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-key-stages-subject-assets
-
 - path: /key-stages/{keyStage}/subject/{subject}/assets
 - method: GET
 - operationId: getAssets-getSubjectAssets
@@ -324,7 +292,6 @@ _No parameters_
 - query params: type (optional enum:9), unit (optional)
 
 ### oak-get-key-stages-subject-lessons
-
 - path: /key-stages/{keyStage}/subject/{subject}/lessons
 - method: GET
 - operationId: getKeyStageSubjectLessons-getKeyStageSubjectLessons
@@ -332,7 +299,6 @@ _No parameters_
 - query params: unit (optional), offset (optional), limit (optional)
 
 ### oak-get-key-stages-subject-questions
-
 - path: /key-stages/{keyStage}/subject/{subject}/questions
 - method: GET
 - operationId: getQuestions-getQuestionsForKeyStageAndSubject
@@ -340,7 +306,6 @@ _No parameters_
 - query params: offset (optional), limit (optional)
 
 ### oak-get-key-stages-subject-units
-
 - path: /key-stages/{keyStage}/subject/{subject}/units
 - method: GET
 - operationId: getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits
@@ -348,7 +313,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-lessons-assets
-
 - path: /lessons/{lesson}/assets
 - method: GET
 - operationId: getAssets-getLessonAssets
@@ -356,7 +320,6 @@ _No parameters_
 - query params: type (optional enum:9)
 
 ### oak-get-lessons-assets-by-type
-
 - path: /lessons/{lesson}/assets/{type}
 - method: GET
 - operationId: getAssets-getLessonAsset
@@ -364,7 +327,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-lessons-quiz
-
 - path: /lessons/{lesson}/quiz
 - method: GET
 - operationId: getQuestions-getQuestionsForLessons
@@ -372,7 +334,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-lessons-summary
-
 - path: /lessons/{lesson}/summary
 - method: GET
 - operationId: getLessons-getLesson
@@ -380,7 +341,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-lessons-transcript
-
 - path: /lessons/{lesson}/transcript
 - method: GET
 - operationId: getLessonTranscript-getLessonTranscript
@@ -388,7 +348,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-rate-limit
-
 - path: /rate-limit
 - method: GET
 - operationId: getRateLimit-getRateLimit
@@ -396,7 +355,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-search-lessons
-
 - path: /search/lessons
 - method: GET
 - operationId: getLessons-searchByTextSimilarity
@@ -404,7 +362,6 @@ _No parameters_
 - query params: q (required), keyStage (optional enum:4), subject (optional enum:17), unit (optional)
 
 ### oak-get-search-transcripts
-
 - path: /search/transcripts
 - method: GET
 - operationId: searchTranscripts-searchTranscripts
@@ -412,7 +369,6 @@ _No parameters_
 - query params: q (required)
 
 ### oak-get-sequences-assets
-
 - path: /sequences/{sequence}/assets
 - method: GET
 - operationId: getAssets-getSequenceAssets
@@ -420,7 +376,6 @@ _No parameters_
 - query params: year (optional), type (optional enum:9)
 
 ### oak-get-sequences-questions
-
 - path: /sequences/{sequence}/questions
 - method: GET
 - operationId: getQuestions-getQuestionsForSequence
@@ -428,7 +383,6 @@ _No parameters_
 - query params: year (optional), offset (optional), limit (optional)
 
 ### oak-get-sequences-units
-
 - path: /sequences/{sequence}/units
 - method: GET
 - operationId: getSequences-getSequenceUnits
@@ -436,7 +390,6 @@ _No parameters_
 - query params: year (optional enum:12)
 
 ### oak-get-subject-detail
-
 - path: /subjects/{subject}
 - method: GET
 - operationId: getSubjects-getSubject
@@ -444,7 +397,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-subjects
-
 - path: /subjects
 - method: GET
 - operationId: getSubjects-getAllSubjects
@@ -452,7 +404,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-subjects-key-stages
-
 - path: /subjects/{subject}/key-stages
 - method: GET
 - operationId: getSubjects-getSubjectKeyStages
@@ -460,7 +411,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-subjects-sequences
-
 - path: /subjects/{subject}/sequences
 - method: GET
 - operationId: getSubjects-getSubjectSequence
@@ -468,7 +418,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-subjects-years
-
 - path: /subjects/{subject}/years
 - method: GET
 - operationId: getSubjects-getSubjectYears
@@ -476,7 +425,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-threads
-
 - path: /threads
 - method: GET
 - operationId: getThreads-getAllThreads
@@ -484,7 +432,6 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-threads-units
-
 - path: /threads/{threadSlug}/units
 - method: GET
 - operationId: getThreads-getThreadUnits
@@ -492,12 +439,12 @@ _No parameters_
 - query params: _None_
 
 ### oak-get-units-summary
-
 - path: /units/{unit}/summary
 - method: GET
 - operationId: getUnits-getUnit
 - path params: unit (required)
 - query params: _None_
+
 
 ## References
 
@@ -526,20 +473,20 @@ Validation issue details
 ### HttpMethod
 
 ```ts
-type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+type HttpMethod = "get" | "post" | "put" | "delete" | "patch"
 ```
 
-Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
 
 HTTP methods supported by validation
 
 ### OakApiClient
 
 ```ts
-type OakApiClient = OpenApiClient<paths>;
+type OakApiClient = OpenApiClient<paths>
 ```
 
-Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -548,10 +495,10 @@ Use this client for maximum performance.
 ### OakApiPathBasedClient
 
 ```ts
-type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
+type OakApiPathBasedClient = OpenApiPathBasedClient<paths>
 ```
 
-Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -566,7 +513,7 @@ the performance cost.
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [packages/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
 
 Result type for validation operations
 Discriminated union for type-safe error handling
@@ -582,7 +529,7 @@ Discriminated union for type-safe error handling
 ### createOakClient
 
 ```ts
-function createOakClient(apiKey: string): OakApiClient;
+function createOakClient(apiKey: string): OakApiClient
 ```
 
 Create an Oak API client using the OpenAPI-Fetch style interface.
@@ -593,7 +540,7 @@ Always pass the API key explicitly.
 ### createOakPathBasedClient
 
 ```ts
-function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient;
+function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient
 ```
 
 Create an Oak API client using the path-indexed interface.
@@ -612,11 +559,7 @@ Ultra-thin executor - just validation and delegation to embedded executor
 ### validateRequest
 
 ```ts
-function validateRequest(
-  path: string,
-  method: HttpMethod,
-  args: unknown,
-): ValidationResult<unknown>;
+function validateRequest(path: string, method: HttpMethod, args: unknown): ValidationResult<unknown>
 ```
 
 Validates request parameters against the schema for the given path and method
@@ -625,12 +568,7 @@ Uses generated schemas from the endpoints file
 ### validateResponse
 
 ```ts
-function validateResponse(
-  path: string,
-  method: HttpMethod,
-  statusCode: number,
-  response: unknown,
-): ValidationResult<Record<string, unknown>>;
+function validateResponse(path: string, method: HttpMethod, statusCode: number, response: unknown): ValidationResult<Record<string, unknown>>
 ```
 
 Validates response data for an API operation
