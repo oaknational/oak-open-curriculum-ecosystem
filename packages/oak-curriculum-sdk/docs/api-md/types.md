@@ -3,7 +3,7 @@
 ### HttpMethod
 
 ```ts
-type HttpMethod = "get" | "post" | "put" | "delete" | "patch"
+type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
 Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
@@ -13,7 +13,7 @@ HTTP methods supported by validation
 ### OakApiClient
 
 ```ts
-type OakApiClient = OpenApiClient<paths>
+type OakApiClient = OpenApiClient<paths>;
 ```
 
 Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
@@ -25,7 +25,7 @@ Use this client for maximum performance.
 ### OakApiPathBasedClient
 
 ```ts
-type OakApiPathBasedClient = OpenApiPathBasedClient<paths>
+type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
 Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/cdbb4faece422da77d11aa67291c961366d225d5/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
