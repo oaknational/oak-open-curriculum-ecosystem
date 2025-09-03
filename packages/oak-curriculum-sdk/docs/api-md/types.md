@@ -6,7 +6,7 @@
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
-Source: [validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/3e902bf53424c4a2a132b6d3a7906bfaca9e8c33/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
 
 HTTP methods supported by validation
 
@@ -16,7 +16,7 @@ HTTP methods supported by validation
 type OakApiClient = OpenApiClient<paths>;
 ```
 
-Source: [client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/3e902bf53424c4a2a132b6d3a7906bfaca9e8c33/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -28,7 +28,7 @@ Use this client for maximum performance.
 type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
-Source: [client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/3e902bf53424c4a2a132b6d3a7906bfaca9e8c33/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -43,7 +43,7 @@ the performance cost.
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/3e902bf53424c4a2a132b6d3a7906bfaca9e8c33/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/5c74925867cd05b4f30b2d5a8afe0f46e7bbb743/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
 
 Result type for validation operations
 Discriminated union for type-safe error handling

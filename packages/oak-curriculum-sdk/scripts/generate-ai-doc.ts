@@ -1,3 +1,5 @@
+/* eslint-disable max-lines -- disabling because this is a long, doc generating script, not prod code  */
+
 /*
  * AI Doc Generator for Oak Curriculum SDK
  *
@@ -13,10 +15,31 @@ import { fileURLToPath } from 'node:url';
 import { parseTDProject, collectExports } from './lib/ai-doc-types';
 import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
+// Import generated artifacts directly for endpoint/tool catalogs
+import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
+import { MCP_TOOLS } from '../src/types/generated/api-schema/mcp-tools/index.js';
+// no helper imports required here; this script uses built-in reflection safely
 import { ZodError, type ZodIssue } from 'zod';
 
 function formatZodIssues(issues: ZodIssue[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
+}
+
+// Safe access helpers
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null;
+}
+function getBool(o: unknown, k: string): boolean {
+  if (!isRecord(o)) return false;
+  const d = Object.getOwnPropertyDescriptor(o, k);
+  if (d && typeof d.value === 'boolean') return d.value;
+  return false;
+}
+function getEnumLen(o: unknown, k: string): number | undefined {
+  if (!isRecord(o)) return undefined;
+  const d = Object.getOwnPropertyDescriptor(o, k);
+  if (d && Array.isArray(d.value)) return d.value.length;
+  return undefined;
 }
 
 function makeQuickstartSection(): string {
@@ -96,14 +119,23 @@ async function readTypedocProject(typedocJsonPath: string): Promise<TDProject> {
 
 function renderSections(grouped: Map<string, TDReflection[]>): string[] {
   const sections: string[] = [];
+  const plural = (k: string): string => {
+    const map: Record<string, string> = {
+      Class: 'Classes',
+      'Type alias': 'Type Aliases',
+      Variable: 'Variables',
+      Function: 'Functions',
+      Interface: 'Interfaces',
+      Enum: 'Enums',
+      Namespace: 'Namespaces',
+      Reference: 'References',
+    };
+    return map[k] ?? (k.endsWith('s') ? k : `${k}s`);
+  };
   for (const [kind, items] of grouped) {
-    if (items.length === 0) {
-      continue;
-    }
-    sections.push(`## ${kind}s`);
-    for (const r of items) {
-      sections.push(renderReflection(r));
-    }
+    if (items.length === 0) continue;
+    sections.push(`## ${plural(kind)}`);
+    for (const r of items) sections.push(renderReflection(r));
   }
   return sections;
 }
@@ -117,13 +149,185 @@ function buildHeader(): string {
   );
 }
 
+function buildConventionsSection(): string {
+  return [
+    '## Conventions',
+    '- Authorization: pass API key to `createOakClient(apiKey)`; the SDK never reads env vars.',
+    '- Base URL: defaults to the production API; override via `OAK_API_URL` if needed.',
+    '- Responses: every call returns `{ data, error, response }` from openapi-fetch.',
+    '- Rate limits: see `/rate-limit` endpoint; headers expose remaining/limit.',
+  ].join('\n');
+}
+
+interface ParamSchemaMeta {
+  type?: string;
+  enum?: readonly unknown[];
+}
+interface ParamMeta {
+  in?: string;
+  name?: string;
+  required?: boolean;
+  schema?: ParamSchemaMeta;
+}
+/* eslint-disable-next-line complexity */
+function isParam(x: unknown): x is ParamMeta {
+  if (!isRecord(x)) return false;
+  const nameDesc = Object.getOwnPropertyDescriptor(x, 'name');
+  const inDesc = Object.getOwnPropertyDescriptor(x, 'in');
+  const reqDesc = Object.getOwnPropertyDescriptor(x, 'required');
+  const schemaDesc = Object.getOwnPropertyDescriptor(x, 'schema');
+  const nameOk = !nameDesc || typeof nameDesc.value === 'string';
+  const inOk = !inDesc || typeof inDesc.value === 'string';
+  const reqOk = !reqDesc || typeof reqDesc.value === 'boolean';
+  let schemaOk = true;
+  if (schemaDesc && isRecord(schemaDesc.value)) {
+    const tDesc = Object.getOwnPropertyDescriptor(schemaDesc.value, 'type');
+    const eDesc = Object.getOwnPropertyDescriptor(schemaDesc.value, 'enum');
+    schemaOk =
+      (!tDesc || typeof tDesc.value === 'string') && (!eDesc || Array.isArray(eDesc.value));
+  }
+  return nameOk && inOk && reqOk && schemaOk;
+}
+/* eslint-disable-next-line complexity */
+function renderParamSummary(params: unknown): string {
+  if (!Array.isArray(params) || params.length === 0) return '_No parameters_';
+  const items: string[] = [];
+  for (const p of params) {
+    if (!isParam(p)) continue;
+    const loc = typeof p.in === 'string' ? p.in : 'query';
+    const name = typeof p.name === 'string' ? p.name : '?';
+    const req = Boolean(p.required);
+    let typeName = 'string';
+    let enumText = '';
+    if (p.schema && isRecord(p.schema)) {
+      if (typeof p.schema.type === 'string') typeName = p.schema.type;
+      if (Array.isArray(p.schema.enum)) enumText = ` enum:${String(p.schema.enum.length)}`;
+    }
+    items.push(`- ${loc} ${name} (${typeName}${enumText})${req ? ' — required' : ''}`);
+  }
+  return items.join('\n');
+}
+
+/* eslint-disable-next-line complexity */
+function renderEndpointCatalog(ops: unknown): string {
+  const lines: string[] = [];
+  lines.push('## Endpoint Catalog');
+  const list: unknown[] = Array.isArray(ops) ? ops : [];
+  const sorted = list
+    .map((o) => (isRecord(o) ? o : undefined))
+    .filter((o): o is Record<string, unknown> => Boolean(o))
+    .sort((a, b) => {
+      const aPath = typeof a.path === 'string' ? a.path : '';
+      const aMethod = typeof a.method === 'string' ? a.method : '';
+      const bPath = typeof b.path === 'string' ? b.path : '';
+      const bMethod = typeof b.method === 'string' ? b.method : '';
+      return (aPath + aMethod).localeCompare(bPath + bMethod);
+    });
+  for (const op of sorted) {
+    const method = typeof op.method === 'string' ? op.method : '';
+    const path = typeof op.path === 'string' ? op.path : '';
+    lines.push(`### ${method.toUpperCase()} ${path}`);
+    const opIdDesc = Object.getOwnPropertyDescriptor(op, 'operationId');
+    if (typeof opIdDesc?.value === 'string') lines.push(`- operationId: ${opIdDesc.value}`);
+    const sumDesc = Object.getOwnPropertyDescriptor(op, 'summary');
+    if (typeof sumDesc?.value === 'string') lines.push(`- summary: ${sumDesc.value}`);
+    const descDesc = Object.getOwnPropertyDescriptor(op, 'description');
+    if (typeof descDesc?.value === 'string') lines.push(`- description: ${descDesc.value}`);
+    lines.push('Parameters:');
+    const paramsDesc = Object.getOwnPropertyDescriptor(op, 'parameters');
+    lines.push(renderParamSummary(paramsDesc?.value));
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+/* eslint-disable-next-line complexity, max-statements */
+function renderToolCatalog(): string {
+  const lines: string[] = [];
+  lines.push('## MCP Tool Catalog');
+  const names: string[] = [];
+  for (const k in MCP_TOOLS) {
+    if (Object.prototype.hasOwnProperty.call(MCP_TOOLS, k)) names.push(k);
+  }
+  names.sort((a, b) => a.localeCompare(b));
+  for (const name of names) {
+    const toolDesc = Object.getOwnPropertyDescriptor(MCP_TOOLS, name);
+    const base = toolDesc && isRecord(toolDesc.value) ? toolDesc.value : undefined;
+    const opIdDesc = base ? Object.getOwnPropertyDescriptor(base, 'operationId') : undefined;
+    const pathDesc = base ? Object.getOwnPropertyDescriptor(base, 'path') : undefined;
+    const methodDesc = base ? Object.getOwnPropertyDescriptor(base, 'method') : undefined;
+    const opId = typeof opIdDesc?.value === 'string' ? opIdDesc.value : '';
+    const path = typeof pathDesc?.value === 'string' ? pathDesc.value : '';
+    const method = typeof methodDesc?.value === 'string' ? methodDesc.value : '';
+    lines.push(`### ${name}`);
+    lines.push(`- path: ${path}`);
+    lines.push(`- method: ${method}`);
+    if (opId) lines.push(`- operationId: ${opId}`);
+    /* eslint-disable-next-line complexity */
+    function renderParamObject(obj: unknown): string {
+      if (!isRecord(obj)) return '_None_';
+      const desc = Object.getOwnPropertyDescriptors(obj);
+      const out: string[] = [];
+      for (const k in desc) {
+        if (!Object.prototype.hasOwnProperty.call(desc, k)) continue;
+        const metaDesc = Object.getOwnPropertyDescriptor(obj, k);
+        const required = getBool(metaDesc?.value, 'required');
+        const enumCount = getEnumLen(metaDesc?.value, 'allowedValues');
+        const allowed = typeof enumCount === 'number' ? ` enum:${String(enumCount)}` : '';
+        out.push(`${k} (${required ? 'required' : 'optional'}${allowed})`);
+      }
+      return out.length === 0 ? '_None_' : out.join(', ');
+    }
+    lines.push(
+      `- path params: ${renderParamObject(
+        base ? Object.getOwnPropertyDescriptor(base, 'pathParams')?.value : undefined,
+      )}`,
+    );
+    lines.push(
+      `- query params: ${renderParamObject(
+        base ? Object.getOwnPropertyDescriptor(base, 'queryParams')?.value : undefined,
+      )}`,
+    );
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
 async function main(): Promise<void> {
   const { docsDir, typedocJsonPath, outPath } = resolvePaths();
   const project = await readTypedocProject(typedocJsonPath);
-  const exported = collectExports(project);
+  // Filter out internal helper functions that aren’t useful for AI agents
+  const exported = collectExports(project).filter((r) => {
+    const name = r.name;
+    const ignoreNames = new Set([
+      'typeSafeKeys',
+      'typeSafeValues',
+      'typeSafeEntries',
+      'typeSafeFromEntries',
+      'typeSafeGet',
+      'typeSafeSet',
+      'typeSafeHas',
+      'typeSafeHasOwn',
+      'typeSafeOwnKeys',
+    ]);
+    if (ignoreNames.has(name)) return false;
+    const src = r.sources?.[0]?.fileName ?? '';
+    if (src.includes('types/helpers.ts')) return false;
+    return true;
+  });
   const grouped = groupByKind(exported);
   const quickstart = makeQuickstartSection();
-  const content = [buildHeader(), quickstart, ...renderSections(grouped)].join('\n\n');
+  const conventions = buildConventionsSection();
+  const endpointCatalog = renderEndpointCatalog(PATH_OPERATIONS);
+  const toolCatalog = renderToolCatalog();
+  const content = [
+    buildHeader(),
+    quickstart,
+    conventions,
+    endpointCatalog,
+    toolCatalog,
+    ...renderSections(grouped),
+  ].join('\n\n');
   await ensureDir(docsDir);
   await fs.writeFile(outPath, content, 'utf8');
 }

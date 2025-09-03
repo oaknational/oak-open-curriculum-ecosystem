@@ -22,6 +22,86 @@ Create an Oak API client using the path-indexed interface.
 Environment-agnostic: The SDK core never reads environment variables.
 Always pass the API key explicitly.
 
+### executeToolCall
+
+```ts
+function executeToolCall(maybeToolName: unknown, maybeParams: unknown, client: PathBasedClient<paths, <templateLiteral>(…)>): Promise<ToolExecutionResult>
+```
+
+Ultra-thin executor - just validation and delegation to embedded executor
+
+### typeSafeEntries
+
+```ts
+function typeSafeEntries(obj: T): <tuple>(…)[]
+```
+
+Typed entries (Object.entries)
+
+### typeSafeFromEntries
+
+```ts
+function typeSafeFromEntries(iter: Iterable<<typeOperator>(…), any, any>): Record<K, V>
+```
+
+Typed fromEntries (Object.fromEntries)
+
+### typeSafeGet
+
+```ts
+function typeSafeGet(obj: T, key: K): <indexedAccess>(…)
+```
+
+Typed value access (instead of Reflect.get)
+
+### typeSafeHas
+
+```ts
+function typeSafeHas(obj: T, key: PropertyKey): <predicate>(…)
+```
+
+Membership check (instead of Reflect.has)
+
+### typeSafeHasOwn
+
+```ts
+function typeSafeHasOwn(obj: T, key: PropertyKey): <predicate>(…)
+```
+
+Own-key check (typed)
+
+### typeSafeKeys
+
+```ts
+function typeSafeKeys(obj: T): Extract<<typeOperator>(…), string>[]
+```
+
+Type safe object helpers
+
+### typeSafeOwnKeys
+
+```ts
+function typeSafeOwnKeys(obj: T): <typeOperator>(…)[]
+```
+
+All own keys (instead of Reflect.ownKeys)
+
+### typeSafeSet
+
+```ts
+function typeSafeSet(obj: T, key: K, value: <indexedAccess>(…)): void
+```
+
+Typed set (instead of Reflect.set)
+
+### typeSafeValues
+
+```ts
+function typeSafeValues(obj: T): <indexedAccess>(…)[]
+```
+
+Typed values (Object.values)
+
 ### validateRequest
 
 ```ts

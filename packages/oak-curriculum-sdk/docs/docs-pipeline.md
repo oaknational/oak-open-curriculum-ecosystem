@@ -9,7 +9,7 @@ Outputs are produced from a single source of truth: TypeDoc JSON generated from 
 - HTML docs: `packages/oak-curriculum-sdk/docs/api/`
 - TypeDoc JSON: `packages/oak-curriculum-sdk/docs/api/typedoc.json`
 - Markdown API docs: `packages/oak-curriculum-sdk/docs/api-md/*.md`
-- AI single-file reference: `packages/oak-curriculum-sdk/docs/oak-open-curriculum-api-sdk-reference.md`
+- AI single-file reference (canonical): `packages/oak-curriculum-sdk/docs/api/AI-REFERENCE.md`
 
 The pipeline is plugin-free for the Markdown generation steps and uses small, pure TypeScript helpers.
 
@@ -29,7 +29,7 @@ pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:html
 # Generate TypeDoc JSON only
 pnpm -F @oaknational/oak-curriculum-sdk -s docs:api:json
 
-# Generate AI-focused single-file reference from JSON
+# Generate AI-focused single-file reference from JSON + generated artifacts
 pnpm -F @oaknational/oak-curriculum-sdk -s docs:ai
 
 # Generate Markdown API docs (multi-file) from JSON
@@ -47,7 +47,7 @@ pnpm -F @oaknational/oak-curriculum-sdk -s docs:all
 - HTML: `docs/api/index.html`
 - JSON: `docs/api/typedoc.json`
 - Markdown: `docs/api-md/index.md`, `functions.md`, `interfaces.md`, `types.md`, `variables.md`, `references.md`
-- AI reference: `docs/oak-open-curriculum-api-sdk-reference.md`
+- AI reference: `docs/api/AI-REFERENCE.md`
 
 ### Type aliases rendering
 
