@@ -31,7 +31,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate and verify SDK docs
-        run: pnpm -F @oaknational/oak-curriculum-sdk docs:all
+        run: |
+          pnpm -F @oaknational/oak-curriculum-sdk docs:all
+          pnpm format
 
       - name: Fail if docs changed (uncommitted diffs)
         shell: bash

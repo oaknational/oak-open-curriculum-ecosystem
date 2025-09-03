@@ -37,13 +37,13 @@ jobs:
         run: pnpm format:check
 
       - name: Run linting
-        run: pnpm lint
+        run: pnpm lint --only
 
       - name: Run type checking
-        run: pnpm type-check
+        run: pnpm type-check --only
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm test --only
 
       - name: Build project
-        run: pnpm build
+        run: pnpm build --only
