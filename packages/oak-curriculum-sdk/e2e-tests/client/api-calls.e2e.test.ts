@@ -8,7 +8,7 @@
  */
 
 import { describe, it, expect, beforeAll } from 'vitest';
-import { config } from 'dotenv';
+import { logErrorDiagnostics } from '../helpers/e2e-diagnostics';
 import { createOakClient } from '../../src/client/index';
 import type { OakApiClient } from '../../src/client/index';
 import type { components } from '../../src/types/generated/api-schema/api-paths-types';
@@ -19,9 +19,6 @@ type Subject = components['schemas']['AllSubjectsResponseSchema'][number];
 type LessonSummary = components['schemas']['LessonSummaryResponseSchema'];
 type SearchResult = components['schemas']['LessonSearchResponseSchema'][number];
 type TranscriptSearchResult = components['schemas']['SearchTranscriptResponseSchema'][number];
-
-// Load environment variables from .env file at repo root
-config({ path: '../../../../.env' });
 
 const apiKey = process.env.OAK_API_KEY ?? '';
 
@@ -189,7 +186,7 @@ describe.skipIf(!apiKey)('Oak Curriculum SDK E2E Tests', () => {
           expect(searchResult.lessonTitle).toBeDefined();
         }
       }
-    }, 10000);
+    }, 20000);
 
     it('should search transcripts', async () => {
       const result = await client.GET('/search/transcripts', {
@@ -200,19 +197,27 @@ describe.skipIf(!apiKey)('Oak Curriculum SDK E2E Tests', () => {
         },
       });
 
-      expect(result.error).toBeUndefined();
-      expect(result.data).toBeDefined();
-
-      if (result.data) {
+      if (!result.response.ok) {
+        await logErrorDiagnostics(
+          result as unknown as { response: Response; error: unknown },
+          {
+            feature: 'Search Transcripts',
+            query: { q: 'algebra' },
+          },
+          { apiKey },
+        );
+        expect.fail('Search transcripts returned an error. See diagnostics above.');
+      } else {
+        expect(result.data).toBeDefined();
         expect(Array.isArray(result.data)).toBe(true);
-        if (result.data.length > 0) {
+        if (result.data?.length && result.data.length > 0) {
           const transcript: TranscriptSearchResult = result.data[0];
           // TypeScript ensures these properties exist at compile time
           expect(transcript.lessonTitle).toBeDefined();
           expect(transcript.lessonSlug).toBeDefined();
         }
       }
-    }, 10000);
+    }, 20000);
   });
 
   describe('Error Handling', () => {

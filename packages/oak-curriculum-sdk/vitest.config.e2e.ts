@@ -1,14 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import { mergeConfig } from 'vitest/config';
+import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
 /**
  * E2E test configuration for Oak Curriculum SDK
  * Tests that involve real I/O operations (network, filesystem)
  */
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'node',
-    include: ['e2e-tests/**/*.e2e.test.ts'],
-    exclude: ['node_modules', 'dist', 'coverage'],
-  },
+export default mergeConfig(baseE2EConfig, {
+  // SDK uses all defaults from base E2E config
 });

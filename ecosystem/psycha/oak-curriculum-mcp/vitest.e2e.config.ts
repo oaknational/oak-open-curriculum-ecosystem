@@ -1,17 +1,9 @@
-import { defineConfig } from 'vitest/config';
-import { config } from 'dotenv';
-import { resolve } from 'path';
+import { mergeConfig } from 'vitest/config';
+import { baseE2EConfig } from '../../../vitest.e2e.config.base';
 
-// Load environment variables from repo root
-config({ path: resolve(__dirname, '../../../.env') });
-
-export default defineConfig({
+export default mergeConfig(baseE2EConfig, {
   test: {
     include: ['e2e-tests/**/*.e2e.test.ts'],
-    globals: true,
-    environment: 'node',
-    testTimeout: 30000,
-    hookTimeout: 30000,
     isolate: true,
     pool: 'forks',
     poolOptions: {

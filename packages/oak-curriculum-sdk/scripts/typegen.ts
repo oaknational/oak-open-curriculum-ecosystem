@@ -12,13 +12,32 @@
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
 import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
 import type { OpenAPI3 } from 'openapi-typescript';
 
-// Load environment variables from root .env
-dotenvConfig({ path: path.resolve(process.cwd(), '../../.env') });
+// Load environment variables from repo root .env (or .env.e2e) if not set
+function findRepoRoot(startDir: string): string {
+  let current = startDir;
+  for (;;) {
+    const workspace = path.join(current, 'pnpm-workspace.yaml');
+    const gitDir = path.join(current, '.git');
+    if (existsSync(workspace) || existsSync(gitDir)) return current;
+    const parent = path.dirname(current);
+    if (parent === current) return current;
+    current = parent;
+  }
+}
+
+if (!process.env.OAK_API_KEY) {
+  const repoRoot = findRepoRoot(process.cwd());
+  const envE2EPath = path.join(repoRoot, '.env.e2e');
+  const envPath = path.join(repoRoot, '.env');
+  const chosen = existsSync(envE2EPath) ? envE2EPath : envPath;
+  dotenvConfig({ path: chosen });
+}
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');
