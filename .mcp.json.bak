@@ -1,5 +1,12 @@
 {
   "mcpServers": {
+    "notion-dev": {
+      "command": "pnpm",
+      "args": ["exec", "tsx", "ecosystem/psycha/oak-notion-mcp/src/index.ts"],
+      "env": {
+        "LOG_LEVEL": "debug"
+      }
+    },
     "oak-curriculum-dev": {
       "command": "pnpm",
       "args": ["exec", "tsx", "ecosystem/psycha/oak-curriculum-mcp/bin/oak-curriculum-mcp.ts"],
