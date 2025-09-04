@@ -1,44 +1,57 @@
 # Oak Notion MCP Server
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.org) server that provides AI assistants like Claude with safe, read-only access to your Notion workspace through the official Notion API.
+A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworka and libraries that provide AI assistants like Claude with access to various data sources:
+
+- Notion (read-only access)
+- Oak Open Curriculum API (read-only access)
 
 > 🗺️ **First time here?** Check our [Architecture Map](docs/ARCHITECTURE_MAP.md) for a visual guide to the codebase!
 
-## Quick Start
+## 🏛️ Architecture: Ancient Greek-Inspired Biological Design
 
-```bash
-# Install in your project
-npm add -D oak-notion-mcp@latest
+This project uses Ancient Greek (inspired) biological and metaphysical terms to create clear conceptual boundaries, these live under the `ecosystem` directory.
 
-# Configure with your Notion API key
-export NOTION_API_KEY="secret_your_actual_key_here"
+Most code will fit into the below categories, but where that doesn't make sense, we will use the `packages` directory and more conventional naming.
 
-# Add to Claude Desktop/Code (see detailed setup below)
-```
+There are three main ecosystem layers:
 
-## 🏛️ Architecture: Greek-Inspired Biological Design
+- Moria (plural: molecules), pure functions
+- Histoi (plural: tissues/matrices), runtime-adaptive libraries, e.g. logging, storage, transport
+- Psycha (plural: ensouled beings/organisms), complete applications (should really be Empsycha, but that is a mouthful)
 
-This project uses Greek philosophical terms to create clear conceptual boundaries. The architecture follows a **genotype/phenotype** model:
-
-## Architecture: Three-Tier Biological Ecosystem ✅
-
-The project implements a **Moria/Histoi/Psycha** architecture (Phase 5 completed!):
-
-### Ecosystem Layers
-
-| Layer | Purpose | Packages |
-|-------|---------|----------|
-| **Moria** (Μόρια) | Pure abstractions, zero dependencies | `@oaknational/mcp-moria` |
-| **Histoi** (Ἱστοί) | Transplantable runtime-adaptive tissues | `@oaknational/mcp-histos-logger`<br>`@oaknational/mcp-histos-storage`<br>`@oaknational/mcp-histos-env`<br>`@oaknational/mcp-histos-transport` |
-| **Psycha** (Ψυχά) | Living organisms (complete applications) | `@oaknational/oak-notion-mcp` |
-
-### Within Each Psycha Organism
-
-| Greek Term | English | Purpose | Location |
+| Greek Term | English | Purpose | Packages |
 |------------|---------|---------|----------|
-| **Chorai** (χώραι) | Fields | Pervasive infrastructure | Cross-cutting concerns |
+| **Moria** (Μόρια) | Molecules/Atoms | Pure abstractions, zero dependencies | `@oaknational/mcp-moria` |
+| **Histoi** (Ἱστοί) | Tissues/Matrices | Transplantable runtime-adaptive libraries | `@oaknational/mcp-histos-logger`<br>`@oaknational/mcp-histos-storage`<br>`@oaknational/mcp-histos-env`<br>`@oaknational/mcp-histos-transport` |
+| **Psycha** (Ψυχά) | Ensouled beings | Complete applications | `@oaknational/oak-notion-mcp` |
+
+Within each Psychon organism there are
+
+- Chora/Chorai (singular/plural: fields), pervasive, cross-cutting infrastructure, e.g. configuration management
+- Organon/Organa (singular/plural: organs), discrete business logic, e.g. a Notion SDK
+- Psychon (singular: soul), application wiring, bringing it all together
+
+| Greek Term | English | Purpose | Example Location |
+|------------|---------|---------|----------|
+| **Chorai** (χώραι) | Fields | Pervasive infrastructure | [`ecosystem/psycha/oak-notion-mcp/src/chorai/`] |
 | **Organa** (ὄργανα) | Organs | Discrete business logic | [`ecosystem/psycha/oak-notion-mcp/src/organa/`] |
 | **Psychon** (ψυχόν) | Soul | Integration & wiring | [`ecosystem/psycha/oak-notion-mcp/src/psychon/`] |
+
+There are (currently) four categories of chorai/fields
+
+- aither/aitheres (air/flows) - Transforms that modify data flows, e.g. PII scrubbing
+- eidolon/eidola (phantoms) - Test doubles, mocks, fakes, stubs etc
+- phaneron/phanera (the visible) - Configuration (not secrets)
+- stroma/stromata (foundations) - Types, schemas, contracts
+
+we are likely to also need
+
+- krypton/krypta (hidden) - Secrets, keys, tokens
+
+and possibly some combination of
+
+- nomos/nomoi (governance/policy) - Access control policy
+- kratos/krate (power/control) - Identity and access control
 
 ### Why Greek Terms?
 
@@ -46,17 +59,13 @@ The project implements a **Moria/Histoi/Psycha** architecture (Phase 5 completed
 2. **Precision** - Each term has specific philosophical meaning
 3. **Memorability** - Unique names create stronger mental models
 
-### The Morphai: Platonic Forms in Code
-
-**Morphai (μορφαί)** are the hidden forms - abstract patterns that organs instantiate. Like Plato's theory of forms, morphai represent the perfect, eternal patterns that exist in the genotype, while organs are their imperfect but functional shadows in the phenomenal world.
-
-- **Morphai define potential** - What it means to be a tool, handler, or registry
-- **Organs express actuality** - How those patterns work in a specific context
-- **Inheritance through genetics** - All phenotypes inherit the same morphai from the genotype
-
 > 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md)
 
-## Features
+### Architectural Decision Records (ADRs)
+
+Key architectural decisions are documented as ADRs. [View all ADRs →](docs/architecture/architectural-decisions/)
+
+## Features (specific to Notion, needs moving)
 
 - 🔍 **Search** across your Notion workspace
 - 📊 **List and query** databases with filters and sorting
@@ -65,7 +74,7 @@ The project implements a **Moria/Histoi/Psycha** architecture (Phase 5 completed
 - 🔒 **Privacy-first** - Automatic PII scrubbing, read-only access
 - 🚀 **High performance** - TypeScript, ESM-only, tree-shakeable
 
-## Installation & Setup
+## Installation & Setup (specific to Notion, needs moving, also the packages are not published yet)
 
 ### Prerequisites
 
@@ -82,7 +91,7 @@ npm install -g oak-notion-mcp
 npm add -D oak-notion-mcp
 ```
 
-### Configure Claude Desktop
+### Configure Claude Desktop (specific to Notion, needs moving)
 
 Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
 
@@ -116,7 +125,7 @@ Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claud
 }
 ```
 
-### Configure Claude Code
+### Configure Claude Code (specific to Notion, needs moving)
 
 ```bash
 # Add the server
@@ -126,7 +135,7 @@ claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mc
 claude mcp list
 ```
 
-## Usage Examples
+## Usage Examples (specific to Notion, needs moving)
 
 Once configured, you can ask Claude:
 
@@ -138,69 +147,47 @@ Once configured, you can ask Claude:
 
 ## Development
 
+This is a pnpm workspaces monorepo, using Turbo for task execution.
+
+This repo is optimised for working with agentic AI assistants, see [below](#making-the-most-of-agentic-ai-assistants).
+
 ### Getting Started
 
 ```bash
 # Clone and install
-git clone https://github.com/oaknational/oak-notion-mcp.git
-cd oak-notion-mcp
+git clone https://github.com/oaknational/oak-mcp-ecosystem.git
+cd oak-mcp-ecosystem
 pnpm install
 
 # Set up environment
 cp .env.example .env
-# Add your NOTION_API_KEY to .env
-
-# Run in development
-pnpm dev
+# Add your NOTION_API_KEY and/or OAK_API_KEY to .env
 ```
 
 ### Available Commands
 
+#### In the root of the monorepo
+
 ```bash
 # Development
-pnpm dev          # Run with hot reload
-pnpm build        # Build for production
-pnpm start        # Run built version
-
-# Testing
-pnpm test         # Run all tests
-pnpm test:watch   # Run tests in watch mode
-pnpm test:coverage # Generate coverage report
-pnpm test:e2e     # Run end-to-end tests (requires API key)
-
-# Code Quality
-pnpm lint         # Check linting
-pnpm lint:fix     # Fix linting issues
-pnpm format       # Format code
-pnpm type-check   # Check TypeScript types
+"build": "turbo run --continue build",
+"clean": "turbo run --continue clean",
+"dev": "turbo run --continue dev",
+"format": "turbo run --continue format -- --cache",
+"lint": "turbo run --continue lint",
+"test": "turbo run --continue test",
+"test:e2e": "turbo run --continue test:e2e",
+"type-check": "turbo run --continue type-check",
 
 # Analysis
 pnpm analyze      # Run all analysis tools
 ```
 
-### Project Structure
+If you want to deal with automatically fixable linting issues, run `pnpm lint -- --fix` in the root of the monorepo, or `pnpm lint --fix` in a workspace.
 
-```text
-src/
-├── chora/          # Cross-cutting infrastructure layers
-│   ├── stroma/     # Types, contracts, schemas (foundation)
-│   ├── aither/     # Logging, events, errors (flows)
-│   ├── phaneron/   # Configuration (visible settings)
-│   └── eidola/     # Test mocks (phantoms)
-├── organa/         # Business logic organs
-│   ├── notion/     # Notion API integration
-│   └── mcp/        # MCP protocol handlers
-└── psychon/        # Application wiring (soul)
-```
+### Making the Most of Agentic AI Assistants
 
-## Architecture Decisions
-
-Key architectural decisions are documented as ADRs:
-
-- [ESM-Only Package](docs/architecture/architectural-decisions/001-esm-only-package.md)
-- [Pure Functions First](docs/architecture/architectural-decisions/002-pure-functions-first.md)
-- [Biological Architecture](docs/architecture/architectural-decisions/020-biological-architecture.md)
-- [View all ADRs →](docs/architecture/architectural-decisions/)
+[TBD]
 
 ## Contributing
 
@@ -226,8 +213,8 @@ MIT - see [LICENSE](LICENSE) for details
 ## Support
 
 - 📖 [Documentation](docs/README.md)
-- 🐛 [Report Issues](https://github.com/oaknational/oak-notion-mcp/issues)
-- 💬 [Discussions](https://github.com/oaknational/oak-notion-mcp/discussions)
+- 🐛 [Report Issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
+- 💬 [Discussions](https://github.com/oaknational/oak-mcp-ecosystem/discussions)
 
 ---
 

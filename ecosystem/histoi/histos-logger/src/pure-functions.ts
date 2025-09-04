@@ -3,6 +3,8 @@
  */
 
 import type { LogLevel } from './types.js';
+import type { JsonObject, JsonValue } from '@oaknational/mcp-moria';
+import { isObject } from '@oaknational/mcp-moria';
 
 /**
  * Converts semantic log level to numeric value
@@ -40,17 +42,39 @@ export function toConsolaLevel(level: number): number {
 /**
  * Merges base context with additional context
  */
-export function mergeLogContext(
-  base: Record<string, unknown>,
-  context?: unknown,
-): Record<string, unknown> {
-  if (context === undefined) return base;
+// kept for clarity via isJsonValue
 
-  if (typeof context === 'object' && context !== null && !Array.isArray(context)) {
-    return { ...base, ...(context as Record<string, unknown>) };
+function toJsonSafeObject(value: unknown): JsonObject | null {
+  if (!isObject(value)) return null;
+  const serialised: unknown = JSON.parse(JSON.stringify(value));
+  return isObject(serialised) ? serialised : null;
+}
+
+function isJsonValue(value: unknown): value is JsonValue {
+  if (value === null) return true;
+  const t = typeof value;
+  if (t === 'string' || t === 'number' || t === 'boolean') return true;
+  if (Array.isArray(value)) return value.every((v) => isJsonValue(v));
+  if (isObject(value)) return Object.values(value).every((v) => isJsonValue(v));
+  return false;
+}
+
+function toAttachableValue(value: unknown): JsonValue {
+  if (isJsonValue(value)) return value;
+  try {
+    const sanitised: unknown = JSON.parse(JSON.stringify(value));
+    if (isJsonValue(sanitised)) return sanitised;
+  } catch {
+    // fall through to string fallback
   }
+  return '[unserializable]';
+}
 
-  return { ...base, value: context };
+export function mergeLogContext(base: JsonObject, context?: unknown): JsonObject {
+  if (context === undefined) return base;
+  const jsonSafe = toJsonSafeObject(context);
+  if (jsonSafe) return { ...base, ...jsonSafe };
+  return { ...base, value: toAttachableValue(context) };
 }
 
 /**

@@ -68,10 +68,12 @@ export interface CancellableHandler<TInput = unknown, TOutput = unknown> {
 /**
  * Handler that emits events
  */
+import type { JsonValue } from '../types/core.js';
+
 export interface EventEmittingHandler<
   TInput = unknown,
   TOutput = unknown,
-  TEvents extends Record<string, unknown> = Record<string, unknown>,
+  TEvents extends Record<string, JsonValue> = Record<string, JsonValue>,
 > {
   /**
    * Subscribe to an event

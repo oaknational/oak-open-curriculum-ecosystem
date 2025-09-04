@@ -3,7 +3,7 @@
  * Assembles tools from clean abstractions
  */
 
-import type { NotionDependencies } from '../../../chora/stroma/notion-types/dependencies';
+import type { NotionDependencies } from '../../../chorai/stroma/notion-types/dependencies';
 import type { McpTool } from '../types';
 import {
   createToolFactory,

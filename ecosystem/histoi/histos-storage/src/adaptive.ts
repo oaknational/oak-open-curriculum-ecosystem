@@ -48,14 +48,15 @@ async function createFileStorage(options?: StorageOptions): Promise<StorageProvi
   // Ensure directory exists
   await fsModule.mkdir(dir, { recursive: true });
 
-  // Cast to our interface type
+  // Create adapter that matches our interface using the actual Node.js types
+  // No type assertions needed - we're adapting the functions to our interface
   const fs: FileSystemInterface = {
-    readFile: fsModule.readFile as FileSystemInterface['readFile'],
-    writeFile: fsModule.writeFile as FileSystemInterface['writeFile'],
-    unlink: fsModule.unlink as FileSystemInterface['unlink'],
-    access: fsModule.access as FileSystemInterface['access'],
-    readdir: fsModule.readdir as FileSystemInterface['readdir'],
-    mkdir: fsModule.mkdir as FileSystemInterface['mkdir'],
+    readFile: fsModule.readFile,
+    writeFile: fsModule.writeFile,
+    unlink: fsModule.unlink,
+    access: fsModule.access,
+    readdir: fsModule.readdir,
+    mkdir: fsModule.mkdir,
   };
 
   const path: PathInterface = {

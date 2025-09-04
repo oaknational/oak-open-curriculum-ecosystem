@@ -155,6 +155,8 @@ export interface RegistryEvent<TKey, TValue> {
 /**
  * Registry entry with metadata
  */
+import type { JsonObject } from '../types/core.js';
+
 export interface RegistryEntry<T> {
   /**
    * The actual value
@@ -169,7 +171,7 @@ export interface RegistryEntry<T> {
   /**
    * Optional metadata
    */
-  metadata?: Record<string, unknown>;
+  metadata?: JsonObject;
 }
 
 /**

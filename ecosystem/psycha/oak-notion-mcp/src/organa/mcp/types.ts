@@ -1,4 +1,5 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { JsonObject } from '@oaknational/mcp-moria';
 
 // Tool interface
 export interface McpTool {
@@ -6,7 +7,7 @@ export interface McpTool {
   description: string;
   inputSchema: {
     type: 'object';
-    properties: Record<string, unknown>;
+    properties: JsonObject;
     required?: string[];
   };
   handler: (args: unknown) => Promise<CallToolResult>;

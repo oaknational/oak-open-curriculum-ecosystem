@@ -2,9 +2,10 @@
   "name": "@oaknational/mcp-ecosystem",
   "version": "0.5.0",
   "private": true,
-  "description": "MCP ecosystem - genotype and phenotypes for Model Context Protocol servers",
+  "description": "MCP ecosystem - A collection of MCP servers and supporting framework and libraries",
   "type": "module",
   "scripts": {
+    "type-gen": "turbo run --continue type-gen",
     "build": "turbo run --continue build",
     "clean": "turbo run --continue clean",
     "dev": "turbo run --continue dev",
@@ -12,8 +13,7 @@
     "format:check": "turbo run --continue format:check -- --cache",
     "lint": "turbo run --continue lint",
     "test": "turbo run --continue test",
-    "test:e2e": "RUN_E2E=true turbo run --continue test:e2e",
-    "test:e2e:skip": "turbo run --continue test:e2e",
+    "test:e2e": "turbo run --continue test:e2e",
     "type-check": "turbo run --continue type-check",
     "prepare": "husky",
     "publish:dry": "pnpm -r publish --dry-run",
@@ -21,7 +21,8 @@
     "analyze": "pnpm run analyze:deps && pnpm run analyze:modules",
     "analyze:deps": "madge ecosystem/ --circular --image .agent/generalisation-opportunities-analysis/dependency-graph.svg",
     "analyze:circular": "madge ecosystem/ --circular",
-    "analyze:modules": "tsx scripts/analyze-modules.ts"
+    "analyze:modules": "tsx scripts/analyze-modules.ts",
+    "analyze:outdated": "pnpm outdated -r"
   },
   "keywords": [
     "mcp",
@@ -32,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/oaknational/oak-notion-mcp.git"
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git"
   },
   "engines": {
     "node": ">=22.0.0"

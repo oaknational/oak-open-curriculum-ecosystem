@@ -26,6 +26,16 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-018: Complete Biological Architecture](018-complete-biological-architecture.md)
 - [ADR-019: Domain-Driven File Splitting](019-domain-driven-file-splitting.md)
 - [ADR-020: Biological Architecture Pattern](020-biological-architecture.md)
+- [ADR-021: Genotype/Phenotype/Chorai](021-genotype-phenotype-chorai.md)
+- [ADR-022: Conditional Dependencies in Genotype](022-conditional-dependencies-genotype.md)
+- [ADR-023: Moria/Histoi/Psycha Architecture](023-moria-histoi-psycha-architecture.md)
+- [ADR-024: Dependency Injection Pattern](024-dependency-injection-pattern.md)
+- [ADR-025: Erasable Syntax Only](025-erasable-syntax-only.md)
+- [ADR-026: OpenAPI Type Generation Strategy](026-openapi-type-generation-strategy.md)
+- [ADR-027: Runtime Isolation Strategy](027-runtime-isolation-strategy.md)
+- [ADR-028: Zod Validation Deferral](028-zod-validation-deferral.md)
+- [ADR-029: No Manual API Data Structures in MCP](029-no-manual-api-data.md)
+- [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
 
 ## Key Architectural Decisions
 
@@ -35,6 +45,11 @@ For understanding our biological architecture, these ADRs are most important:
 - **[ADR-018](018-complete-biological-architecture.md)** - Evolution to complete biological model
 - **[ADR-009](009-mathematical-foundation-for-architecture.md)** - Mathematical grounding from complex systems theory
 - **[ADR-006](006-cellular-architecture-pattern.md)** - Original cellular architecture inspiration
+
+For understanding our API integration approach:
+
+- **[ADR-029](029-no-manual-api-data.md)** - No manual API data structures in MCP
+- **[ADR-030](030-sdk-single-source-truth.md)** - SDK as single source of truth for API contracts
 
 ## About ADRs
 

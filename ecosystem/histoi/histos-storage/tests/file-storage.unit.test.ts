@@ -55,7 +55,7 @@ describe('createFileStorage - Unit Tests', () => {
       const value = await storage.get('key1');
 
       expect(value).toBe('value1');
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+
       expect(mockFs.writeFile).toHaveBeenCalledWith(
         '/test/key1.json',
         JSON.stringify('value1'),
@@ -80,7 +80,7 @@ describe('createFileStorage - Unit Tests', () => {
 
       const value = await storage.get('key1');
       expect(value).toBeNull();
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+
       expect(mockFs.unlink).toHaveBeenCalledWith('/test/key1.json');
     });
 

@@ -36,14 +36,35 @@ jobs:
       - name: Check formatting
         run: pnpm format:check
 
+      - name: Debug ESLint config (oak-curriculum-mcp)
+        continue-on-error: true
+        run: |
+          echo "Node/ESLint/TS versions:" && node -v && pnpm exec eslint -v && pnpm exec tsc -v
+          echo "Effective ESLint config subset for oak-curriculum-mcp:"
+          pnpm -C ecosystem/psycha/oak-curriculum-mcp exec eslint --print-config src/organa/mcp/tools/index.ts \
+            | node -e '
+                let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>{
+                  const j=JSON.parse(s);
+                  const out={
+                    parserOptions:j.languageOptions?.parserOptions,
+                    resolverTS:j.settings?.["import-x/resolver"]?.typescript,
+                    rules:{
+                      noUnsafeCall:j.rules?.["@typescript-eslint/no-unsafe-call"],
+                      restrictTpl:j.rules?.["@typescript-eslint/restrict-template-expressions"]
+                    }
+                  };
+                  console.log(JSON.stringify(out,null,2));
+                });
+              '
+
       - name: Run linting
-        run: pnpm lint
+        run: pnpm lint --only
 
       - name: Run type checking
-        run: pnpm type-check
+        run: pnpm type-check --only
 
       - name: Run tests
-        run: pnpm test
+        run: pnpm test --only
 
       - name: Build project
-        run: pnpm build
+        run: pnpm build --only

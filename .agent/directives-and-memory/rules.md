@@ -10,14 +10,26 @@ All of these rules MUST be followed at all times.
 
 ### Code Patterns and Architectural Principles
 
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to *prove it fails*), Green (run the test to prove it passes, *because product code exists now*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers** - replace old approaches with new approaches
-- **Pure functions first** - Use TDD to design, no side effects, no I/O (these are your "organelles")
+- **Pure functions first** - Use TDD to design (*test first*, red, green, refactor), no side effects, no I/O (these are your "organelles")
 - **Build up through scales** - Functions → Modules (cells) → Chorai/Organa
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
+- **Inline docs everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have inline jsdoc/tsdoc comments that can be compiled by `typedoc` to generate documentation.
 
 See also [Biological Model Architecture](#biological-model-architecture) below.
+
+### Refactoring
+
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to *prove it fails*), Green (run the test to prove it passes, *because product code exists now*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
+- **NEVER create compatibility layers** - replace old approaches with new approaches
+- **Splitting long files** - If a file is too long, split it into smaller files defined by groupings of responsibility, but keep the boundaries and public API clear with index.ts files, using TDD.
+- **Splitting long functions** - If a function is too long, split it into smaller, pure functions with a single responsibility, using TDD.
+- **Reducing complexity in functions** - If a function is too complex, identify distinct responsibilities and split it into smaller, pure functions with a single responsibility, using TDD.
+- **Removing unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
+- **Version with git, not with names** - Fix files in place, or replace old approaches with new approaches, NEVER create parallel versions using naming. Incorrect example: `execute-tool-call.ts` and `execute-tool-call.v2.ts`, correct example: `execute-tool-call.ts` and `execute-tool-call.ts` with a git history showing the evolution of the file. Incorrect example: `execute-tool-call.ts` and `execute-tool-call-correct.ts`, correct example: `execute-tool-call.ts` and `execute-tool-call.ts` with a git history showing the evolution of the file.
 
 ### Tooling
 
@@ -29,17 +41,20 @@ Use the right tool for the job:
 - **TypeScript** for compiler time types
 - **ESLint** for syntax correctness, code-style adherence, **architectural boundary adherence**
 - **Prettier** for code-style adherence
+- **Typedoc** for documentation generation
 
 ### Code Quality
 
-- **NEVER disable checks** - Never disable any quality gates, never disable any linting, never disable any formatting, never disable any tests
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to *prove it fails*), Green (run the test to prove it passes, *because product code exists now*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
+- **NEVER disable checks** - Never disable any quality gates, never disable type checks, never disable any linting, never disable any formatting, never disable any tests, never disable Git hooks (`--no-verify`)
 - **Never work around checks** - e.g. if a variable is unused, figure out why and fix it, delete the variable if it is not needed. Do not disable eslint or typescript, do not attempt to prefix the variable with a `_`. ALWAYS fix the root cause, never work around it.
 - **Quality gates** - Run ALL gates after changes: format → type-check → lint → test → build
 - **No unused code** - If a function is not used, delete it. If product code is only used in tests, delete it. If a file is not used, delete it. Delete dead code.
 
 ### Compiler Time Types and Runtime Validation
 
-- **No type shortcuts** - Never use `as`, `any`, `!`, or type assertions
+- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `Object.*` methods, or `Reflect.*` methods - they ALL disable the type system
+- **Preserve type information** - NEVER widen types by assigning to broader types like `string` or `number`. If you have a literal type `'/api/path'`, keep it as that literal, don't accept it as `string`. Type information flows from data structures with `as const` through to usage. Every `: string` or `: number` parameter destroys type information irreversibly
 - **Single source of truth for types** - Define types ONCE, and import them consistently
 - **Use library types directly where possible** - don't make up a type when you can use a library type
 - **Validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation, use Zod where appropriate
@@ -59,7 +74,7 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 
 #### Universal Testing Rules
 
-- **TDD** - ALWAYS use TDD. Write tests **FIRST**
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to *prove it fails*), Green (run the test to prove it passes, *because product code exists now*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
 - **Test real behaviour, not implementation details** - We should be able to change *how* something works without breaking the test that proves *that* it works.
 - **Test to interfaces, not internals** - Tests should be written to the interfaces, not the internals. Closely related to test behaviour not implementation.
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
@@ -68,7 +83,16 @@ Tests prove the correctness of runtime logic. If you want to validate types, use
 - **KISS: No complex mocks** - Mocks should be simple and focused, no complex logic in mocks, or we risk testing the mocks rather than the code. Complex mocks are a signal that we need to step back and simplify the code or our approach.
 - **No skipped tests** - Fix it or delete it
 
+### Developer Experience
+
+- **No skipped tests** - Fix it or delete it
+- **No commented out code** - Fix it or delete it
+- **No dead code** - Delete it
+- **Inline docs everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have inline jsdoc/tsdoc comments that can be compiled by `typedoc` to generate documentation.
+
 ### Biological Model Architecture
+
+This applies to workspaces under `ecosystem/`, relative to the root of the repository. It does not apply to `packages/` which use traditional architectural patterns.
 
 Think in biological scales at two levels, workspace (ecosystem) and psychon (organism).
 

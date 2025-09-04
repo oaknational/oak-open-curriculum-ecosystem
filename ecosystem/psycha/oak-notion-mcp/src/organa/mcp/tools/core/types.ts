@@ -6,6 +6,7 @@
 import type {
   ToolExecutor as MorphaiToolExecutor,
   ToolDefinition as MorphaiToolDefinition,
+  JsonObject,
 } from '@oaknational/mcp-moria';
 
 /**
@@ -21,7 +22,7 @@ export type ToolDefinition = MorphaiToolDefinition;
 export interface ErrorContext {
   readonly toolName: string;
   readonly operation?: string;
-  readonly metadata?: Record<string, unknown>;
+  readonly metadata?: JsonObject;
 }
 
 /**
@@ -48,8 +49,8 @@ export type ToolResult = McpToolResult;
  * Subset of logger interface needed by tools
  */
 export interface ToolLogger {
-  debug(message: string, context?: Record<string, unknown>): void;
-  error(message: string, context?: Record<string, unknown>): void;
+  debug(message: string, context?: JsonObject): void;
+  error(message: string, context?: JsonObject): void;
 }
 
 /**

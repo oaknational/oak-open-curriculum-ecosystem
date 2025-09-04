@@ -6,9 +6,9 @@
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
 import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
-import type { NotionDependencies } from '../../../../chora/stroma/notion-types/dependencies';
+import type { NotionDependencies } from '../../../../chorai/stroma/notion-types/dependencies';
 // Transformers will be accessed through deps.notionOperations
-import { scrubSensitiveData } from '../../../../chora/aither/scrubbing';
+import { scrubSensitiveData } from '../../../../chorai/aither/scrubbing';
 
 /**
  * Handles the special discovery resource

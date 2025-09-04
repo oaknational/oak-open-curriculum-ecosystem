@@ -32,3 +32,5 @@ Then, using your thoughts, reflections, and insights, work through the following
 5. CONCLUDE: What is the most accurate/helpful response?
 
 Now: carry out the review and produce a detailed, actionable report, thinking hard at each step.
+
+Now: invoke each of the sub-agents to review the relevant code, and report sections, and report back to you. Make it clear they are to review and report, not to modify or fix. Reflect on their reports. Update your report as appropriate.

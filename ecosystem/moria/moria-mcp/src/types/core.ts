@@ -96,7 +96,7 @@ export type Brand<T, B> = T & { __brand: B };
 /**
  * Tagged union helper
  */
-export type Tagged<Tag extends string, T = Record<string, unknown>> = T & { _tag: Tag };
+export type Tagged<Tag extends string, T = JsonObject> = T & { _tag: Tag };
 
 /**
  * Opaque type for hiding implementation
@@ -151,14 +151,12 @@ export type AsyncFn<TArgs extends unknown[] = unknown[], TReturn = unknown> = (
 /**
  * Constructor type
  */
-export type Constructor<T = Record<string, unknown>> = new (...args: unknown[]) => T;
+export type Constructor<T = JsonObject> = new (...args: unknown[]) => T;
 
 /**
  * Abstract constructor type
  */
-export type AbstractConstructor<T = Record<string, unknown>> = abstract new (
-  ...args: unknown[]
-) => T;
+export type AbstractConstructor<T = JsonObject> = abstract new (...args: unknown[]) => T;
 
 /**
  * Mixin type
@@ -224,7 +222,7 @@ export type Awaited<T> = T extends Promise<infer U> ? Awaited<U> : T;
  * Path type for nested object access
  */
 export type Path<T, K extends keyof T = keyof T> = K extends string
-  ? T[K] extends Record<string, unknown>
+  ? T[K] extends JsonObject
     ? K | `${K}.${Path<T[K], keyof T[K]>}`
     : K
   : never;

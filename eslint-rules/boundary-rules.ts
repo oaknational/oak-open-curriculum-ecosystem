@@ -200,6 +200,7 @@ export const HISTOI_TISSUES = [
   'histos-storage',
   'histos-env',
   'histos-transport',
+  'histos-runtime-abstraction',
   // Add new tissues here as they are created
 ] as const;
 

@@ -4,14 +4,14 @@
  */
 
 import type { ConsolaInstance } from 'consola';
-import type { Logger } from '@oaknational/mcp-moria';
+import type { Logger, JsonObject } from '@oaknational/mcp-moria';
 import { mergeLogContext, normalizeError } from './pure-functions.js';
 
 export class ConsolaLogger implements Logger {
   private readonly consola: ConsolaInstance;
-  private readonly contextData: Record<string, unknown>;
+  private readonly contextData: JsonObject;
 
-  constructor(consola: ConsolaInstance, contextData: Record<string, unknown> = {}) {
+  constructor(consola: ConsolaInstance, contextData: JsonObject = {}) {
     this.consola = consola;
     this.contextData = contextData;
   }
@@ -46,7 +46,7 @@ export class ConsolaLogger implements Logger {
     return this.consola.level >= level;
   }
 
-  child?(context: Record<string, unknown>): Logger {
+  child?(context: JsonObject): Logger {
     return new ConsolaLogger(this.consola, mergeLogContext(this.contextData, context));
   }
 }

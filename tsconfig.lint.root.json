@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [
+    "ecosystem/**/src/**/*.ts",
+    "ecosystem/**/tests/**/*.ts",
+    "ecosystem/**/**.test.ts",
+    "ecosystem/**/**.spec.ts",
+    "ecosystem/**/bin/**/*.ts",
+    "packages/**/src/**/*.ts",
+    "packages/**/scripts/**/*.ts",
+    "packages/**/tests/**/*.ts",
+    "packages/**/**.test.ts",
+    "packages/**/**.spec.ts"
+  ],
+  "exclude": [
+    "**/dist/**",
+    "**/coverage/**",
+    "node_modules"
+  ]
+}
