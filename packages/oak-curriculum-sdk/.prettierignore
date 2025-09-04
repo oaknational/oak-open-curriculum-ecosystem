@@ -1,0 +1,17 @@
+# Build output
+dist/
+*.d.ts
+*.d.ts.map
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage/
+
+# Cache
+.turbo/
+
+# Generated files
+test-cache/
+src/types/generated/

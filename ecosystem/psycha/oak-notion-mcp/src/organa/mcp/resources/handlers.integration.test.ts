@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers';
-import type { MinimalNotionClient } from '../../../chora/stroma/notion-types/notion-client';
+import type { MinimalNotionClient } from '../../../chorai/stroma/notion-types/notion-client';
 import type { Logger } from '@oaknational/mcp-moria';
 import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
-} from '../../../chora/eidola/notion-mocks';
+} from '../../../chorai/eidola/notion-mocks';
 import {
   createMockListUsersResponse,
   createMockSearchResponse,
-} from '../../../chora/eidola/notion-api-mocks';
+} from '../../../chorai/eidola/notion-api-mocks';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {

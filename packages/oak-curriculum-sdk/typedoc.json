@@ -1,0 +1,25 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "./tsconfig.json",
+  "readme": "none",
+  "githubPages": false,
+  "categorizeByGroup": true,
+  "sort": ["kind", "instance-first", "alphabetical"],
+  "exclude": [
+    "src/types/generated/**",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "e2e-tests/**",
+    "test-cache/**",
+    "examples/**",
+    "scripts/**"
+  ],
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "hideBreadcrumbs": true,
+  "hideInPageTOC": false,
+  "includeVersion": true
+}

@@ -19,7 +19,7 @@ import {
   createMockDatabase,
   createMockPersonUser,
   createMockBotUser,
-} from '../../chora/eidola/notion-mocks';
+} from '../../chorai/eidola/notion-mocks';
 
 // Helper to create default annotations for rich text
 const defaultAnnotations = {

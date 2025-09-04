@@ -1,5 +1,11 @@
 # Testing and Development Strategy
 
+## Tooling
+
+- Vitest
+- TypeScript
+- Supertest if needed
+
 ## Philosophy
 
 - ALWAYS test behaviour, NEVER test implementation
@@ -17,7 +23,7 @@
 
 ## Rules
 
-- **TDD** - ALWAYS use TDD. Write tests **FIRST**
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (failing *test*), Green (passing test, because product code is created at this point, *not before*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
 - **Test real behaviour, not implementation details** - We should be able to change *how* something works without breaking the test that proves *that* it works.
 - **Test to interfaces, not internals** - Tests should be written to the interfaces, not the internals. Closely related to test behaviour not implementation.
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
@@ -52,6 +58,7 @@ Out-of-process tests are tests that validate a running *system*, the tests and t
 #### Common Misconception: Integration Tests
 
 **WRONG Understanding (Common but Incorrect):**
+
 ```typescript
 // ❌ This is NOT an integration test - it's an E2E test
 describe('API Integration Test', () => {
@@ -63,6 +70,7 @@ describe('API Integration Test', () => {
 ```
 
 **CORRECT Understanding (Our Definition):**
+
 ```typescript
 // ✅ This IS an integration test - testing code units working together
 import { UserService } from './user-service';
@@ -183,7 +191,7 @@ describe('Oak Notion MCP assembly', () => {
 // e2e-tests/oak-notion-mcp.e2e.test.ts
 describe('Oak Notion MCP E2E', () => {
   it('responds to MCP protocol requests', () => {
-    // Test complete system behavior
+    // Test complete system behaviour
   });
 });
 ```
@@ -221,7 +229,7 @@ describe('log formatter', () => {
 // chora/aither/logging/logger.integration.test.ts
 describe('logger integration', () => {
   it('flows through all layers when injected', () => {
-    // Test pervasive behavior with simple mocks
+    // Test pervasive behaviour with simple mocks
   });
 });
 ```
@@ -255,7 +263,7 @@ describe('Notion organ integration', () => {
     const mockLogger = createMockLogger();
     const mockConfig = { notionApiKey: 'test' };
     const notion = createNotionOperations({ logger: mockLogger, config: mockConfig });
-    // Test public API behavior
+    // Test public API behaviour
   });
 });
 ```

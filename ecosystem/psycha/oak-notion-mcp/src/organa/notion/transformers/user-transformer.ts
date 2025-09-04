@@ -5,6 +5,7 @@
 
 import type { UserObjectResponse as NotionUser } from '@notionhq/client';
 import type { Resource, EmailScrubber } from './types';
+import type { JsonObject } from '@oaknational/mcp-moria';
 
 /**
  * Default email scrubber - redacts email addresses
@@ -35,7 +36,7 @@ export function createUserTransformer(
     const name = user.name ?? 'Unknown User';
     const description = user.type === 'bot' ? 'Notion bot user' : 'Notion workspace user';
 
-    const _meta: Record<string, unknown> = {
+    const _meta: JsonObject = {
       type: user.type,
       avatar_url: user.avatar_url,
     };

@@ -1,5 +1,5 @@
-import type { NotionDependencies } from '../../chora/stroma/notion-types/dependencies';
-import { scrubEmail } from '../../chora/aither/scrubbing';
+import type { NotionDependencies } from '../../chorai/stroma/notion-types/dependencies';
+import { scrubEmail } from '../../chorai/aither/scrubbing';
 
 export interface Resource {
   uri: string;

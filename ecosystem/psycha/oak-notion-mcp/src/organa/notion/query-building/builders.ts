@@ -10,29 +10,40 @@ import type {
   SearchOptions,
   NotionSearchQuery,
 } from './types';
+import type { JsonObject } from '@oaknational/mcp-moria';
 
 /**
  * Build filter condition for a single property
  */
-function buildPropertyCondition(
-  propertyName: string,
-  filter: McpPropertyFilter,
-): Record<string, unknown> {
-  const condition: Record<string, unknown> = {
-    property: propertyName,
-  };
+function isSimpleValue(v: unknown): v is string | number | boolean | null {
+  return typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean' || v === null;
+}
 
-  // Empty/not empty operators don't need a value
+function toSafeSimpleValue(v: unknown): string | number | boolean | null {
+  if (isSimpleValue(v)) return v;
+  try {
+    const s: unknown = JSON.parse(JSON.stringify(v));
+    return isSimpleValue(s) ? s : '[unserializable]';
+  } catch {
+    return '[unserializable]';
+  }
+}
+
+function buildPropertyCondition(propertyName: string, filter: McpPropertyFilter): JsonObject {
+  const condition: JsonObject = { property: propertyName };
   if (filter.operator === 'is_empty') {
     condition[filter.type] = { is_empty: true };
-  } else if (filter.operator === 'is_not_empty') {
-    condition[filter.type] = { is_not_empty: true };
-  } else if (filter.value !== undefined) {
-    // Operators with values
-    const operator = filter.operator ?? 'equals';
-    condition[filter.type] = { [operator]: filter.value };
+    return condition;
   }
-
+  if (filter.operator === 'is_not_empty') {
+    condition[filter.type] = { is_not_empty: true };
+    return condition;
+  }
+  if (filter.value === undefined) return condition;
+  const operator = filter.operator ?? 'equals';
+  const val = toSafeSimpleValue(filter.value);
+  const opClause: Record<string, string | number | boolean | null> = { [operator]: val };
+  condition[filter.type] = opClause;
   return condition;
 }
 
@@ -41,7 +52,7 @@ function buildPropertyCondition(
  */
 function buildFilterClause(
   properties: McpFilters['properties'],
-): { and: Record<string, unknown>[] } | undefined {
+): { and: JsonObject[] } | undefined {
   if (!properties || Object.keys(properties).length === 0) {
     return undefined;
   }

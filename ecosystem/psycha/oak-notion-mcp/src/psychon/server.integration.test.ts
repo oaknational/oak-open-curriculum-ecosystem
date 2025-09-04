@@ -3,7 +3,7 @@ import { createMcpServer } from './server';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { Logger } from '@oaknational/mcp-moria';
-import { createMockListUsersResponse } from '../chora/eidola';
+import { createMockListUsersResponse } from '../chorai/eidola';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {

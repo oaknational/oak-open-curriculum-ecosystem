@@ -20,6 +20,7 @@
 
 - [Tissue and Organ Interfaces](./tissue-and-organ-interfaces.md) - Interface patterns and code templates
 - [Tissue and Organ Example](./tissue-organ-example.md) - Complete implementation example
+- [Programmatic Tool Generation](./programmatic-tool-generation.md) - MCP tool generation from SDK
 
 ### Architectural Decisions
 

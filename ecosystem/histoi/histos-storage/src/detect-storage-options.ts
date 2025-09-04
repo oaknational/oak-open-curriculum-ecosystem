@@ -32,7 +32,7 @@ export interface GThis {
     };
   };
   // Node.js
-  process?: { env: Record<string, unknown> };
+  process?: { env: Record<string, string | undefined> };
 }
 
 /**

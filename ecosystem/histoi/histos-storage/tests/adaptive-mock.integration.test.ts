@@ -187,7 +187,7 @@ describe('Adaptive Storage Integration - Mocked', () => {
       await expect(storage.clear?.()).resolves.toBeUndefined();
 
       // Verify unlink was called for both files
-      // eslint-disable-next-line @typescript-eslint/unbound-method
+
       expect(mockFs.unlink).toHaveBeenCalledTimes(2);
     });
   });

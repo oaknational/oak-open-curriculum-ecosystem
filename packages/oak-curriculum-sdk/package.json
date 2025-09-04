@@ -1,0 +1,77 @@
+{
+  "name": "@oaknational/oak-curriculum-sdk",
+  "version": "0.0.1",
+  "description": "TypeScript SDK for Oak National Academy Curriculum API",
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "type-gen": "pnpm generate:types",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "prebuild": "pnpm generate:types",
+    "generate:types": "pnpm generate:openapi && pnpm generate:zod",
+    "generate:openapi": "tsx scripts/typegen.ts",
+    "generate:openapi:clean": "rm -rf src/types/generated",
+    "generate:zod": "tsx scripts/zodgen.ts",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:e2e": "vitest run --config vitest.config.e2e.ts",
+    "docs:api": "typedoc --options typedoc.json",
+    "docs:api:html": "typedoc --options typedoc.ai.json",
+    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
+    "docs:api:json:ai": "typedoc --options typedoc.ai.json --json docs/api/typedoc.json",
+    "docs:ai": "pnpm -s docs:api:json:ai && tsx scripts/generate-ai-doc.ts",
+    "docs:api:md": "tsx scripts/generate-markdown-docs.ts",
+    "docs:verify": "tsx scripts/verify-docs.ts",
+    "docs:all": "pnpm -s docs:api:html && pnpm -s docs:ai && pnpm -s docs:api:md && pnpm -s docs:verify"
+  },
+  "dependencies": {
+    "openapi-fetch": "^0.14.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "dotenv": "^17.2.1",
+    "openapi-typescript": "^7.8.0",
+    "openapi-zod-client": "^1.18.3",
+    "typedoc": "^0.26.5",
+    "typedoc-plugin-markdown": "^4.2.0",
+    "tsup": "^8.3.5",
+    "tsx": "^4.20.3",
+    "typescript": "^5.7.2",
+    "vitest": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/oak-curriculum-sdk"
+  },
+  "keywords": [
+    "oak",
+    "curriculum",
+    "api",
+    "sdk",
+    "education",
+    "typescript"
+  ],
+  "author": "Oak National Academy",
+  "license": "MIT"
+}

@@ -4,6 +4,8 @@ This file provides core directives for AI agents working with this codebase. Rea
 
 ## Grounding
 
+Commit to always using British spelling. State "REMINDER: UseBritish spelling" explicitly in the todo list.
+
 Read the [metacognitive prompt](./metacognition.md) and follow all instructions, reflect on it.
 
 Now reflect on what you are doing. Would you like to update your todo list or the plan?
@@ -22,9 +24,13 @@ Now reflect on what you are doing. Would you like to update your todo list or th
 
 Read [the rules](./rules.md); reflect on them, _apply_ them,they MUST be followed at ALL times.
 
-## Use of Sub-agents
+## Use of Sub-agents [Claude only, other agents should ignore this section]
 
-You MUST invoke the appropriate sub-agent or sub-agents to review changes. They are mostly used in two ways:
+You MUST invoke the appropriate sub-agent or sub-agents to review changes.
+
+When using the sub-agents to perform analysis, you must carry out the analysis yourself first. This establishes context, which the sub-agents can then build on from their unique perspectives.
+
+The sub-agents are mostly used in two ways:
 
 1. To review small, focussed changes. This should be done OFTEN. The sub-agents work best when they have a tight focus.
 2. To holistically review larger changes at the end of significant milestones. This gives the broader view needed to ensure the codebase is on the right path.
@@ -35,6 +41,7 @@ The sub-agents are:
 - architecture-reviewer
 - config-auditor
 - test-auditor
+- type-reviewer
 
 Use them **A LOT**. Insert them into the todo list, at regular intervals, and at the end of significant milestones. If in doubt, use them more.
 
@@ -60,7 +67,7 @@ pnpm test           # 4. Test
 pnpm build          # 5. Build
 ```
 
-Run quality gates 1-5 in order after changes and before commits.
+Run quality gates 1-5 in order after changes and before commits. Pure documentation work only requires formatting.
 
 ## Architectural Understanding
 
@@ -77,7 +84,7 @@ The architecture operates at two different scales:
 - **Moria (Molecules/Atoms)** (`ecosystem/moria/`): Pure abstractions - interfaces, types, algorithms with zero dependencies
   - _Example_: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
 - **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`): Runtime-adaptive connective tissues that bind organisms
-  - _Example_: Adaptive logger using console/pino, storage tissue using localStorage/fs
+  - _Example_: Adaptive logger using consola, storage tissue using localStorage/fs
 - **Psycha (Living Organisms)** (`ecosystem/psycha/`): Complete applications
   - _Example_: `oak-notion-mcp` server, `github-mcp` server
 

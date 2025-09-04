@@ -5,6 +5,7 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "customConditions": ["development"],
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
@@ -19,6 +20,10 @@
     "paths": {
       "@oaknational/oak-notion-mcp": ["./ecosystem/psycha/oak-notion-mcp/src"],
       "@oaknational/oak-notion-mcp/*": ["./ecosystem/psycha/oak-notion-mcp/src/*"],
+      "@oaknational/oak-curriculum-mcp": ["./ecosystem/psycha/oak-curriculum-mcp/src"],
+      "@oaknational/oak-curriculum-mcp/*": ["./ecosystem/psycha/oak-curriculum-mcp/src/*"],
+      "@oaknational/oak-curriculum-sdk": ["./packages/oak-curriculum-sdk/src"],
+      "@oaknational/oak-curriculum-sdk/*": ["./packages/oak-curriculum-sdk/src/*"],
       "@oaknational/mcp-moria": ["./ecosystem/moria/moria-mcp/src"],
       "@oaknational/mcp-moria/*": ["./ecosystem/moria/moria-mcp/src/*"],
       "@oaknational/mcp-histos-env": ["./ecosystem/histoi/histos-env/src"],
@@ -26,7 +31,9 @@
       "@oaknational/mcp-histos-logger": ["./ecosystem/histoi/histos-logger/src"],
       "@oaknational/mcp-histos-logger/*": ["./ecosystem/histoi/histos-logger/src/*"],
       "@oaknational/mcp-histos-storage": ["./ecosystem/histoi/histos-storage/src"],
-      "@oaknational/mcp-histos-storage/*": ["./ecosystem/histoi/histos-storage/src/*"]
+      "@oaknational/mcp-histos-storage/*": ["./ecosystem/histoi/histos-storage/src/*"],
+      "@oaknational/mcp-histos-transport": ["./ecosystem/histoi/histos-transport/src"],
+      "@oaknational/mcp-histos-transport/*": ["./ecosystem/histoi/histos-transport/src/*"]
     }
   }
 }

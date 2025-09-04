@@ -6,6 +6,13 @@
       "env": {
         "LOG_LEVEL": "debug"
       }
+    },
+    "oak-curriculum-dev": {
+      "command": "pnpm",
+      "args": ["exec", "tsx", "ecosystem/psycha/oak-curriculum-mcp/bin/oak-curriculum-mcp.ts"],
+      "env": {
+        "LOG_LEVEL": "debug"
+      }
     }
   }
 }

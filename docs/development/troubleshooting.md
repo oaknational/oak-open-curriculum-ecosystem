@@ -366,7 +366,7 @@ If issues persist:
    - Configuration used
 
 3. **Report issue**:
-   - GitHub Issues: [oak-notion-mcp/issues](https://github.com/oaknational/oak-notion-mcp/issues)
+   - GitHub Issues: [oak-mcp-ecosystem/issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
    - Include all gathered information
    - Redact sensitive data (API keys)
 

@@ -106,29 +106,64 @@ export const combineResults = <T, E>(results: Result<T, E>[]): Result<T[], E> =>
 };
 
 /**
- * Tries to execute a function and wraps the result/error in a Result
+ * Default error handler that ensures we always return an Error instance
  */
-export const tryCatch = <T, E = Error>(
+const defaultErrorHandler = (error: unknown): Error => {
+  if (error instanceof Error) {
+    return error;
+  }
+  return new Error(String(error));
+};
+
+/**
+ * Tries to execute a function and wraps the result/error in a Result
+ * Overload 1: When no error handler is provided, returns Result<T, Error>
+ */
+export function tryCatch<T>(fn: () => T): Result<T>;
+
+/**
+ * Overload 2: With custom error handler, returns Result<T, E>
+ */
+export function tryCatch<T, E>(fn: () => T, onError: (error: unknown) => E): Result<T, E>;
+
+/**
+ * Implementation
+ */
+export function tryCatch<T, E = Error>(
   fn: () => T,
   onError?: (error: unknown) => E,
-): Result<T, E> => {
+): Result<T, E | Error> {
   try {
     return Ok(fn());
   } catch (error) {
     if (onError) {
       return Err(onError(error));
     }
-    return Err(error as E);
+    return Err(defaultErrorHandler(error));
   }
-};
+}
 
 /**
  * Async version of tryCatch
+ * Overload 1: When no error handler is provided, returns Promise<Result<T, Error>>
  */
-export const tryCatchAsync = async <T, E = Error>(
+export function tryCatchAsync<T>(fn: () => Promise<T>): Promise<Result<T>>;
+
+/**
+ * Overload 2: With custom error handler, returns Promise<Result<T, E>>
+ */
+export function tryCatchAsync<T, E>(
+  fn: () => Promise<T>,
+  onError: (error: unknown) => E,
+): Promise<Result<T, E>>;
+
+/**
+ * Implementation
+ */
+export async function tryCatchAsync<T, E = Error>(
   fn: () => Promise<T>,
   onError?: (error: unknown) => E,
-): Promise<Result<T, E>> => {
+): Promise<Result<T, E | Error>> {
   try {
     const value = await fn();
     return Ok(value);
@@ -136,6 +171,6 @@ export const tryCatchAsync = async <T, E = Error>(
     if (onError) {
       return Err(onError(error));
     }
-    return Err(error as E);
+    return Err(defaultErrorHandler(error));
   }
-};
+}

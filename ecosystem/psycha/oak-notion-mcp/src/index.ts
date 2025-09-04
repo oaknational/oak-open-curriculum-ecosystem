@@ -5,7 +5,13 @@
  * All orchestration happens in the psychon layer.
  */
 
+import { config } from 'dotenv';
 import { startOrganism } from './psychon';
+
+// Load environment variables from .env file
+// This must happen before any other imports that depend on process.env
+// Path is relative to where pnpm exec tsx runs from (project root)
+config();
 
 // Application entry point - minimal delegation
 export async function main(): Promise<void> {

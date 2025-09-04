@@ -45,3 +45,4 @@ Comprehensive documentation for AI agents working with this codebase:
 ## Additional Resources
 
 - [GO.md](../GO.md) - Grounding document for maintaining focus and quality (AI agents: read every 3rd task)
+- [SDK Docs Pipeline Guide](../packages/oak-curriculum-sdk/docs/docs-pipeline.md) - Generate, verify, and extend the SDK docs (HTML/JSON/MD/AI)

@@ -4,6 +4,7 @@
  */
 
 import type { McpPropertyFilter, McpSort } from './types';
+import type { JsonObject } from '@oaknational/mcp-moria';
 import type { SortDirection } from './constants';
 import { validSortDirectionsArray, validPropertyTypesArray } from './constants';
 
@@ -12,7 +13,7 @@ import { validSortDirectionsArray, validPropertyTypesArray } from './constants';
  * @param value - Value to check
  * @returns True if value is a record object
  */
-export function isRecord(value: unknown): value is Record<string, unknown> {
+export function isRecord(value: unknown): value is JsonObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 

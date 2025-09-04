@@ -95,3 +95,13 @@ export {
   combineEffects,
   sequenceEffects,
 } from './boundary';
+
+// External boundary type utilities - ONLY for validating external data
+export {
+  isObject,
+  isEnvironmentObject,
+  hasProperty,
+  hasNestedProperty,
+  extractProperty,
+  extractNestedProperty,
+} from './runtime-boundary';

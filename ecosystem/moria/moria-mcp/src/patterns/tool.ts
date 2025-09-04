@@ -1,3 +1,5 @@
+import type { JsonObject } from '../types/core.js';
+
 /**
  * @fileoverview Tool patterns - pure abstractions for tool creation and management
  * @module moria/patterns/tool
@@ -42,7 +44,7 @@ export interface ToolDefinition {
    */
   readonly inputSchema: {
     readonly type: 'object';
-    readonly properties: Record<string, unknown>;
+    readonly properties: JsonObject;
     readonly required?: readonly string[];
     readonly additionalProperties?: boolean;
   };

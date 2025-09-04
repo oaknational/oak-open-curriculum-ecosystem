@@ -9,7 +9,7 @@ import {
   type ReadResourceRequest,
 } from '@modelcontextprotocol/sdk/types.js';
 import { createResourceHandlers, createToolHandlers } from '../organa/mcp';
-import type { NotionServerDependencies } from '../chora/stroma/notion-types/dependencies';
+import type { NotionServerDependencies } from '../chorai/stroma/notion-types/dependencies';
 
 /**
  * Set up tool-related request handlers

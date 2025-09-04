@@ -2,6 +2,7 @@
  * @fileoverview Type definitions for Notion query building
  * @module notion/query-building
  */
+import type { JsonObject } from '@oaknational/mcp-moria';
 
 /**
  * MCP property filter definition
@@ -35,8 +36,8 @@ export interface McpFilters {
  */
 export interface NotionDatabaseQuery {
   filter?: {
-    and?: Record<string, unknown>[];
-    or?: Record<string, unknown>[];
+    and?: JsonObject[];
+    or?: JsonObject[];
   };
   sorts?: {
     property: string;
