@@ -5,6 +5,7 @@
     "module": "ESNext",
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
+    "customConditions": ["development"],
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
