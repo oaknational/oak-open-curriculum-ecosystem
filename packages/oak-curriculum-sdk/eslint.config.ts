@@ -36,6 +36,7 @@ const config = tsEslintConfig(
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
+        projectService: false,
         project: rootTsProject,
         tsconfigRootDir: repoRootDir,
       },
