@@ -54,13 +54,30 @@ Done:
 - REVIEW: config-auditor to confirm ESLint parser uses root project; verify effective config via `--print-config`
 - QUALITY-GATE: format → type-check → lint at repo root
 
-- ACTION: Re-run CI on PR #13; confirm `oak-curriculum-mcp` lint now passes
-- REVIEW: code-reviewer to scan `oak-curriculum-mcp` for any lingering implicit `any` in tests/mocks
+- ACTION: commit and push, then observe the new CI run on PR #13; confirm `oak-curriculum-mcp` lint now passes
 - QUALITY-GATE: tests and build at repo root
 
 - GROUNDING: read GO.md and follow all instructions
 
 - ACTION: Add `"development": "./src/index.ts"` to `exports` for packages missing it — COMPLETED for SDK and Curriculum MCP
+
+### New: SDK type generation in CI (offline)
+
+Problem: GitHub CI has restricted network; the SDK’s typegen fetched the OpenAPI schema over network during `prebuild`, causing build failures.
+
+Solution:
+- Update `packages/oak-curriculum-sdk/scripts/typegen.ts` to support an explicit CI/offline mode that reads the committed cached schema and never touches the network.
+- Mode detection: `--ci` CLI flag OR `SDK_TYPEGEN_MODE=ci` OR `CI=true` environment variable triggers offline mode.
+- Behaviour:
+  - Offline (CI): read `packages/oak-curriculum-sdk/src/types/generated/api-schema/api-schema.json`; if missing/invalid, fail with a clear error asking to refresh locally and commit.
+  - Online (dev/prod): fetch fresh schema using `OAK_API_KEY` and proceed.
+
+Done:
+- ACTION: Implement offline mode in `typegen.ts` with strict local-only behaviour in CI — COMPLETED
+
+Usage:
+- Dev (online): `pnpm -F @oaknational/oak-curriculum-sdk type-gen`
+- CI (offline): no changes required; `CI=true` is set and script uses cached schema automatically. For explicit invocation: `pnpm -F @oaknational/oak-curriculum-sdk type-gen -- --ci`.
 - REVIEW: architecture-reviewer to ensure export conditions align with monorepo strategy and don’t impact publishing
 - QUALITY-GATE: type-check and lint focused packages
 

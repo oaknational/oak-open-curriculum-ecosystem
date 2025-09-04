@@ -13,6 +13,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
@@ -44,44 +45,77 @@ const rootDirectory = path.resolve(thisDirectory, '..');
 const outPathFromRoot = 'src/types/generated/api-schema';
 const outDirectory = path.resolve(rootDirectory, outPathFromRoot);
 
-// API configuration
-const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
-const apiKey = process.env.OAK_API_KEY;
+// Determine mode: online (default) vs CI/offline
+const args = process.argv.slice(2);
+const isCiMode =
+  args.includes('--ci') || process.env.SDK_TYPEGEN_MODE === 'ci' || process.env.CI === 'true';
 
-// Download and save the JSON schema
-let response: Response;
+// Load schema
 let maybeSchema: unknown;
 
-console.log('🔄 Fetching OpenAPI schema from:', apiSchemaUrl);
+if (isCiMode) {
+  // Strict offline: use committed schema file only
+  const cachedSchemaPath = path.resolve(rootDirectory, outPathFromRoot, 'api-schema.json');
+  if (!existsSync(cachedSchemaPath)) {
+    throw new Error(
+      `CI/offline type-gen requires a cached schema at ${cachedSchemaPath}. ` +
+        `Run "pnpm -F @oaknational/oak-curriculum-sdk type-gen" locally to refresh the cache and commit the result.`,
+    );
+  }
+  console.log('🧰 Using cached OpenAPI schema (CI/offline):', cachedSchemaPath);
+  const raw = await readFile(cachedSchemaPath, 'utf8');
+  try {
+    maybeSchema = JSON.parse(raw);
+  } catch (err: unknown) {
+    let errMessage = '';
+    if (err instanceof Error) {
+      errMessage = err.message;
+    } else {
+      errMessage = String(err);
+    }
+    throw new Error(
+      `Cached schema at ${cachedSchemaPath} is not valid JSON. ` +
+        `Re-generate locally and commit. Original error: ${errMessage}`,
+    );
+  }
+} else {
+  // Online: fetch fresh schema from API
+  const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
+  const apiKey = process.env.OAK_API_KEY;
 
-try {
-  const headers: Record<string, string> = {
-    Accept: 'application/json',
-  };
+  let response: Response;
 
-  if (!apiKey) {
-    throw new TypeError('API key not found');
+  console.log('🔄 Fetching OpenAPI schema from:', apiSchemaUrl);
+
+  try {
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+    };
+
+    if (!apiKey) {
+      throw new TypeError('API key not found');
+    }
+
+    headers.Authorization = `Bearer ${apiKey}`;
+
+    response = await fetch(apiSchemaUrl, { headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${String(response.status)}: ${response.statusText}`);
+    }
+
+    maybeSchema = await response.json();
+  } catch (error: unknown) {
+    console.error(`❌ Error fetching API schema from ${apiSchemaUrl}:`, error);
+    throw error;
   }
 
-  headers.Authorization = `Bearer ${apiKey}`;
-
-  response = await fetch(apiSchemaUrl, { headers });
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${String(response.status)}: ${response.statusText}`);
+  if (maybeSchema === undefined) {
+    throw new Error('Failed to fetch API schema');
   }
 
-  maybeSchema = await response.json();
-} catch (error) {
-  console.error(`❌ Error fetching API schema from ${apiSchemaUrl}:`, error);
-  throw error;
+  console.log('✅ Schema fetched successfully');
 }
-
-if (maybeSchema === undefined) {
-  throw new Error('Failed to fetch API schema');
-}
-
-console.log('✅ Schema fetched successfully');
 console.log('🔨 Generating type artifacts...');
 
 // Simple inline check - is it an object with openapi: "3.x"?
