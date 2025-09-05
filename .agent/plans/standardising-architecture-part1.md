@@ -358,6 +358,58 @@ Note: Sub-agent invocation names retained per original practice even though exec
 
 ---
 
+## Progress Updates / Execution Journal
+
+Initial session started: (pending timestamp).
+
+No phases executed yet. Acceptance criteria all pending.
+
+Update (Baseline Partial): ACTION 1 initiated – phenotype packages enumerated, directory presence snapshot stored at `.agent/refactor/baseline/packages.json`, placeholder export snapshot files created for both phenotypes. Legacy token grep raw count collected (not yet filtered) – will integrate into baseline artefact in next step of ACTION 1 (need automated script). Next: implement scripted baseline capture to populate export lists & literal scans.
+
+## Executable TODO
+
+This is a living list, and will require regular update in order to fully execute the part 1 plan.
+
+1. ACTION: Baseline capture script – enumerate phenotype packages, produce directory tree snapshots, export surfaces, literal legacy token scan, ESLint phenotype config glob snapshot, boundary rule subset snapshot; persist artefacts under `.agent/refactor/baseline/`.
+   REVIEW: architecture-reviewer validate baseline artefacts completeness.
+2. ACTION: Implement codemod scaffold (plan mode only) producing JSON move plan without FS changes; write to `.agent/refactor/refactor-plan.part1.dryrun.json`.
+   REVIEW: code-reviewer assess mapping correctness & collision detection logic.
+3. GROUNDING: read GO.md & AGENT.md; simplify tasks if possible (Prime Directive) and adjust TODO accordingly.
+4. ACTION: Extend codemod with AST import rewrite logic (dry-run mode counts prospective rewrites) ensuring no content modifications yet.
+   REVIEW: type-reviewer confirm safe node kinds handled; code-reviewer confirm idempotency design.
+5. ACTION: Add config scanning module (phenotype `eslint.config.ts`, potential `tsconfig*`, `turbo.json`) to detect legacy segment references (no writes yet) and include findings in plan JSON.
+   REVIEW: config-auditor verify coverage & false-positive mitigation.
+6. GROUNDING: read GO.md & AGENT.md; refine next steps for simplicity.
+7. ACTION: Implement execution mode: perform directory move operations with collision abort logic (no import rewrites yet) for a temporary test run on first phenotype with `--dry-run-exec` flag (filesystem not mutated); verify plan stability.
+   REVIEW: architecture-reviewer approve execution sequencing.
+8. QUALITY-GATE: Run format → type-check → lint → test (baseline, no changes expected) and store results under `.agent/refactor/baseline/quality-gates.json`.
+9. GROUNDING: read GO.md & AGENT.md; confirm readiness for irreversible moves.
+10. ACTION: Execute moves + import rewrites for first phenotype package; regenerate export surface; run package-scoped gates; store interim report snippet.
+    REVIEW: test-auditor confirm tests unchanged; architecture-reviewer check export parity.
+11. ACTION: Execute moves + import rewrites for remaining phenotype packages sequentially with per-package gates and export parity checks; collect literal residual scans.
+    REVIEW: architecture-reviewer spot-check second package changes for mechanical purity.
+12. GROUNDING: read GO.md & AGENT.md; evaluate if additional safety needed before global config edits.
+13. ACTION: Apply global config updates (phenotype ESLint globs, duplicate boundary rules) and run secondary import rewrite pass (expect zero ops) capturing diff stats.
+    REVIEW: config-auditor validate updated ESLint rules include both legacy & new patterns with TODO comments.
+14. QUALITY-GATE: Full monorepo gates (format, type-check, lint, test, build) capturing results to interim report.
+15. GROUNDING: read GO.md & AGENT.md; consider any simplification before idempotency verification.
+16. ACTION: Idempotency verification – re-run codemod in plan mode expecting zero moves/rewrite operations; perform random file hash sampling; record outcomes.
+    REVIEW: architecture-reviewer validate idempotency evidence.
+17. ACTION: Global residual legacy token grep (including imports now) excluding archived docs; remediate any stragglers (document if found and patched) then rerun scan.
+    REVIEW: code-reviewer confirm remediation touches only textual tokens.
+18. QUALITY-GATE: Run full gates again ensuring remediation did not introduce drift.
+19. ACTION: Generate `refactor-report.json` per schema plus human summary markdown snippet; add legacy pointer doc under `docs/architecture/legacy-biological-mapping.md`.
+    REVIEW: architecture-reviewer & code-reviewer validate report completeness & spelling.
+20. GROUNDING: read GO.md & AGENT.md; quick retrospective, ensure acceptance checklist ready.
+21. ACTION: Prepare acceptance criteria checklist (update plan & report), stage all changes, create single atomic commit with message `refactor(server): mechanical directory normalisation (Part 1)`.
+    REVIEW: test-auditor & config-auditor final holistic review of commit diff.
+22. ACTION: (Post-commit) Run final gates to confirm no staging artefact excluded; open PR with summary & attach artefacts.
+    REVIEW: architecture-reviewer final confirmation; mark execution complete.
+
+Pending next: Start ACTION 1.
+
+---
+
 ## 16. Open Monitoring Items
 
 | Item                                 | Trigger                            | Action                                                     |
