@@ -3,5 +3,6 @@
  * Exports all organ factories
  */
 
-export { createMcpOrgan } from './mcp';
-export type { McpOrgan } from './mcp';
+// Updated re-exports after mechanical renaming: organa/mcp -> tools
+export { createMcpOrgan } from '../tools/index.js';
+export type { McpOrgan } from '../tools/index.js';

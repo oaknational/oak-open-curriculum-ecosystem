@@ -1,0 +1,75 @@
+{
+  "timestamp": "2025-09-05T08:29:27.448Z",
+  "plans": [
+    {
+      "name": "oak-curriculum-mcp",
+      "root": "/Users/jim/code/oak/ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-curriculum-mcp",
+      "moves": [
+        {
+          "from": "src/organa/mcp",
+          "to": "src/tools",
+          "exists": true,
+          "fileCount": 6
+        },
+        {
+          "from": "src/psychon",
+          "to": "src/app",
+          "exists": true,
+          "fileCount": 5
+        }
+      ],
+      "collisions": [],
+      "importRewriteEstimate": 8
+    },
+    {
+      "name": "oak-notion-mcp",
+      "root": "/Users/jim/code/oak/ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-notion-mcp",
+      "moves": [
+        {
+          "from": "src/chorai/phaneron",
+          "to": "src/config",
+          "exists": true,
+          "fileCount": 4
+        },
+        {
+          "from": "src/chorai/aither",
+          "to": "src/logging",
+          "exists": true,
+          "fileCount": 2
+        },
+        {
+          "from": "src/chorai/stroma",
+          "to": "src/types",
+          "exists": true,
+          "fileCount": 3
+        },
+        {
+          "from": "src/chorai/eidola",
+          "to": "src/test/mocks",
+          "exists": true,
+          "fileCount": 3
+        },
+        {
+          "from": "src/organa/mcp",
+          "to": "src/tools",
+          "exists": true,
+          "fileCount": 31
+        },
+        {
+          "from": "src/psychon",
+          "to": "src/app",
+          "exists": true,
+          "fileCount": 8
+        },
+        {
+          "from": "src/organa/notion",
+          "to": "src/integrations/notion",
+          "exists": true,
+          "fileCount": 36
+        }
+      ],
+      "collisions": [],
+      "importRewriteEstimate": 29
+    }
+  ]
+}

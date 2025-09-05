@@ -9,7 +9,7 @@ import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprot
 import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import type { McpOrgan } from '../organa/mcp/index.js';
+import type { McpOrgan } from '../tools/index.js';
 import type { Logger } from '@oaknational/mcp-moria';
 
 /**

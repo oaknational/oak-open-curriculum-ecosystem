@@ -3,8 +3,8 @@
  * Assembles all components into a working MCP server
  */
 
-import { createMcpOrgan } from '../organa/mcp/index.js';
-import type { McpOrgan } from '../organa/mcp/index.js';
+import { createMcpOrgan } from '../tools/index.js';
+import type { McpOrgan } from '../tools/index.js';
 import { appendToLogFile, getLogFilePath } from './file-reporter.js';
 
 function mapLogLevelToIndex(level: string): number {

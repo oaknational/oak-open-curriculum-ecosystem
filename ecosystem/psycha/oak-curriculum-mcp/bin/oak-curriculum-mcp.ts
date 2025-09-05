@@ -2,7 +2,8 @@
 import { config } from 'dotenv';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createStartupLogger, defaultStartupLoggerDeps } from '../src/psychon/startup.js';
+// Updated path after mechanical renaming: psychon -> app
+import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
 function safeStringify(value: unknown): string {
   try {
     return JSON.stringify(value);
