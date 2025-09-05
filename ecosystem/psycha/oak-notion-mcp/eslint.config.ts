@@ -44,22 +44,31 @@ const config = tsEslintConfig(
       },
     },
     rules: {
-      // Enforce module boundaries
-      'import-x/no-relative-parent-imports': 'off',
+      // Enforce module boundaries (zones only; no new strictness in Part 1)
       ...psychaBoundaryRules,
       ...psychonArchitectureRules,
+      // Part 2 consideration: enable the two rules below after alias adoption
+      'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-internal-modules': 'off',
     },
   },
-  // Organa modules - Allow imports within the same organ
+  // Organa modules (legacy) - Allow imports within the same organ
   {
     files: ['src/organa/**/*.ts'],
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
-  // Psychon layer can import from any organ
+  // New structure modules - Allow imports within the same area (tools/integrations)
   {
-    files: ['src/index.ts', 'src/psychon/**/*.ts'],
+    files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': 'off',
+    },
+  },
+  // Psychon/app layer can import from any organ
+  {
+    files: ['src/index.ts', 'src/psychon/**/*.ts', 'src/app/**/*.ts'],
     rules: {
       'import-x/no-restricted-paths': 'off',
       'import-x/no-relative-parent-imports': 'off',

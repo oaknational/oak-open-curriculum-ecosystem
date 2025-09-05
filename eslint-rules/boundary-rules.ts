@@ -1,6 +1,6 @@
 /**
  * Centralized ESLint Boundary Rules for Moria/Histoi/Psycha Architecture
- * 
+ *
  * These rules enforce the biological architecture pattern:
  * - Moria: Pure abstractions with zero dependencies
  * - Histoi: Transplantable tissues that are independent of each other
@@ -22,21 +22,23 @@ export const moriaBoundaryRules: Partial<Linter.RulesRecord> = {
         {
           target: './src/**',
           from: '../../../ecosystem/histoi/**',
-          message: 'Moria cannot import from Histoi tissues. Moria must remain pure with zero dependencies.',
+          message:
+            'Moria cannot import from Histoi tissues. Moria must remain pure with zero dependencies.',
         },
         {
           target: './src/**',
           from: '../../../ecosystem/psycha/**',
-          message: 'Moria cannot import from Psycha organisms. Moria must remain pure with zero dependencies.',
+          message:
+            'Moria cannot import from Psycha organisms. Moria must remain pure with zero dependencies.',
         },
       ],
     },
   ],
-  
+
   // Block any non-relative imports (package imports)
   'import-x/no-internal-modules': 'off', // Allow internal module imports
   'import-x/no-relative-packages': 'off', // Allow relative imports
-  
+
   // Ensure no external dependencies in production code
   'import-x/no-extraneous-dependencies': [
     'error',
@@ -65,33 +67,35 @@ export const moriaTestConfigRules: Partial<Linter.RulesRecord> = {
 /**
  * Generate Histoi boundary rules for a specific tissue
  * Each tissue must be independent of other tissues
- * 
+ *
  * @param tissueName - The name of the current tissue (e.g., 'histos-logger')
  * @param otherTissues - Array of other tissue names to prevent imports from
  */
 export function createHistoiBoundaryRules(
   _tissueName: string,
-  otherTissues: string[]
+  otherTissues: string[],
 ): Partial<Linter.RulesRecord> {
   const zones = [
     // Cannot import from other Histoi tissues
-    ...otherTissues.map(otherTissue => ({
+    ...otherTissues.map((otherTissue) => ({
       target: './src/**' as const,
       from: `../${otherTissue}/**` as const,
-      message: 'Histoi tissues cannot depend on each other. Each tissue must be independently transplantable.',
+      message:
+        'Histoi tissues cannot depend on each other. Each tissue must be independently transplantable.',
     })),
     // Cannot import from Psycha organisms
     {
       target: './src/**' as const,
       from: '../../../ecosystem/psycha/**' as const,
-      message: 'Histoi tissues cannot depend on Psycha organisms. Tissues must be transplantable to any organism.',
+      message:
+        'Histoi tissues cannot depend on Psycha organisms. Tissues must be transplantable to any organism.',
     },
   ];
 
   return {
     // Histoi tissues must be independent and transplantable
     'import-x/no-restricted-paths': ['error', { zones }],
-    
+
     // Only allow imports from Moria and necessary runtime dependencies
     '@typescript-eslint/no-restricted-imports': [
       'error',
@@ -108,21 +112,24 @@ export function createHistoiBoundaryRules(
         ],
       },
     ],
-    
+
     // Prevent direct access to Node.js globals - IO must be injected
     'no-restricted-globals': [
       'error',
       {
         name: 'process',
-        message: 'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies from the consuming organism.',
+        message:
+          'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies from the consuming organism.',
       },
       {
         name: '__dirname',
-        message: 'Histoi tissues must not access __dirname directly. File paths must be injected as dependencies.',
+        message:
+          'Histoi tissues must not access __dirname directly. File paths must be injected as dependencies.',
       },
       {
-        name: '__filename', 
-        message: 'Histoi tissues must not access __filename directly. File paths must be injected as dependencies.',
+        name: '__filename',
+        message:
+          'Histoi tissues must not access __filename directly. File paths must be injected as dependencies.',
       },
     ],
   };
@@ -158,16 +165,18 @@ export const psychonArchitectureRules: Partial<Linter.RulesRecord> = {
     'error',
     {
       zones: [
-        // Organa isolation - organs cannot import from other organs
+        // New structure isolation – integrations cannot import tools, and vice versa
         {
-          target: 'src/organa/notion/**',
-          from: 'src/organa/mcp/**',
-          message: 'Organs cannot import from other organs. Use dependency injection via psychon.',
+          target: 'src/integrations/**',
+          from: 'src/tools/**',
+          message:
+            'Integrations cannot import Tools directly. Use dependency injection via app layer.',
         },
         {
-          target: 'src/organa/mcp/**',
-          from: 'src/organa/notion/**',
-          message: 'Organs cannot import from other organs. Use dependency injection via psychon.',
+          target: 'src/tools/**',
+          from: 'src/integrations/**',
+          message:
+            'Tools cannot import Integrations directly. Use dependency injection via app layer.',
         },
       ],
     },
@@ -180,7 +189,7 @@ export const psychonArchitectureRules: Partial<Linter.RulesRecord> = {
       patterns: [
         {
           group: ['../../*'],
-          message: 'Use path aliases for cross-boundary imports (e.g., @organa/mcp instead of ../../mcp).',
+          message: 'Avoid parent-jump cross-boundary imports. Prefer package entry points/barrels.',
         },
         {
           group: ['**/internal/**', '**/internals/**', '**/private/**'],
@@ -209,6 +218,5 @@ export const HISTOI_TISSUES = [
  * Used to prevent cross-tissue imports
  */
 export function getOtherTissues(currentTissue: string): string[] {
-  return HISTOI_TISSUES.filter(tissue => tissue !== currentTissue);
+  return HISTOI_TISSUES.filter((tissue) => tissue !== currentTissue);
 }
-

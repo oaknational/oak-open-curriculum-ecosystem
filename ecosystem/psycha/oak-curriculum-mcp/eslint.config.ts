@@ -69,9 +69,10 @@ const config = tsEslintConfig(
       '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
-  // Psychon layer can import from any organ
+  // Psychon (legacy) & App (new) layer can import from any organ
+  // Transitional duplication per Part 1 mechanical normalisation (no behavioural change)
   {
-    files: ['src/index.ts', 'src/psychon/**/*.ts'],
+    files: ['src/index.ts', 'src/psychon/**/*.ts', 'src/app/**/*.ts'],
     rules: {
       'import-x/no-restricted-paths': 'off',
       'import-x/no-relative-parent-imports': 'off',
@@ -81,7 +82,7 @@ const config = tsEslintConfig(
   },
   // Entry point can import psychon
   {
-    files: ['src/index.ts'],
+    files: ['src/index.ts'], // remains same; index already whitelisted above for app/psychon access
     rules: {
       'import-x/no-internal-modules': 'off',
     },
