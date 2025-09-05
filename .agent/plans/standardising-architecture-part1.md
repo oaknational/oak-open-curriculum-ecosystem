@@ -2,8 +2,6 @@
 
 Supersedes and concretises the Part 1 content of `standardising-architecture-plan.md` for execution. **No behavioural change.** Purely mechanical, idempotent directory normalisation + import/config rewrites to present a conventional layout while preserving existing logical boundaries and custom ESLint guarantees.
 
----
-
 ## 1. Intent & Impact
 
 **Intent:** Make the MCP servers and shared packages immediately legible to new contributors by replacing esoteric biological/Greek directory names inside phenotype (psycha) packages with conventional names (`config`, `logging`, `types`, `tools`, `integrations`, `app`, `test/mocks`). Provide deterministic, reviewable, one‑shot codemod enabling future Part 2 platform abstraction work. Maintain uninterrupted build + test integrity. Produce auditable report to prove absence of semantic drift.
@@ -102,6 +100,11 @@ Idempotency: skip mapping if target already exists _and_ source absent. If both 
 4. **Idempotent codemod** (second run yields zero diff).
 5. **Green quality gates** after each macro phase (format → type-check → lint → test → build).
 6. **British spelling** in new/modified textual artefacts.
+7. Boundary enforcement parity: duplicated ESLint boundary rules (legacy + new) ensure no transient gap; phenotype configs updated to reference new directories; legacy patterns removed only in Part 2.
+8. **Literal legacy segment strings eliminated** (non-import contexts) outside archived docs.
+9. **Export surface parity**: symbol list (named + default exports) identical pre/post (ordering ignored). Any difference aborts unless justified & recategorised out-of-scope.
+10. **Collision safety**: if both source & target dirs exist with distinct content, operation aborts with explicit diagnostic entry; no silent merges.
+11. **Reporting completeness**: JSON report includes mandatory keys (see Section 11) & idempotency flag true.
 
 ---
 
@@ -120,6 +123,13 @@ Idempotency: skip mapping if target already exists _and_ source absent. If both 
 
 Capture baseline metrics & artefacts: list of candidate server packages, tree of each mapped directory, counts of files per mapping, grep inventory of old segment references.
 
+Additional baseline artefacts:
+
+- Extract current phenotype ESLint restricted path zones and store JSON snapshot.
+- Record boundary rule pairs referencing `src/organa/*`, `src/psychon/*` from `eslint-rules/boundary-rules.ts` (for later potential generalisation; Part 1 keeps file untouched but documents future rename implications).
+- Capture export surface snapshot per phenotype: generate list of exported symbols by parsing each package entry points (heuristic: `src/index.ts`, or package.json `exports`/`main` if present). Persist as `baseline-exports.<pkg>.json`.
+- Perform literal string scan (grep -R) for `psychon/|chorai/|organa/mcp|eidola/` in phenotype `src` excluding known code import lines (filter lines starting with `import` / `from` / `export`). Store occurrences list for remediation tracking.
+
 ### Phase B: Plan Synthesis (Dry Run)
 
 Generate JSON plan: per package [{move {from,to,fileCount}, importRewriteEstimate}]. Validate no conflicting pre‑existing targets. Manual review + sign‑off before execution.
@@ -132,14 +142,24 @@ For each server package alphabetically:
 2. Rewrite imports (AST) limited to package subtree.
 3. Run scoped quality gate (format, type-check, lint, test) filtered to that package.
 4. Abort + revert package changes if failure; record issue.
+5. Re-run export surface extraction for the package; diff against baseline. Abort on divergence.
+6. Re-run literal path scan scoped to package; fail if any legacy tokens remain in non-import contexts.
 
 ### Phase D: Global Config & Residual Rewrite
 
 Run config/alias pattern updates (tsconfig, turbo globs, vitest, eslint). Global import rewrite second pass (should be no changes). Grep to ensure zero old segments outside legacy archive.
 
+Add boundary adaptation step:
+
+1. Update phenotype ESLint configs: replace occurrences of `src/psychon/` → `src/app/`, `src/organa/mcp/` → `src/tools/`, `src/organa/` (non‑mcp integrative organs) → `src/integrations/`.
+2. Duplicate (not replace) relevant patterns in `eslint-rules/boundary-rules.ts`: for every legacy glob referencing `psychon`, `organa/mcp`, or `chorai` add a sibling rule referencing the mapped new directory name with identical constraints. Mark duplicates with a `// TODO(Part2): remove legacy pattern` comment.
+3. After duplication, run lint to confirm no rule pattern crashes (invalid zones, etc.).
+4. Global literal string scan (non-import contexts) across all phenotype packages to ensure zero residual legacy tokens.
+
 ### Phase E: Validation & Reporting
 
 Execute full monorepo quality gates. Generate refactor report (see Section 11). Random sample integrity check (N files) verifying only path segment changes in import lines.
+Export surface global diff: ensure all phenotype packages export lists unchanged relative to baseline snapshot files.
 
 ### Phase F: Documentation & Archival Pointer
 
@@ -192,28 +212,64 @@ Order (per package during Phase C):
 
 Global (Phase E): Format → Type-check (all) → Lint (all) → Test (all) → Build (all). Lint phase includes verification that phenotype ESLint configs no longer contain the deprecated directory globs. Any failure halts; root cause appended to report.
 
+Post‑validation grep assertions:
+
+- `grep -R "psychon/" ecosystem/psycha/*/src` returns 0
+- `grep -R "chorai/" ecosystem/psycha/*/src` returns 0
+- `grep -R "organa/mcp" ecosystem/psycha/*/src` returns 0
+- `grep -R "eidola/" ecosystem/psycha/*/src` returns 0
+
+Exclude archived docs directory when performing final grep.
+
+Export surface diffing:
+
+- Pre-phase capture: `baseline-exports.<pkg>.json`.
+- Post-phase capture: `post-exports.<pkg>.json`.
+- Comparison: sorted set equality of symbol names (distinguish default vs named). Report includes any discrepancies (should be empty array).
+
+Literal path scan filtering heuristic:
+
+- Accept import lines even if containing legacy tokens (handled via rewrite) until final residual scan; final scan expects zero regardless.
+- Non-import contexts (comments, strings inside code) must be absent or migrated to neutral wording (e.g., references in JSDoc updated to new directory name or moved to legacy pointer doc).
+
 ---
 
 ## 11. Reporting Artefacts
 
 `refactor-report.json` schema:
 
-```json
+```jsonc
 {
-  "timestamp": ISO8601,
+  "timestamp": "ISO8601",
   "packages": [
     {
-      "name": string,
-      "moves": [{"from": string, "to": string, "files": number}],
-      "importsRewritten": number,
-      "hashIntegrity": {"changedFiles": number, "contentDiff": []}
-    }
+      "name": "string",
+      "moves": [{ "from": "string", "to": "string", "files": 0 }],
+      "importsRewritten": 0,
+      "hashIntegrity": { "changedFiles": 0, "contentDiff": [] },
+      "exportSurface": {
+        "baseline": ["symbol"],
+        "post": ["symbol"],
+        "diff": { "added": [], "removed": [] },
+      },
+      "literalScanResidual": [],
+      "collisions": [
+        { "source": "string", "target": "string", "status": "aborted|manual-required" },
+      ],
+      "boundaryRulesDuplicated": true,
+    },
   ],
-  "oldSegmentsResidual": string[],
-  "qualityGates": { "typeCheck": "pass|fail", "lint": "pass|fail", "test": {"status": "pass|fail", "summary": {...}}, "build": "pass|fail" },
-  "idempotent": boolean,
-  "randomSampleVerification": [{"file": string, "nonImportChanges": number}],
-  "notes": string
+  "oldSegmentsResidual": [],
+  "qualityGates": {
+    "typeCheck": "pass",
+    "lint": "pass",
+    "test": { "status": "pass", "summary": {} },
+    "build": "pass",
+  },
+  "idempotent": true,
+  "randomSampleVerification": [{ "file": "string", "nonImportChanges": 0 }],
+  "docsUpdated": true,
+  "notes": "string",
 }
 ```
 
@@ -223,14 +279,19 @@ Human summary (Markdown) for PR includes: moves table, counts, guarantees.
 
 ## 12. Risk Register & Mitigations
 
-| Risk                                       | Mitigation                                         | Verification                                      |
-| ------------------------------------------ | -------------------------------------------------- | ------------------------------------------------- |
-| Missed import rewrite                      | Centralised AST traversal, grep post-pass          | Grep for `chorai`, `psychon`, `organa/mcp` tokens |
-| Config pattern omission                    | Enumerate & test mutate list                       | Snapshot diff of config files                     |
-| Behavioural drift via accidental code edit | Hash pre/post                                      | Hash integrity section                            |
-| Snapshot test failure due to path text     | Auto update snapshots (if policy) else manual ack  | Vitest run output                                 |
-| Boundary relaxation                        | Re-run dependency graph (madge) and compare cycles | madge circular report delta                       |
-| Non-idempotent codemod                     | Second dry run diff check                          | Idempotent flag true                              |
+| Risk                                           | Mitigation                                              | Verification                                       |
+| ---------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------- |
+| Missed import rewrite                          | Centralised AST traversal, grep post-pass               | Grep for `chorai`, `psychon`, `organa/mcp` tokens  |
+| Config pattern omission                        | Enumerate & test mutate list                            | Snapshot diff of config files                      |
+| Behavioural drift via accidental code edit     | Hash pre/post                                           | Hash integrity section                             |
+| Snapshot test failure due to path text         | Auto update snapshots (if policy) else manual ack       | Vitest run output                                  |
+| Boundary relaxation                            | Duplicate rules before rename; keep legacy until Part 2 | Lint success + report boundaryRulesDuplicated=true |
+| Non-idempotent codemod                         | Second dry run diff check                               | Idempotent flag true                               |
+| Residual literal legacy strings (non-import)   | Dedicated grep & filtered scan                          | literalScanResidual empty array                    |
+| Export surface drift                           | Baseline + post export symbol diff                      | exportSurface.diff added/removed empty             |
+| Directory collision (source + target coexist ) | Abort & require manual resolution                       | collisions array entries (should be empty)         |
+| Hidden dynamic require paths                   | Grep for `require(` + legacy tokens                     | Manual inspection logged                           |
+| Partial boundary duplication omission          | Programmatic generation mapping & lint run              | boundaryRulesDuplicated flag                       |
 
 ---
 
@@ -245,10 +306,13 @@ Single atomic commit => rollback = `git revert <commit>` or discard branch. For 
 1. All specified directory mappings applied where sources existed.
 2. No remaining source directories with old Greek/biological names inside phenotype packages.
 3. All quality gates pass monorepo‑wide.
-4. No change to exported package public APIs (diff of built `dist` exports shape optional).
-5. Residual grep for old segment tokens (excluding archived docs) returns zero.
-6. Refactor report present & idempotent flag true.
-7. Commit message conforms to conventional style and clearly marks Part 1 mechanical nature.
+4. Export surface parity: no added or removed symbols per package (diff arrays empty).
+5. Residual grep & literal scan for old segment tokens (excluding archived docs) returns zero.
+6. Refactor report present with required schema, `idempotent` true, `boundaryRulesDuplicated` true, `docsUpdated` true.
+7. No collisions unresolved (collisions array empty).
+8. Hash integrity check shows only path/import line modifications (no other content drift aside from directory movement).
+9. Commit message conforms to conventional style and clearly marks Part 1 mechanical nature.
+10. British spelling adhered to in all new/modified textual sections.
 
 ---
 
@@ -258,7 +322,7 @@ REMINDER: UseBritish spelling
 
 Every Action is followed by a Review. Every third task is grounding. Quality gates appear regularly. Prefix semantics: ACTION:, REVIEW:, GROUNDING:, QUALITY-GATE:
 
-1. ACTION: Baseline capture – run and save current madge circular report, grep counts for `chorai|psychon|organa/mcp`, and record package list.  
+1. ACTION: Baseline capture – run and save current madge circular report, grep counts for `chorai|psychon|organa/mcp|eidola`, capture export surfaces, literal legacy string scan (non-import), and record package list.  
    REVIEW: architecture-reviewer to validate baseline completeness.
 2. ACTION: Implement codemod scaffolding (plan mode only) – script that enumerates candidate moves without touching FS.  
    REVIEW: code-reviewer to assess script structure.
@@ -268,22 +332,22 @@ Every Action is followed by a Review. Every third task is grounding. Quality gat
 5. ACTION: Add config mutation module (tsconfig paths key+value, turbo.json, eslint config string search).  
    REVIEW: config-auditor validates exhaustive coverage.
 6. GROUNDING: read GO.md and AGENT.md; simplify if over-engineered.
-7. ACTION: Generate dry-run JSON plan for all server packages; store as `refactor-plan.part1.json`.  
+7. ACTION: Generate dry-run JSON plan for all server packages; include predicted export surface parity hashes; store as `refactor-plan.part1.json`.  
    REVIEW: architecture-reviewer confirms mapping correctness & no conflicts.
-8. QUALITY-GATE: Run format → type-check → lint (should be unchanged), confirm zero failures baseline before executing moves.
+8. QUALITY-GATE: Run format → type-check → lint (should be unchanged), confirm zero failures baseline before executing moves; verify export baseline & literal scan stored.
 9. GROUNDING: read GO.md and AGENT.md; confirm readiness to execute.
 10. ACTION: Execute moves + rewrites for first server package (alphabetical) with scoped quality gate (format, type-check, lint, test).  
     REVIEW: test-auditor validates no test regressions.
-11. ACTION: Repeat step 10 for remaining server packages sequentially, updating cumulative report.  
+11. ACTION: Repeat step 10 for remaining server packages sequentially, updating cumulative report; run per-package export diff + literal residual scan.
     REVIEW: architecture-reviewer spot-check second package diff for mechanical purity.
 12. GROUNDING: read GO.md and AGENT.md; verify continuing alignment.
-13. ACTION: Run global config rewrite + second import rewrite pass (should yield zero net changes).  
+13. ACTION: Run global config rewrite + second import rewrite pass (should yield zero net changes); duplicate boundary rules; update phenotype ESLint configs.  
     REVIEW: config-auditor verifies config diffs minimal & correct.
 14. QUALITY-GATE: Full monorepo gates (format, type-check, lint, test, build) – record outcomes in report.
 15. GROUNDING: read GO.md and AGENT.md; reflect on any simplifications before finalisation.
 16. ACTION: Perform idempotency check (re-run codemod in dry-run; expect zero planned operations) and hash integrity sampling.  
     REVIEW: architecture-reviewer confirms idempotency & integrity evidence.
-17. ACTION: Generate legacy pointer doc + compile `refactor-report.json` + PR description draft.  
+17. ACTION: Generate legacy pointer doc + compile `refactor-report.json` (including export surface & literal scan data) + PR description draft.  
     REVIEW: code-reviewer + architecture-reviewer review narrative & clarity.
 18. QUALITY-GATE: Final pre-commit gates (format, type-check, lint, test) ensuring no drift since last gate.
 19. ACTION: Create single atomic commit and open PR with acceptance criteria checklist.  
@@ -318,5 +382,20 @@ Applied Prime Directive: Avoid per-file commits – single atomic commit reduces
 - Team acknowledgement (implicit via review) that changes are mechanical
 
 ---
+
+## 19. Ambiguity Audit
+
+| Potential Ambiguity                                   | Resolution / Clarification                                                                                                                                |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Whether to mutate shared `eslint-rules` or only local | Duplicate patterns in shared file (additive); legacy retained until Part 2 removal.                                                                       |
+| Handling of existing target dirs with partial overlap | Abort & require manual reconciliation; no auto-merge to avoid silent loss.                                                                                |
+| Definition of export surface (which entry)            | Use `src/index.ts` if present; else resolve from package.json `exports` or `main`. Fallback: glob `src/**/*.ts` building synthetic export map (document). |
+| Acceptable differences in export order                | Order ignored; treat as sets.                                                                                                                             |
+| Literal string scan scope (imports vs other)          | Imports transformed; only non-import contexts must be zero residual. Final global scan ensures imports also clean.                                        |
+| Hash integrity exclusions                             | Only import specifier path segments may differ; file path relocation inherently changes diff but content hash (sans path string) stable.                  |
+| Boundary duplication comment format                   | Add `// TODO(Part2): remove legacy pattern` for each duplicated legacy rule.                                                                              |
+| Archive location for legacy docs                      | Existing docs left in place; new pointer doc summarises mapping & rationale referencing them.                                                             |
+
+Audit complete – no unresolved ambiguities remain for Part 1 mechanical scope.
 
 End of Part 1 Implementation Plan.
