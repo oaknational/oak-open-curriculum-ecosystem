@@ -36,7 +36,7 @@ export interface ErrorHandler {
 /**
  * Import existing MCP types - single source of truth
  */
-import type { McpTool, McpToolResult } from '../../types.js';
+import type { McpTool, McpToolResult } from '../../types';
 
 /**
  * Tool result structure

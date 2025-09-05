@@ -3,10 +3,10 @@
  * Assembles tools from clean abstractions
  */
 
-import type { NotionDependencies } from '../../types/notion-types/dependencies.js';
-import type { McpTool } from '../types.js';
-import { createToolFactory, createErrorHandler, createToolRegistry } from './core/index.js';
-import type { ToolRegistry as CoreToolRegistry } from './core/types.js';
+import type { NotionDependencies } from '../../types/notion-types/dependencies';
+import type { McpTool } from '../types';
+import { createToolFactory, createErrorHandler, createToolRegistry } from './core/index';
+import type { ToolRegistry as CoreToolRegistry } from './core/types';
 import {
   searchToolDefinition,
   listDatabasesToolDefinition,

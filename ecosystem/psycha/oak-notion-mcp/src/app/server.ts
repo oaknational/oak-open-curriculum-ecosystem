@@ -8,7 +8,7 @@ import {
   type CallToolRequest,
   type ReadResourceRequest,
 } from '@modelcontextprotocol/sdk/types.js';
-import { createResourceHandlers, createToolHandlers } from '../tools/index.js';
+import { createResourceHandlers, createToolHandlers } from '../tools/index';
 import type { McpTool } from '../tools/types';
 import type { NotionServerDependencies } from '../types/notion-types/dependencies';
 

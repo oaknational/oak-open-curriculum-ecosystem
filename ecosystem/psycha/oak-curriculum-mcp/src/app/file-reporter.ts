@@ -30,8 +30,8 @@ export function appendToLogFile(logFilePath: string, message: string): void {
 export function getRepoRoot(): string {
   const currentFileUrl = import.meta.url;
   const currentFilePath = fileURLToPath(currentFileUrl);
-  // Go up from ecosystem/psycha/oak-curriculum-mcp/src/psychon to repo root
-  // Current: ecosystem/psycha/oak-curriculum-mcp/src/psychon/file-reporter.ts
+  // Go up from ecosystem/psycha/oak-curriculum-mcp/src/app to repo root
+  // Current: ecosystem/psycha/oak-curriculum-mcp/src/app/file-reporter.ts
   // Need to go up 5 directories to reach repo root
   let root = currentFilePath;
   for (let i = 0; i < 5; i++) {

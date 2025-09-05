@@ -3,7 +3,7 @@
  * Converts errors into user-friendly MCP responses
  */
 
-import type { ErrorHandler, ErrorContext, ToolResult, ToolLogger } from './types.js';
+import type { ErrorHandler, ErrorContext, ToolResult, ToolLogger } from './types';
 
 /**
  * Creates a default error handler with logging

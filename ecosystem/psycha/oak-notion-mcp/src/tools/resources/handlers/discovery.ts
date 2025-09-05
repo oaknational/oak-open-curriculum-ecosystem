@@ -6,9 +6,9 @@
 import type { ReadResourceResult, Resource } from '@modelcontextprotocol/sdk/types.js';
 import type { PageObjectResponse, DatabaseObjectResponse } from '@notionhq/client';
 import { isFullPage, isFullDatabase } from '@notionhq/client/build/src/helpers';
-import type { NotionDependencies } from '../../../types/notion-types/dependencies.js';
+import type { NotionDependencies } from '../../../types/notion-types/dependencies';
 // Transformers will be accessed through deps.notionOperations
-import { scrubSensitiveData } from '../../../logging/scrubbing.js';
+import { scrubSensitiveData } from '../../../logging/scrubbing';
 
 /**
  * Handles the special discovery resource

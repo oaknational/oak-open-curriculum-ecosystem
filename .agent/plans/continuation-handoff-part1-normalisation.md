@@ -12,6 +12,11 @@ This document equips a successor agent to complete the purely mechanical Part 1 
 - Preserve architectural boundaries; do not relax ESLint rules.
 - British spelling (REMINDER: UseBritish spelling).
 
+## Core References
+
+- Read and follow `GO.md` for grounding, TODO structuring, and quality gates. Replace references to external review agents with self-reviews.
+- Read `.agent/directives-and-memory/AGENT.md` and linked documents.
+
 ## Repository Snapshot
 
 Phenotype packages (`ecosystem/psycha/`):
@@ -66,7 +71,7 @@ After full migration these must only appear in archived docs or the pointer doc 
 | Boundary relaxation              | Duplicate rules (legacy + new)                                 | Lint PASS                               |
 | Non-idempotent script            | Re-run expecting zero ops                                      | Second run no changes                   |
 | Naming collisions across layers  | Prefer explicit deep imports; disambiguate barrel export names | Type-check PASS; clear symbol ownership |
-| Confusing nested tools directory | Plan mechanical rename (`tools/tools` → `tools/runtime`)       | Gates PASS post‑rename                  |
+| Confusing nested tools directory | Rename deferred to Part 2 (`tools/tools` → `tools/runtime`)    | Tracked in Part 2 acceptance            |
 | Residual tokens                  | Global grep & remediate                                        | Residual array empty                    |
 
 ## Acceptance Criteria
@@ -89,13 +94,13 @@ After full migration these must only appear in archived docs or the pointer doc 
    - Layered barrels resolved to correct layers (e.g., `createToolHandlers` now exported from `src/tools/tools/handlers` via `src/tools/index.ts`).
    - `ToolRegistry` ambiguity resolved: runtime registry API imported from `tools/tools/core/types`; schema mapping kept local to `tools/tools/types`.
 
-2. Root gates to run now: `pnpm build` (type‑check, lint and tests already PASS).
+2. Root gates: all PASS (type‑check, lint, tests, build). Export parity verified (no diff). Residual scans clean. Idempotency confirmed (codemod no‑op). Report and pointer doc generated.
 3. Export parity capture & diff for `oak-notion-mcp` (pre/post snapshots) – should be identical.
 4. Legacy token scan (non-import contexts) and remediate.
 5. Duplicate ESLint boundary rules & add new globs (legacy retained with `// TODO(Part2)` comments). Note: central rules already updated to reflect tools↔integrations isolation; per‑package config aligned to enforce zones only for Part 1 (defer strict `no-internal-modules` and `no-relative-parent-imports` to Part 2).
 6. Idempotency check: re-run codemod (`tsx scripts/refactor/part1-codemod-exec.ts --packages=oak-notion-mcp`) expecting zero ops.
 7. Global residual token grep (imports + non-import) confirm clean (exclude archived/pointer docs).
-8. Generate `refactor-report.json` + pointer doc `docs/architecture/legacy-biological-mapping.md`.
+8. Generate `refactor-report.json` + pointer doc `docs/architecture/legacy-biological-mapping.md`. (Generated)
 9. Final full gates and atomic commit & PR (attach report & acceptance checklist).
 
 ## Report JSON (Shape Example)
@@ -153,3 +158,25 @@ Run remaining quality gates from repo root (`pnpm lint`, `pnpm test`, `pnpm buil
 ---
 
 Completion = all acceptance criteria satisfied + report + atomic commit + PR.
+
+## Queued Part 2 Work (Workspace taxonomy)
+
+- Rename workspace taxonomy (mechanical):
+  - `ecosystem/psycha/<server>` → `apps/<server>`
+  - `ecosystem/moria/moria-mcp` → `packages/core/mcp-core`
+  - `ecosystem/histoi/histos-logger` → `packages/libs/logger`
+  - `ecosystem/histoi/histos-transport` → `packages/libs/transport`
+  - `ecosystem/histoi/histos-storage` → `packages/libs/storage`
+  - `ecosystem/histoi/histos-env` → `packages/libs/env`
+  - `ecosystem/histoi/histos-runtime-abstraction` → `packages/libs/runtime`
+  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
+
+- Introduce internal alias scope distinct from publish scope:
+  - Reserve `@oaknational/*` for published packages only
+  - Add `@workspace/*` aliases in `tsconfig.base.json`:
+    - `@workspace/apps/*` → `apps/*/src/*`
+    - `@workspace/core/*` → `packages/core/*/src/*`
+    - `@workspace/libs/*` → `packages/libs/*/src/*`
+    - `@workspace/sdks/*` → `packages/sdks/*/src/*`
+
+- Update configs (ESLint boundaries, Turbo, test globs) accordingly and run idempotent codemod (git mv + AST import rewrite). Full gates must be green post‑rename.

@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createResourceHandlers } from './handlers/index.js';
-import type { MinimalNotionClient } from '../../types/notion-types/notion-client.js';
+import { createResourceHandlers } from './handlers/index';
+import type { MinimalNotionClient } from '../../types/notion-types/notion-client';
 import type { Logger } from '@oaknational/mcp-moria';
 import {
   createMockPage,
   createMockDatabase,
   createMockPersonUser,
-} from '../../test/mocks/notion-mocks.js';
+} from '../../test/mocks/notion-mocks';
 import {
   createMockListUsersResponse,
   createMockSearchResponse,
-} from '../../test/mocks/notion-api-mocks.js';
+} from '../../test/mocks/notion-api-mocks';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {

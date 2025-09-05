@@ -3,8 +3,8 @@
  * Pure business logic with no MCP concerns
  */
 
-import type { MinimalNotionClient } from '../../../types/notion-types/notion-client.js';
-import type { NotionOperations } from '../../../types/notion-contracts/notion-operations.js';
+import type { MinimalNotionClient } from '../../../types/notion-types/notion-client';
+import type { NotionOperations } from '../../../types/notion-contracts/notion-operations';
 import type { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { notionListDatabasesSchema } from '../schemas';
 import type { ToolExecutor, ToolLogger } from '../core/types';

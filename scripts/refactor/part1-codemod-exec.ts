@@ -119,6 +119,8 @@ function getPackageRootFromFilePath(currentFilePath: string): string | null {
 function rewriteRelativeSpecifier(currentFilePath: string, spec: string): string {
   // 1) Map legacy segments inside the spec text (handles ../chorai/... etc.)
   const mappedSpec = applySegmentMapping(spec);
+  const hadJsExt = /\.js$/i.test(spec);
+  const hadTsExt = /\.tsx?$/i.test(spec);
   // 2) Resolve to absolute, preferring packageRoot/src/<segment>/... for known top-level segments
   const currentDir = path.dirname(currentFilePath);
   const pkgRoot = getPackageRootFromFilePath(currentFilePath);
@@ -153,12 +155,29 @@ function rewriteRelativeSpecifier(currentFilePath: string, spec: string): string
   // 4) Compute new relative from current file to target
   let rel = toPosix(path.relative(currentDir, absMapped));
   if (!rel.startsWith('.')) rel = './' + rel;
-  // 5) Drop trailing .ts/.tsx/.js if present (prefer extensionless like original codebase)
-  rel = rel.replace(/\.(ts|tsx|js)$/g, '');
+  // 5) Preserve original extension behaviour for idempotency & ESM runtime:
+  //    - If original had .js, keep .js
+  //    - If original had .ts/.tsx, drop extension
+  //    - If original had no extension, keep extensionless
+  if (hadJsExt) {
+    // normalise to .js suffix
+    rel = rel.replace(/\.(ts|tsx)$/g, '');
+    if (!/\.js$/i.test(rel)) rel = rel.replace(/\.(mjs|cjs)$/i, '').replace(/$/, '') + '.js';
+  } else if (hadTsExt) {
+    rel = rel.replace(/\.(ts|tsx)$/g, '');
+  } else {
+    // ensure no accidental TS/JS extension leaks
+    rel = rel.replace(/\.(ts|tsx)$/g, '');
+  }
   return rel;
 }
 
 function rewriteSpecifier(currentFilePath: string, spec: string): string {
+  // Fast idempotency path: if spec already references only new segments and is extensionally
+  // equivalent to desired style, return as-is.
+  if (!/(psychon|chorai|organa\/mcp)/.test(spec)) {
+    return spec;
+  }
   if (spec.startsWith('.')) {
     return rewriteRelativeSpecifier(currentFilePath, spec);
   }

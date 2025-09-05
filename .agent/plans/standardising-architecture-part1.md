@@ -13,6 +13,11 @@ Supersedes and concretises the Part 1 content of `standardising-architecture-pla
 - Stable foundation for forthcoming explicit runtime injection (Part 2)
 - Preservation of architectural import boundaries (no accidental relaxation)
 
+## Core References
+
+- Read and follow `GO.md` (primary operational guidance: grounding, TODO structuring, quality gates, deep thinking). Replace any mentions of external review agents with self‑reviews.
+- Read `.agent/directives-and-memory/AGENT.md` and follow the instructions there and in linked documents.
+
 ---
 
 ## 2. Scope & Non‑Goals
@@ -31,6 +36,7 @@ Out of Scope:
 - Re‑organising internal module layering _within_ new folders beyond pure moves
 - Adding/changing exports or reshaping public API surfaces
 - Performance optimisation, schema evolution, new tests (except minimal safety harness if required)
+- Workspace‑level taxonomy rename (`ecosystem/{psycha,histoi,moria}` → `apps/` and `packages/{core,libs,sdks}`) and internal alias introduction (`@workspace/*`) – deferred to Part 2.
 
 ---
 
@@ -61,10 +67,10 @@ src/
   app/            # previously psychon
   tools/          # previously organa/mcp
   integrations/   # previously organa/<integration>
-  config/         # previously chora(i)/phaneron
-  logging/        # previously chora(i)/aither (logging & events subset)
-  types/          # previously chora(i)/stroma
-  test/mocks/     # previously chora(i)/eidola (fallback: src/mocks if collision)
+  config/         # previously chorai/phaneron
+  logging/        # previously chorai/aither (logging & events subset)
+  types/          # previously chorai/stroma
+  test/mocks/     # previously chorai/eidola (fallback: src/mocks if collision)
   organa/         # (OPTIONAL) remains only if residual organs not mapped by rules
 ```
 
@@ -165,7 +171,7 @@ Add boundary adaptation step:
    - When adding new barrels, only re‑export public, stable APIs; avoid re‑exporting similarly named internals from different layers.
    - Adopt a convention for “runtime vs schema” naming where practical to prevent regressions.
 
-7. Path deconfliction planning: a nested `src/tools/tools/` structure was observed and is confusing. Plan a mechanical rename of the inner `src/tools/tools/` folder to a clearer name (candidate: `src/tools/runtime/`), updating imports via codemod. Schedule this after export parity and ESLint boundary duplication, and validate with full gates. This remains a mechanical change (no behaviour) and can be executed either at the end of Part 1 or as the first task in Part 2 if risk dictates.
+7. Path deconfliction — deferred to Part 2: a nested `src/tools/tools/` structure was observed and is confusing. The mechanical rename of the inner folder to `src/tools/runtime/` (with import updates via codemod) is explicitly deferred to Part 2. Validate with full gates during Part 2 execution. No rename will occur in Part 1.
 
 ### Phase E: Validation & Reporting
 
@@ -489,13 +495,13 @@ Quality gates status (root):
 - Type-check: PASS across all packages (including oak-notion-mcp) post-migration
 - Lint: PASS (root)
 - Test (unit + e2e): PASS (root)
-- Build: PENDING (to run at full gate)
+- Build: PASS (root)
 
 Pending Part 1 items:
 
-- Export surface capture/diff for oak-notion-mcp
-- Duplicate ESLint boundary rules and update phenotype ESLint globs (legacy retained with TODO markers) – PARTIAL: per‑package config aligned; central boundary rules updated to reflect tools↔integrations isolation while keeping legacy duplication policy.
-- Idempotency verification (codemod re-run should be no‑op)
-- Residual legacy token scan (non‑import contexts) and final global scan
-- `refactor-report.json` + pointer doc generation
-- Final full gates including build and atomic commit/PR
+- Export surface capture/diff for oak-notion-mcp – COMPLETE (no diff)
+- Duplicate ESLint boundary rules and update phenotype ESLint globs (legacy retained with TODO markers) – PARTIAL (central zones updated; per‑package enforcement set to zones only for Part 1)
+- Idempotency verification – COMPLETE (codemod re-run rewrote 0 specifiers)
+- Residual legacy token scan (non‑import contexts) – COMPLETE (clean)
+- `refactor-report.json` + pointer doc – GENERATED
+- Final gates – COMPLETE (build PASS). Prepare atomic commit/PR.

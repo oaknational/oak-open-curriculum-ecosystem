@@ -1,5 +1,5 @@
-import type { NotionDependencies } from '../types/notion-types/dependencies.js';
-import { scrubEmail } from '../logging/scrubbing.js';
+import type { NotionDependencies } from '../types/notion-types/dependencies';
+import { scrubEmail } from '../logging/scrubbing';
 
 export interface Resource {
   uri: string;

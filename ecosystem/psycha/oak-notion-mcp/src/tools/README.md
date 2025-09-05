@@ -1,4 +1,4 @@
-# MCP Organ (Ὄργανον)
+# MCP Tools
 
 **You're in the Model Context Protocol (MCP) server implementation directory.**
 
@@ -16,15 +16,15 @@ This organ handles all MCP protocol concerns - tools, resources, and server setu
 ### Architecture Overview
 
 ```
-mcp/
+tools/
 ├── tools/                 # MCP tools (search, query, etc.)
-│   ├── definitions/      # Tool metadata and descriptions
+│   ├── definitions/       # Tool metadata and descriptions
 │   ├── notion-operations/ # Business logic for each tool
-│   └── core/             # Tool infrastructure (factory, registry)
-├── resources/            # MCP resources (discovery, reading)
-│   └── handlers/         # Resource-specific logic
-├── handlers.ts           # Main entry point
-└── types.ts             # MCP-specific types
+│   └── core/              # Tool infrastructure (factory, registry)
+├── resources/             # MCP resources (discovery, reading)
+│   └── handlers/          # Resource-specific logic
+├── handlers.ts            # Main entry point
+└── types.ts               # MCP-specific types
 ```
 
 ### Adding a New Tool
@@ -67,10 +67,10 @@ export function createMyToolExecutor(deps: Dependencies): ToolExecutor {
 
 ```typescript
 // Main handler creation
-import { createMcpHandlers } from '@organa/mcp';
+import { createMcpHandlers } from '../tools/handlers';
 
 // Types
-import type { McpTool } from '@organa/mcp';
+import type { McpTool } from '../tools/types';
 ```
 
 ### Key Concepts
@@ -80,4 +80,4 @@ import type { McpTool } from '@organa/mcp';
 - **Handlers**: Route MCP requests to appropriate logic
 - **Executors**: Contain the actual business logic
 
-💡 **Remember**: This organ knows MCP, not Notion internals. It uses injected Notion operations to do its work.
+💡 **Remember**: This layer knows MCP, not Notion internals. It uses injected Notion operations to do its work.

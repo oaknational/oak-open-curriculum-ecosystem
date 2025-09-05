@@ -5,7 +5,7 @@ import type {
   notionQueryDatabaseSchema,
   notionGetPageSchema,
   notionListUsersSchema,
-} from './schemas.js';
+} from './schemas';
 
 // Tool handler result type matching MCP SDK expectations
 export interface ToolResult {
