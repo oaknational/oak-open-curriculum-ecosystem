@@ -81,16 +81,21 @@ High‑Level Outcomes:
 2. Providers (Node, Cloudflare) implementing contracts; selected via config (no auto‑detection).
 3. Server bootstraps construct runtime via factory and inject into tools/integrations.
 4. Strengthened purity boundaries (core cannot import providers) enforced by ESLint.
-5. Legacy architecture narrative archived with forward‑looking pointer.
+5. Strict import hygiene with eslint-plugin-import-x: alias‑only cross‑boundary imports; `no-relative-parent-imports`; `no-internal-modules` except approved public subpaths.
+6. Mechanical deconfliction rename: `src/tools/tools` → `src/tools/runtime` with import updates.
+7. Barrel rationalisation and naming clarity to avoid layered collisions (e.g., export runtime registry as `CoreToolRegistry`; keep schema types local).
+8. Legacy architecture narrative archived with forward‑looking pointer.
 
 Phased Shape (concise):
 
 1. Core extraction & internal publish.
 2. Provider modules + contract tests.
 3. Introduce configuration (`config/runtime.json`) & remove detection logic.
-4. Server refactor → DI pattern; enforce boundaries.
+4. Server refactor → DI pattern; enforce boundaries with import‑x strict rules.
 5. Documentation + archival update.
 6. Optional CI provider matrix.
+7. Apply nested tools rename (`src/tools/tools` → `src/tools/runtime`) and update imports.
+8. Barrel rationalisation; remove duplicated legacy boundary patterns retained from Part 1.
 
 Key Risks & Mitigations:
 
@@ -102,7 +107,7 @@ Key Risks & Mitigations:
 | Performance overhead from indirection | Benchmark before/after runtime assembly             |
 | Ambiguous ownership                   | CODEOWNERS + core README roles section              |
 
-Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, purity boundaries enforced, tests green, docs updated & legacy archived.
+Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import‑x boundary rules active (alias‑only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived.
 
 ---
 

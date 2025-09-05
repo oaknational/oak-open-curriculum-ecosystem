@@ -8,7 +8,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { Project } from 'ts-morph';
+import { Project, SyntaxKind, Node } from 'ts-morph';
 
 interface Move {
   from: string;
@@ -86,7 +86,11 @@ async function buildExecPlan(pkg: { name: string; root: string }): Promise<Packa
   return { name: pkg.name, root: pkg.root, moves };
 }
 
-function rewriteSpecifier(spec: string): string {
+function toPosix(p: string): string {
+  return p.split('\\').join('/');
+}
+
+function applySegmentMapping(text: string): string {
   const replacements: [RegExp, string][] = [
     [/organa\/mcp(?=$|\/)/g, 'tools'],
     [/organa\/notion(?=$|\/)/g, 'integrations/notion'],
@@ -96,9 +100,70 @@ function rewriteSpecifier(spec: string): string {
     [/chorai\/eidola(?=$|\/)/g, 'test/mocks'],
     [/psychon(?=$|\/)/g, 'app'],
   ];
-  let out = spec;
-  for (const [pattern, to] of replacements) out = out.replace(pattern, to);
+  let out = text;
+  for (const [rx, to] of replacements) out = out.replace(rx, to);
   return out;
+}
+
+function applySegmentMappingAbsolute(absPath: string): string {
+  // Map legacy segments inside an absolute path string
+  return applySegmentMapping(toPosix(absPath));
+}
+
+function getPackageRootFromFilePath(currentFilePath: string): string | null {
+  const idx = currentFilePath.lastIndexOf(`${path.sep}src${path.sep}`);
+  if (idx === -1) return null;
+  return currentFilePath.slice(0, idx);
+}
+
+function rewriteRelativeSpecifier(currentFilePath: string, spec: string): string {
+  // 1) Map legacy segments inside the spec text (handles ../chorai/... etc.)
+  const mappedSpec = applySegmentMapping(spec);
+  // 2) Resolve to absolute, preferring packageRoot/src/<segment>/... for known top-level segments
+  const currentDir = path.dirname(currentFilePath);
+  const pkgRoot = getPackageRootFromFilePath(currentFilePath);
+  let abs: string;
+  if (pkgRoot) {
+    const withoutDots = toPosix(mappedSpec)
+      .replace(/^\.\/?/, '')
+      .replace(/^\.\//, '');
+    const parts = withoutDots.split('/');
+    const first = parts[0];
+    const rest = parts.slice(1).join('/');
+    const knownTop = new Set([
+      'config',
+      'logging',
+      'types',
+      'test',
+      'tools',
+      'integrations',
+      'app',
+    ]);
+    if (knownTop.has(first)) {
+      const candidateUnderSrc = path.join(pkgRoot, 'src', first, rest);
+      abs = candidateUnderSrc;
+    } else {
+      abs = path.resolve(currentDir, mappedSpec);
+    }
+  } else {
+    abs = path.resolve(currentDir, mappedSpec);
+  }
+  // 3) Ensure absolute path also has mapped segments applied
+  const absMapped = applySegmentMappingAbsolute(abs);
+  // 4) Compute new relative from current file to target
+  let rel = toPosix(path.relative(currentDir, absMapped));
+  if (!rel.startsWith('.')) rel = './' + rel;
+  // 5) Drop trailing .ts/.tsx/.js if present (prefer extensionless like original codebase)
+  rel = rel.replace(/\.(ts|tsx|js)$/g, '');
+  return rel;
+}
+
+function rewriteSpecifier(currentFilePath: string, spec: string): string {
+  if (spec.startsWith('.')) {
+    return rewriteRelativeSpecifier(currentFilePath, spec);
+  }
+  // Bare/module-like specifiers: apply segment mapping only (no path math)
+  return applySegmentMapping(spec);
 }
 
 async function rewriteImports(pkgRoot: string) {
@@ -118,9 +183,10 @@ async function rewriteImports(pkgRoot: string) {
   let rewrites = 0;
   for (const sf of project.getSourceFiles()) {
     let changed = false;
+    const filePath = sf.getFilePath();
     sf.getImportDeclarations().forEach((imp) => {
       const before = imp.getModuleSpecifierValue();
-      const after = rewriteSpecifier(before);
+      const after = rewriteSpecifier(filePath, before);
       if (after !== before) {
         imp.setModuleSpecifier(after);
         changed = true;
@@ -130,11 +196,44 @@ async function rewriteImports(pkgRoot: string) {
     sf.getExportDeclarations().forEach((exp) => {
       const spec = exp.getModuleSpecifierValue();
       if (spec) {
-        const after = rewriteSpecifier(spec);
+        const after = rewriteSpecifier(filePath, spec);
         if (after !== spec) {
           exp.setModuleSpecifier(after);
           changed = true;
           rewrites++;
+        }
+      }
+    });
+    // Dynamic import("...") and require("...")
+    sf.forEachDescendant((node) => {
+      // import("...")
+      if (node.getKind() === SyntaxKind.ImportExpression) {
+        // @ts-ignore ts-morph typings
+        const arg = node.getArgument && node.getArgument();
+        if (arg && Node.isStringLiteral(arg)) {
+          const before = arg.getLiteralText();
+          const after = rewriteSpecifier(filePath, before);
+          if (after !== before) {
+            arg.setLiteralValue(after);
+            changed = true;
+            rewrites++;
+          }
+        }
+      }
+      // require("...")
+      if (Node.isCallExpression(node)) {
+        const expr = node.getExpression();
+        if (Node.isIdentifier(expr) && expr.getText() === 'require') {
+          const args = node.getArguments();
+          if (args.length > 0 && Node.isStringLiteral(args[0])) {
+            const before = args[0].getLiteralText();
+            const after = rewriteSpecifier(filePath, before);
+            if (after !== before) {
+              args[0].setLiteralValue(after);
+              changed = true;
+              rewrites++;
+            }
+          }
         }
       }
     });

@@ -147,7 +147,9 @@ For each server package alphabetically:
 
 ### Phase D: Global Config & Residual Rewrite
 
-Run config/alias pattern updates (tsconfig, turbo globs, vitest, eslint). Global import rewrite second pass (should be no changes). Grep to ensure zero old segments outside legacy archive.
+Run config/alias pattern updates (tsconfig, turbo globs, vitest, eslint). Global import rewrite second pass. Grep to ensure zero old segments outside legacy archive.
+
+ESM note (post‑codemod): For Node ESM runtime resolution, relative internal imports that execute at runtime may require a `.js` suffix in source after build. Keep type‑only imports via barrels extensionless. Dynamic imports in `src/app/**` and runtime wiring should include `.js` as needed. This is a mechanical path fix, not a logic change.
 
 Add boundary adaptation step:
 
@@ -155,6 +157,15 @@ Add boundary adaptation step:
 2. Duplicate (not replace) relevant patterns in `eslint-rules/boundary-rules.ts`: for every legacy glob referencing `psychon`, `organa/mcp`, or `chorai` add a sibling rule referencing the mapped new directory name with identical constraints. Mark duplicates with a `// TODO(Part2): remove legacy pattern` comment.
 3. After duplication, run lint to confirm no rule pattern crashes (invalid zones, etc.).
 4. Global literal string scan (non-import contexts) across all phenotype packages to ensure zero residual legacy tokens.
+5. Layered barrels caution: where multiple modules share names (e.g., `handlers.ts`, `types.ts`, or `ToolRegistry` in different layers), ensure import specifiers point to the intended layer post‑rename. Prefer explicit deeper paths for runtime APIs (e.g., `tools/tools/core/**`) and use package barrels only for public re‑exports. This avoids accidental resolution to similarly named but semantically different modules.
+
+6. Naming collisions guidance (present and future):
+   - If two layers expose the same filename/symbol (e.g., `handlers.ts`, `types.ts`, `ToolRegistry`), prefer explicit, deeper import paths to the authoritative source (e.g., `tools/tools/core/types` for the runtime registry API) rather than relying on higher‑level barrels.
+   - Disambiguate exported type names in barrels to make intent obvious (e.g., export runtime registry as `CoreToolRegistry`), and leave schema/helper types under their local module names.
+   - When adding new barrels, only re‑export public, stable APIs; avoid re‑exporting similarly named internals from different layers.
+   - Adopt a convention for “runtime vs schema” naming where practical to prevent regressions.
+
+7. Path deconfliction planning: a nested `src/tools/tools/` structure was observed and is confusing. Plan a mechanical rename of the inner `src/tools/tools/` folder to a clearer name (candidate: `src/tools/runtime/`), updating imports via codemod. Schedule this after export parity and ESLint boundary duplication, and validate with full gates. This remains a mechanical change (no behaviour) and can be executed either at the end of Part 1 or as the first task in Part 2 if risk dictates.
 
 ### Phase E: Validation & Reporting
 
@@ -460,3 +471,31 @@ Applied Prime Directive: Avoid per-file commits – single atomic commit reduces
 Audit complete – no unresolved ambiguities remain for Part 1 mechanical scope.
 
 End of Part 1 Implementation Plan.
+
+---
+
+## Progress Updates / Execution Journal (continued)
+
+Update: ACTION 11 executed – oak-notion-mcp migrated per mapping (psychon→app, organa/mcp→tools, organa/notion→integrations/notion, chorai/\*→config/logging/types/test/mocks). Addressed layered barrel import collisions and runtime ESM `.js` suffix requirements in minimal, non‑behavioural edits:
+
+- Adjusted `src/tools/index.ts` to re-export `createToolHandlers` from `./tools/handlers.js` and added `.js` on resource handler barrel.
+- Ensured runtime `ToolRegistry` usage points to core registry API (`tools/tools/core/types`) and schema types remain for mapping only.
+- Added explicit `McpTool` annotation in `src/app/server.ts` map callback and imported handlers from `../tools/index.js`.
+- Plan amended with ESM `.js` guidance and layered barrel caution (Phase D).
+
+Quality gates status (root):
+
+- Format: unchanged
+- Type-check: PASS across all packages (including oak-notion-mcp) post-migration
+- Lint: PASS (root)
+- Test (unit + e2e): PASS (root)
+- Build: PENDING (to run at full gate)
+
+Pending Part 1 items:
+
+- Export surface capture/diff for oak-notion-mcp
+- Duplicate ESLint boundary rules and update phenotype ESLint globs (legacy retained with TODO markers) – PARTIAL: per‑package config aligned; central boundary rules updated to reflect tools↔integrations isolation while keeping legacy duplication policy.
+- Idempotency verification (codemod re-run should be no‑op)
+- Residual legacy token scan (non‑import contexts) and final global scan
+- `refactor-report.json` + pointer doc generation
+- Final full gates including build and atomic commit/PR

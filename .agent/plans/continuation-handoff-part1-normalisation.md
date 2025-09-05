@@ -17,7 +17,7 @@ This document equips a successor agent to complete the purely mechanical Part 1 
 Phenotype packages (`ecosystem/psycha/`):
 
 - `oak-curriculum-mcp` – MIGRATED (psychon→app, organa/mcp→tools). Imports rewritten. Gates green.
-- `oak-notion-mcp` – LEGACY (still: `src/psychon`, `src/organa/mcp`, `src/organa/notion`, `src/chorai/{aither,stroma,phaneron,eidola}`).
+- `oak-notion-mcp` – MIGRATED (psychon→app, organa/mcp→tools, organa/notion→integrations/notion, chorai/\*→config/logging/types/test/mocks). Imports rewritten; minimal post‑fixes applied (dynamic import `.js` suffixes, layered barrel targets).
 
 Baseline export surface & filtered legacy token scan: partial (needs completion for `oak-notion-mcp` pre/post migration).
 
@@ -59,13 +59,15 @@ After full migration these must only appear in archived docs or the pointer doc 
 
 ## Risks & Mitigations
 
-| Risk                  | Mitigation                      | Verification                 |
-| --------------------- | ------------------------------- | ---------------------------- |
-| Missed import rewrite | ts-morph traversal + final grep | Type-check PASS + grep clean |
-| Export drift          | Pre/post export snapshot diff   | Diff arrays empty            |
-| Boundary relaxation   | Duplicate rules (legacy + new)  | Lint PASS                    |
-| Non-idempotent script | Re-run expecting zero ops       | Second run no changes        |
-| Residual tokens       | Global grep & remediate         | Residual array empty         |
+| Risk                             | Mitigation                                                     | Verification                            |
+| -------------------------------- | -------------------------------------------------------------- | --------------------------------------- |
+| Missed import rewrite            | ts-morph traversal + final grep                                | Type-check PASS + grep clean            |
+| Export drift                     | Pre/post export snapshot diff                                  | Diff arrays empty                       |
+| Boundary relaxation              | Duplicate rules (legacy + new)                                 | Lint PASS                               |
+| Non-idempotent script            | Re-run expecting zero ops                                      | Second run no changes                   |
+| Naming collisions across layers  | Prefer explicit deep imports; disambiguate barrel export names | Type-check PASS; clear symbol ownership |
+| Confusing nested tools directory | Plan mechanical rename (`tools/tools` → `tools/runtime`)       | Gates PASS post‑rename                  |
+| Residual tokens                  | Global grep & remediate                                        | Residual array empty                    |
 
 ## Acceptance Criteria
 
@@ -82,23 +84,19 @@ After full migration these must only appear in archived docs or the pointer doc 
 
 ## Remaining Work Sequence
 
-1. Migrate `oak-notion-mcp`:
+1. Migration status: `oak-notion-mcp` migrated with codemod (directories moved; imports rewritten). Post-fixes applied:
+   - ESM `.js` suffix added to runtime internal imports where required (e.g., dynamic/server wiring and barrels exporting concrete files).
+   - Layered barrels resolved to correct layers (e.g., `createToolHandlers` now exported from `src/tools/tools/handlers` via `src/tools/index.ts`).
+   - `ToolRegistry` ambiguity resolved: runtime registry API imported from `tools/tools/core/types`; schema mapping kept local to `tools/tools/types`.
 
-```bash
-tsx scripts/refactor/part1-codemod-exec.ts --packages=oak-notion-mcp
-```
-
-2. Root gates: `pnpm type-check`, `pnpm lint`, `pnpm test`.
-3. Export parity capture & diff.
-4. Legacy token scan (non-import contexts); remediate.
-5. Duplicate ESLint boundary rules & add new globs (legacy retained with `// TODO(Part2)` comments).
-6. Secondary no-op import rewrite (expect zero changes).
-7. Full gates including `pnpm build`.
-8. Idempotency check: re-run codemod (zero ops) + random moved file sample (only specifier changes).
-9. Global residual token grep (imports + non-import) confirm clean.
-10. Generate `refactor-report.json` + pointer doc `docs/architecture/legacy-biological-mapping.md`.
-11. Final gates.
-12. Atomic commit & PR (attach report & acceptance checklist).
+2. Root gates to run now: `pnpm build` (type‑check, lint and tests already PASS).
+3. Export parity capture & diff for `oak-notion-mcp` (pre/post snapshots) – should be identical.
+4. Legacy token scan (non-import contexts) and remediate.
+5. Duplicate ESLint boundary rules & add new globs (legacy retained with `// TODO(Part2)` comments). Note: central rules already updated to reflect tools↔integrations isolation; per‑package config aligned to enforce zones only for Part 1 (defer strict `no-internal-modules` and `no-relative-parent-imports` to Part 2).
+6. Idempotency check: re-run codemod (`tsx scripts/refactor/part1-codemod-exec.ts --packages=oak-notion-mcp`) expecting zero ops.
+7. Global residual token grep (imports + non-import) confirm clean (exclude archived/pointer docs).
+8. Generate `refactor-report.json` + pointer doc `docs/architecture/legacy-biological-mapping.md`.
+9. Final full gates and atomic commit & PR (attach report & acceptance checklist).
 
 ## Report JSON (Shape Example)
 
@@ -150,7 +148,7 @@ pnpm format
 
 ## Immediate Next Action
 
-Perform migration of `oak-notion-mcp` (step 1) then run root gates (step 2) and record results in the master plan file.
+Run remaining quality gates from repo root (`pnpm lint`, `pnpm test`, `pnpm build`). Then perform export parity, ESLint boundary duplication, idempotency check, residual scans, and reporting. Record outcomes in the master plan file.
 
 ---
 

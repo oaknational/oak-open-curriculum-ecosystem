@@ -1,25 +1,12 @@
 {
-  "timestamp": "2025-09-05T08:29:27.448Z",
+  "timestamp": "2025-09-05T10:09:06.200Z",
   "plans": [
     {
       "name": "oak-curriculum-mcp",
       "root": "/Users/jim/code/oak/ai_experiments/oak-notion-mcp/ecosystem/psycha/oak-curriculum-mcp",
-      "moves": [
-        {
-          "from": "src/organa/mcp",
-          "to": "src/tools",
-          "exists": true,
-          "fileCount": 6
-        },
-        {
-          "from": "src/psychon",
-          "to": "src/app",
-          "exists": true,
-          "fileCount": 5
-        }
-      ],
+      "moves": [],
       "collisions": [],
-      "importRewriteEstimate": 8
+      "importRewriteEstimate": 0
     },
     {
       "name": "oak-notion-mcp",
