@@ -6,7 +6,7 @@
  */
 
 import { config } from 'dotenv';
-import { startOrganism } from './psychon';
+import { startOrganism } from './app';
 
 // Load environment variables from .env file
 // This must happen before any other imports that depend on process.env
