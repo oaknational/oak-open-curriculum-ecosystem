@@ -47,8 +47,8 @@ const config = tsEslintConfig(
       // Enforce module boundaries (zones only; no new strictness in Part 1)
       ...psychaBoundaryRules,
       ...psychonArchitectureRules,
-      // Part 2 consideration: enable the two rules below after alias adoption
-      'import-x/no-relative-parent-imports': 'off',
+      // Cross-boundary imports must not use parent relatives
+      'import-x/no-relative-parent-imports': 'error',
       'import-x/no-internal-modules': 'off',
     },
   },
@@ -64,6 +64,15 @@ const config = tsEslintConfig(
     files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
+      // Allow intra-package parent relatives within phenotype code
+      'import-x/no-relative-parent-imports': 'off',
+    },
+  },
+  // General intra-package allowance for parent relatives across src/**
+  {
+    files: ['src/**/*.ts'],
+    rules: {
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
   // Psychon/app layer can import from any organ
@@ -71,6 +80,7 @@ const config = tsEslintConfig(
     files: ['src/index.ts', 'src/psychon/**/*.ts', 'src/app/**/*.ts'],
     rules: {
       'import-x/no-restricted-paths': 'off',
+      // Within the app package, allow intra-package relative parents
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-internal-modules': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',
@@ -89,6 +99,7 @@ const config = tsEslintConfig(
     rules: {
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-restricted-paths': 'off',
+      'import-x/no-internal-modules': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
@@ -104,6 +115,7 @@ const config = tsEslintConfig(
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
       'import-x/no-relative-parent-imports': 'off',
+      'import-x/no-internal-modules': 'off',
     },
   },
 );

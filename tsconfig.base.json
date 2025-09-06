@@ -18,6 +18,7 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
+      "@workspace/apps/oak-notion-mcp/*": ["./ecosystem/psycha/oak-notion-mcp/src/*"],
       "@oaknational/oak-notion-mcp": ["./ecosystem/psycha/oak-notion-mcp/src"],
       "@oaknational/oak-notion-mcp/*": ["./ecosystem/psycha/oak-notion-mcp/src/*"],
       "@oaknational/oak-curriculum-mcp": ["./ecosystem/psycha/oak-curriculum-mcp/src"],

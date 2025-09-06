@@ -18,6 +18,9 @@ Completed so far:
 - Added configuration file `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; server wiring now reads config for logger level/name and server identity. Detection logic removed from wiring.
 - Barrel rationalisation: renamed core registry interface to `CoreToolRegistry` to avoid schema collisions; imports/exports updated and lint PASS.
 - Providers: scaffolded `packages/providers/mcp-providers-node` with minimal Node clock, console logger, and in‑memory storage; unit tests added; monorepo gates PASS.
+- Provider contracts: shared helper added at `@oaknational/mcp-core/testing/provider-contract`; consumed by Node providers with unit + integration tests — PASS.
+- Notion server wiring refined: static logger import (no require), minimal runtime config validation via `validateRuntimeConfig`, runtime composed via core factory; all workspaces build PASS after correcting alias policy.
+- Documentation: added `docs/architecture/provider-contracts.md` and `docs/architecture/greek-ecosystem-deprecation.md`; updated core/providers READMEs.
 
 ---
 
@@ -87,7 +90,7 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
   - Node provider present (clock/logger/storage) with unit tests; Cloudflare provider queued.
   - Selected exclusively via configuration file (e.g., `src/config/runtime.json`).
 - Server wiring:
-  - `src/app/bootstrap.ts` reads config, selects provider, calls core factory, and injects runtime into `src/tools/*` and `src/integrations/*`. (WIRING UPDATED TO READ CONFIG; FACTORY INTEGRATION PENDING)
+  - `src/app/wiring.ts` reads config, composes runtime via core factory, and prepares for injection into `src/tools/*` and `src/integrations/*`. (Factory composition complete; injection deferred to avoid behaviour drift)
 - Lint boundaries:
   - Core cannot depend on providers.
   - Tools/integrations consume only injected runtime or public core interfaces.
@@ -131,6 +134,12 @@ Part 2 adds provider contract tests and (optionally) a small e2e matrix across p
   - Disallow `../` parent imports across boundaries
   - Forbid `no-internal-modules` except approved public subpaths
 - Maintain phenotype boundary rules from Part 1; remove legacy duplicates only after Part 2 stabilises.
+
+Alias policy clarification (per high-level plan):
+
+- Reserve `@oaknational/*` exclusively for published packages; do not use it as an internal alias.
+- Use internal `@workspace/*` aliases for cross-workspace imports only. Prefer relative imports for intra-package paths.
+- For intra-repo TypeScript sources, omit `.js` in import specifiers. Keep `.js` suffix only for deep ESM imports from external packages when required by the runtime/bundler.
 
 Snapshot (captured):
 
@@ -226,11 +235,11 @@ Terminology note: Chōra (singular) and Chōrai (plural) in prose; use ASCII `ch
 4. Configuration introduction
 
 - Define minimal `src/config/runtime.json` schema and ownership. (DONE – FILE ADDED; OWNERSHIP TO SERVER TEAM)
-- Replace detection logic with config reading and validation. (PARTIAL – CONFIG READ IN WIRING; VALIDATION PENDING)
+- Replace detection logic with config reading and validation. (DONE – CONFIG READ + MINIMAL VALIDATION IN WIRING)
 
 5. Server DI refactor
 
-- Refactor `src/app/bootstrap.ts` to assemble runtime via core factory and inject into tools/integrations. (PENDING)
+- Refactor `src/app/wiring.ts` to assemble runtime via core factory and inject into tools/integrations. (PARTIAL – RUNTIME COMPOSED; injection deferred to avoid behaviour drift)
 
 6. Strict boundary enforcement
 
@@ -303,6 +312,8 @@ Progress Journal (rolling):
 - 2025‑09‑05: Captured detection inventory and ESLint boundary snapshot.
 - 2025‑09‑06: Scaffolded `@oaknational/mcp-core` with minimal runtime factory; added `runtime.json`; updated Notion wiring to consume config; renamed registry type to `CoreToolRegistry`; lint/type‑check/build PASS.
 - 2025‑09‑06: Scaffolded `@oaknational/mcp-providers-node` (clock/logger/storage) with unit tests; configured ESLint for typed rules; monorepo gates PASS.
+- 2025‑09‑06: Refined Notion wiring: static `createAdaptiveLogger` import; extracted `validateRuntimeConfig`; composed runtime via core factory; all gates PASS; committed.
+- 2025‑09‑06: Authored provider contracts documentation and Greek ecosystem deprecation reference; linked from package READMEs and acceptance criteria.
 
 14. ACTION: Update documentation (core README, providers READMEs, architecture pointers).  
     REVIEW: Self‑review terminology: Chōra/Chōrai in prose; `chorai` in paths.
