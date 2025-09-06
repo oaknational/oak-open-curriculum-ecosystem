@@ -226,6 +226,9 @@ importers:
       '@oaknational/mcp-moria':
         specifier: workspace:^
         version: link:../../moria/moria-mcp
+      '@oaknational/mcp-providers-node':
+        specifier: workspace:^
+        version: link:../../../packages/providers/mcp-providers-node
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -281,6 +284,12 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.17.1)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.1)
+
+  packages/providers/mcp-providers-node:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
 
 packages:
 
