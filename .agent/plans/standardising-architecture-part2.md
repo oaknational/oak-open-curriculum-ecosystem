@@ -17,6 +17,7 @@ Completed so far:
 - Core package scaffolded at `packages/core/mcp-core` exposing minimal `createRuntime` and provider contracts (no provider imports). Build PASS.
 - Added configuration file `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; server wiring now reads config for logger level/name and server identity. Detection logic removed from wiring.
 - Barrel rationalisation: renamed core registry interface to `CoreToolRegistry` to avoid schema collisions; imports/exports updated and lint PASS.
+- Providers: scaffolded `packages/providers/mcp-providers-node` with minimal Node clock, console logger, and in‑memory storage; unit tests added; monorepo gates PASS.
 
 ---
 
@@ -83,6 +84,7 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
   - Contains no provider imports.
 - Providers:
   - `providers/node` and `providers/cloudflare` modules implementing the same contracts.
+  - Node provider present (clock/logger/storage) with unit tests; Cloudflare provider queued.
   - Selected exclusively via configuration file (e.g., `src/config/runtime.json`).
 - Server wiring:
   - `src/app/bootstrap.ts` reads config, selects provider, calls core factory, and injects runtime into `src/tools/*` and `src/integrations/*`. (WIRING UPDATED TO READ CONFIG; FACTORY INTEGRATION PENDING)
@@ -179,9 +181,9 @@ Acceptance (Part 2):
 3. `src/tools/tools` renamed to `src/tools/runtime` with imports updated.
 4. Provider contract tests pass for all providers; e2e smoke tests pass.
 5. Build, lint, type‑check, and test gates green monorepo‑wide.
-6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived; pointer maintained.
+6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived.
 7. Export surface parity preserved (baseline vs post equal; `default` treated separately).
-8. Legacy tokens (`psychon/`, `chorai/`, `organa/mcp`, `eidola/`) appear only in archived docs or pointer docs; no active code/comments/imports.
+8. Greek ecosystem architecture fully removed from active code/comments/imports (tokens such as `psychon/`, `chorai/`, `organa/mcp`, `eidola/`). A single reference document remains explaining what it was and why it was removed (location: `docs/architecture/greek-ecosystem-deprecation.md`).
 
 Abort conditions (Part 2 execution):
 
@@ -219,6 +221,7 @@ Terminology note: Chōra (singular) and Chōrai (plural) in prose; use ASCII `ch
 
 - Implement Node and Cloudflare providers against the core contracts.
 - Ensure contract tests drive implementation.
+  - Status: Node provider scaffolded (clock/logger/storage) with unit tests — PASS; Cloudflare provider pending.
 
 4. Configuration introduction
 
@@ -254,6 +257,7 @@ Appendix: Workspace taxonomy and aliases (Queued mechanical)
   - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
 
 - Full quality gates; provider matrix; reports updated.
+- Greek ecosystem deprecation reference created and linked; residual token scan confirms only that single reference remains.
 
 ---
 
@@ -298,6 +302,7 @@ Progress Journal (rolling):
 - 2025‑09‑05: Completed nested tools rename → runtime in both servers; updated imports; gates PASS.
 - 2025‑09‑05: Captured detection inventory and ESLint boundary snapshot.
 - 2025‑09‑06: Scaffolded `@oaknational/mcp-core` with minimal runtime factory; added `runtime.json`; updated Notion wiring to consume config; renamed registry type to `CoreToolRegistry`; lint/type‑check/build PASS.
+- 2025‑09‑06: Scaffolded `@oaknational/mcp-providers-node` (clock/logger/storage) with unit tests; configured ESLint for typed rules; monorepo gates PASS.
 
 14. ACTION: Update documentation (core README, providers READMEs, architecture pointers).  
     REVIEW: Self‑review terminology: Chōra/Chōrai in prose; `chorai` in paths.

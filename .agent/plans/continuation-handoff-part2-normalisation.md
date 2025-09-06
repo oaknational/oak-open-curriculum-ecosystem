@@ -26,14 +26,16 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Core package scaffolded at `packages/core/mcp-core` with minimal `createRuntime` and provider contracts; build PASS.
 - Added `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; Notion server wiring now reads config (logger level/name and server identity). Detection logic removed from wiring; lint/type-check/build PASS.
 - Barrel rationalisation: core registry interface renamed to `CoreToolRegistry`; imports/exports updated; lint PASS.
+- Providers: `packages/providers/mcp-providers-node` scaffolded with in‑memory storage, console logger, and time‑based clock; unit tests PASS; monorepo gates PASS.
 
 ## Immediate Next Actions
 
 1. Barrel rationalisation (avoid layered collisions; export runtime registry as `CoreToolRegistry`; keep schema types local). (PARTIAL COMPLETE)
 2. Introduce configuration schema (`src/config/runtime.json`) and server DI refactor to explicit provider injection via core factory. (CONFIG READ COMPLETE; VALIDATION + DI FACTORY WIRING PENDING)
-3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; CONTRACT TESTS PENDING)
+3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; NODE PROVIDER SCAFFOLDED; CONTRACT TESTS PENDING)
 4. Adopt strict import‑x hygiene after alias setup (alias‑only, no parent relatives, approved public subpaths). (PENDING)
 5. Workspace taxonomy rename and `@workspace/*` alias adoption (mechanical, later in phase). (PENDING)
+6. Greek ecosystem deprecation: remove all traces in active code/comments/imports; add single reference doc `docs/architecture/greek-ecosystem-deprecation.md` explaining context and rationale. (PENDING)
 
 Abort if both source and target exist and differ.
 
