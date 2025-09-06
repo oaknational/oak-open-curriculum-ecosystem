@@ -1,6 +1,8 @@
-# Handoff Prompt: Continue Part 1 Mechanical Architecture Normalisation
+# Handoff Prompt: Continue Part 2 – Core, Providers, Explicit Injection
 
-This document equips a successor agent to complete the purely mechanical Part 1 directory normalisation in the `oak-mcp-ecosystem` monorepo. Master reference: `.agent/plans/standardising-architecture-part1.md`.
+Status: IN PROGRESS. Branch: `feat/standardising_architecture_part_2`.
+
+Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 
 ## Core Directives
 
@@ -17,38 +19,32 @@ This document equips a successor agent to complete the purely mechanical Part 1 
 - Read and follow `GO.md` for grounding, TODO structuring, and quality gates. Replace references to external review agents with self-reviews.
 - Read `.agent/directives-and-memory/AGENT.md` and linked documents.
 
-## Repository Snapshot
+## Current Progress (minimal)
 
-Phenotype packages (`ecosystem/psycha/`):
+- Nested tools rename completed in both servers: `src/tools/tools` → `src/tools/runtime`; imports updated; gates PASS.
+- Baseline captured: detection inventory (adaptive env + direct `process.env`), ESLint boundary snapshot.
+- Core package scaffolded at `packages/core/mcp-core` with minimal `createRuntime` and provider contracts; build PASS.
+- Added `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; Notion server wiring now reads config (logger level/name and server identity). Detection logic removed from wiring; lint/type-check/build PASS.
+- Barrel rationalisation: core registry interface renamed to `CoreToolRegistry`; imports/exports updated; lint PASS.
 
-- `oak-curriculum-mcp` – MIGRATED (psychon→app, organa/mcp→tools). Imports rewritten. Gates green.
-- `oak-notion-mcp` – MIGRATED (psychon→app, organa/mcp→tools, organa/notion→integrations/notion, chorai/\*→config/logging/types/test/mocks). Imports rewritten; minimal post‑fixes applied (dynamic import `.js` suffixes, layered barrel targets).
+## Immediate Next Actions
 
-Baseline export surface & filtered legacy token scan: partial (needs completion for `oak-notion-mcp` pre/post migration).
-
-## Mapping Rules
-
-| From                       | To                                      |
-| -------------------------- | --------------------------------------- |
-| `src/chorai/phaneron`      | `src/config`                            |
-| `src/chorai/aither`        | `src/logging`                           |
-| `src/chorai/stroma`        | `src/types`                             |
-| `src/chorai/eidola`        | `src/test/mocks` (fallback `src/mocks`) |
-| `src/organa/mcp`           | `src/tools`                             |
-| `src/organa/<integration>` | `src/integrations/<integration>`        |
-| `src/psychon`              | `src/app`                               |
+1. Barrel rationalisation (avoid layered collisions; export runtime registry as `CoreToolRegistry`; keep schema types local). (PARTIAL COMPLETE)
+2. Introduce configuration schema (`src/config/runtime.json`) and server DI refactor to explicit provider injection via core factory. (CONFIG READ COMPLETE; VALIDATION + DI FACTORY WIRING PENDING)
+3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; CONTRACT TESTS PENDING)
+4. Adopt strict import‑x hygiene after alias setup (alias‑only, no parent relatives, approved public subpaths). (PENDING)
+5. Workspace taxonomy rename and `@workspace/*` alias adoption (mechanical, later in phase). (PENDING)
 
 Abort if both source and target exist and differ.
 
-## Tooling
+## References
 
-- Execution codemod: `scripts/refactor/part1-codemod-exec.ts` (git mv + import rewrite + integration folder mapping + idempotent skips).
+- Plan: `.agent/plans/standardising-architecture-part2.md` (single source of truth for Part 2).
+- High-level: `.agent/plans/standardising-architecture-high-level-plan.md`.
 
-## Non‑Goals
+## Non‑Goals (for this handoff note)
 
-- No logic changes or public API modifications.
-- Do not delete legacy docs; instead add a pointer doc.
-- Do not remove legacy ESLint boundary patterns (duplicate with TODO markers).
+- Restating Part 1 details; see Part 1 plan if needed.
 
 ## Export Surface Parity
 
@@ -73,35 +69,15 @@ After full migration these must only appear in archived docs or the pointer doc 
 | Naming collisions across layers  | Prefer explicit deep imports; disambiguate barrel export names | Type-check PASS; clear symbol ownership |
 | Confusing nested tools directory | Rename deferred to Part 2 (`tools/tools` → `tools/runtime`)    | Tracked in Part 2 acceptance            |
 | Residual tokens                  | Global grep & remediate                                        | Residual array empty                    |
+| Config typing issues             | Use `with { type: 'json' }` and import-x rules                 | Build/lint PASS                         |
 
-## Acceptance Criteria
+## Quality Gates
 
-1. All mappings applied where sources existed (both phenotypes).
-2. No legacy directory names under phenotype `src/` trees.
-3. Root gates PASS (type-check, lint, test, build).
-4. Export surface parity (no added/removed symbols).
-5. Residual token scan clean (exempt: archived + pointer doc).
-6. `refactor-report.json` present: required schema, `idempotent:true`, `boundaryRulesDuplicated:true`.
-7. No collisions unresolved.
-8. Only import path segment edits + relocations (no semantic drift).
-9. Single atomic commit message: `refactor(server): mechanical directory normalisation (Part 1)`.
-10. British spelling maintained.
+Run from repo root, single invocation per gate (wait for completion): `pnpm format`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm build` after each material change.
 
 ## Remaining Work Sequence
 
-1. Migration status: `oak-notion-mcp` migrated with codemod (directories moved; imports rewritten). Post-fixes applied:
-   - ESM `.js` suffix added to runtime internal imports where required (e.g., dynamic/server wiring and barrels exporting concrete files).
-   - Layered barrels resolved to correct layers (e.g., `createToolHandlers` now exported from `src/tools/tools/handlers` via `src/tools/index.ts`).
-   - `ToolRegistry` ambiguity resolved: runtime registry API imported from `tools/tools/core/types`; schema mapping kept local to `tools/tools/types`.
-
-2. Root gates: all PASS (type‑check, lint, tests, build). Export parity verified (no diff). Residual scans clean. Idempotency confirmed (codemod no‑op). Report and pointer doc generated.
-3. Export parity capture & diff for `oak-notion-mcp` (pre/post snapshots) – should be identical.
-4. Legacy token scan (non-import contexts) and remediate.
-5. Duplicate ESLint boundary rules & add new globs (legacy retained with `// TODO(Part2)` comments). Note: central rules already updated to reflect tools↔integrations isolation; per‑package config aligned to enforce zones only for Part 1 (defer strict `no-internal-modules` and `no-relative-parent-imports` to Part 2).
-6. Idempotency check: re-run codemod (`tsx scripts/refactor/part1-codemod-exec.ts --packages=oak-notion-mcp`) expecting zero ops.
-7. Global residual token grep (imports + non-import) confirm clean (exclude archived/pointer docs).
-8. Generate `refactor-report.json` + pointer doc `docs/architecture/legacy-biological-mapping.md`. (Generated)
-9. Final full gates and atomic commit & PR (attach report & acceptance checklist).
+None — Part 1 is complete. See `.agent/plans/standardising-architecture-part2.md` for next steps.
 
 ## Report JSON (Shape Example)
 
@@ -111,8 +87,11 @@ After full migration these must only appear in archived docs or the pointer doc 
   "packages": [
     {
       "name": "oak-notion-mcp",
-      "moves": [],
-      "importsRewritten": 0,
+      "moves": [
+        "packages/core/mcp-core (added)",
+        "ecosystem/psycha/oak-notion-mcp/src/config/runtime.json (added)"
+      ],
+      "importsRewritten": 2,
       "exportSurface": { "baseline": [], "post": [], "diff": { "added": [], "removed": [] } },
       "literalScanResidual": [],
       "collisions": [],
@@ -130,7 +109,7 @@ After full migration these must only appear in archived docs or the pointer doc 
   "idempotent": true,
   "randomSampleVerification": [],
   "docsUpdated": true,
-  "notes": ""
+  "notes": "Core scaffolding and config introduction complete; DI factory wiring and provider contracts next."
 }
 ```
 
@@ -150,10 +129,11 @@ pnpm format
 - Collision during migration.
 - Idempotency re-run produces planned operations.
 - New boundary lint failures after duplication.
+- Residual legacy tokens found in active code/comments/imports.
 
 ## Immediate Next Action
 
-Run remaining quality gates from repo root (`pnpm lint`, `pnpm test`, `pnpm build`). Then perform export parity, ESLint boundary duplication, idempotency check, residual scans, and reporting. Record outcomes in the master plan file.
+Barrel rationalisation in servers (runtime vs schema types), then DI/config introduction.
 
 ---
 
@@ -180,3 +160,10 @@ Completion = all acceptance criteria satisfied + report + atomic commit + PR.
     - `@workspace/sdks/*` → `packages/sdks/*/src/*`
 
 - Update configs (ESLint boundaries, Turbo, test globs) accordingly and run idempotent codemod (git mv + AST import rewrite). Full gates must be green post‑rename.
+
+## Additional Acceptance & Reporting Notes
+
+- Core package path is `packages/core/mcp-core/`; the core must not import providers.
+- Export surface parity must be preserved; capture baseline and post snapshots; abort on diff.
+- Legacy tokens (`psychon/`, `chorai/`, `organa/mcp`, `eidola/`) must only exist in archived docs or pointer docs after migration; include residual scan output in the report.
+- Alias‑only cross‑boundary imports enforced with `eslint-plugin-import-x`; approved public subpaths documented in package READMEs and ESLint config comments.

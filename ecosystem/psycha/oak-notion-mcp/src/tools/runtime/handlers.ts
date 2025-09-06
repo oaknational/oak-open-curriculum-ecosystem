@@ -6,7 +6,7 @@
 import type { NotionDependencies } from '../../types/notion-types/dependencies';
 import type { McpTool } from '../types';
 import { createToolFactory, createErrorHandler, createToolRegistry } from './core/index';
-import type { ToolRegistry as CoreToolRegistry } from './core/types';
+import type { CoreToolRegistry } from './core/types';
 import {
   searchToolDefinition,
   listDatabasesToolDefinition,

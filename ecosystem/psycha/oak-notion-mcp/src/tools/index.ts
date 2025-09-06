@@ -8,7 +8,7 @@
 export { createResourceHandlers } from './resources/handlers/index.js';
 
 // Tool handlers
-export { createToolHandlers } from './tools/handlers.js';
+export { createToolHandlers } from './runtime/handlers.js';
 
 // Types
 export type { McpTool, McpToolResult } from '../types';

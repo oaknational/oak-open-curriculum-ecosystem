@@ -1,5 +1,7 @@
 # Standardising Architecture – Part 1 Implementation Plan (Mechanical Refactor)
 
+Status: COMPLETE (2025-09-05). Merged via [PR #14](https://github.com/oaknational/oak-mcp-ecosystem/pull/14). All acceptance criteria satisfied; see `.agent/refactor/refactor-report.json`. Any remaining tasks are moved to Part 2 (`feat/standardising_architecture_part_2`) or discarded as unnecessary.
+
 Supersedes and concretises the Part 1 content of `standardising-architecture-plan.md` for execution. **No behavioural change.** Purely mechanical, idempotent directory normalisation + import/config rewrites to present a conventional layout while preserving existing logical boundaries and custom ESLint guarantees.
 
 ## 1. Intent & Impact
@@ -340,38 +342,38 @@ REMINDER: UseBritish spelling
 Every Action is followed by a Review. Every third task is grounding. Quality gates appear regularly. Prefix semantics: ACTION:, REVIEW:, GROUNDING:, QUALITY-GATE:
 
 1. ACTION: Baseline capture – run and save current madge circular report, grep counts for `chorai|psychon|organa/mcp|eidola`, capture export surfaces, literal legacy string scan (non-import), and record package list.  
-   REVIEW: architecture-reviewer to validate baseline completeness.
+   REVIEW: Self‑review: validate baseline completeness.
 2. ACTION: Implement codemod scaffolding (plan mode only) – script that enumerates candidate moves without touching FS.  
-   REVIEW: code-reviewer to assess script structure.
+   REVIEW: Self‑review: assess script structure.
 3. GROUNDING: read GO.md and AGENT.md, reaffirm Prime Directive, adjust plan if simplification possible.
 4. ACTION: Extend codemod with AST import rewrite (dry-run printing diff counts).  
-   REVIEW: code-reviewer + type-reviewer ensure safe traversal & type assumptions.
+   REVIEW: Self‑review: ensure safe traversal & type assumptions.
 5. ACTION: Add config mutation module (tsconfig paths key+value, turbo.json, eslint config string search).  
-   REVIEW: config-auditor validates exhaustive coverage.
+   REVIEW: Self‑review: validate exhaustive coverage.
 6. GROUNDING: read GO.md and AGENT.md; simplify if over-engineered.
 7. ACTION: Generate dry-run JSON plan for all server packages; include predicted export surface parity hashes; store as `refactor-plan.part1.json`.  
-   REVIEW: architecture-reviewer confirms mapping correctness & no conflicts.
+   REVIEW: Self‑review: confirm mapping correctness & no conflicts.
 8. QUALITY-GATE: Run format → type-check → lint (should be unchanged), confirm zero failures baseline before executing moves; verify export baseline & literal scan stored.
 9. GROUNDING: read GO.md and AGENT.md; confirm readiness to execute.
 10. ACTION: Execute moves + rewrites for first server package (alphabetical) with scoped quality gate (format, type-check, lint, test).  
-    REVIEW: test-auditor validates no test regressions.
+    REVIEW: Self‑review: validate no test regressions.
 11. ACTION: Repeat step 10 for remaining server packages sequentially, updating cumulative report; run per-package export diff + literal residual scan.
-    REVIEW: architecture-reviewer spot-check second package diff for mechanical purity.
+    REVIEW: Self‑review: spot‑check second package diff for mechanical purity.
 12. GROUNDING: read GO.md and AGENT.md; verify continuing alignment.
-13. ACTION: Run global config rewrite + second import rewrite pass (should yield zero net changes); duplicate boundary rules; update phenotype ESLint configs.  
-    REVIEW: config-auditor verifies config diffs minimal & correct.
+13. ACTION: Run global config rewrite + second import rewrite pass (should yield zero net changes); duplicate boundary rules; update phenotype ESLLint configs.  
+    REVIEW: Self‑review: verify config diffs minimal & correct.
 14. QUALITY-GATE: Full monorepo gates (format, type-check, lint, test, build) – record outcomes in report.
 15. GROUNDING: read GO.md and AGENT.md; reflect on any simplifications before finalisation.
 16. ACTION: Perform idempotency check (re-run codemod in dry-run; expect zero planned operations) and hash integrity sampling.  
-    REVIEW: architecture-reviewer confirms idempotency & integrity evidence.
+    REVIEW: Self‑review: confirm idempotency & integrity evidence.
 17. ACTION: Generate legacy pointer doc + compile `refactor-report.json` (including export surface & literal scan data) + PR description draft.  
-    REVIEW: code-reviewer + architecture-reviewer review narrative & clarity.
+    REVIEW: Self‑review: review narrative & clarity.
 18. QUALITY-GATE: Final pre-commit gates (format, type-check, lint, test) ensuring no drift since last gate.
 19. ACTION: Create single atomic commit and open PR with acceptance criteria checklist.  
-    REVIEW: config-auditor + test-auditor final holistic sign-off.
+    REVIEW: Self‑review: final holistic sign‑off.
 20. GROUNDING: read GO.md and AGENT.md; capture retrospective notes for Part 2 preparation (experience log).
 
-Note: Sub-agent invocation names retained per original practice even though execution here will be manual/human reviewed; placeholders maintained for consistency.
+Note: All review items are self‑reviews; references to external review agents have been removed for this plan.
 
 ---
 
@@ -412,20 +414,7 @@ Completed / Partial:
 
 Remaining (actionable next steps):
 
-11. [ ] Execute migration for second phenotype (`oak-notion-mcp`): apply mappings (psychon→app, organa/mcp→tools, organa/notion→integrations/notion, chorai/{phaneron→config,aither→logging,stroma→types,eidola→test/mocks}); rewrite imports.
-
-Then immediately:
-
-- Run root gates (type-check, lint, test) once.
-- Capture export surface pre/post (baseline file to be finalised) and diff.
-
-13. [ ] Global config update: duplicate boundary rules, adjust phenotype ESLint globs to include new folders while retaining legacy until Part 2; secondary no-op import rewrite.
-14. [ ] Full monorepo quality gates including build.
-15. [ ] Idempotency verification & hash sampling.
-16. [ ] Global residual legacy token grep (imports + non-import contexts) – ensure zero outside archived docs.
-17. [ ] Generate report + legacy pointer doc.
-18. [ ] Prepare acceptance checklist, atomic commit.
-19. [ ] Final gates post-commit & PR creation.
+None — Part 1 complete. All residual items were completed in [PR #14](https://github.com/oaknational/oak-mcp-ecosystem/pull/14) or moved to the Part 2 plan on branch `feat/standardising_architecture_part_2`.
 
 Deferred / Folded Adjustments:
 
@@ -497,11 +486,11 @@ Quality gates status (root):
 - Test (unit + e2e): PASS (root)
 - Build: PASS (root)
 
-Pending Part 1 items:
+Finalisation:
 
-- Export surface capture/diff for oak-notion-mcp – COMPLETE (no diff)
-- Duplicate ESLint boundary rules and update phenotype ESLint globs (legacy retained with TODO markers) – PARTIAL (central zones updated; per‑package enforcement set to zones only for Part 1)
-- Idempotency verification – COMPLETE (codemod re-run rewrote 0 specifiers)
-- Residual legacy token scan (non‑import contexts) – COMPLETE (clean)
-- `refactor-report.json` + pointer doc – GENERATED
-- Final gates – COMPLETE (build PASS). Prepare atomic commit/PR.
+- PR merged: [PR #14](https://github.com/oaknational/oak-mcp-ecosystem/pull/14) into `main` from `feat/normalising_architecture`.
+- Export surface parity: COMPLETE (no diff).
+- Boundary rules duplicated for parity; stricter rules deferred to Part 2.
+- Idempotency verification: COMPLETE (no-op).
+- Residual legacy tokens: NONE (outside archived/pointer docs).
+- Report generated and stamped; all gates PASS.

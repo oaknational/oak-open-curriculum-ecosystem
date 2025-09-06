@@ -2,6 +2,8 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Logger } from '@oaknational/mcp-moria';
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import runtimeConfig from '../config/runtime.json' with { type: 'json' };
+import { parseLogLevel } from '@oaknational/mcp-histos-logger';
 
 export interface ServerSetupDependencies {
   transport: StdioServerTransport;
@@ -28,10 +30,7 @@ async function loadEnvironment(log: ServerSetupDependencies['log']) {
 /**
  * Creates all server dependencies
  */
-async function createServerDependencies(
-  environment: Awaited<ReturnType<typeof loadEnvironment>>,
-  log: ServerSetupDependencies['log'],
-): Promise<{
+async function createServerDependencies(log: ServerSetupDependencies['log']): Promise<{
   logger: Logger;
   notionClient: Client;
   server: Server;
@@ -47,8 +46,10 @@ async function createServerDependencies(
 
   log('[STARTUP] Creating logger...');
   const logger = createAdaptiveLogger({
-    level: environment.LOG_LEVEL,
-    name: 'oak-notion-mcp',
+    level: parseLogLevel(
+      typeof runtimeConfig.logLevel === 'string' ? runtimeConfig.logLevel : undefined,
+    ),
+    name: runtimeConfig.serverName,
     consolaOptions: {
       // MCP servers must use stderr for ALL logs to keep stdout clean for JSON-RPC
       stdout: process.stderr,
@@ -60,10 +61,7 @@ async function createServerDependencies(
   const notionConfig = getNotionConfig(notionEnv);
   const notionClient = new Client({ auth: notionConfig.apiKey });
 
-  const serverConfig = {
-    name: 'oak-notion-mcp',
-    version: '0.0.0-development',
-  };
+  const serverConfig = { name: runtimeConfig.serverName, version: runtimeConfig.serverVersion };
 
   log('[STARTUP] Creating Notion operations...');
   const notionOperations = createNotionOperations();
@@ -79,8 +77,8 @@ async function createServerDependencies(
  * This is an integration point that orchestrates the server startup
  */
 export async function setupAndStartServer(deps: ServerSetupDependencies): Promise<void> {
-  const environment = await loadEnvironment(deps.log);
-  const { logger, server } = await createServerDependencies(environment, deps.log);
+  await loadEnvironment(deps.log);
+  const { logger, server } = await createServerDependencies(deps.log);
 
   deps.log('[STARTUP] Connecting to stdio transport...');
   await server.connect(deps.transport);

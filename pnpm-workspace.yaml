@@ -7,6 +7,8 @@ packages:
   - ecosystem/histoi/histos-storage
   - ecosystem/histoi/histos-transport
   - packages/oak-curriculum-sdk
+  - packages/core/mcp-core
+  - packages/providers/mcp-providers-node
 
 onlyBuiltDependencies:
   - esbuild

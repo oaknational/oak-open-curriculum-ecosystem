@@ -37,6 +37,9 @@ Key Outcomes:
 5. Idempotent codemod + comprehensive `refactor-report.json` (hashes, collisions, export parity, literal scan, boundary duplication flag).
 6. Single atomic, green‑gated commit.
 
+Status: Part 1 complete (2025-09-05); merged via [PR #14](https://github.com/oaknational/oak-mcp-ecosystem/pull/14).
+Part 2 in progress on `feat/standardising_architecture_part_2`: nested tools rename → runtime completed; gates PASS.
+
 High-Level Phases:
 
 1. Baseline capture (structure, exports, boundaries, literals).
@@ -59,6 +62,9 @@ High‑Level Outcomes:
 10. Internal alias scope introduced: reserve `@oaknational/*` for published packages; use `@workspace/*` for internal aliasing.
 
 Phased Shape (concise):
+
+Current working branch for Part 2: `feat/standardising_architecture_part_2`.
+Early progress: Step 7 (tools rename) completed; proceeding with barrels and strict import hygiene prep.
 
 1. Core extraction & internal publish.
 2. Provider modules + contract tests.

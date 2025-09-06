@@ -33,7 +33,9 @@
       "@oaknational/mcp-histos-storage": ["./ecosystem/histoi/histos-storage/src"],
       "@oaknational/mcp-histos-storage/*": ["./ecosystem/histoi/histos-storage/src/*"],
       "@oaknational/mcp-histos-transport": ["./ecosystem/histoi/histos-transport/src"],
-      "@oaknational/mcp-histos-transport/*": ["./ecosystem/histoi/histos-transport/src/*"]
+      "@oaknational/mcp-histos-transport/*": ["./ecosystem/histoi/histos-transport/src/*"],
+      "@oaknational/mcp-providers-node": ["./packages/providers/mcp-providers-node/src"],
+      "@oaknational/mcp-providers-node/*": ["./packages/providers/mcp-providers-node/src/*"]
     }
   }
 }

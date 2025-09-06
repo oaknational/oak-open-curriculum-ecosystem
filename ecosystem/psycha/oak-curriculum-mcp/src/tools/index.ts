@@ -6,7 +6,7 @@
  */
 
 import { handleToolCall } from './handlers/tool-handler.js';
-import { getMcpTools } from './tools/index.js';
+import { getMcpTools } from './runtime/index.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
 /**

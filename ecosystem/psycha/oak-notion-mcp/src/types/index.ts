@@ -33,8 +33,8 @@ export type {
   ToolResult as CoreToolResult,
   ToolLogger,
   ToolFactory,
-  ToolRegistry as CoreToolRegistry,
-} from '../tools/tools/core/types';
+  CoreToolRegistry,
+} from '../tools/runtime/core/types';
 
 export type {
   ToolResult,
@@ -47,4 +47,4 @@ export type {
   ToolConfig,
   ToolTuple,
   ToolSchemaMap,
-} from '../tools/tools/types';
+} from '../tools/runtime/types';

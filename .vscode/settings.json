@@ -14,6 +14,7 @@
     "Dynamis",
     "Ecosystema",
     "Ecosystemata",
+    "Eeuo",
     "Empsycha",
     "Energeia",
     "fallbacks",
@@ -103,7 +104,7 @@
     { "directory": "ecosystem/histoi/histos-logger", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-storage", "changeProcessCWD": true },
     { "directory": "ecosystem/histoi/histos-transport", "changeProcessCWD": true },
-    { "directory": "packages/oak-curriculum-sdk", "changeProcessCWD": true },
+    { "directory": "packages/oak-curriculum-sdk", "changeProcessCWD": true }
   ],
   "cSpell.ignorePaths": [
     "package-lock.json",
@@ -114,5 +115,5 @@
     ".vscode",
     ".vscode-insiders",
     "**/generated/**/*"
-  ],
+  ]
 }

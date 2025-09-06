@@ -12,7 +12,7 @@ export type {
   ToolResult,
   ToolLogger,
   ToolFactory,
-  ToolRegistry,
+  CoreToolRegistry,
 } from './types';
 
 // Re-export McpTool from its single source of truth

@@ -45,9 +45,9 @@ const config = tsEslintConfig(
     },
     rules: createHistoiBoundaryRules('histos-env', getOtherTissues('histos-env')),
   },
-  // Config files
+  // Config files (exclude tsup.config.ts to avoid dynamic bundling side-effects during lint)
   {
-    files: ['eslint.config.ts', 'vitest.config.ts', 'tsup.config.ts'],
+    files: ['eslint.config.ts', 'vitest.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',

@@ -1,0 +1,15 @@
+{
+  "name": "@oaknational/mcp-core",
+  "version": "0.0.0-development",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rimraf dist .tsup",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  }
+}

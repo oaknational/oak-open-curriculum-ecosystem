@@ -3,13 +3,13 @@
  * Manages collection of MCP tools
  */
 
-import type { ToolRegistry } from './types';
+import type { CoreToolRegistry } from './types';
 import type { McpTool } from '../../types';
 
 /**
  * Creates a tool registry for managing MCP tools
  */
-export function createToolRegistry(): ToolRegistry {
+export function createToolRegistry(): CoreToolRegistry {
   const tools = new Map<string, McpTool>();
 
   return {

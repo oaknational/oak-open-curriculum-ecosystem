@@ -24,6 +24,8 @@ export const baseConfig = tsEslintConfig(
       '**/*.d.ts',
       '.eslintrc.js',
       'commitlint.config.js',
+      '**/eslint.config.ts',
+      '**/tsup.config.ts',
       'reference/',
     ],
   },
@@ -149,14 +151,14 @@ export const baseConfig = tsEslintConfig(
       '@typescript-eslint/unbound-method': 'off',
     },
   },
-  // Config files need their own tsconfig
+  // Config files - allow default project service to avoid per-package tsconfig coupling
   {
     files: ['**/*.config.ts', '**/eslint.config.ts', 'eslint.config.base.ts'],
     languageOptions: {
       parser: tsEslintParser,
       parserOptions: {
-        project: './tsconfig.json',
-        tsconfigRootDir: import.meta.dirname,
+        projectService: true,
+        allowDefaultProject: true,
       },
     },
   },

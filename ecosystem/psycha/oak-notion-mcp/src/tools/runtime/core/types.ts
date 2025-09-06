@@ -64,10 +64,10 @@ export type ToolFactory = (
 ) => McpTool;
 
 /**
- * Tool registry for MCP tools
- * Follows the morphai pattern but adapted for MCP tool structure
+ * Core tool registry for MCP tools
+ * Named explicitly to avoid collisions with schema-level types
  */
-export interface ToolRegistry {
+export interface CoreToolRegistry {
   register(tool: McpTool): void;
   get(name: string): McpTool | undefined;
   getAll(): McpTool[];
