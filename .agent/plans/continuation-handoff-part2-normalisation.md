@@ -31,15 +31,21 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Providers: `packages/providers/mcp-providers-node` scaffolded with in‑memory storage, console logger, and time‑based clock; unit tests PASS; monorepo gates PASS.
 - Provider contracts: shared helper at `@oaknational/mcp-core/testing/provider-contract` with consumer integration test in providers‑node; PASS.
 - Docs: `docs/architecture/provider-contracts.md` and `docs/architecture/greek-ecosystem-deprecation.md` added; package READMEs link to contracts doc.
+- Workspace taxonomy progress:
+  - Apps moved: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp` (gates PASS), `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp` (lint PASS; tests/build pending local vitest resolution).
+  - Libs moved: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}` (gates PASS).
+  - Orphan tissue to archive: `ecosystem/histoi/histos-runtime-abstraction`.
+  - Remaining Greek workspace: `ecosystem/moria/moria-mcp` (will be retired after import switch to `@oaknational/mcp-core` compat).
 
 ## Immediate Next Actions
 
 1. Barrel rationalisation (avoid layered collisions; export runtime registry as `CoreToolRegistry`; keep schema types local). (PARTIAL COMPLETE)
 2. Introduce configuration schema (`src/config/runtime.json`) and server DI refactor to explicit provider injection via core factory. (CONFIG READ + MINIMAL VALIDATION COMPLETE; runtime composed; injection into tools/integrations deferred to avoid behaviour drift)
 3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; NODE PROVIDER SCAFFOLDED; CONTRACT TESTS ADDED FOR NODE)
-4. Adopt strict import‑x hygiene after alias setup (alias‑only, no parent relatives, approved public subpaths). (PENDING – phenotype rules present; strict flags currently OFF pending alias adoption)
-5. Workspace taxonomy rename and `@workspace/*` alias adoption (mechanical, later in phase). (PENDING)
-6. Greek ecosystem deprecation: remove all traces in active code/comments/imports; single reference doc `docs/architecture/greek-ecosystem-deprecation.md` created (DONE); residual scan and pointer linking PENDING.
+4. Replace imports from `@oaknational/mcp-moria` with `@oaknational/mcp-core` compatibility exports (mechanical codemod); remove `ecosystem/moria/moria-mcp` from workspace. (PENDING)
+5. Archive `ecosystem/histoi/histos-runtime-abstraction`. (PENDING)
+6. Adopt strict import‑x hygiene after import switch (alias‑only, no parent relatives, approved subpaths). (PENDING)
+7. Greek ecosystem deprecation: reduce legacy docs to the single pointer; scan residual tokens. (PENDING)
 
 Abort if both source and target exist and differ.
 
@@ -82,7 +88,7 @@ After full migration these must only appear in archived docs or the pointer doc 
 
 ## Quality Gates
 
-Run from repo root, single invocation per gate (wait for completion): `pnpm format`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm build` after each material change. Build currently PASS; lint has known follow-up fixes pending.
+Run from repo root, single invocation per gate (wait for completion): `pnpm format`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm build` after each material change. Build currently PASS; curriculum app tests are pending vitest local dependency resolution (install and config fixed for lint).
 
 ## Remaining Work Sequence
 
@@ -142,7 +148,7 @@ pnpm format
 
 ## Immediate Next Action
 
-Barrel rationalisation in servers (runtime vs schema types), then DI/config introduction.
+1. Implement `mcp-core` compat exports and repo‑wide import switch from `mcp-moria`. 2) Archive `histos-runtime-abstraction`. 3) Remove `ecosystem/moria/moria-mcp` from workspace. 4) Rename Greek folders inside notion app to neutral names and adjust ESLint.
 
 ---
 

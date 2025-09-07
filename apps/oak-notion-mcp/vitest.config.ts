@@ -1,7 +1,7 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import { fileURLToPath } from 'node:url';
 import { resolve, dirname } from 'node:path';
-import { baseTestConfig } from '../../../vitest.config.base';
+import { baseTestConfig } from '../../vitest.config.base';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -9,10 +9,15 @@ export default mergeConfig(
   baseTestConfig,
   defineConfig({
     resolve: {
+      conditions: ['development'],
       alias: {
         '@/*': resolve(__dirname, './src/*'),
         '@organa/*': resolve(__dirname, './src/organa/*'),
         '@psychon/*': resolve(__dirname, './src/psychon/*'),
+        '@oaknational/mcp-histos-logger': resolve(
+          __dirname,
+          '../../packages/libs/logger/src/index.ts',
+        ),
       },
     },
     test: {

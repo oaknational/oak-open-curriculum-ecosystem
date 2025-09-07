@@ -10,7 +10,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
-const serverSrc = path.join(repoRoot, 'ecosystem/psycha/oak-notion-mcp/src');
+const serverSrc = path.join(repoRoot, 'apps/oak-notion-mcp/src');
 const aliasPrefix = '@workspace/apps/oak-notion-mcp/';
 
 /** @param {string} p */

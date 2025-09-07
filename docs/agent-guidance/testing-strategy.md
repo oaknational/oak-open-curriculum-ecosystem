@@ -23,8 +23,8 @@
 
 ## Rules
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (failing *test*), Green (passing test, because product code is created at this point, *not before*), Refactor (improve the product code implementation, know that the *behaviour* at the interface will remain proven by the test)
-- **Test real behaviour, not implementation details** - We should be able to change *how* something works without breaking the test that proves *that* it works.
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (failing _test_), Green (passing test, because product code is created at this point, _not before_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
+- **Test real behaviour, not implementation details** - We should be able to change _how_ something works without breaking the test that proves _that_ it works.
 - **Test to interfaces, not internals** - Tests should be written to the interfaces, not the internals. Closely related to test behaviour not implementation.
 - **No useless tests** - Each test must prove something useful about the product code. If a test is only testing the test or mocks, delete it.
 - **Do not test types** - Tests are for logic, types are explored through creating tests, but types cannot be tested. If test only tests types, delete it.
@@ -51,7 +51,7 @@ In-process tests are tests that validate **code imported into the test process**
 
 #### Out-of-process tests
 
-Out-of-process tests are tests that validate a running *system*, the tests and the system run in *separate processes*. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
+Out-of-process tests are tests that validate a running _system_, the tests and the system run in _separate processes_. They are slower, are less specific in the causes of issues but cast a wider net, and may produce side effects locally and in external systems.
 
 - **E2E test**: A test that verifies the behaviour of a running system. E2E tests DO trigger IO, have side effects, and DO NOT contain mocks in many cases. E2E tests are NOT automatically run, because they produce side effects, and because they can induce costs.
 
@@ -81,7 +81,7 @@ describe('UserService Integration Test', () => {
     const mockDb = { query: () => [{ id: 1, name: 'Alice' }] };
     const adapter = new DatabaseAdapter(mockDb); // Simple mock injected
     const service = new UserService(adapter);
-    
+
     const users = service.getAllUsers();
     // Testing how CODE UNITS integrate, not a running system
     expect(users).toHaveLength(1);
@@ -94,33 +94,26 @@ The key distinction: Integration tests import and test code directly. They never
 ### Workspace Architecture Components (Moria/Histoi/Psycha)
 
 - **Moria (Molecules/Atoms)**: Pure abstractions (zero dependencies) - Test with unit tests only, no IO or mocks allowed
-  - *Example*: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
-  
+  - _Example_: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
 - **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms - Test with unit tests for pure logic, integration tests for runtime adaptation
-  - *Example*: Adaptive logger that uses `console` in browser but `pino` in Node.js, storage tissue that uses `localStorage` in browser but `fs` in Node.js
-  
+  - _Example_: Adaptive logger that uses `console` in browser but `pino` in Node.js, storage tissue that uses `localStorage` in browser but `fs` in Node.js
 - **Psycha (Living Organisms)**: Complete applications - Test with integration tests for assembly, E2E tests for full behaviour
-  - *Example*: `oak-notion-mcp` server, `github-mcp` server - complete MCP applications
+  - _Example_: `oak-notion-mcp` server, `github-mcp` server - complete MCP applications
 
 ### Psychon Architecture Components (Within Each Organism)
 
 - **Chora/Morphai (Forms)**: Hidden forms and Platonic ideals - Test with unit tests for pure patterns
-  - *Example*: Abstract `ToolExecutor` pattern, `RequestHandler` interface that all tools implement
-  
+  - _Example_: Abstract `ToolExecutor` pattern, `RequestHandler` interface that all tools implement
 - **Chora/Stroma (Support/Foundation)**: Types and contracts (compile-time only) - Test with TypeScript compiler, no runtime tests needed
-  - *Example*: `NotionBlock` type, `MCPRequest` interface, `ToolResult` type
-  
+  - _Example_: `NotionBlock` type, `MCPRequest` interface, `ToolResult` type
 - **Chora/Aither (Air/Essence)**: Logging and events (pervasive flows) - Test with unit tests for pure transformations, integration tests for flow behaviour
-  - *Example*: Logger that flows through all layers, event bus for tool execution events
-  
+  - _Example_: Logger that flows through all layers, event bus for tool execution events
 - **Chora/Phaneron (Manifestation)**: Configuration and perceivable environment - Test with integration tests for validation and defaults
-  - *Example*: `.env` configuration, runtime feature flags, API keys management
-  
+  - _Example_: `.env` configuration, runtime feature flags, API keys management
 - **Organa (Organs)**: Discrete business logic organs - Test with unit tests for pure functions, integration tests at organ boundaries
-  - *Example*: Notion search organ, database query organ, page creation organ
-  
+  - _Example_: Notion search organ, database query organ, page creation organ
 - **Psychon (Soul/Living Whole)**: The wiring layer - Test with integration tests to verify proper assembly and dependency injection
-  - *Example*: Main application class that wires all organs together, dependency injection container
+  - _Example_: Main application class that wires all organs together, dependency injection container
 
 ### Design Approaches
 
@@ -181,7 +174,7 @@ describe('logger tissue integration', () => {
 ### Testing Psycha (Complete Organisms)
 
 ```typescript
-// ecosystem/psycha/oak-notion-mcp/psychon.integration.test.ts
+// apps/oak-notion-mcp/psychon.integration.test.ts
 describe('Oak Notion MCP assembly', () => {
   it('wires all components from moria and histoi', () => {
     // Verify proper assembly of all layers
@@ -312,4 +305,4 @@ describe('Psychon assembly', () => {
 - Tests live next to to code they test, not in a `test` directory.
   - Unit tests live next to the pure function file containing the functions they test. They MUST end in `*.unit.test.ts` or `*.test.ts` for moria packages (which contain only unit tests).
   - Integration tests live next to the integration point file containing the integration points they test. They MUST end in `*.integration.test.ts`.
-  - E2E tests are an exception and live in the `e2e-tests` directory. This is because they test a running *system* rather than importing code to test. They MUST end in `*.e2e.test.ts`.
+  - E2E tests are an exception and live in the `e2e-tests` directory. This is because they test a running _system_ rather than importing code to test. They MUST end in `*.e2e.test.ts`.

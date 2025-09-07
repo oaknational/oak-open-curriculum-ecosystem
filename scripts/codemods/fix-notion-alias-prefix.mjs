@@ -7,7 +7,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
-const serverSrc = path.join(repoRoot, 'ecosystem/psycha/oak-notion-mcp/src');
+const serverSrc = path.join(repoRoot, 'apps/oak-notion-mcp/src');
 
 async function* walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });

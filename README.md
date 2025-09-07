@@ -19,11 +19,11 @@ There are three main ecosystem layers:
 - Histoi (plural: tissues/matrices), runtime-adaptive libraries, e.g. logging, storage, transport
 - Psycha (plural: ensouled beings/organisms), complete applications (should really be Empsycha, but that is a mouthful)
 
-| Greek Term | English | Purpose | Packages |
-|------------|---------|---------|----------|
-| **Moria** (Μόρια) | Molecules/Atoms | Pure abstractions, zero dependencies | `@oaknational/mcp-moria` |
+| Greek Term         | English          | Purpose                                   | Packages                                                                                                                                      |
+| ------------------ | ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Moria** (Μόρια)  | Molecules/Atoms  | Pure abstractions, zero dependencies      | `@oaknational/mcp-moria`                                                                                                                      |
 | **Histoi** (Ἱστοί) | Tissues/Matrices | Transplantable runtime-adaptive libraries | `@oaknational/mcp-histos-logger`<br>`@oaknational/mcp-histos-storage`<br>`@oaknational/mcp-histos-env`<br>`@oaknational/mcp-histos-transport` |
-| **Psycha** (Ψυχά) | Ensouled beings | Complete applications | `@oaknational/oak-notion-mcp` |
+| **Psycha** (Ψυχά)  | Ensouled beings  | Complete applications                     | `@oaknational/oak-notion-mcp`                                                                                                                 |
 
 Within each Psychon organism there are
 
@@ -31,11 +31,11 @@ Within each Psychon organism there are
 - Organon/Organa (singular/plural: organs), discrete business logic, e.g. a Notion SDK
 - Psychon (singular: soul), application wiring, bringing it all together
 
-| Greek Term | English | Purpose | Example Location |
-|------------|---------|---------|----------|
-| **Chorai** (χώραι) | Fields | Pervasive infrastructure | [`ecosystem/psycha/oak-notion-mcp/src/chorai/`] |
-| **Organa** (ὄργανα) | Organs | Discrete business logic | [`ecosystem/psycha/oak-notion-mcp/src/organa/`] |
-| **Psychon** (ψυχόν) | Soul | Integration & wiring | [`ecosystem/psycha/oak-notion-mcp/src/psychon/`] |
+| Greek Term          | English | Purpose                  | Example Location                     |
+| ------------------- | ------- | ------------------------ | ------------------------------------ |
+| **Chorai** (χώραι)  | Fields  | Pervasive infrastructure | [`apps/oak-notion-mcp/src/chorai/`]  |
+| **Organa** (ὄργανα) | Organs  | Discrete business logic  | [`apps/oak-notion-mcp/src/organa/`]  |
+| **Psychon** (ψυχόν) | Soul    | Integration & wiring     | [`apps/oak-notion-mcp/src/psychon/`] |
 
 There are (currently) four categories of chorai/fields
 

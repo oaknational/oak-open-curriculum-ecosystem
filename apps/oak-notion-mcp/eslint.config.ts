@@ -5,18 +5,18 @@
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
-import { baseConfig } from '../../../eslint.config.base';
+import { baseConfig } from '../../eslint.config.base';
 import {
   psychaBoundaryRules,
   psychonArchitectureRules,
   commonSettings,
-} from '../../../eslint-rules/index.js';
+} from '../../eslint-rules/index.js';
 
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const rootTsProject = fileURLToPath(new URL('../../../tsconfig.lint.root.json', import.meta.url));
+const rootTsProject = fileURLToPath(new URL('../../tsconfig.lint.root.json', import.meta.url));
 const repoRootDir = dirname(rootTsProject);
 
 const config = tsEslintConfig(

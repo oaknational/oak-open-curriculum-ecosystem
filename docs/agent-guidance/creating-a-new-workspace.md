@@ -339,7 +339,7 @@ After creation, always verify:
 mkdir -p ecosystem/psycha/my-service-mcp/src/{chora/{morphai,stroma,aither,phaneron,eidola},organa,psychon}
 
 # 2. Copy configuration files from oak-curriculum-mcp
-cp ecosystem/psycha/oak-curriculum-mcp/*.{json,ts} ecosystem/psycha/my-service-mcp/
+cp apps/oak-curriculum-mcp/*.{json,ts} apps/my-service-mcp/
 
 # 3. Update package.json name and description
 # 4. Add to pnpm-workspace.yaml
@@ -351,7 +351,7 @@ cp ecosystem/psycha/oak-curriculum-mcp/*.{json,ts} ecosystem/psycha/my-service-m
 ## Getting Help
 
 - Review existing workspaces for examples:
-  - `ecosystem/psycha/oak-notion-mcp` - Complete MCP server with biological architecture
+  - `apps/oak-notion-mcp` - Complete MCP server with biological architecture
   - `packages/oak-curriculum-sdk` - Standard SDK package
   - `ecosystem/histoi/histos-logger` - Adaptive tissue example
 - Use sub-agents for verification:

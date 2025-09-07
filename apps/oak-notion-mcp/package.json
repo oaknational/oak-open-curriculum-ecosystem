@@ -29,7 +29,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup",
     "clean": "rm -rf dist",
     "deps": "pnpm outdated -r",
     "dev": "tsx watch src/index.ts",
@@ -62,7 +62,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "ecosystem/psycha/oak-notion-mcp"
+    "directory": "apps/oak-notion-mcp"
   },
   "publishConfig": {
     "access": "public"

@@ -1,8 +1,6 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "baseUrl": "."
-  },
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {},
   "include": ["src/**/*.ts", "**/*.test.ts", "e2e-tests/**/*.ts", "*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

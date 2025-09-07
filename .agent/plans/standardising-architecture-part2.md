@@ -22,6 +22,16 @@ Completed so far:
 - Notion server wiring refined: static logger import (no require), minimal runtime config validation via `validateRuntimeConfig`, runtime composed via core factory; all workspaces build PASS after correcting alias policy.
 - Documentation: added `docs/architecture/provider-contracts.md` and `docs/architecture/greek-ecosystem-deprecation.md`; updated core/providers READMEs.
 
+- Workspace taxonomy progress (mechanical):
+  - Apps: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp` (gates PASS), `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp` (lint PASS; tests/build pending install relink).
+  - Libs: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}` (gates PASS).
+  - Orphan tissue identified for archival: `ecosystem/histoi/histos-runtime-abstraction` (not referenced).
+
+Primary objective emphasis:
+
+- The central outcome of Part 2 is the complete removal of the Greek‑themed architecture from active code, directories, and working documentation. Replace with standard, intent‑revealing taxonomy and names: `apps/`, `packages/core`, `packages/libs`, `packages/sdks`. Only a single reference document may remain: `docs/architecture/greek-ecosystem-deprecation.md`.
+  - Concretely: replace runtime interfaces imported from `@oaknational/mcp-moria` with neutral exports from `@oaknational/mcp-core` (compat surface), then remove the legacy `ecosystem/moria/moria-mcp` workspace.
+
 ---
 
 ## 1. Intent & Impact
@@ -85,6 +95,7 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
   - Exposes interfaces, types, and pure utilities.
   - Provides a factory: `createRuntime(providers)` returning `{ logger, storage, clock, … }`.
   - Contains no provider imports.
+  - Provides a temporary compatibility export surface for runtime interfaces currently sourced from `@oaknational/mcp-moria` to enable a mechanical switch without behavioural drift.
 - Providers:
   - `providers/node` and `providers/cloudflare` modules implementing the same contracts.
   - Node provider present (clock/logger/storage) with unit tests; Cloudflare provider queued.
@@ -95,6 +106,7 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
   - Core cannot depend on providers.
   - Tools/integrations consume only injected runtime or public core interfaces.
   - Alias‑only cross‑package imports.
+- No Greek‑themed tokens remain anywhere in active code or docs. Directory layout is `apps/*`, `packages/core/*`, `packages/libs/*`, `packages/sdks/*`. The `ecosystem/*` tree is removed from active code (archived if needed).
 - Mechanical rename applied:
   - `src/tools/tools` → `src/tools/runtime` with updated imports. (COMPLETED)
 - Barrel rationalisation:
@@ -155,6 +167,10 @@ Aliases (internal workspace scope; distinct from publish scope):
   - `@workspace/libs/*` → `packages/libs/*/src/*`
   - `@workspace/sdks/*` → `packages/sdks/*/src/*`
 
+Residual token set (must be eradicated from active code/docs; scan at PR time):
+
+- psycha, psychon, chorai, chora, aither, stroma, phaneron, organa, moria, histoi, eidola, morphai, krypton, kanon, kratos, nomos, systema (and plurals/variants).
+
 ---
 
 ## 8. Risks & Mitigations
@@ -167,6 +183,9 @@ Aliases (internal workspace scope; distinct from publish scope):
 | Performance overhead from indirection    | Benchmark before/after; optimise only if indicated     | Acceptable latency and resource usage |
 | Ambiguous ownership                      | CODEOWNERS, package READMEs with roles                 | Clear ownership, fewer review loops   |
 | Rename fallout (`tools/tools` → runtime) | Mechanical codemod + gates; idempotency check          | Zero or minimal diffs; gates green    |
+| Residual Greek tokens post‑rename        | Add PR‑time grep gate; delete/rename directories       | Grep clean except reference doc       |
+| Curriculum app move fallout (tests/build) | Re‑link workspace (`pnpm install`); fix local paths     | Lint green; tests/build green         |
+| Moria removal breaks imports             | Introduce `mcp-core` compat exports; codemod imports   | Type‑check green after rewrite        |
 
 ---
 
@@ -181,7 +200,8 @@ Report artefacts (append to Part 1 report or add a Part 2 section):
 - Rename application summary (`tools/tools` → `tools/runtime`), import rewrite counts
 - Barrel rationalisation notes (collisions avoided; naming clarified)
 - Export surface parity report (baseline vs post) with empty diff
-- Residual token scan report confirming only archived/pointer occurrences
+- Residual token scan report confirming only the single pointer document remains: `docs/architecture/greek-ecosystem-deprecation.md`
+ - Workspace taxonomy report: lists of moved directories (apps/libs), archived tissues, and removal of `ecosystem/moria/moria-mcp` after import rewrite.
 
 Acceptance (Part 2):
 
@@ -190,9 +210,10 @@ Acceptance (Part 2):
 3. `src/tools/tools` renamed to `src/tools/runtime` with imports updated.
 4. Provider contract tests pass for all providers; e2e smoke tests pass.
 5. Build, lint, type‑check, and test gates green monorepo‑wide.
-6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived.
+6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived; only the deprecation pointer remains.
 7. Export surface parity preserved (baseline vs post equal; `default` treated separately).
-8. Greek ecosystem architecture fully removed from active code/comments/imports (tokens such as `psychon/`, `chorai/`, `organa/mcp`, `eidola/`). A single reference document remains explaining what it was and why it was removed (location: `docs/architecture/greek-ecosystem-deprecation.md`).
+8. Greek ecosystem architecture fully removed from active code/comments/imports/paths (tokens such as `psycha`, `psychon`, `chorai`, `chora`, `organa`, `moria`, `histoi`, `eidola`, `aither`, `stroma`, `phaneron`, `morphai`, `krypton`, `kanon`, `kratos`, `nomos`, `systema`). A single reference document remains explaining what it was and why it was removed (location: `docs/architecture/greek-ecosystem-deprecation.md`).
+9. Imports rewritten from `@oaknational/mcp-moria` to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed from workspace.
 
 Abort conditions (Part 2 execution):
 
@@ -225,6 +246,7 @@ Terminology note: Chōra (singular) and Chōrai (plural) in prose; use ASCII `ch
 
 - Extract interfaces and pure utilities into `@oaknational/mcp-core`. (IN PROGRESS – MINIMAL CORE CREATED)
 - Provide `createRuntime(providers)` factory. (DONE – MINIMAL RETURN OF PROVIDERS)
+- Add temporary compat exports mirroring the `@oaknational/mcp-moria` runtime interfaces to enable import switch with zero behaviour change. (PLANNED)
 
 3. Provider implementations
 
@@ -256,14 +278,12 @@ Terminology note: Chōra (singular) and Chōrai (plural) in prose; use ASCII `ch
 Appendix: Workspace taxonomy and aliases (Queued mechanical)
 
 - Rename workspace taxonomy (mechanical, tracked separately):
-  - `ecosystem/psycha/<server>` → `apps/<server>`
-  - `ecosystem/moria/moria-mcp` → `packages/core/mcp-core`
-  - `ecosystem/histoi/histos-logger` → `packages/libs/logger`
-  - `ecosystem/histoi/histos-transport` → `packages/libs/transport`
-  - `ecosystem/histoi/histos-storage` → `packages/libs/storage`
-  - `ecosystem/histoi/histos-env` → `packages/libs/env`
-  - `ecosystem/histoi/histos-runtime-abstraction` → `packages/libs/runtime`
-  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
+  - DONE: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp`
+  - DONE: `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp`
+  - DONE: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}`
+  - QUEUED: `ecosystem/histoi/histos-runtime-abstraction` → archive/
+  - QUEUED: Replace imports from `@oaknational/mcp-moria` with `@oaknational/mcp-core` compat and remove `ecosystem/moria/moria-mcp` from workspace
+  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk` (naming only; already under packages)
 
 - Full quality gates; provider matrix; reports updated.
 - Greek ecosystem deprecation reference created and linked; residual token scan confirms only that single reference remains.
@@ -314,6 +334,7 @@ Progress Journal (rolling):
 - 2025‑09‑06: Scaffolded `@oaknational/mcp-providers-node` (clock/logger/storage) with unit tests; configured ESLint for typed rules; monorepo gates PASS.
 - 2025‑09‑06: Refined Notion wiring: static `createAdaptiveLogger` import; extracted `validateRuntimeConfig`; composed runtime via core factory; all gates PASS; committed.
 - 2025‑09‑06: Authored provider contracts documentation and Greek ecosystem deprecation reference; linked from package READMEs and acceptance criteria.
+- 2025‑09‑06: Mechanical move applied for Notion app → `apps/oak-notion-mcp`; configs updated; full gates PASS. Remaining Greek directories pending rename: `ecosystem/histoi/*`, `ecosystem/moria/moria-mcp`, `ecosystem/psycha/oak-curriculum-mcp`. Docs still contain legacy nomenclature and will be consolidated into the single deprecation pointer.
 
 14. ACTION: Update documentation (core README, providers READMEs, architecture pointers).  
     REVIEW: Self‑review terminology: Chōra/Chōrai in prose; `chorai` in paths.

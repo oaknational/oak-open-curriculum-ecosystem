@@ -1,5 +1,5 @@
 import { mergeConfig } from 'vitest/config';
-import { baseE2EConfig } from '../../../vitest.e2e.config.base';
+import { baseE2EConfig } from '../../vitest.e2e.config.base';
 
 export default mergeConfig(baseE2EConfig, {
   test: {
