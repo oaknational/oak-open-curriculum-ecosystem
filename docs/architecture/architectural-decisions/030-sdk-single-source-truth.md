@@ -2,11 +2,12 @@
 
 **Status**: Accepted  
 **Date**: 2025-08-12  
-**Decision Makers**: Development Team  
+**Decision Makers**: Development Team
 
 ## Context
 
 In a system with multiple consumers of an API (SDK, MCP server, other clients), there's a risk of each consumer maintaining their own definitions of API contracts, leading to:
+
 - Inconsistencies between implementations
 - Maintenance burden across multiple codebases
 - Drift between implementations over time
@@ -31,7 +32,7 @@ graph TD
     B -->|Constants| D[MCP Server]
     B -->|Validation| E[Runtime Validation]
     B -->|Schema| F[Tool Generation]
-    
+
     style A fill:#ff9,stroke:#333,stroke-width:4px
     style B fill:#9f9,stroke:#333,stroke-width:4px
 ```
@@ -39,14 +40,17 @@ graph TD
 ## Principles
 
 ### 1. Unidirectional Flow
+
 ```
 OpenAPI Spec → SDK → Consumers
 ```
+
 Information flows in one direction only. Consumers never define API contracts.
 
 ### 2. SDK Responsibilities
 
 The SDK is responsible for:
+
 - **Type Generation**: All TypeScript types from OpenAPI
 - **Constant Extraction**: KEY_STAGES, SUBJECTS, etc.
 - **Validation Rules**: Runtime validation via Zod
@@ -56,6 +60,7 @@ The SDK is responsible for:
 ### 3. Consumer Responsibilities
 
 Consumers (like MCP) are responsible for:
+
 - **Business Logic**: How to use the API
 - **User Experience**: How to present API data
 - **Orchestration**: Combining multiple API calls
@@ -72,28 +77,28 @@ export {
   paths,
   components,
   operations,
-  
+
   // Extracted constants
   KEY_STAGES,
   SUBJECTS,
   YEAR_GROUPS,
-  
+
   // Validation
   validation: {
     validateRequest,
     validateResponse,
   },
-  
+
   // Schema access
   schema,
-  
+
   // Tool generation helpers
   toolGeneration: {
     PATH_OPERATIONS,
     PARAM_TYPE_MAP,
     parsePathTemplate,
   },
-  
+
   // Type guards
   isKeyStage,
   isSubject,
@@ -105,14 +110,10 @@ export {
 
 ```typescript
 // MCP server example
-import { 
-  KEY_STAGES,
-  validation,
-  toolGeneration 
-} from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES, validation, toolGeneration } from '@oaknational/oak-curriculum-sdk';
 
 // ONLY import from SDK, never define locally
-const tools = toolGeneration.PATH_OPERATIONS.map(op => ({
+const tools = toolGeneration.PATH_OPERATIONS.map((op) => ({
   name: generateName(op),
   validate: (args) => validation.validateRequest(op.path, op.method, args),
 }));
@@ -169,7 +170,7 @@ function validateKeyStage(value: string) {
 
 ```typescript
 // NEVER DO THIS
-const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'];  // Local definition
+const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4']; // Local definition
 
 function validateKeyStage(value: string) {
   return KEY_STAGES.includes(value);
@@ -195,7 +196,8 @@ async function handleRequest(path: string, method: string, args: unknown) {
 ```typescript
 // NEVER DO THIS
 function validateLesson(lesson: string) {
-  if (!lesson.match(/^[a-z0-9-]+$/)) {  // Custom validation
+  if (!lesson.match(/^[a-z0-9-]+$/)) {
+    // Custom validation
     throw new Error('Invalid lesson');
   }
 }
@@ -204,16 +206,19 @@ function validateLesson(lesson: string) {
 ## Migration Path
 
 ### Current State
+
 - Some manual API definitions in MCP
 - Duplicate validation logic
 - Hardcoded constants
 
 ### Target State
+
 - All API knowledge from SDK
 - SDK validation everywhere
 - Zero local API definitions
 
 ### Steps
+
 1. Identify all local API definitions
 2. Wait for SDK to export needed functionality
 3. Replace local definitions with SDK imports
@@ -223,14 +228,17 @@ function validateLesson(lesson: string) {
 ## Alternatives Considered
 
 ### Alternative 1: Multiple Sources of Truth
+
 - Each consumer maintains own definitions
 - **Rejected**: High maintenance, consistency risk
 
 ### Alternative 2: Shared Configuration Files
+
 - YAML/JSON files shared between projects
 - **Rejected**: Still requires parsing and type generation
 
 ### Alternative 3: Monorepo with Shared Code
+
 - Shared TypeScript code without SDK
 - **Rejected**: SDK pattern is cleaner separation
 

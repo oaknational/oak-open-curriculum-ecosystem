@@ -7,6 +7,7 @@ Accepted - Enhanced by ADR-038 (Compilation-Time Revolution)
 ## Context
 
 The MCP server and SDK were treating type generation as separate concerns, leading to:
+
 - Runtime tool generation in the MCP server
 - Type assertions to bridge compile-time and runtime boundaries
 - Hardcoded mappings between tools and schemas
@@ -107,23 +108,24 @@ packages/oak-curriculum-sdk/
 
 ```typescript
 // Literal union of all tool names
-export type McpToolName = 
+export type McpToolName =
   | 'oak-get-sequences-units'
   | 'oak-get-lessons-transcript'
-  | 'oak-search-lessons'
-  // ... all 25 tools
+  | 'oak-search-lessons';
+// ... all 25 tools
 
 // Discriminated union of parameters
-export type ToolParameters<T extends McpToolName> = 
-  T extends 'oak-get-sequences-units' ? {
-    sequence: string;
-    year?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | 'all-years';
-  } :
-  T extends 'oak-get-lessons-transcript' ? {
-    lesson: string;
-  } :
-  // ... all parameter types
-  never;
+export type ToolParameters<T extends McpToolName> = T extends 'oak-get-sequences-units'
+  ? {
+      sequence: string;
+      year?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | 'all-years';
+    }
+  : T extends 'oak-get-lessons-transcript'
+    ? {
+        lesson: string;
+      }
+    : // ... all parameter types
+      never;
 
 // Type guard without assertions
 export function isMcpToolName(value: unknown): value is McpToolName {
@@ -136,6 +138,7 @@ export function isMcpToolName(value: unknown): value is McpToolName {
 The principles of this ADR remain valid and have been successfully implemented through ADR-038's compilation-time revolution approach. The key enhancement is that instead of generating runtime validators that need to be looked up, we now embed all validation logic directly into each tool file at compile time.
 
 The unified generation pipeline now produces:
+
 1. **Self-contained tool files** with embedded validation
 2. **Two-executor pattern** for type-safe execution
 3. **Complete type definitions** with no runtime dependencies
