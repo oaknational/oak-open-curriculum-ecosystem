@@ -1,4 +1,4 @@
-# @oaknational/mcp-histos-storage
+# @oaknational/mcp-storage
 
 ## Overview
 
@@ -16,7 +16,7 @@ An adaptive storage tissue that provides key-value storage across different runt
 ## Installation
 
 ```bash
-pnpm add @oaknational/mcp-histos-storage
+pnpm add @oaknational/mcp-storage
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ pnpm add @oaknational/mcp-histos-storage
 ### Basic Usage (Automatic Backend)
 
 ```typescript
-import { createAdaptiveStorage } from '@oaknational/mcp-histos-storage';
+import { createAdaptiveStorage } from '@oaknational/mcp-storage';
 
 // Automatically selects best backend
 const storage = await createAdaptiveStorage({
@@ -49,7 +49,7 @@ await storage.delete('user:123');
 ### Manual Backend Selection
 
 ```typescript
-import { createFileStorage } from '@oaknational/mcp-histos-storage';
+import { createFileStorage } from '@oaknational/mcp-storage';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
@@ -62,7 +62,7 @@ await storage.set('config', { theme: 'dark' });
 ### Memory Storage (Testing)
 
 ```typescript
-import { MemoryStorage } from '@oaknational/mcp-histos-storage';
+import { MemoryStorage } from '@oaknational/mcp-storage';
 
 // In-memory storage for testing
 const storage = new MemoryStorage('test-namespace');

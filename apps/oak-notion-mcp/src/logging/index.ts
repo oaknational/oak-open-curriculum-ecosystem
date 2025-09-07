@@ -1,5 +1,5 @@
 /**
- * Aither layer exports for oak-notion-mcp phenotype
+ * Logging exports for oak-notion-mcp application
  *
  * This contains runtime-specific implementations
  * that extend the genotype's abstract patterns.

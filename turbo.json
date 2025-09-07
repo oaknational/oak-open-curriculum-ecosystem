@@ -15,7 +15,7 @@
       "outputs": ["dist/**", ".tsup/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/ecosystem/moria/moria-mcp",
+        "$TURBO_ROOT$/packages/core/mcp-core",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",
@@ -69,7 +69,7 @@
         "$TURBO_ROOT$/eslint.config.ts",
         "$TURBO_ROOT$/eslint.config.base.ts",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/ecosystem/moria/moria-mcp",
+        "$TURBO_ROOT$/packages/core/mcp-core",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",
@@ -112,7 +112,7 @@
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/ecosystem/moria/moria-mcp",
+        "$TURBO_ROOT$/packages/core/mcp-core",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",
@@ -130,11 +130,11 @@
         "$TURBO_DEFAULT$",
         "e2e-tests/**/*.ts",
         "vitest.e2e.config.ts",
-        "$TURBO_ROOT$/ecosystem/moria/moria-mcp",
-        "$TURBO_ROOT$/ecosystem/histoi/histos-env",
-        "$TURBO_ROOT$/ecosystem/histoi/histos-logger",
-        "$TURBO_ROOT$/ecosystem/histoi/histos-storage",
-        "$TURBO_ROOT$/ecosystem/histoi/histos-transport"
+        "$TURBO_ROOT$/packages/core/mcp-core",
+        "$TURBO_ROOT$/packages/libs/env",
+        "$TURBO_ROOT$/packages/libs/logger",
+        "$TURBO_ROOT$/packages/libs/storage",
+        "$TURBO_ROOT$/packages/libs/transport"
       ],
       "env": ["NOTION_API_KEY", "RUN_E2E", "LOG_LEVEL"],
       "passThroughEnv": ["RUN_E2E", "NOTION_API_KEY", "LOG_LEVEL"]
@@ -146,7 +146,7 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/tsconfig.base.json",
-        "$TURBO_ROOT$/ecosystem/moria/moria-mcp",
+        "$TURBO_ROOT$/packages/core/mcp-core",
         "$TURBO_ROOT$/packages/libs/env",
         "$TURBO_ROOT$/packages/libs/logger",
         "$TURBO_ROOT$/packages/libs/storage",

@@ -1,14 +1,14 @@
 /**
  * ESLint Configuration for oak-curriculum-mcp
  *
- * The Curriculum phenotype - enforces biological architecture pattern
+ * Application package ESLint configuration
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base';
 import {
-  psychaBoundaryRules,
-  psychonArchitectureRules,
+  appBoundaryRules,
+  appArchitectureRules,
   commonSettings,
 } from '../../eslint-rules/index.js';
 
@@ -44,12 +44,10 @@ const config = tsEslintConfig(
       },
     },
     rules: {
-      // Enforce module boundaries
       'import-x/no-relative-parent-imports': 'off',
-      ...psychaBoundaryRules,
-      ...psychonArchitectureRules,
+      ...appBoundaryRules,
+      ...appArchitectureRules,
       '@typescript-eslint/no-restricted-types': [
-        // temp disable until we have allow in error handling
         'off',
         {
           types: {
@@ -62,29 +60,22 @@ const config = tsEslintConfig(
       ],
     },
   },
-  // Organa modules - Allow imports within the same organ
+  // Application modules - Allow imports within the same area
   {
-    files: ['src/organa/**/*.ts'],
+    files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
+      'import-x/no-relative-parent-imports': 'off',
     },
   },
-  // Psychon (legacy) & App (new) layer can import from any organ
-  // Transitional duplication per Part 1 mechanical normalisation (no behavioural change)
+  // Entry and app wiring may import broadly
   {
-    files: ['src/index.ts', 'src/psychon/**/*.ts', 'src/app/**/*.ts'],
+    files: ['src/index.ts', 'src/app/**/*.ts'],
     rules: {
       'import-x/no-restricted-paths': 'off',
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-internal-modules': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',
-    },
-  },
-  // Entry point can import psychon
-  {
-    files: ['src/index.ts'], // remains same; index already whitelisted above for app/psychon access
-    rules: {
-      'import-x/no-internal-modules': 'off',
     },
   },
   // Test files can break boundaries but should maintain type safety

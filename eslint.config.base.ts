@@ -27,6 +27,9 @@ export const baseConfig = tsEslintConfig(
       '**/eslint.config.ts',
       '**/tsup.config.ts',
       'reference/',
+      // Ignore ephemeral bundled config artifacts (e.g., tsup.config.bundled_*.mjs)
+      '**/tsup.config.*',
+      '**/*.bundled_*.mjs',
     ],
   },
   eslint.configs.recommended,

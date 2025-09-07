@@ -1,14 +1,14 @@
 /**
- * ESLint Configuration for mcp-histos-logger
+ * ESLint Configuration for logger library
  *
- * Logger tissue for multi-runtime support
+ * Logger helpers for multi-runtime support
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
-  createHistoiBoundaryRules,
-  getOtherTissues,
+  createLibBoundaryRules,
+  getOtherLibs,
   commonSettings,
 } from '../../../eslint-rules/index.js';
 
@@ -43,7 +43,7 @@ const config = tsEslintConfig(
         },
       },
     },
-    rules: createHistoiBoundaryRules('histos-logger', getOtherTissues('histos-logger')),
+    rules: createLibBoundaryRules('logger', getOtherLibs('logger')),
   },
   // Config files
   {

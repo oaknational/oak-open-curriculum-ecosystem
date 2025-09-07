@@ -1,5 +1,5 @@
 /**
- * Organa layer membrane - public interface
+ * Modules layer membrane - public interface
  * Exports all organ factories
  */
 

@@ -1,7 +1,7 @@
 /**
- * @oaknational/mcp-histos-storage
+ * @oaknational/mcp-storage
  *
- * Adaptive storage tissue for multi-runtime MCP applications
+ * Adaptive storage library for multi-runtime MCP applications
  * Uses feature detection to provide the best available storage mechanism
  */
 

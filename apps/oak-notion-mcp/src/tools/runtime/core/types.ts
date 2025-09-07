@@ -1,6 +1,6 @@
 /**
  * Core abstractions for MCP tools following Dependency Inversion Principle
- * These now inherit from the pure abstractions in Moria
+ * These now inherit from the pure abstractions in the core package
  */
 
 import type {
@@ -10,8 +10,8 @@ import type {
 } from '@oaknational/mcp-core';
 
 /**
- * Re-export morphai patterns for backward compatibility
- * The phenotype instantiates the morphai forms
+ * Re-export core patterns for backward compatibility
+ * The application instantiates the core forms
  */
 export type ToolExecutor<TOutput = string> = MorphaiToolExecutor<unknown, TOutput>;
 export type ToolDefinition = MorphaiToolDefinition;

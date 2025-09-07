@@ -1,8 +1,8 @@
 /**
- * Entry point - delegates to the psychon (soul) layer
+ * Entry point - delegates to the application wiring layer
  *
  * This file remains minimal and only bootstraps the organism.
- * All orchestration happens in the psychon layer.
+ * All orchestration happens in the application wiring.
  */
 
 import { config } from 'dotenv';

@@ -1,14 +1,14 @@
 /**
- * ESLint Configuration for histos-env
+ * ESLint Configuration for env library
  *
- * Environment tissue for multi-runtime support
+ * Environment helpers for multi-runtime support
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
-  createHistoiBoundaryRules,
-  getOtherTissues,
+  createLibBoundaryRules,
+  getOtherLibs,
   commonSettings,
 } from '../../../eslint-rules/index.js';
 
@@ -43,7 +43,7 @@ const config = tsEslintConfig(
         },
       },
     },
-    rules: createHistoiBoundaryRules('histos-env', getOtherTissues('histos-env')),
+    rules: createLibBoundaryRules('env', getOtherLibs('env')),
   },
   // Config files (exclude tsup.config.ts to avoid dynamic bundling side-effects during lint)
   {

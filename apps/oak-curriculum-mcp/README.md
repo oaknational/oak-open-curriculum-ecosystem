@@ -4,12 +4,11 @@ MCP server that provides AI assistants with access to Oak National Academy's cur
 
 ## Architecture
 
-This organism follows the Moria/Histoi/Psycha architecture:
+This application follows the standard structure:
 
-- **Chorai** (Pervasive Infrastructure): Logging, configuration, types, tool metadata
-- **Organa** (Business Logic):
-  - `mcp/` - MCP protocol handlers that directly delegate to SDK
-- **Psychon** (Wiring): Application assembly and dependency injection
+- App wiring in `src/app/`
+- Tools in `src/tools/`
+- Integrations in `src/integrations/`
 
 ## Key Architectural Innovation - Direct SDK Integration
 

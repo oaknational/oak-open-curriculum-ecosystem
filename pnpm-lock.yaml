@@ -104,16 +104,16 @@ importers:
       '@oaknational/mcp-core':
         specifier: workspace:*
         version: link:../../packages/core/mcp-core
-      '@oaknational/mcp-histos-env':
+      '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
-      '@oaknational/mcp-histos-logger':
+      '@oaknational/mcp-logger':
         specifier: workspace:*
         version: link:../../packages/libs/logger
-      '@oaknational/mcp-histos-storage':
+      '@oaknational/mcp-storage':
         specifier: workspace:*
         version: link:../../packages/libs/storage
-      '@oaknational/mcp-histos-transport':
+      '@oaknational/mcp-transport':
         specifier: workspace:*
         version: link:../../packages/libs/transport
       '@oaknational/oak-curriculum-sdk':
@@ -156,7 +156,7 @@ importers:
       '@oaknational/mcp-core':
         specifier: workspace:^
         version: link:../../packages/core/mcp-core
-      '@oaknational/mcp-histos-logger':
+      '@oaknational/mcp-logger':
         specifier: workspace:^
         version: link:../../packages/libs/logger
       '@oaknational/mcp-providers-node':

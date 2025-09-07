@@ -44,5 +44,5 @@ export function createAdaptiveLogger(
   return new ConsolaLogger(consola, options?.context ?? {});
 }
 
-// Export types from moria
+// Export core types for convenience
 export type { Logger } from '@oaknational/mcp-core';

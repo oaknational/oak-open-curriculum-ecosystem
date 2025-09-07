@@ -26,7 +26,7 @@ Like the soul in ancient philosophy:
 - It emerges from proper arrangement
 - It cannot be reduced to its components
 
-The psychon doesn't DO anything in the business sense - it simply IS. By existing, by connecting, by organizing, it transforms a collection of organs and fields into a living, breathing organism that can:
+This layer doesn't DO anything in the business sense - it simply wires components. By existing, by connecting, by organizing, it transforms a collection of modules into a coherent, running server that can:
 
 - Respond to requests
 - Process information
@@ -35,14 +35,14 @@ The psychon doesn't DO anything in the business sense - it simply IS. By existin
 
 ## The Mystery of Life
 
-The deepest mystery in biology is how life emerges from non-life. Similarly, the psychon represents that mysterious moment when:
+The deepest mystery in biology is how life emerges from non-life. Similarly, the app wiring represents that moment when:
 
 - Types become data
 - Interfaces become connections
 - Functions become behaviors
 - Components become organism
 
-This is why we don't distribute the wiring throughout the codebase - the soul is indivisible. You cannot have half a soul. The psychon must be whole, must be one, must be the single place where life enters the system.
+This is why we don't distribute the wiring throughout the codebase. There should be a clear composition root: a single place where wiring happens.
 
 ## 🗺️ Developer Quick Reference
 

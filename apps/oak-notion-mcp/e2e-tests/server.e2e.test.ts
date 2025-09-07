@@ -5,7 +5,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { config } from 'dotenv';
 import { join, dirname, resolve } from 'path';
 import { existsSync } from 'fs';
-import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 import { fileURLToPath } from 'url';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));

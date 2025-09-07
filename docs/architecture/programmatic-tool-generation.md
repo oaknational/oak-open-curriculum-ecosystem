@@ -199,24 +199,21 @@ export async function handleToolCall(toolName: string, args: unknown) {
 }
 ```
 
-## File Structure
+## File Structure (current)
 
 ```
-ecosystem/psycha/oak-curriculum-mcp/
+apps/oak-curriculum-mcp/
 ├── scripts/
 │   └── generate-tools.ts         # Build-time generation
 ├── src/
-│   ├── chorai/
-│   │   └── tool-metadata/
-│   │       └── decorative.ts     # Human-friendly descriptions only
-│   ├── organa/
-│   │   └── mcp/
-│   │       ├── generated/
-│   │       │   └── tools.generated.ts  # Auto-generated tools
-│   │       └── handlers/
-│   │           └── tool-handler.ts     # Runtime execution
-│   └── psychon/
-│       └── server.ts              # MCP server integration
+│   ├── tools/
+│   │   ├── generated/
+│   │   │   └── tools.generated.ts      # Auto-generated tools
+│   │   └── handlers/
+│   │       └── tool-handler.ts         # Runtime execution
+│   ├── integrations/
+│   └── app/
+│       └── server.ts                   # MCP server integration
 ```
 
 ## Benefits

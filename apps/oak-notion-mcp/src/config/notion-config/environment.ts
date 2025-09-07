@@ -9,7 +9,7 @@ import {
   LOG_LEVEL_KEY,
   ENABLE_DEBUG_LOGGING_KEY,
   type BaseLoggingEnvironment,
-} from '@oaknational/mcp-histos-logger';
+} from '@oaknational/mcp-logger';
 
 /**
  * Notion-specific environment variables

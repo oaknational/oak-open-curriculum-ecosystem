@@ -1,14 +1,14 @@
 /**
  * ESLint Configuration for oak-notion-mcp
  *
- * The Notion phenotype - enforces biological architecture pattern
+ * Application package ESLint configuration
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base';
 import {
-  psychaBoundaryRules,
-  psychonArchitectureRules,
+  appBoundaryRules,
+  appArchitectureRules,
   commonSettings,
 } from '../../eslint-rules/index.js';
 
@@ -44,19 +44,10 @@ const config = tsEslintConfig(
       },
     },
     rules: {
-      // Enforce module boundaries (zones only; no new strictness in Part 1)
-      ...psychaBoundaryRules,
-      ...psychonArchitectureRules,
-      // Cross-boundary imports must not use parent relatives
+      ...appBoundaryRules,
+      ...appArchitectureRules,
       'import-x/no-relative-parent-imports': 'error',
       'import-x/no-internal-modules': 'off',
-    },
-  },
-  // Organa modules (legacy) - Allow imports within the same organ
-  {
-    files: ['src/organa/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
   // New structure modules - Allow imports within the same area (tools/integrations)
@@ -64,7 +55,6 @@ const config = tsEslintConfig(
     files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
     rules: {
       '@typescript-eslint/no-restricted-imports': 'off',
-      // Allow intra-package parent relatives within phenotype code
       'import-x/no-relative-parent-imports': 'off',
     },
   },
@@ -75,25 +65,24 @@ const config = tsEslintConfig(
       'import-x/no-relative-parent-imports': 'off',
     },
   },
-  // Psychon/app layer can import from any organ
+  // App layer can import broadly within the package
   {
-    files: ['src/index.ts', 'src/psychon/**/*.ts', 'src/app/**/*.ts'],
+    files: ['src/index.ts', 'src/app/**/*.ts'],
     rules: {
       'import-x/no-restricted-paths': 'off',
-      // Within the app package, allow intra-package relative parents
       'import-x/no-relative-parent-imports': 'off',
       'import-x/no-internal-modules': 'off',
       '@typescript-eslint/no-restricted-imports': 'off',
     },
   },
-  // Entry point can import psychon
+  // Entry point
   {
     files: ['src/index.ts'],
     rules: {
       'import-x/no-internal-modules': 'off',
     },
   },
-  // Test files can break boundaries but should maintain type safety
+  // Test files
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
     rules: {

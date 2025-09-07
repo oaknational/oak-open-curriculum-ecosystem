@@ -1,6 +1,6 @@
 /**
- * @fileoverview Eidola - Simple test forms
- * @module chora/eidola
+ * @fileoverview Test mocks - Simple test forms
+ * @module test/mocks
  *
  * Keep it simple. Only export the basic Notion object mocks.
  * Tests should create their own mocks inline for clarity.

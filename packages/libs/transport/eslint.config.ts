@@ -1,14 +1,14 @@
 /**
- * ESLint Configuration for histos-transport
+ * ESLint Configuration for transport library
  *
- * STDIO transport tissue for MCP servers
+ * STDIO transport for MCP servers
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
-  createHistoiBoundaryRules,
-  getOtherTissues,
+  createLibBoundaryRules,
+  getOtherLibs,
   commonSettings,
 } from '../../../eslint-rules/index.js';
 
@@ -44,7 +44,7 @@ const config = tsEslintConfig(
       },
     },
     rules: {
-      ...createHistoiBoundaryRules('histos-transport', getOtherTissues('histos-transport')),
+      ...createLibBoundaryRules('transport', getOtherLibs('transport')),
       // No type assertions allowed - must use type predicates or proper typing
       '@typescript-eslint/consistent-type-assertions': [
         'error',
@@ -52,23 +52,23 @@ const config = tsEslintConfig(
           assertionStyle: 'never',
         },
       ],
-      // Histoi tissues must not access Node.js globals directly
+      // Libraries must not access Node.js globals directly
       'no-restricted-globals': [
         'error',
         {
           name: 'process',
           message:
-            'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies from the consuming organism.',
+            'Libraries must not access process directly. IO interfaces must be injected as dependencies from the consuming application.',
         },
         {
           name: '__dirname',
           message:
-            'Histoi tissues must not access __dirname directly. File paths must be injected as dependencies.',
+            'Libraries must not access __dirname directly. File paths must be injected as dependencies.',
         },
         {
           name: '__filename',
           message:
-            'Histoi tissues must not access __filename directly. File paths must be injected as dependencies.',
+            'Libraries must not access __filename directly. File paths must be injected as dependencies.',
         },
       ],
     },

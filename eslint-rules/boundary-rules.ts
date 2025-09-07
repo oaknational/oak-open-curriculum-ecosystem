@@ -1,35 +1,34 @@
 /**
- * Centralized ESLint Boundary Rules for Moria/Histoi/Psycha Architecture
+ * Centralized ESLint Boundary Rules for the standard architecture
  *
- * These rules enforce the biological architecture pattern:
- * - Moria: Pure abstractions with zero dependencies
- * - Histoi: Transplantable tissues that are independent of each other
- * - Psycha: Complete organisms that can use Moria and Histoi
+ * These rules enforce neutral, intent-revealing boundaries:
+ * - Core: Pure abstractions with zero dependencies
+ * - Libs: Reusable libraries that are independent of each other
+ * - Apps: Application packages that compose core and libs
  */
 
 import type { Linter } from 'eslint';
 
 /**
- * Moria boundary rules - Zero external dependencies
- * Apply these to all Moria packages (src files only)
+ * Core boundary rules - Zero external dependencies
+ * Apply these to all core packages (src files only)
  */
-export const moriaBoundaryRules: Partial<Linter.RulesRecord> = {
-  // Prevent any imports from outside Moria
+export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
+  // Prevent any imports from outside core
   'import-x/no-restricted-paths': [
     'error',
     {
       zones: [
         {
           target: './src/**',
-          from: '../../../ecosystem/histoi/**',
+          from: '../../../packages/libs/**',
           message:
-            'Moria cannot import from Histoi tissues. Moria must remain pure with zero dependencies.',
+            'Core cannot import from libraries. Core must remain pure with zero dependencies.',
         },
         {
           target: './src/**',
-          from: '../../../ecosystem/psycha/**',
-          message:
-            'Moria cannot import from Psycha organisms. Moria must remain pure with zero dependencies.',
+          from: '../../../apps/**',
+          message: 'Core cannot import from apps. Core must remain pure with zero dependencies.',
         },
       ],
     },
@@ -53,10 +52,10 @@ export const moriaBoundaryRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
- * Moria test and config file rules
+ * Core test and config file rules
  * Allows dev dependencies in test and config files
  */
-export const moriaTestConfigRules: Partial<Linter.RulesRecord> = {
+export const coreTestConfigRules: Partial<Linter.RulesRecord> = {
   // Turn off all import restrictions for test and config files
   'import-x/no-extraneous-dependencies': 'off',
   'import-x/no-restricted-paths': 'off',
@@ -65,53 +64,36 @@ export const moriaTestConfigRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
- * Generate Histoi boundary rules for a specific tissue
- * Each tissue must be independent of other tissues
+ * Generate library boundary rules for a specific library
+ * Each library must be independent of other libraries
  *
- * @param tissueName - The name of the current tissue (e.g., 'histos-logger')
- * @param otherTissues - Array of other tissue names to prevent imports from
+ * @param libName - The name of the current library (e.g., 'logger')
+ * @param otherLibs - Array of other library names to prevent imports from
  */
-export function createHistoiBoundaryRules(
-  _tissueName: string,
-  otherTissues: string[],
+export function createLibBoundaryRules(
+  _libName: string,
+  otherLibs: string[],
 ): Partial<Linter.RulesRecord> {
   const zones = [
-    // Cannot import from other Histoi tissues
-    ...otherTissues.map((otherTissue) => ({
+    // Cannot import from other libraries
+    ...otherLibs.map((otherLib) => ({
       target: './src/**' as const,
-      from: `../${otherTissue}/**` as const,
+      from: `../${otherLib}/**` as const,
       message:
-        'Histoi tissues cannot depend on each other. Each tissue must be independently transplantable.',
+        'Libraries cannot depend on each other. Each library must be independently reusable.',
     })),
-    // Cannot import from Psycha organisms
+    // Cannot import from apps
     {
       target: './src/**' as const,
-      from: '../../../ecosystem/psycha/**' as const,
+      from: '../../../apps/**' as const,
       message:
-        'Histoi tissues cannot depend on Psycha organisms. Tissues must be transplantable to any organism.',
+        'Libraries cannot depend on apps. Libraries must remain reusable across applications.',
     },
   ];
 
   return {
-    // Histoi tissues must be independent and transplantable
+    // Libraries must be independent and reusable
     'import-x/no-restricted-paths': ['error', { zones }],
-
-    // Only allow imports from Moria and necessary runtime dependencies
-    '@typescript-eslint/no-restricted-imports': [
-      'error',
-      {
-        patterns: [
-          {
-            group: ['../histos-*/**'],
-            message: 'Cannot import from other Histoi tissues. Each tissue must be independent.',
-          },
-          {
-            group: ['../../psycha/**'],
-            message: 'Cannot import from Psycha layer. Tissues must be transplantable.',
-          },
-        ],
-      },
-    ],
 
     // Prevent direct access to Node.js globals - IO must be injected
     'no-restricted-globals': [
@@ -119,27 +101,27 @@ export function createHistoiBoundaryRules(
       {
         name: 'process',
         message:
-          'Histoi tissues must not access process directly. IO interfaces must be injected as dependencies from the consuming organism.',
+          'Libraries must not access process directly. IO interfaces must be injected as dependencies from the consuming application.',
       },
       {
         name: '__dirname',
         message:
-          'Histoi tissues must not access __dirname directly. File paths must be injected as dependencies.',
+          'Libraries must not access __dirname directly. File paths must be injected as dependencies.',
       },
       {
         name: '__filename',
         message:
-          'Histoi tissues must not access __filename directly. File paths must be injected as dependencies.',
+          'Libraries must not access __filename directly. File paths must be injected as dependencies.',
       },
     ],
   };
 }
 
 /**
- * Psycha organism boundary rules
- * Organisms cannot import from other organisms but can use Moria and Histoi
+ * App boundary rules
+ * Apps cannot import from other apps but can use core and libs
  */
-export const psychaBoundaryRules: Partial<Linter.RulesRecord> = {
+export const appBoundaryRules: Partial<Linter.RulesRecord> = {
   // Organisms cannot import from other organisms
   'import-x/no-restricted-paths': [
     'error',
@@ -148,7 +130,7 @@ export const psychaBoundaryRules: Partial<Linter.RulesRecord> = {
         {
           target: './src/**',
           from: '../!(oak-notion-mcp)/**',
-          message: 'Organisms cannot import from other organisms. Each organism is independent.',
+          message: 'Apps cannot import from other apps. Each app is independent.',
         },
       ],
     },
@@ -156,10 +138,10 @@ export const psychaBoundaryRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
- * Psychon internal architecture rules (within an organism)
- * Enforces the chorai/organa/psychon separation
+ * App internal architecture rules
+ * Enforces internal module boundaries within an app
  */
-export const psychonArchitectureRules: Partial<Linter.RulesRecord> = {
+export const appArchitectureRules: Partial<Linter.RulesRecord> = {
   // Biological Architecture Enforcement
   'import-x/no-restricted-paths': [
     'error',
@@ -201,22 +183,15 @@ export const psychonArchitectureRules: Partial<Linter.RulesRecord> = {
 };
 
 /**
- * List of all Histoi tissues for reference
- * Update this list when adding new tissues
+ * List of all libraries for reference
+ * Update this list when adding new libraries
  */
-export const HISTOI_TISSUES = [
-  'histos-logger',
-  'histos-storage',
-  'histos-env',
-  'histos-transport',
-  'histos-runtime-abstraction',
-  // Add new tissues here as they are created
-] as const;
+export const LIB_PACKAGES = ['logger', 'storage', 'env', 'transport'] as const;
 
 /**
- * Get all other Histoi tissues (excluding the current one)
- * Used to prevent cross-tissue imports
+ * Get all other libraries (excluding the current one)
+ * Used to prevent cross-library imports
  */
-export function getOtherTissues(currentTissue: string): string[] {
-  return HISTOI_TISSUES.filter((tissue) => tissue !== currentTissue);
+export function getOtherLibs(currentLib: string): string[] {
+  return LIB_PACKAGES.filter((lib) => lib !== currentLib);
 }

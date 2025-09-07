@@ -12,12 +12,7 @@ export default mergeConfig(
       conditions: ['development'],
       alias: {
         '@/*': resolve(__dirname, './src/*'),
-        '@organa/*': resolve(__dirname, './src/organa/*'),
-        '@psychon/*': resolve(__dirname, './src/psychon/*'),
-        '@oaknational/mcp-histos-logger': resolve(
-          __dirname,
-          '../../packages/libs/logger/src/index.ts',
-        ),
+        '@oaknational/mcp-logger': resolve(__dirname, '../../packages/libs/logger/src/index.ts'),
       },
     },
     test: {

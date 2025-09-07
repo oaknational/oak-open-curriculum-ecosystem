@@ -2,7 +2,7 @@
 import { config } from 'dotenv';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-// Updated path after mechanical renaming: psychon -> app
+// Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
 function safeStringify(value: unknown): string {
   try {
@@ -14,8 +14,8 @@ function safeStringify(value: unknown): string {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Detect if running from source (bin/) or built (dist/bin/)
-// Source: ecosystem/psycha/oak-curriculum-mcp/bin -> 4 levels up
-// Built: ecosystem/psycha/oak-curriculum-mcp/dist/bin -> 5 levels up
+// Source: apps/oak-curriculum-mcp/bin -> 3 levels up
+// Built: apps/oak-curriculum-mcp/dist/bin -> 4 levels up
 const isBuilt = __dirname.includes('/dist/bin');
 const rootDir = resolve(__dirname, isBuilt ? '../../../../..' : '../../../..');
 

@@ -1,5 +1,5 @@
 /**
- * Psychon wiring - dependency injection and composition
+ * App wiring - dependency injection and composition
  * Assembles all components into a working MCP server
  */
 
@@ -74,7 +74,7 @@ export interface ServerConfig {
 }
 
 /**
- * Simple logger interface (matches Moria's Logger)
+ * Simple logger interface (aligns with core Logger)
  */
 export interface Logger {
   trace(message: string, data?: unknown): void;

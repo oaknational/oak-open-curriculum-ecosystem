@@ -3,7 +3,7 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
-import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
 import { createRuntime, type CoreLogger, type Logger } from '@oaknational/mcp-core';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 
@@ -96,7 +96,7 @@ async function createServerDependencies(log: ServerSetupDependencies['log']): Pr
   log('[STARTUP] Creating logger...');
   const logger = createLoggerFromConfig();
 
-  // Bridge histos (Moria) logger to core logger for runtime composition
+  // Bridge application logger to core logger for runtime composition
   const runtime = createCoreRuntime(logger);
 
   log('[STARTUP] Creating Notion client...');

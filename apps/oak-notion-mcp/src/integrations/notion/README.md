@@ -1,8 +1,8 @@
-# Notion Organ (Ὄργανον)
+# Notion Integration
 
 **You're in the Notion API integration directory.**
 
-This organ handles all interactions with the Notion API - it's a self-contained unit responsible for transforming Notion data into formats the rest of the system can use.
+This module handles all interactions with the Notion API - it's a self-contained unit responsible for transforming Notion data into formats the rest of the system can use.
 
 ## 🗺️ Developer Quick Reference
 
@@ -16,7 +16,7 @@ This organ handles all interactions with the Notion API - it's a self-contained 
 
 ```typescript
 // Main entry point
-import { createNotionOperations } from '@organa/notion';
+import { createNotionOperations } from '../../integrations/notion';
 
 // The operations object provides:
 const operations = createNotionOperations();
@@ -34,11 +34,11 @@ operations.formatters.formatUserList(users);
 
 ### Architecture
 
-This organ follows the biological architecture:
+This module follows clear boundaries:
 
 - **Self-contained**: All Notion logic lives here
 - **Clear boundaries**: Exposes operations through a single interface
-- **No cross-organ imports**: Doesn't know about MCP or other organs
+- **No cross-module imports**: Doesn't know about MCP or other internal modules
 - **Dependency injection**: Receives what it needs, doesn't reach out
 
 ### Common Tasks
@@ -64,4 +64,4 @@ const query = {
 };
 ```
 
-💡 **Remember**: This organ knows Notion, not MCP. It transforms Notion data into neutral formats that other organs can consume.
+💡 **Remember**: This integration knows Notion, not MCP. It transforms Notion data into neutral formats that other modules can consume.

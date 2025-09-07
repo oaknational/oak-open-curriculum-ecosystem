@@ -1,13 +1,13 @@
 /**
- * @fileoverview Runtime-adaptive environment tissue for MCP applications
- * @module mcp-histos-env
+ * @fileoverview Runtime-adaptive environment utilities for MCP applications
+ * @module mcp-env
  *
- * This tissue provides adaptive environment variable access that works across
+ * This library provides adaptive environment variable access that works across
  * different runtime environments (Node.js, Edge, Browser) using feature detection.
  */
 
 // Export adaptive environment (default)
 export { createAdaptiveEnvironment } from './adaptive.js';
 
-// Export types from moria
+// Export core types for convenience
 export type { EnvironmentProvider } from '@oaknational/mcp-core';

@@ -1,8 +1,8 @@
-# @oaknational/mcp-histos-transport
+# @oaknational/mcp-transport
 
 ## Overview
 
-A transplantable transport tissue for MCP (Model Context Protocol) communication. This tissue provides the gold standard implementation of dependency injection and pure function patterns for all Histoi tissues.
+A transport library for MCP (Model Context Protocol) communication. This package provides a clean implementation of dependency injection and pure function patterns for reusable libraries.
 
 ## Features
 
@@ -15,7 +15,7 @@ A transplantable transport tissue for MCP (Model Context Protocol) communication
 ## Installation
 
 ```bash
-pnpm add @oaknational/mcp-histos-transport
+pnpm add @oaknational/mcp-transport
 ```
 
 ## Usage
@@ -23,8 +23,8 @@ pnpm add @oaknational/mcp-histos-transport
 ### Basic Usage
 
 ```typescript
-import { StdioTransport } from '@oaknational/mcp-histos-transport';
-import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { StdioTransport } from '@oaknational/mcp-transport';
+import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 
 // Create transport with injected dependencies
 const transport = new StdioTransport(process.stdin, process.stdout, createAdaptiveLogger());
@@ -45,14 +45,14 @@ for await (const message of transport.receive()) {
 
 ### Pure Functions
 
-The transport tissue exports pure functions for message handling:
+The transport library exports pure functions for message handling:
 
 ```typescript
 import {
   formatJsonRpcMessage,
   parseJsonRpcMessage,
   MessageBuffer,
-} from '@oaknational/mcp-histos-transport';
+} from '@oaknational/mcp-transport';
 
 // Format a message for transmission
 const formatted = formatJsonRpcMessage({
@@ -72,7 +72,7 @@ const messages = buffer.extractMessages();
 
 ## Architecture
 
-This tissue follows the Histoi patterns:
+This library follows these patterns:
 
 1. **Dependency Injection**: All I/O is injected through constructor
 2. **Pure Functions**: Core logic extracted as pure, testable functions
@@ -92,7 +92,7 @@ src/
 
 ## Testing
 
-The tissue demonstrates best testing practices:
+The library demonstrates best testing practices:
 
 ### Unit Tests (Pure Functions)
 
@@ -137,7 +137,7 @@ class MessageBuffer {
 
 ## Design Decisions
 
-This tissue serves as the reference implementation for all Histoi tissues:
+This library serves as a reference implementation for reusable transport modules:
 
 1. **No Direct Node.js Imports**: All Node.js dependencies are injected
 2. **Pure Function Extraction**: Business logic separated from I/O
@@ -153,7 +153,7 @@ This tissue serves as the reference implementation for all Histoi tissues:
 
 ## Contributing
 
-This tissue is part of the Oak MCP ecosystem. See the main repository for contribution guidelines.
+This package is part of the Oak MCP ecosystem. See the main repository for contribution guidelines.
 
 ## License
 

@@ -38,8 +38,8 @@ describe('environment configuration', () => {
       getNumber: vi.fn(() => 100),
     }));
 
-    // Mock histos-logger
-    vi.doMock('@oaknational/mcp-histos-logger', () => ({
+    // Mock logger library
+    vi.doMock('@oaknational/mcp-logger', () => ({
       parseLogLevel: vi.fn(() => 'INFO'),
       LOG_LEVEL_KEY: 'LOG_LEVEL',
       ENABLE_DEBUG_LOGGING_KEY: 'ENABLE_DEBUG_LOGGING',

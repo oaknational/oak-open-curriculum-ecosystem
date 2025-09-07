@@ -1,7 +1,7 @@
 /**
  * Public API for the MCP organ
  *
- * Only these exports should be imported by other organs or the psychon layer.
+ * Only these exports should be imported by other modules or the app layer.
  */
 
 // Resource handlers

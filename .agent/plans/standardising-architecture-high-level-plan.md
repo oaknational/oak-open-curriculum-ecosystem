@@ -15,7 +15,7 @@ Summary:
 
 - Part 1: Behaviour‑preserving directory & import normalisation (conventional structure, export & boundary parity, audited atomic commit).
 - Part 2: Platform‑agnostic core & explicit provider injection (remove runtime auto‑detection, reinforce purity boundaries).
-  - Additional mandate: eradicate Greek‑nomenclature from active code. Mechanically move apps/libs under standard taxonomy; replace `@oaknational/mcp-moria` imports with neutral `@oaknational/mcp-core` compat and retire the moria workspace; archive any orphan tissues.
+  - Additional mandate: eradicate legacy nomenclature from active code. Mechanically move apps/libs under standard taxonomy; use `@oaknational/mcp-core`; retire obsolete workspaces; archive any orphan packages. Maintain a single deprecation pointer doc.
 
 Shared Constraints:
 
@@ -61,7 +61,7 @@ High‑Level Outcomes:
 8. Legacy architecture narrative archived with forward‑looking pointer.
 9. Workspace taxonomy renaming (mechanical): `ecosystem/{psycha,histoi,moria}` → `apps/` and `packages/{core,libs,sdks}`.
    - Central principle: remove Greek‑themed architecture and nomenclature from active code and docs; retain only a single pointer doc (`docs/architecture/greek-ecosystem-deprecation.md`).
-   - Status: apps moved (notion, curriculum); libs moved (env, logger, storage, transport); `histos-runtime-abstraction` archived; `moria-mcp` removed after core‑compat import switch; top‑level `ecosystem/` deleted.
+   - Status: apps moved (Notion, Curriculum); libs moved (env, logger, storage, transport); runtime abstraction archived; legacy core removed after core switch; top‑level `ecosystem/` deleted.
 10. Internal alias scope introduced: reserve `@oaknational/*` for published packages; use `@workspace/*` for internal aliasing.
 
 Phased Shape (concise):
@@ -88,15 +88,12 @@ Early progress: Step 7 (tools rename) completed; proceeding with barrels and str
     - `libs/`: reusable libraries (ex‑histoi)
     - `sdks/`: public SDKs (e.g., `oak-curriculum-sdk`)
 
-- Mapping (directories only; no publish name changes unless scheduled). Residual Greek tokens to eradicate: psycha, psychon, chorai, chora, aither, stroma, phaneron, organa, moria, histoi, eidola, morphai, krypton, kanon, kratos, nomos, systema (and plurals/variants).
-  - `ecosystem/psycha/<server>` → `apps/<server>`
-  - `ecosystem/moria/moria-mcp` → `packages/core/mcp-core`
-  - `ecosystem/histoi/histos-logger` → `packages/libs/logger`
-  - `ecosystem/histoi/histos-transport` → `packages/libs/transport`
-  - `ecosystem/histoi/histos-storage` → `packages/libs/storage`
-  - `ecosystem/histoi/histos-env` → `packages/libs/env`
-  - `ecosystem/histoi/histos-runtime-abstraction` → `packages/libs/runtime`
-  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
+- Mapping (directories only; avoid legacy nomenclature in names):
+- legacy app directories → `apps/<server>`
+- legacy core runtime → `packages/core/mcp-core`
+- legacy libraries → `packages/libs/{logger,transport,storage,env}`
+- any legacy runtime abstraction → archived under `archive/`
+- SDKs reside under `packages/sdks/*`
 
 - Alias policy (distinct from publish scope)
   - Reserve `@oaknational/*` for published packages only.
@@ -125,6 +122,7 @@ Early progress: Step 7 (tools rename) completed; proceeding with barrels and str
 - Acceptance additions (Part 2)
   - Directory mapping applied; configs updated (tsconfig/eslint/turbo/test); codemod idempotent; full gates green; docs updated with taxonomy and alias guidance; no publish name changes unless explicitly scheduled.
   - The top‑level `ecosystem/` directory is fully removed from active code after moves/archival. Only `apps/` and `packages/` remain (any historical materials live under `archive/`).
+  - Identity cleanup: `pnpm identity-check` passes (0). Allowed references only in `archive/**`, `.agent/experience/**`, and `docs/architecture/greek-ecosystem-deprecation.md`.
 
 Key Risks & Mitigations:
 
@@ -135,15 +133,15 @@ Key Risks & Mitigations:
 | Config sprawl                         | Minimal schema & documented ownership               |
 | Performance overhead from indirection | Benchmark before/after runtime assembly             |
 
-Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import-x boundary rules active (alias-only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived.
+Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import-x boundary rules active (alias-only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived. Identity cleanup gate passes with zero disallowed references.
 
-- And: imports rewritten to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed; orphan tissues archived; residual Greek tokens only in the pointer doc.
+- And: imports use `@oaknational/mcp-core`; legacy workspace removed; orphan tissues archived; legacy terminology appears only in the single deprecation pointer document.
 
 ---
 
 ## Shared Quality Gates
 
-Across both parts: `pnpm -r format` → `pnpm -r type-check` → `pnpm -r lint` → `pnpm -r test` → `pnpm -r build` (order enforced). Part 1 adds export parity & legacy token eradication; Part 2 adds provider contract test suite.
+Across both parts: `pnpm -r format` → `pnpm -r type-check` → `pnpm -r lint` → `pnpm -r test` → `pnpm -r build` (order enforced). Part 2 adds provider contract test suite. Identity check runs on demand (`pnpm identity-check`) and must be zero at acceptance.
 
 ---
 

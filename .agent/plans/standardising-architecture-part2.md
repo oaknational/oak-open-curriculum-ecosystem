@@ -15,7 +15,7 @@ Completed so far:
 - Baseline detection inventory captured (adaptive env in `histos-env`; direct `process.env` usage in both servers).
 - ESLint boundary snapshot captured (root `eslint-rules/boundary-rules.ts` and phenotype configs).
 - Core package scaffolded at `packages/core/mcp-core` exposing minimal `createRuntime` and provider contracts (no provider imports). Build PASS.
-- Added configuration file `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; server wiring now reads config for logger level/name and server identity. Detection logic removed from wiring.
+- Added configuration file `apps/oak-notion-mcp/src/config/runtime.json`; server wiring now reads config for logger level/name and server identity. Detection logic removed from wiring.
 - Barrel rationalisation: renamed core registry interface to `CoreToolRegistry` to avoid schema collisions; imports/exports updated and lint PASS.
 - Providers: scaffolded `packages/providers/mcp-providers-node` with minimal Node clock, console logger, and in‑memory storage; unit tests added; monorepo gates PASS.
 - Provider contracts: shared helper added at `@oaknational/mcp-core/testing/provider-contract`; consumed by Node providers with unit + integration tests — PASS.
@@ -23,15 +23,14 @@ Completed so far:
 - Documentation: added `docs/architecture/provider-contracts.md` and `docs/architecture/greek-ecosystem-deprecation.md`; updated core/providers READMEs.
 
 - Workspace taxonomy progress (mechanical):
-  - Apps: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp` (gates PASS), `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp` (lint PASS; tests/build pending install relink).
-  - Libs: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}` (gates PASS).
-  - Orphan tissue identified for archival: `ecosystem/histoi/histos-runtime-abstraction` (not referenced).
-  - Top-level `ecosystem/` directory removed; residual logs archived under `archive/` (DONE).
+  - Apps moved to `apps/*` (Notion, Curriculum) — gates PASS.
+  - Libs moved to `packages/libs/{env,logger,storage,transport}` — gates PASS.
+  - Orphan runtime abstraction archived; top-level `ecosystem/` removed — DONE.
 
 Primary objective emphasis:
 
-- The central outcome of Part 2 is the complete removal of the Greek‑themed architecture from active code, directories, and working documentation. Replace with standard, intent‑revealing taxonomy and names: `apps/`, `packages/core`, `packages/libs`, `packages/sdks`. Only a single reference document may remain: `docs/architecture/greek-ecosystem-deprecation.md`.
-  - Concretely: replace runtime interfaces imported from `@oaknational/mcp-moria` with neutral exports from `@oaknational/mcp-core` (compat surface), then remove the legacy `ecosystem/moria/moria-mcp` workspace.
+- The central outcome of Part 2 is the complete removal of the legacy architecture terms from active code, directories, tests, configs, and working documentation. Replace with standard, intent‑revealing taxonomy and names: `apps/`, `packages/core`, `packages/libs`, `packages/sdks`. Only a single reference document may remain: `docs/architecture/greek-ecosystem-deprecation.md`.
+- Concretely: runtime interfaces must be sourced from `@oaknational/mcp-core`; any legacy workspace content is archived; names in code/docs/config avoid legacy tokens.
 
 ---
 
@@ -113,6 +112,33 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
 - Barrel rationalisation:
   - Avoid layered collisions; clarify names (e.g., `CoreToolRegistry` for runtime registry types; schema/types kept local).
 
+### Package naming standardisation (libs)
+
+Completed renames to neutral names:
+
+- `@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`
+
+Checklist to update consistently:
+
+- Package manifests: `packages/libs/*/package.json` name fields
+- Consumers’ dependencies: apps and packages referencing old names (apps’ `package.json`)
+- TypeScript paths: `tsconfig.base.json` mappings from old → new package names
+- Build/tooling configs:
+  - `apps/*/tsup.config.ts` external/noExternal arrays
+  - `apps/*/vitest.config.ts` resolver/alias
+- Source imports in apps:
+  - `apps/oak-notion-mcp/src/app/wiring.ts`
+  - `apps/oak-notion-mcp/src/config/notion-config/environment.ts`
+  - `apps/oak-notion-mcp/src/config/notion-config/env-utils.unit.test.ts`
+  - `apps/oak-notion-mcp/src/app/index.unit.test.ts` (vi.doMock)
+  - `apps/oak-notion-mcp/e2e-tests/server.e2e.test.ts`
+- Library headers/README snippets:
+  - Header comments in `packages/libs/*/src/**/*.ts`
+  - `packages/libs/{logger,env,storage,transport}/README.md`
+- App ESLint configs only if names are referenced literally (otherwise unchanged)
+- Root README live examples (archived docs can remain unchanged)
+- Lock/workspace: regenerate `pnpm-lock.yaml` after change; workspace globs remain directory‑based
+
 ---
 
 ## 5. Quality Gates (Shared)
@@ -124,6 +150,9 @@ Run from the repository root once per gate (single invocation; wait for completi
 - `pnpm lint`
 - `pnpm test`
 - `pnpm build`
+- Identity cleanup: `pnpm identity-check` (Node script) returns zero.
+  - Allowed exceptions (path allowlist): `archive/**`, `.agent/experience/**`, `.agent/plans/**`, `.agent/refactor/**`, `.agent/roles/**`, `.claude/**`, `.vscode/**`, `docs/architecture/greek-ecosystem-deprecation.md`.
+  - Reporting helper: `pnpm identity-report` prints a summary including counts by token and by file extension.
 
 Part 2 adds provider contract tests and (optionally) a small e2e matrix across providers.
 
@@ -168,9 +197,17 @@ Aliases (internal workspace scope; distinct from publish scope):
   - `@workspace/libs/*` → `packages/libs/*/src/*`
   - `@workspace/sdks/*` → `packages/sdks/*/src/*`
 
-Residual token set (must be eradicated from active code/docs; scan at PR time):
+Identity cleanup rubric:
 
-- psycha, psychon, chorai, chora, aither, stroma, phaneron, organa, moria, histoi, eidola, morphai, krypton, kanon, kratos, nomos, systema (and plurals/variants).
+- Measurement: Node script `scripts/identity-check.mjs` invoked via `pnpm identity-check` (enforce) and `pnpm identity-report` (inspect).
+- Scope: all files excluding allowlisted paths: `archive/**`, `.agent/experience/**`, `.agent/plans/**`, `.agent/refactor/**`, `.agent/roles/**`, `.claude/**`, `.vscode/**`, and `docs/architecture/greek-ecosystem-deprecation.md`.
+- Goal: count must be 0 at acceptance outside the allowlist.
+- Fix triage order (apply in this priority):
+  1) TypeScript (`*.ts`, `*.tsx`)
+  2) JSON (`*.json`)
+  3) JavaScript/Modules (`*.js`, `*.mjs`)
+  4) High‑impact docs (READMEs, quick-starts, entry docs used by new contributors)
+  5) Low‑impact docs (deep historical narratives that are not ADRs; ADRs remain unchanged by policy)
 
 ---
 
@@ -212,7 +249,7 @@ Acceptance (Part 2):
 3. `src/tools/tools` renamed to `src/tools/runtime` with imports updated.
 4. Provider contract tests pass for all providers; e2e smoke tests pass.
 5. Build, lint, type‑check, and test gates green monorepo‑wide.
-6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived; only the deprecation pointer remains.
+6. Documentation updated (core README, provider READMEs, architecture pointers). Legacy narratives archived; only the deprecation pointer remains. Identity cleanup gate passes (0 findings).
 7. Export surface parity preserved (baseline vs post equal; `default` treated separately).
 8. Greek ecosystem architecture fully removed from active code/comments/imports/paths (tokens such as `psycha`, `psychon`, `chorai`, `chora`, `organa`, `moria`, `histoi`, `eidola`, `aither`, `stroma`, `phaneron`, `morphai`, `krypton`, `kanon`, `kratos`, `nomos`, `systema`). A single reference document remains explaining what it was and why it was removed (location: `docs/architecture/greek-ecosystem-deprecation.md`).
 9. Imports rewritten from `@oaknational/mcp-moria` to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed from workspace.

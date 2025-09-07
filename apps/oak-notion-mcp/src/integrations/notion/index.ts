@@ -1,9 +1,9 @@
 /**
- * @fileoverview Notion organ public API
- * @module organa/notion
+ * @fileoverview Notion integration public API
+ * @module integrations/notion
  *
- * Exposes Notion operations for dependency injection into other organa.
- * This maintains organ boundaries - other organa receive these operations
+ * Exposes Notion operations for dependency injection into other modules.
+ * This maintains clear boundaries – consumers receive these operations
  * rather than importing directly from Notion internals.
  */
 

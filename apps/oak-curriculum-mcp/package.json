@@ -1,7 +1,7 @@
 {
   "name": "@oaknational/oak-curriculum-mcp",
   "version": "0.0.1",
-  "description": "MCP server for Oak National Academy Curriculum API",
+  "description": "MCP server for the Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/src/index.js",
   "bin": {
@@ -40,10 +40,10 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",
     "@oaknational/mcp-core": "workspace:*",
-    "@oaknational/mcp-histos-logger": "workspace:*",
-    "@oaknational/mcp-histos-env": "workspace:*",
-    "@oaknational/mcp-histos-storage": "workspace:*",
-    "@oaknational/mcp-histos-transport": "workspace:*",
+    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/mcp-env": "workspace:*",
+    "@oaknational/mcp-storage": "workspace:*",
+    "@oaknational/mcp-transport": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "dotenv": "^17.2.1",
     "zod": "^3.23.8",

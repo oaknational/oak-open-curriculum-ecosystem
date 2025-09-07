@@ -10,23 +10,21 @@ When given a task, always include "Read GO.md and follow all instructions" in yo
 2. **Regular Grounding**: You re-read GO.md every third task
 3. **Quality Maintenance**: You follow all rules and best practices
 
-## 🧪 Experimental Architecture
+## 🧱 Standard Architecture (Current)
 
-This codebase follows an experimental approach. See [Experimental Architecture Quick Reference](./experimental-architecture-quick-reference.md) for concrete examples of how to:
+Active code and documentation use a conventional, intent‑revealing structure:
 
-- Create small modules with clear interfaces
-- Use dependency injection instead of direct imports
-- Accept different patterns in different contexts
-- Use the 91 warnings as architectural insights showing natural boundaries
+- `apps/` – runnable MCP servers (application wiring, startup)
+- `packages/core/` – shared interfaces, types, and utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – runtime‑adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
-### Biological Architecture with Greek Nomenclature
+Historical material describing the legacy Greek model is preserved for context only. See the single pointer document: [Greek ecosystem deprecation](../architecture/greek-ecosystem-deprecation.md).
 
-We use a living systems model with Greek terms for conceptual clarity. See our [Naming Guide](../naming.md) to understand:
+Key implementation principles:
 
-- The complete biological hierarchy (molecules → biosphere)
-- Why each Greek term was chosen (etymology and philosophy)
-- How components relate biologically
-- Current and future architectural layers
+- Small modules with clear interfaces
+- Dependency injection instead of direct imports for runtime concerns
+- Strict lint boundaries for safe cross‑package interactions
 
 ## 📋 Task Management
 
@@ -149,13 +147,13 @@ TodoWrite:
 
 ## 🔍 Key Files to Remember
 
-### Core Implementation
+### Application Layout (example)
 
-- `src/server.ts` - Main server setup
-- `src/organa/notion/` - Notion organ (business logic)
-- `src/organa/mcp/` - MCP organ (protocol handling)
-- `src/substrate/` - Types and contracts (compile-time)
-- `src/systems/` - Pervasive infrastructure (logging, events, config)
+- `src/app/` - Composition root (wiring, startup, server bootstrap)
+- `src/tools/` - MCP tools and handlers
+- `src/integrations/` - External integrations (e.g. Notion)
+- `src/types/` - Local types and contracts
+- `src/logging/` - App‑specific logging utilities
 
 ### Configuration
 
@@ -186,8 +184,8 @@ Before considering any task complete:
 1. **Start Here**: [Developer Onboarding Journey](../development/onboarding-journey.md)
 2. **Quick Tasks**: [Quick Reference](../quick-reference.md)
 3. **Deep Dive**: [Understanding Agent References](./understanding-agent-references.md)
-4. **Architecture**: [Biological Architecture Guide](./architecture.md) - THE authoritative reference
-5. **System Design**: [High Level Architecture](../architecture/high-level-architecture.md)
+4. **Architecture (current)**: [Architecture README](../architecture/README.md)
+5. **Historical context**: [Greek ecosystem deprecation](../architecture/greek-ecosystem-deprecation.md)
 
 ## 💡 Pro Tips
 

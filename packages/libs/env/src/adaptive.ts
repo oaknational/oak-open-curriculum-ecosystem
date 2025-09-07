@@ -89,5 +89,5 @@ export function createAdaptiveEnvironment(gThis: unknown): EnvironmentProvider {
   };
 }
 
-// Export types from moria
+// Export core types for convenience
 export type { EnvironmentProvider } from '@oaknational/mcp-core';

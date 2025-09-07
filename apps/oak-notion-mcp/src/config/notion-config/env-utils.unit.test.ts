@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { parseLogLevel, type LogLevel, LOG_LEVEL_KEY } from '@oaknational/mcp-histos-logger';
+import { parseLogLevel, type LogLevel, LOG_LEVEL_KEY } from '@oaknational/mcp-logger';
 
 describe('env-utils', () => {
   describe('parseLogLevel', () => {

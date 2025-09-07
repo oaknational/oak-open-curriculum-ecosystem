@@ -1,14 +1,14 @@
 /**
- * ESLint Configuration for histos-storage
+ * ESLint Configuration for storage library
  *
- * Storage tissue for multi-runtime support
+ * Storage helpers for multi-runtime support
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
-  createHistoiBoundaryRules,
-  getOtherTissues,
+  createLibBoundaryRules,
+  getOtherLibs,
   commonSettings,
 } from '../../../eslint-rules/index.js';
 
@@ -43,7 +43,7 @@ const config = tsEslintConfig(
         },
       },
     },
-    rules: createHistoiBoundaryRules('histos-storage', getOtherTissues('histos-storage')),
+    rules: createLibBoundaryRules('storage', getOtherLibs('storage')),
   },
   // Config files
   {

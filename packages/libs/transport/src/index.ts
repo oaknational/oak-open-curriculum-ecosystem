@@ -1,9 +1,9 @@
 /**
- * @fileoverview Main entry point for histos-transport tissue
- * @module histos-transport
+ * @fileoverview Transport library public entry point
+ * @module mcp-transport
  *
- * Histoi Transport Tissue - Adaptive transport layer for MCP servers
- * Provides STDIO transport implementation that can be transplanted to any Psycha organism
+ * Adaptive transport layer for MCP servers
+ * Provides STDIO transport implementation that can be used by any application
  */
 
 import type { StdioTransport, StdioTransportOptions } from './types.js';
@@ -26,5 +26,5 @@ export { formatMessage, parseMessage } from './message-formatter.js';
 // Export types
 export type { StdioTransport, StdioTransportOptions, JsonRpcMessage } from './types.js';
 
-// Re-export stream and logger types from Moria for convenience
+// Re-export stream and logger types from core for convenience
 export type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';

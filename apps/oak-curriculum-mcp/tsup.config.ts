@@ -35,10 +35,10 @@ export default defineConfig({
     'buffer',
     // Workspace packages (these are already built)
     '@oaknational/mcp-core',
-    '@oaknational/mcp-histos-logger',
-    '@oaknational/mcp-histos-storage',
-    '@oaknational/mcp-histos-env',
-    '@oaknational/mcp-histos-transport',
+    '@oaknational/mcp-logger',
+    '@oaknational/mcp-storage',
+    '@oaknational/mcp-env',
+    '@oaknational/mcp-transport',
     '@oaknational/oak-curriculum-sdk',
   ],
   // Mark the package as having no side effects for better tree-shaking

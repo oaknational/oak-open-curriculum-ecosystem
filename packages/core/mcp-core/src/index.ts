@@ -31,7 +31,7 @@ export function createRuntime(providers: CoreProviders): CoreRuntime {
 // Temporary compatibility surface (behaviour‑preserving)
 // ---------------------------------------------
 // These definitions mirror commonly used types previously imported from
-// @oaknational/mcp-moria so we can switch imports mechanically without
+// the legacy core so we can switch imports mechanically without
 // changing behaviour. When consumers migrate fully, this surface can be
 // narrowed or removed in favour of dedicated core types.
 
@@ -41,7 +41,7 @@ export interface JsonObject {
   [key: string]: JsonValue;
 }
 
-// Logger (moria-compatible shape)
+// Logger (legacy-compatible shape)
 export interface Logger {
   trace(message: string, context?: unknown): void;
   debug(message: string, context?: unknown): void;
@@ -53,7 +53,7 @@ export interface Logger {
   child?(context: JsonObject): Logger;
 }
 
-// Storage (moria-compatible shape)
+// Storage (legacy-compatible shape)
 export interface StorageProvider {
   get(key: string): Promise<string | null>;
   set(key: string, value: string): Promise<void>;
@@ -65,14 +65,14 @@ export interface StorageProvider {
 }
 export type AsyncStorageProvider = StorageProvider;
 
-// Environment (moria-compatible interface)
+// Environment (legacy-compatible interface)
 export interface EnvironmentProvider {
   get(key: string): string | undefined;
   getAll(): Record<string, string | undefined>;
   has(key: string): boolean;
 }
 
-// Streams (moria-compatible evented interfaces)
+// Streams (legacy-compatible evented interfaces)
 export interface ReadableStream {
   on(event: 'data', handler: (chunk: Buffer | string) => void): void;
   on(event: 'error', handler: (error: Error) => void): void;
@@ -92,7 +92,7 @@ export interface WritableStream {
 
 export interface DuplexStream extends ReadableStream, WritableStream {}
 
-// Tool abstractions (moria-compatible)
+// Tool abstractions (legacy-compatible)
 export interface ToolExecutor<TInput = unknown, TOutput = unknown> {
   execute(input: TInput): Promise<TOutput>;
 }
@@ -128,7 +128,7 @@ export interface ToolValidator<TInput = unknown> {
   getErrors?(input: unknown): string[];
 }
 
-// Runtime-boundary helpers (moria-compatible)
+// Runtime-boundary helpers (legacy-compatible)
 export function isObject(value: unknown): value is JsonObject {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }

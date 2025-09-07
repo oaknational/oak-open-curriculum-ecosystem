@@ -1,7 +1,7 @@
 /**
- * @oaknational/mcp-histos-logger
+ * @oaknational/mcp-logger
  *
- * Adaptive logging tissue for multi-runtime MCP applications
+ * Adaptive logging library for multi-runtime MCP applications
  * Uses Consola with feature detection to adapt configuration
  */
 

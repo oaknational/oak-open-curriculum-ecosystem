@@ -1,12 +1,12 @@
 {
-  "name": "@oaknational/mcp-histos-transport",
+  "name": "@oaknational/mcp-transport",
   "version": "0.1.0",
-  "description": "Histoi transport tissue - adaptive transport layer for MCP servers",
+  "description": "Transport library - adaptive transport layer for MCP servers",
   "keywords": [
     "mcp",
     "transport",
     "stdio",
-    "histoi",
+    "transport",
     "tissue"
   ],
   "license": "MIT",
@@ -49,7 +49,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "ecosystem/histoi/histos-transport"
+    "directory": "packages/libs/transport"
   },
   "publishConfig": {
     "access": "public"

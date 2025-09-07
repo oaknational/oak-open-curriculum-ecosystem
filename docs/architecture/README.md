@@ -2,32 +2,29 @@
 
 ## Start Here
 
-1. **→ [Biological Architecture Guide](../agent-guidance/architecture.md)** - THE authoritative reference for the two-scale architecture
-2. **→ [High-Level Architecture](./high-level-architecture.md)** - Detailed technical design with Moria/Histoi/Psycha
-3. **→ [Architecture Overview](../architecture-overview.md)** - Introduction to biological concepts
+1. **→ Current Architecture Overview (this page)**
+2. **→ Historical Context: Greek Ecosystem Deprecation](./greek-ecosystem-deprecation.md)**
 
 ## Reference Documentation
 
-### Core Architecture
+### Core Architecture (Current)
 
-- [Biological Architecture Guide](../agent-guidance/architecture.md) - Authoritative two-scale architecture reference
-- [High-Level Architecture](./high-level-architecture.md) - Moria/Histoi/Psycha three-tier design
-- [Architecture Overview](../architecture-overview.md) - Introduction to biological concepts
-- [Naming Guide](../naming.md) - Complete biological hierarchy and Greek nomenclature
-- [Biological Philosophy](./biological-philosophy.md) - Deep principles and evolution to three-tier model
+- Standard structure:
+  - `apps/` – applications (MCP servers)
+  - `packages/core/` – core interfaces/utilities (`@oaknational/mcp-core`)
+  - `packages/libs/` – runtime‑adaptive libraries (`@oaknational/mcp-*`)
+  - `packages/sdks/` – public SDKs
+- Boundaries enforced by ESLint rules under `eslint-rules/`
+- Provider injection replaces runtime auto‑detection
 
 ### Implementation Guides
 
-- [Tissue and Organ Interfaces](./tissue-and-organ-interfaces.md) - Interface patterns and code templates
-- [Tissue and Organ Example](./tissue-organ-example.md) - Complete implementation example
 - [Programmatic Tool Generation](./programmatic-tool-generation.md) - MCP tool generation from SDK
 
 ### Architectural Decisions
 
-- [ADR-023: Moria/Histoi/Psycha Architecture](./architectural-decisions/023-moria-histoi-psycha-architecture.md) - Three-tier workspace model
-- [ADR-020: Biological Architecture](./architectural-decisions/020-biological-architecture.md) - Greek nomenclature and biological model
-- [ADR-009: Mathematical Foundation](./architectural-decisions/009-mathematical-foundation-for-architecture.md) - Complex systems theory
-- [All ADRs](./architectural-decisions/) - Complete decision record
+- [ADR-040: Transition to Neutral Architecture and Allowlist Identity Check](./architectural-decisions/040-neutral-architecture-and-identity-allowlist.md)
+- [All ADRs](./architectural-decisions/) - Complete decision record (historical ADRs preserved)
 
 ## Related Agent Guidance
 
@@ -37,6 +34,5 @@
 
 ## Implementation Plans
 
-- [Phase 5: Moria/Histoi/Psycha Evolution](../../.agent/plans/phase-5-moria-histoi-psycha-evolution.md) - Current implementation
-- [Phase 4: Genotype/Phenotype](../../.agent/plans/archive/phase-4-oak-mcp-core-implementation-plan.md) - Completed phase
-- [High-Level Plan](../../.agent/plans/high-level-plan.md) - Overall evolution roadmap
+- [Standardising Architecture – Part 2](../../.agent/plans/standardising-architecture-part2.md)
+- [High-Level Plan](../../.agent/plans/standardising-architecture-high-level-plan.md)

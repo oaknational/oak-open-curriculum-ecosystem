@@ -1,5 +1,5 @@
 {
-  "name": "@oaknational/mcp-histos-env",
+  "name": "@oaknational/mcp-env",
   "version": "0.0.1",
   "description": "Runtime-adaptive environment tissue for MCP applications",
   "type": "module",
@@ -53,6 +53,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
-    "directory": "ecosystem/histoi/histos-env"
+    "directory": "packages/libs/env"
   }
 }

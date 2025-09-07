@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "Node/ESLint/TS versions:" && node -v && pnpm exec eslint -v && pnpm exec tsc -v
           echo "Effective ESLint config subset for oak-curriculum-mcp:"
-          pnpm -C ecosystem/psycha/oak-curriculum-mcp exec eslint --print-config src/organa/mcp/tools/index.ts \
+          pnpm -C apps/oak-curriculum-mcp exec eslint --print-config src/tools/index.ts \
             | node -e '
                 let s="";process.stdin.on("data",c=>s+=c);process.stdin.on("end",()=>{
                   const j=JSON.parse(s);

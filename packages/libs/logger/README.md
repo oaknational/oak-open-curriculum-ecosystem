@@ -1,4 +1,4 @@
-# @oaknational/mcp-histos-logger
+# @oaknational/mcp-logger
 
 ## Overview
 
@@ -16,7 +16,7 @@ An adaptive logging tissue that provides structured logging across different run
 ## Installation
 
 ```bash
-pnpm add @oaknational/mcp-histos-logger
+pnpm add @oaknational/mcp-logger
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ pnpm add @oaknational/mcp-histos-logger
 ### Basic Usage
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
+import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 
 // Create a logger
 const logger = createAdaptiveLogger({
@@ -42,7 +42,7 @@ logger.debug('Processing item', { id: 123 });
 ### Dependency Injection
 
 ```typescript
-import { ConsolaLogger } from '@oaknational/mcp-histos-logger';
+import { ConsolaLogger } from '@oaknational/mcp-logger';
 import { createConsola } from 'consola';
 
 // Inject your own Consola instance
@@ -84,7 +84,7 @@ import {
   mergeLogContext,
   normalizeError,
   isLevelEnabled,
-} from '@oaknational/mcp-histos-logger';
+} from '@oaknational/mcp-logger';
 
 // Convert semantic level to numeric
 const level = convertLogLevel('DEBUG'); // Returns 10

@@ -19,12 +19,20 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Read and follow `GO.md` for grounding, TODO structuring, and quality gates. Replace references to external review agents with self-reviews.
 - Read `.agent/directives-and-memory/AGENT.md` and linked documents.
 
+## Zero‑Context Resume Checklist
+
+1. pnpm install (if dependencies changed)
+2. pnpm -r type-check && pnpm -r lint && pnpm -r test && pnpm -r build
+3. pnpm identity-report (allowed only in archive/**, .agent/experience/** and docs/architecture/greek-ecosystem-deprecation.md)
+4. Verify Notion and Curriculum apps pass tests
+5. Continue with “Immediate Next Actions”
+
 ## Current Progress (up to date)
 
 - Nested tools rename completed in both servers: `src/tools/tools` → `src/tools/runtime`; imports updated; gates PASS.
 - Baseline captured: detection inventory (adaptive env + direct `process.env`), ESLint boundary snapshot.
 - Core package scaffolded at `packages/core/mcp-core` with minimal `createRuntime` and provider contracts; build PASS.
-- Added `ecosystem/psycha/oak-notion-mcp/src/config/runtime.json`; Notion server wiring now reads config (logger level/name and server identity). Detection logic removed from wiring; lint/type-check/build PASS.
+- Added `apps/oak-notion-mcp/src/config/runtime.json`; Notion server wiring now reads config (logger level/name and server identity). Detection logic removed from wiring; lint/type-check/build PASS.
 - Alias policy corrected: no `@oaknational/*` for internal aliases; intra-package imports use relative paths; `@workspace/*` reserved for cross-workspace imports; `.js` suffix only for external deep ESM imports. Monorepo build now PASS.
 - Refined wiring: static `createAdaptiveLogger` import; minimal `validateRuntimeConfig` extracted; runtime composed via core factory; all gates PASS; committed.
 - Barrel rationalisation: core registry interface renamed to `CoreToolRegistry`; imports/exports updated; lint PASS.
@@ -32,21 +40,17 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Provider contracts: shared helper at `@oaknational/mcp-core/testing/provider-contract` with consumer integration test in providers‑node; PASS.
 - Docs: `docs/architecture/provider-contracts.md` and `docs/architecture/greek-ecosystem-deprecation.md` added; package READMEs link to contracts doc.
 - Workspace taxonomy progress:
-  - Apps moved: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp` (gates PASS), `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp` (lint PASS; tests/build pending local vitest resolution).
-  - Libs moved: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}` (gates PASS).
-  - Orphan tissue to archive: `ecosystem/histoi/histos-runtime-abstraction`.
-  - Remaining Greek workspace: `ecosystem/moria/moria-mcp` (will be retired after import switch to `@oaknational/mcp-core` compat).
+  - Apps moved to `apps/*` (Notion and Curriculum) — gates PASS.
+  - Libs moved to `packages/libs/{env,logger,storage,transport}` — gates PASS.
+  - Orphan runtime abstraction archived; top‑level `ecosystem/` removed — DONE.
 
 ## Immediate Next Actions
 
 1. Barrel rationalisation (avoid layered collisions; export runtime registry as `CoreToolRegistry`; keep schema types local). (PARTIAL COMPLETE)
 2. Introduce configuration schema (`src/config/runtime.json`) and server DI refactor to explicit provider injection via core factory. (CONFIG READ + MINIMAL VALIDATION COMPLETE; runtime composed; injection into tools/integrations deferred to avoid behaviour drift)
 3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; NODE PROVIDER SCAFFOLDED; CONTRACT TESTS ADDED FOR NODE)
-4. Replace imports from `@oaknational/mcp-moria` with `@oaknational/mcp-core` compatibility exports (mechanical codemod); remove `ecosystem/moria/moria-mcp` from workspace. (PENDING)
-5. Archive `ecosystem/histoi/histos-runtime-abstraction`. (PENDING)
-6. Adopt strict import‑x hygiene after import switch (alias‑only, no parent relatives, approved subpaths). (PENDING)
-7. Greek ecosystem deprecation: reduce legacy docs to the single pointer; scan residual tokens. (PENDING)
-8. Ensure final workspace state deletes the top‑level `ecosystem/` directory; any remaining legacy materials must be moved to `archive/` prior to removal. (COMPLETED)
+4. Strict import‑x hygiene (alias‑only, no parent relatives, approved public subpaths). (PENDING)
+5. Identity cleanup: archive remaining narrative docs (including `.agent/experience/**`) and ensure only the single pointer doc remains; drive `pnpm identity-check` to 0 (allowed exceptions only). (IN PROGRESS)
 
 Abort if both source and target exist and differ.
 
@@ -68,11 +72,14 @@ Abort if both source and target exist and differ.
 2. Capture post-migration exports; compare sets.
 3. Abort on any added/removed symbols.
 
-## Legacy Tokens
+## Legacy References Policy
 
-`psychon/`, `chorai/`, `organa/mcp`, `eidola/`.
+Legacy architecture terms must not appear in active code, configs, tests, or working docs. They are allowed only in:
 
-After full migration these must only appear in archived docs or the pointer doc (not in active code/comments/imports).
+- `docs/architecture/greek-ecosystem-deprecation.md` (single reference)
+- `archive/**` (historical context)
+
+All other occurrences must be removed or archived; track with `pnpm identity-check`.
 
 ## Risks & Mitigations
 
@@ -163,23 +170,3 @@ Completion = all acceptance criteria satisfied + report + atomic commit + PR.
   - `ecosystem/histoi/histos-logger` → `packages/libs/logger`
   - `ecosystem/histoi/histos-transport` → `packages/libs/transport`
   - `ecosystem/histoi/histos-storage` → `packages/libs/storage`
-  - `ecosystem/histoi/histos-env` → `packages/libs/env`
-  - `ecosystem/histoi/histos-runtime-abstraction` → `packages/libs/runtime`
-  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
-
-- Introduce internal alias scope distinct from publish scope:
-  - Reserve `@oaknational/*` for published packages only
-  - Add `@workspace/*` aliases in `tsconfig.base.json`:
-    - `@workspace/apps/*` → `apps/*/src/*`
-    - `@workspace/core/*` → `packages/core/*/src/*`
-    - `@workspace/libs/*` → `packages/libs/*/src/*`
-    - `@workspace/sdks/*` → `packages/sdks/*/src/*`
-
-- Update configs (ESLint boundaries, Turbo, test globs) accordingly and run idempotent codemod (git mv + AST import rewrite). Full gates must be green post‑rename.
-
-## Additional Acceptance & Reporting Notes
-
-- Core package path is `packages/core/mcp-core/`; the core must not import providers.
-- Export surface parity must be preserved; capture baseline and post snapshots; abort on diff.
-- Legacy tokens (`psychon/`, `chorai/`, `organa/mcp`, `eidola/`) must only exist in archived docs or pointer docs after migration; include residual scan output in the report.
-- Alias‑only cross‑boundary imports enforced with `eslint-plugin-import-x`; approved public subpaths documented in package READMEs and ESLint config comments.

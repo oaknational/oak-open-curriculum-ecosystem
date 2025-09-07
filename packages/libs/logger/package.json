@@ -1,5 +1,5 @@
 {
-  "name": "@oaknational/mcp-histos-logger",
+  "name": "@oaknational/mcp-logger",
   "version": "0.1.0",
   "description": "Adaptive logging tissue for multi-runtime MCP applications",
   "type": "module",
