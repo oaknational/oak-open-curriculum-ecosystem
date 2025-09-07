@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-07T18:34:01.299Z
+Generated: 2025-09-07T20:42:10.025Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -529,7 +529,7 @@ Validation issue details
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
-Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/3037c9d2f58618c7d24e4181cb9ae04f0faa5f93/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/aba9f228c2d9fa585ce316b1fcc6a2e644543195/packages/oak-curriculum-sdk/src/validation/types.ts#L38)
 
 HTTP methods supported by validation
 
@@ -539,7 +539,7 @@ HTTP methods supported by validation
 type OakApiClient = OpenApiClient<paths>;
 ```
 
-Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/3037c9d2f58618c7d24e4181cb9ae04f0faa5f93/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/aba9f228c2d9fa585ce316b1fcc6a2e644543195/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -551,7 +551,7 @@ Use this client for maximum performance.
 type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
-Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/3037c9d2f58618c7d24e4181cb9ae04f0faa5f93/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/aba9f228c2d9fa585ce316b1fcc6a2e644543195/packages/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -566,7 +566,7 @@ the performance cost.
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [packages/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/3037c9d2f58618c7d24e4181cb9ae04f0faa5f93/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
+Source: [packages/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/aba9f228c2d9fa585ce316b1fcc6a2e644543195/packages/oak-curriculum-sdk/src/validation/types.ts#L12)
 
 Result type for validation operations
 Discriminated union for type-safe error handling
