@@ -49,6 +49,19 @@ export const coreBoundaryRules: Partial<Linter.RulesRecord> = {
       includeTypes: false,
     },
   ],
+  // Disallow workspace alias for inter-workspace imports – use @oaknational/* packages instead
+  '@typescript-eslint/no-restricted-imports': [
+    'error',
+    {
+      patterns: [
+        {
+          group: ['@workspace/*'],
+          message:
+            'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+        },
+      ],
+    },
+  ],
 };
 
 /**
@@ -94,6 +107,19 @@ export function createLibBoundaryRules(
   return {
     // Libraries must be independent and reusable
     'import-x/no-restricted-paths': ['error', { zones }],
+    // Disallow @workspace/* imports in library source
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        patterns: [
+          {
+            group: ['@workspace/*'],
+            message:
+              'Do not import from @workspace/* in source. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
+          },
+        ],
+      },
+    ],
 
     // Prevent direct access to Node.js globals - IO must be injected
     'no-restricted-globals': [
@@ -164,14 +190,15 @@ export const appArchitectureRules: Partial<Linter.RulesRecord> = {
     },
   ],
 
-  // Force use of path aliases for cross-boundary imports
+  // Enforce package-only inter-workspace imports; allow intra-package relatives
   '@typescript-eslint/no-restricted-imports': [
     'error',
     {
       patterns: [
         {
-          group: ['../../*'],
-          message: 'Avoid parent-jump cross-boundary imports. Prefer package entry points/barrels.',
+          group: ['@workspace/*'],
+          message:
+            'Do not import from @workspace/* in apps. Use @oaknational/* package imports for inter-workspace dependencies or relative paths within the same package.',
         },
         {
           group: ['**/internal/**', '**/internals/**', '**/private/**'],

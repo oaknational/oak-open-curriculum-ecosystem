@@ -60,24 +60,7 @@ const config = tsEslintConfig(
       ],
     },
   },
-  // Application modules - Allow imports within the same area
-  {
-    files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-restricted-imports': 'off',
-      'import-x/no-relative-parent-imports': 'off',
-    },
-  },
-  // Entry and app wiring may import broadly
-  {
-    files: ['src/index.ts', 'src/app/**/*.ts'],
-    rules: {
-      'import-x/no-restricted-paths': 'off',
-      'import-x/no-relative-parent-imports': 'off',
-      'import-x/no-internal-modules': 'off',
-      '@typescript-eslint/no-restricted-imports': 'off',
-    },
-  },
+  // Remove broad allowances; rely on package imports and local relative paths only
   // Test files can break boundaries but should maintain type safety
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],

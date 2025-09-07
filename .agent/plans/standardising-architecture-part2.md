@@ -6,7 +6,7 @@ This file intentionally contains no code snippets that belong in scripts; it foc
 
 British spelling applies throughout (behaviour, normalisation, rationalisation, etc.).
 
-Status: IN PROGRESS. Working branch: `feat/standardising_architecture_part_2`.
+Status: IN PROGRESS. Working branch: `feat/standardising_architecture_part_2` (identity=0, all gates PASS; branch pushed).
 
 Completed so far:
 
@@ -53,7 +53,7 @@ In scope (Part 2):
 - Implement provider modules (Node, Cloudflare) that implement the core contracts.
 - Replace detection logic with configuration‑driven selection (e.g. `src/config/runtime.json`).
 - Refactor server bootstrap to dependency injection (construct runtime via core factory and pass into tools/integrations).
-- Enforce strict import hygiene with eslint-plugin-import-x (alias‑only cross‑boundary imports; no relative parent imports; no internal modules beyond approved public subpaths).
+- Enforce strict import hygiene with eslint-plugin-import-x (inter‑workspace via `@oaknational/*` package imports; allow intra‑package relative imports including parent relatives; avoid internal/private modules beyond approved public subpaths).
 - Mechanical deconfliction rename: `src/tools/tools` → `src/tools/runtime` with import updates. (COMPLETED)
 - Barrel rationalisation and naming clarity (e.g., export runtime registry as `CoreToolRegistry`; keep schema types local).
 
@@ -75,9 +75,9 @@ Note: Coding work in Part 2 must follow TDD with Vitest (repo standard). Documen
 1. Configuration (not detection) selects providers / runtime.
 2. The core package must not import providers (one‑way dependency).
 3. Strict import hygiene (import‑x):
-   - Alias‑only across boundaries
-   - `no-relative-parent-imports`
-   - `no-internal-modules`, except explicitly approved public subpaths
+   - Inter‑workspace deps via `@oaknational/*` package specifiers
+   - Intra‑package relatives allowed (including parent relatives)
+   - Avoid internal/private modules beyond approved public subpaths
 4. No behavioural regressions across providers: provider contract tests must pass equivalently.
 5. British spelling in new/updated textual artefacts.
 6. Prefer smaller, atomic modules and functions with no side effects.
@@ -172,15 +172,15 @@ Part 2 adds provider contract tests and (optionally) a small e2e matrix across p
 ## 7. ESLint & Import Hygiene
 
 - Adopt strict `eslint-plugin-import-x` configuration:
-  - Enforce alias‑only cross‑boundary imports
-  - Disallow `../` parent imports across boundaries
-  - Forbid `no-internal-modules` except approved public subpaths
+  - Inter‑workspace imports must be `@oaknational/*` packages
+  - Intra‑package relatives allowed
+  - Avoid internal/private modules except approved public subpaths
 - Maintain phenotype boundary rules from Part 1; remove legacy duplicates only after Part 2 stabilises.
 
-Alias policy clarification (per high-level plan):
+Import policy clarification (per high-level plan):
 
-- Reserve `@oaknational/*` exclusively for published packages; do not use it as an internal alias.
-- Use internal `@workspace/*` aliases for cross-workspace imports only. Prefer relative imports for intra-package paths.
+- Inter‑workspace imports must use `@oaknational/*` package specifiers (workspace symlinks in dev, published in prod).
+- Intra‑package imports may use relative paths, including parent relatives where clear.
 - For intra-repo TypeScript sources, omit `.js` in import specifiers. Keep `.js` suffix only for deep ESM imports from external packages when required by the runtime/bundler.
 
 Snapshot (captured):
@@ -188,14 +188,9 @@ Snapshot (captured):
 - Central boundaries in `eslint-rules/boundary-rules.ts` enforce `tools` ↔ `integrations` isolation.
 - Phenotype configs import central rules; strict `no-relative-parent-imports` and `no-internal-modules` remain OFF pending alias adoption.
 
-Aliases (internal workspace scope; distinct from publish scope):
+No internal alias scope:
 
-- Reserve `@oaknational/*` for published packages only.
-- Introduce `@workspace/*` aliases in `tsconfig.base.json`:
-  - `@workspace/apps/*` → `apps/*/src/*`
-  - `@workspace/core/*` → `packages/core/*/src/*`
-  - `@workspace/libs/*` → `packages/libs/*/src/*`
-  - `@workspace/sdks/*` → `packages/sdks/*/src/*`
+- Do not introduce `@workspace/*` aliases in `tsconfig.base.json`.
 
 Identity cleanup rubric:
 
@@ -203,11 +198,11 @@ Identity cleanup rubric:
 - Scope: all files excluding allowlisted paths: `archive/**`, `.agent/experience/**`, `.agent/plans/**`, `.agent/refactor/**`, `.agent/roles/**`, `.claude/**`, `.vscode/**`, and `docs/architecture/greek-ecosystem-deprecation.md`.
 - Goal: count must be 0 at acceptance outside the allowlist.
 - Fix triage order (apply in this priority):
-  1) TypeScript (`*.ts`, `*.tsx`)
-  2) JSON (`*.json`)
-  3) JavaScript/Modules (`*.js`, `*.mjs`)
-  4) High‑impact docs (READMEs, quick-starts, entry docs used by new contributors)
-  5) Low‑impact docs (deep historical narratives that are not ADRs; ADRs remain unchanged by policy)
+  1. TypeScript (`*.ts`, `*.tsx`)
+  2. JSON (`*.json`)
+  3. JavaScript/Modules (`*.js`, `*.mjs`)
+  4. High‑impact docs (READMEs, quick-starts, entry docs used by new contributors)
+  5. Low‑impact docs (deep historical narratives that are not ADRs; ADRs remain unchanged by policy)
 
 ---
 

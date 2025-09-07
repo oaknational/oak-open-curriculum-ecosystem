@@ -23,7 +23,7 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 
 1. pnpm install (if dependencies changed)
 2. pnpm -r type-check && pnpm -r lint && pnpm -r test && pnpm -r build
-3. pnpm identity-report (allowed only in archive/**, .agent/experience/** and docs/architecture/greek-ecosystem-deprecation.md)
+3. pnpm identity-report (allowed only in archive/**, .agent/experience/**, .agent/plans/**, .agent/refactor/**, .agent/roles/**, .claude/**, .vscode/\*\* and docs/architecture/greek-ecosystem-deprecation.md)
 4. Verify Notion and Curriculum apps pass tests
 5. Continue with “Immediate Next Actions”
 
@@ -33,7 +33,7 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Baseline captured: detection inventory (adaptive env + direct `process.env`), ESLint boundary snapshot.
 - Core package scaffolded at `packages/core/mcp-core` with minimal `createRuntime` and provider contracts; build PASS.
 - Added `apps/oak-notion-mcp/src/config/runtime.json`; Notion server wiring now reads config (logger level/name and server identity). Detection logic removed from wiring; lint/type-check/build PASS.
-- Alias policy corrected: no `@oaknational/*` for internal aliases; intra-package imports use relative paths; `@workspace/*` reserved for cross-workspace imports; `.js` suffix only for external deep ESM imports. Monorepo build now PASS.
+- Import policy clarified: inter‑workspace imports must use `@oaknational/*` package specifiers; intra‑package imports can be relative (including parent relatives). No `@workspace/*` alias. `.js` suffix only for external deep ESM imports when required.
 - Refined wiring: static `createAdaptiveLogger` import; minimal `validateRuntimeConfig` extracted; runtime composed via core factory; all gates PASS; committed.
 - Barrel rationalisation: core registry interface renamed to `CoreToolRegistry`; imports/exports updated; lint PASS.
 - Providers: `packages/providers/mcp-providers-node` scaffolded with in‑memory storage, console logger, and time‑based clock; unit tests PASS; monorepo gates PASS.
@@ -44,13 +44,13 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
   - Libs moved to `packages/libs/{env,logger,storage,transport}` — gates PASS.
   - Orphan runtime abstraction archived; top‑level `ecosystem/` removed — DONE.
 
-## Immediate Next Actions
+## Immediate Next Actions (post-identity=0)
 
 1. Barrel rationalisation (avoid layered collisions; export runtime registry as `CoreToolRegistry`; keep schema types local). (PARTIAL COMPLETE)
 2. Introduce configuration schema (`src/config/runtime.json`) and server DI refactor to explicit provider injection via core factory. (CONFIG READ + MINIMAL VALIDATION COMPLETE; runtime composed; injection into tools/integrations deferred to avoid behaviour drift)
 3. Core package extraction to `packages/core/mcp-core/` (publish: `@oaknational/mcp-core`) and provider contract tests (Node, Cloudflare). (CORE MINIMAL COMPLETE; NODE PROVIDER SCAFFOLDED; CONTRACT TESTS ADDED FOR NODE)
-4. Strict import‑x hygiene (alias‑only, no parent relatives, approved public subpaths). (PENDING)
-5. Identity cleanup: archive remaining narrative docs (including `.agent/experience/**`) and ensure only the single pointer doc remains; drive `pnpm identity-check` to 0 (allowed exceptions only). (IN PROGRESS)
+4. Strict import‑x hygiene (package‑only inter‑workspace, allow intra‑package relatives, avoid internal/private subpaths). (READY)
+5. Identity cleanup: complete (identity=0). Keep allowlist limited to archives, agent plans/experience/refactor/roles, `.claude/`, `.vscode/`, and the single deprecation doc.
 
 Abort if both source and target exist and differ.
 

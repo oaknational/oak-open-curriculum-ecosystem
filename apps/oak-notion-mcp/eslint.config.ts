@@ -46,25 +46,11 @@ const config = tsEslintConfig(
     rules: {
       ...appBoundaryRules,
       ...appArchitectureRules,
-      'import-x/no-relative-parent-imports': 'error',
+      'import-x/no-relative-parent-imports': 'off',
       'import-x/no-internal-modules': 'off',
     },
   },
-  // New structure modules - Allow imports within the same area (tools/integrations)
-  {
-    files: ['src/tools/**/*.ts', 'src/integrations/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-restricted-imports': 'off',
-      'import-x/no-relative-parent-imports': 'off',
-    },
-  },
-  // General intra-package allowance for parent relatives across src/**
-  {
-    files: ['src/**/*.ts'],
-    rules: {
-      'import-x/no-relative-parent-imports': 'off',
-    },
-  },
+  // Remove broad parent-relative allowances; keep package-local flexibility minimal
   // App layer can import broadly within the package
   {
     files: ['src/index.ts', 'src/app/**/*.ts'],

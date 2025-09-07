@@ -19,7 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
-      "@workspace/apps/oak-notion-mcp/*": ["./apps/oak-notion-mcp/src/*"],
       "@oaknational/oak-notion-mcp": ["./apps/oak-notion-mcp/src"],
       "@oaknational/oak-notion-mcp/*": ["./apps/oak-notion-mcp/src/*"],
       "@oaknational/oak-curriculum-mcp": ["./apps/oak-curriculum-mcp/src"],
