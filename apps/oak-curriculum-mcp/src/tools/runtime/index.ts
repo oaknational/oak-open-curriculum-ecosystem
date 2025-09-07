@@ -6,7 +6,7 @@
  */
 
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 
 /**

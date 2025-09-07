@@ -101,6 +101,9 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
         version: 1.17.2
+      '@oaknational/mcp-core':
+        specifier: workspace:*
+        version: link:../../packages/core/mcp-core
       '@oaknational/mcp-histos-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -113,9 +116,6 @@ importers:
       '@oaknational/mcp-histos-transport':
         specifier: workspace:*
         version: link:../../packages/libs/transport
-      '@oaknational/mcp-moria':
-        specifier: workspace:*
-        version: link:../../ecosystem/moria/moria-mcp
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
         version: link:../../packages/oak-curriculum-sdk
@@ -153,12 +153,12 @@ importers:
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.1
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../packages/core/mcp-core
       '@oaknational/mcp-histos-logger':
         specifier: workspace:^
         version: link:../../packages/libs/logger
-      '@oaknational/mcp-moria':
-        specifier: workspace:^
-        version: link:../../ecosystem/moria/moria-mcp
       '@oaknational/mcp-providers-node':
         specifier: workspace:^
         version: link:../../packages/providers/mcp-providers-node
@@ -176,22 +176,13 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  ecosystem/moria/moria-mcp:
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
   packages/core/mcp-core: {}
 
   packages/libs/env:
     dependencies:
-      '@oaknational/mcp-moria':
+      '@oaknational/mcp-core':
         specifier: workspace:^
-        version: link:../../../ecosystem/moria/moria-mcp
+        version: link:../../core/mcp-core
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -205,9 +196,9 @@ importers:
 
   packages/libs/logger:
     dependencies:
-      '@oaknational/mcp-moria':
+      '@oaknational/mcp-core':
         specifier: workspace:^
-        version: link:../../../ecosystem/moria/moria-mcp
+        version: link:../../core/mcp-core
       consola:
         specifier: ^3.2.3
         version: 3.4.2
@@ -221,9 +212,9 @@ importers:
 
   packages/libs/storage:
     dependencies:
-      '@oaknational/mcp-moria':
+      '@oaknational/mcp-core':
         specifier: workspace:^
-        version: link:../../../ecosystem/moria/moria-mcp
+        version: link:../../core/mcp-core
     devDependencies:
       pnpm:
         specifier: ^10.14.0
@@ -234,9 +225,9 @@ importers:
 
   packages/libs/transport:
     dependencies:
-      '@oaknational/mcp-moria':
+      '@oaknational/mcp-core':
         specifier: workspace:^
-        version: link:../../../ecosystem/moria/moria-mcp
+        version: link:../../core/mcp-core
     devDependencies:
       pnpm:
         specifier: ^10.14.0

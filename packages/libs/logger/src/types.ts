@@ -3,7 +3,7 @@
  */
 
 import type { LogLevel } from './log-levels.js';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 
 export type { LogLevel };
 

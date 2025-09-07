@@ -10,4 +10,4 @@
 export { createAdaptiveEnvironment } from './adaptive.js';
 
 // Export types from moria
-export type { EnvironmentProvider } from '@oaknational/mcp-moria';
+export type { EnvironmentProvider } from '@oaknational/mcp-core';

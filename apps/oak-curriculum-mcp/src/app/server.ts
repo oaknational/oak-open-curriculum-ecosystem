@@ -10,7 +10,7 @@ import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
 import type { McpOrgan } from '../tools/index.js';
-import type { Logger } from '@oaknational/mcp-moria';
+import type { Logger } from '@oaknational/mcp-core';
 
 /**
  * Check if an object has a property

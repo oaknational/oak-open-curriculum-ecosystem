@@ -31,7 +31,7 @@
     "quality": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
-    "@oaknational/mcp-moria": "workspace:^",
+    "@oaknational/mcp-core": "workspace:^",
     "dotenv": "^17.2.1"
   },
   "devDependencies": {

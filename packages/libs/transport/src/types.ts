@@ -2,7 +2,7 @@
  * Types for the STDIO transport tissue
  */
 
-import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-moria';
+import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';
 
 /**
  * JSON-RPC message structure

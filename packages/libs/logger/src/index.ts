@@ -15,7 +15,7 @@ export {
   isLevelEnabled,
 } from './pure-functions.js';
 export type { LoggerOptions } from './types.js';
-export type { Logger } from '@oaknational/mcp-moria';
+export type { Logger } from '@oaknational/mcp-core';
 
 // Export log level utilities
 export {

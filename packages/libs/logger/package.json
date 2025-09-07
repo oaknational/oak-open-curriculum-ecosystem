@@ -29,7 +29,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@oaknational/mcp-moria": "workspace:^",
+    "@oaknational/mcp-core": "workspace:^",
     "consola": "^3.2.3"
   },
   "devDependencies": {

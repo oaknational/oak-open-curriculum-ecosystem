@@ -1,7 +1,6 @@
 packages:
   - apps/oak-notion-mcp
   - apps/oak-curriculum-mcp
-  - ecosystem/moria/moria-mcp
   - packages/libs/env
   - packages/libs/logger
   - packages/libs/storage

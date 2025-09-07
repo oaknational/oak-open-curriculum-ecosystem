@@ -3,8 +3,8 @@
  */
 
 import type { LogLevel } from './types.js';
-import type { JsonObject, JsonValue } from '@oaknational/mcp-moria';
-import { isObject } from '@oaknational/mcp-moria';
+import type { JsonObject, JsonValue } from '@oaknational/mcp-core';
+import { isObject } from '@oaknational/mcp-core';
 
 /**
  * Converts semantic log level to numeric value

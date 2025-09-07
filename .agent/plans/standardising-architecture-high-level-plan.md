@@ -124,6 +124,7 @@ Early progress: Step 7 (tools rename) completed; proceeding with barrels and str
 
 - Acceptance additions (Part 2)
   - Directory mapping applied; configs updated (tsconfig/eslint/turbo/test); codemod idempotent; full gates green; docs updated with taxonomy and alias guidance; no publish name changes unless explicitly scheduled.
+  - The top‑level `ecosystem/` directory is fully removed from active code after moves/archival. Only `apps/` and `packages/` remain (any historical materials live under `archive/`).
 
 Key Risks & Mitigations:
 
@@ -135,7 +136,8 @@ Key Risks & Mitigations:
 | Performance overhead from indirection | Benchmark before/after runtime assembly             |
 
 Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import-x boundary rules active (alias-only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived.
-  - And: imports rewritten to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed; orphan tissues archived; residual Greek tokens only in the pointer doc.
+
+- And: imports rewritten to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed; orphan tissues archived; residual Greek tokens only in the pointer doc.
 
 ---
 

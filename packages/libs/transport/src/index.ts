@@ -27,4 +27,4 @@ export { formatMessage, parseMessage } from './message-formatter.js';
 export type { StdioTransport, StdioTransportOptions, JsonRpcMessage } from './types.js';
 
 // Re-export stream and logger types from Moria for convenience
-export type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-moria';
+export type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';

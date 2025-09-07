@@ -10,7 +10,7 @@ import type {
   SearchOptions,
   NotionSearchQuery,
 } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 
 /**
  * Build filter condition for a single property

@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",
-    "@oaknational/mcp-moria": "workspace:*",
+    "@oaknational/mcp-core": "workspace:*",
     "@oaknational/mcp-histos-logger": "workspace:*",
     "@oaknational/mcp-histos-env": "workspace:*",
     "@oaknational/mcp-histos-storage": "workspace:*",

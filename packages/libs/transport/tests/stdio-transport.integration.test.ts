@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { ReadableStream, WritableStream, Logger } from '@oaknational/mcp-moria';
+import type { ReadableStream, WritableStream, Logger } from '@oaknational/mcp-core';
 import type { JsonRpcMessage } from '../src/types.js';
 
 describe('StdioTransport Integration', () => {

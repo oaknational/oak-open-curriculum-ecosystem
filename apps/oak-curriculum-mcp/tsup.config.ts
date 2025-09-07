@@ -34,7 +34,7 @@ export default defineConfig({
     'events',
     'buffer',
     // Workspace packages (these are already built)
-    '@oaknational/mcp-moria',
+    '@oaknational/mcp-core',
     '@oaknational/mcp-histos-logger',
     '@oaknational/mcp-histos-storage',
     '@oaknational/mcp-histos-env',

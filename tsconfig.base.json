@@ -26,14 +26,8 @@
       "@oaknational/oak-curriculum-mcp/*": ["./apps/oak-curriculum-mcp/src/*"],
       "@oaknational/oak-curriculum-sdk": ["./packages/oak-curriculum-sdk/src"],
       "@oaknational/oak-curriculum-sdk/*": ["./packages/oak-curriculum-sdk/src/*"],
-      "@oaknational/mcp-moria": [
-        "./packages/core/mcp-moria/src",
-        "./ecosystem/moria/moria-mcp/src"
-      ],
-      "@oaknational/mcp-moria/*": [
-        "./packages/core/mcp-moria/src/*",
-        "./ecosystem/moria/moria-mcp/src/*"
-      ],
+      "@oaknational/mcp-core": ["./packages/core/mcp-core/src"],
+      "@oaknational/mcp-core/*": ["./packages/core/mcp-core/src/*"],
       "@oaknational/mcp-histos-env": ["./packages/libs/env/src"],
       "@oaknational/mcp-histos-env/*": ["./packages/libs/env/src/*"],
       "@oaknational/mcp-histos-logger": ["./packages/libs/logger/src"],

@@ -46,7 +46,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",
     "@notionhq/client": "^4.0.1",
-    "@oaknational/mcp-moria": "workspace:^",
+    "@oaknational/mcp-core": "workspace:^",
     "@oaknational/mcp-histos-logger": "workspace:^",
     "@oaknational/mcp-providers-node": "workspace:^",
     "dotenv": "^17.2.1",

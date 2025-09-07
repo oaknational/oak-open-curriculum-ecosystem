@@ -4,7 +4,7 @@
  */
 
 import type { ConsolaInstance } from 'consola';
-import type { Logger, JsonObject } from '@oaknational/mcp-moria';
+import type { Logger, JsonObject } from '@oaknational/mcp-core';
 import { mergeLogContext, normalizeError } from './pure-functions.js';
 
 export class ConsolaLogger implements Logger {

@@ -1,5 +1,5 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Logger } from '@oaknational/mcp-moria';
+import type { Logger } from '@oaknational/mcp-core';
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };

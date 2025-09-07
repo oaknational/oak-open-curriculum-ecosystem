@@ -4,7 +4,7 @@
  */
 
 import type { McpPropertyFilter, McpSort } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 import type { SortDirection } from './constants';
 import { validSortDirectionsArray, validPropertyTypesArray } from './constants';
 

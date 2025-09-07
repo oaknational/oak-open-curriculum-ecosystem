@@ -5,7 +5,7 @@
 
 import type { UserObjectResponse as NotionUser } from '@notionhq/client';
 import type { Resource, EmailScrubber } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 
 /**
  * Default email scrubber - redacts email addresses

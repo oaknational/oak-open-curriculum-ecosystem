@@ -175,17 +175,17 @@ Residual token set (must be eradicated from active code/docs; scan at PR time):
 
 ## 8. Risks & Mitigations
 
-| Risk                                     | Mitigation                                             | Signal                                |
-| ---------------------------------------- | ------------------------------------------------------ | ------------------------------------- |
-| Provider leakage into core               | Interface segregation; lint boundaries; contract tests | No core→provider imports; tests pass  |
-| Behaviour divergence between providers   | Shared contract test suite                             | Equal pass set across providers       |
-| Config sprawl / ambiguity                | Minimal config schema, ownership documented            | Stable minimal config footprint       |
-| Performance overhead from indirection    | Benchmark before/after; optimise only if indicated     | Acceptable latency and resource usage |
-| Ambiguous ownership                      | CODEOWNERS, package READMEs with roles                 | Clear ownership, fewer review loops   |
-| Rename fallout (`tools/tools` → runtime) | Mechanical codemod + gates; idempotency check          | Zero or minimal diffs; gates green    |
-| Residual Greek tokens post‑rename        | Add PR‑time grep gate; delete/rename directories       | Grep clean except reference doc       |
-| Curriculum app move fallout (tests/build) | Re‑link workspace (`pnpm install`); fix local paths     | Lint green; tests/build green         |
-| Moria removal breaks imports             | Introduce `mcp-core` compat exports; codemod imports   | Type‑check green after rewrite        |
+| Risk                                      | Mitigation                                             | Signal                                |
+| ----------------------------------------- | ------------------------------------------------------ | ------------------------------------- |
+| Provider leakage into core                | Interface segregation; lint boundaries; contract tests | No core→provider imports; tests pass  |
+| Behaviour divergence between providers    | Shared contract test suite                             | Equal pass set across providers       |
+| Config sprawl / ambiguity                 | Minimal config schema, ownership documented            | Stable minimal config footprint       |
+| Performance overhead from indirection     | Benchmark before/after; optimise only if indicated     | Acceptable latency and resource usage |
+| Ambiguous ownership                       | CODEOWNERS, package READMEs with roles                 | Clear ownership, fewer review loops   |
+| Rename fallout (`tools/tools` → runtime)  | Mechanical codemod + gates; idempotency check          | Zero or minimal diffs; gates green    |
+| Residual Greek tokens post‑rename         | Add PR‑time grep gate; delete/rename directories       | Grep clean except reference doc       |
+| Curriculum app move fallout (tests/build) | Re‑link workspace (`pnpm install`); fix local paths    | Lint green; tests/build green         |
+| Moria removal breaks imports              | Introduce `mcp-core` compat exports; codemod imports   | Type‑check green after rewrite        |
 
 ---
 
@@ -201,7 +201,7 @@ Report artefacts (append to Part 1 report or add a Part 2 section):
 - Barrel rationalisation notes (collisions avoided; naming clarified)
 - Export surface parity report (baseline vs post) with empty diff
 - Residual token scan report confirming only the single pointer document remains: `docs/architecture/greek-ecosystem-deprecation.md`
- - Workspace taxonomy report: lists of moved directories (apps/libs), archived tissues, and removal of `ecosystem/moria/moria-mcp` after import rewrite.
+- Workspace taxonomy report: lists of moved directories (apps/libs), archived tissues, and removal of `ecosystem/moria/moria-mcp` after import rewrite.
 
 Acceptance (Part 2):
 
@@ -214,6 +214,7 @@ Acceptance (Part 2):
 7. Export surface parity preserved (baseline vs post equal; `default` treated separately).
 8. Greek ecosystem architecture fully removed from active code/comments/imports/paths (tokens such as `psycha`, `psychon`, `chorai`, `chora`, `organa`, `moria`, `histoi`, `eidola`, `aither`, `stroma`, `phaneron`, `morphai`, `krypton`, `kanon`, `kratos`, `nomos`, `systema`). A single reference document remains explaining what it was and why it was removed (location: `docs/architecture/greek-ecosystem-deprecation.md`).
 9. Imports rewritten from `@oaknational/mcp-moria` to `@oaknational/mcp-core` compat; `ecosystem/moria/moria-mcp` removed from workspace.
+10. The top‑level `ecosystem/` directory is removed from the repository after moves and archival; only `apps/` and `packages/` remain. Any legacy materials are placed under `archive/`.
 
 Abort conditions (Part 2 execution):
 

@@ -4,7 +4,7 @@
  */
 
 import { createConsola, type ConsolaInstance, type ConsolaOptions } from 'consola';
-import type { Logger } from '@oaknational/mcp-moria';
+import type { Logger } from '@oaknational/mcp-core';
 import type { LoggerOptions } from './types.js';
 import { ConsolaLogger } from './consola-logger.js';
 import { convertLogLevel, toConsolaLevel } from './pure-functions.js';
@@ -45,4 +45,4 @@ export function createAdaptiveLogger(
 }
 
 // Export types from moria
-export type { Logger } from '@oaknational/mcp-moria';
+export type { Logger } from '@oaknational/mcp-core';

@@ -3,7 +3,7 @@
  * Uses generic stream interfaces for runtime independence
  */
 
-import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-moria';
+import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';
 import type { JsonRpcMessage, StdioTransport, StdioTransportOptions } from './types.js';
 import { MessageBuffer } from './message-buffer.js';
 import { formatMessage, parseMessage } from './message-formatter.js';

@@ -30,7 +30,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@oaknational/mcp-moria": "workspace:^"
+    "@oaknational/mcp-core": "workspace:^"
   },
   "devDependencies": {
     "pnpm": "^10.14.0",

@@ -7,7 +7,7 @@ import type {
   ToolExecutor as MorphaiToolExecutor,
   ToolDefinition as MorphaiToolDefinition,
   JsonObject,
-} from '@oaknational/mcp-moria';
+} from '@oaknational/mcp-core';
 
 /**
  * Re-export morphai patterns for backward compatibility

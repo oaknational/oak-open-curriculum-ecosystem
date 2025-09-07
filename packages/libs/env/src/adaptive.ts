@@ -12,7 +12,7 @@ import {
   extractNestedProperty,
   hasProperty,
   extractProperty,
-} from '@oaknational/mcp-moria';
+} from '@oaknational/mcp-core';
 
 /**
  * Internal type for validated environment variables
@@ -90,4 +90,4 @@ export function createAdaptiveEnvironment(gThis: unknown): EnvironmentProvider {
 }
 
 // Export types from moria
-export type { EnvironmentProvider } from '@oaknational/mcp-moria';
+export type { EnvironmentProvider } from '@oaknational/mcp-core';

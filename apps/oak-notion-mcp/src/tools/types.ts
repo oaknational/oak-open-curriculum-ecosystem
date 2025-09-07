@@ -1,5 +1,5 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { JsonObject } from '@oaknational/mcp-moria';
+import type { JsonObject } from '@oaknational/mcp-core';
 
 // Tool interface
 export interface McpTool {
