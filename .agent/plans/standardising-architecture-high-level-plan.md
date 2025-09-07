@@ -61,7 +61,7 @@ High‑Level Outcomes:
 8. Legacy architecture narrative archived with forward‑looking pointer.
 9. Workspace taxonomy renaming (mechanical): `ecosystem/{psycha,histoi,moria}` → `apps/` and `packages/{core,libs,sdks}`.
    - Central principle: remove Greek‑themed architecture and nomenclature from active code and docs; retain only a single pointer doc (`docs/architecture/greek-ecosystem-deprecation.md`).
-   - Status: apps moved (notion, curriculum); libs moved (env, logger, storage, transport); `histos-runtime-abstraction` queued for archival; `moria-mcp` queued for removal after core‑compat import switch.
+   - Status: apps moved (notion, curriculum); libs moved (env, logger, storage, transport); `histos-runtime-abstraction` archived; `moria-mcp` removed after core‑compat import switch; top‑level `ecosystem/` deleted.
 10. Internal alias scope introduced: reserve `@oaknational/*` for published packages; use `@workspace/*` for internal aliasing.
 
 Phased Shape (concise):

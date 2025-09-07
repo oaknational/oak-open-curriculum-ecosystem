@@ -26,6 +26,7 @@ Completed so far:
   - Apps: `ecosystem/psycha/oak-notion-mcp` → `apps/oak-notion-mcp` (gates PASS), `ecosystem/psycha/oak-curriculum-mcp` → `apps/oak-curriculum-mcp` (lint PASS; tests/build pending install relink).
   - Libs: `ecosystem/histoi/{histos-env,histos-logger,histos-storage,histos-transport}` → `packages/libs/{env,logger,storage,transport}` (gates PASS).
   - Orphan tissue identified for archival: `ecosystem/histoi/histos-runtime-abstraction` (not referenced).
+  - Top-level `ecosystem/` directory removed; residual logs archived under `archive/` (DONE).
 
 Primary objective emphasis:
 
@@ -202,6 +203,7 @@ Report artefacts (append to Part 1 report or add a Part 2 section):
 - Export surface parity report (baseline vs post) with empty diff
 - Residual token scan report confirming only the single pointer document remains: `docs/architecture/greek-ecosystem-deprecation.md`
 - Workspace taxonomy report: lists of moved directories (apps/libs), archived tissues, and removal of `ecosystem/moria/moria-mcp` after import rewrite.
+  - Confirmation that top-level `ecosystem/` directory has been removed; any historical assets live under `archive/`.
 
 Acceptance (Part 2):
 
@@ -336,6 +338,7 @@ Progress Journal (rolling):
 - 2025‑09‑06: Refined Notion wiring: static `createAdaptiveLogger` import; extracted `validateRuntimeConfig`; composed runtime via core factory; all gates PASS; committed.
 - 2025‑09‑06: Authored provider contracts documentation and Greek ecosystem deprecation reference; linked from package READMEs and acceptance criteria.
 - 2025‑09‑06: Mechanical move applied for Notion app → `apps/oak-notion-mcp`; configs updated; full gates PASS. Remaining Greek directories pending rename: `ecosystem/histoi/*`, `ecosystem/moria/moria-mcp`, `ecosystem/psycha/oak-curriculum-mcp`. Docs still contain legacy nomenclature and will be consolidated into the single deprecation pointer.
+‑ 2025‑09‑07: Archived `histos-runtime-abstraction`; switched imports to `@oaknational/mcp-core`; removed `ecosystem/moria/moria-mcp`; deleted top‑level `ecosystem/` directory. Full gates PASS.
 
 14. ACTION: Update documentation (core README, providers READMEs, architecture pointers).  
     REVIEW: Self‑review terminology: Chōra/Chōrai in prose; `chorai` in paths.

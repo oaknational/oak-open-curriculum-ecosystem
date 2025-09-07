@@ -46,7 +46,7 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 5. Archive `ecosystem/histoi/histos-runtime-abstraction`. (PENDING)
 6. Adopt strict import‑x hygiene after import switch (alias‑only, no parent relatives, approved subpaths). (PENDING)
 7. Greek ecosystem deprecation: reduce legacy docs to the single pointer; scan residual tokens. (PENDING)
-8. Ensure final workspace state deletes the top‑level `ecosystem/` directory; any remaining legacy materials must be moved to `archive/` prior to removal. (PENDING)
+8. Ensure final workspace state deletes the top‑level `ecosystem/` directory; any remaining legacy materials must be moved to `archive/` prior to removal. (COMPLETED)
 
 Abort if both source and target exist and differ.
 
