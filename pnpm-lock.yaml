@@ -96,96 +96,29 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.2.0)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.1)
 
-  ecosystem/histoi/histos-env:
-    dependencies:
-      '@oaknational/mcp-moria':
-        specifier: workspace:^
-        version: link:../../moria/moria-mcp
-      dotenv:
-        specifier: ^17.2.1
-        version: 17.2.1
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  ecosystem/histoi/histos-logger:
-    dependencies:
-      '@oaknational/mcp-moria':
-        specifier: workspace:^
-        version: link:../../moria/moria-mcp
-      consola:
-        specifier: ^3.2.3
-        version: 3.4.2
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  ecosystem/histoi/histos-storage:
-    dependencies:
-      '@oaknational/mcp-moria':
-        specifier: workspace:^
-        version: link:../../moria/moria-mcp
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  ecosystem/histoi/histos-transport:
-    dependencies:
-      '@oaknational/mcp-moria':
-        specifier: workspace:^
-        version: link:../../moria/moria-mcp
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  ecosystem/moria/moria-mcp:
-    devDependencies:
-      pnpm:
-        specifier: ^10.14.0
-        version: 10.14.0
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.2
-
-  ecosystem/psycha/oak-curriculum-mcp:
+  apps/oak-curriculum-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
         version: 1.17.2
-      '@oaknational/mcp-histos-env':
+      '@oaknational/mcp-core':
         specifier: workspace:*
-        version: link:../../histoi/histos-env
-      '@oaknational/mcp-histos-logger':
+        version: link:../../packages/core/mcp-core
+      '@oaknational/mcp-env':
         specifier: workspace:*
-        version: link:../../histoi/histos-logger
-      '@oaknational/mcp-histos-storage':
+        version: link:../../packages/libs/env
+      '@oaknational/mcp-logger':
         specifier: workspace:*
-        version: link:../../histoi/histos-storage
-      '@oaknational/mcp-histos-transport':
+        version: link:../../packages/libs/logger
+      '@oaknational/mcp-storage':
         specifier: workspace:*
-        version: link:../../histoi/histos-transport
-      '@oaknational/mcp-moria':
+        version: link:../../packages/libs/storage
+      '@oaknational/mcp-transport':
         specifier: workspace:*
-        version: link:../../moria/moria-mcp
+        version: link:../../packages/libs/transport
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
-        version: link:../../../packages/oak-curriculum-sdk
+        version: link:../../packages/oak-curriculum-sdk
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -212,7 +145,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.17.1)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.1)
 
-  ecosystem/psycha/oak-notion-mcp:
+  apps/oak-notion-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
@@ -220,18 +153,81 @@ importers:
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.1
-      '@oaknational/mcp-histos-logger':
+      '@oaknational/mcp-core':
         specifier: workspace:^
-        version: link:../../histoi/histos-logger
-      '@oaknational/mcp-moria':
+        version: link:../../packages/core/mcp-core
+      '@oaknational/mcp-logger':
         specifier: workspace:^
-        version: link:../../moria/moria-mcp
+        version: link:../../packages/libs/logger
+      '@oaknational/mcp-providers-node':
+        specifier: workspace:^
+        version: link:../../packages/providers/mcp-providers-node
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
       zod:
         specifier: ^4.0.15
         version: 4.0.15
+    devDependencies:
+      pnpm:
+        specifier: ^10.14.0
+        version: 10.14.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  packages/core/mcp-core: {}
+
+  packages/libs/env:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
+      dotenv:
+        specifier: ^17.2.1
+        version: 17.2.1
+    devDependencies:
+      pnpm:
+        specifier: ^10.14.0
+        version: 10.14.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  packages/libs/logger:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
+      consola:
+        specifier: ^3.2.3
+        version: 3.4.2
+    devDependencies:
+      pnpm:
+        specifier: ^10.14.0
+        version: 10.14.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  packages/libs/storage:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
+    devDependencies:
+      pnpm:
+        specifier: ^10.14.0
+        version: 10.14.0
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  packages/libs/transport:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
     devDependencies:
       pnpm:
         specifier: ^10.14.0
@@ -279,6 +275,12 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.17.1)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.1)
+
+  packages/providers/mcp-providers-node:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
 
 packages:
 

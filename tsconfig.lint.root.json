@@ -4,6 +4,11 @@
     "baseUrl": "."
   },
   "include": [
+    "apps/**/src/**/*.ts",
+    "apps/**/tests/**/*.ts",
+    "apps/**/**.test.ts",
+    "apps/**/**.spec.ts",
+    "apps/**/bin/**/*.ts",
     "ecosystem/**/src/**/*.ts",
     "ecosystem/**/tests/**/*.ts",
     "ecosystem/**/**.test.ts",
@@ -15,9 +20,5 @@
     "packages/**/**.test.ts",
     "packages/**/**.spec.ts"
   ],
-  "exclude": [
-    "**/dist/**",
-    "**/coverage/**",
-    "node_modules"
-  ]
+  "exclude": ["apps/**/dist/**", "**/dist/**", "**/coverage/**", "node_modules"]
 }

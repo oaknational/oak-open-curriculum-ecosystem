@@ -26,9 +26,9 @@ packages/oak-curriculum-sdk/src/schemas/generated/
 packages/oak-curriculum-sdk/src/validation/generated/
 
 # MCP generated tools
-ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/generated/
-ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/generation/
-ecosystem/psycha/oak-curriculum-mcp/src/chorai/generated/
+apps/oak-curriculum-mcp/src/tools/generated/
+apps/oak-curriculum-mcp/src/tools/generation/
+apps/oak-curriculum-mcp/src/test/mocks/generated/
 
 # API schema files
 **/*.api.json

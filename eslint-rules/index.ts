@@ -1,18 +1,18 @@
 /**
  * ESLint Custom Rules Index
- * 
+ *
  * Central export point for all custom ESLint rules and configurations
- * for the Moria/Histoi/Psycha biological architecture
+ * for the standardised architecture (core, libs, apps)
  */
 
 export {
-  moriaBoundaryRules,
-  moriaTestConfigRules,
-  createHistoiBoundaryRules,
-  psychaBoundaryRules,
-  psychonArchitectureRules,
-  HISTOI_TISSUES,
-  getOtherTissues,
+  coreBoundaryRules,
+  coreTestConfigRules,
+  createLibBoundaryRules,
+  appBoundaryRules,
+  appArchitectureRules,
+  LIB_PACKAGES,
+  getOtherLibs,
 } from './boundary-rules.js';
 
 // Re-export common settings for convenience

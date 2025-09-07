@@ -15,6 +15,7 @@ Summary:
 
 - Part 1: Behaviour‑preserving directory & import normalisation (conventional structure, export & boundary parity, audited atomic commit).
 - Part 2: Platform‑agnostic core & explicit provider injection (remove runtime auto‑detection, reinforce purity boundaries).
+  - Additional mandate: eradicate legacy nomenclature from active code. Mechanically move apps/libs under standard taxonomy; use `@oaknational/mcp-core`; retire obsolete workspaces; archive any orphan packages. Maintain a single deprecation pointer doc.
 
 Shared Constraints:
 
@@ -37,6 +38,9 @@ Key Outcomes:
 5. Idempotent codemod + comprehensive `refactor-report.json` (hashes, collisions, export parity, literal scan, boundary duplication flag).
 6. Single atomic, green‑gated commit.
 
+Status: Part 1 complete (2025-09-05); merged via [PR #14](https://github.com/oaknational/oak-mcp-ecosystem/pull/14).
+Part 2 in progress on `feat/standardising_architecture_part_2`: nested tools rename → runtime completed; identity 0; all gates PASS; branch pushed.
+
 High-Level Phases:
 
 1. Baseline capture (structure, exports, boundaries, literals).
@@ -51,14 +55,19 @@ High‑Level Outcomes:
 2. Providers (Node, Cloudflare) implementing contracts; selected via config (no auto‑detection).
 3. Server bootstraps construct runtime via factory and inject into tools/integrations.
 4. Strengthened purity boundaries (core cannot import providers) enforced by ESLint.
-5. Strict import hygiene with eslint-plugin-import-x: alias‑only cross‑boundary imports; `no-relative-parent-imports`; `no-internal-modules` except approved public subpaths.
+5. Strict import hygiene with eslint-plugin-import-x: inter‑workspace dependencies must use `@oaknational/*` package imports; intra‑package relative imports (including parent relatives) are allowed; avoid importing internal/private modules except approved public subpaths.
 6. Mechanical deconfliction rename: `src/tools/tools` → `src/tools/runtime` with import updates.
 7. Barrel rationalisation and naming clarity to avoid layered collisions (e.g., export runtime registry as `CoreToolRegistry`; keep schema types local).
 8. Legacy architecture narrative archived with forward‑looking pointer.
 9. Workspace taxonomy renaming (mechanical): `ecosystem/{psycha,histoi,moria}` → `apps/` and `packages/{core,libs,sdks}`.
-10. Internal alias scope introduced: reserve `@oaknational/*` for published packages; use `@workspace/*` for internal aliasing.
+   - Central principle: remove Greek‑themed architecture and nomenclature from active code and docs; retain only a single pointer doc (`docs/architecture/greek-ecosystem-deprecation.md`).
+   - Status: apps moved (Notion, Curriculum); libs moved (env, logger, storage, transport); runtime abstraction archived; legacy core removed after core switch; top‑level `ecosystem/` deleted.
+10. No internal alias scope. Reserve `@oaknational/*` for packages (published or workspaces). Do not use an `@workspace/*` alias approach.
 
 Phased Shape (concise):
+
+Current working branch for Part 2: `feat/standardising_architecture_part_2`.
+Early progress: Step 7 (tools rename) completed; proceeding with barrels and strict import hygiene prep.
 
 1. Core extraction & internal publish.
 2. Provider modules + contract tests.
@@ -68,7 +77,7 @@ Phased Shape (concise):
 6. Optional CI provider matrix.
 7. Apply nested tools rename (`src/tools/tools` → `src/tools/runtime`) and update imports.
 8. Barrel rationalisation; remove duplicated legacy boundary patterns retained from Part 1.
-9. Workspace taxonomy renaming (apps + packages/{core,libs,sdks}) and `@workspace/*` alias introduction; update configs; idempotent import rewrite.
+9. Workspace taxonomy renaming (apps + packages/{core,libs,sdks}); update configs; idempotent import rewrite. No `@workspace/*` alias.
 
 ### Workspace taxonomy renaming (mechanical)
 
@@ -79,28 +88,23 @@ Phased Shape (concise):
     - `libs/`: reusable libraries (ex‑histoi)
     - `sdks/`: public SDKs (e.g., `oak-curriculum-sdk`)
 
-- Mapping (directories only; no publish name changes unless scheduled)
-  - `ecosystem/psycha/<server>` → `apps/<server>`
-  - `ecosystem/moria/moria-mcp` → `packages/core/mcp-core`
-  - `ecosystem/histoi/histos-logger` → `packages/libs/logger`
-  - `ecosystem/histoi/histos-transport` → `packages/libs/transport`
-  - `ecosystem/histoi/histos-storage` → `packages/libs/storage`
-  - `ecosystem/histoi/histos-env` → `packages/libs/env`
-  - `ecosystem/histoi/histos-runtime-abstraction` → `packages/libs/runtime`
-  - `packages/oak-curriculum-sdk` → `packages/sdks/oak-curriculum-sdk`
+- Mapping (directories only; avoid legacy nomenclature in names):
+- legacy app directories → `apps/<server>`
+- legacy core runtime → `packages/core/mcp-core`
+- legacy libraries → `packages/libs/{logger,transport,storage,env}`
+- any legacy runtime abstraction → archived under `archive/`
+- SDKs reside under `packages/sdks/*`
 
-- Alias policy (distinct from publish scope)
-  - Reserve `@oaknational/*` for published packages only.
-  - Introduce internal alias scope `@workspace/*`:
-    - `@workspace/apps/*` → `apps/*/src/*`
-    - `@workspace/core/*` → `packages/core/*/src/*`
-    - `@workspace/libs/*` → `packages/libs/*/src/*`
-    - `@workspace/sdks/*` → `packages/sdks/*/src/*`
+- Import policy
+  - Inter‑workspace imports must use `@oaknational/*` package specifiers (workspace symlinks in dev, published in prod).
+  - Intra‑package imports may use relative paths, including parent relatives where clear.
+  - Avoid importing internal/private modules except approved public subpaths.
 
 - Config mutations
-  - `tsconfig.base.json`: add `paths` for `@workspace/*`; remove any `ecosystem/**` paths.
+  - `tsconfig.base.json`: remove any `ecosystem/**` paths; do not add `@workspace/*` aliases.
   - ESLint boundaries: replace zones `ecosystem/psycha/**` → `apps/**`, `ecosystem/histoi/**` → `packages/libs/**`, `ecosystem/moria/**` → `packages/core/**`; add `packages/sdks/**` allowances (no deps on apps).
   - Turborepo/test globs: update inputs/outputs from `ecosystem/**` to the new directories.
+  - pnpm-workspace: include `apps/*` and `packages/*`, exclude removed `ecosystem/psycha/*` entries.
 
 - Codemod
   - Moves via `git mv` per mapping (abort on collisions).
@@ -114,6 +118,8 @@ Phased Shape (concise):
 
 - Acceptance additions (Part 2)
   - Directory mapping applied; configs updated (tsconfig/eslint/turbo/test); codemod idempotent; full gates green; docs updated with taxonomy and alias guidance; no publish name changes unless explicitly scheduled.
+  - The top‑level `ecosystem/` directory is fully removed from active code after moves/archival. Only `apps/` and `packages/` remain (any historical materials live under `archive/`).
+  - Identity cleanup: `pnpm identity-check` passes (0). Allowed references only in `archive/**`, `.agent/experience/**`, `.agent/plans/**`, `.agent/refactor/**`, `.agent/roles/**`, `.claude/**`, `.vscode/**`, and `docs/architecture/greek-ecosystem-deprecation.md`.
 
 Key Risks & Mitigations:
 
@@ -124,13 +130,15 @@ Key Risks & Mitigations:
 | Config sprawl                         | Minimal schema & documented ownership               |
 | Performance overhead from indirection | Benchmark before/after runtime assembly             |
 
-Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import-x boundary rules active (alias-only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived.
+Acceptance (Part 2): Core adopted, providers injected explicitly, no detection logic, strict import-x boundary rules active (alias-only, no parent relatives, no internal modules beyond approved public subpaths), nested tools rename applied, barrels rationalised, tests green, docs updated & legacy archived. Identity cleanup gate passes with zero disallowed references.
+
+- And: imports use `@oaknational/mcp-core`; legacy workspace removed; orphan tissues archived; legacy terminology appears only in the single deprecation pointer document.
 
 ---
 
 ## Shared Quality Gates
 
-Across both parts: `pnpm -r format` → `pnpm -r type-check` → `pnpm -r lint` → `pnpm -r test` → `pnpm -r build` (order enforced). Part 1 adds export parity & legacy token eradication; Part 2 adds provider contract test suite.
+Across both parts: `pnpm -r format` → `pnpm -r type-check` → `pnpm -r lint` → `pnpm -r test` → `pnpm -r build` (order enforced). Part 2 adds provider contract test suite. Identity check runs on demand (`pnpm identity-check`) and must be zero at acceptance.
 
 ---
 

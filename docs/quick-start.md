@@ -2,7 +2,7 @@
 
 For experienced developers who want to jump straight in.
 
-> **New to our Architecture?** See our [Naming Guide](./naming.md) to understand our biological architecture with Greek nomenclature.
+> New here? See the architecture overview in `docs/architecture/README.md` and the deprecation note `docs/architecture/greek-ecosystem-deprecation.md`.
 
 ## 🤖 Working with AI Agents
 
@@ -30,26 +30,20 @@ Claude/AI Agent → MCP Protocol → Our Server → Notion API
 - **Tools**: Callable functions (`notion-search`, `notion-get-page`)
 - **Transport**: stdio (JSON-RPC over stdin/stdout)
 
-## Code Map
+## Code Map (current)
 
 ```
 src/
-├── psychon.ts        # The ensouled whole - wires everything together
-├── server.ts         # MCP server setup, handler registration
-├── chora/            # Cross-cutting fields (pervasive infrastructure)
-│   ├── stroma/       # Structural matrix (types, contracts)
-│   ├── aither/       # Divine flows (logging, events, errors, sensitive data)
-│   ├── phaneron/     # Visible manifestation (configuration)
-│   └── eidola/       # Phantoms for testing
-├── organa/           # Discrete organs (bounded business logic)
-│   ├── notion/       # Notion integration organ
-│   └── mcp/          # MCP protocol organ
-│       ├── resources/    # Resource handlers (notion://...)
-│       └── tools/        # Tool handlers (notion-search, etc.)
-└── [old structure being migrated]
+├── app/              # Application wiring and bootstrap
+├── config/           # Runtime configuration (e.g. runtime.json)
+├── integrations/     # External integrations (e.g. Notion)
+├── logging/          # Logging helpers
+├── test/             # Test utilities and mocks
+├── tools/            # MCP tools and resources
+└── types/            # Shared types
 ```
 
-> **Full Hierarchy**: See [Naming Guide](./naming.md) for the complete biological hierarchy from molecules to biosphere.
+> See `docs/architecture/README.md` for structure details and links.
 
 ## Quick Start
 
