@@ -15,7 +15,7 @@
     "test": "turbo run --continue test",
     "test:e2e": "turbo run --continue test:e2e",
     "type-check": "turbo run --continue type-check",
-    "qg": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm lint -- --fix && pnpm format && pnpm test && pnpm test:e2e",
+    "qg": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm lint -- --fix && pnpm -F @oaknational/oak-curriculum-sdk docs:all && pnpm format && pnpm test && pnpm test:e2e",
     "identity-check": "node scripts/identity-check.mjs --mode=enforce",
     "identity-report": "node scripts/identity-check.mjs --mode=report",
     "fix": "pnpm format && pnpm lint -- --fix",
