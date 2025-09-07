@@ -71,27 +71,20 @@ Run quality gates 1-5 in order after changes and before commits. Pure documentat
 
 ## Architectural Understanding
 
-First, read ALL of [the architecture](../../docs/agent-guidance/architecture.md).
+First, understand the current neutral architecture in this monorepo.
 
-### Two Complementary Models
+### Structure
 
-The architecture operates at two different scales:
+- `apps/` – runnable MCP servers
+- `packages/core/` – shared interfaces, types, utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
-#### Workspace Architecture (Package Organization)
-
-**Moria → Histoi → Psycha**
-
-- **Moria (Molecules/Atoms)** (`ecosystem/moria/`): Pure abstractions - interfaces, types, algorithms with zero dependencies
-  - _Example_: `Logger` interface, `StorageProvider` interface, pure sorting algorithms
-- **Histoi (Tissues/Matrices)** (`ecosystem/histoi/`): Runtime-adaptive connective tissues that bind organisms
-  - _Example_: Adaptive logger using consola, storage tissue using localStorage/fs
-- **Psycha (Living Organisms)** (`ecosystem/psycha/`): Complete applications
-  - _Example_: `oak-notion-mcp` server, `github-mcp` server
+Legacy Greek terminology is deprecated in active code and docs. Historical context is kept only in `docs/architecture/greek-ecosystem-deprecation.md`.
 
 ## Remember
 
 1. Read GO.md every 3rd task for grounding
 2. When in doubt, make it simpler
-3. Think in scales: organelles (functions) → cells (modules) → chorai (pervasive infrastructure including morphai) → organa (discrete business logic) → psychon (living whole)
+3. Think in layers: functions → modules → packages (`core`, `libs`, `apps`)
 4. You can call on the sub-agents at any time, the code reviewer and architecture reviewer, and the monorepo config auditor.
-5. When you finish a major piece of work, record your experiences and insights in .agent/experience/, not technical docs but subjective comprehension and qualia-analogues
+5. When you finish a major piece of work, record your experiences and insights in docs/archive/experience/ (historical notes only)

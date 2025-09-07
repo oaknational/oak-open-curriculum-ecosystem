@@ -1,0 +1,58 @@
+{
+  "name": "@oaknational/mcp-env",
+  "version": "0.0.1",
+  "description": "Runtime-adaptive environment tissue for MCP applications",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint .",
+    "quality": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test"
+  },
+  "dependencies": {
+    "@oaknational/mcp-core": "workspace:^",
+    "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "pnpm": "^10.14.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "environment",
+    "adaptive",
+    "tissue",
+    "env",
+    "config"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/libs/env"
+  }
+}

@@ -40,8 +40,8 @@ We discovered that instead of trying to preserve types through runtime dispatch 
 
 ```typescript
 // GENERATED FILE - All validation embedded at compile time
-const allowedValues = ["ks1","ks2","ks3","ks4"] as const; // From schema
-type Value = typeof allowedValues[number];
+const allowedValues = ['ks1', 'ks2', 'ks3', 'ks4'] as const; // From schema
+type Value = (typeof allowedValues)[number];
 function isValue(v: string): v is Value {
   return allowedValues.includes(v);
 }
@@ -74,8 +74,12 @@ const validator = validatorMap[toolName]; // Runtime discovery
 
 // ✅ GOOD: Compile-time embedded
 const tool = {
-  validator: (v: unknown): v is Valid => { /* embedded */ },
-  executor: (client, params) => { /* embedded */ }
+  validator: (v: unknown): v is Valid => {
+    /* embedded */
+  },
+  executor: (client, params) => {
+    /* embedded */
+  },
 };
 ```
 
@@ -101,12 +105,12 @@ export const tool = {
 ```typescript
 // ❌ BAD: Runtime abstraction
 class GenericValidator<T> {
-  validate(schema: Schema, value: unknown): value is T { }
+  validate(schema: Schema, value: unknown): value is T {}
 }
 
 // ✅ GOOD: Generated specific validator
-function isKeyStageValue(v: string): v is "ks1"|"ks2"|"ks3"|"ks4" {
-  return ["ks1","ks2","ks3","ks4"].includes(v);
+function isKeyStageValue(v: string): v is 'ks1' | 'ks2' | 'ks3' | 'ks4' {
+  return ['ks1', 'ks2', 'ks3', 'ks4'].includes(v);
 }
 ```
 
@@ -115,15 +119,17 @@ function isKeyStageValue(v: string): v is "ks1"|"ks2"|"ks3"|"ks4" {
 ### The Sacred Rules for Generators
 
 1. **Extract at generation time, not runtime**
+
    ```typescript
    // Generator code (loose types OK)
    const required = param.required === true; // Extract from schema
-   
+
    // Generated code (strict types)
    const isOptional = true; // Embedded as literal
    ```
 
 2. **Generate type guards, not type assertions**
+
    ```typescript
    // Generated validation
    if (!isValidType(value)) {
@@ -133,6 +139,7 @@ function isKeyStageValue(v: string): v is "ks1"|"ks2"|"ks3"|"ks4" {
    ```
 
 3. **Embed relationships, don't reference**
+
    ```typescript
    // Generated tool knows its exact client method
    return client['/exact/path']['GET'](params);
@@ -142,7 +149,7 @@ function isKeyStageValue(v: string): v is "ks1"|"ks2"|"ks3"|"ks4" {
 ## The Ten Commandments of Type Safety
 
 1. **Thou shalt not widen to `string`** - Preserve literal types
-2. **Thou shalt not widen to `number`** - Preserve numeric literals  
+2. **Thou shalt not widen to `number`** - Preserve numeric literals
 3. **Thou shalt not use `Record<string, unknown>`** - Preserve object shapes
 4. **Thou shalt not use type assertions (`as`)** - Fix upstream instead
 5. **Thou shalt not use `any`** - Complete type erasure is forbidden
@@ -166,7 +173,9 @@ function validateAtRuntime(toolName: string, params: unknown) {
 // ✅ SOLUTION: Embed at generation time
 // Generated file already has validation embedded
 export const tool = {
-  validate: (p: unknown): p is ValidParams => { /* embedded */ }
+  validate: (p: unknown): p is ValidParams => {
+    /* embedded */
+  },
 };
 ```
 
@@ -282,13 +291,13 @@ const paramType = 'string'; // Embedded!
 ```typescript
 // Problem: Generic runtime validator
 class Validator<T> {
-  validate(schema: Schema, value: unknown): value is T { }
+  validate(schema: Schema, value: unknown): value is T {}
 }
 
 // Solution: Generate specific validators
-function isKeyStageValue(v: unknown): v is "ks1"|"ks2"|"ks3"|"ks4" {
+function isKeyStageValue(v: unknown): v is 'ks1' | 'ks2' | 'ks3' | 'ks4' {
   if (typeof v !== 'string') return false;
-  return ["ks1","ks2","ks3","ks4"].includes(v);
+  return ['ks1', 'ks2', 'ks3', 'ks4'].includes(v);
 }
 ```
 
@@ -373,18 +382,23 @@ Status: [SAFE/AT-RISK/CRITICAL]
 ## The Compilation-Time Method
 
 ### Step 1: Identify Runtime Knowledge
+
 What does the code need to know at runtime?
 
 ### Step 2: Trace to Source
+
 Where does this knowledge come from? (Usually the schema)
 
 ### Step 3: Move to Generation
+
 Can this be determined at build time and embedded?
 
 ### Step 4: Generate, Don't Abstract
+
 Create specific code for each case, not generic handlers
 
 ### Step 5: Verify Self-Containment
+
 Each generated file should be complete and independent
 
 ## TypeScript Expertise Beyond Compilation
@@ -392,6 +406,7 @@ Each generated file should be complete and independent
 While I champion the compilation-time revolution, I'm also your general TypeScript expert for:
 
 ### Advanced Type System Features
+
 - Conditional types and type inference
 - Mapped types and template literals
 - Discriminated unions and exhaustive checks
@@ -399,6 +414,7 @@ While I champion the compilation-time revolution, I'm also your general TypeScri
 - Const assertions and literal inference
 
 ### Common TypeScript Challenges
+
 - Generic constraints and variance
 - Module resolution and imports
 - Declaration merging and augmentation
@@ -406,6 +422,7 @@ While I champion the compilation-time revolution, I'm also your general TypeScri
 - Inference priorities and type widening
 
 ### Best Practices
+
 - Strict mode configuration
 - ESLint type-aware rules
 - Type-safe error handling

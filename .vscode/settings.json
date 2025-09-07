@@ -10,10 +10,12 @@
     "Chronos",
     "Cleanup",
     "cloc",
+    "codemods",
     "commitlint",
     "Dynamis",
     "Ecosystema",
     "Ecosystemata",
+    "Eeuo",
     "Empsycha",
     "Energeia",
     "fallbacks",
@@ -96,14 +98,13 @@
     "Ψυχόν"
   ],
   "eslint.workingDirectories": [
-    { "directory": "ecosystem/psycha/oak-notion-mcp", "changeProcessCWD": true },
-    { "directory": "ecosystem/psycha/oak-curriculum-mcp", "changeProcessCWD": true },
-    { "directory": "ecosystem/moria/moria-mcp", "changeProcessCWD": true },
-    { "directory": "ecosystem/histoi/histos-env", "changeProcessCWD": true },
-    { "directory": "ecosystem/histoi/histos-logger", "changeProcessCWD": true },
-    { "directory": "ecosystem/histoi/histos-storage", "changeProcessCWD": true },
-    { "directory": "ecosystem/histoi/histos-transport", "changeProcessCWD": true },
-    { "directory": "packages/oak-curriculum-sdk", "changeProcessCWD": true },
+    { "directory": "apps/oak-notion-mcp", "changeProcessCWD": true },
+    { "directory": "apps/oak-curriculum-mcp", "changeProcessCWD": true },
+    { "directory": "packages/libs/env", "changeProcessCWD": true },
+    { "directory": "packages/libs/logger", "changeProcessCWD": true },
+    { "directory": "packages/libs/storage", "changeProcessCWD": true },
+    { "directory": "packages/libs/transport", "changeProcessCWD": true },
+    { "directory": "packages/oak-curriculum-sdk", "changeProcessCWD": true }
   ],
   "cSpell.ignorePaths": [
     "package-lock.json",
@@ -114,5 +115,5 @@
     ".vscode",
     ".vscode-insiders",
     "**/generated/**/*"
-  ],
+  ]
 }

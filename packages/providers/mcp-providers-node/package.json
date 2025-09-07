@@ -1,0 +1,29 @@
+{
+  "name": "@oaknational/mcp-providers-node",
+  "version": "0.0.0-development",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "development": "./src/index.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "clean": "rimraf dist .tsup",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@oaknational/mcp-core": "workspace:^"
+  }
+}

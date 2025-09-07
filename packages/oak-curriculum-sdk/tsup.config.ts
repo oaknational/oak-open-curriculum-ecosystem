@@ -36,7 +36,7 @@ export default defineConfig({
   platform: 'neutral',
   external: [
     // Keep all dependencies external for SDK
-    '@oaknational/mcp-moria',
+    '@oaknational/mcp-core',
     'zod',
   ],
   treeshake: true,

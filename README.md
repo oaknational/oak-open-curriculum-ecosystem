@@ -7,59 +7,15 @@ A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org)
 
 > 🗺️ **First time here?** Check our [Architecture Map](docs/ARCHITECTURE_MAP.md) for a visual guide to the codebase!
 
-## 🏛️ Architecture: Ancient Greek-Inspired Biological Design
+## 🧭 Architecture
 
-This project uses Ancient Greek (inspired) biological and metaphysical terms to create clear conceptual boundaries, these live under the `ecosystem` directory.
+This monorepo uses a conventional, intent-revealing structure:
 
-Most code will fit into the below categories, but where that doesn't make sense, we will use the `packages` directory and more conventional naming.
+- `apps/` – runnable applications (MCP servers)
+- `packages/core/` – shared interfaces, types, and utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
-There are three main ecosystem layers:
-
-- Moria (plural: molecules), pure functions
-- Histoi (plural: tissues/matrices), runtime-adaptive libraries, e.g. logging, storage, transport
-- Psycha (plural: ensouled beings/organisms), complete applications (should really be Empsycha, but that is a mouthful)
-
-| Greek Term | English | Purpose | Packages |
-|------------|---------|---------|----------|
-| **Moria** (Μόρια) | Molecules/Atoms | Pure abstractions, zero dependencies | `@oaknational/mcp-moria` |
-| **Histoi** (Ἱστοί) | Tissues/Matrices | Transplantable runtime-adaptive libraries | `@oaknational/mcp-histos-logger`<br>`@oaknational/mcp-histos-storage`<br>`@oaknational/mcp-histos-env`<br>`@oaknational/mcp-histos-transport` |
-| **Psycha** (Ψυχά) | Ensouled beings | Complete applications | `@oaknational/oak-notion-mcp` |
-
-Within each Psychon organism there are
-
-- Chora/Chorai (singular/plural: fields), pervasive, cross-cutting infrastructure, e.g. configuration management
-- Organon/Organa (singular/plural: organs), discrete business logic, e.g. a Notion SDK
-- Psychon (singular: soul), application wiring, bringing it all together
-
-| Greek Term | English | Purpose | Example Location |
-|------------|---------|---------|----------|
-| **Chorai** (χώραι) | Fields | Pervasive infrastructure | [`ecosystem/psycha/oak-notion-mcp/src/chorai/`] |
-| **Organa** (ὄργανα) | Organs | Discrete business logic | [`ecosystem/psycha/oak-notion-mcp/src/organa/`] |
-| **Psychon** (ψυχόν) | Soul | Integration & wiring | [`ecosystem/psycha/oak-notion-mcp/src/psychon/`] |
-
-There are (currently) four categories of chorai/fields
-
-- aither/aitheres (air/flows) - Transforms that modify data flows, e.g. PII scrubbing
-- eidolon/eidola (phantoms) - Test doubles, mocks, fakes, stubs etc
-- phaneron/phanera (the visible) - Configuration (not secrets)
-- stroma/stromata (foundations) - Types, schemas, contracts
-
-we are likely to also need
-
-- krypton/krypta (hidden) - Secrets, keys, tokens
-
-and possibly some combination of
-
-- nomos/nomoi (governance/policy) - Access control policy
-- kratos/krate (power/control) - Identity and access control
-
-### Why Greek Terms?
-
-1. **Clarity** - Avoids overloaded English terms like "service" or "component"
-2. **Precision** - Each term has specific philosophical meaning
-3. **Memorability** - Unique names create stronger mental models
-
-> 📚 Learn more: [Architecture Overview](docs/architecture-overview.md) | [Complete Naming Guide](docs/naming.md)
+Legacy Greek terminology has been deprecated from active code and docs. For historical context only, see `docs/architecture/greek-ecosystem-deprecation.md`.
 
 ### Architectural Decision Records (ADRs)
 
