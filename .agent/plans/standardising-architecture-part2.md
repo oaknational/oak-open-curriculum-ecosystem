@@ -338,7 +338,7 @@ Progress Journal (rolling):
 - 2025‑09‑06: Refined Notion wiring: static `createAdaptiveLogger` import; extracted `validateRuntimeConfig`; composed runtime via core factory; all gates PASS; committed.
 - 2025‑09‑06: Authored provider contracts documentation and Greek ecosystem deprecation reference; linked from package READMEs and acceptance criteria.
 - 2025‑09‑06: Mechanical move applied for Notion app → `apps/oak-notion-mcp`; configs updated; full gates PASS. Remaining Greek directories pending rename: `ecosystem/histoi/*`, `ecosystem/moria/moria-mcp`, `ecosystem/psycha/oak-curriculum-mcp`. Docs still contain legacy nomenclature and will be consolidated into the single deprecation pointer.
-‑ 2025‑09‑07: Archived `histos-runtime-abstraction`; switched imports to `@oaknational/mcp-core`; removed `ecosystem/moria/moria-mcp`; deleted top‑level `ecosystem/` directory. Full gates PASS.
+  ‑ 2025‑09‑07: Archived `histos-runtime-abstraction`; switched imports to `@oaknational/mcp-core`; removed `ecosystem/moria/moria-mcp`; deleted top‑level `ecosystem/` directory. Full gates PASS.
 
 14. ACTION: Update documentation (core README, providers READMEs, architecture pointers).  
     REVIEW: Self‑review terminology: Chōra/Chōrai in prose; `chorai` in paths.

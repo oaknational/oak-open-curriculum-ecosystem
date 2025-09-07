@@ -1,33 +1,21 @@
-# Psychon (Ψυχόν) - The Ensouled Whole
+# Application Startup Orchestrator
 
-**Etymology**: From Greek ψυχή (psychḗ) meaning "soul", "life", or "breath of life"
-
-**Philosophical Heritage**: In Aristotelian philosophy, the psyche is what distinguishes the living from the non-living - it's the form that gives life to matter, the animating principle.
-
-## Why Psychon?
-
-We chose Psychon for our composition root because it:
-
-- **Brings Life**: Transforms inert components into a living system
-- **Provides Soul**: The animating force that makes organs work together
-- **Creates Unity**: From many parts, one living whole emerges
-- **Enables Consciousness**: The system becomes aware and responsive
+This directory contains the application wiring and startup logic for the Notion MCP server.
 
 ## What Happens Here
 
-The psychon.ts file is where:
+The startup index is where:
 
-- All chora fields are initialized
-- All organs are created and connected
-- Dependencies are wired together
-- The organism awakens to life
+- All dependencies are created and connected
+- Configuration is loaded and validated
+- The MCP server is initialised
 
 ## Architectural Principles
 
 1. **Composition Root**: ALL wiring happens here, nowhere else
-2. **No Business Logic**: The psychon only connects, never computes
+2. **No Business Logic**: Only connects, never computes
 3. **Single Source**: One file that shows how everything connects
-4. **Life Cycle**: Manages birth (startup) and death (shutdown)
+4. **Lifecycle**: Manages startup and shutdown
 
 ## The Soul Nature
 
@@ -71,13 +59,13 @@ This is why we don't distribute the wiring throughout the codebase - the soul is
 
 ```typescript
 // Main entry - what external code uses
-import { startServer } from '@psychon';
+import { main as startServer } from '../../index';
 
 // The wiring - how everything connects
 // wiring.ts shows:
 // - How to create loggers
 // - How to get configuration
-// - How to wire organs together
+// - How to wire modules together
 // - How to inject dependencies
 ```
 
@@ -86,11 +74,11 @@ import { startServer } from '@psychon';
 ```typescript
 // In wiring.ts, you'll see:
 export async function createWiredDependencies() {
-  // 1. Create infrastructure (chora)
+  // 1. Create infrastructure
   const logger = createConsoleLogger({ level });
   const config = getNotionConfig();
 
-  // 2. Create organs with dependencies
+  // 2. Create operations with dependencies
   const notionOperations = createNotionOperations();
   const notionClient = new Client({ auth: config.apiKey });
 
@@ -124,4 +112,4 @@ await startServer({
 });
 ```
 
-💡 **Remember**: Psychon is pure wiring - no business logic! It's where the organism comes to life through proper connection of all its parts.
+💡 **Remember**: This directory contains wiring only—no business logic.

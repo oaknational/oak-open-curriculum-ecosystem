@@ -1,5 +1,5 @@
 /**
- * This is the startup logger for the MCP server, to track issues that happen before the proper logger is initialised.
+ * This is the startup logger for the MCP server, to track issues that happen before the proper logger is initialized.
  */
 
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -55,9 +55,9 @@ export function createStartupLogger(
 export function getRootDir(): string {
   const currentFileUrl = import.meta.url;
   const currentFilePath = fileURLToPath(currentFileUrl);
-  // Go up from src/psychon to package root, then to repo root
-  // ecosystem/psycha/oak-curriculum-mcp/src/psychon -> repo root (5 levels up)
-  return dirname(dirname(dirname(dirname(dirname(currentFilePath)))));
+  // Go up from apps/oak-curriculum-mcp/src/app to repo root (4 levels up)
+  // apps/oak-curriculum-mcp/src/app/startup.ts -> repo root
+  return dirname(dirname(dirname(dirname(currentFilePath))));
 }
 
 /**

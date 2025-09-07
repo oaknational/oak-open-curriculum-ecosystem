@@ -1,8 +1,8 @@
 /**
- * Psychon - The soul that brings the organism to life
+ * Startup orchestrator
  *
  * This is the main orchestration layer that wires all components together.
- * The psychon can import from any organ or chora, but only via public APIs.
+ * It may import from any module via public APIs only.
  */
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -14,11 +14,11 @@ import { createStartupLogger, defaultStartupLoggerDeps } from './startup';
 export async function startOrganism(): Promise<void> {
   const log = createStartupLogger(defaultStartupLoggerDeps);
 
-  log('[PSYCHON] Awakening the organism...');
+  log('[STARTUP] Awakening the server...');
 
   try {
     // Import and run wiring
-    log('[PSYCHON] Wiring components...');
+    log('[STARTUP] Wiring components...');
     const { setupAndStartServer } = await import('./wiring');
 
     const transport = new StdioServerTransport();
@@ -28,9 +28,9 @@ export async function startOrganism(): Promise<void> {
       log,
     });
 
-    log('[PSYCHON] Organism is fully alive and conscious');
+    log('[STARTUP] Server is running');
   } catch (error) {
-    log('[PSYCHON ERROR] Failed to bring organism to life: ' + String(error), true);
+    log('[STARTUP ERROR] Failed to start server: ' + String(error), true);
     throw error;
   }
 }
