@@ -109,9 +109,13 @@ describe('createStartupLogger', () => {
 
     // Then: Console.log is still called, error is logged
     expect(consoleMock.log).toHaveBeenCalledWith(expect.stringContaining('[INFO] Test message'));
-    expect(consoleMock.error).toHaveBeenCalledWith(
-      'Failed to write startup log file',
-      expect.any(Error),
-    );
+    // Accept either signature: (msg, Error) or a single combined message
+    const calls = (consoleMock.error as unknown as { mock: { calls: unknown[][] } }).mock.calls;
+    expect(calls.length).toBeGreaterThan(0);
+    const firstCall = calls[0];
+    expect(String(firstCall[0])).toContain('Failed to write startup log file');
+    if (firstCall.length > 1) {
+      expect(firstCall[1]).toBeInstanceOf(Error);
+    }
   });
 });

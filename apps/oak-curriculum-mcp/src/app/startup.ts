@@ -5,6 +5,7 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { findRepoRoot } from '@oaknational/mcp-env';
 
 export interface StartupLoggerDependencies {
   console: Pick<Console, 'log' | 'error'>;
@@ -40,11 +41,14 @@ export function createStartupLogger(
     // Try to write to a file for persistence
     try {
       const logDir = deps.path.join(deps.rootDir, '.logs', 'oak-curriculum-mcp-startup');
+      deps.console.log(`Attempting to write startup log to: ${logDir}`);
       deps.fs.mkdirSync(logDir, { recursive: true });
       const logFile = deps.path.join(logDir, 'startup.log');
       deps.fs.writeFileSync(logFile, logMessage, { flag: 'a' });
     } catch (error: unknown) {
-      deps.console.error(`Failed to write startup log file`, error);
+      deps.console.error(
+        `Failed to write startup log file: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   };
 }
@@ -53,11 +57,8 @@ export function createStartupLogger(
  * Get the root directory for the repository
  */
 export function getRootDir(): string {
-  const currentFileUrl = import.meta.url;
-  const currentFilePath = fileURLToPath(currentFileUrl);
-  // Go up from apps/oak-curriculum-mcp/src/app to repo root (4 levels up)
-  // apps/oak-curriculum-mcp/src/app/startup.ts -> repo root
-  return dirname(dirname(dirname(dirname(currentFilePath))));
+  const thisDir = dirname(fileURLToPath(import.meta.url));
+  return findRepoRoot(thisDir);
 }
 
 /**

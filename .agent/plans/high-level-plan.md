@@ -2,13 +2,14 @@
 
 Scope: strategic overview. Details are in the individual plan documents.
 
-1. Architectural Refinements Plan — Status: In Progress
-   - Plan: `.agent/plans/architectural-refinements-plan.md`
+1. Architectural Refinements Plan — Status: Done
+   - Plan: Completed — see PR #16
    - Acceptance: DI-only wiring; docs updated; gates green
 
-2. Remote Hosting Support Plan (Streaming HTTP) — Status: Planned
+2. Remote Hosting Support Plan (Streaming HTTP) — Status: In Progress
+   - Plan: `.agent/plans/remote-mcp-enablement-plan.md`
    - Scope: enable Streaming HTTP (not SSE) for MCP servers; guidance for Vercel/Node hosting
-   - Acceptance: streaming framing defined and implemented; example deploy documented
+   - Acceptance: streaming framing defined and implemented; example Vercel deploy existent and documented and available for demos
 
 3. Semantic Search Application Plan — Status: Planned
    - Scope: lexical+semantic search app; design a Search SDK that also generates search MCP tools

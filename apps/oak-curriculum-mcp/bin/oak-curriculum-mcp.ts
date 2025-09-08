@@ -1,9 +1,9 @@
 #!/usr/bin/env tsx
-import { config } from 'dotenv';
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
+import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {
     return JSON.stringify(value);
@@ -12,15 +12,13 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-// Detect if running from source (bin/) or built (dist/bin/)
-// Source: apps/oak-curriculum-mcp/bin -> 3 levels up
-// Built: apps/oak-curriculum-mcp/dist/bin -> 4 levels up
-const isBuilt = __dirname.includes('/dist/bin');
-const rootDir = resolve(__dirname, isBuilt ? '../../../../..' : '../../../..');
+const thisDir = dirname(fileURLToPath(import.meta.url));
+// Resolve repo root reliably
+const rootDir = findRepoRoot(thisDir);
 
 // Create logger with ROOT directory for logs
 // Override console to only write to stderr to keep stdout clean for MCP protocol
+console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
 const log = createStartupLogger({
   ...defaultStartupLoggerDeps,
   rootDir: rootDir, // Override to use repo root
@@ -33,26 +31,19 @@ const log = createStartupLogger({
 log('[START-MCP] Starting oak-curriculum-mcp...');
 log(`[START-MCP] Root directory: ${rootDir}`);
 
-// Load environment variables from root .env file
-const envPath = resolve(rootDir, '.env');
-log(`[START-MCP] Loading .env from: ${envPath}`);
-
-// Suppress dotenv's debug output to keep stdout clean for MCP protocol
-const originalConsoleLog = console.log;
-const noop = (): void => {
-  /* intentionally no-op to keep MCP stdout clean */
-};
-console.log = noop;
-const result = config({ path: envPath });
-console.log = originalConsoleLog;
-
-if (result.error) {
-  log(`[START-MCP ERROR] Failed to load .env: ${result.error.message}`, true);
-} else {
-  log(`[START-MCP] Loaded .env successfully`);
-  log(`[START-MCP] OAK_API_KEY present: ${(!!process.env.OAK_API_KEY).toString()}`);
-  log(`[START-MCP] LOG_LEVEL: ${process.env.LOG_LEVEL ?? 'not set'}`);
+// Load environment variables from repo root (.env.local then .env) if needed
+const loaded = loadRootEnv({
+  requiredKeys: ['OAK_API_KEY'],
+  startDir: rootDir,
+  env: { ...process.env },
+});
+if (loaded.loaded && loaded.path) {
+  log(`[START-MCP] Loaded env from: ${loaded.path}`);
 }
+const hasApiKey = typeof process.env.OAK_API_KEY === 'string' && process.env.OAK_API_KEY.length > 0;
+const logLevelValue = typeof process.env.LOG_LEVEL === 'string' ? process.env.LOG_LEVEL : 'not set';
+log(`[START-MCP] OAK_API_KEY present: ${hasApiKey ? 'true' : 'false'}`);
+log(`[START-MCP] LOG_LEVEL: ${logLevelValue}`);
 
 // Now import and start the server
 log('[START-MCP] Importing server module...');

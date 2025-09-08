@@ -16,6 +16,7 @@ export type { McpOrgan } from './tools/index.js';
 
 // Main entry point when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {
+  console.debug('Creating startup logger from curriculum mcp index.ts...');
   const startupLog = createStartupLogger(defaultStartupLoggerDeps);
   startupLog('[STARTUP] Oak Curriculum MCP server starting...');
 
