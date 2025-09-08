@@ -1,5 +1,5 @@
 /**
- * Types for the STDIO transport tissue
+ * Types for the STDIO transport library
  */
 
 import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';

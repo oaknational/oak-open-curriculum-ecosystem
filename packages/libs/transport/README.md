@@ -153,7 +153,7 @@ This library serves as a reference implementation for reusable transport modules
 
 ## Contributing
 
-This package is part of the Oak MCP ecosystem. See the main repository for contribution guidelines.
+This package is part of the Oak MCP workspace. See the main repository for contribution guidelines.
 
 ## License
 

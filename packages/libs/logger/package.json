@@ -1,7 +1,7 @@
 {
   "name": "@oaknational/mcp-logger",
   "version": "0.1.0",
-  "description": "Adaptive logging tissue for multi-runtime MCP applications",
+  "description": "Adaptive logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -47,7 +47,6 @@
   "keywords": [
     "mcp",
     "logging",
-    "tissue",
     "adaptive",
     "multi-runtime"
   ],

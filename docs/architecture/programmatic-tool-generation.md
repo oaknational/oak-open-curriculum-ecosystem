@@ -13,6 +13,7 @@ This document describes the architecture for programmatically generating MCP too
 ### 1. Single Source of Truth
 
 The SDK is the **sole authoritative source** for all API-related information:
+
 - API endpoints and paths
 - Parameter definitions and types
 - Response schemas
@@ -22,6 +23,7 @@ The SDK is the **sole authoritative source** for all API-related information:
 ### 2. Zero Manual API Data
 
 The MCP must contain **NO hardcoded API structures**:
+
 - ❌ No manual path definitions
 - ❌ No manual parameter schemas
 - ❌ No manual type definitions
@@ -34,6 +36,7 @@ When the API changes and the SDK is updated, the MCP tools must automatically re
 ### 4. Generation-Time Extraction
 
 **ALL metadata extraction and constant generation happens at build/generation time**:
+
 - The OpenAPI schema is processed once during SDK build
 - All runtime constants are pre-computed and written as TypeScript code
 - Runtime code uses pre-generated constants with zero processing
@@ -48,7 +51,7 @@ graph TD
     C -->|Imports| D[MCP Tool Generator]
     D -->|Generates| E[MCP Tools]
     F[Metadata Registry] -->|Decorates| E
-    
+
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style C fill:#9f9,stroke:#333,stroke-width:2px
     style E fill:#99f,stroke:#333,stroke-width:2px
@@ -75,7 +78,7 @@ function extractOperations(schema: OpenAPI3) {
           operationId: operation.operationId,
           summary: operation.summary,
           description: operation.description,
-          parameters: operation.parameters || []
+          parameters: operation.parameters || [],
         });
       }
     }
@@ -101,20 +104,20 @@ The SDK provides pre-generated constants and utilities:
 export {
   // Raw OpenAPI schema (with 'as const')
   schema,
-  
+
   // Validation namespace
   validation: {
     validateRequest(path, method, args),
     validateResponse(path, method, status, data),
   },
-  
+
   // Tool generation namespace (pre-generated constants)
   toolGeneration: {
     PATH_OPERATIONS,      // Pre-generated at build time
     PARAM_TYPE_MAP,       // Pre-generated at build time
     parsePathTemplate,    // Runtime utility function
   },
-  
+
   // Constants (pre-generated at build time)
   KEY_STAGES,
   SUBJECTS,
@@ -130,7 +133,7 @@ import { toolGeneration } from '@oaknational/oak-curriculum-sdk';
 
 function generateAllTools() {
   const tools = [];
-  
+
   // Generate from SDK's operation list
   for (const operation of toolGeneration.PATH_OPERATIONS) {
     const tool = {
@@ -139,10 +142,10 @@ function generateAllTools() {
       inputSchema: generateSchema(operation.parameters),
       // Generated from SDK data only
     };
-    
+
     tools.push(tool);
   }
-  
+
   return tools;
 }
 ```
@@ -154,7 +157,7 @@ Metadata provides **only decorative enhancements**, keyed by stable identifiers:
 ```typescript
 // CORRECT: Keyed by operationId (stable)
 const TOOL_METADATA = {
-  'getLessonTranscript': {
+  getLessonTranscript: {
     description: 'Get lesson video transcript with timestamps',
     examples: ['Get transcript for "adding-fractions-2"'],
     category: 'content',
@@ -165,9 +168,10 @@ const TOOL_METADATA = {
 
 // WRONG: Keyed by path (can change)
 const BAD_METADATA = {
-  '/lessons/{lesson}/transcript': { // ❌ Hardcoded path!
+  '/lessons/{lesson}/transcript': {
+    // ❌ Hardcoded path!
     // This breaks automatic adaptation
-  }
+  },
 };
 ```
 
@@ -178,23 +182,19 @@ const BAD_METADATA = {
 export async function handleToolCall(toolName: string, args: unknown) {
   // Map tool to operation
   const operation = toolNameToOperation(toolName);
-  
+
   // Validate using SDK
-  const validated = validation.validateRequest(
-    operation.path,
-    operation.method,
-    args
-  );
-  
+  const validated = validation.validateRequest(operation.path, operation.method, args);
+
   // Execute API call
   const response = await executeOperation(validated);
-  
+
   // Validate response
   return validation.validateResponse(
     operation.path,
     operation.method,
     response.status,
-    response.data
+    response.data,
   );
 }
 ```
@@ -219,21 +219,25 @@ apps/oak-curriculum-mcp/
 ## Benefits
 
 ### 1. Automatic API Adaptation
+
 - API changes flow through SDK automatically
 - No manual updates needed in MCP
 - Guaranteed consistency with API
 
 ### 2. Reduced Maintenance
+
 - No duplicate API definitions to maintain
 - Single source of truth (SDK)
 - Fewer places for bugs to hide
 
 ### 3. Type Safety
+
 - Full TypeScript support from SDK
 - Compile-time type checking
 - Runtime validation via Zod
 
 ### 4. Scalability
+
 - Add new API endpoints automatically
 - Remove deprecated endpoints automatically
 - Handle API versioning through SDK
@@ -246,9 +250,9 @@ apps/oak-curriculum-mcp/
 // NEVER DO THIS
 const TOOLS = {
   'oak-get-lesson': {
-    path: '/lessons/{lesson}',  // Hardcoded!
-    params: ['lesson'],         // Manual!
-  }
+    path: '/lessons/{lesson}', // Hardcoded!
+    params: ['lesson'], // Manual!
+  },
 };
 ```
 
@@ -257,7 +261,7 @@ const TOOLS = {
 ```typescript
 // NEVER DO THIS
 interface LessonParams {
-  lesson: string;  // Duplicating SDK types!
+  lesson: string; // Duplicating SDK types!
 }
 ```
 
@@ -266,7 +270,8 @@ interface LessonParams {
 ```typescript
 // NEVER DO THIS
 function validateLesson(lesson: string) {
-  if (!lesson.match(/^[a-z0-9-]+$/)) {  // Manual validation!
+  if (!lesson.match(/^[a-z0-9-]+$/)) {
+    // Manual validation!
     throw new Error('Invalid lesson');
   }
 }
@@ -278,21 +283,14 @@ function validateLesson(lesson: string) {
 
 ```typescript
 // ALWAYS DO THIS
-import { 
-  KEY_STAGES,
-  SUBJECTS,
-  validation,
-  toolGeneration 
-} from '@oaknational/oak-curriculum-sdk';
+import { KEY_STAGES, SUBJECTS, validation, toolGeneration } from '@oaknational/oak-curriculum-sdk';
 ```
 
 ### ✅ Generate from SDK Data
 
 ```typescript
 // ALWAYS DO THIS
-const tools = toolGeneration.PATH_OPERATIONS.map(op => 
-  generateToolFromOperation(op)
-);
+const tools = toolGeneration.PATH_OPERATIONS.map((op) => generateToolFromOperation(op));
 ```
 
 ### ✅ Validate with SDK
@@ -308,11 +306,13 @@ if (!result.ok) {
 ## Migration Path
 
 ### Current State (Incorrect)
+
 - Metadata registry contains hardcoded paths
 - Manual validation functions
 - Duplicate constant definitions
 
 ### Target State (Correct)
+
 1. Remove all hardcoded paths from metadata
 2. Key metadata by operationId
 3. Import all constants from SDK
@@ -320,6 +320,7 @@ if (!result.ok) {
 5. Generate tools programmatically
 
 ### Migration Steps
+
 1. Wait for SDK Zod validators implementation
 2. Refactor metadata registry structure
 3. Implement tool generation script
@@ -329,16 +330,19 @@ if (!result.ok) {
 ## Testing Strategy
 
 ### Unit Tests
+
 - Test metadata decoration logic
 - Test tool name generation
 - Test schema transformation
 
 ### Integration Tests
+
 - Test tool generation from SDK
 - Test runtime validation
 - Test API execution
 
 ### Adaptation Tests
+
 - Simulate API changes
 - Verify automatic tool updates
 - Ensure backward compatibility

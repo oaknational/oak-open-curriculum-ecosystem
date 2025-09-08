@@ -1,12 +1,12 @@
 /**
  * Entry point - delegates to the application wiring layer
  *
- * This file remains minimal and only bootstraps the organism.
+ * This file remains minimal and only bootstraps the server.
  * All orchestration happens in the application wiring.
  */
 
 import { config } from 'dotenv';
-import { startOrganism } from './app';
+import { startServer } from './app';
 
 // Load environment variables from .env file
 // This must happen before any other imports that depend on process.env
@@ -15,7 +15,7 @@ config();
 
 // Application entry point - minimal delegation
 export async function main(): Promise<void> {
-  await startOrganism();
+  await startServer();
 }
 
 // Only run if this is the main module

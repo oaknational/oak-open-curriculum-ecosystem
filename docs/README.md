@@ -17,7 +17,7 @@
 ### Architecture
 
 - [High Level Architecture](architecture/high-level-architecture.md) - Detailed system design, layers, and components
-- [Tissue and Organ Interfaces](architecture/tissue-and-organ-interfaces.md) - Multi-scale interface patterns
+- [Module Interface Patterns](architecture/README.md) - Multi-scale interface patterns
 - [Architecture Decision Records](architecture/architectural-decisions/) - All architectural decisions
 
 ### Development

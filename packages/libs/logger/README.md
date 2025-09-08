@@ -2,7 +2,7 @@
 
 ## Overview
 
-An adaptive logging tissue that provides structured logging across different runtime environments using Consola as the underlying engine.
+An adaptive logging library that provides structured logging across different runtime environments using Consola as the underlying engine.
 
 ## Features
 
@@ -195,7 +195,7 @@ The logger automatically adapts to different environments:
 
 ## Contributing
 
-This tissue is part of the Oak MCP ecosystem. See the main repository for contribution guidelines.
+This library is part of the Oak MCP workspace. See the main repository for contribution guidelines.
 
 ## License
 

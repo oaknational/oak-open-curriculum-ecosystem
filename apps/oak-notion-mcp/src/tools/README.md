@@ -2,7 +2,7 @@
 
 **You're in the Model Context Protocol (MCP) server implementation directory.**
 
-This organ handles all MCP protocol concerns - tools, resources, and server setup. It's a self-contained unit that exposes Notion functionality through the MCP interface.
+This module handles all MCP protocol concerns - tools, resources, and server setup. It's a self-contained unit that exposes Notion functionality through the MCP interface.
 
 ## 🗺️ Developer Quick Reference
 
@@ -15,7 +15,7 @@ This organ handles all MCP protocol concerns - tools, resources, and server setu
 
 ### Architecture Overview
 
-```
+```text
 tools/
 ├── tools/                 # MCP tools (search, query, etc.)
 │   ├── definitions/       # Tool metadata and descriptions

@@ -2,11 +2,12 @@
 
 **Status**: Accepted  
 **Date**: 2025-08-12  
-**Decision Makers**: Development Team  
+**Decision Makers**: Development Team
 
 ## Context
 
 The Oak Curriculum MCP server needs to provide tools that wrap the Oak Curriculum API. These tools require:
+
 - API endpoint definitions
 - Parameter schemas
 - Response types
@@ -29,6 +30,7 @@ All API-related information must be imported from the SDK, which is automaticall
 ### What is Prohibited ❌
 
 1. **No hardcoded API paths**
+
    ```typescript
    // PROHIBITED
    const TOOL_METADATA = {
@@ -37,17 +39,20 @@ All API-related information must be imported from the SDK, which is automaticall
    ```
 
 2. **No manual parameter definitions**
+
    ```typescript
    // PROHIBITED
    const params = {
-     lesson: { type: 'string', pattern: '^[a-z0-9-]+$' }  // ❌ Manual schema
+     lesson: { type: 'string', pattern: '^[a-z0-9-]+$' }, // ❌ Manual schema
    };
    ```
 
 3. **No duplicate type definitions**
+
    ```typescript
    // PROHIBITED
-   interface LessonParams {  // ❌ Duplicating SDK types
+   interface LessonParams {
+     // ❌ Duplicating SDK types
      lesson: string;
    }
    ```
@@ -55,7 +60,8 @@ All API-related information must be imported from the SDK, which is automaticall
 4. **No manual validation logic**
    ```typescript
    // PROHIBITED
-   function validateKeyStage(value: string) {  // ❌ Manual validation
+   function validateKeyStage(value: string) {
+     // ❌ Manual validation
      return ['ks1', 'ks2', 'ks3', 'ks4'].includes(value);
    }
    ```
@@ -63,19 +69,22 @@ All API-related information must be imported from the SDK, which is automaticall
 ### What is Allowed ✅
 
 1. **Decorative metadata only**
+
    ```typescript
    // ALLOWED
    const TOOL_METADATA = {
-     'getLessonTranscript': {  // ✅ Keyed by operationId
+     getLessonTranscript: {
+       // ✅ Keyed by operationId
        description: 'Enhanced human-friendly description',
        examples: ['Example usage'],
        category: 'content',
-       priority: 'high'
-     }
+       priority: 'high',
+     },
    };
    ```
 
 2. **Import from SDK**
+
    ```typescript
    // ALLOWED
    import { KEY_STAGES, SUBJECTS, validation } from '@oaknational/oak-curriculum-sdk';
@@ -114,16 +123,19 @@ All API-related information must be imported from the SDK, which is automaticall
 ## Implementation
 
 ### Phase 1: Clean Up (Immediate)
+
 - Remove hardcoded paths from metadata registry
 - Delete manual validation functions
 - Remove duplicate constant definitions
 
 ### Phase 2: Wait for SDK (Blocked)
+
 - SDK team implements required exports
 - SDK provides validation namespace
 - SDK provides tool generation helpers
 
 ### Phase 3: Implement Generation (After SDK)
+
 - Create build-time generation script
 - Refactor metadata to use operationIds
 - Implement runtime validation using SDK
@@ -131,6 +143,7 @@ All API-related information must be imported from the SDK, which is automaticall
 ## Validation
 
 We will know this decision is successful when:
+
 1. MCP has zero hardcoded API paths
 2. All API data comes from SDK imports
 3. API changes require zero MCP code changes
@@ -139,16 +152,19 @@ We will know this decision is successful when:
 ## Alternatives Considered
 
 ### Alternative 1: Maintain Manual Definitions
+
 - **Pros**: Full control, easier debugging
 - **Cons**: High maintenance, drift risk, duplication
 - **Rejected**: Maintenance burden outweighs benefits
 
 ### Alternative 2: Hybrid Approach
+
 - **Pros**: Some automation, some control
 - **Cons**: Complex, unclear boundaries
 - **Rejected**: Partial automation still requires maintenance
 
 ### Alternative 3: Direct OpenAPI Consumption
+
 - **Pros**: Skip SDK dependency
 - **Cons**: Duplicate SDK's work, complex parsing
 - **Rejected**: SDK already solves this problem

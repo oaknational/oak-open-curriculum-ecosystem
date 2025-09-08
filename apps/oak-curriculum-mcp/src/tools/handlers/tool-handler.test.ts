@@ -5,7 +5,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
-import { handleToolCall, _resetClient } from './tool-handler.js';
+import { createHandleToolCall } from './tool-handler.js';
 
 // Mock the SDK
 vi.mock('@oaknational/oak-curriculum-sdk', () => ({
@@ -51,10 +51,6 @@ import {
 describe('handleToolCall', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset cached client
-    _resetClient();
-    // Set up environment variable for tests
-    process.env.OAK_API_KEY = 'test-api-key';
   });
 
   describe('successful tool execution', () => {
@@ -75,6 +71,8 @@ describe('handleToolCall', () => {
       };
 
       // When: Execute tool
+      const mockClient = {} as never;
+      const handleToolCall = createHandleToolCall(mockClient);
       const result = await handleToolCall(request);
 
       // Then: Returns formatted MCP result
@@ -110,6 +108,8 @@ describe('handleToolCall', () => {
       };
 
       // When/Then: Should throw McpError with MethodNotFound
+      const mockClient = {} as never;
+      const handleToolCall = createHandleToolCall(mockClient);
       const result = await handleToolCall(request);
       expect(result).toHaveProperty('isError', true);
       expect(result).toHaveProperty('content');
@@ -138,6 +138,8 @@ describe('handleToolCall', () => {
         },
       };
 
+      const mockClient = {} as never;
+      const handleToolCall = createHandleToolCall(mockClient);
       const result = await handleToolCall(request);
       expect(result).toHaveProperty('isError', true);
       const text = (result.content[0] as { type: string; text?: string }).text ?? '';
@@ -162,6 +164,8 @@ describe('handleToolCall', () => {
         },
       };
 
+      const mockClient = {} as never;
+      const handleToolCall = createHandleToolCall(mockClient);
       const result = await handleToolCall(request);
       expect(result).toHaveProperty('isError', true);
       const text = (result.content[0] as { type: string; text?: string }).text ?? '';
@@ -183,6 +187,8 @@ describe('handleToolCall', () => {
         },
       };
 
+      const mockClient = {} as never;
+      const handleToolCall = createHandleToolCall(mockClient);
       const result = await handleToolCall(request);
       expect(result).toHaveProperty('isError', true);
       const text = (result.content[0] as { type: string; text?: string }).text ?? '';
@@ -190,24 +196,5 @@ describe('handleToolCall', () => {
     });
   });
 
-  describe('missing API key', () => {
-    it('should return MCP error result when API key is not set', async () => {
-      // Given: No API key
-      delete process.env.OAK_API_KEY;
-      vi.mocked(isToolName).mockReturnValue(true);
-
-      const request: CallToolRequest = {
-        method: 'tools/call',
-        params: {
-          name: 'oak-get-subjects',
-          arguments: {},
-        },
-      };
-
-      const result = await handleToolCall(request);
-      expect(result).toHaveProperty('isError', true);
-      const text = (result.content[0] as { type: string; text?: string }).text ?? '';
-      expect(text).toContain('OAK_API_KEY environment variable is not set');
-    });
-  });
+  // No env-based tests needed; client is injected
 });

@@ -1,8 +1,8 @@
 /**
- * Log level configuration for all organisms
+ * Log level configuration for all servers/apps
  *
  * This module provides a single source of truth for log levels
- * across the entire ecosystem. All types and type guards are
+ * across the entire workspace. All types and type guards are
  * derived from the master data structure.
  */
 
@@ -37,7 +37,7 @@ export const ENABLE_DEBUG_LOGGING_KEY = 'ENABLE_DEBUG_LOGGING' as const;
 
 /**
  * Base logging environment interface
- * Use this to ensure consistent logging configuration across organisms
+ * Use this to ensure consistent logging configuration across servers/apps
  */
 export interface BaseLoggingEnvironment {
   [LOG_LEVEL_KEY]: LogLevel;

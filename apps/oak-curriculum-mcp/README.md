@@ -10,43 +10,21 @@ This application follows the standard structure:
 - Tools in `src/tools/`
 - Integrations in `src/integrations/`
 
-## Key Architectural Innovation - Direct SDK Integration
+## Architecture Highlights
 
-**CRITICAL**: This MCP server achieves full ADR compliance through **direct SDK delegation**:
+### Dependency Injection (DI)
 
-1. **No Manual API Mapping**: The handler uses enriched tools generated at build time
-2. **Automatic API Updates**: When the API changes, we only need to:
-   - Rebuild the SDK (which fetches new OpenAPI schema)
-   - Regenerate enriched tools (`pnpm exec tsx scripts/generate-enriched-tools.ts`)
-   - That's it! No code changes required
+- Runtime is composed centrally in `src/app/wiring.ts` using `@oaknational/mcp-core.createRuntime` with Node adapters.
+- The Oak Curriculum SDK client is constructed from `OAK_API_KEY` and injected into the tools module via `createMcpToolsModule({ client })`.
+- Tool handling uses a factory `createHandleToolCall(client)` to ensure all execution goes through the injected client.
 
-The flow is completely automatic:
+Benefits: explicit composition, testability (mock client), and clear ownership of dependencies.
 
-```
-API Change → SDK Rebuild → Enriched Tools Generation → MCP Server Works
-```
+### Compile-time SDK Tool Generation
 
-This is achieved through:
-
-- **ADR-029**: No manual API data structures - all from SDK
-- **ADR-030**: SDK as single source of truth - we import SDK types directly
-- **ADR-031**: Generation at build time - enriched tools combine SDK operations with decorations
-
-### How It Works
-
-1. **Build Time**:
-   - SDK generates operations from OpenAPI schema
-   - Our script combines these with decorative metadata
-   - Creates `enriched-tools.ts` with all 26 operations
-
-2. **Runtime**:
-   - Handler receives MCP tool name
-   - Finds enriched tool by name
-   - Maps operationId to SDK method name
-   - Calls SDK directly with parameters
-   - Returns SDK response
-
-No intermediate layers, no manual mapping, everything flows from the API schema.
+- The `@oaknational/oak-curriculum-sdk` generates MCP tool metadata and validators at compile time from the OpenAPI schema.
+- This server lists tools from the SDK’s generated `MCP_TOOLS`, and delegates execution via `executeToolCall` with the injected client.
+- No runtime schema fetching and no manual mapping layers.
 
 ## Tools
 
@@ -91,6 +69,11 @@ Add to your Claude Desktop configuration:
   }
 }
 ```
+
+## Testing
+
+- Tests avoid network calls by mocking the SDK client and injecting it into the handler factory.
+- See `src/tools/handlers/tool-handler.test.ts` for examples.
 
 ## Development
 

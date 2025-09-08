@@ -1,7 +1,7 @@
 {
   "name": "@oaknational/mcp-storage",
   "version": "0.1.0",
-  "description": "Adaptive storage tissue for multi-runtime MCP applications",
+  "description": "Adaptive storage library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
