@@ -27,7 +27,7 @@ pnpm type-check && pnpm lint && pnpm test && pnpm build
 - Apps: `apps/*` (servers and wiring)
 - Core: `packages/core/mcp-core`
 - Libs: `packages/libs/*`
-- Providers: `packages/providers/*`
+- Runtime Adapters: `packages/runtime-adapters/*`
 
 5. Identity check (legacy names):
 

@@ -12,9 +12,14 @@ This document explains how providers integrate with `@oaknational/mcp-core`, how
 
 ```ts
 import { createRuntime } from '@oaknational/mcp-core';
-import { nodeProviders } from '@oaknational/mcp-providers-node';
+import { createNodeClock } from '@oaknational/mcp-providers-node';
+import { createInMemoryStorage } from '@oaknational/mcp-providers-node';
 
-const runtime = createRuntime(nodeProviders);
+const runtime = createRuntime({
+  logger: /* bridge your app logger to CoreLogger shape */,
+  clock: createNodeClock(),
+  storage: createInMemoryStorage(),
+});
 // Pass runtime to app wiring and tool registration
 ```
 

@@ -21,7 +21,7 @@ Legacy Greek terminology has been deprecated from active code and docs. For hist
 
 Key architectural decisions are documented as ADRs. [View all ADRs →](docs/architecture/architectural-decisions/)
 
-## Features (specific to Notion, needs moving)
+## Features (Notion example)
 
 - 🔍 **Search** across your Notion workspace
 - 📊 **List and query** databases with filters and sorting
@@ -30,7 +30,7 @@ Key architectural decisions are documented as ADRs. [View all ADRs →](docs/arc
 - 🔒 **Privacy-first** - Automatic PII scrubbing, read-only access
 - 🚀 **High performance** - TypeScript, ESM-only, tree-shakeable
 
-## Installation & Setup (specific to Notion, needs moving, also the packages are not published yet)
+## Installation & Setup (Notion example; packages not published yet)
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ npm install -g oak-notion-mcp
 npm add -D oak-notion-mcp
 ```
 
-### Configure Claude Desktop (specific to Notion, needs moving)
+### Configure Claude Desktop (Notion example)
 
 Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
 
@@ -81,7 +81,7 @@ Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claud
 }
 ```
 
-### Configure Claude Code (specific to Notion, needs moving)
+### Configure Claude Code (Notion example)
 
 ```bash
 # Add the server
@@ -91,7 +91,7 @@ claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mc
 claude mcp list
 ```
 
-## Usage Examples (specific to Notion, needs moving)
+## Usage Examples (Notion example)
 
 Once configured, you can ask Claude:
 
@@ -140,6 +140,12 @@ pnpm analyze      # Run all analysis tools
 ```
 
 If you want to deal with automatically fixable linting issues, run `pnpm lint -- --fix` in the root of the monorepo, or `pnpm lint --fix` in a workspace.
+
+### Dependency Injection and Runtime Adapters
+
+- Apps compose a `CoreRuntime` using `@oaknational/mcp-core` and inject dependencies into servers/handlers.
+- Runtime adapters live under `packages/runtime-adapters/` (e.g., Node today; Workers planned in a separate plan).
+- Curriculum MCP integrates with the compile‑time generated SDK tools and injects an SDK client for execution.
 
 ### Making the Most of Agentic AI Assistants
 

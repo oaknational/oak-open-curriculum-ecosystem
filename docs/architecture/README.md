@@ -17,6 +17,7 @@
   - `packages/sdks/` – public SDKs (future growth)
 - Boundaries enforced by ESLint rules under `eslint-rules/`
 - Provider injection replaces runtime auto‑detection
+- Apps compose a `CoreRuntime` and inject dependencies (DI) into servers and tools
 - Provider system overview: see [Provider System](./provider-system.md)
 - Onboarding guide: see [Onboarding](../onboarding.md)
 
@@ -28,7 +29,7 @@
 
 ### Implementation Guides
 
-- [Programmatic Tool Generation](./programmatic-tool-generation.md) - MCP tool generation from SDK
+- [Programmatic Tool Generation](./programmatic-tool-generation.md) - MCP tool generation from SDK (compile‑time)
 
 ### Architectural Decisions
 

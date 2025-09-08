@@ -1,6 +1,6 @@
 # Architectural Refinements Plan (Deferred)
 
-Status: Executed (Notion app DI exemplar complete; docs and import policy updated). Remaining: doc cross-links, provider naming decision, Workers POC.
+Status: Executed (Notion + Curriculum app DI complete; docs and import policy updated). Remaining: Workers provider POC (deferred) and a small DI note in curriculum app README.
 
 ## Goals
 
@@ -33,12 +33,14 @@ Adopt Option A from `workspace-structure-options.md`:
 ## Progress
 
 - Notion app DI exemplar implemented: runtime composed centrally and injected into server/tool handlers; no behaviour change; tests unchanged.
+- Curriculum app DI implemented: runtime composed in `apps/oak-curriculum-mcp/src/app/wiring.ts`, SDK client injected via DI, tool handler refactored to a factory, tools module accepts injected client; tests updated; all quality gates pass; changes committed and pushed.
 - Import policy enforced across workspace; docs reflect policy; ESLint boundaries green.
 - Docs added/updated:
   - `docs/architecture/provider-system.md` (provider overview)
   - `docs/onboarding.md` (quick start and links)
   - `docs/architecture/README.md` updated with Option A layout and Rules & Relationships; ADR added.
   - `docs/architecture/architectural-decisions/041-workspace-structure-option-a.md` present.
+- Provider naming decided: `packages/providers/` → `packages/runtime-adapters/` (see ADR‑042). References updated across docs.
 - Placement verification done: `oak-curriculum-sdk` rehomed to `packages/sdks/oak-curriculum-sdk`.
 - Quality gates from repo root all PASS: format, type-check, lint, test, build, identity-check.
 
@@ -64,23 +66,17 @@ Adopt Option A from `workspace-structure-options.md`:
 
 ## Remaining Next Steps (updated)
 
-1. Architecture cross-links (docs)
-   - Ensure `docs/architecture/README.md` explicitly links to `provider-system.md` and `onboarding.md` (Onboarding already references provider-system; add back-links for completeness).
-   - Bound: 10–15 min.
-
-2. Provider folder naming decision
-   - Decide whether to keep `providers/` or adopt an alternative (`platforms/`, `runtimes/`, `adapters/`), document outcome, update references if changed.
-   - Bound: 15–30 min (docs-only if unchanged).
-
-3. Workers provider POC (deferred)
+1. Workers provider POC (deferred)
    - Track in `serverless-hosting-plan.md`; validate pure web APIs and surface for Workers; add contract tests.
    - Bound: separate POC.
 
-4. Optional: extend DI to Oak Curriculum MCP server
-   - Compose `CoreRuntime` in `apps/oak-curriculum-mcp` wiring; inject runtime+logger and SDK client (replace env-driven lazy client) into tool handling.
-   - Bound: 2–4 hours including tests (no behaviour change).
+2. Tiny docs follow-up (optional)
+   - Add a short DI note to `apps/oak-curriculum-mcp/README.md` indicating runtime and client injection points.
+   - Bound: 5–10 min.
 
 ## Curriculum MCP DI Steps (detailed)
+
+(Completed; retained here for traceability)
 
 1. Add runtime composition (wiring)
    - In `apps/oak-curriculum-mcp/src/app/wiring.ts`, compose `CoreRuntime` using `@oaknational/mcp-core.createRuntime` with node providers (logger bridge, clock, storage).
