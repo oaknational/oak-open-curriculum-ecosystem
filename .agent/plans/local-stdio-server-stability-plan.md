@@ -9,11 +9,17 @@ Restore and harden the local STDIO server (`apps/oak-curriculum-mcp`) so that:
 - Logs are consistently written under `/.logs/...` (not `apps/.logs/...`).
 - Parity between exposed MCP tools and SDK `MCP_TOOLS` is enforced by tests.
 - Regressions in env loading or tool listing are caught by CI.
+- The local curriculum mcp server works as expected in a client such as Cursor, and displays the tools in the tool list or a count of the tools.
 
 ## Non-goals
 
 - Remote/HTTP transport or Vercel integration (covered by `remote-mcp-enablement-plan.md`).
 - Replacing runtime logging implementation beyond fixing root resolution and placement.
+
+## Current State
+
+- Logs are not being written to the correct directory.
+- The tool list in Cursor still read 0 tools
 
 ## Acceptance criteria
 
@@ -44,15 +50,15 @@ Restore and harden the local STDIO server (`apps/oak-curriculum-mcp`) so that:
 
 ## Tasks
 
-1) Add shared utilities to `packages/libs/env`:
+1. Add shared utilities to `packages/libs/env`:
    - `repo-root.ts`: `findRepoRoot`, `loadRootEnv` (using dotenv), exports from `index.ts`.
    - Tests: `repo-root.unit.test.ts`, `load-root-env.integration.test.ts`.
-2) Update server to use shared utilities:
+2. Update server to use shared utilities:
    - `bin/oak-curriculum-mcp.ts`: replace local dotenv/root logic with `loadRootEnv`/`findRepoRoot`.
    - `src/app/startup.ts`: use `findRepoRoot` for default `rootDir`.
    - `src/app/file-reporter.ts`: use `findRepoRoot` for log path.
-3) Add tool-list parity test under `apps/oak-curriculum-mcp/e2e-tests/`.
-4) Run quality gates; iterate until green.
+3. Add tool-list parity test under `apps/oak-curriculum-mcp/e2e-tests/`.
+4. Run quality gates; iterate until green.
 
 ## Rollback/mitigations
 

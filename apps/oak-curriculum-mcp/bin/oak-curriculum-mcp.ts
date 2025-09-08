@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { dirname, resolve } from 'node:path';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
@@ -12,16 +12,13 @@ function safeStringify(value: unknown): string {
   }
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-// Detect if running from source (bin/) or built (dist/bin/)
-// Source: apps/oak-curriculum-mcp/bin -> 3 levels up
-// Built: apps/oak-curriculum-mcp/dist/bin -> 4 levels up
-const isBuilt = __dirname.includes('/dist/bin');
+const thisDir = dirname(fileURLToPath(import.meta.url));
 // Resolve repo root reliably
-const rootDir = findRepoRoot(resolve(__dirname, isBuilt ? '../../../../..' : '../../../..'));
+const rootDir = findRepoRoot(thisDir);
 
 // Create logger with ROOT directory for logs
 // Override console to only write to stderr to keep stdout clean for MCP protocol
+console.debug('Creating startup logger from bin/oak-curriculum-mcp.ts...');
 const log = createStartupLogger({
   ...defaultStartupLoggerDeps,
   rootDir: rootDir, // Override to use repo root

@@ -4,12 +4,19 @@ import { config as dotenvConfig } from 'dotenv';
 
 /** Find the monorepo root by walking up until a directory containing pnpm-workspace.yaml or .git is found */
 export function findRepoRoot(startDir: string): string {
+  console.debug('Finding repo root from: ', startDir);
   let current = startDir;
   for (;;) {
     const workspace = join(current, 'pnpm-workspace.yaml');
     const gitDir = join(current, '.git');
-    if (existsSync(workspace) || existsSync(gitDir)) return current;
+    if (existsSync(workspace) || existsSync(gitDir)) {
+      console.debug('Found repo root: ', current);
+      return current;
+    }
     const parent = dirname(current);
+    if (parent === '/') {
+      throw new Error('Could not find repo root. Iterated to `/`');
+    }
     if (parent === current) return current;
     current = parent;
   }

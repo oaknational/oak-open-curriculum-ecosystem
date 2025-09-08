@@ -5,6 +5,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { findRepoRoot } from '@oaknational/mcp-env';
 
 /**
@@ -28,7 +29,8 @@ export function appendToLogFile(logFilePath: string, message: string): void {
  * Get the root directory for the repository
  */
 export function getRepoRoot(): string {
-  return findRepoRoot(process.cwd());
+  const thisDir = dirname(fileURLToPath(import.meta.url));
+  return findRepoRoot(thisDir);
 }
 
 /**
