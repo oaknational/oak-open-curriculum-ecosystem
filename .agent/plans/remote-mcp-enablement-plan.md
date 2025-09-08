@@ -10,6 +10,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 - App directory: `apps/oak-curriculum-mcp-remote-poc`; package name: `@oaknational/curriculum-mcp-remote-poc`.
 - OAuth‑first authorization aligned with MCP Basic Authorization (2025‑03‑26) and Vercel guidance; provide a dev fallback static token for local/testing.
 - Preserve compile‑time SDK tool generation: remote server consumes the generated MCP tools from the Curriculum SDK; no bespoke tool definitions in the remote app.
+- Expose OAuth Protected Resource Metadata endpoint (/.well-known/oauth-protected-resource) describing authorization servers and resource URL, per MCP Authorization.
 
 ## Non-goals
 
@@ -28,6 +29,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - Dev fallback: allow a static Bearer token for local/dev only (env‑gated), documented and covered by tests.
   - Optional: Vercel authentication in front of the function for team‑only access (Oak Vercel accounts), with notes on MCP client header behaviour and trade‑offs.
 - ListTools parity: `list_tools` from the remote endpoint exactly matches the generated tools exported by the Curriculum SDK (source of truth), and a test asserts equality.
+- OAuth Protected Resource Metadata endpoint available at `/.well-known/oauth-protected-resource` and returns issuer URLs; OPTIONS preflight handled for CORS.
 - Local testability documented (inspector flow) mirroring Vercel’s guidance.
 
 ## Design outline
@@ -86,6 +88,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
    - Provide a dev fallback: static Bearer token (env‑gated) for local/testing; ensure this is disabled in production.
    - Optional: document how to place Vercel authentication in front of the function for team‑only access.
      REVIEW: Self‑analyze simplicity and security trade‑offs vs spec recommendations; keep implementation canonical.
+   - Add OAuth Protected Resource Metadata endpoint at `/.well-known/oauth-protected-resource` (GET + OPTIONS); in Express, implement a small handler equivalent to `protectedResourceHandler`.
 
 9. ACTION: Minimize duplication via shared workspace
    - Create shared package (e.g., `packages/curriculum-mcp-server-core`) exporting:

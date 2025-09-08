@@ -5,7 +5,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { findRepoRoot } from '@oaknational/mcp-env';
 
 /**
  * Simple file reporter that appends logs to a file
@@ -28,11 +28,7 @@ export function appendToLogFile(logFilePath: string, message: string): void {
  * Get the root directory for the repository
  */
 export function getRepoRoot(): string {
-  const currentFileUrl = import.meta.url;
-  const currentFilePath = fileURLToPath(currentFileUrl);
-  // Go up from apps/oak-curriculum-mcp/src/app to repo root (4 levels up)
-  // Current: apps/oak-curriculum-mcp/src/app/file-reporter.ts
-  return dirname(dirname(dirname(dirname(currentFilePath))));
+  return findRepoRoot(process.cwd());
 }
 
 /**

@@ -4,7 +4,7 @@
 
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { findRepoRoot } from '@oaknational/mcp-env';
 
 export interface StartupLoggerDependencies {
   console: Pick<Console, 'log' | 'error'>;
@@ -53,11 +53,7 @@ export function createStartupLogger(
  * Get the root directory for the repository
  */
 export function getRootDir(): string {
-  const currentFileUrl = import.meta.url;
-  const currentFilePath = fileURLToPath(currentFileUrl);
-  // Go up from apps/oak-curriculum-mcp/src/app to repo root (4 levels up)
-  // apps/oak-curriculum-mcp/src/app/startup.ts -> repo root
-  return dirname(dirname(dirname(dirname(currentFilePath))));
+  return findRepoRoot(process.cwd());
 }
 
 /**
