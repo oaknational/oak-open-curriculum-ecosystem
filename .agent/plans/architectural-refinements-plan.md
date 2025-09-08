@@ -1,6 +1,6 @@
 # Architectural Refinements Plan (Deferred)
 
-Status: Deferred from Part 2; execute after import hygiene and docs polish.
+Status: Executed (Notion app DI exemplar complete; docs and import policy updated). Remaining: doc cross-links, provider naming decision, Workers POC.
 
 ## Goals
 
@@ -16,7 +16,7 @@ Adopt Option A from `workspace-structure-options.md`:
 - `apps/` – runnable MCP servers
 - `packages/core/` – core contracts/utilities (`@oaknational/mcp-core`)
 - `packages/libs/` – reusable libraries
-- `packages/providers/` – platform providers (node, workers)
+- `packages/runtime-adapters/` – runtime adapters (node, workers)
 - `packages/sdks/` – client SDKs
 
 ## Scope
@@ -29,6 +29,18 @@ Adopt Option A from `workspace-structure-options.md`:
 - Provider system overview (structure, contracts, DI usage): `docs/architecture/provider-system.md`
 - Onboarding guide (links: quick start, architecture, providers): `docs/onboarding.md`
 - Plan updated with open questions and decision placeholders (this file)
+
+## Progress
+
+- Notion app DI exemplar implemented: runtime composed centrally and injected into server/tool handlers; no behaviour change; tests unchanged.
+- Import policy enforced across workspace; docs reflect policy; ESLint boundaries green.
+- Docs added/updated:
+  - `docs/architecture/provider-system.md` (provider overview)
+  - `docs/onboarding.md` (quick start and links)
+  - `docs/architecture/README.md` updated with Option A layout and Rules & Relationships; ADR added.
+  - `docs/architecture/architectural-decisions/041-workspace-structure-option-a.md` present.
+- Placement verification done: `oak-curriculum-sdk` rehomed to `packages/sdks/oak-curriculum-sdk`.
+- Quality gates from repo root all PASS: format, type-check, lint, test, build, identity-check.
 
 ## Non-Goals
 
@@ -50,34 +62,48 @@ Adopt Option A from `workspace-structure-options.md`:
   - Define ownership and dependency arrows; publish boundaries and examples.
 - Onboarding docs: what must a new dev read first, and in what order? Keep it fast and accurate.
 
-## Remaining Next Steps (time‑boxed, minimal)
+## Remaining Next Steps (updated)
 
-1. Architecture index update (docs)
-   - Add Option A layout and “Rules & Relationships” to `docs/architecture/README.md`.
-   - Cross‑link `docs/architecture/provider-system.md` and `docs/onboarding.md`.
-   - Bound: 60–90 min.
+1. Architecture cross-links (docs)
+   - Ensure `docs/architecture/README.md` explicitly links to `provider-system.md` and `onboarding.md` (Onboarding already references provider-system; add back-links for completeness).
+   - Bound: 10–15 min.
 
-2. Placement verification (structure)
-   - Confirm `packages/providers/` and `packages/sdks/` contain current providers/SDKs.
-   - Completed: `oak-curriculum-sdk` rehomed to `packages/sdks/oak-curriculum-sdk`; workspace and tsconfig updated.
-   - Bound: 15–30 min.
+2. Provider folder naming decision
+   - Decide whether to keep `providers/` or adopt an alternative (`platforms/`, `runtimes/`, `adapters/`), document outcome, update references if changed.
+   - Bound: 15–30 min (docs-only if unchanged).
 
-3. DI exemplar (code‑light)
-   - In Notion app: centralise `createRuntime(nodeProviders)` in a single wiring point and thread runtime via params (no behaviour change).
-   - Bound: 60–90 min.
+3. Workers provider POC (deferred)
+   - Track in `serverless-hosting-plan.md`; validate pure web APIs and surface for Workers; add contract tests.
+   - Bound: separate POC.
 
-4. Import policy confirmation (lint/docs)
-   - Re‑assert package‑only inter‑workspace imports (`@oaknational/*`); allow intra‑package relatives; avoid private internals. No `@workspace/*` alias.
-   - Ensure ESLint config comments and docs reflect policy. Status: rules enforced and applied across apps/libs; docs updated.
-   - Bound: 30 min.
+4. Optional: extend DI to Oak Curriculum MCP server
+   - Compose `CoreRuntime` in `apps/oak-curriculum-mcp` wiring; inject runtime+logger and SDK client (replace env-driven lazy client) into tool handling.
+   - Bound: 2–4 hours including tests (no behaviour change).
 
-5. Decision record
-   - Add ADR: “ADR‑041 Workspace Structure (Option A) – adopted”. Short, links to options doc.
-   - Bound: 30–45 min.
+## Curriculum MCP DI Steps (detailed)
 
-6. Gates and push
-   - Run format → type‑check → lint → test → build → identity‑check (0); commit and push.
-   - Bound: 10–20 min.
+1. Add runtime composition (wiring)
+   - In `apps/oak-curriculum-mcp/src/app/wiring.ts`, compose `CoreRuntime` using `@oaknational/mcp-core.createRuntime` with node providers (logger bridge, clock, storage).
+   - Expose `runtime` alongside `logger` and `config` in `WiredDependencies`.
+
+2. Inject SDK client via DI
+   - Replace env-driven lazy client in `tools/handlers/tool-handler.ts` with an injected client factory or client instance.
+   - Update `createMcpOrgan()` and `handleToolCall()` to accept the injected client (and logger/runtime if desired for logging).
+   - Source `apiKey` from `wireDependencies(config)` and construct the client (or a factory) there.
+
+3. Thread dependencies end-to-end
+   - Update `wireDependencies` to return `{ logger, runtime, mcpOrgan, config }` where `mcpOrgan` is constructed with injected client.
+   - Ensure `server.ts` uses the injected organ and does not perform any env lookups.
+
+4. Tests (no network)
+   - Provide a test client stub/factory in unit/integration tests; remove any reliance on process env.
+   - Add a small DI test verifying that injected client is used and calls are delegated.
+
+5. Docs
+   - Add a short DI note to `apps/oak-curriculum-mcp/README.md` (or the architecture docs) indicating runtime and client injection points.
+
+6. Quality gates
+   - Run format → type‑check → lint → test → build → identity‑check from repo root.
 
 Deferred (tracked elsewhere): Cloudflare Workers provider POC (`serverless-hosting-plan.md`), provider naming finalisation after POC.
 

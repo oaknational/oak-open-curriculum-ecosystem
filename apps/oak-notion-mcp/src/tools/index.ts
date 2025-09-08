@@ -1,5 +1,5 @@
 /**
- * Public API for the MCP organ
+ * Public API for the MCP tools module
  *
  * Only these exports should be imported by other modules or the app layer.
  */

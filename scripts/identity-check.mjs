@@ -13,6 +13,7 @@ const DENY_TOKENS = [
   'aither',
   'stroma',
   'phaneron',
+  'organ',
   'organa',
   'moria',
   'histoi',
@@ -24,15 +25,36 @@ const DENY_TOKENS = [
   'kratos',
   'nomos',
   'systema',
+  'tissue',
+  'tissues',
+  'organism',
+  'organisms',
+  'ecosystem',
+  'ecosystems',
+  'psychon',
+  'psychons',
+  'chorai',
+  'chroma',
+  'chromai',
+  'chromas',
+  'chroma',
+  'chromas',
+  'phaneron',
+  'phanera',
+  'phanerae',
+  'phanerons',
+  'phanerae',
 ];
 
 // Allowed path-level exceptions (remain for historical context or archives)
 // Match any archive segment anywhere: **/archive/**
 const ALLOW_PATH_PATTERNS = [
+  /CHANGELOG\.md$/,
   /(^|\/)archive\//,
   /(^|\/)\.agent\/experience\//,
   /(^|\/)\.agent\/plans\//,
   /(^|\/)\.agent\/refactor\//,
+  /(^|\/)\.agent\/reference-docs\//,
   /(^|\/)\.agent\/roles\//,
   /(^|\/)\.claude\//,
   /(^|\/)\.vscode\//,
@@ -95,20 +117,54 @@ async function* walk(dir) {
 }
 
 const tokenRegex = new RegExp(`\\b(${DENY_TOKENS.join('|')})\\b`, 'i');
+const DENY_SET = new Set(DENY_TOKENS.map((t) => t.toLowerCase()));
+
+function isAllowedTokenContext(token, relFile, line) {
+  const t = token.toLowerCase();
+  if (t === 'ecosystem') {
+    if (relFile.endsWith('package.json')) return true;
+    if (/oak-mcp-ecosystem/i.test(line)) return true; // allow repo/package name wherever present
+    if (/greek-ecosystem-deprecation/i.test(line)) return true; // allow explicit doc reference
+    if (/https?:\/\/github\.com\/oaknational\/oak-mcp-ecosystem/i.test(line)) return true;
+    if (/\.git\b/i.test(line)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 const results = [];
 for await (const relFile of walk(repoRoot)) {
   if (isAllowedPath(relFile)) continue;
+
+  // Check path segments for exact disallowed tokens (e.g., "organa")
+  const segments = relFile.split('/');
+  for (const seg of segments) {
+    const lower = seg.toLowerCase();
+    if (DENY_SET.has(lower)) {
+      results.push({
+        file: relFile,
+        line: 0,
+        token: lower,
+        text: `Path segment: ${seg}`,
+      });
+      // Do not break; allow multiple matches if present in different segments
+    }
+  }
+
+  // Check file contents
   const content = await fs.readFile(relFile, 'utf8');
   const lines = content.split(/\r?\n/);
   for (let idx = 0; idx < lines.length; idx += 1) {
     const line = lines[idx];
     if (!tokenRegex.test(line)) continue;
     const match = line.match(tokenRegex);
+    const tok = match?.[1]?.toLowerCase() ?? 'unknown';
+    if (isAllowedTokenContext(tok, relFile, line)) continue;
     results.push({
       file: relFile,
       line: idx + 1,
-      token: match?.[1]?.toLowerCase() ?? 'unknown',
+      token: tok,
       text: line.trim().slice(0, 300),
     });
   }

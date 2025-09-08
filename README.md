@@ -1,6 +1,6 @@
-# Oak Notion MCP Server
+# Oak Notion MCP Servers
 
-A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworka and libraries that provide AI assistants like Claude with access to various data sources:
+A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworks and libraries that provide AI assistants like Claude with access to various data sources:
 
 - Notion (read-only access)
 - Oak Open Curriculum API (read-only access)

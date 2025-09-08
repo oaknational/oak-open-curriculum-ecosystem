@@ -136,7 +136,7 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   const serverConfig = buildServerConfig(config);
   const logger = createLogger(serverConfig.logLevel);
 
-  // Create MCP organ with SDK delegation
+  // Create MCP tools module with SDK delegation
   const mcpOrgan = createMcpOrgan();
 
   return {

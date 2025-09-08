@@ -13,10 +13,12 @@
   - `apps/` – applications (MCP servers)
   - `packages/core/` – core interfaces/utilities (`@oaknational/mcp-core`)
   - `packages/libs/` – reusable libraries (`@oaknational/mcp-*`)
-  - `packages/providers/` – platform providers (e.g., Node, Workers)
+  - `packages/runtime-adapters/` – runtime adapters (e.g., Node, Workers)
   - `packages/sdks/` – public SDKs (future growth)
 - Boundaries enforced by ESLint rules under `eslint-rules/`
 - Provider injection replaces runtime auto‑detection
+- Provider system overview: see [Provider System](./provider-system.md)
+- Onboarding guide: see [Onboarding](../onboarding.md)
 
 #### Rules & Relationships
 

@@ -9,11 +9,7 @@
     "apps/**/**.test.ts",
     "apps/**/**.spec.ts",
     "apps/**/bin/**/*.ts",
-    "ecosystem/**/src/**/*.ts",
-    "ecosystem/**/tests/**/*.ts",
-    "ecosystem/**/**.test.ts",
-    "ecosystem/**/**.spec.ts",
-    "ecosystem/**/bin/**/*.ts",
+
     "packages/**/src/**/*.ts",
     "packages/**/scripts/**/*.ts",
     "packages/**/tests/**/*.ts",

@@ -1,7 +1,7 @@
 {
   "name": "@oaknational/mcp-env",
   "version": "0.0.1",
-  "description": "Runtime-adaptive environment tissue for MCP applications",
+  "description": "Runtime-adaptive environment library for MCP applications",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -45,7 +45,6 @@
     "mcp",
     "environment",
     "adaptive",
-    "tissue",
     "env",
     "config"
   ],
