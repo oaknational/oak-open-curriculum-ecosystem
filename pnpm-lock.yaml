@@ -118,7 +118,7 @@ importers:
         version: link:../../packages/libs/transport
       '@oaknational/oak-curriculum-sdk':
         specifier: workspace:*
-        version: link:../../packages/oak-curriculum-sdk
+        version: link:../../packages/sdks/oak-curriculum-sdk
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -236,7 +236,13 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/oak-curriculum-sdk:
+  packages/providers/mcp-providers-node:
+    dependencies:
+      '@oaknational/mcp-core':
+        specifier: workspace:^
+        version: link:../../core/mcp-core
+
+  packages/sdks/oak-curriculum-sdk:
     dependencies:
       openapi-fetch:
         specifier: ^0.14.0
@@ -275,12 +281,6 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@22.17.1)(jiti@2.5.1)(tsx@4.20.3)(yaml@2.8.1)
-
-  packages/providers/mcp-providers-node:
-    dependencies:
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../core/mcp-core
 
 packages:
 

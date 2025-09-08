@@ -58,7 +58,8 @@ Adopt Option A from `workspace-structure-options.md`:
    - Bound: 60–90 min.
 
 2. Placement verification (structure)
-   - Confirm `packages/providers/` and `packages/sdks/` contain current providers/SDKs (no moves expected).
+   - Confirm `packages/providers/` and `packages/sdks/` contain current providers/SDKs.
+   - Completed: `oak-curriculum-sdk` rehomed to `packages/sdks/oak-curriculum-sdk`; workspace and tsconfig updated.
    - Bound: 15–30 min.
 
 3. DI exemplar (code‑light)
@@ -66,8 +67,8 @@ Adopt Option A from `workspace-structure-options.md`:
    - Bound: 60–90 min.
 
 4. Import policy confirmation (lint/docs)
-   - Re‑assert package‑only inter‑workspace imports; allow intra‑package relatives; avoid private internals.
-   - Ensure ESLint config comments and docs reflect policy.
+   - Re‑assert package‑only inter‑workspace imports (`@oaknational/*`); allow intra‑package relatives; avoid private internals. No `@workspace/*` alias.
+   - Ensure ESLint config comments and docs reflect policy. Status: rules enforced and applied across apps/libs; docs updated.
    - Bound: 30 min.
 
 5. Decision record
