@@ -9,9 +9,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { createStartupLogger, defaultStartupLoggerDeps } from './startup';
 
 /**
- * Start the organism - bring everything to life
+ * Start the server
  */
-export async function startOrganism(): Promise<void> {
+export async function startServer(): Promise<void> {
   const log = createStartupLogger(defaultStartupLoggerDeps);
 
   log('[STARTUP] Awakening the server...');

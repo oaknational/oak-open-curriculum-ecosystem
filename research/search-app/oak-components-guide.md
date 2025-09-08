@@ -143,9 +143,9 @@ The library is organized as:
 
 - **Atoms:** generic, minimal, usually unstyled primitives (e.g. `Box`, low-level inputs).
 - **Molecules:** styled combinations of atoms (e.g. `IconButton`, `Button`, simple field + label).
-- **Organisms:** page-level sections composed of multiple atoms/molecules (e.g. complex forms, modals with logic).
+- **Pages:** page-level sections composed of multiple atoms/molecules (e.g. complex forms, modals with logic).
 
-**Rule of thumb:** Atoms don’t import molecules/organisms; molecules don’t import organisms. Organisms may contain state/logic.
+**Rule of thumb:** Atoms don’t import molecules/pages; molecules don’t import pages. Page-level components may contain state/logic.
 
 ---
 
@@ -185,7 +185,7 @@ import { TextInput } from '@oaknational/oak-components';
 />;
 ```
 
-### 4.4 Modal (organism-level)
+### 4.4 Modal (page-level)
 
 ```tsx
 import { OakModal } from '@oaknational/oak-components';

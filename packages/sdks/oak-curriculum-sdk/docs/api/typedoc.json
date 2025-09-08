@@ -1,0 +1,4192 @@
+{
+  "id": 0,
+  "name": "@oaknational/oak-curriculum-sdk",
+  "variant": "project",
+  "kind": 1,
+  "flags": {},
+  "children": [
+    {
+      "id": 11,
+      "name": "createApiClient",
+      "variant": "reference",
+      "kind": 4194304,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/index.ts",
+          "line": 20,
+          "character": 28,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/index.ts#L20"
+        }
+      ],
+      "target": 1
+    },
+    {
+      "id": 69,
+      "name": "McpParameterError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "children": [
+        {
+          "id": 79,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 36,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 80,
+              "name": "new McpParameterError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "sources": [
+                {
+                  "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                  "line": 36,
+                  "character": 2,
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 81,
+                  "name": "message",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 82,
+                  "name": "toolName",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 83,
+                  "name": "pathParameterName",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 84,
+                  "name": "queryParameterName",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 85,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 86,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "children": [
+                        {
+                          "id": 87,
+                          "name": "cause",
+                          "variant": "declaration",
+                          "kind": 1024,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "sources": [
+                            {
+                              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                              "line": 41,
+                              "character": 16,
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
+                            }
+                          ],
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                              "qualifiedName": "Error"
+                            },
+                            "name": "Error",
+                            "package": "typescript"
+                          }
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "title": "Properties",
+                          "children": [87]
+                        }
+                      ],
+                      "sources": [
+                        {
+                          "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                          "line": 41,
+                          "character": 14,
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 69,
+                "name": "McpParameterError",
+                "package": "@oaknational/oak-curriculum-sdk"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.constructor"
+          }
+        },
+        {
+          "id": 94,
+          "name": "cause",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isOptional": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es2022.error.d.ts",
+              "line": 26,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.cause"
+          }
+        },
+        {
+          "id": 92,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1077,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.message"
+          }
+        },
+        {
+          "id": 91,
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1076,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.name"
+          }
+        },
+        {
+          "id": 89,
+          "name": "pathParameterName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 33,
+              "character": 11,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L33"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 90,
+          "name": "queryParameterName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 34,
+              "character": 11,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L34"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 93,
+          "name": "stack",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isOptional": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1078,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.stack"
+          }
+        },
+        {
+          "id": 88,
+          "name": "toolName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 32,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L32"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 78,
+          "name": "stackTraceLimit",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The "
+              },
+              {
+                "kind": "code",
+                "text": "`Error.stackTraceLimit`"
+              },
+              {
+                "kind": "text",
+                "text": " property specifies the number of stack frames\ncollected by a stack trace (whether generated by "
+              },
+              {
+                "kind": "code",
+                "text": "`new Error().stack`"
+              },
+              {
+                "kind": "text",
+                "text": " or\n"
+              },
+              {
+                "kind": "code",
+                "text": "`Error.captureStackTrace(obj)`"
+              },
+              {
+                "kind": "text",
+                "text": ").\n\nThe default value is "
+              },
+              {
+                "kind": "code",
+                "text": "`10`"
+              },
+              {
+                "kind": "text",
+                "text": " but may be set to any valid JavaScript number. Changes\nwill affect any stack trace captured _after_ the value has been changed.\n\nIf set to a non-number value, or set to a negative number, stack traces will\nnot capture any frames."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 161,
+              "character": 8
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.stackTraceLimit"
+          }
+        },
+        {
+          "id": 70,
+          "name": "captureStackTrace",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 145,
+              "character": 8
+            }
+          ],
+          "signatures": [
+            {
+              "id": 71,
+              "name": "captureStackTrace",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isExternal": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`.stack`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " property on "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`targetObject`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", which when accessed returns\na string representing the location in the code at which\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Error.captureStackTrace()`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " was called.\n\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "```js\nconst myObject = {};\nError.captureStackTrace(myObject);\nmyObject.stack;  // Similar to `new Error().stack`\n```"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "\n\nThe first line of the trace will be prefixed with\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`${myObject.name}: ${myObject.message}`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nThe optional "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " argument accepts a function. If given, all frames\nabove "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", including "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", will be omitted from the\ngenerated stack trace.\n\nThe "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " argument is useful for hiding implementation\ndetails of error generation from the user. For instance:\n\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "```js\nfunction a() {\n  b();\n}\n\nfunction b() {\n  c();\n}\n\nfunction c() {\n  // Create an error without stack trace to avoid calculating the stack trace twice.\n  const { stackTraceLimit } = Error;\n  Error.stackTraceLimit = 0;\n  const error = new Error();\n  Error.stackTraceLimit = stackTraceLimit;\n\n  // Capture the stack trace above function b\n  Error.captureStackTrace(error, b); // Neither function c, nor b is included in the stack trace\n  throw error;\n}\n\na();\n```"
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                  "line": 145,
+                  "character": 8
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 72,
+                  "name": "targetObject",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "object"
+                  }
+                },
+                {
+                  "id": 73,
+                  "name": "constructorOpt",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true,
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                      "qualifiedName": "Function"
+                    },
+                    "name": "Function",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.captureStackTrace"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.captureStackTrace"
+          }
+        },
+        {
+          "id": 74,
+          "name": "prepareStackTrace",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 149,
+              "character": 8
+            }
+          ],
+          "signatures": [
+            {
+              "id": 75,
+              "name": "prepareStackTrace",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isExternal": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@see",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "https://v8.dev/docs/stack-trace-api#customizing-stack-traces"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                  "line": 149,
+                  "character": 8
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 76,
+                  "name": "err",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                      "qualifiedName": "Error"
+                    },
+                    "name": "Error",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "id": 77,
+                  "name": "stackTraces",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "array",
+                    "elementType": {
+                      "type": "reference",
+                      "target": {
+                        "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                        "qualifiedName": "__global.NodeJS.CallSite"
+                      },
+                      "name": "CallSite",
+                      "package": "@types/node",
+                      "qualifiedName": "__global.NodeJS.CallSite"
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "any"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.prepareStackTrace"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.prepareStackTrace"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [79]
+        },
+        {
+          "title": "Properties",
+          "children": [94, 92, 91, 89, 90, 93, 88, 78]
+        },
+        {
+          "title": "Methods",
+          "children": [70, 74]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+          "line": 31,
+          "character": 13,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L31"
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+            "qualifiedName": "Error"
+          },
+          "name": "Error",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "McpToolError",
+      "variant": "declaration",
+      "kind": 128,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Error types with proper cause chains"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 55,
+          "name": "constructor",
+          "variant": "declaration",
+          "kind": 512,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 23,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+            }
+          ],
+          "signatures": [
+            {
+              "id": 56,
+              "name": "new McpToolError",
+              "variant": "signature",
+              "kind": 16384,
+              "flags": {},
+              "sources": [
+                {
+                  "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                  "line": 23,
+                  "character": 2,
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 57,
+                  "name": "message",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 58,
+                  "name": "toolName",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {},
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "string"
+                  }
+                },
+                {
+                  "id": 59,
+                  "name": "options",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reflection",
+                    "declaration": {
+                      "id": 60,
+                      "name": "__type",
+                      "variant": "declaration",
+                      "kind": 65536,
+                      "flags": {},
+                      "children": [
+                        {
+                          "id": 61,
+                          "name": "cause",
+                          "variant": "declaration",
+                          "kind": 1024,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "sources": [
+                            {
+                              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                              "line": 23,
+                              "character": 61,
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                            }
+                          ],
+                          "type": {
+                            "type": "reference",
+                            "target": {
+                              "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                              "qualifiedName": "Error"
+                            },
+                            "name": "Error",
+                            "package": "typescript"
+                          }
+                        },
+                        {
+                          "id": 62,
+                          "name": "code",
+                          "variant": "declaration",
+                          "kind": 1024,
+                          "flags": {
+                            "isOptional": true
+                          },
+                          "sources": [
+                            {
+                              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                              "line": 23,
+                              "character": 76,
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                            }
+                          ],
+                          "type": {
+                            "type": "intrinsic",
+                            "name": "string"
+                          }
+                        }
+                      ],
+                      "groups": [
+                        {
+                          "title": "Properties",
+                          "children": [61, 62]
+                        }
+                      ],
+                      "sources": [
+                        {
+                          "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+                          "line": 23,
+                          "character": 59,
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "reference",
+                "target": 45,
+                "name": "McpToolError",
+                "package": "@oaknational/oak-curriculum-sdk"
+              },
+              "overwrites": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.constructor"
+              }
+            }
+          ],
+          "overwrites": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.constructor"
+          }
+        },
+        {
+          "id": 68,
+          "name": "cause",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isOptional": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es2022.error.d.ts",
+              "line": 26,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "unknown"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.cause"
+          }
+        },
+        {
+          "id": 64,
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true,
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 21,
+              "character": 11,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L21"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 66,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1077,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.message"
+          }
+        },
+        {
+          "id": 65,
+          "name": "name",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1076,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.name"
+          }
+        },
+        {
+          "id": 67,
+          "name": "stack",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isExternal": true,
+            "isOptional": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "line": 1078,
+              "character": 4
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.stack"
+          }
+        },
+        {
+          "id": 63,
+          "name": "toolName",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isReadonly": true
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 20,
+              "character": 11,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L20"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 54,
+          "name": "stackTraceLimit",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "The "
+              },
+              {
+                "kind": "code",
+                "text": "`Error.stackTraceLimit`"
+              },
+              {
+                "kind": "text",
+                "text": " property specifies the number of stack frames\ncollected by a stack trace (whether generated by "
+              },
+              {
+                "kind": "code",
+                "text": "`new Error().stack`"
+              },
+              {
+                "kind": "text",
+                "text": " or\n"
+              },
+              {
+                "kind": "code",
+                "text": "`Error.captureStackTrace(obj)`"
+              },
+              {
+                "kind": "text",
+                "text": ").\n\nThe default value is "
+              },
+              {
+                "kind": "code",
+                "text": "`10`"
+              },
+              {
+                "kind": "text",
+                "text": " but may be set to any valid JavaScript number. Changes\nwill affect any stack trace captured _after_ the value has been changed.\n\nIf set to a non-number value, or set to a negative number, stack traces will\nnot capture any frames."
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 161,
+              "character": 8
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "number"
+          },
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.stackTraceLimit"
+          }
+        },
+        {
+          "id": 46,
+          "name": "captureStackTrace",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 145,
+              "character": 8
+            }
+          ],
+          "signatures": [
+            {
+              "id": 47,
+              "name": "captureStackTrace",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isExternal": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "Creates a "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`.stack`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " property on "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`targetObject`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", which when accessed returns\na string representing the location in the code at which\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`Error.captureStackTrace()`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " was called.\n\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "```js\nconst myObject = {};\nError.captureStackTrace(myObject);\nmyObject.stack;  // Similar to `new Error().stack`\n```"
+                  },
+                  {
+                    "kind": "text",
+                    "text": "\n\nThe first line of the trace will be prefixed with\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`${myObject.name}: ${myObject.message}`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ".\n\nThe optional "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " argument accepts a function. If given, all frames\nabove "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", including "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": ", will be omitted from the\ngenerated stack trace.\n\nThe "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`constructorOpt`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " argument is useful for hiding implementation\ndetails of error generation from the user. For instance:\n\n"
+                  },
+                  {
+                    "kind": "code",
+                    "text": "```js\nfunction a() {\n  b();\n}\n\nfunction b() {\n  c();\n}\n\nfunction c() {\n  // Create an error without stack trace to avoid calculating the stack trace twice.\n  const { stackTraceLimit } = Error;\n  Error.stackTraceLimit = 0;\n  const error = new Error();\n  Error.stackTraceLimit = stackTraceLimit;\n\n  // Capture the stack trace above function b\n  Error.captureStackTrace(error, b); // Neither function c, nor b is included in the stack trace\n  throw error;\n}\n\na();\n```"
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                  "line": 145,
+                  "character": 8
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 48,
+                  "name": "targetObject",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "intrinsic",
+                    "name": "object"
+                  }
+                },
+                {
+                  "id": 49,
+                  "name": "constructorOpt",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true,
+                    "isOptional": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                      "qualifiedName": "Function"
+                    },
+                    "name": "Function",
+                    "package": "typescript"
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "void"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.captureStackTrace"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.captureStackTrace"
+          }
+        },
+        {
+          "id": 50,
+          "name": "prepareStackTrace",
+          "variant": "declaration",
+          "kind": 2048,
+          "flags": {
+            "isStatic": true,
+            "isExternal": true,
+            "isInherited": true
+          },
+          "sources": [
+            {
+              "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+              "line": 149,
+              "character": 8
+            }
+          ],
+          "signatures": [
+            {
+              "id": 51,
+              "name": "prepareStackTrace",
+              "variant": "signature",
+              "kind": 4096,
+              "flags": {
+                "isExternal": true,
+                "isInherited": true
+              },
+              "comment": {
+                "summary": [],
+                "blockTags": [
+                  {
+                    "tag": "@see",
+                    "content": [
+                      {
+                        "kind": "text",
+                        "text": "https://v8.dev/docs/stack-trace-api#customizing-stack-traces"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "sources": [
+                {
+                  "fileName": "node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                  "line": 149,
+                  "character": 8
+                }
+              ],
+              "parameters": [
+                {
+                  "id": 52,
+                  "name": "err",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                      "qualifiedName": "Error"
+                    },
+                    "name": "Error",
+                    "package": "typescript"
+                  }
+                },
+                {
+                  "id": 53,
+                  "name": "stackTraces",
+                  "variant": "param",
+                  "kind": 32768,
+                  "flags": {
+                    "isExternal": true
+                  },
+                  "type": {
+                    "type": "array",
+                    "elementType": {
+                      "type": "reference",
+                      "target": {
+                        "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+                        "qualifiedName": "__global.NodeJS.CallSite"
+                      },
+                      "name": "CallSite",
+                      "package": "@types/node",
+                      "qualifiedName": "__global.NodeJS.CallSite"
+                    }
+                  }
+                }
+              ],
+              "type": {
+                "type": "intrinsic",
+                "name": "any"
+              },
+              "inheritedFrom": {
+                "type": "reference",
+                "target": -1,
+                "name": "Error.prepareStackTrace"
+              }
+            }
+          ],
+          "inheritedFrom": {
+            "type": "reference",
+            "target": -1,
+            "name": "Error.prepareStackTrace"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Constructors",
+          "children": [55]
+        },
+        {
+          "title": "Properties",
+          "children": [68, 64, 66, 65, 67, 63, 54]
+        },
+        {
+          "title": "Methods",
+          "children": [46, 50]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+          "line": 19,
+          "character": 13,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L19"
+        }
+      ],
+      "extendedTypes": [
+        {
+          "type": "reference",
+          "target": {
+            "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+            "qualifiedName": "Error"
+          },
+          "name": "Error",
+          "package": "typescript"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "ValidatedClientOptions",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Options for the validated client wrapper"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 38,
+          "name": "strict",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether to throw on validation failure (vs returning result)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 32,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L32"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 36,
+          "name": "validateRequest",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether to validate requests before sending"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 28,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L28"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        },
+        {
+          "id": 37,
+          "name": "validateResponse",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Whether to validate responses after receiving"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 30,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L30"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "boolean"
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [38, 36, 37]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+          "line": 26,
+          "character": 17,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L26"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "ValidationIssue",
+      "variant": "declaration",
+      "kind": 256,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Validation issue details"
+          }
+        ]
+      },
+      "children": [
+        {
+          "id": 34,
+          "name": "code",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {
+            "isOptional": true
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 20,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L20"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 33,
+          "name": "message",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 19,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L19"
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "string"
+          }
+        },
+        {
+          "id": 32,
+          "name": "path",
+          "variant": "declaration",
+          "kind": 1024,
+          "flags": {},
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+              "line": 18,
+              "character": 2,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L18"
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "intrinsic",
+              "name": "string"
+            }
+          }
+        }
+      ],
+      "groups": [
+        {
+          "title": "Properties",
+          "children": [34, 33, 32]
+        }
+      ],
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+          "line": 17,
+          "character": 17,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L17"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "HttpMethod",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "HTTP methods supported by validation"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+          "line": 38,
+          "character": 12,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L38"
+        }
+      ],
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "literal",
+            "value": "get"
+          },
+          {
+            "type": "literal",
+            "value": "post"
+          },
+          {
+            "type": "literal",
+            "value": "put"
+          },
+          {
+            "type": "literal",
+            "value": "delete"
+          },
+          {
+            "type": "literal",
+            "value": "patch"
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "name": "OakApiClient",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The base OpenAPI-Fetch client.\n\nUse this client for maximum performance."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts",
+          "line": 17,
+          "character": 12,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "sourceFileName": "../../../node_modules/.pnpm/openapi-fetch@0.14.0/node_modules/openapi-fetch/dist/index.d.mts",
+          "qualifiedName": "Client"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "target": {
+              "sourceFileName": "src/types/generated/api-schema/api-paths-types.ts",
+              "qualifiedName": "paths"
+            },
+            "name": "paths",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        ],
+        "name": "OpenApiClient",
+        "package": "openapi-fetch",
+        "qualifiedName": "Client"
+      }
+    },
+    {
+      "id": 8,
+      "name": "OakApiPathBasedClient",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "The base OpenAPI-Fetch path-based client.\n\nUse this client for accessing paths as properties of the client.\nThis uses an object proxy to access the paths, which causes some\nperformance overhead. For most use cases the convenience outweighs\nthe performance cost."
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts",
+          "line": 27,
+          "character": 12,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27"
+        }
+      ],
+      "type": {
+        "type": "reference",
+        "target": {
+          "sourceFileName": "../../../node_modules/.pnpm/openapi-fetch@0.14.0/node_modules/openapi-fetch/dist/index.d.mts",
+          "qualifiedName": "PathBasedClient"
+        },
+        "typeArguments": [
+          {
+            "type": "reference",
+            "target": {
+              "sourceFileName": "src/types/generated/api-schema/api-paths-types.ts",
+              "qualifiedName": "paths"
+            },
+            "name": "paths",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        ],
+        "name": "OpenApiPathBasedClient",
+        "package": "openapi-fetch",
+        "qualifiedName": "PathBasedClient"
+      }
+    },
+    {
+      "id": 23,
+      "name": "ValidationResult",
+      "variant": "declaration",
+      "kind": 2097152,
+      "flags": {},
+      "comment": {
+        "summary": [
+          {
+            "kind": "text",
+            "text": "Result type for validation operations\nDiscriminated union for type-safe error handling"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+          "line": 12,
+          "character": 12,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+        }
+      ],
+      "typeParameters": [
+        {
+          "id": 30,
+          "name": "T",
+          "variant": "typeParam",
+          "kind": 131072,
+          "flags": {}
+        }
+      ],
+      "type": {
+        "type": "union",
+        "types": [
+          {
+            "type": "reflection",
+            "declaration": {
+              "id": 24,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 25,
+                  "name": "ok",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                      "line": 12,
+                      "character": 36,
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                    }
+                  ],
+                  "type": {
+                    "type": "literal",
+                    "value": true
+                  }
+                },
+                {
+                  "id": 26,
+                  "name": "value",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                      "line": 12,
+                      "character": 46,
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                    }
+                  ],
+                  "type": {
+                    "type": "reference",
+                    "target": 30,
+                    "name": "T",
+                    "package": "@oaknational/oak-curriculum-sdk",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Properties",
+                  "children": [25, 26]
+                }
+              ],
+              "sources": [
+                {
+                  "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                  "line": 12,
+                  "character": 34,
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                }
+              ]
+            }
+          },
+          {
+            "type": "reflection",
+            "declaration": {
+              "id": 27,
+              "name": "__type",
+              "variant": "declaration",
+              "kind": 65536,
+              "flags": {},
+              "children": [
+                {
+                  "id": 29,
+                  "name": "issues",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                      "line": 12,
+                      "character": 72,
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                    }
+                  ],
+                  "type": {
+                    "type": "array",
+                    "elementType": {
+                      "type": "reference",
+                      "target": 31,
+                      "name": "ValidationIssue",
+                      "package": "@oaknational/oak-curriculum-sdk"
+                    }
+                  }
+                },
+                {
+                  "id": 28,
+                  "name": "ok",
+                  "variant": "declaration",
+                  "kind": 1024,
+                  "flags": {},
+                  "sources": [
+                    {
+                      "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                      "line": 12,
+                      "character": 61,
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                    }
+                  ],
+                  "type": {
+                    "type": "literal",
+                    "value": false
+                  }
+                }
+              ],
+              "groups": [
+                {
+                  "title": "Properties",
+                  "children": [29, 28]
+                }
+              ],
+              "sources": [
+                {
+                  "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
+                  "line": 12,
+                  "character": 59,
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "name": "apiSchemaUrl",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/config/index.ts",
+          "line": 45,
+          "character": 6,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L45"
+        }
+      ],
+      "type": {
+        "type": "intrinsic",
+        "name": "string"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "id": 9,
+      "name": "apiUrl",
+      "variant": "declaration",
+      "kind": 32,
+      "flags": {
+        "isConst": true
+      },
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/config/index.ts",
+          "line": 47,
+          "character": 6,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L47"
+        }
+      ],
+      "type": {
+        "type": "intrinsic",
+        "name": "string"
+      },
+      "defaultValue": "..."
+    },
+    {
+      "id": 1,
+      "name": "createOakClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
+          "line": 13,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 2,
+          "name": "createOakClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Create an Oak API client using the OpenAPI-Fetch style interface.\n\nEnvironment-agnostic: The SDK core never reads environment variables.\nAlways pass the API key explicitly."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "The method-based "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`OakApiClient`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " instance."
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
+              "line": 13,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 3,
+              "name": "apiKey",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "API key to authorize requests."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 7,
+            "name": "OakApiClient",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "createOakPathBasedClient",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
+          "line": 28,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 5,
+          "name": "createOakPathBasedClient",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Create an Oak API client using the path-indexed interface.\n\nEnvironment-agnostic: The SDK core never reads environment variables.\nAlways pass the API key explicitly."
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "The path-based "
+                  },
+                  {
+                    "kind": "code",
+                    "text": "`OakApiPathBasedClient`"
+                  },
+                  {
+                    "kind": "text",
+                    "text": " instance."
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
+              "line": 28,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 6,
+              "name": "apiKey",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "API key to authorize requests."
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 8,
+            "name": "OakApiPathBasedClient",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "executeToolCall",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+          "line": 116,
+          "character": 22,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L116"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 41,
+          "name": "executeToolCall",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Ultra-thin executor - just validation and delegation to embedded executor"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
+              "line": 116,
+              "character": 22,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L116"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 42,
+              "name": "maybeToolName",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 43,
+              "name": "maybeParams",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            },
+            {
+              "id": 44,
+              "name": "client",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/openapi-fetch@0.14.0/node_modules/openapi-fetch/dist/index.d.mts",
+                  "qualifiedName": "PathBasedClient"
+                },
+                "typeArguments": [
+                  {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "src/types/generated/api-schema/api-paths-types.ts",
+                      "qualifiedName": "paths"
+                    },
+                    "name": "paths",
+                    "package": "@oaknational/oak-curriculum-sdk"
+                  },
+                  {
+                    "type": "templateLiteral",
+                    "head": "",
+                    "tail": [
+                      [
+                        {
+                          "type": "intrinsic",
+                          "name": "string"
+                        },
+                        "/"
+                      ],
+                      [
+                        {
+                          "type": "intrinsic",
+                          "name": "string"
+                        },
+                        ""
+                      ]
+                    ]
+                  }
+                ],
+                "name": "PathBasedClient",
+                "package": "openapi-fetch"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "qualifiedName": "Promise"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "src/mcp/execute-tool-call.ts",
+                  "qualifiedName": "ToolExecutionResult"
+                },
+                "name": "ToolExecutionResult",
+                "package": "@oaknational/oak-curriculum-sdk"
+              }
+            ],
+            "name": "Promise",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "name": "typeSafeEntries",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 17,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 104,
+          "name": "typeSafeEntries",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Typed entries (Object.entries)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 17,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 105,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 106,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 105,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "tuple",
+              "elements": [
+                {
+                  "type": "reference",
+                  "target": {
+                    "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                    "qualifiedName": "Extract"
+                  },
+                  "typeArguments": [
+                    {
+                      "type": "typeOperator",
+                      "operator": "keyof",
+                      "target": {
+                        "type": "reference",
+                        "target": 105,
+                        "name": "T",
+                        "package": "@oaknational/oak-curriculum-sdk",
+                        "refersToTypeParameter": true
+                      }
+                    },
+                    {
+                      "type": "intrinsic",
+                      "name": "string"
+                    }
+                  ],
+                  "name": "Extract",
+                  "package": "typescript"
+                },
+                {
+                  "type": "indexedAccess",
+                  "indexType": {
+                    "type": "reference",
+                    "target": {
+                      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                      "qualifiedName": "Extract"
+                    },
+                    "typeArguments": [
+                      {
+                        "type": "typeOperator",
+                        "operator": "keyof",
+                        "target": {
+                          "type": "reference",
+                          "target": 105,
+                          "name": "T",
+                          "package": "@oaknational/oak-curriculum-sdk",
+                          "refersToTypeParameter": true
+                        }
+                      },
+                      {
+                        "type": "intrinsic",
+                        "name": "string"
+                      }
+                    ],
+                    "name": "Extract",
+                    "package": "typescript"
+                  },
+                  "objectType": {
+                    "type": "reference",
+                    "target": 105,
+                    "name": "T",
+                    "package": "@oaknational/oak-curriculum-sdk",
+                    "refersToTypeParameter": true
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "name": "typeSafeFromEntries",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 26,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 108,
+          "name": "typeSafeFromEntries",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Typed fromEntries (Object.fromEntries)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 26,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 109,
+              "name": "K",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                  "qualifiedName": "PropertyKey"
+                },
+                "name": "PropertyKey",
+                "package": "typescript"
+              }
+            },
+            {
+              "id": 110,
+              "name": "V",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {}
+            }
+          ],
+          "parameters": [
+            {
+              "id": 111,
+              "name": "iter",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es2015.iterable.d.ts",
+                  "qualifiedName": "Iterable"
+                },
+                "typeArguments": [
+                  {
+                    "type": "typeOperator",
+                    "operator": "readonly",
+                    "target": {
+                      "type": "tuple",
+                      "elements": [
+                        {
+                          "type": "reference",
+                          "target": 109,
+                          "name": "K",
+                          "package": "@oaknational/oak-curriculum-sdk",
+                          "refersToTypeParameter": true
+                        },
+                        {
+                          "type": "reference",
+                          "target": 110,
+                          "name": "V",
+                          "package": "@oaknational/oak-curriculum-sdk",
+                          "refersToTypeParameter": true
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "any"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "any"
+                  }
+                ],
+                "name": "Iterable",
+                "package": "typescript"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": {
+              "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+              "qualifiedName": "Record"
+            },
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": 109,
+                "name": "K",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              },
+              {
+                "type": "reference",
+                "target": 110,
+                "name": "V",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            ],
+            "name": "Record",
+            "package": "typescript"
+          }
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "name": "typeSafeGet",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 34,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 113,
+          "name": "typeSafeGet",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Typed value access (instead of Reflect.get)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 34,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 114,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            },
+            {
+              "id": 115,
+              "name": "K",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "symbol"
+                  }
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 116,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 114,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 117,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 115,
+                "name": "K",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "indexedAccess",
+            "indexType": {
+              "type": "reference",
+              "target": 115,
+              "name": "K",
+              "package": "@oaknational/oak-curriculum-sdk",
+              "refersToTypeParameter": true
+            },
+            "objectType": {
+              "type": "reference",
+              "target": 114,
+              "name": "T",
+              "package": "@oaknational/oak-curriculum-sdk",
+              "refersToTypeParameter": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "name": "typeSafeHas",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 48,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 126,
+          "name": "typeSafeHas",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Membership check (instead of Reflect.has)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 48,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 127,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 128,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 127,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 129,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                  "qualifiedName": "PropertyKey"
+                },
+                "name": "PropertyKey",
+                "package": "typescript"
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "key",
+            "asserts": false,
+            "targetType": {
+              "type": "typeOperator",
+              "operator": "keyof",
+              "target": {
+                "type": "reference",
+                "target": 127,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "name": "typeSafeHasOwn",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 53,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 131,
+          "name": "typeSafeHasOwn",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Own-key check (typed)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 53,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 132,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 133,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 132,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 134,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                  "qualifiedName": "PropertyKey"
+                },
+                "name": "PropertyKey",
+                "package": "typescript"
+              }
+            }
+          ],
+          "type": {
+            "type": "predicate",
+            "name": "key",
+            "asserts": false,
+            "targetType": {
+              "type": "typeOperator",
+              "operator": "keyof",
+              "target": {
+                "type": "reference",
+                "target": 132,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "name": "typeSafeKeys",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 5,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 96,
+          "name": "typeSafeKeys",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Type safe object helpers"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 5,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 97,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 98,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 97,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "reference",
+              "target": {
+                "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                "qualifiedName": "Extract"
+              },
+              "typeArguments": [
+                {
+                  "type": "typeOperator",
+                  "operator": "keyof",
+                  "target": {
+                    "type": "reference",
+                    "target": 97,
+                    "name": "T",
+                    "package": "@oaknational/oak-curriculum-sdk",
+                    "refersToTypeParameter": true
+                  }
+                },
+                {
+                  "type": "intrinsic",
+                  "name": "string"
+                }
+              ],
+              "name": "Extract",
+              "package": "typescript"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "name": "typeSafeOwnKeys",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 58,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 136,
+          "name": "typeSafeOwnKeys",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "All own keys (instead of Reflect.ownKeys)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 58,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 137,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 138,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 137,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "typeOperator",
+              "operator": "keyof",
+              "target": {
+                "type": "reference",
+                "target": 137,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 118,
+      "name": "typeSafeSet",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 39,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 119,
+          "name": "typeSafeSet",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Typed set (instead of Reflect.set)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 39,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 120,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            },
+            {
+              "id": 121,
+              "name": "K",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "union",
+                "types": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "number"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "symbol"
+                  }
+                ]
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 122,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 120,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 123,
+              "name": "key",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 121,
+                "name": "K",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            },
+            {
+              "id": 124,
+              "name": "value",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "indexedAccess",
+                "indexType": {
+                  "type": "reference",
+                  "target": 121,
+                  "name": "K",
+                  "package": "@oaknational/oak-curriculum-sdk",
+                  "refersToTypeParameter": true
+                },
+                "objectType": {
+                  "type": "reference",
+                  "target": 120,
+                  "name": "T",
+                  "package": "@oaknational/oak-curriculum-sdk",
+                  "refersToTypeParameter": true
+                }
+              }
+            }
+          ],
+          "type": {
+            "type": "intrinsic",
+            "name": "void"
+          }
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "name": "typeSafeValues",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+          "line": 11,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 100,
+          "name": "typeSafeValues",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Typed values (Object.values)"
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
+              "line": 11,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
+            }
+          ],
+          "typeParameters": [
+            {
+              "id": 101,
+              "name": "T",
+              "variant": "typeParam",
+              "kind": 131072,
+              "flags": {},
+              "type": {
+                "type": "intrinsic",
+                "name": "object"
+              }
+            }
+          ],
+          "parameters": [
+            {
+              "id": 102,
+              "name": "obj",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "type": {
+                "type": "reference",
+                "target": 101,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          ],
+          "type": {
+            "type": "array",
+            "elementType": {
+              "type": "indexedAccess",
+              "indexType": {
+                "type": "typeOperator",
+                "operator": "keyof",
+                "target": {
+                  "type": "reference",
+                  "target": 101,
+                  "name": "T",
+                  "package": "@oaknational/oak-curriculum-sdk",
+                  "refersToTypeParameter": true
+                }
+              },
+              "objectType": {
+                "type": "reference",
+                "target": 101,
+                "name": "T",
+                "package": "@oaknational/oak-curriculum-sdk",
+                "refersToTypeParameter": true
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "validateRequest",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts",
+          "line": 153,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L153"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 13,
+          "name": "validateRequest",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Validates request parameters against the schema for the given path and method\nUses generated schemas from the endpoints file"
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "Validation result with success/failure status"
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts",
+              "line": 153,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L153"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 14,
+              "name": "path",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The API path (e.g., \"/lessons/{lesson}/transcript\")"
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 15,
+              "name": "method",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The HTTP method"
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": 39,
+                "name": "HttpMethod",
+                "package": "@oaknational/oak-curriculum-sdk"
+              }
+            },
+            {
+              "id": 16,
+              "name": "args",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The request parameters to validate"
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 23,
+            "typeArguments": [
+              {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            ],
+            "name": "ValidationResult",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "validateResponse",
+      "variant": "declaration",
+      "kind": 64,
+      "flags": {},
+      "sources": [
+        {
+          "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts",
+          "line": 99,
+          "character": 16,
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L99"
+        }
+      ],
+      "signatures": [
+        {
+          "id": 18,
+          "name": "validateResponse",
+          "variant": "signature",
+          "kind": 4096,
+          "flags": {},
+          "comment": {
+            "summary": [
+              {
+                "kind": "text",
+                "text": "Validates response data for an API operation"
+              }
+            ],
+            "blockTags": [
+              {
+                "tag": "@returns",
+                "content": [
+                  {
+                    "kind": "text",
+                    "text": "ValidationResult with validated response or validation issues"
+                  }
+                ]
+              }
+            ]
+          },
+          "sources": [
+            {
+              "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts",
+              "line": 99,
+              "character": 16,
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/09cb9db1eeb0240edf25fb634b4a0e6edf10efc9/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L99"
+            }
+          ],
+          "parameters": [
+            {
+              "id": 19,
+              "name": "path",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The API path template (e.g., '/lessons/{lesson}/transcript')"
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "string"
+              }
+            },
+            {
+              "id": 20,
+              "name": "method",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The HTTP method"
+                  }
+                ]
+              },
+              "type": {
+                "type": "reference",
+                "target": 39,
+                "name": "HttpMethod",
+                "package": "@oaknational/oak-curriculum-sdk"
+              }
+            },
+            {
+              "id": 21,
+              "name": "statusCode",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The HTTP response status code"
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "number"
+              }
+            },
+            {
+              "id": 22,
+              "name": "response",
+              "variant": "param",
+              "kind": 32768,
+              "flags": {},
+              "comment": {
+                "summary": [
+                  {
+                    "kind": "text",
+                    "text": "The response data to validate"
+                  }
+                ]
+              },
+              "type": {
+                "type": "intrinsic",
+                "name": "unknown"
+              }
+            }
+          ],
+          "type": {
+            "type": "reference",
+            "target": 23,
+            "typeArguments": [
+              {
+                "type": "reference",
+                "target": {
+                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+                  "qualifiedName": "Record"
+                },
+                "typeArguments": [
+                  {
+                    "type": "intrinsic",
+                    "name": "string"
+                  },
+                  {
+                    "type": "intrinsic",
+                    "name": "unknown"
+                  }
+                ],
+                "name": "Record",
+                "package": "typescript"
+              }
+            ],
+            "name": "ValidationResult",
+            "package": "@oaknational/oak-curriculum-sdk"
+          }
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "title": "References",
+      "children": [11]
+    },
+    {
+      "title": "Classes",
+      "children": [69, 45]
+    },
+    {
+      "title": "Interfaces",
+      "children": [35, 31]
+    },
+    {
+      "title": "Type Aliases",
+      "children": [39, 7, 8, 23]
+    },
+    {
+      "title": "Variables",
+      "children": [10, 9]
+    },
+    {
+      "title": "Functions",
+      "children": [1, 4, 40, 103, 107, 112, 125, 130, 95, 135, 118, 99, 12, 17]
+    }
+  ],
+  "packageName": "@oaknational/oak-curriculum-sdk",
+  "packageVersion": "0.0.1",
+  "symbolIdMap": {
+    "0": {
+      "sourceFileName": "src/index.ts",
+      "qualifiedName": ""
+    },
+    "1": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "createOakClient"
+    },
+    "2": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "createOakClient"
+    },
+    "3": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "apiKey"
+    },
+    "4": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "createOakPathBasedClient"
+    },
+    "5": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "createOakPathBasedClient"
+    },
+    "6": {
+      "sourceFileName": "src/client/index.ts",
+      "qualifiedName": "apiKey"
+    },
+    "7": {
+      "sourceFileName": "src/client/oak-base-client.ts",
+      "qualifiedName": "OakApiClient"
+    },
+    "8": {
+      "sourceFileName": "src/client/oak-base-client.ts",
+      "qualifiedName": "OakApiPathBasedClient"
+    },
+    "9": {
+      "sourceFileName": "src/config/index.ts",
+      "qualifiedName": "apiUrl"
+    },
+    "10": {
+      "sourceFileName": "src/config/index.ts",
+      "qualifiedName": "apiSchemaUrl"
+    },
+    "11": {
+      "sourceFileName": "src/index.ts",
+      "qualifiedName": "createApiClient"
+    },
+    "12": {
+      "sourceFileName": "src/validation/request-validators.ts",
+      "qualifiedName": "validateRequest"
+    },
+    "13": {
+      "sourceFileName": "src/validation/request-validators.ts",
+      "qualifiedName": "validateRequest"
+    },
+    "14": {
+      "sourceFileName": "src/validation/request-validators.ts",
+      "qualifiedName": "path"
+    },
+    "15": {
+      "sourceFileName": "src/validation/request-validators.ts",
+      "qualifiedName": "method"
+    },
+    "16": {
+      "sourceFileName": "src/validation/request-validators.ts",
+      "qualifiedName": "args"
+    },
+    "17": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "validateResponse"
+    },
+    "18": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "validateResponse"
+    },
+    "19": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "path"
+    },
+    "20": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "method"
+    },
+    "21": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "statusCode"
+    },
+    "22": {
+      "sourceFileName": "src/validation/response-validators.ts",
+      "qualifiedName": "response"
+    },
+    "23": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidationResult"
+    },
+    "24": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type"
+    },
+    "25": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type.ok"
+    },
+    "26": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type.value"
+    },
+    "27": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type"
+    },
+    "28": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type.ok"
+    },
+    "29": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "__type.issues"
+    },
+    "30": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "T"
+    },
+    "31": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidationIssue"
+    },
+    "32": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidationIssue.path"
+    },
+    "33": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidationIssue.message"
+    },
+    "34": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidationIssue.code"
+    },
+    "35": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidatedClientOptions"
+    },
+    "36": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidatedClientOptions.validateRequest"
+    },
+    "37": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidatedClientOptions.validateResponse"
+    },
+    "38": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "ValidatedClientOptions.strict"
+    },
+    "39": {
+      "sourceFileName": "src/validation/types.ts",
+      "qualifiedName": "HttpMethod"
+    },
+    "40": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "executeToolCall"
+    },
+    "41": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "executeToolCall"
+    },
+    "42": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "maybeToolName"
+    },
+    "43": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "maybeParams"
+    },
+    "44": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "client"
+    },
+    "45": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpToolError"
+    },
+    "46": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.captureStackTrace"
+    },
+    "47": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.captureStackTrace"
+    },
+    "48": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "targetObject"
+    },
+    "49": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "constructorOpt"
+    },
+    "50": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.prepareStackTrace"
+    },
+    "51": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.prepareStackTrace"
+    },
+    "52": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "err"
+    },
+    "53": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "stackTraces"
+    },
+    "54": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.stackTraceLimit"
+    },
+    "55": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpToolError.__constructor"
+    },
+    "56": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpToolError"
+    },
+    "57": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "message"
+    },
+    "58": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "toolName"
+    },
+    "59": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "options"
+    },
+    "60": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "__type"
+    },
+    "61": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "__type.cause"
+    },
+    "62": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "__type.code"
+    },
+    "63": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpToolError.toolName"
+    },
+    "64": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpToolError.code"
+    },
+    "65": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.name"
+    },
+    "66": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.message"
+    },
+    "67": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.stack"
+    },
+    "68": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es2022.error.d.ts",
+      "qualifiedName": "Error.cause"
+    },
+    "69": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError"
+    },
+    "70": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.captureStackTrace"
+    },
+    "71": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.captureStackTrace"
+    },
+    "72": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "targetObject"
+    },
+    "73": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "constructorOpt"
+    },
+    "74": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.prepareStackTrace"
+    },
+    "75": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.prepareStackTrace"
+    },
+    "76": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "err"
+    },
+    "77": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "stackTraces"
+    },
+    "78": {
+      "sourceFileName": "../../../node_modules/.pnpm/@types+node@22.17.1/node_modules/@types/node/globals.d.ts",
+      "qualifiedName": "__global.ErrorConstructor.stackTraceLimit"
+    },
+    "79": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError.__constructor"
+    },
+    "80": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError"
+    },
+    "81": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "message"
+    },
+    "82": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "toolName"
+    },
+    "83": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "pathParameterName"
+    },
+    "84": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "queryParameterName"
+    },
+    "85": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "options"
+    },
+    "86": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "__type"
+    },
+    "87": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "__type.cause"
+    },
+    "88": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError.toolName"
+    },
+    "89": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError.pathParameterName"
+    },
+    "90": {
+      "sourceFileName": "src/mcp/execute-tool-call.ts",
+      "qualifiedName": "McpParameterError.queryParameterName"
+    },
+    "91": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.name"
+    },
+    "92": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.message"
+    },
+    "93": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
+      "qualifiedName": "Error.stack"
+    },
+    "94": {
+      "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es2022.error.d.ts",
+      "qualifiedName": "Error.cause"
+    },
+    "95": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeKeys"
+    },
+    "96": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeKeys"
+    },
+    "97": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "98": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "99": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeValues"
+    },
+    "100": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeValues"
+    },
+    "101": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "102": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "103": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeEntries"
+    },
+    "104": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeEntries"
+    },
+    "105": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "106": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "107": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeFromEntries"
+    },
+    "108": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeFromEntries"
+    },
+    "109": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "K"
+    },
+    "110": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "V"
+    },
+    "111": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "iter"
+    },
+    "112": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeGet"
+    },
+    "113": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeGet"
+    },
+    "114": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "115": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "K"
+    },
+    "116": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "117": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "key"
+    },
+    "118": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeSet"
+    },
+    "119": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeSet"
+    },
+    "120": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "121": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "K"
+    },
+    "122": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "123": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "key"
+    },
+    "124": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "value"
+    },
+    "125": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeHas"
+    },
+    "126": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeHas"
+    },
+    "127": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "128": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "129": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "key"
+    },
+    "130": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeHasOwn"
+    },
+    "131": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeHasOwn"
+    },
+    "132": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "133": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    },
+    "134": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "key"
+    },
+    "135": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeOwnKeys"
+    },
+    "136": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "typeSafeOwnKeys"
+    },
+    "137": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "T"
+    },
+    "138": {
+      "sourceFileName": "src/types/helpers.ts",
+      "qualifiedName": "obj"
+    }
+  },
+  "files": {
+    "entries": {
+      "1": "src/index.ts"
+    },
+    "reflections": {
+      "1": 0
+    }
+  }
+}

@@ -6,8 +6,7 @@
     "mcp",
     "transport",
     "stdio",
-    "transport",
-    "tissue"
+    "transport"
   ],
   "license": "MIT",
   "type": "module",

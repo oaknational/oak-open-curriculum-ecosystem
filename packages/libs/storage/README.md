@@ -2,7 +2,7 @@
 
 ## Overview
 
-An adaptive storage tissue that provides key-value storage across different runtime environments with automatic backend selection.
+An adaptive storage library that provides key-value storage across different runtime environments with automatic backend selection.
 
 ## Features
 
@@ -216,7 +216,7 @@ const value = await storage.get('nonexistent'); // undefined
 
 ## Contributing
 
-This tissue is part of the Oak MCP ecosystem. See the main repository for contribution guidelines.
+This library is part of the Oak MCP workspace. See the main repository for contribution guidelines.
 
 ## License
 

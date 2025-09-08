@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-core';
+import { createMockRuntime } from '../../test/mocks';
 import type { MinimalNotionClient } from '../../types/notion-types/notion-client';
 import { createMockPage } from '../../test/mocks/notion-mocks';
 import {
@@ -61,10 +62,12 @@ describe('Tool Handlers', () => {
     it('should create a search tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionSearchTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(tool.name).toBe('notion-search');
@@ -159,10 +162,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionSearchTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({ query: 'test' });
 
@@ -193,10 +198,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionSearchTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       await tool.handler({ query: 'test', filter: { type: 'page' } });
 
@@ -216,10 +223,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionSearchTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({ query: 'test' });
 
@@ -237,10 +246,12 @@ describe('Tool Handlers', () => {
     it('should create a list databases tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionListDatabasesTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(tool.name).toBe('notion-list-databases');
@@ -283,10 +294,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionListDatabasesTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({});
 
@@ -312,10 +325,12 @@ describe('Tool Handlers', () => {
     it('should create a query database tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionQueryDatabaseTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(tool.name).toBe('notion-query-database');
@@ -408,10 +423,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionQueryDatabaseTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({ database_id: 'db-123' });
 
@@ -437,10 +454,12 @@ describe('Tool Handlers', () => {
     it('should create a get page tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionGetPageTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(tool.name).toBe('notion-get-page');
@@ -524,10 +543,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn().mockResolvedValue({ results: mockBlocks }) } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionGetPageTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({ page_id: 'page-123', include_content: true });
 
@@ -553,10 +574,12 @@ describe('Tool Handlers', () => {
     it('should create a list users tool with correct metadata', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionListUsersTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(tool.name).toBe('notion-list-users');
@@ -595,10 +618,12 @@ describe('Tool Handlers', () => {
         blocks: { children: { list: vi.fn() } },
       };
 
+      const runtime = createMockRuntime(mockLogger);
       const tool = createNotionListUsersTool({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const result = await tool.handler({});
 
@@ -623,10 +648,12 @@ describe('Tool Handlers', () => {
     it('should return all tool handlers', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createToolHandlers({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       expect(handlers).toHaveProperty('notion-search');
@@ -641,10 +668,12 @@ describe('Tool Handlers', () => {
     it('should return tools array from getTools method', () => {
       const mockClient = createMockNotionClient();
 
+      const runtime = createMockRuntime(mockLogger);
       const { getTools } = createToolHandlers({
         notionClient: mockClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
       const tools = getTools();
 

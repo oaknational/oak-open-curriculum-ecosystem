@@ -148,7 +148,7 @@ export function createLibBoundaryRules(
  * Apps cannot import from other apps but can use core and libs
  */
 export const appBoundaryRules: Partial<Linter.RulesRecord> = {
-  // Organisms cannot import from other organisms
+  // Apps cannot import from other apps
   'import-x/no-restricted-paths': [
     'error',
     {

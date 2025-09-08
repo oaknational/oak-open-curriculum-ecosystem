@@ -104,6 +104,6 @@ The project is actively being developed with:
 - Core MCP server functionality implemented
 - Notion integration working for read operations
 - Comprehensive test coverage
-- Architecture evolution toward cellular/ecosystem patterns
+- Architecture evolution toward cellular/workspace patterns
 
 See [Architecture Overview](../architecture-overview.md) for detailed architecture information.

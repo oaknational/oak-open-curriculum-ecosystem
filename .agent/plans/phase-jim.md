@@ -9,7 +9,7 @@
 - [x] Add Claude custom commands for quality gates, stepping back, commit and push
 - [x] Think about how best to use sub-agents - code review, architecture review, etc.
 - [x] Turn it into a pnpm workspace and Turbo monorepo.
-- [ ] Standardise the architecture for ease of onboarding and maintenance.
+- [x] Standardise the architecture for ease of onboarding and maintenance.
 - [ ] Move the MCP server workspaces under an mcp folder, possibly under the packages folder, or services folder?
 - [ ] Better define the providers folder
   - [ ] consider a more semantically useful name

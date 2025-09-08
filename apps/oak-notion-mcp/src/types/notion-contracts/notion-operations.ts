@@ -3,7 +3,7 @@
  * @module substrate/contracts/notion-operations
  *
  * These contracts define what Notion operations MCP can use through dependency injection.
- * This maintains organ boundaries - MCP doesn't import from Notion, it receives these.
+ * This maintains clear module boundaries - MCP doesn't import from Notion internals, it receives these.
  */
 
 import type {

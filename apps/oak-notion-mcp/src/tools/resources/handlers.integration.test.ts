@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers/index';
 import type { MinimalNotionClient } from '../../types/notion-types/notion-client';
 import type { Logger } from '@oaknational/mcp-core';
+import { createMockRuntime } from '../../test/mocks';
 import {
   createMockPage,
   createMockDatabase,
@@ -77,10 +78,12 @@ describe('createResourceHandlers', () => {
 
   describe('handleListResources', () => {
     it('should list all available resources', async () => {
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       const result = await handlers.handleListResources();
@@ -170,10 +173,12 @@ describe('createResourceHandlers', () => {
         createMockSearchResponse(mockSearchResult.results),
       );
 
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       const result = await handlers.handleReadResource('notion://discovery');
@@ -222,10 +227,12 @@ describe('createResourceHandlers', () => {
 
       vi.mocked(mockNotionClient.pages.retrieve).mockResolvedValueOnce(mockPage);
 
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       const result = await handlers.handleReadResource('notion://pages/page-123');
@@ -276,10 +283,12 @@ describe('createResourceHandlers', () => {
 
       vi.mocked(mockNotionClient.databases.retrieve).mockResolvedValueOnce(mockDatabase);
 
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       const result = await handlers.handleReadResource('notion://databases/db-456');
@@ -298,10 +307,12 @@ describe('createResourceHandlers', () => {
     });
 
     it('should handle invalid URI', async () => {
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       await expect(handlers.handleReadResource('invalid://uri')).rejects.toThrow(
@@ -314,10 +325,12 @@ describe('createResourceHandlers', () => {
     });
 
     it('should handle unsupported resource type', async () => {
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       await expect(handlers.handleReadResource('notion://unknown/123')).rejects.toThrow(
@@ -329,10 +342,12 @@ describe('createResourceHandlers', () => {
       const notionError = new Error('API rate limited');
       vi.mocked(mockNotionClient.pages.retrieve).mockRejectedValueOnce(notionError);
 
+      const runtime = createMockRuntime(mockLogger);
       const handlers = createResourceHandlers({
         notionClient: mockNotionClient,
         logger: mockLogger,
         notionOperations: createMockOperations(),
+        runtime,
       });
 
       await expect(handlers.handleReadResource('notion://pages/page-123')).rejects.toThrow(
@@ -343,7 +358,7 @@ describe('createResourceHandlers', () => {
         'Error reading resource',
         expect.objectContaining({
           uri: 'notion://pages/page-123',
-          error: notionError,
+          error: new Error('API rate limited'),
         }),
       );
     });

@@ -40,7 +40,7 @@ The deepest mystery in biology is how life emerges from non-life. Similarly, the
 - Types become data
 - Interfaces become connections
 - Functions become behaviors
-- Components become organism
+- Components become page-level modules
 
 This is why we don't distribute the wiring throughout the codebase. There should be a clear composition root: a single place where wiring happens.
 

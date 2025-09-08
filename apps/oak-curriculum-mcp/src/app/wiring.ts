@@ -5,6 +5,9 @@
 
 import { createMcpOrgan } from '../tools/index.js';
 import type { McpOrgan } from '../tools/index.js';
+import { createRuntime, type CoreLogger } from '@oaknational/mcp-core';
+import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
+import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 import { appendToLogFile, getLogFilePath } from './file-reporter.js';
 
 function mapLogLevelToIndex(level: string): number {
@@ -101,6 +104,7 @@ export interface WiredDependencies {
   logger: Logger;
   mcpOrgan: McpOrgan;
   config: Required<ServerConfig>;
+  runtime: ReturnType<typeof createRuntime>;
 }
 
 /**
@@ -135,13 +139,40 @@ function buildServerConfig(config?: ServerConfig): Required<ServerConfig> {
 export function wireDependencies(config?: ServerConfig): WiredDependencies {
   const serverConfig = buildServerConfig(config);
   const logger = createLogger(serverConfig.logLevel);
+  // Compose CoreRuntime
+  const coreLogger: CoreLogger = {
+    debug: (message, context) => {
+      logger.debug(message, context);
+    },
+    info: (message, context) => {
+      logger.info(message, context);
+    },
+    warn: (message, context) => {
+      logger.warn(message, context);
+    },
+    error: (message, context) => {
+      logger.error(message, context);
+    },
+  };
+  const runtime = createRuntime({
+    logger: coreLogger,
+    clock: createNodeClock(),
+    storage: createInMemoryStorage(),
+  });
 
-  // Create MCP organ with SDK delegation
-  const mcpOrgan = createMcpOrgan();
+  // Create SDK client via injected config
+  if (!serverConfig.apiKey) {
+    throw new Error('OAK_API_KEY is required');
+  }
+  const client = createOakPathBasedClient(serverConfig.apiKey);
+
+  // Create MCP tools module with injected client
+  const mcpOrgan = createMcpOrgan({ client });
 
   return {
     logger,
     mcpOrgan,
     config: serverConfig,
+    runtime,
   };
 }
