@@ -9,6 +9,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 - Maintain parity with local STDIO behaviour through transport/adapter contract tests.
 - App directory: `apps/oak-curriculum-mcp-remote-poc`; package name: `@oaknational/curriculum-mcp-remote-poc`.
 - OAuth‑first authorization aligned with MCP Basic Authorization (2025‑03‑26) and Vercel guidance; provide a dev fallback static token for local/testing.
+- Preserve compile‑time SDK tool generation: remote server consumes the generated MCP tools from the Curriculum SDK; no bespoke tool definitions in the remote app.
 
 ## Non-goals
 
@@ -26,6 +27,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - Unauthorized requests return 401 and include MCP authorization hints in the JSON‑RPC error payload (per MCP Basic Authorization spec).
   - Dev fallback: allow a static Bearer token for local/dev only (env‑gated), documented and covered by tests.
   - Optional: Vercel authentication in front of the function for team‑only access (Oak Vercel accounts), with notes on MCP client header behaviour and trade‑offs.
+- ListTools parity: `list_tools` from the remote endpoint exactly matches the generated tools exported by the Curriculum SDK (source of truth), and a test asserts equality.
 - Local testability documented (inspector flow) mirroring Vercel’s guidance.
 
 ## Design outline
@@ -68,6 +70,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 5. ACTION: Wire into one server (Curriculum MCP)
    - Add an HTTP entry that reuses existing DI wiring and registers the HTTP adapter.
    - Keep STDIO entry intact; choose entry via env/config.
+   - Use the generated Curriculum SDK MCP tools via `createMcpToolsModule({ client })` and `getMcpTools()`; do not redefine tools in the remote app.
      REVIEW: Self-analyze that DI remains explicit and no implicit env lookups are introduced.
 
 6. QUALITY-GATE: Run from repo root
