@@ -9,6 +9,16 @@ Status: Deferred from Part 2; execute after import hygiene and docs polish.
 
 This stage is deliberately minimal, time‑boxed, and focused on onboarding and clarity.
 
+## Adopted Workspace Structure
+
+Adopt Option A from `workspace-structure-options.md`:
+
+- `apps/` – runnable MCP servers
+- `packages/core/` – core contracts/utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – reusable libraries
+- `packages/providers/` – platform providers (node, workers)
+- `packages/sdks/` – client SDKs
+
 ## Scope
 
 - Define app-level composition functions and pass providers/runtime to integrations/tools.
@@ -39,6 +49,36 @@ This stage is deliberately minimal, time‑boxed, and focused on onboarding and 
 - Canonical tiering: apps/services → libs → core/utilities — what does “excellent” look like here?
   - Define ownership and dependency arrows; publish boundaries and examples.
 - Onboarding docs: what must a new dev read first, and in what order? Keep it fast and accurate.
+
+## Remaining Next Steps (time‑boxed, minimal)
+
+1. Architecture index update (docs)
+   - Add Option A layout and “Rules & Relationships” to `docs/architecture/README.md`.
+   - Cross‑link `docs/architecture/provider-system.md` and `docs/onboarding.md`.
+   - Bound: 60–90 min.
+
+2. Placement verification (structure)
+   - Confirm `packages/providers/` and `packages/sdks/` contain current providers/SDKs (no moves expected).
+   - Bound: 15–30 min.
+
+3. DI exemplar (code‑light)
+   - In Notion app: centralise `createRuntime(nodeProviders)` in a single wiring point and thread runtime via params (no behaviour change).
+   - Bound: 60–90 min.
+
+4. Import policy confirmation (lint/docs)
+   - Re‑assert package‑only inter‑workspace imports; allow intra‑package relatives; avoid private internals.
+   - Ensure ESLint config comments and docs reflect policy.
+   - Bound: 30 min.
+
+5. Decision record
+   - Add ADR: “ADR‑041 Workspace Structure (Option A) – adopted”. Short, links to options doc.
+   - Bound: 30–45 min.
+
+6. Gates and push
+   - Run format → type‑check → lint → test → build → identity‑check (0); commit and push.
+   - Bound: 10–20 min.
+
+Deferred (tracked elsewhere): Cloudflare Workers provider POC (`serverless-hosting-plan.md`), provider naming finalisation after POC.
 
 ## Minimal, Impactful Steps (time‑boxed)
 
