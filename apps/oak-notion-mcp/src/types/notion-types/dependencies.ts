@@ -2,7 +2,7 @@
  * Notion-specific dependencies for the phenotype
  */
 
-import type { Logger } from '@oaknational/mcp-core';
+import type { Logger, CoreRuntime } from '@oaknational/mcp-core';
 import type { MinimalNotionClient } from './notion-client';
 import type { NotionOperations } from '../notion-contracts/notion-operations';
 
@@ -13,6 +13,7 @@ export interface NotionDependencies {
   notionClient: MinimalNotionClient;
   logger: Logger;
   notionOperations: NotionOperations;
+  runtime: CoreRuntime;
 }
 
 /**

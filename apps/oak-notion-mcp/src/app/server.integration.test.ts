@@ -3,7 +3,7 @@ import { createMcpServer } from './server';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import type { Logger } from '@oaknational/mcp-core';
-import { createMockListUsersResponse } from '../test/mocks';
+import { createMockRuntime, createMockListUsersResponse } from '../test/mocks';
 
 // Simple helper to create mock operations inline
 function createMockOperations() {
@@ -66,11 +66,13 @@ describe('MCP Server', () => {
       version: '1.0.0',
     };
 
+    const runtime = createMockRuntime(mockLogger);
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
       notionOperations: createMockOperations(),
       config,
+      runtime,
     });
 
     // Setup mock to return users
@@ -123,11 +125,13 @@ describe('MCP Server', () => {
       version: '1.0.0',
     };
 
+    const runtime = createMockRuntime(mockLogger);
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
       notionOperations: createMockOperations(),
       config,
+      runtime,
     });
 
     // Create transport and connect
@@ -168,11 +172,13 @@ describe('MCP Server', () => {
    */
   async function setupServerAndClient() {
     const config = { name: 'test-server', version: '1.0.0' };
+    const runtime = createMockRuntime(mockLogger);
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
       notionOperations: createMockOperations(),
       config,
+      runtime,
     });
 
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -239,11 +245,13 @@ describe('MCP Server', () => {
       version: '1.0.0',
     };
 
+    const runtime = createMockRuntime(mockLogger);
     const server = createMcpServer({
       notionClient: mockNotionClient,
       logger: mockLogger,
       notionOperations: createMockOperations(),
       config,
+      runtime,
     });
 
     // Create transport and connect

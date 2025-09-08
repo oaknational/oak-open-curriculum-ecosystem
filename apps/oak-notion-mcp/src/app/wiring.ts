@@ -109,7 +109,13 @@ async function createServerDependencies(log: ServerSetupDependencies['log']): Pr
   const notionOperations = createNotionOperations();
 
   log('[STARTUP] Creating MCP server...');
-  const server = createMcpServer({ notionClient, logger, notionOperations, config: serverConfig });
+  const server = createMcpServer({
+    notionClient,
+    logger,
+    notionOperations,
+    config: serverConfig,
+    runtime,
+  });
 
   return { logger, notionClient, server, runtime };
 }
