@@ -5,7 +5,7 @@
  * All tool logic and validation is handled by the SDK.
  */
 
-import { handleToolCall } from './handlers/tool-handler.js';
+import { createHandleToolCall, type SdkClient } from './handlers/tool-handler.js';
 import { getMcpTools } from './runtime/index.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
@@ -41,7 +41,8 @@ function extractTextContent(result: unknown): string | undefined {
 /**
  * Creates MCP tools module that delegates to SDK
  */
-export function createMcpToolsModule(): McpToolsModule {
+export function createMcpToolsModule(deps: { client: SdkClient }): McpToolsModule {
+  const handler = createHandleToolCall(deps.client);
   return {
     tools: getMcpTools(),
     handleTool: async (name: string, args: unknown) => {
@@ -52,7 +53,7 @@ export function createMcpToolsModule(): McpToolsModule {
           arguments: isRecord(args) ? args : undefined,
         },
       } as const;
-      const result = await handleToolCall(request);
+      const result = await handler(request);
       // If the underlying handler signals an error, pass through untouched
       if (isRecord(result) && result.isError === true && 'content' in result) {
         return result;
@@ -80,6 +81,6 @@ export function createMcpToolsModule(): McpToolsModule {
 
 // Backward-compatibility exports
 export type McpOrgan = McpToolsModule;
-export function createMcpOrgan(): McpToolsModule {
-  return createMcpToolsModule();
+export function createMcpOrgan(deps: { client: SdkClient }): McpToolsModule {
+  return createMcpToolsModule(deps);
 }
