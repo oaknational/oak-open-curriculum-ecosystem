@@ -29,6 +29,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 - CORS (browser clients): expose header `Mcp-Session-Id` and allow `mcp-session-id` when using session mode.
 - Security: enable DNS rebinding protection for local dev; configure `allowedHosts`/`allowedOrigins` as appropriate in remote environments.
 - Vercel runtime: use Node runtime (not Edge); ensure streaming/chunked responses are not buffered by middleware.
+- Rationale: in stateless mode, create a fresh server/transport per request to avoid JSON‑RPC request ID collisions across concurrent clients.
 
 ## Implementation steps
 
@@ -44,7 +45,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
      REVIEW: Self‑analyze for parity with STDIO and proper lifecycle/cleanup.
 
 3. ACTION: CORS and security
-   - For browser clients, configure CORS to expose `Mcp-Session-Id` and allow header `mcp-session-id` (session mode only).
+   - For browser clients, configure CORS to expose `Mcp-Session-Id` and allow header `mcp-session-id` (session mode only). Example: `exposedHeaders: ['Mcp-Session-Id']`, `allowedHeaders: ['Content-Type', 'mcp-session-id']`.
    - Enable DNS rebinding protection for local dev; set `allowedHosts`/`allowedOrigins` in remote.
      REVIEW: Self‑analyze correctness of CORS and protection settings.
 
@@ -83,3 +84,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 ## Documentation
 
 - Add a short guide under `docs/usage/` describing Streaming HTTP usage and the Vercel deployment steps.
+
+## References
+
+- Streamable HTTP (TypeScript SDK) — setup, session management, CORS, DNS rebinding: [TypeScript SDK README — Streamable HTTP](https://github.com/modelcontextprotocol/typescript-sdk/blob/main/README.md#streamable-http)
