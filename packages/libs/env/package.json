@@ -21,7 +21,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",

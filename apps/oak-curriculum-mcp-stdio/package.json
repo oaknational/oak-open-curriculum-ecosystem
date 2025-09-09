@@ -33,7 +33,7 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",

@@ -33,7 +33,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
     "@oaknational/mcp-core": "workspace:^"

@@ -27,7 +27,7 @@
     "generate:openapi": "tsx scripts/typegen.ts",
     "generate:openapi:clean": "rm -rf src/types/generated",
     "generate:zod": "tsx scripts/zodgen.ts",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",

@@ -25,7 +25,7 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
     "@oaknational/mcp-core": "workspace:^"

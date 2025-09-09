@@ -19,6 +19,13 @@ function parseFirstSseData(text: string): unknown {
   }
   return undefined;
 }
+function isTextContent(value: unknown): value is { type: string; text: string } {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as { text?: unknown }).text === 'string'
+  );
+}
 import { createApp } from './index.js';
 
 describe('Oak Curriculum MCP Streamable HTTP', () => {
@@ -120,6 +127,10 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     expect(result?.isError).toBe(true);
     const content = result?.content ?? [];
     expect(Array.isArray(content)).toBe(true);
-    expect(String(content[0]?.text)).toContain('Error:');
+    const first = content[0];
+    expect(isTextContent(first)).toBe(true);
+    if (isTextContent(first)) {
+      expect(first.text).toContain('Error:');
+    }
   });
 });
