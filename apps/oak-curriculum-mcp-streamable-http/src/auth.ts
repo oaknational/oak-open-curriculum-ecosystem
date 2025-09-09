@@ -1,6 +1,39 @@
-import type { RequestHandler } from 'express';
+import type { RequestHandler, Response } from 'express';
+import { jwtVerify, importJWK, type JWK } from 'jose';
+import { readEnv } from './env.js';
 
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.VERCEL;
+
+function unauthorized(
+  res: Response,
+  params: {
+    error: 'invalid_request' | 'invalid_token' | 'insufficient_scope';
+    description: string;
+    realm?: string;
+  },
+): void {
+  const realm = params.realm ?? 'mcp';
+  // Read env safely; defaults avoid throwing when optional values are absent
+  let resource = 'http://localhost/mcp';
+  let authorizationUri = '/.well-known/oauth-protected-resource';
+  try {
+    const env = readEnv();
+    resource = env.MCP_CANONICAL_URI ?? resource;
+    if (env.BASE_URL) authorizationUri = `${env.BASE_URL}/.well-known/oauth-protected-resource`;
+  } catch {
+    // Fall back to defaults if env is not fully configured
+  }
+
+  const parts = [
+    `realm="${realm}"`,
+    `error="${params.error}"`,
+    `error_description="${params.description}"`,
+    `resource="${resource}"`,
+    `authorization_uri="${authorizationUri}"`,
+  ];
+  res.setHeader('WWW-Authenticate', `Bearer ${parts.join(', ')}`);
+  res.status(401).json({ error: params.error, error_description: params.description });
+}
 
 function getAuthHeader(req: { get(name: string): string | undefined }): string | undefined {
   return req.get('authorization') ?? req.get('Authorization');
@@ -26,7 +59,7 @@ function isCiAuthorized(token: string | undefined): boolean {
   return Boolean(token) && isCi && Boolean(ciToken) && token === ciToken;
 }
 
-export const bearerAuth: RequestHandler = (req, res, next) => {
+export const bearerAuth: RequestHandler = async (req, res, next) => {
   const token = getBearerToken(getAuthHeader(req));
 
   if (!token) {
@@ -34,7 +67,7 @@ export const bearerAuth: RequestHandler = (req, res, next) => {
       next();
       return;
     }
-    res.status(401).json({ error: 'Missing Authorization header' });
+    unauthorized(res, { error: 'invalid_request', description: 'Missing Authorization header' });
     return;
   }
 
@@ -43,5 +76,54 @@ export const bearerAuth: RequestHandler = (req, res, next) => {
     return;
   }
 
-  res.status(401).json({ error: 'Invalid token' });
+  try {
+    await verifyAccessToken(token);
+    next();
+  } catch (err: unknown) {
+    const description = err instanceof Error ? err.message : 'Token verification failed';
+    unauthorized(res, { error: 'invalid_token', description });
+  }
 };
+
+function safeParseJson(value: string): unknown {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return undefined;
+  }
+}
+
+function isJwk(value: unknown): value is JWK {
+  if (value !== null && typeof value === 'object') {
+    const obj: object = value;
+    const kty: unknown = Reflect.get(obj, 'kty');
+    return typeof kty === 'string';
+  }
+  return false;
+}
+
+async function verifyAccessToken(token: string): Promise<void> {
+  const env = readEnv();
+  if (env.ENABLE_LOCAL_AS !== 'true') {
+    throw new Error('JWT verification disabled: ENABLE_LOCAL_AS must be true');
+  }
+
+  const jwkJson = process.env.LOCAL_AS_JWK;
+  const issuer = env.BASE_URL;
+  const audience = env.MCP_CANONICAL_URI;
+
+  if (!jwkJson) throw new Error('Server misconfiguration: LOCAL_AS_JWK is missing');
+  if (!issuer) throw new Error('Server misconfiguration: BASE_URL is missing');
+  if (!audience) throw new Error('Server misconfiguration: MCP_CANONICAL_URI is missing');
+
+  const parsed = safeParseJson(jwkJson);
+  if (!isJwk(parsed)) throw new Error('Server misconfiguration: LOCAL_AS_JWK is not a valid JWK');
+
+  const key = await importJWK(parsed, 'RS256');
+  await jwtVerify(token, key, {
+    issuer,
+    audience,
+    maxTokenAge: '10m',
+    clockTolerance: '60s',
+  });
+}
