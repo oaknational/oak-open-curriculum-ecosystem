@@ -19,6 +19,7 @@
     "@modelcontextprotocol/sdk": "^1.17.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "jose": "^6.1.0",
     "zod": "^3.23.8",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "@oaknational/mcp-core": "workspace:*",

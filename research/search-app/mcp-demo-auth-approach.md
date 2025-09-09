@@ -315,7 +315,7 @@ app.listen(Number(Env.PORT), () => {
 
 ## 7) Example `.env` (validated with `zod`)
 
-```
+```shell
 PORT=3000
 BASE_URL=https://mcp.example.com
 MCP_CANONICAL_URI=https://mcp.example.com/mcp

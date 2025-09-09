@@ -11,6 +11,6 @@ export default mergeConfig(baseE2EConfig, {
         singleFork: true,
       },
     },
-    setupFiles: ['src/test.setup.ts'],
+    // Do NOT include src/test.setup.ts here: e2e tests may allow network IO
   },
 });

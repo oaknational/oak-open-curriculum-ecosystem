@@ -13,7 +13,7 @@
     "format:check": "prettier --check --cache .",
     "lint": "turbo run --continue lint",
     "test": "turbo run --continue test",
-    "test:e2e": "turbo run --continue test:e2e",
+    "test:e2e": "E2E_REAL_API=true turbo run --continue test:e2e",
     "type-check": "turbo run --continue type-check",
     "qg": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm lint -- --fix && pnpm -F @oaknational/oak-curriculum-sdk docs:all && pnpm format && pnpm test && pnpm test:e2e",
     "identity-check": "node scripts/identity-check.mjs --mode=enforce",

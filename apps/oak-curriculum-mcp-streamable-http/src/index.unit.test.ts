@@ -32,7 +32,10 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   const DEV_TOKEN = 'dev-token';
   let app: express.Express;
 
+  /** @todo refactor the underlying lying so we don't have to care about envs in unit tests */
   beforeEach(() => {
+    delete process.env.BASE_URL;
+    delete process.env.MCP_CANONICAL_URI;
     process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
     process.env.OAK_API_KEY = 'test-key';
     vi.restoreAllMocks();
