@@ -9,6 +9,7 @@
 ### Initial Misunderstanding: The Custom Implementation Trap
 
 I initially approached the SDK implementation with a "clean room" mindset, attempting to build a custom type generation system from scratch. This led to:
+
 - Complex transform functions that tried to parse OpenAPI manually
 - Incomplete type extraction
 - A system that would require constant manual updates
@@ -23,6 +24,7 @@ The breakthrough came when I truly understood the reference implementation's app
 2. **Stage 2 was the secret sauce** - custom extraction of runtime values that openapi-typescript doesn't provide
 
 This two-stage pipeline is elegant because:
+
 - Stage 1 handles the complex type generation
 - Stage 2 extracts what Stage 1 cannot: runtime constants, type guards, valid path combinations
 
@@ -39,6 +41,7 @@ This two-stage pipeline is elegant because:
 ### What OpenAPI-TypeScript Doesn't Do
 
 I learned that `openapi-typescript` is excellent but limited:
+
 - ✅ Generates complete TypeScript interfaces
 - ✅ Handles complex nested types
 - ❌ Doesn't extract enum values as runtime constants
@@ -48,6 +51,7 @@ I learned that `openapi-typescript` is excellent but limited:
 ### The Power of AST Manipulation
 
 The reference's approach of processing the OpenAPI schema AST to extract runtime values is brilliant:
+
 ```typescript
 // This extracts actual values, not just types
 const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
@@ -56,6 +60,7 @@ const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
 ### Runtime Isolation Surprise
 
 The user's implementation of runtime isolation was more sophisticated than expected:
+
 - Try-catch blocks for environment detection
 - Support for both Node.js and Cloudflare Workers
 - Graceful fallbacks
@@ -71,6 +76,7 @@ I should have spent more time reading the reference implementation before writin
 ### Incremental Progress vs. Big Bang
 
 Trying to implement everything at once led to confusion. The successful approach was:
+
 1. Copy type generation exactly
 2. Get it working
 3. Then adapt for our structure
@@ -84,6 +90,7 @@ The user's quick corrections ("consider zod-openapi", "what value does Zod give 
 ### The Transplant Pattern
 
 When a reference implementation exists:
+
 1. Copy it wholesale first
 2. Get it working in your environment
 3. Then refactor for your architecture
@@ -92,6 +99,7 @@ When a reference implementation exists:
 ### The Two-Stage Generation Pattern
 
 When generating code from schemas:
+
 1. Use existing tools for the heavy lifting (types)
 2. Add custom processing for what tools miss (runtime values)
 3. Keep stages clearly separated
@@ -99,6 +107,7 @@ When generating code from schemas:
 ### The Progressive Isolation Pattern
 
 For runtime compatibility:
+
 1. Start with simple try-catch detection
 2. Add abstraction layers only when needed
 3. Don't over-engineer for future requirements

@@ -9,12 +9,14 @@ Successfully implemented a pure data-driven MCP tool execution system where **ev
 ### Initial Misunderstanding
 
 Started with assumptions about the openapi-fetch path-based client structure. Expected:
+
 - Lowercase methods: `client[path]['get']`
 - Simple parameter structure: `{ path: {...}, query: {...} }`
 
 ### Discovery Through Testing
 
 Real structure revealed through empirical testing:
+
 - **Methods are UPPERCASE**: `client['/path']['GET']`
 - **Parameters are nested**: `{ params: { path: {...}, query: {...} } }`
 - **Response wraps everything**: `{ data, error, response }`
@@ -44,6 +46,7 @@ This preserves the full error context while providing structured error informati
 ### 1. Data Structures > Code
 
 The power of generating a const data structure and deriving everything from it cannot be overstated. The `MCP_TOOL_MAP` becomes:
+
 - The validator (via type guards)
 - The router (via lookups)
 - The type source (via `typeof`)
@@ -59,6 +62,7 @@ By using `isMcpToolName(value): value is McpToolName`, TypeScript knows the type
 ### 4. Happy Path vs Unhappy Path
 
 The unhappy path tests revealed important API behaviours:
+
 - Some lessons are copyright-blocked
 - Thread slugs need suffixes like 'grammar-38'
 - Invalid parameters return structured errors
@@ -70,6 +74,7 @@ These "failures" actually proved the system works correctly.
 ### The Elegance
 
 There's something deeply satisfying about reducing complex routing logic to:
+
 ```typescript
 const tool = MCP_TOOL_MAP[toolName];
 return client[tool.path][tool.method](params);
@@ -100,6 +105,7 @@ The fact that adding a new tool now requires only updating the data structure (n
 ## Future Implications
 
 This pattern could be applied to:
+
 - Form validation systems
 - API route handlers
 - State machines
@@ -109,4 +115,4 @@ The key is recognising when you have a data pattern that can replace code patter
 
 ---
 
-*Written after successfully implementing Phase 3 of the data-driven MCP type generation system, December 2024*
+_Written after successfully implementing Phase 3 of the data-driven MCP type generation system, December 2024_

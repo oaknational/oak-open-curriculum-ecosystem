@@ -1,6 +1,7 @@
 # ADR-025: Erasable Syntax Only for Pure ESM Output
 
 ## Status
+
 Accepted (Revised)
 
 ## Context
@@ -45,7 +46,7 @@ class ServiceImpl implements Service {
 // tsconfig.base.json
 {
   "compilerOptions": {
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": true
     // ... other options
   }
 }
@@ -121,6 +122,7 @@ import type { Logger } from '@oaknational/mcp-moria';
 ## Validation
 
 This configuration has been validated by:
+
 - All packages still building successfully
 - All 193 tests passing
 - Bundle sizes remaining minimal
@@ -129,6 +131,7 @@ This configuration has been validated by:
 ## Migration
 
 No migration needed - our codebase already follows erasable patterns:
+
 - We use manual dependency injection (ADR-024)
 - We don't use decorators
 - We don't rely on reflect-metadata
@@ -158,8 +161,8 @@ The investigation was valuable as it confirmed our patterns are already optimal 
 // This pattern is used throughout our codebase
 export class ConsolaLogger implements Logger {
   constructor(
-    private readonly consola: ConsolaInstance,  // TS1294 Error
-    private readonly contextData: Record<string, unknown> = {},  // TS1294 Error
+    private readonly consola: ConsolaInstance, // TS1294 Error
+    private readonly contextData: Record<string, unknown> = {}, // TS1294 Error
   ) {}
 }
 
@@ -167,7 +170,7 @@ export class ConsolaLogger implements Logger {
 export class ConsolaLogger implements Logger {
   private readonly consola: ConsolaInstance;
   private readonly contextData: Record<string, unknown>;
-  
+
   constructor(consola: ConsolaInstance, contextData: Record<string, unknown> = {}) {
     this.consola = consola;
     this.contextData = contextData;

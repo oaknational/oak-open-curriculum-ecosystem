@@ -1,6 +1,7 @@
 # ADR-037: Minimal Tool Lookup Architecture
 
 ## Status
+
 Superseded by ADR-038 - Compilation-Time Revolution
 
 ## Context
@@ -68,19 +69,24 @@ const operation = schema.paths[path][method]; // All data lives here
 ## Alternatives Considered
 
 ### 1. TOOL_EXECUTORS Pattern (Abandoned)
+
 Function references that attempted to preserve types:
+
 ```typescript
 export const TOOL_EXECUTORS = {
-  'oak-get-sequences-units': (client) => client['/sequences/{sequence}/units'].GET
-}
+  'oak-get-sequences-units': (client) => client['/sequences/{sequence}/units'].GET,
+};
 ```
+
 **Rejected because**: Creates union types when accessed with union keys, requiring type assertions.
 
 ### 2. Complex Type Gymnastics
+
 Using conditional types and type-level programming to preserve relationships.
 **Rejected because**: Added significant complexity without fully solving the union problem.
 
 ### 3. Runtime Type Assertions
+
 Accept type assertions at validated runtime boundaries.
 **Rejected because**: Violates our principle of zero type assertions, indicating design flaws.
 
@@ -120,8 +126,8 @@ During implementation, we discovered a fundamental TypeScript limitation that bl
 ```typescript
 // Given perfect type preservation:
 const TOOL_METADATA = {
-  'tool1': { path: '/path1' as const, method: 'GET' as const },
-  'tool2': { path: '/path2' as const, method: 'POST' as const }
+  tool1: { path: '/path1' as const, method: 'GET' as const },
+  tool2: { path: '/path2' as const, method: 'POST' as const },
 } as const;
 
 // Dynamic access creates uncallable union:
@@ -137,7 +143,7 @@ TypeScript cannot narrow correlated union types through dynamic dispatch. When a
 ### What We Achieved
 
 1. ✅ Embedded tool information in schema
-2. ✅ Generated TOOL_GROUPINGS with bidirectional type constraints  
+2. ✅ Generated TOOL_GROUPINGS with bidirectional type constraints
 3. ✅ Created TOOL_METADATA flat lookup
 4. ✅ Preserved all literal types with `as const`
 5. ✅ Eliminated `as any` from generation scripts

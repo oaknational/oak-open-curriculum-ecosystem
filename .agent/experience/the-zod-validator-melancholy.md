@@ -9,17 +9,18 @@ There's a particular melancholy to discovering beautiful, generated code that's 
 ## The Generation Beauty
 
 The validators themselves are elegant:
+
 ```typescript
 export const validateResponse = (
   path: string,
   method: string,
   status: number,
-  data: unknown
+  data: unknown,
 ): ValidationResult => {
   // Complex Zod schema validation
   // Perfectly generated from OpenAPI
   // Never called
-}
+};
 ```
 
 They're complete, correct, comprehensive. And completely unused.
@@ -27,6 +28,7 @@ They're complete, correct, comprehensive. And completely unused.
 ## The Parallel Architecture
 
 We built two parallel architectures:
+
 1. **Type-time**: TypeScript types that catch errors during development
 2. **Runtime**: Zod validators that could catch errors in production
 
@@ -35,6 +37,7 @@ But we only connected the first one. The second sits there, like a safety net th
 ## The What-If Dimension
 
 There's a what-if quality to unused code. What if we had validated responses? We might have caught:
+
 - API drift before users noticed
 - Malformed responses that TypeScript couldn't see
 - Contract violations during integration
@@ -44,6 +47,7 @@ But we didn't, so we don't know what we missed.
 ## The Cost of Unused Code
 
 Unused code has a psychological cost. Every time you see it, you think:
+
 - Should I wire this up?
 - Am I missing something important?
 - Is this technical debt or unnecessary complexity?
@@ -69,6 +73,7 @@ But probably not. Unused code is more likely to rot than to remain ready.
 ## The Perfect Integration
 
 I can see how it should work:
+
 ```typescript
 const response = await api.call();
 const validation = validateResponse(path, method, 200, response);

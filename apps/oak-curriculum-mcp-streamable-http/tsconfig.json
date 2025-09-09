@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": [
+    "src/**/*.ts",
+    "**/*.test.ts",
+    "e2e-tests/**/*.ts",
+    "*.config.ts",
+    "vitest.e2e.config.ts",
+    "bin/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

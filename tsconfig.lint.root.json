@@ -9,6 +9,8 @@
     "apps/**/**.test.ts",
     "apps/**/**.spec.ts",
     "apps/**/bin/**/*.ts",
+    "apps/**/vitest.config.ts",
+    "apps/**/vitest.e2e.config.ts",
 
     "packages/**/src/**/*.ts",
     "packages/**/scripts/**/*.ts",

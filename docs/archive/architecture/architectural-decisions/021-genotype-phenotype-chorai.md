@@ -19,6 +19,7 @@ During Phase 4 implementation (genotype/phenotype separation), we needed to clar
 **Chorai can exist in BOTH genotype and phenotype**, following these principles:
 
 ### Genotype Chorai (oak-mcp-core)
+
 These are the **genetic traits** - abstract patterns that ALL phenotypes inherit:
 
 - **morphai**: Abstract patterns (Platonic forms) - tool patterns, handler patterns, registry patterns
@@ -27,6 +28,7 @@ These are the **genetic traits** - abstract patterns that ALL phenotypes inherit
 - **phaneron**: Base configuration patterns - config management abstractions
 
 ### Phenotype Chorai (oak-notion-mcp)
+
 These are **environmental extensions** - specific adaptations for the Notion environment:
 
 - **eidola**: Notion-specific test infrastructure - mocks, fixtures, test helpers
@@ -69,8 +71,8 @@ import type { MinimalNotionClient } from './notion-client.js';
 
 export interface NotionDependencies {
   notionClient: MinimalNotionClient;
-  logger: Logger;  // Inherited from genotype
-  notionOperations: NotionOperations;  // Phenotype-specific
+  logger: Logger; // Inherited from genotype
+  notionOperations: NotionOperations; // Phenotype-specific
 }
 ```
 
@@ -96,12 +98,14 @@ export interface NotionDependencies {
 ## Decision Rules
 
 ### What goes in GENOTYPE chorai?
+
 - Abstract patterns without implementation details
 - Universal infrastructure all phenotypes need
 - Core type definitions and contracts
 - Base configuration management
 
 ### What goes in PHENOTYPE chorai?
+
 - Implementation-specific types and contracts
 - Environment-specific configuration
 - Specific test mocks and fixtures
@@ -110,6 +114,7 @@ export interface NotionDependencies {
 ## Migration Notes
 
 During Phase 4 Sub-phase 1, we successfully:
+
 1. Extracted universal chorai to oak-mcp-core (genotype)
 2. Kept Notion-specific chorai in oak-notion-mcp (phenotype)
 3. Established import patterns from phenotype to genotype

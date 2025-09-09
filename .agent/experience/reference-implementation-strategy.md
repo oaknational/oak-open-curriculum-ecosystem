@@ -11,6 +11,7 @@ After reviewing the Phase 6 plan with the user, I realized we needed explicit ta
 ## The Enhancement Pattern
 
 The user's review triggered an important realization: we need to:
+
 1. **Map** the reference structure to our architecture
 2. **Identify** what can be preserved unchanged (pure functions)
 3. **List** what needs isolation (Node.js dependencies)
@@ -21,6 +22,7 @@ This creates a bridge between "having reference code" and "using reference code 
 ## Why This Matters
 
 Without this analysis phase:
+
 - We might accidentally break working logic
 - We could miss opportunities to reuse tested code
 - Dependencies might leak into our core
@@ -29,6 +31,7 @@ Without this analysis phase:
 ## The Mapping Document Concept
 
 Creating a "reference path → SDK path" mapping serves multiple purposes:
+
 - Provides a checklist for transplantation
 - Documents decisions for future maintainers
 - Helps identify missing functionality
@@ -62,6 +65,7 @@ When integrating any reference implementation:
 ## The Value of "Preserve Unchanged"
 
 Adding "Preserve pure functions unchanged where possible" acknowledges that working, tested code has value. We shouldn't refactor for the sake of refactoring. If a pure function works correctly, keeping it unchanged:
+
 - Maintains proven logic
 - Reduces introduction of new bugs
 - Speeds up implementation
@@ -69,4 +73,4 @@ Adding "Preserve pure functions unchanged where possible" acknowledges that work
 
 ---
 
-*This experience reinforces that good architecture isn't about starting from scratch—it's about thoughtfully integrating what exists with what we need.*
+_This experience reinforces that good architecture isn't about starting from scratch—it's about thoughtfully integrating what exists with what we need._

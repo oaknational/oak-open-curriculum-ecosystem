@@ -9,6 +9,7 @@ Accepted
 Log level configuration was duplicated across multiple organisms in the ecosystem, with each implementing its own validation and type definitions. This violated the DRY principle and made it difficult to ensure consistent logging behaviour across all organisms.
 
 Additionally, the log level configuration was tightly coupled to environment-specific concerns:
+
 - Direct access to `process.env` within utility functions
 - Implicit dotenv loading within modules
 - NODE_ENV-based logic that made assumptions about the runtime environment
@@ -78,6 +79,7 @@ The centralised configuration provides:
 ## Notes
 
 This pattern can be applied to other cross-cutting concerns that need consistent configuration across organisms, such as:
+
 - Feature flags
 - Performance thresholds
 - Retry policies

@@ -88,13 +88,13 @@ But with more sophisticated data structures, and types that retain the constrain
 /**
  * For each path, and each method within that path,
  * map to the return type of a 200 response.
- * 
+ *
  * This works because the raw schema type and the OpenAPI-TS type use the path as the key.
  */
 export type PathReturnTypes = {
   [P in ValidPath]: {
-    "get": Paths[P]["get"]["responses"][200]["content"]["application/json"];
-  }
+    get: Paths[P]['get']['responses'][200]['content']['application/json'];
+  };
 };
 ```
 
@@ -122,7 +122,7 @@ Note that the repo code is currently a mess, and the flow is not as described ab
 ### Build-Time Flow (Type Generation)
 
 ```text
-1. OpenAPI Schema (JSON) 
+1. OpenAPI Schema (JSON)
    ↓
 2. SDK type-gen script runs
    ↓
@@ -166,7 +166,7 @@ export const MCP_TOOL_MAP = {
     operation: paths['/sequences/{sequence}/units']['get'],
   },
   // ... 24 more tools
-}
+};
 ```
 
 ### Execution: Switch-Based Router
@@ -175,14 +175,14 @@ export const MCP_TOOL_MAP = {
 export async function executeToolCall(
   toolName: string,
   params: unknown,
-  sdk: OakApiClient
+  sdk: OakApiClient,
 ): Promise<{ data?: unknown; error?: unknown }> {
   switch (toolName) {
     case 'oak-get-sequences-units': {
       const p = params as Record<string, unknown>;
       // @ts-expect-error - SDK validates exact types at runtime
       return sdk.GET('/sequences/{sequence}/units', {
-        params: { path: { sequence: p.sequence }, query: { year: p.year } }
+        params: { path: { sequence: p.sequence }, query: { year: p.year } },
       });
     }
     // ... cases for all tools
@@ -261,12 +261,14 @@ Created 9 different generator approaches before settling on current solution:
 **Core Insight**: Transform the boundary problem into a data-driven solution where type predicates prove runtime values match compile-time types, eliminating ALL type assertions and suppressions.
 
 #### Phase 1: Master Schema Data Structure (SDK Type-Gen)
+
 - Create exhaustive const data structure from OpenAPI schema
 - Extract ALL paths, methods, parameters with literal types (`as const`)
 - Include parameter types, optionality, enums, and constraints
 - This becomes the single source of truth for ALL downstream generation
 
 #### Phase 2: Type Predicates Generation (SDK Type-Gen)
+
 - Generate comprehensive type predicates for each operation
 - One predicate function per unique parameter combination
 - Predicates validate against the schema data structure itself
@@ -274,6 +276,7 @@ Created 9 different generator approaches before settling on current solution:
 - NO custom types - everything flows from the schema structure
 
 #### Phase 3: MCP Tool Metadata Layer (MCP Type-Gen - Runs AFTER SDK)
+
 - Import SDK's master schema data structure and generated types
 - Programmatically add MCP-specific metadata (tool names, descriptions)
 - Generate tool-specific type predicates that compose SDK predicates
@@ -281,12 +284,14 @@ Created 9 different generator approaches before settling on current solution:
 - NO hardcoded values - everything derived from imported SDK structures
 
 #### Phase 4: Two-Boundary Validation Flow
+
 - **Boundary 1**: MCP receives `unknown` → validate to known tool+params structure
 - **Boundary 2**: Tool executor validates params → calls typed SDK methods
 - Each boundary uses generated predicates, never assertions
 - Runtime validation proves compile-time types are satisfied
 
 #### Phase 5: Testing & Documentation
+
 - Unit test ALL generated type predicates with valid/invalid inputs
 - Integration test the complete MCP→SDK flow
 - Generate comprehensive JSDoc documentation from schema

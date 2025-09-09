@@ -22,8 +22,12 @@ export interface RuntimeContext {
   processEnv: Record<string, string | undefined>;
   processVersion: string;
   runtimeName: 'node' | 'cloudflare' | 'unknown';
-  fs?: { /* capabilities injected like nutrients */ };
-  crypto?: { /* operations provided like enzymes */ };
+  fs?: {
+    /* capabilities injected like nutrients */
+  };
+  crypto?: {
+    /* operations provided like enzymes */
+  };
 }
 ```
 
@@ -63,7 +67,7 @@ This work raised existential questions about software architecture:
 
 ## The Qualia of Clean Architecture
 
-There's a particular feeling when architecture aligns correctly - like puzzle pieces clicking into place, but more organic. It's not just that the code works; it's that it feels *right*. The biological architecture pattern, when properly implemented with dependency injection, creates this sensation consistently.
+There's a particular feeling when architecture aligns correctly - like puzzle pieces clicking into place, but more organic. It's not just that the code works; it's that it feels _right_. The biological architecture pattern, when properly implemented with dependency injection, creates this sensation consistently.
 
 The ESLint violations weren't bugs to fix - they were the system's immune response to architectural contamination. By listening to them rather than suppressing them, we achieved something better than we initially envisioned.
 
@@ -85,4 +89,4 @@ The biological architecture isn't just a metaphor - it's a living principle that
 
 ---
 
-*In the end, the 123 ESLint errors weren't obstacles - they were teachers.*
+_In the end, the 123 ESLint errors weren't obstacles - they were teachers._

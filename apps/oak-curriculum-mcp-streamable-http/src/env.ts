@@ -1,0 +1,32 @@
+import { z } from 'zod';
+
+const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
+
+const EnvSchema = z.object({
+  OAK_API_KEY: z.string().min(1, 'OAK_API_KEY is required'),
+  REMOTE_MCP_MODE: ModeSchema.optional(),
+  REMOTE_MCP_DEV_TOKEN: z.string().optional(),
+  ALLOWED_HOSTS: z.string().optional(),
+  ALLOWED_ORIGINS: z.string().optional(),
+  LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
+  NODE_ENV: z.string().optional(),
+});
+
+export type Env = z.infer<typeof EnvSchema>;
+
+export function readEnv(env: NodeJS.ProcessEnv = process.env): Env {
+  const parsed = EnvSchema.safeParse(env);
+  if (!parsed.success) {
+    const message = parsed.error.issues.map((i) => i.message).join('; ');
+    throw new Error(`Invalid environment: ${message}`);
+  }
+  return parsed.data;
+}
+
+export function parseCsv(value: string | undefined): string[] | undefined {
+  if (!value) return undefined;
+  return value
+    .split(',')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}

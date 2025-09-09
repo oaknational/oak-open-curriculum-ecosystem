@@ -11,7 +11,9 @@ Implement the SDK core with proper boundary isolation, dependency injection, and
 ## 🌟 What Went Well
 
 ### TDD Flow Felt Natural
+
 The test-first approach created a beautiful rhythm:
+
 1. Write failing test
 2. See red
 3. Implement minimal code
@@ -21,31 +23,39 @@ The test-first approach created a beautiful rhythm:
 This cycle felt like breathing - natural and effortless. Each test failure guided exactly what to implement next.
 
 ### Dependency Injection Clarity
+
 The HttpAdapter interface created such a clean boundary. The moment I defined:
+
 ```typescript
 interface HttpAdapter {
   request(url: string, options: HttpOptions): Promise<HttpResponse>;
 }
 ```
+
 Everything else fell into place. The SDK core doesn't know or care about fetch, axios, or any specific HTTP implementation.
 
 ### Pure Functions Are Delightful
+
 The transformation functions (`transformLesson`, `buildSearchUrl`) are so simple and testable. No mocks, no complexity, just data in → data out. They're like mathematical functions - deterministic and predictable.
 
 ## 🤔 Moments of Realisation
 
 ### Type Duplication Caught Me
+
 The code reviewer spotted duplicate `Lesson` types in different files. I'd unconsciously created parallel type hierarchies. The fix was simple - single source of truth - but it reminded me how easy it is to accidentally duplicate concepts when moving quickly.
 
 ### Formatting Matters More Than Expected
+
 The linter caught missing newlines at EOF and formatting inconsistencies. These seem trivial but they matter for consistency. The pre-commit hooks and quality gates are like guardrails - annoying when you hit them, essential for keeping you on track.
 
 ### Unused Parameters in Tests
+
 TypeScript caught unused parameters in test mocks (`url` declared but never read). Initially felt pedantic, but prefixing with underscore (`_url`) clearly signals "this is intentionally unused" - better communication through code.
 
 ## 🔄 The Architecture Emerged Naturally
 
 The structure that emerged:
+
 ```
 src/
 ├── client/        # Core logic (pure)
@@ -54,6 +64,7 @@ src/
 ```
 
 This wasn't forced - it emerged from following the principles:
+
 - Pure functions first
 - Isolate I/O at boundaries
 - Dependency injection for flexibility
@@ -61,17 +72,21 @@ This wasn't forced - it emerged from following the principles:
 ## 💡 Key Insights
 
 ### Boundaries Create Freedom
+
 By defining clear boundaries (HttpAdapter interface), we gained freedom to swap implementations. The SDK doesn't care if it's running in Node.js, Deno, or the browser - just inject the appropriate adapter.
 
 ### Tests as Documentation
+
 The tests serve as living documentation. Want to know how to use `searchLessons`? Look at the test. Want to understand error handling? Check the error test cases.
 
 ### Simple Mocks Are Best
+
 The mock HTTP adapters in tests are just functions that return expected data. No complex mocking libraries, no magic - just simple functions. This aligns perfectly with the project philosophy.
 
 ## 🚀 What's Next
 
 The foundation is solid. Next steps (Phase 6.2) will be:
+
 - Implement remaining operations (getLesson, listProgrammes, etc.)
 - Create the MCP server wrapping this SDK
 - Add E2E tests with real API

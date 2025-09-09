@@ -9,19 +9,24 @@ The user identified a "fundamental failure" in my initial approach to implementi
 ### 1. **Always Study the Reference Implementation Deeply**
 
 The reference implementation wasn't just using `openapi-typescript` - it had a sophisticated two-stage pipeline:
+
 - Stage 1: `openapi-typescript` generates base types from OpenAPI spec
 - Stage 2: Custom processing extracts runtime constants, type guards, and path mappings
 
 This second stage is crucial - it extracts things like:
+
 ```typescript
-export const KEY_STAGES = ["ks1", "ks2", "ks3", "ks4"] as const;
-export type KeyStage = typeof KEY_STAGES[number];
-export function isKeyStage(value: string): value is KeyStage { /*...*/ }
+export const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+export type KeyStage = (typeof KEY_STAGES)[number];
+export function isKeyStage(value: string): value is KeyStage {
+  /*...*/
+}
 ```
 
 ### 2. **The Power of Total Automation**
 
 The user's requirement was clear: "The ONLY manual step when API changes is regenerating types". This means:
+
 - No manual type definitions
 - No manual path definitions
 - No manual validation schemas
@@ -30,6 +35,7 @@ The user's requirement was clear: "The ONLY manual step when API changes is rege
 ### 3. **Copy First, Understand Second, Modify Last**
 
 The correct approach was:
+
 1. Copy the reference implementation wholesale
 2. Minimal modifications only for paths and package names
 3. Remove incompatible code that doesn't align with the pattern
@@ -41,22 +47,24 @@ I initially tried to understand and reimplement, which led to the fundamental fa
 ### What Worked
 
 The corrected implementation using `openapi-fetch`:
+
 ```typescript
 import createClient from 'openapi-fetch';
 import type { paths } from './types/generated/api-schema/api-paths-types';
 
-const client = createClient<paths>({ 
+const client = createClient<paths>({
   baseUrl: 'https://open-api.thenational.academy/api/v0',
-  headers: { Authorization: `Bearer ${apiKey}` }
+  headers: { Authorization: `Bearer ${apiKey}` },
 });
 
 // Fully typed, automatic endpoint discovery
 const { data, error } = await client.GET('/lessons/{lesson}/summary', {
-  params: { path: { lesson: 'intro-to-fractions' } }
+  params: { path: { lesson: 'intro-to-fractions' } },
 });
 ```
 
 This provides:
+
 - Complete type safety
 - Automatic endpoint discovery
 - No manual path definitions
@@ -65,6 +73,7 @@ This provides:
 ### What Didn't Work
 
 My initial custom implementation with:
+
 - Manual type definitions
 - Custom HTTP adapter pattern
 - Manual transform functions
@@ -79,6 +88,7 @@ The feeling of deleting all my custom code and replacing it with the copied refe
 ## Pattern Recognition
 
 This experience reinforces a pattern I should recognise:
+
 1. When a reference implementation exists, study it deeply first
 2. Look for sophisticated patterns beyond surface-level library usage
 3. "Reuse the original implementation wherever possible" means COPY it, don't reimplement
@@ -87,6 +97,7 @@ This experience reinforces a pattern I should recognise:
 ## Future Application
 
 For the MCP server implementation (Phase 6.2), I will:
+
 1. First check if there's a reference MCP implementation to copy
 2. Look for patterns beyond just library usage
 3. Copy wholesale before attempting any custom implementation

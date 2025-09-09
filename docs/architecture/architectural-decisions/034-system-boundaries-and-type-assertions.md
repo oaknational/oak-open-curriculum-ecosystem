@@ -95,12 +95,12 @@ const result = await sdk.GET(sdkPath, options);
 
 ```typescript
 // What OpenAPI-fetch expects:
-sdk.GET("/lessons/{lesson}/summary", { params: { path: { lesson: "abc" } } })
+sdk.GET('/lessons/{lesson}/summary', { params: { path: { lesson: 'abc' } } });
 //       ^^^^^^^^^^^^^^^^^^^^^^^^^ Must be a literal type
 
 // What we have at runtime:
 const path = enrichedTool.path; // string at runtime, even with "as const" in generation
-sdk.GET(path, options) // TypeScript error: string is not assignable to literal union
+sdk.GET(path, options); // TypeScript error: string is not assignable to literal union
 ```
 
 ## Can Validation or Type Predicates Replace Assertions?
@@ -164,8 +164,8 @@ Validation serves a different purpose:
 ```typescript
 // tool-handler.ts - THE ONLY ASSERTION IN THE SYSTEM
 const sdkPath = enrichedTool.path as any;
-const result = await sdk.GET(sdkPath, { 
-  params: { query: queryParams, path: pathParams } 
+const result = await sdk.GET(sdkPath, {
+  params: { query: queryParams, path: pathParams },
 });
 ```
 
@@ -180,7 +180,7 @@ This is correct because:
 
 ```typescript
 // WRONG: Casting to specific types
-const sdkPath = enrichedTool.path as "/lessons/{lesson}/summary";
+const sdkPath = enrichedTool.path as '/lessons/{lesson}/summary';
 
 // WRONG: Multiple assertions
 const method = enrichedTool.method as HttpMethod;
@@ -205,7 +205,7 @@ const sdkMethod = sdk[method] as Function;
 export function validateRequest(
   path: string,
   method: HttpMethod,
-  args: unknown
+  args: unknown,
 ): ValidationResult<unknown> {
   // Uses generated Zod schemas
   const schema = parameterSchemaMap.get(key);

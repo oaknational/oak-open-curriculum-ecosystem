@@ -3,6 +3,6 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts", "start-mcp.ts", "bin/**/*.ts"],
+  "include": ["src/**/*.ts", "**/*.test.ts", "e2e-tests/**/*.ts", "*.config.ts", "bin/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

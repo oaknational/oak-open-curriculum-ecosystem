@@ -124,6 +124,6 @@ Your response must end with the following:
 
 ```text
 ===
- 
+
 REMEMBER: The sub-agent is not necessarily correct. If you are in doubt re-invoke the sub-agent with more context and specific requests.
 ```

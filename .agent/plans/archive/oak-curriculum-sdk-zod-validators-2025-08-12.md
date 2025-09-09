@@ -34,12 +34,12 @@
 
 ## Progress Update (2025-08-13 Afternoon Session)
 
-- __ACTION__: Request validation module refactored to remove type assertions and use runtime type guards; helper extraction reduced complexity; all changes remain additive and ADR-030/031 compliant.
-- __ACTION__: Docs generator improved for Type aliases:
+- **ACTION**: Request validation module refactored to remove type assertions and use runtime type guards; helper extraction reduced complexity; all changes remain additive and ADR-030/031 compliant.
+- **ACTION**: Docs generator improved for Type aliases:
   - `scripts/lib/ai-doc-types.ts`: added `TDReflection.type` and `sources[]` support (with Zod schemas) to parse alias underlying types and source locations from TypeDoc JSON.
   - `scripts/lib/ai-doc-render.ts`: special-case “Type alias” to render `type Name = ...` and a “Source:” line (with link when available).
-- __QUALITY-GATE__: SDK lint, type-check, and tests pass locally. Docs pipeline re-run scheduled next step to verify alias rendering in markdown.
-- __GROUNDING__: Changes align with GO.md principles (no any, prefer type guards, small pure functions) and keep docs pipeline plugin-free.
+- **QUALITY-GATE**: SDK lint, type-check, and tests pass locally. Docs pipeline re-run scheduled next step to verify alias rendering in markdown.
+- **GROUNDING**: Changes align with GO.md principles (no any, prefer type guards, small pure functions) and keep docs pipeline plugin-free.
 
 ### Remaining Work (Brief)
 
@@ -50,37 +50,37 @@
 
 ## Progress Update (2025-08-12 Initial Session)
 
-- __Generator implemented__: Added `scripts/zodgen-core.ts` and CLI `scripts/zodgen.ts` using `openapi-zod-client` with the `schemas-only` template to produce Zod schemas deterministically.
-- __Single-command regeneration__: In `packages/oak-curriculum-sdk/package.json`, `generate:types` now runs both OpenAPI typegen and Zod schema generation. `prebuild` calls `generate:types`, so `pnpm build` auto-regenerates.
-- __Programmatic exports__: Implemented and tested `schema` re-export and `toolGeneration` namespace utilities (`PATH_OPERATIONS`, `PARAM_TYPE_MAP`, `parsePathTemplate`). See `src/tool-generation.unit.test.ts`.
-- __E2E tests__: Added resilient e2e test for Zod generation output formatting; passes locally.
-- __Type-safety__: Strict guards in `zodgen-core.ts` (no unsafe assertions). Reduced complexity with small helper guards.
-- __Outstanding__: ESLint error triggered by generated test artifact path: `packages/oak-curriculum-sdk/test-cache/zod-out/schemas.ts` not included in TS project for lint parsing. Plan to exclude `test-cache/**` from lint/ts parsing or adjust eslint TS config `allowDefaultProject`.
+- **Generator implemented**: Added `scripts/zodgen-core.ts` and CLI `scripts/zodgen.ts` using `openapi-zod-client` with the `schemas-only` template to produce Zod schemas deterministically.
+- **Single-command regeneration**: In `packages/oak-curriculum-sdk/package.json`, `generate:types` now runs both OpenAPI typegen and Zod schema generation. `prebuild` calls `generate:types`, so `pnpm build` auto-regenerates.
+- **Programmatic exports**: Implemented and tested `schema` re-export and `toolGeneration` namespace utilities (`PATH_OPERATIONS`, `PARAM_TYPE_MAP`, `parsePathTemplate`). See `src/tool-generation.unit.test.ts`.
+- **E2E tests**: Added resilient e2e test for Zod generation output formatting; passes locally.
+- **Type-safety**: Strict guards in `zodgen-core.ts` (no unsafe assertions). Reduced complexity with small helper guards.
+- **Outstanding**: ESLint error triggered by generated test artifact path: `packages/oak-curriculum-sdk/test-cache/zod-out/schemas.ts` not included in TS project for lint parsing. Plan to exclude `test-cache/**` from lint/ts parsing or adjust eslint TS config `allowDefaultProject`.
 
 ## Progress Update (2025-08-12 Evening Session)
 
 ### Phase 2 Completed: Generation-Time Extraction
 
-- __Generation-time extraction implemented__: Created modular extraction system in `scripts/typegen/operations/` that extracts ALL operation metadata at build time
-- __Operations extraction__: Added `extractPathOperations()` function that generates `PATH_OPERATIONS` constant with full operation details
-- __Runtime refactoring__: Completely eliminated runtime processing from `src/tool-generation/index.ts` - now just imports and re-exports pre-generated constants
-- __Type safety achieved__: Zero type assertions in runtime code - all metadata is pre-extracted at generation time
-- __TDD approach__: Used test-driven development throughout, writing failing tests first before implementation
-- __E2E tests fixed__: Updated e2e tests to focus on behaviour (values present) rather than implementation details (quote style)
+- **Generation-time extraction implemented**: Created modular extraction system in `scripts/typegen/operations/` that extracts ALL operation metadata at build time
+- **Operations extraction**: Added `extractPathOperations()` function that generates `PATH_OPERATIONS` constant with full operation details
+- **Runtime refactoring**: Completely eliminated runtime processing from `src/tool-generation/index.ts` - now just imports and re-exports pre-generated constants
+- **Type safety achieved**: Zero type assertions in runtime code - all metadata is pre-extracted at generation time
+- **TDD approach**: Used test-driven development throughout, writing failing tests first before implementation
+- **E2E tests fixed**: Updated e2e tests to focus on behaviour (values present) rather than implementation details (quote style)
 
 ### Key Architecture Improvements
 
-1. __Extraction at generation time__ (typegen-core.ts):
+1. **Extraction at generation time** (typegen-core.ts):
    - Extract operations from OpenAPI3 schema (loose type)
    - Generate TypeScript code as strings
    - Write constants to path-parameters.ts
 
-2. __Runtime simplicity__ (tool-generation/index.ts):
+2. **Runtime simplicity** (tool-generation/index.ts):
    - Import pre-generated constants
    - Re-export for public API
    - No schema iteration, no type assertions
 
-3. __Modular organization with pure functions__:
+3. **Modular organization with pure functions**:
    - `/scripts/typegen/operations/` - Operation extraction logic
    - `/scripts/typegen/parameters/` - Parameter generation
    - `/scripts/typegen/paths/` - Path generation
@@ -94,47 +94,50 @@
 The user performed a major architectural refactoring to eliminate all runtime type assertions by fully implementing the generation-time extraction pattern. This resolved the fundamental issue where runtime code was attempting to iterate over `as const` schemas.
 
 **Key Pattern Established:**
-- ✅ __ONE type assertion allowed__: Only at generation time when asserting API response is OpenAPI3
-- ✅ __No runtime type assertions__: All runtime code uses proper type narrowing
-- ✅ __Object.getOwnPropertyDescriptor pattern__: Safe property access without assertions
-- ✅ __Generation vs runtime boundary__: Clear separation between build-time and runtime code
+
+- ✅ **ONE type assertion allowed**: Only at generation time when asserting API response is OpenAPI3
+- ✅ **No runtime type assertions**: All runtime code uses proper type narrowing
+- ✅ **Object.getOwnPropertyDescriptor pattern**: Safe property access without assertions
+- ✅ **Generation vs runtime boundary**: Clear separation between build-time and runtime code
 
 **Files Refactored (by user intervention):**
+
 - `scripts/typegen-extraction.ts` - Uses Object.getOwnPropertyDescriptor for safe access
 - `scripts/typegen-extraction-helpers.ts` - Proper type narrowing without assertions
 - `scripts/test-fixtures.ts` - Type guard implementation without type assertions
 - `scripts/typegen/operations/operation-validators.ts` - Safe property access patterns
 
 **Remaining Issues (2 violations only):**
+
 - `src/config/index.ts`: Line 22 - unnecessary conditional
 - `src/config/index.ts`: Line 34 - unsafe assignment
 
 ### Testing Philosophy Applied
 
-- __Test behaviour, not implementation__: E2E tests now check for presence of values, not specific quote styles
-- __TDD for pure functions__: Created failing tests first, then implementation for all extraction functions
-- __Immediate use of refactored code__: New functions immediately replace old code (no backwards compatibility layers)
+- **Test behaviour, not implementation**: E2E tests now check for presence of values, not specific quote styles
+- **TDD for pure functions**: Created failing tests first, then implementation for all extraction functions
+- **Immediate use of refactored code**: New functions immediately replace old code (no backwards compatibility layers)
 
 ### Deep Review Findings (sweep 1)
 
-- __ESLint flat-config present__: `packages/oak-curriculum-sdk/eslint.config.ts` now exists and sets:
+- **ESLint flat-config present**: `packages/oak-curriculum-sdk/eslint.config.ts` now exists and sets:
   - `ignores`: `dist/**`, `coverage/**`, `.turbo/**`, `examples/**`, `src/types/generated/**`, `test-cache/**`
   - Type-aware linting via `parserOptions.project: './tsconfig.lint.json'`
   - Resolver settings synced to the lint tsconfig
-  This should address the earlier parsing error on `test-cache/zod-out/schemas.ts`.
-- __Generation wiring__: `scripts/zodgen-core.ts` + `scripts/zodgen.ts` use `openapi-zod-client` `schemas-only` correctly. Output path in CLI is `src/types/generated/zod/`.
-- __Build integration__: `package.json` uses `generate:types` -> runs both OpenAPI typegen and Zod generation. `prebuild` delegates to `generate:types`. Verified in logs during `pnpm lint` (build step runs and succeeds).
-- __Programmatic exports__: Tests at `packages/oak-curriculum-sdk/src/tool-generation.unit.test.ts` validate `schema` presence, `PATH_OPERATIONS` coverage for `/lessons/{lesson}/transcript`, curated enums alignment (`KEY_STAGES`, `SUBJECTS`), and `parsePathTemplate()` behaviour.
-- __Type guard quality__: `isOpenAPIObject()` refactored to smaller helpers to satisfy complexity rule; adheres to “no unsafe assertions”.
-- __Next lint pass__: After the ESLint config update, re-run `pnpm -w -F @oaknational/oak-curriculum-sdk lint` to confirm clean status.
+    This should address the earlier parsing error on `test-cache/zod-out/schemas.ts`.
+- **Generation wiring**: `scripts/zodgen-core.ts` + `scripts/zodgen.ts` use `openapi-zod-client` `schemas-only` correctly. Output path in CLI is `src/types/generated/zod/`.
+- **Build integration**: `package.json` uses `generate:types` -> runs both OpenAPI typegen and Zod generation. `prebuild` delegates to `generate:types`. Verified in logs during `pnpm lint` (build step runs and succeeds).
+- **Programmatic exports**: Tests at `packages/oak-curriculum-sdk/src/tool-generation.unit.test.ts` validate `schema` presence, `PATH_OPERATIONS` coverage for `/lessons/{lesson}/transcript`, curated enums alignment (`KEY_STAGES`, `SUBJECTS`), and `parsePathTemplate()` behaviour.
+- **Type guard quality**: `isOpenAPIObject()` refactored to smaller helpers to satisfy complexity rule; adheres to “no unsafe assertions”.
+- **Next lint pass**: After the ESLint config update, re-run `pnpm -w -F @oaknational/oak-curriculum-sdk lint` to confirm clean status.
 
 ### Alignment and Clarifications
 
-- __Output paths__:
+- **Output paths**:
   - OpenAPI types: `src/types/generated/api-schema/`
   - Zod schemas (ozc): `src/types/generated/zod/`
-- __Public API stance__: Keep ozc inferred types internal; expose curated validators and `toolGeneration` utilities additively.
-- __Docs plan__: Continue with TypeDoc for public exports only; exclude generated folders.
+- **Public API stance**: Keep ozc inferred types internal; expose curated validators and `toolGeneration` utilities additively.
+- **Docs plan**: Continue with TypeDoc for public exports only; exclude generated folders.
 
 ## Non-Goals
 
@@ -196,7 +199,7 @@ Exports from package root:
 
 Per [ADR-031: Generation-Time Extraction Pattern](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md):
 
-- __ALL metadata extraction and constant generation MUST happen at build/generation time__, not runtime
+- **ALL metadata extraction and constant generation MUST happen at build/generation time**, not runtime
 - The generated schema with `as const` is for type definitions only
 - ALL runtime constants (paths, operations, parameters, etc.) are pre-computed during generation
 - Runtime code becomes a simple, performant mapping between pre-generated constants
@@ -267,10 +270,7 @@ Per [ADR-029: No Manual API Data Structures](../../docs/architecture/architectur
   "excludeProtected": true,
   "excludeInternal": true,
   "hideGenerator": true,
-  "exclude": [
-    "src/types/generated/**",
-    "src/**/__tests__/**"
-  ]
+  "exclude": ["src/types/generated/**", "src/**/__tests__/**"]
 }
 ```
 
@@ -313,7 +313,7 @@ Per [ADR-029: No Manual API Data Structures](../../docs/architecture/architectur
 
 ### Phase 2: Critical Generation-Time Extraction Implementation (COMPLETED)
 
-__Based on reviewer feedback, these are the CRITICAL actions required:__
+**Based on reviewer feedback, these are the CRITICAL actions required:**
 
 - [x] ACTION: Implement generation-time extraction in `scripts/typegen-core.ts`
   - Add `extractPathOperations(schema: OpenAPI3)` function to extract ALL operations at build time
@@ -335,9 +335,15 @@ __Based on reviewer feedback, these are the CRITICAL actions required:__
   - REPLACE with simple imports and re-exports:
 
     ```typescript
-    import { PATH_OPERATIONS, OPERATIONS_BY_ID, PARAM_TYPE_MAP } from '../types/generated/api-schema/path-parameters';
+    import {
+      PATH_OPERATIONS,
+      OPERATIONS_BY_ID,
+      PARAM_TYPE_MAP,
+    } from '../types/generated/api-schema/path-parameters';
     export { PATH_OPERATIONS, OPERATIONS_BY_ID, PARAM_TYPE_MAP };
-    export function parsePathTemplate(template: string, method?: string) { /* utility only */ }
+    export function parsePathTemplate(template: string, method?: string) {
+      /* utility only */
+    }
     ```
 
   - TESTS: Update tests to verify pre-generated constants are used
@@ -351,15 +357,15 @@ __Based on reviewer feedback, these are the CRITICAL actions required:__
 
 Based on linting results, core rules, and sub-agent reviews:
 
-__CRITICAL PRINCIPLES TO FOLLOW:__
+**CRITICAL PRINCIPLES TO FOLLOW:**
 
-1. __TDD ALWAYS__ - Write failing tests FIRST, then implementation (Red → Green → Refactor)
-2. __No type assertions__ - Never use `as`, `any`, `!` except at external signal boundaries with validation
-3. __Never disable checks__ - Fix root causes, never work around linting/type errors
-4. __Pure functions first__ - Extract complex logic into testable pure functions
-5. __Delete unused code__ - If it's not used, delete it immediately
+1. **TDD ALWAYS** - Write failing tests FIRST, then implementation (Red → Green → Refactor)
+2. **No type assertions** - Never use `as`, `any`, `!` except at external signal boundaries with validation
+3. **Never disable checks** - Fix root causes, never work around linting/type errors
+4. **Pure functions first** - Extract complex logic into testable pure functions
+5. **Delete unused code** - If it's not used, delete it immediately
 
-__SUB-AGENT REVIEW SUMMARY:__
+**SUB-AGENT REVIEW SUMMARY:**
 
 - **Architecture-Reviewer (85% Compliance)**: Approach is sound but needs stronger boundary definitions
 - **Code-Reviewer (High Success)**: All 19 violations fixable with planned approach
@@ -437,7 +443,9 @@ __SUB-AGENT REVIEW SUMMARY:__
     export const mockSchema: OpenAPI3 = {
       openapi: '3.0.3',
       info: { title: 'Test', version: '1.0.0' },
-      paths: { /* minimal paths for test */ }
+      paths: {
+        /* minimal paths for test */
+      },
     };
     ```
 
@@ -481,7 +489,7 @@ __SUB-AGENT REVIEW SUMMARY:__
 
 #### 4.2: Expected Outcomes After Reviews
 
-__Success Criteria:__
+**Success Criteria:**
 
 - `pnpm lint` returns 0 violations
 - `pnpm type-check` returns 0 errors
@@ -490,7 +498,7 @@ __Success Criteria:__
 - All tests pass and follow TDD principles
 - No disabled linting rules or workarounds
 
-__Quality Metrics:__
+**Quality Metrics:**
 
 - Function complexity: Max 8 (currently 9 in processPath)
 - Type assertions: Max 1 at boundary (currently 4)
@@ -522,15 +530,17 @@ __Quality Metrics:__
 **MAJOR VIOLATION**: Request validators are using MANUALLY defined Zod schemas instead of generated ones from the API schema. This breaks the CORE principle that ALL types must flow from the API schema.
 
 **What's Wrong:**
+
 - `request-validators.ts` contains hand-coded Zod schemas like:
   ```typescript
   const schemaBuilders = {
     lessonTranscript: () => z.object({ lesson: z.string() }),
-    searchLessons: () => z.object({
-      q: z.string(),
-      keyStage: z.enum(['ks1', 'ks2', 'ks3', 'ks4', 'eyfs']).optional(),
-      // ... manual definitions
-    })
+    searchLessons: () =>
+      z.object({
+        q: z.string(),
+        keyStage: z.enum(['ks1', 'ks2', 'ks3', 'ks4', 'eyfs']).optional(),
+        // ... manual definitions
+      }),
   };
   ```
 - These duplicate information from the OpenAPI spec
@@ -538,17 +548,19 @@ __Quality Metrics:__
 - Risk of drift between API spec and validation logic
 
 **What's Correct:**
+
 - Response validators properly use generated Zod schemas from `src/types/generated/zod/schemas.ts`
 - Zod generation pipeline (`generate:zod`) correctly generates schemas from OpenAPI
 
 #### Previously Completed Items:
+
 - [x] ACTION: Created `src/validation/` directory structure
 - [x] ACTION: Defined validation types (`ValidationResult`, `ValidationIssue`, `ValidatedClientOptions`)
 - [x] ACTION: Written failing tests for `validateRequest` (TDD Red phase)
 - [x] ACTION: Implemented `validateRequest` function ~~using generated Zod schemas~~ **USING MANUAL SCHEMAS** ❌
 - [x] ACTION: Written failing tests for `validateResponse` (TDD Red phase)
 - [x] ACTION: Implemented `validateResponse` function with tests (TDD Green phase) ✅
-- [x] ACTION: Updated `src/index.ts` with explicit validation exports (no export * for tree-shaking)
+- [x] ACTION: Updated `src/index.ts` with explicit validation exports (no export \* for tree-shaking)
 - [x] ACTION: Refactored for ESLint compliance (complexity reduction from 15 to 2)
 - [x] ACTION: Eliminated all type assertions using `parseWithSchema` helper
 - [x] ACTION: All tests passing (91 total)
@@ -561,10 +573,12 @@ __Quality Metrics:__
 **Core Principle:** ALL types MUST flow from the API schema for trivial updatability.
 
 **Critical Issue Identified**: Request validators use manually defined Zod schemas instead of generated ones. This violates:
+
 - ADR-030: SDK as single source of truth
 - ADR-031: Generation-time extraction pattern
 
 #### Investigation Complete (15:00)
+
 - [x] ACTION: Investigate if request parameter schemas are being generated
   - **Finding**: NO - only response schemas are generated using `schemas-only` template
 - [x] ACTION: Identify root cause
@@ -575,6 +589,7 @@ __Quality Metrics:__
 - [x] REVIEW: Code-reviewer confirmed solution is correct
 
 #### Implementation Plan (TDD Approach)
+
 - [x] ACTION: Write failing test for `generateZodEndpointsArtifacts` function (TDD Red)
 - [ ] ACTION: Implement `generateZodEndpointsArtifacts` in `zodgen-core.ts` (TDD Green)
 - [ ] ACTION: Update `zodgen.ts` to call both generation functions
@@ -587,6 +602,7 @@ __Quality Metrics:__
 - [ ] QUALITY-GATE: Run all SDK quality checks
 
 #### Expected Outcome
+
 - Request validation schemas generated from OpenAPI spec
 - No manual schema definitions in validation layer
 - SDK trivially updatable - just run `generate:types` when API changes
@@ -595,12 +611,14 @@ __Quality Metrics:__
 ### Phase 8: Per-Operation Validators for Compile-Time Safety (CRITICAL for SDK usability)
 
 **Why This Is Now Critical (not deferred):**
+
 - Next project after MCP will use SDK directly and needs compile-time type safety
 - Current generic validators (`validateRequest`) only provide runtime validation
 - Without per-operation validators, SDK users get no TypeScript help catching errors
 - This violates developer ergonomics expectations for a TypeScript SDK
 
 **Core Requirement: Fully Programmatic Generation**
+
 - ✅ MUST be 100% generated from OpenAPI schema - zero magic strings
 - ✅ MUST automatically update when API changes (single `generate:types` command)
 - ✅ MUST NOT contain any hardcoded paths or operation names
@@ -611,22 +629,20 @@ __Quality Metrics:__
 **Approach: Generate Typed Wrapper Functions**
 
 1. **Add generator function to `zodgen-core.ts`**:
+
 ```typescript
-export async function generateTypedValidators(
-  openApiDoc: OpenAPI3,
-  outDir: string
-): Promise<void> {
+export async function generateTypedValidators(openApiDoc: OpenAPI3, outDir: string): Promise<void> {
   const validators: string[] = [];
-  
+
   // Iterate OpenAPI document - NO hardcoded paths!
   for (const [path, pathItem] of Object.entries(openApiDoc.paths)) {
     for (const [method, operation] of Object.entries(pathItem)) {
       if (!isHttpMethod(method)) continue;
-      
+
       // Everything comes FROM the OpenAPI spec
       const funcName = `validate${toPascalCase(operation.operationId)}`;
       const typePath = `paths['${path}']['${method}']['parameters']`;
-      
+
       validators.push(`
 export function ${funcName}(
   args: ${typePath}
@@ -635,7 +651,7 @@ export function ${funcName}(
 }`);
     }
   }
-  
+
   // Write generated file
   const content = `
 // AUTO-GENERATED from OpenAPI schema - DO NOT EDIT
@@ -645,22 +661,23 @@ import type { paths } from '../api-schema/api-schema';
 
 ${validators.join('\n')}
 `;
-  
+
   await writeFile(path.join(outDir, 'validators.ts'), content);
 }
 ```
 
 2. **What Gets Generated** (example):
+
 ```typescript
 // This entire file is AUTO-GENERATED
 export function validateGetLessonsTranscript(
-  args: paths['/lessons/{lesson}/transcript']['get']['parameters']
+  args: paths['/lessons/{lesson}/transcript']['get']['parameters'],
 ): ValidationResult<paths['/lessons/{lesson}/transcript']['get']['parameters']> {
   return genericValidate('/lessons/{lesson}/transcript', 'get', args);
 }
 
 export function validateSearchLessons(
-  args: paths['/search/lessons']['get']['parameters']
+  args: paths['/search/lessons']['get']['parameters'],
 ): ValidationResult<paths['/search/lessons']['get']['parameters']> {
   return genericValidate('/search/lessons', 'get', args);
 }
@@ -668,24 +685,26 @@ export function validateSearchLessons(
 ```
 
 3. **Benefits for SDK Users**:
+
 ```typescript
 // Full compile-time type checking
-validateGetLessonsTranscript({ 
-  lesson: 'adding-fractions' // ✅ TypeScript knows this needs to be a string
+validateGetLessonsTranscript({
+  lesson: 'adding-fractions', // ✅ TypeScript knows this needs to be a string
 });
 
 // TypeScript catches errors at compile time
-validateGetLessonsTranscript({ 
-  lessson: 'typo' // ❌ TS Error: Did you mean 'lesson'?
+validateGetLessonsTranscript({
+  lessson: 'typo', // ❌ TS Error: Did you mean 'lesson'?
 });
 
 validateSearchLessons({
   q: 'mathematics',
-  keyStage: 'invalid' // ❌ TS Error: not assignable to type 'ks1' | 'ks2' | 'ks3' | 'ks4'
+  keyStage: 'invalid', // ❌ TS Error: not assignable to type 'ks1' | 'ks2' | 'ks3' | 'ks4'
 });
 ```
 
 #### Why This Approach Is Correct:
+
 - **No magic strings**: Paths come from iterating the OpenAPI document
 - **Automatic updates**: When API changes, regeneration creates/removes/updates functions
 - **Type safety**: Links to generated `paths` type ensures consistency
@@ -693,6 +712,7 @@ validateSearchLessons({
 - **Zero maintenance**: Never needs manual updates
 
 #### Action Items:
+
 - [ ] ACTION: Write failing tests for typed validator generation (TDD Red)
 - [ ] ACTION: Implement `generateTypedValidators` in `zodgen-core.ts` (TDD Green)
 - [ ] ACTION: Update `zodgen.ts` CLI to call typed validator generation
@@ -702,10 +722,12 @@ validateSearchLessons({
 - [ ] QUALITY-GATE: Ensure all quality checks still pass
 
 **Deferred Items (Actually Future Work):**
+
 - [ ] ACTION: Implement `makeValidatedClient(baseClient, opts)` wrapper
 - [ ] ACTION: Document validation usage patterns
 
 #### Key Achievements:
+
 - ✅ Request validation maps paths/methods to Zod schemas for parameter validation
 - ✅ Response validation maps operation IDs and status codes to response schemas
 - ✅ Type-safe discriminated unions for `ValidationResult<T>`
@@ -714,6 +736,7 @@ validateSearchLessons({
 - ✅ ESLint compliance (refactored complex functions)
 
 #### Architecture Notes:
+
 - SDK remains a pure utility library (Moria-like abstractions)
 - Validation functions are pure utilities with no side effects
 - Using generated Zod schemas from `src/types/generated/zod/schemas.ts`
@@ -728,15 +751,15 @@ validateSearchLessons({
 
 ### Sub-agent Checkpoints (per GO.md)
 
-- __Architecture-Reviewer__
+- **Architecture-Reviewer**
   - Confirm generator placement doesn’t bloat public surface; output is tree-shakeable.
   - Ensure `toolGeneration` shapes are stable and minimal.
-- __Code-Reviewer__
+- **Code-Reviewer**
   - Verify generator functions are pure, deterministic, and have robust error handling.
   - Confirm no type assertions beyond `as const`; favour type guards.
-- __Docs-Reviewer__
+- **Docs-Reviewer**
   - Validate TSDoc coverage for all public exports; examples align with runtime behaviour.
-- __Release-Reviewer__
+- **Release-Reviewer**
   - Audit additive-only changes; confirm semantic versioning and CI quality gates.
 
 ### Acceptance Criteria (next milestone)
@@ -748,12 +771,12 @@ validateSearchLessons({
 
 ## Risks & Mitigations
 
-- __Bundle size__: Curate exports; generate schemas but re-export only commonly used ones. Keep others internal and tree-shakeable.
-- __Perf overhead__: Validation is opt-in. The default client remains unchanged.
-- __Schema drift__: Generate schemas at build-time from the same OpenAPI source as types; version pin the generator; add CI check step.
-- __DX confusion__: Provide clear docs and examples; keep API minimal and predictable.
-- __Stability of programmatic exports__: Keep under a dedicated `toolGeneration` namespace; document non-breaking evolution policy; avoid leaking internal file paths.
-- __ESLint/TS project parsing of generated artifacts__: Exclude `test-cache/**` and other generated outputs from ESLint TypeScript project parsing or enable `allowDefaultProject`. Add `.eslintignore` or parserOptions overrides. Verify with `pnpm -F @oaknational/oak-curriculum-sdk lint`.
+- **Bundle size**: Curate exports; generate schemas but re-export only commonly used ones. Keep others internal and tree-shakeable.
+- **Perf overhead**: Validation is opt-in. The default client remains unchanged.
+- **Schema drift**: Generate schemas at build-time from the same OpenAPI source as types; version pin the generator; add CI check step.
+- **DX confusion**: Provide clear docs and examples; keep API minimal and predictable.
+- **Stability of programmatic exports**: Keep under a dedicated `toolGeneration` namespace; document non-breaking evolution policy; avoid leaking internal file paths.
+- **ESLint/TS project parsing of generated artifacts**: Exclude `test-cache/**` and other generated outputs from ESLint TypeScript project parsing or enable `allowDefaultProject`. Add `.eslintignore` or parserOptions overrides. Verify with `pnpm -F @oaknational/oak-curriculum-sdk lint`.
 
 ## Success Criteria
 
@@ -777,44 +800,45 @@ validateSearchLessons({
 
 ## Decisions (added)
 
-- __Tool naming format__: `oak-<method>-<kebab-path>` (e.g., `/lessons/{lesson}/transcript` GET -> `oak-get-lessons-transcript`).
-- __Input schemas__: include both path and query parameters by default in generated tool input schemas.
-- __OPERATIONS_BY_ID__: optional nicety; may be added additively later if needed by consumers.
+- **Tool naming format**: `oak-<method>-<kebab-path>` (e.g., `/lessons/{lesson}/transcript` GET -> `oak-get-lessons-transcript`).
+- **Input schemas**: include both path and query parameters by default in generated tool input schemas.
+- **OPERATIONS_BY_ID**: optional nicety; may be added additively later if needed by consumers.
 
 ## Implementation Note: Generation Time vs Runtime (2025-08-12)
 
 After deep analysis comparing the reference implementation with current approach, we discovered a fundamental architectural issue:
 
-__Problem__: The current `tool-generation/index.ts` attempts to dynamically iterate the `as const` schema at runtime, which requires type assertions and loses type safety.
+**Problem**: The current `tool-generation/index.ts` attempts to dynamically iterate the `as const` schema at runtime, which requires type assertions and loses type safety.
 
-__Solution__ (from reference implementation):
+**Solution** (from reference implementation):
 
-1. At __generation time__ (`typegen-core.ts`), extract ALL metadata from the OpenAPI schema
-2. Generate TypeScript code __as strings__ that define runtime constants
+1. At **generation time** (`typegen-core.ts`), extract ALL metadata from the OpenAPI schema
+2. Generate TypeScript code **as strings** that define runtime constants
 3. Write these constants to files (e.g., `path-parameters.ts`)
-4. At __runtime__, simply import and use these pre-generated, fully-typed constants
+4. At **runtime**, simply import and use these pre-generated, fully-typed constants
 
-__Key Insight__: The `for (const path in schema.paths)` pattern in the reference works because it's in a __template string__ being generated, not actual TypeScript code being executed. The generated code has access to the `as const` schema for types, but all the actual data is pre-extracted into constants.
+**Key Insight**: The `for (const path in schema.paths)` pattern in the reference works because it's in a **template string** being generated, not actual TypeScript code being executed. The generated code has access to the `as const` schema for types, but all the actual data is pre-extracted into constants.
 
-__Benefits__:
+**Benefits**:
 
 - Zero type assertions needed at runtime
-- Perfect type safety maintained  
+- Perfect type safety maintained
 - Very performant - no runtime processing needed
 - Single source of truth - the OpenAPI schema at build time
 
 ### Examples from Reference Implementation
 
-__1. Generation Time (typegen.ts lines 338-350):__
+**1. Generation Time (typegen.ts lines 338-350):**
 
 ```typescript
 // This code GENERATES a string that becomes TypeScript code
 const allowedMethodsSet = new Set<AllowedMethods>();
-for (const path in schema.paths) {  // schema here is OpenAPI3 type
+for (const path in schema.paths) {
+  // schema here is OpenAPI3 type
   if (!isValidPath(path)) {
     throw new TypeError(`Invalid path: ${path}`);
   }
-  const methods = Object.keys(schema.paths[path]);  // Works because OpenAPI3 allows indexing
+  const methods = Object.keys(schema.paths[path]); // Works because OpenAPI3 allows indexing
   for (const method of methods) {
     allowedMethodsSet.add(method as AllowedMethods);
   }
@@ -824,16 +848,17 @@ for (const path in schema.paths) {  // schema here is OpenAPI3 type
 export const allowedMethods: AllowedMethods[] = [...allowedMethodsSet];
 ```
 
-__2. Generated Output (path-parameters.ts lines 68-86):__
+**2. Generated Output (path-parameters.ts lines 68-86):**
 
 ```typescript
 // This is the GENERATED code that gets written to the file
 const allowedMethodsSet = new Set<AllowedMethods>();
-for (const path in schema.paths) {  // schema here has 'as const'
+for (const path in schema.paths) {
+  // schema here has 'as const'
   if (!isValidPath(path)) {
     throw new TypeError(`Invalid path: ${path}`);
   }
-  const methods = Object.keys(schema.paths[path]);  // Works in generated code!
+  const methods = Object.keys(schema.paths[path]); // Works in generated code!
   for (const method of methods) {
     allowedMethodsSet.add(method as AllowedMethods);
   }
@@ -843,21 +868,17 @@ for (const path in schema.paths) {  // schema here has 'as const'
 export const allowedMethods: AllowedMethods[] = [...allowedMethodsSet];
 ```
 
-__3. Pattern for Generating Constants (typegen.ts lines 374-384):__
+**3. Pattern for Generating Constants (typegen.ts lines 374-384):**
 
 ```typescript
 // Extract at generation time
-const parameters = extractPathParameters(schema);  // schema is OpenAPI3
+const parameters = extractPathParameters(schema); // schema is OpenAPI3
 
 // Generate the code string
 const pathParameterFileContent = `/**
  * Key stages extracted from the API schema
  */
-export const KEY_STAGES = ${JSON.stringify(
-  parameters.keyStage,
-  undefined,
-  2
-)} as const;
+export const KEY_STAGES = ${JSON.stringify(parameters.keyStage, undefined, 2)} as const;
 type KeyStages = typeof KEY_STAGES;
 export type KeyStage = KeyStages[number];
 export function isKeyStage(value: string): value is KeyStage {
@@ -869,7 +890,7 @@ export function isKeyStage(value: string): value is KeyStage {
 fs.writeFileSync(outFile, pathParameterFileContent);
 ```
 
-__4. What We Need to Generate for PATH_OPERATIONS:__
+**4. What We Need to Generate for PATH_OPERATIONS:**
 
 ```typescript
 // In typegen-core.ts, extract operations at generation time
@@ -886,7 +907,7 @@ function extractOperations(schema: OpenAPI3) {
           operationId: operation.operationId,
           summary: operation.summary,
           description: operation.description,
-          parameters: operation.parameters || []
+          parameters: operation.parameters || [],
         });
       }
     }
@@ -900,7 +921,7 @@ const operationsCode = `
 export const PATH_OPERATIONS = ${JSON.stringify(operations, null, 2)} as const;
 
 export const OPERATIONS_BY_ID = {
-${operations.map(op => `  "${op.operationId}": PATH_OPERATIONS[${operations.indexOf(op)}]`).join(',\n')}
+${operations.map((op) => `  "${op.operationId}": PATH_OPERATIONS[${operations.indexOf(op)}]`).join(',\n')}
 } as const;
 `;
 
@@ -915,22 +936,22 @@ I'm implementing Phase 6.5 (Programmatic MCP Tool Generation) and have reviewed 
 
 #### What This Plan Provides (That I Can Use):
 
-✅ __Runtime validation__ - The `validateRequest` and `validateResponse` functions can replace our manual validators  
-✅ __Per-operation validators__ - These will ensure MCP tool inputs match API expectations  
-✅ __Type safety__ - Generated Zod schemas maintain consistency between SDK and MCP layers
+✅ **Runtime validation** - The `validateRequest` and `validateResponse` functions can replace our manual validators  
+✅ **Per-operation validators** - These will ensure MCP tool inputs match API expectations  
+✅ **Type safety** - Generated Zod schemas maintain consistency between SDK and MCP layers
 
 #### Additional Exports Needed for Programmatic MCP Tool Generation:
 
-1. __Raw OpenAPI Schema Export__:
+1. **Raw OpenAPI Schema Export**:
 
 ```typescript
 // Need in SDK index.ts:
 export { schema } from './types/generated/api-schema/api-schema';
 ```
 
-*Rationale*: I need to parse the OpenAPI schema to extract operation metadata (descriptions, parameter details) for generating MCP tool definitions.
+_Rationale_: I need to parse the OpenAPI schema to extract operation metadata (descriptions, parameter details) for generating MCP tool definitions.
 
-2. __Path Operation Metadata__:
+2. **Path Operation Metadata**:
 
 ```typescript
 export interface PathOperationMetadata {
@@ -945,9 +966,9 @@ export interface PathOperationMetadata {
 export const PATH_OPERATIONS: PathOperationMetadata[];
 ```
 
-*Rationale*: MCP tools need human-readable descriptions and operation details that aren't in the type definitions alone.
+_Rationale_: MCP tools need human-readable descriptions and operation details that aren't in the type definitions alone.
 
-3. __Parameter Type Mappings__:
+3. **Parameter Type Mappings**:
 
 ```typescript
 export const PARAM_TYPE_MAP = {
@@ -958,9 +979,9 @@ export const PARAM_TYPE_MAP = {
 };
 ```
 
-*Rationale*: I need to convert OpenAPI parameter types to JSON Schema format for MCP tool input schemas.
+_Rationale_: I need to convert OpenAPI parameter types to JSON Schema format for MCP tool input schemas.
 
-4. __Path Template Utilities__:
+4. **Path Template Utilities**:
 
 ```typescript
 export function parsePathTemplate(template: string): {
@@ -969,22 +990,22 @@ export function parsePathTemplate(template: string): {
 };
 ```
 
-*Rationale*: Need to parse paths like `/lessons/{lesson}/transcript` to generate consistent MCP tool names like `oak-get-lesson-transcript`.
+_Rationale_: Need to parse paths like `/lessons/{lesson}/transcript` to generate consistent MCP tool names like `oak-get-lesson-transcript`.
 
 #### SDK Constants Verification:
 
-__UPDATE (2025-08-12)__: After testing with the actual API, I've confirmed that __the SDK is correct and the MCP validators are wrong__.
+**UPDATE (2025-08-12)**: After testing with the actual API, I've confirmed that **the SDK is correct and the MCP validators are wrong**.
 
-__Verified API Reality (tested with API key):__
+**Verified API Reality (tested with API key):**
 
-1. __Key Stages - SDK is CORRECT__:
+1. **Key Stages - SDK is CORRECT**:
    - API supports exactly: `['ks1', 'ks2', 'ks3', 'ks4']` ✅
    - API rejects `'eyfs'` with: "Invalid enum value. Expected 'ks1' | 'ks2' | 'ks3' | 'ks4', received 'eyfs'"
    - API rejects `'ks5'` with: "Invalid enum value. Expected 'ks1' | 'ks2' | 'ks3' | 'ks4', received 'ks5'"
-   - __SDK correctly exports__: `['ks1', 'ks2', 'ks3', 'ks4']`
-   - __MCP validators incorrectly have__: `['eyfs', 'ks1', 'ks2', 'ks3', 'ks4', 'ks5']` ❌
+   - **SDK correctly exports**: `['ks1', 'ks2', 'ks3', 'ks4']`
+   - **MCP validators incorrectly have**: `['eyfs', 'ks1', 'ks2', 'ks3', 'ks4', 'ks5']` ❌
 
-2. __Subjects - SDK is CORRECT__:
+2. **Subjects - SDK is CORRECT**:
    - API returns exactly 17 subjects (verified via `/subjects` endpoint):
 
      ```text
@@ -993,23 +1014,23 @@ __Verified API Reality (tested with API key):__
      physical-education, religious-education, rshe-pshe, science, spanish
      ```
 
-   - __SDK correctly exports__ all 17 subjects including `'cooking-nutrition'` ✅
-   - __MCP validators incorrectly have__ 18 subjects including non-existent `'latin'` ❌
+   - **SDK correctly exports** all 17 subjects including `'cooking-nutrition'` ✅
+   - **MCP validators incorrectly have** 18 subjects including non-existent `'latin'` ❌
 
-__Root Cause:__
+**Root Cause:**
 
-The MCP validators were manually created with __incorrect assumptions__ about what a UK education API "should" have (EYFS for early years, KS5 for sixth form, Latin as a classical subject) rather than what the Oak API __actually supports__.
+The MCP validators were manually created with **incorrect assumptions** about what a UK education API "should" have (EYFS for early years, KS5 for sixth form, Latin as a classical subject) rather than what the Oak API **actually supports**.
 
-__Impact for Programmatic Generation:__
+**Impact for Programmatic Generation:**
 
-This is actually __good news__! It means:
+This is actually **good news**! It means:
 
 1. ✅ The SDK is already correct and can be trusted as the source of truth
 2. ✅ No SDK updates needed - it accurately reflects the API
 3. ✅ Programmatic generation from SDK will give correct values
 4. ❌ Manual MCP validators must be deleted and replaced with SDK imports
 
-__Immediate Action Required:__
+**Immediate Action Required:**
 
 The MCP validators file (`ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/validators/tool-validators.ts`) needs to be updated to:
 
@@ -1067,7 +1088,7 @@ ecosystem/psycha/oak-curriculum-mcp/
 
 #### Example Usage in MCP Tool Generation:
 
-__File: `ecosystem/psycha/oak-curriculum-mcp/src/chorai/aither/tool-generation/generator.ts`__
+**File: `ecosystem/psycha/oak-curriculum-mcp/src/chorai/aither/tool-generation/generator.ts`**
 
 ```typescript
 import {
@@ -1078,22 +1099,23 @@ import {
   PATH_OPERATIONS,
   PARAM_TYPE_MAP,
   parsePathTemplate,
-  validateRequest,  // From Zod plan
+  validateRequest, // From Zod plan
 } from '@oaknational/oak-curriculum-sdk';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 
 // Generate MCP tools from SDK exports
 export function generateMcpTools(): Tool[] {
-  return PATH_OPERATIONS.map(operation => {
+  return PATH_OPERATIONS.map((operation) => {
     const { pathParams, toMcpToolName } = parsePathTemplate(operation.path);
-    
+
     return {
       name: toMcpToolName(),
-      description: operation.summary || operation.description || `Operation: ${operation.operationId}`,
+      description:
+        operation.summary || operation.description || `Operation: ${operation.operationId}`,
       inputSchema: {
         type: 'object',
         properties: generatePropertiesFromParams(operation.parameters),
-        required: operation.parameters.filter(p => p.required).map(p => p.name),
+        required: operation.parameters.filter((p) => p.required).map((p) => p.name),
       },
     };
   });
@@ -1101,7 +1123,7 @@ export function generateMcpTools(): Tool[] {
 
 function generatePropertiesFromParams(params: ParameterMetadata[]) {
   const properties: Record<string, any> = {};
-  
+
   for (const param of params) {
     // Use SDK's PARAM_TYPE_MAP instead of duplicating
     if (param.name in PARAM_TYPE_MAP) {
@@ -1113,12 +1135,12 @@ function generatePropertiesFromParams(params: ParameterMetadata[]) {
       };
     }
   }
-  
+
   return properties;
 }
 ```
 
-__File: `ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/handlers/tool-handler.ts`__
+**File: `ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/handlers/tool-handler.ts`**
 
 ```typescript
 import { validateRequest, validateResponse } from '@oaknational/oak-curriculum-sdk';
@@ -1126,30 +1148,30 @@ import { validateRequest, validateResponse } from '@oaknational/oak-curriculum-s
 export async function handleToolCall(
   toolName: string,
   args: unknown,
-  curriculumOrgan: CurriculumOrgan
+  curriculumOrgan: CurriculumOrgan,
 ): Promise<unknown> {
   const path = toolNameToPath(toolName);
-  
+
   // Use SDK's Zod validators instead of manual validation
   const validation = validateRequest(path, 'get', args);
   if (!validation.ok) {
     throw new McpValidationError(validation.issues);
   }
-  
+
   // Make API call
   const response = await curriculumOrgan.executeOperation(path, validation.value);
-  
+
   // Validate response using SDK's Zod schemas
   const responseValidation = validateResponse(path, 'get', 200, response);
   if (!responseValidation.ok) {
     throw new ApiResponseError('Invalid API response', responseValidation.issues);
   }
-  
+
   return responseValidation.value;
 }
 ```
 
-__File: `ecosystem/psycha/oak-curriculum-mcp/scripts/generate-tools.ts`__
+**File: `ecosystem/psycha/oak-curriculum-mcp/scripts/generate-tools.ts`**
 
 ```typescript
 import { generateMcpTools } from '../src/chorai/aither/tool-generation/generator';
@@ -1160,21 +1182,18 @@ import path from 'node:path';
 // Build-time generation script
 async function main() {
   console.log('🔧 Generating MCP tools from SDK...');
-  
+
   const tools = generateMcpTools();
-  
+
   // Enhance with custom metadata
-  const enhancedTools = tools.map(tool => ({
+  const enhancedTools = tools.map((tool) => ({
     ...tool,
     ...TOOL_METADATA[tool.name], // Add categories, examples, etc.
   }));
-  
+
   // Write to generated file
-  const outputPath = path.join(
-    __dirname,
-    '../src/organa/mcp/generated/tools.generated.ts'
-  );
-  
+  const outputPath = path.join(__dirname, '../src/organa/mcp/generated/tools.generated.ts');
+
   const content = `// AUTO-GENERATED - DO NOT EDIT
 // Generated from Oak Curriculum SDK on ${new Date().toISOString()}
 
@@ -1184,7 +1203,7 @@ export const GENERATED_TOOLS: Tool[] = ${JSON.stringify(enhancedTools, null, 2)}
 
 export const TOOL_COUNT = ${enhancedTools.length} as const;
 `;
-  
+
   fs.writeFileSync(outputPath, content);
   console.log(`✅ Generated ${enhancedTools.length} MCP tools`);
 }
@@ -1192,7 +1211,7 @@ export const TOOL_COUNT = ${enhancedTools.length} as const;
 main().catch(console.error);
 ```
 
-__File: `ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/validators/tool-validators.ts`__
+**File: `ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/validators/tool-validators.ts`**
 
 ```typescript
 // BEFORE: Manual duplication (DELETE THIS)

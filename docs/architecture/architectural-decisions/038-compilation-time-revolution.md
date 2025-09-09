@@ -1,6 +1,7 @@
 # ADR-038: Compilation-Time Revolution - Complete Validation Embedding
 
 ## Status
+
 Accepted and Implemented
 
 ## Context
@@ -28,19 +29,25 @@ const method = 'GET' as const;
 type Client = OakApiPathBasedClient['/lessons/{lesson}/transcript']['GET'];
 
 // Parameter type guards with compile-time embedded values
-const allowedKeyStageValues = ["ks1","ks2","ks3","ks4"] as const;
-type KeyStageValue = typeof allowedKeyStageValues[number];
+const allowedKeyStageValues = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+type KeyStageValue = (typeof allowedKeyStageValues)[number];
 function isKeyStageValue(value: string): value is KeyStageValue {
   const stringKeyStageValue: readonly string[] = allowedKeyStageValues;
   return stringKeyStageValue.includes(value);
 }
 
 // Two-executor pattern
-const executor = (client: OakApiPathBasedClient, requestParams: ValidRequestParams): ReturnType<Client> => {
+const executor = (
+  client: OakApiPathBasedClient,
+  requestParams: ValidRequestParams,
+): ReturnType<Client> => {
   // Type-safe execution with validated params
 };
 
-const getExecutorFromGenericRequestParams = (client: OakApiPathBasedClient, requestParams: unknown) => {
+const getExecutorFromGenericRequestParams = (
+  client: OakApiPathBasedClient,
+  requestParams: unknown,
+) => {
   // Validates unknown input and returns executor
 };
 ```
@@ -115,6 +122,7 @@ mcp-tools/
 ### The TypeScript Limitation
 
 Previous approaches failed because TypeScript cannot handle:
+
 ```typescript
 const response = await client[dynamicPath][dynamicMethod](params);
 // Creates union of incompatible signatures
@@ -123,6 +131,7 @@ const response = await client[dynamicPath][dynamicMethod](params);
 ### Our Solution
 
 We never use dynamic dispatch. Instead:
+
 ```typescript
 const tool = MCP_TOOLS[toolName]; // Get tool with embedded executor
 const result = await tool.getExecutorFromGenericRequestParams(client, params);

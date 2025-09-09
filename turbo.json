@@ -36,30 +36,6 @@
       "cache": false,
       "persistent": true
     },
-    "format": {
-      "outputs": ["**/*.{ts,tsx,js,jsx,json,md}"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "**/*.md",
-        "**/*.json",
-        ".prettierrc",
-        "$TURBO_ROOT$/.prettierrc",
-        "$TURBO_ROOT$/prettier.config.js"
-      ]
-    },
-    "format:check": {
-      "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "**/*.md",
-        "**/*.json",
-        ".prettierrc",
-        "$TURBO_ROOT$/.prettierrc",
-        "$TURBO_ROOT$/prettier.config.js"
-      ]
-    },
     "lint": {
       "dependsOn": ["^build"],
       "cache": true,

@@ -1,6 +1,7 @@
 # ADR-024: Dependency Injection Pattern for Histoi Tissues
 
 ## Status
+
 Accepted
 
 ## Context
@@ -8,6 +9,7 @@ Accepted
 During Phase 5 development, we needed to create truly transplantable tissues that could adapt to different runtime environments (Node.js, Edge, Browser) without code changes. The challenge was managing runtime-specific dependencies (filesystem, console, process) while maintaining clean architecture.
 
 Initial attempts used runtime detection and conditional imports, but this created:
+
 - Tight coupling to specific environments
 - Difficult-to-test code with complex mocks
 - Violations of the Single Responsibility Principle
@@ -32,7 +34,7 @@ export class FileStorage {
     private readonly fs: FileSystemInterface,
     private readonly path: PathInterface,
   ) {}
-  
+
   // All methods use injected dependencies
   async read(key: string): Promise<string> {
     return this.fs.readFile(this.path.join(this.dir, key), 'utf-8');
@@ -78,6 +80,7 @@ const storage = new FileStorage(fs, path);
 ## Implementation Examples
 
 ### histos-logger
+
 ```typescript
 export class ConsolaLogger implements Logger {
   constructor(
@@ -88,15 +91,17 @@ export class ConsolaLogger implements Logger {
 ```
 
 ### histos-storage
+
 ```typescript
 export function createFileStorage(
   fs: FileSystemInterface,
   path: PathInterface,
   dir: string,
-): StorageProvider
+): StorageProvider;
 ```
 
 ### histos-transport
+
 ```typescript
 export class StdioTransport implements Transport {
   constructor(
@@ -110,6 +115,7 @@ export class StdioTransport implements Transport {
 ## Validation
 
 The pattern has been validated through:
+
 - All Histoi tissues successfully refactored
 - Test auditor confirmed "gold standard" implementation
 - Code reviewer gave A/A+ grades

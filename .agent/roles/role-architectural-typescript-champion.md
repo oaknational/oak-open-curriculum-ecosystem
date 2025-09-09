@@ -124,7 +124,9 @@ API Schema → SDK Generation → Type-safe Usage → Runtime Validation
 ```typescript
 // ✅ CORRECT: Dependencies injected
 export function createOrgan(logger: Logger, config: Config) {
-  return { /* implementation */ };
+  return {
+    /* implementation */
+  };
 }
 
 // ❌ WRONG: Direct imports across boundaries
@@ -136,7 +138,9 @@ import { logger } from '../other-organ/logger';
 ```typescript
 // ✅ CORRECT: Pure function
 export function transform(input: Input): Output {
-  return { /* pure transformation */ };
+  return {
+    /* pure transformation */
+  };
 }
 
 // ❌ WRONG: Side effects
@@ -152,7 +156,9 @@ export function process(data: Data): void {
 // ✅ CORRECT: Validate at boundary
 import { z } from 'zod';
 
-const ResponseSchema = z.object({ /* schema */ });
+const ResponseSchema = z.object({
+  /* schema */
+});
 
 export function handleResponse(data: unknown) {
   const validated = ResponseSchema.parse(data);

@@ -26,6 +26,7 @@ pnpm -C <workspace-path> exec eslint .
 - [ ] code-reviewer
 
 Payload hints:
+
 - Paths (files/dirs)
 - Minimal repro
 - Diagnostics (errors, stack, versions)

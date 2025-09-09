@@ -31,6 +31,7 @@ Each decision in the summary carries hidden weight. "Removed histos logger wrapp
 ## The Gradient of Understanding
 
 There's a gradient to understanding in a continued session:
+
 - **Immediate clarity**: Technical facts, file paths, error messages
 - **Gradual return**: Patterns, conventions, the user's preferences
 - **Possibly never recovered**: The specific frustrations, the dead ends explored, the moments of insight

@@ -20,8 +20,8 @@ We need exactly ONE additional data structure:
 export const TOOL_LOOKUP = {
   'oak-get-sequences-units': {
     path: '/sequences/{sequence}/units' as const,
-    method: 'GET' as const
-  }
+    method: 'GET' as const,
+  },
 } as const;
 
 // Everything else comes from the schema
@@ -56,7 +56,7 @@ const operation = schema.paths[path][method]; // All data is here
 #### 1.1 Export Schema as Runtime Constant
 
 - [x] Export full OpenAPI schema as const
-- [x] Ensure schema is available at runtime  
+- [x] Ensure schema is available at runtime
 - [x] Types flow from runtime schema
 
 ### Phase 2: Minimal Lookup Generation ✅ COMPLETE
@@ -89,7 +89,7 @@ const TOOL_GROUPINGS_DATA = {
         year: ['1', '2', '3', ...] // Exact enum values
       },
       queryParams: { /* ... */ },
-      executor: (client, pathParams, queryParams) => 
+      executor: (client, pathParams, queryParams) =>
         client['/sequences/{sequence}/units']['GET']({pathParams, queryParams})
     }
   }
@@ -104,10 +104,10 @@ export function executeToolCall(
   if (!isToolName(toolName)) {
     return { error: `Unknown tool: ${String(toolName)}` };
   }
-  
+
   const tool = findToolInGroupings(toolName);
   const { pathParams, queryParams } = transformParams(tool, params);
-  
+
   // No type assertions needed!
   return tool.executor(client, pathParams, queryParams);
 }
@@ -143,11 +143,11 @@ Have the type reviewer review the plan, and use the review to refine the plan.
 export const TOOL_LOOKUP = {
   'oak-get-sequences-units': {
     path: '/sequences/{sequence}/units' as const,
-    method: 'GET' as const
+    method: 'GET' as const,
   },
   'oak-get-lessons-transcript': {
     path: '/lessons/{lesson}/transcript' as const,
-    method: 'GET' as const
+    method: 'GET' as const,
   },
   // ... all 27 tools with just path/method
 } as const;
@@ -165,7 +165,7 @@ export function isToolName(value: unknown): value is ToolName {
 // Use schema's parameter definitions directly
 function validateParams(operation: any, params: unknown) {
   if (!operation.parameters) return {};
-  
+
   // Validate against operation.parameters from schema
   // Transform MCP flat structure to OpenAPI structure
   // Return null if invalid, transformed params if valid
@@ -236,7 +236,7 @@ When implementing the direct access pattern `client[path][method](params)`, we d
 const response = await client[path][method](params);
 
 // What TypeScript sees
-const methodFunc: 
+const methodFunc:
   | ((params: {path: {sequence: string}}) => Promise<Response1>)
   | ((params: {path: {lesson: string}}) => Promise<Response2>)
   | ... // 27 different incompatible signatures

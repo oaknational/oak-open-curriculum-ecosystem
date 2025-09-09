@@ -11,6 +11,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 ## 📊 Current State Analysis
 
 ### Existing Tools (4/25)
+
 1. `oak-search-lessons` - Search for lessons ✅
 2. `oak-get-lesson` - Get lesson metadata (without transcript) ✅
 3. `oak-list-key-stages` - List all key stages ✅
@@ -19,6 +20,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 ### SDK Endpoints Requiring MCP Tools (21 remaining)
 
 #### Critical Priority (Most Valuable)
+
 1. `/lessons/{lesson}/transcript` - **Get lesson transcript** ⭐
 2. `/lessons/{lesson}/summary` - Get lesson summary
 3. `/lessons/{lesson}/quiz` - Get lesson quiz questions
@@ -26,6 +28,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 5. `/key-stages/{keyStage}/subject/{subject}/lessons` - List lessons by key stage and subject
 
 #### High Priority (Frequently Useful)
+
 6. `/key-stages/{keyStage}/subject/{subject}/units` - Get units for key stage/subject
 7. `/units/{unit}/summary` - Get unit summary
 8. `/search/transcripts` - Search within transcripts
@@ -33,6 +36,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 10. `/subjects/{subject}/key-stages` - Get key stages for a subject
 
 #### Medium Priority (Specialised Use)
+
 11. `/sequences/{sequence}/units` - Get sequence units
 12. `/subjects/{subject}/sequences` - Get subject sequences
 13. `/subjects/{subject}/years` - Get subject years
@@ -42,6 +46,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 17. `/sequences/{sequence}/questions` - Get sequence questions
 
 #### Low Priority (Administrative/Metadata)
+
 18. `/changelog` - Get changelog
 19. `/changelog/latest` - Get latest changelog
 20. `/rate-limit` - Get rate limit info
@@ -50,6 +55,7 @@ Transform the Oak Curriculum MCP server from basic functionality (4 tools) to co
 23. `/lessons/{lesson}/assets/{type}` - Get specific asset type
 
 ### Convenience Tools (New)
+
 24. `oak-get-lesson-complete` - Get lesson metadata + transcript + quiz (composite tool)
 
 ## 🏗️ Implementation Architecture
@@ -92,6 +98,7 @@ ecosystem/psycha/oak-curriculum-mcp/
 ## 📝 Implementation Steps
 
 ### Phase 1: Foundation (Day 1)
+
 1. **Restructure tool organisation**
    - Create modular tool files by domain
    - Update tool definitions schema
@@ -103,6 +110,7 @@ ecosystem/psycha/oak-curriculum-mcp/
    - Ensure proper error handling
 
 ### Phase 2: Critical Tools (Day 1-2)
+
 3. **Implement transcript operations**
    - `oak-get-lesson-transcript` tool
    - Integration with SDK client
@@ -119,6 +127,7 @@ ecosystem/psycha/oak-curriculum-mcp/
    - `oak-list-units-by-stage-subject`
 
 ### Phase 3: Search and Discovery (Day 2)
+
 6. **Enhance search capabilities**
    - `oak-search-transcripts`
    - Add pagination support to existing search
@@ -129,6 +138,7 @@ ecosystem/psycha/oak-curriculum-mcp/
    - `oak-list-sequence-units`
 
 ### Phase 4: Convenience and Composite (Day 3)
+
 8. **Create composite tools**
    - `oak-get-lesson-complete` (metadata + transcript + quiz)
    - `oak-get-subject-overview` (subject + key stages + units)
@@ -138,6 +148,7 @@ ecosystem/psycha/oak-curriculum-mcp/
    - `oak-get-rate-limit`
 
 ### Phase 5: Testing and Integration (Day 3-4)
+
 10. **Comprehensive testing**
     - Unit tests for all pure functions
     - Integration tests for MCP protocol compliance
@@ -151,18 +162,21 @@ ecosystem/psycha/oak-curriculum-mcp/
 ## 🧪 Testing Strategy
 
 ### Unit Tests (Per Tool)
+
 - Pure transformation functions
 - Error handling
 - Parameter validation
 - Response formatting
 
 ### Integration Tests (Per Domain)
+
 - Tool registration
 - Handler dispatch
 - SDK client integration
 - Protocol compliance
 
 ### E2E Tests (Critical Paths)
+
 - Search → Get Lesson → Get Transcript
 - List Subjects → Get Subject → List Lessons
 - Composite tool functionality
@@ -196,13 +210,13 @@ export async function getLessonTranscript(
   const result = await client.GET('/lessons/{lesson}/transcript', {
     params: { path: { lesson: lessonSlug } },
   });
-  
+
   if (result.error) {
     throw new CurriculumOperationError(
       `Failed to fetch transcript: ${result.error.message}`,
     );
   }
-  
+
   return transformTranscriptResponse(result.data);
 }
 
@@ -216,12 +230,14 @@ case 'oak-get-lesson-transcript':
 ## 🎯 Success Criteria
 
 ### Functional Requirements
+
 - [ ] All 25 SDK endpoints have corresponding MCP tools
 - [ ] Composite convenience tools for common workflows
 - [ ] Proper error handling with helpful messages
 - [ ] Type-safe parameter validation
 
 ### Quality Requirements
+
 - [ ] 100% unit test coverage for pure functions
 - [ ] All tools pass MCP protocol compliance tests
 - [ ] Zero ESLint warnings or errors
@@ -229,6 +245,7 @@ case 'oak-get-lesson-transcript':
 - [ ] Functions under 50 lines (complexity < 8)
 
 ### Documentation Requirements
+
 - [ ] Each tool has clear description
 - [ ] Input schemas are self-documenting
 - [ ] Usage examples for common patterns
@@ -237,12 +254,14 @@ case 'oak-get-lesson-transcript':
 ## 🚀 Benefits
 
 ### For Users
+
 - Complete access to Oak curriculum content
 - Efficient composite tools for common tasks
 - Reliable transcript access for lesson analysis
 - Rich search capabilities
 
 ### For Development
+
 - Modular, maintainable tool structure
 - Clear separation of concerns
 - Comprehensive test coverage
@@ -251,15 +270,19 @@ case 'oak-get-lesson-transcript':
 ## ⚠️ Risks and Mitigations
 
 ### Risk: API Rate Limiting
+
 **Mitigation**: Implement rate limit checking tool, add throttling guidance
 
 ### Risk: Large Response Sizes
+
 **Mitigation**: Implement pagination, provide filtering options
 
 ### Risk: Complex Tool Discovery
+
 **Mitigation**: Logical naming conventions, comprehensive descriptions
 
 ### Risk: Maintenance Burden
+
 **Mitigation**: Modular structure, comprehensive tests, clear patterns
 
 ## 📅 Timeline

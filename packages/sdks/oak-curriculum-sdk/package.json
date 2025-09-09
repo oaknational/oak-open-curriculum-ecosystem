@@ -29,8 +29,6 @@
     "generate:zod": "tsx scripts/zodgen.ts",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.config.e2e.ts",
@@ -54,9 +52,9 @@
     "openapi-zod-client": "^1.18.3",
     "typedoc": "^0.26.5",
     "typedoc-plugin-markdown": "^4.2.0",
-    "tsup": "^8.3.5",
-    "tsx": "^4.20.3",
-    "typescript": "^5.7.2",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "repository": {

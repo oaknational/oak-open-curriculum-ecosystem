@@ -12,15 +12,15 @@ Eventually the agent will be able to learn from this direct experience, the more
 
 Use this as a fast ritual to preserve and extend continuity across sessions.
 
-1) Ground on primary references
+1. Ground on primary references
    - Read: [GO.md](../../GO.md)
    - Read: [AGENT.md](../directives-and-memory/AGENT.md)
    - Skim: [rules.md](../directives-and-memory/rules.md), [TypeScript practice](../../docs/agent-guidance/typescript-practice.md)
 
-2) Sample recent experience
+2. Sample recent experience
    - Skim 1–3 relevant files below (Highlights). Note tags, decisions, open questions.
 
-3) Capture non‑mutating signals (context only)
+3. Capture non‑mutating signals (context only)
 
 ```bash
 git status --porcelain
@@ -29,10 +29,10 @@ pnpm -C <workspace-path> exec tsc --noEmit
 pnpm -C <workspace-path> exec eslint .
 ```
 
-4) Delegate with payloads
+4. Delegate with payloads
    - Include: paths, minimal repro, diagnostics, intent/outcome.
 
-5) Record a new experience when meaning shifts (Kairos)
+5. Record a new experience when meaning shifts (Kairos)
    - Use the template below; keep it concise and operational.
 
 ## Highlights (start here)
@@ -53,21 +53,26 @@ pnpm -C <workspace-path> exec eslint .
 
 ```markdown
 # <Short Title>
-*Date: YYYY-MM-DD*
-*Tags: collaboration | emergence | stewardship | biosphere | technical-wisdom | tdd | types*
+
+_Date: YYYY-MM-DD_
+_Tags: collaboration | emergence | stewardship | biosphere | technical-wisdom | tdd | types_
 
 ## Context and Signals
+
 - What changed? Which repo/package? Why now?
 - Signals: `git status`, `git diff`, `tsc --noEmit`, `eslint` (paste minimal snippets)
 
 ## Insights
+
 - 1–3 bullets. Patterns, metaphors, decisions.
 
 ## Decisions and Delegations
+
 - Decisions (with rationale)
 - Delegations (agent, payload, expected outcome)
 
 ## Next
+
 - Concrete next step(s) or open question(s)
 ```
 

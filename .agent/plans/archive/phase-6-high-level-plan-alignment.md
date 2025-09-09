@@ -20,11 +20,12 @@ This report follows GO.md and AGENT.md: atomic, measurable, provable actions; pe
 
 ## User Decisions (2025-08-09T22:21:57+01:00)
 
-- __Runtime isolation (Phase 5.5)__: Hard prerequisite; must be completed before Phase 6 work proceeds. No waiver.
-- __ElasticSearch__: Critical for future, but OUT of MVP for the Oak MCP server. Defer to a future enhancement.
-- __Implication__: Update both plans to mark the 5.5 gate and defer ES; adjust scope and success criteria accordingly.
+- **Runtime isolation (Phase 5.5)**: Hard prerequisite; must be completed before Phase 6 work proceeds. No waiver.
+- **ElasticSearch**: Critical for future, but OUT of MVP for the Oak MCP server. Defer to a future enhancement.
+- **Implication**: Update both plans to mark the 5.5 gate and defer ES; adjust scope and success criteria accordingly.
 
 ## Alignment Findings
+
 - Phase 5.5 (Runtime Isolation) gating
   - High‑level plan: "must complete before Phase 6".
   - Phase 6 plan: implies Phase 5 complete with no explicit gate.
@@ -63,6 +64,7 @@ This report follows GO.md and AGENT.md: atomic, measurable, provable actions; pe
   - Recommendation: Provide concrete multi‑server config patterns (Action M1).
 
 ## Required Plan Updates (edits to make)
+
 - `.agent/plans/phase-6-oak-curriculum-api.md`
   - A1. Add explicit HARD GATE on Phase 5.5 runtime isolation completion; no waiver.
   - E1. Mark ElasticSearch as DEFERRED (OUT of MVP; critical future enhancement). Ensure success criteria exclude ES and point to a future enhancement plan.
@@ -83,6 +85,7 @@ This report follows GO.md and AGENT.md: atomic, measurable, provable actions; pe
   - N2. Sync sub‑phase numbering exactly with Phase 6 plan.
 
 ## Reference SDK Deep Dive Snapshot
+
 - Client construction
   - `src/client/oak-base-client.ts`: wraps `openapi-fetch`; `createClient<paths>({ baseUrl: apiUrl })`; injects `createAuthMiddleware(apiKey)`; exposes `client` and `pathBasedClient` (proxy with convenience, slight perf cost).
   - `src/client/index.ts`: factories `createOakClient(apiKey)` and `createOakPathBasedClient(apiKey)`.
@@ -99,6 +102,7 @@ This report follows GO.md and AGENT.md: atomic, measurable, provable actions; pe
 Assessment: SDK is clean, DI‑friendly, and runtime‑agnostic—well‑suited for MCP wrapping.
 
 ## Migration Plan to MCP (Atomic TODOs)
+
 All tasks follow TDD (Vitest), no `any`, prefer type guards, pure modules, and DI. Quality gates run continuously. GROUNDING every third task.
 
 1. GROUNDING: read `GO.md` and follow all instructions.
@@ -141,6 +145,7 @@ All tasks follow TDD (Vitest), no `any`, prefer type guards, pure modules, and D
     - Ensure format, type‑check, lint, test, build run green in CI for this server.
 
 Acceptance criteria:
+
 - Green quality gates on server package.
 - Endpoint manifest generated from schema; MCP tools align with manifest.
 - Retry/backoff and caching demonstrated by tests.
@@ -148,11 +153,13 @@ Acceptance criteria:
 - Security (token redaction) verified by tests.
 
 ## Open Questions (need USER decision)
+
 1. Multi‑server requirements: which environments/regions must be supported initially?
 2. Rate limits and SLAs: any known constraints to inform retry/backoff defaults?
 3. Observability stack preference: basic structured logs only, or OTEL hooks as a must‑have?
 
 ## Next Actions
+
 - If approved, I will:
   - Apply plan updates to `phase-6-oak-curriculum-api.md` and `high-level-plan.md` per “Required Plan Updates”.
   - Begin MCP server scaffold (Tasks 1–3) and generate endpoint manifest (Task 5).

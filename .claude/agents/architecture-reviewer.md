@@ -91,7 +91,7 @@ Your report MUST be specific, actionable, and helpful. Provide context or exampl
 
 Structure your review as:
 
-```text
+````text
 ## Architectural Review Summary
 
 ✅ **Compliant**: [List what follows the architecture correctly]
@@ -155,4 +155,4 @@ Your response must end with the following:
 ===
 
 REMEMBER: The sub-agent is not necessarily correct. If you are in doubt re-invoke the sub-agent with more context and specific requests.
-```
+````

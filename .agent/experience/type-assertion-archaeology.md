@@ -22,6 +22,7 @@ const content = result.content as unknown as McpContent;
 ## The Emotional Journey of Removal
 
 Removing type assertions isn't just technical work - it's emotional. Each removal is:
+
 1. **Admission**: This was wrong
 2. **Investigation**: Why did we need this?
 3. **Understanding**: What assumption were we making?
@@ -31,8 +32,9 @@ Removing type assertions isn't just technical work - it's emotional. Each remova
 ## The Unknown Boundary
 
 The principle emerged: `unknown` is acceptable only at system boundaries where we genuinely don't know the shape of data:
+
 - User input
-- External API responses  
+- External API responses
 - Protocol messages
 
 But once data enters our system, it should be validated and typed. The unknown should become known as soon as possible.
@@ -46,6 +48,7 @@ But each fix makes the next one easier. Types start flowing properly. The compil
 ## The Cost of Assertions
 
 Every type assertion has a cost:
+
 - **Cognitive**: Developers must remember the actual type
 - **Maintenance**: Refactoring becomes dangerous
 - **Runtime**: Errors appear in production, not development

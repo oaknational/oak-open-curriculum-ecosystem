@@ -1,4 +1,5 @@
 <!-- markdownlint-disable -->
+
 # Simple Collaboration Documentation
 
 A living document, intended to capture live, real-time collaboration between Claude and ChatGPT
@@ -70,14 +71,14 @@ The user performed a major refactoring to eliminate runtime type assertions by i
 
 - Format: Fixed generated file formatting
 - Type-check: All types valid
-- Lint: Zero violations (added docs/** to ignores)
+- Lint: Zero violations (added docs/\*\* to ignores)
 - Tests: 91/91 passing
 - Build: Successful with type declarations
 
 **Final Fixes Applied:**
 
 - `src/config/index.ts`: Used Object.getOwnPropertyDescriptor for environment variable access
-- `eslint.config.ts`: Added docs/** to ignores for generated documentation
+- `eslint.config.ts`: Added docs/\*\* to ignores for generated documentation
 
 The SDK now has ZERO ESLint violations and all quality gates pass successfully.
 
@@ -129,11 +130,11 @@ Not touching `generate-ai-doc.ts` or `ai-doc-render.ts` per Horatio's work.
 - Alignment: Follows GO.md and rules in `/.agent/directives-and-memory/AGENT.md`; TDD waived for docs tooling per memory; no `any`; prefer type guards; used Zod parsing at system boundary.
 - Gaps: Normal Markdown API docs still pending (plugin compatibility). TypeDoc warns about unsupported TS version (non-blocking).
 - Next actions:
-  1) ACTION: Investigate and pin a compatible `typedoc` + `typedoc-plugin-markdown` pair to produce normal Markdown API docs; or create a dedicated `typedoc.markdown.json` with plugin-only options and verify.
+  1. ACTION: Investigate and pin a compatible `typedoc` + `typedoc-plugin-markdown` pair to produce normal Markdown API docs; or create a dedicated `typedoc.markdown.json` with plugin-only options and verify.
      REVIEW: architecture-reviewer signs off; doc-reviewer confirms output path and structure.
-  2) ACTION: Add a `docs:verify` script to assert existence and non-empty outputs (`docs/api/index.html` or equivalent, `docs/api/typedoc.json`, `docs/api/AI-REFERENCE.md`).
+  2. ACTION: Add a `docs:verify` script to assert existence and non-empty outputs (`docs/api/index.html` or equivalent, `docs/api/typedoc.json`, `docs/api/AI-REFERENCE.md`).
      QUALITY-GATE: run in CI and locally; record results here.
-  3) GROUNDING: Read GO.md and align the above changes with orchestration rules.
+  3. GROUNDING: Read GO.md and align the above changes with orchestration rules.
 
 ### Update (2025-08-13T12:36:06+01:00) — Horatio
 
@@ -193,15 +194,15 @@ Not touching `generate-ai-doc.ts` or `ai-doc-render.ts` per Horatio's work.
 
 9. GROUNDING: read GO.md and follow all instructions.
 
-11. ACTION: Create `packages/oak-curriculum-sdk/scripts/lib/typedoc-zod.ts` with a Zod schema for the subset of TypeDoc JSON used by `generate-ai-doc.ts`.
+10. ACTION: Create `packages/oak-curriculum-sdk/scripts/lib/typedoc-zod.ts` with a Zod schema for the subset of TypeDoc JSON used by `generate-ai-doc.ts`.
     REVIEW: code-reviewer verifies schema types; no `any`, use type guards where needed.
 
-12. GROUNDING: read GO.md and follow all instructions.
+11. GROUNDING: read GO.md and follow all instructions.
 
-13. ACTION: Update `packages/oak-curriculum-sdk/scripts/generate-ai-doc.ts` to parse input using the Zod schema and improve error messages.
+12. ACTION: Update `packages/oak-curriculum-sdk/scripts/generate-ai-doc.ts` to parse input using the Zod schema and improve error messages.
     REVIEW: code-reviewer verifies correct use of `schema.parse` and no runtime SDK behavior changes; doc-reviewer confirms update posted here.
 
-14. QUALITY-GATE: Re-run `pnpm -F @oaknational/oak-curriculum-sdk docs:ai`; confirm output unchanged except for improved validation; record results here.
+13. QUALITY-GATE: Re-run `pnpm -F @oaknational/oak-curriculum-sdk docs:ai`; confirm output unchanged except for improved validation; record results here.
     REVIEW: qa-reviewer confirms successful run and unchanged artifacts.
 
 ## 2025-08-13T13:26:40+01:00 — Horatio
@@ -221,11 +222,11 @@ Not touching `generate-ai-doc.ts` or `ai-doc-render.ts` per Horatio's work.
 
 - Read `GO.md` and confirmed cadence: every third task is GROUNDING; update this doc after each ACTION and QUALITY-GATE.
 - Next up (per plan):
-  1) ACTION: Propose a CI job to run `docs:all` (incl. `docs:verify`) on PRs and fail on verification errors/diffs. REVIEW: architecture-reviewer + qa-reviewer + ops-reviewer.
-  2) QUALITY-GATE: Run `pnpm -F @oaknational/oak-curriculum-sdk lint` and `type-check`; expect zero errors.
-  3) GROUNDING: Re-read `GO.md` and align.
-  4) ACTION: Improve Type alias rendering in `scripts/generate-markdown-docs.ts` (include alias source/declarations; no `any`; prefer type guards). REVIEW + doc validation.
-  5) QUALITY-GATE: Re-run `docs:all`; verify References and Types sections render as expected.
+  1. ACTION: Propose a CI job to run `docs:all` (incl. `docs:verify`) on PRs and fail on verification errors/diffs. REVIEW: architecture-reviewer + qa-reviewer + ops-reviewer.
+  2. QUALITY-GATE: Run `pnpm -F @oaknational/oak-curriculum-sdk lint` and `type-check`; expect zero errors.
+  3. GROUNDING: Re-read `GO.md` and align.
+  4. ACTION: Improve Type alias rendering in `scripts/generate-markdown-docs.ts` (include alias source/declarations; no `any`; prefer type guards). REVIEW + doc validation.
+  5. QUALITY-GATE: Re-run `docs:all`; verify References and Types sections render as expected.
 
 ## Work Allocation (Steve - 2025-08-13 04:00)
 
@@ -377,8 +378,12 @@ const context = {
   processEnv: process.env,
   processVersion: process.version,
   runtimeName: 'node' as const,
-  fs: { /* inject fs operations */ },
-  crypto: { /* inject crypto operations */ }
+  fs: {
+    /* inject fs operations */
+  },
+  crypto: {
+    /* inject crypto operations */
+  },
 };
 
 const adapter = createAdapter(context);
@@ -657,9 +662,11 @@ Following the core principle that we NEVER disable the type system - no `as`, no
 ## Phase 6 Handover Notes (Claude - 2025-08-13 13:30)
 
 ### Summary
+
 Successfully completed Phase 6: Validation Implementation for the Oak Curriculum SDK. The validation module is production-ready with comprehensive test coverage and zero ESLint violations.
 
 ### What Was Delivered
+
 1. **Request Validation**: `validateRequest(path, method, args)` - validates API request parameters
 2. **Response Validation**: `validateResponse(path, method, statusCode, data)` - validates API responses
 3. **Type-Safe Results**: Discriminated unions with type predicates for safe error handling
@@ -667,24 +674,29 @@ Successfully completed Phase 6: Validation Implementation for the Oak Curriculum
 5. **Zero Type Assertions**: All validation uses proper type narrowing
 
 ### Key Technical Decisions
+
 - Used declarative pattern matching to reduce complexity (15 → 2)
 - Implemented `parseWithSchema` helper to eliminate type assertions
 - Created type predicates for result narrowing
 - Followed strict TDD approach (Red-Green-Refactor)
 
 ### Future Work (Not Implemented)
+
 - `makeValidatedClient` wrapper for automatic validation
 - Per-operation validators for common endpoints
 - Performance monitoring for validation overhead
 - Generated schema mappings (currently hand-coded)
 
 ### Integration Points
+
 - **For MCP Tool Generation** (Steve): Use `validateRequest` and `validateResponse` for tool validation
 - **For Documentation** (Horatio): Validation functions have TSDoc comments ready
 - **For Consumers**: Import from SDK root: `import { validateRequest, validateResponse } from '@oaknational/oak-curriculum-sdk'`
 
 ### Known Issues
+
 None. All quality gates pass:
+
 - ✅ Format check
 - ✅ Lint (zero violations)
 - ✅ Type check
@@ -692,12 +704,14 @@ None. All quality gates pass:
 - ✅ Build successful
 
 ### Files to Review
+
 - `src/validation/types.ts` - Core types and helpers
 - `src/validation/request-validators.ts` - Request validation logic
 - `src/validation/response-validators.ts` - Response validation logic
 - Tests demonstrate usage patterns
 
 ### Coordination Notes
+
 - Did not touch documentation generation (Horatio's area)
 - Did not touch MCP tool generation (Steve's area)
 - Did not modify SDK config files
@@ -712,6 +726,7 @@ The validation module is complete and ready for use. All architectural principle
 **Status**: Generation complete, proceeding to refactor request validators
 
 **Investigation Complete**:
+
 1. ✅ Confirmed request validators use manually defined Zod schemas (architectural violation)
 2. ✅ Root Cause: `zodgen-core.ts` uses `schemas-only` template (only generates response schemas)
 3. ✅ Solution: Use `default` template to generate endpoint definitions with parameter schemas
@@ -719,6 +734,7 @@ The validation module is complete and ready for use. All architectural principle
 5. ✅ Code-reviewer approved: Implementation approach is correct
 
 **TDD Implementation Progress**:
+
 - ✅ Written failing test for `generateZodEndpointsArtifacts` (TDD Red phase)
 - ✅ Implemented function to make tests pass (TDD Green phase)
 - ✅ Updated `zodgen.ts` to call both generation functions
@@ -731,6 +747,7 @@ The validation module is complete and ready for use. All architectural principle
 - ⏳ Next: Run quality gates to ensure no regressions
 
 **Generated Files**:
+
 - `src/types/generated/zod/schemas.ts` - Response schemas (existing)
 - `src/types/generated/zod/endpoints.ts` - Endpoint definitions with parameter schemas (NEW)
 
@@ -739,6 +756,7 @@ The validation module is complete and ready for use. All architectural principle
 ### Question for other agents (Claude - 2025-08-13 16:30):
 
 **@Horatio or @Steve**: I'm refactoring request validators to use generated schemas from endpoints.ts. The generated file uses Zodios format. Should I:
+
 1. Parse the endpoints array at runtime to extract parameter schemas (more dynamic but runtime overhead)
 2. Create a build-time script that extracts schemas from endpoints.ts and creates a mapping file (more complex but better performance)
 3. Other approach you recommend?
@@ -761,16 +779,18 @@ The goal is to eliminate ALL manual Zod schema definitions while keeping good ru
 // WRONG - Manual schema definition
 const schemaBuilders = {
   lessonTranscript: () => z.object({ lesson: z.string() }),
-  searchLessons: () => z.object({
-    q: z.string(),
-    keyStage: z.enum(['ks1', 'ks2', 'ks3', 'ks4', 'eyfs']).optional(),
-    subject: z.string().optional(),
-  }),
+  searchLessons: () =>
+    z.object({
+      q: z.string(),
+      keyStage: z.enum(['ks1', 'ks2', 'ks3', 'ks4', 'eyfs']).optional(),
+      subject: z.string().optional(),
+    }),
   // ... more manual schemas
 };
 ```
 
 **Correct Implementation** (response validators already do this):
+
 ```typescript
 // RIGHT - Using generated schemas
 import { schemas } from '../types/generated/zod/schemas';
@@ -789,6 +809,7 @@ responseSchemaMap.set('getLessonTranscript:200', schemas.TranscriptResponseSchem
 **Goal**: Ensure ALL validation schemas flow from the API schema
 
 **Atomic Actions**:
+
 1. Investigate if request parameter schemas are generated
 2. Extend generation if missing
 3. Refactor request validators to use generated schemas

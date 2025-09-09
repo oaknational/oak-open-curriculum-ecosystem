@@ -3,16 +3,19 @@
 ## Date: 2025-08-10
 
 ## Context
+
 Implemented type generation for Oak Curriculum SDK using TDD approach to create TypeScript types and Zod validators from OpenAPI schemas.
 
 ## Key Learnings
 
 ### 1. TDD Implementation Flow
+
 - **Success Pattern**: Writing failing tests first drives better API design
 - **Key Insight**: Tests should focus on transformation behaviour, not implementation details
 - **Example**: Testing pure functions with simple input/output assertions makes tests resilient to refactoring
 
 ### 2. Pure Function Architecture
+
 - **Success Pattern**: Separating pure transformation logic from I/O operations
 - **Benefits**:
   - Easy to test without mocks
@@ -21,19 +24,23 @@ Implemented type generation for Oak Curriculum SDK using TDD approach to create 
 - **Implementation**: Core transformation functions (typegen-typescript.ts, typegen-zod.ts) are pure, while I/O is handled separately (schema-fetcher.ts, generate-types.ts)
 
 ### 3. ESM Module Challenges
+
 - **Issue**: `__dirname` not available in ESM modules
 - **Solution**: Use `import.meta.url` with `fileURLToPath` and `dirname`
+
 ```typescript
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 ```
 
 ### 4. TypeScript Linting Rules
+
 - **Issue**: ESLint forbids `Array<T>` syntax, requires `T[]`
 - **Challenge**: Complex types need parentheses: `({...})[]`
 - **Solution**: Check if type contains special characters before applying array syntax
 
 ### 5. Test Classification Importance
+
 - **Critical Learning**: Integration tests vs E2E tests have different boundaries
 - **Integration Tests**: Test code units working together, no I/O, simple injected mocks
 - **E2E Tests**: Test full system including I/O operations (network, filesystem)
@@ -41,8 +48,10 @@ const __dirname = dirname(__filename);
 - **Resolution**: Moved to E2E test directory with separate configuration
 
 ### 6. Schema Name Sanitisation
+
 - **Issue**: OpenAPI schemas can have names with special characters (e.g., "error.UNAUTHORIZED")
 - **Solution**: Sanitise names to valid TypeScript identifiers
+
 ```typescript
 function sanitizeName(name: string): string {
   return name.replace(/[^a-zA-Z0-9_]/g, '_');
@@ -50,11 +59,13 @@ function sanitizeName(name: string): string {
 ```
 
 ### 7. Cache Fallback Pattern
+
 - **Success Pattern**: Try remote fetch first, fall back to local cache on failure
 - **Benefits**: Enables offline development and resilience to API downtime
 - **Implementation**: Separate validation logic ensures both remote and cached schemas are valid
 
 ### 8. Function Complexity Management
+
 - **Issue**: Linting rules enforce maximum complexity and lines per function
 - **Solution**: Extract helper functions and split into separate modules
 - **Example**: Separated TypeScript and Zod generation into distinct modules
@@ -78,11 +89,13 @@ function sanitizeName(name: string): string {
 ## Architectural Patterns Applied
 
 ### Biological Architecture Alignment
+
 - **Moria (Foundation)**: Pure transformation functions form the core
 - **Histoi (Coordination)**: Schema fetcher and pipeline coordinate operations
 - **Psycha (Interface)**: Generated types provide the developer interface
 
 ### SOLID Principles
+
 - **Single Responsibility**: Each module has one clear purpose
 - **Open/Closed**: Easy to extend with new transformations
 - **Dependency Inversion**: Core logic doesn't depend on I/O
@@ -99,6 +112,7 @@ function sanitizeName(name: string): string {
 ## Commands and Tools
 
 ### Key Commands Used
+
 ```bash
 # Generate types from OpenAPI schema
 pnpm generate:types
@@ -116,6 +130,7 @@ pnpm build
 ```
 
 ### File Structure Created
+
 ```
 packages/oak-curriculum-sdk/
 ├── scripts/
@@ -144,6 +159,7 @@ packages/oak-curriculum-sdk/
 ## Conclusion
 
 This implementation successfully demonstrates TDD principles applied to code generation, resulting in a robust, maintainable solution. The key success factors were:
+
 1. Writing tests first to drive design
 2. Maintaining pure functions for core logic
 3. Clear separation of concerns

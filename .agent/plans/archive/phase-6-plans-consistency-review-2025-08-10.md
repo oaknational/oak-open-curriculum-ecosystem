@@ -149,14 +149,14 @@ Each issue below includes concrete, minimal edits to make in the plans.
 
 ## Cross-Document Consistency Matrix (Summary)
 
-| Topic | phase-6 plan | high-level plan | rules/testing/guidance | Status |
-|---|---|---|---|---|
-| Phase 5.5 gating | “MITIGATED” | “MITIGATED/Proceed” | Prior decision: hard prerequisite | Needs decision/clarification |
-| Quality gate order | Not explicit | Lint before type-check; no build | format → type-check → lint → test → build | Align to guidance |
-| Test filenames | Some `*.test.ts` | Consistent at high level | Strict suffixes per testing strategy | Align examples to strategy |
-| Zod at boundaries | Not explicit | Not explicit | Required | Add explicit tasks |
-| Type-only imports | Not explicit | Not explicit | Required | Add explicit note |
-| Typegen workflow | Present | Present | OK but clarify build/offline | Clarify details |
+| Topic              | phase-6 plan     | high-level plan                  | rules/testing/guidance                    | Status                       |
+| ------------------ | ---------------- | -------------------------------- | ----------------------------------------- | ---------------------------- |
+| Phase 5.5 gating   | “MITIGATED”      | “MITIGATED/Proceed”              | Prior decision: hard prerequisite         | Needs decision/clarification |
+| Quality gate order | Not explicit     | Lint before type-check; no build | format → type-check → lint → test → build | Align to guidance            |
+| Test filenames     | Some `*.test.ts` | Consistent at high level         | Strict suffixes per testing strategy      | Align examples to strategy   |
+| Zod at boundaries  | Not explicit     | Not explicit                     | Required                                  | Add explicit tasks           |
+| Type-only imports  | Not explicit     | Not explicit                     | Required                                  | Add explicit note            |
+| Typegen workflow   | Present          | Present                          | OK but clarify build/offline              | Clarify details              |
 
 ---
 
@@ -164,13 +164,13 @@ Each issue below includes concrete, minimal edits to make in the plans.
 
 Apply the following minimal edits to the plans (no code changes):
 
-1) In both plans (dependencies section for Phase 6)
+1. In both plans (dependencies section for Phase 6)
 
 - Replace: “Phase 5.5 🚧 MITIGATED”
 - With:
   - “Phase 5.5 ⏭️ Deferred until after SDK integration; MUST be completed before MCP tool exposure (BLOCKER). Interim acceptance criteria during integration: Node-specific code isolated in adapters; no Node globals in core; boundary integration tests enforce isolation.”
 
-2) In `/.agent/plans/high-level-plan.md` Quality Gates
+2. In `/.agent/plans/high-level-plan.md` Quality Gates
 
 - Replace the list with:
   - 1. `pnpm format`
@@ -180,21 +180,21 @@ Apply the following minimal edits to the plans (no code changes):
   - 5. `pnpm build`
 - Add note: “`pnpm test:e2e` is manual/on-demand (not in default CI).”
 
-3) In `/.agent/plans/phase-6-oak-curriculum-api.md` test filenames in examples
+3. In `/.agent/plans/phase-6-oak-curriculum-api.md` test filenames in examples
 
 - Replace occurrences of `*.test.ts` intended as unit tests with `*.unit.test.ts` (e.g., `scripts/typegen.unit.test.ts`, `client.unit.test.ts`).
 - Keep `*.integration.test.ts` and `*.e2e.test.ts` as-is.
 
-4) In `/.agent/plans/phase-6-oak-curriculum-api.md` add runtime validation tasks
+4. In `/.agent/plans/phase-6-oak-curriculum-api.md` add runtime validation tasks
 
 - For SDK adapters during initial integration: it is acceptable to rely on generated `is` predicates for API response validation; add tests to assert failure modes and error reporting. Add a follow-up to migrate to Zod (or generate Zod from OpenAPI) post-5.5 to align with repo practices.
 - For MCP `chora/phaneron`: Validate configuration (API keys, endpoints) with Zod at startup (required for boundary), consistent with repo guidance.
 
-5) In `/.agent/plans/phase-6-oak-curriculum-api.md` add type-only import note
+5. In `/.agent/plans/phase-6-oak-curriculum-api.md` add type-only import note
 
 - Add a short note: “Use `import type { … } from '…'` for all type-only imports (required by rules).”
 
-6) In `/.agent/plans/phase-6-oak-curriculum-api.md` clarify typegen workflow
+6. In `/.agent/plans/phase-6-oak-curriculum-api.md` clarify typegen workflow
 
 - Add bullets:
   - “Cached OpenAPI spec location: `packages/oak-curriculum-sdk/scripts/openapi-cache/swagger.json`.”
