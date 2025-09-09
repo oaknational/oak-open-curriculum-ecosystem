@@ -26,6 +26,10 @@ Scope: strategic overview. Details are in the individual plan documents.
    - Scope: integrate generated search tools; compose advanced tools with data tools
    - Acceptance: tools exposed via MCP; end-to-end tests (no network) pass
 
+7. Enhance Oak Curriculum MCP Tools/Resources/Prompts Usage
+   - At the moment we just provide tools, but there are other categories of MCP primitives that we could benefit from, see <https://modelcontextprotocol.io/docs/learn/server-concepts> for more details. This may require reclassifying some tools as resources. The prompts may be useful in the semantic search use case, so this work may need to be moved up.
+   - Acceptance: tools/resources/prompts exposed via MCP; end-to-end tests pass
+
 ## Dependencies / Order
 
 - Architectural → SDK Enhancements → Search SDK/tools → MCP integration → Hosting (Remote then Serverless)

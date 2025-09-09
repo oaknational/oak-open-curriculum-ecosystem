@@ -33,7 +33,9 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - Unauthorized requests return 401 and include MCP authorization hints in the JSON‑RPC error payload (per MCP Basic Authorization spec).
   - Dev token is ignored in any Vercel environment; it is local‑only. Optional: Vercel authentication in front of the function for team‑only access, with trade‑offs noted.
 - ListTools parity: `list_tools` from the remote endpoint exactly matches the generated tools exported by the Curriculum SDK (source of truth), and a test asserts equality.
-- OAuth Protected Resource Metadata endpoint available at `/.well-known/oauth-protected-resource` and returns issuer URLs; OPTIONS preflight handled for CORS.
+- OAuth 2.0 Protected Resource Metadata endpoint available at `/.well-known/oauth-protected-resource` and returns the canonical resource URI and the authorization server(s); OPTIONS preflight handled for CORS.
+- Access tokens are short‑lived JWTs (RFC 9068) minted by our Authorization Server (AS), audience‑bound to the MCP canonical resource URI; the Resource Server (RS) validates `iss`, `aud`, `exp/iat` and signature with JWKS.
+- Google ID tokens are NOT accepted as Bearer credentials to the RS; Google is used only for user sign‑in at the AS.
 - Local testability documented (inspector flow) mirroring Vercel’s guidance.
 - Unit/integration tests must not make network calls (use stubs/mocks). E2E tests for the HTTP server MAY make real network calls to the real Curriculum API to ensure end‑to‑end parity with the SDK tests.
 - Env contract documented and enforced in tests:
@@ -45,6 +47,15 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - `ALLOWED_HOSTS`, `ALLOWED_ORIGINS` – comma‑separated lists for DNS‑rebinding protection and CORS
   - `LOG_LEVEL` – `debug|info|warn|error` (default `info`)
   - Hosting flags honoured: `VERCEL`, `VERCEL_ENV` (preview|production), `CI`
+  - AS/RS (auth) variables:
+    - `BASE_URL` – public base URL of the deployment (e.g. Vercel URL)
+    - `MCP_CANONICAL_URI` – canonical resource URI (e.g. `${BASE_URL}/mcp`)
+    - `OIDC_ISSUER` – Google issuer (`https://accounts.google.com`)
+    - `OIDC_CLIENT_ID` – Google OAuth client id
+    - `OIDC_REDIRECT_URI` – `${BASE_URL}/oauth/callback`
+    - `ALLOWED_DOMAIN` – `thenational.academy`
+    - `SESSION_SECRET` – cookie/session secret for AS
+    - Dev toggle: `ENABLE_LOCAL_AS` (`true|false`) to run a minimal co‑hosted AS for local demos/tests
 
 ## Current status
 
@@ -55,8 +66,8 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - CORS middleware (mode‑aware headers; session headers documented)
   - OAuth Protected Resource metadata endpoint exposed at
     `/.well-known/oauth-protected-resource` (GET + OPTIONS)
-- Auth: bearer middleware present with dev token support in local mode; OAuth/CI paths
-  planned next.
+- Auth: bearer middleware present with dev token support (local only) and CI token (CI only).
+  OAuth path planned next per co‑hosted AS (Google sign‑in → our JWT access tokens).
 - Tests:
   - Unit: 401 unauthorised; tools/list; tool success/error (SDK mocked)
   - E2E (supertest): 401 without `Authorization`; tools/list with dev token
@@ -85,6 +96,20 @@ Gaps remaining to fully meet acceptance:
 - Rationale: in stateless mode, create a fresh server/transport per request to avoid JSON‑RPC request ID collisions across concurrent clients.
 - SDK usage: remote app uses the same MCP TypeScript SDK and the generated curriculum SDK; only the transport changes.
 
+### Authorization model (co‑hosted AS + RS)
+
+- AS (Authorization Server) endpoints (co‑hosted for demos):
+  - `/.well-known/openid-configuration` (AS metadata)
+  - `/.well-known/jwks.json` (JWKS for RS verification)
+  - `/oauth/authorize` + `/oauth/callback` (Google OIDC Authorization Code + PKCE) [may be stubbed for demos]
+- RS (Resource Server):
+  - `/.well-known/oauth-protected-resource` (resource metadata with canonical URI and AS list)
+  - Validates short‑lived JWT access tokens: `iss` = AS `BASE_URL`, `aud` = `MCP_CANONICAL_URI`.
+  - Returns `401` with `WWW-Authenticate` referencing resource metadata.
+- Local development policy:
+  - Keep simple: allow `REMOTE_MCP_DEV_TOKEN` and optional `REMOTE_MCP_ALLOW_NO_AUTH=true` ONLY in local dev.
+  - Feature‑gate local AS (`ENABLE_LOCAL_AS=true`) to expose metadata/JWKS and accept JWTs minted locally for E2E without adding attack surface to production.
+
 ## Implementation steps
 
 1. ACTION: Select Streamable HTTP mode
@@ -102,6 +127,13 @@ Gaps remaining to fully meet acceptance:
    - DONE: Implemented CORS with mode‑aware headers; DNS‑rebinding protection enabled.
    - TODO: Add tests for allowed/blocked origins/hosts; document exposed headers for
      session mode.
+
+3a. ACTION: Adopt OAuth2.1 authorization model (co‑hosted demo AS)
+   - Do not accept Google ID tokens as Bearer; use Google only for user authentication at the AS.
+   - RS exposes `/.well-known/oauth-protected-resource` with canonical resource and AS list; returns proper `WWW-Authenticate` on 401.
+   - Add AS metadata endpoints: `/.well-known/openid-configuration`, `/.well-known/jwks.json`.
+   - RS validates JWT access tokens (RFC 9068) using AS JWKS; enforce audience binding to `MCP_CANONICAL_URI`.
+   - Local dev: behind `ENABLE_LOCAL_AS=true`, serve ephemeral JWKS and accept JWTs in E2E; keep dev token/no‑auth for local convenience only.
 
 4. ACTION: Vercel integration
    - Create `apps/oak-curriculum-mcp-remote-poc/` with `vercel.json` or docs for project settings.
@@ -132,6 +164,10 @@ Gaps remaining to fully meet acceptance:
    - Status: Implemented 401 and list tools with dev token. Next: add 200 auth path and
      tool success/error assertions (may call real API on success path).
 
+7a. ACTION: E2E tests for OAuth access tokens (no external calls)
+   - Locally mint a short‑lived JWT using the same ephemeral signing key as the local AS (test‑only export) and assert RS accepts it (200).
+   - Assert `WWW-Authenticate` on 401 references resource metadata.
+
 8. ACTION: Coverage matrix to prove service works
    - Auth matrix: unauthorised 401; local dev token 200; CI token 200 (CI only); OAuth path documented for Vercel.
    - Transport negotiation: Accept header required; SSE parsing verified in responses.
@@ -140,12 +176,13 @@ Gaps remaining to fully meet acceptance:
    - CORS/DNS‑rebinding: headers and host/origin checks enforced (tests for local/dev).
 
 9. ACTION: Access control (OAuth‑first)
-   - Implement OAuth 2.1 (authorization code + PKCE) using a Vercel‑compatible flow; accept requests with `Authorization: Bearer <access_token>`.
+   - Implement OAuth 2.1 (authorization code + PKCE) using a Vercel‑compatible flow; accept `Authorization: Bearer <access_token>` minted by our AS (audience‑bound).
    - When unauthorized, return 401 and include MCP authorization metadata in the JSON‑RPC error to guide clients.
    - Provide a dev fallback: static Bearer token (env‑gated) for local/testing; ensure this is disabled in production.
    - Optional: document how to place Vercel authentication in front of the function for team‑only access.
      REVIEW: Self‑analyze simplicity and security trade‑offs vs spec recommendations; keep implementation canonical.
    - DONE: OAuth Protected Resource Metadata endpoint at `/.well-known/oauth-protected-resource` (GET + OPTIONS).
+   - NEXT: Add AS metadata + JWKS, jose‑based JWT verification in RS; add local AS feature‑flag.
 
 10. ACTION: Minimize duplication via shared workspace
     - Create shared package (e.g., `packages/curriculum-mcp-server-core`) exporting:
