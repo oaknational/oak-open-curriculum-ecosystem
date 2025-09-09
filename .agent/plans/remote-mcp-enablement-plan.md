@@ -48,23 +48,29 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 
 ## Current status
 
-- Streamable HTTP server implemented in `apps/oak-curriculum-mcp-streamable-http` (stateless mode), using SDK transport and Accept negotiation (`application/json, text/event-stream`).
-- Unit tests cover:
-  - 401 unauthorised
-  - tools/list
-  - tool call happy/error paths (with SDK calls mocked)
-- E2E tests now added for the HTTP app (vitest + supertest):
-  - 401 when missing `Authorization`
-  - tools/list with dev bearer token
-- Repo quality gates passing locally after rename; root-only Prettier confirmed.
+- Streamable HTTP server implemented in `apps/oak-curriculum-mcp-streamable-http` (stateless)
+  using the SDK transport, with Accept negotiation (`application/json, text/event-stream`).
+- Security hardening in place:
+  - DNS‑rebinding protection (fail‑closed with localhost defaults)
+  - CORS middleware (mode‑aware headers; session headers documented)
+  - OAuth Protected Resource metadata endpoint exposed at
+    `/.well-known/oauth-protected-resource` (GET + OPTIONS)
+- Auth: bearer middleware present with dev token support in local mode; OAuth/CI paths
+  planned next.
+- Tests:
+  - Unit: 401 unauthorised; tools/list; tool success/error (SDK mocked)
+  - E2E (supertest): 401 without `Authorization`; tools/list with dev token
+- Tooling: tsconfig layouts standardised; typed ESLint covers tests/config; builds
+  exclude tests for clean emits. Prettier runs from repo root only.
+- All quality gates green (type‑check, lint, unit, e2e, build).
 
 Gaps remaining to fully meet acceptance:
 
-- E2E: add tool call success (mock `executeToolCall` to avoid network) and error (unknown tool) coverage.
-- CORS and DNS‑rebinding safeguards; document exposed headers for optional session mode.
-- OAuth Protected Resource metadata endpoint (`/.well-known/oauth-protected-resource`).
-- Access control behaviour per environment (local no‑auth flag, CI token, OAuth on Vercel) and corresponding tests.
-- ListTools parity assertion against SDK‑generated tool definitions.
+- E2E: add 200 path with valid auth and tool success (may call real API), and explicit
+  error path assertions.
+- ListTools parity assertion against SDK‑generated tools.
+- Access control behaviour per environment (local no‑auth flag, CI token, OAuth on
+  Vercel) and corresponding tests.
 
 ## Design outline
 
@@ -93,9 +99,9 @@ Gaps remaining to fully meet acceptance:
      REVIEW: Self‑analyze for parity with STDIO and proper lifecycle/cleanup.
 
 3. ACTION: CORS and security
-   - For browser clients, configure CORS to expose `Mcp-Session-Id` and allow header `mcp-session-id` (session mode only). Example: `exposedHeaders: ['Mcp-Session-Id']`, `allowedHeaders: ['Content-Type', 'mcp-session-id']`.
-   - Enable DNS rebinding protection for local dev; set `allowedHosts`/`allowedOrigins` in remote. Prefer fail‑closed defaults; allow localhost in dev.
-     REVIEW: Self‑analyze correctness of CORS and protection settings.
+   - DONE: Implemented CORS with mode‑aware headers; DNS‑rebinding protection enabled.
+   - TODO: Add tests for allowed/blocked origins/hosts; document exposed headers for
+     session mode.
 
 4. ACTION: Vercel integration
    - Create `apps/oak-curriculum-mcp-remote-poc/` with `vercel.json` or docs for project settings.
@@ -123,10 +129,8 @@ Gaps remaining to fully meet acceptance:
    - `pnpm format:check && pnpm type-check && pnpm lint && pnpm test && pnpm build && pnpm identity-report`
 
 7. ACTION: E2E tests for Express endpoint (real API allowed)
-   - Add vitest + supertest tests: list tools, tools/call happy path, tool error path; 401 vs 200 auth cases.
-   - Allow real Curriculum API calls in E2E to validate real data flow (mirror SDK e2e). Keep unit/integration offline.
-   - Status: Initial E2E (401 and list tools with dev token) implemented. Next: add tool success (real call) and error (unknown tool) cases.
-   - REVIEW: Self‑analyze coverage sufficiency and flake risk; mark E2E as optional in local dev if network unavailable.
+   - Status: Implemented 401 and list tools with dev token. Next: add 200 auth path and
+     tool success/error assertions (may call real API on success path).
 
 8. ACTION: Coverage matrix to prove service works
    - Auth matrix: unauthorised 401; local dev token 200; CI token 200 (CI only); OAuth path documented for Vercel.
@@ -141,7 +145,7 @@ Gaps remaining to fully meet acceptance:
    - Provide a dev fallback: static Bearer token (env‑gated) for local/testing; ensure this is disabled in production.
    - Optional: document how to place Vercel authentication in front of the function for team‑only access.
      REVIEW: Self‑analyze simplicity and security trade‑offs vs spec recommendations; keep implementation canonical.
-   - Add OAuth Protected Resource Metadata endpoint at `/.well-known/oauth-protected-resource` (GET + OPTIONS); in Express, implement a small handler equivalent to `protectedResourceHandler`.
+   - DONE: OAuth Protected Resource Metadata endpoint at `/.well-known/oauth-protected-resource` (GET + OPTIONS).
 
 10. ACTION: Minimize duplication via shared workspace
     - Create shared package (e.g., `packages/curriculum-mcp-server-core`) exporting:

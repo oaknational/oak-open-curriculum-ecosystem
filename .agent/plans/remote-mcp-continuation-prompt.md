@@ -16,19 +16,19 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 
 ## Current Progress
 
-- Implemented Streamable HTTP server (stateless) with per-request handling and Accept negotiation.
-- Unit tests in place: 401 unauthorised, tools/list, tool success/error (SDK mocked).
-- E2E tests added (vitest + supertest) for HTTP app:
-  - 401 when `Authorization` missing
-  - tools/list returns tools with dev token
-- Next E2E to add: tool call success (mocked) and error (unknown tool), plus auth 200 path.
+- Implemented Streamable HTTP server (stateless) with per-request handling and Accept
+  negotiation. Security hardened with CORS and DNS‑rebinding protection.
+- OAuth Protected Resource metadata endpoint added (GET + OPTIONS).
+- Unit tests: 401 unauthorised, tools/list, tool success/error (SDK mocked).
+- E2E tests: 401 missing `Authorization`, tools/list with dev token.
+- All quality gates green (type-check, lint, unit, e2e, build).
 
 ## Next Actions (short)
 
-1. Add remaining E2E: tool success/error and 200 cases (allow real API on success path).
-2. Implement CORS + DNS‑rebinding protection and tests.
-3. Add `/.well-known/oauth-protected-resource` (GET/OPTIONS) and tests.
-4. Add list-tools parity assertion vs SDK constants.
+1. Add remaining E2E: 200 auth case and tool success (may call real API) and error.
+2. Add CORS/DNS tests (allowed/blocked origins/hosts); document exposed headers for
+   session mode.
+3. Add list-tools parity assertion vs SDK generated tools.
 
 ## Non‑negotiables
 
