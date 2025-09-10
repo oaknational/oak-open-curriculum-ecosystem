@@ -1,8 +1,6 @@
 {
-  "functions": {
-    "api/**/*.ts": { "runtime": "nodejs22.x" },
-    "api/**/*.js": { "runtime": "nodejs22.x" }
-  },
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "express",
   "rewrites": [
     { "source": "/", "destination": "/api/server" },
     { "source": "/mcp", "destination": "/api/server" },
