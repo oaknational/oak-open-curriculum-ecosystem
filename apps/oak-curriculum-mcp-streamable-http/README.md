@@ -34,9 +34,9 @@ curl -sS \
 - Use Node runtime (not Edge)
 - Minimal env:
   - `OAK_API_KEY`
-  - `BASE_URL` (e.g. `https://<project>.vercel.app`)
-  - `MCP_CANONICAL_URI` (e.g. `${BASE_URL}/mcp`)
-  - `ALLOWED_HOSTS` (comma-separated)
+  - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname)
+  - `BASE_URL` (recommended; if omitted we derive from request host)
+  - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
 - Optional:
   - `ALLOWED_ORIGINS` for browser CORS
   - `LOG_LEVEL` (default `info`)
@@ -45,7 +45,7 @@ curl -sS \
 ### Smoke-test checklist (post-deploy)
 
 - Confirm Node runtime (not Edge) in project settings
-- Verify envs set: `OAK_API_KEY`, `BASE_URL`, `MCP_CANONICAL_URI`, `ALLOWED_HOSTS`
+- Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS` (+ optionally `BASE_URL`, `MCP_CANONICAL_URI`)
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
 - POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
 - POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
@@ -70,6 +70,11 @@ If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for
 
 ## Troubleshooting
 
+- 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
+  - Ensure routing is configured. This repo includes `vercel.json` to route `/`, `/mcp`, and `/.well-known/*` to `api/server` (Node runtime).
+  - Confirm there is an `api/server.ts` function that exports the Express app (present in repo).
+  - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
+  - If using local demo AS, ensure `ENABLE_LOCAL_AS=true` and `LOCAL_AS_JWK` is present or allow the app to generate it.
 - 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint
 - CORS blocked: set `ALLOWED_ORIGINS` to include your origin
 - Host blocked: add host to `ALLOWED_HOSTS`
