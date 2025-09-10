@@ -7,7 +7,9 @@
       "dependsOn": ["^type-gen"],
       "cache": true,
       "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"]
+      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"],
+      "env": ["OAK_API_KEY"],
+      "passThroughEnv": ["OAK_API_KEY"]
     },
     "build": {
       "dependsOn": ["^build", "type-gen"],
