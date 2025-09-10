@@ -29,7 +29,7 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - 401 responses now include RFC-compliant `WWW-Authenticate` header with `resource` and `authorization_uri` discovery hints per OAuth Protected Resource metadata.
   - Test network policy: unit/integration tests block network; e2e tests for SDKs and MCP servers MAY allow network where required. HTTP app e2e do not load the unit test network-blocking setup.
 - Access control in place and documented:
-  - Remote (Vercel preview/production): require OAuth 2.1 (authorization code + PKCE); POST /mcp requires `Authorization: Bearer <access_token>`.
+  - Remote (Vercel preview/production): require OAuth 2.1 (Authorization Code + PKCE, and Device Authorization Grant for headless clients). POST /mcp requires `Authorization: Bearer <access_token>`. This is MANDATORY and the next implementation step.
   - Local development (localhost): permit no‑auth only when `REMOTE_MCP_ALLOW_NO_AUTH=true`; dev token allowed locally when present.
   - CI/CD: remove CI-only static token path to avoid expanding the credential surface; prefer OAuth path or local dev token strictly in local workflows.
   - Unauthorized requests return 401 and include MCP authorization hints in the JSON‑RPC error payload (per MCP Basic Authorization spec).
@@ -85,12 +85,50 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   exclude tests for clean emits. Prettier runs from repo root only.
 - All quality gates green (type‑check, lint, unit, e2e, build).
 
-## Gaps remaining to fully meet acceptance:
+- Vercel deployment:
+  - Running on Node LAMBDAS (Node 22) with the Express framework. The app now
+    exports the Express instance as the default export from `src/index.ts` to
+    satisfy Vercel’s Express runtime contract.
+  - `vercel.json` lives in the app workspace and declares `framework: "express"`;
+    rewrites were removed. Root‑level `api/server.ts` was deleted to avoid
+    monorepo routing ambiguity.
+  - Root health endpoint (`GET /`) returns JSON for quick smoke checks.
+  - OAuth metadata endpoint returns 200 without requiring `OAK_API_KEY`. Local
+    AS endpoints initialize before auth middleware to avoid early 401s.
+  - DNS‑rebinding protection now supports wildcards. Example production value:
+    `ALLOWED_HOSTS=poc-oak-open-curriculum-*.vercel.thenational.academy,curriculum-mcp-alpha.oaknational.dev,localhost`.
+  - Dev token is intentionally ignored on Vercel (preview/production). Unauth
+    calls return 401 with RFC `WWW-Authenticate` including `resource` and
+    `authorization_uri` discovery hints.
 
-- Optional E2E: add real‑API tool success path (with `OAK_API_KEY`) and explicit error assertions.
-- Access control behaviour per environment (local no‑auth flag, CI token, OAuth on
-  Vercel) – document clearly and add one Vercel smoke‑test after first deploy.
-- Documentation: add Vercel‑focused README to the HTTP app with minimum configuration (see Quick config below) and curl example. Add a short local client (Cursor) configuration snippet and troubleshooting pointers to startup logs.
+## Challenges and resolutions
+
+- Vercel function crashes: “Invalid export found … default export must be a
+  function or server”. Resolved by exporting the Express app as default from
+  `src/index.ts` and using `framework: "express"`.
+- Routing confusion from monorepo root `api/server.ts`. Resolved by removing
+  the root function and keeping config in the app workspace’s `vercel.json`.
+- Early 401 on `/.well-known/*` due to AS initialization order. Resolved by
+  registering OAuth metadata immediately and awaiting local AS setup before
+  attaching bearer middleware.
+- Host filtering blocked dynamic preview hosts. Resolved by adding wildcard
+  host patterns (e.g., `poc-oak-open-curriculum-*.vercel.thenational.academy`).
+- Env validation in tests failed on URL schema. Resolved by sanitizing URL envs
+  in tests and reading `process.env` for early security reads so metadata does
+  not hard‑fail when optional envs are unset.
+- SSE parsing in e2e was brittle. Resolved by parsing the first `data:` line as
+  JSON instead of substring matching.
+
+## Gaps remaining to fully meet acceptance
+
+- Optional E2E: add real‑API tool success path (with `OAK_API_KEY`) and explicit
+  error assertions (guarded by `E2E_REAL_API=true`).
+- Access control (MANDATORY next step): production‑grade OAuth 2.1 Authorization Code + PKCE flow for end users and Device Authorization Grant for headless/MCP clients. Current co‑hosted AS is demo‑only. Implement a proper login/consent flow, token minting and refresh, and align RS validation to the production AS JWKS.
+- Add one Vercel smoke test in CI post‑deploy (fetch health and metadata) to
+  quickly detect routing/runtime regressions.
+- Documentation: ensure the app README troubleshooting matches the Express
+  framework approach (default export) and remove stale references to root
+  `api/server.ts`/rewrites.
 - Backlog (next session):
   - Identity policy: beyond `*.thenational.academy` domain allow‑list, support an explicit email allow‑list. Clarify whether non‑Google emails are permitted (depends on chosen IdP). If we remain Google‑only, emails must be Google accounts; otherwise, support a secondary allow‑list store checked by the AS.
   - STDIO server reliability: Cursor shows “No tools or prompts” for the local STDIO server. Add a failing test that asserts non‑empty `list_tools` for STDIO, then fix the wiring so generated tools are correctly registered. Capture logs to `.logs` during startup tests.
@@ -102,17 +140,25 @@ This is a deployment‑time reference for the demo. See the app README for full 
 Required
 
 - `OAK_API_KEY` – curriculum API key
-- `BASE_URL` – public URL of the deployment (e.g. `https://<project>.vercel.app`)
+- `BASE_URL` – public URL of the deployment (e.g. `https://curriculum-mcp-alpha.oaknational.dev`)
 - `MCP_CANONICAL_URI` – canonical resource URI (e.g. `${BASE_URL}/mcp`)
-- `ALLOWED_HOSTS` – comma‑separated hostnames accepted by DNS‑rebinding protection
+- `ALLOWED_HOSTS` – comma‑separated hostnames; supports `*` wildcards
+  (e.g. `poc-oak-open-curriculum-*.vercel.thenational.academy,curriculum-mcp-alpha.oaknational.dev,localhost`)
 
 Optional
 
 - `ALLOWED_ORIGINS` – comma‑separated browser origins for CORS (usually empty)
 - `LOG_LEVEL` – `debug|info|warn|error` (default `info`)
-- `ENABLE_LOCAL_AS` – `true|false` (default `false`). When `true`, exposes JWKS and accepts JWTs signed by your private key; intended for demos/tests.
-- `LOCAL_AS_JWK` – public JWK (JSON) used by the RS to verify tokens when `ENABLE_LOCAL_AS=true`
-- `REMOTE_MCP_CI_TOKEN` – accepted only when `CI==='true'`
+- `ENABLE_LOCAL_AS` – `true|false` (demo‑only, not for production). When `true`, exposes
+  `/.well-known/openid-configuration` and `/.well-known/jwks.json` and accepts
+  JWTs minted for demos/tests.
+- `LOCAL_AS_JWK` – public JWK (JSON) used by the RS to verify tokens when
+  `ENABLE_LOCAL_AS=true` (omit to auto‑generate in dev/demo).
+- `REMOTE_MCP_CI_TOKEN` – accepted only when `CI==='true'` (temporary validation in preview; remove after use)
+
+To be introduced with production OAuth implementation (not active yet):
+
+- `OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_REDIRECT_URI`, `ALLOWED_DOMAIN`, `SESSION_SECRET` – required for a production AS that issues RFC 9068 access tokens after Google login (domain‑restricted).
 
 ## Design outline
 
@@ -168,9 +214,11 @@ Optional
 - Local dev: behind `ENABLE_LOCAL_AS=true`, serve ephemeral JWKS and accept JWTs in E2E; keep dev token/no‑auth for local convenience only.
 
 4. ACTION: Vercel integration
-   - Create `apps/oak-curriculum-mcp-remote-poc/` with `vercel.json` or docs for project settings.
-   - Use Node runtime (not Edge) to ensure streaming semantics and timeouts fit typical use.
-   - Provide `curl` and minimal client example to demonstrate streaming POST behaviour; document SSE endpoints as optional.
+   - Configure `apps/oak-curriculum-mcp-streamable-http/vercel.json` with
+     `framework: "express"` (Node runtime). Export the Express app as default
+     from `src/index.ts`. Avoid root‑level functions in a monorepo.
+   - Provide `curl` and minimal client example to demonstrate streaming POST
+     behaviour; document session mode as optional.
      Example:
 
      ```bash

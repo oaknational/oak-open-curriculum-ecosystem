@@ -34,7 +34,7 @@ curl -sS \
 - Use Node runtime (not Edge)
 - Minimal env:
   - `OAK_API_KEY`
-  - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname)
+  - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards)
   - `BASE_URL` (recommended; if omitted we derive from request host)
   - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
 - Optional:
@@ -68,14 +68,25 @@ curl -sS \
 
 If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for diagnostics.
 
+## Authentication status and next steps
+
+- Production OAuth is MANDATORY next step. The server already validates RFC 9068 JWTs against a co‑hosted demo AS when `ENABLE_LOCAL_AS=true`, but there is no production Authorization Server yet. Implement:
+  - Authorization Code + PKCE for UI users (Google OIDC restricted to `*.thenational.academy`).
+  - Device Authorization Grant for headless/MCP clients. AS mints short‑lived JWT access tokens (`iss=BASE_URL`, `aud=MCP_CANONICAL_URI`).
+- Until production OAuth exists, Vercel deploys will return 401 unless you provide a valid JWT minted by the demo AS. Dev tokens are intentionally ignored on Vercel.
+
+Temporary validation bypass (for smoke only):
+
+- Preview/CI only: set `CI=true` and `REMOTE_MCP_CI_TOKEN=<secret>` and call with `Authorization: Bearer <secret>`. Remove after validation.
+- Local only: set `REMOTE_MCP_ALLOW_NO_AUTH=true` (ignored on Vercel) or use `REMOTE_MCP_DEV_TOKEN`.
+
 ## Troubleshooting
 
 - 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
-  - Ensure routing is configured. This repo includes `vercel.json` to route `/`, `/mcp`, and `/.well-known/*` to `api/server` (Node runtime).
-  - Confirm there is an `api/server.ts` function that exports the Express app (present in repo).
+  - Ensure Vercel framework is Express and the app default‑exports an Express instance (this repo does in `src/index.ts`).
   - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
   - If using local demo AS, ensure `ENABLE_LOCAL_AS=true` and `LOCAL_AS_JWK` is present or allow the app to generate it.
-- 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint
+- 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint. For demo: enable `ENABLE_LOCAL_AS=true` and mint a short‑lived JWT.
 - CORS blocked: set `ALLOWED_ORIGINS` to include your origin
 - Host blocked: add host to `ALLOWED_HOSTS`
 - Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
