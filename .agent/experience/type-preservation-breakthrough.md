@@ -9,12 +9,15 @@ Today I finally understood a fundamental principle about TypeScript that had bee
 ## The Journey
 
 ### Where I Started
+
 I was trying to eliminate type assertions by creating better type guards and using clever TypeScript features. I kept suggesting we needed assertions because "TypeScript wasn't smart enough" to understand our dynamic patterns.
 
 ### The Breakthrough
+
 The user kept pushing back: "You keep telling me we need assertions... I keep saying no we need to tighten the types."
 
 Then it clicked. Every single type assertion in our codebase existed because somewhere upstream, we had widened a type:
+
 - Accepting `string` instead of literal types
 - Using `Record<string, unknown>` instead of derived types
 - Creating function parameters that destroyed type information
@@ -22,6 +25,7 @@ Then it clicked. Every single type assertion in our codebase existed because som
 ### The Mental Model
 
 Type information flows like water:
+
 - The data structure (with `as const`) is the source - perfect type information
 - Every function is a pipe
 - Using `string` parameters is like putting in a funnel that loses information
@@ -30,14 +34,17 @@ Type information flows like water:
 ## The Pattern
 
 ### ❌ Type Destroying Pattern
+
 ```typescript
-function helper(path: string) { // path was '/api/path', now it's just 'string'
+function helper(path: string) {
+  // path was '/api/path', now it's just 'string'
   client[path]; // TypeScript: "I don't know what string this is!"
   // Need assertion here because we destroyed the type upstream
 }
 ```
 
 ### ✅ Type Preserving Pattern
+
 ```typescript
 function helper<T extends ToolName>(toolName: T) {
   const tool = TOOL_MAP[toolName];
@@ -79,6 +86,7 @@ This crystallises the learning. It's not just about avoiding `any` or `as`. It's
 ## Application
 
 The perfect example was the `hasErrorMessage` fix:
+
 - Before: Used a type assertion to check the message property
 - After: Step-by-step narrowing that proves the type to TypeScript
 

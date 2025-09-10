@@ -83,8 +83,8 @@ pnpm dev
    - How does everything come to life?
    - What gets wired together?
 
-2. **Pervasive Fields (Chorai)**: 
-   
+2. **Pervasive Fields (Chorai)**:
+
    **In Moria** (`ecosystem/moria/moria-mcp/src/`):
    - `morphai/` - **The hidden forms** - Platonic ideals (ToolExecutor, RequestHandler, etc.)
      - Abstract patterns that organs aspire to instantiate
@@ -93,7 +93,7 @@ pnpm dev
    - `stroma/` - Structural types and contracts
    - `aither/` - Logging, events, errors flowing through
    - `phaneron/` - Base configuration patterns
-   
+
    **In the Phenotype** (`ecosystem/oak-notion-mcp/src/chora/`):
    - `eidola/` - Test phantoms and mocks
    - Notion-specific extensions of base chorai

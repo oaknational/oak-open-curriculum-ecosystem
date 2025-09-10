@@ -3,12 +3,14 @@
 ## Overview
 
 This plan details the implementation of Oak Curriculum API integration through two packages:
+
 1. `oak-curriculum-sdk` - A conventional SDK package
 2. `oak-curriculum-mcp` - A biologically-architected MCP server
 
 ## Sub-Phase 6.1: SDK Foundation (2-3 days)
 
 ### Tasks
+
 1. **Package Setup**
    - [ ] Refactor transplanted placeholder code
    - [ ] Add openapi-fetch and zod dependencies
@@ -41,6 +43,7 @@ This plan details the implementation of Oak Curriculum API integration through t
 ## Sub-Phase 6.2: MCP Server Structure (2-3 days)
 
 ### Tasks
+
 1. **Biological Architecture Setup**
    - [ ] Create chora directories (morphai, stroma, aither, phaneron, eidola)
    - [ ] Set up organa structure (curriculum, mcp)
@@ -74,6 +77,7 @@ This plan details the implementation of Oak Curriculum API integration through t
 ## Sub-Phase 6.3: MCP Integration (3-4 days)
 
 ### Tasks
+
 1. **Tool Implementation**
    - [ ] oak-search-lessons tool
    - [ ] oak-get-lesson tool
@@ -102,6 +106,7 @@ This plan details the implementation of Oak Curriculum API integration through t
 ## Sub-Phase 6.4: Testing & Documentation (2-3 days)
 
 ### Tasks
+
 1. **Unit Testing**
    - [ ] Test pure functions in SDK
    - [ ] Test organ operations
@@ -129,16 +134,19 @@ This plan details the implementation of Oak Curriculum API integration through t
 ## Implementation Order
 
 ### Week 1
+
 1. **Day 1-2**: SDK foundation - package setup, type generation
 2. **Day 3-4**: Base client and high-level methods
 3. **Day 5**: SDK testing and refinement
 
 ### Week 2
+
 1. **Day 1-2**: MCP server biological structure
 2. **Day 3-4**: Organ implementation
 3. **Day 5**: Psychon wiring and integration
 
 ### Week 3
+
 1. **Day 1-2**: MCP tools and resources
 2. **Day 3**: Caching and rate limiting
 3. **Day 4-5**: Testing and documentation
@@ -146,6 +154,7 @@ This plan details the implementation of Oak Curriculum API integration through t
 ## Quality Gates
 
 After each sub-phase, run:
+
 1. `pnpm format` - Code formatting
 2. `pnpm lint` - ESLint validation
 3. `pnpm type-check` - TypeScript validation
@@ -155,12 +164,14 @@ After each sub-phase, run:
 ## Risk Mitigation
 
 ### Technical Risks
+
 1. **API Changes**: Lock to specific Oak API version
 2. **Rate Limits**: Implement aggressive caching
 3. **Type Drift**: Automated type generation in CI
 4. **Network Issues**: Retry logic with backoff
 
 ### Architecture Risks
+
 1. **Biological Violations**: ESLint rules enforcement
 2. **Cross-Organ Dependencies**: Strict module boundaries
 3. **Circular Dependencies**: Dependency injection pattern
@@ -169,18 +180,21 @@ After each sub-phase, run:
 ## Success Criteria
 
 ### SDK Success
+
 - [ ] Type-safe API operations
 - [ ] Zero runtime dependencies on environment
-- [ ] >80% test coverage
+- [ ] > 80% test coverage
 - [ ] Clean API surface
 
 ### MCP Server Success
+
 - [ ] Full biological architecture compliance
 - [ ] All MCP tools functional
 - [ ] <100ms operation overhead
 - [ ] Proper caching behavior
 
 ### Overall Success
+
 - [ ] Both packages pass quality gates
 - [ ] Documentation complete
 - [ ] Examples working

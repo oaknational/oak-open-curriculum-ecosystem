@@ -33,8 +33,6 @@
     "clean": "rm -rf dist",
     "deps": "pnpm outdated -r",
     "dev": "tsx watch src/index.ts",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "lint": "eslint .",
     "start": "node dist/index.js",
     "test": "vitest run",
@@ -53,7 +51,7 @@
     "zod": "^4.0.15"
   },
   "devDependencies": {
-    "pnpm": "^10.14.0",
+    "pnpm": "^10.15.1",
     "typescript": "^5.9.2"
   },
   "engines": {

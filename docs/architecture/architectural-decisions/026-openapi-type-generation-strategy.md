@@ -7,6 +7,7 @@
 ## Context
 
 The Oak Curriculum API provides an OpenAPI schema that we need to consume in our TypeScript SDK. We need a strategy that:
+
 - Generates complete TypeScript types from the OpenAPI specification
 - Provides runtime validation capabilities
 - Extracts constants for dynamic API path construction
@@ -27,12 +28,14 @@ This approach directly copies the reference implementation's proven pattern.
 ### Why Two Stages?
 
 The OpenAPI schema contains information at two levels:
+
 - **Type definitions**: Structure of requests and responses (handled by openapi-typescript)
 - **Runtime values**: Enum values, parameter constraints, path patterns (need custom extraction)
 
 ### Why Not Just openapi-typescript?
 
 While openapi-typescript generates excellent type definitions, it doesn't extract:
+
 - Runtime constants (KEY_STAGES, SUBJECTS arrays)
 - Type guard functions (isKeyStage, isSubject)
 - Valid parameter combinations for path construction
@@ -54,6 +57,7 @@ const { parameters, validCombinations } = extractPathParameters(schema);
 ## Consequences
 
 ### Positive
+
 - Complete type safety from OpenAPI to runtime
 - Single source of truth (OpenAPI schema)
 - Automatic updates when API changes
@@ -61,11 +65,13 @@ const { parameters, validCombinations } = extractPathParameters(schema);
 - No manual type maintenance
 
 ### Negative
+
 - Two-stage pipeline is more complex than single tool
 - Custom extraction logic needs maintenance
 - Generated files are large (but that's automated)
 
 ### Neutral
+
 - Must run generation on every API schema change
 - Generated files should not be edited manually
 - Build process includes type generation step

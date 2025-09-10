@@ -9,16 +9,19 @@ This guide helps diagnose and resolve common issues with Histoi tissues across d
 ### 1. Module Resolution Errors
 
 #### Symptom
+
 ```
 Error: Cannot find module '@oaknational/mcp-histos-logger'
 ```
 
 #### Causes
+
 - Package not installed
 - Workspace not properly configured
 - Build not completed
 
 #### Solutions
+
 ```bash
 # Install dependencies
 pnpm install
@@ -33,17 +36,20 @@ cat pnpm-workspace.yaml
 ### 2. TypeScript Import Errors
 
 #### Symptom
+
 ```typescript
 // TS2307: Cannot find module or its corresponding type declarations
 import { Logger } from '@oaknational/mcp-moria';
 ```
 
 #### Causes
+
 - Missing `.js` extension in imports
 - TypeScript not recognizing workspace packages
 - Build artifacts not generated
 
 #### Solutions
+
 ```typescript
 // Add .js extension for ESM
 import { Logger } from '@oaknational/mcp-moria/dist/index.js';
@@ -62,17 +68,20 @@ import { Logger } from '@oaknational/mcp-moria/dist/index.js';
 ### 3. Runtime Adaptation Failures
 
 #### Symptom
+
 ```
 Error: localStorage is not defined
 ReferenceError: process is not defined
 ```
 
 #### Causes
+
 - Direct access to runtime-specific globals
 - Missing dependency injection
 - Wrong backend detection
 
 #### Solutions
+
 ```typescript
 // ❌ Bad: Direct global access
 class Storage {
@@ -84,7 +93,7 @@ class Storage {
 // ✅ Good: Dependency injection
 class Storage {
   constructor(private backend: StorageBackend) {}
-  
+
   save(key: string, value: string) {
     return this.backend.set(key, value);
   }
@@ -94,17 +103,20 @@ class Storage {
 ### 4. ESLint Boundary Violations
 
 #### Symptom
+
 ```
 ESLint: Histoi tissues cannot import from Node.js built-ins
 ESLint: Cross-tissue imports are not allowed
 ```
 
 #### Causes
+
 - Direct Node.js imports in Histoi
 - Tissue importing from another tissue
 - Missing dependency injection
 
 #### Solutions
+
 ```typescript
 // ❌ Bad: Direct Node.js import
 import * as fs from 'node:fs/promises';
@@ -122,17 +134,20 @@ class Storage {
 ### 5. Test Failures
 
 #### Symptom
+
 ```
 FAIL: Integration test performing real I/O
 Error: ENOENT: no such file or directory
 ```
 
 #### Causes
+
 - Integration tests doing real I/O
 - Missing mock injection
 - Wrong test type (should be E2E)
 
 #### Solutions
+
 ```typescript
 // ❌ Bad: Real I/O in integration test
 it('should read file', async () => {
@@ -152,14 +167,15 @@ it('should read file', async () => {
 
 ## Runtime Compatibility Matrix
 
-| Tissue | Node.js | Deno | Bun | Browser | Edge | Cloudflare |
-|--------|---------|------|-----|---------|------|------------|
-| histos-logger | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| histos-storage | ✅ | ⚠️ | ✅ | ✅ | ⚠️ | 🔄 |
-| histos-env | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ |
-| histos-transport | ✅ | ⚠️ | ✅ | ❌ | ❌ | ❌ |
+| Tissue           | Node.js | Deno | Bun | Browser | Edge | Cloudflare |
+| ---------------- | ------- | ---- | --- | ------- | ---- | ---------- |
+| histos-logger    | ✅      | ✅   | ✅  | ✅      | ✅   | ✅         |
+| histos-storage   | ✅      | ⚠️   | ✅  | ✅      | ⚠️   | 🔄         |
+| histos-env       | ✅      | ✅   | ✅  | ❌      | ✅   | ✅         |
+| histos-transport | ✅      | ⚠️   | ✅  | ❌      | ❌   | ❌         |
 
 Legend:
+
 - ✅ Fully supported
 - ⚠️ Partial support (with adaptation)
 - 🔄 In development
@@ -216,12 +232,15 @@ vite preview
 ### Missing Exports
 
 #### Symptom
+
 ```
 Error: Package subpath './dist/index.js' is not defined by "exports"
 ```
 
 #### Solution
+
 Ensure package.json has proper exports:
+
 ```json
 {
   "exports": {
@@ -237,11 +256,13 @@ Ensure package.json has proper exports:
 ### TypeScript Declaration Files
 
 #### Symptom
+
 ```
 Cannot find type declarations
 ```
 
 #### Solution
+
 ```bash
 # Build with declarations
 pnpm build
@@ -260,26 +281,29 @@ pnpm build
 ### Memory Leaks
 
 #### Symptom
+
 - Increasing memory usage over time
 - Node.js heap out of memory
 
 #### Common Causes
+
 - Event listeners not cleaned up
 - Circular references in stored data
 - Large buffers not released
 
 #### Solutions
+
 ```typescript
 class Transport {
   private listeners = new Set<Function>();
-  
+
   close() {
     // Clean up listeners
     this.listeners.clear();
-    
+
     // Remove event listeners
     this.stream.removeAllListeners();
-    
+
     // Clear buffers
     this.buffer = null;
   }
@@ -289,10 +313,12 @@ class Transport {
 ### Slow Operations
 
 #### Symptom
+
 - Storage operations taking >100ms
 - Logger causing performance degradation
 
 #### Solutions
+
 ```typescript
 // Batch operations
 const batch = [];
@@ -339,9 +365,7 @@ try {
 ```typescript
 // Issue: No filesystem access
 // Solution: Use KV storage or memory
-const storage = globalThis.KV 
-  ? new KVStorage(globalThis.KV)
-  : new MemoryStorage();
+const storage = globalThis.KV ? new KVStorage(globalThis.KV) : new MemoryStorage();
 ```
 
 ## Getting Help

@@ -7,11 +7,13 @@
 ## Context
 
 The OpenAPI type generation pipeline could include Zod schema generation for runtime validation. We investigated three approaches:
+
 1. Generate Zod schemas from OpenAPI (`openapi-zod`)
 2. Transform TypeScript types to Zod (`ts-to-zod`)
 3. Manual generation from extracted data
 
 Currently, our type generation already provides:
+
 - TypeScript interfaces for compile-time safety
 - Type predicate functions (`isKeyStage`, `isSubject`)
 - Extracted constants for validation
@@ -26,6 +28,7 @@ Defer Zod implementation and rely on existing type predicates for the MVP.
 ### Current Validation is Sufficient
 
 Our generated type predicates provide basic runtime validation:
+
 ```typescript
 export function isKeyStage(value: string): value is KeyStage {
   const keyStages: readonly string[] = KEY_STAGES;
@@ -36,6 +39,7 @@ export function isKeyStage(value: string): value is KeyStage {
 ### Complexity Without Clear Benefit
 
 Adding Zod now would require:
+
 - Another stage in the generation pipeline
 - Additional dependency
 - More generated code to maintain
@@ -48,6 +52,7 @@ The MCP server already uses Zod for tool input validation. It can validate at it
 ### Clear Reconsideration Triggers
 
 We will reconsider when:
+
 - API returns malformed data in production
 - Runtime validation errors become frequent
 - We need data transformation/coercion
@@ -56,18 +61,21 @@ We will reconsider when:
 ## Consequences
 
 ### Positive
+
 - Simpler generation pipeline
 - Fewer dependencies
 - Faster build times
 - Less generated code
 
 ### Negative
+
 - No automatic data coercion
 - Less detailed validation errors
 - Manual validation for complex types
 - Potential for runtime type errors
 
 ### Neutral
+
 - Type predicates provide basic validation
 - TypeScript catches most issues at compile time
 - Can be added later without breaking changes
@@ -89,7 +97,7 @@ import { generate } from 'ts-to-zod';
 
 await generate({
   input: './src/types/generated/api-schema/api-paths-types.ts',
-  output: './src/validators/generated/api-validators.ts'
+  output: './src/validators/generated/api-validators.ts',
 });
 
 // Use in SDK

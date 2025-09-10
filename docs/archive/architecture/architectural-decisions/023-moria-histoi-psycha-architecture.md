@@ -11,7 +11,7 @@ Proposed
 Phase 4's successful implementation of the genotype/phenotype model revealed a fundamental architectural tension: oak-mcp-core tries to be three different things simultaneously:
 
 1. **Pure abstractions** (interfaces, types, algorithms) - truly generic, no IO
-2. **Runtime capabilities** (env loading, file access) - need IO but are generic  
+2. **Runtime capabilities** (env loading, file access) - need IO but are generic
 3. **Development conveniences** (dotenv loading, config helpers) - opinionated shared patterns
 
 This violates the Single Responsibility Principle at the package level. Different kinds of shared code want to live in different places, creating architectural friction that manifests as bundling issues, runtime incompatibilities, and unclear boundaries.
@@ -23,34 +23,37 @@ We will evolve from the two-tier genotype/phenotype model to a three-tier worksp
 ### Two Complementary Architectural Models
 
 #### Workspace Architecture (Package Organization)
+
 How packages relate to each other in the workspace:
 
 1. **Moria (Μόρια) - Molecules/Atoms**
-   - Location: `ecosystem/moria/`  
-   - Package: `@oaknational/mcp-moria`  
+   - Location: `ecosystem/moria/`
+   - Package: `@oaknational/mcp-moria`
    - Nature: The smallest units - pure interfaces, types, algorithms
    - Contents: Abstract patterns with zero dependencies, no IO
    - Metaphor: Like molecules that form the basic building blocks
 
 2. **Histoi (Ἱστοί) - Tissues/Matrices**
-   - Location: `ecosystem/histoi/`  
+   - Location: `ecosystem/histoi/`
    - Packages: Multiple tissue packages (`@oaknational/mcp-histos-*`)
    - Nature: Connective tissues/matrices that bind and connect organisms
    - Key Features: Runtime adaptation, tree-shaking, transplantable across organisms
    - Examples:
      - `@oaknational/mcp-histos-logger` - Adaptive logging tissue
-     - `@oaknational/mcp-histos-storage` - Adaptive storage tissue  
+     - `@oaknational/mcp-histos-storage` - Adaptive storage tissue
      - `@oaknational/mcp-histos-env` - Environment adaptation tissue
      - `@oaknational/mcp-histos-transport` - Transport tissue (stdio, Streamable HTTP)
 
 3. **Psycha (ψυχά) - Living Organisms**
-   - Location: `ecosystem/psycha/`  
+   - Location: `ecosystem/psycha/`
    - Packages: Complete applications (`@oaknational/*-mcp-server`)
    - Nature: Complete, living applications - the ensouled wholes
    - Composition: Built on moria foundation, connected by histoi tissues
 
 #### Psychon Architecture (Within Each Organism)
+
 Each psychon contains:
+
 - **Linear Hierarchy**: Organelles → Cells (Kytia) → Organs (Organa)
 - **Cross-Cutting Chorai**: Morphai, Stroma, Aither, Phaneron (pervasive infrastructure)
 
@@ -89,16 +92,20 @@ All achieved through conditional exports and dynamic imports for optimal tree-sh
 ## Key Principles
 
 ### Runtime Adaptation, Not Degradation
+
 Edge runtimes aren't "limited" - they have different capabilities:
+
 - **Node.js**: `fs`, `process.env`, `AsyncLocalStorage`, `EventEmitter`
 - **Edge**: `KV Store`, `env context`, `AsyncLocalStorage`, `EventTarget`
 
 Organs adapt to use the available capabilities, not degrade to lowest common denominator.
 
 ### Consumer Responsibility for IO
+
 The organism (psychon) is responsible for choosing its environment and wiring IO, while organs provide the capabilities.
 
 ### Phenotypic Plasticity
+
 The adaptive tissues (histoi) demonstrate phenotypic plasticity - the same interface expressing differently based on environment (runtime). This is distinct from the morphai chorai within each psychon, which are abstract forms.
 
 ## Consequences
@@ -106,6 +113,7 @@ The adaptive tissues (histoi) demonstrate phenotypic plasticity - the same inter
 ### Positive
 
 **Technical Benefits**:
+
 - **Optimal bundle sizes** - Tree-shaking removes unused runtime code
 - **Zero configuration** in most cases (automatic runtime detection)
 - **Full control** when needed (explicit imports)
@@ -113,12 +121,14 @@ The adaptive tissues (histoi) demonstrate phenotypic plasticity - the same inter
 - **Clean dependency graph** - No circular dependencies possible
 
 **Organizational Benefits**:
+
 - **Clear ownership** - Each package has single responsibility
 - **Independent deployment** - Organs can be versioned separately
 - **Parallel development** - Teams can work on different organs
 - **Easy testing** - Each organ is self-contained
 
 **Philosophical Coherence**:
+
 - **Aligns with biological model** perfectly
 - **Follows Greek nomenclature** consistently
 - **Resolves architectural tensions** completely

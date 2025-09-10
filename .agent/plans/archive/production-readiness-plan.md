@@ -35,12 +35,12 @@ When working on a later gate, re-run all prior gates first to avoid regressions.
 
 ## Working Loop
 
-1) Run the Quality Gates (format → build → type-gen → type-check → lint → test → test:e2e).
-2) Fix failures with the smallest, type-safe changes possible:
+1. Run the Quality Gates (format → build → type-gen → type-check → lint → test → test:e2e).
+2. Fix failures with the smallest, type-safe changes possible:
    - Replace assertions with precise types/guards that already exist at build time (schema as source of truth).
    - Prefer existing typed helpers when lint rules restrict `Object.keys/entries/fromEntries`.
    - Adjust tests (not functionality) for determinism and correctness; ensure e2e tests cleanly skip when required env keys are absent.
-3) Repeat until all gates are green.
+3. Repeat until all gates are green.
 
 ## Plan of Action (tight, incremental)
 
@@ -84,7 +84,7 @@ Completed changes (surgical, no new features):
 - Fixed TypeScript structural access in SDK param introspection to remove unsafe property access.
 - Ensured emitter exports use camelCase tool names; aligned unit tests accordingly.
 - Updated Notion MCP startup logger tests to assert stderr (stdout reserved for MCP JSON-RPC).
-- Replaced many Object.* usages in SDK scripts with typed helpers; removed `require()` in SDK e2e tests; reduced unsafe types.
+- Replaced many Object.\* usages in SDK scripts with typed helpers; removed `require()` in SDK e2e tests; reduced unsafe types.
 - Replaced forbidden `Record<string, unknown>` with `JsonObject`/precise shapes across Moria and Histoi; tightened runtime-boundary guards; preserved JSON-safe contexts.
 - Included `bin/**/*.ts` in Curriculum MCP lint TS config to fix project parsing.
 
@@ -92,7 +92,7 @@ Impact: repository builds cleanly; deterministic tests green; type safety improv
 
 ### Update — SDK lint wave 1 completed (structural safety), wave 2 planned
 
-- SDK: replaced unsafe Object.* in writers/extraction/validators/executor; removed assertions in param utilities/introspection; introduced emitter-based composition points for generator.
+- SDK: replaced unsafe Object.\* in writers/extraction/validators/executor; removed assertions in param utilities/introspection; introduced emitter-based composition points for generator.
 - Current gates: type-check pass; tests pass; lint reduced but remaining issues relate to max-lines/complexity in generator and a few helpers (no functional changes required).
 - Alignment: all types flow from the OpenAPI schema; generator/validators operate strictly on schema-derived artefacts. No ad-hoc type invention.
 
@@ -185,4 +185,4 @@ Notes on execution:
 
 - Keep diffs minimal; prefer extracting tiny pure helpers to satisfy complexity rules without changing behaviour.
 - Re-run earlier gates before later ones to catch regressions.
- - Schema is the single source of truth for types; all generated/runtime types must ultimately derive from the OpenAPI schema.
+- Schema is the single source of truth for types; all generated/runtime types must ultimately derive from the OpenAPI schema.

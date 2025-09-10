@@ -47,4 +47,3 @@ Intent: Deliver a single, AI-focused markdown reference that fully covers the SD
 - Add a short “Playbook” section to AI doc with common flows (e.g., find lessons by subject→fetch summary→fetch assets), showing minimal code and typical params.
 - Improve type formatter to reduce `<reflection>(…)` placeholders for advanced TypeDoc nodes.
 - Extend `docs:verify` to check that the Endpoint/Tool Catalogs are non-empty and counts match generated artifacts.
-

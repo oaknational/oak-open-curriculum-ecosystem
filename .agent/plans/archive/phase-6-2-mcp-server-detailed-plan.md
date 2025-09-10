@@ -61,12 +61,14 @@ cd ecosystem/psycha/oak-curriculum-mcp
 ```
 
 **Tasks**:
+
 1. ✅ Directory already created
 2. [ ] Update package.json with dependencies
 3. [ ] Configure TypeScript and build tools
 4. [ ] Set up test infrastructure
 
 **Dependencies to add**:
+
 ```json
 {
   "dependencies": {
@@ -81,7 +83,7 @@ cd ecosystem/psycha/oak-curriculum-mcp
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "vitest": "^2.1.8"
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
@@ -97,6 +99,7 @@ cd ecosystem/psycha/oak-curriculum-mcp
 #### 2.1 Stroma (Types and Contracts)
 
 **File**: `src/chorai/stroma/curriculum-contracts/operations.ts`
+
 ```typescript
 // Operation contracts for curriculum domain
 import type { Lesson, Programme, Unit } from '@oaknational/oak-curriculum-sdk';
@@ -128,14 +131,10 @@ export interface CurriculumStructure {
 ```
 
 **File**: `src/chorai/stroma/curriculum-types/types.ts`
+
 ```typescript
 // Import SDK types
-import type { 
-  Lesson, 
-  Programme, 
-  Unit, 
-  SearchParams 
-} from '@oaknational/oak-curriculum-sdk';
+import type { Lesson, Programme, Unit, SearchParams } from '@oaknational/oak-curriculum-sdk';
 
 // MCP-specific types
 export interface CurriculumToolInput {
@@ -153,18 +152,20 @@ export interface CurriculumToolOutput {
 #### 2.2 Aither (Logging)
 
 **File**: `src/chorai/aither/index.ts`
+
 ```typescript
 import { createAdaptiveLogger } from '@oaknational/mcp-histos-logger';
 
 export const logger = createAdaptiveLogger({
   name: 'oak-curriculum-mcp',
-  level: process.env.LOG_LEVEL || 'info'
+  level: process.env.LOG_LEVEL || 'info',
 });
 ```
 
 #### 2.3 Phaneron (Configuration)
 
 **File**: `src/chorai/phaneron/curriculum-config/config.ts`
+
 ```typescript
 import { z } from 'zod';
 
@@ -172,7 +173,7 @@ import { z } from 'zod';
 // SDK handles its own configuration per ADR-027
 const ConfigSchema = z.object({
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-  MCP_SERVER_NAME: z.string().default('oak-curriculum-mcp')
+  MCP_SERVER_NAME: z.string().default('oak-curriculum-mcp'),
 });
 
 export function loadConfig() {
@@ -189,6 +190,7 @@ export function loadConfig() {
 #### 3.1 Curriculum Organ
 
 **File**: `src/organa/curriculum/operations/search.ts`
+
 ```typescript
 import type { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-moria';
@@ -202,32 +204,29 @@ export async function searchLessons(
     subject?: string;
     keyStage?: string;
     limit?: number;
-  }
+  },
 ) {
   logger.info('Searching lessons', params);
-  
+
   try {
     const results = await sdk.searchLessons(params);
     logger.debug(`Found ${results.length} lessons`);
     return results;
   } catch (error) {
     logger.error('Search failed', error);
-    throw new CurriculumOperationError(
-      'searchLessons',
-      error,
-      { params }
-    );
+    throw new CurriculumOperationError('searchLessons', error, { params });
   }
 }
 ```
 
 **File**: `src/organa/curriculum/errors/curriculum-errors.ts`
+
 ```typescript
 export class CurriculumOperationError extends Error {
   constructor(
     operation: string,
     cause: unknown,
-    public readonly context?: Record<string, unknown>
+    public readonly context?: Record<string, unknown>,
   ) {
     super(`Curriculum ${operation} failed: ${String(cause)}`);
     this.name = 'CurriculumOperationError';
@@ -236,6 +235,7 @@ export class CurriculumOperationError extends Error {
 ```
 
 **File**: `src/organa/curriculum/index.ts` (Organ Membrane)
+
 ```typescript
 import type { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
 import type { Logger } from '@oaknational/mcp-moria';
@@ -250,16 +250,11 @@ import type { CurriculumOperations } from '../../chorai/stroma/curriculum-contra
 
 export function createCurriculumOrgan(deps: CurriculumOrganDeps): CurriculumOperations {
   return {
-    searchLessons: (params) => 
-      operations.searchLessons(deps.sdk, deps.logger, params),
-    getLesson: (slug) => 
-      operations.getLesson(deps.sdk, deps.logger, slug),
-    listProgrammes: () =>
-      operations.listProgrammes(deps.sdk, deps.logger),
-    getUnit: (slug) =>
-      operations.getUnit(deps.sdk, deps.logger, slug),
-    browseCurriculum: (params) =>
-      operations.browseCurriculum(deps.sdk, deps.logger, params)
+    searchLessons: (params) => operations.searchLessons(deps.sdk, deps.logger, params),
+    getLesson: (slug) => operations.getLesson(deps.sdk, deps.logger, slug),
+    listProgrammes: () => operations.listProgrammes(deps.sdk, deps.logger),
+    getUnit: (slug) => operations.getUnit(deps.sdk, deps.logger, slug),
+    browseCurriculum: (params) => operations.browseCurriculum(deps.sdk, deps.logger, params),
   };
 }
 ```
@@ -267,6 +262,7 @@ export function createCurriculumOrgan(deps: CurriculumOrganDeps): CurriculumOper
 #### 3.2 MCP Organ
 
 **File**: `src/organa/mcp/tools/definitions.ts`
+
 ```typescript
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
@@ -275,44 +271,49 @@ import { zodToJsonSchema } from 'zod-to-json-schema';
 export const SearchLessonsSchema = z.object({
   subject: z.string().optional(),
   keyStage: z.string().optional(),
-  limit: z.number().int().positive().max(100).default(10)
+  limit: z.number().int().positive().max(100).default(10),
 });
 
 export const GetLessonSchema = z.object({
-  lessonSlug: z.string().min(1)
+  lessonSlug: z.string().min(1),
 });
 
 // Tool definitions
 export const TOOL_DEFINITIONS = {
   'oak-search-lessons': {
     description: 'Search Oak National Academy lessons',
-    inputSchema: zodToJsonSchema(SearchLessonsSchema)
+    inputSchema: zodToJsonSchema(SearchLessonsSchema),
   },
   'oak-get-lesson': {
     description: 'Get detailed lesson information',
-    inputSchema: zodToJsonSchema(GetLessonSchema)
+    inputSchema: zodToJsonSchema(GetLessonSchema),
   },
   'oak-list-programmes': {
     description: 'List all curriculum programmes',
-    inputSchema: zodToJsonSchema(z.object({}))
+    inputSchema: zodToJsonSchema(z.object({})),
   },
   'oak-get-unit': {
     description: 'Get unit details with lessons',
-    inputSchema: zodToJsonSchema(z.object({
-      unitSlug: z.string().min(1)
-    }))
+    inputSchema: zodToJsonSchema(
+      z.object({
+        unitSlug: z.string().min(1),
+      }),
+    ),
   },
   'oak-browse-curriculum': {
     description: 'Browse curriculum structure',
-    inputSchema: zodToJsonSchema(z.object({
-      subject: z.string().optional(),
-      keyStage: z.string().optional()
-    }))
-  }
+    inputSchema: zodToJsonSchema(
+      z.object({
+        subject: z.string().optional(),
+        keyStage: z.string().optional(),
+      }),
+    ),
+  },
 };
 ```
 
 **File**: `src/organa/mcp/handlers/tool-handler.ts`
+
 ```typescript
 import type { CurriculumOperations } from '../../../chorai/stroma/curriculum-contracts/operations';
 import { SearchLessonsSchema, GetLessonSchema } from '../tools/definitions';
@@ -340,6 +341,7 @@ export function createToolHandler(curriculumOps: CurriculumOperations) {
 ### Step 4: Psychon Layer - Wiring (1 hour)
 
 **File**: `src/psychon/wiring.ts`
+
 ```typescript
 import { createOakClient } from '@oaknational/oak-curriculum-sdk';
 import { createCurriculumOrgan } from '../organa/curriculum';
@@ -350,90 +352,92 @@ import { loadConfig } from '../chorai/phaneron/curriculum-config';
 export function wireApplication() {
   // Load configuration
   const config = loadConfig();
-  
+
   // Create SDK client (SDK handles its own env config per ADR-027)
   const sdk = createOakClient();
-  
+
   // Create organs with dependencies
   const curriculumOrgan = createCurriculumOrgan({
     sdk,
-    logger: logger.child({ module: 'curriculum' })
+    logger: logger.child({ module: 'curriculum' }),
   });
-  
+
   // Pass interface abstraction, not direct organ
   const curriculumOps: CurriculumOperations = curriculumOrgan;
-  
+
   const mcpOrgan = createMCPOrgan({
-    curriculumOps,  // Interface abstraction
-    logger: logger.child({ module: 'mcp' })
+    curriculumOps, // Interface abstraction
+    logger: logger.child({ module: 'mcp' }),
   });
-  
+
   return {
     curriculumOrgan,
     mcpOrgan,
     config,
-    logger
+    logger,
   };
 }
 ```
 
 **File**: `src/psychon/server.ts`
+
 ```typescript
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { 
-  ListToolsRequestSchema,
-  CallToolRequestSchema 
-} from '@modelcontextprotocol/sdk/types.js';
+import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { wireApplication } from './wiring';
 import { TOOL_DEFINITIONS } from '../organa/mcp/tools/definitions';
 
 export async function createServer() {
   const { mcpOrgan, logger } = wireApplication();
-  
-  const server = new Server({
-    name: 'oak-curriculum-mcp',
-    version: '1.0.0'
-  }, {
-    capabilities: {
-      tools: {}
-    }
-  });
-  
+
+  const server = new Server(
+    {
+      name: 'oak-curriculum-mcp',
+      version: '1.0.0',
+    },
+    {
+      capabilities: {
+        tools: {},
+      },
+    },
+  );
+
   // Register tool list handler
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: Object.entries(TOOL_DEFINITIONS).map(([name, def]) => ({
       name,
       description: def.description,
-      inputSchema: def.inputSchema
-    }))
+      inputSchema: def.inputSchema,
+    })),
   }));
-  
+
   // Register tool execution handler
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
     try {
-      const result = await mcpOrgan.handleTool(
-        request.params.name,
-        request.params.arguments
-      );
+      const result = await mcpOrgan.handleTool(request.params.name, request.params.arguments);
       return {
-        content: [{
-          type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }]
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
       };
     } catch (error) {
       logger.error('Tool execution failed', error);
       return {
-        content: [{
-          type: 'text',
-          text: `Error: ${error.message}`
-        }],
-        isError: true
+        content: [
+          {
+            type: 'text',
+            text: `Error: ${error.message}`,
+          },
+        ],
+        isError: true,
       };
     }
   });
-  
+
   return server;
 }
 ```
@@ -443,6 +447,7 @@ export async function createServer() {
 #### 5.1 Unit Tests (Pure Functions Only)
 
 **File**: `src/organa/curriculum/transformers/lesson-transformer.unit.test.ts`
+
 ```typescript
 import { transformLesson } from './lesson-transformer';
 
@@ -452,15 +457,15 @@ describe('transformLesson', () => {
     const sdkLesson = {
       slug: 'test-lesson',
       title: 'Test Lesson',
-      subject: 'maths'
+      subject: 'maths',
     };
-    
+
     const result = transformLesson(sdkLesson);
-    
+
     expect(result).toEqual({
       id: 'test-lesson',
       name: 'Test Lesson',
-      metadata: { subject: 'maths' }
+      metadata: { subject: 'maths' },
     });
   });
 });
@@ -469,6 +474,7 @@ describe('transformLesson', () => {
 #### 5.2 Integration Tests (No Mocks)
 
 **File**: `src/organa/curriculum/operations/search.integration.test.ts`
+
 ```typescript
 import { createCurriculumOrgan } from '../index';
 import { createOakClient } from '@oaknational/oak-curriculum-sdk';
@@ -478,15 +484,13 @@ describe('Curriculum Operations Integration', () => {
   it('integrates SDK with error handling', async () => {
     // Simple injected dependencies, not complex mocks
     const sdk = {
-      searchLessons: vi.fn().mockResolvedValue([
-        { slug: 'lesson-1', title: 'Lesson 1' }
-      ])
+      searchLessons: vi.fn().mockResolvedValue([{ slug: 'lesson-1', title: 'Lesson 1' }]),
     };
     const logger = { info: vi.fn(), debug: vi.fn(), error: vi.fn() };
-    
+
     const organ = createCurriculumOrgan({ sdk, logger });
     const result = await organ.searchLessons({ subject: 'maths' });
-    
+
     expect(result).toHaveLength(1);
     expect(logger.info).toHaveBeenCalled();
   });
@@ -496,6 +500,7 @@ describe('Curriculum Operations Integration', () => {
 #### 5.3 E2E Tests (Conditional Execution)
 
 **File**: `e2e-tests/server.e2e.test.ts`
+
 ```typescript
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'child_process';
@@ -508,32 +513,30 @@ const shouldRunE2E = process.env.OAK_API_KEY && process.env.RUN_E2E === 'true';
 describe.skipIf(!shouldRunE2E)('Oak Curriculum MCP Server E2E', () => {
   let server: ChildProcess;
   let client: Client;
-  
+
   beforeAll(async () => {
     // Use real environment, not fake keys
     server = spawn('node', ['dist/index.js'], {
-      env: process.env
+      env: process.env,
     });
-    
+
     const transport = new StdioClientTransport({
       stdin: server.stdin!,
-      stdout: server.stdout!
+      stdout: server.stdout!,
     });
-    
+
     client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });
     await client.connect(transport);
   });
-  
+
   afterAll(async () => {
     await client?.close();
     server?.kill();
   });
-  
+
   it('lists available tools', async () => {
     const response = await client.request({ method: 'tools/list' });
-    expect(response.tools).toContainEqual(
-      expect.objectContaining({ name: 'oak-search-lessons' })
-    );
+    expect(response.tools).toContainEqual(expect.objectContaining({ name: 'oak-search-lessons' }));
   });
 });
 ```
@@ -541,18 +544,21 @@ describe.skipIf(!shouldRunE2E)('Oak Curriculum MCP Server E2E', () => {
 ## 🏁 Success Criteria
 
 ### Functional Requirements
+
 - [ ] All 5 tools implemented and working
 - [ ] Proper error handling with user-friendly messages
 - [ ] Logging at appropriate levels
 - [ ] Configuration via environment variables
 
 ### Non-Functional Requirements
+
 - [ ] Response time < 2 seconds for all tools
 - [ ] Graceful handling of API rate limits
 - [ ] Clear separation of concerns (biological architecture)
 - [ ] No cross-organ dependencies
 
 ### Quality Gates
+
 - [ ] All unit tests passing
 - [ ] All integration tests passing
 - [ ] E2E tests passing
@@ -564,7 +570,7 @@ describe.skipIf(!shouldRunE2E)('Oak Curriculum MCP Server E2E', () => {
 
 - **Step 1**: Project Setup - 30 minutes
 - **Step 2**: Chorai Layer - 1 hour
-- **Step 3**: Organa Layer - 2 hours  
+- **Step 3**: Organa Layer - 2 hours
 - **Step 4**: Psychon Layer - 1 hour
 - **Step 5**: Testing - 2 hours
 - **Step 6**: Integration & Debugging - 1 hour

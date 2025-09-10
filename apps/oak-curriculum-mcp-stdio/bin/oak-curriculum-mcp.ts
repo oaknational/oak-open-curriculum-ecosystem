@@ -3,6 +3,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
+import { getMcpTools } from '../src/tools/runtime/index.js';
 import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {
@@ -44,6 +45,18 @@ const hasApiKey = typeof process.env.OAK_API_KEY === 'string' && process.env.OAK
 const logLevelValue = typeof process.env.LOG_LEVEL === 'string' ? process.env.LOG_LEVEL : 'not set';
 log(`[START-MCP] OAK_API_KEY present: ${hasApiKey ? 'true' : 'false'}`);
 log(`[START-MCP] LOG_LEVEL: ${logLevelValue}`);
+
+// Emit tool diagnostics early so issues are visible even if startup fails later
+try {
+  const toolCount = getMcpTools().length;
+  log(`[START-MCP] Tool count: ${String(toolCount)}`);
+  log(`[START-MCP] Tools: ${String(toolCount)}`);
+} catch (err: unknown) {
+  log(
+    `[START-MCP ERROR] Failed to read tool list: ${err instanceof Error ? err.message : String(err)}`,
+    true,
+  );
+}
 
 // Now import and start the server
 log('[START-MCP] Importing server module...');

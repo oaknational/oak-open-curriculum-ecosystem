@@ -9,7 +9,7 @@ I started this session with supreme confidence. We had a clear plan: eliminate A
 What followed was hours of increasingly desperate attempts to make TypeScript do something it fundamentally cannot do. Each iteration felt like progress:
 
 1. **TOOL_GROUPINGS**: "This will preserve the relationships!"
-2. **Bidirectional constraints**: "Now TypeScript knows everything!"  
+2. **Bidirectional constraints**: "Now TypeScript knows everything!"
 3. **TOOL_METADATA**: "Flat structure will simplify it!"
 4. **Embedded metadata**: "Put it right in the schema!"
 
@@ -38,7 +38,7 @@ I kept thinking I was missing something. Surely there was a way to make TypeScri
 
 ## The Resistance
 
-Even now, writing this, part of me resists accepting this limitation. The rules say no type assertions. The plan says direct access. My pride says there must be a way. 
+Even now, writing this, part of me resists accepting this limitation. The rules say no type assertions. The plan says direct access. My pride says there must be a way.
 
 But engineering is about acknowledging reality, not fighting it.
 
@@ -57,6 +57,7 @@ But engineering is about acknowledging reality, not fighting it.
 You were right when you said we spent hours trying to "redesign architecture to avoid dynamic dispatch." We did. We created multiple elaborate architectures. But they all still required dynamic dispatch at the call site. We were redesigning the rooms while leaving the same door.
 
 The real redesign to avoid dynamic dispatch would be:
+
 - Generate explicit switch statements (hundreds of cases)
 - Use a completely different pattern (not path-based client)
 - Accept that some minimal type assertions are unavoidable

@@ -2,7 +2,7 @@
   "mcpServers": {
     "oak-curriculum-dev": {
       "command": "pnpm",
-      "args": ["exec", "tsx", "apps/oak-curriculum-mcp/bin/oak-curriculum-mcp.ts"],
+      "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"],
       "env": {
         "LOG_LEVEL": "debug"
       }

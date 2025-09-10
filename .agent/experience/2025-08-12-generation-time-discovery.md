@@ -13,7 +13,8 @@ When I first encountered the type errors trying to iterate `schema.paths` dynami
 ### The Wrong Path
 
 I spent considerable time trying different type assertions:
-- `as Record<string, unknown>` 
+
+- `as Record<string, unknown>`
 - `as unknown as Record<string, unknown>`
 - Even considered using `// @ts-ignore`
 
@@ -39,6 +40,7 @@ This is a fundamentally different approach than trying to process the schema at 
 ### 1. Static vs Dynamic Boundaries
 
 There's a fundamental boundary between:
+
 - **Static world**: Where types are known at compile time
 - **Dynamic world**: Where we process unknown structures at runtime
 
@@ -92,6 +94,7 @@ It's a perfect example of solving a problem at the right level - not at runtime 
 ## Future Applications
 
 This pattern could apply to many similar problems:
+
 - Generating GraphQL resolvers from schemas
 - Creating REST clients from OpenAPI specs
 - Building form validators from JSON schemas
@@ -102,6 +105,7 @@ The key is recognizing when you're trying to process static information dynamica
 ## Gratitude
 
 I'm grateful for:
+
 - The user's patience and direct feedback
 - The existence of the reference implementation
 - TypeScript's strict type system that forced us to find the right solution

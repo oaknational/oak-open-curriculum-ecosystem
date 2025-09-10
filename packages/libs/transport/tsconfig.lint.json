@@ -1,5 +1,15 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["src/**/*", "tests/**/*", "./*.ts", "./*.js"],
+  "extends": "../../../tsconfig.lint.root.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": ".tsbuildinfo.lint"
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "*.config.ts",
+    "bin/**/*.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

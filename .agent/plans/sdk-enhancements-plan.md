@@ -49,6 +49,12 @@ Status: Proposal (quick wins + high-impact improvements)
    - Emit per-tool stability flags (e.g., experimental/stable) and API version.
    - Facilitate safe tool selection and upgrade planning.
 
+5. Test mocks
+   - Have the compile time code generate simple mocks for the SDK and the MCP tools. These will enable integration tests of other systems that use the SDK in tests where we don't care about SDK behaviour.
+
+6. Tool discovery/listing
+   - Add a tool that allows tools to be discovered by tag, e.g. 'search'
+
 ## Non-Goals
 
 - Changing compile-time generation to runtime fetching (keep current approach).

@@ -161,4 +161,4 @@ The unified generation pipeline now produces:
 - Data-driven refinement: `.agent/plans/data-driven-mcp-type-generation.md`
 - Compilation-time plan: `.agent/plans/compilation-time-revolution-plan.md`
 - Logger pattern: `ecosystem/histoi/histos-logger/src/log-levels.ts`
-- MCP server: `ecosystem/psycha/oak-curriculum-mcp/`
+- MCP server: `ecosystem/psycha/oak-curriculum-mcp-stdio/`

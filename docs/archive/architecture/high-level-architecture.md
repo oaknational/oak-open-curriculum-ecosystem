@@ -246,14 +246,14 @@ export class Psychon {
   constructor() {
     // Import from Moria
     const { Logger } = await import('@oaknational/mcp-moria');
-    
+
     // Import from Histoi
     const { createAdaptiveLogger } = await import('@oaknational/mcp-histos-logger');
-    
+
     // Create infrastructure
     const logger = createAdaptiveLogger();
     const config = createConfig();
-    
+
     // Create organs with injected dependencies
     const notion = createNotionOperations({ logger, config });
     const mcp = createMcpServer({
@@ -332,21 +332,21 @@ export class Psychon {
 
 ### Workspace Level Testing
 
-| Level | Testing Approach | Example |
-|-------|-----------------|---------|
-| Moria | Unit tests only, no mocks, no I/O | Interface implementation tests |
-| Histoi | Unit tests for pure logic, integration for adaptation | Runtime detection tests |
-| Psycha | Integration tests for assembly, E2E for full behavior | MCP protocol tests |
+| Level  | Testing Approach                                      | Example                        |
+| ------ | ----------------------------------------------------- | ------------------------------ |
+| Moria  | Unit tests only, no mocks, no I/O                     | Interface implementation tests |
+| Histoi | Unit tests for pure logic, integration for adaptation | Runtime detection tests        |
+| Psycha | Integration tests for assembly, E2E for full behavior | MCP protocol tests             |
 
 ### Psychon Level Testing
 
-| Level | Greek Term | Testing Approach |
-|-------|------------|------------------|
-| Foundation | Chora/Stroma | Compile-time type checking |
-| Pure Functions | Organelles | Pure unit tests, no mocks |
-| Infrastructure | Chorai | Infrastructure tests with test doubles |
-| Business Logic | Organa | Business logic tests with mocked chorai |
-| Application | Psychon | Integration tests verifying wiring |
+| Level          | Greek Term   | Testing Approach                        |
+| -------------- | ------------ | --------------------------------------- |
+| Foundation     | Chora/Stroma | Compile-time type checking              |
+| Pure Functions | Organelles   | Pure unit tests, no mocks               |
+| Infrastructure | Chorai       | Infrastructure tests with test doubles  |
+| Business Logic | Organa       | Business logic tests with mocked chorai |
+| Application    | Psychon      | Integration tests verifying wiring      |
 
 ## Error Handling
 

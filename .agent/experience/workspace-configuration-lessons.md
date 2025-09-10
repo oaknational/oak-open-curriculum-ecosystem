@@ -6,12 +6,14 @@
 
 **Learning**: When configuring workspace dependencies for dual-mode operation (local development vs published packages), use `workspace:^` instead of `workspace:*`.
 
-**Context**: 
+**Context**:
+
 - `workspace:*` locks to exact local version
 - `workspace:^` allows version range, automatically replaced with actual version during publish
 - This enables local development with source code while published packages use versioned dependencies
 
 **Implementation**:
+
 ```json
 // In oak-notion-mcp/package.json
 "dependencies": {
@@ -25,7 +27,8 @@
 
 **Context**: User was accustomed to `--continue` behavior where all tasks run despite failures. Without it, turbo exits on first error, which can hide issues in other workspaces.
 
-**Best Practice**: 
+**Best Practice**:
+
 - For development: Use `--continue` to see all issues at once
 - For CI: Default behavior (stop on first failure) is often preferred
 
@@ -36,13 +39,15 @@
 **Context**: Removed separate `test:unit` and `test:integration` scripts in favor of single `test` command that runs both.
 
 **Rationale**:
+
 - Files still use `.unit.test.ts` and `.integration.test.ts` naming for clarity
 - But execution is unified to ensure comprehensive coverage
 - Prevents accidentally running only one type of test
 
 **Exception**: E2E tests remain separate (`test:e2e`) because they:
+
 - Use real credentials
-- Call real external services  
+- Call real external services
 - Should only run when explicitly intended
 - Could incur costs or rate limits
 
@@ -61,7 +66,7 @@
 ## Key Takeaways
 
 1. **Workspace protocols matter**: Choose the right workspace protocol for your publishing strategy
-2. **Test organization vs execution**: Organize tests by type, but consider unified execution for comprehensive coverage  
+2. **Test organization vs execution**: Organize tests by type, but consider unified execution for comprehensive coverage
 3. **Explicit E2E separation**: Keep tests with side effects manually triggered
 4. **Tool behavior understanding**: Distinguish between tool exit codes (normal) and actual errors (problems)
 5. **Version automation**: Let semantic-release handle versioning rather than manual updates

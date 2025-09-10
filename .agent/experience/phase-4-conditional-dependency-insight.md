@@ -1,6 +1,6 @@
 # Phase 4: The Conditional Dependency Insight
 
-*2025-01-06*
+_2025-01-06_
 
 ## The Moment of Clarity
 
@@ -13,6 +13,7 @@ This triggered a complete reframing of how I understood the genotype/phenotype a
 I was rigidly interpreting "zero runtime dependencies" to mean the genotype could have NO Node.js code whatsoever. This led me to plan moving all AsyncLocalStorage, file operations, and other Node.js features to the phenotype.
 
 This interpretation was:
+
 - Overly rigid
 - Creating unnecessary code duplication
 - Actually LESS biological than reality
@@ -20,6 +21,7 @@ This interpretation was:
 ## The Biological Reality
 
 In real genetics:
+
 - Genotypes contain genes for ALL possible traits
 - Environmental factors determine which genes are expressed
 - The same genotype produces different phenotypes in different environments
@@ -33,6 +35,7 @@ The principle isn't "zero dependencies" but rather:
 **"Zero HARD dependencies - all features must gracefully degrade"**
 
 This means:
+
 - The genotype CAN contain Node.js code
 - But it must work in ALL environments
 - Features conditionally express based on capabilities
@@ -78,6 +81,7 @@ It's elegant, practical, and truly biological.
 ## Impact on Phase 4
 
 This insight completely changes Sub-phase 2.1.1:
+
 - No need to move Node.js code out
 - Focus on code quality instead
 - Document this as the intended pattern

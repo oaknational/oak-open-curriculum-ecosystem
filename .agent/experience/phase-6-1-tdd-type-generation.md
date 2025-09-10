@@ -28,25 +28,31 @@ Successfully implemented TypeScript and Zod generation from OpenAPI schemas usin
 ## Technical Decisions
 
 ### ESM Module Support
+
 Used `import.meta.url` with `fileURLToPath` for file paths:
+
 ```typescript
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 ```
 
 ### Array Syntax
+
 Changed from `Array<T>` to `T[]` per ESLint rules:
+
 ```typescript
 // Before
-type: 'Array<string>'
-// After  
-type: 'string[]'
+type: 'Array<string>';
+// After
+type: 'string[]';
 // Complex types
-type: '({ foo: string })[]'
+type: '({ foo: string })[]';
 ```
 
 ### Name Sanitization
+
 Created sanitizer for invalid TypeScript identifiers:
+
 ```typescript
 function sanitizeName(name: string): string {
   return name.replace(/[^a-zA-Z0-9_]/g, '_');
@@ -55,7 +61,9 @@ function sanitizeName(name: string): string {
 ```
 
 ### Complexity Management
+
 Split large functions to reduce cyclomatic complexity:
+
 - Separate functions for each type (object, array, enum)
 - Helper functions for modifiers (nullable, optional)
 - Clear single responsibility
@@ -63,15 +71,18 @@ Split large functions to reduce cyclomatic complexity:
 ## Challenges Faced
 
 ### 1. Pre-commit Hook Issue
+
 **Problem**: Pre-commit runs type-check → triggers build → regenerates files → formatting issues
 **Current Status**: Generation script outputs unformatted code
 **Solution Needed**: Add prettier formatting to generation script
 
 ### 2. Test Classification
+
 **Problem**: Integration test performing I/O operations (violates project rules)
 **Solution**: Moved to E2E tests with separate config
 
 ### 3. ESLint Array Syntax
+
 **Problem**: `Array<T>` forbidden by @typescript-eslint/array-type rule
 **Solution**: Implemented proper `T[]` syntax with parentheses for complex types
 

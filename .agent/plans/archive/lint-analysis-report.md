@@ -15,9 +15,10 @@ The errors reveal a systemic issue: **The membrane between external chaos and in
 **Biological Insight**: The eidola (test forms) don't match the reality they're meant to simulate
 
 **Evidence**:
+
 ```typescript
 // Current problematic pattern
-const mockClient = createMockNotionClient();  // Returns 'error' type
+const mockClient = createMockNotionClient(); // Returns 'error' type
 const server = await createServer({ client: mockClient }); // Unsafe assignment
 ```
 
@@ -28,6 +29,7 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
 **Biological Insight**: The genotype is forcing knowledge rather than encoding it properly
 
 **Locations**:
+
 - `error-handler.ts:89` - Record access type narrowing
 - `file-reporter.ts:106` - Function type from record
 - `logger.ts:17` - Sensitive data scrubbing return type
@@ -39,6 +41,7 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
 **Biological Insight**: Organs trying to access forms that don't exist in their environment
 
 **Issues**:
+
 - `eslint.config.ts` importing from `../../eslint.config.base.js`
 - Test files importing from `'../../../chora/eidola/factories.js'` (doesn't exist)
 
@@ -59,11 +62,12 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
 ### Phase 1: Fix the Test Forms (eidola) - **Resolves 110+ errors**
 
 1. **Create properly typed mock factories**
+
    ```typescript
    // In ecosystem/oak-notion-mcp/src/chora/eidola/factories.ts
    export function createMockNotionClient(): Client {
      return {
-       users: { 
+       users: {
          list: vi.fn<[], Promise<ListUsersResponse>>(),
          // ... properly typed methods
        },
@@ -82,6 +86,7 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
 ### Phase 2: Fix Type Narrowing in Genotype - **Resolves 3 errors**
 
 1. **Error Handler**: Use proper type guards
+
    ```typescript
    const classification = ERROR_CLASSIFICATIONS[code];
    if (classification !== undefined) {
@@ -90,6 +95,7 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
    ```
 
 2. **File Reporter**: Extract typed formatter
+
    ```typescript
    const formatter = PRIMITIVE_FORMATTERS[typeof value];
    if (typeof formatter === 'function') {
@@ -114,8 +120,9 @@ const server = await createServer({ client: mockClient }); // Unsafe assignment
 ### Phase 4: Fix Type Safety Issues - **Resolves 10 errors**
 
 1. **Template literals**: Explicitly convert numbers
+
    ```typescript
-   `Items: ${String(items.length)}`  // Not `Items: ${items.length}`
+   `Items: ${String(items.length)}`; // Not `Items: ${items.length}`
    ```
 
 2. **Remove unnecessary conditionals** through better type guards

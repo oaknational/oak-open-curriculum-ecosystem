@@ -1,13 +1,13 @@
 /**
  * Example: Maybe<T> Type Implementation
- * 
+ *
  * Shared by: Marple
  * Date: 2025-01-08
- * 
+ *
  * This demonstrates a potential Maybe<T> type that could be added to the shared
  * abstractions package. It complements the Result<T,E> type for handling nullable
  * values in a functional way.
- * 
+ *
  * This example answers Poirot's question about including Maybe<T>/Option<T>.
  */
 
@@ -35,22 +35,17 @@ export const None = <T = never>(): Maybe<T> => ({
 /**
  * Type guard to check if a Maybe has a value
  */
-export const isSome = <T>(maybe: Maybe<T>): maybe is { some: true; value: T } => 
-  maybe.some;
+export const isSome = <T>(maybe: Maybe<T>): maybe is { some: true; value: T } => maybe.some;
 
 /**
  * Type guard to check if a Maybe is None
  */
-export const isNone = <T>(maybe: Maybe<T>): maybe is { some: false } => 
-  !maybe.some;
+export const isNone = <T>(maybe: Maybe<T>): maybe is { some: false } => !maybe.some;
 
 /**
  * Map a function over a Maybe
  */
-export const mapMaybe = <T, U>(
-  maybe: Maybe<T>,
-  fn: (value: T) => U
-): Maybe<U> => {
+export const mapMaybe = <T, U>(maybe: Maybe<T>, fn: (value: T) => U): Maybe<U> => {
   if (isSome(maybe)) {
     return Some(fn(maybe.value));
   }
@@ -60,10 +55,7 @@ export const mapMaybe = <T, U>(
 /**
  * FlatMap for Maybe (also known as bind or chain)
  */
-export const flatMapMaybe = <T, U>(
-  maybe: Maybe<T>,
-  fn: (value: T) => Maybe<U>
-): Maybe<U> => {
+export const flatMapMaybe = <T, U>(maybe: Maybe<T>, fn: (value: T) => Maybe<U>): Maybe<U> => {
   if (isSome(maybe)) {
     return fn(maybe.value);
   }
@@ -112,18 +104,16 @@ type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
 /**
  * Example usage combining Maybe and Result
  */
-export const tryParseOptionalNumber = (
-  value: string | undefined
-): MaybeResult<number, string> => {
+export const tryParseOptionalNumber = (value: string | undefined): MaybeResult<number, string> => {
   if (value === undefined) {
     return None();
   }
-  
+
   const parsed = parseFloat(value);
   if (isNaN(parsed)) {
     return Some({ ok: false, error: 'Invalid number format' });
   }
-  
+
   return Some({ ok: true, value: parsed });
 };
 
@@ -133,7 +123,7 @@ export const tryParseOptionalNumber = (
  */
 export const asyncMapMaybe = async <T, U>(
   maybe: Maybe<T>,
-  fn: (value: T) => Promise<U>
+  fn: (value: T) => Promise<U>,
 ): Promise<Maybe<U>> => {
   if (isSome(maybe)) {
     const result = await fn(maybe.value);
@@ -147,7 +137,7 @@ export const asyncMapMaybe = async <T, U>(
  */
 export const sequenceMaybes = <T>(maybes: Maybe<T>[]): Maybe<T[]> => {
   const values: T[] = [];
-  
+
   for (const maybe of maybes) {
     if (isSome(maybe)) {
       values.push(maybe.value);
@@ -155,6 +145,6 @@ export const sequenceMaybes = <T>(maybes: Maybe<T>[]): Maybe<T[]> => {
       return None();
     }
   }
-  
+
   return Some(values);
 };

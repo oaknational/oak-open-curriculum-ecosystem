@@ -21,12 +21,12 @@ Phase 5 transforms our monolithic genotype/phenotype model into a three-tier bio
 
 ### Comprehensive Review Results (2025-01-09)
 
-| Component | Architecture | Code Quality | Test Quality | Configuration | Overall |
-|-----------|-------------|--------------|--------------|---------------|---------|
-| histos-transport | A+ | A+ | A+ (Gold Standard) | B- | A |
-| histos-logger | B+ | B+ | C (Needs work) | A | B+ |
-| histos-storage | B+ | B+ | C- (IO violations) | A | B |
-| histos-env | A | A | A | A | A |
+| Component        | Architecture | Code Quality | Test Quality       | Configuration | Overall |
+| ---------------- | ------------ | ------------ | ------------------ | ------------- | ------- |
+| histos-transport | A+           | A+           | A+ (Gold Standard) | B-            | A       |
+| histos-logger    | B+           | B+           | C (Needs work)     | A             | B+      |
+| histos-storage   | B+           | B+           | C- (IO violations) | A             | B       |
+| histos-env       | A            | A            | A                  | A             | A       |
 
 ### Critical Issues Found
 
@@ -90,12 +90,12 @@ Phase 5 transforms our monolithic genotype/phenotype model into a three-tier bio
 
 ### Rule Violations Detected
 
-| Rule | Location | Violation | Severity |
-|------|----------|-----------|----------|
-| No skipped tests | histos-storage/tests | 3 skipped test blocks | HIGH |
-| No useless tests | histos-logger/tests | Entire file tests nothing | HIGH |
-| Test file naming | All test files | Missing .unit/.integration suffix | MEDIUM |
-| No complex mocks | histos-storage/tests | Complex vi.doMock usage | MEDIUM |
+| Rule             | Location             | Violation                         | Severity |
+| ---------------- | -------------------- | --------------------------------- | -------- |
+| No skipped tests | histos-storage/tests | 3 skipped test blocks             | HIGH     |
+| No useless tests | histos-logger/tests  | Entire file tests nothing         | HIGH     |
+| Test file naming | All test files       | Missing .unit/.integration suffix | MEDIUM   |
+| No complex mocks | histos-storage/tests | Complex vi.doMock usage           | MEDIUM   |
 
 ---
 
@@ -218,7 +218,7 @@ Successfully reorganized the ecosystem structure:
 
 Successfully implemented ESLint rules to enforce:
 
-- No direct access to Node.js globals (process, __dirname,__filename) in Histoi
+- No direct access to Node.js globals (process, **dirname,**filename) in Histoi
 - Import boundary enforcement through workspace references
 - Clear error messages for architectural violations
 - Updated documentation to clarify IO injection requirements
@@ -265,10 +265,10 @@ Successfully created transplantable `@oaknational/mcp-histos-transport` with:
      receive(): AsyncIterator<Message>;
      close(): Promise<void>;
    }
-   
+
    // src/stdio.ts - Local subprocess transport
    class StdioTransport implements Transport { ... }
-   
+
    // src/adaptive.ts - Simple selection (stdio only for now)
    export function createAdaptiveTransport(config: Config): Transport {
      return new StdioTransport(config);
@@ -306,7 +306,7 @@ Successfully standardized all Histoi tissues using histos-transport patterns:
    ```json
    // Remove excessive devDependencies, keep only:
    "devDependencies": {
-     "pnpm": "^10.14.0",
+     "pnpm": "^10.15.1",
      "typescript": "^5.9.2"
    }
    ```
@@ -364,6 +364,7 @@ Successfully standardized all Histoi tissues using histos-transport patterns:
 **Grade: A** | **Status: Complete**
 
 Successfully documented all architectural patterns and decisions:
+
 - Created comprehensive tissue-adaptation-patterns.md
 - Updated all Histoi package READMEs
 - Created troubleshooting guide
@@ -375,6 +376,7 @@ Successfully documented all architectural patterns and decisions:
 **Grade: A** | **Status: Investigation Complete**
 
 Investigated `"erasableSyntaxOnly": true` but found it incompatible with our patterns:
+
 - Conflicts with parameter properties used throughout codebase
 - Would require extensive refactoring for minimal benefit
 - Current output is already pure ESM without runtime artifacts
@@ -584,12 +586,12 @@ Measure and validate optimizations
 
 ## ⚠️ Risk Mitigation
 
-| Risk | Mitigation | Status |
-|------|------------|--------|
-| Breaking changes | No compatibility layers, use versioning | ✅ |
-| Test quality degradation | Strict enforcement of rules | ⚠️ Must fix NOW |
-| Architecture violations | ESLint enforcement after restructure | ⏳ |
-| Premature optimization | Build Oak API first, optimize later | ✅ |
+| Risk                     | Mitigation                              | Status          |
+| ------------------------ | --------------------------------------- | --------------- |
+| Breaking changes         | No compatibility layers, use versioning | ✅              |
+| Test quality degradation | Strict enforcement of rules             | ⚠️ Must fix NOW |
+| Architecture violations  | ESLint enforcement after restructure    | ⏳              |
+| Premature optimization   | Build Oak API first, optimize later     | ✅              |
 
 ---
 

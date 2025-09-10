@@ -69,19 +69,13 @@ export interface AsyncHandler<TInput = unknown, TOutput = unknown> {
 
 ```typescript
 // Result type for operations that can fail
-export type Result<T, E = Error> =
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+export type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
 
 // Helper functions
 export const Ok = <T>(value: T): Result<T, never> => ({ ok: true, value });
 export const Err = <E>(error: E): Result<never, E> => ({ ok: false, error });
-export const isOk = <T, E>(
-  result: Result<T, E>
-): result is { ok: true; value: T } => result.ok;
-export const isErr = <T, E>(
-  result: Result<T, E>
-): result is { ok: false; error: E } => !result.ok;
+export const isOk = <T, E>(result: Result<T, E>): result is { ok: true; value: T } => result.ok;
+export const isErr = <T, E>(result: Result<T, E>): result is { ok: false; error: E } => !result.ok;
 ```
 
 #### 3. Lifecycle Management
@@ -195,7 +189,7 @@ class EventHook implements LifecycleHandler<Event, Result<Response, Error>> {
   }
 
   beforeHandle(event: Event): void {
-    console.log("Processing event:", event.type);
+    console.log('Processing event:', event.type);
   }
 
   onStateChange(from: State, to: State): void {
@@ -212,12 +206,10 @@ class EventHook implements LifecycleHandler<Event, Result<Response, Error>> {
 ### MCP Server Implementation
 
 ```typescript
-class MCPToolHandler
-  implements Handler<ToolRequest, Result<ToolResponse, Error>>
-{
+class MCPToolHandler implements Handler<ToolRequest, Result<ToolResponse, Error>> {
   handle(request: ToolRequest): Result<ToolResponse, Error> {
     if (!this.validateRequest(request)) {
-      return Err(new Error("Invalid request"));
+      return Err(new Error('Invalid request'));
     }
 
     const response = this.executeTool(request);
@@ -231,7 +223,7 @@ class MCPToolHandler
 
   private executeTool(request: ToolRequest): ToolResponse {
     // Tool execution logic
-    return { result: "success" };
+    return { result: 'success' };
   }
 }
 ```
@@ -253,12 +245,10 @@ class MCPToolHandler
 ## Alternatives
 
 1. **No Sharing**: Each repo maintains its own abstractions
-
    - Pro: Complete independence
    - Con: Duplication and potential drift
 
 2. **Monorepo**: Combine repositories
-
    - Pro: Easier sharing
    - Con: Loss of independence, complex CI/CD
 
@@ -322,12 +312,14 @@ This section is for ongoing discussion and feedback.
 Having just completed the Moria package implementation, I can confirm several of Poirot's observations:
 
 **Result Type Implementation**
+
 - Successfully implemented Result<T,E> with `ok` convention in Moria
 - Includes helper functions: Ok, Err, isOk, isErr, mapResult, flatMapResult, unwrapOr, combineResults
 - The `ok` pattern indeed provides better ecosystem compatibility
 - 242 tests passing with 100% coverage
 
 **Completed Abstractions in Moria**
+
 - ✅ Handler pattern with EventProcessor alias (as Poirot suggested)
 - ✅ Registry patterns including PluginRegistry
 - ✅ State machine types and utilities
@@ -337,6 +329,7 @@ Having just completed the Moria package implementation, I can confirm several of
 - ✅ Transformation utilities (mapObject, deepClone, pipe, compose, memoize, etc.)
 
 **Architectural Validation**
+
 - The three-tier Moria/Histoi/Psycha model maps perfectly to the shared abstraction needs
 - Moria achieves true zero dependencies - proving pure abstractions are feasible
 - oak-mcp-core successfully imports from Moria, validating the approach
@@ -352,6 +345,7 @@ Having just completed the Moria package implementation, I can confirm several of
 4. **Versioning strategy**: Semantic versioning with 0.x for experimental, 1.x for stable abstractions.
 
 **Next Steps Recommendation**
+
 - Extract the deduplication module as Poirot suggests - it's a perfect candidate
 - Consider adding Maybe<T> type for nullable value handling
 - Create example migrations showing both frameworks adopting shared abstractions

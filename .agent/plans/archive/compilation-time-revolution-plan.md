@@ -61,7 +61,7 @@ type XValue = typeof allowedXValues[number] | undefined; // | undefined for opti
 function isXValue(value: string | undefined): value is XValue { ... }
 
 // Parameter metadata with embedded type guards
-const pathParams = { 
+const pathParams = {
   paramName: {
     typePrimitive: "string",
     valueConstraint: true,
@@ -98,6 +98,7 @@ including all generated MCP tools, is well and accurately documented.
 ### Overview
 
 The SDK now has a rich public API including:
+
 - Client factories (`createOakClient`, `createOakPathBasedClient`)
 - Generated MCP tools (25+ tools with full metadata)
 - Type guards and validators
@@ -158,14 +159,7 @@ All of this needs proper TypeScript documentation that generates into beautiful,
     "includeCategories": true,
     "includeGroups": true
   },
-  "categoryOrder": [
-    "Client",
-    "MCP Tools",
-    "Validation",
-    "Type Guards",
-    "Types",
-    "*"
-  ]
+  "categoryOrder": ["Client", "MCP Tools", "Validation", "Type Guards", "Types", "*"]
 }
 ```
 
@@ -173,10 +167,10 @@ All of this needs proper TypeScript documentation that generates into beautiful,
 
 For each public export, ensure comprehensive documentation:
 
-```typescript
+````typescript
 /**
  * Creates an Oak API client using openapi-fetch
- * 
+ *
  * @example
  * ```typescript
  * const client = createOakClient({ apiKey: 'your-key' });
@@ -184,18 +178,18 @@ For each public export, ensure comprehensive documentation:
  *   params: { path: { lesson: 'lesson-slug' } }
  * });
  * ```
- * 
+ *
  * @param apiKey - Oak API key for authentication
  * @param options - Optional configuration
  * @returns Configured openapi-fetch client
- * 
+ *
  * @category Client
  * @since 0.0.1
  */
 export function createOakClient(apiKey: string, options?: ClientOptions) {
   // ...
 }
-```
+````
 
 #### Step 1a.4: Document generated MCP tools
 
@@ -204,18 +198,18 @@ Add documentation generation to the tool generator:
 ```typescript
 /**
  * ${tool.description}
- * 
+ *
  * @remarks
  * HTTP Method: ${tool.method.toUpperCase()}
  * Path: ${tool.path}
  * Operation ID: ${tool.operationId}
- * 
+ *
  * @param client - Oak API client instance
  * @param params - Tool parameters
  * ${generateParamDocs(tool.pathParams, tool.queryParams)}
- * 
+ *
  * @returns API response for ${tool.operationId}
- * 
+ *
  * @category MCP Tools
  * @since Generated
  */
@@ -237,7 +231,7 @@ Use TypeDoc's `@category` tag to organize documentation:
 
 Every major function should have an `@example` block:
 
-```typescript
+````typescript
 /**
  * @example
  * ```typescript
@@ -248,7 +242,7 @@ Every major function should have an `@example` block:
  * }
  * ```
  */
-```
+````
 
 #### Step 1a.7: Generate and review documentation
 
@@ -273,6 +267,7 @@ Every major function should have an `@example` block:
 #### Step 1a.9: Create README sections for API docs
 
 Add sections to README.md:
+
 - Link to generated API documentation
 - Quick start examples using the documented APIs
 - Common usage patterns
@@ -340,11 +335,11 @@ Add sections to README.md:
   ```typescript
   const pathParams = {
     paramName: {
-      typePrimitive: "string",
+      typePrimitive: 'string',
       valueConstraint: true,
       allowedValues: allowedParamNameValues,
-      typeguard: isParamNameValue
-    }
+      typeguard: isParamNameValue,
+    },
   };
   ```
 
@@ -355,9 +350,9 @@ Add sections to README.md:
   ```typescript
   type ValidRequestParams = {
     params: {
-      path: { requiredParam: string },
-      query?: { optionalParam?: string }
-    }
+      path: { requiredParam: string };
+      query?: { optionalParam?: string };
+    };
   };
   ```
 
@@ -444,11 +439,7 @@ All SDK tools are now immediately available through the MCP protocol.
 
 ```typescript
 // In package.json or wherever the SDK is referenced
-import { 
-  executeToolCall, 
-  isToolName,
-  MCP_TOOLS 
-} from '@oaknational/oak-curriculum-sdk';
+import { executeToolCall, isToolName, MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 ```
 
 - Ensure SDK is built first
@@ -464,38 +455,33 @@ import { executeToolCall, isToolName } from '@oaknational/oak-curriculum-sdk';
 import { McpError, ErrorCode } from '@modelcontextprotocol/sdk';
 import type { CallToolRequest, CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
-export async function handleToolCall(
-  request: CallToolRequest
-): Promise<CallToolResult> {
+export async function handleToolCall(request: CallToolRequest): Promise<CallToolResult> {
   const { name, arguments: args } = request.params;
-  
+
   // Validate tool exists using SDK's type guard
   if (!isToolName(name)) {
-    throw new McpError(
-      ErrorCode.MethodNotFound,
-      `Unknown tool: ${name}`
-    );
+    throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
   }
-  
+
   // Delegate ALL execution to SDK
   const result = await executeToolCall(name, args);
-  
+
   // Handle errors with proper MCP error codes
   if (result.error) {
     // Distinguish parameter errors from API errors
-    const code = result.error.paramName 
-      ? ErrorCode.InvalidParams 
-      : ErrorCode.InternalError;
-    
+    const code = result.error.paramName ? ErrorCode.InvalidParams : ErrorCode.InternalError;
+
     throw new McpError(code, result.error.message);
   }
-  
+
   // Return successful result formatted for MCP
   return {
-    content: [{
-      type: 'text',
-      text: JSON.stringify(result.data, null, 2)
-    }]
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(result.data, null, 2),
+      },
+    ],
   };
 }
 ```
@@ -510,38 +496,34 @@ import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 import { ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 
 // Helper to convert SDK params to JSON Schema
-function generateInputSchema(tool: typeof MCP_TOOLS[keyof typeof MCP_TOOLS]) {
+function generateInputSchema(tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS]) {
   const properties: Record<string, any> = {};
   const required: string[] = [];
-  
+
   // Convert path parameters
   for (const [name, meta] of Object.entries(tool.pathParams)) {
     properties[name] = {
       type: meta.typePrimitive === 'number' ? 'number' : 'string',
       enum: meta.allowedValues,
-      description: meta.valueConstraint 
-        ? `One of: ${meta.allowedValues.join(', ')}` 
-        : undefined
+      description: meta.valueConstraint ? `One of: ${meta.allowedValues.join(', ')}` : undefined,
     };
     if (meta.required) required.push(name);
   }
-  
+
   // Convert query parameters
   for (const [name, meta] of Object.entries(tool.queryParams)) {
     properties[name] = {
       type: meta.typePrimitive === 'number' ? 'number' : 'string',
       enum: meta.allowedValues,
-      description: meta.valueConstraint 
-        ? `One of: ${meta.allowedValues.join(', ')}` 
-        : undefined
+      description: meta.valueConstraint ? `One of: ${meta.allowedValues.join(', ')}` : undefined,
     };
     if (meta.required) required.push(name);
   }
-  
+
   return {
     type: 'object',
     properties,
-    required: required.length > 0 ? required : undefined
+    required: required.length > 0 ? required : undefined,
   };
 }
 
@@ -549,19 +531,19 @@ function generateInputSchema(tool: typeof MCP_TOOLS[keyof typeof MCP_TOOLS]) {
 const tools = Object.entries(MCP_TOOLS).map(([name, tool]) => ({
   name,
   description: `${tool.method.toUpperCase()} ${tool.path} - ${tool.operationId}`,
-  inputSchema: generateInputSchema(tool)
+  inputSchema: generateInputSchema(tool),
 }));
 
 // Register the list tools handler
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
-  tools
+  tools,
 }));
 ```
 
 #### Step 20: Clean up and remove duplicates ✅
 
 - Removed all hardcoded tool arrays
-- Deleted manual tool implementations  
+- Deleted manual tool implementations
 - Removed old validation logic
 - Kept only minimal MCP protocol handling
 
@@ -606,6 +588,7 @@ Successfully tested all functionality:
    - Fixed unknown type handling
 
 **Successful Outcomes:**
+
 - MCP server is minimal, all logic in SDK
 - Complete type safety maintained
 - All tools working with real API
@@ -621,6 +604,7 @@ and identify other common code that could be extracted into reusable components.
 ### Overview
 
 The monorepo has established patterns for shared code:
+
 - **ecosystem/moria** - Core interfaces and patterns (Logger, Storage, Transport)
 - **ecosystem/histoi** - Concrete implementations (histos-logger, histos-storage, histos-transport, histos-env)
 
@@ -629,12 +613,14 @@ Both MCP servers (oak-curriculum and oak-notion) currently have duplicated code 
 ### Current Shared Components Available
 
 #### From @oaknational/mcp-moria (Interfaces):
+
 - `Logger` - Logging interface
 - `Storage` - Storage abstraction
 - `Transport` - Transport abstraction
 - Core types and patterns
 
-#### From @oaknational/mcp-histos-* (Implementations):
+#### From @oaknational/mcp-histos-\* (Implementations):
+
 - `histos-logger` - Adaptive logger with Consola
 - `histos-storage` - File system storage
 - `histos-transport` - Transport implementations
@@ -689,7 +675,7 @@ const logger = createAdaptiveLogger({
   fileOutput: {
     enabled: true,
     directory: '.logs/oak-curriculum-mcp',
-  }
+  },
 });
 ```
 
@@ -732,7 +718,7 @@ const env = await loadEnvironment({
   validateFn: (env) => {
     // Custom validation
     return true;
-  }
+  },
 });
 ```
 
@@ -746,32 +732,30 @@ export abstract class McpServerBase {
   protected logger: Logger;
   protected server: Server;
   protected transport: StdioServerTransport;
-  
+
   constructor(config: McpServerConfig) {
     this.logger = this.createLogger(config);
     this.transport = new StdioServerTransport();
     this.server = this.createServer(config);
   }
-  
+
   abstract getTools(): Tool[];
   abstract handleToolCall(request: CallToolRequest): Promise<CallToolResult>;
-  
+
   async start(): Promise<void> {
     // Common startup logic
     await this.loadEnvironment();
     await this.registerHandlers();
     await this.server.connect(this.transport);
   }
-  
+
   protected registerHandlers(): void {
     // Register common handlers
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: this.getTools()
+      tools: this.getTools(),
     }));
-    
-    this.server.setRequestHandler(CallToolRequestSchema, (request) => 
-      this.handleToolCall(request)
-    );
+
+    this.server.setRequestHandler(CallToolRequestSchema, (request) => this.handleToolCall(request));
   }
 }
 ```
@@ -786,23 +770,23 @@ export function mapSdkErrorToMcpError(error: SdkError): McpError {
   if ('pathParameterName' in error || 'queryParameterName' in error) {
     return new McpError(ErrorCode.InvalidParams, error.message);
   }
-  
+
   if (error.code === 'NETWORK_ERROR') {
     return new McpError(ErrorCode.InternalError, 'Network error occurred');
   }
-  
+
   // More mappings...
-  
+
   return new McpError(ErrorCode.InternalError, error.message);
 }
 
 export function wrapUnknownError(error: unknown): McpError {
   if (error instanceof McpError) return error;
-  
+
   if (error instanceof Error) {
     return new McpError(ErrorCode.InternalError, error.message);
   }
-  
+
   return new McpError(ErrorCode.InternalError, 'Unknown error occurred');
 }
 ```
@@ -815,11 +799,11 @@ Extract common validation patterns:
 // New: @oaknational/mcp-validation
 export function validateRequiredEnvVars(
   required: string[],
-  env: NodeJS.ProcessEnv = process.env
+  env: NodeJS.ProcessEnv = process.env,
 ): Record<string, string> {
   const result: Record<string, string> = {};
   const missing: string[] = [];
-  
+
   for (const key of required) {
     const value = env[key];
     if (!value) {
@@ -828,11 +812,11 @@ export function validateRequiredEnvVars(
       result[key] = value;
     }
   }
-  
+
   if (missing.length > 0) {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
-  
+
   return result;
 }
 ```
@@ -859,7 +843,7 @@ export interface Chorai {
 export function createOrganism<T extends Psychon>(
   psychon: T,
   organs: Organa<any, any>[],
-  chorai: Chorai[]
+  chorai: Chorai[],
 ): Organism<T> {
   return new Organism(psychon, organs, chorai);
 }
@@ -911,6 +895,7 @@ Automatically go up the tree until it finds a .git folder or .git file or pnpm-l
 We generate Zod validators for the request and response schemas at compile time, but they're currently unused. This is a missed opportunity for runtime safety.
 
 #### Current State
+
 - SDK generates `validateRequest` and `validateResponse` functions using Zod schemas
 - These are exported from the SDK but never imported/used
 - MCP server passes Oak API responses through unvalidated
@@ -919,61 +904,60 @@ We generate Zod validators for the request and response schemas at compile time,
 #### Implementation Plan
 
 **Option 1: Validate in the SDK's executeToolCall (Recommended)**
+
 ```typescript
 // In packages/oak-curriculum-sdk/src/mcp/execute-tool-call.ts
 import { validateResponse } from '../validation/index.js';
 
 export async function executeToolCall(
   toolName: ToolName,
-  requestParams: unknown
+  requestParams: unknown,
 ): Promise<ToolCallResult> {
   // ... existing validation and execution ...
-  
+
   const response = await tool.executor(client, validParams);
-  
+
   // NEW: Validate the API response matches our schema
   const validation = validateResponse(
     tool.path,
     tool.method,
     200, // Or extract from response status
-    response.data
+    response.data,
   );
-  
+
   if (!validation.ok) {
     // Log validation failure for monitoring
     console.error('API response validation failed:', validation.issues);
     // Could throw or return error based on strictness needs
   }
-  
+
   return { data: response.data };
 }
 ```
 
 **Option 2: Validate in the MCP server handler**
+
 ```typescript
 // In ecosystem/psycha/oak-curriculum-mcp/src/organa/mcp/handlers/tool-handler.ts
 import { validateResponse } from '@oaknational/oak-curriculum-sdk';
 
 export async function handleToolCall(request: CallToolRequest) {
   const result = await executeToolCall(name, args);
-  
+
   // Validate before sending to MCP client
   if (result.data) {
-    const validation = validateResponse(
-      tool.path,
-      tool.method,
-      200,
-      result.data
-    );
-    
+    const validation = validateResponse(tool.path, tool.method, 200, result.data);
+
     if (!validation.ok) {
       // Return structured error to client
       return {
         isError: true,
-        content: [{
-          type: 'text',
-          text: `API response validation failed: ${JSON.stringify(validation.issues)}`
-        }]
+        content: [
+          {
+            type: 'text',
+            text: `API response validation failed: ${JSON.stringify(validation.issues)}`,
+          },
+        ],
       };
     }
   }
@@ -981,6 +965,7 @@ export async function handleToolCall(request: CallToolRequest) {
 ```
 
 #### Benefits
+
 - **Early Detection**: Catch API contract violations immediately
 - **Better Errors**: Provide specific validation errors instead of runtime crashes
 - **Monitoring**: Log validation failures for API health monitoring
@@ -988,6 +973,7 @@ export async function handleToolCall(request: CallToolRequest) {
 - **Progressive Enhancement**: Can start with logging, move to strict validation
 
 #### Considerations
+
 - Performance impact of validation (likely negligible with Zod)
 - Handling validation failures (log vs error)
 - Backward compatibility during API transitions
@@ -1116,23 +1102,23 @@ Create comprehensive documentation of the pipeline:
 ```typescript
 interface OpenApiToMcpConfig {
   // Tool naming
-  toolPrefix?: string;                    // Default: none
+  toolPrefix?: string; // Default: none
   toolNameGenerator?: (path: string, method: string) => string;
-  
-  // Client configuration  
+
+  // Client configuration
   clientType: 'fetch' | 'axios' | 'custom';
   clientFactory: (config: any) => ApiClient;
-  
+
   // Authentication
   auth?: {
     type: 'apiKey' | 'bearer' | 'basic' | 'oauth2';
     config: AuthConfig;
   };
-  
+
   // Customization hooks
   onToolGenerated?: (tool: ToolDefinition) => ToolDefinition;
   onValidationError?: (error: ValidationError) => McpError;
-  
+
   // Output options
   outputDir: string;
   generateSdk: boolean;

@@ -1,7 +1,9 @@
 # Quality Gate Audit Report
+
 Generated: 2025-01-09
 
 ## Summary
+
 - **Format**: ✅ PASSING (0 errors)
 - **Type Check**: ❌ FAILING (68 errors - all in test files)
 - **Lint**: ❌ FAILING (157 errors)
@@ -11,14 +13,17 @@ Generated: 2025-01-09
 ## Detailed Analysis
 
 ### 1. Type Check Errors (68 total)
+
 All errors are in test files, primarily:
 
 #### Pattern Test Files
+
 - `src/patterns/handler.test.ts`: Type incompatibilities with Handler generics
 - `src/patterns/registry.test.ts`: Accessing private properties ('items', 'observers', 'predicates')
 - `src/patterns/tool.test.ts`: Unused variables
 
 #### Issues by Category:
+
 1. **Private Property Access** (~40 errors): Tests accessing internal implementation details
 2. **Generic Type Mismatches** (~15 errors): Handler chain type incompatibilities
 3. **Unused Variables** (~13 errors): Test setup variables not used
@@ -26,6 +31,7 @@ All errors are in test files, primarily:
 ### 2. Lint Errors (157 total)
 
 #### Main Categories:
+
 1. **@typescript-eslint/no-explicit-any**: Using 'any' type
 2. **@typescript-eslint/no-unused-vars**: Unused variables in tests
 3. **@typescript-eslint/no-empty-function**: Empty test stub functions
@@ -36,25 +42,30 @@ All errors are in test files, primarily:
 ### 3. Package-Specific Issues
 
 #### ecosystem/moria/moria-mcp
+
 - Type errors: 68 (all in tests)
 - Lint errors: ~150
 - Tests: ✅ Passing
 - Build: ✅ Passing
 
 #### ecosystem/histoi/histos-storage
+
 - Format: Needs checking
 - Tests: ✅ Passing
 - Build: ✅ Passing
 
 #### ecosystem/histoi/histos-env
+
 - Tests: ✅ Passing
 - Build: ✅ Passing
 
 #### ecosystem/histoi/histos-logger
+
 - Tests: ✅ Passing
 - Build: ✅ Passing
 
 #### ecosystem/oak-notion-mcp
+
 - Type/Lint: Needs checking
 - Tests: Needs checking
 - Build: ✅ Passing
