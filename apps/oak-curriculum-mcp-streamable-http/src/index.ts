@@ -15,20 +15,22 @@ export function createApp(): express.Express {
   const { mode, allowedHosts, allowedOrigins } = readSecurityEnv();
   const corsMw = applySecurity(app, mode, allowedHosts, allowedOrigins);
 
-  const { transport, ready, server } = initializeServer();
+  const { transport, ready: serverReady, server } = initializeServer();
   registerHandlers(server);
-  app.use(async (_req, _res, next) => {
-    await ready;
-    next();
-  });
-
+  // Expose resource metadata immediately
   setupOAuthMetadata(app, corsMw);
-  setupLocalAuthorizationServer(app, corsMw).catch((err: unknown) => {
+  // Ensure local AS endpoints are registered before handling requests
+  const asReady = setupLocalAuthorizationServer(app, corsMw).catch((err: unknown) => {
     if (err instanceof Error) {
       console.error('Error setting up local authorization server:', err.message);
     } else {
       console.error('Error setting up local authorization server:', err);
     }
+  });
+  const ready = Promise.all([serverReady, asReady]).then(() => undefined);
+  app.use(async (_req, _res, next) => {
+    await ready;
+    next();
   });
   app.use(bearerAuth);
   app.post('/mcp', createMcpHandler(transport));
