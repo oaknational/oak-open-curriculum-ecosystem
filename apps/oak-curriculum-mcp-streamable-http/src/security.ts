@@ -1,8 +1,27 @@
 import type express from 'express';
 import cors from 'cors';
 
+function compileHostMatchers(allowedHosts: readonly string[]): ((host: string) => boolean)[] {
+  const matchers: ((host: string) => boolean)[] = [];
+  for (const raw of allowedHosts) {
+    const value = raw.trim().toLowerCase();
+    if (!value) continue;
+    if (value.includes('*')) {
+      // Convert simple glob to a safe anchored regex
+      // - Escape dots
+      // - Replace * with character class covering typical hostname chars (including dots)
+      const pattern = '^' + value.replace(/\./g, '\\.').replace(/\*/g, '[a-z0-9.-]*') + '$';
+      const regex = new RegExp(pattern);
+      matchers.push((h: string) => regex.test(h));
+    } else {
+      matchers.push((h: string) => h === value);
+    }
+  }
+  return matchers;
+}
+
 export function dnsRebindingProtection(allowedHosts: readonly string[]): express.RequestHandler {
-  const allowed = new Set(allowedHosts.map((h) => h.toLowerCase()));
+  const matchers = compileHostMatchers(allowedHosts);
   return (req, res, next) => {
     const hostHeader = req.headers.host;
     if (!hostHeader) {
@@ -10,7 +29,8 @@ export function dnsRebindingProtection(allowedHosts: readonly string[]): express
       return;
     }
     const hostname = hostHeader.split(':')[0]?.toLowerCase();
-    if (!allowed.has(hostname)) {
+    const isAllowed = matchers.length === 0 || matchers.some((m) => m(hostname));
+    if (!isAllowed) {
       res.status(403).json({ error: 'Forbidden: host not allowed' });
       return;
     }
