@@ -11,18 +11,21 @@ Scope: strategic overview. Details are in the individual plan documents.
    - Scope: enable Streaming HTTP (not SSE) for MCP servers; guidance for Vercel/Node hosting
    - Acceptance: streaming framing defined and implemented; example Vercel deploy existent and documented and available for demos
 
-3. Curriculum MCP Enhancements Plan — Status: In Progress
+3. Semantic Search Application Plan — Status: Next Up
+   - Scope: lexical+semantic search app
+   - Details: design a Search SDK, and either have it surface MCP tools, or have it surface an OpenAPI definition that can be used to generate MCP tools (possibly in the curriculum SDK)
+   - Acceptance: hybrid lexical+semantic search service exists, and can be accessed via MCP
+   - Plan: `.agent/plans/semantic-search-service-plan.md`
+
+4. Curriculum MCP Enhancements Plan — Status: Planned
    - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md`
    - Acceptance: OAuth 2.1 (AS+RS) production flows implemented and tested (no external calls); CI post‑deploy smoke checks; SDK‑centred typed argument handling; shared server core adopted; docs updated
 
-4. Semantic Search Application Plan — Status: Planned
-   - Scope: lexical+semantic search app; design a Search SDK that also generates search MCP tools
-
-5. SDK Enhancements Plan — Status: In Progress
+5. SDK Enhancements Plan — Status: Planned
    - Plan: `.agent/plans/sdk-enhancements-plan.md`
    - Acceptance: additive typed outputs/helpers; deterministic generation; reduced app boilerplate
 
-6. Serverless Hosting Plan (Cloudflare Workers) — Status: Planned (Deferred)
+6. Serverless Hosting Plan (Cloudflare Workers) — Status: Planned
    - Plan: `.agent/plans/serverless-hosting-plan.md`
    - Acceptance: Workers provider parity via contract tests; Wrangler deploy + docs
 
