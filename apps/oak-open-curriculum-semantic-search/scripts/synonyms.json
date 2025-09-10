@@ -1,0 +1,131 @@
+{
+  "synonyms_set": [
+    {
+      "id": "ks1",
+      "synonyms": "ks1, key stage 1, key-stage 1, key stage one, y1, yr 1, year 1, y2, yr 2, year 2"
+    },
+    {
+      "id": "ks2",
+      "synonyms": "ks2, key stage 2, key-stage 2, key stage two, y3, yr 3, year 3, y4, yr 4, year 4, y5, yr 5, year 5, y6, yr 6, year 6"
+    },
+    {
+      "id": "ks3",
+      "synonyms": "ks3, key stage 3, key-stage 3, key stage three, y7, yr 7, year 7, y8, yr 8, year 8, y9, yr 9, year 9"
+    },
+    {
+      "id": "ks4",
+      "synonyms": "ks4, key stage 4, key-stage 4, key stage four, y10, yr 10, year 10, y11, yr 11, year 11, gcse"
+    },
+
+    { "id": "subject_geography", "synonyms": "geography, geo" },
+    { "id": "subject_history", "synonyms": "history" },
+    { "id": "subject_maths", "synonyms": "maths, mathematics, math" },
+    { "id": "subject_english", "synonyms": "english, literacy, language arts" },
+    { "id": "subject_science", "synonyms": "science, sciences" },
+    { "id": "subject_biology", "synonyms": "biology, life science, life sciences" },
+    { "id": "subject_chemistry", "synonyms": "chemistry, chemical science, chemical sciences" },
+    { "id": "subject_physics", "synonyms": "physics, physical science, physical sciences" },
+    {
+      "id": "subject_computing",
+      "synonyms": "computing, computer science, ict, information technology"
+    },
+    { "id": "subject_art", "synonyms": "art, visual art, fine art" },
+    { "id": "subject_music", "synonyms": "music" },
+    { "id": "subject_dt", "synonyms": "design and technology, design technology, dt, d&t" },
+    { "id": "subject_pe", "synonyms": "pe, physical education, sport, sports" },
+    { "id": "subject_re", "synonyms": "re, religious education" },
+    { "id": "subject_pshe", "synonyms": "pshe, personal social health education" },
+
+    {
+      "id": "theme_climate",
+      "synonyms": "climate, climate change, global warming, greenhouse effect, weather, climate crisis"
+    },
+    {
+      "id": "theme_weather",
+      "synonyms": "weather, meteorology, precipitation, rainfall, temperature"
+    },
+    { "id": "theme_mountains", "synonyms": "mountain, mountains, alpine, highland, upland" },
+    { "id": "theme_rivers", "synonyms": "river, rivers, fluvial, stream, drainage basin" },
+    { "id": "theme_coasts", "synonyms": "coast, coasts, coastal, shoreline" },
+    { "id": "theme_volcanoes", "synonyms": "volcano, volcanoes, volcanic" },
+    { "id": "theme_earthquakes", "synonyms": "earthquake, earthquakes, seismic, seismology" },
+    { "id": "theme_glaciation", "synonyms": "glacier, glaciers, glaciation, ice sheet, ice age" },
+    {
+      "id": "theme_ecosystems",
+      "synonyms": "ecosystem, ecosystems, biome, biomes, habitat, habitats"
+    },
+    { "id": "theme_population", "synonyms": "population, demography, demographic" },
+    {
+      "id": "theme_settlement",
+      "synonyms": "settlement, settlements, urbanisation, urbanization, city, cities, town, towns"
+    },
+    { "id": "theme_industry", "synonyms": "industry, industrial, manufacturing, factories" },
+    { "id": "theme_trade", "synonyms": "trade, trading, commerce, economy, economic" },
+    {
+      "id": "theme_sustainability",
+      "synonyms": "sustainability, sustainable development, environment, environmental"
+    },
+
+    {
+      "id": "history_ww1",
+      "synonyms": "world war 1, world war i, ww1, first world war, great war"
+    },
+    { "id": "history_ww2", "synonyms": "world war 2, world war ii, ww2, second world war" },
+    {
+      "id": "history_industrial_revolution",
+      "synonyms": "industrial revolution, victorian industry, mechanisation, mechanization"
+    },
+    { "id": "history_tudors", "synonyms": "tudor, tudors" },
+    { "id": "history_victorians", "synonyms": "victorian, victorians" },
+    { "id": "history_cold_war", "synonyms": "cold war, superpower rivalry" },
+    { "id": "history_empire", "synonyms": "british empire, empire, imperial" },
+
+    { "id": "maths_addition", "synonyms": "addition, add, plus, sum" },
+    { "id": "maths_subtraction", "synonyms": "subtraction, subtract, minus, take away" },
+    { "id": "maths_multiplication", "synonyms": "multiplication, multiply, times, product" },
+    { "id": "maths_division", "synonyms": "division, divide, quotient" },
+    {
+      "id": "maths_fractions",
+      "synonyms": "fraction, fractions, rational number, rational numbers"
+    },
+    {
+      "id": "maths_algebra",
+      "synonyms": "algebra, equation, equations, expression, expressions, variable, variables"
+    },
+    { "id": "maths_geometry", "synonyms": "geometry, geometric, angle, angles, polygon, polygons" },
+    { "id": "maths_statistics", "synonyms": "statistics, data handling, data analysis" },
+
+    { "id": "english_grammar", "synonyms": "grammar, syntax" },
+    {
+      "id": "english_punctuation",
+      "synonyms": "punctuation, commas, apostrophes, full stops, periods"
+    },
+    { "id": "english_spelling", "synonyms": "spelling, spellings" },
+    { "id": "english_poetry", "synonyms": "poetry, poem, poems" },
+    {
+      "id": "english_literary_devices",
+      "synonyms": "figurative language, metaphor, simile, personification"
+    },
+    { "id": "english_shakespeare", "synonyms": "shakespeare, william shakespeare" },
+
+    { "id": "science_photosynthesis", "synonyms": "photosynthesis, chlorophyll, chloroplast" },
+    {
+      "id": "science_respiration",
+      "synonyms": "respiration, aerobic respiration, anaerobic respiration"
+    },
+    { "id": "science_states_of_matter", "synonyms": "states of matter, solid, liquid, gas" },
+    {
+      "id": "science_forces",
+      "synonyms": "force, forces, newton, newtons, gravity, gravitational"
+    },
+    {
+      "id": "science_energy",
+      "synonyms": "energy, kinetic energy, potential energy, conservation of energy"
+    },
+    { "id": "science_cells", "synonyms": "cell, cells, cell theory, cell biology" },
+    { "id": "science_evolution", "synonyms": "evolution, natural selection, adaptation" },
+    { "id": "science_rocks", "synonyms": "rock cycle, igneous, sedimentary, metamorphic" },
+
+    { "id": "generic_assessment", "synonyms": "assessment, quiz, test, exam" }
+  ]
+}

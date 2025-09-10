@@ -1,0 +1,49 @@
+import { z } from 'zod';
+import { env } from '@lib/env';
+import { generateObject } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
+import { isKeyStage, isSubject } from '@adapters/sdk-guards';
+
+/** Structured output schema for parsed teacher queries. */
+export const ParsedQuerySchema = z.object({
+  intent: z.enum(['units', 'lessons']).describe('Whether the user wants units or lessons.'),
+  text: z.string().describe('Topical text suitable for semantic search.').default(''),
+  subject: z.string().optional(),
+  keyStage: z.string().optional(),
+  minLessons: z.number().int().min(0).optional(),
+});
+
+export type ParsedQueryRaw = z.infer<typeof ParsedQuerySchema>;
+export type ParsedQuery = {
+  intent: 'units' | 'lessons';
+  text: string;
+  subject?: string;
+  keyStage?: string;
+  minLessons?: number;
+};
+
+export async function parseQuery(q: string): Promise<ParsedQuery> {
+  const e = env();
+  const openai = createOpenAI({ apiKey: e.OPENAI_API_KEY });
+  const { object } = await generateObject({
+    model: openai('gpt-4o-mini'),
+    temperature: 0,
+    prompt: [
+      'You convert teacher queries into parameters for a curriculum search engine.',
+      'Return intent=lessons|units, optional subject and keyStage (ks1-ks4), optional minLessons, and the topical text for search.',
+      "Be conservative with subject/keyStage unless strongly implied. For phrases like 'KS4 geography', set both.",
+    ].join('\n'),
+    schema: ParsedQuerySchema,
+    input: q,
+  });
+
+  // Validate subject/keyStage with SDK guards; drop invalid values.
+  const clean: ParsedQuery = {
+    intent: object.intent,
+    text: object.text,
+    subject: object.subject && isSubject(object.subject) ? object.subject : undefined,
+    keyStage: object.keyStage && isKeyStage(object.keyStage) ? object.keyStage : undefined,
+    minLessons: object.minLessons,
+  };
+  return clean;
+}

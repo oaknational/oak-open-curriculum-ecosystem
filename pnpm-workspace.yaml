@@ -2,6 +2,7 @@ packages:
   - apps/oak-notion-mcp
   - apps/oak-curriculum-mcp-stdio
   - apps/oak-curriculum-mcp-streamable-http
+  - apps/oak-open-curriculum-semantic-search
   - packages/libs/env
   - packages/libs/logger
   - packages/libs/storage
@@ -12,4 +13,5 @@ packages:
 
 onlyBuiltDependencies:
   - esbuild
+  - sharp
   - unrs-resolver
