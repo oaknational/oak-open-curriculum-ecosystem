@@ -1,7 +1,7 @@
 import express from 'express';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { readEnv, parseCsv } from './env.js';
+import { parseCsv } from './env.js';
 import { exportJWK, generateKeyPair } from 'jose';
 import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
@@ -41,10 +41,9 @@ function readSecurityEnv(): {
   allowedHosts: readonly string[];
   allowedOrigins: readonly string[] | undefined;
 } {
-  const env = readEnv();
-  const mode = (env.REMOTE_MCP_MODE ?? 'stateless') === 'session' ? 'session' : 'stateless';
-  const allowedHosts = parseCsv(env.ALLOWED_HOSTS) ?? ['localhost', '127.0.0.1', '::1'];
-  const allowedOrigins = parseCsv(env.ALLOWED_ORIGINS);
+  const mode = (process.env.REMOTE_MCP_MODE ?? 'stateless') === 'session' ? 'session' : 'stateless';
+  const allowedHosts = parseCsv(process.env.ALLOWED_HOSTS) ?? ['localhost', '127.0.0.1', '::1'];
+  const allowedOrigins = parseCsv(process.env.ALLOWED_ORIGINS);
   return { mode, allowedHosts, allowedOrigins };
 }
 
@@ -77,12 +76,11 @@ function initializeServer(): {
 function setupOAuthMetadata(app: express.Express, corsMw: express.RequestHandler): void {
   app.options('/.well-known/oauth-protected-resource', corsMw);
   app.get('/.well-known/oauth-protected-resource', (_req, res) => {
-    const env = readEnv();
-    const envCanonicalUri = env.MCP_CANONICAL_URI;
+    const envCanonicalUri = process.env.MCP_CANONICAL_URI;
     const defaultCanonicalUri = 'http://localhost/mcp';
     res.json({
       resource: envCanonicalUri ?? defaultCanonicalUri,
-      authorization_servers: env.BASE_URL ? [env.BASE_URL] : [],
+      authorization_servers: process.env.BASE_URL ? [process.env.BASE_URL] : [],
       bearer_methods_supported: ['header'],
       scopes_supported: ['mcp:invoke', 'mcp:read'],
     });
@@ -93,8 +91,7 @@ async function setupLocalAuthorizationServer(
   app: express.Express,
   corsMw: express.RequestHandler,
 ): Promise<void> {
-  const env = readEnv();
-  if (env.ENABLE_LOCAL_AS !== 'true') return;
+  if (process.env.ENABLE_LOCAL_AS !== 'true') return;
 
   let publicJwk: unknown;
   if (!process.env.LOCAL_AS_JWK) {
@@ -110,7 +107,7 @@ async function setupLocalAuthorizationServer(
 
   app.options('/.well-known/openid-configuration', corsMw);
   app.get('/.well-known/openid-configuration', (_req, res) => {
-    const base = env.BASE_URL ?? 'http://localhost:3333';
+    const base = process.env.BASE_URL ?? 'http://localhost:3333';
     res.json({
       issuer: base,
       authorization_endpoint: `${base}/oauth/authorize`,
