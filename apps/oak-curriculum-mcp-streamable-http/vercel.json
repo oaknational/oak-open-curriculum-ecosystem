@@ -1,9 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "express",
-  "rewrites": [
-    { "source": "/", "destination": "/api/server" },
-    { "source": "/mcp", "destination": "/api/server" },
-    { "source": "/.well-known/:path*", "destination": "/api/server" }
-  ]
+  "rewrites": []
 }

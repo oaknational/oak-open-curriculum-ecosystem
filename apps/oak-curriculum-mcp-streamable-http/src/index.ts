@@ -168,3 +168,6 @@ export async function startDevServer(): Promise<void> {
 
   console.log(`Streaming HTTP MCP listening on http://localhost:${String(port)}`);
 }
+
+// Default export for Vercel Express runtime
+export default createApp();

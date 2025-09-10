@@ -38,6 +38,8 @@ function toolNamesFromResult(value: unknown): string[] {
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   it('returns 401 when missing Authorization', async () => {
+    // ensure no leaked no-auth setting from other tests
+    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
     delete process.env.BASE_URL;
     delete process.env.MCP_CANONICAL_URI;
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
