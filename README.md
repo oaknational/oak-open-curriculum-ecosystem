@@ -4,18 +4,15 @@ A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org)
 
 - Notion (read-only access)
 - Oak Open Curriculum API (read-only access)
-
-> 🗺️ **First time here?** Check our [Architecture Map](docs/ARCHITECTURE_MAP.md) for a visual guide to the codebase!
+  sual guide to the codebase!
 
 ## 🧭 Architecture
 
-This monorepo uses a conventional, intent-revealing structure:
+This monorepo uses a standard pnpm + Turborepo layout:
 
 - `apps/` – runnable applications (MCP servers)
 - `packages/core/` – shared interfaces, types, and utilities (`@oaknational/mcp-core`)
 - `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
-
-Legacy Greek terminology has been deprecated from active code and docs. For historical context only, see `docs/architecture/greek-ecosystem-deprecation.md`.
 
 ### Architectural Decision Records (ADRs)
 
@@ -37,14 +34,21 @@ Key architectural decisions are documented as ADRs. [View all ADRs →](docs/arc
 - Node.js >= 22.0.0
 - A [Notion integration](https://www.notion.so/my-integrations) with read access to your workspace
 
-### For End Users
+### Oak Curriculum MCP Server Config Example
 
-```bash
-# Install globally
-npm install -g oak-notion-mcp
+For now, we are using simple bearer token authentication. Later we will use OAuth.
 
-# Or in your project
-npm add -D oak-notion-mcp
+```json
+{
+  "mcpServers": {
+    "oak-curriculum-alpha": {
+      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp",
+      "headers": {
+        "Authorization": "Bearer ${SECRET_TOKEN}"
+      }
+    }
+  }
+}
 ```
 
 ### Configure Claude Desktop (Notion example)

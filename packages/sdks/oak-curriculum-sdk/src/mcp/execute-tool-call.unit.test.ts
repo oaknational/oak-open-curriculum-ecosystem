@@ -156,4 +156,65 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       expect(result.error?.message).toContain('API error');
     });
   });
+
+  describe('argument mapping (string and JSON string inputs)', () => {
+    it('maps a plain string to the single required query param (q) for oak-get-search-lessons', async () => {
+      const getSpy = vi.fn().mockImplementation((p: unknown) => {
+        const params = (p as { params?: { query?: Record<string, unknown> } }).params;
+        expect(params?.query?.q).toBe('frogs');
+        return { data: [] };
+      });
+      const mockClient = {
+        '/search/lessons': {
+          GET: getSpy,
+        },
+      } as unknown as OakApiPathBasedClient;
+
+      const result = await executeToolCall('oak-get-search-lessons', 'frogs', mockClient);
+
+      expect(result).toHaveProperty('data');
+      expect(getSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('parses a JSON string into structured arguments for oak-get-search-lessons', async () => {
+      const getSpy = vi.fn().mockImplementation((p: unknown) => {
+        const params = (p as { params?: { query?: Record<string, unknown> } }).params;
+        expect(params?.query?.q).toBe('frogs');
+        return { data: [] };
+      });
+      const mockClient = {
+        '/search/lessons': {
+          GET: getSpy,
+        },
+      } as unknown as OakApiPathBasedClient;
+
+      const json = JSON.stringify({ q: 'frogs' });
+      const result = await executeToolCall('oak-get-search-lessons', json, mockClient);
+
+      expect(result).toHaveProperty('data');
+      expect(getSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('maps a plain string to the single required path param for oak-get-lessons-summary', async () => {
+      const getSpy = vi.fn().mockImplementation((p: unknown) => {
+        const params = (p as { params?: { path?: Record<string, unknown> } }).params;
+        expect(params?.path?.lesson).toBe('some-lesson-slug');
+        return { data: { slug: 'some-lesson-slug' } };
+      });
+      const mockClient = {
+        '/lessons/{lesson}/summary': {
+          GET: getSpy,
+        },
+      } as unknown as OakApiPathBasedClient;
+
+      const result = await executeToolCall(
+        'oak-get-lessons-summary',
+        'some-lesson-slug',
+        mockClient,
+      );
+
+      expect(result).toHaveProperty('data');
+      expect(getSpy).toHaveBeenCalledTimes(1);
+    });
+  });
 });

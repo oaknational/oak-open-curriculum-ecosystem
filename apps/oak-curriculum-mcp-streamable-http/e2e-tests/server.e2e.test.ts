@@ -42,10 +42,14 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
     delete process.env.BASE_URL;
     delete process.env.MCP_CANONICAL_URI;
+    // ensure host filtering doesn't mask auth behaviour
+    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
+    delete process.env.ALLOWED_ORIGINS;
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
+      .set('Host', 'localhost')
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(401);

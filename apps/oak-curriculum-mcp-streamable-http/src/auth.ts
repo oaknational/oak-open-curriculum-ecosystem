@@ -2,6 +2,7 @@ import type { RequestHandler, Response } from 'express';
 import { jwtVerify, importJWK, type JWK } from 'jose';
 import { readEnv } from './env.js';
 
+/** @todo this allows using different auth for local dev, come up with a better solution */
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.VERCEL;
 
 function unauthorized(
@@ -20,8 +21,14 @@ function unauthorized(
     const env = readEnv();
     resource = env.MCP_CANONICAL_URI ?? resource;
     if (env.BASE_URL) authorizationUri = `${env.BASE_URL}/.well-known/oauth-protected-resource`;
-  } catch {
+  } catch (err: unknown) {
     // Fall back to defaults if env is not fully configured
+    if (err instanceof Error) {
+      console.warn('Error reading env:', err.message);
+    } else {
+      console.warn('Error reading env:', err);
+    }
+    console.warn('Returning fallback resource and authorization URI');
   }
 
   const parts = [
