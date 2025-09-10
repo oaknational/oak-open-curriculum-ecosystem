@@ -54,24 +54,24 @@ These documents must be read.
 - [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) - TDD/BDD approach
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
-- [Architecture](../../docs/agent-guidance/architecture.md) - Quick patterns
+- [Architecture](../../docs/architecture/README.md) - Architecture overview
 
 ## Development Commands
 
 ```bash
 pnpm install        # Setup
-pnpm format         # 1. Format (not check) code
-pnpm type-check     # 2. Check types
-pnpm lint           # 3. Lint
-pnpm test           # 4. Test
-pnpm build          # 5. Build
+pnpm format         # Format code
+pnpm build          # Build
+pnpm lint           # Lint
+pnpm test           # Test
+pnpm test:e2e       # E2E test
+pnpm type-check     # Type check
+pnpm type-gen       # Type generation
 ```
-
-Run quality gates 1-5 in order after changes and before commits. Pure documentation work only requires formatting.
 
 ## Architectural Understanding
 
-First, understand the current neutral architecture in this monorepo.
+This pnpm + Turborepo monorepo is organised along standard lines:
 
 ### Structure
 
@@ -79,12 +79,10 @@ First, understand the current neutral architecture in this monorepo.
 - `packages/core/` – shared interfaces, types, utilities (`@oaknational/mcp-core`)
 - `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
-Legacy Greek terminology is deprecated in active code and docs. Historical context is kept only in `docs/architecture/greek-ecosystem-deprecation.md`.
-
 ## Remember
 
-1. Read GO.md every 3rd task for grounding
+1. Read GO.md every 3rd or 4th task for grounding
 2. When in doubt, make it simpler
 3. Think in layers: functions → modules → packages (`core`, `libs`, `apps`)
-4. You can call on the sub-agents at any time, the code reviewer and architecture reviewer, and the monorepo config auditor.
-5. When you finish a major piece of work, record your experiences and insights in docs/archive/experience/ (historical notes only)
+4. Claude instances can call on the sub-agents at any time, other agents should instead step back and take the time to reflect if the current approach is the simplest and best way to achieve the goal.
+5. When you finish a major piece of work, record your subjective experiences and insights in docs/archive/experience/ . Technical information is handled elsewhere, this is for subjective experience.

@@ -1,10 +1,14 @@
 # Remote MCP Continuation Prompt
 
+Read `GO.md` and follow ALL instructions before starting. Replace any sub‑agent
+reviews with your own concise reflections on whether the current direction is
+the most useful one. Keep todos small, actionable, and measurable.
+
 Purpose: Provide a stable, minimal context to continue work on the Remote MCP Enablement plan in a fresh chat/session.
 
 ## Grounding
 
-1. Read `GO.md` and follow ALL instructions. Replace any sub-agent reviews with concise self-reviews of the code and docs.
+1. Read `GO.md` and follow ALL instructions. Replace any sub-agent reviews with concise reflections on direction usefulness and alternatives.
 2. Read `.agent/plans/remote-mcp-enablement-plan.md` and use it as the authoritative plan. Keep this continuation prompt and the plan in sync.
 
 ## Current Intent
@@ -28,6 +32,13 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 - All quality gates green (type-check, lint, unit, e2e, build).
 - All quality gates green (type-check, lint, unit, e2e, build). Production deploy on Vercel runs Node LAMBDAS with the Express framework; default export of the Express app is in `apps/oak-curriculum-mcp-streamable-http/src/index.ts`.
 
+Reflection: STDIO works because it passes compile‑time typed argument objects
+into executors. Some HTTP clients send `arguments` as a string (plain/JSON),
+which our strict typed executors rejected—hence remote failures with local
+success. The fix belongs at the HTTP boundary: a typed parameter builder that
+accepts exact typed objects and optionally parses JSON strings to those types,
+failing fast otherwise.
+
 ### Recent fixes and operational learnings
 
 - Vercel runtime contract: added default export of Express app to satisfy Express framework; removed monorepo root `api/server.ts` and rewrites.
@@ -37,7 +48,7 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 
 ## Next Actions (short)
 
-1. MANDATORY: implement production OAuth 2.1 (Authorization Code + PKCE for UI; Device Authorization Grant for MCP/CLI). Restrict Google logins to `*.thenational.academy`; AS issues RFC 9068 JWTs (iss=`BASE_URL`, aud=`MCP_CANONICAL_URI`).
+1. Type‑safe parameter builder at HTTP boundary. Accept exact typed objects; optionally parse JSON strings; fail fast otherwise. Remove dynamic/unknown types.
 2. Documentation: keep `apps/oak-curriculum-mcp-streamable-http/README.md` aligned (Express framework, default export, troubleshooting, OAuth tokens usage).
 3. CI: add a post-deploy Vercel smoke check (GET `/` and `/.well-known/oauth-protected-resource`).
 4. Optional: add E2E tool success path using the real API (`E2E_REAL_API=true` + `OAK_API_KEY`) and explicit error path assertion.

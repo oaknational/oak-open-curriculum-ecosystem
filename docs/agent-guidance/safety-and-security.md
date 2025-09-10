@@ -2,12 +2,12 @@
 
 ## Overview
 
-The Oak Notion MCP Server is designed with security and privacy as core principles. This document outlines the security measures, safety controls, and privacy protections implemented throughout the system.
+The Oak MCP Servers are designed with security and privacy as core principles. This document outlines the security measures, safety controls, and privacy protections implemented throughout the system.
 
 ## Core Security Principles
 
 1. **Principle of Least Privilege**: Read-only access by default
-2. **Defense in Depth**: Multiple layers of security controls
+2. **Defence in Depth**: Multiple layers of security controls
 3. **Privacy by Design**: Automatic PII protection
 4. **Fail Secure**: Safe defaults when errors occur
 5. **No Trust Assumptions**: Validate all inputs
@@ -71,20 +71,7 @@ export function scrubEmail(email: string): string {
   - Delete any data
   - Modify permissions
 
-### Future Write Operations (Phase 3+)
-
-When write operations are implemented, they will require:
-
-1. **Explicit User Confirmation**: Every write operation must be confirmed
-2. **Preview Before Execute**: Users see exactly what will be changed
-3. **Audit Trail**: All operations logged with user, timestamp, and details
-4. **Rollback Tracking**: Ability to undo operations
-
-## Input Validation
-
-### Zod Schema Validation
-
-All external inputs are validated using strict Zod schemas:
+All external inputs are validated using strict Zod schemas where appropriate:
 
 - **Request Parameters**: Validated before processing
 - **Environment Variables**: Validated on startup
@@ -136,14 +123,6 @@ Errors are classified and handled appropriately:
 - No option to disable SSL/TLS
 - Certificate validation enabled
 
-### Rate Limiting (Future)
-
-Phase 2.5 will add:
-
-- Client-side rate limiting
-- Exponential backoff
-- Respect for Notion API limits
-
 ## Secure Development Practices
 
 ### Type Safety
@@ -189,15 +168,6 @@ Phase 2.5 will add:
 - No tracking or analytics
 - User data not stored
 
-### Audit Trail (Future)
-
-Phase 3 will add:
-
-- Operation logging
-- User attribution
-- Timestamp tracking
-- Immutable audit log
-
 ## Security Incident Response
 
 ### Vulnerability Reporting
@@ -223,25 +193,3 @@ Before committing code:
 - [ ] No use of `any` or type assertions
 - [ ] Security implications documented
 - [ ] Tests cover security edge cases
-
-## Future Security Enhancements
-
-### Phase 2.5
-
-- Rate limiting implementation
-- Enhanced error classification
-- Performance monitoring without data collection
-
-### Phase 3
-
-- Write operation confirmations
-- Audit trail implementation
-- Rollback capabilities
-- OAuth support for user-level access
-
-### Phase 4
-
-- End-to-end encryption options
-- Advanced permission models
-- Multi-tenant isolation
-- Security compliance certifications

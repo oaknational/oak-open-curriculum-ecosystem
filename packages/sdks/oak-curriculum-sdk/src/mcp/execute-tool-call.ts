@@ -68,6 +68,58 @@ function buildGenericRequestParams(
   tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS],
   args: unknown,
 ): { params: { path?: Record<string, unknown>; query?: Record<string, unknown> } } {
+  // Local helper: narrow to a plain object record
+  function isRecord(value: unknown): value is Record<string, unknown> {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+  }
+
+  // Helper: derive required path/query parameter names from generated meta
+  interface ParamMeta {
+    required?: boolean;
+  }
+  function getRequiredParamNames(meta: Record<string, ParamMeta>): readonly string[] {
+    const out: string[] = [];
+    for (const name of typeSafeKeys(meta)) {
+      if (meta[name].required === true) out.push(name);
+    }
+    return out;
+  }
+
+  // Helper: safe JSON parse to a record
+  function tryParseJsonObject(input: string): Record<string, unknown> | undefined {
+    try {
+      const parsed: unknown = JSON.parse(input);
+      if (isRecord(parsed)) return parsed;
+    } catch {
+      // ignore
+    }
+    return undefined;
+  }
+
+  // Helper: normalize string arguments
+  function normalizeStringArgs(value: string): Record<string, unknown> | undefined {
+    const trimmed = value.trim();
+    const parsedObj = tryParseJsonObject(trimmed);
+    if (parsedObj) return parsedObj;
+
+    // Narrow with an intermediate local binding to satisfy lint rule without assertions
+    const requiredPath = getRequiredParamNames(tool.pathParams);
+    const requiredQuery = getRequiredParamNames(tool.queryParams);
+
+    // Map plain string to a single required parameter when unambiguous
+    if (requiredPath.length === 1 && requiredQuery.length === 0) {
+      const out: Record<string, unknown> = {};
+      out[requiredPath[0]] = trimmed;
+      return out;
+    }
+    if (requiredQuery.length === 1 && requiredPath.length === 0) {
+      const out: Record<string, unknown> = {};
+      out[requiredQuery[0]] = trimmed;
+      return out;
+    }
+    return undefined;
+  }
+
   const hasPathParams = typeSafeKeys(tool.pathParams).length > 0;
   const hasQueryParams = typeSafeKeys(tool.queryParams).length > 0;
 
@@ -78,7 +130,15 @@ function buildGenericRequestParams(
 
   const params: { path?: Record<string, unknown>; query?: Record<string, unknown> } = {};
 
-  if (!args || typeof args !== 'object' || Array.isArray(args)) {
+  // Normalize string arguments (supports JSON string and single param mapping)
+  if (typeof args === 'string') {
+    const normalized = normalizeStringArgs(args);
+    if (normalized) {
+      args = normalized;
+    }
+  }
+
+  if (!isRecord(args)) {
     // If no args provided, return empty params structure
     if (hasPathParams) {
       params.path = {};

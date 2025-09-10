@@ -29,11 +29,10 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
   - 401 responses now include RFC-compliant `WWW-Authenticate` header with `resource` and `authorization_uri` discovery hints per OAuth Protected Resource metadata.
   - Test network policy: unit/integration tests block network; e2e tests for SDKs and MCP servers MAY allow network where required. HTTP app e2e do not load the unit test network-blocking setup.
 - Access control in place and documented:
-  - Remote (Vercel preview/production): require OAuth 2.1 (Authorization Code + PKCE, and Device Authorization Grant for headless clients). POST /mcp requires `Authorization: Bearer <access_token>`. This is MANDATORY and the next implementation step.
-  - Local development (localhost): permit no‑auth only when `REMOTE_MCP_ALLOW_NO_AUTH=true`; dev token allowed locally when present.
-  - CI/CD: remove CI-only static token path to avoid expanding the credential surface; prefer OAuth path or local dev token strictly in local workflows.
+  - Production/preview (Vercel): OAuth 2.1 (Authorization Code + PKCE; Device Authorization Grant for headless clients) is required policy. Implementation tracked in Backlog; remote endpoints must refuse dev tokens in Vercel.
+  - Local (localhost): permit no‑auth only when `REMOTE_MCP_ALLOW_NO_AUTH=true`; allow `REMOTE_MCP_DEV_TOKEN` strictly for local workflows.
+  - CI/CD: avoid additional static tokens; prefer OAuth or local dev token only in local workflows.
   - Unauthorized requests return 401 and include MCP authorization hints in the JSON‑RPC error payload (per MCP Basic Authorization spec).
-  - Dev token is ignored in any Vercel environment; it is local‑only. Optional: Vercel authentication in front of the function for team‑only access, with trade‑offs noted.
 - ListTools parity: `list_tools` from the remote endpoint exactly matches the generated tools exported by the Curriculum SDK (source of truth), and a test asserts equality.
 - OAuth 2.0 Protected Resource Metadata endpoint available at `/.well-known/oauth-protected-resource` and returns the canonical resource URI and the authorization server(s); OPTIONS preflight handled for CORS.
 - Access tokens are short‑lived JWTs (RFC 9068) minted by our Authorization Server (AS), audience‑bound to the MCP canonical resource URI; the Resource Server (RS) validates `iss`, `aud`, `exp/iat` and signature with JWKS.
@@ -119,11 +118,48 @@ Scope: enable Streamable HTTP for MCP servers using the official SDK transport, 
 - SSE parsing in e2e was brittle. Resolved by parsing the first `data:` line as
   JSON instead of substring matching.
 
+### Root‑cause note: STDIO vs Streamable HTTP argument shapes
+
+- STDIO flows pass compile‑time typed argument objects, so executors validate cleanly.
+- Some Streamable HTTP clients may send `arguments` as a string (plain/JSON). Our strict executor expected typed objects and rejected these, so remote failed while STDIO worked.
+- Direction: keep strict typing. Introduce a typed parameter builder at the HTTP boundary that accepts exact typed objects and optionally parses JSON strings to those types. Fail fast otherwise. Remove `unknown`/`Record<string, unknown>` from hot paths.
+
+## Non‑negotiables
+
+- Stateless path by default; session mode optional and documented.
+- Unit/integration tests stay offline; HTTP E2E may call the real Curriculum API (guarded and opt‑in).
+- Use `OAK_API_KEY` for the curriculum client; do not introduce parallel keys.
+- Centralise environment reads; avoid hidden lookups inside handlers.
+- TypeScript practice (strict):
+  - Unknown only at external boundaries (HTTP, process.env, file/IO). Immediately validate with generated Zod schemas and/or type guards from the OpenAPI‑derived types.
+  - After validation, keep precise types throughout. Do not use `as`, `any`, `unknown`, or `Object.*`/`Reflect.*`. Where unavoidable, prefer typed helpers from `src/types/helpers.ts`.
+  - The HTTP boundary’s typed parameter builder must return fully typed executor inputs without assertions; accept exact typed objects and optionally parse JSON strings into those exact types; fail fast otherwise.
+
+## Environment Contract (dev + tests)
+
+- `OAK_API_KEY` – curriculum API key (same as local app)
+- `REMOTE_MCP_MODE` – `stateless` | `session` (default `stateless`)
+- `REMOTE_MCP_ALLOW_NO_AUTH` – `true|false` (default `false`) enables no‑auth only on localhost
+- `REMOTE_MCP_DEV_TOKEN` – dev token for local usage; ignored on Vercel
+- `REMOTE_MCP_CI_TOKEN` – CI token honoured only when `CI === 'true'`
+- `ALLOWED_HOSTS`, `ALLOWED_ORIGINS` – comma‑separated lists for DNS‑rebinding protection and CORS
+- `LOG_LEVEL` – `debug|info|warn|error` (default `info`)
+- Hosting flags honoured: `VERCEL`, `VERCEL_ENV` (preview|production), `CI`
+- AS/RS (auth) variables:
+  - `BASE_URL` – public base URL of the deployment (e.g. Vercel URL)
+  - `MCP_CANONICAL_URI` – canonical resource URI (e.g. `${BASE_URL}/mcp`)
+  - `OIDC_ISSUER` – Google issuer (`https://accounts.google.com`)
+  - `OIDC_CLIENT_ID` – Google OAuth client id
+  - `OIDC_REDIRECT_URI` – `${BASE_URL}/oauth/callback`
+  - `ALLOWED_DOMAIN` – `thenational.academy`
+  - `SESSION_SECRET` – cookie/session secret for AS
+  - Dev toggle: `ENABLE_LOCAL_AS` (`true|false`) to run a minimal co‑hosted AS for local demos/tests
+
 ## Gaps remaining to fully meet acceptance
 
+- Type‑safe parameter construction at HTTP boundary: Provide a compile‑time typed arg builder (no `unknown`, no `Record<string, unknown>`, no `as`) that accepts the exact generated types and optionally parses JSON strings when passed by clients. Remove dynamic reflection; fail fast with helpful errors. Add unit tests first (red), then implement and refactor.
 - Optional E2E: add real‑API tool success path (with `OAK_API_KEY`) and explicit
   error assertions (guarded by `E2E_REAL_API=true`).
-- Access control (MANDATORY next step): production‑grade OAuth 2.1 Authorization Code + PKCE flow for end users and Device Authorization Grant for headless/MCP clients. Current co‑hosted AS is demo‑only. Implement a proper login/consent flow, token minting and refresh, and align RS validation to the production AS JWKS.
 - Add one Vercel smoke test in CI post‑deploy (fetch health and metadata) to
   quickly detect routing/runtime regressions.
 - Documentation: ensure the app README troubleshooting matches the Express

@@ -32,11 +32,14 @@ describe('Success path (stubbed executeToolCall)', () => {
     // Ensure optional URL envs do not break validation in tests
     delete process.env.BASE_URL;
     delete process.env.MCP_CANONICAL_URI;
+    // Ensure host filtering does not interfere with auth path
+    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
+      .set('Host', 'localhost')
       .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
