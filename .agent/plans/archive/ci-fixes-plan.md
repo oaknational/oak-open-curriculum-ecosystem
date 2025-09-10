@@ -14,7 +14,7 @@ Primary cause: In CI, ESLint’s type-aware analysis is running against a TypeSc
 
 ## Proposed fix (monorepo‑friendly, no build dependency)
 
-1) Force ESLint’s TypeScript parser to use the root lint project by disabling the project service for linted source files in each package config, alongside the already‑set `project` and `tsconfigRootDir`.
+1. Force ESLint’s TypeScript parser to use the root lint project by disabling the project service for linted source files in each package config, alongside the already‑set `project` and `tsconfigRootDir`.
 
 - Keep:
   - `languageOptions.parserOptions.project = <repo>/tsconfig.lint.root.json`
@@ -24,7 +24,7 @@ Primary cause: In CI, ESLint’s type-aware analysis is running against a TypeSc
 
 This ensures ESLint builds a single TS program from the root lint tsconfig for all workspaces, so cross‑package types are available in CI without requiring `dist/`.
 
-2) Add safeguard (consistent with “use source in dev/runtime”): ensure each internal package’s `exports` includes a `development` condition pointing to `./src/index.ts`. We already added `compilerOptions.customConditions: ["development"]` in the root `tsconfig.base.json`. This helps any resolver that prefers package `exports` conditions to pick up source types.
+2. Add safeguard (consistent with “use source in dev/runtime”): ensure each internal package’s `exports` includes a `development` condition pointing to `./src/index.ts`. We already added `compilerOptions.customConditions: ["development"]` in the root `tsconfig.base.json`. This helps any resolver that prefers package `exports` conditions to pick up source types.
 
 Done:
 
@@ -66,6 +66,7 @@ Done:
 Problem: GitHub CI has restricted network; the SDK’s typegen fetched the OpenAPI schema over network during `prebuild`, causing build failures.
 
 Solution:
+
 - Update `packages/oak-curriculum-sdk/scripts/typegen.ts` to support an explicit CI/offline mode that reads the committed cached schema and never touches the network.
 - Mode detection: `--ci` CLI flag OR `SDK_TYPEGEN_MODE=ci` OR `CI=true` environment variable triggers offline mode.
 - Behaviour:
@@ -73,9 +74,11 @@ Solution:
   - Online (dev/prod): fetch fresh schema using `OAK_API_KEY` and proceed.
 
 Done:
+
 - ACTION: Implement offline mode in `typegen.ts` with strict local-only behaviour in CI — COMPLETED
 
 Usage:
+
 - Dev (online): `pnpm -F @oaknational/oak-curriculum-sdk type-gen`
 - CI (offline): no changes required; `CI=true` is set and script uses cached schema automatically. For explicit invocation: `pnpm -F @oaknational/oak-curriculum-sdk type-gen -- --ci`.
 - REVIEW: architecture-reviewer to ensure export conditions align with monorepo strategy and don’t impact publishing

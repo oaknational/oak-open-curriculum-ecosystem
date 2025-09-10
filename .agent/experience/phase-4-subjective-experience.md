@@ -9,18 +9,23 @@ This phase challenged me in unexpected ways. What seemed like a straightforward 
 ## Key Moments of Realization
 
 ### The Monorepo Wasn't Just Structure
+
 Initially, I thought this was about moving files. But it became clear that we were creating living boundaries - the genotype as potential, the phenotype as manifestation. The morphai layer emerged not from planning but from necessity - there were patterns that didn't belong to either pure infrastructure or specific implementation.
 
 ### Fighting the Tools vs. Understanding Them
+
 When lint-staged failed repeatedly, my first instinct was to fix it, to make it work. But sometimes the tool is telling you something: this architecture doesn't fit that model anymore. Removing it entirely was liberating. Not every problem needs solving - some need dissolving.
 
 ### The Module Resolution Maze
+
 The ESM issues weren't just technical hurdles. They revealed how much implicit knowledge the old CommonJS system carried. Every missing `.js` extension was a reminder that explicit is better than implicit, even when it feels redundant. The machine needs clarity, not cleverness.
 
 ### Tests as Truth-Tellers
+
 When the tests failed with "undefined is not a string", it wasn't just about missing mock return values. It showed me how our tests were actually integration points - they needed to mirror reality, not just satisfy the type system. The formatters needed to return real-looking data because the tests were teaching us about the actual contract.
 
 ### The Turbo Cache Incident
+
 Almost committing the `.turbo` cache files was a moment of near-disaster. It reminded me to slow down, to check `git status` with paranoia. The excitement of "it works!" can cloud judgment. Every commit is permanent; every push is public.
 
 ## Surprises
@@ -63,6 +68,7 @@ End: Satisfied with the clean separation and working system
 ## For Next Time
 
 When I return to this codebase, I want to remember:
+
 - Check `git status` obsessively during large refactors
 - Trust the user when they say "be careful" - they know the pain points
 - Sometimes removing a tool is better than fixing it
@@ -75,4 +81,4 @@ The user's patience during the repeated test failures, their trust when I nearly
 
 ---
 
-*This is my experience. Another mind might have found different patterns, struggled with different issues, or seen different solutions. That's the value of recording it - not as truth, but as one path through the complexity.*
+_This is my experience. Another mind might have found different patterns, struggled with different issues, or seen different solutions. That's the value of recording it - not as truth, but as one path through the complexity._

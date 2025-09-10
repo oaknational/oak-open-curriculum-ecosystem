@@ -77,23 +77,21 @@ export const baseConfig = tsEslintConfig(
             // This is a complicated way of saying `any` for objects
             'Record<string, unknown>': {
               message:
-                'Avoid Record<string, unknown>. Use a concrete value type. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the data structure.',
+                'Avoid Record<string, unknown>. Use an existing internal or library type where possible. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the compile time data structures packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.',
             },
 
             // Common variants you might also want to block
             'Record<string, undefined>': {
               message:
-                'Avoid Record<string, undefined>. If keys are optional, prefer Partial<Record<string, T>>; otherwise use a concrete value type. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the data structure.',
+                'Avoid Record<string, undefined>. Use an existing internal or library type where possible. If keys are optional, prefer Partial. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the compile time data structures packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.',
             },
             'Readonly<Record<string, undefined>>': {
               message:
-                'Avoid Readonly<Record<string, undefined>>. Prefer a concrete value type or Partial<Readonly<Record<string, T>>>.',
-              suggest: ['Partial<Readonly<Record<string, T>>>'],
+                'Avoid Readonly<Record<string, undefined>>. Use an existing internal or library type where possible. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the compile time data structures packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.',
             },
             'Record<PropertyKey, undefined>': {
               message:
-                'Avoid Record<PropertyKey, undefined>. Prefer a concrete value type or a more specific key type plus Partial<>.',
-              suggest: ['Partial<Record<string, T>>'],
+                'Avoid Record<PropertyKey, undefined>. Use an existing internal or library type where possible. If you are working on the Oak Curriculum SDK or MCP server, use a type and type guard derived from the compile time data structures packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.',
             },
           },
         },

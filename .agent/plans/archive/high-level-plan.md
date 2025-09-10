@@ -32,15 +32,15 @@ Build a robust MCP ecosystem using biological architecture principles, starting 
 
 ## 📊 Phase Status Overview
 
-| Phase | Status | Description | Key Outcome |
-|-------|--------|-------------|-------------|
-| 1-4 | ✅ COMPLETED | Foundation & Setup | Monorepo, quality gates, initial structure |
-| 5 | ✅ COMPLETED | Moria/Histoi/Psycha Evolution | Biological architecture implemented |
-| 5.5 | 🚧 MITIGATED | Runtime Isolation (SDK only) | Proceeding with boundary isolation strategy |
-| 6 | 🚧 IN PROGRESS | Oak Curriculum API | SDK complete, MCP 4/25 tools, waiting for SDK Zod |
-| 7 | 🎯 CRITICAL | Full Ecosystem Runtime Isolation | Edge runtime compatibility |
-| 8 | 📋 PLANNED | Performance & Optimization | HTTP transport, tree-shaking |
-| 9 | 🔮 FUTURE | Multi-Organism Ecosystem | Additional MCP servers |
+| Phase | Status         | Description                      | Key Outcome                                       |
+| ----- | -------------- | -------------------------------- | ------------------------------------------------- |
+| 1-4   | ✅ COMPLETED   | Foundation & Setup               | Monorepo, quality gates, initial structure        |
+| 5     | ✅ COMPLETED   | Moria/Histoi/Psycha Evolution    | Biological architecture implemented               |
+| 5.5   | 🚧 MITIGATED   | Runtime Isolation (SDK only)     | Proceeding with boundary isolation strategy       |
+| 6     | 🚧 IN PROGRESS | Oak Curriculum API               | SDK complete, MCP 4/25 tools, waiting for SDK Zod |
+| 7     | 🎯 CRITICAL    | Full Ecosystem Runtime Isolation | Edge runtime compatibility                        |
+| 8     | 📋 PLANNED     | Performance & Optimization       | HTTP transport, tree-shaking                      |
+| 9     | 🔮 FUTURE      | Multi-Organism Ecosystem         | Additional MCP servers                            |
 
 ## Phase 5: Moria/Histoi/Psycha Architecture ✅ COMPLETED
 
@@ -185,6 +185,7 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
 #### Sub-phase 6.5: Full MCP Tool Coverage 🚧 IN PROGRESS (Parallel Work Complete)
 
 **Current State (2025-08-12 Evening)**:
+
 - **Tools**: 4/25 implemented (search, get lesson, list key stages/subjects)
 - **Parallel Work COMPLETED**:
   - ✅ Fixed MCP validators to use SDK constants (removed wrong values)
@@ -194,10 +195,12 @@ Add Oak National Academy's curriculum API as a new MCP organism, demonstrating m
   - ✅ All quality gates passing
 
 **Waiting For**:
+
 - 🔄 SDK team implementing Zod validators
 - 🔄 New SDK exports: `validation` and `toolGeneration` namespaces
 
 **Next Steps** (After SDK delivery):
+
 1. Integrate SDK's runtime validation functions
 2. Build tool generator using SDK helpers
 3. Generate all 25+ tools programmatically
@@ -323,9 +326,9 @@ Multiple specialized MCP organisms coexisting:
 2. **Test Behaviour**: Not implementation details
 3. **Simple Mocks**: Complex mocks indicate need for refactoring
 4. **Test Types**:
-   - Unit tests: Pure functions only (*.unit.test.ts)
-   - Integration tests: Component interaction (*.integration.test.ts)
-   - E2E tests: Full system behaviour (*.e2e.test.ts)
+   - Unit tests: Pure functions only (\*.unit.test.ts)
+   - Integration tests: Component interaction (\*.integration.test.ts)
+   - E2E tests: Full system behaviour (\*.e2e.test.ts)
 
 ### Quality Gates (Sequential)
 

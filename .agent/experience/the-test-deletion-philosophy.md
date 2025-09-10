@@ -24,10 +24,10 @@ The most insidious tests were those that seemed useful but were actually testing
 
 ```typescript
 // Bad: Testing implementation
-expect(generateToolFile.calledWith(specificArgs))
+expect(generateToolFile.calledWith(specificArgs));
 
-// Good: Testing behavior  
-expect(generatedFile).toContain('export const')
+// Good: Testing behavior
+expect(generatedFile).toContain('export const');
 ```
 
 The first test breaks if we refactor. The second breaks only if we break functionality.
@@ -47,6 +47,7 @@ But keeping bad tests is like keeping broken tools in your toolbox because you'r
 ## The Perfect Test Suite
 
 After deletion, the remaining tests felt purposeful. Each one had a clear job:
+
 - Prove the MCP server starts
 - Prove tools can be discovered
 - Prove tools can be executed
@@ -57,6 +58,7 @@ Not "prove that the string contains these exact characters" or "prove that this 
 ## The Meta-Testing Philosophy
 
 The experience led to a meta-philosophy: tests should be tested too. Not with code, but with questions:
+
 - If this test fails, will I know something valuable?
 - If the implementation changes but behavior doesn't, will this test still pass?
 - Am I testing my code or testing my assumptions?

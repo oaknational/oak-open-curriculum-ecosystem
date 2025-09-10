@@ -202,7 +202,7 @@ export async function handleToolCall(toolName: string, args: unknown) {
 ## File Structure (current)
 
 ```
-apps/oak-curriculum-mcp/
+apps/oak-curriculum-mcp-stdio/
 ├── scripts/
 │   └── generate-tools.ts         # Build-time generation
 ├── src/

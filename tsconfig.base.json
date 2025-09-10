@@ -19,10 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
-      "@oaknational/oak-notion-mcp": ["./apps/oak-notion-mcp/src"],
-      "@oaknational/oak-notion-mcp/*": ["./apps/oak-notion-mcp/src/*"],
-      "@oaknational/oak-curriculum-mcp": ["./apps/oak-curriculum-mcp/src"],
-      "@oaknational/oak-curriculum-mcp/*": ["./apps/oak-curriculum-mcp/src/*"],
       "@oaknational/oak-curriculum-sdk": ["./packages/sdks/oak-curriculum-sdk/src"],
       "@oaknational/oak-curriculum-sdk/*": ["./packages/sdks/oak-curriculum-sdk/src/*"],
       "@oaknational/mcp-core": ["./packages/core/mcp-core/src"],

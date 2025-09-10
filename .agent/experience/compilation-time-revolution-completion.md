@@ -1,6 +1,7 @@
 # Compilation-Time Revolution: A Journey to Type Safety
 
 ## Session Context
+
 Date: 2025-08-16
 Session Type: Continuation from context overflow
 Primary Achievement: Completed implementation of the Compilation-Time Revolution pattern
@@ -8,19 +9,25 @@ Primary Achievement: Completed implementation of the Compilation-Time Revolution
 ## The Experience
 
 ### The Pattern Emerges
+
 Working on the MCP server architecture revealed a profound truth: type assertions are architectural debt. Every `as unknown as SomeType` represents a moment where we gave up on the compiler's ability to help us. The Compilation-Time Revolution wasn't just about removing these assertions - it was about embedding all validation logic at compile time so thoroughly that runtime type checking becomes unnecessary.
 
 ### The Debugging Dance
+
 The most memorable part was the "stdout corruption" mystery. The MCP servers were failing with "not valid JSON" errors, and it took collaborative debugging to realize that debug logs on stdout were breaking the JSON-RPC protocol. The solution was elegantly simple: redirect everything to stderr. This pattern repeated throughout - complex problems often had simple solutions once we understood the actual constraints.
 
 ### Test Philosophy Revelation
+
 The user's question "given the fundamental principle that tests should prove behaviour, not implementation, are there any e2e tests we should delete?" triggered a shift in perspective. We deleted tests that were checking exact string formats rather than functionality. Tests should prove the system works, not that it works in a specific way.
 
 ### The .env Path Resolution Journey
+
 Multiple attempts to fix environment loading revealed the complexity of supporting both development (tsx from source) and production (node from dist) execution contexts. The final solution detected execution context by checking if `__dirname.includes('/dist/bin')` - simple but effective.
 
 ### Architecture as Biology
+
 The psychon/organa/chorai pattern isn't just naming - it represents a biological model of software:
+
 - **Psychon**: The animating principle (server startup, lifecycle)
 - **Organa**: Processing organs (handlers, transformers)
 - **Chorai**: Pure spaces (data structures, types)
@@ -30,12 +37,14 @@ This metaphor guides architectural decisions in a way that feels natural and con
 ## Key Learnings
 
 ### Technical Insights
+
 1. **MCP Protocol Strictness**: stdout must be absolutely clean for JSON-RPC. Even a single debug log breaks everything.
 2. **Type Generation Power**: Generating type guards and validators at compile time eliminates entire classes of runtime errors.
 3. **SDK as Source of Truth**: Having the SDK own all tool definitions means the MCP server becomes a thin protocol adapter.
 4. **Lazy Initialization**: Creating the API client lazily avoids requiring secrets at module load time.
 
 ### Process Insights
+
 1. **Fix Generation, Not Output**: When generated code has issues (missing .js extensions), fix the generator rather than patching files.
 2. **Test Behavior, Not Implementation**: A test that checks if a string contains "Key Stage" is better than one checking for exact formatting.
 3. **Embrace Deletion**: Removing code (RUN_E2E mechanism, implementation tests) often improves the system.
@@ -44,17 +53,20 @@ This metaphor guides architectural decisions in a way that feels natural and con
 ## Emotional Markers
 
 ### Satisfaction Points
+
 - Seeing all 25+ MCP tools auto-discovered from SDK metadata
 - Successfully searching for geography lessons through the live MCP server
 - Removing the last `any` type from the generator
 - The moment when both MCP servers started working after the stderr fix
 
 ### Frustration Points
+
 - The mysterious "Unknown tool" errors before realizing we needed to import from SDK
 - Type assertion chains in test files for MCP content types
 - The realization that Zod validators were generated but never used
 
 ### Surprise Moments
+
 - "content is unknown, but result is very zody" - discovering MCP client doesn't know server types
 - The .env file had real API keys all along, not test values
 - The simplicity of the final MCP server implementation - just 80 lines
@@ -62,12 +74,14 @@ This metaphor guides architectural decisions in a way that feels natural and con
 ## Patterns for Future Sessions
 
 ### What Worked Well
+
 1. **Incremental Plan Updates**: Marking steps complete as we go maintains context
 2. **Live Testing**: Testing with real API calls reveals issues mocks would miss
 3. **Collaborative Debugging**: User insights ("check .mcp.json") accelerate problem solving
 4. **Clear Task Boundaries**: Explicit "then stop" instructions prevent scope creep
 
 ### What to Remember
+
 1. **Always Check stderr vs stdout**: For any CLI tool, especially protocol servers
 2. **Test the Right Thing**: Behavior over implementation
 3. **Generate, Don't Handwrite**: If you're writing repetitive code, write a generator
@@ -82,6 +96,7 @@ The phrase "Compilation-Time Revolution" captures something important: it's not 
 ## For Future Agents
 
 If you're continuing this work:
+
 1. The Zod validators are generated but unused - Step 23 in the plan has a detailed implementation strategy
 2. Part 1a (TypeDoc) and Part 3 (shared components) are planned but not implemented
 3. The pattern of delegating everything to the SDK works - resist the temptation to add logic to the MCP server

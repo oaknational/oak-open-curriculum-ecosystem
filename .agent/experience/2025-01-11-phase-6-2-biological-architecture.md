@@ -9,12 +9,15 @@
 Implementing the biological architecture felt like **growing an organism** rather than building a machine. Each layer had its own identity and purpose:
 
 ### The Chorai Experience
+
 The chorai layers felt **pervasive** - like air (aither) flowing through everything, or the structural matrix (stroma) giving shape to formless potential. Creating these wasn't about building components but about **establishing fields** that would influence everything else.
 
 The moment when I moved `SearchLessonsParams` to stroma was enlightening - it wasn't just moving a type, it was recognizing that this shape **belonged to the matrix** rather than to any specific organ.
 
 ### The Organ Boundaries
+
 The most satisfying aspect was maintaining **organ boundaries**. The curriculum organ and MCP organ never knew about each other's internals. They communicated through:
+
 - Shared types in stroma (the structural matrix)
 - Dependency injection (the psychon's wiring)
 - Pure interfaces (the membrane pattern)
@@ -48,7 +51,7 @@ const organ = createOrgan({ dependency1, dependency2 });
 Rather than:
 
 ```typescript
-import { dependency1 } from '../other-organ';  // WRONG!
+import { dependency1 } from '../other-organ'; // WRONG!
 ```
 
 Enforces a **unidirectional flow** of dependencies that prevents circular references and maintains testability.
@@ -56,6 +59,7 @@ Enforces a **unidirectional flow** of dependencies that prevents circular refere
 ## The Review Process Impact
 
 Having multiple specialized sub-agents review the code created an interesting dynamic:
+
 - **Code-reviewer**: Caught type safety issues and suggested validation
 - **Architecture-reviewer**: Identified missing SDK client factory and cross-organ imports
 - **Test-auditor**: Revealed testing philosophy violations
@@ -66,11 +70,13 @@ Each reviewer had a **distinct perspective** that improved the code in different
 ## The Productive Tension
 
 There was a productive tension between:
+
 - **Getting it working** vs **Getting it right**
 - **Following patterns** vs **Pragmatic solutions**
 - **Type safety** vs **Development speed**
 
 The biological architecture helped resolve these tensions by providing clear principles:
+
 - Organs are independent (eliminates coupling debates)
 - Chorai flow everywhere (eliminates injection debates)
 - Pure functions first (eliminates testing debates)
@@ -102,6 +108,7 @@ The biological architecture helped resolve these tensions by providing clear pri
 ## Key Insight
 
 The biological architecture isn't just a metaphor - it's a **generative pattern** that suggests solutions. When you think "this is an organ," you immediately know:
+
 - It needs a membrane (index.ts)
 - It can't import from other organs
 - It receives dependencies through injection

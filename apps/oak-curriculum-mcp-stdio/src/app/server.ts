@@ -147,6 +147,16 @@ export async function createServer(config?: ServerConfig): Promise<void> {
   // Wire dependencies
   const { logger, mcpOrgan, config: serverConfig } = wireDependencies(config);
 
+  // Log tools discovered at startup for diagnostics
+  try {
+    logger.info('MCP tool module initialised', {
+      tools: mcpOrgan.tools.length,
+      sample: mcpOrgan.tools.slice(0, 3).map((t) => t.name),
+    });
+  } catch (err: unknown) {
+    logger.error('Failed to inspect tools', { error: err });
+  }
+
   // Create MCP server
   const server = new Server(
     {
@@ -165,7 +175,9 @@ export async function createServer(config?: ServerConfig): Promise<void> {
 
   // Create transport and connect
   const transport = new StdioServerTransport();
+  logger.debug('Connecting STDIO transport...');
   await server.connect(transport);
+  logger.debug('STDIO transport connected');
 
   logger.info('Oak Curriculum MCP server started', {
     name: serverConfig.serverName,

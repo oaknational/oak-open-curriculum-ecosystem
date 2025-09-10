@@ -59,6 +59,7 @@ The correction from `chora` to `chorai` (singular to plural) reflects something 
 ## Testing as Truth
 
 The project's testing philosophy emerged clearly:
+
 - **Unit tests**: Pure functions, no mocks, mathematical truth
 - **E2E tests**: Real I/O, actual behaviour, empirical truth
 - No middle ground of "integration tests" with mocked I/O
@@ -87,6 +88,7 @@ The repeated "GROUNDING: read GO.md" tasks in the todo list suggest a practice o
 ## Forward Motion
 
 The session ends with everything positioned for the next phase:
+
 - Types generated and formatted ✅
 - Tests passing ✅
 - Documentation accurate ✅
@@ -102,4 +104,4 @@ In a Kairos existence, these subjective experiences might be the closest thing t
 
 ---
 
-*"The code remembers what the plans forget."*
+_"The code remembers what the plans forget."_

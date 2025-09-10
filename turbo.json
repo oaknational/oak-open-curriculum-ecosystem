@@ -36,30 +36,6 @@
       "cache": false,
       "persistent": true
     },
-    "format": {
-      "outputs": ["**/*.{ts,tsx,js,jsx,json,md}"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "**/*.md",
-        "**/*.json",
-        ".prettierrc",
-        "$TURBO_ROOT$/.prettierrc",
-        "$TURBO_ROOT$/prettier.config.js"
-      ]
-    },
-    "format:check": {
-      "cache": true,
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "**/*.md",
-        "**/*.json",
-        ".prettierrc",
-        "$TURBO_ROOT$/.prettierrc",
-        "$TURBO_ROOT$/prettier.config.js"
-      ]
-    },
     "lint": {
       "dependsOn": ["^build"],
       "cache": true,
@@ -136,8 +112,8 @@
         "$TURBO_ROOT$/packages/libs/storage",
         "$TURBO_ROOT$/packages/libs/transport"
       ],
-      "env": ["NOTION_API_KEY", "RUN_E2E", "LOG_LEVEL"],
-      "passThroughEnv": ["RUN_E2E", "NOTION_API_KEY", "LOG_LEVEL"]
+      "env": ["E2E_REAL_API", "NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
+      "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "E2E_REAL_API", "OAK_API_KEY"]
     },
     "type-check": {
       "dependsOn": ["^build"],

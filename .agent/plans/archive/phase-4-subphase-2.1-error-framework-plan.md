@@ -47,14 +47,17 @@ This document provides detailed implementation guidance for Sub-phase 2.1 of Pha
 ## Architectural Considerations
 
 ### Genotype vs Phenotype
+
 - ChainedError, ErrorContext, Result<T,E> belong in genotype (universal patterns)
 - NotionErrorHandler classification stays in phenotype (Notion-specific)
 
 ### Morphai Pattern
+
 - Error morphai already exist in `chora/morphai/errors/types.ts`
 - Need to implement the shadows (concrete implementations) of these forms
 
 ### Zero Dependencies
+
 - AsyncLocalStorage is Node.js built-in (acceptable)
 - Need fallback for environments without AsyncLocalStorage
 
@@ -69,10 +72,10 @@ class ChainedError extends Error {
   constructor(
     message: string,
     public readonly cause?: Error,
-    public readonly context?: Record<string, unknown>
+    public readonly context?: Record<string, unknown>,
   ) {
     super(message);
-    
+
     // Preserve the original stack trace
     if (cause?.stack) {
       this.stack = `${this.stack}\nCaused by: ${cause.stack}`;
@@ -92,14 +95,14 @@ class ChainedError extends Error {
   getAllContext(): Record<string, unknown>[] {
     const contexts: Record<string, unknown>[] = [];
     let current: Error | undefined = this;
-    
+
     while (current) {
       if (current instanceof ChainedError && current.context) {
         contexts.push(current.context);
       }
       current = (current as ChainedError).cause;
     }
-    
+
     return contexts;
   }
 }
@@ -128,6 +131,7 @@ class ChainedError extends Error {
 ```
 
 #### Key Benefits
+
 - **Complete Error History**: Every transformation and handling point is preserved
 - **Context Accumulation**: Each layer adds its own context without losing previous information
 - **Original Stack Traces**: The original error's stack trace is preserved, not replaced
@@ -176,14 +180,15 @@ export function createContextStorage<T>(): ContextStorage<T> {
 #### Runtime Implementations
 
 **Node.js/Bun - Full AsyncLocalStorage:**
+
 ```typescript
 class AsyncLocalStorageAdapter<T> implements ContextStorage<T> {
   constructor(private als: AsyncLocalStorage<T>) {}
-  
+
   run<R>(context: T, callback: () => R): R {
     return this.als.run(context, callback);
   }
-  
+
   getStore(): T | undefined {
     return this.als.getStore();
   }
@@ -191,10 +196,11 @@ class AsyncLocalStorageAdapter<T> implements ContextStorage<T> {
 ```
 
 **Cloudflare Workers - Manual Context Passing:**
+
 ```typescript
 class ManualContextStorage<T> implements ContextStorage<T> {
   private stack: T[] = [];
-  
+
   run<R>(context: T, callback: () => R): R {
     this.stack.push(context);
     try {
@@ -203,7 +209,7 @@ class ManualContextStorage<T> implements ContextStorage<T> {
       this.stack.pop();
     }
   }
-  
+
   getStore(): T | undefined {
     return this.stack[this.stack.length - 1];
   }
@@ -215,6 +221,7 @@ class ManualContextStorage<T> implements ContextStorage<T> {
 For Cloudflare Workers, we have several options for context storage:
 
 1. **Request Context Pattern** (Simplest - Recommended for now):
+
 ```typescript
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
@@ -225,7 +232,7 @@ export default {
     };
     // Pass context explicitly through the call chain
     return handleRequest(request, errorContext);
-  }
+  },
 };
 ```
 
@@ -242,9 +249,7 @@ export default {
 Building on the existing ValidationResult pattern:
 
 ```typescript
-export type Result<T, E = Error> = 
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+export type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
 
 export const Result = {
   ok<T>(value: T): Result<T, never> {
@@ -263,19 +268,16 @@ export const Result = {
     return result.ok ? fn(result.value) : result;
   },
 
-  match<T, E, R>(
-    result: Result<T, E>,
-    handlers: { ok: (value: T) => R; err: (error: E) => R }
-  ): R {
+  match<T, E, R>(result: Result<T, E>, handlers: { ok: (value: T) => R; err: (error: E) => R }): R {
     return result.ok ? handlers.ok(result.value) : handlers.err(result.error);
   },
 
   // Convert from existing ValidationResult
   fromValidation<T>(validation: ValidationResult<T>): Result<T, string[]> {
-    return validation.valid 
+    return validation.valid
       ? Result.ok(validation.data!)
       : Result.err(validation.errors || ['Unknown error']);
-  }
+  },
 };
 ```
 
@@ -316,7 +318,7 @@ oak-mcp-core/src/chora/aither/errors/
 
 ### Integration with Existing Code
 
-1. **Preserve existing error-handler.ts**: 
+1. **Preserve existing error-handler.ts**:
    - Keep Notion-specific classification in phenotype
    - ChainedError can wrap these classifications
 
@@ -331,18 +333,21 @@ oak-mcp-core/src/chora/aither/errors/
 ## Best Practices
 
 ### Industry Standards
+
 - Follow Error Cause TC39 proposal patterns
 - Implement stack trace preservation
 - Provide both synchronous and asynchronous error context
 - Use feature detection over runtime detection
 
 ### Zero Dependencies
+
 - No external polyfills
 - Uses only what's available in the runtime
 - Falls back to manual implementation
 - Same TypeScript interfaces regardless of runtime
 
 ### Type Safety
+
 - Generic Result<T,E> for flexibility
 - Proper discriminated unions
 - No unsafe type assertions
@@ -351,7 +356,7 @@ oak-mcp-core/src/chora/aither/errors/
 ## Estimated Lines of Code
 
 - **ChainedError class**: ~100 LoC
-- **ErrorContext with AsyncLocalStorage**: ~80 LoC  
+- **ErrorContext with AsyncLocalStorage**: ~80 LoC
 - **Context storage abstraction**: ~60 LoC
 - **Result<T,E> utilities**: ~80 LoC
 - **Integration code**: ~40 LoC

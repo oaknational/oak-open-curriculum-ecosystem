@@ -27,7 +27,7 @@ interface FileSystemInterface {
 
 class Storage {
   constructor(private fs: FileSystemInterface) {}
-  
+
   async read(key: string) {
     return this.fs.readFile(key, 'utf-8'); // Works anywhere
   }
@@ -73,11 +73,11 @@ export interface Logger {
 // In Histoi - full implementation with adaptation
 export class ConsoleLogger implements Logger {
   constructor(private console: Console) {} // Injected
-  
+
   info(message: string, context?: unknown) {
     this.console.log(message, context);
   }
-  
+
   error(message: string, error?: unknown, context?: unknown) {
     this.console.error(message, error, context);
   }
@@ -109,9 +109,9 @@ histos-transport/
 ```typescript
 export class StdioTransport implements Transport {
   constructor(
-    private stdin: NodeJS.ReadStream,   // Injected
+    private stdin: NodeJS.ReadStream, // Injected
     private stdout: NodeJS.WriteStream, // Injected
-    private logger: Logger,             // Injected from Moria interface
+    private logger: Logger, // Injected from Moria interface
   ) {
     this.messageBuffer = new MessageBuffer(); // Pure, no dependencies
   }
@@ -155,13 +155,9 @@ describe('StdioTransport', () => {
     const mockStdout = { write: vi.fn() };
     const mockStdin = new EventEmitter();
     const mockLogger = { info: vi.fn(), error: vi.fn() };
-    
-    const transport = new StdioTransport(
-      mockStdin as any,
-      mockStdout as any,
-      mockLogger,
-    );
-    
+
+    const transport = new StdioTransport(mockStdin as any, mockStdout as any, mockLogger);
+
     await transport.send({ method: 'test' });
     expect(mockStdout.write).toHaveBeenCalled();
   });
@@ -197,9 +193,9 @@ pnpm init
 export class RedisCache implements Cache {
   constructor(
     private client: RedisClientInterface, // Injected
-    private logger: Logger,               // From Moria
+    private logger: Logger, // From Moria
   ) {}
-  
+
   async get(key: string): Promise<unknown> {
     try {
       const value = await this.client.get(key);
@@ -235,11 +231,11 @@ export function createAdaptiveCache(options?: CacheOptions): Cache {
   if (options?.redis) {
     return new RedisCache(options.redis, options.logger);
   }
-  
+
   if (typeof localStorage !== 'undefined') {
     return new LocalStorageCache(options?.logger);
   }
-  
+
   // Fallback to memory
   return new MemoryCache(options?.logger);
 }
@@ -263,7 +259,7 @@ describe('RedisCache', () => {
       set: vi.fn().mockResolvedValue('OK'),
     };
     const mockLogger = { info: vi.fn(), error: vi.fn() };
-    
+
     const cache = new RedisCache(mockClient, mockLogger);
     const result = await cache.get('key');
     expect(result).toEqual({ name: 'test' });
@@ -281,17 +277,17 @@ export function detectStorageBackend(): StorageBackend {
   if (typeof process !== 'undefined' && process.versions?.node) {
     return 'filesystem';
   }
-  
+
   // Browser localStorage
   if (typeof localStorage !== 'undefined') {
     return 'localstorage';
   }
-  
+
   // Cloudflare KV
   if (typeof globalThis !== 'undefined' && 'KV' in globalThis) {
     return 'cloudflare-kv';
   }
-  
+
   // Fallback
   return 'memory';
 }
@@ -302,7 +298,7 @@ export function detectStorageBackend(): StorageBackend {
 ```typescript
 export class AdaptiveStorage {
   private backend: StorageProvider;
-  
+
   constructor(options?: StorageOptions) {
     try {
       this.backend = createOptimalBackend(options);
@@ -402,6 +398,7 @@ class Storage {
 ### Example Migration
 
 Before:
+
 ```typescript
 import * as fs from 'fs/promises';
 
@@ -414,6 +411,7 @@ export class ConfigLoader {
 ```
 
 After:
+
 ```typescript
 // Pure function
 export function parseConfig(content: string): Config {
@@ -423,7 +421,7 @@ export function parseConfig(content: string): Config {
 // Injected dependency
 export class ConfigLoader {
   constructor(private fs: FileSystemInterface) {}
-  
+
   async load(path: string) {
     const content = await this.fs.readFile(path, 'utf-8');
     return parseConfig(content); // Pure function
@@ -435,12 +433,12 @@ export class ConfigLoader {
 
 Current tissues and their capabilities:
 
-| Tissue | Package | Capabilities | Environments |
-|--------|---------|-------------|--------------|
-| Logger | `@oaknational/mcp-histos-logger` | Structured logging with Consola | All |
-| Storage | `@oaknational/mcp-histos-storage` | Key-value storage | Node, Browser, Memory |
-| Environment | `@oaknational/mcp-histos-env` | Environment variables | Node, Edge, Memory |
-| Transport | `@oaknational/mcp-histos-transport` | MCP communication | Node (STDIO), Future: HTTP |
+| Tissue      | Package                             | Capabilities                    | Environments               |
+| ----------- | ----------------------------------- | ------------------------------- | -------------------------- |
+| Logger      | `@oaknational/mcp-histos-logger`    | Structured logging with Consola | All                        |
+| Storage     | `@oaknational/mcp-histos-storage`   | Key-value storage               | Node, Browser, Memory      |
+| Environment | `@oaknational/mcp-histos-env`       | Environment variables           | Node, Edge, Memory         |
+| Transport   | `@oaknational/mcp-histos-transport` | MCP communication               | Node (STDIO), Future: HTTP |
 
 ## Future Tissues
 

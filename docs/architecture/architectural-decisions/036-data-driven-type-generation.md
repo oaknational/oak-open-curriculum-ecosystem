@@ -35,7 +35,7 @@ export const MCP_TOOLS = {
 
 // 2. Types derived from data
 export type McpToolName = keyof typeof MCP_TOOLS;
-export type ToolConfig<T extends McpToolName> = typeof MCP_TOOLS[T];
+export type ToolConfig<T extends McpToolName> = (typeof MCP_TOOLS)[T];
 
 // 3. Type guard checks against data
 export function isMcpToolName(value: string): value is McpToolName {
@@ -43,7 +43,7 @@ export function isMcpToolName(value: string): value is McpToolName {
 }
 
 // 4. Lookup-based execution (no switch needed)
-const tool = MCP_TOOLS[validatedToolName];  // Type-safe!
+const tool = MCP_TOOLS[validatedToolName]; // Type-safe!
 ```
 
 ### The `maybe` Pattern
@@ -52,22 +52,22 @@ Use the prefix `maybe` for unvalidated values to make the validation flow explic
 
 ```typescript
 export async function executeToolCall(
-  maybeToolName: string,      // Unvalidated
-  maybeParams: unknown,        // Unvalidated
-  sdk: OakApiClient
+  maybeToolName: string, // Unvalidated
+  maybeParams: unknown, // Unvalidated
+  sdk: OakApiClient,
 ) {
   // Validate tool name
   if (!isMcpToolName(maybeToolName)) {
     throw new TypeError(`Unknown tool: ${maybeToolName}`);
   }
-  const toolName: McpToolName = maybeToolName;  // Now validated!
-  
+  const toolName: McpToolName = maybeToolName; // Now validated!
+
   // Validate params
   if (!isValidParamsForTool(toolName, maybeParams)) {
     throw new TypeError(`Invalid params for ${toolName}`);
   }
-  const params: ToolParameters<typeof toolName> = maybeParams;  // Now validated!
-  
+  const params: ToolParameters<typeof toolName> = maybeParams; // Now validated!
+
   // Use validated keys for lookup
   const tool = MCP_TOOLS[toolName];
   return sdk[tool.method](tool.path, { params });
@@ -79,6 +79,7 @@ export async function executeToolCall(
 ### 1. Data as Source of Truth
 
 The const data structure is the single source of truth for:
+
 - Available values (via object keys)
 - Type definitions (via `typeof`)
 - Runtime validation (via inclusion checks)
@@ -86,12 +87,14 @@ The const data structure is the single source of truth for:
 ### 2. No Switch Statements
 
 Switch statements are unnecessary when you have:
+
 - Validated keys that guarantee type-safe lookup
 - Data structures that contain all routing information
 
 ### 3. Type Predicates, Not Assertions
 
 Type predicates prove types at runtime without assertions:
+
 - `value is Type` narrows the type when the predicate returns true
 - No `as Type` assertions needed
 - TypeScript's control flow analysis understands the narrowing
@@ -99,21 +102,25 @@ Type predicates prove types at runtime without assertions:
 ### 4. Generate Data, Not Code
 
 Instead of generating:
+
 ```typescript
 // ❌ Imperative code
-switch(toolName) {
-  case 'tool1': return executeTool1();
-  case 'tool2': return executeTool2();
+switch (toolName) {
+  case 'tool1':
+    return executeTool1();
+  case 'tool2':
+    return executeTool2();
 }
 ```
 
 Generate:
+
 ```typescript
 // ✅ Data structure
 const TOOLS = {
-  'tool1': { path: '/path1', method: 'get' },
-  'tool2': { path: '/path2', method: 'post' },
-}
+  tool1: { path: '/path1', method: 'get' },
+  tool2: { path: '/path2', method: 'post' },
+};
 ```
 
 ## Consequences
@@ -142,6 +149,7 @@ const TOOLS = {
 ### Phase 1: Refactor MCP Tool Generation
 
 Update `/packages/oak-curriculum-sdk/scripts/typegen/mcp-tools/mcp-tool-mapping-generator.ts`:
+
 - Remove switch statement generation
 - Generate pure data structure
 - Generate type predicates that check against data
@@ -149,18 +157,21 @@ Update `/packages/oak-curriculum-sdk/scripts/typegen/mcp-tools/mcp-tool-mapping-
 ### Phase 2: Update Executor
 
 Replace switch-based executor with lookup-based:
+
 - Use validated keys for type-safe lookup
 - Implement `maybe` pattern for validation flow
 
 ### Phase 3: Update MCP Handler
 
 Adapt handler to use new data-driven approach:
+
 - Same external API
 - Cleaner internal implementation
 
 ## Validation
 
 Success is achieved when:
+
 1. Zero type suppressions in generated code
 2. All routing via data lookup, not switches
 3. Type predicates validate against data structures
@@ -186,8 +197,8 @@ export function isLogLevel(value: unknown): value is LogLevel {
 ### Path Parameters (`reference/oak-curriculum-api-client`)
 
 ```typescript
-export const KEY_STAGES = ["ks1", "ks2", "ks3", "ks4"] as const;
-export type KeyStage = typeof KEY_STAGES[number];
+export const KEY_STAGES = ['ks1', 'ks2', 'ks3', 'ks4'] as const;
+export type KeyStage = (typeof KEY_STAGES)[number];
 
 export function isKeyStage(value: string): value is KeyStage {
   return KEY_STAGES.includes(value);

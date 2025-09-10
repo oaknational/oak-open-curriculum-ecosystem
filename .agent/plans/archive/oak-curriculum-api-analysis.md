@@ -21,6 +21,7 @@ The reference implementation (`reference/oak-curriculum-api-client/`) is a well-
 The Oak Curriculum API provides comprehensive access to educational content:
 
 #### Core Endpoints
+
 - `/subjects` - List all subjects
 - `/key-stages` - List key stages
 - `/lessons/{lesson}/*` - Lesson content, transcripts, quizzes, assets
@@ -30,6 +31,7 @@ The Oak Curriculum API provides comprehensive access to educational content:
 - `/search/transcripts` - Search lesson transcripts
 
 #### Authentication
+
 - Bearer token authentication required for all endpoints
 - API key passed via `Authorization: Bearer {apiKey}` header
 - Clean middleware pattern prevents credential leakage
@@ -37,6 +39,7 @@ The Oak Curriculum API provides comprehensive access to educational content:
 ### Code Quality Assessment
 
 **Strengths:**
+
 - Excellent TypeScript meta-programming in type generation
 - Clean separation between generated and hand-written code
 - Comprehensive validation strategy (strict for enums, graceful for open parameters)
@@ -44,6 +47,7 @@ The Oak Curriculum API provides comprehensive access to educational content:
 - Factory pattern implementation hides complexity from consumers
 
 **Patterns to Adapt (Not Adopt Wholesale):**
+
 - Global state management risk with shared `_apiKey` variable - we'll use instance properties instead
 - Limited to ESM format only - we may want dual format support
 - Integration test patterns - we'll implement comprehensive testing
@@ -52,6 +56,7 @@ The Oak Curriculum API provides comprehensive access to educational content:
 ### Key Patterns to Adopt
 
 1. **Factory Pattern with Dependency Injection**
+
 ```typescript
 export function createOakClient(apiKey: string): OakApiClient {
   // Never access process.env inside the SDK core
@@ -63,11 +68,13 @@ export function createOakClient(apiKey: string): OakApiClient {
 ```
 
 2. **Type Generation Pipeline**
+
 - Use `openapi-typescript` for initial generation
 - Build custom tooling for parameter extraction
 - Generate both static types and runtime validators
 
 3. **Dual Client Architecture**
+
 - Method-based: `client.GET('/lessons/{lesson}/summary', { params: { path: { lesson } } })`
 - Path-based: `client['/lessons/{lesson}/summary'].GET({ params: { path: { lesson } } })`
 
@@ -78,6 +85,7 @@ export function createOakClient(apiKey: string): OakApiClient {
 **Type**: Standard Package (no biological architecture)
 
 **Key Design Decisions:**
+
 - Simple, focused wrapper around Oak API
 - Environment-agnostic factory pattern
 - Type-safe with generated OpenAPI types
@@ -85,23 +93,25 @@ export function createOakClient(apiKey: string): OakApiClient {
 - No biological dependencies (conventional package)
 
 **Core Components:**
+
 ```typescript
 // src/client.ts
 export class OakCurriculumClient {
   private readonly apiClient: OpenApiClient<paths>;
-  
+
   constructor(config: { apiKey: string; baseUrl?: string }) {
     // Implementation following reference patterns
   }
-  
+
   // High-level methods wrapping API calls
-  async searchLessons(params: SearchParams): Promise<Lesson[]>
-  async getLesson(id: string): Promise<LessonDetails>
-  async getUnitLessons(unitId: string): Promise<Lesson[]>
+  async searchLessons(params: SearchParams): Promise<Lesson[]>;
+  async getLesson(id: string): Promise<LessonDetails>;
+  async getUnitLessons(unitId: string): Promise<Lesson[]>;
 }
 ```
 
 **Dependencies:**
+
 - `openapi-fetch` - Type-safe HTTP client
 - `zod` - Runtime validation (if needed)
 - No biological architecture packages
@@ -113,6 +123,7 @@ export class OakCurriculumClient {
 **Biological Structure:**
 
 #### Chorai (Pervasive Infrastructure)
+
 ```
 src/chora/
 ├── morphai/     # Abstract patterns
@@ -126,6 +137,7 @@ src/chora/
 ```
 
 #### Organa (Discrete Business Logic)
+
 ```
 src/organa/
 ├── curriculum/  # Curriculum operations organ
@@ -140,6 +152,7 @@ src/organa/
 ```
 
 #### Psychon (Orchestration Layer)
+
 ```
 src/psychon/
 ├── index.ts     # Main wiring
@@ -168,6 +181,7 @@ src/psychon/
    - `oak-get-quiz`: Get lesson quiz questions
 
 **MCP Resources:**
+
 - `oak-curriculum://subjects` - Static subject list
 - `oak-curriculum://lessons/{id}` - Lesson content
 - `oak-curriculum://units/{id}` - Unit content
@@ -175,6 +189,7 @@ src/psychon/
 ## Implementation Strategy
 
 ### Phase 6.1: SDK Foundation
+
 1. Set up package structure with proper configuration
 2. Implement type generation from OpenAPI schema
 3. Create base client with authentication middleware
@@ -182,6 +197,7 @@ src/psychon/
 5. Write comprehensive unit tests
 
 ### Phase 6.2: MCP Server Structure
+
 1. Create full biological architecture directories
 2. Implement chorai infrastructure layers
 3. Build curriculum organ with caching
@@ -189,12 +205,14 @@ src/psychon/
 5. Wire everything through psychon
 
 ### Phase 6.3: MCP Integration
+
 1. Map API operations to MCP tools
 2. Implement resource providers
 3. Add rate limiting and caching
 4. Create integration tests
 
 ### Phase 6.4: Testing & Documentation
+
 1. Unit tests for pure functions
 2. Integration tests for organ interactions
 3. E2E tests for MCP protocol compliance
@@ -203,6 +221,7 @@ src/psychon/
 ## Key Architectural Principles
 
 ### SDK Principles
+
 1. **Simplicity**: Minimal abstraction over API
 2. **Type Safety**: Full TypeScript integration
 3. **Environment Agnostic**: No env var access
@@ -210,6 +229,7 @@ src/psychon/
 5. **Factory Pattern**: Clean construction and configuration
 
 ### MCP Server Principles
+
 1. **Biological Architecture**: Full chorai/organa/psychon structure
 2. **Dependency Injection**: No cross-organ imports
 3. **Pervasive Infrastructure**: Chorai flow through everything

@@ -3,6 +3,6 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["src/**/*.ts", "**/*.test.ts", "tests/**/*.ts", "*.config.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "**/*.test.ts", "*.config.ts", "bin/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,0 +1,51 @@
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { findRepoRoot } from '@oaknational/mcp-env';
+
+function readStartupLog(repoRoot: string): string {
+  const p = join(repoRoot, '.logs', 'oak-curriculum-mcp-startup', 'startup.log');
+  if (!existsSync(p)) return '';
+  try {
+    return readFileSync(p, 'utf8');
+  } catch {
+    return '';
+  }
+}
+
+describe('MCP Startup logging', () => {
+  let client: Client;
+  let transport: StdioClientTransport;
+
+  beforeAll(async () => {
+    transport = new StdioClientTransport({
+      command: 'node',
+      args: ['dist/bin/oak-curriculum-mcp.js'],
+      env: {
+        ...process.env,
+        OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-key',
+        LOG_LEVEL: 'debug',
+      },
+    });
+    client = new Client({ name: 'test-client', version: '1.0.0' }, { capabilities: {} });
+    await client.connect(transport);
+  });
+
+  afterAll(async () => {
+    await client.close();
+    await transport.close();
+  });
+
+  it('writes startup diagnostics including non-empty tool count', async () => {
+    // force server to list tools so that handlers are exercised
+    const tools = await client.listTools();
+    expect(Array.isArray(tools.tools)).toBe(true);
+    const repoRoot = findRepoRoot(process.cwd());
+    const log = readStartupLog(repoRoot);
+    // Expect at least one of these diagnostics to appear once implemented
+    expect(log.toLowerCase()).toContain('tool count');
+    expect(log).toMatch(/tools:\s*\d+/i);
+  });
+});

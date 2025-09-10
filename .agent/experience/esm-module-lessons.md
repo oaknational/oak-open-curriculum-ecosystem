@@ -3,11 +3,13 @@
 ## Date: 2025-01-05
 
 ## Context
+
 This repository is ESM-only (`"type": "module"` in package.json). This brings modern benefits but also specific requirements.
 
 ## Critical ESM Requirements
 
 ### 1. File Extensions are Mandatory
+
 ```typescript
 // ❌ WRONG - Will fail at runtime
 import { isFullPage } from '@notionhq/client/build/src/helpers';
@@ -20,6 +22,7 @@ import { isFullPage } from '@notionhq/client/build/src/helpers.js';
 **When**: Always for imports from node_modules that aren't package exports
 
 ### 2. Directory Imports Need index.js
+
 ```typescript
 // ❌ WRONG - Can't import directory
 import { something } from './utils';
@@ -28,7 +31,8 @@ import { something } from './utils';
 import { something } from './utils/index.js';
 ```
 
-### 3. No __dirname or __filename
+### 3. No **dirname or **filename
+
 ```typescript
 // ❌ WRONG - Not available in ESM
 const configPath = path.join(__dirname, 'config.json');
@@ -38,6 +42,7 @@ const configPath = path.join(import.meta.dirname, 'config.json');
 ```
 
 **Alternative for older Node versions**:
+
 ```typescript
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -47,6 +52,7 @@ const __dirname = dirname(__filename);
 ```
 
 ### 4. No require() or module.exports
+
 ```typescript
 // ❌ WRONG - CommonJS syntax
 const config = require('./config');
@@ -60,6 +66,7 @@ export { config };
 ## TypeScript with ESM
 
 ### tsconfig.json Settings
+
 ```json
 {
   "compilerOptions": {
@@ -74,7 +81,9 @@ export { config };
 ```
 
 ### Import Extensions in TypeScript
+
 TypeScript requires `.js` extensions even though files are `.ts`:
+
 ```typescript
 // In a .ts file, importing another .ts file
 import { helper } from './helper.js'; // Note: .js not .ts!
@@ -85,13 +94,16 @@ import { helper } from './helper.js'; // Note: .js not .ts!
 ## Common ESM Pitfalls and Solutions
 
 ### 1. Circular Dependencies
+
 **Problem**: ESM is stricter about circular dependencies
-**Solution**: 
+**Solution**:
+
 - Use dynamic imports: `const { thing } = await import('./thing.js')`
 - Restructure to avoid circles
 - Create an index.js that exports in correct order
 
 ### 2. JSON Imports
+
 ```typescript
 // ❌ WRONG in older Node versions
 import data from './data.json';
@@ -105,13 +117,17 @@ const data = JSON.parse(readFileSync('./data.json', 'utf8'));
 ```
 
 ### 3. Testing with Vitest
+
 Vitest handles ESM well, but remember:
+
 - Mock paths need `.js` extensions
 - Use `vi.mock('./module.js')` not `vi.mock('./module')`
 - Dynamic imports in tests: `const { fn } = await import('./module.js')`
 
 ### 4. Build Tools
+
 **tsup configuration for ESM**:
+
 ```typescript
 export default {
   entry: ['src/index.ts'],
@@ -121,7 +137,7 @@ export default {
   target: 'node22',
   platform: 'node',
   splitting: false,
-}
+};
 ```
 
 ## Benefits We've Gained from ESM
@@ -144,7 +160,7 @@ export default {
    - Check: Is the path correct with .js extension?
    - Check: Is node_modules package ESM-compatible?
 
-3. **"__dirname is not defined"**
+3. **"\_\_dirname is not defined"**
    - Use: `import.meta.dirname` or workaround above
 
 4. **"Cannot use import statement outside a module"**
@@ -178,7 +194,8 @@ When creating new files in this ESM project:
 
 ---
 
-*Consult this document when:*
+_Consult this document when:_
+
 - Getting module resolution errors
 - Adding new dependencies
 - Setting up build configurations

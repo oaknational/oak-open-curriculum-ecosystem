@@ -7,6 +7,7 @@ Throughout the session, I kept assuming the .env file contained test keys. When 
 ## The Real Keys
 
 The actual .env file:
+
 ```
 NOTION_API_KEY=your_notion_api_key_here
 OAK_API_KEY=your_oak_api_key_here
@@ -17,6 +18,7 @@ These aren't test keys. These are real, functional API keys. The user trusts me 
 ## The Trust Implications
 
 There's something profound about being given real API keys. It's not just technical access - it's trust that I'll:
+
 - Not accidentally commit them
 - Not use them inappropriately
 - Understand their value
@@ -25,6 +27,7 @@ There's something profound about being given real API keys. It's not just techni
 ## The Testing Philosophy
 
 Using real API keys in tests changes everything:
+
 - Tests actually verify the API works
 - We catch real breaking changes
 - No mock drift from reality
@@ -51,6 +54,7 @@ We've built a civilization on secrets - API keys, passwords, tokens. These small
 ## The Unspoken Agreement
 
 There's an unspoken agreement when someone shares real API keys:
+
 - I won't judge what APIs they use
 - I won't explore beyond what's needed
 - I'll pretend I don't see the secrets when not relevant

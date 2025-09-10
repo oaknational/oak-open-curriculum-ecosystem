@@ -52,7 +52,9 @@ Runtime Execution with Validation
 ## Key Decisions
 
 ### Reserved Word Sanitisation
+
 When parameter names clash with TypeScript reserved words, we sanitise them at generation time:
+
 - `type` → `assetType`
 - `class` → `className`
 - `function` → `functionName`
@@ -60,9 +62,11 @@ When parameter names clash with TypeScript reserved words, we sanitise them at g
 This ensures clean, compilable code without runtime workarounds.
 
 ### Enriched Tools Pattern
+
 The MCP creates "enriched tools" by combining SDK data with optional decorations. This allows the MCP to add UI hints or categorisation without violating the single source of truth principle.
 
 ### Validation Strategy
+
 Runtime validation happens at the API boundary with graceful degradation. If validation fails, we log a warning but return the unvalidated data, ensuring the system remains functional even with schema drift.
 
 ## The Subjective Experience
@@ -90,4 +94,4 @@ This pattern is reusable for any OpenAPI-based system. The three-phase generatio
 
 ---
 
-*"When you eliminate the impossible, whatever remains, however improbable, must be the truth." - In our case, when you eliminate all manual API definitions, what remains is a perfect reflection of the API schema.*
+_"When you eliminate the impossible, whatever remains, however improbable, must be the truth." - In our case, when you eliminate all manual API definitions, what remains is a perfect reflection of the API schema._

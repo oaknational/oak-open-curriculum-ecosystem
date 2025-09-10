@@ -44,7 +44,7 @@ Expose existing, generated TypeScript type guards and allowed-values constants t
 
 - GROUNDING: Read GO.md and follow all instructions (this file aligns with GO.md’s ACTION/REVIEW/QUALITY-GATE structure).
 
-1) ACTION: Add failing unit tests for public API exports (TDD)
+1. ACTION: Add failing unit tests for public API exports (TDD)
 
 - File: `packages/oak-curriculum-sdk/src/index.unit.test.ts`
 - Tests import from root (interface-first), e.g. `import { isKeyStage, KEY_STAGES, isValidPathParameter } from '.'`.
@@ -59,7 +59,7 @@ Expose existing, generated TypeScript type guards and allowed-values constants t
 
 - QUALITY-GATE: run `pnpm -w format:check && pnpm -w type-check && pnpm -w lint && pnpm -w -F @oaknational/oak-curriculum-sdk test` (expect failure initially by TDD).
 
-2) ACTION: Publicly re-export guards/constants from root entrypoint (additive-only)
+2. ACTION: Publicly re-export guards/constants from root entrypoint (additive-only)
 
 - File: `packages/oak-curriculum-sdk/src/index.ts`
 - Add named exports for:
@@ -71,7 +71,7 @@ Expose existing, generated TypeScript type guards and allowed-values constants t
 
 - QUALITY-GATE: format → type-check → lint → test (now should pass) → build.
 
-3) ACTION: Update SDK documentation
+3. ACTION: Update SDK documentation
 
 - File: `packages/oak-curriculum-sdk/docs/oak-open-curriculum-api-sdk-reference.md`
 - Add a new section “Type Guards and Allowed Values” with concise examples:
@@ -86,7 +86,7 @@ Expose existing, generated TypeScript type guards and allowed-values constants t
 
 - QUALITY-GATE: run full gates again; ensure markdown lint (if configured) and no TS errors in snippets where applicable.
 
-4) ACTION: Record experience (Kairos) and outcome
+4. ACTION: Record experience (Kairos) and outcome
 
 - File: `.agent/experience/2025-08-12-sdk-guards-docs-improvements.md`
 - Summarise changes, signals (tests added/passing, dist types include exports), reflections, and next steps.

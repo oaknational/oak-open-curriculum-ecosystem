@@ -75,8 +75,6 @@ Every workspace needs these files:
     "type-check": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
@@ -86,12 +84,12 @@ Every workspace needs these files:
     // Add workspace and external dependencies
   },
   "devDependencies": {
-    "@types/node": "^22.10.5",
-    "tsx": "^4.19.2", // Only for MCP servers with dev scripts
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8",
-    "eslint": "^9.18.0"
+    "@types/node": "^22",
+    "tsx": "^4.20.5", // Only for MCP servers with dev scripts
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "eslint": "^9.35.0"
   }
 }
 ```
@@ -338,8 +336,8 @@ After creation, always verify:
 # 1. Create structure with all chora categories
 mkdir -p ecosystem/psycha/my-service-mcp/src/{chora/{morphai,stroma,aither,phaneron,eidola},organa,psychon}
 
-# 2. Copy configuration files from oak-curriculum-mcp
-cp apps/oak-curriculum-mcp/*.{json,ts} apps/my-service-mcp/
+# 2. Copy configuration files from oak-curriculum-mcp-stdio
+cp apps/oak-curriculum-mcp-stdio/*.{json,ts} apps/my-service-mcp/
 
 # 3. Update package.json name and description
 # 4. Add to pnpm-workspace.yaml

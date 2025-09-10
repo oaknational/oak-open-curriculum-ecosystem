@@ -103,14 +103,14 @@ export const workspaceArchitectureRules = {
           from: ['ecosystem/histoi/**', 'ecosystem/psycha/**', 'node_modules/**'],
           message: 'Moria (pure molecules) cannot have any external dependencies.',
         },
-        
+
         // Histoi isolation - tissues cannot depend on each other
         {
           target: 'ecosystem/histoi/*/**',
           from: ['ecosystem/histoi/!(${target})/**', 'ecosystem/psycha/**'],
           message: 'Tissues cannot depend on other tissues or organisms.',
         },
-        
+
         // Psycha isolation - organisms are independent
         {
           target: 'ecosystem/psycha/*/**',

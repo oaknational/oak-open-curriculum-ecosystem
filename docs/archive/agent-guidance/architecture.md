@@ -11,11 +11,11 @@ This codebase implements a **Biological Architecture with Greek Nomenclature**, 
 **Moria → Histoi → Psycha** - The three-tier ecosystem:
 
 - **Moria (Molecules/Atoms)**: Pure abstractions with zero dependencies
-  - *Example*: `Logger` interface, `StorageProvider` interface, pure algorithms
+  - _Example_: `Logger` interface, `StorageProvider` interface, pure algorithms
 - **Histoi (Tissues/Matrices)**: Runtime-adaptive connective tissues that bind organisms
-  - *Example*: Adaptive logger (console vs pino), adaptive storage (localStorage vs fs)
+  - _Example_: Adaptive logger (console vs pino), adaptive storage (localStorage vs fs)
 - **Psycha (Living Organisms)**: Complete applications
-  - *Example*: `oak-notion-mcp` server, `github-mcp` server
+  - _Example_: `oak-notion-mcp` server, `github-mcp` server
 
 ### Psychon Architecture (Within Each Organism)
 
@@ -90,22 +90,22 @@ This is not metaphor - it's mathematically grounded in complex systems theory. T
 
 ### Workspace Level Terms
 
-| Greek Term | Pronunciation | Translation | Definition | Example |
-|------------|---------------|-------------|------------|---------|
-| **Moria** (Μόρια) | MO-ree-ah | Molecules/Atoms | Pure abstractions, zero dependencies | `Logger` interface |
-| **Histoi** (Ἱστοί) | hee-STOY | Tissues/Matrices | Runtime-adaptive connective tissues | Adaptive logger tissue |
-| **Psycha** (ψυχά) | psoo-KHA | Living Organisms | Complete applications | `oak-notion-mcp` server |
+| Greek Term         | Pronunciation | Translation      | Definition                           | Example                 |
+| ------------------ | ------------- | ---------------- | ------------------------------------ | ----------------------- |
+| **Moria** (Μόρια)  | MO-ree-ah     | Molecules/Atoms  | Pure abstractions, zero dependencies | `Logger` interface      |
+| **Histoi** (Ἱστοί) | hee-STOY      | Tissues/Matrices | Runtime-adaptive connective tissues  | Adaptive logger tissue  |
+| **Psycha** (ψυχά)  | psoo-KHA      | Living Organisms | Complete applications                | `oak-notion-mcp` server |
 
 ### Psychon Level Terms
 
-| Greek Term | Pronunciation | Translation | Definition | Example |
-|------------|---------------|-------------|------------|---------|
-| **Morphai** (Μορφαί) | mor-FAI | Forms | Hidden forms, Platonic ideals | `ToolExecutor` pattern |
-| **Stroma** (Στρῶμα) | STRO-mah | Support/Foundation | Types and contracts (compile-time) | `NotionBlock` type |
-| **Aither** (Αἰθήρ) | eye-THAIR | Air/Essence | Logging and events (pervasive flows) | Logger flowing through layers |
-| **Phaneron** (Φανερόν) | fa-ne-RON | Manifestation | Configuration and environment | `.env` configuration |
-| **Organa** (Ὄργανα) | OR-ga-na | Organs | Discrete business logic | Notion search organ |
-| **Psychon** (Ψυχόν) | psoo-KHON | Soul/Living Whole | The wiring layer | Main application class |
+| Greek Term             | Pronunciation | Translation        | Definition                           | Example                       |
+| ---------------------- | ------------- | ------------------ | ------------------------------------ | ----------------------------- |
+| **Morphai** (Μορφαί)   | mor-FAI       | Forms              | Hidden forms, Platonic ideals        | `ToolExecutor` pattern        |
+| **Stroma** (Στρῶμα)    | STRO-mah      | Support/Foundation | Types and contracts (compile-time)   | `NotionBlock` type            |
+| **Aither** (Αἰθήρ)     | eye-THAIR     | Air/Essence        | Logging and events (pervasive flows) | Logger flowing through layers |
+| **Phaneron** (Φανερόν) | fa-ne-RON     | Manifestation      | Configuration and environment        | `.env` configuration          |
+| **Organa** (Ὄργανα)    | OR-ga-na      | Organs             | Discrete business logic              | Notion search organ           |
+| **Psychon** (Ψυχόν)    | psoo-KHON     | Soul/Living Whole  | The wiring layer                     | Main application class        |
 
 ## Quick Decision Trees
 
@@ -217,7 +217,7 @@ const notion = createNotionOperations({ logger });
 ```typescript
 // ✅ CORRECT: Organ using injected dependencies
 // organa/notion/index.ts
-export function createNotionOperations(deps: { 
+export function createNotionOperations(deps: {
   logger: Logger; // From aither
   config: Config; // From phaneron
 }) {
