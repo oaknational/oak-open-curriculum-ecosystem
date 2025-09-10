@@ -27,14 +27,18 @@
         "src/**/*.ts",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
-      ]
+      ],
+      "env": ["OAK_API_KEY"],
+      "passThroughEnv": ["OAK_API_KEY"]
     },
     "clean": {
       "cache": false
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["OAK_API_KEY"],
+      "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
       "dependsOn": ["^build"],
