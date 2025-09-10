@@ -26,12 +26,21 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 - E2E tests: 401 missing `Authorization`, tools/list with dev token, JWT happy path, CORS/DNS negative checks, list‑tools parity, 401 `WWW-Authenticate` assertions, and a stubbed success-path with SSE parsing.
 - STDIO server: added failing test for non‑empty `list_tools`, enhanced startup diagnostics (tool count, transport connect) logged to `.logs`, and fixed a Cursor config path issue (root cause of “No tools or prompts”).
 - All quality gates green (type-check, lint, unit, e2e, build).
+- All quality gates green (type-check, lint, unit, e2e, build). Production deploy on Vercel runs Node LAMBDAS with the Express framework; default export of the Express app is in `apps/oak-curriculum-mcp-streamable-http/src/index.ts`.
+
+### Recent fixes and operational learnings
+
+- Vercel runtime contract: added default export of Express app to satisfy Express framework; removed monorepo root `api/server.ts` and rewrites.
+- OAuth endpoints: ensure `/.well-known/*` initialize before bearer checks to avoid 401s; metadata does not require `OAK_API_KEY`.
+- Hosts: wildcard host support for dynamic preview URLs (e.g. `poc-oak-open-curriculum-*.vercel.thenational.academy`).
+- SSE parsing: tests parse first `data:` JSON line; no brittle string matching.
 
 ## Next Actions (short)
 
-1. Optional: add E2E tool success path using the real API (prove end‑to‑end success); add explicit error path assertion.
-2. Documentation: add a Vercel‑focused README under `apps/oak-curriculum-mcp-streamable-http/` with minimal env config and a curl example.
-3. Document MCP client configuration for local tooling (Cursor) including the correct command path; add a short troubleshooting note pointing to startup logs when tools appear empty.
+1. MANDATORY: implement production OAuth 2.1 (Authorization Code + PKCE for UI; Device Authorization Grant for MCP/CLI). Restrict Google logins to `*.thenational.academy`; AS issues RFC 9068 JWTs (iss=`BASE_URL`, aud=`MCP_CANONICAL_URI`).
+2. Documentation: keep `apps/oak-curriculum-mcp-streamable-http/README.md` aligned (Express framework, default export, troubleshooting, OAuth tokens usage).
+3. CI: add a post-deploy Vercel smoke check (GET `/` and `/.well-known/oauth-protected-resource`).
+4. Optional: add E2E tool success path using the real API (`E2E_REAL_API=true` + `OAK_API_KEY`) and explicit error path assertion.
 
 ## Non‑negotiables
 
@@ -48,7 +57,7 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 - `REMOTE_MCP_ALLOW_NO_AUTH` – `true|false` (default `false`) enables no‑auth on localhost only
 - `REMOTE_MCP_DEV_TOKEN` – dev bearer token for local/testing; ignored on Vercel
 - `REMOTE_MCP_CI_TOKEN` – CI bearer token, honoured only when `CI === 'true'`
-- `ALLOWED_HOSTS`, `ALLOWED_ORIGINS` – comma-separated lists; fail-closed defaults; allow localhost in dev
+- `ALLOWED_HOSTS`, `ALLOWED_ORIGINS` – comma-separated lists; fail-closed defaults; allow localhost in dev; hosts support `*` wildcards
 - `LOG_LEVEL` – `debug|info|warn|error` (default `info`)
 - Hosting flags: `VERCEL`, `VERCEL_ENV` (preview/production), `CI`
 - AS/RS demo flags: `ENABLE_LOCAL_AS` (`true|false`), `LOCAL_AS_JWK` (public JWK JSON), `BASE_URL`, `MCP_CANONICAL_URI`
@@ -76,9 +85,9 @@ Purpose: Provide a stable, minimal context to continue work on the Remote MCP En
 Required
 
 - `OAK_API_KEY` – curriculum API key
-- `BASE_URL` – `https://<project>.vercel.app`
+- `BASE_URL` – `https://curriculum-mcp-alpha.oaknational.dev`
 - `MCP_CANONICAL_URI` – `${BASE_URL}/mcp`
-- `ALLOWED_HOSTS` – `<project>.vercel.app,localhost`
+- `ALLOWED_HOSTS` – `poc-oak-open-curriculum-*.vercel.thenational.academy,curriculum-mcp-alpha.oaknational.dev,localhost`
 
 Optional
 
@@ -96,6 +105,34 @@ curl -sS \
   -X POST "$URL/mcp" \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
+
+## Live validation (production)
+
+Health
+
+```bash
+curl -sS -i https://curriculum-mcp-alpha.oaknational.dev/
+```
+
+Expect 200 and JSON body with status ok.
+
+OAuth metadata
+
+```bash
+curl -sS -i https://curriculum-mcp-alpha.oaknational.dev/.well-known/oauth-protected-resource
+```
+
+Expect 200 JSON with resource and authorization_servers.
+
+401 challenge (no auth)
+
+```bash
+curl -sS -i -H 'Accept: application/json, text/event-stream' -H 'Content-Type: application/json' \
+  -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}' \
+  https://curriculum-mcp-alpha.oaknational.dev/mcp
+```
+
+Expect 401 with `WWW-Authenticate` including `resource` and `authorization_uri`.
 
 ## Quality Gates (from repo root)
 

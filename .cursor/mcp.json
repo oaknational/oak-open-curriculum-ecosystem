@@ -1,10 +1,16 @@
 {
   "mcpServers": {
-    "oak-curriculum-dev": {
+    "oak-curriculum-local": {
       "command": "pnpm",
       "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"],
       "env": {
         "LOG_LEVEL": "debug"
+      }
+    },
+    "oak-curriculum-remote": {
+      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp",
+      "headers": {
+        "Authorization": "Bearer super-duper-secret-dev-token?!"
       }
     }
   }

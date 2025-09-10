@@ -7,6 +7,19 @@ import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler } from './handlers.js';
 
+function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler): void {
+  app.options('/mcp', corsMw);
+  app.head('/mcp', (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).end();
+  });
+  app.get('/mcp', (_req, res) => {
+    res
+      .type('application/json')
+      .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
+  });
+}
+
 export function createApp(): express.Express {
   const app = express();
   // eslint-disable-next-line import-x/no-named-as-default-member -- allow since we already import the default express (no treeshaking advantage)
@@ -19,6 +32,8 @@ export function createApp(): express.Express {
   registerHandlers(server);
   // Expose resource metadata immediately
   setupOAuthMetadata(app, corsMw);
+  // Lightweight unauthenticated health endpoints for tooling/UI probes
+  addHealthEndpoints(app, corsMw);
   // Ensure local AS endpoints are registered before handling requests
   const asReady = setupLocalAuthorizationServer(app, corsMw).catch((err: unknown) => {
     if (err instanceof Error) {
