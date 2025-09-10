@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/**/*.ts": { "runtime": "nodejs22.x" },
+    "api/**/*.js": { "runtime": "nodejs22.x" }
+  },
+  "rewrites": [
+    { "source": "/", "destination": "/api/server" },
+    { "source": "/mcp", "destination": "/api/server" },
+    { "source": "/.well-known/:path*", "destination": "/api/server" }
+  ]
+}

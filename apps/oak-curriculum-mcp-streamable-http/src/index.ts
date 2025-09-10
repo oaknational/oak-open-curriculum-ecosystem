@@ -33,6 +33,17 @@ export function createApp(): express.Express {
   app.use(bearerAuth);
   app.post('/mcp', createMcpHandler(transport));
 
+  // Basic health for root when routed via Vercel
+  app.get('/', (_req, res) => {
+    res.type('application/json').send(
+      JSON.stringify({
+        status: 'ok',
+        name: 'oak-curriculum-mcp-streamable-http',
+        routes: ['/mcp', '/.well-known/oauth-protected-resource'],
+      }),
+    );
+  });
+
   return app;
 }
 
