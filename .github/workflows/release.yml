@@ -17,8 +17,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
           run_install: false
 
@@ -32,8 +32,8 @@ jobs:
         run: pnpm install
 
       - name: Create Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # We don't want to run husky hooks in the release workflow
           HUSKY: 0
-        run: npx semantic-release
