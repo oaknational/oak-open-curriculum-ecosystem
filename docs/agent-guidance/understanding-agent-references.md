@@ -23,7 +23,7 @@ Our reference documents provide:
 
 ## Reference Structure
 
-```
+```text
 .agent/reference/
 ├── README.md                      # Index with links to sources
 ├── mcp-docs-for-agents.md        # MCP overview for AI agents
@@ -47,7 +47,7 @@ Our reference documents provide:
 
 When working with Claude or other AI assistants:
 
-```
+```text
 "Can you explain how MCP resources work? Check the reference docs."
 "Look at the Notion SDK reference and tell me how to query a database."
 "Review the Claude MCP docs and help me debug this connection issue."
@@ -59,13 +59,13 @@ When working with Claude or other AI assistants:
 
 **mcp-docs-for-agents.md**
 
-- Extracted from: https://modelcontextprotocol.io/llms-full.txt
+- Extracted from: <https://modelcontextprotocol.io/llms-full.txt>
 - Purpose: Complete MCP overview optimized for AI processing
 - Use when: Understanding MCP concepts, designing new features
 
 **mcp-typescript-sdk-readme.md**
 
-- Source: https://github.com/modelcontextprotocol/typescript-sdk
+- Source: <https://github.com/modelcontextprotocol/typescript-sdk>
 - Purpose: SDK API reference and examples
 - Use when: Implementing MCP handlers, understanding SDK patterns
 
@@ -73,13 +73,13 @@ When working with Claude or other AI assistants:
 
 **notion-api-overview.md**
 
-- Source: https://developers.notion.com/docs/getting-started
+- Source: <https://developers.notion.com/docs/getting-started>
 - Purpose: Core Notion API concepts
 - Use when: Understanding Notion's data model
 
 **notion-sdk-readme.md**
 
-- Source: https://github.com/makenotion/notion-sdk-js
+- Source: <https://github.com/makenotion/notion-sdk-js>
 - Purpose: JavaScript/TypeScript SDK reference
 - Use when: Writing code that calls Notion API
 
@@ -87,13 +87,13 @@ When working with Claude or other AI assistants:
 
 **claude-configuration-docs.md**
 
-- Source: https://docs.anthropic.com/en/docs/claude-code/settings
+- Source: <https://docs.anthropic.com/en/docs/claude-code/settings>
 - Purpose: How to configure MCP servers in Claude
 - Use when: Setting up or troubleshooting Claude integration
 
 **claude-mcp-docs.md**
 
-- Source: https://docs.anthropic.com/en/docs/claude-code/mcp
+- Source: <https://docs.anthropic.com/en/docs/claude-code/mcp>
 - Purpose: Claude's MCP implementation details
 - Use when: Understanding Claude-specific MCP features
 
@@ -167,20 +167,21 @@ Here's how a developer might use these references:
 
 2. **Check agent references**:
 
-   ```
+   ```text
    Read notion-sdk-readme.md section on pagination
    Find the iteratePaginatedAPI helper
    ```
 
 3. **Ask AI assistant**:
 
-   ```
+   ```text
    "Looking at notion-sdk-readme.md, how would I implement
    pagination for the notion-query-database tool?"
    ```
 
 4. **Deep dive if needed**:
-   ```
+
+   ```text
    Visit https://github.com/makenotion/notion-sdk-js
    Check examples/pagination.js
    ```

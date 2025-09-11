@@ -3,6 +3,7 @@
 A Next.js workspace that indexes Oak curriculum content and exposes a hybrid (semantic + lexical) search API intended to supersede the basic SDK search.
 
 **Highlights**
+
 - **Serverless Elasticsearch** indices:
   - `oak_lessons` — transcripts + `lesson_semantic`
   - `oak_units` — unit metadata & filters
@@ -21,6 +22,7 @@ See `ARCHITECTURE.md`, `ROLLUP.md`, `SETUP.md`, and `SDK-ENDPOINTS.md`.
 ## Quick examples
 
 **Structured units search**
+
 ```bash
 curl -X POST http://localhost:3000/api/search \
   -H 'content-type: application/json' \
@@ -28,6 +30,7 @@ curl -X POST http://localhost:3000/api/search \
 ```
 
 **Natural language (LLM)**
+
 ```bash
 curl -X POST http://localhost:3000/api/search/nl \
   -H 'content-type: application/json' \

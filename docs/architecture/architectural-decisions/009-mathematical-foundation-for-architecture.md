@@ -76,16 +76,16 @@ The principles we're applying have been validated across:
 
 ## References
 
-1. Meena, C., Hens, C., Acharyya, S. et al. (2023). Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042. https://doi.org/10.1038/s41567-023-02020-8
+1. Meena, C., Hens, C., Acharyya, S. et al. (2023). Emergent stability in complex network dynamics. Nat. Phys. 19, 1033–1042. <https://doi.org/10.1038/s41567-023-02020-8>
 
-2. Scheffer, M., et al. (2009). Early-warning signals for critical transitions. Nature. https://doi.org/10.1038/nature08227
+2. Scheffer, M., et al. (2009). Early-warning signals for critical transitions. Nature. <https://doi.org/10.1038/nature08227>
 
-3. Beggs, J. M., & Plenz, D. (2003). Neuronal avalanches in neocortical circuits. Journal of Neuroscience. https://doi.org/10.1523/JNEUROSCI.23-35-11167.2003
+3. Beggs, J. M., & Plenz, D. (2003). Neuronal avalanches in neocortical circuits. Journal of Neuroscience. <https://doi.org/10.1523/JNEUROSCI.23-35-11167.2003>
 
-4. Schoenholz, S. S., et al. (2017). Deep information propagation. ICLR. https://arxiv.org/abs/1611.01232
+4. Schoenholz, S. S., et al. (2017). Deep information propagation. ICLR. <https://arxiv.org/abs/1611.01232>
 
-5. Hatton, I. A., et al. (2024). Scaling laws predict ecosystem stability across trophic levels. Science. https://doi.org/10.1126/science.ade4513
+5. Hatton, I. A., et al. (2024). Scaling laws predict ecosystem stability across trophic levels. Science. <https://doi.org/10.1126/science.ade4513>
 
-6. Maturana, M. I., et al. (2020). Critical slowing down as a biomarker for seizure susceptibility. Nature Communications. https://doi.org/10.1038/s41467-020-14742-1
+6. Maturana, M. I., et al. (2020). Critical slowing down as a biomarker for seizure susceptibility. Nature Communications. <https://doi.org/10.1038/s41467-020-14742-1>
 
-7. Rietkerk, M., et al. (2021). Spatial self-organization can postpone critical transitions in ecosystems. Science. https://doi.org/10.1126/science.abj0359
+7. Rietkerk, M., et al. (2021). Spatial self-organization can postpone critical transitions in ecosystems. Science. <https://doi.org/10.1126/science.abj0359>

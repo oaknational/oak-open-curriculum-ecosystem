@@ -28,7 +28,7 @@ echo $NOTION_API_KEY
 
 #### Symptom
 
-```
+```text
 MCP tools fail with connection errors
 "Failed to connect" messages when using Notion tools
 ```
@@ -41,7 +41,7 @@ The dev server uses `tsx` in `--watch` mode, which can crash and need restarting
 
 1. **Check connection status**:
 
-   ```
+   ```text
    /mcp
    ```
 
@@ -59,7 +59,7 @@ The dev server uses `tsx` in `--watch` mode, which can crash and need restarting
 
 #### Symptom
 
-```
+```text
 Error: NOTION_API_KEY is required but not found
 ```
 
@@ -67,7 +67,7 @@ Error: NOTION_API_KEY is required but not found
 
 1. **Check environment variable**:
 
-   ```bash
+   ```shell
    echo $NOTION_API_KEY
    ```
 
@@ -84,6 +84,7 @@ Error: NOTION_API_KEY is required but not found
    ```
 
 4. **Check Claude configuration**:
+
    ```json
    {
      "mcpServers": {
@@ -100,7 +101,7 @@ Error: NOTION_API_KEY is required but not found
 
 #### Symptom
 
-```
+```text
 Error: Invalid API key
 APIResponseError: API token is invalid
 ```
@@ -118,7 +119,8 @@ APIResponseError: API token is invalid
    - Regenerate key if needed
 
 3. **Test API key directly**:
-   ```bash
+
+   ```shell
    curl -X GET 'https://api.notion.com/v1/users/me' \
      -H 'Authorization: Bearer YOUR_API_KEY' \
      -H 'Notion-Version: 2022-06-28'
@@ -128,7 +130,7 @@ APIResponseError: API token is invalid
 
 #### Symptom
 
-```
+```text
 Error: Insufficient permissions
 You do not have access to this resource
 ```
@@ -154,7 +156,7 @@ You do not have access to this resource
 
 #### Symptom
 
-```
+```text
 Error: Connection timeout
 Network error: ECONNREFUSED
 ```
@@ -163,7 +165,7 @@ Network error: ECONNREFUSED
 
 1. **Check internet connection**:
 
-   ```bash
+   ```shell
    ping api.notion.com
    ```
 
@@ -173,7 +175,8 @@ Network error: ECONNREFUSED
    - Try without VPN
 
 3. **Test Notion API directly**:
-   ```bash
+
+   ```shell
    curl https://api.notion.com/v1/users
    ```
 
@@ -207,6 +210,7 @@ Network error: ECONNREFUSED
    ```
 
 3. **Test with absolute path**:
+
    ```json
    {
      "command": "node",
@@ -218,7 +222,7 @@ Network error: ECONNREFUSED
 
 #### Symptom
 
-```
+```text
 Error: Page/Database not found
 Resource with ID xxx does not exist
 ```
@@ -244,7 +248,7 @@ Resource with ID xxx does not exist
 
 #### Symptom
 
-```
+```text
 Error: Rate limited
 Too many requests
 ```
@@ -302,7 +306,7 @@ This is intentional! Emails are scrubbed for privacy:
 
 #### Symptom
 
-```
+```text
 Error: Cannot find module
 ESM errors
 ```
@@ -311,13 +315,13 @@ ESM errors
 
 1. **Check Node.js version**:
 
-   ```bash
+   ```shell
    node --version  # Must be 22+
    ```
 
 2. **Clear npm cache**:
 
-   ```bash
+   ```shell
    npm cache clean --force
    rm -rf node_modules
    npm install

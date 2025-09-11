@@ -134,7 +134,7 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 
 - operationId: getAssets-getLessonAssets
 - summary: Downloadable lesson assets
-- description: This endpoint returns the types of available assets for a given lesson, and the download endpoints for each. 
+- description: This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
   This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
 
 Parameters:

@@ -1,6 +1,7 @@
 # Architecture
 
 ## Indices
+
 - `oak_lessons`
   - `lesson_title` (text), `subject_slug` (keyword), `key_stage` (keyword)
   - `transcript_text` (text, term vectors, highlightable)
@@ -14,6 +15,7 @@
   - `unit_semantic` (`semantic_text`)
 
 ## Endpoints
+
 - **Structured**: `POST /api/search` – requires a structured body (no LLM).
 - **Natural language**: `POST /api/search/nl` – converts `q` into a structured query via LLM (disabled if no OPENAI_API_KEY).
 - **Indexer**: `GET /api/index-oak` (admin header `x-api-key`).
@@ -21,6 +23,7 @@
 - **SDK parity**: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
 
 ## Data flow
+
 - **Indexing:** `/api/index-oak` uses the **SDK** to fetch units, lessons, and transcripts, then bulk indexes to `oak_lessons` and `oak_units`.
 - **Rollups:** `/api/rebuild-rollup` reads units + lessons from ES, synthesizes short lesson passages, and indexes `oak_unit_rollup`.
 - **Search:** both endpoints call a shared core (`runHybridSearch`) that:

@@ -9,8 +9,15 @@ These expose the original API search for completeness and parity checks. The hyb
 - **Filters:** `keyStage`, `subject`, **`unit`** (optional).
   Body:
 
-```
-{ "q": "fractions", "keyStage": "ks2", "subject": "maths", "unit": "optional-unit-slug", "limit": 20, "offset": 0 }
+```json
+{
+  "q": "fractions",
+  "keyStage": "ks2",
+  "subject": "maths",
+  "unit": "optional-unit-slug",
+  "limit": 20,
+  "offset": 0
+}
 ```
 
 ## POST /api/sdk/search-transcripts
@@ -19,6 +26,6 @@ These expose the original API search for completeness and parity checks. The hyb
 - **Defaults:** 5 results (as per public docs).
   Body:
 
-```
+```json
 { "q": "photosynthesis", "keyStage": "ks3", "subject": "science" }
 ```

@@ -129,7 +129,7 @@ This tri-level structure mirrors findings in neuroscience where signals have str
 
 ### Directory Structure
 
-```
+```text
 src/
 ├── substrate/           # Foundation layer ✅ COMPLETED
 │   ├── types/          # Core types (LogLevel, etc.)
@@ -190,7 +190,7 @@ While the original design included a "tissue" level between cells and organs/sys
 
 ### Scientific Foundation
 
-- Meena, C., et al. (2023). Emergent stability in complex network dynamics. Nature Physics. https://doi.org/10.1038/s41567-023-02020-8
-- Scheffer, M., et al. (2009). Early-warning signals for critical transitions. Nature. https://doi.org/10.1038/nature08227
-- Beggs, J. M., & Plenz, D. (2003). Neuronal avalanches in neocortical circuits. Journal of Neuroscience. https://doi.org/10.1523/JNEUROSCI.23-35-11167.2003
+- Meena, C., et al. (2023). Emergent stability in complex network dynamics. Nature Physics. <https://doi.org/10.1038/s41567-023-02020-8>
+- Scheffer, M., et al. (2009). Early-warning signals for critical transitions. Nature. <https://doi.org/10.1038/nature08227>
+- Beggs, J. M., & Plenz, D. (2003). Neuronal avalanches in neocortical circuits. Journal of Neuroscience. <https://doi.org/10.1523/JNEUROSCI.23-35-11167.2003>
 - Complex Systems Research Summary (2021-2025) - See `.agent/reference/complex-systems-dynamics/`

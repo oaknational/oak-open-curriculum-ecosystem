@@ -8,7 +8,7 @@ For experienced developers who want to jump straight in.
 
 When assigning tasks to AI agents, always include:
 
-```
+```text
 "[Task description]. Read GO.md and follow all instructions"
 ```
 
@@ -16,7 +16,7 @@ This ensures the agent maintains focus, quality, and regular grounding. See [AI 
 
 ## Architecture TL;DR
 
-```
+```text
 Claude/AI Agent → MCP Protocol → Our Server → Notion API
                                        ↓
                               Pure Functions Core
@@ -32,7 +32,7 @@ Claude/AI Agent → MCP Protocol → Our Server → Notion API
 
 ## Code Map (current)
 
-```
+```text
 src/
 ├── app/              # Application wiring and bootstrap
 ├── config/           # Runtime configuration (e.g. runtime.json)
@@ -47,7 +47,7 @@ src/
 
 ## Quick Start
 
-```bash
+```shell
 # Setup
 git clone <repo> && cd oak-notion-mcp
 pnpm install
@@ -164,7 +164,7 @@ try {
 
 ## Git Workflow
 
-```bash
+```shell
 git checkout -b feat/your-feature
 # Make changes with TDD
 pnpm test:watch
@@ -180,7 +180,7 @@ git push origin feat/your-feature
 
 ## Debugging
 
-```bash
+```shell
 # Enable debug logs
 LOG_LEVEL=debug pnpm dev
 
