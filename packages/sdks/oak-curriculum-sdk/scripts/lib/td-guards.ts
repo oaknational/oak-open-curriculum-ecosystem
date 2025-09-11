@@ -1,9 +1,10 @@
 /*
  * TypeDoc guard helpers (small, pure, no side effects)
  */
+import { isPlainObject } from '../../src/types/helpers';
 
-export function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null;
+export function isRecord(v: unknown): v is object {
+  return isPlainObject(v);
 }
 
 export function isString(v: unknown): v is string {

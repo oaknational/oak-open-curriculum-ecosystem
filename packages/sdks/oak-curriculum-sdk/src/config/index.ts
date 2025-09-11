@@ -13,27 +13,20 @@ const defaultApiSchemaUrl = {
   v0: new URL('api/v0/swagger.json', defaultBaseUrl).href,
 };
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
+import { getOwnValue } from '../types/helpers.js';
 
 function getEnvironmentVariable(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string | undefined {
   // Try Node.js environment first
-  if (typeof process !== 'undefined' && isRecord(process.env)) {
+  if (typeof process !== 'undefined') {
     const value = process.env[key];
-    return typeof value === 'string' ? value : undefined;
+    if (typeof value === 'string') return value;
   }
 
   // Try Cloudflare Workers environment
   // Check if globalThis has an env property dynamically
-  const envDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'env');
-  if (envDescriptor && isRecord(envDescriptor.value)) {
-    const env = envDescriptor.value;
-    const valueDescriptor = Object.getOwnPropertyDescriptor(env, key);
-    if (valueDescriptor && typeof valueDescriptor.value === 'string') {
-      return valueDescriptor.value;
-    }
-  }
+  const env = getOwnValue(globalThis, 'env');
+  const val = getOwnValue(env, key);
+  if (typeof val === 'string') return val;
 
   return undefined;
 }

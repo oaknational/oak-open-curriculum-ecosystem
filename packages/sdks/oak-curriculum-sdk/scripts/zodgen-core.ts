@@ -2,29 +2,26 @@ import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import type { OpenAPIObject } from 'openapi3-ts';
+import { isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
 
 // Small helper type guards to keep complexity low and avoid assertions
-function isNonNullObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function hasStringProp(o: Record<string, unknown>, key: string): boolean {
-  return typeof o[key] === 'string';
-}
-
 function isOpenAPIInfo(value: unknown): value is { title: string; version: string } {
-  if (!isNonNullObject(value)) return false;
-  return hasStringProp(value, 'title') && hasStringProp(value, 'version');
+  if (!isPlainObject(value)) return false;
+  const title = getOwnString(value, 'title');
+  const version = getOwnString(value, 'version');
+  return typeof title === 'string' && typeof version === 'string';
 }
 
 // Type guard: validate we have a minimal OpenAPIObject shape without using assertions
 function isOpenAPIObject(doc: unknown): doc is OpenAPIObject {
-  if (!isNonNullObject(doc)) return false;
-  const o = doc;
-  if (!hasStringProp(o, 'openapi')) return false;
-  if (!isNonNullObject(o.paths)) return false;
-  if (!isOpenAPIInfo(o.info)) return false;
+  if (!isPlainObject(doc)) return false;
+  const openapi = getOwnString(doc, 'openapi');
+  if (typeof openapi !== 'string') return false;
+  const paths = getOwnValue(doc, 'paths');
+  if (!isPlainObject(paths)) return false;
+  const info = getOwnValue(doc, 'info');
+  if (!isOpenAPIInfo(info)) return false;
   return true;
 }
 

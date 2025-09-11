@@ -19,6 +19,7 @@ function buildPreamble(): string {
   ].join('\n');
 }
 
+// eslint-disable-next-line max-statements -- Code generation, we could break it up, but that might negatively affect readability
 function buildExecutorBlock(path: string, method: string): string {
   const code: string[] = [];
   code.push('const executor= (client: OakApiPathBasedClient) => {');
@@ -26,12 +27,8 @@ function buildExecutorBlock(path: string, method: string): string {
   code.push('    if (!isValidRequestParams(params)) {');
   code.push('      throw new TypeError(getValidRequestParamsDescription());');
   code.push('    }');
-  code.push(`    const ep = (client as Record<string, unknown>)[${JSON.stringify(path)}];`);
-  code.push(
-    `    const call = ep && typeof ep === "object" ? (ep as Record<string, (p: ValidRequestParams) => Promise<unknown>>)[${JSON.stringify(
-      method.toUpperCase(),
-    )}] : undefined;`,
-  );
+  code.push(`    const ep = client[${JSON.stringify(path)}];`);
+  code.push(`    const call = ep ? ep[${JSON.stringify(method.toUpperCase())}] : undefined;`);
   code.push('    if (typeof call !== "function") {');
   code.push(
     `      throw new TypeError('Invalid method on endpoint: ${method.toUpperCase()} for ${path}');`,
@@ -47,6 +44,13 @@ function buildExecutorBlock(path: string, method: string): string {
   code.push('  return executor(client)(_params);');
   code.push('};');
   code.push('');
+  code.push('const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {');
+  code.push('  if (!isValidRequestParams(_params)) {');
+  code.push('    throw new TypeError(getValidRequestParamsDescription());');
+  code.push('  }');
+  code.push('  return executor(client)(_params);');
+  code.push('};');
+  code.push('');
   return code.join('\n');
 }
 
@@ -55,8 +59,10 @@ function buildExportBlock(safeName: string): string {
     `export const ${safeName} = {`,
     '  executor,',
     '  getExecutorFromGenericRequestParams,',
+    '  invoke,',
     '  pathParams,',
     '  queryParams,',
+    '  inputSchema,',
     '  operationId,',
     '  name,',
     '  path,',

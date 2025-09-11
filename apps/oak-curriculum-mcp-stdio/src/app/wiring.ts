@@ -3,8 +3,8 @@
  * Assembles all components into a working MCP server
  */
 
-import { createMcpOrgan } from '../tools/index.js';
-import type { McpOrgan } from '../tools/index.js';
+import { createMcpToolsModule } from '../tools/index.js';
+import type { McpToolsModule } from '../tools/index.js';
 import { createRuntime, type CoreLogger } from '@oaknational/mcp-core';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
@@ -102,7 +102,7 @@ function createLogger(level: string, enableFileLogging = true): Logger {
  */
 export interface WiredDependencies {
   logger: Logger;
-  mcpOrgan: McpOrgan;
+  mcpOrgan: McpToolsModule;
   config: Required<ServerConfig>;
   runtime: ReturnType<typeof createRuntime>;
 }
@@ -167,7 +167,7 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   const client = createOakPathBasedClient(serverConfig.apiKey);
 
   // Create MCP tools module with injected client
-  const mcpOrgan = createMcpOrgan({ client });
+  const mcpOrgan = createMcpToolsModule({ client });
 
   return {
     logger,

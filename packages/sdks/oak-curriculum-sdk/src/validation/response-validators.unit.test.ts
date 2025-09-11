@@ -68,8 +68,9 @@ describe('validateResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toHaveProperty('extraField');
-        expect(result.value.extraField).toBe('This is allowed');
+        const d = Object.getOwnPropertyDescriptor(result.value as object, 'extraField');
+        expect(typeof d?.value === 'string').toBe(true);
+        expect(d?.value).toBe('This is allowed');
       }
     });
   });

@@ -40,11 +40,15 @@ const queryParams= {
 
 void pathParams;
 void queryParams;
+type PathParamsShape = {
+  keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4';
+  subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';
+};
 type ValidRequestParams= {params: {
-  path?: Record<string, unknown>;
-  query?: Record<string, unknown>;
+  path: PathParamsShape;
 }}
 
+const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2'","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -66,32 +70,36 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
       if (!has) return false;
     }
   }
-  const validateValue = (meta: unknown, value: unknown): boolean => {
-    if (!meta || typeof meta !== "object") return true;
-    const m = meta as {
-      valueConstraint?: boolean;
-      typeguard?: (v: unknown) => boolean
-    };
-    if (m.valueConstraint && typeof m.typeguard === "function") {
-      return m.typeguard(value);
+  const hasTypeguardAndValidate = (container: unknown, key: string, value: unknown): boolean => {
+    if (container === null || typeof container !== 'object') return true;
+    const metaDesc = Object.getOwnPropertyDescriptor(container, key);
+    const metaVal = metaDesc?.value;
+    if (metaVal && typeof metaVal === 'object') {
+      const tgDesc = Object.getOwnPropertyDescriptor(metaVal, 'typeguard');
+      const vcDesc = Object.getOwnPropertyDescriptor(metaVal, 'valueConstraint');
+      const typeguard = tgDesc?.value;
+      const hasConstraint = vcDesc?.value === true;
+      if (hasConstraint && typeof typeguard === "function") {
+        return typeguard(value);
+      }
     }
     return true;
   };
   if (path) {
     for (const [k, v] of Object.entries(path)) {
-      if (!validateValue((pathParams as Record<string, unknown>)[k], v)) return false;
+      if (!hasTypeguardAndValidate(pathParams, k, v)) return false;
     }
   }
   if (query) {
     for (const [k, v] of Object.entries(query)) {
-      if (!validateValue((queryParams as Record<string, unknown>)[k], v)) return false;
+      if (!hasTypeguardAndValidate(queryParams, k, v)) return false;
     }
   }
   return true;
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\'","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -101,8 +109,8 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = (client as Record<string, unknown>)["/key-stages/{keyStage}/subject/{subject}/units"];
-    const call = ep && typeof ep === "object" ? (ep as Record<string, (p: ValidRequestParams) => Promise<unknown>>)["GET"] : undefined;
+    const ep = client["/key-stages/{keyStage}/subject/{subject}/units"];
+    const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
       throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/units');
     }
@@ -114,11 +122,20 @@ const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient
   return executor(client)(_params);
 };
 
+const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
+  if (!isValidRequestParams(_params)) {
+    throw new TypeError(getValidRequestParamsDescription());
+  }
+  return executor(client)(_params);
+};
+
 export const oakGetKeyStagesSubjectUnits = {
   executor,
   getExecutorFromGenericRequestParams,
+  invoke,
   pathParams,
   queryParams,
+  inputSchema,
   operationId,
   name,
   path,

@@ -13,8 +13,16 @@ describe('typegen-core', () => {
       const jsonSchema = '{"test": "value"}';
       const tsTypesContent = 'export type Test = string;';
       const pathParameterContent = 'export const PATHS = {};';
+      const pathUtilsContent = 'export const DUMMY = 1;';
 
-      const result = createFileMap(sourceSchema, jsonSchema, tsTypesContent, pathParameterContent);
+      const result = createFileMap(
+        sourceSchema,
+        jsonSchema,
+        tsTypesContent,
+        pathParameterContent,
+        pathUtilsContent,
+        'export const RESPONSE_MAP = new Map();',
+      );
 
       expect(result).toHaveProperty('api-schema.json');
       expect(result).toHaveProperty('api-schema-base.ts');
@@ -35,8 +43,16 @@ describe('typegen-core', () => {
       const jsonSchema = '{"openapi": "3.0.0"}';
       const tsTypesContent = 'types';
       const pathParameterContent = 'parameters';
+      const pathUtilsContent = 'utils';
 
-      const result = createFileMap(sourceSchema, jsonSchema, tsTypesContent, pathParameterContent);
+      const result = createFileMap(
+        sourceSchema,
+        jsonSchema,
+        tsTypesContent,
+        pathParameterContent,
+        pathUtilsContent,
+        'export const RESPONSE_MAP = new Map();',
+      );
 
       expect(result['api-schema-base.ts']).toContain('export const schemaBase =');
       expect(result['api-schema-base.ts']).toContain('as const');

@@ -28,7 +28,7 @@
     "generate:openapi:clean": "rm -rf src/types/generated",
     "generate:zod": "tsx scripts/zodgen.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.config.e2e.ts",

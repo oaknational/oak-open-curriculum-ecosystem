@@ -4,6 +4,7 @@
  */
 
 import { z } from 'zod';
+import { isPlainObject } from '../types/helpers.js';
 
 /**
  * Result type for validation operations
@@ -61,8 +62,8 @@ export function isValidationFailure<T>(
  * Type predicate to safely check if a value is a record
  * Used after Zod validation to ensure type safety
  */
-export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+export function isRecord(value: unknown): value is object {
+  return isPlainObject(value);
 }
 
 /**

@@ -27,8 +27,6 @@ class StorageNotSupportedError extends Error {
   }
 }
 
-// Removed - now using createFileStorage from file-storage.ts
-
 /**
  * Creates file-based storage provider
  *

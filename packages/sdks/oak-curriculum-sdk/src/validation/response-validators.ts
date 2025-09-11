@@ -6,63 +6,9 @@
 import type { z } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
 import { PATH_OPERATIONS } from '../types/generated/api-schema/path-parameters.js';
+import { toCurly } from '../types/generated/api-schema/path-utils.js';
 import { parseWithSchema } from './types.js';
-import { schemas } from '../types/generated/zod/schemas.js';
-
-/**
- * Map of operation IDs to their response schemas
- * Built from the generated Zod schemas
- */
-const responseSchemaMap = new Map<string, z.ZodSchema>();
-
-// Map operation IDs to their response schemas
-responseSchemaMap.set(
-  'getLessonTranscript-getLessonTranscript:200',
-  schemas.TranscriptResponseSchema,
-);
-responseSchemaMap.set(
-  'searchTranscripts-searchTranscripts:200',
-  schemas.SearchTranscriptResponseSchema,
-);
-responseSchemaMap.set('getSequences-getSequenceUnits:200', schemas.SequenceUnitsResponseSchema);
-responseSchemaMap.set('getAssets-getSequenceAssets:200', schemas.SequenceAssetsResponseSchema);
-responseSchemaMap.set('getAssets-getSubjectAssets:200', schemas.SubjectAssetsResponseSchema);
-responseSchemaMap.set('getAssets-getLessonAssets:200', schemas.LessonAssetsResponseSchema);
-responseSchemaMap.set('getAssets-getLessonAsset:200', schemas.LessonAssetResponseSchema);
-responseSchemaMap.set('getSubjects-getAllSubjects:200', schemas.AllSubjectsResponseSchema);
-responseSchemaMap.set('getSubjects-getSubject:200', schemas.SubjectResponseSchema);
-responseSchemaMap.set('getSubjects-getSubjectSequence:200', schemas.SubjectSequenceResponseSchema);
-responseSchemaMap.set(
-  'getSubjects-getSubjectKeyStages:200',
-  schemas.SubjectKeyStagesResponseSchema,
-);
-responseSchemaMap.set('getKeyStages-getKeyStages:200', schemas.KeyStageResponseSchema);
-responseSchemaMap.set(
-  'getKeyStageSubjectLessons-getKeyStageSubjectLessons:200',
-  schemas.KeyStageSubjectLessonsResponseSchema,
-);
-responseSchemaMap.set(
-  'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:200',
-  schemas.AllKeyStageAndSubjectUnitsResponseSchema,
-);
-responseSchemaMap.set(
-  'getQuestions-getQuestionsForLessons:200',
-  schemas.QuestionForLessonsResponseSchema,
-);
-responseSchemaMap.set(
-  'getQuestions-getQuestionsForSequence:200',
-  schemas.QuestionsForSequenceResponseSchema,
-);
-responseSchemaMap.set(
-  'getQuestions-getQuestionsForKeyStageAndSubject:200',
-  schemas.QuestionsForKeyStageAndSubjectResponseSchema,
-);
-responseSchemaMap.set('getLessons-getLesson:200', schemas.LessonSummaryResponseSchema);
-responseSchemaMap.set('getLessons-searchByTextSimilarity:200', schemas.LessonSearchResponseSchema);
-responseSchemaMap.set('getUnits-getUnit:200', schemas.UnitSummaryResponseSchema);
-responseSchemaMap.set('getThreads-getAllThreads:200', schemas.AllThreadsResponseSchema);
-responseSchemaMap.set('getThreads-getThreadUnits:200', schemas.ThreadUnitsResponseSchema);
-responseSchemaMap.set('getRateLimit-getRateLimit:200', schemas.RateLimitResponseSchema);
+import { responseSchemaMap } from '../types/generated/api-schema/response-map.js';
 
 // Error schemas for common status codes
 // TODO: Generate error schemas from OpenAPI spec
@@ -74,17 +20,18 @@ responseSchemaMap.set('getRateLimit-getRateLimit:200', schemas.RateLimitResponse
  * Find the operation ID for a given path and method
  */
 function findOperationId(path: string, method: HttpMethod): string | undefined {
-  const operation = PATH_OPERATIONS.find((op) => op.path === path && op.method === method);
+  const normalizedPath = toCurly(path);
+  const methodLower = typeof method === 'string' ? method.toLowerCase() : method;
+  const operation = PATH_OPERATIONS.find(
+    (op) => op.path === normalizedPath && op.method === methodLower,
+  );
   return operation?.operationId;
 }
 
 /**
  * Parse and validate response data
  */
-function parseResponse(
-  schema: z.ZodSchema,
-  response: unknown,
-): ValidationResult<Record<string, unknown>> {
+function parseResponse<T>(schema: z.ZodSchema<T>, response: unknown): ValidationResult<T> {
   return parseWithSchema(schema, response);
 }
 
@@ -101,7 +48,7 @@ export function validateResponse(
   method: HttpMethod,
   statusCode: number,
   response: unknown,
-): ValidationResult<Record<string, unknown>> {
+): ValidationResult<unknown> {
   const operationId = findOperationId(path, method);
 
   if (!operationId) {

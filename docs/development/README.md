@@ -8,12 +8,6 @@ This directory contains documentation for developers working on the Oak Notion M
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
 
-## Architecture
-
-- [Naming Guide](../naming.md) - Biological architecture with Greek nomenclature
-- [Architecture Overview](../architecture-overview.md) - Current implementation details
-- [Quick Start](../quick-start.md) - Jump right in for experienced developers
-
 ## Purpose
 
 These documents help developers:

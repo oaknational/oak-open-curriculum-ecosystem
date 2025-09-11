@@ -123,7 +123,7 @@ function validateResponse(
   method: HttpMethod,
   statusCode: number,
   response: unknown,
-): ValidationResult<Record<string, unknown>>;
+): ValidationResult<unknown>;
 ```
 
 Validates response data for an API operation

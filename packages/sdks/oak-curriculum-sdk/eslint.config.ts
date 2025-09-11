@@ -1,7 +1,5 @@
 /**
  * ESLint Configuration for oak-curriculum-sdk
- *
- * Standard SDK package configuration - no biological architecture enforcement
  */
 
 import { config as tsEslintConfig } from 'typescript-eslint';
@@ -23,6 +21,8 @@ const config = tsEslintConfig(
       'coverage/**',
       '*.log',
       '.turbo/**',
+      // Local entry shims (JS)
+      'scripts/*.mjs',
       // Examples
       'examples/**',
       // Generated files
@@ -52,18 +52,6 @@ const config = tsEslintConfig(
       },
     },
     rules: {
-      '@typescript-eslint/no-restricted-types': [
-        // temp disable until we have allow in error handling
-        'off',
-        {
-          types: {
-            unknown: {
-              message:
-                'Avoid `unknown`. Prefer a specific union, a domain model, or a generic parameter (e.g. <T>), so callers/implementations have a concrete type. The only exception is incoming data from network requests, or data read from files, which should be validated.',
-            },
-          },
-        },
-      ],
       // Disallow specific Object.* properties, they lose type information
       'no-restricted-properties': [
         'error',
@@ -120,6 +108,13 @@ const config = tsEslintConfig(
           message: 'Use typeSafeOwnKeys<T>() for a typed result.',
         },
       ],
+    },
+  },
+  // Rules for the type-gen code
+  {
+    files: ['scripts/typegen/**'],
+    rules: {
+      'no-restricted-properties': 'off',
     },
   },
   // Allow the type helper file to use restricted APIs internally

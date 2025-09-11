@@ -10,38 +10,30 @@ import type {
   OperationObject,
 } from 'openapi-typescript';
 import type { ExtractionContext } from './typegen/extraction-types';
+import { isPlainObject, getOwnString } from '../src/types/helpers';
 
 /**
  * Narrow unknown to a non-null object record
  */
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isObject(value: unknown): value is object {
+  return isPlainObject(value);
 }
 
 /**
  * Check if value is a ReferenceObject
  */
 function isReferenceObject(obj: unknown): obj is ReferenceObject {
-  if (!isRecord(obj)) return false;
-  const desc = Object.getOwnPropertyDescriptor(obj, '$ref');
-  return !!desc && typeof desc.value === 'string';
+  return isObject(obj) && typeof getOwnString(obj, '$ref') === 'string';
 }
 
 /**
  * Check if value is a ParameterObject or ReferenceObject
  */
 function isParameterOrReference(p: unknown): p is ParameterObject | ReferenceObject {
-  if (!isRecord(p)) return false;
-
-  // Check if it's a reference
+  if (!isObject(p)) return false;
   if (isReferenceObject(p)) return true;
-
-  // Check if it's a parameter (must have 'name' and 'in' properties)
-  const nameDesc = Object.getOwnPropertyDescriptor(p, 'name');
-  const inDesc = Object.getOwnPropertyDescriptor(p, 'in');
-  const nameVal: unknown = nameDesc?.value;
-  const inVal: unknown = inDesc?.value;
-
+  const nameVal = getOwnString(p, 'name');
+  const inVal = getOwnString(p, 'in');
   return (
     typeof nameVal === 'string' &&
     typeof inVal === 'string' &&
@@ -101,10 +93,5 @@ export function processOperationParameters(
  * Check if a value is a valid operation object
  */
 function isValidOperation(operation: unknown): operation is OperationObject {
-  return (
-    operation !== null &&
-    operation !== undefined &&
-    typeof operation === 'object' &&
-    !isReferenceObject(operation)
-  );
+  return isObject(operation) && !isReferenceObject(operation);
 }

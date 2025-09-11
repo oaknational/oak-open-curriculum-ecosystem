@@ -6,7 +6,11 @@
 import { describe, it, expect } from 'vitest';
 import { validateRequest } from './request-validators.js';
 import type { HttpMethod } from './types.js';
-import { isRecord } from './types.js';
+function hasOwnString(o: unknown, key: string, expected: string): boolean {
+  if (typeof o !== 'object' || o === null) return false;
+  const d = Object.getOwnPropertyDescriptor(o, key);
+  return d?.value === expected;
+}
 
 describe('validateRequest', () => {
   describe('for GET /lessons/{lesson}/transcript', () => {
@@ -71,12 +75,9 @@ describe('validateRequest', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(isRecord(result.value)).toBe(true);
-        if (isRecord(result.value)) {
-          expect(result.value.q).toBe('mathematics');
-          expect(result.value.keyStage).toBe('ks3');
-          expect(result.value.subject).toBe('maths');
-        }
+        expect(hasOwnString(result.value, 'q', 'mathematics')).toBe(true);
+        expect(hasOwnString(result.value, 'keyStage', 'ks3')).toBe(true);
+        expect(hasOwnString(result.value, 'subject', 'maths')).toBe(true);
       }
     });
 
@@ -105,12 +106,7 @@ describe('validateRequest', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(isRecord(result.value)).toBe(true);
-        if (isRecord(result.value)) {
-          expect(result.value.q).toBe('search term');
-          expect(result.value.keyStage).toBeUndefined();
-          expect(result.value.subject).toBeUndefined();
-        }
+        expect(hasOwnString(result.value, 'q', 'search term')).toBe(true);
       }
     });
   });

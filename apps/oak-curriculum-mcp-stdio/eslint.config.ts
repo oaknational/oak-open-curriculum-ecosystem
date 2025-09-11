@@ -47,20 +47,8 @@ const config = tsEslintConfig(
       'import-x/no-relative-parent-imports': 'off',
       ...appBoundaryRules,
       ...appArchitectureRules,
-      '@typescript-eslint/no-restricted-types': [
-        'off',
-        {
-          types: {
-            unknown: {
-              message:
-                'Avoid `unknown`. Prefer a specific union, a domain model, or a generic parameter (e.g. <T>), so callers/implementations have a concrete type. The only exception is incoming data from network requests, or data read from files, which should be validated.',
-            },
-          },
-        },
-      ],
     },
   },
-  // Remove broad allowances; rely on package imports and local relative paths only
   // Test files can break boundaries but should maintain type safety
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],
