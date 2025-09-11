@@ -2,11 +2,18 @@
 
 A Next.js workspace that indexes Oak Open Curriculum content into **Elasticsearch Serverless** and exposes a **hybrid (lexical + semantic)** search API. This project complements (and can ultimately replace) the SDK’s legacy search endpoints by providing richer recall, highlights, and flexible filters.
 
-> This workspace uses the Elasticsearch JS client, and the Oak Curriculum SDK for all source fetching.
+> This workspace uses the Elasticsearch JS client, and the Oak Open Curriculum SDK for all source fetching.
 
 ---
 
-## Features at a glance
+## Primary usage endpoints
+
+- search: `POST /api/search`
+- natural language search (uses an LLM to parse the query): `POST /api/search/nl`
+- admin: `GET /api/index-oak` and `GET /api/rebuild-rollup`
+- sdk parity: `POST /api/sdk/search-lessons` and `POST /api/sdk/search-transcripts`
+
+## Technical features at a glance
 
 - **Serverless Elasticsearch indices**
   - `oak_lessons`: lesson metadata + full transcript + `lesson_semantic` (`semantic_text`).
@@ -192,13 +199,22 @@ The **rollup** index lets us surface unit‑level snippets without duplicating f
 **Workspace scripts** (from repo root):
 
 ```bash
-pnpm -C apps/oak-open-curriculum-semantic-search dev      # Next.js dev
-pnpm -C apps/oak-open-curriculum-semantic-search build    # Next.js build
-pnpm -C apps/oak-open-curriculum-semantic-search start    # Next.js start
-pnpm -C apps/oak-open-curriculum-semantic-search lint     # ESLint
-pnpm -C apps/oak-open-curriculum-semantic-search typecheck# TypeScript
+pnpm -C apps/oak-open-curriculum-semantic-search dev       # Next.js dev
+pnpm -C apps/oak-open-curriculum-semantic-search build     # Next.js build
+pnpm -C apps/oak-open-curriculum-semantic-search start     # Next.js start
+pnpm -C apps/oak-open-curriculum-semantic-search lint      # ESLint (extends repo base + Next.js rules)
+pnpm -C apps/oak-open-curriculum-semantic-search type-check# TypeScript strict (lint tsconfig)
+pnpm -C apps/oak-open-curriculum-semantic-search format    # Prettier (if configured at root)
 pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
 ```
+
+Root‑run quality gates (see `docs/agent-guidance/development-practice.md`):
+
+```bash
+pnpm format && pnpm type-check && pnpm lint && pnpm test && pnpm build
+```
+
+Turbo wiring: this workspace participates in `turbo.json` pipelines for `build`, `lint`, `type-check`, `test`, and `format`.
 
 **Node runtime**: This app targets the Node server runtime (Vercel supported). The official Elasticsearch client is used for `_search` and `_bulk`.
 

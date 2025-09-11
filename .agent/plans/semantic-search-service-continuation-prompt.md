@@ -1,14 +1,14 @@
-# Semantic Search Service — Continuation Prompt
+# Semantic Search Service — Continuation Prompt (Living Context)
 
 _Last updated: 2025‑09‑11 (Europe/London)_
 
-This file exists to preserve **working context** so any agent can immediately continue the Oak Curriculum **hybrid search** project without re-reading the whole thread. It pairs with the plan file: `semantic-search-service-plan.md`.
+Purpose: Preserve essential working context so any agent can immediately continue the Oak Curriculum **hybrid search** project without re‑reading full threads. Pairs with the implementation plan `semantic-search-service-plan.md`. Keep this concise, current, and actionable.
 
 ---
 
 ## TL;DR (current state)
 
-- **Workspace**: `apps/oak-open-curriculum-semantic-search` (Next.js 15, React 19, TS strict).
+- **Workspace**: `apps/oak-open-curriculum-semantic-search` (Next.js 15, React 19, TS strict)
 - **Search model**: Hybrid retrieval (BM25 + `semantic_text`) fused via **RRF**.
 - **Indices (Elasticsearch Serverless)**:
   - `oak_lessons`: lesson metadata + full `transcript_text` + `lesson_semantic` (semantic_text).
@@ -20,7 +20,7 @@ This file exists to preserve **working context** so any agent can immediately co
   - Admin (guarded by `x-api-key`): `GET /api/index-oak`, `GET /api/rebuild-rollup`.
   - SDK parity: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
   - API docs: **UI** at `GET /api/docs`, **schema** at `GET /api/openapi.json` (OpenAPI 3.1 from Zod).
-- **SDK**: All source data fetched via `@oaknational/oak-curriculum-sdk` only (no raw HTTP). Runtime guards from SDK are used to validate Subject/KeyStage.
+- **SDK**: All source data via `@oaknational/oak-curriculum-sdk` only (no raw HTTP). Runtime guards from SDK validate Subject/KeyStage.
 - **ES client**: Official `@elastic/elasticsearch` (`_search`, `_bulk`).
 - **Synonyms**: Updateable set `oak-syns`; analyzer `oak_text` = `lowercase` + `synonym_graph` (case‑insensitive matching). File: `scripts/synonyms.json`.
 
@@ -111,15 +111,32 @@ These align with the plan file phases—do not duplicate effort; check what’s 
    - Two tabs: Structured vs NL. Dropdowns for Subject/KeyStage using SDK allowed values. Result list with highlights.
 3. **Admin UI** (`/admin`)
    - Buttons: Re‑index, Rebuild rollup. Show counts / last run.
-4. **MCP exposure**
+4. **Workspace integration & tooling parity**
+   - Add/verify Turbo wiring in `turbo.json` (build, lint, type-check, test, format)
+   - Align workspace scripts with root conventions (`type-check`, `lint`, `dev`, `build`, `start`)
+   - Ensure ESLint extends repo base + Next.js/React rules; add `tsconfig.lint.json`
+   - Verify root-run gates pass for this workspace
+5. **MCP exposure**
    - Use `/api/openapi.json` to register tools: `searchStructured`, `searchNaturalLanguage`, `sdkSearchLessons`, `sdkSearchTranscripts`.
    - Consider prompt helpers (YAML or markdown presets).
-5. **Oakify UI**
+6. **Oakify UI**
    - Integrate `@oaknational/oak-components` and theme provider; swap controls to Oak components.
-6. **Testing**
+7. **Testing**
    - Vitest: query validation; RRF determinism; highlight presence; indexing smoke (mock SDK).
-7. **Ops niceties**
-   - Add `/healthz` (checks ES + SDK; LLM availability when enabled). Add minimal logging.
+8. **Ops niceties**
+
+---
+
+## Quick status signals
+
+- OpenAPI present at `/api/openapi.json`; Redoc at `/api/docs`.
+- Core hybrid search wired (`src/lib/run-hybrid-search.ts`), endpoints available.
+- LLM path optional; if disabled, `/api/search/nl` returns 501 with error payload.
+
+## Immediate next task
+
+- Build the `/search` page using Oak Components (two tabs: Structured, NL). Use SDK guards for dropdown values. Ensure accessibility (`role="search"`, `aria-live` for results).
+  - Add `/healthz` (checks ES + SDK; LLM availability when enabled). Add minimal logging.
 
 ---
 
