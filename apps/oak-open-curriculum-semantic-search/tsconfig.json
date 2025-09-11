@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "forceConsistentCasingInFileNames": true,
@@ -21,11 +24,32 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["src/lib/*"],
-      "@adapters/*": ["src/adapters/*"],
-      "@types/*": ["src/types/*"]
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@adapters/*": [
+        "src/adapters/*"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ]
     },
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
