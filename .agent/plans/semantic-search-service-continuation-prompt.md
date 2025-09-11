@@ -24,6 +24,8 @@ Purpose: Preserve essential working context so any agent can immediately continu
 - **ES client**: Official `@elastic/elasticsearch` (`_search`, `_bulk`) with official client types in helpers.
 - **Synonyms**: Updateable set `oak-syns`; analyzer `oak_text` = `lowercase` + `synonym_graph` (case‑insensitive matching). File: `scripts/synonyms.json`.
 
+- **UI/Health**: Minimal `/search` page (plain HTML, Structured + NL tabs) and `/healthz` route (ES, SDK, LLM status).
+
 ---
 
 ## ENV (server‑side)
@@ -112,8 +114,8 @@ These align with the plan file phases—do not duplicate effort; check what’s 
 
 1. **Remote deploy (Vercel)**
    - Set env vars (prod/preview). Confirm Node runtime. Smoke test `/api/docs`, `/api/search`.
-2. **Basic UI page** (`/search`)
-   - Two tabs: Structured vs NL. Dropdowns for Subject/KeyStage using SDK allowed values. Result list with highlights.
+2. **Oakify UI page** (`/search`)
+   - Replace current plain HTML with Oak Components. Keep two tabs (Structured vs NL) and SDK‑guarded dropdowns. Result list with highlights and accessible labels.
 3. **Admin UI** (`/admin`)
    - Buttons: Re‑index, Rebuild rollup. Show counts / last run.
 4. **Workspace integration & tooling parity**
@@ -141,8 +143,9 @@ These align with the plan file phases—do not duplicate effort; check what’s 
 
 ## Immediate next task
 
-- Build the `/search` page using Oak Components (two tabs: Structured, NL). Use SDK guards for dropdown values. Ensure accessibility (`role="search"`, `aria-live` for results).
-  - Add `/healthz` (checks ES + SDK; LLM availability when enabled). Add minimal logging.
+- Run full root quality gates and push changes.
+- Prepare Vercel deploy (set env vars; create project); smoke test `/api/docs` and `/api/search`.
+- Oakify `/search` with Oak Components; ensure accessibility (`role="search"`, `aria-live`).
 
 ---
 

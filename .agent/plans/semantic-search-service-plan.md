@@ -49,14 +49,15 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
   - Official Elasticsearch client types adopted; removed custom generic shapes
   - TS path aliases removed; imports are relative (incl. Vitest)
   - Type-check configured for App Router: `tsconfig.lint.json` includes `jsx: react-jsx` and `lib: ["ES2022","DOM"]`
+  - UI/Health: Minimal `/search` demo page (plain HTML, Structured + NL tabs) and `/healthz` route (ES, SDK, LLM status)
 - Build status: Monorepo build succeeds. Next build succeeds (ESLint plugin detection warning remains to revisit).
-- Not yet done (top items): tests coverage uplift (hybrid-search and OpenAPI), basic `/search` demo UI, `/admin` UI, remote deploy smoke, Oak Components integration
+- Not yet done (top items): tests coverage uplift (hybrid-search and OpenAPI), remote deploy smoke, Oak Components integration (replace minimal UI), `/admin` UI
 
 ## Near‑term priorities (ranked)
 
 0. Reduce function length/complexity where flagged by lint — ongoing; hybrid-search and OpenAPI splits done
 1. Tests: unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
-2. Basic `/search` demo page (Structured + NL tabs) using Oak Components
+2. Oakify `/search` demo page with Oak Components (minimal HTML shipped)
 3. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
 4. `/admin` UI (guarded by `x-api-key`) for index + rollup
 5. MCP exposure from OpenAPI (tools enabled for non‑admin endpoints by default)
