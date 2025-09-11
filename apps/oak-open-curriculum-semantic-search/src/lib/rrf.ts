@@ -1,5 +1,10 @@
-export type RankedId = { id: string; score?: number | null };
-export type RrfConfig = { k?: number };
+export interface RankedId {
+  id: string;
+  score?: number | null;
+}
+export interface RrfConfig {
+  k?: number;
+}
 export function rrfFuse(
   lists: readonly (readonly RankedId[])[],
   cfg?: RrfConfig,

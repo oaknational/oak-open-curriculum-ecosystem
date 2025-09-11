@@ -1,5 +1,5 @@
 import { Client } from '@elastic/elasticsearch';
-import { env } from '@lib/env';
+import { env } from './env';
 
 /**
  * Singleton client for Node.js route handlers.
@@ -13,8 +13,6 @@ export function esClient(): Client {
   _client = new Client({
     node: e.ELASTICSEARCH_URL,
     auth: { apiKey: e.ELASTICSEARCH_API_KEY },
-    // If your version exposes a 'serverMode' option for Serverless, you can add:
-    // serverMode: 'serverless'
   });
   return _client;
 }

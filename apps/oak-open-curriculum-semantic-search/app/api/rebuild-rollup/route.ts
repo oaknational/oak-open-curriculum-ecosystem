@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { env } from '@lib/env';
-import { esSearch, esBulk } from '@lib/elastic-http';
-import type { UnitsIndexDoc, LessonsIndexDoc, UnitRollupDoc } from '@types/oak';
+import { type NextRequest, NextResponse } from 'next/server';
+import { env } from '../../../src/lib/env';
+import { esSearch, esBulk } from '../../../src/lib/elastic-http';
+import type { UnitsIndexDoc, LessonsIndexDoc, UnitRollupDoc } from '../../../src/types/oak';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -19,14 +19,8 @@ function extractPassage(text: string): string {
 
 export const maxDuration = 300;
 
-export async function GET(req: NextRequest): Promise<Response> {
-  if (!authorize(req)) return new NextResponse('Unauthorized', { status: 401 });
-
-  const size = 500;
-  let totalProcessed = 0;
-  let bulkOps: unknown[] = [];
-
-  const unitsRes = await esSearch<UnitsIndexDoc>({
+async function fetchAllUnits(size: number) {
+  return esSearch<UnitsIndexDoc>({
     index: 'oak_units',
     size,
     query: { match_all: {} },
@@ -41,31 +35,48 @@ export async function GET(req: NextRequest): Promise<Response> {
       'lesson_count',
     ],
   });
+}
+
+async function fetchUnitLessons(unitSlug: string) {
+  return esSearch<LessonsIndexDoc>({
+    index: 'oak_lessons',
+    size: 200,
+    query: { term: { unit_ids: unitSlug } },
+    _source: ['lesson_id', 'lesson_title', 'transcript_text'],
+  });
+}
+
+function buildRollupDoc(u: UnitsIndexDoc, snippets: string[]): UnitRollupDoc {
+  return {
+    unit_id: u.unit_id,
+    unit_slug: u.unit_slug,
+    unit_title: u.unit_title,
+    subject_slug: u.subject_slug,
+    key_stage: u.key_stage,
+    lesson_ids: u.lesson_ids,
+    lesson_count: u.lesson_count,
+    rollup_text: snippets.join(' \n'),
+  };
+}
+
+export async function GET(req: NextRequest): Promise<Response> {
+  if (!authorize(req)) return new NextResponse('Unauthorized', { status: 401 });
+
+  const size = 500;
+  let totalProcessed = 0;
+  let bulkOps: unknown[] = [];
+
+  const unitsRes = await fetchAllUnits(size);
 
   for (const uh of unitsRes.hits.hits) {
     const u = uh._source;
-
-    const lessonsRes = await esSearch<LessonsIndexDoc>({
-      index: 'oak_lessons',
-      size: 200,
-      query: { term: { unit_ids: u.unit_slug } },
-      _source: ['lesson_id', 'lesson_title', 'transcript_text'],
-    });
+    const lessonsRes = await fetchUnitLessons(u.unit_slug);
 
     const snippets: string[] = [];
     for (const lh of lessonsRes.hits.hits)
       snippets.push(extractPassage(lh._source.transcript_text));
 
-    const roll: UnitRollupDoc = {
-      unit_id: u.unit_id,
-      unit_slug: u.unit_slug,
-      unit_title: u.unit_title,
-      subject_slug: u.subject_slug,
-      key_stage: u.key_stage,
-      lesson_ids: u.lesson_ids,
-      lesson_count: u.lesson_count,
-      rollup_text: snippets.join(' \n'),
-    };
+    const roll = buildRollupDoc(u, snippets);
 
     bulkOps.push({ index: { _index: 'oak_unit_rollup', _id: roll.unit_id } }, roll);
     if (bulkOps.length >= 1000) {

@@ -76,8 +76,5 @@
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.0",
     "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^8.1.0"
   }
 }

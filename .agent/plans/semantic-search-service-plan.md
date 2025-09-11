@@ -42,15 +42,23 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
   - Elasticsearch Serverless scripts: synonyms + three indices mappings
   - API routes: `/api/search` (structured), `/api/search/nl` (NL, LLM optional), `/api/index-oak`, `/api/rebuild-rollup`, SDK parity routes
   - OpenAPI: `/api/openapi.json` with Redoc UI at `/api/docs`
-  - Core search logic: RRF fusion and highlights (`src/lib/run-hybrid-search.ts`)
-- Not yet done (top items): basic `/search` demo UI, `/admin` UI, remote deploy smoke, tests coverage uplift, Oak Components integration
+  - Core search logic refactored into `src/lib/hybrid-search/` module:
+    - `index.ts` orchestrator, `lessons.ts`, `units.ts`, `types.ts`; shim re-export at `src/lib/run-hybrid-search.ts`
+  - OpenAPI route registrations split to `src/lib/openapi.register.ts` (smaller helpers); `src/lib/openapi.ts` simplified, avoids unsafe assertions
+  - Type-aware linting enabled; SDK parity routes validate bodies with Zod
+  - Official Elasticsearch client types adopted; removed custom generic shapes
+  - TS path aliases removed; imports are relative (incl. Vitest)
+  - Type-check configured for App Router: `tsconfig.lint.json` includes `jsx: react-jsx` and `lib: ["ES2022","DOM"]`
+- Build status: Monorepo build succeeds. Next build succeeds (ESLint plugin detection warning remains to revisit).
+- Not yet done (top items): tests coverage uplift (hybrid-search and OpenAPI), basic `/search` demo UI, `/admin` UI, remote deploy smoke, Oak Components integration
 
 ## Near‑term priorities (ranked)
 
-1. Basic `/search` demo page (Structured + NL tabs) using Oak Components
-2. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
-3. `/admin` UI (guarded by `x-api-key`) for index + rollup
-4. Tests: Zod schema validation, RRF determinism, highlights presence (no network)
+0. Reduce function length/complexity where flagged by lint — ongoing; hybrid-search and OpenAPI splits done
+1. Tests: unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
+2. Basic `/search` demo page (Structured + NL tabs) using Oak Components
+3. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
+4. `/admin` UI (guarded by `x-api-key`) for index + rollup
 5. MCP exposure from OpenAPI (tools enabled for non‑admin endpoints by default)
 
 ---
@@ -72,8 +80,18 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 ## Quality gates (repo standard)
 
 - Use British spelling throughout documentation and code comments.
-- Run from repo root without extra args:
-  - `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build`
+- Always run, from repo root, in this exact order (none optional):
+  - `pnpm i`
+  - `pnpm type-gen`
+  - `pnpm build`
+  - `pnpm type-check`
+  - `pnpm lint -- --fix`
+  - `pnpm -F @oaknational/oak-curriculum-sdk docs:all`
+  - `pnpm format`
+  - `pnpm markdownlint`
+  - `pnpm test`
+  - `pnpm test:e2e`
+- After each fix, restart the sequence from the beginning to catch regressions.
 - No `any`, no unsafe type assertions; validate external inputs with Zod and SDK guards.
 - Keep admin endpoints guarded by `x-api-key` and never expose admin MCP tools by default.
 
@@ -98,8 +116,8 @@ Tasks
   - Adopt architectural boundary rules enforced by `eslint-rules/`
 - TypeScript configs
   - Use `tsconfig.json` for build/runtime with strict options
-  - Add/align `tsconfig.lint.json` so lint/type-check use the lint tsconfig per repo standard
-  - Ensure path aliases match the workspace (`@lib/*`, `@adapters/*`, `@types/*`)
+  - Add/align `tsconfig.lint.json` so lint/type-check use the lint tsconfig per repo standard; set `jsx: react-jsx` and include DOM libs
+  - Do not use TS path aliases in this workspace; use relative imports everywhere (also in Vitest)
 - Prettier / formatting
   - Honour root Prettier configuration and include `format` in gates when applicable
 - Docs
@@ -107,7 +125,7 @@ Tasks
 
 Acceptance
 
-- Root-run gates succeed for this workspace: `pnpm format`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm build`
+- Root-run gates succeed using the full, ordered sequence listed above
 - `turbo run build` includes this workspace; incremental caches work on CI and locally
 - ESLint applies both repo standards and Next.js/React specific rules without conflicts
 
@@ -117,7 +135,7 @@ Acceptance
 
 - **Serverless ES ready**: three indices exist with configured analyzers, `semantic_text` fields, and synonyms; smoke query succeeds.
 - **Indexing works end‑to‑end**: calling `/api/index-oak` + `/api/rebuild-rollup` populates ES; no duplicate explosion; reasonable doc counts.
-- **Hybrid search**: for representative queries, BM25 + semantic results are fused via RRF; snippets are present.
+- **Hybrid search**: for representative queries, BM25 + semantic results are fused via RRF; snippets are present; code resides in `src/lib/hybrid-search/` with tests.
 - **LLM optionality**: `/api/search` requires no LLM; `/api/search/nl` returns 501 if LLM disabled, otherwise produces sensible structured queries.
 - **OpenAPI**: `/api/openapi.json` reflects all public endpoints and schemas; valid under an OpenAPI validator.
 - **MCP**: tools can be loaded from OpenAPI; non‑admin tools enabled by default; admin tools require explicit opt‑in.

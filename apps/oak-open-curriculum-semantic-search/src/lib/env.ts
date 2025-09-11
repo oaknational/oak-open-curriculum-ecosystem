@@ -1,22 +1,25 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /** Strict runtime env validation (no unsafe process.env). */
 const BaseEnvSchema = z.object({
-  ELASTICSEARCH_URL: z.string().url(),
+  ELASTICSEARCH_URL: z.url(),
   ELASTICSEARCH_API_KEY: z.string().min(10),
   OAK_API_KEY: z.string().min(6).optional(),
   OAK_API_BEARER: z.string().min(6).optional(),
   SEARCH_API_KEY: z.string().min(10),
-  AI_PROVIDER: z.enum(["openai", "none"]).default("openai"),
-  OPENAI_API_KEY: z.string().min(10).optional()
+  AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
+  OPENAI_API_KEY: z.string().min(10).optional(),
 });
 
 const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
   if (!(v.OAK_API_KEY || v.OAK_API_BEARER)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Set OAK_API_KEY or OAK_API_BEARER." });
+    ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY or OAK_API_BEARER.' });
   }
-  if (v.AI_PROVIDER === "openai" && (!v.OPENAI_API_KEY || v.OPENAI_API_KEY.length < 10)) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "OPENAI_API_KEY is required when AI_PROVIDER=openai." });
+  if (v.AI_PROVIDER === 'openai' && (!v.OPENAI_API_KEY || v.OPENAI_API_KEY.length < 10)) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'OPENAI_API_KEY is required when AI_PROVIDER=openai.',
+    });
   }
 });
 
@@ -31,11 +34,11 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     OAK_API_KEY: process.env.OAK_API_KEY,
     OAK_API_BEARER: process.env.OAK_API_BEARER,
     SEARCH_API_KEY: process.env.SEARCH_API_KEY,
-    AI_PROVIDER: process.env.AI_PROVIDER ?? "openai",
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY
+    AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   });
   if (!parsed.success) throw new Error(parsed.error.message);
-  const key = parsed.data.OAK_API_KEY ?? parsed.data.OAK_API_BEARER ?? "";
+  const key = parsed.data.OAK_API_KEY ?? parsed.data.OAK_API_BEARER ?? '';
   cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
   return cached;
 }
@@ -43,5 +46,9 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
 /** True when natural-language parsing (OpenAI) is available. */
 export function llmEnabled(): boolean {
   const e = env();
-  return e.AI_PROVIDER === "openai" && typeof e.OPENAI_API_KEY === "string" && e.OPENAI_API_KEY.length > 0;
+  return (
+    e.AI_PROVIDER === 'openai' &&
+    typeof e.OPENAI_API_KEY === 'string' &&
+    e.OPENAI_API_KEY.length > 0
+  );
 }

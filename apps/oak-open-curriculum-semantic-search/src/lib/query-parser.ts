@@ -1,8 +1,9 @@
 import { z } from 'zod';
-import { env } from '@lib/env';
+import { env } from './env';
 import { generateObject } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
-import { isKeyStage, isSubject } from '@adapters/sdk-guards';
+import { isKeyStage, isSubject } from '../adapters/sdk-guards';
+import type { KeyStage, Subject } from '@oaknational/oak-curriculum-sdk';
 
 /** Structured output schema for parsed teacher queries. */
 export const ParsedQuerySchema = z.object({
@@ -14,13 +15,13 @@ export const ParsedQuerySchema = z.object({
 });
 
 export type ParsedQueryRaw = z.infer<typeof ParsedQuerySchema>;
-export type ParsedQuery = {
+export interface ParsedQuery {
   intent: 'units' | 'lessons';
   text: string;
-  subject?: string;
-  keyStage?: string;
+  subject?: Subject;
+  keyStage?: KeyStage;
   minLessons?: number;
-};
+}
 
 export async function parseQuery(q: string): Promise<ParsedQuery> {
   const e = env();
@@ -32,9 +33,9 @@ export async function parseQuery(q: string): Promise<ParsedQuery> {
       'You convert teacher queries into parameters for a curriculum search engine.',
       'Return intent=lessons|units, optional subject and keyStage (ks1-ks4), optional minLessons, and the topical text for search.',
       "Be conservative with subject/keyStage unless strongly implied. For phrases like 'KS4 geography', set both.",
+      `\nUser query: ${q}`,
     ].join('\n'),
     schema: ParsedQuerySchema,
-    input: q,
   });
 
   // Validate subject/keyStage with SDK guards; drop invalid values.

@@ -1,17 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { env } from '@lib/env';
-import { createOakClient } from '@oaknational/oak-curriculum-sdk';
-import { isKeyStage, isSubject } from '@adapters/sdk-guards';
+import { type NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { env } from '../../../../src/lib/env';
+import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
+import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
+
+const BodySchema = z.object({
+  q: z.string().min(1),
+  keyStage: z.string().optional(),
+  subject: z.string().optional(),
+});
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const body = (await req.json()) as { q: string; keyStage?: string; subject?: string };
+  const parsed = BodySchema.safeParse(await req.json());
+  if (!parsed.success)
+    return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+  const body = parsed.data;
   const e = env();
-  const client = createOakClient(e.OAK_EFFECTIVE_KEY);
+  const client = createOakPathBasedClient(e.OAK_EFFECTIVE_KEY);
 
   const keyStage = body.keyStage && isKeyStage(body.keyStage) ? body.keyStage : undefined;
   const subject = body.subject && isSubject(body.subject) ? body.subject : undefined;
 
-  const res = await client.GET('/search/transcripts', {
+  const res = await client['/search/transcripts'].GET({
     params: {
       query: {
         q: body.q,
@@ -21,6 +31,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     },
   });
 
-  if (res.error) return NextResponse.json({ error: res.error }, { status: 400 });
+  if (!res.response.ok)
+    return NextResponse.json({ error: res.response.statusText }, { status: res.response.status });
   return NextResponse.json(res.data ?? []);
 }

@@ -20,8 +20,8 @@ Purpose: Preserve essential working context so any agent can immediately continu
   - Admin (guarded by `x-api-key`): `GET /api/index-oak`, `GET /api/rebuild-rollup`.
   - SDK parity: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
   - API docs: **UI** at `GET /api/docs`, **schema** at `GET /api/openapi.json` (OpenAPI 3.1 from Zod).
-- **SDK**: All source data via `@oaknational/oak-curriculum-sdk` only (no raw HTTP). Runtime guards from SDK validate Subject/KeyStage.
-- **ES client**: Official `@elastic/elasticsearch` (`_search`, `_bulk`).
+- **SDK**: All source data via `@oaknational/oak-curriculum-sdk` only (no raw HTTP). Runtime guards from SDK validate Subject/KeyStage. SDK parity routes now validate request bodies with Zod.
+- **ES client**: Official `@elastic/elasticsearch` (`_search`, `_bulk`) with official client types in helpers.
 - **Synonyms**: Updateable set `oak-syns`; analyzer `oak_text` = `lowercase` + `synonym_graph` (case‑insensitive matching). File: `scripts/synonyms.json`.
 
 ---
@@ -51,7 +51,12 @@ Set these in `.env.local` for local dev; equivalent on Vercel for remote:
 - **Indexing & search**
   - `app/api/index-oak/route.ts` — SDK‑driven indexing of lessons/units.
   - `app/api/rebuild-rollup/route.ts` — derives unit rollups from existing docs.
-  - `src/lib/run-hybrid-search.ts` — **single source of truth** for running hybrid search + RRF + highlights.
+  - `src/lib/hybrid-search/` — module for hybrid search:
+    - `index.ts` — exports `runHybridSearch`
+    - `lessons.ts` — lesson lexical/semantic queries + RRF fusion + highlights
+    - `units.ts` — unit/rollup queries + fusion + rollup fallback mapping
+    - `types.ts` — shared query/result types
+    - `src/lib/run-hybrid-search.ts` — re-export shim for backwards compatibility
   - `app/api/search/route.ts` — **structured** endpoint; validates body; calls `runHybridSearch`.
   - `app/api/search/nl/route.ts` — **NL** endpoint; uses `parseQuery()` (Vercel AI SDK) → structured → `runHybridSearch`.
   - `src/lib/query-parser.ts` — LLM parser (Vercel AI SDK + OpenAI). Safe to bypass when LLM disabled.
@@ -61,7 +66,7 @@ Set these in `.env.local` for local dev; equivalent on Vercel for remote:
   - `src/adapters/oak-adapter-sdk.ts` — SDK integration; strict guards.
   - `src/adapters/sdk-guards.ts` — re‑exports SDK guards; structural fallbacks.
 - **API docs**
-  - `src/lib/openapi.ts` — builds OpenAPI 3.1 doc from Zod.
+  - `src/lib/openapi.ts` — builds OpenAPI 3.1 doc from Zod and delegates path registrations to `src/lib/openapi.register.ts` (smaller helpers; no unsafe assertions).
   - `app/api/openapi.json/route.ts` — serves schema.
   - `app/api/docs/page.tsx` — Redoc UI (CDN) with link to `/api/openapi.json`.
 - **Docs**
@@ -95,7 +100,7 @@ Set these in `.env.local` for local dev; equivalent on Vercel for remote:
 ## Invariants / non‑negotiables
 
 - **SDK‑first**: All Oak data via `@oaknational/oak-curriculum-sdk` only.
-- **Strict typing**: No `any`; use Zod + SDK guards; keep request/response schemas in sync with `src/lib/openapi.ts`.
+- **Strict typing**: No `any`; use Zod + SDK guards; keep request/response schemas in sync with `src/lib/openapi.ts`. Avoid `as` assertions; prefer guards/narrowing.
 - **No transcript duplication** in units: use rollup index for unit highlights.
 - **Security**: Admin endpoints require `x-api-key: ${SEARCH_API_KEY}`; never expose admin tools by default.
 
@@ -115,7 +120,8 @@ These align with the plan file phases—do not duplicate effort; check what’s 
    - Add/verify Turbo wiring in `turbo.json` (build, lint, type-check, test, format)
    - Align workspace scripts with root conventions (`type-check`, `lint`, `dev`, `build`, `start`)
    - Ensure ESLint extends repo base + Next.js/React rules; add `tsconfig.lint.json`
-   - Verify root-run gates pass for this workspace
+   - Remove TS path aliases; use relative imports everywhere (including Vitest config)
+   - Verify root-run gates pass for this workspace using the full ordered set
 5. **MCP exposure**
    - Use `/api/openapi.json` to register tools: `searchStructured`, `searchNaturalLanguage`, `sdkSearchLessons`, `sdkSearchTranscripts`.
    - Consider prompt helpers (YAML or markdown presets).
@@ -163,4 +169,5 @@ These align with the plan file phases—do not duplicate effort; check what’s 
 - Source SDK: `@oaknational/oak-curriculum-sdk` (see project docs).
 - This workspace: `apps/oak-open-curriculum-semantic-search`.
 
-> If you are a new agent: start at **Docs → Setup**, verify **ENV**, run **elastic:setup**, then use the **Admin** endpoints to index and roll up. Demo **/api/docs**, then **/api/search** and **/api/search/nl**.
+> If you are a new agent: start at **Docs → Setup**, verify **ENV**
+> For initial setup, guide the user to run **elastic:setup**, then use the **Admin** endpoints to index and roll up. Demo **/api/docs**, then **/api/search** and **/api/search/nl**.

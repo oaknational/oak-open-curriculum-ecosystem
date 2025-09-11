@@ -17,7 +17,7 @@
     "build": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": ["dist/**", ".tsup/**"],
+      "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/packages/core/mcp-core",
@@ -29,7 +29,10 @@
         "tsconfig.json",
         "tsconfig.build.json",
         "tsup.config.ts",
+        "next.config.ts",
         "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ],
@@ -73,6 +76,8 @@
       "inputs": [
         "$TURBO_DEFAULT$",
         "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
         "tests/**/*.ts",
         "vitest.config.ts",
         "$TURBO_ROOT$/vitest.config.ts",
@@ -140,6 +145,8 @@
         "tsconfig.build.json",
         "tsconfig.lint.json",
         "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
         "**/*.d.ts"
       ]
     }

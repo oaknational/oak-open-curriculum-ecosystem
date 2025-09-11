@@ -11,7 +11,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc -p tsconfig.json",
+    "type-check": "tsc -p tsconfig.lint.json",
+    "format": "prettier --write --cache .",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "elastic:setup": "bash scripts/setup.sh",
     "elastic:alias-swap": "bash scripts/alias-swap.sh"
   },
@@ -32,6 +35,14 @@
     "eslint": "^9.35.0",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "prettier": "^3.6.2",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@vitest/ui": "^3.2.4",
+    "jsdom": "^25.0.1",
+    "eslint-config-next": "^15.5.2",
+    "@eslint/eslintrc": "^3.2.0"
   }
 }

@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-12T14:44:08.246Z
+Generated: 2025-09-11T17:47:21.611Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -291,7 +291,7 @@ _No parameters_
 
 ## MCP Tool Catalog
 
-### get-changelog
+### oak-get-changelog
 
 - path: /changelog
 - method: GET
@@ -299,7 +299,7 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-changelog-latest
+### oak-get-changelog-latest
 
 - path: /changelog/latest
 - method: GET
@@ -307,7 +307,7 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-key-stages
+### oak-get-key-stages
 
 - path: /key-stages
 - method: GET
@@ -315,79 +315,79 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-key-stages-subject-assets
+### oak-get-key-stages-subject-assets
 
 - path: /key-stages/{keyStage}/subject/{subject}/assets
 - method: GET
 - operationId: getAssets-getSubjectAssets
-- path params: keyStage, subject
-- query params: type, unit
+- path params: keyStage (required enum:4), subject (required enum:17)
+- query params: type (optional enum:9), unit (optional)
 
-### get-key-stages-subject-lessons
+### oak-get-key-stages-subject-lessons
 
 - path: /key-stages/{keyStage}/subject/{subject}/lessons
 - method: GET
 - operationId: getKeyStageSubjectLessons-getKeyStageSubjectLessons
-- path params: keyStage, subject
-- query params: unit, offset, limit
+- path params: keyStage (required enum:4), subject (required enum:17)
+- query params: unit (optional), offset (optional), limit (optional)
 
-### get-key-stages-subject-questions
+### oak-get-key-stages-subject-questions
 
 - path: /key-stages/{keyStage}/subject/{subject}/questions
 - method: GET
 - operationId: getQuestions-getQuestionsForKeyStageAndSubject
-- path params: keyStage, subject
-- query params: offset, limit
+- path params: keyStage (required enum:4), subject (required enum:17)
+- query params: offset (optional), limit (optional)
 
-### get-key-stages-subject-units
+### oak-get-key-stages-subject-units
 
 - path: /key-stages/{keyStage}/subject/{subject}/units
 - method: GET
 - operationId: getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits
-- path params: keyStage, subject
+- path params: keyStage (required enum:4), subject (required enum:17)
 - query params: _None_
 
-### get-lessons-assets
+### oak-get-lessons-assets
 
 - path: /lessons/{lesson}/assets
 - method: GET
 - operationId: getAssets-getLessonAssets
-- path params: lesson
-- query params: type
+- path params: lesson (required)
+- query params: type (optional enum:9)
 
-### get-lessons-assets-by-type
+### oak-get-lessons-assets-by-type
 
 - path: /lessons/{lesson}/assets/{type}
 - method: GET
 - operationId: getAssets-getLessonAsset
-- path params: lesson, type
+- path params: lesson (required), type (required enum:9)
 - query params: _None_
 
-### get-lessons-quiz
+### oak-get-lessons-quiz
 
 - path: /lessons/{lesson}/quiz
 - method: GET
 - operationId: getQuestions-getQuestionsForLessons
-- path params: lesson
+- path params: lesson (required)
 - query params: _None_
 
-### get-lessons-summary
+### oak-get-lessons-summary
 
 - path: /lessons/{lesson}/summary
 - method: GET
 - operationId: getLessons-getLesson
-- path params: lesson
+- path params: lesson (required)
 - query params: _None_
 
-### get-lessons-transcript
+### oak-get-lessons-transcript
 
 - path: /lessons/{lesson}/transcript
 - method: GET
 - operationId: getLessonTranscript-getLessonTranscript
-- path params: lesson
+- path params: lesson (required)
 - query params: _None_
 
-### get-rate-limit
+### oak-get-rate-limit
 
 - path: /rate-limit
 - method: GET
@@ -395,55 +395,55 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-search-lessons
+### oak-get-search-lessons
 
 - path: /search/lessons
 - method: GET
 - operationId: getLessons-searchByTextSimilarity
 - path params: _None_
-- query params: q, keyStage, subject, unit
+- query params: q (required), keyStage (optional enum:4), subject (optional enum:17), unit (optional)
 
-### get-search-transcripts
+### oak-get-search-transcripts
 
 - path: /search/transcripts
 - method: GET
 - operationId: searchTranscripts-searchTranscripts
 - path params: _None_
-- query params: q
+- query params: q (required)
 
-### get-sequences-assets
+### oak-get-sequences-assets
 
 - path: /sequences/{sequence}/assets
 - method: GET
 - operationId: getAssets-getSequenceAssets
-- path params: sequence
-- query params: year, type
+- path params: sequence (required)
+- query params: year (optional), type (optional enum:9)
 
-### get-sequences-questions
+### oak-get-sequences-questions
 
 - path: /sequences/{sequence}/questions
 - method: GET
 - operationId: getQuestions-getQuestionsForSequence
-- path params: sequence
-- query params: year, offset, limit
+- path params: sequence (required)
+- query params: year (optional), offset (optional), limit (optional)
 
-### get-sequences-units
+### oak-get-sequences-units
 
 - path: /sequences/{sequence}/units
 - method: GET
 - operationId: getSequences-getSequenceUnits
-- path params: sequence
-- query params: year
+- path params: sequence (required)
+- query params: year (optional enum:12)
 
-### get-subject-detail
+### oak-get-subject-detail
 
 - path: /subjects/{subject}
 - method: GET
 - operationId: getSubjects-getSubject
-- path params: subject
+- path params: subject (required)
 - query params: _None_
 
-### get-subjects
+### oak-get-subjects
 
 - path: /subjects
 - method: GET
@@ -451,31 +451,31 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-subjects-key-stages
+### oak-get-subjects-key-stages
 
 - path: /subjects/{subject}/key-stages
 - method: GET
 - operationId: getSubjects-getSubjectKeyStages
-- path params: subject
+- path params: subject (required)
 - query params: _None_
 
-### get-subjects-sequences
+### oak-get-subjects-sequences
 
 - path: /subjects/{subject}/sequences
 - method: GET
 - operationId: getSubjects-getSubjectSequence
-- path params: subject
+- path params: subject (required)
 - query params: _None_
 
-### get-subjects-years
+### oak-get-subjects-years
 
 - path: /subjects/{subject}/years
 - method: GET
 - operationId: getSubjects-getSubjectYears
-- path params: subject
+- path params: subject (required)
 - query params: _None_
 
-### get-threads
+### oak-get-threads
 
 - path: /threads
 - method: GET
@@ -483,20 +483,20 @@ _No parameters_
 - path params: _None_
 - query params: _None_
 
-### get-threads-units
+### oak-get-threads-units
 
 - path: /threads/{threadSlug}/units
 - method: GET
 - operationId: getThreads-getThreadUnits
-- path params: threadSlug
+- path params: threadSlug (required)
 - query params: _None_
 
-### get-units-summary
+### oak-get-units-summary
 
 - path: /units/{unit}/summary
 - method: GET
 - operationId: getUnits-getUnit
-- path params: unit
+- path params: unit (required)
 - query params: _None_
 
 ## References
@@ -512,6 +512,18 @@ _No parameters_
 Error types with proper cause chains
 
 ## Interfaces
+
+### LessonsIndexDoc
+
+ES lesson document (search index shape).
+
+### UnitRollupDoc
+
+ES rollup document (search index shape).
+
+### UnitsIndexDoc
+
+ES unit document (search index shape).
 
 ### ValidatedClientOptions
 
@@ -529,7 +541,7 @@ Validation issue details
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:39](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L39)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L38)
 
 HTTP methods supported by validation
 
@@ -539,7 +551,7 @@ HTTP methods supported by validation
 type OakApiClient = OpenApiClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -551,7 +563,7 @@ Use this client for maximum performance.
 type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -560,13 +572,23 @@ This uses an object proxy to access the paths, which causes some
 performance overhead. For most use cases the convenience outweighs
 the performance cost.
 
+### SubjectSlug
+
+```ts
+type SubjectSlug = Subject;
+```
+
+Source: [packages/sdks/oak-curriculum-sdk/src/types/search-index.ts:11](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11)
+
+Alias used by downstream apps.
+
 ### ValidationResult
 
 ```ts
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:13](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12)
 
 Result type for validation operations
 Discriminated union for type-safe error handling
@@ -609,6 +631,24 @@ function executeToolCall(maybeToolName: unknown, maybeParams: unknown, client: P
 
 Ultra-thin executor - just validation and delegation to embedded executor
 
+### isLessonGroups
+
+```ts
+function isLessonGroups(v: unknown): <predicate>(…)
+```
+
+### isTranscriptResponse
+
+```ts
+function isTranscriptResponse(v: unknown): <predicate>(…)
+```
+
+### isUnitsGrouped
+
+```ts
+function isUnitsGrouped(v: unknown): <predicate>(…)
+```
+
 ### validateRequest
 
 ```ts
@@ -630,7 +670,7 @@ function validateResponse(
   method: HttpMethod,
   statusCode: number,
   response: unknown,
-): ValidationResult<unknown>;
+): ValidationResult<Record<string, unknown>>;
 ```
 
 Validates response data for an API operation

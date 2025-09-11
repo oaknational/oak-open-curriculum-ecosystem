@@ -48,7 +48,8 @@ export {
 // Schema and operation exports
 export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters.js';
-export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters';
+export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters.js';
+export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
 // Validation module exports (explicit for tree-shaking)
 export { validateRequest, validateResponse } from './validation/index.js';
@@ -83,3 +84,18 @@ export {
   typeSafeHasOwn,
   typeSafeOwnKeys,
 } from './types/helpers.js';
+
+// Response-shape type guards for search-related endpoints
+export {
+  isUnitsGrouped,
+  isLessonGroups,
+  isTranscriptResponse,
+} from './types/search-response-guards.js';
+
+// Hybrid search index types (SDK-owned to centralise downstream usage)
+export type {
+  LessonsIndexDoc,
+  UnitsIndexDoc,
+  UnitRollupDoc,
+  SubjectSlug,
+} from './types/search-index.js';

@@ -1,37 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { env } from '@lib/env';
-import { createOakClient } from '@oaknational/oak-curriculum-sdk';
-import { isKeyStage, isSubject } from '@adapters/sdk-guards';
+import { type NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { env } from '../../../../src/lib/env';
+import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
+import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
+
+const BodySchema = z.object({
+  q: z.string().min(1),
+  keyStage: z.string().optional(),
+  subject: z.string().optional(),
+  unit: z.string().optional(),
+  limit: z.number().int().min(1).max(100).optional(),
+  offset: z.number().int().min(0).optional(),
+});
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const body = (await req.json()) as {
-    q: string;
-    keyStage?: string;
-    subject?: string;
-    unit?: string;
-    limit?: number;
-    offset?: number;
-  };
-  const e = env();
-  const client = createOakClient(e.OAK_EFFECTIVE_KEY);
+  const parseBody = async () => BodySchema.safeParse(await req.json());
+  function toOptional<T extends string>(guard: (v: string) => v is T, v?: string): T | undefined {
+    if (typeof v !== 'string' || v.length === 0) return undefined;
+    if (guard(v)) return v;
+    return undefined;
+  }
+  const coerceNum = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
 
-  const keyStage = body.keyStage && isKeyStage(body.keyStage) ? body.keyStage : undefined;
-  const subject = body.subject && isSubject(body.subject) ? body.subject : undefined;
+  const parsed = await parseBody();
+  if (!parsed.success)
+    return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+
+  const body = parsed.data;
+  const client = createOakPathBasedClient(env().OAK_EFFECTIVE_KEY);
+
+  const keyStage = toOptional(isKeyStage, body.keyStage);
+  const subject = toOptional(isSubject, body.subject);
   const unit = typeof body.unit === 'string' && body.unit.length > 0 ? body.unit : undefined;
 
-  const res = await client.GET('/search/lessons', {
+  const res = await client['/search/lessons'].GET({
     params: {
       query: {
         q: body.q,
         keyStage,
         subject,
         unit,
-        limit: typeof body.limit === 'number' ? body.limit : 20,
-        offset: typeof body.offset === 'number' ? body.offset : 0,
+        limit: coerceNum(body.limit, 20),
+        offset: coerceNum(body.offset, 0),
       },
     },
   });
 
-  if (res.error) return NextResponse.json({ error: res.error }, { status: 400 });
+  if (!res.response.ok)
+    return NextResponse.json({ error: res.response.statusText }, { status: res.response.status });
   return NextResponse.json(res.data ?? []);
 }

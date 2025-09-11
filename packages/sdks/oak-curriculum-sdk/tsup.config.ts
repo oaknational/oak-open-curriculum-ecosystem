@@ -10,6 +10,8 @@ export default defineConfig({
     'src/config/index.ts',
     'src/types/index.ts',
     'src/types/helpers.ts',
+    'src/types/search-index.ts',
+    'src/types/search-response-guards.ts',
     'src/types/generated/api-schema/api-paths-types.ts',
     'src/types/generated/api-schema/api-schema-base.ts',
     'src/types/generated/api-schema/path-parameters.ts',

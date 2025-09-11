@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { env } from '@lib/env';
-import type { KeyStage, SubjectSlug, LessonsIndexDoc, UnitsIndexDoc } from '@types/oak';
-import { createOakSdkClient } from '@adapters/oak-adapter-sdk';
-import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '@adapters/sdk-guards';
-import { esBulk } from '@lib/elastic-http';
-import { getRateLimit } from '@lib/rate-limit';
+import { type NextRequest, NextResponse } from 'next/server';
+import { env } from '../../../src/lib/env';
+import type { KeyStage, SubjectSlug } from '../../../src/types/oak';
+import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
+import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
+import { esBulk } from '../../../src/lib/elastic-http';
+import { getRateLimit } from '../../../src/lib/rate-limit';
+import { buildIndexBulkOps } from '../../../src/lib/index-oak';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -26,51 +27,9 @@ export async function GET(req: NextRequest): Promise<Response> {
 
   const client = createOakSdkClient();
 
-  const keyStages: KeyStage[] = (KEY_STAGES as readonly unknown[]).filter(isKeyStage);
-  const subjects: SubjectSlug[] = (SUBJECTS as readonly unknown[]).filter(isSubject);
-
-  const bulkOps: unknown[] = [];
-
-  for (const subject of subjects) {
-    for (const ks of keyStages) {
-      try {
-        const units = await client.getUnitsByKeyStageAndSubject(ks, subject);
-        const lessonsGrouped = await client.getLessonsByKeyStageAndSubject(ks, subject);
-
-        for (const u of units) {
-          const unitDoc: UnitsIndexDoc = {
-            unit_id: u.unitSlug,
-            unit_slug: u.unitSlug,
-            unit_title: u.unitTitle,
-            subject_slug: subject,
-            key_stage: ks,
-            lesson_ids: [],
-            lesson_count: 0,
-          };
-          bulkOps.push({ index: { _index: 'oak_units', _id: unitDoc.unit_id } }, unitDoc);
-        }
-
-        for (const group of lessonsGrouped) {
-          for (const lesson of group.lessons) {
-            const transcript = await client.getLessonTranscript(lesson.lessonSlug);
-            const doc: LessonsIndexDoc = {
-              lesson_id: lesson.lessonSlug,
-              lesson_slug: lesson.lessonSlug,
-              lesson_title: lesson.lessonTitle,
-              subject_slug: subject,
-              key_stage: ks,
-              unit_ids: [group.unitSlug],
-              unit_titles: [group.unitTitle],
-              transcript_text: transcript.transcript,
-            };
-            bulkOps.push({ index: { _index: 'oak_lessons', _id: doc.lesson_id } }, doc);
-          }
-        }
-      } catch {
-        // Consider structured logging
-      }
-    }
-  }
+  const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
+  const subjects: SubjectSlug[] = SUBJECTS.filter(isSubject);
+  const bulkOps = await buildIndexBulkOps(client, keyStages, subjects);
 
   if (bulkOps.length > 0) await esBulk(bulkOps);
   return NextResponse.json({ ok: true, indexedDocs: bulkOps.length / 2 });

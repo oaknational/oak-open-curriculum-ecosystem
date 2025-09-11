@@ -6,7 +6,7 @@
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:39](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L39)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:38](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L38)
 
 HTTP methods supported by validation
 
@@ -16,7 +16,7 @@ HTTP methods supported by validation
 type OakApiClient = OpenApiClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -28,7 +28,7 @@ Use this client for maximum performance.
 type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -37,13 +37,23 @@ This uses an object proxy to access the paths, which causes some
 performance overhead. For most use cases the convenience outweighs
 the performance cost.
 
+### SubjectSlug
+
+```ts
+type SubjectSlug = Subject;
+```
+
+Source: [packages/sdks/oak-curriculum-sdk/src/types/search-index.ts:11](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11)
+
+Alias used by downstream apps.
+
 ### ValidationResult
 
 ```ts
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:13](https://github.com/oaknational/oak-mcp-ecosystem/blob/8191b107f621008bc4e64a003acb1887fa1b4d70/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:12](https://github.com/oaknational/oak-mcp-ecosystem/blob/74091d18dbaedc060693646264dec947ca5d7216/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12)
 
 Result type for validation operations
 Discriminated union for type-safe error handling

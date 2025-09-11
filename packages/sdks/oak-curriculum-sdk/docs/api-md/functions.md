@@ -30,6 +30,24 @@ function executeToolCall(maybeToolName: unknown, maybeParams: unknown, client: P
 
 Ultra-thin executor - just validation and delegation to embedded executor
 
+### isLessonGroups
+
+```ts
+function isLessonGroups(v: unknown): <predicate>(…)
+```
+
+### isTranscriptResponse
+
+```ts
+function isTranscriptResponse(v: unknown): <predicate>(…)
+```
+
+### isUnitsGrouped
+
+```ts
+function isUnitsGrouped(v: unknown): <predicate>(…)
+```
+
 ### typeSafeEntries
 
 ```ts

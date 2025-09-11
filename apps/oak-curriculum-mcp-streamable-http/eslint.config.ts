@@ -1,4 +1,4 @@
-import { config as tsEslintConfig, ConfigArray } from 'typescript-eslint';
+import { config as tsEslintConfig, type ConfigArray } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base';
 import {
   appBoundaryRules,

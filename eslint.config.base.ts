@@ -11,6 +11,7 @@ import {
   config as tsEslintConfig,
   configs as tsEslintConfigs,
   parser as tsEslintParser,
+  type ConfigArray,
 } from 'typescript-eslint';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
@@ -124,6 +125,10 @@ export const baseConfig: ConfigArray = tsEslintConfig(
       'import-x/no-cycle': ['error'],
       'import-x/no-useless-path-segments': ['error'],
       'import-x/no-named-as-default': 'error',
+
+      // Improved dependency management
+      // 'import-x/no-extraneous-dependencies': 'error',
+      // 'no-internal-modules': 'error',
 
       // Prevent export * for better tree shaking
       'no-restricted-syntax': [

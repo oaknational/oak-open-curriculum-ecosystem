@@ -138,7 +138,7 @@ Every workspace needs these files:
 For **Psycha organisms**, use biological architecture rules:
 
 ```typescript
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { ConfigArray, config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
   psychaBoundaryRules,
@@ -151,7 +151,7 @@ import {
 For **standard packages**, use simple configuration:
 
 ```typescript
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { ConfigArray, config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base';
 import { commonSettings } from '../../eslint-rules/index.js';
 // ... (see oak-curriculum-sdk for example)
@@ -424,7 +424,7 @@ Includes all files for linting:
 Must properly import and extend base configuration. For Psycha organisms:
 
 ```typescript
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { ConfigArray, config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
   psychaBoundaryRules,

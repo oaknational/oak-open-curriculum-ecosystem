@@ -28,3 +28,9 @@ export {
   typeSafeHasOwn,
   typeSafeOwnKeys,
 } from './helpers.js';
+
+// Hybrid search index types
+export type { LessonsIndexDoc, UnitsIndexDoc, UnitRollupDoc, SubjectSlug } from './search-index.js';
+
+// Response-shape type guards for search-related endpoints
+export { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './search-response-guards.js';
