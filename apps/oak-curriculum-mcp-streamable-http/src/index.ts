@@ -18,6 +18,7 @@ import { loadRootEnv } from '@oaknational/mcp-env';
       const message = err instanceof Error ? err.message : String(err);
       throw new Error(
         `Failed to load OAK_API_KEY from ENV variables and from dotenv, exiting: ${message}`,
+        { cause: err },
       );
     }
   }
