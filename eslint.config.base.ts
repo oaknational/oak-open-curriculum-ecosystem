@@ -7,7 +7,6 @@
 
 import eslint from '@eslint/js';
 import {
-  ConfigArray,
   config as tsEslintConfig,
   configs as tsEslintConfigs,
   parser as tsEslintParser,

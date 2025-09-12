@@ -82,6 +82,9 @@ function addRootLandingPage(app: express.Express): void {
   });
 }
 
+/**
+ * Mount static assets for favicon/logo (works locally and on Vercel (and probably would without this complexity))
+ */
 function mountStaticAssets(app: express.Express): void {
   const candidates = [
     path.resolve(process.cwd(), 'public'),
@@ -89,6 +92,7 @@ function mountStaticAssets(app: express.Express): void {
   ];
   const chosen = candidates.find((p) => fs.existsSync(p));
   if (chosen) {
+    // eslint-disable-next-line import-x/no-named-as-default-member -- allow since we already import the default express (no treeshaking advantage)
     app.use(express.static(chosen, { etag: true, maxAge: '1d' }));
   }
 }

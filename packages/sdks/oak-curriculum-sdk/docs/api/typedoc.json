@@ -16,7 +16,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/index.ts",
           "line": 20,
           "character": 28,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/index.ts#L20"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/index.ts#L20"
         }
       ],
       "target": 1
@@ -39,7 +39,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 36,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
             }
           ],
           "signatures": [
@@ -54,7 +54,7 @@
                   "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                   "line": 36,
                   "character": 2,
-                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L36"
                 }
               ],
               "parameters": [
@@ -136,7 +136,7 @@
                               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                               "line": 41,
                               "character": 16,
-                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
                             }
                           ],
                           "type": {
@@ -161,7 +161,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                           "line": 41,
                           "character": 14,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L41"
                         }
                       ]
                     }
@@ -280,7 +280,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 33,
               "character": 11,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L33"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L33"
             }
           ],
           "type": {
@@ -302,7 +302,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 34,
               "character": 11,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L34"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L34"
             }
           ],
           "type": {
@@ -348,7 +348,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 32,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L32"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L32"
             }
           ],
           "type": {
@@ -719,7 +719,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
           "line": 31,
           "character": 13,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L31"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L31"
         }
       ],
       "extendedTypes": [
@@ -760,7 +760,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 23,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
             }
           ],
           "signatures": [
@@ -775,7 +775,7 @@
                   "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                   "line": 23,
                   "character": 2,
-                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
                 }
               ],
               "parameters": [
@@ -831,7 +831,7 @@
                               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                               "line": 23,
                               "character": 61,
-                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
                             }
                           ],
                           "type": {
@@ -857,7 +857,7 @@
                               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                               "line": 23,
                               "character": 76,
-                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
                             }
                           ],
                           "type": {
@@ -877,7 +877,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
                           "line": 23,
                           "character": 59,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L23"
                         }
                       ]
                     }
@@ -944,7 +944,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 21,
               "character": 11,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L21"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L21"
             }
           ],
           "type": {
@@ -1044,7 +1044,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
               "line": 20,
               "character": 11,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L20"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L20"
             }
           ],
           "type": {
@@ -1415,7 +1415,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
           "line": 19,
           "character": 13,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L19"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L19"
         }
       ],
       "extendedTypes": [
@@ -1456,7 +1456,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 19,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L19"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L19"
             }
           ],
           "type": {
@@ -1492,7 +1492,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 15,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L15"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L15"
             }
           ],
           "type": {
@@ -1511,7 +1511,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 16,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L16"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L16"
             }
           ],
           "type": {
@@ -1530,7 +1530,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 17,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L17"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L17"
             }
           ],
           "type": {
@@ -1549,7 +1549,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 18,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L18"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L18"
             }
           ],
           "type": {
@@ -1637,7 +1637,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 23,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L23"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L23"
             }
           ],
           "type": {
@@ -1656,7 +1656,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 21,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L21"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L21"
             }
           ],
           "type": {
@@ -1678,7 +1678,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 22,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L22"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L22"
             }
           ],
           "type": {
@@ -1702,7 +1702,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 20,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L20"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L20"
             }
           ],
           "type": {
@@ -1722,7 +1722,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
           "line": 14,
           "character": 17,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L14"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L14"
         }
       ]
     },
@@ -1752,7 +1752,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 45,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L45"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L45"
             }
           ],
           "type": {
@@ -1788,7 +1788,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 48,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L48"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L48"
             }
           ],
           "type": {
@@ -1807,7 +1807,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 47,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L47"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L47"
             }
           ],
           "type": {
@@ -1829,7 +1829,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 49,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L49"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L49"
             }
           ],
           "type": {
@@ -1848,7 +1848,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 44,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L44"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L44"
             }
           ],
           "type": {
@@ -1936,7 +1936,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 41,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L41"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L41"
             }
           ],
           "type": {
@@ -1955,7 +1955,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 42,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L42"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L42"
             }
           ],
           "type": {
@@ -1974,7 +1974,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 43,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L43"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L43"
             }
           ],
           "type": {
@@ -1995,7 +1995,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 46,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L46"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L46"
             }
           ],
           "type": {
@@ -2015,7 +2015,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
           "line": 40,
           "character": 17,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L40"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L40"
         }
       ]
     },
@@ -2045,7 +2045,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 32,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L32"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L32"
             }
           ],
           "type": {
@@ -2081,7 +2081,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 35,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L35"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L35"
             }
           ],
           "type": {
@@ -2100,7 +2100,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 34,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L34"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L34"
             }
           ],
           "type": {
@@ -2122,7 +2122,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 31,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L31"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L31"
             }
           ],
           "type": {
@@ -2210,7 +2210,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 28,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L28"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L28"
             }
           ],
           "type": {
@@ -2229,7 +2229,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 29,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L29"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L29"
             }
           ],
           "type": {
@@ -2248,7 +2248,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 30,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L30"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L30"
             }
           ],
           "type": {
@@ -2269,7 +2269,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 36,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L36"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L36"
             }
           ],
           "type": {
@@ -2290,7 +2290,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
               "line": 33,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L33"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L33"
             }
           ],
           "type": {
@@ -2310,7 +2310,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
           "line": 27,
           "character": 17,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L27"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L27"
         }
       ]
     },
@@ -2348,9 +2348,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 32,
+              "line": 33,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L32"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L33"
             }
           ],
           "type": {
@@ -2377,9 +2377,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 28,
+              "line": 29,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L28"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L29"
             }
           ],
           "type": {
@@ -2406,9 +2406,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 30,
+              "line": 31,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L30"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L31"
             }
           ],
           "type": {
@@ -2426,9 +2426,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-          "line": 26,
+          "line": 27,
           "character": 17,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L26"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L27"
         }
       ]
     },
@@ -2458,9 +2458,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 20,
+              "line": 21,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L20"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L21"
             }
           ],
           "type": {
@@ -2477,9 +2477,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 19,
+              "line": 20,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L19"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L20"
             }
           ],
           "type": {
@@ -2496,9 +2496,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-              "line": 18,
+              "line": 19,
               "character": 2,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L18"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L19"
             }
           ],
           "type": {
@@ -2519,9 +2519,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-          "line": 17,
+          "line": 18,
           "character": 17,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L17"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L18"
         }
       ]
     },
@@ -2542,9 +2542,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-          "line": 38,
+          "line": 39,
           "character": 12,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L38"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L39"
         }
       ],
       "type": {
@@ -2592,7 +2592,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts",
           "line": 17,
           "character": 12,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17"
         }
       ],
       "type": {
@@ -2636,7 +2636,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts",
           "line": 27,
           "character": 12,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27"
         }
       ],
       "type": {
@@ -2680,7 +2680,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-index.ts",
           "line": 11,
           "character": 12,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11"
         }
       ],
       "type": {
@@ -2710,9 +2710,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-          "line": 12,
+          "line": 13,
           "character": 12,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
         }
       ],
       "typeParameters": [
@@ -2745,9 +2745,9 @@
                   "sources": [
                     {
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                      "line": 12,
+                      "line": 13,
                       "character": 36,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                     }
                   ],
                   "type": {
@@ -2764,9 +2764,9 @@
                   "sources": [
                     {
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                      "line": 12,
+                      "line": 13,
                       "character": 46,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                     }
                   ],
                   "type": {
@@ -2787,9 +2787,9 @@
               "sources": [
                 {
                   "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                  "line": 12,
+                  "line": 13,
                   "character": 34,
-                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                 }
               ]
             }
@@ -2812,9 +2812,9 @@
                   "sources": [
                     {
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                      "line": 12,
+                      "line": 13,
                       "character": 72,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                     }
                   ],
                   "type": {
@@ -2836,9 +2836,9 @@
                   "sources": [
                     {
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                      "line": 12,
+                      "line": 13,
                       "character": 61,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                     }
                   ],
                   "type": {
@@ -2856,9 +2856,9 @@
               "sources": [
                 {
                   "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/types.ts",
-                  "line": 12,
+                  "line": 13,
                   "character": 59,
-                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L12"
+                  "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13"
                 }
               ]
             }
@@ -2877,9 +2877,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/config/index.ts",
-          "line": 45,
+          "line": 38,
           "character": 6,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L45"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L38"
         }
       ],
       "type": {
@@ -2899,9 +2899,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/config/index.ts",
-          "line": 47,
+          "line": 40,
           "character": 6,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L47"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/config/index.ts#L40"
         }
       ],
       "type": {
@@ -2921,7 +2921,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
           "line": 13,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
         }
       ],
       "signatures": [
@@ -2963,7 +2963,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
               "line": 13,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L13"
             }
           ],
           "parameters": [
@@ -3007,7 +3007,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
           "line": 28,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
         }
       ],
       "signatures": [
@@ -3049,7 +3049,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/client/index.ts",
               "line": 28,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/index.ts#L28"
             }
           ],
           "parameters": [
@@ -3091,9 +3091,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
-          "line": 176,
+          "line": 163,
           "character": 22,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L176"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L163"
         }
       ],
       "signatures": [
@@ -3114,9 +3114,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts",
-              "line": 176,
+              "line": 163,
               "character": 22,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L176"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.ts#L163"
             }
           ],
           "parameters": [
@@ -3224,7 +3224,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
           "line": 15,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
         }
       ],
       "signatures": [
@@ -3239,7 +3239,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
               "line": 15,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
             }
           ],
           "parameters": [
@@ -3281,7 +3281,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                           "line": 18,
                           "character": 2,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
                         }
                       ],
                       "type": {
@@ -3306,7 +3306,7 @@
                                     "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                     "line": 18,
                                     "character": 13,
-                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
+                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
                                   }
                                 ],
                                 "type": {
@@ -3325,7 +3325,7 @@
                                     "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                     "line": 18,
                                     "character": 33,
-                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
+                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
                                   }
                                 ],
                                 "type": {
@@ -3345,7 +3345,7 @@
                                 "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                 "line": 18,
                                 "character": 11,
-                                "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
+                                "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L18"
                               }
                             ]
                           }
@@ -3363,7 +3363,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                           "line": 16,
                           "character": 2,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L16"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L16"
                         }
                       ],
                       "type": {
@@ -3382,7 +3382,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                           "line": 17,
                           "character": 2,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L17"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L17"
                         }
                       ],
                       "type": {
@@ -3402,7 +3402,7 @@
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                       "line": 15,
                       "character": 49,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L15"
                     }
                   ]
                 }
@@ -3423,7 +3423,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
           "line": 23,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
         }
       ],
       "signatures": [
@@ -3438,7 +3438,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
               "line": 23,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
             }
           ],
           "parameters": [
@@ -3478,7 +3478,7 @@
                         "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                         "line": 23,
                         "character": 57,
-                        "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
+                        "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
                       }
                     ],
                     "type": {
@@ -3497,7 +3497,7 @@
                         "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                         "line": 23,
                         "character": 77,
-                        "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
+                        "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
                       }
                     ],
                     "type": {
@@ -3517,7 +3517,7 @@
                     "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                     "line": 23,
                     "character": 55,
-                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
+                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L23"
                   }
                 ]
               }
@@ -3537,7 +3537,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
           "line": 9,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L9"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L9"
         }
       ],
       "signatures": [
@@ -3552,7 +3552,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
               "line": 9,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L9"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L9"
             }
           ],
           "parameters": [
@@ -3594,7 +3594,7 @@
                           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                           "line": 11,
                           "character": 10,
-                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
+                          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
                         }
                       ],
                       "type": {
@@ -3619,7 +3619,7 @@
                                     "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                     "line": 11,
                                     "character": 19,
-                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
+                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
                                   }
                                 ],
                                 "type": {
@@ -3638,7 +3638,7 @@
                                     "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                     "line": 11,
                                     "character": 37,
-                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
+                                    "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
                                   }
                                 ],
                                 "type": {
@@ -3658,7 +3658,7 @@
                                 "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                                 "line": 11,
                                 "character": 17,
-                                "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
+                                "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
                               }
                             ]
                           }
@@ -3677,7 +3677,7 @@
                       "fileName": "packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts",
                       "line": 11,
                       "character": 8,
-                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
+                      "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-response-guards.ts#L11"
                     }
                   ]
                 }
@@ -3698,7 +3698,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 17,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
         }
       ],
       "signatures": [
@@ -3721,7 +3721,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 17,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L17"
             }
           ],
           "typeParameters": [
@@ -3837,7 +3837,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 26,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
         }
       ],
       "signatures": [
@@ -3860,7 +3860,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 26,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L26"
             }
           ],
           "typeParameters": [
@@ -3978,7 +3978,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 34,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
         }
       ],
       "signatures": [
@@ -4001,7 +4001,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 34,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L34"
             }
           ],
           "typeParameters": [
@@ -4102,7 +4102,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 48,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
         }
       ],
       "signatures": [
@@ -4125,7 +4125,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 48,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L48"
             }
           ],
           "typeParameters": [
@@ -4203,7 +4203,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 53,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
         }
       ],
       "signatures": [
@@ -4226,7 +4226,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 53,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L53"
             }
           ],
           "typeParameters": [
@@ -4304,7 +4304,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 5,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
         }
       ],
       "signatures": [
@@ -4327,7 +4327,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 5,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L5"
             }
           ],
           "typeParameters": [
@@ -4402,7 +4402,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 58,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
         }
       ],
       "signatures": [
@@ -4425,7 +4425,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 58,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L58"
             }
           ],
           "typeParameters": [
@@ -4485,7 +4485,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 39,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
         }
       ],
       "signatures": [
@@ -4508,7 +4508,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 39,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L39"
             }
           ],
           "typeParameters": [
@@ -4620,7 +4620,7 @@
           "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
           "line": 11,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
         }
       ],
       "signatures": [
@@ -4643,7 +4643,7 @@
               "fileName": "packages/sdks/oak-curriculum-sdk/src/types/helpers.ts",
               "line": 11,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/helpers.ts#L11"
             }
           ],
           "typeParameters": [
@@ -4711,9 +4711,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts",
-          "line": 153,
+          "line": 144,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L153"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L144"
         }
       ],
       "signatures": [
@@ -4745,9 +4745,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts",
-              "line": 153,
+              "line": 144,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L153"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/request-validators.ts#L144"
             }
           ],
           "parameters": [
@@ -4835,9 +4835,9 @@
       "sources": [
         {
           "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts",
-          "line": 99,
+          "line": 46,
           "character": 16,
-          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L99"
+          "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L46"
         }
       ],
       "signatures": [
@@ -4869,9 +4869,9 @@
           "sources": [
             {
               "fileName": "packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts",
-              "line": 99,
+              "line": 46,
               "character": 16,
-              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/0d6cf10e41fda978a7214dd4bd9a42c144c58204/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L99"
+              "url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/response-validators.ts#L46"
             }
           ],
           "parameters": [
@@ -4959,23 +4959,8 @@
             "target": 23,
             "typeArguments": [
               {
-                "type": "reference",
-                "target": {
-                  "sourceFileName": "../../../node_modules/.pnpm/typescript@5.9.2/node_modules/typescript/lib/lib.es5.d.ts",
-                  "qualifiedName": "Record"
-                },
-                "typeArguments": [
-                  {
-                    "type": "intrinsic",
-                    "name": "string"
-                  },
-                  {
-                    "type": "intrinsic",
-                    "name": "unknown"
-                  }
-                ],
-                "name": "Record",
-                "package": "typescript"
+                "type": "intrinsic",
+                "name": "unknown"
               }
             ],
             "name": "ValidationResult",
