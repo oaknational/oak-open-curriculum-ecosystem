@@ -33,17 +33,6 @@ This layer doesn't DO anything in the business sense - it simply wires component
 - Maintain state
 - Exhibit behaviour
 
-## The Mystery of Life
-
-The deepest mystery in biology is how life emerges from non-life. Similarly, the app wiring represents that moment when:
-
-- Types become data
-- Interfaces become connections
-- Functions become behaviors
-- Components become page-level modules
-
-This is why we don't distribute the wiring throughout the codebase. There should be a clear composition root: a single place where wiring happens.
-
 ## 🗺️ Developer Quick Reference
 
 **You're in the application wiring and startup directory!**

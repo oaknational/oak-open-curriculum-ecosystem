@@ -17,7 +17,7 @@ const method= 'GET' as const;
 // Path parameters
 
 const pathParams= {
-"subject":{"typePrimitive":"string","valueConstraint":false,"required":true},
+"subject":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"Subject slug to filter by"},
 };
 
 const queryParams= {
@@ -25,11 +25,14 @@ const queryParams= {
 
 void pathParams;
 void queryParams;
+type PathParamsShape = {
+  subject: string;
+};
 type ValidRequestParams= {params: {
-  path?: Record<string, unknown>;
-  query?: Record<string, unknown>;
+  path: PathParamsShape;
 }}
 
+const inputSchema = {"type":"object","properties":{"subject":{"type":"string","description":"Subject slug to filter by"}},"additionalProperties":false,"required":["subject"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -51,32 +54,36 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
       if (!has) return false;
     }
   }
-  const validateValue = (meta: unknown, value: unknown): boolean => {
-    if (!meta || typeof meta !== "object") return true;
-    const m = meta as {
-      valueConstraint?: boolean;
-      typeguard?: (v: unknown) => boolean
-    };
-    if (m.valueConstraint && typeof m.typeguard === "function") {
-      return m.typeguard(value);
+  const hasTypeguardAndValidate = (container: unknown, key: string, value: unknown): boolean => {
+    if (container === null || typeof container !== 'object') return true;
+    const metaDesc = Object.getOwnPropertyDescriptor(container, key);
+    const metaVal = metaDesc?.value;
+    if (metaVal && typeof metaVal === 'object') {
+      const tgDesc = Object.getOwnPropertyDescriptor(metaVal, 'typeguard');
+      const vcDesc = Object.getOwnPropertyDescriptor(metaVal, 'valueConstraint');
+      const typeguard = tgDesc?.value;
+      const hasConstraint = vcDesc?.value === true;
+      if (hasConstraint && typeof typeguard === "function") {
+        return typeguard(value);
+      }
     }
     return true;
   };
   if (path) {
     for (const [k, v] of Object.entries(path)) {
-      if (!validateValue((pathParams as Record<string, unknown>)[k], v)) return false;
+      if (!hasTypeguardAndValidate(pathParams, k, v)) return false;
     }
   }
   if (query) {
     for (const [k, v] of Object.entries(query)) {
-      if (!validateValue((queryParams as Record<string, unknown>)[k], v)) return false;
+      if (!hasTypeguardAndValidate(queryParams, k, v)) return false;
     }
   }
   return true;
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"Subject slug to filter by"}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -86,8 +93,8 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = (client as Record<string, unknown>)["/subjects/{subject}/years"];
-    const call = ep && typeof ep === "object" ? (ep as Record<string, (p: ValidRequestParams) => Promise<unknown>>)["GET"] : undefined;
+    const ep = client["/subjects/{subject}/years"];
+    const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
       throw new TypeError('Invalid method on endpoint: GET for /subjects/{subject}/years');
     }
@@ -99,11 +106,20 @@ const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient
   return executor(client)(_params);
 };
 
+const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
+  if (!isValidRequestParams(_params)) {
+    throw new TypeError(getValidRequestParamsDescription());
+  }
+  return executor(client)(_params);
+};
+
 export const oakGetSubjectsYears = {
   executor,
   getExecutorFromGenericRequestParams,
+  invoke,
   pathParams,
   queryParams,
+  inputSchema,
   operationId,
   name,
   path,

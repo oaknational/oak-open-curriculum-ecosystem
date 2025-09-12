@@ -19,8 +19,6 @@ All of these rules MUST be followed at all times.
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
 - **Inline docs everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have inline jsdoc/tsdoc comments that can be compiled by `typedoc` to generate documentation.
 
-See also [Biological Model Architecture](#biological-model-architecture) below.
-
 ### Refactoring
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)

@@ -7,6 +7,7 @@
 
 import eslint from '@eslint/js';
 import {
+  ConfigArray,
   config as tsEslintConfig,
   configs as tsEslintConfigs,
   parser as tsEslintParser,
@@ -15,7 +16,7 @@ import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
 import globals from 'globals';
 
-export const baseConfig = tsEslintConfig(
+export const baseConfig: ConfigArray = tsEslintConfig(
   {
     ignores: [
       'dist/',

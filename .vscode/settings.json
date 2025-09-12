@@ -117,5 +117,6 @@
     ".vscode",
     ".vscode-insiders",
     "**/generated/**/*"
-  ]
+  ],
+  "chatgpt.commentCodeLensEnabled": false
 }

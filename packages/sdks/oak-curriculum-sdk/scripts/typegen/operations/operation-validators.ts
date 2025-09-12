@@ -1,32 +1,32 @@
 /**
  * Type validators for OpenAPI operation extraction
  * These functions eliminate the need for type assertions by providing proper type guards
+ *
+ * @todo get rid of these pointless wrapper functions, factor out the helpers, rename scripts as typegen, use the new helpers workspace
  */
 
 import type { ParameterObject, OperationObject } from 'openapi-typescript';
+import { isPlainObject, getOwnValue } from '../../../src/types/helpers.js';
 
 /**
  * Type guard to check if a value is a non-null object (Record)
  */
-export function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+export function isRecord(value: unknown): value is object {
+  return isPlainObject(value);
 }
 
 /**
  * Type guard to check if an object has a specific property
  */
-export function hasProperty<K extends string>(obj: unknown, key: K): obj is Record<K, unknown> {
-  return isRecord(obj) && key in obj;
+export function hasProperty(obj: unknown, key: PropertyKey): boolean {
+  return getOwnValue(obj, key) !== undefined;
 }
 
 /**
  * Safely get a property value from an unknown object
  */
 export function getPropertyValue(obj: unknown, key: string): unknown {
-  if (hasProperty(obj, key)) {
-    return obj[key];
-  }
-  return undefined;
+  return getOwnValue(obj, key);
 }
 
 /**
@@ -88,6 +88,6 @@ export function isBoolean(value: unknown): value is boolean {
 /**
  * Check if a value is an object (for schema validation)
  */
-export function isObject(value: unknown): value is Record<string, unknown> {
+export function isObject(value: unknown): value is object {
   return isRecord(value);
 }

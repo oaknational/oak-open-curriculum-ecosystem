@@ -63,3 +63,46 @@ export function typeSafeOwnKeys<T extends object>(obj: T): (keyof T)[] {
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- vetted for this helper
   return [...names, ...symbols] as (keyof T)[];
 }
+
+/**
+ * Narrow unknown to a plain object (non-null, non-array)
+ */
+export function isPlainObject(value: unknown): value is object {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Get own string property if present and a string
+ */
+export function getOwnString(obj: unknown, key: PropertyKey): string | undefined {
+  if (!isPlainObject(obj)) return undefined;
+  const desc = Object.getOwnPropertyDescriptor(obj, key);
+  return typeof desc?.value === 'string' ? desc.value : undefined;
+}
+
+/**
+ * Get own boolean property if present and a boolean
+ */
+export function getOwnBoolean(obj: unknown, key: PropertyKey): boolean | undefined {
+  if (!isPlainObject(obj)) return undefined;
+  const desc = Object.getOwnPropertyDescriptor(obj, key);
+  return typeof desc?.value === 'boolean' ? desc.value : undefined;
+}
+
+/**
+ * Get the length of an own array property, if present
+ */
+export function getOwnArrayLength(obj: unknown, key: PropertyKey): number | undefined {
+  if (!isPlainObject(obj)) return undefined;
+  const desc = Object.getOwnPropertyDescriptor(obj, key);
+  return Array.isArray(desc?.value) ? desc.value.length : undefined;
+}
+
+/**
+ * Get an own property value (untyped)
+ */
+export function getOwnValue(obj: unknown, key: PropertyKey): unknown {
+  if (!isPlainObject(obj)) return undefined;
+  const desc = Object.getOwnPropertyDescriptor(obj, key);
+  return desc?.value;
+}

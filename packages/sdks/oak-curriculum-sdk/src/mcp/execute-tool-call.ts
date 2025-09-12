@@ -11,7 +11,7 @@
 
 import type { OakApiPathBasedClient } from '../client/index.js';
 import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools/index.js';
-import { typeSafeKeys } from '../types/helpers.js';
+import { typeSafeKeys, isPlainObject, getOwnValue, typeSafeFromEntries } from '../types/helpers.js';
 
 /**
  * Error types with proper cause chains
@@ -67,29 +67,22 @@ type ToolExecutionResult =
 function buildGenericRequestParams(
   tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS],
   args: unknown,
-): { params: { path?: Record<string, unknown>; query?: Record<string, unknown> } } {
-  // Local helper: narrow to a plain object record
-  function isRecord(value: unknown): value is Record<string, unknown> {
-    return value !== null && typeof value === 'object' && !Array.isArray(value);
-  }
-
+): { params: { path?: object; query?: object } } {
   // Helper: derive required path/query parameter names from generated meta
-  interface ParamMeta {
-    required?: boolean;
-  }
-  function getRequiredParamNames(meta: Record<string, ParamMeta>): readonly string[] {
+  function getRequiredParamNames(meta: object): readonly string[] {
     const out: string[] = [];
     for (const name of typeSafeKeys(meta)) {
-      if (meta[name].required === true) out.push(name);
+      const m = getOwnValue(meta, name);
+      if (isPlainObject(m) && getOwnValue(m, 'required') === true) out.push(name);
     }
     return out;
   }
 
   // Helper: safe JSON parse to a record
-  function tryParseJsonObject(input: string): Record<string, unknown> | undefined {
+  function tryParseJsonObject(input: string): object | undefined {
     try {
       const parsed: unknown = JSON.parse(input);
-      if (isRecord(parsed)) return parsed;
+      if (isPlainObject(parsed)) return parsed;
     } catch {
       // ignore
     }
@@ -97,7 +90,7 @@ function buildGenericRequestParams(
   }
 
   // Helper: normalize string arguments
-  function normalizeStringArgs(value: string): Record<string, unknown> | undefined {
+  function normalizeStringArgs(value: string): object | undefined {
     const trimmed = value.trim();
     const parsedObj = tryParseJsonObject(trimmed);
     if (parsedObj) return parsedObj;
@@ -108,14 +101,10 @@ function buildGenericRequestParams(
 
     // Map plain string to a single required parameter when unambiguous
     if (requiredPath.length === 1 && requiredQuery.length === 0) {
-      const out: Record<string, unknown> = {};
-      out[requiredPath[0]] = trimmed;
-      return out;
+      return { [requiredPath[0]]: trimmed };
     }
     if (requiredQuery.length === 1 && requiredPath.length === 0) {
-      const out: Record<string, unknown> = {};
-      out[requiredQuery[0]] = trimmed;
-      return out;
+      return { [requiredQuery[0]]: trimmed };
     }
     return undefined;
   }
@@ -128,7 +117,7 @@ function buildGenericRequestParams(
     return { params: {} };
   }
 
-  const params: { path?: Record<string, unknown>; query?: Record<string, unknown> } = {};
+  const params: { path?: object; query?: object } = {};
 
   // Normalize string arguments (supports JSON string and single param mapping)
   if (typeof args === 'string') {
@@ -138,33 +127,31 @@ function buildGenericRequestParams(
     }
   }
 
-  if (!isRecord(args)) {
+  if (!isPlainObject(args)) {
     // If no args provided, return empty params structure
-    if (hasPathParams) {
-      params.path = {};
-    }
-    if (hasQueryParams) {
-      params.query = {};
-    }
+    if (hasPathParams) params.path = {};
+    if (hasQueryParams) params.query = {};
     return { params };
   }
 
   // Build path params if needed
   if (hasPathParams) {
-    params.path = {};
+    const entries: (readonly [string, unknown])[] = [];
     for (const paramName of typeSafeKeys(tool.pathParams)) {
-      const d = Object.getOwnPropertyDescriptor(args, paramName);
-      if (d) params.path[paramName] = d.value;
+      const v = getOwnValue(args, paramName);
+      if (v !== undefined) entries.push([paramName, v]);
     }
+    params.path = typeSafeFromEntries(entries);
   }
 
   // Build query params if needed
   if (hasQueryParams) {
-    params.query = {};
+    const entries: (readonly [string, unknown])[] = [];
     for (const paramName of typeSafeKeys(tool.queryParams)) {
-      const d = Object.getOwnPropertyDescriptor(args, paramName);
-      if (d) params.query[paramName] = d.value;
+      const v = getOwnValue(args, paramName);
+      if (v !== undefined) entries.push([paramName, v]);
     }
+    params.query = typeSafeFromEntries(entries);
   }
 
   return { params };
@@ -196,9 +183,8 @@ export async function executeToolCall(
     // Step 3: Build request params in the structure expected by the executor
     const genericRequestParams = buildGenericRequestParams(tool, maybeParams);
 
-    // Step 4: Call the embedded executor
-    // The executor handles all validation and type narrowing internally
-    const response = await tool.getExecutorFromGenericRequestParams(client, genericRequestParams);
+    // Step 4: Call the generated invoke wrapper (unknown → validated)
+    const response = await tool.invoke(client, genericRequestParams);
 
     // Step 5: Return the response
     return { data: response };

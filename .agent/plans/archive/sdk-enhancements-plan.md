@@ -1,6 +1,6 @@
-# SDK Enhancements Plan
+# SDK Enhancements Plan (Archived)
 
-Status: Proposal (quick wins + high-impact improvements)
+Status: Archived. Selected items incorporated into `shared-mcp-core-and-mcp-server-migration-plan.md`.
 
 ## Goals
 

@@ -4,7 +4,7 @@
  * STDIO transport for MCP servers
  */
 
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { config as tsEslintConfig, ConfigArray } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
   createLibBoundaryRules,
@@ -19,7 +19,7 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const rootTsProject = fileURLToPath(new URL('../../../tsconfig.lint.root.json', import.meta.url));
 const repoRootDir = dirname(rootTsProject);
 
-const config = tsEslintConfig(
+const config: ConfigArray = tsEslintConfig(
   ...baseConfig,
   {
     ignores: ['dist/**', 'coverage/**', '*.log', '.turbo/**'],
