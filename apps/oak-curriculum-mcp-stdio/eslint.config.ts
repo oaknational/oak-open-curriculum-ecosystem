@@ -4,7 +4,7 @@
  * Application package ESLint configuration
  */
 
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { config as tsEslintConfig, ConfigArray } from 'typescript-eslint';
 import { baseConfig } from '../../eslint.config.base';
 import {
   appBoundaryRules,
@@ -19,7 +19,7 @@ const thisDir = dirname(fileURLToPath(import.meta.url));
 const rootTsProject = fileURLToPath(new URL('../../tsconfig.lint.root.json', import.meta.url));
 const repoRootDir = dirname(rootTsProject);
 
-const config = tsEslintConfig(
+const config: ConfigArray = tsEslintConfig(
   ...baseConfig,
   {
     ignores: ['dist/**', '*.log', '.turbo/**', '.logs/**'],
@@ -47,20 +47,8 @@ const config = tsEslintConfig(
       'import-x/no-relative-parent-imports': 'off',
       ...appBoundaryRules,
       ...appArchitectureRules,
-      '@typescript-eslint/no-restricted-types': [
-        'off',
-        {
-          types: {
-            unknown: {
-              message:
-                'Avoid `unknown`. Prefer a specific union, a domain model, or a generic parameter (e.g. <T>), so callers/implementations have a concrete type. The only exception is incoming data from network requests, or data read from files, which should be validated.',
-            },
-          },
-        },
-      ],
     },
   },
-  // Remove broad allowances; rely on package imports and local relative paths only
   // Test files can break boundaries but should maintain type safety
   {
     files: ['**/*.test.ts', '**/*.spec.ts'],

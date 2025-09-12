@@ -9,46 +9,30 @@ import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprot
 import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import type { McpOrgan } from '../tools/index.js';
+import type { McpToolsModule } from '../tools/index.js';
 import type { Logger } from '@oaknational/mcp-core';
-
-/**
- * Check if an object has a property
- */
-function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record<K, unknown> {
-  return typeof obj === 'object' && obj !== null && key in obj;
-}
 
 /**
  * Find a tool by name from the available tools
  * Tools are guaranteed to have a name property by the MCP SDK types
  */
 function findTool(name: string, tools: readonly Tool[]): Tool {
-  // Tools from MCP SDK are guaranteed to have name property
-  // The Tool type from @modelcontextprotocol/sdk includes name: string
   for (const tool of tools) {
-    if (hasProperty(tool, 'name')) {
-      const toolName = tool.name;
-      if (typeof toolName === 'string' && toolName === name) {
-        return tool;
-      }
-    }
+    if (tool.name === name) return tool;
   }
   throw new Error(`Unknown tool: ${name}`);
 }
 
-/**
- * Type guard for object
- */
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isErrorResultShape(value: unknown): value is { isError?: unknown; content?: unknown } {
+  if (typeof value !== 'object' || value === null) return false;
+  return 'isError' in value && 'content' in value;
 }
 
 /**
  * Validate arguments are an object
  */
-function validateArgsObject(args: unknown): Record<string, unknown> {
-  if (!isObject(args)) {
+function validateArgsObject(args: unknown): unknown {
+  if (typeof args !== 'object' || args === null || Array.isArray(args)) {
     throw new Error('Arguments must be an object');
   }
   return args;
@@ -57,7 +41,11 @@ function validateArgsObject(args: unknown): Record<string, unknown> {
 /**
  * Execute a tool based on its name
  */
-async function executeTool(toolName: string, args: unknown, mcpOrgan: McpOrgan): Promise<unknown> {
+async function executeTool(
+  toolName: string,
+  args: unknown,
+  mcpOrgan: McpToolsModule,
+): Promise<unknown> {
   // For now, delegate all tools to the generic handler
   // The handler will be responsible for routing to the correct implementation
   const validatedArgs = validateArgsObject(args ?? {});
@@ -68,23 +56,27 @@ async function executeTool(toolName: string, args: unknown, mcpOrgan: McpOrgan):
  * Format tool execution result as MCP response
  */
 function formatToolResponse(result: unknown, isError = false) {
-  return {
-    content: [
-      {
-        type: 'text',
-        text: isError
-          ? `Error: ${result instanceof Error ? result.message : 'Unknown error'}`
-          : JSON.stringify(result, null, 2),
-      },
-    ],
-    ...(isError && { isError: true }),
-  };
+  function textContent(text: string): { type: 'text'; text: string } {
+    return { type: 'text', text };
+  }
+  if (!isError) {
+    return {
+      content: [textContent(JSON.stringify(result, null, 2))],
+    };
+  }
+
+  const message = result instanceof Error ? result.message : 'Unknown error';
+  // Split multi-line messages to surface a concise first line for Inspector, with details following
+  const lines = message.split('\n');
+  const [first, ...rest] = lines;
+  const content = [textContent(`Error: ${first}`), ...rest.map((t) => textContent(t))];
+  return { content, isError: true };
 }
 
 /**
  * Register MCP request handlers
  */
-function registerHandlers(server: Server, mcpOrgan: McpOrgan, logger: Logger): void {
+function registerHandlers(server: Server, mcpOrgan: McpToolsModule, logger: Logger): void {
   // Register tool list handler
   server.setRequestHandler(ListToolsRequestSchema, () => {
     logger.debug('Listing available tools');
@@ -110,12 +102,8 @@ function registerHandlers(server: Server, mcpOrgan: McpOrgan, logger: Logger): v
       const result = await executeTool(name, args, mcpOrgan);
 
       // If handler returned a CallToolResult-like error, pass through
-      if (typeof result === 'object' && result !== null) {
-        const isError = Object.getOwnPropertyDescriptor(result, 'isError')?.value === true;
-        const content: unknown = Object.getOwnPropertyDescriptor(result, 'content')?.value;
-        if (isError && content !== undefined) {
-          return { isError: true, content };
-        }
+      if (isErrorResultShape(result) && result.isError === true && result.content !== undefined) {
+        return { isError: true, content: result.content };
       }
 
       // Otherwise, format as success response

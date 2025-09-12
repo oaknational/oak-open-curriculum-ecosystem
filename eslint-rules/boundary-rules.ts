@@ -168,7 +168,6 @@ export const appBoundaryRules: Partial<Linter.RulesRecord> = {
  * Enforces internal module boundaries within an app
  */
 export const appArchitectureRules: Partial<Linter.RulesRecord> = {
-  // Biological Architecture Enforcement
   'import-x/no-restricted-paths': [
     'error',
     {

@@ -1,57 +1,52 @@
 /* TypeDoc type formatting and guards (pure) */
 
-import type { TDArray, TDIntrinsic, TDLiteral, TDReference, TDUnion } from './ai-doc-types';
+import { getOwnString, getOwnValue } from '../../src/types/helpers';
 
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null;
-}
-function hasProp<K extends string>(o: unknown, k: K): o is Record<K, unknown> {
-  return isRecord(o) && k in o;
-}
-
-function renderLiteral(value: TDLiteral['value']): string {
+function renderLiteral(value: unknown): string {
   return typeof value === 'string' ? JSON.stringify(value) : String(value);
 }
-function renderReference(t: TDReference): string {
-  const args =
-    t.typeArguments && t.typeArguments.length > 0
-      ? `<${t.typeArguments.map((a) => typeToString(a)).join(', ')}>`
-      : '';
-  return `${t.name}${args}`;
+function renderReferenceUnknown(t: unknown): string {
+  const name = getOwnString(t, 'name') ?? 'Unknown';
+  const argsUnknown = getOwnValue(t, 'typeArguments');
+  const arr = Array.isArray(argsUnknown) ? argsUnknown : [];
+  const args = arr.length > 0 ? `<${arr.map((a) => typeToString(a)).join(', ')}>` : '';
+  return `${name}${args}`;
 }
-function renderArray(t: TDArray): string {
-  return `${typeToString(t.elementType)}[]`;
+function renderArrayUnknown(t: unknown): string {
+  const el = getOwnValue(t, 'elementType');
+  return `${typeToString(el)}[]`;
 }
-function renderUnion(t: TDUnion): string {
-  return t.types.map((x) => typeToString(x)).join(' | ');
+function renderUnionUnknown(t: unknown): string {
+  const types = getOwnValue(t, 'types');
+  const arr = Array.isArray(types) ? types : [];
+  return arr.map((x) => typeToString(x)).join(' | ');
 }
 
-function isIntrinsic(t: unknown): t is TDIntrinsic {
-  return (
-    hasProp(t, 'type') && hasProp(t, 'name') && t.type === 'intrinsic' && typeof t.name === 'string'
-  );
+function isIntrinsic(t: unknown): boolean {
+  return getOwnString(t, 'type') === 'intrinsic' && typeof getOwnString(t, 'name') === 'string';
 }
-function isArrayT(t: unknown): t is TDArray {
-  return hasProp(t, 'type') && isRecord(t) && t.type === 'array' && 'elementType' in t;
+function isArrayT(t: unknown): boolean {
+  return getOwnString(t, 'type') === 'array' && getOwnValue(t, 'elementType') !== undefined;
 }
-function isUnion(t: unknown): t is TDUnion {
-  return hasProp(t, 'type') && hasProp(t, 'types') && t.type === 'union' && Array.isArray(t.types);
+function isUnion(t: unknown): boolean {
+  return getOwnString(t, 'type') === 'union' && Array.isArray(getOwnValue(t, 'types'));
 }
-function isLiteral(t: unknown): t is TDLiteral {
-  return hasProp(t, 'type') && isRecord(t) && t.type === 'literal' && 'value' in t;
+function isLiteral(t: unknown): boolean {
+  return getOwnString(t, 'type') === 'literal' && getOwnValue(t, 'value') !== undefined;
 }
-function isReference(t: unknown): t is TDReference {
-  return (
-    hasProp(t, 'type') && hasProp(t, 'name') && t.type === 'reference' && typeof t.name === 'string'
-  );
+function isReference(t: unknown): boolean {
+  return getOwnString(t, 'type') === 'reference' && typeof getOwnString(t, 'name') === 'string';
 }
 
 function stringifyKnown(t: unknown): string | null {
-  if (isIntrinsic(t)) return t.name;
-  if (isArrayT(t)) return renderArray(t);
-  if (isUnion(t)) return renderUnion(t);
-  if (isLiteral(t)) return renderLiteral(t.value);
-  if (isReference(t)) return renderReference(t);
+  if (isIntrinsic(t)) return getOwnString(t, 'name') ?? 'unknown';
+  if (isArrayT(t)) return renderArrayUnknown(t);
+  if (isUnion(t)) return renderUnionUnknown(t);
+  if (isLiteral(t)) {
+    const value = getOwnValue(t, 'value');
+    return renderLiteral(value);
+  }
+  if (isReference(t)) return renderReferenceUnknown(t);
   return null;
 }
 
@@ -59,8 +54,8 @@ export function typeToString(t?: unknown): string {
   if (!t) return 'void';
   const known = stringifyKnown(t);
   if (known !== null) return known;
-  if (hasProp(t, 'type')) {
-    const kind = String(t.type);
+  const kind = getOwnString(t, 'type');
+  if (kind) {
     return `<${kind}>(…)`;
   }
   return 'unknown';

@@ -17,16 +17,16 @@ function safeJson(value: unknown, max = 4000): string {
   }
 }
 
-function pickHeaders(h: Headers, keys: string[]): Record<string, string | null> {
-  const out: Record<string, string | null> = {};
-  for (const k of keys) out[k] = h.get(k);
+function pickHeaders(h: Headers, keys: string[]): { name: string; value: string | null }[] {
+  const out: { name: string; value: string | null }[] = [];
+  for (const k of keys) out.push({ name: k, value: h.get(k) });
   return out;
 }
 
 /* eslint-disable-next-line max-lines-per-function, complexity */
 export async function logErrorDiagnostics(
   result: { response: Response; error: Errorish },
-  context: Record<string, unknown> = {},
+  context: unknown = {},
   options: { apiKey?: string } = {},
 ): Promise<void> {
   const { response, error } = result;

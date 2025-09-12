@@ -6,6 +6,8 @@ const repoRoot = process.cwd();
 
 // Deterministic rubric configuration
 const DENY_TOKENS = [
+  'biology',
+  'biological',
   'psycha',
   'psychon',
   'chorai',

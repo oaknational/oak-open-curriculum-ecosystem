@@ -9,7 +9,7 @@ import type {
   PathItemObject,
   ReferenceObject,
 } from 'openapi-typescript';
-import { typeSafeKeys } from '../src/types/helpers.js';
+import { typeSafeKeys, isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
 import type {
   PathEntry,
   ValidCombinations,
@@ -23,20 +23,8 @@ import {
   processOperationParameters,
 } from './typegen-extraction-helpers.js';
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
 export function isReferenceObject(value: unknown): value is ReferenceObject {
-  if (!isRecord(value)) {
-    return false;
-  }
-
-  if (!('$ref' in value)) {
-    return false;
-  }
-
-  return typeof value.$ref === 'string';
+  return isPlainObject(value) && typeof getOwnString(value, '$ref') === 'string';
 }
 
 export function dereferenceParameter(
@@ -52,13 +40,11 @@ export function dereferenceParameter(
   let current: unknown = root;
 
   for (const segment of refPath) {
-    if (typeof current !== 'object' || current === null || Array.isArray(current)) {
+    const next = getOwnValue(current, segment);
+    if (next === undefined) {
       throw new Error(`Cannot dereference ${ref}: invalid path at ${segment}`);
     }
-    if (!isRecord(current)) {
-      throw new Error(`Cannot dereference ${ref}: invalid path at ${segment}`);
-    }
-    current = current[segment];
+    current = next;
   }
 
   if (!isParameterObject(current)) {
@@ -73,7 +59,7 @@ export function isParameterObject(value: unknown): value is ParameterObject {
 }
 
 export function isPathItemObject(value: unknown): value is PathItemObject {
-  return typeof value === 'object' && value !== null;
+  return isPlainObject(value);
 }
 
 export function extractParameterNamesFromPath(pathPattern: string): string[] {
@@ -107,7 +93,7 @@ export function extractEnumFromParameter(param: ParameterObject): string[] | und
   const schema = param.schema;
   if (!schema) return undefined;
 
-  const enumArray: unknown = Object.getOwnPropertyDescriptor(schema, 'enum')?.value;
+  const enumArray: unknown = getOwnValue(schema, 'enum');
   if (Array.isArray(enumArray)) {
     return enumArray.filter((v): v is string => typeof v === 'string');
   }

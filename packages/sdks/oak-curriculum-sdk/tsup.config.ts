@@ -13,6 +13,8 @@ export default defineConfig({
     'src/types/generated/api-schema/api-paths-types.ts',
     'src/types/generated/api-schema/api-schema-base.ts',
     'src/types/generated/api-schema/path-parameters.ts',
+    'src/types/generated/api-schema/path-utils.ts',
+    'src/types/generated/api-schema/response-map.ts',
     'src/types/generated/api-schema/mcp-tools/index.ts',
     'src/types/generated/api-schema/mcp-tools/types.ts',
     'src/types/generated/api-schema/mcp-tools/lib.ts',

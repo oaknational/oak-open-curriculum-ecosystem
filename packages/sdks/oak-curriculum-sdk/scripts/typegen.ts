@@ -18,6 +18,7 @@ import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
 import type { OpenAPI3 } from 'openapi-typescript';
+import { isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
 function findRepoRoot(startDir: string): string {
@@ -88,15 +89,14 @@ if (isCiMode) {
   console.log('🔄 Fetching OpenAPI schema from:', apiSchemaUrl);
 
   try {
-    const headers: Record<string, string> = {
-      Accept: 'application/json',
-    };
+    const headers = new Headers();
+    headers.set('Accept', 'application/json');
 
     if (!apiKey) {
       throw new TypeError('API key not found');
     }
 
-    headers.Authorization = `Bearer ${apiKey}`;
+    headers.set('Authorization', `Bearer ${apiKey}`);
 
     response = await fetch(apiSchemaUrl, { headers });
 
@@ -118,15 +118,24 @@ if (isCiMode) {
 }
 console.log('🔨 Generating type artifacts...');
 
-// Simple inline check - is it an object with openapi: "3.x"?
-if (!maybeSchema || typeof maybeSchema !== 'object' || !('openapi' in maybeSchema)) {
+function isOpenAPI3Schema(value: unknown): value is OpenAPI3 {
+  if (!isPlainObject(value)) return false;
+  const ver = getOwnString(value, 'openapi');
+  if (!ver?.startsWith('3.')) return false;
+  const paths = getOwnValue(value, 'paths');
+  if (!isPlainObject(paths)) return false;
+  const info = getOwnValue(value, 'info');
+  if (!isPlainObject(info)) return false;
+  const title = getOwnString(info, 'title');
+  const version = getOwnString(info, 'version');
+  return typeof title === 'string' && typeof version === 'string';
+}
+
+if (!isOpenAPI3Schema(maybeSchema)) {
   throw new Error('Schema is not a valid OpenAPI 3.x schema');
 }
 
-// THE ONLY TYPE ASSERTION IN THE ENTIRE CODEBASE
-// After this, we KNOW EVERYTHING about the API
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-const schema = maybeSchema as OpenAPI3;
+const schema = maybeSchema;
 
 // Generate all artifacts including MCP tools
 // schema is now fully typed as OpenAPI3

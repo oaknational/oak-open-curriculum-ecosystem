@@ -1,5 +1,10 @@
 import type { OpenAPI3, OperationObject, ParameterObject } from 'openapi-typescript';
-import { typeSafeEntries, typeSafeKeys } from '../../../src/types/helpers.js';
+import {
+  typeSafeEntries,
+  typeSafeKeys,
+  isPlainObject,
+  getOwnValue,
+} from '../../../src/types/helpers.js';
 import { generateMcpToolName } from './name-generator.js';
 import { emitHeader } from './parts/emit-header.js';
 import { emitParams } from './parts/emit-params.js';
@@ -17,6 +22,8 @@ export interface ParamMetadata {
   valueConstraint: boolean;
   required: boolean;
   allowedValues?: readonly unknown[];
+  description?: string;
+  default?: unknown;
 }
 
 function generateToolFile(
@@ -47,12 +54,12 @@ function generateToolFile(
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
-function isPathItemObject(value: unknown): value is Record<(typeof HTTP_METHODS)[number], unknown> {
-  return typeof value === 'object' && value !== null && !('$ref' in value);
+function isPathItemObject(value: unknown): boolean {
+  return isPlainObject(value) && getOwnValue(value, '$ref') === undefined;
 }
 
 function isOperationObject(value: unknown): value is OperationObject {
-  return typeof value === 'object' && value !== null && !('$ref' in value);
+  return isPlainObject(value) && getOwnValue(value, '$ref') === undefined;
 }
 
 function iterOperations(
@@ -64,13 +71,21 @@ function iterOperations(
   for (const [path, pathItem] of typeSafeEntries(schema.paths)) {
     if (!isPathItemObject(pathItem)) continue;
     for (const method of HTTP_METHODS) {
-      const desc = Object.getOwnPropertyDescriptor(pathItem, method);
-      const op: unknown = desc?.value;
+      const op: unknown = getOwnValue(pathItem, method);
       if (!isOperationObject(op)) continue;
       out.push({ path, method, operation: op });
     }
   }
   return out;
+}
+
+function extractDefaultValue(schemaObj: unknown): unknown {
+  return getOwnValue(schemaObj, 'default');
+}
+
+function extractEnumValues(schemaObj: unknown): readonly unknown[] | undefined {
+  const raw: unknown = getOwnValue(schemaObj, 'enum');
+  return Array.isArray(raw) ? raw : undefined;
 }
 
 function extractParamMetadata(param: ParameterObject): ParamMetadata {
@@ -83,10 +98,16 @@ function extractParamMetadata(param: ParameterObject): ParamMetadata {
   };
   const schemaObj = param.schema;
   if (schemaObj && typeof schemaObj === 'object') {
-    const desc = Object.getOwnPropertyDescriptor(schemaObj, 'enum');
-    const raw: unknown = desc?.value;
-    const e = Array.isArray(raw) ? raw : undefined;
-    if (Array.isArray(e)) {
+    const descDesc = Object.getOwnPropertyDescriptor(schemaObj, 'description');
+    if (typeof descDesc?.value === 'string') {
+      metadata.description = descDesc.value;
+    }
+    const defaultValue = extractDefaultValue(schemaObj);
+    if (defaultValue !== undefined) {
+      metadata.default = defaultValue;
+    }
+    const e = extractEnumValues(schemaObj);
+    if (e !== undefined) {
       metadata.valueConstraint = true;
       metadata.allowedValues = e;
     }

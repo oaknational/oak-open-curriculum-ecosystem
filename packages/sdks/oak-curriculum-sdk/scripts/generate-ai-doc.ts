@@ -18,28 +18,25 @@ import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-r
 // Import generated artifacts directly for endpoint/tool catalogs
 import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
 import { MCP_TOOLS } from '../src/types/generated/api-schema/mcp-tools/index.js';
-// no helper imports required here; this script uses built-in reflection safely
+// typed helpers for safe object inspection
+import {
+  typeSafeKeys,
+  typeSafeEntries,
+  getOwnString,
+  getOwnBoolean,
+  getOwnArrayLength,
+  isPlainObject,
+  getOwnValue,
+} from '../src/types/helpers';
 import { ZodError, type ZodIssue } from 'zod';
 
 function formatZodIssues(issues: ZodIssue[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
 }
 
-// Safe access helpers
-function isRecord(v: unknown): v is Record<string, unknown> {
-  return typeof v === 'object' && v !== null;
-}
-function getBool(o: unknown, k: string): boolean {
-  if (!isRecord(o)) return false;
-  const d = Object.getOwnPropertyDescriptor(o, k);
-  if (d && typeof d.value === 'boolean') return d.value;
-  return false;
-}
-function getEnumLen(o: unknown, k: string): number | undefined {
-  if (!isRecord(o)) return undefined;
-  const d = Object.getOwnPropertyDescriptor(o, k);
-  if (d && Array.isArray(d.value)) return d.value.length;
-  return undefined;
+// Pure helpers
+function isArrayOfObjects(value: unknown): value is object[] {
+  return Array.isArray(value) && value.every((v) => isPlainObject(v));
 }
 
 function makeQuickstartSection(): string {
@@ -159,135 +156,93 @@ function buildConventionsSection(): string {
   ].join('\n');
 }
 
-interface ParamSchemaMeta {
-  type?: string;
-  enum?: readonly unknown[];
+// Tool map helpers derived at use sites via typeSafeEntries
+
+interface RenderableParamInfo {
+  loc: string;
+  name: string;
+  typeName: string;
+  required: boolean;
+  enumCount?: number;
 }
-interface ParamMeta {
-  in?: string;
-  name?: string;
-  required?: boolean;
-  schema?: ParamSchemaMeta;
+
+function extractParamInfo(p: unknown): RenderableParamInfo {
+  const loc = getOwnString(p, 'in') ?? 'query';
+  const name = getOwnString(p, 'name') ?? '?';
+  const required = getOwnBoolean(p, 'required') === true;
+  const schema = getOwnValue(p, 'schema');
+  const typeName = schema ? (getOwnString(schema, 'type') ?? 'string') : 'string';
+  const enumCount = schema ? getOwnArrayLength(schema, 'enum') : undefined;
+  return { loc, name, typeName, required, enumCount };
 }
-/* eslint-disable-next-line complexity */
-function isParam(x: unknown): x is ParamMeta {
-  if (!isRecord(x)) return false;
-  const nameDesc = Object.getOwnPropertyDescriptor(x, 'name');
-  const inDesc = Object.getOwnPropertyDescriptor(x, 'in');
-  const reqDesc = Object.getOwnPropertyDescriptor(x, 'required');
-  const schemaDesc = Object.getOwnPropertyDescriptor(x, 'schema');
-  const nameOk = !nameDesc || typeof nameDesc.value === 'string';
-  const inOk = !inDesc || typeof inDesc.value === 'string';
-  const reqOk = !reqDesc || typeof reqDesc.value === 'boolean';
-  let schemaOk = true;
-  if (schemaDesc && isRecord(schemaDesc.value)) {
-    const tDesc = Object.getOwnPropertyDescriptor(schemaDesc.value, 'type');
-    const eDesc = Object.getOwnPropertyDescriptor(schemaDesc.value, 'enum');
-    schemaOk =
-      (!tDesc || typeof tDesc.value === 'string') && (!eDesc || Array.isArray(eDesc.value));
-  }
-  return nameOk && inOk && reqOk && schemaOk;
+
+function renderParamLine(info: RenderableParamInfo): string {
+  const enumText = typeof info.enumCount === 'number' ? ` enum:${String(info.enumCount)}` : '';
+  return `- ${info.loc} ${info.name} (${info.typeName}${enumText})${info.required ? ' — required' : ''}`;
 }
-/* eslint-disable-next-line complexity */
+
 function renderParamSummary(params: unknown): string {
-  if (!Array.isArray(params) || params.length === 0) return '_No parameters_';
-  const items: string[] = [];
-  for (const p of params) {
-    if (!isParam(p)) continue;
-    const loc = typeof p.in === 'string' ? p.in : 'query';
-    const name = typeof p.name === 'string' ? p.name : '?';
-    const req = Boolean(p.required);
-    let typeName = 'string';
-    let enumText = '';
-    if (p.schema && isRecord(p.schema)) {
-      if (typeof p.schema.type === 'string') typeName = p.schema.type;
-      if (Array.isArray(p.schema.enum)) enumText = ` enum:${String(p.schema.enum.length)}`;
-    }
-    items.push(`- ${loc} ${name} (${typeName}${enumText})${req ? ' — required' : ''}`);
-  }
+  if (!isArrayOfObjects(params) || params.length === 0) return '_No parameters_';
+  const items = params.map(extractParamInfo).map(renderParamLine);
   return items.join('\n');
 }
 
-/* eslint-disable-next-line complexity */
+function sortPathOps(ops: unknown[]): unknown[] {
+  return [...ops].sort((a, b) => {
+    const aPath = getOwnString(a, 'path') ?? '';
+    const aMethod = getOwnString(a, 'method') ?? '';
+    const bPath = getOwnString(b, 'path') ?? '';
+    const bMethod = getOwnString(b, 'method') ?? '';
+    return (aPath + aMethod).localeCompare(bPath + bMethod);
+  });
+}
+
 function renderEndpointCatalog(ops: unknown): string {
   const lines: string[] = [];
   lines.push('## Endpoint Catalog');
   const list: unknown[] = Array.isArray(ops) ? ops : [];
-  const sorted = list
-    .map((o) => (isRecord(o) ? o : undefined))
-    .filter((o): o is Record<string, unknown> => Boolean(o))
-    .sort((a, b) => {
-      const aPath = typeof a.path === 'string' ? a.path : '';
-      const aMethod = typeof a.method === 'string' ? a.method : '';
-      const bPath = typeof b.path === 'string' ? b.path : '';
-      const bMethod = typeof b.method === 'string' ? b.method : '';
-      return (aPath + aMethod).localeCompare(bPath + bMethod);
-    });
+  const sorted = sortPathOps(list);
   for (const op of sorted) {
-    const method = typeof op.method === 'string' ? op.method : '';
-    const path = typeof op.path === 'string' ? op.path : '';
+    const method = getOwnString(op, 'method') ?? '';
+    const path = getOwnString(op, 'path') ?? '';
     lines.push(`### ${method.toUpperCase()} ${path}`);
-    const opIdDesc = Object.getOwnPropertyDescriptor(op, 'operationId');
-    if (typeof opIdDesc?.value === 'string') lines.push(`- operationId: ${opIdDesc.value}`);
-    const sumDesc = Object.getOwnPropertyDescriptor(op, 'summary');
-    if (typeof sumDesc?.value === 'string') lines.push(`- summary: ${sumDesc.value}`);
-    const descDesc = Object.getOwnPropertyDescriptor(op, 'description');
-    if (typeof descDesc?.value === 'string') lines.push(`- description: ${descDesc.value}`);
+    const opId = getOwnString(op, 'operationId');
+    const summary = getOwnString(op, 'summary');
+    const description = getOwnString(op, 'description');
+    if (opId) lines.push(`- operationId: ${opId}`);
+    if (summary) lines.push(`- summary: ${summary}`);
+    if (description) lines.push(`- description: ${description}`);
     lines.push('Parameters:');
-    const paramsDesc = Object.getOwnPropertyDescriptor(op, 'parameters');
-    lines.push(renderParamSummary(paramsDesc?.value));
+    const params = getOwnValue(op, 'parameters');
+    lines.push(renderParamSummary(params));
     lines.push('');
   }
   return lines.join('\n');
 }
 
-/* eslint-disable-next-line complexity, max-statements */
+function listParamObjectKeys(obj: unknown): string {
+  if (!isPlainObject(obj)) return '_None_';
+  const keys = typeSafeKeys(obj);
+  return keys.length === 0 ? '_None_' : keys.join(', ');
+}
+
 function renderToolCatalog(): string {
   const lines: string[] = [];
   lines.push('## MCP Tool Catalog');
-  const names: string[] = [];
-  for (const k in MCP_TOOLS) {
-    if (Object.prototype.hasOwnProperty.call(MCP_TOOLS, k)) names.push(k);
-  }
-  names.sort((a, b) => a.localeCompare(b));
-  for (const name of names) {
-    const toolDesc = Object.getOwnPropertyDescriptor(MCP_TOOLS, name);
-    const base = toolDesc && isRecord(toolDesc.value) ? toolDesc.value : undefined;
-    const opIdDesc = base ? Object.getOwnPropertyDescriptor(base, 'operationId') : undefined;
-    const pathDesc = base ? Object.getOwnPropertyDescriptor(base, 'path') : undefined;
-    const methodDesc = base ? Object.getOwnPropertyDescriptor(base, 'method') : undefined;
-    const opId = typeof opIdDesc?.value === 'string' ? opIdDesc.value : '';
-    const path = typeof pathDesc?.value === 'string' ? pathDesc.value : '';
-    const method = typeof methodDesc?.value === 'string' ? methodDesc.value : '';
+  const entries = typeSafeEntries(MCP_TOOLS);
+  entries.sort(([a], [b]) => a.localeCompare(b));
+  for (const [name, base] of entries) {
+    const opId = getOwnString(base, 'operationId') ?? '';
+    const path = getOwnString(base, 'path') ?? '';
+    const method = getOwnString(base, 'method') ?? '';
     lines.push(`### ${name}`);
     lines.push(`- path: ${path}`);
     lines.push(`- method: ${method}`);
     if (opId) lines.push(`- operationId: ${opId}`);
-    /* eslint-disable-next-line complexity */
-    function renderParamObject(obj: unknown): string {
-      if (!isRecord(obj)) return '_None_';
-      const desc = Object.getOwnPropertyDescriptors(obj);
-      const out: string[] = [];
-      for (const k in desc) {
-        if (!Object.prototype.hasOwnProperty.call(desc, k)) continue;
-        const metaDesc = Object.getOwnPropertyDescriptor(obj, k);
-        const required = getBool(metaDesc?.value, 'required');
-        const enumCount = getEnumLen(metaDesc?.value, 'allowedValues');
-        const allowed = typeof enumCount === 'number' ? ` enum:${String(enumCount)}` : '';
-        out.push(`${k} (${required ? 'required' : 'optional'}${allowed})`);
-      }
-      return out.length === 0 ? '_None_' : out.join(', ');
-    }
-    lines.push(
-      `- path params: ${renderParamObject(
-        base ? Object.getOwnPropertyDescriptor(base, 'pathParams')?.value : undefined,
-      )}`,
-    );
-    lines.push(
-      `- query params: ${renderParamObject(
-        base ? Object.getOwnPropertyDescriptor(base, 'queryParams')?.value : undefined,
-      )}`,
-    );
+    const pathParams = getOwnValue(base, 'pathParams');
+    const queryParams = getOwnValue(base, 'queryParams');
+    lines.push(`- path params: ${listParamObjectKeys(pathParams)}`);
+    lines.push(`- query params: ${listParamObjectKeys(queryParams)}`);
     lines.push('');
   }
   return lines.join('\n');

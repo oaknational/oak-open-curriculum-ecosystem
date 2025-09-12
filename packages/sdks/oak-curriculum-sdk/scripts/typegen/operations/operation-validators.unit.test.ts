@@ -21,7 +21,7 @@ describe('Operation Validators', () => {
       expect(isRecord('string')).toBe(false);
       expect(isRecord(123)).toBe(false);
       expect(isRecord(true)).toBe(false);
-      expect(isRecord([])).toBe(true); // Arrays are objects
+      expect(isRecord([])).toBe(false);
     });
   });
 

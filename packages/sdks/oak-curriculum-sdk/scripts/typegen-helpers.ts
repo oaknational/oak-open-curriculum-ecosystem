@@ -10,7 +10,7 @@ import { typeSafeKeys } from '../src/types/helpers.js';
  * Sort object keys alphabetically
  * Note: This is a generic helper for any object, not API-specific
  */
-export function sortObjectKeys(obj: Record<string, unknown>): string[] {
+export function sortObjectKeys<T extends object>(obj: T): Extract<keyof T, string>[] {
   return typeSafeKeys(obj).sort((a, b) => a.localeCompare(b));
 }
 

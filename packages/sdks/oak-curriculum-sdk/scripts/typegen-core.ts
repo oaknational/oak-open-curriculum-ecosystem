@@ -22,6 +22,10 @@ import {
   extractPathOperations,
   generateOperationConstants,
 } from './typegen/index.js';
+import { generatePathUtilsFile } from './typegen/paths/generate-path-utils.js';
+import { buildResponseMapData } from './typegen/response-map/build-response-map.js';
+import { emitResponseValidators } from './typegen/response-map/emit-response-validators.js';
+import { runAllCrossValidations } from './typegen/validation/cross-validate.js';
 import type { FileMap } from './typegen/extraction-types.js';
 import {
   generateCompleteMcpTools,
@@ -38,12 +42,16 @@ export function createFileMap(
   jsonStringSchema: string,
   tsTypesContent: string,
   pathParameterContent: string,
+  pathUtilsContent: string,
+  responseValidatorsContent: string,
 ): FileMap {
   const baseFiles: FileMap = {
     'api-schema.json': jsonStringSchema,
     'api-schema-base.ts': generateBaseSchemaContent(sourceSchema),
     'api-paths-types.ts': tsTypesContent,
     'path-parameters.ts': pathParameterContent,
+    'path-utils.ts': pathUtilsContent,
+    'response-map.ts': responseValidatorsContent,
   };
 
   return baseFiles;
@@ -130,12 +138,19 @@ export async function generateSchemaArtifacts(
     parameters,
     validCombinations,
   );
+  const pathUtilsContent = generatePathUtilsFile();
+  const responseMapEntries = buildResponseMapData(sourceSchema);
+  // Cross-validation: fail fast on drift/mismatch
+  runAllCrossValidations(sourceSchema, responseMapEntries);
+  const responseValidatorsContent = emitResponseValidators(responseMapEntries);
 
   const fileMap = createFileMap(
     sourceSchema,
     jsonStringSchema,
     tsTypesContent,
     pathParameterContent,
+    pathUtilsContent,
+    responseValidatorsContent,
   );
 
   // Write all files (side effect)

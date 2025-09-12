@@ -7,19 +7,20 @@ import { z } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
 import { parseWithSchema } from './types.js';
 import { endpoints } from '../types/generated/zod/endpoints.js';
-import { typeSafeFromEntries } from '../types/helpers.js';
+import { typeSafeFromEntries, isPlainObject, getOwnValue } from '../types/helpers.js';
+import { toColon } from '../types/generated/api-schema/path-utils.js';
 
 // Runtime type utilities (no assertions)
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+function isObject(value: unknown): value is object {
+  return isPlainObject(value);
 }
 
-function get(o: Record<string, unknown>, key: string): unknown {
-  return o[key];
+function get(o: unknown, key: string): unknown {
+  return getOwnValue(o, key);
 }
 
-function hasFunction(o: Record<string, unknown>, key: string): boolean {
-  const v = o[key];
+function hasFunction(o: unknown, key: string): boolean {
+  const v = getOwnValue(o, key);
   return typeof v === 'function';
 }
 
@@ -96,16 +97,6 @@ function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
 // Build the schema map once at module load time
 const parameterSchemaMap = buildParameterSchemaMap();
 
-/**
- * Normalizes API path by converting parameter placeholders
- * Converts OpenAPI style paths to match the generated format
- * e.g., "/lessons/{lesson}/transcript" -> "/lessons/:lesson/transcript"
- */
-function normalizePath(path: string): string {
-  // Convert curly brace params to colon-prefixed format
-  return path.replace(/\{([^}]+)\}/g, ':$1');
-}
-
 function hasPathInMap(normalizedPath: string): boolean {
   return Array.from(parameterSchemaMap.keys()).some((k) => k.endsWith(`:${normalizedPath}`));
 }
@@ -156,7 +147,7 @@ export function validateRequest(
   args: unknown,
 ): ValidationResult<unknown> {
   // Normalize the path to match generated format
-  const normalizedPath = normalizePath(path);
+  const normalizedPath = toColon(path);
   const key = `${method.toUpperCase()}:${normalizedPath}`;
 
   // Look up the schema for this endpoint

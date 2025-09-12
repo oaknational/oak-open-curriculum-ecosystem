@@ -12,7 +12,7 @@ export { createServer } from './app/server.js';
 export type { ServerConfig } from './app/wiring.js';
 
 // Re-export types for external use
-export type { McpOrgan } from './tools/index.js';
+// Compatibility type re-export removed per unified plan. Use createMcpToolsModule and associated types instead.
 
 // Main entry point when run directly
 if (import.meta.url === `file://${process.argv[1]}`) {

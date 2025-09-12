@@ -1,6 +1,8 @@
-# Curriculum MCP Enhancements Plan
+# Curriculum MCP Enhancements Plan (Archived)
 
 Scope: Post‑enablement improvements for the Oak Curriculum MCP servers (STDIO and Streamable HTTP). Focus on OAuth 2.1, CI hardening, documentation, shared server core, and strict typed argument handling consistency across transports.
+
+Status: Archived. Superseded by `shared-mcp-core-and-mcp-server-migration-plan.md`.
 
 ## Goals
 
