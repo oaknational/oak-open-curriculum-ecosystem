@@ -1,5 +1,81 @@
 <!-- markdownlint-disable -->
 
+# Unified Plan: Steps 1–3 (Transport parity and error UX)
+
+Date: 2025-09-11
+Owner: Engineering (MCP/Oak SDK)
+
+## Scope
+
+This document exists solely to guide implementation of Steps 1–3:
+
+- Step 1: HTTP server shows tool argument fields (schema parity with STDIO)
+- Step 2: Improved error messages in both servers
+- Step 3: Merge, publish, and validate the live deployment
+
+All other work is tracked in `shared-mcp-core-and-mcp-server-migration-plan.md` and `mcp-oauth-implementation-plan.md`.
+
+## References
+
+- `.agent/reference-docs/mcp-typescript-sdk-readme.md` (Tool schema, Streamable HTTP, stdio)
+- GO.md; docs/agent-guidance/testing-strategy.md; typescript-practice.md; development-practice.md
+
+## Next steps (only remaining tasks)
+
+1. HTTP tool arguments: Streamable HTTP app returns full generated schemas
+
+- Change `apps/oak-curriculum-mcp-streamable-http/src/mcp-tools.ts` to emit `tool.inputSchema` (mirror STDIO).
+- Extend e2e tests: `tools/list` properties/required present; `tools/call` negative/positive paths.
+
+2. Error messages: concise, multi‑block in both servers
+
+- Keep validation in generated executors; format at server boundary with blocks:
+  - 1: `Error: Invalid arguments for <tool>`
+  - 2: `Required: <keys>`
+  - 3: Tiny valid example JSON
+- Add tests asserting ordering and contents.
+
+3. Merge and publish; validate live
+
+- Merge PR → automatic deploy for HTTP app.
+- Live validation: schemas in `tools/list`, Inspector renders fields; `tools/call` behaves; errors show summary + follow‑ups.
+
+## Implementation notes
+
+- Do not build schemas at runtime. Pass through generated `tool.inputSchema`.
+- Keep servers thin; adjust only listing and formatting.
+- Use British spelling; fail‑fast, clear errors.
+
+## Tests (TDD)
+
+- HTTP e2e: `tools/list` properties/required; `tools/call` negative/positive.
+- STDIO/HTTP error UX: summary, `Required:`, tiny example blocks.
+
+## Quality gates (run from repo root)
+
+1. pnpm i
+2. pnpm type-gen
+3. pnpm build
+4. pnpm type-check
+5. pnpm lint -- --fix
+6. pnpm -F @oaknational/oak-curriculum-sdk docs:all
+7. pnpm format
+8. pnpm markdownlint
+9. pnpm test
+10. pnpm test:e2e
+
+## Acceptance criteria
+
+- Streamable HTTP: `tools/list` includes full schemas; Inspector renders fields.
+- Both servers: error responses are multi‑block (summary, required, example).
+- Live deployment validated post‑merge; smoke checks pass.
+
+---
+
+Archived original plan follows.
+
+<!-- markdownlint-disable -->
+
 # Unified Plan: Compile‑time, Schema‑Driven Validation for Oak Curriculum SDK + MCP
 
 Date: 2025-09-11
@@ -32,12 +108,18 @@ We will unify compile‑time generation to make tool inputs, error descriptions,
 
 ## Goals
 
-- Generate accurate JSON Schema for each tool’s inputs at compile time and export with each tool.
-- Provide concise, compile‑time error descriptions that include a compact schema and required‑fields summary.
-- Generate response validators (operationId → status → Zod schema) at compile time.
-- Provide canonical path normalisation utilities and validate both curly/colon path styles.
-- Cross‑validate OpenAPI paths/methods against generated endpoints to fail fast on drift.
-- All types/schemas/validators are created during `pnpm type-gen`.
+- Primary goals (Phase 1 – immediate):
+  - Fix Streamable HTTP server tool argument rendering by surfacing full generated `inputSchema` (parity with STDIO), proved with TDD.
+  - Improve error messages in both servers with concise first‑line summaries and follow‑up lines for required fields and a tiny example (no code duplication), proved with TDD.
+  - Merge and publish; validate the live deployment post‑merge (automatic deploy + smoke checks).
+
+- Supporting goals (SDK compile‑time, already underway in this plan):
+  - Generate accurate JSON Schema for each tool’s inputs at compile time and export with each tool.
+  - Provide concise, compile‑time error descriptions that include a compact schema and required‑fields summary.
+  - Generate response validators (operationId → status → Zod schema) at compile time.
+  - Provide canonical path normalisation utilities and validate both curly/colon path styles.
+  - Cross‑validate OpenAPI paths/methods against generated endpoints to fail fast on drift.
+  - Ensure all types/schemas/validators are created during `pnpm type-gen`.
 
 ## Non‑Goals
 
@@ -54,6 +136,37 @@ We will unify compile‑time generation to make tool inputs, error descriptions,
 - Servers are thin adaptors. All schema/validation/path logic lives in the SDK (compile‑time). No runtime schema builders.
 - Forbid `Object.*`/`Reflect.*` in servers and scripts. Prefer SDK helpers from `packages/sdks/oak-curriculum-sdk/src/types/helpers.ts` (`typeSafeKeys/Values/Entries`, etc.).
 - Avoid “hidden” `Record<string, unknown>` via guards (e.g. removed generic `isRecord`). Prefer precise domain types or boundary validation.
+
+## Phase 1: Transport parity and error UX (Primary goals: Steps 1–3)
+
+### P1.1 HTTP tool arguments (TDD)
+
+- Change `apps/oak-curriculum-mcp-streamable-http/src/mcp-tools.ts` to return the generated `tool.inputSchema` (mirror STDIO’s `getMcpTools`).
+- Tests:
+  - Extend HTTP e2e to assert `tools/list` includes non‑empty `properties` and correct `required` for a representative tool (e.g., `oak-get-lessons-transcript` requires `lesson`).
+  - Add a negative `tools/call` test that fails without required args and succeeds with them.
+- References: `.agent/reference-docs/mcp-typescript-sdk-readme.md` → Streamable HTTP usage and stateless mode; Tool schema shape in `ToolSchema`.
+
+### P1.2 Error messages (minimal)
+
+- Format multi‑block responses so the first line is concise (Inspector‑visible), followed by “Required:” and a tiny example.
+- Keep validation source in generated executors; only adjust formatting at the server boundary.
+- Tests:
+  - Unit/e2e asserting multi‑block content ordering and presence of required keys/example.
+
+### P1.3 Merge and publish (deployment validation)
+
+- Merge PR → automatic deployment (Vercel for HTTP app).
+- Validate live server:
+  - Run smoke checks against `POST /mcp` with `tools/list` to verify schemas present.
+  - Manual sanity in MCP Inspector (STDIO and remote) for argument forms and error UX.
+- Note: This step is complete when the PR is merged and live validation passes.
+
+## Phase 2: Shared MCP core and McpServer migration (preview)
+
+- Extract shared handlers and error formatting into a new internal workspace package to remove duplication across STDIO/HTTP.
+- Migrate to `McpServer` with compile‑time generated Zod input schemas, removing duplicate validation while preserving OpenAPI as the single source of truth.
+- See the new consolidated plan: `./shared-mcp-core-and-mcp-server-migration-plan.md` (to be added alongside this document).
 
 ## High‑Level Approach (Type‑Gen Pipeline Ordering)
 
@@ -110,6 +223,10 @@ We will unify compile‑time generation to make tool inputs, error descriptions,
 - Generated `path-utils.ts` used by validators.
 - Generated `response-map.ts` (operationId:status → Zod schema) and validators in `src/validation/response-validators.ts` use it via `responseSchemaMap`.
 - SDK README updates to document compile‑time generation of input schemas and response validators.
+- For Phase 1:
+  - HTTP server lists full `inputSchema` (Inspector shows fields).
+  - Both servers emit concise, multi‑block error messages with required keys and example.
+  - Live deployment validated post‑merge.
 
 ## Current Status and Progress (as of 2025‑09‑11 18:03)
 
@@ -151,6 +268,9 @@ REMINDER: UseBritish spelling
 - D.2 `response-emitter.unit.test.ts`: emitted TS contains expected imports/exports, no assertions.
 - D.3 `response-wrapper-behaviour.unit.test.ts`: success returns ok/value; invalid data returns structured issues; accepts both colon/curly inputs.
 - E.1 `cross-validate.unit.test.ts`: matching sets pass; mismatches produce descriptive diffs.
+- P1 HTTP/Errors (new):
+  - `apps/oak-curriculum-mcp-streamable-http` e2e: `tools/list` exposes properties/required; `tools/call` missing required fails; present succeeds.
+  - STDIO/HTTP error UX tests: first line summary + required keys + tiny example across both transports.
 
 Naming: unit tests end with `*.unit.test.ts`; integration `*.integration.test.ts`; E2E `*.e2e.test.ts`.
 
@@ -172,6 +292,8 @@ Naming: unit tests end with `*.unit.test.ts`; integration `*.integration.test.ts
 5) Ensure `tsup.config.ts` includes entries for the new generated modules (`path-utils.ts`, `response-map.ts`, tool files exposing `inputSchema`).
 
 6) Documentation updates pending in SDK README and ADR cross‑references.
+
+7) Phase 1 (Primary) – HTTP parity + error UX + deployment validation (see Phase 1 section above for details and tests).
 
 ### D) Response validation map + validators (Priority 1) — Status: Completed
 
@@ -218,6 +340,10 @@ Naming: unit tests end with `*.unit.test.ts`; integration `*.integration.test.ts
 - OpenAPI parameter descriptions appear as JSON Schema `description` in `tools/list` and are visible in MCP Inspector; defaults appear where defined.
 - ESLint strict rules enforced with zero relaxations or disables; complexity thresholds respected across source and generators.
 - Generated tools expose `invoke(client, unknown)` wrapper that validates params and preserves type safety; executor calls align with `openapi-fetch` endpoint signatures.
+- Phase 1 (Primary):
+  - HTTP server lists full schemas; Inspector displays argument fields.
+  - Error messages: concise first line; follow‑up lines include required keys and an example; verified in both servers.
+  - Deployment validated live post‑merge (smoke checks pass).
 
 ## Risks and Mitigations
 

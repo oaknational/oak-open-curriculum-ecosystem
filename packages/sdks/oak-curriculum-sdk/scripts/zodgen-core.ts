@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import type { OpenAPIObject } from 'openapi3-ts';
+import type { OpenAPIObject } from 'openapi3-ts/oas30';
 import { isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
 

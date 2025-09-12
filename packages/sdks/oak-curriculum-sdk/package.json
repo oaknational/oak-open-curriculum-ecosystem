@@ -50,6 +50,7 @@
     "dotenv": "^17.2.1",
     "openapi-typescript": "^7.8.0",
     "openapi-zod-client": "^1.18.3",
+    "openapi3-ts": "^4.5.0",
     "typedoc": "^0.26.5",
     "typedoc-plugin-markdown": "^4.2.0",
     "tsup": "^8.5.0",
