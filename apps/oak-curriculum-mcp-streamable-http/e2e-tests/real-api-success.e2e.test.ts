@@ -21,7 +21,7 @@ describe('Real API success path (requires OAK_API_KEY)', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'oak-get-key-stages', arguments: {} },
+        params: { name: 'get-key-stages', arguments: {} },
       });
     expect(res.status).toBe(200);
     const dataLine = res.text

@@ -7,7 +7,7 @@ const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 describe('Success path (stubbed executeToolCall)', () => {
-  const toolName = 'oak-get-key-stages';
+  const toolName = 'get-key-stages';
   const stubData = { ok: true, data: { keyStages: [{ id: 'ks1' }, { id: 'ks2' }] } };
 
   beforeEach(() => {

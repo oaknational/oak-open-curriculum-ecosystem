@@ -1,4 +1,7 @@
 import express from 'express';
+import path from 'node:path';
+import fs from 'node:fs';
+import { renderLandingPageHtml } from './landing-page.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { parseCsv } from './env.js';
@@ -64,21 +67,30 @@ export function createApp(): express.Express {
     await ready;
     next();
   });
+  // Static assets for favicon/logo (works locally and on Vercel)
+  mountStaticAssets(app);
+  addRootLandingPage(app);
   app.use(bearerAuth);
   app.post('/mcp', createMcpHandler(transport));
 
-  // Basic health for root when routed via Vercel
-  app.get('/', (_req, res) => {
-    res.type('application/json').send(
-      JSON.stringify({
-        status: 'ok',
-        name: 'oak-curriculum-mcp-streamable-http',
-        routes: ['/mcp', '/.well-known/oauth-protected-resource'],
-      }),
-    );
-  });
-
   return app;
+}
+
+function addRootLandingPage(app: express.Express): void {
+  app.get('/', (_req, res) => {
+    res.type('text/html').send(renderLandingPageHtml());
+  });
+}
+
+function mountStaticAssets(app: express.Express): void {
+  const candidates = [
+    path.resolve(process.cwd(), 'public'),
+    path.resolve(process.cwd(), 'apps/oak-curriculum-mcp-streamable-http/public'),
+  ];
+  const chosen = candidates.find((p) => fs.existsSync(p));
+  if (chosen) {
+    app.use(express.static(chosen, { etag: true, maxAge: '1d' }));
+  }
 }
 
 function readSecurityEnv(): {
@@ -110,7 +122,7 @@ function initializeServer(): {
   ready: Promise<void>;
 } {
   const server = new Server(
-    { name: 'oak-curriculum-mcp-streamable-http', version: '0.1.0' },
+    { name: 'oak-curriculum-http', version: '0.1.0' },
     { capabilities: { tools: {} } },
   );
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });

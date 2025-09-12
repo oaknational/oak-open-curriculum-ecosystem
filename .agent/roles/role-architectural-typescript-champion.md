@@ -104,7 +104,7 @@ API Schema → SDK Generation → Type-safe Usage → Runtime Validation
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "bundler",
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "ESNext"
   }
 }

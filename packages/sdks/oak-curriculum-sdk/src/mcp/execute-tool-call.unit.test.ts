@@ -27,7 +27,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         { sequence: 'english-primary', year: '1' }, // year is required
         mockClient,
       );
@@ -44,7 +44,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       const mockClient = {} as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         {
           sequence: 'english-primary', // path param
           year: '1', // query param
@@ -63,7 +63,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       const mockClient = {} as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         {
           sequence: 'english-primary',
           year: 'invalid-year', // Not in enum ['1', '2', '3', ...]
@@ -85,7 +85,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         {
           sequence: 'english-primary',
           year: '1', // Valid enum value
@@ -107,7 +107,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         { sequence: 'english-primary', year: '1' }, // year is required
         mockClient,
       );
@@ -125,7 +125,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-key-stages-subject-assets',
+        'get-key-stages-subject-assets',
         {
           keyStage: 'ks1', // Must be exact enum value
           subject: 'maths', // Must be exact enum value
@@ -147,7 +147,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const result = await executeToolCall(
-        'oak-get-sequences-units',
+        'get-sequences-units',
         { sequence: 'english-primary', year: '1' }, // year is required
         mockClient,
       );
@@ -158,7 +158,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
   });
 
   describe('argument mapping (string and JSON string inputs)', () => {
-    it('maps a plain string to the single required query param (q) for oak-get-search-lessons', async () => {
+    it('maps a plain string to the single required query param (q) for get-search-lessons', async () => {
       const getSpy = vi.fn().mockImplementation((p: unknown) => {
         const params = (p as { params?: { query?: Record<string, unknown> } }).params;
         expect(params?.query?.q).toBe('frogs');
@@ -170,13 +170,13 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
         },
       } as unknown as OakApiPathBasedClient;
 
-      const result = await executeToolCall('oak-get-search-lessons', 'frogs', mockClient);
+      const result = await executeToolCall('get-search-lessons', 'frogs', mockClient);
 
       expect(result).toHaveProperty('data');
       expect(getSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('parses a JSON string into structured arguments for oak-get-search-lessons', async () => {
+    it('parses a JSON string into structured arguments for get-search-lessons', async () => {
       const getSpy = vi.fn().mockImplementation((p: unknown) => {
         const params = (p as { params?: { query?: Record<string, unknown> } }).params;
         expect(params?.query?.q).toBe('frogs');
@@ -189,13 +189,13 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
       } as unknown as OakApiPathBasedClient;
 
       const json = JSON.stringify({ q: 'frogs' });
-      const result = await executeToolCall('oak-get-search-lessons', json, mockClient);
+      const result = await executeToolCall('get-search-lessons', json, mockClient);
 
       expect(result).toHaveProperty('data');
       expect(getSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('maps a plain string to the single required path param for oak-get-lessons-summary', async () => {
+    it('maps a plain string to the single required path param for get-lessons-summary', async () => {
       const getSpy = vi.fn().mockImplementation((p: unknown) => {
         const params = (p as { params?: { path?: Record<string, unknown> } }).params;
         expect(params?.path?.lesson).toBe('some-lesson-slug');
@@ -207,11 +207,7 @@ describe('executeToolCall with TOOL_GROUPINGS executors', () => {
         },
       } as unknown as OakApiPathBasedClient;
 
-      const result = await executeToolCall(
-        'oak-get-lessons-summary',
-        'some-lesson-slug',
-        mockClient,
-      );
+      const result = await executeToolCall('get-lessons-summary', 'some-lesson-slug', mockClient);
 
       expect(result).toHaveProperty('data');
       expect(getSpy).toHaveBeenCalledTimes(1);

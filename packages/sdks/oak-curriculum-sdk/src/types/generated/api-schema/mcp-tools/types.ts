@@ -9,107 +9,107 @@
  */
 const operationIdToToolName = {
   'getSequences-getSequenceUnits': {
-    toolName: 'oak-get-sequences-units',
+    toolName: 'get-sequences-units',
     operationIdKey: 'getSequences-getSequenceUnits',
   },
   'getLessonTranscript-getLessonTranscript': {
-    toolName: 'oak-get-lessons-transcript',
+    toolName: 'get-lessons-transcript',
     operationIdKey: 'getLessonTranscript-getLessonTranscript',
   },
   'searchTranscripts-searchTranscripts': {
-    toolName: 'oak-get-search-transcripts',
+    toolName: 'get-search-transcripts',
     operationIdKey: 'searchTranscripts-searchTranscripts',
   },
   'getAssets-getSequenceAssets': {
-    toolName: 'oak-get-sequences-assets',
+    toolName: 'get-sequences-assets',
     operationIdKey: 'getAssets-getSequenceAssets',
   },
   'getAssets-getSubjectAssets': {
-    toolName: 'oak-get-key-stages-subject-assets',
+    toolName: 'get-key-stages-subject-assets',
     operationIdKey: 'getAssets-getSubjectAssets',
   },
   'getAssets-getLessonAssets': {
-    toolName: 'oak-get-lessons-assets',
+    toolName: 'get-lessons-assets',
     operationIdKey: 'getAssets-getLessonAssets',
   },
   'getAssets-getLessonAsset': {
-    toolName: 'oak-get-lessons-assets-by-type',
+    toolName: 'get-lessons-assets-by-type',
     operationIdKey: 'getAssets-getLessonAsset',
   },
   'getSubjects-getAllSubjects': {
-    toolName: 'oak-get-subjects',
+    toolName: 'get-subjects',
     operationIdKey: 'getSubjects-getAllSubjects',
   },
   'getSubjects-getSubject': {
-    toolName: 'oak-get-subject-detail',
+    toolName: 'get-subject-detail',
     operationIdKey: 'getSubjects-getSubject',
   },
   'getSubjects-getSubjectSequence': {
-    toolName: 'oak-get-subjects-sequences',
+    toolName: 'get-subjects-sequences',
     operationIdKey: 'getSubjects-getSubjectSequence',
   },
   'getSubjects-getSubjectKeyStages': {
-    toolName: 'oak-get-subjects-key-stages',
+    toolName: 'get-subjects-key-stages',
     operationIdKey: 'getSubjects-getSubjectKeyStages',
   },
   'getSubjects-getSubjectYears': {
-    toolName: 'oak-get-subjects-years',
+    toolName: 'get-subjects-years',
     operationIdKey: 'getSubjects-getSubjectYears',
   },
   'getKeyStages-getKeyStages': {
-    toolName: 'oak-get-key-stages',
+    toolName: 'get-key-stages',
     operationIdKey: 'getKeyStages-getKeyStages',
   },
   'getKeyStageSubjectLessons-getKeyStageSubjectLessons': {
-    toolName: 'oak-get-key-stages-subject-lessons',
+    toolName: 'get-key-stages-subject-lessons',
     operationIdKey: 'getKeyStageSubjectLessons-getKeyStageSubjectLessons',
   },
   'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits': {
-    toolName: 'oak-get-key-stages-subject-units',
+    toolName: 'get-key-stages-subject-units',
     operationIdKey: 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits',
   },
   'getQuestions-getQuestionsForLessons': {
-    toolName: 'oak-get-lessons-quiz',
+    toolName: 'get-lessons-quiz',
     operationIdKey: 'getQuestions-getQuestionsForLessons',
   },
   'getQuestions-getQuestionsForSequence': {
-    toolName: 'oak-get-sequences-questions',
+    toolName: 'get-sequences-questions',
     operationIdKey: 'getQuestions-getQuestionsForSequence',
   },
   'getQuestions-getQuestionsForKeyStageAndSubject': {
-    toolName: 'oak-get-key-stages-subject-questions',
+    toolName: 'get-key-stages-subject-questions',
     operationIdKey: 'getQuestions-getQuestionsForKeyStageAndSubject',
   },
   'getLessons-getLesson': {
-    toolName: 'oak-get-lessons-summary',
+    toolName: 'get-lessons-summary',
     operationIdKey: 'getLessons-getLesson',
   },
   'getLessons-searchByTextSimilarity': {
-    toolName: 'oak-get-search-lessons',
+    toolName: 'get-search-lessons',
     operationIdKey: 'getLessons-searchByTextSimilarity',
   },
   'getUnits-getUnit': {
-    toolName: 'oak-get-units-summary',
+    toolName: 'get-units-summary',
     operationIdKey: 'getUnits-getUnit',
   },
   'getThreads-getAllThreads': {
-    toolName: 'oak-get-threads',
+    toolName: 'get-threads',
     operationIdKey: 'getThreads-getAllThreads',
   },
   'getThreads-getThreadUnits': {
-    toolName: 'oak-get-threads-units',
+    toolName: 'get-threads-units',
     operationIdKey: 'getThreads-getThreadUnits',
   },
   'changelog-changelog': {
-    toolName: 'oak-get-changelog',
+    toolName: 'get-changelog',
     operationIdKey: 'changelog-changelog',
   },
   'changelog-latest': {
-    toolName: 'oak-get-changelog-latest',
+    toolName: 'get-changelog-latest',
     operationIdKey: 'changelog-latest',
   },
   'getRateLimit-getRateLimit': {
-    toolName: 'oak-get-rate-limit',
+    toolName: 'get-rate-limit',
     operationIdKey: 'getRateLimit-getRateLimit',
   },
 } as const;

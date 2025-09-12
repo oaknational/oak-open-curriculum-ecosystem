@@ -210,7 +210,7 @@ export async function executeToolCall(
 
     if (error instanceof Error) {
       return {
-        error: new McpToolError(`Execution failed: ${String(error)}`, toolName, {
+        error: new McpToolError(`Execution failed: ${error.message}`, toolName, {
           cause: error,
           code: 'EXECUTION_ERROR',
         }),

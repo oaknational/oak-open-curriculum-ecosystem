@@ -22,7 +22,8 @@ export function getMcpTools(): Tool[] {
     return { type: 'object', properties: props, required: req };
   }
 
-  return Object.entries(MCP_TOOLS).map(([name, tool]) => ({
+  const sorted = Object.entries(MCP_TOOLS).sort(([a], [b]) => a.localeCompare(b));
+  return sorted.map(([name, tool]) => ({
     name,
     description: `${tool.method.toUpperCase()} ${tool.path} - ${tool.operationId}`,
     inputSchema: toMutableInputSchema(tool.inputSchema),

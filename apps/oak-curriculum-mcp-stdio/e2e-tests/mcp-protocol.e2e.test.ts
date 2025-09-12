@@ -56,9 +56,9 @@ describe('MCP Protocol E2E', () => {
 
       // Verify some expected tools are present
       const toolNames = toolsResponse.tools.map((t) => t.name);
-      expect(toolNames).toContain('oak-get-subjects');
-      expect(toolNames).toContain('oak-get-key-stages');
-      expect(toolNames).toContain('oak-get-search-lessons');
+      expect(toolNames).toContain('get-subjects');
+      expect(toolNames).toContain('get-key-stages');
+      expect(toolNames).toContain('get-search-lessons');
 
       // Verify tool structure
       const firstTool = toolsResponse.tools[0];
@@ -71,7 +71,7 @@ describe('MCP Protocol E2E', () => {
   describe('Tool Execution', () => {
     it('should execute tool without parameters', async () => {
       const result = await client.callTool({
-        name: 'oak-get-key-stages',
+        name: 'get-key-stages',
         arguments: {},
       });
 
@@ -90,7 +90,7 @@ describe('MCP Protocol E2E', () => {
 
     it('should execute tool with parameters', async () => {
       const result = await client.callTool({
-        name: 'oak-get-search-lessons',
+        name: 'get-search-lessons',
         arguments: {
           q: 'fractions',
         },
@@ -111,7 +111,7 @@ describe('MCP Protocol E2E', () => {
     it('should handle optional parameters correctly', async () => {
       // Call with only required parameters
       const result = await client.callTool({
-        name: 'oak-get-sequences-units',
+        name: 'get-sequences-units',
         arguments: {
           sequence: 'english-primary-ks1',
         },
@@ -122,7 +122,7 @@ describe('MCP Protocol E2E', () => {
 
       // Call with optional parameters
       const resultWithOptional = await client.callTool({
-        name: 'oak-get-sequences-units',
+        name: 'get-sequences-units',
         arguments: {
           sequence: 'english-primary-ks1',
           year: '1',
@@ -149,7 +149,7 @@ describe('MCP Protocol E2E', () => {
 
     it('should handle missing required parameters', async () => {
       const result = await client.callTool({
-        name: 'oak-get-search-lessons',
+        name: 'get-search-lessons',
         arguments: {}, // Missing required 'q' parameter
       });
 
@@ -163,7 +163,7 @@ describe('MCP Protocol E2E', () => {
 
     it('should handle invalid parameter values', async () => {
       const result = await client.callTool({
-        name: 'oak-get-key-stages-subject-lessons',
+        name: 'get-key-stages-subject-lessons',
         arguments: {
           keyStage: 'invalid-stage', // Invalid enum value
           subject: 'maths',

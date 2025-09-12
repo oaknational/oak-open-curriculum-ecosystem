@@ -7,6 +7,7 @@ This directory contains documentation for developers working on the Oak Notion M
 - [Onboarding Journey](./onboarding-journey.md) - Structured 5-day learning path for new developers
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
+- [CI Policy](./ci-policy.md) - What runs in CI (type-gen policy, build behavior)
 
 ## Purpose
 

@@ -9,7 +9,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  target: 'node22',
+  target: 'es2023',
   minify: false,
   bundle: true, // Bundle to avoid ESM directory import issues
   platform: 'neutral', // Use 'neutral' for edge compatibility
