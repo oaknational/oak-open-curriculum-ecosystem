@@ -1,47 +1,38 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-sequences-questions
- * Path: /sequences/{sequence}/questions
+ * Tool: get-units-summary
+ * Path: /units/{unit}/summary
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getQuestions-getQuestionsForSequence' as const;
-const name= 'oak-get-sequences-questions' as const;
-const path= '/sequences/{sequence}/questions' as const;
+const operationId= 'getUnits-getUnit' as const;
+const name= 'get-units-summary' as const;
+const path= '/units/{unit}/summary' as const;
 const method= 'GET' as const;
 
 
 // Path parameters
-// Query parameters
+
 const pathParams= {
-"sequence":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The sequence slug identifier, including the key stage 4 option where relevant."},
+"unit":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The unit slug"},
 };
 
 const queryParams= {
-"year":{"typePrimitive":"number","valueConstraint":false,"required":false,"description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},
-"offset":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":0},
-"limit":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":10},
 };
 
 void pathParams;
 void queryParams;
 type PathParamsShape = {
-  sequence: string;
-};
-type QueryParamsShape = {
-  year?: number;
-  offset?: number;
-  limit?: number;
+  unit: string;
 };
 type ValidRequestParams= {params: {
   path: PathParamsShape;
-  query?: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["sequence"]} as const;
+const inputSchema = {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -92,7 +83,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -102,10 +93,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/sequences/{sequence}/questions"];
+    const ep = client["/units/{unit}/summary"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /sequences/{sequence}/questions');
+      throw new TypeError('Invalid method on endpoint: GET for /units/{unit}/summary');
     }
     return call(params);
   };
@@ -122,7 +113,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetSequencesQuestions = {
+export const getUnitsSummary = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

@@ -1,23 +1,22 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-subject-detail
- * Path: /subjects/{subject}
+ * Tool: get-threads
+ * Path: /threads
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getSubjects-getSubject' as const;
-const name= 'oak-get-subject-detail' as const;
-const path= '/subjects/{subject}' as const;
+const operationId= 'getThreads-getAllThreads' as const;
+const name= 'get-threads' as const;
+const path= '/threads' as const;
 const method= 'GET' as const;
 
 
-// Path parameters
+
 
 const pathParams= {
-"subject":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The slug identifier for the subject"},
 };
 
 const queryParams= {
@@ -25,14 +24,10 @@ const queryParams= {
 
 void pathParams;
 void queryParams;
-type PathParamsShape = {
-  subject: string;
-};
 type ValidRequestParams= {params: {
-  path: PathParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"subject":{"type":"string","description":"The slug identifier for the subject"}},"additionalProperties":false,"required":["subject"]} as const;
+const inputSchema = {"type":"object","properties":{},"additionalProperties":false} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -83,7 +78,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"subject":{"type":"string","description":"The slug identifier for the subject"}},"additionalProperties":false,"required":["subject"]}\nRequired: subject';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -93,10 +88,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/subjects/{subject}"];
+    const ep = client["/threads"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /subjects/{subject}');
+      throw new TypeError('Invalid method on endpoint: GET for /threads');
     }
     return call(params);
   };
@@ -113,7 +108,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetSubjectDetail = {
+export const getThreads = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

@@ -113,7 +113,7 @@ export interface WiredDependencies {
 const DEFAULT_CONFIG: Required<ServerConfig> = {
   logLevel: 'info',
   apiKey: process.env.OAK_API_KEY ?? '',
-  serverName: 'oak-curriculum-mcp-stdio',
+  serverName: 'oak-curriculum-stdio',
   serverVersion: '0.0.1',
 };
 

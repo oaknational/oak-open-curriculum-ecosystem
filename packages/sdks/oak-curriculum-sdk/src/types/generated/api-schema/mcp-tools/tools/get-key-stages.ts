@@ -1,16 +1,16 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-changelog-latest
- * Path: /changelog/latest
+ * Tool: get-key-stages
+ * Path: /key-stages
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'changelog-latest' as const;
-const name= 'oak-get-changelog-latest' as const;
-const path= '/changelog/latest' as const;
+const operationId= 'getKeyStages-getKeyStages' as const;
+const name= 'get-key-stages' as const;
+const path= '/key-stages' as const;
 const method= 'GET' as const;
 
 
@@ -88,10 +88,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/changelog/latest"];
+    const ep = client["/key-stages"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /changelog/latest');
+      throw new TypeError('Invalid method on endpoint: GET for /key-stages');
     }
     return call(params);
   };
@@ -108,7 +108,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetChangelogLatest = {
+export const getKeyStages = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

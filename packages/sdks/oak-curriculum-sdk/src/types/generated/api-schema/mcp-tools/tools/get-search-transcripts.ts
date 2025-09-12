@@ -1,33 +1,38 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-key-stages
- * Path: /key-stages
+ * Tool: get-search-transcripts
+ * Path: /search/transcripts
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getKeyStages-getKeyStages' as const;
-const name= 'oak-get-key-stages' as const;
-const path= '/key-stages' as const;
+const operationId= 'searchTranscripts-searchTranscripts' as const;
+const name= 'get-search-transcripts' as const;
+const path= '/search/transcripts' as const;
 const method= 'GET' as const;
 
 
 
-
+// Query parameters
 const pathParams= {
 };
 
 const queryParams= {
+"q":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"A snippet of text to search for in the lesson video transcripts"},
 };
 
 void pathParams;
 void queryParams;
+type QueryParamsShape = {
+  q: string;
+};
 type ValidRequestParams= {params: {
+  query: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{},"additionalProperties":false} as const;
+const inputSchema = {"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}},"additionalProperties":false,"required":["q"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -78,7 +83,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"q":{"type":"string","description":"A snippet of text to search for in the lesson video transcripts"}},"additionalProperties":false,"required":["q"]}\nRequired: q';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -88,10 +93,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/key-stages"];
+    const ep = client["/search/transcripts"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /key-stages');
+      throw new TypeError('Invalid method on endpoint: GET for /search/transcripts');
     }
     return call(params);
   };
@@ -108,7 +113,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetKeyStages = {
+export const getSearchTranscripts = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

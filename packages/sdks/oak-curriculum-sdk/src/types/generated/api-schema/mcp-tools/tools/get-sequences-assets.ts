@@ -1,28 +1,28 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-sequences-units
- * Path: /sequences/{sequence}/units
+ * Tool: get-sequences-assets
+ * Path: /sequences/{sequence}/assets
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getSequences-getSequenceUnits' as const;
-const name= 'oak-get-sequences-units' as const;
-const path= '/sequences/{sequence}/units' as const;
+const operationId= 'getAssets-getSequenceAssets' as const;
+const name= 'get-sequences-assets' as const;
+const path= '/sequences/{sequence}/assets' as const;
 const method= 'GET' as const;
 
 
 // Path parameters
 // Query parameters
-// Year value is optional, not all query parameters are.
-const allowedYearValues= ["1","2","3","4","5","6","7","8","9","10","11","all-years"] as const;
-type YearValue = typeof allowedYearValues[number] | undefined;
-function isYearValue(value: string | undefined): value is YearValue {
+// Type value is optional, not all query parameters are.
+const allowedTypeValues= ["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"] as const;
+type TypeValue = typeof allowedTypeValues[number] | undefined;
+function isTypeValue(value: string | undefined): value is TypeValue {
   if (value === undefined) { return true; }
-  const stringYearValue: readonly string[] = allowedYearValues;
-  return stringYearValue.includes(value);
+  const stringTypeValue: readonly string[] = allowedTypeValues;
+  return stringTypeValue.includes(value);
 }
 
 const pathParams= {
@@ -30,7 +30,8 @@ const pathParams= {
 };
 
 const queryParams= {
-"year":{"typePrimitive":"string","valueConstraint":true,"required":false,"allowedValues":allowedYearValues, typeguard: isYearValue},
+"year":{"typePrimitive":"number","valueConstraint":false,"required":false,"description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},
+"type":{"typePrimitive":"string","valueConstraint":true,"required":false,"allowedValues":allowedTypeValues, typeguard: isTypeValue},
 };
 
 void pathParams;
@@ -39,14 +40,15 @@ type PathParamsShape = {
   sequence: string;
 };
 type QueryParamsShape = {
-  year?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | 'all-years';
+  year?: number;
+  type?: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers';
 };
 type ValidRequestParams= {params: {
   path: PathParamsShape;
   query?: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"string","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.","enum":["1","2","3","4","5","6","7","8","9","10","11","all-years"]}},"additionalProperties":false,"required":["sequence"]} as const;
+const inputSchema = {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"type":{"type":"string","description":"Optional asset type specifier\n\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]}},"additionalProperties":false,"required":["sequence"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -97,7 +99,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"string","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used.","enum":["1","2","3","4","5","6","7","8","9","10","11","all-years"]}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"type":{"type":"string","description":"Optional asset type specifier\\n\\nAvailable values: slideDeck, exitQuiz, exitQuizAnswers, starterQuiz, starterQuizAnswers, supplementaryResource, video, worksheet, worksheetAnswers","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -107,10 +109,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/sequences/{sequence}/units"];
+    const ep = client["/sequences/{sequence}/assets"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /sequences/{sequence}/units');
+      throw new TypeError('Invalid method on endpoint: GET for /sequences/{sequence}/assets');
     }
     return call(params);
   };
@@ -127,7 +129,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetSequencesUnits = {
+export const getSequencesAssets = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

@@ -5,6 +5,8 @@ export function toolNameToCamelCase(toolName: string): string {
 export function generateIndexFile(toolNames: string[]): string {
   const lines: string[] = [];
 
+  const alphabeticallySortedToolNames = toolNames.toSorted();
+
   lines.push(`/**
  * GENERATED FILE - DO NOT EDIT
  * 
@@ -17,7 +19,7 @@ import type {} from 'openapi-typescript-helpers';
 
 // Import all tool definitions`);
 
-  for (const toolName of toolNames) {
+  for (const toolName of alphabeticallySortedToolNames) {
     const variableName = toolNameToCamelCase(toolName);
     lines.push(`import { ${variableName} } from './tools/${toolName}.js';`);
   }
@@ -26,7 +28,7 @@ import type {} from 'openapi-typescript-helpers';
 // Tool name to tool mapping
 export const MCP_TOOLS = {`);
 
-  for (const toolName of toolNames) {
+  for (const toolName of alphabeticallySortedToolNames) {
     const variableName = toolNameToCamelCase(toolName);
     lines.push(`  '${toolName}': ${variableName},`);
   }

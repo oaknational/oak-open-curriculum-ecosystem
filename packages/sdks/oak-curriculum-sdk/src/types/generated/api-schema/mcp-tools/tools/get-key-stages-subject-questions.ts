@@ -1,16 +1,16 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-key-stages-subject-units
- * Path: /key-stages/{keyStage}/subject/{subject}/units
+ * Tool: get-key-stages-subject-questions
+ * Path: /key-stages/{keyStage}/subject/{subject}/questions
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits' as const;
-const name= 'oak-get-key-stages-subject-units' as const;
-const path= '/key-stages/{keyStage}/subject/{subject}/units' as const;
+const operationId= 'getQuestions-getQuestionsForKeyStageAndSubject' as const;
+const name= 'get-key-stages-subject-questions' as const;
+const path= '/key-stages/{keyStage}/subject/{subject}/questions' as const;
 const method= 'GET' as const;
 
 
@@ -29,13 +29,15 @@ function isSubjectValue(value: string): value is SubjectValue {
   return stringSubjectValue.includes(value);
 }
 
-
+// Query parameters
 const pathParams= {
 "keyStage":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedKeyStageValues, typeguard: isKeyStageValue},
 "subject":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedSubjectValues, typeguard: isSubjectValue},
 };
 
 const queryParams= {
+"offset":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":0},
+"limit":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":10},
 };
 
 void pathParams;
@@ -44,11 +46,16 @@ type PathParamsShape = {
   keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4';
   subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';
 };
+type QueryParamsShape = {
+  offset?: number;
+  limit?: number;
+};
 type ValidRequestParams= {params: {
   path: PathParamsShape;
+  query?: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2'","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
+const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -99,7 +106,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\'","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -109,10 +116,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/key-stages/{keyStage}/subject/{subject}/units"];
+    const ep = client["/key-stages/{keyStage}/subject/{subject}/questions"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/units');
+      throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/questions');
     }
     return call(params);
   };
@@ -129,7 +136,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetKeyStagesSubjectUnits = {
+export const getKeyStagesSubjectQuestions = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

@@ -1,7 +1,7 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-changelog
+ * Tool: get-changelog
  * Path: /changelog
  * Method: GET
  */
@@ -9,7 +9,7 @@
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
 const operationId= 'changelog-changelog' as const;
-const name= 'oak-get-changelog' as const;
+const name= 'get-changelog' as const;
 const path= '/changelog' as const;
 const method= 'GET' as const;
 
@@ -108,7 +108,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetChangelog = {
+export const getChangelog = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

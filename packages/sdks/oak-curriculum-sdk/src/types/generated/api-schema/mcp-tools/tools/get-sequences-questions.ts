@@ -1,41 +1,27 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-key-stages-subject-questions
- * Path: /key-stages/{keyStage}/subject/{subject}/questions
+ * Tool: get-sequences-questions
+ * Path: /sequences/{sequence}/questions
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getQuestions-getQuestionsForKeyStageAndSubject' as const;
-const name= 'oak-get-key-stages-subject-questions' as const;
-const path= '/key-stages/{keyStage}/subject/{subject}/questions' as const;
+const operationId= 'getQuestions-getQuestionsForSequence' as const;
+const name= 'get-sequences-questions' as const;
+const path= '/sequences/{sequence}/questions' as const;
 const method= 'GET' as const;
 
 
 // Path parameters
-const allowedKeyStageValues= ["ks1","ks2","ks3","ks4"] as const;
-type KeyStageValue = typeof allowedKeyStageValues[number];
-function isKeyStageValue(value: string): value is KeyStageValue {
-  const stringKeyStageValue: readonly string[] = allowedKeyStageValues;
-  return stringKeyStageValue.includes(value);
-}
-
-const allowedSubjectValues= ["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"] as const;
-type SubjectValue = typeof allowedSubjectValues[number];
-function isSubjectValue(value: string): value is SubjectValue {
-  const stringSubjectValue: readonly string[] = allowedSubjectValues;
-  return stringSubjectValue.includes(value);
-}
-
 // Query parameters
 const pathParams= {
-"keyStage":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedKeyStageValues, typeguard: isKeyStageValue},
-"subject":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedSubjectValues, typeguard: isSubjectValue},
+"sequence":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The sequence slug identifier, including the key stage 4 option where relevant."},
 };
 
 const queryParams= {
+"year":{"typePrimitive":"number","valueConstraint":false,"required":false,"description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},
 "offset":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":0},
 "limit":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":10},
 };
@@ -43,10 +29,10 @@ const queryParams= {
 void pathParams;
 void queryParams;
 type PathParamsShape = {
-  keyStage: 'ks1' | 'ks2' | 'ks3' | 'ks4';
-  subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';
+  sequence: string;
 };
 type QueryParamsShape = {
+  year?: number;
   offset?: number;
   limit?: number;
 };
@@ -55,7 +41,7 @@ type ValidRequestParams= {params: {
   query?: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
+const inputSchema = {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["sequence"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -106,7 +92,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"sequence":{"type":"string","description":"The sequence slug identifier, including the key stage 4 option where relevant."},"year":{"type":"number","description":"The year group to filter by. For the physical-education-primary sequence, a value of all-years can also be used."},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["sequence"]}\nRequired: sequence';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -116,10 +102,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/key-stages/{keyStage}/subject/{subject}/questions"];
+    const ep = client["/sequences/{sequence}/questions"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/questions');
+      throw new TypeError('Invalid method on endpoint: GET for /sequences/{sequence}/questions');
     }
     return call(params);
   };
@@ -136,7 +122,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetKeyStagesSubjectQuestions = {
+export const getSequencesQuestions = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

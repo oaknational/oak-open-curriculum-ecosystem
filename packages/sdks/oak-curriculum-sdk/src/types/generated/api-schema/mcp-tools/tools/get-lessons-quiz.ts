@@ -1,23 +1,23 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-lessons-transcript
- * Path: /lessons/{lesson}/transcript
+ * Tool: get-lessons-quiz
+ * Path: /lessons/{lesson}/quiz
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getLessonTranscript-getLessonTranscript' as const;
-const name= 'oak-get-lessons-transcript' as const;
-const path= '/lessons/{lesson}/transcript' as const;
+const operationId= 'getQuestions-getQuestionsForLessons' as const;
+const name= 'get-lessons-quiz' as const;
+const path= '/lessons/{lesson}/quiz' as const;
 const method= 'GET' as const;
 
 
 // Path parameters
 
 const pathParams= {
-"lesson":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The slug of the lesson"},
+"lesson":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The lesson slug identifier"},
 };
 
 const queryParams= {
@@ -32,7 +32,7 @@ type ValidRequestParams= {params: {
   path: PathParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"lesson":{"type":"string","description":"The slug of the lesson"}},"additionalProperties":false,"required":["lesson"]} as const;
+const inputSchema = {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier"}},"additionalProperties":false,"required":["lesson"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -83,7 +83,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The slug of the lesson"}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug identifier"}},"additionalProperties":false,"required":["lesson"]}\nRequired: lesson';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -93,10 +93,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/lessons/{lesson}/transcript"];
+    const ep = client["/lessons/{lesson}/quiz"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /lessons/{lesson}/transcript');
+      throw new TypeError('Invalid method on endpoint: GET for /lessons/{lesson}/quiz');
     }
     return call(params);
   };
@@ -113,7 +113,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetLessonsTranscript = {
+export const getLessonsQuiz = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

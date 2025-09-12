@@ -18,10 +18,10 @@ export function generateMcpToolName(path: string, method: string): string {
   // Special cases to avoid duplicates and reserved words
   // 'type' is a TypeScript keyword, so we use 'assetType' instead
   if (path === '/lessons/{lesson}/assets/{type}') {
-    return 'oak-get-lessons-assets-by-type';
+    return 'get-lessons-assets-by-type';
   }
   if (path === '/subjects/{subject}' && method === 'get') {
-    return 'oak-get-subject-detail';
+    return 'get-subject-detail';
   }
 
   // Parse path to extract non-parameter segments
@@ -35,5 +35,5 @@ export function generateMcpToolName(path: string, method: string): string {
     .filter(Boolean);
 
   // Generate deterministic name: oak-{method}-{segments}
-  return `oak-${method.toLowerCase()}-${nameSegments.join('-')}`;
+  return `${method.toLowerCase()}-${nameSegments.join('-')}`;
 }

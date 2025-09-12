@@ -25,7 +25,7 @@ export function createToolRegistry(): CoreToolRegistry {
     },
 
     getAll(): McpTool[] {
-      return Array.from(tools.values());
+      return Array.from(tools.values()).sort((a, b) => a.name.localeCompare(b.name));
     },
 
     has(name: string): boolean {

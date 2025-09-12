@@ -1,22 +1,31 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-rate-limit
- * Path: /rate-limit
+ * Tool: get-lessons-assets-by-type
+ * Path: /lessons/{lesson}/assets/{type}
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getRateLimit-getRateLimit' as const;
-const name= 'oak-get-rate-limit' as const;
-const path= '/rate-limit' as const;
+const operationId= 'getAssets-getLessonAsset' as const;
+const name= 'get-lessons-assets-by-type' as const;
+const path= '/lessons/{lesson}/assets/{type}' as const;
 const method= 'GET' as const;
 
 
+// Path parameters
+const allowedTypeValues= ["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"] as const;
+type TypeValue = typeof allowedTypeValues[number];
+function isTypeValue(value: string): value is TypeValue {
+  const stringTypeValue: readonly string[] = allowedTypeValues;
+  return stringTypeValue.includes(value);
+}
 
 
 const pathParams= {
+"lesson":{"typePrimitive":"string","valueConstraint":false,"required":true,"description":"The lesson slug"},
+"type":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedTypeValues, typeguard: isTypeValue},
 };
 
 const queryParams= {
@@ -24,10 +33,15 @@ const queryParams= {
 
 void pathParams;
 void queryParams;
+type PathParamsShape = {
+  lesson: string;
+  type: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers';
+};
 type ValidRequestParams= {params: {
+  path: PathParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{},"additionalProperties":false} as const;
+const inputSchema = {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug"},"type":{"type":"string","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]}},"additionalProperties":false,"required":["lesson","type"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -78,7 +92,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"lesson":{"type":"string","description":"The lesson slug"},"type":{"type":"string","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]}},"additionalProperties":false,"required":["lesson","type"]}\nRequired: lesson, type';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -88,10 +102,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/rate-limit"];
+    const ep = client["/lessons/{lesson}/assets/{type}"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /rate-limit');
+      throw new TypeError('Invalid method on endpoint: GET for /lessons/{lesson}/assets/{type}');
     }
     return call(params);
   };
@@ -108,7 +122,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetRateLimit = {
+export const getLessonsAssetsByType = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

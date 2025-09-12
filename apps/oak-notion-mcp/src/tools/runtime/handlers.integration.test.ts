@@ -678,12 +678,13 @@ describe('Tool Handlers', () => {
       const tools = getTools();
 
       expect(tools).toHaveLength(5);
+      // Tools are returned sorted alphabetically by name
       expect(tools.map((t) => t.name)).toEqual([
-        'notion-search',
-        'notion-list-databases',
-        'notion-query-database',
         'notion-get-page',
+        'notion-list-databases',
         'notion-list-users',
+        'notion-query-database',
+        'notion-search',
       ]);
     });
   });

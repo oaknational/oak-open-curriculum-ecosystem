@@ -1,16 +1,16 @@
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
- * Tool: oak-get-key-stages-subject-assets
- * Path: /key-stages/{keyStage}/subject/{subject}/assets
+ * Tool: get-key-stages-subject-lessons
+ * Path: /key-stages/{keyStage}/subject/{subject}/lessons
  * Method: GET
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 
-const operationId= 'getAssets-getSubjectAssets' as const;
-const name= 'oak-get-key-stages-subject-assets' as const;
-const path= '/key-stages/{keyStage}/subject/{subject}/assets' as const;
+const operationId= 'getKeyStageSubjectLessons-getKeyStageSubjectLessons' as const;
+const name= 'get-key-stages-subject-lessons' as const;
+const path= '/key-stages/{keyStage}/subject/{subject}/lessons' as const;
 const method= 'GET' as const;
 
 
@@ -30,23 +30,15 @@ function isSubjectValue(value: string): value is SubjectValue {
 }
 
 // Query parameters
-// Type value is optional, not all query parameters are.
-const allowedTypeValues= ["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"] as const;
-type TypeValue = typeof allowedTypeValues[number] | undefined;
-function isTypeValue(value: string | undefined): value is TypeValue {
-  if (value === undefined) { return true; }
-  const stringTypeValue: readonly string[] = allowedTypeValues;
-  return stringTypeValue.includes(value);
-}
-
 const pathParams= {
 "keyStage":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedKeyStageValues, typeguard: isKeyStageValue},
 "subject":{"typePrimitive":"string","valueConstraint":true,"required":true,"allowedValues":allowedSubjectValues, typeguard: isSubjectValue},
 };
 
 const queryParams= {
-"type":{"typePrimitive":"string","valueConstraint":true,"required":false,"allowedValues":allowedTypeValues, typeguard: isTypeValue},
 "unit":{"typePrimitive":"string","valueConstraint":false,"required":false,"description":"Optional unit slug to additionally filter by"},
+"offset":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":0},
+"limit":{"typePrimitive":"number","valueConstraint":false,"required":false,"default":10},
 };
 
 void pathParams;
@@ -56,15 +48,16 @@ type PathParamsShape = {
   subject: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';
 };
 type QueryParamsShape = {
-  type?: 'slideDeck' | 'exitQuiz' | 'exitQuizAnswers' | 'starterQuiz' | 'starterQuizAnswers' | 'supplementaryResource' | 'video' | 'worksheet' | 'worksheetAnswers';
   unit?: string;
+  offset?: number;
+  limit?: number;
 };
 type ValidRequestParams= {params: {
   path: PathParamsShape;
   query?: QueryParamsShape;
 }}
 
-const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. 'science' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"type":{"type":"string","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]},"unit":{"type":"string","description":"Optional unit slug to additionally filter by"}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
+const inputSchema = {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. 'ks2' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to filter by, e.g. 'english' - note that casing is important here, and should be lowercase","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"unit":{"type":"string","description":"Optional unit slug to additionally filter by"},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]} as const;
 function isValidRequestParams(value: unknown): value is ValidRequestParams {
   if (value === null || typeof value !== "object") return false;
   const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");
@@ -115,7 +108,7 @@ function isValidRequestParams(value: unknown): value is ValidRequestParams {
 }
 
 const getValidRequestParamsDescription= () => {
-  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to search by, e.g. \'science\' - note that casing is important here (always lowercase)","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"type":{"type":"string","enum":["slideDeck","exitQuiz","exitQuizAnswers","starterQuiz","starterQuizAnswers","supplementaryResource","video","worksheet","worksheetAnswers"]},"unit":{"type":"string","description":"Optional unit slug to additionally filter by"}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
+  return 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"keyStage":{"type":"string","description":"Key stage slug to filter by, e.g. \'ks2\' - note that casing is important here, and should be lowercase","enum":["ks1","ks2","ks3","ks4"]},"subject":{"type":"string","description":"Subject slug to filter by, e.g. \'english\' - note that casing is important here, and should be lowercase","enum":["art","citizenship","computing","cooking-nutrition","design-technology","english","french","geography","german","history","maths","music","physical-education","religious-education","rshe-pshe","science","spanish"]},"unit":{"type":"string","description":"Optional unit slug to additionally filter by"},"offset":{"type":"number","default":0},"limit":{"type":"number","default":10}},"additionalProperties":false,"required":["keyStage","subject"]}\nRequired: keyStage, subject';
 };
 void [operationId, name, path, method];
 void [pathParams, queryParams];
@@ -125,10 +118,10 @@ const executor= (client: OakApiPathBasedClient) => {
     if (!isValidRequestParams(params)) {
       throw new TypeError(getValidRequestParamsDescription());
     }
-    const ep = client["/key-stages/{keyStage}/subject/{subject}/assets"];
+    const ep = client["/key-stages/{keyStage}/subject/{subject}/lessons"];
     const call = ep ? ep["GET"] : undefined;
     if (typeof call !== "function") {
-      throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/assets');
+      throw new TypeError('Invalid method on endpoint: GET for /key-stages/{keyStage}/subject/{subject}/lessons');
     }
     return call(params);
   };
@@ -145,7 +138,7 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {
   return executor(client)(_params);
 };
 
-export const oakGetKeyStagesSubjectAssets = {
+export const getKeyStagesSubjectLessons = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,

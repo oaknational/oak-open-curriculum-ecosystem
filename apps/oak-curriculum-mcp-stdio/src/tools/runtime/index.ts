@@ -51,7 +51,8 @@ function toMutableInputSchema(schema: {
  * Get all MCP tools from SDK
  */
 export function getMcpTools(): Tool[] {
-  return entriesTools(MCP_TOOLS).map(([name, tool]) => ({
+  const sorted = entriesTools(MCP_TOOLS).sort(([a], [b]) => a.localeCompare(b));
+  return sorted.map(([name, tool]) => ({
     name,
     description: `${tool.method.toUpperCase()} ${tool.path} - ${tool.operationId}`,
     inputSchema: toMutableInputSchema(tool.inputSchema),

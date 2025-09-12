@@ -110,7 +110,7 @@ function initializeServer(): {
   ready: Promise<void>;
 } {
   const server = new Server(
-    { name: 'oak-curriculum-mcp-streamable-http', version: '0.1.0' },
+    { name: 'oak-curriculum-http', version: '0.1.0' },
     { capabilities: { tools: {} } },
   );
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
