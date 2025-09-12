@@ -1,5 +1,8 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "remoteCache": {
+    "enabled": true
+  },
   "ui": "stream",
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
@@ -12,7 +15,7 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "build": {
-      "dependsOn": ["^build", "type-gen"],
+      "dependsOn": ["^build"],
       "cache": true,
       "outputs": ["dist/**", ".tsup/**"],
       "inputs": [

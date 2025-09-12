@@ -22,7 +22,6 @@
   "scripts": {
     "type-gen": "pnpm generate:types",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "prebuild": "pnpm generate:types",
     "pregenerate:types": "pnpm generate:clean",
     "generate:types": "pnpm generate:openapi && pnpm generate:zod",
     "generate:openapi": "tsx scripts/typegen.ts",

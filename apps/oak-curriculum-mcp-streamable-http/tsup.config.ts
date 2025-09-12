@@ -6,6 +6,6 @@ export default defineConfig({
   clean: true,
   format: ['esm'],
   dts: true,
-  target: 'node20',
+  target: 'es2023',
   skipNodeModulesBundle: true,
 });

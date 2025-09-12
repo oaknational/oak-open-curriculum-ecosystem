@@ -17,6 +17,8 @@
 - [x] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.
 - [x] Improve the documentation, the rules file is now too large to be consistently applied by the agent, and we have other "agent guidance" docs... we need to consolidate and refine. Fewer, better, more consistent.
 - [+] Add the utilities, libraries, and a single app (for now) for creating the semantic search indices, keeping them updated, and providing a UI for using them. IN PROGRESS
+- [ ] Add a trivial front page for the mcp http server, so it doesn't show "authentication error" when visited in a browser... in fact, maybe put some _very_ basic quickstart docs there?
+- [ ] Update dependency versions across the board.
 - [ ] Add mutation testing to the test suite
 - [ ] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides. This strict type-safety is one of the key benefits of the SDK architecture over the standard auto-generated API client.
 - [ ] Improve the logger, Consola is too lightweight, we need something production ready and cloud runtime compatible. Enforce logger usage with eslint no-console rule

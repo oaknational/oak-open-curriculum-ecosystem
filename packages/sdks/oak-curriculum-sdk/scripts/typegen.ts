@@ -17,8 +17,8 @@ import { readFile } from 'node:fs/promises';
 import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
-import type { OpenAPI3 } from 'openapi-typescript';
-import { isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
+import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
+import { isOpenAPI3Schema } from './typegen-helpers.js';
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
 function findRepoRoot(startDir: string): string {
@@ -28,6 +28,9 @@ function findRepoRoot(startDir: string): string {
     const gitDir = path.join(current, '.git');
     if (existsSync(workspace) || existsSync(gitDir)) return current;
     const parent = path.dirname(current);
+    if (parent === '/') {
+      throw new Error('Could not find repo root. Iterated to `/`');
+    }
     if (parent === current) return current;
     current = parent;
   }
@@ -58,6 +61,7 @@ const isCiMode = forceCi || (isCiEnv && !isVercel);
 let maybeSchema: unknown;
 
 const cachedSchemaPath = path.resolve(rootDirectory, outPathFromRoot, 'api-schema.json');
+const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema.json');
 
 async function readCachedSchemaOrThrow(): Promise<unknown> {
   if (!existsSync(cachedSchemaPath)) {
@@ -119,7 +123,15 @@ if (isCiMode) {
     maybeSchema = await readCachedSchemaOrThrow();
   } else {
     const online = await fetchSchemaOnlineOrNull(apiSchemaUrl, apiKey);
-    maybeSchema = online ?? (await readCachedSchemaOrThrow());
+    if (online) {
+      // Update schema cache if version changed or missing
+      await writeSchemaCacheIfChanged(schemaCacheFile, online);
+      maybeSchema = online;
+    } else {
+      // Fallback order: schema cache file, then committed generated copy
+      const cached = await readSchemaCacheOrNull(schemaCacheFile);
+      maybeSchema = cached ?? (await readCachedSchemaOrThrow());
+    }
   }
 
   if (maybeSchema === undefined) {
@@ -129,19 +141,6 @@ if (isCiMode) {
   console.log('✅ Schema fetched successfully');
 }
 console.log('🔨 Generating type artifacts...');
-
-function isOpenAPI3Schema(value: unknown): value is OpenAPI3 {
-  if (!isPlainObject(value)) return false;
-  const ver = getOwnString(value, 'openapi');
-  if (!ver?.startsWith('3.')) return false;
-  const paths = getOwnValue(value, 'paths');
-  if (!isPlainObject(paths)) return false;
-  const info = getOwnValue(value, 'info');
-  if (!isPlainObject(info)) return false;
-  const title = getOwnString(info, 'title');
-  const version = getOwnString(info, 'version');
-  return typeof title === 'string' && typeof version === 'string';
-}
 
 if (!isOpenAPI3Schema(maybeSchema)) {
   throw new Error('Schema is not a valid OpenAPI 3.x schema');
