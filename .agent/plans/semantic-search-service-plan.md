@@ -44,23 +44,47 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
   - OpenAPI: `/api/openapi.json` with Redoc UI at `/api/docs`
   - Core search logic refactored into `src/lib/hybrid-search/` module:
     - `index.ts` orchestrator, `lessons.ts`, `units.ts`, `types.ts`; shim re-export at `src/lib/run-hybrid-search.ts`
-  - OpenAPI route registrations split to `src/lib/openapi.register.ts` (smaller helpers); `src/lib/openapi.ts` simplified, avoids unsafe assertions
+  - OpenAPI registrations split to `src/lib/openapi.register.ts`; `src/lib/openapi.ts` simplified, avoids unsafe assertions
   - Type-aware linting enabled; SDK parity routes validate bodies with Zod
   - Official Elasticsearch client types adopted; removed custom generic shapes
   - TS path aliases removed; imports are relative (incl. Vitest)
-  - Type-check configured for App Router: `tsconfig.lint.json` includes `jsx: react-jsx` and `lib: ["ES2022","DOM"]`
-  - UI/Health: Minimal `/search` demo page (plain HTML, Structured + NL tabs) and `/healthz` route (ES, SDK, LLM status)
-- Build status: Monorepo build succeeds. Next build succeeds (ESLint plugin detection warning remains to revisit).
-- Not yet done (top items): tests coverage uplift (hybrid-search and OpenAPI), remote deploy smoke, Oak Components integration (replace minimal UI), `/admin` UI
+  - Type-check configured for App Router: `tsconfig.lint.json` uses `jsx: react-jsx` and includes DOM libs
+- UI/Health: Minimal `/search` page (plain HTML, Structured + NL tabs) and `/healthz` route (ES, SDK, LLM status)
+- Tests: basic RRF unit test exists; hybrid-search and OpenAPI tests pending
+- Build status: Monorepo build succeeds
+- Not yet done (top items): **rebase onto `main`**, test coverage uplift (hybrid-search and OpenAPI), Vercel deploy smoke, Oak Components UI, `/admin` UI
+
+---
+
+## Merge strategy: Rebase first
+
+We will rebase `feat/semantic_search` onto `origin/main` before continuing feature work to minimize divergence and reduce long‑lived conflicts.
+
+### Rebase checklist
+
+1. Fetch and rebase: `git fetch origin && git rebase origin/main`
+2. Resolve conflicts in hotspots (below), then regenerate types and tools
+3. Run full root quality gates until green (see Quality gates)
+4. Push with `--force-with-lease`
+
+### Conflict hotspots to expect
+
+- SDK typegen and schema cache: `packages/sdks/oak-curriculum-sdk/scripts/**` (typegen.ts, helpers, schema-cache)
+- Generated MCP tool artifacts and tests referencing old `oak-*` tool names and ordering (update to shortened names and alphabetical order)
+- Validation/response mapping: request/response validators and response-map emitters
+- Monorepo wiring: `pnpm-workspace.yaml`, `turbo.json`, workspace `eslint.config.ts`
+- Lockfile: `pnpm-lock.yaml` (re-resolve after rebase)
+
+---
 
 ## Near‑term priorities (ranked)
 
-0. Reduce function length/complexity where flagged by lint — ongoing; hybrid-search and OpenAPI splits done
-1. Tests: unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
-2. Oakify `/search` demo page with Oak Components (minimal HTML shipped)
-3. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
+0. Rebase `feat/semantic_search` onto `origin/main` and align SDK/MCP changes
+1. Tests: add unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
+2. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
+3. Oakify `/search` with Oak Components (keep Structured vs NL tabs; strong a11y)
 4. `/admin` UI (guarded by `x-api-key`) for index + rollup
-5. MCP exposure from OpenAPI (tools enabled for non‑admin endpoints by default)
+5. MCP exposure from OpenAPI (non‑admin tools by default)
 
 ---
 
@@ -213,7 +237,7 @@ curl -X POST http://localhost:3000/api/search/nl \
 
 - Add basic tests (Vitest) for: query struct validation, RRF fusion determinism, highlight presence.
 
-Status: indexing and search endpoints implemented; tests pending.
+Status: indexing/search endpoints implemented; basic RRF test present; more tests pending.
 
 **Definition of Done**
 
@@ -266,7 +290,7 @@ Status: pending.
 - **MCP tools**: derive tool definitions from `openapi.json`.
   - Expose: `searchStructured`, `searchNaturalLanguage`, `sdkSearchLessons`, `sdkSearchTranscripts`.
   - Keep `indexOak`/`rebuildRollup` tools disabled by default; enable only in trusted agents.
-- **Prompt helpers** (optional): ship a few example prompts (e.g., “Find KS4 Geography units with ≥3 lessons on mountains”).
+- **Prompt helpers** (optional): ship a few example prompts.
 
 **Definition of Done**
 
