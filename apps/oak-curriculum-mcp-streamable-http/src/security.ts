@@ -46,11 +46,17 @@ export function createCorsMiddleware(
   const isSession = mode === 'session';
   return cors({
     origin(origin, callback) {
+      // Allow requests without Origin (e.g. server-to-server, supertest)
       if (!origin) {
         callback(null, true);
         return;
       }
-      const isAllowed = originSet.size > 0 && originSet.has(origin.toLowerCase());
+      // If no explicit allow-list provided, allow all origins
+      if (originSet.size === 0) {
+        callback(null, true);
+        return;
+      }
+      const isAllowed = originSet.has(origin.toLowerCase());
       if (isAllowed) {
         callback(null, true);
       } else {
