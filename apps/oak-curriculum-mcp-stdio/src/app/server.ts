@@ -56,17 +56,21 @@ async function executeTool(
  * Format tool execution result as MCP response
  */
 function formatToolResponse(result: unknown, isError = false) {
-  return {
-    content: [
-      {
-        type: 'text',
-        text: isError
-          ? `Error: ${result instanceof Error ? result.message : 'Unknown error'}`
-          : JSON.stringify(result, null, 2),
-      },
-    ],
-    ...(isError && { isError: true }),
-  };
+  function textContent(text: string): { type: 'text'; text: string } {
+    return { type: 'text', text };
+  }
+  if (!isError) {
+    return {
+      content: [textContent(JSON.stringify(result, null, 2))],
+    };
+  }
+
+  const message = result instanceof Error ? result.message : 'Unknown error';
+  // Split multi-line messages to surface a concise first line for Inspector, with details following
+  const lines = message.split('\n');
+  const [first, ...rest] = lines;
+  const content = [textContent(`Error: ${first}`), ...rest.map((t) => textContent(t))];
+  return { content, isError: true };
 }
 
 /**

@@ -6,6 +6,14 @@ import { exportJWK, generateKeyPair } from 'jose';
 import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler } from './handlers.js';
+import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
+
+// Ensure critical env is available in local/dev by loading from repo root when missing
+(() => {
+  const requiredKeys = ['OAK_API_KEY'];
+  const startDir = findRepoRoot(process.cwd());
+  loadRootEnv({ requiredKeys, startDir, env: process.env });
+})();
 
 function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler): void {
   app.options('/mcp', corsMw);
