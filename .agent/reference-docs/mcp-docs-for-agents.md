@@ -2075,9 +2075,9 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     ```json tsconfig.json
     {
       "compilerOptions": {
-        "target": "ES2022",
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "target": "ES2023",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "outDir": "./build",
         "rootDir": "./",
         "strict": true,
@@ -2337,23 +2337,23 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     When you submit a query:
 
-    1. The client gets the list of available tools from the server
-    2. Your query is sent to Claude along with tool descriptions
-    3. Claude decides which tools (if any) to use
-    4. The client executes any requested tool calls through the server
-    5. Results are sent back to Claude
-    6. Claude provides a natural language response
-    7. The response is displayed to you
+    4. The client gets the list of available tools from the server
+    5. Your query is sent to Claude along with tool descriptions
+    6. Claude decides which tools (if any) to use
+    7. The client executes any requested tool calls through the server
+    8. Results are sent back to Claude
+    9. Claude provides a natural language response
+    10. The response is displayed to you
 
     ## Best practices
 
-    1. **Error Handling**
+    11. **Error Handling**
        * Use TypeScript's type system for better error detection
        * Wrap tool calls in try-catch blocks
        * Provide meaningful error messages
        * Gracefully handle connection issues
 
-    2. **Security**
+    12. **Security**
        * Store API keys securely in `.env`
        * Validate server responses
        * Be cautious with tool permissions
@@ -3660,9 +3660,9 @@ This tutorial will primarily focus on tools.
     ```json tsconfig.json
     {
       "compilerOptions": {
-        "target": "ES2022",
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "target": "ES2023",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "outDir": "./build",
         "rootDir": "./src",
         "strict": true,

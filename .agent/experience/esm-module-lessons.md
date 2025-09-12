@@ -72,8 +72,8 @@ export { config };
   "compilerOptions": {
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "lib": ["ES2022"],
+    "target": "ES2023",
+    "lib": ["ES2023"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   }

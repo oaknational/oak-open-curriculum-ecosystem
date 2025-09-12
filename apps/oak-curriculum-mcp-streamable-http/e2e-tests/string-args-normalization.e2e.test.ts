@@ -36,7 +36,7 @@ describe('HTTP boundary typed-argument normalization', () => {
     vi.restoreAllMocks();
   });
 
-  it('accepts a plain string argument at the HTTP boundary for oak-get-search-lessons', async () => {
+  it('accepts a plain string argument at the HTTP boundary for get-search-lessons', async () => {
     // Do not rely on mocking across module boundaries in ESM; just verify 200 + SSE shape
 
     const app = createApp();
@@ -48,7 +48,7 @@ describe('HTTP boundary typed-argument normalization', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'oak-get-search-lessons', arguments: 'trees' },
+        params: { name: 'get-search-lessons', arguments: 'trees' },
       });
 
     expect(res.status).toBe(200);
@@ -57,7 +57,7 @@ describe('HTTP boundary typed-argument normalization', () => {
     expect(typeof text).toBe('string');
   });
 
-  it('accepts a JSON string argument at the HTTP boundary for oak-get-search-lessons', async () => {
+  it('accepts a JSON string argument at the HTTP boundary for get-search-lessons', async () => {
     const jsonArg = JSON.stringify({ q: 'trees' });
 
     const app = createApp();
@@ -69,13 +69,13 @@ describe('HTTP boundary typed-argument normalization', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'oak-get-search-lessons', arguments: jsonArg },
+        params: { name: 'get-search-lessons', arguments: jsonArg },
       });
 
     expect(res.status).toBe(200);
   });
 
-  it('accepts a plain string argument at the HTTP boundary for oak-get-lessons-summary', async () => {
+  it('accepts a plain string argument at the HTTP boundary for get-lessons-summary', async () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
@@ -85,7 +85,7 @@ describe('HTTP boundary typed-argument normalization', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'oak-get-lessons-summary', arguments: 'some-lesson-slug' },
+        params: { name: 'get-lessons-summary', arguments: 'some-lesson-slug' },
       });
 
     expect(res.status).toBe(200);

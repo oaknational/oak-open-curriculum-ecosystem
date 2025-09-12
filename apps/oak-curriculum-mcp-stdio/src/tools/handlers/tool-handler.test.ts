@@ -65,7 +65,7 @@ describe('handleToolCall', () => {
       const request: CallToolRequest = {
         method: 'tools/call',
         params: {
-          name: 'oak-search-lessons',
+          name: 'get-search-lessons',
           arguments: { q: 'fractions' },
         },
       };
@@ -87,7 +87,7 @@ describe('handleToolCall', () => {
 
       // And: Called SDK with correct parameters
       expect(executeToolCall).toHaveBeenCalledWith(
-        'oak-search-lessons',
+        'get-search-lessons',
         { q: 'fractions' },
         expect.any(Object), // The client
       );
@@ -127,13 +127,13 @@ describe('handleToolCall', () => {
       vi.mocked(isToolName).mockReturnValue(true);
       vi.mocked(executeToolCall).mockResolvedValue({
         data: undefined,
-        error: new McpParameterError('Invalid parameter', 'oak-get-lesson', 'lesson'),
+        error: new McpParameterError('Invalid parameter', 'get-lesson', 'lesson'),
       });
 
       const request: CallToolRequest = {
         method: 'tools/call',
         params: {
-          name: 'oak-get-lesson',
+          name: 'get-lesson',
           arguments: {},
         },
       };
@@ -153,13 +153,13 @@ describe('handleToolCall', () => {
       vi.mocked(isToolName).mockReturnValue(true);
       vi.mocked(executeToolCall).mockResolvedValue({
         data: undefined,
-        error: new McpToolError('API error: 500', 'oak-get-subjects'),
+        error: new McpToolError('API error: 500', 'get-subjects'),
       });
 
       const request: CallToolRequest = {
         method: 'tools/call',
         params: {
-          name: 'oak-get-subjects',
+          name: 'get-subjects',
           arguments: {},
         },
       };
@@ -182,7 +182,7 @@ describe('handleToolCall', () => {
       const request: CallToolRequest = {
         method: 'tools/call',
         params: {
-          name: 'oak-get-subjects',
+          name: 'get-subjects',
           arguments: {},
         },
       };

@@ -4,7 +4,8 @@
  */
 
 import type { PathGroup } from './typegen/extraction-types.js';
-import { typeSafeKeys } from '../src/types/helpers.js';
+import { getOwnString, getOwnValue, isPlainObject, typeSafeKeys } from '../src/types/helpers.js';
+import type { OpenAPI3 } from 'openapi-typescript';
 
 /**
  * Sort object keys alphabetically
@@ -36,4 +37,17 @@ export function createSortedEntries(group: PathGroup): PathGroup {
 export function formatPathGrouping(pathGroupingKey: string, group: PathGroup): string {
   const sortedEntries = createSortedEntries(group);
   return `"${pathGroupingKey}": ${JSON.stringify(sortedEntries, undefined, 2)}`;
+}
+
+export function isOpenAPI3Schema(value: unknown): value is OpenAPI3 {
+  if (!isPlainObject(value)) return false;
+  const ver = getOwnString(value, 'openapi');
+  if (!ver?.startsWith('3.')) return false;
+  const paths = getOwnValue(value, 'paths');
+  if (!isPlainObject(paths)) return false;
+  const info = getOwnValue(value, 'info');
+  if (!isPlainObject(info)) return false;
+  const title = getOwnString(info, 'title');
+  const version = getOwnString(info, 'version');
+  return typeof title === 'string' && typeof version === 'string';
 }
