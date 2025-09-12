@@ -1,16 +1,16 @@
 <!-- markdownlint-disable -->
 
-# Shared MCP Core and McpServer Migration Plan
+# Curriculum MCP Enhancements Plan
 
 Date: 2025-09-12
 Owner: Engineering (MCP/Oak SDK)
 
 ## Purpose
 
-Deliver Steps 4 and 5 from the staged approach:
-
-- Step 4: Extract common logic into a shared MCP library workspace (shared server core and error handling) used by both STDIO and Streamable HTTP apps.
-- Step 5: Migrate from the low‑level Server to MCP SDK abstractions (`McpServer`), removing duplicate validation while preserving the principle that all types, type guards, schemas, and validation are generated at compile time from the OpenAPI schema.
+- Enable accurate versioning of the MCP servers, using the root package.json version. This includes resolving the issues with the release pipeline (see errors in GitHub release logs). <- This purpose needs properly integrating into this plan. The version is important because we are changing the tools, resources, prompts, and other capabilities of the MCP servers, and clients will need to know when to update their cache etc.
+- Extract common logic into a shared MCP library workspace (shared server core and error handling) used by both STDIO and Streamable HTTP apps.
+- Migrate from the low‑level Server to MCP SDK abstractions (`McpServer`), removing duplicate validation while preserving the principle that all types, type guards, schemas, and validation are generated at compile time from the OpenAPI schema.
+- Enable Resources and Prompts capabilities, and cross‑server composition and pipelines.
 
 ## Core References
 
