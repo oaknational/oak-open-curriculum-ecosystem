@@ -29,7 +29,7 @@ const BaseEnvSchema = z.object({
 });
 
 const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
-  if (!(v.OAK_API_KEY || v.OAK_API_BEARER)) {
+  if (!(v.OAK_API_KEY)) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Set OAK_API_KEY or OAK_API_BEARER." });
   }
   if (v.AI_PROVIDER === "openai" && (!v.OPENAI_API_KEY || v.OPENAI_API_KEY.length < 10)) {
@@ -299,7 +299,7 @@ A Next.js workspace that indexes Oak curriculum content and exposes a hybrid (se
   - `oak_unit_rollup` — unit-level snippets + `unit_semantic`
 - **Hybrid search (BM25 + ELSER)** fused with **RRF**
 - **Two search endpoints**
-  - **Structured**: `POST /api/search` (no LLM)
+  - **Structured**: `POST /api/search`
   - **Natural language**: `POST /api/search/nl` (LLM parsing; returns 501 if disabled)
 - **Transcript & rollup highlights**
 - **SDK-first indexing** (no raw HTTP)
@@ -386,7 +386,7 @@ write_file "$APP_DIR/docs/ARCHITECTURE.md" <<'EOF'
   - `unit_semantic` (`semantic_text`)
 
 ## Endpoints
-- **Structured**: `POST /api/search` – requires a structured body (no LLM).
+- **Structured**: `POST /api/search` – requires a structured body.
 - **Natural language**: `POST /api/search/nl` – converts `q` into a structured query via LLM (disabled if no OPENAI_API_KEY).
 - **Indexer**: `GET /api/index-oak` (admin header `x-api-key`).
 - **Rollup**: `GET /api/rebuild-rollup` (admin header `x-api-key`).

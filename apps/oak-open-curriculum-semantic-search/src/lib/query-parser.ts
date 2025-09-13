@@ -3,7 +3,7 @@ import { env } from './env';
 import { generateObject } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
 import { isKeyStage, isSubject } from '../adapters/sdk-guards';
-import type { KeyStage, Subject } from '@oaknational/oak-curriculum-sdk';
+import type { KeyStage, SubjectSlug as Subject } from '../types/oak';
 
 /** Structured output schema for parsed teacher queries. */
 export const ParsedQuerySchema = z.object({

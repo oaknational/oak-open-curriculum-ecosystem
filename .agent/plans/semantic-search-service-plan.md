@@ -161,7 +161,7 @@ Acceptance
 - **Serverless ES ready**: three indices exist with configured analyzers, `semantic_text` fields, and synonyms; smoke query succeeds.
 - **Indexing works end‑to‑end**: calling `/api/index-oak` + `/api/rebuild-rollup` populates ES; no duplicate explosion; reasonable doc counts.
 - **Hybrid search**: for representative queries, BM25 + semantic results are fused via RRF; snippets are present; code resides in `src/lib/hybrid-search/` with tests.
-- **LLM optionality**: `/api/search` requires no LLM; `/api/search/nl` returns 501 if LLM disabled, otherwise produces sensible structured queries.
+- **LLM optionality**: `/api/search`; `/api/search/nl` returns 501 if LLM disabled, otherwise produces sensible structured queries.
 - **OpenAPI**: `/api/openapi.json` reflects all public endpoints and schemas; valid under an OpenAPI validator.
 - **MCP**: tools can be loaded from OpenAPI; non‑admin tools enabled by default; admin tools require explicit opt‑in.
 - **UI**: a basic Oak‑styled page demonstrates both search modes; admin page can trigger indexing/rollups with feedback.
@@ -204,7 +204,7 @@ pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
 **Tasks**
 
 - Fill `.env.local`:
-  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY` (or `OAK_API_BEARER`), `SEARCH_API_KEY`.
+  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`, `SEARCH_API_KEY`.
   - Optional LLM: `AI_PROVIDER=openai`, `OPENAI_API_KEY=…`; set `AI_PROVIDER=none` to disable.
 - Start dev server:
 
@@ -249,7 +249,7 @@ Status: indexing/search endpoints implemented; basic RRF test present; more test
 
 - Create Vercel project for the workspace (Node runtime).
 - Set env vars in Vercel (Production/Preview):
-  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY` (or `OAK_API_BEARER`), `SEARCH_API_KEY`.
+  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY` , `SEARCH_API_KEY`.
   - Optional: `AI_PROVIDER` (`openai`/`none`), `OPENAI_API_KEY`.
 - Deploy and run:
   - Admin routes via curl with `x-api-key`.

@@ -38,7 +38,7 @@ function registerStructuredSearch(
   registry.registerPath({
     method: 'post',
     path: '/api/search',
-    summary: 'Structured hybrid search (no LLM required)',
+    summary: 'Structured hybrid search',
     description: 'Hybrid (BM25 + semantic_text) with RRF using a structured body.',
     tags: ['search'],
     request: { body: { content: { 'application/json': { schema: StructuredQuerySchema } } } },

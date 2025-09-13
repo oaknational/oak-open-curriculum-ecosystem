@@ -21,6 +21,10 @@
       "headers": {
         "Authorization": "Bearer dev-token"
       }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
     }
   }
 }

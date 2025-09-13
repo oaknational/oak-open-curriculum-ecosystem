@@ -29,7 +29,7 @@ Purpose: Preserve essential working context so any agent can immediately continu
 ## ENV (server‑side)
 
 - `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`
-- `OAK_API_KEY` (or `OAK_API_BEARER`)
+- `OAK_API_KEY`
 - `SEARCH_API_KEY` (admin routes)
 - Optional LLM: `AI_PROVIDER=openai`, `OPENAI_API_KEY`
 

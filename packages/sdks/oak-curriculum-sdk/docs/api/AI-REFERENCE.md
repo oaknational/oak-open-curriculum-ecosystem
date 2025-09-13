@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-12T16:25:31.134Z
+Generated: 2025-09-13T09:55:30.995Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -499,10 +499,6 @@ _No parameters_
 - path params: unit
 - query params: _None_
 
-## References
-
-### createApiClient
-
 ## Classes
 
 ### McpParameterError
@@ -541,7 +537,7 @@ Validation issue details
 type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:39](https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L39)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:39](https://github.com/oaknational/oak-mcp-ecosystem/blob/aaeb89eb5492fe24a34d18a6dc97a3767fd36099/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L39)
 
 HTTP methods supported by validation
 
@@ -551,7 +547,7 @@ HTTP methods supported by validation
 type OakApiClient = OpenApiClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:17](https://github.com/oaknational/oak-mcp-ecosystem/blob/aaeb89eb5492fe24a34d18a6dc97a3767fd36099/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L17)
 
 The base OpenAPI-Fetch client.
 
@@ -563,7 +559,7 @@ Use this client for maximum performance.
 type OakApiPathBasedClient = OpenApiPathBasedClient<paths>;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
+Source: [packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts:27](https://github.com/oaknational/oak-mcp-ecosystem/blob/aaeb89eb5492fe24a34d18a6dc97a3767fd36099/packages/sdks/oak-curriculum-sdk/src/client/oak-base-client.ts#L27)
 
 The base OpenAPI-Fetch path-based client.
 
@@ -578,7 +574,7 @@ the performance cost.
 type SubjectSlug = Subject;
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/types/search-index.ts:11](https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11)
+Source: [packages/sdks/oak-curriculum-sdk/src/types/search-index.ts:11](https://github.com/oaknational/oak-mcp-ecosystem/blob/aaeb89eb5492fe24a34d18a6dc97a3767fd36099/packages/sdks/oak-curriculum-sdk/src/types/search-index.ts#L11)
 
 Alias used by downstream apps.
 
@@ -588,7 +584,7 @@ Alias used by downstream apps.
 type ValidationResult = <reflection>(…) | <reflection>(…)
 ```
 
-Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:13](https://github.com/oaknational/oak-mcp-ecosystem/blob/1bf8576ad1f0e55562e11cf178c63147dd5ed0b6/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13)
+Source: [packages/sdks/oak-curriculum-sdk/src/validation/types.ts:13](https://github.com/oaknational/oak-mcp-ecosystem/blob/aaeb89eb5492fe24a34d18a6dc97a3767fd36099/packages/sdks/oak-curriculum-sdk/src/validation/types.ts#L13)
 
 Result type for validation operations
 Discriminated union for type-safe error handling
@@ -603,6 +599,11 @@ Discriminated union for type-safe error handling
 
 ### createOakClient
 
+Oak Curriculum SDK
+
+TypeScript SDK for accessing Oak National Academy's Curriculum API.
+This SDK provides a type-safe client using openapi-fetch with generated types.
+
 ```ts
 function createOakClient(apiKey: string): OakApiClient;
 ```
@@ -613,6 +614,11 @@ Environment-agnostic: The SDK core never reads environment variables.
 Always pass the API key explicitly.
 
 ### createOakPathBasedClient
+
+Oak Curriculum SDK
+
+TypeScript SDK for accessing Oak National Academy's Curriculum API.
+This SDK provides a type-safe client using openapi-fetch with generated types.
 
 ```ts
 function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient;
@@ -626,7 +632,11 @@ Always pass the API key explicitly.
 ### executeToolCall
 
 ```ts
-function executeToolCall(maybeToolName: unknown, maybeParams: unknown, client: PathBasedClient<paths, <templateLiteral>(…)>): Promise<ToolExecutionResult>
+function executeToolCall(
+  maybeToolName: unknown,
+  maybeParams: unknown,
+  client: OakApiPathBasedClient,
+): Promise<ToolExecutionResult>;
 ```
 
 Ultra-thin executor - just validation and delegation to embedded executor
@@ -674,3 +684,7 @@ function validateResponse(
 ```
 
 Validates response data for an API operation
+
+## References
+
+### createApiClient

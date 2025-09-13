@@ -35,10 +35,10 @@ apps/oak-open-curriculum-semantic-search/
 │  ├─ api/
 │  │  ├─ index-oak/route.ts        # Admin: index lessons/units (SDK → ES)
 │  │  ├─ rebuild-rollup/route.ts   # Admin: rebuild `oak_unit_rollup`
-│  │  ├─ search/route.ts           # Structured search (no LLM required)
+│  │  ├─ search/route.ts           # Structured search
 │  │  ├─ search/nl/route.ts        # Natural-language search (LLM optional)
 │  │  └─ sdk/...
-│  └─ page.tsx
+│  └─ page.tsx                     # Canonical search page (UI moved here)
 ├─ src/
 │  ├─ adapters/                    # SDK guards + adapter
 │  ├─ lib/                         # env, ES client, RRF, query parser, runner
@@ -66,16 +66,16 @@ cp apps/oak-open-curriculum-semantic-search/.env.example \
 
 Required values:
 
-| Variable                          | Required | Notes                                                       |
-| --------------------------------- | -------- | ----------------------------------------------------------- |
-| `ELASTICSEARCH_URL`               | ✅       | Elastic Cloud Serverless endpoint (HTTPS).                  |
-| `ELASTICSEARCH_API_KEY`           | ✅       | ApiKey with index manage permissions.                       |
-| `OAK_API_KEY` or `OAK_API_BEARER` | ✅       | Auth for Oak Open Curriculum API (via the SDK).             |
-| `SEARCH_API_KEY`                  | ✅       | Any long random string; used to guard admin routes.         |
-| `AI_PROVIDER`                     | ➖       | `openai` (default) or `none`. Controls NL parsing endpoint. |
-| `OPENAI_API_KEY`                  | ➖       | Required iff `AI_PROVIDER=openai`.                          |
+| Variable                | Required | Notes                                                       |
+| ----------------------- | -------- | ----------------------------------------------------------- |
+| `ELASTICSEARCH_URL`     | ✅       | Elastic Cloud Serverless endpoint (HTTPS).                  |
+| `ELASTICSEARCH_API_KEY` | ✅       | ApiKey with index manage permissions.                       |
+| `OAK_API_KEY`           | ✅       | Auth for Oak Open Curriculum API (via the SDK).             |
+| `SEARCH_API_KEY`        | ✅       | Any long random string; used to guard admin routes.         |
+| `AI_PROVIDER`           | ➖       | `openai` (default) or `none`. Controls NL parsing endpoint. |
+| `OPENAI_API_KEY`        | ➖       | Required iff `AI_PROVIDER=openai`.                          |
 
-3. **Create indices & analyzers** in Elasticsearch Serverless:
+1. **Create indices & analyzers** in Elasticsearch Serverless:
 
 ```bash
 ELASTICSEARCH_URL=... ELASTICSEARCH_API_KEY=... \
@@ -136,7 +136,7 @@ If LLM is disabled (`AI_PROVIDER=none` or no `OPENAI_API_KEY`), `/api/search/nl`
 
 ### Search (primary)
 
-- `POST /api/search` → **Structured** search (no LLM). Body:
+- `POST /api/search` → **Structured** search. Body:
 
   ```json
   {
@@ -233,7 +233,7 @@ Turbo wiring: this workspace participates in `turbo.json` pipelines for `build`,
 - **501 from `/api/search/nl`** → LLM disabled. Set `AI_PROVIDER=openai` and `OPENAI_API_KEY`.
 - **Index missing** → run `elastic:setup` and re‑try indexing.
 - **Empty results** → ensure indexing finished and rollup rebuilt.
-- **SDK errors** → verify `OAK_API_KEY` or `OAK_API_BEARER`.
+- **SDK errors** → verify `OAK_API_KEY`
 
 ---
 
@@ -245,3 +245,23 @@ See the deep‑dive docs in `docs/`:
 - `docs/ARCHITECTURE.md` — indices, endpoints, data flow.
 - `docs/ROLLUP.md` — motivation and details for the rollup index.
 - `docs/SDK-ENDPOINTS.md` — parity routes and payload examples.
+
+---
+
+## Data storage & transmission (development)
+
+- Client storage
+  - `localStorage`: `theme-mode` → user's theme preference (`system|light|dark`).
+  - Cookie: `theme-mode=...; Path=/; SameSite=Lax; Max-Age=31536000` mirrors the preference for SSR/early render. No identifiers; used only for UI.
+
+- Server storage
+  - None for user state. Admin operations do not persist user data; they run ES setup/indexing.
+
+- Network
+  - Search endpoints (`/api/search`, `/api/search/nl`) receive query payloads only. Cookie is not required by these endpoints.
+  - Admin endpoints (`/api/admin/*`) stream text output; protected by `x-api-key`.
+  - External services: Elasticsearch and Oak API via server-side env vars; never exposed to clients.
+
+- Rendering & performance
+  - Early inline script in `app/layout.tsx` reads `theme-mode` cookie (fallback to `localStorage`) to set `data-theme` pre-hydration, minimizing FOUC.
+  - Only the Providers subtree consumes theme hint; the rest of the page remains statically rendered.

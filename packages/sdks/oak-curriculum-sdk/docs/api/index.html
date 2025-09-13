@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="default" lang="en">
+<html class="default" lang="en" data-base="./">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
@@ -17,271 +17,463 @@
     <script>
       document.documentElement.dataset.theme = localStorage.getItem('tsd-theme') || 'os';
       document.body.style.display = 'none';
-      setTimeout(() => (app ? app.showPage() : document.body.style.removeProperty('display')), 500);
+      setTimeout(
+        () => (window.app ? app.showPage() : document.body.style.removeProperty('display')),
+        500,
+      );
     </script>
     <header class="tsd-page-toolbar">
       <div class="tsd-toolbar-contents container">
-        <div class="table-cell" id="tsd-search" data-base=".">
-          <div class="field">
-            <label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"
-              ><svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <use href="assets/icons.svg#icon-search"></use></svg></label
-            ><input type="text" id="tsd-search-field" aria-label="Search" />
+        <a href="index.html" class="title">@oaknational/oak-curriculum-sdk - v0.0.1</a>
+        <div id="tsd-toolbar-links"></div>
+        <button id="tsd-search-trigger" class="tsd-widget" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <use href="assets/icons.svg#icon-search"></use>
+          </svg>
+        </button>
+        <dialog id="tsd-search" aria-label="Search">
+          <input
+            role="combobox"
+            id="tsd-search-input"
+            aria-controls="tsd-search-results"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            autocapitalize="off"
+            autocomplete="off"
+            placeholder="Search the docs"
+            maxlength="100"
+          />
+          <ul role="listbox" id="tsd-search-results"></ul>
+          <div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+            <div>Preparing search index...</div>
           </div>
-          <div class="field"><div id="tsd-toolbar-links"></div></div>
-          <ul class="results">
-            <li class="state loading">Preparing search index...</li>
-            <li class="state failure">The search index is not available</li>
-          </ul>
-          <a href="index.html" class="title">@oaknational/oak-curriculum-sdk - v0.0.1</a>
-        </div>
-        <div class="table-cell" id="tsd-widgets">
-          <a
-            href="#"
-            class="tsd-widget tsd-toolbar-icon menu no-caption"
-            data-toggle="menu"
-            aria-label="Menu"
-            ><svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <use href="assets/icons.svg#icon-menu"></use></svg
-          ></a>
-        </div>
+        </dialog>
+        <a
+          href="#"
+          class="tsd-widget menu"
+          id="tsd-toolbar-menu-trigger"
+          data-toggle="menu"
+          aria-label="Menu"
+          ><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <use href="assets/icons.svg#icon-menu"></use></svg
+        ></a>
       </div>
     </header>
     <div class="container container-main">
       <div class="col-content">
         <div class="tsd-page-title"><h1>@oaknational/oak-curriculum-sdk - v0.0.1</h1></div>
-        <section class="tsd-panel-group tsd-index-group">
-          <section class="tsd-panel tsd-index-panel">
-            <details class="tsd-index-content tsd-accordion" open>
-              <summary class="tsd-accordion-summary tsd-index-summary">
-                <h5
-                  class="tsd-index-heading uppercase"
-                  role="button"
-                  aria-expanded="false"
-                  tabindex="0"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <use href="assets/icons.svg#icon-chevronSmall"></use>
-                  </svg>
-                  Index
-                </h5>
-              </summary>
-              <div class="tsd-accordion-details">
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">References</h3>
-                  <div class="tsd-index-list">
-                    <a href="index.html#createApiClient" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-4194304"></use></svg
-                      ><span>create<wbr />Api<wbr />Client</span></a
-                    >
-                  </div>
-                </section>
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">Classes</h3>
-                  <div class="tsd-index-list">
-                    <a href="classes/McpParameterError.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-128"></use></svg
-                      ><span>Mcp<wbr />Parameter<wbr />Error</span></a
-                    >
-                    <a href="classes/McpToolError.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-128"></use></svg
-                      ><span>Mcp<wbr />Tool<wbr />Error</span></a
-                    >
-                  </div>
-                </section>
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">Interfaces</h3>
-                  <div class="tsd-index-list">
-                    <a href="interfaces/LessonsIndexDoc.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-256"></use></svg
-                      ><span>Lessons<wbr />Index<wbr />Doc</span></a
-                    >
-                    <a href="interfaces/UnitRollupDoc.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-256"></use></svg
-                      ><span>Unit<wbr />Rollup<wbr />Doc</span></a
-                    >
-                    <a href="interfaces/UnitsIndexDoc.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-256"></use></svg
-                      ><span>Units<wbr />Index<wbr />Doc</span></a
-                    >
-                    <a href="interfaces/ValidatedClientOptions.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-256"></use></svg
-                      ><span>Validated<wbr />Client<wbr />Options</span></a
-                    >
-                    <a href="interfaces/ValidationIssue.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-256"></use></svg
-                      ><span>Validation<wbr />Issue</span></a
-                    >
-                  </div>
-                </section>
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">Type Aliases</h3>
-                  <div class="tsd-index-list">
-                    <a href="types/HttpMethod.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-2097152"></use></svg
-                      ><span>Http<wbr />Method</span></a
-                    >
-                    <a href="types/OakApiClient.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-2097152"></use></svg
-                      ><span>Oak<wbr />Api<wbr />Client</span></a
-                    >
-                    <a href="types/OakApiPathBasedClient.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-2097152"></use></svg
-                      ><span>Oak<wbr />Api<wbr />Path<wbr />Based<wbr />Client</span></a
-                    >
-                    <a href="types/SubjectSlug.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-2097152"></use></svg
-                      ><span>Subject<wbr />Slug</span></a
-                    >
-                    <a href="types/ValidationResult.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-2097152"></use></svg
-                      ><span>Validation<wbr />Result</span></a
-                    >
-                  </div>
-                </section>
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">Variables</h3>
-                  <div class="tsd-index-list">
-                    <a href="variables/apiSchemaUrl.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-32"></use></svg
-                      ><span>api<wbr />Schema<wbr />Url</span></a
-                    >
-                    <a href="variables/apiUrl.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-32"></use></svg
-                      ><span>api<wbr />Url</span></a
-                    >
-                  </div>
-                </section>
-                <section class="tsd-index-section">
-                  <h3 class="tsd-index-heading">Functions</h3>
-                  <div class="tsd-index-list">
-                    <a href="functions/createOakClient.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>create<wbr />Oak<wbr />Client</span></a
-                    >
-                    <a href="functions/createOakPathBasedClient.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>create<wbr />Oak<wbr />Path<wbr />Based<wbr />Client</span></a
-                    >
-                    <a href="functions/executeToolCall.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>execute<wbr />Tool<wbr />Call</span></a
-                    >
-                    <a href="functions/isLessonGroups.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>is<wbr />Lesson<wbr />Groups</span></a
-                    >
-                    <a href="functions/isTranscriptResponse.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>is<wbr />Transcript<wbr />Response</span></a
-                    >
-                    <a href="functions/isUnitsGrouped.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>is<wbr />Units<wbr />Grouped</span></a
-                    >
-                    <a href="functions/typeSafeEntries.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Entries</span></a
-                    >
-                    <a href="functions/typeSafeFromEntries.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />From<wbr />Entries</span></a
-                    >
-                    <a href="functions/typeSafeGet.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Get</span></a
-                    >
-                    <a href="functions/typeSafeHas.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Has</span></a
-                    >
-                    <a href="functions/typeSafeHasOwn.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Has<wbr />Own</span></a
-                    >
-                    <a href="functions/typeSafeKeys.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Keys</span></a
-                    >
-                    <a href="functions/typeSafeOwnKeys.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Own<wbr />Keys</span></a
-                    >
-                    <a href="functions/typeSafeSet.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Set</span></a
-                    >
-                    <a href="functions/typeSafeValues.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>type<wbr />Safe<wbr />Values</span></a
-                    >
-                    <a href="functions/validateRequest.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>validate<wbr />Request</span></a
-                    >
-                    <a href="functions/validateResponse.html" class="tsd-index-link"
-                      ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                        <use href="assets/icons.svg#icon-64"></use></svg
-                      ><span>validate<wbr />Response</span></a
-                    >
-                  </div>
-                </section>
-              </div>
-            </details>
-          </section>
-        </section>
+        <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
+          <summary class="tsd-accordion-summary" data-key="section-Classes">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Classes</h2>
+          </summary>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="mcpparametererror">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Class">
+                  <use href="assets/icons.svg#icon-128"></use></svg
+                ><a href="classes/McpParameterError.html">McpParameterError</a
+                ><a href="#mcpparametererror" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="mcptoolerror">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Class">
+                  <use href="assets/icons.svg#icon-128"></use></svg
+                ><a href="classes/McpToolError.html">McpToolError</a
+                ><a href="#mcptoolerror" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
+        </details>
+        <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
+          <summary class="tsd-accordion-summary" data-key="section-Interfaces">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Interfaces</h2>
+          </summary>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="lessonsindexdoc">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                  <use href="assets/icons.svg#icon-256"></use></svg
+                ><a href="interfaces/LessonsIndexDoc.html">LessonsIndexDoc</a
+                ><a href="#lessonsindexdoc" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="unitrollupdoc">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                  <use href="assets/icons.svg#icon-256"></use></svg
+                ><a href="interfaces/UnitRollupDoc.html">UnitRollupDoc</a
+                ><a href="#unitrollupdoc" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="unitsindexdoc">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                  <use href="assets/icons.svg#icon-256"></use></svg
+                ><a href="interfaces/UnitsIndexDoc.html">UnitsIndexDoc</a
+                ><a href="#unitsindexdoc" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="validatedclientoptions">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                  <use href="assets/icons.svg#icon-256"></use></svg
+                ><a href="interfaces/ValidatedClientOptions.html">ValidatedClientOptions</a
+                ><a href="#validatedclientoptions" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="validationissue">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                  <use href="assets/icons.svg#icon-256"></use></svg
+                ><a href="interfaces/ValidationIssue.html">ValidationIssue</a
+                ><a href="#validationissue" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
+        </details>
+        <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
+          <summary class="tsd-accordion-summary" data-key="section-Type Aliases">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Type Aliases</h2>
+          </summary>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="httpmethod">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                  <use href="assets/icons.svg#icon-2097152"></use></svg
+                ><a href="types/HttpMethod.html">HttpMethod</a
+                ><a href="#httpmethod" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="oakapiclient">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                  <use href="assets/icons.svg#icon-2097152"></use></svg
+                ><a href="types/OakApiClient.html">OakApiClient</a
+                ><a href="#oakapiclient" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="oakapipathbasedclient">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                  <use href="assets/icons.svg#icon-2097152"></use></svg
+                ><a href="types/OakApiPathBasedClient.html">OakApiPathBasedClient</a
+                ><a href="#oakapipathbasedclient" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="subjectslug">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                  <use href="assets/icons.svg#icon-2097152"></use></svg
+                ><a href="types/SubjectSlug.html">SubjectSlug</a
+                ><a href="#subjectslug" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="validationresult">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                  <use href="assets/icons.svg#icon-2097152"></use></svg
+                ><a href="types/ValidationResult.html">ValidationResult</a
+                ><a href="#validationresult" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
+        </details>
+        <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
+          <summary class="tsd-accordion-summary" data-key="section-Variables">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Variables</h2>
+          </summary>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="apischemaurl">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Variable">
+                  <use href="assets/icons.svg#icon-32"></use></svg
+                ><a href="variables/apiSchemaUrl.html">apiSchemaUrl</a
+                ><a href="#apischemaurl" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="apiurl">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Variable">
+                  <use href="assets/icons.svg#icon-32"></use></svg
+                ><a href="variables/apiUrl.html">apiUrl</a
+                ><a href="#apiurl" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
+        </details>
+        <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
+          <summary class="tsd-accordion-summary" data-key="section-Functions">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>Functions</h2>
+          </summary>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="createoakclient">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/createOakClient.html">createOakClient</a
+                ><a href="#createoakclient" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="createoakpathbasedclient">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/createOakPathBasedClient.html">createOakPathBasedClient</a
+                ><a href="#createoakpathbasedclient" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="executetoolcall">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/executeToolCall.html">executeToolCall</a
+                ><a href="#executetoolcall" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="islessongroups">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/isLessonGroups.html">isLessonGroups</a
+                ><a href="#islessongroups" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="istranscriptresponse">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/isTranscriptResponse.html">isTranscriptResponse</a
+                ><a href="#istranscriptresponse" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="isunitsgrouped">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/isUnitsGrouped.html">isUnitsGrouped</a
+                ><a href="#isunitsgrouped" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafeentries">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeEntries.html">typeSafeEntries</a
+                ><a href="#typesafeentries" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafefromentries">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeFromEntries.html">typeSafeFromEntries</a
+                ><a href="#typesafefromentries" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafeget">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeGet.html">typeSafeGet</a
+                ><a href="#typesafeget" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafehas">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeHas.html">typeSafeHas</a
+                ><a href="#typesafehas" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafehasown">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeHasOwn.html">typeSafeHasOwn</a
+                ><a href="#typesafehasown" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafekeys">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeKeys.html">typeSafeKeys</a
+                ><a href="#typesafekeys" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafeownkeys">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeOwnKeys.html">typeSafeOwnKeys</a
+                ><a href="#typesafeownkeys" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafeset">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeSet.html">typeSafeSet</a
+                ><a href="#typesafeset" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="typesafevalues">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/typeSafeValues.html">typeSafeValues</a
+                ><a href="#typesafevalues" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="validaterequest">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/validateRequest.html">validateRequest</a
+                ><a href="#validaterequest" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+            <dt class="tsd-member-summary" id="validateresponse">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><a href="functions/validateResponse.html">validateResponse</a
+                ><a href="#validateresponse" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
+        </details>
         <details class="tsd-panel-group tsd-member-group tsd-accordion" open>
           <summary class="tsd-accordion-summary" data-key="section-References">
-            <h2>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <use href="assets/icons.svg#icon-chevronDown"></use>
-              </svg>
-              References
-            </h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <use href="assets/icons.svg#icon-chevronDown"></use>
+            </svg>
+            <h2>References</h2>
           </summary>
-          <section>
-            <section class="tsd-panel tsd-member">
-              <a id="createApiClient" class="tsd-anchor"></a>
-              <h3 class="tsd-anchor-link">
-                <span>create<wbr />Api<wbr />Client</span
-                ><a href="#createApiClient" aria-label="Permalink" class="tsd-anchor-icon"
-                  ><svg viewBox="0 0 24 24"><use href="assets/icons.svg#icon-anchor"></use></svg
-                ></a>
-              </h3>
-              Renames and re-exports <a href="functions/createOakClient.html">createOakClient</a>
-            </section>
-          </section>
+          <dl class="tsd-member-summaries">
+            <dt class="tsd-member-summary" id="createapiclient">
+              <span class="tsd-member-summary-name"
+                ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                  <use href="assets/icons.svg#icon-64"></use></svg
+                ><span>createApiClient</span><span> → </span
+                ><a href="functions/createOakClient.html">createOakClient</a
+                ><a href="#createapiclient" aria-label="Permalink" class="tsd-anchor-icon"
+                  ><svg viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-anchor"></use></svg></a
+              ></span>
+            </dt>
+            <dd class="tsd-member-summary"></dd>
+          </dl>
         </details>
       </div>
       <div class="col-sidebar">
@@ -289,11 +481,10 @@
           <div class="tsd-navigation settings">
             <details class="tsd-accordion">
               <summary class="tsd-accordion-summary">
-                <h3>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
-                  >Settings
-                </h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <use href="assets/icons.svg#icon-chevronDown"></use>
+                </svg>
+                <h3>Settings</h3>
               </summary>
               <div class="tsd-accordion-details">
                 <div class="tsd-filter-visibility">
@@ -398,23 +589,196 @@
           </div>
           <details open class="tsd-accordion tsd-page-navigation">
             <summary class="tsd-accordion-summary">
-              <h3>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <use href="assets/icons.svg#icon-chevronDown"></use></svg
-                >On This Page
-              </h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <use href="assets/icons.svg#icon-chevronDown"></use>
+              </svg>
+              <h3>On This Page</h3>
             </summary>
             <div class="tsd-accordion-details">
               <details open class="tsd-accordion tsd-page-navigation-section">
-                <summary class="tsd-accordion-summary" data-key="tsd-otp-References">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <summary class="tsd-accordion-summary" data-key="section-Classes">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
+                  >Classes
+                </summary>
+                <div>
+                  <a href="#mcpparametererror"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Class">
+                      <use href="assets/icons.svg#icon-128"></use></svg
+                    ><span>Mcp<wbr />Parameter<wbr />Error</span></a
+                  ><a href="#mcptoolerror"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Class">
+                      <use href="assets/icons.svg#icon-128"></use></svg
+                    ><span>Mcp<wbr />Tool<wbr />Error</span></a
+                  >
+                </div>
+              </details>
+              <details open class="tsd-accordion tsd-page-navigation-section">
+                <summary class="tsd-accordion-summary" data-key="section-Interfaces">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
+                  >Interfaces
+                </summary>
+                <div>
+                  <a href="#lessonsindexdoc"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                      <use href="assets/icons.svg#icon-256"></use></svg
+                    ><span>Lessons<wbr />Index<wbr />Doc</span></a
+                  ><a href="#unitrollupdoc"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                      <use href="assets/icons.svg#icon-256"></use></svg
+                    ><span>Unit<wbr />Rollup<wbr />Doc</span></a
+                  ><a href="#unitsindexdoc"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                      <use href="assets/icons.svg#icon-256"></use></svg
+                    ><span>Units<wbr />Index<wbr />Doc</span></a
+                  ><a href="#validatedclientoptions"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                      <use href="assets/icons.svg#icon-256"></use></svg
+                    ><span>Validated<wbr />Client<wbr />Options</span></a
+                  ><a href="#validationissue"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Interface">
+                      <use href="assets/icons.svg#icon-256"></use></svg
+                    ><span>Validation<wbr />Issue</span></a
+                  >
+                </div>
+              </details>
+              <details open class="tsd-accordion tsd-page-navigation-section">
+                <summary class="tsd-accordion-summary" data-key="section-Type Aliases">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
+                  >Type Aliases
+                </summary>
+                <div>
+                  <a href="#httpmethod"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                      <use href="assets/icons.svg#icon-2097152"></use></svg
+                    ><span>Http<wbr />Method</span></a
+                  ><a href="#oakapiclient"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                      <use href="assets/icons.svg#icon-2097152"></use></svg
+                    ><span>Oak<wbr />Api<wbr />Client</span></a
+                  ><a href="#oakapipathbasedclient"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                      <use href="assets/icons.svg#icon-2097152"></use></svg
+                    ><span>Oak<wbr />Api<wbr />Path<wbr />Based<wbr />Client</span></a
+                  ><a href="#subjectslug"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                      <use href="assets/icons.svg#icon-2097152"></use></svg
+                    ><span>Subject<wbr />Slug</span></a
+                  ><a href="#validationresult"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Type Alias">
+                      <use href="assets/icons.svg#icon-2097152"></use></svg
+                    ><span>Validation<wbr />Result</span></a
+                  >
+                </div>
+              </details>
+              <details open class="tsd-accordion tsd-page-navigation-section">
+                <summary class="tsd-accordion-summary" data-key="section-Variables">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
+                  >Variables
+                </summary>
+                <div>
+                  <a href="#apischemaurl"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Variable">
+                      <use href="assets/icons.svg#icon-32"></use></svg
+                    ><span>api<wbr />Schema<wbr />Url</span></a
+                  ><a href="#apiurl"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Variable">
+                      <use href="assets/icons.svg#icon-32"></use></svg
+                    ><span>api<wbr />Url</span></a
+                  >
+                </div>
+              </details>
+              <details open class="tsd-accordion tsd-page-navigation-section">
+                <summary class="tsd-accordion-summary" data-key="section-Functions">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <use href="assets/icons.svg#icon-chevronDown"></use></svg
+                  >Functions
+                </summary>
+                <div>
+                  <a href="#createoakclient"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>create<wbr />Oak<wbr />Client</span></a
+                  ><a href="#createoakpathbasedclient"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>create<wbr />Oak<wbr />Path<wbr />Based<wbr />Client</span></a
+                  ><a href="#executetoolcall"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>execute<wbr />Tool<wbr />Call</span></a
+                  ><a href="#islessongroups"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>is<wbr />Lesson<wbr />Groups</span></a
+                  ><a href="#istranscriptresponse"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>is<wbr />Transcript<wbr />Response</span></a
+                  ><a href="#isunitsgrouped"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>is<wbr />Units<wbr />Grouped</span></a
+                  ><a href="#typesafeentries"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Entries</span></a
+                  ><a href="#typesafefromentries"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />From<wbr />Entries</span></a
+                  ><a href="#typesafeget"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Get</span></a
+                  ><a href="#typesafehas"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Has</span></a
+                  ><a href="#typesafehasown"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Has<wbr />Own</span></a
+                  ><a href="#typesafekeys"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Keys</span></a
+                  ><a href="#typesafeownkeys"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Own<wbr />Keys</span></a
+                  ><a href="#typesafeset"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Set</span></a
+                  ><a href="#typesafevalues"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>type<wbr />Safe<wbr />Values</span></a
+                  ><a href="#validaterequest"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>validate<wbr />Request</span></a
+                  ><a href="#validateresponse"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
+                    ><span>validate<wbr />Response</span></a
+                  >
+                </div>
+              </details>
+              <details open class="tsd-accordion tsd-page-navigation-section">
+                <summary class="tsd-accordion-summary" data-key="section-References">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <use href="assets/icons.svg#icon-chevronDown"></use></svg
                   >References
                 </summary>
                 <div>
-                  <a href="#createApiClient" class=""
-                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                      <use href="assets/icons.svg#icon-4194304"></use></svg
+                  <a href="#createapiclient"
+                    ><svg class="tsd-kind-icon" viewBox="0 0 24 24" aria-label="Function">
+                      <use href="assets/icons.svg#icon-64"></use></svg
                     ><span>create<wbr />Api<wbr />Client</span></a
                   >
                 </div>
@@ -424,12 +788,8 @@
         </div>
         <div class="site-menu">
           <nav class="tsd-navigation">
-            <a href="index.html" class="current"
-              ><svg class="tsd-kind-icon" viewBox="0 0 24 24">
-                <use href="assets/icons.svg#icon-1"></use></svg
-              ><span>@oaknational/oak-curriculum-sdk - v0.0.1</span></a
-            >
-            <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base=".">
+            <a href="index.html" class="current">@oaknational/oak-curriculum-sdk - v0.0.1</a>
+            <ul class="tsd-small-nested-navigation" id="tsd-nav-container">
               <li>Loading...</li>
             </ul>
           </nav>

@@ -2,6 +2,11 @@
 
 ### createOakClient
 
+Oak Curriculum SDK
+
+TypeScript SDK for accessing Oak National Academy's Curriculum API.
+This SDK provides a type-safe client using openapi-fetch with generated types.
+
 ```ts
 function createOakClient(apiKey: string): OakApiClient;
 ```
@@ -12,6 +17,11 @@ Environment-agnostic: The SDK core never reads environment variables.
 Always pass the API key explicitly.
 
 ### createOakPathBasedClient
+
+Oak Curriculum SDK
+
+TypeScript SDK for accessing Oak National Academy's Curriculum API.
+This SDK provides a type-safe client using openapi-fetch with generated types.
 
 ```ts
 function createOakPathBasedClient(apiKey: string): OakApiPathBasedClient;
@@ -25,7 +35,11 @@ Always pass the API key explicitly.
 ### executeToolCall
 
 ```ts
-function executeToolCall(maybeToolName: unknown, maybeParams: unknown, client: PathBasedClient<paths, <templateLiteral>(…)>): Promise<ToolExecutionResult>
+function executeToolCall(
+  maybeToolName: unknown,
+  maybeParams: unknown,
+  client: OakApiPathBasedClient,
+): Promise<ToolExecutionResult>;
 ```
 
 Ultra-thin executor - just validation and delegation to embedded executor
@@ -59,7 +73,7 @@ Typed entries (Object.entries)
 ### typeSafeFromEntries
 
 ```ts
-function typeSafeFromEntries(iter: Iterable<<typeOperator>(…), any, any>): Record<K, V>
+function typeSafeFromEntries(iter: Iterable<<typeOperator>(…)>): Record<K, V>
 ```
 
 Typed fromEntries (Object.fromEntries)

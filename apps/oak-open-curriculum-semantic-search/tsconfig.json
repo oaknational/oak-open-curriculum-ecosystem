@@ -1,13 +1,18 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "jsx": "preserve",
     "jsxImportSource": "react",
     "noEmit": true,
     "incremental": true,
+    "paths": {
+      "@/*": ["./*"],
+      "@oaknational/oak-curriculum-sdk": ["../../packages/sdks/oak-curriculum-sdk"],
+      "@oaknational/oak-curriculum-sdk/*": ["../../packages/sdks/oak-curriculum-sdk/*"]
+    },
     "plugins": [
       {
         "name": "next"
@@ -16,6 +21,6 @@
     "allowJs": true,
     "isolatedModules": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styled.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

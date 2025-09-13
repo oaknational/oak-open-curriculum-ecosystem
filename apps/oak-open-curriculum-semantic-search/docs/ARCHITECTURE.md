@@ -16,7 +16,7 @@
 
 ## Endpoints
 
-- **Structured**: `POST /api/search` – requires a structured body (no LLM).
+- **Structured**: `POST /api/search` – requires a structured body.
 - **Natural language**: `POST /api/search/nl` – converts `q` into a structured query via LLM (disabled if no OPENAI_API_KEY).
 - **Indexer**: `GET /api/index-oak` (admin header `x-api-key`).
 - **Rollup**: `GET /api/rebuild-rollup` (admin header `x-api-key`).

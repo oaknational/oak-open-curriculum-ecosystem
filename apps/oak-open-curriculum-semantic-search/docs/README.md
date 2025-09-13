@@ -10,7 +10,7 @@ A Next.js workspace that indexes Oak curriculum content and exposes a hybrid (se
   - `oak_unit_rollup` — unit-level snippets + `unit_semantic`
 - **Hybrid search (BM25 + ELSER)** fused with **RRF**
 - **Two search endpoints**
-  - **Structured**: `POST /api/search` (no LLM)
+  - **Structured**: `POST /api/search`
   - **Natural language**: `POST /api/search/nl` (LLM parsing; returns 501 if disabled)
 - **Transcript & rollup highlights**
 - **SDK-first indexing** (no raw HTTP)

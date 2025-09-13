@@ -5,15 +5,14 @@ const BaseEnvSchema = z.object({
   ELASTICSEARCH_URL: z.url(),
   ELASTICSEARCH_API_KEY: z.string().min(10),
   OAK_API_KEY: z.string().min(6).optional(),
-  OAK_API_BEARER: z.string().min(6).optional(),
   SEARCH_API_KEY: z.string().min(10),
   AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
   OPENAI_API_KEY: z.string().min(10).optional(),
 });
 
 const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
-  if (!(v.OAK_API_KEY || v.OAK_API_BEARER)) {
-    ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY or OAK_API_BEARER.' });
+  if (!v.OAK_API_KEY) {
+    ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY.' });
   }
   if (v.AI_PROVIDER === 'openai' && (!v.OPENAI_API_KEY || v.OPENAI_API_KEY.length < 10)) {
     ctx.addIssue({
@@ -32,13 +31,12 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
     ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
     OAK_API_KEY: process.env.OAK_API_KEY,
-    OAK_API_BEARER: process.env.OAK_API_BEARER,
     SEARCH_API_KEY: process.env.SEARCH_API_KEY,
     AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   });
   if (!parsed.success) throw new Error(parsed.error.message);
-  const key = parsed.data.OAK_API_KEY ?? parsed.data.OAK_API_BEARER ?? '';
+  const key = parsed.data.OAK_API_KEY ?? '';
   cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
   return cached;
 }

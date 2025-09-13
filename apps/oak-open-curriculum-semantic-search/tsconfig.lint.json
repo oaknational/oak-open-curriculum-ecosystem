@@ -1,12 +1,7 @@
 {
-  "extends": "../../tsconfig.lint.root.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "noEmit": true,
-    "incremental": false,
-    "jsx": "react-jsx",
-    "lib": ["ES2022", "DOM"]
+    "noEmit": true
   },
-  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules", ".next", "dist", "out"]
 }
