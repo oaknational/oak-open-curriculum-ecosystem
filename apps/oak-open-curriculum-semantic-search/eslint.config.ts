@@ -34,6 +34,8 @@ const config: ConfigArray = [
     languageOptions: {
       parserOptions: {
         projectService: true,
+        project: './tsconfig.lint.json',
+        tsconfigRootDir: thisDir,
       },
     },
     rules: {

@@ -34,7 +34,9 @@ export function Providers({ children }: { children: React.ReactNode }): JSX.Elem
 
   useEffect(() => {
     // Keep in sync with changes from ThemeSelect if they occur after mount
-    const saved = window.localStorage.getItem('theme-mode') as ThemeMode | null;
+    const raw = window.localStorage.getItem('theme-mode');
+    const saved: ThemeMode | null =
+      raw === 'light' || raw === 'dark' || raw === 'system' ? raw : null;
     if (saved && saved !== mode) setMode(saved);
   }, [mode]);
 

@@ -1,8 +1,9 @@
 'use client';
 
+import type { JSX } from 'react';
 import { RedocStandalone } from 'redoc';
 
-export default function ApiDocsPage() {
+export default function ApiDocsPage(): JSX.Element {
   const specUrl = '/api/openapi.json';
   return (
     <main style={{ padding: 16 }}>

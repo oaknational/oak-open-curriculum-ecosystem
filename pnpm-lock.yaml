@@ -63,8 +63,8 @@ importers:
         specifier: ^0.45.0
         version: 0.45.0
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -231,8 +231,8 @@ importers:
         version: 4.0.15
     devDependencies:
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -334,8 +334,8 @@ importers:
         version: 17.2.1
     devDependencies:
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -350,8 +350,8 @@ importers:
         version: 3.4.2
     devDependencies:
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -363,8 +363,8 @@ importers:
         version: link:../../core/mcp-core
     devDependencies:
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -376,8 +376,8 @@ importers:
         version: link:../../core/mcp-core
     devDependencies:
       pnpm:
-        specifier: ^10.15.1
-        version: 10.15.1
+        specifier: ^10.16.0
+        version: 10.16.0
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -4422,8 +4422,8 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  pnpm@10.15.1:
-    resolution: {integrity: sha512-NOU4wym1VTAUyo6PRTWZf5YYCh0PYUM5NXRJk1NQ2STiL4YUaCGRJk7DPRRirCFWGv+X9rsYBlNRwWLH6PbeZw==}
+  pnpm@10.16.0:
+    resolution: {integrity: sha512-gGbnsDQhe3AKmk27OgBQYdZBuhMKiZFSE6ELPKSRnBnAN77IBmr9xVm4ljX9uAaxbqZz8kaPuyiqv6E8U+P3aQ==}
     engines: {node: '>=18.12'}
     hasBin: true
 
@@ -10023,7 +10023,7 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  pnpm@10.15.1: {}
+  pnpm@10.16.0: {}
 
   polished@4.3.1:
     dependencies:

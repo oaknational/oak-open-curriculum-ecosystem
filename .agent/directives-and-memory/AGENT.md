@@ -12,11 +12,17 @@ Now reflect on what you are doing. Would you like to update your todo list or th
 
 ## Prime Directive
 
+Always applies
+
 **Ask: could it be simpler without compromising quality?**
+
+## Cardinal Rules of _This Project_
+
+ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run.
 
 ## Project Context
 
-**What**: oak-notion-mcp - MCP server for Notion API access  
+**What**: SDK, MCP servers, and Search services for the Oak Open Curriculum API  
 **Package Manager**: pnpm (REQUIRED - never npm/yarn)  
 **Commands**: See [Development Commands](#development-commands) below
 

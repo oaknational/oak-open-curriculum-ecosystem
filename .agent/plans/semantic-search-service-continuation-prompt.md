@@ -1,6 +1,6 @@
 # Semantic Search Service — Continuation Prompt (Living Context)
 
-_Last updated: 2025‑09‑12 (Europe/London)_
+_Last updated: 2025‑09‑13 (Europe/London)_
 
 Purpose: Preserve essential working context so any agent can immediately continue the Oak Curriculum **hybrid search** project without re‑reading full threads. Pairs with the implementation plan `semantic-search-service-plan.md`. Keep this concise, current, and actionable.
 
@@ -22,7 +22,7 @@ Purpose: Preserve essential working context so any agent can immediately continu
 - **OpenAPI**: schema at `/api/openapi.json`, docs UI at `/api/docs`
 - **SDK**: All data via `@oaknational/oak-curriculum-sdk`; runtime guards validate Subject/KeyStage
 - **ES client**: Official `@elastic/elasticsearch`
-- **UI/Health**: Minimal `/search` page (Structured + NL tabs); `/healthz` route (ES, SDK, LLM)
+- **UI/Health**: Canonical search page at `/` with header/nav/theme; `/healthz` route (ES, SDK, LLM)
 
 ---
 
@@ -54,25 +54,18 @@ LLM optionality: `/api/search` never requires OpenAI. `/api/search/nl` returns `
 
 ---
 
-## Rebase-first note
+## Rebase status
 
-The `main` branch contains significant SDK/MCP refactors (shortened tool names, alphabetical ordering, validation hardening, typegen + schema cache behavior). **Rebase `feat/semantic_search` onto `origin/main` before continuing.**
-
-### Quick rebase checklist
-
-1. `git fetch origin && git rebase origin/main`
-2. Resolve conflicts in: SDK typegen/scripts, generated MCP tools/tests, validators/response map, `turbo.json`, `pnpm-workspace.yaml`, workspace `eslint.config.ts`, `pnpm-lock.yaml`
-3. Regenerate types/tools; delete stale `oak-*` generated artifacts
-4. Run full root quality gates until green; then `git push --force-with-lease`
+Completed. Branch aligned with `origin/main`; types/tools regenerated; lockfile re-resolved via `pnpm i`.
 
 ---
 
 ## Immediate next tasks
 
-- Rebase and align with `main` (see checklist)
-- Add unit tests for hybrid-search (fusion/filters/highlights/rollup fallback) and OpenAPI builder
-- Prepare Vercel deploy (set env vars) and smoke `/api/docs` + `/api/search`
-- Oakify `/search` with Oak Components (keep Structured/NL tabs; strong a11y)
+- Resolve linting issues in the semantic search app in line with `/.agent/directives-and-memory/rules.md` and `/docs/agent-guidance/typescript-practice.md`
+- Resolve all other quality gates to the highest possible standards (install → type-gen → build → type-check → lint → docs:all → format → markdownlint → test → test:e2e) until green
+- Commit and push; then review next steps and plan
+- Follow-on: tests for hybrid-search and OpenAPI builder; Oak Components integration; Vercel deploy
 
 ---
 

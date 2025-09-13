@@ -16,8 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const rootTsProject = fileURLToPath(new URL('../../tsconfig.lint.root.json', import.meta.url));
-const repoRootDir = dirname(rootTsProject);
+const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config: ConfigArray = tsEslintConfig(
   ...baseConfig,
@@ -29,17 +28,22 @@ const config: ConfigArray = tsEslintConfig(
     languageOptions: {
       parserOptions: {
         projectService: false,
-        project: rootTsProject,
-        tsconfigRootDir: repoRootDir,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
       },
     },
     settings: {
       ...commonSettings,
       'import-x/resolver': {
         ...commonSettings['import-x/resolver'],
+        node: {
+          extensions: ['.ts', '.js'],
+          // Honour the package.json "exports" condition we use during dev
+          conditions: ['development', 'import', 'types'],
+        },
         typescript: {
           ...commonSettings['import-x/resolver'].typescript,
-          project: rootTsProject,
+          project: wsTsProject,
         },
       },
     },

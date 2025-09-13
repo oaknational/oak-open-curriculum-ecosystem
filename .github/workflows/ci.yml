@@ -37,7 +37,8 @@ jobs:
         run: pnpm format:check
 
       - name: Run linting
-        run: pnpm lint --only
+        # The semantic search app is linted during build on Vercel, no need to duplicate the linting here
+        run: pnpm lint --only --filter=!@oaknational/open-curriculum-semantic-search
 
       - name: Run type checking
         run: pnpm type-check --only
@@ -46,4 +47,5 @@ jobs:
         run: pnpm test --only
 
       - name: Build project
-        run: pnpm build --only
+        # The hosted MCP server and the semantic search app are built in Vercel, no need to duplicate the build here
+        run: pnpm build --only --filter=!@oaknational/oak-curriculum-mcp-streamable-http --filter=!@oaknational/open-curriculum-semantic-search

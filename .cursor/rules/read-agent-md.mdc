@@ -1,7 +1,7 @@
 ---
-description: Always read AGENT.md file to understand the project and the agent's role.
-globs: .agent/directives-and-memory/AGENT.md
+description: Always read AGENT.md and rules.md to understand the project and the agent's role.
+globs: .agent/directives-and-memory/AGENT.md, .agent/directives-and-memory/rules.md
 alwaysApply: true
 ---
 
-Read AGENT.md file to understand the project and the agent's role.
+Read AGENT.md and rules.md files to understand the project and the agent's role.

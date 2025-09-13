@@ -49,42 +49,29 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
   - Official Elasticsearch client types adopted; removed custom generic shapes
   - TS path aliases removed; imports are relative (incl. Vitest)
   - Type-check configured for App Router: `tsconfig.lint.json` uses `jsx: react-jsx` and includes DOM libs
-- UI/Health: Minimal `/search` page (plain HTML, Structured + NL tabs) and `/healthz` route (ES, SDK, LLM status)
+- UI/Health: Canonical search page at `/` with shared header (logo home link, nav links, theme selector); theme SSR hint via cookie + early script; Styled Components SSR wired; `/healthz` reports ES/SDK/LLM with correct status codes
+- Admin: New `/admin` page to run ES setup, indexing, and rollup with streaming output
 - Tests: basic RRF unit test exists; hybrid-search and OpenAPI tests pending
-- Build status: Monorepo build succeeds
-- Not yet done (top items): **rebase onto `main`**, test coverage uplift (hybrid-search and OpenAPI), Vercel deploy smoke, Oak Components UI, `/admin` UI
+- Build status: Monorepo builds succeed for packages; Next.js workspace fails the build on strict ESLint violations (in-progress fixes)
+- Rebase: Completed onto `origin/main` (conflicts resolved; types/tools regenerated)
 
 ---
 
-## Merge strategy: Rebase first
+## Merge strategy: Rebase
 
-We will rebase `feat/semantic_search` onto `origin/main` before continuing feature work to minimize divergence and reduce long‑lived conflicts.
-
-### Rebase checklist
-
-1. Fetch and rebase: `git fetch origin && git rebase origin/main`
-2. Resolve conflicts in hotspots (below), then regenerate types and tools
-3. Run full root quality gates until green (see Quality gates)
-4. Push with `--force-with-lease`
-
-### Conflict hotspots to expect
-
-- SDK typegen and schema cache: `packages/sdks/oak-curriculum-sdk/scripts/**` (typegen.ts, helpers, schema-cache)
-- Generated MCP tool artifacts and tests referencing old `oak-*` tool names and ordering (update to shortened names and alphabetical order)
-- Validation/response mapping: request/response validators and response-map emitters
-- Monorepo wiring: `pnpm-workspace.yaml`, `turbo.json`, workspace `eslint.config.ts`
-- Lockfile: `pnpm-lock.yaml` (re-resolve after rebase)
+Status: Completed. `feat/semantic_search` is rebased onto `origin/main` and aligned with SDK/MCP changes. Lockfile was re-resolved via `pnpm i`. Resolved hotspots included ESLint configs, SDK typegen outputs, response mapping, `turbo.json`, and workspace wiring.
 
 ---
 
 ## Near‑term priorities (ranked)
 
-0. Rebase `feat/semantic_search` onto `origin/main` and align SDK/MCP changes
-1. Tests: add unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
-2. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
-3. Oakify `/search` with Oak Components (keep Structured vs NL tabs; strong a11y)
-4. `/admin` UI (guarded by `x-api-key`) for index + rollup
-5. MCP exposure from OpenAPI (non‑admin tools by default)
+0. Resolve linting issues in the semantic search app per `/.agent/directives-and-memory/rules.md` and `/docs/agent-guidance/typescript-practice.md`
+1. Resolve all other quality gates to the highest possible standards (install → type-gen → build → type-check → lint → docs:all → format → markdownlint → test → test:e2e) until green
+2. Commit and push the branch; then review and plan next steps
+3. Add unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
+4. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
+5. Oakify the UI using Oak Components (retain Structured/NL tabs; strong a11y)
+6. MCP exposure from OpenAPI (non‑admin tools by default)
 
 ---
 

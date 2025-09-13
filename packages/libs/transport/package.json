@@ -39,7 +39,7 @@
     "@oaknational/mcp-core": "workspace:^"
   },
   "devDependencies": {
-    "pnpm": "^10.15.1",
+    "pnpm": "^10.16.0",
     "typescript": "^5.9.2"
   },
   "engines": {

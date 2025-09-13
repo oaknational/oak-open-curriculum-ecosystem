@@ -1,45 +1,10 @@
 'use client';
 
 import type { JSX } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useStream } from '@/app/lib/useStream';
 
-type RunState = 'idle' | 'running' | 'done' | 'error';
-
-function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }) {
-  const [state, setState] = useState<RunState>('idle');
-  const [text, setText] = useState('');
-  const ctrlRef = useRef<AbortController | null>(null);
-
-  async function run() {
-    try {
-      setText('');
-      setState('running');
-      ctrlRef.current?.abort();
-      const ctrl = new AbortController();
-      ctrlRef.current = ctrl;
-      const res = await fetch(url, { method: method ?? 'POST', signal: ctrl.signal });
-      if (!res.body) {
-        setText(await res.text());
-        setState(res.ok ? 'done' : 'error');
-        return;
-      }
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      // Use an infinite for-loop to avoid a boolean-constant condition
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        setText((t) => t + decoder.decode(value, { stream: true }));
-      }
-      setState(res.ok ? 'done' : 'error');
-    } catch (e) {
-      setState('error');
-      setText(String(e));
-    }
-  }
-
-  useEffect(() => () => ctrlRef.current?.abort(), []);
-
+function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
+  const { state, text, run } = useStream(url, method ?? 'POST');
   return (
     <section style={{ marginBottom: 24 }}>
       <button
