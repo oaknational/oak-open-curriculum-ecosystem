@@ -9,9 +9,7 @@
     "noEmit": true,
     "incremental": true,
     "paths": {
-      "@/*": ["./*"],
-      "@oaknational/oak-curriculum-sdk": ["../../packages/sdks/oak-curriculum-sdk"],
-      "@oaknational/oak-curriculum-sdk/*": ["../../packages/sdks/oak-curriculum-sdk/*"]
+      "@/*": ["./*"]
     },
     "plugins": [
       {

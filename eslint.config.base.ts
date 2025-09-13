@@ -45,7 +45,8 @@ export const baseRules: ConfigArray = [
 export const tsRules: Linter.RulesRecord = {
   // Types
   '@typescript-eslint/no-explicit-any': ['error', { fixToUnknown: true, ignoreRestArgs: false }],
-  '@typescript-eslint/no-unused-vars': ['error'],
+  'no-unused-vars': 'off',
+  '@typescript-eslint/no-unused-vars': 'error',
   '@typescript-eslint/explicit-module-boundary-types': 'error',
   '@typescript-eslint/no-non-null-assertion': 'error',
   '@typescript-eslint/consistent-type-assertions': [

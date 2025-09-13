@@ -2,15 +2,18 @@
  * ESLint Configuration for Oak Open Curriculum Semantic Search
  */
 
-import type { ConfigArray } from 'typescript-eslint';
-import { ignores, tsRules } from '../../eslint.config.base';
-import { appBoundaryRules, appArchitectureRules } from '../../eslint-rules/index.js';
-import { FlatCompat } from '@eslint/eslintrc';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
+
+import { FlatCompat } from '@eslint/eslintrc';
 import eslint from '@eslint/js';
+
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
+import type { ConfigArray } from 'typescript-eslint';
+
+import { ignores, tsRules } from '../../eslint.config.base';
+import { appBoundaryRules, appArchitectureRules } from '../../eslint-rules/index.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
@@ -26,8 +29,6 @@ const config: ConfigArray = [
     settings: { next: { rootDir: '.' } },
   }),
   eslint.configs.recommended,
-  importX.flatConfigs.recommended,
-  importX.flatConfigs.typescript,
   prettierRecommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -45,6 +46,8 @@ const config: ConfigArray = [
       ...tsRules,
     },
   },
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
 ];
 
 export default config;

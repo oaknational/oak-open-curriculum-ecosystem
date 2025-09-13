@@ -10,7 +10,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint --cache .",
+    "lint": "eslint .",
     "type-check": "tsc -p tsconfig.lint.json",
     "format": "prettier --write --cache .",
     "test": "vitest run",

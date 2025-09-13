@@ -1,6 +1,6 @@
 'use client';
 
-import type { JSX } from 'react';
+import type { JSX, FormEventHandler, Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
 
@@ -11,14 +11,16 @@ const ApiResponseSchema = z
   })
   .loose();
 
+function safeJsonParse(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
 function parseResponse(resOk: boolean, txt: string): { error: string | null; results: unknown[] } {
-  const parsed = (() => {
-    try {
-      return JSON.parse(txt) as unknown;
-    } catch {
-      return null as unknown;
-    }
-  })();
+  const parsed = safeJsonParse(txt);
   const safe = ApiResponseSchema.safeParse(parsed);
   if (!safe.success) return { error: resOk ? null : 'Search failed', results: [] };
   const data = safe.data;
@@ -32,14 +34,109 @@ export interface NaturalBody {
   size?: number;
 }
 
+function QueryField({
+  nl,
+  setNl,
+}: {
+  nl: NaturalBody;
+  setNl: Dispatch<SetStateAction<NaturalBody>>;
+}): JSX.Element {
+  return (
+    <label>
+      Query
+      <input
+        type="text"
+        value={nl.q}
+        onChange={(e) => {
+          setNl((s) => ({ ...s, q: e.target.value }));
+        }}
+        required
+      />
+    </label>
+  );
+}
+
+function ScopeField({
+  nl,
+  setNl,
+}: {
+  nl: NaturalBody;
+  setNl: Dispatch<SetStateAction<NaturalBody>>;
+}): JSX.Element {
+  return (
+    <label>
+      Scope
+      <select
+        value={nl.scope}
+        onChange={(e) => {
+          const v = e.target.value;
+          if (v === 'units' || v === 'lessons') setNl((s) => ({ ...s, scope: v }));
+        }}
+      >
+        <option value="units">Units</option>
+        <option value="lessons">Lessons</option>
+      </select>
+    </label>
+  );
+}
+
+function SizeField({
+  nl,
+  setNl,
+}: {
+  nl: NaturalBody;
+  setNl: Dispatch<SetStateAction<NaturalBody>>;
+}): JSX.Element {
+  return (
+    <label>
+      Size
+      <input
+        type="number"
+        min={1}
+        max={100}
+        value={nl.size ?? 10}
+        onChange={(e) => {
+          const n = Number(e.target.value);
+          setNl((s) => ({ ...s, size: Number.isFinite(n) && n > 0 ? n : s.size }));
+        }}
+      />
+    </label>
+  );
+}
+
+function NaturalSearchForm({
+  nl,
+  setNl,
+  onSubmit,
+}: {
+  nl: NaturalBody;
+  setNl: Dispatch<SetStateAction<NaturalBody>>;
+  onSubmit: FormEventHandler<HTMLFormElement>;
+}): JSX.Element {
+  return (
+    <form
+      onSubmit={onSubmit}
+      style={{ display: 'grid', gap: '0.5rem' }}
+      id="nl-panel"
+      role="tabpanel"
+      aria-labelledby="nl-tab"
+    >
+      <QueryField nl={nl} setNl={setNl} />
+      <ScopeField nl={nl} setNl={setNl} />
+      <SizeField nl={nl} setNl={setNl} />
+      <button type="submit">Search</button>
+    </form>
+  );
+}
+
 export default function NaturalSearchComponent({
   onResults,
   onError,
   setLoading,
 }: {
-  onResults: (results: unknown[]) => void;
-  onError: (message: string | null) => void;
-  setLoading: (isLoading: boolean) => void;
+  onResults: Dispatch<SetStateAction<unknown[]>>;
+  onError: Dispatch<SetStateAction<string | null>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }): JSX.Element {
   const [nl, setNl] = useState<NaturalBody>({ q: '', scope: 'units', size: 10 });
 
@@ -71,54 +168,12 @@ export default function NaturalSearchComponent({
   }
 
   return (
-    <form
+    <NaturalSearchForm
+      nl={nl}
+      setNl={setNl}
       onSubmit={(ev) => {
         void onSubmit(ev);
       }}
-      style={{ display: 'grid', gap: '0.5rem' }}
-      id="nl-panel"
-      role="tabpanel"
-      aria-labelledby="nl-tab"
-    >
-      <label>
-        Query
-        <input
-          type="text"
-          value={nl.q}
-          onChange={(e) => {
-            setNl((s) => ({ ...s, q: e.target.value }));
-          }}
-          required
-        />
-      </label>
-
-      <label>
-        Scope
-        <select
-          value={nl.scope}
-          onChange={(e) => {
-            setNl((s) => ({ ...s, scope: e.target.value as 'units' | 'lessons' }));
-          }}
-        >
-          <option value="units">Units</option>
-          <option value="lessons">Lessons</option>
-        </select>
-      </label>
-
-      <label>
-        Size
-        <input
-          type="number"
-          min={1}
-          max={100}
-          value={nl.size ?? 10}
-          onChange={(e) => {
-            setNl((s) => ({ ...s, size: Number(e.target.value) }));
-          }}
-        />
-      </label>
-
-      <button type="submit">Search</button>
-    </form>
+    />
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import type { JSX } from 'react';
+import type { JSX, ChangeEventHandler } from 'react';
 
 interface LabeledSelectProps {
   label: string;
   id: string;
   value: string;
-  onChange: (_value: string) => void;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
   options: readonly string[];
   includeAny?: boolean;
 }
@@ -22,13 +22,7 @@ export function LabeledSelect({
   return (
     <label>
       {label}
-      <select
-        id={id}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-      >
+      <select id={id} value={value} onChange={onChange}>
         {includeAny ? <option value="">(any)</option> : null}
         {options.map((opt) => (
           <option key={opt} value={opt}>
@@ -45,7 +39,7 @@ interface LabeledInputProps {
   id: string;
   type: 'text' | 'number';
   value: string | number;
-  onChange: (_value: string | number) => void;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   min?: number;
   max?: number;
   required?: boolean;
@@ -71,9 +65,7 @@ export function LabeledInput({
         min={min}
         max={max}
         required={required}
-        onChange={(e) => {
-          onChange(type === 'number' ? Number(e.target.value) : e.target.value);
-        }}
+        onChange={onChange}
       />
     </label>
   );

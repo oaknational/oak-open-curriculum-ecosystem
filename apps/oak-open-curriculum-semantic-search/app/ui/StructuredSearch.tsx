@@ -1,9 +1,15 @@
 'use client';
 
-import type { JSX } from 'react';
+import type { JSX, FormEvent, Dispatch, SetStateAction } from 'react';
 import { useState } from 'react';
-import { KEY_STAGES, SUBJECTS } from '../../src/adapters/sdk-guards';
-import { LabeledInput, LabeledSelect } from './fields';
+import {
+  ScopeField,
+  QueryField,
+  SubjectField,
+  KeyStageField,
+  MinLessonsField,
+  SizeField,
+} from './structured-fields';
 import { z } from 'zod';
 
 export interface StructuredBody {
@@ -15,7 +21,92 @@ export interface StructuredBody {
   size?: number;
 }
 
-export function StructuredSearch({
+function safeJsonParse(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+function buildStructuredBody(s: StructuredBody): StructuredBody {
+  return {
+    scope: s.scope,
+    text: s.text,
+    subject: s.subject || undefined,
+    keyStage: s.keyStage || undefined,
+    minLessons: s.minLessons && s.minLessons > 0 ? s.minLessons : undefined,
+    size: s.size && s.size > 0 ? s.size : undefined,
+  };
+}
+
+function parseStructuredResponse(
+  ok: boolean,
+  txt: string,
+): { error: string | null; results: unknown[] } {
+  const Resp = z
+    .object({ results: z.array(z.unknown()).default([]), error: z.string().optional() })
+    .loose();
+  const parsed = safeJsonParse(txt);
+  const safe = Resp.safeParse(parsed);
+  if (!safe.success) return { error: ok ? null : 'Search failed', results: [] };
+  const data = safe.data;
+  if (!ok && data.error) return { error: data.error, results: [] };
+  return { error: null, results: data.results };
+}
+
+function StructuredForm({
+  model,
+  onChange,
+  onSubmit,
+}: {
+  model: StructuredBody;
+  onChange: (patch: Partial<StructuredBody>) => void;
+  onSubmit: (ev: FormEvent<HTMLFormElement>) => void;
+}): JSX.Element {
+  return (
+    <form
+      onSubmit={(ev) => {
+        onSubmit(ev);
+      }}
+      style={{ display: 'grid', gap: '0.5rem' }}
+      id="structured-panel"
+      role="tabpanel"
+      aria-labelledby="structured-tab"
+    >
+      <ScopeField value={model.scope} onChange={onChange} />
+      <QueryField value={model.text} onChange={onChange} />
+      <SubjectField value={model.subject ?? ''} onChange={onChange} />
+      <KeyStageField value={model.keyStage ?? ''} onChange={onChange} />
+      <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />
+      <SizeField value={model.size ?? 10} onChange={onChange} />
+
+      <button type="submit">Search</button>
+    </form>
+  );
+}
+
+const PopulatedStructuredForm = ({
+  structured,
+  setStructured,
+  onSubmit,
+}: {
+  structured: StructuredBody;
+  setStructured: Dispatch<SetStateAction<StructuredBody>>;
+  onSubmit: (ev: FormEvent<HTMLFormElement>) => void;
+}) => {
+  return (
+    <StructuredForm
+      model={structured}
+      onChange={(patch) => setStructured((s) => ({ ...s, ...patch }))}
+      onSubmit={(ev) => {
+        void onSubmit(ev);
+      }}
+    />
+  );
+};
+
+function StructuredSearchInner({
   onResults,
   onError,
   setLoading,
@@ -33,46 +124,22 @@ export function StructuredSearch({
     size: 10,
   });
 
-  async function onSubmit(ev: React.FormEvent<HTMLFormElement>): Promise<void> {
+  async function onSubmit(ev: FormEvent<HTMLFormElement>): Promise<void> {
     ev.preventDefault();
     setLoading(true);
     onError(null);
     onResults([]);
     try {
-      const body: StructuredBody = {
-        scope: structured.scope,
-        text: structured.text,
-        subject: structured.subject || undefined,
-        keyStage: structured.keyStage || undefined,
-        minLessons:
-          structured.minLessons && structured.minLessons > 0 ? structured.minLessons : undefined,
-        size: structured.size && structured.size > 0 ? structured.size : undefined,
-      };
+      const body = buildStructuredBody(structured);
       const res = await fetch('/api/search', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(body),
       });
       const txt = await res.text();
-      const Resp = z
-        .object({ results: z.array(z.unknown()).default([]), error: z.string().optional() })
-        .loose();
-      const parsed = (() => {
-        try {
-          return JSON.parse(txt);
-        } catch {
-          return null;
-        }
-      })();
-      const safe = Resp.safeParse(parsed);
-      if (!safe.success) {
-        if (!res.ok) throw new Error('Search failed');
-        onResults([]);
-        return;
-      }
-      const data = safe.data;
-      if (!res.ok && data.error) throw new Error(data.error);
-      onResults(data.results);
+      const { error, results } = parseStructuredResponse(res.ok, txt);
+      if (error) throw new Error(error);
+      onResults(results);
     } catch (err) {
       onError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -81,84 +148,20 @@ export function StructuredSearch({
   }
 
   return (
-    <form
-      onSubmit={(ev) => {
-        void onSubmit(ev);
-      }}
-      style={{ display: 'grid', gap: '0.5rem' }}
-      id="structured-panel"
-      role="tabpanel"
-      aria-labelledby="structured-tab"
-    >
-      <LabeledSelect
-        label="Scope"
-        id="structured-scope"
-        value={structured.scope}
-        onChange={(v) => {
-          if (v === 'units' || v === 'lessons') setStructured((s) => ({ ...s, scope: v }));
-        }}
-        options={['units', 'lessons']}
-      />
-
-      <LabeledInput
-        label="Query"
-        id="structured-query"
-        type="text"
-        value={structured.text}
-        required
-        onChange={(v) => {
-          if (typeof v === 'string') setStructured((s) => ({ ...s, text: v }));
-        }}
-      />
-
-      <LabeledSelect
-        label="Subject"
-        id="structured-subject"
-        value={structured.subject ?? ''}
-        onChange={(v) => {
-          setStructured((s) => ({ ...s, subject: v }));
-        }}
-        options={SUBJECTS}
-        includeAny
-      />
-
-      <LabeledSelect
-        label="Key Stage"
-        id="structured-ks"
-        value={structured.keyStage ?? ''}
-        onChange={(v) => {
-          setStructured((s) => ({ ...s, keyStage: v }));
-        }}
-        options={KEY_STAGES}
-        includeAny
-      />
-
-      <LabeledInput
-        label="Minimum lessons (units only)"
-        id="structured-minlessons"
-        type="number"
-        value={structured.minLessons ?? 0}
-        min={0}
-        onChange={(v) => {
-          if (typeof v === 'number') setStructured((s) => ({ ...s, minLessons: v }));
-        }}
-      />
-
-      <LabeledInput
-        label="Size"
-        id="structured-size"
-        type="number"
-        value={structured.size ?? 10}
-        min={1}
-        max={100}
-        onChange={(v) => {
-          if (typeof v === 'number') setStructured((s) => ({ ...s, size: v }));
-        }}
-      />
-
-      <button type="submit">Search</button>
-    </form>
+    <PopulatedStructuredForm
+      structured={structured}
+      setStructured={setStructured}
+      onSubmit={onSubmit}
+    />
   );
+}
+
+export function StructuredSearch(props: {
+  onResults: (results: unknown[]) => void;
+  onError: (message: string | null) => void;
+  setLoading: (isLoading: boolean) => void;
+}): JSX.Element {
+  return <StructuredSearchInner {...props} />;
 }
 
 export default StructuredSearch;

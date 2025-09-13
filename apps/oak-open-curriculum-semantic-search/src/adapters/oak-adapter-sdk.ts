@@ -1,7 +1,25 @@
 import type { KeyStage, SubjectSlug } from '../types/oak';
 import { env } from '../lib/env';
-import { createOakClient } from '@oaknational/oak-curriculum-sdk';
+import { createOakClient, type OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guards';
+
+type GetUnitsFn = (
+  keyStage: KeyStage,
+  subject: SubjectSlug,
+) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
+
+type GetLessonsFn = (
+  keyStage: KeyStage,
+  subject: SubjectSlug,
+) => Promise<
+  readonly {
+    unitSlug: string;
+    unitTitle: string;
+    lessons: { lessonSlug: string; lessonTitle: string }[];
+  }[]
+>;
+
+type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
 
 function assertSdkOk(res: { response: Response }): void {
   if (!res.response.ok) {
@@ -14,13 +32,8 @@ function assertSdkOk(res: { response: Response }): void {
   }
 }
 
-function makeGetUnitsByKeyStageAndSubject(
-  client: ReturnType<typeof createOakClient>,
-): (
-  keyStage: KeyStage,
-  subject: SubjectSlug,
-) => Promise<readonly { unitSlug: string; unitTitle: string }[]> {
-  return async (keyStage: KeyStage, subject: SubjectSlug) => {
+function makeGetUnitsByKeyStageAndSubject(client: OakApiClient): GetUnitsFn {
+  return async (keyStage, subject) => {
     const res = await client.GET('/key-stages/{keyStage}/subject/{subject}/units', {
       params: { path: { keyStage, subject } },
     });
@@ -36,17 +49,8 @@ function makeGetUnitsByKeyStageAndSubject(
   };
 }
 
-function makeGetLessonsByKeyStageAndSubject(client: ReturnType<typeof createOakClient>): (
-  keyStage: KeyStage,
-  subject: SubjectSlug,
-) => Promise<
-  readonly {
-    unitSlug: string;
-    unitTitle: string;
-    lessons: { lessonSlug: string; lessonTitle: string }[];
-  }[]
-> {
-  return async (keyStage: KeyStage, subject: SubjectSlug) => {
+function makeGetLessonsByKeyStageAndSubject(client: OakApiClient): GetLessonsFn {
+  return async (keyStage, subject) => {
     const res = await client.GET('/key-stages/{keyStage}/subject/{subject}/lessons', {
       params: { path: { keyStage, subject }, query: { limit: 100 } },
     });
@@ -58,10 +62,8 @@ function makeGetLessonsByKeyStageAndSubject(client: ReturnType<typeof createOakC
   };
 }
 
-function makeGetLessonTranscript(
-  client: ReturnType<typeof createOakClient>,
-): (lessonSlug: string) => Promise<{ transcript: string; vtt: string }> {
-  return async (lessonSlug: string) => {
+function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
+  return async (lessonSlug) => {
     const res = await client.GET('/lessons/{lesson}/transcript', {
       params: { path: { lesson: lessonSlug } },
     });
@@ -74,21 +76,9 @@ function makeGetLessonTranscript(
 
 /** SDK-backed client (preferred). */
 export function createOakSdkClient(): {
-  getUnitsByKeyStageAndSubject: (
-    keyStage: KeyStage,
-    subject: SubjectSlug,
-  ) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
-  getLessonsByKeyStageAndSubject: (
-    keyStage: KeyStage,
-    subject: SubjectSlug,
-  ) => Promise<
-    readonly {
-      unitSlug: string;
-      unitTitle: string;
-      lessons: { lessonSlug: string; lessonTitle: string }[];
-    }[]
-  >;
-  getLessonTranscript: (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
+  getUnitsByKeyStageAndSubject: GetUnitsFn;
+  getLessonsByKeyStageAndSubject: GetLessonsFn;
+  getLessonTranscript: GetTranscriptFn;
 } {
   const { OAK_EFFECTIVE_KEY } = env();
   const client = createOakClient(OAK_EFFECTIVE_KEY);

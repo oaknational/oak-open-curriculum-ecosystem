@@ -62,18 +62,36 @@ export function SearchResults({ results }: { results: unknown[] }): JSX.Element 
   const parsed = ResultsSchema.safeParse(results);
   if (!parsed.success || parsed.data.length === 0) return null;
 
+  function titleFor(rec: z.infer<typeof ItemSchema>): string {
+    return rec.lesson?.lesson_title || rec.unit?.unit_title || rec.id;
+  }
+
+  function subjectFor(rec: z.infer<typeof ItemSchema>): string {
+    return rec.lesson?.subject_slug || rec.unit?.subject_slug || '';
+  }
+
+  function keyStageFor(rec: z.infer<typeof ItemSchema>): string {
+    return rec.lesson?.key_stage || rec.unit?.key_stage || '';
+  }
+
+  function highlightsFor(rec: z.infer<typeof ItemSchema>): string[] {
+    return rec.highlights ?? [];
+  }
+
   return (
     <section aria-live="polite" style={{ marginTop: '1.25rem' }}>
       <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.5rem' }}>
-        {parsed.data.map((rec) => (
-          <ResultItem
-            key={rec.id}
-            title={rec.lesson?.lesson_title || rec.unit?.unit_title || rec.id}
-            subject={rec.lesson?.subject_slug || rec.unit?.subject_slug || ''}
-            keyStage={rec.lesson?.key_stage || rec.unit?.key_stage || ''}
-            highlights={rec.highlights ?? []}
-          />
-        ))}
+        {parsed.data.map((rec) => {
+          return (
+            <ResultItem
+              key={rec.id}
+              title={titleFor(rec)}
+              subject={subjectFor(rec)}
+              keyStage={keyStageFor(rec)}
+              highlights={highlightsFor(rec)}
+            />
+          );
+        })}
       </ul>
     </section>
   );
