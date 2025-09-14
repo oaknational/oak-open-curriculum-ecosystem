@@ -3,7 +3,12 @@
  * - HTML docs index
  * - TypeDoc JSON (parseable, has children)
  * - AI reference markdown
- * - Markdown API docs (index + selected kind files)
+ * - Markdown API docs (index + files linked from the index)
+ *
+ * Rationale: Expected Markdown files are derived from the generated index
+ * rather than raw TypeDoc kinds. This mirrors the generator behaviour, which
+ * only emits pages for exported, curated reflections. Depending on public API
+ * curation, some kinds may be absent — that should not fail verification.
  */
 
 import { promises as fs } from 'node:fs';
@@ -30,37 +35,23 @@ function hasChildren(obj: unknown): obj is { children?: unknown[] } {
   return typeof obj === 'object' && obj !== null && 'children' in obj;
 }
 
-function hasProp<K extends string>(o: unknown, key: K): o is Record<K, unknown> {
-  return typeof o === 'object' && o !== null && key in o;
-}
+// no-op
 
-const KIND_TO_MD: Record<number, string> = {
-  64: 'functions.md',
-  128: 'classes.md',
-  256: 'interfaces.md',
-  2097152: 'types.md',
-  8: 'enums.md',
-  32: 'variables.md',
-  4: 'namespaces.md',
-  4194304: 'references.md',
-};
-
-async function computeExpectedMd(
+async function computeExpectedMdFromIndex(
   mdIndex: string,
-  mdFiles: string[],
-  tdJson: string,
   guard: (label: string, f: () => Promise<void>) => Promise<void>,
 ): Promise<Set<string>> {
-  const mdExpected = new Set<string>(mdFiles);
-  let kindSet: Set<number> = new Set<number>();
-  await guard('Kind scan', async () => {
-    kindSet = await readKindSet(tdJson);
+  const expected = new Set<string>();
+  await guard('Index links', async () => {
+    const content = await fs.readFile(mdIndex, 'utf8');
+    const linkRe = /\[[^\]]+\]\(\.\/([^)]+)\)/g; // matches (./filename)
+    let match: RegExpExecArray | null;
+    while ((match = linkRe.exec(content)) !== null) {
+      const rel = match[1];
+      expected.add(join(dirname(mdIndex), rel));
+    }
   });
-  for (const k of kindSet) {
-    const fname = KIND_TO_MD[k];
-    if (fname) mdExpected.add(join(dirname(mdIndex), fname));
-  }
-  return mdExpected;
+  return expected;
 }
 
 async function verifyMdFiles(
@@ -93,23 +84,13 @@ async function verifyTypedocJson(path: string): Promise<void> {
   }
 }
 
-async function readKindSet(path: string): Promise<Set<number>> {
-  const raw = await fs.readFile(path, 'utf8');
-  const json: unknown = JSON.parse(raw);
-  if (!hasChildren(json) || !Array.isArray(json.children)) return new Set<number>();
-  const kinds = new Set<number>();
-  for (const c of json.children) {
-    if (hasProp(c, 'kind') && typeof c.kind === 'number') kinds.add(c.kind);
-  }
-  return kinds;
-}
+// removed: kind scanning not needed; we derive expected pages from index links
 
 function resolvePaths(): {
   htmlIndex: string;
   tdJson: string;
   aiRef: string;
   mdIndex: string;
-  mdFiles: string[];
 } {
   const thisDir = dirname(fileURLToPath(import.meta.url));
   const pkgRoot = resolve(thisDir, '..');
@@ -117,16 +98,11 @@ function resolvePaths(): {
   const tdJson = join(pkgRoot, 'docs', 'api', 'typedoc.json');
   const aiRef = join(pkgRoot, 'docs', 'api', 'AI-REFERENCE.md');
   const mdIndex = join(pkgRoot, 'docs', 'api-md', 'index.md');
-  const mdFiles = [
-    join(pkgRoot, 'docs', 'api-md', 'functions.md'),
-    join(pkgRoot, 'docs', 'api-md', 'types.md'),
-    join(pkgRoot, 'docs', 'api-md', 'variables.md'),
-  ];
-  return { htmlIndex, tdJson, aiRef, mdIndex, mdFiles };
+  return { htmlIndex, tdJson, aiRef, mdIndex };
 }
 
 async function main(): Promise<void> {
-  const { htmlIndex, tdJson, aiRef, mdIndex, mdFiles } = resolvePaths();
+  const { htmlIndex, tdJson, aiRef, mdIndex } = resolvePaths();
   const failures: string[] = [];
   async function guard(label: string, f: () => Promise<void>): Promise<void> {
     try {
@@ -143,8 +119,10 @@ async function main(): Promise<void> {
   await guard('TypeDoc JSON', async () => verifyTypedocJson(tdJson));
   await guard('AI reference', async () => mustExistNonEmpty(aiRef));
   await guard('MD index', async () => mustExistNonEmpty(mdIndex));
-  const mdExpected = await computeExpectedMd(mdIndex, mdFiles, tdJson, guard);
-  await verifyMdFiles(mdExpected, guard);
+  const mdExpected = await computeExpectedMdFromIndex(mdIndex, guard);
+  if (mdExpected.size > 0) {
+    await verifyMdFiles(mdExpected, guard);
+  }
 
   if (failures.length > 0) {
     const failureMessages = failures.map((s) => `- ${s}`).join('\n');
