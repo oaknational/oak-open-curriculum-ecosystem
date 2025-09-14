@@ -35,14 +35,17 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 - Implemented: ES setup scripts; `/api/search`, `/api/search/nl`, `/api/index-oak`, `/api/rebuild-rollup` and SDK‑parity routes; OpenAPI at `/api/openapi.json` with `/api/docs` UI; core hybrid‑search module (`src/lib/hybrid-search/*`); OpenAPI registration split; strict linting with Zod validation; official ES types; relative imports; App Router type‑check config.
 - UI/Health: Search page with shared header/theme; Styled Components SSR; `/healthz` covers ES/SDK/LLM.
 - Admin: `/admin` for ES setup, indexing, rollup with streaming output.
-- Tests: basic RRF unit test present; hybrid‑search and OpenAPI tests pending.
+- Tests: theming unit/integration added (SSR cookie hint, system subscription, ThemeSelect
+  interaction); basic RRF present; hybrid‑search and OpenAPI tests pending.
 - Build: Workspaces build; Next app imports SDK dist; ESLint issues addressed in UI.
-- SDK docs: TypeDoc hardened (`treatValidationWarningsAsErrors: true`), suppression wrappers removed.
-  Generated helper types exported; curated entry points added. Remaining refs (`SchemaBase`,
-  `PathParameters`, `ValidPathGroupings`) now explicitly exported/bridged. Root `doc-gen` runs docs
-  across workspaces.
-- Rebase: Aligned with `origin/main`; types/tools regenerated.
-- Search docs: Authored docs updated (`SETUP.md`, `ARCHITECTURE.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`); docs structure clarified (authored vs generated); workspace `doc-gen` added and verified.
+- SDK docs: TypeDoc hardened (`treatValidationWarningsAsErrors: true`); suppression removed; helper
+  type exports completed (incl. `PathGroupingKeys`); curated entry points retained; verification
+  derives expected Markdown pages from the generated index to match curated surfaces. Root `doc-gen`
+  runs docs across workspaces; SDK and Search doc‑gen are green.
+- Rebase: Completed onto `origin/feat/semantic_search`; resolved conflicts by removing/regenerating
+  generated docs; branch pushed.
+- Search docs: Authored docs updated (`SETUP.md`, `ARCHITECTURE.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`);
+  docs structure clarified (authored vs generated); workspace `doc-gen` verified green.
 
 ---
 

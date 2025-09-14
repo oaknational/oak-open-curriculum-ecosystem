@@ -29,6 +29,7 @@ export const ignores = [
   '**/tsup.config.*',
   '**/*.bundled_*.mjs',
   // Generated TSDoc files
+  '**/docs/_typedoc_src/**',
   '**/docs/api/',
   '**/docs/api-md/',
 ];

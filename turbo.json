@@ -66,7 +66,7 @@
     "lint": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": [],
+      "outputs": [".eslintcache"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.ts",

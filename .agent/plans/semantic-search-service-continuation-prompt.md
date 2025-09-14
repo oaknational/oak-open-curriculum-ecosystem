@@ -13,9 +13,9 @@ Purpose: Preserve essential working context so any agent can immediately continu
 - Indices (Elasticsearch Serverless): `oak_lessons` (transcripts + `lesson_semantic`), `oak_units` (metadata), `oak_unit_rollup` (per‑lesson passages + `unit_semantic`).
 - Endpoints: `POST /api/search` (structured, LLM‑free), `POST /api/search/nl` (501 if LLM disabled); admin: `GET /api/index-oak`, `GET /api/rebuild-rollup`; SDK parity: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
 - OpenAPI: `/api/openapi.json` and `/api/docs`.
-- SDK: All data via `@oaknational/oak-curriculum-sdk`; runtime guards validate Subject/KeyStage; docs include generated types; warnings reduced via sanitiser; zero‑warning goal pending.
+- SDK: All data via `@oaknational/oak-curriculum-sdk`; runtime guards validate Subject/KeyStage; docs include generated types; TypeDoc hardened with `treatValidationWarningsAsErrors: true`; helper exports completed (incl. `PathGroupingKeys`); verification aligns to curated surfaces; doc‑gen green.
 - ES client: Official `@elastic/elasticsearch`.
-- UI/Health: Search page with header/nav/theme; `/healthz` covers ES/SDK/LLM.
+- UI/Health: Search page with header/nav/theme; SSR‑first theming in place (cookie → `data-theme-mode`, client provider, system subscription); tests cover SSR hint, system preference updates, and ThemeSelect interaction; `/healthz` covers ES/SDK/LLM.
 
 ---
 
@@ -40,16 +40,16 @@ LLM optionality: `/api/search` never requires OpenAI. `/api/search/nl` returns `
 
 ## Rebase status
 
-Completed. Aligned with `origin/main`; types/tools regenerated; lockfile re‑resolved via `pnpm i`.
+Completed. Rebased `feat/semantic_search` onto remote; resolved generated‑doc conflicts by deletion/regeneration; outdated remote approach superseded; pushed successfully.
 
 ---
 
 ## Immediate next tasks
 
-- SDK docs: reduce warnings to zero (TypeDoc includes generated types; sanitise JSDoc; include minimal generated entry points); commit.
-- Search workspace: add `doc-gen` (TypeDoc HTML/JSON + optional Markdown/AI); write README, Onboarding, Quick Start, Troubleshooting; commit.
-- Run full quality gates from repo root; fix regressions; commit.
-- Follow‑on: tests for hybrid‑search and OpenAPI builder; Oak Components; Vercel deploy.
+- SDK docs: TSDoc pass across curated API surfaces; maintain zero‑warning baseline.
+- Search workspace: finish authored docs (README, Onboarding, Quick Start, Troubleshooting, Reuse guide) and TSDoc across adapters/lib/routes/UI.
+- Tests: add hybrid‑search fusion/filter/highlight tests; add OpenAPI builder tests.
+- Ops: Vercel deploy plan and env wiring; smoke `/api/docs` and `/api/search`.
 
 ---
 
