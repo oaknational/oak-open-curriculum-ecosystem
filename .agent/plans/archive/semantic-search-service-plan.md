@@ -11,7 +11,14 @@ The original contents follow for historical reference.
 ---
 
 ```1:452:.agent/plans/semantic-search-service-plan.md
-# Semantic Search Service Plan (Implementation)
+# [ARCHIVE] Semantic Search Service Plan (Implementation)
+
+Superseded by:
+
+- `semantic-search-api-plan.md`
+- `semantic-search-ui-plan.md`
+- `semantic-search-documentation-plan.md`
+- `semantic-search-caching-plan.md`
 
 Role: This is the detailed implementation plan for the Semantic Search App/API. It translates the strategic direction in `high-level-plan.md` into concrete phases, tasks, and acceptance criteria, and tracks current status and next priorities. It pairs with the living context file `semantic-search-service-continuation-prompt.md` which preserves day‑to‑day working context.
 

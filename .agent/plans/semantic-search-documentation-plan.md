@@ -56,6 +56,14 @@ Acceptance
 
 ---
 
+## Repo integration & quality gates
+
+- Align with repo standards: British spelling, strict typing, no unsafe assertions.
+- Root gates to run in order: `pnpm make`, then `pnpm qg`.
+- See `docs/development/ci-policy.md` for details; ensure this workspace’s docs and TypeDoc runs are included.
+
+---
+
 ## References
 
 - Project docs under `docs/` (agent guidance, testing strategy, TypeScript practice).
