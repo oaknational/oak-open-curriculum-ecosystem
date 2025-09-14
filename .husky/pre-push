@@ -4,26 +4,34 @@ echo "🚀 Running pre-push checks..."
 
 # Check formatting (don't modify files)
 echo "📝 Checking formatting..."
-if ! pnpm format:check; then
+if ! pnpm format-check:root; then
   echo "❌ Formatting issues found!"
-  echo "💡 Run 'pnpm format' to fix formatting issues, then commit the changes"
+  echo "💡 Run 'pnpm format:root' to fix formatting issues, then commit the changes"
   exit 1
 fi
-
-# Run full lint (without --fix to avoid modifications)
-echo "🔍 Running full lint..."
-pnpm lint
 
 # Run full type-check
 echo "🔤 Running full type-check..."
 pnpm type-check
 
-# Run full (in-process) test suite
+# Run full lint (without --fix to avoid modifications)
+echo "🔍 Running full lint..."
+pnpm lint
+
+# Run full markdownlint
+echo "🔍 Running full markdownlint..."
+pnpm markdownlint-check:root
+
+# Run full test suite
 echo "🧪 Running full test suite..."
 pnpm test
 
-# Build the project
-echo "📦 Building project..."
+# Run full test:e2e
+echo "🧪 Running full test:e2e..."
+pnpm test:e2e
+
+# Build the workspaces. Happens last because it mutates the filesystem, invalidating the cache.
+echo "📦 Building workspaces..."
 pnpm build
 
 echo "✅ All pre-push checks passed!"

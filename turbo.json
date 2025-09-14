@@ -1,11 +1,31 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "ui": "tui",
   "remoteCache": {
     "enabled": true
   },
-  "ui": "stream",
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
+    "//#format:root": {
+      "cache": true,
+      "outputs": [],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
+    },
+    "//#format-check:root": {
+      "cache": true,
+      "outputs": [],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
+    },
+    "//#markdownlint:root": {
+      "cache": true,
+      "outputs": [],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
+    },
+    "//#markdownlint-check:root": {
+      "cache": true,
+      "outputs": [],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
+    },
     "type-gen": {
       "dependsOn": ["^type-gen"],
       "cache": true,
@@ -64,7 +84,6 @@
       "passThroughEnv": ["OAK_API_KEY"]
     },
     "lint": {
-      "dependsOn": ["^build"],
       "cache": true,
       "outputs": [".eslintcache"],
       "inputs": [
@@ -99,38 +118,9 @@
         "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
-    "test:unit": {
-      "cache": true,
-      "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "src/**/*.ts",
-        "tests/**/*.ts",
-        "!src/**/*.integration.test.ts",
-        "!src/**/*.e2e.test.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
-    },
-    "test:integration": {
-      "cache": true,
-      "outputs": [],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/packages/core/mcp-core",
-        "$TURBO_ROOT$/packages/libs/env",
-        "$TURBO_ROOT$/packages/libs/logger",
-        "$TURBO_ROOT$/packages/libs/storage",
-        "$TURBO_ROOT$/packages/libs/transport",
-        "src/**/*.integration.test.ts",
-        "src/**/*.ts",
-        "vitest.config.ts",
-        "$TURBO_ROOT$/vitest.config.base.ts"
-      ]
-    },
     "test:e2e": {
       "outputs": [],
-      "cache": false,
+      "cache": true,
       "inputs": [
         "$TURBO_DEFAULT$",
         "e2e-tests/**/*.ts",
@@ -145,7 +135,7 @@
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "E2E_REAL_API", "OAK_API_KEY"]
     },
     "type-check": {
-      "dependsOn": ["^build"],
+      "dependsOn": [],
       "cache": true,
       "outputs": [],
       "inputs": [

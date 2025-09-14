@@ -2,19 +2,27 @@
 
 echo "🔍 Running pre-commit checks..."
 
+# Run lint-staged for formatting only
+echo "📝 Checking formatting..."
+if ! pnpm format-check:root; then
+  echo "❌ Formatting issues found!"
+  echo "💡 Run 'pnpm format:root' to fix formatting issues, then commit the changes"
+  exit 1
+fi
+
 echo "🔤 Running type checks..."
 pnpm type-check
 
-# Run lint-staged for formatting only
-echo "📝 Formatting changed files..."
-pnpm format --affected
-
 echo "🔍 Running lint for changed files..."
-pnpm lint --affected
+pnpm lint
+
+# Run full markdownlint
+echo "🔍 Running full markdownlint..."
+pnpm markdownlint-check:root
 
 # This may not find any relevant tests, that is fine.
 echo "🧪 Running tests on changed files..."
-pnpm test --affected
+pnpm test
 
 echo "✅ Pre-commit checks completed!"
 
