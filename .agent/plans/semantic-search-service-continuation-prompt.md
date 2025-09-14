@@ -1,8 +1,10 @@
-# Semantic Search Service — Continuation Prompt (living context)
+# MOVED — See `semantic-search-ui-continuation-prompt.md`
 
 _Last updated: 2025‑09‑14 (Europe/London)_
 
-Purpose: Preserve essential working context so any agent can immediately continue the Oak Curriculum hybrid‑search project without re‑reading threads. Pairs with `semantic-search-service-plan.md`. Keep this concise, current, and actionable.
+This file has been superseded for the UI track. Please see
+`semantic-search-ui-continuation-prompt.md` for the current, cohesive UI
+continuation prompt.
 
 ---
 
