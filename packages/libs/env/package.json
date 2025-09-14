@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-env",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "Runtime-adaptive environment library for MCP applications",
   "type": "module",
   "main": "./dist/index.js",

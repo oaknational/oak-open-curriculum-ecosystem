@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/oak-curriculum-mcp-stdio",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "MCP server for the Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/src/index.js",

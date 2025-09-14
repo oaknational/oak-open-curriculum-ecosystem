@@ -2,9 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'child_process';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { config } from 'dotenv';
-import { join, dirname, resolve } from 'path';
-import { existsSync } from 'fs';
+import { dirname } from 'path';
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 import { fileURLToPath } from 'url';
 
@@ -16,18 +14,17 @@ const logger = createAdaptiveLogger({
   level: 20, // Info level
 });
 
-// Find and load the .env file from the repo root
-const repoRoot = resolve(thisDir, '../../../..');
-const envPath = join(repoRoot, '.env');
-
-if (existsSync(envPath)) {
-  config({ path: envPath });
-  logger.debug('Loaded .env file', { path: envPath });
+// Load env from repo root using shared helper
+import { loadRootEnv } from '@oaknational/mcp-env';
+const loaded = loadRootEnv({
+  startDir: thisDir,
+  requiredKeys: ['NOTION_API_KEY'],
+  env: process.env,
+});
+if (loaded.loaded) {
+  logger.debug('Loaded .env file', { path: loaded.path });
 } else {
-  // Try fallback locations
-  logger.debug('.env not found at repo root, trying fallbacks', { tried: envPath });
-  config({ path: join(process.cwd(), '../../.env') });
-  config(); // Also try local .env as fallback
+  logger.debug('No .env file loaded from root', { repoRoot: loaded.repoRoot });
 }
 
 // Type guard for object with property

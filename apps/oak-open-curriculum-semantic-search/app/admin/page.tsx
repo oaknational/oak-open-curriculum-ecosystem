@@ -1,7 +1,7 @@
 'use client';
 
 import type { JSX } from 'react';
-import { useStream } from '@/app/lib/useStream';
+import { useStream } from '../lib/useStream';
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
   const { state, text, run } = useStream(url, method ?? 'POST');

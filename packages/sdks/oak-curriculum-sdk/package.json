@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/oak-curriculum-sdk",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",
@@ -31,14 +31,16 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.config.e2e.ts",
-    "docs:api": "typedoc --options typedoc.json",
-    "docs:api:html": "typedoc --options typedoc.ai.json",
-    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
-    "docs:api:json:ai": "typedoc --options typedoc.ai.json --json docs/api/typedoc.json",
+    "docs:prepare": "tsx scripts/sanitize-docs.ts",
+    "docs:api": "pnpm -s docs:prepare && typedoc --options typedoc.json",
+    "docs:api:html": "pnpm -s docs:prepare && typedoc --options typedoc.ai.json",
+    "docs:api:json": "pnpm -s docs:prepare && typedoc --options typedoc.json --json docs/api/typedoc.json",
+    "docs:api:json:ai": "pnpm -s docs:prepare && typedoc --options typedoc.ai.json --json docs/api/typedoc.json",
+    "docs:mcp": "pnpm -s docs:prepare && typedoc --options typedoc.mcp.json",
     "docs:ai": "pnpm -s docs:api:json:ai && tsx scripts/generate-ai-doc.ts",
     "docs:api:md": "tsx scripts/generate-markdown-docs.ts",
     "docs:verify": "tsx scripts/verify-docs.ts",
-    "docs:all": "pnpm -s docs:api:html && pnpm -s docs:ai && pnpm -s docs:api:md && pnpm -s docs:verify"
+    "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:ai && pnpm -s docs:api:md && pnpm -s docs:verify"
   },
   "dependencies": {
     "openapi-fetch": "^0.14.0",

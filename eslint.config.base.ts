@@ -28,6 +28,9 @@ export const ignores = [
   // Ignore ephemeral bundled config artifacts (e.g., tsup.config.bundled_*.mjs)
   '**/tsup.config.*',
   '**/*.bundled_*.mjs',
+  // Generated TSDoc files
+  '**/docs/api/',
+  '**/docs/api-md/',
 ];
 
 export const baseRules: ConfigArray = [

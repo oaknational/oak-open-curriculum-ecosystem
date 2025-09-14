@@ -125,6 +125,12 @@ curl -X POST http://localhost:3000/api/search/nl \
 
 If LLM is disabled (`AI_PROVIDER=none` or no `OPENAI_API_KEY`), `/api/search/nl` returns `501` with `{ "error":"LLM_DISABLED" }`.
 
+### Build docs (API)
+
+```bash
+pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+```
+
 ---
 
 ## Endpoints

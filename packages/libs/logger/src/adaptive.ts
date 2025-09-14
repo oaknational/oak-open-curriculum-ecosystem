@@ -5,9 +5,9 @@
 
 import { createConsola, type ConsolaInstance, type ConsolaOptions } from 'consola';
 import type { Logger } from '@oaknational/mcp-core';
-import type { LoggerOptions } from './types.js';
-import { ConsolaLogger } from './consola-logger.js';
-import { convertLogLevel, toConsolaLevel } from './pure-functions.js';
+import type { LoggerOptions } from './types';
+import { ConsolaLogger } from './consola-logger';
+import { convertLogLevel, toConsolaLevel } from './pure-functions';
 
 /**
  * Helper to create a configured consola instance

@@ -19,6 +19,24 @@ A Next.js workspace that indexes Oak curriculum content and exposes a hybrid (se
 
 See `ARCHITECTURE.md`, `ROLLUP.md`, `SETUP.md`, and `SDK-ENDPOINTS.md`.
 
+## Documentation build
+
+Generate API docs (TypeDoc HTML + JSON):
+
+```bash
+pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+```
+
+Outputs:
+
+- HTML: `apps/oak-open-curriculum-semantic-search/docs/api/`
+- JSON: `apps/oak-open-curriculum-semantic-search/docs/api/typedoc.json`
+
+## Structure
+
+- Authored docs (hand-written): `docs/*.md` such as `SETUP.md`, `ARCHITECTURE.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`.
+- Generated docs (build artefacts): `docs/api/**` (TypeDoc markdown tree) and `docs/api/typedoc.json`.
+
 ## Quick examples
 
 **Structured units search**

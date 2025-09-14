@@ -5,16 +5,16 @@
  * Uses Consola with feature detection to adapt configuration
  */
 
-export { createAdaptiveLogger } from './adaptive.js';
-export { ConsolaLogger } from './consola-logger.js';
+export { createAdaptiveLogger } from './adaptive';
+export { ConsolaLogger } from './consola-logger';
 export {
   convertLogLevel,
   toConsolaLevel,
   mergeLogContext,
   normalizeError,
   isLevelEnabled,
-} from './pure-functions.js';
-export type { LoggerOptions } from './types.js';
+} from './pure-functions';
+export type { LoggerOptions } from './types';
 export type { Logger } from '@oaknational/mcp-core';
 
 // Export log level utilities
@@ -29,4 +29,4 @@ export {
   shouldLog,
   type LogLevel,
   type BaseLoggingEnvironment,
-} from './log-levels.js';
+} from './log-levels';

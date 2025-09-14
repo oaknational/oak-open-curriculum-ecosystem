@@ -245,6 +245,9 @@ importers:
       '@elastic/elasticsearch':
         specifier: ^9.1.1
         version: 9.1.1
+      '@oaknational/mcp-logger':
+        specifier: workspace:*
+        version: link:../../packages/libs/logger
       '@oaknational/oak-components':
         specifier: ^1.143.0
         version: 1.143.0(next-cloudinary@6.16.0(next@15.5.3(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1))(next@15.5.3(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@6.1.19(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
@@ -315,6 +318,12 @@ importers:
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
+      typedoc:
+        specifier: ^0.28.12
+        version: 0.28.12(typescript@5.9.2)
+      typedoc-plugin-markdown:
+        specifier: ^4.4.2
+        version: 4.8.1(typedoc@0.28.12(typescript@5.9.2))
       typescript:
         specifier: ^5.9.2
         version: 5.9.2

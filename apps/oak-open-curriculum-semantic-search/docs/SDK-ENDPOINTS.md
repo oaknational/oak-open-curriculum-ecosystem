@@ -5,7 +5,7 @@ These expose the original API search for completeness and parity checks. The hyb
 ## POST /api/sdk/search-lessons
 
 - **What it does:** mirrors `GET /search/lessons` (title-similarity) from the SDK.
-- **Defaults:** 20 results if `limit` omitted.
+- **Defaults:** 20 results if `limit` is omitted.
 - **Filters:** `keyStage`, `subject`, **`unit`** (optional).
   Body:
 
@@ -22,7 +22,7 @@ These expose the original API search for completeness and parity checks. The hyb
 
 ## POST /api/sdk/search-transcripts
 
-- **What it does:** mirrors `GET /search/transcripts` (transcript-similarity) from the SDK.
+- **What it does:** mirrors `GET /search/transcripts` (transcript‑similarity) from the SDK.
 - **Defaults:** 5 results (as per public docs).
   Body:
 

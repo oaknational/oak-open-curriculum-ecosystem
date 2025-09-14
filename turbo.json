@@ -14,6 +14,21 @@
       "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
+    "doc-gen": {
+      "dependsOn": ["^doc-gen"],
+      "cache": true,
+      "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/scripts/**/*.ts",
+        "next.config.ts",
+        "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "!src/**/*.test.ts",
+        "!src/**/*.spec.ts"
+      ]
+    },
     "build": {
       "dependsOn": ["^build"],
       "cache": true,

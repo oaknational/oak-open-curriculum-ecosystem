@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-transport",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Transport library - adaptive transport layer for MCP servers",
   "keywords": [
     "mcp",

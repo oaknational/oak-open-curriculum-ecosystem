@@ -1,15 +1,8 @@
 # Oak Curriculum SDK — API (Markdown)
 
-Generated: 2025-09-13T16:03:02.225Z
+Generated: 2025-09-14T08:58:45.315Z
 
 ## Contents
-
-- [Functions](./functions.md)
-- [Classes](./classes.md)
-- [Interfaces](./interfaces.md)
-- [Type Aliases](./types.md)
-- [Variables](./variables.md)
-- [References](./references.md)
 
 ## Quickstart
 

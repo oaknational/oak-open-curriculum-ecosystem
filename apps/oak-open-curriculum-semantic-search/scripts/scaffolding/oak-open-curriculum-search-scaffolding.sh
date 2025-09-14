@@ -45,7 +45,7 @@ mkdir -p "$APP_DIR"
 write_file "$APP_DIR/package.json" <<'EOF'
 {
   "name": "@oaknational/open-curriculum-elasticsearch",
-  "version": "1.7.1",
+  "version": "0.0.0-development",
   "private": true,
   "type": "module",
   "engines": { "node": ">=22" },

@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-logger",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Adaptive logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,8 +9,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "development": "./src/index.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "files": [

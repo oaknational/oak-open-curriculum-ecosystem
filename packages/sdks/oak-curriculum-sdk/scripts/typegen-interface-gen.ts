@@ -22,7 +22,7 @@ export function generatePathParametersInterface(): string {
 /**
  * All possible path parameters extracted from the API schema
  */
-interface PathParameters {
+export interface PathParameters {
 ${interfaceFields}
 }
 

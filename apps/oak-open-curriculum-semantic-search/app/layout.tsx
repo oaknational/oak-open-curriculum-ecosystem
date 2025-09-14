@@ -5,10 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
 
-import { lexend } from '@/app/ui/fonts';
-import StyledComponentsRegistry from '@/app/lib/registry';
-import { Providers } from '@/app/lib/Providers';
-import ThemeSelect from '@/app/ui/ThemeSelect';
+import { lexend } from './ui/fonts';
+import ThemeSelect from './ui/ThemeSelect';
+import StyledComponentsRegistry from './lib/registry';
+import { Providers } from './lib/Providers';
 
 export const metadata: Metadata = {
   title: 'Oak Semantic Search',
@@ -54,9 +54,8 @@ function Header(): JSX.Element {
         <Link href="/" style={{ marginRight: '1rem' }}>
           Home
         </Link>
-        <Link href="/">Search</Link>
         <Link href="/api/docs" style={{ marginLeft: '1rem' }}>
-          API Docs
+          Open API Docs
         </Link>
       </nav>
       <ThemeSelect />

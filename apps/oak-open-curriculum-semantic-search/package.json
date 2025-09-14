@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-semantic-search",
-  "version": "1.7.1",
+  "version": "0.0.0-development",
   "private": true,
   "type": "module",
   "engines": {
@@ -16,13 +16,18 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "elastic:setup": "bash scripts/setup.sh",
-    "elastic:alias-swap": "bash scripts/alias-swap.sh"
+    "elastic:alias-swap": "bash scripts/alias-swap.sh",
+    "docs:api:html": "typedoc --options typedoc.json",
+    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
+    "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",
+    "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.24",
     "@elastic/elasticsearch": "^9.1.1",
     "@oaknational/oak-components": "^1.143.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "@oaknational/mcp-logger": "workspace:*",
     "ai": "^5.0.34",
     "next": "^15.5.3",
     "react": "^19.1.1",
@@ -32,6 +37,8 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
+    "typedoc": "^0.28.12",
+    "typedoc-plugin-markdown": "^4.4.2",
     "@asteasolutions/zod-to-openapi": "^8.1.0",
     "@eslint/eslintrc": "^3.2.0",
     "@next/eslint-plugin-next": "^15.5.3",

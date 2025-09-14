@@ -5,7 +5,7 @@
 
 import type { ConsolaInstance } from 'consola';
 import type { Logger, JsonObject } from '@oaknational/mcp-core';
-import { mergeLogContext, normalizeError } from './pure-functions.js';
+import { mergeLogContext, normalizeError } from './pure-functions';
 
 export class ConsolaLogger implements Logger {
   private readonly consola: ConsolaInstance;

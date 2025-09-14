@@ -3,12 +3,20 @@ import { env } from '../lib/env';
 import { createOakClient, type OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guards';
 
-type GetUnitsFn = (
+/**
+ * Public shape for listing units by key stage and subject.
+ * Linked plan: `.agent/plans/generated-document-enhancements-plan.md` (docs API curation)
+ */
+export type GetUnitsFn = (
   keyStage: KeyStage,
   subject: SubjectSlug,
 ) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
 
-type GetLessonsFn = (
+/**
+ * Public shape for listing grouped lessons by key stage and subject.
+ * Linked plan: `.agent/plans/generated-document-enhancements-plan.md`
+ */
+export type GetLessonsFn = (
   keyStage: KeyStage,
   subject: SubjectSlug,
 ) => Promise<
@@ -19,7 +27,11 @@ type GetLessonsFn = (
   }[]
 >;
 
-type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
+/**
+ * Public shape for fetching a lesson transcript.
+ * Linked plan: `.agent/plans/generated-document-enhancements-plan.md`
+ */
+export type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
 
 function assertSdkOk(res: { response: Response }): void {
   if (!res.response.ok) {
@@ -74,12 +86,18 @@ function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
   };
 }
 
-/** SDK-backed client (preferred). */
-export function createOakSdkClient(): {
+/** Documented SDK-backed client interface (narrow, curated). */
+export interface OakSdkClient {
+  /** List units for a key stage and subject. */
   getUnitsByKeyStageAndSubject: GetUnitsFn;
+  /** List grouped lessons for a key stage and subject. */
   getLessonsByKeyStageAndSubject: GetLessonsFn;
+  /** Get a lesson transcript and VTT. */
   getLessonTranscript: GetTranscriptFn;
-} {
+}
+
+/** SDK-backed client (preferred). */
+export function createOakSdkClient(): OakSdkClient {
   const { OAK_EFFECTIVE_KEY } = env();
   const client = createOakClient(OAK_EFFECTIVE_KEY);
   return {

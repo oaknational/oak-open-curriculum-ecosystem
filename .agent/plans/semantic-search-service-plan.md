@@ -18,60 +18,77 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 
 ---
 
-## Goals
+## Objectives
 
-- Deliver a high‑quality search experience that supports **teachers’ natural language** queries and **structured filters** (subject, keyStage, minimum lessons) with reliable highlights.
-- Keep the **source of truth** as the Oak Curriculum API via the **Oak Curriculum SDK**; no raw HTTP.
-- Use **Elasticsearch Serverless** with:
-  - `oak_lessons` (full transcript + `lesson_semantic`),
-  - `oak_units` (unit metadata),
-  - `oak_unit_rollup` (short per‑lesson passages + `unit_semantic`).
-- Provide **two search endpoints**:
-  - **Structured:** `POST /api/search` (LLM‑free, deterministic),
-  - **Natural language:** `POST /api/search/nl` (LLM optional; returns 501 if disabled).
-- Publish an **auto‑generated OpenAPI schema** for all non‑SDK passthrough endpoints; use it to expose **MCP tools** (and optional prompt helpers).
-- Ship a minimal **UI** to demo structured vs NL search, with an **Admin** page to trigger indexing and rollups.
-- Apply **Oak Components** + theming to “Oakify” the UI.
+- Deliver a high‑quality search experience supporting natural‑language queries and structured filters (subject, keyStage, minimum lessons) with reliable highlights.
+- Keep the Oak Curriculum API as the single source of truth via the official SDK; never call raw HTTP.
+- Use Elasticsearch Serverless with three indices: `oak_lessons` (full transcripts + `lesson_semantic`), `oak_units` (unit metadata), `oak_unit_rollup` (short per‑lesson passages + `unit_semantic`).
+- Provide two endpoints: `POST /api/search` (structured, LLM‑free) and `POST /api/search/nl` (LLM optional; returns 501 if disabled).
+- Publish an auto‑generated OpenAPI schema for public, non‑admin endpoints; expose corresponding MCP tools.
+- Ship a minimal demo UI and an Admin page (index/rollup), and later apply Oak Components with strong accessibility.
 
 ---
 
 ## Current status (at a glance)
 
 - Workspace: `apps/oak-open-curriculum-semantic-search` (Next.js 15, React 19, TS strict)
-- Implemented:
-  - Elasticsearch Serverless scripts: synonyms + three indices mappings
-  - API routes: `/api/search` (structured), `/api/search/nl` (NL, LLM optional), `/api/index-oak`, `/api/rebuild-rollup`, SDK parity routes
-  - OpenAPI: `/api/openapi.json` with Redoc UI at `/api/docs`
-  - Core search logic refactored into `src/lib/hybrid-search/` module:
-    - `index.ts` orchestrator, `lessons.ts`, `units.ts`, `types.ts`; shim re-export at `src/lib/run-hybrid-search.ts`
-  - OpenAPI registrations split to `src/lib/openapi.register.ts`; `src/lib/openapi.ts` simplified, avoids unsafe assertions
-  - Type-aware linting enabled; SDK parity routes validate bodies with Zod
-  - Official Elasticsearch client types adopted; removed custom generic shapes
-  - TS path aliases removed; imports are relative (incl. Vitest)
-  - Type-check configured for App Router: `tsconfig.lint.json` uses `jsx: react-jsx` and includes DOM libs
-- UI/Health: Canonical search page at `/` with shared header (logo home link, nav links, theme selector); theme SSR hint via cookie + early script; Styled Components SSR wired; `/healthz` reports ES/SDK/LLM with correct status codes
-- Admin: New `/admin` page to run ES setup, indexing, and rollup with streaming output
-- Tests: basic RRF unit test exists; hybrid-search and OpenAPI tests pending
-- Build status: Monorepo builds succeed for packages; Next.js workspace fails the build on strict ESLint violations (in-progress fixes)
-- Rebase: Completed onto `origin/main` (conflicts resolved; types/tools regenerated)
-
----
-
-## Merge strategy: Rebase
-
-Status: Completed. `feat/semantic_search` is rebased onto `origin/main` and aligned with SDK/MCP changes. Lockfile was re-resolved via `pnpm i`. Resolved hotspots included ESLint configs, SDK typegen outputs, response mapping, `turbo.json`, and workspace wiring.
+- Implemented: ES setup scripts; `/api/search`, `/api/search/nl`, `/api/index-oak`, `/api/rebuild-rollup` and SDK‑parity routes; OpenAPI at `/api/openapi.json` with `/api/docs` UI; core hybrid‑search module (`src/lib/hybrid-search/*`); OpenAPI registration split; strict linting with Zod validation; official ES types; relative imports; App Router type‑check config.
+- UI/Health: Search page with shared header/theme; Styled Components SSR; `/healthz` covers ES/SDK/LLM.
+- Admin: `/admin` for ES setup, indexing, rollup with streaming output.
+- Tests: basic RRF unit test present; hybrid‑search and OpenAPI tests pending.
+- Build: Workspaces build; Next app imports SDK dist; ESLint issues addressed in UI.
+- SDK docs: TypeDoc hardened (`treatValidationWarningsAsErrors: true`), suppression wrappers removed.
+  Generated helper types exported; curated entry points added. Remaining refs (`SchemaBase`,
+  `PathParameters`, `ValidPathGroupings`) now explicitly exported/bridged. Root `doc-gen` runs docs
+  across workspaces.
+- Rebase: Aligned with `origin/main`; types/tools regenerated.
+- Search docs: Authored docs updated (`SETUP.md`, `ARCHITECTURE.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`); docs structure clarified (authored vs generated); workspace `doc-gen` added and verified.
 
 ---
 
 ## Near‑term priorities (ranked)
 
-0. Resolve linting issues in the semantic search app per `/.agent/directives-and-memory/rules.md` and `/docs/agent-guidance/typescript-practice.md`
-1. Resolve all other quality gates to the highest possible standards (install → type-gen → build → type-check → lint → docs:all → format → markdownlint → test → test:e2e) until green
-2. Commit and push the branch; then review and plan next steps
-3. Add unit tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder
-4. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`
-5. Oakify the UI using Oak Components (retain Structured/NL tabs; strong a11y)
-6. MCP exposure from OpenAPI (non‑admin tools by default)
+### Immediate next tasks
+
+1. SDK docs: reach zero warnings and enforce a baseline in CI. Focus: verify clean runs after
+   exports/bridges; finish TSDoc on curated API surfaces.
+2. Documentation excellence (Search workspace): complete README; thorough TSDoc on adapters, lib, routes, UI; author Onboarding, Quick Start, Troubleshooting; draft Reuse guide (REST vs GraphQL adapters). Status: README and authored docs updated; docs structure clarified; `doc-gen` implemented and green.
+3. Resolve all quality gates at the repo root (install → type‑gen → build → type‑check → lint →
+   doc-gen → format → markdownlint → test → test:e2e).
+4. Add tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder.
+
+### Follow‑on tasks
+
+5. Vercel deploy + environment wiring + smoke `/api/docs` and `/api/search`.
+6. Oak‑ify the UI using Oak Components (retain Structured/NL tabs; strong accessibility).
+7. MCP exposure from OpenAPI for the two search endpoints only (admin endpoints stay excluded by default).
+
+---
+
+## Documentation work (teaching & reuse focus)
+
+Objectives
+
+- Teach hybrid search with Elasticsearch Serverless and the Oak SDK clearly and concisely.
+- Favour reusability of patterns across products, including a future GraphQL/Hasura backend.
+
+Scope and deliverables
+
+- README: purpose, architecture overview, structured vs NL flows, screenshots.
+- Quick Start: env, dev server, index/rollup, sample queries; link to API docs.
+- Admin guidance: `x-api-key` safeguards, `/healthz`.
+- TSDoc pass on: `src/lib/hybrid-search/*`, `src/lib/openapi*`, `src/adapters/*`, `app/api/*`, `app/ui/*`.
+- Generated docs: `doc-gen` implemented mirroring the SDK (TypeDoc HTML + JSON).
+- Onboarding and Troubleshooting: ES auth/indices, LLM disabled behaviour, Next/SDK integration, common errors.
+- Reuse guide: componentise search flows; outline REST vs GraphQL/Hasura variations and adapter seams; document rollup strategy.
+
+Acceptance for Documentation
+
+- README gives a newcomer enough to run, index, search, and understand architecture in ≤15 minutes
+- TSDoc present on all exported functions/types in target modules; examples compile
+- Generated docs build without warnings in SDK and (if added) the search workspace
+- Onboarding/Quick Start/Troubleshooting cover top 10 likely issues
+- Reuse guide outlines migration to alternative backends with concrete adapter seams
 
 ---
 
@@ -82,9 +99,9 @@ Status: Completed. `feat/semantic_search` is rebased onto `origin/main` and alig
 3. **Search routes**: `POST /api/search` (structured) and `POST /api/search/nl` (natural language).
 4. **SDK parity routes**: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
 5. **OpenAPI schema**: `GET /api/openapi.json` generated from Zod schemas; optional `/docs` UI.
-6. **MCP tools**: tool manifest generated from OpenAPI (search structured, search NL, index, rollup; admin tools off by default).
+6. **MCP tools**: tool manifest generated from OpenAPI (search structured, search NL). Admin tools are off by default.
 7. **UI pages**: `/search` (demo), `/admin` (index/rollup/status), with Oak Components & theming.
-8. **Docs**: updated `docs/SETUP.md`, `docs/ARCHITECTURE.md`, `docs/ROLLUP.md`, plus a short MCP/OpenAPI guide.
+8. **Docs**: updated `docs/SETUP.md`, `docs/ARCHITECTURE.md`, `docs/ROLLUP.md`, `docs/SDK-ENDPOINTS.md`, plus a short MCP/OpenAPI guide.
 9. **Tests**: basic unit/integration for parsing, fusion, and endpoint validation.
 
 ---
@@ -98,7 +115,8 @@ Status: Completed. `feat/semantic_search` is rebased onto `origin/main` and alig
   - `pnpm build`
   - `pnpm type-check`
   - `pnpm lint -- --fix`
-  - `pnpm -F @oaknational/oak-curriculum-sdk docs:all`
+  - `pnpm -F @oaknational/oak-curriculum-sdk doc-gen`
+  - `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` (once added)
   - `pnpm format`
   - `pnpm markdownlint`
   - `pnpm test`
@@ -123,9 +141,9 @@ Tasks
   - Ensure presence of: `dev`, `build`, `start`, `lint`, `type-check`, `format` (if used), and any `test` scripts
   - Keep Elasticsearch scripts under `run elastic:*`; document in README
 - ESLint
-  - Extend the repo’s base `eslint.config.base.ts` and top-level `eslint.config.ts`
-  - Preserve Next.js and React rules via `next` plugin/presets; do not relax repo standards
-  - Adopt architectural boundary rules enforced by `eslint-rules/`
+  - Extend the repo’s base `eslint.config.base.ts` and top-level `eslint.config.ts`.
+  - Preserve Next.js and React rules via `next` plugin/presets; do not relax repo standards.
+  - Adopt architectural boundary rules enforced by `eslint-rules/`.
 - TypeScript configs
   - Use `tsconfig.json` for build/runtime with strict options
   - Add/align `tsconfig.lint.json` so lint/type-check use the lint tsconfig per repo standard; set `jsx: react-jsx` and include DOM libs
@@ -143,7 +161,7 @@ Acceptance
 
 ---
 
-## Acceptance Criteria
+## Acceptance criteria
 
 - **Serverless ES ready**: three indices exist with configured analyzers, `semantic_text` fields, and synonyms; smoke query succeeds.
 - **Indexing works end‑to‑end**: calling `/api/index-oak` + `/api/rebuild-rollup` populates ES; no duplicate explosion; reasonable doc counts.
@@ -152,6 +170,7 @@ Acceptance
 - **OpenAPI**: `/api/openapi.json` reflects all public endpoints and schemas; valid under an OpenAPI validator.
 - **MCP**: tools can be loaded from OpenAPI; non‑admin tools enabled by default; admin tools require explicit opt‑in.
 - **UI**: a basic Oak‑styled page demonstrates both search modes; admin page can trigger indexing/rollups with feedback.
+- **Docs**: SDK and Search app docs build cleanly (zero warnings). Search app README/onboarding/quick-start/troubleshooting complete and accurate.
 
 ---
 
@@ -163,7 +182,7 @@ Acceptance
 
 ---
 
-## Implementation Plan (Phased)
+## Implementation plan (phased)
 
 ### Phase 1 — Create indices (Serverless ES)
 
@@ -214,7 +233,7 @@ curl -X POST http://localhost:3000/api/search \
   -d '{ "scope":"units","text":"mountains","subject":"geography","keyStage":"ks4","minLessons":3 }'
 ```
 
-- Test NL search (if LLM enabled):
+- Test NL search:
 
 ```bash
 curl -X POST http://localhost:3000/api/search/nl \
@@ -222,7 +241,7 @@ curl -X POST http://localhost:3000/api/search/nl \
   -d '{ "q":"ks4 geography units about mountains with at least 3 lessons" }'
 ```
 
-- Add basic tests (Vitest) for: query struct validation, RRF fusion determinism, highlight presence.
+- Add tests (Vitest) for: query struct validation, RRF fusion determinism, highlight presence. Cover important edge cases.
 
 Status: indexing/search endpoints implemented; basic RRF test present; more tests pending.
 
@@ -320,12 +339,37 @@ Status: pending.
 
 ---
 
-## Dependencies and Notes
+## Dependencies and notes
 
 - Align with repository rules for **strict typing**, validation, and test isolation; no `any`.
 - Prefer **SDK types/guards** for subject/keyStage validation.
 - Keep LLM usage limited to **NL parsing** (optional); structured endpoint must not require LLM.
 - Maintain idempotent index scripts; synonyms are updatable; prefer aliasing for future blue/green swaps.
+
+### Preserved context (decisions)
+
+- SDK import policy: package-root imports (built dist) across workspaces for consistency and reliable Next.js builds; optional dev-time source alias can be reinstated later with `transpilePackages`.
+- Docs pipeline: include generated types in TypeDoc; sanitise generated JSDoc; explicitly include minimal generated entry points; enforce zero-warning baseline in CI.
+- Tests: avoid network I/O; stub SDK/ES clients; end-to-end tests limited to STDIO.
+- Accessibility: strong defaults; labelled inputs; keyboard navigation; avoid regressions during Oak Components introduction.
+
+### Near‑term execution checklist
+
+1. SDK docs: reduce warnings to zero; commit.
+2. Search app docs: write README, Onboarding, Quick Start, Troubleshooting, Reuse guide; commit. Status: README and core authored docs updated; pipeline added.
+3. TSDoc pass across adapters/lib/routes/UI; commit.
+4. Full quality gate from repo root; fix regressions; commit.
+5. Evaluate a shared `packages/libs/docs-pipeline` and, if justified, extract and adopt for SDK and Search.
+
+### Proposal: shared docs pipeline
+
+- Create (later) `packages/libs/docs-pipeline` with small, pure TypeScript helpers to:
+  - prepare sources (sanitise JSDoc, copy curated entry points),
+  - run TypeDoc (HTML/JSON),
+  - render AI/Markdown outputs,
+  - verify outputs (presence and zero‑warning policy).
+- Replace duplicated scripts in SDK/Search with CLI wrappers from the shared library.
+- Enforce a zero‑warning baseline via CI for both workspaces.
 
 ## Risks and mitigations
 
