@@ -33,7 +33,7 @@
     "dotenv": "^17.2.1"
   },
   "devDependencies": {
-    "pnpm": "^10.16.0",
+    "pnpm": "^10.16.1",
     "typescript": "^5.9.2"
   },
   "engines": {

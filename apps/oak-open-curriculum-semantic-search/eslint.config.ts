@@ -12,7 +12,7 @@ import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
 import type { ConfigArray } from 'typescript-eslint';
 
-import { ignores, tsRules } from '../../eslint.config.base';
+import { ignores, tsRules, testRules } from '../../eslint.config.base';
 import { appBoundaryRules, appArchitectureRules } from '../../eslint-rules/index.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
@@ -48,6 +48,19 @@ const config: ConfigArray = [
   },
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
+  {
+    files: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/test-*.ts',
+      '**/__tests__/**',
+    ],
+    rules: {
+      ...testRules,
+    },
+  },
 ];
 
 export default config;

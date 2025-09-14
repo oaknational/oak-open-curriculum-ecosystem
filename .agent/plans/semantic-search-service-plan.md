@@ -65,6 +65,75 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 
 ---
 
+## Theming and accessibility (Next.js App Router + styled‑components)
+
+Comparison to current state
+
+- Current: `app/lib/Providers.tsx` uses `OakThemeProvider`/`OakGlobalStyle` with `oakDefaultTheme`
+  only; `app/ui/useThemeMode.ts` mutates `document.documentElement.dataset` and persists
+  preferences client‑side; `ThemeSelect.tsx` calls the client hook.
+- Target: keep `OakThemeProvider` at the root, select `oakLightTheme`/`oakDarkTheme` from a typed
+  ThemeContext, and hydrate with a server‑read cookie so the very first render matches the theme,
+  avoiding flicker and hydration issues.
+
+Approach
+
+- Base theme: use `@oaknational/oak-components` `OakThemeProvider` + `OakGlobalStyle`.
+- Dark mode: if Oak Components exposes a dark theme, adopt it. Otherwise derive an `oakDarkTheme`
+  by deep‑merging palette/semantic colours while leaving spacing/typography/breakpoints intact.
+  Keep tokens centralised in `app/ui/theme/{tokens,light,dark}.ts` with strong typing.
+- Provider: create a Client Provider (under App Router) that exposes ThemeContext and renders
+  `OakThemeProvider` with either `oakLightTheme` or `oakDarkTheme`.
+- SSR: in `app/layout.tsx` (server), read the theme cookie via `cookies()` and pass the initial
+  mode to the provider so the first client paint already matches the chosen theme (or system).
+  No ad‑hoc DOM writes for theming.
+- Server markup: set `data-theme-mode` on `<html>` from the cookie so server markup and hydration
+  match without an inline script; CSS always includes both themes.
+- System mode: if no stored preference exists, default to `system` and compute from
+  `prefers-color-scheme`.
+- Persistence: write both a cookie (server hint) and `localStorage` (client convenience).
+- Toggle: accessible header control (System/Light/Dark) with explicit label, `aria-pressed`, and
+  clear state announcements.
+- Accessibility: ensure focus outlines are visible and themed; validate colour contrast (WCAG AA);
+  respect `prefers-reduced-motion`.
+
+Acceptance criteria (theming)
+
+1. UI toggle selects theme (System/Light/Dark).
+2. Default is “System” when no preference exists.
+3. System mode respects `prefers-color-scheme`.
+4. Preference persists (cookie + localStorage) and restores.
+5. Zero hydration errors and zero theme flash on first load/navigation (SSR initial mode).
+6. Current theme always applied to Oak Components and custom UI.
+7. Aligns with Next.js/React best practice (providers/context, no ad‑hoc DOM writes).
+8. Pure unit tests: mode→theme mapping, persistence utilities.
+9. Component tests: provider + toggle behaviour, SSR initialisation path.
+10. WCAG AA contrast for both themes; themed focus outline.
+11. `prefers-reduced-motion` respected where animations exist.
+12. No inline hydration scripts; server renders correct theme via cookie + system defaults.
+
+Application structure conventions
+
+- `app/ui/themes/`
+  - `tokens.ts` (design tokens), `light.ts`, `dark.ts` (typed Oak theme variants)
+- `app/lib/theme/`
+  - `ThemeContext.tsx` (client provider + mapping + persistence utils)
+- `app/ui/components/`
+  - `atoms/` and `molecules/` should be minimal since Oak Components provides primitives; prefer
+    using Oak Components directly. Add `organisms/` for page‑level composites specific to this app.
+- Tests
+  - `__tests__/unit/theme/*.test.ts` for pure functions (mapping, persistence, system detection)
+  - `__tests__/components/theme/*.test.tsx` for provider/SSR/toggle behaviour (React Testing Library)
+
+References
+
+- styled-components Theming: https://styled-components.com/docs/advanced#theming
+- Next.js providers (App Router): https://nextjs.org/docs/app/getting-started/server-and-client-components#context-providers
+- React Context usage: https://react.dev/reference/react/useContext#usage
+- Oak Components: https://components.thenational.academy/?path=/docs/introduction--docs
+
+---
+
 ## Documentation work (teaching & reuse focus)
 
 Objectives

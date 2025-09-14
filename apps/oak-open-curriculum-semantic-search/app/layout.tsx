@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next';
-import type { JSX } from 'react';
+import React, { type JSX } from 'react';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import Script from 'next/script';
+import { cookies } from 'next/headers';
 
 import { lexend } from './ui/fonts';
 import ThemeSelect from './ui/ThemeSelect';
@@ -70,17 +70,22 @@ function Header(): JSX.Element {
   );
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}): Promise<JSX.Element> {
+  const cookieStore = await cookies();
+  const cookieValue = cookieStore.get('theme-mode')?.value;
+  const initialMode =
+    cookieValue === 'light' || cookieValue === 'dark' || cookieValue === 'system'
+      ? cookieValue
+      : 'system';
   return (
-    <html lang="en">
+    <html lang="en" data-theme-mode={initialMode}>
       <body className={lexend.className}>
-        <Script id="theme-init" strategy="beforeInteractive">
-          {
-            "(function(){try{var c=document.cookie.match(/(?:^|; )theme-mode=([^;]+)/);var m=c?decodeURIComponent(c[1]):null;var ls=null;try{ls=localStorage.getItem('theme-mode')}catch(_){};var pref=(ls||m);var d=window.matchMedia('(prefers-color-scheme: dark)').matches;var dark=pref==='dark'||(pref===null||pref==='system')&&d;document.documentElement.dataset.theme=dark?'dark':'light';}catch(e){}})();"
-          }
-        </Script>
         <StyledComponentsRegistry>
-          <Providers>
+          <Providers initialMode={initialMode}>
             <Header />
             {children}
           </Providers>

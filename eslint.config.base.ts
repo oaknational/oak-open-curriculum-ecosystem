@@ -129,6 +129,25 @@ export const tsRules: Linter.RulesRecord = {
   ],
 };
 
+/**
+ * Test file rules
+ *
+ * @todo move to eslint-rules
+ */
+export const testRules: Linter.RulesRecord = {
+  'max-lines': ['error', 700],
+  'max-lines-per-function': ['error', 1000],
+  '@typescript-eslint/consistent-type-assertions': [
+    'error',
+    {
+      assertionStyle: 'as',
+    },
+  ],
+  '@typescript-eslint/no-restricted-types': 'off',
+  '@typescript-eslint/unbound-method': 'off',
+  'import-x/no-named-as-default-member': 'off',
+};
+
 export const baseConfig: ConfigArray = tsEslintConfig(
   {
     ignores,
@@ -153,19 +172,16 @@ export const baseConfig: ConfigArray = tsEslintConfig(
   },
   // Test files - common rules
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/test-*.ts', '**/__tests__/**'],
+    files: [
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/test-*.ts',
+      '**/__tests__/**',
+    ],
     rules: {
-      'max-lines': ['error', 700],
-      'max-lines-per-function': ['error', 1000],
-      '@typescript-eslint/consistent-type-assertions': [
-        'error',
-        {
-          // Remove when possible.
-          assertionStyle: 'as',
-        },
-      ],
-      '@typescript-eslint/no-restricted-types': 'off',
-      '@typescript-eslint/unbound-method': 'off',
+      ...testRules,
     },
   },
   // Config files - allow default project service to avoid per-package tsconfig coupling

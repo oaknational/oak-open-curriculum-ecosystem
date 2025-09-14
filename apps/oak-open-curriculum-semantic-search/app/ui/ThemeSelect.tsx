@@ -1,12 +1,12 @@
 'use client';
 
-import type { JSX } from 'react';
+import { type JSX } from 'react';
 import { useId } from 'react';
-import { useThemeMode } from './useThemeMode';
+import { useThemeContext } from '../lib/theme/ThemeContext';
 
 export default function ThemeSelect(): JSX.Element {
   const selectId = useId();
-  const { mode, setMode } = useThemeMode();
+  const { mode, setMode } = useThemeContext();
 
   return (
     <div style={{ marginLeft: 'auto' }}>

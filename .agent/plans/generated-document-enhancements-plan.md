@@ -66,3 +66,14 @@ Role: Address long-term documentation quality for generated types and public API
 - Complete TSDoc pass on curated public surfaces in SDK and Search (examples, @remarks, @see).
 - Author deep‑dive catalogues for large generated structures and link them from API pages.
 - Re‑evaluate extracting `packages/libs/docs-pipeline` once current pipelines are fully stable.
+
+## Deferred items
+
+- SDK zero‑warnings verification across clean local and CI runs, with fixes driven by:
+  - Ensuring `PathParameters`, `ValidPathGroupings`, `PathGroupingKeys`, and `SchemaBase` are
+    exported only via curated entry points consumed by TypeDoc.
+  - Removing any remaining accidental references to non‑exported internals from public types.
+- Full TSDoc coverage on curated SDK/Search public surfaces with examples and cross‑links to
+  authored deep‑dives.
+- Authored deep‑dive documents (enum/value catalogues, endpoint maps) linked from API pages.
+- Post‑stabilisation: consider extracting shared docs pipeline (`packages/libs/docs-pipeline`).
