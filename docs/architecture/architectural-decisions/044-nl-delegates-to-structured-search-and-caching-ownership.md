@@ -44,6 +44,17 @@ This ensures:
 - Cache metrics and invalidation logic are centralised in the structured handler.
 - Revalidation continues to be driven by index/rollup workflows via tag rotation.
 
+## Telemetry and observability
+
+- We will instrument cache operations with OpenTelemetry spans/metrics.
+- Export target is Sentry when credentials are present; otherwise, instrumentation is a no‑op.
+  - Gate via environment (e.g., `SENTRY_DSN` and `SENTRY_ENVIRONMENT`). If `SENTRY_DSN` is
+    absent, do not initialise Sentry exporters.
+  - Capture span attributes only with non‑sensitive data: route, cacheOutcome (`hit`/`miss`),
+    indexVersion, keyHash (hash of the canonical structured payload), resultCount, duration, and
+    error type (if any). Do not log raw request bodies or PII.
+  - Suggested sample rates: traces 0.1–0.5 in production; 1.0 in preview/test.
+
 ## References
 
 - Code: `apps/oak-open-curriculum-semantic-search/app/api/search/route.ts`

@@ -210,6 +210,12 @@ export async function GET() {
 - Keep validation strict; only cache validated, normalised inputs.
 - Use short TTLs or no cache for any data that can expose user‑specific context.
 - Consider `runtime = 'nodejs'` unless all dependencies are edge‑safe; move to `runtime = 'edge'` selectively for GET docs if desired.
+- Instrument with OpenTelemetry; export to Sentry only when credentials are present (e.g.,
+  `SENTRY_DSN`).
+  - Record cache outcome (hit/miss), route, index version tag, key hash (not raw payload), result
+    count, duration, and errors. Avoid PII and raw request content.
+  - Telemetry must be optional and non‑blocking; if Sentry is not configured, spans/metrics are
+    still generated locally or no‑op.
 
 ---
 
