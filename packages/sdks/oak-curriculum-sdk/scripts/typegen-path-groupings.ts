@@ -26,7 +26,7 @@ export function generatePathGroupingTypes(pathGroupingKeys: string): string {
 /**
  * Path grouping keys
  */
-type PathGroupingKeys = ${pathGroupingKeys};
+export type PathGroupingKeys = ${pathGroupingKeys};
 
 
 /**

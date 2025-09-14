@@ -248,7 +248,7 @@ export function isValidPathParameter<K extends keyof PathParameterValues>(
 /**
  * Path grouping keys
  */
-type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "subject" | "threadSlug" | "unit";
+export type PathGroupingKeys = "NO_PARAMS" | "keyStage_subject" | "lesson" | "lesson_type" | "sequence" | "subject" | "threadSlug" | "unit";
 
 
 /**

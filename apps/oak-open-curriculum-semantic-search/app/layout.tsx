@@ -51,11 +51,18 @@ function Header(): JSX.Element {
         />
       </Link>
       <nav aria-label="Primary">
-        <Link href="/" style={{ marginRight: '1rem' }}>
+        <Link href="/" style={{ marginLeft: '1rem' }}>
           Home
         </Link>
         <Link href="/api/docs" style={{ marginLeft: '1rem' }}>
           Open API Docs
+        </Link>
+        <span style={{ marginLeft: '1rem' }}>|</span>
+        <Link href="/admin" style={{ marginLeft: '1rem' }}>
+          Admin
+        </Link>
+        <Link href="/healthz" style={{ marginLeft: '1rem' }}>
+          Health (API)
         </Link>
       </nav>
       <ThemeSelect />

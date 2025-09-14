@@ -27,7 +27,6 @@
   "excludePrivate": true,
   "excludeProtected": false,
   "hideBreadcrumbs": true,
-  "hideInPageTOC": false,
   "includeVersion": true,
   "treatValidationWarningsAsErrors": true
 }
