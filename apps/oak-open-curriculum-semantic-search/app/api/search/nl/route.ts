@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { parseQuery } from '../../../../src/lib/query-parser';
 import { llmEnabled } from '../../../../src/lib/env';
-import { runHybridSearch, type StructuredQuery } from '../../../../src/lib/run-hybrid-search';
+import type { StructuredQuery } from '../../../../src/lib/run-hybrid-search';
 
 const BodySchema = z.object({
   q: z.string().min(1),
@@ -38,6 +38,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     size,
   };
 
-  const out = await runHybridSearch(structured);
-  return NextResponse.json({ derived: structured, results: out.results });
+  // Delegate to structured endpoint to share the Data Cache and response shape
+  const res = await fetch(new URL('/api/search', req.url), {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(structured),
+    // Do not set cache hints here; structured route owns caching
+  });
+  const json: unknown = await res.json();
+  return NextResponse.json(json, { status: res.status });
 }

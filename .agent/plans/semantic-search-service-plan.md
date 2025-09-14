@@ -42,8 +42,6 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
   type exports completed (incl. `PathGroupingKeys`); curated entry points retained; verification
   derives expected Markdown pages from the generated index to match curated surfaces. Root `doc-gen`
   runs docs across workspaces; SDK and Search doc‑gen are green.
-- Rebase: Completed onto `origin/feat/semantic_search`; resolved conflicts by removing/regenerating
-  generated docs; branch pushed.
 - Search docs: Authored docs updated (`SETUP.md`, `ARCHITECTURE.md`, `ROLLUP.md`, `SDK-ENDPOINTS.md`);
   docs structure clarified (authored vs generated); workspace `doc-gen` verified green.
 
@@ -56,8 +54,7 @@ Note: all workspaces must have cohesive and consistent tooling configuration.
 1. SDK docs: reach zero warnings and enforce a baseline in CI. Focus: verify clean runs after
    exports/bridges; finish TSDoc on curated API surfaces.
 2. Documentation excellence (Search workspace): complete README; thorough TSDoc on adapters, lib, routes, UI; author Onboarding, Quick Start, Troubleshooting; draft Reuse guide (REST vs GraphQL adapters). Status: README and authored docs updated; docs structure clarified; `doc-gen` implemented and green.
-3. Resolve all quality gates at the repo root (install → type‑gen → build → type‑check → lint →
-   doc-gen → format → markdownlint → test → test:e2e).
+3. Resolve all quality gates at the repo root `pnpm qg`.
 4. Add tests for `hybrid-search/{lessons,units}.ts` (fusion, filters, highlights, rollup fallback) and OpenAPI builder.
 
 ### Follow‑on tasks
@@ -182,17 +179,8 @@ Acceptance for Documentation
 
 - Use British spelling throughout documentation and code comments.
 - Always run, from repo root, in this exact order (none optional):
-  - `pnpm i`
-  - `pnpm type-gen`
-  - `pnpm build`
-  - `pnpm type-check`
-  - `pnpm lint -- --fix`
-  - `pnpm -F @oaknational/oak-curriculum-sdk doc-gen`
-  - `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` (once added)
-  - `pnpm format`
-  - `pnpm markdownlint`
-  - `pnpm test`
-  - `pnpm test:e2e`
+  - `pnpm make`
+  - `pnpm qg`
 - After each fix, restart the sequence from the beginning to catch regressions.
 - No `any`, no unsafe type assertions; validate external inputs with Zod and SDK guards.
 - Keep admin endpoints guarded by `x-api-key` and never expose admin MCP tools by default.
@@ -248,6 +236,7 @@ Acceptance
 
 ## Security
 
+- All hosted pages and routes are behind Vercel deployment protection.
 - Admin routes require header `x-api-key: ${SEARCH_API_KEY}`; rate‑limit externally if exposed beyond a private network.
 - Only server code reads sensitive env vars. Natural‑language search is disabled unless `AI_PROVIDER=openai` and `OPENAI_API_KEY` are set.
 - No raw HTTP calls to Oak: the official SDK is the single access path.
@@ -260,11 +249,11 @@ Acceptance
 
 **Tasks**
 
-- Ensure env vars: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`.
-- Run setup script to upsert synonyms and create indices (idempotent):
+- Ensure env vars: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`, `SEARCH_API_KEY`.
+- Run setup script to upsert synonyms and create indices (idempotent), note, script should read envs from the root `.env` file:
 
 ```bash
-ELASTICSEARCH_URL=... ELASTICSEARCH_API_KEY=... \
+ELASTICSEARCH_URL=... ELASTICSEARCH_API_KEY=... OAK_API_KEY=... SEARCH_API_KEY=... \
 pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
 ```
 
@@ -281,9 +270,8 @@ pnpm -C apps/oak-open-curriculum-semantic-search run elastic:setup
 
 **Tasks**
 
-- Fill `.env.local`:
-  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`, `SEARCH_API_KEY`.
-  - Optional LLM: `AI_PROVIDER=openai`, `OPENAI_API_KEY=…`; set `AI_PROVIDER=none` to disable.
+- Fill `.env.local`, note, script should read envs from the root `.env` file:
+  - Required: `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`, `OAK_API_KEY`, `SEARCH_API_KEY`, `AI_PROVIDER`, `OPENAI_API_KEY`
 - Start dev server:
 
 ```bash
@@ -364,11 +352,12 @@ Status: pending.
 - **OpenAPI**: generate `/api/openapi.json` from Zod schemas using `@asteasolutions/zod-to-openapi`.
   - Include: `/api/search` (structured), `/api/search/nl`, `/api/sdk/search-lessons`, `/api/sdk/search-transcripts`.
   - Exclude or mark **admin** routes by default; if included, flag `x-requires-api-key`.
-  - Optional: serve `/docs` using Redoc or Swagger UI for human browsing.
+  - Serve `/openapi-docs` using Redoc or Swagger UI for human browsing of the OpenAPI schema.
+  - Serve `docs/api` using TypeDoc HTML and JSON for public (code) API documentation.
 - **MCP tools**: derive tool definitions from `openapi.json`.
   - Expose: `searchStructured`, `searchNaturalLanguage`, `sdkSearchLessons`, `sdkSearchTranscripts`.
-  - Keep `indexOak`/`rebuildRollup` tools disabled by default; enable only in trusted agents.
-- **Prompt helpers** (optional): ship a few example prompts.
+  - Do NOT expose admin tools via MCP
+- **MCP prompts**: provide helpful prompts for the search endpoints.
 
 **Definition of Done**
 
