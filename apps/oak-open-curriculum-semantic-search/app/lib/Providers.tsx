@@ -3,20 +3,49 @@
 
 import type { JSX } from 'react';
 import { ThemeProvider as ThemeContextProvider, useThemeContext } from './theme/ThemeContext';
-import { ColorModeProvider } from './theme/ColorModeContext';
+import { useEffect, useRef } from 'react';
+import { ColorModeProvider, useColorMode } from './theme/ColorModeContext';
 import { ThemeBridgeProvider } from './theme/ThemeBridgeProvider';
-import { HtmlThemeAttribute } from './theme/HtmlThemeAttribute';
 
-function BridgeComposer({ children }: { children: React.ReactNode }): JSX.Element {
-  const { resolved } = useThemeContext();
+function BridgeComposer({
+  children,
+  ssrMode,
+}: {
+  children: React.ReactNode;
+  ssrMode: 'light' | 'dark';
+}): JSX.Element {
   return (
-    <ColorModeProvider initialMode={resolved} key={resolved}>
-      <ThemeBridgeProvider>
-        <HtmlThemeAttribute />
-        {children}
+    <ColorModeProvider initialMode={ssrMode}>
+      <ThemeBridgeProvider ssrMode={ssrMode}>
+        <ThemeWrapper>
+          <SyncModeToResolved />
+          {children}
+        </ThemeWrapper>
       </ThemeBridgeProvider>
     </ColorModeProvider>
   );
+}
+
+function ThemeWrapper({ children }: { children: React.ReactNode }): JSX.Element {
+  const { mode } = useColorMode();
+  return (
+    <div id="app-theme-root" data-theme={mode}>
+      {children}
+    </div>
+  );
+}
+
+function SyncModeToResolved(): JSX.Element | null {
+  const { resolved } = useThemeContext();
+  const { mode, setMode } = useColorMode();
+  const didSyncRef = useRef(false);
+  useEffect(() => {
+    if (!didSyncRef.current) {
+      didSyncRef.current = true;
+      if (resolved !== mode) setMode(resolved);
+    }
+  }, [resolved, mode, setMode]);
+  return null;
 }
 
 export function Providers({
@@ -26,9 +55,10 @@ export function Providers({
   initialMode: 'light' | 'dark' | 'system';
   children: React.ReactNode;
 }): JSX.Element {
+  const ssrResolved: 'light' | 'dark' = initialMode === 'dark' ? 'dark' : 'light';
   return (
     <ThemeContextProvider initialMode={initialMode}>
-      <BridgeComposer>{children}</BridgeComposer>
+      <BridgeComposer ssrMode={ssrResolved}>{children}</BridgeComposer>
     </ThemeContextProvider>
   );
 }

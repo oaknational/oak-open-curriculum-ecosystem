@@ -1,20 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import { useTheme } from 'styled-components';
-import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
-
-import { ColorModeProvider, useColorMode } from './ColorModeContext.js';
-import { ThemeBridgeProvider } from './ThemeBridgeProvider.js';
-import { HtmlThemeAttribute } from './HtmlThemeAttribute.js';
+import { useColorMode } from './ColorModeContext.js';
+import { Providers as AppProviders } from '../Providers.js';
 
 function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <OakThemeProvider theme={oakDefaultTheme}>
-      <ColorModeProvider initialMode="light">
-        <ThemeBridgeProvider>{children}</ThemeBridgeProvider>
-      </ColorModeProvider>
-    </OakThemeProvider>
-  );
+  return <AppProviders initialMode="light">{children}</AppProviders>;
 }
 
 describe('Bridge theming (ADR-045)', () => {
@@ -47,61 +38,53 @@ describe('Bridge theming (ADR-045)', () => {
       const theme = useTheme() as unknown as { app?: { colors?: { headerBorder?: string } } };
       return <span data-testid="color">{theme?.app?.colors?.headerBorder ?? 'missing'}</span>;
     };
-    const { rerender } = render(
-      <Providers>
-        <HtmlThemeAttribute />
-        <ColorProbe />
-      </Providers>,
-    );
-    const before = screen.getAllByTestId('color')[0].textContent;
-    const cssBefore = getComputedStyle(document.documentElement).getPropertyValue(
-      '--app-color-header-border',
-    );
-    // Toggle
     const Toggler = () => {
-      const { toggle } = useColorMode();
+      const { setMode } = useColorMode();
       return (
-        <button onClick={toggle} data-testid="toggle2">
-          toggle
+        <button onClick={() => setMode('dark')} data-testid="toggle2">
+          to dark
         </button>
       );
     };
-    rerender(
+
+    render(
       <Providers>
-        <HtmlThemeAttribute />
         <Toggler />
         <ColorProbe />
       </Providers>,
     );
+    const before = screen.getAllByTestId('color')[0].textContent;
+    const rootEl = document.getElementById('app-theme-root') as HTMLElement;
+    const cssBefore = getComputedStyle(rootEl).getPropertyValue('--app-color-header-border');
+
     act(() => {
       screen.getByTestId('toggle2').click();
     });
+
     const after = screen.getAllByTestId('color')[0].textContent;
-    const cssAfter = getComputedStyle(document.documentElement).getPropertyValue(
-      '--app-color-header-border',
-    );
+    const cssAfter = getComputedStyle(rootEl).getPropertyValue('--app-color-header-border');
     expect(after).not.toBe(before);
     expect(cssAfter.trim()).not.toBe(cssBefore.trim());
   });
-  it('syncs <html data-theme> when mode toggles', () => {
+
+  it('syncs wrapper data-theme when mode toggles', () => {
     const Toggle = () => {
-      const { mode, toggle } = useColorMode();
+      const { mode, setMode } = useColorMode();
       return (
-        <button onClick={toggle} data-testid="toggle">
+        <button onClick={() => setMode('dark')} data-testid="toggle">
           {mode}
         </button>
       );
     };
     render(
       <Providers>
-        <HtmlThemeAttribute />
         <Toggle />
       </Providers>,
     );
-    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(document.getElementById('app-theme-root')?.dataset.theme).toBe('light');
     act(() => {
       screen.getByTestId('toggle').click();
     });
-    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(document.getElementById('app-theme-root')?.dataset.theme).toBe('dark');
   });
 });

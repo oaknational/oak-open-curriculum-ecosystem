@@ -32,6 +32,7 @@ import {
 } from './theme-utils';
 
 export { THEME_MODES };
+export type { ResolvedThemeMode };
 
 /** @todo centralise logger creation */
 const logger = createAdaptiveLogger({ name: 'ThemeContext' });

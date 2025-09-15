@@ -1,6 +1,7 @@
 'use client';
 
 import type { JSX, FormEvent, Dispatch, SetStateAction } from 'react';
+import sc from 'styled-components';
 import { useState } from 'react';
 import {
   ScopeField,
@@ -55,6 +56,11 @@ function parseStructuredResponse(
   return { error: null, results: data.results };
 }
 
+const FormGrid = sc.form`
+  display: grid;
+  gap: ${(p) => p.theme.app.space.sm};
+`;
+
 function StructuredForm({
   model,
   onChange,
@@ -65,11 +71,10 @@ function StructuredForm({
   onSubmit: (ev: FormEvent<HTMLFormElement>) => void;
 }): JSX.Element {
   return (
-    <form
+    <FormGrid
       onSubmit={(ev) => {
         onSubmit(ev);
       }}
-      style={{ display: 'grid', gap: '0.5rem' }}
       id="structured-panel"
       role="tabpanel"
       aria-labelledby="structured-tab"
@@ -82,7 +87,7 @@ function StructuredForm({
       <SizeField value={model.size ?? 10} onChange={onChange} />
 
       <button type="submit">Search</button>
-    </form>
+    </FormGrid>
   );
 }
 

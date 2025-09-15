@@ -45,6 +45,24 @@ Document relationships
 
 ---
 
+## Non‑negotiable requirements
+
+- No `dangerouslySetInnerHTML` anywhere. Highlights/rich text must be rendered as safe React elements or server‑sanitized with a strict allowlist and stripped attributes. Enforced by ESLint `react/no-danger`; tests cover safety behaviour.
+- No direct DOM manipulation. Theme switching and UI changes must be declarative via React state/props/attributes (e.g., wrapper `data-theme`), not `document.*` writes. Implemented via `Providers` binding the wrapper’s `data-theme` to context.
+- Zero hydration errors. Server HTML must match the first client render; avoid `Date.now()`, `Math.random()`, locale‑dependent formatting, and client‑only branches in server components.
+- SSR‑first theming without flicker. Server sets theme attributes; CSS variables are emitted for the selected mode; switching updates attributes without remounts.
+- Styled‑components and Oak Components compatible. Keep `OakThemeProvider` and the v6 SSR registry.
+- Typed semantic theme. Expose `theme.app` tokens layered over Oak tokens; all components use semantic tokens.
+- Accessible by default. WCAG 2.2 AA contrast, visible focus, `prefers-reduced-motion` respected.
+- Deterministic, testable code. No real network I/O in unit/integration tests; add component/a11y/contrast tests; prove theme switching updates tokens and CSS vars.
+- Next.js/React best practice. Server components for data/structure; client components only for interactivity; avoid global side effects.
+- Security and robustness. Validate/sanitize all external content at server boundaries; avoid unsafe type assertions.
+- Dev/E2E workflow. Use the Playwright MCP server to drive the app while observing server logs.
+- All design tokens MUST come from the theme. Do not hard‑code colors/spacing/etc.; no raw hex or magic numbers.
+- Never use the `style` prop. Replace with styled‑components (or Oak Components props) consuming theme tokens. Enforced by ESLint `react/forbid-component-props` forbidding `style`.
+
+---
+
 ## Theming approach (accepted)
 
 - Provider composition follows ADR‑045 (Hybrid theming Bridge):
@@ -70,6 +88,9 @@ Acceptance (theming)
 9. WCAG AA contrast; themed focus outlines.
 10. `prefers-reduced-motion` observed.
 11. Semantic tokens and CSS variable values change on toggle (tested).
+12. No `style` prop usage; all styling via styled‑components/Oak Components using theme tokens; ESLint rule present.
+13. No `dangerouslySetInnerHTML` usage; safe rendering/sanitization in place; ESLint rule present.
+14. All design tokens sourced from the theme; no raw hex/magic numbers.
 
 ---
 
@@ -101,7 +122,7 @@ Acceptance (theming)
   header + layout refactored via `HeaderStyles` client wrapper; tabs removed;
   style audit captured in `.agent/plans/ui-style-audit.md`.
 
-Acceptance (M0): No raw hex/magic numbers remain; visual output unchanged.
+Acceptance (M0): No raw hex/magic numbers; no `style` prop usage; visual output unchanged.
 
 ### M1 — Oak theme integration via Bridge (light + dark)
 
@@ -128,9 +149,9 @@ Acceptance (M2): Primary UI surfaces use Oak; a11y semantics intact.
 
 ### M3 — Highlights safety and semantics
 
-- Audit `dangerouslySetInnerHTML`; sanitize/allowlist server‑side or render
-  safely with emphasis.
-- Add tests to ensure no unsafe HTML is rendered.
+- Remove `dangerouslySetInnerHTML` from the app. Render highlights as safe React
+  elements or sanitize server‑side with a strict allowlist (strip all attributes).
+- Add tests that assert XSS payloads/attributes are removed (behavioural tests; syntax is guarded by ESLint).
 
 Acceptance (M3): Safe highlight rendering; tests pass.
 

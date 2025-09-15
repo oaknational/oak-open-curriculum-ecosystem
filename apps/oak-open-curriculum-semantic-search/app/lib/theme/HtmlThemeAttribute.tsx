@@ -11,10 +11,10 @@ export function HtmlThemeAttribute(): React.JSX.Element | null {
   const { mode } = useColorMode();
   useEffect(() => {
     try {
-      document.documentElement.dataset.theme = mode;
+      const root = document.getElementById('app-theme-root');
+      if (root) root.dataset.theme = mode;
     } catch (error: unknown) {
       logger.error(`Error setting theme mode: ${error}`, { error });
-      // ignore
     }
   }, [mode]);
   return null;

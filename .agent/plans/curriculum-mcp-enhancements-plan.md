@@ -7,6 +7,7 @@ Owner: Engineering (MCP/Oak SDK)
 
 ## Purpose
 
+- Support the [OpenAI Connector standard for MCP](https://platform.openai.com/docs/mcp#create-an-mcp-server) servers by exposing `search` and `fetch` built to the OpenAI Connector standard, mounted alongside our existing MCP endpoint in the same Express app at a new path `/openai_connector`. These tools act as intelligent facades over existing SDK MCP tools. The `search` tool aggregates existing search endpoints initially; later it will be powered by the semantic search service.
 - Enable accurate versioning of the MCP servers, using the root package.json version. This includes resolving the issues with the release pipeline (see errors in GitHub release logs). <- This purpose needs properly integrating into this plan. The version is important because we are changing the tools, resources, prompts, and other capabilities of the MCP servers, and clients will need to know when to update their cache etc.
 - Extract common logic into a shared MCP library workspace (shared server core and error handling) used by both STDIO and Streamable HTTP apps.
 - Migrate from the low‑level Server to MCP SDK abstractions (`McpServer`), removing duplicate validation while preserving the principle that all types, type guards, schemas, and validation are generated at compile time from the OpenAPI schema.
@@ -14,12 +15,16 @@ Owner: Engineering (MCP/Oak SDK)
 
 ## Core References
 
+- `.agent/reference-docs/openai-connector-standards.md` (OpenAI Connector standard for MCP)
 - `.agent/directives-and-memory/AGENT.md` (Development Practice, Testing Strategy, TypeScript Practice)
 - `.agent/reference-docs/mcp-typescript-sdk-readme.md` (McpServer, Streamable HTTP, stdio, debounced notifications, elicitation)
+- `docs/architecture/architectural-decisions/046-openai-connector-facades-in-streamable-http.md`
 - `docs/architecture/architectural-decisions/` (relevant ADRs)
 - [Understanding MCP servers](https://modelcontextprotocol.io/docs/learn/server-concepts)
 
 ## Goals
+
+- Support the OpenAI Connector standard for MCP servers by exposing `search` and `fetch` built to the OpenAI Connector standard, as per `.agent/reference-docs/openai-connector-standards.md`.
 
 - Create an internal workspace package (e.g., `packages/libs/mcp-server-kit`) that provides:
   - Tool list builder from SDK: `MCP_TOOLS → Tool[]` with full JSON Schema (Inspector‑friendly)
@@ -55,7 +60,58 @@ Owner: Engineering (MCP/Oak SDK)
 
 ## Approach
 
-### Phase A: Shared MCP server core
+### Phase A: OpenAI Connector compatibility in the same Express app (new path)
+
+1. Server structure
+
+- Create a new MCP `Server` instance (OpenAI Connector server) in `apps/oak-curriculum-mcp-streamable-http`.
+- Create a dedicated `StreamableHTTPServerTransport` for this server.
+- Mount POST at `/openai_connector` with a handler analogous to `createMcpHandler`.
+- Add HEAD/GET/OPTIONS health endpoints at `/openai_connector` (mirror `/mcp`).
+
+2. Middleware and security
+
+- Reuse `bearerAuth`, DNS rebinding protection, and CORS configuration.
+- Add Accept header normalisation middleware for `/openai_connector` (same as `/mcp`).
+
+3. Tools: `tools/list`
+
+- Return exactly two tools with input schemas:
+  - `search` (input: string `query`)
+  - `fetch` (input: string `id`)
+
+4. Tools: `tools/call` handlers
+
+- `search` (initial implementation):
+  - Aggregate results from `get-search-lessons` and `get-search-transcripts` via SDK `executeToolCall`.
+  - Normalise and deduplicate to `{ results: [{ id, title, url }] }`.
+  - Return as MCP content array with a single item `{ type: "text", text: JSON.stringify({ results }) }`.
+- `fetch`:
+  - Determine content type by ID prefix: `lesson:`, `unit:`, `subject:`, `sequence:`.
+  - Route to the appropriate SDK MCP tool; transform to `{ id, title, text, url, metadata? }`.
+  - Return as a single `text` content item (JSON string as per OpenAI spec).
+
+5. Canonical URLs and metadata
+
+- Lessons: `/lessons/{slug}`; Units: `/units/{slug}`; Subjects: `/subjects/{slug}`; Sequences: `/sequences/{slug}`.
+- Include minimal metadata (e.g., `{ contentType, subject?, keyStage? }`) when available.
+
+6. Tests (Phase A scope)
+
+- Unit: content-type detection, URL generation, search aggregation normalisation, response transformers.
+- Integration: `/openai_connector` `tools/list` returns exactly `search` & `fetch`.
+- Integration: `tools/call` for both tools returns correct OpenAI format (single `text` item containing JSON).
+- Error cases: unknown IDs, upstream failures formatted as multi-block error content.
+
+7. Docs
+
+- Add ADR-046 and update the app README with the new endpoint.
+
+8. Deferred: Caching
+
+- Do not implement caching in Phase A. Mark as a later enhancement (see Later Enhancements).
+
+### Phase B: Shared MCP server core
 
 1. Package scaffolding
 
@@ -77,7 +133,7 @@ Owner: Engineering (MCP/Oak SDK)
 - Unit tests in the shared package for builders and formatters
 - Integration/e2e in apps reusing the shared helpers
 
-### Phase B: Migration to McpServer with generated Zod input schemas
+### Phase C: Migration to McpServer with generated Zod input schemas
 
 1. Type‑gen extension (SDK)
 
@@ -99,7 +155,7 @@ Owner: Engineering (MCP/Oak SDK)
 - Unit tests: Zod parse success/failure per representative tool
 - E2E/Inspector sanity: argument fields render; validation failures produce shared formatted errors
 
-### Phase C: Resources and Prompts enablement
+### Phase D: Resources and Prompts enablement
 
 1. Resource classification and generation
 
@@ -115,7 +171,7 @@ Owner: Engineering (MCP/Oak SDK)
 - E2E: `resources/list`, `resources/templates/list`, and `resources/read` for representative endpoints
 - E2E: `prompts/list` and `prompts/get`; verify argument schemas and completions
 
-### Phase D: Cross‑server composition and pipelines
+### Phase E: Cross‑server composition and pipelines
 
 1. Composition patterns
 
@@ -133,6 +189,14 @@ Owner: Engineering (MCP/Oak SDK)
 4. Documentation
 
 - Codify best practices and examples; reference MCP server concepts for Tools, Resources, Prompts, and bringing servers together
+
+## Later Enhancements
+
+- Caching layer (e.g., memory/Redis) for `fetch` and `search`:
+  - Response caching with invalidation hooks
+  - Popular content cache warming
+  - Metrics and cache-hit observability
+- Replace search aggregation with the semantic search service while keeping the OpenAI output shape stable
 
 ## TDD and Quality Gates
 
@@ -156,6 +220,7 @@ Owner: Engineering (MCP/Oak SDK)
 
 ## Rollout
 
-- Phase A PR: introduce shared library and adopt in both apps; green gates
-- Phase B PR: migrate to `McpServer` using generated Zod input schemas; green gates
+- Phase A PR: implement `search` and `fetch` tools as intelligent facades over the existing MCP tools; green gates
+- Phase B PR: introduce shared library and adopt in both apps; green gates
+- Phase C PR: migrate to `McpServer` using generated Zod input schemas; green gates
 - Manual Inspector verification against STDIO and Streamable HTTP endpoints

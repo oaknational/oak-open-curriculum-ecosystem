@@ -1,7 +1,99 @@
 'use client';
 
-import type { JSX } from 'react';
+import { createElement, type JSX } from 'react';
+import sc from 'styled-components';
 import { z } from 'zod';
+
+type AllowedTag = 'em' | 'strong' | 'mark';
+const ALLOWED_TAGS: ReadonlySet<string> = new Set(['em', 'strong', 'mark']);
+
+function isAllowedTag(name: string): name is AllowedTag {
+  return ALLOWED_TAGS.has(name);
+}
+
+function tokenize(html: string): string[] {
+  return html.split(/(<\/?[^>]+>)/g).filter(Boolean);
+}
+
+function flushUnclosed(
+  stack: { type: AllowedTag; children: React.ReactNode[] }[],
+  current: () => React.ReactNode[],
+): void {
+  if (stack.length) {
+    const last = stack.pop();
+    if (last) current().push(...last.children);
+  }
+}
+
+function handleToken(
+  tok: string,
+  stack: { type: AllowedTag; children: React.ReactNode[] }[],
+  current: () => React.ReactNode[],
+  keyRef: { current: number },
+): void {
+  const m = tok.match(/^<\/?\s*([a-zA-Z0-9]+)[^>]*>$/);
+  if (!m) {
+    current().push(tok);
+    return;
+  }
+  const name = m[1].toLowerCase();
+  const closing = tok.startsWith('</');
+  if (!isAllowedTag(name)) return;
+  if (!closing) {
+    stack.push({ type: name, children: [] });
+  } else {
+    const last = stack.pop();
+    if (last && last.type === name)
+      current().push(createElement(name, { key: `hl-${keyRef.current++}` }, ...last.children));
+  }
+}
+
+function renderSafeHighlight(html: string): React.ReactNode[] {
+  const tokens = tokenize(html);
+  const stack: { type: AllowedTag; children: React.ReactNode[] }[] = [];
+  const root: React.ReactNode[] = [];
+  const keyRef = { current: 0 };
+
+  const current = (): React.ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
+
+  for (const tok of tokens) handleToken(tok, stack, current, keyRef);
+  flushUnclosed(stack, current);
+  return root;
+}
+
+const ResultsSection = sc.section`
+  margin-top: ${(p) => p.theme.app.space.xl};
+`;
+
+const ResultsList = sc.ul`
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: ${(p) => p.theme.app.space.sm};
+`;
+
+const ResultItemLi = sc.li`
+  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
+  padding: ${(p) => p.theme.app.space.sm};
+  border-radius: ${(p) => p.theme.app.radii.sm};
+`;
+
+const Title = sc.div`
+  font-weight: 600;
+`;
+
+const Meta = sc.div`
+  color: ${(p) => p.theme.app.colors.textMuted};
+  font-size: ${(p) => p.theme.app.fontSizes.xs};
+`;
+
+const HighlightsList = sc.ul`
+  margin-top: ${(p) => p.theme.app.space.sm};
+`;
+
+const HighlightItem = sc.li`
+  font-size: ${(p) => p.theme.app.fontSizes.xs};
+`;
 
 function ResultItem({
   title,
@@ -20,17 +112,17 @@ function ResultItem({
   const meta = parts.join(' · ');
 
   return (
-    <li style={{ border: '1px solid #ddd', padding: '0.5rem', borderRadius: 4 }}>
-      <div style={{ fontWeight: 600 }}>{title}</div>
-      {meta ? <div style={{ color: '#666', fontSize: 12 }}>{meta}</div> : null}
+    <ResultItemLi>
+      <Title>{title}</Title>
+      {meta ? <Meta>{meta}</Meta> : null}
       {highlights.length > 0 ? (
-        <ul style={{ marginTop: '0.5rem' }}>
+        <HighlightsList>
           {highlights.map((h, i) => (
-            <li key={i} style={{ fontSize: 12 }} dangerouslySetInnerHTML={{ __html: String(h) }} />
+            <HighlightItem key={i}>{renderSafeHighlight(String(h))}</HighlightItem>
           ))}
-        </ul>
+        </HighlightsList>
       ) : null}
-    </li>
+    </ResultItemLi>
   );
 }
 
@@ -79,21 +171,19 @@ export function SearchResults({ results }: { results: unknown[] }): JSX.Element 
   }
 
   return (
-    <section aria-live="polite" style={{ marginTop: '1.25rem' }}>
-      <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.5rem' }}>
-        {parsed.data.map((rec) => {
-          return (
-            <ResultItem
-              key={rec.id}
-              title={titleFor(rec)}
-              subject={subjectFor(rec)}
-              keyStage={keyStageFor(rec)}
-              highlights={highlightsFor(rec)}
-            />
-          );
-        })}
-      </ul>
-    </section>
+    <ResultsSection aria-live="polite">
+      <ResultsList>
+        {parsed.data.map((rec) => (
+          <ResultItem
+            key={rec.id}
+            title={titleFor(rec)}
+            subject={subjectFor(rec)}
+            keyStage={keyStageFor(rec)}
+            highlights={highlightsFor(rec)}
+          />
+        ))}
+      </ResultsList>
+    </ResultsSection>
   );
 }
 

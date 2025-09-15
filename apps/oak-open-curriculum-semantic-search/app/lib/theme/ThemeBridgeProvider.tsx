@@ -13,7 +13,9 @@ type SemanticTheme = ReturnType<typeof createSemanticTheme>;
 function resolveModeFromDom(): 'light' | 'dark' {
   try {
     if (typeof document !== 'undefined') {
-      return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+      const root = document.getElementById('app-theme-root');
+      if (root && root.dataset.theme === 'dark') return 'dark';
+      return 'light';
     }
   } catch {
     /* ignore */
@@ -46,12 +48,16 @@ function buildVarMap(mode: 'light' | 'dark'): Record<string, string> {
 
 export function ThemeBridgeProvider({
   children,
+  ssrMode,
 }: {
   children: React.ReactNode;
+  ssrMode?: 'light' | 'dark';
 }): React.JSX.Element {
   const raw = oakDefaultTheme;
   const contextMode = useColorMode().mode;
-  const mode = typeof document === 'undefined' ? 'light' : (contextMode ?? resolveModeFromDom());
+  // Align first client render with server by preferring ssrMode if provided
+  const initial = ssrMode ?? resolveModeFromDom();
+  const mode = contextMode ?? initial;
   const semantic = useMemo<SemanticTheme>(() => createSemanticTheme(raw, mode), [raw, mode]);
   const vars = useMemo(() => buildVarMap(mode), [mode]);
   return (

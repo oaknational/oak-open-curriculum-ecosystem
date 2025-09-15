@@ -96,6 +96,7 @@ function ensureMcpAcceptHeader(
   const accept = req.get('Accept');
   const requiredAccept = 'application/json, text/event-stream';
 
+  /** @todo remove once OAuth is enabled */
   // Check if Accept header is missing, is wildcard, or doesn't contain both required types
   if (
     !accept ||
@@ -246,5 +247,4 @@ export async function startDevServer(): Promise<void> {
   console.log(`Streaming HTTP MCP listening on http://localhost:${String(port)}`);
 }
 
-// Default export for Vercel Express runtime
 export default createApp();

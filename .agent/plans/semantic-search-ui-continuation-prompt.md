@@ -16,7 +16,7 @@ Oak Components integration, accessibility, and page structure. Companion to the
 - Theme: `oakDefaultTheme` light + derived dark at semantic layer; toggle in header via `ThemeSelect` updates context and HTML attribute; Bridge recomputes tokens and CSS vars by mode.
 - Layout: tabs removed; Structured and NL forms shown side‑by‑side.
 - Header: moved styling into client file `app/ui/client/HeaderStyles.tsx`; layout remains server.
-- Inline styles: still present in form fields/results; migrating to tokens via Bridge.
+- Inline styles: migrated in forms/results to styled‑components using `theme.app` tokens; ESLint forbids `style` prop.
 - Tests: theming unit/integration green; SSR cookie mapping test stabilized with scoped mocks.
 
 ---
@@ -24,7 +24,7 @@ Oak Components integration, accessibility, and page structure. Companion to the
 ## Immediate next tasks (ordered)
 
 1. Implement Theme Bridge provider (raw→semantic mapping, CSS var emission, typed `theme.app`) [DONE].
-2. Migrate inline styles in Structured/NL forms and results to tokens/styled‑components.
+2. Migrate inline styles in Structured/NL forms and results to tokens/styled‑components. [DONE]
 3. Validate dark theme visuals; ensure AA contrast; add focus outlines per tokens.
 4. Begin Oak Components refactor (inputs/selects/buttons/header) with a11y semantics.
 5. Add component tests for submit/error/results flows; introduce a11y + contrast checks (axe + contrast matrix). Add Bridge assertions: CSS vars and `theme.app` values change on toggle [DONE].
@@ -38,7 +38,7 @@ Oak Components integration, accessibility, and page structure. Companion to the
 - Page shell: `app/page.tsx` (server) + `app/ui/client/SearchPageClient.tsx` (client container).
 - Forms: `app/ui/StructuredSearch.tsx`, `app/ui/NaturalSearch.tsx`,
   `app/ui/structured-fields.tsx`, `app/ui/fields.tsx`.
-- Results: `app/ui/SearchResults.tsx` (uses `dangerouslySetInnerHTML` for highlights).
+- Results: `app/ui/SearchResults.tsx` (safe React rendering for highlights; no `dangerouslySetInnerHTML`).
 - Theme infra: `app/lib/theme/{ThemeContext.tsx,theme-utils.ts}` plus Bridge files (`ColorModeContext.tsx`, `ThemeBridgeProvider.tsx`, `ThemeCssVars.tsx`, optional `HtmlThemeAttribute.tsx`). Bridge composes mode‑specific tokens via `createLightTheme`/`createDarkTheme` and emits corresponding CSS vars.
 
 ---
@@ -75,8 +75,8 @@ Oak Components integration, accessibility, and page structure. Companion to the
 [x] ThemeSelect present in header; provider under `Providers`
 [x] Bridge provider implemented; `theme.app` available at runtime
 [x] Bridge mode toggling updates CSS vars and `theme.app` tokens
-[ ] Inline styles migrated to themed styled‑components (forms/results)
+[x] Inline styles migrated to themed styled‑components (forms/results)
 [ ] Dark theme visuals verified for contrast AA
 [ ] Forms/header migrated to Oak Components
-[ ] Highlights sanitized or safely rendered
+[x] Highlights sanitized or safely rendered (safe React rendering)
 [ ] Component tests for main flows; a11y + contrast checks added

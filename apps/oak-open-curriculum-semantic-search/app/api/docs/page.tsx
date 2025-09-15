@@ -1,27 +1,45 @@
 'use client';
 
 import type { JSX } from 'react';
+import sc from 'styled-components';
 import { RedocStandalone } from 'redoc';
+
+const Main = sc.main`
+  padding: ${(p) => p.theme.app.space.md};
+`;
+const Header = sc.header`
+  margin-bottom: ${(p) => p.theme.app.space.sm};
+`;
+const H1 = sc.h1`
+  margin: 0;
+  font-size: ${(p) => p.theme.app.fontSizes.md};
+`;
+const P = sc.p`
+  margin: ${(p) => `${p.theme.app.space.xs} 0 0`};
+`;
+const LinkA = sc.a`
+  text-decoration: underline;
+`;
+const Frame = sc.div`
+  border: 1px solid ${(p) => p.theme.app.colors.headerBorder};
+  border-radius: ${(p) => p.theme.app.radii.md};
+  overflow: hidden;
+`;
 
 export default function ApiDocsPage(): JSX.Element {
   const specUrl = '/api/openapi.json';
   return (
-    <main style={{ padding: 16 }}>
-      <header style={{ marginBottom: 12 }}>
-        <h1 style={{ margin: 0, fontSize: 22 }}>Oak Curriculum Search API</h1>
-        <p style={{ margin: '6px 0 0', color: '#4b5563' }}>
+    <Main>
+      <Header>
+        <H1>Oak Curriculum Search API</H1>
+        <P>
           OpenAPI schema:{' '}
-          <a
-            href={specUrl}
-            target="_blank"
-            rel="noreferrer"
-            style={{ textDecoration: 'underline' }}
-          >
+          <LinkA href={specUrl} target="_blank" rel="noreferrer">
             {specUrl}
-          </a>
-        </p>
-      </header>
-      <div style={{ border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden' }}>
+          </LinkA>
+        </P>
+      </Header>
+      <Frame>
         <RedocStandalone
           specUrl={specUrl}
           options={{
@@ -31,7 +49,7 @@ export default function ApiDocsPage(): JSX.Element {
             pathInMiddlePanel: true,
           }}
         />
-      </div>
-    </main>
+      </Frame>
+    </Main>
   );
 }

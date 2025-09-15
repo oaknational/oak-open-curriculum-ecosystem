@@ -44,6 +44,15 @@ const config: ConfigArray = [
       ...appBoundaryRules,
       ...appArchitectureRules,
       ...tsRules,
+      // Enforce safety and theming conventions
+      'react/no-danger': 'error',
+      'react/forbid-component-props': [
+        'error',
+        { forbid: [{ propName: 'style', message: 'Use styled-components and theme tokens' }] },
+      ],
+      // Keep algorithms simple in UI helpers
+      complexity: ['error', 8],
+      'max-statements': ['error', 20],
     },
   },
   importX.flatConfigs.recommended,

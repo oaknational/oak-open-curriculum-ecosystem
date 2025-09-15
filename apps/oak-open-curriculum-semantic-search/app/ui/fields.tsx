@@ -62,6 +62,8 @@ export function LabeledInput({
         id={id}
         type={type}
         value={value}
+        // Browser plugins may auto-fill the field, so we need to suppress hydration warning
+        suppressHydrationWarning
         min={min}
         max={max}
         required={required}

@@ -1,6 +1,7 @@
 'use client';
 
 import type { JSX, FormEventHandler, Dispatch, SetStateAction } from 'react';
+import sc from 'styled-components';
 import { useState } from 'react';
 import { z } from 'zod';
 
@@ -104,6 +105,11 @@ function SizeField({
   );
 }
 
+const FormGrid = sc.form`
+  display: grid;
+  gap: ${(p) => p.theme.app.space.sm};
+`;
+
 function NaturalSearchForm({
   nl,
   setNl,
@@ -114,18 +120,12 @@ function NaturalSearchForm({
   onSubmit: FormEventHandler<HTMLFormElement>;
 }): JSX.Element {
   return (
-    <form
-      onSubmit={onSubmit}
-      style={{ display: 'grid', gap: '0.5rem' }}
-      id="nl-panel"
-      role="tabpanel"
-      aria-labelledby="nl-tab"
-    >
+    <FormGrid onSubmit={onSubmit} id="nl-panel" role="tabpanel" aria-labelledby="nl-tab">
       <QueryField nl={nl} setNl={setNl} />
       <ScopeField nl={nl} setNl={setNl} />
       <SizeField nl={nl} setNl={setNl} />
       <button type="submit">Search</button>
-    </form>
+    </FormGrid>
   );
 }
 

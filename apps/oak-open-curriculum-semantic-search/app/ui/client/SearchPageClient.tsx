@@ -1,43 +1,59 @@
 'use client';
 import type { JSX } from 'react';
+import sc from 'styled-components';
 import { useSearchController } from './useSearchController';
 import { StructuredSearch } from '../StructuredSearch';
 import NaturalSearchComponent from '../NaturalSearch';
 import SearchResultsComponent from '../SearchResults';
 
+const Main = sc.main`
+  max-width: ${(p) => p.theme.app.layout.containerMaxWidth};
+  margin: 0 auto;
+  padding: ${(p) => p.theme.app.space.lg};
+`;
+const H1 = sc.h1`
+  margin-bottom: ${(p) => p.theme.app.space.sm};
+`;
+const P = sc.p`
+  margin-top: 0;
+`;
+const Section = sc.section`
+  margin-bottom: ${(p) => p.theme.app.space.lg};
+`;
+const ErrorP = sc.p`
+  color: ${(p) => p.theme.app.colors.errorText};
+  margin-top: ${(p) => p.theme.app.space.lg};
+`;
+
 export default function SearchPageClient(): JSX.Element {
   const ctrl = useSearchController();
 
   return (
-    <main style={{ maxWidth: 900, margin: '0 auto', padding: '1rem' }}>
-      <h1 style={{ marginBottom: '0.5rem' }}>Hybrid Search</h1>
-      <p style={{ marginTop: 0 }}>Structured and natural language side by side.</p>
+    <Main>
+      <H1>Hybrid Search</H1>
+      <P>Structured and natural language side by side.</P>
 
-      <section aria-labelledby="structured-heading" style={{ marginBottom: '1rem' }}>
+      <Section aria-labelledby="structured-heading">
         <h2 id="structured-heading">Structured</h2>
         <StructuredSearch
           onResults={ctrl.onSuccess}
           onError={(m) => ctrl.onError(m ?? 'Unknown error')}
           setLoading={(v) => (v ? ctrl.onStart() : undefined)}
         />
-      </section>
+      </Section>
 
-      <section aria-labelledby="nl-heading" style={{ marginBottom: '1rem' }}>
+      <Section aria-labelledby="nl-heading">
         <h2 id="nl-heading">Natural language</h2>
         <NaturalSearchComponent
           onResults={(r) => ctrl.onSuccess(Array.isArray(r) ? r : [])}
           onError={(m) => ctrl.onError(typeof m === 'string' ? m : 'Unknown error')}
           setLoading={(v) => (v ? ctrl.onStart() : undefined)}
         />
-      </section>
+      </Section>
 
-      {ctrl.error ? (
-        <p role="alert" style={{ color: 'crimson', marginTop: '1rem' }}>
-          {ctrl.error}
-        </p>
-      ) : null}
+      {ctrl.error ? <ErrorP role="alert">{ctrl.error}</ErrorP> : null}
 
       <SearchResultsComponent results={ctrl.results} />
-    </main>
+    </Main>
   );
 }
