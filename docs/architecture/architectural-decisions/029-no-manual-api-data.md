@@ -58,6 +58,7 @@ All API-related information must be imported from the SDK, which is automaticall
    ```
 
 4. **No manual validation logic**
+
    ```typescript
    // PROHIBITED
    function validateKeyStage(value: string) {
@@ -91,6 +92,7 @@ All API-related information must be imported from the SDK, which is automaticall
    ```
 
 3. **Generate from SDK data**
+
    ```typescript
    // ALLOWED
    const tools = toolGeneration.PATH_OPERATIONS.map(generateTool);

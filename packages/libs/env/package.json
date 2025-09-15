@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-env",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "Runtime-adaptive environment library for MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -25,7 +25,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "quality": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
@@ -33,7 +33,7 @@
     "dotenv": "^17.2.1"
   },
   "devDependencies": {
-    "pnpm": "^10.15.1",
+    "pnpm": "^10.16.1",
     "typescript": "^5.9.2"
   },
   "engines": {

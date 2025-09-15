@@ -31,7 +31,7 @@ This approach ensures we never predict what another generator will produce - we 
 
 The entire SDK+MCP system is a pure function of the OpenAPI schema:
 
-```
+```text
 OpenAPI Schema (Single Source of Truth)
            ↓
     SDK Type-Gen (ONE command: pnpm type-gen)
@@ -84,7 +84,7 @@ OpenAPI Schema (Single Source of Truth)
 
 ### File Structure
 
-```
+```text
 packages/oak-curriculum-sdk/
 ├── scripts/
 │   ├── typegen.ts              # Phase 1: OpenAPI types

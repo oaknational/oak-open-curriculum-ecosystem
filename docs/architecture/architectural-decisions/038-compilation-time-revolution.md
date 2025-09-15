@@ -83,7 +83,7 @@ This solves the dynamic dispatch problem by moving validation INTO each tool rat
 
 ### File Structure
 
-```
+```text
 mcp-tools/
 ├── index.ts        # MCP_TOOLS mapping
 ├── types.ts        # Operation ID mapping and type guards

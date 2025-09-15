@@ -12,10 +12,9 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Prerequisites
 
-1. **Node.js 22+** - Required for ESM support
-2. **pnpm** - Package manager (will be installed automatically)
-3. **Notion Account** - For testing
-4. **Notion API Key** - From a test integration
+1. **Node.js 22+**
+2. **pnpm**
+3. Various optional but important service keys, Notion, Oak, Elasticsearch, etc.
 
 ### Setup
 
@@ -267,11 +266,6 @@ We use semantic-release for automated releases:
 
 ## Security
 
-If you find a security issue:
-
-1. **DO NOT** create a public issue
-2. Email security contact (TBD)
-3. Include details and reproduction steps
-4. Wait for response before disclosure
+If you find a security issue, see the [security policy](SECURITY.md).
 
 Thank you for contributing to Oak Notion MCP! 🎉

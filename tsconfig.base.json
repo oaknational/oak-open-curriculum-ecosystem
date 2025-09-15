@@ -19,8 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "paths": {
-      "@oaknational/oak-curriculum-sdk": ["./packages/sdks/oak-curriculum-sdk/src"],
-      "@oaknational/oak-curriculum-sdk/*": ["./packages/sdks/oak-curriculum-sdk/src/*"],
       "@oaknational/mcp-core": ["./packages/core/mcp-core/src"],
       "@oaknational/mcp-core/*": ["./packages/core/mcp-core/src/*"],
       "@oaknational/mcp-env": ["./packages/libs/env/src"],

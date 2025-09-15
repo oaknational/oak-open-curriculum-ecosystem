@@ -44,7 +44,7 @@ export function generatePathsConstant(schema: Pick<OpenAPI3, 'paths'>): string {
     .map((p) => `  '${p}': '${p}'`)
     .join(',\n');
 
-  return `type ValidPath = keyof Paths;
+  return `export type ValidPath = keyof Paths;
 /**
  * Convenience map for all the paths
  */
@@ -62,7 +62,7 @@ function runtimeTypeDerivations(): string {
 /**
  * Types derived from the runtime schema object.
 */
-type RawPaths = Schema["paths"];
+export type RawPaths = Schema["paths"];
 
 export function isValidPath(value: string): value is ValidPath {
   const paths = Object.keys(schema.paths);
@@ -70,7 +70,7 @@ export function isValidPath(value: string): value is ValidPath {
 }
 export const apiPaths: RawPaths = schema.paths;`;
   const allowed = `
-type AllowedMethods = keyof (RawPaths[keyof RawPaths]);
+export type AllowedMethods = keyof (RawPaths[keyof RawPaths]);
 const allowedMethodsSet = new Set<AllowedMethods>();
 for (const path in schema.paths) {
   if (!isValidPath(path)) { throw new TypeError(\`Invalid path: \${path}\`); }

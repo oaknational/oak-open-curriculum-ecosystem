@@ -71,6 +71,8 @@ export function createApp(): express.Express {
   mountStaticAssets(app);
   addRootLandingPage(app);
   app.use(bearerAuth);
+  // Add middleware to ensure proper Accept header for MCP requests
+  app.use('/mcp', ensureMcpAcceptHeader);
   app.post('/mcp', createMcpHandler(transport));
 
   return app;
@@ -82,6 +84,35 @@ function addRootLandingPage(app: express.Express): void {
   });
 }
 
+/**
+ * Middleware to ensure MCP requests have the required Accept header.
+ * This improves UX by automatically adding the header if missing.
+ */
+function ensureMcpAcceptHeader(
+  req: express.Request,
+  _res: express.Response,
+  next: express.NextFunction,
+): void {
+  const accept = req.get('Accept');
+  const requiredAccept = 'application/json, text/event-stream';
+
+  /** @todo remove once OAuth is enabled */
+  // Check if Accept header is missing, is wildcard, or doesn't contain both required types
+  if (
+    !accept ||
+    accept === '*/*' ||
+    !accept.includes('application/json') ||
+    !accept.includes('text/event-stream')
+  ) {
+    req.headers.accept = requiredAccept;
+  }
+
+  next();
+}
+
+/**
+ * Mount static assets for favicon/logo (works locally and on Vercel (and probably would without this complexity))
+ */
 function mountStaticAssets(app: express.Express): void {
   const candidates = [
     path.resolve(process.cwd(), 'public'),
@@ -89,6 +120,7 @@ function mountStaticAssets(app: express.Express): void {
   ];
   const chosen = candidates.find((p) => fs.existsSync(p));
   if (chosen) {
+    // eslint-disable-next-line import-x/no-named-as-default-member -- allow since we already import the default express (no treeshaking advantage)
     app.use(express.static(chosen, { etag: true, maxAge: '1d' }));
   }
 }
@@ -215,5 +247,4 @@ export async function startDevServer(): Promise<void> {
   console.log(`Streaming HTTP MCP listening on http://localhost:${String(port)}`);
 }
 
-// Default export for Vercel Express runtime
 export default createApp();

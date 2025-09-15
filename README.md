@@ -1,10 +1,9 @@
 # Oak Notion MCP Servers
 
-A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworks and libraries that provide AI assistants like Claude with access to various data sources:
+A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworks and libraries that provide AI assistants such as Codex, Claude, and Gemini with access to various data sources:
 
-- Notion (read-only access)
 - Oak Open Curriculum API (read-only access)
-  sual guide to the codebase!
+- Notion (read-only access)
 
 ## 🧭 Architecture
 
@@ -164,7 +163,7 @@ This is a pre-release version of the project, as such we are not accepting contr
 3. Use [Conventional Commits](https://www.conventionalcommits.org/)
 4. Ensure all tests pass before submitting PRs
 
-## Security
+## Security and Privacy
 
 We aim to avoid security and privacy issues by trying to:
 
@@ -172,9 +171,13 @@ We aim to avoid security and privacy issues by trying to:
 - Automatically scrub PII (emails)
 - Ensure read-only access to Notion (no write operations)
 
-## License
+If you find a security issue, see the [security policy](SECURITY.md).
 
-MIT - see [LICENSE](LICENSE) for details
+## Licensing
+
+The code in this repository is under the MIT License - see [LICENSE](LICENSE) for details. All logos and branding remain the property of Oak National Academy. For further information, please see [https://www.thenational.academy/legal/copyright-notice](https://www.thenational.academy/legal/copyright-notice).
+
+Oak's curriculum data is provided under an [Open Government License](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
 ## Support
 

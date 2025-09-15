@@ -45,6 +45,10 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 **/zod/schemas.ts
 **/zod/endpoints.ts
 
+# Generated docs
+**/docs/api/
+
+
 # Test output and cache
 test-results/
 test-cache/

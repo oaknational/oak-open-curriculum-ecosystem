@@ -1,5 +1,0 @@
-# Variables
-
-### apiSchemaUrl
-
-### apiUrl

@@ -1,9 +1,10 @@
-import { config as tsEslintConfig, ConfigArray } from 'typescript-eslint';
+import { config as tsEslintConfig } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 
-const rootTsProject = fileURLToPath(new URL('../../../tsconfig.lint.root.json', import.meta.url));
-const repoRootDir = fileURLToPath(new URL('../../../', import.meta.url));
+const thisDir = dirname(fileURLToPath(import.meta.url));
+const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 export default tsEslintConfig(
   ...baseConfig,
@@ -15,8 +16,8 @@ export default tsEslintConfig(
     languageOptions: {
       parserOptions: {
         projectService: false,
-        project: rootTsProject,
-        tsconfigRootDir: repoRootDir,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
       },
     },
   },

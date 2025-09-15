@@ -24,10 +24,11 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 curl -sS \
   -H "Authorization: Bearer $REMOTE_MCP_DEV_TOKEN" \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json, text/event-stream' \
   -X POST http://localhost:3333/mcp \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
+
+Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
 
 ## Vercel deployment
 
@@ -77,6 +78,7 @@ If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for
 
 Temporary validation bypass (for smoke only):
 
+- **Dangerous override**: set `DANGEROUSLY_DISABLE_AUTH=true` to bypass all authentication (works everywhere, including production - use with extreme caution)
 - Preview/CI only: set `CI=true` and `REMOTE_MCP_CI_TOKEN=<secret>` and call with `Authorization: Bearer <secret>`. Remove after validation.
 - Local only: set `REMOTE_MCP_ALLOW_NO_AUTH=true` (ignored on Vercel) or use `REMOTE_MCP_DEV_TOKEN`.
 

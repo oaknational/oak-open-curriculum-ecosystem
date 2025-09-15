@@ -38,7 +38,7 @@ Always use the TodoWrite tool to:
 
 ### Example Task Structure
 
-```
+```text
 1. Research existing implementation
 2. Write tests for new feature
 3. GROUNDING: read GO.md and follow all instructions
@@ -72,7 +72,7 @@ This approach acknowledges that development time is highly variable and depends 
 
 ### 1. Before Starting Any Task
 
-```
+```text
 1. Read GO.md
 2. Read AGENT.md
 3. Create todo list with TodoWrite
@@ -81,7 +81,7 @@ This approach acknowledges that development time is highly variable and depends 
 
 ### 2. During Development
 
-```
+```text
 1. Follow TDD: Write test → Make it pass → Refactor
 2. Run quality gates after each significant change:
    - pnpm format

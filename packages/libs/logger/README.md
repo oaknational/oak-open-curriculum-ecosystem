@@ -185,6 +185,21 @@ The logger automatically adapts to different environments:
 - **Edge Runtime**: Structured JSON output
 - **Testing**: Controllable output for test assertions
 
+## Consumption: Source vs Bundled
+
+- In development and app builds (e.g. Next.js), imports resolve to the TypeScript sources via monorepo path mapping:
+  - `@oaknational/mcp-logger` → `packages/libs/logger/src`
+  - Internal imports in `src/` are extensionless (e.g. `./pure-functions`) to keep TS and bundlers happy.
+- At runtime (Node, tests, packaged usage), the library ships a single bundled ESM entry at `dist/index.js`:
+  - Package `exports` maps `import`/`default` to `./dist/index.js`.
+  - This avoids nested relative ESM resolution issues in child processes/e2e.
+
+Guidance:
+
+- **Next.js / web apps**: depend on `@oaknational/mcp-logger` normally. The app will consume source during build and bundle it.
+- **Node CLIs / e2e**: also depend normally; at runtime the bundled `dist/index.js` is used automatically via `exports`.
+- Do not deep‑import internal files; always import from the package root.
+
 ## Design Decisions
 
 1. **Consola-based**: Leverages Consola's built-in environment detection

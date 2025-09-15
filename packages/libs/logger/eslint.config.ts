@@ -4,7 +4,7 @@
  * Logger helpers for multi-runtime support
  */
 
-import { config as tsEslintConfig, ConfigArray } from 'typescript-eslint';
+import { config as tsEslintConfig, type ConfigArray } from 'typescript-eslint';
 import { baseConfig } from '../../../eslint.config.base';
 import {
   createLibBoundaryRules,
@@ -16,8 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
-const rootTsProject = fileURLToPath(new URL('../../../tsconfig.lint.root.json', import.meta.url));
-const repoRootDir = dirname(rootTsProject);
+const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
 const config: ConfigArray = tsEslintConfig(
   ...baseConfig,
@@ -29,8 +28,8 @@ const config: ConfigArray = tsEslintConfig(
     languageOptions: {
       parserOptions: {
         projectService: false,
-        project: rootTsProject,
-        tsconfigRootDir: repoRootDir,
+        project: wsTsProject,
+        tsconfigRootDir: thisDir,
       },
     },
     settings: {
@@ -39,7 +38,7 @@ const config: ConfigArray = tsEslintConfig(
         ...commonSettings['import-x/resolver'],
         typescript: {
           ...commonSettings['import-x/resolver'].typescript,
-          project: rootTsProject,
+          project: wsTsProject,
         },
       },
     },

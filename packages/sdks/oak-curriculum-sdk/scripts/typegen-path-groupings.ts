@@ -26,14 +26,14 @@ export function generatePathGroupingTypes(pathGroupingKeys: string): string {
 /**
  * Path grouping keys
  */
-type PathGroupingKeys = ${pathGroupingKeys};
+export type PathGroupingKeys = ${pathGroupingKeys};
 
 
 /**
  * Type for a valid parameter combination, linking to the paths types file.
  */
 // Parametrise ValidParameterCombination with both the path and the path key
-interface ValidParameterCombination<
+export interface ValidParameterCombination<
   P extends ValidPath,
   K extends PathGroupingKeys
 > {
@@ -43,13 +43,13 @@ interface ValidParameterCombination<
 }
 
 // Make ValidPathAndParameters parameterized by the path key K
-type ValidPathAndParameters<K extends PathGroupingKeys> = {
+export type ValidPathAndParameters<K extends PathGroupingKeys> = {
   // Only include paths that are valid for this specific K
   [P in ValidPath as P extends keyof Paths ? P : never]?: ValidParameterCombination<P, K>;
 };
 
 // Now ValidPathGroupings maps each key to only its relevant paths
-type ValidPathGroupings = {
+export type ValidPathGroupings = {
   [K in PathGroupingKeys]: ValidPathAndParameters<K>;
 };`;
 }
