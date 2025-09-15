@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "oak_syns_filter": {
+          "type": "synonym_graph",
+          "synonyms_set": "oak-syns",
+          "updateable": true
+        }
+      },
+      "analyzer": {
+        "oak_text": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase", "oak_syns_filter"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "unit_id": { "type": "keyword" },
+      "unit_slug": { "type": "keyword" },
+      "unit_title": {
+        "type": "text",
+        "analyzer": "oak_text",
+        "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } },
+        "copy_to": ["unit_semantic"]
+      },
+      "subject_slug": { "type": "keyword" },
+      "key_stage": { "type": "keyword" },
+      "year": { "type": "integer" },
+      "lesson_ids": { "type": "keyword" },
+      "lesson_count": { "type": "integer" },
+      "rollup_text": {
+        "type": "text",
+        "analyzer": "oak_text",
+        "term_vector": "with_positions_offsets",
+        "copy_to": ["unit_semantic"]
+      },
+      "unit_semantic": { "type": "semantic_text" }
+    }
+  }
+}

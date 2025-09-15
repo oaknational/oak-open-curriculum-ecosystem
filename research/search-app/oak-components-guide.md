@@ -1,7 +1,9 @@
 # Oak Components — Comprehensive Guide (Next.js App Router + TypeScript)
 
+Official docs/Storybook: [components.thenational.academy](https://components.thenational.academy/?path=/docs/introduction--docs)
+
 > **Audience:** Oak engineers and AI agents building internal demos and production features that should look and feel like [thenational.academy](https://www.thenational.academy).  
-> **Goal:** Install, configure, and use `@oaknational/oak-components` effectively — from theming and SSR to real UI patterns (with a special focus on search UX), local dev, and deployment.
+> **Goal:** Install, configure, and use `@oaknational/oak-components` effectively — from theming and SSR to real UI patterns (with a special focus on search UX), local dev, and deployment. Align examples with Next.js 15 + React 19 and repository conventions (pnpm, strict TS, British spelling).
 >
 > This guide draws on the public `oak-components` repo, usage patterns in Oak Web Application (OWA), and internal best practices. Examples use **Next.js App Router** and **TypeScript**.
 
@@ -11,26 +13,26 @@
 
 ```bash
 # 1) install
-pnpm i @oaknational/oak-components styled-components
+pnpm add @oaknational/oak-components styled-components
 
 # 2) types (TS projects)
-pnpm i -D @types/styled-components
+pnpm add -D @types/styled-components
 
 # 3) env (images/icons/illustrations)
-# .env
+# .env.local
 NEXT_PUBLIC_OAK_ASSETS_HOST=<provided-by-oak>
 NEXT_PUBLIC_OAK_ASSETS_PATH=<provided-by-oak>
 
 # 4) Next.js compiler (SSR for styled-components)
-# next.config.js
-module.exports = { compiler: { styledComponents: true } }
+# next.config.ts
+export default { compiler: { styledComponents: true } } as const;
 
 # 5) wrap your app
 # app/layout.tsx
 import { OakThemeProvider, oakDefaultTheme, OakGlobalStyle } from "@oaknational/oak-components";
 import { Lexend } from "next/font/google";
-const lexend = Lexend({ subsets: ["latin"] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const lexend = Lexend({ subsets: ["latin"] });
   return (
     <html lang="en">
       <OakGlobalStyle />
@@ -68,11 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 Enable the SWC transform so styles render on the server and hydrate without FOUC:
 
 ```ts
-// next.config.js (or next.config.mjs)
-const nextConfig = {
-  compiler: { styledComponents: true },
-};
-module.exports = nextConfig;
+// next.config.ts
+import type { NextConfig } from 'next';
+const config: NextConfig = { compiler: { styledComponents: true } };
+export default config;
 ```
 
 If you’re on styled-components v6 and need stricter SSR control, consider the `useServerInsertedHTML` pattern in a custom registry — but the compiler flag above is typically sufficient for Oak demos.
@@ -81,15 +82,16 @@ If you’re on styled-components v6 and need stricter SSR control, consider the 
 
 Allow Oak assets (and Cloudinary fallback) to be served by Next/Image:
 
-```js
-// next.config.js
-module.exports = {
+```ts
+// next.config.ts
+import type { NextConfig } from 'next';
+const config: NextConfig = {
   compiler: { styledComponents: true },
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: process.env.NEXT_PUBLIC_OAK_ASSETS_HOST,
+        hostname: process.env.NEXT_PUBLIC_OAK_ASSETS_HOST!,
         port: '',
         pathname: `${process.env.NEXT_PUBLIC_OAK_ASSETS_PATH}/**`,
       },
@@ -102,11 +104,12 @@ module.exports = {
     ],
   },
 };
+export default config;
 ```
 
 ---
 
-## 2) App Bootstrap — Theme, Globals, Font
+## 2) App bootstrap — theme, globals, font
 
 Oak uses **Lexend**. Combine Oak’s theme + global styles with Next’s optimized font loader:
 
@@ -115,9 +118,8 @@ Oak uses **Lexend**. Combine Oak’s theme + global styles with Next’s optimiz
 import { OakThemeProvider, oakDefaultTheme, OakGlobalStyle } from '@oaknational/oak-components';
 import { Lexend } from 'next/font/google';
 
-const lexend = Lexend({ subsets: ['latin'] });
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const lexend = Lexend({ subsets: ['latin'] });
   return (
     <html lang="en">
       <OakGlobalStyle />
@@ -210,7 +212,7 @@ import { Box } from '@oaknational/oak-components';
 
 ---
 
-## 5) Building a Search Experience (Oak-style)
+## 5) Building a search experience (Oak‑style)
 
 Below are **two** complementary approaches: a lightweight demo you can drop into any app, and the **OWA-inspired structure** used in production.
 
@@ -273,7 +275,7 @@ export default function DemoSearchPage() {
 - Prefer an **IconButton** with `aria-label`, or a text **Button** (“Search”).
 - Announce results area via `aria-live="polite"` for better SR feedback on updates.
 
-### 5.2 OWA-inspired structure (production-friendly)
+### 5.2 OWA‑inspired structure (production‑friendly)
 
 The OWA search page composes providers, head/pagination helpers, and a `Search` view, while fetching static data at build time. Here’s how to emulate the **structure** without copying internal logic:
 
@@ -313,11 +315,11 @@ Inside `SearchView`, compose Oak inputs (TextInput, checkboxes/toggles for filte
 
 ---
 
-## 6) Local Dev & Storybook
+## 6) Local dev & Storybook
 
 ### 6.1 Storybook
 
-The components library ships with Storybook. In your **app**, you can also spin a Storybook that imports `@oaknational/oak-components` for rapid UI iteration:
+The components library ships with Storybook. In your **app**, you can also run a Storybook that imports `@oaknational/oak-components` for rapid UI iteration:
 
 ```bash
 npm run storybook
@@ -355,7 +357,7 @@ For an internal demo, you can simplify: keep conventional commits and a minimal 
 
 ---
 
-## 8) Deployment & Environments
+## 8) Deployment & environments
 
 ### 8.1 Next.js App (your demo)
 
@@ -373,7 +375,7 @@ If you host your own Storybook:
 
 ---
 
-## 9) Troubleshooting & Gotchas
+## 9) Troubleshooting & gotchas
 
 - **FOUC / style flicker:** Ensure `compiler.styledComponents = true`. If issues persist, verify there’s a **single** styled-components version in your lockfile.
 - **Icons/images not loading:** Double-check `NEXT_PUBLIC_OAK_ASSETS_HOST` and `NEXT_PUBLIC_OAK_ASSETS_PATH`. Add Next/Image `remotePatterns` for those hosts.
@@ -383,9 +385,9 @@ If you host your own Storybook:
 
 ---
 
-## 10) Full Search Page Example (drop-in)
+## 10) Full search page example (drop‑in)
 
-This example shows a cohesive Oak-styled search page that you can adapt for your demo. It uses RSC for data bootstrapping + a client search bar.
+This example shows a cohesive Oak‑styled search page you can adapt for the demo app. It uses RSC for data bootstrapping + a client search bar.
 
 ```tsx
 // app/teachers/search/page.tsx
@@ -493,7 +495,7 @@ export default function SearchClient({ taxonomy }: Props) {
 
 - [ ] Install `@oaknational/oak-components` (+ `styled-components`, TS types).
 - [ ] Set `NEXT_PUBLIC_OAK_ASSETS_HOST` and `NEXT_PUBLIC_OAK_ASSETS_PATH`.
-- [ ] Enable `compiler.styledComponents = true` in `next.config.js`.
+- [ ] Enable `compiler.styledComponents = true` in `next.config.ts`.
 - [ ] Use `<OakGlobalStyle />` and `<OakThemeProvider theme={oakDefaultTheme}>` in `app/layout.tsx`.
 - [ ] Use Oak components for inputs, buttons, modals, icons; keep labels and `aria-*` attributes.
 - [ ] Optionally set Next/Image `remotePatterns` for Oak/CDN hosts.
@@ -511,4 +513,4 @@ export default function SearchClient({ taxonomy }: Props) {
 
 ---
 
-_Happy shipping — and keep it Oak-y._
+_Happy shipping — and keep it Oak‑y._

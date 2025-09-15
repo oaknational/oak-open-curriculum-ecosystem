@@ -41,7 +41,7 @@ graph TD
 
 ### 1. Unidirectional Flow
 
-```
+```text
 OpenAPI Spec → SDK → Consumers
 ```
 

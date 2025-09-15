@@ -1,0 +1,24 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "Expand",
+  "entryPoints": ["docs/_typedoc_src/types/generated/api-schema/mcp-tools"],
+  "out": "docs/mcp-api",
+  "tsconfig": "./tsconfig.json",
+  "readme": "none",
+  "githubPages": false,
+  "categorizeByGroup": true,
+  "sort": ["kind", "instance-first", "alphabetical"],
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "e2e-tests/**",
+    "test-cache/**",
+    "examples/**",
+    "scripts/**"
+  ],
+  "excludeInternal": false,
+  "excludePrivate": true,
+  "excludeProtected": false,
+  "includeVersion": true,
+  "treatValidationWarningsAsErrors": true
+}

@@ -1,5 +1,7 @@
 # Turbo cache
 .turbo
+tc-profile.json
+lint-profile.json
 
 # Type declarations
 dist

@@ -27,7 +27,7 @@ This means:
 
 #### ADR Compliance - The Central Contract
 
-**CRITICAL**: This SDK implements the central contract that **if the API schema changes, the ONLY thing required is to rerun the SDK type generation**. All downstream consumers (like MCP servers) will automatically receive:
+This SDK implements the central contract that **if the API schema changes, the ONLY thing required is to rerun the SDK type generation**. All downstream consumers (like MCP servers) will automatically receive:
 
 - Updated types and interfaces
 - New/modified operations and parameters

@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-storage",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Adaptive storage library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -24,14 +24,14 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
     "@oaknational/mcp-core": "workspace:^"
   },
   "devDependencies": {
-    "pnpm": "^10.15.1",
+    "pnpm": "^10.16.1",
     "typescript": "^5.9.2"
   },
   "engines": {

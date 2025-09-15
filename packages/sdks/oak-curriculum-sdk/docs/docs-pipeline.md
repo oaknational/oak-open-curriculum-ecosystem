@@ -13,6 +13,17 @@ Outputs are produced from a single source of truth: TypeDoc JSON generated from 
 
 The pipeline is plugin-free for the Markdown generation steps and uses small, pure TypeScript helpers.
 
+## Docs structure (authored vs generated)
+
+- Authored docs (hand-written): `docs/*.md` (conceptual guides, usage, decisions).
+- Generated docs (build artefacts): `docs/api/**`, `docs/api-md/**`, and `docs/api/typedoc.json`.
+
+### MCP tools deep-dive (authored + generated)
+
+- Authored overview: `docs/mcp/README.md` explains that most MCP tools are thin facades over the Oak Open Curriculum API endpoints, with links back to the relevant SDK functions and types.
+- Generated API docs intentionally exclude MCP internals from the main tree to keep the public surface focused and readable.
+- For the curious, the authored overview links to MCP-specific deep-dive pages and references to the underlying schema-driven types.
+
 ## Prerequisites
 
 - Node.js >= 22

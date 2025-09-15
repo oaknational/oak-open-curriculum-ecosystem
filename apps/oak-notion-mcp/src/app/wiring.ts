@@ -1,9 +1,9 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-// merged type/value imports to avoid duplicate import warnings
 import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
 import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
+/** @todo why are there logger types in the core package instead of the logger package? */
 import { createRuntime, type CoreLogger, type Logger } from '@oaknational/mcp-core';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 

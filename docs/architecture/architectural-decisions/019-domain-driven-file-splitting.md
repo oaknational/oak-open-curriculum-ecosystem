@@ -30,7 +30,7 @@ We will split large consolidated files along domain boundaries rather than arbit
 
 Example structure for pretty formatter:
 
-```
+```text
 src/logging/formatters/
 ├── index.ts           # Public API
 ├── pretty-types.ts    # Type definitions

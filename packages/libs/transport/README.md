@@ -81,7 +81,7 @@ This library follows these patterns:
 
 ### File Structure
 
-```
+```text
 src/
 ├── index.ts              # Public API
 ├── types.ts              # Transport-specific types

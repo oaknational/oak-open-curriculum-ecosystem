@@ -52,6 +52,12 @@ function getBearerToken(header: string | undefined): string | undefined {
 }
 
 function allowsNoAuth(): boolean {
+  // ⚠️ DANGEROUS: This bypasses ALL authentication checks, including in production
+  // Only use for testing/debugging - never in production with real data
+  if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
+    return true;
+  }
+  // Local dev only bypass
   return isLocalDev && process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true';
 }
 

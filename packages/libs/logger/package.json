@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/mcp-logger",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Adaptive logging library for multi-runtime MCP applications",
   "type": "module",
   "main": "./dist/index.js",
@@ -9,8 +9,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "development": "./src/index.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -23,7 +23,7 @@
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint --cache .",
     "clean": "rm -rf dist"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
     "consola": "^3.2.3"
   },
   "devDependencies": {
-    "pnpm": "^10.15.1",
+    "pnpm": "^10.16.1",
     "typescript": "^5.9.2"
   },
   "engines": {

@@ -1,0 +1,67 @@
+{
+  "name": "@oaknational/open-curriculum-semantic-search",
+  "version": "0.0.0-development",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint --cache .",
+    "type-check": "tsc -p tsconfig.lint.json",
+    "format": "prettier --write --cache .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "elastic:setup": "bash scripts/setup.sh",
+    "elastic:alias-swap": "bash scripts/alias-swap.sh",
+    "docs:api:html": "typedoc --options typedoc.json",
+    "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
+    "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",
+    "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
+  },
+  "overrides": {
+    "next": "$next",
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^2.0.24",
+    "@elastic/elasticsearch": "^9.1.1",
+    "@oaknational/mcp-logger": "workspace:*",
+    "@oaknational/oak-components": "^1.143.0",
+    "@oaknational/oak-curriculum-sdk": "workspace:*",
+    "ai": "^5.0.34",
+    "next": "^15.5.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "redoc": "^2.5.0",
+    "styled-components": "^6.1.19",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@eslint/eslintrc": "^3.2.0",
+    "@next/eslint-plugin-next": "^15.5.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9.35.0",
+    "eslint-config-next": "^15.5.3",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.6.2",
+    "typedoc": "^0.28.12",
+    "typedoc-plugin-markdown": "^4.4.2",
+    "typescript": "^5.9.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
+  }
+}

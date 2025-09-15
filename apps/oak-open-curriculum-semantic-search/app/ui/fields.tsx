@@ -1,0 +1,74 @@
+'use client';
+
+import type { JSX, ChangeEventHandler } from 'react';
+
+interface LabeledSelectProps {
+  label: string;
+  id: string;
+  value: string;
+  onChange: ChangeEventHandler<HTMLSelectElement>;
+  options: readonly string[];
+  includeAny?: boolean;
+}
+
+export function LabeledSelect({
+  label,
+  id,
+  value,
+  onChange,
+  options,
+  includeAny,
+}: LabeledSelectProps): JSX.Element {
+  return (
+    <label>
+      {label}
+      <select id={id} value={value} onChange={onChange}>
+        {includeAny ? <option value="">(any)</option> : null}
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+interface LabeledInputProps {
+  label: string;
+  id: string;
+  type: 'text' | 'number';
+  value: string | number;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  min?: number;
+  max?: number;
+  required?: boolean;
+}
+
+export function LabeledInput({
+  label,
+  id,
+  type,
+  value,
+  onChange,
+  min,
+  max,
+  required,
+}: LabeledInputProps): JSX.Element {
+  return (
+    <label>
+      {label}
+      <input
+        id={id}
+        type={type}
+        value={value}
+        // Browser plugins may auto-fill the field, so we need to suppress hydration warning
+        suppressHydrationWarning
+        min={min}
+        max={max}
+        required={required}
+        onChange={onChange}
+      />
+    </label>
+  );
+}

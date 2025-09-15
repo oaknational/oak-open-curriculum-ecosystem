@@ -55,7 +55,7 @@ export function generateParameterConstant(
  * ${collectionTypeName} extracted from the API schema
  */
 export const ${constantName} = ${JSON.stringify(values, undefined, 2)} as const;
-type ${collectionTypeName} = typeof ${constantName};
+export type ${collectionTypeName} = typeof ${constantName};
 export type ${singleTypeName} = ${collectionTypeName}[number];
 export function is${singleTypeName}(value: string): value is ${singleTypeName} {
   const ${guardParamName}: readonly string[] = ${constantName};
