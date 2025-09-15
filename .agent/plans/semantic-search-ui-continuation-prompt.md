@@ -12,21 +12,22 @@ Oak Components integration, accessibility, and page structure. Companion to the
 
 - App: Next.js App Router, Styled Components SSR, `ThemeContext` in place.
 - Theming: SSR cookie → `<html data-theme-mode>`; client persists cookie + localStorage.
-- Current theme: `oakDefaultTheme` only; dark variant pending.
-- Inline styles: present in header, tabs, forms, results, and page shell.
+- Tokens + typing: `app/ui/themes/{tokens,light,dark,types}` added; typed DefaultTheme via
+  `types/styled.d.ts`.
+- Current theme: `oakDefaultTheme` light + derived dark palette; switching via context pending UI polish.
+- Tabs: refactored to themed styled‑components; no inline styles.
+- Inline styles: remain in header, page shell, forms, results, API docs page.
 - Tests: theming unit/integration; UI flow tests pending.
 
 ---
 
 ## Immediate next tasks (ordered)
 
-1. Create `app/ui/themes/{tokens.ts,light.ts,dark.ts}` scaffolding.
-2. Audit all UI for styling constants and move to tokens.
-3. Replace inline styles with styled‑components consuming theme tokens.
-4. Implement dark theme (adopt Oak’s if available; else derive palette overrides).
-5. Wire `ThemeContext` to select light/dark; keep SSR cookie strategy.
-6. Refactor inputs/selects/buttons/tabs/header to Oak Components or wrappers.
-7. Add component tests for submit/error/results flows; add a11y checks (axe).
+1. Replace inline styles in `app/layout.tsx` with themed styled‑components.
+2. Replace inline styles in `app/page.tsx`, `ThemeSelect.tsx`, forms, results, admin, API docs.
+3. Validate dark theme visuals; ensure contrast AA; hook theme toggle styling where needed.
+4. Begin Oak Components refactor for inputs/selects/buttons/tabs/header.
+5. Add component tests for submit/error/results flows; add a11y checks (axe).
 
 ---
 
@@ -60,9 +61,9 @@ Oak Components integration, accessibility, and page structure. Companion to the
 
 ## Short next steps checklist
 
-[] Tokens scaffold exists and exported
+[x] Tokens scaffold exists and exported
 [] Inline styles migrated to themed styled‑components
-[] Dark theme wired through `ThemeContext`
+[] Dark theme visuals verified for contrast AA
 [] Forms/tabs/header use Oak Components
 [] Highlights sanitized or safely rendered
 [] Component tests for main flows; a11y checks added

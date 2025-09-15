@@ -26,8 +26,10 @@ Document relationships
 - Styled Components SSR wired; shared header/theme; `/healthz` covers ES/SDK/LLM.
 - ThemeContext with SSR cookie (`data-theme-mode`), localStorage, and
   system‑preference subscription; tests for SSR hint/system subscription/ThemeSelect.
-- Theme uses `oakDefaultTheme` only; dark variant not yet implemented.
-- Inline styling scattered across header, tabs, forms, results, and page shell.
+- Theme tokens scaffolded under `app/ui/themes/{tokens,light,dark,types}` with typed
+  DefaultTheme; dark theme derivation in place (palette overrides only).
+- `SearchTabHeader` refactored to themed styled‑components (no inline styles).
+- Inline styling remains in header, page shell, forms, results, and API docs page.
 - Admin page planned; Oak Components migration pending.
 
 ---
@@ -86,14 +88,16 @@ Acceptance (theming)
   - Spacing: `padding`, `margin`, `gap`, `borderRadius`.
 - Define token names mapping to Oak tokens first; add app‑specific tokens only
   when Oak lacks an equivalent.
-- Replace inline styles with styled‑components consuming theme tokens.
+- Replace inline styles with styled‑components consuming theme tokens. Progress:
+  tabs done; style audit captured in `.agent/plans/ui-style-audit.md`.
 
 Acceptance (M0): No raw hex/magic numbers remain; visual output unchanged.
 
 ### M1 — Oak theme integration (light + dark)
 
-- Use `oakDefaultTheme` as light base. If Oak has a dark theme, adopt it;
-  otherwise derive `oakDarkTheme` with palette/semantic color overrides only.
+- Use `oakDefaultTheme` as light base. If Oak has a dark theme, adopt it; otherwise
+  derive `oakDarkTheme` with palette/semantic color overrides only. Status: derived
+  dark variant wired at token layer; visual pass pending.
 - Hook `ThemeContext` to select variants; keep SSR cookie strategy.
 - Add contrast checks for key surfaces (text/backgrounds/focus rings).
 
