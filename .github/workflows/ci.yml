@@ -33,6 +33,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build project
+        # The hosted MCP server and the semantic search app are built in Vercel, no need to duplicate the build here
+        run: pnpm build --filter=!@oaknational/oak-curriculum-mcp-streamable-http --filter=!@oaknational/open-curriculum-semantic-search
+
       - name: Check formatting
         run: pnpm format-check:root
 
@@ -45,7 +49,3 @@ jobs:
 
       - name: Run tests
         run: pnpm test
-
-      - name: Build project
-        # The hosted MCP server and the semantic search app are built in Vercel, no need to duplicate the build here
-        run: pnpm build --filter=!@oaknational/oak-curriculum-mcp-streamable-http --filter=!@oaknational/open-curriculum-semantic-search
