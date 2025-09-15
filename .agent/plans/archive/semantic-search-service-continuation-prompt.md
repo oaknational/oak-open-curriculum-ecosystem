@@ -4,7 +4,8 @@ _Last updated: 2025‑09‑14 (Europe/London)_
 
 This file has been superseded for the UI track. Please see
 `semantic-search-ui-continuation-prompt.md` for the current, cohesive UI
-continuation prompt.
+continuation prompt. The theming approach is formalised in ADR‑045
+(`docs/architecture/architectural-decisions/045-hybrid-theming-bridge-for-oak-components.md`).
 
 ---
 

@@ -8,6 +8,7 @@ const EnvSchema = z.object({
   REMOTE_MCP_DEV_TOKEN: z.string().optional(),
   REMOTE_MCP_CI_TOKEN: z.string().optional(),
   REMOTE_MCP_ALLOW_NO_AUTH: z.enum(['true', 'false']).optional(),
+  DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
   ALLOWED_HOSTS: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),

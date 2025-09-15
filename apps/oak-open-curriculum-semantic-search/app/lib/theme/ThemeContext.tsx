@@ -1,6 +1,6 @@
 'use client';
 
-import React, {
+import {
   createContext,
   useCallback,
   useContext,
@@ -30,6 +30,8 @@ import {
   type ResolvedThemeMode,
   type ThemeMode,
 } from './theme-utils';
+
+export { THEME_MODES };
 
 /** @todo centralise logger creation */
 const logger = createAdaptiveLogger({ name: 'ThemeContext' });

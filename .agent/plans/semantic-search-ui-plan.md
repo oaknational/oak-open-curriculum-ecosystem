@@ -23,14 +23,16 @@ Document relationships
 
 ## Current state (as‑is, code audited)
 
-- Styled Components SSR wired; shared header/theme; `/healthz` covers ES/SDK/LLM.
+- Styled Components SSR wired with clean server/client boundary; `/healthz` covers ES/SDK/LLM.
 - ThemeContext with SSR cookie (`data-theme-mode`), localStorage, and
   system‑preference subscription; tests for SSR hint/system subscription/ThemeSelect.
 - Theme tokens scaffolded under `app/ui/themes/{tokens,light,dark,types}` with typed
   DefaultTheme; dark theme derivation in place (palette overrides only).
-- `SearchTabHeader` refactored to themed styled‑components (no inline styles).
-- Inline styling remains in header, page shell, forms, results, and API docs page.
+- Tabs removed; page shows Structured and NL side‑by‑side per plan.
+- Header styling moved to `app/ui/client/HeaderStyles.tsx` (client); layout remains server.
+- Inline styling remains in forms/results; header/page shell largely tokenized.
 - Admin page planned; Oak Components migration pending.
+- Mode-aware Bridge implemented: `ThemeBridgeProvider` derives light/dark `theme.app` and emits CSS vars keyed by mode; `HtmlThemeAttribute` syncs `<html data-theme>`; tests prove CSS var values and `theme.app` tokens change on toggle.
 
 ---
 
@@ -45,13 +47,15 @@ Document relationships
 
 ## Theming approach (accepted)
 
-- Provider: `ThemeContext` client provider exposes mode and resolved mode; wraps
-  `OakThemeProvider` + `OakGlobalStyle`.
-- SSR: server reads `theme-mode` cookie, sets `<html data-theme-mode>` and
-  passes `initialMode` to provider.
-- Persistence: write cookie + localStorage; default to `system` and subscribe to
-  `matchMedia('prefers-color-scheme: dark')`.
-- Separation of concerns: storage/media utilities in `theme-utils.ts`.
+- Provider composition follows ADR‑045 (Hybrid theming Bridge):
+  - `OakThemeProvider (oakDefaultTheme)` → `ColorModeProvider` → `ThemeBridgeProvider` → styled `ThemeProvider`.
+  - The Bridge maps Oak raw tokens to a typed semantic theme and emits a single CSS variable sheet.
+  - Bridge is mode‑aware via `createLightTheme`/`createDarkTheme`; CSS variable values and `theme.app` tokens depend on the current mode.
+- SSR: server reads `theme-mode` cookie and sets `<html data-theme>` to the resolved mode; passes `initialMode` to the client provider.
+- Mode switching: toggle an HTML attribute/class for instant switch; avoid provider remounts.
+- Persistence: cookie + localStorage; default `system`; subscribe to `prefers-color-scheme`.
+- Separation of concerns: storage/media utilities in `theme-utils.ts`; semantic mapping isolated in the Bridge.
+- Reference: `docs/architecture/architectural-decisions/045-hybrid-theming-bridge-for-oak-components.md`.
 
 Acceptance (theming)
 
@@ -60,11 +64,12 @@ Acceptance (theming)
 3. System follows OS preference.
 4. Persists (cookie + localStorage) and restores.
 5. No hydration errors; no flash.
-6. Applied to Oak Components and custom UI.
-7. Canonical Next.js/React patterns; no ad‑hoc DOM writes.
-8. Unit tests for utils; component tests for provider, SSR hint, and toggle.
+6. `theme.app` tokens are present and typed in all consumers.
+7. CSS variable sheet emitted once; mode toggles without flicker.
+8. Unit tests for utils; component tests for provider/SSR hint/toggle; Bridge tests for CSS var emission.
 9. WCAG AA contrast; themed focus outlines.
 10. `prefers-reduced-motion` observed.
+11. Semantic tokens and CSS variable values change on toggle (tested).
 
 ---
 
@@ -72,6 +77,10 @@ Acceptance (theming)
 
 - `app/ui/themes/`: `tokens.ts`, `light.ts`, `dark.ts` (typed variants).
 - `app/lib/theme/`: `ThemeContext.tsx` (provider) and `theme-utils.ts` (utilities).
+- `app/ui/client/`: client‑only containers and widgets (`SearchPageClient`, `HeaderStyles`,
+  `ThemeSelect`, `useSearchController`).
+- `app/ui/server/`: server‑only pieces (reserved; keep empty until needed).
+- `app/ui/shared/`: shared/isomorphic utilities/components.
 - `app/ui/components/`: prefer Oak Components; minimal atoms/molecules; app‑specific organisms.
 
 ---
@@ -89,19 +98,22 @@ Acceptance (theming)
 - Define token names mapping to Oak tokens first; add app‑specific tokens only
   when Oak lacks an equivalent.
 - Replace inline styles with styled‑components consuming theme tokens. Progress:
-  tabs done; style audit captured in `.agent/plans/ui-style-audit.md`.
+  header + layout refactored via `HeaderStyles` client wrapper; tabs removed;
+  style audit captured in `.agent/plans/ui-style-audit.md`.
 
 Acceptance (M0): No raw hex/magic numbers remain; visual output unchanged.
 
-### M1 — Oak theme integration (light + dark)
+### M1 — Oak theme integration via Bridge (light + dark)
 
-- Use `oakDefaultTheme` as light base. If Oak has a dark theme, adopt it; otherwise
-  derive `oakDarkTheme` with palette/semantic color overrides only. Status: derived
-  dark variant wired at token layer; visual pass pending.
-- Hook `ThemeContext` to select variants; keep SSR cookie strategy.
+- Introduce Theme Bridge per ADR‑045: map raw → semantic, emit CSS variables, expose typed `theme.app`.
+- Use `oakDefaultTheme` as light base; derive dark palette at semantic layer until official dark available.
+- Hook `ThemeContext` to select variants (cookie → `<html data-theme>`); keep SSR cookie strategy.
 - Add contrast checks for key surfaces (text/backgrounds/focus rings).
 
-Acceptance (M1): Toggle switches cleanly; SSR/hydration clean; AA contrast.
+Status: ThemeContext remains client‑only under `Providers`; SSR sets
+`<html data-theme>` from cookie; header includes `ThemeSelect`. Bridge is mode‑aware and tested (tokens and CSS vars change on toggle).
+
+Acceptance (M1): Toggle switches cleanly; semantic tokens and CSS vars change; SSR/hydration clean; AA contrast.
 
 ### M2 — Component refactor to Oak Components
 
@@ -109,6 +121,8 @@ Acceptance (M1): Toggle switches cleanly; SSR/hydration clean; AA contrast.
   wrappers) preserving labels/roles/keyboard nav.
 - Results: themed list/cards; highlight styling from tokens.
 - Option: side‑by‑side Structured/NL on desktop; stack on small screens.
+
+Definition of ready for M2: Bridge is in place; `theme.app` is available; inline styles in target components are replaced by tokens.
 
 Acceptance (M2): Primary UI surfaces use Oak; a11y semantics intact.
 
@@ -125,6 +139,10 @@ Acceptance (M3): Safe highlight rendering; tests pass.
 - Component tests for Structured/NL flows (submit, errors, results render).
 - a11y checks (axe) for core pages/components.
 - Keep theming unit/integration tests green.
+- Bridge tests verify mode toggling updates both CSS vars and `theme.app` tokens.
+
+Status: theming unit/integration tests all green; SSR cookie mapping test stabilized
+with scoped styled‑components mock. Build verified with Turbopack.
 
 Acceptance (M4): Flow coverage without network I/O; a11y checks pass.
 
@@ -140,3 +158,12 @@ Definition of Done (UI)
 - Next.js providers (App Router)
 - React Context usage
 - Oak Components Storybook
+
+---
+
+## Dev & E2E workflow note (Playwright MCP)
+
+- The Playwright MCP server is available in this repo. For rapid UI iteration and E2E probing:
+  - Start the Next app in dev mode so server logs remain visible in the terminal.
+  - Use Playwright via MCP to drive the client (navigate, fill, click) while observing server logs in real time.
+  - This is especially useful to validate theme switching, search submissions, and highlight rendering without introducing network flakiness (stub external calls where applicable).

@@ -1,19 +1,17 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "moduleResolution": "Bundler",
-    "baseUrl": ".",
-    "jsx": "preserve",
-    "jsxImportSource": "react",
-    "noEmit": true,
-    "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "baseUrl": ".",
     "allowJs": true,
+    "noEmit": true,
+    "incremental": true,
     "isolatedModules": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "styled.d.ts", ".next/types/**/*.ts"],

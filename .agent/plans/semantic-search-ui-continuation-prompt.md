@@ -10,42 +10,43 @@ Oak Components integration, accessibility, and page structure. Companion to the
 
 ## TL;DR (UI state)
 
-- App: Next.js App Router, Styled Components SSR, `ThemeContext` in place.
-- Theming: SSR cookie → `<html data-theme-mode>`; client persists cookie + localStorage.
-- Tokens + typing: `app/ui/themes/{tokens,light,dark,types}` added; typed DefaultTheme via
-  `types/styled.d.ts`.
-- Current theme: `oakDefaultTheme` light + derived dark palette; switching via context pending UI polish.
-- Tabs: refactored to themed styled‑components; no inline styles.
-- Inline styles: remain in header, page shell, forms, results, API docs page.
-- Tests: theming unit/integration; UI flow tests pending.
+- App: Next.js App Router with Styled Components SSR; clean server/client boundary.
+- Theming: ADR‑045 Bridge adopted. SSR cookie → `<html data-theme>`; client persists cookie + localStorage.
+- Tokens + typing: `app/ui/themes/{tokens,light,dark,types}` exposed via Bridge as `theme.app`; typed DefaultTheme via augmentation.
+- Theme: `oakDefaultTheme` light + derived dark at semantic layer; toggle in header via `ThemeSelect` updates context and HTML attribute; Bridge recomputes tokens and CSS vars by mode.
+- Layout: tabs removed; Structured and NL forms shown side‑by‑side.
+- Header: moved styling into client file `app/ui/client/HeaderStyles.tsx`; layout remains server.
+- Inline styles: still present in form fields/results; migrating to tokens via Bridge.
+- Tests: theming unit/integration green; SSR cookie mapping test stabilized with scoped mocks.
 
 ---
 
 ## Immediate next tasks (ordered)
 
-1. Replace inline styles in `app/layout.tsx` with themed styled‑components.
-2. Replace inline styles in `app/page.tsx`, `ThemeSelect.tsx`, forms, results, admin, API docs.
-3. Validate dark theme visuals; ensure contrast AA; hook theme toggle styling where needed.
-4. Begin Oak Components refactor for inputs/selects/buttons/tabs/header.
-5. Add component tests for submit/error/results flows; add a11y checks (axe).
+1. Implement Theme Bridge provider (raw→semantic mapping, CSS var emission, typed `theme.app`) [DONE].
+2. Migrate inline styles in Structured/NL forms and results to tokens/styled‑components.
+3. Validate dark theme visuals; ensure AA contrast; add focus outlines per tokens.
+4. Begin Oak Components refactor (inputs/selects/buttons/header) with a11y semantics.
+5. Add component tests for submit/error/results flows; introduce a11y + contrast checks (axe + contrast matrix). Add Bridge assertions: CSS vars and `theme.app` values change on toggle [DONE].
 
 ---
 
 ## Files of interest (UI)
 
-- Layout/nav: `app/layout.tsx`, `app/ui/ThemeSelect.tsx`.
-- Page shell: `app/page.tsx`, `app/ui/SearchTabHeader.tsx`.
+- Layout/nav: `app/layout.tsx` (server), `app/ui/client/HeaderStyles.tsx` (client),
+  `app/ui/client/ThemeSelect.tsx` (client), `app/lib/Providers.tsx` (client provider).
+- Page shell: `app/page.tsx` (server) + `app/ui/client/SearchPageClient.tsx` (client container).
 - Forms: `app/ui/StructuredSearch.tsx`, `app/ui/NaturalSearch.tsx`,
   `app/ui/structured-fields.tsx`, `app/ui/fields.tsx`.
 - Results: `app/ui/SearchResults.tsx` (uses `dangerouslySetInnerHTML` for highlights).
-- Theme infra: `app/lib/theme/{ThemeContext.tsx,theme-utils.ts}`.
+- Theme infra: `app/lib/theme/{ThemeContext.tsx,theme-utils.ts}` plus Bridge files (`ColorModeContext.tsx`, `ThemeBridgeProvider.tsx`, `ThemeCssVars.tsx`, optional `HtmlThemeAttribute.tsx`). Bridge composes mode‑specific tokens via `createLightTheme`/`createDarkTheme` and emits corresponding CSS vars.
 
 ---
 
 ## Decisions & invariants (UI)
 
-- SSR‑first theming: server cookie sets initial mode; no pre‑hydration scripts.
-- Theme tokens source: Oak tokens first; add app‑specific only if needed.
+- SSR‑first theming with ADR‑045 Bridge: server sets initial `<html data-theme>`; no pre‑hydration scripts.
+- Theme tokens source: Oak tokens first; app‑specific only if needed, exposed via Bridge as `theme.app`.
 - Accessibility: WCAG 2.2 AA; visible focus; reduced motion respected.
 - Testing: no network I/O; stub/fake fetch where required.
 
@@ -57,13 +58,25 @@ Oak Components integration, accessibility, and page structure. Companion to the
 - Tests (workspace): `pnpm -C apps/oak-open-curriculum-semantic-search test`
 - Root gates: `pnpm make && pnpm qg`
 
+### Dev & E2E (Playwright MCP)
+
+- The Playwright MCP server can drive the Next app in dev:
+  - Run the Next dev server so backend logs are visible in the terminal.
+  - In parallel, run Playwright via MCP to exercise the client (navigation, form submit, theme toggle).
+  - Observe server logs while tests interact with the UI for quick feedback. Stub external calls to avoid real network I/O.
+
 ---
 
 ## Short next steps checklist
 
 [x] Tokens scaffold exists and exported
-[] Inline styles migrated to themed styled‑components
-[] Dark theme visuals verified for contrast AA
-[] Forms/tabs/header use Oak Components
-[] Highlights sanitized or safely rendered
-[] Component tests for main flows; a11y checks added
+[x] Server/client boundary established for layout/header
+[x] Tabs removed; side‑by‑side layout implemented
+[x] ThemeSelect present in header; provider under `Providers`
+[x] Bridge provider implemented; `theme.app` available at runtime
+[x] Bridge mode toggling updates CSS vars and `theme.app` tokens
+[ ] Inline styles migrated to themed styled‑components (forms/results)
+[ ] Dark theme visuals verified for contrast AA
+[ ] Forms/header migrated to Oak Components
+[ ] Highlights sanitized or safely rendered
+[ ] Component tests for main flows; a11y + contrast checks added

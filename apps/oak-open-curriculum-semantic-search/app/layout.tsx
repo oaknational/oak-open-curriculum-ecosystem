@@ -1,14 +1,12 @@
 import type { Metadata, Viewport } from 'next';
-import React, { type JSX } from 'react';
+import type { JSX } from 'react';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { cookies } from 'next/headers';
 
 import { lexend } from './ui/fonts';
-import ThemeSelect from './ui/ThemeSelect';
 import StyledComponentsRegistry from './lib/registry';
 import { Providers } from './lib/Providers';
+import HeaderStyles from './ui/client/HeaderStyles';
 
 export const metadata: Metadata = {
   title: 'Oak Semantic Search',
@@ -30,63 +28,29 @@ export const viewport: Viewport = {
   ],
 } as const;
 
-function Header(): JSX.Element {
-  return (
-    <header
-      style={{
-        borderBottom: '1px solid #e5e7eb',
-        padding: '0.75rem 1rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-      }}
-    >
-      <Link href="/" aria-label="Home">
-        <Image
-          src="/oak-national-academy-logo-512.png"
-          alt="Oak National Academy"
-          width={32}
-          height={32}
-          style={{ display: 'block' }}
-        />
-      </Link>
-      <nav aria-label="Primary">
-        <Link href="/" style={{ marginLeft: '1rem' }}>
-          Home
-        </Link>
-        <Link href="/api/docs" style={{ marginLeft: '1rem' }}>
-          Open API Docs
-        </Link>
-        <span style={{ marginLeft: '1rem' }}>|</span>
-        <Link href="/admin" style={{ marginLeft: '1rem' }}>
-          Admin
-        </Link>
-        <Link href="/healthz" style={{ marginLeft: '1rem' }}>
-          Health (API)
-        </Link>
-      </nav>
-      <ThemeSelect />
-    </header>
-  );
-}
-
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }): Promise<JSX.Element> {
+  /** @todo move all of this into an appropriate theme helper */
   const cookieStore = await cookies();
   const cookieValue = cookieStore.get('theme-mode')?.value;
   const initialMode =
     cookieValue === 'light' || cookieValue === 'dark' || cookieValue === 'system'
       ? cookieValue
       : 'system';
+
   return (
-    <html lang="en" data-theme-mode={initialMode}>
+    <html
+      lang="en"
+      data-theme-mode={initialMode}
+      data-theme={initialMode === 'dark' ? 'dark' : 'light'}
+    >
       <body className={lexend.className}>
         <StyledComponentsRegistry>
           <Providers initialMode={initialMode}>
-            <Header />
+            <HeaderStyles />
             {children}
           </Providers>
         </StyledComponentsRegistry>

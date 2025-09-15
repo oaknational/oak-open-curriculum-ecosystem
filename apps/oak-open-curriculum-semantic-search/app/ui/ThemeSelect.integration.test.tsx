@@ -1,7 +1,6 @@
-import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ThemeSelect from './ThemeSelect';
+import ThemeSelect from './client/ThemeSelect';
 import { ThemeProvider, useThemeContext } from '../lib/theme/ThemeContext';
 
 function ModeProbe(): React.JSX.Element {
