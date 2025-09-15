@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-15T15:49:06.349Z
+Generated: 2025-09-15T16:01:32.465Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -59,22 +59,22 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 
 - operationId: changelog-latest
 - description: Get the latest version and latest change note for the API
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /changelog
 
 - operationId: changelog-changelog
 - description: History of significant changes to the API with associated dates and versions
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /key-stages/{keyStage}/subject/{subject}/assets
 
 - operationId: getAssets-getSubjectAssets
 - summary: Assets
 - description: This endpoint returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query type (string enum:9)
@@ -85,7 +85,7 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - operationId: getKeyStageSubjectLessons-getKeyStageSubjectLessons
 - summary: Lessons
 - description: This endpoint returns an array of available published lessons for a given subject and key stage, grouped by unit.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query unit (string)
@@ -97,7 +97,7 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - operationId: getQuestions-getQuestionsForKeyStageAndSubject
 - summary: Quiz questions by subject and key stage
 - description: This endpoint returns quiz questions and answers for each lesson within a requested subject and key stage.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 - query offset (number)
@@ -108,7 +108,7 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - operationId: getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits
 - summary: Units
 - description: This endpoint returns an array of units containing available published lessons for a given key stage and subject, grouped by year. Units without published lessons will not be returned by this endpoint.
-  Parameters:
+Parameters:
 - path keyStage (string enum:4) — required
 - path subject (string enum:17) — required
 
@@ -117,16 +117,16 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - operationId: getKeyStages-getKeyStages
 - summary: Key stages
 - description: This endpoint returns all the key stages (titles and slugs) that are currently available on Oak
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /lessons/{lesson}/assets/{type}
 
 - operationId: getAssets-getLessonAsset
 - summary: Lesson asset by type
 - description: This endpoint will stream the downloadable asset for the given lesson and type.
-  There is no response returned for this endpoint as it returns a content attachment.
-  Parameters:
+There is no response returned for this endpoint as it returns a content attachment.
+Parameters:
 - path lesson (string) — required
 - path type (string enum:9) — required
 
@@ -135,7 +135,7 @@ for (const op of toolGeneration.PATH_OPERATIONS) {
 - operationId: getAssets-getLessonAssets
 - summary: Downloadable lesson assets
 - description: This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
-  This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+        This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
 
 Parameters:
 
@@ -147,7 +147,7 @@ Parameters:
 - operationId: getQuestions-getQuestionsForLessons
 - summary: Quiz questions by lesson
 - description: The endpoint returns the quiz questions and answers for a given lesson. The answers data indicates which answers are correct, and which are distractors.
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /lessons/{lesson}/summary
@@ -155,7 +155,7 @@ Parameters:
 - operationId: getLessons-getLesson
 - summary: Lesson summary
 - description: This endpoint returns a summary for a given lesson
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /lessons/{lesson}/transcript
@@ -163,7 +163,7 @@ Parameters:
 - operationId: getLessonTranscript-getLessonTranscript
 - summary: Lesson transcript
 - description: This endpoint returns the video transcript and video captions file for a given lesson.
-  Parameters:
+Parameters:
 - path lesson (string) — required
 
 ### GET /rate-limit
@@ -180,7 +180,7 @@ _No parameters_
 - operationId: getLessons-searchByTextSimilarity
 - summary: Lesson search using lesson title
 - description: Search for a term and find the 20 most similar lessons with titles that contain similar text.
-  Parameters:
+Parameters:
 - query q (string) — required
 - query keyStage (string enum:4)
 - query subject (string enum:17)
@@ -191,7 +191,7 @@ _No parameters_
 - operationId: searchTranscripts-searchTranscripts
 - summary: Lesson search using lesson video transcripts
 - description: Search for a term and find the 5 most similar lessons whose video transcripts contain similar text.
-  Parameters:
+Parameters:
 - query q (string) — required
 
 ### GET /sequences/{sequence}/assets
@@ -199,8 +199,8 @@ _No parameters_
 - operationId: getAssets-getSequenceAssets
 - summary: Assets within a sequence
 - description: This endpoint returns all assets for a given sequence, and the download endpoints for each. The assets are grouped by lesson.
-  This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
-  Parameters:
+This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
+Parameters:
 - path sequence (string) — required
 - query year (number)
 - query type (string enum:9)
@@ -210,7 +210,7 @@ _No parameters_
 - operationId: getQuestions-getQuestionsForSequence
 - summary: Questions within a sequence
 - description: This endpoint returns all quiz questions for a given sequence. The assets are separated into starter quiz and entry quiz arrays, grouped by lesson.
-  Parameters:
+Parameters:
 - path sequence (string) — required
 - query year (number)
 - query offset (number)
@@ -221,7 +221,7 @@ _No parameters_
 - operationId: getSequences-getSequenceUnits
 - summary: Units within a sequence
 - description: This endpoint returns high-level information for all of the units in a sequence. Units are returned in the intended sequence order and are grouped by year.
-  Parameters:
+Parameters:
 - path sequence (string) — required
 - query year (string enum:12)
 
@@ -230,7 +230,7 @@ _No parameters_
 - operationId: getSubjects-getSubjectKeyStages
 - summary: Key stages within a subject
 - description: This endpoint returns a list of key stages that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}/sequences
@@ -238,7 +238,7 @@ _No parameters_
 - operationId: getSubjects-getSubjectSequence
 - summary: Sequencing information for a given subject
 - description: This endpoint returns an array of sequence objects that are currently available for a given subject. For secondary sequences, this includes information about key stage 4 variance such as exam board sequences and non-GCSE ‘core’ unit sequences.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}/years
@@ -246,7 +246,7 @@ _No parameters_
 - operationId: getSubjects-getSubjectYears
 - summary: Year groups for a given subject
 - description: This endpoint returns an array of years that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects/{subject}
@@ -254,7 +254,7 @@ _No parameters_
 - operationId: getSubjects-getSubject
 - summary: Subject
 - description: This endpoint returns the sequences, key stages and years that are currently available for a given subject.
-  Parameters:
+Parameters:
 - path subject (string) — required
 
 ### GET /subjects
@@ -262,15 +262,15 @@ _No parameters_
 - operationId: getSubjects-getAllSubjects
 - summary: Subjects
 - description: This endpoint returns an array of all available subjects and their associated sequences, key stages and years.
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /threads/{threadSlug}/units
 
 - operationId: getThreads-getThreadUnits
 - summary: Units belonging to a given thread
 - description: This endpoint returns all of the units that belong to a given thread.
-  Parameters:
+Parameters:
 - path threadSlug (string) — required
 
 ### GET /threads
@@ -278,15 +278,15 @@ _No parameters_
 - operationId: getThreads-getAllThreads
 - summary: Threads
 - description: This endpoint returns an array of all threads, across all subjects. Threads signpost groups of units that link to one another, building a common body of knowledge over time. They are an important component of how Oak’s curricula are sequenced.
-  Parameters:
-  _No parameters_
+Parameters:
+_No parameters_
 
 ### GET /units/{unit}/summary
 
 - operationId: getUnits-getUnit
 - summary: Unit summary
 - description: This endpoint returns unit information for a given unit, including slug, title, number of lessons, prior knowledge requirements, national curriculum statements, prior unit details, future unit descriptions, and lesson titles that form the unit
-  Parameters:
+Parameters:
 - path unit (string) — required
 
 ## MCP Tool Catalog
