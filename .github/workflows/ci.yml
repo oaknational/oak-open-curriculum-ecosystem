@@ -34,18 +34,18 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check formatting
-        run: pnpm format:check
+        run: pnpm format-check:root
 
       - name: Run linting
         # The semantic search app is linted during build on Vercel, no need to duplicate the linting here
-        run: pnpm lint --only --filter=!@oaknational/open-curriculum-semantic-search
+        run: pnpm lint --filter=!@oaknational/open-curriculum-semantic-search
 
       - name: Run type checking
-        run: pnpm type-check --only
+        run: pnpm type-check
 
       - name: Run tests
-        run: pnpm test --only
+        run: pnpm test
 
       - name: Build project
         # The hosted MCP server and the semantic search app are built in Vercel, no need to duplicate the build here
-        run: pnpm build --only --filter=!@oaknational/oak-curriculum-mcp-streamable-http --filter=!@oaknational/open-curriculum-semantic-search
+        run: pnpm build --filter=!@oaknational/oak-curriculum-mcp-streamable-http --filter=!@oaknational/open-curriculum-semantic-search
