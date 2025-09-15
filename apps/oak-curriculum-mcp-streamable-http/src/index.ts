@@ -71,6 +71,8 @@ export function createApp(): express.Express {
   mountStaticAssets(app);
   addRootLandingPage(app);
   app.use(bearerAuth);
+  // Add middleware to ensure proper Accept header for MCP requests
+  app.use('/mcp', ensureMcpAcceptHeader);
   app.post('/mcp', createMcpHandler(transport));
 
   return app;
@@ -80,6 +82,31 @@ function addRootLandingPage(app: express.Express): void {
   app.get('/', (_req, res) => {
     res.type('text/html').send(renderLandingPageHtml());
   });
+}
+
+/**
+ * Middleware to ensure MCP requests have the required Accept header.
+ * This improves UX by automatically adding the header if missing.
+ */
+function ensureMcpAcceptHeader(
+  req: express.Request,
+  _res: express.Response,
+  next: express.NextFunction,
+): void {
+  const accept = req.get('Accept');
+  const requiredAccept = 'application/json, text/event-stream';
+
+  // Check if Accept header is missing, is wildcard, or doesn't contain both required types
+  if (
+    !accept ||
+    accept === '*/*' ||
+    !accept.includes('application/json') ||
+    !accept.includes('text/event-stream')
+  ) {
+    req.headers.accept = requiredAccept;
+  }
+
+  next();
 }
 
 /**

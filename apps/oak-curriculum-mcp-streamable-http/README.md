@@ -24,10 +24,11 @@ pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 curl -sS \
   -H "Authorization: Bearer $REMOTE_MCP_DEV_TOKEN" \
   -H 'Content-Type: application/json' \
-  -H 'Accept: application/json, text/event-stream' \
   -X POST http://localhost:3333/mcp \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
+
+Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
 
 ## Vercel deployment
 
