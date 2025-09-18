@@ -43,10 +43,10 @@ const queryValueValidators: Readonly<Record<string, (value: unknown) => boolean>
 
 void pathParams;
 void queryParams;
-type PathParamsShape = {
+interface PathParamsShape {
   sequence: string;
 }
-type QueryParamsShape = {
+interface QueryParamsShape {
   year?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | 'all-years';
 }
 interface ValidRequestParams {

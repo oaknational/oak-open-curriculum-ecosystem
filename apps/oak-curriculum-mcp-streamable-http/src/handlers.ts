@@ -11,6 +11,7 @@ import {
   zodRawShapeFromToolInputJsonSchema,
   typeSafeEntries,
   validateResponse,
+  isValidationFailure,
   type HttpMethod,
 } from '@oaknational/oak-curriculum-sdk';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -30,16 +31,15 @@ function validateOutput(
 ): { ok: true } | { ok: false; message: string } {
   const httpMethod = toHttpMethod(methodUpper);
   const validation = validateResponse(path, httpMethod, 200, data);
-  const isOk = validation.ok;
-  if (isOk) {
+  if (validation.ok) {
     return { ok: true };
   }
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime check to debug issue
-  const hasIssues = (validation.issues && validation.issues.length > 0) ?? false;
-  if (hasIssues) {
-    return { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
+  if (isValidationFailure(validation)) {
+    const first = validation.issues[0];
+    const message = first.message;
+    return { ok: false, message };
   }
-  return { ok: false, message: `Output validation failed: ${JSON.stringify(validation)}` };
+  return { ok: false, message: 'Output validation failed' };
 }
 
 export function findTool(name: string, tools: readonly Tool[]): Tool {

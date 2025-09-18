@@ -32,7 +32,7 @@ const queryValueValidators: Readonly<Record<string, (value: unknown) => boolean>
 
 void pathParams;
 void queryParams;
-type QueryParamsShape = {
+interface QueryParamsShape {
   q: string;
 }
 interface ValidRequestParams {

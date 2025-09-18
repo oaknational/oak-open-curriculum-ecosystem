@@ -11,7 +11,7 @@
     "build": "next build --turbopack",
     "clean": "rm -rf dist .turbo .next",
     "start": "next start",
-    "lint": "eslint --cache .",
+    "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "format": "prettier --write --cache .",
     "test": "vitest run",

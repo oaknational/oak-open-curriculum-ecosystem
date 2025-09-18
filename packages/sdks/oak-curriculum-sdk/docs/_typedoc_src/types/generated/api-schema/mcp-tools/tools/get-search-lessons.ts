@@ -55,7 +55,7 @@ const queryValueValidators: Readonly<Record<string, (value: unknown) => boolean>
 
 void pathParams;
 void queryParams;
-type QueryParamsShape = {
+interface QueryParamsShape {
   q: string;
   keyStage?: 'ks1' | 'ks2' | 'ks3' | 'ks4';
   subject?: 'art' | 'citizenship' | 'computing' | 'cooking-nutrition' | 'design-technology' | 'english' | 'french' | 'geography' | 'german' | 'history' | 'maths' | 'music' | 'physical-education' | 'religious-education' | 'rshe-pshe' | 'science' | 'spanish';

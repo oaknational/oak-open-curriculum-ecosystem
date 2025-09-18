@@ -62,7 +62,12 @@ export type { PathOperation, OperationId } from './types/generated/api-schema/pa
 export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
 // Validation module exports (explicit for tree-shaking)
-export { validateRequest, validateResponse } from './validation/index.js';
+export {
+  validateRequest,
+  validateResponse,
+  isValidationFailure,
+  isValidationSuccess,
+} from './validation/index.js';
 export type {
   ValidationResult,
   ValidationIssue,

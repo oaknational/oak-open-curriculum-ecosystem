@@ -85,7 +85,7 @@
     },
     "lint": {
       "cache": true,
-      "outputs": [".eslintcache"],
+      "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/eslint.config.ts",

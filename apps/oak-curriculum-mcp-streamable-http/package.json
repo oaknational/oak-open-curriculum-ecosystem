@@ -12,7 +12,7 @@
     "start": "node dist/index.js",
     "smoke:dev": "tsx scripts/smoke-dev.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint --cache .",
+    "lint": "eslint  .",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts"

@@ -29,7 +29,7 @@
     "generate:zod": "tsx scripts/zodgen.ts",
     "generate:clean": "rm -rf src/types/generated",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "lint": "eslint --cache .",
+    "lint": "eslint  .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "vitest run --config vitest.config.e2e.ts",

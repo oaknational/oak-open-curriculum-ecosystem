@@ -19,7 +19,7 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
-    "lint": "eslint --cache .",
+    "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run"
   },

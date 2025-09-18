@@ -50,8 +50,8 @@ function headerBlock(
   const hasQuery = typeSafeKeys(queryParamMetadata).length > 0;
   const hasRequiredQuery = typeSafeValues(queryParamMetadata).some((m) => m.required);
   const lines: string[] = [];
-  if (hasPath) lines.push('type PathParamsShape = ' + pathShape);
-  if (hasQuery) lines.push('type QueryParamsShape = ' + queryShape);
+  if (hasPath) lines.push('interface PathParamsShape ' + pathShape);
+  if (hasQuery) lines.push('interface QueryParamsShape ' + queryShape);
   if (!hasPath && !hasQuery) {
     lines.push('interface ValidRequestParams {');
     lines.push('  [key: string]: unknown;');
