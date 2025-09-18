@@ -85,6 +85,12 @@ function isCiAuthorized(token: string | undefined): boolean {
   return Boolean(token) && isCi && Boolean(ciToken) && token === ciToken;
 }
 
+function isAlphaAuthorized(token: string | undefined): boolean {
+  const ciToken = process.env.REMOTE_MCP_CI_TOKEN;
+  const isCi = process.env.ALPHA_RELEASE === 'true';
+  return Boolean(token) && isCi && Boolean(ciToken) && token === ciToken;
+}
+
 export const bearerAuth: RequestHandler = async (req, res, next) => {
   const token = getBearerToken(getAuthHeader(req));
 
@@ -97,7 +103,7 @@ export const bearerAuth: RequestHandler = async (req, res, next) => {
     return;
   }
 
-  if (isDevAuthorized(token) || isCiAuthorized(token)) {
+  if (isDevAuthorized(token) || isCiAuthorized(token) || isAlphaAuthorized(token)) {
     next();
     return;
   }

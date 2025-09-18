@@ -7,14 +7,16 @@ import { readEnv } from './env.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
+  generateCanonicalUrl,
   isToolName,
   MCP_TOOLS,
   zodRawShapeFromToolInputJsonSchema,
   typeSafeEntries,
   validateResponse,
-  isValidationFailure,
-  type HttpMethod,
   isValidationSuccess,
+  isValidationFailure,
+  type ContentType,
+  type HttpMethod,
   type ValidationResult,
 } from '@oaknational/oak-curriculum-sdk';
 
@@ -90,9 +92,38 @@ export function registerHandlers(server: McpServer): void {
           const firstMessage = out.firstMessage ?? 'Output validation failed';
           return { content: [{ type: 'text', text: 'Error: ' + firstMessage }], isError: true };
         }
-        return { content: [{ type: 'text', text: JSON.stringify(execResult.data) }] };
+        // Augment with canonicalUrl for lesson endpoints when possible
+        const payload = maybeAugmentWithCanonicalUrl(execResult.data, params, def.path);
+        return { content: [{ type: 'text', text: JSON.stringify(payload) }] };
       },
     );
+  }
+}
+
+function getOwnStringIfPresent(obj: unknown, key: PropertyKey): string | undefined {
+  if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
+    return undefined;
+  }
+  const d = Object.getOwnPropertyDescriptor(obj, key);
+  return typeof d?.value === 'string' ? d.value : undefined;
+}
+
+function maybeAugmentWithCanonicalUrl(data: unknown, params: unknown, path: string): unknown {
+  try {
+    if (!path.startsWith('/lessons/')) {
+      return data;
+    }
+    const lessonSlug = getOwnStringIfPresent(params, 'lesson');
+    if (!lessonSlug) {
+      return data;
+    }
+    const ct: ContentType = 'lesson';
+    const canonical = generateCanonicalUrl(ct, 'lesson:' + lessonSlug);
+    return { data, canonicalUrl: canonical };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.warn('Error augmenting with canonicalUrl: ' + msg);
+    return data;
   }
 }
 

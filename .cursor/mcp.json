@@ -19,6 +19,13 @@
       "type": "http",
       "url": "https://poc-oak-open-curriculum-mcp-git-feat-semanticsearch.vercel.thenational.academy/mcp"
     },
+    "oak-curriculum-http-remote-preview": {
+      "type": "http",
+      "url": "https://poc-oak-open-curriculum-mcp-git-feat-openaiconnectorsupport.vercel.thenational.academy/mcp",
+      "headers": {
+        "Authorization": "Bearer super-duper-secret-dev-token?!"
+      }
+    },
     "oak-curriculum-http-local": {
       "type": "http",
       "url": "http://localhost:3333/mcp",
