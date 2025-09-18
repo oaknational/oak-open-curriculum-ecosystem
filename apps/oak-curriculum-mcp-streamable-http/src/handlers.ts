@@ -30,9 +30,16 @@ function validateOutput(
 ): { ok: true } | { ok: false; message: string } {
   const httpMethod = toHttpMethod(methodUpper);
   const validation = validateResponse(path, httpMethod, 200, data);
-  return validation.ok
-    ? { ok: true }
-    : { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
+  const isOk = validation.ok;
+  if (isOk) {
+    return { ok: true };
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime check to debug issue
+  const hasIssues = (validation.issues && validation.issues.length > 0) ?? false;
+  if (hasIssues) {
+    return { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
+  }
+  return { ok: false, message: `Output validation failed: ${JSON.stringify(validation)}` };
 }
 
 export function findTool(name: string, tools: readonly Tool[]): Tool {

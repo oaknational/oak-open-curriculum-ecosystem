@@ -51,7 +51,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "cache": true,
+      "cache": false,
       "outputs": ["dist/**", ".tsup/**", ".next/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
