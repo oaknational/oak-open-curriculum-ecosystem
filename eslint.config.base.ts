@@ -6,12 +6,8 @@
  */
 
 import type { Linter } from 'eslint';
-import {
-  config as tsEslintConfig,
-  configs as tsEslintConfigs,
-  parser as tsEslintParser,
-  type ConfigArray,
-} from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
+import { configs as tsEslintConfigs, parser as tsEslintParser } from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
@@ -35,7 +31,7 @@ export const ignores = [
   '**/docs/api-md/',
 ];
 
-export const baseRules: ConfigArray = [
+export const baseRules: Readonly<Linter.Config[]> = [
   eslint.configs.recommended,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
@@ -150,7 +146,7 @@ export const testRules: Linter.RulesRecord = {
   'import-x/no-named-as-default-member': 'off',
 };
 
-export const baseConfig: ConfigArray = tsEslintConfig(
+export const baseConfig = defineConfig(
   {
     ignores,
   },

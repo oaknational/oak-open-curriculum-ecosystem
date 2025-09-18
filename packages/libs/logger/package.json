@@ -24,13 +24,13 @@
     "test:coverage": "vitest run --coverage",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint --cache .",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "consola": "^3.2.3"
+    "consola": "^3.4.2"
   },
   "devDependencies": {
-    "pnpm": "^10.16.1",
+    "pnpm": "^10.17.0",
     "typescript": "^5.9.2"
   },
   "engines": {

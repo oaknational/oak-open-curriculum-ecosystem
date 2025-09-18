@@ -1,4 +1,4 @@
-import { config as tsEslintConfig, type ConfigArray } from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import { baseConfig } from '../../eslint.config.base';
 import {
   appBoundaryRules,
@@ -14,7 +14,7 @@ import { importX } from 'eslint-plugin-import-x';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
-const config: ConfigArray = [
+const config = defineConfig(
   // JavaScript files configuration - separate from TypeScript config
   {
     files: ['**/*.js', '**/*.mjs'],
@@ -32,7 +32,7 @@ const config: ConfigArray = [
     },
   },
   // TypeScript configuration - exclude JS files
-  ...tsEslintConfig(
+  ...defineConfig(
     ...baseConfig,
     {
       ignores: [
@@ -116,6 +116,6 @@ const config: ConfigArray = [
       'max-lines-per-function': ['error', { max: 70, skipComments: true, skipBlankLines: true }],
     },
   },
-];
+);
 
 export default config;

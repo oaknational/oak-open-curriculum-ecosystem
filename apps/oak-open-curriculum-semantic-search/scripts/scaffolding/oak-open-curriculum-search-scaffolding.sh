@@ -62,7 +62,7 @@ write_file "$APP_DIR/package.json" <<'EOF'
     "next": "^15.5.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "zod": "^4.1.5",
+    "zod": "^4",
     "@ai-sdk/openai": "^2.0.24",
     "ai": "^5.0.34",
     "@oaknational/oak-curriculum-sdk": "workspace:*",

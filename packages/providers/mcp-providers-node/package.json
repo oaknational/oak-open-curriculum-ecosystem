@@ -18,10 +18,21 @@
   ],
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "clean": "rimraf dist .tsup",
+    "clean": "rm -rf dist .turbo",
     "lint": "eslint --cache .",
-    "type-check": "tsc --noEmit -p tsconfig.json",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "pnpm": "^10.17.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oaknational/oak-mcp-ecosystem.git",
+    "directory": "packages/providers/mcp-providers-node"
+  }
 }

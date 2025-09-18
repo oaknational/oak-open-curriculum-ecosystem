@@ -12,6 +12,7 @@ packages:
   - packages/providers/mcp-providers-node
 
 onlyBuiltDependencies:
+  - core-js
   - esbuild
   - sharp
   - unrs-resolver

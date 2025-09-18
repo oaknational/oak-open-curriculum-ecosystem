@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist .turbo",
     "deps": "pnpm outdated -r",
     "dev": "tsx watch src/index.ts",
     "lint": "eslint --cache .",
@@ -43,13 +43,12 @@
     "@oaknational/mcp-transport": "workspace:*",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
     "dotenv": "^17.2.1",
-    "zod": "^3.23.8",
-    "zod-to-json-schema": "^3.24.1"
+    "zod": "^4"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
+    "pnpm": "^10.17.0",
     "tsx": "^4.20.5",
-    "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
