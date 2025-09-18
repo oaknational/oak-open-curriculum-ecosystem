@@ -56,8 +56,12 @@ function buildEnumNumberSchema(values: readonly unknown[]): z.ZodTypeAny {
 
 function buildArraySchema(prop: ArrayProperty): z.ZodTypeAny {
   const itemType = prop.items.type;
-  if (itemType === 'string') return z.array(z.string());
-  if (itemType === 'number') return z.array(z.number());
+  if (itemType === 'string') {
+    return z.array(z.string());
+  }
+  if (itemType === 'number') {
+    return z.array(z.number());
+  }
   return z.array(z.boolean());
 }
 

@@ -30,8 +30,12 @@ function isReferenceObject(obj: unknown): obj is ReferenceObject {
  * Check if value is a ParameterObject or ReferenceObject
  */
 function isParameterOrReference(p: unknown): p is ParameterObject | ReferenceObject {
-  if (!isObject(p)) return false;
-  if (isReferenceObject(p)) return true;
+  if (!isObject(p)) {
+    return false;
+  }
+  if (isReferenceObject(p)) {
+    return true;
+  }
   const nameVal = getOwnString(p, 'name');
   const inVal = getOwnString(p, 'in');
   return (
@@ -59,7 +63,9 @@ export function initializePathParameters(
 export function extractValidParameters(
   parameters: unknown[] | undefined,
 ): (ParameterObject | ReferenceObject)[] {
-  if (!parameters) return [];
+  if (!parameters) {
+    return [];
+  }
 
   return parameters.filter((p): p is ParameterObject | ReferenceObject =>
     isParameterOrReference(p),

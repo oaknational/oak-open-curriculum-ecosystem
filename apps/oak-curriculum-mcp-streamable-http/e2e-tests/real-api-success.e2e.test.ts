@@ -30,11 +30,16 @@ describe('Real API success path (requires OAK_API_KEY)', () => {
       .split('\n')
       .map((l) => l.trim())
       .find((l) => l.startsWith('data: '));
-    if (!dataLine) throw new Error('No data line found in SSE payload');
+    if (!dataLine) {
+      throw new Error('No data line found in SSE payload');
+    }
     const json = JSON.parse(dataLine.replace(/^data: /, '')) as unknown;
     expect(typeof json).toBe('object');
     // restore env to avoid leaking into subsequent tests
-    if (typeof prevNoAuth === 'string') process.env.REMOTE_MCP_ALLOW_NO_AUTH = prevNoAuth;
-    else delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    if (typeof prevNoAuth === 'string') {
+      process.env.REMOTE_MCP_ALLOW_NO_AUTH = prevNoAuth;
+    } else {
+      delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    }
   });
 });

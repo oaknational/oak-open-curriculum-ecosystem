@@ -20,7 +20,9 @@ function unauthorized(
   try {
     const env = readEnv();
     resource = env.MCP_CANONICAL_URI ?? resource;
-    if (env.BASE_URL) authorizationUri = `${env.BASE_URL}/.well-known/oauth-protected-resource`;
+    if (env.BASE_URL) {
+      authorizationUri = `${env.BASE_URL}/.well-known/oauth-protected-resource`;
+    }
   } catch (err: unknown) {
     // Fall back to defaults if env is not fully configured
     if (err instanceof Error) {
@@ -47,18 +49,29 @@ function getAuthHeader(req: { get(name: string): string | undefined }): string |
 }
 
 function getBearerToken(header: string | undefined): string | undefined {
-  if (!header) return undefined;
+  if (!header) {
+    return undefined;
+  }
   return header.startsWith('Bearer ') ? header.slice('Bearer '.length) : undefined;
 }
 
-function allowsNoAuth(): boolean {
+function allowsNoAuth(path: string): boolean {
   // ⚠️ DANGEROUS: This bypasses ALL authentication checks, including in production
   // Only use for testing/debugging - never in production with real data
   if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
     return true;
   }
   // Local dev only bypass
-  return isLocalDev && process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true';
+  if (isLocalDev && process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true') {
+    return true;
+  }
+  if (
+    path.startsWith('/openai_connector') &&
+    process.env.REMOTE_MCP_ALLOW_NO_AUTH_OPENAI === 'true'
+  ) {
+    return true;
+  }
+  return false;
 }
 
 function isDevAuthorized(token: string | undefined): boolean {
@@ -76,7 +89,7 @@ export const bearerAuth: RequestHandler = async (req, res, next) => {
   const token = getBearerToken(getAuthHeader(req));
 
   if (!token) {
-    if (allowsNoAuth()) {
+    if (allowsNoAuth(req.path)) {
       next();
       return;
     }
@@ -125,12 +138,20 @@ async function verifyAccessToken(token: string): Promise<void> {
   const issuer = env.BASE_URL;
   const audience = env.MCP_CANONICAL_URI;
 
-  if (!jwkJson) throw new Error('Server misconfiguration: LOCAL_AS_JWK is missing');
-  if (!issuer) throw new Error('Server misconfiguration: BASE_URL is missing');
-  if (!audience) throw new Error('Server misconfiguration: MCP_CANONICAL_URI is missing');
+  if (!jwkJson) {
+    throw new Error('Server misconfiguration: LOCAL_AS_JWK is missing');
+  }
+  if (!issuer) {
+    throw new Error('Server misconfiguration: BASE_URL is missing');
+  }
+  if (!audience) {
+    throw new Error('Server misconfiguration: MCP_CANONICAL_URI is missing');
+  }
 
   const parsed = safeParseJson(jwkJson);
-  if (!isJwk(parsed)) throw new Error('Server misconfiguration: LOCAL_AS_JWK is not a valid JWK');
+  if (!isJwk(parsed)) {
+    throw new Error('Server misconfiguration: LOCAL_AS_JWK is not a valid JWK');
+  }
 
   const key = await importJWK(parsed, 'RS256');
   await jwtVerify(token, key, {

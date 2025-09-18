@@ -19,11 +19,21 @@ import {
 } from '@oaknational/oak-curriculum-sdk';
 
 function toHttpMethod(methodUpper: string): HttpMethod {
-  if (methodUpper === 'GET') return 'get';
-  if (methodUpper === 'POST') return 'post';
-  if (methodUpper === 'PUT') return 'put';
-  if (methodUpper === 'DELETE') return 'delete';
-  if (methodUpper === 'PATCH') return 'patch';
+  if (methodUpper === 'GET') {
+    return 'get';
+  }
+  if (methodUpper === 'POST') {
+    return 'post';
+  }
+  if (methodUpper === 'PUT') {
+    return 'put';
+  }
+  if (methodUpper === 'DELETE') {
+    return 'delete';
+  }
+  if (methodUpper === 'PATCH') {
+    return 'patch';
+  }
   throw new Error('Unsupported method: ' + methodUpper);
 }
 
@@ -93,7 +103,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   type ValidLogLevel = (typeof validLogLevels)[number];
 
   function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') return false;
+    if (typeof value !== 'string') {
+      return false;
+    }
     const stringValidLogLevels: readonly string[] = validLogLevels;
     return stringValidLogLevels.includes(value);
   }
@@ -132,7 +144,9 @@ function registerMcpTools(
       name,
       { title: name, description, inputSchema: input },
       async (params: unknown) => {
-        if (!isToolName(name)) throw new Error('Unknown tool');
+        if (!isToolName(name)) {
+          throw new Error('Unknown tool');
+        }
         const execResult = await executeToolCall(name, params, client);
         if (execResult.error) {
           const e = execResult.error;

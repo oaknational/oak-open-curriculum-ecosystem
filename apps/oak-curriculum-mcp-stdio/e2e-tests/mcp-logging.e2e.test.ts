@@ -7,7 +7,9 @@ import { findRepoRoot } from '@oaknational/mcp-env';
 
 function readStartupLog(repoRoot: string): string {
   const p = join(repoRoot, '.logs', 'oak-curriculum-mcp-startup', 'startup.log');
-  if (!existsSync(p)) return '';
+  if (!existsSync(p)) {
+    return '';
+  }
   try {
     return readFileSync(p, 'utf8');
   } catch {

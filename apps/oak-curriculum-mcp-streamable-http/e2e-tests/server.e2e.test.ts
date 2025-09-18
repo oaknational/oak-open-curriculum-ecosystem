@@ -19,7 +19,9 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
     .split('\n')
     .map((l) => l.trim())
     .find((l) => l.startsWith('data: '));
-  if (!line) throw new Error('No data line found in SSE payload');
+  if (!line) {
+    throw new Error('No data line found in SSE payload');
+  }
   const json = line.replace(/^data: /, '');
   const parsed: unknown = JSON.parse(json);
   if (parsed && typeof parsed === 'object') {
@@ -30,7 +32,9 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
 
 function toolNamesFromResult(value: unknown): string[] {
   const tools = (value as { result?: { tools?: unknown[] } }).result?.tools;
-  if (!Array.isArray(tools)) return [];
+  if (!Array.isArray(tools)) {
+    return [];
+  }
   return tools
     .map((t) => (t && typeof t === 'object' ? (t as { name?: unknown }).name : undefined))
     .filter((n): n is string => typeof n === 'string');

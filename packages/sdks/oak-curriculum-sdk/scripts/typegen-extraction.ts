@@ -64,7 +64,9 @@ export function isPathItemObject(value: unknown): value is PathItemObject {
 
 export function extractParameterNamesFromPath(pathPattern: string): string[] {
   const matches = pathPattern.match(/{(\w+)}/g);
-  if (!matches) return [];
+  if (!matches) {
+    return [];
+  }
   return matches.map((match) => match.slice(1, -1));
 }
 
@@ -78,10 +80,14 @@ export function processParameterDefinitions(
     const derefParam = dereferenceParameter(param, root);
     const paramName = derefParam.name;
 
-    if (!parameterNames.includes(paramName)) continue;
+    if (!parameterNames.includes(paramName)) {
+      continue;
+    }
 
     const enumValues = extractEnumFromParameter(derefParam);
-    if (!enumValues) continue;
+    if (!enumValues) {
+      continue;
+    }
 
     for (const value of enumValues) {
       pathParameters[paramName].add(value);
@@ -91,7 +97,9 @@ export function processParameterDefinitions(
 
 export function extractEnumFromParameter(param: ParameterObject): string[] | undefined {
   const schema = param.schema;
-  if (!schema) return undefined;
+  if (!schema) {
+    return undefined;
+  }
 
   const enumArray: unknown = getOwnValue(schema, 'enum');
   if (Array.isArray(enumArray)) {

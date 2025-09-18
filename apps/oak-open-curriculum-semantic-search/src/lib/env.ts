@@ -26,7 +26,9 @@ export type Env = z.infer<typeof EnvSchema>;
 let cached: (Env & { OAK_EFFECTIVE_KEY: string }) | null = null;
 
 export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
   const parsed = EnvSchema.safeParse({
     ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
     ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
@@ -35,7 +37,9 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   });
-  if (!parsed.success) throw new Error(parsed.error.message);
+  if (!parsed.success) {
+    throw new Error(parsed.error.message);
+  }
   const key = parsed.data.OAK_API_KEY ?? '';
   cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
   return cached;

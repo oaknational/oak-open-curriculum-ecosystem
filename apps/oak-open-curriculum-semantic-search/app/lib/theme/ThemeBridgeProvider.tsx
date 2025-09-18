@@ -14,7 +14,9 @@ function resolveModeFromDom(): 'light' | 'dark' {
   try {
     if (typeof document !== 'undefined') {
       const root = document.getElementById('app-theme-root');
-      if (root && root.dataset.theme === 'dark') return 'dark';
+      if (root && root.dataset.theme === 'dark') {
+        return 'dark';
+      }
       return 'light';
     }
   } catch {

@@ -12,7 +12,9 @@ export function HtmlThemeAttribute(): React.JSX.Element | null {
   useEffect(() => {
     try {
       const root = document.getElementById('app-theme-root');
-      if (root) root.dataset.theme = mode;
+      if (root) {
+        root.dataset.theme = mode;
+      }
     } catch (error: unknown) {
       logger.error(`Error setting theme mode: ${error}`, { error });
     }

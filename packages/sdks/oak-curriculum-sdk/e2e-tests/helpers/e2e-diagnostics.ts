@@ -19,22 +19,34 @@ function safeJson(value: unknown, max = 4000): string {
 
 function pickHeaders(h: Headers, keys: string[]): { name: string; value: string | null }[] {
   const out: { name: string; value: string | null }[] = [];
-  for (const k of keys) out.push({ name: k, value: h.get(k) });
+  for (const k of keys) {
+    out.push({ name: k, value: h.get(k) });
+  }
   return out;
 }
 
-/* eslint-disable-next-line max-lines-per-function, complexity */
 export async function logErrorDiagnostics(
   result: { response: Response; error: Errorish },
   context: unknown = {},
   options: { apiKey?: string } = {},
 ): Promise<void> {
   const { response, error } = result;
-
   const status = response.status;
   const url = response.url;
-  const statusText = response.statusText;
-  const headers = pickHeaders(response.headers, [
+  printHeader(context, status, response.statusText, url, response.headers, error);
+  await maybeVerify(status, options.apiKey, url);
+  console.error('--- E2E DIAGNOSTICS END ---');
+}
+
+function printHeader(
+  context: unknown,
+  status: number,
+  statusText: string,
+  url: string,
+  headersIn: Headers,
+  error: Errorish,
+): void {
+  const headers = pickHeaders(headersIn, [
     'x-request-id',
     'x-correlation-id',
     'x-ratelimit-limit',
@@ -43,42 +55,49 @@ export async function logErrorDiagnostics(
     'date',
     'content-type',
   ]);
-
-  let probable = 'unknown';
-  if (status >= 500) probable = 'upstream-instability-or-server-error (5xx)';
-  else if (status === 429) probable = 'rate-limited (429)';
-  else if (status >= 400) probable = 'client/test-input-or-auth (4xx)';
-
   console.error('--- E2E DIAGNOSTICS BEGIN ---');
   console.error('Context:', safeJson(context));
   console.error('HTTP:', safeJson({ status, statusText, url }));
   console.error('Headers:', safeJson(headers));
   console.error('Error payload:', safeJson(error));
-  console.error('Probable cause:', probable);
+  console.error('Probable cause:', classify(status));
+}
 
-  // Optional verification fetch for 5xx only
-  if (status >= 500 && options.apiKey) {
-    try {
-      const verification = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${options.apiKey}`,
-          Accept: 'application/json',
-        },
-      });
-      const rawText = await verification.text();
-      console.error(
-        'Verification fetch:',
-        safeJson({
-          status: verification.status,
-          statusText: verification.statusText,
-          headers: pickHeaders(verification.headers, ['x-request-id', 'content-type', 'date']),
-          body: rawText.length > 1000 ? `${rawText.slice(0, 1000)}… [truncated]` : rawText,
-        }),
-      );
-    } catch (verErr) {
-      console.error('Verification fetch failed:', safeJson(verErr));
-    }
+function classify(status: number): string {
+  if (status >= 500) {
+    return 'upstream-instability-or-server-error (5xx)';
   }
+  if (status === 429) {
+    return 'rate-limited (429)';
+  }
+  if (status >= 400) {
+    return 'client/test-input-or-auth (4xx)';
+  }
+  return 'unknown';
+}
 
-  console.error('--- E2E DIAGNOSTICS END ---');
+async function maybeVerify(status: number, apiKey: string | undefined, url: string): Promise<void> {
+  if (!(status >= 500 && apiKey)) {
+    return;
+  }
+  try {
+    const verification = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Accept: 'application/json',
+      },
+    });
+    const rawText = await verification.text();
+    console.error(
+      'Verification fetch:',
+      safeJson({
+        status: verification.status,
+        statusText: verification.statusText,
+        headers: pickHeaders(verification.headers, ['x-request-id', 'content-type', 'date']),
+        body: rawText.length > 1000 ? `${rawText.slice(0, 1000)}… [truncated]` : rawText,
+      }),
+    );
+  } catch (verErr) {
+    console.error('Verification fetch failed:', safeJson(verErr));
+  }
 }

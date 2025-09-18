@@ -14,7 +14,9 @@ export function rrfFuse(
   for (const list of lists) {
     for (let i = 0; i < list.length; i++) {
       const id = list[i]?.id;
-      if (!id) continue;
+      if (!id) {
+        continue;
+      }
       scores.set(id, (scores.get(id) ?? 0) + 1 / (k + (i + 1)));
     }
   }

@@ -19,7 +19,9 @@ function isSimpleValue(v: unknown): v is string | number | boolean | null {
 }
 
 function toSafeSimpleValue(v: unknown): string | number | boolean | null {
-  if (isSimpleValue(v)) return v;
+  if (isSimpleValue(v)) {
+    return v;
+  }
   try {
     const s: unknown = JSON.parse(JSON.stringify(v));
     return isSimpleValue(s) ? s : '[unserializable]';
@@ -42,7 +44,9 @@ function buildPropertyCondition(propertyName: string, filter: McpPropertyFilter)
     condition[filter.type] = { is_not_empty: true };
     return condition;
   }
-  if (filter.value === undefined) return condition;
+  if (filter.value === undefined) {
+    return condition;
+  }
   const operator = filter.operator ?? 'equals';
   const val = toSafeSimpleValue(filter.value);
   const opClause: JsonObject = { [operator]: val };

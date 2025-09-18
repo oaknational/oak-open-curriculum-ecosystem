@@ -34,7 +34,9 @@ export function formatPagePropertiesForDetails(page: PageObjectResponse): string
 
   for (const [key, value] of Object.entries(page.properties)) {
     // Skip title as it's already shown in the header
-    if ('type' in value && value.type === 'title') continue;
+    if ('type' in value && value.type === 'title') {
+      continue;
+    }
 
     const displayValue = extractPropertyValue(value);
     if (displayValue !== 'N/A') {

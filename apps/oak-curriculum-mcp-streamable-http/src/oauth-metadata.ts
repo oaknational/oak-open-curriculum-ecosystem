@@ -19,7 +19,9 @@ export async function setupLocalAuthorizationServer(
   app: express.Express,
   corsMw: express.RequestHandler,
 ): Promise<void> {
-  if (process.env.ENABLE_LOCAL_AS !== 'true') return;
+  if (process.env.ENABLE_LOCAL_AS !== 'true') {
+    return;
+  }
 
   let publicJwk: unknown;
   if (!process.env.LOCAL_AS_JWK) {
@@ -54,7 +56,9 @@ export async function setupLocalAuthorizationServer(
 }
 
 function parseLocalJwk(value: string | undefined): unknown {
-  if (!value) return undefined;
+  if (!value) {
+    return undefined;
+  }
   try {
     return JSON.parse(value);
   } catch {

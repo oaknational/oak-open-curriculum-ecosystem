@@ -3,23 +3,54 @@
  * Pure types with no runtime behaviour
  */
 
-import { z } from 'zod';
-import { isPlainObject } from '../types/helpers.js';
+import type { ZodIssue, ZodType } from 'zod';
 
 /**
  * Result type for validation operations
  * Discriminated union for type-safe error handling
  */
-export type ValidationResult<T> = { ok: true; value: T } | { ok: false; issues: ValidationIssue[] };
+export interface ValidationSuccess<T> {
+  ok: true;
+  value: T;
+}
+export interface ValidationIssue {
+  path: readonly (string | number)[];
+  message?: string;
+  code?: ZodIssue['code'] | 'VALIDATION_ERROR' | 'UNKNOWN_OPERATION' | 'NO_SCHEMA_FOR_STATUS';
+  details?: {
+    expected?: string;
+    received?: string;
+  };
+}
+
+/**
+ * Traceability information to help locate where validation occurred
+ */
+export interface ValidationTrace {
+  when: string;
+  context?: {
+    path?: string;
+    method?: string;
+    statusCode?: number;
+    operationId?: string;
+  };
+}
+
+export interface ValidationFailure {
+  ok: false;
+  issues: readonly ValidationIssue[];
+  firstMessage?: string;
+  trace?: ValidationTrace;
+  zod?: {
+    issues: readonly ZodIssue[];
+  };
+}
+
+export type ValidationResult<T> = ValidationSuccess<T> | ValidationFailure;
 
 /**
  * Validation issue details
  */
-export interface ValidationIssue {
-  path: string[];
-  message: string;
-  code?: string;
-}
 
 /**
  * Options for the validated client wrapper
@@ -44,7 +75,7 @@ export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
  */
 export function isValidationSuccess<T>(
   result: ValidationResult<T>,
-): result is { ok: true; value: T } {
+): result is ValidationSuccess<T> {
   return result.ok;
 }
 
@@ -52,43 +83,57 @@ export function isValidationSuccess<T>(
  * Type predicate to check if a validation result is a failure
  * Enables type narrowing without type assertions
  */
-export function isValidationFailure<T>(
-  result: ValidationResult<T>,
-): result is { ok: false; issues: ValidationIssue[] } {
+export function isValidationFailure<T>(result: ValidationResult<T>): result is ValidationFailure {
   return !result.ok;
-}
-
-/**
- * Type predicate to safely check if a value is a record
- * Used after Zod validation to ensure type safety
- */
-export function isRecord(value: unknown): value is object {
-  return isPlainObject(value);
 }
 
 /**
  * Type-safe Zod parsing helper that eliminates need for type assertions
  * Returns a ValidationResult with proper type narrowing
  */
-export function parseWithSchema<T>(schema: z.ZodSchema<T>, data: unknown): ValidationResult<T> {
-  try {
-    const validated = schema.parse(data);
-    // After successful parse, we know the type is T
-    return { ok: true, value: validated };
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return {
-        ok: false,
-        issues: error.issues.map((issue) => ({
-          path: issue.path.map(String),
-          message: issue.message,
-          code: issue.code,
-        })),
-      };
-    }
-    return {
-      ok: false,
-      issues: [{ path: [], message: 'Validation failed', code: 'VALIDATION_ERROR' }],
+export function parseWithSchema<T>(schema: ZodType<T>, data: unknown): ValidationResult<T> {
+  const parsed = schema.safeParse(data);
+  if (parsed.success) {
+    const success: ValidationSuccess<T> = {
+      ok: true,
+      value: parsed.data,
     };
+    return success;
   }
+
+  const zodIssues = parsed.error.issues;
+  const isInvalidTypeIssue = (
+    issue: ZodIssue,
+  ): issue is ZodIssue & { expected: unknown; received: unknown } =>
+    issue.code === 'invalid_type' && 'expected' in issue && 'received' in issue;
+
+  const coerceString = (value: unknown): string =>
+    typeof value === 'string' ? value : JSON.stringify(value);
+
+  const issues: readonly ValidationIssue[] = zodIssues.map((issue) => {
+    const base: ValidationIssue = {
+      path: issue.path,
+      // message can be optional in downstream handling
+      message: issue.message,
+      code: issue.code,
+    };
+
+    if (isInvalidTypeIssue(issue)) {
+      const details = {
+        expected: coerceString(issue.expected),
+        received: coerceString(issue.received),
+      };
+      return { ...base, details };
+    }
+    return base;
+  });
+
+  const failure: ValidationFailure = {
+    ok: false,
+    issues,
+    firstMessage: issues[0]?.message,
+    trace: { when: new Date().toISOString() },
+    zod: { issues: zodIssues },
+  };
+  return failure;
 }

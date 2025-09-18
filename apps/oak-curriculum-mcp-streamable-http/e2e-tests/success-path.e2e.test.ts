@@ -28,7 +28,9 @@ describe('Success path (stubbed executeToolCall)', () => {
       .split('\n')
       .map((l) => l.trim())
       .find((l) => l.startsWith('data: '));
-    if (!line) throw new Error('No data line found in SSE payload');
+    if (!line) {
+      throw new Error('No data line found in SSE payload');
+    }
     const json = line.replace(/^data: /, '');
     return JSON.parse(json) as unknown;
   }

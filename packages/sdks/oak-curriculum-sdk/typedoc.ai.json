@@ -2,6 +2,8 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": [
     "docs/_typedoc_src/index.ts",
+    "docs/_typedoc_src/validation/types.ts",
+    "docs/_typedoc_src/validation/index.ts",
     "docs/_typedoc_src/types/schema-bridge.ts",
     "docs/_typedoc_src/types/generated/api-schema/api-paths-types.ts",
     "docs/_typedoc_src/types/generated/api-schema/path-parameters.ts",

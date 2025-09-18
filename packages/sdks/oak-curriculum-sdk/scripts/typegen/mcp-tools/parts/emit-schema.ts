@@ -22,16 +22,24 @@ function tsTypeFor(meta: ParamMetadata): string {
       .join(' | ');
   }
   const t = meta.typePrimitive;
-  if (t === 'string' || t === 'number' || t === 'boolean') return t;
-  if (t === 'string[]') return 'string[]';
-  if (t === 'number[]') return 'number[]';
+  if (t === 'string' || t === 'number' || t === 'boolean') {
+    return t;
+  }
+  if (t === 'string[]') {
+    return 'string[]';
+  }
+  if (t === 'number[]') {
+    return 'number[]';
+  }
   return 'boolean[]';
 }
 
 function objectShapeFromMeta(meta: Readonly<Record<string, ParamMetadata>>): string {
   const lines: string[] = ['{'];
   for (const name in meta) {
-    if (!(name in meta)) continue;
+    if (!(name in meta)) {
+      continue;
+    }
     const m = meta[name];
     const optional = m.required ? '' : '?';
     lines.push(`  ${name}${optional}: ${tsTypeFor(m)};`);
@@ -50,8 +58,12 @@ function headerBlock(
   const hasQuery = typeSafeKeys(queryParamMetadata).length > 0;
   const hasRequiredQuery = typeSafeValues(queryParamMetadata).some((m) => m.required);
   const lines: string[] = [];
-  if (hasPath) lines.push('interface PathParamsShape ' + pathShape);
-  if (hasQuery) lines.push('interface QueryParamsShape ' + queryShape);
+  if (hasPath) {
+    lines.push('interface PathParamsShape ' + pathShape);
+  }
+  if (hasQuery) {
+    lines.push('interface QueryParamsShape ' + queryShape);
+  }
   if (!hasPath && !hasQuery) {
     lines.push('interface ValidRequestParams {');
     lines.push('  [key: string]: unknown;');
@@ -61,7 +73,9 @@ function headerBlock(
     lines.push('interface ValidRequestParams {');
     lines.push('  [key: string]: unknown;');
     lines.push('  params: {');
-    if (hasPath) lines.push('    path: PathParamsShape;');
+    if (hasPath) {
+      lines.push('    path: PathParamsShape;');
+    }
     if (hasQuery) {
       lines.push(
         hasRequiredQuery ? '    query: QueryParamsShape;' : '    query?: QueryParamsShape;',
@@ -153,12 +167,20 @@ function inputSchemaBlock(
   const propertiesLiteral = JSON.stringify(schemaObject.properties);
   const requiredKeys: string[] = [];
   for (const name in pathParamMetadata) {
-    if (!(name in pathParamMetadata)) continue;
-    if (pathParamMetadata[name].required) requiredKeys.push(name);
+    if (!(name in pathParamMetadata)) {
+      continue;
+    }
+    if (pathParamMetadata[name].required) {
+      requiredKeys.push(name);
+    }
   }
   for (const name in queryParamMetadata) {
-    if (!(name in queryParamMetadata)) continue;
-    if (queryParamMetadata[name].required) requiredKeys.push(name);
+    if (!(name in queryParamMetadata)) {
+      continue;
+    }
+    if (queryParamMetadata[name].required) {
+      requiredKeys.push(name);
+    }
   }
   const requiredPart = requiredKeys.length > 0 ? `, required: ${JSON.stringify(requiredKeys)}` : '';
   return `const inputSchema = { type: 'object' as const, properties: ${propertiesLiteral} as const, additionalProperties: false as const${requiredPart} };`;

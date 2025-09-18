@@ -104,11 +104,15 @@ function extractToolMeta(tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS]): {
   const queryKeys = ownKeys(queryMeta);
   const requiredPath: string[] = [];
   for (const k of pathKeys) {
-    if (getOwnBoolean(pathMeta[k], 'required')) requiredPath.push(k);
+    if (getOwnBoolean(pathMeta[k], 'required')) {
+      requiredPath.push(k);
+    }
   }
   const requiredQuery: string[] = [];
   for (const k of queryKeys) {
-    if (getOwnBoolean(queryMeta[k], 'required')) requiredQuery.push(k);
+    if (getOwnBoolean(queryMeta[k], 'required')) {
+      requiredQuery.push(k);
+    }
   }
   return { pathKeys, queryKeys, requiredPath, requiredQuery };
 }
@@ -118,14 +122,20 @@ function coerceArgsToObject(
   requiredPath: readonly string[],
   requiredQuery: readonly string[],
 ): unknown {
-  if (typeof args !== 'string') return args;
+  if (typeof args !== 'string') {
+    return args;
+  }
   const trimmed = args.trim();
   const parsedObj = tryParseJsonObject(trimmed);
-  if (parsedObj) return parsedObj;
-  if (requiredPath.length === 1 && requiredQuery.length === 0)
+  if (parsedObj) {
+    return parsedObj;
+  }
+  if (requiredPath.length === 1 && requiredQuery.length === 0) {
     return { [requiredPath[0]]: trimmed };
-  if (requiredQuery.length === 1 && requiredPath.length === 0)
+  }
+  if (requiredQuery.length === 1 && requiredPath.length === 0) {
     return { [requiredQuery[0]]: trimmed };
+  }
   return args;
 }
 
@@ -139,7 +149,9 @@ function splitParams(
     const pathEntries: (readonly [string, unknown])[] = [];
     for (const key of pathKeys) {
       const v = getOwnValue(argsObject, key);
-      if (v !== undefined) pathEntries.push([key, v]);
+      if (v !== undefined) {
+        pathEntries.push([key, v]);
+      }
     }
     result.path = typeSafeFromEntries(pathEntries);
   }
@@ -147,7 +159,9 @@ function splitParams(
     const queryEntries: (readonly [string, unknown])[] = [];
     for (const key of queryKeys) {
       const v = getOwnValue(argsObject, key);
-      if (v !== undefined) queryEntries.push([key, v]);
+      if (v !== undefined) {
+        queryEntries.push([key, v]);
+      }
     }
     result.query = typeSafeFromEntries(queryEntries);
   }
@@ -160,7 +174,9 @@ function buildGenericRequestParams(
 ): { params: { path?: object; query?: object } } {
   const { pathKeys, queryKeys, requiredPath, requiredQuery } = extractToolMeta(tool);
   const maybeObject = coerceArgsToObject(args, requiredPath, requiredQuery);
-  if (!isPlainObject(maybeObject)) return { params: {} };
+  if (!isPlainObject(maybeObject)) {
+    return { params: {} };
+  }
   const params = splitParams(maybeObject, pathKeys, queryKeys);
   return { params };
 }
@@ -169,7 +185,9 @@ function buildGenericRequestParams(
  * Ultra-thin executor - just validation and delegation to embedded executor
  */
 function mapErrorToResult(error: unknown, toolName: string): ToolExecutionResult {
-  if (error instanceof McpParameterError || error instanceof McpToolError) return { error };
+  if (error instanceof McpParameterError || error instanceof McpToolError) {
+    return { error };
+  }
   if (
     error instanceof TypeError &&
     (error.message.includes('Invalid') || error.message.includes('Must be one of'))

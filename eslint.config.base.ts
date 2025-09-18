@@ -31,7 +31,7 @@ export const ignores = [
   '**/docs/api-md/',
 ];
 
-export const baseRules: Readonly<Linter.Config[]> = [
+export const baseRules: readonly Linter.Config[] = [
   eslint.configs.recommended,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
@@ -48,6 +48,7 @@ export const tsRules: Linter.RulesRecord = {
   '@typescript-eslint/no-explicit-any': ['error', { fixToUnknown: true, ignoreRestArgs: false }],
   'no-unused-vars': 'off',
   '@typescript-eslint/no-unused-vars': 'error',
+  curly: 'error',
   '@typescript-eslint/explicit-module-boundary-types': 'error',
   '@typescript-eslint/no-non-null-assertion': 'error',
   '@typescript-eslint/consistent-type-assertions': [
@@ -180,6 +181,13 @@ export const baseConfig = defineConfig(
     ],
     rules: {
       ...testRules,
+    },
+  },
+  // Generated types
+  {
+    files: ['**/src/types/generated/**'],
+    rules: {
+      curly: 'off',
     },
   },
   // Config files - allow default project service to avoid per-package tsconfig coupling

@@ -59,9 +59,13 @@ export function isValidPropertyType(value: unknown): value is string {
  * @returns True if value is a property filter
  */
 export function isPropertyFilter(value: unknown): value is McpPropertyFilter {
-  if (!isRecord(value)) return false;
+  if (!isRecord(value)) {
+    return false;
+  }
   const desc = Object.getOwnPropertyDescriptor(value, 'type');
-  if (!desc || typeof desc.value !== 'string') return false;
+  if (!desc || typeof desc.value !== 'string') {
+    return false;
+  }
   return true;
 }
 
@@ -71,10 +75,16 @@ export function isPropertyFilter(value: unknown): value is McpPropertyFilter {
  * @returns True if value is a sort object
  */
 export function isSort(value: unknown): value is McpSort {
-  if (!isRecord(value)) return false;
+  if (!isRecord(value)) {
+    return false;
+  }
   const p = Object.getOwnPropertyDescriptor(value, 'property');
-  if (!p || typeof p.value !== 'string') return false;
+  if (!p || typeof p.value !== 'string') {
+    return false;
+  }
   const d = Object.getOwnPropertyDescriptor(value, 'direction');
-  if (!d || !isSortDirection(d.value)) return false;
+  if (!d || !isSortDirection(d.value)) {
+    return false;
+  }
   return true;
 }

@@ -13,7 +13,9 @@ interface Meta {
 
 function emitEnumGuardBlock(cap: string, values: readonly unknown[], optional: boolean): string {
   const lines: string[] = [];
-  if (optional) lines.push(`// ${cap} value is optional, not all query parameters are.`);
+  if (optional) {
+    lines.push(`// ${cap} value is optional, not all query parameters are.`);
+  }
   lines.push(`const allowed${cap}Values= ${JSON.stringify(values)} as const;`);
   lines.push(
     `const allowed${cap}Set = new Set<string | number | boolean>([...allowed${cap}Values]);`,
@@ -28,10 +30,14 @@ function emitPathEnumGuards(
   detailsMap: Map<string, ParamDetails>,
 ): string {
   const lines: string[] = [];
-  if (pathParams.length > 0) lines.push('// Path parameters');
+  if (pathParams.length > 0) {
+    lines.push('// Path parameters');
+  }
   for (const name of pathParams) {
     const d = detailsMap.get(name);
-    if (!d?.enumValues) continue;
+    if (!d?.enumValues) {
+      continue;
+    }
     const cap = capitaliseFirst(name);
     lines.push(`const allowed${cap}Values= ${JSON.stringify(d.enumValues)} as const;`);
     lines.push(
@@ -47,10 +53,14 @@ function emitQueryEnumGuards(
   detailsMap: Map<string, ParamDetails>,
 ): string {
   const lines: string[] = [];
-  if (queryParams.length > 0) lines.push('// Query parameters');
+  if (queryParams.length > 0) {
+    lines.push('// Query parameters');
+  }
   for (const name of queryParams) {
     const d = detailsMap.get(name);
-    if (!d?.enumValues) continue;
+    if (!d?.enumValues) {
+      continue;
+    }
     const cap = capitaliseFirst(name);
     const opt = !d.required;
     lines.push(emitEnumGuardBlock(cap, d.enumValues, opt));
@@ -99,13 +109,17 @@ function emitParamMaps(
     lines.push(`const ${label}: Readonly<Record<string, (value: unknown) => boolean>> = {`);
     for (const name of names) {
       const d = details.get(name);
-      if (!d?.enumValues) continue;
+      if (!d?.enumValues) {
+        continue;
+      }
       const cap = capitaliseFirst(name);
       const vt = d.primitiveType;
       const opt = !d.required;
       const typeCheck = vt === 'string' ? '"string"' : vt === 'number' ? '"number"' : '"boolean"';
       lines.push(`  ${JSON.stringify(name)}: (value: unknown) => {`);
-      if (opt) lines.push('    if (value === undefined) return true;');
+      if (opt) {
+        lines.push('    if (value === undefined) return true;');
+      }
       lines.push(`    if (typeof value !== ${typeCheck}) return false;`);
       lines.push(`    const allowed = allowed${cap}Set;`);
       lines.push('    return allowed.has(value);');

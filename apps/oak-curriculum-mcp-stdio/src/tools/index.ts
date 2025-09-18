@@ -27,7 +27,9 @@ export function createMcpToolsModule(deps: { client: SdkClient }): McpToolsModul
     return typeof value === 'object' && value !== null && !Array.isArray(value);
   }
   function decodeResult(result: Awaited<ReturnType<typeof handler>>): unknown {
-    if (result.isError === true) return result;
+    if (result.isError === true) {
+      return result;
+    }
     const first = result.content.length > 0 ? result.content[0] : undefined;
     if (first && first.type === 'text') {
       try {

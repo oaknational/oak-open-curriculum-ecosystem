@@ -42,7 +42,9 @@ function SyncModeToResolved(): JSX.Element | null {
   useEffect(() => {
     if (!didSyncRef.current) {
       didSyncRef.current = true;
-      if (resolved !== mode) setMode(resolved);
+      if (resolved !== mode) {
+        setMode(resolved);
+      }
     }
   }, [resolved, mode, setMode]);
   return null;

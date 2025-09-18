@@ -20,28 +20,46 @@ function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
 function isEnvironmentObject(
   value: unknown,
 ): value is Readonly<Record<string, string | undefined>> {
-  if (!isPlainObject(value)) return false;
+  if (!isPlainObject(value)) {
+    return false;
+  }
   for (const k in value) {
-    if (!Object.prototype.hasOwnProperty.call(value, k)) continue;
+    if (!Object.prototype.hasOwnProperty.call(value, k)) {
+      continue;
+    }
     const v = value[k];
-    if (typeof v !== 'string' && typeof v !== 'undefined') return false;
+    if (typeof v !== 'string' && typeof v !== 'undefined') {
+      return false;
+    }
   }
   return true;
 }
 
 function hasNestedProperty(value: unknown, path: readonly string[]): boolean {
-  if (path.length === 0) return true;
-  if (!isPlainObject(value)) return false;
+  if (path.length === 0) {
+    return true;
+  }
+  if (!isPlainObject(value)) {
+    return false;
+  }
   const [first, ...rest] = path;
-  if (!(first in value)) return false;
+  if (!(first in value)) {
+    return false;
+  }
   return hasNestedProperty(value[first], rest);
 }
 
 function extractNestedProperty(value: unknown, path: readonly string[]): unknown {
-  if (path.length === 0) return value;
-  if (!isPlainObject(value)) return undefined;
+  if (path.length === 0) {
+    return value;
+  }
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
   const [first, ...rest] = path;
-  if (!(first in value)) return undefined;
+  if (!(first in value)) {
+    return undefined;
+  }
   return extractNestedProperty(value[first], rest);
 }
 

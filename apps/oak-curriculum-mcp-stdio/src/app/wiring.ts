@@ -11,12 +11,24 @@ import { appendToLogFile, getLogFilePath } from './file-reporter.js';
 // Removed conflicting import
 
 function mapLogLevelToIndex(level: string): number {
-  if (level === 'trace') return 0;
-  if (level === 'debug') return 1;
-  if (level === 'info') return 2;
-  if (level === 'warn') return 3;
-  if (level === 'error') return 4;
-  if (level === 'fatal') return 5;
+  if (level === 'trace') {
+    return 0;
+  }
+  if (level === 'debug') {
+    return 1;
+  }
+  if (level === 'info') {
+    return 2;
+  }
+  if (level === 'warn') {
+    return 3;
+  }
+  if (level === 'error') {
+    return 4;
+  }
+  if (level === 'fatal') {
+    return 5;
+  }
   return 2; // default INFO
 }
 
@@ -29,7 +41,9 @@ function formatLogMessage(lvl: string, message: string, data?: unknown): string 
 function makeLoggerMethods(currentLevelIndex: number, logFilePath: string | null): Logger {
   const shouldLog = (idx: number): boolean => currentLevelIndex <= idx;
   const logToFile = (lvl: string, message: string, data?: unknown): void => {
-    if (logFilePath) appendToLogFile(logFilePath, formatLogMessage(lvl, message, data));
+    if (logFilePath) {
+      appendToLogFile(logFilePath, formatLogMessage(lvl, message, data));
+    }
   };
   const consoleErr = (tag: string, message: string, data?: unknown): void => {
     console.error(`${tag} ${message}`, data ?? '');

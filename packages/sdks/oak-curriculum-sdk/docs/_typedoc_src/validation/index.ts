@@ -16,4 +16,4 @@ export { validateRequest } from './request-validators.js';
 export { validateResponse } from './response-validators.js';
 
 // Type predicate exports for better type narrowing
-export { isValidationSuccess, isValidationFailure, isRecord, parseWithSchema } from './types.js';
+export { isValidationSuccess, isValidationFailure, parseWithSchema } from './types.js';

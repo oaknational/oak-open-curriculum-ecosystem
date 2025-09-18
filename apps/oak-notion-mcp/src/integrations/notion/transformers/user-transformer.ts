@@ -15,7 +15,9 @@ interface JsonObject {
  */
 export const defaultEmailScrubber: EmailScrubber = (email: string) => {
   const [localPart, domain] = email.split('@');
-  if (!domain || !localPart) return '***@***';
+  if (!domain || !localPart) {
+    return '***@***';
+  }
 
   const redactedLocal =
     localPart.length > 2

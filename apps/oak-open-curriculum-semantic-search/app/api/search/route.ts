@@ -21,8 +21,9 @@ export const revalidate = 0;
 
 export async function POST(req: NextRequest): Promise<Response> {
   const parsed = StructuredSchema.safeParse(await req.json());
-  if (!parsed.success)
+  if (!parsed.success) {
     return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+  }
 
   const b = parsed.data;
   const subject = b.subject && isSubject(b.subject) ? b.subject : undefined;

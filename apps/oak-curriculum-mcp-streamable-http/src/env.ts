@@ -36,7 +36,9 @@ export function readEnv(env: NodeJS.ProcessEnv = process.env): Env {
 }
 
 export function parseCsv(value: string | undefined): string[] | undefined {
-  if (!value) return undefined;
+  if (!value) {
+    return undefined;
+  }
   return value
     .split(',')
     .map((s) => s.trim())

@@ -17,14 +17,18 @@ import { fileURLToPath } from 'node:url';
 
 async function fileSize(path: string): Promise<number> {
   const st = await fs.stat(path);
-  if (!st.isFile()) throw new Error('Not a file: ' + path);
+  if (!st.isFile()) {
+    throw new Error('Not a file: ' + path);
+  }
   return st.size;
 }
 
 async function mustExistNonEmpty(path: string): Promise<void> {
   try {
     const size = await fileSize(path);
-    if (size <= 0) throw new Error('Empty file: ' + path);
+    if (size <= 0) {
+      throw new Error('Empty file: ' + path);
+    }
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     throw new Error(`Missing or empty: ${path} — ${msg}`);

@@ -16,15 +16,20 @@ const BodySchema = z.object({
 export async function POST(req: NextRequest): Promise<Response> {
   const parseBody = async () => BodySchema.safeParse(await req.json());
   function toOptional<T extends string>(guard: (v: string) => v is T, v?: string): T | undefined {
-    if (typeof v !== 'string' || v.length === 0) return undefined;
-    if (guard(v)) return v;
+    if (typeof v !== 'string' || v.length === 0) {
+      return undefined;
+    }
+    if (guard(v)) {
+      return v;
+    }
     return undefined;
   }
   const coerceNum = (v: unknown, d: number) => (typeof v === 'number' ? v : d);
 
   const parsed = await parseBody();
-  if (!parsed.success)
+  if (!parsed.success) {
     return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+  }
 
   const body = parsed.data;
   const client = createOakPathBasedClient(env().OAK_EFFECTIVE_KEY);
@@ -46,7 +51,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     },
   });
 
-  if (!res.response.ok)
+  if (!res.response.ok) {
     return NextResponse.json({ error: res.response.statusText }, { status: res.response.status });
+  }
   return NextResponse.json(res.data ?? []);
 }

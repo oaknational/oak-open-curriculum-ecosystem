@@ -57,7 +57,9 @@ export class StdioTransportImpl implements StdioTransport {
     // The first argument will be the chunk (Buffer | string)
     this.dataHandler = (...args: unknown[]) => {
       const chunk = args[0];
-      if (!chunk) return;
+      if (!chunk) {
+        return;
+      }
 
       // Handle both string and Buffer data using type predicates
       // The stream contract guarantees chunk is Buffer | string

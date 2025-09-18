@@ -75,14 +75,18 @@ export function registerOpenAiConnectorHandlers(server: Server): void {
   async function handleSdkTool(name: string, args: unknown) {
     try {
       // Validate against generated JSON Schema via Zod before execution
-      if (!isToolName(name)) return formatOpenAiContent({ error: `Unknown tool: ${name}` }, true);
+      if (!isToolName(name)) {
+        return formatOpenAiContent({ error: `Unknown tool: ${name}` }, true);
+      }
       const def = getToolFromToolName(name);
       const schema = zodFromToolInputJsonSchema(def.inputSchema);
       schema.parse(args ?? {});
       const apiKey = process.env.OAK_API_KEY ?? '';
       const client = createOakPathBasedClient(apiKey);
       const result = await executeToolCall(name, args, client);
-      if (result.error) return formatOpenAiContent({ error: result.error.message }, true);
+      if (result.error) {
+        return formatOpenAiContent({ error: result.error.message }, true);
+      }
       return formatOpenAiContent(result.data);
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : 'Unknown error';

@@ -33,12 +33,18 @@ function iterOperations(
 ): { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] {
   const out: { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] =
     [];
-  if (!schema.paths) return out;
+  if (!schema.paths) {
+    return out;
+  }
   for (const [path, pathItem] of typeSafeEntries(schema.paths)) {
-    if (!isPathItemObject(pathItem)) continue;
+    if (!isPathItemObject(pathItem)) {
+      continue;
+    }
     for (const method of HTTP_METHODS) {
       const op: unknown = getOwnValue(pathItem, method);
-      if (!isOperationObject(op)) continue;
+      if (!isOperationObject(op)) {
+        continue;
+      }
       out.push({ path, method, operation: op });
     }
   }
@@ -92,7 +98,9 @@ function buildParamMetadataForOperation(operation: OperationObject): {
     return { pathParamMetadata, queryParamMetadata };
   }
   for (const param of parameters) {
-    if ('$ref' in param) continue;
+    if ('$ref' in param) {
+      continue;
+    }
     const metadata = extractParamMetadata(param);
     if (param.in === 'path') {
       pathParamMetadata[param.name] = metadata;

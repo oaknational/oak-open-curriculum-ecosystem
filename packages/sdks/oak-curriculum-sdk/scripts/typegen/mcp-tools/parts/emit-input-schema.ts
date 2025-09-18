@@ -60,8 +60,12 @@ function buildCommon(meta: ParamMetadata): {
   readonly default?: unknown;
 } {
   const out: { description?: string; default?: unknown } = {};
-  if (meta.description !== undefined) out.description = meta.description;
-  if (meta.default !== undefined) out.default = meta.default;
+  if (meta.description !== undefined) {
+    out.description = meta.description;
+  }
+  if (meta.default !== undefined) {
+    out.default = meta.default;
+  }
   return out;
 }
 
@@ -102,11 +106,21 @@ function buildArrayProperty(
 
 function jsonSchemaFromPrimitive(meta: ParamMetadata): JsonSchemaProperty {
   const t = meta.typePrimitive;
-  if (t === 'string') return buildStringProperty(meta);
-  if (t === 'number') return buildNumberProperty(meta);
-  if (t === 'boolean') return buildBooleanProperty(meta);
-  if (t === 'string[]') return buildArrayProperty('string', meta);
-  if (t === 'number[]') return buildArrayProperty('number', meta);
+  if (t === 'string') {
+    return buildStringProperty(meta);
+  }
+  if (t === 'number') {
+    return buildNumberProperty(meta);
+  }
+  if (t === 'boolean') {
+    return buildBooleanProperty(meta);
+  }
+  if (t === 'string[]') {
+    return buildArrayProperty('string', meta);
+  }
+  if (t === 'number[]') {
+    return buildArrayProperty('number', meta);
+  }
   return buildArrayProperty('boolean', meta);
 }
 
@@ -126,7 +140,9 @@ export function buildInputSchemaObject(
     const name = key;
     const meta = pathParams[name];
     properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) required.push(name);
+    if (meta.required) {
+      required.push(name);
+    }
   }
 
   // Query params
@@ -134,7 +150,9 @@ export function buildInputSchemaObject(
     const name = key;
     const meta = queryParams[name];
     properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) required.push(name);
+    if (meta.required) {
+      required.push(name);
+    }
   }
 
   const base: JsonSchemaObject = {

@@ -19,7 +19,9 @@ function isOzcOptions(value: unknown): value is {
   distPath: string;
   options?: Record<string, unknown>;
 } {
-  if (!isRecord(value)) return false;
+  if (!isRecord(value)) {
+    return false;
+  }
   const v = value;
   return typeof v.templatePath === 'string' && typeof v.distPath === 'string';
 }

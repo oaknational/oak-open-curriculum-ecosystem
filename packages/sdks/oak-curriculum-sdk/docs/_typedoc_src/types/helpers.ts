@@ -75,7 +75,9 @@ export function isPlainObject(value: unknown): value is object {
  * Get own string property if present and a string
  */
 export function getOwnString(obj: unknown, key: PropertyKey): string | undefined {
-  if (!isPlainObject(obj)) return undefined;
+  if (!isPlainObject(obj)) {
+    return undefined;
+  }
   const desc = Object.getOwnPropertyDescriptor(obj, key);
   return typeof desc?.value === 'string' ? desc.value : undefined;
 }
@@ -84,7 +86,9 @@ export function getOwnString(obj: unknown, key: PropertyKey): string | undefined
  * Get own boolean property if present and a boolean
  */
 export function getOwnBoolean(obj: unknown, key: PropertyKey): boolean | undefined {
-  if (!isPlainObject(obj)) return undefined;
+  if (!isPlainObject(obj)) {
+    return undefined;
+  }
   const desc = Object.getOwnPropertyDescriptor(obj, key);
   return typeof desc?.value === 'boolean' ? desc.value : undefined;
 }
@@ -93,7 +97,9 @@ export function getOwnBoolean(obj: unknown, key: PropertyKey): boolean | undefin
  * Get the length of an own array property, if present
  */
 export function getOwnArrayLength(obj: unknown, key: PropertyKey): number | undefined {
-  if (!isPlainObject(obj)) return undefined;
+  if (!isPlainObject(obj)) {
+    return undefined;
+  }
   const desc = Object.getOwnPropertyDescriptor(obj, key);
   return Array.isArray(desc?.value) ? desc.value.length : undefined;
 }
@@ -102,7 +108,9 @@ export function getOwnArrayLength(obj: unknown, key: PropertyKey): number | unde
  * Get an own property value (untyped)
  */
 export function getOwnValue(obj: unknown, key: PropertyKey): unknown {
-  if (!isPlainObject(obj)) return undefined;
+  if (!isPlainObject(obj)) {
+    return undefined;
+  }
   const desc = Object.getOwnPropertyDescriptor(obj, key);
   return desc?.value;
 }

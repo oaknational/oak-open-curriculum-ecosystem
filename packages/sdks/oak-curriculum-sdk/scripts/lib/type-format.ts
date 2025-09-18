@@ -39,21 +39,33 @@ function isReference(t: unknown): boolean {
 }
 
 function stringifyKnown(t: unknown): string | null {
-  if (isIntrinsic(t)) return getOwnString(t, 'name') ?? 'unknown';
-  if (isArrayT(t)) return renderArrayUnknown(t);
-  if (isUnion(t)) return renderUnionUnknown(t);
+  if (isIntrinsic(t)) {
+    return getOwnString(t, 'name') ?? 'unknown';
+  }
+  if (isArrayT(t)) {
+    return renderArrayUnknown(t);
+  }
+  if (isUnion(t)) {
+    return renderUnionUnknown(t);
+  }
   if (isLiteral(t)) {
     const value = getOwnValue(t, 'value');
     return renderLiteral(value);
   }
-  if (isReference(t)) return renderReferenceUnknown(t);
+  if (isReference(t)) {
+    return renderReferenceUnknown(t);
+  }
   return null;
 }
 
 export function typeToString(t?: unknown): string {
-  if (!t) return 'void';
+  if (!t) {
+    return 'void';
+  }
   const known = stringifyKnown(t);
-  if (known !== null) return known;
+  if (known !== null) {
+    return known;
+  }
   const kind = getOwnString(t, 'type');
   if (kind) {
     return `<${kind}>(…)`;

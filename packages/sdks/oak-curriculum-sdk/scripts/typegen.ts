@@ -26,12 +26,16 @@ function findRepoRoot(startDir: string): string {
   for (;;) {
     const workspace = path.join(current, 'pnpm-workspace.yaml');
     const gitDir = path.join(current, '.git');
-    if (existsSync(workspace) || existsSync(gitDir)) return current;
+    if (existsSync(workspace) || existsSync(gitDir)) {
+      return current;
+    }
     const parent = path.dirname(current);
     if (parent === '/') {
       throw new Error('Could not find repo root. Iterated to `/`');
     }
-    if (parent === current) return current;
+    if (parent === current) {
+      return current;
+    }
     current = parent;
   }
 }

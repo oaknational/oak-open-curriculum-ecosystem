@@ -1,7 +1,9 @@
 import { spawn } from 'node:child_process';
 
 function processLine(line: string): string | null {
-  if (line.trim().length === 0) return null;
+  if (line.trim().length === 0) {
+    return null;
+  }
   return line;
 }
 
@@ -14,14 +16,18 @@ async function run(): Promise<number> {
   child.stdout.on('data', (chunk: string) => {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
-      if (line) console.log(line);
+      if (line) {
+        console.log(line);
+      }
     }
   });
 
   child.stderr.on('data', (chunk: string) => {
     for (const raw of chunk.split(/\r?\n/)) {
       const line = processLine(raw);
-      if (line) console.error(line);
+      if (line) {
+        console.error(line);
+      }
     }
   });
 
