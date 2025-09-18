@@ -19,21 +19,20 @@
     "package.json"
   ],
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist .turbo",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint --cache .",
+    "lint": "eslint  .",
     "quality": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
-    "@oaknational/mcp-core": "workspace:^",
-    "dotenv": "^17.2.1"
+    "dotenv": "^17.2.2"
   },
   "devDependencies": {
-    "pnpm": "^10.16.1",
+    "pnpm": "^10.17.0",
     "typescript": "^5.9.2"
   },
   "engines": {

@@ -62,7 +62,12 @@ export type { PathOperation, OperationId } from './types/generated/api-schema/pa
 export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
 // Validation module exports (explicit for tree-shaking)
-export { validateRequest, validateResponse } from './validation/index.js';
+export {
+  validateRequest,
+  validateResponse,
+  isValidationFailure,
+  isValidationSuccess,
+} from './validation/index.js';
 export type {
   ValidationResult,
   ValidationIssue,
@@ -73,6 +78,7 @@ export type {
 // MCP (Model Context Protocol) Tool Support
 // These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
 export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
+export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib.js';
 export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index';
 
 // Note: Parameter validation now happens via schema.parameters directly
@@ -82,6 +88,29 @@ export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index'
 // MCP executor - static function using path-based client
 export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
+export {
+  zodFromToolInputJsonSchema,
+  zodRawShapeFromToolInputJsonSchema,
+} from './mcp/zod-input-schema.js';
+
+// Generated URL helpers (deterministic canonical URLs)
+export {
+  generateCanonicalUrlWithContext,
+  generateCanonicalUrl,
+  CONTENT_TYPE_PREFIXES,
+  extractSlug,
+  type ContentType,
+} from './types/generated/api-schema/routing/url-helpers.js';
+
+// OpenAI Connector exports (SDK-generated facade helpers)
+export {
+  executeOpenAiToolCall,
+  OPENAI_CONNECTOR_TOOL_DEFS,
+  isOpenAiToolName,
+  type OpenAiToolName,
+  type OpenAiSearchArgs,
+  type OpenAiFetchArgs,
+} from './types/generated/openai-connector/index.js';
 
 // Export the type-safe object helpers
 export {

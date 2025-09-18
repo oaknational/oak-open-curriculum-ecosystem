@@ -4,7 +4,29 @@ import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
 import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
 /** @todo why are there logger types in the core package instead of the logger package? */
-import { createRuntime, type CoreLogger, type Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-logger';
+
+interface CoreLogger {
+  debug: (message: string, context?: unknown) => void;
+  info: (message: string, context?: unknown) => void;
+  warn: (message: string, context?: unknown) => void;
+  error: (message: string, context?: unknown) => void;
+}
+
+function createRuntime(providers: {
+  logger: CoreLogger;
+  clock: { now: () => number };
+  storage: {
+    get: (key: string) => Promise<string | null>;
+    set: (key: string, value: string) => Promise<void>;
+  };
+}) {
+  return {
+    logger: providers.logger,
+    clock: providers.clock,
+    storage: providers.storage,
+  };
+}
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 
 export interface ServerSetupDependencies {

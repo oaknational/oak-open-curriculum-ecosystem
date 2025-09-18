@@ -19,7 +19,9 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
     .split('\n')
     .map((l) => l.trim())
     .find((l) => l.startsWith('data: '));
-  if (!line) throw new Error('No data line found in SSE payload');
+  if (!line) {
+    throw new Error('No data line found in SSE payload');
+  }
   const json = line.replace(/^data: /, '');
   const parsed: unknown = JSON.parse(json);
   if (parsed && typeof parsed === 'object') {
@@ -30,7 +32,9 @@ function parseFirstSseData(raw: string): JsonRpcEnvelope {
 
 function toolNamesFromResult(value: unknown): string[] {
   const tools = (value as { result?: { tools?: unknown[] } }).result?.tools;
-  if (!Array.isArray(tools)) return [];
+  if (!Array.isArray(tools)) {
+    return [];
+  }
   return tools
     .map((t) => (t && typeof t === 'object' ? (t as { name?: unknown }).name : undefined))
     .filter((n): n is string => typeof n === 'string');
@@ -82,6 +86,50 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(names.sort()).toEqual(sdkToolNames);
   });
 
+  it('OpenAI connector: returns 200 with dev bearer token and responds to tools/list', async () => {
+    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+    const app = createApp();
+    const res = await request(app)
+      .post('/openai_connector')
+      .set('Authorization', `Bearer ${DEV_TOKEN}`)
+      .set('Accept', ACCEPT)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(200);
+    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
+    const payload = parseFirstSseData(payloadText);
+    const names = toolNamesFromResult(payload);
+    expect(Array.isArray(names)).toBe(true);
+    expect(names.length).toBeGreaterThan(0);
+    // Includes OpenAI connector tools
+    expect(names).toContain('search');
+    expect(names).toContain('fetch');
+  });
+
+  it('OpenAI connector: returns 200 and formats unknown tool error', async () => {
+    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+    const app = createApp();
+    const res = await request(app)
+      .post('/openai_connector')
+      .set('Authorization', `Bearer ${DEV_TOKEN}`)
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: '1',
+        method: 'tools/call',
+        params: { name: 'non-existent-tool', arguments: {} },
+      });
+    expect(res.status).toBe(200);
+    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
+    const payload = parseFirstSseData(payloadText) as { error?: unknown; result?: unknown };
+    // OpenAI connector wraps as result with isError; HTTP /mcp uses JSON-RPC error
+    const isOpenAiWrappedError =
+      (payload as { result?: { isError?: boolean } }).result?.isError === true;
+    const hasJsonRpcError = typeof (payload as { error?: unknown }).error !== 'undefined';
+    expect(isOpenAiWrappedError || hasJsonRpcError).toBe(true);
+  });
+
   it('returns JSON-RPC error when calling an unknown tool (error path)', async () => {
     process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
@@ -98,10 +146,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       });
     expect(res.status).toBe(200);
     const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText);
-    // We expect a formatted error result wrapper from the handler
-    const isError = (payload as { result?: { isError?: boolean } }).result?.isError === true;
-    expect(isError).toBe(true);
+    const payload = parseFirstSseData(payloadText) as { error?: unknown };
+    // With McpServer unknown tool returns a JSON-RPC error envelope
+    expect(typeof payload.error !== 'undefined').toBe(true);
   });
 
   it('allows no-auth in local dev when REMOTE_MCP_ALLOW_NO_AUTH=true', async () => {

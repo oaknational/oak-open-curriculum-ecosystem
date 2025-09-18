@@ -27,15 +27,25 @@ function validatePathTransform(p: string): void {
 }
 
 function isAllowedMethodKey(k: string): boolean {
-  for (const m of ALLOWED_METHODS) if (m === k) return true;
+  for (const m of ALLOWED_METHODS) {
+    if (m === k) {
+      return true;
+    }
+  }
   return false;
 }
 
 function validatePathMethods(p: string, pathItem: unknown): void {
-  if (!isObject(pathItem)) return;
+  if (!isObject(pathItem)) {
+    return;
+  }
   for (const k of typeSafeKeys(pathItem)) {
-    if (isAllowedMethodKey(k)) continue;
-    if (k === 'parameters' || k === 'summary' || k === 'description' || k === 'servers') continue;
+    if (isAllowedMethodKey(k)) {
+      continue;
+    }
+    if (k === 'parameters' || k === 'summary' || k === 'description' || k === 'servers') {
+      continue;
+    }
     throw new Error(`Unknown HTTP method key on path ${p}: ${String(k)}`);
   }
 }
@@ -73,10 +83,14 @@ function collectExpectedResponseKeys(schema: OpenAPI3): Set<string> {
   const paths = schema.paths ?? {};
   for (const p of typeSafeKeys(paths)) {
     const pathItem = getOwnValue(paths, p);
-    if (!isObject(pathItem)) continue;
+    if (!isObject(pathItem)) {
+      continue;
+    }
     for (const m of ALLOWED_METHODS) {
       const opUnknown = getOwnValue(pathItem, m);
-      if (!isObject(opUnknown)) continue;
+      if (!isObject(opUnknown)) {
+        continue;
+      }
       addExpectedFromOperation(opUnknown, out);
     }
   }
@@ -85,20 +99,30 @@ function collectExpectedResponseKeys(schema: OpenAPI3): Set<string> {
 
 function computeMissing(expected: Set<string>, actual: Set<string>): string[] {
   const missing: string[] = [];
-  for (const key of expected) if (!actual.has(key)) missing.push(key);
+  for (const key of expected) {
+    if (!actual.has(key)) {
+      missing.push(key);
+    }
+  }
   return missing;
 }
 
 function computeExtra(expected: Set<string>, actual: Set<string>): string[] {
   const extra: string[] = [];
-  for (const key of actual) if (!expected.has(key)) extra.push(key);
+  for (const key of actual) {
+    if (!expected.has(key)) {
+      extra.push(key);
+    }
+  }
   return extra;
 }
 
 function reportDiffIfAny(expected: Set<string>, actual: Set<string>): void {
   const missing = computeMissing(expected, actual);
   const extra = computeExtra(expected, actual);
-  if (missing.length === 0 && extra.length === 0) return;
+  if (missing.length === 0 && extra.length === 0) {
+    return;
+  }
   const lines: string[] = ['Response map cross‑validation failed.'];
   if (missing.length > 0) {
     lines.push(`Missing (${String(missing.length)}): ${missing.slice(0, 10).join(', ')}`);
@@ -111,23 +135,37 @@ function reportDiffIfAny(expected: Set<string>, actual: Set<string>): void {
 
 function addExpectedFromOperation(op: unknown, out: Set<string>): void {
   const opIdVal = getOwnValue(op, 'operationId');
-  if (typeof opIdVal !== 'string') return;
+  if (typeof opIdVal !== 'string') {
+    return;
+  }
   const responses = getOwnValue(op, 'responses');
-  if (!isObject(responses)) return;
+  if (!isObject(responses)) {
+    return;
+  }
   for (const status of typeSafeKeys(responses)) {
     const resp = getOwnValue(responses, status);
-    if (hasJsonRef(resp)) out.add(`${opIdVal}:${String(status)}`);
+    if (hasJsonRef(resp)) {
+      out.add(`${opIdVal}:${String(status)}`);
+    }
   }
 }
 
 function hasJsonRef(value: unknown): boolean {
-  if (!isObject(value)) return false;
+  if (!isObject(value)) {
+    return false;
+  }
   const content = getOwnValue(value, 'content');
-  if (!isObject(content)) return false;
+  if (!isObject(content)) {
+    return false;
+  }
   const json = getOwnValue(content, 'application/json');
-  if (!isObject(json)) return false;
+  if (!isObject(json)) {
+    return false;
+  }
   const sObj = getOwnValue(json, 'schema');
-  if (!isObject(sObj)) return false;
+  if (!isObject(sObj)) {
+    return false;
+  }
   const ref = getOwnValue(sObj, '$ref');
   return typeof ref === 'string';
 }

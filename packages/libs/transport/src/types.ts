@@ -2,7 +2,11 @@
  * Types for the STDIO transport library
  */
 
-import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';
+import type { Readable, Writable } from 'stream';
+// eslint-disable-next-line import-x/no-restricted-paths -- @todo resolve this, the logger is fundamental, or use composition, or something.
+import type { Logger } from '@oaknational/mcp-logger';
+
+export type { Logger };
 
 /**
  * JSON-RPC message structure
@@ -22,12 +26,12 @@ export interface JsonRpcMessage {
 
 /**
  * Options for creating STDIO transport
- * Uses generic stream interfaces for transplantability
+ * Uses Node.js stream types directly
  */
 export interface StdioTransportOptions {
   logger: Logger;
-  stdin?: ReadableStream;
-  stdout?: WritableStream;
+  stdin?: Readable;
+  stdout?: Writable;
   onMessage?: (message: JsonRpcMessage) => void;
 }
 

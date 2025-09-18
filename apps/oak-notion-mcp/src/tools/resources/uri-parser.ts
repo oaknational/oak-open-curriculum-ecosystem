@@ -72,8 +72,12 @@ export function parseResourceUri(uri: string): ResourceIdentifier | null {
  * Validate basic URI requirements
  */
 function validateBasicUri(uri: string): string | null {
-  if (!uri) return 'URI is required';
-  if (!uri.startsWith('notion://')) return 'URI must use notion:// protocol';
+  if (!uri) {
+    return 'URI is required';
+  }
+  if (!uri.startsWith('notion://')) {
+    return 'URI must use notion:// protocol';
+  }
   return null;
 }
 

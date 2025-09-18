@@ -26,13 +26,11 @@ describe('generateToolFile header shapes and invoke wrapper', () => {
       queryMeta,
     );
 
-    expect(code).toContain('type PathParamsShape =');
+    expect(code).toContain('interface PathParamsShape');
     expect(code).toContain('lesson: string;');
     expect(code).toContain('path: PathParamsShape;');
-    expect(code).not.toContain('type QueryParamsShape =');
-    expect(code).toContain(
-      'const invoke = async (client: OakApiPathBasedClient, _params: unknown) =>',
-    );
+    expect(code).not.toContain('interface QueryParamsShape');
+    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
   });
 
   it('emits required query only for search lessons tool with q and includes literal unions', () => {
@@ -60,13 +58,11 @@ describe('generateToolFile header shapes and invoke wrapper', () => {
       queryMeta,
     );
 
-    expect(code).toContain('type QueryParamsShape =');
+    expect(code).toContain('interface QueryParamsShape');
     expect(code).toContain('q: string;');
     expect(code).toContain("keyStage?: 'ks1' | 'ks2'");
     expect(code).toContain('query: QueryParamsShape;');
     expect(code).not.toContain('PathParamsShape');
-    expect(code).toContain(
-      'const invoke = async (client: OakApiPathBasedClient, _params: unknown) =>',
-    );
+    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
   });
 });

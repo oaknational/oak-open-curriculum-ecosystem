@@ -73,8 +73,12 @@ export function groupByKind(reflections: TDReflection[]): Map<string, TDReflecti
     4194304: 'Reference',
   };
   const labelFor = (r: TDReflection): string => {
-    if (r.kindString && r.kindString.length > 0) return r.kindString;
-    if (typeof r.kind === 'number') return KIND_LABEL[r.kind] ?? 'Kind:' + String(r.kind);
+    if (r.kindString && r.kindString.length > 0) {
+      return r.kindString;
+    }
+    if (typeof r.kind === 'number') {
+      return KIND_LABEL[r.kind] ?? 'Kind:' + String(r.kind);
+    }
     return 'Symbol';
   };
   for (const r of reflections) {
@@ -91,7 +95,9 @@ function isTypeAlias(r: TDReflection): boolean {
 }
 
 function renderSources(sources?: TDSource[]): string {
-  if (!Array.isArray(sources) || sources.length === 0) return '';
+  if (!Array.isArray(sources) || sources.length === 0) {
+    return '';
+  }
   const s = sources[0];
   const loc = `${s.fileName}:${String(s.line)}`;
   if (typeof s.url === 'string' && s.url.length > 0) {

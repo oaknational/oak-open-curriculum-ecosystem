@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createResourceHandlers } from './handlers/index';
 import type { MinimalNotionClient } from '../../types/notion-types/notion-client';
-import type { Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-logger';
 import { createMockRuntime } from '../../test/mocks';
 import {
   createMockPage,

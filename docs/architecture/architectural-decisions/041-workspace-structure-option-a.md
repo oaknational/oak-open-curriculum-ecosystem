@@ -12,7 +12,7 @@ We compared multiple workspace layouts to improve clarity, onboarding, and long-
 Adopt Option A (conventional) with clear directories:
 
 - `apps/` – runnable MCP servers
-- `packages/core/` – core contracts/utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – lib contracts/utilities (logger, storage, transport, env)
 - `packages/libs/` – reusable libraries
 - `packages/providers/` – platform providers (e.g., Node, Workers)
 - `packages/sdks/` – client SDKs (future growth)

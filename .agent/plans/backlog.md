@@ -17,15 +17,17 @@
 - [x] Find all the as, any, non-null, `record<string`, eslint-disable, ts-ignore, ts-expect-error, etc in the SDK and MCP server. and remove them manually.
 - [x] Improve the documentation, the rules file is now too large to be consistently applied by the agent, and we have other "agent guidance" docs... we need to consolidate and refine. Fewer, better, more consistent.
 - [x] Add a trivial front page for the mcp http server, so it doesn't show "authentication error" when visited in a browser... in fact, maybe put some _very_ basic quickstart docs there?
-- [+] Add the utilities, libraries, and a single app (for now) for creating the semantic search indices, keeping them updated, and providing a UI for using them. IN PROGRESS
-- [ ] Profile the `pnpm qg` command, and see what we can speed up adn where... it's mostly the linting that is slow, and likely that is due to type-based rules. This is important because it is a DX frustration and it is slowing down the development process, including for agents.
+- [=] Add the utilities, libraries, and a single app (for now) for creating the semantic search indices, keeping them updated, and providing a UI for using them. IN PROGRESS
+- [x] Profile the `pnpm qg` command, and see what we can speed up adn where... it's mostly the linting that is slow, and likely that is due to type-based rules. This is important because it is a DX frustration and it is slowing down the development process, including for agents.
 - [ ] Update dependency versions across the board.
 - [ ] Add mutation testing to the test suite
-- [ ] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides. This strict type-safety is one of the key benefits of the SDK architecture over the standard auto-generated API client.
+- [x] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides. This strict type-safety is one of the key benefits of the SDK architecture over the standard auto-generated API client.
 - [ ] Improve the logger, Consola is too lightweight, we need something production ready and cloud runtime compatible. Enforce logger usage with eslint no-console rule
 - [ ] Update Zod to Zod 4 everywhere, requires support from OpenAPI type generation pipeline.
 - [ ] Standardise and improve the Claude sub-agents.
 - [ ] Production hardening, auth, caching, logging, tracing, error handling (Result<T,E>), error tracking (Sentry), etc.
+- [ ] Rename the type-gen code from scripts to something more meaningful.
+- [ ] Consider putting the type-gen code in a separate package from the SDK runtime code, they are not tightly coupled and have different if related intentions. This could go either way, the typegen code essentially becomes a library of functions that are used within the SDK runtime code.
 
 ## MCP server ideas
 

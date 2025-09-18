@@ -2,7 +2,21 @@
  * Notion-specific dependencies for the phenotype
  */
 
-import type { Logger, CoreRuntime } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-logger';
+
+interface CoreRuntime {
+  logger: {
+    debug: (message: string, context?: unknown) => void;
+    info: (message: string, context?: unknown) => void;
+    warn: (message: string, context?: unknown) => void;
+    error: (message: string, context?: unknown) => void;
+  };
+  clock: { now: () => number };
+  storage: {
+    get: (key: string) => Promise<string | null>;
+    set: (key: string, value: string) => Promise<void>;
+  };
+}
 import type { MinimalNotionClient } from './notion-client';
 import type { NotionOperations } from '../notion-contracts/notion-operations';
 

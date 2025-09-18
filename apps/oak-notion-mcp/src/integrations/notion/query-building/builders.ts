@@ -10,7 +10,6 @@ import type {
   SearchOptions,
   NotionSearchQuery,
 } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-core';
 
 /**
  * Build filter condition for a single property
@@ -20,13 +19,19 @@ function isSimpleValue(v: unknown): v is string | number | boolean | null {
 }
 
 function toSafeSimpleValue(v: unknown): string | number | boolean | null {
-  if (isSimpleValue(v)) return v;
+  if (isSimpleValue(v)) {
+    return v;
+  }
   try {
     const s: unknown = JSON.parse(JSON.stringify(v));
     return isSimpleValue(s) ? s : '[unserializable]';
   } catch {
     return '[unserializable]';
   }
+}
+
+interface JsonObject {
+  [key: string]: string | number | boolean | null | JsonObject;
 }
 
 function buildPropertyCondition(propertyName: string, filter: McpPropertyFilter): JsonObject {
@@ -39,10 +44,12 @@ function buildPropertyCondition(propertyName: string, filter: McpPropertyFilter)
     condition[filter.type] = { is_not_empty: true };
     return condition;
   }
-  if (filter.value === undefined) return condition;
+  if (filter.value === undefined) {
+    return condition;
+  }
   const operator = filter.operator ?? 'equals';
   const val = toSafeSimpleValue(filter.value);
-  const opClause: Record<string, string | number | boolean | null> = { [operator]: val };
+  const opClause: JsonObject = { [operator]: val };
   condition[filter.type] = opClause;
   return condition;
 }

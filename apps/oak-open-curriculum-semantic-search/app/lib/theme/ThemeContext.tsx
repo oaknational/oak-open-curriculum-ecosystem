@@ -47,7 +47,9 @@ const Ctx = createContext<ThemeContextValue | null>(null);
 
 export function useThemeContext(): ThemeContextValue {
   const v = useContext(Ctx);
-  if (!v) throw new Error('ThemeContext not available');
+  if (!v) {
+    throw new Error('ThemeContext not available');
+  }
   return v;
 }
 
@@ -60,7 +62,9 @@ function useSystemPreferenceSync(
   setSystemPrefersDark: React.Dispatch<React.SetStateAction<boolean>>,
 ): void {
   useEffect(() => {
-    if (mode !== THEME_MODES.system) return undefined;
+    if (mode !== THEME_MODES.system) {
+      return undefined;
+    }
     const unsubscribe = subscribeToSystemPrefersDark((prefers) => setSystemPrefersDark(prefers));
     return unsubscribe;
   }, [mode, setSystemPrefersDark]);
@@ -88,7 +92,9 @@ export function ThemeProvider({
   const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(() => getSystemPrefersDark());
 
   const setMode = useCallback((next: ThemeMode) => {
-    if (!isThemeMode(next)) return;
+    if (!isThemeMode(next)) {
+      return;
+    }
     setModeState(next);
     try {
       // Persist for client convenience and SSR hint via cookie

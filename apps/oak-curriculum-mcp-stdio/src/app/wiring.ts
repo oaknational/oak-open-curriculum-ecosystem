@@ -5,18 +5,30 @@
 
 import { createMcpToolsModule } from '../tools/index.js';
 import type { McpToolsModule } from '../tools/index.js';
-import { createRuntime, type CoreLogger } from '@oaknational/mcp-core';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 import { appendToLogFile, getLogFilePath } from './file-reporter.js';
+// Removed conflicting import
 
 function mapLogLevelToIndex(level: string): number {
-  if (level === 'trace') return 0;
-  if (level === 'debug') return 1;
-  if (level === 'info') return 2;
-  if (level === 'warn') return 3;
-  if (level === 'error') return 4;
-  if (level === 'fatal') return 5;
+  if (level === 'trace') {
+    return 0;
+  }
+  if (level === 'debug') {
+    return 1;
+  }
+  if (level === 'info') {
+    return 2;
+  }
+  if (level === 'warn') {
+    return 3;
+  }
+  if (level === 'error') {
+    return 4;
+  }
+  if (level === 'fatal') {
+    return 5;
+  }
   return 2; // default INFO
 }
 
@@ -29,7 +41,9 @@ function formatLogMessage(lvl: string, message: string, data?: unknown): string 
 function makeLoggerMethods(currentLevelIndex: number, logFilePath: string | null): Logger {
   const shouldLog = (idx: number): boolean => currentLevelIndex <= idx;
   const logToFile = (lvl: string, message: string, data?: unknown): void => {
-    if (logFilePath) appendToLogFile(logFilePath, formatLogMessage(lvl, message, data));
+    if (logFilePath) {
+      appendToLogFile(logFilePath, formatLogMessage(lvl, message, data));
+    }
   };
   const consoleErr = (tag: string, message: string, data?: unknown): void => {
     console.error(`${tag} ${message}`, data ?? '');
@@ -104,7 +118,10 @@ export interface WiredDependencies {
   logger: Logger;
   mcpOrgan: McpToolsModule;
   config: Required<ServerConfig>;
-  runtime: ReturnType<typeof createRuntime>;
+  runtime: {
+    storage: ReturnType<typeof createInMemoryStorage>;
+    clock: ReturnType<typeof createNodeClock>;
+  };
 }
 
 /**
@@ -140,25 +157,31 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   const serverConfig = buildServerConfig(config);
   const logger = createLogger(serverConfig.logLevel);
   // Compose CoreRuntime
-  const coreLogger: CoreLogger = {
-    debug: (message, context) => {
+  const coreLogger = {
+    trace: (message: string, context?: unknown) => {
       logger.debug(message, context);
     },
-    info: (message, context) => {
+    debug: (message: string, context?: unknown) => {
+      logger.debug(message, context);
+    },
+    info: (message: string, context?: unknown) => {
       logger.info(message, context);
     },
-    warn: (message, context) => {
+    warn: (message: string, context?: unknown) => {
       logger.warn(message, context);
     },
-    error: (message, context) => {
+    error: (message: string, context?: unknown) => {
+      logger.error(message, context);
+    },
+    fatal: (message: string, context?: unknown) => {
       logger.error(message, context);
     },
   };
-  const runtime = createRuntime({
+  const runtime = {
     logger: coreLogger,
     clock: createNodeClock(),
     storage: createInMemoryStorage(),
-  });
+  };
 
   // Create SDK client via injected config
   if (!serverConfig.apiKey) {

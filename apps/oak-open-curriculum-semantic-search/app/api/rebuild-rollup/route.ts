@@ -60,24 +60,24 @@ function buildRollupDoc(u: UnitsIndexDoc, snippets: string[]): UnitRollupDoc {
 }
 
 export async function GET(req: NextRequest): Promise<Response> {
-  if (!authorize(req)) return new NextResponse('Unauthorized', { status: 401 });
+  if (!authorize(req)) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+  const { count, rest } = await rollupAllUnits();
+  if (rest.length > 0) {
+    await esBulk(rest);
+  }
+  return NextResponse.json({ ok: true, unitsProcessed: count });
+}
 
+async function rollupAllUnits(): Promise<{ count: number; rest: unknown[] }> {
   const size = 500;
   let totalProcessed = 0;
   let bulkOps: unknown[] = [];
-
   const unitsRes = await fetchAllUnits(size);
-
   for (const uh of unitsRes.hits.hits) {
     const u = uh._source;
-    const lessonsRes = await fetchUnitLessons(u.unit_slug);
-
-    const snippets: string[] = [];
-    for (const lh of lessonsRes.hits.hits)
-      snippets.push(extractPassage(lh._source.transcript_text));
-
-    const roll = buildRollupDoc(u, snippets);
-
+    const roll = await rollupUnit(u);
     bulkOps.push({ index: { _index: 'oak_unit_rollup', _id: roll.unit_id } }, roll);
     if (bulkOps.length >= 1000) {
       await esBulk(bulkOps);
@@ -85,7 +85,14 @@ export async function GET(req: NextRequest): Promise<Response> {
     }
     totalProcessed += 1;
   }
+  return { count: totalProcessed, rest: bulkOps };
+}
 
-  if (bulkOps.length > 0) await esBulk(bulkOps);
-  return NextResponse.json({ ok: true, unitsProcessed: totalProcessed });
+async function rollupUnit(u: UnitsIndexDoc): Promise<UnitRollupDoc> {
+  const lessonsRes = await fetchUnitLessons(u.unit_slug);
+  const snippets: string[] = [];
+  for (const lh of lessonsRes.hits.hits) {
+    snippets.push(extractPassage(lh._source.transcript_text));
+  }
+  return buildRollupDoc(u, snippets);
 }

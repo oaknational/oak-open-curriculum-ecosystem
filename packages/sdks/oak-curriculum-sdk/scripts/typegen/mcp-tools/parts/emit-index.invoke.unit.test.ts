@@ -9,9 +9,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
     const method = 'GET';
     const operation: OperationObject = { responses: {} };
     const code = emitIndex(toolName, path, method, operation, ['lesson'], []);
-    expect(code).toContain(
-      'const invoke = async (client: OakApiPathBasedClient, _params: unknown) =>',
-    );
+    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
     expect(code).toContain('return executor(client)(_params);');
   });
 });

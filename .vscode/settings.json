@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
     "agentic",
+    "Aila",
     "Aither",
     "Aitheres",
     "asteasolutions",
@@ -11,6 +12,7 @@
     "Chronos",
     "Cleanup",
     "cloc",
+    "codegen",
     "codemods",
     "commitlint",
     "deployability",
@@ -20,6 +22,8 @@
     "Eeuo",
     "Empsycha",
     "Energeia",
+    "Errorish",
+    "esbuild",
     "estypes",
     "fallbacks",
     "healthz",
@@ -64,6 +68,7 @@
     "turbopack",
     "Turborepo",
     "ultrathinking",
+    "unrs",
     "unstub",
     "xenotransplantation",
     "zodgen",
@@ -123,5 +128,6 @@
     ".vscode-insiders",
     "**/generated/**/*"
   ],
-  "chatgpt.commentCodeLensEnabled": false
+  "chatgpt.commentCodeLensEnabled": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

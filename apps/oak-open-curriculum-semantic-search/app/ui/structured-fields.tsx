@@ -3,7 +3,7 @@
 import type { JSX, ChangeEvent } from 'react';
 import { LabeledInput, LabeledSelect } from './fields';
 import { KEY_STAGES, SUBJECTS } from '../../src/adapters/sdk-guards';
-import type { StructuredBody } from './StructuredSearch';
+import type { StructuredBody } from './structured-search.shared';
 
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
 
@@ -21,7 +21,9 @@ export function ScopeField({
       value={value}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
         const v = e.target.value;
-        if (v === 'units' || v === 'lessons') onChange({ scope: v });
+        if (v === 'units' || v === 'lessons') {
+          onChange({ scope: v });
+        }
       }}
       options={['units', 'lessons']}
     />

@@ -23,8 +23,9 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const body = BodySchema.safeParse(await req.json());
-  if (!body.success)
+  if (!body.success) {
     return NextResponse.json({ error: z.treeifyError(body.error) }, { status: 400 });
+  }
 
   const { q, scope, size } = body.data;
   const parsed = await parseQuery(q);

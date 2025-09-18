@@ -21,7 +21,7 @@ These are not implementation tests. They verify behaviours that consumers rely o
 ## How they work
 
 - Core exposes a testing helper:
-  - `@oaknational/mcp-core/testing/provider-contract` → `defineProviderContract(factory)`
+  - Local testing helpers → `defineProviderContract(factory)`
   - You pass creators for `logger`, `clock`, and `storage`.
   - The helper returns sync/async checks you run in your test suite.
 
@@ -29,7 +29,7 @@ These are not implementation tests. They verify behaviours that consumers rely o
 
 ```ts
 // providers-node example (integration test)
-import { defineProviderContract } from '@oaknational/mcp-core/testing/provider-contract';
+// Testing helpers are now defined locally in each package
 import {
   createConsoleLogger,
   createInMemoryStorage,

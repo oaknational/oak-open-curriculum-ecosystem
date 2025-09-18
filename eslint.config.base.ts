@@ -6,12 +6,8 @@
  */
 
 import type { Linter } from 'eslint';
-import {
-  config as tsEslintConfig,
-  configs as tsEslintConfigs,
-  parser as tsEslintParser,
-  type ConfigArray,
-} from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
+import { configs as tsEslintConfigs, parser as tsEslintParser } from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
@@ -25,6 +21,7 @@ export const ignores = [
   'commitlint.config.js',
   '**/tsup.config.ts',
   'reference/',
+  'research/',
   // Ignore ephemeral bundled config artifacts (e.g., tsup.config.bundled_*.mjs)
   '**/tsup.config.*',
   '**/*.bundled_*.mjs',
@@ -34,7 +31,7 @@ export const ignores = [
   '**/docs/api-md/',
 ];
 
-export const baseRules: ConfigArray = [
+export const baseRules: readonly Linter.Config[] = [
   eslint.configs.recommended,
   importX.flatConfigs.recommended,
   importX.flatConfigs.typescript,
@@ -51,6 +48,7 @@ export const tsRules: Linter.RulesRecord = {
   '@typescript-eslint/no-explicit-any': ['error', { fixToUnknown: true, ignoreRestArgs: false }],
   'no-unused-vars': 'off',
   '@typescript-eslint/no-unused-vars': 'error',
+  curly: 'error',
   '@typescript-eslint/explicit-module-boundary-types': 'error',
   '@typescript-eslint/no-non-null-assertion': 'error',
   '@typescript-eslint/consistent-type-assertions': [
@@ -139,7 +137,7 @@ export const testRules: Linter.RulesRecord = {
   'max-lines': ['error', 700],
   'max-lines-per-function': ['error', 1000],
   '@typescript-eslint/consistent-type-assertions': [
-    'error',
+    'off',
     {
       assertionStyle: 'as',
     },
@@ -149,7 +147,7 @@ export const testRules: Linter.RulesRecord = {
   'import-x/no-named-as-default-member': 'off',
 };
 
-export const baseConfig: ConfigArray = tsEslintConfig(
+export const baseConfig = defineConfig(
   {
     ignores,
   },
@@ -183,6 +181,13 @@ export const baseConfig: ConfigArray = tsEslintConfig(
     ],
     rules: {
       ...testRules,
+    },
+  },
+  // Generated types
+  {
+    files: ['**/src/types/generated/**'],
+    rules: {
+      curly: 'off',
     },
   },
   // Config files - allow default project service to avoid per-package tsconfig coupling

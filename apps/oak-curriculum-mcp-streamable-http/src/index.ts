@@ -2,13 +2,15 @@ import express from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { renderLandingPageHtml } from './landing-page.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { parseCsv } from './env.js';
-import { exportJWK, generateKeyPair } from 'jose';
 import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler } from './handlers.js';
+import { registerOpenAiConnectorHandlers } from './openai/connector.js';
+import { setupOAuthMetadata, setupLocalAuthorizationServer } from './oauth-metadata.js';
 import { loadRootEnv } from '@oaknational/mcp-env';
 
 // Ensure critical env is available in local/dev by loading from repo root when missing
@@ -38,6 +40,17 @@ function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler
       .type('application/json')
       .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
   });
+  // OpenAI connector health endpoints
+  app.options('/openai_connector', corsMw);
+  app.head('/openai_connector', (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).end();
+  });
+  app.get('/openai_connector', (_req, res) => {
+    res
+      .type('application/json')
+      .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
+  });
 }
 
 export function createApp(): express.Express {
@@ -48,8 +61,37 @@ export function createApp(): express.Express {
   const { mode, allowedHosts, allowedOrigins } = readSecurityEnv();
   const corsMw = applySecurity(app, mode, allowedHosts, allowedOrigins);
 
-  const { transport, ready: serverReady, server } = initializeServer();
+  const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw);
+  // Static assets for favicon/logo (works locally and on Vercel)
+  mountStaticAssets(app);
+  addRootLandingPage(app);
+  app.use(bearerAuth);
+  // Add middleware to ensure proper Accept header for MCP requests
+  app.use('/mcp', ensureMcpAcceptHeader);
+  app.post('/mcp', createMcpHandler(coreTransport));
+
+  // OpenAI Connector: mirror security and Accept handling, separate server+transport
+  const openAi = initializeServer();
+  registerOpenAiConnectorHandlers(openAi.server);
+  app.use('/openai_connector', ensureMcpAcceptHeader);
+  app.post('/openai_connector', createMcpHandler(openAi.transport));
+
+  // Gate request handling on readiness
+  app.use(async (_req, _res, next) => {
+    await ready;
+    next();
+  });
+  return app;
+}
+
+function initializeCoreEndpoints(
+  app: express.Express,
+  corsMw: express.RequestHandler,
+): { transport: StreamableHTTPServerTransport; ready: Promise<void> } {
+  const { transport, server } = initializeCoreMcpServer();
+  // Register tools BEFORE connecting the transport to satisfy MCP SDK constraints
   registerHandlers(server);
+  const serverReady = server.connect(transport);
   // Expose resource metadata immediately
   setupOAuthMetadata(app, corsMw);
   // Lightweight unauthenticated health endpoints for tooling/UI probes
@@ -62,20 +104,7 @@ export function createApp(): express.Express {
       console.error('Error setting up local authorization server:', err);
     }
   });
-  const ready = Promise.all([serverReady, asReady]).then(() => undefined);
-  app.use(async (_req, _res, next) => {
-    await ready;
-    next();
-  });
-  // Static assets for favicon/logo (works locally and on Vercel)
-  mountStaticAssets(app);
-  addRootLandingPage(app);
-  app.use(bearerAuth);
-  // Add middleware to ensure proper Accept header for MCP requests
-  app.use('/mcp', ensureMcpAcceptHeader);
-  app.post('/mcp', createMcpHandler(transport));
-
-  return app;
+  return { transport, ready: Promise.all([serverReady, asReady]).then(() => undefined) };
 }
 
 function addRootLandingPage(app: express.Express): void {
@@ -148,6 +177,15 @@ function applySecurity(
   return corsMw;
 }
 
+function initializeCoreMcpServer(): {
+  server: McpServer;
+  transport: StreamableHTTPServerTransport;
+} {
+  const server = new McpServer({ name: 'oak-curriculum-http', version: '0.1.0' });
+  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+  return { server, transport };
+}
+
 function initializeServer(): {
   server: Server;
   transport: StreamableHTTPServerTransport;
@@ -160,74 +198,6 @@ function initializeServer(): {
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   const ready = server.connect(transport);
   return { server, transport, ready };
-}
-
-function setupOAuthMetadata(app: express.Express, corsMw: express.RequestHandler): void {
-  app.options('/.well-known/oauth-protected-resource', corsMw);
-  app.get('/.well-known/oauth-protected-resource', (_req, res) => {
-    const envCanonicalUri = process.env.MCP_CANONICAL_URI;
-    const defaultCanonicalUri = 'http://localhost/mcp';
-    res.json({
-      resource: envCanonicalUri ?? defaultCanonicalUri,
-      authorization_servers: process.env.BASE_URL ? [process.env.BASE_URL] : [],
-      bearer_methods_supported: ['header'],
-      scopes_supported: ['mcp:invoke', 'mcp:read'],
-    });
-  });
-}
-
-async function setupLocalAuthorizationServer(
-  app: express.Express,
-  corsMw: express.RequestHandler,
-): Promise<void> {
-  if (process.env.ENABLE_LOCAL_AS !== 'true') return;
-
-  let publicJwk: unknown;
-  if (!process.env.LOCAL_AS_JWK) {
-    const { publicKey } = await generateKeyPair('RS256');
-    const jwk = await exportJWK(publicKey);
-    jwk.alg = 'RS256';
-    jwk.use = 'sig';
-    process.env.LOCAL_AS_JWK = JSON.stringify(jwk);
-    publicJwk = jwk;
-  } else {
-    publicJwk = parseLocalJwk(process.env.LOCAL_AS_JWK);
-  }
-
-  app.options('/.well-known/openid-configuration', corsMw);
-  app.get('/.well-known/openid-configuration', (_req, res) => {
-    const base = process.env.BASE_URL ?? 'http://localhost:3333';
-    res.json({
-      issuer: base,
-      authorization_endpoint: `${base}/oauth/authorize`,
-      token_endpoint: `${base}/oauth/token`,
-      jwks_uri: `${base}/.well-known/jwks.json`,
-      grant_types_supported: ['authorization_code'],
-      response_types_supported: ['code'],
-      token_endpoint_auth_methods_supported: ['none'],
-    });
-  });
-
-  app.options('/.well-known/jwks.json', corsMw);
-  app.get('/.well-known/jwks.json', (_req, res) => {
-    const jwk = process.env.LOCAL_AS_JWK ? parseLocalJwk(process.env.LOCAL_AS_JWK) : publicJwk;
-    res.json({ keys: jwk ? [jwk] : [] });
-  });
-}
-
-function parseLocalJwk(value: string | undefined): unknown {
-  if (!value) return undefined;
-  try {
-    return JSON.parse(value);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.warn('Error parsing local JWK:', err.message);
-    } else {
-      console.warn('Error parsing local JWK:', err);
-    }
-    console.warn('Returning undefined local JWK');
-    return undefined;
-  }
 }
 
 // handlers are registered via handlers.ts

@@ -2,7 +2,7 @@
  * Simple storage provider that detects available storage mechanisms
  */
 
-import type { StorageProvider } from '@oaknational/mcp-core';
+import type { StorageProvider } from './index';
 
 import { detectStorageOptions, STORAGE_OPTIONS, type GThis } from './detect-storage-options.js';
 import {

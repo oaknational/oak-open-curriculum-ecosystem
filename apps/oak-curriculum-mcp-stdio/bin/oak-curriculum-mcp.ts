@@ -3,7 +3,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
-import { getMcpTools } from '../src/tools/runtime/index.js';
+import { MCP_TOOLS, typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
 import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {
@@ -48,7 +48,7 @@ log(`[START-MCP] LOG_LEVEL: ${logLevelValue}`);
 
 // Emit tool diagnostics early so issues are visible even if startup fails later
 try {
-  const toolCount = getMcpTools().length;
+  const toolCount = typeSafeKeys(MCP_TOOLS).length;
   log(`[START-MCP] Tool count: ${String(toolCount)}`);
   log(`[START-MCP] Tools: ${String(toolCount)}`);
 } catch (err: unknown) {
@@ -70,7 +70,9 @@ try {
   type ValidLogLevel = (typeof validLogLevels)[number];
 
   function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') return false;
+    if (typeof value !== 'string') {
+      return false;
+    }
     const stringValidLogLevels: readonly string[] = validLogLevels;
     return stringValidLogLevels.includes(value);
   }

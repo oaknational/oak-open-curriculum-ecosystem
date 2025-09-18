@@ -2,7 +2,7 @@
  * File storage implementation with injectable filesystem
  */
 
-import type { StorageProvider } from '@oaknational/mcp-core';
+import type { StorageProvider } from './index';
 
 // BufferEncoding is a global type from Node.js
 export interface FileSystemInterface {

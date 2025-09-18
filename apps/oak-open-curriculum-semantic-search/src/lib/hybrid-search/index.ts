@@ -9,6 +9,8 @@ export async function runHybridSearch(q: StructuredQuery): Promise<HybridSearchR
   const from = typeof q.from === 'number' ? Math.max(q.from, 0) : 0;
   const doHighlight = q.highlight !== false;
 
-  if (q.scope === 'lessons') return runLessonsSearch(q, size, from, doHighlight);
+  if (q.scope === 'lessons') {
+    return runLessonsSearch(q, size, from, doHighlight);
+  }
   return runUnitsSearch(q, size, from, doHighlight);
 }

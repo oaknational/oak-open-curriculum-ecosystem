@@ -8,10 +8,60 @@ Owner: Engineering (MCP/Oak SDK)
 ## Purpose
 
 - Support the [OpenAI Connector standard for MCP](https://platform.openai.com/docs/mcp#create-an-mcp-server) servers by exposing `search` and `fetch` built to the OpenAI Connector standard, mounted alongside our existing MCP endpoint in the same Express app at a new path `/openai_connector`. These tools act as intelligent facades over existing SDK MCP tools. The `search` tool aggregates existing search endpoints initially; later it will be powered by the semantic search service.
-- Enable accurate versioning of the MCP servers, using the root package.json version. This includes resolving the issues with the release pipeline (see errors in GitHub release logs). <- This purpose needs properly integrating into this plan. The version is important because we are changing the tools, resources, prompts, and other capabilities of the MCP servers, and clients will need to know when to update their cache etc.
 - Extract common logic into a shared MCP library workspace (shared server core and error handling) used by both STDIO and Streamable HTTP apps.
 - Migrate from the low‑level Server to MCP SDK abstractions (`McpServer`), removing duplicate validation while preserving the principle that all types, type guards, schemas, and validation are generated at compile time from the OpenAPI schema.
-- Enable Resources and Prompts capabilities, and cross‑server composition and pipelines.
+- Enable Resources and Prompts capabilities, and cross‑server
+
+## New Type-Layering Approach (Adopted)
+
+- Define base MCP types in a shared low‑level workspace (target: `packages/core/mcp-core`). These extend official `@modelcontextprotocol/sdk` `Tool` types minimally to capture the shapes we actually use (e.g., input schema structure), remaining strictly compatible.
+- In the SDK, compose domain‑specific generic types from these bases (e.g., Zod builders for input schemas) and emit strict mapped types keyed by generated unions (e.g., `{ [K in AllToolNames]: ToolDescriptor & { name: K } }`).
+- Emit `MCP_TOOLS` as a strict mapped type; each value embeds `name: K` so key and value identities are enforced at compile time.
+
+- Guaranteeing precision beyond JSON:
+  - Server‑kit functions are generic over the SDK’s strict map and return `ReadonlyArray<TMap[TNames]>` (the exact tool items), so no widening to JSON occurs.
+  - Only the core adapter `toOfficialTools(McpBaseToolSet)` materialises MCP `OfficialTool[]` for server wiring. JSONish shapes are quarantined inside core.
+
+Refinements (naming, boundaries, and adapters)
+
+- Core (`packages/core/mcp-core`):
+  - Provide vendor‑neutral base types:
+    - `McpBaseToolInputSchemaBase`
+    - `McpBaseTool`
+    - `type McpBaseToolSet = readonly McpBaseTool[]`
+    - `type McpBaseToolsMap<Names extends string> = { [K in Names]: McpBaseTool & { name: K } }`
+  - Expose a narrow adapter for the actual MCP server wiring only:
+    - `toOfficialTools(tools: McpBaseToolSet): OfficialTool[]`
+  - Rule: No `@modelcontextprotocol/sdk` imports outside core; all other workspaces import the base types from core.
+
+- SDK:
+  - Export `OakCurriculumMcpTools: McpBaseToolsMap<AllToolNames>` (strict mapped type with key↔name equality).
+  - Generators emit `name: 'literal'` per tool to satisfy the mapped type.
+
+- Server‑kit:
+  - Primary API: `buildToolList<TNames extends string, T extends McpBaseToolsMap<TNames>>(tools: T): McpBaseToolSet`.
+  - Optional convenience: `buildToolListFromArray<T extends McpBaseToolSet>(tools: T): McpBaseToolSet`.
+  - All attach/register helpers accept generics constrained to these base types; conversion to official types is delegated to the core adapter when instantiating the real MCP server.
+
+Benefits
+
+- Single source of truth for types; no ad‑hoc local types or widening.
+- Unknown only at external boundaries; immediate validation to strict generated types.
+- Compile‑time enforcement of key↔name equivalence and schema consistency; validators and Zod derive from the same types.
+- Lint rules become guardrails; no assertions, no `Record<string, *>`, no index signatures.
+
+## Status
+
+- This document is PAUSED. See the new strict MVP plan and context for the active scope.
+
+- Enhancements (Post‑MVP):
+  - Shared error handling library workspace (centralised error classes, normalisers, mapping to user‑facing summaries)
+  - Shared OpenTelemetry workspace/library for tracing/metrics, consumed by logger and error handler
+  - Tool grouping/discovery by tags and Inspector discoverability
+  - AI docs bundle generation; test mocks; offline/CI guardrails
+  - Resources/Prompts and cross‑server pipelines
+  - Caching and semantic search backend swap
+  - Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
 
 ## Core References
 
@@ -62,6 +112,16 @@ Owner: Engineering (MCP/Oak SDK)
 
 ### Phase A: OpenAI Connector compatibility in the same Express app (new path)
 
+Status summary (completed)
+
+- New `/openai_connector` server and transport mounted in the existing Express app with HEAD/GET/OPTIONS health endpoints.
+- Security parity with `/mcp` (bearer auth, DNS rebinding protection, CORS) and Accept header normalization added.
+- Tools surface: tools/list exposes all SDK tools except internal ones, plus OpenAI `search` and `fetch` facades. OpenAI facades are now generated at type‑gen time and exported from the SDK public entrypoint; the hand‑authored module has been removed.
+- Tools execution: tools/call wraps all results in the OpenAI format (single text item containing JSON).
+- SDK: deterministic canonical URL helpers are generated at type‑gen time and are now imported by the app (runtime helpers removed). Generated exports now include `CONTENT_TYPE_PREFIXES`, `ContentType`, `extractSlug`, `generateCanonicalUrlWithContext`, and a new context‑free `generateCanonicalUrl` fallback.
+- SDK: OpenAI `search` and `fetch` facades are generated in `types/generated/openai-connector/index.ts` and re‑exported from the SDK root. The hand‑authored module was deleted to eliminate duplication.
+- Tests: SDK unit tests and app unit/e2e tests pass for the above behavior; full repo quality gates pass.
+
 1. Server structure
 
 - Create a new MCP `Server` instance (OpenAI Connector server) in `apps/oak-curriculum-mcp-streamable-http`.
@@ -76,32 +136,43 @@ Owner: Engineering (MCP/Oak SDK)
 
 3. Tools: `tools/list`
 
-- Return exactly two tools with input schemas:
-  - `search` (input: string `query`)
-  - `fetch` (input: string `id`)
+- Expose all SDK MCP tools (excluding internal-only: changelog, changelog-latest, rate-limit) at `/openai_connector` with their input schemas, plus generated OpenAI `search` and `fetch` tools. (Done)
 
 4. Tools: `tools/call` handlers
 
-- `search` (initial implementation):
-  - Aggregate results from `get-search-lessons` and `get-search-transcripts` via SDK `executeToolCall`.
-  - Normalise and deduplicate to `{ results: [{ id, title, url }] }`.
-  - Return as MCP content array with a single item `{ type: "text", text: JSON.stringify({ results }) }`.
-- `fetch`:
-  - Determine content type by ID prefix: `lesson:`, `unit:`, `subject:`, `sequence:`.
-  - Route to the appropriate SDK MCP tool; transform to `{ id, title, text, url, metadata? }`.
-  - Return as a single `text` content item (JSON string as per OpenAI spec).
+- For every OpenAI tool (SDK‑derived or OpenAI‑specific), return results in the OpenAI format: a content array with exactly one item `{ type: "text", text: <JSON string> }`. (Done)
+- SDK‑derived tools:
+  - Delegate to the SDK executor, then transform the response into a JSON‑encoded string (retain response structure) and wrap in a single text content item. (Done)
+  - Multi‑parameter/list endpoints remain callable as first‑class tools (not via fetch), with their input schemas mirroring the SDK. (Done)
+- OpenAI `search` (SDK implementation for Phase A):
+  - Aggregates `get-search-lessons` and `get-search-transcripts` via SDK executors. (Done)
+  - Current output returns `{ q, keyStage?, subject?, unit?, lessons, transcripts }`. Dedupe/normalisation to a compact `{ results: [...] }` can be added later without breaking contract.
+  - Returns as a single text content item. (Done)
+- OpenAI `fetch` (SDK implementation for Phase A):
+  - Routes by ID prefix: `lesson:`, `unit:`, `subject:`, `sequence:`, `thread:` and supports single‑id variants later (`lessonTranscript:`, `lessonQuiz:`, `sequenceQuestions:`, `sequenceAssets:`). (Done for core prefixes)
+  - Uses deterministic URL helpers (generated in SDK) for canonical URLs and returns `{ id, type, canonicalUrl?, data }`. (Done)
+  - Returns as a single text content item. (Done)
+  - Uses generated `CONTENT_TYPE_PREFIXES` and `ContentType` to avoid any app‑local duplication. (Done)
 
 5. Canonical URLs and metadata
 
-- Lessons: `/lessons/{slug}`; Units: `/units/{slug}`; Subjects: `/subjects/{slug}`; Sequences: `/sequences/{slug}`.
-- Include minimal metadata (e.g., `{ contentType, subject?, keyStage? }`) when available.
+- Deterministic URL transforms (no runtime sitemaps) – generated in the SDK at type‑gen time and imported by apps. App runtime helpers have been removed in favor of SDK imports. (Done)
+  - lesson → `/teachers/lessons/{lessonSlug}`
+  - sequence (programme) → `/teachers/programmes/{sequenceSlug}/units`
+  - unit → `/teachers/programmes/{subjectSlug}-{phaseSlug}/units/{unitSlug}` (derive from UnitSummary)
+  - subject → `/teachers/key-stages/{ks}/subjects/{subjectSlug}/programmes` (pick ks deterministically from SubjectKeyStages: ks1→ks2→ks3→ks4)
+  - variants (lessonTranscript/lessonQuiz) → lesson page; (sequenceQuestions/sequenceAssets) → programme units page
+  - thread → no first-class teachers page; omit URL
+  - Provide fallback URLs without context, but prefer context-aware form where available
+- Include minimal metadata (e.g., `{ contentType, subject?, keyStage?, programmeSlug? }`) when available. (Deferred where not yet in response)
 
 6. Tests (Phase A scope)
 
-- Unit: content-type detection, URL generation, search aggregation normalisation, response transformers.
-- Integration: `/openai_connector` `tools/list` returns exactly `search` & `fetch`.
-- Integration: `tools/call` for both tools returns correct OpenAI format (single `text` item containing JSON).
-- Error cases: unknown IDs, upstream failures formatted as multi-block error content.
+- Unit: content-type detection, URL generation, search aggregation, response transformers. (Done)
+- Integration: `/openai_connector` `tools/list` returns all SDK tools (filtered) plus `search` & `fetch`. (Done)
+- Integration: `tools/call` for both tools returns correct OpenAI format (single `text` item containing JSON). (Done)
+- Integration: representative SDK-derived tools return correct OpenAI format with JSON string payloads. (Done)
+- Error cases: unknown IDs, upstream failures formatted as multi-block error content. (Done)
 
 7. Docs
 
@@ -113,6 +184,14 @@ Owner: Engineering (MCP/Oak SDK)
 
 ### Phase B: Shared MCP server core
 
+Status summary (completed)
+
+- Created `packages/libs/mcp-server-kit` with `McpToolRegistry`, `attachMcpHandlers`, `formatStandardContent`, `formatOpenAiContent`, and `buildToolList`.
+- Adopted in both `apps/oak-curriculum-mcp-streamable-http` and `apps/oak-curriculum-mcp-stdio`; duplicate formatters and local tooling removed.
+- Zod-backed argument validation wired via SDK-generated schemas for all tools; parity maintained across transports.
+- Added HTTP E2E tests for validation failure and enum-violation; updated STDIO E2E assertions to the new "validation error" wording.
+- Onboarding updated in root and app READMEs; server-kit README added; root scripts `pnpm make` and `pnpm qg` validated green.
+
 1. Package scaffolding
 
 - Create `packages/libs/mcp-server-kit` with proper TypeScript config and exports
@@ -120,6 +199,7 @@ Owner: Engineering (MCP/Oak SDK)
   - `buildToolList(MCP_TOOLS): Tool[]`
   - `registerLowLevelHandlers(server, { client, tools, logger }): void`
   - `formatErrorForInspector(error, toolMeta): Content[]`
+  - `formatOpenAiContent(value, isError?): { content: TextContent[]; isError?: true }` for OpenAI Connector responses
 
 2. Adoption in apps
 
@@ -135,16 +215,38 @@ Owner: Engineering (MCP/Oak SDK)
 
 ### Phase C: Migration to McpServer with generated Zod input schemas
 
-1. Type‑gen extension (SDK)
+Status summary (completed for MVP scope)
+
+- `/mcp` endpoints (STDIO and Streamable HTTP) migrated to `McpServer` and register tools directly using SDK‑generated Zod input shapes; duplicate validation removed.
+- Output validation integrated for structured content via SDK response validators prior to response.
+- Error semantics aligned:
+  - Unknown tool and argument‑validation failures return JSON‑RPC errors (HTTP SSE envelope; STDIO throws `McpError`).
+  - Execution or output‑validation failures return a single text content item containing a compact JSON error payload.
+- OpenAI Connector at `/openai_connector` intentionally remains on the low‑level `Server` and uses `formatOpenAiContent` to preserve the exact OpenAI contract.
+
+1. Type‑gen extensions (SDK)
 
 - Emit Zod input schemas per tool alongside existing JSON Schema and response validators
+- Generate OpenAI‑specific MCP tools (`search`, `fetch`) with their routing/aggregation logic (now generated and exported)
+- Generate deterministic URL helpers (content type prefixes, context‑aware URL builders) (done; extended to include fallback URL helper)
 - Ensure literal enums and descriptions are preserved; no `any`/assertions
+
+- Generator hardening and type‑safety improvements (applied across generators):
+  - Replaced all `as` assertions with safe accessors using `getOwnValue`, `getOwnString`, and explicit guards; removed reliance on `Object.entries` in emitted validators.
+  - Switched enum validators to Set‑based membership checks (`Set.has`) and typed sets as `Set<string|number|boolean>`.
+  - Added explicit return types to all emitted helpers; simplified boolean comparisons and control flow for readability.
+  - Broke `index.ts`/`lib.ts` import cycle with dynamic imports for `MCP_TOOLS`; typed getters to return entries of `MCP_TOOLS`.
+  - Introduced coupled map types: `OperationIdToToolNameMap` with derived `AllOperationIds` and `AllToolNames`, and guard functions that use maps instead of array scans.
+  - Widened generated `ValidRequestParams` shape at call‑sites to include an index signature for compatibility with executors.
+  - Added whitespace sanitiser in core type‑gen to strip non‑breaking spaces; added `posttype-gen` to run workspace formatting after generation.
+  - Stabilised `MCP_TOOLS` surface via a `ToolDescriptor` type (including typed `inputSchema: ToolInputJsonSchema`) to avoid leaking per‑tool internals.
 
 2. Server migration
 
-- Replace low‑level `Server` handlers with `McpServer.registerTool`
-- Use generated Zod input schemas in `inputSchema` and delegate to executors
-- Keep output as text content unless/ until `outputSchema` is introduced
+- Replace low‑level `Server` handlers with `McpServer.registerTool` for `/mcp` (done for STDIO and HTTP).
+- Use generated Zod input schemas in `inputSchema` and delegate to executors (done for `/mcp`).
+- Validate outputs against SDK response validators before respond (done for `/mcp`).
+- OpenAI Connector: remain on low‑level `Server` short‑term; continue to return a single text content item with JSON using `formatOpenAiContent`.
 
 3. Debounced notifications
 
@@ -200,16 +302,16 @@ Owner: Engineering (MCP/Oak SDK)
 
 ## TDD and Quality Gates
 
-- Follow repo gates: `pnpm type-gen` → `pnpm build` → `pnpm type-check` → `pnpm lint -- --fix` → `pnpm test` → (apps) `pnpm test:e2e`
+- Follow repo gates: `pnpm make` (install, type‑gen, build, doc‑gen, format, markdownlint, lint --fix) → `pnpm qg` (format‑check, type‑check, lint, markdownlint‑check, test, test:e2e)
 - No runtime schema building; servers are thin; validation is compile‑time generated
 
 ## Acceptance Criteria
 
 - Shared library adopted by both servers; duplication removed for tool listing and error formatting
 - Both transports list identical tools and schemas; parity tests green
-- Migrated servers use `McpServer` with generated Zod input schemas; no duplicate validation
+- Migrated `/mcp` servers (STDIO and HTTP) use `McpServer` with generated Zod input schemas; no duplicate validation
 - Inspector shows argument fields; error messages follow the concise multi‑block format
-- Output schemas enforced via `outputSchema`; structured content validated
+- Output schemas enforced via SDK response validators; structured content validated
 - Error codes surfaced consistently; formatter maps codes to clear summaries and actionable follow‑ups
 - Grouping by tag available and parity‑tested; AI documentation bundle generated and accessible
 - Test mocks used in shared library and apps; offline/CI guardrails documented and tested
@@ -217,6 +319,13 @@ Owner: Engineering (MCP/Oak SDK)
 - Resources exposed with correct metadata and parameter completion; resource operations validated via E2E
 - Prompts discoverable with clear argument schemas; completions work; exemplar workflows implemented
 - Cross‑server pipelines demonstrated in E2E, aggregating results from multiple servers reliably and within timeouts
+
+## Open items for continuation
+
+- Align published SDK declaration types for `MCP_TOOLS` so `inputSchema` is typed as `ToolInputJsonSchema` in `dist` (currently appears as `unknown` in `index.d.ts`); verify tsconfig/build ordering and emitted type imports.
+- Keep repo gates green on every change: run `pnpm make` and `pnpm qg` from repo root; add a short note in any PR if a rule must remain temporarily disabled (and why).
+- Add parity tests that assert each tool’s `inputSchema` shape is present and inspector‑friendly in both transports.
+- Consider applying the coupled‑map pattern to additional generated maps (response validators, path groupings) to preserve relationships at the type level.
 
 ## Rollout
 

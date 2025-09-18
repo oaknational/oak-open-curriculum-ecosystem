@@ -1,4 +1,4 @@
-import { config as tsEslintConfig } from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import { baseConfig } from '../../../eslint.config.base';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
@@ -6,7 +6,7 @@ import { dirname } from 'node:path';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
-export default tsEslintConfig(
+export default defineConfig(
   ...baseConfig,
   {
     ignores: ['dist/**', '*.log', '.turbo/**', '.logs/**', 'tsup.config.*', '**/*.bundled_*.mjs'],

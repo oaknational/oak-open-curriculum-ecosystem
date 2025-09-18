@@ -10,5 +10,7 @@
 export { createAdaptiveEnvironment } from './adaptive.js';
 export { findRepoRoot, loadRootEnv } from './repo-root.js';
 
-// Export core types for convenience
-export type { EnvironmentProvider } from '@oaknational/mcp-core';
+/**
+ * Environment provider interface for consistent environment variable access
+ */
+export type { EnvironmentProvider } from './adaptive.js';

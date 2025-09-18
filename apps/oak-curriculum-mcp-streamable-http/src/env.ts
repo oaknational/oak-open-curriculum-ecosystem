@@ -14,11 +14,11 @@ const EnvSchema = z.object({
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
   NODE_ENV: z.string().optional(),
   // Auth (AS/RS)
-  BASE_URL: z.string().url().optional(),
-  MCP_CANONICAL_URI: z.string().url().optional(),
-  OIDC_ISSUER: z.string().url().default('https://accounts.google.com').optional(),
+  BASE_URL: z.url().optional(),
+  MCP_CANONICAL_URI: z.url().optional(),
+  OIDC_ISSUER: z.url().default('https://accounts.google.com').optional(),
   OIDC_CLIENT_ID: z.string().optional(),
-  OIDC_REDIRECT_URI: z.string().url().optional(),
+  OIDC_REDIRECT_URI: z.url().optional(),
   ALLOWED_DOMAIN: z.string().optional(),
   SESSION_SECRET: z.string().optional(),
   ENABLE_LOCAL_AS: z.enum(['true', 'false']).optional(),
@@ -36,7 +36,9 @@ export function readEnv(env: NodeJS.ProcessEnv = process.env): Env {
 }
 
 export function parseCsv(value: string | undefined): string[] | undefined {
-  if (!value) return undefined;
+  if (!value) {
+    return undefined;
+  }
   return value
     .split(',')
     .map((s) => s.trim())

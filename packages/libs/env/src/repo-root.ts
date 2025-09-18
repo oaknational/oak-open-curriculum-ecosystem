@@ -17,7 +17,9 @@ export function findRepoRoot(startDir: string): string {
     if (parent === '/') {
       throw new Error('Could not find repo root. Iterated to `/`');
     }
-    if (parent === current) return current;
+    if (parent === current) {
+      return current;
+    }
     current = parent;
   }
 }

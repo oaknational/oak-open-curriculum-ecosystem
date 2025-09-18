@@ -25,7 +25,9 @@ function hasFunction(o: unknown, key: string): boolean {
 }
 
 function isZodSchema(value: unknown): value is z.ZodTypeAny {
-  if (!isObject(value)) return false;
+  if (!isObject(value)) {
+    return false;
+  }
   return hasFunction(value, 'parse') && hasFunction(value, 'safeParse');
 }
 
@@ -45,7 +47,9 @@ interface ParamDefinition {
 }
 
 function isParameterDefinition(value: unknown): value is ParamDefinition {
-  if (!isObject(value)) return false;
+  if (!isObject(value)) {
+    return false;
+  }
   const name = get(value, 'name');
   const type = get(value, 'type');
   const schema = get(value, 'schema');
@@ -57,13 +61,21 @@ function isParameterDefinition(value: unknown): value is ParamDefinition {
 }
 
 function isEndpointDefinition(value: unknown): value is EndpointDefinition {
-  if (!isObject(value)) return false;
+  if (!isObject(value)) {
+    return false;
+  }
   const method = get(value, 'method');
   const path = get(value, 'path');
-  if (typeof method !== 'string' || typeof path !== 'string') return false;
+  if (typeof method !== 'string' || typeof path !== 'string') {
+    return false;
+  }
   const params = 'parameters' in value ? get(value, 'parameters') : undefined;
-  if (params === undefined) return true;
-  if (!Array.isArray(params)) return false;
+  if (params === undefined) {
+    return true;
+  }
+  if (!Array.isArray(params)) {
+    return false;
+  }
   return params.every(isParameterDefinition);
 }
 
@@ -83,7 +95,9 @@ function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
 
   if (Array.isArray(endpoints)) {
     for (const e of endpoints) {
-      if (!isEndpointDefinition(e)) continue;
+      if (!isEndpointDefinition(e)) {
+        continue;
+      }
       const key = `${e.method.toUpperCase()}:${e.path}`;
       const parameters = Array.isArray(e.parameters) ? e.parameters : [];
       const schema = parameters.length > 0 ? paramsToSchema(parameters) : z.object({});
@@ -112,7 +126,7 @@ function makeUnsupportedMethod(
       {
         path: [],
         message: `Unsupported method ${method} for path ${normalizedPath}`,
-        code: 'METHOD_NOT_SUPPORTED',
+        code: 'UNKNOWN_OPERATION',
       },
     ],
   };
@@ -126,7 +140,7 @@ function makeUnknownOperation(key: string): ValidationResult<unknown> {
       {
         path: [],
         message: `Unknown operation ${key}`,
-        code: 'OPERATION_NOT_FOUND',
+        code: 'UNKNOWN_OPERATION',
       },
     ],
   };

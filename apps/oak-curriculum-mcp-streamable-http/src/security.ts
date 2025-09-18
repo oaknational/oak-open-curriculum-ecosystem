@@ -5,7 +5,9 @@ function compileHostMatchers(allowedHosts: readonly string[]): ((host: string) =
   const matchers: ((host: string) => boolean)[] = [];
   for (const raw of allowedHosts) {
     const value = raw.trim().toLowerCase();
-    if (!value) continue;
+    if (!value) {
+      continue;
+    }
     if (value.includes('*')) {
       // Convert simple glob to a safe anchored regex
       // - Escape dots

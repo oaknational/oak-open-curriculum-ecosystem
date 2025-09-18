@@ -25,7 +25,9 @@ vi.mock('node:fs/promises', async (importOriginal) => {
   const readFile = (p: string) => {
     const s = (globalThis as unknown as { __schemaStore?: Map<string, string> }).__schemaStore;
     const val = s?.get(p);
-    if (val === undefined) throw new Error('ENOENT');
+    if (val === undefined) {
+      throw new Error('ENOENT');
+    }
     return Promise.resolve(val);
   };
   const writeFile = (p: string, data: string) => {

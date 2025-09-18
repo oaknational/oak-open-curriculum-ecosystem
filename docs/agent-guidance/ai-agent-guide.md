@@ -15,7 +15,7 @@ When given a task, always include "Read GO.md and follow all instructions" in yo
 Active code and documentation use a conventional, intent‑revealing structure:
 
 - `apps/` – runnable MCP servers (application wiring, startup)
-- `packages/core/` – shared interfaces, types, and utilities (`@oaknational/mcp-core`)
+- `packages/libs/` – shared interfaces, types, and utilities (logger, storage, transport, env)
 - `packages/libs/` – runtime‑adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
 Historical material describing the legacy Greek model is preserved for context only. See the single pointer document: [Greek ecosystem deprecation](../architecture/greek-ecosystem-deprecation.md).

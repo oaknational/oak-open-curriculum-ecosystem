@@ -46,7 +46,9 @@ function extractParameter(param: ParameterObject): ExtractedParameter {
  * Extract parameters from an operation
  */
 function extractOperationParameters(operation: OperationObject): ExtractedParameter[] {
-  if (!Array.isArray(operation.parameters)) return [];
+  if (!Array.isArray(operation.parameters)) {
+    return [];
+  }
 
   const parameters: ExtractedParameter[] = [];
   for (const param of operation.parameters) {
@@ -65,13 +67,17 @@ function extractOperationsForPath(
   pathItem: unknown,
   httpMethods: readonly string[],
 ): ExtractedOperation[] {
-  if (!pathItem || typeof pathItem !== 'object') return [];
+  if (!pathItem || typeof pathItem !== 'object') {
+    return [];
+  }
 
   const operations: ExtractedOperation[] = [];
 
   for (const method of httpMethods) {
     const operation = getPropertyValue(pathItem, method);
-    if (!isOperationObject(operation)) continue;
+    if (!isOperationObject(operation)) {
+      continue;
+    }
 
     operations.push({
       path,

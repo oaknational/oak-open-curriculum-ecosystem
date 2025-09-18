@@ -16,7 +16,9 @@ interface HealthDetails {
 }
 
 function toMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
+  if (error instanceof Error) {
+    return error.message;
+  }
   try {
     return typeof error === 'string' ? error : JSON.stringify(error);
   } catch {
@@ -39,7 +41,9 @@ async function checkSdk(
   try {
     const sdk = createOakClient(apiKey);
     const res = await sdk.GET('/key-stages');
-    if (res.data) return { sdk: 'ok' };
+    if (res.data) {
+      return { sdk: 'ok' };
+    }
     return { sdk: 'error', sdkError: 'No data' };
   } catch (e) {
     return { sdk: 'error', sdkError: toMessage(e) };
@@ -47,10 +51,15 @@ async function checkSdk(
 }
 
 function classifySdkHttp(msg: string): number {
-  if (/ENOTFOUND|ECONNREFUSED|timeout|network/i.test(msg)) return 503;
-  if (!/^https?:\/\//.test(process.env.OAK_API_KEY ?? '')) return 400;
-  if (/GET\s*:\s*\/key-stages/i.test(msg) || /Unknown host|Invalid URL|400|401|403|404/.test(msg))
+  if (/ENOTFOUND|ECONNREFUSED|timeout|network/i.test(msg)) {
+    return 503;
+  }
+  if (!/^https?:\/\//.test(process.env.OAK_API_KEY ?? '')) {
     return 400;
+  }
+  if (/GET\s*:\s*\/key-stages/i.test(msg) || /Unknown host|Invalid URL|400|401|403|404/.test(msg)) {
+    return 400;
+  }
   return 503;
 }
 

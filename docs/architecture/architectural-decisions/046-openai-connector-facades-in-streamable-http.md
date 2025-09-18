@@ -18,17 +18,18 @@ Short-term, `search` should aggregate existing search endpoints. Medium-term, we
 
 1. Host OpenAI Connector-compatible tools on a new path in the same Express app: `/openai_connector`.
 2. Create a separate MCP `Server` instance, connected to its own `StreamableHTTPServerTransport`, mounted at `/openai_connector`.
-3. Register only two tools on this server:
+3. Register all SDK MCP tools on this server (excluding internal-only tools: changelog, changelog-latest, rate-limit). Ensure each returns the OpenAI-required format: a content array with exactly one `{ type: "text", text: <JSON string> }` item.
+4. Additionally register two OpenAI-specific tools generated in the SDK at type-gen time:
    - `search(query: string)` → returns `{ results: [{ id, title, url }] }`
    - `fetch(id: string)` → returns `{ id, title, text, url, metadata? }`
-4. Implement both tools as thin facades:
+5. Implementations:
    - `search` (now): aggregate existing SDK MCP tools (e.g., `get-search-lessons`, `get-search-transcripts`), dedupe, normalise, and transform to the OpenAI format. Later: replace aggregation with the semantic search service.
    - `fetch`: route by ID pattern to the relevant SDK MCP tool (e.g., lessons/units/subjects/sequences), transform to the OpenAI format, and produce canonical URLs.
-5. Apply the same security middleware to `/openai_connector` as `/mcp`:
+6. Apply the same security middleware to `/openai_connector` as `/mcp`:
    - Reuse bearer auth and DNS rebinding protections.
    - Add Accept header normalisation middleware for MCP (same pattern as `/mcp`).
-6. Do not add SSE; continue to use Streamable HTTP transport.
-7. Mark caching as a later enhancement (not in this phase).
+7. Do not add SSE; continue to use Streamable HTTP transport.
+8. Mark caching as a later enhancement (not in this phase).
 
 ## Rationale
 
@@ -56,16 +57,18 @@ Short-term, `search` should aggregate existing search endpoints. Medium-term, we
   - Create a new `StreamableHTTPServerTransport` for the OpenAI server and mount POST on `/openai_connector`.
   - Apply Accept header middleware also on `/openai_connector`.
 
-- `search` facade (now):
-  - Aggregate `get-search-lessons` and `get-search-transcripts` calls
-  - Normalise to `{ results: [{ id, title, url }] }`
-  - Return via `[{ type: 'text', text: JSON.stringify({results}) }]`
+- SDK-derived tools:
+  - Delegate to SDK executors and wrap responses in a single text content item containing a JSON-encoded string of the original response shape
 
-- `fetch` facade:
-  - Determine content type from `id` (`lesson:…`, `unit:…`, `subject:…`, `sequence:…`)
-  - Route to the appropriate SDK MCP tool
-  - Transform to `{ id, title, text, url, metadata? }`
-  - Return via the same single-text content array requirement
+- OpenAI `search` (generated in SDK):
+  - Aggregates `get-search-lessons` and `get-search-transcripts`
+  - Normalises to `{ results: [{ id, title, url }] }`
+  - Returns as a single text content item
+
+- OpenAI `fetch` (generated in SDK):
+  - Determines content type from `id` prefixes and routes to the appropriate SDK tool
+  - Uses deterministic, context-aware URL helpers generated in the SDK
+  - Returns `{ id, title, text, url, metadata? }` wrapped in a single text content item
 
 ## Alternatives Considered
 

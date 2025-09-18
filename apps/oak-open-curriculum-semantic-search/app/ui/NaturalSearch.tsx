@@ -23,9 +23,13 @@ function safeJsonParse(text: string): unknown {
 function parseResponse(resOk: boolean, txt: string): { error: string | null; results: unknown[] } {
   const parsed = safeJsonParse(txt);
   const safe = ApiResponseSchema.safeParse(parsed);
-  if (!safe.success) return { error: resOk ? null : 'Search failed', results: [] };
+  if (!safe.success) {
+    return { error: resOk ? null : 'Search failed', results: [] };
+  }
   const data = safe.data;
-  if (!resOk && data.error) return { error: data.error, results: [] };
+  if (!resOk && data.error) {
+    return { error: data.error, results: [] };
+  }
   return { error: null, results: data.results };
 }
 
@@ -71,7 +75,9 @@ function ScopeField({
         value={nl.scope}
         onChange={(e) => {
           const v = e.target.value;
-          if (v === 'units' || v === 'lessons') setNl((s) => ({ ...s, scope: v }));
+          if (v === 'units' || v === 'lessons') {
+            setNl((s) => ({ ...s, scope: v }));
+          }
         }}
       >
         <option value="units">Units</option>
@@ -158,7 +164,9 @@ export default function NaturalSearchComponent({
       });
       const txt = await res.text();
       const { error, results } = parseResponse(res.ok, txt);
-      if (error) throw new Error(error);
+      if (error) {
+        throw new Error(error);
+      }
       onResults(results);
     } catch (err) {
       onError(err instanceof Error ? err.message : 'Unknown error');

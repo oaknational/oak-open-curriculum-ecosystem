@@ -16,7 +16,7 @@ export interface ToolResult {
 }
 
 // Tool handler function type
-export type ToolHandler<TSchema extends z.ZodSchema> = (
+export type ToolHandler<TSchema extends z.ZodType> = (
   args: z.infer<TSchema>,
   extra: unknown,
 ) => Promise<ToolResult>;

@@ -31,6 +31,8 @@ export function ColorModeProvider({
 
 export function useColorMode(): ModeContextValue {
   const v = useContext(ModeCtx);
-  if (!v) throw new Error('useColorMode used outside ColorModeProvider');
+  if (!v) {
+    throw new Error('useColorMode used outside ColorModeProvider');
+  }
   return v;
 }
