@@ -15,9 +15,9 @@ describe('emitSchema header (ValidRequestParams shape emission)', () => {
     const queryMeta: Record<string, ParamMetadata> = {};
     const code = emitSchema(op(), pathMeta, queryMeta);
 
-    expect(code).toContain('type PathParamsShape =');
+    expect(code).toContain('interface PathParamsShape');
     expect(code).toContain('path: PathParamsShape;');
-    expect(code).not.toContain('type QueryParamsShape =');
+    expect(code).not.toContain('interface QueryParamsShape');
   });
 
   it('emits required query shape when any query param is required', () => {
@@ -33,7 +33,7 @@ describe('emitSchema header (ValidRequestParams shape emission)', () => {
     };
     const code = emitSchema(op(), pathMeta, queryMeta);
 
-    expect(code).toContain('type QueryParamsShape =');
+    expect(code).toContain('interface QueryParamsShape');
     expect(code).toContain('query: QueryParamsShape;');
     expect(code).toContain("'ks1' | 'ks2'");
     expect(code).not.toContain('PathParamsShape');
@@ -51,7 +51,7 @@ describe('emitSchema header (ValidRequestParams shape emission)', () => {
     };
     const code = emitSchema(op(), pathMeta, queryMeta);
 
-    expect(code).toContain('type QueryParamsShape =');
+    expect(code).toContain('interface QueryParamsShape');
     expect(code).toContain('query?: QueryParamsShape;');
     expect(code).toContain("'maths' | 'english'");
     expect(code).not.toContain('PathParamsShape');

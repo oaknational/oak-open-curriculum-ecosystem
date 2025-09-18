@@ -10,10 +10,15 @@ export async function runUnitsSearch(
   doHighlight: boolean,
 ): Promise<HybridSearchResult> {
   const filters: { term?: object; range?: object }[] = [];
-  if (q.subject) filters.push({ term: { subject_slug: q.subject } });
-  if (q.keyStage) filters.push({ term: { key_stage: q.keyStage } });
-  if (typeof q.minLessons === 'number')
+  if (q.subject) {
+    filters.push({ term: { subject_slug: q.subject } });
+  }
+  if (q.keyStage) {
+    filters.push({ term: { key_stage: q.keyStage } });
+  }
+  if (typeof q.minLessons === 'number') {
     filters.push({ range: { lesson_count: { gte: q.minLessons } } });
+  }
 
   const [lexUnits, semRoll, lexRoll] = await Promise.all([
     fetchLexicalUnits(q, size, filters),
@@ -97,10 +102,14 @@ function makeUnitResults(
   ]);
 
   const unitsMap = new Map<string, EsHit<UnitsIndexDoc>>();
-  for (const h of lexUnits.hits.hits) unitsMap.set(h._id, h);
+  for (const h of lexUnits.hits.hits) {
+    unitsMap.set(h._id, h);
+  }
 
   const rollMap = new Map<string, EsHit<UnitRollupDoc>>();
-  for (const h of [...semRoll.hits.hits, ...lexRoll.hits.hits]) rollMap.set(h._id, h);
+  for (const h of [...semRoll.hits.hits, ...lexRoll.hits.hits]) {
+    rollMap.set(h._id, h);
+  }
 
   return Array.from(fused.entries())
     .sort((x, y) => y[1] - x[1])

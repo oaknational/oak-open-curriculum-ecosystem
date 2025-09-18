@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-logger';
 import { createMockRuntime } from '../../test/mocks';
 import type { MinimalNotionClient } from '../../types/notion-types/notion-client';
 import { createMockPage } from '../../test/mocks/notion-mocks';

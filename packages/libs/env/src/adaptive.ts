@@ -5,20 +5,77 @@
  * environment data from the JavaScript runtime (globalThis).
  */
 
-import {
-  type EnvironmentProvider,
-  isEnvironmentObject,
-  hasNestedProperty,
-  extractNestedProperty,
-  hasProperty,
-  extractProperty,
-} from '@oaknational/mcp-core';
+// Local export to avoid import cycle with index.ts
+// Avoid cross-lib dependency to respect layering constraints
+export interface EnvironmentProvider {
+  get(key: string): string | undefined;
+  getAll(): Readonly<Record<string, string | undefined>>;
+  has(key: string): boolean;
+}
+
+function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isEnvironmentObject(
+  value: unknown,
+): value is Readonly<Record<string, string | undefined>> {
+  if (!isPlainObject(value)) {
+    return false;
+  }
+  for (const k in value) {
+    if (!Object.prototype.hasOwnProperty.call(value, k)) {
+      continue;
+    }
+    const v = value[k];
+    if (typeof v !== 'string' && typeof v !== 'undefined') {
+      return false;
+    }
+  }
+  return true;
+}
+
+function hasNestedProperty(value: unknown, path: readonly string[]): boolean {
+  if (path.length === 0) {
+    return true;
+  }
+  if (!isPlainObject(value)) {
+    return false;
+  }
+  const [first, ...rest] = path;
+  if (!(first in value)) {
+    return false;
+  }
+  return hasNestedProperty(value[first], rest);
+}
+
+function extractNestedProperty(value: unknown, path: readonly string[]): unknown {
+  if (path.length === 0) {
+    return value;
+  }
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
+  const [first, ...rest] = path;
+  if (!(first in value)) {
+    return undefined;
+  }
+  return extractNestedProperty(value[first], rest);
+}
+
+function hasProperty(value: unknown, property: string): value is Record<PropertyKey, unknown> {
+  return isPlainObject(value) && property in value;
+}
+
+function extractProperty(value: unknown, property: string): unknown {
+  return isPlainObject(value) ? value[property] : undefined;
+}
 
 /**
  * Internal type for validated environment variables
  * After boundary validation, we work with this type internally
  */
-type EnvVars = Record<string, string | undefined>;
+type EnvVars = Readonly<Record<string, string | undefined>>;
 
 class EnvironmentNotSupportedError extends Error {
   constructor() {
@@ -90,4 +147,4 @@ export function createAdaptiveEnvironment(gThis: unknown): EnvironmentProvider {
 }
 
 // Export core types for convenience
-export type { EnvironmentProvider } from '@oaknational/mcp-core';
+// (Types re-exported from index.ts to consumers)

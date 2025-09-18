@@ -1,0 +1,6 @@
+---
+description: Never use type shortcuts like `as` (type assertions), `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*`
+alwaysApply: true
+---
+
+Never use type shortcuts like `as` (type assertions), `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*` - they ALL disable the type system. The goal is to preserve type information as much as possible, not to work around this rule.

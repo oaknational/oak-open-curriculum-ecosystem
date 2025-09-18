@@ -2,6 +2,7 @@ import type { OperationObject } from 'openapi-typescript';
 import type { PrimitiveType } from './param-utils.js';
 import { buildInputSchemaObject } from './emit-input-schema.js';
 import { emitErrorDescription } from './emit-error-description.js';
+import { typeSafeKeys, typeSafeValues } from '../../../../src/types/helpers.js';
 
 export interface ParamMetadata {
   typePrimitive: PrimitiveType;
@@ -21,15 +22,25 @@ function tsTypeFor(meta: ParamMetadata): string {
       .join(' | ');
   }
   const t = meta.typePrimitive;
-  if (t === 'string' || t === 'number' || t === 'boolean') return t;
-  if (t === 'string[]') return 'string[]';
-  if (t === 'number[]') return 'number[]';
+  if (t === 'string' || t === 'number' || t === 'boolean') {
+    return t;
+  }
+  if (t === 'string[]') {
+    return 'string[]';
+  }
+  if (t === 'number[]') {
+    return 'number[]';
+  }
   return 'boolean[]';
 }
 
-function objectShapeFromMeta(meta: Record<string, ParamMetadata>): string {
+function objectShapeFromMeta(meta: Readonly<Record<string, ParamMetadata>>): string {
   const lines: string[] = ['{'];
-  for (const [name, m] of Object.entries(meta)) {
+  for (const name in meta) {
+    if (!(name in meta)) {
+      continue;
+    }
+    const m = meta[name];
     const optional = m.required ? '' : '?';
     lines.push(`  ${name}${optional}: ${tsTypeFor(m)};`);
   }
@@ -38,79 +49,104 @@ function objectShapeFromMeta(meta: Record<string, ParamMetadata>): string {
 }
 
 function headerBlock(
-  pathParamMetadata: Record<string, ParamMetadata>,
-  queryParamMetadata: Record<string, ParamMetadata>,
+  pathParamMetadata: Readonly<Record<string, ParamMetadata>>,
+  queryParamMetadata: Readonly<Record<string, ParamMetadata>>,
 ): string {
   const pathShape = objectShapeFromMeta(pathParamMetadata);
   const queryShape = objectShapeFromMeta(queryParamMetadata);
-  const hasPath = Object.keys(pathParamMetadata).length > 0;
-  const hasQuery = Object.keys(queryParamMetadata).length > 0;
-  const hasRequiredQuery = Object.values(queryParamMetadata).some((m) => m.required);
+  const hasPath = typeSafeKeys(pathParamMetadata).length > 0;
+  const hasQuery = typeSafeKeys(queryParamMetadata).length > 0;
+  const hasRequiredQuery = typeSafeValues(queryParamMetadata).some((m) => m.required);
   const lines: string[] = [];
-  if (hasPath) lines.push('type PathParamsShape = ' + pathShape + ';');
-  if (hasQuery) lines.push('type QueryParamsShape = ' + queryShape + ';');
-  lines.push('type ValidRequestParams= {params: {');
-  if (hasPath) lines.push('  path: PathParamsShape;');
-  if (hasQuery) {
-    lines.push(hasRequiredQuery ? '  query: QueryParamsShape;' : '  query?: QueryParamsShape;');
+  if (hasPath) {
+    lines.push('interface PathParamsShape ' + pathShape);
   }
-  lines.push('}}');
+  if (hasQuery) {
+    lines.push('interface QueryParamsShape ' + queryShape);
+  }
+  if (!hasPath && !hasQuery) {
+    lines.push('interface ValidRequestParams {');
+    lines.push('  [key: string]: unknown;');
+    lines.push('  params?: object');
+    lines.push('}');
+  } else {
+    lines.push('interface ValidRequestParams {');
+    lines.push('  [key: string]: unknown;');
+    lines.push('  params: {');
+    if (hasPath) {
+      lines.push('    path: PathParamsShape;');
+    }
+    if (hasQuery) {
+      lines.push(
+        hasRequiredQuery ? '    query: QueryParamsShape;' : '    query?: QueryParamsShape;',
+      );
+    }
+    lines.push('  };');
+    lines.push('}');
+  }
   lines.push('');
   return lines.join('\n');
+}
+
+function buildValidatorHelpers(): string[] {
+  return [
+    'function hasRequired(meta: object, container: unknown): boolean {',
+    '  if (container === null) return false;',
+    "  if (container !== undefined && typeof container !== 'object') return false;",
+    '  const obj = typeof container === "object" && container !== null ? container : undefined;',
+    '  for (const name in meta) {',
+    '    if (!(name in meta)) continue;',
+    '    const m = getOwnValue(meta, name);',
+    '    const isReq = Boolean(getOwnValue(m, "required"));',
+    '    if (isReq) {',
+    '      if (!obj || !(name in obj)) return false;',
+    '    }',
+    '  }',
+    '  return true;',
+    '}',
+    '',
+    'function validateKnown(validators: Readonly<Record<string, (value: unknown) => boolean>> | undefined, container: unknown): boolean {',
+    '  if (!validators) return true;',
+    '  for (const k in validators) {',
+    '    if (!(k in validators)) continue;',
+    '    const fn = validators[k];',
+    '    const isObj = typeof container === "object" && container !== null;',
+    '    if (typeof fn === "function" && isObj && (k in container)) {',
+    '      const v = getOwnValue(container, k);',
+    '      if (!fn(v)) return false;',
+    '    }',
+    '  }',
+    '  return true;',
+    '}',
+    '',
+  ];
 }
 
 function buildValidatorHead(): string[] {
   return [
     'function isValidRequestParams(value: unknown): value is ValidRequestParams {',
     '  if (value === null || typeof value !== "object") return false;',
-    '  const paramsDesc = Object.getOwnPropertyDescriptor(value, "params");',
-    '  const params = paramsDesc?.value;',
-    '  if (params !== undefined && (params === null || typeof params !== "object")) return false;',
-    '  const path = params?.path;',
-    '  const query = params?.query;',
-    '  if (path !== undefined && (path === null || typeof path !== "object" || Array.isArray(path))) return false;',
-    '  if (query !== undefined && (query === null || typeof query !== "object" || Array.isArray(query))) return false;',
-    '  for (const [name, meta] of Object.entries(pathParams)) {',
-    '    if (meta && (meta as { required?: boolean }).required === true) {',
-    '      const has = Boolean(path && Object.prototype.hasOwnProperty.call(path, name));',
-    '      if (!has) return false;',
-    '    }',
-    '  }',
-    '  for (const [name, meta] of Object.entries(queryParams)) {',
-    '    if (meta && (meta as { required?: boolean }).required === true) {',
-    '      const has = Boolean(query && Object.prototype.hasOwnProperty.call(query, name));',
-    '      if (!has) return false;',
-    '    }',
-    '  }',
+    '  const params = getOwnValue(value, "params");',
+    '  if (params === null) return false;',
+    '  if (params !== undefined && typeof params !== "object") return false;',
+    '  const path = getOwnValue(params, "path");',
+    '  const query = getOwnValue(params, "query");',
+    '  if (path === null) return false;',
+    '  if (path !== undefined && (typeof path !== "object" || Array.isArray(path))) return false;',
+    '  if (query === null) return false;',
+    '  if (query !== undefined && (typeof query !== "object" || Array.isArray(query))) return false;',
+    '  if (!hasRequired(pathParams, path)) return false;',
+    '  if (!hasRequired(queryParams, query)) return false;',
   ];
 }
 
 function buildValidatorTail(): string[] {
   return [
-    '  const hasTypeguardAndValidate = (container: unknown, key: string, value: unknown): boolean => {',
-    "    if (container === null || typeof container !== 'object') return true;",
-    '    const metaDesc = Object.getOwnPropertyDescriptor(container, key);',
-    '    const metaVal = metaDesc?.value;',
-    "    if (metaVal && typeof metaVal === 'object') {",
-    "      const tgDesc = Object.getOwnPropertyDescriptor(metaVal, 'typeguard');",
-    "      const vcDesc = Object.getOwnPropertyDescriptor(metaVal, 'valueConstraint');",
-    '      const typeguard = tgDesc?.value;',
-    '      const hasConstraint = vcDesc?.value === true;',
-    '      if (hasConstraint && typeof typeguard === "function") {',
-    '        return typeguard(value);',
-    '      }',
-    '    }',
-    '    return true;',
-    '  };',
-    '  if (path) {',
-    '    for (const [k, v] of Object.entries(path)) {',
-    '      if (!hasTypeguardAndValidate(pathParams, k, v)) return false;',
-    '    }',
+    '  if (typeof path === "object" && path !== null) {',
+    '    if (!validateKnown(pathValueValidators, path)) return false;',
     '  }',
-    '  if (query) {',
-    '    for (const [k, v] of Object.entries(query)) {',
-    '      if (!hasTypeguardAndValidate(queryParams, k, v)) return false;',
-    '    }',
+    '  if (typeof query === "object" && query !== null) {',
+    '    if (!validateKnown(queryValueValidators, query)) return false;',
     '  }',
     '  return true;',
     '}',
@@ -123,23 +159,42 @@ function validatorBlock(): string {
 }
 
 function inputSchemaBlock(
-  pathParamMetadata: Record<string, ParamMetadata>,
-  queryParamMetadata: Record<string, ParamMetadata>,
+  pathParamMetadata: Readonly<Record<string, ParamMetadata>>,
+  queryParamMetadata: Readonly<Record<string, ParamMetadata>>,
 ): string {
-  // Build a concrete JSON Schema object and embed it as a literal
+  // Build JSON schema and then emit a typed literal with mutable required
   const schemaObject = buildInputSchemaObject(pathParamMetadata, queryParamMetadata);
-  const schemaLiteral = JSON.stringify(schemaObject);
-  return `const inputSchema = ${schemaLiteral} as const;`;
+  const propertiesLiteral = JSON.stringify(schemaObject.properties);
+  const requiredKeys: string[] = [];
+  for (const name in pathParamMetadata) {
+    if (!(name in pathParamMetadata)) {
+      continue;
+    }
+    if (pathParamMetadata[name].required) {
+      requiredKeys.push(name);
+    }
+  }
+  for (const name in queryParamMetadata) {
+    if (!(name in queryParamMetadata)) {
+      continue;
+    }
+    if (queryParamMetadata[name].required) {
+      requiredKeys.push(name);
+    }
+  }
+  const requiredPart = requiredKeys.length > 0 ? `, required: ${JSON.stringify(requiredKeys)}` : '';
+  return `const inputSchema = { type: 'object' as const, properties: ${propertiesLiteral} as const, additionalProperties: false as const${requiredPart} };`;
 }
 
 export function emitSchema(
   _operation: OperationObject,
-  _pathParamMetadata: Record<string, ParamMetadata>,
-  _queryParamMetadata: Record<string, ParamMetadata>,
+  _pathParamMetadata: Readonly<Record<string, ParamMetadata>>,
+  _queryParamMetadata: Readonly<Record<string, ParamMetadata>>,
 ): string {
   void [_operation];
   return [
     headerBlock(_pathParamMetadata, _queryParamMetadata),
+    ...buildValidatorHelpers(),
     inputSchemaBlock(_pathParamMetadata, _queryParamMetadata),
     validatorBlock(),
     emitErrorDescription(_pathParamMetadata, _queryParamMetadata),

@@ -7,7 +7,9 @@ import { describe, it, expect } from 'vitest';
 import { validateRequest } from './request-validators.js';
 import type { HttpMethod } from './types.js';
 function hasOwnString(o: unknown, key: string, expected: string): boolean {
-  if (typeof o !== 'object' || o === null) return false;
+  if (typeof o !== 'object' || o === null) {
+    return false;
+  }
   const d = Object.getOwnPropertyDescriptor(o, key);
   return d?.value === expected;
 }

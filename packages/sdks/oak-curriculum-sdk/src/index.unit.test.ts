@@ -1,7 +1,15 @@
 import { describe, it, expect } from 'vitest';
 
 // Import from the package public entrypoint (root of src)
-import { isKeyStage, KEY_STAGES, isValidPathParameter, isValidPath, isAllowedMethod } from '.';
+import {
+  isKeyStage,
+  KEY_STAGES,
+  isValidPathParameter,
+  isValidPath,
+  isAllowedMethod,
+  extractSlug,
+  generateCanonicalUrlWithContext,
+} from '.';
 
 describe('Public API: type guards and allowed values', () => {
   it('exposes isKeyStage and KEY_STAGES with correct behaviour', () => {
@@ -22,5 +30,12 @@ describe('Public API: type guards and allowed values', () => {
 
     expect(isAllowedMethod('get')).toBe(true);
     expect(isAllowedMethod('post')).toBe(false);
+  });
+
+  it('exposes URL helpers and they behave deterministically', () => {
+    expect(extractSlug('lesson:add-two-numbers')).toBe('add-two-numbers');
+    const url = generateCanonicalUrlWithContext('lesson', 'lesson:add-two-numbers');
+    expect(typeof url).toBe('string');
+    expect(url).toContain('/teachers/lessons/add-two-numbers');
   });
 });

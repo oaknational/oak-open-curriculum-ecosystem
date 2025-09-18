@@ -7,12 +7,17 @@ describe('MCP dev runner (tsx src/index.ts)', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
+    const apiKey = process.env.OAK_API_KEY;
+    if (!apiKey) {
+      throw new Error('OAK_API_KEY is not set');
+    }
+
     transport = new StdioClientTransport({
       command: 'tsx',
       args: ['src/index.ts'],
       env: {
         ...process.env,
-        OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-key',
+        OAK_API_KEY: apiKey,
         LOG_LEVEL: 'error',
       },
     });

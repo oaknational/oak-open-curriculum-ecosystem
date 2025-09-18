@@ -15,14 +15,19 @@ describe('MCP Protocol E2E', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
+    const apiKey = process.env.OAK_API_KEY;
+    if (!apiKey) {
+      throw new Error('OAK_API_KEY is not set');
+    }
+
     // Create client transport pointing to built server
     transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
-        OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-key',
-        LOG_LEVEL: 'error', // Keep logs quiet during tests
+        OAK_API_KEY: apiKey,
+        LOG_LEVEL: 'error',
       },
     });
 
@@ -136,46 +141,24 @@ describe('MCP Protocol E2E', () => {
 
   describe('Error Handling', () => {
     it('should handle unknown tool error', async () => {
-      const result = await client.callTool({
-        name: 'non-existent-tool',
-        arguments: {},
-      });
-
-      expect(result.isError).toBe(true);
-      expect(result.content).toBeDefined();
-      expect((result.content as McpContent)[0].type).toBe('text');
-      expect((result.content as McpContent)[0].text).toContain('Unknown tool');
+      await expect(client.callTool({ name: 'non-existent-tool', arguments: {} })).rejects.toThrow(
+        /Tool non-existent-tool not found/,
+      );
     });
 
     it('should handle missing required parameters', async () => {
-      const result = await client.callTool({
-        name: 'get-search-lessons',
-        arguments: {}, // Missing required 'q' parameter
-      });
-
-      expect(result.isError).toBe(true);
-      expect(result.content).toBeDefined();
-      expect((result.content as McpContent)[0].type).toBe('text');
-      // The error message should indicate the missing parameter
-      const errorText = ((result.content as McpContent)[0].text ?? '').toLowerCase();
-      expect(errorText).toContain('invalid request');
+      await expect(client.callTool({ name: 'get-search-lessons', arguments: {} })).rejects.toThrow(
+        /Invalid arguments.*get-search-lessons/,
+      );
     });
 
     it('should handle invalid parameter values', async () => {
-      const result = await client.callTool({
-        name: 'get-key-stages-subject-lessons',
-        arguments: {
-          keyStage: 'invalid-stage', // Invalid enum value
-          subject: 'maths',
-        },
-      });
-
-      expect(result.isError).toBe(true);
-      expect(result.content).toBeDefined();
-      expect((result.content as McpContent)[0].type).toBe('text');
-      // The error message should indicate invalid value
-      const errorText = ((result.content as McpContent)[0].text ?? '').toLowerCase();
-      expect(errorText).toContain('invalid');
+      await expect(
+        client.callTool({
+          name: 'get-key-stages-subject-lessons',
+          arguments: { keyStage: 'invalid-stage', subject: 'maths' },
+        }),
+      ).rejects.toThrow(/Invalid arguments.*get-key-stages-subject-lessons/);
     });
   });
 });

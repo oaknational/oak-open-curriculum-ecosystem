@@ -9,4 +9,14 @@ export { createAdaptiveStorage } from './adaptive.js';
 export type { StorageOptions } from './adaptive.js';
 export { createFileStorage } from './file-storage.js';
 export type { FileSystemInterface, PathInterface } from './file-storage.js';
-export type { StorageProvider } from '@oaknational/mcp-core';
+/**
+ * Storage provider interface for consistent storage access
+ */
+export interface StorageProvider {
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string): Promise<void>;
+  delete(key: string): Promise<void>;
+  has(key: string): Promise<boolean>;
+  keys(): Promise<string[]>;
+  clear(): Promise<void>;
+}

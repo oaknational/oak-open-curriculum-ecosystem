@@ -1300,4 +1300,6 @@ export const OPERATIONS_BY_ID = {
   "getRateLimit-getRateLimit": PATH_OPERATIONS[25]
 } as const;
 
-export type OperationId = "getSequences-getSequenceUnits" | "getLessonTranscript-getLessonTranscript" | "searchTranscripts-searchTranscripts" | "getAssets-getSequenceAssets" | "getAssets-getSubjectAssets" | "getAssets-getLessonAssets" | "getAssets-getLessonAsset" | "getSubjects-getAllSubjects" | "getSubjects-getSubject" | "getSubjects-getSubjectSequence" | "getSubjects-getSubjectKeyStages" | "getSubjects-getSubjectYears" | "getKeyStages-getKeyStages" | "getKeyStageSubjectLessons-getKeyStageSubjectLessons" | "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits" | "getQuestions-getQuestionsForLessons" | "getQuestions-getQuestionsForSequence" | "getQuestions-getQuestionsForKeyStageAndSubject" | "getLessons-getLesson" | "getLessons-searchByTextSimilarity" | "getUnits-getUnit" | "getThreads-getAllThreads" | "getThreads-getThreadUnits" | "changelog-changelog" | "changelog-latest" | "getRateLimit-getRateLimit";
+export type OperationIdToOperationMap = typeof OPERATIONS_BY_ID;
+export type OperationId = keyof OperationIdToOperationMap;
+export function isOperationId(value: string): value is OperationId { return value in OPERATIONS_BY_ID; }

@@ -19,7 +19,6 @@ function buildPreamble(): string {
   ].join('\n');
 }
 
-// eslint-disable-next-line max-statements -- Code generation, we could break it up, but that might negatively affect readability
 function buildExecutorBlock(path: string, method: string): string {
   const code: string[] = [];
   code.push('const executor= (client: OakApiPathBasedClient) => {');
@@ -28,7 +27,7 @@ function buildExecutorBlock(path: string, method: string): string {
   code.push('      throw new TypeError(getValidRequestParamsDescription());');
   code.push('    }');
   code.push(`    const ep = client[${JSON.stringify(path)}];`);
-  code.push(`    const call = ep ? ep[${JSON.stringify(method.toUpperCase())}] : undefined;`);
+  code.push(`    const call = ep ? ep.${method.toUpperCase()} : undefined;`);
   code.push('    if (typeof call !== "function") {');
   code.push(
     `      throw new TypeError('Invalid method on endpoint: ${method.toUpperCase()} for ${path}');`,
@@ -39,12 +38,14 @@ function buildExecutorBlock(path: string, method: string): string {
   code.push('};');
   code.push('');
   code.push(
-    'const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient, _params: ValidRequestParams) => {',
+    'const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient, _params: ValidRequestParams): Promise<unknown> => {',
   );
   code.push('  return executor(client)(_params);');
   code.push('};');
   code.push('');
-  code.push('const invoke = async (client: OakApiPathBasedClient, _params: unknown) => {');
+  code.push(
+    'const invoke = async (client: OakApiPathBasedClient, _params: unknown): Promise<unknown> => {',
+  );
   code.push('  if (!isValidRequestParams(_params)) {');
   code.push('    throw new TypeError(getValidRequestParamsDescription());');
   code.push('  }');

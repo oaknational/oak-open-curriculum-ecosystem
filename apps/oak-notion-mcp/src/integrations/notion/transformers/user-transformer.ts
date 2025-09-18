@@ -5,7 +5,9 @@
 
 import type { UserObjectResponse as NotionUser } from '@notionhq/client';
 import type { Resource, EmailScrubber } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-core';
+interface JsonObject {
+  [key: string]: string | number | boolean | null | JsonObject;
+}
 
 /**
  * Default email scrubber - redacts email addresses
@@ -13,7 +15,9 @@ import type { JsonObject } from '@oaknational/mcp-core';
  */
 export const defaultEmailScrubber: EmailScrubber = (email: string) => {
   const [localPart, domain] = email.split('@');
-  if (!domain || !localPart) return '***@***';
+  if (!domain || !localPart) {
+    return '***@***';
+  }
 
   const redactedLocal =
     localPart.length > 2

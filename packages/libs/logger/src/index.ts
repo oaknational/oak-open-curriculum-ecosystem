@@ -15,7 +15,8 @@ export {
   isLevelEnabled,
 } from './pure-functions';
 export type { LoggerOptions } from './types';
-export type { Logger } from '@oaknational/mcp-core';
+export type { Logger } from './types';
+export type { JsonObject } from './types';
 
 // Export log level utilities
 export {

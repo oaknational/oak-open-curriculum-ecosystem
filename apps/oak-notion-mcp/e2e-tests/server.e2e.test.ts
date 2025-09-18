@@ -34,7 +34,9 @@ function hasProperty<K extends PropertyKey>(obj: unknown, key: K): obj is Record
 
 // Type guard for text content
 function isTextContent(c: unknown): c is { type: string; text?: string } {
-  if (!hasProperty(c, 'type')) return false;
+  if (!hasProperty(c, 'type')) {
+    return false;
+  }
   return c.type === 'text';
 }
 

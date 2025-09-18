@@ -1,38 +1,19 @@
 import { describe, it, expect, vi } from 'vitest';
-import type { ReadableStream, WritableStream, Logger } from '@oaknational/mcp-core';
+import { PassThrough, Writable } from 'stream';
+import type { Logger } from '@oaknational/mcp-logger';
 import type { JsonRpcMessage } from '../src/types.js';
 
 describe('StdioTransport Integration', () => {
   function createMinimalMocks() {
     // Store state for behavior testing
     let writtenData = '';
-    const handlers = new Map<string, Set<(...args: unknown[]) => void>>();
 
-    // Minimal mock for stdin - stores handlers for later simulation
-    const stdin: ReadableStream = {
-      on: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
-        if (!handlers.has(event)) {
-          handlers.set(event, new Set());
-        }
-        handlers.get(event)?.add(handler);
-      }),
-      removeListener: vi.fn((event: string, handler: (...args: unknown[]) => void) => {
-        handlers.get(event)?.delete(handler);
-        return stdin;
-      }),
-      pause: vi.fn(),
-      resume: vi.fn(),
-    };
-
-    // Minimal mock for stdout that captures output
-    const stdout: WritableStream = {
-      write: vi.fn((data: string | Buffer, callback?: (error?: Error | null) => void) => {
-        writtenData += data.toString();
-        if (callback) callback();
-        return true;
-      }),
-      end: vi.fn(),
-    };
+    // Use real Node streams to avoid type assertions
+    const stdin = new PassThrough();
+    const stdout = new PassThrough();
+    stdout.on('data', (chunk: Buffer | string) => {
+      writtenData += Buffer.isBuffer(chunk) ? chunk.toString() : chunk;
+    });
 
     // Minimal logger
     const logger: Logger = {
@@ -46,12 +27,7 @@ describe('StdioTransport Integration', () => {
 
     // Helper to simulate input - calls all data handlers
     const simulateInput = (data: string | Buffer) => {
-      const dataHandlers = handlers.get('data');
-      if (dataHandlers) {
-        dataHandlers.forEach((handler) => {
-          handler(data);
-        });
-      }
+      stdin.emit('data', data);
     };
 
     // Helper to get written output
@@ -130,13 +106,15 @@ describe('StdioTransport Integration', () => {
       const { stdin, logger } = createMinimalMocks();
 
       // Create a stdout that always fails
-      const stdout: WritableStream = {
-        write: vi.fn((_data: string | Buffer, callback?: (error?: Error | null) => void) => {
-          if (callback) callback(new Error('Write failed'));
-          return false;
-        }),
-        end: vi.fn(),
-      };
+      const stdout = new Writable({
+        write(_chunk, _enc, cb) {
+          cb(new Error('Write failed'));
+        },
+      });
+      // Attach error listener to avoid unhandled exception in the process
+      stdout.on('error', () => {
+        // handled by the test expectation below
+      });
 
       const transport = createStdioTransport({
         logger,

@@ -8,7 +8,9 @@ import { env } from './env';
 let _client: Client | null = null;
 
 export function esClient(): Client {
-  if (_client) return _client;
+  if (_client) {
+    return _client;
+  }
   const e = env();
   _client = new Client({
     node: e.ELASTICSEARCH_URL,

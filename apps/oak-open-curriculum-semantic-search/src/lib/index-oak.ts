@@ -9,8 +9,11 @@ export async function buildIndexBulkOps(
   const ksList = filterKeyStages(keyStages);
   const subjList = filterSubjects(subjects);
   const bulkOps: unknown[] = [];
-  for (const subject of subjList)
-    for (const ks of ksList) bulkOps.push(...(await buildOpsForPair(client, ks, subject)));
+  for (const subject of subjList) {
+    for (const ks of ksList) {
+      bulkOps.push(...(await buildOpsForPair(client, ks, subject)));
+    }
+  }
   return bulkOps;
 }
 
@@ -54,9 +57,12 @@ async function buildOpsForPair(
     client.getUnitsByKeyStageAndSubject(ks, subject),
     client.getLessonsByKeyStageAndSubject(ks, subject),
   ]);
-  for (const u of units) ops.push(...buildUnitOps(u, subject, ks));
-  for (const groupOps of await buildLessonOps(client, lessonsGrouped, subject, ks))
+  for (const u of units) {
+    ops.push(...buildUnitOps(u, subject, ks));
+  }
+  for (const groupOps of await buildLessonOps(client, lessonsGrouped, subject, ks)) {
     ops.push(...groupOps);
+  }
   return ops;
 }
 

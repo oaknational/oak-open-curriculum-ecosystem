@@ -28,13 +28,10 @@ export function createToolFactory(): ToolFactory {
 
       async handler(args: unknown) {
         try {
-          // Pass args directly - executor is responsible for validation
-          // This maintains type safety by letting the executor handle
-          // the runtime type checking rather than using unsafe assertions
           const result = await executor.execute(args);
-
+          const text = typeof result === 'string' ? result : JSON.stringify(result);
           return {
-            content: [{ type: 'text', text: result }],
+            content: [{ type: 'text', text }],
           };
         } catch (error) {
           return errorHandler.handle(error, {

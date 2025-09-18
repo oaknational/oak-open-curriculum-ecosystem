@@ -16,9 +16,9 @@ Always applies
 
 **Ask: could it be simpler without compromising quality?**
 
-## Cardinal Rules of _This Project_
+## Cardinal Rule of This Repository
 
-ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run.
+ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run. If the upstream OpenAPI schema changes, then running `pnpm type-gen` MUST be sufficient to bring all workspaces into alignment with the new schema.
 
 ## Project Context
 
@@ -82,7 +82,7 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 ### Structure
 
 - `apps/` – runnable MCP servers
-- `packages/core/` – shared interfaces, types, utilities (`@oaknational/mcp-core`)
+- `packages/core/` – shared interfaces, types, utilities
 - `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
 ## Remember
@@ -91,4 +91,3 @@ This pnpm + Turborepo monorepo is organised along standard lines:
 2. When in doubt, make it simpler
 3. Think in layers: functions → modules → packages (`core`, `libs`, `apps`)
 4. Claude instances can call on the sub-agents at any time, other agents should instead step back and take the time to reflect if the current approach is the simplest and best way to achieve the goal.
-5. When you finish a major piece of work, record your subjective experiences and insights in docs/archive/experience/ . Technical information is handled elsewhere, this is for subjective experience.

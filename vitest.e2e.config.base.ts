@@ -17,7 +17,6 @@ export const baseE2EConfig = defineConfig({
     exclude: ['node_modules', 'dist', 'coverage'],
     testTimeout: 30000, // E2E tests may take longer
     hookTimeout: 30000,
-    bail: 1, // Stop on first failure in E2E tests
     retry: 0, // No retries by default for E2E
   },
 });

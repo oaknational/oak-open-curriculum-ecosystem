@@ -26,7 +26,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   type ValidLogLevel = (typeof validLogLevels)[number];
 
   function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') return false;
+    if (typeof value !== 'string') {
+      return false;
+    }
     const stringValidLogLevels: readonly string[] = validLogLevels;
     return stringValidLogLevels.includes(value);
   }

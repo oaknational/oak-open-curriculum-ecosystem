@@ -4,7 +4,7 @@
  * Storage helpers for multi-runtime support
  */
 
-import { config as tsEslintConfig, type ConfigArray } from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 import { baseConfig } from '../../../eslint.config.base';
 import {
   createLibBoundaryRules,
@@ -18,7 +18,7 @@ import { dirname } from 'node:path';
 const thisDir = dirname(fileURLToPath(import.meta.url));
 const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.url));
 
-const config: ConfigArray = tsEslintConfig(
+const config = defineConfig(
   ...baseConfig,
   {
     ignores: ['dist/**', 'coverage/**', '*.log', '.turbo/**', '.storage/**'],

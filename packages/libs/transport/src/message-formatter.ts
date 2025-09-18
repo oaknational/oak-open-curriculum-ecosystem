@@ -44,7 +44,9 @@ function isJsonRpcMessage(value: unknown): value is JsonRpcMessage {
 export function parseMessage(line: string): JsonRpcMessage | null {
   try {
     const trimmed = line.trim();
-    if (!trimmed) return null;
+    if (!trimmed) {
+      return null;
+    }
 
     const parsed: unknown = JSON.parse(trimmed);
 

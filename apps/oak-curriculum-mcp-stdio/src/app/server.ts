@@ -3,123 +3,56 @@
  * The living whole that integrates all organs
  */
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
 import { wireDependencies } from './wiring.js';
-import type { ServerConfig } from './wiring.js';
-import type { McpToolsModule } from '../tools/index.js';
-import type { Logger } from '@oaknational/mcp-core';
+import type { ServerConfig, Logger } from './wiring.js';
+import {
+  MCP_TOOLS,
+  zodRawShapeFromToolInputJsonSchema,
+  createOakPathBasedClient,
+  executeToolCall,
+  isToolName,
+  typeSafeEntries,
+  validateResponse,
+  type HttpMethod,
+} from '@oaknational/oak-curriculum-sdk';
 
-/**
- * Find a tool by name from the available tools
- * Tools are guaranteed to have a name property by the MCP SDK types
- */
-function findTool(name: string, tools: readonly Tool[]): Tool {
-  for (const tool of tools) {
-    if (tool.name === name) return tool;
+function toHttpMethod(methodUpper: string): HttpMethod {
+  if (methodUpper === 'GET') {
+    return 'get';
   }
-  throw new Error(`Unknown tool: ${name}`);
-}
-
-function isErrorResultShape(value: unknown): value is { isError?: unknown; content?: unknown } {
-  if (typeof value !== 'object' || value === null) return false;
-  return 'isError' in value && 'content' in value;
-}
-
-/**
- * Validate arguments are an object
- */
-function validateArgsObject(args: unknown): unknown {
-  if (typeof args !== 'object' || args === null || Array.isArray(args)) {
-    throw new Error('Arguments must be an object');
+  if (methodUpper === 'POST') {
+    return 'post';
   }
-  return args;
-}
-
-/**
- * Execute a tool based on its name
- */
-async function executeTool(
-  toolName: string,
-  args: unknown,
-  mcpOrgan: McpToolsModule,
-): Promise<unknown> {
-  // For now, delegate all tools to the generic handler
-  // The handler will be responsible for routing to the correct implementation
-  const validatedArgs = validateArgsObject(args ?? {});
-  return await mcpOrgan.handleTool(toolName, validatedArgs);
-}
-
-/**
- * Format tool execution result as MCP response
- */
-function formatToolResponse(result: unknown, isError = false) {
-  function textContent(text: string): { type: 'text'; text: string } {
-    return { type: 'text', text };
+  if (methodUpper === 'PUT') {
+    return 'put';
   }
-  if (!isError) {
-    return {
-      content: [textContent(JSON.stringify(result, null, 2))],
-    };
+  if (methodUpper === 'DELETE') {
+    return 'delete';
   }
-
-  const message = result instanceof Error ? result.message : 'Unknown error';
-  // Split multi-line messages to surface a concise first line for Inspector, with details following
-  const lines = message.split('\n');
-  const [first, ...rest] = lines;
-  const content = [textContent(`Error: ${first}`), ...rest.map((t) => textContent(t))];
-  return { content, isError: true };
+  if (methodUpper === 'PATCH') {
+    return 'patch';
+  }
+  throw new Error('Unsupported method: ' + methodUpper);
 }
 
-/**
- * Register MCP request handlers
- */
-function registerHandlers(server: Server, mcpOrgan: McpToolsModule, logger: Logger): void {
-  // Register tool list handler
-  server.setRequestHandler(ListToolsRequestSchema, () => {
-    logger.debug('Listing available tools');
-    return {
-      tools: mcpOrgan.tools.map((tool) => ({
-        name: tool.name,
-        description: tool.description,
-        inputSchema: tool.inputSchema,
-      })),
-    };
-  });
-
-  // Register tool call handler
-  server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest) => {
-    const { name, arguments: args } = request.params;
-    logger.info('Executing tool', { tool: name, args });
-
-    try {
-      // Validate the tool exists
-      findTool(name, mcpOrgan.tools);
-
-      // Execute the tool
-      const result = await executeTool(name, args, mcpOrgan);
-
-      // If handler returned a CallToolResult-like error, pass through
-      if (isErrorResultShape(result) && result.isError === true && result.content !== undefined) {
-        return { isError: true, content: result.content };
-      }
-
-      // Otherwise, format as success response
-      return formatToolResponse(result);
-    } catch (error) {
-      logger.error('Tool execution failed', { tool: name, error });
-      // Format and return error response
-      return formatToolResponse(error, true);
-    }
-  });
+function validateOutput(
+  path: string,
+  methodUpper: string,
+  data: unknown,
+): { ok: true } | { ok: false; message: string } {
+  const httpMethod = toHttpMethod(methodUpper);
+  const validation = validateResponse(path, httpMethod, 200, data);
+  return validation.ok
+    ? { ok: true }
+    : { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
 }
 
 /**
  * Setup shutdown handler
  */
-function setupShutdownHandler(server: Server, logger: Logger): void {
+function setupShutdownHandler(server: { close: () => Promise<void> }, logger: Logger): void {
   process.on('SIGINT', () => {
     logger.info('Shutting down server');
     void server.close().then(() => {
@@ -133,33 +66,17 @@ function setupShutdownHandler(server: Server, logger: Logger): void {
  */
 export async function createServer(config?: ServerConfig): Promise<void> {
   // Wire dependencies
-  const { logger, mcpOrgan, config: serverConfig } = wireDependencies(config);
+  const { logger, config: serverConfig } = wireDependencies(config);
 
-  // Log tools discovered at startup for diagnostics
-  try {
-    logger.info('MCP tool module initialised', {
-      tools: mcpOrgan.tools.length,
-      sample: mcpOrgan.tools.slice(0, 3).map((t) => t.name),
-    });
-  } catch (err: unknown) {
-    logger.error('Failed to inspect tools', { error: err });
-  }
+  logToolDiscovery(logger);
 
-  // Create MCP server
-  const server = new Server(
-    {
-      name: serverConfig.serverName,
-      version: serverConfig.serverVersion,
-    },
-    {
-      capabilities: {
-        tools: {},
-      },
-    },
-  );
-
-  // Register handlers
-  registerHandlers(server, mcpOrgan, logger);
+  // Create McpServer and register tools with Zod validation and SDK execution
+  const server = new McpServer({
+    name: serverConfig.serverName,
+    version: serverConfig.serverVersion,
+  });
+  const client = createOakPathBasedClient(serverConfig.apiKey);
+  registerMcpTools(server, client);
 
   // Create transport and connect
   const transport = new StdioServerTransport();
@@ -186,7 +103,9 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   type ValidLogLevel = (typeof validLogLevels)[number];
 
   function isValidLogLevel(value: unknown): value is ValidLogLevel {
-    if (typeof value !== 'string') return false;
+    if (typeof value !== 'string') {
+      return false;
+    }
     const stringValidLogLevels: readonly string[] = validLogLevels;
     return stringValidLogLevels.includes(value);
   }
@@ -200,4 +119,54 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.error('Failed to start server:', error);
     process.exit(1);
   });
+}
+
+function logToolDiscovery(logger: Logger): void {
+  try {
+    const toolNames = Object.keys(MCP_TOOLS).sort();
+    logger.info('MCP tool module initialised', {
+      tools: toolNames.length,
+      sample: toolNames.slice(0, 3),
+    });
+  } catch (err: unknown) {
+    logger.error('Failed to inspect tools', { error: err });
+  }
+}
+
+function registerMcpTools(
+  server: McpServer,
+  client: ReturnType<typeof createOakPathBasedClient>,
+): void {
+  for (const [name, def] of typeSafeEntries(MCP_TOOLS)) {
+    const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
+    const description = def.method.toUpperCase() + ' ' + def.path;
+    server.registerTool(
+      name,
+      { title: name, description, inputSchema: input },
+      async (params: unknown) => {
+        if (!isToolName(name)) {
+          throw new Error('Unknown tool');
+        }
+        const execResult = await executeToolCall(name, params, client);
+        if (execResult.error) {
+          const e = execResult.error;
+          const message = e instanceof Error ? e.message : 'Unknown error';
+          const errorPayload = { error: { message } };
+          return {
+            content: [{ type: 'text', text: JSON.stringify(errorPayload) }],
+            isError: true,
+          };
+        }
+        const out = validateOutput(def.path, def.method, execResult.data);
+        if (!out.ok) {
+          const errorPayload = { error: { message: out.message } };
+          return {
+            content: [{ type: 'text', text: JSON.stringify(errorPayload) }],
+            isError: true,
+          };
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(execResult.data) }] };
+      },
+    );
+  }
 }

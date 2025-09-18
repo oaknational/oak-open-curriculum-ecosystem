@@ -19,14 +19,18 @@ function getEnvironmentVariable(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): stri
   // Try Node.js environment first
   if (typeof process !== 'undefined') {
     const value = process.env[key];
-    if (typeof value === 'string') return value;
+    if (typeof value === 'string') {
+      return value;
+    }
   }
 
   // Try Cloudflare Workers environment
   // Check if globalThis has an env property dynamically
   const env = getOwnValue(globalThis, 'env');
   const val = getOwnValue(env, key);
-  if (typeof val === 'string') return val;
+  if (typeof val === 'string') {
+    return val;
+  }
 
   return undefined;
 }

@@ -59,53 +59,73 @@ function isCodeBlock(block: NotionBlock): block is Extract<NotionBlock, { type: 
  * Extract text from specific block types
  */
 function extractParagraphText(block: NotionBlock): string {
-  if (!isParagraphBlock(block)) return '';
+  if (!isParagraphBlock(block)) {
+    return '';
+  }
   return formatNotionRichText(block.paragraph.rich_text);
 }
 
 function extractHeading1Text(block: NotionBlock): string {
-  if (!isHeading1Block(block)) return '';
+  if (!isHeading1Block(block)) {
+    return '';
+  }
   return `# ${formatNotionRichText(block.heading_1.rich_text)}`;
 }
 
 function extractHeading2Text(block: NotionBlock): string {
-  if (!isHeading2Block(block)) return '';
+  if (!isHeading2Block(block)) {
+    return '';
+  }
   return `## ${formatNotionRichText(block.heading_2.rich_text)}`;
 }
 
 function extractHeading3Text(block: NotionBlock): string {
-  if (!isHeading3Block(block)) return '';
+  if (!isHeading3Block(block)) {
+    return '';
+  }
   return `### ${formatNotionRichText(block.heading_3.rich_text)}`;
 }
 
 function extractBulletedListText(block: NotionBlock): string {
-  if (!isBulletedListBlock(block)) return '';
+  if (!isBulletedListBlock(block)) {
+    return '';
+  }
   return `• ${formatNotionRichText(block.bulleted_list_item.rich_text)}`;
 }
 
 function extractNumberedListText(block: NotionBlock): string {
-  if (!isNumberedListBlock(block)) return '';
+  if (!isNumberedListBlock(block)) {
+    return '';
+  }
   return `1. ${formatNotionRichText(block.numbered_list_item.rich_text)}`;
 }
 
 function extractToDoText(block: NotionBlock): string {
-  if (!isToDoBlock(block)) return '';
+  if (!isToDoBlock(block)) {
+    return '';
+  }
   const checkbox = block.to_do.checked ? '[x]' : '[ ]';
   return `${checkbox} ${formatNotionRichText(block.to_do.rich_text)}`;
 }
 
 function extractToggleText(block: NotionBlock): string {
-  if (!isToggleBlock(block)) return '';
+  if (!isToggleBlock(block)) {
+    return '';
+  }
   return `▸ ${formatNotionRichText(block.toggle.rich_text)}`;
 }
 
 function extractQuoteText(block: NotionBlock): string {
-  if (!isQuoteBlock(block)) return '';
+  if (!isQuoteBlock(block)) {
+    return '';
+  }
   return `> ${formatNotionRichText(block.quote.rich_text)}`;
 }
 
 function extractCodeText(block: NotionBlock): string {
-  if (!isCodeBlock(block)) return '';
+  if (!isCodeBlock(block)) {
+    return '';
+  }
   const lang = block.code.language;
   const code = formatNotionRichText(block.code.rich_text);
   return `\`\`\`${lang}\n${code}\n\`\`\``;

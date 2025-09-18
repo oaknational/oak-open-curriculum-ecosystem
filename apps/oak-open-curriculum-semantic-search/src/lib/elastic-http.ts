@@ -43,11 +43,17 @@ function isEsHit<TDoc>(v: unknown): v is EsHit<TDoc> {
   );
 }
 function isEsSearchResponse<TDoc>(v: unknown): v is EsSearchResponse<TDoc> {
-  if (!(typeof v === 'object' && v !== null && hasKey(v, 'hits'))) return false;
+  if (!(typeof v === 'object' && v !== null && hasKey(v, 'hits'))) {
+    return false;
+  }
   const h = v.hits;
-  if (!(typeof h === 'object' && h !== null && hasKey(h, 'hits'))) return false;
+  if (!(typeof h === 'object' && h !== null && hasKey(h, 'hits'))) {
+    return false;
+  }
   const arr = h.hits;
-  if (!Array.isArray(arr)) return false;
+  if (!Array.isArray(arr)) {
+    return false;
+  }
   return arr.every(isEsHit);
 }
 
@@ -74,7 +80,9 @@ export async function esSearch<T>(body: EsSearchRequest): Promise<EsSearchRespon
       max_score: res.hits.max_score ?? null,
       hits: res.hits.hits
         .map((h) => {
-          if (typeof h._id !== 'string' || h._source === undefined) return undefined;
+          if (typeof h._id !== 'string' || h._source === undefined) {
+            return undefined;
+          }
           const hit: EsHit<T> = {
             _index: typeof h._index === 'string' ? h._index : index,
             _id: h._id,

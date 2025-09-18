@@ -1,6 +1,6 @@
 # Oak Curriculum MCP – Streamable HTTP (Vercel-ready)
 
-This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It defaults to stateless mode (no SSE) and is designed for Vercel’s Node runtime.
+This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport and the MCP `McpServer` for the `/mcp` endpoint. It defaults to stateless mode (no SSE) and is designed for Vercel’s Node runtime. The `/openai_connector` endpoint intentionally retains the OpenAI Connector contract and low‑level Server.
 
 ## Quick start (local)
 
@@ -30,6 +30,59 @@ curl -sS \
 
 Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
 
+### Example payloads
+
+- `/mcp` success (SSE-wrapped JSON-RPC):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "tools": [
+      {
+        "name": "get-key-stages",
+        "description": "GET /key-stages",
+        "inputSchema": { "type": "object", "properties": {} }
+      }
+    ]
+  }
+}
+```
+
+- `/mcp` error (unknown tool or invalid args → JSON-RPC error):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "error": { "code": -32601, "message": "Tool non-existent-tool not found" }
+}
+```
+
+- `/openai_connector` success (single text item containing JSON string):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": { "content": [{ "type": "text", "text": "{\n  \"ok\": true, \"data\": { ... }\n}" }] }
+}
+```
+
+- `/openai_connector` error (single text item containing compact JSON error string):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "1",
+  "result": {
+    "isError": true,
+    "content": [{ "type": "text", "text": "{\"error\":{\"message\":\"Invalid arguments\"}}" }]
+  }
+}
+```
+
 ## Vercel deployment
 
 - Use Node runtime (not Edge)
@@ -43,6 +96,11 @@ Note: The server automatically adds the required `Accept: application/json, text
   - `LOG_LEVEL` (default `info`)
   - `ENABLE_LOCAL_AS` for demo JWKS endpoints
 
+### Health endpoints
+
+- `/mcp`: `HEAD`, `GET`, and `OPTIONS` respond for health and metadata checks
+- `/openai_connector`: `HEAD`, `GET`, and `OPTIONS` respond for health and metadata checks
+
 ### Smoke-test checklist (post-deploy)
 
 - Confirm Node runtime (not Edge) in project settings
@@ -50,6 +108,7 @@ Note: The server automatically adds the required `Accept: application/json, text
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
 - POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
 - POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
+- POST `/openai_connector` with a valid Bearer token returns 200 with OpenAI single‑text content response
 
 ### OAuth discovery
 
@@ -92,3 +151,10 @@ Temporary validation bypass (for smoke only):
 - CORS blocked: set `ALLOWED_ORIGINS` to include your origin
 - Host blocked: add host to `ALLOWED_HOSTS`
 - Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
+
+## How it works
+
+- `/mcp` is implemented with MCP `McpServer`; tools are registered directly from SDK‑generated metadata.
+- Request validation uses Zod schemas derived at compile-time from the OpenAPI spec. Unknown tool and argument validation failures are returned as JSON‑RPC errors; execution and output‑validation failures are returned as a single text content item with a compact JSON error payload.
+- Successful results are SSE-wrapped JSON-RPC responses (Streamable HTTP).
+- `/openai_connector` uses the OpenAI Connector contract and returns a single text content item containing a JSON string for both success and error, via `formatOpenAiContent`.

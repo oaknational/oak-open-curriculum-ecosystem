@@ -28,7 +28,7 @@ function generateToolCallResponse(isError: boolean, text: string): CallToolResul
  */
 export function createHandleToolCall(client: SdkClient) {
   return async function handleToolCall(request: CallToolRequest): Promise<CallToolResult> {
-    const { name, arguments: args } = request.params;
+    const { name, arguments: params } = request.params;
 
     // Validate tool exists using SDK's type guard
     if (!isToolName(name)) {
@@ -37,7 +37,7 @@ export function createHandleToolCall(client: SdkClient) {
 
     try {
       // Delegate ALL execution to SDK with injected client
-      const result = await executeToolCall(name, args, client);
+      const result = await executeToolCall(name, params, client);
 
       // Handle SDK errors
       if (result.error) {

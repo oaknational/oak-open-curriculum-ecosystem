@@ -9,7 +9,6 @@ Status: Deferred (execute after import hygiene and docs polish). This plan mirro
 
 ## Scope
 
-- Implement a Cloudflare Workers runtime adapter for `@oaknational/mcp-core` contracts (logger, clock, storage) using Web APIs only.
 - Minimal deployment config (Wrangler), environment handling (KV/secrets), and CI integration.
 - Validation via provider contract tests and an example deployment of one MCP app.
 

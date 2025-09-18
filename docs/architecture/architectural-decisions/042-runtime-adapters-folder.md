@@ -4,7 +4,7 @@ Status: Accepted
 
 ## Context
 
-We need a clear, neutral name for platform-specific implementations of `@oaknational/mcp-core` provider contracts (logger, clock, storage, etc.). Historically these lived under `packages/providers/`.
+We need a clear, neutral name for platform-specific implementations of lib package provider contracts (logger, clock, storage, etc.). Historically these lived under `packages/providers/`.
 
 ## Decision
 

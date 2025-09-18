@@ -104,7 +104,7 @@ describe('createFileStorage - Unit Tests', () => {
       await storage.set('key2', 'value2');
       await storage.set('key3', 'value3');
 
-      const keys = (await storage.keys?.()) ?? [];
+      const keys = await storage.keys();
       expect(keys).toEqual(expect.arrayContaining(['key1', 'key2', 'key3']));
       expect(keys).toHaveLength(3);
     });
@@ -116,11 +116,11 @@ describe('createFileStorage - Unit Tests', () => {
       await storage.set('key1', 'value1');
       await storage.set('key2', 'value2');
 
-      await storage.clear?.();
+      await storage.clear();
 
       expect(await storage.has('key1')).toBe(false);
       expect(await storage.has('key2')).toBe(false);
-      expect(await storage.keys?.()).toEqual([]);
+      expect(await storage.keys()).toEqual([]);
     });
 
     it('should handle clear when directory does not exist', async () => {
@@ -131,7 +131,7 @@ describe('createFileStorage - Unit Tests', () => {
       const storage = createFileStorage(mockFs, mockPath, '/test');
 
       // Should not throw
-      await expect(storage.clear?.()).resolves.toBeUndefined();
+      await expect(storage.clear()).resolves.toBeUndefined();
     });
 
     it('should handle keys when directory does not exist', async () => {
@@ -141,7 +141,7 @@ describe('createFileStorage - Unit Tests', () => {
 
       const storage = createFileStorage(mockFs, mockPath, '/test');
 
-      const keys = (await storage.keys?.()) ?? [];
+      const keys = await storage.keys();
       expect(keys).toEqual([]);
     });
   });

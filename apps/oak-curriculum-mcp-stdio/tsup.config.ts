@@ -34,7 +34,6 @@ export default defineConfig({
     'events',
     'buffer',
     // Workspace packages (these are already built)
-    '@oaknational/mcp-core',
     '@oaknational/mcp-logger',
     '@oaknational/mcp-storage',
     '@oaknational/mcp-env',

@@ -33,7 +33,9 @@ export function getPropertyValue(obj: unknown, key: string): unknown {
  * Type guard to check if a value is a ParameterObject (not a ReferenceObject)
  */
 export function isParameterObject(param: unknown): param is ParameterObject {
-  if (!isRecord(param)) return false;
+  if (!isRecord(param)) {
+    return false;
+  }
 
   // Check required fields
   const name = getPropertyValue(param, 'name');
@@ -51,7 +53,9 @@ export function isParameterObject(param: unknown): param is ParameterObject {
  * Type guard to check if a value is an OperationObject
  */
 export function isOperationObject(op: unknown): op is OperationObject {
-  if (!isRecord(op)) return false;
+  if (!isRecord(op)) {
+    return false;
+  }
 
   // Operations must have responses object
   const responses = getPropertyValue(op, 'responses');

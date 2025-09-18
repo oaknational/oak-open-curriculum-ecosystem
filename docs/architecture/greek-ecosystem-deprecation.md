@@ -16,7 +16,7 @@ This document records the historical “Greek ecosystem” naming system and why
 ## What replaced it
 
 - Plain, intent-revealing naming with clear separation:
-  - Core abstractions and factory: `@oaknational/mcp-core`
+  - Lib abstractions and utilities: logger, storage, transport, env packages
   - Providers (runtime-specific): `@oaknational/mcp-providers-node` (Cloudflare pending)
   - Apps/servers (phenotypes) under `apps/` (future taxonomy rename)
   - Libraries under `packages/libs/*`, SDKs under `packages/sdks/*`

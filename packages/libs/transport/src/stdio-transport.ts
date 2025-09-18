@@ -1,10 +1,10 @@
 /**
  * STDIO transport implementation for MCP servers
- * Uses generic stream interfaces for runtime independence
+ * Uses Node.js stream types directly
  */
 
-import type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';
-import type { JsonRpcMessage, StdioTransport, StdioTransportOptions } from './types.js';
+import type { Readable, Writable } from 'stream';
+import type { JsonRpcMessage, StdioTransport, StdioTransportOptions, Logger } from './types.js';
 import { MessageBuffer } from './message-buffer.js';
 import { formatMessage, parseMessage } from './message-formatter.js';
 
@@ -24,12 +24,12 @@ function isBuffer(value: unknown): value is Buffer {
 
 /**
  * Creates a STDIO transport for MCP communication
- * Transplantable across runtimes through dependency injection
+ * Uses Node.js stream types directly
  */
 export class StdioTransportImpl implements StdioTransport {
   private logger: Logger;
-  private stdin: ReadableStream;
-  private stdout: WritableStream;
+  private stdin: Readable;
+  private stdout: Writable;
   private onMessage?: (message: JsonRpcMessage) => void;
   private messageBuffer: MessageBuffer;
   // Store as generic handler to work with removeListener's generic overload
@@ -57,7 +57,9 @@ export class StdioTransportImpl implements StdioTransport {
     // The first argument will be the chunk (Buffer | string)
     this.dataHandler = (...args: unknown[]) => {
       const chunk = args[0];
-      if (!chunk) return;
+      if (!chunk) {
+        return;
+      }
 
       // Handle both string and Buffer data using type predicates
       // The stream contract guarantees chunk is Buffer | string
@@ -87,7 +89,7 @@ export class StdioTransportImpl implements StdioTransport {
     return new Promise((resolve, reject) => {
       const data = formatMessage(message);
 
-      this.stdout.write(data, (error) => {
+      this.stdout.write(data, (error?: Error | null) => {
         if (error) {
           this.logger.error('Failed to write to stdout:', error);
           reject(error);

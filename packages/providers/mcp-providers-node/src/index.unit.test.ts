@@ -32,10 +32,10 @@ describe('providers-node', () => {
       logger.error('e');
     }).not.toThrow();
 
-    expect(spyDebug).toHaveBeenCalled();
-    expect(spyInfo).toHaveBeenCalled();
-    expect(spyWarn).toHaveBeenCalled();
-    expect(spyError).toHaveBeenCalled();
+    expect(spyDebug.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(spyInfo.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(spyWarn.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(spyError.mock.calls.length >= 1).toBe(true);
 
     spyDebug.mockRestore();
     spyInfo.mockRestore();
@@ -45,9 +45,9 @@ describe('providers-node', () => {
 
   it('createInMemoryStorage stores, retrieves, and deletes values', async () => {
     const storage = createInMemoryStorage();
-    await storage.set('k', 123);
-    expect(await storage.get('k')).toBe(123);
+    await storage.set('k', '123');
+    expect(await storage.get('k')).toBe('123');
     await storage.delete('k');
-    expect(await storage.get('k')).toBeUndefined();
+    expect(await storage.get('k')).toBeNull();
   });
 });

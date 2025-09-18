@@ -24,7 +24,4 @@ export { MessageBuffer } from './message-buffer.js';
 export { formatMessage, parseMessage } from './message-formatter.js';
 
 // Export types
-export type { StdioTransport, StdioTransportOptions, JsonRpcMessage } from './types.js';
-
-// Re-export stream and logger types from core for convenience
-export type { Logger, ReadableStream, WritableStream } from '@oaknational/mcp-core';
+export type { StdioTransport, StdioTransportOptions, JsonRpcMessage, Logger } from './types.js';

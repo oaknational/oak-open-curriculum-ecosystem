@@ -11,7 +11,7 @@ The repository historically used a Greek-nomenclature biological model (Moria/Hi
 
 1. Adopt standard structure in active code/docs:
    - `apps/` – MCP servers
-   - `packages/core/` – `@oaknational/mcp-core` (interfaces, utilities, composition)
+   - `packages/libs/` – lib packages (interfaces, utilities, composition)
    - `packages/libs/` – `@oaknational/mcp-*` libraries (logger, env, storage, transport)
 2. Replace runtime auto‑detection with explicit provider injection.
 3. Enforce architectural boundaries with central ESLint rules.

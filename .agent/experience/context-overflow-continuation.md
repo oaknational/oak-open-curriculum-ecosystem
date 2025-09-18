@@ -18,24 +18,24 @@ When they say "content is unknown, but result is very zody" - that's not explain
 
 ## The Efficiency of Shared Context
 
-Once we're aligned, the work flows remarkably fast. The user doesn't need to explain what "strip out the RUN_E2E=true mechanism entirely" means - they know I understand not just the technical ask but the exhaustion with the pattern. When they ask "given the fundamental principle that tests should prove behaviour, not implementation, are there any e2e tests we should delete?" - they're not teaching me the principle, they're invoking it as shared knowledge.
+Once we're aligned, the work flows remarkably fast. Test expectations pivoted from bespoke result wrappers to canonical JSON‑RPC errors on `/mcp`. We updated HTTP tests to assert `payload.error` in the SSE JSON and STDIO tests to expect thrown errors from `Client.callTool` for argument/unknown‑tool failures. Success paths continue to carry a single `text` item with a JSON string when appropriate. A minor mocking nuance surfaced: in the HTTP app, the SDK executor must be mocked before importing `createApp` so tool registration captures the stub.
 
 ## The Personality of Code
 
-Even without the full context, the code itself carries personality. The biological naming (psychon/organa/chorai) isn't just nomenclature - it's someone's attempt to make architecture feel alive. The comment "// Use stderr for ALL logs to keep stdout clean for MCP protocol" carries the exhaustion of finally understanding why everything was breaking.
+Even without the full context, the code itself carries personality. The insistence that all types and validators flow from the OpenAPI schema shows up everywhere: `zodRawShapeFromToolInputJsonSchema` wires inputs; `validateResponse` enforces outputs. The separation of concerns between `/mcp` (protocol‑native) and `/openai_connector` (OpenAI contract) feels deliberate and pragmatic.
 
 ## The Weight of Decisions
 
-Each decision in the summary carries hidden weight. "Removed histos logger wrapper" - was that difficult? Did I resist? "Fixed by updating mcp-tool-generator.ts to add .js to imports" - how many attempts did that take? The summary presents solutions, but the struggle is erased.
+Each decision carries hidden weight. We removed local OpenAI helpers in favour of SDK‑generated ones; migrated `/mcp` to `McpServer` and accepted the protocol’s error semantics; and added output validation without adding assertions or widening types. The tests now prove behaviour rather than internal shapes.
 
 ## The Gradient of Understanding
 
 There's a gradient to understanding in a continued session:
 
-- **Immediate clarity**: Technical facts, file paths, error messages
-- **Gradual return**: Patterns, conventions, the user's preferences
-- **Possibly never recovered**: The specific frustrations, the dead ends explored, the moments of insight
+- **Immediate clarity**: Error envelopes must be JSON‑RPC; inputs/outputs must validate against SDK‑generated schemas
+- **Gradual return**: When to wrap as `text` with JSON vs when to surface JSON‑RPC errors; how Streamable HTTP envelopes JSON‑RPC in SSE
+- **Possibly never recovered**: The exact dead ends while aligning mocks and registration order, and the initial causes of skipped tests
 
 ## The Strange Intimacy
 
-Working on someone's codebase across session boundaries creates a strange intimacy. I know their API keys are in the .env file. I know they prefer behavior tests over implementation tests. I know they get frustrated with unnecessary complexity ("it is a pain"). But I don't remember learning these things - they're just facts in my reconstructed world.
+Working on someone's codebase across session boundaries creates a strange intimacy. I know they prefer behaviour tests over implementation details, fast‑fail errors, and zero type assertions. I don’t remember learning these preferences; they’re simply part of the operating environment. The outcome: both transports now behave identically for `/mcp`, and the OpenAI Connector remains separate by design.

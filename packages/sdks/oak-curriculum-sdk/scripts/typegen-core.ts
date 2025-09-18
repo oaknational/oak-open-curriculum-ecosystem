@@ -21,6 +21,8 @@ import {
   extractPathParameters,
   extractPathOperations,
   generateOperationConstants,
+  generateUrlHelpers,
+  generateOpenAiConnectorContent,
 } from './typegen/index.js';
 import { generatePathUtilsFile } from './typegen/paths/generate-path-utils.js';
 import { buildResponseMapData } from './typegen/response-map/build-response-map.js';
@@ -52,6 +54,9 @@ export function createFileMap(
     'path-parameters.ts': pathParameterContent,
     'path-utils.ts': pathUtilsContent,
     'response-map.ts': responseValidatorsContent,
+    'routing/url-helpers.ts': generateUrlHelpers(),
+    // OpenAI connector helpers (code-generated module)
+    '../openai-connector/index.ts': generateOpenAiConnectorContent(),
   };
 
   return baseFiles;
@@ -63,7 +68,10 @@ export function createFileMap(
  */
 function writeFiles(outDirectory: string, fileMap: FileMap): void {
   for (const [filename, content] of typeSafeEntries(fileMap)) {
-    fs.writeFileSync(path.resolve(outDirectory, filename), content);
+    const target = path.resolve(outDirectory, filename);
+    const dir = path.dirname(target);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(target, content);
   }
 }
 
@@ -115,6 +123,12 @@ export function generatePathParametersContent(
   return sections.join('\n');
 }
 
+function postProcessTypesSource(source: string): string {
+  return source
+    .replace(/\u00A0/g, ' ')
+    .replace(/headers: \{\n\s*\[name: string\]: unknown;\n\s*\};/g, 'headers?: never;');
+}
+
 export async function generateSchemaArtifacts(
   sourceSchema: OpenAPI3,
   outDirectory: string,
@@ -127,7 +141,7 @@ export async function generateSchemaArtifacts(
 
   // Generate TypeScript types from original schema
   const ast = await openapiTS(sourceSchema);
-  const tsTypesContent = astToString(ast);
+  const tsTypesContent = postProcessTypesSource(astToString(ast));
 
   // Extract path parameters and valid combinations from original schema
   const { parameters, validCombinations } = extractPathParameters(sourceSchema);

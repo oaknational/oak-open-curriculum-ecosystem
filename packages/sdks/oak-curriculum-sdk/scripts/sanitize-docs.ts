@@ -25,7 +25,9 @@ function sanitizeJsDoc(content: string, filePath: string): string {
   const isGenerated = filePath.includes(
     `${path.sep}types${path.sep}generated${path.sep}api-schema${path.sep}`,
   );
-  if (!isGenerated) return content;
+  if (!isGenerated) {
+    return content;
+  }
 
   // Replace JSDoc blocks like `/** @description Something */` with `/** Something */`
   let out = content.replace(/\/\*\*\s*@description\s+/g, '/** ');

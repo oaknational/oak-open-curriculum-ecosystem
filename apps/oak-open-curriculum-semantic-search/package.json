@@ -9,9 +9,10 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "clean": "rm -rf dist .turbo .next",
     "start": "next start",
-    "lint": "eslint --cache .",
-    "type-check": "tsc -p tsconfig.lint.json",
+    "lint": "eslint  .",
+    "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "format": "prettier --write --cache .",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -39,7 +40,7 @@
     "react-dom": "^19.1.1",
     "redoc": "^2.5.0",
     "styled-components": "^6.1.19",
-    "zod": "^4.1.5"
+    "zod": "^4"
   },
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",
@@ -57,6 +58,7 @@
     "eslint": "^9.35.0",
     "eslint-config-next": "^15.5.3",
     "jsdom": "^25.0.1",
+    "pnpm": "^10.17.0",
     "prettier": "^3.6.2",
     "typedoc": "^0.28.12",
     "typedoc-plugin-markdown": "^4.4.2",

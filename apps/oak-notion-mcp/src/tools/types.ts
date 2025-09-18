@@ -1,14 +1,14 @@
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import type { JsonObject } from '@oaknational/mcp-core';
+import type { JsonObject } from '@oaknational/mcp-logger';
 
 // Tool interface
 export interface McpTool {
   name: string;
-  description: string;
+  description?: string;
   inputSchema: {
     type: 'object';
     properties: JsonObject;
-    required?: string[];
+    required?: readonly string[];
   };
   handler: (args: unknown) => Promise<CallToolResult>;
 }

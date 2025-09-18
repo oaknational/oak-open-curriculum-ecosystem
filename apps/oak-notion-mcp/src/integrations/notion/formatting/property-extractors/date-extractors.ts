@@ -9,7 +9,9 @@ import type { PageObjectResponse } from '@notionhq/client';
  * Extract display value from date property
  */
 export function extractDateValue(property: PageObjectResponse['properties'][string]): string {
-  if (!('date' in property) || !property.date) return 'N/A';
+  if (!('date' in property) || !property.date) {
+    return 'N/A';
+  }
   const date = property.date;
   if (typeof date === 'object' && 'start' in date && typeof date.start === 'string') {
     return date.start;
@@ -23,7 +25,9 @@ export function extractDateValue(property: PageObjectResponse['properties'][stri
 export function extractCreatedTimeValue(
   property: PageObjectResponse['properties'][string],
 ): string {
-  if (!('created_time' in property) || typeof property.created_time !== 'string') return 'N/A';
+  if (!('created_time' in property) || typeof property.created_time !== 'string') {
+    return 'N/A';
+  }
   return new Date(property.created_time).toLocaleDateString();
 }
 
@@ -33,7 +37,8 @@ export function extractCreatedTimeValue(
 export function extractLastEditedTimeValue(
   property: PageObjectResponse['properties'][string],
 ): string {
-  if (!('last_edited_time' in property) || typeof property.last_edited_time !== 'string')
+  if (!('last_edited_time' in property) || typeof property.last_edited_time !== 'string') {
     return 'N/A';
+  }
   return new Date(property.last_edited_time).toLocaleDateString();
 }

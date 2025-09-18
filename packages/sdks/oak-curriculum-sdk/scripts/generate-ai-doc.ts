@@ -130,9 +130,13 @@ function renderSections(grouped: Map<string, TDReflection[]>): string[] {
     return map[k] ?? (k.endsWith('s') ? k : `${k}s`);
   };
   for (const [kind, items] of grouped) {
-    if (items.length === 0) continue;
+    if (items.length === 0) {
+      continue;
+    }
     sections.push(`## ${plural(kind)}`);
-    for (const r of items) sections.push(renderReflection(r));
+    for (const r of items) {
+      sections.push(renderReflection(r));
+    }
   }
   return sections;
 }
@@ -182,7 +186,9 @@ function renderParamLine(info: RenderableParamInfo): string {
 }
 
 function renderParamSummary(params: unknown): string {
-  if (!isArrayOfObjects(params) || params.length === 0) return '_No parameters_';
+  if (!isArrayOfObjects(params) || params.length === 0) {
+    return '_No parameters_';
+  }
   const items = params.map(extractParamInfo).map(renderParamLine);
   return items.join('\n');
 }
@@ -200,28 +206,41 @@ function sortPathOps(ops: unknown[]): unknown[] {
 function renderEndpointCatalog(ops: unknown): string {
   const lines: string[] = [];
   lines.push('## Endpoint Catalog');
-  const list: unknown[] = Array.isArray(ops) ? ops : [];
-  const sorted = sortPathOps(list);
+  const sorted = normalizeAndSortOps(ops);
   for (const op of sorted) {
-    const method = getOwnString(op, 'method') ?? '';
-    const path = getOwnString(op, 'path') ?? '';
-    lines.push(`### ${method.toUpperCase()} ${path}`);
-    const opId = getOwnString(op, 'operationId');
-    const summary = getOwnString(op, 'summary');
-    const description = getOwnString(op, 'description');
-    if (opId) lines.push(`- operationId: ${opId}`);
-    if (summary) lines.push(`- summary: ${summary}`);
-    if (description) lines.push(`- description: ${description}`);
-    lines.push('Parameters:');
-    const params = getOwnValue(op, 'parameters');
-    lines.push(renderParamSummary(params));
-    lines.push('');
+    renderSingleEndpoint(lines, op);
   }
   return lines.join('\n');
 }
 
+function normalizeAndSortOps(ops: unknown): unknown[] {
+  const list: unknown[] = Array.isArray(ops) ? ops : [];
+  return sortPathOps(list);
+}
+
+function renderSingleEndpoint(lines: string[], op: unknown): void {
+  const method = getOwnString(op, 'method') ?? '';
+  const path = getOwnString(op, 'path') ?? '';
+  lines.push(`### ${method.toUpperCase()} ${path}`);
+  maybePush(lines, 'operationId', getOwnString(op, 'operationId'));
+  maybePush(lines, 'summary', getOwnString(op, 'summary'));
+  maybePush(lines, 'description', getOwnString(op, 'description'));
+  lines.push('Parameters:');
+  const params = getOwnValue(op, 'parameters');
+  lines.push(renderParamSummary(params));
+  lines.push('');
+}
+
+function maybePush(lines: string[], label: string, value: string | undefined): void {
+  if (value) {
+    lines.push(`- ${label}: ${value}`);
+  }
+}
+
 function listParamObjectKeys(obj: unknown): string {
-  if (!isPlainObject(obj)) return '_None_';
+  if (!isPlainObject(obj)) {
+    return '_None_';
+  }
   const keys = typeSafeKeys(obj);
   return keys.length === 0 ? '_None_' : keys.join(', ');
 }
@@ -238,7 +257,9 @@ function renderToolCatalog(): string {
     lines.push(`### ${name}`);
     lines.push(`- path: ${path}`);
     lines.push(`- method: ${method}`);
-    if (opId) lines.push(`- operationId: ${opId}`);
+    if (opId) {
+      lines.push(`- operationId: ${opId}`);
+    }
     const pathParams = getOwnValue(base, 'pathParams');
     const queryParams = getOwnValue(base, 'queryParams');
     lines.push(`- path params: ${listParamObjectKeys(pathParams)}`);
@@ -265,9 +286,13 @@ async function main(): Promise<void> {
       'typeSafeHasOwn',
       'typeSafeOwnKeys',
     ]);
-    if (ignoreNames.has(name)) return false;
+    if (ignoreNames.has(name)) {
+      return false;
+    }
     const src = r.sources?.[0]?.fileName ?? '';
-    if (src.includes('types/helpers.ts')) return false;
+    if (src.includes('types/helpers.ts')) {
+      return false;
+    }
     return true;
   });
   const grouped = groupByKind(exported);

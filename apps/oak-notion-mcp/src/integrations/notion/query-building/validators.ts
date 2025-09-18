@@ -18,48 +18,58 @@ import {
  * @returns Validation result
  */
 export function validateDatabaseFilters(filters: unknown): ValidationResult<McpFilters> {
-  // Check if filters is an object
   if (!isRecord(filters)) {
-    return {
-      valid: false,
-      errors: ['Filters must be an object'],
-    };
+    return { valid: false, errors: ['Filters must be an object'] };
   }
-
   const result: McpFilters = {};
-  const errors: string[] = [];
+  const fieldValidators = makeFieldValidators(result);
+  const errors = collectValidationErrors(filters, fieldValidators);
+  return errors.length > 0 ? { valid: false, errors } : { valid: true, data: result };
+}
 
-  // Define field validators for each filter property
-  const fieldValidators = {
+function makeFieldValidators(result: McpFilters): Record<string, (value: unknown) => string[]> {
+  return {
     properties: (value: unknown) => {
       const { validatedProperties, errors } = validateProperties(value);
-      if (validatedProperties) result.properties = validatedProperties;
+      if (validatedProperties) {
+        result.properties = validatedProperties;
+      }
       return errors;
     },
     sorts: (value: unknown) => {
       const { validatedSorts, errors } = validateSorts(value);
-      if (validatedSorts) result.sorts = validatedSorts;
+      if (validatedSorts) {
+        result.sorts = validatedSorts;
+      }
       return errors;
     },
     pageSize: (value: unknown) => {
       const { validPageSize, errors } = validatePageSize(value);
-      if (validPageSize !== undefined) result.pageSize = validPageSize;
+      if (validPageSize !== undefined) {
+        result.pageSize = validPageSize;
+      }
       return errors;
     },
     startCursor: (value: unknown) => {
       const { validCursor, errors } = validateStartCursor(value);
-      if (validCursor) result.startCursor = validCursor;
+      if (validCursor) {
+        result.startCursor = validCursor;
+      }
       return errors;
     },
   };
+}
 
-  // Validate each field if present
-  for (const [field, validator] of Object.entries(fieldValidators)) {
-    const desc = Object.getOwnPropertyDescriptor(filters, field);
+function collectValidationErrors(
+  source: object,
+  validators: Record<string, (value: unknown) => string[]>,
+): string[] {
+  const errors: string[] = [];
+  for (const [field, validator] of Object.entries(validators)) {
+    const desc = Object.getOwnPropertyDescriptor(source, field);
     if (desc && desc.value !== undefined) {
       errors.push(...validator(desc.value));
     }
   }
-
-  return errors.length > 0 ? { valid: false, errors } : { valid: true, data: result };
+  return errors;
 }

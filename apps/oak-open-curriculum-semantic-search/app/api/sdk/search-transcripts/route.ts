@@ -12,8 +12,9 @@ const BodySchema = z.object({
 
 export async function POST(req: NextRequest): Promise<Response> {
   const parsed = BodySchema.safeParse(await req.json());
-  if (!parsed.success)
+  if (!parsed.success) {
     return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+  }
   const body = parsed.data;
   const e = env();
   const client = createOakPathBasedClient(e.OAK_EFFECTIVE_KEY);
@@ -31,7 +32,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     },
   });
 
-  if (!res.response.ok)
+  if (!res.response.ok) {
     return NextResponse.json({ error: res.response.statusText }, { status: res.response.status });
+  }
   return NextResponse.json(res.data ?? []);
 }

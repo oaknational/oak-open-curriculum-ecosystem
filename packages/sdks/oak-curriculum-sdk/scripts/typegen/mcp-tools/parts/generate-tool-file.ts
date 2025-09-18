@@ -1,7 +1,7 @@
 import type { OperationObject } from 'openapi-typescript';
 import { typeSafeKeys } from '../../../../src/types/helpers.js';
 import type { PrimitiveType } from './param-utils.js';
-import { emitHeader, emitParams, emitSchema, emitIndex } from './emitters.js';
+import { emitHeader, emitParams, emitSchema, emitIndex, emitOakTool } from './emitters.js';
 
 export interface ParamMetadata {
   typePrimitive: PrimitiveType;
@@ -29,6 +29,17 @@ export function generateToolFile(
   parts.push(emitParams(operation, pathParamMetadata, queryParamMetadata));
   parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
   parts.push(emitIndex(toolName, path, method, operation, pathParams, queryParams));
+  parts.push(
+    emitOakTool(
+      toolName,
+      path,
+      method,
+      operationId,
+      operation,
+      pathParamMetadata,
+      queryParamMetadata,
+    ),
+  );
 
   return parts.join('\n');
 }

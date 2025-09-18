@@ -51,10 +51,16 @@ function makeGetUnitsByKeyStageAndSubject(client: OakApiClient): GetUnitsFn {
     });
     assertSdkOk(res);
     const data = res.data;
-    if (!data) return [];
+    if (!data) {
+      return [];
+    }
     if (isUnitsGrouped(data)) {
       const flat: { unitSlug: string; unitTitle: string }[] = [];
-      for (const group of data) for (const u of group.units) flat.push(u);
+      for (const group of data) {
+        for (const u of group.units) {
+          flat.push(u);
+        }
+      }
       return flat;
     }
     throw new Error('Unexpected units response shape');
@@ -68,8 +74,12 @@ function makeGetLessonsByKeyStageAndSubject(client: OakApiClient): GetLessonsFn 
     });
     assertSdkOk(res);
     const data = res.data;
-    if (!data) return [];
-    if (isLessonGroups(data)) return data;
+    if (!data) {
+      return [];
+    }
+    if (isLessonGroups(data)) {
+      return data;
+    }
     throw new Error('Unexpected lessons response shape');
   };
 }
@@ -81,7 +91,9 @@ function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
     });
     assertSdkOk(res);
     const data = res.data;
-    if (isTranscriptResponse(data)) return data;
+    if (isTranscriptResponse(data)) {
+      return data;
+    }
     throw new Error('Unexpected transcript response shape');
   };
 }

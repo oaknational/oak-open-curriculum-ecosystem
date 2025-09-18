@@ -21,7 +21,9 @@ function flushUnclosed(
 ): void {
   if (stack.length) {
     const last = stack.pop();
-    if (last) current().push(...last.children);
+    if (last) {
+      current().push(...last.children);
+    }
   }
 }
 
@@ -38,13 +40,16 @@ function handleToken(
   }
   const name = m[1].toLowerCase();
   const closing = tok.startsWith('</');
-  if (!isAllowedTag(name)) return;
+  if (!isAllowedTag(name)) {
+    return;
+  }
   if (!closing) {
     stack.push({ type: name, children: [] });
   } else {
     const last = stack.pop();
-    if (last && last.type === name)
+    if (last && last.type === name) {
       current().push(createElement(name, { key: `hl-${keyRef.current++}` }, ...last.children));
+    }
   }
 }
 
@@ -56,7 +61,9 @@ function renderSafeHighlight(html: string): React.ReactNode[] {
 
   const current = (): React.ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
 
-  for (const tok of tokens) handleToken(tok, stack, current, keyRef);
+  for (const tok of tokens) {
+    handleToken(tok, stack, current, keyRef);
+  }
   flushUnclosed(stack, current);
   return root;
 }
@@ -107,8 +114,12 @@ function ResultItem({
   highlights: string[];
 }): JSX.Element {
   const parts: string[] = [];
-  if (subject) parts.push(`Subject: ${subject}`);
-  if (keyStage) parts.push(`Key stage: ${keyStage}`);
+  if (subject) {
+    parts.push(`Subject: ${subject}`);
+  }
+  if (keyStage) {
+    parts.push(`Key stage: ${keyStage}`);
+  }
   const meta = parts.join(' · ');
 
   return (
@@ -152,7 +163,9 @@ const ResultsSchema = z.array(ItemSchema);
 
 export function SearchResults({ results }: { results: unknown[] }): JSX.Element | null {
   const parsed = ResultsSchema.safeParse(results);
-  if (!parsed.success || parsed.data.length === 0) return null;
+  if (!parsed.success || parsed.data.length === 0) {
+    return null;
+  }
 
   function titleFor(rec: z.infer<typeof ItemSchema>): string {
     return rec.lesson?.lesson_title || rec.unit?.unit_title || rec.id;

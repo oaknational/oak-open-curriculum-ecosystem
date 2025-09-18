@@ -1,15 +1,7 @@
 import type { OpenAPI3, OperationObject, ParameterObject } from 'openapi-typescript';
-import {
-  typeSafeEntries,
-  typeSafeKeys,
-  isPlainObject,
-  getOwnValue,
-} from '../../../src/types/helpers.js';
+import { typeSafeEntries, isPlainObject, getOwnValue } from '../../../src/types/helpers.js';
 import { generateMcpToolName } from './name-generator.js';
-import { emitHeader } from './parts/emit-header.js';
-import { emitParams } from './parts/emit-params.js';
-import { emitSchema } from './parts/emit-schema.js';
-import { emitIndex } from './parts/emit-index.js';
+import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateIndexFile } from './parts/generate-index-file.js';
@@ -24,32 +16,6 @@ export interface ParamMetadata {
   allowedValues?: readonly unknown[];
   description?: string;
   default?: unknown;
-}
-
-function generateToolFile(
-  toolName: string,
-  path: string,
-  method: string,
-  operationId: string,
-  operation: OperationObject,
-  pathParamMetadata: Record<string, ParamMetadata>,
-  queryParamMetadata: Record<string, ParamMetadata>,
-): string {
-  const parts: string[] = [];
-  parts.push(emitHeader(toolName, path, method, operationId));
-  parts.push(emitParams(operation, pathParamMetadata, queryParamMetadata));
-  parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
-  parts.push(
-    emitIndex(
-      toolName,
-      path,
-      method,
-      operation,
-      typeSafeKeys(pathParamMetadata),
-      typeSafeKeys(queryParamMetadata),
-    ),
-  );
-  return parts.join('\n');
 }
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
@@ -67,12 +33,18 @@ function iterOperations(
 ): { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] {
   const out: { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] =
     [];
-  if (!schema.paths) return out;
+  if (!schema.paths) {
+    return out;
+  }
   for (const [path, pathItem] of typeSafeEntries(schema.paths)) {
-    if (!isPathItemObject(pathItem)) continue;
+    if (!isPathItemObject(pathItem)) {
+      continue;
+    }
     for (const method of HTTP_METHODS) {
       const op: unknown = getOwnValue(pathItem, method);
-      if (!isOperationObject(op)) continue;
+      if (!isOperationObject(op)) {
+        continue;
+      }
       out.push({ path, method, operation: op });
     }
   }
@@ -126,7 +98,9 @@ function buildParamMetadataForOperation(operation: OperationObject): {
     return { pathParamMetadata, queryParamMetadata };
   }
   for (const param of parameters) {
-    if ('$ref' in param) continue;
+    if ('$ref' in param) {
+      continue;
+    }
     const metadata = extractParamMetadata(param);
     if (param.in === 'path') {
       pathParamMetadata[param.name] = metadata;

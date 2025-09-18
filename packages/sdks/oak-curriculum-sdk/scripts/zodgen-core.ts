@@ -7,7 +7,9 @@ import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
 
 // Small helper type guards to keep complexity low and avoid assertions
 function isOpenAPIInfo(value: unknown): value is { title: string; version: string } {
-  if (!isPlainObject(value)) return false;
+  if (!isPlainObject(value)) {
+    return false;
+  }
   const title = getOwnString(value, 'title');
   const version = getOwnString(value, 'version');
   return typeof title === 'string' && typeof version === 'string';
@@ -15,13 +17,21 @@ function isOpenAPIInfo(value: unknown): value is { title: string; version: strin
 
 // Type guard: validate we have a minimal OpenAPIObject shape without using assertions
 function isOpenAPIObject(doc: unknown): doc is OpenAPIObject {
-  if (!isPlainObject(doc)) return false;
+  if (!isPlainObject(doc)) {
+    return false;
+  }
   const openapi = getOwnString(doc, 'openapi');
-  if (typeof openapi !== 'string') return false;
+  if (typeof openapi !== 'string') {
+    return false;
+  }
   const paths = getOwnValue(doc, 'paths');
-  if (!isPlainObject(paths)) return false;
+  if (!isPlainObject(paths)) {
+    return false;
+  }
   const info = getOwnValue(doc, 'info');
-  if (!isOpenAPIInfo(info)) return false;
+  if (!isOpenAPIInfo(info)) {
+    return false;
+  }
   return true;
 }
 

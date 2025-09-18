@@ -24,12 +24,16 @@ describe('Schema Generators', () => {
       const item = parsed.paths?.['/users'];
       // Ensure it's not a ReferenceObject before accessing path methods
       expect(item && !('$ref' in item)).toBe(true);
-      if (!item || '$ref' in item) throw new Error('Expected PathItemObject for /users');
+      if (!item || '$ref' in item) {
+        throw new Error('Expected PathItemObject for /users');
+      }
 
       const getOp = item.get;
       // Ensure GET is an OperationObject (not a ReferenceObject)
       expect(getOp && !('$ref' in getOp)).toBe(true);
-      if (!getOp || '$ref' in getOp) throw new Error('Expected OperationObject for GET /users');
+      if (!getOp || '$ref' in getOp) {
+        throw new Error('Expected OperationObject for GET /users');
+      }
       expect(getOp.operationId).toBe('getUsers');
     });
   });

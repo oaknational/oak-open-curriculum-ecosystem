@@ -3,11 +3,11 @@
  * Maps API operations to their response validators
  */
 
-import type { z } from 'zod';
-import type { ValidationResult, HttpMethod } from './types.js';
+import type { ZodType } from 'zod';
+import type { ValidationResult, HttpMethod, ValidationFailure } from './types.js';
+import { isValidationFailure, parseWithSchema } from './types.js';
 import { PATH_OPERATIONS } from '../types/generated/api-schema/path-parameters.js';
 import { toCurly } from '../types/generated/api-schema/path-utils.js';
-import { parseWithSchema } from './types.js';
 import { responseSchemaMap } from '../types/generated/api-schema/response-map.js';
 
 // Error schemas for common status codes
@@ -31,8 +31,29 @@ function findOperationId(path: string, method: HttpMethod): string | undefined {
 /**
  * Parse and validate response data
  */
-function parseResponse<T>(schema: z.ZodSchema<T>, response: unknown): ValidationResult<T> {
+function parseResponse<T>(schema: ZodType<T>, response: unknown): ValidationResult<T> {
   return parseWithSchema(schema, response);
+}
+
+function withTrace(
+  failure: ValidationFailure,
+  ctx: { path: string; method: HttpMethod; statusCode: number; operationId?: string },
+): ValidationFailure {
+  if (failure.trace) {
+    return failure;
+  }
+  return {
+    ...failure,
+    trace: {
+      when: new Date().toISOString(),
+      context: {
+        path: ctx.path,
+        method: ctx.method,
+        statusCode: ctx.statusCode,
+        operationId: ctx.operationId,
+      },
+    },
+  };
 }
 
 /**
@@ -52,7 +73,7 @@ export function validateResponse(
   const operationId = findOperationId(path, method);
 
   if (!operationId) {
-    return {
+    const unknownOperation: ValidationFailure = {
       ok: false,
       issues: [
         {
@@ -62,6 +83,7 @@ export function validateResponse(
         },
       ],
     };
+    return withTrace(unknownOperation, { path, method, statusCode });
   }
 
   // Try to find schema for specific operation and status code
@@ -73,7 +95,7 @@ export function validateResponse(
   }
 
   if (!schema) {
-    return {
+    const noSchemaForStatus: ValidationFailure = {
       ok: false,
       issues: [
         {
@@ -83,7 +105,12 @@ export function validateResponse(
         },
       ],
     };
+    return withTrace(noSchemaForStatus, { path, method, statusCode, operationId });
   }
 
-  return parseResponse(schema, response);
+  const result = parseResponse(schema, response);
+  if (isValidationFailure(result)) {
+    return withTrace(result, { path, method, statusCode, operationId });
+  }
+  return result;
 }

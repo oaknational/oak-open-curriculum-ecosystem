@@ -16,7 +16,9 @@ function authorize(req: NextRequest): boolean {
 export const maxDuration = 300;
 
 export async function GET(req: NextRequest): Promise<Response> {
-  if (!authorize(req)) return new NextResponse('Unauthorized', { status: 401 });
+  if (!authorize(req)) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
 
   // Optional: peek at rate limit (free endpoint)
   try {
@@ -31,6 +33,8 @@ export async function GET(req: NextRequest): Promise<Response> {
   const subjects: SubjectSlug[] = SUBJECTS.filter(isSubject);
   const bulkOps = await buildIndexBulkOps(client, keyStages, subjects);
 
-  if (bulkOps.length > 0) await esBulk(bulkOps);
+  if (bulkOps.length > 0) {
+    await esBulk(bulkOps);
+  }
   return NextResponse.json({ ok: true, indexedDocs: bulkOps.length / 2 });
 }

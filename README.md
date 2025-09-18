@@ -10,7 +10,7 @@ A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org)
 This monorepo uses a standard pnpm + Turborepo layout:
 
 - `apps/` – runnable applications (MCP servers)
-- `packages/core/` – shared interfaces, types, and utilities (`@oaknational/mcp-core`)
+- `packages/core/` – shared interfaces, types, and utilities
 - `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
 ### Architectural Decision Records (ADRs)
@@ -33,9 +33,9 @@ Key architectural decisions are documented as ADRs. [View all ADRs →](docs/arc
 - Node.js >= 22.0.0
 - A [Notion integration](https://www.notion.so/my-integrations) with read access to your workspace
 
-### Oak Curriculum MCP Server Config Example
+### Oak Curriculum MCP Server Config Examples
 
-For now, we are using simple bearer token authentication. Later we will use OAuth.
+For now, we are using simple bearer token authentication for development. In production, use OAuth (see app README for discovery endpoints and auth notes).
 
 ```json
 {
@@ -65,6 +65,16 @@ Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claud
       }
     }
   }
+}
+```
+
+Alternatively, for local STDIO usage with Cursor or Claude Desktop, see the per‑app READMEs. Example for Cursor:
+
+```json
+{
+  "command": "pnpm",
+  "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"],
+  "env": { "OAK_API_KEY": "${OAK_API_KEY}", "LOG_LEVEL": "info" }
 }
 ```
 
@@ -121,6 +131,14 @@ pnpm install
 # Set up environment
 cp .env.example .env
 # Add your NOTION_API_KEY and/or OAK_API_KEY to .env
+
+# Build and validate
+pnpm make   # install, type-gen, build, doc-gen, format, markdownlint, lint --fix
+pnpm qg     # format-check, type-check, lint, markdownlint-check, test, test:e2e
+
+# Deploy (Vercel)
+# Ensure `apps/oak-curriculum-mcp-streamable-http/vercel.json` and envs are configured.
+# After deploy, verify health endpoints and smoke tests described in the app README.
 ```
 
 ### Available Commands
@@ -143,12 +161,6 @@ pnpm analyze      # Run all analysis tools
 ```
 
 If you want to deal with automatically fixable linting issues, run `pnpm lint -- --fix` in the root of the monorepo, or `pnpm lint --fix` in a workspace.
-
-### Dependency Injection and Runtime Adapters
-
-- Apps compose a `CoreRuntime` using `@oaknational/mcp-core` and inject dependencies into servers/handlers.
-- Runtime adapters live under `packages/runtime-adapters/` (e.g., Node today; Workers planned in a separate plan).
-- Curriculum MCP integrates with the compile‑time generated SDK tools and injects an SDK client for execution.
 
 ### Making the Most of Agentic AI Assistants
 
