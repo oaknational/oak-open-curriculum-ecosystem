@@ -1,7 +1,11 @@
 /*
- * Smoke test against a locally started dev server.
- * Runs the server in-process, hits endpoints, and then shuts down.
- * Usage: pnpm -F @oaknational/oak-curriculum-mcp-streamable-http smoke:dev
+ * Smoke test for HTTP MCP server.
+ * - Local mode (default): starts server in-process on PORT (default 3333)
+ * - Remote mode: if BASE_URL is set, tests against that URL without starting a server
+ *
+ * Usage:
+ *  - Local:  pnpm -F @oaknational/oak-curriculum-mcp-streamable-http smoke:dev
+ *  - Remote: BASE_URL=https://your-app.example tsx scripts/smoke-dev.ts
  */
 
 import type { Server } from 'node:http';
@@ -21,18 +25,23 @@ async function run(): Promise<void> {
   // Ensure a dev token exists for the server and client side
   process.env.REMOTE_MCP_DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN || 'dev-token';
 
-  const app = createApp();
+  const baseUrlEnv = process.env.BASE_URL;
   const port = Number(process.env.PORT || 3333);
+  const isRemote = typeof baseUrlEnv === 'string' && baseUrlEnv.length > 0;
 
-  const server: Server = await new Promise((resolve, reject) => {
-    const s = app.listen(port, () => resolve(s));
-    s.on('error', reject);
-  });
-
-  const baseUrl = `http://localhost:${String(port)}`;
+  let server: Server | undefined;
+  const baseUrl = isRemote ? baseUrlEnv! : `http://localhost:${String(port)}`;
   const devToken = process.env.REMOTE_MCP_DEV_TOKEN as string;
 
   try {
+    if (!isRemote) {
+      const app = createApp();
+      server = await new Promise<Server>((resolve, reject) => {
+        const s = app.listen(port, () => resolve(s));
+        s.on('error', reject);
+      });
+    }
+
     // 1) Health
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), { method: 'GET' });
@@ -153,9 +162,11 @@ async function run(): Promise<void> {
 
     console.log('Smoke OK for', baseUrl);
   } finally {
-    await new Promise<void>((resolve, reject) =>
-      server.close((err) => (err ? reject(err) : resolve())),
-    );
+    if (server) {
+      await new Promise<void>((resolve, reject) =>
+        server!.close((err) => (err ? reject(err) : resolve())),
+      );
+    }
   }
 }
 
