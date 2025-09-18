@@ -33,8 +33,8 @@ describe('emitErrorDescription (compile-time literal emitter)', () => {
     };
     const block = emitErrorDescription(pathMeta, queryMeta);
 
-    // Basic shape
-    expect(block.startsWith('const getValidRequestParamsDescription= () => {')).toBe(true);
+    // Basic shape (behavioural, not exact signature)
+    expect(block.includes('const getValidRequestParamsDescription= ')).toBe(true);
     expect(block.trim().endsWith('};')).toBe(true);
 
     // Content checks

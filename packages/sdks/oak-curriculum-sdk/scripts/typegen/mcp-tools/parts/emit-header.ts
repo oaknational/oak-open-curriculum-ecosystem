@@ -14,6 +14,7 @@ export function emitHeader(
  */
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
+import { getOwnValue } from "../../../../helpers.js";
 
 const operationId= '${operationId}' as const;
 const name= '${toolName}' as const;

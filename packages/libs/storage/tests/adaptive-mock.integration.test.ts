@@ -71,7 +71,7 @@ describe('Adaptive Storage Integration - Mocked', () => {
       await storage1.set('key1', 'value1');
       await storage2.set('key2', 'value2');
 
-      await storage1.clear?.();
+      await storage1.clear();
 
       expect(await storage1.has('key1')).toBe(false);
       expect(await storage2.has('key2')).toBe(true);
@@ -87,8 +87,8 @@ describe('Adaptive Storage Integration - Mocked', () => {
       await storage1.set('b', 'value2');
       await storage2.set('c', 'value3');
 
-      const keys1 = (await storage1.keys?.()) ?? [];
-      const keys2 = (await storage2.keys?.()) ?? [];
+      const keys1 = await storage1.keys();
+      const keys2 = await storage2.keys();
 
       expect(keys1).toEqual(expect.arrayContaining(['a', 'b']));
       expect(keys1).not.toContain('c');
@@ -128,7 +128,7 @@ describe('Adaptive Storage Integration - Mocked', () => {
         storage.get('existing'),
         storage.has('existing'),
         storage.delete('toDelete'),
-        storage.keys?.() ?? Promise.resolve([]),
+        storage.keys(),
       ]);
 
       const [, getValue, hasValue, , keys] = await operations;
@@ -157,7 +157,7 @@ describe('Adaptive Storage Integration - Mocked', () => {
       // Should return null instead of throwing
       expect(await storage.get('any')).toBeNull();
       expect(await storage.has('any')).toBe(false);
-      expect(await storage.keys?.()).toEqual([]);
+      expect(await storage.keys()).toEqual([]);
     });
 
     it('should handle partial failures in bulk operations gracefully', async () => {
@@ -184,7 +184,7 @@ describe('Adaptive Storage Integration - Mocked', () => {
 
       // Clear should complete despite the partial failure
       // (the implementation catches errors)
-      await expect(storage.clear?.()).resolves.toBeUndefined();
+      await expect(storage.clear()).resolves.toBeUndefined();
 
       // Verify unlink was called for both files
 

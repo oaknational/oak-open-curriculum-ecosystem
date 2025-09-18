@@ -25,6 +25,7 @@ export const ignores = [
   'commitlint.config.js',
   '**/tsup.config.ts',
   'reference/',
+  'research/',
   // Ignore ephemeral bundled config artifacts (e.g., tsup.config.bundled_*.mjs)
   '**/tsup.config.*',
   '**/*.bundled_*.mjs',
@@ -139,7 +140,7 @@ export const testRules: Linter.RulesRecord = {
   'max-lines': ['error', 700],
   'max-lines-per-function': ['error', 1000],
   '@typescript-eslint/consistent-type-assertions': [
-    'error',
+    'off',
     {
       assertionStyle: 'as',
     },

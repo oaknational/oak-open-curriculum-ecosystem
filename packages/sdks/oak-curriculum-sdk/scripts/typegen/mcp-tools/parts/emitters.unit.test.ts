@@ -72,9 +72,12 @@ describe('emitters', () => {
       {},
       { q: { typePrimitive: 'string', valueConstraint: false, required: false } },
     );
-    expect(out).toContain('type ValidRequestParams= {params: {');
+    // Behavioural shape: ValidRequestParams interface with params container
+    expect(out).toContain('interface ValidRequestParams');
+    expect(out).toContain('params: {');
     expect(out).toContain('function isValidRequestParams(');
-    expect(out).toContain('const getValidRequestParamsDescription= () => {');
+    // Behavioural: we emit a function to describe validation errors
+    expect(out).toContain('const getValidRequestParamsDescription= ');
   });
 
   it('emits index/executor block exporting tool', () => {

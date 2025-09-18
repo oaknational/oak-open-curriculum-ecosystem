@@ -39,3 +39,6 @@ export {
 export { generatePathParametersInterface } from '../typegen-interface-gen.js';
 export { generateValidPathsByParameters } from '../typegen-writers.js';
 export { extractPathParameters } from '../typegen-extraction.js';
+export { generateCompleteMcpTools } from './mcp-tools/index.js';
+export { generateUrlHelpers } from './routing/generate-url-helpers.js';
+export { generateOpenAiConnectorContent } from './openai/generate-openai-connector.js';

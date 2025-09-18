@@ -6,6 +6,7 @@
   "include": [
     "src/**/*.ts",
     "e2e-tests/**/*.ts",
+    "scripts/**/*.ts",
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",

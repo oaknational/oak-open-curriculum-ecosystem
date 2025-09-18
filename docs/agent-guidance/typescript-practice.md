@@ -3,6 +3,7 @@
 ## General
 
 - NEVER disable type checking
+- **No type shortcuts** - Never use `as`, `any`, `!`, or `Record<string, unknown>`, or `{ [key: string]: unknown }`, or `Object.*` methods, or `Reflect.*` methods - they ALL disable the type system. The goal is to preserve type information as much as possible, not to work around this rule.
 - Never use `any`
 - Never use `as` NO TYPE ASSERTIONS, NO TYPE CASTING, JUST NO.
 - Only use `unknown` at the boundaries of the application

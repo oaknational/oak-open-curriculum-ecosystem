@@ -20,12 +20,17 @@ describe('MCP Startup logging', () => {
   let transport: StdioClientTransport;
 
   beforeAll(async () => {
+    const apiKey = process.env.OAK_API_KEY;
+    if (!apiKey) {
+      throw new Error('OAK_API_KEY is not set');
+    }
+
     transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/bin/oak-curriculum-mcp.js'],
       env: {
         ...process.env,
-        OAK_API_KEY: process.env.OAK_API_KEY ?? 'test-key',
+        OAK_API_KEY: apiKey,
         LOG_LEVEL: 'debug',
       },
     });

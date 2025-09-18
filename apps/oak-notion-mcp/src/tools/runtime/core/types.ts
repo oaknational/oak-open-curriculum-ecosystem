@@ -3,18 +3,27 @@
  * These now inherit from the pure abstractions in the core package
  */
 
-import type {
-  ToolExecutor as MorphaiToolExecutor,
-  ToolDefinition as MorphaiToolDefinition,
-  JsonObject,
-} from '@oaknational/mcp-core';
+import type { JsonObject } from '@oaknational/mcp-logger';
 
 /**
- * Re-export core patterns for backward compatibility
- * The application instantiates the core forms
+ * Minimal local executor type to avoid coupling to core generics
  */
-export type ToolExecutor<TOutput = string> = MorphaiToolExecutor<unknown, TOutput>;
-export type ToolDefinition = MorphaiToolDefinition;
+export interface ToolExecutor<TInput = unknown, TOutput = unknown> {
+  execute(input: TInput): Promise<TOutput>;
+}
+
+/**
+ * Minimal local definition type aligned with core base tool shape
+ */
+export interface ToolDefinition {
+  readonly name: string;
+  readonly description?: string;
+  readonly inputSchema: Readonly<{
+    readonly type: 'object';
+    readonly properties: JsonObject;
+    readonly required?: readonly string[];
+  }>;
+}
 
 /**
  * Error context for tool-specific error handling

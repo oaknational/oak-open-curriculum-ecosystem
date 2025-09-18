@@ -2,9 +2,11 @@
  * Pure functions extracted from ConsolaLogger for testability
  */
 
-import type { LogLevel } from './types.js';
-import type { JsonObject, JsonValue } from '@oaknational/mcp-core';
-import { isObject } from '@oaknational/mcp-core';
+import type { LogLevel, JsonObject, JsonValue } from './types.js';
+
+function isObject(value: unknown): value is JsonObject {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
 
 /**
  * Converts semantic log level to numeric value

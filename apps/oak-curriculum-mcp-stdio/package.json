@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",
-    "@oaknational/mcp-core": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-storage": "workspace:*",

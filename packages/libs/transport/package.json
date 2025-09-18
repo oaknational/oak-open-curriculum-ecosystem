@@ -36,7 +36,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
   "dependencies": {
-    "@oaknational/mcp-core": "workspace:^"
+    "@oaknational/mcp-logger": "workspace:^"
   },
   "devDependencies": {
     "pnpm": "^10.16.1",

@@ -27,9 +27,7 @@
     "lint": "eslint --cache .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit"
   },
-  "dependencies": {
-    "@oaknational/mcp-core": "workspace:^"
-  },
+  "dependencies": {},
   "devDependencies": {
     "pnpm": "^10.16.1",
     "typescript": "^5.9.2"

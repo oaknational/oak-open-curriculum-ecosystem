@@ -50,7 +50,7 @@ export type JsonSchemaProperty =
 
 export interface JsonSchemaObject {
   readonly type: 'object';
-  readonly properties: Record<string, JsonSchemaProperty>;
+  readonly properties: Readonly<Record<string, JsonSchemaProperty>>;
   readonly required?: readonly string[];
   readonly additionalProperties: false;
 }
@@ -115,8 +115,8 @@ function jsonSchemaFromPrimitive(meta: ParamMetadata): JsonSchemaProperty {
  * Pure, compile-time friendly, no type assertions at call sites.
  */
 export function buildInputSchemaObject(
-  pathParams: Record<string, ParamMetadata>,
-  queryParams: Record<string, ParamMetadata>,
+  pathParams: Readonly<Record<string, ParamMetadata>>,
+  queryParams: Readonly<Record<string, ParamMetadata>>,
 ): JsonSchemaObject {
   const properties: Record<string, JsonSchemaProperty> = {};
   const required: string[] = [];

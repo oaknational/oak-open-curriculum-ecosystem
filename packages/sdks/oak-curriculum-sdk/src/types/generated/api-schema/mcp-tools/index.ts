@@ -8,6 +8,25 @@
 // Import type helpers to satisfy TS2742 portable type naming
 import type {} from 'openapi-typescript-helpers';
 
+// Import types used to provide a stable, nameable export surface
+import type { OakApiPathBasedClient } from '../../../../client/index.js';
+import type { ToolInputJsonSchema } from '../../../../mcp/zod-input-schema.js';
+import type { AllToolNames } from './types.js';
+import type { Tool as BaseTool } from '@modelcontextprotocol/sdk/types.js';
+
+// Minimal shape to avoid leaking per-tool internal types (e.g. ValidRequestParams)
+export interface ToolDescriptor extends BaseTool {
+  invoke: (client: OakApiPathBasedClient, _params: unknown) => Promise<unknown>;
+  inputSchema: ToolInputJsonSchema;
+  operationId: string;
+  name: string;
+  path: string;
+  method: string;
+  // Emitted metadata used by the executor to split and validate arguments
+  readonly pathParams: Readonly<Record<string, { readonly required?: boolean }>>;
+  readonly queryParams: Readonly<Record<string, { readonly required?: boolean }>>;
+}
+
 // Import all tool definitions
 import { getChangelog } from './tools/get-changelog.js';
 import { getChangelogLatest } from './tools/get-changelog-latest.js';
@@ -37,7 +56,7 @@ import { getThreadsUnits } from './tools/get-threads-units.js';
 import { getUnitsSummary } from './tools/get-units-summary.js';
 
 // Tool name to tool mapping
-export const MCP_TOOLS = {
+export const MCP_TOOLS: Readonly<Record<AllToolNames, ToolDescriptor>> = {
   'get-changelog': getChangelog,
   'get-changelog-latest': getChangelogLatest,
   'get-key-stages': getKeyStages,
@@ -64,18 +83,11 @@ export const MCP_TOOLS = {
   'get-threads': getThreads,
   'get-threads-units': getThreadsUnits,
   'get-units-summary': getUnitsSummary,
-} as const;
+};
 
-// Re-export types with explicit names
 export { 
   type AllOperationIds,
   type AllToolNames,
   isToolName,
   getToolNameFromOperationId
 } from './types.js';
-
-// Re-export lib functions with explicit names
-export {
-  getToolFromToolName,
-  getToolFromOperationId,
-} from './lib.js';

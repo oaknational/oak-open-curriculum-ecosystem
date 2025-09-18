@@ -1257,7 +1257,7 @@ export interface components {
             } | null;
         }[];
         /**
-         * @description The key stage slug identifiers for which this subject has content available for
+         * @description The key stage slug identifiers for which this subject has content available for
          * @example [
          *       {
          *         "keyStageTitle": "Key Stage 1",
@@ -2662,9 +2662,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SequenceUnitsResponseSchema"];
                 };
@@ -2685,9 +2683,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["TranscriptResponseSchema"];
                 };
@@ -2708,9 +2704,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SearchTranscriptResponseSchema"];
                 };
@@ -2735,9 +2729,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SequenceAssetsResponseSchema"];
                 };
@@ -2764,9 +2756,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectAssetsResponseSchema"];
                 };
@@ -2790,9 +2780,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonAssetsResponseSchema"];
                 };
@@ -2815,9 +2803,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonAssetResponseSchema"];
                 };
@@ -2835,9 +2821,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["AllSubjectsResponseSchema"];
                 };
@@ -2858,9 +2842,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectResponseSchema"];
                 };
@@ -2881,9 +2863,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectSequenceResponseSchema"];
                 };
@@ -2904,9 +2884,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectKeyStagesResponseSchema"];
                 };
@@ -2927,9 +2905,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["SubjectYearsResponseSchema"];
                 };
@@ -2947,9 +2923,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["KeyStageResponseSchema"];
                 };
@@ -2978,9 +2952,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["KeyStageSubjectLessonsResponseSchema"];
                 };
@@ -3003,9 +2975,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["AllKeyStageAndSubjectUnitsResponseSchema"];
                 };
@@ -3026,9 +2996,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["QuestionForLessonsResponseSchema"];
                 };
@@ -3055,9 +3023,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["QuestionsForSequenceResponseSchema"];
                 };
@@ -3085,9 +3051,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["QuestionsForKeyStageAndSubjectResponseSchema"];
                 };
@@ -3108,9 +3072,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonSummaryResponseSchema"];
                 };
@@ -3134,9 +3096,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["LessonSearchResponseSchema"];
                 };
@@ -3157,9 +3117,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["UnitSummaryResponseSchema"];
                 };
@@ -3177,9 +3135,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["AllThreadsResponseSchema"];
                 };
@@ -3199,9 +3155,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["ThreadUnitsResponseSchema"];
                 };
@@ -3219,9 +3173,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": {
                         version: string;
@@ -3243,9 +3195,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": {
                         version: string;
@@ -3267,9 +3217,7 @@ export interface operations {
         responses: {
             /** @description Successful response */
             200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+                headers?: never;
                 content: {
                     "application/json": components["schemas"]["RateLimitResponseSchema"];
                 };

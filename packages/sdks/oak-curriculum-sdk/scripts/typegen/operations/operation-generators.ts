@@ -47,8 +47,6 @@ export type OperationId = never;
     })
     .join(',\n');
 
-  const operationIds = operationsWithId.map((op) => `"${op.operationId ?? ''}"`).join(' | ');
-
   return `
 /**
  * Map of operations by their operationId
@@ -58,7 +56,9 @@ export const OPERATIONS_BY_ID = {
 ${entries}
 } as const;
 
-export type OperationId = ${operationIds};
+export type OperationIdToOperationMap = typeof OPERATIONS_BY_ID;
+export type OperationId = keyof OperationIdToOperationMap;
+export function isOperationId(value: string): value is OperationId { return value in OPERATIONS_BY_ID; }
 `;
 }
 

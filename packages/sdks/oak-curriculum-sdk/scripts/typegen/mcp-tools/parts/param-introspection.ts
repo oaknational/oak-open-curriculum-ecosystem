@@ -18,7 +18,7 @@ function isParameterObject(p: ParameterObject | ReferenceObject): p is Parameter
 
 function getEnumValuesFromSchema(schema: unknown): unknown[] | undefined {
   if (typeof schema !== 'object' || schema === null) return undefined;
-  const desc = Object.getOwnPropertyDescriptor(schema, 'enum');
+  const desc = 'enum' in schema ? { value: schema.enum } : undefined;
   if (!desc || !Array.isArray(desc.value)) return undefined;
   // Create a shallow copy to avoid leaking the descriptor's any-typed value
   const out: unknown[] = [];
@@ -28,7 +28,7 @@ function getEnumValuesFromSchema(schema: unknown): unknown[] | undefined {
 
 function getSchemaType(schema: unknown): unknown {
   if (typeof schema !== 'object' || schema === null) return undefined;
-  const typeDesc = Object.getOwnPropertyDescriptor(schema, 'type');
+  const typeDesc = 'type' in schema ? { value: schema.type } : undefined;
   return typeDesc?.value;
 }
 

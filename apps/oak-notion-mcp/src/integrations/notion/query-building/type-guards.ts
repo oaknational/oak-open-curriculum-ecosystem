@@ -4,7 +4,7 @@
  */
 
 import type { McpPropertyFilter, McpSort } from '../../../types';
-import type { JsonObject } from '@oaknational/mcp-core';
+import type { JsonObject } from '@oaknational/mcp-logger';
 import type { SortDirection } from './constants';
 import { validSortDirectionsArray, validPropertyTypesArray } from './constants';
 
@@ -60,7 +60,8 @@ export function isValidPropertyType(value: unknown): value is string {
  */
 export function isPropertyFilter(value: unknown): value is McpPropertyFilter {
   if (!isRecord(value)) return false;
-  if (!('type' in value) || !isString(value.type)) return false;
+  const desc = Object.getOwnPropertyDescriptor(value, 'type');
+  if (!desc || typeof desc.value !== 'string') return false;
   return true;
 }
 
@@ -71,7 +72,9 @@ export function isPropertyFilter(value: unknown): value is McpPropertyFilter {
  */
 export function isSort(value: unknown): value is McpSort {
   if (!isRecord(value)) return false;
-  if (!('property' in value) || !isString(value.property)) return false;
-  if (!('direction' in value) || !isSortDirection(value.direction)) return false;
+  const p = Object.getOwnPropertyDescriptor(value, 'property');
+  if (!p || typeof p.value !== 'string') return false;
+  const d = Object.getOwnPropertyDescriptor(value, 'direction');
+  if (!d || !isSortDirection(d.value)) return false;
   return true;
 }

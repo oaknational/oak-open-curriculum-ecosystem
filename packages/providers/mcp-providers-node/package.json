@@ -23,7 +23,5 @@
     "type-check": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },
-  "dependencies": {
-    "@oaknational/mcp-core": "workspace:^"
-  }
+  "dependencies": {}
 }

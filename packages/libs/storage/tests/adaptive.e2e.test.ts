@@ -79,9 +79,9 @@ describe('createAdaptiveStorage - Integration Tests', () => {
       await storage.set('key2', 'value2');
       await storage.set('key3', 'value3');
 
-      const keys = await storage.keys?.();
+      const keys = await storage.keys();
       expect(keys).toEqual(expect.arrayContaining(['key1', 'key2', 'key3']));
-      expect(keys?.length).toBe(3);
+      expect(keys.length).toBe(3);
     });
 
     it('should clear all keys', async () => {
@@ -92,12 +92,12 @@ describe('createAdaptiveStorage - Integration Tests', () => {
       await storage.set('clear1', 'value1');
       await storage.set('clear2', 'value2');
 
-      await storage.clear?.();
+      await storage.clear();
 
       expect(await storage.has('clear1')).toBe(false);
       expect(await storage.has('clear2')).toBe(false);
 
-      const keys = await storage.keys?.();
+      const keys = await storage.keys();
       expect(keys).toEqual([]);
     });
 

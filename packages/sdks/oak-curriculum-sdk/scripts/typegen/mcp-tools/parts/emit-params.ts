@@ -11,22 +11,14 @@ interface Meta {
   allowedValues?: readonly unknown[];
 }
 
-function emitEnumGuardBlock(
-  cap: string,
-  vt: PrimitiveType,
-  values: readonly unknown[],
-  optional: boolean,
-): string {
+function emitEnumGuardBlock(cap: string, values: readonly unknown[], optional: boolean): string {
   const lines: string[] = [];
   if (optional) lines.push(`// ${cap} value is optional, not all query parameters are.`);
   lines.push(`const allowed${cap}Values= ${JSON.stringify(values)} as const;`);
-  const typeSuffix = optional ? ' | undefined' : '';
-  lines.push(`type ${cap}Value = typeof allowed${cap}Values[number]${typeSuffix};`);
-  lines.push(`function is${cap}Value(value: ${vt}${typeSuffix}): value is ${cap}Value {`);
-  if (optional) lines.push('  if (value === undefined) { return true; }');
-  lines.push(`  const string${cap}Value: readonly ${vt}[] = allowed${cap}Values;`);
-  lines.push(`  return string${cap}Value.includes(value);`);
-  lines.push('}');
+  lines.push(
+    `const allowed${cap}Set = new Set<string | number | boolean>([...allowed${cap}Values]);`,
+  );
+  // No emitted type guard function; validators will use allowed values directly
   lines.push('');
   return lines.join('\n');
 }
@@ -41,13 +33,10 @@ function emitPathEnumGuards(
     const d = detailsMap.get(name);
     if (!d?.enumValues) continue;
     const cap = capitaliseFirst(name);
-    const vt = d.primitiveType;
     lines.push(`const allowed${cap}Values= ${JSON.stringify(d.enumValues)} as const;`);
-    lines.push(`type ${cap}Value = typeof allowed${cap}Values[number];`);
-    lines.push(`function is${cap}Value(value: ${vt}): value is ${cap}Value {`);
-    lines.push(`  const string${cap}Value: readonly ${vt}[] = allowed${cap}Values;`);
-    lines.push(`  return string${cap}Value.includes(value);`);
-    lines.push('}');
+    lines.push(
+      `const allowed${cap}Set = new Set<string | number | boolean>([...allowed${cap}Values]);`,
+    );
     lines.push('');
   }
   return lines.join('\n');
@@ -63,9 +52,8 @@ function emitQueryEnumGuards(
     const d = detailsMap.get(name);
     if (!d?.enumValues) continue;
     const cap = capitaliseFirst(name);
-    const vt = d.primitiveType;
     const opt = !d.required;
-    lines.push(emitEnumGuardBlock(cap, vt, d.enumValues, opt));
+    lines.push(emitEnumGuardBlock(cap, d.enumValues, opt));
   }
   return lines.join('\n');
 }
@@ -74,13 +62,13 @@ function emitParamMaps(
   pathParams: readonly string[],
   queryParams: readonly string[],
   detailsMap: Map<string, ParamDetails>,
-  pathMeta: Record<string, Meta>,
-  queryMeta: Record<string, Meta>,
+  pathMeta: Readonly<Record<string, Meta>>,
+  queryMeta: Readonly<Record<string, Meta>>,
 ): string {
   const buildMapBlock = (
     label: 'pathParams' | 'queryParams',
     names: readonly string[],
-    meta: Record<string, Meta>,
+    meta: Readonly<Record<string, Meta>>,
   ): string => {
     const out: string[] = [];
     out.push(`const ${label}= {`);
@@ -92,7 +80,7 @@ function emitParamMaps(
         out.push(
           `"${name}":{"typePrimitive":"${m.typePrimitive}","valueConstraint":${String(
             m.valueConstraint,
-          )},"required":${String(m.required)},"allowedValues":allowed${cap}Values, typeguard: is${cap}Value},`,
+          )},"required":${String(m.required)},"allowedValues":allowed${cap}Values},`,
         );
       } else {
         out.push(`"${name}":${JSON.stringify(m)},`);
@@ -102,9 +90,36 @@ function emitParamMaps(
     out.push('');
     return out.join('\n');
   };
+  const buildValidatorsBlock = (
+    label: 'pathValueValidators' | 'queryValueValidators',
+    names: readonly string[],
+    details: Map<string, ParamDetails>,
+  ): string => {
+    const lines: string[] = [];
+    lines.push(`const ${label}: Readonly<Record<string, (value: unknown) => boolean>> = {`);
+    for (const name of names) {
+      const d = details.get(name);
+      if (!d?.enumValues) continue;
+      const cap = capitaliseFirst(name);
+      const vt = d.primitiveType;
+      const opt = !d.required;
+      const typeCheck = vt === 'string' ? '"string"' : vt === 'number' ? '"number"' : '"boolean"';
+      lines.push(`  ${JSON.stringify(name)}: (value: unknown) => {`);
+      if (opt) lines.push('    if (value === undefined) return true;');
+      lines.push(`    if (typeof value !== ${typeCheck}) return false;`);
+      lines.push(`    const allowed = allowed${cap}Set;`);
+      lines.push('    return allowed.has(value);');
+      lines.push('  },');
+    }
+    lines.push('};');
+    lines.push('');
+    return lines.join('\n');
+  };
   const blocks = [
     buildMapBlock('pathParams', pathParams, pathMeta),
     buildMapBlock('queryParams', queryParams, queryMeta),
+    buildValidatorsBlock('pathValueValidators', pathParams, detailsMap),
+    buildValidatorsBlock('queryValueValidators', queryParams, detailsMap),
     'void pathParams;',
     'void queryParams;',
   ];
@@ -113,8 +128,8 @@ function emitParamMaps(
 
 export function emitParams(
   operation: OperationObject,
-  pathParamMetadata: Record<string, Meta>,
-  queryParamMetadata: Record<string, Meta>,
+  pathParamMetadata: Readonly<Record<string, Meta>>,
+  queryParamMetadata: Readonly<Record<string, Meta>>,
 ): string {
   const detailsMap = buildParamDetailsMap(operation);
   const pathParams = typeSafeKeys(pathParamMetadata);

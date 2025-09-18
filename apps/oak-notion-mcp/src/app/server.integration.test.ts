@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMcpServer } from './server';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import type { Logger } from '@oaknational/mcp-core';
+import type { Logger } from '@oaknational/mcp-logger';
 import { createMockRuntime, createMockListUsersResponse } from '../test/mocks';
 
 // Simple helper to create mock operations inline

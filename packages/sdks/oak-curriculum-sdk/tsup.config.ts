@@ -17,6 +17,7 @@ export default defineConfig({
     'src/types/generated/api-schema/path-parameters.ts',
     'src/types/generated/api-schema/path-utils.ts',
     'src/types/generated/api-schema/response-map.ts',
+    'src/types/generated/api-schema/routing/url-helpers.ts',
     'src/types/generated/api-schema/mcp-tools/index.ts',
     'src/types/generated/api-schema/mcp-tools/types.ts',
     'src/types/generated/api-schema/mcp-tools/lib.ts',
@@ -28,6 +29,8 @@ export default defineConfig({
     'src/types/generated/zod/endpoints.ts',
     'src/types/generated/zod/schemas.ts',
     'src/mcp/execute-tool-call.ts',
+    'src/mcp/zod-input-schema.ts',
+    'src/types/generated/openai-connector/index.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
@@ -40,7 +43,6 @@ export default defineConfig({
   platform: 'neutral',
   external: [
     // Keep all dependencies external for SDK
-    '@oaknational/mcp-core',
     'zod',
   ],
   treeshake: true,

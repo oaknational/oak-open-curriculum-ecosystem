@@ -1,4 +1,21 @@
-import type { CoreClock, CoreLogger, CoreStorage } from '@oaknational/mcp-core';
+// Removed unused imports
+
+interface CoreClock {
+  now(): number;
+}
+
+interface CoreLogger {
+  debug: (message: string, context?: unknown) => void;
+  info: (message: string, context?: unknown) => void;
+  warn: (message: string, context?: unknown) => void;
+  error: (message: string, context?: unknown) => void;
+}
+
+interface CoreStorage {
+  get: (key: string) => Promise<string | null>;
+  set: (key: string, value: string) => Promise<void>;
+  delete: (key: string) => Promise<void>;
+}
 
 export function createNodeClock(): CoreClock {
   return {
@@ -24,16 +41,16 @@ export function createConsoleLogger(name = 'node-logger'): CoreLogger {
 }
 
 export function createInMemoryStorage(): CoreStorage {
-  const store = new Map<string, unknown>();
+  const store = new Map<string, string>();
   return {
-    get(key) {
-      return Promise.resolve(store.get(key));
+    get(key: string) {
+      return Promise.resolve(store.get(key) ?? null);
     },
-    set(key, value) {
+    set(key: string, value: string) {
       store.set(key, value);
       return Promise.resolve();
     },
-    delete(key) {
+    delete(key: string) {
       store.delete(key);
       return Promise.resolve();
     },

@@ -1,6 +1,6 @@
 # @oaknational/mcp-providers-node
 
-Minimal Node providers for `@oaknational/mcp-core`:
+Minimal Node providers for lib packages:
 
 - `createNodeClock()`
 - `createConsoleLogger(name?: string)`

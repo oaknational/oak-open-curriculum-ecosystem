@@ -2,7 +2,7 @@
  * @fileoverview Type definitions for Notion query building
  * @module notion/query-building
  */
-import type { JsonObject } from '@oaknational/mcp-core';
+import type { JsonObject } from '@oaknational/mcp-logger';
 
 /**
  * MCP property filter definition
@@ -25,7 +25,7 @@ export interface McpSort {
  * MCP filters for database queries
  */
 export interface McpFilters {
-  properties?: Record<string, McpPropertyFilter>;
+  properties?: Readonly<Record<string, McpPropertyFilter>>;
   sorts?: McpSort[];
   pageSize?: number;
   startCursor?: string;

@@ -24,8 +24,9 @@ const config: ConfigArray = tsEslintConfig(
       'scripts/*.mjs',
       // Examples
       'examples/**',
-      // Generated files
-      'src/types/generated/**',
+
+      // E2E script snippets not part of the TS project
+      'e2e-tests/scripts/**',
       'test-cache/**',
       // Documentation
       'docs/**',
@@ -35,7 +36,7 @@ const config: ConfigArray = tsEslintConfig(
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        projectService: false,
+        projectService: true,
         project: wsTsProject,
         tsconfigRootDir: thisDir,
       },
@@ -114,6 +115,32 @@ const config: ConfigArray = tsEslintConfig(
     files: ['scripts/typegen/**'],
     rules: {
       'no-restricted-properties': 'off',
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      'max-depth': 'off',
+      complexity: 'off',
+    },
+  },
+  // Rules for the generated files
+  {
+    files: ['src/types/generated/**'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-depth': 'off',
+      complexity: 'off',
+      // Generated code: relax strictness to avoid busywork on emitted text
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-redundant-type-constituents': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'off',
+      'no-irregular-whitespace': 'off',
+      'no-restricted-properties': 'off',
+      'max-statements': 'off',
     },
   },
   // Allow the type helper file to use restricted APIs internally

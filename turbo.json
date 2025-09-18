@@ -131,8 +131,8 @@
         "$TURBO_ROOT$/packages/libs/storage",
         "$TURBO_ROOT$/packages/libs/transport"
       ],
-      "env": ["E2E_REAL_API", "NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
-      "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "E2E_REAL_API", "OAK_API_KEY"]
+      "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
+      "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
     "type-check": {
       "dependsOn": [],

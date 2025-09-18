@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — AI Reference
 
-Generated: 2025-09-15T16:01:32.465Z
+Generated: 2025-09-18T09:05:00.572Z
 
 This single-file document is intended for AI agents. It contains the public API surface of the SDK, usage examples, and programmatic exports. For detailed human-oriented docs, see files under `docs/api/`.
 
@@ -506,5 +506,7 @@ Parameters:
 ### types/generated/api-schema/api-paths-types
 
 ### types/generated/api-schema/path-parameters
+
+### types/generated/api-schema/routing/url-helpers
 
 ### types/schema-bridge

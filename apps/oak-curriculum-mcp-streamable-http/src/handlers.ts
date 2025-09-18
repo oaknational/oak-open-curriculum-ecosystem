@@ -1,36 +1,38 @@
 import type express from 'express';
-import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { ListToolsRequestSchema, CallToolRequestSchema } from '@modelcontextprotocol/sdk/types.js';
-import type { CallToolRequest, Tool, TextContent } from '@modelcontextprotocol/sdk/types.js';
-import { getMcpTools } from './mcp-tools.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+// getMcpTools no longer used now that tools are registered directly from MCP_TOOLS
 import { readEnv } from './env.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
   isToolName,
+  MCP_TOOLS,
+  zodRawShapeFromToolInputJsonSchema,
+  typeSafeEntries,
+  validateResponse,
+  type HttpMethod,
 } from '@oaknational/oak-curriculum-sdk';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+function toHttpMethod(methodUpper: string): HttpMethod {
+  if (methodUpper === 'GET') return 'get';
+  if (methodUpper === 'POST') return 'post';
+  if (methodUpper === 'PUT') return 'put';
+  if (methodUpper === 'DELETE') return 'delete';
+  if (methodUpper === 'PATCH') return 'patch';
+  throw new Error('Unsupported method: ' + methodUpper);
+}
 
-export function formatToolResponse(
-  result: unknown,
-  isError = false,
-): {
-  content: readonly TextContent[];
-  isError?: true;
-} {
-  function textContent(text: string): { type: 'text'; text: string } {
-    return { type: 'text', text };
-  }
-  if (!isError) {
-    return {
-      content: [textContent(JSON.stringify(result, null, 2))],
-    };
-  }
-  const message = result instanceof Error ? result.message : 'Unknown error';
-  const lines = message.split('\n');
-  const [first, ...rest] = lines;
-  const content = [textContent(`Error: ${first}`), ...rest.map((t) => textContent(t))];
-  return { content, isError: true };
+function validateOutput(
+  path: string,
+  methodUpper: string,
+  data: unknown,
+): { ok: true } | { ok: false; message: string } {
+  const httpMethod = toHttpMethod(methodUpper);
+  const validation = validateResponse(path, httpMethod, 200, data);
+  return validation.ok
+    ? { ok: true }
+    : { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
 }
 
 export function findTool(name: string, tools: readonly Tool[]): Tool {
@@ -39,32 +41,33 @@ export function findTool(name: string, tools: readonly Tool[]): Tool {
       return tool;
     }
   }
-  throw new Error(`Unknown tool: ${name}`);
+  throw new Error('Unknown tool: ' + name);
 }
 
-export function registerHandlers(server: Server): void {
-  server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: getMcpTools() }));
-
-  server.setRequestHandler(CallToolRequestSchema, async (request: CallToolRequest) => {
-    const { name, arguments: args } = request.params;
-    try {
-      const tools = getMcpTools();
-      findTool(name, tools);
-      if (!isToolName(name)) {
-        return formatToolResponse(new Error(`Unknown tool: ${name}`), true);
-      }
-      const env = readEnv();
-      const client = createOakPathBasedClient(env.OAK_API_KEY);
-      const result = await executeToolCall(name, args, client);
-      if (result.error) {
-        return formatToolResponse(new Error(result.error.message), true);
-      }
-      return formatToolResponse(result.data);
-    } catch (error) {
-      const safeError = error instanceof Error ? error : new Error('Unknown error');
-      return formatToolResponse(safeError, true);
-    }
-  });
+export function registerHandlers(server: McpServer): void {
+  for (const [name, def] of typeSafeEntries(MCP_TOOLS)) {
+    const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
+    const description = def.method.toUpperCase() + ' ' + def.path;
+    server.registerTool(
+      name,
+      { title: name, description, inputSchema: input },
+      async (params: unknown) => {
+        const env = readEnv();
+        const client = createOakPathBasedClient(env.OAK_API_KEY);
+        if (!isToolName(name)) throw new Error('Unknown tool');
+        const execResult = await executeToolCall(name, params, client);
+        if (execResult.error) {
+          const e = execResult.error;
+          const message = e instanceof Error ? e.message : 'Unknown error';
+          return { content: [{ type: 'text', text: 'Error: ' + message }], isError: true };
+        }
+        const out = validateOutput(def.path, def.method, execResult.data);
+        if (!out.ok)
+          return { content: [{ type: 'text', text: 'Error: ' + out.message }], isError: true };
+        return { content: [{ type: 'text', text: JSON.stringify(execResult.data) }] };
+      },
+    );
+  }
 }
 
 export function createMcpHandler(

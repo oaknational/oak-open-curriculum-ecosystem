@@ -27,8 +27,8 @@ function escapeForSingleQuotedJsString(text: string): string {
  * The returned string is a JS/TS snippet defining `getValidRequestParamsDescription`.
  */
 export function emitErrorDescription(
-  pathParamMetadata: Record<string, ParamMetadata>,
-  queryParamMetadata: Record<string, ParamMetadata>,
+  pathParamMetadata: Readonly<Record<string, ParamMetadata>>,
+  queryParamMetadata: Readonly<Record<string, ParamMetadata>>,
 ): string {
   const schema = buildInputSchemaObject(pathParamMetadata, queryParamMetadata);
 
@@ -43,7 +43,9 @@ export function emitErrorDescription(
 
   const escaped = escapeForSingleQuotedJsString(content);
 
-  return ['const getValidRequestParamsDescription= () => {', `  return '${escaped}';`, '};'].join(
-    '\n',
-  );
+  return [
+    'const getValidRequestParamsDescription= (): string => {',
+    `  return '${escaped}';`,
+    '};',
+  ].join('\n');
 }

@@ -6,15 +6,13 @@
  */
 
 import { createHandleToolCall, type SdkClient } from './handlers/tool-handler.js';
-import type { CallToolRequest, Tool } from '@modelcontextprotocol/sdk/types.js';
-import { getMcpTools } from './runtime/index.js';
+import type { CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
+// Removed unused import
 
 /**
  * MCP tools module interface
  */
 export interface McpToolsModule {
-  /** Available MCP tools */
-  readonly tools: Tool[];
   /** Handle tool execution */
   handleTool: (name: string, args: unknown) => Promise<unknown>;
 }
@@ -42,7 +40,6 @@ export function createMcpToolsModule(deps: { client: SdkClient }): McpToolsModul
     return { content: [] };
   }
   return {
-    tools: getMcpTools(),
     handleTool: async (name: string, args: unknown) => {
       const request = {
         method: 'tools/call',

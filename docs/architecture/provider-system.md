@@ -1,17 +1,17 @@
 # Provider System Overview
 
-This document explains how providers integrate with `@oaknational/mcp-core`, how apps compose a runtime, and how dependencies are injected. For a broader context, see the [Architecture index](./README.md) and onboarding in [docs/onboarding.md](../onboarding.md).
+This document explains how providers integrate with the lib packages, how apps compose a runtime, and how dependencies are injected. For a broader context, see the [Architecture index](./README.md) and onboarding in [docs/onboarding.md](../onboarding.md).
 
 ## Concepts
 
-- Core (`@oaknational/mcp-core`): interfaces and `createRuntime(providers)` factory. No provider imports.
+- Lib packages: interfaces and utilities for logger, storage, transport, and environment. No provider imports.
 - Providers (e.g., `@oaknational/mcp-providers-node`): implement `CoreProviders` (logger, clock, storage, etc.).
 - Apps: read config, select provider set, call `createRuntime`, pass runtime into tools/integrations.
 
 ## Composition
 
 ```ts
-import { createRuntime } from '@oaknational/mcp-core';
+// Runtime composition is now handled locally in each app
 import { createNodeClock } from '@oaknational/mcp-providers-node';
 import { createInMemoryStorage } from '@oaknational/mcp-providers-node';
 

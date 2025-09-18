@@ -101,9 +101,6 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
         version: 1.17.2
-      '@oaknational/mcp-core':
-        specifier: workspace:*
-        version: link:../../packages/core/mcp-core
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -150,9 +147,6 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.2
         version: 1.17.2
-      '@oaknational/mcp-core':
-        specifier: workspace:*
-        version: link:../../packages/core/mcp-core
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -214,9 +208,6 @@ importers:
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.1
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../packages/core/mcp-core
       '@oaknational/mcp-logger':
         specifier: workspace:^
         version: link:../../packages/libs/logger
@@ -340,13 +331,8 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.12)(@types/node@24.2.0)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(tsx@4.20.5)(yaml@2.8.1)
 
-  packages/core/mcp-core: {}
-
   packages/libs/env:
     dependencies:
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../core/mcp-core
       dotenv:
         specifier: ^17.2.1
         version: 17.2.1
@@ -360,9 +346,6 @@ importers:
 
   packages/libs/logger:
     dependencies:
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../core/mcp-core
       consola:
         specifier: ^3.2.3
         version: 3.4.2
@@ -375,10 +358,6 @@ importers:
         version: 5.9.2
 
   packages/libs/storage:
-    dependencies:
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../core/mcp-core
     devDependencies:
       pnpm:
         specifier: ^10.16.1
@@ -389,9 +368,9 @@ importers:
 
   packages/libs/transport:
     dependencies:
-      '@oaknational/mcp-core':
+      '@oaknational/mcp-logger':
         specifier: workspace:^
-        version: link:../../core/mcp-core
+        version: link:../logger
     devDependencies:
       pnpm:
         specifier: ^10.16.1
@@ -400,11 +379,7 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
 
-  packages/providers/mcp-providers-node:
-    dependencies:
-      '@oaknational/mcp-core':
-        specifier: workspace:^
-        version: link:../../core/mcp-core
+  packages/providers/mcp-providers-node: {}
 
   packages/sdks/oak-curriculum-sdk:
     dependencies:
@@ -7401,7 +7376,7 @@ snapshots:
       sirv: 3.0.2
       tinyglobby: 0.2.14
       tinyrainbow: 2.0.0
-      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@24.2.0)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(tsx@4.20.5)(yaml@2.8.1)
+      vitest: 3.2.4(@types/debug@4.1.12)(@types/node@22.17.1)(@vitest/ui@3.2.4)(jiti@2.5.1)(jsdom@25.0.1)(tsx@4.20.5)(yaml@2.8.1)
 
   '@vitest/utils@3.2.4':
     dependencies:

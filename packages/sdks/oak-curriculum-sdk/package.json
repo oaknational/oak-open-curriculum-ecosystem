@@ -20,6 +20,7 @@
   },
   "scripts": {
     "type-gen": "pnpm generate:types",
+    "posttype-gen": "pnpm -w format:root",
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "pregenerate:types": "pnpm generate:clean",
     "generate:types": "pnpm generate:openapi && pnpm generate:zod",

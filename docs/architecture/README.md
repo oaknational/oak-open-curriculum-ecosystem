@@ -11,7 +11,7 @@
 
 - Standard structure (Option A):
   - `apps/` – applications (MCP servers)
-  - `packages/core/` – core interfaces/utilities (`@oaknational/mcp-core`)
+  - `packages/libs/` – lib interfaces/utilities (logger, storage, transport, env)
   - `packages/libs/` – reusable libraries (`@oaknational/mcp-*`)
   - `packages/runtime-adapters/` – runtime adapters (e.g., Node, Workers)
   - `packages/sdks/` – public SDKs (future growth)
