@@ -1,10 +1,11 @@
-import type { OakApiPathBasedClient } from '../../../src/client/index.js';
-import { executeToolCall } from '../../../src/mcp/execute-tool-call.js';
+
+import type { OakApiPathBasedClient } from '../../../client/index.js';
+import { executeToolCall } from '../../../mcp/execute-tool-call.js';
 import {
   generateCanonicalUrlWithContext,
   extractSlug,
   type ContentType,
-} from '../../../src/types/generated/api-schema/routing/url-helpers.js';
+} from '../api-schema/routing/url-helpers.js';
 
 export type OpenAiToolName = 'search' | 'fetch';
 
@@ -82,9 +83,7 @@ function normalizeFetchId(args: unknown): string {
   } else if (args && typeof args === 'object') {
     idVal = getOwn(args, 'id');
   }
-  if (typeof idVal !== 'string' || idVal.trim() === '') {
-    throw new TypeError('fetch requires an "id" string');
-  }
+  if (typeof idVal !== 'string' || idVal.trim() === '') throw new TypeError('fetch requires an "id" string');
   return idVal.trim();
 }
 
@@ -123,9 +122,7 @@ export async function executeOpenAiToolCall(
   if (name === 'fetch') {
     const id = normalizeFetchId(args);
     const type = detectTypeFromId(id);
-    if (!type) {
-      throw new TypeError('Unsupported id prefix in ' + id);
-    }
+    if (!type) throw new TypeError('Unsupported id prefix in ' + id);
     const slug = extractSlug(id);
 
     switch (type) {
