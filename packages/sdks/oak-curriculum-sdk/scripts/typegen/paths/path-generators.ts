@@ -28,7 +28,7 @@ import type { paths as Paths } from "./api-paths-types";
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
 import type { SchemaBase as Schema } from "./api-schema-base";
-import { schemaBase as schema } from "./api-schema-base";
+import { schemaBase as schema } from "./api-schema-base.js";
 
 `;
 }

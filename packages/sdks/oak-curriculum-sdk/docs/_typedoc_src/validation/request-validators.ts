@@ -86,7 +86,7 @@ function isEndpointDefinition(value: unknown): value is EndpointDefinition {
 /**
  * Builds a map of path+method to parameter schemas from generated endpoints
  *
- * @todo move generation to compile-time, so this can be a static constant, with typ guards and a static type
+ * @remarks move generation to compile-time, so this can be a static constant, with typ guards and a static type
  */
 function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
   const schemaMap = new Map<string, z.ZodSchema>();
@@ -161,14 +161,14 @@ function makeUnknownOperation(key: string): ValidationResult<unknown> {
  * @param args - The request parameters to validate
  * @returns Validation result with success/failure status
  *
- * @todo properly type the return value
+ * @remarks consider if we can further narrow the return type
  */
 export function validateRequest<P extends ValidPath>(
   path: P,
   method: AllowedMethodsForPath<P>,
   args: unknown,
 ): ValidationResult<unknown> {
-  /** @todo sort out proper types for schemas */
+  /** @remarks sort out proper types for schemas */
   // Normalize the path to match generated format
   const normalizedPath = toColon(path);
   const key = `${method.toUpperCase()}:${normalizedPath}`;

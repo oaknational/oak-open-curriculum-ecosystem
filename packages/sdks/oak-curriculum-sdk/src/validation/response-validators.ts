@@ -6,7 +6,7 @@
 import type { ZodType, ZodSchema } from 'zod';
 import type { ValidationResult, HttpMethod, ValidationFailure } from './types';
 
-import { isValidationFailure, parseWithSchema } from './types';
+import { isValidationFailure, parseWithSchema } from './types.js';
 import {
   getOperationIdByPathAndMethod,
   isValidPath,
@@ -16,15 +16,9 @@ import {
   type AllowedMethodsForPath,
   type JsonBody200,
   type OperationId,
-} from '../types/generated/api-schema/path-parameters';
-import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map';
-import { augmentResponseWithCanonicalUrl } from '../response-augmentation';
-
-// Error schemas for common status codes
-// TODO: Generate error schemas from OpenAPI spec
-// responseSchemaMap.set('*:401', schemas.error_UNAUTHORIZED);
-// responseSchemaMap.set('*:403', schemas.error_FORBIDDEN);
-// responseSchemaMap.set('*:500', schemas.error_INTERNAL_SERVER_ERROR);
+} from '../types/generated/api-schema/path-parameters.js';
+import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map.js';
+import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
 
 /**
  * Parse and validate response data
@@ -85,7 +79,7 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
  * @param response - The response data to validate
  * @returns ValidationResult with validated response or validation issues
  *
- * @note Only the 200 responses are defined in the original OpenAPI schema, hence the overloads with unknown types
+ * @remarks Only the 200 responses are defined in the original OpenAPI schema, hence the overloads with unknown types
  */
 export function validateResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   path: P,

@@ -15,7 +15,7 @@ import type { paths as Paths } from "./api-paths-types";
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
 import type { SchemaBase as Schema } from "./api-schema-base";
-import { schemaBase as schema } from "./api-schema-base";
+import { schemaBase as schema } from "./api-schema-base.js";
 
 
 export type ValidPath = keyof Paths;
@@ -1753,13 +1753,13 @@ export function areValidResponseCodes(codes: string[]): codes is ValidResponseCo
   return codes.every((code) => isValidResponseCode(code));
 }
 
-type UnknownResponseCode = Exclude<keyof PossibleResponseCode, ValidResponseCode>;
+export type UnknownResponseCode = Exclude<keyof PossibleResponseCode, ValidResponseCode>;
 export function isUnknownResponseCode(value: string): value is UnknownResponseCode {
   const stringCodes: readonly string[] = Object.keys(RESPONSE_CODES);
   return stringCodes.includes(value) && !isValidResponseCode(value);
 }
 
-const ERROR_RESPONSE_CODES = Object.keys(RESPONSE_CODES).filter((code) => (code.startsWith('4') || code.startsWith('5')));
+export const ERROR_RESPONSE_CODES = Object.keys(RESPONSE_CODES).filter((code) => (code.startsWith('4') || code.startsWith('5')));
 export type ErrorResponseCode = typeof ERROR_RESPONSE_CODES[number];
 export function isErrorResponseCode(value: string): value is ErrorResponseCode {
   const stringCodes: readonly string[] = ERROR_RESPONSE_CODES;

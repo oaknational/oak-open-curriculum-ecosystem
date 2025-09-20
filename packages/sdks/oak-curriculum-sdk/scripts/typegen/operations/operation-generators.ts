@@ -164,13 +164,13 @@ export function areValidResponseCodes(codes: string[]): codes is ValidResponseCo
   return codes.every((code) => isValidResponseCode(code));
 }
 
-type UnknownResponseCode = Exclude<keyof PossibleResponseCode, ValidResponseCode>;
+export type UnknownResponseCode = Exclude<keyof PossibleResponseCode, ValidResponseCode>;
 export function isUnknownResponseCode(value: string): value is UnknownResponseCode {
   const stringCodes: readonly string[] = Object.keys(RESPONSE_CODES);
   return stringCodes.includes(value) && !isValidResponseCode(value);
 }
 
-const ERROR_RESPONSE_CODES = Object.keys(RESPONSE_CODES).filter((code) => (code.startsWith('4') || code.startsWith('5')));
+export const ERROR_RESPONSE_CODES = Object.keys(RESPONSE_CODES).filter((code) => (code.startsWith('4') || code.startsWith('5')));
 export type ErrorResponseCode = typeof ERROR_RESPONSE_CODES[number];
 export function isErrorResponseCode(value: string): value is ErrorResponseCode {
   const stringCodes: readonly string[] = ERROR_RESPONSE_CODES;

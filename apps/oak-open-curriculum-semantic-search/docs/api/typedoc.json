@@ -47,7 +47,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 106,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L106"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L106"
 								}
 							],
 							"type": {
@@ -76,7 +76,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 108,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L108"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L108"
 								}
 							],
 							"type": {
@@ -105,7 +105,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 104,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L104"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L104"
 								}
 							],
 							"type": {
@@ -131,7 +131,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 102,
 							"character": 17,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L102"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L102"
 						}
 					]
 				},
@@ -158,7 +158,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 19,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L19"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L19"
 						}
 					],
 					"type": {
@@ -174,7 +174,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 19,
 									"character": 27,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L19"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L19"
 								}
 							],
 							"signatures": [
@@ -254,7 +254,7 @@
 																			"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																			"line": 26,
 																			"character": 4,
-																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
+																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
 																		}
 																	],
 																	"type": {
@@ -279,7 +279,7 @@
 																								"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																								"line": 26,
 																								"character": 15,
-																								"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
+																								"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
 																							}
 																						],
 																						"type": {
@@ -298,7 +298,7 @@
 																								"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																								"line": 26,
 																								"character": 35,
-																								"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
+																								"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
 																							}
 																						],
 																						"type": {
@@ -321,7 +321,7 @@
 																						"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																						"line": 26,
 																						"character": 13,
-																						"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
+																						"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L26"
 																					}
 																				]
 																			}
@@ -339,7 +339,7 @@
 																			"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																			"line": 24,
 																			"character": 4,
-																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L24"
+																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L24"
 																		}
 																	],
 																	"type": {
@@ -358,7 +358,7 @@
 																			"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																			"line": 25,
 																			"character": 4,
-																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L25"
+																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L25"
 																		}
 																	],
 																	"type": {
@@ -382,7 +382,7 @@
 																	"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																	"line": 23,
 																	"character": 11,
-																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L23"
+																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L23"
 																}
 															]
 														}
@@ -421,7 +421,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 34,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
 						}
 					],
 					"type": {
@@ -437,7 +437,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 34,
 									"character": 30,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
 								}
 							],
 							"signatures": [
@@ -488,7 +488,7 @@
 																	"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																	"line": 34,
 																	"character": 64,
-																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
+																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
 																}
 															],
 															"type": {
@@ -507,7 +507,7 @@
 																	"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																	"line": 34,
 																	"character": 84,
-																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
+																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
 																}
 															],
 															"type": {
@@ -530,7 +530,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 															"line": 34,
 															"character": 62,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L34"
 														}
 													]
 												}
@@ -571,7 +571,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 10,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L10"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L10"
 						}
 					],
 					"type": {
@@ -587,7 +587,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 10,
 									"character": 25,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L10"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L10"
 								}
 							],
 							"signatures": [
@@ -667,7 +667,7 @@
 																			"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																			"line": 13,
 																			"character": 24,
-																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
+																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
 																		}
 																	],
 																	"type": {
@@ -686,7 +686,7 @@
 																			"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																			"line": 13,
 																			"character": 42,
-																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
+																			"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
 																		}
 																	],
 																	"type": {
@@ -709,7 +709,7 @@
 																	"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 																	"line": 13,
 																	"character": 22,
-																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
+																	"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L13"
 																}
 															]
 														}
@@ -736,7 +736,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 122,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L122"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L122"
 						}
 					],
 					"type": {
@@ -772,7 +772,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 							"line": 112,
 							"character": 16,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L112"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L112"
 						}
 					],
 					"signatures": [
@@ -795,7 +795,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 									"line": 112,
 									"character": 16,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L112"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L112"
 								}
 							],
 							"type": {
@@ -836,7 +836,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/oak-adapter-sdk.ts#L1"
 				}
 			]
 		},
@@ -860,7 +860,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 16,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L16"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L16"
 						}
 					],
 					"type": {
@@ -950,7 +950,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 23,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L23"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L23"
 						}
 					],
 					"type": {
@@ -1168,7 +1168,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 17,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L17"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L17"
 						}
 					],
 					"type": {
@@ -1310,7 +1310,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 25,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L25"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L25"
 						}
 					],
 					"type": {
@@ -1443,7 +1443,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 21,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L21"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L21"
 						}
 					],
 					"type": {
@@ -1631,7 +1631,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 18,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L18"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L18"
 						}
 					],
 					"type": {
@@ -1674,7 +1674,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 							"line": 19,
 							"character": 13,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L19"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L19"
 						}
 					],
 					"type": {
@@ -1776,7 +1776,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/adapters/sdk-guards.ts#L1"
 				}
 			]
 		},
@@ -1798,7 +1798,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts",
 							"line": 7,
 							"character": 22,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L7"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L7"
 						}
 					],
 					"signatures": [
@@ -1813,7 +1813,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts",
 									"line": 7,
 									"character": 22,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L7"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L7"
 								}
 							],
 							"parameters": [
@@ -1863,7 +1863,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts",
 							"line": 5,
 							"character": 31,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L5"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L5"
 						}
 					],
 					"target": 39
@@ -1879,7 +1879,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts",
 							"line": 5,
 							"character": 14,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L5"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L5"
 						}
 					],
 					"target": 20
@@ -1905,7 +1905,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/index.ts#L1"
 				}
 			]
 		},
@@ -1927,7 +1927,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts",
 							"line": 6,
 							"character": 22,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L6"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L6"
 						}
 					],
 					"signatures": [
@@ -1942,7 +1942,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts",
 									"line": 6,
 									"character": 22,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L6"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L6"
 								}
 							],
 							"parameters": [
@@ -2028,7 +2028,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/lessons.ts#L1"
 				}
 			]
 		},
@@ -2057,7 +2057,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 25,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L25"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L25"
 								}
 							],
 							"type": {
@@ -2079,7 +2079,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 22,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L22"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L22"
 								}
 							],
 							"type": {
@@ -2098,7 +2098,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 24,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L24"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L24"
 								}
 							],
 							"type": {
@@ -2123,7 +2123,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 23,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L23"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L23"
 								}
 							],
 							"type": {
@@ -2148,7 +2148,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 							"line": 21,
 							"character": 17,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L21"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L21"
 						}
 					]
 				},
@@ -2172,7 +2172,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 10,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L10"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L10"
 								}
 							],
 							"type": {
@@ -2193,7 +2193,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 11,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L11"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L11"
 								}
 							],
 							"type": {
@@ -2214,7 +2214,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 7,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L7"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L7"
 								}
 							],
 							"type": {
@@ -2252,7 +2252,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 8,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L8"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L8"
 								}
 							],
 							"type": {
@@ -2271,7 +2271,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 4,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L4"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L4"
 								}
 							],
 							"type": {
@@ -2301,7 +2301,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 9,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L9"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L9"
 								}
 							],
 							"type": {
@@ -2322,7 +2322,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 6,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L6"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L6"
 								}
 							],
 							"type": {
@@ -2410,7 +2410,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 5,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L5"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L5"
 								}
 							],
 							"type": {
@@ -2439,7 +2439,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 							"line": 3,
 							"character": 17,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L3"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L3"
 						}
 					]
 				},
@@ -2461,7 +2461,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 18,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L18"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L18"
 								}
 							],
 							"type": {
@@ -2483,7 +2483,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 15,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L15"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L15"
 								}
 							],
 							"type": {
@@ -2502,7 +2502,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 16,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L16"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L16"
 								}
 							],
 							"type": {
@@ -2521,7 +2521,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 									"line": 17,
 									"character": 2,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L17"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L17"
 								}
 							],
 							"type": {
@@ -2561,7 +2561,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 							"line": 14,
 							"character": 17,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L14"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L14"
 						}
 					]
 				},
@@ -2576,7 +2576,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 							"line": 28,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L28"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L28"
 						}
 					],
 					"type": {
@@ -2602,7 +2602,7 @@
 													"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 													"line": 29,
 													"character": 22,
-													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
+													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
 												}
 											],
 											"type": {
@@ -2626,7 +2626,7 @@
 													"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 													"line": 29,
 													"character": 6,
-													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
+													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
 												}
 											],
 											"type": {
@@ -2649,7 +2649,7 @@
 											"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 											"line": 29,
 											"character": 4,
-											"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
+											"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L29"
 										}
 									]
 								}
@@ -2674,7 +2674,7 @@
 													"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 													"line": 30,
 													"character": 24,
-													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
+													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
 												}
 											],
 											"type": {
@@ -2698,7 +2698,7 @@
 													"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 													"line": 30,
 													"character": 6,
-													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
+													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
 												}
 											],
 											"type": {
@@ -2721,7 +2721,7 @@
 											"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 											"line": 30,
 											"character": 4,
-											"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
+											"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L30"
 										}
 									]
 								}
@@ -2751,7 +2751,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/types.ts#L1"
 				}
 			]
 		},
@@ -2773,7 +2773,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts",
 							"line": 6,
 							"character": 22,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L6"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L6"
 						}
 					],
 					"signatures": [
@@ -2788,7 +2788,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts",
 									"line": 6,
 									"character": 22,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L6"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L6"
 								}
 							],
 							"parameters": [
@@ -2874,7 +2874,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/hybrid-search/units.ts#L1"
 				}
 			]
 		},
@@ -2896,7 +2896,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts",
 							"line": 124,
 							"character": 12,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L124"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L124"
 						}
 					],
 					"type": {
@@ -2915,7 +2915,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts",
 							"line": 126,
 							"character": 16,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L126"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L126"
 						}
 					],
 					"signatures": [
@@ -2930,7 +2930,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts",
 									"line": 126,
 									"character": 16,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L126"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L126"
 								}
 							],
 							"parameters": [
@@ -2975,7 +2975,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.ts#L1"
 				}
 			]
 		},
@@ -2997,7 +2997,7 @@
 							"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 							"line": 4,
 							"character": 16,
-							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L4"
+							"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L4"
 						}
 					],
 					"signatures": [
@@ -3012,7 +3012,7 @@
 									"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 									"line": 4,
 									"character": 16,
-									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L4"
+									"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L4"
 								}
 							],
 							"parameters": [
@@ -3059,7 +3059,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 10,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L10"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L10"
 														}
 													],
 													"type": {
@@ -3084,7 +3084,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 11,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L11"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L11"
 														}
 													],
 													"type": {
@@ -3109,7 +3109,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 12,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L12"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L12"
 														}
 													],
 													"type": {
@@ -3134,7 +3134,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 15,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L15"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L15"
 														}
 													],
 													"type": {
@@ -3159,7 +3159,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 13,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L13"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L13"
 														}
 													],
 													"type": {
@@ -3184,7 +3184,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 14,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L14"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L14"
 														}
 													],
 													"type": {
@@ -3209,7 +3209,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 7,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L7"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L7"
 														}
 													],
 													"type": {
@@ -3234,7 +3234,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 8,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L8"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L8"
 														}
 													],
 													"type": {
@@ -3259,7 +3259,7 @@
 															"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 															"line": 9,
 															"character": 4,
-															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L9"
+															"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L9"
 														}
 													],
 													"type": {
@@ -3295,7 +3295,7 @@
 													"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 													"line": 6,
 													"character": 8,
-													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L6"
+													"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L6"
 												}
 											]
 										}
@@ -3323,7 +3323,7 @@
 					"fileName": "apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts",
 					"line": 1,
 					"character": 0,
-					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/76fc07f007c4d96971f2ef1fab61a390e1cb46d8/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L1"
+					"url": "https://github.com/oaknational/oak-mcp-ecosystem/blob/37b2adefff5849cd226af0752c582b62d686cbcc/apps/oak-open-curriculum-semantic-search/src/lib/openapi.register.ts#L1"
 				}
 			]
 		}
