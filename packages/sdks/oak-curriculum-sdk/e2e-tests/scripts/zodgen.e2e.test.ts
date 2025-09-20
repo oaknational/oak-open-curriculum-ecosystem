@@ -3,7 +3,8 @@ import { rmSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'node
 import path from 'node:path';
 import { execSync } from 'child_process';
 
-import { generateZodSchemasArtifacts } from '../../scripts/zodgen-core';
+import { generateZodSchemas } from '../../scripts/zodgen-core';
+import type { OpenAPI3 } from 'openapi-typescript';
 
 function assertNoForbiddenAssertions(content: string): void {
   const lines = content.split('\n');
@@ -20,10 +21,9 @@ function assertNoForbiddenAssertions(content: string): void {
 }
 
 // Minimal OpenAPI v3 doc with a single component schema to keep the test light
-const minimalOpenApi = {
+const minimalOpenApi: OpenAPI3 = {
   openapi: '3.0.0',
   info: { title: 'Test', version: '1.0.0' },
-  servers: [{ url: 'https://example.com' }],
   paths: {},
   components: {
     schemas: {
@@ -37,11 +37,11 @@ const minimalOpenApi = {
       },
     },
   },
-} as const;
+};
 
 describe('zod generator - functionality tests', () => {
   const outDir = path.resolve(__dirname, '../../test-cache/zod-out');
-  const outFile = path.join(outDir, 'schemas.ts');
+  const outFile = path.join(outDir, 'zodSchemas.ts');
 
   beforeEach(() => {
     // clean output directory between runs
@@ -56,13 +56,13 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates a schemas.ts file', async () => {
-    await generateZodSchemasArtifacts(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir);
 
     expect(existsSync(outFile)).toBe(true);
   });
 
   it('generates valid TypeScript that imports zod', async () => {
-    await generateZodSchemasArtifacts(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir);
 
     const content = readFileSync(outFile, 'utf-8');
 
@@ -80,7 +80,7 @@ describe('zod generator - functionality tests', () => {
         module: 'ESNext',
         target: 'ES2020',
       },
-      include: ['./schemas.ts'],
+      include: ['./zodSchemas.ts'],
     };
 
     const tsConfigPath = path.join(outDir, 'tsconfig.json');
@@ -97,7 +97,7 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates schemas for components', async () => {
-    await generateZodSchemasArtifacts(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir);
 
     const content = readFileSync(outFile, 'utf-8');
 
@@ -110,7 +110,7 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('does not use type assertions except as const', async () => {
-    await generateZodSchemasArtifacts(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir);
 
     const content = readFileSync(outFile, 'utf-8');
 
@@ -119,11 +119,11 @@ describe('zod generator - functionality tests', () => {
   });
 
   it('generates importable and usable Zod schemas', async () => {
-    await generateZodSchemasArtifacts(minimalOpenApi, outDir);
+    await generateZodSchemas(minimalOpenApi, outDir);
 
     // Create a test file that imports and uses the generated schemas
     const testContent = `
-      import { schemas } from './schemas.js';
+      import { schemas } from './zodSchemas.js';
       import { z } from 'zod';
       
       // Test that we can use the schemas

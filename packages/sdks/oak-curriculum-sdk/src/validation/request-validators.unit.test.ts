@@ -6,6 +6,8 @@
 import { describe, it, expect } from 'vitest';
 import { validateRequest } from './request-validators.js';
 import type { HttpMethod } from './types.js';
+import type { ValidPath } from 'src/types/generated/api-schema/path-parameters.js';
+
 function hasOwnString(o: unknown, key: string, expected: string): boolean {
   if (typeof o !== 'object' || o === null) {
     return false;
@@ -115,7 +117,7 @@ describe('validateRequest', () => {
 
   describe('for unknown operations', () => {
     it('should return error for unknown path', () => {
-      const result = validateRequest('/unknown/path', 'get', {});
+      const result = validateRequest('/unknown/path' as ValidPath, 'get', {});
 
       expect(result.ok).toBe(false);
       if (!result.ok) {

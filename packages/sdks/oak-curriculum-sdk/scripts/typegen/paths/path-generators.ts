@@ -27,7 +27,7 @@ import type { paths as Paths } from "./api-paths-types";
  * The Schema["paths"] keys are the same as the Paths type keys, but the types are different.
  * The Schema["paths"] type is for the raw schema, and the Paths type is the OpenAPI-TS type for the processed schema.
  */
-import type { SchemaBase as Schema } from "./api-schema-base.js";
+import type { SchemaBase as Schema } from "./api-schema-base";
 import { schemaBase as schema } from "./api-schema-base.js";
 
 `;
@@ -87,9 +87,35 @@ export function isAllowedMethod(maybeMethod: string): maybeMethod is AllowedMeth
   return methods.includes(maybeMethod);
 }`;
   const tail = `
+// Helper types derived from schema for path/method/response typing
+export type HttpMethodKeys = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
+export type AllowedMethodsForPath<P extends ValidPath> = Extract<keyof Paths[P], HttpMethodKeys>;
+
+// Normalize 200 key to always be numeric 200
+export type Normalize200<R> =
+  200 extends keyof R ? R & { 200: R[200] } :
+  '200' extends keyof R ? Omit<R, '200'> & { 200: R['200'] } :
+  never;
+
+export type NormalizedResponsesFor<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
+  Normalize200<ResponseForPathAndMethod<P, M>>;
+
+export type JsonBody200<P extends ValidPath, M extends AllowedMethodsForPath<P>> =
+  NormalizedResponsesFor<P, M> extends infer NR
+    ? NR extends never
+      ? never
+      : 200 extends keyof NR
+        ? ('content' extends keyof NR[200]
+            ? (NR[200]['content'] extends infer C
+                ? ('application/json' extends keyof C ? C['application/json'] : never)
+                : never)
+            : never)
+        : never
+    : never;
+
 export type PathReturnTypes = {
   [P in ValidPath]: {
-    "get": Paths[P]["get"]["responses"][200]["content"]["application/json"];
+    [M in AllowedMethodsForPath<P>]: JsonBody200<P, M>
   }
 };`;
   return [header, allowed, tail].join('\n');

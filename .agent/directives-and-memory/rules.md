@@ -16,7 +16,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
-- **NEVER create compatibility layers** - replace old approaches with new approaches
+- **NEVER create compatibility layers, no backwards compatibility** - replace old approaches with new approaches, never create compatibility layers, never prioritise backwards compatibility
 - **Pure functions first** - Use TDD to design (_test first_, red, green, refactor), no side effects, no I/O
 - **Build up through scales** - Functions → Modules → Packages (`core`, `libs`, `apps`)
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files

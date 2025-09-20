@@ -67,7 +67,7 @@ export interface ValidatedClientOptions {
 /**
  * HTTP methods supported by validation
  */
-export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch';
+export type HttpMethod = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'options' | 'head' | 'trace';
 
 /**
  * Type predicate to check if a validation result is successful

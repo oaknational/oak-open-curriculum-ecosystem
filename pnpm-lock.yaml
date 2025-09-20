@@ -390,6 +390,9 @@ importers:
 
   packages/sdks/oak-curriculum-sdk:
     dependencies:
+      '@oaknational/mcp-logger':
+        specifier: workspace:*
+        version: link:../../libs/logger
       openapi-fetch:
         specifier: ^0.14.0
         version: 0.14.0

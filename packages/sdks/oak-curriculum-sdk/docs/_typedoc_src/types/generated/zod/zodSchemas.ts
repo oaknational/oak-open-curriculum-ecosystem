@@ -71,6 +71,7 @@ const SequenceUnitsResponseSchema = z.array(
               .passthrough(),
           ])
         ),
+        canonicalUrl: z.string().optional(),
       })
       .passthrough(),
     z
@@ -235,6 +236,7 @@ const SequenceUnitsResponseSchema = z.array(
               .passthrough(),
           ])
         ),
+        canonicalUrl: z.string().optional(),
       })
       .passthrough(),
     z
@@ -316,12 +318,17 @@ const SequenceUnitsResponseSchema = z.array(
             })
             .passthrough()
         ),
+        canonicalUrl: z.string().optional(),
       })
       .passthrough(),
   ])
 );
 const TranscriptResponseSchema = z
-  .object({ transcript: z.string(), vtt: z.string() })
+  .object({
+    transcript: z.string(),
+    vtt: z.string(),
+    canonicalUrl: z.string().optional(),
+  })
   .passthrough();
 const SearchTranscriptResponseSchema = z.array(
   z
@@ -329,6 +336,7 @@ const SearchTranscriptResponseSchema = z.array(
       lessonTitle: z.string(),
       lessonSlug: z.string(),
       transcriptSnippet: z.string().optional(),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -357,6 +365,7 @@ const SequenceAssetsResponseSchema = z.array(
           })
           .passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -385,6 +394,7 @@ const SubjectAssetsResponseSchema = z.array(
           })
           .passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -410,6 +420,7 @@ const LessonAssetsResponseSchema = z
         })
         .passthrough()
     ),
+    canonicalUrl: z.string(),
   })
   .partial()
   .passthrough();
@@ -444,6 +455,7 @@ const AllSubjectsResponseSchema = z.array(
           .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
           .passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -476,6 +488,7 @@ const SubjectResponseSchema = z
         .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
         .passthrough()
     ),
+    canonicalUrl: z.string().optional(),
   })
   .passthrough();
 const SubjectSequenceResponseSchema = z.array(
@@ -494,17 +507,28 @@ const SubjectSequenceResponseSchema = z.array(
         .object({ title: z.string(), slug: z.string() })
         .passthrough()
         .nullable(),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
 const SubjectKeyStagesResponseSchema = z.array(
   z
-    .object({ keyStageTitle: z.string(), keyStageSlug: z.string() })
+    .object({
+      keyStageTitle: z.string(),
+      keyStageSlug: z.string(),
+      canonicalUrl: z.string().optional(),
+    })
     .passthrough()
 );
 const SubjectYearsResponseSchema = z.array(z.number());
 const KeyStageResponseSchema = z.array(
-  z.object({ slug: z.string(), title: z.string() }).passthrough()
+  z
+    .object({
+      slug: z.string(),
+      title: z.string(),
+      canonicalUrl: z.string().optional(),
+    })
+    .passthrough()
 );
 const KeyStageSubjectLessonsResponseSchema = z.array(
   z
@@ -516,6 +540,7 @@ const KeyStageSubjectLessonsResponseSchema = z.array(
           .object({ lessonSlug: z.string(), lessonTitle: z.string() })
           .passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -527,6 +552,7 @@ const AllKeyStageAndSubjectUnitsResponseSchema = z.array(
       units: z.array(
         z.object({ unitSlug: z.string(), unitTitle: z.string() }).passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -760,6 +786,7 @@ const QuestionForLessonsResponseSchema = z
           ])
         )
     ),
+    canonicalUrl: z.string().optional(),
   })
   .passthrough();
 const QuestionsForSequenceResponseSchema = z.array(
@@ -995,6 +1022,7 @@ const QuestionsForSequenceResponseSchema = z.array(
             ])
           )
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -1231,6 +1259,7 @@ const QuestionsForKeyStageAndSubjectResponseSchema = z.array(
             ])
           )
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -1271,6 +1300,7 @@ const LessonSummaryResponseSchema = z
     ]),
     supervisionLevel: z.union([z.string(), z.null()]),
     downloadsAvailable: z.boolean(),
+    canonicalUrl: z.string().optional(),
   })
   .passthrough();
 const LessonSearchResponseSchema = z.array(
@@ -1290,6 +1320,7 @@ const LessonSearchResponseSchema = z.array(
           })
           .passthrough()
       ),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
@@ -1334,10 +1365,17 @@ const UnitSummaryResponseSchema = z
         })
         .passthrough()
     ),
+    canonicalUrl: z.string().optional(),
   })
   .passthrough();
 const AllThreadsResponseSchema = z.array(
-  z.object({ title: z.string(), slug: z.string() }).passthrough()
+  z
+    .object({
+      title: z.string(),
+      slug: z.string(),
+      canonicalUrl: z.string().optional(),
+    })
+    .passthrough()
 );
 const ThreadUnitsResponseSchema = z.array(
   z
@@ -1345,11 +1383,17 @@ const ThreadUnitsResponseSchema = z.array(
       unitTitle: z.string(),
       unitSlug: z.string(),
       unitOrder: z.number(),
+      canonicalUrl: z.string().optional(),
     })
     .passthrough()
 );
 const RateLimitResponseSchema = z
-  .object({ limit: z.number(), remaining: z.number(), reset: z.number() })
+  .object({
+    limit: z.number(),
+    remaining: z.number(),
+    reset: z.number(),
+    canonicalUrl: z.string().optional(),
+  })
   .passthrough();
 
 export const schemas = {

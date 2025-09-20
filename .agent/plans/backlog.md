@@ -19,6 +19,7 @@
 - [x] Add a trivial front page for the mcp http server, so it doesn't show "authentication error" when visited in a browser... in fact, maybe put some _very_ basic quickstart docs there?
 - [=] Add the utilities, libraries, and a single app (for now) for creating the semantic search indices, keeping them updated, and providing a UI for using them. IN PROGRESS
 - [x] Profile the `pnpm qg` command, and see what we can speed up adn where... it's mostly the linting that is slow, and likely that is due to type-based rules. This is important because it is a DX frustration and it is slowing down the development process, including for agents.
+- [ ] Add more canonical URLs to the MCP server, and the SDK.
 - [ ] Update dependency versions across the board.
 - [ ] Add mutation testing to the test suite
 - [x] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides. This strict type-safety is one of the key benefits of the SDK architecture over the standard auto-generated API client.

@@ -36,22 +36,14 @@ export {
   isAllowedMethod,
   isKeyStage,
   isSubject,
-  isLesson,
   isAssetType,
-  isSequence,
-  isThreadSlug,
-  isUnit,
   isValidParameterType,
   isValidPathParameter,
   // Allowed values / helpers
   PATHS,
   KEY_STAGES,
   SUBJECTS,
-  LESSONS,
   ASSET_TYPES,
-  SEQUENCES,
-  THREAD_SLUGS,
-  UNITS,
   VALID_PATHS_BY_PARAMETERS,
 } from './types/generated/api-schema/path-parameters.js';
 

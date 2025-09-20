@@ -108,11 +108,12 @@ describe('Path Generators', () => {
       expect(result).toContain('throw new TypeError');
     });
 
-    it('should generate PathReturnTypes mapping', () => {
+    it('should generate PathReturnTypes and JsonBody200 helpers', () => {
       const result = generateRuntimeSchemaChecks();
 
       expect(result).toContain('[P in ValidPath]');
-      expect(result).toContain('Paths[P]["get"]["responses"][200]["content"]["application/json"]');
+      expect(result).toContain('export type PathReturnTypes');
+      expect(result).toContain('export type JsonBody200');
     });
   });
 });

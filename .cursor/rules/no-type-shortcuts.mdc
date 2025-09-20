@@ -1,6 +1,9 @@
 ---
-description: Never use type shortcuts like `as` (type assertions), `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*`
+description: Never use type assertions like `as`, or any other type shortcut, e.g. `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*`
+globs: '**/*.{ts,tsx,mts}'
 alwaysApply: true
 ---
 
-Never use type shortcuts like `as` (type assertions), `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*` - they ALL disable the type system. The goal is to preserve type information as much as possible, not to work around this rule.
+Never use type assertions like `as`, or any other type shortcut, e.g. `any`, `!`, `Record<string, unknown>`, `{ [key: string]: unknown }`, `Object.*`, or `Reflect.*` - they ALL disable the type system. The goal is to preserve type information as much as possible, not to work around this rule.
+
+Instead, use type guards to narrow types to known, specific types derived from appropriate data structures or imports. DO NOT add type guards for 'Object' or any other type-guard that is a more complex way of saying `any` or `unknown` or `Record<string, unknown>`.

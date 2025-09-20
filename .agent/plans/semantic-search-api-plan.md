@@ -41,12 +41,20 @@ Document relationships
 ## Deliverables (API)
 
 1. Indices & mappings (serverless): scripts to create/update synonyms and mappings.
-2. Indexing routes: `GET /api/index-oak`, `GET /api/rebuild-rollup` (admin‑guarded via `x-api-key`).
+2. Indexing routes:
+   - `GET /api/index-oak` (legacy, single-shot indexing)
+   - `POST /api/index-oak-chunked` (chunked indexing for cloud deployment)
+   - `POST /api/index-oak-bulk` (orchestrated bulk population)
+   - `GET /api/index-oak-status` (progress monitoring)
+   - `GET /api/rebuild-rollup` (rollup index rebuild)
+   - All admin routes guarded via `x-api-key`.
+
 3. Search routes: `POST /api/search` (structured), `POST /api/search/nl` (NL, 501 when LLM disabled).
 4. SDK parity routes: `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts`.
 5. OpenAPI schema: `GET /api/openapi.json` and `/api/docs` UI.
 6. MCP tools/resources/prompts derived from OpenAPI for non‑admin operations.
 7. Tests: unit/integration for validation, fusion, highlights; OpenAPI builder.
+8. Cloud deployment configuration: Vercel settings, environment variables, execution limits.
 
 ---
 
@@ -67,6 +75,63 @@ Verify
 - Mappings include `semantic_text` and `term_vector` where expected.
 
 Notes: synonyms are case‑insensitive; re‑PUT to update; close/open index to refresh analysers if needed.
+
+### Phase A.5 — Cloud-based initial data population
+
+**Critical**: Data population must happen in the cloud environment, not locally, to avoid bandwidth issues and ensure proper execution context.
+
+**Deployment prerequisites**:
+
+- Vercel project configured with all required environment variables
+- Elasticsearch Serverless indices created (Phase A)
+- Oak API access verified
+
+**Data population strategy** (Vercel execution limits):
+
+- **Vercel Pro**: 300s max duration per function
+- **Estimated data size**: ~10,000+ lessons with full transcripts
+- **Solution**: Chunked indexing with progress tracking
+
+**Implementation approach**:
+
+1. **Chunked indexing endpoint**: `POST /api/index-oak-chunked`
+   - Accepts `{ keyStage?: string, subject?: string, offset?: number, limit?: number }`
+   - Returns `{ ok: boolean, indexedDocs: number, hasMore: boolean, nextOffset?: number }`
+   - Implements rate limiting and progress logging
+
+2. **Bulk population script**: `POST /api/index-oak-bulk`
+   - Orchestrates chunked indexing across all key stage/subject combinations
+   - Uses recursive calls to stay within Vercel limits
+   - Provides real-time progress via streaming response
+
+3. **Progress monitoring**: `GET /api/index-oak-status`
+   - Returns current indexing status and statistics
+   - Shows completion percentage and estimated time remaining
+
+**Usage** (after deployment):
+
+```bash
+# Single chunk (for testing)
+curl -X POST https://your-app.vercel.app/api/index-oak-chunked \
+  -H "x-api-key: $SEARCH_API_KEY" \
+  -H "content-type: application/json" \
+  -d '{"keyStage":"ks2","subject":"maths","offset":0,"limit":50}'
+
+# Full population (orchestrated)
+curl -X POST https://your-app.vercel.app/api/index-oak-bulk \
+  -H "x-api-key: $SEARCH_API_KEY"
+
+# Check progress
+curl -H "x-api-key: $SEARCH_API_KEY" \
+  https://your-app.vercel.app/api/index-oak-status
+```
+
+**Rollup population** (after main indexing):
+
+```bash
+curl -H "x-api-key: $SEARCH_API_KEY" \
+  https://your-app.vercel.app/api/rebuild-rollup
+```
 
 ### Phase B — Local service & tests
 
@@ -122,10 +187,14 @@ Tests to add: query struct validation, RRF determinism, highlight presence, Open
 
 - Serverless ES ready: three indices exist with expected mappings and synonyms; smoke query succeeds.
 - Indexing works end‑to‑end (no duplicate explosion; reasonable counts).
+- **Chunked indexing**: Cloud-based data population completes successfully within Vercel execution limits.
+- **Progress tracking**: Indexing status endpoint provides accurate completion metrics.
+- **Resilient indexing**: Failed chunks can be retried without data corruption.
 - Hybrid search: BM25 + semantic fused via RRF; snippets present; code in `src/lib/hybrid-search/` with tests.
 - LLM optionality: structured works without LLM; NL returns 501 if disabled.
 - OpenAPI: reflects public endpoints and schemas; validates.
 - MCP: loadable tools/resources, non‑admin by default.
+- **Cloud deployment**: All endpoints accessible and functional in Vercel production environment.
 
 ---
 
@@ -143,6 +212,10 @@ Tests to add: query struct validation, RRF determinism, highlight presence, Open
 - Oak API rate limits → batch with jitter/backoff; progress logs.
 - Transcript size / ES payloads → keep rollup snippets ~300 chars; avoid large bulks.
 - Serverless quirks → prefer small payloads; test on preview first.
+- **Vercel execution limits** → chunked indexing with recursive orchestration; monitor progress.
+- **Cloud data population failures** → retry mechanism for failed chunks; idempotent operations.
+- **Bandwidth costs** → run indexing in cloud environment, not locally.
+- **Indexing timeouts** → implement progress persistence; resume from last successful chunk.
 
 ---
 

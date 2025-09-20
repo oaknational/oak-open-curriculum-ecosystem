@@ -7,9 +7,9 @@
  * - Direct property access avoids dynamic dispatch
  * - ZERO type assertions - perfect type flow
  *
- * @todo Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
+ * @remarks Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
  * threading the OpenAPI-derived response types through the executor layer along with Zod validators.
- * @todo make it clearer where and how the tool responses are validated and narrowed to the specific tool response type.
+ * @remarks make it clearer where and how the tool responses are validated and narrowed to the specific tool response type.
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
@@ -61,7 +61,7 @@ export class McpParameterError extends Error {
 /**
  * Result type for tool execution.
  *
- * @todo Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
+ * @remarks Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
  * threading the OpenAPI-derived response types through the executor layer along with Zod validators.
  */
 export type ToolExecutionResult =
@@ -77,7 +77,7 @@ export type ToolExecutionResult =
  * object and maps required single-parameter cases to a minimal `{ [name]: value }` structure.
  * The tool-specific validators enforce the exact types at the executor boundary.
  *
- * @todo import the proper types from the generated tool files
+ * @remarks import the proper types from the generated tool files
  */
 function tryParseJsonObject(input: string): object | undefined {
   try {
