@@ -36,7 +36,8 @@ const ALLOWED_IDS = [
 
 export type AllowedId = typeof ALLOWED_IDS[number];
 export function isAllowedId(value: string): value is AllowedId {
-  return value in ALLOWED_IDS;
+const stringIds: readonly string[] = ALLOWED_IDS;
+  return stringIds.includes(value);
 }
 `;
 

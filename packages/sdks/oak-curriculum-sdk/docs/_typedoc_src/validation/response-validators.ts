@@ -3,40 +3,28 @@
  * Maps API operations to their response validators
  */
 
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
-
-/* eslint-disable max-lines-per-function */
-
 import type { ZodType, ZodSchema } from 'zod';
-import type { ValidationResult, HttpMethod, ValidationFailure } from './types.js';
-import type {
-  ValidPath,
-  AllowedMethodsForPath,
-  JsonBody200,
-} from '../types/generated/api-schema/path-parameters.js';
-import { isValidationFailure, parseWithSchema } from './types.js';
-import { PATH_OPERATIONS } from '../types/generated/api-schema/path-parameters.js';
-import { toCurly } from '../types/generated/api-schema/path-utils.js';
-import { responseSchemaMap } from '../types/generated/api-schema/response-map.js';
-import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
+import type { ValidationResult, HttpMethod, ValidationFailure } from './types';
+
+import { isValidationFailure, parseWithSchema } from './types';
+import {
+  getOperationIdByPathAndMethod,
+  isValidPath,
+  isAllowedMethod,
+  isValidResponseCode,
+  type ValidPath,
+  type AllowedMethodsForPath,
+  type JsonBody200,
+  type OperationId,
+} from '../types/generated/api-schema/path-parameters';
+import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map';
+import { augmentResponseWithCanonicalUrl } from '../response-augmentation';
 
 // Error schemas for common status codes
 // TODO: Generate error schemas from OpenAPI spec
 // responseSchemaMap.set('*:401', schemas.error_UNAUTHORIZED);
 // responseSchemaMap.set('*:403', schemas.error_FORBIDDEN);
 // responseSchemaMap.set('*:500', schemas.error_INTERNAL_SERVER_ERROR);
-
-/**
- * Find the operation ID for a given path and method
- */
-function findOperationId(path: string, method: HttpMethod): string | undefined {
-  const normalizedPath = toCurly(path);
-  const methodLower = typeof method === 'string' ? method.toLowerCase() : method;
-  const operation = PATH_OPERATIONS.find(
-    (op) => op.path === normalizedPath && op.method === methodLower,
-  );
-  return operation?.operationId;
-}
 
 /**
  * Parse and validate response data
@@ -67,107 +55,121 @@ function withTrace(
 }
 
 /**
+ * Runtime type guard: does `value` conform to the exact JSON body type
+ * for the given path/method/status as defined by the generated schema?
+ */
+export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  path: P,
+  method: M,
+  value: unknown,
+): value is JsonBody200<P, M> {
+  const operationId = getOperationIdByPathAndMethod(path, method);
+  if (!operationId) {
+    return false;
+  }
+  let schema: ZodSchema<unknown>;
+  try {
+    schema = getResponseSchemaByOperationIdAndStatus(operationId, 200);
+  } catch {
+    return false;
+  }
+  const res = schema.safeParse(value);
+  return res.success;
+}
+
+/**
  * Validates response data for an API operation
  * @param path - The API path template (e.g., '/lessons/{lesson}/transcript')
  * @param method - The HTTP method
  * @param statusCode - The HTTP response status code
  * @param response - The response data to validate
  * @returns ValidationResult with validated response or validation issues
+ *
+ * @note Only the 200 responses are defined in the original OpenAPI schema, hence the overloads with unknown types
  */
-export function validateResponse<P extends string, M extends string, S extends number>(
+export function validateResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   path: P,
   method: M,
-  statusCode: S,
+  statusCode: 200,
   response: unknown,
-): ValidationResult<
-  P extends ValidPath
-    ? M extends AllowedMethodsForPath<P>
-      ? S extends 200
-        ? JsonBody200<P & ValidPath, M & AllowedMethodsForPath<P & ValidPath>>
-        : unknown
-      : unknown
-    : unknown
-> {
-  const operationId = findOperationId(path as string, method as HttpMethod);
-
-  if (!operationId) {
-    const unknownOperation: ValidationFailure = {
-      ok: false,
-      issues: [
-        {
-          path: [],
-          message: `Unknown operation: ${String(method).toUpperCase()} ${path}`,
-          code: 'UNKNOWN_OPERATION',
-        },
-      ],
-    };
-    return withTrace(unknownOperation, {
-      path: path as string,
-      method: method as HttpMethod,
-      statusCode,
-    });
+): ValidationResult<JsonBody200<P, M>>;
+export function validateResponse<P extends ValidPath>(
+  path: P,
+  method: AllowedMethodsForPath<P>,
+  statusCode: number,
+  response: unknown,
+): ValidationResult<unknown>;
+export function validateResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  path: P,
+  method: M,
+  statusCode: number,
+  response: unknown,
+): ValidationResult<JsonBody200<P, M>> | ValidationResult<unknown> {
+  if (!isValidPath(path)) {
+    throw new TypeError('Invalid path: ' + String(path));
+  }
+  if (!isAllowedMethod(method)) {
+    throw new TypeError('Invalid method: ' + method);
   }
 
-  const schema = findResponseSchema(operationId, statusCode);
-  if (!schema) {
-    const noSchemaForStatus: ValidationFailure = {
-      ok: false,
-      issues: [
-        {
-          path: [],
-          message: `No schema for status code ${String(statusCode)} in operation ${operationId}`,
-          code: 'NO_SCHEMA_FOR_STATUS',
-        },
-      ],
-    };
-    return withTrace(noSchemaForStatus, {
-      path: path as string,
-      method: method as HttpMethod,
-      statusCode,
-      operationId,
+  const operationId = getOperationIdByPathAndMethod(path, method);
+  if (!operationId) {
+    throw new TypeError('Unknown operation: ' + method + ' ' + path);
+  }
+
+  const statusCodeString = String(statusCode);
+  if (!isValidResponseCode(statusCodeString)) {
+    throw new TypeError(
+      'Invalid status code for operation: ' + operationId + ' ' + statusCodeString,
+    );
+  }
+
+  let schema: ZodSchema;
+  try {
+    schema = getResponseSchemaByOperationIdAndStatus(operationId, statusCodeString);
+  } catch (err) {
+    throw new TypeError('Error getting response schema by operationId and statusCode', {
+      cause: err,
     });
   }
 
   const result = parseResponse(schema, response);
   if (isValidationFailure(result)) {
-    return withTrace(result, {
-      path: path as string,
-      method: method as HttpMethod,
-      statusCode,
-      operationId,
-    });
+    return withTrace(result, { path, method, statusCode, operationId });
   }
 
-  // Augment successful responses with canonical URLs
-  if (result.ok && statusCode >= 200 && statusCode < 300) {
-    const augmentedResponse = augmentResponseWithCanonicalUrl(
-      result.value,
-      path as string,
-      method as HttpMethod,
-    );
-    return {
-      ...result,
-      value: augmentedResponse as unknown as any,
-    };
+  if (statusCode === 200) {
+    return finalizeOk200(path, method, operationId, result.value);
   }
 
-  return result as unknown as any;
+  return result;
+}
+
+function finalizeOk200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  path: P,
+  method: M,
+  operationId: OperationId,
+  value: unknown,
+): ValidationResult<JsonBody200<P, M>> {
+  if (isResponseJsonBody200(path, method, value)) {
+    const value200 =
+      method === 'get' ? augmentResponseWithCanonicalUrl(value, path, method) : value;
+    return { ok: true, value: value200 };
+  }
+  const unexpectedShape: ValidationFailure = {
+    ok: false,
+    issues: [
+      {
+        path: [],
+        message: 'Response body did not match 200 JSON body after validation',
+        code: 'VALIDATION_ERROR',
+      },
+    ],
+  };
+  return withTrace(unexpectedShape, { path, method, statusCode: 200, operationId });
 }
 
 /**
  * Finds the appropriate response schema for an operation and status code
  */
-function findResponseSchema(
-  operationId: string,
-  statusCode: number,
-): ZodSchema<unknown> | undefined {
-  // Try to find schema for specific operation and status code
-  let schema = responseSchemaMap.get(`${operationId}:${String(statusCode)}`);
-
-  // If not found, try generic error schemas
-  if (!schema && statusCode >= 400) {
-    schema = responseSchemaMap.get(`*:${String(statusCode)}`);
-  }
-
-  return schema;
-}
+// getResponseSchema is generated alongside responseSchemaMap and throws when not found

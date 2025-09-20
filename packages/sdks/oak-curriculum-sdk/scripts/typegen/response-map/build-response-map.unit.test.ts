@@ -34,6 +34,8 @@ describe('buildResponseMapData', () => {
           operationId: 'getLessons-getLesson',
           status: '200',
           componentName: 'LessonSummaryResponseSchema',
+          path: '/lessons/{lesson}/summary',
+          method: 'get',
         },
       ]),
     );
@@ -82,9 +84,27 @@ describe('buildResponseMapData', () => {
     const entries = buildResponseMapData(schema);
     expect(entries).toEqual(
       expect.arrayContaining([
-        { operationId: 'getThings-getThing', status: '200', componentName: 'Thing' },
-        { operationId: 'getThings-getThing', status: '404', componentName: 'NotFound' },
-        { operationId: 'getThings-getThing', status: '500', componentName: 'InternalError' },
+        {
+          operationId: 'getThings-getThing',
+          status: '200',
+          componentName: 'Thing',
+          path: '/things/{id}',
+          method: 'get',
+        },
+        {
+          operationId: 'getThings-getThing',
+          status: '404',
+          componentName: 'NotFound',
+          path: '/things/{id}',
+          method: 'get',
+        },
+        {
+          operationId: 'getThings-getThing',
+          status: '500',
+          componentName: 'InternalError',
+          path: '/things/{id}',
+          method: 'get',
+        },
       ]),
     );
   });

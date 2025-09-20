@@ -1741,37 +1741,13 @@ export const RESPONSE_CODES = {
 export type PossibleResponseCode = typeof RESPONSE_CODES;
 
 export const VALID_RESPONSE_CODES = [
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
-  "200",
   "200"
 ] as const;
 export type ValidResponseCode = typeof VALID_RESPONSE_CODES[number];
 export type ValidNumericResponseCode = PossibleResponseCode[ValidResponseCode]['numeric'];
 export function isValidResponseCode(value: string): value is ValidResponseCode {
-  return value in VALID_RESPONSE_CODES;
+  const stringCodes: readonly string[] = VALID_RESPONSE_CODES;
+  return stringCodes.includes(value);
 }
 export function areValidResponseCodes(codes: string[]): codes is ValidResponseCode[] {
   return codes.every((code) => isValidResponseCode(code));
@@ -1779,13 +1755,15 @@ export function areValidResponseCodes(codes: string[]): codes is ValidResponseCo
 
 type UnknownResponseCode = Exclude<keyof PossibleResponseCode, ValidResponseCode>;
 export function isUnknownResponseCode(value: string): value is UnknownResponseCode {
-  return value in RESPONSE_CODES && !isValidResponseCode(value);
+  const stringCodes: readonly string[] = Object.keys(RESPONSE_CODES);
+  return stringCodes.includes(value) && !isValidResponseCode(value);
 }
 
 const ERROR_RESPONSE_CODES = Object.keys(RESPONSE_CODES).filter((code) => (code.startsWith('4') || code.startsWith('5')));
 export type ErrorResponseCode = typeof ERROR_RESPONSE_CODES[number];
 export function isErrorResponseCode(value: string): value is ErrorResponseCode {
-  return value in ERROR_RESPONSE_CODES;
+  const stringCodes: readonly string[] = ERROR_RESPONSE_CODES;
+  return stringCodes.includes(value);
 }
 
 export function getResponseCodesForPathAndMethod(path: string, method: string): ValidResponseCode[] {

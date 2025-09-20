@@ -5,17 +5,16 @@
  * based on content type and available context.
  */
 
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-/* eslint-disable @typescript-eslint/no-restricted-types */
 /* eslint-disable complexity */
 
 import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
-import type {
-  ResponseWithCanonicalUrl,
-  ResponseContext,
-  ContentType,
-} from './types/response-augmentation.js';
+import type { ResponseContext, ContentType } from './types/response-augmentation.js';
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import type { HttpMethod } from './validation/types.js';
+
+function isReadonlyStringArray(value: unknown): value is readonly string[] {
+  return Array.isArray(value) && value.every((v) => typeof v === 'string');
+}
 
 /**
  * Extracts context from response data for units and subjects
@@ -36,9 +35,9 @@ function extractContextFromResponse(response: unknown): ResponseContext {
   }
 
   // Extract subject context from response data
-  if ('keyStageSlugs' in response && Array.isArray(response.keyStageSlugs)) {
+  if ('keyStageSlugs' in response && isReadonlyStringArray(response.keyStageSlugs)) {
     context.subject = {
-      keyStageSlugs: response.keyStageSlugs as readonly string[],
+      keyStageSlugs: response.keyStageSlugs,
     };
   }
 
@@ -113,29 +112,28 @@ function extractIdFromPath(response: unknown, path: string): string | undefined 
 /**
  * Augments response with canonical URL
  *
- * Pure function that takes a response and returns it augmented with canonical URL
- * if the content type and context allow for URL generation.
+ * Returns the same response type, augmented with an optional canonicalUrl.
  */
-export function augmentResponseWithCanonicalUrl(
-  response: unknown,
+export function augmentResponseWithCanonicalUrl<T extends object>(
+  response: T,
   path: string,
-  method: string,
-): ResponseWithCanonicalUrl {
+  method: HttpMethod,
+): T & { canonicalUrl?: string } {
   // Only process GET requests
-  if (method.toLowerCase() !== 'get') {
-    return response as ResponseWithCanonicalUrl;
+  if (method !== 'get') {
+    return response;
   }
 
   const contentType = getContentTypeFromPath(path);
   if (!contentType) {
-    return response as ResponseWithCanonicalUrl;
+    return response;
   }
 
   const id = extractIdFromResponse(response, path);
   if (!id) {
     const logger = createAdaptiveLogger({ name: 'response-augmentation' });
     logger.warn(`Could not extract ID from response`, { path, contentType });
-    return response as ResponseWithCanonicalUrl;
+    return response;
   }
 
   const context = extractContextFromResponse(response);
@@ -144,11 +142,9 @@ export function augmentResponseWithCanonicalUrl(
   if (!canonicalUrl) {
     const logger = createAdaptiveLogger({ name: 'response-augmentation' });
     logger.warn(`Could not generate canonical URL`, { contentType, id, context });
-    return response as ResponseWithCanonicalUrl;
+    return response;
   }
 
-  return {
-    ...(response as Record<string, unknown>),
-    canonicalUrl,
-  };
+  const augmented: T & { canonicalUrl: string } = { ...response, canonicalUrl };
+  return augmented;
 }

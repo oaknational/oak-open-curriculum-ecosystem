@@ -26,10 +26,11 @@ describe('schema separation', () => {
   // shouldUseOriginalSchema removed: pipeline always decorates and consumes SDK schema
 
   describe('downloadOriginalSchema', () => {
-    it('should download schema from API and save as api-schema-original.json', async () => {
+    it('should download schema from API and return a valid OpenAPI3 object', async () => {
       const mockSchema = {
         openapi: '3.0.3',
-        info: { title: 'Oak OpenAPI' },
+        info: { title: 'Oak OpenAPI', version: '1.0.0' },
+        paths: {},
         components: {
           schemas: {
             LessonResponse: {
@@ -58,6 +59,16 @@ describe('schema separation', () => {
       expect(result).toBeDefined();
       expect(result.openapi).toBe('3.0.3');
       expect(result.info.title).toBe('Oak OpenAPI');
+      expect(result.info.version).toBe('1.0.0');
+    });
+
+    it('throws a helpful error when API returns an invalid schema', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ openapi: '3.0.3', info: { title: 't' } }),
+      });
+
+      await expect(downloadOriginalSchema()).rejects.toThrow('Invalid schema response from API');
     });
   });
 

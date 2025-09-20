@@ -119,13 +119,9 @@ export function validateResponse<P extends ValidPath, M extends AllowedMethodsFo
 
   const statusCodeString = String(statusCode);
   if (!isValidResponseCode(statusCodeString)) {
-    // Other status codes can happen
-    return withTrace(constructUnexpectedStatusFailure(statusCode), {
-      path,
-      method,
-      statusCode,
-      operationId,
-    });
+    throw new TypeError(
+      'Invalid status code for operation: ' + operationId + ' ' + statusCodeString,
+    );
   }
 
   let schema: ZodSchema;
@@ -147,19 +143,6 @@ export function validateResponse<P extends ValidPath, M extends AllowedMethodsFo
   }
 
   return result;
-}
-
-function constructUnexpectedStatusFailure(statusCode: number): ValidationFailure {
-  return {
-    ok: false,
-    issues: [
-      {
-        path: [],
-        message: 'Unexpected status code: ' + String(statusCode),
-        code: 'VALIDATION_ERROR',
-      },
-    ],
-  };
 }
 
 function finalizeOk200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(

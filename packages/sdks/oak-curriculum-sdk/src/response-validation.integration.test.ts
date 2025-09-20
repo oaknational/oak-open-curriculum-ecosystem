@@ -106,16 +106,13 @@ describe('SDK response pipeline integration', () => {
   });
 
   describe('error responses', () => {
-    it('should not add canonical URLs to error responses', () => {
+    it('throws for unsupported status codes (no schema)', () => {
       const response = {
         error: 'Not Found',
         message: 'Resource not found',
       };
 
-      const result = validateResponse('/lessons/{lesson}/summary', 'get', 404, response);
-
-      // Error responses should not be augmented with canonical URLs
-      expect(result.ok).toBe(false);
+      expect(() => validateResponse('/lessons/{lesson}/summary', 'get', 404, response)).toThrow();
     });
   });
 });

@@ -172,17 +172,12 @@ describe('validateResponse', () => {
       expect(() => {
         // simulate pre-validation: product code would call isValidPath and throw earlier
         // we explicitly call the validator with an invalid path to assert fail-fast
-        validateResponse('/unknown/path' as ValidPath, 'get', 200, {});
+        validateResponse('/unknown/path' as ValidPath, 'get' as never, 200, {});
       }).toThrow();
     });
 
-    it('should return error for unsupported status code', () => {
-      const result = validateResponse('/lessons/{lesson}/transcript', 'get', 404, {});
-
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.issues[0].message).toContain('No schema for status code');
-      }
+    it('should throw for unsupported status code (fail-fast)', () => {
+      expect(() => validateResponse('/lessons/{lesson}/transcript', 'get', 404, {})).toThrow();
     });
   });
 });

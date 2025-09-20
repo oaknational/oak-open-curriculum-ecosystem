@@ -39,7 +39,7 @@ describe('generateAllParameterConstants', () => {
     expect(result).toContain('value is Subject');
   });
 
-  it('should handle multiple parameter types', () => {
+  it('should handle multiple parameter types (omit empty groups)', () => {
     const parameters = {
       keyStage: ['ks1', 'ks2'],
       subject: ['maths', 'english'],
@@ -48,23 +48,18 @@ describe('generateAllParameterConstants', () => {
 
     const result = generateAllParameterConstants(parameters);
 
-    // Should generate all constants
+    // Should generate non-empty constants and omit empty groups
     expect(result).toContain('export const KEY_STAGES');
     expect(result).toContain('export const SUBJECTS');
-    expect(result).toContain('export const LESSONS');
-
-    // Should handle empty arrays
-    expect(result).toContain('export const LESSONS = []');
+    expect(result).not.toContain('export const LESSONS');
   });
 
-  it('should handle missing parameters gracefully', () => {
+  it('should handle missing parameters gracefully by omitting outputs', () => {
     const parameters = {};
 
     const result = generateAllParameterConstants(parameters);
 
-    // Should generate empty arrays for all configured parameters
-    expect(result).toContain('export const KEY_STAGES = []');
-    expect(result).toContain('export const SUBJECTS = []');
-    expect(result).toContain('export const LESSONS = []');
+    // No parameters present: nothing should be emitted
+    expect(result).toBe('');
   });
 });

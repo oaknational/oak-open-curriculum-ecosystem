@@ -162,12 +162,9 @@ describe('generateParameterConstant', () => {
     expect(result).toContain('return keyStages.includes(value)');
   });
 
-  it('should handle empty arrays', () => {
+  it('should omit emission for empty arrays (no useless constants/guards)', () => {
     const result = generateParameterConstant('emptyParam', 'emptyParams', []);
-
-    expect(result).toContain('export const EMPTY_PARAMS = []');
-    expect(result).toContain('type EmptyParams = typeof EMPTY_PARAMS');
-    expect(result).toContain('export type EmptyParam = EmptyParams[number]');
+    expect(result).toBe('');
   });
 
   it('should capitalize names correctly', () => {

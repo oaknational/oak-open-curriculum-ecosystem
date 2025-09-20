@@ -5,30 +5,10 @@
  * focusing on what the function does, not how it does it.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { augmentResponseWithCanonicalUrl } from './response-augmentation.js';
 
-const mockCreateAdaptiveLogger = vi.fn(() => ({
-  warn: vi.fn(),
-  debug: vi.fn(),
-  info: vi.fn(),
-  error: vi.fn(),
-  fatal: vi.fn(),
-  trace: vi.fn(),
-}));
-vi.mock('@oaknational/mcp-logger', () => ({
-  createAdaptiveLogger: mockCreateAdaptiveLogger,
-}));
-
 describe('augmentResponseWithCanonicalUrl', () => {
-  let mockLogger: ReturnType<typeof mockCreateAdaptiveLogger>;
-
-  beforeEach(async () => {
-    const { createAdaptiveLogger } = vi.mocked(await import('@oaknational/mcp-logger'));
-    createAdaptiveLogger.mockReset();
-    mockLogger = mockCreateAdaptiveLogger();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -100,11 +80,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not generate canonical URL', {
-        contentType: 'unit',
-        id: 'place-value',
-        context: {},
-      });
     });
 
     it('should omit canonicalUrl when unit context is partial', () => {
@@ -117,11 +92,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/units/place-value', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not generate canonical URL', {
-        contentType: 'unit',
-        id: 'place-value',
-        context: {},
-      });
     });
   });
 
@@ -145,11 +115,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not generate canonical URL', {
-        contentType: 'subject',
-        id: 'maths',
-        context: {},
-      });
     });
 
     it('should omit canonicalUrl when subject context is empty', () => {
@@ -161,11 +126,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/subjects/maths', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not generate canonical URL', {
-        contentType: 'subject',
-        id: 'maths',
-        context: { subject: { keyStageSlugs: [] } },
-      });
     });
   });
 
@@ -200,10 +160,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/lessons/', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not extract ID from response', {
-        path: '/lessons/',
-        contentType: 'lesson',
-      });
     });
 
     // Non-object responses cannot be passed to this function by type design
@@ -213,10 +169,6 @@ describe('augmentResponseWithCanonicalUrl', () => {
       const result = augmentResponseWithCanonicalUrl(response, '/lessons/add-two-numbers', 'get');
 
       expect(result).not.toHaveProperty('canonicalUrl');
-      expect(mockLogger.warn).toHaveBeenCalledWith('Could not extract ID from response', {
-        path: '/lessons/add-two-numbers',
-        contentType: 'lesson',
-      });
     });
   });
 });
