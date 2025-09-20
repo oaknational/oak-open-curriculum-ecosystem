@@ -4,9 +4,9 @@
  * This script generates the types for the API schema.
  *
  * It generates the following files:
- * - api-schema.json - A copy of the OpenAPI schema
- * - api-schema.ts - The OpenAPI schema as an exported runtime object
- * - api-paths-types.ts - The OpenAPI-TS types for the API schema, for use with OpenAPI-Fetch
+ * - api-schema-original.json - The schema as returned from the API (pure, undecorated)
+ * - api-schema-sdk.json - The SDK-decorated schema (e.g., canonicalUrl fields)
+ * - api-paths-types.ts - The OpenAPI-TS types for the SDK schema, for use with OpenAPI-Fetch
  * - path-parameters.ts - The tuples, types and type guards for the path parameters, for use in dynamically constructing API requests
  */
 
@@ -19,6 +19,7 @@ import { config as dotenvConfig } from 'dotenv';
 import { generateSchemaArtifacts } from './typegen-core.js';
 import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
 import { isOpenAPI3Schema } from './typegen-helpers.js';
+import { createSdkSchema, saveSchemaToFile } from './schema-separation-core.js';
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
 function findRepoRoot(startDir: string): string {
@@ -64,18 +65,19 @@ const isCiMode = forceCi || (isCiEnv && !isVercel);
 // Load schema
 let maybeSchema: unknown;
 
-const cachedSchemaPath = path.resolve(rootDirectory, outPathFromRoot, 'api-schema.json');
-const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema.json');
+// In offline/CI mode we cache and read the SDK schema, which is what all generators consume
+const cachedSchemaPath = path.resolve(rootDirectory, outPathFromRoot, 'api-schema-sdk.json');
+const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema-sdk.json');
 
 async function readCachedSchemaOrThrow(): Promise<unknown> {
   if (!existsSync(cachedSchemaPath)) {
     throw new Error(
-      `CI/offline type-gen requires a cached schema at ${cachedSchemaPath}. ` +
+      `CI/offline type-gen requires a cached SDK schema at ${cachedSchemaPath}. ` +
         `Run "pnpm -F @oaknational/oak-curriculum-sdk type-gen" locally to refresh ` +
         `the cache and commit the result.`,
     );
   }
-  console.log('🧰 Using cached OpenAPI schema:', cachedSchemaPath);
+  console.log('🧰 Using cached SDK OpenAPI schema:', cachedSchemaPath);
   const raw = await readFile(cachedSchemaPath, 'utf8');
   try {
     const parsed: unknown = JSON.parse(raw);
@@ -83,7 +85,7 @@ async function readCachedSchemaOrThrow(): Promise<unknown> {
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     throw new Error(
-      `Cached schema at ${cachedSchemaPath} is not valid JSON. Re-generate locally and commit. ` +
+      `Cached SDK schema at ${cachedSchemaPath} is not valid JSON. Re-generate locally and commit. ` +
         `Original error: ${msg}`,
     );
   }
@@ -123,7 +125,7 @@ if (isCiMode) {
   const apiKey = process.env.OAK_API_KEY;
 
   if (!apiKey) {
-    console.warn('⚠️  OAK_API_KEY not found; attempting to use cached schema');
+    console.warn('⚠️  OAK_API_KEY not found; attempting to use cached SDK schema');
     maybeSchema = await readCachedSchemaOrThrow();
   } else {
     const online = await fetchSchemaOnlineOrNull(apiSchemaUrl, apiKey);
@@ -144,17 +146,26 @@ if (isCiMode) {
 
   console.log('✅ Schema fetched successfully');
 }
+
 console.log('🔨 Generating type artifacts...');
 
 if (!isOpenAPI3Schema(maybeSchema)) {
   throw new Error('Schema is not a valid OpenAPI 3.x schema');
 }
 
-const schema = maybeSchema;
+const downloadedSchema = maybeSchema;
 
-// Generate all artifacts including MCP tools
-// schema is now fully typed as OpenAPI3
-await generateSchemaArtifacts(schema, outDirectory, {
+// Save the original schema
+const originalSchemaPath = path.resolve(outDirectory, 'api-schema-original.json');
+saveSchemaToFile(downloadedSchema, originalSchemaPath);
+console.log(`💾 Original schema saved to: ${path.relative(process.cwd(), originalSchemaPath)}`);
+
+// Create the SDK schema with our decorations
+console.log('🎨 Creating SDK schema with canonicalUrl fields...');
+const sdkSchema = createSdkSchema(downloadedSchema);
+
+// Use the SDK schema for generation
+await generateSchemaArtifacts(downloadedSchema, sdkSchema, outDirectory, {
   generateMcpTools: true,
 });
 

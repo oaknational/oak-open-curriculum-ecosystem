@@ -22,7 +22,10 @@ describe('validateResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual(response);
+        expect(result.value).toEqual({
+          ...response,
+          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/transcript',
+        });
       }
     });
 
@@ -104,7 +107,10 @@ describe('validateResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual(response);
+        expect(result.value).toEqual({
+          ...response,
+          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/summary',
+        });
       }
     });
 

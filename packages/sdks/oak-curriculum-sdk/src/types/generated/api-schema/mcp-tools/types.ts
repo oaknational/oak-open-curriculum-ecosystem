@@ -411,7 +411,7 @@ export type ZodSchemaInfo = OperationIdToZodSchemasMap[keyof OperationIdToZodSch
  * Dynamic response schema mapping from endpoints
  * Generated at compile time from the actual endpoints array
  */
-import { endpoints } from '../../zod/endpoints.js';
+import { endpoints } from '../../zod/zodSchemas.js';
 
 function getResponseSchemaForEndpoint(method: string, path: string): ZodSchema {
   const endpoint = endpoints.find((ep: { method: string; path: string; response: ZodSchema }) => ep.method === method && ep.path === path);

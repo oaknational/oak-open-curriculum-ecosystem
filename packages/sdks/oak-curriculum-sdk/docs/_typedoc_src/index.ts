@@ -123,6 +123,8 @@ export {
   typeSafeHas,
   typeSafeHasOwn,
   typeSafeOwnKeys,
+  isPlainObject,
+  getOwnString,
 } from './types/helpers.js';
 
 // Response-shape type guards for search-related endpoints

@@ -5,6 +5,7 @@
 
 import { describe, it, expect } from 'vitest';
 import { validateResponse } from './response-validators.js';
+import type { ValidPath } from '../types/generated/api-schema/path-parameters.js';
 
 describe('validateResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
@@ -22,7 +23,10 @@ describe('validateResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual(response);
+        expect(result.value).toEqual({
+          ...response,
+          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/transcript',
+        });
       }
     });
 
@@ -104,7 +108,10 @@ describe('validateResponse', () => {
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value).toEqual(response);
+        expect(result.value).toEqual({
+          ...response,
+          canonicalUrl: 'https://www.thenational.academy/teachers/lessons/summary',
+        });
       }
     });
 
@@ -161,13 +168,12 @@ describe('validateResponse', () => {
   });
 
   describe('for unknown operations', () => {
-    it('should return error for unknown path', () => {
-      const result = validateResponse('/unknown/path', 'get', 200, {});
-
-      expect(result.ok).toBe(false);
-      if (!result.ok) {
-        expect(result.issues[0].message).toContain('Unknown operation');
-      }
+    it('should throw for invalid path (fail-fast)', () => {
+      expect(() => {
+        // simulate pre-validation: product code would call isValidPath and throw earlier
+        // we explicitly call the validator with an invalid path to assert fail-fast
+        validateResponse('/unknown/path' as ValidPath, 'get', 200, {});
+      }).toThrow();
     });
 
     it('should return error for unsupported status code', () => {

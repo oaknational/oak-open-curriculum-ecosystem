@@ -36,6 +36,22 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-028: Zod Validation Deferral](028-zod-validation-deferral.md)
 - [ADR-029: No Manual API Data Structures in MCP](029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](030-sdk-single-source-truth.md)
+- [ADR-031: Generation-Time Extraction](031-generation-time-extraction.md)
+- [ADR-032: External Boundary Validation](032-external-boundary-validation.md)
+- [ADR-033: Centralised Log Level Configuration](033-centralised-log-level-configuration.md)
+- [ADR-034: System Boundaries and Type Assertions](034-system-boundaries-and-type-assertions.md)
+- [ADR-035: Unified SDK-MCP Type Generation](035-unified-sdk-mcp-type-generation.md)
+- [ADR-036: Data-Driven Type Generation](036-data-driven-type-generation.md)
+- [ADR-037: Embedded Tool Information](037-embedded-tool-information.md)
+- [ADR-038: Compilation Time Revolution](038-compilation-time-revolution.md)
+- [ADR-040: Neutral Architecture and Identity Allowlist](040-neutral-architecture-and-identity-allowlist.md)
+- [ADR-041: Workspace Structure Option A](041-workspace-structure-option-a.md)
+- [ADR-042: Runtime Adapters Folder](042-runtime-adapters-folder.md)
+- [ADR-043: Typegen in Build and CI](043-typegen-in-build-and-ci.md)
+- [ADR-044: NL Delegates to Structured Search and Caching Ownership](044-nl-delegates-to-structured-search-and-caching-ownership.md)
+- [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
+- [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md)
+- [ADR-047: Canonical URL Generation at Type-Gen Time](047-canonical-url-generation-at-typegen-time.md)
 
 ## Key Architectural Decisions
 

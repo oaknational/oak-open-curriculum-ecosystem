@@ -6,9 +6,13 @@
 import { z } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
 import { parseWithSchema } from './types.js';
-import { endpoints } from '../types/generated/zod/endpoints.js';
+import { endpoints } from '../types/generated/zod/zodSchemas.js';
 import { typeSafeFromEntries, isPlainObject, getOwnValue } from '../types/helpers.js';
 import { toColon } from '../types/generated/api-schema/path-utils.js';
+import type {
+  AllowedMethodsForPath,
+  ValidPath,
+} from '../types/generated/api-schema/path-parameters.js';
 
 // Runtime type utilities (no assertions)
 function isObject(value: unknown): value is object {
@@ -81,6 +85,8 @@ function isEndpointDefinition(value: unknown): value is EndpointDefinition {
 
 /**
  * Builds a map of path+method to parameter schemas from generated endpoints
+ *
+ * @todo move generation to compile-time, so this can be a static constant, with typ guards and a static type
  */
 function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
   const schemaMap = new Map<string, z.ZodSchema>();
@@ -154,12 +160,15 @@ function makeUnknownOperation(key: string): ValidationResult<unknown> {
  * @param method - The HTTP method
  * @param args - The request parameters to validate
  * @returns Validation result with success/failure status
+ *
+ * @todo properly type the return value
  */
-export function validateRequest(
-  path: string,
-  method: HttpMethod,
+export function validateRequest<P extends ValidPath>(
+  path: P,
+  method: AllowedMethodsForPath<P>,
   args: unknown,
 ): ValidationResult<unknown> {
+  /** @todo sort out proper types for schemas */
   // Normalize the path to match generated format
   const normalizedPath = toColon(path);
   const key = `${method.toUpperCase()}:${normalizedPath}`;

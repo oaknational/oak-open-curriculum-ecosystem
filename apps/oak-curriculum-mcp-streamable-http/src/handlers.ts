@@ -7,7 +7,6 @@ import { readEnv } from './env.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
-  generateCanonicalUrl,
   isToolName,
   MCP_TOOLS,
   zodRawShapeFromToolInputJsonSchema,
@@ -15,10 +14,10 @@ import {
   validateResponse,
   isValidationSuccess,
   isValidationFailure,
-  type ContentType,
   type HttpMethod,
   type ValidationResult,
 } from '@oaknational/oak-curriculum-sdk';
+import { isValidPath } from '@oaknational/oak-curriculum-sdk';
 
 function toHttpMethod(methodUpper: string): HttpMethod {
   if (methodUpper === 'GET') {
@@ -44,7 +43,27 @@ function validateOutput(
   methodUpper: string,
   data: unknown,
 ): ValidationResult<unknown> {
+  if (!isValidPath(path)) {
+    return {
+      ok: false,
+      issues: [{ path: [], message: 'Invalid path: ' + path, code: 'VALIDATION_ERROR' }],
+      firstMessage: 'Invalid path: ' + path,
+    };
+  }
   const httpMethod = toHttpMethod(methodUpper);
+  if (httpMethod !== 'get') {
+    return {
+      ok: false,
+      issues: [
+        {
+          path: [],
+          message: 'Unsupported method for path: ' + httpMethod,
+          code: 'VALIDATION_ERROR',
+        },
+      ],
+      firstMessage: 'Unsupported method for path: ' + httpMethod,
+    };
+  }
   const validation = validateResponse(path, httpMethod, 200, data);
   if (isValidationSuccess(validation)) {
     return validation;
@@ -92,38 +111,10 @@ export function registerHandlers(server: McpServer): void {
           const firstMessage = out.firstMessage ?? 'Output validation failed';
           return { content: [{ type: 'text', text: 'Error: ' + firstMessage }], isError: true };
         }
-        // Augment with canonicalUrl for lesson endpoints when possible
-        const payload = maybeAugmentWithCanonicalUrl(execResult.data, params, def.path);
-        return { content: [{ type: 'text', text: JSON.stringify(payload) }] };
+        // Canonical URLs are now automatically added by the SDK's validateResponse function
+        return { content: [{ type: 'text', text: JSON.stringify(out.value) }] };
       },
     );
-  }
-}
-
-function getOwnStringIfPresent(obj: unknown, key: PropertyKey): string | undefined {
-  if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
-    return undefined;
-  }
-  const d = Object.getOwnPropertyDescriptor(obj, key);
-  return typeof d?.value === 'string' ? d.value : undefined;
-}
-
-function maybeAugmentWithCanonicalUrl(data: unknown, params: unknown, path: string): unknown {
-  try {
-    if (!path.startsWith('/lessons/')) {
-      return data;
-    }
-    const lessonSlug = getOwnStringIfPresent(params, 'lesson');
-    if (!lessonSlug) {
-      return data;
-    }
-    const ct: ContentType = 'lesson';
-    const canonical = generateCanonicalUrl(ct, 'lesson:' + lessonSlug);
-    return { data, canonicalUrl: canonical };
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.warn('Error augmenting with canonicalUrl: ' + msg);
-    return data;
   }
 }
 

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { generateZodSchemasArtifacts, generateZodEndpointsArtifacts } from './zodgen-core';
+import { generateZodSchemas } from './zodgen-core';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
+import type { OpenAPI3 } from 'openapi-typescript';
 
 vi.mock('node:fs');
 vi.mock('openapi-zod-client', () => ({
@@ -27,7 +28,7 @@ function isOzcOptions(value: unknown): value is {
 }
 
 describe('zodgen-core', () => {
-  const mockOpenApiDoc = {
+  const mockOpenApiDoc: OpenAPI3 = {
     openapi: '3.0.3',
     info: { title: 'Test API', version: '1.0.0' },
     paths: {
@@ -52,9 +53,9 @@ describe('zodgen-core', () => {
     vi.mocked(existsSync).mockReturnValue(true);
   });
 
-  describe('generateZodSchemasArtifacts', () => {
+  describe('generateZodSchemas', () => {
     it('should generate response schemas using schemas-only template', async () => {
-      await generateZodSchemasArtifacts(mockOpenApiDoc, '/output');
+      await generateZodSchemas(mockOpenApiDoc, '/output');
       const calls: unknown[][] = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
       expect(calls.length).toBeGreaterThan(0);
       const firstArg = calls[0][0];
@@ -67,15 +68,18 @@ describe('zodgen-core', () => {
     });
 
     it('should reject invalid OpenAPI document', async () => {
-      await expect(generateZodSchemasArtifacts({}, '/output')).rejects.toThrow(
-        'Invalid OpenAPI document',
-      );
+      await expect(
+        generateZodSchemas(
+          { openapi: '3.0.0', info: { title: 'Test API', version: '1.0.0' } },
+          '/output',
+        ),
+      ).rejects.toThrow('Invalid OpenAPI document');
     });
   });
 
-  describe('generateZodEndpointsArtifacts', () => {
+  describe('generateZodSchemas', () => {
     it('should generate endpoint schemas with parameters using default template', async () => {
-      await generateZodEndpointsArtifacts(mockOpenApiDoc, '/output');
+      await generateZodSchemas(mockOpenApiDoc, '/output');
       const calls: unknown[][] = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
       expect(calls.length).toBeGreaterThan(0);
       const lastCall = calls[calls.length - 1];
@@ -95,7 +99,7 @@ describe('zodgen-core', () => {
     it('should create output directory if it does not exist', async () => {
       vi.mocked(existsSync).mockReturnValue(false);
 
-      await generateZodEndpointsArtifacts(mockOpenApiDoc, '/output');
+      await generateZodSchemas(mockOpenApiDoc, '/output');
 
       expect(mkdirSync).toHaveBeenCalledWith('/output', { recursive: true });
     });
@@ -103,15 +107,18 @@ describe('zodgen-core', () => {
     it('should write output file when string is returned', async () => {
       vi.mocked(generateZodClientFromOpenAPI).mockResolvedValue('// Generated endpoints');
 
-      await generateZodEndpointsArtifacts(mockOpenApiDoc, '/output');
+      await generateZodSchemas(mockOpenApiDoc, '/output');
 
       expect(writeFileSync).toHaveBeenCalledWith('/output/endpoints.ts', '// Generated endpoints');
     });
 
     it('should reject invalid OpenAPI document', async () => {
-      await expect(generateZodEndpointsArtifacts({}, '/output')).rejects.toThrow(
-        'Invalid OpenAPI document',
-      );
+      await expect(
+        generateZodSchemas(
+          { openapi: '3.0.0', info: { title: 'Test API', version: '1.0.0' } },
+          '/output',
+        ),
+      ).rejects.toThrow('Invalid OpenAPI document');
     });
   });
 });

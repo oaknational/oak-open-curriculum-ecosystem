@@ -1,4 +1,3 @@
-
 import type { OakApiPathBasedClient } from '../../../client/index.js';
 import { executeToolCall } from '../../../mcp/execute-tool-call.js';
 import {
@@ -83,7 +82,8 @@ function normalizeFetchId(args: unknown): string {
   } else if (args && typeof args === 'object') {
     idVal = getOwn(args, 'id');
   }
-  if (typeof idVal !== 'string' || idVal.trim() === '') throw new TypeError('fetch requires an "id" string');
+  if (typeof idVal !== 'string' || idVal.trim() === '')
+    throw new TypeError('fetch requires an "id" string');
   return idVal.trim();
 }
 

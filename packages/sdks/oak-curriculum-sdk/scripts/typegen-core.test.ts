@@ -10,26 +10,27 @@ describe('typegen-core', () => {
         info: { title: 'Test', version: '1.0.0' },
         paths: {},
       };
-      const jsonSchema = '{"test": "value"}';
       const tsTypesContent = 'export type Test = string;';
       const pathParameterContent = 'export const PATHS = {};';
       const pathUtilsContent = 'export const DUMMY = 1;';
 
       const result = createFileMap(
         sourceSchema,
-        jsonSchema,
+        sourceSchema,
         tsTypesContent,
         pathParameterContent,
         pathUtilsContent,
         'export const RESPONSE_MAP = new Map();',
       );
 
-      expect(result).toHaveProperty('api-schema.json');
+      expect(result).toHaveProperty('api-schema-original.json');
+      expect(result).toHaveProperty('api-schema-sdk.json');
       expect(result).toHaveProperty('api-schema-base.ts');
       expect(result).toHaveProperty('api-paths-types.ts');
       expect(result).toHaveProperty('path-parameters.ts');
 
-      expect(result['api-schema.json']).toBe(jsonSchema);
+      expect(typeof result['api-schema-original.json']).toBe('string');
+      expect(typeof result['api-schema-sdk.json']).toBe('string');
       expect(result['api-paths-types.ts']).toBe(tsTypesContent);
       expect(result['path-parameters.ts']).toBe(pathParameterContent);
     });
@@ -40,14 +41,14 @@ describe('typegen-core', () => {
         info: { title: 'Test', version: '1.0.0' },
         paths: {},
       };
-      const jsonSchema = '{"openapi": "3.0.0"}';
+      // Not used now that createFileMap accepts both base and sdk schemas directly
       const tsTypesContent = 'types';
       const pathParameterContent = 'parameters';
       const pathUtilsContent = 'utils';
 
       const result = createFileMap(
         sourceSchema,
-        jsonSchema,
+        sourceSchema,
         tsTypesContent,
         pathParameterContent,
         pathUtilsContent,

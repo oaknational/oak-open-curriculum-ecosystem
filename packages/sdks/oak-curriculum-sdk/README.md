@@ -48,6 +48,39 @@ This is achieved through:
 - `src/client/` - Runtime client that uses the pre-generated types
 - `src/tool-generation/` - Exports for programmatic tool generation (e.g., MCP servers)
 
+### Canonical URL Generation
+
+This SDK automatically generates canonical URLs for all curriculum resources at type-generation time. This eliminates the need for consuming applications to implement their own URL generation logic.
+
+#### How it works:
+
+1. **Type-Gen Time**: URL helpers are generated during `pnpm type-gen` based on the OpenAPI schema
+2. **Response Augmentation**: All API responses are automatically augmented with `canonicalUrl` fields
+3. **Schema Decoration**: The OpenAPI schema is decorated to include `canonicalUrl` in response types
+4. **Context-Aware**: URL generation uses response context (e.g., subject/phase for units) when available
+
+#### Example:
+
+```typescript
+// All responses automatically include canonical URLs
+const lesson = await client.getLessonSummary('add-two-numbers');
+console.log(lesson.canonicalUrl); // "https://www.thenational.academy/teachers/lessons/add-two-numbers"
+
+const unit = await client.getUnitSummary('place-value');
+console.log(unit.canonicalUrl); // "https://www.thenational.academy/teachers/programmes/maths-ks1/units/place-value"
+
+// Context is automatically extracted from response data
+const subject = await client.getSubject('maths');
+console.log(subject.canonicalUrl); // "https://www.thenational.academy/teachers/key-stages/ks1/subjects/maths/programmes"
+```
+
+#### URL Generation Features:
+
+- **Fail-Fast Design**: Missing context results in warnings, not broken URLs
+- **Structured Logging**: Clear debugging information for URL generation issues
+- **Type Safety**: All URL generation is fully typed based on the OpenAPI schema
+- **Consistent Patterns**: All consuming applications generate identical canonical URLs
+
 ### MCP Tool Generation
 
 This SDK now generates all MCP (Model Context Protocol) tool types at build time, making the entire SDK+MCP system a pure function of the OpenAPI schema. The generation happens in three phases:
@@ -89,6 +122,7 @@ This SDK follows several important architectural patterns documented in our ADRs
 - [ADR-030: SDK as Single Source of Truth](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md) - The SDK is the authoritative source for API types
 - [ADR-031: Generation-Time Extraction](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
 - [ADR-035: Unified SDK-MCP Type Generation](../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - MCP tool types flow from the SDK
+- [ADR-047: Canonical URL Generation at Type-Gen Time](../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md) - Automatic canonical URL generation in all responses
 
 ### Directory Structure
 
@@ -102,15 +136,19 @@ oak-curriculum-sdk/
 │       ├── operations/    # Extract and generate operation constants
 │       ├── parameters/    # Extract and generate parameter constants
 │       ├── paths/         # Extract and generate path constants
+│       ├── routing/       # Generate canonical URL helpers
 │       └── mcp-tools/     # MCP tool type generation
 ├── src/
 │   ├── client/            # Runtime API client
+│   ├── response-augmentation.ts # Automatic canonical URL augmentation
 │   ├── types/
 │   │   └── generated/     # Generated types (DO NOT EDIT)
 │   │       ├── api-schema/       # OpenAPI types and constants
 │   │       │   ├── mcp-tools.ts      # MCP tool definitions
 │   │       │   ├── mcp-parameters.ts # MCP parameter types
-│   │       │   └── mcp-validators.ts # MCP validators
+│   │       │   ├── mcp-validators.ts # MCP validators
+│   │       │   └── routing/          # Canonical URL generation
+│   │       │       └── url-helpers.ts # Generated URL helper functions
 │   │       └── zod/              # Zod validation schemas
 │   └── tool-generation/   # Exports for programmatic tool generation
 └── dist/                  # Built output
@@ -151,6 +189,7 @@ const units = await client.listUnits('programme-id');
 ## Features
 
 - Type-safe API methods
+- **Automatic canonical URL generation** - All responses include canonical URLs
 - Automatic retry with exponential backoff
 - Response caching
 - Error handling with detailed messages

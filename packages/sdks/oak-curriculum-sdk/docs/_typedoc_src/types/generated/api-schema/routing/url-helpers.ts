@@ -4,6 +4,8 @@
 * Canonical URL helpers for teachers-site resources (deterministic, no network).
 */
 
+import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+
 export const CONTENT_TYPE_PREFIXES = {
   lesson: { prefix: 'lesson:', contentType: 'lesson' },
   unit: { prefix: 'unit:', contentType: 'unit' },
@@ -61,11 +63,32 @@ export function generateCanonicalUrlWithContext(
   return undefined;
 }
 
-export function generateCanonicalUrl(type: ContentType, id: string): string {
+export function generateCanonicalUrl(
+  type: ContentType,
+  id: string,
+  context?: {
+    unit?: { subjectSlug?: string; phaseSlug?: string };
+    subject?: { keyStageSlugs?: readonly string[] };
+  },
+): string | undefined {
   const slug = extractSlug(id);
   if (type === 'lesson') return urlForLesson(slug);
   if (type === 'sequence') return urlForSequence(slug);
-  if (type === 'unit') return 'https://www.thenational.academy/teachers/units/' + slug;
-  if (type === 'subject') return 'https://www.thenational.academy/teachers/subjects/' + slug;
+  if (type === 'unit') {
+    const canonicalUrl = urlForUnit(slug, context?.unit);
+    if (!canonicalUrl) {
+      const logger = createAdaptiveLogger({ name: 'url-helpers' });
+      logger.warn('Could not generate canonical URL for unit', { id, context: context?.unit });
+    }
+    return canonicalUrl;
+  }
+  if (type === 'subject') {
+    const canonicalUrl = urlForSubject(slug, context?.subject?.keyStageSlugs);
+    if (!canonicalUrl) {
+      const logger = createAdaptiveLogger({ name: 'url-helpers' });
+      logger.warn('Could not generate canonical URL for subject', { id, context: context?.subject?.keyStageSlugs });
+    }
+    return canonicalUrl;
+  }
   throw new TypeError('Unsupported content type: ' + String(type));
 }

@@ -4,7 +4,7 @@
  * Centralised here so downstream apps do not define their own guards.
  */
 
-import { schemas } from './generated/zod/endpoints.js';
+import { schemas } from './generated/zod/zodSchemas.js';
 
 export function isUnitsGrouped(
   v: unknown,

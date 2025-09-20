@@ -45,6 +45,7 @@
     "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:ai && pnpm -s docs:api:md && pnpm -s docs:verify"
   },
   "dependencies": {
+    "@oaknational/mcp-logger": "workspace:*",
     "openapi-fetch": "^0.14.0",
     "pnpm": "^10.17.0",
     "zod": "^3"
