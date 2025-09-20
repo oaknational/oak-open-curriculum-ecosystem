@@ -33,6 +33,12 @@ export function generateParameterConstant(
   pluralName: string,
   values: unknown,
 ): string {
+  // If there are no concrete enum values for this parameter, do not emit
+  // an empty constant/guard. Open-ended parameters will be handled by
+  // isValidPathParameter as open sets.
+  if (!Array.isArray(values) || values.length === 0) {
+    return '';
+  }
   // Special case for 'type' parameter which becomes 'AssetType'
   const isTypeParam = singularName === 'type';
 
@@ -73,7 +79,10 @@ export function generateAllParameterConstants(parameters: ExtractedParameters): 
 
   for (const config of PARAMETER_GENERATION_CONFIG) {
     const values = parameters[config.singular] ?? [];
-    sections.push(generateParameterConstant(config.singular, config.plural, values));
+    const block = generateParameterConstant(config.singular, config.plural, values);
+    if (block) {
+      sections.push(block);
+    }
   }
 
   return sections.join('\n');

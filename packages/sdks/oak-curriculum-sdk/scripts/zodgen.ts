@@ -3,9 +3,8 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { generateZodSchemasArtifacts, generateZodEndpointsArtifacts } from './zodgen-core.js';
-// Import the generated runtime OpenAPI schema object
-import { schemaBase as schema } from '../src/types/generated/api-schema/api-schema-base';
+import { generateZodSchemas } from './zodgen-core.js';
+import { loadSchemaFromFile } from './schema-separation-core.js';
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');
@@ -13,14 +12,18 @@ const outPathFromRoot = 'src/types/generated/zod';
 const outDirectory = path.resolve(rootDirectory, outPathFromRoot);
 
 void (async () => {
-  console.log('🔨 Generating Zod schemas from generated OpenAPI runtime schema...');
+  console.log('🔨 Generating Zod schemas from SDK OpenAPI schema...');
 
-  // Generate response schemas using schemas-only template
-  await generateZodSchemasArtifacts(schema, outDirectory);
-  console.log('✅ Response schema generation complete!');
+  // Load the SDK schema (which already has canonicalUrl fields)
+  const sdkSchemaPath = path.resolve(
+    rootDirectory,
+    'src/types/generated/api-schema/api-schema-sdk.json',
+  );
+  const sdkSchema = loadSchemaFromFile(sdkSchemaPath);
+  console.log('📖 Loaded SDK schema with canonicalUrl fields');
 
   // Generate endpoint definitions with parameter schemas using default template
-  await generateZodEndpointsArtifacts(schema, outDirectory);
+  await generateZodSchemas(sdkSchema, outDirectory);
   console.log('✅ Endpoint schema generation complete!');
 
   console.log('✅ All Zod schema generation complete!');

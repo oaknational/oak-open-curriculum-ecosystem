@@ -5,7 +5,7 @@ import { generateSchemaArtifacts } from '../../scripts/typegen-core';
 import type { OpenAPI3 } from 'openapi-typescript';
 
 describe('generateSchemaArtifacts functionality tests', () => {
-  const testDir = path.join(__dirname, 'test-output');
+  const testDir = path.resolve(__dirname, '../../test-cache/typegen-out');
 
   beforeEach(() => {
     // Create test directory
@@ -65,10 +65,11 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     // Check that all expected files are created
-    expect(fs.existsSync(path.join(testDir, 'api-schema.json'))).toBe(true);
+    expect(fs.existsSync(path.join(testDir, 'api-schema-original.json'))).toBe(true);
+    expect(fs.existsSync(path.join(testDir, 'api-schema-sdk.json'))).toBe(true);
     expect(fs.existsSync(path.join(testDir, 'api-schema-base.ts'))).toBe(true);
     expect(fs.existsSync(path.join(testDir, 'api-paths-types.ts'))).toBe(true);
     expect(fs.existsSync(path.join(testDir, 'path-parameters.ts'))).toBe(true);
@@ -89,10 +90,10 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     // Test that JSON is valid and contains expected structure
-    const jsonContent = fs.readFileSync(path.join(testDir, 'api-schema.json'), 'utf-8');
+    const jsonContent = fs.readFileSync(path.join(testDir, 'api-schema-sdk.json'), 'utf-8');
     const parsed: OpenAPI3 = JSON.parse(jsonContent) as OpenAPI3; // Will throw if invalid JSON
 
     expect(parsed).toBeDefined();
@@ -114,7 +115,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     // Check that generated TypeScript files are syntactically valid
     // by verifying they contain expected TypeScript constructs
@@ -148,7 +149,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
       paths: {},
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     // Test that the file exports what we expect
     const tsContent = fs.readFileSync(path.join(testDir, 'api-schema-base.ts'), 'utf-8');
@@ -179,7 +180,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     const pathParamsContent = fs.readFileSync(path.join(testDir, 'path-parameters.ts'), 'utf-8');
 
@@ -213,7 +214,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     const pathParamsContent = fs.readFileSync(path.join(testDir, 'path-parameters.ts'), 'utf-8');
 
@@ -237,7 +238,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
       },
     };
 
-    await generateSchemaArtifacts(schema, testDir);
+    await generateSchemaArtifacts(schema, schema, testDir);
 
     // Verify that generated files have proper module exports
     const schemaContent = fs.readFileSync(path.join(testDir, 'api-schema-base.ts'), 'utf-8');

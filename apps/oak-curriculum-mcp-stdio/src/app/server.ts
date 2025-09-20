@@ -13,36 +13,24 @@ import {
   createOakPathBasedClient,
   executeToolCall,
   isToolName,
+  isValidPath,
   typeSafeEntries,
   validateResponse,
-  type HttpMethod,
+  isAllowedMethod,
 } from '@oaknational/oak-curriculum-sdk';
-
-function toHttpMethod(methodUpper: string): HttpMethod {
-  if (methodUpper === 'GET') {
-    return 'get';
-  }
-  if (methodUpper === 'POST') {
-    return 'post';
-  }
-  if (methodUpper === 'PUT') {
-    return 'put';
-  }
-  if (methodUpper === 'DELETE') {
-    return 'delete';
-  }
-  if (methodUpper === 'PATCH') {
-    return 'patch';
-  }
-  throw new Error('Unsupported method: ' + methodUpper);
-}
 
 function validateOutput(
   path: string,
-  methodUpper: string,
+  maybeHttpMethod: string,
   data: unknown,
 ): { ok: true } | { ok: false; message: string } {
-  const httpMethod = toHttpMethod(methodUpper);
+  if (!isValidPath(path)) {
+    return { ok: false, message: 'Invalid path: ' + path };
+  }
+  const httpMethod = maybeHttpMethod.toLowerCase();
+  if (!isAllowedMethod(httpMethod)) {
+    return { ok: false, message: 'Unsupported method: ' + httpMethod };
+  }
   const validation = validateResponse(path, httpMethod, 200, data);
   return validation.ok
     ? { ok: true }

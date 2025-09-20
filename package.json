@@ -21,7 +21,7 @@
     "markdownlint-check:root": "markdownlint .",
     "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:e2e",
-    "check": "pnpm clean && pnpm type-gen && pnpm make && pnpm qg",
+    "check": "pnpm clean && pnpm lint:clean && pnpm type-gen && pnpm make && pnpm qg",
     "identity-check": "node scripts/identity-check.mjs --mode=enforce",
     "identity-report": "node scripts/identity-check.mjs --mode=report",
     "prepare": "husky",

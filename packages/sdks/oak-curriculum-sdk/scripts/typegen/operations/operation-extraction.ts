@@ -3,7 +3,12 @@
  * Extracts path operations at generation time for runtime constants
  */
 
-import type { OpenAPI3, OperationObject, ParameterObject } from 'openapi-typescript';
+import type {
+  OpenAPI3,
+  OperationObject,
+  ParameterObject,
+  ResponsesObject,
+} from 'openapi-typescript';
 import { getPropertyValue, isParameterObject, isOperationObject } from './operation-validators.js';
 
 export interface ExtractedParameter {
@@ -21,6 +26,7 @@ export interface ExtractedOperation {
   summary?: string;
   description?: string;
   parameters: ExtractedParameter[];
+  responses?: ResponsesObject;
 }
 
 // isParameterObject type guard moved to operation-validators.ts
@@ -86,6 +92,7 @@ function extractOperationsForPath(
       summary: operation.summary,
       description: operation.description,
       parameters: extractOperationParameters(operation),
+      responses: operation.responses,
     });
   }
 

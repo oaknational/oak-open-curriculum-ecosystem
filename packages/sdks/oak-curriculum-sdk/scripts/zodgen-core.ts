@@ -1,9 +1,10 @@
 import path from 'node:path';
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import type { OpenAPIObject } from 'openapi3-ts/oas30';
 import { isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
+import type { OpenAPI3 } from 'openapi-typescript';
 
 // Small helper type guards to keep complexity low and avoid assertions
 function isOpenAPIInfo(value: unknown): value is { title: string; version: string } {
@@ -35,43 +36,6 @@ function isOpenAPIObject(doc: unknown): doc is OpenAPIObject {
   return true;
 }
 
-export async function generateZodSchemasArtifacts(
-  openApiDoc: unknown,
-  outDir: string,
-): Promise<void> {
-  if (!isOpenAPIObject(openApiDoc)) {
-    throw new TypeError('Invalid OpenAPI document passed to generateZodSchemasArtifacts');
-  }
-
-  if (!existsSync(outDir)) {
-    mkdirSync(outDir, { recursive: true });
-  }
-
-  // Resolve ozc built-in schemas-only template from node_modules
-  const require = createRequire(import.meta.url);
-  const ozcPkgDir = path.dirname(require.resolve('openapi-zod-client/package.json'));
-  const templatePath = path.join(ozcPkgDir, 'src/templates/schemas-only.hbs');
-  const outFile = path.join(outDir, 'schemas.ts');
-
-  const output = await generateZodClientFromOpenAPI({
-    openApiDoc,
-    templatePath,
-    distPath: outFile,
-    // Ensure we export all component schemas and corresponding types
-    options: {
-      shouldExportAllSchemas: true,
-      shouldExportAllTypes: true,
-      groupStrategy: 'none',
-      withAlias: false,
-    },
-  });
-
-  // When distPath is provided, ozc writes the file. Some versions also return the string; persist if returned.
-  if (typeof output === 'string') {
-    writeFileSync(outFile, output);
-  }
-}
-
 /**
  * Generates Zod endpoint definitions with parameter schemas from an OpenAPI document.
  * Uses the default template to generate complete endpoint definitions including request parameters.
@@ -79,10 +43,7 @@ export async function generateZodSchemasArtifacts(
  * @param outDir - The output directory for generated files
  * @throws {TypeError} If the OpenAPI document is invalid
  */
-export async function generateZodEndpointsArtifacts(
-  openApiDoc: unknown,
-  outDir: string,
-): Promise<void> {
+export async function generateZodSchemas(openApiDoc: OpenAPI3, outDir: string): Promise<void> {
   if (!isOpenAPIObject(openApiDoc)) {
     throw new TypeError('Invalid OpenAPI document passed to generateZodEndpointsArtifacts');
   }
@@ -95,7 +56,7 @@ export async function generateZodEndpointsArtifacts(
   const require = createRequire(import.meta.url);
   const ozcPkgDir = path.dirname(require.resolve('openapi-zod-client/package.json'));
   const templatePath = path.join(ozcPkgDir, 'src/templates/default.hbs');
-  const outFile = path.join(outDir, 'endpoints.ts');
+  const outFile = path.join(outDir, 'zodSchemas.ts');
 
   const output = await generateZodClientFromOpenAPI({
     openApiDoc,
@@ -109,23 +70,16 @@ export async function generateZodEndpointsArtifacts(
       withAlias: false,
     },
   });
+  console.log('✅ Zod schemas generated');
 
-  // When distPath is provided, ozc writes the file. Some versions also return the string; persist if returned.
-  if (typeof output === 'string') {
-    writeFileSync(outFile, output);
-  }
+  // Modify the generated file to export the schemas
+  console.log('🔍 Modifying file to export the endpoints');
+  const modifiedContent = output.replace(
+    'const endpoints = makeApi',
+    'export const endpoints = makeApi',
+  );
 
-  // Post-process the generated file to export the endpoints array
-  // This allows us to programmatically access endpoint definitions
-  const generatedContent = existsSync(outFile) ? readFileSync(outFile, 'utf-8') : '';
-  if (
-    typeof generatedContent === 'string' &&
-    generatedContent.includes('const endpoints = makeApi')
-  ) {
-    const modifiedContent = generatedContent.replace(
-      'const endpoints = makeApi',
-      'export const endpoints = makeApi',
-    );
-    writeFileSync(outFile, modifiedContent);
-  }
+  console.log('📝 Writing to file: ', outFile);
+
+  writeFileSync(outFile, modifiedContent);
 }

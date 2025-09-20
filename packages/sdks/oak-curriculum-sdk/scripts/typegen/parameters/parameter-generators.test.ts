@@ -20,12 +20,9 @@ describe('Parameter Generators', () => {
       expect(result).toContain('return keyStages.includes(value)');
     });
 
-    it('should handle empty arrays', () => {
+    it('should omit emission for empty arrays (no useless constants/guards)', () => {
       const result = generateParameterConstant('emptyParam', 'emptyParams', []);
-
-      expect(result).toContain('export const EMPTY_PARAMS = []');
-      expect(result).toContain('type EmptyParams = typeof EMPTY_PARAMS');
-      expect(result).toContain('export type EmptyParam = EmptyParams[number]');
+      expect(result).toBe('');
     });
 
     it('should handle type parameter specially as AssetType', () => {
@@ -80,7 +77,7 @@ describe('Parameter Generators', () => {
       expect(result).toContain('export type AssetType'); // Note: not Type
     });
 
-    it('should handle missing parameters gracefully', () => {
+    it('should handle missing parameters gracefully by omitting outputs', () => {
       const parameters = {
         keyStage: ['ks1'],
         // Other parameters missing
@@ -89,9 +86,9 @@ describe('Parameter Generators', () => {
       const result = generateAllParameterConstants(parameters);
 
       expect(result).toContain('export const KEY_STAGES');
-      // Should have empty arrays for missing parameters
-      expect(result).toContain('export const SUBJECTS = []');
-      expect(result).toContain('export const LESSONS = []');
+      // Missing parameters should not be emitted at all
+      expect(result).not.toContain('export const SUBJECTS');
+      expect(result).not.toContain('export const LESSONS');
     });
   });
 
