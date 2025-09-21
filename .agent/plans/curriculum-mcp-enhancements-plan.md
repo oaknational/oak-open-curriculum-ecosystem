@@ -60,7 +60,7 @@ Benefits
   - Tool grouping/discovery by tags and Inspector discoverability
   - AI docs bundle generation; test mocks; offline/CI guardrails
   - Resources/Prompts and cross‑server pipelines
-  - Caching and semantic search backend swap
+  - Caching
   - Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
 
 ## Core References
