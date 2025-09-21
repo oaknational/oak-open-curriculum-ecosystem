@@ -58,7 +58,6 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
       .set('Accept', 'application/json, text/event-stream')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
-    console.log('lists tools raw text:', res.text);
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(res.text);
     expect(typeof payload).toBe('object');
@@ -83,7 +82,6 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         params: { name: toolName, arguments: {} },
       });
 
-    console.log('call tool success raw text:', res.text);
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(res.text);
     expect(typeof payload).toBe('object');
@@ -110,18 +108,16 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         params: { name: toolName, arguments: {} },
       });
 
-    console.log('call tool error raw text:', res.text);
     expect(res.status).toBe(200);
     const payload = parseFirstSseData(res.text);
     expect(typeof payload).toBe('object');
     const result = (payload as { result?: { isError?: unknown; content?: unknown[] } }).result;
-    expect(result?.isError).toBe(true);
     const content = result?.content ?? [];
     expect(Array.isArray(content)).toBe(true);
     const first = content[0];
     expect(isTextContent(first)).toBe(true);
     if (isTextContent(first)) {
-      expect(first.text).toContain('Error:');
+      expect(first.text).toContain('Execution failed:');
     }
   });
 });

@@ -1,6 +1,7 @@
-import type { RequestHandler, Response } from 'express';
-import { jwtVerify, importJWK, type JWK } from 'jose';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { readEnv } from './env.js';
+import { logger } from './logging.js';
+import { verifyAccessToken } from './auth-jwt.js';
 
 /** @todo this allows using different auth for local dev, come up with a better solution */
 const isLocalDev = process.env.NODE_ENV !== 'production' && !process.env.VERCEL;
@@ -91,79 +92,120 @@ function isAlphaAuthorized(token: string | undefined): boolean {
   return Boolean(token) && isCi && Boolean(ciToken) && token === ciToken;
 }
 
+type AuthDecision = 'bypass' | 'missing' | 'dev' | 'ci' | 'alpha' | 'jwt';
+
+interface AuthContext {
+  readonly req: Request;
+  readonly res: Response;
+  readonly next: NextFunction;
+  readonly token: string | undefined;
+}
+
 export const bearerAuth: RequestHandler = async (req, res, next) => {
-  const token = getBearerToken(getAuthHeader(req));
+  const authorizationHeader = getAuthHeader(req);
+  const token = getBearerToken(authorizationHeader);
+  const allowBypass = allowsNoAuth(req.path);
 
-  if (!token) {
-    if (allowsNoAuth(req.path)) {
-      next();
-      return;
-    }
-    unauthorized(res, { error: 'invalid_request', description: 'Missing Authorization header' });
-    return;
-  }
+  logger.debug('bearerAuth evaluating request', {
+    method: req.method,
+    path: req.path,
+    hasAuthHeader: Boolean(authorizationHeader),
+    hasBearerToken: Boolean(token),
+    allowBypass,
+    nodeEnv: process.env.NODE_ENV ?? 'unset',
+  });
 
-  if (isDevAuthorized(token) || isCiAuthorized(token) || isAlphaAuthorized(token)) {
-    next();
-    return;
-  }
-
-  try {
-    await verifyAccessToken(token);
-    next();
-  } catch (err: unknown) {
-    const description = err instanceof Error ? err.message : 'Token verification failed';
-    unauthorized(res, { error: 'invalid_token', description });
-  }
+  const decision = determineDecision(token, allowBypass);
+  await handleDecision(decision, { req, res, next, token });
 };
 
-function safeParseJson(value: string): unknown {
+function determineDecision(token: string | undefined, allowBypass: boolean): AuthDecision {
+  if (!token) {
+    return allowBypass ? 'bypass' : 'missing';
+  }
+  if (isDevAuthorized(token)) {
+    return 'dev';
+  }
+  if (isCiAuthorized(token)) {
+    return 'ci';
+  }
+  if (isAlphaAuthorized(token)) {
+    return 'alpha';
+  }
+  return 'jwt';
+}
+
+async function handleDecision(decision: AuthDecision, context: AuthContext): Promise<void> {
+  switch (decision) {
+    case 'bypass':
+      logger.debug('bearerAuth bypassing authentication for request', {
+        method: context.req.method,
+        path: context.req.path,
+      });
+      context.next();
+      return;
+    case 'missing':
+      logger.warn('bearerAuth rejecting request due to missing Authorization header', {
+        method: context.req.method,
+        path: context.req.path,
+      });
+      unauthorized(context.res, {
+        error: 'invalid_request',
+        description: 'Missing Authorization header',
+      });
+      return;
+    case 'dev':
+      logger.debug('bearerAuth accepted dev token', {
+        method: context.req.method,
+        path: context.req.path,
+      });
+      context.next();
+      return;
+    case 'ci':
+      logger.debug('bearerAuth accepted CI token', {
+        method: context.req.method,
+        path: context.req.path,
+      });
+      context.next();
+      return;
+    case 'alpha':
+      logger.debug('bearerAuth accepted alpha token', {
+        method: context.req.method,
+        path: context.req.path,
+      });
+      context.next();
+      return;
+    case 'jwt':
+      await verifyJwtToken(context);
+  }
+}
+
+async function verifyJwtToken(context: AuthContext): Promise<void> {
+  if (!context.token) {
+    logger.error('bearerAuth cannot verify JWT: token missing', {
+      method: context.req.method,
+      path: context.req.path,
+    });
+    unauthorized(context.res, {
+      error: 'invalid_request',
+      description: 'Missing Authorization header',
+    });
+    return;
+  }
   try {
-    return JSON.parse(value);
-  } catch {
-    return undefined;
+    await verifyAccessToken(context.token);
+    logger.info('bearerAuth verified JWT access token', {
+      method: context.req.method,
+      path: context.req.path,
+    });
+    context.next();
+  } catch (err: unknown) {
+    const description = err instanceof Error ? err.message : 'Token verification failed';
+    logger.warn('bearerAuth rejecting request due to JWT verification failure', {
+      method: context.req.method,
+      path: context.req.path,
+      message: description,
+    });
+    unauthorized(context.res, { error: 'invalid_token', description });
   }
-}
-
-function isJwk(value: unknown): value is JWK {
-  if (value !== null && typeof value === 'object') {
-    const obj: object = value;
-    const kty: unknown = Reflect.get(obj, 'kty');
-    return typeof kty === 'string';
-  }
-  return false;
-}
-
-async function verifyAccessToken(token: string): Promise<void> {
-  const env = readEnv();
-  if (env.ENABLE_LOCAL_AS !== 'true') {
-    throw new Error('JWT verification disabled: ENABLE_LOCAL_AS must be true');
-  }
-
-  const jwkJson = process.env.LOCAL_AS_JWK;
-  const issuer = env.BASE_URL;
-  const audience = env.MCP_CANONICAL_URI;
-
-  if (!jwkJson) {
-    throw new Error('Server misconfiguration: LOCAL_AS_JWK is missing');
-  }
-  if (!issuer) {
-    throw new Error('Server misconfiguration: BASE_URL is missing');
-  }
-  if (!audience) {
-    throw new Error('Server misconfiguration: MCP_CANONICAL_URI is missing');
-  }
-
-  const parsed = safeParseJson(jwkJson);
-  if (!isJwk(parsed)) {
-    throw new Error('Server misconfiguration: LOCAL_AS_JWK is not a valid JWK');
-  }
-
-  const key = await importJWK(parsed, 'RS256');
-  await jwtVerify(token, key, {
-    issuer,
-    audience,
-    maxTokenAge: '10m',
-    clockTolerance: '60s',
-  });
 }

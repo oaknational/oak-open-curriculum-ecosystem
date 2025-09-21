@@ -4,40 +4,75 @@
   "remoteCache": {
     "enabled": true
   },
-  "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
+  "globalDependencies": [
+    "**/.env.*local",
+    "tsconfig.base.json"
+  ],
   "tasks": {
     "//#format:root": {
       "cache": true,
       "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.prettier*",
+        "$TURBO_ROOT$/prettier.config.*"
+      ]
     },
     "//#format-check:root": {
       "cache": true,
       "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.prettier*",
+        "$TURBO_ROOT$/prettier.config.*"
+      ]
     },
     "//#markdownlint:root": {
       "cache": true,
       "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.markdownlint*",
+        "**/*.md"
+      ]
     },
     "//#markdownlint-check:root": {
       "cache": true,
       "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/.markdownlint*",
+        "**/*.md"
+      ]
     },
     "type-gen": {
-      "dependsOn": ["^type-gen"],
+      "dependsOn": [
+        "^type-gen"
+      ],
       "cache": true,
-      "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"],
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"]
+      "outputs": [
+        "**/generated/**"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/scripts/**/*.ts"
+      ],
+      "env": [
+        "OAK_API_KEY"
+      ],
+      "passThroughEnv": [
+        "OAK_API_KEY"
+      ]
     },
     "doc-gen": {
-      "dependsOn": ["^doc-gen"],
+      "dependsOn": [
+        "^doc-gen"
+      ],
       "cache": true,
-      "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
+      "outputs": [
+        "**/docs/api/**",
+        "**/docs/api-md/**"
+      ],
       "inputs": [
         "$TURBO_DEFAULT$",
         "**/scripts/**/*.ts",
@@ -50,9 +85,15 @@
       ]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "cache": false,
-      "outputs": ["dist/**", ".tsup/**", ".next/**"],
+      "outputs": [
+        "dist/**",
+        ".tsup/**",
+        ".next/**"
+      ],
       "inputs": [
         "$TURBO_DEFAULT$",
         "$TURBO_ROOT$/packages/core/mcp-core",
@@ -71,8 +112,12 @@
         "!src/**/*.test.ts",
         "!src/**/*.spec.ts"
       ],
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"]
+      "env": [
+        "OAK_API_KEY"
+      ],
+      "passThroughEnv": [
+        "OAK_API_KEY"
+      ]
     },
     "clean": {
       "cache": false
@@ -80,8 +125,12 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"]
+      "env": [
+        "OAK_API_KEY"
+      ],
+      "passThroughEnv": [
+        "OAK_API_KEY"
+      ]
     },
     "lint": {
       "cache": true,
@@ -131,8 +180,16 @@
         "$TURBO_ROOT$/packages/libs/storage",
         "$TURBO_ROOT$/packages/libs/transport"
       ],
-      "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
-      "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
+      "env": [
+        "NOTION_API_KEY",
+        "OAK_API_KEY",
+        "LOG_LEVEL"
+      ],
+      "passThroughEnv": [
+        "NOTION_API_KEY",
+        "LOG_LEVEL",
+        "OAK_API_KEY"
+      ]
     },
     "type-check": {
       "dependsOn": [],
@@ -153,6 +210,24 @@
         "app/**/*.ts",
         "app/**/*.tsx",
         "**/*.d.ts"
+      ]
+    },
+    "smoke:dev": {
+      "dependsOn": [
+        "^smoke:dev"
+      ],
+      "cache": false,
+      "outputs": [],
+      "env": [
+        "OAK_API_KEY"
+      ],
+      "passThroughEnv": [
+        "OAK_API_KEY"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     }
   }

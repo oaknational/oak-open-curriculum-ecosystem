@@ -104,6 +104,16 @@ export {
   type OpenAiFetchArgs,
 } from './types/generated/openai-connector/index.js';
 
+// Universal MCP tooling exports
+export {
+  listUniversalTools,
+  isUniversalToolName,
+  createUniversalToolExecutor,
+  type UniversalToolName,
+  type UniversalToolExecutorDependencies,
+  type UniversalToolListEntry,
+} from './mcp/universal-tools.js';
+
 // Export the type-safe object helpers
 export {
   typeSafeKeys,

@@ -5,53 +5,78 @@
  * All tool logic and validation is handled by the SDK.
  */
 
-import { createHandleToolCall, type SdkClient } from './handlers/tool-handler.js';
-import type { CallToolRequest } from '@modelcontextprotocol/sdk/types.js';
-// Removed unused import
+import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
+import {
+  executeToolCall,
+  executeOpenAiToolCall,
+  createUniversalToolExecutor,
+  isUniversalToolName,
+  type ToolExecutionResult,
+  type OpenAiToolName,
+  type AllToolNames,
+  type OakApiPathBasedClient,
+} from '@oaknational/oak-curriculum-sdk';
 
 /**
  * MCP tools module interface
  */
 export interface McpToolsModule {
-  /** Handle tool execution */
   handleTool: (name: string, args: unknown) => Promise<unknown>;
 }
 
-/**
- * Creates MCP tools module that delegates to SDK
- */
-export function createMcpToolsModule(deps: { client: SdkClient }): McpToolsModule {
-  const handler = createHandleToolCall(deps.client);
-  type McpArguments = NonNullable<CallToolRequest['params']['arguments']>;
-  function isMcpArguments(value: unknown): value is McpArguments {
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
-  }
-  function decodeResult(result: Awaited<ReturnType<typeof handler>>): unknown {
-    if (result.isError === true) {
-      return result;
+export interface UniversalToolExecutors {
+  readonly executeMcpTool?: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult>;
+  readonly executeOpenAiTool?: (name: OpenAiToolName, args: unknown) => Promise<unknown>;
+}
+
+function formatError(message: string): CallToolResult {
+  const content: TextContent = { type: 'text', text: `Error: ${message}` };
+  return { content: [content], isError: true };
+}
+
+function decodeSuccessfulResult(result: CallToolResult): unknown {
+  const first = result.content.length > 0 ? result.content[0] : undefined;
+  if (first?.type === 'text') {
+    try {
+      return JSON.parse(first.text);
+    } catch {
+      return first.text;
     }
-    const first = result.content.length > 0 ? result.content[0] : undefined;
-    if (first && first.type === 'text') {
-      try {
-        const parsed: unknown = JSON.parse(first.text);
-        return parsed;
-      } catch {
-        return first.text;
-      }
-    }
-    return { content: [] };
   }
+  return { content: [] };
+}
+
+export function createMcpToolsModule(
+  deps: { client: OakApiPathBasedClient } & UniversalToolExecutors,
+): McpToolsModule {
+  const executeMcpTool =
+    deps.executeMcpTool ??
+    ((name: AllToolNames, args: unknown) => executeToolCall(name, args, deps.client));
+
+  const executeOpenAiTool =
+    deps.executeOpenAiTool ??
+    ((name: OpenAiToolName, args: unknown) => executeOpenAiToolCall(name, args, deps.client));
+
+  const executor = createUniversalToolExecutor({
+    executeMcpTool: (name, args) => executeMcpTool(name, args),
+    executeOpenAiTool: (name, args) => executeOpenAiTool(name, args),
+  });
+
   return {
     handleTool: async (name: string, args: unknown) => {
-      const request = {
-        method: 'tools/call',
-        params: {
-          name,
-          arguments: isMcpArguments(args) ? args : undefined,
-        },
-      } as const;
-      const result = await handler(request);
-      return decodeResult(result);
+      if (!isUniversalToolName(name)) {
+        return formatError(`Unknown tool: ${name}`);
+      }
+      try {
+        const result = await executor(name, args ?? {});
+        if (result.isError) {
+          return result;
+        }
+        return decodeSuccessfulResult(result);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return formatError(message);
+      }
     },
   };
 }

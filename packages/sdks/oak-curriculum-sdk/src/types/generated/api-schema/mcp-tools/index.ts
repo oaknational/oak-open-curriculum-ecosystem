@@ -9,23 +9,7 @@
 import type {} from 'openapi-typescript-helpers';
 
 // Import types used to provide a stable, nameable export surface
-import type { OakApiPathBasedClient } from '../../../../client/index.js';
-import type { ToolInputJsonSchema } from '../../../../mcp/zod-input-schema.js';
-import type { AllToolNames } from './types.js';
-import type { Tool as BaseTool } from '@modelcontextprotocol/sdk/types.js';
-
-// Minimal shape to avoid leaking per-tool internal types (e.g. ValidRequestParams)
-export interface ToolDescriptor extends BaseTool {
-  invoke: (client: OakApiPathBasedClient, _params: unknown) => Promise<unknown>;
-  inputSchema: ToolInputJsonSchema;
-  operationId: string;
-  name: string;
-  path: string;
-  method: string;
-  // Emitted metadata used by the executor to split and validate arguments
-  readonly pathParams: Readonly<Record<string, { readonly required?: boolean }>>;
-  readonly queryParams: Readonly<Record<string, { readonly required?: boolean }>>;
-}
+import type { AllToolNames, ToolDescriptor } from './types.js';
 
 // Import all tool definitions
 import { getChangelog } from './tools/get-changelog.js';

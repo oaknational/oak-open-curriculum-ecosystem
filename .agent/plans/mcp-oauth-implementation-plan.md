@@ -2,7 +2,7 @@
 
 # MCP OAuth 2.1 Implementation Plan (AS + RS)
 
-PAUSED: Requires updating with [research on Clerk](../../docs/architecture/)
+PAUSED: Requires updating with [research on Clerk](../../research/clerk-unified-auth-mcp-nextjs.md)
 
 Date: 2025-09-12
 Owner: Engineering (Security/Platform)

@@ -4,6 +4,8 @@ import request from 'supertest';
 import { createApp } from '../src/index.js';
 import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 
+/* eslint max-lines-per-function: ["error", 300] */
+
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
@@ -81,9 +83,79 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
     const payload = parseFirstSseData(payloadText);
     const names = toolNamesFromResult(payload);
+    const toolObjects = (payload.result as { tools?: unknown[] } | undefined)?.tools ?? [];
+    const containsMethodField = toolObjects.some(
+      (tool) => tool && typeof tool === 'object' && 'method' in (tool as Record<string, unknown>),
+    );
+    expect(containsMethodField).toBe(false);
+    const baseToolNames = Object.keys(MCP_TOOLS);
+    const composedTools = ['fetch', 'search'];
+    const expectedToolNames = [...baseToolNames, ...composedTools];
+    expect(names.sort()).toEqual(expectedToolNames.sort());
+  });
 
-    const sdkToolNames = Object.keys(MCP_TOOLS).sort();
-    expect(names.sort()).toEqual(sdkToolNames);
+  it('rejects missing Accept header with 406', async () => {
+    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+    const app = createApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Authorization', `Bearer ${DEV_TOKEN}`)
+      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
+    expect(res.status).toBe(406);
+    expect(res.body).toEqual({
+      error: 'Accept header must include text/event-stream',
+    });
+  });
+
+  it('rejects initialize without clientInfo', async () => {
+    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+    const app = createApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Authorization', `Bearer ${DEV_TOKEN}`)
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'init-1',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+        },
+      });
+    expect(res.status).toBe(200);
+    const payload = parseFirstSseData(res.text);
+    const error = payload.error as { message?: string } | undefined;
+    expect(error).toBeDefined();
+    expect(error?.message ?? '').toContain('clientInfo');
+  });
+
+  it('accepts initialize with clientInfo and advertises listChanged capability', async () => {
+    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+    const app = createApp();
+    const res = await request(app)
+      .post('/mcp')
+      .set('Authorization', `Bearer ${DEV_TOKEN}`)
+      .set('Accept', ACCEPT)
+      .send({
+        jsonrpc: '2.0',
+        id: 'init-2',
+        method: 'initialize',
+        params: {
+          protocolVersion: '2025-06-18',
+          capabilities: {},
+          clientInfo: { name: 'hardening-probe', version: '0.0.0-test' },
+        },
+      });
+    expect(res.status).toBe(200);
+    const payload = parseFirstSseData(res.text);
+    const result = payload.result as
+      | { capabilities?: { tools?: { listChanged?: boolean } } }
+      | undefined;
+    expect(result?.capabilities?.tools?.listChanged).toBe(true);
   });
 
   it('OpenAI connector: returns 200 with dev bearer token and responds to tools/list', async () => {

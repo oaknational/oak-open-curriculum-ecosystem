@@ -27,9 +27,29 @@
 - [ ] Improve the logger, Consola is too lightweight, we need something production ready and cloud runtime compatible. Enforce logger usage with eslint no-console rule
 - [ ] Update Zod to Zod 4 everywhere, requires support from OpenAPI type generation pipeline.
 - [ ] Standardise and improve the Claude sub-agents.
+- [ ] Extract all common code from the stdio and http servers into a shared library.
 - [ ] Production hardening, auth, caching, logging, tracing, error handling (Result<T,E>), error tracking (Sentry), etc.
 - [ ] Rename the type-gen code from scripts to something more meaningful.
 - [ ] Consider putting the type-gen code in a separate package from the SDK runtime code, they are not tightly coupled and have different if related intentions. This could go either way, the typegen code essentially becomes a library of functions that are used within the SDK runtime code.
+
+## MCP Enhancements
+
+### Enhancements (Post‑MVP):
+
+- Shared error handling library workspace (centralised error classes, normalisers, mapping to user‑facing summaries)
+- Shared OpenTelemetry workspace/library for tracing/metrics, consumed by logger and error handler
+- Tool grouping/discovery by tags and Inspector discoverability
+- AI docs bundle generation; test mocks; offline/CI guardrails
+- Resources/Prompts and cross‑server pipelines
+- Caching
+- Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
+
+### Core References
+
+- [OpenAI Connector standard for MCP](.agent/reference-docs/openai-connector-standards.md)
+- [Development Practice, Testing Strategy, TypeScript Practice](.agent/directives-and-memory/AGENT.md)
+- [McpServer, Streamable HTTP, stdio, debounced notifications, elicitation](.agent/reference-docs/mcp-typescript-sdk-readme.md)
+- [Understanding MCP servers](https://modelcontextprotocol.io/docs/learn/server-concepts)
 
 ## MCP server ideas
 

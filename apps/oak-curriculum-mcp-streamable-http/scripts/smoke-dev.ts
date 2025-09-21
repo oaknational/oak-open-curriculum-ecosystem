@@ -12,6 +12,15 @@ import type { Server } from 'node:http';
 import assert from 'node:assert/strict';
 import { createApp } from '../src/index.js';
 
+const REQUIRED_ACCEPT = 'application/json, text/event-stream';
+
+interface JsonRpcEnvelope {
+  jsonrpc?: string;
+  id?: string | number;
+  result?: unknown;
+  error?: unknown;
+}
+
 async function fetchJson(
   url: URL | string,
   init?: RequestInit,
@@ -19,6 +28,18 @@ async function fetchJson(
   const res = await fetch(url, init);
   const text = await res.text();
   return { res, text };
+}
+
+function parseFirstSsePayload(raw: string): JsonRpcEnvelope {
+  const line = raw
+    .split('\n')
+    .map((value) => value.trim())
+    .find((value) => value.startsWith('data: '));
+  assert.ok(line, 'SSE payload must include at least one data line');
+  const json = line!.replace(/^data: /, '');
+  const parsed = JSON.parse(json) as unknown;
+  assert.ok(parsed && typeof parsed === 'object', 'SSE data must be a JSON object envelope');
+  return parsed as JsonRpcEnvelope;
 }
 
 async function run(): Promise<void> {
@@ -42,27 +63,68 @@ async function run(): Promise<void> {
       });
     }
 
-    // 1) Health
+    // 1) Health endpoints
     {
-      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), { method: 'GET' });
-      assert.equal(res.status, 200, 'GET /mcp should return 200');
-      assert.match(text, /"status":"ok"/, 'GET /mcp should include status ok');
+      const { res, text } = await fetchJson(new URL('/healthz', baseUrl), { method: 'GET' });
+      assert.equal(res.status, 200, 'GET /healthz should return 200');
+      const body = JSON.parse(text) as { status?: unknown; mode?: unknown; auth?: unknown };
+      assert.equal(body.status, 'ok', 'Health response should report ok status');
+      assert.equal(
+        body.mode,
+        'streamable-http',
+        'Health response should describe streamable-http mode',
+      );
+      assert.equal(
+        body.auth,
+        'required-for-post',
+        'Health response should document auth expectations',
+      );
+    }
+    {
+      const { res, text } = await fetchJson(new URL('/healthz', baseUrl), { method: 'HEAD' });
+      assert.equal(res.status, 200, 'HEAD /healthz should return 200');
+      assert.equal(text, '', 'HEAD /healthz should not return a body');
+    }
+
+    // 2) Accept header enforcement when missing streaming requirements
+    {
+      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-1', method: 'tools/list' }),
+      });
+      assert.equal(res.status, 406, 'POST /mcp without required Accept header should be 406');
+      assert.match(text, /Accept header must include text\/event-stream/);
     }
     {
       const { res, text } = await fetchJson(new URL('/openai_connector', baseUrl), {
-        method: 'GET',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-2', method: 'tools/list' }),
       });
-      assert.equal(res.status, 200, 'GET /openai_connector should return 200');
-      assert.match(text, /"status":"ok"/, 'GET /openai_connector should include status ok');
+      assert.equal(
+        res.status,
+        406,
+        'POST /openai_connector without required Accept header should be 406',
+      );
+      assert.match(text, /Accept header must include text\/event-stream/);
     }
 
-    // 2) 401 without auth
+    // 3) 401 without auth
     {
       const { res } = await fetchJson(new URL('/mcp', baseUrl), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json, text/event-stream',
+          Accept: REQUIRED_ACCEPT,
         },
         body: JSON.stringify({ jsonrpc: '2.0', id: '1', method: 'tools/list' }),
       });
@@ -75,7 +137,7 @@ async function run(): Promise<void> {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json, text/event-stream',
+          Accept: REQUIRED_ACCEPT,
         },
         body: JSON.stringify({ jsonrpc: '2.0', id: '1', method: 'tools/list' }),
       });
@@ -84,14 +146,71 @@ async function run(): Promise<void> {
       assert.match(www.toLowerCase(), /^bearer\s+/, 'WWW-Authenticate must be Bearer');
     }
 
-    // 3) tools/list with dev token
+    // 4) initialise handshake validation
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${devToken}`,
           'Content-Type': 'application/json',
-          Accept: 'application/json, text/event-stream',
+          Accept: REQUIRED_ACCEPT,
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'init-no-client',
+          method: 'initialize',
+          params: {
+            protocolVersion: '2025-06-18',
+            capabilities: {},
+          },
+        }),
+      });
+      assert.equal(res.status, 200, 'POST /mcp initialize without clientInfo should be 200');
+      const payload = parseFirstSsePayload(text);
+      const error = payload.error as { message?: string } | undefined;
+      const message = error?.message ?? '';
+      assert.notEqual(message.length, 0, 'Initialise error payload should include a message');
+      assert.match(message.toLowerCase(), /clientinfo/, 'Error message should mention clientInfo');
+    }
+    {
+      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: REQUIRED_ACCEPT,
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'init-with-client',
+          method: 'initialize',
+          params: {
+            protocolVersion: '2025-06-18',
+            capabilities: {},
+            clientInfo: { name: 'smoke-dev', version: '0.0.0-local' },
+          },
+        }),
+      });
+      assert.equal(res.status, 200, 'POST /mcp initialize with clientInfo should be 200');
+      const payload = parseFirstSsePayload(text);
+      const result = payload.result as
+        | { capabilities?: { tools?: { listChanged?: boolean } } }
+        | undefined;
+      assert.equal(
+        result?.capabilities?.tools?.listChanged,
+        true,
+        'Initialise result should advertise listChanged capability',
+      );
+    }
+
+    // 5) tools/list with dev token
+    {
+      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: REQUIRED_ACCEPT,
         },
         body: JSON.stringify({ jsonrpc: '2.0', id: '1', method: 'tools/list' }),
       });
@@ -114,14 +233,14 @@ async function run(): Promise<void> {
       assert.match(text, /"tools"\s*:/, 'Payload should include tools');
     }
 
-    // 4) Validation failure / error payloads
+    // 6) Validation failure / error payloads
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${devToken}`,
           'Content-Type': 'application/json',
-          Accept: 'application/json, text/event-stream',
+          Accept: REQUIRED_ACCEPT,
         },
         body: JSON.stringify({
           jsonrpc: '2.0',
@@ -142,7 +261,7 @@ async function run(): Promise<void> {
         headers: {
           Authorization: `Bearer ${devToken}`,
           'Content-Type': 'application/json',
-          Accept: 'application/json, text/event-stream',
+          Accept: REQUIRED_ACCEPT,
         },
         body: JSON.stringify({
           jsonrpc: '2.0',
