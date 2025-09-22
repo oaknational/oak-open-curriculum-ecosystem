@@ -5,6 +5,7 @@ import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateIndexFile } from './parts/generate-index-file.js';
+import { generateSynonymsFile } from './parts/generate-synonyms-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
 
 export type PrimitiveType = 'string' | 'number' | 'boolean' | 'string[]' | 'number[]' | 'boolean[]';
@@ -115,6 +116,7 @@ export interface GeneratedMcpToolFiles {
   'index.ts': string;
   'types.ts': string;
   'lib.ts': string;
+  'synonyms.ts': string;
   tools: Record<string, string>; // filename -> content
 }
 
@@ -123,11 +125,14 @@ export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFile
     'index.ts': '',
     'types.ts': '',
     'lib.ts': '',
+    'synonyms.ts': '',
     tools: {},
   };
 
   const operationIdMap: Record<string, { toolName: string; operationId: string }> = {};
   const toolNames: string[] = [];
+  const subjectEnumValues = new Set<string>();
+  const keyStageEnumValues = new Set<string>();
 
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
@@ -136,6 +141,8 @@ export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFile
     toolNames.push(toolName);
 
     const { pathParamMetadata, queryParamMetadata } = buildParamMetadataForOperation(operation);
+    collectSynonymCandidates(pathParamMetadata, subjectEnumValues, keyStageEnumValues);
+    collectSynonymCandidates(queryParamMetadata, subjectEnumValues, keyStageEnumValues);
     const toolFile = generateToolFile(
       toolName,
       path,
@@ -152,5 +159,66 @@ export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFile
   result['lib.ts'] = generateLibFile();
   result['index.ts'] = generateIndexFile(toolNames);
 
+  const synonymOutput = generateSynonymsFile(
+    Array.from(subjectEnumValues),
+    Array.from(keyStageEnumValues),
+  );
+
+  if (synonymOutput.subjectReport.missingInConfig.length > 0) {
+    console.warn(
+      '[mcp-tool-generator] No subject synonyms configured for:',
+      synonymOutput.subjectReport.missingInConfig.join(', '),
+    );
+  }
+  if (synonymOutput.subjectReport.unusedConfigKeys.length > 0) {
+    console.warn(
+      '[mcp-tool-generator] Subject synonym config contains unused keys:',
+      synonymOutput.subjectReport.unusedConfigKeys.join(', '),
+    );
+  }
+  if (synonymOutput.keyStageReport.missingInConfig.length > 0) {
+    console.warn(
+      '[mcp-tool-generator] No key stage synonyms configured for:',
+      synonymOutput.keyStageReport.missingInConfig.join(', '),
+    );
+  }
+  if (synonymOutput.keyStageReport.unusedConfigKeys.length > 0) {
+    console.warn(
+      '[mcp-tool-generator] Key stage synonym config contains unused keys:',
+      synonymOutput.keyStageReport.unusedConfigKeys.join(', '),
+    );
+  }
+
+  result['synonyms.ts'] = synonymOutput.content;
+
   return result;
+}
+
+const SUBJECT_FIELD_NAMES = new Set(['subject', 'subjectSlug']);
+const KEY_STAGE_FIELD_NAMES = new Set(['keyStage', 'keyStageSlug']);
+
+function collectSynonymCandidates(
+  metadata: Record<string, ParamMetadata>,
+  subjectValues: Set<string>,
+  keyStageValues: Set<string>,
+): void {
+  for (const [paramName, paramMeta] of typeSafeEntries(metadata)) {
+    if (!paramMeta.allowedValues) {
+      continue;
+    }
+    if (SUBJECT_FIELD_NAMES.has(paramName)) {
+      for (const value of paramMeta.allowedValues) {
+        if (typeof value === 'string') {
+          subjectValues.add(value);
+        }
+      }
+    }
+    if (KEY_STAGE_FIELD_NAMES.has(paramName)) {
+      for (const value of paramMeta.allowedValues) {
+        if (typeof value === 'string') {
+          keyStageValues.add(value);
+        }
+      }
+    }
+  }
 }

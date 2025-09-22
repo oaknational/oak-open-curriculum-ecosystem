@@ -13,12 +13,17 @@ import assert from 'node:assert/strict';
 import { createApp } from '../src/index.js';
 
 const REQUIRED_ACCEPT = 'application/json, text/event-stream';
+const EXPECTED_TOOLS = ['search', 'fetch', 'get-key-stages-subject-lessons'] as const;
 
 interface JsonRpcEnvelope {
   jsonrpc?: string;
   id?: string | number;
   result?: unknown;
   error?: unknown;
+}
+
+interface ToolListResult {
+  tools?: ReadonlyArray<{ name?: string }>;
 }
 
 async function fetchJson(
@@ -40,6 +45,16 @@ function parseFirstSsePayload(raw: string): JsonRpcEnvelope {
   const parsed = JSON.parse(json) as unknown;
   assert.ok(parsed && typeof parsed === 'object', 'SSE data must be a JSON object envelope');
   return parsed as JsonRpcEnvelope;
+}
+
+function extractToolNames(raw: string): string[] {
+  const envelope = parseFirstSsePayload(raw);
+  const result = envelope.result as ToolListResult | undefined;
+  assert.ok(result && Array.isArray(result.tools), 'tools/list must include tools array');
+  const names = result.tools!.map((entry) => entry?.name).filter((name): name is string => !!name);
+  const unique = new Set(names);
+  assert.equal(unique.size, names.length, 'tools/list should not contain duplicate tool names');
+  return names;
 }
 
 async function run(): Promise<void> {
@@ -87,6 +102,7 @@ async function run(): Promise<void> {
     }
 
     // 2) Accept header enforcement when missing streaming requirements
+    let canonicalToolNames: string[] = [];
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
         method: 'POST',
@@ -100,6 +116,7 @@ async function run(): Promise<void> {
       assert.equal(res.status, 406, 'POST /mcp without required Accept header should be 406');
       assert.match(text, /Accept header must include text\/event-stream/);
     }
+
     {
       const { res, text } = await fetchJson(new URL('/openai_connector', baseUrl), {
         method: 'POST',
@@ -202,7 +219,6 @@ async function run(): Promise<void> {
         'Initialise result should advertise listChanged capability',
       );
     }
-
     // 5) tools/list with dev token
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
@@ -216,7 +232,11 @@ async function run(): Promise<void> {
       });
       assert.equal(res.status, 200, 'POST /mcp tools/list should be 200');
       assert.match(text, /event: message/, 'Response should be SSE wrapped');
-      assert.match(text, /"tools"\s*:/, 'Payload should include tools');
+      const names = extractToolNames(text);
+      for (const tool of EXPECTED_TOOLS) {
+        assert.ok(names.includes(tool), `tools/list should include ${tool}`);
+      }
+      canonicalToolNames = names;
     }
     {
       const { res, text } = await fetchJson(new URL('/openai_connector', baseUrl), {
@@ -230,7 +250,16 @@ async function run(): Promise<void> {
       });
       assert.equal(res.status, 200, 'POST /openai_connector tools/list should be 200');
       assert.match(text, /event: message/, 'Response should be SSE wrapped');
-      assert.match(text, /"tools"\s*:/, 'Payload should include tools');
+      const names = extractToolNames(text);
+      const canonicalNames = new Set(canonicalToolNames);
+      assert.equal(
+        names.length,
+        canonicalNames.size,
+        'Alias tools/list should mirror canonical set',
+      );
+      for (const tool of names) {
+        assert.ok(canonicalNames.has(tool), `Alias tools/list should not introduce ${tool}`);
+      }
     }
 
     // 6) Validation failure / error payloads
@@ -277,6 +306,66 @@ async function run(): Promise<void> {
       assert.match(text, /event: message/, 'Response should be SSE wrapped');
       assert.match(text, /\"text\"\s*:/, 'Payload should contain text content item');
       assert.match(text, /\\\"(error|message)\\\"\s*:/, 'Wrapped JSON should indicate error');
+    }
+
+    // 7) Synonym canonicalisation succeeds
+    {
+      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: REQUIRED_ACCEPT,
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'synonyms-success',
+          method: 'tools/call',
+          params: {
+            name: 'get-key-stages-subject-lessons',
+            arguments: {
+              keyStage: 'Key Stage Four',
+              subject: 'Fine Art',
+            },
+          },
+        }),
+      });
+      assert.equal(res.status, 200, 'POST /mcp tools/call with synonyms should be 200');
+      const envelope = parseFirstSsePayload(text);
+      const error = envelope.error as { message?: string } | undefined;
+      const errorMessage = error?.message ?? '';
+      assert.ok(
+        !errorMessage.toLowerCase().includes('unknown subject'),
+        'Subject synonym should not be rejected',
+      );
+      assert.ok(
+        !errorMessage.toLowerCase().includes('unknown key stage'),
+        'Key stage synonym should not be rejected',
+      );
+      if (!error) {
+        const result = envelope.result as {
+          content?: ReadonlyArray<{ type?: string; text?: string }>;
+          isError?: boolean;
+        } | null;
+        assert.ok(result && result.isError !== true, 'tools/call success should not signal error');
+        const textContent = result?.content?.find((entry) => entry?.type === 'text')?.text;
+        if (textContent && textContent.length > 0) {
+          try {
+            const payload = JSON.parse(textContent) as {
+              subjectSlug?: string;
+              keyStageSlug?: string;
+            };
+            if (payload?.subjectSlug) {
+              assert.equal(payload.subjectSlug, 'art', 'Subject synonym should canonise to art');
+            }
+            if (payload?.keyStageSlug) {
+              assert.equal(payload.keyStageSlug, 'ks4', 'Key stage synonym should canonise to ks4');
+            }
+          } catch (jsonError) {
+            console.warn('Unable to parse canonicalised payload:', jsonError);
+          }
+        }
+      }
     }
 
     console.log('Smoke OK for', baseUrl);

@@ -22,6 +22,13 @@ This document consolidates everything learned in our testing to make the Oak MCP
 
 ---
 
+## Todo
+
+- [ ] REMINDER: UseBritish spelling
+- [x] Extend smoke probe coverage for Accept enforcement, handshake checks, and `/openai_connector` alias behaviour. (2025-09-22) `smoke-dev.ts` now parses SSE payloads for both endpoints, asserts merged tool lists, and verifies synonym canonicalisation.
+
+---
+
 ## 1) Current Observations & Issues Found
 
 ### 1.1 Handshake
@@ -310,12 +317,14 @@ Do not replace SSE with NDJSON; rely on the SDK to keep pace with the specificat
 - [x] Add regression tests for `tools/list` payload shape, translation round-trips, and schema snapshots (including `year` coercion) leveraging the generated guards. Use TDD so converters are validated before integration.
 - [x] Document `/openai_connector` deprecation path and timeline; configure redirect/alias during migration without creating a compatibility layer.
 - [ ] Run scripted curl probes plus Gemini/ElevenLabs smoke tests and capture SSE traces for verification. Store results to demonstrate standards compliance.
+- [x] Run scripted curl probes against preview and production (`/mcp` GET/POST) to confirm Accept enforcement, auth bypass, and tool responses; log outstanding Gemini/ElevenLabs validation.
 - [x] Update the SDK build pipeline (`tsup.config.ts`, `tsconfig.build.json`, exports) so the universal tool layer ships in `dist/` without relying on source imports; rerun builds to confirm consumers resolve the module.
 - [x] Adjust consuming workspaces (`oak-curriculum-mcp-stdio`, `oak-curriculum-mcp-streamable-http`, `oak-open-curriculum-semantic-search`) to import from the published SDK surface rather than packages/.../src, verifying `package.json` dependencies point to the workspace package.
 - [x] Re-run `pnpm build` and address any residual type-generation or bundling gaps so the monorepo builds cleanly end-to-end.
 - [x] Extend generated MCP tool descriptors so schema descriptions surface in `MCP_TOOLS`, add detailed JSDoc for executors/adapters, and ensure Gemini surfaces tool-centric copy.
-- [ ] Extend the `smoke-dev` probe to cover `/healthz`, Accept-header enforcement, initialize (success/failure), merged tool list, and `/openai_connector` alias behaviour; schedule it as the weekly MCP health check.
-- [ ] Sweep README/usage docs to emphasise `/mcp` as canonical, note `/openai_connector` as a temporary alias, and link to the deprecation timeline.
+- [x] Expand subject and key stage synonym configuration so type-gen warnings are eliminated; regenerate SDK artefacts until coverage is complete. (2025-09-22) Added comprehensive subject and key stage synonyms, regenerated artefacts, and confirmed clean generator output.
+- [x] Extend the `smoke-dev` probe to cover `/healthz`, Accept-header enforcement, initialize (success/failure), merged tool list, and `/openai_connector` alias behaviour; schedule it as the weekly MCP health check. (2025-09-22) Added SSE parsing, alias parity assertions, and synonym call coverage; retained follow-up to automate weekly scheduling.
+- [x] Sweep README/usage docs to emphasise `/mcp` as canonical, note `/openai_connector` as a temporary alias, and link to the deprecation timeline. (2025-09-22) Updated deprecation plan to reference the strengthened smoke probe and reiterated `/mcp` as the primary surface.
 
 ---
 
