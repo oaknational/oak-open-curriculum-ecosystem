@@ -17,7 +17,7 @@ export interface ToolExecutor<TInput = unknown, TOutput = unknown> {
  */
 export interface ToolDefinition {
   readonly name: string;
-  readonly description?: string;
+  readonly description: string;
   readonly inputSchema: Readonly<{
     readonly type: 'object';
     readonly properties: JsonObject;

@@ -91,6 +91,7 @@ function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpTool
   fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools['index.ts']);
   fs.writeFileSync(path.resolve(mcpToolsDir, 'types.ts'), mcpTools['types.ts']);
   fs.writeFileSync(path.resolve(mcpToolsDir, 'lib.ts'), mcpTools['lib.ts']);
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'synonyms.ts'), mcpTools['synonyms.ts']);
 
   // Write tool files
   for (const [filename, content] of typeSafeEntries(mcpTools.tools)) {

@@ -11,6 +11,7 @@ import { typeSafeEntries } from '../types/helpers.js';
 import { zodFromToolInputJsonSchema } from './zod-input-schema.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
+import { normaliseMcpArgs, type NormaliseResult } from './argument-normaliser.js';
 
 export type UniversalToolName = OpenAiToolName | AllToolNames;
 
@@ -130,7 +131,13 @@ function validateArgs(
   if (!validator) {
     return { ok: false, message: `Unknown tool: ${name}` };
   }
-  const safeResult = validator.safeParse(args);
+  const normalisedArgs: NormaliseResult = isToolName(name)
+    ? normaliseMcpArgs(args)
+    : { ok: true as const, value: args };
+  if (!normalisedArgs.ok) {
+    return normalisedArgs;
+  }
+  const safeResult = validator.safeParse(normalisedArgs.value);
   if (safeResult.success) {
     return { ok: true, value: safeResult.data };
   }

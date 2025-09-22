@@ -24,7 +24,7 @@ function toolDescriptorBlock(): string {
     '  readonly inputSchema: ToolInputJsonSchema;',
     '  readonly operationId: string;',
     '  readonly name: string;',
-    '  readonly description?: string;',
+    '  readonly description: string;',
     '  readonly path: string;',
     '  readonly method: string;',
     '  readonly pathParams: Readonly<Record<string, { readonly required?: boolean }>>;',

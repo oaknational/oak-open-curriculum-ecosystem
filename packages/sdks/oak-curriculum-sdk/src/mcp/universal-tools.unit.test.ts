@@ -84,6 +84,76 @@ describe('createUniversalToolExecutor', () => {
     expect(result.content[0]).toEqual({ type: 'text', text: JSON.stringify({ status: 'ok' }) });
   });
 
+  it('standardises subject and key stage synonyms before validation', async () => {
+    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: 'Key Stage 3',
+      subject: 'math',
+    });
+
+    expect(executeMcpTool).toHaveBeenCalledTimes(1);
+    const callArgs = executeMcpTool.mock.calls[0];
+    expect(callArgs[1]).toEqual({
+      keyStage: 'ks3',
+      subject: 'maths',
+    });
+  });
+
+  it.each([
+    ['Fine Art', 'art'],
+    ['Civics', 'citizenship'],
+    ['Food and Nutrition', 'cooking-nutrition'],
+    ['Design and Technology', 'design-technology'],
+    ['French Language', 'french'],
+    ['Geo', 'geography'],
+    ['German Language', 'german'],
+    ['Historical Studies', 'history'],
+    ['Music Education', 'music'],
+    ['PE', 'physical-education'],
+    ['Religious Studies', 'religious-education'],
+    ['PSHE', 'rshe-pshe'],
+    ['Spanish Language', 'spanish'],
+  ])('normalises subject synonym %s to %s', async (input, expected) => {
+    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: 'ks3',
+      subject: input,
+    });
+
+    expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: 'ks3',
+      subject: expected,
+    });
+  });
+
+  it.each([
+    ['KS 1', 'ks1'],
+    ['Key Stage Two', 'ks2'],
+    ['ks 3', 'ks3'],
+    ['Key Stage Four', 'ks4'],
+    ['KS-2', 'ks2'],
+  ])('normalises key stage synonym %s to %s', async (input, expected) => {
+    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: input,
+      subject: 'science',
+    });
+
+    expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: expected,
+      subject: 'science',
+    });
+  });
+
   it('returns an error result when validation fails', async () => {
     const executeMcpTool = vi.fn();
     const executeOpenAiTool = vi.fn();
@@ -94,6 +164,23 @@ describe('createUniversalToolExecutor', () => {
     expect(result.isError).toBe(true);
     expect(result.content[0]?.type).toBe('text');
     expect(result.content[0]?.text).toContain('Required');
+    expect(executeMcpTool).not.toHaveBeenCalled();
+  });
+
+  it('returns an error when subject cannot be standardised', async () => {
+    const executeMcpTool = vi.fn();
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
+      keyStage: 'ks3',
+      subject: 'matematico',
+    });
+
+    expect(result.isError).toBe(true);
+    const text = result.content[0] && 'text' in result.content[0] ? result.content[0].text : '';
+    expect(text).toContain('Unknown subject');
+    expect(text).toContain('Allowed subjects');
     expect(executeMcpTool).not.toHaveBeenCalled();
   });
 
