@@ -10,10 +10,7 @@
     },
     "oak-curriculum-http-remote": {
       "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp",
-      "headers": {
-        "Authorization": "Bearer super-duper-secret-dev-token?!"
-      }
+      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
     },
     "oak-remote-oai": {
       "type": "http",
@@ -21,7 +18,7 @@
     },
     "oak-curriculum-http-remote-unprotected": {
       "type": "http",
-      "url": "https://poc-oak-open-curriculum-mcp-git-feat-semanticsearch.vercel.thenational.academy/mcp"
+      "url": "https://poc-oak-open-curriculum-gga0uzvz8.vercel.thenational.academy/openai_connector"
     },
     "oak-curriculum-http-local": {
       "type": "http",
