@@ -24,7 +24,7 @@ This document consolidates everything learned in our testing to make the Oak MCP
 
 ## Todo
 
-- [ ] REMINDER: UseBritish spelling
+- [x] REMINDER: UseBritish spelling (2025-09-22)
 - [x] Extend smoke probe coverage for Accept enforcement, handshake checks, and `/openai_connector` alias behaviour. (2025-09-22) `smoke-dev.ts` now parses SSE payloads for both endpoints, asserts merged tool lists, and verifies synonym canonicalisation.
 
 ---
@@ -316,7 +316,7 @@ Do not replace SSE with NDJSON; rely on the SDK to keep pace with the specificat
 - [x] Confirm `capabilities.tools.listChanged` appears in responses; add an explicit assertion in transport integration tests.
 - [x] Add regression tests for `tools/list` payload shape, translation round-trips, and schema snapshots (including `year` coercion) leveraging the generated guards. Use TDD so converters are validated before integration.
 - [x] Document `/openai_connector` deprecation path and timeline; configure redirect/alias during migration without creating a compatibility layer.
-- [ ] Run scripted curl probes plus Gemini/ElevenLabs smoke tests and capture SSE traces for verification. Store results to demonstrate standards compliance.
+- [x] Run scripted curl probes plus Gemini/ElevenLabs smoke tests and capture SSE traces for verification. Store results to demonstrate standards compliance. (2025-09-22)
 - [x] Run scripted curl probes against preview and production (`/mcp` GET/POST) to confirm Accept enforcement, auth bypass, and tool responses; log outstanding Gemini/ElevenLabs validation.
 - [x] Update the SDK build pipeline (`tsup.config.ts`, `tsconfig.build.json`, exports) so the universal tool layer ships in `dist/` without relying on source imports; rerun builds to confirm consumers resolve the module.
 - [x] Adjust consuming workspaces (`oak-curriculum-mcp-stdio`, `oak-curriculum-mcp-streamable-http`, `oak-open-curriculum-semantic-search`) to import from the published SDK surface rather than packages/.../src, verifying `package.json` dependencies point to the workspace package.
@@ -325,22 +325,6 @@ Do not replace SSE with NDJSON; rely on the SDK to keep pace with the specificat
 - [x] Expand subject and key stage synonym configuration so type-gen warnings are eliminated; regenerate SDK artefacts until coverage is complete. (2025-09-22) Added comprehensive subject and key stage synonyms, regenerated artefacts, and confirmed clean generator output.
 - [x] Extend the `smoke-dev` probe to cover `/healthz`, Accept-header enforcement, initialize (success/failure), merged tool list, and `/openai_connector` alias behaviour; schedule it as the weekly MCP health check. (2025-09-22) Added SSE parsing, alias parity assertions, and synonym call coverage; retained follow-up to automate weekly scheduling.
 - [x] Sweep README/usage docs to emphasise `/mcp` as canonical, note `/openai_connector` as a temporary alias, and link to the deprecation timeline. (2025-09-22) Updated deprecation plan to reference the strengthened smoke probe and reiterated `/mcp` as the primary surface.
-
----
-
-## Appendix A — Future Enhancements
-
-- Investigate higher-level “hero” tools (e.g. `suggest_lesson_plan`) once the canonical transport and compliance work, and the semantic search work, is complete.
-
----
-
-## 12) Future Hardening – Tool Generation
-
-- Collapse the generated `*Tool` stubs once we can derive handlers directly from the descriptor constants. The descriptor should be the single source of truth for transports, tooling, and docs.
-- Emit a stable constant data structure first, then synthesise TypeScript types, Zod schemas, and type guards from that data so request/response validation remains consistent end-to-end without manual assertions.
-- Thread the derived types and guards through `execute-tool-call`, the universal translation layer, and future transports so no path operates on `unknown` values.
-- Remove placeholder, no-op `handle` implementations once the generator can route through real executors; this avoids dead code and clarifies the runtime shape for contributors.
-- Add generator-level tests that assert descriptions, parameter metadata, and validation rules stay aligned with the upstream OpenAPI schema.
 
 ---
 
