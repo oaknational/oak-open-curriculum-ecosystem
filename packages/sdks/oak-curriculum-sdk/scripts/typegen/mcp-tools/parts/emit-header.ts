@@ -15,6 +15,8 @@ export function emitHeader(
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 import { getOwnValue } from "../../../../helpers.js";
+import { getResponseSchemaForEndpoint } from "../types.js";
+import type { OakMcpToolBase, ToolDescriptor } from "../types.js";
 
 const operationId= '${operationId}' as const;
 const name= '${toolName}' as const;

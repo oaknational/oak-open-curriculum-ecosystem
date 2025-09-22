@@ -8,7 +8,22 @@ import {
   type Tool as BaseTool,
 } from '@modelcontextprotocol/sdk/types.js';
 import type { ZodSchema } from 'zod';
+import type { OakApiPathBasedClient } from '../../../../client/index.js';
+import type { ToolInputJsonSchema } from '../../../../mcp/zod-input-schema.js';
 
+
+// Minimal shape to avoid leaking per-tool internal types (e.g. ValidRequestParams)
+export interface ToolDescriptor extends BaseTool {
+  readonly invoke: (client: OakApiPathBasedClient, _params: unknown) => Promise<unknown>;
+  readonly inputSchema: ToolInputJsonSchema;
+  readonly operationId: string;
+  readonly name: string;
+  readonly description?: string;
+  readonly path: string;
+  readonly method: string;
+  readonly pathParams: Readonly<Record<string, { readonly required?: boolean }>>;
+  readonly queryParams: Readonly<Record<string, { readonly required?: boolean }>>;
+}
 
 /**
  * Operation ID to tool name mapping

@@ -3,9 +3,17 @@
 tc-profile.json
 lint-profile.json
 
-# Type declarations
+# Built files
 dist
 **/dist
+
+# Generated docs
+**/docs/api
+**/.typedoc
+**/_typedoc_*
+
+
+# Type declarations
 **/*.d.ts
 **/*.d.ts.map
 

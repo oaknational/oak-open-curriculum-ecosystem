@@ -1,118 +1,32 @@
 import type express from 'express';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 
 import { readEnv } from './env.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
-  isToolName,
-  MCP_TOOLS,
   zodRawShapeFromToolInputJsonSchema,
-  typeSafeEntries,
-  validateResponse,
-  isValidationSuccess,
-  isValidationFailure,
-  type HttpMethod,
-  type ValidationResult,
+  executeOpenAiToolCall,
+  listUniversalTools,
+  createUniversalToolExecutor,
 } from '@oaknational/oak-curriculum-sdk';
-import { isValidPath } from '@oaknational/oak-curriculum-sdk';
-
-function toHttpMethod(methodUpper: string): HttpMethod {
-  if (methodUpper === 'GET') {
-    return 'get';
-  }
-  if (methodUpper === 'POST') {
-    return 'post';
-  }
-  if (methodUpper === 'PUT') {
-    return 'put';
-  }
-  if (methodUpper === 'DELETE') {
-    return 'delete';
-  }
-  if (methodUpper === 'PATCH') {
-    return 'patch';
-  }
-  throw new TypeError('Unsupported method: ' + methodUpper);
-}
-
-function validateOutput(
-  path: string,
-  methodUpper: string,
-  data: unknown,
-): ValidationResult<unknown> {
-  if (!isValidPath(path)) {
-    return {
-      ok: false,
-      issues: [{ path: [], message: 'Invalid path: ' + path, code: 'VALIDATION_ERROR' }],
-      firstMessage: 'Invalid path: ' + path,
-    };
-  }
-  const httpMethod = toHttpMethod(methodUpper);
-  if (httpMethod !== 'get') {
-    return {
-      ok: false,
-      issues: [
-        {
-          path: [],
-          message: 'Unsupported method for path: ' + httpMethod,
-          code: 'VALIDATION_ERROR',
-        },
-      ],
-      firstMessage: 'Unsupported method for path: ' + httpMethod,
-    };
-  }
-  const validation = validateResponse(path, httpMethod, 200, data);
-  if (isValidationSuccess(validation)) {
-    return validation;
-  }
-  if (isValidationFailure(validation)) {
-    return validation;
-  }
-  return {
-    ok: false,
-    issues: [{ path: [], message: 'Output validation failed', code: 'VALIDATION_ERROR' }],
-    firstMessage: 'Output validation failed',
-  };
-}
-
-export function findTool(name: string, tools: readonly Tool[]): Tool {
-  for (const tool of tools) {
-    if (tool.name === name) {
-      return tool;
-    }
-  }
-  throw new Error('Unknown tool: ' + name);
-}
 
 export function registerHandlers(server: McpServer): void {
-  for (const [name, def] of typeSafeEntries(MCP_TOOLS)) {
-    const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
-    const description = def.method.toUpperCase() + ' ' + def.path;
+  const tools = listUniversalTools();
+  for (const tool of tools) {
+    const input = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
     server.registerTool(
-      name,
-      { title: name, description, inputSchema: input },
+      tool.name,
+      { title: tool.name, description: tool.description ?? tool.name, inputSchema: input },
       async (params: unknown) => {
         const env = readEnv();
         const client = createOakPathBasedClient(env.OAK_API_KEY);
-        if (!isToolName(name)) {
-          throw new Error('Unknown tool');
-        }
-        const execResult = await executeToolCall(name, params, client);
-        if (execResult.error) {
-          const e = execResult.error;
-          const message = e instanceof Error ? e.message : 'Unknown error';
-          return { content: [{ type: 'text', text: 'Error: ' + message }], isError: true };
-        }
-        const out = validateOutput(def.path, def.method, execResult.data);
-        if (isValidationFailure(out)) {
-          const firstMessage = out.firstMessage ?? 'Output validation failed';
-          return { content: [{ type: 'text', text: 'Error: ' + firstMessage }], isError: true };
-        }
-        // Canonical URLs are now automatically added by the SDK's validateResponse function
-        return { content: [{ type: 'text', text: JSON.stringify(out.value) }] };
+        const executor = createUniversalToolExecutor({
+          executeMcpTool: (name, args) => executeToolCall(name, args, client),
+          executeOpenAiTool: (name, args) => executeOpenAiToolCall(name, args, client),
+        });
+        return executor(tool.name, params ?? {});
       },
     );
   }
@@ -122,7 +36,6 @@ export function createMcpHandler(
   transport: StreamableHTTPServerTransport,
 ): (req: express.Request, res: express.Response) => Promise<void> {
   return async (req: express.Request, res: express.Response) => {
-    res.setHeader('Content-Type', 'application/json');
     await transport.handleRequest(req, res, req.body);
   };
 }

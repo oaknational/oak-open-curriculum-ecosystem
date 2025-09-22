@@ -12,6 +12,7 @@ import { registerHandlers, createMcpHandler } from './handlers.js';
 import { registerOpenAiConnectorHandlers } from './openai/connector.js';
 import { setupOAuthMetadata, setupLocalAuthorizationServer } from './oauth-metadata.js';
 import { loadRootEnv } from '@oaknational/mcp-env';
+import { logger } from './logging.js';
 
 // Ensure critical env is available in local/dev by loading from repo root when missing
 /** @todo this should be handled by the mcp-env package or the shared MCP library, fix */
@@ -30,23 +31,11 @@ import { loadRootEnv } from '@oaknational/mcp-env';
 })();
 
 function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler): void {
-  app.options('/mcp', corsMw);
-  app.head('/mcp', (_req, res) => {
+  app.head('/healthz', corsMw, (_req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end();
   });
-  app.get('/mcp', (_req, res) => {
-    res
-      .type('application/json')
-      .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
-  });
-  // OpenAI connector health endpoints
-  app.options('/openai_connector', corsMw);
-  app.head('/openai_connector', (_req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).end();
-  });
-  app.get('/openai_connector', (_req, res) => {
+  app.get('/healthz', corsMw, (_req, res) => {
     res
       .type('application/json')
       .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
@@ -69,12 +58,14 @@ export function createApp(): express.Express {
   // Add middleware to ensure proper Accept header for MCP requests
   app.use('/mcp', ensureMcpAcceptHeader);
   app.post('/mcp', createMcpHandler(coreTransport));
+  app.get('/mcp', createMcpHandler(coreTransport));
 
   // OpenAI Connector: mirror security and Accept handling, separate server+transport
   const openAi = initializeServer();
   registerOpenAiConnectorHandlers(openAi.server);
   app.use('/openai_connector', ensureMcpAcceptHeader);
   app.post('/openai_connector', createMcpHandler(openAi.transport));
+  app.get('/openai_connector', createMcpHandler(openAi.transport));
 
   // Gate request handling on readiness
   app.use(async (_req, _res, next) => {
@@ -119,23 +110,53 @@ function addRootLandingPage(app: express.Express): void {
  */
 function ensureMcpAcceptHeader(
   req: express.Request,
-  _res: express.Response,
+  res: express.Response,
   next: express.NextFunction,
 ): void {
-  const accept = req.get('Accept');
-  const requiredAccept = 'application/json, text/event-stream';
+  const accept = req.get('Accept') ?? '';
+  const hasJson = accept.includes('application/json');
+  const hasEventStream = accept.includes('text/event-stream');
+  const requiresJson = req.method !== 'GET';
 
-  /** @todo remove once OAuth is enabled */
-  // Check if Accept header is missing, is wildcard, or doesn't contain both required types
-  if (
-    !accept ||
-    accept === '*/*' ||
-    !accept.includes('application/json') ||
-    !accept.includes('text/event-stream')
-  ) {
-    req.headers.accept = requiredAccept;
+  logger.debug('ensureMcpAcceptHeader evaluating request', {
+    method: req.method,
+    path: req.path,
+    acceptHeader: accept,
+    hasJson,
+    hasEventStream,
+    requiresJson,
+  });
+
+  if (!hasEventStream) {
+    logger.warn('ensureMcpAcceptHeader rejecting request: missing text/event-stream', {
+      method: req.method,
+      path: req.path,
+      acceptHeader: accept,
+    });
+    res
+      .status(406)
+      .type('application/json')
+      .send({ error: 'Accept header must include text/event-stream' });
+    return;
   }
 
+  if (requiresJson && !hasJson) {
+    logger.warn('ensureMcpAcceptHeader rejecting request: missing application/json', {
+      method: req.method,
+      path: req.path,
+      acceptHeader: accept,
+    });
+    res
+      .status(406)
+      .type('application/json')
+      .send({ error: 'Accept header must include application/json and text/event-stream' });
+    return;
+  }
+
+  logger.debug('ensureMcpAcceptHeader allowing request', {
+    method: req.method,
+    path: req.path,
+  });
   next();
 }
 
@@ -214,7 +235,11 @@ export async function startDevServer(): Promise<void> {
     server.on('error', reject);
   });
 
-  console.log(`Streaming HTTP MCP listening on http://localhost:${String(port)}`);
+  logger.info('Streaming HTTP MCP dev server listening', {
+    url: `http://localhost:${String(port)}`,
+    allowNoAuth: process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true',
+    nodeEnv: process.env.NODE_ENV ?? 'unset',
+  });
 }
 
 export default createApp();

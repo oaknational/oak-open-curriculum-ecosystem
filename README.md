@@ -37,6 +37,8 @@ Key architectural decisions are documented as ADRs. [View all ADRs →](docs/arc
 
 For now, we are using simple bearer token authentication for development. In production, use OAuth (see app README for discovery endpoints and auth notes).
 
+> **Canonical transport:** All HTTP clients must target `/mcp` and send `Accept: application/json, text/event-stream` on every POST. The server returns HTTP 406 if either media type is missing. The legacy `/openai_connector` path is a short-lived alias that delegates to the same tool catalogue and will be removed once clients migrate.
+
 ```json
 {
   "mcpServers": {
