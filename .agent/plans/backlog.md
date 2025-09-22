@@ -34,7 +34,18 @@
 
 ## MCP Enhancements
 
-### Enhancements (Post‑MVP):
+### Feature Enhancements:
+
+- Enhance tool descriptions to improve the agent's understanding of the intention of the tools and the nature of the information they provide.
+- Provide custom commands/prompts via MCP to couch request in terms of multiple tool calls and nudges to validate pedagogical value and provide provenance back to the original Oak resources (e.g. lesson, unit, sequence, etc). E.g. `/getLesson show me lessons about Romans` becomes an entire prompt which encourages searching, refinements, and provenance tracking, multiple context and resource calls, checks against pedagogical rules, etc.
+- At the Curriculum API level, add
+  - native support for canonical URLs
+  - an ontology endpoint describing the _meaning_ of the resources and the relationships between them
+  - expanded description for each resource type, including relationships to other resource types
+  - Possibly some pedagogical guidance, although perhaps that should live at the MCP level?
+- At the AI services level, a service we can submit e.g. generated lesson content to, and have it graded on quality with feedback?
+
+### Engineering and Developer Experience Enhancements:
 
 - Shared error handling library workspace (centralised error classes, normalisers, mapping to user‑facing summaries)
 - Shared OpenTelemetry workspace/library for tracing/metrics, consumed by logger and error handler

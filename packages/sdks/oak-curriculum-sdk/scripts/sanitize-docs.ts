@@ -48,7 +48,30 @@ async function copyAndSanitize(): Promise<void> {
   }
 }
 
-copyAndSanitize().catch((err: unknown) => {
-  console.error('[sanitize-docs] Failed:', err);
-  process.exit(1);
-});
+async function patchGeneratedDocs(): Promise<void> {
+  const pathParametersFile = path.join(OUT_DIR, 'types/generated/api-schema/path-parameters.ts');
+  try {
+    const original = await fs.readFile(pathParametersFile, 'utf8');
+    const patched = original.replace(
+      /import type \{ SchemaBase as Schema \} from "\.\/api-schema-base";\s*import \{ schemaBase as schema \} from "\.\/api-schema-base\.js";/,
+      'import { schemaBase as schema } from "./api-schema-base.js";\n\nexport type Schema = typeof schema;',
+    );
+    if (patched !== original) {
+      await fs.writeFile(pathParametersFile, patched, 'utf8');
+    }
+  } catch (error) {
+    console.warn('[sanitize-docs] Unable to patch path-parameters import:', error);
+  }
+
+  const schemaBridgeFile = path.join(OUT_DIR, 'types/schema-bridge.ts');
+  const bridgeContents = `import { schemaBase } from '../../../src/types/generated/api-schema/api-schema-base.js';\n\nexport type OpenApiSchemaBase = typeof schemaBase;\n\nexport { schemaBase };\n`;
+  await fs.mkdir(path.dirname(schemaBridgeFile), { recursive: true });
+  await fs.writeFile(schemaBridgeFile, bridgeContents, 'utf8');
+}
+
+copyAndSanitize()
+  .then(() => patchGeneratedDocs())
+  .catch((err: unknown) => {
+    console.error('[sanitize-docs] Failed:', err);
+    process.exit(1);
+  });
