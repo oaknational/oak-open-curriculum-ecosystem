@@ -1,6 +1,6 @@
 # Query Patterns
 
-Hybrid search hinges on **server-side Reciprocal Rank Fusion (RRF)** so we can combine lexical and semantic relevance in a single Elasticsearch `_search` request per scope. This document summarises the queries we issue and how to extend them safely.
+The definitive architecture uses **server-side Reciprocal Rank Fusion (RRF)** to combine lexical and semantic relevance in a single Elasticsearch `_search` per scope. This guide documents the canonical request bodies and highlights, facet, and suggestion behaviour.
 
 ## Lessons (`oak_lessons`)
 
@@ -12,7 +12,7 @@ Hybrid search hinges on **server-side Reciprocal Rank Fusion (RRF)** so we can c
     "queries": [
       {
         "multi_match": {
-          "query": "mountains",
+          "query": "mountain formation",
           "type": "best_fields",
           "tie_breaker": 0.2,
           "fields": [
@@ -26,33 +26,43 @@ Hybrid search hinges on **server-side Reciprocal Rank Fusion (RRF)** so we can c
           ]
         }
       },
-      { "semantic": { "field": "lesson_semantic", "query": "mountains" } }
+      { "semantic": { "field": "lesson_semantic", "query": "mountain formation" } }
     ]
   },
   "query": {
     "bool": {
-      "filter": [{ "term": { "subject_slug": "geography" } }, { "term": { "key_stage": "ks4" } }]
+      "filter": [
+        { "term": { "subject_slug": "geography" } },
+        { "term": { "key_stage": "ks4" } },
+        { "terms": { "years": ["year-10", "year-11"] } }
+      ]
     }
   },
   "highlight": {
     "type": "unified",
     "order": "score",
+    "boundary_scanner": "sentence",
     "fields": {
       "transcript_text": {
         "fragment_size": 160,
         "number_of_fragments": 2,
-        "boundary_scanner": "sentence"
+        "pre_tags": ["<mark>"],
+        "post_tags": ["</mark>"]
       }
     }
+  },
+  "aggs": {
+    "key_stages": { "terms": { "field": "key_stage", "size": 10 } },
+    "subjects": { "terms": { "field": "subject_slug", "size": 20 } }
   }
 }
 ```
 
-### Notes
+Notes:
 
-- Keep lexical fields tightly scoped to avoid noisy semantic boosts (teacher metadata + transcript).
-- Adjust boosts cautiously; lexical dominance risks drowning semantic scores in the fused ranking.
-- Highlights rely on `term_vector: with_positions_offsets` for `transcript_text`.
+- Keep lexical fields focused on teacher metadata and transcripts to avoid semantic dilution.
+- Highlights rely on `term_vector` support; ensure `highlight.max_analyzed_offset` is high enough.
+- Facets should only be included when the client requests them to minimise response size.
 
 ## Units (`oak_unit_rollup`)
 
@@ -64,13 +74,13 @@ Hybrid search hinges on **server-side Reciprocal Rank Fusion (RRF)** so we can c
     "queries": [
       {
         "multi_match": {
-          "query": "mountains",
-          "fields": ["unit_title^3", "rollup_text", "unit_topics^1.5"],
+          "query": "glaciation",
           "type": "best_fields",
-          "tie_breaker": 0.2
+          "tie_breaker": 0.2,
+          "fields": ["unit_title^3", "rollup_text", "unit_topics^1.5"]
         }
       },
-      { "semantic": { "field": "unit_semantic", "query": "mountains" } }
+      { "semantic": { "field": "unit_semantic", "query": "glaciation" } }
     ]
   },
   "query": {
@@ -84,94 +94,17 @@ Hybrid search hinges on **server-side Reciprocal Rank Fusion (RRF)** so we can c
   },
   "highlight": {
     "type": "unified",
+    "boundary_scanner": "sentence",
     "fields": {
       "rollup_text": {
         "fragment_size": 160,
         "number_of_fragments": 2,
-        "boundary_scanner": "sentence"
+        "pre_tags": ["<mark>"],
+        "post_tags": ["</mark>"]
       }
     }
-  }
-}
-```
-
-### Notes
-
-- `rollup_text` holds stitched lesson snippets; semantic recall works because `unit_semantic` mirrors those contents via `copy_to`.
-- Range filters (e.g. minimum lessons) sit in `bool.filter` to keep scoring unaffected.
-- For facets, augment the body with `aggs` rather than separate requests to minimise round trips.
-
-## Sequences (`oak_sequences`)
-
-```json
-{
-  "size": 25,
-  "query": {
-    "bool": {
-      "must": [
-        {
-          "multi_match": {
-            "query": "geography ks4",
-            "fields": ["sequence_title^2", "category_titles", "subject_title", "phase_title"]
-          }
-        }
-      ],
-      "filter": [
-        { "term": { "subject_slug": "geography" } },
-        { "term": { "phase_slug": "secondary" } }
-      ]
-    }
-  }
-}
-```
-
-Add a `semantic` query if we introduce a `sequence_semantic` field in future.
-
-## Type-ahead (`search_as_you_type`)
-
-```json
-{
-  "size": 10,
-  "query": {
-    "multi_match": {
-      "query": "mount",
-      "type": "bool_prefix",
-      "fields": ["lesson_title.sa", "lesson_title.sa._2gram", "lesson_title.sa._3gram"]
-    }
-  }
-}
-```
-
-## Completion suggestions
-
-```json
-{
-  "suggest": {
-    "by_title": {
-      "prefix": "mount",
-      "completion": {
-        "field": "title_suggest",
-        "size": 10,
-        "contexts": {
-          "subject": ["geography"],
-          "key_stage": ["ks4"]
-        }
-      }
-    }
-  }
-}
-```
-
-## Facets / aggregations
-
-Attach aggregations only when the client explicitly requests them to keep responses lean.
-
-```json
-{
-  "size": 0,
-  "query": { "bool": { "filter": [{ "term": { "subject_slug": "geography" } }] } },
+  },
   "aggs": {
-    "key_stages": { "terms": { "field": "key_stage", "size": 10 } },
     "lesson_count_ranges": {
       "range": {
         "field": "lesson_count",
@@ -182,8 +115,104 @@ Attach aggregations only when the client explicitly requests them to keep respon
 }
 ```
 
-## Implementation tips
+Notes:
 
-- Keep RRF `window_size` and `rank_constant` consistent across scopes unless we have strong evidence to adjust.
-- When adding a new semantic component (e.g. ANN `knn_search`), include it as another entry inside `rank.queries` to preserve the fusion pattern.
-- Log query bodies (with sensitive data stripped) alongside response timings to inform synonym and analyser tuning.
+- Filters belong in `bool.filter` to avoid impacting scoring.
+- `unit_topics` provides topical boost; keep synonyms aligned with `oak-syns`.
+
+## Sequences (`oak_sequences`)
+
+```json
+{
+  "size": 25,
+  "rank": {
+    "rrf": {
+      "window_size": 40,
+      "rank_constant": 40
+    },
+    "queries": [
+      {
+        "multi_match": {
+          "query": "secondary geography",
+          "type": "best_fields",
+          "fields": ["sequence_title^2", "category_titles", "subject_title", "phase_title"]
+        }
+      },
+      { "semantic": { "field": "sequence_semantic", "query": "secondary geography" } }
+    ]
+  },
+  "query": {
+    "bool": {
+      "filter": [
+        { "term": { "subject_slug": "geography" } },
+        { "term": { "phase_slug": "secondary" } }
+      ]
+    }
+  }
+}
+```
+
+Notes:
+
+- Omit the semantic clause if `sequence_semantic` not populated yet.
+- Return canonical URLs so the UI can deep link to sequence pages.
+
+## Suggestion / type-ahead (`POST /api/search/suggest`)
+
+```json
+{
+  "prefix": "mount",
+  "scope": "lessons",
+  "subject": "geography",
+  "keyStage": "ks4",
+  "limit": 10
+}
+```
+
+Response structure:
+
+```json
+{
+  "suggestions": [
+    {
+      "label": "Mountains and glaciation",
+      "scope": "lessons",
+      "subject": "geography",
+      "keyStage": "ks4",
+      "url": "https://www.thenational.academy/...",
+      "contexts": { "sequenceId": "seq-123" }
+    }
+  ],
+  "cache": {
+    "version": "v2025-03-16",
+    "ttlSeconds": 60
+  }
+}
+```
+
+## Zero-hit logging
+
+Whenever a search returns zero hits, log:
+
+```json
+{
+  "event": "semantic-search.zero-hit",
+  "scope": "units",
+  "text": "mountain formation",
+  "filters": {
+    "subject": "geography",
+    "keyStage": "ks4"
+  },
+  "indexVersion": "v2025-03-16"
+}
+```
+
+These events feed observability pipelines and should trigger UI feedback on the admin console.
+
+## Implementation guidance
+
+- Build queries using pure functions (see `src/lib/queries`) so they are unit testable.
+- Always normalise filters (lowercase slugs) before hashing for caching.
+- Update this document and corresponding tests whenever mappings or query logic change.
+
+For more context, review `semantic-search-api-plan.md` and the caching plan to see how queries integrate with versioned caching.

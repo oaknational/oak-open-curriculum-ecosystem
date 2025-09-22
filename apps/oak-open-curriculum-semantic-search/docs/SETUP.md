@@ -1,83 +1,144 @@
 # Setup
 
-Follow these steps to run the hybrid search service end-to-end. All commands assume you are in the repository root unless noted otherwise.
+Follow these steps to run the semantic search service end-to-end. All commands assume the repository root unless stated otherwise. Always follow GO.md: record ACTION/REVIEW pairs and ground every third task.
 
-## 1. Environment variables
+## 1. Configure environment variables
 
 Create `apps/oak-open-curriculum-semantic-search/.env.local` and populate:
 
 ```env
-ELASTICSEARCH_URL=https://...              # Serverless endpoint
-ELASTICSEARCH_API_KEY=...                  # API key with manage + search privileges
-OAK_API_KEY=...                            # or set OAK_API_BEARER
-SEARCH_API_KEY=...                         # Protects /api/index-oak and /api/rebuild-rollup
+# Elasticsearch
+ELASTICSEARCH_URL=https://...               # Serverless HTTPS endpoint
+ELASTICSEARCH_API_KEY=...                   # API key with manage + search privileges
 
-AI_PROVIDER=openai                         # or 'none' to disable NL endpoint
-OPENAI_API_KEY=...                         # required when AI_PROVIDER=openai
+# Oak Curriculum access (pick one)
+OAK_API_KEY=...                             # Legacy key (optional)
+OAK_API_BEARER=...                          # Preferred bearer token (mutually exclusive with OAK_API_KEY)
+
+# Admin + observability
+SEARCH_API_KEY=...                          # Shared secret for admin/status routes
+SEARCH_INDEX_VERSION=v2025-03-16            # Monotonic version tag for cache invalidation
+ZERO_HIT_WEBHOOK_URL=https://... | none     # Optional webhook for zero-hit telemetry
+LOG_LEVEL=info                              # Structured logging level
+
+# Natural language search
+AI_PROVIDER=openai | none                   # Choose 'none' to disable NL endpoint
+OPENAI_API_KEY=...                          # Required when AI_PROVIDER=openai
 ```
 
-Keep these secrets server-side; never expose them to the browser.
+Environment validation (`src/lib/env.ts`) enforces these rules; run unit tests after editing env handling.
 
-## 2. Install & bootstrap
+## 2. Install dependencies
 
 ```bash
 pnpm install
-ELASTICSEARCH_URL=... ELASTICSEARCH_API_KEY=... \
-  pnpm -C apps/oak-open-curriculum-semantic-search elastic:setup
 ```
 
-The `elastic:setup` script:
+## 3. Bootstrap Elasticsearch (mappings, synonyms, indices)
 
-- Creates/updates the `oak-syns` synonyms set from `scripts/synonyms.json`.
-- Configures index settings (analysers, normalisers, highlight offsets).
-- Creates the four indices: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`.
+```bash
+ELASTICSEARCH_URL=... \
+ELASTICSEARCH_API_KEY=... \
+pnpm -C apps/oak-open-curriculum-semantic-search elastic:setup
+```
 
-## 3. Run the service
+This script:
+
+- Creates/updates the `oak-syns` synonym set.
+- Applies index templates/settings (analysers, normalisers, `highlight.max_analyzed_offset`).
+- Creates all four indices: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`.
+- Verifies completion contexts and `semantic_text` mappings.
+
+## 4. Start the dev server
 
 ```bash
 pnpm -C apps/oak-open-curriculum-semantic-search dev
 ```
 
-## 4. Index content & build rollups
+The server uses App Router with SSR theming; logs appear in the terminal for observability events.
 
-Call the admin endpoints with the shared secret:
+## 5. Run ingestion and rollup (admin endpoints)
+
+Admin endpoints require `x-api-key: $SEARCH_API_KEY` and should run in the target deployment (e.g. Vercel). For local testing:
 
 ```bash
-curl -H "x-api-key: $SEARCH_API_KEY" http://localhost:3000/api/index-oak
-curl -H "x-api-key: $SEARCH_API_KEY" http://localhost:3000/api/rebuild-rollup
+curl -X POST http://localhost:3000/api/index-oak \
+  -H "x-api-key: $SEARCH_API_KEY"
+
+curl -X POST http://localhost:3000/api/rebuild-rollup \
+  -H "x-api-key: $SEARCH_API_KEY"
 ```
 
-- `/api/index-oak` pulls lessons, units, sequences, and transcripts through the Oak Curriculum SDK and bulk indexes Elasticsearch.
-- `/api/rebuild-rollup` regenerates unit rollup snippets (≈300 characters per lesson) and updates `oak_unit_rollup`.
+These endpoints:
 
-## 5. Verify search
+- Fetch lessons, units, sequences via the SDK and perform resilient bulk indexing.
+- Regenerate unit rollups with teacher-centric snippets and canonical URLs.
+- Rotate aliases and bump `SEARCH_INDEX_VERSION` (ensure environment store updated).
+- Trigger cache invalidation and structured logging.
 
-Structured query example:
+Monitor progress using the status endpoint:
+
+```bash
+curl http://localhost:3000/api/index-oak/status \
+  -H "x-api-key: $SEARCH_API_KEY"
+```
+
+The response reports processed counts, remaining batches, last error, and current index version.
+
+## 6. Verify search endpoints
+
+Structured search:
 
 ```bash
 curl -X POST http://localhost:3000/api/search \
   -H 'content-type: application/json' \
   -d '{
-    "scope": "lessons",
+    "scope": "units",
     "text": "mountain formation",
     "subject": "geography",
-    "keyStage": "ks4"
+    "keyStage": "ks4",
+    "minLessons": 3,
+    "facets": true
   }'
 ```
 
-Natural language query (only when `AI_PROVIDER=openai`):
+Natural-language search (if `AI_PROVIDER` ≠ `none`):
 
 ```bash
 curl -X POST http://localhost:3000/api/search/nl \
   -H 'content-type: application/json' \
-  -d '{ "q": "Find KS4 geography units with at least three lessons about mountains" }'
+  -d '{ "q": "Find KS4 geography units about mountains with at least three lessons" }'
 ```
 
-Responses include RRF-ranked hits, highlights (`transcript_text` or `rollup_text`), canonical URLs, and optional facets if requested.
+Suggestion endpoint:
 
-## 6. Maintenance reminders
+```bash
+curl -X POST http://localhost:3000/api/search/suggest \
+  -H 'content-type: application/json' \
+  -d '{ "prefix": "mount", "scope": "lessons", "subject": "geography", "keyStage": "ks4" }'
+```
 
-- Re-run the indexing + rollup endpoints on a schedule (nightly recommended).
-- Update `scripts/synonyms.json` and re-run `elastic:setup` (or `PUT /_synonyms/oak-syns`) when vocabulary changes.
-- Track logs for bulk indexing errors or zero-hit searches; adjust metadata or synonyms accordingly.
-- For breaking mapping changes, spin up new indices and swap aliases rather than updating in place.
+## 7. Quality gates (run after changes)
+
+```bash
+pnpm format
+pnpm type-check
+pnpm lint
+pnpm test
+pnpm build
+pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+```
+
+Record results in your GO.md review log; remediate failures immediately. For deployment, ensure Vercel environment variables match `.env.local` (excluding secrets committed to source control) and rerun admin endpoints after each deploy.
+
+## 8. Observability reminders
+
+- Monitor logs for bulk retries, zero-hit events, and ingestion durations.
+- If using `ZERO_HIT_WEBHOOK_URL`, verify webhook deliveries after search verification.
+- Update `SEARCH_INDEX_VERSION` whenever running ingestion/rollup to keep caches coherent.
+
+## 9. Documentation sync
+
+After making structural changes, update authored docs and README via the documentation plan and regenerate OpenAPI/TypeDoc artefacts.
+
+By following these steps you will have a workspace aligned with the definitive architecture and ready for further development or demonstration.

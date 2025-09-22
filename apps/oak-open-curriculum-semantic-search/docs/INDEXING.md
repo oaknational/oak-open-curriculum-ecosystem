@@ -1,97 +1,115 @@
 # Indexing Playbook
 
-This guide summarises how we populate Elasticsearch Serverless from the Oak Curriculum SDK. Use it alongside `oak-curriculum-hybrid-search-definitive-guide.md` when running or automating ingestion jobs.
+Use this guide when populating Elasticsearch Serverless with Oak Curriculum data. It assumes the definitive alignment architecture is in place.
 
 ## Data sources
 
-All content comes from the Oak Curriculum SDK (`@oaknational/oak-curriculum-sdk`). We never make raw HTTP requests. The SDK provides:
-
-- Lessons (metadata + transcripts)
-- Units (metadata, lesson relationships)
-- Sequences (phase/subject navigation)
-- Canonical URLs for every resource
+- All content flows through `@oaknational/oak-curriculum-sdk`; never perform raw HTTP requests.
+- SDK adapters must expose teacher metadata, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm type-gen` when SDK schema changes.
 
 ## Canonical URLs
 
-We index canonical URLs as keywords for traceability:
+Include canonical URLs in every document to aid traceability:
 
 - Lesson: `https://www.thenational.academy/teachers/lessons/{lesson_slug}`
 - Unit: `https://www.thenational.academy/teachers/programmes/{subjectSlug}-{phaseSlug}/units/{unit_slug}`
-- Subject programmes: `https://www.thenational.academy/teachers/key-stages/{ks}/subjects/{subject_slug}/programmes`
 - Sequence: `https://www.thenational.academy/teachers/programmes/{sequence_slug}/units`
+- Subject programmes: `https://www.thenational.academy/teachers/key-stages/{ks}/subjects/{subject_slug}/programmes`
 
 ## Field expectations
 
 ### Lessons (`oak_lessons`)
 
-- Metadata: `lesson_id`, `lesson_slug`, `lesson_title`, `subject_slug`, `key_stage`
-- Relationships: `unit_ids`, `unit_titles`, `unit_count`
-- Teacher content: `lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`
-- Transcript: `transcript_text` (full text, term vectors)
-- Semantic: `lesson_semantic` (text sent verbatim; ES derives the embedding)
-- Suggestions: `title_suggest` with `subject` + `key_stage` contexts
+- Identifiers: `lesson_id`, `lesson_slug`, `unit_ids`, `unit_titles`.
+- Metadata: `subject_slug`, `key_stage`, `year_groups`, `lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`.
+- Transcript: `transcript_text` with `term_vector: with_positions_offsets` for highlights.
+- Semantic: `lesson_semantic` (`semantic_text` field) with direct copy of transcript or curated semantic text.
+- URLs & provenance: canonical URL, unit canonical URLs, curriculum version, published flags.
+- Suggestions: `title_suggest` completion field with contexts `{ subject, key_stage }` and optional `sequence_id`.
 
 ### Unit rollup (`oak_unit_rollup`)
 
-- Metadata: `unit_id`, `unit_slug`, `unit_title`, `subject_slug`, `key_stage`
-- Lesson relationship: `lesson_ids`, `lesson_count`
-- Topical context: `unit_topics` (optional, derived from SDK tags or titles)
-- Rollup text: concatenated ~300-character lesson snippets, sentence-aware, stored in `rollup_text`
-- Semantic: `unit_semantic` receives `copy_to` from `unit_title` and `rollup_text`
-- URLs: `unit_url`, `subject_programmes_url`
-- Suggestions: `title_suggest` with contexts
+- Identifiers: `unit_id`, `unit_slug`, `subject_slug`, `key_stage`, `years`.
+- Lessons: `lesson_ids`, `lesson_count` (integer), snippet metadata.
+- Snippets: `rollup_text` (~300 characters per lesson, sentence aware) prioritising teacher metadata before transcript fallback.
+- Semantic: `unit_semantic` (`semantic_text` with `copy_to` from title + rollup).
+- Facets: `unit_topics`, `phase_slug`, `programme_slug`.
+- URLs: `unit_url`, `subject_programmes_url`.
+- Suggestions: `title_suggest` with contexts and optional `sequence_id`.
 
 ### Units (`oak_units`)
 
-- Mirrors metadata from `oak_unit_rollup` without the rollup snippets. Used for analytics, joins, and facets where large text fields are unnecessary.
+- Mirrors unit identifiers and facets without the heavy rollup text; used for aggregations and analytics.
 
 ### Sequences (`oak_sequences`)
 
-- Titles, phase and subject metadata, `key_stages`, `years`, `unit_slugs`, `thread_slugs`, `category_titles`
-- Optional `sequence_semantic` field if semantic recall becomes necessary.
+- Core fields: `sequence_id`, `sequence_slug`, `sequence_title`, `category_titles`, `phase_slug`, `key_stages`, `years`, canonical URL, unit slugs.
+- Semantic (optional): `sequence_semantic` (`semantic_text`) derived from curated descriptions.
+- Suggestions: completion payloads for sequence discovery.
 
-## Bulk indexing helpers
+## Resilient bulk indexing
 
-Use the official Elasticsearch JS client with bulk batches of 250–500 documents and exponential backoff on HTTP 429 responses.
+- Batch size: 250–300 documents per bulk call; adjust if ES returns 413/429 responses.
+- Retry strategy: exponential backoff (e.g., 1s, 2s, 4s, 8s) with jitter; abort after configurable max attempts and log failure.
+- Idempotence: carry progress markers (key stage + subject + offset) so reruns continue from the last successful chunk.
+- Logging: log each batch outcome with doc counts, duration, and error summaries; zero-hit thresholds feed observability dashboards.
+- Aliases: index to versioned write indices (`oak_lessons_v2025-03-16`) then swap aliases atomically once ingestion succeeds.
+
+Example helper (simplified):
 
 ```ts
-import { Client } from '@elastic/elasticsearch';
+const BATCH_SIZE = 250;
 
-const es = new Client({
-  node: process.env.ELASTICSEARCH_URL,
-  auth: { apiKey: process.env.ELASTICSEARCH_API_KEY! },
-});
-
-type BulkItem = { index: { _index: string; _id: string } } | Record<string, unknown>;
-
-export async function bulkIndex(
-  index: string,
-  docs: Array<{ id: string; body: Record<string, unknown> }>,
-) {
-  const body: BulkItem[] = [];
-  for (const doc of docs) {
-    body.push({ index: { _index: index, _id: doc.id } });
-    body.push(doc.body);
-  }
-
-  const res = await es.bulk({ refresh: false, body });
-  if (res.errors) {
-    const failed = res.items.filter((item) => (item as any).index?.error);
-    throw new Error(`Bulk indexing had errors (${failed.length}).`);
+async function indexDocuments({
+  client,
+  index,
+  docs,
+}: {
+  client: Client;
+  index: string;
+  docs: Document[];
+}) {
+  for (const chunk of chunkArray(docs, BATCH_SIZE)) {
+    await retry(async () => {
+      const body = chunk.flatMap((doc) => [{ index: { _index: index, _id: doc.id } }, doc.body]);
+      const res = await client.bulk({ refresh: false, body });
+      if (res.errors) {
+        const failures = res.items.filter((item) => (item as any).index?.error);
+        throw new BulkError(failures);
+      }
+    });
   }
 }
 ```
 
 ## Rollup snippet generation
 
-1. Pull lesson metadata/transcripts for each unit.
-2. Extract teacher-facing sections (keywords, key learning points, tips) before falling back to transcript sentences.
-3. Trim to ~300 characters per lesson, respecting sentence boundaries.
-4. Join with separators (e.g. two newlines) to keep highlights readable.
-5. Write the combined text into `rollup_text` and copy to `unit_semantic`.
+1. Fetch lessons for each unit using the SDK, including teacher metadata and transcripts.
+2. Prefer teacher metadata blocks (key learning points, teacher tips) for snippets; fall back to transcript sentences if metadata missing.
+3. Trim to ~300 characters per lesson, ensuring sentence boundaries.
+4. Concatenate snippets with double newlines; include lesson titles for context if needed.
+5. Write combined string to `rollup_text`, copy to `unit_semantic`, and update completion contexts.
+6. Log snippet source (metadata vs transcript) for auditing.
 
-## Operational cadence
+## Suggestion payloads
 
-- Run `/api/index-oak` then `/api/rebuild-rollup` on a nightly schedule.
-- After updating synonyms or analyser settings, re-run the same endpoints to refresh documents.
-- Capture metrics: bulk job duration, number of documents indexed, errors, zero-hit query counts (to inform synonyms).
+- Lessons/units: include `input` array with title variants (`lesson_title`, `unit_title`), synonyms, teacher phrases; set contexts for subject/key stage.
+- Sequences: include sequence title, category titles, year ranges; context by subject and phase.
+- Keep payloads concise (<100 characters) to avoid truncation; use British spelling.
+
+## Post-ingestion steps
+
+1. Swap aliases (`scripts/elastic-alias-swap.ts`) to point read aliases at freshly populated indices.
+2. Increment and persist `SEARCH_INDEX_VERSION` (environment variable or config store).
+3. Call `revalidateTag` for the new version to flush cached results.
+4. Trigger rollup rebuild if not already part of the ingest run.
+5. Capture metrics: total docs per index, duration, retry count, zero-hit baseline.
+
+## Troubleshooting
+
+- **Bulk errors**: Inspect `res.items` for mapping issues; ensure payload fields match templates.
+- **Timeouts**: Reduce batch size or increase client timeout; verify ES cluster health.
+- **Missing metadata**: Confirm SDK exposes required fields; escalate upstream rather than hardcoding fallbacks.
+- **Cache staleness**: Confirm `SEARCH_INDEX_VERSION` bumped and `revalidateTag` invoked; check logs for cache key usage.
+
+Maintain this playbook alongside the alignment plan; update it whenever ingestion or mapping behaviour changes.
