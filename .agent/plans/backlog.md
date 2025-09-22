@@ -37,6 +37,7 @@
 ### Feature Enhancements:
 
 - Enhance tool descriptions to improve the agent's understanding of the intention of the tools and the nature of the information they provide.
+- Use tags to group tools etc, and to improve the agent's understanding of the intention of the tools and the nature of the information they provide.
 - Provide custom commands/prompts via MCP to couch request in terms of multiple tool calls and nudges to validate pedagogical value and provide provenance back to the original Oak resources (e.g. lesson, unit, sequence, etc). E.g. `/getLesson show me lessons about Romans` becomes an entire prompt which encourages searching, refinements, and provenance tracking, multiple context and resource calls, checks against pedagogical rules, etc.
 - At the Curriculum API level, add
   - native support for canonical URLs
