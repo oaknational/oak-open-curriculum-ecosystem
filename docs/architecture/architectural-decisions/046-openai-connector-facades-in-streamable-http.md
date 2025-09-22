@@ -1,64 +1,50 @@
-# ADR-046: OpenAI Connector-Compatible Tools in Streamable HTTP App at `/openai_connector`
+# ADR-046: OpenAI-Compatible Tool Surface in the Streamable HTTP App
 
 Status: Accepted
 Date: 2025-09-15
 
 ## Context
 
-We want to expose OpenAI Connector-compatible tools (`search`, `fetch`) that:
+We need to expose OpenAI-compatible tools (`search`, `fetch`) that:
 
-- Follow the OpenAI connector response contract: tool results must return a content array with exactly one content item of `type: "text"`, whose `text` is a JSON-encoded object matching the required schema.
-- Are discoverable as just these two tools via MCP `tools/list`, and callable via MCP `tools/call`.
-- Reuse our existing Oak Curriculum SDK and MCP infrastructure.
-- Live alongside our existing Streamable HTTP MCP endpoint (`/mcp`) without adding SSE (we standardise on Streamable HTTP).
+- Follow the OpenAI connector response contract: each `tools/call` result returns a content array with a single `{ type: "text", text: <JSON string> }` item matching the schema.
+- Are discoverable via MCP `tools/list` so any compliant client (OpenAI, ElevenLabs, Gemini, etc.) sees them alongside the curriculum tools.
+- Reuse the Oak Curriculum SDK’s generated types/validators.
+- Run over the same Streamable HTTP transport as `/mcp` (the repo standard).
 
-Short-term, `search` should aggregate existing search endpoints. Medium-term, we’ll switch to the upcoming semantic search service as the backing for `search`. Caching will be added later.
+Originally we hosted these tools on a separate `/openai_connector` transport. That duplicated schema/registration logic and forced consumers to switch endpoints. The new universal translation layer means we can expose the complete toolset—curriculum tools + OpenAI facades—through a single `/mcp` surface while keeping `/openai_connector` as a temporary alias for backwards compatibility.
 
 ## Decision
 
-1. Host OpenAI Connector-compatible tools on a new path in the same Express app: `/openai_connector`.
-2. Create a separate MCP `Server` instance, connected to its own `StreamableHTTPServerTransport`, mounted at `/openai_connector`.
-3. Register all SDK MCP tools on this server (excluding internal-only tools: changelog, changelog-latest, rate-limit). Ensure each returns the OpenAI-required format: a content array with exactly one `{ type: "text", text: <JSON string> }` item.
-4. Additionally register two OpenAI-specific tools generated in the SDK at type-gen time:
-   - `search(query: string)` → returns `{ results: [{ id, title, url }] }`
-   - `fetch(id: string)` → returns `{ id, title, text, url, metadata? }`
-5. Implementations:
-   - `search` (now): aggregate existing SDK MCP tools (e.g., `get-search-lessons`, `get-search-transcripts`), dedupe, normalise, and transform to the OpenAI format. Later: replace aggregation with the semantic search service.
-   - `fetch`: route by ID pattern to the relevant SDK MCP tool (e.g., lessons/units/subjects/sequences), transform to the OpenAI format, and produce canonical URLs.
-6. Apply the same security middleware to `/openai_connector` as `/mcp`:
-   - Reuse bearer auth and DNS rebinding protections.
-   - Add Accept header normalisation middleware for MCP (same pattern as `/mcp`).
-7. Do not add SSE; continue to use Streamable HTTP transport.
-8. Mark caching as a later enhancement (not in this phase).
+1. Generate OpenAI-compatible tool facades in the SDK at type-gen time and expose them through a universal MCP translation module. The module normalises inputs/outputs using schema-derived Zod validators—no type assertions, fail fast.
+2. Register every tool (curriculum + OpenAI facades) on the same `McpServer` instance behind `/mcp`, driven by the universal executor.
+3. Keep `/openai_connector` as a short-lived alias that delegates to the same executor for consumers that have not migrated yet. Publish a deprecation notice and sunset timeline.
+4. Share all security, logging, and Accept-header enforcement middleware between `/mcp` and `/openai_connector`, returning HTTP 406 whenever the `Accept` header omits `application/json` or `text/event-stream`.
+5. Continue using the SDK-managed Streamable HTTP transport (Server-Sent Events framing), avoiding bespoke NDJSON shims.
+6. Track caching, semantic search integration for `search`, and the `/openai_connector` removal as follow-on milestones.
 
 ## Rationale
 
 - Single deployment surface: simpler ops, logging, security, and monitoring.
-- Clear separation of concerns via two MCP `Server` instances in one app: the `/mcp` endpoint lists the full SDK-generated toolset; `/openai_connector` only exposes `search` and `fetch`.
-- Thin facades maximise reuse of generated types/validators/executors and reduce risk.
-- The path-based design makes it easy to evolve `search` to semantic search later without changing the contract.
+- Universal translation layer guarantees every tool (curriculum + OpenAI) stays schema-derived and MCP-compliant.
+- `/openai_connector` remains available for existing integrations but no longer carries any bespoke logic, making deprecation safe once clients migrate.
+- The facade design lets us evolve the `search` implementation (e.g., semantic search backend) without changing the contract.
 
 ## Consequences
 
-- We must run two MCP servers (two `Server`+`StreamableHTTPServerTransport` pairs) in-process and mount each on its own route.
-- We add format-conversion code to comply with OpenAI’s strict content array + JSON-as-text requirement.
-- We must ensure `/openai_connector` is fully MCP-compliant for `tools/list` and `tools/call`, but with only two tools.
-- Caching is deferred; initial responses may be slower for large documents until caching is added later.
+- All clients see the same tool list on `/mcp`; `/openai_connector` is now an alias slated for removal once consumers switch.
+- The universal executor owns the OpenAI formatting rules, so there’s a single place to maintain the JSON-as-text contract.
+- Caching remains a future enhancement; semantic search integration for `search` stays on the roadmap.
 
 ## Implementation Sketch
 
 - In `apps/oak-curriculum-mcp-streamable-http`:
-  - Create `createOpenAiConnectorServer()` that:
-    - Instantiates a new MCP `Server`
-    - Registers `tools/list` → returns `[{ name: 'search' }, { name: 'fetch' }]` with their input schemas
-    - Registers `tools/call` for `search` and `fetch` that:
-      - Delegate to SDK MCP executors (`executeToolCall`) where applicable
-      - Transform results into the OpenAI “single text item containing JSON” format
-  - Create a new `StreamableHTTPServerTransport` for the OpenAI server and mount POST on `/openai_connector`.
-  - Apply Accept header middleware also on `/openai_connector`.
+  - Mount `/mcp` on the canonical `McpServer` and expose `/openai_connector` as an alias wired through `registerOpenAiConnectorHandlers`, ensuring both surfaces lean on the SDK’s universal executor.
+  - Instantiate `StreamableHTTPServerTransport` instances for both `/mcp` and the alias, and guard them with `ensureMcpAcceptHeader`, which fails fast unless `Accept` contains both `application/json` and `text/event-stream`.
+  - Surface `/healthz` (HEAD + GET) as the only unauthenticated probe endpoint; keep MCP transports dedicated to protocol traffic.
 
-- SDK-derived tools:
-  - Delegate to SDK executors and wrap responses in a single text content item containing a JSON-encoded string of the original response shape
+- SDK universal layer:
+  - Generate type-safe tool metadata and executors at `pnpm type-gen` time and expose helpers (`listUniversalTools`, `createUniversalToolExecutor`, `executeOpenAiToolCall`) consumed by both `/mcp` and `/openai_connector`.
 
 - OpenAI `search` (generated in SDK):
   - Aggregates `get-search-lessons` and `get-search-transcripts`
@@ -74,7 +60,7 @@ Short-term, `search` should aggregate existing search endpoints. Medium-term, we
 
 - Separate app for OpenAI Connector: rejected (adds operational overhead).
 - SSE transport: rejected (project standardises on Streamable HTTP).
-- Exposing `search`/`fetch` on `/mcp` with allowed_tools filtering only: rejected (tool discovery would still show the full set unless filtered by client).
+- Hiding OpenAI tools via `allowed_tools` filtering only: rejected (tool discovery would still show the full set unless filtered by client). We now expose the merged list but keep `/openai_connector` as an alias until migration completes.
 
 ## Links
 

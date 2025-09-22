@@ -8,6 +8,8 @@
 
 import type { OakApiPathBasedClient } from "../../../../../client/index.js";
 import { getOwnValue } from "../../../../helpers.js";
+import { getResponseSchemaForEndpoint } from "../types.js";
+import type { OakMcpToolBase, ToolDescriptor } from "../types.js";
 
 const operationId= 'getAssets-getLessonAsset' as const;
 const name= 'get-lessons-assets-by-type' as const;
@@ -110,6 +112,12 @@ const getValidRequestParamsDescription= (): string => {
 void [operationId, name, path, method];
 void [pathParams, queryParams];
 void [isValidRequestParams, getValidRequestParamsDescription];
+/**
+ * Execute the underlying Open Curriculum API endpoint.
+ *
+ * @param client - Preconfigured Oak API client with authentication and telemetry.
+ * @returns Handler that accepts validated MCP parameters and resolves with the raw API payload.
+ */
 const executor= (client: OakApiPathBasedClient) => {
   return async (params: ValidRequestParams): Promise<unknown> => {
     if (!isValidRequestParams(params)) {
@@ -124,10 +132,24 @@ const executor= (client: OakApiPathBasedClient) => {
   };
 };
 
+/**
+ * Retains compatibility with internal call sites that still compose request envelopes manually.
+ *
+ * @param client - Oak API client instance.
+ * @param _params - Schema-validated request parameters.
+ */
 const getExecutorFromGenericRequestParams = async (client: OakApiPathBasedClient, _params: ValidRequestParams): Promise<unknown> => {
   return executor(client)(_params);
 };
 
+/**
+ * Convenience wrapper that mirrors the SDK executor signature used by MCP transports.
+ *
+ * @param client - Oak API client configured for the current transport.
+ * @param _params - Arbitrary request payload received from the MCP runtime.
+ * @returns Raw API payload once the call succeeds.
+ * @throws TypeError when validation fails before reaching the API.
+ */
 const invoke = async (client: OakApiPathBasedClient, _params: unknown): Promise<unknown> => {
   if (!isValidRequestParams(_params)) {
     throw new TypeError(getValidRequestParamsDescription());
@@ -135,7 +157,13 @@ const invoke = async (client: OakApiPathBasedClient, _params: unknown): Promise<
   return executor(client)(_params);
 };
 
-export const getLessonsAssetsByType = {
+/**
+ * Tool descriptor consumed by MCP_TOOLS.
+ *
+ * @see MCP_TOOLS
+ * @remarks Wiring layers (stdio, HTTP, aliases) rely on this metadata for execution and validation.
+ */
+export const getLessonsAssetsByType: ToolDescriptor = {
   executor,
   getExecutorFromGenericRequestParams,
   invoke,
@@ -144,6 +172,7 @@ export const getLessonsAssetsByType = {
   inputSchema,
   operationId,
   name,
+  description: "This tool will stream the downloadable asset for the given lesson and type. There is no response returned for this tool as it returns a content attachment.",
   path,
   method,
 };
@@ -151,9 +180,11 @@ export const getLessonsAssetsByType = {
 // DEBUG: OakMcpTool generation started
 import { z } from 'zod';
 import type { ZodSchema } from 'zod';
-import { getResponseSchemaForEndpoint } from '../types.js';
-import type { OakMcpToolBase } from '../types.js';
 
+/**
+ * @internal Generated Oak MCP tool stub kept for documentation and regression tests.
+ * @remarks Runtime execution flows through the ToolDescriptor entry; this stub will be replaced when tool handlers adopt schema-derived types.
+ */
 export const getLessonsAssetsByTypeTool: OakMcpToolBase<unknown, unknown> = {
   name: 'get-lessons-assets-by-type',
   description: 'This endpoint will stream the downloadable asset for the given lesson and type. \nThere is no response returned for this endpoint as it returns a content attachment.',

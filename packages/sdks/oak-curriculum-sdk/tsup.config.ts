@@ -30,6 +30,7 @@ export default defineConfig({
     'src/types/generated/zod/zodSchemas.ts',
     'src/mcp/execute-tool-call.ts',
     'src/mcp/zod-input-schema.ts',
+    'src/mcp/universal-tools.ts',
     'src/types/generated/openai-connector/index.ts',
   ],
   format: ['esm'],

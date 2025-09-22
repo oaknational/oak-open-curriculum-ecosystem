@@ -31,7 +31,8 @@
     "analyze:deps": "madge ecosystem/ --circular --image .agent/generalisation-opportunities-analysis/dependency-graph.svg",
     "analyze:circular": "madge ecosystem/ --circular",
     "analyze:modules": "tsx scripts/analyze-modules.ts",
-    "analyze:outdated": "pnpm outdated -r"
+    "analyze:outdated": "pnpm outdated -r",
+    "smoke:dev": "turbo run smoke:dev --filter=@oaknational/oak-curriculum-mcp-streamable-http"
   },
   "keywords": [
     "mcp",

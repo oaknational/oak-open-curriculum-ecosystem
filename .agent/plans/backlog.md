@@ -19,16 +19,37 @@
 - [x] Add a trivial front page for the mcp http server, so it doesn't show "authentication error" when visited in a browser... in fact, maybe put some _very_ basic quickstart docs there?
 - [=] Add the utilities, libraries, and a single app (for now) for creating the semantic search indices, keeping them updated, and providing a UI for using them. IN PROGRESS
 - [x] Profile the `pnpm qg` command, and see what we can speed up adn where... it's mostly the linting that is slow, and likely that is due to type-based rules. This is important because it is a DX frustration and it is slowing down the development process, including for agents.
-- [ ] Add more canonical URLs to the MCP server, and the SDK.
+- [x] Add more canonical URLs to the MCP server, and the SDK.
+- [ ] Remove generated files from version control `git filter-repo --path dist --path docs/api --path '_typedoc_*' --invert-paths` -- alters history
 - [ ] Update dependency versions across the board.
 - [ ] Add mutation testing to the test suite
 - [x] Make sure that the generated types are properly crossed referenced, so not anyValidKey: anyValidValue, but specificValidKey: validValuesForThatSpecificKey, required types derived from data structures with reference IDs on both sides. This strict type-safety is one of the key benefits of the SDK architecture over the standard auto-generated API client.
 - [ ] Improve the logger, Consola is too lightweight, we need something production ready and cloud runtime compatible. Enforce logger usage with eslint no-console rule
 - [ ] Update Zod to Zod 4 everywhere, requires support from OpenAPI type generation pipeline.
 - [ ] Standardise and improve the Claude sub-agents.
+- [ ] Extract all common code from the stdio and http servers into a shared library.
 - [ ] Production hardening, auth, caching, logging, tracing, error handling (Result<T,E>), error tracking (Sentry), etc.
 - [ ] Rename the type-gen code from scripts to something more meaningful.
 - [ ] Consider putting the type-gen code in a separate package from the SDK runtime code, they are not tightly coupled and have different if related intentions. This could go either way, the typegen code essentially becomes a library of functions that are used within the SDK runtime code.
+
+## MCP Enhancements
+
+### Enhancements (Post‑MVP):
+
+- Shared error handling library workspace (centralised error classes, normalisers, mapping to user‑facing summaries)
+- Shared OpenTelemetry workspace/library for tracing/metrics, consumed by logger and error handler
+- Tool grouping/discovery by tags and Inspector discoverability
+- AI docs bundle generation; test mocks; offline/CI guardrails
+- Resources/Prompts and cross‑server pipelines
+- Caching
+- Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
+
+### Core References
+
+- [OpenAI Connector standard for MCP](.agent/reference-docs/openai-connector-standards.md)
+- [Development Practice, Testing Strategy, TypeScript Practice](.agent/directives-and-memory/AGENT.md)
+- [McpServer, Streamable HTTP, stdio, debounced notifications, elicitation](.agent/reference-docs/mcp-typescript-sdk-readme.md)
+- [Understanding MCP servers](https://modelcontextprotocol.io/docs/learn/server-concepts)
 
 ## MCP server ideas
 

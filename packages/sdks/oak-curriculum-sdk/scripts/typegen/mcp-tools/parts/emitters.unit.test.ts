@@ -92,7 +92,7 @@ describe('emitters', () => {
     const op = makeOp(params);
     const out = emitIndex('get-pets-id', '/pets/{id}', 'get', op, ['id'], []);
     expect(out).toContain('const executor= (client: OakApiPathBasedClient');
-    expect(out).toContain('export const getPetsId = {');
+    expect(out).toContain('export const getPetsId: ToolDescriptor = {');
     expect(out).toContain('getExecutorFromGenericRequestParams');
   });
 });

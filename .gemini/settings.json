@@ -1,0 +1,10 @@
+{
+  "mcp": {
+    "allowed": ["oak-curriculum-standards"]
+  },
+  "mcpServers": {
+    "oak-curriculum-standards": {
+      "httpUrl": "http://localhost:3333/mcp"
+    }
+  }
+}

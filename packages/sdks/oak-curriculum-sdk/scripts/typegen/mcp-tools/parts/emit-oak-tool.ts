@@ -122,8 +122,6 @@ export function emitOakTool(
     // Import statements
     lines.push("import { z } from 'zod';");
     lines.push("import type { ZodSchema } from 'zod';");
-    lines.push("import { getResponseSchemaForEndpoint } from '../types.js';");
-    lines.push("import type { OakMcpToolBase } from '../types.js';");
     lines.push('');
 
     // Generate schemas
@@ -132,6 +130,14 @@ export function emitOakTool(
 
     // Tool definition
     const safeName = buildSafeName(toolName);
+    lines.push('/**');
+    lines.push(
+      ' * @internal Generated Oak MCP tool stub kept for documentation and regression tests.',
+    );
+    lines.push(
+      ' * @remarks Runtime execution flows through the ToolDescriptor entry; this stub will be replaced when tool handlers adopt schema-derived types.',
+    );
+    lines.push(' */');
     lines.push(`export const ${safeName}Tool: OakMcpToolBase<unknown, unknown> = {`);
     lines.push(`  name: '${toolName}',`);
 
