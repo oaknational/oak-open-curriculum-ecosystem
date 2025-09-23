@@ -48,75 +48,77 @@ The following tasks are atomic, actionable, and aligned to the intent. Each `ACT
 
 #### Phase 3 – Metadata strategy and tool taxonomy
 
-15. ACTION: Define canonical tool categories and tags: categories = `data | guidance | playbook | command` and domain tags (e.g., `curriculum`, `lessons`, `units`, `sequences`, `search`, `presentation`, `provenance`, `accessibility`). Draft a metadata interface for tool registration including optional fields (stability, audience, input/output examples, caching, rateLimitPolicy, determinism, requiresNetwork, provenanceRequired, etc.).
-16. REVIEW: Verify metadata fields align with MCP spec and do not introduce runtime logic; ensure descriptions are intention-revealing and concise.
-17. GROUNDING: read GO.md and follow all instructions
-18. QUALITY-GATE: Run full quality gate sequence from repo root.
+15. ACTION: Define canonical tool categories and tags: categories = `data.simple | data.complex | guidance.presentation | guidance.ontology | playbook | command` and domain tags (e.g., `curriculum`, `lessons`, `units`, `sequences`, `search`, `presentation`, `provenance`, `accessibility`, `educational-context`, `content-sensitivity`). Draft a metadata interface for tool registration including optional fields (stability, audience, input/output examples, caching, rateLimitPolicy, determinism, requiresNetwork, provenanceRequired, multiCallComplexity, etc.).
+16. ACTION: Define criteria for tool categorization: `data.simple` = direct OpenAPI endpoint facades (single API call); `data.complex` = tools requiring multiple API calls to join/aggregate data (e.g., get lesson with assets, get unit with lessons); `guidance.presentation` = in-repo authored presentation specs and templates (no API calls); `guidance.ontology` = schema-derived metadata and documentation (no API calls).
+17. REVIEW: Verify metadata fields align with MCP spec and do not introduce runtime logic; ensure descriptions are intention-revealing and concise, clearly indicating whether tools are facades, complex data joiners, or guidance providers.
+18. GROUNDING: read GO.md and follow all instructions
+19. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 4 – MCP servers: tools, resources, and metadata
 
-19. ACTION: In `apps/oak-curriculum-mcp-stdio` and `apps/oak-curriculum-mcp-streamable-http`, update existing curriculum tools to be exposed as `oak.data.*`, add clear descriptions, categories, tags, and optional metadata fields (stability, determinism, pagination, caching, rate limits, errors, etc.). Maintain non-breaking aliases if needed.
-20. REVIEW: Confirm no server-side agentic orchestration is introduced; the tools remain stateless data fetchers.
-21. GROUNDING: read GO.md and follow all instructions
-22. ACTION: Implement `oak.guidance.getLessonPresentationSpec` and `oak.guidance.getSearchResultsPresentationSpec` tools that return the authored, validated guidance objects (no external API).
-23. REVIEW: Validate guidance tool outputs with generated Zod validators; fail fast with informative errors if invalid.
-24. QUALITY-GATE: Run full quality gate sequence from repo root.
+20. ACTION: In `apps/oak-curriculum-mcp-stdio` and `apps/oak-curriculum-mcp-streamable-http`, update existing curriculum tools to be exposed as `oak.data.simple.*` or `oak.data.complex.*` as appropriate, add clear descriptions, categories, tags, and optional metadata fields (stability, determinism, pagination, caching, rate limits, errors, multiCallComplexity, etc.). Maintain non-breaking aliases if needed.
+21. REVIEW: Confirm no server-side agentic orchestration is introduced; the tools remain stateless data fetchers; verify complex tools are properly categorized with multiCallComplexity metadata.
+22. GROUNDING: read GO.md and follow all instructions
+23. ACTION: Implement `oak.guidance.presentation.getLessonPresentationSpec` and `oak.guidance.presentation.getSearchResultsPresentationSpec` tools that return the authored, validated guidance objects (no external API).
+24. ACTION: Implement `oak.guidance.ontology.getOntology` tool that returns schema-derived ontology metadata (no external API calls beyond SDK schema parsing).
+25. REVIEW: Validate guidance tool outputs with generated Zod validators; fail fast with informative errors if invalid; ensure ontology tool includes schema reference metadata.
+26. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 5 – Playbooks and commands registry
 
-25. ACTION: Implement `oak.playbooks.get` tool returning `FindLesson@v1` playbook. The playbook defines: clarification questions (audience, keyStage, etc.), steps to call `oak.data.searchLessons`, aggregation, fetching `oak.guidance.getSearchResultsPresentationSpec`, and a `format` step referencing a markdown template.
-26. REVIEW: Ensure deterministic behavior; inputs and outputs are fully typed; no network beyond curriculum data tools when executed by the caller.
-27. GROUNDING: read GO.md and follow all instructions
-28. ACTION: Add a read-only resource `mcp://oak/commands/index.json` mapping `oak_find_lesson` → `FindLesson@v1` with summary and hints.
-29. REVIEW: Confirm resource discoverability and that clients can wire slash commands to playbooks via this index.
-30. QUALITY-GATE: Run full quality gate sequence from repo root.
+27. ACTION: Implement `oak.playbooks.get` tool returning `FindLesson@v1` playbook. The playbook defines: clarification questions (audience, keyStage, etc.), steps to call `oak.data.simple.searchLessons`, aggregation, fetching `oak.guidance.presentation.getSearchResultsPresentationSpec`, and a `format` step referencing a markdown template.
+28. REVIEW: Ensure deterministic behavior; inputs and outputs are fully typed; no network beyond curriculum data tools when executed by the caller.
+29. GROUNDING: read GO.md and follow all instructions
+30. ACTION: Add a read-only resource `mcp://oak/commands/index.json` mapping `oak_find_lesson` → `FindLesson@v1` with summary and hints.
+31. REVIEW: Confirm resource discoverability and that clients can wire slash commands to playbooks via this index.
+32. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 6 – Documentation and examples
 
-31. ACTION: Add a new document under `docs/agent-guidance/` covering categories, tags, how to consume playbooks/guidance, and an example `/oak_find_lesson find me lessons about Vikings` flow; add a link to it from `AGENT.md`.
-32. REVIEW: Ensure docs reflect no server-side agentic activity and point to the commands registry.
-33. GROUNDING: read GO.md and follow all instructions
-34. ACTION: Update app READMEs with grouped tool tables (data vs guidance vs playbooks vs commands), metadata fields, and example calls.
-35. REVIEW: Cross-check descriptions with tool registration to avoid drift.
-36. QUALITY-GATE: Run full quality gate sequence from repo root.
+33. ACTION: Add a new document under `docs/agent-guidance/` covering categories, tags, how to consume playbooks/guidance, and an example `/oak_find_lesson find me lessons about Vikings` flow; add a link to it from `AGENT.md`.
+34. REVIEW: Ensure docs reflect no server-side agentic activity and point to the commands registry.
+35. GROUNDING: read GO.md and follow all instructions
+36. ACTION: Update app READMEs with grouped tool tables (data.simple vs data.complex vs guidance.presentation vs guidance.ontology vs playbooks vs commands), metadata fields, and example calls showing the distinction between facade tools (single API calls), complex tools (multiple API calls), and guidance tools (no API calls).
+37. REVIEW: Cross-check descriptions with tool registration to avoid drift.
+38. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 7 – Testing per repository strategy
 
-37. ACTION: Unit tests for schema validators (guidance and playbooks), plus pure helpers (template interpolation, condition evaluation).
-38. REVIEW: Confirm no network and no I/O in unit tests; use pure data fixtures.
-39. GROUNDING: read GO.md and follow all instructions
-40. ACTION: Integration tests importing server registration code to verify: tool metadata presence (categories, tags), guidance validation, playbook contract, and formatting output contains required headings and provenance links using mocks.
-41. REVIEW: Validate that integration tests remain in-process and do not start servers; only simple injected mocks are used.
-42. QUALITY-GATE: Run full quality gate sequence from repo root.
+39. ACTION: Unit tests for schema validators (guidance and playbooks), plus pure helpers (template interpolation, condition evaluation).
+40. REVIEW: Confirm no network and no I/O in unit tests; use pure data fixtures.
+41. GROUNDING: read GO.md and follow all instructions
+42. ACTION: Integration tests importing server registration code to verify: tool metadata presence (categories, tags), guidance validation, playbook contract, and formatting output contains required headings and provenance links using mocks.
+43. REVIEW: Validate that integration tests remain in-process and do not start servers; only simple injected mocks are used; test both simple and complex data tools appropriately.
+44. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 8 – Optional metadata and observability polish
 
-43. ACTION: Add strictly standards-compliant, optional metadata fields where useful (stability, audience, expectedLatencyMs, cache, rateLimitPolicy, determinism, pagination, errors taxonomy, licensing, contentNotices, accessibility hints, debugExampleSession).
-44. REVIEW: Ensure metadata is consistent across stdio and streamable-http servers and documented in AGENT.md.
-45. GROUNDING: read GO.md and follow all instructions
-46. QUALITY-GATE: Run full quality gate sequence from repo root.
+45. ACTION: Add strictly standards-compliant, optional metadata fields where useful (stability, audience, expectedLatencyMs, cache, rateLimitPolicy, determinism, pagination, errors taxonomy, licensing, contentNotices, accessibility hints, debugExampleSession, multiCallComplexity).
+46. REVIEW: Ensure metadata is consistent across stdio and streamable-http servers and documented in AGENT.md; verify multiCallComplexity is properly indicated for complex tools.
+47. GROUNDING: read GO.md and follow all instructions
+48. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 9 – Final acceptance
 
-47. ACTION: Verify acceptance criteria (below) and tidy any discrepancies.
-48. REVIEW: Self-review against `rules.md`, verify types flow from type-gen, no unsafe type assertions, and tests follow strategy.
-49. QUALITY-GATE: Run full quality gate sequence from repo root.
+49. ACTION: Verify acceptance criteria (below) and tidy any discrepancies.
+50. REVIEW: Self-review against `rules.md`, verify types flow from type-gen, no unsafe type assertions, and tests follow strategy; confirm all tool categories are properly implemented and distinguished.
+51. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 #### Phase 10 – Ontology tool and schemas
 
-50. ACTION: Add OpenAPI module `Ontology@v1` defining: `Ontology` (entities[], relationships[]), `Entity` (id, label, definition, keyFields, enums?), `Relationship` (source, target, type, label, cardinality), and `Enumeration` (id, values). Generate validators via `pnpm type-gen`.
-51. REVIEW: Ensure ontology schema reflects SDK domain (Subjects, Sequences, Units, Lessons, Threads, Categories, Assets, KeyStages, Phases, Years, Quizzes, Transcripts) and enumerations (KeyStageSlug, AssetType, QuestionType, AnswerFormat).
-52. GROUNDING: read GO.md and follow all instructions
-53. ACTION: Implement MCP tool `oak.guidance.getOntology` that returns the authored ontology JSON (validated); tag as `guidance`, `documentation`, `ontology`.
-54. REVIEW: Validate tool output with generated validators; ensure deterministic, versioned (`v1`).
-55. QUALITY-GATE: Run full quality gate sequence from repo root.
-56. ACTION: Document the new tool in `AGENT.md` and add an optional command mapping `oak_get_ontology` → `getOntology` in the commands registry resource.
-57. REVIEW: Confirm discoverability and example usage in docs and READMEs.
-58. QUALITY-GATE: Run full quality gate sequence from repo root.
+52. ACTION: Add OpenAPI module `Ontology@v1` defining: `Ontology` (entities[], relationships[]), `Entity` (id, label, definition, keyFields, enums?), `Relationship` (source, target, type, label, cardinality), and `Enumeration` (id, values). Generate validators via `pnpm type-gen`.
+53. REVIEW: Ensure ontology schema reflects SDK domain (Subjects, Sequences, Units, Lessons, Threads, Categories, Assets, KeyStages, Phases, Years, Quizzes, Transcripts, SearchResults, ContentGuidance, EducationalMetadata) and enumerations (KeyStageSlug, AssetType, QuestionType, AnswerFormat, SubjectSlug, ContentGuidanceArea, SupervisionLevel).
+54. GROUNDING: read GO.md and follow all instructions
+55. ACTION: Implement MCP tool `oak.guidance.ontology.getOntology` that returns the authored ontology JSON (validated); tag as `guidance.ontology`, `documentation`, `ontology`.
+56. REVIEW: Validate tool output with generated validators; ensure deterministic, versioned (`v1`).
+57. QUALITY-GATE: Run full quality gate sequence from repo root.
+58. ACTION: Document the new tool in `AGENT.md` and add an optional command mapping `oak_get_ontology` → `getOntology` in the commands registry resource.
+59. REVIEW: Confirm discoverability and example usage in docs and READMEs.
+60. QUALITY-GATE: Run full quality gate sequence from repo root.
 
 ### Acceptance Criteria
 
-- Tool taxonomy: curriculum tools exposed as `oak.data.*`; guidance tools as `oak.guidance.*`; playbook retrieval as `oak.playbooks.get`; commands registry resource present.
+- Tool taxonomy: simple data tools as `oak.data.simple.*` (direct API facades); complex data tools as `oak.data.complex.*` (multi-API-call joiners); presentation guidance as `oak.guidance.presentation.*` (in-repo authored specs); ontology guidance as `oak.guidance.ontology.*` (schema-derived metadata); playbook retrieval as `oak.playbooks.get`; commands registry resource present.
 - Descriptions and tags: every tool/resource has clear, intention-revealing descriptions and category/domain tags; ontology metadata present on relevant tools.
 - Guidance specs: authored in-repo, versioned (v1), validated at runtime using generated validators; include required headings, notices, provenance/link policy, and accessibility checklist.
 - Playbook `FindLesson@v1`: includes clarification loop, multiple tool calls, aggregation, and formatting via template; deterministic, typed inputs/outputs.
@@ -143,348 +145,28 @@ The following tasks are atomic, actionable, and aligned to the intent. Each `ACT
 ### How the ontology supports the plan intent
 
 - Separation of data vs guidance tools
-  - Ontology provides clear entity boundaries (Subject, Sequence, Unit, Lesson, Asset, Quiz) used by `oak.data.*` tools, while PresentationSpec lives in `oak.guidance.*`. The graph clarifies provenance edges (e.g., Lesson → Asset) that guidance tools must reference but never fetch.
+  - Ontology provides clear entity boundaries (Subject, Sequence, Unit, Lesson, Asset, Quiz, Answer, ContentGuidance, EducationalMetadata) used by `oak.data.simple.*` and `oak.data.complex.*` tools, while PresentationSpec lives in `oak.guidance.presentation.*` and ontology metadata in `oak.guidance.ontology.*`. The graph clarifies provenance edges (e.g., Lesson → Asset) that guidance tools must reference but never fetch.
 - Deterministic guidance and playbooks
-  - Ontology enumerates inputs/outputs and relations used by playbooks (e.g., Sequence → Unit → Lesson). Steps are data-graph traversals plus formatting, making the process deterministic and testable.
+  - Ontology enumerates inputs/outputs and relations used by playbooks (e.g., Sequence → Unit → Lesson → ContentGuidance). Steps are data-graph traversals plus formatting, making the process deterministic and testable. Enhanced with educational context (prior knowledge, curriculum alignment) and content sensitivity classification.
 - Commands registry and playbook discoverability
-  - Ontology defines the target nodes/edges for each command (e.g., find lessons → traverse Subject/KeyStage/Year → Lessons), enabling concise, discoverable playbooks and command descriptions.
+  - Ontology defines the target nodes/edges for each command (e.g., find lessons → traverse Subject/KeyStage/Year → Lessons → ContentGuidance), enabling concise, discoverable playbooks and command descriptions with rich metadata.
 - Richer metadata and tool descriptions
-  - Category/domain tags map to ontology nodes/edges (e.g., `search`, `lessons`, `provenance`, `presentation`), improving agent routing. Coverage edges (Subject ↔ KeyStage/Year) inform filter metadata.
+  - Category/domain tags map to ontology nodes/edges (e.g., `search`, `lessons`, `provenance`, `presentation`, `content-sensitivity`, `educational-context`), improving agent routing. Coverage edges (Subject ↔ KeyStage/Year) inform filter metadata, with additional search and sensitivity relationships.
 - Type discipline and validators
-  - Entities and relationships are tied to explicit schema references in Appendix A, generating types/validators at type-gen. Canonicalization rules (e.g., Year) ensure consistent internal types without assertions.
+  - Entities and relationships are tied to explicit schema references in the [Curriculum Ontology](docs/architecture/curriculum-ontology.md), generating types/validators at type-gen. Canonicalization rules (e.g., Year, AnswerFormat) ensure consistent internal types without assertions. Enhanced with comprehensive subject enumeration and content guidance classifications.
 
-### Appendix A: Curriculum Ontology Related to Schema
+## Curriculum Ontology Reference
 
-This appendix maps ontology nodes and edges to the SDK schema. Each entry is either explicit in the schema or an implied link with a specific schema reference. Appendix B lists concepts that are not present in the schema and is informational only.
+The comprehensive curriculum ontology is maintained as a separate architecture document at `docs/architecture/curriculum-ontology.md`. This document includes:
 
-#### Schema index (where referenced)
+- **Schema index** mapping all OpenAPI schemas to ontology entities
+- **Entity definitions** with key fields, relationships, and schema references
+- **Enumerations and constraints** derived from the OpenAPI schema
+- **Type canonicalization rules** for consistent data handling
+- **Relationship diagrams** showing entity connections
+- **Graph extraction opportunities** for advanced use cases
+- **Information sources and separation** (manual vs auto-derived, generic vs Oak-specific)
 
-- `SequenceUnitsResponseSchema`: Unit trees, unitOrder, categories[], threads[], KS4 examSubjects/tiers.
-- `AllKeyStageAndSubjectUnitsResponseSchema`: Year groups with units and lessons; demonstrates `lessonOrder`.
-- `KeyStageSubjectLessonsResponseSchema`: Units with nested lessons for a key stage and subject.
-- `UnitSummaryResponseSchema`: Unit metadata and `unitOptions` (alternatives).
-- `LessonSummaryResponseSchema`: Keywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance, supervisionLevel.
-- `LessonSearchResponseSchema`: Lesson similarity, many-to-many lesson↔unit references, context slugs.
-- `LessonAssetsResponseSchema` / `SubjectAssetsResponseSchema` / `SequenceAssetsResponseSchema`: Assets and attribution.
-- `TranscriptResponseSchema`: Lesson transcript and VTT captions.
-- `AllSubjectsResponseSchema` / `SubjectResponseSchema`: Subjects with sequences, coverage of key stages and years.
-- `SubjectSequenceResponseSchema`: Sequence-level keyStages/years coverage and phase.
-- `SubjectKeyStagesResponseSchema` / `SubjectYearsResponseSchema`: Coverage lists.
-- `AllThreadsResponseSchema` / `ThreadUnitsResponseSchema`: Threads and their units.
-- `QuestionsForSequenceResponseSchema` / `QuestionsForKeyStageAndSubjectResponseSchema` / `QuestionForLessonsResponseSchema`: Quiz question sets scoped to sequence/subject/lesson.
-- `KeyStageResponseSchema`: Key stage slugs and titles.
+The ontology is automatically derived from the OpenAPI schema via `pnpm type-gen` and provides the foundation for all curriculum tools, ensuring type safety and consistent domain understanding across implementations.
 
-#### Entities and definitions
-
-- Sequence (synonyms: Programme)
-  - Definition: A pedagogically ordered collection of Units (and associated Threads) for a Subject across specified Key Stages/Years.
-  - Key fields: `sequenceSlug` (string), `years` (number[]), `keyStages` [{`keyStageTitle`, `keyStageSlug`}], `phaseSlug` (string), `phaseTitle` (string), `ks4Options` ({title, slug}|null)
-  - Relationships: Sequence → Units; Sequence → KeyStages (covers); Sequence → Years (covers); Sequence → Phase (belongs_to); Subject → Sequence (has)
-- Subject
-  - Definition: An academic discipline (e.g., Maths).
-  - Key fields: `subjectSlug` (string), `subjectTitle` (string)
-  - Relationships: Subject → Sequences; Subject → KeyStages (coverage lists); Subject → Years (coverage lists)
-- Unit
-  - Definition: A themed set of Lessons within a Sequence.
-  - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number)
-  - Additional fields (where available): `year` (number|string), `yearSlug` (string), `phaseSlug` (string), `subjectSlug` (string), `keyStageSlug` (string), `notes` (string|nullable)
-  - Relationships: Sequence → Unit (has); Unit → Lessons (has); Unit ↔ Thread (membership via `ThreadUnitsResponseSchema`); Unit → Categories (has)
-- Thread
-  - Definition: A cross-unit conceptual strand.
-  - Key fields: `slug` (string), `title` (string)
-  - Relationships: Thread → Units (has); Units ↔ Thread (membership)
-- Category
-  - Definition: A classification label for Units.
-  - Fields: `categoryTitle` (string), `categorySlug` (string, optional)
-  - Relationships: Unit → Category (has)
-- Lesson
-  - Definition: A single teaching session within a Unit.
-  - Key fields: `lessonSlug` (string), `lessonTitle` (string), `subjectSlug` (string), `keyStageSlug` (string), `unitSlug` (string), `downloadsAvailable` (boolean)
-  - Summary fields: `lessonKeywords` [{`keyword`, `description`}], `keyLearningPoints` [{`keyLearningPoint`}], `misconceptionsAndCommonMistakes` [{`misconception`, `response`}], `teacherTips` [{`teacherTip`}], `contentGuidance` (array|null), `supervisionLevel` (string|null)
-  - Relationships: Unit → Lesson (has); Lesson → Assets (has); Lesson → Transcript (has)
-- Asset
-  - Definition: Downloadable or viewable resource, including `video`.
-  - Fields: `type` (enum), `label` (string), `url` (string); attribution at lesson/subject/sequence scope
-  - Relationships: Lesson → Asset (has)
-- Transcript
-  - Definition: Video transcript and captions timing.
-  - Fields: `transcript` (string), `vtt` (string)
-  - Relationships: Lesson → Transcript (has)
-- Quiz
-  - Definition: A set of questions associated with a Lesson (starter/exit).
-  - Types: `starterQuiz`, `exitQuiz`
-  - Relationships: Lesson → Quiz (has); Quiz → Question (has)
-- Question
-  - Definition: A question within a Quiz.
-  - Types (enums): `multiple-choice`, `short-answer`, `match`, `order`
-  - Answer formats: `text`, `image`
-  - Relationships: Quiz → Question (has)
-
-- KeyStage
-  - Definition: UK educational stage.
-  - Fields: `keyStageSlug` (ks1|ks2|ks3|ks4), `keyStageTitle` (string) or as `slug`/`title`
-  - Relationships: Subject → KeyStage (coverage); Sequence → KeyStage (covers)
-- Phase
-  - Definition: School phase grouping.
-  - Fields: `phaseSlug` (primary|secondary), `phaseTitle` (string)
-  - Relationships: Sequence → Phase (belongs_to)
-- YearGroup (synonyms: Year)
-  - Definition: Curriculum year grouping.
-  - Fields: number 1–11 (and filter string `"1"…"11"`; special `"all-years"`)
-  - Relationships: Subject → Years (coverage); Sequence → Years (covers); Unit → Year (belongs_to)
-
-- KS4 variants
-  - ExamSubject
-    - Fields: `examSubjectTitle`, optional `examSubjectSlug`
-    - Relationships: Sequence (KS4 contexts) → ExamSubject (has); ExamSubject → Tier (has)
-  - Tier
-    - Fields: `tierTitle`, `tierSlug`
-    - Relationships: ExamSubject → Tier (has); Tier → Units (has)
-  - Unit options (synonyms: Unit variant/Optionality)
-    - Definition: Alternative Unit slugs within a Unit position or tiered variants.
-    - Fields: `unitOptions` [{`unitTitle`, `unitSlug`}]
-    - Relationships: Unit → Unit options (has)
-
-#### Enumerations and constraints
-
-- KeyStageSlug: `ks1` | `ks2` | `ks3` | `ks4`
-- AssetType: `slideDeck` | `exitQuiz` | `exitQuizAnswers` | `starterQuiz` | `starterQuizAnswers` | `supplementaryResource` | `video` | `worksheet` | `worksheetAnswers`
-- QuestionType: `multiple-choice` | `short-answer` | `match` | `order`
-- AnswerFormat: `text` | `image`
-- Year filters: `"1"`–`"11"`, `"all-years"` (string), plus numeric years in many responses
-- PhaseSlug: `primary` | `secondary`
-
-#### Inconsistent types and canonicalization
-
-- Year
-  - Observed types: number; string filters `"1"…"11"`; literal `"all-years"`.
-  - Canonical internal form: number 1–11, or `'ALL_YEARS'`.
-- Unit.year (number|string)
-  - Canonical internal form: number (1–11) or `'ALL_YEARS'` as above.
-- Nullable strings and arrays (e.g., `examBoardTitle`, `contentGuidance`)
-  - Canonical internal forms: `null` for absence; non-empty when present.
-
-#### Relationships (schema-backed)
-
-- Subject HAS_MANY Sequence
-- Subject HAS_MANY KeyStage (coverage)
-- Subject HAS_MANY YearGroup (coverage)
-- Sequence BELONGS_TO Subject
-- Sequence HAS_MANY Unit
-- Sequence BELONGS_TO Phase
-- Sequence COVERS_MANY YearGroup
-- Sequence COVERS_MANY KeyStage
-- Sequence HAS_OPTIONAL Ks4Option
-- Sequence (KS4) HAS_MANY ExamSubject; ExamSubject HAS_MANY Tier; Tier HAS_MANY Unit
-- Unit HAS_MANY Lesson
-- Unit HAS_MANY Category
-- Unit BELONGS_TO Sequence
-- Unit BELONGS_TO KeyStage/Subject/Phase/YearGroup (via summary fields)
-- Unit HAS_MANY Unit options (variants)
-- Thread HAS_MANY Unit; Unit IN_THREAD Thread
-- Lesson BELONGS_TO Unit
-- Lesson HAS_MANY Asset
-- Lesson HAS Transcript
-- Lesson HAS_MANY Quiz; Quiz HAS_MANY Question
-
-#### Relationship diagram (Mermaid, schema-backed only)
-
-```mermaid
-erDiagram
-  SUBJECT ||--o{ SEQUENCE : has
-  SUBJECT ||--o{ KEY_STAGE : covers
-  SUBJECT ||--o{ YEAR_GROUP : covers
-  SEQUENCE }o--o{ UNIT : has
-  SEQUENCE }o--o{ KEY_STAGE : covers
-  SEQUENCE }o--o{ YEAR_GROUP : covers
-  SEQUENCE }o--o| PHASE : belongs_to
-  EXAM_SUBJECT ||--o{ TIER : has
-  TIER ||--o{ UNIT : has
-  UNIT ||--o{ LESSON : has
-  UNIT }o--o{ CATEGORY : labeled_by
-  UNIT }o--o{ THREAD : in_thread
-  LESSON ||--o{ ASSET : has
-  LESSON ||--|| TRANSCRIPT : has
-  LESSON ||--o{ QUIZ : has
-  QUIZ ||--o{ QUESTION : includes
-```
-
-#### Concrete examples (schema-aligned)
-
-- Sequence (Subject Maths, KS3 Higher): Units → Sequences, Linear Graphs, Circles, Probability.
-- Thread Geometry: Units → Angles & Shapes, Symmetry, 2D Shapes, Circles, Angles, Co-ordinates.
-- Unit Circles: unitOptions → {Foundation/Core/Higher variants or KS4 tiers}; Lessons for variants include Parts of a circle; Circumference; Segments; Using π; Area.
-- Lesson Area of a circle: Assets → Slides, Worksheets, Additional Resources, Videos, Sign Language Video; Quizzes → Starter, Exit; Questions include “Pi is approximately…”.
-
-#### Implied relationships (inferred from schema fields)
-
-- Lesson → Unit (via `unitSlug`; lessons can appear in multiple units in `LessonSearchResponseSchema.units`)
-- Lesson → Subject (via `subjectSlug` in lesson summary/search)
-- Lesson → KeyStage (via `keyStageSlug` in lesson summary/search)
-- Unit → YearGroup (via `year`/`yearSlug`/`yearTitle` where present)
-- Unit ↔ Unit (alternative-of via `unitOptions` indicating alternative unit choices)
-- Sequence → Subject (inverse implied by `Subject.sequenceSlugs[].sequenceSlug`)
-- Sequence → Lesson (transitive: Sequence → Units; `SequenceAssetsResponseSchema` enumerates lessons)
-- Unit → Thread (via `unit.threads[]`; inverse of `ThreadUnitsResponseSchema`)
-- Unit → Category (via `unit.categories[]`)
-- Subject ↔ KeyStage (coverage lists in `SubjectResponseSchema` and `AllSubjectsResponseSchema`)
-- Sequence (KS4) → ExamSubject → Tier → Unit (nested structures)
-- Lesson → Quiz (via starter/exit quiz assets and QuestionsFor\* schemas)
-- Asset → Lesson (assets keyed by lesson)
-- Attribution → Lesson/Assets (via `attribution: string[]`)
-
-#### Implied entities (structured but no standalone endpoints)
-
-- Quiz (starter/exit)
-- Question (and answer options/format)
-- Keyword, KeyLearningPoint, Misconception, TeacherTip (lesson summary sub-objects)
-- Category (unit-level object without standalone endpoint)
-- Phase (fields on sequence, no standalone endpoint)
-- YearGroup (derived from numeric year and `yearSlug`/`yearTitle` aggregates)
-- ExamBoard (nullable `examBoardTitle` in lesson search unit context)
-- ContentGuidanceArea and SupervisionLevel (lesson summary fields)
-- Licence/Attribution (arrays associated with assets and lessons)
-
-#### Graph extraction opportunities (with schema cross-references)
-
-- Provenance/containment paths
-  - Subject → Sequence → Unit → Lesson → Asset/Transcript
-  - Schema refs:
-    - `AllSubjectsResponseSchema.sequenceSlugs[]` (Subject → Sequence)
-    - `SubjectSequenceResponseSchema` (Sequence coverage)
-    - `AllKeyStageAndSubjectUnitsResponseSchema.units[]` and `KeyStageSubjectLessonsResponseSchema.lessons[]` (Sequence/Unit → Lesson)
-    - `LessonAssetsResponseSchema.assets[]`, `TranscriptResponseSchema` (Lesson → Asset/Transcript)
-- Lesson → Quiz → Question
-  - Schema refs: `QuestionsForSequenceResponseSchema`, `QuestionsForKeyStageAndSubjectResponseSchema`, `QuestionForLessonsResponseSchema` (question sets scoped by lesson/sequence/subject); quiz types also implied by asset types `starterQuiz`, `exitQuiz` in `*AssetsResponseSchema`.
-- Unit ↔ Thread; Unit ↔ Category
-  - Schema refs: `ThreadUnitsResponseSchema` (Thread → Units); unit objects embed `threads[]` and `categories[]` in `SequenceUnitsResponseSchema`.
-- Coverage bipartite graphs
-  - Subject ↔ KeyStage, Subject ↔ YearGroup; Sequence ↔ KeyStage, Sequence ↔ YearGroup
-  - Schema refs: `AllSubjectsResponseSchema.keyStages[]`, `AllSubjectsResponseSchema.years[]`, `SubjectKeyStagesResponseSchema`, `SubjectYearsResponseSchema`; `SubjectSequenceResponseSchema.keyStages[]/years[]`.
-- KS4 variant DAG
-  - Sequence → ExamSubject → Tier → Unit; Unit → unitOptions (alternative-of)
-  - Schema refs: `SequenceUnitsResponseSchema` (examSubjects/tiers/units branches), `UnitSummaryResponseSchema.unitOptions[]`.
-- Ordering edges
-  - Unit precedes via `unitOrder`; Lesson precedes via `lessonOrder` (where present)
-  - Schema refs: `SequenceUnitsResponseSchema.unitOrder`, `UnitSummaryResponseSchema` (notes/ordering), `AllKeyStageAndSubjectUnitsResponseSchema.units[].lessons[].lessonOrder` (example shows ordering)
-- Search-derived associations
-  - Lesson ↔ Unit (many-to-many via `LessonSearchResponseSchema.units[]`)
-  - Similarity score (edge weight) via `LessonSearchResponseSchema.similarity`
-- Tag/label graphs
-  - Lesson ↔ Keyword; Lesson ↔ ContentGuidanceArea; Lesson ↔ SupervisionLevel; Unit ↔ Category
-  - Schema refs: `LessonSummaryResponseSchema.lessonKeywords[]`, `contentGuidance`, `supervisionLevel`, and unit `categories[]` in `SequenceUnitsResponseSchema`.
-- Attribution/licensing associations
-  - Lesson/Asset ↔ Attribution
-  - Schema refs: `LessonAssetsResponseSchema.attribution[]`, `SubjectAssetsResponseSchema.attribution[]`, `SequenceAssetsResponseSchema.attribution[]`.
-- Resource-type taxonomies
-  - Asset type enum; Question type and answer format enums
-  - Schema refs: `*AssetsResponseSchema.assets[].type` enum, question `enum` types throughout question schemas.
-
-### Appendix B: Curriculum Ontology Concepts Not in Schema
-
-#### Not-in-schema entities and relationships (from ontology references)
-
-- Entities (absent from current SDK schema)
-  - Age; Age appropriateness
-  - Specialist (specialist settings like PMLD, CLDD)
-  - National Curriculum (boolean flag)
-  - Nation (England, Wales, Scotland, Northern Ireland)
-  - Parent Subject / Child Subject (subject hierarchy)
-  - Programme factors as first-class entities (beyond fields present in sequences/KS4 variants)
-  - Unit Variant as a distinct persisted entity (beyond `unitOptions` and KS4 `tiers`)
-
-- Relationships (not present in current SDK schema structures)
-  - Subject PARENT_OF Subject (parent/child subject hierarchy)
-  - Programme FACTORED_BY Age/AgeAppropriateness/Specialist/NationalCurriculum/Nation (explicit factors)
-  - Programme ↔ Threads (explicit join table entity distinct from ThreadUnits linkage)
-  - UnitVariant ↔ Lessons (distinct linkage beyond unit→lessons filtered by tier/options)
-
-Note: These items are recognized from the diagram/glossary references and are listed for future schema consideration. They are not added to the schema-backed ontology above but may be included as synonyms or mapped concepts where possible (e.g., Unit Variant → unitOptions, KS4 tiers).
-
-### Surfacing ontology in MCP tools
-
-- Existing `oak.data.*` tools (metadata and outputs)
-  - Metadata augmentation:
-    - `ontology`: { `nodesReturned`: ["Lesson","Unit"], `edgesImplied`: ["Unit-has-Lesson"], `schemaRefs`: ["KeyStageSubjectLessonsResponseSchema"], `provenanceRequired`: true }
-    - `tags`: ["curriculum","ontology","provenance","lessons","units"]
-    - `examples`: concise graph paths (e.g., Subject→Sequence→Unit→Lesson)
-  - Output annotations (additive, optional):
-    - `_nodeId`: stable ID (e.g., `"Lesson:lessonSlug"`)
-    - `_nodeType`: `"Lesson" | "Unit" | ...`
-    - `_provenance`: { unitSlug, sequenceSlug, subjectSlug, keyStageSlug }
-    - `_related`: [{ type: `"belongs_to"`, nodeType: `"Unit"`, nodeId: `"Unit:unitSlug"` }]
-    - `_schemaRefs`: ["LessonSummaryResponseSchema"]
-    - `_ontologyRefs`: ["oak:edges/Lesson-has-Asset"]
-
-- Dedicated ontology tool: `oak.guidance.getOntology`
-  - Request:
-    - `{ version?: "v1", filter?: { nodes?: string[], edges?: string[], subjectSlug?, keyStage?, year? }, format?: "json"|"jsonld"|"mermaid" }`
-  - Response (JSON primary):
-    - `version`, `generatedAt`
-    - `entities`: [{ id, label, definition, keyFields, schemaRefs }]
-    - `relationships`: [{ id, source, target, type, cardinality, transitive, schemaRefs }]
-    - `enums`: [{ id, values }]
-    - `canonicalization`: [{ field, from, to }]
-    - `schemaIndex`: [{ name, purpose, paths }]
-    - `examples`: [{ name, path }]
-  - Optional formats:
-    - `jsonld`: JSON-LD wrapper with `@context`/`@type`
-    - `mermaid`: ER/text for human review
-  - Static MCP resources for quick access:
-    - `mcp://oak/ontology/v1.json` (full), `mcp://oak/ontology/index.json` (toc), `mcp://oak/ontology/mermaid.md` (human)
-
-- Minimal JSON examples
-
-```json
-{
-  "entities": [
-    {
-      "id": "Lesson",
-      "label": "Lesson",
-      "definition": "A single teaching session within a unit.",
-      "keyFields": ["lessonSlug"],
-      "schemaRefs": ["LessonSummaryResponseSchema", "LessonSearchResponseSchema"]
-    }
-  ],
-  "relationships": [
-    {
-      "id": "Unit-has-Lesson",
-      "source": "Unit",
-      "target": "Lesson",
-      "type": "has",
-      "cardinality": "1..n",
-      "schemaRefs": ["KeyStageSubjectLessonsResponseSchema"]
-    }
-  ],
-  "canonicalization": [
-    { "field": "year", "from": ["\"1\"..\"11\"", "\"all-years\""], "to": "number|ALL_YEARS" }
-  ]
-}
-```
-
-- Tool metadata augmentation example
-
-```json
-{
-  "name": "oak.data.getLessonsForUnit",
-  "category": "data",
-  "tags": ["curriculum", "lessons", "units", "ontology", "provenance"],
-  "ontology": {
-    "nodesReturned": ["Lesson"],
-    "edgesImplied": ["Unit-has-Lesson"],
-    "schemaRefs": ["KeyStageSubjectLessonsResponseSchema"]
-  }
-}
-```
-
-### Information sources and separation
-
-- Manual vs automatically derived
-  - Automatically derived: Entities, relationships, enums, and canonicalization rules extracted from the OpenAPI schema (`packages/sdks/oak-curriculum-sdk/schema-cache/api-schema-sdk.json`) and validated via type-gen.
-  - Manually derived: Ontological guidance (labels, examples, path recipes, presentation policies) authored in-repo (e.g., required headings, provenance notices, example graph paths).
-  - Practice: Keep authored guidance and ontology overlays in dedicated JSON/Markdown resources (guidance specs, ontology resources), clearly versioned; merge at tool runtime for agent consumption.
-
-- Generic vs Oak-specific
-  - Generic (MCP/server construction): Mechanisms to expose ontology metadata, add output annotations, implement `getOntology`, and provide static MCP resources.
-  - Oak-specific: The concrete entity/relationship set, schemaRefs, enums, and path recipes derived from the Oak Curriculum OpenAPI and guidance requirements (provenance, accessibility, headings).
-  - Practice: Structure packages so generic code paths and types are reusable; Oak-specific data lives under clearly named resources and schemas.
+The ontology document also includes concepts not present in the current schema, implementation guidance for surfacing ontology in MCP tools, and details about manual vs auto-derived content. See the [full ontology document](docs/architecture/curriculum-ontology.md) for complete details.
