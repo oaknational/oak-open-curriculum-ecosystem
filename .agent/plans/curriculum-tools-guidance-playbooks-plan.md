@@ -30,26 +30,26 @@ The following tasks are atomic, actionable, and aligned to the intent. Each `ACT
 3. GROUNDING: read GO.md and follow all instructions
 4. QUALITY-GATE: From repo root run: `pnpm i`, `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint -- --fix`, `pnpm -F @oaknational/oak-curriculum-sdk docs:all`, `pnpm format`, `pnpm markdownlint`, `pnpm test`, `pnpm test:e2e`.
 
-#### Phase 1 – Metadata strategy and tool taxonomy
+#### Phase 1 – SDK: OpenAPI schemas and type generation
 
-5. ACTION: Define canonical tool categories and tags: categories = `data | guidance | playbook | command` and domain tags (e.g., `curriculum`, `lessons`, `units`, `sequences`, `search`, `presentation`, `provenance`, `accessibility`). Draft a metadata interface for tool registration including optional fields (stability, audience, input/output examples, caching, rateLimitPolicy, determinism, requiresNetwork, provenanceRequired, etc.).
-6. REVIEW: Verify metadata fields align with MCP spec and do not introduce runtime logic; ensure descriptions are intention-revealing and concise.
+5. ACTION: Add OpenAPI module `PresentationGuidance@v1` defining: `PresentationSpec` (requiredHeadings, requiredNotices, templates, linkPolicy, provenancePolicy, accessibilityChecklist), specializations `LessonPresentationSpec` and `SearchResultsPresentationSpec`.
+6. REVIEW: Ensure the schema is minimal yet expressive; check enumerations and literals preserve type information (use `as const` data in fixtures; no type assertions in code).
 7. GROUNDING: read GO.md and follow all instructions
-8. QUALITY-GATE: Run full quality gate sequence from repo root.
+8. ACTION: Add OpenAPI module `Playbook@v1` defining: `Playbook` (id, version, inputs, questions), `Step` union (`ask` | `toolCall` | `aggregate` | `format`), light `Condition` language (`missing(x)`, equality), `TemplateRef`, and `Outputs` contract.
+9. REVIEW: Validate that the schema supports a clarification loop and deterministic execution by the caller without embedding LLM prompts in code (prompts referenced as templates or text blocks in the spec).
+10. QUALITY-GATE: Run full quality gate sequence from repo root.
 
-#### Phase 2 – SDK: OpenAPI schemas and type generation
+#### Phase 2 – Author guidance specs and templates in-repo
 
-9. ACTION: Add OpenAPI module `PresentationGuidance@v1` defining: `PresentationSpec` (requiredHeadings, requiredNotices, templates, linkPolicy, provenancePolicy, accessibilityChecklist), specializations `LessonPresentationSpec` and `SearchResultsPresentationSpec`.
-10. REVIEW: Ensure the schema is minimal yet expressive; check enumerations and literals preserve type information (use `as const` data in fixtures; no type assertions in code).
-11. GROUNDING: read GO.md and follow all instructions
-12. ACTION: Add OpenAPI module `Playbook@v1` defining: `Playbook` (id, version, inputs, questions), `Step` union (`ask` | `toolCall` | `aggregate` | `format`), light `Condition` language (`missing(x)`, equality), `TemplateRef`, and `Outputs` contract.
-13. REVIEW: Validate that the schema supports a clarification loop and deterministic execution by the caller without embedding LLM prompts in code (prompts referenced as templates or text blocks in the spec).
+11. ACTION: Author initial guidance fixtures for `lesson` and `searchResults` (JSON) plus markdown templates; store under a dedicated package or within app resources as appropriate, ensuring they are loaded without network access.
+12. REVIEW: Check that provenance rules require links to original Oak resources and that accessibility checklist items are actionable.
+13. GROUNDING: read GO.md and follow all instructions
 14. QUALITY-GATE: Run full quality gate sequence from repo root.
 
-#### Phase 3 – Author guidance specs and templates in-repo
+#### Phase 3 – Metadata strategy and tool taxonomy
 
-15. ACTION: Author initial guidance fixtures for `lesson` and `searchResults` (JSON) plus markdown templates; store under a dedicated package or within app resources as appropriate, ensuring they are loaded without network access.
-16. REVIEW: Check that provenance rules require links to original Oak resources and that accessibility checklist items are actionable.
+15. ACTION: Define canonical tool categories and tags: categories = `data | guidance | playbook | command` and domain tags (e.g., `curriculum`, `lessons`, `units`, `sequences`, `search`, `presentation`, `provenance`, `accessibility`). Draft a metadata interface for tool registration including optional fields (stability, audience, input/output examples, caching, rateLimitPolicy, determinism, requiresNetwork, provenanceRequired, etc.).
+16. REVIEW: Verify metadata fields align with MCP spec and do not introduce runtime logic; ensure descriptions are intention-revealing and concise.
 17. GROUNDING: read GO.md and follow all instructions
 18. QUALITY-GATE: Run full quality gate sequence from repo root.
 
@@ -73,7 +73,7 @@ The following tasks are atomic, actionable, and aligned to the intent. Each `ACT
 
 #### Phase 6 – Documentation and examples
 
-31. ACTION: Update `AGENT.md` to document categories, tags, how to consume playbooks/guidance, and an example `/oak_find_lesson find me lessons about Vikings` flow showing clarifications and provenance.
+31. ACTION: Add a new document under `docs/agent-guidance/` covering categories, tags, how to consume playbooks/guidance, and an example `/oak_find_lesson find me lessons about Vikings` flow; add a link to it from `AGENT.md`.
 32. REVIEW: Ensure docs reflect no server-side agentic activity and point to the commands registry.
 33. GROUNDING: read GO.md and follow all instructions
 34. ACTION: Update app READMEs with grouped tool tables (data vs guidance vs playbooks vs commands), metadata fields, and example calls.

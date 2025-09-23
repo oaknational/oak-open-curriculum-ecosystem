@@ -60,6 +60,7 @@ These documents must be read.
 - [Development Practice](../../docs/agent-guidance/development-practice.md) - Code standards
 - [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) - TDD/BDD approach
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
+- [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
 
 ## Development Commands
