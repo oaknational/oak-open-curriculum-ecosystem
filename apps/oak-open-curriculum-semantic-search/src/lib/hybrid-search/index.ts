@@ -1,6 +1,7 @@
 import type { StructuredQuery, HybridSearchResult } from './types';
 import { runLessonsSearch } from './lessons';
 import { runUnitsSearch } from './units';
+import { runSequencesSearch } from './sequences';
 
 export type { StructuredQuery, HybridSearchResult } from './types';
 
@@ -12,5 +13,8 @@ export async function runHybridSearch(q: StructuredQuery): Promise<HybridSearchR
   if (q.scope === 'lessons') {
     return runLessonsSearch(q, size, from, doHighlight);
   }
-  return runUnitsSearch(q, size, from, doHighlight);
+  if (q.scope === 'units') {
+    return runUnitsSearch(q, size, from, doHighlight);
+  }
+  return runSequencesSearch(q, size, from);
 }

@@ -1,11 +1,11 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-03-20_
+_Last updated: 2025-03-21_
 
 ## Current focus
 
 - Execute the definitive semantic search architecture: four Elasticsearch indices, SDK-enriched ingestion, server-side RRF, suggestion/type-ahead endpoints, and observability.
-- With the ingestion helpers now refactored into pure transforms and the rollup rebuild route consuming them, focus shifts to downstream API/query changes.
+- With server-side RRF now live and returning enriched payloads, focus shifts to documenting the contract, exposing facets in the UI, and delivering suggestion + zero-hit telemetry flows.
 
 ## Progress checkpoints
 
@@ -18,18 +18,21 @@ _Last updated: 2025-03-20_
 - ✅ **Type generation** – ran `pnpm type-gen` to regenerate SDK OpenAPI/Zod artefacts after schema/guard updates.
 - ✅ **Indexing transforms** – `index-oak.ts` now delegates to pure helpers in `lib/indexing/document-transforms.ts`, covering lessons, units, and rollups with dedicated unit tests.
 - ✅ **Rollup rebuild** – API route now uses the shared transforms, enforces lesson-planning snippets, and raises errors when upstream data is missing.
+- ✅ **RRF integration** – Server API routes now call the shared `rank.rrf` builders, remove the legacy `rrfFuse` helper, and surface totals/highlights/aggregations.
+- ✅ **Contract tests** – Added structured route integration tests and `elastic-http` unit tests covering rank, aggregations, and timed-out propagation.
 - ✅ **Doc generation** – Typedoc configuration updated so both the SDK and semantic-search workspaces regenerate documentation without warnings.
 
 ## In progress / blockers
 
-- Search API routes and query builders still operate on client-side fusion and have not yet incorporated sequences, facets, or the enriched payloads.
-- API responses do not yet surface the enriched rollup documents nor expose lesson-planning metadata downstream.
+- OpenAPI + TypeDoc outputs do not yet reflect the richer search responses; consumers lack updated documentation.
+- Suggestion/type-ahead endpoints and zero-hit logging are still outstanding, so observability is limited.
+- Front-end search flows still only use `results`, ignoring totals/facets; UI work required before enabling new metadata publicly.
 
 ## Next actions (see plan for GO cadence)
 
-1. Replace client-side fusion with server-side rank.rrf queries, adding sequences and facets.
-2. Expand API responses (structured + NL + suggestion) to surface the enriched documents and add observability hooks.
-3. Regenerate OpenAPI/TypeDoc artefacts and run full quality gates once the ingestion/query layers stabilise.
+1. Regenerate OpenAPI + TypeDoc artefacts for the enriched search payloads and share diffs with consumers.
+2. Implement suggestion/type-ahead endpoints and structured zero-hit logging aligned with the definitive guide.
+3. Update UI/server actions to consume facets/totals/sequences, then rerun quality gates and doc-gen.
 
 ## Constraints & reminders
 
@@ -42,7 +45,6 @@ Keep this context file updated after each major milestone so the team can recove
 
 ## Next Steps (short outlook)
 
-- Regenerate SDK schema with enriched search fields (lesson planning metadata, suggestion payload inputs) flowing from OpenAPI → SDK transformation.
-- Update adapters to consume those enriched fields and feed the indexing pipeline.
-- Rebuild ingestion pipelines (lessons/units/sequences/rollups) using only SDK-provided data with batching/backoff and structured logging.
-- Redesign rollup flow, then move on to server-side RRF, API expansions, suggestion endpoints, and observability.
+- Regenerate OpenAPI/TypeDoc to reflect the enriched search contract.
+- Ship suggestion/type-ahead endpoints and zero-hit telemetry with unit coverage.
+- Update UI flows to surface facets/totals and ensure caching/tagging still works with expanded payloads.

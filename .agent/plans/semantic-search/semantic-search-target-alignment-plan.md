@@ -9,9 +9,9 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 - Elasticsearch setup scripts have been updated to provision all four indices (`oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`) with the definitive analysers, normalisers, completion contexts, and highlight offsets.
 - Environment validation now enforces `SEARCH_INDEX_VERSION`, optional zero-hit webhook/LOG_LEVEL defaults, and the new requirements are covered by unit tests. SDK adapters expose additional summary endpoints but still need to emit the enriched payloads into the ingestion pipeline.
 - Rollup rebuild now emits lesson-planning snippets drawn from SDK summaries; remaining work is to propagate enriched rollups into API responses and downstream queries.
-- Search logic issues multiple requests per scope and fuses results client-side via custom RRF; it ignores lesson-planning data, does not return facets, and has no sequences support.
-- API surface (structured + NL) exposes only lessons/units, lacks facet toggles, no suggestion/type-ahead endpoints, and returns sparse payloads without canonical URLs.
-- Test suite covers only legacy behaviours; observability for zero-hit queries or bulk failures is missing.
+- Search runtime now issues server-side `rank.rrf` requests for lessons, units, and sequences, returning highlights, totals, and optional aggregations.
+- Structured and NL API routes validate facets/phase filters and emit enriched payload envelopes. Front-end flows still consume only the legacy `results` array and need upgrading.
+- Test suite covers the new helper behaviour, but observability for zero-hit queries, doc generation, and suggestion endpoints remains outstanding.
 
 ## Progress to Date
 
@@ -23,6 +23,10 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 - Successfully regenerated the SDK type artifacts (`pnpm type-gen`), producing up-to-date OpenAPI/Zod outputs after the latest schema adjustments.
 - Refactored indexing pipeline into pure helpers with unit coverage, replacing ad-hoc transforms in `index-oak.ts` and removing lint/type violations.
 - Rebuild route now consumes the shared transforms, generates structured lesson-planning snippets, and relies solely on SDK data.
+- Added RRF query builder module and unit tests covering the canonical Elasticsearch request bodies for lessons, units, and sequences.
+- Integrated the server-side RRF builders into the live search routes, removed the legacy `rrfFuse` helper, and added integration tests for the structured endpoint contract.
+- Refactored `elastic-http.ts` to handle rank/aggregations/from safely with dedicated unit coverage.
+
 - Updated Typedoc configuration and regenerated SDK + semantic-search documentation without warnings.
 
 ## Target Outcomes
@@ -43,32 +47,29 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 
 ## Outstanding Todo (GO cadence)
 
-1. ACTION: Replace client-side fusion with server-side rank.rrf queries for lessons, units, and sequences, including highlights, filters, and facet hooks.
-2. REVIEW: Self-review the new ES query bodies to ensure parity with the definitive guide.
+1. ACTION: Regenerate OpenAPI + TypeDoc outputs to capture the enriched search responses and facet flags.
+2. REVIEW: Inspect generated artefacts for accuracy against the definitive query guide.
 3. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-4. ACTION: Expand structured query/types and API responses (structured + NL) to cover sequences, optional facets, canonical URLs, and enriched result payloads.
-5. REVIEW: Self-review API contracts and NL parsing logic for the new scopes and parameters.
-6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Update the OpenAPI generator, `/api/openapi.json`, TypeDoc outputs, and documentation routes so the published contract reflects the expanded endpoints and payloads.
-8. REVIEW: Self-review OpenAPI/TypeDoc artefacts and ensure regenerated docs match the definitive guide.
-9. GROUNDING: read GO.md and follow all instructions.
-10. ACTION: Implement suggestion and type-ahead endpoints plus zero-hit logging and facet toggles consistent with the guide.
-11. REVIEW: Self-review the suggestion/type-ahead flows and logging instrumentation.
-12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Strengthen the automated test suite and remove obsolete client-side RRF helpers, covering indexing transforms, query builders, and admin flows.
-14. REVIEW: Self-review test coverage and ensure new behaviours are asserted via TDD.
-15. GROUNDING: read GO.md and follow all instructions.
-16. QUALITY-GATE: Run `pnpm lint` within the workspace and address any violations.
-17. REVIEW: Capture lint results and note follow-up actions for any failures.
-18. GROUNDING: read GO.md and follow all instructions.
-19. QUALITY-GATE: Run `pnpm test` (including relevant integration/unit suites) and resolve failures.
-20. REVIEW: Summarise test outcomes and required fixes.
-21. GROUNDING: read GO.md and follow all instructions.
-22. QUALITY-GATE: Run `pnpm build` (or equivalent pipeline) to ensure production readiness.
-23. REVIEW: Confirm build output and log any remediation steps.
-24. GROUNDING: read GO.md and follow all instructions.
-25. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` to refresh OpenAPI/TypeDoc artefacts.
-26. REVIEW: Document doc-gen results and address discrepancies.
-27. GROUNDING: read GO.md and follow all instructions.
-28. ACTION: Compile a final self-review summarising completed milestones, outstanding risks, and recommended follow-up actions.
-29. REVIEW: Record/share the summary to preserve continuity.
+4. ACTION: Implement suggestion and type-ahead endpoints plus zero-hit logging that records scope, filters, and index version.
+5. REVIEW: Self-review suggestion/type-ahead flows and logging instrumentation.
+6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+7. ACTION: Update the front-end search flows (server actions + UI) to consume totals, aggregations, and sequences, enabling facet toggles.
+8. REVIEW: Self-review UI/API integration to ensure new metadata is rendered and backwards compatibility is handled.
+9. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+10. ACTION: Extend observability by wiring structured zero-hit events and verifying webhook behaviour.
+11. REVIEW: Self-review logging output and failure paths for clarity and completeness.
+12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+13. QUALITY-GATE: Run `pnpm lint` after the above changes and address any violations.
+14. REVIEW: Capture lint outcomes and remediation notes.
+15. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+16. QUALITY-GATE: Run `pnpm test` (unit/integration) to ensure coverage of new flows.
+17. REVIEW: Summarise test results and fixes applied.
+18. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+19. QUALITY-GATE: Run `pnpm build` to confirm Vercel-ready output.
+20. REVIEW: Document build outcomes and follow-up work.
+21. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+22. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration.
+23. REVIEW: Record doc-gen results and remaining documentation tasks.
+24. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+25. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements.
+26. REVIEW: Share the summary to maintain continuity.

@@ -6,7 +6,7 @@ import type { StructuredQuery } from '../../../src/lib/run-hybrid-search';
 import { runHybridSearch } from '../../../src/lib/run-hybrid-search';
 
 const StructuredSchema = z.object({
-  scope: z.enum(['units', 'lessons']),
+  scope: z.enum(['units', 'lessons', 'sequences']),
   text: z.string().min(1),
   subject: z.string().optional(),
   keyStage: z.string().optional(),
@@ -14,6 +14,8 @@ const StructuredSchema = z.object({
   size: z.number().int().min(1).max(100).optional(),
   from: z.number().int().min(0).optional(),
   highlight: z.boolean().optional(),
+  includeFacets: z.boolean().optional(),
+  phaseSlug: z.string().optional(),
 });
 
 export const dynamic = 'force-dynamic';
@@ -38,6 +40,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     size: b.size,
     from: b.from,
     highlight: b.highlight,
+    includeFacets: b.includeFacets,
+    phaseSlug: b.phaseSlug,
   };
 
   const indexVersion = process.env.SEARCH_INDEX_VERSION ?? 'v1';
@@ -50,5 +54,5 @@ export async function POST(req: NextRequest): Promise<Response> {
   );
 
   const out = await getCached(q);
-  return NextResponse.json({ results: out.results });
+  return NextResponse.json(out);
 }

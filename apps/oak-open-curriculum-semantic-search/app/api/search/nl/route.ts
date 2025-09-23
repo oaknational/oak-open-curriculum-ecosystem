@@ -6,8 +6,10 @@ import type { StructuredQuery } from '../../../../src/lib/run-hybrid-search';
 
 const BodySchema = z.object({
   q: z.string().min(1),
-  scope: z.enum(['units', 'lessons']).optional(),
+  scope: z.enum(['units', 'lessons', 'sequences']).optional(),
   size: z.number().int().min(1).max(100).optional(),
+  includeFacets: z.boolean().optional(),
+  phaseSlug: z.string().optional(),
 });
 
 export async function POST(req: NextRequest): Promise<Response> {
@@ -27,7 +29,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return NextResponse.json({ error: z.treeifyError(body.error) }, { status: 400 });
   }
 
-  const { q, scope, size } = body.data;
+  const { q, scope, size, includeFacets, phaseSlug } = body.data;
   const parsed = await parseQuery(q);
 
   const structured: StructuredQuery = {
@@ -37,6 +39,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     keyStage: parsed.keyStage,
     minLessons: parsed.minLessons,
     size,
+    includeFacets,
+    phaseSlug,
   };
 
   // Delegate to structured endpoint to share the Data Cache and response shape
