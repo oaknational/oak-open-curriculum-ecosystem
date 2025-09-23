@@ -30,14 +30,14 @@ The following tasks are atomic, actionable, and aligned to the intent. Each `ACT
 3. GROUNDING: read GO.md and follow all instructions
 4. QUALITY-GATE: From repo root run: `pnpm i`, `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint -- --fix`, `pnpm -F @oaknational/oak-curriculum-sdk docs:all`, `pnpm format`, `pnpm markdownlint`, `pnpm test`, `pnpm test:e2e`.
 
-#### Phase 1 – SDK: OpenAPI schemas and type generation
+#### Phase 1 – SDK: OpenAPI schemas and type generation ✅ COMPLETED
 
-5. ACTION: Add OpenAPI module `PresentationGuidance@v1` defining: `PresentationSpec` (requiredHeadings, requiredNotices, templates, linkPolicy, provenancePolicy, accessibilityChecklist), specializations `LessonPresentationSpec` and `SearchResultsPresentationSpec`.
-6. REVIEW: Ensure the schema is minimal yet expressive; check enumerations and literals preserve type information (use `as const` data in fixtures; no type assertions in code).
-7. GROUNDING: read GO.md and follow all instructions
-8. ACTION: Add OpenAPI module `Playbook@v1` defining: `Playbook` (id, version, inputs, questions), `Step` union (`ask` | `toolCall` | `aggregate` | `format`), light `Condition` language (`missing(x)`, equality), `TemplateRef`, and `Outputs` contract.
-9. REVIEW: Validate that the schema supports a clarification loop and deterministic execution by the caller without embedding LLM prompts in code (prompts referenced as templates or text blocks in the spec).
-10. QUALITY-GATE: Run full quality gate sequence from repo root.
+5. ✅ ACTION: Add OpenAPI module `PresentationGuidance@v1` defining: `PresentationSpec` (requiredHeadings, requiredNotices, templates, linkPolicy, provenancePolicy, accessibilityChecklist), specializations `LessonPresentationSpec` and `SearchResultsPresentationSpec`.
+6. ✅ REVIEW: Ensured schema is minimal yet expressive; enumerations and literals preserve type information (use `as const` data in fixtures; no type assertions in code).
+7. ✅ GROUNDING: read GO.md and followed all instructions
+8. ✅ ACTION: Add OpenAPI module `Playbook@v1` defining: `Playbook` (id, version, inputs, questions), `Step` union (`ask` | `toolCall` | `aggregate` | `format`), light `Condition` language (`missing(x)`, equality), `TemplateRef`, and `Outputs` contract.
+9. ✅ REVIEW: Validated schema supports clarification loop and deterministic execution by caller without embedding LLM prompts in code (prompts referenced as templates).
+10. ✅ QUALITY-GATE: Full quality gate sequence passed from repo root.
 
 #### Phase 2 – Author guidance specs and templates in-repo
 
