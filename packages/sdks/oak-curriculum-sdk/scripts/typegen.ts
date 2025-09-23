@@ -65,27 +65,26 @@ const isCiMode = forceCi || (isCiEnv && !isVercel);
 // Load schema
 let maybeSchema: unknown;
 
-// In offline/CI mode we cache and read the SDK schema, which is what all generators consume
-const cachedSchemaPath = path.resolve(rootDirectory, outPathFromRoot, 'api-schema-sdk.json');
-const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema-sdk.json');
+// In offline/CI mode we read the cached original schema
+const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema-original.json');
 
 async function readCachedSchemaOrThrow(): Promise<unknown> {
-  if (!existsSync(cachedSchemaPath)) {
+  if (!existsSync(schemaCacheFile)) {
     throw new Error(
-      `CI/offline type-gen requires a cached SDK schema at ${cachedSchemaPath}. ` +
+      `CI/offline type-gen requires a cached SDK schema at ${schemaCacheFile}. ` +
         `Run "pnpm -F @oaknational/oak-curriculum-sdk type-gen" locally to refresh ` +
         `the cache and commit the result.`,
     );
   }
-  console.log('🧰 Using cached SDK OpenAPI schema:', cachedSchemaPath);
-  const raw = await readFile(cachedSchemaPath, 'utf8');
+  console.log('🧰 Using cached original OpenAPI schema:', schemaCacheFile);
+  const raw = await readFile(schemaCacheFile, 'utf8');
   try {
     const parsed: unknown = JSON.parse(raw);
     return parsed;
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     throw new Error(
-      `Cached SDK schema at ${cachedSchemaPath} is not valid JSON. Re-generate locally and commit. ` +
+      `Cached original OpenAPI schema at ${schemaCacheFile} is not valid JSON. Re-generate locally and commit. ` +
         `Original error: ${msg}`,
     );
   }
