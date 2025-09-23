@@ -7,7 +7,10 @@
     "docs/_typedoc_src/types/schema-bridge.ts",
     "docs/_typedoc_src/types/generated/api-schema/api-paths-types.ts",
     "docs/_typedoc_src/types/generated/api-schema/path-parameters.ts",
-    "docs/_typedoc_src/types/generated/api-schema/routing/url-helpers.ts"
+    "docs/_typedoc_src/types/generated/api-schema/routing/url-helpers.ts",
+    "docs/_typedoc_src/types/search-response-guards.ts",
+    "docs/_typedoc_src/types/search-response-schemas.ts",
+    "docs/_typedoc_src/types/generated/zod/zodSchemas.ts"
   ],
   "out": "docs/api",
   "plugin": ["typedoc-plugin-markdown"],

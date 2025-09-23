@@ -1,7 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
-import type { UnitsIndexDoc, LessonsIndexDoc, UnitRollupDoc } from '../../../src/types/oak';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchUnitsIndexDoc,
+} from '../../../src/types/oak';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -20,7 +24,7 @@ function extractPassage(text: string): string {
 export const maxDuration = 300;
 
 async function fetchAllUnits(size: number) {
-  return esSearch<UnitsIndexDoc>({
+  return esSearch<SearchUnitsIndexDoc>({
     index: 'oak_units',
     size,
     query: { match_all: {} },
@@ -33,12 +37,17 @@ async function fetchAllUnits(size: number) {
       'key_stage',
       'lesson_ids',
       'lesson_count',
+      'unit_url',
+      'subject_programmes_url',
+      'unit_topics',
+      'years',
+      'sequence_ids',
     ],
   });
 }
 
 async function fetchUnitLessons(unitSlug: string) {
-  return esSearch<LessonsIndexDoc>({
+  return esSearch<SearchLessonsIndexDoc>({
     index: 'oak_lessons',
     size: 200,
     query: { term: { unit_ids: unitSlug } },
@@ -46,16 +55,26 @@ async function fetchUnitLessons(unitSlug: string) {
   });
 }
 
-function buildRollupDoc(u: UnitsIndexDoc, snippets: string[]): UnitRollupDoc {
+function buildRollupDoc(u: SearchUnitsIndexDoc, snippets: string[]): SearchUnitRollupDoc {
+  if (!u.unit_url || !u.subject_programmes_url) {
+    throw new Error(`Unit ${u.unit_id} missing canonical URLs`);
+  }
+
   return {
     unit_id: u.unit_id,
     unit_slug: u.unit_slug,
     unit_title: u.unit_title,
     subject_slug: u.subject_slug,
     key_stage: u.key_stage,
+    years: u.years,
     lesson_ids: u.lesson_ids,
     lesson_count: u.lesson_count,
-    rollup_text: snippets.join(' \n'),
+    unit_topics: u.unit_topics,
+    rollup_text: snippets.join('\n\n'),
+    unit_semantic: snippets.join('\n\n'),
+    unit_url: u.unit_url,
+    subject_programmes_url: u.subject_programmes_url,
+    sequence_ids: u.sequence_ids,
   };
 }
 
@@ -88,7 +107,7 @@ async function rollupAllUnits(): Promise<{ count: number; rest: unknown[] }> {
   return { count: totalProcessed, rest: bulkOps };
 }
 
-async function rollupUnit(u: UnitsIndexDoc): Promise<UnitRollupDoc> {
+async function rollupUnit(u: SearchUnitsIndexDoc): Promise<SearchUnitRollupDoc> {
   const lessonsRes = await fetchUnitLessons(u.unit_slug);
   const snippets: string[] = [];
   for (const lh of lessonsRes.hits.hits) {

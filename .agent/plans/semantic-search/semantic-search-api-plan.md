@@ -15,7 +15,7 @@ Document relationships
 
 ## Scope
 
-- Deliver the four-index Elasticsearch Serverless topology (`oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`) with enriched mappings (synonyms, completion contexts, semantic_text, canonical URLs, teacher metadata, highlight offsets).
+- Deliver the four-index Elasticsearch Serverless topology (`oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`) with enriched mappings (synonyms, completion contexts, semantic_text, canonical URLs, lesson-planning data, highlight offsets).
 - Provide resilient ingestion (lessons/units/sequences, rollup rebuild) driven by the Oak Curriculum SDK with batching, retries, and deterministic payloads.
 - Implement server-side RRF query builders for lessons, units, and sequences, optional facets, structured highlights, and deterministic formatting.
 - Expose public APIs: `POST /api/search`, `POST /api/search/nl`, `POST /api/search/suggest` (or equivalent), plus admin/status endpoints guarded by `SEARCH_API_KEY`.
@@ -51,7 +51,7 @@ Out of scope: UI rendering, front-end caching, and SDK type generation (handled 
 - Mappings/settings are missing completion contexts, highlight offsets, and `oak_sequences` definitions.
 - Environment validation lacks `OAK_API_BEARER`, index versioning, observability config, and AI provider safeguards.
 - Ingestion pipeline does not emit enriched metadata, canonical URLs, or semantic payloads for sequences, nor does it provide resilient batching/backoff.
-- Rollup rebuild omits teacher-centric snippets and canonical URLs, and does not trigger cache/tag invalidation.
+- Rollup rebuild omits lesson-planning snippets and canonical URLs, and does not trigger cache/tag invalidation.
 - Query builders still rely on client-side fusion; sequences scope is absent; facets/highlights/filters need parity with the definitive guide.
 - Suggestion/type-ahead endpoints and status telemetry do not exist; zero-hit logging is absent.
 - OpenAPI/MCP artefacts, docs, and tests are stale relative to the target architecture.
@@ -72,11 +72,11 @@ Out of scope: UI rendering, front-end caching, and SDK type generation (handled 
 
 2. **Environment validation & SDK adapters**
    - Enhance `src/lib/env.ts` to validate API credentials, index version tag, logging targets, and AI provider.
-   - Update SDK adapters to surface teacher metadata, canonical URLs, sequences, and provenance fields. Tests must cover validation and adapter transformations.
+   - Update SDK adapters to surface lesson-planning data, canonical URLs, sequences, and provenance fields. Tests must cover validation and adapter transformations.
 
 3. **Ingestion & rollup pipeline**
    - Rebuild `index-oak` orchestration with resilient batching (≈250 docs), exponential backoff, progress logging, and resume capability.
-   - Emit enriched lesson/unit/sequence documents, semantic_text payloads, completion inputs, canonical URLs, and teacher metadata arrays.
+   - Emit enriched lesson/unit/sequence documents, semantic_text payloads, completion inputs, canonical URLs, and lesson-planning data arrays.
    - Redesign rollup generation (snippets, canonical URLs, semantic copy); trigger cache/tag invalidation and alias swaps.
 
 4. **Server-side query builders**
@@ -110,7 +110,7 @@ Each `ACTION:` below must be performed using TDD wherever code is involved, foll
 2. **GROUNDING**: Read GO.md and reaffirm ACTION/REVIEW cadence, referencing `.agent/directives-and-memory/rules.md` and `docs/agent-guidance/testing-strategy.md`.
 3. **ACTION**: Extend `src/lib/env.ts` and related tests to cover `OAK_API_KEY`/`OAK_API_BEARER`, `SEARCH_INDEX_VERSION`, observability config, and AI provider safeguards.  
    **REVIEW**: Run relevant unit tests; confirm validation rejects invalid combinations and follows rules.
-4. **ACTION**: Update SDK adapters and types to surface canonical URLs, teacher metadata, sequences.  
+4. **ACTION**: Update SDK adapters and types to surface canonical URLs, lesson-planning data, sequences.  
    **REVIEW**: Self-review adapters against SDK outputs and definitive guide requirements.
 5. **GROUNDING**: Read GO.md.
 6. **ACTION**: Rebuild ingestion pipeline (lessons/units/sequences) with resilient batching/backoff, enriched payloads, and structured logging.  
@@ -141,7 +141,7 @@ _(Additional GO grounding steps or ACTION/REVIEW pairs should be inserted as nee
 
 - Elasticsearch Serverless hosts four indices with mappings/settings identical to the definitive guide.
 - Environment validation enforces credentials, index versioning, logging, and AI provider safety, with comprehensive tests.
-- Ingestion pipeline produces enriched, canonical, teacher-focused documents with resilient retries, logging, and alias management.
+- Ingestion pipeline produces enriched, canonical, lesson-planning-focused documents with resilient retries, logging, and alias management.
 - Rollup rebuild emits high-quality snippets, copies to semantic fields, and triggers cache/tag invalidation.
 - `/api/search` executes server-side RRF queries for lessons, units, sequences; `/api/search/nl` reuses the structured path; suggestion/type-ahead and status endpoints function as specified.
 - Zero-hit logging and bulk error telemetry operational; admin status reports progress and failures.

@@ -1,6 +1,6 @@
 # Oak Open Curriculum Semantic Search
 
-A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **four Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK’s legacy search by providing canonical URLs, teacher-centric metadata, and robust zero-hit logging.
+A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **four Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK’s legacy search by providing canonical URLs, lesson-planning metadata, and robust zero-hit logging.
 
 > All curriculum data flows through `@oaknational/oak-curriculum-sdk`; types are generated via `pnpm type-gen`.
 
@@ -25,7 +25,7 @@ All admin/status routes require `x-api-key: ${SEARCH_API_KEY}`.
 
 ## Technical highlights
 
-- **Four indices**: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences` with `semantic_text`, completion contexts, highlight offsets, canonical URLs, and teacher metadata.
+- **Four indices**: `oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences` with `semantic_text`, completion contexts, highlight offsets, canonical URLs, and lesson-planning data.
 - **Server-side RRF**: Lexical + semantic queries fused per scope; optional facets and highlights per definitive guide.
 - **Suggestions**: Completion + `search_as_you_type` endpoints with cache tagging tied to `SEARCH_INDEX_VERSION`.
 - **Observability**: Structured logging for ingestion batches, zero-hit events, cache version rotation; optional webhook for zero hits.

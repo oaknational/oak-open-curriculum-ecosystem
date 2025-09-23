@@ -4,7 +4,7 @@ The rollup process produces unit-level documents in `oak_unit_rollup` that power
 
 ## Objectives
 
-- Provide teacher-centric snippets that summarise each unit without duplicating full transcripts.
+- Provide lesson-planning snippets that summarise each unit without duplicating full transcripts.
 - Populate `rollup_text`, `unit_semantic`, completion payloads, and canonical URLs.
 - Support cache invalidation and telemetry after each rebuild.
 
@@ -16,7 +16,7 @@ The rollup process produces unit-level documents in `oak_unit_rollup` that power
 ## Process steps
 
 1. **Fetch unit context**
-   - Retrieve unit metadata plus associated lessons, including teacher metadata and transcripts.
+   - Retrieve unit metadata plus associated lessons, including lesson-planning data and transcripts.
    - Collect canonical URLs for unit and lessons.
 
 2. **Select snippet content**
@@ -47,7 +47,7 @@ The rollup process produces unit-level documents in `oak_unit_rollup` that power
 
 ## Testing & validation
 
-- Unit tests: verify snippet selection logic prioritises teacher metadata and trims correctly.
+- Unit tests: verify snippet selection logic prioritises lesson-planning data and trims correctly.
 - Integration tests: ensure ES documents include `rollup_text`, canonical URLs, completion payloads, and semantic fields.
 - Observability: confirm logs include version, snippet sources, and zero-hit baseline resets.
 

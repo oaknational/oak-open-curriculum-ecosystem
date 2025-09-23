@@ -129,17 +129,35 @@ export {
   getOwnString,
 } from './types/helpers.js';
 
-// Response-shape type guards for search-related endpoints
+// Hybrid search index types (SDK-owned to centralise downstream usage)
+export type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+  SearchCompletionSuggestPayload,
+} from './types/search-index.js';
+export type {
+  SearchLessonSummary,
+  SearchUnitSummary,
+  SearchSubjectSequences,
+} from './types/search-response-guards.js';
+export type {
+  LessonSummaryResponseSchema,
+  UnitSummaryResponseSchema,
+  SubjectSequenceResponseSchema,
+} from './types/search-response-guards.js';
+export {
+  lessonSummarySchema,
+  unitSummarySchema,
+  subjectSequencesSchema,
+} from './types/search-response-guards.js';
 export {
   isUnitsGrouped,
   isLessonGroups,
   isTranscriptResponse,
+  isLessonSummary,
+  isUnitSummary,
+  isSubjectSequences,
 } from './types/search-response-guards.js';
-
-// Hybrid search index types (SDK-owned to centralise downstream usage)
-export type {
-  LessonsIndexDoc,
-  UnitsIndexDoc,
-  UnitRollupDoc,
-  SubjectSlug,
-} from './types/search-index.js';

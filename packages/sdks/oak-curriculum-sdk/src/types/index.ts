@@ -30,7 +30,26 @@ export {
 } from './helpers.js';
 
 // Hybrid search index types
-export type { LessonsIndexDoc, UnitsIndexDoc, UnitRollupDoc, SubjectSlug } from './search-index.js';
+export type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+  SearchCompletionSuggestPayload,
+} from './search-index.js';
 
 // Response-shape type guards for search-related endpoints
-export { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './search-response-guards.js';
+export {
+  isUnitsGrouped,
+  isLessonGroups,
+  isTranscriptResponse,
+  isLessonSummary,
+  isUnitSummary,
+  isSubjectSequences,
+} from './search-response-guards.js';
+export type {
+  SearchLessonSummary,
+  SearchUnitSummary,
+  SearchSubjectSequences,
+} from './search-response-guards.js';

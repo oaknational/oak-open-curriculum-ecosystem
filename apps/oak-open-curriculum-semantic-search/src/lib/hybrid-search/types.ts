@@ -1,9 +1,14 @@
-import type { LessonsIndexDoc, UnitsIndexDoc, SubjectSlug, KeyStage } from '../../types/oak';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchSubjectSlug,
+  KeyStage,
+} from '../../types/oak';
 
 export interface StructuredQuery {
   scope: 'units' | 'lessons';
   text: string;
-  subject?: SubjectSlug;
+  subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
   minLessons?: number;
   size?: number;
@@ -14,14 +19,14 @@ export interface StructuredQuery {
 export interface UnitResult {
   id: string;
   rankScore: number;
-  unit: UnitsIndexDoc | null;
+  unit: SearchUnitsIndexDoc | null;
   highlights: string[];
 }
 
 export interface LessonResult {
   id: string;
   rankScore: number;
-  lesson: LessonsIndexDoc;
+  lesson: SearchLessonsIndexDoc;
   highlights: string[];
 }
 

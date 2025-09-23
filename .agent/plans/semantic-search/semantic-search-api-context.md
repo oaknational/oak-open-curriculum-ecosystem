@@ -24,11 +24,11 @@ A **hybrid lexical + semantic search platform** for Oak Curriculum content that:
 
 - **Backend**: Next.js App Router (Node runtime) deployed to Vercel, with handlers structured for TDD and dependency injection.
 - **Search Engine**: Elasticsearch Serverless **four-index** topology:
-  - `oak_lessons`: Transcript-rich lesson documents with teacher metadata, canonical URLs, `lesson_semantic`, term vectors, and completion payloads.
+  - `oak_lessons`: Transcript-rich lesson documents with lesson-planning data, canonical URLs, `lesson_semantic`, term vectors, and completion payloads.
   - `oak_unit_rollup`: Unit-centric snippets (≈300 characters per lesson) plus `unit_semantic`, facets, canonical URLs, completion contexts.
   - `oak_units`: Lightweight unit metadata for analytics, joins, and facet aggregation.
   - `oak_sequences`: Sequence discovery surface with optional `sequence_semantic`, navigation metadata, canonical URLs, and suggestion payloads.
-- **Data Source**: Oak Curriculum SDK (types generated via `pnpm type-gen`), exposing enriched teacher metadata, canonical URLs, and sequence relationships.
+- **Data Source**: Oak Curriculum SDK (types generated via `pnpm type-gen`), exposing enriched lesson-planning data, canonical URLs, and sequence relationships.
 - **Observability**: Structured logging for bulk indexing, zero-hit searches, and error telemetry; metrics feed future dashboards.
 
 ---
@@ -47,7 +47,7 @@ A **hybrid lexical + semantic search platform** for Oak Curriculum content that:
 - Regenerating **Elasticsearch mappings/settings** to match the definitive guide (completion contexts, highlight offsets, semantic fields, `oak_sequences`).
 - Extending **environment validation** to support `OAK_API_KEY` and `OAK_API_BEARER`, index version tagging, observability config, and AI provider selection with safe defaults.
 - Rebuilding the **ingestion pipeline** (lessons, units, rollout, sequences) for resilient batching/backoff, enriched payloads, and deterministic retries.
-- Redesigning **rollup generation** to prioritise teacher metadata, curated snippets, canonical URLs, and semantic copies.
+- Redesigning **rollup generation** to prioritise lesson-planning data, curated snippets, canonical URLs, and semantic copies.
 - Implementing **server-side RRF** query builders for lessons, units, and sequences with optional facets, highlights, and filters.
 - Expanding **API surface** (structured, NL, suggestion/type-ahead, admin status, observability hooks) with generated schemas and guards.
 - Adding **regression coverage and logging**: zero-hit telemetry, bulk error reporting, and removal of obsolete client-side fusion helpers.
@@ -146,7 +146,7 @@ Environment validation in `src/lib/env.ts` must enforce mutual exclusivity betwe
 
 ### Resilient ingestion pipeline
 
-- Fetch data via SDK adapters that already expose teacher metadata, canonical URLs, sequences, and provenance fields.
+- Fetch data via SDK adapters that already expose lesson-planning data, canonical URLs, sequences, and provenance fields.
 - Produce deterministic document IDs and payloads (JSON serialisable, snake_case field names matching mappings).
 - Use bulk batches (≈250 docs) with exponential backoff on HTTP 429/5xx, and log per-batch outcomes.
 - Persist progress markers (e.g., key stage + subject + offset) so retries resume cleanly.
@@ -178,7 +178,7 @@ Environment validation in `src/lib/env.ts` must enforce mutual exclusivity betwe
 | Challenge                          | Mitigation                                                                                                                               |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | Mapping parity across four indices | Regenerate mappings/settings from definitive guide; cover via integration tests (ES container or mocked responses) per testing strategy. |
-| Enriched SDK data availability     | Ensure SDK exposes teacher metadata, canonical URLs, sequence relationships; if missing, raise upstream issues before proceeding.        |
+| Enriched SDK data availability     | Ensure SDK exposes lesson-planning data, canonical URLs, sequence relationships; if missing, raise upstream issues before proceeding.    |
 | Resilient bulk ingestion           | Implement retry/backoff helpers, idempotent progress markers, and structured logging to enable safe restarts.                            |
 | Cache invalidation & consistency   | Tie response caching to `SEARCH_INDEX_VERSION`; call `revalidateTag` after ingestion/rollup to flush stale results.                      |
 | Observability gaps                 | Instrument zero-hit logging and bulk failure metrics; document operational runbooks in `docs/INDEXING.md` and `docs/QUERYING.md`.        |

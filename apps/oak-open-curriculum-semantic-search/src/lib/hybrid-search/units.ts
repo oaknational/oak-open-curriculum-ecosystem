@@ -1,5 +1,5 @@
 import { esSearch, type EsHit } from '../elastic-http';
-import type { UnitsIndexDoc, UnitRollupDoc } from '../../types/oak';
+import type { SearchUnitsIndexDoc, SearchUnitRollupDoc } from '../../types/oak';
 import { rrfFuse } from '../rrf';
 import type { StructuredQuery, HybridSearchResult, UnitResult } from './types';
 
@@ -35,7 +35,7 @@ function fetchLexicalUnits(
   size: number,
   filters: { term?: object; range?: object }[],
 ) {
-  return esSearch<UnitsIndexDoc>({
+  return esSearch<SearchUnitsIndexDoc>({
     index: 'oak_units',
     size,
     query: {
@@ -53,7 +53,7 @@ function fetchSemanticRollups(
   size: number,
   filters: { term?: object; range?: object }[],
 ) {
-  return esSearch<UnitRollupDoc>({
+  return esSearch<SearchUnitRollupDoc>({
     index: 'oak_unit_rollup',
     size,
     query: {
@@ -72,7 +72,7 @@ function fetchLexicalRollups(
   filters: { term?: object; range?: object }[],
   doHighlight: boolean,
 ) {
-  return esSearch<UnitRollupDoc>({
+  return esSearch<SearchUnitRollupDoc>({
     index: 'oak_unit_rollup',
     size,
     query: {
@@ -89,47 +89,74 @@ function fetchLexicalRollups(
 }
 
 function makeUnitResults(
-  lexUnits: { hits: { hits: EsHit<UnitsIndexDoc>[] } },
-  semRoll: { hits: { hits: EsHit<UnitRollupDoc>[] } },
-  lexRoll: { hits: { hits: EsHit<UnitRollupDoc>[] } },
+  lexUnits: { hits: { hits: EsHit<SearchUnitsIndexDoc>[] } },
+  semRoll: { hits: { hits: EsHit<SearchUnitRollupDoc>[] } },
+  lexRoll: { hits: { hits: EsHit<SearchUnitRollupDoc>[] } },
   from: number,
   size: number,
 ): UnitResult[] {
-  const fused = rrfFuse([
-    lexUnits.hits.hits.map((h) => ({ id: h._id })),
-    semRoll.hits.hits.map((h) => ({ id: h._id })),
-    lexRoll.hits.hits.map((h) => ({ id: h._id })),
-  ]);
-
-  const unitsMap = new Map<string, EsHit<UnitsIndexDoc>>();
-  for (const h of lexUnits.hits.hits) {
-    unitsMap.set(h._id, h);
-  }
-
-  const rollMap = new Map<string, EsHit<UnitRollupDoc>>();
-  for (const h of [...semRoll.hits.hits, ...lexRoll.hits.hits]) {
-    rollMap.set(h._id, h);
-  }
+  const fused = fuseUnitHitIds(lexUnits, semRoll, lexRoll);
+  const unitsMap = mapUnitHits(lexUnits.hits.hits);
+  const rollMap = mapRollupHits([...semRoll.hits.hits, ...lexRoll.hits.hits]);
 
   return Array.from(fused.entries())
     .sort((x, y) => y[1] - x[1])
     .slice(from, from + size)
-    .map(([id, rankScore]) => {
-      const u = unitsMap.get(id);
-      const r = rollMap.get(id);
-      const unit: UnitsIndexDoc | null = u
-        ? u._source
-        : r
-          ? {
-              unit_id: r._source.unit_id,
-              unit_slug: r._source.unit_slug,
-              unit_title: r._source.unit_title,
-              subject_slug: r._source.subject_slug,
-              key_stage: r._source.key_stage,
-              lesson_ids: r._source.lesson_ids,
-              lesson_count: r._source.lesson_count,
-            }
-          : null;
-      return { id, rankScore, unit, highlights: r?.highlight?.rollup_text ?? [] };
-    });
+    .map(([id, rankScore]) => formatUnitResult(id, rankScore, unitsMap, rollMap));
+}
+
+function fuseUnitHitIds(
+  lexUnits: { hits: { hits: EsHit<SearchUnitsIndexDoc>[] } },
+  semRoll: { hits: { hits: EsHit<SearchUnitRollupDoc>[] } },
+  lexRoll: { hits: { hits: EsHit<SearchUnitRollupDoc>[] } },
+) {
+  return rrfFuse([
+    lexUnits.hits.hits.map((h) => ({ id: h._id })),
+    semRoll.hits.hits.map((h) => ({ id: h._id })),
+    lexRoll.hits.hits.map((h) => ({ id: h._id })),
+  ]);
+}
+
+function mapUnitHits(hits: EsHit<SearchUnitsIndexDoc>[]) {
+  return new Map(hits.map((hit) => [hit._id, hit] as const));
+}
+
+function mapRollupHits(hits: EsHit<SearchUnitRollupDoc>[]) {
+  return new Map(hits.map((hit) => [hit._id, hit] as const));
+}
+
+function formatUnitResult(
+  id: string,
+  rankScore: number,
+  unitsMap: Map<string, EsHit<SearchUnitsIndexDoc>>,
+  rollMap: Map<string, EsHit<SearchUnitRollupDoc>>,
+): UnitResult {
+  const unitHit = unitsMap.get(id);
+  const rollupHit = rollMap.get(id);
+  const unit = unitHit ? unitHit._source : rollupHit ? deriveUnitFromRollup(rollupHit) : null;
+
+  return {
+    id,
+    rankScore,
+    unit,
+    highlights: rollupHit?.highlight?.rollup_text ?? [],
+  };
+}
+
+function deriveUnitFromRollup(hit: EsHit<SearchUnitRollupDoc>): SearchUnitsIndexDoc {
+  return {
+    unit_id: hit._source.unit_id,
+    unit_slug: hit._source.unit_slug,
+    unit_title: hit._source.unit_title,
+    subject_slug: hit._source.subject_slug,
+    key_stage: hit._source.key_stage,
+    years: hit._source.years,
+    lesson_ids: hit._source.lesson_ids,
+    lesson_count: hit._source.lesson_count,
+    unit_topics: hit._source.unit_topics,
+    unit_url: hit._source.unit_url,
+    subject_programmes_url: hit._source.subject_programmes_url,
+    sequence_ids: hit._source.sequence_ids,
+    title_suggest: hit._source.title_suggest,
+  };
 }

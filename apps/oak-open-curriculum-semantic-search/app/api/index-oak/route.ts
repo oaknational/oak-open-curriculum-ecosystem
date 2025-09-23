@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
-import type { KeyStage, SubjectSlug } from '../../../src/types/oak';
+import type { KeyStage, SearchSubjectSlug } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
 import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { esBulk } from '../../../src/lib/elastic-http';
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const client = createOakSdkClient();
 
   const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
-  const subjects: SubjectSlug[] = SUBJECTS.filter(isSubject);
+  const subjects: SearchSubjectSlug[] = SUBJECTS.filter(isSubject);
   const bulkOps = await buildIndexBulkOps(client, keyStages, subjects);
 
   if (bulkOps.length > 0) {

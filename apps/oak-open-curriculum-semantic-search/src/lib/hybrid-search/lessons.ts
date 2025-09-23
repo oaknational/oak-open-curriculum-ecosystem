@@ -1,5 +1,5 @@
 import { esSearch, type EsHit } from '../elastic-http';
-import type { LessonsIndexDoc } from '../../types/oak';
+import type { SearchLessonsIndexDoc } from '../../types/oak';
 import { rrfFuse } from '../rrf';
 import type { StructuredQuery, HybridSearchResult, LessonResult } from './types';
 
@@ -18,7 +18,7 @@ export async function runLessonsSearch(
   }
 
   const [lex, sem] = await Promise.all([
-    esSearch<LessonsIndexDoc>({
+    esSearch<SearchLessonsIndexDoc>({
       index: 'oak_lessons',
       size,
       query: {
@@ -35,7 +35,7 @@ export async function runLessonsSearch(
         : undefined,
       sort: from > 0 ? [{ _score: { order: 'desc' } }] : undefined,
     }),
-    esSearch<LessonsIndexDoc>({
+    esSearch<SearchLessonsIndexDoc>({
       index: 'oak_lessons',
       size,
       query: {
@@ -54,8 +54,8 @@ export async function runLessonsSearch(
 }
 
 function makeLessonResults(
-  lex: { hits: { hits: EsHit<LessonsIndexDoc>[] } },
-  sem: { hits: { hits: EsHit<LessonsIndexDoc>[] } },
+  lex: { hits: { hits: EsHit<SearchLessonsIndexDoc>[] } },
+  sem: { hits: { hits: EsHit<SearchLessonsIndexDoc>[] } },
   from: number,
   size: number,
 ): LessonResult[] {
@@ -63,7 +63,7 @@ function makeLessonResults(
     lex.hits.hits.map((h) => ({ id: h._id })),
     sem.hits.hits.map((h) => ({ id: h._id })),
   ]);
-  const idToHit = new Map<string, EsHit<LessonsIndexDoc>>();
+  const idToHit = new Map<string, EsHit<SearchLessonsIndexDoc>>();
   for (const h of [...lex.hits.hits, ...sem.hits.hits]) {
     idToHit.set(h._id, h);
   }

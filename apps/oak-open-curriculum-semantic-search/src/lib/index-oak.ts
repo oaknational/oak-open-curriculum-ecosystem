@@ -1,16 +1,34 @@
-import type { KeyStage, SubjectSlug, LessonsIndexDoc, UnitsIndexDoc } from '../types/oak';
+import { generateCanonicalUrl, isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
+import type {
+  KeyStage,
+  SearchLessonSummary,
+  SearchSubjectSlug,
+  SearchUnitSummary,
+} from '../types/oak';
+import { isLessonSummary, isUnitSummary } from '../types/oak';
 import type { OakClient } from '../adapters/oak-adapter-sdk';
+import {
+  createLessonDocument,
+  createRollupDocument,
+  createUnitDocument,
+  extractPassage,
+  normaliseYears,
+} from './indexing/document-transforms';
+
+type LessonGroup = {
+  unitSlug: string;
+  unitTitle: string;
+  lessons: { lessonSlug: string; lessonTitle: string }[];
+};
 
 export async function buildIndexBulkOps(
   client: OakClient,
   keyStages: readonly string[],
   subjects: readonly string[],
 ): Promise<unknown[]> {
-  const ksList = filterKeyStages(keyStages);
-  const subjList = filterSubjects(subjects);
   const bulkOps: unknown[] = [];
-  for (const subject of subjList) {
-    for (const ks of ksList) {
+  for (const subject of filterSubjects(subjects)) {
+    for (const ks of filterKeyStages(keyStages)) {
       bulkOps.push(...(await buildOpsForPair(client, ks, subject)));
     }
   }
@@ -18,99 +36,208 @@ export async function buildIndexBulkOps(
 }
 
 function filterKeyStages(list: readonly string[]): KeyStage[] {
-  return list.filter(
-    (ks): ks is KeyStage => ks === 'ks1' || ks === 'ks2' || ks === 'ks3' || ks === 'ks4',
-  );
+  return list.filter((ks): ks is KeyStage => isKeyStage(ks));
 }
 
-function filterSubjects(list: readonly string[]): SubjectSlug[] {
-  const subjectStrings = [
-    'art',
-    'citizenship',
-    'computing',
-    'cooking-nutrition',
-    'design-technology',
-    'english',
-    'french',
-    'geography',
-    'german',
-    'history',
-    'maths',
-    'music',
-    'physical-education',
-    'religious-education',
-    'rshe-pshe',
-    'science',
-    'spanish',
-  ] as const;
-  const subjectSet = new Set<string>(subjectStrings);
-  return list.filter((s): s is SubjectSlug => subjectSet.has(s));
+function filterSubjects(list: readonly string[]): SearchSubjectSlug[] {
+  return list.filter((s): s is SearchSubjectSlug => isSubject(s));
 }
 
 async function buildOpsForPair(
   client: OakClient,
   ks: KeyStage,
-  subject: SubjectSlug,
+  subject: SearchSubjectSlug,
 ): Promise<unknown[]> {
-  const ops: unknown[] = [];
-  const [units, lessonsGrouped] = await Promise.all([
+  const [units, groups] = await Promise.all([
     client.getUnitsByKeyStageAndSubject(ks, subject),
     client.getLessonsByKeyStageAndSubject(ks, subject),
   ]);
-  for (const u of units) {
-    ops.push(...buildUnitOps(u, subject, ks));
+
+  const subjectProgrammesUrl = generateCanonicalUrl('subject', subject, {
+    subject: { keyStageSlugs: [ks] },
+  });
+  if (!subjectProgrammesUrl) {
+    throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
   }
-  for (const groupOps of await buildLessonOps(client, lessonsGrouped, subject, ks)) {
-    ops.push(...groupOps);
+
+  const { unitSummaries, unitOps } = await buildUnitDocuments(
+    client,
+    units,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+  );
+  const { lessonOps, rollupSnippets } = await buildLessonDocuments(
+    client,
+    groups,
+    unitSummaries,
+    subject,
+    ks,
+  );
+  const rollupOps = buildRollupDocuments(
+    unitSummaries,
+    rollupSnippets,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+  );
+
+  return [...unitOps, ...lessonOps, ...rollupOps];
+}
+
+async function buildUnitDocuments(
+  client: OakClient,
+  units: readonly { unitSlug: string; unitTitle: string }[],
+  subject: SearchSubjectSlug,
+  ks: KeyStage,
+  subjectProgrammesUrl: string,
+): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: unknown[] }> {
+  const unitSummaries = new Map<string, SearchUnitSummary>();
+  const unitOps: unknown[] = [];
+
+  for (const unit of units) {
+    const summary = await client.getUnitSummary(unit.unitSlug);
+    if (!isUnitSummary(summary)) {
+      throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
+    }
+    unitSummaries.set(unit.unitSlug, summary);
+    unitOps.push(
+      { index: { _index: 'oak_units', _id: summary.unitSlug } },
+      createUnitDocument({
+        summary,
+        subject,
+        keyStage: ks,
+        subjectProgrammesUrl,
+      }),
+    );
+  }
+
+  return { unitSummaries, unitOps };
+}
+
+async function buildLessonDocuments(
+  client: OakClient,
+  groups: readonly LessonGroup[],
+  unitSummaries: Map<string, SearchUnitSummary>,
+  subject: SearchSubjectSlug,
+  ks: KeyStage,
+): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
+  const lessonOps: unknown[] = [];
+  const rollupSnippets = new Map<string, string[]>();
+
+  for (const group of groups) {
+    const summary = unitSummaries.get(group.unitSlug);
+    if (!summary) {
+      throw new Error(`Missing unit summary for unit ${group.unitSlug}`);
+    }
+    ensureUnitSummaryMatchesContext(summary, subject, ks);
+    const { ops, snippets } = await buildLessonDocsForGroup(client, group, summary, subject, ks);
+    lessonOps.push(...ops);
+    rollupSnippets.set(group.unitSlug, snippets);
+  }
+
+  return { lessonOps, rollupSnippets };
+}
+
+async function buildLessonDocsForGroup(
+  client: OakClient,
+  group: LessonGroup,
+  unitSummary: SearchUnitSummary,
+  subject: SearchSubjectSlug,
+  ks: KeyStage,
+): Promise<{ ops: unknown[]; snippets: string[] }> {
+  const ops: unknown[] = [];
+  const snippets: string[] = [];
+
+  const unitCanonicalUrl = unitSummary.canonicalUrl;
+  if (!unitCanonicalUrl) {
+    throw new Error(`Missing canonical URL for unit ${unitSummary.unitSlug}`);
+  }
+
+  ensureUnitSummaryMatchesContext(unitSummary, subject, ks);
+
+  const unitSequenceIds = extractUnitSequenceIds(unitSummary);
+  const years = normaliseYears(unitSummary.year, unitSummary.yearSlug);
+  const baseLessonCount = unitSummary.unitLessons?.length ?? group.lessons.length;
+
+  for (const lesson of group.lessons) {
+    const materials = await fetchLessonMaterials(client, lesson.lessonSlug);
+    const lessonDoc = createLessonDocument({
+      lesson,
+      transcript: materials.transcript,
+      summary: materials.summary,
+      unitCanonicalUrl,
+      subject,
+      keyStage: ks,
+      years,
+      unitSequenceIds,
+      lessonCount: baseLessonCount,
+    });
+
+    ops.push({ index: { _index: 'oak_lessons', _id: lesson.lessonSlug } }, lessonDoc);
+
+    snippets.push(extractPassage(materials.transcript));
+  }
+
+  return { ops, snippets };
+}
+
+function buildRollupDocuments(
+  unitSummaries: Map<string, SearchUnitSummary>,
+  rollupSnippets: Map<string, string[]>,
+  subject: SearchSubjectSlug,
+  keyStage: KeyStage,
+  subjectProgrammesUrl: string,
+): unknown[] {
+  const ops: unknown[] = [];
+  for (const summary of unitSummaries.values()) {
+    ensureUnitSummaryMatchesContext(summary, subject, keyStage);
+    const snippets = rollupSnippets.get(summary.unitSlug) ?? [];
+    const rollupDoc = createRollupDocument({
+      summary,
+      snippets,
+      subject,
+      keyStage,
+      subjectProgrammesUrl,
+    });
+    ops.push({ index: { _index: 'oak_unit_rollup', _id: summary.unitSlug } }, rollupDoc);
   }
   return ops;
 }
 
-function buildUnitOps(
-  u: { unitSlug: string; unitTitle: string },
-  subject: SubjectSlug,
-  ks: KeyStage,
-): unknown[] {
-  const unitDoc: UnitsIndexDoc = {
-    unit_id: u.unitSlug,
-    unit_slug: u.unitSlug,
-    unit_title: u.unitTitle,
-    subject_slug: subject,
-    key_stage: ks,
-    lesson_ids: [],
-    lesson_count: 0,
-  };
-  return [{ index: { _index: 'oak_units', _id: unitDoc.unit_id } }, unitDoc];
+function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
+  return summary.threads?.map((thread) => thread.slug).filter(Boolean);
 }
 
-async function buildLessonOps(
+async function fetchLessonMaterials(
   client: OakClient,
-  groups: readonly {
-    unitSlug: string;
-    unitTitle: string;
-    lessons: { lessonSlug: string; lessonTitle: string }[];
-  }[],
-  subject: SubjectSlug,
-  ks: KeyStage,
-): Promise<unknown[][]> {
-  const allOps: unknown[][] = [];
-  for (const group of groups) {
-    const opsForGroup: unknown[] = [];
-    for (const lesson of group.lessons) {
-      const transcript = await client.getLessonTranscript(lesson.lessonSlug);
-      const doc: LessonsIndexDoc = {
-        lesson_id: lesson.lessonSlug,
-        lesson_slug: lesson.lessonSlug,
-        lesson_title: lesson.lessonTitle,
-        subject_slug: subject,
-        key_stage: ks,
-        unit_ids: [group.unitSlug],
-        unit_titles: [group.unitTitle],
-        transcript_text: transcript.transcript,
-      };
-      opsForGroup.push({ index: { _index: 'oak_lessons', _id: doc.lesson_id } }, doc);
-    }
-    allOps.push(opsForGroup);
+  lessonSlug: string,
+): Promise<{ transcript: string; summary: SearchLessonSummary }> {
+  const [transcript, summary] = await Promise.all([
+    client.getLessonTranscript(lessonSlug),
+    client.getLessonSummary(lessonSlug),
+  ]);
+
+  if (!isLessonSummary(summary)) {
+    throw new Error(`Unexpected lesson summary response for ${lessonSlug}`);
   }
-  return allOps;
+
+  return { transcript: transcript.transcript, summary };
+}
+
+function ensureUnitSummaryMatchesContext(
+  summary: SearchUnitSummary,
+  subject: SearchSubjectSlug,
+  keyStage: KeyStage,
+): void {
+  if (summary.subjectSlug !== subject) {
+    throw new Error(
+      `Unit summary subject mismatch for ${summary.unitSlug}: expected ${subject}, received ${summary.subjectSlug}`,
+    );
+  }
+  if (summary.keyStageSlug !== keyStage) {
+    throw new Error(
+      `Unit summary key stage mismatch for ${summary.unitSlug}: expected ${keyStage}, received ${summary.keyStageSlug}`,
+    );
+  }
 }

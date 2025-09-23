@@ -45,10 +45,10 @@ Out of scope: code implementation itself (covered by other plans), but every cod
 
 ## Deliverables
 
-1. **ARCHITECTURE.md** – Update diagrams and prose to cover four indices, enriched mappings (completion contexts, canonical URLs, teacher metadata arrays), server-side RRF, suggestion endpoints, and observability hooks.
+1. **ARCHITECTURE.md** – Update diagrams and prose to cover four indices, enriched mappings (completion contexts, canonical URLs, lesson-planning data arrays), server-side RRF, suggestion endpoints, and observability hooks.
 2. **SETUP.md** – Document full environment matrix (`ELASTICSEARCH_*`, `OAK_API_*`, `SEARCH_API_KEY`, `SEARCH_INDEX_VERSION`, observability endpoints, AI provider options), alignment-era setup scripts, and post-setup quality gates.
 3. **INDEXING.md** – Describe resilient batching, retry/backoff strategy, canonical URLs, semantic_text payloads, suggestion payload generation, alias management, and logging expectations.
-4. **ROLLUP.md** – Explain enriched snippet selection, teacher-centric metadata, canonical URL inclusion, semantic copy, and cache/tag invalidation after rebuilds.
+4. **ROLLUP.md** – Explain enriched snippet selection, lesson-planning metadata, canonical URL inclusion, semantic copy, and cache/tag invalidation after rebuilds.
 5. **QUERYING.md** – Provide canonical JSON bodies for lessons/units/sequences RRF queries, facets, highlights, suggestions/type-ahead, and document zero-hit instrumentation.
 6. **SDK-ENDPOINTS.md** – Clarify parity routes, data returned (including canonical URLs), and how they support regression checks vs enriched indices.
 7. **docs/README.md** – Signpost all refreshed docs, explain authored vs generated outputs, and outline documentation quality gates.

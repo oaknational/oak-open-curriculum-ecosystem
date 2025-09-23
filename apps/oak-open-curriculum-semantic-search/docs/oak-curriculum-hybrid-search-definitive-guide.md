@@ -72,7 +72,7 @@ Mappings must remain in sync with `scripts/elastic-setup.ts`; regenerate indices
 1. **Fetch via SDK** – Get lessons, units, sequences, transcripts, teacher notes, canonical URLs. Validate using generated types/guards.
 2. **Transform** – Build deterministic payloads, populate suggestion contexts, ensure British spelling.
 3. **Bulk index** – Batch ~250 docs, retry with exponential backoff on 429/5xx, log outcomes. Use versioned write indices (`oak_lessons_v2025-03-16`) and swap aliases atomically.
-4. **Rollup** – Generate unit snippets prioritising teacher metadata; copy to `unit_semantic`; refresh completion payloads.
+4. **Rollup** – Generate unit snippets prioritising lesson-planning data; copy to `unit_semantic`; refresh completion payloads.
 5. **Versioning** – Increment `SEARCH_INDEX_VERSION`, persist it, and call `revalidateTag` to invalidate caches.
 6. **Telemetry** – Emit structured logs for ingestion completion, retries, zero-hit baseline resets, and version rotations.
 
@@ -80,7 +80,7 @@ Mappings must remain in sync with `scripts/elastic-setup.ts`; regenerate indices
 
 ## 5. Query patterns
 
-- **Lessons**: RRF over lexical (`lesson_title^3`, teacher metadata, `transcript_text`) and `lesson_semantic`; apply filters in `bool.filter`; highlight `transcript_text` with sentence boundary scanner.
+- **Lessons**: RRF over lexical (`lesson_title^3`, lesson-planning data, `transcript_text`) and `lesson_semantic`; apply filters in `bool.filter`; highlight `transcript_text` with sentence boundary scanner.
 - **Units**: RRF over `unit_title^3`, `rollup_text`, `unit_topics`, and `unit_semantic`; optional lesson count ranges aggregated via `aggs`.
 - **Sequences**: Lexical + optional semantic; filter by subject/phase; return canonical URLs.
 - **Suggestions**: Completion API with contexts; fallback to `search_as_you_type`; responses include cache metadata (`version`, `ttlSeconds`).

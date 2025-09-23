@@ -29,9 +29,9 @@
   "mappings": {
     "dynamic": "strict",
     "properties": {
-      "unit_id": { "type": "keyword", "normalizer": "oak_lower" },
-      "unit_slug": { "type": "keyword", "normalizer": "oak_lower" },
-      "unit_title": {
+      "sequence_id": { "type": "keyword", "normalizer": "oak_lower" },
+      "sequence_slug": { "type": "keyword", "normalizer": "oak_lower" },
+      "sequence_title": {
         "type": "text",
         "analyzer": "oak_text",
         "fields": {
@@ -43,25 +43,19 @@
         "type": "completion",
         "contexts": [
           { "name": "subject", "type": "category" },
-          { "name": "key_stage", "type": "category" },
-          { "name": "sequence", "type": "category", "optional": true }
+          { "name": "phase", "type": "category" }
         ]
       },
+      "category_titles": { "type": "text", "analyzer": "oak_text" },
       "subject_slug": { "type": "keyword", "normalizer": "oak_lower" },
-      "key_stage": { "type": "keyword", "normalizer": "oak_lower" },
+      "subject_title": { "type": "text", "analyzer": "oak_text" },
+      "phase_slug": { "type": "keyword", "normalizer": "oak_lower" },
+      "phase_title": { "type": "text", "analyzer": "oak_text" },
+      "key_stages": { "type": "keyword", "normalizer": "oak_lower" },
       "years": { "type": "keyword", "normalizer": "oak_lower" },
-      "unit_topics": { "type": "text", "analyzer": "oak_text" },
-      "lesson_ids": { "type": "keyword", "normalizer": "oak_lower" },
-      "lesson_count": { "type": "integer" },
-      "rollup_text": {
-        "type": "text",
-        "analyzer": "oak_text",
-        "term_vector": "with_positions_offsets"
-      },
-      "unit_semantic": { "type": "semantic_text" },
-      "unit_url": { "type": "keyword", "ignore_above": 1024 },
-      "subject_programmes_url": { "type": "keyword", "ignore_above": 1024 },
-      "sequence_ids": { "type": "keyword", "normalizer": "oak_lower" }
+      "unit_slugs": { "type": "keyword", "normalizer": "oak_lower" },
+      "sequence_semantic": { "type": "semantic_text" },
+      "sequence_url": { "type": "keyword", "ignore_above": 1024 }
     }
   }
 }

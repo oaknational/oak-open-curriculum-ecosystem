@@ -60,7 +60,7 @@ The definitive architecture uses **server-side Reciprocal Rank Fusion (RRF)** to
 
 Notes:
 
-- Keep lexical fields focused on teacher metadata and transcripts to avoid semantic dilution.
+- Keep lexical fields focused on lesson-planning data and transcripts to avoid semantic dilution.
 - Highlights rely on `term_vector` support; ensure `highlight.max_analyzed_offset` is high enough.
 - Facets should only be included when the client requests them to minimise response size.
 

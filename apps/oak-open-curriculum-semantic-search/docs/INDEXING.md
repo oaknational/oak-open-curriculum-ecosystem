@@ -5,7 +5,7 @@ Use this guide when populating Elasticsearch Serverless with Oak Curriculum data
 ## Data sources
 
 - All content flows through `@oaknational/oak-curriculum-sdk`; never perform raw HTTP requests.
-- SDK adapters must expose teacher metadata, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm type-gen` when SDK schema changes.
+- SDK adapters must expose lesson-planning data, canonical URLs, sequences, provenance fields, and suggestion inputs. Run `pnpm type-gen` when SDK schema changes.
 
 ## Canonical URLs
 
@@ -31,7 +31,7 @@ Include canonical URLs in every document to aid traceability:
 
 - Identifiers: `unit_id`, `unit_slug`, `subject_slug`, `key_stage`, `years`.
 - Lessons: `lesson_ids`, `lesson_count` (integer), snippet metadata.
-- Snippets: `rollup_text` (~300 characters per lesson, sentence aware) prioritising teacher metadata before transcript fallback.
+- Snippets: `rollup_text` (~300 characters per lesson, sentence aware) prioritising lesson-planning data before transcript fallback.
 - Semantic: `unit_semantic` (`semantic_text` with `copy_to` from title + rollup).
 - Facets: `unit_topics`, `phase_slug`, `programme_slug`.
 - URLs: `unit_url`, `subject_programmes_url`.
@@ -84,8 +84,8 @@ async function indexDocuments({
 
 ## Rollup snippet generation
 
-1. Fetch lessons for each unit using the SDK, including teacher metadata and transcripts.
-2. Prefer teacher metadata blocks (key learning points, teacher tips) for snippets; fall back to transcript sentences if metadata missing.
+1. Fetch lessons for each unit using the SDK, including lesson-planning data and transcripts.
+2. Prefer lesson-planning data blocks (key learning points, teacher tips) for snippets; fall back to transcript sentences if metadata missing.
 3. Trim to ~300 characters per lesson, ensuring sentence boundaries.
 4. Concatenate snippets with double newlines; include lesson titles for context if needed.
 5. Write combined string to `rollup_text`, copy to `unit_semantic`, and update completion contexts.

@@ -50,7 +50,7 @@ _(Remember GROUNDING after every two ACTION/REVIEW pairs as per GO.md.)_
 ## Decisions & invariants
 
 - Self-review only: no sub-agent calls; log reviews in the alignment refresh plan.
-- UI must surface canonical URLs, teacher metadata, zero-hit feedback, and cache status in line with API outputs.
+- UI must surface canonical URLs, lesson-planning data, zero-hit feedback, and cache status in line with API outputs.
 - Accessibility first: keyboard navigation, focus states, reduced motion, screen-reader labelling.
 - Tests must stub network calls; suggestion and admin panels rely on injected fetchers/mocks.
 

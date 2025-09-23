@@ -72,7 +72,7 @@ curl -X POST http://localhost:3000/api/rebuild-rollup \
 These endpoints:
 
 - Fetch lessons, units, sequences via the SDK and perform resilient bulk indexing.
-- Regenerate unit rollups with teacher-centric snippets and canonical URLs.
+- Regenerate unit rollups with lesson-planning snippets and canonical URLs.
 - Rotate aliases and bump `SEARCH_INDEX_VERSION` (ensure environment store updated).
 - Trigger cache invalidation and structured logging.
 
