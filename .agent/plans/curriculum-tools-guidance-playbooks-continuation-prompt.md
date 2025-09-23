@@ -6,19 +6,20 @@ This is a **10-phase project** to implement clean separation between curriculum 
 
 ## Current Status
 
-**Phase 2**: 🔄 IN PROGRESS - Author guidance specs and templates in-repo
+**Phase 2**: 🔄 READY TO START - Create additional schemas and update type-gen process
 
 **Phase 1**: ✅ COMPLETED - OpenAPI schemas and type generation
 
 - PresentationGuidance@v1 module implemented (PresentationSpec, LessonPresentationSpec, SearchResultsPresentationSpec)
 - Playbook@v1 module implemented (deterministic execution, clarification loops, template-based prompts)
 - All quality gates passed (404 tests across 10 packages)
+- **Repo restored** to correct state (no server-specific guidance code)
 
 **Phase 0**: ✅ COMPLETED - Project grounding and scope confirmation
 
 ## Immediate Next Task
 
-**Task 11**: Author initial guidance fixtures for `lesson` and `searchResults` (JSON) plus markdown templates; store under a dedicated package or within app resources as appropriate, ensuring they are loaded without network access.
+**Task 11**: Create additional static schema files and update type-gen process to generate guidance tools at compile time.
 
 ## Key Architectural Principles
 
@@ -28,12 +29,13 @@ This is a **10-phase project** to implement clean separation between curriculum 
 - ✅ **Deterministic execution**: All tools stateless data fetchers and guidance providers
 - 🔒 **Type discipline**: All static structures flow from OpenAPI schema via `pnpm type-gen`
 - 🧪 **Testing strategy**: Tests use proper mocking, avoid network calls, follow TDD
+- 🔄 **Compile-time generation**: All tools and fixtures generated through established SDK pipeline
 
 ### Tool Taxonomy
 
 - `data.simple.*` - Direct OpenAPI endpoint facades (single API call)
 - `data.complex.*` - Multiple API calls to join/aggregate data
-- `guidance.presentation.*` - In-repo authored presentation specs (no API calls)
+- `guidance.presentation.*` - Compile-time generated presentation specs (no API calls)
 - `guidance.ontology.*` - Schema-derived metadata (no API calls)
 - `playbooks.*` - Playbook retrieval and execution
 - `commands.*` - Command registry mapping
@@ -45,10 +47,10 @@ If starting fresh:
 1. **Check codebase health**:
 
    ```bash
-   git status
+   git status  # Ensure no server-specific guidance code
    pnpm i
-   pnpm type-gen
-   pnpm build
+   pnpm type-gen  # Must process additional schemas
+   pnpm build     # Must include new generated tools
    pnpm type-check
    pnpm lint -- --fix
    pnpm format:root
@@ -62,11 +64,11 @@ If starting fresh:
    - 📖 **Agent Guide**: `.agent/directives-and-memory/AGENT.md`
    - ⚖️ **Rules**: `.agent/directives-and-memory/rules.md`
 
-3. **Understand Phase 2**: Author guidance fixtures and templates in-repo
-   - Create JSON fixtures for `lesson` and `searchResults` presentation specs
-   - Create markdown templates for formatting
-   - Store in dedicated package/app resources (no network access)
-   - Ensure provenance rules and accessibility compliance
+3. **Understand Phase 2**: Create additional schemas and update compile-time generation
+   - Create additional static schema files (separate from main API schema)
+   - Update type-gen process to ingest additional schemas
+   - Verify compile-time generation produces all required tools and fixtures
+   - Ensure runtime SDK includes new generated tools alongside existing ones
 
 ## Available Resources
 
@@ -83,8 +85,8 @@ If starting fresh:
 
 ```bash
 pnpm i                    # Dependencies
-pnpm type-gen             # Type generation
-pnpm build                # Build verification
+pnpm type-gen             # Type generation (must process additional schemas)
+pnpm build                # Build verification (must include new generated tools)
 pnpm type-check           # TypeScript validation
 pnpm lint -- --fix        # Code style
 pnpm -F @oaknational/oak-curriculum-sdk docs:ai  # Documentation
@@ -92,54 +94,54 @@ pnpm format:root          # Code formatting
 pnpm test                 # Unit and integration tests
 ```
 
-## Development Approach
+## Development Approach - CORRECTED
 
-### TDD-First Workflow
+### TDD-First Workflow (Following SDK Pipeline)
 
 1. **Write tests first** using generated types
-2. **Define schemas** in OpenAPI specification
-3. **Run type-gen** to generate types/validators
-4. **Implement** using generated types
-5. **Validate** with quality gates
+2. **Schema Definition**: Create additional static schema files (not modify cached schema)
+3. **Type Generation**: Update `type-gen` process to ingest additional schemas and generate ALL data structures at compile time
+4. **SDK Integration**: Runtime SDK includes all generated tools (existing + new) from compile-time generation
+5. **Quality Gates**: Regular quality gate validation
 
-### Key Implementation Patterns
+### Key Implementation Patterns - CORRECTED
 
-- **In-repo fixtures**: All guidance specs stored locally, no external API calls
-- **Template separation**: Prompts referenced by ID, not embedded in code
-- **Runtime validation**: Generated Zod validators for all schemas
-- **Provenance tracking**: Mandatory source attribution in presentation specs
-- **Accessibility compliance**: Built-in accessibility checklist in schemas
+- **Additional schemas**: Create `additional-schemas/presentation-guidance.json` and `additional-schemas/playbooks.json`
+- **Type-gen integration**: Update process to merge additional schemas with main API schema
+- **Compile-time generation**: All guidance specs, templates, and tools generated at compile time
+- **Runtime SDK**: Includes both existing and new generated components
+- **No server code**: MCP servers import runtime SDK exactly as before
 
 ## Next Steps for Phase 2
 
-1. **Author guidance fixtures**:
-   - Create `lesson-presentation-spec-v1.json`
-   - Create `search-results-presentation-spec-v1.json`
-   - Include required headings, notices, provenance policy, accessibility checklist
+1. **Create additional schemas**:
+   - Create `additional-schemas/presentation-guidance.json`
+   - Create `additional-schemas/playbooks.json`
+   - Define tool schemas for guidance and playbook tools
 
-2. **Create markdown templates**:
-   - Lesson formatting template
-   - Search results formatting template
-   - Ensure templates reference PresentationSpec structure
+2. **Update type-gen process**:
+   - Modify type-gen to ingest additional schemas
+   - Generate MCP tools from additional schemas alongside existing ones
+   - Ensure compile-time generation produces guidance fixtures and templates
 
-3. **Store appropriately**:
-   - Consider dedicated package for guidance resources
-   - Or store within app resources directory
-   - Ensure no network access required
+3. **Verify SDK integration**:
+   - Confirm runtime SDK includes new generated tools
+   - Test that MCP servers can import and use new tools without modification
+   - Validate that guidance fixtures are generated at compile time
 
-4. **Review and validate**:
-   - Check provenance rules require Oak resource links
-   - Verify accessibility checklist items are actionable
-   - Run full quality gate sequence
+4. **Quality gate validation**:
+   - Ensure type-gen processes additional schemas
+   - Verify build includes new generated tools
+   - Confirm all tests pass with new generated components
 
 ## Questions to Ask Yourself
 
 - **Am I following TDD?** Write tests before implementation
-- **Am I using generated types?** No type assertions, use `pnpm type-gen` output
-- **Is it deterministic?** No server-side orchestration, caller controls execution
-- **Are fixtures in-repo?** No external API calls, all data local
-- **Does it preserve types?** Use `as const` data, no type assertions in code
-- **Have I run quality gates?** All must pass before proceeding
+- **Am I creating additional schemas?** Not modifying cached schema
+- **Is type-gen updated?** Does it process additional schemas and generate tools?
+- **Are tools compile-time generated?** No server-specific implementation
+- **Does runtime SDK include everything?** Both existing and new generated components
+- **Have I run quality gates?** All must pass before proceeding, especially type-gen and build
 
 ## Reference Documentation
 
@@ -152,4 +154,4 @@ pnpm test                 # Unit and integration tests
 
 ---
 
-**Ready to continue Phase 2?** Start by reviewing the plan document for Task 11 details, then create the guidance fixtures and templates using the generated types from Phase 1.
+**Ready to continue Phase 2?** Start by reviewing the plan document for Task 11 details, then create additional schema files and update the type-gen process to generate guidance tools at compile time.
