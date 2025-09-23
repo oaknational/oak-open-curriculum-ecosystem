@@ -11,9 +11,9 @@ import {
   createLessonDocument,
   createRollupDocument,
   createUnitDocument,
-  extractPassage,
   normaliseYears,
 } from './indexing/document-transforms';
+import { selectLessonPlanningSnippet } from './indexing/lesson-planning-snippets';
 
 type LessonGroup = {
   unitSlug: string;
@@ -176,7 +176,12 @@ async function buildLessonDocsForGroup(
 
     ops.push({ index: { _index: 'oak_lessons', _id: lesson.lessonSlug } }, lessonDoc);
 
-    snippets.push(extractPassage(materials.transcript));
+    snippets.push(
+      selectLessonPlanningSnippet({
+        summary: materials.summary,
+        transcript: materials.transcript,
+      }),
+    );
   }
 
   return { ops, snippets };

@@ -1,11 +1,11 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-03-18_
+_Last updated: 2025-03-20_
 
 ## Current focus
 
 - Execute the definitive semantic search architecture: four Elasticsearch indices, SDK-enriched ingestion, server-side RRF, suggestion/type-ahead endpoints, and observability.
-- Work now shifts to enriching the SDK schema/adapter outputs so the ingestion pipeline can emit full lesson/unit/sequence documents without recomputing derived data.
+- With the ingestion helpers now refactored into pure transforms and the rollup rebuild route consuming them, focus shifts to downstream API/query changes.
 
 ## Progress checkpoints
 
@@ -13,21 +13,23 @@ _Last updated: 2025-03-18_
 - ✅ **Environment validation** – `src/lib/env.ts` now enforces `SEARCH_INDEX_VERSION`, zero-hit webhook defaults, `LOG_LEVEL`, and AI provider rules; covered by `env.unit.test.ts`.
 - ✅ **Search types** – SDK search index interfaces prefixed (`SearchLessonsIndexDoc`, etc.), enriched with canonical URL fields, lesson-planning metadata placeholders, suggestion payload definitions. Semantic-search app updated to consume new types.
 - ✅ **Schema guards** – Added Zod-backed guards (`isLessonSummary`, `isUnitSummary`, `isSubjectSequences`) so enriched summary responses flow through a single schema-derived type.
-- ✅ **Adapter extensions (partial)** – SDK adapter now fetches lesson/unit summaries and subject sequences using the new guards; ready to feed canonical URLs and planning metadata into ingestion.
+- ✅ **Adapter extensions** – SDK adapter now fetches lesson/unit summaries and subject sequences using the new guards and passes canonical URLs/lesson-planning data straight through.
 - ✅ **Sanity tooling** – `scripts/check-search-canonical-urls.ts` verifies canonical URL helpers resolve to live resources.
 - ✅ **Type generation** – ran `pnpm type-gen` to regenerate SDK OpenAPI/Zod artefacts after schema/guard updates.
+- ✅ **Indexing transforms** – `index-oak.ts` now delegates to pure helpers in `lib/indexing/document-transforms.ts`, covering lessons, units, and rollups with dedicated unit tests.
+- ✅ **Rollup rebuild** – API route now uses the shared transforms, enforces lesson-planning snippets, and raises errors when upstream data is missing.
+- ✅ **Doc generation** – Typedoc configuration updated so both the SDK and semantic-search workspaces regenerate documentation without warnings.
 
 ## In progress / blockers
 
-- `src/lib/index-oak.ts` now assembles enriched unit/lesson documents (canonical URLs, planning metadata); however the refactor currently fails lint/type checks (`max-lines-per-function`, complexity limits, and `unknown` typing) that must be resolved before the build passes.
-- `app/api/rebuild-rollup/route.ts` consumes the enriched unit docs but still depends on the updated ingestion output; further adjustments may be needed once lesson documents are finalised.
+- Search API routes and query builders still operate on client-side fusion and have not yet incorporated sequences, facets, or the enriched payloads.
+- API responses do not yet surface the enriched rollup documents nor expose lesson-planning metadata downstream.
 
 ## Next actions (see plan for GO cadence)
 
-1. Regenerate the SDK schema so derived fields (canonical URLs, planning metadata, suggestion payload inputs) flow directly from the OpenAPI → SDK transformation.
-2. Update adapters to pass through those enriched fields without recomputing them.
-3. Rebuild the ingestion pipeline using only SDK-provided data, introducing batching/backoff, structured logging, and enriched documents.
-4. Redesign rollup flow, then move on to server-side RRF queries, API expansion, suggestion endpoints, and observability.
+1. Replace client-side fusion with server-side rank.rrf queries, adding sequences and facets.
+2. Expand API responses (structured + NL + suggestion) to surface the enriched documents and add observability hooks.
+3. Regenerate OpenAPI/TypeDoc artefacts and run full quality gates once the ingestion/query layers stabilise.
 
 ## Constraints & reminders
 

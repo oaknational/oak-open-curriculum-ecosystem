@@ -1,24 +1,18 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
-import type {
-  SearchLessonsIndexDoc,
-  SearchUnitRollupDoc,
-  SearchUnitsIndexDoc,
-} from '../../../src/types/oak';
+import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
+import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
+import { isLessonSummary, isUnitSummary } from '../../../src/types/oak';
+import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
+import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
+import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
+import type { OakClient } from '../../../src/adapters/oak-adapter-sdk';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
   const k = req.headers.get('x-api-key');
   return typeof k === 'string' && k.length > 0 && k === env().SEARCH_API_KEY;
-}
-
-/** Extract a short passage (first 1-2 sentences up to ~300 chars). */
-function extractPassage(text: string): string {
-  const cleaned = text.replace(/\s+/g, ' ').trim();
-  const sentences = cleaned.split(/(?<=[.!?])\s+/u);
-  const pick = sentences.slice(0, 2).join(' ');
-  return pick.slice(0, 300);
 }
 
 export const maxDuration = 300;
@@ -46,57 +40,26 @@ async function fetchAllUnits(size: number) {
   });
 }
 
-async function fetchUnitLessons(unitSlug: string) {
-  return esSearch<SearchLessonsIndexDoc>({
-    index: 'oak_lessons',
-    size: 200,
-    query: { term: { unit_ids: unitSlug } },
-    _source: ['lesson_id', 'lesson_title', 'transcript_text'],
-  });
-}
-
-function buildRollupDoc(u: SearchUnitsIndexDoc, snippets: string[]): SearchUnitRollupDoc {
-  if (!u.unit_url || !u.subject_programmes_url) {
-    throw new Error(`Unit ${u.unit_id} missing canonical URLs`);
-  }
-
-  return {
-    unit_id: u.unit_id,
-    unit_slug: u.unit_slug,
-    unit_title: u.unit_title,
-    subject_slug: u.subject_slug,
-    key_stage: u.key_stage,
-    years: u.years,
-    lesson_ids: u.lesson_ids,
-    lesson_count: u.lesson_count,
-    unit_topics: u.unit_topics,
-    rollup_text: snippets.join('\n\n'),
-    unit_semantic: snippets.join('\n\n'),
-    unit_url: u.unit_url,
-    subject_programmes_url: u.subject_programmes_url,
-    sequence_ids: u.sequence_ids,
-  };
-}
-
 export async function GET(req: NextRequest): Promise<Response> {
   if (!authorize(req)) {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  const { count, rest } = await rollupAllUnits();
+  const client = createOakSdkClient();
+  const { count, rest } = await rollupAllUnits(client);
   if (rest.length > 0) {
     await esBulk(rest);
   }
   return NextResponse.json({ ok: true, unitsProcessed: count });
 }
 
-async function rollupAllUnits(): Promise<{ count: number; rest: unknown[] }> {
+async function rollupAllUnits(client: OakClient): Promise<{ count: number; rest: unknown[] }> {
   const size = 500;
   let totalProcessed = 0;
   let bulkOps: unknown[] = [];
   const unitsRes = await fetchAllUnits(size);
   for (const uh of unitsRes.hits.hits) {
     const u = uh._source;
-    const roll = await rollupUnit(u);
+    const roll = await rollupUnit(client, u);
     bulkOps.push({ index: { _index: 'oak_unit_rollup', _id: roll.unit_id } }, roll);
     if (bulkOps.length >= 1000) {
       await esBulk(bulkOps);
@@ -107,11 +70,38 @@ async function rollupAllUnits(): Promise<{ count: number; rest: unknown[] }> {
   return { count: totalProcessed, rest: bulkOps };
 }
 
-async function rollupUnit(u: SearchUnitsIndexDoc): Promise<SearchUnitRollupDoc> {
-  const lessonsRes = await fetchUnitLessons(u.unit_slug);
-  const snippets: string[] = [];
-  for (const lh of lessonsRes.hits.hits) {
-    snippets.push(extractPassage(lh._source.transcript_text));
+async function rollupUnit(
+  client: OakClient,
+  unitDoc: SearchUnitsIndexDoc,
+): Promise<SearchUnitRollupDoc> {
+  const unitSummary = await client.getUnitSummary(unitDoc.unit_slug);
+  if (!isUnitSummary(unitSummary)) {
+    throw new Error(`Unexpected unit summary response for ${unitDoc.unit_slug}`);
   }
-  return buildRollupDoc(u, snippets);
+
+  unitSummarySchema.parse(unitSummary);
+
+  const snippets: string[] = [];
+  for (const lessonId of unitDoc.lesson_ids) {
+    const lessonSummary = await client.getLessonSummary(lessonId);
+    if (!isLessonSummary(lessonSummary)) {
+      throw new Error(`Unexpected lesson summary response for ${lessonId}`);
+    }
+    lessonSummarySchema.parse(lessonSummary);
+    const transcriptRes = await client.getLessonTranscript(lessonId);
+    snippets.push(
+      selectLessonPlanningSnippet({
+        summary: lessonSummary,
+        transcript: transcriptRes.transcript,
+      }),
+    );
+  }
+
+  return createRollupDocument({
+    summary: unitSummary,
+    snippets,
+    subject: unitDoc.subject_slug,
+    keyStage: unitDoc.key_stage,
+    subjectProgrammesUrl: unitDoc.subject_programmes_url,
+  });
 }
