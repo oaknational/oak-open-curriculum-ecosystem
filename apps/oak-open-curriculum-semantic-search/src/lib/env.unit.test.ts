@@ -33,6 +33,7 @@ afterEach(() => {
         key in REQUIRED ||
         key.startsWith('OPENAI') ||
         key.startsWith('ZERO_HIT') ||
+        key === 'SEARCH_INDEX_TARGET' ||
         key === 'AI_PROVIDER' ||
         key === 'LOG_LEVEL',
     )
@@ -50,6 +51,7 @@ describe('env validation', () => {
     expect(result.SEARCH_INDEX_VERSION).toBe('v2025-03-18');
     expect(result.ZERO_HIT_WEBHOOK_URL).toBe('none');
     expect(result.LOG_LEVEL).toBe('info');
+    expect(result.SEARCH_INDEX_TARGET).toBe('primary');
   });
 
   it('requires OAK_API_KEY to be present', async () => {
@@ -72,5 +74,18 @@ describe('env validation', () => {
     const { env } = await loadEnvModule();
     const parsed = env();
     expect(parsed.ZERO_HIT_WEBHOOK_URL).toBe('https://hooks.example.com/zero-hit');
+  });
+
+  it('accepts SEARCH_INDEX_TARGET values primary and sandbox', async () => {
+    withRequiredEnv({ AI_PROVIDER: 'none', SEARCH_INDEX_TARGET: 'sandbox' });
+    const { env } = await loadEnvModule();
+    const parsed = env();
+    expect(parsed.SEARCH_INDEX_TARGET).toBe('sandbox');
+  });
+
+  it('rejects invalid SEARCH_INDEX_TARGET values', async () => {
+    withRequiredEnv({ AI_PROVIDER: 'none', SEARCH_INDEX_TARGET: 'staging' });
+    const { env } = await loadEnvModule();
+    expect(() => env()).toThrow();
   });
 });

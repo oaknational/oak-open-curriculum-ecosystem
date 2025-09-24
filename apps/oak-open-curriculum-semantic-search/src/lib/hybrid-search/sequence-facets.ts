@@ -1,6 +1,7 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
 import { esSearch, type EsSearchRequest } from '../elastic-http';
+import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SequenceFacetDocument } from '../indexing/sequence-facets';
 import type { SequenceFacet, SearchFacets } from './types';
 
@@ -21,7 +22,7 @@ export async function fetchSequenceFacets(
   }
 
   const request: EsSearchRequest = {
-    index: 'oak_sequence_facets',
+    index: resolveCurrentSearchIndexName('sequence_facets'),
     size: 200,
     query: { bool: { filter: filters } },
     sort: [{ unit_count: { order: 'desc' } }],

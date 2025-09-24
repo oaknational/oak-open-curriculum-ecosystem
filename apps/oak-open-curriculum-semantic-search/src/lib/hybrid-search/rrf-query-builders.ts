@@ -1,5 +1,6 @@
 import type { estypes } from '@elastic/elasticsearch';
 import type { EsSearchRequest } from '../elastic-http';
+import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
@@ -33,7 +34,7 @@ export function buildLessonRrfRequest(params: LessonRrfParams): EsSearchRequest 
   } = params;
   const filters = createLessonFilters(subject, keyStage);
   const request: EsSearchRequest = {
-    index: 'oak_lessons',
+    index: resolveCurrentSearchIndexName('lessons'),
     size,
     rank: createLessonRank(text),
     query: { bool: { filter: filters } },
@@ -63,7 +64,7 @@ export function buildUnitRrfRequest(params: UnitRrfParams): EsSearchRequest {
   const { text, size, subject, keyStage, minLessons, includeHighlights = false } = params;
   const filters = createUnitFilters(subject, keyStage, minLessons);
   const request: EsSearchRequest = {
-    index: 'oak_unit_rollup',
+    index: resolveCurrentSearchIndexName('unit_rollup'),
     size,
     rank: createUnitRank(text),
     query: { bool: { filter: filters } },
@@ -87,7 +88,7 @@ export function buildSequenceRrfRequest(params: SequenceRrfParams): EsSearchRequ
   const { text, size, subject, phaseSlug } = params;
   const filters = createSequenceFilters(subject, phaseSlug);
   return {
-    index: 'oak_sequences',
+    index: resolveCurrentSearchIndexName('sequences'),
     size,
     rank: createSequenceRank(text),
     query: { bool: { filter: filters } },

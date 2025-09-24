@@ -7,6 +7,13 @@ import { isLessonSummary, isUnitSummary } from '../../../src/types/oak';
 import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
 import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
+import {
+  currentSearchIndexTarget,
+  resolveCurrentSearchIndexName,
+  resolvePrimarySearchIndexName,
+  rewriteBulkOperations,
+  type SearchIndexTarget,
+} from '../../../src/lib/search-index-target';
 import type { OakClient } from '../../../src/adapters/oak-adapter-sdk';
 
 /** Guard header check */
@@ -19,7 +26,7 @@ export const maxDuration = 300;
 
 async function fetchAllUnits(size: number) {
   return esSearch<SearchUnitsIndexDoc>({
-    index: 'oak_units',
+    index: resolveCurrentSearchIndexName('units'),
     size,
     query: { match_all: {} },
     sort: [{ unit_slug: 'asc' }],
@@ -45,14 +52,18 @@ export async function GET(req: NextRequest): Promise<Response> {
     return new NextResponse('Unauthorized', { status: 401 });
   }
   const client = createOakSdkClient();
-  const { count, rest } = await rollupAllUnits(client);
+  const target = currentSearchIndexTarget();
+  const { count, rest } = await rollupAllUnits(client, target);
   if (rest.length > 0) {
-    await esBulk(rest);
+    await esBulk(rewriteBulkOperations(rest, target));
   }
   return NextResponse.json({ ok: true, unitsProcessed: count });
 }
 
-async function rollupAllUnits(client: OakClient): Promise<{ count: number; rest: unknown[] }> {
+async function rollupAllUnits(
+  client: OakClient,
+  target: SearchIndexTarget,
+): Promise<{ count: number; rest: unknown[] }> {
   const size = 500;
   let totalProcessed = 0;
   let bulkOps: unknown[] = [];
@@ -60,9 +71,17 @@ async function rollupAllUnits(client: OakClient): Promise<{ count: number; rest:
   for (const uh of unitsRes.hits.hits) {
     const u = uh._source;
     const roll = await rollupUnit(client, u);
-    bulkOps.push({ index: { _index: 'oak_unit_rollup', _id: roll.unit_id } }, roll);
+    bulkOps.push(
+      {
+        index: {
+          _index: resolvePrimarySearchIndexName('unit_rollup'),
+          _id: roll.unit_id,
+        },
+      },
+      roll,
+    );
     if (bulkOps.length >= 1000) {
-      await esBulk(bulkOps);
+      await esBulk(rewriteBulkOperations(bulkOps, target));
       bulkOps = [];
     }
     totalProcessed += 1;

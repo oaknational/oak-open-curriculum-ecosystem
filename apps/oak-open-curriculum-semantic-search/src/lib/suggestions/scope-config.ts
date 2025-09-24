@@ -6,6 +6,7 @@ import type {
   KeyStage,
   SearchSubjectSlug,
 } from '../../types/oak';
+import { resolveCurrentSearchIndexName } from '../search-index-target';
 import type { SuggestQuery, SuggestScope, SuggestionContext, SuggestionItem } from './types';
 
 /** Internal representation of a mapped suggestion hit. */
@@ -26,15 +27,15 @@ export interface ScopeConfig<TDoc> {
   toSuggestion(doc: TDoc, id: string): SuggestionHit | null;
 }
 
-type ConfigMap = {
-  lessons: ScopeConfig<SearchLessonsIndexDoc>;
-  units: ScopeConfig<SearchUnitRollupDoc>;
-  sequences: ScopeConfig<SearchSequenceIndexDoc>;
+type ConfigBuilderMap = {
+  lessons: () => ScopeConfig<SearchLessonsIndexDoc>;
+  units: () => ScopeConfig<SearchUnitRollupDoc>;
+  sequences: () => ScopeConfig<SearchSequenceIndexDoc>;
 };
 
-const scopeConfigs: ConfigMap = {
-  lessons: {
-    index: 'oak_lessons',
+const scopeConfigBuilders: ConfigBuilderMap = {
+  lessons: () => ({
+    index: resolveCurrentSearchIndexName('lessons'),
     completionField: 'title_suggest',
     boolPrefixFields: ['lesson_title.sa', 'lesson_title.sa._2gram', 'lesson_title.sa._3gram'],
     sourceFields: ['lesson_title', 'lesson_url', 'subject_slug', 'key_stage', 'title_suggest'],
@@ -51,9 +52,9 @@ const scopeConfigs: ConfigMap = {
         keyStage: doc.key_stage,
         contexts: {},
       }),
-  },
-  units: {
-    index: 'oak_unit_rollup',
+  }),
+  units: () => ({
+    index: resolveCurrentSearchIndexName('unit_rollup'),
     completionField: 'title_suggest',
     boolPrefixFields: ['unit_title.sa', 'unit_title.sa._2gram', 'unit_title.sa._3gram'],
     sourceFields: [
@@ -77,9 +78,9 @@ const scopeConfigs: ConfigMap = {
         keyStage: doc.key_stage,
         contexts: sequenceContext(doc.sequence_ids),
       }),
-  },
-  sequences: {
-    index: 'oak_sequences',
+  }),
+  sequences: () => ({
+    index: resolveCurrentSearchIndexName('sequences'),
     completionField: 'title_suggest',
     boolPrefixFields: ['sequence_title.sa', 'sequence_title.sa._2gram', 'sequence_title.sa._3gram'],
     sourceFields: ['sequence_title', 'sequence_url', 'subject_slug', 'phase_slug', 'title_suggest'],
@@ -95,14 +96,14 @@ const scopeConfigs: ConfigMap = {
         subject: doc.subject_slug,
         contexts: phaseContext(doc.phase_slug),
       }),
-  },
+  }),
 };
 
 export function getScopeConfig(scope: 'lessons'): ScopeConfig<SearchLessonsIndexDoc>;
 export function getScopeConfig(scope: 'units'): ScopeConfig<SearchUnitRollupDoc>;
 export function getScopeConfig(scope: 'sequences'): ScopeConfig<SearchSequenceIndexDoc>;
 export function getScopeConfig(scope: SuggestScope): ScopeConfig<unknown> {
-  return scopeConfigs[scope];
+  return scopeConfigBuilders[scope]();
 }
 
 function buildSubjectContexts(

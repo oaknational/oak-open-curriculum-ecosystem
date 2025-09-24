@@ -18,6 +18,7 @@
     "test:watch": "vitest",
     "elastic:setup": "bash scripts/setup.sh",
     "elastic:alias-swap": "bash scripts/alias-swap.sh",
+    "sandbox:ingest": "tsx scripts/sandbox/ingest.ts",
     "docs:api:html": "typedoc --options typedoc.json",
     "docs:api:json": "typedoc --options typedoc.json --json docs/api/typedoc.json",
     "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",

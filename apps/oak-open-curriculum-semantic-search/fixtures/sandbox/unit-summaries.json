@@ -1,0 +1,44 @@
+{
+  "ancient-egypt": {
+    "unitSlug": "ancient-egypt",
+    "unitTitle": "Ancient Egypt",
+    "yearSlug": "year-4",
+    "year": "Year 4",
+    "phaseSlug": "primary",
+    "subjectSlug": "history",
+    "keyStageSlug": "ks2",
+    "notes": "Highlight links to geography lessons",
+    "description": "Explore the geography, culture, and legacy of Ancient Egypt.",
+    "priorKnowledgeRequirements": ["Basic understanding of world geography"],
+    "nationalCurriculumContent": ["Early civilisations"],
+    "whyThisWhyNow": "Develops historical enquiry skills through a study of an early civilisation.",
+    "threads": [
+      {
+        "slug": "ancient-civilisations",
+        "title": "Ancient civilisations",
+        "order": 1
+      }
+    ],
+    "categories": [
+      {
+        "categoryTitle": "Civilisations",
+        "categorySlug": "civilisations"
+      }
+    ],
+    "unitLessons": [
+      {
+        "lessonSlug": "ancient-egypt-lesson-1",
+        "lessonTitle": "Introducing Ancient Egypt",
+        "lessonOrder": 1,
+        "state": "published"
+      },
+      {
+        "lessonSlug": "ancient-egypt-lesson-2",
+        "lessonTitle": "Life Along the Nile",
+        "lessonOrder": 2,
+        "state": "published"
+      }
+    ],
+    "canonicalUrl": "https://teachers.thenational.academy/units/ancient-egypt"
+  }
+}

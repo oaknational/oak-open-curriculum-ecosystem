@@ -1,6 +1,7 @@
 import type {
   KeyStage,
   SearchLessonSummary,
+  SearchLessonsIndexDoc,
   SearchSubjectSlug,
   SearchUnitSummary,
 } from '../../types/oak';
@@ -13,6 +14,7 @@ import {
   normaliseYears,
 } from './document-transforms';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
+import { resolvePrimarySearchIndexName } from '../search-index-target';
 
 export interface LessonGroup {
   unitSlug: string;
@@ -37,7 +39,12 @@ export async function buildUnitDocuments(
     }
     unitSummaries.set(unit.unitSlug, summary);
     unitOps.push(
-      { index: { _index: 'oak_units', _id: summary.unitSlug } },
+      {
+        index: {
+          _index: resolvePrimarySearchIndexName('units'),
+          _id: summary.unitSlug,
+        },
+      },
       createUnitDocument({
         summary,
         subject,
@@ -65,7 +72,6 @@ export async function buildLessonDocuments(
     if (!summary) {
       throw new Error(`Missing unit summary for unit ${group.unitSlug}`);
     }
-    ensureUnitSummaryMatchesContext(summary, subject, ks);
     const { ops, snippets } = await buildLessonDocsForGroup(client, group, summary, subject, ks);
     lessonOps.push(...ops);
     rollupSnippets.set(group.unitSlug, snippets);
@@ -92,7 +98,15 @@ export function buildRollupDocuments(
       keyStage,
       subjectProgrammesUrl,
     });
-    ops.push({ index: { _index: 'oak_unit_rollup', _id: summary.unitSlug } }, rollupDoc);
+    ops.push(
+      {
+        index: {
+          _index: resolvePrimarySearchIndexName('unit_rollup'),
+          _id: summary.unitSlug,
+        },
+      },
+      rollupDoc,
+    );
   }
   return ops;
 }
@@ -106,43 +120,83 @@ async function buildLessonDocsForGroup(
 ): Promise<{ ops: unknown[]; snippets: string[] }> {
   const ops: unknown[] = [];
   const snippets: string[] = [];
+  const context = createLessonBuildContext(unitSummary, group, subject, ks);
 
+  for (const lesson of group.lessons) {
+    const entry = await buildLessonDocEntry(client, lesson, context);
+    ops.push(entry.operation, entry.document);
+    snippets.push(entry.snippet);
+  }
+
+  return { ops, snippets };
+}
+
+interface LessonBuildContext {
+  unitCanonicalUrl: string;
+  subject: SearchSubjectSlug;
+  keyStage: KeyStage;
+  years: string[] | undefined;
+  unitSequenceIds: string[] | undefined;
+  lessonCount: number;
+}
+
+interface LessonDocEntry {
+  operation: { index: { _index: string; _id: string } };
+  document: SearchLessonsIndexDoc;
+  snippet: string;
+}
+
+function createLessonBuildContext(
+  unitSummary: SearchUnitSummary,
+  group: LessonGroup,
+  subject: SearchSubjectSlug,
+  keyStage: KeyStage,
+): LessonBuildContext {
   const unitCanonicalUrl = unitSummary.canonicalUrl;
   if (!unitCanonicalUrl) {
     throw new Error(`Missing canonical URL for unit ${unitSummary.unitSlug}`);
   }
 
-  ensureUnitSummaryMatchesContext(unitSummary, subject, ks);
+  ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
 
-  const unitSequenceIds = extractUnitSequenceIds(unitSummary);
-  const years = normaliseYears(unitSummary.year, unitSummary.yearSlug);
-  const baseLessonCount = unitSummary.unitLessons?.length ?? group.lessons.length;
+  return {
+    unitCanonicalUrl,
+    subject,
+    keyStage,
+    years: normaliseYears(unitSummary.year, unitSummary.yearSlug),
+    unitSequenceIds: extractUnitSequenceIds(unitSummary),
+    lessonCount: unitSummary.unitLessons?.length ?? group.lessons.length,
+  };
+}
 
-  for (const lesson of group.lessons) {
-    const materials = await fetchLessonMaterials(client, lesson.lessonSlug);
-    const lessonDoc = createLessonDocument({
-      lesson,
-      transcript: materials.transcript,
-      summary: materials.summary,
-      unitCanonicalUrl,
-      subject,
-      keyStage: ks,
-      years,
-      unitSequenceIds,
-      lessonCount: baseLessonCount,
-    });
-
-    ops.push({ index: { _index: 'oak_lessons', _id: lesson.lessonSlug } }, lessonDoc);
-
-    snippets.push(
-      selectLessonPlanningSnippet({
-        summary: materials.summary,
-        transcript: materials.transcript,
-      }),
-    );
-  }
-
-  return { ops, snippets };
+async function buildLessonDocEntry(
+  client: OakClient,
+  lesson: { lessonSlug: string; lessonTitle: string },
+  context: LessonBuildContext,
+): Promise<LessonDocEntry> {
+  const materials = await fetchLessonMaterials(client, lesson.lessonSlug);
+  const document = createLessonDocument({
+    lesson,
+    transcript: materials.transcript,
+    summary: materials.summary,
+    unitCanonicalUrl: context.unitCanonicalUrl,
+    subject: context.subject,
+    keyStage: context.keyStage,
+    years: context.years,
+    unitSequenceIds: context.unitSequenceIds,
+    lessonCount: context.lessonCount,
+  });
+  const snippet = selectLessonPlanningSnippet({
+    summary: materials.summary,
+    transcript: materials.transcript,
+  });
+  const operation = {
+    index: {
+      _index: resolvePrimarySearchIndexName('lessons'),
+      _id: lesson.lessonSlug,
+    },
+  };
+  return { operation, document, snippet };
 }
 
 function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {

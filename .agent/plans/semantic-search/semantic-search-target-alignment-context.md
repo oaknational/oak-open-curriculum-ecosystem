@@ -1,6 +1,6 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-09-24 (zero-hit dashboard shipped)_
+_Last updated: 2025-09-25 (sandbox harness implemented)_
 
 ## Current focus
 
@@ -39,25 +39,30 @@ _Last updated: 2025-09-24 (zero-hit dashboard shipped)_
 - ✅ **Zero-hit telemetry surface** – Added in-memory event store + API routes, Oak-themed dashboard (`app/ui/admin/ZeroHitDashboard*.tsx`), and unit/integration tests covering refresh, grouping, and webhook ingestion.
 - ✅ **Quality gates (post-Step 39)** – `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm check` all pass after the latest UI/controller updates.
 - ✅ **Phase 1 self-review** – Captured outcomes, residual risks, and recommendations in `.agent/plans/semantic-search/phase-1-self-review.md`.
+- ✅ **Sandbox harness design** – Documented fixture layout, CLI orchestration, index targeting helper, tests, and manual drill steps in `apps/oak-open-curriculum-semantic-search/docs/sandbox-ingestion-harness.md`.
+- ✅ **Sandbox index targeting** – Added env-driven index target selection, rewired ingestion/search modules, and covered the helpers with unit tests (`search-index-target.unit.test.ts`).
+- ✅ **Sandbox ingestion harness** – Implemented fixture-backed Oak client + CLI (`scripts/sandbox/ingest.ts`), rewrote bulk operations via `search-index-target.ts`, and added unit coverage for dry-run vs live `_bulk` requests (`sandbox-harness.unit.test.ts`).
+- ✅ **Sandbox harness refactor** – Split fixture parsing and bulk helpers into dedicated modules, tightened type guards, and cleared lint/max-lines constraints ahead of telemetry persistence work.
 
 ## In progress / blockers
 
 - `oak_sequence_facets` ingestion/caching needs optimisation and a documented operational runbook to stay responsive during UI adoption.
 - Admin console lacks index health telemetry (document counts, last-run timestamps, index version), limiting visibility during bootstrap/update operations.
-- Zero-hit webhook consumer hardening: follow-up work will explore persistence beyond in-memory storage once ingestion is stabilised.
+- Zero-hit webhook consumer hardening: follow-up work will explore Elasticsearch-backed persistence beyond in-memory storage once ingestion is stabilised.
 
 ## Next actions (see plan for GO cadence)
 
-1. Optimise `oak_sequence_facets` ingestion/caching behaviour and document the associated runbook.
-2. Enrich the admin console with index health details and test the bootstrap/reset controls.
-3. Harden zero-hit telemetry persistence (backing store, retention policy) ahead of production deployment.
-4. Update semantic-search documentation, then rerun the end-to-end quality gates before requesting Phase 2 sign-off.
+1. Persist zero-hit telemetry to an Elasticsearch Serverless index with retention safeguards and dashboard wiring.
+2. Optimise `oak_sequence_facets` ingestion/caching using insights from the sandbox run and capture the operational runbook.
+3. Enrich the admin console with index health details and verified controls.
+4. Refresh semantic-search documentation and onboarding packs, then rerun the end-to-end quality gates before Phase 1 hand-off.
 
 ## Constraints & reminders
 
 - **Data flow** is linear: OpenAPI schema → SDK schema (derive canonical URLs et al.) → SDK → search ingestion; no runtime fallbacks or recomputation.
 - **Fail fast**: if a required field is missing, fix the schema generation rather than patching downstream.
 - **GO cadence**: every ACTION → REVIEW pair with grounding every third item; quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`) after major changes.
+- **Elasticsearch**: all interactions (scripts, sandbox drills, telemetry persistence) must target Elasticsearch Serverless via the `@elastic/elasticsearch` TypeScript client—no alternative HTTP adapters.
 - **Testing**: continue expanding unit/integration coverage for ingestion transforms, query builders, and observability hooks as features land.
 
 Keep this context file updated after each major milestone so the team can recover momentum quickly if the conversation resets.

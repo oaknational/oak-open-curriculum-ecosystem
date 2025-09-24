@@ -5,6 +5,7 @@ import {
   extractSequenceFacetSource,
   type SequenceFacetSource,
 } from './sequence-facets';
+import { resolvePrimarySearchIndexName } from '../search-index-target';
 
 export type SequenceUnitsFetcher = (sequenceSlug: string) => Promise<unknown>;
 
@@ -51,7 +52,7 @@ export function buildSequenceFacetOps({
   return docs.flatMap((doc) => [
     {
       index: {
-        _index: 'oak_sequence_facets',
+        _index: resolvePrimarySearchIndexName('sequence_facets'),
         _id: `${doc.subject_slug}-${doc.sequence_slug}-${doc.key_stage}`,
       },
     },

@@ -16,6 +16,7 @@ export const BaseEnvSchema = z.object({
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
   AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
   OPENAI_API_KEY: z.string().min(10).optional(),
+  SEARCH_INDEX_TARGET: z.enum(['primary', 'sandbox']).default('primary'),
 });
 
 export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
@@ -47,6 +48,7 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     LOG_LEVEL: process.env.LOG_LEVEL ?? 'info',
     AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
   });
   if (!parsed.success) {
     throw new Error(parsed.error.message);

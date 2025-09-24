@@ -249,15 +249,23 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 43. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components. _(Completed 2025-09-24; added in-memory store + API routes and new Oak-styled admin dashboard in `apps/oak-open-curriculum-semantic-search/app/ui/admin/ZeroHitDashboard*.tsx`.)_
 44. REVIEW: Cover the telemetry surface with unit/integration tests, including mocked webhook deliveries and dashboard grouping logic. _(Completed 2025-09-24; added `ZeroHitDashboard.unit.test.tsx`, extended `app/admin/page.integration.test.tsx`, and ensured qg suite validates the flows.)_
 45. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 post-dashboard; ready to focus on `oak_sequence_facets` ingestion.)_
-46. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) and document the operational runbook for these jobs.
-47. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds and measure latency regression thresholds.
+46. ACTION: Define the Elasticsearch Serverless sandbox ingestion harness (fixture dataset, CLI flag for `_sandbox` indices, verbose logging, dry-run support) ensuring all requests use `@elastic/elasticsearch`.
+    _(Completed 2025-09-25; shipped fixture-backed ingestion harness (`src/lib/indexing/sandbox-harness.ts`), sandbox fixtures under `fixtures/sandbox/`, CLI entrypoint `scripts/sandbox/ingest.ts`, and index-targeting utilities with defaults wired into ingestion/search flows.)_
+47. REVIEW: Validate the sandbox plan via unit tests that stub the ES client and by drafting the manual drill (spin up serverless endpoint, seed fixture, inspect counts). _(Completed 2025-09-25; added `sandbox-harness.unit.test.ts`, refreshed `docs/sandbox-ingestion-harness.md` with CLI + drill instructions, and confirmed fixtures satisfy SDK Zod schemas.)_
 48. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-49. ACTION: Enrich the admin console with index health details (document counts, last run timestamps, index version) and provide explicit controls for bootstrap/reset flows.
-50. REVIEW: Write integration coverage ensuring the admin view reflects index health fields and command buttons trigger the right routes.
+    _(Completed 2025-09-25; re-read GO.md → AGENT.md → metacognition.md ahead of sandbox refactor.)_
+49. ACTION: Implement zero-hit telemetry persistence using an Elasticsearch Serverless index (`oak_zero_hit_events`) with retention controls, wired through the existing webhook handler.
+50. REVIEW: Add coverage confirming dashboard queries read from the persisted index and document retention/alerting considerations.
 51. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-52. ACTION: Update semantic-search documentation (README, admin runbooks, API docs notes) to reflect the new UI behaviour, telemetry dashboards, and ingestion requirements.
-53. REVIEW: Perform doc review (self) ensuring examples align with current UI/API contracts.
+52. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) informed by sandbox instrumentation; capture the operational runbook.
+53. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds, measuring latency thresholds.
 54. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-55. QUALITY-GATE: Run `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` after completing the above deliverables.
-56. REVIEW: Record quality gate outcomes and capture any remediation needed before phase hand-off.
+55. ACTION: Enrich the admin console with index health details (document counts, last-run timestamps, index version) and provide explicit controls for bootstrap/reset flows.
+56. REVIEW: Write integration coverage ensuring the admin view reflects index health fields and command buttons trigger the correct routes.
 57. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+58. ACTION: Update semantic-search documentation (README, admin runbooks, onboarding flow, API notes) to reflect the new UI, telemetry dashboards, sandbox drill, and ingestion requirements.
+59. REVIEW: Perform doc self-review ensuring examples align with current UI/API contracts and the onboarding path is comprehensive.
+60. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+61. QUALITY-GATE: Run `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm qg` after completing the above deliverables.
+62. REVIEW: Record quality gate outcomes and capture any remediation needed before phase hand-off.
+63. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.

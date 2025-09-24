@@ -18,3 +18,6 @@ export const searchLogger: Logger = child('HybridSearch');
 
 /** Dedicated logger for suggestion/type-ahead flows. */
 export const suggestLogger: Logger = child('Suggestions');
+
+/** Logger for sandbox ingestion drills and harness operations. */
+export const sandboxLogger: Logger = child('SandboxHarness');

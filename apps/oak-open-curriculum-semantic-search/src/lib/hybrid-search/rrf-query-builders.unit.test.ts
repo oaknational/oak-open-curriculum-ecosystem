@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import {
   buildLessonRrfRequest,
@@ -8,6 +8,28 @@ import {
 
 const geography = 'geography' as SearchSubjectSlug;
 const ks4 = 'ks4' as KeyStage;
+
+const REQUIRED_ENV = {
+  ELASTICSEARCH_URL: 'https://example.com',
+  ELASTICSEARCH_API_KEY: 'elastic-key-12345',
+  OAK_API_KEY: 'oak-key-12345',
+  SEARCH_API_KEY: 'search-key-12345',
+  SEARCH_INDEX_VERSION: 'v2025-03-18',
+};
+
+beforeEach(() => {
+  for (const [key, value] of Object.entries(REQUIRED_ENV)) {
+    process.env[key] = value;
+  }
+  process.env.AI_PROVIDER = 'none';
+  process.env.SEARCH_INDEX_TARGET = 'primary';
+});
+
+afterEach(() => {
+  for (const key of [...Object.keys(REQUIRED_ENV), 'AI_PROVIDER', 'SEARCH_INDEX_TARGET']) {
+    delete process.env[key];
+  }
+});
 
 describe('buildLessonRrfRequest', () => {
   it('constructs lexical + semantic RRF query with filters, highlights, and facets', () => {
