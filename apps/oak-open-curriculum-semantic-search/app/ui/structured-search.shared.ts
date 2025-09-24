@@ -7,6 +7,7 @@ export interface StructuredBody {
   keyStage?: string;
   minLessons?: number;
   size?: number;
+  includeFacets?: boolean;
 }
 
 export const SearchRequest = z.object({
@@ -26,6 +27,7 @@ export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody 
     keyStage: input.keyStage || undefined,
     minLessons: input.minLessons,
     size: input.size,
+    includeFacets: true,
   };
 }
 

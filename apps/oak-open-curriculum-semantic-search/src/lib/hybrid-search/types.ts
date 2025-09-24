@@ -42,11 +42,31 @@ export interface SequenceResult {
 
 export type SearchAggregations = Record<string, estypes.AggregationsAggregate>;
 
+export interface SequenceFacet {
+  subjectSlug: SearchSubjectSlug;
+  sequenceSlug: string;
+  keyStage: KeyStage;
+  keyStageTitle?: string;
+  phaseSlug: string;
+  phaseTitle: string;
+  years: string[];
+  units: { unitSlug: string; unitTitle: string }[];
+  unitCount: number;
+  lessonCount: number;
+  hasKs4Options: boolean;
+  sequenceUrl?: string;
+}
+
+export interface SearchFacets {
+  sequences: SequenceFacet[];
+}
+
 export interface HybridSearchMeta {
   total: number;
   took: number;
   timedOut: boolean;
   aggregations?: SearchAggregations;
+  facets?: SearchFacets;
 }
 
 export type HybridSearchResult =

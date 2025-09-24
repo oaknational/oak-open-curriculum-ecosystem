@@ -50,6 +50,8 @@ export type GetSubjectSequencesFn = (
   subject: SearchSubjectSlug,
 ) => Promise<readonly SubjectSequenceEntry[]>;
 
+export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
+
 function assertSdkOk(res: { response: Response }): void {
   if (!res.response.ok) {
     const status = String(res.response.status);
@@ -157,6 +159,16 @@ function makeGetSubjectSequences(client: OakApiClient): GetSubjectSequencesFn {
   };
 }
 
+function makeGetSequenceUnits(client: OakApiClient): GetSequenceUnitsFn {
+  return async (sequenceSlug) => {
+    const res = await client.GET('/sequences/{sequence}/units', {
+      params: { path: { sequence: sequenceSlug } },
+    });
+    assertSdkOk(res);
+    return res.data ?? [];
+  };
+}
+
 /** Documented SDK-backed client interface (narrow, curated). */
 export interface OakSdkClient {
   /** List units for a key stage and subject. */
@@ -171,6 +183,8 @@ export interface OakSdkClient {
   getUnitSummary: GetUnitSummaryFn;
   /** Get sequence metadata for a subject. */
   getSubjectSequences: GetSubjectSequencesFn;
+  /** Get units associated with a sequence. */
+  getSequenceUnits: GetSequenceUnitsFn;
 }
 
 /** SDK-backed client (preferred). */
@@ -184,6 +198,7 @@ export function createOakSdkClient(): OakSdkClient {
     getLessonSummary: makeGetLessonSummary(client),
     getUnitSummary: makeGetUnitSummary(client),
     getSubjectSequences: makeGetSubjectSequences(client),
+    getSequenceUnits: makeGetSequenceUnits(client),
   };
 }
 

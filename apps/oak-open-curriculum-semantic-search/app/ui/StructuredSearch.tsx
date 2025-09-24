@@ -5,7 +5,7 @@ import { searchAction } from './structured-search.actions';
 // This file is a Server Component. The actual action is defined in structured-search.actions.ts
 
 export function StructuredSearch(props: {
-  onResults: (results: unknown[]) => void;
+  onResults: (result: unknown | null) => void;
   onError: (message: string | null) => void;
   setLoading: (isLoading: boolean) => void;
 }): JSX.Element {

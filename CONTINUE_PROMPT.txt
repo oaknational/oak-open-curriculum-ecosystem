@@ -1,0 +1,26 @@
+Docs to read first: GO.md (and through it AGENT.md, rules.md, testing-strategy.md)
+
+This is the plan .agent/plans/semantic-search/semantic-search-target-alignment-plan.md, and this is the living context document .agent/plans/semantic-search/semantic-search-target-alignment-context.md
+
+All work and plans must be fully aligned with the rules .agent/directives-and-memory/rules.md and the testing strategy docs/agent-guidance/testing-strategy.md
+
+Current status summary
+- Search build now provisions `oak_sequence_facets` docs alongside lessons/units, using the shared ingest helpers and `sequence-facet-index` utilities.
+- Structured + NL endpoints request `includeFacets` and surface sequence facet buckets; UI controller displays totals, facets, and results.
+- Quality gates run: `pnpm type-gen`, `pnpm format:root`, `pnpm lint`, `pnpm type-check`, `pnpm -F @oaknational/open-curriculum-semantic-search test`, `pnpm build` (passes).
+- Remaining Phase 1 tasks: regenerate OpenAPI/TypeDoc, implement suggestion/type-ahead + zero-hit telemetry, wire UI filtering interactions (currently read-only).
+
+Key files in flight
+- apps/oak-open-curriculum-semantic-search/src/lib/index-oak.ts
+- apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facet-index.ts
+- apps/oak-open-curriculum-semantic-search/src/lib/indexing/sequence-facets.ts (+ unit test)
+- apps/oak-open-curriculum-semantic-search/app/ui/client/useSearchController.ts
+- apps/oak-open-curriculum-semantic-search/app/ui/SearchFacets.tsx
+- apps/oak-open-curriculum-semantic-search/app/ui/structured-search.actions.ts
+
+Immediate suggested next steps
+0. Resolve any quality gate failures.
+1. Implement the suggestion/type-ahead endpoint and zero-hit logging pipeline described in Phase 1 of the plan.
+2. Regenerate OpenAPI + TypeDoc artefacts and update docs to reflect the enriched response schema.
+3. Extend UI interactions so selecting a sequence/unit facet triggers follow-up searches.
+

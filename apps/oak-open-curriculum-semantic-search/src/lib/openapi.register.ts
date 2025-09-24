@@ -5,11 +5,14 @@ export function registerOpenApiPaths(
   registry: OpenAPIRegistry,
   deps: {
     StructuredQuerySchema: z.ZodType;
-    StructuredResponseLessons: z.ZodType;
-    StructuredResponseUnits: z.ZodType;
+    HybridResponseLessons: z.ZodType;
+    HybridResponseUnits: z.ZodType;
+    HybridResponseSequences: z.ZodType;
+    HybridResponse: z.ZodType;
     ErrorSchema: z.ZodType;
     NaturalLanguageBody: z.ZodType;
-    NaturalLanguageResponse: z.ZodType;
+    SuggestionRequestSchema: z.ZodType;
+    SuggestionResponseSchema: z.ZodType;
     SdkSearchLessonsBody: z.ZodType;
     SdkSearchTranscriptsBody: z.ZodType;
     SdkArrayAny: z.ZodType;
@@ -17,6 +20,7 @@ export function registerOpenApiPaths(
 ): void {
   registerStructuredSearch(registry, deps);
   registerNaturalLanguageSearch(registry, deps);
+  registerSuggestionSearch(registry, deps);
   registerSdkLessons(registry, deps);
   registerSdkTranscripts(registry, deps);
 }
@@ -25,13 +29,15 @@ function registerStructuredSearch(
   registry: OpenAPIRegistry,
   {
     StructuredQuerySchema,
-    StructuredResponseLessons,
-    StructuredResponseUnits,
+    HybridResponseLessons,
+    HybridResponseUnits,
+    HybridResponseSequences,
     ErrorSchema,
   }: {
     StructuredQuerySchema: z.ZodType;
-    StructuredResponseLessons: z.ZodType;
-    StructuredResponseUnits: z.ZodType;
+    HybridResponseLessons: z.ZodType;
+    HybridResponseUnits: z.ZodType;
+    HybridResponseSequences: z.ZodType;
     ErrorSchema: z.ZodType;
   },
 ): void {
@@ -39,7 +45,8 @@ function registerStructuredSearch(
     method: 'post',
     path: '/api/search',
     summary: 'Structured hybrid search',
-    description: 'Hybrid (BM25 + semantic_text) with RRF using a structured body.',
+    description:
+      'Hybrid (BM25 + semantic_text) search across lessons, units, or sequences using a structured body.',
     tags: ['search'],
     request: { body: { content: { 'application/json': { schema: StructuredQuerySchema } } } },
     responses: {
@@ -47,7 +54,7 @@ function registerStructuredSearch(
         description: 'OK',
         content: {
           'application/json': {
-            schema: z.union([StructuredResponseLessons, StructuredResponseUnits]),
+            schema: z.union([HybridResponseLessons, HybridResponseUnits, HybridResponseSequences]),
           },
         },
       },
@@ -63,11 +70,11 @@ function registerNaturalLanguageSearch(
   registry: OpenAPIRegistry,
   {
     NaturalLanguageBody,
-    NaturalLanguageResponse,
+    HybridResponse,
     ErrorSchema,
   }: {
     NaturalLanguageBody: z.ZodType;
-    NaturalLanguageResponse: z.ZodType;
+    HybridResponse: z.ZodType;
     ErrorSchema: z.ZodType;
   },
 ): void {
@@ -81,7 +88,7 @@ function registerNaturalLanguageSearch(
     responses: {
       200: {
         description: 'OK',
-        content: { 'application/json': { schema: NaturalLanguageResponse } },
+        content: { 'application/json': { schema: HybridResponse } },
       },
       400: {
         description: 'Validation error',
@@ -89,6 +96,41 @@ function registerNaturalLanguageSearch(
       },
       501: {
         description: 'LLM disabled',
+        content: { 'application/json': { schema: ErrorSchema } },
+      },
+    },
+  } satisfies RouteConfig);
+}
+
+function registerSuggestionSearch(
+  registry: OpenAPIRegistry,
+  {
+    SuggestionRequestSchema,
+    SuggestionResponseSchema,
+    ErrorSchema,
+  }: {
+    SuggestionRequestSchema: z.ZodType;
+    SuggestionResponseSchema: z.ZodType;
+    ErrorSchema: z.ZodType;
+  },
+): void {
+  registry.registerPath({
+    method: 'post',
+    path: '/api/search/suggest',
+    summary: 'Type-ahead suggestions',
+    description:
+      'Returns lesson, unit, or sequence suggestions using completion contexts and search-as-you-type fallback.',
+    tags: ['search'],
+    request: {
+      body: { content: { 'application/json': { schema: SuggestionRequestSchema } } },
+    },
+    responses: {
+      200: {
+        description: 'OK',
+        content: { 'application/json': { schema: SuggestionResponseSchema } },
+      },
+      400: {
+        description: 'Validation error',
         content: { 'application/json': { schema: ErrorSchema } },
       },
     },

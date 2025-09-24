@@ -5,6 +5,7 @@ import { useSearchController } from './useSearchController';
 import { StructuredSearch } from '../StructuredSearch';
 import NaturalSearchComponent from '../NaturalSearch';
 import SearchResultsComponent from '../SearchResults';
+import { SearchFacets } from '../SearchFacets';
 
 const Main = sc.main`
   max-width: ${(p) => p.theme.app.layout.containerMaxWidth};
@@ -42,6 +43,8 @@ export default function SearchPageClient(): JSX.Element {
         />
       </Section>
 
+      <SearchFacets facets={ctrl.facets} />
+
       <Section aria-labelledby="nl-heading">
         <h2 id="nl-heading">Natural language</h2>
         <NaturalSearchComponent
@@ -53,7 +56,7 @@ export default function SearchPageClient(): JSX.Element {
 
       {ctrl.error ? <ErrorP role="alert">{ctrl.error}</ErrorP> : null}
 
-      <SearchResultsComponent results={ctrl.results} />
+      <SearchResultsComponent results={ctrl.results} meta={ctrl.meta} />
     </Main>
   );
 }

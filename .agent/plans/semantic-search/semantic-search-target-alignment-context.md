@@ -5,7 +5,8 @@ _Last updated: 2025-03-21_
 ## Current focus
 
 - Execute the definitive semantic search architecture: four Elasticsearch indices, SDK-enriched ingestion, server-side RRF, suggestion/type-ahead endpoints, and observability.
-- With server-side RRF now live and returning enriched payloads, focus shifts to documenting the contract, exposing facets in the UI, and delivering suggestion + zero-hit telemetry flows.
+- Phase 1 (demonstration baseline) is in-flight: server-side RRF is live, sequence facet docs ingest, and we now have suggestion + zero-hit telemetry ready for UI wiring.
+- Phase 2 (content depth) and Phase 3 (ontology & observability showcase) are captured in the target alignment plan for staged follow-up once Phase 1 is signed off.
 
 ## Progress checkpoints
 
@@ -21,18 +22,22 @@ _Last updated: 2025-03-21_
 - ✅ **RRF integration** – Server API routes now call the shared `rank.rrf` builders, remove the legacy `rrfFuse` helper, and surface totals/highlights/aggregations.
 - ✅ **Contract tests** – Added structured route integration tests and `elastic-http` unit tests covering rank, aggregations, and timed-out propagation.
 - ✅ **Doc generation** – Typedoc configuration updated so both the SDK and semantic-search workspaces regenerate documentation without warnings.
+- ✅ **Suggestion endpoint** – `/api/search/suggest` ships completion + fallback queries with caching, validation, and integration coverage.
+- ✅ **Zero-hit telemetry** – Structured searches emit zero-hit logs and optional webhook payloads via a shared helper.
+- ✅ **OpenAPI refresh** – Schemas and path registration now include sequences, facets, suggestions, and zero-hit metadata.
 
 ## In progress / blockers
 
-- OpenAPI + TypeDoc outputs do not yet reflect the richer search responses; consumers lack updated documentation.
-- Suggestion/type-ahead endpoints and zero-hit logging are still outstanding, so observability is limited.
-- Front-end search flows still only use `results`, ignoring totals/facets; UI work required before enabling new metadata publicly.
+- Front-end search flows still only use `results`, ignoring totals, sequence facets, and suggestions; UI work required before enabling new metadata publicly.
+- Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators.
+- Need to finalise ingestion + UI wiring for `oak_sequence_facets` to unlock audience filters end-to-end.
 
 ## Next actions (see plan for GO cadence)
 
-1. Regenerate OpenAPI + TypeDoc artefacts for the enriched search payloads and share diffs with consumers.
-2. Implement suggestion/type-ahead endpoints and structured zero-hit logging aligned with the definitive guide.
-3. Update UI/server actions to consume facets/totals/sequences, then rerun quality gates and doc-gen.
+1. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
+2. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
+3. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.
+4. Begin drafting ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) so infrastructure decisions are ready once Phase 1 ships.
 
 ## Constraints & reminders
 
@@ -45,6 +50,6 @@ Keep this context file updated after each major milestone so the team can recove
 
 ## Next Steps (short outlook)
 
-- Regenerate OpenAPI/TypeDoc to reflect the enriched search contract.
-- Ship suggestion/type-ahead endpoints and zero-hit telemetry with unit coverage.
-- Update UI flows to surface facets/totals and ensure caching/tagging still works with expanded payloads.
+- Integrate the new suggestion + facet responses into the client experience and ensure caching/tagging still works with expanded payloads.
+- Stand up zero-hit dashboards/alerts consuming the new webhook/log payloads.
+- Complete ingestion polish for sequence facets ahead of Phase 2 indexing work.

@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import type { StructuredQuery } from '../../../src/lib/run-hybrid-search';
 import { runHybridSearch } from '../../../src/lib/run-hybrid-search';
+import { logZeroHit } from '../../../src/lib/observability/zero-hit';
 
 const StructuredSchema = z.object({
   scope: z.enum(['units', 'lessons', 'sequences']),
@@ -54,5 +55,15 @@ export async function POST(req: NextRequest): Promise<Response> {
   );
 
   const out = await getCached(q);
+  await logZeroHit({
+    total: out.total,
+    scope: out.scope,
+    text: q.text,
+    subject: q.subject,
+    keyStage: q.keyStage,
+    phaseSlug: q.phaseSlug,
+    indexVersion,
+    webhookUrl: process.env.ZERO_HIT_WEBHOOK_URL,
+  });
   return NextResponse.json(out);
 }

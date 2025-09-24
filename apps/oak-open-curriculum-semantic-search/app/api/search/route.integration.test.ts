@@ -7,12 +7,18 @@ const runHybridSearch = vi.hoisted(() =>
   vi.fn<(query: StructuredQuery) => Promise<HybridSearchResult>>(),
 );
 
+const logZeroHit = vi.hoisted(() => vi.fn<(payload: unknown) => Promise<void>>());
+
 vi.mock('next/cache', () => ({
   unstable_cache: <T extends (...args: unknown[]) => Promise<unknown>>(fn: T) => fn,
 }));
 
 vi.mock('../../../src/lib/run-hybrid-search', () => ({
   runHybridSearch,
+}));
+
+vi.mock('../../../src/lib/observability/zero-hit', () => ({
+  logZeroHit,
 }));
 
 import { POST } from './route';
@@ -31,6 +37,7 @@ const HybridResponse = z
 describe('POST /api/search', () => {
   beforeEach(() => {
     runHybridSearch.mockReset();
+    logZeroHit.mockReset();
     process.env.SEARCH_INDEX_VERSION = 'test-v1';
   });
 
@@ -42,6 +49,7 @@ describe('POST /api/search', () => {
       took: 7,
       timedOut: false,
     });
+    logZeroHit.mockResolvedValueOnce();
 
     const request = new NextRequest('http://localhost/api/search', {
       method: 'POST',
@@ -71,6 +79,14 @@ describe('POST /api/search', () => {
         phaseSlug: 'primary',
       }),
     );
+    expect(logZeroHit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        scope: 'sequences',
+        text: 'fractions',
+        phaseSlug: 'primary',
+        indexVersion: 'test-v1',
+      }),
+    );
   });
 
   it('passes includeFacets through to the hybrid search payload', async () => {
@@ -82,6 +98,7 @@ describe('POST /api/search', () => {
       timedOut: false,
       aggregations: { subjects: { buckets: [] } },
     });
+    logZeroHit.mockResolvedValueOnce();
 
     const request = new NextRequest('http://localhost/api/search', {
       method: 'POST',
@@ -107,6 +124,14 @@ describe('POST /api/search', () => {
       expect.objectContaining({
         scope: 'lessons',
         includeFacets: true,
+      }),
+    );
+    expect(logZeroHit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        total: 0,
+        scope: 'lessons',
+        text: 'fractions',
+        indexVersion: 'test-v1',
       }),
     );
   });

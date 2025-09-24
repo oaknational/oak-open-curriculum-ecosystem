@@ -39,7 +39,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     keyStage: parsed.keyStage,
     minLessons: parsed.minLessons,
     size,
-    includeFacets,
+    includeFacets: includeFacets ?? true,
     phaseSlug,
   };
 

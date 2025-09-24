@@ -79,6 +79,12 @@ const ResultsList = sc.ul`
   gap: ${(p) => p.theme.app.space.sm};
 `;
 
+const Summary = sc.p`
+  margin: 0 0 ${(p) => p.theme.app.space.sm} 0;
+  font-size: ${(p) => p.theme.app.fontSizes.xs};
+  color: ${(p) => p.theme.app.colors.textMuted};
+`;
+
 const ResultItemLi = sc.li`
   border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
   padding: ${(p) => p.theme.app.space.sm};
@@ -161,7 +167,13 @@ const ItemSchema = z
   .strict();
 const ResultsSchema = z.array(ItemSchema);
 
-export function SearchResults({ results }: { results: unknown[] }): JSX.Element | null {
+export function SearchResults({
+  results,
+  meta,
+}: {
+  results: unknown[];
+  meta?: { scope?: string; total?: number } | null;
+}): JSX.Element | null {
   const parsed = ResultsSchema.safeParse(results);
   if (!parsed.success || parsed.data.length === 0) {
     return null;
@@ -185,6 +197,11 @@ export function SearchResults({ results }: { results: unknown[] }): JSX.Element 
 
   return (
     <ResultsSection aria-live="polite">
+      {meta?.total !== undefined ? (
+        <Summary>
+          {meta.total} result{meta.total === 1 ? '' : 's'} for {meta.scope ?? 'search'}
+        </Summary>
+      ) : null}
       <ResultsList>
         {parsed.data.map((rec) => (
           <ResultItem

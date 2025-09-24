@@ -27,8 +27,8 @@ export default function StructuredSearchClient({
   onErrorAction,
   setLoadingAction,
 }: {
-  action: (input: StructuredBody) => Promise<{ results: unknown[]; error?: string }>;
-  onResultsAction: (results: unknown[]) => void;
+  action: (input: StructuredBody) => Promise<{ result: unknown | null; error?: string }>;
+  onResultsAction: (result: unknown | null) => void;
   onErrorAction: (message: string | null) => void;
   setLoadingAction: (isLoading: boolean) => void;
 }): JSX.Element {
@@ -41,7 +41,7 @@ export default function StructuredSearchClient({
     size: 10,
   });
 
-  const initial: { error?: string; results: unknown[] } | null = null;
+  const initial: { error?: string; result: unknown | null } | null = null;
   const [serverState, formAction, pending] = useActionState(
     makeServerReducer(action, () => structured),
     initial,
@@ -70,10 +70,10 @@ export default function StructuredSearchClient({
 }
 
 function makeServerReducer(
-  action: (input: StructuredBody) => Promise<{ results: unknown[]; error?: string }>,
+  action: (input: StructuredBody) => Promise<{ result: unknown | null; error?: string }>,
   getModel: () => StructuredBody,
 ) {
-  return async (): Promise<{ error?: string; results: unknown[] }> => {
+  return async (): Promise<{ error?: string; result: unknown | null }> => {
     const clean = buildStructuredBody(getModel());
     return action(clean);
   };
@@ -133,20 +133,20 @@ function buildStructuredBody(s: StructuredBody): StructuredBody {
 function makeOnSubmit(
   setLoading: (b: boolean) => void,
   onError: (m: string | null) => void,
-  onResults: (r: unknown[]) => void,
+  onResults: (r: unknown | null) => void,
 ) {
   return (): void => {
     setLoading(true);
     onError(null);
-    onResults([]);
+    onResults(null);
   };
 }
 
 function reflectServerState(
-  serverState: { error?: string; results: unknown[] } | null,
+  serverState: { error?: string; result: unknown | null } | null,
   pending: boolean,
   handlers: {
-    onResults: (r: unknown[]) => void;
+    onResults: (r: unknown | null) => void;
     onError: (m: string | null) => void;
     setLoading: (b: boolean) => void;
   },
@@ -157,8 +157,6 @@ function reflectServerState(
   if (serverState.error) {
     handlers.onError(serverState.error);
   }
-  if (Array.isArray(serverState.results)) {
-    handlers.onResults(serverState.results);
-  }
+  handlers.onResults(serverState.result ?? null);
   handlers.setLoading(false);
 }
