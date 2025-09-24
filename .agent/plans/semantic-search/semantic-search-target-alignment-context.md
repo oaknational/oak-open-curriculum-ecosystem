@@ -29,15 +29,17 @@ _Last updated: 2025-03-21_
 ## In progress / blockers
 
 - Front-end search flows still only use `results`, ignoring totals, sequence facets, and suggestions; UI work required before enabling new metadata publicly.
+- UI components continue to rely on ad-hoc styling; migrate to Oak Components + semantic tokens for cards, dropdowns, facets, and admin panels.
 - Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators.
 - Need to finalise ingestion + UI wiring for `oak_sequence_facets` to unlock audience filters end-to-end.
 
 ## Next actions (see plan for GO cadence)
 
 1. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
-2. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
-3. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.
-4. Begin drafting ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) so infrastructure decisions are ready once Phase 1 ships.
+2. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels.
+3. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
+4. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.
+5. Begin drafting ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) so infrastructure decisions are ready once Phase 1 ships.
 
 ## Constraints & reminders
 

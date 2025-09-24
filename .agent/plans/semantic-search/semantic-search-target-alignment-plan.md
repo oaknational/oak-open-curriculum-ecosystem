@@ -39,6 +39,14 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 4. API routes (structured, NL, suggestion/type-ahead, admin) that expose the new scopes safely, validate via generated types, and emit the enriched responses.
 5. Comprehensive tests and logging to detect bulk/indexing errors, zero-hit searches, and ensure regression coverage for new behaviours.
 
+## Success Metrics
+
+- **Search responsiveness**: P95 latency for `/api/search`, `/api/search/nl`, and `/api/search/suggest` remains below 900 ms under representative load, with cache hit rates ≥ 60 % for suggestion queries.
+- **Ingestion health**: Nightly ingestion completes within 20 minutes, recording zero failed batches and emitting structured success logs for each index.
+- **Facet accuracy**: Automated regression tests confirm facet totals against baseline fixtures with ≤ 1 % discrepancy.
+- **Zero-hit observability**: Dashboards reflect zero-hit counts, scope distribution, and webhook success rates with < 1 % delivery failure.
+- **UI quality**: Axe + unit tests report no WCAG AA regressions; Lighthouse accessibility score ≥ 95 for search/admin surfaces.
+
 ## Risks & Considerations
 
 - SDK must already expose the necessary lesson-planning data and canonical URLs; otherwise we need upstream changes.
@@ -64,9 +72,17 @@ Objective: showcase a complete hybrid search experience with first-class filteri
   - Responses include totals, pagination metadata, and optional aggregation blocks.
   - UI/server actions consume the enriched responses and render facets.
   - Zero-hit logging captures scope, filters, and `SEARCH_INDEX_VERSION`.
+  - Search forms, results, and suggestion inputs use Oak Components with `theme.app` tokens; suggestion dropdown is keyboard-accessible and surfaces cache/version state.
+  - Admin page presents ingestion/rollup triggers, index version, and latest zero-hit metrics drawing on status endpoints.
+  - Replace inline styles with semantic tokens (`surface.card`, `surface.dropdown`, `text.muted`, etc.); ensure light/dark parity and accessibility (contrast, focus states).
 - **Ingestion**
   - Create a shared ingestion harness (backfill + nightly) that draws solely on SDK data; ensure it can materialise `oak_sequence_facets` efficiently.
   - Document operational runbooks and backoff strategies.
+- **Exit Criteria**
+  - UI reflects lessons/units/sequences with live facets and totals across all supported scopes.
+  - Suggestion dropdown delivers completion data with cache/version context and telemetry logging verified.
+  - Zero-hit dashboard or interim report highlights scope/filter trends using structured logs.
+  - Quality gates (format → type-check → lint → test → build → doc-gen) pass with updated artefacts.
 
 ### Phase 2 – Content Depth Expansion
 
@@ -81,11 +97,16 @@ Objective: enrich search with pedagogical context, resources, and optional prior
 - **Features**
   - Augment search responses with optional blocks (planning snippets, transcript excerpts, guidance highlights, resource suggestions) behind feature flags.
   - Extend filters to include safeguarding/accessibility categories; evaluate prior knowledge graph traversal.
+  - UI surfaces richer content cards, Oak Component tabs, and contextual guidance callouts with responsive layouts and a11y coverage.
 - **Ingestion**
   - Design inference-aware pipelines per index: chunking heuristics, embedding jobs, nightly delta strategies, logging of ontology node IDs.
   - Establish cost monitoring (Elastic inference + storage) and alerting.
 - **Documentation**
   - Publish index specs (mappings, chunking strategy, example docs) and query recipes in `apps/oak-open-curriculum-semantic-search/docs/`.
+- **Exit Criteria**
+  - Planning/transcript/resource indices populated with validated documents and passing ingestion regression tests.
+  - Feature-flagged UI sections expose extended content cards without performance regressions.
+  - Observability captures ingestion cost/latency metrics and alerts on anomalies.
 
 ### Phase 3 – Ontology & Observability Showcase
 
@@ -97,8 +118,13 @@ Objective: surface ontology metadata end-to-end, power advanced suggestions, and
   - Search results embed `_nodeId`, `_nodeType`, `_schemaRefs`, `_ontologyRefs`, `_provenance` for each hit.
   - Suggestion/type-ahead endpoints span all indices, leveraging completion contexts and facet rollups.
   - Zero-hit webhooks emit ontology-rich payloads; dashboards display zero-hit trends by ontology node.
+  - Admin UI presents ontology drill-downs, zero-hit dashboards, and observability widgets sourced from telemetry endpoints.
 - **Tooling & Documentation**
   - Provide MCP resources (`mcp://oak/ontology/v1.json`, JSON-LD/Mermaid exports) and update docs with observability walkthroughs.
+- **Exit Criteria**
+  - Ontology metadata appears in search responses and MCP resources validated by contract tests.
+  - Suggestion endpoints leverage ontology indices with proven zero-hit recovery flows.
+  - Admin observability UI surfaces dashboards meeting Success Metrics thresholds.
 
 ## Implementation Guidance (all phases)
 
@@ -107,6 +133,45 @@ Objective: surface ontology metadata end-to-end, power advanced suggestions, and
 - **Provenance & Ontology Metadata**: enforce ontology-driven identifiers (`Lesson:slug`, etc.) and include MCP metadata placeholders (`ontology.nodesReturned`, `schemaRefs`, `provenanceRequired`) in both stored docs and API responses.
 - **Testing & Observability**: add ingestion unit/integration tests, monitor inference latency and shard usage, and maintain zero-hit diagnostics.
 - **Versioning**: tie index rollouts to `SEARCH_INDEX_VERSION`, documenting alias swap procedures and rollback steps.
+
+## Workstreams (Phase 1 focus)
+
+1. **Elasticsearch configuration** – Align setup scripts and templates with the four-index topology, completion contexts, highlight offsets, and synonyms. Add automated checks where feasible.
+2. **Environment validation & SDK adapters** – Enforce credential variants (`OAK_API_KEY`, bearer token), index version tagging, logging controls, and AI provider safety. Ensure SDK adapters surface canonical URLs, lesson-planning data, sequences, and provenance with unit coverage.
+3. **Ingestion & rollup pipeline** – Provide resilient bulk indexing (batched retries, alias swaps) for lessons, units, sequences, and sequence facets. Rollup rebuild must emit enriched snippets and trigger cache invalidation.
+4. **Query execution** – Maintain server-side RRF builders for lessons/units/sequences, facet handling, pagination, and consistent formatting across structured/NL endpoints.
+5. **Suggestions & telemetry** – Operate `/api/search/suggest`, zero-hit logging/webhook flows, status endpoints, and ingestion progress logs with actionable observability.
+6. **OpenAPI, MCP & regression** – Keep OpenAPI/MCP artefacts in sync, remove legacy fusion helpers, and expand regression tests spanning env validation, ingestion transforms, query builders, and suggestions.
+7. **UI & accessibility** – Migrate forms/results/admin panes to Oak Components, enforce token-driven styling, and extend unit/a11y tests across search, suggestions, and status dashboards.
+
+### UI principles
+
+- Use Oak Components and `theme.app` tokens for all interactive elements; avoid bespoke hex colours or inline styles.
+- Ensure suggestion lists, facet controls, and admin triggers are fully keyboard-accessible and follow WAI-ARIA design patterns.
+- Render highlights without `dangerouslySetInnerHTML`; continue using sanitised React fragments.
+- Surface cache/index-version context alongside search results to explain stale data scenarios.
+- Keep admin dashboards lightweight, relying on back-end telemetry while presenting actionable summaries and failure states.
+
+## Acceptance Criteria
+
+- Four Elasticsearch indices (`oak_lessons`, `oak_unit_rollup`, `oak_units`, `oak_sequences`) plus `oak_sequence_facets` exist with mappings/settings matching the definitive guide, including completion contexts and highlight offsets.
+- Environment validation enforces required credentials, index versioning, logging/telemetry settings, and AI provider safety checks, with unit coverage and clear failure messaging.
+- Ingestion pipelines produce enriched, canonical documents with resilient batching/backoff, logging, and alias swap procedures, and rollup rebuild emits lesson-planning snippets.
+- `/api/search`, `/api/search/nl`, and `/api/search/suggest` execute server-side pathways with deterministic responses, totals, facets, suggestions, and pagination metadata.
+- Zero-hit events log scope, filters, index version, and optional webhook payloads; observability endpoints expose ingestion/search health.
+- OpenAPI, MCP tooling, and docs reflect the richer contract; TypeDoc/OpenAPI generation runs cleanly.
+- Regression tests cover env validation, ingestion transforms, RRF builders, suggestion logic, and observability helpers; obsolete client-side fusion code is removed.
+- Search UI (search/admin) presents scopes, facets, and suggestions via Oak Components with tokenised styling, accessible navigation, and accompanying unit/a11y coverage.
+
+## Deployment & Operations
+
+1. **Provision Elasticsearch Serverless** – Create a dedicated project/endpoint, generate API keys with write/search permissions, and record `ELASTICSEARCH_URL` and `ELASTICSEARCH_API_KEY` secrets.
+2. **Configure environment variables** – Set `OAK_API_KEY` (or `OAK_API_BEARER`), `SEARCH_API_KEY`, `SEARCH_INDEX_VERSION`, `ZERO_HIT_WEBHOOK_URL` (or `none`), `LOG_LEVEL`, and `AI_PROVIDER`. Validate locally via `pnpm type-check` to ensure `env.ts` passes.
+3. **Bootstrap indices** – Run `pnpm -C apps/oak-open-curriculum-semantic-search scripts/elastic-setup` (or trigger the admin “Set up indices” action) to create mappings, synonyms, and the `oak_sequence_facets` store.
+4. **Initial ingestion & rollup** – Execute `/api/admin/index-oak` followed by `/api/admin/rebuild-rollup` (through CLI or admin UI). Confirm logs report document counts, alias swaps, and durations.
+5. **Admin home expectations** – `/admin` must expose ingestion triggers, last-run summaries, zero-hit metrics, index version, and links to documentation. All operations should require `SEARCH_API_KEY` and provide optimistic UI with failure messaging.
+6. **Ongoing updates** – Schedule nightly/weekly ingestion via platform cron (e.g. Vercel Cron) calling the admin endpoints. Monitor zero-hit webhook deliveries and search latency dashboards.
+7. **Application deployment** – Deploy the Next.js app to Vercel (or chosen platform) with the above secrets, enable ISR/edge caching per caching plan, and ensure OpenAPI artefacts are rebuilt post-deploy.
 
 ## Outstanding Todo (GO cadence)
 
@@ -121,23 +186,24 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 7. ACTION: Update client surfaces to expose suggestion/type-ahead responses, including caching and analytics hooks.
 8. REVIEW: Assess suggestion UX and note follow-on experiments.
 9. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-10. ACTION: Draft ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) covering chunking, inference, nightly deltas, and shard sizing.
-11. REVIEW: Validate pipeline designs against performance/cost goals and ontology metadata requirements.
+10. ACTION: Audit UI components for token compliance (cards, dropdowns, facets, admin panels) and replace ad-hoc styles with Oak Component patterns.
+11. REVIEW: Confirm light/dark themes, focus states, and accessibility checks pass after the styling cleanup.
 12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. ACTION: Implement observational dashboards and webhook verification for zero-hit telemetry enriched with ontology data.
-14. REVIEW: Check logs/dashboards for clarity and actionable metrics.
+13. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations.
+14. REVIEW: Capture lint outcomes and remediation notes.
 15. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-16. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations.
-17. REVIEW: Capture lint outcomes and remediation notes.
+16. QUALITY-GATE: Run `pnpm test` (unit/integration) to ensure coverage of new features.
+17. REVIEW: Summarise test results and fixes applied.
 18. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-19. QUALITY-GATE: Run `pnpm test` (unit/integration) to ensure coverage of new features.
-20. REVIEW: Summarise test results and fixes applied.
+19. QUALITY-GATE: Run `pnpm build` to confirm production readiness.
+20. REVIEW: Document build outcomes and follow-up actions.
 21. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-22. QUALITY-GATE: Run `pnpm build` to confirm production readiness.
-23. REVIEW: Document build outcomes and follow-up actions.
+22. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration.
+23. REVIEW: Record doc-gen results and remaining documentation tasks.
 24. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-25. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration.
-26. REVIEW: Record doc-gen results and remaining documentation tasks.
+25. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases.
+26. REVIEW: Share the summary to maintain continuity.
 27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-28. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases.
-29. REVIEW: Share the summary to maintain continuity.
+28. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links.
+29. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2.
+30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
