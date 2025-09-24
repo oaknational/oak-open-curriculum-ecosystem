@@ -11,14 +11,15 @@ This catalogue tracks the styling status of UI surfaces within the semantic sear
 - `apps/oak-open-curriculum-semantic-search/app/ui/StructuredSearchClient.tsx` & `app/ui/structured-fields.tsx` – structured search form/grid rebuilt with Oak radio/input components and shared field helpers.
 - `apps/oak-open-curriculum-semantic-search/app/ui/NaturalSearch.tsx` – natural language search form migrated to Oak radio/input primitives with shared field helpers.
 - `apps/oak-open-curriculum-semantic-search/app/ui/fields.tsx` – general-purpose input/select helpers now wrap Oak components and tokens.
+- `apps/oak-open-curriculum-semantic-search/app/ui/client/HeaderStyles.tsx` – header/nav rebuilt with `OakFlex`, Oak spacing tokens, and Oak logo imagery.
+- `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchPageClient.tsx` – main layout, error messaging, and headings expressed with `OakBox`/`OakTypography` tokens.
+- `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchTabHeader.tsx` – structured/NL mode toggle uses `OakButtonAsRadioGroup` and Oak secondary radio buttons.
+- `apps/oak-open-curriculum-semantic-search/app/ui/client/ThemeSelect.tsx` – theme picker now wraps Oak radio group/button components with token-controlled spacing.
+- `apps/oak-open-curriculum-semantic-search/app/admin/page.tsx` – admin console rebuilt with Oak layout/typography primitives and Oak buttons for stream triggers.
+- `apps/oak-open-curriculum-semantic-search/app/api/docs/page.tsx` – API docs shell migrated to Oak layout/typography tokens with Redoc embedded inside an Oak bordered container.
 
 ## Outstanding bespoke styling to migrate
 
-- `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchPageClient.tsx:11-116` – layout, sections, headings, and error messages built with custom `styled-components` wrappers.
-- `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchTabHeader.tsx:4-41` – bespoke tablist and buttons with manual active styling.
-- `apps/oak-open-curriculum-semantic-search/app/ui/client/ThemeSelect.tsx:1-35` – ensure header integration provides Oak layout spacing after the broader header refactor.
-- `apps/oak-open-curriculum-semantic-search/app/ui/client/HeaderStyles.tsx:6-52` – header/nav, spacing, and logo styling via `styled-components`.
-- `apps/oak-open-curriculum-semantic-search/app/admin/page.tsx:4-74` – admin shell, sections, and streamed output cards using bespoke styling.
-- `apps/oak-open-curriculum-semantic-search/app/api/docs/page.tsx:4-53` – API docs page layout, headers, and wrapper built with custom styled components.
+_(None – all tracked surfaces now use Oak Components/tokens.)_
 
 Future refactors must update this catalogue whenever a surface is migrated or new bespoke styling is introduced.

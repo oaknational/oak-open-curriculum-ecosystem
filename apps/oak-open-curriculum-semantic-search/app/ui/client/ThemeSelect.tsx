@@ -26,6 +26,8 @@ export default function ThemeSelect(): JSX.Element {
       label="Theme"
       value={mode}
       onChange={handleChange}
+      $flexDirection="row"
+      $flexWrap="wrap"
       $gap="space-between-xs"
     >
       {OPTIONS.map((option) => (

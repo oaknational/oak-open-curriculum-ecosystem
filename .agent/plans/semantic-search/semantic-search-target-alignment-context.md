@@ -30,11 +30,15 @@ _Last updated: 2025-09-24_
 - ✅ **Facet & results migration** – Search facets and results now render with Oak Components/theme tokens (no bespoke `styled-components`), validated by `pnpm -C apps/oak-open-curriculum-semantic-search test`.
 - ✅ **Theme switching** – Defined light/dark `AppTheme` variants from `OakTheme`, updated the ThemeProvider to swap them, and moved the theme selector to Oak radio controls.
 - ✅ **Form migration** – Structured and natural search forms now use Oak form/radio components with shared field helpers.
+- ✅ **UI shell refresh** – Header/navigation, search layout shell, tab toggles, and the theme selector all run on Oak layout/typography tokens with bespoke styles removed.
+- ✅ **Admin console migration** – `/admin` now uses Oak layout, typography, and button primitives with stream output rendered via Oak tokens (no styled-components).
+- ✅ **API docs shell** – `/api/docs` is now delivered with Oak layout/typography containers and an Oak-bordered Redoc frame, removing bespoke styled wrappers.
+- ✅ **Admin/docs regression tests** – Added integration coverage for `/admin` and `/api/docs` to verify Oak component wiring and streaming/embed behaviour.
 
 ## In progress / blockers
 
 - Front-end search flows still only use `results`, ignoring totals, sequence facets, and suggestions; UI work required before enabling new metadata publicly.
-- UI components continue to rely on ad-hoc styling; migrate to Oak Components + semantic tokens for cards, dropdowns, facets, and admin panels (see styling catalogue for exact surfaces).
+- Styling catalogue now reports no outstanding bespoke surfaces; future additions must be recorded immediately.
 - Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators.
 - Need to finalise ingestion + UI wiring for `oak_sequence_facets` to unlock audience filters end-to-end.
 

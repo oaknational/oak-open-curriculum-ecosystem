@@ -1,45 +1,40 @@
 'use client';
 
 import type { JSX } from 'react';
-import sc from 'styled-components';
+import { OakBox, OakHeading, OakTypography } from '@oaknational/oak-components';
 import { RedocStandalone } from 'redoc';
-
-const Main = sc.main`
-  padding: ${(p) => p.theme.app.space.md};
-`;
-const Header = sc.header`
-  margin-bottom: ${(p) => p.theme.app.space.sm};
-`;
-const H1 = sc.h1`
-  margin: 0;
-  font-size: ${(p) => p.theme.app.fontSizes.md};
-`;
-const P = sc.p`
-  margin: ${(p) => `${p.theme.app.space.xs} 0 0`};
-`;
-const LinkA = sc.a`
-  text-decoration: underline;
-`;
-const Frame = sc.div`
-  border: 1px solid ${(p) => p.theme.app.colors.headerBorder};
-  border-radius: ${(p) => p.theme.app.radii.md};
-  overflow: hidden;
-`;
 
 export default function ApiDocsPage(): JSX.Element {
   const specUrl = '/api/openapi.json';
+
   return (
-    <Main>
-      <Header>
-        <H1>Oak Curriculum Search API</H1>
-        <P>
+    <OakBox
+      as="main"
+      $display="flex"
+      $flexDirection="column"
+      $gap="space-between-md"
+      $pa="inner-padding-xl"
+      $maxWidth="1000px"
+      $ma="auto"
+    >
+      <OakBox as="header" $display="flex" $flexDirection="column" $gap="space-between-ssx">
+        <OakHeading tag="h1" $font="heading-4">
+          Oak Curriculum Search API
+        </OakHeading>
+        <OakTypography as="p" $font="body-3">
           OpenAPI schema:{' '}
-          <LinkA href={specUrl} target="_blank" rel="noreferrer">
+          <a href={specUrl} target="_blank" rel="noreferrer">
             {specUrl}
-          </LinkA>
-        </P>
-      </Header>
-      <Frame>
+          </a>
+        </OakTypography>
+      </OakBox>
+
+      <OakBox
+        $ba="border-solid-s"
+        $borderColor="border-neutral-lighter"
+        $borderRadius="border-radius-s"
+        $overflow="hidden"
+      >
         <RedocStandalone
           specUrl={specUrl}
           options={{
@@ -49,7 +44,7 @@ export default function ApiDocsPage(): JSX.Element {
             pathInMiddlePanel: true,
           }}
         />
-      </Frame>
-    </Main>
+      </OakBox>
+    </OakBox>
   );
 }

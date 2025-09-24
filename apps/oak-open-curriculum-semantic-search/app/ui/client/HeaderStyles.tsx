@@ -2,53 +2,56 @@
 
 import type { JSX } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import sc from 'styled-components';
+import type { Route } from 'next';
+import { OakBox, OakFlex, OakImage, OakTypography } from '@oaknational/oak-components';
 import ThemeSelect from './ThemeSelect';
 
-const HeaderBar = sc.header`
-  border-bottom: 1px solid ${(p) => p.theme.app.colors.headerBorder};
-  padding: ${(p) => `${p.theme.app.space.md} ${p.theme.app.space.lg}`};
-  display: flex;
-  align-items: center;
-  gap: ${(p) => p.theme.app.space.md};
-`;
-
-const PrimaryNav = sc.nav`
-  a, span {
-    margin-left: ${(p) => p.theme.app.space.lg};
-  }
-`;
-
-const Logo = sc(Image)`
-  display: block;
-`;
-
-const RightZone = sc.div`
-  margin-left: auto;
-`;
+const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
+  { href: '/', label: 'Home' },
+  { href: '/api/docs', label: 'Open API Docs' },
+  { href: '/admin', label: 'Admin' },
+  { href: '/healthz', label: 'Health (API)' },
+];
 
 export default function HeaderStyles(): JSX.Element {
   return (
-    <HeaderBar>
+    <OakFlex
+      as="header"
+      $alignItems="center"
+      $gap="space-between-md"
+      $pa="inner-padding-l"
+      $bb="border-solid-s"
+      $borderColor="border-neutral"
+    >
       <Link href="/" aria-label="Home">
-        <Logo
+        <OakImage
           src="/oak-national-academy-logo-512.png"
           alt="Oak National Academy"
           width={32}
           height={32}
         />
       </Link>
-      <PrimaryNav aria-label="Primary">
-        <Link href="/">Home</Link>
-        <Link href="/api/docs">Open API Docs</Link>
-        <span>|</span>
-        <Link href="/admin">Admin</Link>
-        <Link href="/healthz">Health (API)</Link>
-      </PrimaryNav>
-      <RightZone>
+
+      <OakFlex
+        as="nav"
+        aria-label="Primary"
+        $gap="space-between-lg"
+        $alignItems="center"
+        $flexWrap="wrap"
+        $font="body-3"
+      >
+        {NAV_ITEMS.map((item) => (
+          <Link key={item.href} href={item.href}>
+            <OakTypography as="span" $font="body-3">
+              {item.label}
+            </OakTypography>
+          </Link>
+        ))}
+      </OakFlex>
+
+      <OakBox $ml="auto">
         <ThemeSelect />
-      </RightZone>
-    </HeaderBar>
+      </OakBox>
+    </OakFlex>
   );
 }

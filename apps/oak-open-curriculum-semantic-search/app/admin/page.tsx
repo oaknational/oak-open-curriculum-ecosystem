@@ -1,75 +1,115 @@
 'use client';
 
-import type { JSX } from 'react';
-import sc from 'styled-components';
+import { Fragment, type JSX } from 'react';
+import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import { useStream } from '../lib/useStream';
-
-const Section = sc.section`
-  margin-bottom: ${(p) => p.theme.app.space.lg};
-`;
-const Main = sc.main`
-  max-width: ${(p) => p.theme.app.layout.containerMaxWidth};
-  margin: 0 auto;
-  padding: ${(p) => p.theme.app.space.md};
-`;
-const Pre = sc.pre`
-  white-space: pre-wrap;
-  background: ${(p) => p.theme.app.colors.surfaceEmphasisBg};
-  color: inherit;
-  padding: ${(p) => p.theme.app.space.sm};
-  border-radius: ${(p) => p.theme.app.radii.md};
-  margin-top: ${(p) => p.theme.app.space.sm};
-`;
-const QuickLinks = sc.section`
-  margin-top: ${(p) => p.theme.app.space.sm};
-  margin-bottom: ${(p) => p.theme.app.space.lg};
-`;
-const P = sc.p`
-  margin-top: ${(p) => p.theme.app.space.sm};
-`;
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
   const { state, text, run } = useStream(url, method ?? 'POST');
+
+  const lines = (text ?? '').split('\n');
+
   return (
-    <Section>
-      <button
+    <OakBox $display="flex" $flexDirection="column" $gap="space-between-xs">
+      <OakPrimaryButton
+        element="button"
+        type="button"
+        disabled={state === 'running'}
         onClick={() => {
           void run();
         }}
-        disabled={state === 'running'}
       >
         {state === 'running' ? 'Running…' : 'Run'}
-      </button>
-      <Pre aria-live="polite">{text || '—'}</Pre>
-    </Section>
+      </OakPrimaryButton>
+
+      <OakBox
+        role="status"
+        aria-live="polite"
+        $background="bg-neutral"
+        $pa="inner-padding-m"
+        $borderRadius="border-radius-s"
+        $ba="border-solid-s"
+        $borderColor="border-neutral-lighter"
+      >
+        <OakTypography as="p" $font="body-4" $color="text-subdued">
+          {text ? (
+            lines.map((line, index) => (
+              <Fragment key={`${url}-line-${index}`}>
+                {line.length > 0 ? line : null}
+                {index < lines.length - 1 ? <br /> : null}
+              </Fragment>
+            ))
+          ) : (
+            <>—</>
+          )}
+        </OakTypography>
+      </OakBox>
+    </OakBox>
+  );
+}
+
+function AdminSection({
+  heading,
+  children,
+}: {
+  heading: string;
+  children: JSX.Element;
+}): JSX.Element {
+  return (
+    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-sm">
+      <OakHeading tag="h2" $font="heading-6">
+        {heading}
+      </OakHeading>
+      {children}
+    </OakBox>
   );
 }
 
 export default function AdminPage(): JSX.Element {
   return (
-    <Main>
-      <h1>Admin tools</h1>
-      <p>Run indexing and rollup tasks. Output streams below each action.</p>
-      <QuickLinks>
-        <h2>Quick links</h2>
-        <P>
-          1) <code>/api/admin/index-oak</code> → 2) <code>/api/admin/rebuild-rollup</code> → 3)
-          <code> /api/search</code>
-        </P>
-        <P>
-          SDK parity tests: POST <code>/api/sdk/search-lessons</code>, POST
-          <code> /api/sdk/search-transcripts</code>
-        </P>
-      </QuickLinks>
+    <OakBox
+      as="main"
+      $maxWidth="900px"
+      $ma="auto"
+      $pa="inner-padding-xl"
+      $display="flex"
+      $flexDirection="column"
+      $gap="space-between-xl"
+    >
+      <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx">
+        <OakHeading tag="h1" $font="heading-4">
+          Admin tools
+        </OakHeading>
+        <OakTypography as="p" $font="body-3" $color="text-subdued">
+          Run indexing and rollup tasks. Output streams below each action.
+        </OakTypography>
+      </OakBox>
 
-      <h2>Elasticsearch setup</h2>
-      <StreamOutput url="/api/admin/elastic-setup" method="POST" />
+      <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-xs">
+        <OakHeading tag="h2" $font="heading-6">
+          Quick links
+        </OakHeading>
+        <OakTypography as="p" $font="body-3">
+          1) <code>/api/admin/index-oak</code> → 2) <code>/api/admin/rebuild-rollup</code> → 3){' '}
+          <code>/api/search</code>
+        </OakTypography>
+        <OakTypography as="p" $font="body-3">
+          SDK parity tests: POST <code>/api/sdk/search-lessons</code>, POST{' '}
+          <code>/api/sdk/search-transcripts</code>
+        </OakTypography>
+      </OakBox>
 
-      <h2>Index Oak content</h2>
-      <StreamOutput url="/api/admin/index-oak" method="GET" />
+      <AdminSection heading="Elasticsearch setup">
+        <StreamOutput url="/api/admin/elastic-setup" method="POST" />
+      </AdminSection>
 
-      <h2>Rebuild rollup</h2>
-      <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
-    </Main>
+      <AdminSection heading="Index Oak content">
+        <StreamOutput url="/api/admin/index-oak" method="GET" />
+      </AdminSection>
+
+      <AdminSection heading="Rebuild rollup">
+        <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
+      </AdminSection>
+    </OakBox>
   );
 }

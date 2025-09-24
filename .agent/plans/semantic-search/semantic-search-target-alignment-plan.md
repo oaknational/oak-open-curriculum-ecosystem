@@ -213,24 +213,30 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 7. ACTION: Replace structured/natural search forms and shared field helpers with Oak form primitives (inputs, selects, labels, buttons) wired to theme tokens. _(Completed 2025-09-24 across `StructuredSearchClient`, `NaturalSearch`, and field helpers.)_
 8. REVIEW: Ensure form validation, accessibility attributes, and loading states remain correct post-migration. _(Completed 2025-09-24 via unit/integration tests.)_
 9. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-10. ACTION: Rebuild header, navigation, theme switcher, tab controls, and layout shells using Oak Components and responsive token utilities.
-11. REVIEW: Check header/tab/theme controls for responsive behaviour, focus states, and consistency with Oak design guidance.
-12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations.
-14. REVIEW: Capture lint outcomes and remediation notes.
-15. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-16. QUALITY-GATE: Run `pnpm test` (unit/integration) to ensure coverage of new features.
-17. REVIEW: Summarise test results and fixes applied.
-18. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-19. QUALITY-GATE: Run `pnpm build` to confirm production readiness.
-20. REVIEW: Document build outcomes and follow-up actions.
-21. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-22. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration.
-23. REVIEW: Record doc-gen results and remaining documentation tasks.
-24. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-25. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases.
-26. REVIEW: Share the summary to maintain continuity.
-27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-28. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links.
-29. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2.
+10. ACTION: Rebuild header, navigation, theme switcher, tab controls, and layout shells using Oak Components and responsive token utilities. _(Completed 2025-09-24 across `app/ui/client/HeaderStyles.tsx`, `SearchPageClient.tsx`, `SearchTabHeader.tsx`, and `ThemeSelect.tsx`.)_
+11. REVIEW: Check header/tab/theme controls for responsive behaviour, focus states, and consistency with Oak design guidance. _(Completed 2025-09-24 via manual inspection; no bespoke styling remains and Oak tokens cover spacing/typography.)_
+12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 prior to continuing the UI migration.)_
+13. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations. _(Completed 2025-09-24; lint passed from repo root.)_
+14. REVIEW: Capture lint outcomes and remediation notes. _(Completed 2025-09-24; no lint errors surfaced, cached runs confirmed consistency.)_
+15. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 alongside lint/test preparation.)_
+16. QUALITY-GATE: Run `pnpm test` (unit/integration) to ensure coverage of new features. _(Completed 2025-09-24; `pnpm test` succeeded with cached SDK runs and fresh semantic-search suite.)_
+17. REVIEW: Summarise test results and fixes applied. _(Completed 2025-09-24; no regressions detected, existing canonical URL warnings persist as expected.)_
+18. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 while preparing the admin console migration.)_
+19. ACTION: Migrate the admin console (`app/admin/page.tsx`) to Oak layout/button/typography components, eliminating `styled-components`. _(Completed 2025-09-24; see updated admin page implementation.)_
+20. REVIEW: Confirm admin actions remain accessible, use Oak tokens for spacing/colour, and preserve streaming output semantics. _(Completed 2025-09-24 via component inspection and new `app/admin/page.integration.test.tsx` coverage.)_
+21. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before refreshing the API docs shell.)_
+22. ACTION: Rebuild the API docs page (`app/api/docs/page.tsx`) with Oak Components and theme tokens, removing bespoke wrappers. _(Completed 2025-09-24; see new OakBox/OakHeading layout.)_
+23. REVIEW: Validate the docs page layout, typography, and navigation remain functional without custom styling. _(Completed 2025-09-24 via manual inspection and `app/api/docs/page.integration.test.tsx` mocking Redoc.)_
+24. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 prior to final quality gates.)_
+25. QUALITY-GATE: Run `pnpm build` to confirm production readiness. _(Completed 2025-09-24; resolved Next.js type tightening before successful build.)_
+26. REVIEW: Document build outcomes and follow-up actions. _(Completed 2025-09-24; build succeeded across workspaces, traced typed route fix in `HeaderStyles.tsx` and Oak spacing update.)_
+27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before regenerating docs.)_
+28. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration. _(Completed 2025-09-24; doc-gen succeeded after adjusting `vi.fn` generics.)_
+29. REVIEW: Record doc-gen results and remaining documentation tasks. _(Completed 2025-09-24; HTML/JSON outputs refreshed, no outstanding doc gaps.)_
 30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+31. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases.
+32. REVIEW: Share the summary to maintain continuity.
+33. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+34. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links.
+35. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2.
+36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
