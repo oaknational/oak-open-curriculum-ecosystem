@@ -37,6 +37,7 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 - Implemented `/api/search/suggest` with cached completion + fallback queries, dedicated logging, and integration coverage.
 - Added zero-hit telemetry helper invoked from structured search, including optional webhook dispatch and unit tests.
 - Generated search facet types and Zod validators directly from the OpenAPI schema, tightened the emitters to use named exports, and resolved the lint regression highlighted by the workspace quality gates.
+- Introduced light/dark AppTheme definitions built on `OakTheme`, rewired the ThemeProvider to switch between them, and replaced the theme selector with Oak radio components.
 
 ## Target Outcomes
 
@@ -141,6 +142,25 @@ Objective: surface ontology metadata end-to-end, power advanced suggestions, and
 - **Testing & Observability**: add ingestion unit/integration tests, monitor inference latency and shard usage, and maintain zero-hit diagnostics.
 - **Versioning**: tie index rollouts to `SEARCH_INDEX_VERSION`, documenting alias swap procedures and rollback steps.
 
+### Typography Enhancements (themes backlog)
+
+| Element                  | Typeface                                             | Weight                     | Size (Desktop) | Size (Mobile) | Line Height |
+| ------------------------ | ---------------------------------------------------- | -------------------------- | -------------- | ------------- | ----------- |
+| H1 (Hero headline)       | Lexend                                               | Bold                       | 48–56 px       | 32–36 px      | 1.1–1.2     |
+| H2 (Section heading)     | Lexend                                               | SemiBold                   | 32 px          | 24 px         | 1.25        |
+| H3 (Subheading)          | Lexend                                               | Medium                     | 24 px          | 20 px         | 1.3         |
+| Body / Paragraph         | Lexend                                               | Regular                    | 18 px          | 16 px         | 1.5–1.6     |
+| Small / UI / Captions    | Lexend                                               | Regular                    | 14–16 px       | 14 px         | 1.4         |
+| Hero strapline / tagline | Secondary display face (e.g. Work Sans, Public Sans) | Regular / Medium           | 20–22 px       | 18 px         | 1.4–1.5     |
+| Pull quotes / highlights | Secondary display face                               | Bold Italic (if available) | 22–24 px       | 18–20 px      | 1.4         |
+
+Notes:
+
+- Lexend remains the backbone for headings, body copy, and UI elements to preserve brand readability.
+- Secondary display faces are reserved for straplines, pull quotes, and highlights to add personality without diluting recognition.
+- Weight and size scaling should reinforce hierarchy (dominant H1, structured H2, readable body text).
+- Line heights stay tight on large headers (≈1.1–1.2) and generous for copy (≈1.5–1.6) to optimise legibility.
+
 ## Workstreams (Phase 1 focus)
 
 1. **Elasticsearch configuration** – Align setup scripts and templates with the four-index topology, completion contexts, highlight offsets, and synonyms. Add automated checks where feasible.
@@ -182,19 +202,19 @@ Objective: surface ontology metadata end-to-end, power advanced suggestions, and
 
 ## Outstanding Todo (GO cadence)
 
-We continue to follow GO cadence (ACTION → REVIEW with grounding every third item). Tasks below emphasise Phase 1 completion before Phase 2/3 preparation.
+We continue to follow GO cadence (ACTION → REVIEW with grounding every third item). Styling references should be cross-checked against the catalogue at `.agent/plans/semantic-search/ui-styling-catalogue.md`, updating it as migrations land. Tasks below emphasise Phase 1 completion before Phase 2/3 preparation.
 
-1. ACTION: Bring the search/admin UI to the Oak baseline by replacing remaining bespoke components/styles with Oak Components and theme tokens.
-2. REVIEW: Verify the baseline pass covers cards, dropdowns, facets, and panels with accessible focus/contrast states.
+1. ACTION: Catalogue every instance of custom `styled-components`, inline styles, or raw HTML styling in the Next.js app to define the Oak migration scope. _(Completed 2025-09-24; see `.agent/plans/semantic-search/ui-styling-catalogue.md`.)_
+2. REVIEW: Confirm the catalogue covers search results, facets, forms, header/nav, theme selector, admin/docs pages, and any tests relying on bespoke styling. _(Completed 2025-09-24.)_
 3. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-4. ACTION: Wire UI interactions so selecting sequence/unit facets and filters triggers structured follow-up searches with the new payload metadata.
-5. REVIEW: Confirm facet-driven searches behave correctly across scopes and record remaining UX gaps.
+4. ACTION: Refactor search results and facet panels to use Oak Components and theme tokens exclusively, removing bespoke styled wrappers. _(Completed 2025-09-24; see `SearchFacets.tsx` and `SearchResults.tsx`.)_
+5. REVIEW: Verify the updated facets/results maintain layout, accessibility, and sequencing behaviour without custom styles. _(Completed 2025-09-24 via `pnpm -C apps/oak-open-curriculum-semantic-search test`.)_
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ACTION: Design and document zero-hit observability outputs (dashboards/webhook consumers) using the new structured log format.
-8. REVIEW: Ensure proposed observability flows cover required metrics and alerting paths.
+7. ACTION: Replace structured/natural search forms and shared field helpers with Oak form primitives (inputs, selects, labels, buttons) wired to theme tokens. _(Completed 2025-09-24 across `StructuredSearchClient`, `NaturalSearch`, and field helpers.)_
+8. REVIEW: Ensure form validation, accessibility attributes, and loading states remain correct post-migration. _(Completed 2025-09-24 via unit/integration tests.)_
 9. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-10. ACTION: Update client surfaces to expose suggestion/type-ahead responses, including caching and analytics hooks.
-11. REVIEW: Assess suggestion UX and note follow-on experiments.
+10. ACTION: Rebuild header, navigation, theme switcher, tab controls, and layout shells using Oak Components and responsive token utilities.
+11. REVIEW: Check header/tab/theme controls for responsive behaviour, focus states, and consistency with Oak design guidance.
 12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
 13. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations.
 14. REVIEW: Capture lint outcomes and remediation notes.

@@ -1,11 +1,18 @@
 'use client';
 
 import type { JSX, ChangeEvent } from 'react';
+import { OakRadioButton, OakRadioGroup } from '@oaknational/oak-components';
 import { LabeledInput, LabeledSelect } from './fields';
 import { KEY_STAGES, SUBJECTS } from '../../src/adapters/sdk-guards';
 import type { StructuredBody } from './structured-search.shared';
 
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
+
+const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{ value: StructuredBody['scope']; label: string }> = [
+  { value: 'units', label: 'Units' },
+  { value: 'lessons', label: 'Lessons' },
+  { value: 'sequences', label: 'Sequences' },
+];
 
 export function ScopeField({
   value,
@@ -15,18 +22,27 @@ export function ScopeField({
   onChange: ChangeStructured;
 }): JSX.Element {
   return (
-    <LabeledSelect
+    <OakRadioGroup
+      name="structured-scope"
       label="Scope"
-      id="structured-scope"
       value={value}
-      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        const v = e.target.value;
-        if (v === 'units' || v === 'lessons') {
-          onChange({ scope: v });
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        const next = STRUCTURED_SCOPE_OPTIONS.find((option) => option.value === event.target.value);
+        if (next) {
+          onChange({ scope: next.value });
         }
       }}
-      options={['units', 'lessons']}
-    />
+      $gap="space-between-xs"
+    >
+      {STRUCTURED_SCOPE_OPTIONS.map((option) => (
+        <OakRadioButton
+          key={option.value}
+          id={`structured-scope-${option.value}`}
+          value={option.value}
+          label={option.label}
+        />
+      ))}
+    </OakRadioGroup>
   );
 }
 

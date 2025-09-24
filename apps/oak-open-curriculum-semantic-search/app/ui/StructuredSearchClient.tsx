@@ -1,7 +1,7 @@
 'use client';
 
 import type { JSX, FormEvent } from 'react';
-import sc from 'styled-components';
+import { OakBox, OakPrimaryButton } from '@oaknational/oak-components';
 import type { StructuredBody } from './structured-search.shared';
 import {
   ScopeField,
@@ -35,11 +35,6 @@ export default function StructuredSearchClient(props: {
   );
 }
 
-const FormGrid = sc.form`
-  display: grid;
-  gap: ${(p) => p.theme.app.space.sm};
-`;
-
 function StructuredForm({
   model,
   onChange,
@@ -52,14 +47,17 @@ function StructuredForm({
   disabled?: boolean;
 }): JSX.Element {
   return (
-    <FormGrid
-      onSubmit={(ev) => {
+    <OakBox
+      as="form"
+      onSubmit={(ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
         onSubmit(ev);
       }}
       id="structured-panel"
       role="tabpanel"
       aria-labelledby="structured-tab"
+      $display="grid"
+      $gap="space-between-sm"
     >
       <ScopeField value={model.scope} onChange={onChange} />
       <QueryField value={model.text} onChange={onChange} />
@@ -68,9 +66,9 @@ function StructuredForm({
       <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />
       <SizeField value={model.size ?? 10} onChange={onChange} />
 
-      <button type="submit" disabled={disabled}>
+      <OakPrimaryButton type="submit" disabled={disabled} element="button">
         Search
-      </button>
-    </FormGrid>
+      </OakPrimaryButton>
+    </OakBox>
   );
 }

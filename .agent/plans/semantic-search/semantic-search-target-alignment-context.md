@@ -26,17 +26,21 @@ _Last updated: 2025-09-24_
 - ✅ **Zero-hit telemetry** – Structured searches emit zero-hit logs and optional webhook payloads via a shared helper.
 - ✅ **OpenAPI refresh** – Schemas and path registration now include sequences, facets, suggestions, and zero-hit metadata.
 - ✅ **Search facet exports** – Search facet types and Zod validators now emit named exports from the SDK generator, satisfying eslint rules and keeping `pnpm check` green.
+- ✅ **UI styling catalogue** – Recorded all bespoke styling surfaces in `.agent/plans/semantic-search/ui-styling-catalogue.md` to drive Oak Component migrations.
+- ✅ **Facet & results migration** – Search facets and results now render with Oak Components/theme tokens (no bespoke `styled-components`), validated by `pnpm -C apps/oak-open-curriculum-semantic-search test`.
+- ✅ **Theme switching** – Defined light/dark `AppTheme` variants from `OakTheme`, updated the ThemeProvider to swap them, and moved the theme selector to Oak radio controls.
+- ✅ **Form migration** – Structured and natural search forms now use Oak form/radio components with shared field helpers.
 
 ## In progress / blockers
 
 - Front-end search flows still only use `results`, ignoring totals, sequence facets, and suggestions; UI work required before enabling new metadata publicly.
-- UI components continue to rely on ad-hoc styling; migrate to Oak Components + semantic tokens for cards, dropdowns, facets, and admin panels.
+- UI components continue to rely on ad-hoc styling; migrate to Oak Components + semantic tokens for cards, dropdowns, facets, and admin panels (see styling catalogue for exact surfaces).
 - Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators.
 - Need to finalise ingestion + UI wiring for `oak_sequence_facets` to unlock audience filters end-to-end.
 
 ## Next actions (see plan for GO cadence)
 
-1. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels.
+1. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels (tracking progress via the styling catalogue).
 2. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
 3. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
 4. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.

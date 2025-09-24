@@ -1,47 +1,15 @@
 'use client';
 
 import type { JSX } from 'react';
-import sc from 'styled-components';
+import {
+  OakBox,
+  OakHeading,
+  OakSecondaryButton,
+  OakTypography,
+  OakUL,
+} from '@oaknational/oak-components';
 import type { SequenceFacet } from '../../src/lib/hybrid-search/types';
 import { SearchFacetsSchema } from '../../src/types/oak';
-
-const FacetWrapper = sc.aside`
-  margin-top: ${(p) => p.theme.app.space.lg};
-  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
-  border-radius: ${(p) => p.theme.app.radii.sm};
-  padding: ${(p) => p.theme.app.space.sm};
-`;
-
-const FacetHeading = sc.h3`
-  margin: 0 0 ${(p) => p.theme.app.space.sm} 0;
-`;
-
-const FacetList = sc.ul`
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: ${(p) => p.theme.app.space.xs};
-`;
-
-const FacetItem = sc.li`
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-`;
-
-const FacetButton = sc.button`
-  all: unset;
-  display: block;
-  width: 100%;
-  text-align: left;
-  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
-  border-radius: ${(p) => p.theme.app.radii.sm};
-  padding: ${(p) => p.theme.app.space.xs} ${(p) => p.theme.app.space.sm};
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid ${(p) => p.theme.app.colors.headerBorder};
-    outline-offset: 2px;
-  }
-`;
 
 interface SearchFacetsProps {
   facets: unknown;
@@ -55,10 +23,20 @@ export function SearchFacets({ facets, onSelectSequence }: SearchFacetsProps): J
   }
 
   return (
-    <FacetWrapper aria-label="Sequence facets">
-      <FacetHeading>Programmes &amp; units</FacetHeading>
+    <OakBox
+      as="aside"
+      aria-label="Sequence facets"
+      $mt="space-between-l"
+      $pa="inner-padding-m"
+      $ba="border-solid-s"
+      $borderColor="border-neutral-lighter"
+      $borderRadius="border-radius-s"
+    >
+      <OakHeading tag="h3" $font="heading-6" $mb="space-between-s">
+        Programmes &amp; units
+      </OakHeading>
       <SequenceFacetList sequences={sequences} onSelectSequence={onSelectSequence} />
-    </FacetWrapper>
+    </OakBox>
   );
 }
 
@@ -70,19 +48,60 @@ function SequenceFacetList({
   onSelectSequence?: (facet: SequenceFacet) => void;
 }): JSX.Element {
   return (
-    <FacetList>
+    <OakUL $reset $display="grid" $gap="space-between-s">
       {sequences.map((facet) => (
-        <FacetItem key={`${facet.sequenceSlug}-${facet.keyStage}`}>
-          <FacetButton type="button" onClick={() => onSelectSequence?.(facet)}>
-            <strong>{facet.sequenceSlug}</strong>
-            {facet.keyStageTitle ? ` · ${facet.keyStageTitle}` : ` · ${facet.keyStage}`}
-            {facet.years.length ? ` · Years ${facet.years.join(', ')}` : null}
-            {facet.unitCount !== undefined ? ` · ${facet.unitCount} units` : null}
-            {facet.lessonCount !== undefined ? ` · ${facet.lessonCount} lessons` : null}
-          </FacetButton>
-        </FacetItem>
+        <OakBox as="li" key={`${facet.sequenceSlug}-${facet.keyStage}`}>
+          <FacetButton facet={facet} onSelectSequence={onSelectSequence} />
+        </OakBox>
       ))}
-    </FacetList>
+    </OakUL>
+  );
+}
+
+function FacetButton({
+  facet,
+  onSelectSequence,
+}: {
+  facet: SequenceFacet;
+  onSelectSequence?: (facet: SequenceFacet) => void;
+}): JSX.Element {
+  const metaParts: string[] = [];
+  const keyStageLabel = facet.keyStageTitle ? facet.keyStageTitle : facet.keyStage;
+  if (keyStageLabel) {
+    metaParts.push(keyStageLabel);
+  }
+  if (facet.years.length > 0) {
+    metaParts.push(`Years ${facet.years.join(', ')}`);
+  }
+  if (facet.unitCount !== undefined) {
+    metaParts.push(`${facet.unitCount} units`);
+  }
+  if (facet.lessonCount !== undefined) {
+    metaParts.push(`${facet.lessonCount} lessons`);
+  }
+
+  return (
+    <OakSecondaryButton
+      type="button"
+      width="100%"
+      textAlign="left"
+      onClick={() => onSelectSequence?.(facet)}
+    >
+      <OakTypography as="strong" $display="block" $font="body-2-bold">
+        {facet.sequenceSlug}
+      </OakTypography>
+      {metaParts.length > 0 ? (
+        <OakTypography
+          as="span"
+          $display="block"
+          $font="body-4"
+          $color="text-subdued"
+          $mt="space-between-ssx"
+        >
+          {metaParts.join(' · ')}
+        </OakTypography>
+      ) : null}
+    </OakSecondaryButton>
   );
 }
 

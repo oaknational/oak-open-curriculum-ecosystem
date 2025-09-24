@@ -1,9 +1,15 @@
 'use client';
 
-import type { JSX, FormEventHandler, Dispatch, SetStateAction } from 'react';
-import sc from 'styled-components';
+import type { JSX, FormEventHandler, Dispatch, SetStateAction, ChangeEvent } from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
+import {
+  OakBox,
+  OakPrimaryButton,
+  OakRadioButton,
+  OakRadioGroup,
+} from '@oaknational/oak-components';
+import { LabeledInput } from './fields';
 
 const ApiResponseSchema = z
   .object({
@@ -47,17 +53,17 @@ function QueryField({
   setNl: Dispatch<SetStateAction<NaturalBody>>;
 }): JSX.Element {
   return (
-    <label>
-      Query
-      <input
-        type="text"
-        value={nl.q}
-        onChange={(e) => {
-          setNl((s) => ({ ...s, q: e.target.value }));
-        }}
-        required
-      />
-    </label>
+    <LabeledInput
+      label="Query"
+      id="natural-query"
+      type="text"
+      value={nl.q}
+      required
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        const next = event.target.value;
+        setNl((state) => ({ ...state, q: next }));
+      }}
+    />
   );
 }
 
@@ -69,21 +75,21 @@ function ScopeField({
   setNl: Dispatch<SetStateAction<NaturalBody>>;
 }): JSX.Element {
   return (
-    <label>
-      Scope
-      <select
-        value={nl.scope}
-        onChange={(e) => {
-          const v = e.target.value;
-          if (v === 'units' || v === 'lessons') {
-            setNl((s) => ({ ...s, scope: v }));
-          }
-        }}
-      >
-        <option value="units">Units</option>
-        <option value="lessons">Lessons</option>
-      </select>
-    </label>
+    <OakRadioGroup
+      name="natural-scope"
+      label="Scope"
+      value={nl.scope ?? 'units'}
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        if (value === 'units' || value === 'lessons') {
+          setNl((state) => ({ ...state, scope: value }));
+        }
+      }}
+      $gap="space-between-xs"
+    >
+      <OakRadioButton id="natural-scope-units" value="units" label="Units" />
+      <OakRadioButton id="natural-scope-lessons" value="lessons" label="Lessons" />
+    </OakRadioGroup>
   );
 }
 
@@ -95,26 +101,20 @@ function SizeField({
   setNl: Dispatch<SetStateAction<NaturalBody>>;
 }): JSX.Element {
   return (
-    <label>
-      Size
-      <input
-        type="number"
-        min={1}
-        max={100}
-        value={nl.size ?? 10}
-        onChange={(e) => {
-          const n = Number(e.target.value);
-          setNl((s) => ({ ...s, size: Number.isFinite(n) && n > 0 ? n : s.size }));
-        }}
-      />
-    </label>
+    <LabeledInput
+      label="Size"
+      id="natural-size"
+      type="number"
+      value={nl.size ?? 10}
+      min={1}
+      max={100}
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        const n = Number(event.target.value);
+        setNl((state) => ({ ...state, size: Number.isFinite(n) && n > 0 ? n : state.size }));
+      }}
+    />
   );
 }
-
-const FormGrid = sc.form`
-  display: grid;
-  gap: ${(p) => p.theme.app.space.sm};
-`;
 
 function NaturalSearchForm({
   nl,
@@ -126,12 +126,22 @@ function NaturalSearchForm({
   onSubmit: FormEventHandler<HTMLFormElement>;
 }): JSX.Element {
   return (
-    <FormGrid onSubmit={onSubmit} id="nl-panel" role="tabpanel" aria-labelledby="nl-tab">
+    <OakBox
+      as="form"
+      onSubmit={onSubmit}
+      id="nl-panel"
+      role="tabpanel"
+      aria-labelledby="nl-tab"
+      $display="grid"
+      $gap="space-between-sm"
+    >
       <QueryField nl={nl} setNl={setNl} />
       <ScopeField nl={nl} setNl={setNl} />
       <SizeField nl={nl} setNl={setNl} />
-      <button type="submit">Search</button>
-    </FormGrid>
+      <OakPrimaryButton type="submit" element="button">
+        Search
+      </OakPrimaryButton>
+    </OakBox>
   );
 }
 

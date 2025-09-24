@@ -1,13 +1,12 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { createLightTheme } from './themes/light';
+import { ThemeProvider } from '../lib/theme/ThemeContext';
 import StructuredSearchClient from './StructuredSearchClient';
 
 const resolve = async (): Promise<{ result: unknown | null; error?: string }> => ({ result: null });
 
 function renderWithTheme(ui: React.ReactElement): void {
-  render(<StyledThemeProvider theme={createLightTheme()}>{ui}</StyledThemeProvider>);
+  render(<ThemeProvider initialMode="light">{ui}</ThemeProvider>);
 }
 
 describe('StructuredSearchClient', () => {
@@ -24,8 +23,8 @@ describe('StructuredSearchClient', () => {
       />,
     );
 
-    const select = screen.getByLabelText('Scope');
-    fireEvent.change(select, { target: { value: 'lessons' } });
+    const radio = screen.getByLabelText('Lessons');
+    fireEvent.click(radio);
 
     expect(onScopeChange).toHaveBeenCalledWith('lessons');
   });

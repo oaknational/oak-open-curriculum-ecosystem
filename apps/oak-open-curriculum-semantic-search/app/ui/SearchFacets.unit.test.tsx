@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { createLightTheme } from './themes/light';
+import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
 import type { SequenceFacet } from '../../src/lib/hybrid-search/types';
 import { SearchFacets } from './SearchFacets';
 
@@ -26,9 +25,9 @@ describe('SearchFacets', () => {
     const onSelect = vi.fn();
     const facet = sampleFacet();
     render(
-      <StyledThemeProvider theme={createLightTheme()}>
+      <OakThemeProvider theme={oakDefaultTheme}>
         <SearchFacets facets={{ sequences: [facet] }} onSelectSequence={onSelect} />
-      </StyledThemeProvider>,
+      </OakThemeProvider>,
     );
 
     const button = screen.getByRole('button', { name: /fractions-programme/i });

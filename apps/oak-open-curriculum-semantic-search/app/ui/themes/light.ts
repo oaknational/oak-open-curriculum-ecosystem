@@ -1,10 +1,9 @@
-import { oakDefaultTheme, type OakTheme } from '@oaknational/oak-components';
-import { buildTokens, type AppTokens } from './tokens';
-
-export type AppTheme = OakTheme & { app: AppTokens };
+import { oakDefaultTheme } from '@oaknational/oak-components';
+import { buildTokens } from './tokens';
+import type { AppTheme } from './types';
 
 export function createLightTheme(): AppTheme {
-  const base: OakTheme = oakDefaultTheme;
+  const base = oakDefaultTheme;
   return {
     ...base,
     app: buildTokens(),

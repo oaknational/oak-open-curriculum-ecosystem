@@ -1,13 +1,12 @@
-import { oakDefaultTheme, type OakTheme } from '@oaknational/oak-components';
-import { buildTokens, type AppTokens } from './tokens';
-
-export type AppTheme = OakTheme & { app: AppTokens };
+import { oakDefaultTheme } from '@oaknational/oak-components';
+import { buildTokens } from './tokens';
+import type { AppTheme } from './types';
 
 export function createDarkTheme(): AppTheme {
-  const base: OakTheme = oakDefaultTheme;
+  const base = oakDefaultTheme;
   // Derive dark by overriding palette-only aspects when Oak dark theme is absent.
   const app = buildTokens();
-  const darkApp: AppTokens = {
+  const darkApp = {
     ...app,
     colors: {
       ...app.colors,

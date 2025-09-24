@@ -1,7 +1,7 @@
 'use client';
 
-import { createElement, type JSX } from 'react';
-import sc from 'styled-components';
+import { createElement, type JSX, type ReactNode } from 'react';
+import { OakBox, OakTypography, OakUL } from '@oaknational/oak-components';
 import { z } from 'zod';
 
 type AllowedTag = 'em' | 'strong' | 'mark';
@@ -16,8 +16,8 @@ function tokenize(html: string): string[] {
 }
 
 function flushUnclosed(
-  stack: { type: AllowedTag; children: React.ReactNode[] }[],
-  current: () => React.ReactNode[],
+  stack: { type: AllowedTag; children: ReactNode[] }[],
+  current: () => ReactNode[],
 ): void {
   if (stack.length) {
     const last = stack.pop();
@@ -29,8 +29,8 @@ function flushUnclosed(
 
 function handleToken(
   tok: string,
-  stack: { type: AllowedTag; children: React.ReactNode[] }[],
-  current: () => React.ReactNode[],
+  stack: { type: AllowedTag; children: ReactNode[] }[],
+  current: () => ReactNode[],
   keyRef: { current: number },
 ): void {
   const m = tok.match(/^<\/?\s*([a-zA-Z0-9]+)[^>]*>$/);
@@ -53,13 +53,13 @@ function handleToken(
   }
 }
 
-function renderSafeHighlight(html: string): React.ReactNode[] {
+function renderSafeHighlight(html: string): ReactNode[] {
   const tokens = tokenize(html);
-  const stack: { type: AllowedTag; children: React.ReactNode[] }[] = [];
-  const root: React.ReactNode[] = [];
+  const stack: { type: AllowedTag; children: ReactNode[] }[] = [];
+  const root: ReactNode[] = [];
   const keyRef = { current: 0 };
 
-  const current = (): React.ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
+  const current = (): ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
 
   for (const tok of tokens) {
     handleToken(tok, stack, current, keyRef);
@@ -67,46 +67,6 @@ function renderSafeHighlight(html: string): React.ReactNode[] {
   flushUnclosed(stack, current);
   return root;
 }
-
-const ResultsSection = sc.section`
-  margin-top: ${(p) => p.theme.app.space.xl};
-`;
-
-const ResultsList = sc.ul`
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: ${(p) => p.theme.app.space.sm};
-`;
-
-const Summary = sc.p`
-  margin: 0 0 ${(p) => p.theme.app.space.sm} 0;
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-  color: ${(p) => p.theme.app.colors.textMuted};
-`;
-
-const ResultItemLi = sc.li`
-  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
-  padding: ${(p) => p.theme.app.space.sm};
-  border-radius: ${(p) => p.theme.app.radii.sm};
-`;
-
-const Title = sc.div`
-  font-weight: 600;
-`;
-
-const Meta = sc.div`
-  color: ${(p) => p.theme.app.colors.textMuted};
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-`;
-
-const HighlightsList = sc.ul`
-  margin-top: ${(p) => p.theme.app.space.sm};
-`;
-
-const HighlightItem = sc.li`
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-`;
 
 function ResultItem({
   title,
@@ -129,17 +89,31 @@ function ResultItem({
   const meta = parts.join(' · ');
 
   return (
-    <ResultItemLi>
-      <Title>{title}</Title>
-      {meta ? <Meta>{meta}</Meta> : null}
-      {highlights.length > 0 ? (
-        <HighlightsList>
-          {highlights.map((h, i) => (
-            <HighlightItem key={i}>{renderSafeHighlight(String(h))}</HighlightItem>
-          ))}
-        </HighlightsList>
+    <OakBox
+      as="li"
+      $ba="border-solid-s"
+      $borderColor="border-neutral"
+      $borderRadius="border-radius-s"
+      $pa="inner-padding-m"
+    >
+      <OakTypography as="div" $font="body-2-bold">
+        {title}
+      </OakTypography>
+      {meta ? (
+        <OakTypography as="div" $font="body-4" $color="text-subdued" $mt="space-between-ssx">
+          {meta}
+        </OakTypography>
       ) : null}
-    </ResultItemLi>
+      {highlights.length > 0 ? (
+        <OakUL $mt="space-between-s">
+          {highlights.map((h, i) => (
+            <OakTypography as="li" key={i} $font="body-4">
+              {renderSafeHighlight(String(h))}
+            </OakTypography>
+          ))}
+        </OakUL>
+      ) : null}
+    </OakBox>
   );
 }
 
@@ -196,13 +170,13 @@ export function SearchResults({
   }
 
   return (
-    <ResultsSection aria-live="polite">
+    <OakBox as="section" aria-live="polite" $mt="space-between-xl">
       {meta?.total !== undefined ? (
-        <Summary>
+        <OakTypography as="p" $font="body-3" $color="text-subdued" $mb="space-between-s">
           {meta.total} result{meta.total === 1 ? '' : 's'} for {meta.scope ?? 'search'}
-        </Summary>
+        </OakTypography>
       ) : null}
-      <ResultsList>
+      <OakUL $reset $display="grid" $gap="space-between-m">
         {parsed.data.map((rec) => (
           <ResultItem
             key={rec.id}
@@ -212,8 +186,8 @@ export function SearchResults({
             highlights={highlightsFor(rec)}
           />
         ))}
-      </ResultsList>
-    </ResultsSection>
+      </OakUL>
+    </OakBox>
   );
 }
 
