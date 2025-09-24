@@ -246,7 +246,7 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 40. ACTION: Wire suggestion and facet interactions so selecting a suggestion, facet, or scope change replays a structured search with the correct payload (including sequence follow-up support). _(Completed 2025-09-24; `useStructuredFollowUp` now dispatches follow-up searches for scope toggles, programme facets, and suggestions via new helper utilities.)_
 41. REVIEW: Expand controller/facet interaction tests to prove follow-up searches fire with the expected body (suggestions, sequences, scope pivots). _(Completed 2025-09-24; coverage added in `SearchPageClient.integration.test.tsx` and `suggestion-search.unit.test.ts` validates suggestion, facet, and rescope payloads.)_
 42. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-43. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components.
+43. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components. _(Planned approach: add an in-memory event store + API routes powering an admin dashboard with Oak cards/tables.)_
 44. REVIEW: Cover the telemetry surface with unit/integration tests, including mocked webhook deliveries and dashboard grouping logic.
 45. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
 46. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) and document the operational runbook for these jobs.

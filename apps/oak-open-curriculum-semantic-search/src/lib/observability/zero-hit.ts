@@ -1,5 +1,6 @@
 import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { searchLogger } from '../logger';
+import { recordZeroHitEvent } from './zero-hit-store';
 
 /**
  * Parameters required to emit a zero-hit telemetry event.
@@ -33,6 +34,13 @@ export async function logZeroHit(payload: ZeroHitPayload): Promise<void> {
   };
 
   searchLogger.info('semantic-search.zero-hit', logContext);
+
+  recordZeroHitEvent({
+    scope: payload.scope,
+    text: payload.text,
+    filters,
+    indexVersion: payload.indexVersion,
+  });
 
   const url = payload.webhookUrl;
   if (!url || url === 'none') {

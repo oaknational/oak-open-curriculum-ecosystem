@@ -23,6 +23,7 @@ vi.mock('../logger', () => ({
 const { info, error, noop } = loggerStubs;
 
 import { logZeroHit } from './zero-hit';
+import { getZeroHitSummary, resetZeroHitStore } from './zero-hit-store';
 
 describe('logZeroHit', () => {
   const fetchMock = vi.fn<typeof fetch>();
@@ -33,6 +34,7 @@ describe('logZeroHit', () => {
     noop.mockReset();
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
+    resetZeroHitStore();
   });
 
   it('emits a structured log and webhook payload when hits are zero', async () => {
@@ -65,6 +67,10 @@ describe('logZeroHit', () => {
         indexVersion: 'v2025-03-16',
       }),
     });
+
+    const summary = getZeroHitSummary();
+    expect(summary.total).toBe(1);
+    expect(summary.byScope.units).toBe(1);
   });
 
   it('does nothing when total is above zero', async () => {
@@ -77,5 +83,6 @@ describe('logZeroHit', () => {
 
     expect(info).not.toHaveBeenCalled();
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(getZeroHitSummary().total).toBe(0);
   });
 });
