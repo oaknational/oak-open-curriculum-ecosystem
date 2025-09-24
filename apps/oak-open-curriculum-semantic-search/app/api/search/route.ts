@@ -64,6 +64,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     phaseSlug: q.phaseSlug,
     indexVersion,
     webhookUrl: process.env.ZERO_HIT_WEBHOOK_URL,
+    took: out.took,
+    timedOut: out.timedOut,
   });
   return NextResponse.json(out);
 }

@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { NextRequest } from 'next/server';
 import { handleZeroHitSummary, handleZeroHitWebhook } from './zero-hit-api';
 import { recordZeroHitEvent, resetZeroHitStore, getZeroHitSummary } from '../zero-hit-store';
+import type { ZeroHitTelemetry } from '../zero-hit-persistence';
 
 const envMock = vi.hoisted(() => ({
   env: vi.fn(() => ({
@@ -10,6 +11,21 @@ const envMock = vi.hoisted(() => ({
 }));
 
 vi.mock('../../env', () => envMock);
+
+const persistenceMocks = vi.hoisted(() => ({
+  zeroHitPersistenceEnabled: vi.fn(() => false),
+  fetchZeroHitTelemetry: vi.fn<() => Promise<ZeroHitTelemetry>>(async () => ({
+    summary: {
+      total: 0,
+      byScope: { lessons: 0, units: 0, sequences: 0 },
+      latestIndexVersion: null,
+    },
+    recent: [],
+  })),
+  persistZeroHitEvent: vi.fn(async () => undefined),
+}));
+
+vi.mock('../zero-hit-persistence', () => persistenceMocks);
 
 interface SummaryScopeBreakdown {
   lessons: number;
@@ -132,6 +148,9 @@ describe('zero-hit API handlers', () => {
   beforeEach(() => {
     envMock.env.mockClear();
     resetZeroHitStore();
+    persistenceMocks.zeroHitPersistenceEnabled.mockReturnValue(false);
+    persistenceMocks.fetchZeroHitTelemetry.mockClear();
+    persistenceMocks.persistZeroHitEvent.mockClear();
   });
 
   it('rejects unauthorised summary access', async () => {
@@ -156,9 +175,44 @@ describe('zero-hit API handlers', () => {
     assertSummaryResponse(payload);
     expect(payload.summary.total).toBe(1);
     expect(payload.recent).toHaveLength(1);
+    expect(persistenceMocks.fetchZeroHitTelemetry).not.toHaveBeenCalled();
+  });
+
+  it('returns persisted telemetry when enabled', async () => {
+    const telemetry = {
+      summary: {
+        total: 5,
+        byScope: { lessons: 3, units: 2, sequences: 0 },
+        latestIndexVersion: 'v9',
+      },
+      recent: [
+        {
+          timestamp: 123,
+          scope: 'units' as const,
+          text: 'angles',
+          filters: { keyStage: 'ks3' },
+          indexVersion: 'v9',
+        },
+      ],
+    };
+    persistenceMocks.zeroHitPersistenceEnabled.mockReturnValue(true);
+    persistenceMocks.fetchZeroHitTelemetry.mockResolvedValueOnce(telemetry);
+
+    const response = await handleZeroHitSummary(
+      makeRequest('GET', undefined, { 'x-search-api-key': 'test-key' }),
+    );
+    expect(response.status).toBe(200);
+    const payload: unknown = await response.json();
+    assertSummaryResponse(payload);
+    expect(payload.summary.total).toBe(5);
+    expect(payload.recent).toEqual(telemetry.recent);
+    expect(persistenceMocks.fetchZeroHitTelemetry).toHaveBeenCalledWith({ limit: 50 });
   });
 
   it('accepts webhook events when authorised', async () => {
+    persistenceMocks.zeroHitPersistenceEnabled.mockReturnValue(true);
+    persistenceMocks.persistZeroHitEvent.mockResolvedValueOnce(undefined);
+
     const response = await handleZeroHitWebhook(
       makeRequest(
         'POST',
@@ -174,6 +228,13 @@ describe('zero-hit API handlers', () => {
     );
     expect(response.status).toBe(202);
     expect(getZeroHitSummary().total).toBe(1);
+    expect(persistenceMocks.persistZeroHitEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        scope: 'units',
+        text: 'angles',
+        indexVersion: 'v2',
+      }),
+    );
   });
 
   it('rejects invalid webhook payloads', async () => {

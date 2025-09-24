@@ -17,6 +17,11 @@ export const BaseEnvSchema = z.object({
   AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
   OPENAI_API_KEY: z.string().min(10).optional(),
   SEARCH_INDEX_TARGET: z.enum(['primary', 'sandbox']).default('primary'),
+  ZERO_HIT_PERSISTENCE_ENABLED: z
+    .union([z.literal('true'), z.literal('false'), z.boolean()])
+    .default('false')
+    .transform((value) => value === true || value === 'true'),
+  ZERO_HIT_INDEX_RETENTION_DAYS: z.coerce.number().int().min(7).max(365).default(30),
 });
 
 export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
@@ -49,6 +54,8 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
+    ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
+    ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
   });
   if (!parsed.success) {
     throw new Error(parsed.error.message);

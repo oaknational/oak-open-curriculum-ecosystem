@@ -1,6 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { env } from '../../env';
 import { getZeroHitRecent, getZeroHitSummary, recordZeroHitEvent } from '../zero-hit-store';
+import {
+  fetchZeroHitTelemetry,
+  persistZeroHitEvent,
+  zeroHitPersistenceEnabled,
+} from '../zero-hit-persistence';
 
 type ZeroHitScope = 'lessons' | 'units' | 'sequences';
 
@@ -17,9 +22,13 @@ export async function handleZeroHitSummary(request: NextRequest): Promise<Respon
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
+  if (zeroHitPersistenceEnabled()) {
+    const telemetry = await fetchZeroHitTelemetry({ limit: 50 });
+    return NextResponse.json(telemetry);
+  }
+
   const summary = getZeroHitSummary();
   const recent = getZeroHitRecent();
-
   return NextResponse.json({ summary, recent });
 }
 
@@ -33,13 +42,19 @@ export async function handleZeroHitWebhook(request: NextRequest): Promise<Respon
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
   }
 
-  recordZeroHitEvent({
+  const event = {
     scope: parsed.scope,
     text: parsed.text,
     filters: parsed.filters ?? {},
     indexVersion: parsed.indexVersion,
     timestamp: parsed.timestamp ?? Date.now(),
-  });
+  };
+
+  recordZeroHitEvent(event);
+
+  if (zeroHitPersistenceEnabled()) {
+    await persistZeroHitEvent(event);
+  }
 
   return NextResponse.json({ status: 'accepted' }, { status: 202 });
 }

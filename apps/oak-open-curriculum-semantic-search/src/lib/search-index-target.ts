@@ -3,6 +3,8 @@ import { env } from './env';
 export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
 export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
 
+export const ZERO_HIT_INDEX_BASE = 'oak_zero_hit_events';
+
 export const SEARCH_INDEX_KINDS = [
   'lessons',
   'unit_rollup',
@@ -50,6 +52,11 @@ export function currentSearchIndexTarget(): SearchIndexTarget {
 /** Resolve the index name for the current environment configuration. */
 export function resolveCurrentSearchIndexName(kind: SearchIndexKind): string {
   return resolveSearchIndexName(kind, currentSearchIndexTarget());
+}
+
+/** Resolve the zero-hit telemetry index name for the given target. */
+export function resolveZeroHitIndexName(target: SearchIndexTarget): string {
+  return target === 'primary' ? ZERO_HIT_INDEX_BASE : `${ZERO_HIT_INDEX_BASE}_sandbox`;
 }
 
 /**

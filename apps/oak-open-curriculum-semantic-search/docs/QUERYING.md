@@ -209,6 +209,29 @@ Whenever a search returns zero hits, log:
 
 These events feed observability pipelines and should trigger UI feedback on the admin console.
 
+### Persisted telemetry
+
+Zero-hit summaries can be persisted to Elasticsearch Serverless when `ZERO_HIT_PERSISTENCE_ENABLED=true` in the app environment. The helper resolves the index name from the current search target:
+
+- `primary` → `oak_zero_hit_events`
+- `sandbox` → `oak_zero_hit_events_sandbox`
+
+Persistence automatically provisions an ILM policy (`oak_zero_hit_events_retention_<days>d`) and assigns it to the index so documents older than `ZERO_HIT_INDEX_RETENTION_DAYS` (default 30) are deleted once they age out of the hot tier. Index creation and policy provisioning happen lazily the first time an event is written.
+
+When the index is absent (e.g. fresh sandbox), the dashboard gracefully falls back to empty telemetry until the first event lands. The in-memory ring buffer remains available for non-persisted deployments and webhook consumers, but the admin dashboard reads from Elasticsearch whenever persistence is enabled.
+
+### Manual purges
+
+Use the CLI to purge old events when manual intervention is required (for example, expiring data sooner in a sandbox):
+
+```bash
+pnpm -C apps/oak-open-curriculum-semantic-search zero-hit:purge --force \
+  --target sandbox \
+  --older-than-days 7
+```
+
+The script issues a `delete_by_query` request targeting `@timestamp < now-<days>d`. The `--force` flag is mandatory to prevent accidental deletions.
+
 ## Implementation guidance
 
 - Build queries using pure functions (see `src/lib/queries`) so they are unit testable.

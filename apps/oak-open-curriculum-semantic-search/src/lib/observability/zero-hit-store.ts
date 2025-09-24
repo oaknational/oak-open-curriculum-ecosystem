@@ -12,6 +12,10 @@ export interface ZeroHitEvent {
   text: string;
   filters: Record<string, string>;
   indexVersion: string;
+  tookMs?: number;
+  timedOut?: boolean;
+  requestId?: string;
+  sessionId?: string;
 }
 
 const events: ZeroHitEvent[] = [];
@@ -29,6 +33,10 @@ export function recordZeroHitEvent(
     text: event.text,
     filters: event.filters,
     indexVersion: event.indexVersion,
+    tookMs: event.tookMs,
+    timedOut: event.timedOut,
+    requestId: event.requestId,
+    sessionId: event.sessionId,
   };
 
   events.unshift(entry);

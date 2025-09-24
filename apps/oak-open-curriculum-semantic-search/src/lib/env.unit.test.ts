@@ -52,6 +52,8 @@ describe('env validation', () => {
     expect(result.ZERO_HIT_WEBHOOK_URL).toBe('none');
     expect(result.LOG_LEVEL).toBe('info');
     expect(result.SEARCH_INDEX_TARGET).toBe('primary');
+    expect(result.ZERO_HIT_PERSISTENCE_ENABLED).toBe(false);
+    expect(result.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(30);
   });
 
   it('requires OAK_API_KEY to be present', async () => {
@@ -74,6 +76,18 @@ describe('env validation', () => {
     const { env } = await loadEnvModule();
     const parsed = env();
     expect(parsed.ZERO_HIT_WEBHOOK_URL).toBe('https://hooks.example.com/zero-hit');
+  });
+
+  it('parses zero-hit persistence flags', async () => {
+    withRequiredEnv({
+      AI_PROVIDER: 'none',
+      ZERO_HIT_PERSISTENCE_ENABLED: 'true',
+      ZERO_HIT_INDEX_RETENTION_DAYS: '45',
+    });
+    const { env } = await loadEnvModule();
+    const parsed = env();
+    expect(parsed.ZERO_HIT_PERSISTENCE_ENABLED).toBe(true);
+    expect(parsed.ZERO_HIT_INDEX_RETENTION_DAYS).toBe(45);
   });
 
   it('accepts SEARCH_INDEX_TARGET values primary and sandbox', async () => {

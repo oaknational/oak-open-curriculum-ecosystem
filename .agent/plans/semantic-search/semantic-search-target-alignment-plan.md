@@ -255,7 +255,25 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 48. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
     _(Completed 2025-09-25; re-read GO.md → AGENT.md → metacognition.md ahead of sandbox refactor.)_
 49. ACTION: Implement zero-hit telemetry persistence using an Elasticsearch Serverless index (`oak_zero_hit_events`) with retention controls, wired through the existing webhook handler.
+    - Target a dedicated index per environment using the existing `SearchIndexTarget` helper (`oak_zero_hit_events` vs `oak_zero_hit_events_sandbox`) so all Serverless writes continue to flow through the official client and the `_sandbox` workflow remains reproducible.
+    - Mapping outline (all keyword/flattened fields generated from the SDK types at ingest time):
+      - `@timestamp` (date) captured at persistence time for retention queries.
+      - `search_scope` (keyword) matching `SearchScope` enum.
+      - `query` (text/keyword multi-field) for free-text analysis on admin filters.
+      - `filters` (flattened) to store facet payloads exactly as emitted by the SDK.
+      - `index_version` (keyword) to track schema alignment during roll-outs.
+      - `request_id` (keyword) + `session_id` (keyword, optional) for dedupe).
+      - `took_ms` (long) and `timed_out` (boolean) for operational dashboards.
+    - Retention: configure a 30-day Serverless data stream with an ILM policy (hot tier only, size limit 5 GB) documented in `docs/sandbox-ingestion-harness.md` and referenced from the admin runbook; add a `delete_by_query` fallback script for manual purges.
+    - Ingestion path: extend `logZeroHit` so, after logging/webhook dispatch, it calls a new `persistZeroHitEvent` helper that serialises the event via `esClient().indices.create` (on first run) and bulk indexes documents; reuse the sandbox harness transport to support dry-run testing.
+    - Dashboard read path: adapt `getZeroHitSummary` to fall back to Elasticsearch aggregations when persistence is enabled, with the in-memory ring buffer kept as a hot cache (write-through) for current session data.
+    - Env/config updates: add `ZERO_HIT_INDEX_RETENTION_DAYS` (default 30) and `ZERO_HIT_PERSISTENCE_ENABLED` (default false) to `env.ts`, plus validation/tests; document CLI drill steps for enabling persistence in Serverless sandboxes.
+    - Testing outline: introduce unit tests that stub the ES transport (no network) verifying the indexed payload and index targeting, and integration tests for the summary helper using a fake ES client returning canned aggregation responses.
+      _(Outline reviewed 2025-09-25: requirements align with the plan (Step 49) and testing strategy—no schema drift from SDK as documents are derived at ingestion time and all new tests remain pure/stubbed.)_
+    - Tests executed 2025-09-25: `pnpm -C apps/oak-open-curriculum-semantic-search test` (Vitest) covering new persistence unit tests + updated zero-hit API/logging suites (all pass locally).
+      _(Completed 2025-09-25; added `zero-hit-persistence*.ts` modules with ILM provisioning, 404 fallbacks, and CLI purge script, plus env/docs updates.)_
 50. REVIEW: Add coverage confirming dashboard queries read from the persisted index and document retention/alerting considerations.
+    _(Completed 2025-09-25; Vitest suites assert persisted telemetry wiring and docs now capture retention + purge workflow in `docs/QUERYING.md`.)_
 51. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
 52. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) informed by sandbox instrumentation; capture the operational runbook.
 53. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds, measuring latency thresholds.

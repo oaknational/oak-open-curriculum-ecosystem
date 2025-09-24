@@ -1,6 +1,6 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-09-25 (sandbox harness implemented)_
+_Last updated: 2025-09-25 (zero-hit persistence shipped)_
 
 ## Current focus
 
@@ -43,6 +43,7 @@ _Last updated: 2025-09-25 (sandbox harness implemented)_
 - ✅ **Sandbox index targeting** – Added env-driven index target selection, rewired ingestion/search modules, and covered the helpers with unit tests (`search-index-target.unit.test.ts`).
 - ✅ **Sandbox ingestion harness** – Implemented fixture-backed Oak client + CLI (`scripts/sandbox/ingest.ts`), rewrote bulk operations via `search-index-target.ts`, and added unit coverage for dry-run vs live `_bulk` requests (`sandbox-harness.unit.test.ts`).
 - ✅ **Sandbox harness refactor** – Split fixture parsing and bulk helpers into dedicated modules, tightened type guards, and cleared lint/max-lines constraints ahead of telemetry persistence work.
+- ✅ **Zero-hit persistence** – Implemented Serverless-backed writes with automatic ILM provisioning, index-missing fallbacks, retention-aware env toggles, CLI purge support, documentation, and Vitest coverage across persistence/search paths.
 
 ## In progress / blockers
 
@@ -52,10 +53,9 @@ _Last updated: 2025-09-25 (sandbox harness implemented)_
 
 ## Next actions (see plan for GO cadence)
 
-1. Persist zero-hit telemetry to an Elasticsearch Serverless index with retention safeguards and dashboard wiring.
-2. Optimise `oak_sequence_facets` ingestion/caching using insights from the sandbox run and capture the operational runbook.
-3. Enrich the admin console with index health details and verified controls.
-4. Refresh semantic-search documentation and onboarding packs, then rerun the end-to-end quality gates before Phase 1 hand-off.
+1. Optimise `oak_sequence_facets` ingestion/caching using insights from the sandbox run and capture the operational runbook.
+2. Enrich the admin console with index health details and verified controls.
+3. Refresh semantic-search documentation and onboarding packs, then rerun the end-to-end quality gates before Phase 1 hand-off.
 
 ## Constraints & reminders
 

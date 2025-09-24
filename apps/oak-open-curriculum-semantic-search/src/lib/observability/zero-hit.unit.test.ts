@@ -20,7 +20,15 @@ vi.mock('../logger', () => ({
   searchLogger: loggerStubs.stub,
 }));
 
+const persistenceStubs = vi.hoisted(() => ({
+  persistZeroHitEvent: vi.fn<(payload: unknown) => Promise<void>>(),
+  zeroHitPersistenceEnabled: vi.fn(() => false),
+}));
+
+vi.mock('./zero-hit-persistence', () => persistenceStubs);
+
 const { info, error, noop } = loggerStubs;
+const { persistZeroHitEvent, zeroHitPersistenceEnabled } = persistenceStubs;
 
 import { logZeroHit } from './zero-hit';
 import { getZeroHitSummary, resetZeroHitStore } from './zero-hit-store';
@@ -35,6 +43,8 @@ describe('logZeroHit', () => {
     fetchMock.mockReset();
     vi.stubGlobal('fetch', fetchMock);
     resetZeroHitStore();
+    persistZeroHitEvent.mockReset();
+    zeroHitPersistenceEnabled.mockReturnValue(false);
   });
 
   it('emits a structured log and webhook payload when hits are zero', async () => {
@@ -84,5 +94,32 @@ describe('logZeroHit', () => {
     expect(info).not.toHaveBeenCalled();
     expect(fetchMock).not.toHaveBeenCalled();
     expect(getZeroHitSummary().total).toBe(0);
+  });
+
+  it('persists zero-hit events when persistence is enabled', async () => {
+    zeroHitPersistenceEnabled.mockReturnValue(true);
+    persistZeroHitEvent.mockResolvedValueOnce();
+
+    await logZeroHit({
+      total: 0,
+      scope: 'lessons',
+      text: 'fractions',
+      indexVersion: 'v2025-03-16',
+      webhookUrl: 'none',
+      took: 123,
+      timedOut: false,
+      requestId: 'req-123',
+    });
+
+    expect(persistZeroHitEvent).toHaveBeenCalledWith(
+      expect.objectContaining({
+        scope: 'lessons',
+        text: 'fractions',
+        indexVersion: 'v2025-03-16',
+        tookMs: 123,
+        timedOut: false,
+        requestId: 'req-123',
+      }),
+    );
   });
 });
