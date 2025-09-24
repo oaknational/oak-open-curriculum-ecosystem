@@ -1,4 +1,4 @@
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import type { JSX } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
@@ -59,9 +59,9 @@ describe('SearchPageClient', () => {
   });
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {
-    const action = vi
-      .fn<StructuredSearchAction>()
-      .mockResolvedValue({ result: { scope: 'units', results: [], total: 0 } });
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'units', results: [], total: 0, took: 5, timedOut: false },
+    });
     renderWithTheme(action);
 
     const basePayload: StructuredBody = {
@@ -104,9 +104,9 @@ describe('SearchPageClient', () => {
   });
 
   it('runs a follow-up search when the scope changes', async () => {
-    const action = vi
-      .fn<StructuredSearchAction>()
-      .mockResolvedValue({ result: { scope: 'lessons', results: [], total: 0 } });
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 7, timedOut: false },
+    });
     renderWithTheme(action);
 
     const basePayload: StructuredBody = {
@@ -131,5 +131,48 @@ describe('SearchPageClient', () => {
         }),
       );
     });
+  });
+
+  it('surfaces totals and suggestions when structured results arrive', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 5, timedOut: false },
+    });
+    renderWithTheme(action);
+
+    const payload = {
+      scope: 'lessons',
+      results: [
+        {
+          id: 'lesson-1',
+          lesson: {
+            lesson_title: 'Decimals introduction',
+            subject_slug: 'maths',
+            key_stage: 'ks2',
+          },
+          highlights: [],
+        },
+      ],
+      total: 1,
+      took: 9,
+      timedOut: false,
+      suggestions: [
+        {
+          label: 'Decimals recap',
+          scope: 'lessons' as const,
+          url: '/lessons/decimals-recap',
+          contexts: {},
+        },
+      ],
+    };
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(payload);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('1 result for lessons')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Took 9ms')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /decimals recap/i })).toBeInTheDocument();
   });
 });

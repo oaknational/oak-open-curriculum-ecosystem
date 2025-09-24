@@ -22,6 +22,8 @@ export function SearchFacets({ facets, onSelectSequence }: SearchFacetsProps): J
     return null;
   }
 
+  const countLabel = sequences.length === 1 ? '1 programme' : `${sequences.length} programmes`;
+
   return (
     <OakBox
       as="aside"
@@ -35,6 +37,9 @@ export function SearchFacets({ facets, onSelectSequence }: SearchFacetsProps): J
       <OakHeading tag="h3" $font="heading-6" $mb="space-between-s">
         Programmes &amp; units
       </OakHeading>
+      <OakTypography as="p" $font="body-4" $color="text-subdued" $mb="space-between-s">
+        {countLabel}
+      </OakTypography>
       <SequenceFacetList sequences={sequences} onSelectSequence={onSelectSequence} />
     </OakBox>
   );

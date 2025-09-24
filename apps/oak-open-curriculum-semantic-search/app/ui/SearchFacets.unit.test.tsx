@@ -35,5 +35,6 @@ describe('SearchFacets', () => {
 
     expect(onSelect).toHaveBeenCalledTimes(1);
     expect(onSelect).toHaveBeenCalledWith(facet);
+    expect(screen.getByText('1 programme')).toBeInTheDocument();
   });
 });

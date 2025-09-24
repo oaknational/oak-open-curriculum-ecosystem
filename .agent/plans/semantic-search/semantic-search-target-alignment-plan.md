@@ -233,10 +233,31 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before regenerating docs.)_
 28. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration. _(Completed 2025-09-24; doc-gen succeeded after adjusting `vi.fn` generics.)_
 29. REVIEW: Record doc-gen results and remaining documentation tasks. _(Completed 2025-09-24; HTML/JSON outputs refreshed, no outstanding doc gaps.)_
-30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-31. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases.
-32. REVIEW: Share the summary to maintain continuity.
-33. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-34. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links.
-35. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2.
-36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before drafting the Phase 1 self-review.)_
+31. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-self-review.md`.)_
+32. REVIEW: Share the summary to maintain continuity. _(Completed 2025-09-24 via plan/context updates referencing the self-review document.)_
+33. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 ahead of Phase 1 exit validation.)_
+34. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-exit-validation.md`.)_
+35. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2. _(Completed 2025-09-24 within the exit validation checklist; outstanding work limited to observability dashboards.)_
+36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 concluding the current GO cadence cycle.)_
+37. ACTION: Surface structured search totals, facet counts, and suggestion payloads in the hybrid search UI using the SDK-derived response types (results + metadata + suggestions). _(Completed 2025-09-24; UI now renders summary text, facet counts, and suggestion chips via controller updates.)_
+38. REVIEW: Add/extend integration tests (e.g. `SearchPageClient`, `SearchResults`) to assert totals, facet badges, and suggestion chips render correctly for each scope. _(Completed 2025-09-24 via new unit/integration coverage across `SearchResults`, `SearchSuggestions`, `SearchFacets`, and `SearchPageClient`.)_
+39. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; post-step quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, `pnpm check`) all passed.)_
+40. ACTION: Wire suggestion and facet interactions so selecting a suggestion, facet, or scope change replays a structured search with the correct payload (including sequence follow-up support).
+41. REVIEW: Expand controller/facet interaction tests to prove follow-up searches fire with the expected body (suggestions, sequences, scope pivots).
+42. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+43. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components.
+44. REVIEW: Cover the telemetry surface with unit/integration tests, including mocked webhook deliveries and dashboard grouping logic.
+45. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+46. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) and document the operational runbook for these jobs.
+47. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds and measure latency regression thresholds.
+48. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+49. ACTION: Enrich the admin console with index health details (document counts, last run timestamps, index version) and provide explicit controls for bootstrap/reset flows.
+50. REVIEW: Write integration coverage ensuring the admin view reflects index health fields and command buttons trigger the right routes.
+51. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+52. ACTION: Update semantic-search documentation (README, admin runbooks, API docs notes) to reflect the new UI behaviour, telemetry dashboards, and ingestion requirements.
+53. REVIEW: Perform doc review (self) ensuring examples align with current UI/API contracts.
+54. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+55. QUALITY-GATE: Run `pnpm lint`, `pnpm test`, `pnpm build`, and `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` after completing the above deliverables.
+56. REVIEW: Record quality gate outcomes and capture any remediation needed before phase hand-off.
+57. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.

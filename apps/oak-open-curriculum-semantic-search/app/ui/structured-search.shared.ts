@@ -22,6 +22,46 @@ export const SearchRequest = z.object({
   includeFacets: z.boolean().optional(),
 });
 
+const SuggestionContextSchema = z
+  .object({
+    sequenceId: z.string().optional(),
+    phaseSlug: z.string().optional(),
+  })
+  .catchall(z.unknown());
+
+export const SuggestionItemSchema = z
+  .object({
+    label: z.string(),
+    scope: z.enum(['lessons', 'units', 'sequences']),
+    url: z.string(),
+    subject: z.string().optional(),
+    keyStage: z.string().optional(),
+    contexts: SuggestionContextSchema.default({}),
+  })
+  .catchall(z.unknown());
+
+export const SuggestionResponseSchema = z
+  .object({
+    suggestions: z.array(SuggestionItemSchema).default([]),
+    cache: z.object({ version: z.string(), ttlSeconds: z.number().int().nonnegative() }),
+  })
+  .catchall(z.unknown());
+
+export const HybridResponseSchema = z
+  .object({
+    scope: z.enum(['lessons', 'units', 'sequences']),
+    results: z.array(z.unknown()).default([]),
+    total: z.number().int().nonnegative(),
+    took: z.number().int().nonnegative(),
+    timedOut: z.boolean(),
+    aggregations: z.record(z.string(), z.unknown()).optional(),
+    facets: z.unknown().optional(),
+  })
+  .catchall(z.unknown());
+
+export type HybridResponse = z.infer<typeof HybridResponseSchema>;
+export type SuggestionItem = z.infer<typeof SuggestionItemSchema>;
+
 export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody {
   return {
     scope: input.scope,

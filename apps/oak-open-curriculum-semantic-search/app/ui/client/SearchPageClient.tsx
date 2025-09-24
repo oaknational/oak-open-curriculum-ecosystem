@@ -15,6 +15,7 @@ import type { StructuredSearchAction } from '../StructuredSearch';
 import NaturalSearchComponent from '../NaturalSearch';
 import SearchResultsComponent from '../SearchResults';
 import { SearchFacets } from '../SearchFacets';
+import { SearchSuggestions } from '../SearchSuggestions';
 import type { StructuredBody } from '../structured-search.shared';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import { buildFacetFollowUpInput } from './facet-search';
@@ -47,6 +48,8 @@ export default function SearchPageClient({
       </OakBox>
 
       <StructuredPanel searchAction={searchStructured} controller={ctrl} followUp={followUp} />
+
+      <SearchSuggestions suggestions={ctrl.suggestions} />
 
       <SearchFacets facets={ctrl.facets} onSelectSequence={followUp.handleFacetSelect} />
 

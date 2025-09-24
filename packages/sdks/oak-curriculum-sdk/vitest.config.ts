@@ -17,7 +17,6 @@ export default defineConfig({
         '**/*.config.*',
         '**/*.test.*',
         '**/*.spec.*',
-        '**/index.ts', // Often just re-exports
       ],
     },
     include: [

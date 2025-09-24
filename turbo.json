@@ -118,6 +118,22 @@
         "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
+    "mutate": {
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "tests/**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts",
+        "stryker.config.ts",
+        "$TURBO_ROOT$/stryker.config.base.ts"
+      ]
+    },
     "test:e2e": {
       "outputs": [],
       "cache": true,

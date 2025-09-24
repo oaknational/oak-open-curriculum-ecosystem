@@ -1,7 +1,9 @@
 # MCP Enhancements Plan
 
-## Future Hardening – Tool Generation
+## Future Hardening
 
+- rate limiting
+- auth
 - Collapse the generated `*Tool` stubs once we can derive handlers directly from the descriptor constants. The descriptor should be the single source of truth for transports, tooling, and docs.
 - Emit a stable constant data structure first, then synthesise TypeScript types, Zod schemas, and type guards from that data so request/response validation remains consistent end-to-end without manual assertions.
 - Thread the derived types and guards through `execute-tool-call`, the universal translation layer, and future transports so no path operates on `unknown` values.

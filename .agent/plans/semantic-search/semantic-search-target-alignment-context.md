@@ -1,6 +1,6 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-09-24_
+_Last updated: 2025-09-24 (post-Step 39 quality gate run)_
 
 ## Current focus
 
@@ -34,21 +34,26 @@ _Last updated: 2025-09-24_
 - ✅ **Admin console migration** – `/admin` now uses Oak layout, typography, and button primitives with stream output rendered via Oak tokens (no styled-components).
 - ✅ **API docs shell** – `/api/docs` is now delivered with Oak layout/typography containers and an Oak-bordered Redoc frame, removing bespoke styled wrappers.
 - ✅ **Admin/docs regression tests** – Added integration coverage for `/admin` and `/api/docs` to verify Oak component wiring and streaming/embed behaviour.
+- ✅ **Structured UI metadata** – Hybrid search page now surfaces totals, took/timed-out flags, facet counts, and suggestion chips derived from SDK schemas with accompanying tests.
+- ✅ **Quality gates (post-Step 39)** – `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm check` all pass after the latest UI/controller updates.
+- ✅ **Phase 1 self-review** – Captured outcomes, residual risks, and recommendations in `.agent/plans/semantic-search/phase-1-self-review.md`.
 
 ## In progress / blockers
 
-- Front-end search flows still only use `results`, ignoring totals, sequence facets, and suggestions; UI work required before enabling new metadata publicly.
-- Styling catalogue now reports no outstanding bespoke surfaces; future additions must be recorded immediately.
+- Suggestion and facet interactions do not yet replay follow-up structured searches; reducer wiring needs to handle chip/facet selection payloads.
 - Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators.
-- Need to finalise ingestion + UI wiring for `oak_sequence_facets` to unlock audience filters end-to-end.
+- `oak_sequence_facets` ingestion/caching needs optimisation and a documented operational runbook to stay responsive during UI adoption.
+- Admin console lacks index health telemetry (document counts, last-run timestamps, index version), limiting visibility during bootstrap/update operations.
 
 ## Next actions (see plan for GO cadence)
 
-1. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels (tracking progress via the styling catalogue).
-2. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
-3. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
-4. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.
-5. Begin drafting ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) so infrastructure decisions are ready once Phase 1 ships.
+1. Wire suggestion and facet interactions so follow-up structured searches execute with the correct payloads across scopes.
+2. Extend controller/facet interaction tests to guarantee the dispatched bodies match suggestion, sequence, and scope selections.
+3. Build zero-hit telemetry surfaces (dashboard page + webhook consumer stub) using Oak components.
+4. Cover the telemetry work with unit/integration tests, including mocked webhook deliveries and aggregation checks.
+5. Optimise `oak_sequence_facets` ingestion/caching behaviour and document the associated runbook.
+6. Enrich the admin console with index health details and test the bootstrap/reset controls.
+7. Update semantic-search documentation, then rerun the end-to-end quality gates before requesting Phase 2 sign-off.
 
 ## Constraints & reminders
 

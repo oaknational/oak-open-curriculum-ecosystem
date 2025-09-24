@@ -3,6 +3,7 @@
 import { createElement, type JSX, type ReactNode } from 'react';
 import { OakBox, OakTypography, OakUL } from '@oaknational/oak-components';
 import { z } from 'zod';
+import type { SearchMeta } from './client/useSearchController';
 
 type AllowedTag = 'em' | 'strong' | 'mark';
 const ALLOWED_TAGS: ReadonlySet<string> = new Set(['em', 'strong', 'mark']);
@@ -146,7 +147,7 @@ export function SearchResults({
   meta,
 }: {
   results: unknown[];
-  meta?: { scope?: string; total?: number } | null;
+  meta?: SearchMeta | null;
 }): JSX.Element | null {
   const parsed = ResultsSchema.safeParse(results);
   if (!parsed.success || parsed.data.length === 0) {
@@ -169,13 +170,11 @@ export function SearchResults({
     return rec.highlights ?? [];
   }
 
+  const summary = buildSummary(meta);
+
   return (
     <OakBox as="section" aria-live="polite" $mt="space-between-xl">
-      {meta?.total !== undefined ? (
-        <OakTypography as="p" $font="body-3" $color="text-subdued" $mb="space-between-s">
-          {meta.total} result{meta.total === 1 ? '' : 's'} for {meta.scope ?? 'search'}
-        </OakTypography>
-      ) : null}
+      <SearchSummary summary={summary} />
       <OakUL $reset $display="grid" $gap="space-between-m">
         {parsed.data.map((rec) => (
           <ResultItem
@@ -192,3 +191,54 @@ export function SearchResults({
 }
 
 export default SearchResults;
+
+function buildSummary(meta?: SearchMeta | null): {
+  primary: string | null;
+  secondary: string | null;
+} {
+  if (!meta) {
+    return { primary: null, secondary: null };
+  }
+
+  const scopeLabel = formatScope(meta.scope);
+  const primary = `${meta.total} result${meta.total === 1 ? '' : 's'} for ${scopeLabel}`;
+  const timedOut = meta.timedOut ? 'Results may be incomplete (timed out).' : null;
+  const took = `Took ${meta.took}ms`;
+  const secondary = timedOut ? `${took}. ${timedOut}` : took;
+  return { primary, secondary };
+}
+
+function formatScope(scope: SearchMeta['scope']): string {
+  if (scope === 'lessons') {
+    return 'lessons';
+  }
+  if (scope === 'units') {
+    return 'units';
+  }
+  return 'programmes';
+}
+
+function SearchSummary({
+  summary,
+}: {
+  summary: { primary: string | null; secondary: string | null };
+}): JSX.Element | null {
+  if (!summary.primary && !summary.secondary) {
+    return null;
+  }
+
+  return (
+    <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx" $mb="space-between-s">
+      {summary.primary ? (
+        <OakTypography as="p" $font="body-3" $color="text-subdued">
+          {summary.primary}
+        </OakTypography>
+      ) : null}
+      {summary.secondary ? (
+        <OakTypography as="p" $font="body-4" $color="text-subdued">
+          {summary.secondary}
+        </OakTypography>
+      ) : null}
+    </OakBox>
+  );
+}
