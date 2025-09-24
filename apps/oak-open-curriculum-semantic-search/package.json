@@ -58,7 +58,7 @@
     "eslint": "^9.35.0",
     "eslint-config-next": "^15.5.3",
     "jsdom": "^25.0.1",
-    "pnpm": "^10.17.0",
+    "pnpm": "^10.17.1",
     "prettier": "^3.6.2",
     "typedoc": "^0.28.12",
     "typedoc-plugin-markdown": "^4.4.2",
