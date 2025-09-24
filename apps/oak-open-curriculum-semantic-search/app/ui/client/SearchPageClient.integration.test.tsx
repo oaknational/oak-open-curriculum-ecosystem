@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { JSX } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
@@ -174,5 +174,63 @@ describe('SearchPageClient', () => {
     });
     expect(screen.getByText('Took 9ms')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /decimals recap/i })).toBeInTheDocument();
+  });
+
+  it('replays structured search when a suggestion is selected', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 6, timedOut: false },
+    });
+    renderWithTheme(action);
+
+    const basePayload: StructuredBody = {
+      scope: 'lessons',
+      text: 'fractions',
+      includeFacets: true,
+      subject: 'maths',
+      keyStage: 'ks2',
+    };
+
+    await act(async () => {
+      structuredPropsRef.current?.onSubmitPayload?.(basePayload);
+    });
+
+    const resultPayload = {
+      scope: 'lessons',
+      results: [],
+      total: 1,
+      took: 9,
+      timedOut: false,
+      suggestions: [
+        {
+          label: 'Decimals recap',
+          scope: 'lessons' as const,
+          subject: 'maths',
+          keyStage: 'ks2',
+          url: '/lessons/decimals-recap',
+          contexts: {},
+        },
+      ],
+    };
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(resultPayload);
+    });
+
+    const suggestionButton = await screen.findByRole('button', { name: /decimals recap/i });
+
+    fireEvent.click(suggestionButton);
+
+    await waitFor(() => {
+      expect(action).toHaveBeenCalledTimes(1);
+    });
+
+    const followUpPayload = action.mock.calls.at(-1)?.[0];
+    expect(followUpPayload).toMatchObject({
+      scope: 'lessons',
+      text: 'Decimals recap',
+      subject: 'maths',
+      keyStage: 'ks2',
+    });
+    expect(followUpPayload?.phaseSlug).toBeUndefined();
   });
 });

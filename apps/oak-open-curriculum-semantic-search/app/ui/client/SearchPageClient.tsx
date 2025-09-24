@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  useCallback,
-  useState,
-  useTransition,
-  type Dispatch,
-  type SetStateAction,
-  type JSX,
-} from 'react';
+import type { JSX } from 'react';
 import { OakBox, OakTypography } from '@oaknational/oak-components';
 import { useSearchController, type SearchController } from './useSearchController';
 import { StructuredSearch } from '../StructuredSearch';
@@ -16,9 +9,7 @@ import NaturalSearchComponent from '../NaturalSearch';
 import SearchResultsComponent from '../SearchResults';
 import { SearchFacets } from '../SearchFacets';
 import { SearchSuggestions } from '../SearchSuggestions';
-import type { StructuredBody } from '../structured-search.shared';
-import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
-import { buildFacetFollowUpInput } from './facet-search';
+import { useStructuredFollowUp } from './useStructuredFollowUp';
 
 export default function SearchPageClient({
   searchStructured,
@@ -49,7 +40,10 @@ export default function SearchPageClient({
 
       <StructuredPanel searchAction={searchStructured} controller={ctrl} followUp={followUp} />
 
-      <SearchSuggestions suggestions={ctrl.suggestions} />
+      <SearchSuggestions
+        suggestions={ctrl.suggestions}
+        onSelectSuggestion={followUp.handleSuggestionSelect}
+      />
 
       <SearchFacets facets={ctrl.facets} onSelectSequence={followUp.handleFacetSelect} />
 
@@ -126,115 +120,5 @@ function NaturalPanel({ controller }: { controller: SearchController }): JSX.Ele
         }}
       />
     </OakBox>
-  );
-}
-
-function useStructuredFollowUp({
-  searchStructured,
-  controller,
-}: {
-  searchStructured: StructuredSearchAction;
-  controller: SearchController;
-}) {
-  const [lastStructured, setLastStructured] = useState<StructuredBody | null>(null);
-  const runSearch = useStructuredSearchRunner(searchStructured, controller);
-
-  const recordPayload = useCallback((payload: StructuredBody) => {
-    setLastStructured(payload);
-  }, []);
-
-  const handleScopeChange = useScopeChangeHandler({
-    lastStructured,
-    setLastStructured,
-    runSearch,
-  });
-
-  const handleFacetSelect = useFacetSelectHandler({
-    controller,
-    lastStructured,
-    setLastStructured,
-    runSearch,
-  });
-
-  return { recordPayload, handleScopeChange, handleFacetSelect };
-}
-
-function useStructuredSearchRunner(
-  searchStructured: StructuredSearchAction,
-  controller: SearchController,
-) {
-  const [, startTransition] = useTransition();
-
-  return useCallback(
-    (payload: StructuredBody) => {
-      startTransition(() => {
-        void (async () => {
-          controller.onStart();
-          try {
-            const { result, error } = await searchStructured(payload);
-            if (error) {
-              controller.onError(error);
-              return;
-            }
-            controller.onSuccess(result ?? null);
-          } catch (error) {
-            const fallback = error instanceof Error ? error.message : 'Search failed';
-            controller.onError(fallback);
-          }
-        })();
-      });
-    },
-    [controller, searchStructured, startTransition],
-  );
-}
-
-function useScopeChangeHandler({
-  lastStructured,
-  setLastStructured,
-  runSearch,
-}: {
-  lastStructured: StructuredBody | null;
-  setLastStructured: Dispatch<SetStateAction<StructuredBody | null>>;
-  runSearch: (payload: StructuredBody) => void;
-}) {
-  return useCallback(
-    (scope: StructuredBody['scope']) => {
-      if (!lastStructured) {
-        return;
-      }
-      const payload: StructuredBody = {
-        ...lastStructured,
-        scope,
-        phaseSlug: scope === 'sequences' ? lastStructured.phaseSlug : undefined,
-      };
-      setLastStructured(payload);
-      runSearch(payload);
-    },
-    [lastStructured, runSearch, setLastStructured],
-  );
-}
-
-function useFacetSelectHandler({
-  controller,
-  lastStructured,
-  setLastStructured,
-  runSearch,
-}: {
-  controller: SearchController;
-  lastStructured: StructuredBody | null;
-  setLastStructured: Dispatch<SetStateAction<StructuredBody | null>>;
-  runSearch: (payload: StructuredBody) => void;
-}) {
-  return useCallback(
-    (facet: SequenceFacet) => {
-      const next = buildFacetFollowUpInput({ base: lastStructured, facet });
-      if (!next) {
-        controller.onError('Run a structured search before selecting a programme.');
-        return;
-      }
-      setLastStructured(next);
-      runSearch(next);
-    },
-    [controller, lastStructured, runSearch, setLastStructured],
   );
 }

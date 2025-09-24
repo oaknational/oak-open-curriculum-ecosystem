@@ -26,6 +26,11 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 - **Dev dependency gaps**: Libraries and the Notion MCP app omit local `vitest`, relying on root hoisting. Adding Stryker packages solely at the root will follow the existing pattern but should be documented.
 - **Stryker absence**: Searches confirm no `stryker.config.*` files or `@stryker-mutator/*` dependencies; greenfield integration is required.
 
+### Progress update (2025-09-24)
+
+- **`@oaknational/mcp-providers-node` mutation run**: Local Stryker configuration now exists (`stryker.config.ts`, `vitest.config.ts`, `mutate` script). Initial run succeeded via `pnpm --filter @oaknational/mcp-providers-node mutate --logLevel trace`, producing a mutation score of **53.57%** (15 killed, 13 survived). Surviving mutants cluster around console logging branches (`src/index.ts`), highlighting missing behavioural assertions for logging outputs.
+- **Vitest configuration duplication**: To unblock the mutation run under Stryker's sandbox, the workspace now carries a self-contained `vitest.config.ts` mirroring `vitest.config.base.ts`. This confirms the need for a dedicated configuration workspace that can be imported from both regular runs and sandboxed environments without fragile relative paths.
+
 ## Audit findings (2025-09-24)
 
 ### Root tooling
@@ -44,6 +49,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 - **`apps/oak-open-curriculum-semantic-search/`**: `vitest.config.ts` configures JS DOM, includes `**/*.unit.test.{ts,tsx}` and `**/*.integration.test.{ts,tsx}`. Dev dependencies already pin `vitest`. Mutation tooling must honour the JS DOM environment and `test.setup.ts`.
 - **`packages/libs/{env,logger,storage,transport}/`**: Each `package.json` defines `test: "vitest run"`, imports `vitest.config.base.ts`, and lacks local `vitest` in `devDependencies`. Mutation config can rely on hoisting but should confirm the shared base provides correct include/exclude patterns (currently broad `*.test.ts`/`*.spec.ts`).
 - **`packages/providers/mcp-providers-node/`**: `package.json` exposes `test: "vitest run"` but has no local `vitest` dependency and no `vitest.config.ts`. It will rely entirely on root defaults; adding a workspace config may be necessary to tune mutation scope.
+- **Update (2025-09-24)**: Workspace now owns `vitest.config.ts`, `stryker.config.ts`, and a `mutate` script. Mutation score data above should inform follow-up test enhancements (assertions around logging providers).
 - **`packages/sdks/oak-curriculum-sdk/`**: `vitest.config.ts` is standalone with extensive include patterns (`src/**/*.test.ts`, `scripts/**/*.test.ts`). Dev dependencies include `vitest`. Mutation targeting may need to narrow to unit/integration naming conventions.
 - **Missing workspace directory**: `packages/libs/mcp-server-kit` is absent despite being declared in `pnpm-workspace.yaml`; confirm whether the package is planned or the workspace file needs updating before Stryker integration attempts to cover it.
 
@@ -66,7 +72,11 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 
 - **Include patterns**: Standardise unit/integration globs so Stryker targets only in-process tests. Update configs that currently match `*.e2e.test.ts` to exclude E2E suites.
 - **Environment settings**: Ensure JS DOM environments (Next.js app) and Node environments declare setup files explicitly so Stryker can resolve them.
-- **Shared utilities**: Introduce optional helper exports in `vitest.config.base.ts` for JS DOM vs Node to minimise drift.
+- **Shared utilities → configuration workspace**: Replace the single `vitest.config.base.ts` file with a dedicated configuration workspace (e.g., `packages/config/testing/`) exporting reusable `vitest`, `stryker`, and related helpers. This workspace must:
+  - Publish ESM modules that can be imported via package specifiers (`@oaknational/testing-config/vitest`) from both workspaces and Stryker sandboxes.
+  - Expose typed factory functions (e.g., `createNodeVitestConfig`, `createJsDomVitestConfig`) so consuming workspaces can compose includes/excludes without duplicating objects.
+  - Provide Stryker helper exports (mutate glob factories, checker presets) to minimise duplication across workspace-specific configs.
+  - Maintain zero runtime side effects to respect testing strategy guidance (pure config generators, no environment mutation).
 
 ### 4. Turbo Task Extensions
 
@@ -81,6 +91,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
 - **Resource constraints**: Profile long-running suites to gauge mutation-testing feasibility and identify candidates for selective mutant scopes.
 - **Command wiring**: Ensure each workspace adds a `mutate` script that runs `stryker run` with its local config before enabling the Turbo pipeline.
 - **Config hygiene**: Add workspace-level `vitest.config.ts` files where missing (e.g., `packages/providers/mcp-providers-node`) so mutation config can mirror vitest behaviour without depending on implicit defaults.
+- **Configuration workspace adoption**: Schedule migration of all workspaces to consume the shared testing configuration package once it exists, removing bespoke copies and preventing future sandbox path regressions.
 
 ## Strategic Roadmap
 
@@ -109,6 +120,7 @@ Deliver a dependable mutation-testing capability across all pnpm workspaces so t
   - Roll out workspace-level `mutate` scripts and ensure `pnpm mutate` covers the entire workspace set.
   - Update `pnpm qg` (or companion command) to include mutation testing once runtimes stabilise.
   - Establish reporting/dashboards to surface mutation results in CI.
+  - Build and publish the shared testing configuration workspace; migrate existing `vitest.config.ts` files to import from it, then deprecate raw `vitest.config.base.ts` usage.
 
 ### Phase 3 – Optimisation & Automation
 

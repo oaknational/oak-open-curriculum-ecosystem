@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
 import { SearchSuggestions } from './SearchSuggestions';
 
@@ -32,5 +32,19 @@ describe('SearchSuggestions', () => {
     );
 
     expect(container.firstChild).toBeNull();
+  });
+
+  it('invokes callback when a suggestion is selected', () => {
+    const onSelect = vi.fn();
+
+    render(
+      <OakThemeProvider theme={oakDefaultTheme}>
+        <SearchSuggestions suggestions={suggestions} onSelectSuggestion={onSelect} />
+      </OakThemeProvider>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /fractions primer/i }));
+
+    expect(onSelect).toHaveBeenCalledWith(suggestions[0]);
   });
 });

@@ -1,4 +1,6 @@
-const config = {
+import type { PartialStrykerOptions } from '@stryker-mutator/api/core';
+
+const config: PartialStrykerOptions = {
   _comment:
     "This config was generated using 'stryker init'. Please take a look at: https://stryker-mutator.io/docs/stryker-js/configuration/ for more information.",
   packageManager: 'pnpm',

@@ -12,8 +12,10 @@ import type { SuggestionItem } from './structured-search.shared';
 
 export function SearchSuggestions({
   suggestions,
+  onSelectSuggestion,
 }: {
   suggestions: SuggestionItem[];
+  onSelectSuggestion?: (suggestion: SuggestionItem) => void;
 }): JSX.Element | null {
   if (!suggestions || suggestions.length === 0) {
     return null;
@@ -33,7 +35,13 @@ export function SearchSuggestions({
       <OakUL $reset $display="flex" $flexWrap="wrap" $gap="space-between-ssx">
         {suggestions.map((suggestion) => (
           <OakBox as="li" key={`${suggestion.scope}-${suggestion.label}`}>
-            <OakSecondaryButton type="button" width="100%" textAlign="left" element="button">
+            <OakSecondaryButton
+              type="button"
+              width="100%"
+              textAlign="left"
+              element="button"
+              onClick={() => onSelectSuggestion?.(suggestion)}
+            >
               <OakTypography as="span" $font="body-3-bold">
                 {suggestion.label}
               </OakTypography>
