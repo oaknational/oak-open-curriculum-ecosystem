@@ -29,12 +29,12 @@ Deliver an extensible framework that transforms any OpenAPI specification, plus 
 
 ## Milestones
 
-| Milestone | Description | Exit Criteria |
-| --- | --- | --- |
-| **M1 – Foundations** | Audit current scripts, define abstractions, and establish configuration schema plus validation. | Audit + architecture docs merged; config schema with Zod guards published alongside examples. |
-| **M2 – Runtime Kit** | Extract shared runtime package and implement SDK generator CLI with Oak + non-Oak samples. | Shared package exported, CLI emits compilable projects, tests green across samples. |
-| **M3 – Search & Tooling** | Scaffold search service template, MCP servers, and ensure success metrics instrumentation. | Search scaffolding passes smoke tests, tool composition examples documented, metrics recorded. |
-| **M4 – Rollout** | Finalise documentation, CI automation, and release checklist for framework adoption. | Usage guides published, CI templates live, rollout checklist approved. |
+| Milestone                 | Description                                                                                     | Exit Criteria                                                                                  |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **M1 – Foundations**      | Audit current scripts, define abstractions, and establish configuration schema plus validation. | Audit + architecture docs merged; config schema with Zod guards published alongside examples.  |
+| **M2 – Runtime Kit**      | Extract shared runtime package and implement SDK generator CLI with Oak + non-Oak samples.      | Shared package exported, CLI emits compilable projects, tests green across samples.            |
+| **M3 – Search & Tooling** | Scaffold search service template, MCP servers, and ensure success metrics instrumentation.      | Search scaffolding passes smoke tests, tool composition examples documented, metrics recorded. |
+| **M4 – Rollout**          | Finalise documentation, CI automation, and release checklist for framework adoption.            | Usage guides published, CI templates live, rollout checklist approved.                         |
 
 ## Governance & Reporting
 

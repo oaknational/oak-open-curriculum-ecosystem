@@ -1,5 +1,11 @@
 # Semantic Search Target Alignment Plan
 
+## Infrastructure
+
+- Next.js App Router app, hosted on Vercel, with access to the Oak Open Curriculum data via the SDK in this monorepo.
+- [Elastic Hybrid Search](https://www.elastic.co/docs/solutions/search/hybrid-semantic-text) (EHS) with [Elasticsearch Serverless](https://www.elastic.co/docs/deploy-manage/deploy/elastic-cloud/serverless), which has [its own API surface](https://www.elastic.co/docs/api/doc/elastic-cloud-serverless/) distinct from the hosted solutions.
+- The official Elasticsearch Typescript client, [@elastic/elasticsearch](https://www.npmjs.com/package/@elastic/elasticsearch), which includes support for Elasticsearch Serverless.
+
 ## Intent
 
 Deliver the hybrid search app so that it matches the definitive architecture: server-side RRF queries over enriched Elasticsearch Serverless indices, fully populated via the SDK with canonical URLs and lesson-planning data, plus the supporting admin flows, suggestion endpoints, and observability. All ingestion and search orchestration runs inside Next.js App Router API routes deployed on Vercel, so every step must remain compatible with that runtime (Node 18/20 edge constraints, streaming limits, invocation timeouts). This plan now subsumes the semantic search index enhancement roadmap and grounds ontology requirements in `docs/architecture/curriculum-ontology.md`.
@@ -10,7 +16,7 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 - Environment validation now enforces `SEARCH_INDEX_VERSION`, optional zero-hit webhook/LOG_LEVEL defaults, and the new requirements are covered by unit tests. SDK adapters expose additional summary endpoints but still need to emit the enriched payloads into the ingestion pipeline.
 - Rollup rebuild now emits lesson-planning snippets drawn from SDK summaries; remaining work is to propagate enriched rollups into API responses and downstream queries.
 - Search runtime now issues server-side `rank.rrf` requests for lessons, units, and sequences, returning highlights, totals, and optional aggregations.
-- Structured, NL, and suggestion API routes validate facets/phase filters, emit enriched payload envelopes, and now share cached responses with zero-hit logging hooks. Front-end flows still consume only the legacy `results` array and need upgrading.
+- Structured, NL, and suggestion API routes validate facets/phase filters, emit enriched payload envelopes, and now share cached responses with zero-hit logging hooks. Front-end flows still consume only the legacy `results` array and need upgrading, but the SDK exposes canonical facet schemas plus named Zod exports so downstream code stays lint-clean.
 - Test suite covers the new helper behaviour, and zero-hit logging now records scope, filters, and index version; observability dashboards and UI surfacing of these events remain outstanding.
 
 ## Progress to Date
@@ -30,6 +36,7 @@ Deliver the hybrid search app so that it matches the definitive architecture: se
 - Updated Typedoc configuration and regenerated SDK + semantic-search documentation without warnings.
 - Implemented `/api/search/suggest` with cached completion + fallback queries, dedicated logging, and integration coverage.
 - Added zero-hit telemetry helper invoked from structured search, including optional webhook dispatch and unit tests.
+- Generated search facet types and Zod validators directly from the OpenAPI schema, tightened the emitters to use named exports, and resolved the lint regression highlighted by the workspace quality gates.
 
 ## Target Outcomes
 
@@ -177,17 +184,17 @@ Objective: surface ontology metadata end-to-end, power advanced suggestions, and
 
 We continue to follow GO cadence (ACTION → REVIEW with grounding every third item). Tasks below emphasise Phase 1 completion before Phase 2/3 preparation.
 
-1. ACTION: Wire UI interactions so selecting sequence/unit facets and filters triggers structured follow-up searches with the new payload metadata.
-2. REVIEW: Verify facet-driven searches behave correctly across scopes and record remaining UX gaps.
+1. ACTION: Bring the search/admin UI to the Oak baseline by replacing remaining bespoke components/styles with Oak Components and theme tokens.
+2. REVIEW: Verify the baseline pass covers cards, dropdowns, facets, and panels with accessible focus/contrast states.
 3. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-4. ACTION: Design and document zero-hit observability outputs (dashboards/webhook consumers) using the new structured log format.
-5. REVIEW: Confirm proposed observability flows cover required metrics and alerting paths.
+4. ACTION: Wire UI interactions so selecting sequence/unit facets and filters triggers structured follow-up searches with the new payload metadata.
+5. REVIEW: Confirm facet-driven searches behave correctly across scopes and record remaining UX gaps.
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ACTION: Update client surfaces to expose suggestion/type-ahead responses, including caching and analytics hooks.
-8. REVIEW: Assess suggestion UX and note follow-on experiments.
+7. ACTION: Design and document zero-hit observability outputs (dashboards/webhook consumers) using the new structured log format.
+8. REVIEW: Ensure proposed observability flows cover required metrics and alerting paths.
 9. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-10. ACTION: Audit UI components for token compliance (cards, dropdowns, facets, admin panels) and replace ad-hoc styles with Oak Component patterns.
-11. REVIEW: Confirm light/dark themes, focus states, and accessibility checks pass after the styling cleanup.
+10. ACTION: Update client surfaces to expose suggestion/type-ahead responses, including caching and analytics hooks.
+11. REVIEW: Assess suggestion UX and note follow-on experiments.
 12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
 13. QUALITY-GATE: Run `pnpm lint` after completing the above changes and resolve any violations.
 14. REVIEW: Capture lint outcomes and remediation notes.

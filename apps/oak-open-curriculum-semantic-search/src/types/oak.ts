@@ -11,9 +11,17 @@ export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
+  SequenceFacetUnit,
+  SequenceFacet,
+  SearchFacets,
 } from '@oaknational/oak-curriculum-sdk';
 export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
+} from '@oaknational/oak-curriculum-sdk';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
 } from '@oaknational/oak-curriculum-sdk';

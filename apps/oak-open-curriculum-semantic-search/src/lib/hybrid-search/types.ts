@@ -4,6 +4,8 @@ import type {
   SearchSequenceIndexDoc,
   SearchSubjectSlug,
   KeyStage,
+  SequenceFacet,
+  SearchFacets,
 } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
 
@@ -42,25 +44,6 @@ export interface SequenceResult {
 
 export type SearchAggregations = Record<string, estypes.AggregationsAggregate>;
 
-export interface SequenceFacet {
-  subjectSlug: SearchSubjectSlug;
-  sequenceSlug: string;
-  keyStage: KeyStage;
-  keyStageTitle?: string;
-  phaseSlug: string;
-  phaseTitle: string;
-  years: string[];
-  units: { unitSlug: string; unitTitle: string }[];
-  unitCount: number;
-  lessonCount: number;
-  hasKs4Options: boolean;
-  sequenceUrl?: string;
-}
-
-export interface SearchFacets {
-  sequences: SequenceFacet[];
-}
-
 export interface HybridSearchMeta {
   total: number;
   took: number;
@@ -73,3 +56,5 @@ export type HybridSearchResult =
   | (HybridSearchMeta & { scope: 'units'; results: UnitResult[] })
   | (HybridSearchMeta & { scope: 'lessons'; results: LessonResult[] })
   | (HybridSearchMeta & { scope: 'sequences'; results: SequenceResult[] });
+
+export type { SequenceFacet, SearchFacets };

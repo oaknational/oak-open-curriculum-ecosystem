@@ -39,6 +39,14 @@ export type {
   SearchCompletionSuggestPayload,
 } from './search-index.js';
 
+// Hybrid search facet types and schemas
+export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index.js';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+} from './generated/zod/search/output/index.js';
+
 // Response-shape type guards for search-related endpoints
 export {
   isUnitsGrouped,

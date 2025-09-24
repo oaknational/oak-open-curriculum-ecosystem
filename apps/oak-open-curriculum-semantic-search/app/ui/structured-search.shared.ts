@@ -1,22 +1,25 @@
 import { z } from 'zod';
 
 export interface StructuredBody {
-  scope: 'units' | 'lessons';
+  scope: 'units' | 'lessons' | 'sequences';
   text: string;
   subject?: string;
   keyStage?: string;
   minLessons?: number;
   size?: number;
   includeFacets?: boolean;
+  phaseSlug?: string;
 }
 
 export const SearchRequest = z.object({
-  scope: z.enum(['units', 'lessons']),
+  scope: z.enum(['units', 'lessons', 'sequences']),
   text: z.string(),
   subject: z.string().optional(),
   keyStage: z.string().optional(),
   minLessons: z.number().int().positive().optional(),
   size: z.number().int().positive().optional(),
+  phaseSlug: z.string().optional(),
+  includeFacets: z.boolean().optional(),
 });
 
 export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody {
@@ -27,7 +30,8 @@ export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody 
     keyStage: input.keyStage || undefined,
     minLessons: input.minLessons,
     size: input.size,
-    includeFacets: true,
+    includeFacets: input.includeFacets ?? true,
+    phaseSlug: input.phaseSlug || undefined,
   };
 }
 

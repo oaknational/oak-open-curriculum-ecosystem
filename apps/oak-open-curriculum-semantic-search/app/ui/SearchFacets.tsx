@@ -2,25 +2,8 @@
 
 import type { JSX } from 'react';
 import sc from 'styled-components';
-import { z } from 'zod';
-
-const SequenceFacetSchema = z
-  .object({
-    sequenceSlug: z.string(),
-    keyStage: z.string(),
-    keyStageTitle: z.string().optional(),
-    years: z.array(z.string()).default([]),
-    units: z.array(z.object({ unitSlug: z.string(), unitTitle: z.string() })).default([]),
-    unitCount: z.number().optional(),
-    lessonCount: z.number().optional(),
-  })
-  .catchall(z.unknown());
-
-const FacetsSchema = z
-  .object({
-    sequences: z.array(SequenceFacetSchema).default([]),
-  })
-  .catchall(z.unknown());
+import type { SequenceFacet } from '../../src/lib/hybrid-search/types';
+import { SearchFacetsSchema } from '../../src/types/oak';
 
 const FacetWrapper = sc.aside`
   margin-top: ${(p) => p.theme.app.space.lg};
@@ -44,13 +27,29 @@ const FacetItem = sc.li`
   font-size: ${(p) => p.theme.app.fontSizes.xs};
 `;
 
-export function SearchFacets({ facets }: { facets: unknown }): JSX.Element | null {
-  const parsed = FacetsSchema.safeParse(facets);
-  if (!parsed.success) {
-    return null;
-  }
+const FacetButton = sc.button`
+  all: unset;
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
+  border-radius: ${(p) => p.theme.app.radii.sm};
+  padding: ${(p) => p.theme.app.space.xs} ${(p) => p.theme.app.space.sm};
+  cursor: pointer;
 
-  const sequences = parsed.data.sequences ?? [];
+  &:focus-visible {
+    outline: 2px solid ${(p) => p.theme.app.colors.headerBorder};
+    outline-offset: 2px;
+  }
+`;
+
+interface SearchFacetsProps {
+  facets: unknown;
+  onSelectSequence?: (facet: SequenceFacet) => void;
+}
+
+export function SearchFacets({ facets, onSelectSequence }: SearchFacetsProps): JSX.Element | null {
+  const sequences = parseSequenceFacets(facets);
   if (sequences.length === 0) {
     return null;
   }
@@ -58,17 +57,40 @@ export function SearchFacets({ facets }: { facets: unknown }): JSX.Element | nul
   return (
     <FacetWrapper aria-label="Sequence facets">
       <FacetHeading>Programmes &amp; units</FacetHeading>
-      <FacetList>
-        {sequences.map((seq) => (
-          <FacetItem key={`${seq.sequenceSlug}-${seq.keyStage}`}>
-            <strong>{seq.sequenceSlug}</strong>
-            {seq.keyStageTitle ? ` · ${seq.keyStageTitle}` : ` · ${seq.keyStage}`}
-            {seq.years && seq.years.length ? ` · Years ${seq.years.join(', ')}` : null}
-            {seq.unitCount !== undefined ? ` · ${seq.unitCount} units` : null}
-            {seq.lessonCount !== undefined ? ` · ${seq.lessonCount} lessons` : null}
-          </FacetItem>
-        ))}
-      </FacetList>
+      <SequenceFacetList sequences={sequences} onSelectSequence={onSelectSequence} />
     </FacetWrapper>
   );
+}
+
+function SequenceFacetList({
+  sequences,
+  onSelectSequence,
+}: {
+  sequences: SequenceFacet[];
+  onSelectSequence?: (facet: SequenceFacet) => void;
+}): JSX.Element {
+  return (
+    <FacetList>
+      {sequences.map((facet) => (
+        <FacetItem key={`${facet.sequenceSlug}-${facet.keyStage}`}>
+          <FacetButton type="button" onClick={() => onSelectSequence?.(facet)}>
+            <strong>{facet.sequenceSlug}</strong>
+            {facet.keyStageTitle ? ` · ${facet.keyStageTitle}` : ` · ${facet.keyStage}`}
+            {facet.years.length ? ` · Years ${facet.years.join(', ')}` : null}
+            {facet.unitCount !== undefined ? ` · ${facet.unitCount} units` : null}
+            {facet.lessonCount !== undefined ? ` · ${facet.lessonCount} lessons` : null}
+          </FacetButton>
+        </FacetItem>
+      ))}
+    </FacetList>
+  );
+}
+
+function parseSequenceFacets(facets: unknown): SequenceFacet[] {
+  const parsed = SearchFacetsSchema.safeParse(facets);
+  if (!parsed.success) {
+    return [];
+  }
+
+  return parsed.data.sequences ?? [];
 }

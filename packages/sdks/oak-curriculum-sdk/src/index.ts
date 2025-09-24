@@ -139,6 +139,11 @@ export type {
   SearchCompletionSuggestPayload,
 } from './types/search-index.js';
 export type {
+  SequenceFacetUnit,
+  SequenceFacet,
+  SearchFacets,
+} from './types/generated/search/index.js';
+export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
@@ -153,6 +158,11 @@ export {
   unitSummarySchema,
   subjectSequencesSchema,
 } from './types/search-response-guards.js';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+} from './types/generated/zod/search/output/index.js';
 export {
   isUnitsGrouped,
   isLessonGroups,

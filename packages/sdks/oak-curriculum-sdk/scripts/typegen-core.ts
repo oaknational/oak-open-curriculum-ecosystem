@@ -34,6 +34,8 @@ import {
   type GeneratedMcpToolFiles,
 } from './typegen/mcp-tools/mcp-tool-generator.js';
 import { typeSafeEntries } from '../src/types/helpers.js';
+import { generateSearchFacetTypeModules } from './typegen/search/generate-search-facet-types.js';
+import { generateSearchFacetZodModules } from './typegen/search/generate-search-facet-zod.js';
 
 /**
  * Create a map of filenames to their content
@@ -60,7 +62,14 @@ export function createFileMap(
     '../openai-connector/index.ts': generateOpenAiConnectorContent(),
   };
 
-  return baseFiles;
+  const searchFacetTypes = generateSearchFacetTypeModules();
+  const searchFacetZod = generateSearchFacetZodModules();
+
+  return {
+    ...baseFiles,
+    ...searchFacetTypes,
+    ...searchFacetZod,
+  };
 }
 
 /**

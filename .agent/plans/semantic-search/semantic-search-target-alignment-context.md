@@ -1,6 +1,6 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-03-21_
+_Last updated: 2025-09-24_
 
 ## Current focus
 
@@ -25,6 +25,7 @@ _Last updated: 2025-03-21_
 - ✅ **Suggestion endpoint** – `/api/search/suggest` ships completion + fallback queries with caching, validation, and integration coverage.
 - ✅ **Zero-hit telemetry** – Structured searches emit zero-hit logs and optional webhook payloads via a shared helper.
 - ✅ **OpenAPI refresh** – Schemas and path registration now include sequences, facets, suggestions, and zero-hit metadata.
+- ✅ **Search facet exports** – Search facet types and Zod validators now emit named exports from the SDK generator, satisfying eslint rules and keeping `pnpm check` green.
 
 ## In progress / blockers
 
@@ -35,8 +36,8 @@ _Last updated: 2025-03-21_
 
 ## Next actions (see plan for GO cadence)
 
-1. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
-2. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels.
+1. Migrate UI surfaces to Oak Components + semantic tokens, retiring ad-hoc styling in search and admin panels.
+2. Wire UI/server actions to trigger follow-up searches when facets or filters change, exposing totals/facets/suggestions.
 3. Document and prototype observability flows (dashboards/webhook consumer) for the zero-hit telemetry payloads.
 4. Finalise ingestion + caching strategy for `oak_sequence_facets` so UI filtering remains responsive.
 5. Begin drafting ingestion pipeline designs for Phase 2 indices (lesson planning, transcripts, guidance, assets, assessments) so infrastructure decisions are ready once Phase 1 ships.
