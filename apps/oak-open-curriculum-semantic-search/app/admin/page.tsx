@@ -3,6 +3,7 @@
 import { Fragment, type JSX } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import { useStream } from '../lib/useStream';
+import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
   const { state, text, run } = useStream(url, method ?? 'POST');
@@ -76,28 +77,8 @@ export default function AdminPage(): JSX.Element {
       $flexDirection="column"
       $gap="space-between-xl"
     >
-      <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx">
-        <OakHeading tag="h1" $font="heading-4">
-          Admin tools
-        </OakHeading>
-        <OakTypography as="p" $font="body-3" $color="text-subdued">
-          Run indexing and rollup tasks. Output streams below each action.
-        </OakTypography>
-      </OakBox>
-
-      <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-xs">
-        <OakHeading tag="h2" $font="heading-6">
-          Quick links
-        </OakHeading>
-        <OakTypography as="p" $font="body-3">
-          1) <code>/api/admin/index-oak</code> → 2) <code>/api/admin/rebuild-rollup</code> → 3){' '}
-          <code>/api/search</code>
-        </OakTypography>
-        <OakTypography as="p" $font="body-3">
-          SDK parity tests: POST <code>/api/sdk/search-lessons</code>, POST{' '}
-          <code>/api/sdk/search-transcripts</code>
-        </OakTypography>
-      </OakBox>
+      <AdminIntro />
+      <QuickLinks />
 
       <AdminSection heading="Elasticsearch setup">
         <StreamOutput url="/api/admin/elastic-setup" method="POST" />
@@ -110,6 +91,41 @@ export default function AdminPage(): JSX.Element {
       <AdminSection heading="Rebuild rollup">
         <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
       </AdminSection>
+
+      <AdminSection heading="Zero-hit telemetry">
+        <ZeroHitDashboard />
+      </AdminSection>
+    </OakBox>
+  );
+}
+
+function AdminIntro(): JSX.Element {
+  return (
+    <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx">
+      <OakHeading tag="h1" $font="heading-4">
+        Admin tools
+      </OakHeading>
+      <OakTypography as="p" $font="body-3" $color="text-subdued">
+        Run indexing and rollup tasks. Output streams below each action.
+      </OakTypography>
+    </OakBox>
+  );
+}
+
+function QuickLinks(): JSX.Element {
+  return (
+    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-xs">
+      <OakHeading tag="h2" $font="heading-6">
+        Quick links
+      </OakHeading>
+      <OakTypography as="p" $font="body-3">
+        1) <code>/api/admin/index-oak</code> → 2) <code>/api/admin/rebuild-rollup</code> → 3){' '}
+        <code>/api/search</code>
+      </OakTypography>
+      <OakTypography as="p" $font="body-3">
+        SDK parity tests: POST <code>/api/sdk/search-lessons</code>, POST{' '}
+        <code>/api/sdk/search-transcripts</code>
+      </OakTypography>
     </OakBox>
   );
 }

@@ -1,6 +1,6 @@
 # Semantic Search Target Alignment – Context Snapshot
 
-_Last updated: 2025-09-24 (zero-hit dashboard planning)_
+_Last updated: 2025-09-24 (zero-hit dashboard shipped)_
 
 ## Current focus
 
@@ -36,23 +36,22 @@ _Last updated: 2025-09-24 (zero-hit dashboard planning)_
 - ✅ **Admin/docs regression tests** – Added integration coverage for `/admin` and `/api/docs` to verify Oak component wiring and streaming/embed behaviour.
 - ✅ **Structured UI metadata** – Hybrid search page now surfaces totals, took/timed-out flags, facet counts, and suggestion chips derived from SDK schemas with accompanying tests.
 - ✅ **Follow-up wiring** – Scope toggles, programme facets, and suggestion chips all replay structured searches with typed payload builders (`useStructuredFollowUp`, `facet-search`, `suggestion-search`) plus integration/unit coverage.
-- 🛠️ **Zero-hit dashboard design** – Planned implementation: in-memory event store with API endpoints feeding an Oak-themed admin dashboard and webhook consumer stub. Work now moves into execution.
+- ✅ **Zero-hit telemetry surface** – Added in-memory event store + API routes, Oak-themed dashboard (`app/ui/admin/ZeroHitDashboard*.tsx`), and unit/integration tests covering refresh, grouping, and webhook ingestion.
 - ✅ **Quality gates (post-Step 39)** – `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm check` all pass after the latest UI/controller updates.
 - ✅ **Phase 1 self-review** – Captured outcomes, residual risks, and recommendations in `.agent/plans/semantic-search/phase-1-self-review.md`.
 
 ## In progress / blockers
 
-- Zero-hit logs exist, but dashboards/webhook consumers are not yet wired to surface the data to operators (implementation plan agreed).
 - `oak_sequence_facets` ingestion/caching needs optimisation and a documented operational runbook to stay responsive during UI adoption.
 - Admin console lacks index health telemetry (document counts, last-run timestamps, index version), limiting visibility during bootstrap/update operations.
+- Zero-hit webhook consumer hardening: follow-up work will explore persistence beyond in-memory storage once ingestion is stabilised.
 
 ## Next actions (see plan for GO cadence)
 
-1. Build zero-hit telemetry surfaces (in-memory store + API routes + admin dashboard + webhook consumer) using Oak components.
-2. Cover the telemetry work with unit/integration tests, including mocked webhook deliveries and aggregation checks.
-3. Optimise `oak_sequence_facets` ingestion/caching behaviour and document the associated runbook.
-4. Enrich the admin console with index health details and test the bootstrap/reset controls.
-5. Update semantic-search documentation, then rerun the end-to-end quality gates before requesting Phase 2 sign-off.
+1. Optimise `oak_sequence_facets` ingestion/caching behaviour and document the associated runbook.
+2. Enrich the admin console with index health details and test the bootstrap/reset controls.
+3. Harden zero-hit telemetry persistence (backing store, retention policy) ahead of production deployment.
+4. Update semantic-search documentation, then rerun the end-to-end quality gates before requesting Phase 2 sign-off.
 
 ## Constraints & reminders
 
@@ -65,6 +64,6 @@ Keep this context file updated after each major milestone so the team can recove
 
 ## Next Steps (short outlook)
 
-- Stand up zero-hit dashboards/alerts consuming the new webhook/log payloads.
+- Harden zero-hit telemetry persistence so dashboards survive process restarts.
 - Complete ingestion polish for sequence facets ahead of Phase 2 indexing work.
 - Add admin surface telemetry for index health prior to the Phase 1 hand-off.
