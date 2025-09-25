@@ -189,6 +189,8 @@ Notes:
 - OpenAPI, MCP tooling, and docs reflect the richer contract; TypeDoc/OpenAPI generation runs cleanly.
 - Regression tests cover env validation, ingestion transforms, RRF builders, suggestion logic, and observability helpers; obsolete client-side fusion code is removed.
 - Search UI (search/admin) presents scopes, facets, and suggestions via Oak Components with tokenised styling, accessible navigation, and accompanying unit/a11y coverage.
+- `pnpm test` must provide exhaustive unit/integration proof of engineering correctness (including theme token usage, colours, typography, and component state), while `pnpm test:e2e` validates system-level behaviour; all work follows the documented TDD/testing strategy with simple fakes only.
+- Playwright MCP investigations of the running dev server identify React warnings, styling defects, and UI design gaps; each finding is captured, addressed via TDD, and verified before sign-off.
 
 ## Deployment & Operations
 
@@ -228,33 +230,48 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
 22. ACTION: Rebuild the API docs page (`app/api/docs/page.tsx`) with Oak Components and theme tokens, removing bespoke wrappers. _(Completed 2025-09-24; see new OakBox/OakHeading layout.)_
 23. REVIEW: Validate the docs page layout, typography, and navigation remain functional without custom styling. _(Completed 2025-09-24 via manual inspection and `app/api/docs/page.integration.test.tsx` mocking Redoc.)_
 24. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 prior to final quality gates.)_
-25. QUALITY-GATE: Run `pnpm build` to confirm production readiness. _(Completed 2025-09-24; resolved Next.js type tightening before successful build.)_
-26. REVIEW: Document build outcomes and follow-up actions. _(Completed 2025-09-24; build succeeded across workspaces, traced typed route fix in `HeaderStyles.tsx` and Oak spacing update.)_
-27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before regenerating docs.)_
-28. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration. _(Completed 2025-09-24; doc-gen succeeded after adjusting `vi.fn` generics.)_
-29. REVIEW: Record doc-gen results and remaining documentation tasks. _(Completed 2025-09-24; HTML/JSON outputs refreshed, no outstanding doc gaps.)_
-30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before drafting the Phase 1 self-review.)_
-31. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-self-review.md`.)_
-32. REVIEW: Share the summary to maintain continuity. _(Completed 2025-09-24 via plan/context updates referencing the self-review document.)_
-33. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 ahead of Phase 1 exit validation.)_
-34. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-exit-validation.md`.)_
-35. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2. _(Completed 2025-09-24 within the exit validation checklist; outstanding work limited to observability dashboards.)_
-36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 concluding the current GO cadence cycle.)_
-37. ACTION: Surface structured search totals, facet counts, and suggestion payloads in the hybrid search UI using the SDK-derived response types (results + metadata + suggestions). _(Completed 2025-09-24; UI now renders summary text, facet counts, and suggestion chips via controller updates.)_
-38. REVIEW: Add/extend integration tests (e.g. `SearchPageClient`, `SearchResults`) to assert totals, facet badges, and suggestion chips render correctly for each scope. _(Completed 2025-09-24 via new unit/integration coverage across `SearchResults`, `SearchSuggestions`, `SearchFacets`, and `SearchPageClient`.)_
-39. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; post-step quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, `pnpm check`) all passed.)_
-40. ACTION: Wire suggestion and facet interactions so selecting a suggestion, facet, or scope change replays a structured search with the correct payload (including sequence follow-up support). _(Completed 2025-09-24; `useStructuredFollowUp` now dispatches follow-up searches for scope toggles, programme facets, and suggestions via new helper utilities.)_
-41. REVIEW: Expand controller/facet interaction tests to prove follow-up searches fire with the expected body (suggestions, sequences, scope pivots). _(Completed 2025-09-24; coverage added in `SearchPageClient.integration.test.tsx` and `suggestion-search.unit.test.ts` validates suggestion, facet, and rescope payloads.)_
-42. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; re-read GO.md → AGENT.md → metacognition.md before starting telemetry UI work.)_
-43. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components. _(Completed 2025-09-24; added in-memory store + API routes and new Oak-styled admin dashboard in `apps/oak-open-curriculum-semantic-search/app/ui/admin/ZeroHitDashboard*.tsx`.)_
-44. REVIEW: Cover the telemetry surface with unit/integration tests, including mocked webhook deliveries and dashboard grouping logic. _(Completed 2025-09-24; added `ZeroHitDashboard.unit.test.tsx`, extended `app/admin/page.integration.test.tsx`, and ensured qg suite validates the flows.)_
-45. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 post-dashboard; ready to focus on `oak_sequence_facets` ingestion.)_
-46. ACTION: Define the Elasticsearch Serverless sandbox ingestion harness (fixture dataset, CLI flag for `_sandbox` indices, verbose logging, dry-run support) ensuring all requests use `@elastic/elasticsearch`.
+25. ACTION: Audit existing unit/integration/e2e suites to catalogue gaps around theme tokens, colour palettes, typography, and design system usage (no Elasticsearch credentials required yet). Use `.agent/reference-docs/ui/styled-components-in-nextjs.md` for reference.
+26. REVIEW: Summarise uncovered gaps in `.agent/plans/semantic-search/semantic-search-target-alignment-context.md`, noting any redundant tests that fail to exercise behaviour.
+27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+28. ACTION: Apply TDD to add failing tests that assert theme/design token application (e.g. colour CSS vars, typography, spacing) and remove redundant tests; ensure coverage runs under `pnpm test`.
+29. REVIEW: Confirm new tests prove behaviour without complex mocks, and document removals of ineffective suites.
+30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+31. ACTION: Use the Playwright MCP server to inspect the running dev server, capturing React warnings, styling regressions, and UI design issues for remediation. Use `.agent/reference-docs/ui/styled-components-in-nextjs.md` for reference.
+32. REVIEW: Record findings, prioritised fixes, and links to evidence/screenshots in the plan/context.
+33. GROUNDING: read GO.md and follow all instructions. Read `.agent/reference-docs/ui/styled-components-in-nextjs.md` for reference. REMINDER: UseBritish spelling.
+34. ACTION: Resolve identified UI issues using TDD—write failing tests first, then implement fixes for React/styling problems, keeping mocks simple.
+35. REVIEW: Verify fixes locally (tests + Playwright check) and update context with outcomes.
+36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+37. QUALITY-GATE: Run `pnpm test`, `pnpm test:e2e`, `pnpm lint`, and `pnpm build` to prove engineering and system design remain correct.
+38. REVIEW: Publish quality gate results and outstanding risks in the context snapshot.
+39. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+40. QUALITY-GATE: Run `pnpm build` to confirm production readiness. _(Completed 2025-09-24; resolved Next.js type tightening before successful build.)_
+41. REVIEW: Document build outcomes and follow-up actions. _(Completed 2025-09-24; build succeeded across workspaces, traced typed route fix in `HeaderStyles.tsx` and Oak spacing update.)_
+42. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before regenerating docs.)_
+43. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration. _(Completed 2025-09-24; doc-gen succeeded after adjusting `vi.fn` generics.)_
+44. REVIEW: Record doc-gen results and remaining documentation tasks. _(Completed 2025-09-24; HTML/JSON outputs refreshed, no outstanding doc gaps.)_
+45. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before drafting the Phase 1 self-review.)_
+46. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-self-review.md`.)_
+47. REVIEW: Share the summary to maintain continuity. _(Completed 2025-09-24 via plan/context updates referencing the self-review document.)_
+48. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 ahead of Phase 1 exit validation.)_
+49. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-exit-validation.md`.)_
+50. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2. _(Completed 2025-09-24 within the exit validation checklist; outstanding work limited to observability dashboards.)_
+51. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 concluding the current GO cadence cycle.)_
+52. ACTION: Surface structured search totals, facet counts, and suggestion payloads in the hybrid search UI using the SDK-derived response types (results + metadata + suggestions). _(Completed 2025-09-24; UI now renders summary text, facet counts, and suggestion chips via controller updates.)_
+53. REVIEW: Add/extend integration tests (e.g. `SearchPageClient`, `SearchResults`) to assert totals, facet badges, and suggestion chips render correctly for each scope. _(Completed 2025-09-24 via new unit/integration coverage across `SearchResults`, `SearchSuggestions`, `SearchFacets`, and `SearchPageClient`.)_
+54. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; post-step quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, `pnpm check`) all passed.)_
+55. ACTION: Wire suggestion and facet interactions so selecting a suggestion, facet, or scope change replays a structured search with the correct payload (including sequence follow-up support). _(Completed 2025-09-24; `useStructuredFollowUp` now dispatches follow-up searches for scope toggles, programme facets, and suggestions via new helper utilities.)_
+56. REVIEW: Expand controller/facet interaction tests to prove follow-up searches fire with the expected body (suggestions, sequences, scope pivots). _(Completed 2025-09-24; coverage added in `SearchPageClient.integration.test.tsx` and `suggestion-search.unit.test.ts` validates suggestion, facet, and rescope payloads.)_
+57. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; re-read GO.md → AGENT.md → metacognition.md before starting telemetry UI work.)_
+58. ACTION: Implement zero-hit telemetry surfacing (dashboard page + webhook consumer stub) that aggregates recent events, grouped by scope/index version, using Oak components. _(Completed 2025-09-24; added in-memory store + API routes and new Oak-styled admin dashboard in `apps/oak-open-curriculum-semantic-search/app/ui/admin/ZeroHitDashboard*.tsx`.)_
+59. REVIEW: Cover the telemetry surface with unit/integration tests, including mocked webhook deliveries and dashboard grouping logic. _(Completed 2025-09-24; added `ZeroHitDashboard.unit.test.tsx`, extended `app/admin/page.integration.test.tsx`, and ensured qg suite validates the flows.)_
+60. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 post-dashboard; ready to focus on `oak_sequence_facets` ingestion.)_
+61. ACTION: Define the Elasticsearch Serverless sandbox ingestion harness (fixture dataset, CLI flag for `_sandbox` indices, verbose logging, dry-run support) ensuring all requests use `@elastic/elasticsearch`.
     _(Completed 2025-09-25; shipped fixture-backed ingestion harness (`src/lib/indexing/sandbox-harness.ts`), sandbox fixtures under `fixtures/sandbox/`, CLI entrypoint `scripts/sandbox/ingest.ts`, and index-targeting utilities with defaults wired into ingestion/search flows.)_
-47. REVIEW: Validate the sandbox plan via unit tests that stub the ES client and by drafting the manual drill (spin up serverless endpoint, seed fixture, inspect counts). _(Completed 2025-09-25; added `sandbox-harness.unit.test.ts`, refreshed `docs/sandbox-ingestion-harness.md` with CLI + drill instructions, and confirmed fixtures satisfy SDK Zod schemas.)_
-48. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+62. REVIEW: Validate the sandbox plan via unit tests that stub the ES client and by drafting the manual drill (spin up serverless endpoint, seed fixture, inspect counts). _(Completed 2025-09-25; added `sandbox-harness.unit.test.ts`, refreshed `docs/sandbox-ingestion-harness.md` with CLI + drill instructions, and confirmed fixtures satisfy SDK Zod schemas.)_
+63. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
     _(Completed 2025-09-25; re-read GO.md → AGENT.md → metacognition.md ahead of sandbox refactor.)_
-49. ACTION: Implement zero-hit telemetry persistence using an Elasticsearch Serverless index (`oak_zero_hit_events`) with retention controls, wired through the existing webhook handler.
+64. ACTION: Implement zero-hit telemetry persistence using an Elasticsearch Serverless index (`oak_zero_hit_events`) with retention controls, wired through the existing webhook handler.
     - Target a dedicated index per environment using the existing `SearchIndexTarget` helper (`oak_zero_hit_events` vs `oak_zero_hit_events_sandbox`) so all Serverless writes continue to flow through the official client and the `_sandbox` workflow remains reproducible.
     - Mapping outline (all keyword/flattened fields generated from the SDK types at ingest time):
       - `@timestamp` (date) captured at persistence time for retention queries.
@@ -272,18 +289,18 @@ We continue to follow GO cadence (ACTION → REVIEW with grounding every third i
       _(Outline reviewed 2025-09-25: requirements align with the plan (Step 49) and testing strategy—no schema drift from SDK as documents are derived at ingestion time and all new tests remain pure/stubbed.)_
     - Tests executed 2025-09-25: `pnpm -C apps/oak-open-curriculum-semantic-search test` (Vitest) covering new persistence unit tests + updated zero-hit API/logging suites (all pass locally).
       _(Completed 2025-09-25; added `zero-hit-persistence*.ts` modules with ILM provisioning, 404 fallbacks, and CLI purge script, plus env/docs updates.)_
-50. REVIEW: Add coverage confirming dashboard queries read from the persisted index and document retention/alerting considerations.
+65. REVIEW: Add coverage confirming dashboard queries read from the persisted index and document retention/alerting considerations.
     _(Completed 2025-09-25; Vitest suites assert persisted telemetry wiring and docs now capture retention + purge workflow in `docs/QUERYING.md`.)_
-51. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-52. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) informed by sandbox instrumentation; capture the operational runbook.
-53. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds, measuring latency thresholds.
-54. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-55. ACTION: Enrich the admin console with index health details (document counts, last-run timestamps, index version) and provide explicit controls for bootstrap/reset flows.
-56. REVIEW: Write integration coverage ensuring the admin view reflects index health fields and command buttons trigger the correct routes.
-57. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-58. ACTION: Update semantic-search documentation (README, admin runbooks, onboarding flow, API notes) to reflect the new UI, telemetry dashboards, sandbox drill, and ingestion requirements.
-59. REVIEW: Perform doc self-review ensuring examples align with current UI/API contracts and the onboarding path is comprehensive.
-60. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-61. QUALITY-GATE: Run `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm qg` after completing the above deliverables.
-62. REVIEW: Record quality gate outcomes and capture any remediation needed before phase hand-off.
-63. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+66. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+67. ACTION: Optimise `oak_sequence_facets` ingestion and caching (batch sizing, cache invalidation hooks) informed by sandbox instrumentation; capture the operational runbook.
+68. REVIEW: Add ingestion unit tests/integration drills that exercise facet cache rebuilds, measuring latency thresholds.
+69. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+70. ACTION: Enrich the admin console with index health details (document counts, last-run timestamps, index version) and provide explicit controls for bootstrap/reset flows.
+71. REVIEW: Write integration coverage ensuring the admin view reflects index health fields and command buttons trigger the correct routes.
+72. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+73. ACTION: Update semantic-search documentation (README, admin runbooks, onboarding flow, API notes) to reflect the new UI, telemetry dashboards, sandbox drill, and ingestion requirements.
+74. REVIEW: Perform doc self-review ensuring examples align with current UI/API contracts and the onboarding path is comprehensive.
+75. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+76. QUALITY-GATE: Run `pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, and `pnpm qg` after completing the above deliverables.
+77. REVIEW: Record quality gate outcomes and capture any remediation needed before phase hand-off.
+78. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.

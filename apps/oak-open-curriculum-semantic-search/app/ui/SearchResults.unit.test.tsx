@@ -47,4 +47,16 @@ describe('SearchResults', () => {
       screen.getByText('Took 15ms. Results may be incomplete (timed out).'),
     ).toBeInTheDocument();
   });
+
+  it('DEBUG inspect rendered markup', () => {
+    const { container } = render(
+      <OakThemeProvider theme={oakDefaultTheme}>
+        <SearchResults results={[sampleResult]} meta={sampleMeta} />
+      </OakThemeProvider>,
+    );
+
+    // eslint-disable-next-line no-console
+    console.log(container.innerHTML);
+    expect(true).toBe(false);
+  });
 });
