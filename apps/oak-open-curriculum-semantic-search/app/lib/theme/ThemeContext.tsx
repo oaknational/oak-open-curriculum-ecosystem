@@ -63,6 +63,8 @@ function useSystemPreferenceSync(
     if (mode !== THEME_MODES.system) {
       return undefined;
     }
+    const prefersDark = getSystemPrefersDark();
+    setSystemPrefersDark(prefersDark);
     const unsubscribe = subscribeToSystemPrefersDark((prefers) => setSystemPrefersDark(prefers));
     return unsubscribe;
   }, [mode, setSystemPrefersDark]);
@@ -86,7 +88,11 @@ export function ThemeProvider({
   const [mode, setModeState] = useState<ThemeMode>(
     isThemeMode(initialMode) ? initialMode : THEME_MODES.system,
   );
-  const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(() => getSystemPrefersDark());
+  const normalisedInitialMode = isThemeMode(initialMode) ? initialMode : THEME_MODES.system;
+  const initialResolvedForRender = resolveMode(normalisedInitialMode, () => false);
+  const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(
+    () => initialResolvedForRender === THEME_MODES.dark,
+  );
 
   const setMode = useCallback((next: ThemeMode) => {
     if (!isThemeMode(next)) {

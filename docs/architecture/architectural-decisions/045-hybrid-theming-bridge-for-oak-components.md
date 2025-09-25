@@ -40,7 +40,10 @@ Adopt a layered “Bridge” theming architecture:
    - Only the Bridge layer references Oak raw tokens. App code uses semantic tokens exclusively.
 
 4. SSR-first mode initialisation
-   - The server reads the cookie and sets `<html data-theme="light|dark">` (or a `data-theme-mode` hint if needed), and passes `initialMode` to `ColorModeProvider`. No imperative pre-hydration script is used.
+
+- The server reads the cookie and sets `<html data-theme="light|dark">` (or a `data-theme-mode` hint if needed), and passes `initialMode` to `ColorModeProvider`. No imperative pre-hydration script is used.
+
+> **2025-09 stop-gap:** During the semantic-search UI snagging audit we are temporarily injecting a pre-hydration script that mirrors the ThemeContext resolution rules. This keeps hydration stable while we unblock styling work without reintroducing per-request SSR. The script is documented in `apps/oak-open-curriculum-semantic-search/app/layout.tsx` and should be removed once the CSS-based dual-theme output (see snagging plan) lands.
 
 5. Testing and guardrails
    - Ensure only one `styled-components` version exists. Add tests that verify:

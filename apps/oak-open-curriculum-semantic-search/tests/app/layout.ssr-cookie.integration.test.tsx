@@ -57,7 +57,8 @@ vi.mock('next/headers', () => {
 // Mock next/font/google Lexend to avoid runtime call in server render
 vi.mock('../../app/ui/fonts', () => {
   return {
-    lexend: { className: '' },
+    lexend: { className: '', variable: '' },
+    workSans: { className: '', variable: '' },
   };
 });
 

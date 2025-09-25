@@ -1,23 +1,27 @@
 import { useMemo } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { ThemeCssVars } from './ThemeCssVars';
-import { buildTokens } from '../../ui/themes/tokens';
-import { oakDefaultTheme, type OakTheme } from '@oaknational/oak-components';
-import type { AppTokens } from '../../ui/themes/tokens';
 import { createLightTheme } from '../../ui/themes/light';
 import { createDarkTheme } from '../../ui/themes/dark';
+import type { SemanticMode } from '../../ui/themes/semantic-theme-spec';
+import { ThemeCssVars } from './ThemeCssVars';
 import { useColorMode } from './ColorModeContext';
 
-type SemanticTheme = ReturnType<typeof createSemanticTheme>;
+const THEMES = {
+  light: createLightTheme(),
+  dark: createDarkTheme(),
+} as const;
 
-function resolveModeFromDom(): 'light' | 'dark' {
+type SemanticTheme = (typeof THEMES)[keyof typeof THEMES];
+
+type Mode = SemanticMode;
+
+function resolveModeFromDom(): Mode {
   try {
     if (typeof document !== 'undefined') {
       const root = document.getElementById('app-theme-root');
-      if (root && root.dataset.theme === 'dark') {
+      if (root?.dataset.theme === 'dark') {
         return 'dark';
       }
-      return 'light';
     }
   } catch {
     /* ignore */
@@ -25,26 +29,42 @@ function resolveModeFromDom(): 'light' | 'dark' {
   return 'light';
 }
 
-function createSemanticTheme(raw: OakTheme, mode: 'light' | 'dark') {
-  const appBase: AppTokens = buildTokens();
-  const themedApp = mode === 'dark' ? createDarkTheme().app : createLightTheme().app;
-  return { ...raw, app: { ...appBase, ...themedApp } } as const;
+function selectTheme(mode: Mode): SemanticTheme {
+  return THEMES[mode];
 }
 
-function buildVarMap(mode: 'light' | 'dark'): Record<string, string> {
-  const t = mode === 'dark' ? createDarkTheme().app : createLightTheme().app;
+function buildVarMap(theme: SemanticTheme): Record<string, string> {
+  const t = theme.app;
   return {
-    '--app-space-xs': t.space.xs,
-    '--app-space-sm': t.space.sm,
-    '--app-space-md': t.space.md,
-    '--app-space-lg': t.space.lg,
-    '--app-space-xl': t.space.xl,
-    '--app-radius-sm': t.radii.sm,
-    '--app-radius-md': t.radii.md,
+    '--app-gap-grid': t.space.gap.grid,
+    '--app-gap-section': t.space.gap.section,
+    '--app-gap-cluster': t.space.gap.cluster,
+    '--app-padding-card': t.space.padding.card,
+    '--app-padding-pill': t.space.padding.pill,
+    '--app-radius-card': t.radii.card,
+    '--app-radius-pill': t.radii.pill,
     '--app-color-border-subtle': t.colors.borderSubtle,
     '--app-color-header-border': t.colors.headerBorder,
     '--app-color-text-muted': t.colors.textMuted,
     '--app-color-error-text': t.colors.errorText,
+    '--app-color-page-note': t.colors.pageNote,
+    '--app-color-docs-note': t.colors.docsNote,
+    '--app-color-surface-emphasis-bg': t.colors.surfaceEmphasisBg,
+    '--app-font-primary': t.fonts.primary,
+    '--app-font-secondary': t.fonts.secondary,
+    '--app-typography-hero-size': t.typography.hero.fontSizeRem,
+    '--app-typography-hero-line-height': String(t.typography.hero.lineHeight),
+    '--app-typography-hero-weight': `${t.typography.hero.fontWeight}`,
+    '--app-typography-hero-letter-spacing': t.typography.hero.letterSpacing,
+    '--app-typography-body-size': t.typography.body.fontSizeRem,
+    '--app-typography-body-line-height': String(t.typography.body.lineHeight),
+    '--app-typography-body-weight': `${t.typography.body.fontWeight}`,
+    '--app-typography-body-letter-spacing': t.typography.body.letterSpacing,
+    '--app-typography-quote-size': t.typography.quote.fontSizeRem,
+    '--app-typography-quote-line-height': String(t.typography.quote.lineHeight),
+    '--app-typography-quote-family': t.typography.quote.fontFamily,
+    '--app-typography-quote-style': t.typography.quote.fontStyle,
+    '--app-layout-container-max-width': t.layout.containerMaxWidth,
   };
 }
 
@@ -53,15 +73,15 @@ export function ThemeBridgeProvider({
   ssrMode,
 }: {
   children: React.ReactNode;
-  ssrMode?: 'light' | 'dark';
+  ssrMode?: Mode;
 }): React.JSX.Element {
-  const raw = oakDefaultTheme;
   const contextMode = useColorMode().mode;
-  // Align first client render with server by preferring ssrMode if provided
   const initial = ssrMode ?? resolveModeFromDom();
-  const mode = contextMode ?? initial;
-  const semantic = useMemo<SemanticTheme>(() => createSemanticTheme(raw, mode), [raw, mode]);
-  const vars = useMemo(() => buildVarMap(mode), [mode]);
+  const mode: Mode = contextMode ?? initial;
+
+  const semantic = useMemo<SemanticTheme>(() => selectTheme(mode), [mode]);
+  const vars = useMemo(() => buildVarMap(semantic), [semantic]);
+
   return (
     <>
       <ThemeCssVars vars={vars} />

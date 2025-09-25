@@ -48,15 +48,35 @@ describe('SearchResults', () => {
     ).toBeInTheDocument();
   });
 
-  it('DEBUG inspect rendered markup', () => {
-    const { container } = render(
+  function renderResults(meta: SearchMeta = sampleMeta) {
+    return render(
       <OakThemeProvider theme={oakDefaultTheme}>
-        <SearchResults results={[sampleResult]} meta={sampleMeta} />
+        <SearchResults results={[sampleResult]} meta={meta} />
       </OakThemeProvider>,
     );
+  }
 
-    // eslint-disable-next-line no-console
-    console.log(container.innerHTML);
-    expect(true).toBe(false);
+  function queryRequired<T extends Element>(container: HTMLElement, selector: string): T {
+    const node = container.querySelector(selector);
+    expect(node).not.toBeNull();
+    return node as T;
+  }
+
+  it('applies Oak spacing and border tokens to the results list', () => {
+    const { container } = renderResults();
+
+    const section = queryRequired<HTMLElement>(container, 'section');
+    expect(section.getAttribute('aria-live')).toBe('polite');
+
+    const list = queryRequired<HTMLElement>(container, 'ul');
+    const listStyles = getComputedStyle(list);
+    expect(listStyles.display).toBe('grid');
+    expect(listStyles.gap).toBe('1.5rem');
+
+    const item = queryRequired<HTMLElement>(list, 'li');
+    const itemStyles = getComputedStyle(item);
+    expect(itemStyles.padding).toBe('1rem');
+    expect(itemStyles.borderRadius).toBe('0.25rem');
+    expect(itemStyles.borderTopWidth).toBe('0.063rem');
   });
 });

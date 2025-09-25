@@ -17,20 +17,24 @@ describe('Bridge theming (ADR-045)', () => {
     );
     const styleEl = document.getElementById('app-theme-vars');
     expect(styleEl).toBeTruthy();
-    expect(styleEl?.textContent || '').toMatch(/--app-space-md/);
+    expect(styleEl?.textContent || '').toMatch(/--app-gap-section/);
   });
 
   it('exposes theme.app tokens to styled-components consumers', () => {
     const TokenProbe = () => {
-      const theme = useTheme() as unknown as { app?: { space?: { md?: string } } };
-      return <span data-testid="token-md">{theme?.app?.space?.md ?? 'missing'}</span>;
+      const theme = useTheme() as unknown as {
+        app?: { space?: { gap?: { section?: string } } };
+      };
+      return (
+        <span data-testid="token-section">{theme?.app?.space?.gap?.section ?? 'missing'}</span>
+      );
     };
     render(
       <Providers>
         <TokenProbe />
       </Providers>,
     );
-    expect(screen.getByTestId('token-md').textContent).toBeTruthy();
+    expect(screen.getByTestId('token-section').textContent).toBe('3.5rem');
   });
 
   it('changes semantic tokens and CSS vars when mode toggles', () => {
