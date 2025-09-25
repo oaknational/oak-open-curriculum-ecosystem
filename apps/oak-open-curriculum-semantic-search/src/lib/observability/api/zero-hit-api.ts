@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { env } from '../../env';
+import { optionalEnv } from '../../env';
 import { getZeroHitRecent, getZeroHitSummary, recordZeroHitEvent } from '../zero-hit-store';
 import {
   fetchZeroHitTelemetry,
@@ -18,7 +18,13 @@ interface WebhookPayload {
 }
 
 export async function handleZeroHitSummary(request: NextRequest): Promise<Response> {
-  if (!isAuthorised(request)) {
+  const envVars = optionalEnv();
+
+  if (!envVars?.SEARCH_API_KEY) {
+    return NextResponse.json(buildDisabledTelemetryPayload());
+  }
+
+  if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
@@ -33,7 +39,13 @@ export async function handleZeroHitSummary(request: NextRequest): Promise<Respon
 }
 
 export async function handleZeroHitWebhook(request: NextRequest): Promise<Response> {
-  if (!isAuthorised(request)) {
+  const envVars = optionalEnv();
+
+  if (!envVars?.SEARCH_API_KEY) {
+    return NextResponse.json({ error: 'Zero-hit telemetry disabled' }, { status: 503 });
+  }
+
+  if (!isAuthorised(request, envVars.SEARCH_API_KEY)) {
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
   }
 
@@ -59,10 +71,26 @@ export async function handleZeroHitWebhook(request: NextRequest): Promise<Respon
   return NextResponse.json({ status: 'accepted' }, { status: 202 });
 }
 
-function isAuthorised(request: NextRequest): boolean {
-  const apiKey = env().SEARCH_API_KEY;
+function isAuthorised(request: NextRequest, apiKey: string): boolean {
   const header = request.headers.get('x-search-api-key');
   return typeof header === 'string' && header === apiKey;
+}
+
+function buildDisabledTelemetryPayload(): { summary: DisabledSummary; recent: [] } {
+  return {
+    summary: {
+      total: 0,
+      byScope: { lessons: 0, units: 0, sequences: 0 },
+      latestIndexVersion: null,
+    },
+    recent: [],
+  };
+}
+
+interface DisabledSummary {
+  total: number;
+  byScope: { lessons: number; units: number; sequences: number };
+  latestIndexVersion: string | null;
 }
 
 interface JsonObject {

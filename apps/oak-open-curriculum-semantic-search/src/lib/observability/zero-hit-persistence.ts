@@ -1,6 +1,6 @@
 import type { TransportRequestOptions, TransportRequestParams } from '@elastic/elasticsearch';
 import { esClient } from '../es-client';
-import { env } from '../env';
+import { optionalEnv } from '../env';
 import {
   currentSearchIndexTarget,
   resolveZeroHitIndexName,
@@ -51,18 +51,19 @@ export interface ZeroHitTelemetry {
 
 /** True when persistence is enabled through environment configuration. */
 export function zeroHitPersistenceEnabled(): boolean {
-  return env().ZERO_HIT_PERSISTENCE_ENABLED;
+  return optionalEnv()?.ZERO_HIT_PERSISTENCE_ENABLED ?? false;
 }
 
 /** Persist a zero-hit event to the Serverless Elasticsearch index. */
 export async function persistZeroHitEvent(event: PersistedZeroHitEvent): Promise<void> {
-  if (!zeroHitPersistenceEnabled()) {
+  const envVars = optionalEnv();
+  if (!envVars?.ZERO_HIT_PERSISTENCE_ENABLED) {
     return;
   }
 
   const target = currentSearchIndexTarget();
   const indexName = resolveZeroHitIndexName(target);
-  const retentionDays = env().ZERO_HIT_INDEX_RETENTION_DAYS;
+  const retentionDays = envVars.ZERO_HIT_INDEX_RETENTION_DAYS;
 
   await ensureZeroHitIndex(indexName, retentionDays);
   const document = createZeroHitDocument(event);

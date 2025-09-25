@@ -7,6 +7,11 @@ const envStub = vi.hoisted(() => ({
     ZERO_HIT_INDEX_RETENTION_DAYS: 30,
     SEARCH_INDEX_TARGET: 'primary',
   })),
+  optionalEnv: vi.fn(() => ({
+    ZERO_HIT_PERSISTENCE_ENABLED: true,
+    ZERO_HIT_INDEX_RETENTION_DAYS: 30,
+    SEARCH_INDEX_TARGET: 'primary',
+  })),
 }));
 
 vi.mock('../../lib/env', () => envStub);
@@ -46,23 +51,28 @@ interface TransportCall {
 describe('zero-hit persistence', () => {
   beforeEach(() => {
     envStub.env.mockClear();
+    envStub.optionalEnv.mockClear();
     transportStub.request.mockReset();
     targetStub.currentSearchIndexTarget.mockReturnValue('primary');
     targetStub.resolveZeroHitIndexName.mockReturnValue('oak_zero_hit_events');
-    envStub.env.mockReturnValue({
+    const baseEnv = {
       ZERO_HIT_PERSISTENCE_ENABLED: true,
       ZERO_HIT_INDEX_RETENTION_DAYS: 30,
       SEARCH_INDEX_TARGET: 'primary',
-    });
+    };
+    envStub.env.mockReturnValue(baseEnv);
+    envStub.optionalEnv.mockReturnValue(baseEnv);
     __resetZeroHitPersistenceCachesForTests();
   });
 
   it('reports persistence toggle from the environment', () => {
-    envStub.env.mockReturnValueOnce({
+    const toggled = {
       ZERO_HIT_PERSISTENCE_ENABLED: false,
       ZERO_HIT_INDEX_RETENTION_DAYS: 30,
       SEARCH_INDEX_TARGET: 'sandbox',
-    });
+    };
+    envStub.env.mockReturnValueOnce(toggled);
+    envStub.optionalEnv.mockReturnValueOnce(toggled);
 
     expect(zeroHitPersistenceEnabled()).toBe(false);
   });

@@ -15,6 +15,7 @@
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "format": "prettier --write --cache .",
     "test": "vitest run",
+    "test:ui": "playwright test",
     "test:watch": "vitest",
     "elastic:setup": "bash scripts/setup.sh",
     "elastic:alias-swap": "bash scripts/alias-swap.sh",
@@ -46,8 +47,10 @@
   },
   "devDependencies": {
     "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@axe-core/playwright": "^4.10.2",
     "@eslint/eslintrc": "^3.2.0",
     "@next/eslint-plugin-next": "^15.5.4",
+    "@playwright/test": "^1.55.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",

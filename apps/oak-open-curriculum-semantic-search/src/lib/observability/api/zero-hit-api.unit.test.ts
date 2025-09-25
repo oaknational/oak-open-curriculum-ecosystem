@@ -4,11 +4,15 @@ import { handleZeroHitSummary, handleZeroHitWebhook } from './zero-hit-api';
 import { recordZeroHitEvent, resetZeroHitStore, getZeroHitSummary } from '../zero-hit-store';
 import type { ZeroHitTelemetry } from '../zero-hit-persistence';
 
-const envMock = vi.hoisted(() => ({
-  env: vi.fn(() => ({
+const envMock = vi.hoisted(() => {
+  const value = {
     SEARCH_API_KEY: 'test-key',
-  })),
-}));
+  } as const;
+  return {
+    env: vi.fn(() => value),
+    optionalEnv: vi.fn(() => value),
+  };
+});
 
 vi.mock('../../env', () => envMock);
 
@@ -147,6 +151,7 @@ function makeRequest(
 describe('zero-hit API handlers', () => {
   beforeEach(() => {
     envMock.env.mockClear();
+    envMock.optionalEnv.mockClear();
     resetZeroHitStore();
     persistenceMocks.zeroHitPersistenceEnabled.mockReturnValue(false);
     persistenceMocks.fetchZeroHitTelemetry.mockClear();

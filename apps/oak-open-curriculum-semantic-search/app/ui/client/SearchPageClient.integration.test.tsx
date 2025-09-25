@@ -44,18 +44,100 @@ vi.mock('../SearchFacets', () => ({
   SearchFacets: renderFacets,
 }));
 
-function renderWithTheme(action: StructuredSearchAction): void {
+type AppTheme = ReturnType<typeof createLightTheme>;
+
+function renderWithTheme(
+  action: StructuredSearchAction,
+  theme: AppTheme = createLightTheme(),
+): AppTheme {
   render(
-    <StyledThemeProvider theme={createLightTheme()}>
+    <StyledThemeProvider theme={theme}>
       <SearchPageClient searchStructured={action} />
     </StyledThemeProvider>,
   );
+  return theme;
 }
 
 describe('SearchPageClient', () => {
   beforeEach(() => {
     structuredPropsRef.current = null;
     facetPropsRef.current = null;
+  });
+
+  it('renders the hero panel with Oak-neutral background and brand border', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    const theme = renderWithTheme(action);
+
+    const hero = screen.getByTestId('search-hero');
+    const styles = getComputedStyle(hero);
+
+    expect(styles.backgroundColor).toBe(hexToRgb(theme.app.colors.surfaceCard));
+    expect(styles.borderColor).toBe(hexToRgb(theme.app.palette.brandPrimaryDeep));
+    expect(styles.paddingTop).toBe(theme.app.space.padding.card);
+  });
+
+  it('wraps structured and natural panels in Oak-neutral surfaces', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+    const theme = renderWithTheme(action);
+
+    const structured = screen.getByTestId('structured-search-panel');
+    const natural = screen.getByTestId('natural-search-panel');
+
+    const raisedSurface = hexToRgb(theme.app.colors.surfaceRaised);
+    expect(getComputedStyle(structured).backgroundColor).toBe(raisedSurface);
+    expect(getComputedStyle(natural).backgroundColor).toBe(raisedSurface);
+  });
+
+  it('caps the main layout width using the app layout CSS variable', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action);
+
+    const main = screen.getByRole('main');
+    const computed = getComputedStyle(main);
+    expect(computed.maxWidth).toBe('var(--app-layout-container-max-width)');
+  });
+
+  it('applies theme-driven spacing to the main layout shell', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    const theme = renderWithTheme(action);
+
+    const main = screen.getByRole('main');
+    const computed = getComputedStyle(main);
+
+    const expectedGap = theme.app.space.gap.section;
+    expect(computed.rowGap).toBe(expectedGap);
+    expect(computed.paddingLeft).toBe(expectedGap);
+    expect(computed.paddingRight).toBe(expectedGap);
+  });
+
+  it('uses theme surface colours for hero and search panels', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    const theme = renderWithTheme(action);
+
+    const hero = screen.getByTestId('search-hero');
+    const structured = screen.getByTestId('structured-search-panel');
+    const natural = screen.getByTestId('natural-search-panel');
+
+    const cardSurface = hexToRgb(theme.app.colors.surfaceCard);
+    const raisedSurface = hexToRgb(theme.app.colors.surfaceRaised);
+
+    expect(getComputedStyle(hero).backgroundColor).toBe(cardSurface);
+    expect(getComputedStyle(structured).backgroundColor).toBe(raisedSurface);
+    expect(getComputedStyle(natural).backgroundColor).toBe(raisedSurface);
   });
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {
@@ -234,3 +316,12 @@ describe('SearchPageClient', () => {
     expect(followUpPayload?.phaseSlug).toBeUndefined();
   });
 });
+
+function hexToRgb(hex: string): string {
+  const normalized = hex.replace('#', '');
+  const bigint = parseInt(normalized, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgb(${r}, ${g}, ${b})`;
+}

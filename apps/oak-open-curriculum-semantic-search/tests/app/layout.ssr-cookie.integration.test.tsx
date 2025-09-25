@@ -20,6 +20,11 @@ vi.mock('styled-components', () => {
       },
     },
   );
+  const createGlobalStyle = () => {
+    const Global: React.FC<{ children?: React.ReactNode }> = () => null;
+    Global.displayName = 'GlobalStyleMock';
+    return Global;
+  };
   class ServerStyleSheetMock {
     instance = {
       clearTag: vi.fn(),
@@ -37,6 +42,7 @@ vi.mock('styled-components', () => {
   return {
     __esModule: true,
     default: styled,
+    createGlobalStyle,
     ServerStyleSheet: ServerStyleSheetMock,
     StyleSheetManager,
     ThemeProvider,

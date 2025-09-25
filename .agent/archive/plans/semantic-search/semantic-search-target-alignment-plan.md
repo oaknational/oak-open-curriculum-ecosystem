@@ -18,15 +18,17 @@
 
 - ✅ Oak token inventory captured in `.agent/plans/semantic-search/semantic-theme-inventory.md`.
 - ✅ `semanticThemeSpec` plus typed resolvers implemented; unit coverage added in `theme-factory.unit.test.ts`.
-- ⚠️ Outstanding: global foreground/background still default to browser values; layout wrappers (header, main panels, labels) rely on inherited black text and white backgrounds.
-- ⏭️ Next: wire Oak tokens into the global CSS bridge and component wrappers so both light/dark modes consume `uiColors` entirely, then resume Phase 1 workstreams.
+- ✅ `ThemeGlobalStyle` now injects deterministic light/dark foreground/background rules (see `app/lib/theme/bridge.integration.test.tsx`).
+- ✅ Brand accents: CTA buttons, active links, and header borders now draw from `oakGreen` in light mode (with the global background lifted to `mint30`), and shared border/CTA tokens in dark mode keep the keystone colour visible while mint handles link contrast.
+- ⚠️ Outstanding: layout wrappers (header, main panels, navigation) still lean on generic Oak tokens rather than the new `app.*` CSS variables, so spacing/contrast audits remain (particularly in navigation spacing and multi-column responsive breakpoints).
+- ⏭️ Next: drive spacing, card surfaces, and responsive behaviour from the semantic theme—including deeper `oakGreen` accents—before resuming the remaining Phase 1 workstreams.
 
 ### Design Considerations
 
 - Prefer Oak exports (`oakUiRoleTokens`, `oakColorTokens`, `oakSpaceBetweenTokens`, `oakFontTokens`, etc.) when composing local theme data.
 - Where Oak lacks a concept we need, define a constant spec and derive both the type and a type guard from it; do not introduce ad-hoc interfaces.
 - Every colour in the semantic themes must be explainable: either the Oak default value or a documented override with accessibility rationale.
-- Space, radius, and typography values should reference Oak tokens and be converted to CSS values centrally (e.g. the Theme Bridge) to avoid drift.
+- Space, radius, and typography values should reference Oak tokens and be converted to CSS values centrally (e.g. the Theme Bridge) to avoid drift; component layout must consume the emitted CSS variables for gap/padding rather than hard-coded values.
 - Theme switching must stay SSR-safe; any DOM-prefetch scripts must reference shared helpers so they cannot fall out of sync with runtime logic.
 
 ### Task Breakdown
@@ -44,19 +46,27 @@
 
 - Adjust `ThemeBridgeProvider` and `ThemeCssVars` to emit CSS variables from the helper lookups rather than hard-coded strings. _(Completed.)_
 - Thread references back to the hydration script / theme context so all sources of truth interoperate. _(Completed.)_
-- Introduce a global style layer (or Oak wrapper) that applies `bg-primary`/`text-primary` to `html`, `body`, and the root layout so browser defaults no longer leak through in either mode.
-- Ensure the page-level layout (`SearchPageClient`, header, form panels) uses Oak `$background`, `$color`, and border tokens instead of inheriting or hard-coding values.
+- Introduce a deterministic `ThemeGlobalStyle` sheet that applies `bg-primary`/`text-primary` to `html`, `body`, and the `#app-theme-root` wrapper; ensure the style tag mounts before component-level sheets in both SSR and CSR.
+- Wire the App Router root layout to mount the global style wrapper exactly once (SSR + client) and expose an escape hatch for Playwright to probe the active mode.
+- Backfill integration coverage asserting that mode toggles re-render the `html/body` rules and that the SSR markup captures the light-mode defaults.
 
 4. **Align UI components**
 
 - Sweep the semantic-search UI for custom elements that could be Oak components and replace them; update layout props to use the refreshed spacing/grid tokens.
-- Review typography usage (headings, summary text, result metadata) and map each surface to the refreshed theme ramp.
+- Catalogue each wrapper that still relies on magic numbers and convert to Oak tokens:
+  - `SearchPageClient` shell (`$maxWidth`, `$pa`, `$gap`, `$background`, `$color`).
+  - Header + nav wrappers (`HeaderStyles`, breadcrumbs, page hero) to consume Oak spacing + border tokens rather than literal CSS.
+  - Form panels (`StructuredSearch`, `NaturalSearch`) and filter chips to align with `app.space` + `app.colors`.
+  - Results list + cards (`SearchResults`, `SearchResultCard`) to adopt Oak elevations, emphasised backgrounds, and new muted text token.
+- Review typography usage (headings, summary text, result metadata) and map each surface to the refreshed theme ramp, adding quotes/caption overrides where Oak tokens fall short.
 - Confirm the dark theme meets contrast expectations using Oak Storybook guidance once global colours are applied.
-- Remove any residual hex/rgba literals in the app; all styling must originate from Oak tokens or the semantic spec.
+- Remove any residual hex/rgba literals in the app; all styling must originate from Oak tokens or the semantic spec (e.g. `mint30` for the base background, `bg-btn-secondary` for cards), recording exceptions in the doc.
 
 5. **Verification**
    - Expand unit tests: lock the semantic theme spec, CSS variable emission, and any helper guards; update snapshot assertions where values shift.
-   - Run `pnpm qg`; add targeted Playwright MCP checks for hydration warnings and dark-mode visuals.
+   - Extend `app/lib/theme/bridge.integration.test.tsx` with SSR markup snapshots and mode-toggle assertions that inspect the injected styles for both wrappers and document root.
+   - Backstop component-level contracts (`SearchPageClient`, `SearchSuggestions`, `SearchFacets`, `SearchResults`) with expectations over key Oak props (backgrounds, borders, typography) so regressions surface close to source.
+   - Run `pnpm qg`; add targeted Playwright MCP checks for hydration warnings and dark-mode visuals (including screenshot diff of hero section and result list backgrounds).
 6. **Documentation and follow-up**
    - Note deviations or desired upstream enhancements for `@oaknational/oak-components`.
    - Update ADR-045 / UI snagging plan if mitigation strategy changes.
@@ -125,21 +135,16 @@ Objective: showcase a complete hybrid search experience with first-class filteri
 
 ### Outstanding Todo (GO cadence)
 
-26. REVIEW: Document build outcomes and follow-up actions. _(Completed 2025-09-24; build succeeded across workspaces, traced typed route fix in `HeaderStyles.tsx` and Oak spacing update.)_
-27. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before regenerating docs.)_
-28. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` post-integration. _(Completed 2025-09-24; doc-gen succeeded after adjusting `vi.fn` generics.)_
-29. REVIEW: Record doc-gen results and remaining documentation tasks. _(Completed 2025-09-24; HTML/JSON outputs refreshed, no outstanding doc gaps.)_
-30. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 before drafting the Phase 1 self-review.)_
-31. ACTION: Compile a final self-review covering completed milestones, residual risks, and recommended enhancements for future phases. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-self-review.md`.)_
-32. REVIEW: Share the summary to maintain continuity. _(Completed 2025-09-24 via plan/context updates referencing the self-review document.)_
-33. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 ahead of Phase 1 exit validation.)_
-34. ACTION: Validate Phase 1 exit criteria by reviewing telemetry dashboards, regression artefacts, and quality gate logs; capture evidence links. _(Completed 2025-09-24; see `.agent/plans/semantic-search/phase-1-exit-validation.md`.)_
-35. REVIEW: Summarise validation findings, noting outstanding items before advancing to Phase 2. _(Completed 2025-09-24 within the exit validation checklist; outstanding work limited to observability dashboards.)_
-36. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24 concluding the current GO cadence cycle.)_
-37. ACTION: Surface structured search totals, facet counts, and suggestion payloads in the hybrid search UI using the SDK-derived response types (results + metadata + suggestions). _(Completed 2025-09-24; UI now renders summary text, facet counts, and suggestion chips via controller updates.)_
-38. REVIEW: Add/extend integration tests (e.g. `SearchPageClient`, `SearchResults`) to assert totals, facet badges, and suggestion chips render correctly for each scope. _(Completed 2025-09-24 via new unit/integration coverage across `SearchResults`, `SearchSuggestions`, `SearchFacets`, and `SearchPageClient`.)_
-39. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. _(Completed 2025-09-24; post-step quality gates (`pnpm lint`, `pnpm test`, `pnpm build`, `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`, `pnpm check`) all passed.)_
-40. ACTION: Wire suggestion and facet interactions so selecting a suggestion, facet, or scope change replays a structured search with the correct payload (including sequence follow-up support). _(Completed 2025-09-24; `useStructuredFollowUp` now dispatches structured queries with preserved filters.)_
+1. ACTION: Refresh this plan and the context snapshot with responsive layout goals, palette extensions, and navigation spacing alignment tasks.
+2. REVIEW: Confirm plan/context updates reflect responsive layout + palette objectives without contradicting prior milestones.
+3. ACTION: Add failing tests that lock header spacing, responsive search grids, and extended theme palette exports (including deeper `oakGreen` shades).
+4. REVIEW: QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx` to observe failing assertions.
+5. QUALITY-GATE: Capture baseline notes/snapshots from failing tests to guide implementation.
+6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+7. ACTION: Implement responsive layout + spacing changes driven by theme CSS variables, introduce additional brand palette shades, and remove hard-coded styles from header/search components.
+8. REVIEW: Inspect updated components to ensure spacing/colour rules flow exclusively via Oak tokens or bridge variables; adjust any residual hard-coded values.
+9. QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx theme-factory.unit.test.ts` to confirm green state.
+10. QUALITY-GATE: Execute `pnpm format`, `pnpm lint`, `pnpm type-check`, and `pnpm build` at repo root once updates settle.
 
 ## Pending Phases (for awareness)
 

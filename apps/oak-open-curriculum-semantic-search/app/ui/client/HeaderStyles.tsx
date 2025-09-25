@@ -4,7 +4,29 @@ import type { JSX } from 'react';
 import Link from 'next/link';
 import type { Route } from 'next';
 import { OakBox, OakFlex, OakImage, OakTypography } from '@oaknational/oak-components';
+import styledComponents from 'styled-components';
 import ThemeSelect from './ThemeSelect';
+import { getAppTheme } from '../themes/app-theme-helpers';
+
+const HeaderRoot = styledComponents(OakFlex)`
+  align-items: center;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+  padding-block: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  padding-inline: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
+  border-bottom-color: ${({ theme }) => getAppTheme(theme).app.colors.headerBorder};
+`;
+
+const PrimaryNav = styledComponents(OakFlex)`
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+  row-gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+`;
+
+const NavText = styledComponents(OakTypography)`
+  font-family: ${({ theme }) => getAppTheme(theme).app.fonts.primary};
+`;
 
 const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
   { href: '/', label: 'Home' },
@@ -15,13 +37,15 @@ const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
 
 export default function HeaderStyles(): JSX.Element {
   return (
-    <OakFlex
+    <HeaderRoot
       as="header"
+      role="banner"
       $alignItems="center"
-      $gap="space-between-md"
-      $pa="inner-padding-l"
+      $flexWrap="wrap"
       $bb="border-solid-s"
-      $borderColor="border-neutral"
+      $borderColor="border-brand"
+      $background="bg-primary"
+      $color="text-primary"
     >
       <Link href="/" aria-label="Home">
         <OakImage
@@ -32,26 +56,19 @@ export default function HeaderStyles(): JSX.Element {
         />
       </Link>
 
-      <OakFlex
-        as="nav"
-        aria-label="Primary"
-        $gap="space-between-lg"
-        $alignItems="center"
-        $flexWrap="wrap"
-        $font="body-3"
-      >
+      <PrimaryNav as="nav" aria-label="Primary" $font="body-3" $color="text-primary">
         {NAV_ITEMS.map((item) => (
           <Link key={item.href} href={item.href}>
-            <OakTypography as="span" $font="body-3">
+            <NavText as="span" $font="body-3" $color="text-primary">
               {item.label}
-            </OakTypography>
+            </NavText>
           </Link>
         ))}
-      </OakFlex>
+      </PrimaryNav>
 
       <OakBox $ml="auto">
         <ThemeSelect />
       </OakBox>
-    </OakFlex>
+    </HeaderRoot>
   );
 }

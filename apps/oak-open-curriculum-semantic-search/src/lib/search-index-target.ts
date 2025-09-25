@@ -1,4 +1,4 @@
-import { env } from './env';
+import { optionalEnv } from './env';
 
 export const SEARCH_INDEX_TARGETS = ['primary', 'sandbox'] as const;
 export type SearchIndexTarget = (typeof SEARCH_INDEX_TARGETS)[number];
@@ -46,7 +46,7 @@ export function resolvePrimarySearchIndexName(kind: SearchIndexKind): string {
 
 /** Return the configured search index target from the current environment. */
 export function currentSearchIndexTarget(): SearchIndexTarget {
-  return env().SEARCH_INDEX_TARGET;
+  return optionalEnv()?.SEARCH_INDEX_TARGET ?? 'primary';
 }
 
 /** Resolve the index name for the current environment configuration. */

@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, type JSX } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../../ui/themes/light';
 import { createDarkTheme } from '../../ui/themes/dark';
 import type { SemanticMode } from '../../ui/themes/semantic-theme-spec';
 import { ThemeCssVars } from './ThemeCssVars';
+import { ThemeGlobalStyle } from './ThemeGlobalStyle';
 import { useColorMode } from './ColorModeContext';
 
 const THEMES = {
@@ -50,6 +51,8 @@ function buildVarMap(theme: SemanticTheme): Record<string, string> {
     '--app-color-page-note': t.colors.pageNote,
     '--app-color-docs-note': t.colors.docsNote,
     '--app-color-surface-emphasis-bg': t.colors.surfaceEmphasisBg,
+    '--app-color-surface-card': t.colors.surfaceCard,
+    '--app-color-surface-raised': t.colors.surfaceRaised,
     '--app-font-primary': t.fonts.primary,
     '--app-font-secondary': t.fonts.secondary,
     '--app-typography-hero-size': t.typography.hero.fontSizeRem,
@@ -65,6 +68,12 @@ function buildVarMap(theme: SemanticTheme): Record<string, string> {
     '--app-typography-quote-family': t.typography.quote.fontFamily,
     '--app-typography-quote-style': t.typography.quote.fontStyle,
     '--app-layout-container-max-width': t.layout.containerMaxWidth,
+    '--app-layout-control-column-min-width': t.layout.controlColumnMinWidth,
+    '--app-layout-secondary-column-min-width': t.layout.secondaryColumnMinWidth,
+    '--app-color-brand-primary': t.palette.brandPrimary,
+    '--app-color-brand-primary-dark': t.palette.brandPrimaryDark,
+    '--app-color-brand-primary-deep': t.palette.brandPrimaryDeep,
+    '--app-color-brand-primary-bright': t.palette.brandPrimaryBright,
   };
 }
 
@@ -74,7 +83,7 @@ export function ThemeBridgeProvider({
 }: {
   children: React.ReactNode;
   ssrMode?: Mode;
-}): React.JSX.Element {
+}): JSX.Element {
   const contextMode = useColorMode().mode;
   const initial = ssrMode ?? resolveModeFromDom();
   const mode: Mode = contextMode ?? initial;
@@ -85,6 +94,7 @@ export function ThemeBridgeProvider({
   return (
     <>
       <ThemeCssVars vars={vars} />
+      <ThemeGlobalStyle theme={semantic} />
       <StyledThemeProvider theme={semantic}>{children}</StyledThemeProvider>
     </>
   );

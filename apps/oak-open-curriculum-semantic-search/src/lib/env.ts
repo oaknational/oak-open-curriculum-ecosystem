@@ -65,6 +65,14 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
   return cached;
 }
 
+export function optionalEnv(): (Env & { OAK_EFFECTIVE_KEY: string }) | null {
+  try {
+    return env();
+  } catch {
+    return null;
+  }
+}
+
 /** True when natural-language parsing (OpenAI) is available. */
 export function llmEnabled(): boolean {
   const e = env();

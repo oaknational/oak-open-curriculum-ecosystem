@@ -1,72 +1,17 @@
 import { oakColorTokens, oakDefaultTheme, oakUiRoleTokens } from '@oaknational/oak-components';
+import type { OakColorToken, OakUiRoleToken } from '@oaknational/oak-components';
 import type {
-  OakColorToken,
-  OakInnerPaddingToken,
-  OakSpaceBetweenToken,
-  OakUiRoleToken,
-  OakFontToken,
-  OakBorderRadiusToken,
-} from '@oaknational/oak-components';
+  SemanticAppSpec,
+  SemanticMode,
+  SemanticThemeDefinition,
+} from './semantic-theme-types';
 
-/**
- * The two supported semantic theme modes.
- */
-export type SemanticMode = 'light' | 'dark';
-
-/**
- * Describes typography entries in the semantic theme spec.
- */
-export interface SemanticTypographySpecEntry {
-  /**
-   * Oak typography token that provides font size, weight, and letter spacing.
-   */
-  readonly token: OakFontToken;
-  /**
-   * Dimensionless line-height multiplier to preserve relative spacing across zoom levels.
-   */
-  readonly lineHeight: number;
-  readonly fontFamilyOverride?: string;
-  readonly fontStyle?: 'normal' | 'italic';
-}
-
-/**
- * Describes the application-specific tokens that sit alongside Oak UI colours.
- */
-export interface SemanticAppSpec {
-  readonly space: {
-    readonly gap: Record<'grid' | 'section' | 'cluster', OakSpaceBetweenToken>;
-    readonly padding: Record<'card' | 'pill', OakInnerPaddingToken>;
-  };
-  readonly radii: Record<'card' | 'pill', OakBorderRadiusToken>;
-  readonly typography: {
-    readonly hero: SemanticTypographySpecEntry;
-    readonly heading: SemanticTypographySpecEntry;
-    readonly subheading: SemanticTypographySpecEntry;
-    readonly body: SemanticTypographySpecEntry;
-    readonly bodyStrong: SemanticTypographySpecEntry;
-    readonly caption: SemanticTypographySpecEntry;
-    readonly quote: SemanticTypographySpecEntry;
-  };
-  readonly fonts: {
-    readonly primaryFamily: string;
-    readonly secondaryFamily: string;
-  };
-  readonly layout: {
-    readonly containerMaxWidth: string;
-  };
-  readonly colors: Record<
-    'headerBorder' | 'borderSubtle' | 'textMuted' | 'errorText' | 'pageNote' | 'docsNote',
-    OakColorToken
-  > & {
-    readonly surfaceEmphasisBg: string;
-  };
-}
-
-export interface SemanticThemeDefinition {
-  readonly name: string;
-  readonly uiColors: Record<OakUiRoleToken, OakColorToken>;
-  readonly app: SemanticAppSpec;
-}
+export type {
+  SemanticMode,
+  SemanticAppSpec,
+  SemanticThemeDefinition,
+  SemanticTypographySpecEntry,
+} from './semantic-theme-types';
 
 type UiColorMap = Record<OakUiRoleToken, OakColorToken>;
 type PartialUiColorMap = Partial<Record<OakUiRoleToken, OakColorToken>>;
@@ -151,7 +96,15 @@ const sharedAppSpec: Omit<SemanticAppSpec, 'colors'> = {
     secondaryFamily: '"Work Sans", sans-serif',
   },
   layout: {
-    containerMaxWidth: '72rem',
+    containerMaxWidth: 'min(72rem, 92vw)',
+    controlColumnMinWidth: '20rem',
+    secondaryColumnMinWidth: '18rem',
+  },
+  palette: {
+    brandPrimary: oakColorTokens.oakGreen,
+    brandPrimaryDark: '#0f381b',
+    brandPrimaryDeep: '#144d24',
+    brandPrimaryBright: '#35a04c',
   },
 };
 
@@ -161,38 +114,46 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
     uiColors: buildUiColorMap({
       'text-primary': 'navy120',
       'text-subdued': 'grey60',
-      'text-link-active': 'navy',
-      'text-link-hover': 'navy110',
-      'text-link-pressed': 'navy120',
+      'text-link-active': 'oakGreen',
+      'text-link-hover': 'mint110',
+      'text-link-pressed': 'oakGreen',
       'text-link-visited': 'lavender110',
-      'bg-primary': 'white',
+      'bg-primary': 'mint30',
       'bg-neutral': 'grey20',
       'bg-neutral-stronger': 'grey30',
-      'bg-btn-primary': 'navy',
-      'bg-btn-primary-hover': 'navy110',
+      'bg-btn-primary': 'oakGreen',
+      'bg-btn-primary-hover': 'mint110',
       'bg-btn-primary-disabled': 'grey40',
       'bg-btn-secondary': 'white',
       'bg-btn-secondary-hover': 'grey20',
       'bg-btn-secondary-disabled': 'grey30',
       'bg-icon': 'grey20',
       'bg-icon-hover': 'grey30',
-      'icon-main': 'navy120',
+      'icon-main': 'oakGreen',
       'icon-inverted': 'white',
       'border-neutral': 'grey30',
       'border-neutral-lighter': 'grey20',
-      'border-primary': 'navy120',
+      'border-primary': 'oakGreen',
       'border-brand': 'oakGreen',
     }),
     app: {
       ...sharedAppSpec,
       colors: {
-        headerBorder: 'grey30',
+        headerBorder: 'oakGreen',
         borderSubtle: 'grey20',
         textMuted: 'grey60',
         errorText: 'red',
-        pageNote: 'navy120',
-        docsNote: 'navy110',
+        pageNote: 'oakGreen',
+        docsNote: 'oakGreen',
         surfaceEmphasisBg: 'rgba(0, 0, 0, 0.06)',
+        surfaceCard: 'white',
+        surfaceRaised: 'grey20',
+      },
+      palette: {
+        brandPrimary: oakColorTokens.oakGreen,
+        brandPrimaryDark: '#0f381b',
+        brandPrimaryDeep: '#144d24',
+        brandPrimaryBright: '#35a04c',
       },
     },
   },
@@ -202,38 +163,46 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
       'text-primary': 'white',
       'text-subdued': 'grey30',
       'text-link-active': 'mint',
-      'text-link-hover': 'mint110',
-      'text-link-pressed': 'mint50',
+      'text-link-hover': 'mint50',
+      'text-link-pressed': 'mint30',
       'text-link-visited': 'lavender50',
-      'text-inverted': 'navy120',
-      'bg-primary': 'navy120',
-      'bg-neutral': 'navy110',
+      'text-inverted': 'mint30',
+      'bg-primary': 'grey80',
+      'bg-neutral': 'oakGreen',
       'bg-neutral-stronger': 'navy',
-      'bg-btn-primary': 'amber',
-      'bg-btn-primary-hover': 'amber50',
+      'bg-btn-primary': 'oakGreen',
+      'bg-btn-primary-hover': 'mint50',
       'bg-btn-primary-disabled': 'grey60',
       'bg-btn-secondary': 'navy',
       'bg-btn-secondary-hover': 'navy110',
       'bg-btn-secondary-disabled': 'navy120',
       'bg-icon': 'navy110',
       'bg-icon-hover': 'navy',
-      'icon-main': 'white',
+      'icon-main': 'mint',
       'icon-inverted': 'navy120',
       'border-neutral': 'navy110',
       'border-neutral-lighter': 'navy',
-      'border-primary': 'amber',
-      'border-brand': 'amber',
+      'border-primary': 'oakGreen',
+      'border-brand': 'oakGreen',
     }),
     app: {
       ...sharedAppSpec,
       colors: {
-        headerBorder: 'navy110',
+        headerBorder: 'oakGreen',
         borderSubtle: 'navy',
         textMuted: 'grey30',
         errorText: 'amber50',
-        pageNote: 'white',
-        docsNote: 'grey20',
+        pageNote: 'mint50',
+        docsNote: 'mint50',
         surfaceEmphasisBg: 'rgba(255, 255, 255, 0.08)',
+        surfaceCard: 'navy110',
+        surfaceRaised: 'navy',
+      },
+      palette: {
+        brandPrimary: oakColorTokens.oakGreen,
+        brandPrimaryDark: '#82d88a',
+        brandPrimaryDeep: '#0b2a16',
+        brandPrimaryBright: '#6ed680',
       },
     },
   },

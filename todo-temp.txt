@@ -1,53 +1,14 @@
 - REMINDER: UseBritish spelling
-- ACTION: Re-read semantic-search-target-alignment-plan.md and annotate key outcomes and risks.
-- REVIEW: Confirm notes cover all target outcomes.
+- ACTION: Capture Oak brand baselines via Playwright (current site + legacy blog) for colour/spacing reference.
+- REVIEW: Summarise captured design cues and map to semantic theme requirements.
 - GROUNDING: read GO.md and follow all instructions.
-- ACTION: Update scripts/elastic-setup.ts for four indices with oak_text, oak_lower, completion contexts, highlight offsets, oak_sequences.
-- REVIEW: Check mappings against definitive guide.
+- ACTION: Audit localhost UI with Playwright to identify components lacking Oak tokens/spacing.
+- REVIEW: Document gaps and prioritise changes.
+- ACTION: Extend tests (unit/integration) to encode new oakGreen/mint spacing rules before implementation.
+- REVIEW: Ensure failing tests prove required changes.
+- ACTION: Implement theme and layout updates using Oak components/tokens inspired by captured references.
+- REVIEW: Self-review code for token compliance and British spelling.
+- QUALITY-GATE: Run `pnpm test` for targeted suites.
 - GROUNDING: read GO.md and follow all instructions.
-- ACTION: Extend src/lib/env.ts validation (OAK_API_KEY/OAK_API_BEARER, SEARCH_INDEX_VERSION, observability, AI provider) with tests.
-- REVIEW: Verify env validation tests cover invalid combinations.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Update SDK adapters to emit canonical URLs, lesson-planning data, suggestion payload inputs, provenance fields.
-- REVIEW: Confirm adapter outputs match SDK types and target spec.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Rebuild ingestion pipeline with resilient batching/backoff, progress markers, structured logging.
-- REVIEW: Validate bulk logs/retry behaviour using fixtures.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Redesign rollup generation for lesson-planning data snippets, unit_semantic, completion payloads, canonical URLs.
-- REVIEW: Check rollup documents for snippet quality and semantic copy.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Implement alias rotation and SEARCH_INDEX_VERSION persistence/invalidation.
-- REVIEW: Ensure alias/version flow invalidates caches safely.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Introduce shared server-side RRF query builders (lessons/units/sequences) with facets and highlights.
-- REVIEW: Compare query payloads to definitive examples.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Refactor /api/search and /api/search/nl to use builders, normalise filters, enforce NL fallback.
-- REVIEW: Test NL/structured responses and caching.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Implement /api/search/suggest and /api/index-oak/status with telemetry and cache tags.
-- REVIEW: Confirm suggestion/status outputs meet observability needs.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Regenerate OpenAPI/MCP artefacts so new surfaces appear correctly.
-- REVIEW: Validate generated /api/openapi.json and MCP tooling.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Refresh authored docs + README to reflect new behaviour.
-- REVIEW: Self-review documentation for accuracy and British spelling.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Expand regression tests (unit/integration/UI) for ingestion, RRF builders, suggestions, admin telemetry, caching helpers.
-- REVIEW: Run pnpm test and fix failures.
-- GROUNDING: read GO.md and follow all instructions.
-- ACTION: Remove obsolete client-side RRF helpers and dead code.
-- REVIEW: Ensure only redundant code removed.
-- GROUNDING: read GO.md and follow all instructions.
-- QUALITY-GATE: Run pnpm lint.
-- REVIEW: Record lint outcome.
-- GROUNDING: read GO.md and follow all instructions.
-- QUALITY-GATE: Run pnpm build.
-- REVIEW: Record build outcome.
-- GROUNDING: read GO.md and follow all instructions.
-- QUALITY-GATE: Run pnpm -C apps/oak-open-curriculum-semantic-search doc-gen.
-- REVIEW: Record doc-gen outcome.
-- ACTION: Compile final self-review summarising milestones, risks, next steps.
-- REVIEW: Share/record the summary for continuity.
+- QUALITY-GATE: Run `pnpm lint` and `pnpm build`.
+- REVIEW: Confirm lint/build success and plan next steps.

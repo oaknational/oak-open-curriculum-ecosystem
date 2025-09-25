@@ -13,12 +13,12 @@ import type {
   OakBorderRadiusToken,
   OakAllSpacingToken,
 } from '@oaknational/oak-components';
-import {
-  semanticThemeSpec,
-  type SemanticMode,
-  type SemanticAppSpec,
-  type SemanticTypographySpecEntry,
-} from './semantic-theme-spec';
+import { semanticThemeSpec } from './semantic-theme-spec';
+import type {
+  SemanticAppSpec,
+  SemanticMode,
+  SemanticTypographySpecEntry,
+} from './semantic-theme-types';
 
 function pxToRem(px: number): string {
   return `${parseFloat((px / 16).toFixed(3))}rem`;
@@ -75,7 +75,14 @@ export interface ResolvedTypographyEntry {
 
 export interface ResolvedAppTokens {
   readonly colors: Record<
-    'headerBorder' | 'borderSubtle' | 'textMuted' | 'errorText' | 'pageNote' | 'docsNote',
+    | 'headerBorder'
+    | 'borderSubtle'
+    | 'textMuted'
+    | 'errorText'
+    | 'pageNote'
+    | 'docsNote'
+    | 'surfaceCard'
+    | 'surfaceRaised',
     string
   > & {
     readonly surfaceEmphasisBg: string;
@@ -100,7 +107,10 @@ export interface ResolvedAppTokens {
   };
   readonly layout: {
     readonly containerMaxWidth: string;
+    readonly controlColumnMinWidth: string;
+    readonly secondaryColumnMinWidth: string;
   };
+  readonly palette: SemanticAppSpec['palette'];
 }
 
 function resolveTypographyEntry(
@@ -123,7 +133,7 @@ function resolveTypographyEntry(
 function resolveRadii(token: OakBorderRadiusToken): string {
   const px = oakBorderRadiusTokens[token];
   if (typeof px !== 'number') {
-    throw new Error(`Unknown border radius token "${token}"`);
+    throw new TypeError(`Unknown border radius token "${token}"`);
   }
   return pxToPx(px);
 }
@@ -150,6 +160,8 @@ function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colo
     errorText: resolveColorToken(spec.errorText),
     pageNote: resolveColorToken(spec.pageNote),
     docsNote: resolveColorToken(spec.docsNote),
+    surfaceCard: resolveColorToken(spec.surfaceCard),
+    surfaceRaised: resolveColorToken(spec.surfaceRaised),
     surfaceEmphasisBg: spec.surfaceEmphasisBg,
   };
 }
@@ -180,6 +192,9 @@ export function resolveAppTokens(mode: SemanticMode): ResolvedAppTokens {
     },
     layout: {
       containerMaxWidth: spec.layout.containerMaxWidth,
+      controlColumnMinWidth: spec.layout.controlColumnMinWidth,
+      secondaryColumnMinWidth: spec.layout.secondaryColumnMinWidth,
     },
+    palette: spec.palette,
   };
 }

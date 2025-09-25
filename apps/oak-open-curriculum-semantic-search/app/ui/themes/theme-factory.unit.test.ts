@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { oakUiRoleTokens } from '@oaknational/oak-components';
+import { oakColorTokens, oakUiRoleTokens } from '@oaknational/oak-components';
 import { createLightTheme } from './light';
 import { createDarkTheme } from './dark';
 import { semanticThemeSpec } from './semantic-theme-spec';
@@ -26,6 +26,16 @@ describe('semanticThemeSpec', () => {
     expect(Object.keys(darkApp.radii).sort()).toEqual(Object.keys(lightApp.radii).sort());
     expect(Object.keys(darkApp.typography).sort()).toEqual(Object.keys(lightApp.typography).sort());
     expect(Object.keys(darkApp.fonts).sort()).toEqual(Object.keys(lightApp.fonts).sort());
+  });
+
+  it('leans on oakGreen for key brand accents', () => {
+    expect(semanticThemeSpec.light.uiColors['bg-btn-primary']).toBe('oakGreen');
+    expect(semanticThemeSpec.light.uiColors['text-link-active']).toBe('oakGreen');
+    expect(semanticThemeSpec.light.uiColors['border-primary']).toBe('oakGreen');
+
+    expect(semanticThemeSpec.dark.uiColors['bg-btn-primary']).toBe('oakGreen');
+    expect(semanticThemeSpec.dark.uiColors['border-primary']).toBe('oakGreen');
+    expect(semanticThemeSpec.dark.uiColors['border-brand']).toBe('oakGreen');
   });
 });
 
@@ -69,8 +79,47 @@ describe('App theme factories', () => {
     const lightColors = resolveAppTokens('light').colors;
     const darkColors = resolveAppTokens('dark').colors;
 
-    expect(lightColors.headerBorder).not.toBe(darkColors.headerBorder);
+    expect(lightColors.headerBorder).toBe(oakColorTokens.oakGreen);
+    expect(darkColors.headerBorder).toBe(oakColorTokens.oakGreen);
+    expect(lightColors.textMuted).not.toBe(darkColors.textMuted);
     expect(lightColors.surfaceEmphasisBg).toBe('rgba(0, 0, 0, 0.06)');
     expect(darkColors.surfaceEmphasisBg).toBe('rgba(255, 255, 255, 0.08)');
+  });
+
+  it('exposes custom palette entries for brand colours', () => {
+    const lightPalette = resolveAppTokens('light').palette;
+    const darkPalette = resolveAppTokens('dark').palette;
+
+    expect(lightPalette.brandPrimary).toBe(oakColorTokens.oakGreen);
+    expect(darkPalette.brandPrimary).toBe(oakColorTokens.oakGreen);
+    expect(lightPalette.brandPrimaryDark).toBe('#0f381b');
+    expect(darkPalette.brandPrimaryDark).toBe('#82d88a');
+  });
+
+  it('provides surface colour entries for cards and panels', () => {
+    const lightColors = resolveAppTokens('light').colors as Record<string, string>;
+    const darkColors = resolveAppTokens('dark').colors as Record<string, string>;
+
+    expect(lightColors.surfaceCard).toBe(oakColorTokens.white);
+    expect(lightColors.surfaceRaised).toBe(oakColorTokens.grey20);
+    expect(darkColors.surfaceCard).toBe(oakColorTokens.navy110);
+    expect(darkColors.surfaceRaised).toBe(oakColorTokens.navy);
+  });
+
+  it('exposes extended brand palette shades', () => {
+    const lightPalette = resolveAppTokens('light').palette as Record<string, string>;
+    const darkPalette = resolveAppTokens('dark').palette as Record<string, string>;
+
+    expect(lightPalette.brandPrimaryDeep).toBe('#144d24');
+    expect(lightPalette.brandPrimaryBright).toBe('#35a04c');
+    expect(darkPalette.brandPrimaryDeep).toBe('#0b2a16');
+    expect(darkPalette.brandPrimaryBright).toBe('#6ed680');
+  });
+
+  it('provides layout measurements for responsive grids', () => {
+    const lightLayout = resolveAppTokens('light').layout;
+
+    expect(lightLayout.controlColumnMinWidth).toBe('20rem');
+    expect(lightLayout.secondaryColumnMinWidth).toBe('18rem');
   });
 });

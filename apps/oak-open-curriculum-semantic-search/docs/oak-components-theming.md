@@ -17,11 +17,11 @@ This document explains how to consume and extend `@oaknational/oak-components` i
 `OakGlobalStyle` (shipped with the component library) only installs resets. It **does not** set foreground/background colours or reference the current theme. Apps must:
 
 1. Mount `OakGlobalStyle` once (we do this inside `ThemeContext`).
-2. Layer an additional global style that reads from the resolved theme to apply:
+2. Emit a deterministic `<style id="app-theme-global">` from the bridge that paints `html`, `body`, and `#app-theme-root` using the resolved semantic theme (our light mode now sets `bg-primary` to the mint30 token so the base canvas picks up Oak’s pale green wash):
    - `html, body { background-color: theme.uiColors['bg-primary']; color: theme.uiColors['text-primary']; }`
    - Link, label, and helper text colours derived from the semantic tokens (e.g. `text-link-*`, `text-subdued`).
 
-We emit CSS variables through `ThemeBridgeProvider` (`--app-*`). A lightweight `createGlobalStyle` wrapper should consume those variables so the browser never falls back to black-on-white defaults. This differs from OWA, which assumes a single light theme and relies on the browser defaults.
+We expose CSS variables through `ThemeBridgeProvider` (`--app-*`) and generate the global stylesheet manually so ordering is deterministic during SSR and hydration. This differs from OWA, which assumes a single light theme and relies on the browser defaults.
 
 ## 3. Creating the theme
 
@@ -29,8 +29,9 @@ We emit CSS variables through `ThemeBridgeProvider` (`--app-*`). A lightweight `
 2. Use helpers similar to `buildUiColorMap`/`resolveAppTokens` to:
    - Validate full `OakUiRoleToken` coverage.
    - Convert spacing/radius/typography tokens into CSS-ready values (rem/px/unitless).
-3. Expose a `createLightTheme`/`createDarkTheme` function that returns an `OakTheme` extended with app-specific tokens.
-4. Mount `OakThemeProvider` (from Oak components) with the resolved theme so every component can read tokenised values.
+3. Lean on `oakGreen` for keystone brand accents—primary buttons, active links, borders, and header edges all share the token so downstream surfaces remain consistent in both modes. Our semantic layer also introduces `brandPrimaryDeep`/`brandPrimaryBright` entries so darker hero borders and lighter highlights stay within the Oak palette without inventing ad-hoc hex codes.
+4. Expose a `createLightTheme`/`createDarkTheme` function that returns an `OakTheme` extended with app-specific tokens.
+5. Mount `OakThemeProvider` (from Oak components) with the resolved theme so every component can read tokenised values.
 
 ## 4. Applying tokens in UI code
 
@@ -40,6 +41,7 @@ Oak components expect everything to flow from tokens. Do **not** hard-code colou
 - For headings/labels/helper copy, pass `$font` to ensure the Oak typography ramp is used.
 - For custom wrappers (headers, forms, modals), explicitly set tokens instead of relying on inheritance.
 - If a new colour/space token is absolutely required, add it to the semantic spec and derive the TypeScript type from the constant so tests fail when the contract changes.
+- Layout CSS variables emitted by the bridge (`--app-layout-container-max-width`, `--app-layout-control-column-min-width`, `--app-layout-secondary-column-min-width`) keep responsive grids consistent; prefer them over hard-coded `minmax` values when composing custom wrappers.
 
 ## 5. Dark mode support
 
