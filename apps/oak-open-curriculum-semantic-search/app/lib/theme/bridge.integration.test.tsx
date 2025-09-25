@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import { useTheme } from 'styled-components';
-import { useColorMode } from './ColorModeContext.js';
+import { useThemeContext } from './ThemeContext.js';
 import { Providers as AppProviders } from '../Providers.js';
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -39,7 +39,7 @@ describe('Bridge theming (ADR-045)', () => {
       return <span data-testid="color">{theme?.app?.colors?.headerBorder ?? 'missing'}</span>;
     };
     const Toggler = () => {
-      const { setMode } = useColorMode();
+      const { setMode } = useThemeContext();
       return (
         <button onClick={() => setMode('dark')} data-testid="toggle2">
           to dark
@@ -69,7 +69,7 @@ describe('Bridge theming (ADR-045)', () => {
 
   it('syncs wrapper data-theme when mode toggles', () => {
     const Toggle = () => {
-      const { mode, setMode } = useColorMode();
+      const { mode, setMode } = useThemeContext();
       return (
         <button onClick={() => setMode('dark')} data-testid="toggle">
           {mode}
@@ -86,5 +86,33 @@ describe('Bridge theming (ADR-045)', () => {
       screen.getByTestId('toggle').click();
     });
     expect(document.getElementById('app-theme-root')?.dataset.theme).toBe('dark');
+  });
+
+  it('syncs wrapper data-theme when ThemeContext mode changes', () => {
+    const ThemeToggle = () => {
+      const { mode, setMode } = useThemeContext();
+      return (
+        <button
+          onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
+          data-testid="theme-toggle"
+        >
+          toggle
+        </button>
+      );
+    };
+    render(
+      <Providers>
+        <ThemeToggle />
+      </Providers>,
+    );
+
+    const root = () => document.getElementById('app-theme-root')?.dataset.theme;
+    expect(root()).toBe('light');
+
+    act(() => {
+      screen.getByTestId('theme-toggle').click();
+    });
+
+    expect(root()).toBe('dark');
   });
 });

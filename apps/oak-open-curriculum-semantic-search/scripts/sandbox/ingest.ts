@@ -70,9 +70,9 @@ async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const flags = parseFlags(args);
   const cwd = process.cwd();
-  const fixtureRoot =
-    flags.fixtureRoot ??
-    path.join(cwd, 'apps/oak-open-curriculum-semantic-search/fixtures/sandbox');
+  const fixtureRoot = flags.fixtureRoot
+    ? path.resolve(cwd, flags.fixtureRoot)
+    : path.join(cwd, 'fixtures/sandbox');
   const target = flags.target ?? 'sandbox';
 
   sandboxLogger.info('sandbox.cli.start', {

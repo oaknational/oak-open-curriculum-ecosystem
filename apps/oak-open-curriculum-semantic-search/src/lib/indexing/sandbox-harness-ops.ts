@@ -94,12 +94,14 @@ export function logSummary(
   target: SearchIndexTarget,
   summary: { totalDocs: number; counts: Record<SearchIndexKind, number> },
   dryRun: boolean,
+  metrics?: unknown,
 ): void {
   logger.info(event, {
     target,
     totalDocs: summary.totalDocs,
     counts: summary.counts,
     dryRun,
+    metrics,
   });
 }
 

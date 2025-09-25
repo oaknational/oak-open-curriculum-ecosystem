@@ -44,12 +44,17 @@ _Last updated: 2025-09-25 (zero-hit persistence shipped)_
 - ✅ **Sandbox ingestion harness** – Implemented fixture-backed Oak client + CLI (`scripts/sandbox/ingest.ts`), rewrote bulk operations via `search-index-target.ts`, and added unit coverage for dry-run vs live `_bulk` requests (`sandbox-harness.unit.test.ts`).
 - ✅ **Sandbox harness refactor** – Split fixture parsing and bulk helpers into dedicated modules, tightened type guards, and cleared lint/max-lines constraints ahead of telemetry persistence work.
 - ✅ **Zero-hit persistence** – Implemented Serverless-backed writes with automatic ILM provisioning, index-missing fallbacks, retention-aware env toggles, CLI purge support, documentation, and Vitest coverage across persistence/search paths.
+- ✅ **Sequence facet instrumentation** – Sandbox harness now wraps `buildIndexBulkOps` with per-sequence metrics (fetch/extraction timings, unit counts, inclusion state) and returns them with each dry-run/ingest summary, alongside CLI path fixes for fixtures.
+- ✅ **Hybrid search coverage** – Added `runHybridSearch` unit tests to prove scope routing, pagination normalisation, and facet enrichment behaviour end-to-end.
+- ✅ **UI theming remediation** – Styled-components registry now avoids client-side sheet reuse and theme sync no longer stalls; integration tests confirm `data-theme` updates flow through the Oak bridge.
 
 ## In progress / blockers
 
-- `oak_sequence_facets` ingestion/caching needs optimisation and a documented operational runbook to stay responsive during UI adoption.
+- `oak_sequence_facets` ingestion/caching needs optimisation and a documented operational runbook to stay responsive during UI adoption (instrumentation now exposes per-sequence timings; remaining work focuses on batching/invalidation policy and admin surfacing).
+- 2025-09-26 ingestion audit: sandbox harness dry-run (fixture dataset) required explicit `--fixture ./fixtures/sandbox` flag because the CLI currently double-nests `apps/…` when resolving the default path. Env bootstrap demanded dummy ES/Oak keys even for dry runs, confirming the helpers always touch `env()` before transport rewiring. Instrumenting `buildIndexBulkOps` with the fixture client showed a single `_bulk` payload (10 operations → 5 documents) with exactly one sequence facet document, while request counts highlighted fully sequential calls (`getSequenceUnits` invoked once per sequence, no concurrency or caching beyond the per-subject map). `esBulk` still posts the entire operation array without chunking/retries/logging, and no cache invalidation hook (`revalidateTag`) currently runs after ingestion.
 - Admin console lacks index health telemetry (document counts, last-run timestamps, index version), limiting visibility during bootstrap/update operations.
 - Zero-hit webhook consumer hardening: follow-up work will explore Elasticsearch-backed persistence beyond in-memory storage once ingestion is stabilised.
+- 2025-09-26 coverage reflection: Expanded unit suites now cover hybrid search routing and sequence facet instrumentation, yet real Elasticsearch integration tests and UI regression coverage remain open; the work stays on Phase 1’s critical path until ingestion batching and UI remediation are complete.
 
 ## Next actions (see plan for GO cadence)
 

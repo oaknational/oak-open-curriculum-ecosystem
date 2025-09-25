@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { KeyStage, SearchUnitSummary, SearchSubjectSlug } from '../../types/oak';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
 import { createSequenceFacetDocuments, type SequenceFacetSource } from './sequence-facets';
+import {
+  buildSequenceFacetSources,
+  type SequenceFacetProcessingMetrics,
+} from './sequence-facet-index';
 
 function makeSequenceEntry(overrides: Partial<SubjectSequenceEntry> = {}): SubjectSequenceEntry {
   return {
@@ -130,5 +134,41 @@ describe('createSequenceFacetDocuments', () => {
     });
 
     expect(docs).toHaveLength(0);
+  });
+
+  it('emits instrumentation metrics for each processed sequence', async () => {
+    const sequences: SubjectSequenceEntry[] = [
+      makeSequenceEntry({ sequenceSlug: 'programme-1' }),
+      makeSequenceEntry({
+        sequenceSlug: 'programme-2',
+        keyStages: [{ keyStageSlug: 'ks2', keyStageTitle: 'Key stage 2' }],
+      }),
+    ];
+
+    const payloads: Record<string, unknown> = {
+      'programme-1': [{ units: [{ unitSlug: 'unit-a' }] }],
+      'programme-2': [],
+    };
+
+    const record = vi.fn<(metrics: SequenceFacetProcessingMetrics) => void>();
+
+    await buildSequenceFacetSources(async (slug) => payloads[slug], sequences, {
+      instrumentation: {
+        record,
+      },
+    });
+
+    expect(record).toHaveBeenCalledTimes(2);
+    const firstCall = record.mock.calls[0][0];
+    expect(firstCall.sequenceSlug).toBe('programme-1');
+    expect(firstCall.unitCount).toBe(1);
+    expect(firstCall.included).toBe(true);
+    expect(firstCall.fetchDurationMs).toBeGreaterThanOrEqual(0);
+    expect(firstCall.extractionDurationMs).toBeGreaterThanOrEqual(0);
+
+    const secondCall = record.mock.calls[1][0];
+    expect(secondCall.sequenceSlug).toBe('programme-2');
+    expect(secondCall.unitCount).toBe(0);
+    expect(secondCall.included).toBe(false);
   });
 });

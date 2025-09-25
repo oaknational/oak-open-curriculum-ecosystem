@@ -27,7 +27,7 @@ describe('sandbox harness', () => {
       es,
     });
 
-    const { operations, summary } = await harness.prepareBulkOperations();
+    const { operations, summary, metrics } = await harness.prepareBulkOperations();
 
     expect(summary.target).toBe('sandbox');
     expect(summary.totalDocs).toBeGreaterThan(0);
@@ -37,6 +37,11 @@ describe('sandbox harness', () => {
       unit_rollup: 1,
       sequence_facets: 1,
     });
+
+    expect(metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
+    expect(metrics?.sequenceFacets.includedSequences).toBe(1);
+    expect(metrics?.sequenceFacets.skippedSequences).toBeGreaterThanOrEqual(0);
+    expect(metrics?.sequenceFacets.entries[0]?.fetchDurationMs).toBeGreaterThanOrEqual(0);
 
     const actionIndexes = collectActionIndexes(operations);
     expect(actionIndexes).toContain(resolveSearchIndexName('lessons', 'sandbox'));
@@ -56,6 +61,7 @@ describe('sandbox harness', () => {
     const result = await harness.ingest({ dryRun: false, verbose: true });
 
     expect(result.summary.totalDocs).toBeGreaterThan(0);
+    expect(result.metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
     expect(es.requestMock).toHaveBeenCalledTimes(1);
     const paramsCandidate = es.requests[0];
     if (!isUnknownObject(paramsCandidate)) {
@@ -80,6 +86,7 @@ describe('sandbox harness', () => {
     const result = await harness.ingest({ dryRun: true, verbose: true });
 
     expect(result.summary.totalDocs).toBeGreaterThan(0);
+    expect(result.metrics?.sequenceFacets.totalSequences).toBeGreaterThan(0);
     expect(es.requestMock).not.toHaveBeenCalled();
     expect(es.requests).toHaveLength(0);
   });

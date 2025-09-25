@@ -2,25 +2,51 @@ import { generateCanonicalUrl, isKeyStage, isSubject } from '@oaknational/oak-cu
 import type { KeyStage, SearchSubjectSlug } from '../types/oak';
 import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
 import { type SequenceFacetSource } from './indexing/sequence-facets';
-import { buildSequenceFacetOps, buildSequenceFacetSources } from './indexing/sequence-facet-index';
+import {
+  buildSequenceFacetOps,
+  buildSequenceFacetSources,
+  type SequenceFacetProcessingMetrics,
+} from './indexing/sequence-facet-index';
 import {
   buildLessonDocuments,
   buildRollupDocuments,
   buildUnitDocuments,
 } from './indexing/index-bulk-helpers';
 
+export interface BuildIndexBulkOpsOptions {
+  readonly onSequenceFacetProcessed?: (
+    details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
+  ) => void;
+}
+
 export async function buildIndexBulkOps(
   client: OakClient,
   keyStages: readonly string[],
   subjects: readonly string[],
+  options?: BuildIndexBulkOpsOptions,
 ): Promise<unknown[]> {
   const bulkOps: unknown[] = [];
   for (const subject of filterSubjects(subjects)) {
     const subjectSequences = await client.getSubjectSequences(subject);
+    const events: SequenceFacetProcessingMetrics[] = [];
     const sequenceSources = await buildSequenceFacetSources(
       (slug) => client.getSequenceUnits(slug),
       subjectSequences,
+      options?.onSequenceFacetProcessed
+        ? {
+            instrumentation: {
+              record(details) {
+                events.push(details);
+              },
+            },
+          }
+        : undefined,
     );
+    if (options?.onSequenceFacetProcessed) {
+      for (const event of events) {
+        options.onSequenceFacetProcessed({ ...event, subject });
+      }
+    }
     for (const ks of filterKeyStages(keyStages)) {
       bulkOps.push(
         ...(await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources)),

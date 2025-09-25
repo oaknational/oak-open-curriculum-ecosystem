@@ -13,6 +13,7 @@ import { sandboxLogger } from '../logger';
 import { esClient } from '../es-client';
 import { createFixtureOakClient } from './sandbox-fixture';
 import { dispatchBulk, logPreview, logSummary, summariseOperations } from './sandbox-harness-ops';
+import type { SequenceFacetProcessingMetrics } from './sequence-facet-index';
 
 interface SandboxHarnessOptions {
   readonly fixtureRoot?: string;
@@ -39,16 +40,30 @@ interface SandboxBulkSummary {
   readonly counts: Record<SearchIndexKind, number>;
 }
 
+interface SequenceFacetMetricsEntry extends SequenceFacetProcessingMetrics {
+  readonly subject: SearchSubjectSlug;
+}
+interface SequenceFacetMetricsSummary {
+  readonly totalSequences: number;
+  readonly includedSequences: number;
+  readonly skippedSequences: number;
+  readonly totalUnitCount: number;
+  readonly totalFetchDurationMs: number;
+  readonly totalExtractionDurationMs: number;
+  readonly entries: readonly SequenceFacetMetricsEntry[];
+}
+interface SandboxBulkMetrics {
+  readonly sequenceFacets: SequenceFacetMetricsSummary;
+}
 interface SandboxBulkResult {
   readonly operations: unknown[];
   readonly summary: SandboxBulkSummary;
+  readonly metrics?: SandboxBulkMetrics;
 }
-
 interface IngestOptions {
   readonly dryRun?: boolean;
   readonly verbose?: boolean;
 }
-
 export interface SandboxHarness {
   prepareBulkOperations(): Promise<SandboxBulkResult>;
   ingest(options?: IngestOptions): Promise<SandboxBulkResult>;
@@ -143,10 +158,14 @@ function resolveTransport(es?: Pick<Client, 'transport'>): Pick<Client, 'transpo
 }
 
 async function prepareOperations(context: HarnessContext): Promise<SandboxBulkResult> {
-  const bulkOps = await buildIndexBulkOps(context.client, context.keyStages, context.subjects);
+  const metricsCollector = createSequenceFacetMetricsCollector();
+  const bulkOps = await buildIndexBulkOps(context.client, context.keyStages, context.subjects, {
+    onSequenceFacetProcessed: metricsCollector.record,
+  });
   const targetedOps = rewriteBulkOperations(bulkOps, context.target);
   const summary = summariseOperations(targetedOps, context.target);
-  return { operations: targetedOps, summary };
+  const metrics = metricsCollector.snapshot();
+  return { operations: targetedOps, summary, metrics };
 }
 
 async function ingestOperations(
@@ -158,7 +177,14 @@ async function ingestOperations(
   const dryRun = options.dryRun ?? false;
   const verbose = options.verbose ?? false;
 
-  logSummary(context.logger, 'sandbox.ingest.prepared', context.target, result.summary, dryRun);
+  logSummary(
+    context.logger,
+    'sandbox.ingest.prepared',
+    context.target,
+    result.summary,
+    dryRun,
+    result.metrics,
+  );
 
   if (result.operations.length === 0 || dryRun) {
     if (verbose) {
@@ -169,11 +195,53 @@ async function ingestOperations(
 
   await dispatchBulk(context.es, result.operations);
 
-  logSummary(context.logger, 'sandbox.ingest.completed', context.target, result.summary, false);
+  logSummary(
+    context.logger,
+    'sandbox.ingest.completed',
+    context.target,
+    result.summary,
+    false,
+    result.metrics,
+  );
 
   if (verbose) {
     logPreview(context.logger, context.target, result.operations);
   }
 
   return result;
+}
+
+function createSequenceFacetMetricsCollector(): {
+  readonly record: (
+    details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
+  ) => void;
+  readonly snapshot: () => SandboxBulkMetrics;
+} {
+  const entries: SequenceFacetMetricsEntry[] = [];
+  return {
+    record(details) {
+      entries.push(details);
+    },
+    snapshot() {
+      const totalSequences = entries.length;
+      const includedSequences = entries.filter((entry) => entry.included).length;
+      const totalUnitCount = entries.reduce((acc, entry) => acc + entry.unitCount, 0);
+      const totalFetchDurationMs = entries.reduce((acc, entry) => acc + entry.fetchDurationMs, 0);
+      const totalExtractionDurationMs = entries.reduce(
+        (acc, entry) => acc + entry.extractionDurationMs,
+        0,
+      );
+      return {
+        sequenceFacets: {
+          totalSequences,
+          includedSequences,
+          skippedSequences: totalSequences - includedSequences,
+          totalUnitCount,
+          totalFetchDurationMs,
+          totalExtractionDurationMs,
+          entries,
+        },
+      } satisfies SandboxBulkMetrics;
+    },
+  };
 }
