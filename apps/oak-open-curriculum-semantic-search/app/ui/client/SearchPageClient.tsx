@@ -15,6 +15,7 @@ import {
   ControlsGrid,
   FacetsPanel,
   HeroCard,
+  ContentContainer,
   HeroControlsCluster,
   NaturalPanelCard,
   PageContainer,
@@ -38,25 +39,27 @@ export default function SearchPageClient({
       $background="bg-primary"
       $color="text-primary"
     >
-      <HeroControlsCluster as="section" aria-label="Search hero and controls">
-        <SearchHero />
-        <SearchForms searchAction={searchStructured} controller={ctrl} followUp={followUp} />
-      </HeroControlsCluster>
+      <ContentContainer data-testid="search-page-content">
+        <HeroControlsCluster as="section" aria-label="Search hero and controls">
+          <SearchHero />
+          <SearchForms searchAction={searchStructured} controller={ctrl} followUp={followUp} />
+        </HeroControlsCluster>
 
-      <SearchSecondary
-        suggestions={ctrl.suggestions}
-        onSelectSuggestion={followUp.handleSuggestionSelect}
-        facets={ctrl.facets}
-        onSelectSequence={followUp.handleFacetSelect}
-      />
+        <SearchSecondary
+          suggestions={ctrl.suggestions}
+          onSelectSuggestion={followUp.handleSuggestionSelect}
+          facets={ctrl.facets}
+          onSelectSequence={followUp.handleFacetSelect}
+        />
 
-      {ctrl.error ? (
-        <OakTypography as="p" role="alert" $font="body-3" $color="text-error">
-          {ctrl.error}
-        </OakTypography>
-      ) : null}
+        {ctrl.error ? (
+          <OakTypography as="p" role="alert" $font="body-3" $color="text-error">
+            {ctrl.error}
+          </OakTypography>
+        ) : null}
 
-      <SearchResultsComponent results={ctrl.results} meta={ctrl.meta} />
+        <SearchResultsComponent results={ctrl.results} meta={ctrl.meta} />
+      </ContentContainer>
     </PageContainer>
   );
 }
@@ -130,6 +133,17 @@ function SearchHero(): JSX.Element {
         be adapted for Leeds&rdquo;, passes that to an LLM to figure out the intent, and then defers
         to the structured search to find the best results with hybrid lexical and semantic search.
       </OakTypography>
+      <OakTypography as="p" $font="body-2">
+        Ready to start?{' '}
+        <OakTypography as="a" href="#structured-search-panel" $font="body-2-bold" $color="text-link-active">
+          Jump to structured search
+        </OakTypography>{' '}
+        or{' '}
+        <OakTypography as="a" href="#natural-search-panel" $font="body-2-bold" $color="text-link-active">
+          try the natural language search
+        </OakTypography>
+        .
+      </OakTypography>
     </HeroCard>
   );
 }
@@ -148,6 +162,7 @@ function StructuredPanel({
       as="section"
       aria-labelledby="structured-heading"
       data-testid="structured-search-panel"
+      id="structured-search-panel"
       $ba="border-solid-s"
     >
       <OakTypography as="h2" id="structured-heading" $font="heading-6">
@@ -175,6 +190,7 @@ function NaturalPanel({ controller }: { controller: SearchController }): JSX.Ele
       as="section"
       aria-labelledby="nl-heading"
       data-testid="natural-search-panel"
+      id="natural-search-panel"
       $ba="border-solid-s"
     >
       <OakTypography as="h2" id="nl-heading" $font="heading-6">

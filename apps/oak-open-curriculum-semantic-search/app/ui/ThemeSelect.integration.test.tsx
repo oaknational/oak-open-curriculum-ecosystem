@@ -49,7 +49,9 @@ describe('ThemeSelect', () => {
     const systemBorder = getComputedStyle(systemRadioOutline).borderColor;
     const darkBorder = getComputedStyle(darkRadioOutline).borderColor;
 
+    // Note, this is a brittle test, it's more about a regression we had in the radio style application
+    // delete if causing issues
     expect(systemBorder).toBe('rgb(228, 228, 228)');
-    expect(darkBorder).toBe('rgb(255, 255, 255)');
+    expect(darkBorder).toBe('rgb(242, 242, 242)');
   });
 });

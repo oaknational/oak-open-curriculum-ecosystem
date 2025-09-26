@@ -4,12 +4,8 @@ import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveBreakpoint } from '../shared/breakpoints';
 
 export const PageContainer = styledComponents(OakBox)`
-  display: flex;
-  flex-direction: column;
-  gap: var(--app-gap-section);
   width: 100%;
-  max-inline-size: var(--app-layout-container-max-width);
-  margin-inline: auto;
+  box-sizing: border-box;
   padding-inline: clamp(
     var(--app-layout-inline-padding-base),
     4vw,
@@ -22,6 +18,14 @@ export const PageContainer = styledComponents(OakBox)`
       padding-block: var(--app-gap-section);
     }
   `}
+`;
+
+export const ContentContainer = styledComponents(OakBox)`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-section);
+  width: min(100%, var(--app-layout-container-max-width));
+  margin-inline: auto;
 `;
 
 export const HeroControlsCluster = styledComponents(OakBox)`

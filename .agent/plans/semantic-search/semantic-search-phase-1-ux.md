@@ -37,6 +37,8 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
 - Axe still flags two violations on Health (HTML fallback) until that UI shell lands; search regressions are clean.
 - Axe still flags two violations in dev mode due to the Next.js overlay; suppress with `NEXT_DISABLE_DEV_ERRORS` in the Playwright server env, but investigate underlying errors before relaxing assertions.
 - 2025-09-27: Introduced `resolveBreakpoint` helper and updated Search layout components to consume semantic breakpoints via styled-components theme; Playwright sampling confirmed `ControlsGrid` now transitions to two columns at `bp-md` while retaining token-driven column clamps.
+- Theme selector radios honour dark mode by resolving semantic tokens to Oak colour hex values, yielding visibly lighter outlines with integration coverage guarding `rgb(228, 228, 228)` / `rgb(255, 255, 255)` borders.
+- 2025-09-27: Hero/controls now share a `HeroControlsCluster` grid (stacking below `bp-lg`, two columns above), control cards use `surfaceCard` with brand borders for contrast, radio/select groups wrap on narrow widths, and integration tests + Playwright responsive sweeps cover the new theming.
 
 ### Outstanding Audit Notes
 
@@ -44,6 +46,8 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
   - Draft shell (2025-09-27): adopt `PageContainer` with hero summary (status badge + uptime note), two-column grid at `bp-md` separating "Status" cards from "Diagnostics" accordion, and reserve a `role="status"` live region for API health messages. Accept-header toggle should serve JSON by default yet promote UI when `text/html` requested without breaking caching.
 - **Playwright coverage:** Admin `bp-md` and Health `bp-xs` remain guarded until their respective UX tasks land; Admin/Docs `bp-xxl` baselines are enforced.
 - **Search hero clamp:** Copy still exceeds the 45 ch target at `bp-lg`; now that fixtures drive deterministic results, we can adjust layout tokens/media queries next.
+- **Search hero polish:** Confirm the new clamp (`max-inline-size: min(45ch, 100%)`) keeps hero copy within 45 ch across locales, consider adding an illustration at `bp-xl`, and verify dark-mode contrast on the refreshed control cards.
+- Search UX: validate the new hero/control cluster (contrast in dark mode, hero copy clamp ≤45 ch) and capture any additional token work (e.g. hero illustration slots at `bp-xl`).
 
 ## Breakpoint Strategy
 

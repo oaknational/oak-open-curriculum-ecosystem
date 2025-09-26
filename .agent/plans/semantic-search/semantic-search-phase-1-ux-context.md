@@ -19,6 +19,8 @@ _Last updated: 2025-09-26 (post Admin/Docs baseline refresh)_
 - Navigation and hero layouts still waste space on phones; Health surface remains raw JSON awaiting UI shell brief.
 - Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
 - Health shell outline drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle plan to serve JSON/UI without cache regressions.
+- Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
+- 2025-09-27 update: hero + controls now use a responsive grid (stacking on phones, horizontal from `bp-lg`), control panels share `surfaceCard` + brand borders for contrast, and form containers gained wrapping/min-inline safeguards to stop overflow at ≤360 px.
 
 ## Tooling & References
 

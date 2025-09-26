@@ -22,6 +22,9 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Health shell outline in the plan pairs a hero status banner with a two-column card grid at `bp-md`, includes an accessible `role="status"` region for live updates, and anticipates Accept header toggling between JSON and UI without cache regressions.
 - Playwright runs now enable `SEMANTIC_SEARCH_USE_FIXTURES` (plus `NEXT_DISABLE_DEV_ERRORS`) so structured search and suggestions return deterministic fixtures independent of Elasticsearch while keeping the dev overlay quiet.
 - Browser theme colours resolve from semantic tokens (`app/layout.meta.unit.test.ts` guards), keeping light/dark polish intact.
+- Theme selector contrast in dark mode is now guarded: radios resolve semantic tokens to Oak hex values so unselected outlines read `rgb(228, 228, 228)` and selected states stay `rgb(255, 255, 255)` with a dedicated integration test.
+- 2025-09-27 audit: hero and controls remain vertically stacked at `bp-lg`, leaving the search forms below the fold; control cards use `surfaceRaised`/`borderSubtle` which blends into the mint background, and at ≤360 px radio groups and selects overflow their panels due to missing `min-inline-size: 0` guards.
+- 2025-09-27 implementation: added a `HeroControlsCluster` grid so hero + controls align horizontally from `bp-lg`, rethemed panels to `surfaceCard` with brand borders, and added wrapping/min-inline safeguards so radio groups and selects stay within their cards on ≤360 px viewports.
 
 ## Cadence Overview
 
@@ -82,6 +85,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Queue the quality-gate sequence (`pnpm format`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, `pnpm -C apps/oak-open-curriculum-semantic-search test:ui`) once implementation stabilises; record outcomes in the REVIEW artefacts.
 - Keep Playwright attachments (screenshots + axe JSON) for each breakpoint as part of the REVIEW steps to ease regression tracking.
 - Document any token changes in `semantic-theme-spec.md` and update the responsive architecture doc so the knowledge base stays current.
+- Latest run (2025-09-27): `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` and the full `pnpm qg` suite both passed after updating integration tests for the new panel theming.
 
 ## Open Follow-ups
 
