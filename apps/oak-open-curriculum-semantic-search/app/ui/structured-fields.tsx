@@ -33,6 +33,7 @@ export function ScopeField({
         }
       }}
       $gap="space-between-xs"
+      $flexWrap="wrap"
     >
       {STRUCTURED_SCOPE_OPTIONS.map((option) => (
         <OakRadioButton

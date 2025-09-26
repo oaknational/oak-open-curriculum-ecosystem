@@ -74,9 +74,12 @@ function StructuredForm({
 
 const StructuredFormContainer = styledComponents(OakBox)`
   display: grid;
+  width: 100%;
+  min-inline-size: 0;
 `;
 
 const StyledForm = styledComponents('form')`
   display: grid;
   gap: var(--app-gap-cluster);
+  width: 100%;
 `;

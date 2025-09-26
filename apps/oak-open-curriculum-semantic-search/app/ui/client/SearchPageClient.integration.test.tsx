@@ -79,7 +79,7 @@ describe('SearchPageClient', () => {
     expect(styles.paddingTop).toBe(theme.app.space.padding.card);
   });
 
-  it('wraps structured and natural panels in Oak-neutral surfaces', () => {
+  it('wraps structured and natural panels in Oak card surfaces with brand borders', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
     });
@@ -87,10 +87,13 @@ describe('SearchPageClient', () => {
 
     const structured = screen.getByTestId('structured-search-panel');
     const natural = screen.getByTestId('natural-search-panel');
+    const expectedSurface = hexToRgb(theme.app.colors.surfaceCard);
+    const expectedBorder = hexToRgb(theme.app.palette.brandPrimaryDeep);
 
-    const raisedSurface = hexToRgb(theme.app.colors.surfaceRaised);
-    expect(getComputedStyle(structured).backgroundColor).toBe(raisedSurface);
-    expect(getComputedStyle(natural).backgroundColor).toBe(raisedSurface);
+    expect(getComputedStyle(structured).backgroundColor).toBe(expectedSurface);
+    expect(getComputedStyle(natural).backgroundColor).toBe(expectedSurface);
+    expect(getComputedStyle(structured).borderColor).toBe(expectedBorder);
+    expect(getComputedStyle(natural).borderColor).toBe(expectedBorder);
   });
 
   it('caps the main layout inline size using the app layout CSS variable', () => {
@@ -130,11 +133,10 @@ describe('SearchPageClient', () => {
     const natural = screen.getByTestId('natural-search-panel');
 
     const cardSurface = hexToRgb(theme.app.colors.surfaceCard);
-    const raisedSurface = hexToRgb(theme.app.colors.surfaceRaised);
 
     expect(getComputedStyle(hero).backgroundColor).toBe(cardSurface);
-    expect(getComputedStyle(structured).backgroundColor).toBe(raisedSurface);
-    expect(getComputedStyle(natural).backgroundColor).toBe(raisedSurface);
+    expect(getComputedStyle(structured).backgroundColor).toBe(cardSurface);
+    expect(getComputedStyle(natural).backgroundColor).toBe(cardSurface);
   });
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {

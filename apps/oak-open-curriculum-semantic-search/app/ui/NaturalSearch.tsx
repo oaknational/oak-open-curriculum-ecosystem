@@ -83,6 +83,7 @@ function ScopeField({
         }
       }}
       $gap="space-between-xs"
+      $flexWrap="wrap"
     >
       <OakRadioButton id="natural-scope-units" value="units" label="Units" />
       <OakRadioButton id="natural-scope-lessons" value="lessons" label="Lessons" />
@@ -187,9 +188,12 @@ export default function NaturalSearchComponent({
 
 const NaturalFormContainer = styledComponents(OakBox)`
   display: grid;
+  width: 100%;
+  min-inline-size: 0;
 `;
 
 const StyledNaturalForm = styledComponents('form')`
   display: grid;
   gap: var(--app-gap-cluster);
+  width: 100%;
 `;

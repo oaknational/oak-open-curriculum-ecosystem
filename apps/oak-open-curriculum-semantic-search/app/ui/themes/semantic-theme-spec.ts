@@ -172,7 +172,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
   dark: {
     name: 'oak-semantic-dark',
     uiColors: buildUiColorMap({
-      'text-primary': 'white',
+      'text-primary': 'grey20',
       'text-subdued': 'grey30',
       'text-link-active': 'mint',
       'text-link-hover': 'mint50',

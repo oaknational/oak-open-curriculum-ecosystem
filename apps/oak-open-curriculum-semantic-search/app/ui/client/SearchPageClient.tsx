@@ -15,6 +15,7 @@ import {
   ControlsGrid,
   FacetsPanel,
   HeroCard,
+  HeroControlsCluster,
   NaturalPanelCard,
   PageContainer,
   SecondaryGrid,
@@ -37,9 +38,10 @@ export default function SearchPageClient({
       $background="bg-primary"
       $color="text-primary"
     >
-      <SearchHero />
-
-      <SearchForms searchAction={searchStructured} controller={ctrl} followUp={followUp} />
+      <HeroControlsCluster as="section" aria-label="Search hero and controls">
+        <SearchHero />
+        <SearchForms searchAction={searchStructured} controller={ctrl} followUp={followUp} />
+      </HeroControlsCluster>
 
       <SearchSecondary
         suggestions={ctrl.suggestions}

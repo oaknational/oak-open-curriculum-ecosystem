@@ -24,6 +24,35 @@ export const PageContainer = styledComponents(OakBox)`
   `}
 `;
 
+export const HeroControlsCluster = styledComponents(OakBox)`
+  display: grid;
+  gap: var(--app-gap-section);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'hero'
+    'controls';
+
+  ${({ theme }) => {
+    const lg = resolveBreakpoint(theme, 'lg');
+    const xl = resolveBreakpoint(theme, 'xl');
+    return css`
+      @media (min-width: ${lg}) {
+        grid-template-columns:
+          minmax(0, 0.9fr)
+          minmax(0, 1.1fr);
+        grid-template-areas: 'hero controls';
+        align-items: start;
+      }
+
+      @media (min-width: ${xl}) {
+        grid-template-columns:
+          minmax(0, 1fr)
+          minmax(0, 1fr);
+      }
+    `;
+  }}
+`;
+
 export const ControlsGrid = styledComponents(OakBox)`
   display: grid;
   gap: var(--app-gap-section);
@@ -31,6 +60,8 @@ export const ControlsGrid = styledComponents(OakBox)`
   grid-template-areas:
     'structured'
     'natural';
+  grid-area: controls;
+  align-items: stretch;
 
   ${({ theme }) => {
     const md = resolveBreakpoint(theme, 'md');
@@ -89,17 +120,22 @@ export const HeroCard = styledComponents(OakBox)`
   border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-  max-inline-size: 45ch;
+  max-inline-size: min(45ch, 100%);
+  width: 100%;
+  min-inline-size: 0;
+  grid-area: hero;
 `;
 
 const PanelCard = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;
   gap: var(--app-gap-cluster);
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
-  border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
+  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
+  border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  width: 100%;
+  min-inline-size: 0;
 `;
 
 export const StructuredPanelCard = styledComponents(PanelCard)`
