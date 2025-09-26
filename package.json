@@ -25,6 +25,7 @@
     "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
     "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev",
     "check": "pnpm clean && pnpm lint:clean && pnpm type-gen && pnpm make && pnpm qg",
+    "app:search": "pnpm run dev --filter=@oaknational/open-curriculum-semantic-search",
     "identity-check": "node scripts/identity-check.mjs --mode=enforce",
     "identity-report": "node scripts/identity-check.mjs --mode=report",
     "prepare": "husky",

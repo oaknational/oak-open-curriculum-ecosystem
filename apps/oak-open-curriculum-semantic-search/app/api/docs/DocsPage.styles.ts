@@ -34,5 +34,19 @@ export const DocsWrapper = styledComponents(OakBox)`
   border-style: solid;
   overflow: hidden;
   background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
+  color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
   min-height: clamp(40rem, 70vh, 72rem);
+
+  .redoc-wrap,
+  .redoc-wrap .api-content,
+  .redoc-wrap .menu-content {
+    background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
+    color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
+  }
+
+  .redoc-wrap pre,
+  .redoc-wrap code {
+    background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
+    color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
+  }
 `;

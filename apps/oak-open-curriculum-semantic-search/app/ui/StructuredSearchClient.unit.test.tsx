@@ -56,4 +56,40 @@ describe('StructuredSearchClient', () => {
       }),
     );
   });
+
+  it('reveals all filters and explanatory copy when all content scope is selected', () => {
+    renderWithTheme(
+      <StructuredSearchClient
+        action={resolve}
+        onResultsAction={() => undefined}
+        onErrorAction={() => undefined}
+        setLoadingAction={() => undefined}
+        onScopeChange={() => undefined}
+        onSubmitPayload={() => undefined}
+      />,
+    );
+
+    fireEvent.click(screen.getByLabelText('All content'));
+
+    expect(screen.getByText(/filters apply/i)).toBeInTheDocument();
+    expect(screen.getByLabelText('Phase')).toBeInTheDocument();
+    expect(screen.getByLabelText('Minimum lessons (units only)')).toBeInTheDocument();
+  });
+
+  it('hides programme-specific filters when lessons scope is selected', () => {
+    renderWithTheme(
+      <StructuredSearchClient
+        action={resolve}
+        onResultsAction={() => undefined}
+        onErrorAction={() => undefined}
+        setLoadingAction={() => undefined}
+        onScopeChange={() => undefined}
+        onSubmitPayload={() => undefined}
+      />,
+    );
+
+    fireEvent.click(screen.getByLabelText('Lessons'));
+
+    expect(screen.queryByLabelText('Phase')).not.toBeInTheDocument();
+  });
 });

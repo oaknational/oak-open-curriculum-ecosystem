@@ -5,6 +5,7 @@ import { resolveBreakpoint } from '../shared/breakpoints';
 
 export const PageContainer = styledComponents(OakBox)`
   width: 100%;
+  max-width: min(100%, var(--app-layout-container-max-width));
   box-sizing: border-box;
   padding-inline: clamp(
     var(--app-layout-inline-padding-base),
@@ -25,6 +26,8 @@ export const ContentContainer = styledComponents(OakBox)`
   flex-direction: column;
   gap: var(--app-gap-section);
   width: min(100%, var(--app-layout-container-max-width));
+  max-inline-size: min(100%, var(--app-layout-container-max-width));
+  max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
 `;
 
@@ -37,10 +40,10 @@ export const HeroControlsCluster = styledComponents(OakBox)`
     'controls';
 
   ${({ theme }) => {
-    const lg = resolveBreakpoint(theme, 'lg');
     const xl = resolveBreakpoint(theme, 'xl');
+    const xxl = resolveBreakpoint(theme, 'xxl');
     return css`
-      @media (min-width: ${lg}) {
+      @media (min-width: ${xl}) {
         grid-template-columns:
           minmax(0, 0.9fr)
           minmax(0, 1.1fr);
@@ -48,10 +51,8 @@ export const HeroControlsCluster = styledComponents(OakBox)`
         align-items: start;
       }
 
-      @media (min-width: ${xl}) {
-        grid-template-columns:
-          minmax(0, 1fr)
-          minmax(0, 1fr);
+      @media (min-width: ${xxl}) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     `;
   }}
@@ -108,8 +109,9 @@ export const SecondaryGrid = styledComponents(OakBox)`
       }
 
       @media (min-width: ${xl}) {
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-columns:
+          minmax(var(--app-layout-secondary-column-min-width), 1fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
       }
     `;
   }}

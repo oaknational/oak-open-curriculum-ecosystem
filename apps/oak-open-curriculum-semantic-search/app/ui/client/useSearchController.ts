@@ -2,8 +2,18 @@
 
 import { useCallback, useMemo, useReducer } from 'react';
 import { z } from 'zod';
-import { HybridResponseSchema, SuggestionItemSchema } from '../structured-search.shared';
-import type { HybridResponse, SuggestionItem } from '../structured-search.shared';
+import {
+  HybridResponseSchema,
+  SuggestionItemSchema,
+  MultiScopeHybridResponseSchema,
+} from '../structured-search.shared';
+import type {
+  HybridResponse,
+  SuggestionItem,
+  MultiScopeHybridResponse,
+  MultiScopeBucket,
+  SearchScope,
+} from '../structured-search.shared';
 import { SearchFacetsSchema } from '../../../src/types/oak';
 import type { SearchFacets } from '../../../src/types/oak';
 
@@ -17,10 +27,19 @@ export interface SearchMeta {
   aggregations?: HybridAggregations;
 }
 
+export interface MultiScopeBucketView {
+  scope: SearchScope;
+  meta: SearchMeta;
+  results: unknown[];
+  facets: SearchFacets | null;
+}
+
 export type SearchController = {
+  mode: 'idle' | 'single' | 'multi';
   results: unknown[];
   facets: SearchFacets | null;
   meta: SearchMeta | null;
+  multiBuckets: MultiScopeBucketView[] | null;
   suggestions: SuggestionItem[];
   error: string | null;
   loading: boolean;
@@ -33,17 +52,16 @@ const StructuredPayloadSchema = HybridResponseSchema.extend({
   suggestions: z.array(SuggestionItemSchema).optional(),
 });
 
-interface ParsedHybridPayload {
-  results: unknown[];
-  facets: SearchFacets | null;
-  meta: SearchMeta | null;
-  suggestions: SuggestionItem[];
-}
+type ParsedHybridPayload =
+  | { kind: 'single'; response: z.infer<typeof StructuredPayloadSchema> }
+  | { kind: 'multi'; response: MultiScopeHybridResponse };
 
 type SearchState = {
+  mode: 'idle' | 'single' | 'multi';
   results: unknown[];
   facets: SearchFacets | null;
   meta: SearchMeta | null;
+  multiBuckets: MultiScopeBucketView[] | null;
   suggestions: SuggestionItem[];
   error: string | null;
   loading: boolean;
@@ -57,9 +75,11 @@ type SearchAction =
   | { type: 'error'; message: string };
 
 const INITIAL_SEARCH_STATE: SearchState = {
+  mode: 'idle',
   results: [],
   facets: null,
   meta: null,
+  multiBuckets: null,
   suggestions: [],
   error: null,
   loading: false,
@@ -70,17 +90,11 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
     case 'start':
       return { ...INITIAL_SEARCH_STATE, loading: true };
     case 'success':
-      return {
-        ...state,
-        results: action.payload.results,
-        facets: action.payload.facets,
-        meta: action.payload.meta,
-        suggestions: action.payload.suggestions,
-        error: null,
-        loading: false,
-      };
+      return action.payload.kind === 'single'
+        ? applySingleSuccess(state, action.payload.response)
+        : applyMultiSuccess(state, action.payload.response);
     case 'array':
-      return { ...INITIAL_SEARCH_STATE, results: action.results };
+      return { ...INITIAL_SEARCH_STATE, mode: 'single', results: action.results };
     case 'reset':
       return { ...INITIAL_SEARCH_STATE };
     case 'error':
@@ -88,6 +102,38 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
     default:
       return state;
   }
+}
+
+function applySingleSuccess(
+  state: SearchState,
+  response: z.infer<typeof StructuredPayloadSchema>,
+): SearchState {
+  const facetsResult = response.facets ? SearchFacetsSchema.safeParse(response.facets) : null;
+  return {
+    ...state,
+    mode: 'single',
+    results: response.results,
+    facets: facetsResult && facetsResult.success ? facetsResult.data : null,
+    meta: toSearchMeta(response),
+    multiBuckets: null,
+    suggestions: response.suggestions ?? [],
+    error: null,
+    loading: false,
+  };
+}
+
+function applyMultiSuccess(state: SearchState, response: MultiScopeHybridResponse): SearchState {
+  return {
+    ...state,
+    mode: 'multi',
+    results: [],
+    facets: null,
+    meta: null,
+    multiBuckets: response.buckets.map(toBucketView),
+    suggestions: response.suggestions ?? [],
+    error: null,
+    loading: false,
+  };
 }
 
 export function useSearchController(): SearchController {
@@ -128,20 +174,33 @@ function parseHybridPayload(payload: unknown | null): ParsedHybridPayload | null
   }
   const parsed = StructuredPayloadSchema.safeParse(payload);
   if (!parsed.success) {
+    const multi = MultiScopeHybridResponseSchema.safeParse(payload);
+    if (multi.success) {
+      return { kind: 'multi', response: multi.data };
+    }
     return null;
   }
-  const data = parsed.data;
-  const facetsResult = data.facets ? SearchFacetsSchema.safeParse(data.facets) : null;
+  return { kind: 'single', response: parsed.data };
+}
+
+function toSearchMeta(response: HybridResponse): SearchMeta {
   return {
-    results: data.results,
+    scope: response.scope,
+    total: response.total,
+    took: response.took,
+    timedOut: response.timedOut,
+    aggregations: response.aggregations ?? undefined,
+  };
+}
+
+function toBucketView(bucket: MultiScopeBucket): MultiScopeBucketView {
+  const facetsResult = bucket.result.facets
+    ? SearchFacetsSchema.safeParse(bucket.result.facets)
+    : null;
+  return {
+    scope: bucket.scope,
+    meta: toSearchMeta(bucket.result),
+    results: bucket.result.results,
     facets: facetsResult && facetsResult.success ? facetsResult.data : null,
-    meta: {
-      scope: data.scope,
-      total: data.total,
-      took: data.took,
-      timedOut: data.timedOut,
-      aggregations: data.aggregations ?? undefined,
-    },
-    suggestions: data.suggestions ?? [],
   };
 }

@@ -25,6 +25,13 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Theme selector contrast in dark mode is now guarded: radios resolve semantic tokens to Oak hex values so unselected outlines read `rgb(228, 228, 228)` and selected states stay `rgb(255, 255, 255)` with a dedicated integration test.
 - 2025-09-27 audit: hero and controls remain vertically stacked at `bp-lg`, leaving the search forms below the fold; control cards use `surfaceRaised`/`borderSubtle` which blends into the mint background, and at ≤360 px radio groups and selects overflow their panels due to missing `min-inline-size: 0` guards.
 - 2025-09-27 implementation: added a `HeroControlsCluster` grid so hero + controls align horizontally from `bp-lg`, rethemed panels to `surfaceCard` with brand borders, and added wrapping/min-inline safeguards so radio groups and selects stay within their cards on ≤360 px viewports.
+- Structured search now exposes the Phase filter and natural search scopes default to “Auto”, letting the backend infer scope unless the user explicitly picks Units/Lessons/Sequences.
+- Structured search integration harness now asserts the Phase selector options via a themed mock form; keep fixtures representative for screenshot runs.
+- Structured "All content" searches fan out across lessons/units/sequences; deterministic fixtures mirror this bucketed response, but we still need to enrich card/facet data so Playwright screenshots feel populated.
+- 2025-09-28: Hero/controls cluster now stays stacked until `xl`, eliminating the 1 100 px overflow (Playwright guard in `tests/visual/responsive-baseline.spec.ts` now passes; artefacts in `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
+- 2025-09-28 `pnpm make` run halted at type-check because `SearchResults.unit.test.tsx` still references the pre multi-scope props; update the test to pass `mode`/`multiBuckets` and add coverage for the bucketed render prior to rerunning the gate.
+- 2025-09-28: `SearchResults.unit.test.tsx` now covers the multi-scope pathway (vitest run: `pnpm -C apps/oak-open-curriculum-semantic-search test app/ui/SearchResults.unit.test.tsx`), unblocking the next `pnpm make` attempt.
+- 2025-09-28: `pnpm make` completes successfully post unit-test update; full `pnpm qg` now fails further downstream on Notion MCP E2E tests (search timeout against placeholder IDs). Follow up with functionality owners before considering retries.
 
 ## Cadence Overview
 
@@ -86,9 +93,12 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Keep Playwright attachments (screenshots + axe JSON) for each breakpoint as part of the REVIEW steps to ease regression tracking.
 - Document any token changes in `semantic-theme-spec.md` and update the responsive architecture doc so the knowledge base stays current.
 - Latest run (2025-09-27): `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` and the full `pnpm qg` suite both passed after updating integration tests for the new panel theming.
+- 2025-09-27 refresh: `pnpm make` now clears the lint threshold (after trimming `SearchHero`) and the latest `pnpm qg` run passed format/type/lint/test/smoke gates.
 
 ## Open Follow-ups
 
 - Decide whether `/healthz` remains in navigation when JSON-only; align with functionality once the shell plan is agreed.
 - Confirm whether additional semantic tokens (e.g. `layout.inlinePadding.narrow`) are needed to handle extreme mobile cases after the Search audit.
 - Revisit Storybook once responsive updates land to ensure Oak Components coverage captures the new layouts.
+- Extend Playwright fixtures with populated search results/facets (in addition to zero-hit cases) so responsive screenshots communicate the real layout; document the toggle workflow for contributors.
+- Validate the wide-view hero/control balance (forms above the fold at `bp-lg+`) and adjust `HeroControlsCluster` track ratios if the controls continue to slip beneath the hero copy.

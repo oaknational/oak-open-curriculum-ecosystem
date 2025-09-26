@@ -39,12 +39,15 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
 - 2025-09-27: Introduced `resolveBreakpoint` helper and updated Search layout components to consume semantic breakpoints via styled-components theme; Playwright sampling confirmed `ControlsGrid` now transitions to two columns at `bp-md` while retaining token-driven column clamps.
 - Theme selector radios honour dark mode by resolving semantic tokens to Oak colour hex values, yielding visibly lighter outlines with integration coverage guarding `rgb(228, 228, 228)` / `rgb(255, 255, 255)` borders.
 - 2025-09-27: Hero/controls now share a `HeroControlsCluster` grid (stacking below `bp-lg`, two columns above), control cards use `surfaceCard` with brand borders for contrast, radio/select groups wrap on narrow widths, and integration tests + Playwright responsive sweeps cover the new theming.
+- Structured search now exposes the `phaseSlug` filter via a Phase select, and natural language search treats scope as optional (auto-detects unless the user chooses Units/Lessons/Sequences).
 
 ### Outstanding Audit Notes
 
 - **Health telemetry shell:** The `/healthz` route still renders raw JSON and lacks the Oak container/hero wrappers. Responsive layout work must introduce the shared `PageContainer` and card shells once the UI brief lands.
   - Draft shell (2025-09-27): adopt `PageContainer` with hero summary (status badge + uptime note), two-column grid at `bp-md` separating "Status" cards from "Diagnostics" accordion, and reserve a `role="status"` live region for API health messages. Accept-header toggle should serve JSON by default yet promote UI when `text/html` requested without breaking caching.
-- **Playwright coverage:** Admin `bp-md` and Health `bp-xs` remain guarded until their respective UX tasks land; Admin/Docs `bp-xxl` baselines are enforced.
+- **Search hero/control balance:** Validate that the `HeroControlsCluster` column ratios keep both structured and natural panels visible above the fold on `bp-lg`+ widths; adjust tokenised track weights if forms continue to slip below the hero copy.
+- **Playwright data mocks:** Extend the deterministic fixture set beyond the existing hybrid search responses so responsive screenshots reflect populated cards, facets, and zero-hit dashboards; document the toggle strategy inside the plan/context to guide future contributors.
+- **Search overflow guard:** Playwright now asserts `bp-lg` at 1 100 px and 1 380 px; the narrower viewport still exceeds the clamp by ~98 px, so refine container widths before unguarding the test. The 1 380 px viewport passes with the current clamp.
 - **Search hero clamp:** Copy still exceeds the 45 ch target at `bp-lg`; now that fixtures drive deterministic results, we can adjust layout tokens/media queries next.
 - **Search hero polish:** Confirm the new clamp (`max-inline-size: min(45ch, 100%)`) keeps hero copy within 45 ch across locales, consider adding an illustration at `bp-xl`, and verify dark-mode contrast on the refreshed control cards.
 - Search UX: validate the new hero/control cluster (contrast in dark mode, hero copy clamp ≤45 ch) and capture any additional token work (e.g. hero illustration slots at `bp-xl`).
@@ -127,42 +130,25 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 - ACTION/REVIEW 7–8 COMPLETE: Playwright admin/docs `bp-xxl` baseline updated, snapshots regenerated, and axe checks recorded post-refactor.
 - ACTION/REVIEW 9–10 COMPLETE: Browser chrome metadata sources semantic `bg-primary` tokens with unit tests guarding light/dark parity.
 - Integration note: Theme bridge and token specs extended to include breakpoint variables and inline padding clamps (see responsive architecture doc).
+- 2025-09-27 audit (Search filters): Structured search form now exposes scope, query, subject, key stage, phase, minimum lessons, and size controls via Oak-labelled inputs; phase options cover primary/secondary slugs and propagate through `useStructuredSearchHandlers`. Natural language scope radios default to “Auto”, clearing the scope from the payload when selected, so scopes remain optional as requested. No additional filter dimensions surfaced in the API contract at this stage, and `includeFacets` stays enabled by default without a UI toggle.
+- 2025-09-28 review (Filter gating): Reconfirmed scope-driven visibility rules—structured filters for key stage, phase, and minimum lessons only appear when their scopes apply, while natural search shows a guidance note when scope is Auto/All. Subject remains always visible by design, and backend-only fields (`from`, `highlight`, `includeFacets`) stay implicit with no user-facing gaps identified.
+- 2025-09-28 integration (Search layout): `SearchPageClient.integration.test.tsx` now asserts the Phase selector options and the layout clamp expressed as `min(100%, var(--app-layout-container-max-width))`; suite passes under Vitest.
+- 2025-09-28 implementation (Multi-scope fixtures): Structured search fan-out now buckets lessons/units/sequences when scope = All; Playwright fixtures mirror this output so responsive snapshots capture populated sections, with a follow-up to enrich card content for more representative screenshots.
+- 2025-09-27 quality gates: `pnpm make` succeeded after trimming `SearchHero` under the lint threshold, and the full `pnpm qg` suite passed (format, type-check, lint, tests, smoke).
 
 ## Todo (GO cadence)
 
-1. ACTION: Audit Search hero, controls, and results layouts against the responsive architecture to pinpoint changes required for `bp-xs` through `bp-md`.
-   - Inspect `SearchPageClient.styles.ts` (`PageContainer`, `ControlsGrid`, `SecondaryGrid`, `HeroCard`) alongside `SearchResults.tsx` to record current grid, clamp, and token usage.
-   - At 360 px capture computed `grid-template-columns`/`grid-template-areas` and note that the Playwright `splitColumns` helper currently over-counts `minmax()` entries; decide whether failure is CSS or assertion driven.
-   - Verify hero copy clamp expectations at `bp-lg`, targeting `max-inline-size ≤ 45ch`, and log any token gaps (inline padding, min-width guards) blocking compliance.
-2. REVIEW: Capture the Search audit findings inside this plan and confirm priorities with functionality stakeholders.
-   - Attach Playwright MCP artefacts (`search-controls-bp-xs`, `search-hero-bp-lg`) plus axe JSON summaries; annotate whether failures stem from styling or helper logic.
-   - 2025-09-27 note: inline Playwright script sampled `/` at 360/800/1 200 px and confirmed the media queries are not applying (see Outstanding Audit Notes entry for metrics).
-3. ACTION: Prototype CSS updates for Search forms/results (tokens + media queries) to validate stacking behaviour before shipping.
-   - Ensure `ControlsGrid` collapses to a single column below `bp-md` via `grid-template-areas` and tokenised column clamps.
-   - Test hero layout swaps (e.g. `display: grid` introduced at `bp-lg`) while preserving DOM order, and confirm `SecondaryGrid`/results grids reuse shared min-width + gap tokens.
-   - Capture prototype learnings about additional token requirements before touching production code.
-   - 2025-09-27 note: Search layout now queries breakpoints through `resolveBreakpoint` with theme-backed values; `splitColumns` replacement must still assert behaviour before removing Playwright guards.
-4. REVIEW: Validate the prototype in local viewports and note gaps that block removing `test.fail()` in Playwright.
-   - Exercise 360/800/1 200 px widths in browser and via Playwright MCP, checking axe output and hydration stability.
-   - 2025-09-27 validation run: `ControlsGrid` now reports `"structured natural"` columns at 800 px (Playwright audit), but hero clamp still reads ~447 px and results list remains empty without a seeded response, so further work must supply fixture data and tighten hero typography.
-   - Extend Playwright setup to inject representative search results (seeded API responses or fixtures) so column-count assertions reflect real card grids before removing guards.
-5. ACTION: Outline Health shell UX requirements (cards, status messaging, layout tokens) and record dependencies on functionality deliverables.
-   - Map current JSON fields (`status`, `details`) to proposed Oak UI atoms (badges, cards, accordions) and flag any missing semantics needed for accessible summary messaging.
-   - Plan test hooks up front (`data-testid` anchors, `role="status"`, landmark structure) and define how Accept headers could toggle between JSON and UI without cache regressions.
-6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ACTION: Implement Search page responsive updates (structured/natural forms, secondary panels) using shared layout tokens.
-   - Ship the validated CSS/media query changes, ensuring tokens replace leftover pixel values and inline padding clamps align with the responsive architecture doc.
-   - 2025-09-27: Forms now wrap `<form>` inside `tabpanel` containers and share a custom submit button with brand contrast; next iteration focuses on clamping hero copy at `bp-lg`.
-8. REVIEW: Run targeted Playwright widths (360/800/1 200 px) to confirm the Search updates behave as intended and capture artefacts.
-   - Store screenshots + axe JSON as part of the REVIEW evidence set.
-   - 2025-09-27: Playwright assertions at `bp-xs`/`bp-md`/`bp-lg` now pass without guards using deterministic fixtures.
-9. ACTION: Update the Playwright responsive baseline spec to replace the Search `bp-xs` `test.fail()` guard with concrete assertions.
-   - Refactor or replace `splitColumns` (e.g. assert on `grid-template-areas`) so the test enforces single-column stacking without false positives.
-   - 2025-09-27: Replaced `splitColumns` with area/track helpers and added seeded fixtures; results grid now asserted at `bp-md` alongside control stacking. Extend to `bp-xl` once responsive cards land.
-10. REVIEW: Rerun `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and inspect Search snapshots, ensuring axe violations remain at 0.
-    - 2025-09-27: Search snapshots now run clean (axe violations = 0); keep monitoring once hero clamp adjustments land.
-11. QUALITY-GATE: Run `pnpm format`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui`.
-12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. ACTION: Update UX documentation (plan + responsive architecture + context) to log the Search changes and Health shell outline.
-    - Include token adjustments, baseline updates, and Health shell agreements so knowledge stays centralised.
-14. REVIEW: Confirm documentation, visual baselines, and automation dashboards reflect the new responsive standards before closing the workstream.
+1. ✅ REMINDER: UseBritish spelling.
+2. ✅ ACTION: Update plan/context/continuation docs with the hero stacking fix and Playwright artefacts.
+3. ✅ REVIEW: Confirm documentation reflects the hero fix and overflow guard status.
+4. ✅ ACTION: Adjust `HeroControlsCluster` breakpoint to stack below `xl` and rerun the targeted Playwright guard.
+5. ✅ REVIEW: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Overflow guard 1100px"` passes and artefact path logged.
+6. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+7. ✅ QUALITY-GATE: Run `pnpm make` from the repo root (2025-09-28 run succeeded post unit-test update).
+8. ✅ REVIEW: Capture the passing `pnpm make` outcome and readiness for the full quality gate.
+9. 🚧 QUALITY-GATE: Run `pnpm qg` from the repo root (2025-09-28 run failed: Notion MCP E2E `notion-search` timed out and returned validation errors).
+10. REVIEW: Document the `pnpm qg` failure, highlighting the Notion MCP suite and artefacts to share with the functionality stream.
+11. ACTION: Coordinate with functionality/notion owners or capture a mitigation plan for the failing Notion MCP E2E tests before the next `pnpm qg` run.
+12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. (Review ACTION 11: consolidate outcomes from the coordination step once complete.)
+13. ACTION: Prepare the handover summary with progress, outstanding qg blockers, and next steps.
+14. REVIEW: Self-review deliverables before sharing with stakeholders.

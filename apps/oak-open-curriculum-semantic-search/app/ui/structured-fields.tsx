@@ -9,9 +9,15 @@ import type { StructuredBody } from './structured-search.shared';
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
 
 const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{ value: StructuredBody['scope']; label: string }> = [
+  { value: 'all', label: 'All content' },
   { value: 'units', label: 'Units' },
   { value: 'lessons', label: 'Lessons' },
   { value: 'sequences', label: 'Sequences' },
+];
+
+const PHASE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
+  { value: 'primary', label: 'Primary' },
+  { value: 'secondary', label: 'Secondary' },
 ];
 
 export function ScopeField({
@@ -105,6 +111,27 @@ export function KeyStageField({
         onChange({ keyStage: e.target.value });
       }}
       options={KEY_STAGES}
+      includeAny
+    />
+  );
+}
+
+export function PhaseField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: ChangeStructured;
+}): JSX.Element {
+  return (
+    <LabeledSelect
+      label="Phase"
+      id="structured-phase"
+      value={value}
+      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+        onChange({ phaseSlug: e.target.value });
+      }}
+      options={PHASE_OPTIONS}
       includeAny
     />
   );

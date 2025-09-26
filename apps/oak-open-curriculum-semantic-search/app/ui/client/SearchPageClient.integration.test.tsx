@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { JSX } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
@@ -27,7 +27,18 @@ const facetPropsRef: { current: FacetComponentProps | null } = { current: null }
 
 function renderStructured(props: StructuredComponentProps): JSX.Element {
   structuredPropsRef.current = props;
-  return <div data-testid="structured-search" />;
+  return (
+    <div data-testid="structured-search">
+      <form aria-label="Structured search form" role="form">
+        <label htmlFor="structured-phase-select">Phase</label>
+        <select id="structured-phase-select" defaultValue="">
+          <option value="">(any)</option>
+          <option value="primary">Primary</option>
+          <option value="secondary">Secondary</option>
+        </select>
+      </form>
+    </div>
+  );
 }
 
 function renderFacets(props: FacetComponentProps): JSX.Element {
@@ -79,6 +90,20 @@ describe('SearchPageClient', () => {
     expect(styles.paddingTop).toBe(theme.app.space.padding.card);
   });
 
+  it('links the hero copy to the structured and natural search panels', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action);
+
+    const structuredLink = screen.getByRole('link', { name: /jump to structured search/i });
+    const naturalLink = screen.getByRole('link', { name: /try the natural language search/i });
+
+    expect(structuredLink).toHaveAttribute('href', '#structured-search-panel');
+    expect(naturalLink).toHaveAttribute('href', '#natural-search-panel');
+  });
+
   it('wraps structured and natural panels in Oak card surfaces with brand borders', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
@@ -96,6 +121,22 @@ describe('SearchPageClient', () => {
     expect(getComputedStyle(natural).borderColor).toBe(expectedBorder);
   });
 
+  it('surfaces the structured Phase selector with an accessible label', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action);
+
+    const structuredPanel = screen.getByTestId('structured-search-panel');
+    const phaseSelect = within(structuredPanel).getByLabelText('Phase');
+
+    expect(phaseSelect).toHaveAttribute('id', 'structured-phase-select');
+    const options = within(phaseSelect).getAllByRole('option');
+    const optionLabels = options.map((opt) => opt.textContent?.trim());
+    expect(optionLabels).toEqual(['(any)', 'Primary', 'Secondary']);
+  });
+
   it('caps the main layout inline size using the app layout CSS variable', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
@@ -103,9 +144,11 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action);
 
-    const main = screen.getByRole('main');
-    const computed = getComputedStyle(main);
-    expect(computed.maxInlineSize).toBe('var(--app-layout-container-max-width)');
+    const content = screen.getByTestId('search-page-content');
+    const computed = getComputedStyle(content);
+    expect(computed.getPropertyValue('max-width')).toBe(
+      'min(100%, var(--app-layout-container-max-width))',
+    );
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -115,8 +158,8 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action);
 
-    const main = screen.getByRole('main');
-    const computed = getComputedStyle(main);
+    const content = screen.getByTestId('search-page-content');
+    const computed = getComputedStyle(content);
 
     expect(computed.getPropertyValue('gap')).toBe('var(--app-gap-section)');
   });

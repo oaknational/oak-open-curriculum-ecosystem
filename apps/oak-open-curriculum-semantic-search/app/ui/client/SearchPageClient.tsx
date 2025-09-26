@@ -24,6 +24,12 @@ import {
   SuggestionsPanel,
 } from './SearchPageClient.styles';
 
+const HERO_BODY_PARAGRAPHS: ReadonlyArray<string> = [
+  'We expose two search experiences: a structured search experience and a natural language search experience. Both combine traditional lexical search with semantic search to deliver more relevant results.',
+  'The structured search allows filtering on many dimensions, such as subject, year, and topic.',
+  'The natural language search takes queries like "find me lessons about history that can be adapted for Leeds", passes that to an LLM to figure out the intent, and then defers to the structured search to find the best results with hybrid lexical and semantic search.',
+];
+
 export default function SearchPageClient({
   searchStructured,
 }: {
@@ -58,7 +64,12 @@ export default function SearchPageClient({
           </OakTypography>
         ) : null}
 
-        <SearchResultsComponent results={ctrl.results} meta={ctrl.meta} />
+        <SearchResultsComponent
+          mode={ctrl.mode}
+          results={ctrl.results}
+          meta={ctrl.meta}
+          multiBuckets={ctrl.multiBuckets}
+        />
       </ContentContainer>
     </PageContainer>
   );
@@ -120,26 +131,28 @@ function SearchHero(): JSX.Element {
       <OakTypography as="p" $font="body-4" $color="text-subdued">
         Search lessons, units, and sequences.
       </OakTypography>
-      <OakTypography as="p" $font="body-2">
-        We expose two search experiences: a structured search experience and a natural language
-        search experience. Both combine traditional lexical search with semantic search to deliver
-        more relevant results.
-      </OakTypography>
-      <OakTypography as="p" $font="body-2">
-        The structured search allows filtering on many dimensions, such as subject, year, and topic.
-      </OakTypography>
-      <OakTypography as="p" $font="body-2">
-        The natural language search takes queries like &ldquo;find me lessons about history that can
-        be adapted for Leeds&rdquo;, passes that to an LLM to figure out the intent, and then defers
-        to the structured search to find the best results with hybrid lexical and semantic search.
-      </OakTypography>
+      {HERO_BODY_PARAGRAPHS.map((paragraph) => (
+        <OakTypography as="p" $font="body-2" key={paragraph}>
+          {paragraph}
+        </OakTypography>
+      ))}
       <OakTypography as="p" $font="body-2">
         Ready to start?{' '}
-        <OakTypography as="a" href="#structured-search-panel" $font="body-2-bold" $color="text-link-active">
+        <OakTypography
+          as="a"
+          href="#structured-search-panel"
+          $font="body-2-bold"
+          $color="text-link-active"
+        >
           Jump to structured search
         </OakTypography>{' '}
         or{' '}
-        <OakTypography as="a" href="#natural-search-panel" $font="body-2-bold" $color="text-link-active">
+        <OakTypography
+          as="a"
+          href="#natural-search-panel"
+          $font="body-2-bold"
+          $color="text-link-active"
+        >
           try the natural language search
         </OakTypography>
         .

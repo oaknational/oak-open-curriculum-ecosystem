@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
+export type SearchScope = 'units' | 'lessons' | 'sequences';
+export type SearchScopeWithAll = SearchScope | 'all';
+
 export interface StructuredBody {
-  scope: 'units' | 'lessons' | 'sequences';
+  scope: SearchScopeWithAll;
   text: string;
   subject?: string;
   keyStage?: string;
@@ -12,7 +15,7 @@ export interface StructuredBody {
 }
 
 export const SearchRequest = z.object({
-  scope: z.enum(['units', 'lessons', 'sequences']),
+  scope: z.enum(['units', 'lessons', 'sequences', 'all']),
   text: z.string(),
   subject: z.string().optional(),
   keyStage: z.string().optional(),
@@ -61,6 +64,22 @@ export const HybridResponseSchema = z
 
 export type HybridResponse = z.infer<typeof HybridResponseSchema>;
 export type SuggestionItem = z.infer<typeof SuggestionItemSchema>;
+
+export const MultiScopeBucketSchema = z.object({
+  scope: z.enum(['lessons', 'units', 'sequences']),
+  result: HybridResponseSchema,
+});
+
+export const MultiScopeHybridResponseSchema = z
+  .object({
+    scope: z.literal('all'),
+    buckets: z.array(MultiScopeBucketSchema),
+    suggestions: z.array(SuggestionItemSchema).optional(),
+  })
+  .catchall(z.unknown());
+
+export type MultiScopeHybridResponse = z.infer<typeof MultiScopeHybridResponseSchema>;
+export type MultiScopeBucket = z.infer<typeof MultiScopeBucketSchema>;
 
 export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody {
   return {

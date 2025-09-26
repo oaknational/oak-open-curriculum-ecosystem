@@ -14,7 +14,7 @@ interface LabeledSelectProps {
   id: string;
   value: string;
   onChange: ChangeEventHandler<HTMLSelectElement>;
-  options: readonly string[];
+  options: ReadonlyArray<string | { value: string; label: string }>;
   includeAny?: boolean;
 }
 
@@ -43,11 +43,15 @@ export function LabeledSelect({
         $background="bg-neutral"
       >
         {includeAny ? <option value="">(any)</option> : null}
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
+        {options.map((opt) => {
+          const optionValue = typeof opt === 'string' ? opt : opt.value;
+          const optionLabel = typeof opt === 'string' ? opt : opt.label;
+          return (
+            <option key={optionValue} value={optionValue}>
+              {optionLabel}
+            </option>
+          );
+        })}
       </OakBox>
     </OakFlex>
   );

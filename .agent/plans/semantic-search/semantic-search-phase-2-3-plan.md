@@ -10,14 +10,18 @@ Objective: enrich search with pedagogical context, resources, and optional prior
   - `oak_lesson_planning`: denormalised lesson/unit planning metadata (key learning points, misconceptions, teacher tips, accessibility notes, canonical URLs) with semantic embeddings.
   - `oak_lesson_transcripts`: chunked transcripts with timing metadata and long-form embeddings.
   - `oak_content_guidance`: safeguarding tags, supervision levels, accessibility notices, prior knowledge relationships. Add prior knowledge (`priorKnowledgeRequirements`) and National Curriculum (`nationalCurriculumContent`) filters/boosting once ingestion proves reliable.
-  - `oak_assets`: downloadable/viewable resources with attribution, asset type, accessibility metadata, and completion contexts for suggestions.
+  - `oak_assets`: downloadable/viewable resources with attribution, asset type, accessibility metadata, completion contexts for suggestions, and structured metadata for exam boards (AQA, Edexcel, OCR, WJEC, Eduqas, Pearson, Edexcel B, or not specified).
   - `oak_assessments`: quiz stem/distractor/objective data for assessment discovery.
 - **Features**
   - Augment search responses with optional blocks (planning snippets, transcript excerpts, guidance highlights, resource suggestions) behind feature flags.
   - Extend filters to include safeguarding/accessibility categories; evaluate prior knowledge graph traversal.
+  - Implement structured filter support covering key stage, year group, subject, and the curated exam board list (AQA, Edexcel, OCR, WJEC, Eduqas, Pearson, Edexcel B, not specified) with consistent UI controls and schema validation.
+  - Add boolean resource filters (quiz, worksheet, video, slide deck, etc.) driven by the `oak_assets` index so educators can target specific asset types.
+  - Provide KS4 options controls (e.g. foundation/higher, combined/separate science) that map onto dedicated index fields and sequence facet metadata for meaningful narrowing of secondary pathways.
   - UI surfaces richer content cards, Oak Component tabs, and contextual guidance callouts with responsive layouts and a11y coverage.
 - **Ingestion**
   - Design inference-aware pipelines per index: chunking heuristics, embedding jobs, nightly delta strategies, logging of ontology node IDs.
+  - Populate and validate enumerated metadata for exam boards, KS4 option flags, year groups, and asset-type booleans during ingestion so filters stay authoritative.
   - Establish cost monitoring (Elastic inference + storage) and alerting.
 - **Documentation**
   - Publish index specs (mappings, chunking strategy, example docs) and query recipes in `apps/oak-open-curriculum-semantic-search/docs/`.

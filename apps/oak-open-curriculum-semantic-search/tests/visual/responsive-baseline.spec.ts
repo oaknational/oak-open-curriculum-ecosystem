@@ -213,6 +213,42 @@ test.describe('Search page responsive regressions', () => {
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });
+
+  test.describe('Overflow guard 1100px', () => {
+    test.use({ viewport: { width: 1_100, height: 900 } });
+
+    test('Content does not overflow the viewport at 1100px', async ({ page }, testInfo) => {
+      await mockSearchEndpoints(page);
+      await page.goto('/');
+      await runStructuredSearch(page);
+
+      await captureScreenshot(page, 'search-overflow-1100', testInfo);
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+
+      expect.soft(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+    });
+  });
+
+  test.describe('Overflow guard 1380px', () => {
+    test.use({ viewport: { width: 1_380, height: 900 } });
+
+    test('Content does not overflow the viewport at 1380px', async ({ page }, testInfo) => {
+      await mockSearchEndpoints(page);
+      await page.goto('/');
+      await runStructuredSearch(page);
+
+      await captureScreenshot(page, 'search-overflow-1380', testInfo);
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+
+      expect.soft(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+    });
+  });
 });
 
 // Admin page regressions -----------------------------------------------------

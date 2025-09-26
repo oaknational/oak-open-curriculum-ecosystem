@@ -7,18 +7,38 @@ import {
   safeJsonParse,
   HybridResponseSchema,
   SuggestionResponseSchema,
+  MultiScopeHybridResponseSchema,
 } from './structured-search.shared';
 import { structuredSearchFixture, suggestionFixture } from './__fixtures__/search-structured';
-import type { StructuredBody, SuggestionItem } from './structured-search.shared';
+import type {
+  StructuredBody,
+  SuggestionItem,
+  MultiScopeHybridResponse,
+  SearchScope,
+} from './structured-search.shared';
+
+type StructuredRequestInput = Parameters<typeof buildBody>[0];
 
 export async function searchAction(
   req: unknown,
 ): Promise<{ result: unknown | null; error?: string }> {
   const input = SearchRequest.parse(req);
-  const body = buildBody(input);
   const base = baseUrl();
 
   if (process.env.SEMANTIC_SEARCH_USE_FIXTURES === 'true') {
+    if (input.scope === 'all') {
+      const buckets = ['lessons', 'units', 'sequences'].map((scope) => ({
+        scope,
+        result: structuredSearchFixture,
+      }));
+      return {
+        result: {
+          scope: 'all',
+          buckets,
+          suggestions: suggestionFixture.suggestions,
+        },
+      };
+    }
     return {
       result: {
         ...structuredSearchFixture,
@@ -29,6 +49,12 @@ export async function searchAction(
   }
 
   try {
+    if (input.scope === 'all') {
+      const multi = await requestMultiScopeSearch(base, input);
+      return { result: multi };
+    }
+
+    const body = buildBody(input);
     const result = await requestStructuredSearch(base, body);
     const suggestions = await requestSuggestions(base, body);
     return { result: { ...result, suggestions } };
@@ -61,12 +87,13 @@ async function requestSuggestions(base: string, body: StructuredBody): Promise<S
   }
 
   try {
+    const scope: SearchScope = body.scope === 'all' ? 'lessons' : body.scope;
     const response = await fetch(new URL('/api/search/suggest', base).toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         prefix,
-        scope: body.scope,
+        scope,
         subject: body.subject,
         keyStage: body.keyStage,
         phaseSlug: body.phaseSlug,
@@ -85,4 +112,44 @@ async function requestSuggestions(base: string, body: StructuredBody): Promise<S
     console.error('Failed to fetch suggestions', error);
     return [];
   }
+}
+
+async function requestMultiScopeSearch(
+  base: string,
+  input: StructuredRequestInput,
+): Promise<MultiScopeHybridResponse> {
+  const queryBase = {
+    text: input.text,
+    subject: input.subject,
+    keyStage: input.keyStage,
+    minLessons: input.minLessons,
+    size: input.size,
+    includeFacets: input.includeFacets ?? true,
+    phaseSlug: input.phaseSlug,
+  } as const;
+
+  const scopes: SearchScope[] = ['lessons', 'units', 'sequences'];
+  const results = await Promise.all(
+    scopes.map(async (scope) => {
+      const response = await requestStructuredSearch(base, buildBody({ ...queryBase, scope }));
+      return { scope, result: response } as const;
+    }),
+  );
+
+  const suggestions = await requestSuggestions(base, {
+    scope: 'lessons',
+    text: input.text,
+    subject: input.subject,
+    keyStage: input.keyStage,
+    includeFacets: input.includeFacets ?? true,
+  });
+
+  const payload: MultiScopeHybridResponse = {
+    scope: 'all',
+    buckets: results,
+    suggestions,
+  };
+
+  const parsed = MultiScopeHybridResponseSchema.safeParse(payload);
+  return parsed.success ? parsed.data : payload;
 }

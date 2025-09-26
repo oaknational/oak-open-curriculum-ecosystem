@@ -141,6 +141,7 @@ function createInitialModel(): StructuredBody {
     text: '',
     subject: '',
     keyStage: '',
+    phaseSlug: '',
     minLessons: 0,
     size: 10,
     includeFacets: true,
