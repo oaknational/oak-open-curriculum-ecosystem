@@ -139,16 +139,18 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 ## Todo (GO cadence)
 
 1. ✅ REMINDER: UseBritish spelling.
-2. ✅ ACTION: Update plan/context/continuation docs with the hero stacking fix and Playwright artefacts.
-3. ✅ REVIEW: Confirm documentation reflects the hero fix and overflow guard status.
-4. ✅ ACTION: Adjust `HeroControlsCluster` breakpoint to stack below `xl` and rerun the targeted Playwright guard.
-5. ✅ REVIEW: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Overflow guard 1100px"` passes and artefact path logged.
+2. ✅ ACTION: Audit the API Docs page to reproduce the Redoc colour failure and identify offending theme values.
+3. ✅ REVIEW: Record the API Docs findings (failing colour tokens, repro steps) in the plan/context docs.
+4. ✅ ACTION: Implement Redoc theme fixes (resolve UI tokens to hex) and extend deterministic integration coverage for the docs page.
+5. ✅ REVIEW: Run targeted docs tests (`pnpm -C apps/oak-open-curriculum-semantic-search test app/api/docs/page.integration.test.tsx`) and log results.
 6. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ✅ QUALITY-GATE: Run `pnpm make` from the repo root (2025-09-28 run succeeded post unit-test update).
-8. ✅ REVIEW: Capture the passing `pnpm make` outcome and readiness for the full quality gate.
-9. 🚧 QUALITY-GATE: Run `pnpm qg` from the repo root (2025-09-28 run failed: Notion MCP E2E `notion-search` timed out and returned validation errors).
-10. REVIEW: Document the `pnpm qg` failure, highlighting the Notion MCP suite and artefacts to share with the functionality stream.
-11. ACTION: Coordinate with functionality/notion owners or capture a mitigation plan for the failing Notion MCP E2E tests before the next `pnpm qg` run.
-12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling. (Review ACTION 11: consolidate outcomes from the coordination step once complete.)
-13. ACTION: Prepare the handover summary with progress, outstanding qg blockers, and next steps.
-14. REVIEW: Self-review deliverables before sharing with stakeholders.
+7. ✅ ACTION: Audit the Admin page layout and scrolling behaviour, noting hash changes and responsive overflow points.
+8. ✅ REVIEW: Document the Admin audit outcomes with proposed layout/hash handling adjustments.
+9. ✅ ACTION: Implement Admin layout fixes (container clamps, hash handling) and extend integration/visual tests for the new behaviour.
+10. ✅ REVIEW: Capture Admin verification evidence (test outputs, screenshots) and summarise residual risks.
+11. ✅ REVIEW: Ensure the documented findings align with UX goals before updating broader docs.
+12. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+13. ✅ ACTION: Update plan/context/continuation docs with finalised fixes, artefact links, and next steps.
+14. ✅ REVIEW: Sanity-check documentation updates for accuracy and clarity.
+15. ✅ QUALITY-GATE: Run `pnpm qg` from the repo root once fixes land.
+16. ✅ REVIEW: Log the `pnpm qg` outcome, flagging any remaining exceptions.

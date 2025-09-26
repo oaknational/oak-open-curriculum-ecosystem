@@ -27,6 +27,9 @@ _Last updated: 2025-09-28 (post multi-scope search + integration updates)_
 - 2025-09-28: `pnpm make` now passes end-to-end after the SearchResults unit test update cleared the type-check regression.
 - Wide-view hero layout still needs validation that structured and natural panels remain visible above the fold at `xl`/`xxl`; adjust `HeroControlsCluster` track ratios if further Playwright sweeps highlight controls slipping below the hero copy.
 - 2025-09-28 `pnpm qg` run still fails outside the Semantic Search workspace: Notion MCP E2E tests time out on `notion-search` and return validation errors against placeholder IDs. Determine whether credentials/fixtures need refreshing or whether these failures remain accepted debt before the next quality gate.
+- 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex (`resolveUiColor`) and integration coverage asserts the options payload stays in-valid colour space (`app/api/docs/page.integration.test.tsx`).
+- 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and Playwright regression coverage (`Admin page responsive regressions`) now captures screenshots plus overflow/axe assertions across lg/md/xxl viewports.
+- 2025-09-29: Full `pnpm qg` suite passes following the docs/admin fixes; continue to monitor Notion MCP E2E flake potential but no failures observed in the latest run.
 
 ## Tooling & References
 

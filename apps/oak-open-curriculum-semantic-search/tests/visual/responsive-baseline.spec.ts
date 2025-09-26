@@ -254,20 +254,49 @@ test.describe('Search page responsive regressions', () => {
 // Admin page regressions -----------------------------------------------------
 
 test.describe('Admin page responsive regressions', () => {
+  test.use({ viewport: VIEWPORTS.bpLg });
+
+  test('Layout clamps within the viewport and clears stale hashes', async ({ page }, testInfo) => {
+    await page.goto('/admin#tag/sdk/paths/~1api~1sdk~1search-transcripts/post');
+    await expect(page).toHaveURL(/\/admin$/);
+
+    const container = page.getByTestId('admin-page');
+    const maxWidth = await container.evaluate((el) => getComputedStyle(el).maxWidth);
+    expect.soft(maxWidth.includes('min(100%,')).toBe(true);
+
+    const overflow = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+
+    await captureScreenshot(page, 'admin-layout-bp-lg', testInfo);
+    const axe = await captureAccessibility(page, 'admin-layout-bp-lg', testInfo);
+
+    expect.soft(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+    expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
+  });
+});
+
+// Admin page regressions -----------------------------------------------------
+
+test.describe('Admin page responsive regressions', () => {
   test.describe('bp-md (800px)', () => {
     test.use({ viewport: VIEWPORTS.bpMd });
 
-    test('Admin main layout uses grid columns', async ({ page }, testInfo) => {
-      test.fail();
+    test('Admin actions grid forms responsive columns', async ({ page }, testInfo) => {
       await page.goto('/admin');
       await expect(page.getByRole('heading', { level: 1, name: 'Admin tools' })).toBeVisible();
 
-      const mainDisplay = await page.locator('main').evaluate((el) => getComputedStyle(el).display);
+      const actionsGrid = page.getByTestId('admin-actions-grid');
+      const display = await actionsGrid.evaluate((el) => getComputedStyle(el).display);
+      const template = await actionsGrid.evaluate((el) => getComputedStyle(el).gridTemplateColumns);
+      const columnCount = countTracks(template);
 
       await captureScreenshot(page, 'admin-main-bp-md', testInfo);
       const axe = await captureAccessibility(page, 'admin-main-bp-md', testInfo);
 
-      expect.soft(mainDisplay).toBe('grid');
+      expect.soft(display).toBe('grid');
+      expect.soft(columnCount).toBeGreaterThanOrEqual(1);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });

@@ -1,13 +1,14 @@
 import { OakBox } from '@oaknational/oak-components';
-import styledComponents from 'styled-components';
+import styledComponents, { css } from 'styled-components';
 import { getAppTheme } from '../../ui/themes/app-theme-helpers';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 
 export const PageContainer = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;
   gap: var(--app-gap-section);
-  width: 100%;
-  max-inline-size: var(--app-layout-container-max-width);
+  width: min(100%, var(--app-layout-container-max-width));
+  max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
   padding-inline: clamp(
     var(--app-layout-inline-padding-base),
@@ -28,25 +29,35 @@ export const HeaderSection = styledComponents(OakBox)`
 `;
 
 export const DocsWrapper = styledComponents(OakBox)`
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
-  border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
-  border-width: 1px;
-  border-style: solid;
-  overflow: hidden;
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
-  min-height: clamp(40rem, 70vh, 72rem);
+  ${({ theme }) => {
+    const appTheme = getAppTheme(theme);
+    const surfaceCard = appTheme.app.colors.surfaceCard;
+    const surfaceRaised = appTheme.app.colors.surfaceRaised;
+    const borderColour = appTheme.app.colors.borderSubtle;
+    const textPrimary = resolveUiColor(appTheme, 'text-primary');
 
-  .redoc-wrap,
-  .redoc-wrap .api-content,
-  .redoc-wrap .menu-content {
-    background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-    color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
-  }
+    return css`
+      border-radius: ${appTheme.app.radii.card};
+      border-color: ${borderColour};
+      border-width: 1px;
+      border-style: solid;
+      overflow: hidden;
+      background-color: ${surfaceCard};
+      color: ${textPrimary};
+      min-height: clamp(40rem, 70vh, 72rem);
 
-  .redoc-wrap pre,
-  .redoc-wrap code {
-    background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
-    color: ${({ theme }) => getAppTheme(theme).uiColors['text-primary']};
-  }
+      .redoc-wrap,
+      .redoc-wrap .api-content,
+      .redoc-wrap .menu-content {
+        background-color: ${surfaceCard};
+        color: ${textPrimary};
+      }
+
+      .redoc-wrap pre,
+      .redoc-wrap code {
+        background-color: ${surfaceRaised};
+        color: ${textPrimary};
+      }
+    `;
+  }}
 `;

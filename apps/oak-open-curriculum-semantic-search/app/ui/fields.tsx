@@ -39,8 +39,9 @@ export function LabeledSelect({
         $pa="inner-padding-s"
         $borderRadius="border-radius-s"
         $ba="border-solid-s"
-        $borderColor="border-neutral"
-        $background="bg-neutral"
+        $borderColor="border-primary"
+        $background="bg-primary"
+        $color="text-primary"
       >
         {includeAny ? <option value="">(any)</option> : null}
         {options.map((opt) => {
@@ -95,6 +96,7 @@ export function LabeledInput({
         required={required}
         onChange={onChange}
         wrapperWidth="100%"
+        borderColor="border-primary"
       />
       {helperText ? (
         <OakTypography as="span" $font="body-4" $color="text-subdued">

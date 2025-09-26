@@ -1,112 +1,50 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it, vi, beforeEach, afterEach, afterAll } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { createLightTheme } from '../ui/themes/light';
 import AdminPage from './page';
+import { createLightTheme } from '../ui/themes/light';
 
-type UseStreamState = 'idle' | 'running' | 'error';
-
-const { runSpy, useStreamMock } = vi.hoisted(() => {
-  const run = vi.fn<() => Promise<void>>(() => Promise.resolve());
-  const stream = vi.fn(
-    (
-      url: string,
-      method: 'GET' | 'POST',
-    ): { state: UseStreamState; text: string; run: () => Promise<void> } => {
-      if (url === '/api/admin/index-oak') {
-        return { state: 'running', text: 'Indexing…', run };
-      }
-      return { state: 'idle', text: `${method} ${url}`, run };
-    },
-  );
-
-  return { runSpy: run, useStreamMock: stream };
-});
-
-const fetchMock = vi.hoisted(() =>
-  vi.fn().mockResolvedValue({
-    ok: true,
-    json: async () => ({
-      summary: {
-        total: 0,
-        byScope: { lessons: 0, units: 0, sequences: 0 },
-        latestIndexVersion: null,
-      },
-      recent: [],
-    }),
-  }),
-);
-
-vi.mock('../lib/useStream', () => ({
-  useStream: useStreamMock,
+vi.mock('../ui/admin/ZeroHitDashboard', () => ({
+  ZeroHitDashboard: () => <div data-testid="zero-hit-dashboard" />,
 }));
 
-vi.stubGlobal('fetch', fetchMock);
+const theme = createLightTheme();
 
-function renderWithTheme(): void {
+function renderAdmin(): void {
   render(
-    <StyledThemeProvider theme={createLightTheme()}>
+    <StyledThemeProvider theme={theme}>
       <AdminPage />
     </StyledThemeProvider>,
   );
 }
 
 describe('AdminPage', () => {
+  let replaceStateSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
-    runSpy.mockClear();
-    useStreamMock.mockClear();
-    fetchMock.mockClear();
+    replaceStateSpy = vi.spyOn(window.history, 'replaceState');
+    window.history.replaceState(null, '', '/admin#tag/sdk/paths/~1api~1sdk');
   });
 
   afterEach(() => {
-    fetchMock.mockClear();
+    replaceStateSpy.mockRestore();
+    window.history.replaceState(null, '', '/');
   });
 
-  afterAll(() => {
-    vi.unstubAllGlobals();
+  it('clears any existing hash on mount', () => {
+    renderAdmin();
+
+    expect(replaceStateSpy).toHaveBeenLastCalledWith(null, '', '/admin');
+    expect(window.location.hash).toBe('');
   });
 
-  it('renders headings and stream outputs with Oak-wrapped buttons', async () => {
-    renderWithTheme();
+  it('clamps the main container to the semantic layout width', () => {
+    renderAdmin();
 
-    const adminHeading = await screen.findByRole('heading', { level: 1, name: 'Admin tools' });
-    const elasticHeading = await screen.findByRole('heading', {
-      level: 2,
-      name: 'Elasticsearch setup',
+    const container = screen.getByTestId('admin-page');
+    expect(container).toHaveStyle({
+      maxWidth: 'min(100%, var(--app-layout-container-max-width))',
+      width: 'min(100%, var(--app-layout-container-max-width))',
     });
-    const zeroHitHeadings = await screen.findAllByRole('heading', {
-      level: 2,
-      name: 'Zero-hit telemetry',
-    });
-
-    expect(adminHeading).toBeInTheDocument();
-    expect(elasticHeading).toBeInTheDocument();
-    expect(zeroHitHeadings.length).toBeGreaterThan(0);
-    await screen.findByText('No zero-hit events recorded yet.');
-
-    const statusRegions = screen.getAllByRole('status');
-    expect(statusRegions).toHaveLength(3);
-    expect(statusRegions[0]).toHaveTextContent('POST /api/admin/elastic-setup');
-    expect(statusRegions[1]).toHaveTextContent('Indexing…');
-    expect(statusRegions[2]).toHaveTextContent('GET /api/admin/rebuild-rollup');
-  });
-
-  it('invokes the stream runner when an action button is clicked', async () => {
-    renderWithTheme();
-
-    const buttons = await screen.findAllByRole('button');
-    expect(buttons[0]).toHaveTextContent('Run');
-
-    fireEvent.click(buttons[0]);
-
-    expect(runSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it('shows loading state for in-progress actions', async () => {
-    renderWithTheme();
-
-    const allButtons = await screen.findAllByRole('button');
-    const runningButton = allButtons.find((button) => button.textContent?.includes('Running…'));
-    expect(runningButton).toBeDefined();
   });
 });

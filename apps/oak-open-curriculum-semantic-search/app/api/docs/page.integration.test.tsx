@@ -1,15 +1,42 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../../ui/themes/light';
 import { createDarkTheme } from '../../ui/themes/dark';
 import ApiDocsPage from './page';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
+
+type RedocProps = {
+  readonly specUrl: string;
+  readonly options: {
+    readonly theme: {
+      readonly colors: {
+        readonly text: { readonly primary: string; readonly secondary: string };
+        readonly background: { readonly main: string };
+      };
+    };
+  };
+};
+
+const redocCalls: RedocProps[] = [];
 
 vi.mock('redoc', () => ({
-  RedocStandalone: ({ specUrl }: { specUrl: string }) => (
-    <div data-testid="redoc" data-spec={specUrl} />
-  ),
+  RedocStandalone: (props: RedocProps) => {
+    redocCalls.push(props);
+    return <div data-testid="redoc" data-spec={props.specUrl} />;
+  },
 }));
+
+function lastRedocCall(): RedocProps {
+  if (redocCalls.length === 0) {
+    throw new Error('Redoc was not invoked');
+  }
+  return redocCalls[redocCalls.length - 1];
+}
+
+beforeEach(() => {
+  redocCalls.length = 0;
+});
 
 function renderDocs(): void {
   render(
@@ -51,6 +78,16 @@ describe('ApiDocsPage', () => {
     const styles = window.getComputedStyle(wrapper);
     const expected = hexToRgb(createDarkTheme().app.colors.surfaceCard);
     expect(styles.backgroundColor).toBe(expected);
+  });
+
+  it('passes resolved colour tokens to Redoc', () => {
+    renderDocs();
+
+    const props = lastRedocCall();
+    const theme = createLightTheme();
+    expect(props.options.theme.colors.text.primary).toBe(resolveUiColor(theme, 'text-primary'));
+    expect(props.options.theme.colors.text.secondary).toBe(resolveUiColor(theme, 'text-subdued'));
+    expect(props.options.theme.colors.background.main).toBe(theme.app.colors.surfaceCard);
   });
 });
 

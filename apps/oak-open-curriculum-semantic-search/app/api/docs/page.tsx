@@ -7,6 +7,7 @@ import { RedocStandalone } from 'redoc';
 import { DocsWrapper, HeaderSection, PageContainer } from './DocsPage.styles';
 import { useTheme } from 'styled-components';
 import { getAppTheme } from '../../ui/themes/app-theme-helpers';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 
 export default function ApiDocsPage(): JSX.Element {
   const specUrl = '/api/openapi.json';
@@ -91,8 +92,8 @@ function createRedocThemeConfig(appTheme: ReturnType<typeof getAppTheme>) {
 }
 
 function createRedocColorPalette(appTheme: ReturnType<typeof getAppTheme>) {
-  const textPrimary = appTheme.uiColors['text-primary'] ?? '#11243e';
-  const textSecondary = appTheme.uiColors['text-subdued'] ?? '#556171';
+  const textPrimary = resolveUiColor(appTheme, 'text-primary');
+  const textSecondary = resolveUiColor(appTheme, 'text-subdued');
   return {
     primary: {
       main: appTheme.app.palette.brandPrimaryDeep,

@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, type JSX } from 'react';
+import { Fragment, type JSX, useEffect } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import { useStream } from '../lib/useStream';
 import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
@@ -75,12 +75,27 @@ function AdminSection({
 }
 
 export default function AdminPage(): JSX.Element {
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    if (window.location.hash) {
+      const { pathname, search } = window.location;
+      window.history.replaceState(null, '', `${pathname}${search}`);
+    }
+  }, []);
+
   return (
-    <PageContainer as="main" $background="bg-primary" $color="text-primary">
+    <PageContainer
+      as="main"
+      data-testid="admin-page"
+      $background="bg-primary"
+      $color="text-primary"
+    >
       <AdminIntro />
       <QuickLinks />
 
-      <ActionsGrid>
+      <ActionsGrid data-testid="admin-actions-grid">
         <AdminSection heading="Elasticsearch setup">
           <StreamOutput url="/api/admin/elastic-setup" method="POST" />
         </AdminSection>

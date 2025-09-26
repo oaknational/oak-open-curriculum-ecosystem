@@ -32,6 +32,9 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - 2025-09-28 `pnpm make` run halted at type-check because `SearchResults.unit.test.tsx` still references the pre multi-scope props; update the test to pass `mode`/`multiBuckets` and add coverage for the bucketed render prior to rerunning the gate.
 - 2025-09-28: `SearchResults.unit.test.tsx` now covers the multi-scope pathway (vitest run: `pnpm -C apps/oak-open-curriculum-semantic-search test app/ui/SearchResults.unit.test.tsx`), unblocking the next `pnpm make` attempt.
 - 2025-09-28: `pnpm make` completes successfully post unit-test update; full `pnpm qg` now fails further downstream on Notion MCP E2E tests (search timeout against placeholder IDs). Follow up with functionality owners before considering retries.
+- 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex via `resolveUiColor`; integration tests assert the generated palette matches resolved colours.
+- 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and gains Playwright regression guards across lg/md/xxl viewports.
+- 2025-09-29: `pnpm qg` now passes end-to-end after the API docs/admin fixes; attach latest run logs for any regressions.
 
 ## Cadence Overview
 
