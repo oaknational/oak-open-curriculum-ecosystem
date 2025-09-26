@@ -14,10 +14,11 @@ _Last updated: 2025-09-26 (post Admin/Docs baseline refresh)_
 
 - Semantic tokens (`semanticThemeSpec`, resolver helpers) exist with brand palette entries and CSS variable bridge; layout breakpoints/clamps now drive Admin and Docs via shared Styled Components wrappers.
 - `ThemeGlobalStyle` paints `html`, `body`, and `#app-theme-root`; light/dark `<meta name="theme-color">` now resolves from semantic `bg-primary` tokens with unit coverage.
-- Playwright responsive suite enforces Admin/Docs behaviour at `bp-xxl` (container width clamped 1 200 – 1 260 px, axe violations = 0); Search `bp-xs`/`bp-lg`, Admin `bp-md`, and Health `bp-xs` still marked `test.fail()` pending UX work.
+- Playwright responsive suite enforces Admin/Docs behaviour at `bp-xxl` (container width clamped 1 200 – 1 260 px, axe violations = 0); Admin `bp-md` and Health `bp-xs` remain guarded until their UX work lands.
+- Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
 - Navigation and hero layouts still waste space on phones; Health surface remains raw JSON awaiting UI shell brief.
-- 2025-09-27 audit confirms Search controls stay stacked across `bp-xs`/`bp-md`/`bp-lg` (media queries not applying) and hero clamp exceeds 45 ch, reaffirming responsive CSS gaps.
-- Follow-up prototype swaps the Search layout media queries to use semantic breakpoints via `resolveBreakpoint`; manual Playwright sampling shows `ControlsGrid` now aligns to two columns at 800 px while `SecondaryGrid` and `ResultsGrid` await data-backed assertions.
+- Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
+- Health shell outline drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle plan to serve JSON/UI without cache regressions.
 
 ## Tooling & References
 

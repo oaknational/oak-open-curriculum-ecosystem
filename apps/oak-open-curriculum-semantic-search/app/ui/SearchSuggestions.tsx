@@ -39,7 +39,6 @@ export function SearchSuggestions({
               type="button"
               width="100%"
               textAlign="left"
-              element="button"
               onClick={() => onSelectSuggestion?.(suggestion)}
             >
               <OakTypography as="span" $font="body-3-bold">

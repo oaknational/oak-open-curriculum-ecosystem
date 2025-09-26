@@ -9,6 +9,7 @@ import { lexend, workSans } from './ui/fonts';
 import StyledComponentsRegistry from './lib/registry';
 import { Providers } from './lib/Providers';
 import HeaderStyles from './ui/client/HeaderStyles';
+import { WebVitals } from './ui/web-vitals';
 
 /**
  * Inline script injected before hydration to sync the DOM with the preferred theme.
@@ -91,6 +92,7 @@ export default async function RootLayout({
         </Script>
       </head>
       <body className={`${lexend.className} ${workSans.className}`}>
+        <WebVitals />
         <StyledComponentsRegistry>
           <Providers initialMode={initialMode}>
             <HeaderStyles />

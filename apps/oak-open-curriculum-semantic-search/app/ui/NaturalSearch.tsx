@@ -3,13 +3,10 @@
 import type { JSX, FormEventHandler, Dispatch, SetStateAction, ChangeEvent } from 'react';
 import { useState } from 'react';
 import { z } from 'zod';
-import {
-  OakBox,
-  OakPrimaryButton,
-  OakRadioButton,
-  OakRadioGroup,
-} from '@oaknational/oak-components';
+import { OakBox, OakRadioButton, OakRadioGroup } from '@oaknational/oak-components';
 import { LabeledInput } from './fields';
+import { PrimarySubmitButton } from './client/SearchPageClient.styles';
+import styledComponents from 'styled-components';
 
 const ApiResponseSchema = z
   .object({
@@ -126,22 +123,14 @@ function NaturalSearchForm({
   onSubmit: FormEventHandler<HTMLFormElement>;
 }): JSX.Element {
   return (
-    <OakBox
-      as="form"
-      onSubmit={onSubmit}
-      id="nl-panel"
-      role="tabpanel"
-      aria-labelledby="nl-tab"
-      $display="grid"
-      $gap="space-between-sm"
-    >
-      <QueryField nl={nl} setNl={setNl} />
-      <ScopeField nl={nl} setNl={setNl} />
-      <SizeField nl={nl} setNl={setNl} />
-      <OakPrimaryButton type="submit" element="button">
-        Search
-      </OakPrimaryButton>
-    </OakBox>
+    <NaturalFormContainer id="nl-panel" role="tabpanel" aria-labelledby="nl-tab">
+      <StyledNaturalForm data-testid="natural-search-form" onSubmit={onSubmit}>
+        <QueryField nl={nl} setNl={setNl} />
+        <ScopeField nl={nl} setNl={setNl} />
+        <SizeField nl={nl} setNl={setNl} />
+        <PrimarySubmitButton type="submit">Search</PrimarySubmitButton>
+      </StyledNaturalForm>
+    </NaturalFormContainer>
   );
 }
 
@@ -195,3 +184,12 @@ export default function NaturalSearchComponent({
     />
   );
 }
+
+const NaturalFormContainer = styledComponents(OakBox)`
+  display: grid;
+`;
+
+const StyledNaturalForm = styledComponents('form')`
+  display: grid;
+  gap: var(--app-gap-cluster);
+`;

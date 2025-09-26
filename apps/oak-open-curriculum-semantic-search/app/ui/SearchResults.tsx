@@ -87,7 +87,9 @@ const ResultsSection = styledComponents(OakBox)`
   row-gap: var(--app-gap-section);
 `;
 
-const ResultsGrid = styledComponents(OakUL)`
+const ResultsGrid = styledComponents(OakUL).attrs({
+  'data-testid': 'search-results-grid',
+})`
   display: grid;
   row-gap: var(--app-gap-section);
   column-gap: var(--app-gap-grid);

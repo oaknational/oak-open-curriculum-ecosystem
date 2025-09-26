@@ -1,4 +1,11 @@
 #!/usr/bin/env node
+
+/**
+ * This script checks for disallowed tokens in the codebase.
+ *
+ * Specifically, it checks for remnants of an earlier architectural model based on ecology and ancient Greek
+ * philosophy.
+ */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
@@ -60,10 +67,17 @@ const ALLOW_PATH_PATTERNS = [
   /(^|\/)\.agent\/roles\//,
   /(^|\/)\.claude\//,
   /(^|\/)\.vscode\//,
+  /(^|\/)\.next\//,
   /^docs\/architecture\/greek-ecosystem-deprecation\.md$/,
   /^docs\/architecture\/architectural-decisions\//,
   /^scripts\/codemods\//,
   /^scripts\/identity-check\.mjs$/,
+  /(^|\/)test-results\//,
+  // Reference directories contain things like checkouts of other repos, or files that are only temporarily useful
+  /(^|\/)reference\//,
+  // Legitimate uses
+  /(^|\/)synonyms\.json$/,
+  /research\/custom_gpt\/custom_gpt_flow_outline\.md$/,
 ];
 
 // File filters

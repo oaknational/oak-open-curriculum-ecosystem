@@ -16,9 +16,11 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 ## Orientation (2025-09-26)
 
 - Semantic tokens, the bridge, and shared layout wrappers already power Admin and Docs; Playwright `bp-xxl` assertions now enforce those layouts without `test.fail()` guards.
-- Search still carries intentional `test.fail()` markers at `bp-xs` (controls stack) and `bp-lg` (hero clamp). Layout debt presents most obviously at 360 px where hero + forms sit side-by-side and the hero copy overruns at `bp-lg`.
-- Fresh 2025-09-27 audit via Playwright confirmed the `ControlsGrid` media query never promoted to two columns (360/800/1 200 px all reported `"structured" "natural"` areas) and the hero clamp remained at ~447 px; prototype updates now route breakpoint lookups through `resolveBreakpoint`, restoring the `bp-md` grid split while we plan robust Playwright assertions and hero clamp refinements.
+- Search responsive assertions at `bp-xs`/`bp-md`/`bp-lg` now pass without guards: forms wrap `<form>` elements inside `tabpanel` containers, submit buttons use high-contrast brand colours, and Playwright fixtures supply deterministic results. Hero copy still overruns the 45 ch target at `bp-lg`, so the next pass will focus on clamping.
+- Fresh 2025-09-27 audit via Playwright (post-fixture update) shows `ControlsGrid` stacks correctly at `bp-xs` and splits at `bp-md`; results grids now assert column counts via `gridTemplateColumns` parsing.
 - Health remains an API-style response (`NextResponse.json` in `apps/oak-open-curriculum-semantic-search/app/healthz/route.ts`) with no Oak UI chrome. The responsive baseline records this as an expected failure pending UX shell work.
+- Health shell outline in the plan pairs a hero status banner with a two-column card grid at `bp-md`, includes an accessible `role="status"` region for live updates, and anticipates Accept header toggling between JSON and UI without cache regressions.
+- Playwright runs now enable `SEMANTIC_SEARCH_USE_FIXTURES` (plus `NEXT_DISABLE_DEV_ERRORS`) so structured search and suggestions return deterministic fixtures independent of Elasticsearch while keeping the dev overlay quiet.
 - Browser theme colours resolve from semantic tokens (`app/layout.meta.unit.test.ts` guards), keeping light/dark polish intact.
 
 ## Cadence Overview
@@ -31,14 +33,14 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 ### ACTION 1 – Audit Search hero, controls, and results (`bp-xs` → `bp-md`)
 
-- Inspect `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchPageClient.styles.ts` (`PageContainer`, `ControlsGrid`, `SecondaryGrid`, `HeroCard`) alongside `SearchResults.tsx` for grid + clamp behaviour.
-- At 360 px confirm DOM order remains linear and note why hero/forms still render side-by-side. Capture computed `gridTemplateColumns` and `gridTemplateAreas`; the existing Playwright helper `splitColumns` currently over-counts `minmax` strings, so note whether the failure is stylistic or an assertion artefact.
-- Verify hero copy clamp expectations at `bp-lg`; compare computed `max-inline-size` with the architecture guidance (`max-inline-size ≤ 45ch`) and record gaps.
-- Document token usage gaps (e.g. inline padding, `--app-gap-section`, column min-width guards) so implementation tasks can target the exact variables.
+- Inspect `apps/oak-open-curriculum-semantic-search/app/ui/client/SearchPageClient.styles.ts` (`PageContainer`, `ControlsGrid`, `SecondaryGrid`, `HeroCard`) alongside `SearchResults.tsx` with the new fixtures turned on.
+- At 360 px reconfirm DOM order + gap rhythm; ensure the new tabpanel containers do not introduce extra spacing or focus regressions.
+- Verify hero copy clamp expectations at `bp-lg`; compare computed `max-inline-size` with the architecture guidance (`max-inline-size ≤ 45ch`) and record any residual overshoot for ACTION 7.
+- Note remaining token gaps (inline padding, column min-width guards) needed to finish the hero/responsive polish.
 
 ### REVIEW 2 – Capture audit evidence
 
-- Attach Playwright MCP snapshots (`search-controls-bp-xs`, `search-hero-bp-lg`) and axe JSON to the plan, annotating whether the failures are due to CSS or test parsing.
+- Attach Playwright MCP snapshots (`search-controls-bp-xs`, `search-hero-bp-lg`) and axe JSON to the plan, confirming search regressions remain green with fixtures and highlighting any outstanding hero clamp deltas.
 - Summarise findings directly in this document (brief bullets) so ACTION 3 can start with concrete deltas.
 
 ### ACTION 3 – Prototype Search layout adjustments

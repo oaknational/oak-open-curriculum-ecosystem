@@ -121,3 +121,41 @@ export const FacetsPanel = styledComponents(OakBox)`
 export const AccentTypography = styledComponents(OakTypography)`
   color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
 `;
+
+export const PrimarySubmitButton = styledComponents.button`
+  align-items: center;
+  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+  border: 1px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontFamily};
+  font-size: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontSizeRem};
+  font-weight: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontWeight};
+  gap: var(--app-gap-cluster);
+  justify-content: center;
+  line-height: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.lineHeight};
+  padding-block: calc(var(--app-gap-cluster) / 1.5);
+  padding-inline: var(--app-gap-section);
+  text-decoration: none;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+  }
+
+  &:disabled {
+    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+    outline-offset: 2px;
+  }
+`;

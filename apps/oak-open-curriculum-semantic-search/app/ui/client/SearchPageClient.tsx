@@ -113,10 +113,20 @@ function SearchHero(): JSX.Element {
         </OakBox>
       </OakTypography>
       <OakTypography as="p" $font="body-2">
-        Structured and natural language together in one Oak-themed workspace to accelerate planning.
+        We expose two search experiences: a structured search experience and a natural language
+        search experience.
+      </OakTypography>
+      <OakTypography as="p" $font="body-2">
+        The structured search allows filtering on many dimensions, and uses semantic matching to
+        enhance the traditional lexical search experience.
+      </OakTypography>
+      <OakTypography as="p" $font="body-2">
+        The natural language search takes queries like &ldquo;find me lessons about history that can
+        be adapted for Leeds&rdquo;, passes that to an LLM to figure out the intent, and then defers
+        to the structured search to find the best results with hybrid lexical and semantic search.
       </OakTypography>
       <OakTypography as="p" $font="body-4" $color="text-subdued">
-        Search units, lessons, and sequences without leaving the Oak ecosystem.
+        Search lessons, units, and sequences.
       </OakTypography>
     </HeroCard>
   );

@@ -53,7 +53,6 @@ function DashboardHeader({ loading, onRefresh }: DashboardHeaderProps): ReactEle
       </OakHeading>
       <OakSecondaryButton
         type="button"
-        element="button"
         disabled={loading}
         onClick={() => {
           void onRefresh();

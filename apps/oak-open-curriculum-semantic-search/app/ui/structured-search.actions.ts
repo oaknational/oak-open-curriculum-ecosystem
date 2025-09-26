@@ -8,6 +8,7 @@ import {
   HybridResponseSchema,
   SuggestionResponseSchema,
 } from './structured-search.shared';
+import { structuredSearchFixture, suggestionFixture } from './__fixtures__/search-structured';
 import type { StructuredBody, SuggestionItem } from './structured-search.shared';
 
 export async function searchAction(
@@ -16,6 +17,16 @@ export async function searchAction(
   const input = SearchRequest.parse(req);
   const body = buildBody(input);
   const base = baseUrl();
+
+  if (process.env.SEMANTIC_SEARCH_USE_FIXTURES === 'true') {
+    return {
+      result: {
+        ...structuredSearchFixture,
+        scope: structuredSearchFixture.scope,
+        suggestions: suggestionFixture.suggestions,
+      },
+    };
+  }
 
   try {
     const result = await requestStructuredSearch(base, body);

@@ -14,6 +14,11 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: true,
     timeout: 120_000,
+    env: {
+      ...process.env,
+      SEMANTIC_SEARCH_USE_FIXTURES: 'true',
+      NEXT_DISABLE_DEV_ERRORS: '1',
+    },
   },
   use: {
     baseURL,

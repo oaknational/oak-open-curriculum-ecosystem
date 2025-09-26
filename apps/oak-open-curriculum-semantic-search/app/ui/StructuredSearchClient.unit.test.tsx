@@ -43,7 +43,7 @@ describe('StructuredSearchClient', () => {
     );
 
     fireEvent.change(screen.getByLabelText('Query'), { target: { value: 'fractions' } });
-    const form = screen.getByRole('tabpanel');
+    const form = screen.getByTestId('structured-search-form');
     await act(async () => {
       fireEvent.submit(form);
     });

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
@@ -56,25 +56,21 @@ describe('SearchResults', () => {
     return renderWithProviders([sampleResult], meta);
   }
 
-  function queryRequired<T extends Element>(container: HTMLElement, selector: string): T {
-    const node = container.querySelector(selector);
-    expect(node).not.toBeNull();
-    return node as T;
-  }
-
   it('applies Oak spacing and border tokens to the results list', () => {
     const { container } = renderResults();
 
-    const section = queryRequired<HTMLElement>(container, 'section');
-    expect(section.getAttribute('aria-live')).toBe('polite');
+    const section = container.querySelector('section');
+    expect(section).not.toBeNull();
+    const sectionEl = section as HTMLElement;
+    expect(sectionEl.getAttribute('aria-live')).toBe('polite');
 
-    const list = queryRequired<HTMLElement>(container, 'ul');
+    const list = screen.getByTestId('search-results-grid');
     const listStyles = getComputedStyle(list);
     expect(listStyles.display).toBe('grid');
     expect(listStyles.getPropertyValue('row-gap')).toBe('var(--app-gap-section)');
     expect(listStyles.getPropertyValue('column-gap')).toBe('var(--app-gap-grid)');
 
-    const item = queryRequired<HTMLElement>(list, 'li');
+    const item = within(list).getAllByRole('listitem')[0];
     const itemStyles = getComputedStyle(item);
     expect(itemStyles.padding).toBe('1rem');
     expect(itemStyles.borderRadius).toBe('0.25rem');

@@ -57,6 +57,7 @@
     "playbook",
     "playbooks",
     "Poirot",
+    "PREHYDRATION",
     "Psycha",
     "Psychon",
     "qualia",
@@ -158,5 +159,10 @@
     "**/generated/**/*"
   ],
   "chatgpt.commentCodeLensEnabled": false,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.configPath": ".prettierrc.json",
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

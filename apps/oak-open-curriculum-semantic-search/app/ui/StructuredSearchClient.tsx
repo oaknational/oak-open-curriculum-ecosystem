@@ -1,7 +1,7 @@
 'use client';
 
 import type { JSX, FormEvent } from 'react';
-import { OakBox, OakPrimaryButton } from '@oaknational/oak-components';
+import { OakBox } from '@oaknational/oak-components';
 import type { StructuredBody } from './structured-search.shared';
 import {
   ScopeField,
@@ -12,6 +12,8 @@ import {
   SizeField,
 } from './structured-fields';
 import { useStructuredSearchHandlers } from './StructuredSearchClient.hooks';
+import { PrimarySubmitButton } from './client/SearchPageClient.styles';
+import styledComponents from 'styled-components';
 
 export default function StructuredSearchClient(props: {
   action: (input: StructuredBody) => Promise<{ result: unknown | null; error?: string }>;
@@ -47,28 +49,34 @@ function StructuredForm({
   disabled?: boolean;
 }): JSX.Element {
   return (
-    <OakBox
-      as="form"
-      onSubmit={(ev: FormEvent<HTMLFormElement>) => {
-        ev.preventDefault();
-        onSubmit(ev);
-      }}
-      id="structured-panel"
-      role="tabpanel"
-      aria-labelledby="structured-tab"
-      $display="grid"
-      $gap="space-between-sm"
-    >
-      <ScopeField value={model.scope} onChange={onChange} />
-      <QueryField value={model.text} onChange={onChange} />
-      <SubjectField value={model.subject ?? ''} onChange={onChange} />
-      <KeyStageField value={model.keyStage ?? ''} onChange={onChange} />
-      <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />
-      <SizeField value={model.size ?? 10} onChange={onChange} />
+    <StructuredFormContainer id="structured-panel" role="tabpanel" aria-labelledby="structured-tab">
+      <StyledForm
+        data-testid="structured-search-form"
+        onSubmit={(ev: FormEvent<HTMLFormElement>) => {
+          ev.preventDefault();
+          onSubmit(ev);
+        }}
+      >
+        <ScopeField value={model.scope} onChange={onChange} />
+        <QueryField value={model.text} onChange={onChange} />
+        <SubjectField value={model.subject ?? ''} onChange={onChange} />
+        <KeyStageField value={model.keyStage ?? ''} onChange={onChange} />
+        <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />
+        <SizeField value={model.size ?? 10} onChange={onChange} />
 
-      <OakPrimaryButton type="submit" disabled={disabled} element="button">
-        Search
-      </OakPrimaryButton>
-    </OakBox>
+        <PrimarySubmitButton type="submit" disabled={disabled}>
+          Search
+        </PrimarySubmitButton>
+      </StyledForm>
+    </StructuredFormContainer>
   );
 }
+
+const StructuredFormContainer = styledComponents(OakBox)`
+  display: grid;
+`;
+
+const StyledForm = styledComponents('form')`
+  display: grid;
+  gap: var(--app-gap-cluster);
+`;
