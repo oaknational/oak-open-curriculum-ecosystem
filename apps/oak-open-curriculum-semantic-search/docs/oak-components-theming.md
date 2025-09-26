@@ -1,6 +1,17 @@
 # Oak Components Integration & Theming Guide
 
-This document explains how to consume and extend `@oaknational/oak-components` in applications outside the Oak Web Application (OWA). It captures the additional work required to support light/dark theming in the Semantic Search app and should be treated as the canonical reference when wiring the Oak styling into other runtimes.
+This document explains how to consume and extend `@oaknational/oak-components` in applications outside the Oak Web Application (OWA). It captures the additional work required to support light/dark theming in the Semantic Search app and should be treated as the canonical reference when wiring the Oak styling into other runtimes. A reference checkout of OWA lives in `reference/Oak-Web-Application`, and a reference checkout of the component library lives in `reference/oak-components`; consult them when cross-checking behaviour.
+
+## 0. Provider stack quick-start
+
+Our runtime composes a handful of thin providers around the Oak theme. Replicate the stack below when bootstrapping another app:
+
+1. `ThemeContextProvider` (`app/lib/theme/ThemeContext.tsx`) resolves the selected Oak theme, mounts `OakGlobalStyle`, and hands the concrete theme to `OakThemeProvider`.
+2. `ColorModeProvider` (`app/lib/theme/ColorModeContext.tsx`) keeps an app-level light/dark toggle for DOM synchronisation.
+3. `ThemeBridgeProvider` (`app/lib/theme/ThemeBridgeProvider.tsx`) mirrors the resolved theme into CSS variables and global styles before rendering children inside a styled-components theme provider.
+4. `Providers` (`app/lib/Providers.tsx`) ties the pieces together, ensures SSR-safe defaults, and injects the DOM `data-theme` attributes.
+
+`app/Providers` is rendered from `app/layout.tsx`, just after pre-hydration runs. If you deviate from this order you risk hydration mismatches or stale CSS variables in dark mode.
 
 ## 1. Core packages
 
@@ -41,7 +52,7 @@ Oak components expect everything to flow from tokens. Do **not** hard-code colou
 - For headings/labels/helper copy, pass `$font` to ensure the Oak typography ramp is used.
 - For custom wrappers (headers, forms, modals), explicitly set tokens instead of relying on inheritance.
 - If a new colour/space token is absolutely required, add it to the semantic spec and derive the TypeScript type from the constant so tests fail when the contract changes.
-- Layout CSS variables emitted by the bridge (`--app-layout-container-max-width`, `--app-layout-inline-padding-base`, `--app-layout-inline-padding-wide`, `--app-layout-control-column-min-width`, `--app-layout-secondary-column-min-width`, and `--app-bp-…`) keep responsive grids consistent; prefer them over hard-coded `minmax` values or pixel breakpoints when composing custom wrappers.
+- Layout CSS variables emitted by the bridge (`--app-layout-container-max-width`, `--app-layout-inline-padding-base`, `--app-layout-inline-padding-wide`, `--app-layout-control-column-min-width`, `--app-layout-secondary-column-min-width`, and `--app-bp-…`) keep responsive grids consistent; prefer them over hard-coded `minmax` values or pixel breakpoints when composing custom wrappers. We still have a handful of legacy pixel widths (for example, `app/admin/page.tsx:73` and `app/api/docs/page.tsx:17`) that should be migrated to those tokens—avoid copying those exceptions into new surfaces.
 
 ## 5. Dark mode support
 
@@ -69,6 +80,16 @@ When Oak lacks a token or component variant:
 2. Use Oak typography tokens for headings, body text, and helper copy.
 3. Ensure any Oak forms/buttons have adequate contrast in both modes (WCAG AA minimum).
 4. Add unit tests (or Playwright checks) that fail if the contract changes unexpectedly.
-5. Update this doc when new patterns emerge.
+5. Update this doc when new patterns emerge and note any temporary deviations (e.g. raw pixel widths) so they can be cleared out promptly.
+
+## 8. Suggestions for the Oak Components roadmap
+
+While the guide above documents how to bend the current package to multi-theme apps, several enhancements in the core library would make the experience dramatically smoother for downstream teams:
+
+- **First-class theme factory** – expose a helper such as `createOakTheme({ uiColorsOverride, paletteOverride })` so apps do not need to reimplement `buildUiColorMap`, nor translate spacing/typography tokens into CSS units manually (`app/ui/themes/semantic-theme-resolver.ts`).
+- **Built-in theme bridge** – ship an optional provider that emits CSS variables and the global `<style>` block Oak expects. Every host app currently has to recreate `ThemeBridgeProvider` plus `ThemeCssVars`.
+- **Shared colour-mode utilities** – the cookie/localStorage synchronisation and DOM dataset updates in `ThemeContext` and `HtmlThemeAttribute` exist purely because the library does not expose ergonomic hooks for multi-mode apps.
+- **Layout/breakpoint tokens in the public theme** – expose container widths, inline padding, and breakpoints directly on the Oak theme contract so bespoke specs such as `semanticThemeSpec` aren’t required to duplicate them.
+- **Official multi-theme example** – adding a dark/light example surface (ideally referencing this repo) to `reference/oak-components` would keep library code and host expectations aligned and encourage contributions in this space.
 
 Following this approach keeps downstream apps aligned with Oak Components while allowing flexible theming beyond the assumptions baked into OWA.
