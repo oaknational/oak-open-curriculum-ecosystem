@@ -104,7 +104,7 @@ function SearchHero(): JSX.Element {
     <HeroCard data-testid="search-hero" $ba="border-solid-s">
       <OakTypography as="h1" $font="heading-3">
         <OakBox as="span" $display="inline-flex" $gap="space-between-ssx">
-          <AccentTypography as="span" $font="heading-3">
+          <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
             Hybrid
           </AccentTypography>
           <OakTypography as="span" $font="heading-3">
@@ -112,21 +112,21 @@ function SearchHero(): JSX.Element {
           </OakTypography>
         </OakBox>
       </OakTypography>
-      <OakTypography as="p" $font="body-2">
-        We expose two search experiences: a structured search experience and a natural language
-        search experience.
+      <OakTypography as="p" $font="body-4" $color="text-subdued">
+        Search lessons, units, and sequences.
       </OakTypography>
       <OakTypography as="p" $font="body-2">
-        The structured search allows filtering on many dimensions, and uses semantic matching to
-        enhance the traditional lexical search experience.
+        We expose two search experiences: a structured search experience and a natural language
+        search experience. Both combine traditional lexical search with semantic search to deliver
+        more relevant results.
+      </OakTypography>
+      <OakTypography as="p" $font="body-2">
+        The structured search allows filtering on many dimensions, such as subject, year, and topic.
       </OakTypography>
       <OakTypography as="p" $font="body-2">
         The natural language search takes queries like &ldquo;find me lessons about history that can
         be adapted for Leeds&rdquo;, passes that to an LLM to figure out the intent, and then defers
         to the structured search to find the best results with hybrid lexical and semantic search.
-      </OakTypography>
-      <OakTypography as="p" $font="body-4" $color="text-subdued">
-        Search lessons, units, and sequences.
       </OakTypography>
     </HeroCard>
   );
