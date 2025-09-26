@@ -2,7 +2,6 @@
 
 import type { JSX } from 'react';
 import { OakBox, OakTypography } from '@oaknational/oak-components';
-import styledComponents from 'styled-components';
 import { useSearchController, type SearchController } from './useSearchController';
 import { StructuredSearch } from '../StructuredSearch';
 import type { StructuredSearchAction } from '../StructuredSearch';
@@ -11,53 +10,17 @@ import SearchResultsComponent from '../SearchResults';
 import { SearchFacets } from '../SearchFacets';
 import { SearchSuggestions } from '../SearchSuggestions';
 import { useStructuredFollowUp } from './useStructuredFollowUp';
-import { getAppTheme } from '../themes/app-theme-helpers';
-
-const PageContainer = styledComponents(OakBox)`
-  row-gap: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
-  padding-left: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
-  padding-right: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
-  padding-top: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
-  padding-bottom: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
-`;
-
-const ControlsGrid = styledComponents(OakBox)`
-  display: grid;
-  grid-template-columns: ${({ theme }) => {
-    const appTheme = getAppTheme(theme);
-    return `repeat(auto-fit, minmax(${appTheme.app.layout.controlColumnMinWidth}, 1fr))`;
-  }};
-  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
-`;
-
-const SecondaryGrid = styledComponents(OakBox)`
-  display: grid;
-  grid-template-columns: ${({ theme }) => {
-    const appTheme = getAppTheme(theme);
-    return `repeat(auto-fit, minmax(${appTheme.app.layout.secondaryColumnMinWidth}, 1fr))`;
-  }};
-  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
-`;
-
-const HeroCard = styledComponents(OakBox)`
-  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
-  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-`;
-
-const PanelCard = styledComponents(OakBox)`
-  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
-  border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
-  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-`;
-
-const AccentTypography = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
-`;
+import {
+  AccentTypography,
+  ControlsGrid,
+  FacetsPanel,
+  HeroCard,
+  NaturalPanelCard,
+  PageContainer,
+  SecondaryGrid,
+  StructuredPanelCard,
+  SuggestionsPanel,
+} from './SearchPageClient.styles';
 
 export default function SearchPageClient({
   searchStructured,
@@ -71,11 +34,6 @@ export default function SearchPageClient({
     <PageContainer
       data-testid="search-page"
       as="main"
-      $maxWidth="var(--app-layout-container-max-width)"
-      $width="100%"
-      $ma="auto"
-      $display="flex"
-      $flexDirection="column"
       $background="bg-primary"
       $color="text-primary"
     >
@@ -111,7 +69,7 @@ function SearchForms({
   followUp: ReturnType<typeof useStructuredFollowUp>;
 }): JSX.Element {
   return (
-    <ControlsGrid as="section" aria-label="Search controls" $display="grid">
+    <ControlsGrid as="section" aria-label="Search controls">
       <StructuredPanel searchAction={searchAction} controller={controller} followUp={followUp} />
       <NaturalPanel controller={controller} />
     </ControlsGrid>
@@ -131,20 +89,19 @@ function SearchSecondary({
 }): JSX.Element {
   return (
     <SecondaryGrid>
-      <SearchSuggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
-      <SearchFacets facets={facets} onSelectSequence={onSelectSequence} />
+      <SuggestionsPanel>
+        <SearchSuggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
+      </SuggestionsPanel>
+      <FacetsPanel>
+        <SearchFacets facets={facets} onSelectSequence={onSelectSequence} />
+      </FacetsPanel>
     </SecondaryGrid>
   );
 }
 
 function SearchHero(): JSX.Element {
   return (
-    <HeroCard
-      data-testid="search-hero"
-      $display="flex"
-      $flexDirection="column"
-      $ba="border-solid-s"
-    >
+    <HeroCard data-testid="search-hero" $ba="border-solid-s">
       <OakTypography as="h1" $font="heading-3">
         <OakBox as="span" $display="inline-flex" $gap="space-between-ssx">
           <AccentTypography as="span" $font="heading-3">
@@ -175,12 +132,10 @@ function StructuredPanel({
   followUp: ReturnType<typeof useStructuredFollowUp>;
 }): JSX.Element {
   return (
-    <PanelCard
+    <StructuredPanelCard
       as="section"
       aria-labelledby="structured-heading"
       data-testid="structured-search-panel"
-      $display="flex"
-      $flexDirection="column"
       $ba="border-solid-s"
     >
       <OakTypography as="h2" id="structured-heading" $font="heading-6">
@@ -198,18 +153,16 @@ function StructuredPanel({
         onScopeChange={followUp.handleScopeChange}
         onSubmitPayload={followUp.recordPayload}
       />
-    </PanelCard>
+    </StructuredPanelCard>
   );
 }
 
 function NaturalPanel({ controller }: { controller: SearchController }): JSX.Element {
   return (
-    <PanelCard
+    <NaturalPanelCard
       as="section"
       aria-labelledby="nl-heading"
       data-testid="natural-search-panel"
-      $display="flex"
-      $flexDirection="column"
       $ba="border-solid-s"
     >
       <OakTypography as="h2" id="nl-heading" $font="heading-6">
@@ -226,6 +179,6 @@ function NaturalPanel({ controller }: { controller: SearchController }): JSX.Ele
           }
         }}
       />
-    </PanelCard>
+    </NaturalPanelCard>
   );
 }

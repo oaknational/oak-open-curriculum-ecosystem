@@ -71,7 +71,8 @@ describe('SearchResults', () => {
     const list = queryRequired<HTMLElement>(container, 'ul');
     const listStyles = getComputedStyle(list);
     expect(listStyles.display).toBe('grid');
-    expect(listStyles.gap).toBe('1.5rem');
+    expect(listStyles.getPropertyValue('row-gap')).toBe('var(--app-gap-section)');
+    expect(listStyles.getPropertyValue('column-gap')).toBe('var(--app-gap-grid)');
 
     const item = queryRequired<HTMLElement>(list, 'li');
     const itemStyles = getComputedStyle(item);

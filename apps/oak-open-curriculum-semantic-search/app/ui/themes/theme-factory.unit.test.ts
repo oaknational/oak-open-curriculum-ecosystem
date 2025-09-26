@@ -121,5 +121,17 @@ describe('App theme factories', () => {
 
     expect(lightLayout.controlColumnMinWidth).toBe('20rem');
     expect(lightLayout.secondaryColumnMinWidth).toBe('18rem');
+    expect(lightLayout.containerMaxWidth.replace(/\s+/g, '')).toBe('clamp(20rem,92vw,78rem)');
+    expect(lightLayout.inlinePadding.base).toMatch(/rem$/);
+    expect(lightLayout.inlinePadding.wide).toMatch(/rem$/);
+    expect(parseFloat(lightLayout.inlinePadding.base)).toBeLessThan(
+      parseFloat(lightLayout.inlinePadding.wide),
+    );
+    expect(lightLayout.breakpoints).toMatchObject({
+      xs: '0px',
+      md: '768px',
+      lg: '1024px',
+      xxl: '1760px',
+    });
   });
 });

@@ -109,6 +109,8 @@ export interface ResolvedAppTokens {
     readonly containerMaxWidth: string;
     readonly controlColumnMinWidth: string;
     readonly secondaryColumnMinWidth: string;
+    readonly inlinePadding: Record<'base' | 'wide', string>;
+    readonly breakpoints: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', string>;
   };
   readonly palette: SemanticAppSpec['palette'];
 }
@@ -149,6 +151,15 @@ function resolveSpace(spec: SemanticAppSpec['space']): ResolvedAppTokens['space'
       card: pxToRem(resolveInnerPadding(spec.padding.card)),
       pill: pxToRem(resolveInnerPadding(spec.padding.pill)),
     },
+  };
+}
+
+function resolveInlinePadding(
+  tokens: SemanticAppSpec['layout']['inlinePadding'],
+): ResolvedAppTokens['layout']['inlinePadding'] {
+  return {
+    base: pxToRem(resolveSpaceBetween(tokens.base)),
+    wide: pxToRem(resolveSpaceBetween(tokens.wide)),
   };
 }
 
@@ -194,6 +205,8 @@ export function resolveAppTokens(mode: SemanticMode): ResolvedAppTokens {
       containerMaxWidth: spec.layout.containerMaxWidth,
       controlColumnMinWidth: spec.layout.controlColumnMinWidth,
       secondaryColumnMinWidth: spec.layout.secondaryColumnMinWidth,
+      inlinePadding: resolveInlinePadding(spec.layout.inlinePadding),
+      breakpoints: spec.layout.breakpoints,
     },
     palette: spec.palette,
   };

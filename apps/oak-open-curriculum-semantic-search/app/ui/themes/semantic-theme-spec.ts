@@ -96,9 +96,21 @@ const sharedAppSpec: Omit<SemanticAppSpec, 'colors'> = {
     secondaryFamily: '"Work Sans", sans-serif',
   },
   layout: {
-    containerMaxWidth: 'min(72rem, 92vw)',
+    containerMaxWidth: 'clamp(20rem, 92vw, 78rem)',
     controlColumnMinWidth: '20rem',
     secondaryColumnMinWidth: '18rem',
+    inlinePadding: {
+      base: 'space-between-l',
+      wide: 'space-between-xl',
+    },
+    breakpoints: {
+      xs: '0px',
+      sm: '480px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1360px',
+      xxl: '1760px',
+    },
   },
   palette: {
     brandPrimary: oakColorTokens.oakGreen,

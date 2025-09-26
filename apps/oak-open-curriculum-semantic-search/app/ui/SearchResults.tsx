@@ -1,73 +1,11 @@
 'use client';
 
-import { createElement, type JSX, type ReactNode } from 'react';
+import { type JSX } from 'react';
 import { OakBox, OakTypography, OakUL } from '@oaknational/oak-components';
+import styledComponents from 'styled-components';
 import { z } from 'zod';
 import type { SearchMeta } from './client/useSearchController';
-
-type AllowedTag = 'em' | 'strong' | 'mark';
-const ALLOWED_TAGS: ReadonlySet<string> = new Set(['em', 'strong', 'mark']);
-
-function isAllowedTag(name: string): name is AllowedTag {
-  return ALLOWED_TAGS.has(name);
-}
-
-function tokenize(html: string): string[] {
-  return html.split(/(<\/?[^>]+>)/g).filter(Boolean);
-}
-
-function flushUnclosed(
-  stack: { type: AllowedTag; children: ReactNode[] }[],
-  current: () => ReactNode[],
-): void {
-  if (stack.length) {
-    const last = stack.pop();
-    if (last) {
-      current().push(...last.children);
-    }
-  }
-}
-
-function handleToken(
-  tok: string,
-  stack: { type: AllowedTag; children: ReactNode[] }[],
-  current: () => ReactNode[],
-  keyRef: { current: number },
-): void {
-  const m = tok.match(/^<\/?\s*([a-zA-Z0-9]+)[^>]*>$/);
-  if (!m) {
-    current().push(tok);
-    return;
-  }
-  const name = m[1].toLowerCase();
-  const closing = tok.startsWith('</');
-  if (!isAllowedTag(name)) {
-    return;
-  }
-  if (!closing) {
-    stack.push({ type: name, children: [] });
-  } else {
-    const last = stack.pop();
-    if (last && last.type === name) {
-      current().push(createElement(name, { key: `hl-${keyRef.current++}` }, ...last.children));
-    }
-  }
-}
-
-function renderSafeHighlight(html: string): ReactNode[] {
-  const tokens = tokenize(html);
-  const stack: { type: AllowedTag; children: ReactNode[] }[] = [];
-  const root: ReactNode[] = [];
-  const keyRef = { current: 0 };
-
-  const current = (): ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
-
-  for (const tok of tokens) {
-    handleToken(tok, stack, current, keyRef);
-  }
-  flushUnclosed(stack, current);
-  return root;
-}
+import { renderSafeHighlight } from './searchResultsHighlight';
 
 function ResultItem({
   title,
@@ -142,6 +80,27 @@ const ItemSchema = z
   .strict();
 const ResultsSchema = z.array(ItemSchema);
 
+const ResultsSection = styledComponents(OakBox)`
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--app-gap-section);
+`;
+
+const ResultsGrid = styledComponents(OakUL)`
+  display: grid;
+  row-gap: var(--app-gap-section);
+  column-gap: var(--app-gap-grid);
+  grid-template-columns: minmax(0, 1fr);
+
+  @media (min-width: var(--app-bp-md)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: var(--app-bp-xl)) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+`;
+
 export function SearchResults({
   results,
   meta,
@@ -173,9 +132,9 @@ export function SearchResults({
   const summary = buildSummary(meta);
 
   return (
-    <OakBox as="section" aria-live="polite" $mt="space-between-xl">
+    <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
       <SearchSummary summary={summary} />
-      <OakUL $reset $display="grid" $gap="space-between-m">
+      <ResultsGrid $reset>
         {parsed.data.map((rec) => (
           <ResultItem
             key={rec.id}
@@ -185,8 +144,8 @@ export function SearchResults({
             highlights={highlightsFor(rec)}
           />
         ))}
-      </OakUL>
-    </OakBox>
+      </ResultsGrid>
+    </ResultsSection>
   );
 }
 

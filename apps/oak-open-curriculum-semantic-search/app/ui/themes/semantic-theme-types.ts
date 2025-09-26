@@ -54,6 +54,8 @@ export interface SemanticAppSpec {
     readonly containerMaxWidth: string;
     readonly controlColumnMinWidth: string;
     readonly secondaryColumnMinWidth: string;
+    readonly inlinePadding: Record<'base' | 'wide', OakSpaceBetweenToken>;
+    readonly breakpoints: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', string>;
   };
   readonly colors: Record<
     | 'headerBorder'

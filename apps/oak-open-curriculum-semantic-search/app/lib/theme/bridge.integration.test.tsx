@@ -66,6 +66,8 @@ describe('Bridge theming (ADR-045)', () => {
     lightForeground: string;
     darkBackground: string;
     darkForeground: string;
+    lightLayout: ReturnType<typeof createLightTheme>['app']['layout'];
+    darkLayout: ReturnType<typeof createDarkTheme>['app']['layout'];
   } {
     const lightTheme = createLightTheme();
     const darkTheme = createDarkTheme();
@@ -105,7 +107,59 @@ describe('Bridge theming (ADR-045)', () => {
       lightForeground,
       darkBackground,
       darkForeground,
+      lightLayout: lightTheme.app.layout,
+      darkLayout: darkTheme.app.layout,
     };
+  }
+
+  function assertLightModeStyles(
+    styles: string,
+    background: string,
+    foreground: string,
+    layout: ReturnType<typeof createLightTheme>['app']['layout'],
+  ): void {
+    expect(styles).toContain(
+      `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
+    );
+    expect(styles).toContain(
+      `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
+    );
+    expect(styles).toContain('--app-color-brand-primary:#287c34;');
+    expect(styles).toContain('--app-color-brand-primary-deep:#144d24;');
+    expect(styles).toContain('--app-color-brand-primary-bright:#35a04c;');
+    expect(styles).toContain('--app-layout-control-column-min-width:20rem;');
+    expect(styles).toContain('--app-layout-secondary-column-min-width:18rem;');
+    expect(styles).toContain(
+      `--app-layout-container-max-width:${layout.containerMaxWidth.replace(/\s+/g, '')};`,
+    );
+    expect(styles).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
+    expect(styles).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
+    expect(styles).toContain(`--app-bp-xs:${layout.breakpoints.xs};`);
+    expect(styles).toContain(`--app-bp-md:${layout.breakpoints.md};`);
+    expect(styles).toContain(`--app-bp-xxl:${layout.breakpoints.xxl};`);
+  }
+
+  function assertDarkModeStyles(
+    styles: string,
+    background: string,
+    foreground: string,
+    layout: ReturnType<typeof createDarkTheme>['app']['layout'],
+  ): void {
+    expect(styles).toContain(
+      `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
+    );
+    expect(styles).toContain(
+      `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
+    );
+    expect(styles).toContain('--app-color-brand-primary:#287c34;');
+    expect(styles).toContain('--app-color-brand-primary-deep:#0b2a16;');
+    expect(styles).toContain('--app-color-brand-primary-bright:#6ed680;');
+    expect(styles).toContain(
+      `--app-layout-container-max-width:${layout.containerMaxWidth.replace(/\s+/g, '')};`,
+    );
+    expect(styles).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
+    expect(styles).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
+    expect(styles).toContain(`--app-bp-lg:${layout.breakpoints.lg};`);
   }
 
   it('applies theme background/foreground tokens to html and body elements', () => {
@@ -116,29 +170,12 @@ describe('Bridge theming (ADR-045)', () => {
       lightForeground,
       darkBackground,
       darkForeground,
+      lightLayout,
+      darkLayout,
     } = renderAndCollectThemeStyles();
 
-    expect(initialStyles).toContain(
-      `html,body{background-color:${lightBackground.toLowerCase()};color:${lightForeground.toLowerCase()};`,
-    );
-    expect(initialStyles).toContain(
-      `#app-theme-root{background-color:${lightBackground.toLowerCase()};color:${lightForeground.toLowerCase()};`,
-    );
-    expect(initialStyles).toContain('--app-color-brand-primary:#287c34;');
-    expect(initialStyles).toContain('--app-color-brand-primary-deep:#144d24;');
-    expect(initialStyles).toContain('--app-color-brand-primary-bright:#35a04c;');
-    expect(initialStyles).toContain('--app-layout-control-column-min-width:20rem;');
-    expect(initialStyles).toContain('--app-layout-secondary-column-min-width:18rem;');
-
-    expect(darkStyles).toContain(
-      `html,body{background-color:${darkBackground.toLowerCase()};color:${darkForeground.toLowerCase()};`,
-    );
-    expect(darkStyles).toContain(
-      `#app-theme-root{background-color:${darkBackground.toLowerCase()};color:${darkForeground.toLowerCase()};`,
-    );
-    expect(darkStyles).toContain('--app-color-brand-primary:#287c34;');
-    expect(darkStyles).toContain('--app-color-brand-primary-deep:#0b2a16;');
-    expect(darkStyles).toContain('--app-color-brand-primary-bright:#6ed680;');
+    assertLightModeStyles(initialStyles, lightBackground, lightForeground, lightLayout);
+    assertDarkModeStyles(darkStyles, darkBackground, darkForeground, darkLayout);
   });
 
   it('mounts a single ThemeGlobalStyle sheet and reuses it when mode changes', () => {

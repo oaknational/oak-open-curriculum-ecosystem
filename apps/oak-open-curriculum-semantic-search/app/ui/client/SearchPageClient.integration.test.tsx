@@ -93,7 +93,7 @@ describe('SearchPageClient', () => {
     expect(getComputedStyle(natural).backgroundColor).toBe(raisedSurface);
   });
 
-  it('caps the main layout width using the app layout CSS variable', () => {
+  it('caps the main layout inline size using the app layout CSS variable', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
     });
@@ -102,7 +102,7 @@ describe('SearchPageClient', () => {
 
     const main = screen.getByRole('main');
     const computed = getComputedStyle(main);
-    expect(computed.maxWidth).toBe('var(--app-layout-container-max-width)');
+    expect(computed.maxInlineSize).toBe('var(--app-layout-container-max-width)');
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -110,15 +110,12 @@ describe('SearchPageClient', () => {
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
     });
 
-    const theme = renderWithTheme(action);
+    renderWithTheme(action);
 
     const main = screen.getByRole('main');
     const computed = getComputedStyle(main);
 
-    const expectedGap = theme.app.space.gap.section;
-    expect(computed.rowGap).toBe(expectedGap);
-    expect(computed.paddingLeft).toBe(expectedGap);
-    expect(computed.paddingRight).toBe(expectedGap);
+    expect(computed.getPropertyValue('gap')).toBe('var(--app-gap-section)');
   });
 
   it('uses theme surface colours for hero and search panels', () => {

@@ -41,7 +41,7 @@ Oak components expect everything to flow from tokens. Do **not** hard-code colou
 - For headings/labels/helper copy, pass `$font` to ensure the Oak typography ramp is used.
 - For custom wrappers (headers, forms, modals), explicitly set tokens instead of relying on inheritance.
 - If a new colour/space token is absolutely required, add it to the semantic spec and derive the TypeScript type from the constant so tests fail when the contract changes.
-- Layout CSS variables emitted by the bridge (`--app-layout-container-max-width`, `--app-layout-control-column-min-width`, `--app-layout-secondary-column-min-width`) keep responsive grids consistent; prefer them over hard-coded `minmax` values when composing custom wrappers.
+- Layout CSS variables emitted by the bridge (`--app-layout-container-max-width`, `--app-layout-inline-padding-base`, `--app-layout-inline-padding-wide`, `--app-layout-control-column-min-width`, `--app-layout-secondary-column-min-width`, and `--app-bp-…`) keep responsive grids consistent; prefer them over hard-coded `minmax` values or pixel breakpoints when composing custom wrappers.
 
 ## 5. Dark mode support
 
