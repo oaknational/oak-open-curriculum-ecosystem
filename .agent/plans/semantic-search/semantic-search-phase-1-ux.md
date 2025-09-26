@@ -48,19 +48,19 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
   - `bp-md`: structured/natural forms share a two-column grid, secondary panels align beside each other.
   - `bp-lg`: container paddings widen, results adopt two-column cards, hero admits optional media.
   - `bp-xl`/`bp-xxl`: introduce three-column results and expanded admin/docs layouts without exceeding the container clamp.
-- Update Admin, Docs, and Health surfaces to follow the same breakpoint-driven rules (stack → dual column → three column) instead of bespoke fixed widths.
+- Update Admin, Docs, and Health surfaces to follow the same breakpoint-driven rules (stack → dual column → three column) instead of bespoke fixed widths, replacing literal pixel clamps/gaps with the shared layout tokens and CSS variables.
 
 ### 2. Visual Hierarchy & Surface Refinement
 
 - Recompose hero and CTA blocks per breakpoint so typography scales smoothly (Lexend ramp) and emphasis surfaces respond to new grid states.
 - Convert Admin action panels and telemetry outputs into card clusters that widen at `bp-md` and reflow at `bp-xl`.
-- Wrap Redoc (Docs) and Health diagnostics in Oak surfaces with radius/spacing tokens and ensure they honour container clamps through `bp-xxl`.
+- Wrap Redoc (Docs) and Health diagnostics in Oak surfaces with radius/spacing tokens, ensure they honour container clamps through `bp-xxl`, and drive zero-hit dashboards/cards from the emitted layout variables rather than `minmax(180px, 1fr)` fallbacks.
 
 ### 3. Accessibility & Readability
 
 - Validate focus order and DOM reading order across breakpoint transitions (no DOM reshuffling; CSS grid areas only).
 - Check colour contrast in both modes for the reworked surfaces, paying particular attention to hover/focus states introduced at `bp-sm` and above.
-- Add axe coverage to Playwright runs at xs/md/lg/xxl to confirm headings, landmarks, and status regions remain intact.
+- Add axe coverage to Playwright runs at xs/md/lg/xxl to confirm headings, landmarks, and status regions remain intact, and surface light/dark theme-colour metadata from the semantic palette so browser chrome follows Oak tokens.
 
 ### 4. Observability & Regression Safety for UX
 
@@ -89,17 +89,17 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 
 ## Todo (GO cadence)
 
-1. ACTION: Draft responsive layout architecture notes (breakpoints, grid tokens, stacking rules) and review with stakeholders.
-2. REVIEW: Walk through the architecture notes with design/product to confirm responsive goals cover Search, Admin, Docs, Health.
-3. ACTION: Add failing integration/visual tests that capture current layout issues across all breakpoints for each primary page.
-4. REVIEW: Analyse captured failures to ensure tests meaningfully represent hero/forms/cards/nav expectations.
-5. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search test app/lib/theme/bridge.integration.test.tsx` plus new visual specs to validate failure coverage.
+1. ACTION: Audit Admin, Docs, and Health wrappers for literal pixel widths/gaps, noting where layout tokens or CSS variables should replace bespoke values.
+2. REVIEW: Summarise the audit findings against the responsive architecture plan and confirm priorities with stakeholders.
+3. ACTION: Refactor the Admin page (including zero-hit dashboard grid) to consume the shared layout variables and breakpoint-aware grids.
+4. REVIEW: Validate the Admin page changes through integration/unit tests and responsive spot checks across bp-xs → bp-xxl.
+5. ACTION: Update the Docs page container, Redoc wrapper, and related surfaces to use layout tokens, and prepare Health overrides for the upcoming UI shell.
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ACTION: Implement responsive grid + hero/card redesign for Search page backed by passing tests and accessibility checks.
-8. REVIEW: Peer review Search page outcome against Oak guidelines and recorded tests; capture screenshots for documentation.
-9. ACTION: Redesign Admin/Docs/Health layouts with new surfaces, status messaging, and accessibility affordances.
-10. REVIEW: Audit cross-page consistency (spacing tokens, typography, error handling) and adjust theme tokens where necessary.
-11. QUALITY-GATE: Execute `pnpm format:root`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, and visual regressions to confirm green state.
+7. ACTION: Surface light/dark `theme-color` metadata from the semantic palette, adding spec entries if needed so browser chrome tracks Oak tokens.
+8. REVIEW: Confirm the metadata swaps correctly in light/dark mode via targeted tests or Playwright assertions.
+9. ACTION: Extend Playwright baseline specs to assert Admin/Docs responsive behaviour using the new CSS variables across xs/md/lg/xxl widths.
+10. REVIEW: Inspect Playwright output to ensure failures meaningfully capture layout regressions before regeneration.
+11. QUALITY-GATE: After implementing updates, run `pnpm format`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui`.
 12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. ACTION: Update UX documentation (design decisions, QA cadence, palette references) and share with functionality stream.
-14. REVIEW: Validate documentation, ensure automation dashboards capture new snapshots, and close UX plan items with sign-off.
+13. ACTION: Regenerate UX documentation and share the updated layout/token guidance with the functionality stream.
+14. REVIEW: Confirm documentation, visual baselines, and automation dashboards reflect the new responsive standards before closing Phase 1 tasks.
