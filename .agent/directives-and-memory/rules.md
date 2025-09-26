@@ -40,6 +40,7 @@ Use the right tool for the job:
 - **Turborepo** for monorepo operations
 - **pnpm** for monorepo definitions and package management
 - **Vitest** for testing **runtime logic**
+- **Playwright** for testing **runtime UI**
 - **TypeScript** for compiler time types
 - **ESLint** for syntax correctness, code-style adherence, **architectural boundary adherence**
 - **Prettier** for code-style adherence

@@ -1,23 +1,16 @@
 'use client';
 
 import type { JSX } from 'react';
-import { OakBox, OakHeading, OakTypography } from '@oaknational/oak-components';
+import { OakHeading, OakTypography } from '@oaknational/oak-components';
 import { RedocStandalone } from 'redoc';
+import { DocsWrapper, HeaderSection, PageContainer } from './DocsPage.styles';
 
 export default function ApiDocsPage(): JSX.Element {
   const specUrl = '/api/openapi.json';
 
   return (
-    <OakBox
-      as="main"
-      $display="flex"
-      $flexDirection="column"
-      $gap="space-between-md"
-      $pa="inner-padding-xl"
-      $maxWidth="1000px"
-      $ma="auto"
-    >
-      <OakBox as="header" $display="flex" $flexDirection="column" $gap="space-between-ssx">
+    <PageContainer as="main" $background="bg-primary" $color="text-primary">
+      <HeaderSection as="header">
         <OakHeading tag="h1" $font="heading-4">
           Oak Curriculum Search API
         </OakHeading>
@@ -27,14 +20,9 @@ export default function ApiDocsPage(): JSX.Element {
             {specUrl}
           </a>
         </OakTypography>
-      </OakBox>
+      </HeaderSection>
 
-      <OakBox
-        $ba="border-solid-s"
-        $borderColor="border-neutral-lighter"
-        $borderRadius="border-radius-s"
-        $overflow="hidden"
-      >
+      <DocsWrapper>
         <RedocStandalone
           specUrl={specUrl}
           options={{
@@ -44,7 +32,7 @@ export default function ApiDocsPage(): JSX.Element {
             pathInMiddlePanel: true,
           }}
         />
-      </OakBox>
-    </OakBox>
+      </DocsWrapper>
+    </PageContainer>
   );
 }

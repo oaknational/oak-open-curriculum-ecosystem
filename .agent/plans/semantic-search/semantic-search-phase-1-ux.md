@@ -23,6 +23,23 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
 - ⚠️ Admin and API docs views expose raw data/Swagger scaffolding instead of Oak UI, and mobile views are largely unusable.
 - ⚠️ Health endpoint returns JSON strings; telemetry cards show raw HTTP errors with no recovery path.
 
+### Recent Progress
+
+- Admin shell now delegates its container, grid, and telemetry cards to shared layout tokens; zero-hit dashboard adopts `--app-layout-secondary-column-min-width`.
+- API Docs wrapper consumes the shared container clamp and Oak surfaces, removing bespoke pixel width clamps.
+- Responsive layout architecture updated to align with the refined breakpoint ramp (`bp-xs` → `bp-xxl`).
+- Playwright baseline still contains intentional `test.fail()` markers for work-in-progress assertions (Search xs, Hero lg, Admin md, Admin xxl, Docs xxl, Health xs); Admin `bp-xxl` now passes locally and requires baseline updates.
+- Health surface remains JSON-only; responsive shell debt stays recorded for follow-up.
+- Playwright responsive baseline now asserts Admin/Docs `bp-xxl` container clamps without `test.fail()` guards, producing actionable snapshots.
+- `<meta name="theme-color">` draws from semantic `bg-primary` tokens, guarded by `layout.meta.unit.test.ts` so browser chrome tracks Oak palette changes.
+- 2025-09-27: Introduced `resolveBreakpoint` helper and updated Search layout components to consume semantic breakpoints via styled-components theme; Playwright sampling confirmed `ControlsGrid` now transitions to two columns at `bp-md` while retaining token-driven column clamps.
+
+### Outstanding Audit Notes
+
+- **Health telemetry shell:** The `/healthz` route still renders raw JSON and lacks the Oak container/hero wrappers. Responsive layout work must introduce the shared `PageContainer` and card shells once the UI brief lands.
+- **Playwright coverage:** Search `bp-xs`, Search hero `bp-lg`, Admin `bp-md`, and Health `bp-xs` remain flagged with `test.fail()` until their respective UX tasks land; Admin/Docs `bp-xxl` baselines are now enforced.
+- **Search audit (2025-09-27):** Automated Playwright sampling shows `ControlsGrid` remains single-column at 360 px, 800 px, and 1 200 px (`grid-template-columns` simply equals the container width, `grid-template-areas: "structured" "natural"`). Hero card width tracks the container with `max-inline-size: 447.84px`, so copy overruns the 45 ch goal. Results list stays null because no auto-search runs, highlighting the need for deterministic fixtures when validating column counts.
+
 ## Breakpoint Strategy
 
 All responsive work targets a single breakpoint ramp so every surface behaves consistently across the widths mandated in the plan and Playwright suite.
@@ -68,6 +85,12 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 - Add visual assertions keyed to layout breakpoints (e.g. results column count, stacked vs side-by-side panels).
 - Integrate accessibility checks into the same runs to enforce responsive semantics.
 
+#### Upcoming Verification Criteria
+
+- **Admin `bp-xxl` baseline:** Assert `main` width respects `--app-layout-container-max-width` while exceeding 1 200 px, and confirm axe violations remain at 0.
+- **Theme colour metadata:** Validate `<meta name="theme-color">` reflects semantic `bg-primary` tokens for both themes (`app/layout.meta.unit.test.ts` guards values via `resolveUiColor`).
+- **Baseline artefacts:** Capture before/after Playwright attachments for Search, Admin, and Docs at `bp-xxl` to evidence responsive improvements prior to regenerating snapshots.
+
 ## Deliverables
 
 - Breakpoint-driven responsive architecture shared across Search, Admin, Docs, and Health surfaces.
@@ -87,19 +110,45 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 - **Risk:** Palette tweaks may diverge from Oak web components. **Mitigation:** Document overrides with rationale, seek upstream alignment where possible.
 - **Risk:** Swagger embed updates could break docs build. **Mitigation:** Pair with functionality stream on API docs hosting changes.
 
+## Progress Log
+
+- ACTION/REVIEW 1–2 COMPLETE: Audit captured Admin/Docs literal clamps; Health noted as pending shell work.
+- ACTION/REVIEW 3–4 COMPLETE: Admin page now consumes shared container and telemetry grid tokens; responsive behaviour validated manually.
+- ACTION 5 COMPLETE: Docs wrapper migrated to shared layout tokens; Health override remains on roadmap.
+- ACTION/REVIEW 7–8 COMPLETE: Playwright admin/docs `bp-xxl` baseline updated, snapshots regenerated, and axe checks recorded post-refactor.
+- ACTION/REVIEW 9–10 COMPLETE: Browser chrome metadata sources semantic `bg-primary` tokens with unit tests guarding light/dark parity.
+- Integration note: Theme bridge and token specs extended to include breakpoint variables and inline padding clamps (see responsive architecture doc).
+
 ## Todo (GO cadence)
 
-1. ACTION: Audit Admin, Docs, and Health wrappers for literal pixel widths/gaps, noting where layout tokens or CSS variables should replace bespoke values.
-2. REVIEW: Summarise the audit findings against the responsive architecture plan and confirm priorities with stakeholders.
-3. ACTION: Refactor the Admin page (including zero-hit dashboard grid) to consume the shared layout variables and breakpoint-aware grids.
-4. REVIEW: Validate the Admin page changes through integration/unit tests and responsive spot checks across bp-xs → bp-xxl.
-5. ACTION: Update the Docs page container, Redoc wrapper, and related surfaces to use layout tokens, and prepare Health overrides for the upcoming UI shell.
+1. ACTION: Audit Search hero, controls, and results layouts against the responsive architecture to pinpoint changes required for `bp-xs` through `bp-md`.
+   - Inspect `SearchPageClient.styles.ts` (`PageContainer`, `ControlsGrid`, `SecondaryGrid`, `HeroCard`) alongside `SearchResults.tsx` to record current grid, clamp, and token usage.
+   - At 360 px capture computed `grid-template-columns`/`grid-template-areas` and note that the Playwright `splitColumns` helper currently over-counts `minmax()` entries; decide whether failure is CSS or assertion driven.
+   - Verify hero copy clamp expectations at `bp-lg`, targeting `max-inline-size ≤ 45ch`, and log any token gaps (inline padding, min-width guards) blocking compliance.
+2. REVIEW: Capture the Search audit findings inside this plan and confirm priorities with functionality stakeholders.
+   - Attach Playwright MCP artefacts (`search-controls-bp-xs`, `search-hero-bp-lg`) plus axe JSON summaries; annotate whether failures stem from styling or helper logic.
+   - 2025-09-27 note: inline Playwright script sampled `/` at 360/800/1 200 px and confirmed the media queries are not applying (see Outstanding Audit Notes entry for metrics).
+3. ACTION: Prototype CSS updates for Search forms/results (tokens + media queries) to validate stacking behaviour before shipping.
+   - Ensure `ControlsGrid` collapses to a single column below `bp-md` via `grid-template-areas` and tokenised column clamps.
+   - Test hero layout swaps (e.g. `display: grid` introduced at `bp-lg`) while preserving DOM order, and confirm `SecondaryGrid`/results grids reuse shared min-width + gap tokens.
+   - Capture prototype learnings about additional token requirements before touching production code.
+   - 2025-09-27 note: Search layout now queries breakpoints through `resolveBreakpoint` with theme-backed values; `splitColumns` replacement must still assert behaviour before removing Playwright guards.
+4. REVIEW: Validate the prototype in local viewports and note gaps that block removing `test.fail()` in Playwright.
+   - Exercise 360/800/1 200 px widths in browser and via Playwright MCP, checking axe output and hydration stability.
+5. ACTION: Outline Health shell UX requirements (cards, status messaging, layout tokens) and record dependencies on functionality deliverables.
+   - Map current JSON fields (`status`, `details`) to proposed Oak UI atoms (badges, cards, accordions) and flag any missing semantics needed for accessible summary messaging.
+   - Plan test hooks up front (`data-testid` anchors, `role="status"`, landmark structure) and define how Accept headers could toggle between JSON and UI without cache regressions.
 6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ACTION: Surface light/dark `theme-color` metadata from the semantic palette, adding spec entries if needed so browser chrome tracks Oak tokens.
-8. REVIEW: Confirm the metadata swaps correctly in light/dark mode via targeted tests or Playwright assertions.
-9. ACTION: Extend Playwright baseline specs to assert Admin/Docs responsive behaviour using the new CSS variables across xs/md/lg/xxl widths.
-10. REVIEW: Inspect Playwright output to ensure failures meaningfully capture layout regressions before regeneration.
-11. QUALITY-GATE: After implementing updates, run `pnpm format`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui`.
+7. ACTION: Implement Search page responsive updates (structured/natural forms, secondary panels) using shared layout tokens.
+   - Ship the validated CSS/media query changes, ensuring tokens replace leftover pixel values and inline padding clamps align with the responsive architecture doc.
+8. REVIEW: Run targeted Playwright widths (360/800/1 200 px) to confirm the Search updates behave as intended and capture artefacts.
+   - Store screenshots + axe JSON as part of the REVIEW evidence set.
+9. ACTION: Update the Playwright responsive baseline spec to replace the Search `bp-xs` `test.fail()` guard with concrete assertions.
+   - Refactor or replace `splitColumns` (e.g. assert on `grid-template-areas`) so the test enforces single-column stacking without false positives.
+   - Planned approach (2025-09-27): derive column counts from `gridTemplateAreas` by parsing quoted rows and ensuring each row contains a single token at `bp-xs`, avoiding brittle whitespace splitting on `gridTemplateColumns`.
+10. REVIEW: Rerun `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and inspect Search snapshots, ensuring axe violations remain at 0.
+11. QUALITY-GATE: Run `pnpm format`, `pnpm lint`, `pnpm type-check`, `pnpm -C apps/oak-open-curriculum-semantic-search test`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui`.
 12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. ACTION: Regenerate UX documentation and share the updated layout/token guidance with the functionality stream.
-14. REVIEW: Confirm documentation, visual baselines, and automation dashboards reflect the new responsive standards before closing Phase 1 tasks.
+13. ACTION: Update UX documentation (plan + responsive architecture + context) to log the Search changes and Health shell outline.
+    - Include token adjustments, baseline updates, and Health shell agreements so knowledge stays centralised.
+14. REVIEW: Confirm documentation, visual baselines, and automation dashboards reflect the new responsive standards before closing the workstream.

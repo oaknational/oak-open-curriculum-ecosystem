@@ -150,6 +150,18 @@
       "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
     },
+    "test:ui": {
+      "outputs": [],
+      "cache": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "next.config.ts",
+        "playwright.config.ts"
+      ]
+    },
     "type-check": {
       "dependsOn": [],
       "cache": true,

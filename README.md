@@ -2,15 +2,14 @@
 
 A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworks and libraries that provide AI assistants such as Codex, Claude, and Gemini with access to various data sources:
 
-- Oak Open Curriculum API (read-only access)
-- Notion (read-only access)
+- Oak Open Curriculum API (read-only access), via the Oak Open Curriculum SDK
+- Notion (read-only access) - this is primarily a development and design tool, making it easier to conceptualise what is specific to a given server and what can and should be extracted into shared libraries
 
 ## 🧭 Architecture
 
 This monorepo uses a standard pnpm + Turborepo layout:
 
 - `apps/` – runnable applications (MCP servers)
-- `packages/core/` – shared interfaces, types, and utilities
 - `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
 
 ### Architectural Decision Records (ADRs)
@@ -96,26 +95,6 @@ Alternatively, for local STDIO usage with Cursor or Claude Desktop, see the per�
 }
 ```
 
-### Configure Claude Code (Notion example)
-
-```bash
-# Add the server
-claude mcp add notion -e NOTION_API_KEY="${NOTION_API_KEY}" -- npx oak-notion-mcp
-
-# Verify it's running
-claude mcp list
-```
-
-## Usage Examples (Notion example)
-
-Once configured, you can ask Claude:
-
-- "Show me all databases in my Notion workspace"
-- "Search for pages about 'Q4 planning'"
-- "Get the content of page [page-id]"
-- "Query the Projects database for items with status 'In Progress'"
-- "List all users in the workspace"
-
 ## Development
 
 This is a pnpm workspaces monorepo, using Turbo for task execution.
@@ -147,22 +126,26 @@ pnpm qg     # format-check, type-check, lint, markdownlint-check, test, test:e2e
 
 #### In the root of the monorepo
 
+From the repo root, via Turbo:
+
 ```bash
 # Development
-"build": "turbo run --continue build",
-"clean": "turbo run --continue clean",
-"dev": "turbo run --continue dev",
-"format": "turbo run --continue format -- --cache",
-"lint": "turbo run --continue lint",
-"test": "turbo run --continue test",
-"test:e2e": "turbo run --continue test:e2e",
-"type-check": "turbo run --continue type-check",
+pnpm install        # Setup
+pnpm type-gen       # Type generation
+pnpm build          # Build
+pnpm type-check     # Type check
+pnpm doc-gen        # Documentation generation for public APIs
+pnpm format:root    # Format code with Prettier
+pnpm markdownlint:root    # Markdown lint
+pnpm lint -- --fix  # Lint
+pnpm test           # Unit and integration tests
+pnpm test:ui        # UI tests
+pnpm test:e2e       # E2E tests
+pnpm dev:smoke      # Local smoke tests
+pnpm check          # Clean all build products, then run all of the above
 
-# Analysis
-pnpm analyze      # Run all analysis tools
+pnpm outdated       # Check for outdated dependencies
 ```
-
-If you want to deal with automatically fixable linting issues, run `pnpm lint -- --fix` in the root of the monorepo, or `pnpm lint --fix` in a workspace.
 
 ### Making the Most of Agentic AI Assistants
 

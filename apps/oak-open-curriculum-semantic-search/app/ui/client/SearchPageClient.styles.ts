@@ -1,6 +1,7 @@
 import { OakBox, OakTypography } from '@oaknational/oak-components';
-import styledComponents from 'styled-components';
+import styledComponents, { css } from 'styled-components';
 import { getAppTheme } from '../themes/app-theme-helpers';
+import { resolveBreakpoint } from '../shared/breakpoints';
 
 export const PageContainer = styledComponents(OakBox)`
   display: flex;
@@ -16,9 +17,11 @@ export const PageContainer = styledComponents(OakBox)`
   );
   padding-block: var(--app-gap-cluster);
 
-  @media (min-width: var(--app-bp-lg)) {
-    padding-block: var(--app-gap-section);
-  }
+  ${({ theme }) => css`
+    @media (min-width: ${resolveBreakpoint(theme, 'lg')}) {
+      padding-block: var(--app-gap-section);
+    }
+  `}
 `;
 
 export const ControlsGrid = styledComponents(OakBox)`
@@ -29,18 +32,24 @@ export const ControlsGrid = styledComponents(OakBox)`
     'structured'
     'natural';
 
-  @media (min-width: var(--app-bp-md)) {
-    grid-template-columns:
-      minmax(var(--app-layout-control-column-min-width), 1.25fr)
-      minmax(var(--app-layout-secondary-column-min-width), 1fr);
-    grid-template-areas: 'structured natural';
-  }
+  ${({ theme }) => {
+    const md = resolveBreakpoint(theme, 'md');
+    const xl = resolveBreakpoint(theme, 'xl');
+    return css`
+      @media (min-width: ${md}) {
+        grid-template-columns:
+          minmax(var(--app-layout-control-column-min-width), 1.25fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'structured natural';
+      }
 
-  @media (min-width: var(--app-bp-xl)) {
-    grid-template-columns:
-      minmax(var(--app-layout-control-column-min-width), 1.5fr)
-      minmax(var(--app-layout-secondary-column-min-width), 1fr);
-  }
+      @media (min-width: ${xl}) {
+        grid-template-columns:
+          minmax(var(--app-layout-control-column-min-width), 1.5fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+      }
+    `;
+  }}
 `;
 
 export const SecondaryGrid = styledComponents(OakBox)`
@@ -52,17 +61,23 @@ export const SecondaryGrid = styledComponents(OakBox)`
     'suggestions'
     'facets';
 
-  @media (min-width: var(--app-bp-md)) {
-    grid-template-columns:
-      minmax(var(--app-layout-secondary-column-min-width), 1fr)
-      minmax(var(--app-layout-secondary-column-min-width), 1fr);
-    grid-template-areas: 'suggestions facets';
-  }
+  ${({ theme }) => {
+    const md = resolveBreakpoint(theme, 'md');
+    const xl = resolveBreakpoint(theme, 'xl');
+    return css`
+      @media (min-width: ${md}) {
+        grid-template-columns:
+          minmax(var(--app-layout-secondary-column-min-width), 1fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'suggestions facets';
+      }
 
-  @media (min-width: var(--app-bp-xl)) {
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
-  }
+      @media (min-width: ${xl}) {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
+      }
+    `;
+  }}
 `;
 
 export const HeroCard = styledComponents(OakBox)`

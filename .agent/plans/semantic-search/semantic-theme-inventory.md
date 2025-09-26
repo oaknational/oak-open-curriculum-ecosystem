@@ -1,5 +1,7 @@
 # Semantic Theme Inventory (Phase 1)
 
+_Last reviewed: 2025-09-26 (post Admin/Docs responsive refactor)_
+
 ## Oak Components exports
 
 - `oakDefaultTheme`: baseline `OakTheme` object containing 71 `uiColors` role tokens.
@@ -29,18 +31,16 @@ Use https://components.thenational.academy/?path=/docs/introduction--docs as the
 - _Design Tokens → Spacing_: shows `all-spacing-*`, `space-between-*`, and `inner-padding-*` usage patterns.
 - _Design Tokens → Borders_: covers radius tokens and border utilities.
 
-## Immediate observations
+## Current implementation notes
 
-- Current semantic themes should cease inventing bespoke spacing/typography scales; reuse the Oak ramps and expose helpers that translate token names to CSS values for custom surfaces.
-- The light theme can default to `oakDefaultTheme.uiColors` and override a minimal subset (links, emphasis backgrounds). The dark theme requires a full map (no `Partial`) but should continue to speak in Oak colour tokens wherever possible.
-- Additional app-specific tokens (e.g. `app.colors.headerBorder`) should either:
-  1. Alias an Oak colour token; or
-  2. Live in a constant spec with a derived type/guard, clearly documenting why an Oak token is insufficient.
-- Typography enhancements from the Phase 1 backlog should be expressed via `OakFontToken`s (e.g. `heading-2`, `body-4`) and font family constants drawn from the Oak typography guidance (Lexend primary, Work Sans secondary).
-- Spacing variables emitted through `ThemeCssVars` should map Oak token identifiers to rem values so layout components can continue using token names.
+- Light/dark `semanticThemeSpec` entries now provide full `OakUiRoleToken` coverage via `buildUiColorMap`, overriding only the tokens that diverge from `oakDefaultTheme` (links, emphasis backgrounds, neutrals).
+- `sharedAppSpec` captures app-specific layout guidance: container clamp `clamp(20rem, 92vw, 78rem)`, control/secondary column minimums (`20rem`/`18rem`), inline padding aliases (`space-between-l`/`space-between-xl`), and the `bp-xs` → `bp-xxl` breakpoint ramp.
+- App typography draws directly from Oak font tokens (Lexend/Work Sans) with an explicit italic quote entry; spacing/radii resolve through Oak spacing ramps in the theme resolver.
+- Theme bridge exposes CSS variables such as `--app-layout-inline-padding-base`, `--app-bp-xxl`, `--app-color-brand-primary`, and the responsive refactor now consumes those tokens for Admin, Docs, and dashboard components.
+- Browser theme colours use the semantic `bg-primary` tokens (guarded by `layout.meta.unit.test.ts`) so OS chrome tracks the palette changes automatically.
 
-## Next steps
+## Outstanding tasks & watchpoints
 
-1. Model `semanticThemeSpec` with explicit `uiColors` maps for light/dark (full `OakUiRoleToken` coverage) and an app-specific section referencing Oak spacing/typography tokens.
-2. Provide derived types (e.g. `type SemanticMode = keyof typeof semanticThemeSpec`) and guards to ensure tests can flag drift.
-3. Update `ThemeBridgeProvider` helpers to translate Oak token names into CSS variables, keeping the mapping in lockstep with the spec.
+1. Continue auditing Search/Health components to ensure they consume the exported CSS variables instead of bespoke pixel values.
+2. Track any Oak token gaps encountered during dark-mode refinement (e.g. icon accents) and feed them into the inventory for potential upstream requests.
+3. Consider extending automated checks to compare semantic palette values against Oak contrast guidance once Health UI surfaces land.

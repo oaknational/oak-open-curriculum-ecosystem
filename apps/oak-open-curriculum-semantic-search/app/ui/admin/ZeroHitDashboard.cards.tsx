@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { OakBox, OakTypography } from '@oaknational/oak-components';
+import styledComponents from 'styled-components';
 import type { SummarySnapshot } from './zero-hit-dashboard.parse';
 import type { ZeroHitSummaryCard } from './ZeroHitDashboard.types';
 
@@ -27,14 +28,20 @@ export function buildCards(summary: SummarySnapshot | undefined | null): ZeroHit
   ];
 }
 
+const SummaryGridContainer = styledComponents(OakBox)`
+  display: grid;
+  row-gap: var(--app-gap-section);
+  column-gap: var(--app-gap-grid);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(var(--app-layout-secondary-column-min-width), 1fr)
+  );
+`;
+
 /** Presents telemetry summary cards in an Oak-themed responsive grid. */
 export function SummaryGrid({ cards }: { cards: ZeroHitSummaryCard[] }): ReactElement {
   return (
-    <OakBox
-      $display="grid"
-      $gap="space-between-sm"
-      $gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))"
-    >
+    <SummaryGridContainer>
       {cards.map((card) => (
         <OakBox
           key={card.label}
@@ -51,6 +58,6 @@ export function SummaryGrid({ cards }: { cards: ZeroHitSummaryCard[] }): ReactEl
           </OakTypography>
         </OakBox>
       ))}
-    </OakBox>
+    </SummaryGridContainer>
   );
 }

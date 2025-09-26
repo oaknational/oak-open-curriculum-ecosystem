@@ -1,5 +1,7 @@
 # Semantic Theme Spec – Design Notes
 
+_Last reviewed: 2025-09-26 (post Admin/Docs responsive refactor)_
+
 ## Goals
 
 - Provide a single `semanticThemeSpec` constant that describes both modes (`light`, `dark`).
@@ -22,13 +24,21 @@ const semanticThemeSpec = {
     app: {
       ...sharedAppSpec,
       colors: {
-        headerBorder: 'grey30',
+        headerBorder: 'oakGreen',
         borderSubtle: 'grey20',
         textMuted: 'grey60',
         errorText: 'red',
-        pageNote: 'navy120',
-        docsNote: 'navy110',
+        pageNote: 'oakGreen',
+        docsNote: 'oakGreen',
         surfaceEmphasisBg: 'rgba(0, 0, 0, 0.06)',
+        surfaceCard: 'white',
+        surfaceRaised: 'grey20',
+      },
+      palette: {
+        brandPrimary: oakColorTokens.oakGreen,
+        brandPrimaryDark: '#0f381b',
+        brandPrimaryDeep: '#144d24',
+        brandPrimaryBright: '#35a04c',
       },
     },
   },
@@ -42,13 +52,21 @@ const semanticThemeSpec = {
     app: {
       ...sharedAppSpec,
       colors: {
-        headerBorder: 'navy110',
+        headerBorder: 'oakGreen',
         borderSubtle: 'navy',
         textMuted: 'grey30',
         errorText: 'amber50',
-        pageNote: 'white',
-        docsNote: 'grey20',
+        pageNote: 'mint50',
+        docsNote: 'mint50',
         surfaceEmphasisBg: 'rgba(255, 255, 255, 0.08)',
+        surfaceCard: 'navy110',
+        surfaceRaised: 'navy',
+      },
+      palette: {
+        brandPrimary: oakColorTokens.oakGreen,
+        brandPrimaryDark: '#82d88a',
+        brandPrimaryDeep: '#0b2a16',
+        brandPrimaryBright: '#6ed680',
       },
     },
   },
@@ -84,8 +102,8 @@ function createTheme(mode: SemanticMode): AppTheme {
 }
 ```
 
-- `resolveAppTokens` converts Oak token identifiers into runtime values using `oakAllSpacingTokens`, `oakInnerPaddingTokens`, `oakBorderRadiusTokens`, `oakFontTokens`, etc.
-- Expose a runtime helper for tests: `assertHasAllUiRoleTokens(spec.uiColors)`.
+- `resolveAppTokens` converts Oak token identifiers into runtime values using `oakAllSpacingTokens`, `oakInnerPaddingTokens`, `oakBorderRadiusTokens`, `oakFontTokens`, etc., and now emits layout-specific variables (container clamp, inline padding, breakpoints) consumed by Search/Admin/Docs responsive grids.
+- Unit tests (`theme-factory.unit.test.ts`, `bridge.integration.test.tsx`) assert that CSS variables (`--app-layout-inline-padding-base`, `--app-bp-xxl`, brand palette colors) match the spec.
 
 ## Testing strategy
 
@@ -97,7 +115,6 @@ function createTheme(mode: SemanticMode): AppTheme {
 
 ## Follow-up tasks
 
-- Incorporate contrast checks (e.g. using WCAG formulas) for key text/background pairs in dark mode.
-- Document any remaining Oak gaps (e.g. missing tonal variants) in `.agent/plans/semantic-search/semantic-theme-inventory.md` for potential upstream requests.
-- Extend the theme bridge/global styles so that `bg-primary`/`text-primary` automatically apply to `html`, `body`, and layout wrappers—current Oak global reset does not reference theme tokens.
-- Capture guidance for downstream apps on consuming the spec (global styles, OakBox props, CSS variable usage) in project docs.
+- Extend contrast checks (e.g. via axe or custom assertions) for critical text/background pairs, especially once Search hero colours shift.
+- Capture any Oak token gaps (dark-mode icons, alert states) in the theme inventory for upstream discussion.
+- Document how downstream apps should consume the exported CSS variables and palette tokens in shared developer docs once the Search responsive refactor lands.

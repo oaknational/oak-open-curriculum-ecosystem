@@ -108,6 +108,12 @@ Expose these as CSS variables (`--app-bp-xs` … `--app-bp-xxl`) via the theme b
 - Playwright MCP suite captures screenshots and layout assertions at 360 (xs), 800 (md), 1 200 (lg), and 2 000 (xxl) widths. Add selectors per section (`data-testid="search-hero"`, `"admin-run-panel"`, `"docs-spec-wrapper"`, `"health-status-card"`).
 - Integrate axe checks into these runs to ensure heading hierarchy, landmarks, and `role="status"` regions persist.
 
+### Verification Criteria Snapshot (Phase 1)
+
+- **Admin `bp-xxl` baseline:** Assert `main` width respects `--app-layout-container-max-width` while exceeding 1 200 px, and confirm axe violations remain at 0.
+- **Theme colour metadata:** `<meta name="theme-color">` reflects semantic `bg-primary` tokens for light/dark modes (`app/layout.meta.unit.test.ts` guards values via `resolveUiColor`).
+- **Baseline artefacts:** Capture before/after Playwright attachments for Search, Admin, and Docs at `bp-xxl` to evidence responsive improvements prior to regenerating snapshots.
+
 ## Implementation Notes
 
 1. Extend `semanticThemeSpec` with breakpoint and inline padding entries; update the resolver and bridge to emit new CSS variables.
@@ -115,5 +121,6 @@ Expose these as CSS variables (`--app-bp-xs` … `--app-bp-xxl`) via the theme b
 3. Replace hard-coded min-widths (`20rem`, `900px`, etc.) with token-driven clamps defined above.
 4. Update integration tests (`ThemeBridgeProvider`, `SearchPageClient.integration.test.tsx`) to assert new variables and responsive behaviour.
 5. Add Playwright MCP scripts that exercise each breakpoint, capturing baselines before implementing responsive fixes.
+6. Lock Admin/Docs `bp-xxl` baselines in `tests/visual/responsive-baseline.spec.ts` (no `test.fail()` guards) and guard browser chrome metadata in `app/layout.meta.unit.test.ts`.
 
 Following this playbook keeps semantic tokens as the single source of truth and resolves the rigid grid issues observed in the 360 px and 2 000 px snapshots.

@@ -65,15 +65,21 @@ These documents must be read.
 
 ## Development Commands
 
+From the repo root, via Turbo:
+
 ```bash
 pnpm install        # Setup
-pnpm format         # Format code
-pnpm build          # Build
-pnpm lint           # Lint
-pnpm test           # Test
-pnpm test:e2e       # E2E test
-pnpm type-check     # Type check
 pnpm type-gen       # Type generation
+pnpm build          # Build
+pnpm type-check     # Type check
+pnpm format:root    # Format code
+pnpm markdownlint:root    # Markdown lint
+pnpm lint -- --fix  # Lint
+pnpm test           # Unit and integration tests
+pnpm test:ui        # UI tests
+pnpm test:e2e       # E2E tests
+pnpm dev:smoke      # Local smoke tests
+pnpm check          # Clean all build products, then run all of the above
 ```
 
 ## Architectural Understanding

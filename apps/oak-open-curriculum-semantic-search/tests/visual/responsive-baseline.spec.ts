@@ -113,7 +113,6 @@ test.describe('Admin page responsive regressions', () => {
     test.use({ viewport: VIEWPORTS.bpXxl });
 
     test('Admin main width expands with viewport', async ({ page }, testInfo) => {
-      test.fail();
       await page.goto('/admin');
       await expect(page.getByRole('heading', { level: 1, name: 'Admin tools' })).toBeVisible();
 
@@ -125,6 +124,7 @@ test.describe('Admin page responsive regressions', () => {
       const axe = await captureAccessibility(page, 'admin-main-bp-xxl', testInfo);
 
       expect.soft(mainWidth).toBeGreaterThanOrEqual(1_200);
+      expect.soft(mainWidth).toBeLessThanOrEqual(1_260);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });
@@ -137,7 +137,6 @@ test.describe('Docs page responsive regressions', () => {
     test.use({ viewport: VIEWPORTS.bpXxl });
 
     test('API docs container remains centred and wide enough', async ({ page }, testInfo) => {
-      test.fail();
       await page.goto('/api/docs');
       await expect(
         page.getByRole('heading', { level: 1, name: 'Oak Curriculum Search API' }),
@@ -151,6 +150,7 @@ test.describe('Docs page responsive regressions', () => {
       const axe = await captureAccessibility(page, 'docs-main-bp-xxl', testInfo);
 
       expect.soft(mainWidth).toBeGreaterThanOrEqual(1_200);
+      expect.soft(mainWidth).toBeLessThanOrEqual(1_260);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });

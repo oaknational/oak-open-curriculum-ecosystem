@@ -2,10 +2,11 @@
 
 import { type JSX } from 'react';
 import { OakBox, OakTypography, OakUL } from '@oaknational/oak-components';
-import styledComponents from 'styled-components';
+import styledComponents, { css } from 'styled-components';
 import { z } from 'zod';
 import type { SearchMeta } from './client/useSearchController';
 import { renderSafeHighlight } from './searchResultsHighlight';
+import { resolveBreakpoint } from './shared/breakpoints';
 
 function ResultItem({
   title,
@@ -92,13 +93,19 @@ const ResultsGrid = styledComponents(OakUL)`
   column-gap: var(--app-gap-grid);
   grid-template-columns: minmax(0, 1fr);
 
-  @media (min-width: var(--app-bp-md)) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  ${({ theme }) => {
+    const md = resolveBreakpoint(theme, 'md');
+    const xl = resolveBreakpoint(theme, 'xl');
+    return css`
+      @media (min-width: ${md}) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
 
-  @media (min-width: var(--app-bp-xl)) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+      @media (min-width: ${xl}) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    `;
+  }}
 `;
 
 export function SearchResults({

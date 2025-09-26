@@ -1,8 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { SearchResults } from './SearchResults';
 import type { SearchMeta } from './client/useSearchController';
+import { createLightTheme } from './themes/light';
 
 describe('SearchResults', () => {
   const sampleMeta: SearchMeta = {
@@ -22,12 +24,18 @@ describe('SearchResults', () => {
     highlights: ['<em>decimal</em> place value'],
   };
 
-  it('renders totals and timing information from meta', () => {
-    render(
-      <OakThemeProvider theme={oakDefaultTheme}>
-        <SearchResults results={[sampleResult]} meta={sampleMeta} />
-      </OakThemeProvider>,
+  function renderWithProviders(results: unknown[], meta?: SearchMeta) {
+    return render(
+      <StyledThemeProvider theme={createLightTheme()}>
+        <OakThemeProvider theme={oakDefaultTheme}>
+          <SearchResults results={results} meta={meta} />
+        </OakThemeProvider>
+      </StyledThemeProvider>,
     );
+  }
+
+  it('renders totals and timing information from meta', () => {
+    renderWithProviders([sampleResult], sampleMeta);
 
     expect(screen.getByText('1 result for lessons')).toBeInTheDocument();
     expect(screen.getByText('Took 12ms')).toBeInTheDocument();
@@ -37,11 +45,7 @@ describe('SearchResults', () => {
   it('announces when the query timed out', () => {
     const meta: SearchMeta = { ...sampleMeta, timedOut: true, took: 15 };
 
-    render(
-      <OakThemeProvider theme={oakDefaultTheme}>
-        <SearchResults results={[sampleResult]} meta={meta} />
-      </OakThemeProvider>,
-    );
+    renderWithProviders([sampleResult], meta);
 
     expect(
       screen.getByText('Took 15ms. Results may be incomplete (timed out).'),
@@ -49,11 +53,7 @@ describe('SearchResults', () => {
   });
 
   function renderResults(meta: SearchMeta = sampleMeta) {
-    return render(
-      <OakThemeProvider theme={oakDefaultTheme}>
-        <SearchResults results={[sampleResult]} meta={meta} />
-      </OakThemeProvider>,
-    );
+    return renderWithProviders([sampleResult], meta);
   }
 
   function queryRequired<T extends Element>(container: HTMLElement, selector: string): T {

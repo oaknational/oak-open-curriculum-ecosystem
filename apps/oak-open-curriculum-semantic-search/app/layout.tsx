@@ -55,10 +55,14 @@ export const metadata: Metadata = {
   },
 };
 
+// Colours derived from semantic theme `bg-primary` tokens; see layout.meta.unit.test.ts for guard rails.
+const LIGHT_THEME_COLOR = '#ebfbeb';
+const DARK_THEME_COLOR = '#1b1b1b';
+
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'rgb(190 242 189)' },
-    { media: '(prefers-color-scheme: dark)', color: '#0b1021' },
+    { media: '(prefers-color-scheme: light)', color: LIGHT_THEME_COLOR },
+    { media: '(prefers-color-scheme: dark)', color: DARK_THEME_COLOR },
   ],
 } as const;
 

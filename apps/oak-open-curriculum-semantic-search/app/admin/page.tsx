@@ -4,6 +4,14 @@ import { Fragment, type JSX } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import { useStream } from '../lib/useStream';
 import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
+import {
+  ActionSection,
+  ActionsGrid,
+  IntroSection,
+  PageContainer,
+  QuickLinksSection,
+  TelemetrySection,
+} from './AdminPage.styles';
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
   const { state, text, run } = useStream(url, method ?? 'POST');
@@ -57,64 +65,61 @@ function AdminSection({
   children: JSX.Element;
 }): JSX.Element {
   return (
-    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-sm">
+    <ActionSection as="section">
       <OakHeading tag="h2" $font="heading-6">
         {heading}
       </OakHeading>
       {children}
-    </OakBox>
+    </ActionSection>
   );
 }
 
 export default function AdminPage(): JSX.Element {
   return (
-    <OakBox
-      as="main"
-      $maxWidth="900px"
-      $ma="auto"
-      $pa="inner-padding-xl"
-      $display="flex"
-      $flexDirection="column"
-      $gap="space-between-xl"
-    >
+    <PageContainer as="main" $background="bg-primary" $color="text-primary">
       <AdminIntro />
       <QuickLinks />
 
-      <AdminSection heading="Elasticsearch setup">
-        <StreamOutput url="/api/admin/elastic-setup" method="POST" />
-      </AdminSection>
+      <ActionsGrid>
+        <AdminSection heading="Elasticsearch setup">
+          <StreamOutput url="/api/admin/elastic-setup" method="POST" />
+        </AdminSection>
 
-      <AdminSection heading="Index Oak content">
-        <StreamOutput url="/api/admin/index-oak" method="GET" />
-      </AdminSection>
+        <AdminSection heading="Index Oak content">
+          <StreamOutput url="/api/admin/index-oak" method="GET" />
+        </AdminSection>
 
-      <AdminSection heading="Rebuild rollup">
-        <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
-      </AdminSection>
+        <AdminSection heading="Rebuild rollup">
+          <StreamOutput url="/api/admin/rebuild-rollup" method="GET" />
+        </AdminSection>
 
-      <AdminSection heading="Zero-hit telemetry">
-        <ZeroHitDashboard />
-      </AdminSection>
-    </OakBox>
+        <TelemetrySection as="section">
+          <OakHeading tag="h2" $font="heading-6">
+            Zero-hit telemetry
+          </OakHeading>
+          <ZeroHitDashboard />
+        </TelemetrySection>
+      </ActionsGrid>
+    </PageContainer>
   );
 }
 
 function AdminIntro(): JSX.Element {
   return (
-    <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx">
+    <IntroSection as="section">
       <OakHeading tag="h1" $font="heading-4">
         Admin tools
       </OakHeading>
       <OakTypography as="p" $font="body-3" $color="text-subdued">
         Run indexing and rollup tasks. Output streams below each action.
       </OakTypography>
-    </OakBox>
+    </IntroSection>
   );
 }
 
 function QuickLinks(): JSX.Element {
   return (
-    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-xs">
+    <QuickLinksSection as="section">
       <OakHeading tag="h2" $font="heading-6">
         Quick links
       </OakHeading>
@@ -126,6 +131,6 @@ function QuickLinks(): JSX.Element {
         SDK parity tests: POST <code>/api/sdk/search-lessons</code>, POST{' '}
         <code>/api/sdk/search-transcripts</code>
       </OakTypography>
-    </OakBox>
+    </QuickLinksSection>
   );
 }
