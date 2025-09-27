@@ -169,12 +169,16 @@ describe('semantic theme contrast', () => {
     const resolved = resolveAppTokens(mode);
     const triples = contrastTriples[mode];
 
-    for (const { context, text, background, border } of triples) {
+    for (const triple of triples) {
+      const { context, text, background, border } = triple;
       const textHex = expectHexColor(resolved.colors[text]);
       const backgroundHex = expectHexColor(resolved.colors[background]);
       const borderHex = expectHexColor(resolved.palette[border]);
 
-      expect(contrastRatio(textHex, backgroundHex)).toBeGreaterThanOrEqual(4.5);
+      expect(
+        contrastRatio(textHex, backgroundHex),
+        `${mode} ${context} text`,
+      ).toBeGreaterThanOrEqual(4.5);
       expect(borderHex).toMatch(/^#[0-9a-f]{6}$/i);
     }
 

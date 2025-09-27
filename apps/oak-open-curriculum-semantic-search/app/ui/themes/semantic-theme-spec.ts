@@ -158,6 +158,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
         surfaceEmphasisBg: 'rgba(0, 0, 0, 0.06)',
         surfaceCard: 'white',
         surfaceRaised: 'grey20',
+        methods: 'brand-mint-200',
       },
       palette: {
         brandPrimary: 'brand-forest-500',
@@ -211,6 +212,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
         surfaceEmphasisBg: 'rgba(255, 255, 255, 0.08)',
         surfaceCard: 'navy120',
         surfaceRaised: 'navy',
+        methods: 'brand-forest-900',
       },
       // These need better names, dark is dark on light mode,
       // but needs to be light on dark mode, so accent, secondary, and so on.

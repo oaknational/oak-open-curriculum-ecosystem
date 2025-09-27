@@ -1,5 +1,6 @@
 import type {
   OakBorderRadiusToken,
+  OakColorToken,
   OakFontToken,
   OakInnerPaddingToken,
   OakSpaceBetweenToken,
@@ -69,7 +70,8 @@ export interface SemanticAppSpec {
     | 'pageNote'
     | 'docsNote'
     | 'surfaceCard'
-    | 'surfaceRaised',
+    | 'surfaceRaised'
+    | 'methods',
     SemanticColorToken
   > & {
     readonly surfaceEmphasisBg: string;
@@ -84,6 +86,6 @@ export interface SemanticAppSpec {
 
 export interface SemanticThemeDefinition {
   readonly name: string;
-  readonly uiColors: Record<OakUiRoleToken, SemanticColorToken>;
+  readonly uiColors: Record<OakUiRoleToken, OakColorToken>;
   readonly app: SemanticAppSpec;
 }

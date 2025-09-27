@@ -124,7 +124,7 @@ function SearchHero(): JSX.Element {
             Hybrid
           </AccentTypography>
           <OakTypography as="span" $font="heading-3">
-            Search
+            Search <em>Alpha</em>
           </OakTypography>
         </OakBox>
       </OakTypography>

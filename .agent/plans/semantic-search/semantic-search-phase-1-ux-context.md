@@ -18,7 +18,7 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
 - Navigation and hero layouts still waste space on phones; Health surface remains raw JSON awaiting UI shell brief.
 - Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
-- Health shell outline drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle plan to serve JSON/UI without cache regressions.
+- Platform status page design drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle so users can consume UI or raw JSON while `/healthz` remains an API endpoint.
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
@@ -29,7 +29,7 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex (`resolveUiColor`), the page container uses the neutral background token with elevated card styling, and integration coverage asserts the options payload stays in-valid colour space (`app/api/docs/page.integration.test.tsx`).
 - 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and Playwright regression coverage (`Admin page responsive regressions`) now captures screenshots plus overflow/axe assertions across lg/md/xxl viewports.
 - 2025-09-29: Full `pnpm qg` suite passes following the docs/admin fixes and the markdownlint newline correction; continue to monitor Notion MCP E2E flake potential but no failures observed in the latest run.
-- 2025-09-30: Search hero accent text keeps its brand colour but the 2 rem fully opaque text shadow fails WCAG contrast when sampled against the white hero card; we are iterating on a translucent variant in `SearchPageClient.styles.ts` while rerunning `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` to prove the glow effect remains covered by useful, passing UI tests and axe snapshots.
+- 2025-09-30: Hero accent text contrast iteration is paused until the fixture/toggle work lands; revisit once deterministic data paths are complete.
 
 ## Tooling & References
 

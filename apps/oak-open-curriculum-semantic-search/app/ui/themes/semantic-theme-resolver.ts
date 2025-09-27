@@ -82,7 +82,8 @@ export interface ResolvedAppTokens {
     | 'pageNote'
     | 'docsNote'
     | 'surfaceCard'
-    | 'surfaceRaised',
+    | 'surfaceRaised'
+    | 'methods',
     string
   > & {
     readonly surfaceEmphasisBg: string;
@@ -184,6 +185,7 @@ function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colo
     surfaceCard: resolveColorToken(spec.surfaceCard),
     surfaceRaised: resolveColorToken(spec.surfaceRaised),
     surfaceEmphasisBg: spec.surfaceEmphasisBg,
+    methods: resolveColorToken(spec.methods),
   };
 }
 

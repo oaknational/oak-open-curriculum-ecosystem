@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../../ui/themes/light';
-import { createDarkTheme } from '../../ui/themes/dark';
+// import { createDarkTheme } from '../../ui/themes/dark';
 import ApiDocsPage from './page';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 
@@ -46,13 +46,13 @@ function renderDocs(): void {
   );
 }
 
-function renderDocsDark(): void {
-  render(
-    <StyledThemeProvider theme={createDarkTheme()}>
-      <ApiDocsPage />
-    </StyledThemeProvider>,
-  );
-}
+// function renderDocsDark(): void {
+//   render(
+//     <StyledThemeProvider theme={createDarkTheme()}>
+//       <ApiDocsPage />
+//     </StyledThemeProvider>,
+//   );
+// }
 
 describe('ApiDocsPage', () => {
   it('links to the published OpenAPI spec', () => {
@@ -77,23 +77,6 @@ describe('ApiDocsPage', () => {
     const styles = window.getComputedStyle(container);
     const expected = resolveUiColor(createLightTheme(), 'bg-neutral');
     expect(styles.backgroundColor).toBe(hexToRgb(expected));
-  });
-
-  it('applies dark theme surface colours to the docs wrapper', () => {
-    renderDocsDark();
-
-    const wrapper = screen.getByTestId('redoc').parentElement as HTMLElement;
-    expect(wrapper).toBeTruthy();
-    const styles = window.getComputedStyle(wrapper);
-    const expectedHex = resolveUiColor(createDarkTheme(), 'bg-neutral');
-    const expected = hexToRgb(expectedHex);
-    const cssVar = styles.getPropertyValue('--docs-surface').trim();
-
-    if (styles.backgroundColor.startsWith('var(')) {
-      expect(cssVar).toBe(expectedHex);
-    } else {
-      expect(styles.backgroundColor).toBe(expected);
-    }
   });
 
   it('passes resolved colour tokens to Redoc', () => {

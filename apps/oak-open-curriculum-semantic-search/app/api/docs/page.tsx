@@ -36,7 +36,7 @@ function DocsHeader({ specUrl }: { specUrl: string }): JSX.Element {
   return (
     <HeaderSection as="header">
       <OakHeading tag="h1" $font="heading-4">
-        Oak Curriculum Search API
+        Oak Curriculum Search API <em>Alpha</em>
       </OakHeading>
       <OakTypography as="p" $font="body-3">
         OpenAPI schema:{' '}
@@ -65,7 +65,7 @@ function buildRedocOptions(theme: ReturnType<typeof useRedocTheme>) {
 function createRedocThemeConfig(appTheme: ReturnType<typeof getAppTheme>) {
   const surfaces = resolveDocsSurfaces(appTheme);
   const palette = createRedocColorPalette(appTheme);
-  const typography = createRedocTypography(appTheme);
+  const typography = createRedocTypography(appTheme, surfaces);
   const textPrimary = palette.text.primary;
   const background = {
     main: surfaces.surface,
@@ -86,12 +86,20 @@ function createRedocThemeConfig(appTheme: ReturnType<typeof getAppTheme>) {
     },
     codeBlock: {
       backgroundColor: surfaces.surfaceAlt,
-      textColor: textPrimary,
     },
     schema: {
       linesColor: surfaces.border,
       defaultDetailsWidth: '33%',
-      labelsTextColor: textPrimary,
+      labelsTextColor: palette.text.secondary,
+      typeNameColor: textPrimary,
+      typeTitleColor: textPrimary,
+      requireLabelColor: appTheme.app.colors.errorText,
+      nestingSpacing: '1.25rem',
+      nestedBackground: surfaces.surfaceAlt,
+      arrow: {
+        size: '0.75rem',
+        color: textPrimary,
+      },
     },
   };
 }
@@ -99,25 +107,91 @@ function createRedocThemeConfig(appTheme: ReturnType<typeof getAppTheme>) {
 function createRedocColorPalette(appTheme: ReturnType<typeof getAppTheme>) {
   const textPrimary = resolveUiColor(appTheme, 'text-primary');
   const textSecondary = resolveUiColor(appTheme, 'text-subdued');
+
   return {
-    primary: {
-      main: appTheme.app.palette.brandPrimaryDeep,
-    },
+    tonalOffset: 0,
+    primary: createPrimaryPalette(appTheme),
+    border: createBorderPalette(appTheme),
     text: {
       primary: textPrimary,
       secondary: textSecondary,
     },
-    http: {
-      get: appTheme.app.palette.brandPrimaryBright,
-      post: appTheme.app.palette.brandPrimaryDeep,
-      delete: appTheme.app.colors.errorText,
-      put: appTheme.app.palette.brandPrimaryDeep,
-      options: appTheme.app.palette.brandPrimaryDeep,
+    http: createHttpPalette(appTheme),
+    responses: createResponsePalette(appTheme, textPrimary),
+  };
+}
+
+function createPrimaryPalette(appTheme: ReturnType<typeof getAppTheme>) {
+  const surfaceCard = appTheme.app.colors.surfaceCard;
+  return {
+    main: appTheme.app.palette.brandPrimary,
+    dark: appTheme.app.palette.brandPrimaryDeep,
+    light: appTheme.app.palette.brandPrimaryBright,
+    contrastText: surfaceCard,
+  };
+}
+
+function createBorderPalette(appTheme: ReturnType<typeof getAppTheme>) {
+  return {
+    light: appTheme.app.colors.borderSubtle,
+    dark: appTheme.app.colors.borderAccent,
+  };
+}
+
+function createHttpPalette(appTheme: ReturnType<typeof getAppTheme>) {
+  const primaryDark = appTheme.app.palette.brandPrimaryDark;
+  const primaryDeep = appTheme.app.palette.brandPrimaryDeep;
+  const primaryBright = appTheme.app.palette.brandPrimaryBright;
+
+  return {
+    get: primaryBright,
+    post: primaryDeep,
+    delete: appTheme.app.colors.errorText,
+    put: primaryDark,
+    options: primaryDark,
+    patch: primaryDark,
+    link: primaryDark,
+    head: primaryDark,
+    basic: primaryDark,
+  };
+}
+
+function createResponsePalette(appTheme: ReturnType<typeof getAppTheme>, textPrimary: string) {
+  const surfaceCard = appTheme.app.colors.surfaceCard;
+  const primaryDark = appTheme.app.palette.brandPrimaryDark;
+  const primaryDeep = appTheme.app.palette.brandPrimaryDeep;
+
+  return {
+    success: {
+      color: primaryDeep,
+      backgroundColor: surfaceCard,
+      tabTextColor: textPrimary,
+    },
+    error: {
+      color: appTheme.app.colors.errorText,
+      backgroundColor: surfaceCard,
+      tabTextColor: textPrimary,
+    },
+    redirect: {
+      color: primaryDark,
+      backgroundColor: surfaceCard,
+      tabTextColor: textPrimary,
+    },
+    info: {
+      color: primaryDark,
+      backgroundColor: surfaceCard,
+      tabTextColor: textPrimary,
     },
   };
 }
 
-function createRedocTypography(appTheme: ReturnType<typeof getAppTheme>) {
+function createRedocTypography(
+  appTheme: ReturnType<typeof getAppTheme>,
+  surfaces: ReturnType<typeof resolveDocsSurfaces>,
+) {
+  const textPrimary = resolveUiColor(appTheme, 'text-primary');
+  const linkColor = resolveUiColor(appTheme, 'text-link-active');
+  const linkHover = resolveUiColor(appTheme, 'text-link-hover');
   return {
     fontFamily: appTheme.app.typography.body.fontFamily,
     headings: {
@@ -126,6 +200,19 @@ function createRedocTypography(appTheme: ReturnType<typeof getAppTheme>) {
     },
     code: {
       fontFamily: '"Source Code Pro", monospace',
+      fontSize: '0.95rem',
+      fontWeight: '400',
+      lineHeight: '1.5',
+      color: textPrimary,
+      backgroundColor: surfaces.surfaceAlt,
+      wrap: true,
+    },
+    links: {
+      color: linkColor,
+      visited: linkColor,
+      hover: linkHover,
+      textDecoration: 'underline',
+      hoverTextDecoration: 'underline',
     },
   };
 }
