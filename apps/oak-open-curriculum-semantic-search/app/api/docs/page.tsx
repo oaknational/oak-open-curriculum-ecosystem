@@ -4,7 +4,7 @@ import type { JSX } from 'react';
 import { useMemo } from 'react';
 import { OakHeading, OakTypography } from '@oaknational/oak-components';
 import { RedocStandalone } from 'redoc';
-import { DocsWrapper, HeaderSection, PageContainer } from './DocsPage.styles';
+import { DocsWrapper, HeaderSection, PageContainer, resolveDocsSurfaces } from './DocsPage.styles';
 import { useTheme } from 'styled-components';
 import { getAppTheme } from '../../ui/themes/app-theme-helpers';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
@@ -63,33 +63,33 @@ function buildRedocOptions(theme: ReturnType<typeof useRedocTheme>) {
 }
 
 function createRedocThemeConfig(appTheme: ReturnType<typeof getAppTheme>) {
+  const surfaces = resolveDocsSurfaces(appTheme);
   const palette = createRedocColorPalette(appTheme);
   const typography = createRedocTypography(appTheme);
-  const surfaceRaised = appTheme.app.colors.surfaceRaised;
   const textPrimary = palette.text.primary;
   const background = {
-    main: appTheme.app.colors.surfaceCard,
-    secondary: surfaceRaised,
+    main: surfaces.surface,
+    secondary: surfaces.surfaceAlt,
   };
 
   return {
     colors: { ...palette, background },
     typography,
     sidebar: {
-      backgroundColor: surfaceRaised,
+      backgroundColor: surfaces.surfaceAlt,
       textColor: textPrimary,
       activeTextColor: appTheme.app.palette.brandPrimaryDeep,
     },
     rightPanel: {
-      backgroundColor: surfaceRaised,
+      backgroundColor: surfaces.surfaceAlt,
       textColor: textPrimary,
     },
     codeBlock: {
-      backgroundColor: surfaceRaised,
+      backgroundColor: surfaces.surfaceAlt,
       textColor: textPrimary,
     },
     schema: {
-      linesColor: appTheme.app.colors.borderSubtle,
+      linesColor: surfaces.border,
       defaultDetailsWidth: '33%',
       labelsTextColor: textPrimary,
     },

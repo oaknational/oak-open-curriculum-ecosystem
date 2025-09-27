@@ -4,6 +4,7 @@ import { createLightTheme } from './light';
 import { createDarkTheme } from './dark';
 import { semanticThemeSpec } from './semantic-theme-spec';
 import { resolveAppTokens } from './semantic-theme-resolver';
+import { resolveSemanticColor } from './semantic-color-registry';
 
 const modes = ['light', 'dark'] as const;
 
@@ -90,10 +91,10 @@ describe('App theme factories', () => {
     const lightPalette = resolveAppTokens('light').palette;
     const darkPalette = resolveAppTokens('dark').palette;
 
-    expect(lightPalette.brandPrimary).toBe(oakColorTokens.oakGreen);
-    expect(darkPalette.brandPrimary).toBe(oakColorTokens.oakGreen);
-    expect(lightPalette.brandPrimaryDark).toBe('#0f381b');
-    expect(darkPalette.brandPrimaryDark).toBe('#82d88a');
+    expect(lightPalette.brandPrimary).toBe(resolveSemanticColor('oakGreen'));
+    expect(darkPalette.brandPrimary).toBe(resolveSemanticColor('oakGreen'));
+    expect(lightPalette.brandPrimaryDark).toBe(resolveSemanticColor('brand-forest-900'));
+    expect(darkPalette.brandPrimaryDark).toBe(resolveSemanticColor('brand-mint-300'));
   });
 
   it('provides surface colour entries for cards and panels', () => {
@@ -110,10 +111,10 @@ describe('App theme factories', () => {
     const lightPalette = resolveAppTokens('light').palette as Record<string, string>;
     const darkPalette = resolveAppTokens('dark').palette as Record<string, string>;
 
-    expect(lightPalette.brandPrimaryDeep).toBe('#144d24');
-    expect(lightPalette.brandPrimaryBright).toBe('#35a04c');
-    expect(darkPalette.brandPrimaryDeep).toBe('#0b2a16');
-    expect(darkPalette.brandPrimaryBright).toBe('#6ed680');
+    expect(lightPalette.brandPrimaryDeep).toBe(resolveSemanticColor('brand-forest-800'));
+    expect(lightPalette.brandPrimaryBright).toBe(resolveSemanticColor('rpf-syntax-pink'));
+    expect(darkPalette.brandPrimaryDeep).toBe(resolveSemanticColor('brand-forest-1000'));
+    expect(darkPalette.brandPrimaryBright).toBe(resolveSemanticColor('rpf-syntax-pink'));
   });
 
   it('provides layout measurements for responsive grids', () => {
@@ -135,3 +136,89 @@ describe('App theme factories', () => {
     });
   });
 });
+
+describe('semantic theme contrast', () => {
+  const contrastTriples = {
+    light: [
+      {
+        context: 'card surface',
+        text: 'textPrimary',
+        background: 'surfaceCard',
+        border: 'brandPrimary',
+      },
+      {
+        context: 'raised surface',
+        text: 'textPrimary',
+        background: 'surfaceRaised',
+        border: 'brandPrimary',
+      },
+    ],
+    dark: [
+      {
+        context: 'card surface',
+        text: 'textPrimary',
+        background: 'surfaceCard',
+        border: 'brandPrimaryBright',
+      },
+      {
+        context: 'raised surface',
+        text: 'textPrimary',
+        background: 'surfaceRaised',
+        border: 'brandPrimaryBright',
+      },
+    ],
+  } as const;
+
+  it.each(modes)('keeps %s mode text and borders above WCAG AA thresholds', (mode) => {
+    const resolved = resolveAppTokens(mode);
+    const triples = contrastTriples[mode];
+
+    for (const { context, text, background, border } of triples) {
+      const textHex = expectHexColor(resolved.colors[text]);
+      const backgroundHex = expectHexColor(resolved.colors[background]);
+      const borderHex = expectHexColor(resolved.palette[border]);
+
+      expect(contrastRatio(textHex, backgroundHex)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(borderHex, backgroundHex)).toBeGreaterThanOrEqual(3);
+    }
+
+    const uiBackground = expectHexColor(
+      resolveSemanticColor(semanticThemeSpec[mode].uiColors['bg-neutral']),
+    );
+    const uiText = expectHexColor(
+      resolveSemanticColor(semanticThemeSpec[mode].uiColors['text-primary']),
+    );
+
+    expect(contrastRatio(uiText, uiBackground)).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+function expectHexColor(value: string): string {
+  expect(value).toMatch(/^#/);
+  return value.toLowerCase();
+}
+
+function hexToRgb(hex: string): [number, number, number] {
+  const normalized = hex.replace('#', '');
+  return [0, 1, 2].map((index) => parseInt(normalized.slice(index * 2, index * 2 + 2), 16)) as [
+    number,
+    number,
+    number,
+  ];
+}
+
+function relativeLuminance(hex: string): number {
+  const [r, g, b] = hexToRgb(hex).map((channel) => {
+    const scaled = channel / 255;
+    return scaled <= 0.03928 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function contrastRatio(foreground: string, background: string): number {
+  const foregroundLum = relativeLuminance(foreground);
+  const backgroundLum = relativeLuminance(background);
+  const lighter = Math.max(foregroundLum, backgroundLum);
+  const darker = Math.min(foregroundLum, backgroundLum);
+  return (lighter + 0.05) / (darker + 0.05);
+}

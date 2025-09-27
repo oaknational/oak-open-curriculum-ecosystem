@@ -162,13 +162,14 @@ export const FacetsPanel = styledComponents(OakBox)`
 `;
 
 export const AccentTypography = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+  color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
+  text-shadow: 0 0 2rem ${({ theme }) => getAppTheme(theme).app.colors.borderAccent};
 `;
 
 export const PrimarySubmitButton = styledComponents.button`
   align-items: center;
-  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-  border: 2px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+  border: 2px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
   color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
   cursor: pointer;
@@ -186,8 +187,9 @@ export const PrimarySubmitButton = styledComponents.button`
 
   &:hover,
   &:active {
-    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
-    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
+    color: ${({ theme }) => getAppTheme(theme).uiColors['bg-btn-secondary']};
   }
 
   &:disabled {

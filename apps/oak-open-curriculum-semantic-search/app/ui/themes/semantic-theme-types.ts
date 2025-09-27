@@ -1,11 +1,11 @@
 import type {
   OakBorderRadiusToken,
-  OakColorToken,
   OakFontToken,
   OakInnerPaddingToken,
   OakSpaceBetweenToken,
   OakUiRoleToken,
 } from '@oaknational/oak-components';
+import type { SemanticColorToken } from './semantic-color-registry';
 
 /**
  * The two supported semantic theme modes.
@@ -61,6 +61,7 @@ export interface SemanticAppSpec {
     | 'textPrimary'
     | 'textSubdued'
     | 'headerBorder'
+    | 'borderAccent'
     | 'borderSubtle'
     | 'textMuted'
     | 'errorText'
@@ -68,20 +69,20 @@ export interface SemanticAppSpec {
     | 'docsNote'
     | 'surfaceCard'
     | 'surfaceRaised',
-    OakColorToken
+    SemanticColorToken
   > & {
     readonly surfaceEmphasisBg: string;
   };
   readonly palette: {
-    readonly brandPrimary: string;
-    readonly brandPrimaryDark: string;
-    readonly brandPrimaryDeep: string;
-    readonly brandPrimaryBright: string;
+    readonly brandPrimary: SemanticColorToken;
+    readonly brandPrimaryDark: SemanticColorToken;
+    readonly brandPrimaryDeep: SemanticColorToken;
+    readonly brandPrimaryBright: SemanticColorToken;
   };
 }
 
 export interface SemanticThemeDefinition {
   readonly name: string;
-  readonly uiColors: Record<OakUiRoleToken, OakColorToken>;
+  readonly uiColors: Record<OakUiRoleToken, SemanticColorToken>;
   readonly app: SemanticAppSpec;
 }

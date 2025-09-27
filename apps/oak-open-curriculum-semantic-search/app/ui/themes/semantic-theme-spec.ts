@@ -16,7 +16,7 @@ export type {
 type UiColorMap = Record<OakUiRoleToken, OakColorToken>;
 type PartialUiColorMap = Partial<Record<OakUiRoleToken, OakColorToken>>;
 
-function isOakColorToken(value: unknown): value is OakColorToken {
+function isUiColorToken(value: unknown): value is OakColorToken {
   return typeof value === 'string' && value in oakColorTokens;
 }
 
@@ -33,7 +33,7 @@ function buildUiColorMap(overrides: Partial<Record<OakUiRoleToken, OakColorToken
   for (const token of oakUiRoleTokens) {
     const override = overrides[token];
     const base = oakDefaultTheme.uiColors[token];
-    const value = override ?? (isOakColorToken(base) ? base : undefined);
+    const value = override ?? (isUiColorToken(base) ? base : undefined);
     if (!value) {
       throw new Error(`Missing Oak UI colour mapping for token "${token}"`);
     }
@@ -43,7 +43,7 @@ function buildUiColorMap(overrides: Partial<Record<OakUiRoleToken, OakColorToken
   return map;
 }
 
-const sharedAppSpec: Omit<SemanticAppSpec, 'colors'> = {
+const sharedAppSpec: Omit<SemanticAppSpec, 'colors' | 'palette'> = {
   space: {
     gap: {
       grid: 'space-between-m',
@@ -112,12 +112,6 @@ const sharedAppSpec: Omit<SemanticAppSpec, 'colors'> = {
       xxl: '1760px',
     },
   },
-  palette: {
-    brandPrimary: oakColorTokens.oakGreen,
-    brandPrimaryDark: '#0f381b',
-    brandPrimaryDeep: '#144d24',
-    brandPrimaryBright: '#35a04c',
-  },
 };
 
 export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = {
@@ -154,6 +148,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
         textPrimary: 'navy120',
         textSubdued: 'grey60',
         headerBorder: 'oakGreen',
+        borderAccent: 'brand-forest-500',
         borderSubtle: 'grey20',
         textMuted: 'grey60',
         errorText: 'red',
@@ -164,10 +159,10 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
         surfaceRaised: 'grey20',
       },
       palette: {
-        brandPrimary: oakColorTokens.oakGreen,
-        brandPrimaryDark: '#0f381b',
-        brandPrimaryDeep: '#144d24',
-        brandPrimaryBright: '#35a04c',
+        brandPrimary: 'brand-forest-500',
+        brandPrimaryDark: 'brand-forest-1000',
+        brandPrimaryDeep: 'brand-forest-800',
+        brandPrimaryBright: 'rpf-syntax-pink',
       },
     },
   },
@@ -196,7 +191,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
       'icon-inverted': 'navy120',
       'border-neutral': 'navy110',
       'border-neutral-lighter': 'navy',
-      'border-primary': 'pink110',
+      'border-primary': 'oakGreen',
       'border-brand': 'oakGreen',
     }),
     app: {
@@ -206,19 +201,20 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
         textMuted: 'grey20',
         textSubdued: 'grey30',
         headerBorder: 'oakGreen',
+        borderAccent: 'rpf-syntax-pink',
         borderSubtle: 'rpf-syntax-blue',
         errorText: 'amber50',
         pageNote: 'mint50',
         docsNote: 'mint50',
-        surfaceEmphasisBg: 'black',
+        surfaceEmphasisBg: 'rgba(255, 255, 255, 0.08)',
         surfaceCard: 'navy110',
-        surfaceRaised: 'navy120',
+        surfaceRaised: 'navy',
       },
       palette: {
-        brandPrimary: oakColorTokens.mint,
-        brandPrimaryDark: '#82d88a',
-        brandPrimaryDeep: oakColorTokens.oakGreen,
-        brandPrimaryBright: oakColorTokens['rpf-syntax-pink'],
+        brandPrimary: 'brand-mint-200',
+        brandPrimaryDark: 'lemon110',
+        brandPrimaryDeep: 'brand-mint-200',
+        brandPrimaryBright: 'brand-forest-800',
       },
     },
   },

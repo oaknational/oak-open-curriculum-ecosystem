@@ -1,7 +1,6 @@
 import {
   oakAllSpacingTokens,
   oakBorderRadiusTokens,
-  oakColorTokens,
   oakFontTokens,
   oakInnerPaddingTokens,
   oakSpaceBetweenTokens,
@@ -9,7 +8,6 @@ import {
 import type {
   OakInnerPaddingToken,
   OakSpaceBetweenToken,
-  OakColorToken,
   OakBorderRadiusToken,
   OakAllSpacingToken,
 } from '@oaknational/oak-components';
@@ -19,6 +17,7 @@ import type {
   SemanticMode,
   SemanticTypographySpecEntry,
 } from './semantic-theme-types';
+import { resolveSemanticColor, type SemanticColorToken } from './semantic-color-registry';
 
 function pxToRem(px: number): string {
   return `${parseFloat((px / 16).toFixed(3))}rem`;
@@ -56,12 +55,8 @@ function resolveInnerPadding(token: OakInnerPaddingToken): number {
   return px;
 }
 
-function resolveColorToken(token: OakColorToken): string {
-  const value = oakColorTokens[token];
-  if (!value) {
-    throw new Error(`Unknown Oak colour token "${token}"`);
-  }
-  return value;
+function resolveColorToken(token: SemanticColorToken): string {
+  return resolveSemanticColor(token);
 }
 
 export interface ResolvedTypographyEntry {
@@ -73,11 +68,13 @@ export interface ResolvedTypographyEntry {
   readonly letterSpacing: string;
 }
 
+// This list is defined in two places, fix.
 export interface ResolvedAppTokens {
   readonly colors: Record<
     | 'textPrimary'
     | 'textSubdued'
     | 'headerBorder'
+    | 'borderAccent'
     | 'borderSubtle'
     | 'textMuted'
     | 'errorText'
@@ -114,7 +111,12 @@ export interface ResolvedAppTokens {
     readonly inlinePadding: Record<'base' | 'wide', string>;
     readonly breakpoints: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', string>;
   };
-  readonly palette: SemanticAppSpec['palette'];
+  readonly palette: {
+    readonly brandPrimary: string;
+    readonly brandPrimaryDark: string;
+    readonly brandPrimaryDeep: string;
+    readonly brandPrimaryBright: string;
+  };
 }
 
 function resolveTypographyEntry(
@@ -165,11 +167,13 @@ function resolveInlinePadding(
   };
 }
 
+// Turn this into a type-safe map
 function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colors'] {
   return {
     textPrimary: resolveColorToken(spec.textPrimary),
     textSubdued: resolveColorToken(spec.textSubdued),
     headerBorder: resolveColorToken(spec.headerBorder),
+    borderAccent: resolveColorToken(spec.borderAccent),
     borderSubtle: resolveColorToken(spec.borderSubtle),
     textMuted: resolveColorToken(spec.textMuted),
     errorText: resolveColorToken(spec.errorText),
@@ -178,6 +182,15 @@ function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colo
     surfaceCard: resolveColorToken(spec.surfaceCard),
     surfaceRaised: resolveColorToken(spec.surfaceRaised),
     surfaceEmphasisBg: spec.surfaceEmphasisBg,
+  };
+}
+
+function resolvePalette(spec: SemanticAppSpec['palette']): ResolvedAppTokens['palette'] {
+  return {
+    brandPrimary: resolveColorToken(spec.brandPrimary),
+    brandPrimaryDark: resolveColorToken(spec.brandPrimaryDark),
+    brandPrimaryDeep: resolveColorToken(spec.brandPrimaryDeep),
+    brandPrimaryBright: resolveColorToken(spec.brandPrimaryBright),
   };
 }
 
@@ -212,6 +225,6 @@ export function resolveAppTokens(mode: SemanticMode): ResolvedAppTokens {
       inlinePadding: resolveInlinePadding(spec.layout.inlinePadding),
       breakpoints: spec.layout.breakpoints,
     },
-    palette: spec.palette,
+    palette: resolvePalette(spec.palette),
   };
 }

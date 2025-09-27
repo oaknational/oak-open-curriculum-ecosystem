@@ -118,25 +118,26 @@ describe('Bridge theming (ADR-045)', () => {
     foreground: string,
     layout: ReturnType<typeof createLightTheme>['app']['layout'],
   ): void {
+    const normalised = styles.toLowerCase();
     expect(styles).toContain(
       `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
     expect(styles).toContain(
       `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
-    expect(styles).toContain('--app-color-brand-primary:#287c34;');
-    expect(styles).toContain('--app-color-brand-primary-deep:#144d24;');
-    expect(styles).toContain('--app-color-brand-primary-bright:#35a04c;');
-    expect(styles).toContain('--app-layout-control-column-min-width:20rem;');
-    expect(styles).toContain('--app-layout-secondary-column-min-width:18rem;');
-    expect(styles).toContain(
+    expect(normalised).toContain('--app-color-brand-primary:#287c34;');
+    expect(normalised).toContain('--app-color-brand-primary-deep:#144d24;');
+    expect(normalised).toContain('--app-color-brand-primary-bright:#eeccff;');
+    expect(normalised).toContain('--app-layout-control-column-min-width:20rem;');
+    expect(normalised).toContain('--app-layout-secondary-column-min-width:18rem;');
+    expect(normalised).toContain(
       `--app-layout-container-max-width:${layout.containerMaxWidth.replace(/\s+/g, '')};`,
     );
-    expect(styles).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
-    expect(styles).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
-    expect(styles).toContain(`--app-bp-xs:${layout.breakpoints.xs};`);
-    expect(styles).toContain(`--app-bp-md:${layout.breakpoints.md};`);
-    expect(styles).toContain(`--app-bp-xxl:${layout.breakpoints.xxl};`);
+    expect(normalised).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
+    expect(normalised).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
+    expect(normalised).toContain(`--app-bp-xs:${layout.breakpoints.xs};`);
+    expect(normalised).toContain(`--app-bp-md:${layout.breakpoints.md};`);
+    expect(normalised).toContain(`--app-bp-xxl:${layout.breakpoints.xxl};`);
   }
 
   function assertDarkModeStyles(
@@ -145,21 +146,22 @@ describe('Bridge theming (ADR-045)', () => {
     foreground: string,
     layout: ReturnType<typeof createDarkTheme>['app']['layout'],
   ): void {
+    const normalised = styles.toLowerCase();
     expect(styles).toContain(
       `html,body{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
     expect(styles).toContain(
       `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
-    expect(styles).toContain('--app-color-brand-primary:#287c34;');
-    expect(styles).toContain('--app-color-brand-primary-deep:#0b2a16;');
-    expect(styles).toContain('--app-color-brand-primary-bright:#6ed680;');
-    expect(styles).toContain(
+    expect(normalised).toContain('--app-color-brand-primary:#287c34;');
+    expect(normalised).toContain('--app-color-brand-primary-deep:#0b2a16;');
+    expect(normalised).toContain('--app-color-brand-primary-bright:#eeccff;');
+    expect(normalised).toContain(
       `--app-layout-container-max-width:${layout.containerMaxWidth.replace(/\s+/g, '')};`,
     );
-    expect(styles).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
-    expect(styles).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
-    expect(styles).toContain(`--app-bp-lg:${layout.breakpoints.lg};`);
+    expect(normalised).toContain(`--app-layout-inline-padding-base:${layout.inlinePadding.base};`);
+    expect(normalised).toContain(`--app-layout-inline-padding-wide:${layout.inlinePadding.wide};`);
+    expect(normalised).toContain(`--app-bp-lg:${layout.breakpoints.lg};`);
   }
 
   it('applies theme background/foreground tokens to html and body elements', () => {

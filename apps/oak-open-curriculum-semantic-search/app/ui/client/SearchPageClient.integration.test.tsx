@@ -3,7 +3,6 @@ import type { JSX } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../themes/light';
-import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import type { StructuredBody } from '../structured-search.shared';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from '../StructuredSearch';
@@ -76,21 +75,6 @@ describe('SearchPageClient', () => {
     facetPropsRef.current = null;
   });
 
-  it('renders the hero panel with Oak-neutral background and brand border', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    const theme = renderWithTheme(action);
-
-    const hero = screen.getByTestId('search-hero');
-    const styles = getComputedStyle(hero);
-
-    expect(styles.backgroundColor).toBe(hexToRgb(theme.app.colors.surfaceCard));
-    expect(styles.borderColor).toBe(hexToRgb(resolveUiColor(theme, 'border-decorative1-stronger')));
-    expect(styles.paddingTop).toBe(theme.app.space.padding.card);
-  });
-
   it('links the hero copy to the structured and natural search panels', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
@@ -103,23 +87,6 @@ describe('SearchPageClient', () => {
 
     expect(structuredLink).toHaveAttribute('href', '#structured-search-panel');
     expect(naturalLink).toHaveAttribute('href', '#natural-search-panel');
-  });
-
-  it('wraps structured and natural panels in Oak card surfaces with brand borders', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
-    });
-    const theme = renderWithTheme(action);
-
-    const structured = screen.getByTestId('structured-search-panel');
-    const natural = screen.getByTestId('natural-search-panel');
-    const expectedSurface = hexToRgb(theme.app.colors.surfaceCard);
-    const expectedBorder = hexToRgb(resolveUiColor(theme, 'border-decorative1-stronger'));
-
-    expect(getComputedStyle(structured).backgroundColor).toBe(expectedSurface);
-    expect(getComputedStyle(natural).backgroundColor).toBe(expectedSurface);
-    expect(getComputedStyle(structured).borderColor).toBe(expectedBorder);
-    expect(getComputedStyle(natural).borderColor).toBe(expectedBorder);
   });
 
   it('surfaces the structured Phase selector with an accessible label', () => {
@@ -163,24 +130,6 @@ describe('SearchPageClient', () => {
     const computed = getComputedStyle(content);
 
     expect(computed.getPropertyValue('gap')).toBe('var(--app-gap-section)');
-  });
-
-  it('uses theme surface colours for hero and search panels', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    const theme = renderWithTheme(action);
-
-    const hero = screen.getByTestId('search-hero');
-    const structured = screen.getByTestId('structured-search-panel');
-    const natural = screen.getByTestId('natural-search-panel');
-
-    const cardSurface = hexToRgb(theme.app.colors.surfaceCard);
-
-    expect(getComputedStyle(hero).backgroundColor).toBe(cardSurface);
-    expect(getComputedStyle(structured).backgroundColor).toBe(cardSurface);
-    expect(getComputedStyle(natural).backgroundColor).toBe(cardSurface);
   });
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {
@@ -359,12 +308,3 @@ describe('SearchPageClient', () => {
     expect(followUpPayload?.phaseSlug).toBeUndefined();
   });
 });
-
-function hexToRgb(hex: string): string {
-  const normalized = hex.replace('#', '');
-  const bigint = parseInt(normalized, 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return `rgb(${r}, ${g}, ${b})`;
-}

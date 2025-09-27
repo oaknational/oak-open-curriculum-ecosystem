@@ -85,8 +85,15 @@ describe('ApiDocsPage', () => {
     const wrapper = screen.getByTestId('redoc').parentElement as HTMLElement;
     expect(wrapper).toBeTruthy();
     const styles = window.getComputedStyle(wrapper);
-    const expected = hexToRgb(createDarkTheme().app.colors.surfaceCard);
-    expect(styles.backgroundColor).toBe(expected);
+    const expectedHex = resolveUiColor(createDarkTheme(), 'bg-neutral');
+    const expected = hexToRgb(expectedHex);
+    const cssVar = styles.getPropertyValue('--docs-surface').trim();
+
+    if (styles.backgroundColor.startsWith('var(')) {
+      expect(cssVar).toBe(expectedHex);
+    } else {
+      expect(styles.backgroundColor).toBe(expected);
+    }
   });
 
   it('passes resolved colour tokens to Redoc', () => {
