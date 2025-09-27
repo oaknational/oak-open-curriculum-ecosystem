@@ -28,12 +28,14 @@ export const HeaderSection = styledComponents(OakBox)`
   gap: var(--app-gap-cluster);
 `;
 
+/* eslint-disable max-lines-per-function */
 export const DocsWrapper = styledComponents(OakBox)`
   ${({ theme }) => {
     const appTheme = getAppTheme(theme);
     const surfaceCard = appTheme.app.colors.surfaceCard;
     const surfaceRaised = appTheme.app.colors.surfaceRaised;
     const borderColour = appTheme.app.colors.borderSubtle;
+    const buttonBorder = appTheme.app.palette.brandPrimaryBright;
     const textPrimary = resolveUiColor(appTheme, 'text-primary');
 
     return css`
@@ -49,9 +51,15 @@ export const DocsWrapper = styledComponents(OakBox)`
 
       .redoc-wrap,
       .redoc-wrap .api-content,
-      .redoc-wrap .menu-content {
+      .redoc-wrap .menu-content,
+      .redoc-wrap h5,
+      .redoc-wrap h5 span {
         background-color: ${surfaceCard};
         color: ${textPrimary};
+      }
+
+      .redoc-wrap h3 {
+        margin: 1em;
       }
 
       .redoc-wrap pre,
@@ -59,6 +67,14 @@ export const DocsWrapper = styledComponents(OakBox)`
         background-color: ${surfaceRaised};
         color: ${textPrimary};
       }
+
+      .redoc-wrap ul.react-tabs__tab-list li.react-tabs__tab {
+        margin: 1em;
+        border-color: ${buttonBorder};
+        background-color: ${surfaceCard};
+        color: ${textPrimary};
+      }
     `;
   }}
 `;
+/* eslint-enable max-lines-per-function */

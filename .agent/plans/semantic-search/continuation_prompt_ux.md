@@ -2,9 +2,9 @@
 
 ## Reference Pack
 
-- This document: `.agent/plans/semantic-search/continuation_prompt_ux.md`
-- Phase plan: `.agent/plans/semantic-search/semantic-search-phase-1-ux.md`
-- Context snapshot: `.agent/plans/semantic-search/semantic-search-phase-1-ux-context.md`
+- THE PLAN: `.agent/plans/semantic-search/semantic-search-phase-1-ux.md`
+- THE CONTEXT: `.agent/plans/semantic-search/semantic-search-phase-1-ux-context.md`
+- This jump start document: `.agent/plans/semantic-search/continuation_prompt_ux.md`
 - Theme inventory (reviewed 2025-09-26): `.agent/plans/semantic-search/semantic-theme-inventory.md`
 - Theme specification (reviewed 2025-09-26): `.agent/plans/semantic-search/semantic-theme-spec.md`
 - Oak Components application challenges and potential improvements plan: `.agent/plans/semantic-search/oak-components-application-and-improvement-plan.md`
@@ -13,26 +13,26 @@
 
 All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: UseBritish spelling” in the todo list.
 
-## Orientation (2025-09-29)
+## Current Snapshot (2025-09-29)
 
-- Semantic tokens, the bridge, and shared layout wrappers already power Admin and Docs; Playwright `bp-xxl` assertions now enforce those layouts without `test.fail()` guards.
-- Search responsive assertions at `bp-xs`/`bp-md`/`bp-lg` now pass without guards: forms wrap `<form>` elements inside `tabpanel` containers, submit buttons use high-contrast brand colours, and Playwright fixtures supply deterministic results. Hero copy still overruns the 45 ch target at `bp-lg`, so the next pass will focus on clamping.
-- Fresh 2025-09-27 audit via Playwright (post-fixture update) shows `ControlsGrid` stacks correctly at `bp-xs` and splits at `bp-md`; results grids now assert column counts via `gridTemplateColumns` parsing.
-- Health remains an API-style response (`NextResponse.json` in `apps/oak-open-curriculum-semantic-search/app/healthz/route.ts`) with no Oak UI chrome. The responsive baseline records this as an expected failure pending UX shell work.
-- Health shell outline in the plan pairs a hero status banner with a two-column card grid at `bp-md`, includes an accessible `role="status"` region for live updates, and anticipates Accept header toggling between JSON and UI without cache regressions.
-- Playwright runs now enable `SEMANTIC_SEARCH_USE_FIXTURES` (plus `NEXT_DISABLE_DEV_ERRORS`) so structured search and suggestions return deterministic fixtures independent of Elasticsearch while keeping the dev overlay quiet.
-- Browser theme colours resolve from semantic tokens (`app/layout.meta.unit.test.ts` guards), keeping light/dark polish intact.
-- Theme selector contrast in dark mode is now guarded: radios resolve semantic tokens to Oak hex values so unselected outlines read `rgb(228, 228, 228)` and selected states stay `rgb(255, 255, 255)` with a dedicated integration test.
-- 2025-09-27 audit: hero and controls remain vertically stacked at `bp-lg`, leaving the search forms below the fold; control cards use `surfaceRaised`/`borderSubtle` which blends into the mint background, and at ≤360 px radio groups and selects overflow their panels due to missing `min-inline-size: 0` guards.
-- 2025-09-27 implementation: added a `HeroControlsCluster` grid so hero + controls align horizontally from `bp-lg`, rethemed panels to `surfaceCard` with brand borders, and added wrapping/min-inline safeguards so radio groups and selects stay within their cards on ≤360 px viewports.
-- Structured search now exposes the Phase filter and natural search scopes default to “Auto”, letting the backend infer scope unless the user explicitly picks Units/Lessons/Sequences.
-- Structured search integration harness now asserts the Phase selector options via a themed mock form; keep fixtures representative for screenshot runs.
-- Structured "All content" searches fan out across lessons/units/sequences; deterministic fixtures mirror this bucketed response, but we still need to enrich card/facet data so Playwright screenshots feel populated.
-- 2025-09-28: Hero/controls cluster now stays stacked until `xl`, eliminating the 1 100 px overflow (Playwright guard in `tests/visual/responsive-baseline.spec.ts` now passes; artefacts in `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
-- 2025-09-28 `pnpm make` run halted at type-check because `SearchResults.unit.test.tsx` still references the pre multi-scope props; update the test to pass `mode`/`multiBuckets` and add coverage for the bucketed render prior to rerunning the gate.
-- 2025-09-28: `SearchResults.unit.test.tsx` now covers the multi-scope pathway (vitest run: `pnpm -C apps/oak-open-curriculum-semantic-search test app/ui/SearchResults.unit.test.tsx`), unblocking the next `pnpm make` attempt.
-- 2025-09-28: `pnpm make` completes successfully post unit-test update.
-- 2025-09-29: Full `pnpm qg` passes after correcting the markdownlint newline issue in the Health responsive baseline artefact; monitor Notion MCP E2E runs for future flakes.
+- Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
+- Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; hero copy still needs a 45 ch clamp and the controls must stay visible above the fold on wide screens.
+- Deterministic fixtures power Playwright by toggling `SEMANTIC_SEARCH_USE_FIXTURES`; richer card/facet data and an app-level env toggle are still outstanding.
+- `/healthz` continues to return raw JSON; the Oak UI shell (hero status banner, responsive cards, live region) remains to be implemented.
+- Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
+
+## Immediate Priorities
+
+1. Expand the fixture set (lessons/units/sequences, facets, suggestions) and expose an app `.env` flag so local/dev builds can render against fixtures instead of live APIs.
+2. Finalise the Search hero/controls polish: clamp hero copy, guarantee controls sit above the fold on large viewports, and double-check container overflow guards at 1 100 px and 1 380 px.
+3. Deliver the `/healthz` Oak UI shell as outlined in the UX plan, with responsive layout tokens, accessible status messaging, and updated tests.
+4. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
+
+## Verification Checklist
+
+- Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added.
+- Playwright responsive suites: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"`, `... --grep "Admin page responsive regressions"`, `... --grep "Docs page responsive regressions"`; add Health coverage once the shell lands.
+- Full gate before commit: `pnpm qg`.
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex via `resolveUiColor`; integration tests assert the generated palette matches resolved colours.
 - 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and gains Playwright regression guards across lg/md/xxl viewports.
 - 2025-09-29: `pnpm qg` now passes end-to-end after the API docs/admin fixes; attach latest run logs for any regressions.

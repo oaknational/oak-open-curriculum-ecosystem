@@ -138,21 +138,11 @@ function SearchHero(): JSX.Element {
       ))}
       <OakTypography as="p" $font="body-2">
         Ready to start?{' '}
-        <OakTypography
-          as="a"
-          href="#structured-search-panel"
-          $font="body-2-bold"
-          $color="text-link-active"
-        >
+        <OakTypography as="a" href="#structured-search-panel" $font="body-2-bold">
           Jump to structured search
         </OakTypography>{' '}
         or{' '}
-        <OakTypography
-          as="a"
-          href="#natural-search-panel"
-          $font="body-2-bold"
-          $color="text-link-active"
-        >
+        <OakTypography as="a" href="#natural-search-panel" $font="body-2-bold">
           try the natural language search
         </OakTypography>
         .

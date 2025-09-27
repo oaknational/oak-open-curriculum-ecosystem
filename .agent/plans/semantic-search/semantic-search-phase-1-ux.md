@@ -140,25 +140,36 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 ## Todo (GO cadence)
 
 1. ✅ REMINDER: UseBritish spelling.
-2. ✅ ACTION: Audit the API Docs page to reproduce the Redoc colour failure and identify offending theme values.
-3. ✅ REVIEW: Record the API Docs findings (failing colour tokens, repro steps) in the plan/context docs.
-4. ✅ ACTION: Implement Redoc theme fixes (resolve UI tokens to hex) and extend deterministic integration coverage for the docs page.
-5. ✅ REVIEW: Run targeted docs tests (`pnpm -C apps/oak-open-curriculum-semantic-search test app/api/docs/page.integration.test.tsx`) and log results.
-6. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-7. ✅ ACTION: Audit the Admin page layout and scrolling behaviour, noting hash changes and responsive overflow points.
-8. ✅ REVIEW: Document the Admin audit outcomes with proposed layout/hash handling adjustments.
-9. ✅ ACTION: Implement Admin layout fixes (container clamps, hash handling) and extend integration/visual tests for the new behaviour.
-10. ✅ REVIEW: Capture Admin verification evidence (test outputs, screenshots) and summarise residual risks.
-11. ✅ REVIEW: Ensure the documented findings align with UX goals before updating broader docs.
-12. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-13. ✅ ACTION: Update plan/context/continuation docs with finalised fixes, artefact links, and next steps.
-14. ✅ REVIEW: Sanity-check documentation updates for accuracy and clarity.
-15. ✅ QUALITY-GATE: Run `pnpm qg` from the repo root once fixes land.
-16. ✅ REVIEW: Log the `pnpm qg` outcome, flagging any remaining exceptions.
-17. ✅ ACTION: Re-evaluate API Docs colour tokens for legibility and select improved mappings.
-18. ✅ REVIEW: Capture updated colour decisions in the plan/context docs with rationale.
-19. ✅ ACTION: Implement the API Docs colour adjustments (token tweaks + component styling) and extend integration tests for coverage.
-20. ✅ REVIEW: Run targeted docs/admin tests to prove the new palette (list commands in context).
-21. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
-22. ✅ QUALITY-GATE: Run `pnpm qg` to confirm repository health after the colour changes.
-23. ✅ REVIEW: Note the `pnpm qg` outcome and highlight any outstanding issues.
+2. ✅ ACTION: Refresh the continuation prompt with current context only, keeping detailed history in the plan/context docs.
+3. ✅ REVIEW: Confirm the continuation prompt functions as a concise jumpstart and references supporting documents.
+4. ACTION: Outline the fixture expansion and env-toggle approach (validation, coverage, rollout).
+5. REVIEW: Record fixture/toggle design decisions in working notes.
+6. GROUNDING: read GO.md and follow all instructions.
+7. ACTION: Expand deterministic fixtures (lessons/units/sequences, facets, suggestions) ready for runtime use.
+8. REVIEW: Validate fixtures against schemas/tests and ensure data feels representative for Playwright.
+9. ACTION: Implement the runtime env toggle across structured/natural search paths, including suggestions and controllers.
+10. REVIEW: Inspect code paths/tests to confirm the toggle works in both fixture and live modes.
+11. REVIEW: Identify documentation updates required for the new fixture toggle.
+12. GROUNDING: read GO.md and follow all instructions.
+13. ACTION: Refine the Search hero/controls layout (45 ch clamp, above-fold visibility, overflow guards).
+14. REVIEW: Validate hero behaviour via local inspection and Playwright assertions/screenshots.
+15. ACTION: Build the `/healthz` Oak UI shell with responsive layout tokens and accessibility affordances.
+16. REVIEW: Confirm Health shell behaviour with tests/axe checks and note any residual issues.
+17. REVIEW: Ensure all Phase 1 UX backlog items are either complete or captured as follow-ups.
+18. GROUNDING: read GO.md and follow all instructions.
+19. ACTION: Update plan/context/continuation docs with progress, artefacts, and outstanding work.
+20. REVIEW: Sanity-check documentation clarity and GO cadence alignment.
+21. QUALITY-GATE: Run targeted unit/integration/Playwright suites covering fixtures, Search, Admin, Docs, and new Health surfaces.
+22. REVIEW: Log targeted test outputs and artefact locations.
+23. REVIEW: Confirm readiness for the full quality gate run.
+24. GROUNDING: read GO.md and follow all instructions.
+25. QUALITY-GATE: Execute `pnpm qg` from the repo root.
+26. REVIEW: Summarise the `pnpm qg` results and remediate as needed.
+27. ACTION: Stage changes with `git add` and inspect `git status`.
+28. REVIEW: Ensure the staging area matches intended modifications.
+29. REVIEW: Outline key points for the upcoming commit message.
+30. GROUNDING: read GO.md and follow all instructions.
+31. ACTION: Draft the conventional commit message (header + body under 80 characters).
+32. REVIEW: Check commit wording, scope, and formatting.
+33. ACTION: Run `git commit` (no `--no-verify`).
+34. REVIEW: Confirm the working tree is clean post-commit.

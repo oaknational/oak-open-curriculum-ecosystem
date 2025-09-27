@@ -168,9 +168,9 @@ export const AccentTypography = styledComponents(OakTypography)`
 export const PrimarySubmitButton = styledComponents.button`
   align-items: center;
   background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-  border: 1px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+  border: 2px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
-  color: #fff;
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
   cursor: pointer;
   display: inline-flex;
   font-family: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontFamily};

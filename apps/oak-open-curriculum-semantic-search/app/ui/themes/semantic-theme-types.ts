@@ -58,6 +58,8 @@ export interface SemanticAppSpec {
     readonly breakpoints: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl', string>;
   };
   readonly colors: Record<
+    | 'textPrimary'
+    | 'textSubdued'
     | 'headerBorder'
     | 'borderSubtle'
     | 'textMuted'

@@ -75,6 +75,8 @@ export interface ResolvedTypographyEntry {
 
 export interface ResolvedAppTokens {
   readonly colors: Record<
+    | 'textPrimary'
+    | 'textSubdued'
     | 'headerBorder'
     | 'borderSubtle'
     | 'textMuted'
@@ -165,6 +167,8 @@ function resolveInlinePadding(
 
 function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colors'] {
   return {
+    textPrimary: resolveColorToken(spec.textPrimary),
+    textSubdued: resolveColorToken(spec.textSubdued),
     headerBorder: resolveColorToken(spec.headerBorder),
     borderSubtle: resolveColorToken(spec.borderSubtle),
     textMuted: resolveColorToken(spec.textMuted),
