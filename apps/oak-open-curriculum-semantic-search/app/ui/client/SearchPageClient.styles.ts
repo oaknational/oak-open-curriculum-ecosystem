@@ -142,6 +142,14 @@ export const HeroCard = styledComponents(OakBox)`
   grid-area: hero;
 `;
 
+export const HeroHeadingCluster = styledComponents(OakBox)`
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  width: 100%;
+  min-inline-size: 0;
+`;
+
 const PanelCard = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;

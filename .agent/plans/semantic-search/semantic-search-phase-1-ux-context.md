@@ -16,7 +16,7 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - `ThemeGlobalStyle` paints `html`, `body`, and `#app-theme-root`; light/dark `<meta name="theme-color">` now resolves from semantic `bg-primary` tokens with unit coverage.
 - Playwright responsive suite enforces Admin/Docs behaviour at `bp-xxl` (container width clamped 1 200 – 1 260 px, axe violations = 0); Admin `bp-md` and Health `bp-xs` remain guarded until their UX work lands.
 - Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
-- Navigation and hero layouts still waste space on phones; Health surface remains raw JSON awaiting UI shell brief.
+- Navigation and hero layouts still waste space on phones; `/healthz` intentionally serves raw JSON while a separate status page UI is planned to surface the same data with Oak styling.
 - Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
 - Platform status page design drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle so users can consume UI or raw JSON while `/healthz` remains an API endpoint.
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
@@ -43,7 +43,8 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - Do we need Oak-provided dark-mode token variants (icons, emphasis surfaces), or should we formalise local overrides? (Still open.)
 - Can Oak Components expose precomputed CSS variable sheets to simplify runtime bridge logic? (Still open.)
 - Are additional breakpoints required once Search hero media lands, or does the `bp-xs` → `bp-xxl` ramp remain sufficient?
-- What telemetry/health UI patterns best balance clarity and brand tone once functionality delivers structured outputs? (Feeds into Health shell work.)
+- What telemetry/health UI patterns best balance clarity and brand tone once functionality delivers structured outputs? (To be resolved alongside the status page effort after fixtures land.)
+- When should we resume hero polish (clamp, accent styling) after fixtures and status page work completes? (Track post-fixture follow-up.)
 
 ## Interactions with Functionality Stream
 

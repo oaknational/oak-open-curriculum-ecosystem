@@ -16,18 +16,16 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 ## Current Snapshot (2025-09-29)
 
 - Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
-- Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; hero copy still needs a 45 ch clamp and the controls must stay visible above the fold on wide screens.
-- Hero accent text currently applies a 2 rem fully opaque text-shadow which reduces the sampled contrast against the white hero card; we are iterating on a translucent variant in `SearchPageClient.styles.ts` while validating with axe and Playwright, and the latest `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` run remains green so the scenario stays trustworthy.
+- Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; additional hero polish (45 ch clamp, accent styling) is postponed until fixtures and the status page work are complete.
 - Deterministic fixtures power Playwright by toggling `SEMANTIC_SEARCH_USE_FIXTURES`; richer card/facet data and an app-level env toggle are still outstanding.
-- `/healthz` continues to return raw JSON; the Oak UI shell (hero status banner, responsive cards, live region) remains to be implemented.
+- `/healthz` intentionally remains a JSON API endpoint; user-facing health information will move to a new status page with Oak UI styling.
 - Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
 
 ## Immediate Priorities
 
-1. Expand the fixture set (lessons/units/sequences, facets, suggestions) and expose an app `.env` flag so local/dev builds can render against fixtures instead of live APIs.
-2. Complete the deterministic fixture work (lessons/units/sequences, facets, suggestions) and land the runtime toggle so Search can switch cleanly between live data and fixtures.
-3. Design and build the dedicated status page (separate from `/healthz`) with Oak UI affordances, responsive layout tokens, and automated tests; `/healthz` remains an API endpoint.
-4. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
+1. Complete the deterministic fixture set (lessons/units/sequences, facets, suggestions) and land the runtime toggle so Search can switch cleanly between live data and fixtures.
+2. Design and build the dedicated status page (separate from `/healthz`) with Oak UI affordances, responsive layout tokens, and automated tests.
+3. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
 
 ## Verification Checklist
 
@@ -74,7 +72,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 ### ACTION 5 – Outline Health shell UX requirements
 
-- Draft the Oak UI shell contract that will wrap `healthz` once structured data lands: navigation placement, hero/summary stack, card treatments, error messaging, and how Accept headers might toggle JSON vs UI.
+- Draft the Oak UI shell contract for the new status page: navigation placement, hero/summary stack, card treatments, error messaging, and how Accept headers might toggle JSON vs UI, while keeping `/healthz` as JSON-only.
 - Identify dependencies on functionality (e.g. telemetry payload shape, status enums) and record them so the functionality stream can unblock UX promptly.
 - Reference Admin layout wrappers as the likely base (`apps/oak-open-curriculum-semantic-search/app/admin/ui`), noting any shared components to extract.
 - Map current JSON fields (`status`, `details`) to proposed UI atoms (badges, tables, accordions) and flag any missing semantics that functionality needs to expose for an accessible summary card.
@@ -102,7 +100,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 ## Open Follow-ups
 
-- Decide whether `/healthz` remains in navigation when JSON-only; align with functionality once the shell plan is agreed.
+- Decide how the status page is linked (navigation vs support surfaces) while `/healthz` stays JSON-only; align with functionality once the plan is agreed.
 - Confirm whether additional semantic tokens (e.g. `layout.inlinePadding.narrow`) are needed to handle extreme mobile cases after the Search audit.
 - Revisit Storybook once responsive updates land to ensure Oak Components coverage captures the new layouts.
 - Extend Playwright fixtures with populated search results/facets (in addition to zero-hit cases) so responsive screenshots communicate the real layout; document the toggle workflow for contributors.

@@ -33,8 +33,7 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
 - Playwright responsive baseline now asserts Admin/Docs `bp-xxl` container clamps without `test.fail()` guards, producing actionable snapshots.
 - `<meta name="theme-color">` draws from semantic `bg-primary` tokens, guarded by `layout.meta.unit.test.ts` so browser chrome tracks Oak palette changes.
 - Playwright search scenarios run against curated fixtures by toggling `SEMANTIC_SEARCH_USE_FIXTURES`, ensuring local runs avoid Elasticsearch dependencies and keep results deterministic for layout assertions. Tests at `bp-xs`/`bp-md`/`bp-lg` now pass without `test.fail()` guards following the accessible button + layout updates.
-- Structured and natural forms now place `<form>` elements inside `tabpanel` containers (no invalid ARIA roles) and share a custom submit button with brand-primary contrast that meets WCAG 2.1 ratios.
-- 2025-09-30: Hero accent text keeps its Oak green fill but the 2 rem opaque glow drops the measured contrast; we are tuning the text-shadow alpha and capturing axe plus `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` artefacts so the glow remains a safeguarded visual flourish while UI tests stay purposeful and green.
+- Structured and natural forms now place `<form>` elements inside `tabpanel` containers (no invalid ARIA roles) and share a custom submit button with brand-primary contrast that meets WCAG 2.1 ratios. Further hero polish (clamp, accent styling) is paused until fixtures and the status page work complete.
 - Axe still flags two violations on Health (HTML fallback) until that UI shell lands; search regressions are clean.
 - Axe still flags two violations in dev mode due to the Next.js overlay; suppress with `NEXT_DISABLE_DEV_ERRORS` in the Playwright server env, but investigate underlying errors before relaxing assertions.
 - 2025-09-27: Introduced `resolveBreakpoint` helper and updated Search layout components to consume semantic breakpoints via styled-components theme; Playwright sampling confirmed `ControlsGrid` now transitions to two columns at `bp-md` while retaining token-driven column clamps.
@@ -44,15 +43,9 @@ Phase 1’s UX stream turns the current token-aligned theme into an exemplar O
 
 ### Outstanding Audit Notes
 
-- **Health telemetry shell:** The `/healthz` route still renders raw JSON and lacks the Oak container/hero wrappers. Responsive layout work must introduce the shared `PageContainer` and card shells once the UI brief lands.
-  - Draft shell (2025-09-27): adopt `PageContainer` with hero summary (status badge + uptime note), two-column grid at `bp-md` separating "Status" cards from "Diagnostics" accordion, and reserve a `role="status"` live region for API health messages. Accept-header toggle should serve JSON by default yet promote UI when `text/html` requested without breaking caching.
-- **Search hero/control balance:** Validate that the `HeroControlsCluster` column ratios keep both structured and natural panels visible above the fold on `bp-lg`+ widths; adjust tokenised track weights if forms continue to slip below the hero copy.
-- **Playwright data mocks:** Extend the deterministic fixture set beyond the existing hybrid search responses so responsive screenshots reflect populated cards, facets, and zero-hit dashboards; document the toggle strategy inside the plan/context to guide future contributors.
-- **Search overflow guard:** Playwright now asserts `bp-lg` at 1 100 px and 1 380 px; the narrower viewport still exceeds the clamp by ~98 px, so refine container widths before unguarding the test. The 1 380 px viewport passes with the current clamp.
-- **Search hero clamp:** Copy still exceeds the 45 ch target at `bp-lg`; now that fixtures drive deterministic results, we can adjust layout tokens/media queries next.
-- **Search accent contrast:** The hero Accent span’s wide text-shadow must shift to a translucent value so the effective contrast meets WCAG 2.1 AA against the white hero card; each tweak should be paired with an axe capture and the Search page `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` run to prove the regression suite remains useful.
-- **Search hero polish:** Confirm the new clamp (`max-inline-size: min(45ch, 100%)`) keeps hero copy within 45 ch across locales, consider adding an illustration at `bp-xl`, and verify dark-mode contrast on the refreshed control cards.
-- Search UX: validate the new hero/control cluster (contrast in dark mode, hero copy clamp ≤45 ch) and capture any additional token work (e.g. hero illustration slots at `bp-xl`).
+- **Status page UX:** `/healthz` remains an API endpoint; design and ship the dedicated status page UI (hero summary, diagnostics cards, accessibility hooks) using shared layout tokens.
+- **Deterministic fixtures:** Extend the fixture set and runtime toggle so Search visual tests run against representative data, with documentation for switching modes.
+- **Search hero refinements:** Clamp/accent work deferred until fixtures and status page ship; monitor but do not implement yet.
 
 ## Breakpoint Strategy
 
@@ -153,10 +146,10 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 10. REVIEW: Inspect code paths/tests to confirm the toggle works in both fixture and live modes.
 11. REVIEW: Identify documentation updates required for the new fixture toggle.
 12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Refine the Search hero/controls layout (45 ch clamp, above-fold visibility, overflow guards).
-14. REVIEW: Validate hero behaviour via local inspection and Playwright assertions/screenshots.
-15. ACTION: Build the `/healthz` Oak UI shell with responsive layout tokens and accessibility affordances.
-16. REVIEW: Confirm Health shell behaviour with tests/axe checks and note any residual issues.
+13. ACTION: Outline the dedicated status page UX (hero summary, diagnostics cards, accessibility hooks) that complements `/healthz`.
+14. REVIEW: Share the status page outline with stakeholders and capture feedback before implementation.
+15. ACTION: Implement the status page UI with shared layout tokens, Playwright selectors, and axe coverage.
+16. REVIEW: Validate status page behaviour across breakpoints and document any follow-up work.
 17. REVIEW: Ensure all Phase 1 UX backlog items are either complete or captured as follow-ups.
 18. GROUNDING: read GO.md and follow all instructions.
 19. ACTION: Update plan/context/continuation docs with progress, artefacts, and outstanding work.

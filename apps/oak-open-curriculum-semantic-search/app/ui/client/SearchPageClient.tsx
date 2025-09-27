@@ -1,7 +1,7 @@
 'use client';
 
 import type { JSX } from 'react';
-import { OakBox, OakTypography } from '@oaknational/oak-components';
+import { OakTypography } from '@oaknational/oak-components';
 import { useSearchController, type SearchController } from './useSearchController';
 import { StructuredSearch } from '../StructuredSearch';
 import type { StructuredSearchAction } from '../StructuredSearch';
@@ -15,6 +15,7 @@ import {
   ControlsGrid,
   FacetsPanel,
   HeroCard,
+  HeroHeadingCluster,
   ContentContainer,
   HeroControlsCluster,
   NaturalPanelCard,
@@ -119,14 +120,17 @@ function SearchHero(): JSX.Element {
   return (
     <HeroCard data-testid="search-hero" $ba="border-solid-s">
       <OakTypography as="h1" $font="heading-3">
-        <OakBox as="span" $display="inline-flex" $gap="space-between-ssx">
+        <HeroHeadingCluster as="span">
           <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
             Hybrid
           </AccentTypography>
-          <OakTypography as="span" $font="heading-3">
-            Search <em>Alpha</em>
+          <OakTypography as="span" $font="heading-3" $pr="space-between-ssx">
+            Search
           </OakTypography>
-        </OakBox>
+          <OakTypography as="span" $font="heading-3">
+            <em>Alpha</em>
+          </OakTypography>
+        </HeroHeadingCluster>
       </OakTypography>
       <OakTypography as="p" $font="body-4" $color="text-subdued">
         Search lessons, units, and sequences.
