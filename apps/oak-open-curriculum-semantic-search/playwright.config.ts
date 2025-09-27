@@ -1,4 +1,7 @@
-import { defineConfig, devices } from '@playwright/test';
+import {
+  defineConfig,
+  //devices
+} from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
 
@@ -28,9 +31,15 @@ export default defineConfig({
     video: 'off',
   },
   projects: [
+    // {
+    //   name: 'Google Chrome',
+    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    // },
     {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+      name: 'Chromium',
+      use: {
+        browserName: 'chromium',
+      },
     },
   ],
 });

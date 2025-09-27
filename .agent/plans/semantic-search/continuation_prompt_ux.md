@@ -17,6 +17,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 - Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
 - Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; hero copy still needs a 45 ch clamp and the controls must stay visible above the fold on wide screens.
+- Hero accent text currently applies a 2 rem fully opaque text-shadow which reduces the sampled contrast against the white hero card; we are iterating on a translucent variant in `SearchPageClient.styles.ts` while validating with axe and Playwright, and the latest `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` run remains green so the scenario stays trustworthy.
 - Deterministic fixtures power Playwright by toggling `SEMANTIC_SEARCH_USE_FIXTURES`; richer card/facet data and an app-level env toggle are still outstanding.
 - `/healthz` continues to return raw JSON; the Oak UI shell (hero status banner, responsive cards, live region) remains to be implemented.
 - Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
@@ -24,14 +25,14 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 ## Immediate Priorities
 
 1. Expand the fixture set (lessons/units/sequences, facets, suggestions) and expose an app `.env` flag so local/dev builds can render against fixtures instead of live APIs.
-2. Finalise the Search hero/controls polish: clamp hero copy, guarantee controls sit above the fold on large viewports, and double-check container overflow guards at 1 100 px and 1 380 px.
+2. Finalise the Search hero/controls polish: clamp hero copy, guarantee controls sit above the fold on large viewports, tune the accent text-shadow to a translucent value that passes WCAG, and double-check container overflow guards at 1 100 px and 1 380 px.
 3. Deliver the `/healthz` Oak UI shell as outlined in the UX plan, with responsive layout tokens, accessible status messaging, and updated tests.
 4. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
 
 ## Verification Checklist
 
 - Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added.
-- Playwright responsive suites: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"`, `... --grep "Admin page responsive regressions"`, `... --grep "Docs page responsive regressions"`; add Health coverage once the shell lands.
+- Playwright responsive suites: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"`, `... --grep "Admin page responsive regressions"`, `... --grep "Docs page responsive regressions"`; confirm the Search run captures the hero accent text-shadow and remains useful by flagging future contrast regressions, and add Health coverage once the shell lands.
 - Full gate before commit: `pnpm qg`.
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex via `resolveUiColor`; integration tests assert the generated palette matches resolved colours.
 - 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and gains Playwright regression guards across lg/md/xxl viewports.

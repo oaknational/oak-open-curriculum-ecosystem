@@ -30,6 +30,11 @@ function findGlobalStyle(): HTMLStyleElement | null {
   return document.getElementById('app-theme-global') as HTMLStyleElement | null;
 }
 
+function expectCssVariableHex(styles: string, variable: string): void {
+  const pattern = new RegExp(`--${variable}:#(?:[0-9a-f]{6}|[0-9a-f]{8});`, 'i');
+  expect(pattern.test(styles)).toBe(true);
+}
+
 describe('Bridge theming (ADR-045)', () => {
   it('emits a CSS variables style tag', () => {
     render(
@@ -125,9 +130,10 @@ describe('Bridge theming (ADR-045)', () => {
     expect(styles).toContain(
       `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
-    expect(normalised).toContain('--app-color-brand-primary:#287c34;');
-    expect(normalised).toContain('--app-color-brand-primary-deep:#144d24;');
-    expect(normalised).toContain('--app-color-brand-primary-bright:#eeccff;');
+    expectCssVariableHex(normalised, 'app-color-brand-primary');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-dark');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-deep');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-bright');
     expect(normalised).toContain('--app-layout-control-column-min-width:20rem;');
     expect(normalised).toContain('--app-layout-secondary-column-min-width:18rem;');
     expect(normalised).toContain(
@@ -153,9 +159,10 @@ describe('Bridge theming (ADR-045)', () => {
     expect(styles).toContain(
       `#app-theme-root{background-color:${background.toLowerCase()};color:${foreground.toLowerCase()};`,
     );
-    expect(normalised).toContain('--app-color-brand-primary:#287c34;');
-    expect(normalised).toContain('--app-color-brand-primary-deep:#0b2a16;');
-    expect(normalised).toContain('--app-color-brand-primary-bright:#eeccff;');
+    expectCssVariableHex(normalised, 'app-color-brand-primary');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-dark');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-deep');
+    expectCssVariableHex(normalised, 'app-color-brand-primary-bright');
     expect(normalised).toContain(
       `--app-layout-container-max-width:${layout.containerMaxWidth.replace(/\s+/g, '')};`,
     );

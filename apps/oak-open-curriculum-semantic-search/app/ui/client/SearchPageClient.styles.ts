@@ -4,6 +4,15 @@ import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import { resolveBreakpoint } from '../shared/breakpoints';
 
+function hexToRgba(hex: string, alpha: number): string {
+  const normalized = hex.replace('#', '');
+  const bigint = parseInt(normalized, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 export const PageContainer = styledComponents(OakBox)`
   width: 100%;
   max-width: min(100%, var(--app-layout-container-max-width));
@@ -124,7 +133,7 @@ export const HeroCard = styledComponents(OakBox)`
   gap: var(--app-gap-cluster);
   align-items: flex-start;
   background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  border-color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
+  border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
   max-inline-size: min(45ch, 100%);
@@ -162,16 +171,18 @@ export const FacetsPanel = styledComponents(OakBox)`
 `;
 
 export const AccentTypography = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
-  text-shadow: 0 0 2rem ${({ theme }) => getAppTheme(theme).app.colors.borderAccent};
+  color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+  text-shadow: 0 0 1rem
+    ${({ theme }) => hexToRgba(getAppTheme(theme).app.palette.brandPrimaryBright, 0.5)};
 `;
 
 export const PrimarySubmitButton = styledComponents.button`
   align-items: center;
-  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
-  border: 2px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
+
+      background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
+    color: ${({ theme }) => getAppTheme(theme).uiColors['bg-btn-secondary']};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
   cursor: pointer;
   display: inline-flex;
   font-family: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontFamily};
@@ -187,9 +198,9 @@ export const PrimarySubmitButton = styledComponents.button`
 
   &:hover,
   &:active {
-    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
-    color: ${({ theme }) => getAppTheme(theme).uiColors['bg-btn-secondary']};
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+  border: 2px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
   }
 
   &:disabled {

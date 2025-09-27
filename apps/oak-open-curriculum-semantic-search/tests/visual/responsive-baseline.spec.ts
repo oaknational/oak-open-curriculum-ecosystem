@@ -5,7 +5,6 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import {
   structuredSearchFixture,
   suggestionFixture,
-  emptySearchFixture,
 } from '../../app/ui/__fixtures__/search-structured';
 
 type Viewport = {
@@ -93,21 +92,26 @@ function countTracks(template: string): number {
 async function mockSearchEndpoints(page: Page): Promise<void> {
   await page.route('**/api/search', async (route) => {
     if (route.request().method() === 'POST') {
-      let parsedBody: unknown = null;
+      const raw = route.request().postData();
+      let parsedBody: Record<string, unknown> | null = null;
+
       try {
-        const raw = route.request().postData();
-        parsedBody = raw ? JSON.parse(raw) : null;
+        parsedBody = raw ? (JSON.parse(raw) as Record<string, unknown>) : null;
       } catch {
         parsedBody = null;
       }
 
-      const payload =
-        parsedBody &&
-        typeof parsedBody === 'object' &&
-        parsedBody !== null &&
-        'includeFacets' in parsedBody
-          ? structuredSearchFixture
-          : emptySearchFixture;
+      const payload = (() => {
+        if (parsedBody && parsedBody.scope === 'all') {
+          const scopes = ['lessons', 'units', 'sequences'] as const;
+          return {
+            scope: 'all',
+            buckets: scopes.map((scope) => ({ scope, result: structuredSearchFixture })),
+            suggestions: suggestionFixture.suggestions,
+          };
+        }
+        return structuredSearchFixture;
+      })();
 
       await route.fulfill({
         status: 200,
@@ -126,6 +130,20 @@ async function mockSearchEndpoints(page: Page): Promise<void> {
       body: JSON.stringify(suggestionFixture),
     });
   });
+}
+
+async function setThemeMode(page: Page, mode: 'light' | 'dark' | 'system'): Promise<void> {
+  await page.context().addCookies([
+    {
+      name: 'theme-mode',
+      value: mode,
+      domain: 'localhost',
+      path: '/',
+      httpOnly: false,
+      secure: false,
+      sameSite: 'Lax',
+    },
+  ]);
 }
 
 async function runStructuredSearch(page: Page): Promise<void> {
@@ -210,6 +228,29 @@ test.describe('Search page responsive regressions', () => {
       const axe = await captureAccessibility(page, 'search-hero-bp-lg', testInfo);
 
       expect.soft(maxInline).not.toBe('none');
+      expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
+    });
+  });
+
+  test.describe('bp-lg (1_200px) dark mode', () => {
+    test.use({ viewport: VIEWPORTS.bpLg });
+
+    test('Hero copy is clamped for readability in dark mode', async ({ page }, testInfo) => {
+      await mockSearchEndpoints(page);
+      await setThemeMode(page, 'dark');
+      await page.goto('/');
+      await expect(page.getByTestId('search-hero')).toBeVisible();
+      await runStructuredSearch(page);
+
+      const hero = page.getByTestId('search-hero');
+      const html = page.locator('html');
+
+      await expect(html).toHaveAttribute('data-theme', 'dark');
+      await expect(hero).toBeVisible();
+
+      await captureScreenshot(page, 'search-hero-bp-lg-dark', testInfo);
+      const axe = await captureAccessibility(page, 'search-hero-bp-lg-dark', testInfo);
+
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });

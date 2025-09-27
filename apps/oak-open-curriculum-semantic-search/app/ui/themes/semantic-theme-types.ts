@@ -63,6 +63,7 @@ export interface SemanticAppSpec {
     | 'headerBorder'
     | 'borderAccent'
     | 'borderSubtle'
+    | 'borderStrong'
     | 'textMuted'
     | 'errorText'
     | 'pageNote'

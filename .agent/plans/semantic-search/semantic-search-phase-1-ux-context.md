@@ -29,12 +29,13 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex (`resolveUiColor`), the page container uses the neutral background token with elevated card styling, and integration coverage asserts the options payload stays in-valid colour space (`app/api/docs/page.integration.test.tsx`).
 - 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and Playwright regression coverage (`Admin page responsive regressions`) now captures screenshots plus overflow/axe assertions across lg/md/xxl viewports.
 - 2025-09-29: Full `pnpm qg` suite passes following the docs/admin fixes and the markdownlint newline correction; continue to monitor Notion MCP E2E flake potential but no failures observed in the latest run.
+- 2025-09-30: Search hero accent text keeps its brand colour but the 2 rem fully opaque text shadow fails WCAG contrast when sampled against the white hero card; we are iterating on a translucent variant in `SearchPageClient.styles.ts` while rerunning `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"` to prove the glow effect remains covered by useful, passing UI tests and axe snapshots.
 
 ## Tooling & References
 
 - Dev server: `pnpm dev` (Next.js; see `/tmp/semantic-dev.log` for output).
 - Playwright MCP available via `pnpm dlx @playwright/mcp@latest` (server alias `playwright`).
-- Storybook reference: https://components.thenational.academy/?path=/docs/introduction--docs
+- Storybook reference: <https://components.thenational.academy/?path=/docs/introduction--docs>
 - Theme documentation: `.agent/plans/semantic-search/semantic-theme-inventory.md`, `.agent/plans/semantic-search/semantic-theme-spec.md`, `apps/oak-open-curriculum-semantic-search/docs/oak-components-theming.md`.
 
 ## Outstanding UX Questions

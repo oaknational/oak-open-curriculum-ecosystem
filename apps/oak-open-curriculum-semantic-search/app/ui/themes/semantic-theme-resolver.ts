@@ -76,6 +76,7 @@ export interface ResolvedAppTokens {
     | 'headerBorder'
     | 'borderAccent'
     | 'borderSubtle'
+    | 'borderStrong'
     | 'textMuted'
     | 'errorText'
     | 'pageNote'
@@ -175,6 +176,7 @@ function resolveColors(spec: SemanticAppSpec['colors']): ResolvedAppTokens['colo
     headerBorder: resolveColorToken(spec.headerBorder),
     borderAccent: resolveColorToken(spec.borderAccent),
     borderSubtle: resolveColorToken(spec.borderSubtle),
+    borderStrong: resolveColorToken(spec.borderStrong),
     textMuted: resolveColorToken(spec.textMuted),
     errorText: resolveColorToken(spec.errorText),
     pageNote: resolveColorToken(spec.pageNote),
