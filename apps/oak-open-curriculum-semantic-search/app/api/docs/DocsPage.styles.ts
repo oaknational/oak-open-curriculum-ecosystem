@@ -45,6 +45,7 @@ export const DocsWrapper = styledComponents(OakBox)`
       background-color: ${surfaceCard};
       color: ${textPrimary};
       min-height: clamp(40rem, 70vh, 72rem);
+      box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.08);
 
       .redoc-wrap,
       .redoc-wrap .api-content,

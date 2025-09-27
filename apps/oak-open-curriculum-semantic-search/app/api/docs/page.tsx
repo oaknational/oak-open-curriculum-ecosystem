@@ -17,7 +17,12 @@ export default function ApiDocsPage(): JSX.Element {
   const redocOptions = useMemo(() => buildRedocOptions(redocTheme), [redocTheme]);
 
   return (
-    <PageContainer as="main" $background="bg-primary" $color="text-primary">
+    <PageContainer
+      as="main"
+      data-testid="api-docs-page"
+      $background="bg-neutral"
+      $color="text-primary"
+    >
       <DocsHeader specUrl={specUrl} />
 
       <DocsWrapper>

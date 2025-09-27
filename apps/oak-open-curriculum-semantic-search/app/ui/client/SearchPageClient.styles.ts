@@ -1,6 +1,7 @@
 import { OakBox, OakTypography } from '@oaknational/oak-components';
 import styledComponents, { css } from 'styled-components';
 import { getAppTheme } from '../themes/app-theme-helpers';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import { resolveBreakpoint } from '../shared/breakpoints';
 
 export const PageContainer = styledComponents(OakBox)`
@@ -123,7 +124,7 @@ export const HeroCard = styledComponents(OakBox)`
   gap: var(--app-gap-cluster);
   align-items: flex-start;
   background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  border-color: ${({ theme }) => getAppTheme(theme).uiColors['border-decorative1-stronger']};
+  border-color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
   max-inline-size: min(45ch, 100%);
@@ -137,7 +138,7 @@ const PanelCard = styledComponents(OakBox)`
   flex-direction: column;
   gap: var(--app-gap-cluster);
   background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  border-color: ${({ theme }) => getAppTheme(theme).uiColors['border-decorative1-stronger']};
+  border-color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
   width: 100%;

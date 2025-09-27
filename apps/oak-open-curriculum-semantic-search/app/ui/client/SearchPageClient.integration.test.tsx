@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../themes/light';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import type { StructuredBody } from '../structured-search.shared';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from '../StructuredSearch';
@@ -86,7 +87,7 @@ describe('SearchPageClient', () => {
     const styles = getComputedStyle(hero);
 
     expect(styles.backgroundColor).toBe(hexToRgb(theme.app.colors.surfaceCard));
-    expect(styles.borderColor).toBe(hexToRgb(theme.app.palette.brandPrimaryDeep));
+    expect(styles.borderColor).toBe(hexToRgb(resolveUiColor(theme, 'border-decorative1-stronger')));
     expect(styles.paddingTop).toBe(theme.app.space.padding.card);
   });
 
@@ -113,7 +114,7 @@ describe('SearchPageClient', () => {
     const structured = screen.getByTestId('structured-search-panel');
     const natural = screen.getByTestId('natural-search-panel');
     const expectedSurface = hexToRgb(theme.app.colors.surfaceCard);
-    const expectedBorder = hexToRgb(theme.app.palette.brandPrimaryDeep);
+    const expectedBorder = hexToRgb(resolveUiColor(theme, 'border-decorative1-stronger'));
 
     expect(getComputedStyle(structured).backgroundColor).toBe(expectedSurface);
     expect(getComputedStyle(natural).backgroundColor).toBe(expectedSurface);

@@ -135,6 +135,7 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 - 2025-09-28 integration (Search layout): `SearchPageClient.integration.test.tsx` now asserts the Phase selector options and the layout clamp expressed as `min(100%, var(--app-layout-container-max-width))`; suite passes under Vitest.
 - 2025-09-28 implementation (Multi-scope fixtures): Structured search fan-out now buckets lessons/units/sequences when scope = All; Playwright fixtures mirror this output so responsive snapshots capture populated sections, with a follow-up to enrich card content for more representative screenshots.
 - 2025-09-27 quality gates: `pnpm make` succeeded after trimming `SearchHero` under the lint threshold, and the full `pnpm qg` suite passed (format, type-check, lint, tests, smoke).
+- 2025-09-28 quality gates: Re-ran `pnpm qg` post-markdownlint fix to restore newline on the Health responsive baseline artefact; suite green.
 
 ## Todo (GO cadence)
 
@@ -154,3 +155,10 @@ These breakpoints drive layout tokens, Styled Components media queries, and Play
 14. ✅ REVIEW: Sanity-check documentation updates for accuracy and clarity.
 15. ✅ QUALITY-GATE: Run `pnpm qg` from the repo root once fixes land.
 16. ✅ REVIEW: Log the `pnpm qg` outcome, flagging any remaining exceptions.
+17. ✅ ACTION: Re-evaluate API Docs colour tokens for legibility and select improved mappings.
+18. ✅ REVIEW: Capture updated colour decisions in the plan/context docs with rationale.
+19. ✅ ACTION: Implement the API Docs colour adjustments (token tweaks + component styling) and extend integration tests for coverage.
+20. ✅ REVIEW: Run targeted docs/admin tests to prove the new palette (list commands in context).
+21. ✅ GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+22. ✅ QUALITY-GATE: Run `pnpm qg` to confirm repository health after the colour changes.
+23. ✅ REVIEW: Note the `pnpm qg` outcome and highlight any outstanding issues.

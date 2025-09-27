@@ -73,4 +73,8 @@ Notes:
 - Lexend remains the backbone for headings, body copy, and UI elements to preserve brand readability.
 - Secondary display faces are reserved for straplines, pull quotes, and highlights to add personality without diluting recognition.
 - Weight and size scaling should reinforce hierarchy (dominant H1, structured H2, readable body text).
-- Line heights stay tight on large headers (≈1.1–1.2) and generous for copy (≈1.5–1.6) to optimise legibility.
+- Line heights stay tight on large headers (≈1.1–1.2) and generous for copy (≈1.5–1.6) to optimise legibility.0
+
+## Future Enhancements
+
+The theming solutions involves a pre-hydration script that sets the theme on the DOM before React hydration. This is a pragmatic solution that works well for the current implementation, but it has limitations. Explore a CSS only solution using CSS variables, see .agent/plans/semantic-search/oak-components-application-and-improvement-plan.md .

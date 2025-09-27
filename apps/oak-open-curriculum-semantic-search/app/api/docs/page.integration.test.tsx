@@ -70,6 +70,15 @@ describe('ApiDocsPage', () => {
     expect(frame).toHaveAttribute('data-spec', '/api/openapi.json');
   });
 
+  it('paints the page container with the neutral background token', () => {
+    renderDocs();
+
+    const container = screen.getByTestId('api-docs-page');
+    const styles = window.getComputedStyle(container);
+    const expected = resolveUiColor(createLightTheme(), 'bg-neutral');
+    expect(styles.backgroundColor).toBe(hexToRgb(expected));
+  });
+
   it('applies dark theme surface colours to the docs wrapper', () => {
     renderDocsDark();
 
