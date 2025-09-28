@@ -1,6 +1,6 @@
 # Semantic Search Phase 1 – UX Context Snapshot
 
-_Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
+_Last updated: 2025-09-30 (fixture source enrichment + module outline)_
 
 ## Active Focus
 
@@ -22,7 +22,8 @@ _Last updated: 2025-09-29 (post docs/admin palette + qg rerun)_
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
-- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; structured "All content" calls fan out across lesson/unit/sequence buckets and fixtures mirror that multi-scope payload, though we still plan to enrich card/facet data for more realistic screenshots.
+- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; structured "All content" calls fan out across lesson/unit/sequence buckets and fixtures mirror that multi-scope payload. Fixture sources for KS2 maths, KS4 maths, KS3 history, and KS3 art are captured with manual suggestions ready for builder modelling.
+- Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` outlines forthcoming data modules and builders so the UX stream can centralise fixture logic without violating the cardinal rule.
 - 2025-09-28: `SearchResults.unit.test.tsx` now mounts the new `mode`/`multiBuckets` signature and asserts multi-scope bucket rendering so TypeScript aligns with the component API before rerunning `pnpm make`.
 - 2025-09-28: `pnpm make` now passes end-to-end after the SearchResults unit test update cleared the type-check regression.
 - Wide-view hero layout still needs validation that structured and natural panels remain visible above the fold at `xl`/`xxl`; adjust `HeroControlsCluster` track ratios if further Playwright sweeps highlight controls slipping below the hero copy.

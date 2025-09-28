@@ -1,6 +1,7 @@
 # Semantic Search Phase 1 – UX Plan
 
 ## Programme Vision
+
 - Deliver a hybrid search experience that expresses Oak’s brand, accessibility standards, and clarity of purpose across devices.
 - Ensure Semantic Search UI assets, tokens, and patterns can be lifted into other Oak products without bespoke overrides.
 - Ship UX work with the same rigour as functionality by leaning on TDD, visual regression, accessibility checks, and deterministic data.
@@ -8,26 +9,32 @@
 ## Phase Focus – UX Alignment
 
 Phase 1 keeps the design system aligned with product intent by:
+
 - Repairing responsive layout behaviour from 320 px phones up to ultra-wide desktops.
 - Re-establishing Oak’s typographic, spacing, and surface hierarchy across Search, Admin, Docs, and Health shells.
 - Replacing developer-centric error states with empathetic, observable messaging.
 - Consolidating deterministic fixtures and a runtime toggle so designers and automated tests can validate UX without live infrastructure.
 
 ## Current State Snapshot (2025-09-30)
+
 - ✅ Semantic tokens map colours, spacing, typography, and brand palette and flow through shared layout wrappers.
 - ✅ Search hero + controls now respect container width and maintain stacking rules below `bp-lg` following the `HeroHeadingCluster` fix.
-- ✅ Deterministic structured fixture exists but is overly simple (lessons only, empty facets/suggestions) and duplicated across server actions and Playwright route mocks.
+- ✅ Deterministic fixture sources captured for KS2 maths, KS4 maths, KS3 history, and KS3 art with enriched cross-scope suggestions ready for builder modelling.
+- ✅ Fixture reference notes and module outline drafted (`fixtures/REFERENCE.md`, `app/ui/search-fixtures/README.md`), aligning upcoming implementation with SDK-derived types.
 - ⚠️ Natural-language flow and `/api/search` live-path bypass the fixture toggle, forcing live calls for NL validation.
-- ⚠️ Facet content, bucket meta, and suggestion samples are too sparse to mirror brand storytelling or support responsive screenshots.
+- ⚠️ Facet content, bucket meta, and builder outputs still need to be centralised; fixtures remain duplicated across server actions until the new module lands.
 - ⚠️ Status page shell remains unimplemented; `/healthz` still serves JSON-only responses.
 
 ### Recent Progress
-- 2025-09-29: Captured representative KS2 maths lessons/units/sequences via the Oak Curriculum SDK using `OAK_API_KEY`; source snapshot stored at `tmp/search-fixture-source.json` for fixture modelling.
+
+- 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths.
+- 2025-09-30: Authored `fixtures/REFERENCE.md` to document provenance and schema alignment, plus `app/ui/search-fixtures/README.md` outlining data modules and builder responsibilities.
 - 2025-09-29: Search hero heading now wraps using `HeroHeadingCluster`, preventing overflow within the hero card.
 - 2025-09-29: Playwright responsive suite continues to gate Search/Admin/Docs layouts at bp-xs/md/lg/xxl using the existing structured fixture.
 - 2025-09-28: `SearchResults.unit.test.tsx` and integration coverage updated for multi-scope payloads (`mode` + `multiBuckets`).
 
 ### Outstanding Audit Notes
+
 - **Deterministic fixtures:** Replace ad-hoc fixtures with a single typed source that covers lessons, units, sequences, multi-bucket totals, facets, suggestions, empty states, and edge-cases (timed-out, zero results).
 - **Runtime toggle:** Provide an environment/query/cookie-driven toggle so Search UX can hot-switch between live data and fixtures, covering structured, natural, and suggestion flows.
 - **Status page UX:** Design and implement the Oak-branded status page that consumes `/healthz` data, including accessibility hooks and responsive layout.
@@ -36,28 +43,28 @@ Phase 1 keeps the design system aligned with product intent by:
 ## Deterministic Fixture Strategy (2025-09-30)
 
 ### Goals
+
 - Provide rich, realistic fixtures that let designers validate Search UX offline, unlock deterministic automated tests, and document expected UI states.
 - Eliminate duplicated fixture logic by funnelling all consumers through a single module with typed builders derived from the SDK.
 - Cover positive, mixed, and empty states across lessons, units, sequences, facets, suggestions, and summary metadata.
 
 ### Data Source
+
 - Base content on the KS2 Maths samples fetched via the Oak Curriculum SDK (`tmp/search-fixture-source.json`).
 - Augment with additional programme/phase entries where necessary to demonstrate cross-key-stage behaviour (e.g. KS3 sequences, secondary phases) while preserving brand tone.
 - Normalise suggestion payloads manually (API suggestions endpoint currently returns `null`; craft representative entries covering lessons, units, and sequences).
 
 ### Implementation Outline
-1. Create `apps/oak-open-curriculum-semantic-search/app/ui/search-fixtures/` with an index that exports:
-   - `buildSingleScopeFixture(scope)` returning typed lesson/unit/sequence arrays plus meta/timing/facets.
-   - `buildMultiScopeFixture()` returning the complete multi-bucket payload and suggestion list.
-   - `buildEmptyFixture(scope)` and `buildTimedOutFixture(scope)` for error-state coverage.
-   - Shared helper constants for sample lessons, units, sequences, facets, and suggestion entries.
+
+1. Populate `app/ui/search-fixtures/data/` with static exports derived from the curated JSON snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art).
 2. Encode fixtures using types from `SearchFacetsSchema`, `SequenceFacetSchema`, and `SearchLessonsIndexDoc` to stay aligned with the SDK.
-3. Provide lightweight factory helpers (pure functions) that accept overrides for totals, timings, and highlights—allows tests to tweak without mutating shared objects.
+3. Implement builder helpers (single-scope, multi-scope, empty, timed-out) that accept overrides for totals, timings, highlights, and suggestion lists.
 4. Compose suggestions that showcase varied scope labels (lesson, unit, programme), subject slugs, key stages, context metadata, and highlight the navigation copy used in cards.
-5. Document fixture provenance and regeneration steps in `search-fixtures/README.md` (include API fetch snippet and schema references).
+5. Document fixture provenance and regeneration steps in `search-fixtures/README.md` and ensure the data modules remain thin wrappers over SDK-derived shapes.
 6. Replace existing imports in `structured-search.actions.ts`, Playwright mocks, and future Storybook stories with the shared fixture builders.
 
 ### Fixture Coverage Targets
+
 - **Lessons:** Minimum six records spanning Year 3 fractions and Year 5 decimals with highlight sentences to exercise bullet rendering.
 - **Units:** At least three units per key stage/phase to validate summary metadata and card grids.
 - **Sequences:** Primary and secondary sequences with key stage arrays, years, and phase titles for hero context copy.
@@ -68,23 +75,27 @@ Phase 1 keeps the design system aligned with product intent by:
 ## Runtime Toggle and UX Validation
 
 ### Requirements
+
 - Honour `SEMANTIC_SEARCH_USE_FIXTURES` env default while allowing runtime overrides via query string (`?fixtures=on|off`) and a signed cookie (`semantic-search-fixtures`).
 - Ensure structured search, natural-language search, and `/api/search/suggest` all read from a single resolver to determine fixture mode.
 - Offer a developer-facing UI toggle (visible in dev/admin contexts) that calls a server action to flip the cookie and soft-refresh the page.
 - Guarantee Playwright runs exercise the same toggle path without bespoke route intercepts.
 
 ### Architecture
+
 - Implement `resolveFixtureMode({ cookies, searchParams, env })` as a pure utility with unit coverage proving precedence: query string → cookie → env → default `off`.
 - Add `setFixtureModeCookie(mode)` server action to persist the selection (HttpOnly, short-lived) while respecting Next.js caching.
 - Update `searchAction`, `/api/search`, `/api/search/nl`, `/api/search/suggest`, and `useSearchController` call sites to branch through the resolver and return shared fixtures when enabled.
 - Modify Playwright `globalSetup` to set the cookie instead of intercepting fetches; expose helpers in tests to switch modes mid-run when needed.
 
 ### UX Surface
+
 - Mount a small pill toggle (e.g. top-right dev ribbon) that renders the active mode, uses Oak secondary button styling, and respects keyboard navigation.
 - Provide an accessible description (`aria-live="polite"`) when the mode flips so screen readers announce the data source change.
 - Hide the control in production builds by feature gating on `process.env.NODE_ENV !== 'production'` and an optional `ENABLE_FIXTURE_TOGGLE` flag.
 
 ## Verification Strategy
+
 - **Unit tests:**
   - `resolveFixtureMode.unit.test.ts` covering precedence and invalid inputs.
   - Fixture builder tests asserting schema safeParse success and immutability (deep freeze to prevent accidental mutation).
@@ -99,11 +110,13 @@ Phase 1 keeps the design system aligned with product intent by:
   - Execute `pnpm qg` prior to merge, ensuring logs capture fixture mode states used in tests.
 
 ## Breakpoint Strategy
+
 - Maintain the existing breakpoint ramp (`bp-xs`, `bp-sm`, `bp-md`, `bp-lg`, `bp-xl`, `bp-xxl`) and validate hero, controls, results, and secondary panels at each width.
 - Ensure fixture content exercises line wrapping, multi-column grids, and overflow guards at `bp-lg` and `bp-xxl` once richer data lands.
 - Continue to attach Playwright artefacts (screenshots + axe JSON) for xs/md/lg/xxl to catch regressions introduced by fixture/toggle refactors.
 
 ## Todo (GO cadence)
+
 1. ✅ REMINDER: UseBritish spelling.
 2. ACTION: Consolidate KS2/KS3 fixture reference data from `tmp/search-fixture-source.json` into working notes.
 3. REVIEW: Summarise dataset coverage and highlight remaining gaps (e.g. suggestions, timed-out states).

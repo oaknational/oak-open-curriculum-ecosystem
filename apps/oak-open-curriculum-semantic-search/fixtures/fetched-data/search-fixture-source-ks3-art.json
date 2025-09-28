@@ -1,0 +1,221 @@
+{
+  "fetchedAt": "2025-09-28T05:58:00.409Z",
+  "keyStage": "ks3",
+  "subject": "art",
+  "sequencesSample": [
+    {
+      "sequenceSlug": "art-primary",
+      "years": [1, 2, 3, 4, 5, 6],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 1",
+          "keyStageSlug": "ks1"
+        },
+        {
+          "keyStageTitle": "Key Stage 2",
+          "keyStageSlug": "ks2"
+        }
+      ],
+      "phaseSlug": "primary",
+      "phaseTitle": "Primary",
+      "ks4Options": null
+    },
+    {
+      "sequenceSlug": "art-secondary",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": null
+    }
+  ],
+  "lessonsSample": [
+    {
+      "unitSlug": "abstract-painting-sustainable-materials",
+      "unitTitle": "Abstract painting: sustainable materials",
+      "lessons": [
+        {
+          "lessonSlug": "mark-making-using-different-tools",
+          "lessonTitle": "Mark-making using different tools"
+        },
+        {
+          "lessonSlug": "abstract-art-dry-materials-in-response-to-stimuli",
+          "lessonTitle": "Abstract art: dry materials in response to stimuli"
+        },
+        {
+          "lessonSlug": "mark-making-matching-technique-to-stimuli",
+          "lessonTitle": "Mark-making: matching technique to stimuli"
+        },
+        {
+          "lessonSlug": "abstract-art-painting-using-different-stimuli",
+          "lessonTitle": "Abstract art: painting using different stimuli"
+        },
+        {
+          "lessonSlug": "mark-marking-preparing-the-surface-for-painting",
+          "lessonTitle": "Mark-marking: preparing the surface for painting"
+        },
+        {
+          "lessonSlug": "abstract-marks-respond-to-stimuli-by-painting",
+          "lessonTitle": "Abstract marks: respond to stimuli by painting"
+        }
+      ]
+    },
+    {
+      "unitSlug": "an-overview-of-art",
+      "unitTitle": "An overview of art",
+      "lessons": [
+        {
+          "lessonSlug": "this-is-art-the-power-of-collaborative-making",
+          "lessonTitle": "This is art: the power of collaborative making"
+        },
+        {
+          "lessonSlug": "art-empire-and-museums-who-owns-art",
+          "lessonTitle": "Art, empire and museums: who owns art?"
+        },
+        {
+          "lessonSlug": "viewpoints-and-techniques-disability-and-art",
+          "lessonTitle": "Viewpoints and techniques: disability and art"
+        },
+        {
+          "lessonSlug": "i-cant-draw-building-confidence-through-drawing-techniques",
+          "lessonTitle": "“I can’t draw!\" Building confidence through drawing techniques"
+        }
+      ]
+    }
+  ],
+  "unitsSample": [
+    {
+      "yearSlug": "year-7",
+      "yearTitle": "Year 7",
+      "units": [
+        {
+          "unitSlug": "an-overview-of-art",
+          "unitTitle": "An overview of art"
+        },
+        {
+          "unitSlug": "an-overview-of-craft",
+          "unitTitle": "An overview of craft"
+        },
+        {
+          "unitSlug": "an-overview-of-design",
+          "unitTitle": "An overview of design"
+        },
+        {
+          "unitSlug": "art-craft-and-design-from-around-the-world",
+          "unitTitle": "The importance of nature in art"
+        },
+        {
+          "unitSlug": "art-movements-and-art-periods",
+          "unitTitle": "Art movements"
+        },
+        {
+          "unitSlug": "the-elements-of-art",
+          "unitTitle": "The elements of art"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-8",
+      "yearTitle": "Year 8",
+      "units": [
+        {
+          "unitSlug": "abstract-painting-sustainable-materials",
+          "unitTitle": "Abstract painting: sustainable materials"
+        },
+        {
+          "unitSlug": "being-curious-about-collage-and-assemblage",
+          "unitTitle": "Collage and Assemblage: sustainable materials"
+        },
+        {
+          "unitSlug": "being-curious-about-printing",
+          "unitTitle": "Being curious about printing"
+        },
+        {
+          "unitSlug": "being-curious-about-textiles",
+          "unitTitle": "Textiles and the creative industries"
+        },
+        {
+          "unitSlug": "craft-biomorphic-3d-design",
+          "unitTitle": "Being curious about 3D design"
+        },
+        {
+          "unitSlug": "spatial-design-architecture-and-interiors-working-collaboratively-to-a-brief",
+          "unitTitle": "Being curious about spatial design and architecture"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-9",
+      "yearTitle": "Year 9",
+      "units": [
+        {
+          "unitSlug": "art-for-wellbeing-expression-and-belonging",
+          "unitTitle": "Art for life: expression and belonging"
+        },
+        {
+          "unitSlug": "connections-home-space-and-family",
+          "unitTitle": "Connections: home, space and family"
+        },
+        {
+          "unitSlug": "identity-exploring-portraiture",
+          "unitTitle": "Identity: exploring portraiture"
+        },
+        {
+          "unitSlug": "personal-identity",
+          "unitTitle": "Personal identity"
+        },
+        {
+          "unitSlug": "social-action",
+          "unitTitle": "Social action"
+        },
+        {
+          "unitSlug": "the-principles-of-art",
+          "unitTitle": "The principles of art"
+        }
+      ]
+    }
+  ],
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Mark-making using different tools",
+      "scope": "lessons",
+      "url": "/teachers/lessons/mark-making-using-different-tools",
+      "subject": "art",
+      "keyStage": "ks3",
+      "contexts": {
+        "unitSlug": "abstract-painting-sustainable-materials"
+      }
+    },
+    {
+      "label": "Unit · Identity: exploring portraiture",
+      "scope": "units",
+      "url": "/teachers/units/identity-exploring-portraiture",
+      "subject": "art",
+      "keyStage": "ks3",
+      "contexts": {
+        "years": [9],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · Art secondary sequence",
+      "scope": "sequences",
+      "url": "/teachers/programmes/art-secondary",
+      "subject": "art",
+      "keyStage": "ks3",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"]
+      }
+    }
+  ]
+}

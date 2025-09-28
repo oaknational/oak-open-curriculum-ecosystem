@@ -5,14 +5,7 @@
   "sequencesSample": [
     {
       "sequenceSlug": "maths-primary",
-      "years": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
+      "years": [1, 2, 3, 4, 5, 6],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 1",
@@ -29,13 +22,7 @@
     },
     {
       "sequenceSlug": "maths-secondary",
-      "years": [
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
+      "years": [7, 8, 9, 10, 11],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 3",
@@ -387,5 +374,38 @@
       ]
     }
   ],
-  "suggestionsSample": null
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Represent counting in fours as the 4 times table",
+      "scope": "lessons",
+      "url": "/teachers/lessons/represent-counting-in-fours-as-the-4-times-table",
+      "subject": "maths",
+      "keyStage": "ks2",
+      "contexts": {
+        "unitSlug": "2-4-and-8-times-tables-using-times-tables-to-solve-problems"
+      }
+    },
+    {
+      "label": "Unit · 2, 4 and 8 times tables",
+      "scope": "units",
+      "url": "/teachers/units/2-4-and-8-times-tables-using-times-tables-to-solve-problems",
+      "subject": "maths",
+      "keyStage": "ks2",
+      "contexts": {
+        "years": [3],
+        "phaseSlug": "primary"
+      }
+    },
+    {
+      "label": "Programme · Maths primary sequence",
+      "scope": "sequences",
+      "url": "/teachers/programmes/maths-primary",
+      "subject": "maths",
+      "keyStage": "ks2",
+      "contexts": {
+        "phaseSlug": "primary",
+        "keyStages": ["ks1", "ks2"]
+      }
+    }
+  ]
 }

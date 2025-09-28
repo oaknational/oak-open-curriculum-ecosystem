@@ -20,6 +20,10 @@ Coordinate the execution of all semantic search workstreams so the platform achi
 
 ## Execution Notes
 
-- Use `semantic-search-alignment-refresh-plan.md` to track documentation upkeep, continuation prompt updates, and quality gates (format → lint → type-check → test → build → doc-gen).
+- Use `semantic-search-alignment-refresh-plan.md` to track documentation upkeep, continuation prompt updates, and quality gates (format → lint → type-check → test → build → doc-gen). DONE
 - Every task should reference the governing plan(s) in commits or review logs to maintain traceability.
 - Update this high-level plan as milestones progress (dates, status badges) to keep stakeholders aligned on overall progress.
+
+### Phase 2 Pre-requisite: The search app must follow the cardinal rule
+
+Fully model the flow of information from the sdk to the search index, decide where ingest and output search schemas are defined, clearly define where the search types derive from the SDK schema, and where we decorate with original types. Fully define the source of truth for data shapes in the search app. We need the search app to follow the cardinal rule: if the upstream Oak Open Curriculum OpenAPI spec changes, the only thing required to bring all apps up to date, is to run `pnpm type-gen` to regenerate the SDK types, and then `pnpm build` to allow them to flow through the system.

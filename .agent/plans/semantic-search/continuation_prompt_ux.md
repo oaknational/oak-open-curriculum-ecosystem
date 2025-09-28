@@ -13,17 +13,17 @@
 
 All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: UseBritish spelling” in the todo list.
 
-## Current Snapshot (2025-09-29)
+## Current Snapshot (2025-09-30)
 
 - Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
-- Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; additional hero polish (45 ch clamp, accent styling) is postponed until fixtures and the status page work are complete.
-- Deterministic fixtures power Playwright by toggling `SEMANTIC_SEARCH_USE_FIXTURES`; richer card/facet data and an app-level env toggle are still outstanding.
+- Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; additional hero polish (45 ch clamp, accent styling) remains paused until fixtures and the status page work are complete.
+- Fixture source datasets (KS2 maths, KS4 maths, KS3 history, KS3 art) now live in `fixtures/fetched-data/` with manual suggestions and reference notes in `fixtures/REFERENCE.md`; `app/ui/search-fixtures/README.md` defines the module structure for upcoming builders.
 - `/healthz` intentionally remains a JSON API endpoint; user-facing health information will move to a new status page with Oak UI styling.
 - Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
 
 ## Immediate Priorities
 
-1. Complete the deterministic fixture set (lessons/units/sequences, facets, suggestions) and land the runtime toggle so Search can switch cleanly between live data and fixtures.
+1. Model deterministic fixture builders using the enriched datasets (KS2/KS4 maths, KS3 history, KS3 art) and land the runtime toggle so Search can switch cleanly between live data and fixtures.
 2. Design and build the dedicated status page (separate from `/healthz`) with Oak UI affordances, responsive layout tokens, and automated tests.
 3. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
 

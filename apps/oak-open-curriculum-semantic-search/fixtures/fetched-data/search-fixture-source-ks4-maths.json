@@ -5,14 +5,7 @@
   "sequencesSample": [
     {
       "sequenceSlug": "maths-primary",
-      "years": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
+      "years": [1, 2, 3, 4, 5, 6],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 1",
@@ -29,13 +22,7 @@
     },
     {
       "sequenceSlug": "maths-secondary",
-      "years": [
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
+      "years": [7, 8, 9, 10, 11],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 3",
@@ -257,5 +244,38 @@
       ]
     }
   ],
-  "suggestionsSample": null
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Checking and securing understanding of perimeter",
+      "scope": "lessons",
+      "url": "/teachers/lessons/checking-and-securing-understanding-of-perimeter-for-standard-shapes",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "unitSlug": "2d-and-3d-shape-compound-shapes"
+      }
+    },
+    {
+      "label": "Unit · Algebraic manipulation",
+      "scope": "units",
+      "url": "/teachers/units/algebraic-manipulation",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "years": [10],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · Maths secondary sequence",
+      "scope": "sequences",
+      "url": "/teachers/programmes/maths-secondary",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"]
+      }
+    }
+  ]
 }

@@ -5,14 +5,7 @@
   "sequencesSample": [
     {
       "sequenceSlug": "history-primary",
-      "years": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
+      "years": [1, 2, 3, 4, 5, 6],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 1",
@@ -29,13 +22,7 @@
     },
     {
       "sequenceSlug": "history-secondary-aqa",
-      "years": [
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
+      "years": [7, 8, 9, 10, 11],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 3",
@@ -55,13 +42,7 @@
     },
     {
       "sequenceSlug": "history-secondary-edexcel",
-      "years": [
-        7,
-        8,
-        9,
-        10,
-        11
-      ],
+      "years": [7, 8, 9, 10, 11],
       "keyStages": [
         {
           "keyStageTitle": "Key Stage 3",
@@ -320,5 +301,38 @@
       ]
     }
   ],
-  "suggestionsSample": null
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Cordoba in the 11th century",
+      "scope": "lessons",
+      "url": "/teachers/lessons/cordoba",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "unitSlug": "11th-century-islamic-worlds-how-similar-were-the-regions-of-the-islamic-world"
+      }
+    },
+    {
+      "label": "Unit · Medieval West Africa",
+      "scope": "units",
+      "url": "/teachers/units/medieval-west-africa-why-was-medieval-mali-so-successful",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "years": [7],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · History secondary (AQA)",
+      "scope": "sequences",
+      "url": "/teachers/programmes/history-secondary-aqa",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"]
+      }
+    }
+  ]
 }
