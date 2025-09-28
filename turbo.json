@@ -30,7 +30,7 @@
       "dependsOn": ["^type-gen"],
       "cache": true,
       "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"],
+      "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
       "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
@@ -40,6 +40,7 @@
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
+        "**/type-gen/**/*.ts",
         "**/scripts/**/*.ts",
         "next.config.ts",
         "src/**/*.ts",

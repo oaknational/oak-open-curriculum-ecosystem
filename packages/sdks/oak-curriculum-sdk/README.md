@@ -42,8 +42,8 @@ This is achieved through:
 
 #### Key Components:
 
-- `scripts/typegen/` - Build-time generation scripts that extract metadata from OpenAPI
-- `scripts/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
+- `type-gen/` - Build-time generation scripts that extract metadata from OpenAPI
+- `type-gen/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
 - `src/types/generated/` - Generated TypeScript types and constants (do not edit manually)
 - `src/client/` - Runtime client that uses the pre-generated types
 - `src/tool-generation/` - Exports for programmatic tool generation (e.g., MCP servers)
@@ -128,16 +128,16 @@ This SDK follows several important architectural patterns documented in our ADRs
 
 ```text
 oak-curriculum-sdk/
-├── scripts/
+├── type-gen/
 │   ├── typegen.ts         # Phase 1: OpenAPI type generation
 │   ├── zodgen.ts          # Phase 2: Zod schema generation
 │   ├── mcp-toolgen.ts     # Phase 3: MCP validator mapping
-│   └── typegen/           # Build-time type generation
-│       ├── operations/    # Extract and generate operation constants
-│       ├── parameters/    # Extract and generate parameter constants
-│       ├── paths/         # Extract and generate path constants
-│       ├── routing/       # Generate canonical URL helpers
-│       └── mcp-tools/     # MCP tool type generation
+│   ├── operations/        # Extract and generate operation constants
+│   ├── parameters/        # Extract and generate parameter constants
+│   ├── paths/             # Extract and generate path constants
+│   ├── routing/           # Generate canonical URL helpers
+│   ├── mcp-tools/         # MCP tool type generation
+│   └── lib/               # Shared helpers for generation
 ├── src/
 │   ├── client/            # Runtime API client
 │   ├── response-augmentation.ts # Automatic canonical URL augmentation

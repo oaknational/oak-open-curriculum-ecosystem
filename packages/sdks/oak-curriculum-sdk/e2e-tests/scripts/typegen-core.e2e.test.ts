@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
-import { generateSchemaArtifacts } from '../../scripts/typegen-core';
+import { generateSchemaArtifacts } from '../../type-gen/typegen-core';
 import type { OpenAPI3 } from 'openapi-typescript';
 
 describe('generateSchemaArtifacts functionality tests', () => {

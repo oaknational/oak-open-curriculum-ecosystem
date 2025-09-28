@@ -9,7 +9,7 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",
-    "scripts/**/*.ts",
+    "type-gen/**/*.ts",
     "bin/**/*.ts",
     "e2e-tests/**/*.ts"
   ],

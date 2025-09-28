@@ -3,7 +3,7 @@ import { rmSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'node
 import path from 'node:path';
 import { execSync } from 'child_process';
 
-import { generateZodSchemas } from '../../scripts/zodgen-core';
+import { generateZodSchemas } from '../../type-gen/zodgen-core';
 import type { OpenAPI3 } from 'openapi-typescript';
 
 function assertNoForbiddenAssertions(content: string): void {

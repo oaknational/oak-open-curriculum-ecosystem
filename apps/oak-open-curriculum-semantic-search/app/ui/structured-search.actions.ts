@@ -23,10 +23,7 @@ import {
   buildMultiScopeFixture,
   type SingleScopeDatasetKey,
 } from './search-fixtures/builders';
-import {
-  resolveFixtureMode,
-  FIXTURE_MODE_COOKIE,
-} from '../lib/fixture-mode';
+import { resolveFixtureMode, FIXTURE_MODE_COOKIE } from '../lib/fixture-mode';
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 

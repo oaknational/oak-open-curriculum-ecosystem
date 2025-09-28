@@ -25,7 +25,7 @@
     "e2e-tests/**",
     "test-cache/**",
     "examples/**",
-    "scripts/**",
+    "type-gen/**",
     "docs/_typedoc_src/types/generated/api-schema/mcp-tools/**",
     "docs/_typedoc_src/mcp/**"
   ],
