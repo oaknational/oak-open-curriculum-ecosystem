@@ -2,6 +2,12 @@
 
 All follow-on phases inherit the ontology definitions from `docs/architecture/curriculum-ontology.md` (node IDs, relationships, schema references, provenance) and reuse the definitive hybrid query practices established in Phase 1.
 
+## Pre-requisites
+
+### The search app must follow the cardinal rule
+
+Fully model the flow of information from the sdk to the search index, decide where ingest and output search schemas are defined, clearly define where the search types derive from the SDK schema, and where we decorate with original types. Fully define the source of truth for data shapes in the search app. We need the search app to follow the cardinal rule: if the upstream Oak Open Curriculum OpenAPI spec changes, the only thing required to bring all apps up to date, is to run `pnpm type-gen` to regenerate the SDK types, and then `pnpm build` to allow them to flow through the system.
+
 ## Phase 2 – Content Depth Expansion
 
 Objective: enrich search with pedagogical context, resources, and optional prior knowledge signals, demonstrating the full power of `semantic_text` indices.
