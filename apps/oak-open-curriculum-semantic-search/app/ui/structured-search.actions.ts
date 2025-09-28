@@ -1,5 +1,6 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import {
   SearchRequest,
   buildBody,
@@ -8,14 +9,24 @@ import {
   HybridResponseSchema,
   SuggestionResponseSchema,
   MultiScopeHybridResponseSchema,
+  DEFAULT_SUGGESTION_CACHE,
 } from './structured-search.shared';
-import { structuredSearchFixture, suggestionFixture } from './__fixtures__/search-structured';
 import type {
   StructuredBody,
   SuggestionItem,
   MultiScopeHybridResponse,
   SearchScope,
+  SuggestionResponse,
 } from './structured-search.shared';
+import {
+  buildSingleScopeFixture,
+  buildMultiScopeFixture,
+  type SingleScopeDatasetKey,
+} from './search-fixtures/builders';
+import {
+  resolveFixtureMode,
+  FIXTURE_MODE_COOKIE,
+} from '../lib/fixture-mode';
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 

@@ -9,6 +9,7 @@ import { buildMultiScopeFixture, type BuildMultiScopeFixtureOptions } from './mu
 export type TimedOutSingleScopeFixture = SingleScopeFixture & { readonly timedOut: true };
 export type TimedOutMultiScopeFixture = MultiScopeHybridResponse & {
   readonly suggestions: ReadonlyArray<SuggestionItem>;
+  readonly suggestionCache?: { version: string; ttlSeconds: number };
 };
 
 export function buildTimedOutSingleScopeFixture(
@@ -34,5 +35,6 @@ export function buildTimedOutMultiScopeFixture(
         timedOut: true,
       },
     })),
+    suggestionCache: base.suggestionCache,
   };
 }

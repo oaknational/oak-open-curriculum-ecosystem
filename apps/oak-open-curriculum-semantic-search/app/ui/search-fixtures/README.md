@@ -49,15 +49,15 @@ app/ui/search-fixtures/
 
 ## Next Steps
 
-1. Model static data modules from the curated JSON snapshots.
-2. Implement builder functions with TDD (unit tests alongside builders).
+1. Model static data modules from the curated JSON snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art, KS4 science) including representative facet and aggregation payloads.
+2. Implement builder functions with TDD (unit tests alongside builders), ensuring suggestion responses expose cache metadata (`version`, `ttlSeconds`).
 3. Introduce fixture mode resolver utility and update search actions/routes to branch on it.
 4. Replace existing ad-hoc fixtures and Playwright route intercepts with the shared module.
 
 ## Adoption Checklist
 
-- `structured-search.actions.ts`: replace inline fixture logic with `buildSingleScopeFixture`, `buildMultiScopeFixture`, and helper variants (`buildEmptyFixture`, `buildTimedOutSingleScopeFixture`) once the runtime toggle selects fixture mode.
+- `structured-search.actions.ts`: replace inline fixture logic with `buildSingleScopeFixture`, `buildMultiScopeFixture`, `buildEmptyFixture`, and timed-out helpers once the runtime toggle selects fixture mode.
 - `/app/api/search` and `/app/api/search/nl`: branch on the shared resolver and reuse builders for deterministic payloads when fixtures are enabled, ensuring zero-hit logging continues to operate.
-- Playwright responsive suite: remove bespoke route intercepts in favour of toggling fixture mode; where direct injection is still required, import builders to seed payloads.
+- Playwright responsive suite: remove bespoke route intercepts in favour of toggling fixture mode; where direct injection is still required, import builders to seed payloads, including facet/aggregation data.
 - Legacy fixture file `app/ui/__fixtures__/search-structured.ts`: plan removal after adoption to prevent drift from SDK-derived shapes.
 - Documentation: keep context/plan docs referencing this module as the canonical fixture source so future Phase 2 schema work respects the cardinal rule.

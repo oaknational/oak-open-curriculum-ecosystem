@@ -29,3 +29,14 @@ export {
   ks3ArtSuggestions,
   ks3ArtUnits,
 } from './ks3-art';
+
+export {
+  ks4ScienceLessons,
+  ks4ScienceMeta,
+  ks4ScienceSequences,
+  ks4ScienceSuggestions,
+  ks4ScienceUnits,
+  ks4ScienceFacets,
+  ks4ScienceAggregations,
+  ks4ScienceSuggestionCache,
+} from './ks4-science';

@@ -9,6 +9,7 @@ import {
   ks3ArtLessons,
   ks3ArtMeta,
   ks3ArtSuggestions,
+  ks4ScienceSuggestionCache,
 } from '../data';
 
 describe('buildSingleScopeFixture', () => {
@@ -25,6 +26,7 @@ describe('buildSingleScopeFixture', () => {
     expect(fixture.results).toHaveLength(ks2MathsLessons.length);
     expect(fixture.total).toBe(ks2MathsMeta.total);
     expect(fixture.suggestions).toStrictEqual(ks2MathsSuggestions);
+    expect(fixture.suggestionCache).toMatchObject({ version: 'fixture-v1' });
   });
 
   it('supports alternative datasets such as KS3 art', () => {
@@ -51,6 +53,7 @@ describe('buildSingleScopeFixture', () => {
         took: 5,
         timedOut: true,
         suggestions: [],
+        suggestionCache: { version: 'override', ttlSeconds: 120 },
       },
     });
 
@@ -60,5 +63,11 @@ describe('buildSingleScopeFixture', () => {
     expect(fixture.took).toBe(5);
     expect(fixture.timedOut).toBe(true);
     expect(fixture.suggestions).toStrictEqual([]);
+    expect(fixture.suggestionCache).toEqual({ version: 'override', ttlSeconds: 120 });
+  });
+
+  it('exposes KS4 science cache metadata', () => {
+    const fixture = buildSingleScopeFixture({ dataset: 'ks4-science' });
+    expect(fixture.suggestionCache).toEqual(ks4ScienceSuggestionCache);
   });
 });

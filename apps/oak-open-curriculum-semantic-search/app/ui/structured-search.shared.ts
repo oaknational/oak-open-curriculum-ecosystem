@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SearchFacetsSchema as SdkSearchFacetsSchema } from '../../src/types/oak';
 
 export type SearchScope = 'units' | 'lessons' | 'sequences';
 export type SearchScopeWithAll = SearchScope | 'all';
@@ -43,10 +44,38 @@ export const SuggestionItemSchema = z
   })
   .catchall(z.unknown());
 
+export const DEFAULT_SUGGESTION_CACHE = {
+  version: 'fixture-v1',
+  ttlSeconds: 300,
+} as const;
+
+const SuggestionCacheSchema = z.object({
+  version: z.string(),
+  ttlSeconds: z.number().int().nonnegative(),
+});
+
+const FacetsSchema = z
+  .union([z.null(), z.undefined(), z.unknown()])
+  .transform((value, ctx) => {
+    if (value == null) {
+      return null;
+    }
+    const parsed = SdkSearchFacetsSchema.safeParse(value);
+    if (!parsed.success) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: parsed.error.message,
+      });
+      return z.NEVER;
+    }
+    return parsed.data;
+  })
+  .default(null);
+
 export const SuggestionResponseSchema = z
   .object({
     suggestions: z.array(SuggestionItemSchema).default([]),
-    cache: z.object({ version: z.string(), ttlSeconds: z.number().int().nonnegative() }),
+    cache: SuggestionCacheSchema,
   })
   .catchall(z.unknown());
 
@@ -57,13 +86,16 @@ export const HybridResponseSchema = z
     total: z.number().int().nonnegative(),
     took: z.number().int().nonnegative(),
     timedOut: z.boolean(),
-    aggregations: z.record(z.string(), z.unknown()).optional(),
-    facets: z.unknown().optional(),
+    aggregations: z.record(z.string(), z.unknown()).default({}),
+    facets: FacetsSchema,
+    suggestionCache: SuggestionCacheSchema.default(DEFAULT_SUGGESTION_CACHE),
   })
   .catchall(z.unknown());
 
 export type HybridResponse = z.infer<typeof HybridResponseSchema>;
 export type SuggestionItem = z.infer<typeof SuggestionItemSchema>;
+export type SuggestionResponse = z.infer<typeof SuggestionResponseSchema>;
+export type SuggestionCache = z.infer<typeof SuggestionCacheSchema>;
 
 export const MultiScopeBucketSchema = z.object({
   scope: z.enum(['lessons', 'units', 'sequences']),
@@ -75,6 +107,7 @@ export const MultiScopeHybridResponseSchema = z
     scope: z.literal('all'),
     buckets: z.array(MultiScopeBucketSchema),
     suggestions: z.array(SuggestionItemSchema).optional(),
+    suggestionCache: SuggestionCacheSchema.default(DEFAULT_SUGGESTION_CACHE),
   })
   .catchall(z.unknown());
 

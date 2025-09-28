@@ -8,6 +8,9 @@ import { z } from 'zod';
 
 const MultiScopeSchema = MultiScopeHybridResponseSchema.extend({
   suggestions: z.array(SuggestionItemSchema).optional(),
+  suggestionCache: z
+    .object({ version: z.string(), ttlSeconds: z.number().int().nonnegative() })
+    .optional(),
 });
 
 describe('buildMultiScopeFixture', () => {
@@ -18,6 +21,7 @@ describe('buildMultiScopeFixture', () => {
     expect(parsed.success).toBe(true);
     expect(fixture.scope).toBe('all');
     expect(fixture.buckets).toHaveLength(3);
+    expect(fixture.suggestionCache).toMatchObject({ version: 'fixture-v1' });
 
     const lessonBucket = fixture.buckets.find((bucket) => bucket.scope === 'lessons');
     const unitBucket = fixture.buckets.find((bucket) => bucket.scope === 'units');
@@ -39,17 +43,30 @@ describe('buildMultiScopeFixture', () => {
           lessons: { took: 7 },
           units: { timedOut: true },
         },
+        suggestionCache: { version: 'override', ttlSeconds: 90 },
       },
     });
 
     const parsed = MultiScopeSchema.safeParse(fixture);
     expect(parsed.success).toBe(true);
     expect(fixture.suggestions).toStrictEqual([]);
+    expect(fixture.suggestionCache).toEqual({ version: 'override', ttlSeconds: 90 });
 
     const lessonBucket = fixture.buckets.find((bucket) => bucket.scope === 'lessons');
     expect(lessonBucket?.result.took).toBe(7);
 
     const unitBucket = fixture.buckets.find((bucket) => bucket.scope === 'units');
     expect(unitBucket?.result.timedOut).toBe(true);
+  });
+
+  it('produces sequence buckets with KS4 options when using science dataset', () => {
+    const fixture = buildMultiScopeFixture({ sequencesDataset: 'ks4-science' });
+    const sequenceBucket = fixture.buckets.find((bucket) => bucket.scope === 'sequences');
+    const sequences = sequenceBucket?.result.results as Array<{ highlights: string[] }> | undefined;
+    expect(sequences?.length).toBeGreaterThan(0);
+    const hasKs4Highlight = sequences?.some((entry) =>
+      entry.highlights.some((highlight) => highlight.includes('KS4')),
+    );
+    expect(hasKs4Highlight).toBe(true);
   });
 });

@@ -17,7 +17,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 - Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
 - Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; additional hero polish (45 ch clamp, accent styling) remains paused until fixtures and the status page work are complete.
-- Fixture source datasets (KS2 maths, KS4 maths, KS3 history, KS3 art) now live in `fixtures/fetched-data/` with manual suggestions and reference notes in `fixtures/REFERENCE.md`; `app/ui/search-fixtures/README.md` defines the module structure for upcoming builders.
+- Fixture source datasets (KS2 maths, KS4 maths, KS3 history, KS3 art, KS4 science with populated `ks4Options`) now live in `fixtures/fetched-data/` with manual suggestions and reference notes in `fixtures/REFERENCE.md`; `app/ui/search-fixtures/README.md` defines the module structure for upcoming builders. Science fixtures also expose sample facets/aggregations and suggestion cache metadata for KS4 pathways. Next integration steps: introduce the shared SDK-derived Zod schema module so fixtures, UI, and API boundaries validate identical payload shapes, and plan migration of any residual custom schemas/types into the SDK compile-time generation to uphold the cardinal rule.
 - `/healthz` intentionally remains a JSON API endpoint; user-facing health information will move to a new status page with Oak UI styling.
 - Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
 

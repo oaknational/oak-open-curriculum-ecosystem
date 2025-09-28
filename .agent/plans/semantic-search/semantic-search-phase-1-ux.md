@@ -27,7 +27,7 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ### Recent Progress
 
-- 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths.
+- 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths; captured KS4 science sequences exposing `ks4Options` for future pathway scenarios.
 - 2025-09-30: Authored `fixtures/REFERENCE.md` to document provenance and schema alignment, plus `app/ui/search-fixtures/README.md` outlining data modules and builder responsibilities.
 - 2025-09-29: Search hero heading now wraps using `HeroHeadingCluster`, preventing overflow within the hero card.
 - 2025-09-29: Playwright responsive suite continues to gate Search/Admin/Docs layouts at bp-xs/md/lg/xxl using the existing structured fixture.
@@ -56,12 +56,12 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ### Implementation Outline
 
-1. Populate `app/ui/search-fixtures/data/` with static exports derived from the curated JSON snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art).
-2. Encode fixtures using types from `SearchFacetsSchema`, `SequenceFacetSchema`, and `SearchLessonsIndexDoc` to stay aligned with the SDK.
-3. Implement builder helpers (single-scope, multi-scope, empty, timed-out) that accept overrides for totals, timings, highlights, and suggestion lists.
-4. Compose suggestions that showcase varied scope labels (lesson, unit, programme), subject slugs, key stages, context metadata, and highlight the navigation copy used in cards.
-5. Document fixture provenance and regeneration steps in `search-fixtures/README.md` and ensure the data modules remain thin wrappers over SDK-derived shapes.
-6. Replace existing imports in `structured-search.actions.ts`, Playwright mocks, and future Storybook stories with the shared fixture builders.
+1. Populate `app/ui/search-fixtures/data/` with static exports derived from the curated JSON snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art, KS4 science with `ks4Options`).
+2. Encode fixtures using compile-time generated schemas/types from the SDK (`SearchFacetsSchema`, `SequenceFacetSchema`, `SearchLessonsIndexDoc`, etc.) so UI and API boundaries validate identical payload shapes. Audit remaining custom Zod definitions and plan their migration into the SDK type generation pipeline.
+3. Implement builder helpers (single-scope, multi-scope, empty, timed-out) that accept overrides for totals, timings, highlights, suggestion lists, and cache metadata (`version`, `ttlSeconds`).
+4. Compose suggestions that showcase varied scope labels (lesson, unit, programme), subject slugs, key stages, context metadata—including `ks4OptionSlug` and sequence identifiers—and highlight the navigation copy used in cards.
+5. Enrich fixture datasets with representative facet/aggregation payloads for sequence filtering while documenting provenance in `search-fixtures/README.md`.
+6. Replace existing imports in `structured-search.actions.ts`, Playwright mocks, and future Storybook stories with the shared fixture builders once the runtime toggle resolver is in place, validating inbound/outbound data with the shared Zod schema. Deprecate `app/ui/__fixtures__/search-structured.ts` afterwards.
 
 ### Fixture Coverage Targets
 

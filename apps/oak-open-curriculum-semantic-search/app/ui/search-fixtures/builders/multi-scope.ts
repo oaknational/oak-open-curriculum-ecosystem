@@ -2,8 +2,14 @@ import type {
   HybridResponse,
   MultiScopeHybridResponse,
   SuggestionItem,
+  SuggestionCache,
 } from '../../structured-search.shared';
-import { buildSingleScopeFixture, type SingleScopeDatasetKey } from './single-scope';
+import { DEFAULT_SUGGESTION_CACHE } from '../../structured-search.shared';
+import {
+  buildSingleScopeFixture,
+  type SingleScopeDatasetKey,
+  type SingleScopeFixture,
+} from './single-scope';
 import {
   ks2MathsUnits,
   ks2MathsSequences,
@@ -13,6 +19,8 @@ import {
   ks3HistorySequences,
   ks4MathsUnits,
   ks4MathsSequences,
+  ks4ScienceUnits,
+  ks4ScienceSequences,
 } from '../data';
 
 // Type helpers ----------------------------------------------------------------
@@ -27,7 +35,8 @@ type SequenceRecord =
   | (typeof ks2MathsSequences)[number]
   | (typeof ks4MathsSequences)[number]
   | (typeof ks3HistorySequences)[number]
-  | (typeof ks3ArtSequences)[number];
+  | (typeof ks3ArtSequences)[number]
+  | (typeof ks4ScienceSequences)[number];
 
 type BucketOverride = Partial<
   Pick<HybridResponse, 'total' | 'took' | 'timedOut' | 'aggregations' | 'facets'>
@@ -35,33 +44,45 @@ type BucketOverride = Partial<
 
 type BucketOverrideMap = Partial<Record<'lessons' | 'units' | 'sequences', BucketOverride>>;
 
+type SuggestionCache = {
+  readonly version: string;
+  readonly ttlSeconds: number;
+};
+
 const UNIT_DATASETS: Record<SingleScopeDatasetKey, readonly UnitRecord[]> = {
   'ks2-maths': ks2MathsUnits,
   'ks4-maths': ks4MathsUnits,
   'ks3-history': ks3HistoryUnits,
   'ks3-art': ks3ArtUnits,
+  'ks4-science': ks4ScienceUnits,
 };
+type SequenceDatasetKey = SingleScopeDatasetKey;
 
-const SEQUENCE_DATASETS: Record<SingleScopeDatasetKey, readonly SequenceRecord[]> = {
+const SEQUENCE_DATASETS: Record<SequenceDatasetKey, readonly SequenceRecord[]> = {
   'ks2-maths': ks2MathsSequences,
   'ks4-maths': ks4MathsSequences,
   'ks3-history': ks3HistorySequences,
   'ks3-art': ks3ArtSequences,
+  'ks4-science': ks4ScienceSequences,
 };
 
 export interface BuildMultiScopeFixtureOptions {
   readonly lessonsDataset?: SingleScopeDatasetKey;
   readonly unitsDataset?: SingleScopeDatasetKey;
-  readonly sequencesDataset?: SingleScopeDatasetKey;
+  readonly sequencesDataset?: SequenceDatasetKey;
   readonly overrides?: {
     readonly suggestions?: SuggestionItem[];
     readonly buckets?: BucketOverrideMap;
+    readonly suggestionCache?: SuggestionCache;
   };
 }
 
 export function buildMultiScopeFixture(
   options: BuildMultiScopeFixtureOptions = {},
-): MultiScopeHybridResponse & { suggestions: SuggestionItem[] } {
+): MultiScopeHybridResponse & {
+  suggestions: SuggestionItem[];
+  suggestionCache: SuggestionCache;
+} {
   const {
     lessonsDataset = 'ks2-maths',
     unitsDataset = 'ks4-maths',
@@ -77,18 +98,23 @@ export function buildMultiScopeFixture(
     overrides: overrides?.buckets,
   });
   const suggestions = collectSuggestions(lessonBucket.suggestions, overrides?.suggestions);
+  const suggestionCache = collectSuggestionCache(
+    lessonBucket.suggestionCache,
+    overrides?.suggestionCache,
+  );
 
   return {
     scope: 'all',
     buckets,
     suggestions,
+    suggestionCache,
   };
 }
 
 // Helpers ---------------------------------------------------------------------
 
 function assembleBuckets(params: {
-  readonly lessonBucket: HybridResponse;
+  readonly lessonBucket: SingleScopeFixture;
   readonly unitsDataset: SingleScopeDatasetKey;
   readonly sequencesDataset: SingleScopeDatasetKey;
   readonly overrides?: BucketOverrideMap;
@@ -141,6 +167,16 @@ function collectSuggestions(
     return overrides;
   }
   return [...defaults];
+}
+
+function collectSuggestionCache(
+  defaults: SuggestionCache,
+  override?: SuggestionCache,
+): SuggestionCache {
+  if (override) {
+    return override;
+  }
+  return { ...defaults };
 }
 
 export function buildUnitFixture(datasetKey: SingleScopeDatasetKey): HybridResponse {
