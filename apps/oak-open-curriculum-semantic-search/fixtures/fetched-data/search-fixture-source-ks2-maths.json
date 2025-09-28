@@ -1,0 +1,391 @@
+{
+  "fetchedAt": "2025-09-27T22:55:21.762Z",
+  "keyStage": "ks2",
+  "subject": "maths",
+  "sequencesSample": [
+    {
+      "sequenceSlug": "maths-primary",
+      "years": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 1",
+          "keyStageSlug": "ks1"
+        },
+        {
+          "keyStageTitle": "Key Stage 2",
+          "keyStageSlug": "ks2"
+        }
+      ],
+      "phaseSlug": "primary",
+      "phaseTitle": "Primary",
+      "ks4Options": null
+    },
+    {
+      "sequenceSlug": "maths-secondary",
+      "years": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": null
+    }
+  ],
+  "lessonsSample": [
+    {
+      "unitSlug": "2-4-and-8-times-tables-using-times-tables-to-solve-problems",
+      "unitTitle": "2, 4 and 8 times tables: using times tables to solve problems",
+      "lessons": [
+        {
+          "lessonSlug": "represent-counting-in-fours-as-the-4-times-table",
+          "lessonTitle": "Represent counting in fours as the 4 times table"
+        },
+        {
+          "lessonSlug": "explain-the-relationship-between-adjacent-multiples-of-eight",
+          "lessonTitle": "Explain the relationship between adjacent multiples of eight"
+        },
+        {
+          "lessonSlug": "use-knowledge-of-the-divisibility-rules-for-divisors-of-2-and-4-to-solve-problems",
+          "lessonTitle": "Use knowledge of the divisibility rules for divisors of 2 and 4 to solve problems"
+        },
+        {
+          "lessonSlug": "explain-the-relationship-between-the-multiples-of-2-4-and-8",
+          "lessonTitle": "Explain the relationship between the multiples of 2, 4 and 8"
+        },
+        {
+          "lessonSlug": "scale-known-multiplication-facts-by-10",
+          "lessonTitle": "Scale known multiplication facts by 10"
+        },
+        {
+          "lessonSlug": "use-knowledge-of-the-4-times-table-to-solve-problems",
+          "lessonTitle": "Use knowledge of the 4 times table to solve problems"
+        },
+        {
+          "lessonSlug": "explain-the-relationship-between-adjacent-multiples-of-four",
+          "lessonTitle": "Explain the relationship between adjacent multiples of four"
+        },
+        {
+          "lessonSlug": "use-knowledge-of-the-relationship-between-the-4-and-8-times-tables-to-solve-problems",
+          "lessonTitle": "Use knowledge of the relationship between the 4 and 8 times tables to solve problems"
+        },
+        {
+          "lessonSlug": "use-knowledge-of-the-relationship-between-the-2-and-4-times-tables-to-solve-problems",
+          "lessonTitle": "Use knowledge of the relationship between the 2 and 4 times tables to solve problems"
+        },
+        {
+          "lessonSlug": "represent-counting-in-eights-as-the-8-times-table",
+          "lessonTitle": "Represent counting in eights as the 8 times table"
+        }
+      ]
+    }
+  ],
+  "unitsSample": [
+    {
+      "yearSlug": "year-3",
+      "yearTitle": "Year 3",
+      "units": [
+        {
+          "unitSlug": "2-4-and-8-times-tables-using-times-tables-to-solve-problems",
+          "unitTitle": "2, 4 and 8 times tables: using times tables to solve problems"
+        },
+        {
+          "unitSlug": "bridging-100-counting-on-and-back-in-10s-adding-subtracting-multiples-of-10",
+          "unitTitle": "Bridging 100: counting on and back in 10s, adding/subtracting multiples of 10"
+        },
+        {
+          "unitSlug": "calculate-the-value-of-a-part-fractions-as-operators",
+          "unitTitle": "Calculate the value of a part (fractions as operators)"
+        },
+        {
+          "unitSlug": "column-addition",
+          "unitTitle": "Column addition"
+        },
+        {
+          "unitSlug": "column-subtraction",
+          "unitTitle": "Column subtraction"
+        },
+        {
+          "unitSlug": "compare-and-order-unit-fractions",
+          "unitTitle": "Compare and order unit fractions"
+        },
+        {
+          "unitSlug": "composition-of-non-unit-fractions-addition-and-subtraction",
+          "unitTitle": "Composition of non-unit fractions: addition and subtraction"
+        },
+        {
+          "unitSlug": "identify-parts-and-wholes-in-different-contexts",
+          "unitTitle": "Identify parts and wholes in different contexts"
+        },
+        {
+          "unitSlug": "informal-and-mental-strategies-for-adding-and-subtracting-two-3-digit-numbers",
+          "unitTitle": "Informal and mental strategies for adding and subtracting two 3-digit numbers"
+        },
+        {
+          "unitSlug": "measures-mass-and-capacity",
+          "unitTitle": "Measures: mass and capacity"
+        },
+        {
+          "unitSlug": "measuring-length-and-recording-in-tables",
+          "unitTitle": "Measuring length and recording in tables"
+        },
+        {
+          "unitSlug": "non-unit-fractions",
+          "unitTitle": "Non-unit fractions"
+        },
+        {
+          "unitSlug": "parallel-and-perpendicular-sides-in-polygons-and-perimeter",
+          "unitTitle": "Parallel and perpendicular sides in polygons"
+        },
+        {
+          "unitSlug": "representing-3-digit-numbers-comparing-and-positioning-on-number-lines",
+          "unitTitle": "Representing 3-digit numbers, comparing and positioning on number lines"
+        },
+        {
+          "unitSlug": "review-strategies-for-adding-and-subtracting-across-10",
+          "unitTitle": "Review strategies for adding and subtracting across 10"
+        },
+        {
+          "unitSlug": "right-angles",
+          "unitTitle": "Right angles"
+        },
+        {
+          "unitSlug": "securing-place-value-to-100-and-applying-to-addition-and-subtraction",
+          "unitTitle": "Securing place value to 100 and applying to addition and subtraction"
+        },
+        {
+          "unitSlug": "tell-the-time-to-the-nearest-minute-and-compare-units-of-time",
+          "unitTitle": "Tell the time to the nearest minute and compare units of time"
+        },
+        {
+          "unitSlug": "understand-additive-relationships-and-apply-them-to-rearrange-equations",
+          "unitTitle": "Understand additive relationships and apply them to rearrange equations"
+        },
+        {
+          "unitSlug": "unit-fractions-as-part-of-a-whole",
+          "unitTitle": "Unit fractions as part of a whole"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-4",
+      "yearTitle": "Year 4",
+      "units": [
+        {
+          "unitSlug": "7-times-table-odd-and-even-patterns-square-numbers-and-tests-of-divisibility",
+          "unitTitle": "7 times table: odd and even patterns, square numbers and tests of divisibility"
+        },
+        {
+          "unitSlug": "addition-and-subtraction-of-fractions-and-mixed-numbers-within-a-whole",
+          "unitTitle": "Addition and subtraction of fractions and mixed numbers (within a whole)"
+        },
+        {
+          "unitSlug": "apply-the-distributive-law-to-multiplication",
+          "unitTitle": "Apply the distributive law to multiplication"
+        },
+        {
+          "unitSlug": "calculation-and-conversion-of-measures",
+          "unitTitle": "Calculation and conversion of measures"
+        },
+        {
+          "unitSlug": "column-addition-and-subtraction-with-4-digit-numbers",
+          "unitTitle": "Column addition and subtraction with 4-digit numbers"
+        },
+        {
+          "unitSlug": "compare-and-order-mixed-numbers-and-position-on-a-number-line",
+          "unitTitle": "Compare and order mixed numbers and position on a number line"
+        },
+        {
+          "unitSlug": "comparing-ordering-and-rounding-4-digit-numbers",
+          "unitTitle": "Comparing, ordering and rounding 4-digit numbers"
+        },
+        {
+          "unitSlug": "composition-of-fractions-greater-than-one",
+          "unitTitle": "Composition of fractions greater than one"
+        },
+        {
+          "unitSlug": "convert-improper-fractions-to-mixed-numbers-and-vice-versa",
+          "unitTitle": "Convert improper fractions to mixed numbers and vice versa"
+        },
+        {
+          "unitSlug": "coordinates",
+          "unitTitle": "Coordinates"
+        },
+        {
+          "unitSlug": "division-with-remainders",
+          "unitTitle": "Division with remainders"
+        },
+        {
+          "unitSlug": "efficient-strategies-for-adding-and-subtracting-mixed-numbers-crossing-a-whole",
+          "unitTitle": "Efficient strategies for adding and subtracting mixed numbers (crossing a whole)"
+        },
+        {
+          "unitSlug": "money-apply-efficient-strategies-when-calculating-with-money",
+          "unitTitle": "Money: apply efficient strategies when calculating with money"
+        },
+        {
+          "unitSlug": "perimeter",
+          "unitTitle": "Perimeter"
+        },
+        {
+          "unitSlug": "relationship-between-the-3-and-6-times-tables-and-tests-of-divisibility",
+          "unitTitle": "Relationship between the 3 and 6 times tables and tests of divisibility"
+        },
+        {
+          "unitSlug": "relationship-between-the-3-and-9-times-tables",
+          "unitTitle": "Relationship between the 3 and 9 times tables"
+        },
+        {
+          "unitSlug": "represent-counting-in-nines-as-the-9-times-table",
+          "unitTitle": "Represent counting in nines as the 9 times table"
+        },
+        {
+          "unitSlug": "represent-counting-in-threes-and-sixes-as-the-3-and-6-times-tables",
+          "unitTitle": "Represent counting in threes and sixes as the 3 and 6 times tables"
+        },
+        {
+          "unitSlug": "review-of-column-addition-and-subtraction-roman-numerals",
+          "unitTitle": "Review of column addition and subtraction"
+        },
+        {
+          "unitSlug": "review-of-fractions",
+          "unitTitle": "Review of fractions"
+        },
+        {
+          "unitSlug": "secure-place-value-to-1000-apply-to-addition-and-subtraction-multiples-of-100",
+          "unitTitle": "Secure place value to 1000: apply to addition and subtraction: multiples of 100"
+        },
+        {
+          "unitSlug": "symmetry-in-2d-shapes",
+          "unitTitle": "Properties of 2D and 3D shapes and symmetry"
+        },
+        {
+          "unitSlug": "time-convert-between-12-and-24-hour-clocks-analogue-and-digital",
+          "unitTitle": "Time: Convert between 12 and 24 hour clocks: analogue and digital"
+        },
+        {
+          "unitSlug": "understand-and-represent-multiplicative-structures",
+          "unitTitle": "Understand and represent multiplicative structures"
+        },
+        {
+          "unitSlug": "understand-what-happens-when-a-number-is-multiplied-or-divided-by-10-and-100",
+          "unitTitle": "Understand what happens when a number is multiplied or divided by 10 and 100"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-5",
+      "yearTitle": "Year 5",
+      "units": [
+        {
+          "unitSlug": "angles-compare-name-estimate-and-measure-angles",
+          "unitTitle": "Angles: compare, name, estimate and measure angles"
+        },
+        {
+          "unitSlug": "calculating-with-decimal-fractions",
+          "unitTitle": "Calculating with decimal fractions"
+        },
+        {
+          "unitSlug": "compare-and-describe-measurements-using-knowledge-of-multiplication-and-division",
+          "unitTitle": "Compare and describe measurements using knowledge of multiplication and division"
+        },
+        {
+          "unitSlug": "comparing-fractions-using-equivalence-and-decimals",
+          "unitTitle": "Comparing fractions using equivalence and decimals"
+        },
+        {
+          "unitSlug": "compose-and-calculate-with-decimals-including-column-addition-and-subtraction",
+          "unitTitle": "Compose and calculate with decimals including column addition and subtraction"
+        },
+        {
+          "unitSlug": "converting-units",
+          "unitTitle": "Converting units"
+        },
+        {
+          "unitSlug": "division-by-partitioning-leading-to-short-division-2-and-3-digits-by-1-digit",
+          "unitTitle": "Division by partitioning leading to short division (2 and 3-digits by 1-digit)"
+        },
+        {
+          "unitSlug": "find-unit-and-non-unit-fractions-of-whole-numbers-exploring-parts-and-wholes",
+          "unitTitle": "Find unit and non-unit fractions of whole numbers exploring parts and wholes"
+        },
+        {
+          "unitSlug": "link-area-of-rectangles-to-multiplication",
+          "unitTitle": "Link area of rectangles to multiplication"
+        },
+        {
+          "unitSlug": "multiplication-by-partitioning-leading-to-short-multiplication-2-by-1-digit",
+          "unitTitle": "Multiplication by partitioning leading to short multiplication (2 by 1-digit)"
+        },
+        {
+          "unitSlug": "multiplication-by-partitioning-leading-to-short-multiplication-3-by-1-digit",
+          "unitTitle": "Multiplication by partitioning leading to short multiplication (3 by 1-digit)"
+        },
+        {
+          "unitSlug": "multiply-3-or-more-numbers-commutative-and-associative-laws",
+          "unitTitle": "Multiply 3 or more numbers (commutative and associative laws)"
+        },
+        {
+          "unitSlug": "multiply-a-proper-fraction-by-a-whole-number",
+          "unitTitle": "Multiply a proper fraction by a whole number"
+        },
+        {
+          "unitSlug": "multiply-improper-fractions-and-mixed-numbers-by-a-whole-number",
+          "unitTitle": "Multiply improper fractions and mixed numbers by a whole number"
+        },
+        {
+          "unitSlug": "negative-numbers",
+          "unitTitle": "Negative numbers"
+        },
+        {
+          "unitSlug": "understand-and-use-the-concept-of-factorisation-square-and-prime-numbers",
+          "unitTitle": "Understand and use the concept of factorisation (square and prime numbers)"
+        },
+        {
+          "unitSlug": "understand-hundredths-as-parts-of-a-whole-and-represent",
+          "unitTitle": "Understand hundredths as parts of a whole and represent"
+        },
+        {
+          "unitSlug": "understand-tenths-as-part-of-a-whole-represent-and-calculate-mentally",
+          "unitTitle": "Understand tenths as part of a whole, represent and calculate mentally"
+        },
+        {
+          "unitSlug": "understand-the-concept-of-area",
+          "unitTitle": "Understand the concept of area"
+        },
+        {
+          "unitSlug": "understand-the-concept-of-volume",
+          "unitTitle": "Understand the concept of volume"
+        },
+        {
+          "unitSlug": "use-common-factors-and-multiples-to-solve-calculations-efficiently",
+          "unitTitle": "Use common factors and multiples to solve calculations efficiently"
+        },
+        {
+          "unitSlug": "use-knowledge-of-decimals-to-solve-problems-in-different-contexts-length",
+          "unitTitle": "Use knowledge of decimals to solve problems in different contexts: length"
+        }
+      ]
+    }
+  ],
+  "suggestionsSample": null
+}

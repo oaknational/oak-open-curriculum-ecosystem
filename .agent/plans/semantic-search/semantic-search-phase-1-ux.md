@@ -1,170 +1,140 @@
 # Semantic Search Phase 1 – UX Plan
 
 ## Programme Vision
-
-- Deliver a hybrid search experience whose interface expresses Oak’s brand, accessibility standards, and clarity of purpose across devices.
-- Ensure the design system inside Semantic Search can be lifted into other Oak products without bespoke overrides.
-- Use TDD, visual regression, and accessibility checks so UX changes ship with the same rigour as core functionality.
+- Deliver a hybrid search experience that expresses Oak’s brand, accessibility standards, and clarity of purpose across devices.
+- Ensure Semantic Search UI assets, tokens, and patterns can be lifted into other Oak products without bespoke overrides.
+- Ship UX work with the same rigour as functionality by leaning on TDD, visual regression, accessibility checks, and deterministic data.
 
 ## Phase Focus – UX Alignment
 
-Phase 1’s UX stream turns the current token-aligned theme into an exemplar Oak interface. We will:
+Phase 1 keeps the design system aligned with product intent by:
+- Repairing responsive layout behaviour from 320 px phones up to ultra-wide desktops.
+- Re-establishing Oak’s typographic, spacing, and surface hierarchy across Search, Admin, Docs, and Health shells.
+- Replacing developer-centric error states with empathetic, observable messaging.
+- Consolidating deterministic fixtures and a runtime toggle so designers and automated tests can validate UX without live infrastructure.
 
-- Repair responsive layout behaviour so content reads naturally from 320 px phones up to ultrawide desktops.
-- Re-establish Oak’s typographic, spacing, and surface hierarchy on every page (Search, Admin, Docs, Health, derivative flows).
-- Replace developer-centric error states with empathetic, brand-aligned messaging and observable status indicators.
-- Introduce automation (visual snapshots, accessibility assertions) so design intent stays protected.
-
-## Current State Snapshot (2025-09-26)
-
-- ✅ Semantic theme tokens exist for colours, spacing, typography, and brand palette.
-- ✅ Theme bridge emits CSS variables and global styles validated by integration tests.
-- ⚠️ Layout remains desktop-fixed: cards fail to stack, white space dominates, hero panels are oversized.
-- ⚠️ Admin and API docs views expose raw data/Swagger scaffolding instead of Oak UI, and mobile views are largely unusable.
-- ⚠️ Health endpoint returns JSON strings; telemetry cards show raw HTTP errors with no recovery path.
+## Current State Snapshot (2025-09-30)
+- ✅ Semantic tokens map colours, spacing, typography, and brand palette and flow through shared layout wrappers.
+- ✅ Search hero + controls now respect container width and maintain stacking rules below `bp-lg` following the `HeroHeadingCluster` fix.
+- ✅ Deterministic structured fixture exists but is overly simple (lessons only, empty facets/suggestions) and duplicated across server actions and Playwright route mocks.
+- ⚠️ Natural-language flow and `/api/search` live-path bypass the fixture toggle, forcing live calls for NL validation.
+- ⚠️ Facet content, bucket meta, and suggestion samples are too sparse to mirror brand storytelling or support responsive screenshots.
+- ⚠️ Status page shell remains unimplemented; `/healthz` still serves JSON-only responses.
 
 ### Recent Progress
-
-- Admin shell now delegates its container, grid, and telemetry cards to shared layout tokens; zero-hit dashboard adopts `--app-layout-secondary-column-min-width`.
-- API Docs wrapper consumes the shared container clamp and Oak surfaces, removing bespoke pixel width clamps.
-- Responsive layout architecture updated to align with the refined breakpoint ramp (`bp-xs` → `bp-xxl`).
-- Playwright baseline still contains intentional `test.fail()` markers for work-in-progress assertions (Search xs, Hero lg, Admin md, Admin xxl, Docs xxl, Health xs); Admin `bp-xxl` now passes locally and requires baseline updates.
-- Health surface remains JSON-only; responsive shell debt stays recorded for follow-up.
-- Playwright responsive baseline now asserts Admin/Docs `bp-xxl` container clamps without `test.fail()` guards, producing actionable snapshots.
-- `<meta name="theme-color">` draws from semantic `bg-primary` tokens, guarded by `layout.meta.unit.test.ts` so browser chrome tracks Oak palette changes.
-- Playwright search scenarios run against curated fixtures by toggling `SEMANTIC_SEARCH_USE_FIXTURES`, ensuring local runs avoid Elasticsearch dependencies and keep results deterministic for layout assertions. Tests at `bp-xs`/`bp-md`/`bp-lg` now pass without `test.fail()` guards following the accessible button + layout updates.
-- Structured and natural forms now place `<form>` elements inside `tabpanel` containers (no invalid ARIA roles) and share a custom submit button with brand-primary contrast that meets WCAG 2.1 ratios. Further hero polish (clamp, accent styling) is paused until fixtures and the status page work complete.
-- Axe still flags two violations on Health (HTML fallback) until that UI shell lands; search regressions are clean.
-- Axe still flags two violations in dev mode due to the Next.js overlay; suppress with `NEXT_DISABLE_DEV_ERRORS` in the Playwright server env, but investigate underlying errors before relaxing assertions.
-- 2025-09-27: Introduced `resolveBreakpoint` helper and updated Search layout components to consume semantic breakpoints via styled-components theme; Playwright sampling confirmed `ControlsGrid` now transitions to two columns at `bp-md` while retaining token-driven column clamps.
-- Theme selector radios honour dark mode by resolving semantic tokens to Oak colour hex values, yielding visibly lighter outlines with integration coverage guarding `rgb(228, 228, 228)` / `rgb(255, 255, 255)` borders.
-- 2025-09-27: Hero/controls now share a `HeroControlsCluster` grid (stacking below `bp-lg`, two columns above), control cards use `surfaceCard` with brand borders for contrast, radio/select groups wrap on narrow widths, and integration tests + Playwright responsive sweeps cover the new theming.
-- Structured search now exposes the `phaseSlug` filter via a Phase select, and natural language search treats scope as optional (auto-detects unless the user chooses Units/Lessons/Sequences).
+- 2025-09-29: Captured representative KS2 maths lessons/units/sequences via the Oak Curriculum SDK using `OAK_API_KEY`; source snapshot stored at `tmp/search-fixture-source.json` for fixture modelling.
+- 2025-09-29: Search hero heading now wraps using `HeroHeadingCluster`, preventing overflow within the hero card.
+- 2025-09-29: Playwright responsive suite continues to gate Search/Admin/Docs layouts at bp-xs/md/lg/xxl using the existing structured fixture.
+- 2025-09-28: `SearchResults.unit.test.tsx` and integration coverage updated for multi-scope payloads (`mode` + `multiBuckets`).
 
 ### Outstanding Audit Notes
+- **Deterministic fixtures:** Replace ad-hoc fixtures with a single typed source that covers lessons, units, sequences, multi-bucket totals, facets, suggestions, empty states, and edge-cases (timed-out, zero results).
+- **Runtime toggle:** Provide an environment/query/cookie-driven toggle so Search UX can hot-switch between live data and fixtures, covering structured, natural, and suggestion flows.
+- **Status page UX:** Design and implement the Oak-branded status page that consumes `/healthz` data, including accessibility hooks and responsive layout.
+- **Hero polish:** Revisit hero copy clamp and accent styling once fixtures and status page land.
 
-- **Status page UX:** `/healthz` remains an API endpoint; design and ship the dedicated status page UI (hero summary, diagnostics cards, accessibility hooks) using shared layout tokens.
-- **Deterministic fixtures:** Extend the fixture set and runtime toggle so Search visual tests run against representative data, with documentation for switching modes.
-- **Search hero refinements:** Clamp/accent work deferred until fixtures and status page ship; monitor but do not implement yet.
+## Deterministic Fixture Strategy (2025-09-30)
+
+### Goals
+- Provide rich, realistic fixtures that let designers validate Search UX offline, unlock deterministic automated tests, and document expected UI states.
+- Eliminate duplicated fixture logic by funnelling all consumers through a single module with typed builders derived from the SDK.
+- Cover positive, mixed, and empty states across lessons, units, sequences, facets, suggestions, and summary metadata.
+
+### Data Source
+- Base content on the KS2 Maths samples fetched via the Oak Curriculum SDK (`tmp/search-fixture-source.json`).
+- Augment with additional programme/phase entries where necessary to demonstrate cross-key-stage behaviour (e.g. KS3 sequences, secondary phases) while preserving brand tone.
+- Normalise suggestion payloads manually (API suggestions endpoint currently returns `null`; craft representative entries covering lessons, units, and sequences).
+
+### Implementation Outline
+1. Create `apps/oak-open-curriculum-semantic-search/app/ui/search-fixtures/` with an index that exports:
+   - `buildSingleScopeFixture(scope)` returning typed lesson/unit/sequence arrays plus meta/timing/facets.
+   - `buildMultiScopeFixture()` returning the complete multi-bucket payload and suggestion list.
+   - `buildEmptyFixture(scope)` and `buildTimedOutFixture(scope)` for error-state coverage.
+   - Shared helper constants for sample lessons, units, sequences, facets, and suggestion entries.
+2. Encode fixtures using types from `SearchFacetsSchema`, `SequenceFacetSchema`, and `SearchLessonsIndexDoc` to stay aligned with the SDK.
+3. Provide lightweight factory helpers (pure functions) that accept overrides for totals, timings, and highlights—allows tests to tweak without mutating shared objects.
+4. Compose suggestions that showcase varied scope labels (lesson, unit, programme), subject slugs, key stages, context metadata, and highlight the navigation copy used in cards.
+5. Document fixture provenance and regeneration steps in `search-fixtures/README.md` (include API fetch snippet and schema references).
+6. Replace existing imports in `structured-search.actions.ts`, Playwright mocks, and future Storybook stories with the shared fixture builders.
+
+### Fixture Coverage Targets
+- **Lessons:** Minimum six records spanning Year 3 fractions and Year 5 decimals with highlight sentences to exercise bullet rendering.
+- **Units:** At least three units per key stage/phase to validate summary metadata and card grids.
+- **Sequences:** Primary and secondary sequences with key stage arrays, years, and phase titles for hero context copy.
+- **Facets:** Populate `SearchFacets.sequences` with key stage labels, years, unit/lesson counts, and slug combinations referenced in CTA buttons.
+- **Suggestions:** Five suggestions covering lesson, unit, and sequence scopes with distinct labels and optional context metadata.
+- **Meta:** Provide totals, `took`, and `timedOut` variations for both single and multi scope to drive summary copy.
+
+## Runtime Toggle and UX Validation
+
+### Requirements
+- Honour `SEMANTIC_SEARCH_USE_FIXTURES` env default while allowing runtime overrides via query string (`?fixtures=on|off`) and a signed cookie (`semantic-search-fixtures`).
+- Ensure structured search, natural-language search, and `/api/search/suggest` all read from a single resolver to determine fixture mode.
+- Offer a developer-facing UI toggle (visible in dev/admin contexts) that calls a server action to flip the cookie and soft-refresh the page.
+- Guarantee Playwright runs exercise the same toggle path without bespoke route intercepts.
+
+### Architecture
+- Implement `resolveFixtureMode({ cookies, searchParams, env })` as a pure utility with unit coverage proving precedence: query string → cookie → env → default `off`.
+- Add `setFixtureModeCookie(mode)` server action to persist the selection (HttpOnly, short-lived) while respecting Next.js caching.
+- Update `searchAction`, `/api/search`, `/api/search/nl`, `/api/search/suggest`, and `useSearchController` call sites to branch through the resolver and return shared fixtures when enabled.
+- Modify Playwright `globalSetup` to set the cookie instead of intercepting fetches; expose helpers in tests to switch modes mid-run when needed.
+
+### UX Surface
+- Mount a small pill toggle (e.g. top-right dev ribbon) that renders the active mode, uses Oak secondary button styling, and respects keyboard navigation.
+- Provide an accessible description (`aria-live="polite"`) when the mode flips so screen readers announce the data source change.
+- Hide the control in production builds by feature gating on `process.env.NODE_ENV !== 'production'` and an optional `ENABLE_FIXTURE_TOGGLE` flag.
+
+## Verification Strategy
+- **Unit tests:**
+  - `resolveFixtureMode.unit.test.ts` covering precedence and invalid inputs.
+  - Fixture builder tests asserting schema safeParse success and immutability (deep freeze to prevent accidental mutation).
+- **Integration tests:**
+  - `structured-search.actions.integration.test.ts` verifying fixture/live parity and multi-scope bucket assembly.
+  - Tests for `/api/search` and `/api/search/nl` to ensure fixture mode short-circuits external fetches while still logging zero-hit metrics when appropriate.
+- **Playwright:**
+  - Update `Search page responsive regressions` to rely on cookie toggle instead of route mocks and capture both fixture-on and fixture-off snapshots (fixture-off limited smoke to avoid flaky live results).
+  - Add scenarios for the developer toggle UI (visibility, keyboard toggle, aria announcements).
+- **Quality gates:**
+  - Run targeted `pnpm test --filter "Search"`, `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search"`, and `pnpm lint` during development.
+  - Execute `pnpm qg` prior to merge, ensuring logs capture fixture mode states used in tests.
 
 ## Breakpoint Strategy
-
-All responsive work targets a single breakpoint ramp so every surface behaves consistently across the widths mandated in the plan and Playwright suite.
-
-| Token    | Width    | Devices & Goals                                                                                                           |
-| -------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `bp-xs`  | `0px`    | Phones ≤ 479 px; enforce single-column stacking, readable tap targets, and simplified hero copy.                          |
-| `bp-sm`  | `480px`  | Large phones/small tablets; relax typography and allow wider hero content without reintroducing side-by-side forms.       |
-| `bp-md`  | `768px`  | Tablet landscape; first breakpoint that permits paired panels (structured vs natural search, status vs logs).             |
-| `bp-lg`  | `1024px` | Small desktops/large tablets; primary two-column layouts settle here with balanced gutters.                               |
-| `bp-xl`  | `1360px` | Mainstream desktops; unlock three-column grids and expanded secondary content while respecting line-length clamps.        |
-| `bp-xxl` | `1760px` | Ultrawide monitors; keeps 2 000 px visual runs centred via container clamps and additional breathing room for dashboards. |
-
-These breakpoints drive layout tokens, Styled Components media queries, and Playwright snapshot widths (360/800/1 200/2 000 align with xs/md/lg/xxl). The responsive architecture document inherits this ramp.
-
-## UX Objectives & Workstreams
-
-### 1. Responsive Layout & Grid System (Breakpoints First)
-
-- Define container clamps, inline padding, and grid behaviour at each breakpoint in `.agent/plans/semantic-search/semantic-search-responsive-layout-architecture.md`.
-- Refactor Search page wrappers so:
-  - `bp-xs`/`bp-sm`: hero, forms, suggestions, facets, and results stack linearly with `gap.section` rhythm.
-  - `bp-md`: structured/natural forms share a two-column grid, secondary panels align beside each other.
-  - `bp-lg`: container paddings widen, results adopt two-column cards, hero admits optional media.
-  - `bp-xl`/`bp-xxl`: introduce three-column results and expanded admin/docs layouts without exceeding the container clamp.
-- Update Admin, Docs, and Health surfaces to follow the same breakpoint-driven rules (stack → dual column → three column) instead of bespoke fixed widths, replacing literal pixel clamps/gaps with the shared layout tokens and CSS variables.
-
-### 2. Visual Hierarchy & Surface Refinement
-
-- Recompose hero and CTA blocks per breakpoint so typography scales smoothly (Lexend ramp) and emphasis surfaces respond to new grid states.
-- Convert Admin action panels and telemetry outputs into card clusters that widen at `bp-md` and reflow at `bp-xl`.
-- Wrap Redoc (Docs) and Health diagnostics in Oak surfaces with radius/spacing tokens, ensure they honour container clamps through `bp-xxl`, and drive zero-hit dashboards/cards from the emitted layout variables rather than `minmax(180px, 1fr)` fallbacks.
-
-### 3. Accessibility & Readability
-
-- Validate focus order and DOM reading order across breakpoint transitions (no DOM reshuffling; CSS grid areas only).
-- Check colour contrast in both modes for the reworked surfaces, paying particular attention to hover/focus states introduced at `bp-sm` and above.
-- Add axe coverage to Playwright runs at xs/md/lg/xxl to confirm headings, landmarks, and status regions remain intact, and surface light/dark theme-colour metadata from the semantic palette so browser chrome follows Oak tokens.
-
-### 4. Observability & Regression Safety for UX
-
-- Capture Playwright snapshots at widths representing `bp-xs` (360 px), `bp-md` (800 px), `bp-lg` (1 200 px), and `bp-xxl` (2 000 px) for Search, Admin, Docs, Health.
-- Add visual assertions keyed to layout breakpoints (e.g. results column count, stacked vs side-by-side panels).
-- Integrate accessibility checks into the same runs to enforce responsive semantics.
-
-#### Upcoming Verification Criteria
-
-- **Admin `bp-xxl` baseline:** Assert `main` width respects `--app-layout-container-max-width` while exceeding 1 200 px, and confirm axe violations remain at 0.
-- **Theme colour metadata:** Validate `<meta name="theme-color">` reflects semantic `bg-primary` tokens for both themes (`app/layout.meta.unit.test.ts` guards values via `resolveUiColor`).
-- **Baseline artefacts:** Capture before/after Playwright attachments for Search, Admin, and Docs at `bp-xxl` to evidence responsive improvements prior to regenerating snapshots.
-
-## Deliverables
-
-- Breakpoint-driven responsive architecture shared across Search, Admin, Docs, and Health surfaces.
-- Redesigned layouts and surfaces that respect Oak hierarchy at each breakpoint.
-- Automated visual + accessibility regression checks aligned with the breakpoint ramp.
-- Updated documentation describing layout tokens, component behaviour per breakpoint, and QA cadence.
-
-## Collaborations / Dependencies
-
-- Coordinate with functionality plan owners so telemetry/admin data feeds UI components sized for each breakpoint.
-- Validate breakpoint behaviour with design stakeholders to ensure alignment with Oak components.
-- Sync tooling owners to land Playwright/axe updates without regressing CI performance.
-
-## Risks & Mitigations
-
-- **Risk:** Layout overhaul impacts existing integration tests. **Mitigation:** Drive changes via failing breakpoint-specific visual tests, updating assertions incrementally.
-- **Risk:** Palette tweaks may diverge from Oak web components. **Mitigation:** Document overrides with rationale, seek upstream alignment where possible.
-- **Risk:** Swagger embed updates could break docs build. **Mitigation:** Pair with functionality stream on API docs hosting changes.
-
-## Progress Log
-
-- ACTION/REVIEW 1–2 COMPLETE: Audit captured Admin/Docs literal clamps; Health noted as pending shell work.
-- ACTION/REVIEW 3–4 COMPLETE: Admin page now consumes shared container and telemetry grid tokens; responsive behaviour validated manually.
-- ACTION 5 COMPLETE: Docs wrapper migrated to shared layout tokens; Health override remains on roadmap.
-- ACTION/REVIEW 7–8 COMPLETE: Playwright admin/docs `bp-xxl` baseline updated, snapshots regenerated, and axe checks recorded post-refactor.
-- ACTION/REVIEW 9–10 COMPLETE: Browser chrome metadata sources semantic `bg-primary` tokens with unit tests guarding light/dark parity.
-- Integration note: Theme bridge and token specs extended to include breakpoint variables and inline padding clamps (see responsive architecture doc).
-- 2025-09-27 audit (Search filters): Structured search form now exposes scope, query, subject, key stage, phase, minimum lessons, and size controls via Oak-labelled inputs; phase options cover primary/secondary slugs and propagate through `useStructuredSearchHandlers`. Natural language scope radios default to “Auto”, clearing the scope from the payload when selected, so scopes remain optional as requested. No additional filter dimensions surfaced in the API contract at this stage, and `includeFacets` stays enabled by default without a UI toggle.
-- 2025-09-28 review (Filter gating): Reconfirmed scope-driven visibility rules—structured filters for key stage, phase, and minimum lessons only appear when their scopes apply, while natural search shows a guidance note when scope is Auto/All. Subject remains always visible by design, and backend-only fields (`from`, `highlight`, `includeFacets`) stay implicit with no user-facing gaps identified.
-- 2025-09-28 integration (Search layout): `SearchPageClient.integration.test.tsx` now asserts the Phase selector options and the layout clamp expressed as `min(100%, var(--app-layout-container-max-width))`; suite passes under Vitest.
-- 2025-09-28 implementation (Multi-scope fixtures): Structured search fan-out now buckets lessons/units/sequences when scope = All; Playwright fixtures mirror this output so responsive snapshots capture populated sections, with a follow-up to enrich card content for more representative screenshots.
-- 2025-09-27 quality gates: `pnpm make` succeeded after trimming `SearchHero` under the lint threshold, and the full `pnpm qg` suite passed (format, type-check, lint, tests, smoke).
-- 2025-09-28 quality gates: Re-ran `pnpm qg` post-markdownlint fix to restore newline on the Health responsive baseline artefact; suite green.
+- Maintain the existing breakpoint ramp (`bp-xs`, `bp-sm`, `bp-md`, `bp-lg`, `bp-xl`, `bp-xxl`) and validate hero, controls, results, and secondary panels at each width.
+- Ensure fixture content exercises line wrapping, multi-column grids, and overflow guards at `bp-lg` and `bp-xxl` once richer data lands.
+- Continue to attach Playwright artefacts (screenshots + axe JSON) for xs/md/lg/xxl to catch regressions introduced by fixture/toggle refactors.
 
 ## Todo (GO cadence)
-
 1. ✅ REMINDER: UseBritish spelling.
-2. ✅ ACTION: Refresh the continuation prompt with current context only, keeping detailed history in the plan/context docs.
-3. ✅ REVIEW: Confirm the continuation prompt functions as a concise jumpstart and references supporting documents.
-4. ACTION: Outline the fixture expansion and env-toggle approach (validation, coverage, rollout).
-5. REVIEW: Record fixture/toggle design decisions in working notes.
+2. ACTION: Consolidate KS2/KS3 fixture reference data from `tmp/search-fixture-source.json` into working notes.
+3. REVIEW: Summarise dataset coverage and highlight remaining gaps (e.g. suggestions, timed-out states).
+4. ACTION: Design the `app/ui/search-fixtures` module structure, naming, and builder signatures.
+5. REVIEW: Validate the module design against SDK types and repo architecture rules.
 6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Expand deterministic fixtures (lessons/units/sequences, facets, suggestions) ready for runtime use.
-8. REVIEW: Validate fixtures against schemas/tests and ensure data feels representative for Playwright.
-9. ACTION: Implement the runtime env toggle across structured/natural search paths, including suggestions and controllers.
-10. REVIEW: Inspect code paths/tests to confirm the toggle works in both fixture and live modes.
-11. REVIEW: Identify documentation updates required for the new fixture toggle.
+7. ACTION: Draft fixture builder implementations covering single-scope, multi-scope, empty, and timed-out payloads.
+8. REVIEW: Run Zod `safeParse` prototypes against builder outputs to confirm structural fidelity.
+9. ACTION: Map adoption plan for structured actions, API routes, controllers, and Playwright suites to consume the new fixtures.
+10. REVIEW: Confirm the adoption map covers suggestions, multi-buckets, and natural search flows.
+11. QUALITY-GATE: Define the targeted unit, integration, and Playwright suites that must run during fixture rollout.
 12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Outline the dedicated status page UX (hero summary, diagnostics cards, accessibility hooks) that complements `/healthz`.
-14. REVIEW: Share the status page outline with stakeholders and capture feedback before implementation.
-15. ACTION: Implement the status page UI with shared layout tokens, Playwright selectors, and axe coverage.
-16. REVIEW: Validate status page behaviour across breakpoints and document any follow-up work.
-17. REVIEW: Ensure all Phase 1 UX backlog items are either complete or captured as follow-ups.
+13. ACTION: Implement the fixture mode resolver utility (env → query → cookie) with unit coverage.
+14. REVIEW: Evaluate resolver behaviour against edge cases (invalid modes, missing cookies) and document findings.
+15. ACTION: Thread fixture mode through `searchAction`, `/api/search`, and `/api/search/suggest`, replacing ad-hoc fixture logic.
+16. REVIEW: Add integration tests ensuring fixture/live branches behave consistently and log zero-hit events appropriately.
+17. QUALITY-GATE: Update Playwright configuration to set the fixture cookie and enumerate viewport baselines affected by the change.
 18. GROUNDING: read GO.md and follow all instructions.
-19. ACTION: Update plan/context/continuation docs with progress, artefacts, and outstanding work.
-20. REVIEW: Sanity-check documentation clarity and GO cadence alignment.
-21. QUALITY-GATE: Run targeted unit/integration/Playwright suites covering fixtures, Search, Admin, Docs, and new Health surfaces.
-22. REVIEW: Log targeted test outputs and artefact locations.
-23. REVIEW: Confirm readiness for the full quality gate run.
+19. ACTION: Extend natural-language helper and `/api/search/nl` route to honour fixture mode and reuse shared builders.
+20. REVIEW: Confirm NL paths emit deterministic results and suggestions while maintaining error handling.
+21. ACTION: Build the developer-facing fixture toggle UI control and associated server action for cookie mutation.
+22. REVIEW: Check accessibility (focus order, announcements) and document usage guidance for designers.
+23. QUALITY-GATE: Schedule combined `pnpm test`, `pnpm lint`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search"` runs for fixture/toggle branches.
 24. GROUNDING: read GO.md and follow all instructions.
-25. QUALITY-GATE: Execute `pnpm qg` from the repo root.
-26. REVIEW: Summarise the `pnpm qg` results and remediate as needed.
-27. ACTION: Stage changes with `git add` and inspect `git status`.
-28. REVIEW: Ensure the staging area matches intended modifications.
-29. REVIEW: Outline key points for the upcoming commit message.
+25. ACTION: Refresh continuation + context docs with fixture/toggle outcomes, instructions, and artefact links.
+26. REVIEW: Proofread documentation for clarity, British spelling, and up-to-date references.
+27. ACTION: Stage code + docs, capturing `git status` for the fixture/toggle change set.
+28. REVIEW: Verify staging matches intentions and note any follow-up clean-up.
+29. QUALITY-GATE: Execute `pnpm qg` before final review.
 30. GROUNDING: read GO.md and follow all instructions.
-31. ACTION: Draft the conventional commit message (header + body under 80 characters).
-32. REVIEW: Check commit wording, scope, and formatting.
+31. ACTION: Draft the conventional commit message capturing fixture consolidation and toggle delivery.
+32. REVIEW: Validate commit message scope, tense, and formatting.
 33. ACTION: Run `git commit` (no `--no-verify`).
-34. REVIEW: Confirm the working tree is clean post-commit.
+34. REVIEW: Confirm the working tree is clean and summarise release notes for hand-off.

@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ThemeProvider, useThemeContext } from './ThemeContext';
+import type { JSX } from 'react';
 
-function ModeProbe(): React.JSX.Element {
+function ModeProbe(): JSX.Element {
   const { mode, setMode } = useThemeContext();
   return (
     <div>
