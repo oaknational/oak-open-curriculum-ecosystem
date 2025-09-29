@@ -128,26 +128,38 @@ Phase 1 keeps the design system aligned with product intent by:
 ## Todo (GO cadence)
 
 1. REMINDER: UseBritish spelling.
-2. ACTION: Inspect generated `curriculumZodSchemas.ts` to confirm exported registry guards and schema naming align with expectations.
-3. REVIEW: Summarise any schema export gaps that require regeneration or follow-up fixes.
-4. ACTION: Trace SDK consumers (validation, response map, search guards, MCP tooling, docs) to ensure they now import the renamed curriculum exports exclusively.
-5. REVIEW: Record any lingering references to legacy schema identifiers for remediation.
-6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Refresh UX plan, context snapshot, and continuation prompt with the curriculum schema rename outcomes and downstream adoption guidance.
-8. REVIEW: Proofread documentation updates for clarity and British spelling while checking linked artefacts.
-9. QUALITY-GATE: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation.
-10. ACTION: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour.
-11. REVIEW: Capture test outcomes, noting regressions or flaky cases for follow-up.
-12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas.
-14. REVIEW: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown`.
-15. QUALITY-GATE: Run `pnpm -C packages/sdks/oak-curriculum-sdk type-check` to confirm the validation layer compiles cleanly.
-16. ACTION: Generate search scope constants/types/guard via type-gen so validation code depends on a single compile-time source of truth.
-17. REVIEW: Remove overloads/magic strings from `search-response-validators.ts`, using the generated scope map instead.
-18. GROUNDING: read GO.md and follow all instructions.
-19. ACTION: Re-run `pnpm doc-gen` ensuring regenerated docs flow from updated helpers without manual edits to `_typedoc_src`.
-20. REVIEW: Confirm doc artefacts reflect the new helpers and no generated sources are manually touched.
-21. QUALITY-GATE: Run `pnpm make` followed by `pnpm qg` once documentation and validation layers are stable.
-22. ACTION: Update contributor guidance and validation usage docs to highlight the new parsing helpers and generated search scope utilities.
-23. REVIEW: Share follow-up recommendations with UX and functionality streams based on validation findings.
-24. GROUNDING: read GO.md and follow all instructions.
+2. ACTION [DONE 2025-10-05]: Inspect generated `curriculumZodSchemas.ts` to confirm exported registry guards and schema naming align with expectations (registry exports + guards validated).
+3. REVIEW [DONE 2025-10-05]: Summarise any schema export gaps that require regeneration or follow-up fixes (no gaps identified; current registry matches OpenAPI surface).
+4. ACTION [DONE 2025-10-05]: Trace SDK consumers (validation, response map, search guards, MCP tooling, docs) to ensure they now import the renamed curriculum exports exclusively (legacy identifiers not detected).
+5. REVIEW [DONE 2025-10-05]: Record any lingering references to legacy schema identifiers for remediation (none found).
+6. GROUNDING [DONE 2025-10-05]: read GO.md and follow all instructions.
+7. ACTION [DONE 2025-10-05]: Refresh UX plan, context snapshot, and continuation prompt with the curriculum schema rename outcomes and downstream adoption guidance (this update applied across plan/context/prompt files).
+8. REVIEW [DONE 2025-10-05]: Proofread documentation updates for clarity and British spelling while checking linked artefacts.
+9. QUALITY-GATE [PENDING]: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation.
+10. ACTION [PENDING]: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour.
+11. REVIEW [PENDING]: Capture test outcomes, noting regressions or flaky cases for follow-up.
+12. GROUNDING [PENDING]: read GO.md and follow all instructions.
+13. ACTION [OPEN]: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas.
+14. REVIEW [OPEN]: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown`.
+15. QUALITY-GATE [OPEN]: Run `pnpm -C packages/sdks/oak-curriculum-sdk type-check` to confirm the validation layer compiles cleanly.
+16. ACTION [DONE 2025-10-03]: Generate search scope constants/types/guard via type-gen so validation code depends on a single compile-time source of truth (generated `search/scopes.ts` present).
+17. REVIEW [INCOMPLETE]: Remove overloads/magic strings from `search-response-validators.ts`, using the generated scope map instead (map still embeds literal scope strings; needs refactor).
+18. GROUNDING [PENDING]: read GO.md and follow all instructions.
+19. ACTION [PENDING]: Re-run `pnpm doc-gen` ensuring regenerated docs flow from updated helpers without manual edits to `_typedoc_src`.
+20. REVIEW [PENDING]: Confirm doc artefacts reflect the new helpers and no generated sources are manually touched.
+21. QUALITY-GATE [BLOCKED BY 19-20]: Run `pnpm make` followed by `pnpm qg` once documentation and validation layers are stable.
+22. ACTION [PENDING]: Update contributor guidance and validation usage docs to highlight the new parsing helpers and generated search scope utilities.
+23. REVIEW [PENDING]: Share follow-up recommendations with UX and functionality streams based on validation findings.
+24. GROUNDING [PENDING]: read GO.md and follow all instructions.
+25. ACTION [PENDING]: Define the Oak status page UX contract (layout, content blocks, accessibility) for a minimal but polished release.
+26. REVIEW [PENDING]: Cross-check the status page blueprint with architecture guidance and document references for implementation.
+27. ACTION [PENDING]: Implement the minimal status page shell and wire it to live health signals with snapshot/axe coverage.
+28. REVIEW [PENDING]: Run Playwright + axe for the status page across target breakpoints and record artefacts in the plan.
+29. QUALITY-GATE [PENDING]: Add status page coverage to `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and confirm green runs.
+30. GROUNDING [PENDING]: read GO.md and follow all instructions.
+31. ACTION [PENDING]: Map admin workflows for managing Elastic indexes, rollups, ingest jobs, and re-index scheduling within the UX plan.
+32. REVIEW [PENDING]: Validate admin control requirements with engineering stakeholders and capture dependencies or blockers.
+33. ACTION [PENDING]: Implement admin UI controls for index creation, data ingestion toggles, and feedback surfaces tied to backend orchestration.
+34. REVIEW [PENDING]: Ensure admin flows expose progress/error states, updating Playwright/axe artefacts where needed.
+35. QUALITY-GATE [PENDING]: Extend targeted test suites (`pnpm -C apps/oak-open-curriculum-semantic-search test`, relevant Playwright specs) to cover new admin workflows.
+36. GROUNDING [PENDING]: read GO.md and follow all instructions.

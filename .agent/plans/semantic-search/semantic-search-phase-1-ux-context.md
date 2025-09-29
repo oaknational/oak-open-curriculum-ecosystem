@@ -1,6 +1,6 @@
 # Semantic Search Phase 1 – UX Context Snapshot
 
-_Last updated: 2025-10-01 (schema-aligned fixtures + MCP tool output)_
+_Last updated: 2025-10-05 (curriculum schema audit)_
 
 ## Active Focus
 
@@ -11,6 +11,8 @@ _Last updated: 2025-10-01 (schema-aligned fixtures + MCP tool output)_
 - Address the remaining SDK Typedoc warnings so full `pnpm make`/`pnpm qg` runs can baseline the fixture-mode integration now that search app lint/type-check gates are clean.
 - Lock in the curriculum schema registry rename (`curriculumZodSchemas`) by confirming regenerated artefacts, updated consumers, and the new parsing helpers before widening adoption guidance.
 - Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
+- Deliver a minimal-yet-polished status page shell driven by live health data, with responsive and accessibility evidence captured alongside documentation updates.
+- Expand the admin surface into the operational console for Elastic index/rollup management, ingestion toggles, and telemetry feedback loops.
 
 ## Current State
 
@@ -26,8 +28,10 @@ _Last updated: 2025-10-01 (schema-aligned fixtures + MCP tool output)_
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
 - Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; fixtures continue to mirror the multi-scope payload, and the multi-scope builders/tests now compose the generated `createSearch*Response` helpers directly to guarantee schema fidelity.
-- Curriculum schema metadata now lives in `curriculumZodSchemas`; validation layers call the new curriculum-specific parsing helpers and search validators are being refactored to use generated scope constants instead of overloads.
+- Curriculum schema metadata now lives in `curriculumZodSchemas`; curriculum response validators use the dedicated parsing helpers, search validators still depend on the generic `parseWithSchema`, and the generated search scope constants/guards (`SEARCH_SCOPES`, `SEARCH_SCOPES_WITH_ALL`) are ready for the pending refactor.
 - Search page client now uses a dedicated layout shell and fixture toggle component, keeping max-lines under control while preserving the existing UX flows.
+- Status page UX contract is queued for implementation: focus on Oak-brand shell, live status messaging, and artefacts backing accessibility checks.
+- Admin page requires expanded workflows (index creation, ingestion controls, telemetry) with progress/error cues surfaced to operators.
 - Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` documents the finalised module layout. The shared fixture-mode resolver and developer toggle now drive all server actions and routes, preserving zero-hit logging and accessible announcements; next, broaden science facets as needed and finish splitting fixture helpers so lint complexity thresholds pass.
 - Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover the updated cookie handling and complete without type errors.
 - Quality gate follow-up: `pnpm make` currently halts during `doc-gen` because Typedoc flags generated search schemas; resolve that warning set before re-running `pnpm make`/`pnpm qg` as the new baseline once the curriculum schema rename lands.

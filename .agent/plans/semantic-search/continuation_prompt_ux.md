@@ -22,15 +22,19 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - `/healthz` intentionally remains a JSON API endpoint; user-facing health information will move to a new status page with Oak UI styling.
 - Search API routes now share schema-derived helpers (fixture short-circuit + cached query normaliser), and multi-scope fixture builders/tests rely on the generated `createSearch*Response` factories.
 - Curriculum schema artefacts now regenerate into `curriculumZodSchemas`; next actions include splitting the generic parse helper into curriculum/search-specific functions, generating search scope constants, and updating validators to consume the new utilities.
-- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and the curriculum schema rename plus parse helpers are in place awaiting documentation sign-off.
+- Status page UX needs to progress from blueprint to a minimal Oak-branded shell sourcing live health signals with responsive/a11y coverage.
+- Admin surface must evolve into the operational console for Elastic index creation, ingestion scheduling, and feedback loops.
+- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and the curriculum schema rename is in place with curriculum-specific parse helpers, while search validators still rely on the generic helper pending refactor.
 
 ## Immediate Priorities
 
 1. Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
-2. Verify the generated `curriculumZodSchemas` registry (exports, guards, schema names) and ensure every SDK consumer uses the new helpers end-to-end.
-3. Resolve the SDK Typedoc warnings (schema const exports) so `pnpm make`/`pnpm qg` can complete without manual intervention.
-4. Once documentation builds succeed, rerun `pnpm make`/`pnpm qg` and capture the new baseline before updating Playwright + contributor docs with the fixture toggle workflow.
-5. Review search-result copy/layout now that schema-backed fixtures are authoritative, then shortlist presentation tweaks for the next implementation slice and feed them into the UX backlog.
+2. (Completed 2025-10-05) Verify the generated `curriculumZodSchemas` registry (exports, guards, schema names) and ensure every SDK consumer uses the new helpers end-to-end.
+3. Deliver the initial status page shell (layout, accessibility, live data wiring) and capture responsive/axe artefacts for regression tracking.
+4. Expand the admin page into the operational console for Elastic index/rollup management, ingestion triggers, and progress feedback.
+5. Resolve the SDK Typedoc warnings (schema const exports) so `pnpm make`/`pnpm qg` can complete without manual intervention.
+6. Once documentation builds succeed, rerun `pnpm make`/`pnpm qg` and capture the new baseline before updating Playwright + contributor docs with the fixture toggle workflow.
+7. Review search-result copy/layout now that schema-backed fixtures are authoritative, then shortlist presentation tweaks for the next implementation slice and feed them into the UX backlog.
 
 ## Verification Checklist
 
