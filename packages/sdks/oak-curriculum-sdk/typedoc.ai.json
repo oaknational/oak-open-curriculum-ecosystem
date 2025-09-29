@@ -1,33 +1,11 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": [
-    "docs/_typedoc_src/index.ts",
-    "docs/_typedoc_src/validation/types.ts",
-    "docs/_typedoc_src/validation/index.ts",
-    "docs/_typedoc_src/types/schema-bridge.ts",
-    "docs/_typedoc_src/types/generated/api-schema/api-paths-types.ts",
-    "docs/_typedoc_src/types/generated/api-schema/path-parameters.ts",
-    "docs/_typedoc_src/types/generated/api-schema/routing/url-helpers.ts"
-  ],
+  "extends": "./typedoc.json",
   "out": "docs/api",
-  "tsconfig": "./tsconfig.json",
-  "readme": "none",
-  "githubPages": false,
-  "categorizeByGroup": true,
-  "sort": ["kind", "instance-first", "alphabetical"],
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "e2e-tests/**",
-    "test-cache/**",
-    "examples/**",
-    "type-gen/**",
-    "docs/_typedoc_src/types/generated/api-schema/mcp-tools/**",
-    "docs/_typedoc_src/mcp/**"
-  ],
-  "excludeInternal": true,
-  "excludePrivate": true,
-  "excludeProtected": false,
-  "includeVersion": true,
-  "treatValidationWarningsAsErrors": true
+  "plugin": [],
+  "validation": {
+    "invalidLink": true,
+    "notDocumented": false,
+    "notExported": false
+  }
 }

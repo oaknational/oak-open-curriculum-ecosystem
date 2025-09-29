@@ -13,23 +13,28 @@
 
 All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: UseBritish spelling” in the todo list.
 
-## Current Snapshot (2025-09-30)
+## Current Snapshot (2025-10-01)
 
 - Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, and Docs; responsive Playwright checks at `bp-xs`/`bp-md`/`bp-lg`/`bp-xxl` now run without guards.
 - Structured and natural search forms are scope-aware and render via `HeroControlsCluster`; additional hero polish (45 ch clamp, accent styling) remains paused until fixtures and the status page work are complete.
-- Fixture source datasets (KS2 maths, KS4 maths, KS3 history, KS3 art, KS4 science with populated `ks4Options`) now live in `fixtures/fetched-data/` with manual suggestions and reference notes in `fixtures/REFERENCE.md`; `app/ui/search-fixtures/README.md` defines the module structure for upcoming builders. Science fixtures also expose sample facets/aggregations and suggestion cache metadata for KS4 pathways. Next integration steps: introduce the shared SDK-derived Zod schema module so fixtures, UI, and API boundaries validate identical payload shapes, and plan migration of any residual custom schemas/types into the SDK compile-time generation to uphold the cardinal rule.
+- Fixture source datasets (KS2 maths, KS4 maths, KS3 history, KS3 art, KS4 science with populated `ks4Options`) now live in `fixtures/fetched-data/` with reference notes in `fixtures/REFERENCE.md`; the builders are implemented and call the SDK’s generated `createSearch*Response` helpers so UI, API routes, and tests all validate against the same schema set.
+- Shared fixture-mode resolver honours env → query → cookie precedence across `searchAction`, `/api/search`, `/api/search/suggest`, and `/api/search/nl`, keeping zero-hit logging intact and pairing with the developer toggle’s polite announcements.
 - `/healthz` intentionally remains a JSON API endpoint; user-facing health information will move to a new status page with Oak UI styling.
-- Latest `pnpm qg` (2025-09-29) passed after the docs palette and markdownlint newline fixes.
+- Search API routes now share schema-derived helpers (fixture short-circuit + cached query normaliser), and multi-scope fixture builders/tests rely on the generated `createSearch*Response` factories.
+- Curriculum schema artefacts now regenerate into `curriculumZodSchemas`; next actions include splitting the generic parse helper into curriculum/search-specific functions, generating search scope constants, and updating validators to consume the new utilities.
+- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and the curriculum schema rename plus parse helpers are in place awaiting documentation sign-off.
 
 ## Immediate Priorities
 
-1. Model deterministic fixture builders using the enriched datasets (KS2/KS4 maths, KS3 history, KS3 art) and land the runtime toggle so Search can switch cleanly between live data and fixtures.
-2. Design and build the dedicated status page (separate from `/healthz`) with Oak UI affordances, responsive layout tokens, and automated tests.
-3. Update plan/context docs with the above progress, rerun the full quality gate, and prepare a conventional commit.
+1. Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
+2. Verify the generated `curriculumZodSchemas` registry (exports, guards, schema names) and ensure every SDK consumer uses the new helpers end-to-end.
+3. Resolve the SDK Typedoc warnings (schema const exports) so `pnpm make`/`pnpm qg` can complete without manual intervention.
+4. Once documentation builds succeed, rerun `pnpm make`/`pnpm qg` and capture the new baseline before updating Playwright + contributor docs with the fixture toggle workflow.
+5. Review search-result copy/layout now that schema-backed fixtures are authoritative, then shortlist presentation tweaks for the next implementation slice and feed them into the UX backlog.
 
 ## Verification Checklist
 
-- Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added.
+- Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added; update the integration suites (`app/api/search/*/route.integration.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`) to rely on `NextResponse` so cookie assertions type-check, then re-run them alongside the fixture-mode unit coverage.
 - Playwright responsive suites: `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search page responsive regressions"`, `... --grep "Admin page responsive regressions"`, `... --grep "Docs page responsive regressions"`; confirm the Search run captures the fixture-backed scenarios and remains useful by flagging regressions, and add coverage for the forthcoming status page once work lands.
 - Full gate before commit: `pnpm qg`.
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex via `resolveUiColor`; integration tests assert the generated palette matches resolved colours.

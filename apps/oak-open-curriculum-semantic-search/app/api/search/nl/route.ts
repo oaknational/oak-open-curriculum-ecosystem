@@ -1,41 +1,57 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { parseQuery } from '../../../../src/lib/query-parser';
 import { llmEnabled } from '../../../../src/lib/env';
 import type { StructuredQuery } from '../../../../src/lib/run-hybrid-search';
 import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
+import {
+  DEFAULT_INCLUDE_FACETS,
+  SearchNaturalLanguageRequestSchema,
+} from '../../../../src/types/oak';
+import type { SearchNaturalLanguageRequest } from '../../../../src/types/oak';
+import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../../lib/fixture-mode';
+import { buildSingleScopeFixture } from '../../../ui/search-fixtures/builders';
 
 type NaturalStructuredPayload = Omit<StructuredQuery, 'scope'> & {
   scope: StructuredQuery['scope'] | 'all';
 };
 
-const BodySchema = z.object({
-  q: z.string().min(1),
-  scope: z.enum(['units', 'lessons', 'sequences', 'all']).optional(),
-  size: z.number().int().min(1).max(100).optional(),
-  includeFacets: z.boolean().optional(),
-  phaseSlug: z.string().optional(),
-  subject: z.string().optional(),
-  keyStage: z.string().optional(),
-  minLessons: z.number().int().min(0).optional(),
-});
-
-type NaturalRequestBody = z.infer<typeof BodySchema>;
+type NaturalRequestBody = SearchNaturalLanguageRequest;
 
 export async function POST(req: NextRequest): Promise<Response> {
   if (!llmEnabled()) {
     return renderLlmDisabled();
   }
 
-  const parsedBody = BodySchema.safeParse(await req.json());
+  const parsedBody = SearchNaturalLanguageRequestSchema.safeParse(await req.json());
   if (!parsedBody.success) {
-    return NextResponse.json({ error: z.treeifyError(parsedBody.error) }, { status: 400 });
+    return NextResponse.json({ error: parsedBody.error.flatten() }, { status: 400 });
   }
 
   const requestPayload = await buildNaturalPayload(parsedBody.data);
+  const { mode, persist } = resolveFixtureModeFromRequest(req);
+
+  if (mode === 'fixtures') {
+    const lessonsFixture = buildSingleScopeFixture();
+    const response = NextResponse.json({
+      scope: 'lessons',
+      results: lessonsFixture.results,
+      total: lessonsFixture.total,
+      took: lessonsFixture.took,
+      timedOut: lessonsFixture.timedOut,
+      aggregations: lessonsFixture.aggregations,
+      facets: lessonsFixture.facets,
+      suggestions: lessonsFixture.suggestions,
+      suggestionCache: lessonsFixture.suggestionCache,
+    });
+    applyFixtureModeCookie(response, persist);
+    return response;
+  }
+
   const response = await forwardStructuredSearch(req, requestPayload);
   const bodyJson: unknown = await response.json();
-  return NextResponse.json(bodyJson, { status: response.status });
+  const nextResponse = NextResponse.json(bodyJson, { status: response.status });
+  applyFixtureModeCookie(nextResponse, persist);
+  return nextResponse;
 }
 
 function renderLlmDisabled(): Response {
@@ -59,7 +75,7 @@ async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStr
     keyStage: pickKeyStage(body.keyStage, parsed.keyStage),
     minLessons: body.minLessons ?? parsed.minLessons,
     size: body.size,
-    includeFacets: body.includeFacets ?? true,
+    includeFacets: body.includeFacets ?? DEFAULT_INCLUDE_FACETS,
     phaseSlug: body.phaseSlug,
   } satisfies NaturalStructuredPayload;
 }

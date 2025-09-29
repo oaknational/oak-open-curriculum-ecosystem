@@ -9,7 +9,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 /* eslint-disable @typescript-eslint/no-restricted-types */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-/* eslint-disable no-restricted-properties */
 
 import type { OpenAPI3, SchemaObject } from 'openapi-typescript';
 

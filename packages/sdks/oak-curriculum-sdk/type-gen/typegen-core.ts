@@ -36,6 +36,13 @@ import {
 import { typeSafeEntries } from '../src/types/helpers.js';
 import { generateSearchFacetTypeModules } from './typegen/search/generate-search-facet-types.js';
 import { generateSearchFacetZodModules } from './typegen/search/generate-search-facet-zod.js';
+import { generateSearchRequestModules } from './typegen/search/generate-search-requests.js';
+import { generateSearchResponseModules } from './typegen/search/generate-search-responses.js';
+import { generateSearchResponseDocsModules } from './typegen/search/generate-search-response-docs.js';
+import { generateSearchSuggestionModules } from './typegen/search/generate-search-suggestions.js';
+import { generateSearchScopeModules } from './typegen/search/generate-search-scopes.js';
+import { generateSearchFixtureModules } from './typegen/search/generate-search-fixtures.js';
+import { generateSearchIndexModule } from './typegen/search/generate-search-index.js';
 
 /**
  * Create a map of filenames to their content
@@ -64,11 +71,25 @@ export function createFileMap(
 
   const searchFacetTypes = generateSearchFacetTypeModules();
   const searchFacetZod = generateSearchFacetZodModules();
+  const searchRequests = generateSearchRequestModules(sdkSchema);
+  const searchResponses = generateSearchResponseModules(sdkSchema);
+  const searchResponseDocs = generateSearchResponseDocsModules(sdkSchema);
+  const searchSuggestions = generateSearchSuggestionModules(sdkSchema);
+  const searchScopes = generateSearchScopeModules(sdkSchema);
+  const searchFixtures = generateSearchFixtureModules(sdkSchema);
+  const searchIndex = generateSearchIndexModule(sdkSchema);
 
   return {
     ...baseFiles,
     ...searchFacetTypes,
     ...searchFacetZod,
+    ...searchRequests,
+    ...searchResponses,
+    ...searchResponseDocs,
+    ...searchSuggestions,
+    ...searchScopes,
+    ...searchFixtures,
+    ...searchIndex,
   };
 }
 

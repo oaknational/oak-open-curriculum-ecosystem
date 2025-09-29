@@ -11,60 +11,28 @@ import {
   type SingleScopeFixture,
 } from './single-scope';
 import {
-  ks2MathsUnits,
-  ks2MathsSequences,
-  ks3ArtUnits,
-  ks3ArtSequences,
-  ks3HistoryUnits,
-  ks3HistorySequences,
-  ks4MathsUnits,
-  ks4MathsSequences,
-  ks4ScienceUnits,
-  ks4ScienceSequences,
-} from '../data';
+  createSearchLessonsResponse,
+  createSearchUnitsResponse,
+  createSearchSequencesResponse,
+  createSearchMultiScopeResponse,
+  type SearchMultiScopeResponse,
+  type SearchMultiScopeBucket,
+  SearchSuggestionResponseSchema,
+} from '../../../../src/types/oak';
+import { buildSequenceFixture, buildUnitFixture } from './multi-scope-scopes';
 
 // Type helpers ----------------------------------------------------------------
 
-type UnitRecord =
-  | (typeof ks2MathsUnits)[number]
-  | (typeof ks4MathsUnits)[number]
-  | (typeof ks3HistoryUnits)[number]
-  | (typeof ks3ArtUnits)[number];
-
-type SequenceRecord =
-  | (typeof ks2MathsSequences)[number]
-  | (typeof ks4MathsSequences)[number]
-  | (typeof ks3HistorySequences)[number]
-  | (typeof ks3ArtSequences)[number]
-  | (typeof ks4ScienceSequences)[number];
+type BucketScope = 'lessons' | 'units' | 'sequences';
+type HybridForScope<S extends BucketScope> = Extract<HybridResponse, { scope: S }>;
 
 type BucketOverride = Partial<
   Pick<HybridResponse, 'total' | 'took' | 'timedOut' | 'aggregations' | 'facets'>
 >;
 
-type BucketOverrideMap = Partial<Record<'lessons' | 'units' | 'sequences', BucketOverride>>;
+type BucketOverrideMap = Partial<Record<BucketScope, BucketOverride>>;
 
-type SuggestionCache = {
-  readonly version: string;
-  readonly ttlSeconds: number;
-};
-
-const UNIT_DATASETS: Record<SingleScopeDatasetKey, readonly UnitRecord[]> = {
-  'ks2-maths': ks2MathsUnits,
-  'ks4-maths': ks4MathsUnits,
-  'ks3-history': ks3HistoryUnits,
-  'ks3-art': ks3ArtUnits,
-  'ks4-science': ks4ScienceUnits,
-};
 type SequenceDatasetKey = SingleScopeDatasetKey;
-
-const SEQUENCE_DATASETS: Record<SequenceDatasetKey, readonly SequenceRecord[]> = {
-  'ks2-maths': ks2MathsSequences,
-  'ks4-maths': ks4MathsSequences,
-  'ks3-history': ks3HistorySequences,
-  'ks3-art': ks3ArtSequences,
-  'ks4-science': ks4ScienceSequences,
-};
 
 export interface BuildMultiScopeFixtureOptions {
   readonly lessonsDataset?: SingleScopeDatasetKey;
@@ -77,38 +45,16 @@ export interface BuildMultiScopeFixtureOptions {
   };
 }
 
+export { buildUnitFixture, buildSequenceFixture } from './multi-scope-scopes';
+
 export function buildMultiScopeFixture(
   options: BuildMultiScopeFixtureOptions = {},
 ): MultiScopeHybridResponse & {
   suggestions: SuggestionItem[];
   suggestionCache: SuggestionCache;
 } {
-  const {
-    lessonsDataset = 'ks2-maths',
-    unitsDataset = 'ks4-maths',
-    sequencesDataset = 'ks3-history',
-    overrides,
-  } = options;
-
-  const lessonBucket = buildSingleScopeFixture({ dataset: lessonsDataset });
-  const buckets = assembleBuckets({
-    lessonBucket,
-    unitsDataset,
-    sequencesDataset,
-    overrides: overrides?.buckets,
-  });
-  const suggestions = collectSuggestions(lessonBucket.suggestions, overrides?.suggestions);
-  const suggestionCache = collectSuggestionCache(
-    lessonBucket.suggestionCache,
-    overrides?.suggestionCache,
-  );
-
-  return {
-    scope: 'all',
-    buckets,
-    suggestions,
-    suggestionCache,
-  };
+  const response = createSearchMultiScopeResponse(createResponseInput(options));
+  return finalizeMultiScopeFixture(response);
 }
 
 // Helpers ---------------------------------------------------------------------
@@ -118,45 +64,101 @@ function assembleBuckets(params: {
   readonly unitsDataset: SingleScopeDatasetKey;
   readonly sequencesDataset: SingleScopeDatasetKey;
   readonly overrides?: BucketOverrideMap;
-}) {
+}): SearchMultiScopeBucket[] {
   const unitBucket = buildUnitFixture(params.unitsDataset);
   const sequenceBucket = buildSequenceFixture(params.sequencesDataset);
   return [
-    createBucket('lessons', params.lessonBucket, params.overrides),
-    createBucket('units', unitBucket, params.overrides),
-    createBucket('sequences', sequenceBucket, params.overrides),
+    createLessonBucket(params.lessonBucket, params.overrides?.lessons),
+    createUnitBucket(unitBucket, params.overrides?.units),
+    createSequenceBucket(sequenceBucket, params.overrides?.sequences),
   ];
 }
 
-function createBucket(
-  scope: 'lessons' | 'units' | 'sequences',
-  result: HybridResponse,
-  overrides?: BucketOverrideMap,
-) {
+function createLessonBucket(
+  result: HybridForScope<'lessons'>,
+  override?: BucketOverride,
+): SearchMultiScopeBucket {
   return {
-    scope,
-    result: applyBucketOverrides(scope, result, overrides),
-  } as const;
+    scope: 'lessons',
+    result: applyLessonOverrides(result, override),
+  } satisfies SearchMultiScopeBucket;
 }
 
-function applyBucketOverrides(
-  key: 'lessons' | 'units' | 'sequences',
-  result: HybridResponse,
-  overrides?: BucketOverrideMap,
-): HybridResponse {
-  const override = overrides?.[key];
+function createUnitBucket(
+  result: HybridForScope<'units'>,
+  override?: BucketOverride,
+): SearchMultiScopeBucket {
+  return {
+    scope: 'units',
+    result: applyUnitOverrides(result, override),
+  } satisfies SearchMultiScopeBucket;
+}
+
+function createSequenceBucket(
+  result: HybridForScope<'sequences'>,
+  override?: BucketOverride,
+): SearchMultiScopeBucket {
+  return {
+    scope: 'sequences',
+    result: applySequenceOverrides(result, override),
+  } satisfies SearchMultiScopeBucket;
+}
+
+function applyLessonOverrides(
+  result: HybridForScope<'lessons'>,
+  override?: BucketOverride,
+): HybridForScope<'lessons'> {
   if (!override) {
     return result;
   }
-
-  return {
-    ...result,
+  return createSearchLessonsResponse({
+    results: result.results,
     total: override.total ?? result.total,
     took: override.took ?? result.took,
     timedOut: override.timedOut ?? result.timedOut,
     aggregations: override.aggregations ?? result.aggregations,
     facets: override.facets ?? result.facets,
-  };
+    suggestions: result.suggestions ?? [],
+    suggestionCache: result.suggestionCache,
+  });
+}
+
+function applyUnitOverrides(
+  result: HybridForScope<'units'>,
+  override?: BucketOverride,
+): HybridForScope<'units'> {
+  if (!override) {
+    return result;
+  }
+  return createSearchUnitsResponse({
+    results: result.results,
+    total: override.total ?? result.total,
+    took: override.took ?? result.took,
+    timedOut: override.timedOut ?? result.timedOut,
+    aggregations: override.aggregations ?? result.aggregations,
+    facets: override.facets ?? result.facets,
+    suggestions: result.suggestions,
+    suggestionCache: result.suggestionCache,
+  });
+}
+
+function applySequenceOverrides(
+  result: HybridForScope<'sequences'>,
+  override?: BucketOverride,
+): HybridForScope<'sequences'> {
+  if (!override) {
+    return result;
+  }
+  return createSearchSequencesResponse({
+    results: result.results,
+    total: override.total ?? result.total,
+    took: override.took ?? result.took,
+    timedOut: override.timedOut ?? result.timedOut,
+    aggregations: override.aggregations ?? result.aggregations,
+    facets: override.facets ?? result.facets,
+    suggestions: result.suggestions,
+    suggestionCache: result.suggestionCache,
+  });
 }
 
 function collectSuggestions(
@@ -169,77 +171,51 @@ function collectSuggestions(
   return [...defaults];
 }
 
-function collectSuggestionCache(
-  defaults: SuggestionCache,
-  override?: SuggestionCache,
+function createResponseInput(options: BuildMultiScopeFixtureOptions) {
+  const resolved = resolveMultiScopeOptions(options);
+  const lessonBucket = buildSingleScopeFixture({ dataset: resolved.lessonsDataset });
+  const buckets = assembleBuckets({
+    lessonBucket,
+    unitsDataset: resolved.unitsDataset,
+    sequencesDataset: resolved.sequencesDataset,
+    overrides: resolved.bucketOverrides,
+  });
+
+  const suggestions = collectSuggestions(lessonBucket.suggestions, resolved.suggestionOverrides);
+  const suggestionCache = SearchSuggestionResponseSchema.shape.cache.parse(
+    resolveSuggestionCache(lessonBucket.suggestionCache, resolved.suggestionCacheOverride),
+  );
+
+  return { buckets, suggestions, suggestionCache };
+}
+
+function resolveMultiScopeOptions(options: BuildMultiScopeFixtureOptions) {
+  return {
+    lessonsDataset: options.lessonsDataset ?? 'ks2-maths',
+    unitsDataset: options.unitsDataset ?? 'ks4-maths',
+    sequencesDataset: options.sequencesDataset ?? 'ks3-history',
+    bucketOverrides: options.overrides?.buckets,
+    suggestionOverrides: options.overrides?.suggestions,
+    suggestionCacheOverride: options.overrides?.suggestionCache,
+  } as const;
+}
+
+function resolveSuggestionCache(
+  fallback: SuggestionCache,
+  override: SuggestionCache | undefined,
 ): SuggestionCache {
   if (override) {
     return override;
   }
-  return { ...defaults };
+  return fallback ?? DEFAULT_SUGGESTION_CACHE;
 }
 
-export function buildUnitFixture(datasetKey: SingleScopeDatasetKey): HybridResponse {
-  const units = UNIT_DATASETS[datasetKey];
-  const results = units.map((unit) => ({
-    id: unit.unitSlug,
-    unit: {
-      unit_title: unit.unitTitle,
-      subject_slug: unit.subjectSlug,
-      key_stage: unit.keyStages[0],
-    },
-    highlights: buildUnitHighlights(unit),
-  }));
-
+function finalizeMultiScopeFixture(
+  response: SearchMultiScopeResponse,
+): MultiScopeHybridResponse & { suggestions: SuggestionItem[]; suggestionCache: SuggestionCache } {
   return {
-    scope: 'units',
-    results,
-    total: results.length,
-    took: 16,
-    timedOut: false,
-    aggregations: {},
-    facets: null,
+    ...response,
+    suggestions: response.suggestions ?? [],
+    suggestionCache: response.suggestionCache,
   };
-}
-
-function buildUnitHighlights(unit: UnitRecord): string[] {
-  const highlights: string[] = [];
-  if (unit.yearGroups.length > 0) {
-    highlights.push(`Years ${unit.yearGroups.join(', ')}`);
-  }
-  if (unit.keyStages.length > 0) {
-    highlights.push(`Key stage ${unit.keyStages.join(' / ')}`);
-  }
-  return highlights;
-}
-
-export function buildSequenceFixture(datasetKey: SingleScopeDatasetKey): HybridResponse {
-  const sequences = SEQUENCE_DATASETS[datasetKey];
-  const results = sequences.map((sequence) => ({
-    id: sequence.sequenceSlug,
-    highlights: buildSequenceHighlights(sequence),
-  }));
-
-  return {
-    scope: 'sequences',
-    results,
-    total: results.length,
-    took: 14,
-    timedOut: false,
-    aggregations: {},
-    facets: null,
-  };
-}
-
-function buildSequenceHighlights(sequence: SequenceRecord): string[] {
-  const highlights: string[] = [];
-  highlights.push(sequence.phaseTitle);
-  if (sequence.keyStages.length > 0) {
-    const stages = sequence.keyStages.map((ks) => ks.keyStageSlug.toUpperCase()).join(', ');
-    highlights.push(`Key stages ${stages}`);
-  }
-  if (sequence.years.length > 0) {
-    highlights.push(`Years ${sequence.years.join(', ')}`);
-  }
-  return highlights;
 }

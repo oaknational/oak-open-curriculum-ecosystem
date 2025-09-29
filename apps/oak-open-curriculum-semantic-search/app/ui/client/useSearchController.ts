@@ -1,12 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useReducer } from 'react';
-import { z } from 'zod';
-import {
-  HybridResponseSchema,
-  SuggestionItemSchema,
-  MultiScopeHybridResponseSchema,
-} from '../structured-search.shared';
+import { HybridResponseSchema, MultiScopeHybridResponseSchema } from '../structured-search.shared';
 import type {
   HybridResponse,
   SuggestionItem,
@@ -17,10 +12,10 @@ import type {
 import { SearchFacetsSchema } from '../../../src/types/oak';
 import type { SearchFacets } from '../../../src/types/oak';
 
-type HybridAggregations = NonNullable<HybridResponse['aggregations']>;
+type HybridAggregations = HybridResponse['aggregations'];
 
 export interface SearchMeta {
-  scope: HybridResponse['scope'];
+  scope: SearchScope;
   total: number;
   took: number;
   timedOut: boolean;
@@ -48,12 +43,8 @@ export type SearchController = {
   onError: (message: string) => void;
 };
 
-const StructuredPayloadSchema = HybridResponseSchema.extend({
-  suggestions: z.array(SuggestionItemSchema).optional(),
-});
-
 type ParsedHybridPayload =
-  | { kind: 'single'; response: z.infer<typeof StructuredPayloadSchema> }
+  | { kind: 'single'; response: HybridResponse }
   | { kind: 'multi'; response: MultiScopeHybridResponse };
 
 type SearchState = {
@@ -104,10 +95,7 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
   }
 }
 
-function applySingleSuccess(
-  state: SearchState,
-  response: z.infer<typeof StructuredPayloadSchema>,
-): SearchState {
+function applySingleSuccess(state: SearchState, response: HybridResponse): SearchState {
   const facetsResult = response.facets ? SearchFacetsSchema.safeParse(response.facets) : null;
   return {
     ...state,
@@ -172,7 +160,7 @@ function parseHybridPayload(payload: unknown | null): ParsedHybridPayload | null
   if (!payload) {
     return null;
   }
-  const parsed = StructuredPayloadSchema.safeParse(payload);
+  const parsed = HybridResponseSchema.safeParse(payload);
   if (!parsed.success) {
     const multi = MultiScopeHybridResponseSchema.safeParse(payload);
     if (multi.success) {

@@ -1,130 +1,67 @@
-import { z } from 'zod';
-import { SearchFacetsSchema as SdkSearchFacetsSchema } from '../../src/types/oak';
+import type { z } from 'zod';
+import {
+  DEFAULT_INCLUDE_FACETS,
+  DEFAULT_SUGGESTION_CACHE as SDK_DEFAULT_SUGGESTION_CACHE,
+  SearchStructuredRequestSchema,
+  SearchSuggestionItemSchema,
+  SearchSuggestionResponseSchema,
+  SearchLessonsResponseSchema,
+  SearchUnitsResponseSchema,
+  SearchSequencesResponseSchema,
+  SearchMultiScopeResponseSchema,
+} from '../../src/types/oak';
+import type {
+  SearchStructuredRequest,
+  SearchScope,
+  SearchScopeWithAll,
+  SearchSuggestionItem,
+  SearchSuggestionResponse,
+  SearchMultiScopeBucket,
+  SearchMultiScopeResponse,
+  SearchLessonsResponse,
+  SearchUnitsResponse,
+  SearchSequencesResponse,
+} from '../../src/types/oak';
 
-export type SearchScope = 'units' | 'lessons' | 'sequences';
-export type SearchScopeWithAll = SearchScope | 'all';
+export type StructuredBody = SearchStructuredRequest;
+export const SearchRequest = SearchStructuredRequestSchema;
+export const SuggestionItemSchema = SearchSuggestionItemSchema;
+export const SuggestionResponseSchema = SearchSuggestionResponseSchema;
+export const DEFAULT_SUGGESTION_CACHE = SDK_DEFAULT_SUGGESTION_CACHE;
 
-export interface StructuredBody {
-  scope: SearchScopeWithAll;
-  text: string;
-  subject?: string;
-  keyStage?: string;
-  minLessons?: number;
-  size?: number;
-  includeFacets?: boolean;
-  phaseSlug?: string;
-}
+const SuggestionCacheSchema = SearchSuggestionResponseSchema.shape.cache;
 
-export const SearchRequest = z.object({
-  scope: z.enum(['units', 'lessons', 'sequences', 'all']),
-  text: z.string(),
-  subject: z.string().optional(),
-  keyStage: z.string().optional(),
-  minLessons: z.number().int().positive().optional(),
-  size: z.number().int().positive().optional(),
-  phaseSlug: z.string().optional(),
-  includeFacets: z.boolean().optional(),
-});
+export const HybridResponseSchema = SearchLessonsResponseSchema.or(SearchUnitsResponseSchema).or(
+  SearchSequencesResponseSchema,
+);
 
-const SuggestionContextSchema = z
-  .object({
-    sequenceId: z.string().optional(),
-    phaseSlug: z.string().optional(),
-  })
-  .catchall(z.unknown());
+export const MultiScopeBucketSchema = SearchMultiScopeResponseSchema.shape.buckets.element;
+export const MultiScopeHybridResponseSchema = SearchMultiScopeResponseSchema;
 
-export const SuggestionItemSchema = z
-  .object({
-    label: z.string(),
-    scope: z.enum(['lessons', 'units', 'sequences']),
-    url: z.string(),
-    subject: z.string().optional(),
-    keyStage: z.string().optional(),
-    contexts: SuggestionContextSchema.default({}),
-  })
-  .catchall(z.unknown());
-
-export const DEFAULT_SUGGESTION_CACHE = {
-  version: 'fixture-v1',
-  ttlSeconds: 300,
-} as const;
-
-const SuggestionCacheSchema = z.object({
-  version: z.string(),
-  ttlSeconds: z.number().int().nonnegative(),
-});
-
-const FacetsSchema = z
-  .union([z.null(), z.undefined(), z.unknown()])
-  .transform((value, ctx) => {
-    if (value == null) {
-      return null;
-    }
-    const parsed = SdkSearchFacetsSchema.safeParse(value);
-    if (!parsed.success) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: parsed.error.message,
-      });
-      return z.NEVER;
-    }
-    return parsed.data;
-  })
-  .default(null);
-
-export const SuggestionResponseSchema = z
-  .object({
-    suggestions: z.array(SuggestionItemSchema).default([]),
-    cache: SuggestionCacheSchema,
-  })
-  .catchall(z.unknown());
-
-export const HybridResponseSchema = z
-  .object({
-    scope: z.enum(['lessons', 'units', 'sequences']),
-    results: z.array(z.unknown()).default([]),
-    total: z.number().int().nonnegative(),
-    took: z.number().int().nonnegative(),
-    timedOut: z.boolean(),
-    aggregations: z.record(z.string(), z.unknown()).default({}),
-    facets: FacetsSchema,
-    suggestionCache: SuggestionCacheSchema.default(DEFAULT_SUGGESTION_CACHE),
-  })
-  .catchall(z.unknown());
-
-export type HybridResponse = z.infer<typeof HybridResponseSchema>;
-export type SuggestionItem = z.infer<typeof SuggestionItemSchema>;
-export type SuggestionResponse = z.infer<typeof SuggestionResponseSchema>;
+export type HybridResponse = SearchLessonsResponse | SearchUnitsResponse | SearchSequencesResponse;
+export type SuggestionItem = SearchSuggestionItem;
+export type SuggestionResponse = SearchSuggestionResponse;
 export type SuggestionCache = z.infer<typeof SuggestionCacheSchema>;
+export type MultiScopeHybridResponse = SearchMultiScopeResponse;
+export type MultiScopeBucket = SearchMultiScopeBucket;
 
-export const MultiScopeBucketSchema = z.object({
-  scope: z.enum(['lessons', 'units', 'sequences']),
-  result: HybridResponseSchema,
-});
+export { DEFAULT_INCLUDE_FACETS };
+export { SearchLessonsResponseSchema, SearchUnitsResponseSchema, SearchSequencesResponseSchema };
+export type { SearchScope, SearchScopeWithAll };
 
-export const MultiScopeHybridResponseSchema = z
-  .object({
-    scope: z.literal('all'),
-    buckets: z.array(MultiScopeBucketSchema),
-    suggestions: z.array(SuggestionItemSchema).optional(),
-    suggestionCache: SuggestionCacheSchema.default(DEFAULT_SUGGESTION_CACHE),
-  })
-  .catchall(z.unknown());
-
-export type MultiScopeHybridResponse = z.infer<typeof MultiScopeHybridResponseSchema>;
-export type MultiScopeBucket = z.infer<typeof MultiScopeBucketSchema>;
-
-export function buildBody(input: z.infer<typeof SearchRequest>): StructuredBody {
+export function buildBody(input: StructuredBody): StructuredBody {
   return {
     scope: input.scope,
     text: input.text,
-    subject: input.subject || undefined,
-    keyStage: input.keyStage || undefined,
+    subject: input.subject ?? undefined,
+    keyStage: input.keyStage ?? undefined,
     minLessons: input.minLessons,
     size: input.size,
-    includeFacets: input.includeFacets ?? true,
-    phaseSlug: input.phaseSlug || undefined,
-  };
+    includeFacets: input.includeFacets ?? DEFAULT_INCLUDE_FACETS,
+    phaseSlug: input.phaseSlug ?? undefined,
+    from: input.from,
+    highlight: input.highlight,
+  } satisfies StructuredBody;
 }
 
 export function baseUrl(): string {
@@ -133,9 +70,6 @@ export function baseUrl(): string {
     return fromEnv;
   }
   const fromVercel = process.env.VERCEL_URL;
-  if (fromVercel) {
-    return `https://${fromVercel}`;
-  }
   if (fromVercel) {
     return `https://${fromVercel}`;
   }
@@ -148,4 +82,10 @@ export function safeJsonParse(text: string): unknown {
   } catch {
     return null;
   }
+}
+
+export function normaliseSuggestionCache(
+  value: SuggestionResponse['cache'] | undefined,
+): SuggestionResponse['cache'] {
+  return SuggestionCacheSchema.parse(value ?? DEFAULT_SUGGESTION_CACHE);
 }

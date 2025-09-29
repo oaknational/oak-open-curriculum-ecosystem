@@ -3,7 +3,7 @@
 import type { JSX, ChangeEvent } from 'react';
 import { OakRadioButton, OakRadioGroup } from '@oaknational/oak-components';
 import { LabeledInput, LabeledSelect } from './fields';
-import { KEY_STAGES, SUBJECTS } from '../../src/adapters/sdk-guards';
+import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../src/adapters/sdk-guards';
 import type { StructuredBody } from './structured-search.shared';
 
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
@@ -87,7 +87,8 @@ export function SubjectField({
       id="structured-subject"
       value={value}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        onChange({ subject: e.target.value });
+        const next = e.target.value;
+        onChange({ subject: isSubject(next) ? next : undefined });
       }}
       options={SUBJECTS}
       includeAny
@@ -108,7 +109,8 @@ export function KeyStageField({
       id="structured-ks"
       value={value}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        onChange({ keyStage: e.target.value });
+        const next = e.target.value;
+        onChange({ keyStage: isKeyStage(next) ? next : undefined });
       }}
       options={KEY_STAGES}
       includeAny

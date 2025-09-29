@@ -177,7 +177,7 @@ function responseSchemaMappingBlock(): string {
   lines.push(' * Dynamic response schema mapping from endpoints');
   lines.push(' * Generated at compile time from the actual endpoints array');
   lines.push(' */');
-  lines.push("import { endpoints } from '../../zod/zodSchemas.js';");
+  lines.push("import { endpoints } from '../../zod/curriculumZodSchemas.js';");
   lines.push('');
   lines.push('function getResponseSchemaForEndpoint(method: string, path: string): ZodSchema {');
   lines.push(

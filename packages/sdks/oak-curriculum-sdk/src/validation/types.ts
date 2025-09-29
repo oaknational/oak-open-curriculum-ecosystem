@@ -3,7 +3,12 @@
  * Pure types with no runtime behaviour
  */
 
-import type { ZodIssue, ZodType } from 'zod';
+import type { ZodIssue, ZodType, ZodTypeAny, ZodTypeDef } from 'zod';
+import {
+  curriculumSchemas,
+  type CurriculumSchemaDefinition,
+  type CurriculumSchemaName,
+} from '../types/generated/zod/curriculumZodSchemas.js';
 
 /**
  * Result type for validation operations
@@ -91,10 +96,20 @@ export function isValidationFailure<T>(result: ValidationResult<T>): result is V
  * Type-safe Zod parsing helper that eliminates need for type assertions
  * Returns a ValidationResult with proper type narrowing
  */
-export function parseWithSchema<T>(schema: ZodType<T>, data: unknown): ValidationResult<T> {
+/**
+ * Output type helper for Zod schemas used by {@link parseWithSchema}.
+ */
+export type SchemaOutput<Schema extends ZodTypeAny> = Schema['_output'];
+/**
+ * Safely parse unknown data using a Zod schema and capture validation issues.
+ */
+function parseWithZodType<Input, Output, Def extends ZodTypeDef>(
+  schema: ZodType<Output, Def, Input>,
+  data: unknown,
+): ValidationResult<Output> {
   const parsed = schema.safeParse(data);
   if (parsed.success) {
-    const success: ValidationSuccess<T> = {
+    const success: ValidationSuccess<Output> = {
       ok: true,
       value: parsed.data,
     };
@@ -136,4 +151,28 @@ export function parseWithSchema<T>(schema: ZodType<T>, data: unknown): Validatio
     zod: { issues: zodIssues },
   };
   return failure;
+}
+
+/**
+ * Safely parse unknown data using a Zod schema and capture validation issues.
+ */
+export function parseWithSchema<Schema extends ZodTypeAny>(
+  schema: Schema,
+  data: unknown,
+): ValidationResult<SchemaOutput<Schema>> {
+  return parseWithZodType(schema, data);
+}
+
+export function parseWithCurriculumSchema<Name extends CurriculumSchemaName>(
+  schemaName: Name,
+  data: unknown,
+): ValidationResult<SchemaOutput<CurriculumSchemaDefinition<Name>>> {
+  return parseWithSchema(curriculumSchemas[schemaName], data);
+}
+
+export function parseWithCurriculumSchemaInstance<Schema extends CurriculumSchemaDefinition>(
+  schema: Schema,
+  data: unknown,
+): ValidationResult<SchemaOutput<Schema>> {
+  return parseWithSchema(schema, data);
 }

@@ -1,6 +1,6 @@
 # Semantic Search Phase 1 – UX Context Snapshot
 
-_Last updated: 2025-09-30 (fixture source enrichment + module outline)_
+_Last updated: 2025-10-01 (schema-aligned fixtures + MCP tool output)_
 
 ## Active Focus
 
@@ -8,7 +8,9 @@ _Last updated: 2025-09-30 (fixture source enrichment + module outline)_
 - Ensure semantic theme tokens, bridge CSS variables, and global styles remain the single source of truth across light/dark modes.
 - Use automated visual + accessibility testing (Playwright, axe) to protect layout and typography contracts.
 - Progress immediate Search tasks (audit → prototype → implementation) while drafting the Health shell UX contract; keep artefacts logged per GO cadence.
-- Run the full quality gate (`pnpm qg`) regularly after substantive changes to uphold repository standards.
+- Address the remaining SDK Typedoc warnings so full `pnpm make`/`pnpm qg` runs can baseline the fixture-mode integration now that search app lint/type-check gates are clean.
+- Lock in the curriculum schema registry rename (`curriculumZodSchemas`) by confirming regenerated artefacts, updated consumers, and the new parsing helpers before widening adoption guidance.
+- Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
 
 ## Current State
 
@@ -18,14 +20,21 @@ _Last updated: 2025-09-30 (fixture source enrichment + module outline)_
 - Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
 - Navigation and hero layouts still waste space on phones; `/healthz` intentionally serves raw JSON while a separate status page UI is planned to surface the same data with Oak styling.
 - Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
+- Search API routes (structured + suggestions) now consume schema-derived helpers: fixtures short-circuit via generated factories, while live flows reuse a typed query normaliser to keep cache keys deterministic.
 - Platform status page design drafted: reuse `PageContainer`, hero summary banner, `bp-md` two-column card grid (status vs diagnostics), accessible `role="status"` region, and Accept header toggle so users can consume UI or raw JSON while `/healthz` remains an API endpoint.
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
-- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; structured "All content" calls fan out across lesson/unit/sequence buckets and fixtures mirror that multi-scope payload. Fixture sources for KS2 maths, KS4 maths, KS3 history, and KS3 art are captured with manual suggestions ready for builder modelling.
-- Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` outlines forthcoming data modules and builders so the UX stream can centralise fixture logic without violating the cardinal rule. Follow-up: refine facet coverage beyond the current science example, ensure suggestion cache metadata stays consistent with SDK types, surface the shared Zod schema module so UI/API fixtures validate against one canonical shape, and plan migration of any remaining custom schemas into the SDK compile-time pipeline. KS4 science sequences with populated `ks4Options` now exist in `search-fixture-source-ks4-science.json` and the `ks4-science` data module, enabling KS4 pathway tests with sample facets and aggregator data.
+- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; fixtures continue to mirror the multi-scope payload, and the multi-scope builders/tests now compose the generated `createSearch*Response` helpers directly to guarantee schema fidelity.
+- Curriculum schema metadata now lives in `curriculumZodSchemas`; validation layers call the new curriculum-specific parsing helpers and search validators are being refactored to use generated scope constants instead of overloads.
+- Search page client now uses a dedicated layout shell and fixture toggle component, keeping max-lines under control while preserving the existing UX flows.
+- Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` documents the finalised module layout. The shared fixture-mode resolver and developer toggle now drive all server actions and routes, preserving zero-hit logging and accessible announcements; next, broaden science facets as needed and finish splitting fixture helpers so lint complexity thresholds pass.
+- Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover the updated cookie handling and complete without type errors.
+- Quality gate follow-up: `pnpm make` currently halts during `doc-gen` because Typedoc flags generated search schemas; resolve that warning set before re-running `pnpm make`/`pnpm qg` as the new baseline once the curriculum schema rename lands.
+- Stdio MCP server and SDK validation changes are complete; current gate failures arise from SDK Typedoc warnings during `pnpm doc-gen` even though the search app now passes lint/type-check locally.
+- Full quality gate runs (`pnpm make` and `pnpm qg`) are queued to validate fixture-mode integration before further UI refinements land.
 - 2025-09-28: `SearchResults.unit.test.tsx` now mounts the new `mode`/`multiBuckets` signature and asserts multi-scope bucket rendering so TypeScript aligns with the component API before rerunning `pnpm make`.
-- 2025-09-28: `pnpm make` now passes end-to-end after the SearchResults unit test update cleared the type-check regression.
+- `pnpm make` currently fails at the documentation step because Typedoc treats schema warnings as fatal; coordinate with the SDK tooling stream before re-running the full gate.
 - Wide-view hero layout still needs validation that structured and natural panels remain visible above the fold at `xl`/`xxl`; adjust `HeroControlsCluster` track ratios if further Playwright sweeps highlight controls slipping below the hero copy.
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex (`resolveUiColor`), the page container uses the neutral background token with elevated card styling, and integration coverage asserts the options payload stays in-valid colour space (`app/api/docs/page.integration.test.tsx`).
 - 2025-09-29: Admin shell clamps to the semantic container width, clears inherited hashes on mount, and Playwright regression coverage (`Admin page responsive regressions`) now captures screenshots plus overflow/axe assertions across lg/md/xxl viewports.
@@ -45,7 +54,6 @@ _Last updated: 2025-09-30 (fixture source enrichment + module outline)_
 - Can Oak Components expose precomputed CSS variable sheets to simplify runtime bridge logic? (Still open.)
 - Are additional breakpoints required once Search hero media lands, or does the `bp-xs` → `bp-xxl` ramp remain sufficient?
 - What telemetry/health UI patterns best balance clarity and brand tone once functionality delivers structured outputs? (To be resolved alongside the status page effort after fixtures land.)
-- When should we resume hero polish (clamp, accent styling) after fixtures and status page work completes? (Track post-fixture follow-up.)
 
 ## Interactions with Functionality Stream
 

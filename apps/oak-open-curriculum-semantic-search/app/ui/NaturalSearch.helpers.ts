@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { NaturalBody } from './NaturalSearch.types';
+import { DEFAULT_INCLUDE_FACETS, SearchNaturalLanguageRequestSchema } from '../../src/types/oak';
 
 const ApiResponseSchema = z
   .object({
@@ -33,7 +34,7 @@ export function parseResponse(
 }
 
 export function normaliseNaturalRequest(model: NaturalBody): NaturalBody {
-  return {
+  const candidate: NaturalBody = {
     q: model.q,
     scope: model.scope,
     size: model.size && model.size > 0 ? model.size : undefined,
@@ -41,7 +42,9 @@ export function normaliseNaturalRequest(model: NaturalBody): NaturalBody {
     keyStage: model.keyStage || undefined,
     minLessons: model.minLessons,
     phaseSlug: model.phaseSlug || undefined,
+    includeFacets: model.includeFacets ?? DEFAULT_INCLUDE_FACETS,
   };
+  return SearchNaturalLanguageRequestSchema.parse(candidate);
 }
 
 export async function submitNaturalSearchRequest(body: NaturalBody): Promise<unknown[]> {

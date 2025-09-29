@@ -1,6 +1,11 @@
 import type { HybridResponse } from '../../structured-search.shared';
 import { buildSingleScopeFixture, type SingleScopeDatasetKey } from './single-scope';
 import { buildSequenceFixture, buildUnitFixture } from './multi-scope';
+import {
+  createSearchLessonsResponse,
+  createSearchUnitsResponse,
+  createSearchSequencesResponse,
+} from '../../../../src/types/oak';
 
 export type FixtureScope = 'lessons' | 'units' | 'sequences';
 
@@ -19,36 +24,42 @@ export function buildEmptyFixture({ scope, dataset }: BuildEmptyFixtureOptions):
   const resolvedDataset = dataset ?? DEFAULT_DATASET[scope];
 
   if (scope === 'lessons') {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- deliberately creating a fixture with no suggestions
-    const { suggestions: _ignored, ...base } = buildSingleScopeFixture({
-      dataset: resolvedDataset,
-    });
-    return {
-      ...base,
+    const base = buildSingleScopeFixture({ dataset: resolvedDataset });
+    return createSearchLessonsResponse({
       results: [],
       total: 0,
       took: base.took,
       timedOut: false,
-    };
+      aggregations: base.aggregations,
+      facets: base.facets,
+      suggestions: base.suggestions,
+      suggestionCache: base.suggestionCache,
+    });
   }
 
   if (scope === 'units') {
     const base = buildUnitFixture(resolvedDataset);
-    return {
-      ...base,
+    return createSearchUnitsResponse({
       results: [],
       total: 0,
       took: base.took,
       timedOut: false,
-    };
+      aggregations: base.aggregations,
+      facets: base.facets,
+      suggestions: base.suggestions,
+      suggestionCache: base.suggestionCache,
+    });
   }
 
   const base = buildSequenceFixture(resolvedDataset);
-  return {
-    ...base,
+  return createSearchSequencesResponse({
     results: [],
     total: 0,
     took: base.took,
     timedOut: false,
-  };
+    aggregations: base.aggregations,
+    facets: base.facets,
+    suggestions: base.suggestions,
+    suggestionCache: base.suggestionCache,
+  });
 }

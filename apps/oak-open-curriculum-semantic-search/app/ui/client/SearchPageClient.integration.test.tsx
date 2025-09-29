@@ -6,7 +6,20 @@ import { createLightTheme } from '../themes/light';
 import type { StructuredBody } from '../structured-search.shared';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from '../StructuredSearch';
+import type { FixtureMode } from '../../lib/fixture-mode';
 import SearchPageClient from './SearchPageClient';
+
+const refreshMock = vi.fn();
+
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ refresh: refreshMock }),
+}));
+
+const setFixtureModeMock = vi.hoisted(() => vi.fn<(mode: FixtureMode) => Promise<void>>());
+
+vi.mock('../fixture-mode-toggle.actions', () => ({
+  setFixtureMode: setFixtureModeMock,
+}));
 
 type StructuredComponentProps = {
   onResults: (result: unknown | null) => void;
@@ -59,11 +72,25 @@ type AppTheme = ReturnType<typeof createLightTheme>;
 
 function renderWithTheme(
   action: StructuredSearchAction,
-  theme: AppTheme = createLightTheme(),
+  options: {
+    theme?: AppTheme;
+    initialFixtureMode?: FixtureMode;
+    showFixtureToggle?: boolean;
+  } = {},
 ): AppTheme {
+  const {
+    theme = createLightTheme(),
+    initialFixtureMode = 'live',
+    showFixtureToggle = false,
+  } = options;
+
   render(
     <StyledThemeProvider theme={theme}>
-      <SearchPageClient searchStructured={action} />
+      <SearchPageClient
+        searchStructured={action}
+        initialFixtureMode={initialFixtureMode}
+        showFixtureToggle={showFixtureToggle}
+      />
     </StyledThemeProvider>,
   );
   return theme;
@@ -73,6 +100,9 @@ describe('SearchPageClient', () => {
   beforeEach(() => {
     structuredPropsRef.current = null;
     facetPropsRef.current = null;
+    refreshMock.mockReset();
+    setFixtureModeMock.mockReset();
+    setFixtureModeMock.mockResolvedValue(undefined);
   });
 
   it('links the hero copy to the structured and natural search panels', () => {
@@ -117,6 +147,29 @@ describe('SearchPageClient', () => {
     expect(computed.getPropertyValue('max-width')).toBe(
       'min(100%, var(--app-layout-container-max-width))',
     );
+  });
+
+  it('allows developers to toggle fixture mode when the toggle is visible', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures' });
+
+    expect(screen.getByText(/Search data: Fixtures/i)).toBeInTheDocument();
+    const toggleButton = screen.getByTestId('fixture-mode-toggle');
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
+
+    await act(async () => {
+      fireEvent.click(toggleButton);
+    });
+
+    await waitFor(() => {
+      expect(setFixtureModeMock).toHaveBeenCalledWith('live');
+      expect(refreshMock).toHaveBeenCalled();
+    });
+
+    expect(screen.getByText(/Search data: Live/i)).toBeInTheDocument();
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -218,6 +271,7 @@ describe('SearchPageClient', () => {
       results: [
         {
           id: 'lesson-1',
+          rankScore: 1,
           lesson: {
             lesson_title: 'Decimals introduction',
             subject_slug: 'maths',

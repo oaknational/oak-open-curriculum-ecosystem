@@ -56,7 +56,7 @@ export async function generateZodSchemas(openApiDoc: OpenAPI3, outDir: string): 
   const require = createRequire(import.meta.url);
   const ozcPkgDir = path.dirname(require.resolve('openapi-zod-client/package.json'));
   const templatePath = path.join(ozcPkgDir, 'src/templates/default.hbs');
-  const outFile = path.join(outDir, 'zodSchemas.ts');
+  const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
   const output = await generateZodClientFromOpenAPI({
     openApiDoc,
@@ -74,10 +74,40 @@ export async function generateZodSchemas(openApiDoc: OpenAPI3, outDir: string): 
 
   // Modify the generated file to export the schemas
   console.log('🔍 Modifying file to export the endpoints');
-  const modifiedContent = output.replace(
+  const withExportedEndpoints = output.replace(
     'const endpoints = makeApi',
     'export const endpoints = makeApi',
   );
+  const withTypedImport = withExportedEndpoints.replace(
+    'import { z } from "zod";',
+    'import { z, type ZodSchema } from "zod";',
+  );
+
+  const schemaMetadata =
+    `const curriculumSchemaNames = Object.keys(curriculumSchemas);\n` +
+    `const curriculumSchemaValues: readonly z.ZodTypeAny[] = Object.values(curriculumSchemas);\n\n` +
+    `/**\n * Registry map keyed by generated curriculum schema names.\n * @public\n */\nexport type CurriculumSchemaRegistry = typeof curriculumSchemas;\n` +
+    `/**\n * Valid curriculum schema names derived from the OpenAPI specification.\n * @public\n */\nexport type CurriculumSchemaName = keyof CurriculumSchemaRegistry;\n` +
+    `/**\n * Concrete Zod schema definition for a curriculum schema name.\n * @public\n */\nexport type CurriculumSchemaDefinition<Name extends CurriculumSchemaName = CurriculumSchemaName> = CurriculumSchemaRegistry[Name];\n\n` +
+    `export function isCurriculumSchemaName(value: unknown): value is CurriculumSchemaName {\n` +
+    `  return typeof value === 'string' && curriculumSchemaNames.includes(value);\n` +
+    `}\n\n` +
+    `export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDefinition {\n` +
+    `  if (!(value instanceof z.ZodType)) {\n` +
+    `    return false;\n` +
+    `  }\n` +
+    `  return curriculumSchemaValues.includes(value);\n` +
+    `}`;
+
+  const schemasPattern = /export const schemas = {[\s\S]*?};/;
+  const modifiedContent = withTypedImport.replace(schemasPattern, (substring) => {
+    const body = substring.replace('export const schemas = ', '').replace(';', '');
+    return [
+      'export type CurriculumSchemaCollection = Record<string, ZodSchema>;',
+      `/**\n * Generated Zod schema registry keyed by curriculum schema identifier.\n * @public\n */\nexport const curriculumSchemas = ${body} as const satisfies CurriculumSchemaCollection;`,
+      schemaMetadata,
+    ].join('\n\n');
+  });
 
   console.log('📝 Writing to file: ', outFile);
 

@@ -3,10 +3,9 @@
  * Maps API operations to their response validators
  */
 
-import type { ZodType, ZodSchema } from 'zod';
-import type { ValidationResult, HttpMethod, ValidationFailure } from './types';
+import type { ValidationResult, HttpMethod, ValidationFailure, SchemaOutput } from './types.js';
 
-import { isValidationFailure, parseWithSchema } from './types.js';
+import { isValidationFailure, parseWithCurriculumSchemaInstance } from './types.js';
 import {
   getOperationIdByPathAndMethod,
   isValidPath,
@@ -19,12 +18,16 @@ import {
 } from '../types/generated/api-schema/path-parameters.js';
 import { getResponseSchemaByOperationIdAndStatus } from '../types/generated/api-schema/response-map.js';
 import { augmentResponseWithCanonicalUrl } from '../response-augmentation.js';
+import type { CurriculumSchemaDefinition } from '../types/generated/zod/curriculumZodSchemas.js';
 
 /**
  * Parse and validate response data
  */
-function parseResponse<T>(schema: ZodType<T>, response: unknown): ValidationResult<T> {
-  return parseWithSchema(schema, response);
+function parseCurriculumResponse<Schema extends CurriculumSchemaDefinition>(
+  schema: Schema,
+  response: unknown,
+): ValidationResult<SchemaOutput<Schema>> {
+  return parseWithCurriculumSchemaInstance(schema, response);
 }
 
 function withTrace(
@@ -61,7 +64,7 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
   if (!operationId) {
     return false;
   }
-  let schema: ZodSchema<unknown>;
+  let schema: CurriculumSchemaDefinition;
   try {
     schema = getResponseSchemaByOperationIdAndStatus(operationId, 200);
   } catch {
@@ -81,24 +84,64 @@ export function isResponseJsonBody200<P extends ValidPath, M extends AllowedMeth
  *
  * @remarks Only the 200 responses are defined in the original OpenAPI schema, hence the overloads with unknown types
  */
-export function validateResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+export function validateCurriculumResponse(
+  path: string,
+  method: string,
+  statusCode: number,
+  response: unknown,
+): ValidationResult<unknown>;
+export function validateCurriculumResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   path: P,
   method: M,
   statusCode: 200,
   response: unknown,
 ): ValidationResult<JsonBody200<P, M>>;
-export function validateResponse<P extends ValidPath>(
+export function validateCurriculumResponse<P extends ValidPath>(
   path: P,
   method: AllowedMethodsForPath<P>,
   statusCode: number,
   response: unknown,
 ): ValidationResult<unknown>;
-export function validateResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+export function validateCurriculumResponse<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
   path: P,
   method: M,
   statusCode: number,
   response: unknown,
 ): ValidationResult<JsonBody200<P, M>> | ValidationResult<unknown> {
+  const context = resolveOperationContext(path, method, statusCode);
+  const parsed = parseResponseOrThrow(context.schema, response, context);
+
+  if (isValidationFailure(parsed)) {
+    logValidationFailure(context, response);
+    return withTrace(parsed, {
+      path: context.path,
+      method: context.method,
+      statusCode: context.statusCode,
+      operationId: context.operationId,
+    });
+  }
+
+  if (context.statusCode === 200) {
+    return finalizeOk200(context.path, context.method, context.operationId, parsed.value);
+  }
+
+  return parsed;
+}
+
+interface OperationContext<P extends ValidPath, M extends AllowedMethodsForPath<P>> {
+  readonly path: P;
+  readonly method: M;
+  readonly statusCode: number;
+  readonly statusCodeString: string;
+  readonly operationId: OperationId;
+  readonly schema: CurriculumSchemaDefinition;
+}
+
+function resolveOperationContext<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  path: P,
+  method: M,
+  statusCode: number,
+): OperationContext<P, M> {
   if (!isValidPath(path)) {
     throw new TypeError('Invalid path: ' + String(path));
   }
@@ -118,25 +161,61 @@ export function validateResponse<P extends ValidPath, M extends AllowedMethodsFo
     );
   }
 
-  let schema: ZodSchema;
+  const schema = getResponseSchemaSafely(operationId, statusCodeString);
+
+  return { path, method, statusCode, statusCodeString, operationId, schema };
+}
+
+function getResponseSchemaSafely(
+  operationId: OperationId,
+  statusCode: string,
+): CurriculumSchemaDefinition {
+  if (!isValidResponseCode(statusCode)) {
+    throw new TypeError('Invalid status code: ' + statusCode);
+  }
   try {
-    schema = getResponseSchemaByOperationIdAndStatus(operationId, statusCodeString);
-  } catch (err) {
+    return getResponseSchemaByOperationIdAndStatus(operationId, statusCode);
+  } catch (error) {
     throw new TypeError('Error getting response schema by operationId and statusCode', {
-      cause: err,
+      cause: error,
     });
   }
+}
 
-  const result = parseResponse(schema, response);
-  if (isValidationFailure(result)) {
-    return withTrace(result, { path, method, statusCode, operationId });
+function parseResponseOrThrow<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  schema: CurriculumSchemaDefinition,
+  response: unknown,
+  context: OperationContext<P, M>,
+): ValidationResult<SchemaOutput<CurriculumSchemaDefinition>> {
+  try {
+    return parseCurriculumResponse(schema, response);
+  } catch (error) {
+    throw new Error(
+      `Error parsing response for ${context.operationId} ${context.method} ${context.path} ${String(
+        context.statusCode,
+      )}, with response ${safeJson(response)} and schema [schema metadata omitted]`,
+      { cause: error },
+    );
   }
+}
 
-  if (statusCode === 200) {
-    return finalizeOk200(path, method, operationId, result.value);
+function logValidationFailure<P extends ValidPath, M extends AllowedMethodsForPath<P>>(
+  context: OperationContext<P, M>,
+  response: unknown,
+): void {
+  console.error(
+    `Validation failed for ${context.operationId} ${context.method} ${context.path} ${String(
+      context.statusCode,
+    )}, with response ${safeJson(response)}`,
+  );
+}
+
+function safeJson(value: unknown): string {
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return '[unserialisable value]';
   }
-
-  return result;
 }
 
 function finalizeOk200<P extends ValidPath, M extends AllowedMethodsForPath<P>>(

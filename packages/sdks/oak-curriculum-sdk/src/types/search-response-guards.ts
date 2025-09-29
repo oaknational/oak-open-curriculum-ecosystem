@@ -5,16 +5,16 @@
  */
 
 import type { z } from 'zod';
-import { schemas } from './generated/zod/zodSchemas.js';
+import { curriculumSchemas } from './generated/zod/curriculumZodSchemas.js';
 
 /** Schema for lesson summaries derived from the OpenAPI specification. */
-export const lessonSummarySchema = schemas.LessonSummaryResponseSchema;
+export const lessonSummarySchema = curriculumSchemas.LessonSummaryResponseSchema;
 
 /** Schema for unit summaries derived from the OpenAPI specification. */
-export const unitSummarySchema = schemas.UnitSummaryResponseSchema;
+export const unitSummarySchema = curriculumSchemas.UnitSummaryResponseSchema;
 
 /** Schema for subject sequences derived from the OpenAPI specification. */
-export const subjectSequencesSchema = schemas.SubjectSequenceResponseSchema;
+export const subjectSequencesSchema = curriculumSchemas.SubjectSequenceResponseSchema;
 
 /** Type alias for the lesson summary schema derived from the OpenAPI specification. */
 export type LessonSummaryResponseSchema = typeof lessonSummarySchema;
@@ -28,7 +28,7 @@ export type SubjectSequenceResponseSchema = typeof subjectSequencesSchema;
 export function isUnitsGrouped(
   v: unknown,
 ): v is { units: { unitSlug: string; unitTitle: string }[] }[] {
-  return schemas.AllKeyStageAndSubjectUnitsResponseSchema.safeParse(v).success;
+  return curriculumSchemas.AllKeyStageAndSubjectUnitsResponseSchema.safeParse(v).success;
 }
 
 export function isLessonGroups(v: unknown): v is {
@@ -36,11 +36,11 @@ export function isLessonGroups(v: unknown): v is {
   unitTitle: string;
   lessons: { lessonSlug: string; lessonTitle: string }[];
 }[] {
-  return schemas.KeyStageSubjectLessonsResponseSchema.safeParse(v).success;
+  return curriculumSchemas.KeyStageSubjectLessonsResponseSchema.safeParse(v).success;
 }
 
 export function isTranscriptResponse(v: unknown): v is { transcript: string; vtt: string } {
-  return schemas.TranscriptResponseSchema.safeParse(v).success;
+  return curriculumSchemas.TranscriptResponseSchema.safeParse(v).success;
 }
 
 export type SearchLessonSummary = z.infer<LessonSummaryResponseSchema>;

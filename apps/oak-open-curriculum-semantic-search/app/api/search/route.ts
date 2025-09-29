@@ -1,6 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
-import { z } from 'zod';
 import { isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import type {
   StructuredQuery,
@@ -8,42 +7,40 @@ import type {
   MultiScopeHybridResult,
 } from '../../../src/lib/run-hybrid-search';
 import { runHybridSearch, runHybridSearchAllScopes } from '../../../src/lib/run-hybrid-search';
-import { SuggestionResponseSchema } from '../../ui/structured-search.shared';
-import type { SuggestionItem } from '../../ui/structured-search.shared';
+import { SearchRequest, SuggestionResponseSchema } from '../../ui/structured-search.shared';
+import type { StructuredBody, SuggestionItem } from '../../ui/structured-search.shared';
 import { logZeroHit } from '../../../src/lib/observability/zero-hit';
+import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../lib/fixture-mode';
+import { buildFixtureForScope } from '../../ui/search-fixtures/builders';
 
-const StructuredSchema = z.object({
-  scope: z.enum(['units', 'lessons', 'sequences', 'all']),
-  text: z.string().min(1),
-  subject: z.string().optional(),
-  keyStage: z.string().optional(),
-  minLessons: z.number().int().min(0).optional(),
-  size: z.number().int().min(1).max(100).optional(),
-  from: z.number().int().min(0).optional(),
-  highlight: z.boolean().optional(),
-  includeFacets: z.boolean().optional(),
-  phaseSlug: z.string().optional(),
-});
-
-type StructuredSearchBody = z.infer<typeof StructuredSchema>;
+type StructuredSearchBody = StructuredBody;
 type MultiScopeResponse = MultiScopeHybridResult & { suggestions?: SuggestionItem[] };
-type SearchResponsePayload = HybridSearchResult | MultiScopeResponse;
+type FixtureResponse = ReturnType<typeof buildFixtureForScope>;
+type SearchResponsePayload = HybridSearchResult | MultiScopeResponse | FixtureResponse;
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const parsed = StructuredSchema.safeParse(await req.json());
+  const parsed = SearchRequest.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: z.treeifyError(parsed.error) }, { status: 400 });
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
   const body = parsed.data;
   const query = buildStructuredQuery(body);
   const indexVersion = process.env.SEARCH_INDEX_VERSION ?? 'v1';
-  const result = await resolveSearchResponse({ body, query, req, indexVersion });
+  const { mode, persist } = resolveFixtureModeFromRequest(req);
+
+  const result: SearchResponsePayload =
+    mode === 'fixtures'
+      ? buildFixtureResponse(body)
+      : await resolveSearchResponse({ body, query, req, indexVersion });
+
   await logZeroHitsForResult({ result, query, indexVersion });
-  return NextResponse.json(result);
+  const response = NextResponse.json(result);
+  applyFixtureModeCookie(response, persist);
+  return response;
 }
 
 function buildStructuredQuery(body: StructuredSearchBody): StructuredQuery {
@@ -158,4 +155,8 @@ async function logZeroHitsForResult(params: {
     took: result.took,
     timedOut: result.timedOut,
   });
+}
+
+function buildFixtureResponse(body: StructuredSearchBody): FixtureResponse {
+  return buildFixtureForScope(body.scope);
 }

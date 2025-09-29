@@ -15,3 +15,5 @@ export {
 export { buildEmptyFixture, type BuildEmptyFixtureOptions, type FixtureScope } from './empty';
 
 export { buildTimedOutSingleScopeFixture, buildTimedOutMultiScopeFixture } from './timed-out';
+
+export { buildFixtureForScope } from './resolve-fixture';

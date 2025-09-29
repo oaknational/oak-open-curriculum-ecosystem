@@ -29,6 +29,7 @@ export const ItemSchema = z
     unit: UnitSchema.nullable().optional(),
     lesson: LessonSchema.optional(),
     highlights: z.array(z.string()).optional(),
+    rankScore: z.number().optional(),
   })
   .strict();
 

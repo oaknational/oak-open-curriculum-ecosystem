@@ -1,5 +1,5 @@
 import type { SuggestionItem } from '../../structured-search.shared';
-import type { SearchFacets } from '../../../src/types/oak';
+import type { SearchFacets } from '../../../../src/types/oak';
 
 type SequenceRecord = {
   readonly sequenceSlug: string;

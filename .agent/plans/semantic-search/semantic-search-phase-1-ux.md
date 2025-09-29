@@ -19,25 +19,35 @@ Phase 1 keeps the design system aligned with product intent by:
 
 - ✅ Semantic tokens map colours, spacing, typography, and brand palette and flow through shared layout wrappers.
 - ✅ Search hero + controls now respect container width and maintain stacking rules below `bp-lg` following the `HeroHeadingCluster` fix.
-- ✅ Deterministic fixture sources captured for KS2 maths, KS4 maths, KS3 history, and KS3 art with enriched cross-scope suggestions ready for builder modelling.
-- ✅ Fixture reference notes and module outline drafted (`fixtures/REFERENCE.md`, `app/ui/search-fixtures/README.md`), aligning upcoming implementation with SDK-derived types.
-- ⚠️ Natural-language flow and `/api/search` live-path bypass the fixture toggle, forcing live calls for NL validation.
-- ⚠️ Facet content, bucket meta, and builder outputs still need to be centralised; fixtures remain duplicated across server actions until the new module lands.
+- ✅ Deterministic fixture sources captured for KS2 maths, KS4 maths, KS3 history, KS3 art, and KS4 science with enriched cross-scope suggestions routed through shared builders.
+- ✅ Fixture reference notes and module outline (`fixtures/REFERENCE.md`, `app/ui/search-fixtures/README.md`) stay aligned with SDK-derived types and now underpin all search flows.
+- ✅ Shared fixture-mode resolver enforces env → query → cookie precedence across `searchAction`, `/api/search`, `/api/search/suggest`, and `/api/search/nl`, keeping SDK-backed fixtures deterministic while preserving zero-hit logging and polite developer toggle announcements.
+- ✅ Stdio MCP server package now satisfies lint/complexity requirements after extracting tool response helpers and tightening unit tests.
+- ✅ SDK response validation is now split into curriculum and search modules, each generated from schema types with focused helpers; the curriculum registry now lives in `curriculumZodSchemas` with exported name/definition guards for downstream safety.
+- ✅ Search app lint/type-check now pass after refactoring the client layout and fixture builders; repo-level doc generation still fails on existing TypeDoc warnings in the SDK, so `pnpm make` halts at the doc step. The curriculum schema rename + wrappers will remove the last manual assertions before tackling the warning set.
+- ⚠️ Facet copy and science pathways still need broader narrative coverage before we lock responsive artefacts.
 - ⚠️ Status page shell remains unimplemented; `/healthz` still serves JSON-only responses.
+- ⚠️ Playwright responsive suites must be updated to exercise the fixture toggle (cookie workflow + accessibility artefacts) for on/off states.
 
 ### Recent Progress
 
+- 2025-09-30: Implemented the shared fixture-mode resolver and developer toggle across server action + API routes, with unit/integration coverage verifying env/query/cookie precedence and deterministic fixture payloads.
 - 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths; captured KS4 science sequences exposing `ks4Options` for future pathway scenarios.
 - 2025-09-30: Authored `fixtures/REFERENCE.md` to document provenance and schema alignment, plus `app/ui/search-fixtures/README.md` outlining data modules and builder responsibilities.
+- 2025-09-30: MCP stdio server tool responses now return the SDK `CallToolResult`, and search SDK validation helpers infer schema output types to remove manual assertions.
+- 2025-10-02: Initiated the curriculum schema registry rename (`curriculumZodSchemas`) and drafted domain-specific parsing helpers so validation modules consume generated schema names directly.
+- 2025-10-03: Regenerated curriculum schemas, promoted the registry to `curriculumZodSchemas`, updated validation/search tooling to consume registry exports, and introduced parse helpers that expose precise `SchemaRegistry`, `SchemaName`, and `SchemaDefinition` types.
+- 2025-09-30: Search API routes and suggestion handler now share schema-derived helpers; multi-scope fixture builders/tests rebuilt around generated response factories to enforce single sources of truth.
+- 2025-10-01: Search page client split into layout + toggle components, clearing max-lines violations and keeping fixture-mode UX isolated for reuse.
 - 2025-09-29: Search hero heading now wraps using `HeroHeadingCluster`, preventing overflow within the hero card.
 - 2025-09-29: Playwright responsive suite continues to gate Search/Admin/Docs layouts at bp-xs/md/lg/xxl using the existing structured fixture.
 - 2025-09-28: `SearchResults.unit.test.tsx` and integration coverage updated for multi-scope payloads (`mode` + `multiBuckets`).
 
-### Outstanding Audit Notes
-
-- **Deterministic fixtures:** Replace ad-hoc fixtures with a single typed source that covers lessons, units, sequences, multi-bucket totals, facets, suggestions, empty states, and edge-cases (timed-out, zero results).
-- **Runtime toggle:** Provide an environment/query/cookie-driven toggle so Search UX can hot-switch between live data and fixtures, covering structured, natural, and suggestion flows.
+- **Deterministic fixtures:** Expand science-led facets, bucket meta, and suggestion narratives so fixture-on screenshots tell a complete story across phases; finish splitting the multi- and single-scope builders so they satisfy lint complexity/line limits.
 - **Status page UX:** Design and implement the Oak-branded status page that consumes `/healthz` data, including accessibility hooks and responsive layout.
+- **Playwright coverage:** Update responsive suites to drive the fixture toggle, capture accessibility artefacts for on/off states, and document the workflow for contributors once lint/type-check gates are green.
+- **Type safety cleanup:** Update integration tests to use `NextResponse` helpers (or equivalent) so cookie handling is typed, and finish the curriculum schema registry rename + wrappers so validation code references generated types directly before re-running gates.
+- **Documentation pipeline:** Investigate the SDK Typedoc warnings (schema exports referenced but omitted) so `pnpm doc-gen` stops failing the `pnpm make` pipeline.
 - **Hero polish:** Revisit hero copy clamp and accent styling once fixtures and status page land.
 
 ## Deterministic Fixture Strategy (2025-09-30)
@@ -117,37 +127,27 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ## Todo (GO cadence)
 
-1. ✅ REMINDER: UseBritish spelling.
-2. ACTION: Consolidate KS2/KS3 fixture reference data from `tmp/search-fixture-source.json` into working notes.
-3. REVIEW: Summarise dataset coverage and highlight remaining gaps (e.g. suggestions, timed-out states).
-4. ACTION: Design the `app/ui/search-fixtures` module structure, naming, and builder signatures.
-5. REVIEW: Validate the module design against SDK types and repo architecture rules.
+1. REMINDER: UseBritish spelling.
+2. ACTION: Inspect generated `curriculumZodSchemas.ts` to confirm exported registry guards and schema naming align with expectations.
+3. REVIEW: Summarise any schema export gaps that require regeneration or follow-up fixes.
+4. ACTION: Trace SDK consumers (validation, response map, search guards, MCP tooling, docs) to ensure they now import the renamed curriculum exports exclusively.
+5. REVIEW: Record any lingering references to legacy schema identifiers for remediation.
 6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Draft fixture builder implementations covering single-scope, multi-scope, empty, and timed-out payloads.
-8. REVIEW: Run Zod `safeParse` prototypes against builder outputs to confirm structural fidelity.
-9. ACTION: Map adoption plan for structured actions, API routes, controllers, and Playwright suites to consume the new fixtures.
-10. REVIEW: Confirm the adoption map covers suggestions, multi-buckets, and natural search flows.
-11. QUALITY-GATE: Define the targeted unit, integration, and Playwright suites that must run during fixture rollout.
+7. ACTION: Refresh UX plan, context snapshot, and continuation prompt with the curriculum schema rename outcomes and downstream adoption guidance.
+8. REVIEW: Proofread documentation updates for clarity and British spelling while checking linked artefacts.
+9. QUALITY-GATE: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation.
+10. ACTION: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour.
+11. REVIEW: Capture test outcomes, noting regressions or flaky cases for follow-up.
 12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Implement the fixture mode resolver utility (env → query → cookie) with unit coverage.
-14. REVIEW: Evaluate resolver behaviour against edge cases (invalid modes, missing cookies) and document findings.
-15. ACTION: Thread fixture mode through `searchAction`, `/api/search`, and `/api/search/suggest`, replacing ad-hoc fixture logic.
-16. REVIEW: Add integration tests ensuring fixture/live branches behave consistently and log zero-hit events appropriately.
-17. QUALITY-GATE: Update Playwright configuration to set the fixture cookie and enumerate viewport baselines affected by the change.
+13. ACTION: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas.
+14. REVIEW: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown`.
+15. QUALITY-GATE: Run `pnpm -C packages/sdks/oak-curriculum-sdk type-check` to confirm the validation layer compiles cleanly.
+16. ACTION: Generate search scope constants/types/guard via type-gen so validation code depends on a single compile-time source of truth.
+17. REVIEW: Remove overloads/magic strings from `search-response-validators.ts`, using the generated scope map instead.
 18. GROUNDING: read GO.md and follow all instructions.
-19. ACTION: Extend natural-language helper and `/api/search/nl` route to honour fixture mode and reuse shared builders.
-20. REVIEW: Confirm NL paths emit deterministic results and suggestions while maintaining error handling.
-21. ACTION: Build the developer-facing fixture toggle UI control and associated server action for cookie mutation.
-22. REVIEW: Check accessibility (focus order, announcements) and document usage guidance for designers.
-23. QUALITY-GATE: Schedule combined `pnpm test`, `pnpm lint`, and `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search"` runs for fixture/toggle branches.
+19. ACTION: Re-run `pnpm doc-gen` ensuring regenerated docs flow from updated helpers without manual edits to `_typedoc_src`.
+20. REVIEW: Confirm doc artefacts reflect the new helpers and no generated sources are manually touched.
+21. QUALITY-GATE: Run `pnpm make` followed by `pnpm qg` once documentation and validation layers are stable.
+22. ACTION: Update contributor guidance and validation usage docs to highlight the new parsing helpers and generated search scope utilities.
+23. REVIEW: Share follow-up recommendations with UX and functionality streams based on validation findings.
 24. GROUNDING: read GO.md and follow all instructions.
-25. ACTION: Refresh continuation + context docs with fixture/toggle outcomes, instructions, and artefact links.
-26. REVIEW: Proofread documentation for clarity, British spelling, and up-to-date references.
-27. ACTION: Stage code + docs, capturing `git status` for the fixture/toggle change set.
-28. REVIEW: Verify staging matches intentions and note any follow-up clean-up.
-29. QUALITY-GATE: Execute `pnpm qg` before final review.
-30. GROUNDING: read GO.md and follow all instructions.
-31. ACTION: Draft the conventional commit message capturing fixture consolidation and toggle delivery.
-32. REVIEW: Validate commit message scope, tense, and formatting.
-33. ACTION: Run `git commit` (no `--no-verify`).
-34. REVIEW: Confirm the working tree is clean and summarise release notes for hand-off.

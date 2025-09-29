@@ -2,8 +2,6 @@
  * Interface generation utilities for path parameters
  */
 
-/* eslint-disable max-lines-per-function -- this is a template file */
-
 import { PARAMETER_GENERATION_CONFIG } from './typegen/parameters/index.js';
 import type { ExtractedParameters } from './typegen/extraction-types.js';
 

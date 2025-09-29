@@ -4,10 +4,10 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { validateResponse } from './response-validators.js';
+import { validateCurriculumResponse } from './curriculum-response-validators.js';
 import type { ValidPath } from '../types/generated/api-schema/path-parameters.js';
 
-describe('validateResponse', () => {
+describe('validateCurriculumResponse', () => {
   describe('for GET /lessons/{lesson}/transcript response', () => {
     const path = '/lessons/{lesson}/transcript';
     const method = 'get';
@@ -19,7 +19,7 @@ describe('validateResponse', () => {
         vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -35,7 +35,7 @@ describe('validateResponse', () => {
         transcript: 'Only transcript, no vtt',
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -51,7 +51,7 @@ describe('validateResponse', () => {
         vtt: 'WEBVTT',
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -68,7 +68,7 @@ describe('validateResponse', () => {
         extraField: 'This is allowed',
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -104,7 +104,7 @@ describe('validateResponse', () => {
         downloadsAvailable: true,
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -134,7 +134,7 @@ describe('validateResponse', () => {
         // pupilLessonOutcome is optional
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(true);
     });
@@ -157,7 +157,7 @@ describe('validateResponse', () => {
         downloadsAvailable: true,
       };
 
-      const result = validateResponse(path, method, statusCode, response);
+      const result = validateCurriculumResponse(path, method, statusCode, response);
 
       expect(result.ok).toBe(false);
       if (!result.ok) {
@@ -172,12 +172,14 @@ describe('validateResponse', () => {
       expect(() => {
         // simulate pre-validation: product code would call isValidPath and throw earlier
         // we explicitly call the validator with an invalid path to assert fail-fast
-        validateResponse('/unknown/path' as ValidPath, 'get' as never, 200, {});
+        validateCurriculumResponse('/unknown/path' as ValidPath, 'get' as never, 200, {});
       }).toThrow();
     });
 
     it('should throw for unsupported status code (fail-fast)', () => {
-      expect(() => validateResponse('/lessons/{lesson}/transcript', 'get', 404, {})).toThrow();
+      expect(() =>
+        validateCurriculumResponse('/lessons/{lesson}/transcript', 'get', 404, {}),
+      ).toThrow();
     });
   });
 });

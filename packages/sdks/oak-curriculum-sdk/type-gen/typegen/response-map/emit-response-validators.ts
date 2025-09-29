@@ -12,23 +12,29 @@ export function emitResponseValidators(entries: readonly ResponseMapEntry[]): st
 *
 * Response validator map built from OpenAPI schema at compile-time.
 */
-import type { z } from 'zod';
-import { schemas } from '../zod/zodSchemas.js';
+import { curriculumSchemas, type CurriculumSchemaDefinition } from '../zod/curriculumZodSchemas.js';
 import { type AllowedMethodsForPath, type OperationId, type ValidNumericResponseCode, type ValidPath, type ValidResponseCode, getOperationIdByPathAndMethod } from './path-parameters.js';`;
 
   const IDs: string[] = [];
 
   const schemaLines = `
-const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS = {
+const RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS: Record<
+  string,
+  {
+    schema: CurriculumSchemaDefinition;
+    operationId: OperationId;
+    status: ValidResponseCode | ValidNumericResponseCode;
+  }
+> = {
 ${entries
   .map((entry) => {
     const id = entry.operationId + ':' + entry.status;
     IDs.push(id);
     const member = sanitizeIdentifier(entry.componentName);
-    return `"${id}": {schema: schemas.${member}, operationId: '${entry.operationId}', status: '${entry.status}'},`;
+    return `"${id}": {schema: curriculumSchemas.${member}, operationId: '${entry.operationId}', status: '${entry.status}'},`;
   })
   .join('\n')}
-} as const;
+};
 
 const ALLOWED_IDS = [
 "${IDs.join('",\n"')}"
@@ -52,7 +58,7 @@ function getResponseSchemaById(id: AllowedId): ResponseSchemaByOperationIdAndSta
   return found.schema;
 }
 
-export function getResponseSchemaByOperationIdAndStatus(operationId: OperationId, statusCode: ValidResponseCode | ValidNumericResponseCode): z.ZodSchema {
+export function getResponseSchemaByOperationIdAndStatus(operationId: OperationId, statusCode: ValidResponseCode | ValidNumericResponseCode): CurriculumSchemaDefinition {
   const key = operationId + ':' + String(statusCode);
   if (!isAllowedId(key)) {
     throw new TypeError('Invalid id: ' + String(key));
@@ -60,7 +66,7 @@ export function getResponseSchemaByOperationIdAndStatus(operationId: OperationId
   return getResponseSchemaById(key);
 }
 
-export function getResponseSchemaByPathAndMethodAndStatus(path: ValidPath, method: AllowedMethodsForPath<ValidPath>, statusCode: ValidResponseCode | ValidNumericResponseCode): z.ZodSchema {
+export function getResponseSchemaByPathAndMethodAndStatus(path: ValidPath, method: AllowedMethodsForPath<ValidPath>, statusCode: ValidResponseCode | ValidNumericResponseCode): CurriculumSchemaDefinition {
   const operationId = getOperationIdByPathAndMethod(path, method);
   if (!operationId) {
     throw new TypeError('Invalid operationId: ' + String(operationId));

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { z } from 'zod';
-import { HybridResponseSchema, SuggestionItemSchema } from '../../structured-search.shared';
+import { SearchLessonsResponseSchema } from '../../structured-search.shared';
 import { buildSingleScopeFixture } from './single-scope';
 import {
   ks2MathsLessons,
@@ -13,14 +12,10 @@ import {
 } from '../data';
 
 describe('buildSingleScopeFixture', () => {
-  const StructuredFixtureSchema = HybridResponseSchema.extend({
-    suggestions: z.array(SuggestionItemSchema).optional(),
-  });
-
   it('builds a KS2 maths lesson fixture that passes schema checks', () => {
     const fixture = buildSingleScopeFixture();
 
-    const parsed = StructuredFixtureSchema.safeParse(fixture);
+    const parsed = SearchLessonsResponseSchema.safeParse(fixture);
     expect(parsed.success).toBe(true);
     expect(fixture.scope).toBe('lessons');
     expect(fixture.results).toHaveLength(ks2MathsLessons.length);
@@ -30,7 +25,9 @@ describe('buildSingleScopeFixture', () => {
   });
 
   it('supports alternative datasets such as KS3 art', () => {
-    const fixture = StructuredFixtureSchema.parse(buildSingleScopeFixture({ dataset: 'ks3-art' }));
+    const fixture = SearchLessonsResponseSchema.parse(
+      buildSingleScopeFixture({ dataset: 'ks3-art' }),
+    );
 
     expect(fixture.results).toHaveLength(ks3ArtLessons.length);
     expect(fixture.total).toBe(ks3ArtMeta.total);
@@ -57,7 +54,7 @@ describe('buildSingleScopeFixture', () => {
       },
     });
 
-    const parsed = StructuredFixtureSchema.safeParse(fixture);
+    const parsed = SearchLessonsResponseSchema.safeParse(fixture);
     expect(parsed.success).toBe(true);
     expect(fixture.total).toBe(42);
     expect(fixture.took).toBe(5);

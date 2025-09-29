@@ -2,9 +2,9 @@
 
 All of these rules MUST be followed at all times.
 
-## Prime Directive
+## First Question
 
-**Ask: could it be simpler without compromising quality?**
+Always apply the first question; **Ask: could it be simpler without compromising quality?**
 
 ## Core Rules
 
@@ -66,6 +66,8 @@ Use the right tool for the job:
 - **Type imports must be labelled with `type`** - e.g. `import type { Type } from 'package'` or `import { type Type } from 'package'`
 
 ### Testing
+
+For further information, see the [Testing Strategy](../../docs/agent-guidance/testing-strategy.md).
 
 #### Test Types
 

@@ -1,22 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
   MultiScopeHybridResponseSchema,
-  SuggestionItemSchema,
+  SearchUnitsResponseSchema,
+  SearchSequencesResponseSchema,
 } from '../../structured-search.shared';
 import { buildMultiScopeFixture } from './multi-scope';
-import { z } from 'zod';
-
-const MultiScopeSchema = MultiScopeHybridResponseSchema.extend({
-  suggestions: z.array(SuggestionItemSchema).optional(),
-  suggestionCache: z
-    .object({ version: z.string(), ttlSeconds: z.number().int().nonnegative() })
-    .optional(),
-});
 
 describe('buildMultiScopeFixture', () => {
   it('assembles default lesson, unit, and sequence buckets', () => {
     const fixture = buildMultiScopeFixture();
-    const parsed = MultiScopeSchema.safeParse(fixture);
+    const parsed = MultiScopeHybridResponseSchema.safeParse(fixture);
 
     expect(parsed.success).toBe(true);
     expect(fixture.scope).toBe('all');
@@ -47,7 +40,7 @@ describe('buildMultiScopeFixture', () => {
       },
     });
 
-    const parsed = MultiScopeSchema.safeParse(fixture);
+    const parsed = MultiScopeHybridResponseSchema.safeParse(fixture);
     expect(parsed.success).toBe(true);
     expect(fixture.suggestions).toStrictEqual([]);
     expect(fixture.suggestionCache).toEqual({ version: 'override', ttlSeconds: 90 });
@@ -62,11 +55,27 @@ describe('buildMultiScopeFixture', () => {
   it('produces sequence buckets with KS4 options when using science dataset', () => {
     const fixture = buildMultiScopeFixture({ sequencesDataset: 'ks4-science' });
     const sequenceBucket = fixture.buckets.find((bucket) => bucket.scope === 'sequences');
-    const sequences = sequenceBucket?.result.results as Array<{ highlights: string[] }> | undefined;
-    expect(sequences?.length).toBeGreaterThan(0);
-    const hasKs4Highlight = sequences?.some((entry) =>
+    if (!sequenceBucket) {
+      throw new Error('Expected a sequences bucket in multi-scope fixture');
+    }
+    const sequences = SearchSequencesResponseSchema.parse(sequenceBucket.result);
+    const hasKs4Highlight = sequences.results.some((entry) =>
       entry.highlights.some((highlight) => highlight.includes('KS4')),
     );
     expect(hasKs4Highlight).toBe(true);
+  });
+
+  it('guards unit subject slugs to recognised subjects', () => {
+    const fixture = buildMultiScopeFixture({ unitsDataset: 'ks4-science' });
+    const unitBucket = fixture.buckets.find((bucket) => bucket.scope === 'units');
+    if (!unitBucket) {
+      throw new Error('Expected a units bucket in multi-scope fixture');
+    }
+    const units = SearchUnitsResponseSchema.parse(unitBucket.result);
+    const subjects = units.results
+      .map((entry) => entry.unit?.subject_slug)
+      .filter((slug): slug is NonNullable<typeof slug> => Boolean(slug));
+    expect(subjects).toContain('science');
+    expect(subjects).not.toContain('unknown');
   });
 });

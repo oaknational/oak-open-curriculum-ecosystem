@@ -13,17 +13,12 @@ import {
 } from './structured-search.shared';
 import type {
   StructuredBody,
-  SuggestionItem,
   MultiScopeHybridResponse,
   SearchScope,
   SuggestionResponse,
 } from './structured-search.shared';
-import {
-  buildSingleScopeFixture,
-  buildMultiScopeFixture,
-  type SingleScopeDatasetKey,
-} from './search-fixtures/builders';
-import { resolveFixtureMode, FIXTURE_MODE_COOKIE } from '../lib/fixture-mode';
+import { buildFixtureForScope } from './search-fixtures/builders';
+import { resolveFixtureModeFromCookies } from '../lib/fixture-mode';
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 
@@ -32,28 +27,12 @@ export async function searchAction(
 ): Promise<{ result: unknown | null; error?: string }> {
   const input = SearchRequest.parse(req);
   const base = baseUrl();
+  const cookieStore = await cookies();
+  const fixtureMode = resolveFixtureModeFromCookies(cookieStore);
 
-  if (process.env.SEMANTIC_SEARCH_USE_FIXTURES === 'true') {
-    if (input.scope === 'all') {
-      const buckets = ['lessons', 'units', 'sequences'].map((scope) => ({
-        scope,
-        result: structuredSearchFixture,
-      }));
-      return {
-        result: {
-          scope: 'all',
-          buckets,
-          suggestions: suggestionFixture.suggestions,
-        },
-      };
-    }
-    return {
-      result: {
-        ...structuredSearchFixture,
-        scope: structuredSearchFixture.scope,
-        suggestions: suggestionFixture.suggestions,
-      },
-    };
+  if (fixtureMode === 'fixtures') {
+    const fixture = buildFixtureForScope(input.scope);
+    return { result: fixture };
   }
 
   try {
@@ -64,8 +43,8 @@ export async function searchAction(
 
     const body = buildBody(input);
     const result = await requestStructuredSearch(base, body);
-    const suggestions = await requestSuggestions(base, body);
-    return { result: { ...result, suggestions } };
+    const suggestionResponse = await requestSuggestions(base, body);
+    return { result: { ...result, suggestions: suggestionResponse.suggestions } };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Search failed';
     return { result: null, error: message };
@@ -88,10 +67,13 @@ async function requestStructuredSearch(base: string, body: StructuredBody) {
   return parsed.data;
 }
 
-async function requestSuggestions(base: string, body: StructuredBody): Promise<SuggestionItem[]> {
+async function requestSuggestions(base: string, body: StructuredBody): Promise<SuggestionResponse> {
   const prefix = body.text.trim();
   if (prefix.length <= 1) {
-    return [];
+    return {
+      suggestions: [],
+      cache: DEFAULT_SUGGESTION_CACHE,
+    } satisfies SuggestionResponse;
   }
 
   try {
@@ -111,14 +93,26 @@ async function requestSuggestions(base: string, body: StructuredBody): Promise<S
     });
 
     if (!response.ok) {
-      return [];
+      return {
+        suggestions: [],
+        cache: DEFAULT_SUGGESTION_CACHE,
+      } satisfies SuggestionResponse;
     }
 
     const parsed = SuggestionResponseSchema.safeParse(safeJsonParse(await response.text()));
-    return parsed.success ? parsed.data.suggestions : [];
+    if (parsed.success) {
+      return parsed.data;
+    }
+    return {
+      suggestions: [],
+      cache: DEFAULT_SUGGESTION_CACHE,
+    } satisfies SuggestionResponse;
   } catch (error) {
     console.error('Failed to fetch suggestions', error);
-    return [];
+    return {
+      suggestions: [],
+      cache: DEFAULT_SUGGESTION_CACHE,
+    } satisfies SuggestionResponse;
   }
 }
 
@@ -144,7 +138,7 @@ async function requestMultiScopeSearch(
     }),
   );
 
-  const suggestions = await requestSuggestions(base, {
+  const suggestionResponse = await requestSuggestions(base, {
     scope: 'lessons',
     text: input.text,
     subject: input.subject,
@@ -155,7 +149,8 @@ async function requestMultiScopeSearch(
   const payload: MultiScopeHybridResponse = {
     scope: 'all',
     buckets: results,
-    suggestions,
+    suggestions: suggestionResponse.suggestions,
+    suggestionCache: suggestionResponse.cache,
   };
 
   const parsed = MultiScopeHybridResponseSchema.safeParse(payload);

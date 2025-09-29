@@ -5,8 +5,6 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { wireDependencies } from './wiring.js';
-import type { ServerConfig, Logger } from './wiring.js';
 import {
   MCP_TOOLS,
   zodRawShapeFromToolInputJsonSchema,
@@ -15,9 +13,13 @@ import {
   isToolName,
   isValidPath,
   typeSafeEntries,
-  validateResponse,
+  validateCurriculumResponse,
+  isValidationFailure,
   isAllowedMethod,
 } from '@oaknational/oak-curriculum-sdk';
+import { wireDependencies } from './wiring.js';
+import type { ServerConfig, Logger } from './wiring.js';
+import { createToolResponseHandlers } from './tool-response-handlers.js';
 
 function validateOutput(
   path: string,
@@ -31,10 +33,14 @@ function validateOutput(
   if (!isAllowedMethod(httpMethod)) {
     return { ok: false, message: 'Unsupported method: ' + httpMethod };
   }
-  const validation = validateResponse(path, httpMethod, 200, data);
-  return validation.ok
-    ? { ok: true }
-    : { ok: false, message: validation.issues[0]?.message ?? 'Output validation failed' };
+  const validationResult = validateCurriculumResponse(path, httpMethod, 200, data);
+  if (isValidationFailure(validationResult)) {
+    return {
+      ok: false,
+      message: validationResult.issues[0]?.message ?? 'Output validation failed',
+    };
+  }
+  return { ok: true };
 }
 
 /**
@@ -64,7 +70,7 @@ export async function createServer(config?: ServerConfig): Promise<void> {
     version: serverConfig.serverVersion,
   });
   const client = createOakPathBasedClient(serverConfig.apiKey);
-  registerMcpTools(server, client);
+  registerMcpTools(server, client, logger);
 
   // Create transport and connect
   const transport = new StdioServerTransport();
@@ -124,10 +130,19 @@ function logToolDiscovery(logger: Logger): void {
 function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
+  logger: Logger,
 ): void {
   for (const [name, def] of typeSafeEntries(MCP_TOOLS)) {
     const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
     const description = def.method.toUpperCase() + ' ' + def.path;
+    const handlers = createToolResponseHandlers(logger, {
+      name,
+      description,
+      inputSchemaRaw: def.inputSchema,
+      inputSchemaZod: input,
+      outputSchemaRaw: def.outputSchema,
+      outputSchemaZod: def.outputSchema,
+    });
     server.registerTool(
       name,
       { title: name, description, inputSchema: input },
@@ -137,23 +152,13 @@ function registerMcpTools(
         }
         const execResult = await executeToolCall(name, params, client);
         if (execResult.error) {
-          const e = execResult.error;
-          const message = e instanceof Error ? e.message : 'Unknown error';
-          const errorPayload = { error: { message } };
-          return {
-            content: [{ type: 'text', text: JSON.stringify(errorPayload) }],
-            isError: true,
-          };
+          return handlers.handleExecutionError(params, execResult.error);
         }
         const out = validateOutput(def.path, def.method, execResult.data);
         if (!out.ok) {
-          const errorPayload = { error: { message: out.message } };
-          return {
-            content: [{ type: 'text', text: JSON.stringify(errorPayload) }],
-            isError: true,
-          };
+          return handlers.handleValidationError(params, execResult.data, out.message);
         }
-        return { content: [{ type: 'text', text: JSON.stringify(execResult.data) }] };
+        return handlers.handleSuccess(execResult.data);
       },
     );
   }

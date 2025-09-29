@@ -135,4 +135,24 @@ describe('POST /api/search', () => {
       }),
     );
   });
+
+  it('returns fixture payload when the fixtures query parameter is set', async () => {
+    const request = new NextRequest('http://localhost/api/search?fixtures=on', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scope: 'lessons',
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = HybridResponse.parse(await response.json());
+    expect(payload.scope).toBe('lessons');
+    expect(payload.results.length).toBeGreaterThan(0);
+    expect(runHybridSearch).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=on');
+  });
 });

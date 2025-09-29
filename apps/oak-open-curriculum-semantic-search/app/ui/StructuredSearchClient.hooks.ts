@@ -139,9 +139,6 @@ function createInitialModel(): StructuredBody {
   return {
     scope: 'units',
     text: '',
-    subject: '',
-    keyStage: '',
-    phaseSlug: '',
     minLessons: 0,
     size: 10,
     includeFacets: true,
@@ -167,10 +164,12 @@ function buildStructuredBody(model: StructuredBody): StructuredBody {
 function assignOptionalString<K extends 'subject' | 'keyStage' | 'phaseSlug'>(
   target: StructuredBody,
   key: K,
-  value?: string,
+  value: StructuredBody[K],
 ): void {
-  if (value) {
+  if (typeof value === 'string' && value.length > 0) {
     target[key] = value;
+  } else {
+    delete target[key];
   }
 }
 

@@ -73,4 +73,23 @@ describe('POST /api/search/suggest', () => {
     expect(response.status).toBe(400);
     expect(runSuggestions).not.toHaveBeenCalled();
   });
+
+  it('returns fixture suggestions when fixtures query parameter is set', async () => {
+    const request = new NextRequest('http://localhost/api/search/suggest?fixtures=on', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ prefix: 'math', scope: 'lessons', limit: 5 }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = (await response.json()) as SuggestionResponse;
+    expect(payload.suggestions.length).toBeGreaterThan(0);
+    for (const suggestion of payload.suggestions) {
+      expect(suggestion.scope).toBe('lessons');
+    }
+    expect(runSuggestions).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=on');
+  });
 });
