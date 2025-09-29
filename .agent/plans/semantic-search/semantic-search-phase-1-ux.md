@@ -135,9 +135,9 @@ Phase 1 keeps the design system aligned with product intent by:
 6. GROUNDING [DONE 2025-10-05]: read GO.md and follow all instructions.
 7. ACTION [DONE 2025-10-05]: Refresh UX plan, context snapshot, and continuation prompt with the curriculum schema rename outcomes and downstream adoption guidance (this update applied across plan/context/prompt files).
 8. REVIEW [DONE 2025-10-05]: Proofread documentation updates for clarity and British spelling while checking linked artefacts.
-9. QUALITY-GATE [PENDING]: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation.
-10. ACTION [PENDING]: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour.
-11. REVIEW [PENDING]: Capture test outcomes, noting regressions or flaky cases for follow-up.
+9. QUALITY-GATE [DONE 2025-10-05]: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation (command completed cleanly; no generated changes observed).
+10. ACTION [DONE 2025-10-05]: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour (Vitest suite passed; canonical URL warnings remain expected).
+11. REVIEW [DONE 2025-10-05]: Capture test outcomes, noting regressions or flaky cases for follow-up (no regressions detected; warnings stem from fixture canonical URL gaps already tracked).
 12. GROUNDING [PENDING]: read GO.md and follow all instructions.
 13. ACTION [OPEN]: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas.
 14. REVIEW [OPEN]: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown`.
