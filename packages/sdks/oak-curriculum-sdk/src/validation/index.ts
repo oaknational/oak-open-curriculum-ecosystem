@@ -21,7 +21,10 @@ export { validateSearchResponse } from './search-response-validators.js';
 export {
   isValidationSuccess,
   isValidationFailure,
-  parseWithSchema,
   parseWithCurriculumSchema,
   parseWithCurriculumSchemaInstance,
+  parseEndpointParameters,
+  parseSearchResponse,
+  parseSearchSuggestionResponse,
+  getSearchResponseSchema,
 } from './types.js';

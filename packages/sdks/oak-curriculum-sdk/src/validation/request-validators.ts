@@ -5,7 +5,7 @@
 
 import { z } from 'zod';
 import type { ValidationResult, HttpMethod } from './types.js';
-import { parseWithSchema } from './types.js';
+import { parseEndpointParameters } from './types.js';
 import { endpoints } from '../types/generated/zod/curriculumZodSchemas.js';
 import { typeSafeFromEntries, isPlainObject, getOwnValue } from '../types/helpers.js';
 import { toColon } from '../types/generated/api-schema/path-utils.js';
@@ -184,5 +184,5 @@ export function validateRequest<P extends ValidPath>(
   }
 
   // Validate using the schema
-  return parseWithSchema(schema, args);
+  return parseEndpointParameters(schema, args);
 }

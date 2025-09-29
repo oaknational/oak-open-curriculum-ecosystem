@@ -14,7 +14,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 ### Code Patterns and Architectural Principles
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, now that the _behaviour_ at the interface will remain proven by the test)
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards compatibility** - replace old approaches with new approaches, never create compatibility layers, never prioritise backwards compatibility
 - **Pure functions first** - Use TDD to design (_test first_, red, green, refactor), no side effects, no I/O

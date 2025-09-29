@@ -24,11 +24,11 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Curriculum schema artefacts now regenerate into `curriculumZodSchemas`; next actions include splitting the generic parse helper into curriculum/search-specific functions, generating search scope constants, and updating validators to consume the new utilities.
 - Status page UX needs to progress from blueprint to a minimal Oak-branded shell sourcing live health signals with responsive/a11y coverage.
 - Admin surface must evolve into the operational console for Elastic index creation, ingestion scheduling, and feedback loops.
-- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and the curriculum schema rename is in place with curriculum-specific parse helpers, while search validators still rely on the generic helper pending refactor.
+- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and both curriculum and search validators now rely on domain-specific parsing helpers generated from the schema.
 
 ## Immediate Priorities
 
-1. Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
+1. (Completed 2025-10-05) Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
 2. (Completed 2025-10-05) Verify the generated `curriculumZodSchemas` registry (exports, guards, schema names) and ensure every SDK consumer uses the new helpers end-to-end.
 3. Deliver the initial status page shell (layout, accessibility, live data wiring) and capture responsive/axe artefacts for regression tracking.
 4. Expand the admin page into the operational console for Elastic index/rollup management, ingestion triggers, and progress feedback.

@@ -3,12 +3,21 @@
  * Pure types with no runtime behaviour
  */
 
-import type { ZodIssue, ZodType, ZodTypeAny, ZodTypeDef } from 'zod';
+import type { SafeParseReturnType, ZodIssue, ZodTypeAny } from 'zod';
 import {
   curriculumSchemas,
   type CurriculumSchemaDefinition,
   type CurriculumSchemaName,
 } from '../types/generated/zod/curriculumZodSchemas.js';
+import {
+  SearchLessonsResponseSchema,
+  SearchMultiScopeResponseSchema,
+  SearchSequencesResponseSchema,
+  SearchSuggestionResponseSchema,
+  SearchUnitsResponseSchema,
+  type SearchSuggestionResponse,
+} from '../types/generated/search/index.js';
+import { type SearchScopeWithAll } from '../types/generated/search/scopes.js';
 
 /**
  * Result type for validation operations
@@ -97,38 +106,42 @@ export function isValidationFailure<T>(result: ValidationResult<T>): result is V
  * Returns a ValidationResult with proper type narrowing
  */
 /**
- * Output type helper for Zod schemas used by {@link parseWithSchema}.
+ * Output type helper for Zod schemas consumed by the domain-specific parsing helpers.
  */
-export type SchemaOutput<Schema extends ZodTypeAny> = Schema['_output'];
+export type SchemaInput<Schema extends ZodTypeAny> = Schema extends { _input: infer Input }
+  ? Input
+  : never;
+export type SchemaOutput<Schema extends ZodTypeAny> = Schema extends { _output: infer Output }
+  ? Output
+  : never;
+
+const searchResponseSchemas = {
+  all: SearchMultiScopeResponseSchema,
+  lessons: SearchLessonsResponseSchema,
+  units: SearchUnitsResponseSchema,
+  sequences: SearchSequencesResponseSchema,
+} as const;
+
+export type SearchResponseSchemaMap = typeof searchResponseSchemas;
+
+export type SearchResponseForScope<Scope extends SearchScopeWithAll> = SchemaOutput<
+  SearchResponseSchemaMap[Scope]
+>;
 /**
  * Safely parse unknown data using a Zod schema and capture validation issues.
  */
-function parseWithZodType<Input, Output, Def extends ZodTypeDef>(
-  schema: ZodType<Output, Def, Input>,
-  data: unknown,
-): ValidationResult<Output> {
-  const parsed = schema.safeParse(data);
-  if (parsed.success) {
-    const success: ValidationSuccess<Output> = {
-      ok: true,
-      value: parsed.data,
-    };
-    return success;
-  }
+const isInvalidTypeIssue = (
+  issue: ZodIssue,
+): issue is ZodIssue & { expected: unknown; received: unknown } =>
+  issue.code === 'invalid_type' && 'expected' in issue && 'received' in issue;
 
-  const zodIssues = parsed.error.issues;
-  const isInvalidTypeIssue = (
-    issue: ZodIssue,
-  ): issue is ZodIssue & { expected: unknown; received: unknown } =>
-    issue.code === 'invalid_type' && 'expected' in issue && 'received' in issue;
+const coerceString = (value: unknown): string =>
+  typeof value === 'string' ? value : JSON.stringify(value);
 
-  const coerceString = (value: unknown): string =>
-    typeof value === 'string' ? value : JSON.stringify(value);
-
-  const issues: readonly ValidationIssue[] = zodIssues.map((issue) => {
+function mapValidationIssues(zodIssues: readonly ZodIssue[]): readonly ValidationIssue[] {
+  return zodIssues.map((issue) => {
     const base: ValidationIssue = {
       path: issue.path,
-      // message can be optional in downstream handling
       message: issue.message,
       code: issue.code,
     };
@@ -142,37 +155,73 @@ function parseWithZodType<Input, Output, Def extends ZodTypeDef>(
     }
     return base;
   });
+}
 
-  const failure: ValidationFailure = {
+function toValidationFailure(zodIssues: readonly ZodIssue[]): ValidationFailure {
+  const issues = mapValidationIssues(zodIssues);
+  return {
     ok: false,
     issues,
     firstMessage: issues[0]?.message,
     trace: { when: new Date().toISOString() },
     zod: { issues: zodIssues },
   };
-  return failure;
+}
+
+function parseSchema<Schema extends ZodTypeAny>(
+  schema: Schema,
+  data: unknown,
+): ValidationResult<SchemaOutput<Schema>> {
+  const result: SafeParseReturnType<SchemaInput<Schema>, SchemaOutput<Schema>> = schema.safeParse(
+    data,
+  );
+  if (result.success) {
+    return { ok: true, value: result.data };
+  }
+  return toValidationFailure(result.error.issues);
 }
 
 /**
  * Safely parse unknown data using a Zod schema and capture validation issues.
  */
-export function parseWithSchema<Schema extends ZodTypeAny>(
-  schema: Schema,
-  data: unknown,
-): ValidationResult<SchemaOutput<Schema>> {
-  return parseWithZodType(schema, data);
-}
-
 export function parseWithCurriculumSchema<Name extends CurriculumSchemaName>(
   schemaName: Name,
   data: unknown,
 ): ValidationResult<SchemaOutput<CurriculumSchemaDefinition<Name>>> {
-  return parseWithSchema(curriculumSchemas[schemaName], data);
+  const schema = curriculumSchemas[schemaName];
+  return parseSchema(schema, data);
 }
 
 export function parseWithCurriculumSchemaInstance<Schema extends CurriculumSchemaDefinition>(
   schema: Schema,
   data: unknown,
 ): ValidationResult<SchemaOutput<Schema>> {
-  return parseWithSchema(schema, data);
+  return parseSchema(schema, data);
+}
+
+export function parseEndpointParameters<Schema extends ZodTypeAny>(
+  schema: Schema,
+  data: unknown,
+): ValidationResult<SchemaOutput<Schema>> {
+  return parseSchema(schema, data);
+}
+
+export function parseSearchResponse<Scope extends SearchScopeWithAll>(
+  scope: Scope,
+  data: unknown,
+): ValidationResult<SearchResponseForScope<Scope>> {
+  const schema = searchResponseSchemas[scope];
+  return parseSchema(schema, data);
+}
+
+export function parseSearchSuggestionResponse(
+  data: unknown,
+): ValidationResult<SearchSuggestionResponse> {
+  return parseSchema(SearchSuggestionResponseSchema, data);
+}
+
+export function getSearchResponseSchema<Scope extends SearchScopeWithAll>(
+  scope: Scope,
+): SearchResponseSchemaMap[Scope] {
+  return searchResponseSchemas[scope];
 }

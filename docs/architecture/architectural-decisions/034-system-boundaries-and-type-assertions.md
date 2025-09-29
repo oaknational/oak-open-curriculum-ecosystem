@@ -209,7 +209,7 @@ export function validateRequest(
 ): ValidationResult<unknown> {
   // Uses generated Zod schemas
   const schema = parameterSchemaMap.get(key);
-  return parseWithSchema(schema, args);
+  return parseEndpointParameters(schema, args);
 }
 ```
 
