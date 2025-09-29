@@ -138,7 +138,7 @@ Phase 1 keeps the design system aligned with product intent by:
 9. QUALITY-GATE [DONE 2025-10-05]: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation (command completed cleanly; no generated changes observed).
 10. ACTION [DONE 2025-10-05]: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour (Vitest suite passed; canonical URL warnings remain expected).
 11. REVIEW [DONE 2025-10-05]: Capture test outcomes, noting regressions or flaky cases for follow-up (no regressions detected; warnings stem from fixture canonical URL gaps already tracked).
-12. GROUNDING [PENDING]: read GO.md and follow all instructions.
+12. GROUNDING [DONE 2025-10-05]: read GO.md and follow all instructions (reaffirmed plan focus on parse helper split before wider UX implementation).
 13. ACTION [OPEN]: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas.
 14. REVIEW [OPEN]: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown`.
 15. QUALITY-GATE [OPEN]: Run `pnpm -C packages/sdks/oak-curriculum-sdk type-check` to confirm the validation layer compiles cleanly.
