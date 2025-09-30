@@ -2,72 +2,63 @@
 
 ## Overview
 
-The `apps/oak-open-curriculum-semantic-search` workspace provides a Next.js service that indexes Oak Curriculum content into **Elasticsearch Serverless** and exposes hybrid (lexical + semantic) search endpoints. We favour **server-side Reciprocal Rank Fusion (RRF)** to unify BM25 and `semantic_text` ranking inside a single `_search` per scope, returning highlights, facets, and canonical URLs.
+The semantic search workspace delivers a Next.js (App Router) service that ingests Oak Curriculum content via the official SDK, stores enriched documents in **four Elasticsearch Serverless indices**, and serves hybrid (lexical + semantic) queries with server-side **Reciprocal Rank Fusion (RRF)**. The service now exposes structured, natural-language, suggestion, and admin/status endpoints, all guarded by deterministic validation and observability hooks.
 
 ## Indices (Elasticsearch Serverless)
 
-| Index             | Purpose                                                      | Key fields                                                                                                                                                                                                                                                                                                                                                |
-| ----------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `oak_lessons`     | Primary lesson search surface.                               | `lesson_title` (+ `search_as_you_type`), `lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`, `transcript_text` (term vectors), `lesson_semantic` (`semantic_text`), completion `title_suggest`, metadata keywords (`subject_slug`, `key_stage`, `unit_ids`, `unit_titles`, `lesson_url`). |
-| `oak_unit_rollup` | Primary unit search surface with unit-level semantic recall. | `unit_title` (+ `search_as_you_type`, `completion` with contexts), `rollup_text` (per-lesson snippets, term vectors), `unit_semantic` (`semantic_text`, receives `copy_to` from title + rollup), `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs (`unit_url`, `subject_programmes_url`).                                                      |
-| `oak_units`       | Metadata/analytics companion for joins and admin metrics.    | Mirrors unit metadata without rollup text; supports analytics/facets.                                                                                                                                                                                                                                                                                     |
-| `oak_sequences`   | Sequence discovery/navigation (optional semantic field).     | `sequence_title`, `category_titles`, `phase_*`, `subject_*`, `key_stages`, `years`, `sequence_url`, `unit_slugs`.                                                                                                                                                                                                                                         |
+| Index             | Purpose                                             | Key fields                                                                                                                                                                                                                                                                                                                                                  |
+| ----------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `oak_lessons`     | Primary lesson retrieval surface.                   | `lesson_id`, `lesson_slug`, `lesson_title`, lesson-planning data (`lesson_keywords`, `key_learning_points`, `misconceptions_and_common_mistakes`, `teacher_tips`, `content_guidance`), `transcript_text` with `term_vector`, `lesson_semantic` (`semantic_text`), canonical URL, unit metadata, completion `title_suggest` with contexts, audit timestamps. |
+| `oak_unit_rollup` | Unit search and highlight surface.                  | `unit_id`, `unit_slug`, `unit_title`, `unit_topics`, `lesson_ids`, `lesson_count`, canonical URLs, rollup snippets (`rollup_text`), `unit_semantic` (`semantic_text` with `copy_to`), completion `title_suggest`, facet fields (`key_stage`, `subject_slug`, `years`).                                                                                      |
+| `oak_units`       | Lightweight unit metadata for analytics and facets. | Mirrors unit identifiers, key stage/subject filters, lesson counts, canonical URLs; excludes rollup text for faster aggregations.                                                                                                                                                                                                                           |
+| `oak_sequences`   | Sequence discovery and navigation.                  | `sequence_id`, `sequence_slug`, `sequence_title`, canonical URL, category/phase/year fields, associated unit slugs, optional `sequence_semantic`, completion payloads.                                                                                                                                                                                      |
 
-All indices share custom analysis:
+Shared settings include the `oak_text` analyser (standard, lowercase, asciifolding, `synonym_graph` using `oak-syns`), the `oak_lower` normaliser for keyword filters, and `highlight.max_analyzed_offset` increased to accommodate long transcripts and rollups.
 
-- `oak_text` analyser (standard tokenizer + lowercase + asciifolding + `synonym_graph` via the `oak-syns` synonyms set).
-- `oak_lower` normaliser for keyword filters.
-- `highlight.max_analyzed_offset` increased to avoid truncation on long fields.
+## Service surface (Next.js)
 
-## Service Surface (Next.js)
+- `POST /api/search` – Structured hybrid search over lessons, units, or sequences. Validates payloads, builds server-side RRF queries, returns highlights, canonical URLs, facets, zero-hit metadata.
+- `POST /api/search/nl` – Natural-language wrapper that deterministically converts `{ q }` into structured parameters, then delegates to `/api/search`. Returns `501` when NL search disabled via `AI_PROVIDER=none`.
+- `POST /api/search/suggest` – Suggestion/type-ahead endpoint backed by completion contexts and `search_as_you_type` fields. Supports prefix, scope, optional subject/key stage filters, and returns canonical URLs.
+- `POST /api/index-oak` – Admin ingestion entry point (guarded by `SEARCH_API_KEY`). Triggers resilient batching across lessons, units, sequences.
+- `POST /api/rebuild-rollup` – Regenerates rollup snippets, updates `oak_unit_rollup`, bumps index version, and invalidates caches.
+- `GET /api/index-oak/status` – Reports ingestion progress, processed counts, remaining batches, last error, current `SEARCH_INDEX_VERSION`.
+- `GET /api/openapi.json` & `GET /api/docs` – Serve generated OpenAPI schema and Redoc UI.
+- `/api/sdk/*` – SDK parity routes used for regression comparison (not exposed publicly).
 
-- `POST /api/search` – structured hybrid search (`scope` = `lessons` | `units` | `sequences`), validates filters via SDK guards. Returns RRF-ranked hits with highlights and metadata.
-- `POST /api/search/nl` – natural language endpoint that optionally calls an LLM to translate `{ q }` into structured parameters before delegating to the same core search. Responds with `501` if `AI_PROVIDER=none`.
-- `GET /api/index-oak` – admin endpoint that indexes lessons, units, and sequences via the Oak Curriculum SDK, then writes to the search indices. Requires `x-api-key: ${SEARCH_API_KEY}`.
-- `GET /api/rebuild-rollup` – regenerates unit rollup documents (short lesson snippets) and updates `oak_unit_rollup`. Also requires the admin key.
-- `GET /api/openapi.json` & `GET /api/docs` – serve OpenAPI 3.1 (Zod-generated) and Redoc UI.
+All admin endpoints require `x-api-key: ${SEARCH_API_KEY}`. Structured and NL routes share caching via `SEARCH_INDEX_VERSION` tags (see caching plan).
 
-## Search Flow (Hybrid + RRF)
+## Data flow
 
-1. **Lessons:** Single `_search` against `oak_lessons` using `rank.rrf` with two queries:
-   - `multi_match` over boosted lexical fields (`lesson_title^3`, curated teacher metadata, `transcript_text`).
-   - `semantic` query over `lesson_semantic`.
-     Filters (`subject_slug`, `key_stage`, etc.) applied via `bool.filter`. Highlights come from `transcript_text`.
+1. **Ingestion**: Oak SDK adapters fetch enriched curriculum data (lessons, units, sequences), transform it into canonical payloads, and bulk index into the four Elasticsearch indices. Batching (≈250 docs) with exponential backoff handles throttling; progress markers allow resumable runs. Successful runs rotate aliases and advance `SEARCH_INDEX_VERSION`.
+2. **Rollup rebuild**: A dedicated flow collects lesson-planning snippets (~300 characters per lesson), assembles unit rollups, copies text to `unit_semantic`, and updates completion payloads. Completion triggers cache/tag invalidation and structured logging.
+3. **Querying**: Validated requests build a single `_search` per scope combining lexical `multi_match` clauses and `semantic` queries via `rank.rrf`. Highlights use `unified` highlighter with sentence boundaries. Optional facets and zero-hit logging fire depending on request parameters.
+4. **Suggestions**: Completion API hits `title_suggest` with contextual filters; fallback `search_as_you_type` queries provide prefix matches. Responses include canonical URLs and metadata to power UI linking.
 
-2. **Units:** Single `_search` against `oak_unit_rollup` with `rank.rrf` combining `multi_match` (title, rollup snippets, optional `unit_topics`) and `semantic` on `unit_semantic`. Highlights are produced from `rollup_text`. Range filters (e.g. minimum lesson count) run inside `bool.filter`.
+## Observability & telemetry
 
-3. **Sequences:** Lexical `_search` against `oak_sequences` (semantic optional). Results provide navigation metadata.
+- Structured logs capture ingestion batches, retries, zero-hit searches (`scope`, `text`, filters), and index version rotations.
+- Admin status endpoint collates counts, durations, and errors for dashboards.
+- Suggestion and search routes log cache keys (debug) and version tags (info) to aid troubleshooting.
 
-4. **Type-ahead & suggestions:**
-   - Search-as-you-type via `.sa` field variants.
-   - Completion suggestions via `title_suggest` with `subject` and `key_stage` contexts.
+## Dependencies & tooling
 
-5. **Facets/Aggregations:** Optional `terms` aggregations on `subject_slug`, `key_stage`, and `range` on `lesson_count`. Admin analytics can query `oak_units` for rollups.
+- **SDK**: All curriculum data comes from `@oaknational/oak-curriculum-sdk`; types generated via `pnpm type-gen` uphold the Cardinal Rule.
+- **Testing**: Unit tests cover transforms and query builders; integration suites (Vitest + fixtures/ES test doubles) validate mappings and ingestion behaviour; Playwright (MCP) used for UI flows.
+- **Quality gates**: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`.
 
-## Rollup Strategy
+## Diagram (conceptual)
 
-Units reference many lessons; duplicating entire transcripts per unit would explode storage. Instead we rebuild a dedicated `oak_unit_rollup` index that stores:
+```text
+Oak Curriculum SDK
+    ↓ (enriched transforms)
+Resilient ingestion (batch, retry, alias swap)
+    ↓
+Elasticsearch Serverless indices (lessons, unit_rollup, units, sequences)
+    ↓
+Server-side RRF queries & suggestions
+    ↓
+Next.js API routes → MCP tools → UI
+```
 
-- Per-lesson snippets (~300 characters, sentence aware) concatenated into `rollup_text`.
-- Metadata for canonical URLs and filters.
-- A `unit_semantic` field populated via `copy_to` for semantic recall.
-
-`/api/rebuild-rollup` can be run after indexing or content updates to refresh snippets.
-
-## Environment & Security
-
-Environment variables (server-side only):
-
-- `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`
-- `OAK_API_KEY` **or** `OAK_API_BEARER`
-- `SEARCH_API_KEY` (required for admin endpoints)
-- `AI_PROVIDER` (`openai` or `none`) and `OPENAI_API_KEY` when enabled
-
-Admin endpoints must be called with the header `x-api-key: ${SEARCH_API_KEY}`. Never expose search credentials to the browser; Next.js API routes run server-side only.
-
-## Observability & Maintenance
-
-- Update synonyms via `scripts/synonyms.json` → `PUT /_synonyms/oak-syns`.
-- Nightly indexing keeps Elasticsearch in sync with the Oak Curriculum API.
-- Log slow queries, zero-hit searches, and bulk failures for tuning.
-- For mapping-breaking changes, migrate via versioned indices and alias swaps.
+Keep this document aligned with the target alignment plan whenever indices, endpoints, or observability strategies change.

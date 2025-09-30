@@ -2,53 +2,73 @@
 
 import type { JSX } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import sc from 'styled-components';
+import type { Route } from 'next';
+import { OakBox, OakFlex, OakImage, OakTypography } from '@oaknational/oak-components';
+import styledComponents from 'styled-components';
 import ThemeSelect from './ThemeSelect';
+import { getAppTheme } from '../themes/app-theme-helpers';
 
-const HeaderBar = sc.header`
-  border-bottom: 1px solid ${(p) => p.theme.app.colors.headerBorder};
-  padding: ${(p) => `${p.theme.app.space.md} ${p.theme.app.space.lg}`};
-  display: flex;
+const HeaderRoot = styledComponents(OakFlex)`
   align-items: center;
-  gap: ${(p) => p.theme.app.space.md};
+  flex-wrap: wrap;
+  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+  padding-block: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  padding-inline: ${({ theme }) => getAppTheme(theme).app.space.gap.section};
+  border-bottom-color: ${({ theme }) => getAppTheme(theme).app.colors.headerBorder};
 `;
 
-const PrimaryNav = sc.nav`
-  a, span {
-    margin-left: ${(p) => p.theme.app.space.lg};
-  }
+const PrimaryNav = styledComponents(OakFlex)`
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+  row-gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
 `;
 
-const Logo = sc(Image)`
-  display: block;
+const NavText = styledComponents(OakTypography)`
+  font-family: ${({ theme }) => getAppTheme(theme).app.fonts.primary};
 `;
 
-const RightZone = sc.div`
-  margin-left: auto;
-`;
+const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
+  { href: '/', label: 'Home' },
+  { href: '/api/docs', label: 'Open API Docs' },
+  { href: '/admin', label: 'Admin' },
+  { href: '/healthz', label: 'Health (API)' },
+];
 
 export default function HeaderStyles(): JSX.Element {
   return (
-    <HeaderBar>
+    <HeaderRoot
+      as="header"
+      role="banner"
+      $alignItems="center"
+      $flexWrap="wrap"
+      $bb="border-solid-s"
+      $borderColor="border-brand"
+      $background="bg-primary"
+      $color="text-primary"
+    >
       <Link href="/" aria-label="Home">
-        <Logo
+        <OakImage
           src="/oak-national-academy-logo-512.png"
           alt="Oak National Academy"
           width={32}
           height={32}
         />
       </Link>
-      <PrimaryNav aria-label="Primary">
-        <Link href="/">Home</Link>
-        <Link href="/api/docs">Open API Docs</Link>
-        <span>|</span>
-        <Link href="/admin">Admin</Link>
-        <Link href="/healthz">Health (API)</Link>
+
+      <PrimaryNav as="nav" aria-label="Primary" $font="body-3" $color="text-primary">
+        {NAV_ITEMS.map((item) => (
+          <Link key={item.href} href={item.href}>
+            <NavText as="span" $font="body-3" $color="text-primary">
+              {item.label}
+            </NavText>
+          </Link>
+        ))}
       </PrimaryNav>
-      <RightZone>
+
+      <OakBox $ml="auto">
         <ThemeSelect />
-      </RightZone>
-    </HeaderBar>
+      </OakBox>
+    </HeaderRoot>
   );
 }

@@ -1,10 +1,10 @@
 # Development Documentation
 
-This directory contains documentation for developers working on the Oak Notion MCP project.
+This directory contains documentation for developers working on the Oak MCP ecosystem (SDK, MCP servers, and Semantic Search app).
 
 ## Contents
 
-- [Onboarding Journey](./onboarding-journey.md) - Structured 5-day learning path for new developers
+- [Onboarding](./onboarding.md) - Quick start checklist for new developers and AI assistants
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Troubleshooting](./troubleshooting.md) - Common issues and their solutions
 - [CI Policy](./ci-policy.md) - What runs in CI (type-gen policy, build behavior)
@@ -20,6 +20,6 @@ These documents help developers:
 
 ## Getting Started
 
-New developers should start with the [Onboarding Journey](./onboarding-journey.md), which provides a structured path through all the essential concepts and practices.
+New developers should start with the [Onboarding guide](./onboarding.md), which links the root README, shared parsing helpers, GO.md cadence, and workspace walkthroughs.
 
 For quick solutions to common problems, check the [Troubleshooting](./troubleshooting.md) guide.

@@ -148,7 +148,7 @@ const TOOLS = {
 
 ### Phase 1: Refactor MCP Tool Generation
 
-Update `/packages/oak-curriculum-sdk/scripts/typegen/mcp-tools/mcp-tool-mapping-generator.ts`:
+Update `/packages/oak-curriculum-sdk/type-gen/mcp-tools/mcp-tool-mapping-generator.ts`:
 
 - Remove switch statement generation
 - Generate pure data structure

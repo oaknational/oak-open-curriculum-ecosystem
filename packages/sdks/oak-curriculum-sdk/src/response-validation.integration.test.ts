@@ -7,7 +7,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { validateResponse } from './validation/response-validators.js';
+import { validateCurriculumResponse } from './validation/curriculum-response-validators.js';
 // Note: precise response types are inferred via validateResponse overloads
 
 describe('SDK response pipeline integration', () => {
@@ -30,7 +30,12 @@ describe('SDK response pipeline integration', () => {
         vtt: 'WEBVTT\n\n00:00:00.000 --> 00:00:05.000\nThis is the lesson transcript text',
       };
 
-      const result = validateResponse('/lessons/{lesson}/transcript', 'get', 200, response);
+      const result = validateCurriculumResponse(
+        '/lessons/{lesson}/transcript',
+        'get',
+        200,
+        response,
+      );
 
       console.log('Debug result:', JSON.stringify(result, null, 2));
       expect(result.ok).toBe(true);
@@ -59,7 +64,7 @@ describe('SDK response pipeline integration', () => {
         downloadsAvailable: true,
       };
 
-      const result = validateResponse('/lessons/{lesson}/summary', 'get', 200, response);
+      const result = validateCurriculumResponse('/lessons/{lesson}/summary', 'get', 200, response);
 
       console.log('Debug lesson summary result:', JSON.stringify(result, null, 2));
       expect(result.ok).toBe(true);
@@ -92,7 +97,7 @@ describe('SDK response pipeline integration', () => {
         downloadsAvailable: true,
       };
 
-      const result = validateResponse('/lessons/{lesson}/summary', 'get', 200, response);
+      const result = validateCurriculumResponse('/lessons/{lesson}/summary', 'get', 200, response);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -112,7 +117,9 @@ describe('SDK response pipeline integration', () => {
         message: 'Resource not found',
       };
 
-      expect(() => validateResponse('/lessons/{lesson}/summary', 'get', 404, response)).toThrow();
+      expect(() =>
+        validateCurriculumResponse('/lessons/{lesson}/summary', 'get', 404, response),
+      ).toThrow();
     });
   });
 });

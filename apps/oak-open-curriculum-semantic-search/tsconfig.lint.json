@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "exclude": ["node_modules", ".next", "dist", "out"]
+  "exclude": ["node_modules", ".next", "dist", "out", "docs/_typedoc_src/**"]
 }

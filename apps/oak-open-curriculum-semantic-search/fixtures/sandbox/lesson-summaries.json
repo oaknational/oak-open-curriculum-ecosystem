@@ -1,0 +1,71 @@
+{
+  "ancient-egypt-lesson-1": {
+    "lessonTitle": "Introducing Ancient Egypt",
+    "unitSlug": "ancient-egypt",
+    "unitTitle": "Ancient Egypt",
+    "subjectSlug": "history",
+    "subjectTitle": "History",
+    "keyStageSlug": "ks2",
+    "keyStageTitle": "Key stage 2",
+    "lessonKeywords": [
+      { "keyword": "civilisation", "description": "Understanding an ancient civilisation" },
+      { "keyword": "pharaoh", "description": "Learning about Egyptian rulers" }
+    ],
+    "keyLearningPoints": [
+      { "keyLearningPoint": "Identify key features of Ancient Egypt" },
+      { "keyLearningPoint": "Explain why the Nile was important" }
+    ],
+    "misconceptionsAndCommonMistakes": [
+      { "misconception": "All pyramids were tombs", "response": "Discuss varied pyramid uses" }
+    ],
+    "pupilLessonOutcome": "Pupils can describe the significance of the River Nile.",
+    "teacherTips": [{ "teacherTip": "Use maps to locate the River Nile." }],
+    "contentGuidance": [
+      {
+        "contentGuidanceArea": "History",
+        "supervisionlevel_id": 1,
+        "contentGuidanceLabel": "Low",
+        "contentGuidanceDescription": "Suitable for general classrooms"
+      }
+    ],
+    "supervisionLevel": "low",
+    "downloadsAvailable": true,
+    "canonicalUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-1"
+  },
+  "ancient-egypt-lesson-2": {
+    "lessonTitle": "Life Along the Nile",
+    "unitSlug": "ancient-egypt",
+    "unitTitle": "Ancient Egypt",
+    "subjectSlug": "history",
+    "subjectTitle": "History",
+    "keyStageSlug": "ks2",
+    "keyStageTitle": "Key stage 2",
+    "lessonKeywords": [
+      { "keyword": "river", "description": "Studying the River Nile" },
+      { "keyword": "agriculture", "description": "Farming in Ancient Egypt" }
+    ],
+    "keyLearningPoints": [
+      { "keyLearningPoint": "Describe the annual flooding cycle" },
+      { "keyLearningPoint": "Understand Egyptian farming practices" }
+    ],
+    "misconceptionsAndCommonMistakes": [
+      {
+        "misconception": "The desert was uninhabited",
+        "response": "Discuss settlements beyond the Nile"
+      }
+    ],
+    "pupilLessonOutcome": "Pupils can explain how the Nile supported Egyptian society.",
+    "teacherTips": [{ "teacherTip": "Compare ancient and modern farming along rivers." }],
+    "contentGuidance": [
+      {
+        "contentGuidanceArea": "History",
+        "supervisionlevel_id": 1,
+        "contentGuidanceLabel": "Low",
+        "contentGuidanceDescription": "Suitable for general classrooms"
+      }
+    ],
+    "supervisionLevel": "low",
+    "downloadsAvailable": true,
+    "canonicalUrl": "https://teachers.thenational.academy/lessons/ancient-egypt-lesson-2"
+  }
+}

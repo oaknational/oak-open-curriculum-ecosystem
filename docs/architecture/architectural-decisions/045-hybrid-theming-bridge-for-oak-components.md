@@ -10,44 +10,49 @@ Accepted
 
 We are integrating Oak Components into the Semantic Search app (Next.js App Router, React 19, styled-components). The UI requires:
 
-- SSR-first theming with zero flicker and no pre-hydration scripts
+- SSR-first theming with zero flicker (pre-hydration script allowed when deterministic)
 - A clean server/client boundary that plays well with streaming
 - Light/dark mode with instant switching and minimal re-render
 - Typed, semantic tokens that app components can rely on (e.g., `theme.app.*`)
 - A migration path from inline styles to tokenised, accessible components
 
-Current state:
+Current state and constraints:
 
 - We set an SSR cookie and reflect it as `<html data-theme-mode>`; the client persists cookie + localStorage and subscribes to system preference. Tests cover SSR hints and preference updates.
-- We scaffolded `app/ui/themes/{tokens,light,dark,types}`; however, the runtime theme provided to styled-components does not yet guarantee `theme.app` tokens exist for all components. Mode switching occurs via context but without CSS variable emission.
+- A deterministic pre-hydration script (documented in `app/layout.tsx`) now mirrors the ThemeContext resolution rules so SSR markup always matches the resolved colour mode before hydration.
+- We extended the Oak theme with semantic layout tokens (`theme.app`) via `semanticThemeSpec` and emit CSS variables through `ThemeBridgeProvider`. New responsive guidance lives in `.agent/plans/semantic-search/semantic-search-responsive-layout-architecture.md`.
 
-We need a robust approach that guarantees the presence of semantic/app tokens at runtime, decouples Oak raw tokens from app semantics, and enables instant color-mode switching.
+We need a robust approach that guarantees the presence of semantic/app tokens at runtime, decouples Oak raw tokens from app semantics, and enables instant colour-mode switching while coexisting with the pre-hydration bridge.
 
 ## Decision
 
 Adopt a layered “Bridge” theming architecture:
 
 1. Provider composition
-   - `OakThemeProvider (oakDefaultTheme)` → `ColorModeProvider (initial from SSR cookie)` → `ThemeBridgeProvider` → `styled-components ThemeProvider`.
+   - `ThemeContextProvider` (exposes Oak semantic theme + OakGlobalStyle) → `ColorModeProvider` → `ThemeBridgeProvider` (wraps styled-components ThemeProvider).
+   - `Providers` (`app/lib/Providers.tsx`) orchestrates the chain and injects `ThemeWrapper` plus DOM `data-theme` attributes used by the pre-hydration script.
    - The Bridge is responsible for mapping Oak raw tokens to a typed semantic theme that includes `theme.app` tokens consumed by our components.
 
-2. CSS variables emission
-   - The Bridge emits a minimal `<style id="app-theme-vars">…</style>` element that defines CSS variables for light/dark. This is rendered declaratively (safe for SSR + streaming) and updates when the color mode changes.
-   - Mode switching is achieved by toggling an HTML attribute/class on `<html>` (e.g., `data-theme="dark"`), avoiding component tree remounts.
+2. CSS variables + global style emission
+   - The Bridge emits a minimal `<style id="app-theme-vars">…</style>` element plus a `<style id="app-theme-global">…</style>` block that applies semantic background/foreground colours. Both are rendered declaratively (safe for SSR + streaming) and update when the colour mode changes.
+   - Mode switching is achieved by toggling data attributes on `<html>`/`#app-theme-root` (e.g., `data-theme="dark"`), avoiding component tree remounts.
 
 3. Typed semantic theme
    - The styled-components ThemeProvider exposes a typed semantic theme that includes `app` tokens (spacing, radii, colors, layout sizes) and any necessary Oak-derived mappings.
    - Only the Bridge layer references Oak raw tokens. App code uses semantic tokens exclusively.
 
-4. SSR-first mode initialisation
-   - The server reads the cookie and sets `<html data-theme="light|dark">` (or a `data-theme-mode` hint if needed), and passes `initialMode` to `ColorModeProvider`. No imperative pre-hydration script is used.
+4. SSR-first mode initialisation with deterministic pre-hydration script
 
-5. Testing and guardrails
+- The server reads the cookie and sets `<html data-theme="light|dark">`, passes `initialMode` to `Providers`, and always injects the pre-hydration script that mirrors ThemeContext resolution. This ensures DOM attributes match the resolved mode before hydration.
+- The script is now a permanent part of the bridge until the component library offers a dual-theme static snapshot; removing it would reintroduce flicker and hydration mismatches.
+
+5. Responsive tokens & testing guardrails
    - Ensure only one `styled-components` version exists. Add tests that verify:
-     - `theme.app` is present and typed
-     - CSS variable style tag is emitted
+     - `theme.app` (including layout/breakpoint tokens) is present and typed
+     - CSS variable style tag and global style tag are emitted
      - AA contrast for key pairs (text/background, focus, error)
      - Axe a11y checks pass for core pages
+     - Breakpoint variables (`--app-bp-*`) resolve to expected values (see responsive layout architecture plan)
 
 ## Rationale
 
@@ -80,9 +85,7 @@ Trade-offs:
 3. Imperative pre-hydration scripts to set `className`
    - Increases hydration mismatch risk and complexity. A declarative provider + SSR attribute is safer and more testable.
 
-## Implementation sketch
-
-- Providers (order): `OakThemeProvider` → `ColorModeProvider` → `ThemeBridgeProvider` (internally wraps styled-components ThemeProvider)
+- Providers (order): `ThemeContextProvider` → `ColorModeProvider` → `ThemeBridgeProvider` (internally wraps styled-components ThemeProvider via `Providers`)
 - Bridge responsibilities:
   - Map raw Oak tokens to semantic tokens
   - Emit a single CSS variable sheet for the active mode
@@ -92,10 +95,11 @@ Trade-offs:
 
 Suggested files (illustrative):
 
+- `app/lib/theme/ThemeContext.tsx`
 - `app/lib/theme/ColorModeContext.tsx`
 - `app/lib/theme/ThemeCssVars.tsx`
 - `app/lib/theme/ThemeBridgeProvider.tsx`
-- `app/lib/theme/HtmlThemeAttribute.tsx` (optional, if global CSS relies on HTML attribute)
+- `app/lib/theme/HtmlThemeAttribute.tsx` (keeps DOM `data-theme` in sync with active mode)
 
 ## Acceptance criteria
 
@@ -132,8 +136,8 @@ Suggested files (illustrative):
 
 ## References
 
-- Guide: `research/search-app/OAK_COMPONENTS_INTEGRATION_GUIDE_v2.md` (sections 2–15)
-- Guide: `research/search-app/oak-components-guide.md`
-- Plans: `.agent/plans/semantic-search-ui-plan.md`, `.agent/plans/semantic-search-ui-continuation-prompt.md`
-- Code (current state): `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`, `app/layout.tsx`, `app/ui/**`
+- Guide: `apps/oak-open-curriculum-semantic-search/docs/oak-components-theming.md`
+- Plan: `.agent/plans/semantic-search/semantic-search-responsive-layout-architecture.md`
+- Plan: `.agent/plans/semantic-search/semantic-theme-inventory.md`
+- Code: `apps/oak-open-curriculum-semantic-search/app/lib/theme/ThemeContext.tsx`, `app/lib/Providers.tsx`, `app/lib/theme/ThemeBridgeProvider.tsx`, `app/layout.tsx`
 - Related ADR: `044-nl-delegates-to-structured-search-and-caching-ownership.md`

@@ -1,0 +1,196 @@
+{
+  "fetchedAt": "2025-09-28T08:02:44.699Z",
+  "keyStage": "ks4",
+  "subject": "science",
+  "sequencesSample": [
+    {
+      "sequenceSlug": "science-primary",
+      "years": [1, 2, 3, 4, 5, 6],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 1",
+          "keyStageSlug": "ks1"
+        },
+        {
+          "keyStageTitle": "Key Stage 2",
+          "keyStageSlug": "ks2"
+        }
+      ],
+      "phaseSlug": "primary",
+      "phaseTitle": "Primary",
+      "ks4Options": null
+    },
+    {
+      "sequenceSlug": "science-secondary-aqa",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": {
+        "title": "AQA",
+        "slug": "aqa"
+      }
+    },
+    {
+      "sequenceSlug": "science-secondary-edexcel",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": {
+        "title": "Edexcel",
+        "slug": "edexcel"
+      }
+    },
+    {
+      "sequenceSlug": "science-secondary-ocr",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": {
+        "title": "OCR",
+        "slug": "ocr"
+      }
+    }
+  ],
+  "lessonsSample": [
+    {
+      "unitSlug": "acids-and-bases",
+      "unitTitle": "Acids and bases",
+      "lessons": [
+        {
+          "lessonSlug": "practical-red-cabbage-indicator-solution",
+          "lessonTitle": "Practical: red cabbage indicator solution"
+        },
+        {
+          "lessonSlug": "chemical-reactions-neutralisation",
+          "lessonTitle": "Chemical reactions: neutralisation"
+        },
+        {
+          "lessonSlug": "chemical-reactions-acid-and-metal-carbonate",
+          "lessonTitle": "Chemical reactions: acid and metal carbonate"
+        }
+      ]
+    },
+    {
+      "unitSlug": "adaptations-competition-natural-selection-and-evolution",
+      "unitTitle": "Adaptations, competition, natural selection and evolution",
+      "lessons": [
+        {
+          "lessonSlug": "heritable-variation",
+          "lessonTitle": "Heritable variation"
+        },
+        {
+          "lessonSlug": "competition",
+          "lessonTitle": "Competition"
+        },
+        {
+          "lessonSlug": "natural-selection",
+          "lessonTitle": "Natural selection"
+        }
+      ]
+    }
+  ],
+  "unitsSample": [
+    {
+      "yearSlug": "year-9",
+      "yearTitle": "Year 9",
+      "units": [
+        {
+          "unitSlug": "acids-and-bases",
+          "unitTitle": "Acids and bases"
+        },
+        {
+          "unitSlug": "adaptations-competition-natural-selection-and-evolution",
+          "unitTitle": "Adaptations, competition, natural selection and evolution"
+        },
+        {
+          "unitSlug": "breathing-and-respiration",
+          "unitTitle": "Breathing and respiration"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-10",
+      "yearTitle": "Year 10",
+      "units": [
+        {
+          "unitSlug": "atomic-structure-and-the-periodic-table",
+          "unitTitle": "Atomic structure and the periodic table"
+        },
+        {
+          "unitSlug": "bonding",
+          "unitTitle": "Bonding"
+        },
+        {
+          "unitSlug": "cell-biology",
+          "unitTitle": "Cell biology"
+        }
+      ]
+    }
+  ],
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Chemical reactions: neutralisation",
+      "scope": "lessons",
+      "url": "/teachers/lessons/chemical-reactions-neutralisation",
+      "subject": "science",
+      "keyStage": "ks4",
+      "contexts": {
+        "unitSlug": "acids-and-bases",
+        "ks4OptionSlug": "aqa"
+      }
+    },
+    {
+      "label": "Unit · Adaptations, competition, natural selection and evolution",
+      "scope": "units",
+      "url": "/teachers/units/adaptations-competition-natural-selection-and-evolution",
+      "subject": "science",
+      "keyStage": "ks4",
+      "contexts": {
+        "years": [9],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · Science secondary (AQA)",
+      "scope": "sequences",
+      "url": "/teachers/programmes/science-secondary-aqa",
+      "subject": "science",
+      "keyStage": "ks4",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"],
+        "ks4OptionSlug": "aqa"
+      }
+    }
+  ]
+}

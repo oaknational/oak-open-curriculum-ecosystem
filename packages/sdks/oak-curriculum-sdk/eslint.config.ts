@@ -21,7 +21,7 @@ const config = defineConfig(
       '*.log',
       '.turbo/**',
       // Local entry shims (JS)
-      'scripts/*.mjs',
+      'type-gen/*.mjs',
       // Examples
       'examples/**',
 
@@ -112,7 +112,7 @@ const config = defineConfig(
   },
   // Rules for the type-gen code
   {
-    files: ['scripts/typegen/**'],
+    files: ['type-gen/**'],
     rules: {
       'no-restricted-properties': 'off',
       'max-lines-per-function': 'off',

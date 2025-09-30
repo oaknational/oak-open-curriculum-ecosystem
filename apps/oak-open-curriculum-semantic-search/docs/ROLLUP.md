@@ -1,49 +1,60 @@
-# Unit Rollup Index (`oak_unit_rollup`)
+# Rollup Generation Guide
 
-The rollup index delivers unit-level semantic recall and highlight snippets without duplicating full lesson transcripts. Each document represents a unit enriched with short lesson passages and metadata pulled from the Oak Curriculum SDK.
+The rollup process produces unit-level documents in `oak_unit_rollup` that power semantic unit search, snippets, and suggestion payloads. This guide outlines the definitive approach.
 
-## Why it exists
+## Objectives
 
-- Units span many lessons; copying every transcript into the unit document would bloat storage and slow highlighting.
-- Teachers still expect unit highlights that reference individual lessons. We therefore concatenate curated ~300-character snippets per lesson into `rollup_text`.
-- Both `unit_title` and `rollup_text` are copied into `unit_semantic`, enabling `semantic_text` recall that aligns with the rollup content.
+- Provide lesson-planning snippets that summarise each unit without duplicating full transcripts.
+- Populate `rollup_text`, `unit_semantic`, completion payloads, and canonical URLs.
+- Support cache invalidation and telemetry after each rebuild.
 
-## Document shape
+## Inputs
 
-```json
-{
-  "unit_id": "...",
-  "unit_slug": "...",
-  "unit_title": "Glaciation and Mountains",
-  "subject_slug": "geography",
-  "key_stage": "ks4",
-  "lesson_ids": ["..."],
-  "lesson_count": 10,
-  "unit_topics": "glaciation; mountain formation",
-  "rollup_text": "Introductory lesson snippet …",
-  "unit_semantic": "semantic_text payload (managed by ES)",
-  "unit_url": "https://www.thenational.academy/teachers/programmes/geography-secondary/units/glaciation",
-  "subject_programmes_url": "https://www.thenational.academy/teachers/key-stages/ks4/subjects/geography/programmes"
-}
-```
+- Oak Curriculum SDK data: lessons, lesson metadata, transcripts, teacher notes, canonical URLs.
+- Configuration: snippet length (~300 characters per lesson), sentence boundary detector, priority ordering for metadata vs transcripts.
 
-Key field notes:
+## Process steps
 
-- `rollup_text` uses the shared `oak_text` analyser, stores term vectors for unified highlighting, and participates in RRF via `multi_match`.
-- `unit_semantic` is a `semantic_text` field. Elasticsearch populates and stores the semantic representation; we just send the raw text.
-- `title_suggest` exposes completion suggestions with `subject` and `key_stage` contexts to power guided type-ahead.
+1. **Fetch unit context**
+   - Retrieve unit metadata plus associated lessons, including lesson-planning data and transcripts.
+   - Collect canonical URLs for unit and lessons.
 
-## Rebuild process (`/api/rebuild-rollup`)
+2. **Select snippet content**
+   - Preferred order per lesson: `key_learning_points` → `teacher_tips` → `lesson_keywords` → fallback transcript sentences.
+   - If metadata missing, extract the first sentence matching query context; avoid truncated words.
+   - Enforce British spelling; remove HTML tags.
 
-1. Fetch units and their lessons via the Oak Curriculum SDK (no raw HTTP).
-2. For each lesson:
-   - Select teacher-facing metadata (keywords, key learning points, tips) or transcript excerpts.
-   - Trim to a readable ~300-character snippet, respecting sentence boundaries.
-3. Concatenate the snippets, store them in `rollup_text`, and derive metadata (`lesson_count`, canonical URLs).
-4. Bulk index the documents into `oak_unit_rollup`, checking for partial failures. Refresh highlights by re-running the endpoint after indexing or content updates.
+3. **Trim & normalise**
+   - Limit each lesson snippet to ≈300 characters; ensure sentences close with punctuation.
+   - Append lesson title if needed for clarity.
+   - Join snippets with double newlines to aid highlight readability.
 
-## When to run it
+4. **Populate rollup document**
+   - Set `rollup_text` to concatenated snippets.
+   - Copy combined text into `unit_semantic` (`semantic_text`) via `copy_to` or explicit field.
+   - Update metadata fields: `lesson_ids`, `lesson_count`, `unit_topics`, `years`, canonical URLs.
+   - Refresh completion payload: `title_suggest` with contexts (subject, key_stage, sequence).
 
-- After `POST /api/index-oak` completes (fresh content ingested).
-- On scheduled jobs (e.g. nightly) to capture SDK changes.
-- Whenever synonyms or analyser changes warrant reindexing (combine with the main index rebuild).
+5. **Write to Elasticsearch**
+   - Index via bulk helper with retry/backoff.
+   - Log snippet sources (metadata vs transcript) and total characters for analytics.
+
+6. **Post-write actions**
+   - Rotate aliases to point to the new rollup index version.
+   - Increment `SEARCH_INDEX_VERSION` and persist it.
+   - Call `revalidateTag` for the new version to invalidate cached search/suggestion results.
+   - Emit structured telemetry event: `semantic-search.rollup-updated` with unit counts, duration, version.
+
+## Testing & validation
+
+- Unit tests: verify snippet selection logic prioritises lesson-planning data and trims correctly.
+- Integration tests: ensure ES documents include `rollup_text`, canonical URLs, completion payloads, and semantic fields.
+- Observability: confirm logs include version, snippet sources, and zero-hit baseline resets.
+
+## Troubleshooting
+
+- **Missing snippets**: confirm SDK returns the required metadata; escalate upstream before hardcoding.
+- **Highlight issues**: ensure `term_vector` and `highlight.max_analyzed_offset` set appropriately; regenerate index mappings if needed.
+- **Cache staleness**: verify `SEARCH_INDEX_VERSION` bumped and `revalidateTag` executed; check logs for alias swap success.
+
+Keep this guide in sync with the ingestion pipeline and semantic-search API plan whenever rollup logic changes.

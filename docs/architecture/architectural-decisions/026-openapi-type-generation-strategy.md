@@ -86,5 +86,5 @@ const { parameters, validCombinations } = extractPathParameters(schema);
 ## References
 
 - [openapi-typescript documentation](https://github.com/drwpow/openapi-typescript)
-- Reference implementation: `packages/oak-curriculum-sdk/scripts/typegen-core.ts`
+- Reference implementation: `packages/oak-curriculum-sdk/type-gen/typegen-core.ts`
 - Phase 6 Implementation Plan: `.agent/plans/phase-6-oak-curriculum-api-implementation-plan.md`

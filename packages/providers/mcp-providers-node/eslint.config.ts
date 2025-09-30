@@ -9,7 +9,15 @@ const wsTsProject = fileURLToPath(new URL('./tsconfig.lint.json', import.meta.ur
 export default defineConfig(
   ...baseConfig,
   {
-    ignores: ['dist/**', '*.log', '.turbo/**', '.logs/**', 'tsup.config.*', '**/*.bundled_*.mjs'],
+    ignores: [
+      'dist/**',
+      '*.log',
+      '.turbo/**',
+      '.logs/**',
+      '.stryker-tmp/**',
+      'tsup.config.*',
+      '**/*.bundled_*.mjs',
+    ],
   },
   {
     files: ['**/*.ts'],

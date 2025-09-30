@@ -27,7 +27,7 @@ Where reasonable, we should use standard, well-documented tooling and configurat
 
 ## Context
 
-- `pnpm analyze:outdated` - shows current outdated dependencies
+- `pnpm outdated` - shows current outdated dependencies
 - `pnpm info <package>` - shows latest version of a package
 
 ## Configs

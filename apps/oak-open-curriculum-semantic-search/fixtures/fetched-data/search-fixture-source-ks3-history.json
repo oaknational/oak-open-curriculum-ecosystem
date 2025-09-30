@@ -1,0 +1,338 @@
+{
+  "fetchedAt": "2025-09-28T05:40:45.162Z",
+  "keyStage": "ks3",
+  "subject": "history",
+  "sequencesSample": [
+    {
+      "sequenceSlug": "history-primary",
+      "years": [1, 2, 3, 4, 5, 6],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 1",
+          "keyStageSlug": "ks1"
+        },
+        {
+          "keyStageTitle": "Key Stage 2",
+          "keyStageSlug": "ks2"
+        }
+      ],
+      "phaseSlug": "primary",
+      "phaseTitle": "Primary",
+      "ks4Options": null
+    },
+    {
+      "sequenceSlug": "history-secondary-aqa",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": {
+        "title": "AQA",
+        "slug": "aqa"
+      }
+    },
+    {
+      "sequenceSlug": "history-secondary-edexcel",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": {
+        "title": "Edexcel",
+        "slug": "edexcel"
+      }
+    }
+  ],
+  "lessonsSample": [
+    {
+      "unitSlug": "11th-century-islamic-worlds-how-similar-were-the-regions-of-the-islamic-world",
+      "unitTitle": "11th-century Islamic worlds: how similar were the regions of the Islamic world?",
+      "lessons": [
+        {
+          "lessonSlug": "cordoba",
+          "lessonTitle": "Cordoba in the 11th century"
+        },
+        {
+          "lessonSlug": "baghdad",
+          "lessonTitle": "Baghdad in the 11th century"
+        },
+        {
+          "lessonSlug": "sicily",
+          "lessonTitle": "Sicily and other Islamic worlds in the 11th century"
+        }
+      ]
+    },
+    {
+      "unitSlug": "commonwealth-and-restoration-why-did-the-republican-experiment-fail",
+      "unitTitle": "The British Empire: why did it grow in the 17th and 18th centuries?",
+      "lessons": [
+        {
+          "lessonSlug": "the-growth-of-britains-economy-and-empire",
+          "lessonTitle": "The growth of Britain's economy and empire"
+        },
+        {
+          "lessonSlug": "englands-empire-at-the-beginning-of-the-long-eighteenth-century",
+          "lessonTitle": "England's Empire at the beginning of the 'long eighteenth century'"
+        },
+        {
+          "lessonSlug": "britains-empire-at-the-end-of-the-long-eighteenth-century",
+          "lessonTitle": "Britain's Empire at the end of the 'long eighteenth century'"
+        }
+      ]
+    },
+    {
+      "unitSlug": "decolonisation-how-similar-was-decolonisation-throughout-the-british-empire",
+      "unitTitle": "Decolonisation: how similar was decolonisation throughout the British Empire?",
+      "lessons": [
+        {
+          "lessonSlug": "decolonisation-in-the-caribbean",
+          "lessonTitle": "Decolonisation in the Caribbean"
+        },
+        {
+          "lessonSlug": "decolonisation-and-the-partition-of-india",
+          "lessonTitle": "Decolonisation and the partition of India"
+        },
+        {
+          "lessonSlug": "comparing-decolonisation-across-the-former-british-empire",
+          "lessonTitle": "Comparing decolonisation across the former British Empire"
+        },
+        {
+          "lessonSlug": "decolonisation-in-ireland-in-the-20th-century",
+          "lessonTitle": "Decolonisation in Ireland in the 20th century"
+        }
+      ]
+    }
+  ],
+  "unitsSample": [
+    {
+      "yearSlug": "year-7",
+      "yearTitle": "Year 7",
+      "units": [
+        {
+          "unitSlug": "11th-century-islamic-worlds-how-similar-were-the-regions-of-the-islamic-world",
+          "unitTitle": "11th-century Islamic worlds: how similar were the regions of the Islamic world?"
+        },
+        {
+          "unitSlug": "edward-is-conquests-what-stopped-unification-of-the-british-isles",
+          "unitTitle": "Edward I: What stopped Edward uniting all of Britain?"
+        },
+        {
+          "unitSlug": "england-under-henry-ii-how-successfully-did-henry-reassert-royal-authority",
+          "unitTitle": "England under Henry II: how successfully did Henry reassert royal authority?"
+        },
+        {
+          "unitSlug": "king-john-and-magna-carta-why-was-magna-carta-revived",
+          "unitTitle": "Magna Carta: how did Magna Carta survive?"
+        },
+        {
+          "unitSlug": "local-history-how-similar-were-medieval-lives-in-norwich",
+          "unitTitle": "Local history: how similar were medieval lives in Norwich?"
+        },
+        {
+          "unitSlug": "medieval-west-africa-why-was-medieval-mali-so-successful",
+          "unitTitle": "Medieval West Africa: why was medieval Mali so successful?"
+        },
+        {
+          "unitSlug": "medieval-women-what-can-we-learn-from-matilda-about-women-in-medieval-england",
+          "unitTitle": "Medieval women: what can we learn from Matilda about women in medieval England?"
+        },
+        {
+          "unitSlug": "the-black-death-and-the-silk-roads-how-connected-was-the-medieval-world",
+          "unitTitle": "The Black Death and the Silk Road: how connected was the medieval world?"
+        },
+        {
+          "unitSlug": "the-christian-church-how-completely-did-the-great-schism-transform-christendom",
+          "unitTitle": "The Christian Church: how completely did the Great Schism transform Christendom?"
+        },
+        {
+          "unitSlug": "the-crusades-did-europeans-go-on-crusade-to-capture-the-holy-land",
+          "unitTitle": "The Crusades: did Europeans go on crusade to capture the 'holy land'?"
+        },
+        {
+          "unitSlug": "the-norman-conquest-how-do-we-know-about-the-impact-of-the-conquest-on-england",
+          "unitTitle": "The Norman Conquest: how do we know about the impact of the Conquest on England?"
+        },
+        {
+          "unitSlug": "the-peasants-revolt-why-do-historians-disagree-about-its-causes",
+          "unitTitle": "The Peasants' Revolt: why do historians disagree about its causes?"
+        },
+        {
+          "unitSlug": "the-renaissance-what-do-the-artefacts-of-the-renaissance-tell-us-about-it",
+          "unitTitle": "The Renaissance: what do the artefacts of the Renaissance tell us about it?"
+        },
+        {
+          "unitSlug": "the-wars-of-the-roses-what-does-it-tell-us-about-fifteenth-century-england",
+          "unitTitle": "The Wars of the Roses: what does it tell us about fifteenth-century England?"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-8",
+      "yearTitle": "Year 8",
+      "units": [
+        {
+          "unitSlug": "commonwealth-and-restoration-why-did-the-republican-experiment-fail",
+          "unitTitle": "The British Empire: why did it grow in the 17th and 18th centuries?"
+        },
+        {
+          "unitSlug": "elizabeth-i-why-has-elizabeth-been-represented-so-differently",
+          "unitTitle": "Elizabeth I: why has Elizabeth been represented so differently?"
+        },
+        {
+          "unitSlug": "european-conquest-of-the-americas-why-was-its-impact-so-devastating",
+          "unitTitle": "European conquest of the Americas: why was its impact so devastating?"
+        },
+        {
+          "unitSlug": "glorious-revolution-why-did-whig-historians-call-it-glorious-and-bloodless",
+          "unitTitle": "The Glorious Revolution: how do historians' views of it differ?"
+        },
+        {
+          "unitSlug": "henry-viii-and-the-reformation-how-unusual-was-the-english-reformation",
+          "unitTitle": "Henry VIII and the Reformation: how unusual was the English Reformation?"
+        },
+        {
+          "unitSlug": "life-in-tudor-england-was-there-a-golden-age-for-the-poor",
+          "unitTitle": "Life in Tudor England: was there a 'Golden Age' for the poor?"
+        },
+        {
+          "unitSlug": "the-east-india-company-when-did-mughal-authority-collapse",
+          "unitTitle": "The East India Company: when did Mughal authority collapse?"
+        },
+        {
+          "unitSlug": "the-emergence-of-cabinet-government-why-did-walpole-become-prime-minister",
+          "unitTitle": "The emergence of cabinet government: why did Walpole become Prime Minister?"
+        },
+        {
+          "unitSlug": "the-english-civil-war-what-can-pamphlets-tell-us-about-17th-century-politics",
+          "unitTitle": "The English Civil War: what can pamphlets tell us about 17th century politics? "
+        },
+        {
+          "unitSlug": "the-enlightenment-what-was-the-enlightenment",
+          "unitTitle": "The Enlightenment: what was the Enlightenment?"
+        },
+        {
+          "unitSlug": "the-french-revolution-what-do-cartoons-tell-us-about-british-attitudes",
+          "unitTitle": "The French Revolution: How did Europe respond to the French Revolution?"
+        },
+        {
+          "unitSlug": "the-mughal-empire-how-important-was-violence-to-the-mughal-conquests-in-india",
+          "unitTitle": "The Mughal Empire: how important was violence to the Mughal conquests in India?"
+        },
+        {
+          "unitSlug": "transatlantic-slavery-how-were-west-african-societies-impacted",
+          "unitTitle": "Transatlantic Slavery: how were West African societies impacted?"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-9",
+      "yearTitle": "Year 9",
+      "units": [
+        {
+          "unitSlug": "decolonisation-how-similar-was-decolonisation-throughout-the-british-empire",
+          "unitTitle": "Decolonisation: how similar was decolonisation throughout the British Empire?"
+        },
+        {
+          "unitSlug": "interpreting-the-british-empire-how-has-it-been-commemorated-and-contested",
+          "unitTitle": "Interpreting the British Empire: how has it been commemorated and contested?"
+        },
+        {
+          "unitSlug": "post-war-britain-for-whom-did-the-united-kingdom-become-a-new-jerusalem",
+          "unitTitle": "Post-war Britain: for whom did the United Kingdom become a 'New Jerusalem'?"
+        },
+        {
+          "unitSlug": "the-british-empire-how-far-was-it-transformed-in-the-mid-nineteenth-century",
+          "unitTitle": "The British Empire: how far was it transformed in the mid-nineteenth century?"
+        },
+        {
+          "unitSlug": "the-haitian-revolution-what-was-its-role-in-the-abolition-of-the-slave-trade",
+          "unitTitle": "The Haitian Revolution: what was its role in the abolition of the slave trade? "
+        },
+        {
+          "unitSlug": "the-holocaust-what-was-the-holocaust",
+          "unitTitle": "The Holocaust: what was the Holocaust?"
+        },
+        {
+          "unitSlug": "the-industrial-revolution-did-industrialisation-revolutionise-peoples-lives",
+          "unitTitle": "The Industrial Revolution: did industrialisation revolutionise people's lives?"
+        },
+        {
+          "unitSlug": "thematic-study-how-has-the-role-of-women-in-british-society-changed",
+          "unitTitle": "Thematic study: how has the role of women in British society changed?"
+        },
+        {
+          "unitSlug": "the-russian-revolution-did-communism-completely-transform-russian-society",
+          "unitTitle": "The Russian Revolution: did communism completely transform Russian society? "
+        },
+        {
+          "unitSlug": "the-second-world-war-which-event-turned-the-tide-of-the-second-world-war",
+          "unitTitle": "WW2: which events turned the tide in the story of the Second World War? "
+        },
+        {
+          "unitSlug": "widening-the-franchise-who-gained-the-right-to-vote",
+          "unitTitle": "Widening the franchise: who gained the right to vote?"
+        },
+        {
+          "unitSlug": "womens-suffrage-what-do-sources-tell-us-about-womens-struggle-for-equality",
+          "unitTitle": "Women's suffrage: why did it take so long for women to get the vote in Britain?"
+        },
+        {
+          "unitSlug": "world-war-one-how-total-was-it-for-people-in-the-british-empire",
+          "unitTitle": "World War One: how 'total' was it for people in the British Empire?"
+        }
+      ]
+    }
+  ],
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Cordoba in the 11th century",
+      "scope": "lessons",
+      "url": "/teachers/lessons/cordoba",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "unitSlug": "11th-century-islamic-worlds-how-similar-were-the-regions-of-the-islamic-world"
+      }
+    },
+    {
+      "label": "Unit · Medieval West Africa",
+      "scope": "units",
+      "url": "/teachers/units/medieval-west-africa-why-was-medieval-mali-so-successful",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "years": [7],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · History secondary (AQA)",
+      "scope": "sequences",
+      "url": "/teachers/programmes/history-secondary-aqa",
+      "subject": "history",
+      "keyStage": "ks3",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"]
+      }
+    }
+  ]
+}

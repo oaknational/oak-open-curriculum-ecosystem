@@ -1,11 +1,24 @@
 'use client';
 
 import type { JSX, ChangeEvent } from 'react';
+import { OakRadioButton, OakRadioGroup } from '@oaknational/oak-components';
 import { LabeledInput, LabeledSelect } from './fields';
-import { KEY_STAGES, SUBJECTS } from '../../src/adapters/sdk-guards';
+import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../src/adapters/sdk-guards';
 import type { StructuredBody } from './structured-search.shared';
 
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
+
+const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{ value: StructuredBody['scope']; label: string }> = [
+  { value: 'all', label: 'All content' },
+  { value: 'units', label: 'Units' },
+  { value: 'lessons', label: 'Lessons' },
+  { value: 'sequences', label: 'Sequences' },
+];
+
+const PHASE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
+  { value: 'primary', label: 'Primary' },
+  { value: 'secondary', label: 'Secondary' },
+];
 
 export function ScopeField({
   value,
@@ -15,18 +28,28 @@ export function ScopeField({
   onChange: ChangeStructured;
 }): JSX.Element {
   return (
-    <LabeledSelect
+    <OakRadioGroup
+      name="structured-scope"
       label="Scope"
-      id="structured-scope"
       value={value}
-      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        const v = e.target.value;
-        if (v === 'units' || v === 'lessons') {
-          onChange({ scope: v });
+      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        const next = STRUCTURED_SCOPE_OPTIONS.find((option) => option.value === event.target.value);
+        if (next) {
+          onChange({ scope: next.value });
         }
       }}
-      options={['units', 'lessons']}
-    />
+      $gap="space-between-xs"
+      $flexWrap="wrap"
+    >
+      {STRUCTURED_SCOPE_OPTIONS.map((option) => (
+        <OakRadioButton
+          key={option.value}
+          id={`structured-scope-${option.value}`}
+          value={option.value}
+          label={option.label}
+        />
+      ))}
+    </OakRadioGroup>
   );
 }
 
@@ -64,7 +87,8 @@ export function SubjectField({
       id="structured-subject"
       value={value}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        onChange({ subject: e.target.value });
+        const next = e.target.value;
+        onChange({ subject: isSubject(next) ? next : undefined });
       }}
       options={SUBJECTS}
       includeAny
@@ -85,9 +109,31 @@ export function KeyStageField({
       id="structured-ks"
       value={value}
       onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-        onChange({ keyStage: e.target.value });
+        const next = e.target.value;
+        onChange({ keyStage: isKeyStage(next) ? next : undefined });
       }}
       options={KEY_STAGES}
+      includeAny
+    />
+  );
+}
+
+export function PhaseField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: ChangeStructured;
+}): JSX.Element {
+  return (
+    <LabeledSelect
+      label="Phase"
+      id="structured-phase"
+      value={value}
+      onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+        onChange({ phaseSlug: e.target.value });
+      }}
+      options={PHASE_OPTIONS}
       includeAny
     />
   );

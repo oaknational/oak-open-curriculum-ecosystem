@@ -9,9 +9,9 @@
     "**/*.test.ts",
     "**/*.spec.ts",
     "*.config.ts",
-    "scripts/**/*.ts",
+    "type-gen/**/*.ts",
     "bin/**/*.ts",
     "e2e-tests/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "e2e-tests/scripts/**"]
+  "exclude": ["node_modules", "dist", "e2e-tests/scripts/**", "docs/_typedoc_src/**"]
 }

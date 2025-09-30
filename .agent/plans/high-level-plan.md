@@ -14,14 +14,14 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
    - Acceptance: streaming framing defined and implemented; example Vercel deploy existent and documented and available for demos
 
 3. Plan MCP Hardening — Status: In Progress
-   - Plan: `.agent/plans/semantic-search-target-alignment-plan.md` (supersedes earlier protoplan)
+   - Plan: `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
    - Next Steps: delegate `/mcp` GET/POST to `StreamableHTTPServerTransport`, move health checks, add transport/tool regression tests, verify compatibility with OpenAI Connector, Gemini, ElevenLabs
    - Acceptance: MCP server fully aligned with official spec, transport verified against target clients, regression suite in place
 
 4. Semantic Search Back-End Alignment — Status: Ready (requires plan refresh)
    - Plans:
-     - `.agent/plans/semantic-search-target-alignment-plan.md` — canonical target architecture & compliance tasks
-     - `.agent/plans/semantic-search-api-plan.md` — **stale**, update to reflect the definitive guide and align with the target plan
+     - `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md` — canonical target architecture & compliance tasks
+     - `.agent/plans/semantic-search/semantic-search-api-plan.md` — **stale**, update to reflect the definitive guide and align with the target plan
      - Legacy docs (e.g. `semantic-search-service-plan.md`, `semantic-search-documentation-plan.md`) need review/retirement once the updated plan lands
    - Acceptance: Back-end implementation matches the definitive guide (indices, RRF queries, APIs); indexes populated; services deployed and reachable; end-to-end tests pass; documentation updated and onboarding flows updated.
 
@@ -32,7 +32,7 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
    - Acceptance: Use Clerk, doc in research.
 
 7. Semantic Search Front-End & UI Plan — Status: Planned (requires update)
-   - Plan: `.agent/plans/semantic-search-ui-plan.md` — **stale**, revise to align with the target back-end plan and definitive guide
+   - Plan: `.agent/plans/semantic-search/semantic-search-ui-plan.md` — **stale**, revise to align with the target back-end plan and definitive guide
    - Acceptance: search UI exists, aligns with new API surface, and passes accessibility/usability checks; documentation updated and onboarding flows updated.
 
 8. Serverless Hosting Plan (Cloudflare Workers) — Status: Deferred
@@ -52,7 +52,11 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
 ## Milestones
 
 - M1: Typed MCP tools available from SDK — ✅ DONE
-- M2: Broad MCP platform compatibility — 🔜 In progress via MCP Hardening plan
-- M3: Curriculum MCP integrates semantic search tools — Pending backend/frontend alignment updates
+- M2: Broad MCP platform compatibility — ✅ DONE
 - M4: Remote Streaming HTTP live (e.g., Vercel) — ✅ DONE
-- M5: Cloudflare Workers provider parity and preview deploy — ⏸ Deferred
+- M3: Semantic Search Back-End Alignment - Underway via ./semantic-search-target-alignment-plan.md
+- M5: Curriculum MCP integrates semantic search tools — Pending backend/frontend alignment updates
+
+### Deferred
+
+- D1: Cloudflare Workers provider parity and preview deploy — ⏸ Deferred

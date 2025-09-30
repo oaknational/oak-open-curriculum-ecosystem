@@ -1,30 +1,60 @@
-import type { LessonsIndexDoc, UnitsIndexDoc, SubjectSlug, KeyStage } from '../../types/oak';
+import type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+  KeyStage,
+  SequenceFacet,
+  SearchFacets,
+} from '../../types/oak';
+import type { estypes } from '@elastic/elasticsearch';
 
 export interface StructuredQuery {
-  scope: 'units' | 'lessons';
+  scope: 'units' | 'lessons' | 'sequences';
   text: string;
-  subject?: SubjectSlug;
+  subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
   minLessons?: number;
+  phaseSlug?: string;
   size?: number;
   from?: number;
   highlight?: boolean;
+  includeFacets?: boolean;
 }
 
 export interface UnitResult {
   id: string;
   rankScore: number;
-  unit: UnitsIndexDoc | null;
+  unit: SearchUnitsIndexDoc | null;
   highlights: string[];
 }
 
 export interface LessonResult {
   id: string;
   rankScore: number;
-  lesson: LessonsIndexDoc;
+  lesson: SearchLessonsIndexDoc;
   highlights: string[];
 }
 
+export interface SequenceResult {
+  id: string;
+  rankScore: number;
+  sequence: SearchSequenceIndexDoc;
+}
+
+export type SearchAggregations = Record<string, estypes.AggregationsAggregate>;
+
+export interface HybridSearchMeta {
+  total: number;
+  took: number;
+  timedOut: boolean;
+  aggregations?: SearchAggregations;
+  facets?: SearchFacets;
+}
+
 export type HybridSearchResult =
-  | { scope: 'units'; results: UnitResult[] }
-  | { scope: 'lessons'; results: LessonResult[] };
+  | (HybridSearchMeta & { scope: 'units'; results: UnitResult[] })
+  | (HybridSearchMeta & { scope: 'lessons'; results: LessonResult[] })
+  | (HybridSearchMeta & { scope: 'sequences'; results: SequenceResult[] });
+
+export type { SequenceFacet, SearchFacets };

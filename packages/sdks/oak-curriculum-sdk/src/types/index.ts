@@ -8,10 +8,6 @@ export type { OpenAPI3 } from './openapi.js';
 export type { paths } from './generated/api-schema/api-paths-types';
 export type { components } from './generated/api-schema/api-paths-types';
 
-// MCP tools are now in generated/api-schema/mcp-tools
-
-// Note: Validators removed - validation now happens via schema directly
-
 // Re-export path operations - Note: PATH_OPERATIONS is the const, PathOperation is the type
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './generated/api-schema/path-parameters.js';
 export type { PathOperation, OperationId } from './generated/api-schema/path-parameters';
@@ -30,7 +26,34 @@ export {
 } from './helpers.js';
 
 // Hybrid search index types
-export type { LessonsIndexDoc, UnitsIndexDoc, UnitRollupDoc, SubjectSlug } from './search-index.js';
+export type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+  SearchCompletionSuggestPayload,
+} from './search-index.js';
+
+// Hybrid search facet types and schemas
+export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index.js';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+} from './generated/zod/search/output/index.js';
 
 // Response-shape type guards for search-related endpoints
-export { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './search-response-guards.js';
+export {
+  isUnitsGrouped,
+  isLessonGroups,
+  isTranscriptResponse,
+  isLessonSummary,
+  isUnitSummary,
+  isSubjectSequences,
+} from './search-response-guards.js';
+export type {
+  SearchLessonSummary,
+  SearchUnitSummary,
+  SearchSubjectSequences,
+} from './search-response-guards.js';

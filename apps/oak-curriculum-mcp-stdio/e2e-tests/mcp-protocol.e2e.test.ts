@@ -10,6 +10,23 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 // Type for MCP content messages
 type McpContent = { type: string; text?: string }[];
 
+function expectSuccessfulResult(result: Awaited<ReturnType<Client['callTool']>>) {
+  expect(result).toBeDefined();
+  expect(result.isError).not.toBe(true);
+  const contentList = result.content as McpContent | undefined;
+  if (!contentList || contentList.length === 0) {
+    throw new Error('Tool response did not include content');
+  }
+  const [content] = contentList;
+  expect(content.type).toBe('text');
+  if (typeof content.text !== 'string') {
+    throw new Error('Tool response content was not textual');
+  }
+  const parsed = JSON.parse(content.text) as unknown;
+  expect(parsed).toBeTruthy();
+  return parsed;
+}
+
 describe('MCP Protocol E2E', () => {
   let client: Client;
   let transport: StdioClientTransport;
@@ -75,67 +92,54 @@ describe('MCP Protocol E2E', () => {
 
   describe('Tool Execution', () => {
     it('should execute tool without parameters', async () => {
-      const result = await client.callTool({
-        name: 'get-key-stages',
-        arguments: {},
-      });
-
-      expect(result).toBeDefined();
-      expect(result.content).toBeDefined();
-      expect((result.content as McpContent).length).toBeGreaterThan(0);
-
-      // Result should be text content with JSON
-      const content = (result.content as McpContent)[0];
-      expect(content.type).toBe('text');
-
-      // Should be able to parse as JSON
-      const data = JSON.parse(content.text ?? '{}') as unknown;
-      expect(data).toBeDefined();
+      const payload = expectSuccessfulResult(
+        await client.callTool({
+          name: 'get-key-stages',
+          arguments: {},
+        }),
+      );
+      const dataArray = Array.isArray((payload as { data?: unknown }).data)
+        ? (payload as { data: unknown[] }).data
+        : payload;
+      expect(Array.isArray(dataArray)).toBe(true);
+      expect((dataArray as unknown[]).length).toBeGreaterThan(0);
     });
 
     it('should execute tool with parameters', async () => {
-      const result = await client.callTool({
-        name: 'get-search-lessons',
-        arguments: {
-          q: 'fractions',
-        },
-      });
-
-      expect(result).toBeDefined();
-      expect(result.content).toBeDefined();
-      expect((result.content as McpContent).length).toBeGreaterThan(0);
-
-      const content = (result.content as McpContent)[0];
-      expect(content.type).toBe('text');
-
-      // Should be able to parse as JSON
-      const data = JSON.parse(content.text ?? '{}') as unknown;
-      expect(data).toBeDefined();
+      const payload = expectSuccessfulResult(
+        await client.callTool({
+          name: 'get-search-lessons',
+          arguments: {
+            q: 'fractions',
+          },
+        }),
+      ) as { data?: unknown };
+      expect(Array.isArray(payload.data)).toBe(true);
     });
 
     it('should handle optional parameters correctly', async () => {
       // Call with only required parameters
-      const result = await client.callTool({
-        name: 'get-sequences-units',
-        arguments: {
-          sequence: 'english-primary-ks1',
-        },
-      });
-
-      expect(result).toBeDefined();
-      expect(result.content).toBeDefined();
+      const basePayload = expectSuccessfulResult(
+        await client.callTool({
+          name: 'get-sequences-units',
+          arguments: {
+            sequence: 'english-primary',
+          },
+        }),
+      ) as { data?: unknown };
+      expect(Array.isArray(basePayload.data)).toBe(true);
 
       // Call with optional parameters
-      const resultWithOptional = await client.callTool({
-        name: 'get-sequences-units',
-        arguments: {
-          sequence: 'english-primary-ks1',
-          year: '1',
-        },
-      });
-
-      expect(resultWithOptional).toBeDefined();
-      expect(resultWithOptional.content).toBeDefined();
+      const optionalPayload = expectSuccessfulResult(
+        await client.callTool({
+          name: 'get-sequences-units',
+          arguments: {
+            sequence: 'english-primary',
+            year: '1',
+          },
+        }),
+      ) as { data?: unknown };
+      expect(Array.isArray(optionalPayload.data)).toBe(true);
     });
   });
 

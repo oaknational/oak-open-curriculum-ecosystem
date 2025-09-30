@@ -16,6 +16,8 @@ build/
 # Testing
 coverage/
 *.lcov
+playwright-report/
+test-results/
 
 # Local env files
 .env*

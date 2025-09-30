@@ -7,7 +7,6 @@ packages:
   - packages/libs/logger
   - packages/libs/storage
   - packages/libs/transport
-  - packages/libs/mcp-server-kit
   - packages/sdks/oak-curriculum-sdk
   - packages/providers/mcp-providers-node
 

@@ -17,7 +17,6 @@ export default defineConfig({
         '**/*.config.*',
         '**/*.test.*',
         '**/*.spec.*',
-        '**/index.ts', // Often just re-exports
       ],
     },
     include: [
@@ -25,8 +24,8 @@ export default defineConfig({
       'src/**/*.spec.ts',
       'tests/**/*.test.ts',
       'tests/**/*.spec.ts',
-      'scripts/**/*.test.ts', // Add scripts directory
-      'scripts/**/*.spec.ts',
+      'type-gen/**/*.test.ts',
+      'type-gen/**/*.spec.ts',
     ],
     exclude: ['node_modules', 'dist', 'coverage', '**/*.e2e.test.ts'],
   },
