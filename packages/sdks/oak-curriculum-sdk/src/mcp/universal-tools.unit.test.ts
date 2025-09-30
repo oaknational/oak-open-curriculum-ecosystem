@@ -167,6 +167,30 @@ describe('createUniversalToolExecutor', () => {
     expect(executeMcpTool).not.toHaveBeenCalled();
   });
 
+  it('rejects plain string arguments for get-search-lessons', async () => {
+    const executeMcpTool = vi.fn();
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    const result = await callUniversalTool('get-search-lessons', 'trees');
+
+    expect(result.isError).toBe(true);
+    const message = result.content[0]?.type === 'text' ? result.content[0].text : '';
+    expect(message).toContain('Expected object, received string');
+    expect(executeMcpTool).not.toHaveBeenCalled();
+  });
+
+  it('accepts structured arguments for get-search-lessons', async () => {
+    const executeMcpTool = vi.fn().mockResolvedValue({ data: { data: [] } });
+    const executeOpenAiTool = vi.fn();
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+
+    const result = await callUniversalTool('get-search-lessons', { q: 'trees' });
+
+    expect(result.isError).toBeUndefined();
+    expect(executeMcpTool).toHaveBeenCalledWith('get-search-lessons', { q: 'trees' });
+  });
+
   it('returns an error when subject cannot be standardised', async () => {
     const executeMcpTool = vi.fn();
     const executeOpenAiTool = vi.fn();

@@ -8,6 +8,7 @@ import type { McpToolsModule } from '../tools/index.js';
 import { createInMemoryStorage, createNodeClock } from '@oaknational/mcp-providers-node';
 import { createOakPathBasedClient } from '@oaknational/oak-curriculum-sdk';
 import { appendToLogFile, getLogFilePath } from './file-reporter.js';
+import { resolveToolExecutors } from './stub-executors.js';
 // Removed conflicting import
 
 function mapLogLevelToIndex(level: string): number {
@@ -189,8 +190,10 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
   }
   const client = createOakPathBasedClient(serverConfig.apiKey);
 
+  const toolExecutors = resolveToolExecutors();
+
   // Create MCP tools module with injected client
-  const mcpOrgan = createMcpToolsModule({ client });
+  const mcpOrgan = createMcpToolsModule({ client, ...toolExecutors });
 
   return {
     logger,
