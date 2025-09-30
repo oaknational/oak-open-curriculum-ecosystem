@@ -8,7 +8,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { parseCsv } from './env.js';
 import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
-import { registerHandlers, createMcpHandler } from './handlers.js';
+import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
 import { registerOpenAiConnectorHandlers } from './openai/connector.js';
 import { setupOAuthMetadata, setupLocalAuthorizationServer } from './oauth-metadata.js';
 import { loadRootEnv } from '@oaknational/mcp-env';
@@ -42,7 +42,11 @@ function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler
   });
 }
 
-export function createApp(): express.Express {
+export interface CreateAppOptions {
+  readonly toolHandlerOverrides?: ToolHandlerOverrides;
+}
+
+export function createApp(options?: CreateAppOptions): express.Express {
   const app = express();
   // eslint-disable-next-line import-x/no-named-as-default-member -- allow since we already import the default express (no treeshaking advantage)
   app.use(express.json({ limit: '1mb' }));
@@ -50,7 +54,7 @@ export function createApp(): express.Express {
   const { mode, allowedHosts, allowedOrigins } = readSecurityEnv();
   const corsMw = applySecurity(app, mode, allowedHosts, allowedOrigins);
 
-  const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw);
+  const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw, options);
   // Static assets for favicon/logo (works locally and on Vercel)
   mountStaticAssets(app);
   addRootLandingPage(app);
@@ -78,10 +82,11 @@ export function createApp(): express.Express {
 function initializeCoreEndpoints(
   app: express.Express,
   corsMw: express.RequestHandler,
+  options?: CreateAppOptions,
 ): { transport: StreamableHTTPServerTransport; ready: Promise<void> } {
   const { transport, server } = initializeCoreMcpServer();
   // Register tools BEFORE connecting the transport to satisfy MCP SDK constraints
-  registerHandlers(server);
+  registerHandlers(server, options?.toolHandlerOverrides);
   const serverReady = server.connect(transport);
   // Expose resource metadata immediately
   setupOAuthMetadata(app, corsMw);

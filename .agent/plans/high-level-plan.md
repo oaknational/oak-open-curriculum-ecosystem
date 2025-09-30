@@ -49,13 +49,22 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
 - At the moment we just provide tools, but there are other categories of MCP primitives that we could benefit from, see <https://modelcontextprotocol.io/docs/learn/server-concepts> for more details. This may require reclassifying some tools as resources. The prompts may be useful in the semantic search use case, so this work may need to be moved up.
 - Acceptance: tools/resources/prompts exposed via MCP; end-to-end tests pass
 
+11. Contract Testing with API Schema Evolution — Status: Planned (P1)
+
+- Plan: `.agent/plans/contract-testing-schema-evolution-plan.md`
+- Scope: Automated contract testing validates the Cardinal Rule—when Oak Curriculum API schema evolves, `pnpm type-gen` followed by `pnpm build` produces working artefacts across SDK, MCP servers, and Semantic Search without manual code changes
+- Implementation: 7 synthetic schema evolution scenarios (field additions/removals, type changes, enum updates, new endpoints, parameter modifications, response shape changes, breaking changes); four-stage violation detection (AST analysis, git diff, runtime smoke tests, aggregated reporting); working tree validation with automated restoration
+- Key deliverables: Test harness invokable via `pnpm test:contract`; synthetic schema repository with baseline + scenarios; schema sync utility (`refresh-scenarios.ts`) for drift detection; structured JSON/markdown reports; contribution guide; ADR documenting strategy
+- Acceptance: All 7 scenarios pass with clean violation detection; test harness executes in ≤8 minutes; repository state restored reliably; contribution guide validated by creating new scenario; ADR published; README and onboarding docs updated; fail-fast local execution operational
+
 ## Milestones
 
 - M1: Typed MCP tools available from SDK — ✅ DONE
 - M2: Broad MCP platform compatibility — ✅ DONE
 - M4: Remote Streaming HTTP live (e.g., Vercel) — ✅ DONE
-- M3: Semantic Search Back-End Alignment - Underway via ./semantic-search-target-alignment-plan.md
+- M3: Semantic Search Back-End Alignment — Underway via `./semantic-search/semantic-search-target-alignment-plan.md`
 - M5: Curriculum MCP integrates semantic search tools — Pending backend/frontend alignment updates
+- M6: Contract Testing — Schema evolution validation automated via synthetic scenarios, fail-fast local execution, future CI integration planned (see `./contract-testing-schema-evolution-plan.md`)
 
 ### Deferred
 

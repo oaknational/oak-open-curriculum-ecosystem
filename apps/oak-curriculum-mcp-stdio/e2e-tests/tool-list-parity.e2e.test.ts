@@ -3,6 +3,8 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
 
+process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
+
 describe('Tool list parity with SDK', () => {
   let client: Client;
   let transport: StdioClientTransport;
