@@ -6,5 +6,8 @@ CHANGELOG.md
 # Generated
 packages/sdks/oak-curriculum-sdk/docs/api-md/**
 
+# Playwright test results
+**/test-results/**
+
 # Stryker
 .stryker-tmp
