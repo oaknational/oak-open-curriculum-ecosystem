@@ -52,6 +52,7 @@ This file is an index of architectural decisions made during the development of 
 - [ADR-045: Hybrid Theming Bridge for Oak Components](045-hybrid-theming-bridge-for-oak-components.md)
 - [ADR-046: OpenAI Connector Facades in Streamable HTTP](046-openai-connector-facades-in-streamable-http.md)
 - [ADR-047: Canonical URL Generation at Type-Gen Time](047-canonical-url-generation-at-typegen-time.md)
+- [ADR-048: Shared Parse Schema Helper](048-shared-parse-schema-helper.md)
 
 ## Key Architectural Decisions
 

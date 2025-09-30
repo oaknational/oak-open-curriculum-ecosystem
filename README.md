@@ -1,187 +1,110 @@
-# Oak Notion MCP Servers
+# Oak MCP Ecosystem
 
-A collection of [Model Context Protocol (MCP)](https://modelcontextprotocol.org) servers and supporting frameworks and libraries that provide AI assistants such as Codex, Claude, and Gemini with access to various data sources:
+This monorepo contains Oak National Academy’s Model Context Protocol (MCP) ecosystem:
 
-- Oak Open Curriculum API (read-only access), via the Oak Open Curriculum SDK
-- Notion (read-only access) - this is primarily a development and design tool, making it easier to conceptualise what is specific to a given server and what can and should be extracted into shared libraries
+- **`packages/sdks/oak-curriculum-sdk`** – the generated TypeScript SDK for the Oak Open Curriculum API. It exports runtime clients, Zod schemas, MCP tool metadata, and the shared `parseSchema` helper that validates every request/response boundary.
+- **`apps/oak-open-curriculum-semantic-search`** – a Next.js App Router workspace that indexes curriculum content into Elasticsearch Serverless and serves hybrid (lexical + semantic) search, suggestions, admin tooling, and telemetry.
+- **`apps/oak-curriculum-mcp-*`** – MCP servers (stdio and streamable HTTP) that surface the SDK to AI assistants such as Codex, Claude, and Gemini.
+- **Supporting libraries** under `packages/libs/` for logging, configuration, storage, and transport.
 
-## 🧭 Architecture
+If the curriculum API changes, run `pnpm type-gen`. The SDK, MCP tool catalogues, search validators, and docs regenerate automatically and continue to rely on the shared parsing helpers without manual updates.
 
-This monorepo uses a standard pnpm + Turborepo layout:
+## Architecture Overview
 
-- `apps/` – runnable applications (MCP servers)
-- `packages/libs/` – runtime-adaptive libraries (`@oaknational/mcp-logger`, `@oaknational/mcp-env`, `@oaknational/mcp-storage`, `@oaknational/mcp-transport`)
+| Directory        | Purpose                                                         |
+| ---------------- | --------------------------------------------------------------- |
+| `apps/`          | MCP servers and the Semantic Search web app                     |
+| `packages/sdks/` | Generated SDKs (currently the Oak Curriculum SDK)               |
+| `packages/libs/` | Shared libraries for logging, configuration, storage, transport |
+| `docs/`          | Developer documentation, onboarding guides, ADRs                |
 
-### Architectural Decision Records (ADRs)
+Architectural decisions are recorded as ADRs in [docs/architecture/architectural-decisions/](docs/architecture/architectural-decisions/). ADR-048 documents the shared parsing helper pattern introduced with the new `parseSchema` function.
 
-Key architectural decisions are documented as ADRs. [View all ADRs →](docs/architecture/architectural-decisions/)
+## Quick Start
 
-## Features (Notion example)
+1. **Clone & install**
 
-- 🔍 **Search** across your Notion workspace
-- 📊 **List and query** databases with filters and sorting
-- 📄 **Read page content** including all block types
-- 👥 **List workspace users** with automatic email scrubbing
-- 🔒 **Privacy-first** - Automatic PII scrubbing, read-only access
-- 🚀 **High performance** - TypeScript, ESM-only, tree-shakeable
+   ```bash
+   git clone https://github.com/oaknational/oak-mcp-ecosystem.git
+   cd oak-mcp-ecosystem
+   pnpm install
+   ```
 
-## Installation & Setup (Notion example; packages not published yet)
+2. **Read the onboarding guide** – [docs/development/onboarding.md](docs/development/onboarding.md) links the key READMEs, GO cadence, and validation tooling.
 
-### Prerequisites
+3. **Configure environment variables**
 
-- Node.js >= 22.0.0
-- A [Notion integration](https://www.notion.so/my-integrations) with read access to your workspace
+   ```bash
+   cp .env.example .env
+   # populate OAK_API_KEY, ELASTICSEARCH_*, SEARCH_API_KEY, etc.
+   ```
 
-### Oak Curriculum MCP Server Config Examples
+   Each workspace README provides its own `.env.local` hints.
 
-For now, we are using simple bearer token authentication for development. In production, use OAuth (see app README for discovery endpoints and auth notes).
+4. **Regenerate types & run quality gates**
 
-> **Canonical transport:** All HTTP clients must target `/mcp` and send `Accept: application/json, text/event-stream` on every POST. The server returns HTTP 406 if either media type is missing. The legacy `/openai_connector` path is a short-lived alias that delegates to the same tool catalogue and will be removed once clients migrate.
+   ```bash
+   pnpm make   # install → type-gen → build → type-check → doc-gen → lint → format
+   pnpm qg     # format-check → type-check → lint → markdownlint → test suites → smoke
+   ```
 
-```json
-{
-  "mcpServers": {
-    "oak-curriculum-alpha": {
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp",
-      "headers": {
-        "Authorization": "Bearer ${SECRET_TOKEN}"
-      }
-    }
-  }
-}
-```
+5. **Explore the workspaces**
+   - `packages/sdks/oak-curriculum-sdk/README.md` – SDK usage, MCP tool generation, shared parsing helper guidance.
+   - `apps/oak-open-curriculum-semantic-search/README.md` – indexing pipeline, admin endpoints, zero-hit observability, hybrid search contracts.
+   - `apps/oak-curriculum-mcp-stdio/` & `apps/oak-curriculum-mcp-streamable-http/` – running MCP servers locally or via Vercel.
 
-### Configure Claude Desktop (Notion example)
-
-Add to your Claude Desktop settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
-
-```json
-{
-  "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["oak-notion-mcp"],
-      "env": {
-        "NOTION_API_KEY": "secret_your_actual_key_here"
-      }
-    }
-  }
-}
-```
-
-Alternatively, for local STDIO usage with Cursor or Claude Desktop, see the per‑app READMEs. Example for Cursor:
-
-```json
-{
-  "command": "pnpm",
-  "args": ["exec", "tsx", "apps/oak-curriculum-mcp-stdio/bin/oak-curriculum-mcp.ts"],
-  "env": { "OAK_API_KEY": "${OAK_API_KEY}", "LOG_LEVEL": "info" }
-}
-```
-
-**Security tip**: Use environment variables instead of hardcoding keys:
-
-```json
-{
-  "mcpServers": {
-    "notion": {
-      "command": "npx",
-      "args": ["oak-notion-mcp"],
-      "env": {
-        "NOTION_API_KEY": "${NOTION_API_KEY}"
-      }
-    }
-  }
-}
-```
-
-## Development
-
-This is a pnpm workspaces monorepo, using Turbo for task execution.
-
-This repo is optimised for working with agentic AI assistants, see [below](#making-the-most-of-agentic-ai-assistants).
-
-### Getting Started
+## Key Commands (root)
 
 ```bash
-# Clone and install
-git clone https://github.com/oaknational/oak-mcp-ecosystem.git
-cd oak-mcp-ecosystem
-pnpm install
-
-# Set up environment
-cp .env.example .env
-# Add your NOTION_API_KEY and/or OAK_API_KEY to .env
-
-# Build and validate
-pnpm make   # install, type-gen, build, doc-gen, format, markdownlint, lint --fix
-pnpm qg     # format-check, type-check, lint, markdownlint-check, test, test:e2e
-
-# Deploy (Vercel)
-# Ensure `apps/oak-curriculum-mcp-streamable-http/vercel.json` and envs are configured.
-# After deploy, verify health endpoints and smoke tests described in the app README.
+pnpm install        # Install dependencies
+pnpm type-gen       # Regenerate SDK + MCP artefacts from OpenAPI
+pnpm build          # Build all workspaces
+pnpm type-check     # Type-check apps and packages
+pnpm doc-gen        # Generate TypeDoc/OpenAPI/markdown/AI docs
+pnpm lint -- --fix  # Lint and auto-fix where possible
+pnpm test           # Run unit + integration tests
+pnpm test:ui        # Run Playwright suites
+pnpm test:e2e       # Run end-to-end tests
+pnpm dev:smoke      # Local smoke harness for MCP servers
+pnpm make           # Full pipeline (install → type-gen → build → docs → lint → format)
+pnpm qg             # Quality gate (format-check → type-check → lint → markdownlint → tests → smoke)
 ```
 
-### Available Commands
+## Type Safety & Validation
 
-#### In the root of the monorepo
+- The SDK emits generated Zod schemas for curriculum responses, search responses, and request parameter maps.
+- `parseSchema`, `parseWithCurriculumSchema`, `parseEndpointParameters`, and `parseSearchResponse` wrap `schema.safeParse`, returning typed `ValidationResult` objects without manual assertions.
+- MCP servers, the Semantic Search app, and admin tooling import these helpers—no consumer duplicates schema knowledge. ADR-048 formalises this shared pattern.
 
-From the repo root, via Turbo:
+## Documentation & Onboarding
 
-```bash
-# Development
-pnpm install        # Setup
-pnpm type-gen       # Type generation
-pnpm build          # Build
-pnpm type-check     # Type check
-pnpm doc-gen        # Documentation generation for public APIs
-pnpm format:root    # Format code with Prettier
-pnpm markdownlint:root    # Markdown lint
-pnpm lint -- --fix  # Lint
-pnpm test           # Unit and integration tests
-pnpm test:ui        # UI tests
-pnpm test:e2e       # E2E tests
-pnpm dev:smoke      # Local smoke tests
-pnpm check          # Clean all build products, then run all of the above
-
-pnpm outdated       # Check for outdated dependencies
-```
-
-### Making the Most of Agentic AI Assistants
-
-[TBD]
+- [docs/development/onboarding.md](docs/development/onboarding.md) – first-stop checklist for new developers and AI assistants.
+- [docs/README.md](docs/README.md) – architecture and development index.
+- Workspace READMEs (SDK + Semantic Search) explain local setup, admin workflows, and validation flow.
 
 ## Contributing
 
-This is a pre-release version of the project, as such we are not accepting contributions at this time. Please watch the repository for updates.
+We are iterating internally but welcome interest. Before starting work:
 
-1. Read our [Contributing Guide](CONTRIBUTING.md)
-2. Follow the [Development Guide](docs/development/README.md)
-3. Use [Conventional Commits](https://www.conventionalcommits.org/)
-4. Ensure all tests pass before submitting PRs
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for workflow, commit conventions, and helper usage expectations.
+2. Review [GO.md](GO.md) for the grounding cadence.
+3. Keep documentation close to your changes—onboarding, workspace READMEs, and ADRs should stay current.
 
-## Security and Privacy
+Quality gate checklist:
 
-We aim to avoid security and privacy issues by trying to:
+```bash
+pnpm format
+pnpm type-check
+pnpm lint
+pnpm test
+pnpm doc-gen
+```
 
-- Never log or expose API keys
-- Automatically scrub PII (emails)
-- Ensure read-only access to Notion (no write operations)
+## Support & Licensing
 
-If you find a security issue, see the [security policy](SECURITY.md).
+- 📖 Documentation – [docs/README.md](docs/README.md)
+- 🐛 Issues – <https://github.com/oaknational/oak-mcp-ecosystem/issues>
+- 💬 Discussions – <https://github.com/oaknational/oak-mcp-ecosystem/discussions>
+- 📄 Licence – MIT (see [LICENSE](LICENSE)) – Oak branding remains protected; curriculum data uses the [Open Government Licence](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
-## Licensing
-
-The code in this repository is under the MIT License - see [LICENSE](LICENSE) for details. All logos and branding remain the property of Oak National Academy. For further information, please see [https://www.thenational.academy/legal/copyright-notice](https://www.thenational.academy/legal/copyright-notice).
-
-Oak's curriculum data is provided under an [Open Government License](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
-
-## Support
-
-- 📖 [Documentation](docs/README.md)
-- 🐛 [Report Issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
-- 💬 [Discussions](https://github.com/oaknational/oak-mcp-ecosystem/discussions)
-
----
-
-Built with ❤️ by [Oak National Academy](https://www.thenational.academy/)
+Built with ❤️ by [Oak National Academy](https://www.thenational.academy/).

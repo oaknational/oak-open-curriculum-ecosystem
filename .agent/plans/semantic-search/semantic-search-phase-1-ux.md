@@ -151,15 +151,15 @@ Phase 1 keeps the design system aligned with product intent by:
 22. ACTION [PENDING]: Update contributor guidance and validation usage docs to highlight the new parsing helpers and generated search scope utilities.
 23. REVIEW [PENDING]: Share follow-up recommendations with UX and functionality streams based on validation findings.
 24. GROUNDING [PENDING]: read GO.md and follow all instructions.
-25. ACTION [PENDING]: Define the Oak status page UX contract (layout, content blocks, accessibility) for a minimal but polished release.
-26. REVIEW [PENDING]: Cross-check the status page blueprint with architecture guidance and document references for implementation.
-27. ACTION [PENDING]: Implement the minimal status page shell and wire it to live health signals with snapshot/axe coverage.
-28. REVIEW [PENDING]: Run Playwright + axe for the status page across target breakpoints and record artefacts in the plan.
-29. QUALITY-GATE [PENDING]: Add status page coverage to `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and confirm green runs.
+25. ACTION [PENDING]: Map admin workflows for managing Elastic indexes, rollups, ingest jobs, and re-index scheduling within the UX plan.
+26. REVIEW [PENDING]: Validate admin control requirements with engineering stakeholders and capture dependencies or blockers.
+27. ACTION [PENDING]: Implement admin UI controls for index creation, data ingestion toggles, and feedback surfaces tied to backend orchestration.
+28. REVIEW [PENDING]: Ensure admin flows expose progress/error states, updating Playwright/axe artefacts where needed.
+29. QUALITY-GATE [PENDING]: Extend targeted test suites (`pnpm -C apps/oak-open-curriculum-semantic-search test`, relevant Playwright specs) to cover new admin workflows.
 30. GROUNDING [PENDING]: read GO.md and follow all instructions.
-31. ACTION [PENDING]: Map admin workflows for managing Elastic indexes, rollups, ingest jobs, and re-index scheduling within the UX plan.
-32. REVIEW [PENDING]: Validate admin control requirements with engineering stakeholders and capture dependencies or blockers.
-33. ACTION [PENDING]: Implement admin UI controls for index creation, data ingestion toggles, and feedback surfaces tied to backend orchestration.
-34. REVIEW [PENDING]: Ensure admin flows expose progress/error states, updating Playwright/axe artefacts where needed.
-35. QUALITY-GATE [PENDING]: Extend targeted test suites (`pnpm -C apps/oak-open-curriculum-semantic-search test`, relevant Playwright specs) to cover new admin workflows.
+31. ACTION [PENDING]: Define the Oak status page UX contract (layout, content blocks, accessibility) for a minimal but polished release.
+32. REVIEW [PENDING]: Cross-check the status page blueprint with architecture guidance and document references for implementation.
+33. ACTION [PENDING]: Implement the minimal status page shell and wire it to live health signals with snapshot/axe coverage.
+34. REVIEW [PENDING]: Run Playwright + axe for the status page across target breakpoints and record artefacts in the plan.
+35. QUALITY-GATE [PENDING]: Add status page coverage to `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and confirm green runs.
 36. GROUNDING [PENDING]: read GO.md and follow all instructions.

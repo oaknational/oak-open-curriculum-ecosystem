@@ -30,7 +30,7 @@ All admin/status routes require `x-api-key: ${SEARCH_API_KEY}`.
 - **Suggestions**: Completion + `search_as_you_type` endpoints with cache tagging tied to `SEARCH_INDEX_VERSION`.
 - **Observability**: Structured logging for ingestion batches, zero-hit events, cache version rotation; optional webhook for zero hits.
 - **Caching**: Deterministic Data Cache keys `${SEARCH_INDEX_VERSION}|hash(payload)` with tag-based invalidation.
-- **Type safety**: Zod schema validation, generated SDK types, no unsafe assertions.
+- **Type safety**: Generated SDK types + shared `parseSchema` helper for requests/responses, no unsafe assertions.
 - **Documentation**: Authored guides in `docs/`, generated TypeDoc under `docs/api/`, OpenAPI served at `/api/openapi.json`.
 
 ---
