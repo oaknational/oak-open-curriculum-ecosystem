@@ -11,6 +11,7 @@
 import type { Server } from 'node:http';
 import assert from 'node:assert/strict';
 import { createApp } from '../src/index.js';
+import { loadRootEnv } from '@oaknational/mcp-env';
 
 const REQUIRED_ACCEPT = 'application/json, text/event-stream';
 const EXPECTED_TOOLS = ['search', 'fetch', 'get-key-stages-subject-lessons'] as const;
@@ -64,6 +65,22 @@ async function run(): Promise<void> {
   const baseUrlEnv = process.env.BASE_URL;
   const port = Number(process.env.PORT || 3333);
   const isRemote = typeof baseUrlEnv === 'string' && baseUrlEnv.length > 0;
+  const requireLive = process.argv.includes('--require-live');
+
+  if (requireLive) {
+    loadRootEnv({ requiredKeys: ['OAK_API_KEY'], startDir: process.cwd(), env: process.env });
+    if (!process.env.OAK_API_KEY) {
+      throw new Error('OAK_API_KEY is required for live smoke tests');
+    }
+  }
+
+  if (!isRemote && !process.env.OAK_API_KEY) {
+    if (requireLive) {
+      throw new Error('OAK_API_KEY must be set for live smoke tests');
+    }
+    process.env.OAK_API_KEY = 'stub-test-key';
+    process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
+  }
 
   let server: Server | undefined;
   const baseUrl = isRemote ? baseUrlEnv! : `http://localhost:${String(port)}`;
