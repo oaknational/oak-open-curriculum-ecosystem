@@ -27,11 +27,11 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 ## Success Metrics
 
 - **Execution speed**: Complete contract test suite runs in ≤8 minutes on a development machine
-- **Coverage depth**: Each scenario exercises SDK generation, at least one MCP server (stdio or HTTP), and one Search service integration point
+- **Coverage depth**: Each scenario exercises SDK generation, at least one MCP server (stdio or HTTP), and Search service integration where schema impacts indexing or queries
 - **Detection accuracy**: Zero false positives (legitimate manual changes are not flagged), zero false negatives (violations are caught)
 - **Reproducibility**: Test results are deterministic; repeated runs with same schema produce identical outcomes
 - **Restoration reliability**: Repository state restored to original commit in 100% of test runs, even on failure
-- **Scenario authoring time**: New evolution scenario added and validated in ≤45 minutes
+- **Scenario authoring flow**: New evolution scenario added and validated by following the standard template without ad-hoc steps or manual fixes; documented in contribution guide with concrete examples
 
 ## Milestones
 
@@ -74,8 +74,9 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 
 - **Clean working tree validation**:
   - Implement pre-flight check: `git status --porcelain` must return empty output
-  - Fail immediately with actionable error: "Contract tests require clean working tree. Commit or stash changes."
+  - Fail immediately with actionable error: "Contract tests require clean working tree. Commit or stash changes before running `pnpm test:contract`."
   - Check for untracked files in generated paths (`src/types/generated/`, `dist/`) and warn if present
+  - Verify no ongoing merge/rebase/cherry-pick operations (check `.git/MERGE_HEAD`, `.git/REBASE_HEAD`, `.git/CHERRY_PICK_HEAD`)
 - **State capture mechanism**:
   - Record current HEAD commit: `git rev-parse HEAD`
   - Create temporary branch: `git checkout -b contract-test-temp-$(date +%s)`
@@ -95,7 +96,8 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 **Objective**: Create a library of realistic schema evolution scenarios that can be injected into the type-gen pipeline.
 
 - **Schema storage structure**:
-  ```
+
+  ```text
   .contract-tests/
     schemas/
       baseline/
@@ -120,15 +122,30 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
         07-breaking-type-change/
           ...
   ```
+
 - **Scenario design principles**:
   - Each scenario is self-contained with clear intent documentation
   - Scenarios mirror real API evolution patterns (not contrived edge cases)
   - Expected changes documented to guide validation assertions
   - Scenarios include both non-breaking (backward-compatible) and breaking changes
+  - A helper script (`.contract-tests/bin/refresh-scenarios.ts`) diffs the
+    latest published OpenAPI schema against the baseline snapshot and produces
+    guidance for updating synthetic scenarios while keeping history intact
+  - Scenario READMEs cross-reference [docs/agent-guidance/testing-strategy.md](../../docs/agent-guidance/testing-strategy.md)
+    and [docs/agent-guidance/development-practice.md](../../docs/agent-guidance/development-practice.md)
+    so contributors follow repository-wide testing and TDD expectations
 - **Schema decoration simulation**:
   - Contract test harness applies canonical URL decoration to synthetic schemas
   - Ensures decorated schema matches production decoration logic
   - Validates that decoration process itself is schema-driven
+- **Schema sync workflow**:
+  - Run `.contract-tests/bin/refresh-scenarios.ts` after `pnpm type-gen` updates production schema
+  - Utility pulls latest schema from `schema-cache/`, compares against baseline in `.contract-tests/schemas/baseline/`, computes checksum
+  - Writes guidance report to `.contract-test-results/schema-sync-report-YYYY-MM-DD.md` (untracked) listing detected changes and suggested scenario updates
+  - Review report monthly; manually update scenario snapshots and descriptions based on guidance
+  - Update baseline snapshot checksum in `.contract-tests/schemas/baseline/metadata.json` after synchronisation
+  - Document rationale for updates in scenario READMEs per contribution guide
+  - Utility is read-only: never modifies tracked files, only emits recommendations
 
 ### 4. Violation Detection Strategy
 
@@ -146,12 +163,22 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
   - Tool generation consuming SDK exports
   - Test fixtures and mocks (clearly marked)
 - **Detection implementation**:
-  - Static analysis via AST parsing (ts-morph) to identify violations
-  - Git diff analysis: generated files should change, non-generated files should not (except test fixtures)
-  - Runtime validation: execute smoke tests against MCP servers to confirm tool catalogue updates
+  - Stage 1 – Static analysis (ts-morph): traverse source tree once, flag
+    prohibited constructs with file/line context; reuse AST to avoid repeated
+    parsing (aligns with [ADR-030](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md))
+  - Stage 2 – Git diff heuristics: compare working tree against baseline
+    commit; generated paths (`src/types/generated/**`) may change while
+    hand-authored code must remain untouched (fixtures excluded via allowlist)
+  - Stage 3 – Runtime smoke assertions: execute MCP server smoke tests to
+    confirm tool catalogue reflects schema-driven updates (leverages existing
+    `scripts/smoke-dev.ts --require-live` semantics)
+  - Stage 4 – Aggregation: merge findings into a single JSON report with
+    severity labels and remediation tips referencing relevant ADRs/test docs
 - **Reporting**:
   - List violations with file path, line number, code snippet, violation type
-  - Classify by severity: CRITICAL (blocks cardinal rule), WARNING (potential issue), INFO (allowed pattern)
+  - Classify by severity: CRITICAL (blocks Cardinal Rule), WARNING (potential
+    issue), INFO (allowed pattern) and cross-reference remediation guidance in
+    [docs/agent-guidance/testing-strategy.md](../../docs/agent-guidance/testing-strategy.md)
 
 ### 5. Downstream Validation Scope
 
@@ -180,9 +207,23 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
   - Turbo build: `pnpm build` at repo root succeeds
   - Quality gates (format, lint) pass on generated code
 
+### Scenario Validation Matrix
+
+| Scenario archetype           | SDK assertions                                          | MCP assertions                                               | Search assertions                                        |
+| ---------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------- |
+| Add optional/required fields | Regenerate types/Zod; ensure no manual patches needed   | Verify tool input/output schemas update automatically        | If response consumed, ensure enrichment transform adapts |
+| Add/remove endpoints         | Confirm new/removed operations in generated catalogue   | Tool list parity reflects change; smoke test can invoke tool | Update query mappings only if schema drives behaviour    |
+| Enum evolution               | Union/validator expands or shrinks as expected          | Tool validation rejects unsupported values automatically     | Spotlight search facets updated when schema-driven       |
+| Response reshape             | Interfaces & Zod match new shape; helper functions pass | Tool success payload serialisation reflects new structure    | Search indexing code consumes new fields via schema maps |
+| Breaking type changes        | Type-check intentionally fails in dependent samples     | Tool metadata reflects new types; smoke captures errors      | Downstream query builders fail fast until schema adapted |
+
+The matrix should be refined per scenario. Each scenario README must list the
+exact SDK packages, MCP servers, and Search modules it exercises so reviewers
+can audit coverage quickly.
+
 ## Strategic Roadmap
 
-### Phase 0 – Discovery & Foundation (Weeks 1-2)
+### Phase 0 – Discovery & Foundation (Readiness: Baseline)
 
 **Objective**: Complete prerequisite audits, design core infrastructure, establish governance.
 
@@ -192,8 +233,8 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 4. REVIEW: Self-review state manager design for edge case handling (detached HEAD, merge state, stash conflicts) and fail-safe behaviour (always restore or abort).
 5. QUALITY-GATE: Implement state manager and verify with manual tests: run on clean repo, dirty repo, detached HEAD, mid-merge; confirm restoration works in all cases.
 6. GROUNDING: Read GO.md and follow all instructions; assess whether current approach aligns with First Question (could it be simpler?).
-7. ACTION: Design synthetic schema repository structure following Prerequisites §3, creating directory layout, scenario template, and baseline schema snapshot in `.contract-tests/schemas/`.
-8. REVIEW: Self-review schema repository design ensuring scenarios are realistic, self-documenting, and maintainable by future contributors.
+7. ACTION: Design synthetic schema repository structure following Prerequisites §3, creating directory layout, scenario template, baseline schema snapshot in `.contract-tests/schemas/`, and a sync utility (`.contract-tests/bin/refresh-scenarios.ts`) that: pulls the latest official OpenAPI schema from `schema-cache/`, compares against the baseline snapshot in `.contract-tests/schemas/baseline/`, computes a checksum, and writes a guidance report to `.contract-test-results/schema-sync-report-YYYY-MM-DD.md` (untracked) listing detected changes and suggested scenario updates without modifying any tracked files.
+8. REVIEW: Self-review schema repository design ensuring scenarios are realistic, self-documenting, maintainable by future contributors, and that the sync utility records provenance (schema version, date) without mutating tracked files unexpectedly.
 9. ACTION: Document violation detection strategy following Prerequisites §4, defining prohibited patterns, detection algorithms, and reporting format in `.contract-tests/docs/violation-detection.md`.
 10. REVIEW: Self-review violation strategy confirming alignment with ADR-029 and Cardinal Rule; verify detection approach is automatable via static analysis.
 11. QUALITY-GATE: Validate synthetic schema structure by manually copying baseline schema, applying one simple modification (add optional field), and confirming schema parses correctly.
@@ -201,7 +242,7 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 
 **Exit Criteria**: Audit document merged; state manager tested; schema repository scaffolded with baseline + 1 example scenario; violation detection strategy documented and approved.
 
-### Phase 1 – Test Harness Implementation (Weeks 3-4)
+### Phase 1 – Test Harness Implementation (Readiness: Harness Operational)
 
 **Objective**: Build core test harness that orchestrates schema injection, generation, validation, and restoration.
 
@@ -220,39 +261,39 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 
 **Exit Criteria**: Test harness functional end-to-end with baseline schema; state management verified; schema injection working; violation detection operational; downstream validation covering SDK + one MCP server.
 
-### Phase 2 – Core Scenario Implementation (Weeks 5-7)
+### Phase 2 – Core Scenario Implementation (Readiness: Scenario Coverage)
 
 **Objective**: Implement 7 priority schema evolution scenarios with full validation.
 
-25. ACTION: Create Scenario 01 "Add Optional Field" – add optional field to existing response schema in synthetic JSON, document expected changes (Zod schema update, no MCP tool changes), implement test assertions.
+25. ACTION: Create Scenario 01 "Add Optional Field" – add optional field to existing response schema in synthetic JSON (e.g., `Lesson.estimatedDuration?: number`), document expected changes (Zod schema update, TypeScript interface extended, no MCP tool inputSchema changes), implement test assertions per validation matrix, include cross-references to testing-strategy.md.
 26. REVIEW: Self-review scenario ensuring schema modification is realistic, expected changes documented clearly, and test assertions validate correct outcomes.
 27. QUALITY-GATE: Execute Scenario 01 via test harness; verify: SDK types updated, Zod schema includes new field, MCP tools unchanged, build succeeds, type-check passes, violation detector reports zero issues.
-28. ACTION: Create Scenario 02 "Add Required Parameter" – add required path/query parameter to endpoint, document expected changes (parameter types, MCP tool inputSchema), implement assertions validating compilation errors if SDK consumers don't provide parameter.
+28. ACTION: Create Scenario 02 "Add Required Parameter" – add required query parameter to endpoint (e.g., `GET /lessons/{lesson}/transcript?format=string` where `format` is required), document expected changes (parameter types updated, MCP tool inputSchema includes new required field, consumer type-check fails if parameter omitted), implement assertions validating fail-fast behaviour per validation matrix.
 29. REVIEW: Self-review scenario confirming breaking change is correctly modelled and downstream impact (compilation failures) is expected and acceptable.
 30. GROUNDING: Read GO.md and follow all instructions; validate that scenario design aligns with real API evolution patterns observed in Oak API history.
 31. QUALITY-GATE: Execute Scenario 02; verify: SDK parameter types updated, MCP tool definitions include new parameter, consumers lacking parameter fail type-check (expected), manual updates NOT required in SDK or MCP layers.
-32. ACTION: Create Scenario 03 "Remove Deprecated Endpoint" – remove endpoint from schema, document expected changes (types removed, MCP tool removed from catalogue), implement assertions confirming clean removal without manual edits.
+32. ACTION: Create Scenario 03 "Remove Deprecated Endpoint" – remove deprecated endpoint from schema (e.g., legacy `GET /search/transcripts`), document expected changes (operation types removed from SDK, MCP tool absent from catalogue, no orphaned imports), implement assertions confirming clean removal without manual edits per validation matrix.
 33. REVIEW: Self-review scenario ensuring removed types/tools leave no orphaned references in generated code.
 34. QUALITY-GATE: Execute Scenario 03; verify: endpoint types gone from SDK, MCP tool absent from catalogue, dependent tests updated or removed automatically (if designed to be schema-driven), build succeeds.
-35. ACTION: Create Scenario 04 "Enum Value Addition" – add value to existing enum, document expected changes (union type extended, Zod enum updated), validate backward compatibility.
+35. ACTION: Create Scenario 04 "Enum Value Addition" – add value to existing enum (e.g., `KeyStage` union adds `'eyfs'`), document expected changes (TypeScript union type extended, Zod enum validator accepts new value, existing values remain valid), validate backward compatibility per validation matrix.
 36. GROUNDING: Read GO.md and follow all instructions; ensure scenario suite remains balanced between breaking and non-breaking changes.
 37. REVIEW: Self-review scenario confirming enum extension is non-breaking (existing values still valid) and downstream code handles new value gracefully.
 38. QUALITY-GATE: Execute Scenario 04; verify: enum types extended, Zod validators accept new value, MCP tool schemas updated, existing valid values still work.
-39. ACTION: Create Scenario 05 "Response Shape Change" – modify nested object structure in response, document expected changes (interface reshaping, Zod schema updates, potential Search enrichment logic adjustments), validate propagation.
+39. ACTION: Create Scenario 05 "Response Shape Change" – modify nested object structure in response (e.g., flatten `Lesson.metadata.subject` to `Lesson.subjectSlug`), document expected changes (interface reshaping, Zod schema updates, Search enrichment adapts if schema-driven or flagged for manual review), validate propagation per validation matrix.
 40. REVIEW: Self-review scenario ensuring shape change is realistic (e.g., flattening nested objects, renaming fields) and tests confirm all consumers adapt.
 41. QUALITY-GATE: Execute Scenario 05; verify: SDK types reflect new shape, Zod validation enforces new structure, Search enrichment logic adapts if schema-driven (or is flagged as requiring manual update if not), type-check passes.
 42. GROUNDING: Read GO.md and follow all instructions; assess whether scenario coverage is sufficient to validate Cardinal Rule across diverse change types.
-43. ACTION: Create Scenario 06 "New Endpoint Addition" – add entirely new endpoint with parameters and response schema, document expected changes (new operation, new MCP tool, new types), validate automatic integration.
+43. ACTION: Create Scenario 06 "New Endpoint Addition" – add entirely new endpoint (e.g., `GET /sequences/{sequence}/questions`), document expected changes (new operation types generated, new MCP tool appears in catalogue with correct inputSchema/outputSchema, smoke test can invoke tool), validate automatic integration per validation matrix.
 44. REVIEW: Self-review scenario confirming new endpoint is fully integrated without manual configuration, including tool catalogue registration.
 45. QUALITY-GATE: Execute Scenario 06; verify: new types generated, new MCP tool appears in catalogue, tool metadata includes correct inputSchema/outputSchema, smoke test invokes new tool successfully.
-46. ACTION: Create Scenario 07 "Breaking Type Change" – change existing field type (e.g., string → number), document expected changes (type updates, Zod validators, downstream compilation errors in consumers), validate fail-fast behaviour.
+46. ACTION: Create Scenario 07 "Breaking Type Change" – change existing field type (e.g., `Lesson.order: string` → `Lesson.order: number`), document expected changes (SDK types updated, Zod validators enforce new type, downstream consumers using old type fail type-check with clear error messages), validate fail-fast behaviour per validation matrix and testing-strategy.md expectations.
 47. REVIEW: Self-review scenario confirming breaking change is correctly identified, compilation errors are intentional and expected, and SDK/MCP layers adapt without manual edits.
 48. GROUNDING: Read GO.md and follow all instructions; finalize scenario suite and prepare for integration phase.
 49. QUALITY-GATE: Execute Scenario 07; verify: SDK types changed, Zod validators enforce new type, consumers using old type fail type-check (expected), SDK and MCP layers compile successfully.
 
 **Exit Criteria**: 7 scenarios implemented and passing; each scenario validated across SDK + at least one MCP server; violation detector confirms zero prohibited patterns; test results documented in `.contract-test-results/`.
 
-### Phase 3 – Integration & Reporting (Weeks 8-9)
+### Phase 3 – Integration & Reporting (Readiness: Reporting Complete)
 
 **Objective**: Integrate contract tests into repo workflow, implement structured reporting, enable contribution.
 
@@ -263,14 +304,14 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 54. REVIEW: Self-review reporter ensuring outputs are actionable, violations are clearly explained with remediation guidance, and reports link to relevant ADRs and documentation.
 55. QUALITY-GATE: Generate reports for all scenarios; verify: JSON is valid and parseable, markdown is well-formatted, metrics match success criteria, zero false positives/negatives.
 56. GROUNDING: Read GO.md and follow all instructions; confirm integration aligns with repo quality gate philosophy and contributor workflow.
-57. ACTION: Write scenario contribution guide in `.contract-tests/docs/contributing-scenarios.md` explaining: how to design realistic evolution, synthetic schema authoring, expected changes documentation, test assertion creation, validation criteria.
+57. ACTION: Write scenario contribution guide in `.contract-tests/docs/contributing-scenarios.md` explaining: how to design realistic evolution (with examples from Scenarios 01-07), synthetic schema authoring workflow (baseline snapshot → modify → document → validate), expected changes documentation template, test assertion creation referencing validation matrix, validation criteria aligned with testing-strategy.md, when to run `refresh-scenarios.ts` to detect drift.
 58. REVIEW: Self-review contribution guide for clarity, completeness, and accessibility to developers and AI agents; ensure alignment with British spelling and documentation conventions.
 59. QUALITY-GATE: Ask external reviewer (or simulate with self-review) to follow guide and create one new scenario; validate guide is sufficient without additional context.
 60. GROUNDING: Read GO.md and follow all instructions; finalize integration phase deliverables.
 
 **Exit Criteria**: Contract tests invokable via `pnpm test:contract`; reports generated automatically; contribution guide merged and tested; integration documented in testing-strategy.md.
 
-### Phase 4 – Documentation & Governance (Weeks 10-11)
+### Phase 4 – Documentation & Governance (Readiness: Operationalised)
 
 **Objective**: Formalize contract testing strategy, update governance documents, prepare for CI integration (future).
 
@@ -302,21 +343,21 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
 
 ## Risk Register
 
-| Risk                                                        | Likelihood | Impact | Mitigation                                                                                                                  |
-| ----------------------------------------------------------- | ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
-| Schema decoration logic differs between production and test | Medium     | High   | Reuse production decoration scripts in test harness; add unit tests for decoration logic; validate decorated schema shape   |
-| Working tree restoration fails due to merge conflicts       | Low        | High   | Implement pre-flight check for merge state; abort contract tests if repo in merge/rebase; document in troubleshooting       |
-| Violation detector produces false positives                 | Medium     | Medium | Maintain allowed patterns whitelist; include test fixtures exemption; tune detection rules based on initial results         |
-| Downstream validation scope creep (too many workspaces)     | Medium     | Medium | Start with SDK + one MCP server per scenario; expand coverage incrementally; document validation matrix                     |
-| Synthetic schema scenarios become stale as API evolves      | High       | Medium | Include schema version in scenario metadata; add quarterly review task to backlog; automate staleness detection if feasible |
-| Test harness complexity exceeds maintainability threshold   | Low        | Medium | Follow TDD strictly; extract pure functions; comprehensive inline docs; contribution guide with examples                    |
-| CI integration blocked by environment constraints (future)  | Low        | Low    | Document CI requirements early; validate restoration in isolated containers; design for CI-agnostic execution               |
-| Scenario authoring time exceeds success metric (45 minutes) | Medium     | Low    | Provide scenario template with examples; automate schema diffing; include validation helper CLI                             |
+| Risk                                                        | Likelihood | Impact | Mitigation                                                                                                                                                                                                                           |
+| ----------------------------------------------------------- | ---------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Schema decoration logic differs between production and test | Medium     | High   | Reuse production decoration scripts in test harness; add unit tests for decoration logic; validate decorated schema shape                                                                                                            |
+| Working tree restoration fails due to merge conflicts       | Low        | High   | Implement pre-flight check for merge state; abort contract tests if repo in merge/rebase; document in troubleshooting                                                                                                                |
+| Violation detector produces false positives                 | Medium     | Medium | Maintain allowed patterns whitelist; include test fixtures exemption; tune detection rules based on initial results                                                                                                                  |
+| Downstream validation scope creep (too many workspaces)     | Medium     | Medium | Start with SDK + one MCP server per scenario; expand coverage incrementally; document validation matrix                                                                                                                              |
+| Synthetic schema scenarios become stale as API evolves      | High       | Medium | Run `refresh-scenarios.ts` after each `pnpm type-gen`; review guidance report monthly; store schema version and checksum in baseline metadata; document sync workflow in contribution guide; add quarterly scenario audit to backlog |
+| Test harness complexity exceeds maintainability threshold   | Low        | Medium | Follow TDD strictly; extract pure functions; comprehensive inline docs; contribution guide with examples                                                                                                                             |
+| CI integration blocked by environment constraints (future)  | Low        | Low    | Document CI requirements early; validate restoration in isolated containers; design for CI-agnostic execution                                                                                                                        |
+| Scenario authoring time exceeds success metric (45 minutes) | Medium     | Low    | Provide scenario template with examples; automate schema diffing; include validation helper CLI                                                                                                                                      |
 
 ## Deferred Items & Future Enhancements
 
 - **CI Integration**: Plan documents requirements, but implementation deferred until local execution proven stable and scenarios mature (estimated 3-6 months post-rollout).
-- **Automated schema diffing**: Tool to compare baseline vs evolved schema and suggest expected changes documentation (accelerates scenario authoring).
+- **Automated schema diffing**: Enhance `refresh-scenarios.ts` to generate expected-changes.md templates by analysing OpenAPI diffs (accelerates scenario authoring).
 - **Mutation testing for contract tests**: Validate that intentionally broken scenarios (manual code edits) are detected by violation detector (meta-testing the tests).
 - **Cross-repository validation**: Extend contract tests to downstream consumers outside this monorepo (e.g., external applications using published SDK package).
 - **Performance benchmarking**: Track type-gen + build times across schema versions to detect performance regressions introduced by schema complexity growth.
@@ -351,12 +392,12 @@ Before marking this plan as COMPLETE, verify:
 
 ---
 
-**Priority**: P1 (Detailed planning phase; implementation deferred pending capacity and prioritization)
+**Priority**: P1 (Detailed planning phase; implementation deferred pending capacity and prioritisation)
 
-**Estimated Effort**: 11 weeks (assumes TDD approach, comprehensive documentation, quality gate discipline)
+**Effort Classification**: Large, multi-phase initiative covering foundation, scenario implementation, reporting, and governance readiness; estimated 10-12 weeks with TDD discipline and quality gate adherence
 
-**Dependencies**: None blocking; enhances existing infrastructure
+**Dependencies**: None blocking; enhances existing infrastructure; complements Stryker integration and OpenAPI framework extraction plans
 
 **Owner**: TBD (plan ready for assignment)
 
-**Status**: DRAFT (pending sign-off and incorporation into high-level-plan.md)
+**Status**: REVIEWED (second-pass review complete; ready for sign-off and incorporation into high-level-plan.md)
