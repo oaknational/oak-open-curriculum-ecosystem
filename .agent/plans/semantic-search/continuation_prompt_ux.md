@@ -24,7 +24,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Curriculum schema artefacts now regenerate into `curriculumZodSchemas`; next actions include splitting the generic parse helper into curriculum/search-specific functions, generating search scope constants, and updating validators to consume the new utilities.
 - Status page UX needs to progress from blueprint to a minimal Oak-branded shell sourcing live health signals with responsive/a11y coverage.
 - Admin surface must evolve into the operational console for Elastic index creation, ingestion scheduling, and feedback loops.
-- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and both curriculum and search validators now rely on domain-specific parsing helpers generated from the schema.
+- Latest `pnpm make` stops during `doc-gen` because Typedoc raises warnings for generated search schemas; search app lint/type-check gates are now green after splitting the client and refactoring fixture builders, and both curriculum and search validators now rely on a shared `parseSchema` helper that uses generated `_input`/`_output` typing.
 
 ## Immediate Priorities
 
