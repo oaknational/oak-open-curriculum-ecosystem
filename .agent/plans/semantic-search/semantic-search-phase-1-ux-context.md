@@ -11,7 +11,7 @@ _Last updated: 2025-10-05 (curriculum schema audit)_
 - Address the remaining SDK Typedoc warnings so full `pnpm make`/`pnpm qg` runs can baseline the fixture-mode integration now that search app lint/type-check gates are clean.
 - Lock in the curriculum schema registry rename (`curriculumZodSchemas`) by confirming regenerated artefacts, updated consumers, and the new parsing helpers before widening adoption guidance.
 - Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
-- Expand the admin surface into the operational console for Elastic index/rollup management, ingestion toggles, and telemetry feedback loops ahead of the status page work.
+- Expand the admin surface into the operational console for Elastic index/rollup management, ingestion toggles, and telemetry feedback loops ahead of the status page work (see updated README guidance and onboarding notes).
 - Deliver a minimal-yet-polished status page shell driven by live health data, with responsive and accessibility evidence captured alongside documentation updates.
 
 ## Current State

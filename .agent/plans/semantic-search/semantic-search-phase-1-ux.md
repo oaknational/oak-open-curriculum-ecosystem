@@ -148,8 +148,8 @@ Phase 1 keeps the design system aligned with product intent by:
 19. ACTION [PENDING]: Re-run `pnpm doc-gen` ensuring regenerated docs flow from updated helpers without manual edits to `_typedoc_src`.
 20. REVIEW [PENDING]: Confirm doc artefacts reflect the new helpers and no generated sources are manually touched.
 21. QUALITY-GATE [BLOCKED BY 19-20]: Run `pnpm make` followed by `pnpm qg` once documentation and validation layers are stable.
-22. ACTION [PENDING]: Update contributor guidance and validation usage docs to highlight the new parsing helpers and generated search scope utilities.
-23. REVIEW [PENDING]: Share follow-up recommendations with UX and functionality streams based on validation findings.
+22. ACTION [DONE 2025-10-05]: Update contributor and onboarding docs to highlight the shared parsing helpers and generated search scope utilities (root README, SDK README, onboarding guide, ADR-048).
+23. REVIEW [DONE 2025-10-05]: Share follow-up recommendations with UX and functionality streams based on validation findings (plan/context updated; continuation prompt emphasises admin-first focus).
 24. GROUNDING [PENDING]: read GO.md and follow all instructions.
 25. ACTION [PENDING]: Map admin workflows for managing Elastic indexes, rollups, ingest jobs, and re-index scheduling within the UX plan.
 26. REVIEW [PENDING]: Validate admin control requirements with engineering stakeholders and capture dependencies or blockers.

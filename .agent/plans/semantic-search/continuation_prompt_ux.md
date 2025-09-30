@@ -30,7 +30,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 1. (Completed 2025-10-05) Split the generic parse helper into curriculum/search-specific functions backed by generated schemas, regenerate docs, and ensure the search scope type flows from type-gen constants.
 2. (Completed 2025-10-05) Verify the generated `curriculumZodSchemas` registry (exports, guards, schema names) and ensure every SDK consumer uses the new helpers end-to-end.
-3. Expand the admin page into the operational console for Elastic index/rollup management, ingestion triggers, and progress feedback.
+3. Expand the admin page into the operational console for Elastic index/rollup management, ingestion triggers, and progress feedback (workspace README + onboarding refreshed).
 4. Deliver the initial status page shell (layout, accessibility, live data wiring) and capture responsive/axe artefacts for regression tracking.
 5. Resolve the SDK Typedoc warnings (schema const exports) so `pnpm make`/`pnpm qg` can complete without manual intervention.
 6. Once documentation builds succeed, rerun `pnpm make`/`pnpm qg` and capture the new baseline before updating Playwright + contributor docs with the fixture toggle workflow.

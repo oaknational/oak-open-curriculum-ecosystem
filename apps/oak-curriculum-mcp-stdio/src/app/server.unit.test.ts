@@ -4,6 +4,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { createToolResponseHandlers } from './tool-response-handlers';
+import { pickPayloadForValidation, validateOutput, type OutputValidationResult } from './server';
 
 type ToolLogger = Parameters<typeof createToolResponseHandlers>[0];
 type ToolContext = Parameters<typeof createToolResponseHandlers>[1];
@@ -69,5 +70,41 @@ describe('createToolResponseHandlers', () => {
     expect(logger.info).toHaveBeenCalledWith(
       expect.stringContaining('Tool output validated successfully:'),
     );
+  });
+});
+
+describe('validation helpers', () => {
+  it('prefers the data property when present', () => {
+    const payload = {
+      data: [{ slug: 'ks1', title: 'Key Stage 1' }],
+      response: { status: 200 },
+    };
+    expect(pickPayloadForValidation(payload)).toEqual(payload.data);
+  });
+
+  it('returns the original payload when no data wrapper is present', () => {
+    const scalar = 'plain-value';
+    expect(pickPayloadForValidation(scalar)).toBe(scalar);
+  });
+
+  it('validates curriculum responses once unwrapped', () => {
+    const ok: OutputValidationResult = validateOutput('/key-stages', 'GET', {
+      data: [
+        { slug: 'ks1', title: 'Key Stage 1' },
+        { slug: 'ks2', title: 'Key Stage 2' },
+      ],
+      response: {},
+    });
+    expect(ok).toEqual({ ok: true });
+  });
+
+  it('surfaces informative detail messages when validation fails', () => {
+    const result: OutputValidationResult = validateOutput('/key-stages', 'GET', 'not-valid');
+    expect(result.ok).toBe(false);
+    if (result.ok) {
+      throw new Error('Expected validation to fail');
+    }
+    expect(result.message).toContain('Expected array');
+    expect(result.message).toContain('received string');
   });
 });

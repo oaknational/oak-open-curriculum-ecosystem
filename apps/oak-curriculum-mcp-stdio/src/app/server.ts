@@ -16,16 +16,68 @@ import {
   validateCurriculumResponse,
   isValidationFailure,
   isAllowedMethod,
+  type ValidationIssue,
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig, Logger } from './wiring.js';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 
-function validateOutput(
+/**
+ * Outcome of validating a tool response payload.
+ */
+export type OutputValidationResult =
+  | { readonly ok: true }
+  | { readonly ok: false; readonly message: string };
+
+/**
+ * Represents the possible wrapper returned by MCP tool executions where
+ * the transport response is nested under a `data` property alongside metadata.
+ */
+interface ValidationPayloadWrapper {
+  readonly data?: unknown;
+  readonly response?: unknown;
+}
+
+/**
+ * Determines whether the supplied payload conforms to the wrapper structure
+ * that nests the response payload beneath `data`.
+ */
+function hasValidationPayloadWrapper(candidate: unknown): candidate is ValidationPayloadWrapper {
+  if (typeof candidate !== 'object' || candidate === null) {
+    return false;
+  }
+  return 'data' in candidate && 'response' in candidate;
+}
+
+/**
+ * Extracts the raw payload for downstream validation, accounting for wrapped responses.
+ */
+export function pickPayloadForValidation(data: unknown): unknown {
+  if (hasValidationPayloadWrapper(data)) {
+    return data.data;
+  }
+  return data;
+}
+
+/**
+ * Formats the first validation failure into a concise error description for logging.
+ */
+function formatValidationFailure(details: { readonly issues: readonly ValidationIssue[] }): string {
+  if (details.issues.length === 0) {
+    return 'Output validation failed';
+  }
+  const [firstIssue] = details.issues;
+  const detail = firstIssue.details;
+  const expected = detail?.expected ?? 'unknown';
+  const received = detail?.received ?? 'unknown';
+  return `${firstIssue.message ?? 'Output validation failed'} (expected ${expected}, received ${received})`;
+}
+
+export function validateOutput(
   path: string,
   maybeHttpMethod: string,
   data: unknown,
-): { ok: true } | { ok: false; message: string } {
+): OutputValidationResult {
   if (!isValidPath(path)) {
     return { ok: false, message: 'Invalid path: ' + path };
   }
@@ -33,11 +85,12 @@ function validateOutput(
   if (!isAllowedMethod(httpMethod)) {
     return { ok: false, message: 'Unsupported method: ' + httpMethod };
   }
-  const validationResult = validateCurriculumResponse(path, httpMethod, 200, data);
+  const payload = pickPayloadForValidation(data);
+  const validationResult = validateCurriculumResponse(path, httpMethod, 200, payload);
   if (isValidationFailure(validationResult)) {
     return {
       ok: false,
-      message: validationResult.issues[0]?.message ?? 'Output validation failed',
+      message: formatValidationFailure(validationResult),
     };
   }
   return { ok: true };
