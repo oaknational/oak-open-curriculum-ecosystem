@@ -9,14 +9,12 @@ import {
   useState,
   type JSX,
 } from 'react';
-import {
-  OakGlobalStyle,
-  OakThemeProvider,
-  oakDefaultTheme,
-  type OakTheme,
-} from '@oaknational/oak-components';
+import { OakGlobalStyle, OakThemeProvider } from '@oaknational/oak-components';
 
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createLightTheme } from '../../ui/themes/light';
+import { createDarkTheme } from '../../ui/themes/dark';
+import type { AppTheme } from '../../ui/themes/types';
 
 import {
   THEME_MODES,
@@ -32,7 +30,7 @@ import {
 } from './theme-utils';
 
 export { THEME_MODES };
-export type { ResolvedThemeMode };
+export type { ResolvedThemeMode, ThemeMode };
 
 /** @todo centralise logger creation */
 const logger = createAdaptiveLogger({ name: 'ThemeContext' });
@@ -65,17 +63,18 @@ function useSystemPreferenceSync(
     if (mode !== THEME_MODES.system) {
       return undefined;
     }
+    const prefersDark = getSystemPrefersDark();
+    setSystemPrefersDark(prefersDark);
     const unsubscribe = subscribeToSystemPrefersDark((prefers) => setSystemPrefersDark(prefers));
     return unsubscribe;
   }, [mode, setSystemPrefersDark]);
 }
 
-function useOakTheme(resolved: ResolvedThemeMode): OakTheme {
+function useAppTheme(resolved: ResolvedThemeMode): AppTheme {
   return useMemo(() => {
-    // For now, keep Oak default theme for both; wire in dark variant when available/derived
-    // Oak theme is token driven; once a dark theme is provided/derived, swap here by `resolved`.
+    const theme = resolved === 'dark' ? createDarkTheme() : createLightTheme();
     logger.debug('Changing theme to:', { resolved });
-    return oakDefaultTheme;
+    return theme;
   }, [resolved]);
 }
 
@@ -89,7 +88,11 @@ export function ThemeProvider({
   const [mode, setModeState] = useState<ThemeMode>(
     isThemeMode(initialMode) ? initialMode : THEME_MODES.system,
   );
-  const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(() => getSystemPrefersDark());
+  const normalisedInitialMode = isThemeMode(initialMode) ? initialMode : THEME_MODES.system;
+  const initialResolvedForRender = resolveMode(normalisedInitialMode, () => false);
+  const [systemPrefersDark, setSystemPrefersDark] = useState<boolean>(
+    () => initialResolvedForRender === THEME_MODES.dark,
+  );
 
   const setMode = useCallback((next: ThemeMode) => {
     if (!isThemeMode(next)) {
@@ -110,7 +113,7 @@ export function ThemeProvider({
 
   const resolved: ResolvedThemeMode = useResolvedModeValue(mode, systemPrefersDark);
   useSystemPreferenceSync(mode, setSystemPrefersDark);
-  const theme: OakTheme = useOakTheme(resolved);
+  const theme: AppTheme = useAppTheme(resolved);
 
   const value = useMemo<ThemeContextValue>(
     () => ({ mode, setMode, resolved }),

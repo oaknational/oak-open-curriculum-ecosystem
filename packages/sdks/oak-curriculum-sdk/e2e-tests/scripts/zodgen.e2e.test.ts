@@ -3,7 +3,7 @@ import { rmSync, readFileSync, existsSync, mkdirSync, writeFileSync } from 'node
 import path from 'node:path';
 import { execSync } from 'child_process';
 
-import { generateZodSchemas } from '../../scripts/zodgen-core';
+import { generateZodSchemas } from '../../type-gen/zodgen-core';
 import type { OpenAPI3 } from 'openapi-typescript';
 
 function assertNoForbiddenAssertions(content: string): void {
@@ -41,7 +41,7 @@ const minimalOpenApi: OpenAPI3 = {
 
 describe('zod generator - functionality tests', () => {
   const outDir = path.resolve(__dirname, '../../test-cache/zod-out');
-  const outFile = path.join(outDir, 'zodSchemas.ts');
+  const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
   beforeEach(() => {
     // clean output directory between runs
@@ -80,7 +80,7 @@ describe('zod generator - functionality tests', () => {
         module: 'ESNext',
         target: 'ES2020',
       },
-      include: ['./zodSchemas.ts'],
+      include: ['./curriculumZodSchemas.ts'],
     };
 
     const tsConfigPath = path.join(outDir, 'tsconfig.json');
@@ -106,7 +106,7 @@ describe('zod generator - functionality tests', () => {
 
     // Test that it exports schemas
     expect(content).toContain('export');
-    expect(content).toContain('schemas');
+    expect(content).toContain('curriculumSchemas');
   });
 
   it('does not use type assertions except as const', async () => {
@@ -123,15 +123,15 @@ describe('zod generator - functionality tests', () => {
 
     // Create a test file that imports and uses the generated schemas
     const testContent = `
-      import { schemas } from './zodSchemas.js';
+      import { curriculumSchemas } from './curriculumZodSchemas.js';
       import { z } from 'zod';
       
       // Test that we can use the schemas
-      const testSchemas = schemas;
+      const testSchemas = curriculumSchemas;
       
       // Create a type from the schema (if Thing exists)
-      if ('Thing' in schemas) {
-        type ThingType = z.infer<typeof schemas.Thing>;
+      if ('Thing' in curriculumSchemas) {
+        type ThingType = z.infer<typeof curriculumSchemas.Thing>;
         console.log('Schema is usable');
       }
       

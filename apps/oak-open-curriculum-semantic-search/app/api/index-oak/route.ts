@@ -1,11 +1,15 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { env } from '../../../src/lib/env';
-import type { KeyStage, SubjectSlug } from '../../../src/types/oak';
+import type { KeyStage, SearchSubjectSlug } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
 import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../../src/adapters/sdk-guards';
 import { esBulk } from '../../../src/lib/elastic-http';
 import { getRateLimit } from '../../../src/lib/rate-limit';
 import { buildIndexBulkOps } from '../../../src/lib/index-oak';
+import {
+  currentSearchIndexTarget,
+  rewriteBulkOperations,
+} from '../../../src/lib/search-index-target';
 
 /** Guard header check */
 function authorize(req: NextRequest): boolean {
@@ -30,11 +34,13 @@ export async function GET(req: NextRequest): Promise<Response> {
   const client = createOakSdkClient();
 
   const keyStages: KeyStage[] = KEY_STAGES.filter(isKeyStage);
-  const subjects: SubjectSlug[] = SUBJECTS.filter(isSubject);
+  const subjects: SearchSubjectSlug[] = SUBJECTS.filter(isSubject);
   const bulkOps = await buildIndexBulkOps(client, keyStages, subjects);
+  const target = currentSearchIndexTarget();
+  const targetedOps = rewriteBulkOperations(bulkOps, target);
 
-  if (bulkOps.length > 0) {
-    await esBulk(bulkOps);
+  if (targetedOps.length > 0) {
+    await esBulk(targetedOps);
   }
-  return NextResponse.json({ ok: true, indexedDocs: bulkOps.length / 2 });
+  return NextResponse.json({ ok: true, indexedDocs: targetedOps.length / 2 });
 }

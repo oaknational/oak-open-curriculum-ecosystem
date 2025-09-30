@@ -53,6 +53,8 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 test-results/
 test-cache/
 .turbo/
+.stryker-tmp/
+reports/
 
 # Agent artifacts
 .agent/cache/

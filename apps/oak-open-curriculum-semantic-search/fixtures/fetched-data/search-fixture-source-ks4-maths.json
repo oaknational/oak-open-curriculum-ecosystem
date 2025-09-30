@@ -1,0 +1,281 @@
+{
+  "fetchedAt": "2025-09-28T05:40:44.294Z",
+  "keyStage": "ks4",
+  "subject": "maths",
+  "sequencesSample": [
+    {
+      "sequenceSlug": "maths-primary",
+      "years": [1, 2, 3, 4, 5, 6],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 1",
+          "keyStageSlug": "ks1"
+        },
+        {
+          "keyStageTitle": "Key Stage 2",
+          "keyStageSlug": "ks2"
+        }
+      ],
+      "phaseSlug": "primary",
+      "phaseTitle": "Primary",
+      "ks4Options": null
+    },
+    {
+      "sequenceSlug": "maths-secondary",
+      "years": [7, 8, 9, 10, 11],
+      "keyStages": [
+        {
+          "keyStageTitle": "Key Stage 3",
+          "keyStageSlug": "ks3"
+        },
+        {
+          "keyStageTitle": "Key Stage 4",
+          "keyStageSlug": "ks4"
+        }
+      ],
+      "phaseSlug": "secondary",
+      "phaseTitle": "Secondary",
+      "ks4Options": null
+    }
+  ],
+  "lessonsSample": [
+    {
+      "unitSlug": "2d-and-3d-shape-compound-shapes",
+      "unitTitle": "2D and 3D shape: compound shapes",
+      "lessons": [
+        {
+          "lessonSlug": "checking-and-securing-understanding-of-perimeter-for-standard-shapes",
+          "lessonTitle": "Checking and securing understanding of perimeter for standard shapes"
+        },
+        {
+          "lessonSlug": "checking-and-securing-understanding-of-scales-and-conversion",
+          "lessonTitle": "Checking and securing understanding of scales and conversion"
+        },
+        {
+          "lessonSlug": "checking-and-securing-understanding-of-scales-and-conversion",
+          "lessonTitle": "Checking and securing understanding of scales and conversion"
+        },
+        {
+          "lessonSlug": "shapes-on-coordinate-grids",
+          "lessonTitle": "Shapes on coordinate grids"
+        },
+        {
+          "lessonSlug": "problem-solving-with-complex-2d-shapes",
+          "lessonTitle": "Problem solving with complex 2D shapes"
+        },
+        {
+          "lessonSlug": "area-of-compound-shapes",
+          "lessonTitle": "Area of compound shapes"
+        },
+        {
+          "lessonSlug": "calculating-arc-length",
+          "lessonTitle": "Calculating arc length"
+        },
+        {
+          "lessonSlug": "equations-from-complex-shapes",
+          "lessonTitle": "Equations from complex shapes"
+        },
+        {
+          "lessonSlug": "checking-and-securing-understanding-of-converting-between-metric-and-imperial-measures",
+          "lessonTitle": "Checking and securing understanding of converting between metric and imperial measures"
+        },
+        {
+          "lessonSlug": "checking-and-securing-understanding-of-area-for-compound-shapes",
+          "lessonTitle": "Checking and securing understanding of area for compound shapes"
+        }
+      ]
+    }
+  ],
+  "unitsSample": [
+    {
+      "yearSlug": "year-10",
+      "yearTitle": "Year 10",
+      "units": [
+        {
+          "unitSlug": "2d-and-3d-shape-compound-shapes",
+          "unitTitle": "2D and 3D shape: compound shapes"
+        },
+        {
+          "unitSlug": "algebraic-manipulation",
+          "unitTitle": "Algebraic manipulation"
+        },
+        {
+          "unitSlug": "angles",
+          "unitTitle": "Angles"
+        },
+        {
+          "unitSlug": "arithmetic-procedures-index-laws",
+          "unitTitle": "Arithmetic procedures: index laws"
+        },
+        {
+          "unitSlug": "bearings",
+          "unitTitle": "Bearings"
+        },
+        {
+          "unitSlug": "circle-theorems",
+          "unitTitle": "Circle theorems"
+        },
+        {
+          "unitSlug": "comparisons-of-numerical-summaries-of-data",
+          "unitTitle": "Comparisons of numerical summaries of data"
+        },
+        {
+          "unitSlug": "further-transformations",
+          "unitTitle": "Further transformations"
+        },
+        {
+          "unitSlug": "graphical-representations-of-data-scatter-graphs-and-time-series",
+          "unitTitle": "Graphical representations of data: scatter graphs and time series"
+        },
+        {
+          "unitSlug": "linear-graphs",
+          "unitTitle": "Linear graphs"
+        },
+        {
+          "unitSlug": "non-linear-graphs",
+          "unitTitle": "Non-linear graphs"
+        },
+        {
+          "unitSlug": "percentages",
+          "unitTitle": "Percentages"
+        },
+        {
+          "unitSlug": "plans-and-elevations",
+          "unitTitle": "Plans and elevations"
+        },
+        {
+          "unitSlug": "ratio",
+          "unitTitle": "Ratio"
+        },
+        {
+          "unitSlug": "right-angled-trigonometry",
+          "unitTitle": "Right-angled trigonometry"
+        },
+        {
+          "unitSlug": "rounding-estimation-and-bounds",
+          "unitTitle": "Rounding, estimation and bounds"
+        },
+        {
+          "unitSlug": "sampling",
+          "unitTitle": "Sampling"
+        },
+        {
+          "unitSlug": "similarity",
+          "unitTitle": "Similarity"
+        },
+        {
+          "unitSlug": "simultaneous-equations-2-variables",
+          "unitTitle": "Simultaneous equations: 2 variables"
+        },
+        {
+          "unitSlug": "standard-form-calculations",
+          "unitTitle": "Standard form calculations"
+        },
+        {
+          "unitSlug": "surds",
+          "unitTitle": "Surds"
+        }
+      ]
+    },
+    {
+      "yearSlug": "year-11",
+      "yearTitle": "Year 11",
+      "units": [
+        {
+          "unitSlug": "2d-and-3d-shape-surface-area-and-volume-pyramids-spheres-and-cones",
+          "unitTitle": "2D and 3D shape: surface area and volume (pyramids, spheres and cones)"
+        },
+        {
+          "unitSlug": "algebraic-fractions",
+          "unitTitle": "Algebraic fractions"
+        },
+        {
+          "unitSlug": "compound-measures",
+          "unitTitle": "Compound measures"
+        },
+        {
+          "unitSlug": "conditional-probability",
+          "unitTitle": "Conditional probability"
+        },
+        {
+          "unitSlug": "direct-and-inverse-proportion",
+          "unitTitle": "Direct and inverse proportion"
+        },
+        {
+          "unitSlug": "functions-and-proof",
+          "unitTitle": "Functions and proof"
+        },
+        {
+          "unitSlug": "further-sequences",
+          "unitTitle": "Further sequences"
+        },
+        {
+          "unitSlug": "graphical-representations-of-data-cumulative-frequency-and-histograms",
+          "unitTitle": "Graphical representations of data: cumulative frequency and histograms"
+        },
+        {
+          "unitSlug": "inequalities",
+          "unitTitle": "Inequalities"
+        },
+        {
+          "unitSlug": "iteration",
+          "unitTitle": "Iteration"
+        },
+        {
+          "unitSlug": "loci-and-construction",
+          "unitTitle": "Loci and construction"
+        },
+        {
+          "unitSlug": "non-right-angled-trigonometry",
+          "unitTitle": "Non right-angled trigonometry"
+        },
+        {
+          "unitSlug": "real-life-graphs",
+          "unitTitle": "Real-life graphs"
+        },
+        {
+          "unitSlug": "transformations-of-graphs",
+          "unitTitle": "Transformations of graphs"
+        },
+        {
+          "unitSlug": "vectors",
+          "unitTitle": "Vectors"
+        }
+      ]
+    }
+  ],
+  "suggestionsSample": [
+    {
+      "label": "Lesson · Checking and securing understanding of perimeter",
+      "scope": "lessons",
+      "url": "/teachers/lessons/checking-and-securing-understanding-of-perimeter-for-standard-shapes",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "unitSlug": "2d-and-3d-shape-compound-shapes"
+      }
+    },
+    {
+      "label": "Unit · Algebraic manipulation",
+      "scope": "units",
+      "url": "/teachers/units/algebraic-manipulation",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "years": [10],
+        "phaseSlug": "secondary"
+      }
+    },
+    {
+      "label": "Programme · Maths secondary sequence",
+      "scope": "sequences",
+      "url": "/teachers/programmes/maths-secondary",
+      "subject": "maths",
+      "keyStage": "ks4",
+      "contexts": {
+        "phaseSlug": "secondary",
+        "keyStages": ["ks3", "ks4"]
+      }
+    }
+  ]
+}

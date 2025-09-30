@@ -2,9 +2,9 @@
 
 All of these rules MUST be followed at all times.
 
-## Prime Directive
+## First Question
 
-**Ask: could it be simpler without compromising quality?**
+Always apply the first question; **Ask: could it be simpler without compromising quality?**
 
 ## Core Rules
 
@@ -14,7 +14,7 @@ ALL static data structures, types, type guards, Zod schemas, Zod validators, and
 
 ### Code Patterns and Architectural Principles
 
-- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, know that the _behaviour_ at the interface will remain proven by the test)
+- **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, now that the _behaviour_ at the interface will remain proven by the test)
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards compatibility** - replace old approaches with new approaches, never create compatibility layers, never prioritise backwards compatibility
 - **Pure functions first** - Use TDD to design (_test first_, red, green, refactor), no side effects, no I/O
@@ -40,10 +40,12 @@ Use the right tool for the job:
 - **Turborepo** for monorepo operations
 - **pnpm** for monorepo definitions and package management
 - **Vitest** for testing **runtime logic**
+- **Playwright** for testing **runtime UI**
 - **TypeScript** for compiler time types
 - **ESLint** for syntax correctness, code-style adherence, **architectural boundary adherence**
 - **Prettier** for code-style adherence
 - **Typedoc** for documentation generation
+- **Sentry** for observability, see [docs/agent-guidance/sentry-guidance.md](../../docs/agent-guidance/sentry-guidance.md)
 
 ### Code Quality
 
@@ -64,6 +66,8 @@ Use the right tool for the job:
 - **Type imports must be labelled with `type`** - e.g. `import type { Type } from 'package'` or `import { type Type } from 'package'`
 
 ### Testing
+
+For further information, see the [Testing Strategy](../../docs/agent-guidance/testing-strategy.md).
 
 #### Test Types
 

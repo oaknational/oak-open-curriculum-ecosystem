@@ -30,7 +30,7 @@
       "dependsOn": ["^type-gen"],
       "cache": true,
       "outputs": ["**/generated/**"],
-      "inputs": ["$TURBO_DEFAULT$", "**/scripts/**/*.ts"],
+      "inputs": ["$TURBO_DEFAULT$", "**/type-gen/**/*.ts", "**/scripts/**/*.ts"],
       "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"]
     },
@@ -40,6 +40,7 @@
       "outputs": ["**/docs/api/**", "**/docs/api-md/**"],
       "inputs": [
         "$TURBO_DEFAULT$",
+        "**/type-gen/**/*.ts",
         "**/scripts/**/*.ts",
         "next.config.ts",
         "src/**/*.ts",
@@ -118,6 +119,22 @@
         "$TURBO_ROOT$/vitest.config.base.ts"
       ]
     },
+    "mutate": {
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "tests/**/*.ts",
+        "vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.ts",
+        "$TURBO_ROOT$/vitest.config.base.ts",
+        "stryker.config.ts",
+        "$TURBO_ROOT$/stryker.config.base.ts"
+      ]
+    },
     "test:e2e": {
       "outputs": [],
       "cache": true,
@@ -133,6 +150,18 @@
       ],
       "env": ["NOTION_API_KEY", "OAK_API_KEY", "LOG_LEVEL"],
       "passThroughEnv": ["NOTION_API_KEY", "LOG_LEVEL", "OAK_API_KEY"]
+    },
+    "test:ui": {
+      "outputs": [],
+      "cache": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "src/**/*.ts",
+        "app/**/*.ts",
+        "app/**/*.tsx",
+        "next.config.ts",
+        "playwright.config.ts"
+      ]
     },
     "type-check": {
       "dependsOn": [],

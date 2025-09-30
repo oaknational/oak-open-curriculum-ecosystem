@@ -2,7 +2,7 @@
 
 import type { JSX } from 'react';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useServerInsertedHTML } from 'next/navigation';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 
@@ -18,6 +18,16 @@ export default function StyledComponentsRegistry({
     styledComponentsStyleSheet.instance.clearTag();
     return <>{styles}</>;
   });
+
+  useEffect(() => {
+    return () => {
+      styledComponentsStyleSheet.seal();
+    };
+  }, [styledComponentsStyleSheet]);
+
+  if (typeof window !== 'undefined') {
+    return <>{children}</>;
+  }
 
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>{children}</StyleSheetManager>

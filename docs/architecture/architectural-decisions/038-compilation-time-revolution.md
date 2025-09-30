@@ -154,6 +154,6 @@ const result = await tool.getExecutorFromGenericRequestParams(client, params);
 
 ## References
 
-- Implementation: `/packages/oak-curriculum-sdk/scripts/typegen/mcp-tools/mcp-tool-generator.ts`
+- Implementation: `/packages/oak-curriculum-sdk/type-gen/mcp-tools/mcp-tool-generator.ts`
 - Example output: `/packages/oak-curriculum-sdk/src/types/generated/api-schema/mcp-tools/tools/`
 - Plan: `/.agent/plans/compilation-time-revolution-plan.md`

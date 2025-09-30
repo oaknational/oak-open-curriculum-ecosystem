@@ -42,8 +42,8 @@ This is achieved through:
 
 #### Key Components:
 
-- `scripts/typegen/` - Build-time generation scripts that extract metadata from OpenAPI
-- `scripts/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
+- `type-gen/` - Build-time generation scripts that extract metadata from OpenAPI
+- `type-gen/mcp-toolgen.ts` - Post-zodgen script that maps MCP tools to actual Zod validators
 - `src/types/generated/` - Generated TypeScript types and constants (do not edit manually)
 - `src/client/` - Runtime client that uses the pre-generated types
 - `src/tool-generation/` - Exports for programmatic tool generation (e.g., MCP servers)
@@ -113,6 +113,14 @@ const response = await fetchFromAPI(/* ... */);
 const validated = validateToolResponse(toolName, response);
 ```
 
+### Shared Validation Helpers
+
+- `parseSchema` wraps `schema.safeParse`, returning a typed `ValidationResult` without `any` casts.
+- `parseWithCurriculumSchema`, `parseWithCurriculumSchemaInstance`, `parseEndpointParameters`, and `parseSearchResponse` delegate to `parseSchema`, covering curriculum responses, request parameter maps, and search responses.
+- `parseSearchSuggestionResponse` applies the same pattern for suggestions.
+
+Downstream consumers **must** import these helpers rather than duplicating validation logic. If the OpenAPI schema changes, rerunning `pnpm type-gen` updates the generated Zod schemas and the helpers continue to provide the correct `_input`/`_output` types.
+
 ### Architectural Decisions
 
 This SDK follows several important architectural patterns documented in our ADRs:
@@ -123,21 +131,22 @@ This SDK follows several important architectural patterns documented in our ADRs
 - [ADR-031: Generation-Time Extraction](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md) - Metadata extraction happens at build time, not runtime
 - [ADR-035: Unified SDK-MCP Type Generation](../../docs/architecture/architectural-decisions/035-unified-sdk-mcp-type-generation.md) - MCP tool types flow from the SDK
 - [ADR-047: Canonical URL Generation at Type-Gen Time](../../docs/architecture/architectural-decisions/047-canonical-url-generation-at-typegen-time.md) - Automatic canonical URL generation in all responses
+- [ADR-048: Shared Parse Schema Helper](../../docs/architecture/architectural-decisions/048-shared-parse-schema-helper.md) - Describes how `parseSchema` validates curriculum/search requests and responses.
 
 ### Directory Structure
 
 ```text
 oak-curriculum-sdk/
-├── scripts/
+├── type-gen/
 │   ├── typegen.ts         # Phase 1: OpenAPI type generation
 │   ├── zodgen.ts          # Phase 2: Zod schema generation
 │   ├── mcp-toolgen.ts     # Phase 3: MCP validator mapping
-│   └── typegen/           # Build-time type generation
-│       ├── operations/    # Extract and generate operation constants
-│       ├── parameters/    # Extract and generate parameter constants
-│       ├── paths/         # Extract and generate path constants
-│       ├── routing/       # Generate canonical URL helpers
-│       └── mcp-tools/     # MCP tool type generation
+│   ├── operations/        # Extract and generate operation constants
+│   ├── parameters/        # Extract and generate parameter constants
+│   ├── paths/             # Extract and generate path constants
+│   ├── routing/           # Generate canonical URL helpers
+│   ├── mcp-tools/         # MCP tool type generation
+│   └── lib/               # Shared helpers for generation
 ├── src/
 │   ├── client/            # Runtime API client
 │   ├── response-augmentation.ts # Automatic canonical URL augmentation

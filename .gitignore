@@ -169,3 +169,6 @@ vite.config.ts.timestamp-*
 
 
 .vercel
+
+# stryker temp files
+.stryker-tmp

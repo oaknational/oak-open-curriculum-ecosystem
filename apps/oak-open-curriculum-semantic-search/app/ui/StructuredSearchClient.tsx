@@ -1,88 +1,117 @@
 'use client';
 
 import type { JSX, FormEvent } from 'react';
-import sc from 'styled-components';
-import { useActionState, useState } from 'react';
+import { OakBox, OakTypography } from '@oaknational/oak-components';
+import type { StructuredBody } from './structured-search.shared';
 import {
   ScopeField,
   QueryField,
   SubjectField,
   KeyStageField,
+  PhaseField,
   MinLessonsField,
   SizeField,
 } from './structured-fields';
+import { Fragment } from 'react';
+import { useStructuredSearchHandlers } from './StructuredSearchClient.hooks';
+import { PrimarySubmitButton } from './client/SearchPageClient.styles';
+import styledComponents from 'styled-components';
 
-type StructuredBody = {
-  scope: 'units' | 'lessons';
-  text: string;
-  subject?: string;
-  keyStage?: string;
-  minLessons?: number;
-  size?: number;
-};
-
-export default function StructuredSearchClient({
-  action,
-  onResultsAction,
-  onErrorAction,
-  setLoadingAction,
-}: {
-  action: (input: StructuredBody) => Promise<{ results: unknown[]; error?: string }>;
-  onResultsAction: (results: unknown[]) => void;
+export default function StructuredSearchClient(props: {
+  action: (input: StructuredBody) => Promise<{ result: unknown | null; error?: string }>;
+  onResultsAction: (result: unknown | null) => void;
   onErrorAction: (message: string | null) => void;
   setLoadingAction: (isLoading: boolean) => void;
+  onScopeChange?: (scope: StructuredBody['scope']) => void;
+  onSubmitPayload?: (payload: StructuredBody) => void;
 }): JSX.Element {
-  const [structured, setStructured] = useState<StructuredBody>({
-    scope: 'units',
-    text: '',
-    subject: '',
-    keyStage: '',
-    minLessons: 0,
-    size: 10,
-  });
-
-  const initial: { error?: string; results: unknown[] } | null = null;
-  const [serverState, formAction, pending] = useActionState(
-    makeServerReducer(action, () => structured),
-    initial,
-  );
-
-  const onSubmit = makeOnSubmit(setLoadingAction, onErrorAction, onResultsAction);
-
-  reflectServerState(serverState, pending, {
-    onResults: onResultsAction,
-    onError: onErrorAction,
-    setLoading: setLoadingAction,
-  });
+  const { model, pending, handleChange, handleSubmit } = useStructuredSearchHandlers(props);
 
   return (
     <StructuredForm
-      model={structured}
-      onChange={(patch) => setStructured({ ...structured, ...patch })}
+      model={model}
+      onChange={handleChange}
       onSubmit={() => {
-        onSubmit();
-        // submit via server action
-        formAction();
+        handleSubmit();
       }}
       disabled={pending}
     />
   );
 }
 
-function makeServerReducer(
-  action: (input: StructuredBody) => Promise<{ results: unknown[]; error?: string }>,
-  getModel: () => StructuredBody,
-) {
-  return async (): Promise<{ error?: string; results: unknown[] }> => {
-    const clean = buildStructuredBody(getModel());
-    return action(clean);
+function resolveStructuredVisibility(scope: StructuredBody['scope']): {
+  subject: boolean;
+  keyStage: boolean;
+  phase: boolean;
+  minLessons: boolean;
+} {
+  return {
+    subject: true,
+    keyStage: scope === 'all' || scope === 'lessons' || scope === 'units',
+    phase: scope === 'all' || scope === 'sequences',
+    minLessons: scope === 'all' || scope === 'units',
   };
 }
 
-const FormGrid = sc.form`
-  display: grid;
-  gap: ${(p) => p.theme.app.space.sm};
-`;
+function StructuredScopeGuidance({
+  scope,
+}: {
+  scope: StructuredBody['scope'];
+}): JSX.Element | null {
+  if (scope !== 'all') {
+    return null;
+  }
+
+  return (
+    <OakTypography as="p" $font="body-4" $color="text-subdued">
+      Filters apply to specific categories: Subject &amp; Key stage affect lessons and units, Phase
+      applies to programmes, and Minimum lessons applies to units.
+    </OakTypography>
+  );
+}
+
+function StructuredFilterFields({
+  model,
+  onChange,
+  visibility,
+}: {
+  model: StructuredBody;
+  onChange: (patch: Partial<StructuredBody>) => void;
+  visibility: ReturnType<typeof resolveStructuredVisibility>;
+}): JSX.Element {
+  const descriptors = [
+    {
+      key: 'subject',
+      visible: visibility.subject,
+      render: () => <SubjectField value={model.subject ?? ''} onChange={onChange} />,
+    },
+    {
+      key: 'key-stage',
+      visible: visibility.keyStage,
+      render: () => <KeyStageField value={model.keyStage ?? ''} onChange={onChange} />,
+    },
+    {
+      key: 'phase',
+      visible: visibility.phase,
+      render: () => <PhaseField value={model.phaseSlug ?? ''} onChange={onChange} />,
+    },
+    {
+      key: 'min-lessons',
+      visible: visibility.minLessons,
+      render: () => <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />,
+    },
+  ];
+
+  return (
+    <>
+      {descriptors
+        .filter((descriptor) => descriptor.visible)
+        .map((descriptor) => (
+          <Fragment key={descriptor.key}>{descriptor.render()}</Fragment>
+        ))}
+    </>
+  );
+}
 
 function StructuredForm({
   model,
@@ -95,70 +124,40 @@ function StructuredForm({
   onSubmit: (ev: FormEvent<HTMLFormElement>) => void;
   disabled?: boolean;
 }): JSX.Element {
-  return (
-    <FormGrid
-      onSubmit={(ev) => {
-        ev.preventDefault();
-        onSubmit(ev);
-      }}
-      id="structured-panel"
-      role="tabpanel"
-      aria-labelledby="structured-tab"
-    >
-      <ScopeField value={model.scope} onChange={onChange} />
-      <QueryField value={model.text} onChange={onChange} />
-      <SubjectField value={model.subject ?? ''} onChange={onChange} />
-      <KeyStageField value={model.keyStage ?? ''} onChange={onChange} />
-      <MinLessonsField value={model.minLessons ?? 0} onChange={onChange} />
-      <SizeField value={model.size ?? 10} onChange={onChange} />
+  const scope = model.scope;
+  const visibility = resolveStructuredVisibility(scope);
 
-      <button type="submit" disabled={disabled}>
-        Search
-      </button>
-    </FormGrid>
+  return (
+    <StructuredFormContainer id="structured-panel" role="tabpanel" aria-labelledby="structured-tab">
+      <StyledForm
+        data-testid="structured-search-form"
+        onSubmit={(ev: FormEvent<HTMLFormElement>) => {
+          ev.preventDefault();
+          onSubmit(ev);
+        }}
+      >
+        <ScopeField value={model.scope} onChange={onChange} />
+        <StructuredScopeGuidance scope={scope} />
+        <QueryField value={model.text} onChange={onChange} />
+        <StructuredFilterFields model={model} onChange={onChange} visibility={visibility} />
+        <SizeField value={model.size ?? 10} onChange={onChange} />
+
+        <PrimarySubmitButton type="submit" disabled={disabled}>
+          Search
+        </PrimarySubmitButton>
+      </StyledForm>
+    </StructuredFormContainer>
   );
 }
 
-function buildStructuredBody(s: StructuredBody): StructuredBody {
-  return {
-    scope: s.scope,
-    text: s.text,
-    subject: s.subject || undefined,
-    keyStage: s.keyStage || undefined,
-    minLessons: s.minLessons && s.minLessons > 0 ? s.minLessons : undefined,
-    size: s.size && s.size > 0 ? s.size : undefined,
-  };
-}
+const StructuredFormContainer = styledComponents(OakBox)`
+  display: grid;
+  width: 100%;
+  min-inline-size: 0;
+`;
 
-function makeOnSubmit(
-  setLoading: (b: boolean) => void,
-  onError: (m: string | null) => void,
-  onResults: (r: unknown[]) => void,
-) {
-  return (): void => {
-    setLoading(true);
-    onError(null);
-    onResults([]);
-  };
-}
-
-function reflectServerState(
-  serverState: { error?: string; results: unknown[] } | null,
-  pending: boolean,
-  handlers: {
-    onResults: (r: unknown[]) => void;
-    onError: (m: string | null) => void;
-    setLoading: (b: boolean) => void;
-  },
-): void {
-  if (pending || serverState === null) {
-    return;
-  }
-  if (serverState.error) {
-    handlers.onError(serverState.error);
-  }
-  if (Array.isArray(serverState.results)) {
-    handlers.onResults(serverState.results);
-  }
-  handlers.setLoading(false);
-}
+const StyledForm = styledComponents('form')`
+  display: grid;
+  gap: var(--app-gap-cluster);
+  width: 100%;
+`;

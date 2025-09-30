@@ -1,0 +1,18 @@
+[
+  {
+    "keyStage": "ks2",
+    "subject": "history",
+    "unitSlug": "ancient-egypt",
+    "unitTitle": "Ancient Egypt",
+    "lessons": [
+      {
+        "lessonSlug": "ancient-egypt-lesson-1",
+        "lessonTitle": "Introducing Ancient Egypt"
+      },
+      {
+        "lessonSlug": "ancient-egypt-lesson-2",
+        "lessonTitle": "Life Along the Nile"
+      }
+    ]
+  }
+]

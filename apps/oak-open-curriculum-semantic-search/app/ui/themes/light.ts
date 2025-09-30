@@ -1,12 +1,11 @@
-import { oakDefaultTheme, type OakTheme } from '@oaknational/oak-components';
-import { buildTokens, type AppTokens } from './tokens';
-
-export type AppTheme = OakTheme & { app: AppTokens };
+import type { AppTheme } from './types';
+import { resolveAppTokens } from './semantic-theme-resolver';
+import { semanticThemeSpec } from './semantic-theme-spec';
 
 export function createLightTheme(): AppTheme {
-  const base: OakTheme = oakDefaultTheme;
   return {
-    ...base,
-    app: buildTokens(),
+    name: semanticThemeSpec.light.name,
+    uiColors: semanticThemeSpec.light.uiColors,
+    app: resolveAppTokens('light'),
   };
 }

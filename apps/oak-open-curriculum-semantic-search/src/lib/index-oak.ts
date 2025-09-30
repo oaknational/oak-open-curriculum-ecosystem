@@ -1,116 +1,116 @@
-import type { KeyStage, SubjectSlug, LessonsIndexDoc, UnitsIndexDoc } from '../types/oak';
-import type { OakClient } from '../adapters/oak-adapter-sdk';
+import { generateCanonicalUrl, isKeyStage, isSubject } from '@oaknational/oak-curriculum-sdk';
+import type { KeyStage, SearchSubjectSlug } from '../types/oak';
+import type { OakClient, SubjectSequenceEntry } from '../adapters/oak-adapter-sdk';
+import { type SequenceFacetSource } from './indexing/sequence-facets';
+import {
+  buildSequenceFacetOps,
+  buildSequenceFacetSources,
+  type SequenceFacetProcessingMetrics,
+} from './indexing/sequence-facet-index';
+import {
+  buildLessonDocuments,
+  buildRollupDocuments,
+  buildUnitDocuments,
+} from './indexing/index-bulk-helpers';
+
+export interface BuildIndexBulkOpsOptions {
+  readonly onSequenceFacetProcessed?: (
+    details: SequenceFacetProcessingMetrics & { subject: SearchSubjectSlug },
+  ) => void;
+}
 
 export async function buildIndexBulkOps(
   client: OakClient,
   keyStages: readonly string[],
   subjects: readonly string[],
+  options?: BuildIndexBulkOpsOptions,
 ): Promise<unknown[]> {
-  const ksList = filterKeyStages(keyStages);
-  const subjList = filterSubjects(subjects);
   const bulkOps: unknown[] = [];
-  for (const subject of subjList) {
-    for (const ks of ksList) {
-      bulkOps.push(...(await buildOpsForPair(client, ks, subject)));
+  for (const subject of filterSubjects(subjects)) {
+    const subjectSequences = await client.getSubjectSequences(subject);
+    const events: SequenceFacetProcessingMetrics[] = [];
+    const sequenceSources = await buildSequenceFacetSources(
+      (slug) => client.getSequenceUnits(slug),
+      subjectSequences,
+      options?.onSequenceFacetProcessed
+        ? {
+            instrumentation: {
+              record(details) {
+                events.push(details);
+              },
+            },
+          }
+        : undefined,
+    );
+    if (options?.onSequenceFacetProcessed) {
+      for (const event of events) {
+        options.onSequenceFacetProcessed({ ...event, subject });
+      }
+    }
+    for (const ks of filterKeyStages(keyStages)) {
+      bulkOps.push(
+        ...(await buildOpsForPair(client, ks, subject, subjectSequences, sequenceSources)),
+      );
     }
   }
   return bulkOps;
 }
 
 function filterKeyStages(list: readonly string[]): KeyStage[] {
-  return list.filter(
-    (ks): ks is KeyStage => ks === 'ks1' || ks === 'ks2' || ks === 'ks3' || ks === 'ks4',
-  );
+  return list.filter((ks): ks is KeyStage => isKeyStage(ks));
 }
 
-function filterSubjects(list: readonly string[]): SubjectSlug[] {
-  const subjectStrings = [
-    'art',
-    'citizenship',
-    'computing',
-    'cooking-nutrition',
-    'design-technology',
-    'english',
-    'french',
-    'geography',
-    'german',
-    'history',
-    'maths',
-    'music',
-    'physical-education',
-    'religious-education',
-    'rshe-pshe',
-    'science',
-    'spanish',
-  ] as const;
-  const subjectSet = new Set<string>(subjectStrings);
-  return list.filter((s): s is SubjectSlug => subjectSet.has(s));
+function filterSubjects(list: readonly string[]): SearchSubjectSlug[] {
+  return list.filter((s): s is SearchSubjectSlug => isSubject(s));
 }
 
 async function buildOpsForPair(
   client: OakClient,
   ks: KeyStage,
-  subject: SubjectSlug,
+  subject: SearchSubjectSlug,
+  subjectSequences: readonly SubjectSequenceEntry[],
+  sequenceSources: ReadonlyMap<string, SequenceFacetSource>,
 ): Promise<unknown[]> {
-  const ops: unknown[] = [];
-  const [units, lessonsGrouped] = await Promise.all([
+  const [units, groups] = await Promise.all([
     client.getUnitsByKeyStageAndSubject(ks, subject),
     client.getLessonsByKeyStageAndSubject(ks, subject),
   ]);
-  for (const u of units) {
-    ops.push(...buildUnitOps(u, subject, ks));
-  }
-  for (const groupOps of await buildLessonOps(client, lessonsGrouped, subject, ks)) {
-    ops.push(...groupOps);
-  }
-  return ops;
-}
 
-function buildUnitOps(
-  u: { unitSlug: string; unitTitle: string },
-  subject: SubjectSlug,
-  ks: KeyStage,
-): unknown[] {
-  const unitDoc: UnitsIndexDoc = {
-    unit_id: u.unitSlug,
-    unit_slug: u.unitSlug,
-    unit_title: u.unitTitle,
-    subject_slug: subject,
-    key_stage: ks,
-    lesson_ids: [],
-    lesson_count: 0,
-  };
-  return [{ index: { _index: 'oak_units', _id: unitDoc.unit_id } }, unitDoc];
-}
-
-async function buildLessonOps(
-  client: OakClient,
-  groups: readonly {
-    unitSlug: string;
-    unitTitle: string;
-    lessons: { lessonSlug: string; lessonTitle: string }[];
-  }[],
-  subject: SubjectSlug,
-  ks: KeyStage,
-): Promise<unknown[][]> {
-  const allOps: unknown[][] = [];
-  for (const group of groups) {
-    const opsForGroup: unknown[] = [];
-    for (const lesson of group.lessons) {
-      const transcript = await client.getLessonTranscript(lesson.lessonSlug);
-      const doc: LessonsIndexDoc = {
-        lesson_id: lesson.lessonSlug,
-        lesson_slug: lesson.lessonSlug,
-        lesson_title: lesson.lessonTitle,
-        subject_slug: subject,
-        key_stage: ks,
-        unit_ids: [group.unitSlug],
-        unit_titles: [group.unitTitle],
-        transcript_text: transcript.transcript,
-      };
-      opsForGroup.push({ index: { _index: 'oak_lessons', _id: doc.lesson_id } }, doc);
-    }
-    allOps.push(opsForGroup);
+  const subjectProgrammesUrl = generateCanonicalUrl('subject', subject, {
+    subject: { keyStageSlugs: [ks] },
+  });
+  if (!subjectProgrammesUrl) {
+    throw new Error(`Missing subject programmes canonical URL for ${subject}/${ks}`);
   }
-  return allOps;
+
+  const { unitSummaries, unitOps } = await buildUnitDocuments(
+    client,
+    units,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+  );
+  const { lessonOps, rollupSnippets } = await buildLessonDocuments(
+    client,
+    groups,
+    unitSummaries,
+    subject,
+    ks,
+  );
+  const rollupOps = buildRollupDocuments(
+    unitSummaries,
+    rollupSnippets,
+    subject,
+    ks,
+    subjectProgrammesUrl,
+  );
+  const sequenceFacetOps = buildSequenceFacetOps({
+    subject,
+    keyStage: ks,
+    sequences: subjectSequences,
+    sequenceSources,
+    unitSummaries,
+  });
+
+  return [...unitOps, ...lessonOps, ...rollupOps, ...sequenceFacetOps];
 }

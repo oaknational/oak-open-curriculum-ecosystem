@@ -1,18 +1,10 @@
 {
   "settings": {
     "analysis": {
-      "filter": {
-        "oak_syns_filter": {
-          "type": "synonym_graph",
-          "synonyms_set": "oak-syns",
-          "updateable": true
-        }
-      },
-      "analyzer": {
-        "oak_text": {
+      "normalizer": {
+        "oak_lower": {
           "type": "custom",
-          "tokenizer": "standard",
-          "filter": ["lowercase", "oak_syns_filter"]
+          "filter": ["lowercase", "asciifolding"]
         }
       }
     }
@@ -20,19 +12,16 @@
   "mappings": {
     "dynamic": "strict",
     "properties": {
-      "unit_id": { "type": "keyword" },
-      "unit_slug": { "type": "keyword" },
-      "unit_title": {
-        "type": "text",
-        "analyzer": "oak_text",
-        "fields": { "keyword": { "type": "keyword", "ignore_above": 256 } }
-      },
-      "subject_slug": { "type": "keyword" },
-      "key_stage": { "type": "keyword" },
-      "year": { "type": "integer" },
-      "lesson_ids": { "type": "keyword" },
+      "unit_id": { "type": "keyword", "normalizer": "oak_lower" },
+      "unit_slug": { "type": "keyword", "normalizer": "oak_lower" },
+      "subject_slug": { "type": "keyword", "normalizer": "oak_lower" },
+      "key_stage": { "type": "keyword", "normalizer": "oak_lower" },
+      "years": { "type": "keyword", "normalizer": "oak_lower" },
       "lesson_count": { "type": "integer" },
-      "unit_topics": { "type": "text", "analyzer": "oak_text" }
+      "sequence_ids": { "type": "keyword", "normalizer": "oak_lower" },
+      "unit_url": { "type": "keyword", "ignore_above": 1024 },
+      "subject_programmes_url": { "type": "keyword", "ignore_above": 1024 },
+      "updated_at": { "type": "date" }
     }
   }
 }

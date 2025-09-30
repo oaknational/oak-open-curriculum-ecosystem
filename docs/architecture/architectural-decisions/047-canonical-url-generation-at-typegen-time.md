@@ -36,7 +36,7 @@ The canonical URL generation logic was scattered across:
 
 #### URL Helper Generation
 
-- Generated in `packages/sdks/oak-curriculum-sdk/scripts/typegen/routing/generate-url-helpers.ts`
+- Generated in `packages/sdks/oak-curriculum-sdk/type-gen/routing/generate-url-helpers.ts`
 - Creates typed URL generation functions for each content type (lesson, unit, subject, sequence, thread)
 - Includes context-aware URL generation for resources that require additional metadata
 - Uses structured logging for debugging URL generation issues
@@ -110,12 +110,12 @@ The canonical URL generation logic was scattered across:
 #### Core Implementation
 
 - `packages/sdks/oak-curriculum-sdk/src/response-augmentation.ts` - Response augmentation logic
-- `packages/sdks/oak-curriculum-sdk/scripts/typegen/routing/generate-url-helpers.ts` - URL helper generator
+- `packages/sdks/oak-curriculum-sdk/type-gen/routing/generate-url-helpers.ts` - URL helper generator
 - `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/routing/url-helpers.ts` - Generated URL helpers
 
 #### Schema Integration
 
-- `packages/sdks/oak-curriculum-sdk/scripts/schema-decoration-core.ts` - Schema decoration logic
+- `packages/sdks/oak-curriculum-sdk/type-gen/schema-decoration-core.ts` - Schema decoration logic
 - Integration with type generation pipeline to decorate OpenAPI schema
 
 #### Application Updates

@@ -3,7 +3,7 @@
 
 import type { JSX } from 'react';
 import { ThemeProvider as ThemeContextProvider, useThemeContext } from './theme/ThemeContext';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { ColorModeProvider, useColorMode } from './theme/ColorModeContext';
 import { ThemeBridgeProvider } from './theme/ThemeBridgeProvider';
 
@@ -38,13 +38,9 @@ function ThemeWrapper({ children }: { children: React.ReactNode }): JSX.Element 
 function SyncModeToResolved(): JSX.Element | null {
   const { resolved } = useThemeContext();
   const { mode, setMode } = useColorMode();
-  const didSyncRef = useRef(false);
   useEffect(() => {
-    if (!didSyncRef.current) {
-      didSyncRef.current = true;
-      if (resolved !== mode) {
-        setMode(resolved);
-      }
+    if (resolved !== mode) {
+      setMode(resolved);
     }
   }, [resolved, mode, setMode]);
   return null;

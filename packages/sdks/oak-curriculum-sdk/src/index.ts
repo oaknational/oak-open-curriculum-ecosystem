@@ -56,7 +56,8 @@ export type { KeyStage, Subject } from './types/generated/api-schema/path-parame
 // Validation module exports (explicit for tree-shaking)
 export {
   validateRequest,
-  validateResponse,
+  validateCurriculumResponse,
+  validateSearchResponse,
   isValidationFailure,
   isValidationSuccess,
 } from './validation/index.js';
@@ -129,17 +130,94 @@ export {
   getOwnString,
 } from './types/helpers.js';
 
-// Response-shape type guards for search-related endpoints
+// Hybrid search index types (SDK-owned to centralise downstream usage)
+export type {
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+  SearchCompletionSuggestPayload,
+} from './types/search-index.js';
+export {
+  DEFAULT_INCLUDE_FACETS,
+  SearchStructuredRequestSchema,
+  isSearchStructuredRequest,
+  SearchNaturalLanguageRequestSchema,
+  isSearchNaturalLanguageRequest,
+  SearchParsedQuerySchema,
+  isSearchParsedQuery,
+  SEARCH_SCOPES,
+  SEARCH_SCOPES_WITH_ALL,
+  isSearchScope,
+  isSearchScopeWithAll,
+  DEFAULT_SUGGESTION_CACHE,
+  SearchSuggestionContextSchema,
+  SearchSuggestionItemSchema,
+  SearchSuggestionResponseSchema,
+  SearchSuggestionRequestSchema,
+  isSearchSuggestionRequest,
+  isSearchSuggestionResponse,
+  SearchLessonsResponseSchema,
+  SearchUnitsResponseSchema,
+  SearchSequencesResponseSchema,
+  SearchMultiScopeResponseSchema,
+  createSearchLessonsResponse,
+  createSearchUnitsResponse,
+  createSearchSequencesResponse,
+  createSearchMultiScopeResponse,
+} from './types/generated/search/index.js';
+
+export type {
+  SearchStructuredRequest,
+  SearchStructuredScope,
+  SearchNaturalLanguageRequest,
+  SearchParsedQuery,
+  SearchParsedIntent,
+  SearchScope,
+  SearchScopeWithAll,
+  SearchSuggestionItem,
+  SearchSuggestionResponse,
+  SearchSuggestionRequest,
+  SequenceFacetUnit,
+  SequenceFacet,
+  SearchFacets,
+  SearchLessonResult,
+  SearchLessonsResponse,
+  SearchLessonsSuggestions,
+  SearchLessonsSuggestionCache,
+  SearchUnitResult,
+  SearchUnitsResponse,
+  SearchSequenceResult,
+  SearchSequencesResponse,
+  SearchMultiScopeBucket,
+  SearchMultiScopeResponse,
+} from './types/generated/search/index.js';
+export type {
+  SearchLessonSummary,
+  SearchUnitSummary,
+  SearchSubjectSequences,
+} from './types/search-response-guards.js';
+export type {
+  LessonSummaryResponseSchema,
+  UnitSummaryResponseSchema,
+  SubjectSequenceResponseSchema,
+} from './types/search-response-guards.js';
+export {
+  lessonSummarySchema,
+  unitSummarySchema,
+  subjectSequencesSchema,
+} from './types/search-response-guards.js';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+} from './types/generated/zod/search/output/index.js';
 export {
   isUnitsGrouped,
   isLessonGroups,
   isTranscriptResponse,
+  isLessonSummary,
+  isUnitSummary,
+  isSubjectSequences,
 } from './types/search-response-guards.js';
-
-// Hybrid search index types (SDK-owned to centralise downstream usage)
-export type {
-  LessonsIndexDoc,
-  UnitsIndexDoc,
-  UnitRollupDoc,
-  SubjectSlug,
-} from './types/search-index.js';

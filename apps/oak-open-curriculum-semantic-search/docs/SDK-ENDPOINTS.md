@@ -1,47 +1,58 @@
 # SDK Parity Endpoints
 
-The hybrid Elasticsearch search is the primary experience. We retain two parity endpoints that proxy the Oak Curriculum SDK so we can compare behaviours, run regression checks, and provide fallbacks during incident response. Both live under `/api/sdk/*` and require the same environment configuration as the hybrid endpoints.
+We retain parity endpoints under `/api/sdk/*` to compare the enriched Elasticsearch experience against the baseline Oak Curriculum API. These routes proxy the official SDK and are primarily for regression testing and incident response. They require the same environment configuration as the hybrid endpoints and are typically shielded behind feature flags.
 
 ## `POST /api/sdk/search-lessons`
 
-Mirrors the SDK’s `searchLessons` method (original REST `GET /search/lessons`).
+Mirrors `sdk.searchLessons` (REST `GET /search/lessons`).
 
-- **Body schema:**
+Request body:
 
-  ```json
-  {
-    "q": "fractions",
-    "keyStage": "ks2",
-    "subject": "maths",
-    "unit": "optional-unit-slug",
-    "limit": 20,
-    "offset": 0
-  }
-  ```
+```json
+{
+  "q": "fractions",
+  "keyStage": "ks2",
+  "subject": "maths",
+  "unit": "optional-unit-slug",
+  "limit": 20,
+  "offset": 0
+}
+```
 
-- **Behaviour:** Returns paginated lexical search results from the Oak API. Filters (`keyStage`, `subject`, `unit`) are validated via SDK guards.
-- **Usage:** Useful for test comparisons against the hybrid `scope="lessons"` endpoint or for smoke tests when Elasticsearch is unavailable.
+Behaviour:
+
+- Returns paginated lexical results from the Oak API.
+- Validates `keyStage`, `subject`, `unit` using SDK guards and generated types.
+- Useful for comparing recall/precision against `/api/search` (`scope="lessons"`).
 
 ## `POST /api/sdk/search-transcripts`
 
-Mirrors the SDK’s `searchTranscripts` method (REST `GET /search/transcripts`).
+Mirrors `sdk.searchTranscripts` (REST `GET /search/transcripts`).
 
-- **Body schema:**
+Request body:
 
-  ```json
-  {
-    "q": "photosynthesis",
-    "keyStage": "ks3",
-    "subject": "science",
-    "limit": 5
-  }
-  ```
+```json
+{
+  "q": "photosynthesis",
+  "keyStage": "ks3",
+  "subject": "science",
+  "limit": 5
+}
+```
 
-- **Behaviour:** Returns transcript-centred results (lexical) from the Oak API, defaulting to 5 hits when `limit` is omitted.
-- **Usage:** Provides a ground truth when evaluating semantic recall, and a fallback surface if the Elasticsearch deployment is undergoing maintenance.
+Behaviour:
 
-## Operational Notes
+- Returns transcript-centric lexical hits from the Oak API (defaults `limit` to 5 when omitted).
+- Useful for benchmarking transcript snippets returned by the Elasticsearch hybrid service.
 
-- These routes **do not** implement RRF or semantic ranking; they are straight SDK proxies.
-- Keep them hidden behind feature flags if exposing publicly—they are primarily for internal testing and debugging.
-- Logging from these endpoints should clearly differentiate `sdk/*` requests from hybrid search to avoid noisy analytics.
+## Why keep these endpoints?
+
+- **Regression guard**: compare enriched indices vs canonical API responses.
+- **Fallback**: provide temporary alternative if Elasticsearch service experiences downtime (behind feature flag).
+- **Diagnostics**: log parity results during development to tune synonyms/semantic weights.
+
+## Operational notes
+
+- Do **not** expose these routes publicly; guard with authentication/feature flags in production.
+- Ensure logging differentiates `sdk/*` from hybrid endpoints to avoid noisy analytics.
+- Documentation plan covers how these endpoints feature in onboarding materials; keep payload examples synchronised with SDK releases.

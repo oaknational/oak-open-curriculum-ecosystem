@@ -2,7 +2,7 @@
 
 ## 🚀 Getting Started
 
-- **New to MCP?** → [Developer Onboarding Journey](development/onboarding-journey.md) - 5-day structured learning path
+- **New to the repo?** → [Developer Onboarding](development/onboarding.md) – first-stop checklist covering GO.md cadence, shared parsing helpers, and workspace walkthroughs
 - **Experienced?** → [Quick Reference](quick-reference.md) - Jump right in with code examples
 - **Working with AI?** → [AI Agent Guide](agent-guidance/ai-agent-guide.md) - Essential GO.md patterns and practices
 
@@ -22,7 +22,7 @@
 
 ### Development
 
-- [Onboarding Journey](development/onboarding-journey.md) - Structured learning path for new developers
+- [Onboarding](development/onboarding.md) - Quick start guide for new developers and AI assistants
 - [Tooling](development/tooling.md) - Development tools and versions
 - [Troubleshooting](development/troubleshooting.md) - Common issues and solutions
 

@@ -1,13 +1,20 @@
 'use client';
 
-import type { JSX, ChangeEventHandler } from 'react';
+import type { ChangeEventHandler, JSX } from 'react';
+import {
+  OakBox,
+  OakFlex,
+  OakFormInput,
+  OakLabel,
+  OakTypography,
+} from '@oaknational/oak-components';
 
 interface LabeledSelectProps {
   label: string;
   id: string;
   value: string;
   onChange: ChangeEventHandler<HTMLSelectElement>;
-  options: readonly string[];
+  options: ReadonlyArray<string | { value: string; label: string }>;
   includeAny?: boolean;
 }
 
@@ -20,17 +27,34 @@ export function LabeledSelect({
   includeAny,
 }: LabeledSelectProps): JSX.Element {
   return (
-    <label>
-      {label}
-      <select id={id} value={value} onChange={onChange}>
+    <OakFlex $flexDirection="column" $gap="space-between-ssx">
+      <OakLabel htmlFor={id} $font="body-3-bold">
+        {label}
+      </OakLabel>
+      <OakBox
+        as="select"
+        id={id}
+        value={value}
+        onChange={onChange}
+        $pa="inner-padding-s"
+        $borderRadius="border-radius-s"
+        $ba="border-solid-s"
+        $borderColor="border-primary"
+        $background="bg-primary"
+        $color="text-primary"
+      >
         {includeAny ? <option value="">(any)</option> : null}
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    </label>
+        {options.map((opt) => {
+          const optionValue = typeof opt === 'string' ? opt : opt.value;
+          const optionLabel = typeof opt === 'string' ? opt : opt.label;
+          return (
+            <option key={optionValue} value={optionValue}>
+              {optionLabel}
+            </option>
+          );
+        })}
+      </OakBox>
+    </OakFlex>
   );
 }
 
@@ -43,6 +67,7 @@ interface LabeledInputProps {
   min?: number;
   max?: number;
   required?: boolean;
+  helperText?: string;
 }
 
 export function LabeledInput({
@@ -54,21 +79,30 @@ export function LabeledInput({
   min,
   max,
   required,
+  helperText,
 }: LabeledInputProps): JSX.Element {
   return (
-    <label>
-      {label}
-      <input
+    <OakFlex $flexDirection="column" $gap="space-between-ssx">
+      <OakLabel htmlFor={id} $font="body-3-bold">
+        {label}
+      </OakLabel>
+      <OakFormInput
         id={id}
         type={type}
-        value={value}
-        // Browser plugins may auto-fill the field, so we need to suppress hydration warning
+        value={typeof value === 'number' ? String(value) : value}
         suppressHydrationWarning
         min={min}
         max={max}
         required={required}
         onChange={onChange}
+        wrapperWidth="100%"
+        borderColor="border-primary"
       />
-    </label>
+      {helperText ? (
+        <OakTypography as="span" $font="body-4" $color="text-subdued">
+          {helperText}
+        </OakTypography>
+      ) : null}
+    </OakFlex>
   );
 }

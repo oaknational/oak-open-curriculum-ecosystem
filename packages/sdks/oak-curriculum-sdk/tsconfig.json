@@ -5,7 +5,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "scripts/**/*.ts",
+    "type-gen/**/*.ts",
     "tests/**/*.ts",
     "**/*.test.ts",
     "*.config.ts",

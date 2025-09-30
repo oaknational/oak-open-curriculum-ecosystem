@@ -95,16 +95,20 @@ export const tsRules: Linter.RulesRecord = {
   'max-depth': ['error', 3],
   'max-statements': ['error', 20],
   'max-lines-per-function': ['error', 50],
+  // Reduce to 150, encourage collections of small, focused files
   'max-lines': ['error', 250],
 
-  // General good practices
-  // TypeScript handles undefined variables better than ESLint
+  // To turn back on
   'no-undef': 'off',
+
+  // To investigate turning back on
+  'consistent-return': 'off',
+
+  // General good practices
   'no-empty': 'error',
   'no-empty-function': 'error',
   'no-constant-condition': 'error',
   '@typescript-eslint/no-deprecated': 'error',
-  'consistent-return': 'off',
   '@typescript-eslint/consistent-return': 'error',
 
   // Import rules for tree shaking

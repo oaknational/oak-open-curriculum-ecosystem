@@ -1,203 +1,196 @@
 'use client';
 
-import { createElement, type JSX } from 'react';
-import sc from 'styled-components';
-import { z } from 'zod';
+import type { JSX } from 'react';
+import type { MultiScopeBucketView, SearchMeta } from './client/useSearchController';
+import { OakBox, OakTypography } from '@oaknational/oak-components';
+import {
+  ResultsSchema,
+  ResultsSection,
+  ResultsGrid,
+  ResultItem,
+  extractTitle,
+  extractSubject,
+  extractKeyStage,
+  extractHighlights,
+} from './SearchResults.shared';
 
-type AllowedTag = 'em' | 'strong' | 'mark';
-const ALLOWED_TAGS: ReadonlySet<string> = new Set(['em', 'strong', 'mark']);
-
-function isAllowedTag(name: string): name is AllowedTag {
-  return ALLOWED_TAGS.has(name);
-}
-
-function tokenize(html: string): string[] {
-  return html.split(/(<\/?[^>]+>)/g).filter(Boolean);
-}
-
-function flushUnclosed(
-  stack: { type: AllowedTag; children: React.ReactNode[] }[],
-  current: () => React.ReactNode[],
-): void {
-  if (stack.length) {
-    const last = stack.pop();
-    if (last) {
-      current().push(...last.children);
-    }
-  }
-}
-
-function handleToken(
-  tok: string,
-  stack: { type: AllowedTag; children: React.ReactNode[] }[],
-  current: () => React.ReactNode[],
-  keyRef: { current: number },
-): void {
-  const m = tok.match(/^<\/?\s*([a-zA-Z0-9]+)[^>]*>$/);
-  if (!m) {
-    current().push(tok);
-    return;
-  }
-  const name = m[1].toLowerCase();
-  const closing = tok.startsWith('</');
-  if (!isAllowedTag(name)) {
-    return;
-  }
-  if (!closing) {
-    stack.push({ type: name, children: [] });
-  } else {
-    const last = stack.pop();
-    if (last && last.type === name) {
-      current().push(createElement(name, { key: `hl-${keyRef.current++}` }, ...last.children));
-    }
-  }
-}
-
-function renderSafeHighlight(html: string): React.ReactNode[] {
-  const tokens = tokenize(html);
-  const stack: { type: AllowedTag; children: React.ReactNode[] }[] = [];
-  const root: React.ReactNode[] = [];
-  const keyRef = { current: 0 };
-
-  const current = (): React.ReactNode[] => (stack.length ? stack[stack.length - 1].children : root);
-
-  for (const tok of tokens) {
-    handleToken(tok, stack, current, keyRef);
-  }
-  flushUnclosed(stack, current);
-  return root;
-}
-
-const ResultsSection = sc.section`
-  margin-top: ${(p) => p.theme.app.space.xl};
-`;
-
-const ResultsList = sc.ul`
-  list-style: none;
-  padding: 0;
-  display: grid;
-  gap: ${(p) => p.theme.app.space.sm};
-`;
-
-const ResultItemLi = sc.li`
-  border: 1px solid ${(p) => p.theme.app.colors.borderSubtle};
-  padding: ${(p) => p.theme.app.space.sm};
-  border-radius: ${(p) => p.theme.app.radii.sm};
-`;
-
-const Title = sc.div`
-  font-weight: 600;
-`;
-
-const Meta = sc.div`
-  color: ${(p) => p.theme.app.colors.textMuted};
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-`;
-
-const HighlightsList = sc.ul`
-  margin-top: ${(p) => p.theme.app.space.sm};
-`;
-
-const HighlightItem = sc.li`
-  font-size: ${(p) => p.theme.app.fontSizes.xs};
-`;
-
-function ResultItem({
-  title,
-  subject,
-  keyStage,
-  highlights,
+export function SearchResults({
+  mode,
+  results,
+  meta,
+  multiBuckets,
 }: {
-  title: string;
-  subject: string;
-  keyStage: string;
-  highlights: string[];
-}): JSX.Element {
-  const parts: string[] = [];
-  if (subject) {
-    parts.push(`Subject: ${subject}`);
+  mode: 'idle' | 'single' | 'multi';
+  results: unknown[];
+  meta?: SearchMeta | null;
+  multiBuckets: MultiScopeBucketView[] | null;
+}): JSX.Element | null {
+  if (mode === 'multi' && multiBuckets) {
+    return <MultiScopeResults buckets={multiBuckets} />;
   }
-  if (keyStage) {
-    parts.push(`Key stage: ${keyStage}`);
+
+  return <SingleScopeResults results={results} meta={meta} />;
+}
+
+export default SearchResults;
+
+function MultiScopeResults({ buckets }: { buckets: MultiScopeBucketView[] }): JSX.Element | null {
+  const bucketsWithData = buckets.filter((bucket) => bucket.results.length > 0);
+  if (bucketsWithData.length === 0) {
+    return null;
   }
-  const meta = parts.join(' · ');
 
   return (
-    <ResultItemLi>
-      <Title>{title}</Title>
-      {meta ? <Meta>{meta}</Meta> : null}
-      {highlights.length > 0 ? (
-        <HighlightsList>
-          {highlights.map((h, i) => (
-            <HighlightItem key={i}>{renderSafeHighlight(String(h))}</HighlightItem>
-          ))}
-        </HighlightsList>
-      ) : null}
-    </ResultItemLi>
+    <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+      {bucketsWithData.map((bucket) => (
+        <BucketResults key={bucket.scope} bucket={bucket} />
+      ))}
+    </ResultsSection>
   );
 }
 
-const UnitSchema = z
-  .object({
-    unit_title: z.string().optional(),
-    subject_slug: z.string().optional(),
-    key_stage: z.string().optional(),
-  })
-  .partial();
-const LessonSchema = z
-  .object({
-    lesson_title: z.string().optional(),
-    subject_slug: z.string().optional(),
-    key_stage: z.string().optional(),
-  })
-  .partial();
-const ItemSchema = z
-  .object({
-    id: z.union([z.string(), z.number()]).transform((v) => String(v)),
-    unit: UnitSchema.nullable().optional(),
-    lesson: LessonSchema.optional(),
-    highlights: z.array(z.string()).optional(),
-  })
-  .strict();
-const ResultsSchema = z.array(ItemSchema);
-
-export function SearchResults({ results }: { results: unknown[] }): JSX.Element | null {
+function SingleScopeResults({
+  results,
+  meta,
+}: {
+  results: unknown[];
+  meta?: SearchMeta | null;
+}): JSX.Element | null {
   const parsed = ResultsSchema.safeParse(results);
   if (!parsed.success || parsed.data.length === 0) {
     return null;
   }
 
-  function titleFor(rec: z.infer<typeof ItemSchema>): string {
-    return rec.lesson?.lesson_title || rec.unit?.unit_title || rec.id;
-  }
-
-  function subjectFor(rec: z.infer<typeof ItemSchema>): string {
-    return rec.lesson?.subject_slug || rec.unit?.subject_slug || '';
-  }
-
-  function keyStageFor(rec: z.infer<typeof ItemSchema>): string {
-    return rec.lesson?.key_stage || rec.unit?.key_stage || '';
-  }
-
-  function highlightsFor(rec: z.infer<typeof ItemSchema>): string[] {
-    return rec.highlights ?? [];
-  }
+  const summary = buildSummary(meta);
 
   return (
-    <ResultsSection aria-live="polite">
-      <ResultsList>
+    <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+      <SearchSummary summary={summary} />
+      <ResultsGrid $reset>
         {parsed.data.map((rec) => (
           <ResultItem
             key={rec.id}
-            title={titleFor(rec)}
-            subject={subjectFor(rec)}
-            keyStage={keyStageFor(rec)}
-            highlights={highlightsFor(rec)}
+            title={extractTitle(rec)}
+            subject={extractSubject(rec)}
+            keyStage={extractKeyStage(rec)}
+            highlights={extractHighlights(rec)}
           />
         ))}
-      </ResultsList>
+      </ResultsGrid>
     </ResultsSection>
   );
 }
 
-export default SearchResults;
+function BucketResults({ bucket }: { bucket: MultiScopeBucketView }): JSX.Element {
+  const parsed = ResultsSchema.safeParse(bucket.results);
+  if (!parsed.success) {
+    return <BucketSection bucket={bucket} results={[]} />;
+  }
+  return <BucketSection bucket={bucket} results={parsed.data} />;
+}
+
+function BucketSection({
+  bucket,
+  results,
+}: {
+  bucket: MultiScopeBucketView;
+  results: Array<ReturnType<(typeof ResultsSchema)['parse']>[number]>;
+}): JSX.Element {
+  const summary = buildSummary(bucket.meta);
+  const heading = formatScopeHeading(bucket.scope);
+
+  if (results.length === 0) {
+    return (
+      <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-s">
+        <OakTypography as="h2" $font="heading-6">
+          {heading}
+        </OakTypography>
+        <SearchSummary summary={summary} />
+        <OakTypography as="p" $font="body-3" $color="text-subdued">
+          No results found for this category.
+        </OakTypography>
+      </OakBox>
+    );
+  }
+
+  return (
+    <OakBox as="section" $display="flex" $flexDirection="column" $gap="space-between-s">
+      <OakTypography as="h2" $font="heading-6">
+        {heading}
+      </OakTypography>
+      <SearchSummary summary={summary} />
+      <ResultsGrid $reset>
+        {results.map((rec) => (
+          <ResultItem
+            key={rec.id}
+            title={extractTitle(rec)}
+            subject={extractSubject(rec)}
+            keyStage={extractKeyStage(rec)}
+            highlights={extractHighlights(rec)}
+          />
+        ))}
+      </ResultsGrid>
+    </OakBox>
+  );
+}
+
+function buildSummary(meta?: SearchMeta | null): {
+  primary: string | null;
+  secondary: string | null;
+} {
+  if (!meta) {
+    return { primary: null, secondary: null };
+  }
+
+  const scopeLabel = formatScopeSentence(meta.scope);
+  const primary = `${meta.total} result${meta.total === 1 ? '' : 's'} for ${scopeLabel}`;
+  const timedOut = meta.timedOut ? 'Results may be incomplete (timed out).' : null;
+  const took = `Took ${meta.took}ms`;
+  const secondary = timedOut ? `${took}. ${timedOut}` : took;
+  return { primary, secondary };
+}
+
+function SearchSummary({
+  summary,
+}: {
+  summary: { primary: string | null; secondary: string | null };
+}): JSX.Element | null {
+  if (!summary.primary && !summary.secondary) {
+    return null;
+  }
+
+  return (
+    <OakBox $display="flex" $flexDirection="column" $gap="space-between-ssx" $mb="space-between-s">
+      {summary.primary ? (
+        <OakTypography as="p" $font="body-3" $color="text-subdued">
+          {summary.primary}
+        </OakTypography>
+      ) : null}
+      {summary.secondary ? (
+        <OakTypography as="p" $font="body-4" $color="text-subdued">
+          {summary.secondary}
+        </OakTypography>
+      ) : null}
+    </OakBox>
+  );
+}
+
+function formatScopeSentence(scope: SearchMeta['scope']): string {
+  if (scope === 'lessons') {
+    return 'lessons';
+  }
+  if (scope === 'units') {
+    return 'units';
+  }
+  return 'programmes';
+}
+
+function formatScopeHeading(scope: SearchMeta['scope']): string {
+  if (scope === 'lessons') {
+    return 'Lessons';
+  }
+  if (scope === 'units') {
+    return 'Units';
+  }
+  return 'Programmes';
+}

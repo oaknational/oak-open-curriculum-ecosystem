@@ -1,4 +1,11 @@
-import type { KeyStage, SubjectSlug } from '../types/oak';
+import type {
+  KeyStage,
+  SearchSubjectSlug,
+  SearchLessonSummary,
+  SearchUnitSummary,
+  SearchSubjectSequences,
+} from '../types/oak';
+import { isLessonSummary, isUnitSummary, isSubjectSequences } from '../types/oak';
 import { env } from '../lib/env';
 import { createOakClient, type OakApiClient } from '@oaknational/oak-curriculum-sdk';
 import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guards';
@@ -9,7 +16,7 @@ import { isUnitsGrouped, isLessonGroups, isTranscriptResponse } from './sdk-guar
  */
 export type GetUnitsFn = (
   keyStage: KeyStage,
-  subject: SubjectSlug,
+  subject: SearchSubjectSlug,
 ) => Promise<readonly { unitSlug: string; unitTitle: string }[]>;
 
 /**
@@ -18,7 +25,7 @@ export type GetUnitsFn = (
  */
 export type GetLessonsFn = (
   keyStage: KeyStage,
-  subject: SubjectSlug,
+  subject: SearchSubjectSlug,
 ) => Promise<
   readonly {
     unitSlug: string;
@@ -32,6 +39,18 @@ export type GetLessonsFn = (
  * Linked plan: `.agent/plans/generated-document-enhancements-plan.md`
  */
 export type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
+
+export type GetLessonSummaryFn = (lessonSlug: string) => Promise<SearchLessonSummary>;
+
+export type GetUnitSummaryFn = (unitSlug: string) => Promise<SearchUnitSummary>;
+
+export type SubjectSequenceEntry = SearchSubjectSequences[number];
+
+export type GetSubjectSequencesFn = (
+  subject: SearchSubjectSlug,
+) => Promise<readonly SubjectSequenceEntry[]>;
+
+export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
 
 function assertSdkOk(res: { response: Response }): void {
   if (!res.response.ok) {
@@ -98,6 +117,58 @@ function makeGetLessonTranscript(client: OakApiClient): GetTranscriptFn {
   };
 }
 
+function makeGetLessonSummary(client: OakApiClient): GetLessonSummaryFn {
+  return async (lessonSlug) => {
+    const res = await client.GET('/lessons/{lesson}/summary', {
+      params: { path: { lesson: lessonSlug } },
+    });
+    assertSdkOk(res);
+    const data = res.data;
+    if (isLessonSummary(data)) {
+      return data;
+    }
+    throw new Error('Unexpected lesson summary response shape');
+  };
+}
+
+function makeGetUnitSummary(client: OakApiClient): GetUnitSummaryFn {
+  return async (unitSlug) => {
+    const res = await client.GET('/units/{unit}/summary', {
+      params: { path: { unit: unitSlug } },
+    });
+    assertSdkOk(res);
+    const data = res.data;
+    if (isUnitSummary(data)) {
+      return data;
+    }
+    throw new Error('Unexpected unit summary response shape');
+  };
+}
+
+function makeGetSubjectSequences(client: OakApiClient): GetSubjectSequencesFn {
+  return async (subject) => {
+    const res = await client.GET('/subjects/{subject}/sequences', {
+      params: { path: { subject } },
+    });
+    assertSdkOk(res);
+    const data = res.data ?? [];
+    if (isSubjectSequences(data)) {
+      return data;
+    }
+    throw new Error('Unexpected subject sequences response shape');
+  };
+}
+
+function makeGetSequenceUnits(client: OakApiClient): GetSequenceUnitsFn {
+  return async (sequenceSlug) => {
+    const res = await client.GET('/sequences/{sequence}/units', {
+      params: { path: { sequence: sequenceSlug } },
+    });
+    assertSdkOk(res);
+    return res.data ?? [];
+  };
+}
+
 /** Documented SDK-backed client interface (narrow, curated). */
 export interface OakSdkClient {
   /** List units for a key stage and subject. */
@@ -106,6 +177,14 @@ export interface OakSdkClient {
   getLessonsByKeyStageAndSubject: GetLessonsFn;
   /** Get a lesson transcript and VTT. */
   getLessonTranscript: GetTranscriptFn;
+  /** Get lesson summary metadata. */
+  getLessonSummary: GetLessonSummaryFn;
+  /** Get unit summary metadata. */
+  getUnitSummary: GetUnitSummaryFn;
+  /** Get sequence metadata for a subject. */
+  getSubjectSequences: GetSubjectSequencesFn;
+  /** Get units associated with a sequence. */
+  getSequenceUnits: GetSequenceUnitsFn;
 }
 
 /** SDK-backed client (preferred). */
@@ -116,6 +195,10 @@ export function createOakSdkClient(): OakSdkClient {
     getUnitsByKeyStageAndSubject: makeGetUnitsByKeyStageAndSubject(client),
     getLessonsByKeyStageAndSubject: makeGetLessonsByKeyStageAndSubject(client),
     getLessonTranscript: makeGetLessonTranscript(client),
+    getLessonSummary: makeGetLessonSummary(client),
+    getUnitSummary: makeGetUnitSummary(client),
+    getSubjectSequences: makeGetSubjectSequences(client),
+    getSequenceUnits: makeGetSequenceUnits(client),
   };
 }
 

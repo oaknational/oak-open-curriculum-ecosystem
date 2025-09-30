@@ -1,16 +1,30 @@
 import { z } from 'zod';
 
 /** Strict runtime env validation (no unsafe process.env). */
-const BaseEnvSchema = z.object({
+export const BaseEnvSchema = z.object({
   ELASTICSEARCH_URL: z.url(),
   ELASTICSEARCH_API_KEY: z.string().min(10),
   OAK_API_KEY: z.string().min(6).optional(),
   SEARCH_API_KEY: z.string().min(10),
+  SEARCH_INDEX_VERSION: z
+    .string()
+    .regex(
+      /^v[0-9A-Za-z._-]+$/,
+      'SEARCH_INDEX_VERSION must start with v and contain version characters.',
+    ),
+  ZERO_HIT_WEBHOOK_URL: z.union([z.literal('none'), z.url()]).default('none'),
+  LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error']).default('info'),
   AI_PROVIDER: z.enum(['openai', 'none']).default('openai'),
   OPENAI_API_KEY: z.string().min(10).optional(),
+  SEARCH_INDEX_TARGET: z.enum(['primary', 'sandbox']).default('primary'),
+  ZERO_HIT_PERSISTENCE_ENABLED: z
+    .union([z.literal('true'), z.literal('false'), z.boolean()])
+    .default('false')
+    .transform((value) => value === true || value === 'true'),
+  ZERO_HIT_INDEX_RETENTION_DAYS: z.coerce.number().int().min(7).max(365).default(30),
 });
 
-const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
+export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
   if (!v.OAK_API_KEY) {
     ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY.' });
   }
@@ -34,8 +48,14 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
     ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
     OAK_API_KEY: process.env.OAK_API_KEY,
     SEARCH_API_KEY: process.env.SEARCH_API_KEY,
+    SEARCH_INDEX_VERSION: process.env.SEARCH_INDEX_VERSION,
+    ZERO_HIT_WEBHOOK_URL: process.env.ZERO_HIT_WEBHOOK_URL,
+    LOG_LEVEL: process.env.LOG_LEVEL ?? 'info',
     AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
+    ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
+    ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
   });
   if (!parsed.success) {
     throw new Error(parsed.error.message);
@@ -43,6 +63,14 @@ export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
   const key = parsed.data.OAK_API_KEY ?? '';
   cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
   return cached;
+}
+
+export function optionalEnv(): (Env & { OAK_EFFECTIVE_KEY: string }) | null {
+  try {
+    return env();
+  } catch {
+    return null;
+  }
 }
 
 /** True when natural-language parsing (OpenAI) is available. */

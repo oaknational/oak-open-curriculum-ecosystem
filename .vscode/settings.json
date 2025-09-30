@@ -57,14 +57,17 @@
     "playbook",
     "playbooks",
     "Poirot",
+    "PREHYDRATION",
     "Psycha",
     "Psychon",
     "qualia",
     "releaserc",
     "retryable",
     "rigamarole",
+    "rollups",
     "Scheffer",
     "Signaling",
+    "strapline",
     "Systema",
     "Systemata",
     "turbopack",
@@ -74,6 +77,8 @@
     "unrs",
     "unstub",
     "WEBVTT",
+    "workstream",
+    "workstreams",
     "xenotransplantation",
     "zodgen",
     "Αἰθέρες",
@@ -154,5 +159,10 @@
     "**/generated/**/*"
   ],
   "chatgpt.commentCodeLensEnabled": false,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.configPath": ".prettierrc.json",
+  "editor.formatOnSave": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

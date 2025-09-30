@@ -21,7 +21,8 @@
     "clean": "rm -rf dist .turbo",
     "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "mutate": "stryker run"
   },
   "dependencies": {},
   "devDependencies": {

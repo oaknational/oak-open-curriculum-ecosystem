@@ -308,6 +308,43 @@ async function run(): Promise<void> {
       assert.match(text, /\\\"(error|message)\\\"\s*:/, 'Wrapped JSON should indicate error');
     }
 
+    // 6b) Successful tool call returns payload with data array
+    {
+      const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${devToken}`,
+          'Content-Type': 'application/json',
+          Accept: REQUIRED_ACCEPT,
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 'success-data',
+          method: 'tools/call',
+          params: {
+            name: 'get-key-stages',
+            arguments: {},
+          },
+        }),
+      });
+      assert.equal(res.status, 200, 'POST /mcp get-key-stages should be 200');
+      const envelope = parseFirstSsePayload(text);
+      assert.ok(!envelope.error, 'Successful tool call should not return an error envelope');
+      const result = envelope.result as {
+        content?: ReadonlyArray<{ type?: string; text?: string }>;
+        isError?: boolean;
+      };
+      assert.notEqual(result?.isError, true, 'Successful tool call must not be flagged as error');
+      const payloadText = result?.content?.find((entry) => entry?.type === 'text')?.text ?? '';
+      assert.notEqual(payloadText.length, 0, 'Successful tool call must return text content');
+      const payload = JSON.parse(payloadText) as { data?: unknown };
+      assert.ok(Array.isArray(payload?.data), 'Tool payload should contain a data array');
+      assert.ok(
+        (payload!.data as unknown[]).length > 0,
+        'Tool payload data array should not be empty',
+      );
+    }
+
     // 7) Synonym canonicalisation succeeds
     {
       const { res, text } = await fetchJson(new URL('/mcp', baseUrl), {

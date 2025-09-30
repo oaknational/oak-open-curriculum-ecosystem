@@ -1,6 +1,6 @@
-# Contributing to Oak Notion MCP
+# Contributing to Oak MCP Ecosystem
 
-Thank you for your interest in contributing to the Oak Notion MCP Server! This guide will help you get started.
+Thank you for your interest in contributing to the Oak MCP Ecosystem Server! This guide will help you get started.
 
 This is an internal technical spike for now, so at this time we are not looking for external contributions, but we do appreciate your interest.
 
@@ -14,15 +14,15 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 1. **Node.js 22+**
 2. **pnpm**
-3. Various optional but important service keys, Notion, Oak, Elasticsearch, etc.
+3. Service credentials for the areas you are touching (Oak Curriculum API keys, Elasticsearch Serverless API keys, optional Notion keys for archived servers).
 
 ### Setup
 
 1. Fork and clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/oak-notion-mcp.git
-   cd oak-notion-mcp
+   git clone https://github.com/yourusername/oak-mcp-ecosystem.git
+   cd oak-mcp-ecosystem
    ```
 
 2. Install dependencies:
@@ -35,7 +35,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
    ```bash
    cp .env.example .env
-   # Add your Notion API key to .env
+   # Populate OAK_API_KEY, SEARCH_API_KEY, ELASTICSEARCH_* etc. as needed
    ```
 
 4. Run tests to verify setup:
@@ -145,7 +145,7 @@ Include:
 - **No `any` types** - Use `unknown` at boundaries
 - **No type assertions** - No `as` casting
 - **Use type guards** - Functions with `is` keyword
-- **Validate inputs** - Use Zod at all boundaries
+- **Validate inputs** - Use the generated Zod schemas via the shared helpers in `@oaknational/oak-curriculum-sdk` (see `parseSchema` and friends)
 
 ### Functions
 
@@ -186,17 +186,18 @@ describe('scrubEmail', () => {
 
 ### Layer Boundaries
 
-1. **MCP Protocol Layer** - Handles requests/responses
-2. **Business Logic** - Pure functions only
-3. **Notion Adapter** - Wraps SDK calls
-4. **Infrastructure** - Logging, config, errors
+1. **SDK generation** – All curriculum data flows from the OpenAPI contract. Never hand-write schemas or types.
+2. **Validation layer** – Use the shared helpers exported from `packages/sdks/oak-curriculum-sdk/src/validation` (`parseSchema`, `parseWithCurriculumSchema`, `parseEndpointParameters`, `parseSearchResponse`).
+3. **Application layer** – MCP servers, Semantic Search routes, and admin tools import the SDK helpers and keep business logic pure.
+4. **Infrastructure** – Logging, configuration, storage, and transport live in `packages/libs/`.
 
 ### Adding New Features
 
-1. **Resources**: Add to `src/mcp/resources/handlers.ts`
-2. **Tools**: Add to `src/mcp/tools/handlers.ts`
-3. **Transformers**: Add to `src/notion/transformers.ts`
-4. **Validation**: Add Zod schemas to relevant files
+1. Update or add plan items in the relevant `.agent/plans/` document (remember ACTION/REVIEW/QUALITY-GATE cadence).
+2. Regenerate SDK artefacts with `pnpm type-gen` if the API schema changes.
+3. Extend the shared validation helpers instead of duplicating `safeParse` calls.
+4. Update the workspace README + onboarding docs so contributors know how to run or test the new behaviour.
+5. Add or amend ADRs when introducing new architectural rules (e.g. shared parsing, ingestion flow changes).
 
 ## Testing Your Changes
 
@@ -211,7 +212,7 @@ pnpm test -- scrubbing
 
 ```bash
 pnpm test:e2e
-# Requires valid NOTION_API_KEY
+# Requires valid OAK_API_KEY
 ```
 
 ### Test with Claude
@@ -268,4 +269,4 @@ We use semantic-release for automated releases:
 
 If you find a security issue, see the [security policy](SECURITY.md).
 
-Thank you for contributing to Oak Notion MCP! 🎉
+Thank you for contributing to Oak MCP Ecosystem! 🎉
