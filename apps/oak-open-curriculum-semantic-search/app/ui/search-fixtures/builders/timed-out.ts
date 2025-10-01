@@ -13,7 +13,7 @@ import {
   type SearchLessonsResponse,
   type SearchUnitsResponse,
   type SearchSequencesResponse,
-} from '../../../../src/types/oak';
+} from '@oaknational/oak-curriculum-sdk';
 
 export type TimedOutSingleScopeFixture = SingleScopeFixture & { readonly timedOut: true };
 export type TimedOutMultiScopeFixture = MultiScopeHybridResponse & {

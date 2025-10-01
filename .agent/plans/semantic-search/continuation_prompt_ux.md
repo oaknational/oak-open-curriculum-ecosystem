@@ -13,37 +13,31 @@
 
 All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: UseBritish spelling” in the todo list.
 
-## Current Snapshot (2025-09-30 22:45)
+## Current Snapshot (2025-10-06 11:45)
 
-- Semantic tokens, theme bridge, and shared layout wrappers are in place across Search, Admin, Docs, and the new Status shell; responsive Playwright checks for search/admin remain green.
-- The literal-scope audit is complete: search app, SDK validators, OpenAPI schemas, fixtures, query parser, and observability layers all rely on the generated scope helpers.
-- Fixture mode now has end-to-end evidence (Playwright toggle scenario, RTL assertion, integration tests for query/cookie precedence) and the header toggle drives user feedback.
-- `/status` serves an Oak-branded snapshot derived from `/healthz`, with hero summary, responsive cards, diagnostics link, and updated navigation. Implemented following canonical Next.js Server/Client Component pattern.
-- Quality gates: `pnpm make` passes (TypeDoc fixed with @internal tag); `pnpm qg` blocked by 2 Playwright fixture toggle tests that need investigation.
-- Playwright browsers installed; test-results added to markdownlintignore to prevent generated artefacts from blocking commits.
+- Semantic tokens, bridge styles, and shared layout wrappers continue to power Search, Admin, Docs, and the Status shell with responsive Playwright coverage holding steady.
+- Generated scope helpers now back every search surface (app, SDK validators, OpenAPI wiring, fixtures, observability, query parser); literal strings were removed during the recent scope sweep.
+- Fixture mode toggle is fully deterministic: a dedicated resolver honours the new `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` flag. Unit/integration suites now prove success/empty/error fixture states, and forthcoming RTL/Playwright work will extend accessibility and layout assertions.
+- `/status` remains the Oak-branded view of `/healthz`, implemented as a Server Component that delegates rendering to StatusClient; the navigation reflects the new shell, but tests and flaky-response handling are still outstanding.
+- `pnpm make` and `pnpm qg` both run cleanly after the fixture-mode refactor; continue capturing artefacts after every substantive change.
+- `.markdownlintignore` already includes Playwright artefacts and browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 
 ## Immediate Priorities
 
-1. **Investigate Playwright fixture toggle test failures** – 2 tests in `tests/visual/fixture-toggle.spec.ts` expecting "Search data: Fixtures" text are failing. Tests look for fixture toggle UI controlled by `showFixtureToggle = process.env.NODE_ENV !== 'production'`. Determine if this is environment-specific, visibility logic issue, timing/rendering problem, or test expectation mismatch.
+1. **Prove fixture toggle + search layout behaviour** – Complete RTL and Playwright coverage so the toggle announces state changes and preserves layout/accessibility for successful, empty, and error responses across breakpoints (unit/integration now in place).
 
-2. **Add status page test coverage (TDD violation remediation)** – Status page structure complete but lacks tests:
-   - Unit tests: `StatusClient.unit.test.tsx` (component rendering, props handling, card states)
-   - Unit tests: `status-helpers.unit.test.ts` (buildStatusCards, resolveToneColor, isHealthPayload)
-   - Integration tests: `page.integration.test.tsx` (server component data fetching with headers())
-   - Playwright: responsive coverage at xs/lg breakpoints with accessibility checks
+2. **Admin console telemetry/history** – Add operator feedback, history, and deterministic fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
 
-3. **Status page enhancements** – Tighten card tone logic for flaky/partial `/healthz` responses, ensure failure modes render clear messaging, document expected health payload contract.
+3. **Status page hardening** – Add tone/failure handling plus full test coverage (unit, integration, Playwright) before sign-off.
 
-4. **Admin console polish** – Add telemetry wiring/history, capture Playwright artefacts for enriched outputs, document operator guidance for success/failure states.
+4. **Hero copy/layout refinement** – Revisit hero messaging using deterministic fixtures, ensuring structured/natural panels remain above the fold at xl/xxl.
 
-5. **Hero copy/layout refinement** – Revisit search hero using deterministic fixtures, verify structured/natural panels remain visible above fold at xl/xxl, note backlog-ready adjustments.
-
-6. **Track documentation tidy-up** – Clean up Markdown documentation output, TypeDoc HTML generation, once core Phase 1 UX items complete.
+5. **Documentation tidy-up** – Clean up Markdown and TypeDoc artefacts once the higher priorities are complete.
 
 ## Verification Checklist
 
 - Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added; update the integration suites (`app/api/search/*/route.integration.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`) to rely on `NextResponse` so cookie assertions type-check, then re-run them alongside the fixture-mode unit coverage.
-- 2025-09-30 22:42: `pnpm make` fully passes after status page Server/Client boundary fix and TypeDoc export resolution. `pnpm qg` has 2 pre-existing fixture toggle test failures requiring investigation.
+- `pnpm make` remains green after the fixture toggle resolver landed. Run `pnpm qg` frequently (under two minutes) to record artefacts after each milestone.
 
 ## Recent Learnings (2025-09-30)
 

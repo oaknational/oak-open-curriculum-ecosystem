@@ -31,7 +31,7 @@ Create a consolidated execution plan to align every semantic search plan and aut
 
 ## Todo List (GO cadence)
 
-- REMINDER: UseBritish spelling
+- REMINDER: Use british spelling
 
 1. ACTION: Capture delta notes between the target alignment plan and each existing semantic search plan/document.
 2. REVIEW: Self-review delta notes to confirm every plan/doc is covered.

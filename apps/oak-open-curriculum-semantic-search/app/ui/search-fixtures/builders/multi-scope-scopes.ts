@@ -7,7 +7,7 @@ import {
   type SearchSequencesResponse,
   type SearchUnitResult,
   type SearchUnitsResponse,
-} from '../../../../src/types/oak';
+} from '@oaknational/oak-curriculum-sdk';
 import type { SingleScopeDatasetKey } from './single-scope';
 import {
   ks2MathsSequences,

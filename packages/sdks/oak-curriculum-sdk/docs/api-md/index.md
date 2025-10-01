@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — API (Markdown)
 
-Generated: 2025-10-01T07:15:11.139Z
+Generated: 2025-10-01T10:45:30.995Z
 
 ## Contents
 

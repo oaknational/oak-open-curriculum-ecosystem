@@ -181,4 +181,79 @@ describe('POST /api/search', () => {
     expect(payload.scope).toBe(LESSONS_SCOPE);
     expect(runHybridSearch).not.toHaveBeenCalled();
   });
+
+  it('returns an empty-state fixture payload when the fixtures query requests empty mode', async () => {
+    const request = new NextRequest('http://localhost/api/search?fixtures=empty', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = HybridResponse.parse(await response.json());
+    expect(payload.scope).toBe(LESSONS_SCOPE);
+    expect(payload.total).toBe(0);
+    expect(payload.results).toHaveLength(0);
+    expect(runHybridSearch).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=empty');
+  });
+
+  it('returns an empty-state fixture payload when the fixtures cookie requests empty mode', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=empty',
+      },
+      body: JSON.stringify({ scope: LESSONS_SCOPE, text: 'fractions' }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = HybridResponse.parse(await response.json());
+    expect(payload.total).toBe(0);
+    expect(payload.results).toHaveLength(0);
+    expect(runHybridSearch).not.toHaveBeenCalled();
+  });
+
+  it('returns an error payload when the fixtures query requests error mode', async () => {
+    const request = new NextRequest('http://localhost/api/search?fixtures=error', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(503);
+    const payload = z.object({ error: z.string() }).parse(await response.json());
+    expect(payload).toMatchObject({ error: 'FIXTURE_ERROR' });
+    expect(runHybridSearch).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=error');
+  });
+
+  it('returns an error payload when the fixtures cookie requests error mode', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=error',
+      },
+      body: JSON.stringify({ scope: LESSONS_SCOPE, text: 'fractions' }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(503);
+    const payload = z.object({ error: z.string() }).parse(await response.json());
+    expect(payload).toMatchObject({ error: 'FIXTURE_ERROR' });
+    expect(runHybridSearch).not.toHaveBeenCalled();
+  });
 });

@@ -18,7 +18,7 @@ import {
   type SearchMultiScopeResponse,
   type SearchMultiScopeBucket,
   SearchSuggestionResponseSchema,
-} from '../../../../src/types/oak';
+} from '@oaknational/oak-curriculum-sdk';
 import { buildSequenceFixture, buildUnitFixture } from './multi-scope-scopes';
 
 // Type helpers ----------------------------------------------------------------

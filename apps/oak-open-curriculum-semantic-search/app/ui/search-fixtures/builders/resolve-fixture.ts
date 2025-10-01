@@ -3,7 +3,7 @@ import type {
   SearchUnitsResponse,
   SearchSequencesResponse,
   SearchMultiScopeResponse,
-} from '../../../../src/types/oak';
+} from '@oaknational/oak-curriculum-sdk';
 import type { SingleScopeFixture } from './single-scope';
 import { buildSingleScopeFixture } from './single-scope';
 import { buildUnitFixture, buildSequenceFixture, buildMultiScopeFixture } from './multi-scope';

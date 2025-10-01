@@ -15,44 +15,31 @@ Phase 1 keeps the design system aligned with product intent by:
 - Replacing developer-centric error states with empathetic, observable messaging.
 - Consolidating deterministic fixtures and a runtime toggle so designers and automated tests can validate UX without live infrastructure.
 
-## Current State Snapshot (2025-09-30)
+## Current State Snapshot (2025-10-06)
 
-- ✅ Semantic tokens map colours, spacing, typography, and brand palette and flow through shared layout wrappers.
-- ✅ Search hero + controls now respect container width and maintain stacking rules below `bp-lg` following the `HeroHeadingCluster` fix.
-- ✅ Deterministic fixture sources captured for KS2 maths, KS4 maths, KS3 history, KS3 art, and KS4 science with enriched cross-scope suggestions routed through shared builders.
-- ✅ Fixture reference notes and module outline (`fixtures/REFERENCE.md`, `app/ui/search-fixtures/README.md`) stay aligned with SDK-derived types and now underpin all search flows.
-- ✅ Shared fixture-mode resolver enforces env → query → cookie precedence across `searchAction`, `/api/search`, `/api/search/suggest`, and `/api/search/nl`, keeping SDK-backed fixtures deterministic while preserving zero-hit logging and polite developer toggle announcements.
-- ✅ Stdio MCP server package now satisfies lint/complexity requirements after extracting tool response helpers and tightening unit tests.
-- ✅ SDK response validation is now split into curriculum and search modules, each generated from schema types with focused helpers; the curriculum registry now lives in `curriculumZodSchemas` with exported name/definition guards for downstream safety.
-- ✅ Search app lint/type-check/build/doc-gen all pass; `pnpm make` now completes successfully after resolving Next.js Server/Client boundary violation and TypeDoc validation warning.
-- ⚠️ Facet copy and science pathways still need broader narrative coverage before we lock responsive artefacts.
-- ✅ Status page shell implemented at `/status`; `/healthz` continues to serve JSON-only responses for programmatic access.
-- ⚠️ Playwright responsive suites must be updated to exercise the fixture toggle (cookie workflow + accessibility artefacts) for on/off states.
+- ✅ Semantic tokens and layout wrappers remain consistent across Search, Admin, Docs, and Status shells.
+- ✅ Deterministic fixture sources cover core subject combinations; references and builders stay aligned with generated SDK types.
+- ✅ Fixture toggle logic is centralised in `resolveFixtureToggleVisibility`, and Playwright coverage now exercises fixtures ↔ live transitions.
+- ✅ Search surfaces pass `pnpm make`; the toggle resolver refactor keeps lint/type-check/build/doc-gen green.
+- ⚠️ Unit and integration tests now cover fixture toggle success/empty/error flows, with API routes refactored for variant handling; RTL and Playwright coverage still required to prove accessibility and layout resilience across breakpoints.
+- ⚠️ Admin console lacks telemetry history, operator feedback, and deterministic fixtures for Playwright verification.
+- ⚠️ Status page remains functionally complete but lacks tone/failure handling tests and resilience improvements.
+- ⚠️ Hero copy and science pathways require additional narrative polish once higher priorities land.
 
 ### Recent Progress
 
-- 2025-09-30 22:42: Resolved Next.js build error in `/status` page by converting from Client to Server Component, following canonical App Router pattern where Server Components handle data fetching with server-only APIs (headers()) and delegate rendering to Client Components (StatusClient).
-- 2025-09-30 22:42: Fixed TypeDoc documentation generation failure by exporting ScopeResultMap type with @internal JSDoc tag in hybrid-search types.
-- 2025-09-30 22:42: Added test-results directories to .markdownlintignore to prevent generated Playwright artefacts from blocking commits.
-- 2025-09-30 22:42: Installed Playwright browsers to enable UI test execution.
-- 2025-09-30: Implemented the shared fixture-mode resolver and developer toggle across server action + API routes, with unit/integration coverage verifying env/query/cookie precedence and deterministic fixture payloads.
-- 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths; captured KS4 science sequences exposing `ks4Options` for future pathway scenarios.
-- 2025-09-30: Authored `fixtures/REFERENCE.md` to document provenance and schema alignment, plus `app/ui/search-fixtures/README.md` outlining data modules and builder responsibilities.
-- 2025-09-30: MCP stdio server tool responses now return the SDK `CallToolResult`, and search SDK validation helpers infer schema output types to remove manual assertions.
-- 2025-10-02: Initiated the curriculum schema registry rename (`curriculumZodSchemas`) and drafted domain-specific parsing helpers so validation modules consume generated schema names directly.
-- 2025-10-03: Regenerated curriculum schemas, promoted the registry to `curriculumZodSchemas`, updated validation/search tooling to consume registry exports, and introduced parse helpers that expose precise `SchemaRegistry`, `SchemaName`, and `SchemaDefinition` types.
-- 2025-09-30: Search API routes and suggestion handler now share schema-derived helpers; multi-scope fixture builders/tests rebuilt around generated response factories to enforce single sources of truth.
-- 2025-10-01: Search page client split into layout + toggle components, clearing max-lines violations and keeping fixture-mode UX isolated for reuse.
-- 2025-09-29: Search hero heading now wraps using `HeroHeadingCluster`, preventing overflow within the hero card.
-- 2025-09-29: Playwright responsive suite continues to gate Search/Admin/Docs layouts at bp-xs/md/lg/xxl using the existing structured fixture.
-- 2025-09-28: `SearchResults.unit.test.tsx` and integration coverage updated for multi-scope payloads (`mode` + `multiBuckets`).
+- 2025-10-06 11:40: Expanded fixture-mode support (success/empty/error), added unit/integration coverage, and refactored search routes/toggle helpers; `pnpm make` and `pnpm qg` now pass with deterministic fixture fallbacks.
+- 2025-10-06 08:15: Added `resolveFixtureToggleVisibility`, documented `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`, and refreshed Playwright fixture workflow; `pnpm make` confirmed green post-change.
+- 2025-09-30 22:42: Resolved Next.js build error in `/status` by converting the page to a Server Component and delegating rendering to StatusClient.
+- 2025-09-30: Completed fixture-mode resolver integration across server actions and API routes with supporting tests and documentation.
+- 2025-09-29: Search hero and layout refinements ensured stacking rules and overflow behaviour remain stable at `bp-lg` and above.
 
-- **Deterministic fixtures:** Expand science-led facets, bucket meta, and suggestion narratives so fixture-on screenshots tell a complete story across phases; finish splitting the multi- and single-scope builders so they satisfy lint complexity/line limits.
-- **Status page UX:** Design and implement the Oak-branded status page that consumes `/healthz` data, including accessibility hooks and responsive layout.
-- **Playwright coverage:** Update responsive suites to drive the fixture toggle, capture accessibility artefacts for on/off states, and document the workflow for contributors once lint/type-check gates are green.
-- **Type safety cleanup:** Update integration tests to use `NextResponse` helpers (or equivalent) so cookie handling is typed, and finish the curriculum schema registry rename + wrappers so validation code references generated types directly before re-running gates.
-- **Documentation pipeline:** Investigate the SDK Typedoc warnings (schema exports referenced but omitted) so `pnpm doc-gen` stops failing the `pnpm make` pipeline.
-- **Hero polish:** Revisit hero copy clamp and accent styling once fixtures and status page land.
+### Priority Order (Phase 1 UX)
+
+1. **Fixture toggle + search layout validation** – Use TDD to prove the toggle renders, persists, and drives deterministic behaviour for successful, empty, and error responses while keeping layout/a11y intact.
+2. **Admin telemetry and operator workflows** – Add telemetry history, operator messaging, and deterministic fixtures with comprehensive testing (unit → integration → RTL → Playwright).
+3. **Status page hardening** – Implement tone/failure logic and full coverage before sign-off.
+4. **Secondary polish** – Hero copy/layout refinements, documentation tidy-up, and remaining backlog once the higher priorities are complete.
 
 ### Detailed Task Breakdown (2025-10-05)
 
@@ -63,7 +50,8 @@ Phase 1 keeps the design system aligned with product intent by:
 
 **Fixture usage verification**
 
-- ✅ Added deterministic end-to-end coverage: new Playwright scenario toggles fixtures ↔ live data, RTL test asserts fixture payload rendering, and `/api/search` + `/api/search/suggest` suites now verify cookie-driven fixture mode.
+- ✅ Added deterministic end-to-end coverage: Playwright toggle scenario, RTL assertions, and API suites verify cookie-driven fixture mode.
+- ✅ 2025-10-06: Added failing → passing unit/integration tests for fixture toggle success/empty/error states, introduced coverage matrix, and refactored toggle/fixture helpers to rely on SDK imports.
 
 **Admin console resilience**
 
@@ -75,7 +63,7 @@ Phase 1 keeps the design system aligned with product intent by:
 - ✅ Fixed Next.js build error (commit 066c2d6): converted status page from Client to Server Component by removing `'use client'` directive, delegating UI to StatusClient, and keeping data fetching (headers() API) in server-side page.tsx.
 - ✅ Resolved TypeDoc validation warning by exporting ScopeResultMap with @internal JSDoc tag.
 - ✅ Installed Playwright browsers (Chromium 140, Firefox 141, Webkit 26) and added test-results to markdownlintignore.
-- ✅ Quality gate status: `pnpm make` passing (format, type-check, lint, build, doc-gen); `pnpm qg` has 2 pre-existing Playwright fixture toggle test failures.
+- ✅ Quality gate status: `pnpm make` passing (format, type-check, lint, build, doc-gen); full `pnpm qg` rerun pending after documentation and toggle updates settle.
 - ❌ **Missing test coverage**: Status page components lack unit/integration/Playwright tests (violates TDD principle from rules.md).
 - 🔄 Follow-up: add comprehensive test coverage (StatusClient, status-helpers.ts, page.tsx), tighten card tone logic for flaky API responses, capture Playwright artefacts at xs/lg breakpoints.
 
@@ -131,22 +119,25 @@ Phase 1 keeps the design system aligned with product intent by:
 
 - Mount a small pill toggle (e.g. top-right dev ribbon) that renders the active mode, uses Oak secondary button styling, and respects keyboard navigation.
 - Provide an accessible description (`aria-live="polite"`) when the mode flips so screen readers announce the data source change.
-- Hide the control in production builds by feature gating on `process.env.NODE_ENV !== 'production'` and an optional `ENABLE_FIXTURE_TOGGLE` flag.
+- Hide the control in production builds by setting `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE=false` and documenting the expected environments where it remains enabled.
 
 ## Verification Strategy
 
-- **Unit tests:**
-  - `resolveFixtureMode.unit.test.ts` covering precedence and invalid inputs.
-  - Fixture builder tests asserting schema safeParse success and immutability (deep freeze to prevent accidental mutation).
-- **Integration tests:**
-  - `structured-search.actions.integration.test.ts` verifying fixture/live parity and multi-scope bucket assembly.
-  - Tests for `/api/search` and `/api/search/nl` to ensure fixture mode short-circuits external fetches while still logging zero-hit metrics when appropriate.
-- **Playwright:**
-  - Update `Search page responsive regressions` to rely on cookie toggle instead of route mocks and capture both fixture-on and fixture-off snapshots (fixture-off limited smoke to avoid flaky live results).
-  - Add scenarios for the developer toggle UI (visibility, keyboard toggle, aria announcements).
-- **Quality gates:**
-  - Run targeted `pnpm test --filter "Search"`, `pnpm -C apps/oak-open-curriculum-semantic-search test:ui --grep "Search"`, and `pnpm lint` during development.
-  - Execute `pnpm qg` prior to merge, ensuring logs capture fixture mode states used in tests.
+- **Testing hierarchy:** Always start with unit tests, then integration tests, then React Testing Library, then broader E2E, and finally Playwright if the behaviour requires a browser. Every change must follow TDD.
+- **Fixture toggle focus:**
+  - Unit: extend `fixture-toggle.unit.test.ts`, search controller reducers, and helper utilities to cover success, empty, and error payload permutations plus cookie persistence.
+  - Integration: enhance `searchAction`/`/api/search` suites to exercise toggle-driven branching (fixtures vs live) and error propagation without network flake.
+  - RTL: update `SearchPageClient` tests to assert layout, aria announcements, and messaging for success/error states with the toggle visible.
+  - Playwright: expand `fixture-toggle.spec.ts` and responsive suites to capture fixtures/live toggles across breakpoints, including screenshots and axe artefacts.
+- **Admin workflow:**
+  - Unit: build pure telemetry/history helpers with failing tests first.
+  - Integration/RTL: cover admin page actions for ingest/index with mock data and deterministic fixtures.
+  - Playwright: validate workflows and accessibility at key breakpoints once logic is in place.
+- **Status page:**
+  - Unit: add helper tests for tone/contract.
+  - Integration: cover server data fetching via `headers()` and fallback states.
+  - Playwright: confirm responsive layout, tone, and axe compliance.
+- **Quality gates:** Run `pnpm make` after significant milestones and `pnpm qg` frequently (under two minutes) to capture evidence for fixture toggle, admin, and status updates.
 
 ## Breakpoint Strategy
 
@@ -157,38 +148,23 @@ Phase 1 keeps the design system aligned with product intent by:
 ## Todo (GO cadence)
 
 1. REMINDER: UseBritish spelling.
-2. ACTION [DONE 2025-10-05]: Inspect generated `curriculumZodSchemas.ts` to confirm exported registry guards and schema naming align with expectations (registry exports + guards validated).
-3. REVIEW [DONE 2025-10-05]: Summarise any schema export gaps that require regeneration or follow-up fixes (no gaps identified; current registry matches OpenAPI surface).
-4. ACTION [DONE 2025-10-05]: Trace SDK consumers (validation, response map, search guards, MCP tooling, docs) to ensure they now import the renamed curriculum exports exclusively (legacy identifiers not detected).
-5. REVIEW [DONE 2025-10-05]: Record any lingering references to legacy schema identifiers for remediation (none found).
-6. GROUNDING [DONE 2025-10-05]: read GO.md and follow all instructions.
-7. ACTION [DONE 2025-10-05]: Refresh UX plan, context snapshot, and continuation prompt with the curriculum schema rename outcomes and downstream adoption guidance (this update applied across plan/context/prompt files).
-8. REVIEW [DONE 2025-10-05]: Proofread documentation updates for clarity and British spelling while checking linked artefacts.
-9. QUALITY-GATE [DONE 2025-10-05]: Run `pnpm type-gen` and inspect generated files for unintended diffs after the rename stabilisation (command completed cleanly; no generated changes observed).
-10. ACTION [DONE 2025-10-05]: Execute `pnpm -C packages/sdks/oak-curriculum-sdk test` to cover curriculum/search validation suites and confirm helper behaviour (Vitest suite passed; canonical URL warnings remain expected).
-11. REVIEW [DONE 2025-10-05]: Capture test outcomes, noting regressions or flaky cases for follow-up (no regressions detected; warnings stem from fixture canonical URL gaps already tracked).
-12. GROUNDING [DONE 2025-10-05]: read GO.md and follow all instructions (reaffirmed plan focus on parse helper split before wider UX implementation).
-13. ACTION [DONE 2025-10-05]: Replace the generic `parseWithSchema` helper with domain-specific curriculum/search parsing functions that infer types directly from generated schemas (shared `parseSchema` uses `safeParse` with `_input`/`_output` types).
-14. REVIEW [DONE 2025-10-05]: Verify all curriculum/search validators now consume the specialised helpers and retain strict `z.infer` outputs without `unknown` (request/search validators route through `parseSchema`; `SchemaInput`/`SchemaOutput` exported for downstream use).
-15. QUALITY-GATE [DONE 2025-10-05]: Run `pnpm -C packages/sdks/oak-curriculum-sdk type-check` to confirm the validation layer compiles cleanly (tsc passes; no assertions required).
-16. ACTION [DONE 2025-10-03]: Generate search scope constants/types/guard via type-gen so validation code depends on a single compile-time source of truth (generated `search/scopes.ts` present).
-17. REVIEW [INCOMPLETE]: Remove overloads/magic strings from `search-response-validators.ts`, using the generated scope map instead (map still embeds literal scope strings; needs refactor).
-18. GROUNDING [PENDING]: read GO.md and follow all instructions.
-19. ACTION [PENDING]: Re-run `pnpm doc-gen` ensuring regenerated docs flow from updated helpers without manual edits to `_typedoc_src`.
-20. REVIEW [PENDING]: Confirm doc artefacts reflect the new helpers and no generated sources are manually touched.
-21. QUALITY-GATE [BLOCKED BY 19-20]: Run `pnpm make` followed by `pnpm qg` once documentation and validation layers are stable.
-22. ACTION [DONE 2025-10-05]: Update contributor and onboarding docs to highlight the shared parsing helpers and generated search scope utilities (root README, SDK README, onboarding guide, ADR-048).
-23. REVIEW [DONE 2025-10-05]: Share follow-up recommendations with UX and functionality streams based on validation findings (plan/context updated; continuation prompt emphasises admin-first focus).
-24. GROUNDING [PENDING]: read GO.md and follow all instructions.
-25. ACTION [PENDING]: Map admin workflows for managing Elastic indexes, rollups, ingest jobs, and re-index scheduling within the UX plan.
-26. REVIEW [PENDING]: Validate admin control requirements with engineering stakeholders and capture dependencies or blockers.
-27. ACTION [PENDING]: Implement admin UI controls for index creation, data ingestion toggles, and feedback surfaces tied to backend orchestration.
-28. REVIEW [PENDING]: Ensure admin flows expose progress/error states, updating Playwright/axe artefacts where needed.
-29. QUALITY-GATE [PENDING]: Extend targeted test suites (`pnpm -C apps/oak-open-curriculum-semantic-search test`, relevant Playwright specs) to cover new admin workflows.
-30. GROUNDING [PENDING]: read GO.md and follow all instructions.
-31. ACTION [PENDING]: Define the Oak status page UX contract (layout, content blocks, accessibility) for a minimal but polished release.
-32. REVIEW [PENDING]: Cross-check the status page blueprint with architecture guidance and document references for implementation.
-33. ACTION [PENDING]: Implement the minimal status page shell and wire it to live health signals with snapshot/axe coverage.
-34. REVIEW [PENDING]: Run Playwright + axe for the status page across target breakpoints and record artefacts in the plan.
-35. QUALITY-GATE [PENDING]: Add status page coverage to `pnpm -C apps/oak-open-curriculum-semantic-search test:ui` and confirm green runs.
-36. GROUNDING [PENDING]: read GO.md and follow all instructions.
+2. ACTION: Extend fixture toggle coverage to RTL by drafting failing tests for success/empty/error messaging and announcements.
+3. REVIEW: Confirm RTL assertions prove accessibility outcomes without over-specifying implementation.
+4. ACTION: Expand Playwright specs with failing scenarios for toggle modes across breakpoints, including axe and screenshot artefacts.
+5. REVIEW: Ensure failures isolate missing UX behaviour rather than test harness gaps.
+6. GROUNDING: read GO.md and follow all instructions.
+7. ACTION: Implement any UI/layout updates required to satisfy the new RTL tests while keeping tokens consistent.
+8. REVIEW: Verify RTL suite passes and visual regressions remain acceptable.
+9. QUALITY-GATE: Run `pnpm qg`, archiving artefacts that demonstrate fixture toggle behaviour (success/empty/error).
+10. ACTION: Define admin telemetry/history requirements and draft failing unit/integration/RTL/Playwright tests (in priority order) before implementation.
+11. REVIEW: Cross-check the admin test matrix with stakeholders and documentation to ensure completeness.
+12. GROUNDING: read GO.md and follow all instructions.
+13. ACTION: Implement admin telemetry/history features iteratively to satisfy the new tests, ensuring deterministic fixtures for UI/Playwright coverage.
+14. REVIEW: Assess the admin UI for accessibility, observability clarity, and adherence to Oak tokens.
+15. QUALITY-GATE: Run `pnpm qg`, capturing artefacts for updated admin workflows and verifying stability.
+16. ACTION: Draft failing status page helper/unit/integration tests covering tone logic, failure messaging, and partial data cases.
+17. REVIEW: Verify status coverage matches plan expectations and avoids redundant assertions.
+18. GROUNDING: read GO.md and follow all instructions.
+19. ACTION: Implement status page tone/failure updates and any remaining hero copy/layout refinements using deterministic fixtures.
+20. REVIEW: Validate the updated surfaces against accessibility requirements and UX acceptance criteria.
+21. QUALITY-GATE: Run `pnpm qg` once more to capture final evidence for Phase 1 UX completion.

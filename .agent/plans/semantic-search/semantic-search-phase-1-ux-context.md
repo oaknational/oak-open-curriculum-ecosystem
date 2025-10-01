@@ -1,17 +1,14 @@
 # Semantic Search Phase 1 – UX Context Snapshot
 
-_Last updated: 2025-09-30 22:45 (status page fix complete)_
+_Last updated: 2025-10-06 11:45 (fixture toggle variant coverage + qg green)_
 
 ## Active Focus
 
-- Execute the UX plan (`semantic-search-phase-1-ux.md`): responsive grids, surface hierarchy, accessibility fixes, and cross-device polish for Search, Admin, Docs, and the new Status surface.
+- Execute the UX plan (`semantic-search-phase-1-ux.md`) with priority on fixture toggle/search layout validation, followed by admin telemetry and status page hardening.
 - Ensure semantic theme tokens, bridge CSS variables, and global styles remain the single source of truth across light/dark modes.
-- Keep Playwright/axe coverage in step with UX changes, including new fixture-mode and status-page scenarios.
-- Monitor follow-up items after the scope-helper refactor (e.g. generated constants consumed everywhere, future schema additions remain one-touch).
-- Finish hardening the admin console: richer telemetry wiring, historical run status, and operator guidance for failures/success.
-- Complete status page work: add test coverage (unit, integration, Playwright), tighten card tone logic, and capture responsive artefacts at xs/lg breakpoints.
-- Address Playwright fixture toggle test failures (2 tests failing due to fixture mode UI visibility issues).
-- Maintain green `pnpm make`/`pnpm qg` runs; `pnpm make` now passes, `pnpm qg` blocked by 2 Playwright fixture toggle tests.
+- Keep Playwright/axe coverage in step with UX changes, including new fixture-mode scenarios and admin/status checks.
+- Use TDD for every change, preferring unit tests, then integration, then RTL, with Playwright reserved for behaviours that require a browser.
+- Run `pnpm qg` frequently (under two minutes) after each milestone while keeping `pnpm make` green.
 
 ## Current State
 
@@ -20,21 +17,22 @@ _Last updated: 2025-09-30 22:45 (status page fix complete)_
 - Playwright responsive suite enforces Admin/Docs behaviour at `bp-xxl` (container width clamped 1 200 – 1 260 px, axe violations = 0); Admin `bp-md` and Health `bp-xs` remain guarded until their UX work lands.
 - Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
 - Navigation and hero layouts still waste space on phones; `/healthz` intentionally serves raw JSON while a separate status page UI is planned to surface the same data with Oak styling.
-- Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true` and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
+- Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true`, `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE=true`, and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
 - Search API routes (structured + suggestions) now consume schema-derived helpers: fixtures short-circuit via generated factories, while live flows reuse a typed query normaliser to keep cache keys deterministic.
-- Literal search scope strings still appear across search services, OpenAPI schemas, fixtures, and UI loops; adopting the generated helpers remains a priority task.
+- Search services, SDK validators, fixtures, and UI loops now import scope helpers from `src/lib/search-scopes.ts`, eliminating remaining literal scope strings while keeping defaults centralised.
 - `/status` page now renders an Oak-styled status shell driven by `/healthz`, with hero summary, responsive cards, and diagnostics linking back to raw JSON. Implemented as Server Component (commit 066c2d6) fetching data with `headers()` and delegating rendering to StatusClient. Root cause of initial build failure: page incorrectly marked `'use client'` while using server-only `headers()` API. Solution: removed client directive, extracted UI to StatusClient.tsx (already existed), kept data fetching in server page.tsx. Outstanding: add unit/integration/Playwright test coverage, handle `/healthz` partial failures, tighten card tone logic.
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
-- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) now underpins deterministic Search assertions; fixtures continue to mirror the multi-scope payload, and the multi-scope builders/tests now compose the generated `createSearch*Response` helpers directly to guarantee schema fidelity.
+- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) still seeds deterministic data, and the UI visibility is now controlled via `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`; the resolver honours env overrides. Unit/integration suites now cover success/empty/error fixture states, while RTL and Playwright expansions remain in progress to assert announcements and layout behaviour.
+- Structured, natural, and suggest API routes now share fixture-mode helpers that short-circuit empty/error cases with deterministic responses; successful `pnpm make`/`pnpm qg` runs confirm the refactor keeps quality gates green.
 - Curriculum schema metadata now lives in `curriculumZodSchemas`; both curriculum and search validators now consume a shared `parseSchema` helper that leverages generated `_input`/`_output` typing, with scope constants/guards (`SEARCH_SCOPES`, `SEARCH_SCOPES_WITH_ALL`) queued for the remaining overload cleanup.
 - Search page client now uses a dedicated layout shell and fixture toggle component, keeping max-lines under control while preserving the existing UX flows.
 - Status page implementation complete (structure/rendering); outstanding: comprehensive test coverage required per TDD principles.
 - Admin page requires expanded workflows (index creation, ingestion controls, telemetry) with progress/error cues surfaced to operators.
 - Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` documents the finalised module layout. The shared fixture-mode resolver and developer toggle now drive all server actions and routes, preserving zero-hit logging and accessible announcements; next, broaden science facets as needed and finish splitting fixture helpers so lint complexity thresholds pass.
-- Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover the updated cookie handling and complete without type errors.
-- Quality gates: `pnpm make` passes fully (format, type-check, lint, build, doc-gen); `pnpm qg` has 2 pre-existing Playwright fixture toggle test failures unrelated to recent status page work. Playwright browsers now installed (Chromium 140, Firefox 141, Webkit 26).
+- Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/lib/fixture-toggle.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover cookie precedence plus empty/error fixture fallbacks and complete without type errors.
+- Quality gates: `pnpm make` passes fully (format, type-check, lint, build, doc-gen). Keep running `pnpm qg` frequently (under two minutes) to capture artefacts as fixture toggle, admin, and status work progresses. Playwright browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 - 2025-09-28: `SearchResults.unit.test.tsx` now mounts the new `mode`/`multiBuckets` signature and asserts multi-scope bucket rendering so TypeScript aligns with the component API before rerunning `pnpm make`.
 - Wide-view hero layout still needs validation that structured and natural panels remain visible above the fold at `xl`/`xxl`; adjust `HeroControlsCluster` track ratios if further Playwright sweeps highlight controls slipping below the hero copy.
 - 2025-09-29: API docs Redoc theme now resolves Oak UI tokens to hex (`resolveUiColor`), the page container uses the neutral background token with elevated card styling, and integration coverage asserts the options payload stays in-valid colour space (`app/api/docs/page.integration.test.tsx`).

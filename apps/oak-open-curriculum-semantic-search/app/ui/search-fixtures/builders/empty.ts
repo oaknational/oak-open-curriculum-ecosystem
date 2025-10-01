@@ -1,11 +1,18 @@
-import type { HybridResponse } from '../../structured-search.shared';
-import { buildSingleScopeFixture, type SingleScopeDatasetKey } from './single-scope';
-import { buildSequenceFixture, buildUnitFixture } from './multi-scope';
+import {
+  buildSingleScopeFixture,
+  type SingleScopeDatasetKey,
+  type SingleScopeFixture,
+} from './single-scope';
+import { buildSequenceFixture, buildUnitFixture, buildMultiScopeFixture } from './multi-scope';
 import {
   createSearchLessonsResponse,
   createSearchUnitsResponse,
   createSearchSequencesResponse,
-} from '../../../../src/types/oak';
+  type SearchUnitsResponse,
+  type SearchSequencesResponse,
+  type SearchMultiScopeResponse,
+  type SearchMultiScopeBucket,
+} from '@oaknational/oak-curriculum-sdk';
 
 export type FixtureScope = 'lessons' | 'units' | 'sequences';
 
@@ -20,46 +27,95 @@ const DEFAULT_DATASET: Record<FixtureScope, SingleScopeDatasetKey> = {
   sequences: 'ks3-history',
 };
 
-export function buildEmptyFixture({ scope, dataset }: BuildEmptyFixtureOptions): HybridResponse {
+export function buildEmptyFixture({
+  scope,
+  dataset,
+}: BuildEmptyFixtureOptions): SingleScopeFixture | SearchUnitsResponse | SearchSequencesResponse {
   const resolvedDataset = dataset ?? DEFAULT_DATASET[scope];
 
   if (scope === 'lessons') {
     const base = buildSingleScopeFixture({ dataset: resolvedDataset });
-    return createSearchLessonsResponse({
+    return {
+      ...base,
       results: [],
       total: 0,
-      took: base.took,
       timedOut: false,
-      aggregations: base.aggregations,
-      facets: base.facets,
-      suggestions: base.suggestions,
-      suggestionCache: base.suggestionCache,
-    });
+    };
   }
 
   if (scope === 'units') {
     const base = buildUnitFixture(resolvedDataset);
-    return createSearchUnitsResponse({
+    return {
+      ...base,
       results: [],
       total: 0,
-      took: base.took,
       timedOut: false,
-      aggregations: base.aggregations,
-      facets: base.facets,
-      suggestions: base.suggestions,
-      suggestionCache: base.suggestionCache,
-    });
+    };
   }
 
   const base = buildSequenceFixture(resolvedDataset);
-  return createSearchSequencesResponse({
+  return {
+    ...base,
     results: [],
     total: 0,
-    took: base.took,
     timedOut: false,
-    aggregations: base.aggregations,
-    facets: base.facets,
-    suggestions: base.suggestions,
-    suggestionCache: base.suggestionCache,
-  });
+  };
+}
+
+export function buildEmptyMultiScopeFixture(): SearchMultiScopeResponse {
+  const base = buildMultiScopeFixture();
+  const buckets = base.buckets.map(clearBucketResults);
+  return {
+    ...base,
+    buckets,
+  } satisfies SearchMultiScopeResponse;
+}
+
+function clearBucketResults(bucket: SearchMultiScopeBucket): SearchMultiScopeBucket {
+  const { result } = bucket;
+  if (bucket.scope === 'lessons') {
+    return {
+      ...bucket,
+      result: createSearchLessonsResponse({
+        results: [],
+        total: 0,
+        took: result.took,
+        timedOut: false,
+        aggregations: result.aggregations,
+        facets: result.facets,
+        suggestions: result.suggestions ?? [],
+        suggestionCache: result.suggestionCache,
+      }),
+    } satisfies SearchMultiScopeBucket;
+  }
+
+  if (bucket.scope === 'units') {
+    return {
+      ...bucket,
+      result: createSearchUnitsResponse({
+        results: [],
+        total: 0,
+        took: result.took,
+        timedOut: false,
+        aggregations: result.aggregations,
+        facets: result.facets,
+        suggestions: result.suggestions,
+        suggestionCache: result.suggestionCache,
+      }),
+    } satisfies SearchMultiScopeBucket;
+  }
+
+  return {
+    ...bucket,
+    result: createSearchSequencesResponse({
+      results: [],
+      total: 0,
+      took: result.took,
+      timedOut: false,
+      aggregations: result.aggregations,
+      facets: result.facets,
+      suggestions: result.suggestions,
+      suggestionCache: result.suggestionCache,
+    }),
+  } satisfies SearchMultiScopeBucket;
 }

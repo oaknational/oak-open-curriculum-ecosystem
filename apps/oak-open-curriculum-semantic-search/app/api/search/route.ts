@@ -10,8 +10,16 @@ import { runHybridSearch, runHybridSearchAllScopes } from '../../../src/lib/run-
 import { SearchRequest, SuggestionResponseSchema } from '../../ui/structured-search.shared';
 import type { StructuredBody, SuggestionItem } from '../../ui/structured-search.shared';
 import { logZeroHit } from '../../../src/lib/observability/zero-hit';
-import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../lib/fixture-mode';
-import { buildFixtureForScope } from '../../ui/search-fixtures/builders';
+import {
+  resolveFixtureModeFromRequest,
+  applyFixtureModeCookie,
+  type FixtureMode,
+} from '../../lib/fixture-mode';
+import {
+  buildFixtureForScope,
+  buildEmptyFixture,
+  buildEmptyMultiScopeFixture,
+} from '../../ui/search-fixtures/builders';
 import { MULTI_SCOPE, DEFAULT_NARROW_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
 import { isSearchScope } from '../../../src/types/oak';
 
@@ -19,6 +27,7 @@ type StructuredSearchBody = StructuredBody;
 type MultiScopeResponse = MultiScopeHybridResult & { suggestions?: SuggestionItem[] };
 type FixtureResponse = ReturnType<typeof buildFixtureForScope>;
 type SearchResponsePayload = HybridSearchResult | MultiScopeResponse | FixtureResponse;
+type FixturePayloadMode = Extract<FixtureMode, 'fixtures' | 'fixtures-empty'>;
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -32,17 +41,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   const body = parsed.data;
   const query = buildStructuredQuery(body);
   const indexVersion = process.env.SEARCH_INDEX_VERSION ?? 'v1';
-  const { mode, persist } = resolveFixtureModeFromRequest(req);
 
-  const result: SearchResponsePayload =
-    mode === 'fixtures'
-      ? buildFixtureResponse(body)
-      : await resolveSearchResponse({ body, query, req, indexVersion });
-
-  await logZeroHitsForResult({ result, query, indexVersion });
-  const response = NextResponse.json(result);
-  applyFixtureModeCookie(response, persist);
-  return response;
+  return handleStructuredSearchRequest({ req, body, query, indexVersion });
 }
 
 function buildStructuredQuery(body: StructuredSearchBody): StructuredQuery {
@@ -165,10 +165,76 @@ async function logZeroHitsForResult(params: {
   });
 }
 
-function buildFixtureResponse(body: StructuredSearchBody): FixtureResponse {
+function buildFixtureResponse(
+  body: StructuredSearchBody,
+  mode: FixturePayloadMode,
+): SearchResponsePayload {
+  if (mode === 'fixtures-empty') {
+    return buildEmptyFixtureForScope(body.scope);
+  }
   return buildFixtureForScope(body.scope);
 }
 
 function isMultiScopePayload(value: SearchResponsePayload): value is MultiScopeResponse {
   return value.scope === MULTI_SCOPE && 'buckets' in value;
+}
+
+function buildEmptyFixtureForScope(scope: StructuredSearchBody['scope']): SearchResponsePayload {
+  if (scope === MULTI_SCOPE) {
+    return buildEmptyMultiScopeFixture();
+  }
+
+  if (scope === 'lessons' || scope === 'units' || scope === 'sequences') {
+    return buildEmptyFixture({ scope });
+  }
+
+  return buildFixtureForScope(scope);
+}
+
+async function handleStructuredSearchRequest(params: {
+  req: NextRequest;
+  body: StructuredSearchBody;
+  query: StructuredQuery;
+  indexVersion: string;
+}): Promise<Response> {
+  const { req, body, query, indexVersion } = params;
+  const { mode, persist } = resolveFixtureModeFromRequest(req);
+
+  if (mode !== 'live') {
+    return handleFixtureModeRequest({ body, mode, persist, query, indexVersion });
+  }
+
+  const result = await resolveSearchResponse({ body, query, req, indexVersion });
+  await logZeroHitsForResult({ result, query, indexVersion });
+  const response = NextResponse.json(result);
+  applyFixtureModeCookie(response, persist);
+  return response;
+}
+
+async function handleFixtureModeRequest(params: {
+  body: StructuredSearchBody;
+  mode: Exclude<FixtureMode, 'live'>;
+  persist: FixtureMode | undefined;
+  query: StructuredQuery;
+  indexVersion: string;
+}): Promise<Response> {
+  const { body, mode, persist, query, indexVersion } = params;
+
+  if (mode === 'fixtures-error') {
+    const response = NextResponse.json(
+      {
+        error: 'FIXTURE_ERROR',
+        message: 'Fixture mode requested an error response for structured search.',
+      },
+      { status: 503 },
+    );
+    applyFixtureModeCookie(response, persist);
+    return response;
+  }
+
+  const fixtureResult = buildFixtureResponse(body, mode);
+  await logZeroHitsForResult({ result: fixtureResult, query, indexVersion });
+  const response = NextResponse.json(fixtureResult);
+  applyFixtureModeCookie(response, persist);
+  return response;
 }

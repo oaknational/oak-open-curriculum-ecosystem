@@ -8,8 +8,12 @@ import {
   SearchNaturalLanguageRequestSchema,
 } from '../../../../src/types/oak';
 import type { SearchNaturalLanguageRequest, SearchScopeWithAll } from '../../../../src/types/oak';
-import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../../lib/fixture-mode';
-import { buildSingleScopeFixture } from '../../../ui/search-fixtures/builders';
+import {
+  resolveFixtureModeFromRequest,
+  applyFixtureModeCookie,
+  type FixtureMode,
+} from '../../../lib/fixture-mode';
+import { buildSingleScopeFixture, buildEmptyFixture } from '../../../ui/search-fixtures/builders';
 import { LESSONS_SCOPE, UNITS_SCOPE } from '../../../../src/lib/search-scopes';
 import type { StructuredBody } from '../../../ui/structured-search.shared';
 
@@ -28,30 +32,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const requestPayload = await buildNaturalPayload(parsedBody.data);
-  const { mode, persist } = resolveFixtureModeFromRequest(req);
-
-  if (mode === 'fixtures') {
-    const lessonsFixture = buildSingleScopeFixture();
-    const response = NextResponse.json({
-      scope: LESSONS_SCOPE,
-      results: lessonsFixture.results,
-      total: lessonsFixture.total,
-      took: lessonsFixture.took,
-      timedOut: lessonsFixture.timedOut,
-      aggregations: lessonsFixture.aggregations,
-      facets: lessonsFixture.facets,
-      suggestions: lessonsFixture.suggestions,
-      suggestionCache: lessonsFixture.suggestionCache,
-    });
-    applyFixtureModeCookie(response, persist);
-    return response;
-  }
-
-  const response = await forwardStructuredSearch(req, requestPayload);
-  const bodyJson: unknown = await response.json();
-  const nextResponse = NextResponse.json(bodyJson, { status: response.status });
-  applyFixtureModeCookie(nextResponse, persist);
-  return nextResponse;
+  return handleNaturalSearchRequest({ req, requestPayload });
 }
 
 function renderLlmDisabled(): Response {
@@ -63,6 +44,65 @@ function renderLlmDisabled(): Response {
     },
     { status: 501 },
   );
+}
+
+function buildNaturalFixture(mode: FixtureMode) {
+  if (mode === 'fixtures-empty') {
+    return buildEmptyFixture({ scope: LESSONS_SCOPE });
+  }
+  return buildSingleScopeFixture();
+}
+
+async function handleNaturalSearchRequest(params: {
+  req: NextRequest;
+  requestPayload: NaturalStructuredPayload;
+}): Promise<Response> {
+  const { req, requestPayload } = params;
+  const { mode, persist } = resolveFixtureModeFromRequest(req);
+
+  if (mode !== 'live') {
+    return handleNaturalFixtureRequest({ mode, persist });
+  }
+
+  const response = await forwardStructuredSearch(req, requestPayload);
+  const bodyJson: unknown = await response.json();
+  const nextResponse = NextResponse.json(bodyJson, { status: response.status });
+  applyFixtureModeCookie(nextResponse, persist);
+  return nextResponse;
+}
+
+function handleNaturalFixtureRequest(params: {
+  mode: FixtureMode;
+  persist: FixtureMode | undefined;
+}): Response {
+  const { mode, persist } = params;
+
+  if (mode === 'fixtures-error') {
+    const response = NextResponse.json(
+      {
+        error: 'FIXTURE_ERROR',
+        message: 'Fixture mode requested an error response for natural-language search.',
+      },
+      { status: 503 },
+    );
+    applyFixtureModeCookie(response, persist);
+    return response;
+  }
+
+  const lessonsFixture = buildNaturalFixture(mode);
+  const response = NextResponse.json({
+    scope: lessonsFixture.scope,
+    results: lessonsFixture.results,
+    total: lessonsFixture.total,
+    took: lessonsFixture.took,
+    timedOut: lessonsFixture.timedOut,
+    aggregations: lessonsFixture.aggregations,
+    facets: lessonsFixture.facets,
+    suggestions: lessonsFixture.suggestions,
+    suggestionCache: lessonsFixture.suggestionCache,
+  });
+  applyFixtureModeCookie(response, persist);
+  return response;
 }
 
 async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStructuredPayload> {

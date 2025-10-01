@@ -48,7 +48,7 @@ Done:
 
 ## TODOs (actionable, with reviews)
 
-- REMINDER: UseBritish spelling
+- REMINDER: Use british spelling
 
 - ACTION: Set `parserOptions.projectService = false` for `files: ['**/*.ts']` blocks in all package ESLint configs (keep `project` and `tsconfigRootDir` pointing to root lint tsconfig) — COMPLETED
 - REVIEW: config-auditor to confirm ESLint parser uses root project; verify effective config via `--print-config`

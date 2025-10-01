@@ -12,7 +12,7 @@ Scope: Implement Part 2 per `.agent/plans/standardising-architecture-part2.md`.
 - Maintain export surface parity (symbols unchanged) per phenotype.
 - Codemod idempotent (second execution = no ops).
 - Preserve architectural boundaries; do not relax ESLint rules.
-- British spelling (REMINDER: UseBritish spelling).
+- British spelling (REMINDER: Use british spelling).
 
 ## Core References
 

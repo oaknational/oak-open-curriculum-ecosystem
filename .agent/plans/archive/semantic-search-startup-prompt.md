@@ -70,7 +70,7 @@ You are working on the **Oak Open Curriculum Semantic Search API** project. The 
 - Honour `.agent/directives-and-memory/rules.md` and the testing strategy; apply TDD (Red → Green → Refactor).
 - No skipping quality gates. The sequence: `pnpm format` → `pnpm type-check` → `pnpm lint` → `pnpm test` → `pnpm build` → `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`.
 - No unsafe assertions (`as`, `!`) or bypassing type guards; prefer pure functions.
-- British spelling required; mention “REMINDER: UseBritish spelling” in todo lists.
+- British spelling required; mention “REMINDER: Use british spelling” in todo lists.
 
 ## Success Criteria (per alignment plan)
 

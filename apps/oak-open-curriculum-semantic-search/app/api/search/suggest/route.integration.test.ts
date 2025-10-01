@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { z } from 'zod';
 import type { SuggestQuery, SuggestionResponse } from '../../../../src/lib/suggestions/types';
+import { SearchSuggestionResponseSchema } from '@oaknational/oak-curriculum-sdk';
 import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
 
 const runSuggestions = vi.hoisted(() =>
@@ -52,7 +54,7 @@ describe('POST /api/search/suggest', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = (await response.json()) as SuggestionResponse;
+    const payload = SearchSuggestionResponseSchema.parse(await response.json());
     expect(payload.suggestions).toHaveLength(1);
     expect(runSuggestions).toHaveBeenCalledWith({
       prefix: 'mount',
@@ -84,7 +86,7 @@ describe('POST /api/search/suggest', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = (await response.json()) as SuggestionResponse;
+    const payload = SearchSuggestionResponseSchema.parse(await response.json());
     expect(payload.suggestions.length).toBeGreaterThan(0);
     for (const suggestion of payload.suggestions) {
       expect(suggestion.scope).toBe(LESSONS_SCOPE);
@@ -106,8 +108,40 @@ describe('POST /api/search/suggest', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = (await response.json()) as SuggestionResponse;
+    const payload = SearchSuggestionResponseSchema.parse(await response.json());
     expect(payload.suggestions.length).toBeGreaterThan(0);
+    expect(runSuggestions).not.toHaveBeenCalled();
+  });
+
+  it('returns empty suggestions when fixtures query parameter requests empty mode', async () => {
+    const request = new NextRequest('http://localhost/api/search/suggest?fixtures=empty', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ prefix: 'math', scope: LESSONS_SCOPE, limit: 5 }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = (await response.json()) as SuggestionResponse;
+    expect(payload.suggestions).toHaveLength(0);
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=empty');
+    expect(runSuggestions).not.toHaveBeenCalled();
+  });
+
+  it('returns an error payload when fixtures query parameter requests error mode', async () => {
+    const request = new NextRequest('http://localhost/api/search/suggest?fixtures=error', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ prefix: 'math', scope: LESSONS_SCOPE, limit: 5 }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(503);
+    const payload = z.object({ error: z.string() }).parse(await response.json());
+    expect(payload.error).toBe('FIXTURE_ERROR');
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=error');
     expect(runSuggestions).not.toHaveBeenCalled();
   });
 });

@@ -12,7 +12,12 @@ export {
   type BuildMultiScopeFixtureOptions,
 } from './multi-scope';
 
-export { buildEmptyFixture, type BuildEmptyFixtureOptions, type FixtureScope } from './empty';
+export {
+  buildEmptyFixture,
+  buildEmptyMultiScopeFixture,
+  type BuildEmptyFixtureOptions,
+  type FixtureScope,
+} from './empty';
 
 export { buildTimedOutSingleScopeFixture, buildTimedOutMultiScopeFixture } from './timed-out';
 

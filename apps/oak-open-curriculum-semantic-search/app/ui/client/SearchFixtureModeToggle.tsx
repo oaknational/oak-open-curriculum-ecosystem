@@ -46,18 +46,19 @@ export function SearchFixtureModeToggle({
 
 function useFixtureModeToggle(initialMode: FixtureMode) {
   const router = useRouter();
-  const [mode, setMode] = useState<FixtureMode>(initialMode);
+  const [mode, setMode] = useState<'fixtures' | 'live'>(normaliseToggleMode(initialMode));
   const [statusMessage, setStatusMessage] = useState('');
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setMode(initialMode);
-    setStatusMessage(initialMode === 'fixtures' ? 'Fixtures enabled.' : 'Live data enabled.');
+    const normalised = normaliseToggleMode(initialMode);
+    setMode(normalised);
+    setStatusMessage(normalised === 'fixtures' ? 'Fixtures enabled.' : 'Live data enabled.');
   }, [initialMode]);
 
   const handleToggle = useCallback(() => {
     const previousMode = mode;
-    const targetMode: FixtureMode = mode === 'fixtures' ? 'live' : 'fixtures';
+    const targetMode: 'fixtures' | 'live' = mode === 'fixtures' ? 'live' : 'fixtures';
     setMode(targetMode);
     setStatusMessage(targetMode === 'fixtures' ? 'Fixtures enabled.' : 'Live data enabled.');
 
@@ -84,4 +85,8 @@ function useFixtureModeToggle(initialMode: FixtureMode) {
     isPending,
     statusMessage,
   } as const;
+}
+
+function normaliseToggleMode(mode: FixtureMode): 'fixtures' | 'live' {
+  return mode === 'live' ? 'live' : 'fixtures';
 }

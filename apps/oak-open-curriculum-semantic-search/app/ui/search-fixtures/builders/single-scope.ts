@@ -6,7 +6,7 @@ import {
   type SearchLessonsResponse,
   type SearchFacets,
   type SearchLessonsSuggestionCache,
-} from '../../../../src/types/oak';
+} from '@oaknational/oak-curriculum-sdk';
 import { isSubject } from '@oaknational/oak-curriculum-sdk';
 import {
   ks2MathsLessons,
