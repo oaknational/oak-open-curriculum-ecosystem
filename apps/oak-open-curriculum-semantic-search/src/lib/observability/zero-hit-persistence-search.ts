@@ -1,5 +1,6 @@
 import type { ZeroHitEvent } from './zero-hit-store';
 import type { UnknownRecord } from './zero-hit-persistence-index';
+import type { SearchScope } from '../../types/oak';
 
 /** Minimal representation of an Elasticsearch hit consumed by the parser. */
 export interface SearchHit {
@@ -29,7 +30,7 @@ export interface SearchResponse {
 /** High-level summary presented on the zero-hit dashboard. */
 export interface ZeroHitTelemetrySummary {
   total: number;
-  byScope: Record<'lessons' | 'units' | 'sequences', number>;
+  byScope: Record<SearchScope, number>;
   latestIndexVersion: string | null;
 }
 
@@ -119,8 +120,8 @@ function normaliseHit(hit: SearchHit | undefined): ZeroHitEvent | null {
   };
 }
 
-function normaliseScope(value: unknown): 'lessons' | 'units' | 'sequences' {
-  return value === 'units' || value === 'sequences' ? value : 'lessons';
+function normaliseScope(value: unknown): SearchScope {
+  return isRecognisedScope(value) ? value : 'lessons';
 }
 
 function normaliseFilters(value: unknown): Record<string, string> {
@@ -149,8 +150,8 @@ function normaliseTotal(value: unknown): number {
   return 0;
 }
 
-function normaliseScopeBuckets(value: unknown): Record<'lessons' | 'units' | 'sequences', number> {
-  const initial: Record<'lessons' | 'units' | 'sequences', number> = {
+function normaliseScopeBuckets(value: unknown): Record<SearchScope, number> {
+  const initial: Record<SearchScope, number> = {
     lessons: 0,
     units: 0,
     sequences: 0,
@@ -164,14 +165,17 @@ function normaliseScopeBuckets(value: unknown): Record<'lessons' | 'units' | 'se
     }
     const key = bucket['key'];
     const count = bucket['doc_count'];
-    if (
-      (key === 'lessons' || key === 'units' || key === 'sequences') &&
-      typeof count === 'number'
-    ) {
+    if (isRecognisedScope(key) && typeof count === 'number') {
       initial[key] = count;
     }
   }
   return initial;
+}
+
+function isRecognisedScope(value: unknown): value is SearchScope {
+  return (
+    typeof value === 'string' && (value === 'lessons' || value === 'units' || value === 'sequences')
+  );
 }
 
 function extractLatestVersion(value: unknown): string | null {

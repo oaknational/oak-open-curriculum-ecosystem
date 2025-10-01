@@ -19,6 +19,12 @@ import type {
 } from './structured-search.shared';
 import { buildFixtureForScope } from './search-fixtures/builders';
 import { resolveFixtureModeFromCookies } from '../lib/fixture-mode';
+import { isSearchScope } from '../../src/types/oak';
+import {
+  NARROW_SEARCH_SCOPES,
+  DEFAULT_NARROW_SCOPE,
+  MULTI_SCOPE,
+} from '../../src/lib/search-scopes';
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 
@@ -36,7 +42,7 @@ export async function searchAction(
   }
 
   try {
-    if (input.scope === 'all') {
+    if (input.scope === MULTI_SCOPE) {
       const multi = await requestMultiScopeSearch(base, input);
       return { result: multi };
     }
@@ -77,7 +83,7 @@ async function requestSuggestions(base: string, body: StructuredBody): Promise<S
   }
 
   try {
-    const scope: SearchScope = body.scope === 'all' ? 'lessons' : body.scope;
+    const scope: SearchScope = isSearchScope(body.scope) ? body.scope : DEFAULT_NARROW_SCOPE;
     const response = await fetch(new URL('/api/search/suggest', base).toString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -130,7 +136,7 @@ async function requestMultiScopeSearch(
     phaseSlug: input.phaseSlug,
   } as const;
 
-  const scopes: SearchScope[] = ['lessons', 'units', 'sequences'];
+  const scopes = NARROW_SEARCH_SCOPES;
   const results = await Promise.all(
     scopes.map(async (scope) => {
       const response = await requestStructuredSearch(base, buildBody({ ...queryBase, scope }));
@@ -139,7 +145,7 @@ async function requestMultiScopeSearch(
   );
 
   const suggestionResponse = await requestSuggestions(base, {
-    scope: 'lessons',
+    scope: DEFAULT_NARROW_SCOPE,
     text: input.text,
     subject: input.subject,
     keyStage: input.keyStage,
@@ -147,7 +153,7 @@ async function requestMultiScopeSearch(
   });
 
   const payload: MultiScopeHybridResponse = {
-    scope: 'all',
+    scope: MULTI_SCOPE,
     buckets: results,
     suggestions: suggestionResponse.suggestions,
     suggestionCache: suggestionResponse.cache,

@@ -8,6 +8,8 @@ import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from '../StructuredSearch';
 import type { FixtureMode } from '../../lib/fixture-mode';
 import SearchPageClient from './SearchPageClient';
+import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
+import { buildSingleScopeFixture } from '../search-fixtures/builders';
 
 const refreshMock = vi.fn();
 
@@ -107,7 +109,7 @@ describe('SearchPageClient', () => {
 
   it('links the hero copy to the structured and natural search panels', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action);
@@ -121,7 +123,7 @@ describe('SearchPageClient', () => {
 
   it('surfaces the structured Phase selector with an accessible label', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action);
@@ -137,7 +139,7 @@ describe('SearchPageClient', () => {
 
   it('caps the main layout inline size using the app layout CSS variable', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action);
@@ -151,7 +153,7 @@ describe('SearchPageClient', () => {
 
   it('allows developers to toggle fixture mode when the toggle is visible', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures' });
@@ -174,7 +176,7 @@ describe('SearchPageClient', () => {
 
   it('applies theme-driven spacing to the main layout shell', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 3, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action);
@@ -187,12 +189,12 @@ describe('SearchPageClient', () => {
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'units', results: [], total: 0, took: 5, timedOut: false },
+      result: { scope: UNITS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
     });
     renderWithTheme(action);
 
     const basePayload: StructuredBody = {
-      scope: 'units',
+      scope: UNITS_SCOPE,
       text: 'fractions',
       includeFacets: true,
     };
@@ -223,7 +225,7 @@ describe('SearchPageClient', () => {
     await waitFor(() => {
       expect(action).toHaveBeenCalledWith(
         expect.objectContaining({
-          scope: 'sequences',
+          scope: SEQUENCES_SCOPE,
           phaseSlug: 'maths-primary',
         }),
       );
@@ -232,12 +234,12 @@ describe('SearchPageClient', () => {
 
   it('runs a follow-up search when the scope changes', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 7, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 7, timedOut: false },
     });
     renderWithTheme(action);
 
     const basePayload: StructuredBody = {
-      scope: 'units',
+      scope: UNITS_SCOPE,
       text: 'fractions',
       includeFacets: true,
       subject: 'maths',
@@ -248,13 +250,13 @@ describe('SearchPageClient', () => {
     });
 
     await act(async () => {
-      structuredPropsRef.current?.onScopeChange?.('lessons');
+      structuredPropsRef.current?.onScopeChange?.(LESSONS_SCOPE);
     });
 
     await waitFor(() => {
       expect(action).toHaveBeenCalledWith(
         expect.objectContaining({
-          scope: 'lessons',
+          scope: LESSONS_SCOPE,
         }),
       );
     });
@@ -262,12 +264,12 @@ describe('SearchPageClient', () => {
 
   it('surfaces totals and suggestions when structured results arrive', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 5, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
     });
     renderWithTheme(action);
 
     const payload = {
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       results: [
         {
           id: 'lesson-1',
@@ -286,7 +288,7 @@ describe('SearchPageClient', () => {
       suggestions: [
         {
           label: 'Decimals recap',
-          scope: 'lessons' as const,
+          scope: LESSONS_SCOPE,
           url: '/lessons/decimals-recap',
           contexts: {},
         },
@@ -306,12 +308,12 @@ describe('SearchPageClient', () => {
 
   it('replays structured search when a suggestion is selected', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: 'lessons', results: [], total: 0, took: 6, timedOut: false },
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 6, timedOut: false },
     });
     renderWithTheme(action);
 
     const basePayload: StructuredBody = {
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       text: 'fractions',
       includeFacets: true,
       subject: 'maths',
@@ -323,7 +325,7 @@ describe('SearchPageClient', () => {
     });
 
     const resultPayload = {
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       results: [],
       total: 1,
       took: 9,
@@ -331,7 +333,7 @@ describe('SearchPageClient', () => {
       suggestions: [
         {
           label: 'Decimals recap',
-          scope: 'lessons' as const,
+          scope: LESSONS_SCOPE,
           subject: 'maths',
           keyStage: 'ks2',
           url: '/lessons/decimals-recap',
@@ -354,11 +356,31 @@ describe('SearchPageClient', () => {
 
     const followUpPayload = action.mock.calls.at(-1)?.[0];
     expect(followUpPayload).toMatchObject({
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       text: 'Decimals recap',
       subject: 'maths',
       keyStage: 'ks2',
     });
     expect(followUpPayload?.phaseSlug).toBeUndefined();
+  });
+
+  it('renders fixture datasets when fixture mode is enabled', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
+
+    const fixture = buildSingleScopeFixture();
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(fixture);
+    });
+
+    expect(screen.getByText('Search data: Fixtures')).toBeInTheDocument();
+    const headline = fixture.results[0]?.lesson?.lesson_title;
+    if (headline) {
+      expect(screen.getByText(headline)).toBeInTheDocument();
+    }
   });
 });

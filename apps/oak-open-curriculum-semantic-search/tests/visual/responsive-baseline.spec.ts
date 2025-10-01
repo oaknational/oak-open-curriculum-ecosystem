@@ -6,6 +6,7 @@ import {
   structuredSearchFixture,
   suggestionFixture,
 } from '../../app/ui/__fixtures__/search-structured';
+import { NARROW_SEARCH_SCOPES, MULTI_SCOPE } from '../../src/lib/search-scopes';
 
 type Viewport = {
   readonly width: number;
@@ -102,11 +103,13 @@ async function mockSearchEndpoints(page: Page): Promise<void> {
       }
 
       const payload = (() => {
-        if (parsedBody && parsedBody.scope === 'all') {
-          const scopes = ['lessons', 'units', 'sequences'] as const;
+        if (parsedBody && parsedBody.scope === MULTI_SCOPE) {
           return {
-            scope: 'all',
-            buckets: scopes.map((scope) => ({ scope, result: structuredSearchFixture })),
+            scope: MULTI_SCOPE,
+            buckets: NARROW_SEARCH_SCOPES.map((scope) => ({
+              scope,
+              result: structuredSearchFixture,
+            })),
             suggestions: suggestionFixture.suggestions,
           };
         }
@@ -389,22 +392,22 @@ test.describe('Docs page responsive regressions', () => {
   });
 });
 
-// Health surface regressions -------------------------------------------------
+// Status surface regressions -------------------------------------------------
 
-test.describe('Health surface regressions', () => {
+test.describe('Status surface regressions', () => {
   test.describe('bp-xs (360px)', () => {
     test.use({ viewport: VIEWPORTS.bpXs });
 
-    test('Health page renders Oak UI shell', async ({ page }, testInfo) => {
-      test.fail();
-      await page.goto('/healthz');
+    test('Status page renders Oak UI shell', async ({ page }, testInfo) => {
+      await page.goto('/status');
 
-      const mainCount = await page.locator('main').count();
+      const main = page.getByTestId('status-page');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('heading', { level: 1, name: /Platform status/i })).toBeVisible();
 
-      await captureScreenshot(page, 'healthz-bp-xs', testInfo);
-      const axe = await captureAccessibility(page, 'healthz-bp-xs', testInfo);
+      await captureScreenshot(page, 'status-bp-xs', testInfo);
+      const axe = await captureAccessibility(page, 'status-bp-xs', testInfo);
 
-      expect.soft(mainCount).toBeGreaterThan(0);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });

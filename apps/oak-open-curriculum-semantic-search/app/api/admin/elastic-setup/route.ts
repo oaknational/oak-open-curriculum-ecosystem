@@ -13,6 +13,13 @@ function makeEnv(): NodeJS.ProcessEnv {
   };
 }
 
+function missingElasticEnv(): string[] {
+  return ['ELASTICSEARCH_URL', 'ELASTICSEARCH_API_KEY'].filter((key) => {
+    const value = process.env[key];
+    return typeof value !== 'string' || value.trim().length === 0;
+  });
+}
+
 function toUint8(buffer: Buffer): Uint8Array {
   return new Uint8Array(buffer);
 }
@@ -32,6 +39,15 @@ function safeErrorText(err: unknown): string {
 }
 
 export function POST(): Response {
+  const missing = missingElasticEnv();
+  if (missing.length > 0) {
+    const message = `Missing required environment variables: ${missing.join(', ')}`;
+    return new NextResponse(message, {
+      status: 400,
+      headers: { 'content-type': 'text/plain; charset=utf-8' },
+    });
+  }
+
   const scriptPath = fileURLToPath(new URL('../../../../scripts/setup.sh', import.meta.url));
   const cwd = path.dirname(scriptPath);
   const env = makeEnv();

@@ -1,4 +1,4 @@
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchScope } from '../../types/oak';
 import { searchLogger } from '../logger';
 import { recordZeroHitEvent } from './zero-hit-store';
 import { persistZeroHitEvent, zeroHitPersistenceEnabled } from './zero-hit-persistence';
@@ -9,7 +9,7 @@ import type { ZeroHitEvent } from './zero-hit-store';
  */
 export interface ZeroHitPayload {
   total: number;
-  scope: 'lessons' | 'units' | 'sequences';
+  scope: SearchScope;
   text: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;

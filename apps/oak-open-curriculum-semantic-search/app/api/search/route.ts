@@ -12,6 +12,8 @@ import type { StructuredBody, SuggestionItem } from '../../ui/structured-search.
 import { logZeroHit } from '../../../src/lib/observability/zero-hit';
 import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../lib/fixture-mode';
 import { buildFixtureForScope } from '../../ui/search-fixtures/builders';
+import { MULTI_SCOPE, DEFAULT_NARROW_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
+import { isSearchScope } from '../../../src/types/oak';
 
 type StructuredSearchBody = StructuredBody;
 type MultiScopeResponse = MultiScopeHybridResult & { suggestions?: SuggestionItem[] };
@@ -47,8 +49,10 @@ function buildStructuredQuery(body: StructuredSearchBody): StructuredQuery {
   const subject = body.subject && isSubject(body.subject) ? body.subject : undefined;
   const keyStage = body.keyStage && isKeyStage(body.keyStage) ? body.keyStage : undefined;
 
+  const scope = isSearchScope(body.scope) ? body.scope : DEFAULT_NARROW_SCOPE;
+
   return {
-    scope: body.scope === 'all' ? 'lessons' : body.scope,
+    scope,
     text: body.text,
     subject,
     keyStage,
@@ -70,7 +74,7 @@ async function resolveSearchResponse(params: {
   const { body, query, req, indexVersion } = params;
   const runCached = createCachedRunner(indexVersion, query);
 
-  if (body.scope === 'all') {
+  if (body.scope === MULTI_SCOPE) {
     const multi = await runHybridSearchAllScopes(buildMultiScopeInput(query));
     const suggestions = await fetchAllScopeSuggestions(req, body, query);
     return suggestions.length > 0 ? { ...multi, suggestions } : multi;
@@ -102,7 +106,7 @@ async function fetchAllScopeSuggestions(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       prefix: body.text,
-      scope: 'lessons',
+      scope: DEFAULT_NARROW_SCOPE,
       subject: query.subject,
       keyStage: query.keyStage,
       phaseSlug: query.phaseSlug,
@@ -133,17 +137,21 @@ async function logZeroHitsForResult(params: {
     webhookUrl: process.env.ZERO_HIT_WEBHOOK_URL,
   } as const;
 
-  if (result.scope === 'all') {
+  if (isMultiScopePayload(result)) {
     for (const bucket of result.buckets) {
       await logZeroHit({
         ...common,
         total: bucket.result.total,
         scope: bucket.scope,
-        phaseSlug: bucket.scope === 'sequences' ? query.phaseSlug : undefined,
+        phaseSlug: bucket.scope === SEQUENCES_SCOPE ? query.phaseSlug : undefined,
         took: bucket.result.took,
         timedOut: bucket.result.timedOut,
       });
     }
+    return;
+  }
+
+  if (!('total' in result)) {
     return;
   }
 
@@ -159,4 +167,8 @@ async function logZeroHitsForResult(params: {
 
 function buildFixtureResponse(body: StructuredSearchBody): FixtureResponse {
   return buildFixtureForScope(body.scope);
+}
+
+function isMultiScopePayload(value: SearchResponsePayload): value is MultiScopeResponse {
+  return value.scope === MULTI_SCOPE && 'buckets' in value;
 }

@@ -12,21 +12,35 @@ import {
   type ChangeStructured,
 } from './structured-fields';
 import type { NaturalBody, NaturalScopeChoice } from './NaturalSearch.types';
+import {
+  ALL_SEARCH_SCOPES,
+  LESSONS_SCOPE,
+  UNITS_SCOPE,
+  SEQUENCES_SCOPE,
+  MULTI_SCOPE,
+} from '../../src/lib/search-scopes';
+
+const NATURAL_SCOPE_VALUES = ALL_SEARCH_SCOPES;
 
 export const NATURAL_SCOPE_OPTIONS: ReadonlyArray<{
   value: NaturalScopeChoice;
   label: string;
 }> = [
   { value: 'auto', label: 'Auto (let Oak decide)' },
-  { value: 'units', label: 'Units' },
-  { value: 'lessons', label: 'Lessons' },
-  { value: 'sequences', label: 'Sequences' },
-  { value: 'all', label: 'All content' },
+  ...NATURAL_SCOPE_VALUES.map((scope) => ({
+    value: scope,
+    label: formatNaturalScopeLabel(scope),
+  })),
 ];
 
-const keyStageScopes = new Set<NaturalScopeChoice>(['all', 'auto', 'lessons', 'units']);
-const phaseScopes = new Set<NaturalScopeChoice>(['all', 'auto', 'sequences']);
-const minLessonScopes = new Set<NaturalScopeChoice>(['all', 'auto', 'units']);
+const keyStageScopes = new Set<NaturalScopeChoice>([
+  MULTI_SCOPE,
+  'auto',
+  LESSONS_SCOPE,
+  UNITS_SCOPE,
+]);
+const phaseScopes = new Set<NaturalScopeChoice>([MULTI_SCOPE, 'auto', SEQUENCES_SCOPE]);
+const minLessonScopes = new Set<NaturalScopeChoice>([MULTI_SCOPE, 'auto', UNITS_SCOPE]);
 
 export function QueryField({
   nl,
@@ -112,7 +126,7 @@ export function SizeField({
 }
 
 export function NaturalScopeGuidance({ scope }: { scope: NaturalScopeChoice }): JSX.Element | null {
-  if (scope !== 'all' && scope !== 'auto') {
+  if (scope !== MULTI_SCOPE && scope !== 'auto') {
     return null;
   }
 
@@ -196,11 +210,18 @@ export function createStructuredPatchUpdater(
 }
 
 function isNaturalScopeChoice(value: string): value is NaturalScopeChoice {
-  return (
-    value === 'auto' ||
-    value === 'units' ||
-    value === 'lessons' ||
-    value === 'sequences' ||
-    value === 'all'
-  );
+  return value === 'auto' || NATURAL_SCOPE_VALUES.some((scope) => scope === value);
+}
+
+function formatNaturalScopeLabel(scope: (typeof ALL_SEARCH_SCOPES)[number]): string {
+  if (scope === MULTI_SCOPE) {
+    return 'All content';
+  }
+  if (scope === LESSONS_SCOPE) {
+    return 'Lessons';
+  }
+  if (scope === UNITS_SCOPE) {
+    return 'Units';
+  }
+  return 'Sequences';
 }

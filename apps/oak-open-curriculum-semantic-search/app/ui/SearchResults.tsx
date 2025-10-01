@@ -13,6 +13,7 @@ import {
   extractKeyStage,
   extractHighlights,
 } from './SearchResults.shared';
+import { LESSONS_SCOPE, UNITS_SCOPE } from '../../src/lib/search-scopes';
 
 export function SearchResults({
   mode,
@@ -176,20 +177,20 @@ function SearchSummary({
 }
 
 function formatScopeSentence(scope: SearchMeta['scope']): string {
-  if (scope === 'lessons') {
+  if (scope === LESSONS_SCOPE) {
     return 'lessons';
   }
-  if (scope === 'units') {
+  if (scope === UNITS_SCOPE) {
     return 'units';
   }
   return 'programmes';
 }
 
 function formatScopeHeading(scope: SearchMeta['scope']): string {
-  if (scope === 'lessons') {
+  if (scope === LESSONS_SCOPE) {
     return 'Lessons';
   }
-  if (scope === 'units') {
+  if (scope === UNITS_SCOPE) {
     return 'Units';
   }
   return 'Programmes';

@@ -21,6 +21,7 @@ export default defineConfig({
       ...process.env,
       SEMANTIC_SEARCH_USE_FIXTURES: 'true',
       NEXT_DISABLE_DEV_ERRORS: '1',
+      NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE: 'true',
     },
   },
   use: {

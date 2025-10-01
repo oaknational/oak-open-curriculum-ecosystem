@@ -7,13 +7,13 @@ import {
   DEFAULT_INCLUDE_FACETS,
   SearchNaturalLanguageRequestSchema,
 } from '../../../../src/types/oak';
-import type { SearchNaturalLanguageRequest } from '../../../../src/types/oak';
+import type { SearchNaturalLanguageRequest, SearchScopeWithAll } from '../../../../src/types/oak';
 import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../../lib/fixture-mode';
 import { buildSingleScopeFixture } from '../../../ui/search-fixtures/builders';
+import { LESSONS_SCOPE, UNITS_SCOPE } from '../../../../src/lib/search-scopes';
+import type { StructuredBody } from '../../../ui/structured-search.shared';
 
-type NaturalStructuredPayload = Omit<StructuredQuery, 'scope'> & {
-  scope: StructuredQuery['scope'] | 'all';
-};
+type NaturalStructuredPayload = StructuredBody;
 
 type NaturalRequestBody = SearchNaturalLanguageRequest;
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   if (mode === 'fixtures') {
     const lessonsFixture = buildSingleScopeFixture();
     const response = NextResponse.json({
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       results: lessonsFixture.results,
       total: lessonsFixture.total,
       took: lessonsFixture.took,
@@ -67,9 +67,10 @@ function renderLlmDisabled(): Response {
 
 async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStructuredPayload> {
   const parsed = await parseQuery(body.q);
+  const intent = parsed.intent === LESSONS_SCOPE ? LESSONS_SCOPE : UNITS_SCOPE;
 
   return {
-    scope: resolveScope(body.scope, parsed.intent),
+    scope: resolveScope(body.scope, intent),
     text: parsed.text.length > 0 ? parsed.text : body.q,
     subject: pickSubject(body.subject, parsed.subject),
     keyStage: pickKeyStage(body.keyStage, parsed.keyStage),
@@ -93,8 +94,8 @@ function forwardStructuredSearch(
 
 function resolveScope(
   provided: NaturalRequestBody['scope'],
-  inferred: 'units' | 'lessons',
-): NaturalStructuredPayload['scope'] {
+  inferred: typeof LESSONS_SCOPE | typeof UNITS_SCOPE,
+): SearchScopeWithAll {
   return provided ?? inferred;
 }
 

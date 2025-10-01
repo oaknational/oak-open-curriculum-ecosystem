@@ -2,6 +2,12 @@ import { NextRequest } from 'next/server';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { z } from 'zod';
 import type { HybridSearchResult, StructuredQuery } from '../../../src/lib/run-hybrid-search';
+import {
+  NARROW_SEARCH_SCOPES,
+  SEQUENCES_SCOPE,
+  LESSONS_SCOPE,
+} from '../../../src/lib/search-scopes';
+import type { SearchScope } from '../../../src/types/oak';
 
 const runHybridSearch = vi.hoisted(() =>
   vi.fn<(query: StructuredQuery) => Promise<HybridSearchResult>>(),
@@ -25,7 +31,7 @@ import { POST } from './route';
 
 const HybridResponse = z
   .object({
-    scope: z.enum(['lessons', 'units', 'sequences']),
+    scope: z.enum(NARROW_SEARCH_SCOPES as unknown as [SearchScope, ...SearchScope[]]),
     results: z.array(z.unknown()),
     total: z.number(),
     took: z.number(),
@@ -43,7 +49,7 @@ describe('POST /api/search', () => {
 
   it('allows the sequences scope and calls the hybrid search with phase filters', async () => {
     runHybridSearch.mockResolvedValueOnce({
-      scope: 'sequences',
+      scope: SEQUENCES_SCOPE,
       results: [],
       total: 0,
       took: 7,
@@ -55,7 +61,7 @@ describe('POST /api/search', () => {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        scope: 'sequences',
+        scope: SEQUENCES_SCOPE,
         text: 'fractions',
         subject: 'maths',
         phaseSlug: 'primary',
@@ -66,7 +72,7 @@ describe('POST /api/search', () => {
     expect(response.status).toBe(200);
     const payload = HybridResponse.parse(await response.json());
     expect(payload).toMatchObject({
-      scope: 'sequences',
+      scope: SEQUENCES_SCOPE,
       results: [],
       total: 0,
       took: 7,
@@ -74,7 +80,7 @@ describe('POST /api/search', () => {
     });
     expect(runHybridSearch).toHaveBeenCalledWith(
       expect.objectContaining({
-        scope: 'sequences',
+        scope: SEQUENCES_SCOPE,
         text: 'fractions',
         phaseSlug: 'primary',
       }),
@@ -154,5 +160,25 @@ describe('POST /api/search', () => {
     expect(runHybridSearch).not.toHaveBeenCalled();
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
+  });
+
+  it('returns fixture payload when the fixtures cookie is set', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=on',
+      },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = HybridResponse.parse(await response.json());
+    expect(payload.scope).toBe(LESSONS_SCOPE);
+    expect(runHybridSearch).not.toHaveBeenCalled();
   });
 });

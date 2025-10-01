@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { SuggestQuery, SuggestionResponse } from '../../../../src/lib/suggestions/types';
+import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
 
 const runSuggestions = vi.hoisted(() =>
   vi.fn<(query: SuggestQuery) => Promise<SuggestionResponse>>(),
@@ -27,7 +28,7 @@ describe('POST /api/search/suggest', () => {
       suggestions: [
         {
           label: 'Mountains and glaciation',
-          scope: 'lessons',
+          scope: LESSONS_SCOPE,
           subject: 'geography',
           keyStage: 'ks4',
           url: 'https://example.com/mount',
@@ -42,7 +43,7 @@ describe('POST /api/search/suggest', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         prefix: 'mount',
-        scope: 'lessons',
+        scope: LESSONS_SCOPE,
         subject: 'geography',
         keyStage: 'ks4',
         limit: 8,
@@ -55,7 +56,7 @@ describe('POST /api/search/suggest', () => {
     expect(payload.suggestions).toHaveLength(1);
     expect(runSuggestions).toHaveBeenCalledWith({
       prefix: 'mount',
-      scope: 'lessons',
+      scope: LESSONS_SCOPE,
       subject: 'geography',
       keyStage: 'ks4',
       limit: 8,
@@ -78,7 +79,7 @@ describe('POST /api/search/suggest', () => {
     const request = new NextRequest('http://localhost/api/search/suggest?fixtures=on', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ prefix: 'math', scope: 'lessons', limit: 5 }),
+      body: JSON.stringify({ prefix: 'math', scope: LESSONS_SCOPE, limit: 5 }),
     });
 
     const response = await POST(request);
@@ -86,10 +87,27 @@ describe('POST /api/search/suggest', () => {
     const payload = (await response.json()) as SuggestionResponse;
     expect(payload.suggestions.length).toBeGreaterThan(0);
     for (const suggestion of payload.suggestions) {
-      expect(suggestion.scope).toBe('lessons');
+      expect(suggestion.scope).toBe(LESSONS_SCOPE);
     }
     expect(runSuggestions).not.toHaveBeenCalled();
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
+  });
+
+  it('returns fixture suggestions when the fixtures cookie is set', async () => {
+    const request = new NextRequest('http://localhost/api/search/suggest', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=on',
+      },
+      body: JSON.stringify({ prefix: 'math', scope: LESSONS_SCOPE, limit: 5 }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = (await response.json()) as SuggestionResponse;
+    expect(payload.suggestions.length).toBeGreaterThan(0);
+    expect(runSuggestions).not.toHaveBeenCalled();
   });
 });

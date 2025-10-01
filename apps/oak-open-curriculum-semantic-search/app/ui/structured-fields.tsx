@@ -4,16 +4,28 @@ import type { JSX, ChangeEvent } from 'react';
 import { OakRadioButton, OakRadioGroup } from '@oaknational/oak-components';
 import { LabeledInput, LabeledSelect } from './fields';
 import { KEY_STAGES, SUBJECTS, isKeyStage, isSubject } from '../../src/adapters/sdk-guards';
+import {
+  LESSONS_SCOPE,
+  UNITS_SCOPE,
+  SEQUENCES_SCOPE,
+  MULTI_SCOPE,
+} from '../../src/lib/search-scopes';
 import type { StructuredBody } from './structured-search.shared';
 
 export type ChangeStructured = (update: Partial<StructuredBody>) => void;
 
-const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{ value: StructuredBody['scope']; label: string }> = [
-  { value: 'all', label: 'All content' },
-  { value: 'units', label: 'Units' },
-  { value: 'lessons', label: 'Lessons' },
-  { value: 'sequences', label: 'Sequences' },
+const STRUCTURED_SCOPE_ORDER: ReadonlyArray<StructuredBody['scope']> = [
+  MULTI_SCOPE,
+  UNITS_SCOPE,
+  LESSONS_SCOPE,
+  SEQUENCES_SCOPE,
 ];
+
+const STRUCTURED_SCOPE_OPTIONS: ReadonlyArray<{ value: StructuredBody['scope']; label: string }> =
+  STRUCTURED_SCOPE_ORDER.map((scope) => ({
+    value: scope,
+    label: formatStructuredScopeLabel(scope),
+  }));
 
 const PHASE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = [
   { value: 'primary', label: 'Primary' },
@@ -180,4 +192,17 @@ export function SizeField({
       }}
     />
   );
+}
+
+function formatStructuredScopeLabel(scope: StructuredBody['scope']): string {
+  if (scope === MULTI_SCOPE) {
+    return 'All content';
+  }
+  if (scope === UNITS_SCOPE) {
+    return 'Units';
+  }
+  if (scope === LESSONS_SCOPE) {
+    return 'Lessons';
+  }
+  return 'Sequences';
 }

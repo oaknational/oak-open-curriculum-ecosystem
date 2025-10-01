@@ -16,6 +16,12 @@ import { Fragment } from 'react';
 import { useStructuredSearchHandlers } from './StructuredSearchClient.hooks';
 import { PrimarySubmitButton } from './client/SearchPageClient.styles';
 import styledComponents from 'styled-components';
+import {
+  MULTI_SCOPE,
+  LESSONS_SCOPE,
+  UNITS_SCOPE,
+  SEQUENCES_SCOPE,
+} from '../../src/lib/search-scopes';
 
 export default function StructuredSearchClient(props: {
   action: (input: StructuredBody) => Promise<{ result: unknown | null; error?: string }>;
@@ -47,9 +53,9 @@ function resolveStructuredVisibility(scope: StructuredBody['scope']): {
 } {
   return {
     subject: true,
-    keyStage: scope === 'all' || scope === 'lessons' || scope === 'units',
-    phase: scope === 'all' || scope === 'sequences',
-    minLessons: scope === 'all' || scope === 'units',
+    keyStage: scope === MULTI_SCOPE || scope === LESSONS_SCOPE || scope === UNITS_SCOPE,
+    phase: scope === MULTI_SCOPE || scope === SEQUENCES_SCOPE,
+    minLessons: scope === MULTI_SCOPE || scope === UNITS_SCOPE,
   };
 }
 
@@ -58,7 +64,7 @@ function StructuredScopeGuidance({
 }: {
   scope: StructuredBody['scope'];
 }): JSX.Element | null {
-  if (scope !== 'all') {
+  if (scope !== MULTI_SCOPE) {
     return null;
   }
 

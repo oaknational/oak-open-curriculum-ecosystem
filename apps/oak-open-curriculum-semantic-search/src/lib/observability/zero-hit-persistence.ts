@@ -20,6 +20,7 @@ import {
   parseSearchResponse,
   type SearchResponse,
 } from './zero-hit-persistence-search';
+import type { SearchScope } from '../../types/oak';
 
 const JSON_REQUEST_OPTIONS: TransportRequestOptions = {
   headers: { 'content-type': 'application/json' },
@@ -43,7 +44,7 @@ export type PersistedZeroHitEvent = ZeroHitEvent;
 export interface ZeroHitTelemetry {
   summary: {
     total: number;
-    byScope: Record<'lessons' | 'units' | 'sequences', number>;
+    byScope: Record<SearchScope, number>;
     latestIndexVersion: string | null;
   };
   recent: ZeroHitEvent[];
@@ -179,7 +180,11 @@ function createEmptyTelemetry(): ZeroHitTelemetry {
   return {
     summary: {
       total: 0,
-      byScope: { lessons: 0, units: 0, sequences: 0 },
+      byScope: {
+        lessons: 0,
+        units: 0,
+        sequences: 0,
+      },
       latestIndexVersion: null,
     },
     recent: [],

@@ -2,7 +2,7 @@
 
 import { Fragment, type JSX, useEffect } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
-import { useStream } from '../lib/useStream';
+import { useStream, type StreamOutcome } from '../lib/useStream';
 import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
 import {
   ActionSection,
@@ -14,9 +14,7 @@ import {
 } from './AdminPage.styles';
 
 function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' }): JSX.Element {
-  const { state, text, run } = useStream(url, method ?? 'POST');
-
-  const lines = (text ?? '').split('\n');
+  const { state, text, run, outcome } = useStream(url, method ?? 'POST');
 
   return (
     <OakBox $display="flex" $flexDirection="column" $gap="space-between-xs">
@@ -31,28 +29,8 @@ function StreamOutput({ url, method }: { url: string; method?: 'GET' | 'POST' })
         {state === 'running' ? 'Running…' : 'Run'}
       </OakPrimaryButton>
 
-      <OakBox
-        role="status"
-        aria-live="polite"
-        $background="bg-neutral"
-        $pa="inner-padding-m"
-        $borderRadius="border-radius-s"
-        $ba="border-solid-s"
-        $borderColor="border-neutral-lighter"
-      >
-        <OakTypography as="p" $font="body-4" $color="text-subdued">
-          {text ? (
-            lines.map((line, index) => (
-              <Fragment key={`${url}-line-${index}`}>
-                {line.length > 0 ? line : null}
-                {index < lines.length - 1 ? <br /> : null}
-              </Fragment>
-            ))
-          ) : (
-            <>—</>
-          )}
-        </OakTypography>
-      </OakBox>
+      <StreamSummary outcome={outcome} />
+      <StreamOutputBody text={text} source={url} />
     </OakBox>
   );
 }
@@ -148,4 +126,60 @@ function QuickLinks(): JSX.Element {
       </OakTypography>
     </QuickLinksSection>
   );
+}
+
+function StreamSummary({ outcome }: { outcome: StreamOutcome | null }): JSX.Element | null {
+  if (!outcome) {
+    return null;
+  }
+  const tone = outcome.status;
+  const color = tone === 'success' ? 'text-success' : 'text-error';
+  return (
+    <OakTypography as="p" $font="body-4" $color={color} aria-live="polite">
+      {formatOutcomeLabel(outcome)}
+    </OakTypography>
+  );
+}
+
+function StreamOutputBody({ text, source }: { text: string; source: string }): JSX.Element {
+  const lines = text ? text.split('\n') : [];
+  return (
+    <OakBox
+      role="status"
+      aria-live="polite"
+      $background="bg-neutral"
+      $pa="inner-padding-m"
+      $borderRadius="border-radius-s"
+      $ba="border-solid-s"
+      $borderColor="border-neutral-lighter"
+    >
+      <OakTypography as="p" $font="body-4" $color="text-subdued">
+        {lines.length > 0
+          ? lines.map((line, index) => (
+              <Fragment key={`${source}-line-${index}`}>
+                {line.length > 0 ? line : null}
+                {index < lines.length - 1 ? <br /> : null}
+              </Fragment>
+            ))
+          : '—'}
+      </OakTypography>
+    </OakBox>
+  );
+}
+
+function formatOutcomeLabel(outcome: StreamOutcome | null): string {
+  if (!outcome) {
+    return '';
+  }
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+  const timestamp = formatter.format(outcome.finishedAt);
+  const prefix = outcome.status === 'success' ? 'Completed' : 'Failed';
+  if (outcome.message && outcome.message.length > 0) {
+    return `${prefix} at ${timestamp} – ${outcome.message}`;
+  }
+  return `${prefix} at ${timestamp}`;
 }

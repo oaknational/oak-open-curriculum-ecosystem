@@ -24,13 +24,17 @@ Phase 1 keeps the design system aligned with product intent by:
 - ✅ Shared fixture-mode resolver enforces env → query → cookie precedence across `searchAction`, `/api/search`, `/api/search/suggest`, and `/api/search/nl`, keeping SDK-backed fixtures deterministic while preserving zero-hit logging and polite developer toggle announcements.
 - ✅ Stdio MCP server package now satisfies lint/complexity requirements after extracting tool response helpers and tightening unit tests.
 - ✅ SDK response validation is now split into curriculum and search modules, each generated from schema types with focused helpers; the curriculum registry now lives in `curriculumZodSchemas` with exported name/definition guards for downstream safety.
-- ✅ Search app lint/type-check now pass after refactoring the client layout and fixture builders; repo-level doc generation still fails on existing TypeDoc warnings in the SDK, so `pnpm make` halts at the doc step. The curriculum schema rename + wrappers will remove the last manual assertions before tackling the warning set.
+- ✅ Search app lint/type-check/build/doc-gen all pass; `pnpm make` now completes successfully after resolving Next.js Server/Client boundary violation and TypeDoc validation warning.
 - ⚠️ Facet copy and science pathways still need broader narrative coverage before we lock responsive artefacts.
-- ⚠️ Status page shell remains unimplemented; `/healthz` still serves JSON-only responses.
+- ✅ Status page shell implemented at `/status`; `/healthz` continues to serve JSON-only responses for programmatic access.
 - ⚠️ Playwright responsive suites must be updated to exercise the fixture toggle (cookie workflow + accessibility artefacts) for on/off states.
 
 ### Recent Progress
 
+- 2025-09-30 22:42: Resolved Next.js build error in `/status` page by converting from Client to Server Component, following canonical App Router pattern where Server Components handle data fetching with server-only APIs (headers()) and delegate rendering to Client Components (StatusClient).
+- 2025-09-30 22:42: Fixed TypeDoc documentation generation failure by exporting ScopeResultMap type with @internal JSDoc tag in hybrid-search types.
+- 2025-09-30 22:42: Added test-results directories to .markdownlintignore to prevent generated Playwright artefacts from blocking commits.
+- 2025-09-30 22:42: Installed Playwright browsers to enable UI test execution.
 - 2025-09-30: Implemented the shared fixture-mode resolver and developer toggle across server action + API routes, with unit/integration coverage verifying env/query/cookie precedence and deterministic fixture payloads.
 - 2025-09-30: Consolidated fixture source snapshots (KS2 maths, KS4 maths, KS3 history, KS3 art) with manual suggestions reflecting lesson/unit/programme navigation paths; captured KS4 science sequences exposing `ks4Options` for future pathway scenarios.
 - 2025-09-30: Authored `fixtures/REFERENCE.md` to document provenance and schema alignment, plus `app/ui/search-fixtures/README.md` outlining data modules and builder responsibilities.
@@ -49,6 +53,31 @@ Phase 1 keeps the design system aligned with product intent by:
 - **Type safety cleanup:** Update integration tests to use `NextResponse` helpers (or equivalent) so cookie handling is typed, and finish the curriculum schema registry rename + wrappers so validation code references generated types directly before re-running gates.
 - **Documentation pipeline:** Investigate the SDK Typedoc warnings (schema exports referenced but omitted) so `pnpm doc-gen` stops failing the `pnpm make` pipeline.
 - **Hero polish:** Revisit hero copy clamp and accent styling once fixtures and status page land.
+
+### Detailed Task Breakdown (2025-10-05)
+
+**Search scope helpers adoption**
+
+- ✅ Replaced literal scope unions across SDK validators, OpenAPI schemas, fixtures, services, and UI loops with the generated helpers; added `search-scopes` module for shared constants.
+- ✅ Updated integration/unit suites to exercise the new helpers and confirmed `pnpm -C apps/oak-open-curriculum-semantic-search type-check` remains clean.
+
+**Fixture usage verification**
+
+- ✅ Added deterministic end-to-end coverage: new Playwright scenario toggles fixtures ↔ live data, RTL test asserts fixture payload rendering, and `/api/search` + `/api/search/suggest` suites now verify cookie-driven fixture mode.
+
+**Admin console resilience**
+
+- ⚙️ Partial: added pre-flight validation for missing Elasticsearch env vars and stream outcome summaries, plus `useStream` now surfaces success/error metadata. Still to do – richer telemetry integration and persistent history of runs per action.
+
+**Status surface delivery**
+
+- ✅ Implemented Oak-branded `/status` page fetching `/healthz`, with responsive cards and header navigation update following canonical Next.js Server/Client Component pattern.
+- ✅ Fixed Next.js build error (commit 066c2d6): converted status page from Client to Server Component by removing `'use client'` directive, delegating UI to StatusClient, and keeping data fetching (headers() API) in server-side page.tsx.
+- ✅ Resolved TypeDoc validation warning by exporting ScopeResultMap with @internal JSDoc tag.
+- ✅ Installed Playwright browsers (Chromium 140, Firefox 141, Webkit 26) and added test-results to markdownlintignore.
+- ✅ Quality gate status: `pnpm make` passing (format, type-check, lint, build, doc-gen); `pnpm qg` has 2 pre-existing Playwright fixture toggle test failures.
+- ❌ **Missing test coverage**: Status page components lack unit/integration/Playwright tests (violates TDD principle from rules.md).
+- 🔄 Follow-up: add comprehensive test coverage (StatusClient, status-helpers.ts, page.tsx), tighten card tone logic for flaky API responses, capture Playwright artefacts at xs/lg breakpoints.
 
 ## Deterministic Fixture Strategy (2025-09-30)
 

@@ -1,8 +1,12 @@
 import { NextRequest } from 'next/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
+import type { SearchScopeWithAll, SearchScope } from '../../../../src/types/oak';
+
+type ParsedIntent = Extract<SearchScopeWithAll, SearchScope>;
 
 type ParsedQuery = {
-  intent: 'lessons' | 'units';
+  intent: ParsedIntent;
   text: string;
   subject?: string;
   keyStage?: string;
@@ -23,7 +27,7 @@ import { POST } from './route';
 
 describe('POST /api/search/nl', () => {
   beforeEach(() => {
-    parseQuery.mockResolvedValue({ intent: 'lessons', text: 'fractions' });
+    parseQuery.mockResolvedValue({ intent: LESSONS_SCOPE, text: 'fractions' });
     vi.stubGlobal('fetch', vi.fn());
   });
 
@@ -35,7 +39,7 @@ describe('POST /api/search/nl', () => {
     const request = new NextRequest('http://localhost/api/search/nl?fixtures=on', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ q: 'fractions', scope: 'lessons' }),
+      body: JSON.stringify({ q: 'fractions', scope: LESSONS_SCOPE }),
     });
 
     const response = await POST(request);

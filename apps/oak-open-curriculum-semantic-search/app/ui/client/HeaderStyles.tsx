@@ -32,7 +32,7 @@ const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
   { href: '/', label: 'Home' },
   { href: '/api/docs', label: 'Open API Docs' },
   { href: '/admin', label: 'Admin' },
-  { href: '/healthz', label: 'Health (API)' },
+  { href: '/status', label: 'Status' },
 ];
 
 export default function HeaderStyles(): JSX.Element {

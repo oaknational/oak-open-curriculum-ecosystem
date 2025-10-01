@@ -1,7 +1,7 @@
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchScope } from '../../types/oak';
 
 /** Available scopes for suggestion/type-ahead queries. */
-export type SuggestScope = 'lessons' | 'units' | 'sequences';
+export type SuggestScope = SearchScope;
 
 /**
  * Request payload accepted by the suggestion runner.
