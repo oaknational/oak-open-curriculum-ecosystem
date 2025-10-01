@@ -20,13 +20,37 @@ Shared settings include the `oak_text` analyser (standard, lowercase, asciifoldi
 - `POST /api/search` – Structured hybrid search over lessons, units, or sequences. Validates payloads, builds server-side RRF queries, returns highlights, canonical URLs, facets, zero-hit metadata.
 - `POST /api/search/nl` – Natural-language wrapper that deterministically converts `{ q }` into structured parameters, then delegates to `/api/search`. Returns `501` when NL search disabled via `AI_PROVIDER=none`.
 - `POST /api/search/suggest` – Suggestion/type-ahead endpoint backed by completion contexts and `search_as_you_type` fields. Supports prefix, scope, optional subject/key stage filters, and returns canonical URLs.
-- `POST /api/index-oak` – Admin ingestion entry point (guarded by `SEARCH_API_KEY`). Triggers resilient batching across lessons, units, sequences.
-- `POST /api/rebuild-rollup` – Regenerates rollup snippets, updates `oak_unit_rollup`, bumps index version, and invalidates caches.
-- `GET /api/index-oak/status` – Reports ingestion progress, processed counts, remaining batches, last error, current `SEARCH_INDEX_VERSION`.
+- `GET /api/index-oak` – Admin ingestion entry point (guarded by `SEARCH_API_KEY`). Triggers resilient batching across lessons, units, sequences. Supports `?fixtures=` query strings for SDK-provided fixture responses.
+- `GET /api/rebuild-rollup` – Regenerates rollup snippets, updates `oak_unit_rollup`, bumps index version, and invalidates caches. Supports fixture modes identical to ingestion.
+- `GET /api/index-oak/status` – Reports ingestion progress, processed counts, remaining batches, last error, current `SEARCH_INDEX_VERSION`, and honours fixture mode for deterministic testing.
 - `GET /api/openapi.json` & `GET /api/docs` – Serve generated OpenAPI schema and Redoc UI.
 - `/api/sdk/*` – SDK parity routes used for regression comparison (not exposed publicly).
 
-All admin endpoints require `x-api-key: ${SEARCH_API_KEY}`. Structured and NL routes share caching via `SEARCH_INDEX_VERSION` tags (see caching plan).
+All admin endpoints require
+
+## Design rationale
+
+- **RRF everywhere**: Reciprocal Rank Fusion lets us blend lexical lesson-planning fields with semantic embeddings without issuing multiple round trips. A single `_search` per scope keeps latency predictable and aligns with Elasticsearch Serverless limits.
+- **Versioned caching (`SEARCH_INDEX_VERSION`)**: Every search response, suggestion payload, and telemetry entry is tagged with the current index version. Bumping the version after ingestion or rollup rebuilds gives deterministic cache invalidation and makes it obvious which deployment produced a response.
+- **SDK-generated fixtures**: `SEMANTIC_SEARCH_USE_FIXTURES` (server) and `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` (client) short-circuit search and admin routes with generated data. This removes the dependency on live infrastructure during onboarding, Playwright runs, and regression tests while still exercising the same validation paths.
+- **Target-aware indices**: `SEARCH_INDEX_TARGET` flips the app between primary and sandbox aliases. Admin endpoints, zero-hit persistence, and CLI scripts all derive index names from this target, so developers can experiment in isolated namespaces without touching production data.
+- **Optional zero-hit persistence**: `ZERO_HIT_PERSISTENCE_ENABLED` toggles storing aggregated telemetry in Elasticsearch. Persisted events power the admin dashboard, while the in-memory ring buffer keeps lightweight deployments cheap.
+
+## Developer workflow
+
+1. Copy `.env.example` → `.env.local`, set the required search credentials, and opt into fixtures (`SEMANTIC_SEARCH_USE_FIXTURES=fixtures`).
+2. Run the canonical quality gates:
+
+   ```bash
+   pnpm make
+   pnpm qg
+   ```
+
+3. Start the dev server (`pnpm -C apps/oak-open-curriculum-semantic-search dev`) and use the fixture toggle in the UI to confirm deterministic data.
+4. Execute admin ingestion (`GET /api/index-oak`) and rollup (`GET /api/rebuild-rollup`) locally with fixtures before hitting live Elasticsearch.
+5. Update docs/plan entries whenever index mappings, query builders, or fixture semantics change.
+
+`x-api-key: ${SEARCH_API_KEY}`. Admin and search routes share the fixture resolver (`SEMANTIC_SEARCH_USE_FIXTURES`, `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`) so local development and tests can run entirely offline. Structured and NL routes share caching via `SEARCH_INDEX_VERSION` tags (see caching plan).
 
 ## Data flow
 

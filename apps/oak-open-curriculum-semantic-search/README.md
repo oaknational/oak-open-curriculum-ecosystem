@@ -8,16 +8,16 @@ A Next.js App Router workspace that ingests Oak Curriculum content via the offic
 
 ## Primary endpoints
 
-| Endpoint                                                           | Description                                                                                                                               |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST /api/search`                                                 | Structured hybrid search (`scope` = `lessons`  `units`  `sequences`) returning highlights, facets, canonical URLs, zero-hit metadata. |
-| `POST /api/search/nl`                                              | Natural-language wrapper; deterministically converts `{ q }` before delegating to `/api/search`. Returns `501` when `AI_PROVIDER=none`.   |
-| `POST /api/search/suggest`                                         | Suggestion/type-ahead endpoint backed by completion contexts and `search_as_you_type`. Includes cache/version hints.                      |
-| `POST /api/index-oak`                                              | Admin ingestion (guarded by `SEARCH_API_KEY`); performs resilient batching and alias swaps.                                               |
-| `POST /api/rebuild-rollup`                                         | Regenerates unit rollup snippets, updates completion payloads, bumps `SEARCH_INDEX_VERSION`.                                              |
-| `GET /api/index-oak/status`                                        | Progress telemetry: processed counts, remaining batches, last error, index version.                                                       |
-| `GET /api/openapi.json`, `GET /api/docs`                           | Generated OpenAPI contract and Redoc UI.                                                                                                  |
-| `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts` | SDK parity routes for regression comparison (feature-flagged).                                                                            |
+| Endpoint                                                           | Description                                                                                                                             |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/search`                                                 | Structured hybrid search (`scope` = `lessons` / `units` / `sequences`) returning highlights, facets, canonical URLs, zero-hit metadata. |
+| `POST /api/search/nl`                                              | Natural-language wrapper; deterministically converts `{ q }` before delegating to `/api/search`. Returns `501` when `AI_PROVIDER=none`. |
+| `POST /api/search/suggest`                                         | Suggestion/type-ahead endpoint backed by completion contexts and `search_as_you_type`. Includes cache/version hints.                    |
+| `GET /api/index-oak`                                               | Admin ingestion (guarded by `SEARCH_API_KEY`); performs resilient batching and alias swaps.                                             |
+| `GET /api/rebuild-rollup`                                          | Regenerates unit rollup snippets, updates completion payloads, bumps `SEARCH_INDEX_VERSION`.                                            |
+| `GET /api/index-oak/status`                                        | Progress telemetry: processed counts, remaining batches, last error, index version.                                                     |
+| `GET /api/openapi.json`, `GET /api/docs`                           | Generated OpenAPI contract and Redoc UI.                                                                                                |
+| `POST /api/sdk/search-lessons`, `POST /api/sdk/search-transcripts` | SDK parity routes for regression comparison (feature-flagged).                                                                          |
 
 All admin/status routes require `x-api-key: ${SEARCH_API_KEY}`.
 
@@ -43,7 +43,7 @@ apps/oak-open-curriculum-semantic-search/
 │  ├─ api/
 │  │  ├─ search/route.ts              # Structured server-side RRF
 │  │  ├─ search/nl/route.ts           # NL → structured wrapper
-│  │  ├─ search/suggest/route.ts      # Suggestion/type-ahead (to implement per plan)
+│  │  ├─ search/suggest/route.ts      # Suggestion/type-ahead endpoint
 │  │  ├─ index-oak/route.ts           # Admin ingestion
 │  │  ├─ index-oak/status/route.ts    # Ingestion telemetry
 │  │  ├─ rebuild-rollup/route.ts      # Rollup regeneration
@@ -74,71 +74,103 @@ Consult `docs/ARCHITECTURE.md` for the full system diagram.
    pnpm install
    ```
 
-2. **Configure environment** – create `.env.local` with:
-
-   | Variable                          | Required | Notes                                                      |
-   | --------------------------------- | -------- | ---------------------------------------------------------- |
-   | `ELASTICSEARCH_URL`               | ✅       | Elasticsearch Serverless HTTPS endpoint                    |
-   | `ELASTICSEARCH_API_KEY`           | ✅       | API key with manage/search permissions                     |
-   | `OAK_API_KEY` or `OAK_API_BEARER` | ✅       | SDK authentication (mutually exclusive)                    |
-   | `SEARCH_API_KEY`                  | ✅       | Guards admin/status routes                                 |
-   | `SEARCH_INDEX_VERSION`            | ✅       | Monotonic version used for cache tags (e.g. `v2025-03-16`) |
-   | `ZERO_HIT_WEBHOOK_URL`            | ➖       | Optional webhook (`none` to disable)                       |
-   | `LOG_LEVEL`                       | ➖       | Default `info`                                             |
-   | `AI_PROVIDER`                     | ➖       | `openai` (default) or `none`                               |
-   | `OPENAI_API_KEY`                  | ➖       | Required when `AI_PROVIDER=openai`                         |
-
-3. **Bootstrap Elasticsearch**
+2. **Configure environment**
 
    ```bash
-   ELASTICSEARCH_URL=... ELASTICSEARCH_API_KEY=... \
+   cp apps/oak-open-curriculum-semantic-search/.env.example       apps/oak-open-curriculum-semantic-search/.env.local
+   ```
+
+   Populate the required variables:
+
+   | Variable                       | Required | Notes                                                                             |
+   | ------------------------------ | -------- | --------------------------------------------------------------------------------- |
+   | `ELASTICSEARCH_URL`            | ✅       | Elasticsearch Serverless HTTPS endpoint                                           |
+   | `ELASTICSEARCH_API_KEY`        | ✅       | API key with manage + search privileges                                           |
+   | `OAK_API_KEY`                  | ✅       | Oak Curriculum SDK key (bearer tokens are not yet supported by the env validator) |
+   | `SEARCH_API_KEY`               | ✅       | Shared secret that guards admin and status routes                                 |
+   | `SEARCH_INDEX_VERSION`         | ✅       | Monotonic cache/version tag (update manually after every ingestion/rollup run)    |
+   | `AI_PROVIDER`                  | ✅       | `openai` (default) or `none` to disable natural-language search                   |
+   | `OPENAI_API_KEY`               | ➖       | Required when `AI_PROVIDER=openai`                                                |
+   | `ZERO_HIT_WEBHOOK_URL`         | ➖       | Use a webhook endpoint or set to `none` to disable external delivery              |
+   | `LOG_LEVEL`                    | ➖       | Structured logging level (`info` by default)                                      |
+   | `SEARCH_INDEX_TARGET`          | ➖       | `primary` (default) or `sandbox` for alternate index namespaces                   |
+   | `ZERO_HIT_PERSISTENCE_ENABLED` | ➖       | `true` to persist zero-hit events to Elasticsearch                                |
+
+   Recommended local toggles:
+   - `SEMANTIC_SEARCH_USE_FIXTURES=fixtures` enables deterministic fixtures for search and admin endpoints.
+   - `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE=true` shows the fixture toggle in the UI.
+   - `NEXT_DISABLE_DEV_ERRORS=1` hides the Next.js error overlay during Playwright runs.
+
+3. **Run the standard quality gates**
+
+   ```bash
+   pnpm make   # install → type-gen → build → type-check → doc-gen → lint → format
+   pnpm qg     # format-check → type-check → lint → markdownlint → unit/int/ui tests → smoke
+   ```
+
+4. **Bootstrap Elasticsearch (mappings, synonyms, indices)**
+
+   ```bash
+   ELASTICSEARCH_URL=... \
+   ELASTICSEARCH_API_KEY=... \
    pnpm -C apps/oak-open-curriculum-semantic-search elastic:setup
    ```
 
-4. **Run the dev server**
+5. **Start the dev server**
 
    ```bash
    pnpm -C apps/oak-open-curriculum-semantic-search dev
    ```
 
-5. **Ingest content & rollups (admin calls)**
+6. **Ingest content and rebuild rollups (supports fixtures)**
 
    ```bash
-   curl -X POST http://localhost:3000/api/index-oak \
+   curl "http://localhost:3000/api/index-oak" \
      -H "x-api-key: $SEARCH_API_KEY"
 
-   curl -X POST http://localhost:3000/api/rebuild-rollup \
+   curl "http://localhost:3000/api/rebuild-rollup" \
      -H "x-api-key: $SEARCH_API_KEY"
 
-   curl http://localhost:3000/api/index-oak/status \
+   curl "http://localhost:3000/api/index-oak/status" \
      -H "x-api-key: $SEARCH_API_KEY"
    ```
 
-6. **Exercise endpoints**
-   - Structured search (`/api/search`), natural language (`/api/search/nl`), suggestions (`/api/search/suggest`).
-   - Observe logs for zero-hit events and ingestion telemetry.
+   Append `?fixtures=on|empty|error` to exercise the SDK-generated admin fixtures without touching Elasticsearch.
 
-7. **Quality gates**
+7. **Exercise search endpoints**
+
+   Structured search:
 
    ```bash
-   pnpm format
-   pnpm type-check
-   pnpm lint
-   pnpm test
-   pnpm build
-   pnpm -C apps/oak-open-curriculum-semantic-search doc-gen
+   curl -X POST http://localhost:3000/api/search \
+     -H 'content-type: application/json' \
+     -d '{"scope":"units","text":"mountain formation","subject":"geography","keyStage":"ks4","facets":true}'
    ```
 
-   Record outcomes in your GO.md review entries.
+   Natural-language search (when `AI_PROVIDER` is not `none`):
 
----
+   ```bash
+   curl -X POST http://localhost:3000/api/search/nl \
+     -H 'content-type: application/json' \
+     -d '{"q":"Find KS4 geography units about mountains with at least three lessons"}'
+   ```
+
+   Suggestions:
+
+   ```bash
+   curl -X POST http://localhost:3000/api/search/suggest \
+     -H 'content-type: application/json' \
+     -d '{"prefix":"mount","scope":"lessons","subject":"geography","keyStage":"ks4"}'
+   ```
+
+   Add `?fixtures=` query parameters to any of the above endpoints to confirm deterministic data and cookie persistence.
 
 ## Observability & maintenance
 
 - Monitor structured logs for ingestion retries, zero-hit counts, and cache version rotation.
 - Update `SEARCH_INDEX_VERSION` whenever ingestion/rollup runs; call `revalidateTag` to purge cached results.
 - Keep `scripts/synonyms.json` fresh; rerun `elastic:setup` after synonym or mapping changes.
-- Regenerate OpenAPI (`pnpm make openapi`) and TypeDoc (`pnpm -C apps/oak-open-curriculum-semantic-search doc-gen`) after schema updates.
+- Regenerate OpenAPI and TypeDoc after schema updates with `pnpm -C apps/oak-open-curriculum-semantic-search doc-gen` (this command updates both artefacts).
 - Coordinate UI and documentation updates via the alignment refresh plan and associated GO.md tasks.
 
 For deeper explanations see:
