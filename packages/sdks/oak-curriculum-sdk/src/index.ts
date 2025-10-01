@@ -47,13 +47,11 @@ export {
   VALID_PATHS_BY_PARAMETERS,
 } from './types/generated/api-schema/path-parameters.js';
 
-// Schema and operation exports
 export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters.js';
 export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters.js';
 export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
-// Validation module exports (explicit for tree-shaking)
 export {
   validateRequest,
   validateCurriculumResponse,
@@ -67,18 +65,9 @@ export type {
   ValidatedClientOptions,
   HttpMethod,
 } from './validation/index.js';
-
-// MCP (Model Context Protocol) Tool Support
-// These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
 export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
 export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib.js';
 export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index';
-
-// Note: Parameter validation now happens via schema.parameters directly
-// in the MCP server implementation. Response validation is handled
-// via the SDK's built-in response structures.
-
-// MCP executor - static function using path-based client
 export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
 export {
@@ -168,6 +157,40 @@ export {
   createSearchMultiScopeResponse,
 } from './types/generated/search/index.js';
 
+export {
+  ZERO_HIT_SCOPES,
+  ZeroHitScopeSchema,
+  ZeroHitScopeBreakdownSchema,
+  ZeroHitSummarySchema,
+  ZeroHitEventSchema,
+  ZeroHitTelemetrySchema,
+  createZeroHitEvent,
+  createZeroHitSummary,
+  createZeroHitTelemetry,
+  summariseZeroHitEvents,
+  type ZeroHitScope,
+  type ZeroHitScopeBreakdown,
+  type ZeroHitSummary,
+  type ZeroHitEvent,
+  type ZeroHitTelemetry,
+} from './types/generated/observability/index.js';
+export {
+  ADMIN_STREAM_ACTIONS,
+  AdminStreamActionSchema,
+  AdminStreamSuccessSchema,
+  AdminStreamErrorSchema,
+  AdminStreamFixtureSchema,
+  createAdminStreamFixture,
+  createAdminStreamEmptyFixture,
+  createAdminStreamErrorFixture,
+  createAdminStreamFixtureMap,
+  type AdminStreamAction,
+  type AdminStreamSuccessFixture,
+  type AdminStreamErrorFixture,
+  type AdminStreamFixture,
+  type AdminStreamFixtureMap,
+} from './types/generated/admin/index.js';
+
 export type {
   SearchStructuredRequest,
   SearchStructuredScope,
@@ -198,6 +221,7 @@ export type {
   SearchUnitSummary,
   SearchSubjectSequences,
 } from './types/search-response-guards.js';
+
 export type {
   LessonSummaryResponseSchema,
   UnitSummaryResponseSchema,

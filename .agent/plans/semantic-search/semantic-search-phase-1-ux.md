@@ -22,12 +22,16 @@ Phase 1 keeps the design system aligned with product intent by:
 - ✅ Fixture toggle logic is centralised in `resolveFixtureToggleVisibility`, and Playwright coverage now exercises fixtures ↔ live transitions.
 - ✅ Search surfaces pass `pnpm make`; the toggle resolver refactor keeps lint/type-check/build/doc-gen green.
 - ✅ Unit, integration, RTL, and Playwright suites now cover fixture toggle success/empty/error flows, and API routes/toggle helpers surface deterministic messaging across breakpoints.
+- ✅ Zero-hit observability fixtures now flow from the SDK type-gen pipeline with Zod validation and integration coverage, eliminating bespoke app-level builders for that surface.
+- ✅ Admin stream fixtures now originate from the SDK type-gen pipeline; Next.js admin routes consume the generated helpers, replacing bespoke builders while keeping zero/empty/error behaviour deterministic.
 - ⚠️ Admin console lacks telemetry history, operator feedback, and deterministic fixtures for Playwright verification.
 - ⚠️ Status page remains functionally complete but lacks tone/failure handling tests and resilience improvements.
 - ⚠️ Hero copy and science pathways require additional narrative polish once higher priorities land.
 
 ### Recent Progress
 
+- 2025-10-06 15:10: Generated SDK-backed admin stream fixtures (type-gen + Zod schemas), wired the semantic search app to consume them, and re-ran `pnpm make` to confirm the SDK build and lint pipelines stay green.
+- 2025-10-06 13:55: Generated SDK-backed zero-hit telemetry fixtures (type-gen + Zod schemas) and proved integration coverage for observability routes; confirmed `pnpm make`/`pnpm qg` green while noting admin stream fixtures still rely on handwritten data.
 - 2025-10-06 12:35: Extended Playwright fixture toggle workflow to assert deterministic notices plus empty/error messaging, and taught `searchAction` to forward fixture modes via query parameters with new helper coverage.
 - 2025-10-06 11:40: Expanded fixture-mode support (success/empty/error), added unit/integration coverage, and refactored search routes/toggle helpers; `pnpm make` and `pnpm qg` now pass with deterministic fixture fallbacks.
 - 2025-10-06 08:15: Added `resolveFixtureToggleVisibility`, documented `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`, and refreshed Playwright fixture workflow; `pnpm make` confirmed green post-change.
@@ -57,7 +61,7 @@ Phase 1 keeps the design system aligned with product intent by:
 
 **Admin console resilience**
 
-- ⚙️ Partial: added pre-flight validation for missing Elasticsearch env vars and stream outcome summaries, plus `useStream` now surfaces success/error metadata. Still to do – richer telemetry integration and persistent history of runs per action.
+- ⚙️ Partial: added pre-flight validation for missing Elasticsearch env vars, stream outcome summaries, zero-hit fixtures via the SDK, and SDK-generated admin stream fixtures for success/empty/error states. Still to do – richer telemetry integration, persistent history of runs per action, and operator-facing messaging/tests.
 
 **Status surface delivery**
 
@@ -149,19 +153,19 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ## Todo (GO cadence)
 
-1. REMINDER: UseBritish spelling.
+1. REMINDER: use British spelling.
 2. ACTION: Export updated Playwright artefacts for fixture success/empty/error scenarios at xs/md/lg/xxl once chromium run stabilises.
 3. REVIEW: Confirm the artefacts demonstrate deterministic notices, empty messaging, and outage cues without introducing layout regressions.
-4. ACTION: Draft failing admin telemetry unit/integration specs to define history + operator messaging requirements ahead of implementation.
-5. REVIEW: Validate the telemetry test plan with documentation expectations before touching product code.
+4. ACTION: Draft failing admin telemetry and stream-fixture generation specs (unit/integration) to define history, operator messaging, and compile-time fixture requirements ahead of implementation.
+5. REVIEW: Validate the telemetry + fixture test plan with documentation expectations before touching product code.
 6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Implement any UI/layout updates required to satisfy the new RTL tests while keeping tokens consistent.
-8. REVIEW: Verify RTL suite passes and visual regressions remain acceptable.
-9. QUALITY-GATE: Run `pnpm qg`, archiving artefacts that demonstrate fixture toggle behaviour (success/empty/error).
-10. ACTION: Define admin telemetry/history requirements and draft failing unit/integration/RTL/Playwright tests (in priority order) before implementation.
-11. REVIEW: Cross-check the admin test matrix with stakeholders and documentation to ensure completeness.
+7. ACTION: Extend admin integration/RTL specs to assert SDK-backed stream fixtures across success/empty/error modes.
+8. REVIEW: Confirm tests exercise the generated fixtures end-to-end and highlight any telemetry gaps.
+9. QUALITY-GATE: Run `pnpm qg`, archiving artefacts that demonstrate the new fixtures in use.
+10. ACTION: Define admin telemetry/history requirements and draft failing unit/integration/RTL/Playwright tests (in priority order) before implementation, ensuring fixtures originate from the SDK type-gen pipeline.
+11. REVIEW: Cross-check the admin test matrix and fixture-generation scope with stakeholders and documentation to ensure completeness.
 12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Implement admin telemetry/history features iteratively to satisfy the new tests, ensuring deterministic fixtures for UI/Playwright coverage.
+13. ACTION: Implement remaining admin telemetry/history features iteratively to satisfy the new tests, ensuring deterministic fixtures for UI/Playwright coverage.
 14. REVIEW: Assess the admin UI for accessibility, observability clarity, and adherence to Oak tokens.
 15. QUALITY-GATE: Run `pnpm qg`, capturing artefacts for updated admin workflows and verifying stability.
 16. ACTION: Draft failing status page helper/unit/integration tests covering tone logic, failure messaging, and partial data cases.

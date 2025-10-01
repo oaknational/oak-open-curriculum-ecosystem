@@ -11,22 +11,24 @@
 - Storybook reference: <https://components.thenational.academy/?path=/docs/introduction--docs>
 - Next.js + Styled Components playbook: `.agent/reference-docs/ui/styled-components-in-nextjs.md`
 
-All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: UseBritish spelling” in the todo list.
+All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGENT.md`, `.agent/directives-and-memory/rules.md`, and `docs/agent-guidance/testing-strategy.md`. Maintain the GO cadence (every ACTION immediately followed by REVIEW, with the sixth task reserved for **GROUNDING: read GO.md and follow all instructions**). Always state “REMINDER: use British spelling” in the todo list.
 
-## Current Snapshot (2025-10-06 11:45)
+## Current Snapshot (2025-10-06 15:10)
 
 - Semantic tokens, bridge styles, and shared layout wrappers continue to power Search, Admin, Docs, and the Status shell with responsive Playwright coverage holding steady.
 - Generated scope helpers now back every search surface (app, SDK validators, OpenAPI wiring, fixtures, observability, query parser); literal strings were removed during the recent scope sweep.
 - Fixture mode toggle is fully deterministic: a dedicated resolver honours the new `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` flag. Unit/integration/RTL suites now prove success/empty/error fixture states, and Playwright confirms deterministic notices alongside empty/error messaging.
+- Observability zero-hit telemetry fixtures now come from the SDK type-gen pipeline with Zod validation; integration tests cover the generated payloads so app routes no longer rely on ad-hoc builders.
+- Admin stream fixtures now originate from the SDK type-gen pipeline and the app consumes the generated helpers; telemetry history/UX improvements remain outstanding.
 - `/status` remains the Oak-branded view of `/healthz`, implemented as a Server Component that delegates rendering to StatusClient; the navigation reflects the new shell, but tests and flaky-response handling are still outstanding.
-- `pnpm make` and `pnpm qg` both run cleanly after the fixture-mode refactor; continue capturing artefacts after every substantive change.
+- `pnpm make` and `pnpm qg` both run cleanly after the admin fixture work (2025-10-06 15:18); continue capturing artefacts after each substantive change.
 - `.markdownlintignore` already includes Playwright artefacts and browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 
 ## Immediate Priorities
 
 1. **Prove fixture toggle + search layout behaviour** – Capture artefacts for the now-complete RTL/Playwright coverage so the toggle announcements and empty/error messaging remain traceable across breakpoints.
 
-2. **Admin console telemetry/history** – Add operator feedback, history, and deterministic fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
+2. **Admin console telemetry/history** – Add operator feedback and history on top of the new SDK-backed fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
 
 3. **Status page hardening** – Add tone/failure handling plus full test coverage (unit, integration, Playwright) before sign-off.
 
