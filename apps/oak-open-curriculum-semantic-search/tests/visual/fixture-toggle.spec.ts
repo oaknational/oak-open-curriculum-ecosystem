@@ -36,7 +36,7 @@ test.describe('Fixture toggle workflow', () => {
 
     await page.goto('/search');
 
-    await expect(page.getByText('Search data: Fixtures')).toBeVisible();
+    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
     const fixtureNotice = page.getByText(
       'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
     );
@@ -45,16 +45,19 @@ test.describe('Fixture toggle workflow', () => {
     const fixturesAxe = await captureAccessibility(page, 'fixture-mode-fixtures', testInfo);
     expect.soft(fixturesAxe.violations.length).toBe(0);
 
-    await page.getByTestId('fixture-mode-toggle').click();
-    await expect(page.getByText('Search data: Live')).toBeVisible();
+    await page.locator('label[for="search-fixture-mode-live"]').click();
+    await expect(page.getByText('Using live data')).toBeVisible();
     await expect(fixtureNotice).toBeHidden();
 
     await captureScreenshot(page, 'fixture-mode-live', testInfo);
     const liveAxe = await captureAccessibility(page, 'fixture-mode-live', testInfo);
     expect.soft(liveAxe.violations.length).toBe(0);
-    const cookies = await context.cookies();
-    const fixtureCookie = cookies.find(({ name }) => name === 'semantic-search-fixtures');
-    expect(fixtureCookie?.value).toBe('off');
+    await expect
+      .poll(async () => {
+        const cookies = await context.cookies();
+        return cookies.find(({ name }) => name === 'semantic-search-fixtures')?.value;
+      })
+      .toBe('off');
   });
 
   test('retains multi-scope buckets when fixture mode is enabled via cookie', async ({
@@ -71,7 +74,7 @@ test.describe('Fixture toggle workflow', () => {
 
     await page.goto('/search?scope=all');
 
-    await expect(page.getByText('Search data: Fixtures')).toBeVisible();
+    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
     await expect(page.getByTestId('structured-search-panel')).toBeVisible();
   });
 
@@ -127,5 +130,43 @@ test.describe('Fixture toggle workflow', () => {
 
     await expect(page.getByText('Search failed')).toBeVisible();
     await expect(outageNotice).toBeVisible();
+  });
+
+  test('switches admin fixtures via scenario radios', async ({ page, context }, testInfo) => {
+    await context.addCookies([
+      {
+        name: 'semantic-search-fixtures',
+        value: 'on',
+        url: 'http://localhost:3000',
+      },
+    ]);
+
+    await page.goto('/admin');
+
+    await expect(page.getByRole('radiogroup', { name: 'Admin data' })).toBeVisible();
+    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
+    const successNotice = page.getByText(
+      'Running deterministic admin fixtures. Switch to live data to perform real operations.',
+    );
+    await expect(successNotice).toBeVisible();
+
+    await captureScreenshot(page, 'admin-fixtures-success', testInfo);
+    const successAxe = await captureAccessibility(page, 'admin-fixtures-success', testInfo);
+    expect.soft(successAxe.violations.length).toBe(0);
+
+    await page.locator('label[for="search-fixture-mode-live"]').click();
+    await expect(page.getByText('Using live data')).toBeVisible();
+    await expect(successNotice).toBeHidden();
+
+    await captureScreenshot(page, 'admin-fixtures-live', testInfo);
+    const liveAxe = await captureAccessibility(page, 'admin-fixtures-live', testInfo);
+    expect.soft(liveAxe.violations.length).toBe(0);
+
+    await expect
+      .poll(async () => {
+        const cookies = await context.cookies();
+        return cookies.find(({ name }) => name === 'semantic-search-fixtures')?.value;
+      })
+      .toBe('off');
   });
 });

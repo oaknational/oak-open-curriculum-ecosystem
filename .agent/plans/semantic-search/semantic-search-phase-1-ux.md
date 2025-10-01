@@ -26,6 +26,7 @@ Phase 1 keeps the design system aligned with product intent by:
 - ✅ Admin stream fixtures now originate from the SDK type-gen pipeline; Next.js admin routes consume the generated helpers, replacing bespoke builders while keeping zero/empty/error behaviour deterministic.
 - ⚠️ Admin console lacks telemetry history, operator feedback, and deterministic fixtures for Playwright verification.
 - ⚠️ Status page remains functionally complete but lacks tone/failure handling tests and resilience improvements.
+- ⚠️ Formal UX review (fixtures enabled) pending — designers must walk through success/empty/error flows and capture feedback.
 - ⚠️ Hero copy and science pathways require additional narrative polish once higher priorities land.
 
 ### Recent Progress
@@ -41,12 +42,36 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ### Priority Order (Phase 1 UX)
 
-1. **Fixture toggle + search layout validation** – Use TDD to prove the toggle renders, persists, and drives deterministic behaviour for successful, empty, and error responses while keeping layout/a11y intact.
+1. **Search UX remediation** – Add per-surface fixture scenario toggles, rework the hero CTA into dedicated `/structured_search` and `/natural_language_search` routes, and repair initial/empty/error states while keeping accessibility and responsiveness intact.
 2. **Admin telemetry and operator workflows** – Add telemetry history, operator messaging, and deterministic fixtures with comprehensive testing (unit → integration → RTL → Playwright).
 3. **Status page hardening** – Implement tone/failure logic and full coverage before sign-off.
 4. **Secondary polish** – Hero copy/layout refinements, documentation tidy-up, and remaining backlog once the higher priorities are complete.
 
 ### Detailed Task Breakdown (2025-10-05)
+
+**Search UX remediation**
+
+- ✅ 2025-10-07: Search and Admin surfaces now render fixture scenario radio toggles (success/empty/error) with integration + Playwright evidence; cookie persistence verified across modes.
+- ACTION: Capture admin fixture scenario artefacts for xs/md/lg/xxl and document findings in the GO log alongside accessibility outcomes.
+- REVIEW: Confirm artefacts demonstrate success/empty/error parity across search/admin without introducing layout regressions.
+- ✅ 2025-10-07: Dedicated `/structured_search` and `/natural_language_search` routes now highlight the relevant form above the fold with skip links; hero copy condenses outside the default path.
+- ACTION: Review condensed hero + skip-link flows with designers, noting any copy or token tweaks required for final polish.
+- REVIEW: Record accessibility observations (focus order, axe output) for each variant at xs/md/lg/xxl in the GO log.
+- ✅ 2025-10-07: Initial search state now shows instructional guidance instead of premature empty results; unit coverage proves the idle message.
+- ACTION: Update UX documentation/screenshots to reflect the new instruction state and cross-reference the relevant fixtures.
+- REVIEW: Ensure Playwright suites continue to cover empty/error messaging while acknowledging the new idle instructions.
+- ACTION: Simplify the natural language panel to a multiline textarea that surfaces derived structured parameters alongside results, keeping filters de-duplicated.
+- REVIEW: Confirm the derived parameter presentation with designers and document any follow-up needs.
+- ACTION: Harden structured search error handling so the 503 fixture emits an explicit banner, `aria-live` announcement, and retry CTA without showing stale data.
+- REVIEW: Capture RTL and Playwright assertions for the banner, narration, and retry flow; include screen reader notes where possible.
+- ACTION: Enrich empty result states with query/filter context plus suggestion actions that guide teachers forward.
+- REVIEW: Record design sign-off and attach artefacts demonstrating the refreshed empty state at key breakpoints.
+- ACTION: Resolve the `Maximum update depth exceeded` regression by auditing effect dependencies and onError handlers.
+- REVIEW: Re-run integration suites and confirm the console remains clean during manual fixture runs.
+- ACTION: Improve the fixture status banner’s keyboard-visible pressed state and refine `aria-pressed` handling for the toggle controls.
+- REVIEW: Validate focus outlines and pressed-state transitions through a manual keyboard-only run and document the results.
+- ACTION: Capture UX review findings, screenshots, and axe JSON directly in the GO log once the above work lands.
+- REVIEW: Share findings with stakeholders and raise follow-up tasks where gaps remain.
 
 **Search scope helpers adoption**
 
@@ -156,21 +181,23 @@ Phase 1 keeps the design system aligned with product intent by:
 1. REMINDER: use British spelling.
 2. ACTION: Export updated Playwright artefacts for fixture success/empty/error scenarios at xs/md/lg/xxl once chromium run stabilises.
 3. REVIEW: Confirm the artefacts demonstrate deterministic notices, empty messaging, and outage cues without introducing layout regressions.
-4. ACTION: Draft failing admin telemetry and stream-fixture generation specs (unit/integration) to define history, operator messaging, and compile-time fixture requirements ahead of implementation.
-5. REVIEW: Validate the telemetry + fixture test plan with documentation expectations before touching product code.
-6. GROUNDING: read GO.md and follow all instructions.
-7. ACTION: Extend admin integration/RTL specs to assert SDK-backed stream fixtures across success/empty/error modes.
-8. REVIEW: Confirm tests exercise the generated fixtures end-to-end and highlight any telemetry gaps.
-9. QUALITY-GATE: Run `pnpm qg`, archiving artefacts that demonstrate the new fixtures in use.
-10. ACTION: Define admin telemetry/history requirements and draft failing unit/integration/RTL/Playwright tests (in priority order) before implementation, ensuring fixtures originate from the SDK type-gen pipeline.
-11. REVIEW: Cross-check the admin test matrix and fixture-generation scope with stakeholders and documentation to ensure completeness.
-12. GROUNDING: read GO.md and follow all instructions.
-13. ACTION: Implement remaining admin telemetry/history features iteratively to satisfy the new tests, ensuring deterministic fixtures for UI/Playwright coverage.
-14. REVIEW: Assess the admin UI for accessibility, observability clarity, and adherence to Oak tokens.
-15. QUALITY-GATE: Run `pnpm qg`, capturing artefacts for updated admin workflows and verifying stability.
-16. ACTION: Draft failing status page helper/unit/integration tests covering tone logic, failure messaging, and partial data cases.
-17. REVIEW: Verify status coverage matches plan expectations and avoids redundant assertions.
-18. GROUNDING: read GO.md and follow all instructions.
-19. ACTION: Implement status page tone/failure updates and any remaining hero copy/layout refinements using deterministic fixtures.
-20. REVIEW: Validate the updated surfaces against accessibility requirements and UX acceptance criteria.
-21. QUALITY-GATE: Run `pnpm qg` once more to capture final evidence for Phase 1 UX completion.
+4. ACTION: Conduct the UX review (fixtures enabled) across success/empty/error modes, noting layout, copy, and accessibility observations.
+5. REVIEW: Capture UX findings in the plan and adjust follow-up tasks accordingly.
+6. ACTION: Draft failing admin telemetry and stream-fixture generation specs (unit/integration) to define history, operator messaging, and compile-time fixture requirements ahead of implementation.
+7. REVIEW: Validate the telemetry + fixture test plan with documentation expectations before touching product code.
+8. GROUNDING: read GO.md and follow all instructions.
+9. ACTION: Extend admin integration/RTL specs to assert SDK-backed stream fixtures across success/empty/error modes.
+10. REVIEW: Confirm tests exercise the generated fixtures end-to-end and highlight any telemetry gaps.
+11. QUALITY-GATE: Run `pnpm qg`, archiving artefacts that demonstrate the new fixtures in use.
+12. ACTION: Define admin telemetry/history requirements and draft failing unit/integration/RTL/Playwright tests (in priority order) before implementation, ensuring fixtures originate from the SDK type-gen pipeline.
+13. REVIEW: Cross-check the admin test matrix and fixture-generation scope with stakeholders and documentation to ensure completeness.
+14. GROUNDING: read GO.md and follow all instructions.
+15. ACTION: Implement remaining admin telemetry/history features iteratively to satisfy the new tests, ensuring deterministic fixtures for UI/Playwright coverage.
+16. REVIEW: Assess the admin UI for accessibility, observability clarity, and adherence to Oak tokens.
+17. QUALITY-GATE: Run `pnpm qg`, capturing artefacts for updated admin workflows and verifying stability.
+18. ACTION: Draft failing status page helper/unit/integration tests covering tone logic, failure messaging, and partial data cases.
+19. REVIEW: Verify status coverage matches plan expectations and avoids redundant assertions.
+20. GROUNDING: read GO.md and follow all instructions.
+21. ACTION: Implement status page tone/failure updates and any remaining hero copy/layout refinements using deterministic fixtures.
+22. REVIEW: Validate the updated surfaces against accessibility requirements and UX acceptance criteria.
+23. QUALITY-GATE: Run `pnpm qg` once more to capture final evidence for Phase 1 UX completion.

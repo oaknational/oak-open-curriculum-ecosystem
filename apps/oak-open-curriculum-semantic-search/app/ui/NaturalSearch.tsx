@@ -3,7 +3,7 @@
 import type { JSX, FormEvent, FormEventHandler, Dispatch, SetStateAction } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import styledComponents from 'styled-components';
-import { PrimarySubmitButton } from './client/SearchPageClient.styles';
+import { PrimarySubmitButton } from './client/SearchFormControls.styles';
 import type { NaturalBody, NaturalScopeChoice } from './NaturalSearch.types';
 import {
   QueryField,

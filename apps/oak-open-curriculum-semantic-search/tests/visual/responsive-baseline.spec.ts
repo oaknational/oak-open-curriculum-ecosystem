@@ -91,6 +91,14 @@ function countTracks(template: string): number {
 }
 
 async function mockSearchEndpoints(page: Page): Promise<void> {
+  await page.context().addCookies([
+    {
+      name: 'semantic-search-fixtures',
+      value: 'on',
+      url: 'http://localhost:3000',
+    },
+  ]);
+
   await page.route('**/api/search', async (route) => {
     if (route.request().method() === 'POST') {
       const raw = route.request().postData();

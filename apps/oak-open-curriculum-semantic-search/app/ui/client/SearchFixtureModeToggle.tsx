@@ -1,23 +1,37 @@
 'use client';
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
-import type { JSX } from 'react';
+import { useCallback, useEffect, useId, useState, useTransition } from 'react';
+import type { ChangeEvent, JSX } from 'react';
 import { useRouter } from 'next/navigation';
-import { OakTypography, OakSecondaryButton } from '@oaknational/oak-components';
+import { OakTypography, OakRadioGroup, OakRadioButton } from '@oaknational/oak-components';
 import type { FixtureMode } from '../../lib/fixture-mode';
 import { setFixtureMode } from '../fixture-mode-toggle.actions';
-import { FixtureToggleWrapper, VisuallyHiddenStatus } from './SearchPageClient.styles';
+import { FixtureToggleWrapper, VisuallyHiddenStatus } from './FixtureToggle.styles';
 
 interface SearchFixtureModeToggleProps {
   readonly initialMode: FixtureMode;
   readonly visible: boolean;
   readonly onModeChange?: (mode: FixtureMode) => void;
+  readonly label?: string;
 }
+
+const FIXTURE_MODE_OPTIONS: ReadonlyArray<{
+  readonly value: FixtureMode;
+  readonly label: string;
+}> = [
+  { value: 'live', label: 'Live data' },
+  { value: 'fixtures', label: 'Fixtures (success)' },
+  { value: 'fixtures-empty', label: 'Fixtures (empty)' },
+  { value: 'fixtures-error', label: 'Fixtures (error)' },
+];
+
+const DEFAULT_GROUP_LABEL = 'Search data';
 
 export function SearchFixtureModeToggle({
   initialMode,
   visible,
   onModeChange,
+  label,
 }: SearchFixtureModeToggleProps): JSX.Element | null {
   const state = useFixtureModeToggle(initialMode, onModeChange);
 
@@ -27,18 +41,34 @@ export function SearchFixtureModeToggle({
 
   return (
     <FixtureToggleWrapper>
-      <OakTypography as="span" $font="body-4" aria-live="polite">
-        Search data: {state.summaryLabel}
-      </OakTypography>
-      <OakSecondaryButton
-        type="button"
-        aria-pressed={state.mode === 'fixtures'}
-        onClick={state.handleToggle}
-        disabled={state.isPending}
-        data-testid="fixture-mode-toggle"
+      <OakRadioGroup
+        name="search-fixture-mode"
+        label={label ?? DEFAULT_GROUP_LABEL}
+        aria-label={label ?? DEFAULT_GROUP_LABEL}
+        value={state.mode}
+        aria-describedby={state.summaryId}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          const value = event.target.value;
+          if (!isFixtureModeChoice(value)) {
+            return;
+          }
+          state.handleSelect(value);
+        }}
+        $gap="space-between-xs"
       >
-        {state.isPending ? 'Updating…' : state.buttonLabel}
-      </OakSecondaryButton>
+        {FIXTURE_MODE_OPTIONS.map((option) => (
+          <OakRadioButton
+            key={option.value}
+            id={`search-fixture-mode-${option.value}`}
+            value={option.value}
+            label={option.label}
+            disabled={state.isPending}
+          />
+        ))}
+      </OakRadioGroup>
+      <OakTypography as="span" $font="body-4" id={state.summaryId} aria-live="polite">
+        Using {state.summaryLabel}
+      </OakTypography>
       <VisuallyHiddenStatus aria-live="polite" role="status">
         {state.statusMessage}
       </VisuallyHiddenStatus>
@@ -51,53 +81,49 @@ function useFixtureModeToggle(
   onModeChange?: (mode: FixtureMode) => void,
 ) {
   const router = useRouter();
-  const [mode, setMode] = useState<'fixtures' | 'live'>(normaliseToggleMode(initialMode));
-  const [statusMessage, setStatusMessage] = useState('');
+  const [mode, setMode] = useState<FixtureMode>(initialMode);
+  const [statusMessage, setStatusMessage] = useState(resolveStatusMessage(initialMode));
   const [isPending, startTransition] = useTransition();
-
+  const summaryId = useId();
   useEffect(() => {
-    const normalised = normaliseToggleMode(initialMode);
-    setMode(normalised);
+    setMode(initialMode);
     setStatusMessage(resolveStatusMessage(initialMode));
     onModeChange?.(initialMode);
   }, [initialMode, onModeChange]);
 
-  const handleToggle = useCallback(() => {
-    const previousMode = mode;
-    const targetMode: 'fixtures' | 'live' = mode === 'fixtures' ? 'live' : 'fixtures';
-    const targetFixtureMode: FixtureMode = targetMode;
-    setMode(targetMode);
-    setStatusMessage(resolveStatusMessage(targetFixtureMode));
-    onModeChange?.(targetFixtureMode);
-
-    startTransition(async () => {
-      try {
-        await setFixtureMode(targetMode);
-        router.refresh();
-      } catch (error) {
-        console.error('Failed to update fixture mode', error);
-        setMode(previousMode);
-        setStatusMessage('Failed to update fixture mode.');
-        onModeChange?.(previousMode);
+  const handleSelect = useCallback(
+    (nextMode: FixtureMode) => {
+      if (nextMode === mode) {
+        return;
       }
-    });
-  }, [mode, onModeChange, router, startTransition]);
+      const previousMode = mode;
+      setMode(nextMode);
+      setStatusMessage(resolveStatusMessage(nextMode));
+      onModeChange?.(nextMode);
+      startTransition(async () => {
+        try {
+          await setFixtureMode(nextMode);
+          router.refresh();
+        } catch (error) {
+          console.error('Failed to update fixture mode', error);
+          setMode(previousMode);
+          setStatusMessage('Failed to update fixture mode.');
+          onModeChange?.(previousMode);
+        }
+      });
+    },
+    [mode, onModeChange, router, startTransition],
+  );
 
-  const buttonLabel = mode === 'fixtures' ? 'Use live data' : 'Use fixtures';
-  const summaryLabel = mode === 'fixtures' ? 'Fixtures' : 'Live';
-
+  const summaryLabel = resolveSummaryLabel(mode);
   return {
     mode,
-    buttonLabel,
     summaryLabel,
-    handleToggle,
+    summaryId,
+    handleSelect,
     isPending,
     statusMessage,
   } as const;
-}
-
-function normaliseToggleMode(mode: FixtureMode): 'fixtures' | 'live' {
-  return mode === 'live' ? 'live' : 'fixtures';
 }
 
 function resolveStatusMessage(mode: FixtureMode): string {
@@ -112,4 +138,22 @@ function resolveStatusMessage(mode: FixtureMode): string {
     default:
       return 'Live data enabled.';
   }
+}
+
+function resolveSummaryLabel(mode: FixtureMode): string {
+  switch (mode) {
+    case 'fixtures':
+      return 'fixtures (success)';
+    case 'fixtures-empty':
+      return 'fixtures (empty)';
+    case 'fixtures-error':
+      return 'fixtures (error)';
+    case 'live':
+    default:
+      return 'live data';
+  }
+}
+
+function isFixtureModeChoice(value: string): value is FixtureMode {
+  return FIXTURE_MODE_OPTIONS.some((option) => option.value === value);
 }

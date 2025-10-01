@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import type { FixtureMode } from '../../lib/fixture-mode';
 import { SearchFixtureModeToggle } from './SearchFixtureModeToggle';
-import { FixtureToggleCluster, FixtureNotice } from './SearchPageClient.styles';
+import { FixtureToggleCluster, FixtureNotice } from './FixtureToggle.styles';
 
 interface SearchFixtureNoticeProps {
   readonly initialFixtureMode: FixtureMode;

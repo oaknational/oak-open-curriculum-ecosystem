@@ -77,6 +77,19 @@ describe('SearchResults', () => {
     ).toBeInTheDocument();
   });
 
+  it('shows an instruction state before any search has executed', () => {
+    renderWithProviders({ mode: 'idle', results: [], meta: null });
+
+    expect(
+      screen.getByText('Begin a search to explore structured or natural language results.'),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'No results found for this search. Adjust the filters or try another term.',
+      ),
+    ).not.toBeInTheDocument();
+  });
+
   function renderResults(meta: SearchMeta = sampleMeta) {
     return renderWithProviders({ meta });
   }

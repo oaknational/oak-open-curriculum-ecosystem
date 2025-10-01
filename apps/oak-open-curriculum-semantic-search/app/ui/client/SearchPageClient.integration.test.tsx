@@ -78,12 +78,14 @@ function renderWithTheme(
     theme?: AppTheme;
     initialFixtureMode?: FixtureMode;
     showFixtureToggle?: boolean;
+    variant?: 'default' | 'structured' | 'natural';
   } = {},
 ): AppTheme {
   const {
     theme = createLightTheme(),
     initialFixtureMode = 'live',
     showFixtureToggle = false,
+    variant = 'default',
   } = options;
 
   render(
@@ -92,6 +94,7 @@ function renderWithTheme(
         searchStructured={action}
         initialFixtureMode={initialFixtureMode}
         showFixtureToggle={showFixtureToggle}
+        variant={variant}
       />
     </StyledThemeProvider>,
   );
@@ -107,18 +110,18 @@ describe('SearchPageClient', () => {
     setFixtureModeMock.mockResolvedValue(undefined);
   });
 
-  it('links the hero copy to the structured and natural search panels', () => {
+  it('routes the hero CTAs to dedicated structured and natural search pages', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action);
 
-    const structuredLink = screen.getByRole('link', { name: /jump to structured search/i });
-    const naturalLink = screen.getByRole('link', { name: /try the natural language search/i });
+    const structuredLink = screen.getByRole('link', { name: /open structured search/i });
+    const naturalLink = screen.getByRole('link', { name: /open natural language search/i });
 
-    expect(structuredLink).toHaveAttribute('href', '#structured-search-panel');
-    expect(naturalLink).toHaveAttribute('href', '#natural-search-panel');
+    expect(structuredLink).toHaveAttribute('href', '/structured_search');
+    expect(naturalLink).toHaveAttribute('href', '/natural_language_search');
   });
 
   it('surfaces the structured Phase selector with an accessible label', () => {
@@ -151,27 +154,83 @@ describe('SearchPageClient', () => {
     );
   });
 
-  it('allows developers to toggle fixture mode when the toggle is visible', async () => {
+  it('surfaces fixture scenario radios when the toggle is visible', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures-empty' });
+
+    const radioGroup = screen.getByRole('radiogroup', { name: /search data/i });
+    const liveRadio = within(radioGroup).getByRole('radio', { name: /Live data/i });
+    const successRadio = within(radioGroup).getByRole('radio', {
+      name: /Fixtures \(success\)/i,
+    });
+    const emptyRadio = within(radioGroup).getByRole('radio', {
+      name: /Fixtures \(empty\)/i,
+    });
+    const errorRadio = within(radioGroup).getByRole('radio', {
+      name: /Fixtures \(error\)/i,
+    });
+
+    expect(liveRadio).not.toBeChecked();
+    expect(successRadio).not.toBeChecked();
+    expect(emptyRadio).toBeChecked();
+    expect(errorRadio).not.toBeChecked();
+
+    expect(
+      screen.getByText(
+        /Showing deterministic fixtures without results so you can review empty-state messaging\./i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('persists fixture mode changes when a scenario radio is selected', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures' });
 
-    expect(screen.getByText(/Search data: Fixtures/i)).toBeInTheDocument();
-    const toggleButton = screen.getByTestId('fixture-mode-toggle');
-    expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
+    const radioGroup = screen.getByRole('radiogroup', { name: /search data/i });
+    const liveRadio = within(radioGroup).getByRole('radio', { name: /Live data/i });
+    const emptyRadio = within(radioGroup).getByRole('radio', {
+      name: /Fixtures \(empty\)/i,
+    });
+    const errorRadio = within(radioGroup).getByRole('radio', {
+      name: /Fixtures \(error\)/i,
+    });
 
     await act(async () => {
-      fireEvent.click(toggleButton);
+      fireEvent.click(emptyRadio);
+    });
+
+    await waitFor(() => {
+      expect(setFixtureModeMock).toHaveBeenCalledWith('fixtures-empty');
+      expect(refreshMock).toHaveBeenCalled();
+    });
+
+    expect(emptyRadio).toBeChecked();
+
+    await act(async () => {
+      fireEvent.click(errorRadio);
+    });
+
+    await waitFor(() => {
+      expect(setFixtureModeMock).toHaveBeenCalledWith('fixtures-error');
+    });
+
+    expect(errorRadio).toBeChecked();
+
+    await act(async () => {
+      fireEvent.click(liveRadio);
     });
 
     await waitFor(() => {
       expect(setFixtureModeMock).toHaveBeenCalledWith('live');
-      expect(refreshMock).toHaveBeenCalled();
     });
 
-    expect(screen.getByText(/Search data: Live/i)).toBeInTheDocument();
+    expect(liveRadio).toBeChecked();
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -185,6 +244,44 @@ describe('SearchPageClient', () => {
     const computed = getComputedStyle(content);
 
     expect(computed.getPropertyValue('gap')).toBe('var(--app-gap-section)');
+  });
+
+  it('shows only the structured form and skip link on the structured variant', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { variant: 'structured' });
+
+    expect(screen.getByTestId('structured-search-panel')).toBeInTheDocument();
+    expect(screen.queryByTestId('natural-search-panel')).not.toBeInTheDocument();
+
+    const skipNav = screen.getByRole('navigation', { name: /skip links/i });
+    expect(
+      within(skipNav).getByRole('link', { name: /structured search form/i }),
+    ).toBeInTheDocument();
+    expect(
+      within(skipNav).queryByRole('link', { name: /natural language search form/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows only the natural form and skip link on the natural variant', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { variant: 'natural' });
+
+    expect(screen.getByTestId('natural-search-panel')).toBeInTheDocument();
+    expect(screen.queryByTestId('structured-search-panel')).not.toBeInTheDocument();
+
+    const skipNav = screen.getByRole('navigation', { name: /skip links/i });
+    expect(
+      within(skipNav).getByRole('link', { name: /natural language search form/i }),
+    ).toBeInTheDocument();
+    expect(
+      within(skipNav).queryByRole('link', { name: /structured search form/i }),
+    ).not.toBeInTheDocument();
   });
 
   it('invokes the structured search action when a facet is selected after a submission', async () => {
@@ -377,7 +474,7 @@ describe('SearchPageClient', () => {
       structuredPropsRef.current?.onResults?.(fixture);
     });
 
-    expect(screen.getByText('Search data: Fixtures')).toBeInTheDocument();
+    expect(screen.getByText('Using fixtures (success)')).toBeInTheDocument();
     const headline = fixture.results[0]?.lesson?.lesson_title;
     if (headline) {
       expect(screen.getByText(headline)).toBeInTheDocument();

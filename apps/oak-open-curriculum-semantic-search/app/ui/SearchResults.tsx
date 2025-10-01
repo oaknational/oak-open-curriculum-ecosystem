@@ -26,6 +26,16 @@ export function SearchResults({
   meta?: SearchMeta | null;
   multiBuckets: MultiScopeBucketView[] | null;
 }): JSX.Element | null {
+  if (mode === 'idle') {
+    return (
+      <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+        <OakTypography as="p" $font="body-3" $color="text-subdued">
+          Begin a search to explore structured or natural language results.
+        </OakTypography>
+      </ResultsSection>
+    );
+  }
+
   if (mode === 'multi' && multiBuckets) {
     return <MultiScopeResults buckets={multiBuckets} />;
   }

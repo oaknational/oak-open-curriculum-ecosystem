@@ -4,6 +4,8 @@ import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import { resolveBreakpoint } from '../shared/breakpoints';
 
+export type ControlsLayout = 'both' | 'structured' | 'natural';
+
 function hexToRgba(hex: string, alpha: number): string {
   const normalized = hex.replace('#', '');
   const bigint = parseInt(normalized, 16);
@@ -37,58 +39,51 @@ export const ContentContainer = styledComponents(OakBox)`
   max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
 `;
-export const HeroControlsCluster = styledComponents(OakBox)`
+export const HeroControlsCluster = styledComponents(OakBox)<{ $controlsFirst?: boolean }>`
   display: grid;
   gap: var(--app-gap-section);
   grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    'hero'
-    'controls';
+  grid-template-areas: ${({ $controlsFirst }) =>
+    $controlsFirst ? "'controls' 'hero'" : "'hero' 'controls'"};
 
-  ${({ theme }) => {
+  ${({ theme, $controlsFirst }) => {
     const xl = resolveBreakpoint(theme, 'xl');
     const xxl = resolveBreakpoint(theme, 'xxl');
+    const rowTemplate = $controlsFirst ? "'controls hero'" : "'hero controls'";
     return css`
       @media (min-width: ${xl}) {
         grid-template-columns:
           minmax(0, 0.9fr)
           minmax(0, 1.1fr);
-        grid-template-areas: 'hero controls';
+        grid-template-areas: ${rowTemplate};
         align-items: start;
       }
 
       @media (min-width: ${xxl}) {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas: ${rowTemplate};
       }
     `;
   }}
 `;
 
-export const ControlsGrid = styledComponents(OakBox)`
+export const ControlsGrid = styledComponents(OakBox)<{ $layout: ControlsLayout }>`
   display: grid;
   gap: var(--app-gap-section);
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-areas:
-    'structured'
-    'natural';
   grid-area: controls;
   align-items: stretch;
+  ${({ $layout }) => controlsGridBase($layout)}
 
-  ${({ theme }) => {
+  ${({ theme, $layout }) => {
     const md = resolveBreakpoint(theme, 'md');
     const xl = resolveBreakpoint(theme, 'xl');
     return css`
       @media (min-width: ${md}) {
-        grid-template-columns:
-          minmax(var(--app-layout-control-column-min-width), 1.25fr)
-          minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'structured natural';
+        ${controlsGridMd($layout)}
       }
 
       @media (min-width: ${xl}) {
-        grid-template-columns:
-          minmax(var(--app-layout-control-column-min-width), 1.5fr)
-          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        ${controlsGridXl($layout)}
       }
     `;
   }}
@@ -180,70 +175,68 @@ export const AccentTypography = styledComponents(OakTypography)`
     ${({ theme }) => hexToRgba(getAppTheme(theme).app.palette.brandPrimaryBright, 0.5)};
 `;
 
-export const PrimarySubmitButton = styledComponents.button`
-  align-items: center;
-
-      background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
-    color: ${({ theme }) => getAppTheme(theme).uiColors['bg-btn-secondary']};
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
-  cursor: pointer;
-  display: inline-flex;
-  font-family: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontFamily};
-  font-size: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontSizeRem};
-  font-weight: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.fontWeight};
-  gap: var(--app-gap-cluster);
-  justify-content: center;
-  line-height: ${({ theme }) => getAppTheme(theme).app.typography.bodyStrong.lineHeight};
-  padding-block: calc(var(--app-gap-cluster) / 1.5);
-  padding-inline: var(--app-gap-section);
-  text-decoration: none;
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
-
-  &:hover,
-  &:active {
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
-  background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
-  border: 2px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
+function controlsGridBase(layout: ControlsLayout) {
+  switch (layout) {
+    case 'structured':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
+        grid-template-areas: 'structured';
+      `;
+    case 'natural':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'natural';
+      `;
+    default:
+      return css`
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+          'structured'
+          'natural';
+      `;
   }
+}
 
-  &:disabled {
-    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
-    border-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDark};
-    cursor: not-allowed;
-    opacity: 0.7;
+function controlsGridMd(layout: ControlsLayout) {
+  switch (layout) {
+    case 'structured':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
+        grid-template-areas: 'structured';
+      `;
+    case 'natural':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'natural';
+      `;
+    default:
+      return css`
+        grid-template-columns:
+          minmax(var(--app-layout-control-column-min-width), 1.25fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'structured natural';
+      `;
   }
+}
 
-  &:focus-visible {
-    outline: 3px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
-    outline-offset: 2px;
+function controlsGridXl(layout: ControlsLayout) {
+  switch (layout) {
+    case 'structured':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
+        grid-template-areas: 'structured';
+      `;
+    case 'natural':
+      return css`
+        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'natural';
+      `;
+    default:
+      return css`
+        grid-template-columns:
+          minmax(var(--app-layout-control-column-min-width), 1.5fr)
+          minmax(var(--app-layout-secondary-column-min-width), 1fr);
+        grid-template-areas: 'structured natural';
+      `;
   }
-`;
-
-export const FixtureToggleWrapper = styledComponents(OakBox)`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: var(--app-gap-cluster);
-`;
-
-export const FixtureToggleCluster = styledComponents(OakBox)`
-  display: grid;
-  gap: var(--app-gap-cluster);
-  align-items: start;
-`;
-
-export const FixtureNotice = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
-`;
-
-export const VisuallyHiddenStatus = styledComponents.span`
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-`;
+}

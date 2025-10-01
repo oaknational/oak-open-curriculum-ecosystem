@@ -24,15 +24,19 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - `pnpm make` and `pnpm qg` both run cleanly after the admin fixture work (2025-10-06 15:18); continue capturing artefacts after each substantive change.
 - `.markdownlintignore` already includes Playwright artefacts and browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 
+## UX Snagging Checklist
+
+See `semantic-search-phase-1-ux.md` → "Search UX remediation" for the canonical list of issues to address (fixture toggles, layout, error handling, etc.).
+
 ## Immediate Priorities
 
-1. **Prove fixture toggle + search layout behaviour** – Capture artefacts for the now-complete RTL/Playwright coverage so the toggle announcements and empty/error messaging remain traceable across breakpoints.
+1. **Search UX remediation** – Continue following `semantic-search-phase-1-ux.md`: search + admin now expose scenario radios, dedicated routes surface the relevant form above the fold with skip links, and the idle state shows instructional copy. Next steps—capture cross-breakpoint artefacts, simplify the natural language panel, harden structured error/empty flows, resolve the render loop, polish the fixture banner state, and log every outcome in the GO cadence.
 
 2. **Admin console telemetry/history** – Add operator feedback and history on top of the new SDK-backed fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
 
 3. **Status page hardening** – Add tone/failure handling plus full test coverage (unit, integration, Playwright) before sign-off.
 
-4. **Hero copy/layout refinement** – Revisit hero messaging using deterministic fixtures, ensuring structured/natural panels remain above the fold at xl/xxl.
+4. **Hero/NL layout refinement** – Review condensed hero + skip-link experience with designers, finalise copy/token tweaks, and plan the natural language panel simplification.
 
 5. **Documentation tidy-up** – Clean up Markdown and TypeDoc artefacts once the higher priorities are complete.
 

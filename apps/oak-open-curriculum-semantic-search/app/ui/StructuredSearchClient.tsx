@@ -14,7 +14,7 @@ import {
 } from './structured-fields';
 import { Fragment } from 'react';
 import { useStructuredSearchHandlers } from './StructuredSearchClient.hooks';
-import { PrimarySubmitButton } from './client/SearchPageClient.styles';
+import { PrimarySubmitButton } from './client/SearchFormControls.styles';
 import styledComponents from 'styled-components';
 import {
   MULTI_SCOPE,
