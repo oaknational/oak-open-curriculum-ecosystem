@@ -11,13 +11,15 @@ import { FixtureToggleWrapper, VisuallyHiddenStatus } from './SearchPageClient.s
 interface SearchFixtureModeToggleProps {
   readonly initialMode: FixtureMode;
   readonly visible: boolean;
+  readonly onModeChange?: (mode: FixtureMode) => void;
 }
 
 export function SearchFixtureModeToggle({
   initialMode,
   visible,
+  onModeChange,
 }: SearchFixtureModeToggleProps): JSX.Element | null {
-  const state = useFixtureModeToggle(initialMode);
+  const state = useFixtureModeToggle(initialMode, onModeChange);
 
   if (!visible) {
     return null;
@@ -44,7 +46,10 @@ export function SearchFixtureModeToggle({
   );
 }
 
-function useFixtureModeToggle(initialMode: FixtureMode) {
+function useFixtureModeToggle(
+  initialMode: FixtureMode,
+  onModeChange?: (mode: FixtureMode) => void,
+) {
   const router = useRouter();
   const [mode, setMode] = useState<'fixtures' | 'live'>(normaliseToggleMode(initialMode));
   const [statusMessage, setStatusMessage] = useState('');
@@ -53,14 +58,17 @@ function useFixtureModeToggle(initialMode: FixtureMode) {
   useEffect(() => {
     const normalised = normaliseToggleMode(initialMode);
     setMode(normalised);
-    setStatusMessage(normalised === 'fixtures' ? 'Fixtures enabled.' : 'Live data enabled.');
-  }, [initialMode]);
+    setStatusMessage(resolveStatusMessage(initialMode));
+    onModeChange?.(initialMode);
+  }, [initialMode, onModeChange]);
 
   const handleToggle = useCallback(() => {
     const previousMode = mode;
     const targetMode: 'fixtures' | 'live' = mode === 'fixtures' ? 'live' : 'fixtures';
+    const targetFixtureMode: FixtureMode = targetMode;
     setMode(targetMode);
-    setStatusMessage(targetMode === 'fixtures' ? 'Fixtures enabled.' : 'Live data enabled.');
+    setStatusMessage(resolveStatusMessage(targetFixtureMode));
+    onModeChange?.(targetFixtureMode);
 
     startTransition(async () => {
       try {
@@ -70,9 +78,10 @@ function useFixtureModeToggle(initialMode: FixtureMode) {
         console.error('Failed to update fixture mode', error);
         setMode(previousMode);
         setStatusMessage('Failed to update fixture mode.');
+        onModeChange?.(previousMode);
       }
     });
-  }, [mode, router, startTransition]);
+  }, [mode, onModeChange, router, startTransition]);
 
   const buttonLabel = mode === 'fixtures' ? 'Use live data' : 'Use fixtures';
   const summaryLabel = mode === 'fixtures' ? 'Fixtures' : 'Live';
@@ -89,4 +98,18 @@ function useFixtureModeToggle(initialMode: FixtureMode) {
 
 function normaliseToggleMode(mode: FixtureMode): 'fixtures' | 'live' {
   return mode === 'live' ? 'live' : 'fixtures';
+}
+
+function resolveStatusMessage(mode: FixtureMode): string {
+  switch (mode) {
+    case 'fixtures':
+      return 'Deterministic fixtures enabled.';
+    case 'fixtures-empty':
+      return 'Deterministic empty fixtures enabled.';
+    case 'fixtures-error':
+      return 'Error fixtures enabled.';
+    case 'live':
+    default:
+      return 'Live data enabled.';
+  }
 }

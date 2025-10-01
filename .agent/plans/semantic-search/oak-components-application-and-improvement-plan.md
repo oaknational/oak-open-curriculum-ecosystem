@@ -2,657 +2,207 @@
 
 ## Executive Summary
 
-This document records the integration challenges encountered when applying `@oaknational/oak-components` (v1.149.0) to the Semantic Search application, the workarounds implemented, and recommendations for upstream improvements. The component library was designed for Oak Web Application's single-theme, light-mode context and lacks native support for theme variants, dark mode, and extensible theming APIs.
+The Semantic Search application integrated `@oaknational/oak-components` (v1.149.0) into a dual light/dark experience. Delivering that experience demanded roughly **1,200 lines of bespoke production code** (plus ~850 lines of tests) across ten theming files to compensate for gaps in the upstream library. The engineering cost falls into three buckets:
 
-**Key Finding**: Integrating Oak Components with light/dark theme support required ~10,000 lines of custom theming infrastructure that should be provided by the component library itself.
+- **Theme creation**: no variant API, no dark-mode baseline, and limited theme surface area forced manual overrides for ~24 UI role tokens per mode.
+- **Token + CSS delivery**: Oak exports raw design tokens but no resolution utilities or CSS variable emission, so every consuming app must re-implement parsing and bridging logic.
+- **Runtime alignment & guidance**: styled-components builds diverge between server and client, there is no multi-theme documentation, and downstream teams shoulder the maintenance risk alone.
 
----
+To unblock the wider Oak ecosystem, we propose three headline investment areas for the Oak Components team:
 
-## 1. Integration Architecture Overview
+1. **Theme Factory & Dark Mode Baseline** – ship first-class helpers (and reference themes) so apps can opt into multi-theme support without copy-pasting bespoke infrastructure.
+2. **Token Resolution & CSS Variable Support** – expose CSS-ready values and optional variable emission out of the box, eliminating the need for local conversion layers.
+3. **Runtime & Documentation Alignment** – guarantee SSR/client consistency, provide migration guides, and publish multi-theme integration playbooks.
 
-### 1.1 Required Custom Infrastructure
-
-The Semantic Search app required the following custom implementations due to gaps in Oak Components:
-
-**Theme System** (`app/ui/themes/`):
-
-- `semantic-theme-spec.ts` (228 lines): Manual light/dark theme definitions overriding all 77 `OakUiRoleToken` mappings
-- `semantic-theme-resolver.ts` (7,556 bytes): Token-to-CSS conversion utilities
-- `semantic-theme-types.ts`: Extended theme type definitions
-- `semantic-color-registry.ts`: Custom colour token registry
-- `light.ts` / `dark.ts`: Theme factory functions
-- `ui-colors.ts`: UI colour resolution helpers
-
-**Provider Stack** (`app/lib/theme/`):
-
-- `ThemeContext.tsx`: Theme mode resolution (cookie → localStorage → system preference)
-- `ColorModeContext.tsx`: DOM synchronisation for light/dark toggle
-- `ThemeBridgeProvider.tsx`: CSS variable emission and global style generation
-- `Providers.tsx`: Provider composition and SSR-safe defaults
-
-**Build Configuration**:
-
-- `next.config.ts`: Forced package transpilation to prevent hydration mismatches
-- `layout.tsx`: Pre-hydration script (`THEME_PREHYDRATION_SCRIPT`) to eliminate theme flash
-
-### 1.2 Integration Complexity Metrics
-
-- **10 theme-related files**: 3,000+ lines of custom code
-- **4 React providers**: Context composition for theme management
-- **Manual token conversion**: Every design decision requires token parsing
-- **Pre-hydration script**: Client-side JavaScript to prevent visual flash
-- **Next.js config override**: Package transpilation requirement
+The remainder of this document summarises the bespoke workarounds, quantifies their impact, and frames the improvements required to make Oak Components multi-theme ready by design.
 
 ---
 
-## 2. Core Architectural Problems in Oak Components
+## 1. Integration Snapshot
 
-### 2.1 No Theme Variant Support
+| Oak gap                     | Local implementation                                                       | Cost / risk                                        |
+| --------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------- |
+| No theme variant API        | `semantic-theme-spec.ts`, manual overrides for ~24 UI role tokens per mode | 227 LOC, brittle when Oak adds tokens              |
+| No token resolution helpers | `semantic-theme-resolver.ts`, custom spacing/typography/colour parsers     | 234 LOC, imports Oak internals, hard to maintain   |
+| No CSS variable emission    | `ThemeBridgeProvider.tsx`, `ThemeCssVars.tsx`, `ThemeGlobalStyle.tsx`      | 193 LOC, duplicates theme data, CSP considerations |
+| Server/client style drift   | `next.config.ts` transpilation + layout pre-hydration script               | Build-time penalty, inline script debt             |
+| Limited theme surface area  | Local `AppTheme` types with extended spacing/typography/layout             | Risk of divergence from Oak’s schema               |
+| No dark-mode guidance       | Trial-and-error overrides validated via bespoke tests                      | Time-consuming, no guarantee of consistency        |
 
-**Problem**: Oak Components provides `oakDefaultTheme` only, with no API for creating theme variants.
-
-**Impact**:
-
-```typescript
-// Required workaround: Manually override all 77 UI role tokens
-export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = {
-  light: {
-    uiColors: buildUiColorMap({
-      'text-primary': 'navy120',
-      'text-subdued': 'grey60',
-      'bg-primary': 'mint30',
-      // ... 74 more manual overrides
-    }),
-  },
-  dark: {
-    uiColors: buildUiColorMap({
-      'text-primary': 'grey10',
-      'text-subdued': 'grey30',
-      'bg-primary': 'grey80',
-      // ... 74 more manual overrides
-    }),
-  },
-};
-```
-
-**Custom Implementation Required**:
-
-- `buildUiColorMap()`: Validates all 77 tokens are mapped
-- `assertCompleteUiColorMap()`: Ensures no missing mappings
-- Manual iteration over `oakUiRoleTokens` array
-
-### 2.2 No Token Resolution API
-
-**Problem**: Oak tokens (spacing, typography, colours) are exported as raw objects but not resolved to CSS values.
-
-**Impact**: Apps must manually parse and convert every token:
-
-```typescript
-// Required: 200+ lines to resolve tokens to CSS values
-export function resolveAppTokens(spec: SemanticAppSpec): ResolvedAppTokens {
-  return {
-    space: {
-      gap: {
-        grid: parseSpacing(oakSpaceBetweenTokens[spec.space.gap.grid]),
-        section: parseSpacing(oakSpaceBetweenTokens[spec.space.gap.section]),
-      },
-    },
-    typography: {
-      hero: {
-        fontSize: pxToRem(oakFontSizeTokens[oakFontTokens[spec.typography.hero.token][0]]),
-        lineHeight: spec.typography.hero.lineHeight,
-        fontWeight: oakFontTokens[spec.typography.hero.token][2],
-        letterSpacing: oakFontTokens[spec.typography.hero.token][3],
-      },
-    },
-  };
-}
-```
-
-**Missing Utilities**:
-
-- Token-to-CSS converters (apps must import `parseSpacing`, `pxToRem` from internals)
-- Typography tuple unpacking (font tokens stored as `[size, lineHeight, weight, letterSpacing]`)
-- Resolved theme object with CSS-ready values
-
-### 2.3 No CSS Variable Support
-
-**Problem**: Oak uses styled-components props exclusively; no CSS variable emission.
-
-**Impact**: Apps must build custom bridges:
-
-```typescript
-// Required: Custom provider emitting CSS variables
-export function ThemeBridgeProvider({ children, theme }: Props) {
-  const cssVars = useMemo(() => {
-    const resolved = resolveAppTokens(theme.app);
-    return {
-      '--app-space-gap-grid': resolved.space.gap.grid,
-      '--app-typography-hero-font-size': resolved.typography.hero.fontSize,
-      // ... 50+ variables manually created
-    };
-  }, [theme]);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <style dangerouslySetInnerHTML={{ __html: generateGlobalStyle(theme) }} />
-      <div style={cssVars}>{children}</div>
-    </ThemeProvider>
-  );
-}
-```
-
-**Maintenance Burden**:
-
-- Duplicate theme data across JS props and CSS variables
-- Manual `<style>` tag generation for global styles
-- Risk of desynchronisation between styled-components and CSS variables
-
-### 2.4 Styled-Components Hydration Issues
-
-**Problem**: Oak's styled-components build generates different class names on server vs client.
-
-**Manifestation**:
-
-- Server (Node): `esm__` prefixed class names (CJS bundle)
-- Client (Browser): `sc-*` hashed class names (ESM bundle)
-- Result: React hydration mismatches, console errors
-
-**Required Workarounds**:
-
-```typescript
-// next.config.ts - MANDATORY transpilation
-export default {
-  transpilePackages: ['@oaknational/oak-components'],
-};
-```
-
-```typescript
-// layout.tsx - Pre-hydration script prevents theme flash
-const THEME_PREHYDRATION_SCRIPT = `
-  (function() {
-    const mode = document.cookie.match(/theme-mode=([^;]+)/)?.[1] || 
-                 localStorage.getItem('theme-mode') ||
-                 (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.dataset.theme = mode;
-  })();
-`;
-```
-
-**Drawbacks**:
-
-- Inline script adds maintenance burden (lint exemptions, CSP considerations)
-- Logic duplication between pre-hydration script and `ThemeContext`
-- Transpilation slows Next.js builds
-- Stop-gap solution, doesn't address root cause
-
-### 2.5 Limited Theme Customisation
-
-**Problem**: `OakTheme` type only allows customising `uiColors`:
-
-```typescript
-export type OakTheme = {
-  name: string;
-  uiColors: Record<OakUiRoleToken, OakColorToken>;
-  // No spacing customisation
-  // No typography customisation
-  // No breakpoint customisation
-};
-```
-
-**Impact**: Apps cannot:
-
-- Customise spacing scales
-- Override typography ramps
-- Define custom breakpoints (stuck with mobile/tablet/desktop)
-- Extend theme with app-specific tokens
-
-**Workaround**: Extend theme type externally:
-
-```typescript
-// app/ui/themes/types.ts
-export type AppTheme = OakTheme & { app: ResolvedAppTokens };
-```
-
-### 2.6 No Dark Mode Guidance
-
-**Problem**: Component library has no examples, documentation, or utilities for dark mode.
-
-**Impact**:
-
-- No reference implementation
-- No best practices documented
-- Apps must discover token mappings through trial and error
-- Accessibility concerns (contrast ratios) not addressed
-
-**Evidence**: The 228-line `semantic-theme-spec.ts` required experimentation to find appropriate dark mode token mappings (e.g., `'text-primary': 'grey10'`, `'bg-primary': 'grey80'`).
+Detailed implementation notes and code snippets live in Appendix A; the main body focuses on the lessons and desired upstream capabilities.
 
 ---
 
-## 3. Implemented Solutions
+## 2. Challenges and Local Workarounds
 
-### 3.1 Pre-Hydration Script
+### 2.1 Theme Variants
 
-**Purpose**: Eliminate light→dark theme flash and hydration mismatches.
+- **Problem**: Only `oakDefaultTheme` is exposed; consuming apps cannot extend or derive variants.
+- **Local impact**: We handcrafted a complete theme spec, overriding ~24 UI role tokens per mode and validating completeness via `assertCompleteUiColorMap()`.
+- **Workaround**: `semantic-theme-spec.ts` plus helper guards ensure every `OakUiRoleToken` resolves, but the mapping is manual and fragile.
+- **Desired upstream capability**: A theme factory that accepts partial overrides, validates coverage, and ships with both light and dark reference themes (see Recommendation 3.1).
 
-**Implementation** (`app/layout.tsx`):
+### 2.2 Token Resolution
 
-```typescript
-const THEME_PREHYDRATION_SCRIPT = `
-  (function() {
-    const mode = document.cookie.match(/theme-mode=([^;]+)/)?.[1] || 
-                 localStorage.getItem('theme-mode') ||
-                 (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.dataset.theme = mode;
-    document.documentElement.dataset.themeMode = mode;
-    const root = document.getElementById('app-theme-root');
-    if (root) root.dataset.theme = mode;
-  })();
-`;
-```
+- **Problem**: Oak exports raw design tokens (spacing, typography, colours) without utilities to produce CSS-ready values.
+- **Local impact**: Applications must replicate Oak’s token resolution logic, importing internals such as `oakFontTokens` and `oakSpaceBetweenTokens`.
+- **Workaround**: `semantic-theme-resolver.ts` converts tokens to rem/px values and assembles a resolved theme object consumed by both styled-components and CSS variables.
+- **Desired upstream capability**: Official token-resolution helpers that return CSS-ready strings and insulate consumers from internal token shape changes (Recommendation 3.2).
 
-**Advantages**:
+### 2.3 CSS Variable Emission
 
-- Eliminates visual flash by setting theme before React hydration
-- No dependency on styled-components internals
-- Works with bare DOM APIs
-- Keeps existing provider flow intact
+- **Problem**: Components accept theme props, but the library does not emit CSS variables for downstream usage.
+- **Local impact**: To support non-React styling and utility classes, we built a bridge that maps 45 app-level values into `--app-*` variables and injects bespoke global styles.
+- **Workaround**: `ThemeBridgeProvider.tsx`, `ThemeCssVars.tsx`, and `ThemeGlobalStyle.tsx` emit variables and global styles in parallel with styled-components.
+- **Desired upstream capability**: Opt-in CSS variable emission from Oak Components so every consumer gains consistent variables without duplicating logic (Recommendation 3.3).
 
-**Drawbacks**:
+### 2.4 SSR / Client Divergence
 
-- Requires logic duplication (mirrors `ThemeContext` resolution)
-- Inline script maintenance burden
-- CSP considerations (requires nonce or hash under strict CSP)
-- Doesn't solve underlying class-name divergence
+- **Problem**: The styled-components build hashes class names differently on server (CJS bundle) and client (ESM bundle), leading to hydration warnings.
+- **Local impact**: We must transpile `@oaknational/oak-components` and run a pre-hydration script to align DOM attributes before React mounts, incurring build-time cost and CSP debt.
+- **Workaround**: `next.config.ts` forces transpilation; `layout.tsx` injects an inline script that resolves the preferred theme ahead of hydration.
+- **Desired upstream capability**: Harmonised SSR/client builds (or extracted CSS) that remove the need for transpilation and inline scripts (Recommendation 3.4).
 
-### 3.2 Theme Specification System
+### 2.5 Theme Surface Area
 
-**Purpose**: Define complete light/dark themes using Oak tokens.
+- **Problem**: `OakTheme` only exposes `uiColors`, preventing official customisation of spacing, typography, breakpoints, or app-specific tokens.
+- **Local impact**: We extended the theme type locally (`AppTheme`) and layered additional tokens, but those structures sit outside the Oak contract.
+- **Desired upstream capability**: An extended theme API that supports custom spacing scales, typography ramps, and breakpoints while remaining type-safe (Recommendation 3.5).
 
-**Implementation** (`app/ui/themes/semantic-theme-spec.ts`):
+### 2.6 Dark Mode Guidance
 
-- Manual mapping of all 77 `OakUiRoleToken` entries per mode
-- Validation via `buildUiColorMap()` and `assertCompleteUiColorMap()`
-- Shared app spec for spacing, typography, layout tokens
-- Custom colour registry extending Oak's palette
-
-**Benefits**:
-
-- Type-safe theme definitions
-- Compile-time validation of token completeness
-- Single source of truth for both themes
-
-**Limitations**:
-
-- Verbose (228 lines for what should be library functionality)
-- Maintenance burden (must update when Oak tokens change)
-- No upstream validation or guidance
-
-### 3.3 Token Resolution Layer
-
-**Purpose**: Convert Oak tokens to CSS-ready values.
-
-**Implementation** (`app/ui/themes/semantic-theme-resolver.ts`):
-
-- `resolveAppTokens()`: Converts theme spec to resolved CSS values
-- Spacing resolution via `parseSpacing()` and `pxToRem()`
-- Typography resolution by unpacking font token tuples
-- Border radius and layout token resolution
-
-**Benefits**:
-
-- CSS variables can consume resolved values
-- Decouples theme definition from CSS implementation
-- Testable token resolution logic
-
-**Limitations**:
-
-- 200+ lines of code that should be in Oak Components
-- Requires importing Oak internals (`oakFontTokens`, `oakSpaceBetweenTokens`)
-- Must be updated if Oak token structure changes
-
-### 3.4 CSS Variable Bridge
-
-**Purpose**: Emit CSS variables for use outside styled-components.
-
-**Implementation** (`app/lib/theme/ThemeBridgeProvider.tsx`):
-
-- Generates 50+ CSS variables from resolved theme
-- Injects global `<style>` tag for base colours
-- Provides styled-components `ThemeProvider` wrapper
-
-**Benefits**:
-
-- CSS variables available to non-React code
-- Standard CSS cascade for global styles
-- Predictable variable naming (`--app-*` prefix)
-
-**Limitations**:
-
-- Duplicates theme data (styled-components props + CSS vars)
-- Manual synchronisation required
-- Inline `<style>` tag has CSP implications
+- **Problem**: There is no documented strategy for dark mode, no sample theme, and no design validation guidance.
+- **Local impact**: We relied on experimentation and bespoke tests (contrast ratios, visual snapshots) to ensure accessibility.
+- **Desired upstream capability**: Official dark theme exports, Storybook demos, and an integration guide covering accessibility and implementation basics (Recommendations 3.1 & 4).
 
 ---
 
-## 4. Upstream Improvement Recommendations
+## 3. Upstream Improvement Recommendations
 
-### 4.1 Priority 1: Theme Factory API
+The table below links each challenge to the proposed Oak Components investment.
 
-**Recommendation**: Expose a theme creation helper:
+| Challenge                  | Recommended action                                                                                                                    | Expected impact                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Theme variants & dark mode | **3.1 Theme Factory & Reference Themes** – introduce `createOakTheme`, ship `oakLightTheme`/`oakDarkTheme`, provide validation errors | Removes manual token overrides, accelerates dark-mode adoption       |
+| Token resolution           | **3.2 Token Resolution Utilities** – expose helper returning CSS-ready spacing/typography/colour values                               | Eliminates custom parsers, keeps apps insulated from token refactors |
+| CSS variable emission      | **3.3 Built-in CSS Variable Support** – allow `OakThemeProvider` to emit variables with consistent prefixing                          | Unlocks global styling without bespoke bridges                       |
+| SSR/client drift           | **3.4 Runtime Alignment** – ensure consistent styled-component hashing or extract CSS at build time                                   | Removes transpilation & inline script debt                           |
+| Extended theme surface     | **3.5 Extended Theme API** – support optional custom spacing/typography/breakpoints                                                   | Enables brand alignment without forks                                |
+| Missing guidance           | **4.1–4.3 Documentation Improvements** – publish integration guide, API reference, migration guides                                   | Provides discoverable, repeatable onboarding across teams            |
 
-```typescript
-// Proposed API
-import { createOakTheme } from '@oaknational/oak-components';
+The detailed recommendations remain compatible with the earlier draft; they have been consolidated to maintain focus during the symposium.
 
-const darkTheme = createOakTheme({
-  name: 'my-dark-theme',
-  mode: 'dark',
-  uiColors: {
-    'text-primary': 'grey10',
-    'bg-primary': 'grey80',
-    // Partial overrides, rest inherit from default
-  },
-});
-```
+### 3.1 Theme Factory & Reference Themes
 
-**Benefits**:
+- Expose `createOakTheme(options)` accepting partial overrides and validating coverage.
+- Ship official light and dark themes plus a toggle example app.
+- Provide clear error messages when tokens are missing or mis-typed.
 
-- Eliminates need for custom `buildUiColorMap()` implementations
-- Provides validation and helpful error messages
-- Reduces boilerplate from 228 lines to ~20 lines
-- Enables theme composition and inheritance
+### 3.2 Token Resolution Utilities
 
-**Implementation Guidance**:
+- Offer batched resolution helpers returning CSS-ready strings (rem/px/rgba).
+- Avoid leaking internal token structures to consumers.
+- Document the transformation logic and unit-test upstream.
 
-- Accept partial `uiColors` overrides, fill in defaults
-- Validate all 77 tokens are covered
-- Support theme extension/inheritance
-- Provide TypeScript types for theme options
+### 3.3 Built-in CSS Variable Support
 
-### 4.2 Priority 1: Token Resolution Utilities
+- Add an `emitCssVariables` flag (default off) to `OakThemeProvider`.
+- Emit `--oak-*` variables at the appropriate scope (`:root` and `[data-theme]`).
+- Cover both role tokens and resolved app tokens.
 
-**Recommendation**: Export CSS-ready token values:
+### 3.4 Runtime Alignment
 
-```typescript
-// Proposed API
-import { resolveTokens } from '@oaknational/oak-components';
+- Provide a build that yields consistent styled-component hashes across server and client.
+- Consider extracted CSS or an alternative styling solution if needed.
+- Publish a migration guide for consuming apps.
 
-const resolved = resolveTokens({
-  spacing: ['space-between-m', 'inner-padding-l'],
-  typography: ['heading-3', 'body-2'],
-  colors: ['oakGreen', 'mint30'],
-});
-// Returns: { spacing: ['1rem', '1.5rem'], typography: [...], colors: [...] }
-```
+### 3.5 Extended Theme API & Dark Mode Reference
 
-**Benefits**:
-
-- Eliminates 200+ lines of custom token resolution
-- No need to import internal token objects
-- Consistent resolution logic across all apps
-- Future-proof against token structure changes
-
-**Implementation Guidance**:
-
-- Support batch resolution for performance
-- Return CSS-ready strings (rem, px, rgba)
-- Include TypeScript overloads for each token type
-- Document resolution algorithm
-
-### 4.3 Priority 1: CSS Variable Support
-
-**Recommendation**: Provide built-in CSS variable emission:
-
-```typescript
-// Proposed API
-import { OakThemeProvider, OakCssVariables } from '@oaknational/oak-components';
-
-<OakThemeProvider theme={myTheme} emitCssVariables>
-  {children}
-</OakThemeProvider>
-
-// Automatically emits:
-// --oak-color-text-primary: #0b2a16;
-// --oak-space-m: 1rem;
-// --oak-typography-heading-3-size: 3rem;
-```
-
-**Benefits**:
-
-- No custom bridge providers required
-- Eliminates manual CSS variable generation
-- Standard naming convention across all Oak apps
-- Works with non-React code (plain CSS, SCSS)
-
-**Implementation Guidance**:
-
-- Provide opt-in via `emitCssVariables` prop
-- Use `--oak-*` prefix for all variables
-- Emit variables at `:root` and `[data-theme="..."]` selectors
-- Include resolved values only (no token names)
-
-### 4.4 Priority 2: SSR/Client Alignment
-
-**Recommendation**: Fix styled-components build to prevent class name divergence.
-
-**Options**:
-
-1. ESM-first build with consistent hashing
-2. Server-side style sheet generation
-3. Static CSS extraction option
-4. Move away from styled-components to modern alternative
-
-**Benefits**:
-
-- Eliminates transpilation requirement
-- No pre-hydration scripts needed
-- Consistent class names across environments
-- Better Next.js 14+ compatibility
-
-**Implementation Guidance**:
-
-- Investigate `@rollup/plugin-babel` with styled-components plugin
-- Consider migrating to CSS Modules, vanilla-extract, or Panda CSS
-- Provide migration guide for consuming apps
-- Maintain backward compatibility during transition
-
-### 4.5 Priority 2: Dark Mode Reference Implementation
-
-**Recommendation**: Add official dark theme and example app.
-
-**Deliverables**:
-
-- `oakDarkTheme` export with pre-configured dark mode mappings
-- Storybook with theme switcher demonstrating all components
-- Example Next.js app showing theme toggle implementation
-- Documentation on accessibility considerations (contrast ratios)
-
-**Benefits**:
-
-- Reduces experimentation burden for consuming apps
-- Establishes best practices for dark mode
-- Provides copy-paste starting point
-- Validates component compatibility with dark backgrounds
-
-**Implementation Guidance**:
-
-- Use WCAG AA contrast ratios as minimum
-- Test all components in both modes
-- Document which components need adjustments
-- Provide theme toggle component in library
-
-### 4.6 Priority 3: Extended Theme API
-
-**Recommendation**: Allow customising spacing, typography, and breakpoints:
-
-```typescript
-// Proposed API
-const customTheme = createOakTheme({
-  name: 'custom',
-  spacing: {
-    scale: [0, 4, 8, 12, 16, 24, 32, 48, 64], // Custom scale
-  },
-  typography: {
-    fontSizes: [12, 14, 16, 20, 24, 32], // Custom sizes
-    fontFamily: {
-      primary: '"Inter", sans-serif',
-    },
-  },
-  breakpoints: {
-    sm: 640,
-    md: 768,
-    lg: 1024,
-    xl: 1280,
-  },
-});
-```
-
-**Benefits**:
-
-- Full theme customisation without forking
-- Apps can match brand guidelines
-- Removes need for parallel design systems
-- Better cross-brand support
-
-**Implementation Guidance**:
-
-- Make all theme properties optional with defaults
-- Validate custom scales (e.g., ascending order)
-- Update all components to respect custom values
-- Provide theme composition utilities
+- Allow optional overrides for spacing scales, typography ramps, and breakpoints.
+- Document required validation (ascending scales, contrast requirements).
+- Ensure Storybook supports switching between reference themes and custom themes.
 
 ---
 
-## 5. Documentation Improvements
+## 4. Documentation Improvements
 
-### 5.1 Integration Guide
+1. **Integration Guide** – a multi-theme playbook covering provider setup, theme customisation, dark-mode toggles, CSS variable usage, and common pitfalls (`docs/integration/multi-theme-apps.md`).
+2. **API Reference** – generated Markdown (via Typedoc) enumerating all exported tokens, types, and components with theme-related annotations.
+3. **Migration Guides** – versioned notes for breaking changes, deprecations, and suggested codemods to ease upgrades for consuming applications.
 
-**Current State**: No multi-theme integration documentation.
-
-**Recommendation**: Create comprehensive integration guide covering:
-
-- Provider setup for SSR applications
-- Theme customisation patterns
-- Dark mode implementation
-- CSS variable usage
-- Common pitfalls and solutions
-
-**Location**: `docs/integration/multi-theme-apps.md` in Oak Components repo
-
-### 5.2 API Reference
-
-**Current State**: Storybook-only documentation, not searchable or linkable.
-
-**Recommendation**: Generate markdown API docs from TypeScript:
-
-- All exported types, interfaces, and components
-- Token reference with visual examples
-- Theme API documentation
-- Searchable, linkable, version-specific
-
-**Tooling**: Use `typedoc` or similar to generate from source
-
-### 5.3 Migration Guides
-
-**Current State**: No guidance on upgrading between versions.
-
-**Recommendation**: Publish migration guides for:
-
-- Breaking changes in each major version
-- Deprecation warnings before removal
-- Codemod scripts for automated migrations
-- Before/after examples
+These artefacts are essential for scaling Oak Components across teams once the new APIs land.
 
 ---
 
-## 6. Next Steps for Semantic Search App
+## 5. Appendices
 
-### 6.1 Short Term (Current Implementation)
+### Appendix A – Implementation Highlights (Semantic Search)
 
-1. **Maintain synchronisation**: Keep pre-hydration script and `ThemeContext` logic aligned
-2. **Add test coverage**: Unit tests for theme resolution and token conversion
-3. **Document CSP**: Prepare for strict CSP by documenting nonce/hash requirements
-4. **Monitor Oak updates**: Track Oak Components releases for relevant changes
+The following excerpts illustrate the bespoke infrastructure built for Semantic Search.
 
-### 6.2 Medium Term (Optimisations)
+<details>
+<summary>Pre-hydration script (apps/oak-open-curriculum-semantic-search/app/layout.tsx)</summary>
 
-1. **Simplify if Oak improves**: Adopt upstream theme factory if/when released
-2. **CSS variable migration**: Consider moving more styled-components usage to CSS variables
-3. **Performance audit**: Measure theme resolution overhead and optimise
-4. **Accessibility audit**: Verify WCAG AA contrast in both themes
+```typescript
+const THEME_PREHYDRATION_SCRIPT = `(() => {
+  try {
+    const doc = document;
+    const cookieMatch = doc.cookie.match(/(?:^|;\s*)theme-mode=([^;]+)/);
+    const cookieValue = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+    const stored = window.localStorage?.getItem('theme-mode') ?? null;
+    const mode = cookieValue || stored || 'system';
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    const resolved = mode === 'dark' ? 'dark' : mode === 'light' ? 'light' : prefersDark ? 'dark' : 'light';
+    doc.documentElement.dataset.themeMode = mode;
+    doc.documentElement.dataset.theme = resolved;
+    const root = doc.getElementById('app-theme-root');
+    if (root) {
+      root.dataset.theme = resolved;
+    }
+  } catch (_) {
+    /* ignore – React providers reconcile on hydration */
+  }
+})();`;
+```
 
-### 6.3 Long Term (Strategic)
+</details>
 
-1. **CSS-only theming**: Explore pure CSS variable approach with `prefers-color-scheme` media query
-2. **Reduce Oak dependency**: Consider forking commonly-used primitives if upstream improvements stall
-3. **Share learnings**: Document patterns for other Oak teams needing theme variants
-4. **Contribute upstream**: Propose PRs to Oak Components implementing recommendations
+<details>
+<summary>Theme spec + resolver (apps/.../semantic-theme-spec.ts & semantic-theme-resolver.ts)</summary>
 
----
+- Overrides ~24 UI role tokens per mode while falling back to `oakDefaultTheme` for the rest.
+- Resolves spacing via `resolveSpaceBetween()` / `resolveInnerPadding()` + `pxToRem()`.
+- Unpacks typography tuples from `oakFontTokens` to produce CSS-ready values.
+- Returns a resolved app theme consumed by both styled-components and CSS variable outputs.
 
-## 7. Maintenance Considerations
+</details>
 
-### 7.1 Synchronisation Points
+<details>
+<summary>CSS variable bridge (apps/.../ThemeBridgeProvider.tsx)</summary>
 
-**Critical dependencies** that require updates when Oak Components changes:
+- Pre-creates light/dark theme instances, selects at runtime, and emits 45 `--app-*` variables.
+- Injects deterministic global styles for background/foreground colours and link states.
+- Wraps children in a styled-components provider so existing components continue working.
 
-- `oakUiRoleTokens` array (if new UI roles added)
-- `oakColorTokens` object (if colour palette changes)
-- Font token tuple structure (if typography format changes)
-- Spacing token objects (if naming or structure changes)
+</details>
 
-**Mitigation**:
+### Appendix B – Semantic Search Follow-up Actions
 
-- Pin Oak Components version in `package.json`
-- Test upgrades in isolated branch
-- Run full visual regression tests before upgrading
-- Document any workarounds for specific versions
+Although outside the symposium remit, the Semantic Search team is tracking the following work until upstream support arrives:
 
-### 7.2 Testing Strategy
+1. Keep the pre-hydration script and `ThemeContext` logic in sync.
+2. Expand contrast tests to cover subdued/error text and border accents; extend hydration integration tests to cover navigation toggles.
+3. Prepare CSP guidance (nonce/hash strategy) for inline styles.
+4. Monitor Oak Components releases and reduce custom code once upstream features land.
 
-**Required test coverage**:
+### Appendix C – Maintenance & Testing Considerations
 
-- Theme resolution: All tokens resolve to valid CSS values
-- Theme completeness: All 77 UI role tokens mapped in both modes
-- Contrast ratios: WCAG AA compliance in both themes
-- Hydration: No mismatches with pre-hydration script
-- Visual regression: Storybook snapshots in both themes
-
-**Tooling**:
-
-- Vitest for unit tests
-- Playwright for integration tests
-- Chromatic/Percy for visual regression (future consideration)
-
-### 7.3 Performance Monitoring
-
-**Metrics to track**:
-
-- Theme resolution time (target: <10ms)
-- CSS variable emission overhead
-- Bundle size impact of theme infrastructure
-- Time to Interactive (TTI) with/without theming
-
-**Optimisations**:
-
-- Memoize resolved tokens
-- Code-split theme definitions
-- Lazy-load unused theme modes
-- Consider build-time token resolution
+- **Synchronisation points**: update local code when Oak adds UI role tokens, colour tokens, font tuple structures, or spacing tokens. Pin the Oak Components version and trial upgrades in isolation.
+- **Testing**: maintain unit tests for token resolution, completeness checks, and contrast ratios; run Playwright integration tests and (future) visual regression suites for both themes.
+- **Performance**: monitor theme resolution time (<10 ms target), CSS variable emission overhead, bundle-size impact, and theme-switch responsiveness. Optimise via memoisation, code-splitting, and potential build-time token resolution.
 
 ---
 
-## 8. Conclusion
+## 6. Conclusion
 
-Integrating Oak Components into the Semantic Search application revealed significant architectural limitations in the component library's theming system. The ~10,000 lines of custom infrastructure required for light/dark theme support represents technical debt that should be addressed upstream.
-
-**Key Takeaways**:
-
-1. **Oak Components is single-theme by design**: Built for OWA's light-mode-only context
-2. **Theme customisation is painful**: Requires manual token mapping, resolution, and validation
-3. **Styled-components creates friction**: Hydration mismatches, build overhead, no CSS variables
-4. **Dark mode is unsupported**: No guidance, examples, or pre-configured themes
-5. **Workarounds are necessary**: But should be temporary until upstream improvements land
-
-**Recommended Action**: Oak Components should prioritise theming improvements to support the broader Oak ecosystem's diverse application needs. Until then, this document serves as a reference for other teams facing similar integration challenges.
+Oak Components excels in its original single-theme, light-mode setting, but extending it to contemporary multi-theme requirements currently shifts significant complexity to consuming applications. Semantic Search built ~1,200 lines of theming infrastructure, alongside bespoke tests and runtime workarounds, to bridge the gaps. Investing in theme factories, token-resolution utilities, CSS variable support, and aligned documentation will give every Oak product multi-theme capability by default, reduce duplication across teams, and accelerate delivery of accessible, brand-consistent experiences.

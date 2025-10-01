@@ -21,13 +21,14 @@ Phase 1 keeps the design system aligned with product intent by:
 - ✅ Deterministic fixture sources cover core subject combinations; references and builders stay aligned with generated SDK types.
 - ✅ Fixture toggle logic is centralised in `resolveFixtureToggleVisibility`, and Playwright coverage now exercises fixtures ↔ live transitions.
 - ✅ Search surfaces pass `pnpm make`; the toggle resolver refactor keeps lint/type-check/build/doc-gen green.
-- ⚠️ Unit and integration tests now cover fixture toggle success/empty/error flows, with API routes refactored for variant handling; RTL and Playwright coverage still required to prove accessibility and layout resilience across breakpoints.
+- ✅ Unit, integration, RTL, and Playwright suites now cover fixture toggle success/empty/error flows, and API routes/toggle helpers surface deterministic messaging across breakpoints.
 - ⚠️ Admin console lacks telemetry history, operator feedback, and deterministic fixtures for Playwright verification.
 - ⚠️ Status page remains functionally complete but lacks tone/failure handling tests and resilience improvements.
 - ⚠️ Hero copy and science pathways require additional narrative polish once higher priorities land.
 
 ### Recent Progress
 
+- 2025-10-06 12:35: Extended Playwright fixture toggle workflow to assert deterministic notices plus empty/error messaging, and taught `searchAction` to forward fixture modes via query parameters with new helper coverage.
 - 2025-10-06 11:40: Expanded fixture-mode support (success/empty/error), added unit/integration coverage, and refactored search routes/toggle helpers; `pnpm make` and `pnpm qg` now pass with deterministic fixture fallbacks.
 - 2025-10-06 08:15: Added `resolveFixtureToggleVisibility`, documented `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`, and refreshed Playwright fixture workflow; `pnpm make` confirmed green post-change.
 - 2025-09-30 22:42: Resolved Next.js build error in `/status` by converting the page to a Server Component and delegating rendering to StatusClient.
@@ -52,6 +53,7 @@ Phase 1 keeps the design system aligned with product intent by:
 
 - ✅ Added deterministic end-to-end coverage: Playwright toggle scenario, RTL assertions, and API suites verify cookie-driven fixture mode.
 - ✅ 2025-10-06: Added failing → passing unit/integration tests for fixture toggle success/empty/error states, introduced coverage matrix, and refactored toggle/fixture helpers to rely on SDK imports.
+- ✅ 2025-10-06: Reinforced Playwright coverage for fixture notices plus empty/error responses and added helper utilities so server actions preserve fixture overrides when hitting internal APIs.
 
 **Admin console resilience**
 
@@ -148,10 +150,10 @@ Phase 1 keeps the design system aligned with product intent by:
 ## Todo (GO cadence)
 
 1. REMINDER: UseBritish spelling.
-2. ACTION: Extend fixture toggle coverage to RTL by drafting failing tests for success/empty/error messaging and announcements.
-3. REVIEW: Confirm RTL assertions prove accessibility outcomes without over-specifying implementation.
-4. ACTION: Expand Playwright specs with failing scenarios for toggle modes across breakpoints, including axe and screenshot artefacts.
-5. REVIEW: Ensure failures isolate missing UX behaviour rather than test harness gaps.
+2. ACTION: Export updated Playwright artefacts for fixture success/empty/error scenarios at xs/md/lg/xxl once chromium run stabilises.
+3. REVIEW: Confirm the artefacts demonstrate deterministic notices, empty messaging, and outage cues without introducing layout regressions.
+4. ACTION: Draft failing admin telemetry unit/integration specs to define history + operator messaging requirements ahead of implementation.
+5. REVIEW: Validate the telemetry test plan with documentation expectations before touching product code.
 6. GROUNDING: read GO.md and follow all instructions.
 7. ACTION: Implement any UI/layout updates required to satisfy the new RTL tests while keeping tokens consistent.
 8. REVIEW: Verify RTL suite passes and visual regressions remain acceptable.

@@ -58,26 +58,31 @@ function SingleScopeResults({
   meta?: SearchMeta | null;
 }): JSX.Element | null {
   const parsed = ResultsSchema.safeParse(results);
-  if (!parsed.success || parsed.data.length === 0) {
+  if (!parsed.success) {
     return null;
   }
 
   const summary = buildSummary(meta);
+  const hasResults = parsed.data.length > 0;
 
   return (
     <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
       <SearchSummary summary={summary} />
-      <ResultsGrid $reset>
-        {parsed.data.map((rec) => (
-          <ResultItem
-            key={rec.id}
-            title={extractTitle(rec)}
-            subject={extractSubject(rec)}
-            keyStage={extractKeyStage(rec)}
-            highlights={extractHighlights(rec)}
-          />
-        ))}
-      </ResultsGrid>
+      {hasResults ? (
+        <ResultsGrid $reset>
+          {parsed.data.map((rec) => (
+            <ResultItem
+              key={rec.id}
+              title={extractTitle(rec)}
+              subject={extractSubject(rec)}
+              keyStage={extractKeyStage(rec)}
+              highlights={extractHighlights(rec)}
+            />
+          ))}
+        </ResultsGrid>
+      ) : (
+        <EmptyResultsNotice />
+      )}
     </ResultsSection>
   );
 }
@@ -173,6 +178,14 @@ function SearchSummary({
         </OakTypography>
       ) : null}
     </OakBox>
+  );
+}
+
+function EmptyResultsNotice(): JSX.Element {
+  return (
+    <OakTypography as="p" $font="body-3" $color="text-subdued">
+      No results found for this search. Adjust the filters or try another term.
+    </OakTypography>
   );
 }
 

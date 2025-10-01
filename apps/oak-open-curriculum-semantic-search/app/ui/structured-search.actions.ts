@@ -19,6 +19,7 @@ import type {
 } from './structured-search.shared';
 import { buildFixtureForScope } from './search-fixtures/builders';
 import { resolveFixtureModeFromCookies } from '../lib/fixture-mode';
+import { buildApiUrl, resolveFixtureQueryParam } from './structured-search.actions.helpers';
 import { isSearchScope } from '../../src/types/oak';
 import {
   NARROW_SEARCH_SCOPES,
@@ -28,6 +29,11 @@ import {
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 
+const EMPTY_SUGGESTION_RESPONSE: SuggestionResponse = {
+  suggestions: [],
+  cache: DEFAULT_SUGGESTION_CACHE,
+} satisfies SuggestionResponse;
+
 export async function searchAction(
   req: unknown,
 ): Promise<{ result: unknown | null; error?: string }> {
@@ -35,6 +41,7 @@ export async function searchAction(
   const base = baseUrl();
   const cookieStore = await cookies();
   const fixtureMode = resolveFixtureModeFromCookies(cookieStore);
+  const fixtureQuery = resolveFixtureQueryParam(fixtureMode);
 
   if (fixtureMode === 'fixtures') {
     const fixture = buildFixtureForScope(input.scope);
@@ -43,13 +50,13 @@ export async function searchAction(
 
   try {
     if (input.scope === MULTI_SCOPE) {
-      const multi = await requestMultiScopeSearch(base, input);
+      const multi = await requestMultiScopeSearch({ base, input, fixtureQuery });
       return { result: multi };
     }
 
     const body = buildBody(input);
-    const result = await requestStructuredSearch(base, body);
-    const suggestionResponse = await requestSuggestions(base, body);
+    const result = await requestStructuredSearch({ base, body, fixtureQuery });
+    const suggestionResponse = await requestSuggestions({ base, body, fixtureQuery });
     return { result: { ...result, suggestions: suggestionResponse.suggestions } };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Search failed';
@@ -57,8 +64,13 @@ export async function searchAction(
   }
 }
 
-async function requestStructuredSearch(base: string, body: StructuredBody) {
-  const response = await fetch(new URL('/api/search', base).toString(), {
+async function requestStructuredSearch(params: {
+  base: string;
+  body: StructuredBody;
+  fixtureQuery?: string;
+}) {
+  const { base, body, fixtureQuery } = params;
+  const response = await fetch(buildApiUrl(base, '/api/search', fixtureQuery), {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
@@ -73,18 +85,20 @@ async function requestStructuredSearch(base: string, body: StructuredBody) {
   return parsed.data;
 }
 
-async function requestSuggestions(base: string, body: StructuredBody): Promise<SuggestionResponse> {
+async function requestSuggestions(params: {
+  base: string;
+  body: StructuredBody;
+  fixtureQuery?: string;
+}): Promise<SuggestionResponse> {
+  const { base, body, fixtureQuery } = params;
   const prefix = body.text.trim();
   if (prefix.length <= 1) {
-    return {
-      suggestions: [],
-      cache: DEFAULT_SUGGESTION_CACHE,
-    } satisfies SuggestionResponse;
+    return EMPTY_SUGGESTION_RESPONSE;
   }
 
   try {
     const scope: SearchScope = isSearchScope(body.scope) ? body.scope : DEFAULT_NARROW_SCOPE;
-    const response = await fetch(new URL('/api/search/suggest', base).toString(), {
+    const response = await fetch(buildApiUrl(base, '/api/search/suggest', fixtureQuery), {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
@@ -99,33 +113,23 @@ async function requestSuggestions(base: string, body: StructuredBody): Promise<S
     });
 
     if (!response.ok) {
-      return {
-        suggestions: [],
-        cache: DEFAULT_SUGGESTION_CACHE,
-      } satisfies SuggestionResponse;
+      return EMPTY_SUGGESTION_RESPONSE;
     }
 
     const parsed = SuggestionResponseSchema.safeParse(safeJsonParse(await response.text()));
-    if (parsed.success) {
-      return parsed.data;
-    }
-    return {
-      suggestions: [],
-      cache: DEFAULT_SUGGESTION_CACHE,
-    } satisfies SuggestionResponse;
+    return parsed.success ? parsed.data : EMPTY_SUGGESTION_RESPONSE;
   } catch (error) {
     console.error('Failed to fetch suggestions', error);
-    return {
-      suggestions: [],
-      cache: DEFAULT_SUGGESTION_CACHE,
-    } satisfies SuggestionResponse;
+    return EMPTY_SUGGESTION_RESPONSE;
   }
 }
 
-async function requestMultiScopeSearch(
-  base: string,
-  input: StructuredRequestInput,
-): Promise<MultiScopeHybridResponse> {
+async function requestMultiScopeSearch(params: {
+  base: string;
+  input: StructuredRequestInput;
+  fixtureQuery?: string;
+}): Promise<MultiScopeHybridResponse> {
+  const { base, input, fixtureQuery } = params;
   const queryBase = {
     text: input.text,
     subject: input.subject,
@@ -139,17 +143,25 @@ async function requestMultiScopeSearch(
   const scopes = NARROW_SEARCH_SCOPES;
   const results = await Promise.all(
     scopes.map(async (scope) => {
-      const response = await requestStructuredSearch(base, buildBody({ ...queryBase, scope }));
+      const response = await requestStructuredSearch({
+        base,
+        body: buildBody({ ...queryBase, scope }),
+        fixtureQuery,
+      });
       return { scope, result: response } as const;
     }),
   );
 
-  const suggestionResponse = await requestSuggestions(base, {
-    scope: DEFAULT_NARROW_SCOPE,
-    text: input.text,
-    subject: input.subject,
-    keyStage: input.keyStage,
-    includeFacets: input.includeFacets ?? true,
+  const suggestionResponse = await requestSuggestions({
+    base,
+    body: {
+      scope: DEFAULT_NARROW_SCOPE,
+      text: input.text,
+      subject: input.subject,
+      keyStage: input.keyStage,
+      includeFacets: input.includeFacets ?? true,
+    },
+    fixtureQuery,
   });
 
   const payload: MultiScopeHybridResponse = {

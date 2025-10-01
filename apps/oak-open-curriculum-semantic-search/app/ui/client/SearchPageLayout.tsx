@@ -23,7 +23,7 @@ import {
   StructuredPanelCard,
   SuggestionsPanel,
 } from './SearchPageClient.styles';
-import { SearchFixtureModeToggle } from './SearchFixtureModeToggle';
+import { SearchFixtureNotice } from './SearchFixtureNotice';
 
 interface SearchPageLayoutProps {
   readonly controller: SearchController;
@@ -48,7 +48,7 @@ export function SearchPageLayout({
       $color="text-primary"
     >
       <ContentContainer data-testid="search-page-content">
-        <SearchFixtureModeToggle initialMode={initialFixtureMode} visible={showFixtureToggle} />
+        <SearchFixtureNotice initialFixtureMode={initialFixtureMode} visible={showFixtureToggle} />
 
         <HeroControlsCluster as="section" aria-label="Search hero and controls">
           <SearchHero />

@@ -12,7 +12,6 @@ function hexToRgba(hex: string, alpha: number): string {
   const b = bigint & 255;
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
-
 export const PageContainer = styledComponents(OakBox)`
   width: 100%;
   max-width: min(100%, var(--app-layout-container-max-width));
@@ -23,14 +22,12 @@ export const PageContainer = styledComponents(OakBox)`
     var(--app-layout-inline-padding-wide)
   );
   padding-block: var(--app-gap-cluster);
-
   ${({ theme }) => css`
     @media (min-width: ${resolveBreakpoint(theme, 'lg')}) {
       padding-block: var(--app-gap-section);
     }
   `}
 `;
-
 export const ContentContainer = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;
@@ -40,7 +37,6 @@ export const ContentContainer = styledComponents(OakBox)`
   max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
 `;
-
 export const HeroControlsCluster = styledComponents(OakBox)`
   display: grid;
   gap: var(--app-gap-section);
@@ -229,6 +225,16 @@ export const FixtureToggleWrapper = styledComponents(OakBox)`
   justify-content: flex-end;
   align-items: center;
   gap: var(--app-gap-cluster);
+`;
+
+export const FixtureToggleCluster = styledComponents(OakBox)`
+  display: grid;
+  gap: var(--app-gap-cluster);
+  align-items: start;
+`;
+
+export const FixtureNotice = styledComponents(OakTypography)`
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
 `;
 
 export const VisuallyHiddenStatus = styledComponents.span`

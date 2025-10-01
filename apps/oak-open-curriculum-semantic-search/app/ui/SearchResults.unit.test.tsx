@@ -66,6 +66,17 @@ describe('SearchResults', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders an empty-state notice when no results are returned', () => {
+    const meta: SearchMeta = { ...sampleMeta, total: 0 };
+
+    renderWithProviders({ results: [], meta });
+
+    expect(screen.getByText('0 results for lessons')).toBeInTheDocument();
+    expect(
+      screen.getByText('No results found for this search. Adjust the filters or try another term.'),
+    ).toBeInTheDocument();
+  });
+
   function renderResults(meta: SearchMeta = sampleMeta) {
     return renderWithProviders({ meta });
   }

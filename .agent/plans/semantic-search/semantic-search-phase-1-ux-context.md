@@ -1,6 +1,6 @@
 # Semantic Search Phase 1 – UX Context Snapshot
 
-_Last updated: 2025-10-06 11:45 (fixture toggle variant coverage + qg green)_
+_Last updated: 2025-10-06 12:35 (fixture messaging Playwright coverage + server action forwarding)_
 
 ## Active Focus
 
@@ -24,14 +24,15 @@ _Last updated: 2025-10-06 11:45 (fixture toggle variant coverage + qg green)_
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
 - 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
-- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) still seeds deterministic data, and the UI visibility is now controlled via `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`; the resolver honours env overrides. Unit/integration suites now cover success/empty/error fixture states, while RTL and Playwright expansions remain in progress to assert announcements and layout behaviour.
+- Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) still seeds deterministic data, and the UI visibility is now controlled via `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`; RTL + Playwright now assert deterministic notices plus empty/error messaging while axe checks remain green.
+- `searchAction` forwards fixture overrides to internal APIs via `resolveFixtureQueryParam`/`buildApiUrl`, ensuring empty/error modes propagate even when cookies are unavailable.
 - Structured, natural, and suggest API routes now share fixture-mode helpers that short-circuit empty/error cases with deterministic responses; successful `pnpm make`/`pnpm qg` runs confirm the refactor keeps quality gates green.
 - Curriculum schema metadata now lives in `curriculumZodSchemas`; both curriculum and search validators now consume a shared `parseSchema` helper that leverages generated `_input`/`_output` typing, with scope constants/guards (`SEARCH_SCOPES`, `SEARCH_SCOPES_WITH_ALL`) queued for the remaining overload cleanup.
 - Search page client now uses a dedicated layout shell and fixture toggle component, keeping max-lines under control while preserving the existing UX flows.
 - Status page implementation complete (structure/rendering); outstanding: comprehensive test coverage required per TDD principles.
 - Admin page requires expanded workflows (index creation, ingestion controls, telemetry) with progress/error cues surfaced to operators.
 - Fixture reference notes (`fixtures/REFERENCE.md`) catalogue provenance and schema alignment; `app/ui/search-fixtures/README.md` documents the finalised module layout. The shared fixture-mode resolver and developer toggle now drive all server actions and routes, preserving zero-hit logging and accessible announcements; next, broaden science facets as needed and finish splitting fixture helpers so lint complexity thresholds pass.
-- Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/lib/fixture-toggle.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover cookie precedence plus empty/error fixture fallbacks and complete without type errors.
+- Targeted Vitest runs (`app/lib/fixture-mode.unit.test.ts`, `app/lib/fixture-toggle.unit.test.ts`, `app/ui/structured-search.actions.unit.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`, `app/api/search/route.integration.test.ts`, `app/api/search/suggest/route.integration.test.ts`, `app/api/search/nl/route.integration.test.ts`) now cover cookie precedence plus empty/error fixture fallbacks and complete without type errors.
 - Quality gates: `pnpm make` passes fully (format, type-check, lint, build, doc-gen). Keep running `pnpm qg` frequently (under two minutes) to capture artefacts as fixture toggle, admin, and status work progresses. Playwright browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 - 2025-09-28: `SearchResults.unit.test.tsx` now mounts the new `mode`/`multiBuckets` signature and asserts multi-scope bucket rendering so TypeScript aligns with the component API before rerunning `pnpm make`.
 - Wide-view hero layout still needs validation that structured and natural panels remain visible above the fold at `xl`/`xxl`; adjust `HeroControlsCluster` track ratios if further Playwright sweeps highlight controls slipping below the hero copy.

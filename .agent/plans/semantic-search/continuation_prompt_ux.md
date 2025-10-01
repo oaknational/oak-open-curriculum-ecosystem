@@ -17,14 +17,14 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 - Semantic tokens, bridge styles, and shared layout wrappers continue to power Search, Admin, Docs, and the Status shell with responsive Playwright coverage holding steady.
 - Generated scope helpers now back every search surface (app, SDK validators, OpenAPI wiring, fixtures, observability, query parser); literal strings were removed during the recent scope sweep.
-- Fixture mode toggle is fully deterministic: a dedicated resolver honours the new `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` flag. Unit/integration suites now prove success/empty/error fixture states, and forthcoming RTL/Playwright work will extend accessibility and layout assertions.
+- Fixture mode toggle is fully deterministic: a dedicated resolver honours the new `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` flag. Unit/integration/RTL suites now prove success/empty/error fixture states, and Playwright confirms deterministic notices alongside empty/error messaging.
 - `/status` remains the Oak-branded view of `/healthz`, implemented as a Server Component that delegates rendering to StatusClient; the navigation reflects the new shell, but tests and flaky-response handling are still outstanding.
 - `pnpm make` and `pnpm qg` both run cleanly after the fixture-mode refactor; continue capturing artefacts after every substantive change.
 - `.markdownlintignore` already includes Playwright artefacts and browsers remain installed (Chromium 140, Firefox 141, Webkit 26).
 
 ## Immediate Priorities
 
-1. **Prove fixture toggle + search layout behaviour** – Complete RTL and Playwright coverage so the toggle announces state changes and preserves layout/accessibility for successful, empty, and error responses across breakpoints (unit/integration now in place).
+1. **Prove fixture toggle + search layout behaviour** – Capture artefacts for the now-complete RTL/Playwright coverage so the toggle announcements and empty/error messaging remain traceable across breakpoints.
 
 2. **Admin console telemetry/history** – Add operator feedback, history, and deterministic fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
 
@@ -36,7 +36,7 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 
 ## Verification Checklist
 
-- Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...page.integration.test.tsx`, plus new Health/Search tests as added; update the integration suites (`app/api/search/*/route.integration.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`) to rely on `NextResponse` so cookie assertions type-check, then re-run them alongside the fixture-mode unit coverage.
+- Unit/integration: `pnpm -C apps/oak-open-curriculum-semantic-search test ...SearchResults.unit.test.tsx`, `...StructuredSearchClient.integration.test.tsx`, `...structured-search.actions.unit.test.ts`, `...page.integration.test.tsx`, plus new Health/Search tests as added; keep the integration suites (`app/api/search/*/route.integration.test.ts`, `app/ui/client/SearchPageClient.integration.test.tsx`) aligned with `NextResponse` so cookie assertions type-check, then re-run them alongside the fixture-mode unit coverage.
 - `pnpm make` remains green after the fixture toggle resolver landed. Run `pnpm qg` frequently (under two minutes) to record artefacts after each milestone.
 
 ## Recent Learnings (2025-09-30)
@@ -112,5 +112,5 @@ All work must continue to align with `GO.md`, `.agent/directives-and-memory/AGEN
 - Decide how the status page is linked (navigation vs support surfaces) while `/healthz` stays JSON-only; align with functionality once the plan is agreed.
 - Confirm whether additional semantic tokens (e.g. `layout.inlinePadding.narrow`) are needed to handle extreme mobile cases after the Search audit.
 - Revisit Storybook once responsive updates land to ensure Oak Components coverage captures the new layouts.
-- Extend Playwright fixtures with populated search results/facets (in addition to zero-hit cases) so responsive screenshots communicate the real layout; document the toggle workflow for contributors.
+- Extend Playwright fixtures with populated search results/facets at additional breakpoints (alongside the new empty/error flows) so responsive screenshots communicate the real layout; document the toggle workflow for contributors.
 - Validate the wide-view hero/control balance (forms above the fold at `bp-lg+`) and adjust `HeroControlsCluster` track ratios if the controls continue to slip beneath the hero copy.

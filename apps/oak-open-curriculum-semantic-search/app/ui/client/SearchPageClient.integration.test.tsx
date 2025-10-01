@@ -9,7 +9,7 @@ import type { StructuredSearchAction } from '../StructuredSearch';
 import type { FixtureMode } from '../../lib/fixture-mode';
 import SearchPageClient from './SearchPageClient';
 import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
-import { buildSingleScopeFixture } from '../search-fixtures/builders';
+import { buildSingleScopeFixture, buildEmptyFixture } from '../search-fixtures/builders';
 
 const refreshMock = vi.fn();
 
@@ -382,5 +382,65 @@ describe('SearchPageClient', () => {
     if (headline) {
       expect(screen.getByText(headline)).toBeInTheDocument();
     }
+  });
+
+  it('surfaces helper messaging when deterministic fixtures are enabled', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
+
+    expect(
+      screen.getByText(
+        'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('announces deterministic empty fixtures and empty-state guidance', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures-empty', showFixtureToggle: true });
+
+    expect(
+      screen.getByText(
+        'Showing deterministic fixtures without results so you can review empty-state messaging.',
+      ),
+    ).toBeInTheDocument();
+
+    const emptyFixture = buildEmptyFixture({ scope: 'lessons' });
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(emptyFixture);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('0 results for lessons')).toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText('No results found for this search. Adjust the filters or try another term.'),
+    ).toBeInTheDocument();
+  });
+
+  it('announces deterministic fixture outage messaging when errors occur', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures-error', showFixtureToggle: true });
+
+    const outageMessage = 'Simulating a search outage. Switch to live data or try again later.';
+
+    expect(screen.getByText(outageMessage)).toBeInTheDocument();
+
+    await act(async () => {
+      structuredPropsRef.current?.onError?.(outageMessage);
+    });
+
+    expect(screen.getByRole('alert')).toHaveTextContent(outageMessage);
   });
 });

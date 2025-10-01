@@ -37,12 +37,17 @@ test.describe('Fixture toggle workflow', () => {
     await page.goto('/search');
 
     await expect(page.getByText('Search data: Fixtures')).toBeVisible();
+    const fixtureNotice = page.getByText(
+      'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
+    );
+    await expect(fixtureNotice).toBeVisible();
     await captureScreenshot(page, 'fixture-mode-fixtures', testInfo);
     const fixturesAxe = await captureAccessibility(page, 'fixture-mode-fixtures', testInfo);
     expect.soft(fixturesAxe.violations.length).toBe(0);
 
     await page.getByTestId('fixture-mode-toggle').click();
     await expect(page.getByText('Search data: Live')).toBeVisible();
+    await expect(fixtureNotice).toBeHidden();
 
     await captureScreenshot(page, 'fixture-mode-live', testInfo);
     const liveAxe = await captureAccessibility(page, 'fixture-mode-live', testInfo);
@@ -68,5 +73,59 @@ test.describe('Fixture toggle workflow', () => {
 
     await expect(page.getByText('Search data: Fixtures')).toBeVisible();
     await expect(page.getByTestId('structured-search-panel')).toBeVisible();
+  });
+
+  test('announces deterministic empty fixtures after a structured search', async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      {
+        name: 'semantic-search-fixtures',
+        value: 'empty',
+        url: 'http://localhost:3000',
+      },
+    ]);
+
+    await page.goto('/search');
+
+    await expect(
+      page.getByText(
+        'Showing deterministic fixtures without results so you can review empty-state messaging.',
+      ),
+    ).toBeVisible();
+
+    const structuredPanel = page.getByTestId('structured-search-panel');
+    await structuredPanel.getByLabel('Query').fill('fractions');
+    await structuredPanel.getByRole('button', { name: 'Search' }).click();
+
+    await expect(page.getByText(/0 results for/i)).toBeVisible();
+    await expect(
+      page.getByText('No results found for this search. Adjust the filters or try another term.'),
+    ).toBeVisible();
+  });
+
+  test('surfaces outage messaging when error fixtures are active', async ({ page, context }) => {
+    await context.addCookies([
+      {
+        name: 'semantic-search-fixtures',
+        value: 'error',
+        url: 'http://localhost:3000',
+      },
+    ]);
+
+    await page.goto('/search');
+
+    const outageNotice = page.getByText(
+      'Simulating a search outage. Switch to live data or try again later.',
+    );
+    await expect(outageNotice).toBeVisible();
+
+    const structuredPanel = page.getByTestId('structured-search-panel');
+    await structuredPanel.getByLabel('Query').fill('fractions');
+    await structuredPanel.getByRole('button', { name: 'Search' }).click();
+
+    await expect(page.getByText('Search failed')).toBeVisible();
+    await expect(outageNotice).toBeVisible();
   });
 });
