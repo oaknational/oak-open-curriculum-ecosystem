@@ -1,4 +1,8 @@
+import { redirect } from 'next/navigation';
+
 /**
- * `/search` mirrors the primary search experience exposed at the root route.
+ * `/search` is retained for legacy navigation but now redirects to the landing page.
  */
-export { default } from '../page';
+export default function SearchRedirect(): never {
+  redirect('/');
+}

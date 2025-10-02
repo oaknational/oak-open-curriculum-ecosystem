@@ -7,20 +7,20 @@ import { SearchFacets } from '../SearchFacets';
 import { SearchSuggestions } from '../SearchSuggestions';
 import type { StructuredFollowUpHandlers } from './useStructuredFollowUp';
 import type { SearchController } from './useSearchController';
+import { buildSkipLinks } from './SearchPageHeroContent';
+import type { SearchLayoutVariant } from './SearchPageLayout.types';
+
+export { SearchHero, resolveResultsSectionId } from './SearchPageHeroContent';
+export type { SearchLayoutVariant } from './SearchPageLayout.types';
 import {
-  AccentTypography,
   ControlsGrid,
   FacetsPanel,
-  HeroCard,
-  HeroHeadingCluster,
   NaturalPanelCard,
   SecondaryGrid,
   StructuredPanelCard,
   SuggestionsPanel,
   type ControlsLayout,
 } from './SearchPageClient.styles';
-
-export type SearchLayoutVariant = 'default' | 'structured' | 'natural';
 
 export function SearchForms({
   searchAction,
@@ -70,48 +70,6 @@ export function SearchSecondary({
   );
 }
 
-export function SearchHero({ variant }: { variant: SearchLayoutVariant }): JSX.Element {
-  const showExtendedCopy = variant === 'default';
-  return (
-    <HeroCard data-testid="search-hero" $ba="border-solid-s">
-      <OakTypography as="h1" $font="heading-3">
-        <HeroHeadingCluster as="span">
-          <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
-            Hybrid
-          </AccentTypography>
-          <OakTypography as="span" $font="heading-3" $pr="space-between-ssx">
-            Search
-          </OakTypography>
-          <OakTypography as="span" $font="heading-3">
-            <em>Alpha</em>
-          </OakTypography>
-        </HeroHeadingCluster>
-      </OakTypography>
-      <OakTypography as="p" $font="body-4" $color="text-subdued">
-        Search lessons, units, and sequences.
-      </OakTypography>
-      {showExtendedCopy
-        ? HERO_BODY_PARAGRAPHS.map((paragraph) => (
-            <OakTypography as="p" $font="body-2" key={paragraph}>
-              {paragraph}
-            </OakTypography>
-          ))
-        : null}
-      <OakTypography as="p" $font="body-2">
-        {variant === 'natural' ? 'Need structure? ' : 'Ready to start? '}
-        <OakTypography as="a" href="/structured_search" $font="body-2-bold">
-          Open structured search
-        </OakTypography>{' '}
-        or{' '}
-        <OakTypography as="a" href="/natural_language_search" $font="body-2-bold">
-          Open natural language search
-        </OakTypography>
-        .
-      </OakTypography>
-    </HeroCard>
-  );
-}
-
 export function SearchSkipLinks({ variant }: { variant: SearchLayoutVariant }): JSX.Element | null {
   const links = buildSkipLinks(variant);
   if (links.length === 0) {
@@ -142,26 +100,6 @@ export function resolveControlLayout(variant: SearchLayoutVariant): ControlsLayo
     return 'natural';
   }
   return 'both';
-}
-
-const HERO_BODY_PARAGRAPHS: ReadonlyArray<string> = [
-  'We expose two search experiences: a structured search experience and a natural language search experience. Both combine traditional lexical search with semantic search to deliver more relevant results.',
-  'The structured search allows filtering on many dimensions, such as subject, year, and topic.',
-  'The natural language search takes queries like "find me lessons about history that can be adapted for Leeds", passes that to an LLM to figure out the intent, and then defers to the structured search to find the best results with hybrid lexical and semantic search.',
-];
-
-function buildSkipLinks(variant: SearchLayoutVariant): Array<{ href: string; label: string }> {
-  switch (variant) {
-    case 'structured':
-      return [{ href: '#structured-search-panel', label: 'Skip to structured search form' }];
-    case 'natural':
-      return [{ href: '#natural-search-panel', label: 'Skip to natural language search form' }];
-    default:
-      return [
-        { href: '#structured-search-panel', label: 'Skip to structured search form' },
-        { href: '#natural-search-panel', label: 'Skip to natural language search form' },
-      ];
-  }
 }
 
 function StructuredPanel({

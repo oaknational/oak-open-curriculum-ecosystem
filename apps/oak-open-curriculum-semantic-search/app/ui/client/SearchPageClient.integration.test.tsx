@@ -124,6 +124,31 @@ describe('SearchPageClient', () => {
     expect(naturalLink).toHaveAttribute('href', '/natural_language_search');
   });
 
+  it('presents structured-only hero messaging and skip links on the structured route', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
+    });
+
+    renderWithTheme(action, { variant: 'structured' });
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: /structured search/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /filter the oak curriculum catalogue by subject, key stage, scope, and minimum results to direct your planning/i,
+      ),
+    ).toBeInTheDocument();
+
+    const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
+    const skipLinks = within(skipLinksNav).getAllByRole('link');
+    expect(skipLinks).toHaveLength(2);
+    expect(skipLinks[0]).toHaveAccessibleName(/skip to structured search form/i);
+    expect(skipLinks[1]).toHaveAccessibleName(/skip to structured results/i);
+
+    expect(screen.queryByTestId('natural-search-panel')).not.toBeInTheDocument();
+  });
+
   it('surfaces the structured Phase selector with an accessible label', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },

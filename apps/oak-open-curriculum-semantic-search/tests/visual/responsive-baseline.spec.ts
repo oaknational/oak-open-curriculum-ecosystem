@@ -173,9 +173,9 @@ test.describe('Search page responsive regressions', () => {
   test.describe('bp-xs (360px)', () => {
     test.use({ viewport: VIEWPORTS.bpXs });
 
-    test('Structured and natural panels stack vertically', async ({ page }, testInfo) => {
+    test('Structured controls stack vertically', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
       await expect(page.getByTestId('search-page')).toBeVisible();
       await runStructuredSearch(page);
 
@@ -194,11 +194,11 @@ test.describe('Search page responsive regressions', () => {
   test.describe('bp-md (800px)', () => {
     test.use({ viewport: VIEWPORTS.bpMd });
 
-    test('Structured panels align side by side and results grid spans two columns', async ({
+    test('Structured controls stay single-column and results grid spans two columns', async ({
       page,
     }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
       await expect(page.getByTestId('search-page')).toBeVisible();
       await runStructuredSearch(page);
 
@@ -215,7 +215,7 @@ test.describe('Search page responsive regressions', () => {
       await captureScreenshot(page, 'search-controls-bp-md', testInfo);
       const axe = await captureAccessibility(page, 'search-controls-bp-md', testInfo);
 
-      expect.soft(controlColumns).toBe(2);
+      expect.soft(controlColumns).toBe(1);
       expect.soft(resultsColumns).toBe(2);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
@@ -226,7 +226,7 @@ test.describe('Search page responsive regressions', () => {
 
     test('Hero copy is clamped for readability', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
       await expect(page.getByTestId('search-hero')).toBeVisible();
       await runStructuredSearch(page);
 
@@ -249,7 +249,7 @@ test.describe('Search page responsive regressions', () => {
     test('Hero copy is clamped for readability in dark mode', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
       await setThemeMode(page, 'dark');
-      await page.goto('/');
+      await page.goto('/structured_search');
       await expect(page.getByTestId('search-hero')).toBeVisible();
       await runStructuredSearch(page);
 
@@ -271,7 +271,7 @@ test.describe('Search page responsive regressions', () => {
 
     test('Content does not overflow the viewport at 1100px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
       await runStructuredSearch(page);
 
       await captureScreenshot(page, 'search-overflow-1100', testInfo);
@@ -289,7 +289,7 @@ test.describe('Search page responsive regressions', () => {
 
     test('Content does not overflow the viewport at 1380px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
       await runStructuredSearch(page);
 
       await captureScreenshot(page, 'search-overflow-1380', testInfo);

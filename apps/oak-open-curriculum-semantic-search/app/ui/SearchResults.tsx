@@ -20,15 +20,17 @@ export function SearchResults({
   results,
   meta,
   multiBuckets,
+  sectionId,
 }: {
   mode: 'idle' | 'single' | 'multi';
   results: unknown[];
   meta?: SearchMeta | null;
   multiBuckets: MultiScopeBucketView[] | null;
+  sectionId?: string;
 }): JSX.Element | null {
   if (mode === 'idle') {
     return (
-      <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+      <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
         <OakTypography as="p" $font="body-3" $color="text-subdued">
           Begin a search to explore structured or natural language results.
         </OakTypography>
@@ -37,22 +39,28 @@ export function SearchResults({
   }
 
   if (mode === 'multi' && multiBuckets) {
-    return <MultiScopeResults buckets={multiBuckets} />;
+    return <MultiScopeResults sectionId={sectionId} buckets={multiBuckets} />;
   }
 
-  return <SingleScopeResults results={results} meta={meta} />;
+  return <SingleScopeResults sectionId={sectionId} results={results} meta={meta} />;
 }
 
 export default SearchResults;
 
-function MultiScopeResults({ buckets }: { buckets: MultiScopeBucketView[] }): JSX.Element | null {
+function MultiScopeResults({
+  sectionId,
+  buckets,
+}: {
+  sectionId?: string;
+  buckets: MultiScopeBucketView[];
+}): JSX.Element | null {
   const bucketsWithData = buckets.filter((bucket) => bucket.results.length > 0);
   if (bucketsWithData.length === 0) {
     return null;
   }
 
   return (
-    <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+    <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
       {bucketsWithData.map((bucket) => (
         <BucketResults key={bucket.scope} bucket={bucket} />
       ))}
@@ -61,9 +69,11 @@ function MultiScopeResults({ buckets }: { buckets: MultiScopeBucketView[] }): JS
 }
 
 function SingleScopeResults({
+  sectionId,
   results,
   meta,
 }: {
+  sectionId?: string;
   results: unknown[];
   meta?: SearchMeta | null;
 }): JSX.Element | null {
@@ -76,7 +86,7 @@ function SingleScopeResults({
   const hasResults = parsed.data.length > 0;
 
   return (
-    <ResultsSection as="section" aria-live="polite" $mt="space-between-xl">
+    <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
       <SearchSummary summary={summary} />
       {hasResults ? (
         <ResultsGrid $reset>

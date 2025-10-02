@@ -13,6 +13,7 @@ import {
   SearchSecondary,
   SearchSkipLinks,
   resolveControlLayout,
+  resolveResultsSectionId,
   type SearchLayoutVariant,
 } from './SearchPageLayout.sections';
 
@@ -92,6 +93,7 @@ function SearchPageLayoutBody({
         results={controller.results}
         meta={controller.meta}
         multiBuckets={controller.multiBuckets}
+        sectionId={resolveResultsSectionId(variant)}
       />
     </>
   );

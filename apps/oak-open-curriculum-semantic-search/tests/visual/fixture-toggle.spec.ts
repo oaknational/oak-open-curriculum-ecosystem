@@ -34,7 +34,7 @@ test.describe('Fixture toggle workflow', () => {
       },
     ]);
 
-    await page.goto('/search');
+    await page.goto('/structured_search');
 
     await expect(page.getByText('Using fixtures (success)')).toBeVisible();
     const fixtureNotice = page.getByText(
@@ -72,7 +72,7 @@ test.describe('Fixture toggle workflow', () => {
       },
     ]);
 
-    await page.goto('/search?scope=all');
+    await page.goto('/structured_search?scope=all');
 
     await expect(page.getByText('Using fixtures (success)')).toBeVisible();
     await expect(page.getByTestId('structured-search-panel')).toBeVisible();
@@ -90,7 +90,7 @@ test.describe('Fixture toggle workflow', () => {
       },
     ]);
 
-    await page.goto('/search');
+    await page.goto('/structured_search');
 
     await expect(
       page.getByText(
@@ -117,7 +117,7 @@ test.describe('Fixture toggle workflow', () => {
       },
     ]);
 
-    await page.goto('/search');
+    await page.goto('/structured_search');
 
     const outageNotice = page.getByText(
       'Simulating a search outage. Switch to live data or try again later.',

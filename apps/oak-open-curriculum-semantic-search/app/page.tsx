@@ -1,20 +1,6 @@
 import type { JSX } from 'react';
-import { cookies } from 'next/headers';
-import SearchPageClient from './ui/client/SearchPageClient';
-import { searchAction } from './ui/structured-search.actions';
-import { resolveFixtureModeFromCookies } from './lib/fixture-mode';
-import { resolveFixtureToggleVisibility } from './lib/fixture-toggle';
+import { LandingPage } from './ui/landing/LandingPage';
 
-export default async function Page(): Promise<JSX.Element> {
-  const cookieStore = await cookies();
-  const initialFixtureMode = resolveFixtureModeFromCookies(cookieStore);
-  const showFixtureToggle = resolveFixtureToggleVisibility();
-
-  return (
-    <SearchPageClient
-      searchStructured={searchAction}
-      initialFixtureMode={initialFixtureMode}
-      showFixtureToggle={showFixtureToggle}
-    />
-  );
+export default function Page(): JSX.Element {
+  return <LandingPage />;
 }

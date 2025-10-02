@@ -60,8 +60,22 @@
     **REVIEW:** Log sign-off in this plan, flagging any post-Phase 1 polish items separately.
 21. **QUALITY-GATE:** Run `pnpm qg` again and archive artefacts to demonstrate Phase 1 UX completion.
 
+## Recent Progress
+
+- 2025-10-02 – Action 2: Created landing page integration test to drive the hero + CTA experience for `/`.
+- 2025-10-02 – Action 2: Implemented landing page components, routed `/` to the new layout, and redirected `/search` to `/`; updated integration coverage (`LandingPage.integration`, `/search` redirect, SearchPageClient regression) to green.
+- 2025-10-02 – Action 2: Completed manual light/dark review at `bp-xs`/`bp-md`, confirmed hero readability and CTA focus outlines, and captured artefacts under `apps/oak-open-curriculum-semantic-search/test-artifacts/landing/2025-10-02/`.
+- 2025-10-02 – Action 3: Added structured-route RTL coverage for condensed hero + skip links and refactored hero/skip-link logic with new structured copy; SearchResults now exposes anchored sections per variant.
+
+## Action Status
+
+- **Action 2:** Completed – landing page review signed off with artefacts and RTL regression.
+- **Action 3:** In progress – structured hero, skip links, and results anchors implemented; Playwright verification outstanding.
+- **Actions 4–21:** Pending.
+
 ## Verification & Evidence
 
+- Visual reviews: start the dev server in the search app workspace with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so that the server logs are available for debugging and the app starts in the background. And then open the app in the browser at `http://localhost:3000` using the Playwright MCP tools, examine layout, review console output, and ensure the app is responsive, use screenshots to document states, and review those states. We are aiming for design excellence, very high usability, and full accessibility compliance.
 - Tests: maintain unit → integration → RTL → Playwright hierarchy; update suites as surfaces shift (landing CTAs, dedicated pages, admin telemetry, status tone).
 - Artefacts: regenerate deterministic screenshots + axe reports after major UI updates; store under `apps/oak-open-curriculum-semantic-search/test-artifacts/`.
 - Quality gates: `pnpm make` for intermediate checkpoints; `pnpm qg` for milestone validation and final hand-off.
