@@ -70,6 +70,7 @@
 - 2025-10-02 – Action 4/5: Introduced natural-language hero messaging + skip links (RTL) and updated responsive Playwright coverage with new artefacts at `test-artifacts/structured/2025-10-02/natural-hero-bp-md.png`.
 - 2025-10-02 – Action 5: Harmonised shared layout styling across landing/structured/natural variants; captured passing RTL + Playwright runs as evidence.
 - 2025-10-02 – Action 7: Finalised top navigation (Search/Structured/Natural/Admin/Status/Docs), added focus-visible styling, and captured Playwright accessibility evidence (`tests/visual/navigation.accessibility.spec.ts`).
+- 2025-10-02 – Action 8: Shifted natural-language search to a textarea-first flow with derived parameter summary; expanded RTL + Playwright coverage to prove the new UX.
 
 ## Upcoming Focus
 
@@ -84,7 +85,8 @@
 - **Action 4:** Completed – natural language hero copy, skip links, and results anchoring delivered with RTL coverage.
 - **Action 5:** Completed – shared layout/styles refactored for all variants; responsive Playwright suite regenerated.
 - **Actions 6–7:** Completed – navigation, CTA alignment, and accessibility verification delivered with artefacts.
-- **Actions 8–21:** Pending (next: extend natural-language controller, fixtures, and banner tone via tests-first delivery).
+- **Action 8:** Completed – natural prompt textarea, derived summary, and supporting tests delivered.
+- **Actions 9–21:** Pending (next: error/empty fixtures, banner tone, artefact regeneration, and admin/status polish).
 
 ## Verification & Evidence
 

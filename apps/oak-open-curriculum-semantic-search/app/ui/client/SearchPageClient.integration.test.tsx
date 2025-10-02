@@ -165,6 +165,11 @@ describe('SearchPageClient', () => {
       ),
     ).toBeInTheDocument();
 
+    const summary = screen.getByTestId('natural-summary');
+    const definitions = within(summary).getAllByRole('definition');
+    expect(definitions[0]).toHaveTextContent('(not set)');
+    expect(definitions[1]).toHaveTextContent('Auto (Oak decides)');
+
     const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
     const skipLinks = within(skipLinksNav).getAllByRole('link');
     expect(skipLinks).toHaveLength(2);

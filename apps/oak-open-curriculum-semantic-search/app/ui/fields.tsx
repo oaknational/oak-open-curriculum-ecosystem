@@ -106,3 +106,50 @@ export function LabeledInput({
     </OakFlex>
   );
 }
+
+interface LabeledTextareaProps {
+  label: string;
+  id: string;
+  value: string;
+  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  rows?: number;
+  required?: boolean;
+  helperText?: string;
+}
+
+export function LabeledTextarea({
+  label,
+  id,
+  value,
+  onChange,
+  rows = 4,
+  required,
+  helperText,
+}: LabeledTextareaProps): JSX.Element {
+  return (
+    <OakFlex $flexDirection="column" $gap="space-between-ssx">
+      <OakLabel htmlFor={id} $font="body-3-bold">
+        {label}
+      </OakLabel>
+      <OakBox
+        as="textarea"
+        id={id}
+        value={value}
+        rows={rows}
+        required={required}
+        onChange={onChange}
+        $pa="inner-padding-s"
+        $borderRadius="border-radius-s"
+        $ba="border-solid-s"
+        $borderColor="border-primary"
+        $background="bg-primary"
+        $color="text-primary"
+      />
+      {helperText ? (
+        <OakTypography as="span" $font="body-4" $color="text-subdued">
+          {helperText}
+        </OakTypography>
+      ) : null}
+    </OakFlex>
+  );
+}

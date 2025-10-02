@@ -3,7 +3,7 @@
 import type { ChangeEvent, Dispatch, JSX, SetStateAction } from 'react';
 import { Fragment } from 'react';
 import { OakRadioButton, OakRadioGroup, OakTypography } from '@oaknational/oak-components';
-import { LabeledInput } from './fields';
+import { LabeledInput, LabeledTextarea } from './fields';
 import {
   PhaseField,
   KeyStageField,
@@ -50,13 +50,12 @@ export function QueryField({
   setNl: Dispatch<SetStateAction<NaturalBody>>;
 }): JSX.Element {
   return (
-    <LabeledInput
-      label="Query"
+    <LabeledTextarea
+      label="Describe what you need"
       id="natural-query"
-      type="text"
       value={nl.q}
       required
-      onChange={(event: ChangeEvent<HTMLInputElement>) => {
+      onChange={(event: ChangeEvent<HTMLTextAreaElement>) => {
         const next = event.target.value;
         setNl((state) => ({ ...state, q: next }));
       }}
@@ -213,7 +212,7 @@ function isNaturalScopeChoice(value: string): value is NaturalScopeChoice {
   return value === 'auto' || NATURAL_SCOPE_VALUES.some((scope) => scope === value);
 }
 
-function formatNaturalScopeLabel(scope: (typeof ALL_SEARCH_SCOPES)[number]): string {
+export function formatNaturalScopeLabel(scope: (typeof ALL_SEARCH_SCOPES)[number]): string {
   if (scope === MULTI_SCOPE) {
     return 'All content';
   }
