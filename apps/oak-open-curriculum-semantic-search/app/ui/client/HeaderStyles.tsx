@@ -29,11 +29,26 @@ const NavText = styledComponents(OakTypography)`
 `;
 
 const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
-  { href: '/', label: 'Home' },
-  { href: '/api/docs', label: 'Open API Docs' },
+  { href: '/', label: 'Search' },
+  { href: '/structured_search', label: 'Structured search' },
+  { href: '/natural_language_search', label: 'Natural language search' },
   { href: '/admin', label: 'Admin' },
   { href: '/status', label: 'Status' },
+  { href: '/api/docs', label: 'Docs' },
 ];
+
+const NavLink = styledComponents(Link)`
+  display: inline-flex;
+  align-items: center;
+  gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
+  text-decoration: none;
+  color: inherit;
+
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+    outline-offset: 4px;
+  }
+`;
 
 export default function HeaderStyles(): JSX.Element {
   return (
@@ -58,11 +73,11 @@ export default function HeaderStyles(): JSX.Element {
 
       <PrimaryNav as="nav" aria-label="Primary" $font="body-3" $color="text-primary">
         {NAV_ITEMS.map((item) => (
-          <Link key={item.href} href={item.href}>
+          <NavLink key={item.href} href={item.href}>
             <NavText as="span" $font="body-3" $color="text-primary">
               {item.label}
             </NavText>
-          </Link>
+          </NavLink>
         ))}
       </PrimaryNav>
 
