@@ -2,19 +2,19 @@
 
 ## Executive Summary
 
-The Semantic Search application integrated `@oaknational/oak-components` (v1.149.0) into a dual light/dark experience. Delivering that experience demanded roughly **1,200 lines of bespoke production code** (plus ~850 lines of tests) across ten theming files to compensate for gaps in the upstream library. The engineering cost falls into three buckets:
+The Semantic Search POC application integrated `@oaknational/oak-components` (v1.149.0) into a dual light/dark experience. Delivering that experience demanded roughly **1,200 lines of bespoke production code** (plus ~850 lines of tests) across ten theming files to to enable theme switching. The engineering cost falls into three buckets:
 
 - **Theme creation**: no variant API, no dark-mode baseline, and limited theme surface area forced manual overrides for ~24 UI role tokens per mode.
 - **Token + CSS delivery**: Oak exports raw design tokens but no resolution utilities or CSS variable emission, so every consuming app must re-implement parsing and bridging logic.
 - **Runtime alignment & guidance**: styled-components builds diverge between server and client, there is no multi-theme documentation, and downstream teams shoulder the maintenance risk alone.
 
-To unblock the wider Oak ecosystem, we propose three headline investment areas for the Oak Components team:
+To unblock the wider Oak ecosystem, three headline investment areas are proposed:
 
 1. **Theme Factory & Dark Mode Baseline** – ship first-class helpers (and reference themes) so apps can opt into multi-theme support without copy-pasting bespoke infrastructure.
 2. **Token Resolution & CSS Variable Support** – expose CSS-ready values and optional variable emission out of the box, eliminating the need for local conversion layers.
 3. **Runtime & Documentation Alignment** – guarantee SSR/client consistency, provide migration guides, and publish multi-theme integration playbooks.
 
-The remainder of this document summarises the bespoke workarounds, quantifies their impact, and frames the improvements required to make Oak Components multi-theme ready by design.
+The remainder of this document summarises the bespoke workarounds, quantifies their impact, and frames the changes required to make Oak Components multi-theme ready by design.
 
 ---
 
@@ -38,7 +38,7 @@ Detailed implementation notes and code snippets live in Appendix A; the main bod
 ### 2.1 Theme Variants
 
 - **Problem**: Only `oakDefaultTheme` is exposed; consuming apps cannot extend or derive variants.
-- **Local impact**: We handcrafted a complete theme spec, overriding ~24 UI role tokens per mode and validating completeness via `assertCompleteUiColorMap()`.
+- **Local impact**: A complete theme spec was created, overriding ~24 UI role tokens per mode and validating completeness via `assertCompleteUiColorMap()`.
 - **Workaround**: `semantic-theme-spec.ts` plus helper guards ensure every `OakUiRoleToken` resolves, but the mapping is manual and fragile.
 - **Desired upstream capability**: A theme factory that accepts partial overrides, validates coverage, and ships with both light and dark reference themes (see Recommendation 3.1).
 
@@ -52,27 +52,27 @@ Detailed implementation notes and code snippets live in Appendix A; the main bod
 ### 2.3 CSS Variable Emission
 
 - **Problem**: Components accept theme props, but the library does not emit CSS variables for downstream usage.
-- **Local impact**: To support non-React styling and utility classes, we built a bridge that maps 45 app-level values into `--app-*` variables and injects bespoke global styles.
+- **Local impact**: To support non-React styling and utility classes, a bridge was built that maps 45 app-level values into `--app-*` variables and injects bespoke global styles.
 - **Workaround**: `ThemeBridgeProvider.tsx`, `ThemeCssVars.tsx`, and `ThemeGlobalStyle.tsx` emit variables and global styles in parallel with styled-components.
 - **Desired upstream capability**: Opt-in CSS variable emission from Oak Components so every consumer gains consistent variables without duplicating logic (Recommendation 3.3).
 
 ### 2.4 SSR / Client Divergence
 
 - **Problem**: The styled-components build hashes class names differently on server (CJS bundle) and client (ESM bundle), leading to hydration warnings.
-- **Local impact**: We must transpile `@oaknational/oak-components` and run a pre-hydration script to align DOM attributes before React mounts, incurring build-time cost and CSP debt.
+- **Local impact**: `@oaknational/oak-components` must be transpiled and run a pre-hydration script to align DOM attributes before React mounts, incurring build-time cost and CSP debt.
 - **Workaround**: `next.config.ts` forces transpilation; `layout.tsx` injects an inline script that resolves the preferred theme ahead of hydration.
 - **Desired upstream capability**: Harmonised SSR/client builds (or extracted CSS) that remove the need for transpilation and inline scripts (Recommendation 3.4).
 
 ### 2.5 Theme Surface Area
 
 - **Problem**: `OakTheme` only exposes `uiColors`, preventing official customisation of spacing, typography, breakpoints, or app-specific tokens.
-- **Local impact**: We extended the theme type locally (`AppTheme`) and layered additional tokens, but those structures sit outside the Oak contract.
+- **Local impact**: The theme type was extended locally (`AppTheme`) and additional tokens were added, but those structures sit outside the Oak contract.
 - **Desired upstream capability**: An extended theme API that supports custom spacing scales, typography ramps, and breakpoints while remaining type-safe (Recommendation 3.5).
 
 ### 2.6 Dark Mode Guidance
 
 - **Problem**: There is no documented strategy for dark mode, no sample theme, and no design validation guidance.
-- **Local impact**: We relied on experimentation and bespoke tests (contrast ratios, visual snapshots) to ensure accessibility.
+- **Local impact**: Experimentation and bespoke tests (contrast ratios, visual snapshots) were used to ensure accessibility.
 - **Desired upstream capability**: Official dark theme exports, Storybook demos, and an integration guide covering accessibility and implementation basics (Recommendations 3.1 & 4).
 
 ---
@@ -130,7 +130,7 @@ The detailed recommendations remain compatible with the earlier draft; they have
 2. **API Reference** – generated Markdown (via Typedoc) enumerating all exported tokens, types, and components with theme-related annotations.
 3. **Migration Guides** – versioned notes for breaking changes, deprecations, and suggested codemods to ease upgrades for consuming applications.
 
-These artefacts are essential for scaling Oak Components across teams once the new APIs land.
+These artefacts will add significant value for scaling Oak Components across teams and new apps.
 
 ---
 

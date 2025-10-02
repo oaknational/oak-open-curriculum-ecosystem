@@ -14,12 +14,20 @@ const STRUCTURED_HERO_PARAGRAPHS: ReadonlyArray<string> = [
   'Refine queries quickly, keep provenance in clear view, and rely on deterministic fixtures to evidence the experience.',
 ];
 
+const NATURAL_HERO_PARAGRAPHS: ReadonlyArray<string> = [
+  'Describe what you need in plain language so we can derive structured parameters and run hybrid queries.',
+  'Review the derived filter summary, tweak the prompt, and explore deterministic fixtures to evidence outcomes.',
+];
+
 export function SearchHero({ variant }: { variant: SearchLayoutVariant }): JSX.Element {
   if (variant === 'structured') {
     return <StructuredHero />;
   }
+  if (variant === 'natural') {
+    return <NaturalHero />;
+  }
 
-  return <DefaultHero variant={variant} />;
+  return <DefaultHero />;
 }
 
 export function buildSkipLinks(
@@ -52,12 +60,7 @@ export function resolveResultsSectionId(variant: SearchLayoutVariant): string {
   return 'search-results';
 }
 
-function DefaultHero({
-  variant,
-}: {
-  variant: Extract<SearchLayoutVariant, 'default' | 'natural'>;
-}): JSX.Element {
-  const showExtendedCopy = variant === 'default';
+function DefaultHero(): JSX.Element {
   return (
     <HeroCard data-testid="search-hero" $ba="border-solid-s">
       <OakTypography as="h1" $font="heading-3">
@@ -76,15 +79,13 @@ function DefaultHero({
       <OakTypography as="p" $font="body-4" $color="text-subdued">
         Search lessons, units, and sequences.
       </OakTypography>
-      {showExtendedCopy
-        ? HERO_BODY_PARAGRAPHS.map((paragraph) => (
-            <OakTypography as="p" $font="body-2" key={paragraph}>
-              {paragraph}
-            </OakTypography>
-          ))
-        : null}
+      {HERO_BODY_PARAGRAPHS.map((paragraph) => (
+        <OakTypography as="p" $font="body-2" key={paragraph}>
+          {paragraph}
+        </OakTypography>
+      ))}
       <OakTypography as="p" $font="body-2">
-        {variant === 'natural' ? 'Need structure? ' : 'Ready to start? '}
+        Ready to start?{' '}
         <OakTypography as="a" href="/structured_search" $font="body-2-bold">
           Open structured search
         </OakTypography>{' '}
@@ -113,6 +114,28 @@ function StructuredHero(): JSX.Element {
         Prefer conversational briefs?{' '}
         <OakTypography as="a" href="/natural_language_search" $font="body-2-bold">
           Switch to natural language search
+        </OakTypography>
+        .
+      </OakTypography>
+    </HeroCard>
+  );
+}
+
+function NaturalHero(): JSX.Element {
+  return (
+    <HeroCard data-testid="search-hero" $ba="border-solid-s">
+      <OakTypography as="h1" $font="heading-3">
+        Natural language search
+      </OakTypography>
+      {NATURAL_HERO_PARAGRAPHS.map((paragraph) => (
+        <OakTypography as="p" $font="body-2" key={paragraph}>
+          {paragraph}
+        </OakTypography>
+      ))}
+      <OakTypography as="p" $font="body-2">
+        Need filters instead?{' '}
+        <OakTypography as="a" href="/structured_search" $font="body-2-bold">
+          Switch to structured search
         </OakTypography>
         .
       </OakTypography>

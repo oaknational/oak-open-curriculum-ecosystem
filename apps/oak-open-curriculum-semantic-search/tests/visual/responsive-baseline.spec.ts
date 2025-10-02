@@ -266,6 +266,33 @@ test.describe('Search page responsive regressions', () => {
     });
   });
 
+  test.describe('Natural language route', () => {
+    test.use({ viewport: VIEWPORTS.bpMd });
+
+    test('Hero and skip links emphasise conversational flow', async ({ page }, testInfo) => {
+      await page.goto('/natural_language_search');
+      await expect(page.getByTestId('search-hero')).toBeVisible();
+
+      const heroHeading = page.getByRole('heading', { level: 1, name: 'Natural language search' });
+      await expect(heroHeading).toBeVisible();
+
+      const heroCopy = page.getByText(
+        'Describe what you need in plain language so we can derive structured parameters and run hybrid queries.',
+      );
+      await expect(heroCopy).toBeVisible();
+
+      const skipLinksNav = page.getByRole('navigation', { name: 'Skip links' });
+      const skipLinks = skipLinksNav.getByRole('link');
+      await expect(skipLinks.nth(0)).toHaveAccessibleName('Skip to natural language search form');
+      await expect(skipLinks.nth(1)).toHaveAccessibleName('Skip to natural language results');
+
+      await captureScreenshot(page, 'natural-hero-bp-md', testInfo);
+      const axe = await captureAccessibility(page, 'natural-hero-bp-md', testInfo);
+
+      expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
+    });
+  });
+
   test.describe('Overflow guard 1100px', () => {
     test.use({ viewport: { width: 1_100, height: 900 } });
 

@@ -149,6 +149,31 @@ describe('SearchPageClient', () => {
     expect(screen.queryByTestId('natural-search-panel')).not.toBeInTheDocument();
   });
 
+  it('surfaces natural language hero messaging and skip links on the natural route', () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
+    });
+
+    renderWithTheme(action, { variant: 'natural' });
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: /natural language search/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /describe what you need in plain language so we can derive structured parameters and run hybrid queries/i,
+      ),
+    ).toBeInTheDocument();
+
+    const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
+    const skipLinks = within(skipLinksNav).getAllByRole('link');
+    expect(skipLinks).toHaveLength(2);
+    expect(skipLinks[0]).toHaveAccessibleName(/skip to natural language search form/i);
+    expect(skipLinks[1]).toHaveAccessibleName(/skip to natural language results/i);
+
+    expect(screen.queryByTestId('structured-search-panel')).not.toBeInTheDocument();
+  });
+
   it('surfaces the structured Phase selector with an accessible label', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },

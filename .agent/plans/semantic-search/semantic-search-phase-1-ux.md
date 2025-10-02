@@ -66,11 +66,13 @@
 - 2025-10-02 – Action 2: Implemented landing page components, routed `/` to the new layout, and redirected `/search` to `/`; updated integration coverage (`LandingPage.integration`, `/search` redirect, SearchPageClient regression) to green.
 - 2025-10-02 – Action 2: Completed manual light/dark review at `bp-xs`/`bp-md`, confirmed hero readability and CTA focus outlines, and captured artefacts under `apps/oak-open-curriculum-semantic-search/test-artifacts/landing/2025-10-02/`.
 - 2025-10-02 – Action 3: Added structured-route RTL coverage for condensed hero + skip links and refactored hero/skip-link logic with new structured copy; SearchResults now exposes anchored sections per variant.
+- 2025-10-02 – Action 3 (Review): Ran targeted Playwright structured scenarios (`tests/visual/fixture-toggle.spec.ts`, `tests/visual/responsive-baseline.spec.ts`) to validate hero focus, skip links, and overflow guards; stored screenshots under `apps/oak-open-curriculum-semantic-search/test-artifacts/structured/2025-10-02/`.
+- 2025-10-02 – Action 4/5: Introduced natural-language hero messaging + skip links (RTL) and updated responsive Playwright coverage with new artefacts at `test-artifacts/structured/2025-10-02/natural-hero-bp-md.png`.
 
 ## Action Status
 
 - **Action 2:** Completed – landing page review signed off with artefacts and RTL regression.
-- **Action 3:** In progress – structured hero, skip links, and results anchors implemented; Playwright verification outstanding.
+- **Action 3:** Completed – structured hero and fixtures verified via RTL + Playwright with responsive evidence captured.
 - **Actions 4–21:** Pending.
 
 ## Verification & Evidence
