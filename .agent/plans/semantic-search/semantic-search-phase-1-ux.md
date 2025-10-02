@@ -31,6 +31,7 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ### Recent Progress
 
+- 2025-10-08 08:35: Resolved the structured search "Maximum update depth exceeded" regression by stabilising controller error handling, simplifying panel callbacks, and adding regression integration tests for `StructuredSearchClient` and `SearchPageClient`; Playwright fixture runs now complete without React warnings.
 - 2025-10-06 15:10: Generated SDK-backed admin stream fixtures (type-gen + Zod schemas), wired the semantic search app to consume them, and re-ran `pnpm make` to confirm the SDK build and lint pipelines stay green.
 - 2025-10-06 13:55: Generated SDK-backed zero-hit telemetry fixtures (type-gen + Zod schemas) and proved integration coverage for observability routes; confirmed `pnpm make`/`pnpm qg` green while noting admin stream fixtures still rely on handwritten data.
 - 2025-10-06 12:35: Extended Playwright fixture toggle workflow to assert deterministic notices plus empty/error messaging, and taught `searchAction` to forward fixture modes via query parameters with new helper coverage.
@@ -42,36 +43,33 @@ Phase 1 keeps the design system aligned with product intent by:
 
 ### Priority Order (Phase 1 UX)
 
-1. **Search UX remediation** – Add per-surface fixture scenario toggles, rework the hero CTA into dedicated `/structured_search` and `/natural_language_search` routes, and repair initial/empty/error states while keeping accessibility and responsiveness intact.
+1. **Search UX remediation** – Resolve the structured flow regression, refine fixture capture/artefacts, and complete the remaining UX polish (hero tweaks, panel simplifications, error/empty messaging) while keeping accessibility and responsiveness intact.
 2. **Admin telemetry and operator workflows** – Add telemetry history, operator messaging, and deterministic fixtures with comprehensive testing (unit → integration → RTL → Playwright).
 3. **Status page hardening** – Implement tone/failure logic and full coverage before sign-off.
 4. **Secondary polish** – Hero copy/layout refinements, documentation tidy-up, and remaining backlog once the higher priorities are complete.
 
 ### Detailed Task Breakdown (2025-10-05)
 
-**Search UX remediation**
-
 - ✅ 2025-10-07: Search and Admin surfaces now render fixture scenario radio toggles (success/empty/error) with integration + Playwright evidence; cookie persistence verified across modes.
-- ACTION: Capture admin fixture scenario artefacts for xs/md/lg/xxl and document findings in the GO log alongside accessibility outcomes.
-- REVIEW: Confirm artefacts demonstrate success/empty/error parity across search/admin without introducing layout regressions.
 - ✅ 2025-10-07: Dedicated `/structured_search` and `/natural_language_search` routes now highlight the relevant form above the fold with skip links; hero copy condenses outside the default path.
-- ACTION: Review condensed hero + skip-link flows with designers, noting any copy or token tweaks required for final polish.
-- REVIEW: Record accessibility observations (focus order, axe output) for each variant at xs/md/lg/xxl in the GO log.
 - ✅ 2025-10-07: Initial search state now shows instructional guidance instead of premature empty results; unit coverage proves the idle message.
-- ACTION: Update UX documentation/screenshots to reflect the new instruction state and cross-reference the relevant fixtures.
-- REVIEW: Ensure Playwright suites continue to cover empty/error messaging while acknowledging the new idle instructions.
+- ✅ 2025-10-07: Captured deterministic artefacts (xs/md/lg/xl) for search + admin via `scripts/capture-search-artifacts.mjs`; see `test-artifacts/artifact-summary.json` for layout metrics.
+- ✅ 2025-10-08: Cleared the `Maximum update depth exceeded` regression in the structured flow, re-ran targeted integration suites, and captured fixture-mode Playwright runs confirming the fix.
+- ✅ 2025-10-08: Logged root cause, mitigation, and console trace evidence for the structured regression in the GO cadence.
+- ACTION: Auto-trigger fixture queries during capture so success/empty scenarios include rendered results; adjust `scripts/capture-search-artifacts.mjs` to submit structured searches post-load and regenerate artefacts.
+- REVIEW: Re-capture artefacts once scripted queries run, validating hero height, form order, idle messaging, and admin notices across breakpoints; log findings with screenshots + axe output in the GO cadence.
+- ACTION: Reduce the `/search` hero vertical footprint so structured controls appear above the fold at `bp-md`; trim body copy and adjust padding tokens before the next capture.
+- REVIEW: Conduct our joint review of `/structured_search` + `/natural_language_search` variants—confirm condensed hero treatment, CTA copy, and skip-link wording; record decisions and any token follow-ups.
 - ACTION: Simplify the natural language panel to a multiline textarea that surfaces derived structured parameters alongside results, keeping filters de-duplicated.
-- REVIEW: Confirm the derived parameter presentation with designers and document any follow-up needs.
+- REVIEW: Confirm the derived parameter presentation meets our expectations and document accessibility notes.
 - ACTION: Harden structured search error handling so the 503 fixture emits an explicit banner, `aria-live` announcement, and retry CTA without showing stale data.
 - REVIEW: Capture RTL and Playwright assertions for the banner, narration, and retry flow; include screen reader notes where possible.
 - ACTION: Enrich empty result states with query/filter context plus suggestion actions that guide teachers forward.
-- REVIEW: Record design sign-off and attach artefacts demonstrating the refreshed empty state at key breakpoints.
-- ACTION: Resolve the `Maximum update depth exceeded` regression by auditing effect dependencies and onError handlers.
-- REVIEW: Re-run integration suites and confirm the console remains clean during manual fixture runs.
-- ACTION: Improve the fixture status banner’s keyboard-visible pressed state and refine `aria-pressed` handling for the toggle controls.
-- REVIEW: Validate focus outlines and pressed-state transitions through a manual keyboard-only run and document the results.
-- ACTION: Capture UX review findings, screenshots, and axe JSON directly in the GO log once the above work lands.
-- REVIEW: Share findings with stakeholders and raise follow-up tasks where gaps remain.
+- REVIEW: Record sign-off with artefacts demonstrating the refreshed empty state at key breakpoints.
+- ACTION: Improve the fixture status banner’s keyboard-visible pressed state and refine copy tone for the search/admin notices.
+- REVIEW: Validate focus outlines, pressed-state transitions, and tone via a keyboard-only audit; document outcomes.
+- ACTION: Update UX documentation and screenshots to reflect instructional idle copy, variant routes, and fixture scenarios, linking to regenerated artefacts.
+- REVIEW: Ensure Playwright suites continue to cover idle/error messaging and the admin notices after documentation updates.
 
 **Search scope helpers adoption**
 

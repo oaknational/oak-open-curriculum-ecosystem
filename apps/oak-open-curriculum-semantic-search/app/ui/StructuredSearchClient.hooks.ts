@@ -26,6 +26,7 @@ export function useStructuredSearchHandlers(props: {
     onScopeChange,
     onSubmitPayload,
   } = props;
+  console.debug('[StructuredSearchClient] handlers initialising');
 
   const { model, updateModel } = useStructuredModel(onScopeChange);
   const { pending, submit } = useStructuredSubmit({
@@ -50,11 +51,20 @@ function useStructuredModel(onScopeChange?: (scope: StructuredBody['scope']) => 
 
   const updateModel = useCallback(
     (patch: Partial<StructuredBody>) => {
+      console.debug('[StructuredSearchClient] updateModel invoked', { patch });
       setModel((current) => {
         if (patch.scope && patch.scope !== current.scope) {
+          console.debug('[StructuredSearchClient] scope changing', {
+            previous: current.scope,
+            next: patch.scope,
+          });
           onScopeChange?.(patch.scope);
         }
-        return { ...current, ...patch };
+        const nextModel = { ...current, ...patch };
+        console.debug('[StructuredSearchClient] model updated', {
+          nextModel,
+        });
+        return nextModel;
       });
     },
     [onScopeChange],
@@ -90,12 +100,14 @@ function useStructuredSubmit(params: {
 
   const submit = useCallback(() => {
     const payload = buildStructuredBody(model);
+    console.debug('[StructuredSearchClient] submit triggered', { payload });
     onSubmitPayload?.(payload);
     setLoadingAction(true);
     onErrorAction(null);
     onResultsAction(null);
 
     startTransition(() => {
+      console.debug('[StructuredSearchClient] startTransition dispatching submit');
       formAction();
     });
   }, [
@@ -121,17 +133,28 @@ function useStructuredServerStateEffect(params: {
   const { pending, serverState, onErrorAction, onResultsAction, setLoadingAction } = params;
 
   useEffect(() => {
+    console.debug('[StructuredSearchClient] server state effect tick', {
+      pending,
+      hasServerState: serverState !== null,
+    });
     if (pending || serverState === null) {
       return;
     }
 
     if (serverState.error) {
+      console.debug('[StructuredSearchClient] server reported error', {
+        error: serverState.error,
+      });
       onErrorAction(serverState.error);
     } else {
+      console.debug('[StructuredSearchClient] server reported success', {
+        result: serverState.result,
+      });
       onErrorAction(null);
       onResultsAction(serverState.result ?? null);
     }
     setLoadingAction(false);
+    console.debug('[StructuredSearchClient] loading state cleared');
   }, [pending, serverState, onErrorAction, onResultsAction, setLoadingAction]);
 }
 

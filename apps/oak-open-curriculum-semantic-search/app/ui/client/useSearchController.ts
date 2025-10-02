@@ -40,7 +40,7 @@ export type SearchController = {
   loading: boolean;
   onStart: () => void;
   onSuccess: (payload: unknown | null) => void;
-  onError: (message: string) => void;
+  onError: (message: string | null) => void;
 };
 
 type ParsedHybridPayload =
@@ -63,7 +63,7 @@ type SearchAction =
   | { type: 'success'; payload: ParsedHybridPayload }
   | { type: 'array'; results: unknown[] }
   | { type: 'reset' }
-  | { type: 'error'; message: string };
+  | { type: 'error'; message: string | null };
 
 const INITIAL_SEARCH_STATE: SearchState = {
   mode: 'idle',
@@ -89,7 +89,7 @@ function searchReducer(state: SearchState, action: SearchAction): SearchState {
     case 'reset':
       return { ...INITIAL_SEARCH_STATE };
     case 'error':
-      return { ...state, error: action.message, loading: false };
+      return { ...state, error: action.message ?? null, loading: false };
     default:
       return state;
   }
@@ -146,7 +146,7 @@ export function useSearchController(): SearchController {
     dispatch({ type: 'reset' });
   }, []);
 
-  const onError = useCallback((message: string) => {
+  const onError = useCallback((message: string | null) => {
     dispatch({ type: 'error', message });
   }, []);
 

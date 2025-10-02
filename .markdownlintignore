@@ -8,6 +8,7 @@ packages/sdks/oak-curriculum-sdk/docs/api-md/**
 
 # Playwright test results
 **/test-results/**
+**/test-artifacts/**
 
 # Stryker
 .stryker-tmp

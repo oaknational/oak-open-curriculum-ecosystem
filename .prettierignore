@@ -50,11 +50,12 @@ apps/oak-curriculum-mcp/src/test/mocks/generated/
 
 
 # Test output and cache
-test-results/
-test-cache/
-.turbo/
-.stryker-tmp/
-reports/
+**/test-results/
+**/test-artifacts/
+**/test-cache/
+**/.turbo/
+**/.stryker-tmp/
+**/reports/
 
 # Agent artifacts
 .agent/cache/

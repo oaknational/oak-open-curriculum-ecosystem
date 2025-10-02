@@ -19,7 +19,7 @@
     "smoke:dev": "turbo run smoke:dev --filter=@oaknational/oak-curriculum-mcp-streamable-http",
     "type-check": "turbo run --continue type-check",
     "format:root": "prettier --write --cache .",
-    "format-check:root": "prettier --check --cache .",
+    "format-check:root": "prettier --check .",
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
     "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",

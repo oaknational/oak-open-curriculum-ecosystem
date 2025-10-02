@@ -1,6 +1,6 @@
 'use client';
 
-import type { JSX, FormEvent, FormEventHandler, Dispatch, SetStateAction } from 'react';
+import type { Dispatch, FormEvent, FormEventHandler, JSX, SetStateAction } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import styledComponents from 'styled-components';
 import { PrimarySubmitButton } from './client/SearchFormControls.styles';
@@ -52,9 +52,9 @@ export default function NaturalSearchComponent({
   onError,
   setLoading,
 }: {
-  onResults: Dispatch<SetStateAction<unknown[]>>;
-  onError: Dispatch<SetStateAction<string | null>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
+  onResults: (results: unknown[]) => void;
+  onError: (message: string | null) => void;
+  setLoading: (isLoading: boolean) => void;
 }): JSX.Element {
   const [nl, setNl] = useState<NaturalBody>({ q: '', size: 10 });
 

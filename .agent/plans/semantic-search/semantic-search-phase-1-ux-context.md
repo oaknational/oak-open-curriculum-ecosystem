@@ -4,7 +4,7 @@ _Last updated: 2025-10-06 15:10 (SDK-driven admin stream fixtures live; telemetr
 
 ## Active Focus
 
-- Execute the UX plan (`semantic-search-phase-1-ux.md`) with priority on fixture toggle/search layout validation, followed by admin telemetry and status page hardening.
+- Execute the UX plan (`semantic-search-phase-1-ux.md`) with priority on resolving the structured flow regression, refining fixture capture/artefacts, and completing the remaining search/admin polish before moving to telemetry and status page work.
 - Ensure semantic theme tokens, bridge CSS variables, and global styles remain the single source of truth across light/dark modes.
 - Keep Playwright/axe coverage in step with UX changes, including new fixture-mode scenarios and admin/status checks.
 - Use TDD for every change, preferring unit tests, then integration, then RTL, with Playwright reserved for behaviours that require a browser.
@@ -16,6 +16,7 @@ _Last updated: 2025-10-06 15:10 (SDK-driven admin stream fixtures live; telemetr
 - `ThemeGlobalStyle` paints `html`, `body`, and `#app-theme-root`; light/dark `<meta name="theme-color">` now resolves from semantic `bg-primary` tokens with unit coverage.
 - Playwright responsive suite enforces Admin/Docs behaviour at `bp-xxl` (container width clamped 1 200 – 1 260 px, axe violations = 0); Admin `bp-md` and Health `bp-xs` remain guarded until their UX work lands.
 - Search tests now pass at `bp-xs`/`bp-md`/`bp-lg` with seeded fixtures; structured/natural forms expose valid tabpanels and high-contrast submit buttons. Hero copy still needs tightening at `bp-lg` to hit the 45 ch target.
+- Structured search regression causing "Maximum update depth exceeded" is now cleared; controller callbacks were stabilised and regression integration specs guard the flow before proceeding to the remaining UX polish.
 - Navigation and hero layouts still waste space on phones; `/healthz` intentionally serves raw JSON while a separate status page UI is planned to surface the same data with Oak styling.
 - Playwright environment sets `SEMANTIC_SEARCH_USE_FIXTURES=true`, `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE=true`, and `NEXT_DISABLE_DEV_ERRORS=1`, producing deterministic responses while keeping the dev overlay out of axe checks.
 - Search API routes (structured + suggestions) now consume schema-derived helpers: fixtures short-circuit via generated factories, while live flows reuse a typed query normaliser to keep cache keys deterministic.
@@ -24,7 +25,7 @@ _Last updated: 2025-10-06 15:10 (SDK-driven admin stream fixtures live; telemetr
 - Search services, SDK validators, fixtures, and UI loops now import scope helpers from `src/lib/search-scopes.ts`, eliminating remaining literal scope strings while keeping defaults centralised.
 - `/status` page now renders an Oak-styled status shell driven by `/healthz`, with hero summary, responsive cards, and diagnostics linking back to raw JSON. Implemented as Server Component (commit 066c2d6) fetching data with `headers()` and delegating rendering to StatusClient. Root cause of initial build failure: page incorrectly marked `'use client'` while using server-only `headers()` API. Solution: removed client directive, extracted UI to StatusClient.tsx (already existed), kept data fetching in server page.tsx. Outstanding: add unit/integration/Playwright test coverage, handle `/healthz` partial failures, tighten card tone logic.
 - Theme selector radios now resolve semantic tokens to Oak hex values in dark mode, delivering visible outlines validated by integration tests (`rgb(228, 228, 228)` / `rgb(255, 255, 255)`).
-- 2025-09-28 update: hero + controls now stay stacked below the `xl` breakpoint to keep widths within the container clamp; the Playwright overflow guard at 1 100 px now passes (artefacts in `tests/visual/responsive-baseline.spec.ts` → `Overflow guard 1100px`, see `test-results/responsive-baseline-Search-e065d-flow-the-viewport-at-1100px-Google-Chrome`).
+- 2025-10-07 update: hero + controls remain stacked below `xl`; variant routes now bring the relevant form above the fold. Capture script exports artefacts to `apps/oak-open-curriculum-semantic-search/test-artifacts/`; next step is auto-submitting fixture queries so success/empty states render real results.
 - Structured search UI includes the Phase selector (primary/secondary) while natural search scopes default to auto so the backend can infer intent unless users pick Units/Lessons/Sequences explicitly.
 - Playwright fixture toggle (`SEMANTIC_SEARCH_USE_FIXTURES`) still seeds deterministic data, and the UI visibility is now controlled via `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE`; RTL + Playwright now assert deterministic notices plus empty/error messaging while axe checks remain green.
 - `searchAction` forwards fixture overrides to internal APIs via `resolveFixtureQueryParam`/`buildApiUrl`, ensuring empty/error modes propagate even when cookies are unavailable.

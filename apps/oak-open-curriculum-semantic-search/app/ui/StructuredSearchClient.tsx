@@ -31,13 +31,19 @@ export default function StructuredSearchClient(props: {
   onScopeChange?: (scope: StructuredBody['scope']) => void;
   onSubmitPayload?: (payload: StructuredBody) => void;
 }): JSX.Element {
+  console.debug('[StructuredSearchClient] render start');
   const { model, pending, handleChange, handleSubmit } = useStructuredSearchHandlers(props);
+  console.debug('[StructuredSearchClient] render snapshot', {
+    pending,
+    model,
+  });
 
   return (
     <StructuredForm
       model={model}
       onChange={handleChange}
       onSubmit={() => {
+        console.debug('[StructuredSearchClient] <StructuredForm> onSubmit fired');
         handleSubmit();
       }}
       disabled={pending}

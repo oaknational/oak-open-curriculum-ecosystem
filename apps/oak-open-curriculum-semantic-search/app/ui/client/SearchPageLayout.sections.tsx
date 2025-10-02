@@ -1,4 +1,4 @@
-import type { ComponentProps, JSX } from 'react';
+import { useCallback, type ComponentProps, type JSX } from 'react';
 import { OakTypography } from '@oaknational/oak-components';
 import { StructuredSearch } from '../StructuredSearch';
 import type { StructuredSearchAction } from '../StructuredSearch';
@@ -173,6 +173,17 @@ function StructuredPanel({
   controller: SearchController;
   followUp: StructuredFollowUpHandlers;
 }): JSX.Element {
+  const { onStart } = controller;
+
+  const handleSetLoading = useCallback(
+    (isLoading: boolean) => {
+      if (isLoading) {
+        onStart();
+      }
+    },
+    [onStart],
+  );
+
   return (
     <StructuredPanelCard
       as="section"
@@ -187,12 +198,8 @@ function StructuredPanel({
       <StructuredSearch
         action={searchAction}
         onResults={controller.onSuccess}
-        onError={(message) => controller.onError(message ?? 'Unknown error')}
-        setLoading={(isLoading) => {
-          if (isLoading) {
-            controller.onStart();
-          }
-        }}
+        onError={controller.onError}
+        setLoading={handleSetLoading}
         onScopeChange={followUp.handleScopeChange}
         onSubmitPayload={followUp.recordPayload}
       />
@@ -201,6 +208,17 @@ function StructuredPanel({
 }
 
 function NaturalPanel({ controller }: { controller: SearchController }): JSX.Element {
+  const { onStart } = controller;
+
+  const handleSetLoading = useCallback(
+    (isLoading: boolean) => {
+      if (isLoading) {
+        onStart();
+      }
+    },
+    [onStart],
+  );
+
   return (
     <NaturalPanelCard
       as="section"
@@ -213,15 +231,9 @@ function NaturalPanel({ controller }: { controller: SearchController }): JSX.Ele
         Natural language
       </OakTypography>
       <NaturalSearchComponent
-        onResults={(payload) => controller.onSuccess(Array.isArray(payload) ? payload : [])}
-        onError={(message) =>
-          controller.onError(typeof message === 'string' ? message : 'Unknown error')
-        }
-        setLoading={(isLoading) => {
-          if (isLoading) {
-            controller.onStart();
-          }
-        }}
+        onResults={controller.onSuccess}
+        onError={controller.onError}
+        setLoading={handleSetLoading}
       />
     </NaturalPanelCard>
   );

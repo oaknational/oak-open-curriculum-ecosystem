@@ -6,26 +6,6 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
-    "//#format:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
-    },
-    "//#format-check:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
-    },
-    "//#markdownlint:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
-    },
-    "//#markdownlint-check:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
-    },
     "type-gen": {
       "dependsOn": ["^type-gen"],
       "cache": true,

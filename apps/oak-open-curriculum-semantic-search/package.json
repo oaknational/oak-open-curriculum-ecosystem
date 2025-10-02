@@ -13,7 +13,6 @@
     "start": "next start",
     "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "format": "prettier --write --cache .",
     "test": "vitest run",
     "test:ui": "playwright test",
     "test:watch": "vitest",

@@ -30,7 +30,7 @@ See `semantic-search-phase-1-ux.md` → "Search UX remediation" for the canonica
 
 ## Immediate Priorities
 
-1. **Search UX remediation** – Continue following `semantic-search-phase-1-ux.md`: search + admin now expose scenario radios, dedicated routes surface the relevant form above the fold with skip links, and the idle state shows instructional copy. Next steps—capture cross-breakpoint artefacts, simplify the natural language panel, harden structured error/empty flows, resolve the render loop, polish the fixture banner state, and log every outcome in the GO cadence.
+1. **Search UX remediation** – Continue following `semantic-search-phase-1-ux.md`: with the structured flow regression cleared, move on to auto-running fixture queries in the capture script, regenerating cross-breakpoint artefacts, reviewing hero height/skip-links together, simplifying the natural language panel, hardening structured error/empty flows, enriching empty states, polishing fixture banner tone/keyboard feedback, refreshing documentation with new artefacts, and logging every outcome in the GO cadence.
 
 2. **Admin console telemetry/history** – Add operator feedback and history on top of the new SDK-backed fixtures with comprehensive tests in the preferred order (unit → integration → RTL → Playwright).
 
