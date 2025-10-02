@@ -35,53 +35,96 @@ function selectTheme(mode: Mode): SemanticTheme {
 }
 
 function buildVarMap(theme: SemanticTheme): Record<string, string> {
-  const t = theme.app;
+  const { app } = theme;
   return {
-    '--app-gap-grid': t.space.gap.grid,
-    '--app-gap-section': t.space.gap.section,
-    '--app-gap-cluster': t.space.gap.cluster,
-    '--app-padding-card': t.space.padding.card,
-    '--app-padding-pill': t.space.padding.pill,
-    '--app-radius-card': t.radii.card,
-    '--app-radius-pill': t.radii.pill,
-    '--app-color-border-subtle': t.colors.borderSubtle,
-    '--app-color-header-border': t.colors.headerBorder,
-    '--app-color-text-muted': t.colors.textMuted,
-    '--app-color-error-text': t.colors.errorText,
-    '--app-color-page-note': t.colors.pageNote,
-    '--app-color-docs-note': t.colors.docsNote,
-    '--app-color-surface-emphasis-bg': t.colors.surfaceEmphasisBg,
-    '--app-color-surface-card': t.colors.surfaceCard,
-    '--app-color-surface-raised': t.colors.surfaceRaised,
-    '--app-font-primary': t.fonts.primary,
-    '--app-font-secondary': t.fonts.secondary,
-    '--app-typography-hero-size': t.typography.hero.fontSizeRem,
-    '--app-typography-hero-line-height': String(t.typography.hero.lineHeight),
-    '--app-typography-hero-weight': `${t.typography.hero.fontWeight}`,
-    '--app-typography-hero-letter-spacing': t.typography.hero.letterSpacing,
-    '--app-typography-body-size': t.typography.body.fontSizeRem,
-    '--app-typography-body-line-height': String(t.typography.body.lineHeight),
-    '--app-typography-body-weight': `${t.typography.body.fontWeight}`,
-    '--app-typography-body-letter-spacing': t.typography.body.letterSpacing,
-    '--app-typography-quote-size': t.typography.quote.fontSizeRem,
-    '--app-typography-quote-line-height': String(t.typography.quote.lineHeight),
-    '--app-typography-quote-family': t.typography.quote.fontFamily,
-    '--app-typography-quote-style': t.typography.quote.fontStyle,
-    '--app-layout-container-max-width': t.layout.containerMaxWidth,
-    '--app-layout-control-column-min-width': t.layout.controlColumnMinWidth,
-    '--app-layout-secondary-column-min-width': t.layout.secondaryColumnMinWidth,
-    '--app-layout-inline-padding-base': t.layout.inlinePadding.base,
-    '--app-layout-inline-padding-wide': t.layout.inlinePadding.wide,
-    '--app-bp-xs': t.layout.breakpoints.xs,
-    '--app-bp-sm': t.layout.breakpoints.sm,
-    '--app-bp-md': t.layout.breakpoints.md,
-    '--app-bp-lg': t.layout.breakpoints.lg,
-    '--app-bp-xl': t.layout.breakpoints.xl,
-    '--app-bp-xxl': t.layout.breakpoints.xxl,
-    '--app-color-brand-primary': t.palette.brandPrimary,
-    '--app-color-brand-primary-dark': t.palette.brandPrimaryDark,
-    '--app-color-brand-primary-deep': t.palette.brandPrimaryDeep,
-    '--app-color-brand-primary-bright': t.palette.brandPrimaryBright,
+    ...buildSpaceVars(app),
+    ...buildRadiusVars(app),
+    ...buildColorVars(app),
+    ...buildFontVars(app),
+    ...buildTypographyVars(app),
+    ...buildLayoutVars(app),
+    ...buildPaletteVars(app),
+  };
+}
+
+function buildSpaceVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-gap-grid': app.space.gap.grid,
+    '--app-gap-section': app.space.gap.section,
+    '--app-gap-cluster': app.space.gap.cluster,
+    '--app-gap-stack': app.space.gap.stack,
+    '--app-padding-card': app.space.padding.card,
+    '--app-padding-pill': app.space.padding.pill,
+  };
+}
+
+function buildRadiusVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-radius-card': app.radii.card,
+    '--app-radius-pill': app.radii.pill,
+  };
+}
+
+function buildColorVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-color-border-subtle': app.colors.borderSubtle,
+    '--app-color-header-border': app.colors.headerBorder,
+    '--app-color-text-muted': app.colors.textMuted,
+    '--app-color-error-text': app.colors.errorText,
+    '--app-color-page-note': app.colors.pageNote,
+    '--app-color-docs-note': app.colors.docsNote,
+    '--app-color-surface-emphasis-bg': app.colors.surfaceEmphasisBg,
+    '--app-color-surface-card': app.colors.surfaceCard,
+    '--app-color-surface-raised': app.colors.surfaceRaised,
+  };
+}
+
+function buildFontVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-font-primary': app.fonts.primary,
+    '--app-font-secondary': app.fonts.secondary,
+  };
+}
+
+function buildTypographyVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-typography-hero-size': app.typography.hero.fontSizeRem,
+    '--app-typography-hero-line-height': String(app.typography.hero.lineHeight),
+    '--app-typography-hero-weight': `${app.typography.hero.fontWeight}`,
+    '--app-typography-hero-letter-spacing': app.typography.hero.letterSpacing,
+    '--app-typography-body-size': app.typography.body.fontSizeRem,
+    '--app-typography-body-line-height': String(app.typography.body.lineHeight),
+    '--app-typography-body-weight': `${app.typography.body.fontWeight}`,
+    '--app-typography-body-letter-spacing': app.typography.body.letterSpacing,
+    '--app-typography-quote-size': app.typography.quote.fontSizeRem,
+    '--app-typography-quote-line-height': String(app.typography.quote.lineHeight),
+    '--app-typography-quote-family': app.typography.quote.fontFamily,
+    '--app-typography-quote-style': app.typography.quote.fontStyle,
+  };
+}
+
+function buildLayoutVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-layout-container-max-width': app.layout.containerMaxWidth,
+    '--app-layout-control-column-min-width': app.layout.controlColumnMinWidth,
+    '--app-layout-secondary-column-min-width': app.layout.secondaryColumnMinWidth,
+    '--app-layout-inline-padding-base': app.layout.inlinePadding.base,
+    '--app-layout-inline-padding-wide': app.layout.inlinePadding.wide,
+    '--app-bp-xs': app.layout.breakpoints.xs,
+    '--app-bp-sm': app.layout.breakpoints.sm,
+    '--app-bp-md': app.layout.breakpoints.md,
+    '--app-bp-lg': app.layout.breakpoints.lg,
+    '--app-bp-xl': app.layout.breakpoints.xl,
+    '--app-bp-xxl': app.layout.breakpoints.xxl,
+  };
+}
+
+function buildPaletteVars(app: SemanticTheme['app']): Record<string, string> {
+  return {
+    '--app-color-brand-primary': app.palette.brandPrimary,
+    '--app-color-brand-primary-dark': app.palette.brandPrimaryDark,
+    '--app-color-brand-primary-deep': app.palette.brandPrimaryDeep,
+    '--app-color-brand-primary-bright': app.palette.brandPrimaryBright,
   };
 }
 

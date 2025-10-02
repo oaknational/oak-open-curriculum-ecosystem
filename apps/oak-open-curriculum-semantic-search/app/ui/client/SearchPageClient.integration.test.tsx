@@ -149,7 +149,7 @@ describe('SearchPageClient', () => {
     expect(screen.queryByTestId('natural-search-panel')).not.toBeInTheDocument();
   });
 
-  it('surfaces natural language hero messaging and skip links on the natural route', () => {
+  it('surfaces natural language hero messaging, prompt-only controls, and skip links on the natural route', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
     });
@@ -165,10 +165,17 @@ describe('SearchPageClient', () => {
       ),
     ).toBeInTheDocument();
 
+    expect(screen.getByLabelText('Describe what you need')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Scope')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Subject')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Key Stage')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Phase')).not.toBeInTheDocument();
+
     const summary = screen.getByTestId('natural-summary');
-    const definitions = within(summary).getAllByRole('definition');
-    expect(definitions[0]).toHaveTextContent('(not set)');
-    expect(definitions[1]).toHaveTextContent('Auto (Oak decides)');
+    expect(
+      within(summary).getByRole('heading', { level: 3, name: /derived parameters/i }),
+    ).toBeInTheDocument();
+    expect(summary).toHaveTextContent(/Submit a prompt to populate the derived summary/i);
 
     const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
     const skipLinks = within(skipLinksNav).getAllByRole('link');

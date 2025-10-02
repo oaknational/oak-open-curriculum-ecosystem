@@ -198,3 +198,43 @@ export const AccentTypography = styledComponents(OakTypography)`
   text-shadow: 0 0 1rem
     ${({ theme }) => hexToRgba(getAppTheme(theme).app.palette.brandPrimaryBright, 0.5)};
 `;
+
+export const SkipLinksNav = styledComponents.nav`
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-gap-inline, var(--app-gap-cluster));
+`;
+
+export const SkipLink = styledComponents(OakTypography).attrs({ as: 'a', $font: 'body-4-bold' })`
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+
+  &:focus-visible {
+    position: static;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    clip: auto;
+    padding: 0.5rem 1rem;
+    border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
+    border: 2px solid
+      ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
+    background: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
+    color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'text-inverted')};
+    box-shadow: 0 0 0 4px
+      ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-neutral-lighter')};
+    z-index: 10;
+  }
+`;

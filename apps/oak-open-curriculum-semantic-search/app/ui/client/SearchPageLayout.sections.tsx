@@ -19,6 +19,8 @@ import {
   SecondaryGrid,
   StructuredPanelCard,
   SuggestionsPanel,
+  SkipLink,
+  SkipLinksNav,
   type ControlsLayout,
 } from './SearchPageClient.styles';
 
@@ -42,7 +44,7 @@ export function SearchForms({
       {showStructured ? (
         <StructuredPanel searchAction={searchAction} controller={controller} followUp={followUp} />
       ) : null}
-      {showNatural ? <NaturalPanel controller={controller} /> : null}
+      {showNatural ? <NaturalPanel controller={controller} followUp={followUp} /> : null}
     </ControlsGrid>
   );
 }
@@ -76,19 +78,13 @@ export function SearchSkipLinks({ variant }: { variant: SearchLayoutVariant }): 
     return null;
   }
   return (
-    <OakTypography
-      as="nav"
-      aria-label="Skip links"
-      $display="flex"
-      $flexWrap="wrap"
-      $gap="space-between-xs"
-    >
+    <SkipLinksNav aria-label="Skip links">
       {links.map((link) => (
-        <OakTypography as="a" $font="body-4-bold" key={link.href} href={link.href}>
+        <SkipLink key={link.href} href={link.href}>
           {link.label}
-        </OakTypography>
+        </SkipLink>
       ))}
-    </OakTypography>
+    </SkipLinksNav>
   );
 }
 
@@ -145,7 +141,13 @@ function StructuredPanel({
   );
 }
 
-function NaturalPanel({ controller }: { controller: SearchController }): JSX.Element {
+function NaturalPanel({
+  controller,
+  followUp,
+}: {
+  controller: SearchController;
+  followUp: StructuredFollowUpHandlers;
+}): JSX.Element {
   const { onStart } = controller;
 
   const handleSetLoading = useCallback(
@@ -172,6 +174,7 @@ function NaturalPanel({ controller }: { controller: SearchController }): JSX.Ele
         onResults={controller.onSuccess}
         onError={controller.onError}
         setLoading={handleSetLoading}
+        onDerivedPayload={followUp.recordPayload}
       />
     </NaturalPanelCard>
   );

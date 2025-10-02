@@ -11,6 +11,7 @@ import {
 } from '../client/SearchPageClient.styles';
 import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveBreakpoint } from '../shared/breakpoints';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 
 export function LandingPage(): JSX.Element {
   return (
@@ -117,12 +118,23 @@ const CtaCard = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;
   gap: var(--app-gap-cluster);
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
   padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-  border-width: 1px;
-  border-style: solid;
+  border: 1px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
+  background: linear-gradient(
+      135deg,
+      ${({ theme }) => resolveUiColor(getAppTheme(theme), 'bg-neutral')} 0%,
+      ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised} 100%
+    );
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  }
 `;
 
 const CtaLink = styledComponents(OakTypography).attrs({
@@ -136,8 +148,12 @@ const CtaLink = styledComponents(OakTypography).attrs({
   color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
   text-decoration: none;
 
+  &:hover {
+    color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'text-link-hover')};
+  }
+
   &:focus-visible {
-    outline: 3px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+    outline: 3px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
     outline-offset: 2px;
   }
 `;

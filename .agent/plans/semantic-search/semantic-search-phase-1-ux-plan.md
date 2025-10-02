@@ -2,10 +2,13 @@
 
 ## Vision
 
-- Present semantic search with a confident first impression: `/search` acts as a landing page that introduces the hybrid search proposition, showcases structured vs natural experiences, and routes users clearly.
+- Present semantic search with a confident first impression: `/` acts as a landing page that introduces the hybrid search proposition, and links out to the specific search experiences.
+- There is no `/search` route; `/search` redirects to `/` which has prominent CTA cards leading to the relevant search experiences.
 - Deliver dedicated `/structured_search` and `/natural_language_search` workspaces with accessible, high-quality UX that feels cohesive with Oak’s design system across light and dark themes.
+- Showcase the full natural-language pipeline: users supply free-text prompts only, the server derives structured query parameters, and the client presents both the results and the derived structured query in a read-only card alongside the original request.
 - Keep deterministic fixtures, accessibility, and automated evidence at the heart of delivery so designers, engineers, and tests share a single source of truth.
 - Extend the same rigour to supporting surfaces (admin telemetry and status) so Phase 1 closes with a demonstrably complete UX slice.
+- Establish a layered layout hierarchy leveraging Next.js nested layouts: the root shell shared by all routes, a search layout for landing + search experiences, and an operations layout for admin + status with purpose-built grids and spacing tokens.
 
 ## Current Status Highlights
 
@@ -16,8 +19,9 @@
 ## End-State Definition
 
 - `/` (app root) = focused landing page with an introductory hero, supporting copy, and two prominent CTA cards leading to the relevant search experiences (with `/search` reduced to a redirect).
-- `/structured_search` and `/natural_language_search` = fully dedicated experiences with consistent hero treatment, navigation, skip links, accessible messaging, deterministic fixtures, and polished empty/error states.
+- `/structured_search` and `/natural_language_search` = fully dedicated experiences with consistent hero treatment, navigation, skip links, accessible messaging, deterministic fixtures, and polished empty/error states; `/natural_language_search` sends prompts to the server for LLM-backed derivation, renders the returned structured parameters in a read-only summary, and never exposes manual filter inputs.
 - Top-level navigation includes Search, Structured search, Natural language search, Admin, Status, and Docs, with consistent styling and focus handling.
+- Nested layouts share foundational tokens: landing/structured/natural inherit the search layout, while admin/status inherit an operations layout so both surfaces gain consistent spacing, typography, and responsive grids.
 - Admin console exposes telemetry history/feedback backed by SDK fixtures; status page communicates tone/failure states with comprehensive test coverage.
 - All surfaces pass accessibility checks (keyboard, aria-live, skip links, contrast) and are evidenced through automated artefacts plus plan updates.
 
@@ -28,21 +32,21 @@
    **REVIEW:** RTL + manual light/dark sweep at `bp-xs`/`bp-md` to confirm layout, focus order, and hero readability.
 3. **ACTION:** Rebuild `/structured_search` with condensed hero, dedicated skip links, and ensure structured form/results live solely here; update navigation entry.  
    **REVIEW:** Run `SearchPageClient.integration` variant + Playwright fixture success scenario to validate focus and above-the-fold behaviour.
-4. **ACTION:** Rebuild `/natural_language_search` with textarea-first flow, derived-parameter summary, and consistent hero styling; update navigation entry.  
-   **REVIEW:** Execute RTL coverage for natural route and perform manual keyboard/screen-reader audit.
-5. **ACTION:** Update shared layout/styles to support landing/structured/natural variants while preserving semantic tokens across light/dark themes.  
-   **REVIEW:** Run `pnpm -C apps/oak-open-curriculum-semantic-search test app/ui/client/SearchPageClient.integration.test.tsx --run` to confirm variant handling remains green.
+4. **ACTION:** Rebuild `/natural_language_search` with a prompt-only form that posts to the server for LLM-backed derivation, then render the returned structured query (and original request) in a clearly read-only summary card; keep hero styling consistent.  
+   **REVIEW:** Execute RTL coverage for the natural route, confirm the summary is non-editable, and perform manual keyboard/screen-reader audit of prompt → results → summary focus order.
+5. **ACTION:** Update shared layout/styles to support landing/structured/natural variants while preserving semantic tokens across light/dark themes, introducing any required contrast tokens for CTA cards.  
+   **REVIEW:** Run `pnpm -C apps/oak-open-curriculum-semantic-search test app/ui/client/SearchPageClient.integration.test.tsx --run` to confirm variant handling remains green and capture light/dark screenshots to evidence the new tokens.
 6. **GROUNDING:** read GO.md and follow all instructions.
 7. **ACTION:** Finalise navigation and CTA linking across search/admin/status, ensuring ARIA labelling and focus outlines.  
    **REVIEW:** Manual nav tour plus quick axe pass to confirm accessibility.
-8. **ACTION:** Simplify natural-language panel implementation (multiline textarea, derived parameters) with failing tests first, keeping shared behaviour coherent.  
-   **REVIEW:** Run new unit/integration suites (`NaturalSearch.*`, `useSearchController.*`) and Playwright natural fixture scenario.
+8. **ACTION:** Implement the server-driven natural-language workflow end-to-end: drop manual filter inputs, ensure the client awaits derived parameters, and display the structured summary using read-only Oak components.  
+   **REVIEW:** Run new unit/integration suites (`NaturalSearch.*`, `useSearchController.*`) plus the Playwright natural fixture scenario to prove the prompt→derivation→results loop.
 9. **ACTION:** Harden structured-search error/empty states (503 banner, aria-live, empty guidance) and add regression coverage.  
    **REVIEW:** Run RTL error/empty tests and Playwright `fixtures-error` capture with screenshots.
 10. **ACTION:** Auto-submit fixture queries in capture script and regenerate search/admin artefacts at xs/md/lg/xxl.  
     **REVIEW:** Inspect artefacts + axe reports; update plan with observations.
-11. **ACTION:** Refine fixture status banner tone/copy and pressed states across search/admin surfaces.  
-    **REVIEW:** Keyboard-only audit and RTL assertions for focus/pressed feedback.
+11. **ACTION:** Introduce an operations layout for `/admin` and `/status` (shared typography, grids, spacing) and, within that shell, refine fixture status banner tone/copy and pressed states.  
+    **REVIEW:** Keyboard-only audit plus RTL assertions for focus/pressed feedback across the new layout, and Playwright captures of admin/status in light/dark modes.
 12. **GROUNDING:** read GO.md and follow all instructions.
 13. **ACTION:** Conduct structured/natural design review (hero copy, CTA wording, skip links) and document outcomes + token follow-ups.  
     **REVIEW:** Record decisions in this plan and adjust upcoming actions if needed.
@@ -62,6 +66,12 @@
 
 ## Recent Progress
 
+- 2025-10-03 – Action 4/8: Extracted the derived-summary UI into `NaturalSearchSummary`, applying SDK `SearchStructuredRequestSchema` parsing and official `isSubject`/`isKeyStage` guards so the natural flow now aligns with the cardinal rule; consolidated skip-link styling and prompt handling within smaller hooks to keep the component under lint thresholds.
+- 2025-10-03 – Action 5 (Review): Ran the full quality gate suite (`pnpm build`, format + lint, unit/integration/Playwright/e2e, smoke) to validate the refactor; natural route axe reports now return zero violations and fixtures remain deterministic.
+- 2025-10-03 – Challenge: Discovered lingering manual key-stage casing in the derived summary and duplicate styling bloating `NaturalSearch.tsx`; addressed by introducing the shared summary component and replacing bespoke logic with SDK guards.
+- 2025-10-03 – Action 4/8: Rebuilt `/natural_language_search` as a prompt-only flow; the server now derives the structured payload, and the client renders a read-only summary card while dropping manual filters and local derivation.
+- 2025-10-03 – Action 4/5 (Review): Ran Vitest suites (`NaturalSearch.unit.test.tsx`, `SearchPageClient.integration.test.tsx`, `app/api/search/nl/route.integration.test.ts`) and Playwright `tests/visual/responsive-baseline.spec.ts` to confirm focus styling, skip links, and accessibility all pass with updated artefacts under `apps/oak-open-curriculum-semantic-search/test-results/`.
+- 2025-10-03 – Action 5: Refined skip-link styling, introduced the `--app-gap-stack` token via the theme bridge, and refreshed landing CTA card contrast using Oak palette accents.
 - 2025-10-02 – Action 2: Created landing page integration test to drive the hero + CTA experience for `/`.
 - 2025-10-02 – Action 2: Implemented landing page components, routed `/` to the new layout, and redirected `/search` to `/`; updated integration coverage (`LandingPage.integration`, `/search` redirect, SearchPageClient regression) to green.
 - 2025-10-02 – Action 2: Completed manual light/dark review at `bp-xs`/`bp-md`, confirmed hero readability and CTA focus outlines, and captured artefacts under `apps/oak-open-curriculum-semantic-search/test-artifacts/landing/2025-10-02/`.
@@ -74,19 +84,18 @@
 
 ## Upcoming Focus
 
-- **Actions 6–7:** Maintain GO cadence (grounding complete) and align navigation/CTA wiring with the new routes, including accessibility sweeps.
-- **Actions 8–11:** Extend natural-language controller, error/empty fixtures, and fixture banner tone with tests-first delivery.
+- **Actions 9–11:** Harden structured-search empty/error states, generate operations layout for admin/status, and refine fixture banner tone with tests-first delivery, reusing SDK guards/tokens to avoid bespoke data structures.
 - **Actions 12–21:** Complete grounding checkpoints, regenerate artefacts, run quality gates, and deliver the final cross-surface UX review with evidence.
 
 ## Action Status
 
 - **Action 2:** Completed – landing page review signed off with artefacts and RTL regression.
 - **Action 3:** Completed – structured hero and fixtures verified via RTL + Playwright with responsive evidence captured.
-- **Action 4:** Completed – natural language hero copy, skip links, and results anchoring delivered with RTL coverage.
-- **Action 5:** Completed – shared layout/styles refactored for all variants; responsive Playwright suite regenerated.
+- **Action 4:** Completed – Prompt-only natural-language hero, skip links, and derived summary delivered with server-driven workflow.
+- **Action 5:** Completed – Shared layout tokens, skip-link focus styling, and CTA contrast refreshed across landing/search.
 - **Actions 6–7:** Completed – navigation, CTA alignment, and accessibility verification delivered with artefacts.
-- **Action 8:** Completed – natural prompt textarea, derived summary, and supporting tests delivered.
-- **Actions 9–21:** Pending (next: error/empty fixtures, banner tone, artefact regeneration, and admin/status polish).
+- **Action 8:** Completed – Server-driven natural workflow with end-to-end tests (unit, integration, Playwright) proving prompt→derivation→results loop.
+- **Actions 9–21:** Pending (next: error/empty fixtures, operations layout for admin/status, fixture banner tone, artefact regeneration, and cross-surface polish).
 
 ## Verification & Evidence
 

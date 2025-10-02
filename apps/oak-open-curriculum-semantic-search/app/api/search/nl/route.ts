@@ -32,7 +32,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const requestPayload = await buildNaturalPayload(parsedBody.data);
-  return handleNaturalSearchRequest({ req, requestPayload });
+  return handleNaturalSearchRequest({ req, requestPayload, prompt: parsedBody.data.q });
 }
 
 function renderLlmDisabled(): Response {
@@ -56,17 +56,36 @@ function buildNaturalFixture(mode: FixtureMode) {
 async function handleNaturalSearchRequest(params: {
   req: NextRequest;
   requestPayload: NaturalStructuredPayload;
+  prompt: string;
 }): Promise<Response> {
-  const { req, requestPayload } = params;
+  const { req, requestPayload, prompt } = params;
   const { mode, persist } = resolveFixtureModeFromRequest(req);
 
   if (mode !== 'live') {
-    return handleNaturalFixtureRequest({ mode, persist });
+    return handleNaturalFixtureRequest({ mode, persist, prompt, requestPayload });
   }
 
   const response = await forwardStructuredSearch(req, requestPayload);
-  const bodyJson: unknown = await response.json();
-  const nextResponse = NextResponse.json(bodyJson, { status: response.status });
+  const text = await response.text();
+  const bodyJson = safeJsonParse(text);
+
+  if (!response.ok || !bodyJson) {
+    const errorPayload = bodyJson ?? { error: 'Search failed' };
+    const errorResponse = NextResponse.json(errorPayload, { status: response.status });
+    applyFixtureModeCookie(errorResponse, persist);
+    return errorResponse;
+  }
+
+  const nextResponse = NextResponse.json(
+    {
+      result: bodyJson,
+      summary: {
+        prompt,
+        structured: requestPayload,
+      },
+    },
+    { status: response.status },
+  );
   applyFixtureModeCookie(nextResponse, persist);
   return nextResponse;
 }
@@ -74,8 +93,10 @@ async function handleNaturalSearchRequest(params: {
 function handleNaturalFixtureRequest(params: {
   mode: FixtureMode;
   persist: FixtureMode | undefined;
+  prompt: string;
+  requestPayload: NaturalStructuredPayload;
 }): Response {
-  const { mode, persist } = params;
+  const { mode, persist, prompt, requestPayload } = params;
 
   if (mode === 'fixtures-error') {
     const response = NextResponse.json(
@@ -91,15 +112,21 @@ function handleNaturalFixtureRequest(params: {
 
   const lessonsFixture = buildNaturalFixture(mode);
   const response = NextResponse.json({
-    scope: lessonsFixture.scope,
-    results: lessonsFixture.results,
-    total: lessonsFixture.total,
-    took: lessonsFixture.took,
-    timedOut: lessonsFixture.timedOut,
-    aggregations: lessonsFixture.aggregations,
-    facets: lessonsFixture.facets,
-    suggestions: lessonsFixture.suggestions,
-    suggestionCache: lessonsFixture.suggestionCache,
+    result: {
+      scope: lessonsFixture.scope,
+      results: lessonsFixture.results,
+      total: lessonsFixture.total,
+      took: lessonsFixture.took,
+      timedOut: lessonsFixture.timedOut,
+      aggregations: lessonsFixture.aggregations,
+      facets: lessonsFixture.facets,
+      suggestions: lessonsFixture.suggestions,
+      suggestionCache: lessonsFixture.suggestionCache,
+    },
+    summary: {
+      prompt,
+      structured: requestPayload,
+    },
   });
   applyFixtureModeCookie(response, persist);
   return response;
@@ -130,6 +157,14 @@ function forwardStructuredSearch(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(payload),
   });
+}
+
+function safeJsonParse(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
 }
 
 function resolveScope(

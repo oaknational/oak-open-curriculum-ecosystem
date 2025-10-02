@@ -2,8 +2,6 @@
 
 Scope: strategic overview. Details are in the individual plan documents.
 
-_Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `.agent/plans/semantic-search-target-alignment-plan.md`. Items below call out the specific updates required.
-
 1. Architectural Refinements Plan — Status: Done
    - Plan: Completed — see PR #16
    - Acceptance: DI-only wiring; docs updated; gates green
@@ -13,7 +11,7 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
    - Scope: enable Streaming HTTP (not SSE) for MCP servers; guidance for Vercel/Node hosting
    - Acceptance: streaming framing defined and implemented; example Vercel deploy existent and documented and available for demos
 
-3. Plan MCP Hardening — Status: In Progress
+3. Plan MCP Hardening — Status: Done
    - Plan: `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
    - Next Steps: delegate `/mcp` GET/POST to `StreamableHTTPServerTransport`, move health checks, add transport/tool regression tests, verify compatibility with OpenAI Connector, Gemini, ElevenLabs
    - Acceptance: MCP server fully aligned with official spec, transport verified against target clients, regression suite in place
@@ -31,7 +29,7 @@ _Note:_ Most semantic search plans (API/UI/docs) need refreshing to align with `
    - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md` - needs updating
    - Acceptance: Use Clerk, doc in research.
 
-7. Semantic Search Front-End & UI Plan — Status: Planned (requires update)
+7. Semantic Search Front-End & UI Plan — Status: In Progress
    - Plan: `.agent/plans/semantic-search/semantic-search-ui-plan.md` — **stale**, revise to align with the target back-end plan and definitive guide
    - Acceptance: search UI exists, aligns with new API surface, and passes accessibility/usability checks; documentation updated and onboarding flows updated.
 

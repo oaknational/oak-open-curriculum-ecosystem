@@ -34,7 +34,7 @@ export interface SemanticTypographySpecEntry {
  */
 export interface SemanticAppSpec {
   readonly space: {
-    readonly gap: Record<'grid' | 'section' | 'cluster', OakSpaceBetweenToken>;
+    readonly gap: Record<'grid' | 'section' | 'cluster' | 'stack', OakSpaceBetweenToken>;
     readonly padding: Record<'card' | 'pill', OakInnerPaddingToken>;
   };
   readonly radii: Record<'card' | 'pill', OakBorderRadiusToken>;

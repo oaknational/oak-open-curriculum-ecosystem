@@ -34,6 +34,16 @@ async function captureAccessibility(
   testInfo: TestInfo,
 ): Promise<AxeResults> {
   const results = await new AxeBuilderModule({ page }).analyze();
+  if (results.violations.length > 0) {
+    console.warn(
+      `axe detected ${results.violations.length} violation(s) for ${name}:`,
+      results.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact,
+        targets: violation.nodes.map((node) => JSON.stringify(node.target)),
+      })),
+    );
+  }
   await testInfo.attach(`${name}-axe`, {
     body: Buffer.from(JSON.stringify(results, null, 2)),
     contentType: 'application/json',
@@ -281,10 +291,26 @@ test.describe('Search page responsive regressions', () => {
       );
       await expect(heroCopy).toBeVisible();
 
-      const skipLinksNav = page.getByRole('navigation', { name: 'Skip links' });
-      const skipLinks = skipLinksNav.getByRole('link');
-      await expect(skipLinks.nth(0)).toHaveAccessibleName('Skip to natural language search form');
-      await expect(skipLinks.nth(1)).toHaveAccessibleName('Skip to natural language results');
+      const skipLinksNav = page.getByRole('navigation', {
+        name: 'Skip links',
+        includeHidden: true,
+      });
+      const skipToForm = skipLinksNav.getByRole('link', {
+        name: 'Skip to natural language search form',
+        includeHidden: true,
+      });
+      const skipToResults = skipLinksNav.getByRole('link', {
+        name: 'Skip to natural language results',
+        includeHidden: true,
+      });
+
+      await skipToForm.focus();
+      await expect(skipToForm).toBeVisible();
+      await expect(skipToForm).toHaveAccessibleName('Skip to natural language search form');
+
+      await skipToResults.focus();
+      await expect(skipToResults).toBeVisible();
+      await expect(skipToResults).toHaveAccessibleName('Skip to natural language results');
 
       await captureScreenshot(page, 'natural-hero-bp-md', testInfo);
       const axe = await captureAccessibility(page, 'natural-hero-bp-md', testInfo);

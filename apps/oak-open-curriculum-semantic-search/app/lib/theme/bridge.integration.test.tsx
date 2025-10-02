@@ -44,7 +44,9 @@ describe('Bridge theming (ADR-045)', () => {
     );
     const styleEl = document.getElementById('app-theme-vars');
     expect(styleEl).toBeTruthy();
-    expect(styleEl?.textContent || '').toMatch(/--app-gap-section/);
+    const text = styleEl?.textContent || '';
+    expect(text).toMatch(/--app-gap-section/);
+    expect(text).toMatch(/--app-gap-stack/);
   });
 
   it('exposes theme.app tokens to styled-components consumers', () => {

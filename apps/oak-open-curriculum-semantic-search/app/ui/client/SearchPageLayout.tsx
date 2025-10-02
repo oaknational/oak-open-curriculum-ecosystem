@@ -111,7 +111,7 @@ function SearchHeroAndForms({
   variant: SearchLayoutVariant;
 }): JSX.Element {
   const layout = resolveControlLayout(variant);
-  const controlsFirst = variant !== 'default';
+  const controlsFirst = variant === 'structured';
 
   return (
     <HeroControlsCluster

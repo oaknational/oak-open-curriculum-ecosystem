@@ -1,11 +1,32 @@
 import { z } from 'zod';
 import type { NaturalBody } from './NaturalSearch.types';
-import { DEFAULT_INCLUDE_FACETS, SearchNaturalLanguageRequestSchema } from '../../src/types/oak';
+import {
+  SearchStructuredRequestSchema,
+  SearchNaturalLanguageRequestSchema,
+} from '../../src/types/oak';
 
-const ApiResponseSchema = z
+const NaturalSearchSummarySchema = z
   .object({
-    results: z.array(z.unknown()).default([]),
-    error: z.string().optional(),
+    prompt: z.string(),
+    structured: SearchStructuredRequestSchema,
+  })
+  .loose();
+
+export type NaturalSearchSummary = z.infer<typeof NaturalSearchSummarySchema>;
+
+const NaturalSearchSuccessSchema = z
+  .object({
+    result: z.unknown(),
+    summary: NaturalSearchSummarySchema,
+  })
+  .loose();
+
+export type NaturalSearchSuccessPayload = z.infer<typeof NaturalSearchSuccessSchema>;
+
+const NaturalSearchErrorSchema = z
+  .object({
+    error: z.string(),
+    message: z.string().optional(),
   })
   .loose();
 
@@ -18,45 +39,44 @@ function safeJsonParse(text: string): unknown {
 }
 
 export function parseResponse(
-  resOk: boolean,
-  txt: string,
-): { error: string | null; results: unknown[] } {
-  const parsed = safeJsonParse(txt);
-  const safe = ApiResponseSchema.safeParse(parsed);
-  if (!safe.success) {
-    return { error: resOk ? null : 'Search failed', results: [] };
+  responseOk: boolean,
+  text: string,
+): { error: string | null; payload: NaturalSearchSuccessPayload | null } {
+  const parsed = safeJsonParse(text);
+  const success = NaturalSearchSuccessSchema.safeParse(parsed);
+  if (success.success) {
+    return { error: null, payload: success.data };
   }
-  const data = safe.data;
-  if (!resOk && data.error) {
-    return { error: data.error, results: [] };
+
+  const error = NaturalSearchErrorSchema.safeParse(parsed);
+  if (error.success) {
+    return { error: error.data.error, payload: null };
   }
-  return { error: null, results: data.results };
+
+  if (!responseOk) {
+    return { error: 'Search failed', payload: null };
+  }
+
+  return { error: null, payload: null };
 }
 
-export function normaliseNaturalRequest(model: NaturalBody): NaturalBody {
-  const candidate: NaturalBody = {
-    q: model.q,
-    scope: model.scope,
-    size: model.size && model.size > 0 ? model.size : undefined,
-    subject: model.subject || undefined,
-    keyStage: model.keyStage || undefined,
-    minLessons: model.minLessons,
-    phaseSlug: model.phaseSlug || undefined,
-    includeFacets: model.includeFacets ?? DEFAULT_INCLUDE_FACETS,
-  };
-  return SearchNaturalLanguageRequestSchema.parse(candidate);
+export function normaliseNaturalRequest(model: Pick<NaturalBody, 'q'>): NaturalBody {
+  const prompt = typeof model.q === 'string' ? model.q.trim() : '';
+  return SearchNaturalLanguageRequestSchema.parse({ q: prompt });
 }
 
-export async function submitNaturalSearchRequest(body: NaturalBody): Promise<unknown[]> {
+export async function submitNaturalSearchRequest(
+  body: NaturalBody,
+): Promise<NaturalSearchSuccessPayload> {
   const response = await fetch('/api/search/nl', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(body),
   });
-  const text = await response.text();
-  const { error, results } = parseResponse(response.ok, text);
-  if (error) {
-    throw new Error(error);
+
+  const { error, payload } = parseResponse(response.ok, await response.text());
+  if (error || !payload) {
+    throw new Error(error ?? 'Search failed');
   }
-  return results;
+  return payload;
 }

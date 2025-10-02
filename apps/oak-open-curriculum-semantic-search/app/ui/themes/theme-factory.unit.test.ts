@@ -60,6 +60,13 @@ describe('App theme factories', () => {
 
     expect(resolved.space.gap.section).toBe('3.5rem');
     expect(resolved.space.gap.cluster).toBe('1rem');
+    expect(resolved.space.gap.stack.endsWith('rem')).toBe(true);
+    expect(parseFloat(resolved.space.gap.stack)).toBeGreaterThan(
+      parseFloat(resolved.space.gap.cluster),
+    );
+    expect(parseFloat(resolved.space.gap.stack)).toBeLessThan(
+      parseFloat(resolved.space.gap.section),
+    );
     expect(resolved.space.padding.card).toBe('1.25rem');
     expect(resolved.space.padding.pill).toBe('0.5rem');
   });
