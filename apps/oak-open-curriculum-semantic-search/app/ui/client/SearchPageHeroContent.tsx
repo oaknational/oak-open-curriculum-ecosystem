@@ -62,7 +62,7 @@ export function resolveResultsSectionId(variant: SearchLayoutVariant): string {
 
 function DefaultHero(): JSX.Element {
   return (
-    <HeroCard data-testid="search-hero" $ba="border-solid-s">
+    <HeroCard data-testid="search-hero" $ba="border-solid-s" data-variant="default">
       <OakTypography as="h1" $font="heading-3">
         <HeroHeadingCluster as="span">
           <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
@@ -101,7 +101,7 @@ function DefaultHero(): JSX.Element {
 
 function StructuredHero(): JSX.Element {
   return (
-    <HeroCard data-testid="search-hero" $ba="border-solid-s">
+    <HeroCard data-testid="search-hero" $ba="border-solid-s" data-variant="structured">
       <OakTypography as="h1" $font="heading-3">
         Structured search
       </OakTypography>
@@ -123,7 +123,7 @@ function StructuredHero(): JSX.Element {
 
 function NaturalHero(): JSX.Element {
   return (
-    <HeroCard data-testid="search-hero" $ba="border-solid-s">
+    <HeroCard data-testid="search-hero" $ba="border-solid-s" data-variant="natural">
       <OakTypography as="h1" $font="heading-3">
         Natural language search
       </OakTypography>

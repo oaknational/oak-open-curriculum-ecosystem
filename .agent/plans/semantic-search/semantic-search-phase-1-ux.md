@@ -68,12 +68,21 @@
 - 2025-10-02 – Action 3: Added structured-route RTL coverage for condensed hero + skip links and refactored hero/skip-link logic with new structured copy; SearchResults now exposes anchored sections per variant.
 - 2025-10-02 – Action 3 (Review): Ran targeted Playwright structured scenarios (`tests/visual/fixture-toggle.spec.ts`, `tests/visual/responsive-baseline.spec.ts`) to validate hero focus, skip links, and overflow guards; stored screenshots under `apps/oak-open-curriculum-semantic-search/test-artifacts/structured/2025-10-02/`.
 - 2025-10-02 – Action 4/5: Introduced natural-language hero messaging + skip links (RTL) and updated responsive Playwright coverage with new artefacts at `test-artifacts/structured/2025-10-02/natural-hero-bp-md.png`.
+- 2025-10-02 – Action 5: Harmonised shared layout styling across landing/structured/natural variants; captured passing RTL + Playwright runs as evidence.
+
+## Upcoming Focus
+
+- **Actions 6–7:** Maintain GO cadence (grounding complete) and align navigation/CTA wiring with the new routes, including accessibility sweeps.
+- **Actions 8–11:** Extend natural-language controller, error/empty fixtures, and fixture banner tone with tests-first delivery.
+- **Actions 12–21:** Complete grounding checkpoints, regenerate artefacts, run quality gates, and deliver the final cross-surface UX review with evidence.
 
 ## Action Status
 
 - **Action 2:** Completed – landing page review signed off with artefacts and RTL regression.
 - **Action 3:** Completed – structured hero and fixtures verified via RTL + Playwright with responsive evidence captured.
-- **Actions 4–21:** Pending.
+- **Action 4:** Completed – natural language hero copy, skip links, and results anchoring delivered with RTL coverage.
+- **Action 5:** Completed – shared layout/styles refactored for all variants; responsive Playwright suite regenerated.
+- **Actions 6–21:** Pending (next: navigation/CTA alignment plus accessibility verification).
 
 ## Verification & Evidence
 

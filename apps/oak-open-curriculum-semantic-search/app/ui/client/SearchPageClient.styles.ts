@@ -3,8 +3,15 @@ import styledComponents, { css } from 'styled-components';
 import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 import { resolveBreakpoint } from '../shared/breakpoints';
+import type { SearchLayoutVariant } from './SearchPageLayout.types';
+import {
+  controlsGridBase,
+  controlsGridMd,
+  controlsGridXl,
+  type ControlsLayout,
+} from './SearchPageControlsGrid';
 
-export type ControlsLayout = 'both' | 'structured' | 'natural';
+export type { ControlsLayout } from './SearchPageControlsGrid';
 
 function hexToRgba(hex: string, alpha: number): string {
   const normalized = hex.replace('#', '');
@@ -39,14 +46,20 @@ export const ContentContainer = styledComponents(OakBox)`
   max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
 `;
-export const HeroControlsCluster = styledComponents(OakBox)<{ $controlsFirst?: boolean }>`
+export const HeroControlsCluster = styledComponents(OakBox)<{
+  $controlsFirst?: boolean;
+  $variant: SearchLayoutVariant;
+}>`
   display: grid;
   gap: var(--app-gap-section);
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: ${({ $controlsFirst }) =>
     $controlsFirst ? "'controls' 'hero'" : "'hero' 'controls'"};
 
-  ${({ theme, $controlsFirst }) => {
+  ${({ theme, $controlsFirst, $variant }) => {
+    if ($variant === 'natural') {
+      return '';
+    }
     const xl = resolveBreakpoint(theme, 'xl');
     const xxl = resolveBreakpoint(theme, 'xxl');
     const rowTemplate = $controlsFirst ? "'controls hero'" : "'hero controls'";
@@ -131,6 +144,17 @@ export const HeroCard = styledComponents(OakBox)`
   width: 100%;
   min-inline-size: 0;
   grid-area: hero;
+
+  &[data-variant='structured'] {
+    border-color: ${({ theme }) =>
+      resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
+  }
+
+  &[data-variant='natural'] {
+    background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
+    border-color: ${({ theme }) =>
+      resolveUiColor(getAppTheme(theme), 'border-decorative2-stronger')};
+  }
 `;
 
 export const HeroHeadingCluster = styledComponents(OakBox)`
@@ -174,69 +198,3 @@ export const AccentTypography = styledComponents(OakTypography)`
   text-shadow: 0 0 1rem
     ${({ theme }) => hexToRgba(getAppTheme(theme).app.palette.brandPrimaryBright, 0.5)};
 `;
-
-function controlsGridBase(layout: ControlsLayout) {
-  switch (layout) {
-    case 'structured':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
-        grid-template-areas: 'structured';
-      `;
-    case 'natural':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'natural';
-      `;
-    default:
-      return css`
-        grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          'structured'
-          'natural';
-      `;
-  }
-}
-
-function controlsGridMd(layout: ControlsLayout) {
-  switch (layout) {
-    case 'structured':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
-        grid-template-areas: 'structured';
-      `;
-    case 'natural':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'natural';
-      `;
-    default:
-      return css`
-        grid-template-columns:
-          minmax(var(--app-layout-control-column-min-width), 1.25fr)
-          minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'structured natural';
-      `;
-  }
-}
-
-function controlsGridXl(layout: ControlsLayout) {
-  switch (layout) {
-    case 'structured':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-control-column-min-width), 1fr);
-        grid-template-areas: 'structured';
-      `;
-    case 'natural':
-      return css`
-        grid-template-columns: minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'natural';
-      `;
-    default:
-      return css`
-        grid-template-columns:
-          minmax(var(--app-layout-control-column-min-width), 1.5fr)
-          minmax(var(--app-layout-secondary-column-min-width), 1fr);
-        grid-template-areas: 'structured natural';
-      `;
-  }
-}

@@ -118,6 +118,7 @@ function SearchHeroAndForms({
       as="section"
       aria-label="Search hero and controls"
       $controlsFirst={controlsFirst}
+      $variant={variant}
     >
       <SearchHero variant={variant} />
       <SearchForms
