@@ -10,13 +10,11 @@ const HERO_BODY_PARAGRAPHS: ReadonlyArray<string> = [
 ];
 
 const STRUCTURED_HERO_PARAGRAPHS: ReadonlyArray<string> = [
-  'Filter the Oak curriculum catalogue by subject, key stage, scope, and minimum results to direct your planning.',
-  'Refine queries quickly, keep provenance in clear view, and rely on deterministic fixtures to evidence the experience.',
+  'Filter the Oak curriculum catalogue by subject, key stage and scope.',
 ];
 
 const NATURAL_HERO_PARAGRAPHS: ReadonlyArray<string> = [
-  'Describe what you need in plain language so we can derive structured parameters and run hybrid queries.',
-  'Review the derived filter summary, tweak the prompt, and explore deterministic fixtures to evidence outcomes.',
+  'Describe what you need in plain language.',
 ];
 
 export function SearchHero({ variant }: { variant: SearchLayoutVariant }): JSX.Element {

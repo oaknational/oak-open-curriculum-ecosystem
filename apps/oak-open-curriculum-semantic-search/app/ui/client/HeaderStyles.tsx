@@ -29,7 +29,7 @@ const NavText = styledComponents(OakTypography)`
 `;
 
 const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
-  { href: '/', label: 'Search' },
+  { href: '/', label: 'Homes' },
   { href: '/structured_search', label: 'Structured search' },
   { href: '/natural_language_search', label: 'Natural language search' },
   { href: '/admin', label: 'Admin' },
