@@ -5,6 +5,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { SearchResults } from './SearchResults';
 import type { MultiScopeBucketView, SearchMeta } from './client/useSearchController';
 import { createLightTheme } from './themes/light';
+import { STRUCTURED_EMPTY_RESULTS_MESSAGE } from './content/structured-search-messages';
 
 describe('SearchResults', () => {
   const sampleMeta: SearchMeta = {
@@ -72,9 +73,7 @@ describe('SearchResults', () => {
     renderWithProviders({ results: [], meta });
 
     expect(screen.getByText('0 results for lessons')).toBeInTheDocument();
-    expect(
-      screen.getByText('No results found for this search. Adjust the filters or try another term.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).toBeInTheDocument();
   });
 
   it('shows an instruction state before any search has executed', () => {
@@ -83,11 +82,7 @@ describe('SearchResults', () => {
     expect(
       screen.getByText('Begin a search to explore structured or natural language results.'),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByText(
-        'No results found for this search. Adjust the filters or try another term.',
-      ),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).not.toBeInTheDocument();
   });
 
   function renderResults(meta: SearchMeta = sampleMeta) {
@@ -101,6 +96,7 @@ describe('SearchResults', () => {
     expect(section).not.toBeNull();
     const sectionEl = section as HTMLElement;
     expect(sectionEl.getAttribute('aria-live')).toBe('polite');
+    expect(sectionEl.getAttribute('role')).toBe('status');
 
     const list = screen.getByTestId('search-results-grid');
     const listStyles = getComputedStyle(list);

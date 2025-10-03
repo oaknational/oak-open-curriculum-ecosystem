@@ -1,6 +1,7 @@
 import { OakBox, OakTypography } from '@oaknational/oak-components';
 import styledComponents from 'styled-components';
 import { getAppTheme } from '../themes/app-theme-helpers';
+import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';
 
 export const FixtureToggleWrapper = styledComponents(OakBox)`
   display: grid;
@@ -15,7 +16,18 @@ export const FixtureToggleCluster = styledComponents(OakBox)`
   align-items: start;
 `;
 
-export const FixtureNotice = styledComponents(OakTypography)`
+export const FixtureBanner = styledComponents(OakBox)`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-stack);
+  padding: var(--app-gap-stack);
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
+  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
+  border: 1px solid
+    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-neutral-lighter')};
+`;
+
+export const FixtureNoticeText = styledComponents(OakTypography)`
   color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
 `;
 

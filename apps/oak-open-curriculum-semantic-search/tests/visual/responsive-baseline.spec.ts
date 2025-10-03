@@ -167,14 +167,11 @@ async function setThemeMode(page: Page, mode: 'light' | 'dark' | 'system'): Prom
   ]);
 }
 
-async function runStructuredSearch(page: Page): Promise<void> {
-  const queryInputs = page.getByLabel('Query');
-  await queryInputs.first().fill('decimals');
+async function submitStructuredSearch(page: Page, query = 'decimals'): Promise<void> {
+  const queryField = page.getByLabel('Query');
+  await expect(queryField).toBeVisible();
+  await queryField.first().fill(query);
   await page.getByRole('button', { name: 'Search' }).first().click();
-
-  await expect(page.getByTestId('search-results-grid').locator(':scope > li')).toHaveCount(
-    structuredSearchFixture.results.length,
-  );
 }
 
 // Search page regressions ----------------------------------------------------
@@ -187,7 +184,9 @@ test.describe('Search page responsive regressions', () => {
       await mockSearchEndpoints(page);
       await page.goto('/structured_search');
       await expect(page.getByTestId('search-page')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const controls = page.getByLabel('Search controls');
       const template = await controls.evaluate((el) => getComputedStyle(el).gridTemplateAreas);
@@ -210,7 +209,9 @@ test.describe('Search page responsive regressions', () => {
       await mockSearchEndpoints(page);
       await page.goto('/structured_search');
       await expect(page.getByTestId('search-page')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const controls = page.getByLabel('Search controls');
       const controlAreas = await controls.evaluate((el) => getComputedStyle(el).gridTemplateAreas);
@@ -238,7 +239,9 @@ test.describe('Search page responsive regressions', () => {
       await mockSearchEndpoints(page);
       await page.goto('/structured_search');
       await expect(page.getByTestId('search-hero')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const hero = page.getByTestId('search-hero');
       const maxInline = await hero.evaluate((el) =>
@@ -261,7 +264,9 @@ test.describe('Search page responsive regressions', () => {
       await setThemeMode(page, 'dark');
       await page.goto('/structured_search');
       await expect(page.getByTestId('search-hero')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const hero = page.getByTestId('search-hero');
       const html = page.locator('html');
@@ -325,7 +330,8 @@ test.describe('Search page responsive regressions', () => {
     test('Content does not overflow the viewport at 1100px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
       await page.goto('/structured_search');
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      await expect(page.getByTestId('search-results-grid')).toBeVisible();
 
       await captureScreenshot(page, 'search-overflow-1100', testInfo);
       const overflow = await page.evaluate(() => ({
@@ -343,7 +349,8 @@ test.describe('Search page responsive regressions', () => {
     test('Content does not overflow the viewport at 1380px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
       await page.goto('/structured_search');
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      await expect(page.getByTestId('search-results-grid')).toBeVisible();
 
       await captureScreenshot(page, 'search-overflow-1380', testInfo);
       const overflow = await page.evaluate(() => ({

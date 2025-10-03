@@ -2,6 +2,11 @@ import { Buffer } from 'node:buffer';
 import AxeBuilderModule from '@axe-core/playwright';
 import type { AxeResults } from 'axe-core';
 import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import {
+  STRUCTURED_EMPTY_RESULTS_MESSAGE,
+  STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
+} from '../../app/ui/content/structured-search-messages';
+import { structuredSearchFixture } from '../../app/ui/__fixtures__/search-structured';
 
 async function captureScreenshot(page: Page, name: string, testInfo: TestInfo): Promise<void> {
   const screenshot = await page.screenshot({ fullPage: true });
@@ -24,6 +29,13 @@ async function captureAccessibility(
   return results;
 }
 
+async function submitStructuredSearch(page: Page, query = 'fractions'): Promise<void> {
+  const queryField = page.getByLabel('Query');
+  await expect(queryField).toBeVisible();
+  await queryField.first().fill(query);
+  await page.getByRole('button', { name: 'Search' }).first().click();
+}
+
 test.describe('Fixture toggle workflow', () => {
   test('switches between fixtures and live data paths', async ({ page, context }, testInfo) => {
     await context.addCookies([
@@ -41,6 +53,9 @@ test.describe('Fixture toggle workflow', () => {
       'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
     );
     await expect(fixtureNotice).toBeVisible();
+    await submitStructuredSearch(page);
+    const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+    await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
     await captureScreenshot(page, 'fixture-mode-fixtures', testInfo);
     const fixturesAxe = await captureAccessibility(page, 'fixture-mode-fixtures', testInfo);
     expect.soft(fixturesAxe.violations.length).toBe(0);
@@ -81,7 +96,7 @@ test.describe('Fixture toggle workflow', () => {
   test('announces deterministic empty fixtures after a structured search', async ({
     page,
     context,
-  }) => {
+  }, testInfo) => {
     await context.addCookies([
       {
         name: 'semantic-search-fixtures',
@@ -98,17 +113,19 @@ test.describe('Fixture toggle workflow', () => {
       ),
     ).toBeVisible();
 
-    const structuredPanel = page.getByTestId('structured-search-panel');
-    await structuredPanel.getByLabel('Query').fill('fractions');
-    await structuredPanel.getByRole('button', { name: 'Search' }).click();
+    await submitStructuredSearch(page);
 
     await expect(page.getByText(/0 results for/i)).toBeVisible();
-    await expect(
-      page.getByText('No results found for this search. Adjust the filters or try another term.'),
-    ).toBeVisible();
+    await expect(page.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).toBeVisible();
+    await captureScreenshot(page, 'fixture-mode-empty', testInfo);
+    const emptyAxe = await captureAccessibility(page, 'fixture-mode-empty', testInfo);
+    expect.soft(emptyAxe.violations.length).toBe(0);
   });
 
-  test('surfaces outage messaging when error fixtures are active', async ({ page, context }) => {
+  test('surfaces outage messaging when error fixtures are active', async ({
+    page,
+    context,
+  }, testInfo) => {
     await context.addCookies([
       {
         name: 'semantic-search-fixtures',
@@ -119,17 +136,16 @@ test.describe('Fixture toggle workflow', () => {
 
     await page.goto('/structured_search');
 
-    const outageNotice = page.getByText(
-      'Simulating a search outage. Switch to live data or try again later.',
-    );
+    const outageNotice = page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
     await expect(outageNotice).toBeVisible();
 
-    const structuredPanel = page.getByTestId('structured-search-panel');
-    await structuredPanel.getByLabel('Query').fill('fractions');
-    await structuredPanel.getByRole('button', { name: 'Search' }).click();
+    await submitStructuredSearch(page);
 
-    await expect(page.getByText('Search failed')).toBeVisible();
+    await expect(page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE)).toBeVisible();
     await expect(outageNotice).toBeVisible();
+    await captureScreenshot(page, 'fixture-mode-error', testInfo);
+    const errorAxe = await captureAccessibility(page, 'fixture-mode-error', testInfo);
+    expect.soft(errorAxe.violations.length).toBe(0);
   });
 
   test('switches admin fixtures via scenario radios', async ({ page, context }, testInfo) => {

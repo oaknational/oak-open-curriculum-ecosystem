@@ -26,6 +26,11 @@ import {
   DEFAULT_NARROW_SCOPE,
   MULTI_SCOPE,
 } from '../../src/lib/search-scopes';
+import {
+  StructuredSearchRequestError,
+  createStructuredSearchError,
+  formatStructuredSearchError,
+} from './structured-search.actions.error';
 
 type StructuredRequestInput = Parameters<typeof buildBody>[0];
 
@@ -58,8 +63,9 @@ export async function searchAction(
     const result = await requestStructuredSearch({ base, body, fixtureQuery });
     const suggestionResponse = await requestSuggestions({ base, body, fixtureQuery });
     return { result: { ...result, suggestions: suggestionResponse.suggestions } };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Search failed';
+  } catch (error: unknown) {
+    console.error('Structured search action failed', error);
+    const message = formatStructuredSearchError(error);
     return { result: null, error: message };
   }
 }
@@ -69,17 +75,28 @@ async function requestStructuredSearch(params: {
   body: StructuredBody;
   fixtureQuery?: string;
 }) {
-  const { base, body, fixtureQuery } = params;
+  const { base, body: requestBody, fixtureQuery } = params;
   const response = await fetch(buildApiUrl(base, '/api/search', fixtureQuery), {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify(requestBody),
     cache: 'no-store',
   });
 
-  const parsed = HybridResponseSchema.safeParse(safeJsonParse(await response.text()));
-  if (!response.ok || !parsed.success) {
-    throw new Error('Search failed');
+  const raw = await response.text();
+  const parsedBody = safeJsonParse(raw);
+  const parsed = HybridResponseSchema.safeParse(parsedBody);
+
+  if (!response.ok) {
+    throw createStructuredSearchError(response, parsedBody);
+  }
+
+  if (!parsed.success) {
+    throw new StructuredSearchRequestError({
+      message: 'Structured search response could not be parsed.',
+      statusCode: response.status,
+      code: 'INVALID_RESPONSE',
+    });
   }
 
   return parsed.data;
@@ -118,7 +135,7 @@ async function requestSuggestions(params: {
 
     const parsed = SuggestionResponseSchema.safeParse(safeJsonParse(await response.text()));
     return parsed.success ? parsed.data : EMPTY_SUGGESTION_RESPONSE;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Failed to fetch suggestions', error);
     return EMPTY_SUGGESTION_RESPONSE;
   }

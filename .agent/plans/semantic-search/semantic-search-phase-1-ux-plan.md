@@ -67,11 +67,16 @@
 ## Recent Progress
 
 - 2025-10-03 – Action 4/8: Extracted the derived-summary UI into `NaturalSearchSummary`, applying SDK `SearchStructuredRequestSchema` parsing and official `isSubject`/`isKeyStage` guards so the natural flow now aligns with the cardinal rule; consolidated skip-link styling and prompt handling within smaller hooks to keep the component under lint thresholds.
+- 2025-10-03 – Action 13: Completed a design sweep of landing, structured, and natural experiences; confirmed hero copy and CTA wording match the Phase 1 proposition, skip links remain descriptive, and the new operations layout preserves spacing/focus. Logged a follow-up to retire the "Hybrid Search Alpha" badge once Product approves the wording change.
+- 2025-10-03 – Action 11: Introduced the shared `OperationsLayout` for `/admin` and `/status`, migrated both surfaces to the new shell, and refreshed fixture banners with themed backgrounds; verified via RTL and Playwright (`tests/visual/fixture-toggle.spec.ts`, `tests/visual/responsive-baseline.spec.ts`) capturing updated artefacts.
+- 2025-10-03 – Action 10: Updated Playwright capture suites to auto-submit structured queries, regenerated admin/search artefacts across breakpoints, and confirmed axe reports stay green after the automation tweak.
+- 2025-10-03 – Action 9: Centralised structured-search empty/error copy, wrapped notices in aria-live banners, and extended unit + Playwright coverage so `fixtures-empty`/`fixtures-error` scenarios announce guidance deterministically.
 - 2025-10-03 – Action 5 (Review): Ran the full quality gate suite (`pnpm build`, format + lint, unit/integration/Playwright/e2e, smoke) to validate the refactor; natural route axe reports now return zero violations and fixtures remain deterministic.
 - 2025-10-03 – Challenge: Discovered lingering manual key-stage casing in the derived summary and duplicate styling bloating `NaturalSearch.tsx`; addressed by introducing the shared summary component and replacing bespoke logic with SDK guards.
 - 2025-10-03 – Action 4/8: Rebuilt `/natural_language_search` as a prompt-only flow; the server now derives the structured payload, and the client renders a read-only summary card while dropping manual filters and local derivation.
 - 2025-10-03 – Action 4/5 (Review): Ran Vitest suites (`NaturalSearch.unit.test.tsx`, `SearchPageClient.integration.test.tsx`, `app/api/search/nl/route.integration.test.ts`) and Playwright `tests/visual/responsive-baseline.spec.ts` to confirm focus styling, skip links, and accessibility all pass with updated artefacts under `apps/oak-open-curriculum-semantic-search/test-results/`.
 - 2025-10-03 – Action 5: Refined skip-link styling, introduced the `--app-gap-stack` token via the theme bridge, and refreshed landing CTA card contrast using Oak palette accents.
+- 2025-10-03 – Action 5 (Review): Eliminated remaining lint warnings by switching to the SDK `isSubject`/`isKeyStage` guards, throwing informative errors on unexpected values in the derived summary, and confirming the navigation accessibility suite runs clean after adjusting Axe imports.
 - 2025-10-02 – Action 2: Created landing page integration test to drive the hero + CTA experience for `/`.
 - 2025-10-02 – Action 2: Implemented landing page components, routed `/` to the new layout, and redirected `/search` to `/`; updated integration coverage (`LandingPage.integration`, `/search` redirect, SearchPageClient regression) to green.
 - 2025-10-02 – Action 2: Completed manual light/dark review at `bp-xs`/`bp-md`, confirmed hero readability and CTA focus outlines, and captured artefacts under `apps/oak-open-curriculum-semantic-search/test-artifacts/landing/2025-10-02/`.
@@ -84,8 +89,7 @@
 
 ## Upcoming Focus
 
-- **Actions 9–11:** Harden structured-search empty/error states, generate operations layout for admin/status, and refine fixture banner tone with tests-first delivery, reusing SDK guards/tokens to avoid bespoke data structures.
-- **Actions 12–21:** Complete grounding checkpoints, regenerate artefacts, run quality gates, and deliver the final cross-surface UX review with evidence.
+- **Actions 14–21:** Complete documentation refresh, regenerate artefacts, run quality gates, and deliver the final cross-surface UX review with evidence.
 
 ## Action Status
 
@@ -95,7 +99,10 @@
 - **Action 5:** Completed – Shared layout tokens, skip-link focus styling, and CTA contrast refreshed across landing/search.
 - **Actions 6–7:** Completed – navigation, CTA alignment, and accessibility verification delivered with artefacts.
 - **Action 8:** Completed – Server-driven natural workflow with end-to-end tests (unit, integration, Playwright) proving prompt→derivation→results loop.
-- **Actions 9–21:** Pending (next: error/empty fixtures, operations layout for admin/status, fixture banner tone, artefact regeneration, and cross-surface polish).
+- **Actions 9–11:** Completed – structured-search empty/error messaging hardened, capture flows auto-submit for deterministic artefacts, and operations layout shared across admin/status with refreshed fixture banners.
+- **Action 12:** Completed – Read GO.md to refresh grounding and align the current todo list with Phase 1 objectives.
+- **Action 13:** Completed – Design and copy review across landing, structured, and natural routes with observations captured under Recent Progress.
+- **Actions 14–21:** Pending (next: documentation refresh, telemetry/status hardening, artefact regeneration, and final UX review).
 
 ## Verification & Evidence
 

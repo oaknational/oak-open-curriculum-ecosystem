@@ -13,6 +13,7 @@ import {
   extractKeyStage,
   extractHighlights,
 } from './SearchResults.shared';
+import { STRUCTURED_EMPTY_RESULTS_MESSAGE } from './content/structured-search-messages';
 import { LESSONS_SCOPE, UNITS_SCOPE } from '../../src/lib/search-scopes';
 
 export function SearchResults({
@@ -30,7 +31,13 @@ export function SearchResults({
 }): JSX.Element | null {
   if (mode === 'idle') {
     return (
-      <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
+      <ResultsSection
+        as="section"
+        id={sectionId}
+        aria-live="polite"
+        role="status"
+        $mt="space-between-xl"
+      >
         <OakTypography as="p" $font="body-3" $color="text-subdued">
           Begin a search to explore structured or natural language results.
         </OakTypography>
@@ -60,7 +67,13 @@ function MultiScopeResults({
   }
 
   return (
-    <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
+    <ResultsSection
+      as="section"
+      id={sectionId}
+      aria-live="polite"
+      role="status"
+      $mt="space-between-xl"
+    >
       {bucketsWithData.map((bucket) => (
         <BucketResults key={bucket.scope} bucket={bucket} />
       ))}
@@ -86,7 +99,13 @@ function SingleScopeResults({
   const hasResults = parsed.data.length > 0;
 
   return (
-    <ResultsSection as="section" id={sectionId} aria-live="polite" $mt="space-between-xl">
+    <ResultsSection
+      as="section"
+      id={sectionId}
+      aria-live="polite"
+      role="status"
+      $mt="space-between-xl"
+    >
       <SearchSummary summary={summary} />
       {hasResults ? (
         <ResultsGrid $reset>
@@ -204,7 +223,7 @@ function SearchSummary({
 function EmptyResultsNotice(): JSX.Element {
   return (
     <OakTypography as="p" $font="body-3" $color="text-subdued">
-      No results found for this search. Adjust the filters or try another term.
+      {STRUCTURED_EMPTY_RESULTS_MESSAGE}
     </OakTypography>
   );
 }

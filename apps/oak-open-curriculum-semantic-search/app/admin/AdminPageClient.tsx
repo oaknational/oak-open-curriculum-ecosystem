@@ -1,20 +1,19 @@
 'use client';
 
-import { Fragment, type JSX, useEffect, useState } from 'react';
+import { Fragment, type JSX, useEffect } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import type { FixtureMode } from '../lib/fixture-mode';
-import { SearchFixtureModeToggle } from '../ui/client/SearchFixtureModeToggle';
-import { FixtureToggleCluster } from '../ui/client/FixtureToggle.styles';
 import { useStream, type StreamOutcome } from '../lib/useStream';
 import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
 import {
   ActionSection,
   ActionsGrid,
   IntroSection,
-  PageContainer,
   QuickLinksSection,
   TelemetrySection,
 } from './AdminPage.styles';
+import { OperationsLayout } from '../ui/operations/OperationsLayout';
+import { SearchFixtureNotice } from '../ui/client/SearchFixtureNotice';
 
 interface AdminPageClientProps {
   readonly initialFixtureMode: FixtureMode;
@@ -34,12 +33,6 @@ export function AdminPageClient({
   initialFixtureMode,
   showFixtureToggle,
 }: AdminPageClientProps): JSX.Element {
-  const [fixtureMode, setFixtureMode] = useState<FixtureMode>(initialFixtureMode);
-
-  useEffect(() => {
-    setFixtureMode(initialFixtureMode);
-  }, [initialFixtureMode]);
-
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -50,34 +43,24 @@ export function AdminPageClient({
     }
   }, []);
 
-  return (
-    <PageContainer
-      as="main"
-      data-testid="admin-page"
-      $background="bg-primary"
-      $color="text-primary"
-    >
-      {showFixtureToggle ? (
-        <FixtureToggleCluster>
-          <SearchFixtureModeToggle
-            initialMode={initialFixtureMode}
-            visible={showFixtureToggle}
-            onModeChange={setFixtureMode}
-            label="Admin data"
-          />
-          {ADMIN_FIXTURE_NOTICES[fixtureMode] ? (
-            <OakTypography as="p" $font="body-3" $color="text-subdued" aria-live="polite">
-              {ADMIN_FIXTURE_NOTICES[fixtureMode]}
-            </OakTypography>
-          ) : null}
-        </FixtureToggleCluster>
-      ) : null}
+  const shouldShowNotice = showFixtureToggle || Boolean(ADMIN_FIXTURE_NOTICES[initialFixtureMode]);
 
+  const fixtureNotice = shouldShowNotice ? (
+    <SearchFixtureNotice
+      initialFixtureMode={initialFixtureMode}
+      visible={showFixtureToggle}
+      label="Admin data"
+      messages={ADMIN_FIXTURE_NOTICES}
+    />
+  ) : null;
+
+  return (
+    <OperationsLayout fixtureNotice={fixtureNotice} testId="admin-page">
       <AdminIntro />
       <QuickLinks />
 
       <AdminActions />
-    </PageContainer>
+    </OperationsLayout>
   );
 }
 

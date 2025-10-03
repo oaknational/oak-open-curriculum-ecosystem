@@ -1,4 +1,4 @@
-import AxeBuilder from '@axe-core/playwright';
+import AxeBuilderModule from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 const NAV_LINKS: ReadonlyArray<{ name: string; href: string }> = [
@@ -39,7 +39,7 @@ test.describe('Primary navigation', () => {
     expect(focusStyles?.outlineStyle).not.toBe('none');
     expect(focusStyles?.outlineWidth).not.toBe('0px');
 
-    const axe = await new AxeBuilder({ page }).include('nav[aria-label="Primary"]').analyze();
+    const axe = await new AxeBuilderModule({ page }).include('nav[aria-label="Primary"]').analyze();
     expect(axe.violations.length, JSON.stringify(axe.violations, null, 2)).toBe(0);
   });
 });

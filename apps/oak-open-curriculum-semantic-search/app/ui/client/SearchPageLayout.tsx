@@ -1,5 +1,5 @@
 import type { JSX } from 'react';
-import { OakTypography } from '@oaknational/oak-components';
+import { OakBox, OakTypography } from '@oaknational/oak-components';
 import SearchResultsComponent from '../SearchResults';
 import type { StructuredSearchAction } from '../StructuredSearch';
 import type { StructuredFollowUpHandlers } from './useStructuredFollowUp';
@@ -137,8 +137,19 @@ function SearchErrorMessage({ error }: { error: string | null }): JSX.Element | 
     return null;
   }
   return (
-    <OakTypography as="p" role="alert" $font="body-3" $color="text-error">
-      {error}
-    </OakTypography>
+    <OakBox
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      $background="bg-neutral"
+      $borderRadius="border-radius-s"
+      $ba="border-solid-s"
+      $borderColor="border-neutral-lighter"
+      $pa="inner-padding-m"
+    >
+      <OakTypography as="p" $font="body-3" $color="text-error">
+        {error}
+      </OakTypography>
+    </OakBox>
   );
 }

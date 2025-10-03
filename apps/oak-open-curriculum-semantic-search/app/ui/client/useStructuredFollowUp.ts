@@ -71,7 +71,10 @@ function useStructuredSearchRunner(
             }
             controller.onSuccess(result ?? null);
           } catch (error) {
-            const fallback = error instanceof Error ? error.message : 'Search failed';
+            const fallback =
+              error instanceof Error && error.message.length > 0
+                ? error.message
+                : 'Search failed. Try again later.';
             controller.onError(fallback);
           }
         })();

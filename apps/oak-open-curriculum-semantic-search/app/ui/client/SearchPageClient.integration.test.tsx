@@ -10,6 +10,10 @@ import type { FixtureMode } from '../../lib/fixture-mode';
 import SearchPageClient from './SearchPageClient';
 import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
 import { buildSingleScopeFixture, buildEmptyFixture } from '../search-fixtures/builders';
+import {
+  STRUCTURED_EMPTY_RESULTS_MESSAGE,
+  STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
+} from '../content/structured-search-messages';
 
 const refreshMock = vi.fn();
 
@@ -580,9 +584,7 @@ describe('SearchPageClient', () => {
       expect(screen.getByText('0 results for lessons')).toBeInTheDocument();
     });
 
-    expect(
-      screen.getByText('No results found for this search. Adjust the filters or try another term.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).toBeInTheDocument();
   });
 
   it('announces deterministic fixture outage messaging when errors occur', async () => {
@@ -592,14 +594,14 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action, { initialFixtureMode: 'fixtures-error', showFixtureToggle: true });
 
-    const outageMessage = 'Simulating a search outage. Switch to live data or try again later.';
-
-    expect(screen.getByText(outageMessage)).toBeInTheDocument();
+    expect(screen.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE)).toBeInTheDocument();
 
     await act(async () => {
-      structuredPropsRef.current?.onError?.(outageMessage);
+      structuredPropsRef.current?.onError?.(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
     });
 
-    expect(screen.getByRole('alert')).toHaveTextContent(outageMessage);
+    const alert = screen.getByRole('alert');
+    expect(alert).toHaveTextContent(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
+    expect(alert).toHaveAttribute('aria-live', 'assertive');
   });
 });

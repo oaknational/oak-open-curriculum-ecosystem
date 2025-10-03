@@ -113,21 +113,30 @@ function formatScope(scope: SearchStructuredRequest['scope'] | 'all'): string {
   if (scope === SEQUENCES_SCOPE) {
     return 'Sequences';
   }
-  return 'All content';
+  if (scope === 'all') {
+    return 'All content';
+  }
+  throw new Error(`Unexpected search scope: ${String(scope)}`);
 }
 
 function formatSubject(subject: SearchStructuredRequest['subject'] | undefined): string {
   if (!subject) {
     return 'Any';
   }
-  return isSubject(subject) ? titleCase(subject) : titleCase(String(subject));
+  if (!isSubject(subject)) {
+    throw new Error(`Unexpected subject value: ${String(subject)}`);
+  }
+  return titleCase(subject);
 }
 
 function formatKeyStage(keyStage: SearchStructuredRequest['keyStage'] | undefined): string {
   if (!keyStage) {
     return 'Any';
   }
-  return isKeyStage(keyStage) ? keyStage.toUpperCase() : titleCase(String(keyStage));
+  if (!isKeyStage(keyStage)) {
+    throw new Error(`Unexpected key stage value: ${String(keyStage)}`);
+  }
+  return keyStage.toUpperCase();
 }
 
 function formatPhase(phase: SearchStructuredRequest['phaseSlug'] | undefined): string {
