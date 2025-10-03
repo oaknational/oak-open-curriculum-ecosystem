@@ -13,10 +13,12 @@ export function StatusClient({ payload }: { payload: HealthPayload }): JSX.Eleme
     minute: '2-digit',
     second: '2-digit',
   });
+  const fatalMessage = payload.details.fatal ?? null;
 
   return (
     <OperationsLayout testId="status-page">
       <StatusHero updatedAt={updatedAt} />
+      {fatalMessage ? <StatusAlert message={fatalMessage} /> : null}
       <StatusCardsPanel cards={cards} />
       <DiagnosticsSection />
     </OperationsLayout>
@@ -90,6 +92,35 @@ function DiagnosticsSection(): JSX.Element {
         <br />
         Responses use HTTP status codes to reflect service availability.
       </OakTypography>
+    </OperationsSection>
+  );
+}
+
+function StatusAlert({ message }: { message: string }): JSX.Element {
+  return (
+    <OperationsSection as="section">
+      <OakBox
+        role="alert"
+        aria-live="assertive"
+        $display="flex"
+        $flexDirection="column"
+        $gap="space-between-xs"
+        $background="bg-neutral"
+        $pa="inner-padding-l"
+        $borderRadius="border-radius-m"
+        $ba="border-solid-s"
+        $borderColor="border-neutral-lighter"
+      >
+        <OakHeading tag="h2" $font="heading-6">
+          Platform outage detected
+        </OakHeading>
+        <OakTypography as="p" $font="body-3" $color="text-error">
+          {message}
+        </OakTypography>
+        <OakTypography as="p" $font="body-4" $color="text-subdued">
+          Engineers have been notified. Track remediation updates in the observability dashboards.
+        </OakTypography>
+      </OakBox>
     </OperationsSection>
   );
 }

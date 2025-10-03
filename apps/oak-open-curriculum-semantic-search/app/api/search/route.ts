@@ -122,19 +122,28 @@ async function fetchAllScopeSuggestions(
   const parsedSuggestions = SuggestionResponseSchema.safeParse(suggestionJson);
   return parsedSuggestions.success ? parsedSuggestions.data.suggestions : [];
 }
+interface ZeroHitLoggingOptions {
+  readonly skipLog?: boolean;
+  readonly skipPersistence?: boolean;
+  readonly skipWebhook?: boolean;
+}
 
 async function logZeroHitsForResult(params: {
   result: SearchResponsePayload;
   query: StructuredQuery;
   indexVersion: string;
+  options?: ZeroHitLoggingOptions;
 }): Promise<void> {
-  const { result, query, indexVersion } = params;
+  const { result, query, indexVersion, options } = params;
   const common = {
     text: query.text,
     subject: query.subject,
     keyStage: query.keyStage,
     indexVersion,
     webhookUrl: process.env.ZERO_HIT_WEBHOOK_URL,
+    skipLog: options?.skipLog,
+    skipPersistence: options?.skipPersistence,
+    skipWebhook: options?.skipWebhook,
   } as const;
 
   if (isMultiScopePayload(result)) {
@@ -164,7 +173,6 @@ async function logZeroHitsForResult(params: {
     timedOut: result.timedOut,
   });
 }
-
 function buildFixtureResponse(
   body: StructuredSearchBody,
   mode: FixturePayloadMode,
@@ -174,7 +182,6 @@ function buildFixtureResponse(
   }
   return buildFixtureForScope(body.scope);
 }
-
 function isMultiScopePayload(value: SearchResponsePayload): value is MultiScopeResponse {
   return value.scope === MULTI_SCOPE && 'buckets' in value;
 }
@@ -190,7 +197,6 @@ function buildEmptyFixtureForScope(scope: StructuredSearchBody['scope']): Search
 
   return buildFixtureForScope(scope);
 }
-
 async function handleStructuredSearchRequest(params: {
   req: NextRequest;
   body: StructuredSearchBody;
@@ -210,7 +216,6 @@ async function handleStructuredSearchRequest(params: {
   applyFixtureModeCookie(response, persist);
   return response;
 }
-
 async function handleFixtureModeRequest(params: {
   body: StructuredSearchBody;
   mode: Exclude<FixtureMode, 'live'>;
@@ -233,7 +238,12 @@ async function handleFixtureModeRequest(params: {
   }
 
   const fixtureResult = buildFixtureResponse(body, mode);
-  await logZeroHitsForResult({ result: fixtureResult, query, indexVersion });
+  await logZeroHitsForResult({
+    result: fixtureResult,
+    query,
+    indexVersion,
+    options: { skipLog: true, skipPersistence: true, skipWebhook: true },
+  });
   const response = NextResponse.json(fixtureResult);
   applyFixtureModeCookie(response, persist);
   return response;

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { parseQuery } from '../../../../src/lib/query-parser';
-import { llmEnabled } from '../../../../src/lib/env';
+import { llmEnabled, optionalEnv } from '../../../../src/lib/env';
 import type { StructuredQuery } from '../../../../src/lib/run-hybrid-search';
 import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
 import {
@@ -16,6 +16,7 @@ import {
 import { buildSingleScopeFixture, buildEmptyFixture } from '../../../ui/search-fixtures/builders';
 import { LESSONS_SCOPE, UNITS_SCOPE } from '../../../../src/lib/search-scopes';
 import type { StructuredBody } from '../../../ui/structured-search.shared';
+import { logZeroHit } from '../../../../src/lib/observability/zero-hit';
 
 type NaturalStructuredPayload = StructuredBody;
 
@@ -90,28 +91,49 @@ async function handleNaturalSearchRequest(params: {
   return nextResponse;
 }
 
-function handleNaturalFixtureRequest(params: {
+async function handleNaturalFixtureRequest(params: {
   mode: FixtureMode;
   persist: FixtureMode | undefined;
   prompt: string;
   requestPayload: NaturalStructuredPayload;
-}): Response {
+}): Promise<Response> {
   const { mode, persist, prompt, requestPayload } = params;
 
   if (mode === 'fixtures-error') {
-    const response = NextResponse.json(
-      {
-        error: 'FIXTURE_ERROR',
-        message: 'Fixture mode requested an error response for natural-language search.',
-      },
-      { status: 503 },
-    );
-    applyFixtureModeCookie(response, persist);
-    return response;
+    return buildNaturalFixtureErrorResponse(persist);
   }
 
   const lessonsFixture = buildNaturalFixture(mode);
-  const response = NextResponse.json({
+  const response = buildNaturalFixtureSuccessResponse({ prompt, requestPayload, lessonsFixture });
+  if (lessonsFixture.total === 0) {
+    await logZeroHitForFixture({ requestPayload, lessonsFixture });
+  }
+  applyFixtureModeCookie(response, persist);
+  return response;
+}
+
+function buildNaturalFixtureErrorResponse(persist: FixtureMode | undefined): NextResponse {
+  const response = NextResponse.json(
+    {
+      error: 'FIXTURE_ERROR',
+      message: 'Fixture mode requested an error response for natural-language search.',
+    },
+    { status: 503 },
+  );
+  applyFixtureModeCookie(response, persist);
+  return response;
+}
+
+function buildNaturalFixtureSuccessResponse({
+  prompt,
+  requestPayload,
+  lessonsFixture,
+}: {
+  prompt: string;
+  requestPayload: NaturalStructuredPayload;
+  lessonsFixture: ReturnType<typeof buildNaturalFixture>;
+}): NextResponse {
+  return NextResponse.json({
     result: {
       scope: lessonsFixture.scope,
       results: lessonsFixture.results,
@@ -128,8 +150,28 @@ function handleNaturalFixtureRequest(params: {
       structured: requestPayload,
     },
   });
-  applyFixtureModeCookie(response, persist);
-  return response;
+}
+
+async function logZeroHitForFixture({
+  requestPayload,
+  lessonsFixture,
+}: {
+  requestPayload: NaturalStructuredPayload;
+  lessonsFixture: ReturnType<typeof buildNaturalFixture>;
+}): Promise<void> {
+  const indexVersion = optionalEnv()?.SEARCH_INDEX_VERSION ?? 'v1';
+  await logZeroHit({
+    total: lessonsFixture.total,
+    scope: lessonsFixture.scope,
+    text: requestPayload.text,
+    subject: requestPayload.subject,
+    keyStage: requestPayload.keyStage,
+    phaseSlug: requestPayload.phaseSlug,
+    indexVersion,
+    skipLog: true,
+    skipPersistence: true,
+    skipWebhook: true,
+  });
 }
 
 async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStructuredPayload> {

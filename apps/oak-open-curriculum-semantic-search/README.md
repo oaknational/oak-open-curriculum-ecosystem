@@ -48,8 +48,14 @@ apps/oak-open-curriculum-semantic-search/
 │  │  ├─ index-oak/status/route.ts    # Ingestion telemetry
 │  │  ├─ rebuild-rollup/route.ts      # Rollup regeneration
 │  │  └─ sdk/…                        # SDK parity routes
-│  ├─ admin/page.tsx                  # Admin dashboard (ingestion, zero hits)
-│  └─ page.tsx                        # Search UI (structured + NL + sequences)
+│  ├─ admin/page.tsx                  # Admin dashboard within the shared operations layout
+│  ├─ natural_language_search/page.tsx# Natural-language search workspace (prompt-only)
+│  ├─ structured_search/page.tsx      # Structured search workspace (filters + fixtures)
+│  ├─ page.tsx                        # Landing page (hero + CTAs linking to search variants)
+│  └─ ui/
+│     ├─ landing/                     # Landing hero + CTA cards
+│     ├─ client/                      # Search layout, fixtures toggle, shared controls
+│     └─ operations/                  # OperationsLayout shared by admin and status routes
 ├─ src/
 │  ├─ lib/queries/                    # RRF builders, facets, highlights
 │  ├─ lib/ingestion/                  # Enriched transforms, batching helpers
@@ -61,6 +67,19 @@ apps/oak-open-curriculum-semantic-search/
 ```
 
 Consult `docs/ARCHITECTURE.md` for the full system diagram.
+
+## UX surfaces & artefacts
+
+The Phase 1 UX slice now exposes dedicated surfaces for landing, structured search, natural-language search, and operations tooling. Each surface is backed by deterministic fixtures, automated tests, and captured artefacts.
+
+| Surface                              | Description                                                                                    | Test coverage                                                                                                                                                                                                 | Artefact evidence                                                                                                      |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Landing (`/`)                        | Hero messaging introducing hybrid search, CTA cards linking to both experiences.               | `app/ui/landing/LandingPage.integration.test.tsx`; `tests/visual/navigation.accessibility.spec.ts`.                                                                                                           | `test-artifacts/landing/2025-10-02/landing-light-xs.png`, `test-artifacts/landing/2025-10-02/landing-dark-md.png`.     |
+| Structured (`/structured_search`)    | Condensed hero, structured form, deterministic fixtures with empty/error banners.              | `app/ui/client/SearchPageClient.integration.test.tsx`; `tests/visual/fixture-toggle.spec.ts`; `tests/visual/responsive-baseline.spec.ts`.                                                                     | `test-artifacts/structured/2025-10-02/responsive-baseline-Search-83ced-d-controls-stack-vertically-Google-Chrome.png`. |
+| Natural (`/natural_language_search`) | Prompt-only flow with derived summary card validated against SDK schema.                       | `app/ui/NaturalSearch.unit.test.tsx`; `tests/visual/responsive-baseline.spec.ts` (natural fixtures).                                                                                                          | `test-artifacts/structured/2025-10-02/natural-hero-bp-md.png`.                                                         |
+| Operations (`/admin`, `/status`)     | OperationsLayout with fixture banners, aria-live telemetry status, and platform outage alerts. | `app/admin/AdminPageClient.integration.test.tsx`; `app/ui/admin/ZeroHitDashboard.accessibility.integration.test.tsx`; `app/status/StatusClient.integration.test.tsx`; `tests/visual/admin.telemetry.spec.ts`. | `test-results/responsive-baseline-Admin--02d41-ort-and-clears-stale-hashes-Google-Chrome/test-finished-1.png`.         |
+
+Each artefact path is stored within the repository to maintain deterministic visual evidence for design reviews.
 
 ---
 

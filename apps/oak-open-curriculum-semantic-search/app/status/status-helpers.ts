@@ -1,5 +1,20 @@
 import type { HealthStatus, HealthDetails, StatusCardConfig, HealthPayload } from './types';
 
+const ELASTICSEARCH_HEALTHY_COPY = 'Elasticsearch responding to health checks.';
+const ELASTICSEARCH_OUTAGE_COPY =
+  'Elasticsearch is unreachable. Investigate infrastructure or switch to fixtures.';
+const ELASTICSEARCH_ERROR_COPY =
+  'Elasticsearch reported an error. Review cluster logs for more detail.';
+const ELASTICSEARCH_PENDING_COPY = 'Waiting for Elasticsearch health data.';
+
+const SDK_HEALTHY_COPY = 'SDK parity checks are passing.';
+const SDK_ERROR_COPY = 'SDK health checks are failing. Investigate upstream services.';
+const SDK_PENDING_COPY = 'Waiting for SDK health data.';
+
+const LLM_ENABLED_COPY = 'LLM-backed query parsing is available.';
+const LLM_DISABLED_COPY =
+  'LLM-backed parsing is disabled; natural search uses structured fallbacks only.';
+
 export function buildStatusCards(status: HealthStatus, details: HealthDetails): StatusCardConfig[] {
   const esCard = createEsCard(status.es, details.esError);
   const sdkCard = createSdkCard(status.sdk, details.sdkError);
@@ -65,57 +80,82 @@ function createSystemCard(message: string): StatusCardConfig {
 }
 
 function createEsCard(status: HealthStatus['es'], error?: string): StatusCardConfig {
-  const tone = status === 'ok' ? 'positive' : status === 'unknown' ? 'neutral' : 'negative';
+  if (status === 'ok') {
+    return {
+      title: 'Elasticsearch',
+      summary: 'Operational',
+      tone: 'positive',
+      description: ELASTICSEARCH_HEALTHY_COPY,
+    };
+  }
+
+  if (status === 'down') {
+    return {
+      title: 'Elasticsearch',
+      summary: 'Outage',
+      tone: 'negative',
+      description: error ?? ELASTICSEARCH_OUTAGE_COPY,
+    };
+  }
+
+  if (status === 'error') {
+    return {
+      title: 'Elasticsearch',
+      summary: 'Degraded',
+      tone: 'negative',
+      description: error ?? ELASTICSEARCH_ERROR_COPY,
+    };
+  }
+
   return {
     title: 'Elasticsearch',
-    summary: summariseEs(status),
-    tone,
-    description: error,
+    summary: 'Pending',
+    tone: 'neutral',
+    description: ELASTICSEARCH_PENDING_COPY,
   };
 }
 
 function createSdkCard(status: HealthStatus['sdk'], error?: unknown): StatusCardConfig {
-  const tone = status === 'ok' ? 'positive' : status === 'unknown' ? 'neutral' : 'negative';
+  if (status === 'ok') {
+    return {
+      title: 'Curriculum SDK',
+      summary: 'Operational',
+      tone: 'positive',
+      description: SDK_HEALTHY_COPY,
+    };
+  }
+
+  if (status === 'error') {
+    return {
+      title: 'Curriculum SDK',
+      summary: 'Failure',
+      tone: 'negative',
+      description: describe(error) ?? SDK_ERROR_COPY,
+    };
+  }
+
   return {
     title: 'Curriculum SDK',
-    summary: summariseSdk(status),
-    tone,
-    description: describe(error),
+    summary: 'Pending',
+    tone: 'neutral',
+    description: SDK_PENDING_COPY,
   };
 }
 
 function createLlmCard(status: HealthStatus['llm']): StatusCardConfig {
+  if (status === 'enabled') {
+    return {
+      title: 'Natural-language parsing',
+      summary: 'Enabled',
+      tone: 'positive',
+      description: LLM_ENABLED_COPY,
+    };
+  }
+
   return {
     title: 'Natural-language parsing',
-    summary: status === 'enabled' ? 'Enabled' : 'Disabled',
-    tone: status === 'enabled' ? 'positive' : 'neutral',
-    description:
-      status === 'enabled'
-        ? 'LLM-backed query parsing is available.'
-        : 'LLM-backed parsing is disabled; natural search uses structured fallbacks only.',
+    summary: 'Disabled',
+    tone: 'neutral',
+    description: LLM_DISABLED_COPY,
   };
-}
-
-function summariseEs(status: HealthStatus['es']): string {
-  switch (status) {
-    case 'ok':
-      return 'Operational';
-    case 'down':
-      return 'Unreachable';
-    case 'error':
-      return 'Error';
-    default:
-      return 'Unknown';
-  }
-}
-
-function summariseSdk(status: HealthStatus['sdk']): string {
-  switch (status) {
-    case 'ok':
-      return 'Operational';
-    case 'error':
-      return 'Error';
-    default:
-      return 'Unknown';
-  }
 }

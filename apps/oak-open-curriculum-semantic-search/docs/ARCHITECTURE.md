@@ -26,7 +26,19 @@ Shared settings include the `oak_text` analyser (standard, lowercase, asciifoldi
 - `GET /api/openapi.json` & `GET /api/docs` – Serve generated OpenAPI schema and Redoc UI.
 - `/api/sdk/*` – SDK parity routes used for regression comparison (not exposed publicly).
 
-All admin endpoints require
+All admin endpoints require `x-api-key: ${SEARCH_API_KEY}`.
+
+## UI layout hierarchy
+
+The App Router surfaces use nested layouts to separate search experiences from operational tooling while keeping accessibility and deterministic fixtures front of mind:
+
+- `app/page.tsx` renders the landing page via `app/ui/landing/LandingPage`, introducing hybrid search and funnelling users through CTA cards.
+- `app/structured_search/page.tsx` and `app/natural_language_search/page.tsx` load `SearchPageClient`, which in turn drives `SearchPageLayout` and its variant-specific heroes, skip links, and forms.
+- `app/ui/client/SearchPageLayout.sections.tsx` bifurcates structured and natural controls, wiring skip links (`buildSkipLinks`) and section IDs (`resolveResultsSectionId`) so Playwright and assistive tech can target the correct regions.
+- `app/ui/operations/OperationsLayout.tsx` wraps `/admin` and `/status`, standardising spacing, fixture notices, and aria live regions for status updates (`StatusClient`) and telemetry dashboards (`AdminPageClient`).
+- `app/ui/client/SearchFixtureNotice.tsx` centralises the fixture toggle and banner copy, sharing tone across search and operations surfaces.
+
+Captured artefacts under `test-artifacts/` (landing, structured, natural) and `test-results/responsive-baseline-*` (admin/status) serve as visual checkpoints, aligning with the UX plan’s evidence requirements.
 
 ## Design rationale
 
@@ -64,6 +76,7 @@ All admin endpoints require
 - Structured logs capture ingestion batches, retries, zero-hit searches (`scope`, `text`, filters), and index version rotations.
 - Admin status endpoint collates counts, durations, and errors for dashboards.
 - Suggestion and search routes log cache keys (debug) and version tags (info) to aid troubleshooting.
+- **Zero-hit persistence pipeline**: every zero-hit event is queued through the in-memory ring buffer and, when `ZERO_HIT_PERSISTENCE_ENABLED=true`, also written to the target Elasticsearch Serverless cluster. The pipeline provisions an ILM policy (`oak_zero_hit_events_retention_<days>d`) on first write, applies it to the target index (`oak_zero_hit_events` or `_sandbox`), and honours `ZERO_HIT_INDEX_RETENTION_DAYS` (default 30) before expiring cold documents. The admin dashboard fetches the latest snapshot via `/api/observability/zero-hit`, which falls back to deterministic fixtures when fixture mode is active. Friendly outage copy is surfaced through a dedicated aria-live banner so operators receive immediate feedback when telemetry is unreachable.
 
 ## Dependencies & tooling
 

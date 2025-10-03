@@ -22,6 +22,9 @@ vi.mock('../../../../src/lib/query-parser', () => ({
 
 vi.mock('../../../../src/lib/env', () => ({
   llmEnabled: () => true,
+  optionalEnv: () => ({
+    SEARCH_INDEX_VERSION: 'v-test-index',
+  }),
 }));
 
 import { POST } from './route';
