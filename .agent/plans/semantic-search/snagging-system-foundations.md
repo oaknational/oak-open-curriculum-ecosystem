@@ -56,6 +56,12 @@ app/ui
 - Introduce `useNavItems()` to centralise labelling (fixing "Homes"). Provide optional icon slot for Oak mark link.
 - Persist skip links as the first element inside `body` (or directly beneath header) to retain keyboard access.
 
+### Header Grid Specification (2025-10-04)
+
+- **Base / ≤ `md` (≤768px)**: single-column CSS grid ordered `logo` → `nav` → `utilities`, `row-gap: getSpacingVar('stack')`, `padding-inline: getSpacingVar('inline-base')`, and `justify-items: start` to keep utilities left aligned.
+- **≥ `lg` (≥1024px)**: three-column grid `auto minmax(0, 1fr) auto` with areas `logo nav utilities`, `column-gap: getSpacingVar('cluster')`, `row-gap: getSpacingVar('section')`, `align-items: center`, and utilities anchored with `justify-self: end` while remaining flex-stacked internally.
+- **≥ `xl` (≥1360px)**: promote inline padding to `getSpacingVar('inline-wide')` and optionally clamp nav width with `getAppTheme(theme).app.layout.containerMaxWidth` to prevent drift on ultra-wide viewports.
+
 ## Fixture Mode Architecture
 
 - Promote `FixtureModeContext` within `ui/global/Fixture`. Header menu dispatches mode changes via context, which proxies to the existing server action.

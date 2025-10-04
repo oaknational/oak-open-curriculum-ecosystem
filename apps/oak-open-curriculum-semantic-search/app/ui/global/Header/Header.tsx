@@ -2,11 +2,11 @@
 
 import type { JSX } from 'react';
 import Link from 'next/link';
-import type { Route } from 'next';
 import { OakBox, OakFlex, OakImage, OakTypography } from '@oaknational/oak-components';
 import styledComponents from 'styled-components';
 import ThemeSelect from '../Theme/ThemeSelect';
 import { getAppTheme } from '../../themes/app-theme-helpers';
+import { useNavItems } from './useNavItems';
 
 const HeaderRoot = styledComponents(OakFlex)`
   align-items: center;
@@ -26,16 +26,8 @@ const PrimaryNav = styledComponents(OakFlex)`
 
 const NavText = styledComponents(OakTypography)`
   font-family: ${({ theme }) => getAppTheme(theme).app.fonts.primary};
+  transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
 `;
-
-const NAV_ITEMS: ReadonlyArray<{ href: Route; label: string }> = [
-  { href: '/', label: 'Search' },
-  { href: '/structured_search', label: 'Structured search' },
-  { href: '/natural_language_search', label: 'Natural language search' },
-  { href: '/admin', label: 'Admin' },
-  { href: '/status', label: 'Status' },
-  { href: '/api/docs', label: 'Docs' },
-];
 
 const NavLink = styledComponents(Link)`
   display: inline-flex;
@@ -43,14 +35,34 @@ const NavLink = styledComponents(Link)`
   gap: ${({ theme }) => getAppTheme(theme).app.space.gap.cluster};
   text-decoration: none;
   color: inherit;
+  padding-inline: ${({ theme }) => getAppTheme(theme).app.space.padding.pill};
+  padding-block: calc(${({ theme }) => getAppTheme(theme).app.space.padding.pill} / 2);
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
+  transition: background-color 0.2s ease-in-out, outline-color 0.2s ease-in-out;
 
   &:focus-visible {
     outline: 3px solid ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
     outline-offset: 4px;
+    background-color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+  }
+
+  &:focus-visible ${NavText} {
+    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+    text-decoration: none;
+  }
+
+  &:hover ${NavText} {
+    color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimary};
+    text-decoration: underline;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 0.125rem;
+    text-underline-offset: 0.25rem;
   }
 `;
 
 export default function Header(): JSX.Element {
+  const nav = useNavItems();
+
   return (
     <HeaderRoot
       as="header"
@@ -62,18 +74,18 @@ export default function Header(): JSX.Element {
       $background="bg-primary"
       $color="text-primary"
     >
-      <Link href="/" aria-label="Home">
+      <Link href={nav.home.href} aria-label={nav.home.ariaLabel}>
         <OakImage
-          src="/oak-national-academy-logo-512.png"
-          alt="Oak National Academy"
-          width={32}
-          height={32}
+          src={nav.home.icon.src}
+          alt={nav.home.icon.alt}
+          width={nav.home.icon.width}
+          height={nav.home.icon.height}
         />
       </Link>
 
       <PrimaryNav as="nav" aria-label="Primary" $font="body-3" $color="text-primary">
-        {NAV_ITEMS.map((item) => (
-          <NavLink key={item.href} href={item.href}>
+        {nav.primary.map((item) => (
+          <NavLink key={item.id} href={item.href} aria-label={item.ariaLabel}>
             <NavText as="span" $font="body-3" $color="text-primary">
               {item.label}
             </NavText>
@@ -81,7 +93,10 @@ export default function Header(): JSX.Element {
         ))}
       </PrimaryNav>
 
-      <OakBox $ml="auto">
+      <OakBox
+        $ml="auto"
+        aria-label={nav.utilities.find((utility) => utility.type === 'theme-select')?.ariaLabel}
+      >
         <ThemeSelect />
       </OakBox>
     </HeaderRoot>

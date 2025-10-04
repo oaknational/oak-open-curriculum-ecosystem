@@ -18,6 +18,8 @@ The design does not make use of wide screens, and is not optimised for narrow sc
 - The theme selector remains right-aligned as the viewport becomes narrower. Please fix this. Once it wraps under the nav items, it should be left-aligned.
 - The nav lacks an icon on the left for Oak National Academy. Please add it, and make it a link to the home page.
 - Are the skip links still in place?
+- 2025-10-04: Nav metadata centralised via `useNavItems()`; root route relabelled “Home” and fixture toggle placeholder captured for upcoming utilities work.
+- 2025-10-04: Focus and hover states now use Oak palette tokens (`brandPrimary`, `brandPrimaryBright`) with pill padding/radii to increase target size; no new token gaps found.
 
 ### Home Page
 

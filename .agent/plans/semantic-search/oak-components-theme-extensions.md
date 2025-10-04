@@ -194,6 +194,8 @@ Although outside the symposium remit, the Semantic Search team is tracking the f
 2. Expand contrast tests to cover subdued/error text and border accents; extend hydration integration tests to cover navigation toggles.
 3. Prepare CSP guidance (nonce/hash strategy) for inline styles.
 4. Monitor Oak Components releases and reduce custom code once upstream features land.
+5. Header token sweep (2025-10-04): navigation polish can rely on existing spacing (`grid`, `section`, `cluster`, inline padding), palette (`brandPrimary`, `brandPrimaryBright`), and typography (`body-3`, `body-4`) tokens; no new gaps identified yet.
+6. Header focus states (2025-10-04): hover/focus affordances use existing palette + radii tokens (`brandPrimary`, `brandPrimaryBright`, `radii.pill`, `padding.pill`) so no upstream additions required.
 
 ### Appendix C – Maintenance & Testing Considerations
 

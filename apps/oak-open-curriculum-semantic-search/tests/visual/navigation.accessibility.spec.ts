@@ -1,14 +1,11 @@
 import AxeBuilderModule from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { HEADER_NAV_METADATA } from '../../app/ui/global/Header/useNavItems';
 
-const NAV_LINKS: ReadonlyArray<{ name: string; href: string }> = [
-  { name: 'Search', href: '/' },
-  { name: 'Structured search', href: '/structured_search' },
-  { name: 'Natural language search', href: '/natural_language_search' },
-  { name: 'Admin', href: '/admin' },
-  { name: 'Status', href: '/status' },
-  { name: 'Docs', href: '/api/docs' },
-];
+const NAV_METADATA = HEADER_NAV_METADATA;
+const NAV_LINKS = NAV_METADATA.primary.map(({ label, href }) => ({ name: label, href }));
+const HOME_LINK =
+  NAV_METADATA.primary.find((item) => item.id === 'home') ?? NAV_METADATA.primary[0];
 
 test.describe('Primary navigation', () => {
   test('links are accessible and focusable', async ({ page }) => {
@@ -21,8 +18,8 @@ test.describe('Primary navigation', () => {
       await expect(link).toHaveAttribute('href', href);
     }
 
-    const searchLink = nav.getByRole('link', { name: 'Search', exact: true });
-    await searchLink.focus();
+    const homeLink = nav.getByRole('link', { name: HOME_LINK.label, exact: true });
+    await homeLink.focus();
     const focusStyles = await page.evaluate(() => {
       const active = document.activeElement as HTMLElement | null;
       if (!active) {
