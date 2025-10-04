@@ -6,6 +6,10 @@
 - Ensure server behaviour, admin tooling, and API documentation remain in lockstep with the SDK so downstream consumers gain type-safe, predictable responses.
 - Maintain rigorous quality gates (TDD, type checks, linting, observability) while iterating on Phase 1 feature completeness.
 
+## Prep
+
+Make sure the [Cardinal Rule of the repository](../../directives-and-memory/rules.md) is applied. Specifically the types in apps/oak-open-curriculum-semantic-search/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
+
 ## Phase Focus – Service Hardening & Operations
 
 Phase 1 functionality work cements the back-end and operational experience:

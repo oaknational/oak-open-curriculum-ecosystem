@@ -37,9 +37,6 @@ export function __resetZeroHitPersistenceCachesForTests(): void {
   ensuredPolicies.clear();
 }
 
-/** Alias describing the event persisted to Elasticsearch. */
-export type PersistedZeroHitEvent = ZeroHitEvent;
-
 /** Telemetry snapshot consumed by the dashboard. */
 export interface ZeroHitTelemetry {
   summary: {
@@ -56,7 +53,7 @@ export function zeroHitPersistenceEnabled(): boolean {
 }
 
 /** Persist a zero-hit event to the Serverless Elasticsearch index. */
-export async function persistZeroHitEvent(event: PersistedZeroHitEvent): Promise<void> {
+export async function persistZeroHitEvent(event: ZeroHitEvent): Promise<void> {
   const envVars = optionalEnv();
   if (!envVars?.ZERO_HIT_PERSISTENCE_ENABLED) {
     return;

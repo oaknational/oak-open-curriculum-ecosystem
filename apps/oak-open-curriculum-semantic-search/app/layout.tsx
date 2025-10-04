@@ -5,10 +5,10 @@ import { cookies } from 'next/headers';
 
 import Script from 'next/script';
 
-import { lexend, workSans } from './ui/fonts';
+import { lexend, workSans } from './ui/global/Theme';
 import StyledComponentsRegistry from './lib/registry';
 import { Providers } from './lib/Providers';
-import HeaderStyles from './ui/client/HeaderStyles';
+import { Header } from './ui/global/client';
 import { WebVitals } from './ui/web-vitals';
 
 /**
@@ -95,7 +95,7 @@ export default async function RootLayout({
         <WebVitals />
         <StyledComponentsRegistry>
           <Providers initialMode={initialMode}>
-            <HeaderStyles />
+            <Header />
             {children}
           </Providers>
         </StyledComponentsRegistry>

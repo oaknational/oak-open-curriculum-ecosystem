@@ -5,9 +5,10 @@ import type {
   SearchSequenceIndexDoc,
   KeyStage,
   SearchSubjectSlug,
+  SearchScope,
 } from '../../types/oak';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { SuggestQuery, SuggestScope, SuggestionContext, SuggestionItem } from './types';
+import type { SuggestQuery, SuggestionContext, SuggestionItem } from './types';
 
 /** Internal representation of a mapped suggestion hit. */
 export interface SuggestionHit {
@@ -27,13 +28,7 @@ export interface ScopeConfig<TDoc> {
   toSuggestion(doc: TDoc, id: string): SuggestionHit | null;
 }
 
-type ConfigBuilderMap = {
-  lessons: () => ScopeConfig<SearchLessonsIndexDoc>;
-  units: () => ScopeConfig<SearchUnitRollupDoc>;
-  sequences: () => ScopeConfig<SearchSequenceIndexDoc>;
-};
-
-const scopeConfigBuilders: ConfigBuilderMap = {
+const scopeConfigBuilders = {
   lessons: () => ({
     index: resolveCurrentSearchIndexName('lessons'),
     completionField: 'title_suggest',
@@ -97,13 +92,27 @@ const scopeConfigBuilders: ConfigBuilderMap = {
         contexts: phaseContext(doc.phase_slug),
       }),
   }),
+} as const satisfies {
+  lessons: () => ScopeConfig<SearchLessonsIndexDoc>;
+  units: () => ScopeConfig<SearchUnitRollupDoc>;
+  sequences: () => ScopeConfig<SearchSequenceIndexDoc>;
 };
-
 export function getScopeConfig(scope: 'lessons'): ScopeConfig<SearchLessonsIndexDoc>;
 export function getScopeConfig(scope: 'units'): ScopeConfig<SearchUnitRollupDoc>;
 export function getScopeConfig(scope: 'sequences'): ScopeConfig<SearchSequenceIndexDoc>;
-export function getScopeConfig(scope: SuggestScope): ScopeConfig<unknown> {
-  return scopeConfigBuilders[scope]();
+export function getScopeConfig(scope: SearchScope): ScopeConfig<unknown> {
+  switch (scope) {
+    case 'lessons':
+      return scopeConfigBuilders.lessons();
+    case 'units':
+      return scopeConfigBuilders.units();
+    case 'sequences':
+      return scopeConfigBuilders.sequences();
+    default: {
+      const unexpectedScope: never = scope;
+      throw new Error(`Unsupported suggestion scope: ${unexpectedScope}`);
+    }
+  }
 }
 
 function buildSubjectContexts(
@@ -178,7 +187,7 @@ function phaseContext(phaseSlug: string | undefined): SuggestionContext {
 
 function createSuggestionHit(params: {
   id: string;
-  scope: SuggestScope;
+  scope: SearchScope;
   label: string;
   url: string;
   subject?: SearchSubjectSlug;

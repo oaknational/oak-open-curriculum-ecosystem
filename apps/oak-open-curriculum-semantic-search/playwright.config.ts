@@ -3,17 +3,21 @@ import { defineConfig, devices } from '@playwright/test';
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000';
 
 export default defineConfig({
+  reportSlowTests: {
+    max: 10,
+    threshold: 10_000,
+  },
   testDir: './tests/visual',
-  timeout: 60_000,
+  timeout: 30_000,
   expect: {
-    timeout: 10_000,
+    timeout: 5_000,
   },
   reporter: [['list']],
   webServer: {
     command: 'pnpm dev',
     url: baseURL,
     reuseExistingServer: true,
-    timeout: 120_000,
+    timeout: 60_000,
     env: {
       ...process.env,
       SEMANTIC_SEARCH_USE_FIXTURES: 'true',

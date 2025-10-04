@@ -8,7 +8,7 @@ import {
   ContentContainer,
   HeroCard,
   PageContainer,
-} from '../client/SearchPageClient.styles';
+} from '../search/layout/SearchPageClient.styles';
 import { getAppTheme } from '../themes/app-theme-helpers';
 import { resolveBreakpoint } from '../shared/breakpoints';
 import { resolveUiColor } from '../../lib/theme/ThemeGlobalStyle';

@@ -12,11 +12,11 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ refresh: refreshMock }),
 }));
 
-vi.mock('../ui/admin/ZeroHitDashboard', () => ({
+vi.mock('../ui/ops/admin/ZeroHitDashboard', () => ({
   ZeroHitDashboard: () => <div data-testid="zero-hit-dashboard" />,
 }));
 
-vi.mock('../ui/fixture-mode-toggle.actions', () => ({
+vi.mock('../ui/global/Fixture/fixture-mode-toggle.actions', () => ({
   setFixtureMode: setFixtureModeMock,
 }));
 

@@ -6,19 +6,20 @@ import { isKeyStage, isSubject } from '../../../../src/adapters/sdk-guards';
 import {
   DEFAULT_INCLUDE_FACETS,
   SearchNaturalLanguageRequestSchema,
-} from '../../../../src/types/oak';
-import type { SearchNaturalLanguageRequest, SearchScopeWithAll } from '../../../../src/types/oak';
+  type SearchNaturalLanguageRequest,
+  type SearchScopeWithAll,
+  type SearchStructuredRequest,
+} from '@oaknational/oak-curriculum-sdk';
 import {
   resolveFixtureModeFromRequest,
   applyFixtureModeCookie,
   type FixtureMode,
 } from '../../../lib/fixture-mode';
-import { buildSingleScopeFixture, buildEmptyFixture } from '../../../ui/search-fixtures/builders';
+import { buildSingleScopeFixture, buildEmptyFixture } from '../../../lib/search-fixtures/builders';
 import { LESSONS_SCOPE, UNITS_SCOPE } from '../../../../src/lib/search-scopes';
-import type { StructuredBody } from '../../../ui/structured-search.shared';
 import { logZeroHit } from '../../../../src/lib/observability/zero-hit';
 
-type NaturalStructuredPayload = StructuredBody;
+type NaturalStructuredPayload = SearchStructuredRequest;
 
 type NaturalRequestBody = SearchNaturalLanguageRequest;
 

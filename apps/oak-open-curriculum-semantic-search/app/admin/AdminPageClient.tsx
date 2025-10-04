@@ -4,7 +4,7 @@ import { Fragment, type JSX, useEffect } from 'react';
 import { OakBox, OakHeading, OakPrimaryButton, OakTypography } from '@oaknational/oak-components';
 import type { FixtureMode } from '../lib/fixture-mode';
 import { useStream, type StreamOutcome } from '../lib/useStream';
-import { ZeroHitDashboard } from '../ui/admin/ZeroHitDashboard';
+import { ZeroHitDashboard } from '../ui/ops/admin/ZeroHitDashboard';
 import {
   ActionSection,
   ActionsGrid,
@@ -12,8 +12,8 @@ import {
   QuickLinksSection,
   TelemetrySection,
 } from './AdminPage.styles';
-import { OperationsLayout } from '../ui/operations/OperationsLayout';
-import { SearchFixtureNotice } from '../ui/client/SearchFixtureNotice';
+import { OperationsLayout } from '../ui/ops';
+import { SearchFixtureNotice } from '../ui/global/client';
 
 interface AdminPageClientProps {
   readonly initialFixtureMode: FixtureMode;

@@ -13,7 +13,11 @@ import { importX } from 'eslint-plugin-import-x';
 import type { ConfigArray } from 'typescript-eslint';
 
 import { ignores, tsRules, testRules } from '../../eslint.config.base';
-import { appBoundaryRules, appArchitectureRules } from '../../eslint-rules/index.js';
+import {
+  appBoundaryRules,
+  appArchitectureRules,
+  oakCustomRulesPlugin,
+} from '../../eslint-rules/index.js';
 
 const thisDir = dirname(fileURLToPath(import.meta.url));
 
@@ -39,11 +43,15 @@ const config: ConfigArray = [
         tsconfigRootDir: thisDir,
       },
     },
+    plugins: {
+      'oak-rules': oakCustomRulesPlugin,
+    },
     rules: {
       // App architecture & boundaries
       ...appBoundaryRules,
       ...appArchitectureRules,
       ...tsRules,
+      'oak-rules/no-export-trivial-type-aliases': 'error',
       // Enforce safety and theming conventions
       'react/no-danger': 'error',
       'react/forbid-component-props': [

@@ -64,6 +64,7 @@ Use the right tool for the job:
 - **Use library types directly where possible** - don't make up a type when you can use a library type
 - **Validate external signals** - parse and/or validate external signals (e.g. API responses, read from files, etc), official SDKs count as validation, use Zod where appropriate
 - **Type imports must be labelled with `type`** - e.g. `import type { Type } from 'package'` or `import { type Type } from 'package'`
+- **Don't use type aliases, use good naming** Don't use type aliases, use good naming.
 
 ### Testing
 

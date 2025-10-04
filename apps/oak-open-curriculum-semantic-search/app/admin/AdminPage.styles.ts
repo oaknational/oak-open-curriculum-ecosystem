@@ -1,6 +1,6 @@
 import { OakBox } from '@oaknational/oak-components';
 import styledComponents from 'styled-components';
-import { OperationsSection } from '../ui/operations/OperationsLayout';
+import { OperationsSection } from '../ui/ops';
 
 export const IntroSection = styledComponents(OperationsSection)``;
 

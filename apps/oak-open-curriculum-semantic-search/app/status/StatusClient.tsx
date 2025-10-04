@@ -4,7 +4,7 @@ import type { JSX } from 'react';
 import { OakBox, OakHeading, OakTypography, OakLink } from '@oaknational/oak-components';
 import type { HealthPayload, StatusCardConfig } from './types';
 import { buildStatusCards, resolveToneColor } from './status-helpers';
-import { OperationsLayout, OperationsSection } from '../ui/operations/OperationsLayout';
+import { OperationsLayout, OperationsSection } from '../ui/ops';
 
 export function StatusClient({ payload }: { payload: HealthPayload }): JSX.Element {
   const cards = buildStatusCards(payload.status, payload.details);

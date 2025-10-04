@@ -1,14 +1,11 @@
 import type { KeyStage, SearchSubjectSlug, SearchScope } from '../../types/oak';
 
-/** Available scopes for suggestion/type-ahead queries. */
-export type SuggestScope = SearchScope;
-
 /**
  * Request payload accepted by the suggestion runner.
  */
 export interface SuggestQuery {
   prefix: string;
-  scope: SuggestScope;
+  scope: SearchScope;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
   phaseSlug?: string;
@@ -28,7 +25,7 @@ export interface SuggestionContext {
  */
 export interface SuggestionItem {
   label: string;
-  scope: SuggestScope;
+  scope: SearchScope;
   url: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;

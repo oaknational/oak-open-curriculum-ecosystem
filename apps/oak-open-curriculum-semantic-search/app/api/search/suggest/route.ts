@@ -16,7 +16,7 @@ import {
   applyFixtureModeCookie,
   type FixtureMode,
 } from '../../../lib/fixture-mode';
-import { buildSingleScopeFixture } from '../../../ui/search-fixtures/builders';
+import { buildSingleScopeFixture } from '../../../lib/search-fixtures/builders';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;

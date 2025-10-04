@@ -5,8 +5,8 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import {
   STRUCTURED_EMPTY_RESULTS_MESSAGE,
   STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
-} from '../../app/ui/content/structured-search-messages';
-import { structuredSearchFixture } from '../../app/ui/__fixtures__/search-structured';
+} from '../../app/ui/search/content/structured-search-messages';
+import { structuredSearchFixture } from '../../app/ui/search/__fixtures__/search-structured';
 
 async function captureScreenshot(page: Page, name: string, testInfo: TestInfo): Promise<void> {
   const screenshot = await page.screenshot({ fullPage: true });

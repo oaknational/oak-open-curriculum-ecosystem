@@ -34,9 +34,9 @@ The App Router surfaces use nested layouts to separate search experiences from o
 
 - `app/page.tsx` renders the landing page via `app/ui/landing/LandingPage`, introducing hybrid search and funnelling users through CTA cards.
 - `app/structured_search/page.tsx` and `app/natural_language_search/page.tsx` load `SearchPageClient`, which in turn drives `SearchPageLayout` and its variant-specific heroes, skip links, and forms.
-- `app/ui/client/SearchPageLayout.sections.tsx` bifurcates structured and natural controls, wiring skip links (`buildSkipLinks`) and section IDs (`resolveResultsSectionId`) so Playwright and assistive tech can target the correct regions.
-- `app/ui/operations/OperationsLayout.tsx` wraps `/admin` and `/status`, standardising spacing, fixture notices, and aria live regions for status updates (`StatusClient`) and telemetry dashboards (`AdminPageClient`).
-- `app/ui/client/SearchFixtureNotice.tsx` centralises the fixture toggle and banner copy, sharing tone across search and operations surfaces.
+- `app/ui/search/layout/SearchPageLayout.sections.tsx` bifurcates structured and natural controls, wiring skip links (`buildSkipLinks`) and section IDs (`resolveResultsSectionId`) so Playwright and assistive tech can target the correct regions.
+- `app/ui/ops/OperationsLayout.tsx` wraps `/admin` and `/status`, standardising spacing, fixture notices, and aria live regions for status updates (`StatusClient`) and telemetry dashboards (`AdminPageClient`).
+- `app/ui/global/Fixture/FixtureNotice.tsx` centralises the fixture toggle and banner copy, sharing tone across search and operations surfaces.
 
 Captured artefacts under `test-artifacts/` (landing, structured, natural) and `test-results/responsive-baseline-*` (admin/status) serve as visual checkpoints, aligning with the UX plan’s evidence requirements.
 

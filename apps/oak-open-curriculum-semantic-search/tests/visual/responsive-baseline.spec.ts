@@ -5,7 +5,7 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import {
   structuredSearchFixture,
   suggestionFixture,
-} from '../../app/ui/__fixtures__/search-structured';
+} from '../../app/ui/search/__fixtures__/search-structured';
 import { NARROW_SEARCH_SCOPES, MULTI_SCOPE } from '../../src/lib/search-scopes';
 
 type Viewport = {
