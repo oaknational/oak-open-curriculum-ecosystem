@@ -33,93 +33,19 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 
 ## Workstream 2 – Navigation & Header Polish
 
-1. ✅ Completed – Audited existing header implementation against `snagging.md`
-   issues and `snagging-system-foundations.md` guidance; documented deltas in plan
-   notes (2025-10-04). REVIEW artefact recorded below.
+### Summary (2025-10-18)
 
-### 2025-10-04 – Workstream 2 Audit Notes
+- Header now follows the documented grid (`logo/nav/utilities`) with Oak spacing tokens controlling wrap behaviour across breakpoints. Details live in `app/ui/README.md` and `snagging-system-foundations.md`.
+- `useNavItems()` centralises logo, primary routes (root relabelled to “Home”), and utilities metadata; RTL + integration coverage guard the contract.
+- Utilities cluster hosts the theme selector and `SearchFixtureModeToggle`, backed by `FixtureModeContext` so header, cookies, and page notices stay in sync.
+- Focus/hover styling uses Oak palette tokens; visual sweeps (light/dark/reduced motion/high contrast) are logged in `snagging.md` and Playwright artefacts under `test-artifacts/`.
+- Playwright fixture workflow (`tests/visual/fixture-toggle.spec.ts`) seeds deterministic cookies, drives the header radios, and asserts live/fixture summaries.
+- Quality gates (`pnpm test:ui`, `pnpm qg`) pass as of 2025-10-18 after the fixture workflow refactor.
 
-- `snagging.md` (Navigation): Theme selector remains right-aligned because the header still pushes the utilities cluster with `$ml="auto"`; requirement calls for left alignment after wrapping.
-- `snagging.md` (Navigation): Primary navigation continues to surface the root route as “Search”, whereas the snagging fix expects it to read “Home”.
-- `snagging.md` (Navigation): Oak mark link already exists and targets `/`, so no further action required.
-- `snagging-system-foundations.md` (Header blueprint): Header layout still relies on a flex row and lacks the prescribed grid areas, centralised nav metadata hook, and fixture toggle slot.
-- `snagging-system-foundations.md` (Accessibility): Skip links remain active via `SearchSkipLinks`, but the header does not expose an entry point for the utilities cluster yet.
+### Open follow-ups
 
-2. ✅ Completed – Catalogued Oak Components tokens required (spacing,
-   typography, palette, breakpoints) and logged gaps (none) in
-   `oak-components-theme-extensions.md` (2025-10-04).
-   REVIEW confirmed against `Header.tsx` usage.
-
-### 2025-10-04 – Header Token Inventory
-
-- **Spacing**: `cluster`, `section`, `inline-base`, `inline-wide` via `getSpacingVar()` for gaps, inline padding, and wrap spacing.
-- **Breakpoints**: `app.layout.breakpoints.md` (stack utilities) and `.lg` (restore three-area grid), with `.xl` in reserve if we need to clamp nav width.
-- **Typography**: `OakTypography` presets `body-3` (nav links) and `body-4` (utility labels) backed by `app.fonts.primary`.
-- **Palette & colours**: `app.palette.brandPrimary`, `app.palette.brandPrimaryBright`, `uiColors['text-primary']`, and `app.colors.headerBorder` for focus, hover, and separators.
-- **Radii**: `app.radii.pill` reserved for fixture toggle / utilities cluster chips once integrated.
-
-3. ✅ Completed – Defined responsive header grid spec with token references in
-   this plan and `snagging-system-foundations.md` (2025-10-04). REVIEW satisfied
-   for ≥lg and ≤md scenarios.
-
-### 2025-10-04 – Header Grid Spec
-
-- **Base / ≤ `md` (≤768px)**: single-column CSS grid with areas ordered `logo`, `nav`, `utilities`; `row-gap: getSpacingVar('stack')`, `padding-inline: getSpacingVar('inline-base')`, `justify-items: start` to keep utilities left aligned once they wrap.
-- **≥ `lg` (≥1024px)**: switch to three-column grid `grid-template-columns: auto minmax(0, 1fr) auto`, `grid-template-areas: "logo nav utilities"`, `column-gap: getSpacingVar('cluster')`, `row-gap: getSpacingVar('section')`, and `align-items: center` so logo, navigation, and utilities share a baseline.
-- **≥ `xl` (≥1360px)**: widen inline padding to `getSpacingVar('inline-wide')` while preserving the three-area composition; clamp nav width with `max-width: getAppTheme(theme).app.layout.containerMaxWidth` if overflow reappears.
-- **Utilities cluster**: render as a flex column using `getSpacingVar('stack')` for internal gap; align with the nav area via `justify-self: end` on ≥`lg` and `justify-self: start` otherwise.
-
-4. ✅ Completed – Centralised nav metadata in `useNavItems()` (including Oak icon
-   link and fixture toggle placeholder) and updated Header/tests to consume the
-   hook (2025-10-04). REVIEW evidence captured below.
-
-### 2025-10-04 – Navigation Metadata Centralised
-
-- Introduced `useNavItems()` returning Oak home link, ordered primary routes (root relabelled to “Home”), and utilities metadata for theme + fixture toggles.
-- Header now consumes the hook for logo, nav items, and utility ARIA labels, eliminating inline arrays and duplicated strings.
-- Added `useNavItems.unit.test.ts` alongside updated `Header.integration.test.tsx` to pin the metadata contract and ensure the hook drives rendering.
-
-5. ✅ Completed – Implemented AA-compliant focus/hover states using existing
-   palette tokens and verified via RTL assertions; logged absence of new token
-   gaps (2025-10-04).
-
-### 2025-10-04 – Focus & Hover Styling
-
-- Header links now use Oak spacing/radii tokens for larger targets and apply hover/focus styles with `brandPrimary` + `brandPrimaryBright` while keeping text on `textPrimary`.
-- RTL integration test inspects the styled-components sheet to confirm Oak palette colours (`brandPrimary`, `brandPrimaryBright`) are referenced.
-- No new token gaps identified; existing palette/radii/padding tokens cover the interactions.
-
-6. ✅ Completed – GROUNDING: Read GO.md and re-affirmed instructions before
-   continuing (2025-10-04).
-7. ✅ Completed – Integrated `FixtureModeContext` into header utilities and
-   surfaced the shared `SearchFixtureModeToggle`; documented interplay and kept
-   fixture context tests passing (2025-10-04).
-
-### 2025-10-04 – Fixture Mode Integration
-
-- Root layout now seeds `FixtureModeProvider` using cookies so header + pages
-  share deterministic state and refresh together after toggle changes.
-- Header utilities render the shared `SearchFixtureModeToggle` alongside the
-  theme selector, filtering visibility via Oak env rules.
-- RTL coverage asserts the toggle respects context defaults; SSR/layout tests
-  retain cookie behaviour with updated mocks.
-
-8. ✅ Completed – Updated header layout tests (RTL + Playwright) to cover
-   responsive wrapping, keyboard navigation, and fixture toggle interactions
-   (2025-10-04). REVIEW executed via failing/passing runs documented below.
-
-### 2025-10-04 – Header Layout Test Coverage
-
-- Header grid now exercises the documented `logo/nav/utilities` areas with RTL
-  assertions, guarding display mode and palette usage.
-- Navigation Playwright spec imports shared metadata, validates fixtures toggle
-  visibility, and confirms keyboard focus styling.
-- Targeted `pnpm --filter @oaknational/open-curriculum-semantic-search test -- --run --include "app/ui/global/Header/**"`
-  and Playwright runs demonstrated failure before adjustments and success after updates.
-
-9. ✅ Completed – Performed visual review via Playwright MCP sweep (desktop/
-   mobile, light/dark, reduced motion, high contrast), logged notes in plan and
-   `snagging.md`; screenshots archived under `test-artifacts/` (2025-10-04).
+- Track Oak Components high-contrast palette improvements in `oak-components-theme-extensions.md`.
+- Re-run Playwright visual sweeps when Workstream 3+ changes land to keep evidence fresh.
 
 ### 2025-10-04 – Header & Surface Visual Review
 
@@ -165,23 +91,28 @@ Key accessibility notes:
 
 ## Workstream 3 – Landing Page Rework
 
-1. **Hero layout**: use `HeroLayout` (built on `ResponsiveGrid`) to centre the hero up to ~70ch, keeping single-line heading typography and responsive stacking.
-2. **Primary CTAs**: add Oak primary buttons for structured/natural search plus supportive links; ensure focus order matches visual layout.
-3. **Copy differentiation**: refine subtitle vs body copy to convey guidance vs exploration; align with “surface intent first”.
-4. **CTA cards**: convert to full-card `<Link>` components with motion-safe hover glow (guarded by `prefers-reduced-motion`) and upgraded focus outlines.
-5. **Testing**: add RTL snapshot-style assertions for layout tokens and CTA presence, plus Playwright visual baselines (light/dark, mobile/desktop) capturing hero + cards.
-6. **Visual review**: run manual/Playwright MCP inspection (desktop/mobile, light/dark, reduced motion) noting deviations in `snagging.md` with supporting screenshots.
+### Summary (2025-10-18)
+
+- Hero now centres content within a 70ch clamp, delivers distinct supporting copy, and surfaces primary entry buttons for structured and natural searches.
+- Card links have been promoted to full-card anchors with motion-safe hover states (prefers-reduced-motion guards) and focus outlines.
+- Landing integration test updated to assert hero messaging and new CTA semantics; Playwright coverage added via `tests/visual/landing.hero.spec.ts` with screenshot evidence attached to test artefacts.
+
+### Next steps
+
+- Monitor hero/card behaviour across responsive breakpoints during broader Workstream 3 layout changes and capture MCP evidence for desktop/mobile sweeps (tracked in `snagging.md`).
 
 ## Workstream 4 – Search Surfaces (Structured & Natural)
 
-1. **Fixture messaging**: swap the banner for a compact pill near the hero showing `Using fixture scenario: …`, fed by `FixtureModeContext`.
-2. **Priority layout**: adopt a two-column grid (≥ `lg`) separating controls/support from results so results stay visible above the fold. Ensure small screens stack hero → controls → results with limited gaps.
-3. **Controls clarity**: simplify `SearchPageControlsGrid`, add headings, and align inputs vertically using spacing tokens.
-4. **Results prominence**: wrap `SearchResults` in `ResultsContainer` with sticky summary, accent borders, and motion-safe hover cues.
-5. **Secondary content**: move suggestions/facets into a side panel on wide screens and accordion stack on mobile.
-6. **Skeleton/loading states**: implement `ResultsSkeleton` and `SummarySkeleton` respecting reduced-motion preferences.
-7. **Testing**: extend unit tests for new layout utilities, add RTL integration tests ensuring fixture pills update on context change, and refresh Playwright flows for structured/natural paths (including reduced-motion snapshots).
-8. **Visual review**: run Playwright MCP walkthrough for structured/natural search across breakpoints/modes, capturing screenshots and notes in `snagging.md`.
+### Status (2025-10-18)
+
+- Fixture messaging now renders as a compact pill (`Using fixture scenario: …`) sourced from `FixtureModeContext`; header remains the single point of control.
+- Search + admin pages consume the context via `FixtureModeProvider`; integration and Playwright suites updated to assert the new messaging and absence of duplicate on-page radios.
+
+### Next steps
+
+- Rework hero/copy for structured + natural variants to emphasise intent and streamline supporting paragraphs.
+- Adopt the planned two-column results-first grid (≥`lg`) so outcome summaries stay above the fold and secondary content relocates to side panels/accordions.
+- Introduce motion-safe skeletons and sticky results summaries, updating RTL + Playwright coverage accordingly.
 
 ## Workstream 5 – Natural Language Fixtures Reliability
 

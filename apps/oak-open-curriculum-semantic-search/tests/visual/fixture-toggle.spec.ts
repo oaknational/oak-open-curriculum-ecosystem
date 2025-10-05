@@ -89,9 +89,7 @@ test.describe('Fixture toggle workflow', () => {
     await page.goto('/structured_search');
 
     await expectFixtureModeSummary(page, 'fixtures');
-    const fixtureNotice = page.getByText(
-      'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
-    );
+    const fixtureNotice = page.getByText(/Using fixture scenario: success/i);
     await expect(fixtureNotice).toBeVisible();
     await submitStructuredSearch(page);
     const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
@@ -128,11 +126,7 @@ test.describe('Fixture toggle workflow', () => {
 
     await expectFixtureModeSummary(page, 'fixtures-empty');
 
-    await expect(
-      page.getByText(
-        'Showing deterministic fixtures without results so you can review empty-state messaging.',
-      ),
-    ).toBeVisible();
+    await expect(page.getByText(/Using fixture scenario: empty dataset/i)).toBeVisible();
 
     await submitStructuredSearch(page);
 
@@ -152,13 +146,12 @@ test.describe('Fixture toggle workflow', () => {
 
     await expectFixtureModeSummary(page, 'fixtures-error');
 
-    const outageNotice = page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
-    await expect(outageNotice).toBeVisible();
+    const fixtureScenarioNotice = page.getByText(/Using fixture scenario: simulated outage/i);
+    await expect(fixtureScenarioNotice).toBeVisible();
 
     await submitStructuredSearch(page);
 
     await expect(page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE)).toBeVisible();
-    await expect(outageNotice).toBeVisible();
     await captureScreenshot(page, 'fixture-mode-error', testInfo);
     const errorAxe = await captureAccessibility(page, 'fixture-mode-error', testInfo);
     expect.soft(errorAxe.violations.length).toBe(0);
@@ -169,7 +162,6 @@ test.describe('Fixture toggle workflow', () => {
     await page.goto('/admin');
 
     await expectFixtureModeSummary(page, 'fixtures');
-    await expect(page.getByRole('radiogroup', { name: 'Admin data' })).toBeVisible();
     const successNotice = page.getByText(
       'Running deterministic admin fixtures. Switch to live data to perform real operations.',
     );

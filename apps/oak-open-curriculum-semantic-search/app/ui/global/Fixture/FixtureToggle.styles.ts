@@ -10,25 +10,21 @@ export const FixtureToggleWrapper = styledComponents(OakBox)`
   justify-items: start;
 `;
 
-export const FixtureToggleCluster = styledComponents(OakBox)`
-  display: grid;
-  gap: var(--app-gap-cluster);
-  align-items: start;
-`;
-
-export const FixtureBanner = styledComponents(OakBox)`
-  display: flex;
-  flex-direction: column;
-  gap: var(--app-gap-stack);
-  padding: var(--app-gap-stack);
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
+export const FixturePill = styledComponents(OakBox)`
+  display: inline-flex;
+  align-items: center;
+  gap: var(--app-gap-inline, var(--app-gap-cluster));
+  padding-inline: var(--app-gap-inline, var(--app-gap-cluster));
+  padding-block: calc(var(--app-gap-inline, var(--app-gap-cluster)) / 2);
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
   background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
-  border: 1px solid
-    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-neutral-lighter')};
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+  border: 1px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
+  width: fit-content;
 `;
 
-export const FixtureNoticeText = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
+export const FixturePillText = styledComponents(OakTypography)`
+  color: inherit;
 `;
 
 export const VisuallyHiddenStatus = styledComponents.span`

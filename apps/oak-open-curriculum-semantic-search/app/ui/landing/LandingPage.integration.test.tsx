@@ -18,13 +18,19 @@ describe('LandingPage', () => {
     renderLanding();
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /hybrid search for oak resources/i }),
+      screen.getByRole('heading', { level: 1, name: /search the oak curriculum your way/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        /choose between structured filtering and natural language understanding to start exploring/i,
-      ),
+      screen.getByText(/combine deterministic filters with conversational discovery/i),
     ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /start structured search/i })).toHaveAttribute(
+      'href',
+      '/structured_search',
+    );
+    expect(screen.getByRole('link', { name: /start natural language search/i })).toHaveAttribute(
+      'href',
+      '/natural_language_search',
+    );
   });
 
   it('offers structured and natural CTA cards with accessible link text', () => {
@@ -39,10 +45,16 @@ describe('LandingPage', () => {
     expect(structuredHeading).toBeInTheDocument();
     expect(naturalHeading).toBeInTheDocument();
 
-    const structuredLink = screen.getByRole('link', { name: /explore structured search/i });
-    const naturalLink = screen.getByRole('link', { name: /explore natural language search/i });
+    const structuredLink = screen
+      .getAllByRole('link', { name: /structured search/i })
+      .find((link) => link.getAttribute('href')?.includes('/structured_search'));
+    const naturalLink = screen
+      .getAllByRole('link', { name: /natural language search/i })
+      .find((link) => link.getAttribute('href')?.includes('/natural_language_search'));
 
+    expect(structuredLink).not.toBeUndefined();
     expect(structuredLink).toHaveAttribute('href', '/structured_search');
+    expect(naturalLink).not.toBeUndefined();
     expect(naturalLink).toHaveAttribute('href', '/natural_language_search');
   });
 

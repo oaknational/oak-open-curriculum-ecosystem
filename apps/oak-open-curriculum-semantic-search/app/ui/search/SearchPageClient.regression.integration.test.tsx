@@ -1,30 +1,12 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { createLightTheme } from '../themes/light';
 import type { StructuredSearchAction } from './structured/StructuredSearch';
 import SearchPageClient from './SearchPageClient';
-import type { FixtureMode } from '../../lib/fixture-mode';
-
-const refreshMock = vi.fn();
-
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ refresh: refreshMock }),
-}));
-
-const setFixtureModeMock = vi.hoisted(() => vi.fn<(mode: FixtureMode) => Promise<void>>());
-
-vi.mock('../global/Fixture/fixture-mode-toggle.actions', () => ({
-  setFixtureMode: setFixtureModeMock,
-}));
+import { FixtureModeProvider } from '../global/Fixture/FixtureModeContext';
 
 describe('SearchPageClient regression', () => {
-  beforeEach(() => {
-    refreshMock.mockReset();
-    setFixtureModeMock.mockReset();
-    setFixtureModeMock.mockResolvedValue(undefined);
-  });
-
   it('does not emit repeated errors after a successful structured search submission', async () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: {
@@ -50,11 +32,13 @@ describe('SearchPageClient regression', () => {
 
     render(
       <StyledThemeProvider theme={createLightTheme()}>
-        <SearchPageClient
-          searchStructured={action}
-          initialFixtureMode="live"
-          showFixtureToggle={false}
-        />
+        <FixtureModeProvider initialMode="live">
+          <SearchPageClient
+            searchStructured={action}
+            initialFixtureMode="live"
+            showFixtureToggle={false}
+          />
+        </FixtureModeProvider>
       </StyledThemeProvider>,
     );
 

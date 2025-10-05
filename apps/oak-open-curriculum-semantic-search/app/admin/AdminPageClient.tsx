@@ -49,7 +49,6 @@ export function AdminPageClient({
     <SearchFixtureNotice
       initialFixtureMode={initialFixtureMode}
       visible={showFixtureToggle}
-      label="Admin data"
       messages={ADMIN_FIXTURE_NOTICES}
     />
   ) : null;

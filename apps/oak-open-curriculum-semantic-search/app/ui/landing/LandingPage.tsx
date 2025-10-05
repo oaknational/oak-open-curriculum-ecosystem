@@ -1,7 +1,13 @@
 'use client';
 
 import type { JSX } from 'react';
-import { OakBox, OakTypography } from '@oaknational/oak-components';
+import Link from 'next/link';
+import {
+  OakBox,
+  OakPrimaryButton,
+  OakSecondaryButton,
+  OakTypography,
+} from '@oaknational/oak-components';
 import styledComponents, { css } from 'styled-components';
 import {
   AccentTypography,
@@ -32,32 +38,36 @@ export function LandingPage(): JSX.Element {
 
 function LandingHero(): JSX.Element {
   return (
-    <HeroCard as="section" aria-labelledby="landing-hero-heading">
-      <OakTypography as="h1" id="landing-hero-heading" $font="heading-3">
-        <HeroHeading>
-          <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
-            Hybrid
-          </AccentTypography>
-          <OakTypography as="span" $font="heading-3">
-            search for Oak resources
-          </OakTypography>
-        </HeroHeading>
+    <LandingHeroCard as="section" aria-labelledby="landing-hero-heading">
+      <OakTypography as="h1" id="landing-hero-heading" $font="heading-2" $ta="center">
+        <AccentTypography as="span" $font="heading-2" $pr="space-between-ssx">
+          Search
+        </AccentTypography>{' '}
+        the Oak curriculum your way
       </OakTypography>
-      <OakTypography as="p" $font="body-4" $color="text-subdued">
-        Choose between structured filtering and natural language understanding to start exploring.
+      <OakTypography as="p" $font="body-2" $ta="center">
+        Combine deterministic filters with conversational discovery to surface the right lesson in
+        moments.
       </OakTypography>
-      <OakTypography as="p" $font="body-2">
-        Use the cards below to decide which search experience matches your workflow before diving
-        into live data or deterministic fixtures.
+      <OakTypography as="p" $font="body-3" $color="text-subdued" $ta="center">
+        Pick a starting point below or jump straight in using the shortcuts.
       </OakTypography>
-    </HeroCard>
+      <HeroActions>
+        <HeroPrimaryButton as={Link} href="/structured_search">
+          Start structured search
+        </HeroPrimaryButton>
+        <HeroSecondaryButton as={Link} href="/natural_language_search">
+          Start natural language search
+        </HeroSecondaryButton>
+      </HeroActions>
+    </LandingHeroCard>
   );
 }
 
 function LandingCtaCards(): JSX.Element {
   return (
     <CardsSection as="section" aria-label="Search experience options">
-      <CtaCard as="article" aria-labelledby="structured-cta-heading">
+      <CtaCardLink href="/structured_search" aria-labelledby="structured-cta-heading">
         <OakTypography as="h2" id="structured-cta-heading" $font="heading-6">
           Structured search
         </OakTypography>
@@ -68,9 +78,9 @@ function LandingCtaCards(): JSX.Element {
         <OakTypography as="p" $font="body-3">
           Ideal when you know the curriculum boundaries you need to stay within.
         </OakTypography>
-        <CtaLink href="/structured_search">Explore structured search</CtaLink>
-      </CtaCard>
-      <CtaCard as="article" aria-labelledby="natural-cta-heading">
+        <CardCta>Explore structured search</CardCta>
+      </CtaCardLink>
+      <CtaCardLink href="/natural_language_search" aria-labelledby="natural-cta-heading">
         <OakTypography as="h2" id="natural-cta-heading" $font="heading-6">
           Natural language search
         </OakTypography>
@@ -81,17 +91,36 @@ function LandingCtaCards(): JSX.Element {
         <OakTypography as="p" $font="body-3">
           Ideal when you want fast inspiration or to explore new curriculum angles.
         </OakTypography>
-        <CtaLink href="/natural_language_search">Explore natural language search</CtaLink>
-      </CtaCard>
+        <CardCta>Explore natural language search</CardCta>
+      </CtaCardLink>
     </CardsSection>
   );
 }
 
-const HeroHeading = styledComponents(OakBox)`
-  display: inline-flex;
+const LandingHeroCard = styledComponents(HeroCard)`
+  align-items: center;
+  text-align: center;
+  max-inline-size: min(70ch, 100%);
+  margin-inline: auto;
+  gap: var(--app-gap-cluster);
+`;
+
+const HeroActions = styledComponents(OakBox)`
+  display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  justify-content: center;
   gap: var(--app-gap-inline, var(--app-gap-cluster));
+  width: 100%;
+`;
+
+const HeroPrimaryButton = styledComponents(OakPrimaryButton)`
+  min-width: clamp(14rem, 20vw, 18rem);
+  justify-content: center;
+`;
+
+const HeroSecondaryButton = styledComponents(OakSecondaryButton)`
+  min-width: clamp(14rem, 20vw, 18rem);
+  justify-content: center;
 `;
 
 const CardsSection = styledComponents(OakBox)`
@@ -114,7 +143,29 @@ const CardsSection = styledComponents(OakBox)`
   }}
 `;
 
-const CtaCard = styledComponents(OakBox)`
+const cardInteractiveStyles = css`
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+  }
+`;
+
+const CtaCardLink = styledComponents(Link)`
   display: flex;
   flex-direction: column;
   gap: var(--app-gap-cluster);
@@ -128,32 +179,20 @@ const CtaCard = styledComponents(OakBox)`
     );
   color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  position: relative;
+  ${cardInteractiveStyles}
 
-  &:hover,
-  &:focus-within {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
+  &:focus-visible {
+    outline: 3px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
+    outline-offset: 4px;
   }
 `;
 
-const CtaLink = styledComponents(OakTypography).attrs({
-  as: 'a',
-  $font: 'body-2-bold',
-})`
+const CardCta = styledComponents(OakTypography).attrs({ $font: 'body-2-bold', as: 'span' })`
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   gap: var(--app-gap-inline, var(--app-gap-cluster));
   color: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryDeep};
-  text-decoration: none;
-
-  &:hover {
-    color: ${({ theme }) => resolveUiColor(getAppTheme(theme), 'text-link-hover')};
-  }
-
-  &:focus-visible {
-    outline: 3px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
-    outline-offset: 2px;
-  }
 `;

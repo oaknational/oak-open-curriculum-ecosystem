@@ -14,6 +14,7 @@ import {
   STRUCTURED_EMPTY_RESULTS_MESSAGE,
   STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
 } from './content/structured-search-messages';
+import { FixtureModeProvider } from '../global/Fixture/FixtureModeContext';
 
 const refreshMock = vi.fn();
 
@@ -94,12 +95,14 @@ function renderWithTheme(
 
   render(
     <StyledThemeProvider theme={theme}>
-      <SearchPageClient
-        searchStructured={action}
-        initialFixtureMode={initialFixtureMode}
-        showFixtureToggle={showFixtureToggle}
-        variant={variant}
-      />
+      <FixtureModeProvider initialMode={initialFixtureMode}>
+        <SearchPageClient
+          searchStructured={action}
+          initialFixtureMode={initialFixtureMode}
+          showFixtureToggle={showFixtureToggle}
+          variant={variant}
+        />
+      </FixtureModeProvider>
     </StyledThemeProvider>,
   );
   return theme;
@@ -214,83 +217,15 @@ describe('SearchPageClient', () => {
     );
   });
 
-  it('surfaces fixture scenario radios when the toggle is visible', () => {
+  it('renders a fixture scenario pill when fixtures are enabled on the page', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
     });
 
     renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures-empty' });
 
-    const radioGroup = screen.getByRole('radiogroup', { name: /search data/i });
-    const liveRadio = within(radioGroup).getByRole('radio', { name: /Live data/i });
-    const successRadio = within(radioGroup).getByRole('radio', {
-      name: /Fixtures \(success\)/i,
-    });
-    const emptyRadio = within(radioGroup).getByRole('radio', {
-      name: /Fixtures \(empty\)/i,
-    });
-    const errorRadio = within(radioGroup).getByRole('radio', {
-      name: /Fixtures \(error\)/i,
-    });
-
-    expect(liveRadio).not.toBeChecked();
-    expect(successRadio).not.toBeChecked();
-    expect(emptyRadio).toBeChecked();
-    expect(errorRadio).not.toBeChecked();
-
-    expect(
-      screen.getByText(
-        /Showing deterministic fixtures without results so you can review empty-state messaging\./i,
-      ),
-    ).toBeInTheDocument();
-  });
-
-  it('persists fixture mode changes when a scenario radio is selected', async () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures' });
-
-    const radioGroup = screen.getByRole('radiogroup', { name: /search data/i });
-    const liveRadio = within(radioGroup).getByRole('radio', { name: /Live data/i });
-    const emptyRadio = within(radioGroup).getByRole('radio', {
-      name: /Fixtures \(empty\)/i,
-    });
-    const errorRadio = within(radioGroup).getByRole('radio', {
-      name: /Fixtures \(error\)/i,
-    });
-
-    await act(async () => {
-      fireEvent.click(emptyRadio);
-    });
-
-    await waitFor(() => {
-      expect(setFixtureModeMock).toHaveBeenCalledWith('fixtures-empty');
-      expect(refreshMock).toHaveBeenCalled();
-    });
-
-    expect(emptyRadio).toBeChecked();
-
-    await act(async () => {
-      fireEvent.click(errorRadio);
-    });
-
-    await waitFor(() => {
-      expect(setFixtureModeMock).toHaveBeenCalledWith('fixtures-error');
-    });
-
-    expect(errorRadio).toBeChecked();
-
-    await act(async () => {
-      fireEvent.click(liveRadio);
-    });
-
-    await waitFor(() => {
-      expect(setFixtureModeMock).toHaveBeenCalledWith('live');
-    });
-
-    expect(liveRadio).toBeChecked();
+    expect(screen.getByText(/Using fixture scenario: empty dataset/i)).toBeInTheDocument();
+    expect(screen.queryByRole('radiogroup', { name: /search data/i })).not.toBeInTheDocument();
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -534,25 +469,21 @@ describe('SearchPageClient', () => {
       structuredPropsRef.current?.onResults?.(fixture);
     });
 
-    expect(screen.getByText('Using fixtures (success)')).toBeInTheDocument();
+    expect(screen.getByText(/Using fixture scenario: success/i)).toBeInTheDocument();
     const headline = fixture.results[0]?.lesson?.lesson_title;
     if (headline) {
       expect(screen.getByText(headline)).toBeInTheDocument();
     }
   });
 
-  it('surfaces helper messaging when deterministic fixtures are enabled', () => {
+  it('shows fixture scenario pill when deterministic fixtures are enabled', () => {
     const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
       result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
     });
 
     renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
 
-    expect(
-      screen.getByText(
-        'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Using fixture scenario: success/i)).toBeInTheDocument();
   });
 
   it('announces deterministic empty fixtures and empty-state guidance', async () => {
@@ -562,11 +493,7 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action, { initialFixtureMode: 'fixtures-empty', showFixtureToggle: true });
 
-    expect(
-      screen.getByText(
-        'Showing deterministic fixtures without results so you can review empty-state messaging.',
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Using fixture scenario: empty dataset/i)).toBeInTheDocument();
 
     const emptyFixture = buildEmptyFixture({ scope: 'lessons' });
 
@@ -588,7 +515,7 @@ describe('SearchPageClient', () => {
 
     renderWithTheme(action, { initialFixtureMode: 'fixtures-error', showFixtureToggle: true });
 
-    expect(screen.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE)).toBeInTheDocument();
+    expect(screen.getByText(/Using fixture scenario: simulated outage/i)).toBeInTheDocument();
 
     await act(async () => {
       structuredPropsRef.current?.onError?.(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
