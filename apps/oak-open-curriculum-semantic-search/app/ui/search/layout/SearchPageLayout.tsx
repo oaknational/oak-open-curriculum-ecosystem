@@ -5,17 +5,24 @@ import type { StructuredSearchAction } from '../structured/StructuredSearch';
 import type { StructuredFollowUpHandlers } from '../hooks/useStructuredFollowUp';
 import type { SearchController } from '../hooks/useSearchController';
 import type { FixtureMode } from '../../../lib/fixture-mode';
-import { ContentContainer, HeroControlsCluster, PageContainer } from './SearchPageClient.styles';
+import {
+  ContentContainer,
+  HeroControlsCluster,
+  PageContainer,
+  PrimaryGrid,
+  ResultsColumn,
+  SupportColumn,
+} from './SearchPageClient.styles';
 import { SearchFixtureNotice } from '../../global/client';
 import {
   SearchForms,
   SearchHero,
-  SearchSecondary,
   SearchSkipLinks,
   resolveControlLayout,
   resolveResultsSectionId,
   type SearchLayoutVariant,
 } from './SearchPageLayout.sections';
+import { SearchSecondary } from './SearchSecondary';
 
 export type { SearchLayoutVariant } from './SearchPageLayout.sections';
 
@@ -72,20 +79,44 @@ function SearchPageLayoutBody({
 
       <SearchSkipLinks variant={variant} />
 
-      <SearchHeroAndForms
-        controller={controller}
-        followUp={followUp}
-        searchAction={searchAction}
-        variant={variant}
-      />
+      <PrimaryGrid data-testid="search-primary-grid">
+        <SearchHeroAndForms
+          controller={controller}
+          followUp={followUp}
+          searchAction={searchAction}
+          variant={variant}
+        />
 
-      <SearchSecondary
-        suggestions={controller.suggestions}
-        onSelectSuggestion={followUp.handleSuggestionSelect}
-        facets={controller.facets}
-        onSelectSequence={followUp.handleFacetSelect}
-      />
+        <ResultsColumn>
+          <SearchResultsOrError controller={controller} variant={variant} />
+        </ResultsColumn>
 
+        <SupportColumn
+          as="aside"
+          aria-label="Search support panels"
+          data-testid="search-support-column"
+        >
+          <SearchSecondary
+            suggestions={controller.suggestions}
+            onSelectSuggestion={followUp.handleSuggestionSelect}
+            facets={controller.facets}
+            onSelectSequence={followUp.handleFacetSelect}
+          />
+        </SupportColumn>
+      </PrimaryGrid>
+    </>
+  );
+}
+
+function SearchResultsOrError({
+  controller,
+  variant,
+}: {
+  controller: SearchController;
+  variant: SearchLayoutVariant;
+}): JSX.Element {
+  return (
+    <>
       <SearchErrorMessage error={controller.error} />
 
       <SearchResultsComponent
@@ -94,6 +125,7 @@ function SearchPageLayoutBody({
         meta={controller.meta}
         multiBuckets={controller.multiBuckets}
         sectionId={resolveResultsSectionId(variant)}
+        loading={controller.loading}
       />
     </>
   );

@@ -3,18 +3,22 @@ import { OakTypography } from '@oaknational/oak-components';
 import type { SearchLayoutVariant } from './SearchPageLayout.types';
 import { AccentTypography, HeroCard, HeroHeadingCluster } from './SearchPageClient.styles';
 
+const HERO_LEAD_PARAGRAPH =
+  'Blend structured filters with natural-language prompts to surface Oak lessons, units, and programmes in seconds.';
+
 const HERO_BODY_PARAGRAPHS: ReadonlyArray<string> = [
-  'We expose two search experiences: a structured search experience and a natural language search experience. Both combine traditional lexical search with semantic search to deliver more relevant results.',
-  'The structured search allows filtering on many dimensions, such as subject, year, and topic.',
-  'The natural language search takes queries like "find me lessons about history that can be adapted for Leeds", passes that to an LLM to figure out the intent, and then defers to the structured search to find the best results with hybrid lexical and semantic search.',
+  'Results stay visible alongside the controls, so you can compare options without scrolling back.',
+  'Switch between structured and natural language journeys whenever you need a different approach.',
 ];
 
 const STRUCTURED_HERO_PARAGRAPHS: ReadonlyArray<string> = [
-  'Filter the Oak curriculum catalogue by subject, key stage and scope.',
+  'Choose subject, phase, and scope to target the Oak catalogue with precision.',
+  'Results update alongside the form so you can spot the right lesson immediately.',
 ];
 
 const NATURAL_HERO_PARAGRAPHS: ReadonlyArray<string> = [
-  'Describe what you need in plain language so we can derive structured parameters and run hybrid queries.',
+  'Describe what you need in plain language and we will translate it into a structured query for you.',
+  'Matching results appear next to the prompt so refinements stay effortless.',
 ];
 
 export function SearchHero({ variant }: { variant: SearchLayoutVariant }): JSX.Element {
@@ -64,18 +68,18 @@ function DefaultHero(): JSX.Element {
       <OakTypography as="h1" $font="heading-3">
         <HeroHeadingCluster as="span">
           <AccentTypography as="span" $font="heading-3" $pr="space-between-ssx">
-            Hybrid
+            Find
           </AccentTypography>
           <OakTypography as="span" $font="heading-3" $pr="space-between-ssx">
-            Search
+            lessons
           </OakTypography>
           <OakTypography as="span" $font="heading-3">
-            <em>Alpha</em>
+            faster with hybrid search
           </OakTypography>
         </HeroHeadingCluster>
       </OakTypography>
-      <OakTypography as="p" $font="body-4" $color="text-subdued">
-        Search lessons, units, and sequences.
+      <OakTypography as="p" $font="body-3" $color="text-subdued">
+        {HERO_LEAD_PARAGRAPH}
       </OakTypography>
       {HERO_BODY_PARAGRAPHS.map((paragraph) => (
         <OakTypography as="p" $font="body-2" key={paragraph}>

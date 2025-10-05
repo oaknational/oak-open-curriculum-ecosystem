@@ -40,8 +40,12 @@ The design does not make use of wide screens, and is not optimised for narrow sc
 - Lets make the fixtures a drop down menu that lives in the header, to the right of the theme selector, and on narrow views under the theme selector. **Resolved 2025-10-18 – header utilities host the shared toggle; in-page banner replaced with a small scenario pill.**
 - 2025-10-18: Structured search now shows a compact pill above the hero (`Using fixture scenario: …`) rather than the large banner.
 - The structured search explanation card should be the first item on the page so it guides the users, but the copy needs reducing, I will do that now. Done.
-- The search results, the entire point of all of this, are not even visible on the page until we scroll _past_ the search controls, see `.agent/plans/semantic-search/snagging_files/Screenshot 2025-10-03 at 16.12.33.png`.
-- When they do finally come into view, they are almost invisible, see `.agent/plans/semantic-search/snagging_files/Screenshot 2025-10-03 at 16.14.51.png`, the search results are why we are building this, they need to be prominent.
+- The search results, the entire point of all of this, are not even visible on the page until we scroll _past_ the search controls, see `.agent/plans/semantic-search/snagging_files/Screenshot 2025-10-03 at 16.12.33.png`. **Addressed 2025-10-18 – primary grid now places results in a dedicated column alongside the hero/controls for ≥lg viewports while stacking sensibly on smaller screens.**
+- When they do finally come into view, they are almost invisible, see `.agent/plans/semantic-search/snagging_files/Screenshot 2025-10-03 at 16.14.51.png`, the search results are why we are building this, they need to be prominent. **Contrast and placement improved 2025-10-18; further visual tweaks tracked for results styling.**
+- 2025-10-20: Structured and natural heroes now use intent-led copy, results gain a sticky summary card with motion-safe skeletons, and suggestions/facets live in a dedicated support column; RTL integration coverage updated to assert skeletons, summary stickiness, and relocated panels.
+- 2025-10-20: Structured and natural heroes now use intent-led copy, results gain a sticky summary card with motion-safe skeletons, and suggestions/facets live in a dedicated support column; RTL integration coverage updated to assert skeletons, summary stickiness, and relocated panels.
+- 2025-10-20: Result cards now carry accent meta pills plus improved contrast, and sub-`lg` layouts collapse support panels into header-controlled accordions (tested via new mobile accordion integration).
+- 2025-10-22: Playwright test helpers now remove the Next.js dev overlay and centralise matchMedia stubs so responsive and fixture journeys capture stable evidence.
 
 ### Natural Language Search
 

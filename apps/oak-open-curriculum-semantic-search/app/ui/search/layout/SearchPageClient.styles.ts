@@ -1,3 +1,5 @@
+/* eslint max-lines: ["error", 350] -- Allow longer style file */
+
 import { OakBox, OakTypography } from '@oaknational/oak-components';
 import styledComponents, { css } from 'styled-components';
 import { PageContainer, PageContent } from '../../global/Layout';
@@ -30,6 +32,39 @@ export const ContentContainer = styledComponents(PageContent)`
   max-width: min(100%, var(--app-layout-container-max-width));
   margin-inline: auto;
 `;
+
+export const PrimaryGrid = styledComponents(OakBox)`
+  display: grid;
+  gap: var(--app-gap-section);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'hero'
+    'results'
+    'support';
+
+  ${({ theme }) => {
+    const lg = resolveBreakpoint(theme, 'lg');
+    const xl = resolveBreakpoint(theme, 'xl');
+    return css`
+      @media (min-width: ${lg}) {
+        grid-template-columns:
+          minmax(0, 1.1fr)
+          minmax(0, 0.9fr);
+        grid-template-areas:
+          'results hero'
+          'results support';
+        align-items: start;
+      }
+
+      @media (min-width: ${xl}) {
+        grid-template-columns:
+          minmax(0, 1.2fr)
+          minmax(0, 0.8fr);
+      }
+    `;
+  }}
+`;
+
 export const HeroControlsCluster = styledComponents(OakBox)<{
   $controlsFirst?: boolean;
   $variant: SearchLayoutVariant;
@@ -39,6 +74,7 @@ export const HeroControlsCluster = styledComponents(OakBox)<{
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas: ${({ $controlsFirst }) =>
     $controlsFirst ? "'controls' 'hero'" : "'hero' 'controls'"};
+  grid-area: hero;
 
   ${({ theme, $controlsFirst, $variant }) => {
     if ($variant === 'natural') {
@@ -175,6 +211,69 @@ export const SuggestionsPanel = styledComponents(OakBox)`
 
 export const FacetsPanel = styledComponents(OakBox)`
   grid-area: facets;
+`;
+
+export const ResultsColumn = styledComponents(OakBox)`
+  grid-area: results;
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-section);
+`;
+
+export const SupportColumn = styledComponents(OakBox)`
+  grid-area: support;
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-section);
+`;
+
+export const MobileSupportStack = styledComponents(OakBox).attrs({
+  'data-testid': 'search-support-mobile',
+})`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-section);
+
+  ${({ theme }) => {
+    const lg = resolveBreakpoint(theme, 'lg');
+    return css`
+      @media (min-width: ${lg}) {
+        display: none;
+      }
+    `;
+  }}
+`;
+
+export const MobileAccordionSection = styledComponents(OakBox)`
+  border: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
+  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
+  overflow: hidden;
+`;
+
+export const MobileAccordionButton = styledComponents.button`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  background: transparent;
+  border: none;
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+  font-family: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-brand')};
+    outline-offset: 2px;
+  }
+`;
+
+export const MobileAccordionContent = styledComponents(OakBox)`
+  display: grid;
+  gap: var(--app-gap-section);
+  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  border-top: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
 `;
 
 export const AccentTypography = styledComponents(OakTypography)`

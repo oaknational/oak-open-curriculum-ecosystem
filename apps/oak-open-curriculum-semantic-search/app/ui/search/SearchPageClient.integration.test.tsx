@@ -1,231 +1,25 @@
-import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import type { JSX } from 'react';
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { createLightTheme } from '../themes/light';
 import type { SearchStructuredRequest } from '@oaknational/oak-curriculum-sdk';
 import type { SequenceFacet } from '../../../src/lib/hybrid-search/types';
 import type { StructuredSearchAction } from './structured/StructuredSearch';
-import type { FixtureMode } from '../../lib/fixture-mode';
-import SearchPageClient from './SearchPageClient';
 import { LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE } from '../../../src/lib/search-scopes';
 import { buildSingleScopeFixture, buildEmptyFixture } from '../../lib/search-fixtures/builders';
 import {
   STRUCTURED_EMPTY_RESULTS_MESSAGE,
   STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
 } from './content/structured-search-messages';
-import { FixtureModeProvider } from '../global/Fixture/FixtureModeContext';
-
-const refreshMock = vi.fn();
-
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ refresh: refreshMock }),
-}));
-
-const setFixtureModeMock = vi.hoisted(() => vi.fn<(mode: FixtureMode) => Promise<void>>());
-
-vi.mock('../global/Fixture/fixture-mode-toggle.actions', () => ({
-  setFixtureMode: setFixtureModeMock,
-}));
-
-type StructuredComponentProps = {
-  onResults: (result: unknown | null) => void;
-  onError: (message: string | null) => void;
-  setLoading: (isLoading: boolean) => void;
-  onScopeChange?: (scope: SearchStructuredRequest['scope']) => void;
-  onSubmitPayload?: (payload: SearchStructuredRequest) => void;
-  action?: StructuredSearchAction;
-};
-
-type FacetComponentProps = {
-  facets: unknown;
-  onSelectSequence?: (facet: SequenceFacet) => void;
-};
-
-const structuredPropsRef: { current: StructuredComponentProps | null } = { current: null };
-const facetPropsRef: { current: FacetComponentProps | null } = { current: null };
-
-function renderStructured(props: StructuredComponentProps): JSX.Element {
-  structuredPropsRef.current = props;
-  return (
-    <div data-testid="structured-search">
-      <form aria-label="Structured search form" role="form">
-        <label htmlFor="structured-phase-select">Phase</label>
-        <select id="structured-phase-select" defaultValue="">
-          <option value="">(any)</option>
-          <option value="primary">Primary</option>
-          <option value="secondary">Secondary</option>
-        </select>
-      </form>
-    </div>
-  );
-}
-
-function renderFacets(props: FacetComponentProps): JSX.Element {
-  facetPropsRef.current = props;
-  return <div data-testid="facets" />;
-}
-
-vi.mock('./structured/StructuredSearch', () => ({
-  StructuredSearch: renderStructured,
-  default: renderStructured,
-}));
-
-vi.mock('./components/SearchFacets', () => ({
-  SearchFacets: renderFacets,
-}));
-
-type AppTheme = ReturnType<typeof createLightTheme>;
-
-function renderWithTheme(
-  action: StructuredSearchAction,
-  options: {
-    theme?: AppTheme;
-    initialFixtureMode?: FixtureMode;
-    showFixtureToggle?: boolean;
-    variant?: 'default' | 'structured' | 'natural';
-  } = {},
-): AppTheme {
-  const {
-    theme = createLightTheme(),
-    initialFixtureMode = 'live',
-    showFixtureToggle = false,
-    variant = 'default',
-  } = options;
-
-  render(
-    <StyledThemeProvider theme={theme}>
-      <FixtureModeProvider initialMode={initialFixtureMode}>
-        <SearchPageClient
-          searchStructured={action}
-          initialFixtureMode={initialFixtureMode}
-          showFixtureToggle={showFixtureToggle}
-          variant={variant}
-        />
-      </FixtureModeProvider>
-    </StyledThemeProvider>,
-  );
-  return theme;
-}
+import {
+  renderWithTheme,
+  structuredPropsRef,
+  facetPropsRef,
+  resetSearchPageTestState,
+  mockMatchMedia,
+} from './SearchPageClient.test-helpers';
 
 describe('SearchPageClient', () => {
   beforeEach(() => {
-    structuredPropsRef.current = null;
-    facetPropsRef.current = null;
-    refreshMock.mockReset();
-    setFixtureModeMock.mockReset();
-    setFixtureModeMock.mockResolvedValue(undefined);
-  });
-
-  it('routes the hero CTAs to dedicated structured and natural search pages', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    renderWithTheme(action);
-
-    const structuredLink = screen.getByRole('link', { name: /open structured search/i });
-    const naturalLink = screen.getByRole('link', { name: /open natural language search/i });
-
-    expect(structuredLink).toHaveAttribute('href', '/structured_search');
-    expect(naturalLink).toHaveAttribute('href', '/natural_language_search');
-  });
-
-  it('presents structured-only hero messaging and skip links on the structured route', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
-    });
-
-    renderWithTheme(action, { variant: 'structured' });
-
-    expect(
-      screen.getByRole('heading', { level: 1, name: /structured search/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/filter the oak curriculum catalogue by subject, key stage and scope/i),
-    ).toBeInTheDocument();
-
-    const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
-    const skipLinks = within(skipLinksNav).getAllByRole('link');
-    expect(skipLinks).toHaveLength(2);
-    expect(skipLinks[0]).toHaveAccessibleName(/skip to structured search form/i);
-    expect(skipLinks[1]).toHaveAccessibleName(/skip to structured results/i);
-
-    expect(screen.queryByTestId('natural-search-panel')).not.toBeInTheDocument();
-  });
-
-  it('surfaces natural language hero messaging, prompt-only controls, and skip links on the natural route', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 4, timedOut: false },
-    });
-
-    renderWithTheme(action, { variant: 'natural' });
-
-    expect(
-      screen.getByRole('heading', { level: 1, name: /natural language search/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/describe what you need in plain language/i)).toBeInTheDocument();
-
-    expect(screen.getByLabelText('Describe what you need')).toBeInTheDocument();
-    expect(screen.queryByLabelText('Scope')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Subject')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Key Stage')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Phase')).not.toBeInTheDocument();
-
-    const summary = screen.getByTestId('natural-summary');
-    expect(
-      within(summary).getByRole('heading', { level: 3, name: /derived parameters/i }),
-    ).toBeInTheDocument();
-    expect(summary).toHaveTextContent(/Submit a prompt to populate the derived summary/i);
-
-    const skipLinksNav = screen.getByRole('navigation', { name: /skip links/i });
-    const skipLinks = within(skipLinksNav).getAllByRole('link');
-    expect(skipLinks).toHaveLength(2);
-    expect(skipLinks[0]).toHaveAccessibleName(/skip to natural language search form/i);
-    expect(skipLinks[1]).toHaveAccessibleName(/skip to natural language results/i);
-
-    expect(screen.queryByTestId('structured-search-panel')).not.toBeInTheDocument();
-  });
-
-  it('surfaces the structured Phase selector with an accessible label', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    renderWithTheme(action);
-
-    const structuredPanel = screen.getByTestId('structured-search-panel');
-    const phaseSelect = within(structuredPanel).getByLabelText('Phase');
-
-    expect(phaseSelect).toHaveAttribute('id', 'structured-phase-select');
-    const options = within(phaseSelect).getAllByRole('option');
-    const optionLabels = options.map((opt) => opt.textContent?.trim());
-    expect(optionLabels).toEqual(['(any)', 'Primary', 'Secondary']);
-  });
-
-  it('caps the main layout inline size using the app layout CSS variable', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    renderWithTheme(action);
-
-    const content = screen.getByTestId('search-page-content');
-    const computed = getComputedStyle(content);
-    expect(computed.getPropertyValue('max-width')).toBe(
-      'min(100%, var(--app-layout-container-max-width))',
-    );
-  });
-
-  it('renders a fixture scenario pill when fixtures are enabled on the page', () => {
-    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
-      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
-    });
-
-    renderWithTheme(action, { showFixtureToggle: true, initialFixtureMode: 'fixtures-empty' });
-
-    expect(screen.getByText(/Using fixture scenario: empty dataset/i)).toBeInTheDocument();
-    expect(screen.queryByRole('radiogroup', { name: /search data/i })).not.toBeInTheDocument();
+    resetSearchPageTestState();
   });
 
   it('applies theme-driven spacing to the main layout shell', () => {
@@ -239,6 +33,79 @@ describe('SearchPageClient', () => {
     const computed = getComputedStyle(content);
 
     expect(computed.getPropertyValue('gap')).toBe('var(--app-gap-section)');
+  });
+
+  it('places hero and results within the primary grid so outcomes remain visible', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
+
+    const primaryGrid = screen.getByTestId('search-primary-grid');
+    expect(within(primaryGrid).getByLabelText('Search hero and controls')).toBeInTheDocument();
+    expect(
+      within(primaryGrid).getByText(
+        /Begin a search to explore structured or natural language results/i,
+      ),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(buildSingleScopeFixture());
+    });
+
+    await waitFor(() => {
+      expect(within(primaryGrid).getByText(/results for lessons/i)).toBeInTheDocument();
+    });
+  });
+
+  it('shows motion-safe skeletons while a structured search is running', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 3, timedOut: false },
+    });
+
+    renderWithTheme(action, { initialFixtureMode: 'fixtures', showFixtureToggle: true });
+
+    await act(async () => {
+      structuredPropsRef.current?.setLoading?.(true);
+    });
+
+    expect(screen.getByTestId('search-summary-skeleton')).toBeInTheDocument();
+    expect(screen.getByTestId('search-results-skeleton')).toBeInTheDocument();
+
+    const fixture = buildSingleScopeFixture({
+      overrides: {
+        facets: {
+          sequences: [
+            {
+              subjectSlug: 'maths',
+              sequenceSlug: 'fractions-programme',
+              keyStage: 'ks2',
+              keyStageTitle: 'Key stage 2',
+              phaseSlug: 'maths-primary',
+              phaseTitle: 'Mathematics primary',
+              years: ['4'],
+              units: [{ unitSlug: 'unit-1', unitTitle: 'Unit 1' }],
+              unitCount: 12,
+              lessonCount: 60,
+              hasKs4Options: false,
+              sequenceUrl: 'https://oak.example/fractions-programme',
+            },
+          ],
+        },
+      },
+    });
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(fixture);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('search-results-skeleton')).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Using fixture scenario: success/i)).toBeInTheDocument();
+    expect(screen.getByTestId('search-results-summary')).toBeInTheDocument();
   });
 
   it('shows only the structured form and skip link on the structured variant', () => {
@@ -360,6 +227,29 @@ describe('SearchPageClient', () => {
     });
     renderWithTheme(action);
 
+    const fixture = buildSingleScopeFixture({
+      overrides: {
+        facets: {
+          sequences: [
+            {
+              subjectSlug: 'maths',
+              sequenceSlug: 'fractions-programme',
+              keyStage: 'ks2',
+              keyStageTitle: 'Key stage 2',
+              phaseSlug: 'maths-primary',
+              phaseTitle: 'Mathematics primary',
+              years: ['4'],
+              units: [{ unitSlug: 'unit-1', unitTitle: 'Unit 1' }],
+              unitCount: 12,
+              lessonCount: 60,
+              hasKs4Options: false,
+              sequenceUrl: 'https://oak.example/fractions-programme',
+            },
+          ],
+        },
+      },
+    });
+
     const payload = {
       scope: LESSONS_SCOPE,
       results: [
@@ -385,6 +275,7 @@ describe('SearchPageClient', () => {
           contexts: {},
         },
       ],
+      facets: fixture.facets,
     };
 
     await act(async () => {
@@ -395,7 +286,153 @@ describe('SearchPageClient', () => {
       expect(screen.getByText('1 result for lessons')).toBeInTheDocument();
     });
     expect(screen.getByText('Took 9ms')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: /decimals introduction/i }),
+    ).toBeInTheDocument();
+    const meta = screen.getAllByTestId('search-result-meta')[0];
+    expect(within(meta).getByTestId('search-result-meta-subject')).toHaveTextContent(
+      'Subject: maths',
+    );
+    expect(within(meta).getByTestId('search-result-meta-key-stage')).toHaveTextContent(
+      'Key stage: ks2',
+    );
     expect(screen.getByRole('button', { name: /decimals recap/i })).toBeInTheDocument();
+    const summary = screen.getByTestId('search-results-summary');
+    expect(summary).toHaveAttribute('data-sticky', 'true');
+  });
+
+  it('moves secondary panels into the support column alongside results', async () => {
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
+    });
+    renderWithTheme(action);
+
+    const fixture = buildSingleScopeFixture({
+      overrides: {
+        facets: {
+          sequences: [
+            {
+              subjectSlug: 'maths',
+              sequenceSlug: 'fractions-programme',
+              keyStage: 'ks2',
+              keyStageTitle: 'Key stage 2',
+              phaseSlug: 'maths-primary',
+              phaseTitle: 'Mathematics primary',
+              years: ['4'],
+              units: [{ unitSlug: 'unit-1', unitTitle: 'Unit 1' }],
+              unitCount: 12,
+              lessonCount: 60,
+              hasKs4Options: false,
+              sequenceUrl: 'https://oak.example/fractions-programme',
+            },
+          ],
+        },
+      },
+    });
+
+    const payload = {
+      scope: LESSONS_SCOPE,
+      results: [
+        {
+          id: 'lesson-1',
+          rankScore: 1,
+          lesson: {
+            lesson_title: 'Decimals introduction',
+            subject_slug: 'maths',
+            key_stage: 'ks2',
+          },
+          highlights: [],
+        },
+      ],
+      total: 1,
+      took: 9,
+      timedOut: false,
+      suggestions: [
+        {
+          label: 'Decimals recap',
+          scope: LESSONS_SCOPE,
+          url: '/lessons/decimals-recap',
+          contexts: {},
+        },
+      ],
+      facets: fixture.facets,
+    };
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(payload);
+    });
+
+    const supportColumn = screen.getByTestId('search-support-column');
+    expect(
+      within(supportColumn).getByRole('heading', { level: 3, name: /suggestions/i }),
+    ).toBeInTheDocument();
+    expect(within(supportColumn).getByTestId('facets')).toBeInTheDocument();
+  });
+
+  it('collapses suggestion and facet panels behind mobile accordions', async () => {
+    mockMatchMedia(false);
+    const action = vi.fn<StructuredSearchAction>().mockResolvedValue({
+      result: { scope: LESSONS_SCOPE, results: [], total: 0, took: 5, timedOut: false },
+    });
+    renderWithTheme(action);
+
+    const fixture = buildSingleScopeFixture({
+      overrides: {
+        facets: {
+          sequences: [
+            {
+              subjectSlug: 'maths',
+              sequenceSlug: 'fractions-programme',
+              keyStage: 'ks2',
+              keyStageTitle: 'Key stage 2',
+              phaseSlug: 'maths-primary',
+              phaseTitle: 'Mathematics primary',
+              years: ['4'],
+              units: [{ unitSlug: 'unit-1', unitTitle: 'Unit 1' }],
+              unitCount: 12,
+              lessonCount: 60,
+              hasKs4Options: false,
+              sequenceUrl: 'https://oak.example/fractions-programme',
+            },
+          ],
+        },
+      },
+    });
+
+    await act(async () => {
+      structuredPropsRef.current?.onResults?.(fixture);
+    });
+
+    const mobileSupport = screen.getByTestId('search-support-mobile');
+    const suggestionsToggle = within(mobileSupport).getByRole('button', {
+      name: /toggle suggestions/i,
+    });
+    const facetsToggle = within(mobileSupport).getByRole('button', {
+      name: /toggle programmes & units/i,
+    });
+
+    expect(suggestionsToggle).toHaveAttribute('aria-expanded', 'false');
+    expect(facetsToggle).toHaveAttribute('aria-expanded', 'false');
+
+    fireEvent.click(suggestionsToggle);
+
+    await waitFor(() => {
+      expect(suggestionsToggle).toHaveAttribute('aria-expanded', 'true');
+    });
+    const firstSuggestion = fixture.suggestions[0]?.label ?? '';
+    if (firstSuggestion) {
+      expect(
+        within(mobileSupport).getByRole('button', { name: new RegExp(firstSuggestion, 'i') }),
+      ).toBeInTheDocument();
+    }
+
+    fireEvent.click(facetsToggle);
+
+    await waitFor(() => {
+      expect(facetsToggle).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    expect(within(mobileSupport).getByTestId('facets')).toBeInTheDocument();
   });
 
   it('replays structured search when a suggestion is selected', async () => {

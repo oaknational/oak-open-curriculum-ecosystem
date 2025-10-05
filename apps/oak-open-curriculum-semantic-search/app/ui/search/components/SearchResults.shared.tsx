@@ -6,6 +6,8 @@ import styledComponents, { css } from 'styled-components';
 import { z } from 'zod';
 import { renderSafeHighlight } from './searchResultsHighlight';
 import { resolveBreakpoint } from '../../shared/breakpoints';
+import { getAppTheme } from '../../themes/app-theme-helpers';
+import { resolveUiColor } from '../../../lib/theme/ThemeGlobalStyle';
 
 const UnitSchema = z
   .object({
@@ -46,30 +48,21 @@ export function ResultItem({
   keyStage: string;
   highlights: string[];
 }): JSX.Element {
-  const parts: string[] = [];
-  if (subject) {
-    parts.push(`Subject: ${subject}`);
-  }
-  if (keyStage) {
-    parts.push(`Key stage: ${keyStage}`);
-  }
-  const meta = parts.join(' · ');
+  const metaEntries = buildMetaEntries(subject, keyStage);
 
   return (
-    <OakBox
-      as="li"
-      $ba="border-solid-s"
-      $borderColor="border-neutral"
-      $borderRadius="border-radius-s"
-      $pa="inner-padding-m"
-    >
-      <OakTypography as="div" $font="body-2-bold">
+    <ResultCard as="li">
+      <ResultHeading as="h3" $font="heading-6">
         {title}
-      </OakTypography>
-      {meta ? (
-        <OakTypography as="div" $font="body-4" $color="text-subdued" $mt="space-between-ssx">
-          {meta}
-        </OakTypography>
+      </ResultHeading>
+      {metaEntries.length > 0 ? (
+        <ResultMetaList data-testid="search-result-meta">
+          {metaEntries.map((entry) => (
+            <ResultMetaBadge key={entry.kind} data-testid={entry.testId}>
+              {entry.label}
+            </ResultMetaBadge>
+          ))}
+        </ResultMetaList>
       ) : null}
       {highlights.length > 0 ? (
         <OakUL $mt="space-between-s">
@@ -80,7 +73,7 @@ export function ResultItem({
           ))}
         </OakUL>
       ) : null}
-    </OakBox>
+    </ResultCard>
   );
 }
 
@@ -88,6 +81,30 @@ export const ResultsSection = styledComponents(OakBox)`
   display: flex;
   flex-direction: column;
   row-gap: var(--app-gap-section);
+`;
+
+export const ResultsSummaryContainer = styledComponents(OakBox).attrs({
+  'data-testid': 'search-results-summary',
+  'data-sticky': 'true',
+})`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-inline, var(--app-gap-cluster));
+  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
+  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  border: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
+  margin-bottom: var(--app-gap-section);
+
+  ${({ theme }) => {
+    const lg = resolveBreakpoint(theme, 'lg');
+    return css`
+      @media (min-width: ${lg}) {
+        position: sticky;
+        top: calc(var(--app-gap-section) * 0.5);
+      }
+    `;
+  }}
 `;
 
 export const ResultsGrid = styledComponents(OakUL).attrs({
@@ -112,6 +129,69 @@ export const ResultsGrid = styledComponents(OakUL).attrs({
     `;
   }}
 `;
+
+const ResultCard = styledComponents(OakBox)`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-cluster);
+  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
+  border: 1px solid
+    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
+  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
+  box-shadow: 0 0.75rem 2.5rem -1.5rem
+    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
+`;
+
+const ResultHeading = styledComponents(OakTypography)`
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+`;
+
+const ResultMetaList = styledComponents(OakBox)`
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--app-gap-inline, var(--app-gap-cluster));
+`;
+
+const ResultMetaBadge = styledComponents(OakTypography).attrs({ $font: 'body-4' })`
+  display: inline-flex;
+  align-items: center;
+  padding-inline: calc(var(--app-gap-inline, var(--app-gap-cluster)) / 2);
+  padding-block: 0.25rem;
+  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
+  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
+`;
+
+function buildMetaEntries(
+  subject: string,
+  keyStage: string,
+): Array<{
+  kind: 'subject' | 'key-stage';
+  label: string;
+  testId: `search-result-meta-${string}`;
+}> {
+  const entries: Array<{
+    kind: 'subject' | 'key-stage';
+    label: string;
+    testId: `search-result-meta-${string}`;
+  }> = [];
+  if (subject) {
+    entries.push({
+      kind: 'subject',
+      label: `Subject: ${subject}`,
+      testId: 'search-result-meta-subject',
+    });
+  }
+  if (keyStage) {
+    entries.push({
+      kind: 'key-stage',
+      label: `Key stage: ${keyStage}`,
+      testId: 'search-result-meta-key-stage',
+    });
+  }
+  return entries;
+}
 
 export function extractTitle(rec: z.infer<typeof ItemSchema>): string {
   if (rec.lesson?.lesson_title) {

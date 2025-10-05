@@ -1,10 +1,8 @@
-import { useCallback, type ComponentProps, type JSX } from 'react';
+import { useCallback, type JSX } from 'react';
 import { OakTypography } from '@oaknational/oak-components';
 import { StructuredSearch } from '../structured/StructuredSearch';
 import type { StructuredSearchAction } from '../structured/StructuredSearch';
 import NaturalSearchComponent from '../natural/NaturalSearch';
-import { SearchFacets } from '../components/SearchFacets';
-import { SearchSuggestions } from '../components/SearchSuggestions';
 import type { StructuredFollowUpHandlers } from '../hooks/useStructuredFollowUp';
 import type { SearchController } from '../hooks/useSearchController';
 import { buildSkipLinks } from './SearchPageHeroContent';
@@ -14,11 +12,8 @@ export { SearchHero, resolveResultsSectionId } from './SearchPageHeroContent';
 export type { SearchLayoutVariant } from './SearchPageLayout.types';
 import {
   ControlsGrid,
-  FacetsPanel,
   NaturalPanelCard,
-  SecondaryGrid,
   StructuredPanelCard,
-  SuggestionsPanel,
   SkipLink,
   SkipLinksNav,
   type ControlsLayout,
@@ -46,29 +41,6 @@ export function SearchForms({
       ) : null}
       {showNatural ? <NaturalPanel controller={controller} followUp={followUp} /> : null}
     </ControlsGrid>
-  );
-}
-
-export function SearchSecondary({
-  suggestions,
-  onSelectSuggestion,
-  facets,
-  onSelectSequence,
-}: {
-  suggestions: ComponentProps<typeof SearchSuggestions>['suggestions'];
-  onSelectSuggestion: ComponentProps<typeof SearchSuggestions>['onSelectSuggestion'];
-  facets: ComponentProps<typeof SearchFacets>['facets'];
-  onSelectSequence: ComponentProps<typeof SearchFacets>['onSelectSequence'];
-}): JSX.Element {
-  return (
-    <SecondaryGrid>
-      <SuggestionsPanel>
-        <SearchSuggestions suggestions={suggestions} onSelectSuggestion={onSelectSuggestion} />
-      </SuggestionsPanel>
-      <FacetsPanel>
-        <SearchFacets facets={facets} onSelectSequence={onSelectSequence} />
-      </FacetsPanel>
-    </SecondaryGrid>
   );
 }
 

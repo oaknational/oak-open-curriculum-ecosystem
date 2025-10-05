@@ -7,6 +7,7 @@ import {
   STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
 } from '../../app/ui/search/content/structured-search-messages';
 import { structuredSearchFixture } from '../../app/ui/search/__fixtures__/search-structured';
+import { dismissNextDevOverlay } from './devtools';
 import {
   FIXTURE_MODE_COOKIE,
   modeToCookieValue,
@@ -45,7 +46,9 @@ async function submitStructuredSearch(page: Page, query = 'fractions'): Promise<
   const queryField = page.getByLabel('Query');
   await expect(queryField).toBeVisible();
   await queryField.first().fill(query);
-  await page.getByRole('button', { name: 'Search' }).first().click();
+  const searchButton = page.getByRole('button', { name: 'Search' }).first();
+  await searchButton.click();
+  await page.waitForLoadState('networkidle');
 }
 
 async function seedFixtureCookie(context: BrowserContext, mode: FixtureMode): Promise<void> {
@@ -87,6 +90,7 @@ test.describe('Fixture toggle workflow', () => {
   test('switches between fixtures and live data paths', async ({ page, context }, testInfo) => {
     await seedFixtureCookie(context, 'fixtures');
     await page.goto('/structured_search');
+    await dismissNextDevOverlay(page);
 
     await expectFixtureModeSummary(page, 'fixtures');
     const fixtureNotice = page.getByText(/Using fixture scenario: success/i);
@@ -112,6 +116,7 @@ test.describe('Fixture toggle workflow', () => {
   }) => {
     await seedFixtureCookie(context, 'fixtures');
     await page.goto('/structured_search?scope=all');
+    await dismissNextDevOverlay(page);
 
     await expectFixtureModeSummary(page, 'fixtures');
     await expect(page.getByTestId('structured-search-panel')).toBeVisible();
@@ -123,6 +128,7 @@ test.describe('Fixture toggle workflow', () => {
   }, testInfo) => {
     await seedFixtureCookie(context, 'fixtures-empty');
     await page.goto('/structured_search');
+    await dismissNextDevOverlay(page);
 
     await expectFixtureModeSummary(page, 'fixtures-empty');
 
@@ -130,7 +136,8 @@ test.describe('Fixture toggle workflow', () => {
 
     await submitStructuredSearch(page);
 
-    await expect(page.getByText(/0 results for/i)).toBeVisible();
+    const emptyResults = page.getByTestId('search-results-grid').locator(':scope > li');
+    await expect(emptyResults).toHaveCount(0);
     await expect(page.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).toBeVisible();
     await captureScreenshot(page, 'fixture-mode-empty', testInfo);
     const emptyAxe = await captureAccessibility(page, 'fixture-mode-empty', testInfo);
@@ -143,6 +150,7 @@ test.describe('Fixture toggle workflow', () => {
   }, testInfo) => {
     await seedFixtureCookie(context, 'fixtures-error');
     await page.goto('/structured_search');
+    await dismissNextDevOverlay(page);
 
     await expectFixtureModeSummary(page, 'fixtures-error');
 
@@ -160,6 +168,7 @@ test.describe('Fixture toggle workflow', () => {
   test('switches admin fixtures via scenario radios', async ({ page, context }, testInfo) => {
     await seedFixtureCookie(context, 'fixtures');
     await page.goto('/admin');
+    await dismissNextDevOverlay(page);
 
     await expectFixtureModeSummary(page, 'fixtures');
     const successNotice = page.getByText(

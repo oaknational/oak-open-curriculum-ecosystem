@@ -103,16 +103,19 @@ Key accessibility notes:
 
 ## Workstream 4 – Search Surfaces (Structured & Natural)
 
-### Status (2025-10-18)
+### Status (2025-10-20)
 
-- Fixture messaging now renders as a compact pill (`Using fixture scenario: …`) sourced from `FixtureModeContext`; header remains the single point of control.
-- Search + admin pages consume the context via `FixtureModeProvider`; integration and Playwright suites updated to assert the new messaging and absence of duplicate on-page radios.
+- Fixture messaging still renders as a compact pill (`Using fixture scenario: …`) sourced from `FixtureModeContext`; header remains the single point of control and surfaces refresh the notice via the shared provider.
+- Playwright helpers now suppress the Next.js dev overlay and expose typed `mockMatchMedia` utilities so the responsive evidence remains deterministic.
+- Structured and natural heroes now use tightened intent-led copy, and the responsive grid promotes results in the first column at ≥`lg` while the support panels relocate into a dedicated aside.
+- Motion-safe loading skeletons and sticky results summaries ship for both journeys; RTL integration coverage exercises the skeleton state, sticky summary attributes, and the relocated support column.
+- Result cards now expose accent badges for subject/key stage meta, and sub-`lg` viewports collapse suggestions/facets into accessible accordions while keeping the desktop grid untouched.
 
 ### Next steps
 
-- Rework hero/copy for structured + natural variants to emphasise intent and streamline supporting paragraphs.
-- Adopt the planned two-column results-first grid (≥`lg`) so outcome summaries stay above the fold and secondary content relocates to side panels/accordions.
-- Introduce motion-safe skeletons and sticky results summaries, updating RTL + Playwright coverage accordingly.
+- Evaluate highlight rendering/line-clamping for dense result cards and tighten secondary text contrast for high-contrast themes.
+- Capture fresh Playwright evidence for structured and natural routes (desktop/mobile, light/dark, reduced motion) and log findings in `snagging.md`.
+- Extend documentation/QA notes covering the accordion interaction (keyboard/focus order, analytics) before moving on to skeleton loading polish.
 
 ## Workstream 5 – Natural Language Fixtures Reliability
 

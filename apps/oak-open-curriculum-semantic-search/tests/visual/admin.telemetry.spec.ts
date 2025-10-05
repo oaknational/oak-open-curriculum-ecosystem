@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { dismissNextDevOverlay } from './devtools';
 
 test.describe('Admin telemetry observability', () => {
   test('surfaces outage guidance and fixture status', async ({ page, context }) => {
@@ -22,6 +23,7 @@ test.describe('Admin telemetry observability', () => {
     });
 
     await page.goto('/admin');
+    await dismissNextDevOverlay(page);
 
     const outageAlert = page
       .getByRole('alert')

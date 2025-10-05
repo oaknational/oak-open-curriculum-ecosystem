@@ -31,6 +31,7 @@ describe('SearchResults', () => {
       results?: unknown[];
       meta?: SearchMeta | null;
       multiBuckets?: MultiScopeBucketView[] | null;
+      loading?: boolean;
     } = {},
   ) {
     const {
@@ -38,15 +39,25 @@ describe('SearchResults', () => {
       results = [sampleResult],
       meta = sampleMeta,
       multiBuckets = null,
+      loading = false,
     } = overrides;
 
-    return render(
-      <StyledThemeProvider theme={createLightTheme()}>
+    const theme = createLightTheme();
+
+    const renderResult = render(
+      <StyledThemeProvider theme={theme}>
         <OakThemeProvider theme={oakDefaultTheme}>
-          <SearchResults mode={mode} results={results} meta={meta} multiBuckets={multiBuckets} />
+          <SearchResults
+            mode={mode}
+            results={results}
+            meta={meta}
+            multiBuckets={multiBuckets}
+            loading={loading}
+          />
         </OakThemeProvider>
       </StyledThemeProvider>,
     );
+    return { theme, ...renderResult };
   }
 
   it('renders totals and timing information from meta', () => {
@@ -54,7 +65,16 @@ describe('SearchResults', () => {
 
     expect(screen.getByText('1 result for lessons')).toBeInTheDocument();
     expect(screen.getByText('Took 12ms')).toBeInTheDocument();
-    expect(screen.getByText(/Decimals introduction/)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: /Decimals introduction/i }),
+    ).toBeInTheDocument();
+    const meta = screen.getByTestId('search-result-meta');
+    expect(within(meta).getByTestId('search-result-meta-subject')).toHaveTextContent(
+      'Subject: maths',
+    );
+    expect(within(meta).getByTestId('search-result-meta-key-stage')).toHaveTextContent(
+      'Key stage: ks2',
+    );
   });
 
   it('announces when the query timed out', () => {
@@ -90,7 +110,7 @@ describe('SearchResults', () => {
   }
 
   it('applies Oak spacing and border tokens to the results list', () => {
-    const { container } = renderResults();
+    const { container, theme } = renderResults();
 
     const section = container.querySelector('section');
     expect(section).not.toBeNull();
@@ -106,9 +126,9 @@ describe('SearchResults', () => {
 
     const item = within(list).getAllByRole('listitem')[0];
     const itemStyles = getComputedStyle(item);
-    expect(itemStyles.padding).toBe('1rem');
-    expect(itemStyles.borderRadius).toBe('0.25rem');
-    expect(itemStyles.borderTopWidth).toBe('0.063rem');
+    expect(itemStyles.padding).toBe(theme.app.space.padding.card);
+    expect(itemStyles.borderRadius).toBe(theme.app.radii.card);
+    expect(itemStyles.borderTopWidth).toBe('1px');
   });
 
   it('renders bucketed sections when multiple scopes return data', () => {
