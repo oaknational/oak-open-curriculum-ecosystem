@@ -7,7 +7,7 @@ import { PageContainer, PageContent } from './Page';
 describe('Page layout primitives', () => {
   it('renders a main container with page content', () => {
     render(
-      <Providers initialMode="light">
+      <Providers initialMode="light" initialFixtureMode="live">
         <PageContainer as="main" data-testid="page">
           <PageContent>
             <p>child</p>

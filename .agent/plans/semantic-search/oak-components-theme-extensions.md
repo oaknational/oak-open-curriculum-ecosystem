@@ -196,6 +196,7 @@ Although outside the symposium remit, the Semantic Search team is tracking the f
 4. Monitor Oak Components releases and reduce custom code once upstream features land.
 5. Header token sweep (2025-10-04): navigation polish can rely on existing spacing (`grid`, `section`, `cluster`, inline padding), palette (`brandPrimary`, `brandPrimaryBright`), and typography (`body-3`, `body-4`) tokens; no new gaps identified yet.
 6. Header focus states (2025-10-04): hover/focus affordances use existing palette + radii tokens (`brandPrimary`, `brandPrimaryBright`, `radii.pill`, `padding.pill`) so no upstream additions required.
+7. High contrast gap (2025-10-04): visual review shows forced-color mode falls back to browser defaults; Oak Components should expose high-contrast-friendly palette hooks and outline tokens.
 
 ### Appendix C – Maintenance & Testing Considerations
 

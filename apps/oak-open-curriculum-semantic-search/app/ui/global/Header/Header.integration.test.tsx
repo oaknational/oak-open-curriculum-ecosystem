@@ -1,12 +1,27 @@
 import { render, screen, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import type { FixtureMode } from '../../../lib/fixture-mode';
 import { Providers as AppProviders } from '../../../lib/Providers';
 import Header from './Header';
 import { resolveAppTokens } from '../../themes/semantic-theme-resolver';
 
-function renderHeader() {
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+  useServerInsertedHTML: () => {
+    // no-op for client-side tests
+  },
+}));
+
+function renderHeader(initialFixtureMode: FixtureMode = 'live') {
   render(
-    <AppProviders initialMode="light">
+    <AppProviders initialMode="light" initialFixtureMode={initialFixtureMode}>
       <Header />
     </AppProviders>,
   );
@@ -52,5 +67,23 @@ describe('Header', () => {
 
     expect(styles).toContain(palette.brandPrimary);
     expect(styles).toContain(palette.brandPrimaryBright);
+  });
+
+  it('lays out header regions with explicit grid areas', () => {
+    renderHeader();
+    const banner = screen.getByRole('banner');
+    const bannerStyle = getComputedStyle(banner);
+    expect(bannerStyle.display).toBe('grid');
+    const areas = bannerStyle.gridTemplateAreas.replace(/\s+/g, ' ').trim();
+    expect(areas).toContain("'logo'");
+    expect(areas).toContain("'nav'");
+    expect(areas).toContain("'utilities'");
+  });
+
+  it('renders the fixture mode toggle bound to the shared context', () => {
+    renderHeader('fixtures');
+    const toggle = screen.getByRole('radiogroup', { name: 'Fixture mode' });
+    const fixtureOption = within(toggle).getByRole('radio', { name: 'Fixtures (success)' });
+    expect(fixtureOption).toBeChecked();
   });
 });

@@ -9,7 +9,11 @@ import { createDarkTheme } from '../../ui/themes/dark.js';
 import { resolveUiColor } from './ThemeGlobalStyle.js';
 
 function Providers({ children }: { children: React.ReactNode }) {
-  return <AppProviders initialMode="light">{children}</AppProviders>;
+  return (
+    <AppProviders initialMode="light" initialFixtureMode="live">
+      {children}
+    </AppProviders>
+  );
 }
 
 function flattenCssRules(sheet: CSSStyleSheet): string[] {

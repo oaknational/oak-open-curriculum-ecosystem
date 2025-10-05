@@ -60,6 +60,20 @@ vi.mock('next/headers', () => {
   return { cookies };
 });
 
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+  }),
+  useServerInsertedHTML: (callback: () => unknown) => {
+    callback?.();
+  },
+}));
+
 // Mock next/font/google Lexend to avoid runtime call in server render
 vi.mock('../../app/ui/global/Theme', () => {
   return {

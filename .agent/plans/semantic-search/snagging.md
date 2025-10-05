@@ -12,6 +12,8 @@ For each of these, put your visual design hat on, the needs to _look good_ AND b
 
 The design does not make use of wide screens, and is not optimised for narrow screens. Go back to design basics, and come up with a design that LOOKS GOOD, and uses space appropriately. Read the rest of the issues before planning anything.
 
+- 2025-10-04: Visual sweep highlights remaining opportunities—landing hero CTAs, admin/status tonal hierarchy, and card motion tweaks remain outstanding for Workstreams 3, 6, 7.
+
 ### Navigation
 
 - The navigation had the home page mislabelled as "Search". I have fixed that.
@@ -20,6 +22,9 @@ The design does not make use of wide screens, and is not optimised for narrow sc
 - Are the skip links still in place?
 - 2025-10-04: Nav metadata centralised via `useNavItems()`; root route relabelled “Home” and fixture toggle placeholder captured for upcoming utilities work.
 - 2025-10-04: Focus and hover states now use Oak palette tokens (`brandPrimary`, `brandPrimaryBright`) with pill padding/radii to increase target size; no new token gaps found.
+- 2025-10-04: Header utilities now host the shared fixture mode toggle via `FixtureModeContext`, keeping state in sync with page notices and cookie refresh.
+- 2025-10-04: Header adopts the grid layout spec (`logo/nav/utilities`) with responsive wrapping validated in RTL and Playwright coverage.
+- 2025-10-04: Visual sweep (light/dark/reduced-motion/high-contrast) confirms header polish; note high-contrast mode still falls back to browser defaults—log palette gap for Oak Components follow-up.
 
 ### Home Page
 

@@ -36,6 +36,11 @@ test.describe('Primary navigation', () => {
     expect(focusStyles?.outlineStyle).not.toBe('none');
     expect(focusStyles?.outlineWidth).not.toBe('0px');
 
+    const fixtureToggle = page.getByRole('radiogroup', { name: /fixture mode/i });
+    await expect(fixtureToggle).toBeVisible();
+    const fixturesOption = fixtureToggle.getByRole('radio', { name: /fixtures \(success\)/i });
+    await expect(fixturesOption).toBeChecked();
+
     const axe = await new AxeBuilderModule({ page }).include('nav[aria-label="Primary"]').analyze();
     expect(axe.violations.length, JSON.stringify(axe.violations, null, 2)).toBe(0);
   });

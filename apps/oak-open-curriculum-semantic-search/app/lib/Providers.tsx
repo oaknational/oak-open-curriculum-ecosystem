@@ -6,6 +6,8 @@ import { ThemeProvider as ThemeContextProvider, useThemeContext } from './theme/
 import { useEffect } from 'react';
 import { ColorModeProvider, useColorMode } from './theme/ColorModeContext';
 import { ThemeBridgeProvider } from './theme/ThemeBridgeProvider';
+import type { FixtureMode } from './fixture-mode';
+import { FixtureModeProvider } from '../ui/global/client';
 
 function BridgeComposer({
   children,
@@ -48,15 +50,19 @@ function SyncModeToResolved(): JSX.Element | null {
 
 export function Providers({
   initialMode,
+  initialFixtureMode,
   children,
 }: {
   initialMode: 'light' | 'dark' | 'system';
+  initialFixtureMode: FixtureMode;
   children: React.ReactNode;
 }): JSX.Element {
   const ssrResolved: 'light' | 'dark' = initialMode === 'dark' ? 'dark' : 'light';
   return (
     <ThemeContextProvider initialMode={initialMode}>
-      <BridgeComposer ssrMode={ssrResolved}>{children}</BridgeComposer>
+      <FixtureModeProvider initialMode={initialFixtureMode}>
+        <BridgeComposer ssrMode={ssrResolved}>{children}</BridgeComposer>
+      </FixtureModeProvider>
     </ThemeContextProvider>
   );
 }
