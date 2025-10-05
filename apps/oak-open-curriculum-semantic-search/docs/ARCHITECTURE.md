@@ -38,6 +38,13 @@ The App Router surfaces use nested layouts to separate search experiences from o
 - `app/ui/ops/OperationsLayout.tsx` wraps `/admin` and `/status`, standardising spacing, fixture notices, and aria live regions for status updates (`StatusClient`) and telemetry dashboards (`AdminPageClient`).
 - `app/ui/global/Fixture/FixtureNotice.tsx` centralises the fixture toggle and banner copy, sharing tone across search and operations surfaces.
 
+### Mobile support accordions
+
+- `SearchSecondary` renders suggestions and programme facets side-by-side on large screens (`SecondaryGrid`). Below the `lg` breakpoint it collapses them into accessible accordions (`MobileSupportAccordion`).
+- Each toggle button is `type="button"`, exposes `aria-expanded`/`aria-controls`, and sits immediately after the hero so the tab order flows hero → form → toggle → panel content without surprise jumps.
+- Accordions render their content inside `role="region"` containers and apply `hidden`/`aria-hidden` while collapsed; the children unmount entirely when closed to keep screen readers quiet.
+- When analytics instrumentation arrives, emit a `search.secondary_toggle` event with `{ panelId, open }` through the shared analytics client so we can observe usage without duplicating logic.
+
 Captured artefacts under `test-artifacts/` (landing, structured, natural) and `test-results/responsive-baseline-*` (admin/status) serve as visual checkpoints, aligning with the UX plan’s evidence requirements.
 
 ## Design rationale

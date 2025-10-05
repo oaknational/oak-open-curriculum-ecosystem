@@ -22,102 +22,37 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 
 ## Workstream 1 – UI Architecture & Organisation
 
-1. ✅ **Restructure directories**: `app/ui` now splits into `global/`, `search/`, `ops/`, `shared/`, with server/client entry points (`client.ts`, `index.ts`) to enforce boundaries.
-2. ✅ **Introduce layout primitives**: `PageContainer`, `ResponsiveGrid`, `Cluster`, and spacing helpers live under `global/Layout` with targeted unit/integration coverage.
-3. ✅ **Organise remaining files**: legacy root modules removed; documentation consolidated in `app/ui/README.md` and directories house their tests alongside code.
-4. ✅ **Fixture context**: `global/Fixture/FixtureModeContext` provides hooks + integration tests for cookie bootstrap; clients consume via `app/ui/global/client`.
-5. ✅ **Documentation**: `app/ui/README.md` and updated architecture notes emphasise SDK-derived types and layering guidance replacing the old client README.
-6. ✅ **Testing**: layout primitives, fixture context, and the `no-export-trivial-type-aliases` lint rule ship with Vitest/RTL coverage; imports refreshed to new barrels across UI and API code.
+**Status:** ✅ Complete. Directory reshaping, shared layout primitives, fixture context, and documentation are captured in `app/ui/README.md` and `docs/ARCHITECTURE.md`.
 
-**Remaining Workstream 1 actions**: none — directory refactor, primitives, documentation, and tests are in place. Future changes should extend the existing primitives/tests rather than add new surface-specific helpers.
+**Remaining actions:** None.
 
 ## Workstream 2 – Navigation & Header Polish
 
-### Summary (2025-10-18)
+**Status:** ✅ Complete. Header grid, navigation metadata, and fixture toggle behaviour are recorded in `app/ui/README.md`, `docs/ARCHITECTURE.md`, and `snagging-system-foundations.md`; Playwright artefacts capture the validated journeys.
 
-- Header now follows the documented grid (`logo/nav/utilities`) with Oak spacing tokens controlling wrap behaviour across breakpoints. Details live in `app/ui/README.md` and `snagging-system-foundations.md`.
-- `useNavItems()` centralises logo, primary routes (root relabelled to “Home”), and utilities metadata; RTL + integration coverage guard the contract.
-- Utilities cluster hosts the theme selector and `SearchFixtureModeToggle`, backed by `FixtureModeContext` so header, cookies, and page notices stay in sync.
-- Focus/hover styling uses Oak palette tokens; visual sweeps (light/dark/reduced motion/high contrast) are logged in `snagging.md` and Playwright artefacts under `test-artifacts/`.
-- Playwright fixture workflow (`tests/visual/fixture-toggle.spec.ts`) seeds deterministic cookies, drives the header radios, and asserts live/fixture summaries.
-- Quality gates (`pnpm test:ui`, `pnpm qg`) pass as of 2025-10-18 after the fixture workflow refactor.
+**Remaining actions:**
 
-### Open follow-ups
-
-- Track Oak Components high-contrast palette improvements in `oak-components-theme-extensions.md`.
-- Re-run Playwright visual sweeps when Workstream 3+ changes land to keep evidence fresh.
-
-### 2025-10-04 – Header & Surface Visual Review
-
-| Mode                   | Surface                          | Findings                                                                                                                                                                 | Follow-up                                            |
-| ---------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| Light                  | Header (desktop/mobile)          | Navigation grid aligns logo/nav/utilities per spec; fixture toggle stacks beneath theme selector ≤768px with consistent spacing tokens. Focus outlines meet AA contrast. | None.                                                |
-| Dark                   | Header                           | Palette tokens maintain contrast (brandPrimaryBright outline, brandPrimary text). Logo mark remains legible; toggle retains oak radio styling.                           | None.                                                |
-| Prefers reduced motion | Header + Search hero             | Hover underline animation relies on colour/focus only; no motion detected. Search cards still animate subtly—future Workstream 3 follow-up.                              | Track card motion adjustments during landing rework. |
-| Prefers high contrast  | Header (forced-colors simulated) | Oak components fall back to browser outline; brand palette not exposed as forced-color tokens. Toggle radios fallback to default forced palette.                         | Log high-contrast token gaps for Oak Components.     |
-| Light                  | Search (structured/natural)      | Fixture notice pill appears above hero, stays left-aligned on mobile. Results grid maintains breathing room.                                                             | Address hero CTA hierarchy in Workstream 3.          |
-| Dark                   | Search                           | Typography remains legible; notice pill readable with existing palette.                                                                                                  | None.                                                |
-| Light                  | Admin                            | Utilities cluster (fixture toggle + theme) accessible; panel grid still awaiting redesign.                                                                               | Covered by Workstream 6.                             |
-| Light/Dark             | Status                           | Header integrates cleanly; overall page still needs tonal hierarchy improvements.                                                                                        | Workstream 7.                                        |
-
-Key accessibility notes:
-
-- **High contrast**: currently inherits browser defaults. Record palette/outline gaps in the Oak Components extension log.
-- **Reduced motion**: header interactions respect reduced-motion; card animations require later refinement.
-- **General design excellence**: header now presents balanced spacing, but downstream page layouts (landing, admin, status) still require the planned redesign workstreams.
-
-10. ✅ Completed – Ran targeted header suites via `pnpm --filter @oaknational/open-curriculum-semantic-search test -- --run --include "app/ui/global/Header/**"` (2025-10-04).
-11. ✅ Completed – Refreshed `app/ui/README.md` with the header grid/fixture
-    context contract, updated `snagging-system-foundations.md` to mirror the
-    implemented spacing tokens (`app.space.gap.{stack,cluster,section}`) and
-    inline padding guards, and recorded this step within the plan
-    (2025-10-18). REVIEW confirmed docs reference the shared
-    `SearchFixtureModeToggle` + `useFixtureMode()` entry points.
-12. ✅ Completed – Logged high-contrast palette gap in
-    `.agent/plans/semantic-search/oak-components-theme-extensions.md`
-    (2025-10-04).
-13. QUALITY-GATE: Run full UI quality gate (`pnpm test:ui`) once header work is
-    complete to ensure journeys remain stable.
-    STATUS 2025-10-18 – Passed after refactoring
-    `tests/visual/fixture-toggle.spec.ts` to seed fixture cookies via
-    `modeToCookieValue`, assert header summaries, and drive in-app toggles when
-    switching to live data. All 19 Playwright journeys now succeed with
-    deterministic fixture coverage.
-14. QUALITY-GATE: Conclude with full repo checks (`pnpm qg`) prior to PR to
-    guarantee regression-free delivery.
-    STATUS 2025-10-18 – Passed; full quality gate (format → type-check → lint →
-    markdownlint → unit/integration → Playwright → e2e → smoke) completed with
-    the updated fixture workflow.
+- Monitor Oak Components contrast improvements (tracked in `oak-components-theme-extensions.md`).
+- Re-run header visual sweeps whenever downstream workstreams ship major UI changes.
 
 ## Workstream 3 – Landing Page Rework
 
-### Summary (2025-10-18)
+**Status:** ✅ Complete. Landing hero, CTA treatment, and evidence are documented in `snagging.md` (2025-10-18) and supported by `tests/visual/landing.hero.spec.ts`.
 
-- Hero now centres content within a 70ch clamp, delivers distinct supporting copy, and surfaces primary entry buttons for structured and natural searches.
-- Card links have been promoted to full-card anchors with motion-safe hover states (prefers-reduced-motion guards) and focus outlines.
-- Landing integration test updated to assert hero messaging and new CTA semantics; Playwright coverage added via `tests/visual/landing.hero.spec.ts` with screenshot evidence attached to test artefacts.
-
-### Next steps
-
-- Monitor hero/card behaviour across responsive breakpoints during broader Workstream 3 layout changes and capture MCP evidence for desktop/mobile sweeps (tracked in `snagging.md`).
+**Remaining actions:** None – subsequent monitoring rolls into the cross-cutting evidence sweep.
 
 ## Workstream 4 – Search Surfaces (Structured & Natural)
 
-### Status (2025-10-20)
+**Status:** 🔄 In progress. Search layout, highlight clamping, and responsive evidence are complete (see `docs/ARCHITECTURE.md#search-secondary-accordion` and `snagging.md` entries dated 2025-10-22).
 
-- Fixture messaging still renders as a compact pill (`Using fixture scenario: …`) sourced from `FixtureModeContext`; header remains the single point of control and surfaces refresh the notice via the shared provider.
-- Playwright helpers now suppress the Next.js dev overlay and expose typed `mockMatchMedia` utilities so the responsive evidence remains deterministic.
-- Structured and natural heroes now use tightened intent-led copy, and the responsive grid promotes results in the first column at ≥`lg` while the support panels relocate into a dedicated aside.
-- Motion-safe loading skeletons and sticky results summaries ship for both journeys; RTL integration coverage exercises the skeleton state, sticky summary attributes, and the relocated support column.
-- Result cards now expose accent badges for subject/key stage meta, and sub-`lg` viewports collapse suggestions/facets into accessible accordions while keeping the desktop grid untouched.
+**Remaining actions:**
 
-### Next steps
-
-- Evaluate highlight rendering/line-clamping for dense result cards and tighten secondary text contrast for high-contrast themes.
-- Capture fresh Playwright evidence for structured and natural routes (desktop/mobile, light/dark, reduced motion) and log findings in `snagging.md`.
-- Extend documentation/QA notes covering the accordion interaction (keyboard/focus order, analytics) before moving on to skeleton loading polish.
+- Finalise skeleton loading polish (tone tokens, reduced-motion behaviour) and extend RTL/Playwright coverage to match.
+- Instrument mobile support accordion toggles once the shared analytics client lands; capture panel id + open/closed state for funnel analysis.
 
 ## Workstream 5 – Natural Language Fixtures Reliability
+
+**Status:** 🔜 Pending.
 
 1. **Route guard ordering**: update `/api/search/nl` to resolve fixture mode before `llmEnabled()`, covering fixtures when LLM is off.
 2. **Error messaging**: refine `parseResponse` to surface fixture-triggered errors distinctly in UI copy.
@@ -125,6 +60,8 @@ Key accessibility notes:
 4. **Visual review**: inspect natural-language flows via Playwright MCP, validating fixture messaging/alerts across modes and documenting artefacts in `snagging.md`.
 
 ## Workstream 6 – Admin Page Redesign
+
+**Status:** 🔜 Pending.
 
 1. **Information architecture**: apply `OperationsBlueprint` with sections (`Overview`, `Quick Actions`, `Jobs`, `Telemetry`) based on the new layout primitives.
 2. **Action panels**: convert job controls into cards with descriptive copy, status chips, and collapsible log output (auto-scroll with sticky headers).
@@ -135,6 +72,8 @@ Key accessibility notes:
 
 ## Workstream 7 – Status Page Redesign
 
+**Status:** 🔜 Pending.
+
 1. **Status summary**: introduce `StatusSummaryCard` with severity icon, timestamp, and tone legend above the grid.
 2. **Service cards**: standardise height, add optional links, and utilise accent colours consistent with tone tokens.
 3. **Alert treatment**: refresh fatal alert styling with stronger contrast, actionable next steps, and optional dismissal when not critical.
@@ -143,6 +82,8 @@ Key accessibility notes:
 6. **Visual review**: run status page sweeps with Playwright MCP (all modes/breakpoints), saving screenshots and qualitative notes in `snagging.md`.
 
 ## Workstream 8 – Cross-cutting Validation & Evidence
+
+**Status:** 🔁 Ongoing across remaining workstreams.
 
 1. **TDD workflow**: run unit/integration tests (`pnpm test --filter "ui"` segment) after each workstream; document failures and fixes in commit messages.
 2. **Playwright evidence**: re-baseline journeys (landing, structured, natural, admin, status) in light/dark and mobile/desktop profiles, including reduced-motion mode.

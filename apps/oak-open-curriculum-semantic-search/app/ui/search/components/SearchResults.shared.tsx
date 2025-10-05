@@ -65,13 +65,13 @@ export function ResultItem({
         </ResultMetaList>
       ) : null}
       {highlights.length > 0 ? (
-        <OakUL $mt="space-between-s">
+        <ResultHighlightList>
           {highlights.map((h, i) => (
-            <OakTypography as="li" key={i} $font="body-4">
+            <ResultHighlightItem key={i} data-testid="search-result-highlight-item">
               {renderSafeHighlight(String(h))}
-            </OakTypography>
+            </ResultHighlightItem>
           ))}
-        </OakUL>
+        </ResultHighlightList>
       ) : null}
     </ResultCard>
   );
@@ -141,6 +141,13 @@ const ResultCard = styledComponents(OakBox)`
   background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
   box-shadow: 0 0.75rem 2.5rem -1.5rem
     ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
+
+  @media (prefers-contrast: more) {
+    border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
+    box-shadow: none;
+    outline: 2px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
+    outline-offset: 2px;
+  }
 `;
 
 const ResultHeading = styledComponents(OakTypography)`
@@ -161,6 +168,51 @@ const ResultMetaBadge = styledComponents(OakTypography).attrs({ $font: 'body-4' 
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
   background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
   color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
+
+  @media (prefers-contrast: more) {
+    background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
+    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+    border: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
+  }
+`;
+
+const ResultHighlightList = styledComponents(OakUL)`
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-gap-inline, var(--app-gap-cluster));
+  margin-top: var(--app-gap-inline, var(--app-gap-cluster));
+`;
+
+const ResultHighlightItem = styledComponents(OakTypography).attrs({
+  as: 'li',
+  $font: 'body-4',
+  'data-line-clamp': '3',
+})`
+  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  mark {
+    background: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
+    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+    font-weight: 600;
+    border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
+    padding-inline: 0.25rem;
+    margin-inline: 0.125rem;
+  }
+
+  @media (prefers-contrast: more) {
+    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
+
+    mark {
+      background: transparent;
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
 `;
 
 function buildMetaEntries(

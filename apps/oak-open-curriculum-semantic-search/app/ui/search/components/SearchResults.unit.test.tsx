@@ -96,6 +96,15 @@ describe('SearchResults', () => {
     expect(screen.getByText(STRUCTURED_EMPTY_RESULTS_MESSAGE)).toBeInTheDocument();
   });
 
+  it('clamps highlight copy and exposes metadata for styling', () => {
+    renderWithProviders();
+
+    const highlightItems = screen.getAllByTestId('search-result-highlight-item');
+    expect(highlightItems).not.toHaveLength(0);
+    expect(highlightItems[0]).toHaveAttribute('data-line-clamp', '3');
+    expect(highlightItems[0]).toHaveTextContent('decimal place value');
+  });
+
   it('shows an instruction state before any search has executed', () => {
     renderWithProviders({ mode: 'idle', results: [], meta: null });
 
