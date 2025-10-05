@@ -33,9 +33,9 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 
 ## Workstream 2 – Navigation & Header Polish
 
-1. ACTION: Audit existing header implementation against `snagging.md` issues and
-   `snagging-system-foundations.md` guidance; document deltas in plan notes.
-   REVIEW: Summarise identified gaps plus relevant issue IDs in plan change log.
+1. ✅ Completed – Audited existing header implementation against `snagging.md`
+   issues and `snagging-system-foundations.md` guidance; documented deltas in plan
+   notes (2025-10-04). REVIEW artefact recorded below.
 
 ### 2025-10-04 – Workstream 2 Audit Notes
 
@@ -45,11 +45,10 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 - `snagging-system-foundations.md` (Header blueprint): Header layout still relies on a flex row and lacks the prescribed grid areas, centralised nav metadata hook, and fixture toggle slot.
 - `snagging-system-foundations.md` (Accessibility): Skip links remain active via `SearchSkipLinks`, but the header does not expose an entry point for the utilities cluster yet.
 
-2. ACTION: Catalogue Oak Components tokens required (spacing, typography,
-   palette, breakpoints) and note any missing values in
-   `oak-components-theme-extensions.md`.
-   REVIEW: Verify token list matches usage in `Header.tsx` and shared layout
-   helpers.
+2. ✅ Completed – Catalogued Oak Components tokens required (spacing,
+   typography, palette, breakpoints) and logged gaps (none) in
+   `oak-components-theme-extensions.md` (2025-10-04).
+   REVIEW confirmed against `Header.tsx` usage.
 
 ### 2025-10-04 – Header Token Inventory
 
@@ -59,11 +58,9 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 - **Palette & colours**: `app.palette.brandPrimary`, `app.palette.brandPrimaryBright`, `uiColors['text-primary']`, and `app.colors.headerBorder` for focus, hover, and separators.
 - **Radii**: `app.radii.pill` reserved for fixture toggle / utilities cluster chips once integrated.
 
-3. ACTION: Define responsive grid spec for the header using
-   `getSpacingVar()` spacing tokens and `getAppTheme(theme).app.layout.*`
-   breakpoints; capture spec in this plan and foundations doc.
-   REVIEW: Ensure grid spec covers logo/nav/utilities for ≥lg and stacked layout
-   ≤md with explicit token references.
+3. ✅ Completed – Defined responsive header grid spec with token references in
+   this plan and `snagging-system-foundations.md` (2025-10-04). REVIEW satisfied
+   for ≥lg and ≤md scenarios.
 
 ### 2025-10-04 – Header Grid Spec
 
@@ -72,10 +69,9 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 - **≥ `xl` (≥1360px)**: widen inline padding to `getSpacingVar('inline-wide')` while preserving the three-area composition; clamp nav width with `max-width: getAppTheme(theme).app.layout.containerMaxWidth` if overflow reappears.
 - **Utilities cluster**: render as a flex column using `getSpacingVar('stack')` for internal gap; align with the nav area via `justify-self: end` on ≥`lg` and `justify-self: start` otherwise.
 
-4. ACTION: Centralise nav metadata in `useNavItems()` (including Oak icon link,
-   fixtures toggle placeholder) and wire labels/ARIA from snagging issues.
-   REVIEW: Confirm resulting hook feeds Header + tests without duplicated
-   strings.
+4. ✅ Completed – Centralised nav metadata in `useNavItems()` (including Oak icon
+   link and fixture toggle placeholder) and updated Header/tests to consume the
+   hook (2025-10-04). REVIEW evidence captured below.
 
 ### 2025-10-04 – Navigation Metadata Centralised
 
@@ -83,10 +79,9 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 - Header now consumes the hook for logo, nav items, and utility ARIA labels, eliminating inline arrays and duplicated strings.
 - Added `useNavItems.unit.test.ts` alongside updated `Header.integration.test.tsx` to pin the metadata contract and ensure the hook drives rendering.
 
-5. ACTION: Implement AA-compliant focus/hover states using existing palette
-   tokens (`brandPrimaryBright`, `text-primary`) and log any missing token gaps
-   for Oak Components follow-up.
-   REVIEW: Check computed styles via RTL assertions to ensure token usage only.
+5. ✅ Completed – Implemented AA-compliant focus/hover states using existing
+   palette tokens and verified via RTL assertions; logged absence of new token
+   gaps (2025-10-04).
 
 ### 2025-10-04 – Focus & Hover Styling
 
@@ -94,35 +89,79 @@ Start the dev server with `pnpm dev > /tmp/semantic-dev.log 2>&1 &` so it runs i
 - RTL integration test inspects the styled-components sheet to confirm Oak palette colours (`brandPrimary`, `brandPrimaryBright`) are referenced.
 - No new token gaps identified; existing palette/radii/padding tokens cover the interactions.
 
-6. GROUNDING: Read GO.md and follow all instructions before continuing.
-7. ACTION: Integrate `FixtureModeContext` state into header utilities while
-   sharing toggle UI with `global/Fixture` components; document interplay here.
-   REVIEW: Validate by writing integration notes + verifying context tests
-   remain green.
-8. ACTION: Update header layout tests (RTL + Playwright) to cover responsive
-   wrapping, keyboard navigation, and fixture toggle interactions.
-   REVIEW: Confirm new tests fail pre-change and pass post-change.
-9. ACTION: Perform visual review via Playwright MCP (desktop/mobile,
-   light/dark/reduced motion) logging observations in `snagging.md` and
-   capturing screenshots.
-   REVIEW: Ensure evidence artefacts stored under `test-artifacts/` and linked
-   from the plan.
-10. QUALITY-GATE: Run targeted `pnpm test --filter header` (or equivalent) to
-    confirm unit/integration coverage before broader suites.
-11. ACTION: Refresh documentation—`app/ui/README.md`, architecture doc, and this
-    plan—with the new navigation structure, token usage, and outstanding Oak
-    component extension requests.
-    REVIEW: Cross-check docs reference same token names and component entry
-    points.
-12. ACTION: Raise follow-up entries in
-    `.agent/plans/semantic-search/oak-components-theme-extensions.md` for any
-    token or component enhancements discovered during implementation.
-    REVIEW: Confirm entries include rationale, affected tokens, and proposed
-    API.
+6. ✅ Completed – GROUNDING: Read GO.md and re-affirmed instructions before
+   continuing (2025-10-04).
+7. ✅ Completed – Integrated `FixtureModeContext` into header utilities and
+   surfaced the shared `SearchFixtureModeToggle`; documented interplay and kept
+   fixture context tests passing (2025-10-04).
+
+### 2025-10-04 – Fixture Mode Integration
+
+- Root layout now seeds `FixtureModeProvider` using cookies so header + pages
+  share deterministic state and refresh together after toggle changes.
+- Header utilities render the shared `SearchFixtureModeToggle` alongside the
+  theme selector, filtering visibility via Oak env rules.
+- RTL coverage asserts the toggle respects context defaults; SSR/layout tests
+  retain cookie behaviour with updated mocks.
+
+8. ✅ Completed – Updated header layout tests (RTL + Playwright) to cover
+   responsive wrapping, keyboard navigation, and fixture toggle interactions
+   (2025-10-04). REVIEW executed via failing/passing runs documented below.
+
+### 2025-10-04 – Header Layout Test Coverage
+
+- Header grid now exercises the documented `logo/nav/utilities` areas with RTL
+  assertions, guarding display mode and palette usage.
+- Navigation Playwright spec imports shared metadata, validates fixtures toggle
+  visibility, and confirms keyboard focus styling.
+- Targeted `pnpm --filter @oaknational/open-curriculum-semantic-search test -- --run --include "app/ui/global/Header/**"`
+  and Playwright runs demonstrated failure before adjustments and success after updates.
+
+9. ✅ Completed – Performed visual review via Playwright MCP sweep (desktop/
+   mobile, light/dark, reduced motion, high contrast), logged notes in plan and
+   `snagging.md`; screenshots archived under `test-artifacts/` (2025-10-04).
+
+### 2025-10-04 – Header & Surface Visual Review
+
+| Mode                   | Surface                          | Findings                                                                                                                                                                 | Follow-up                                            |
+| ---------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| Light                  | Header (desktop/mobile)          | Navigation grid aligns logo/nav/utilities per spec; fixture toggle stacks beneath theme selector ≤768px with consistent spacing tokens. Focus outlines meet AA contrast. | None.                                                |
+| Dark                   | Header                           | Palette tokens maintain contrast (brandPrimaryBright outline, brandPrimary text). Logo mark remains legible; toggle retains oak radio styling.                           | None.                                                |
+| Prefers reduced motion | Header + Search hero             | Hover underline animation relies on colour/focus only; no motion detected. Search cards still animate subtly—future Workstream 3 follow-up.                              | Track card motion adjustments during landing rework. |
+| Prefers high contrast  | Header (forced-colors simulated) | Oak components fall back to browser outline; brand palette not exposed as forced-color tokens. Toggle radios fallback to default forced palette.                         | Log high-contrast token gaps for Oak Components.     |
+| Light                  | Search (structured/natural)      | Fixture notice pill appears above hero, stays left-aligned on mobile. Results grid maintains breathing room.                                                             | Address hero CTA hierarchy in Workstream 3.          |
+| Dark                   | Search                           | Typography remains legible; notice pill readable with existing palette.                                                                                                  | None.                                                |
+| Light                  | Admin                            | Utilities cluster (fixture toggle + theme) accessible; panel grid still awaiting redesign.                                                                               | Covered by Workstream 6.                             |
+| Light/Dark             | Status                           | Header integrates cleanly; overall page still needs tonal hierarchy improvements.                                                                                        | Workstream 7.                                        |
+
+Key accessibility notes:
+
+- **High contrast**: currently inherits browser defaults. Record palette/outline gaps in the Oak Components extension log.
+- **Reduced motion**: header interactions respect reduced-motion; card animations require later refinement.
+- **General design excellence**: header now presents balanced spacing, but downstream page layouts (landing, admin, status) still require the planned redesign workstreams.
+
+10. ✅ Completed – Ran targeted header suites via `pnpm --filter @oaknational/open-curriculum-semantic-search test -- --run --include "app/ui/global/Header/**"` (2025-10-04).
+11. ✅ Completed – Refreshed `app/ui/README.md` with the header grid/fixture
+    context contract, updated `snagging-system-foundations.md` to mirror the
+    implemented spacing tokens (`app.space.gap.{stack,cluster,section}`) and
+    inline padding guards, and recorded this step within the plan
+    (2025-10-18). REVIEW confirmed docs reference the shared
+    `SearchFixtureModeToggle` + `useFixtureMode()` entry points.
+12. ✅ Completed – Logged high-contrast palette gap in
+    `.agent/plans/semantic-search/oak-components-theme-extensions.md`
+    (2025-10-04).
 13. QUALITY-GATE: Run full UI quality gate (`pnpm test:ui`) once header work is
     complete to ensure journeys remain stable.
+    STATUS 2025-10-18 – Passed after refactoring
+    `tests/visual/fixture-toggle.spec.ts` to seed fixture cookies via
+    `modeToCookieValue`, assert header summaries, and drive in-app toggles when
+    switching to live data. All 19 Playwright journeys now succeed with
+    deterministic fixture coverage.
 14. QUALITY-GATE: Conclude with full repo checks (`pnpm qg`) prior to PR to
     guarantee regression-free delivery.
+    STATUS 2025-10-18 – Passed; full quality gate (format → type-check → lint →
+    markdownlint → unit/integration → Playwright → e2e → smoke) completed with
+    the updated fixture workflow.
 
 ## Workstream 3 – Landing Page Rework
 

@@ -1,12 +1,24 @@
 import { Buffer } from 'node:buffer';
 import AxeBuilderModule from '@axe-core/playwright';
 import type { AxeResults } from 'axe-core';
-import { expect, test, type Page, type TestInfo } from '@playwright/test';
+import { expect, test, type BrowserContext, type Page, type TestInfo } from '@playwright/test';
 import {
   STRUCTURED_EMPTY_RESULTS_MESSAGE,
   STRUCTURED_FIXTURE_OUTAGE_MESSAGE,
 } from '../../app/ui/search/content/structured-search-messages';
 import { structuredSearchFixture } from '../../app/ui/search/__fixtures__/search-structured';
+import {
+  FIXTURE_MODE_COOKIE,
+  modeToCookieValue,
+  type FixtureMode,
+} from '../../app/lib/fixture-mode';
+
+const FIXTURE_SUMMARY_LABEL: Record<FixtureMode, string> = {
+  fixtures: 'Using fixtures (success)',
+  'fixtures-empty': 'Using fixtures (empty)',
+  'fixtures-error': 'Using fixtures (error)',
+  live: 'Using live data',
+};
 
 async function captureScreenshot(page: Page, name: string, testInfo: TestInfo): Promise<void> {
   const screenshot = await page.screenshot({ fullPage: true });
@@ -36,19 +48,47 @@ async function submitStructuredSearch(page: Page, query = 'fractions'): Promise<
   await page.getByRole('button', { name: 'Search' }).first().click();
 }
 
-test.describe('Fixture toggle workflow', () => {
-  test('switches between fixtures and live data paths', async ({ page, context }, testInfo) => {
-    await context.addCookies([
-      {
-        name: 'semantic-search-fixtures',
-        value: 'on',
-        url: 'http://localhost:3000',
-      },
-    ]);
+async function seedFixtureCookie(context: BrowserContext, mode: FixtureMode): Promise<void> {
+  await context.addCookies([
+    {
+      name: FIXTURE_MODE_COOKIE,
+      value: modeToCookieValue(mode),
+      url: 'http://localhost:3000',
+    },
+  ]);
+}
 
+async function expectFixtureModeSummary(page: Page, mode: FixtureMode): Promise<void> {
+  await expect(page.getByText(FIXTURE_SUMMARY_LABEL[mode]).first()).toBeVisible();
+}
+
+async function selectFixtureMode(
+  page: Page,
+  context: BrowserContext,
+  mode: FixtureMode,
+): Promise<void> {
+  await page.getByRole('banner').locator(`label[for="search-fixture-mode-${mode}"]`).click();
+  await expect
+    .poll(async () => {
+      const cookies = await context.cookies();
+      return cookies.find(({ name }) => name === FIXTURE_MODE_COOKIE)?.value ?? null;
+    })
+    .toBe(modeToCookieValue(mode));
+  await expectFixtureModeSummary(page, mode);
+}
+
+test.describe('Fixture toggle workflow', () => {
+  test.describe.configure({ mode: 'serial' });
+
+  test.beforeEach(async ({ context }) => {
+    await context.clearCookies();
+  });
+
+  test('switches between fixtures and live data paths', async ({ page, context }, testInfo) => {
+    await seedFixtureCookie(context, 'fixtures');
     await page.goto('/structured_search');
 
-    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
+    await expectFixtureModeSummary(page, 'fixtures');
     const fixtureNotice = page.getByText(
       'Showing deterministic fixture results. Switch to live data to inspect production behaviour.',
     );
@@ -60,36 +100,22 @@ test.describe('Fixture toggle workflow', () => {
     const fixturesAxe = await captureAccessibility(page, 'fixture-mode-fixtures', testInfo);
     expect.soft(fixturesAxe.violations.length).toBe(0);
 
-    await page.locator('label[for="search-fixture-mode-live"]').click();
-    await expect(page.getByText('Using live data')).toBeVisible();
+    await selectFixtureMode(page, context, 'live');
     await expect(fixtureNotice).toBeHidden();
 
     await captureScreenshot(page, 'fixture-mode-live', testInfo);
     const liveAxe = await captureAccessibility(page, 'fixture-mode-live', testInfo);
     expect.soft(liveAxe.violations.length).toBe(0);
-    await expect
-      .poll(async () => {
-        const cookies = await context.cookies();
-        return cookies.find(({ name }) => name === 'semantic-search-fixtures')?.value;
-      })
-      .toBe('off');
   });
 
   test('retains multi-scope buckets when fixture mode is enabled via cookie', async ({
     page,
     context,
   }) => {
-    await context.addCookies([
-      {
-        name: 'semantic-search-fixtures',
-        value: 'on',
-        url: 'http://localhost:3000',
-      },
-    ]);
-
+    await seedFixtureCookie(context, 'fixtures');
     await page.goto('/structured_search?scope=all');
 
-    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
+    await expectFixtureModeSummary(page, 'fixtures');
     await expect(page.getByTestId('structured-search-panel')).toBeVisible();
   });
 
@@ -97,15 +123,10 @@ test.describe('Fixture toggle workflow', () => {
     page,
     context,
   }, testInfo) => {
-    await context.addCookies([
-      {
-        name: 'semantic-search-fixtures',
-        value: 'empty',
-        url: 'http://localhost:3000',
-      },
-    ]);
-
+    await seedFixtureCookie(context, 'fixtures-empty');
     await page.goto('/structured_search');
+
+    await expectFixtureModeSummary(page, 'fixtures-empty');
 
     await expect(
       page.getByText(
@@ -126,15 +147,10 @@ test.describe('Fixture toggle workflow', () => {
     page,
     context,
   }, testInfo) => {
-    await context.addCookies([
-      {
-        name: 'semantic-search-fixtures',
-        value: 'error',
-        url: 'http://localhost:3000',
-      },
-    ]);
-
+    await seedFixtureCookie(context, 'fixtures-error');
     await page.goto('/structured_search');
+
+    await expectFixtureModeSummary(page, 'fixtures-error');
 
     const outageNotice = page.getByText(STRUCTURED_FIXTURE_OUTAGE_MESSAGE);
     await expect(outageNotice).toBeVisible();
@@ -149,18 +165,11 @@ test.describe('Fixture toggle workflow', () => {
   });
 
   test('switches admin fixtures via scenario radios', async ({ page, context }, testInfo) => {
-    await context.addCookies([
-      {
-        name: 'semantic-search-fixtures',
-        value: 'on',
-        url: 'http://localhost:3000',
-      },
-    ]);
-
+    await seedFixtureCookie(context, 'fixtures');
     await page.goto('/admin');
 
+    await expectFixtureModeSummary(page, 'fixtures');
     await expect(page.getByRole('radiogroup', { name: 'Admin data' })).toBeVisible();
-    await expect(page.getByText('Using fixtures (success)')).toBeVisible();
     const successNotice = page.getByText(
       'Running deterministic admin fixtures. Switch to live data to perform real operations.',
     );
@@ -170,19 +179,11 @@ test.describe('Fixture toggle workflow', () => {
     const successAxe = await captureAccessibility(page, 'admin-fixtures-success', testInfo);
     expect.soft(successAxe.violations.length).toBe(0);
 
-    await page.locator('label[for="search-fixture-mode-live"]').click();
-    await expect(page.getByText('Using live data')).toBeVisible();
+    await selectFixtureMode(page, context, 'live');
     await expect(successNotice).toBeHidden();
 
     await captureScreenshot(page, 'admin-fixtures-live', testInfo);
     const liveAxe = await captureAccessibility(page, 'admin-fixtures-live', testInfo);
     expect.soft(liveAxe.violations.length).toBe(0);
-
-    await expect
-      .poll(async () => {
-        const cookies = await context.cookies();
-        return cookies.find(({ name }) => name === 'semantic-search-fixtures')?.value;
-      })
-      .toBe('off');
   });
 });

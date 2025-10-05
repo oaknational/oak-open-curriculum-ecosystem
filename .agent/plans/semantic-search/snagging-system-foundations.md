@@ -56,11 +56,17 @@ app/ui
 - Introduce `useNavItems()` to centralise labelling (fixing "Homes"). Provide optional icon slot for Oak mark link.
 - Persist skip links as the first element inside `body` (or directly beneath header) to retain keyboard access.
 
-### Header Grid Specification (2025-10-04)
+### Header Grid Specification (2025-10-18)
 
-- **Base / ≤ `md` (≤768px)**: single-column CSS grid ordered `logo` → `nav` → `utilities`, `row-gap: getSpacingVar('stack')`, `padding-inline: getSpacingVar('inline-base')`, and `justify-items: start` to keep utilities left aligned.
-- **≥ `lg` (≥1024px)**: three-column grid `auto minmax(0, 1fr) auto` with areas `logo nav utilities`, `column-gap: getSpacingVar('cluster')`, `row-gap: getSpacingVar('section')`, `align-items: center`, and utilities anchored with `justify-self: end` while remaining flex-stacked internally.
-- **≥ `xl` (≥1360px)**: promote inline padding to `getSpacingVar('inline-wide')` and optionally clamp nav width with `getAppTheme(theme).app.layout.containerMaxWidth` to prevent drift on ultra-wide viewports.
+- **Base / ≤ `md` (≤768px)**: single-column CSS grid ordered `logo` → `nav` → `utilities`, `row-gap: app.space.gap.stack`, `padding-inline: getSpacingVar('inline-base')`, and `justify-items: start` so theme/fixture utilities stay left aligned.
+- **≥ `lg` (≥1024px)**: three-column grid `auto minmax(0, 1fr) auto` with areas `logo nav utilities`, `column-gap: app.space.gap.cluster`, `row-gap: app.space.gap.section`, `align-items: center`, and utilities anchored with `justify-self: end` while the inner flex cluster continues to stack controls vertically.
+- **≥ `xl` (≥1360px)**: promote inline padding to `getSpacingVar('inline-wide')` and clamp the nav track with `getAppTheme(theme).app.layout.containerMaxWidth` when the viewport exceeds the theme container guard rails.
+
+### Fixture Mode Integration Notes (2025-10-18)
+
+- `FixtureModeProvider` now wraps the app shell using cookie-derived defaults so the header toggle and page-level notices share state (SSR + hydration both derive from the same cookie payload).
+- Header utilities render the shared `SearchFixtureModeToggle`, respecting `NEXT_PUBLIC_ENABLE_FIXTURE_TOGGLE` visibility rules, dispatching `useFixtureMode().setMode`, then relying on the server refresh to propagate the change to result surfaces.
+- Downstream surfaces (search hero pill, admin/status notices) should consume `useFixtureMode()` directly rather than shadowing state to ensure fixture copy mirrors the header selection.
 
 ## Fixture Mode Architecture
 
