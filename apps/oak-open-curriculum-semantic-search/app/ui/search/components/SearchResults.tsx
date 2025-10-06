@@ -2,6 +2,7 @@
 
 import type { JSX } from 'react';
 import type { MultiScopeBucketView, SearchMeta } from '../hooks/useSearchController';
+import type { SearchResultItem } from './SearchResults.schemas';
 import {
   renderIdleResults,
   renderLoadingResults,
@@ -19,7 +20,7 @@ export function SearchResults({
   loading,
 }: {
   mode: 'idle' | 'single' | 'multi';
-  results: unknown[];
+  results: SearchResultItem[];
   meta?: SearchMeta | null;
   multiBuckets: MultiScopeBucketView[] | null;
   sectionId?: string;

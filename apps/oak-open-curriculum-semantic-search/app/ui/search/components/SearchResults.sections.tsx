@@ -4,9 +4,11 @@ import type { MultiScopeBucketView, SearchMeta } from '../hooks/useSearchControl
 import {
   ResultItem,
   ResultsGrid,
-  ResultsSchema,
   ResultsSection,
   ResultsSummaryContainer,
+  parseResultsForScope,
+  type SearchResultArray,
+  type SearchResultItem,
   extractHighlights,
   extractKeyStage,
   extractSubject,
@@ -76,16 +78,16 @@ export function renderMultiScopeResults(
 
 export function renderSingleScopeResults(
   sectionId: string | undefined,
-  results: unknown[],
+  results: SearchResultItem[],
   meta: SearchMeta | null | undefined,
 ): JSX.Element | null {
-  const parsed = ResultsSchema.safeParse(results);
-  if (!parsed.success) {
+  const parsed = parseResultsForScope(meta?.scope, results);
+  if (!parsed) {
     return null;
   }
 
   const summary = buildSummary(meta);
-  const hasResults = parsed.data.length > 0;
+  const hasResults = parsed.length > 0;
 
   return (
     <ResultsSection
@@ -98,7 +100,7 @@ export function renderSingleScopeResults(
       <SearchSummary summary={summary} />
       {hasResults ? (
         <ResultsGrid $reset>
-          {parsed.data.map((rec) => (
+          {parsed.map((rec) => (
             <ResultItem
               key={rec.id}
               title={extractTitle(rec)}
@@ -116,11 +118,11 @@ export function renderSingleScopeResults(
 }
 
 function BucketResults({ bucket }: { bucket: MultiScopeBucketView }): JSX.Element {
-  const parsed = ResultsSchema.safeParse(bucket.results);
-  if (!parsed.success) {
+  const parsed = parseResultsForScope(bucket.scope, bucket.results);
+  if (!parsed) {
     return <BucketSection bucket={bucket} results={[]} />;
   }
-  return <BucketSection bucket={bucket} results={parsed.data} />;
+  return <BucketSection bucket={bucket} results={parsed} />;
 }
 
 function BucketSection({
@@ -128,7 +130,7 @@ function BucketSection({
   results,
 }: {
   bucket: MultiScopeBucketView;
-  results: Array<ReturnType<(typeof ResultsSchema)['parse']>[number]>;
+  results: SearchResultArray;
 }): JSX.Element {
   const summary = buildSummary(bucket.meta);
   const heading = formatScopeHeading(bucket.scope);

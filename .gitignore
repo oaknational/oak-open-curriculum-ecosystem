@@ -7,11 +7,13 @@ lint-profile.json
 dist
 **/dist
 
+# Agent Interactions
+collaboration.txt
+
 # Generated docs
 **/docs/api
 **/.typedoc
 **/_typedoc_*
-
 
 # Type declarations
 **/*.d.ts

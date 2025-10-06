@@ -7,10 +7,10 @@
  */
 
 // Export adaptive environment (default)
-export { createAdaptiveEnvironment } from './adaptive.js';
-export { findRepoRoot, loadRootEnv } from './repo-root.js';
+export { createAdaptiveEnvironment } from './adaptive';
+export { findRepoRoot, loadRootEnv } from './repo-root';
 
 /**
  * Environment provider interface for consistent environment variable access
  */
-export type { EnvironmentProvider } from './adaptive.js';
+export type { EnvironmentProvider } from './adaptive';

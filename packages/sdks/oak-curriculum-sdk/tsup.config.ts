@@ -24,6 +24,7 @@ export default defineConfig({
     'src/types/generated/api-schema/mcp-tools/synonyms.ts',
     'src/types/generated/api-schema/mcp-tools/tools/*.ts',
     'src/types/generated/search/*.ts',
+    'src/types/generated/query-parser/index.ts',
     'src/types/generated/observability/*.ts',
     'src/types/generated/admin/*.ts',
     'src/types/generated/zod/search/index.ts',

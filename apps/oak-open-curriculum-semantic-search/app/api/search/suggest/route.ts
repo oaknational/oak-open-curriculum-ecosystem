@@ -24,7 +24,7 @@ export const revalidate = 0;
 export async function POST(req: NextRequest): Promise<Response> {
   const parsed = SearchSuggestionRequestSchema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
   }
 
   const trimmedPrefix = parsed.data.prefix.trim();

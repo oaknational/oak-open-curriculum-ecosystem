@@ -1,10 +1,3 @@
-/**
- * Oak Curriculum SDK
- *
- * TypeScript SDK for accessing Oak National Academy's Curriculum API.
- * This SDK provides a type-safe client using openapi-fetch with generated types.
- */
-
 // Main client factories
 export { createOakClient, createOakPathBasedClient } from './client/index.js';
 export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
@@ -158,6 +151,18 @@ export {
 } from './types/generated/search/index.js';
 
 export {
+  QueryParserRequestSchema,
+  QueryParserResponseSchema,
+  isQueryParserResponse,
+  QUERY_PARSER_INTENT_ENUM,
+} from './types/generated/query-parser/index.js';
+export type {
+  QueryParserRequest,
+  QueryParserResponse,
+  QueryParserIntent,
+} from './types/generated/query-parser/index.js';
+
+export {
   ZERO_HIT_SCOPES,
   ZeroHitScopeSchema,
   ZeroHitScopeBreakdownSchema,
@@ -215,33 +220,26 @@ export type {
   SearchSequencesResponse,
   SearchMultiScopeBucket,
   SearchMultiScopeResponse,
-} from './types/generated/search/index.js';
-export type {
-  SearchLessonSummary,
-  SearchUnitSummary,
-  SearchSubjectSequences,
-} from './types/search-response-guards.js';
-
-export type {
-  LessonSummaryResponseSchema,
-  UnitSummaryResponseSchema,
-  SubjectSequenceResponseSchema,
-} from './types/search-response-guards.js';
+} from './types/generated/search';
 export {
   lessonSummarySchema,
   unitSummarySchema,
   subjectSequencesSchema,
-} from './types/search-response-guards.js';
-export {
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
-  SearchFacetsSchema,
-} from './types/generated/zod/search/output/index.js';
-export {
   isUnitsGrouped,
   isLessonGroups,
   isTranscriptResponse,
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
+  type LessonSummaryResponseSchema,
+  type UnitSummaryResponseSchema,
+  type SubjectSequenceResponseSchema,
+  type SearchLessonSummary,
+  type SearchUnitSummary,
+  type SearchSubjectSequences,
 } from './types/search-response-guards.js';
+export {
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+} from './types/generated/zod/search/output/index.js';

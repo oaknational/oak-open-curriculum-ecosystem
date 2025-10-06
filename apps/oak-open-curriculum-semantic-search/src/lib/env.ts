@@ -1,3 +1,5 @@
+import { createAdaptiveEnvironment, loadRootEnv } from '@oaknational/mcp-env';
+import type { EnvironmentProvider } from '@oaknational/mcp-env';
 import { z } from 'zod';
 
 /** Strict runtime env validation (no unsafe process.env). */
@@ -37,48 +39,114 @@ export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
 });
 
 export type Env = z.infer<typeof EnvSchema>;
-let cached: (Env & { OAK_EFFECTIVE_KEY: string }) | null = null;
 
-export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
-  if (cached) {
-    return cached;
+type EnvResult = Env & { OAK_EFFECTIVE_KEY: string };
+
+interface EnvOptions {
+  provider?: EnvironmentProvider;
+}
+
+const REQUIRED_ENV_KEYS = [
+  'ELASTICSEARCH_URL',
+  'ELASTICSEARCH_API_KEY',
+  'OAK_API_KEY',
+  'SEARCH_API_KEY',
+  'SEARCH_INDEX_VERSION',
+] as const;
+
+let defaultProvider: EnvironmentProvider | null = null;
+let cachedDefaultEnv: EnvResult | null = null;
+
+function ensureDefaultProvider(): EnvironmentProvider {
+  if (!defaultProvider) {
+    defaultProvider = createAdaptiveEnvironment(globalThis);
   }
+  return defaultProvider;
+}
+
+function refreshDefaultProvider(): void {
+  defaultProvider = createAdaptiveEnvironment(globalThis);
+  cachedDefaultEnv = null;
+}
+
+function providerHasRequiredKeys(provider: EnvironmentProvider): boolean {
+  for (const key of REQUIRED_ENV_KEYS) {
+    if (!provider.has(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function getProvider(options?: EnvOptions): EnvironmentProvider {
+  if (options && options.provider) {
+    return options.provider;
+  }
+  let provider = ensureDefaultProvider();
+  if (!providerHasRequiredKeys(provider)) {
+    loadRootEnv({
+      startDir: process.cwd(),
+      requiredKeys: [...REQUIRED_ENV_KEYS],
+      env: provider.getAll(),
+    });
+    refreshDefaultProvider();
+    provider = ensureDefaultProvider();
+  }
+  return provider;
+}
+
+function parseEnvFromProvider(provider: EnvironmentProvider): EnvResult {
   const parsed = EnvSchema.safeParse({
-    ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
-    ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
-    OAK_API_KEY: process.env.OAK_API_KEY,
-    SEARCH_API_KEY: process.env.SEARCH_API_KEY,
-    SEARCH_INDEX_VERSION: process.env.SEARCH_INDEX_VERSION,
-    ZERO_HIT_WEBHOOK_URL: process.env.ZERO_HIT_WEBHOOK_URL,
-    LOG_LEVEL: process.env.LOG_LEVEL ?? 'info',
-    AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
-    ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
-    ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
+    ELASTICSEARCH_URL: provider.get('ELASTICSEARCH_URL'),
+    ELASTICSEARCH_API_KEY: provider.get('ELASTICSEARCH_API_KEY'),
+    OAK_API_KEY: provider.get('OAK_API_KEY'),
+    SEARCH_API_KEY: provider.get('SEARCH_API_KEY'),
+    SEARCH_INDEX_VERSION: provider.get('SEARCH_INDEX_VERSION'),
+    ZERO_HIT_WEBHOOK_URL: provider.get('ZERO_HIT_WEBHOOK_URL'),
+    LOG_LEVEL: provider.get('LOG_LEVEL') ?? 'info',
+    AI_PROVIDER: provider.get('AI_PROVIDER') ?? 'openai',
+    OPENAI_API_KEY: provider.get('OPENAI_API_KEY'),
+    SEARCH_INDEX_TARGET: provider.get('SEARCH_INDEX_TARGET'),
+    ZERO_HIT_PERSISTENCE_ENABLED: provider.get('ZERO_HIT_PERSISTENCE_ENABLED'),
+    ZERO_HIT_INDEX_RETENTION_DAYS: provider.get('ZERO_HIT_INDEX_RETENTION_DAYS'),
   });
   if (!parsed.success) {
     throw new Error(parsed.error.message);
   }
-  const key = parsed.data.OAK_API_KEY ?? '';
-  cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
-  return cached;
+  const key = parsed.data.OAK_API_KEY;
+  if (typeof key !== 'string' || key.length === 0) {
+    throw new Error('Set OAK_API_KEY.');
+  }
+  return { ...parsed.data, OAK_EFFECTIVE_KEY: key };
 }
 
-export function optionalEnv(): (Env & { OAK_EFFECTIVE_KEY: string }) | null {
+export function env(options?: EnvOptions): EnvResult {
+  const provider = getProvider(options);
+  const useCache = !options || !options.provider;
+  if (useCache && cachedDefaultEnv) {
+    return cachedDefaultEnv;
+  }
+  const result = parseEnvFromProvider(provider);
+  if (useCache) {
+    cachedDefaultEnv = result;
+  }
+  return result;
+}
+
+export function optionalEnv(options?: EnvOptions): EnvResult | null {
   try {
-    return env();
+    return env(options);
   } catch {
     return null;
   }
 }
 
 /** True when natural-language parsing (OpenAI) is available. */
-export function llmEnabled(): boolean {
-  const e = env();
+export function llmEnabled(options?: EnvOptions): boolean {
+  const current = env(options);
   return (
-    e.AI_PROVIDER === 'openai' &&
-    typeof e.OPENAI_API_KEY === 'string' &&
-    e.OPENAI_API_KEY.length > 0
+    current.AI_PROVIDER === 'openai' &&
+    typeof current.OPENAI_API_KEY === 'string' &&
+    current.OPENAI_API_KEY.length > 0
   );
 }

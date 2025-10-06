@@ -3,7 +3,40 @@
 import type { JSX } from 'react';
 import { OakBox } from '@oaknational/oak-components';
 import styledComponents, { keyframes } from 'styled-components';
+import type { DefaultTheme } from 'styled-components';
 import { getAppTheme } from '../../themes/app-theme-helpers';
+
+const HEX_PATTERN = /^#?(?<hex>[0-9a-fA-F]{6})$/;
+
+/**
+ * Converts a six-character HEX colour string into an RGBA string with the provided alpha.
+ */
+function hexToRgba(hex: string, alpha: number): string {
+  const matched = HEX_PATTERN.exec(hex);
+  const value = matched?.groups?.hex ?? null;
+
+  if (!value) {
+    throw new Error(`Invalid hex colour provided to hexToRgba: "${hex}"`);
+  }
+
+  const red = Number.parseInt(value.slice(0, 2), 16);
+  const green = Number.parseInt(value.slice(2, 4), 16);
+  const blue = Number.parseInt(value.slice(4, 6), 16);
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+/**
+ * Resolves the base skeleton tint from the semantic brand palette.
+ */
+const resolveBaseTone = ({ theme }: { theme: DefaultTheme }): string =>
+  hexToRgba(getAppTheme(theme).app.palette.brandPrimaryBright, 0.16);
+
+/**
+ * Builds the shimmer highlight tone from the semantic brand palette.
+ */
+const resolveShimmerTone = ({ theme }: { theme: DefaultTheme }): string =>
+  hexToRgba(getAppTheme(theme).app.palette.brandPrimary, 0.35);
 
 /**
  * Produces a shimmering placeholder block that respects reduced motion preferences.
@@ -23,26 +56,21 @@ const shimmer = keyframes`
 const SkeletonSurface = styledComponents(OakBox)`
   position: relative;
   overflow: hidden;
-  background-color: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
+  background-color: ${resolveBaseTone};
   border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
 
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright}40,
-      transparent
-    );
+    background: linear-gradient(90deg, transparent, ${resolveShimmerTone}, transparent);
     animation: ${shimmer} 1.6s ease-in-out infinite;
   }
 
   @media (prefers-reduced-motion: reduce) {
     &::after {
       animation: none;
-      background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
+      background: ${resolveBaseTone};
     }
   }
 `;

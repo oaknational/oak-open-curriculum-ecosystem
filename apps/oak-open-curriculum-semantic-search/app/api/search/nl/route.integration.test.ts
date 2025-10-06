@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
-import type { SearchScopeWithAll, SearchScope } from '../../../../src/types/oak';
+const LESSONS_SCOPE = 'lessons';
 
-type ParsedIntent = Extract<SearchScopeWithAll, SearchScope>;
+type ParsedIntent = typeof LESSONS_SCOPE;
 
 type ParsedQuery = {
   intent: ParsedIntent;
@@ -15,16 +14,54 @@ type ParsedQuery = {
 };
 
 const parseQuery = vi.hoisted(() => vi.fn<(input: string) => Promise<ParsedQuery>>());
+const llmEnabled = vi.hoisted(() => vi.fn(() => true));
+const naturalFixtures = vi.hoisted(() => ({
+  fixture: {
+    scope: 'lessons',
+    results: [{ id: 'fixture-lesson-1' }],
+    total: 1,
+    took: 0,
+    timedOut: false,
+    aggregations: {},
+    facets: [],
+    suggestions: [],
+    suggestionCache: { version: 'fixture', ttlSeconds: 3600 },
+  },
+  empty: {
+    scope: 'lessons',
+    results: [],
+    total: 0,
+    took: 0,
+    timedOut: false,
+    aggregations: {},
+    facets: [],
+    suggestions: [],
+    suggestionCache: { version: 'fixture', ttlSeconds: 3600 },
+  },
+}));
 
 vi.mock('../../../../src/lib/query-parser', () => ({
   parseQuery,
 }));
 
 vi.mock('../../../../src/lib/env', () => ({
-  llmEnabled: () => true,
+  llmEnabled,
   optionalEnv: () => ({
     SEARCH_INDEX_VERSION: 'v-test-index',
   }),
+}));
+
+vi.mock('../../../lib/search-fixtures/builders', () => {
+  const fixtures = naturalFixtures;
+  return {
+    buildSingleScopeFixture: () => fixtures.fixture,
+    buildEmptyFixture: () => fixtures.empty,
+  };
+});
+
+vi.mock('../../../../src/lib/search-scopes', () => ({
+  LESSONS_SCOPE: 'lessons',
+  UNITS_SCOPE: 'units',
 }));
 
 import { POST } from './route';
@@ -32,6 +69,7 @@ import { POST } from './route';
 describe('POST /api/search/nl', () => {
   beforeEach(() => {
     parseQuery.mockResolvedValue({ intent: LESSONS_SCOPE, text: 'fractions' });
+    llmEnabled.mockReturnValue(true);
     vi.stubGlobal('fetch', vi.fn());
   });
 
@@ -108,11 +146,37 @@ describe('POST /api/search/nl', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(503);
-    const payload = z.object({ error: z.string() }).parse(await response.json());
+    const payload = z
+      .object({ error: z.string(), message: z.string().optional() })
+      .parse(await response.json());
     expect(payload.error).toBe('FIXTURE_ERROR');
+    expect(payload.message).toBe(
+      'Fixture mode requested an error response for natural-language search.',
+    );
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=error');
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('returns a fixture response when the LLM is disabled but fixture mode is requested', async () => {
+    llmEnabled.mockReturnValue(false);
+    const request = new NextRequest('http://localhost/api/search/nl?fixtures=on', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ q: 'fractions about ks2 maths' }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = z
+      .object({ result: z.object({ results: z.array(z.unknown()) }).loose() })
+      .loose()
+      .parse(await response.json());
+    expect(payload.result.results.length).toBeGreaterThan(0);
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=on');
+    expect(fetch).not.toHaveBeenCalled();
+    expect(llmEnabled).toHaveBeenCalled();
   });
 
   it('forwards live requests, returning the derived summary alongside the structured response', async () => {

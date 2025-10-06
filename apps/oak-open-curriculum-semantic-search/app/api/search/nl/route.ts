@@ -19,22 +19,36 @@ import { buildSingleScopeFixture, buildEmptyFixture } from '../../../lib/search-
 import { LESSONS_SCOPE, UNITS_SCOPE } from '../../../../src/lib/search-scopes';
 import { logZeroHit } from '../../../../src/lib/observability/zero-hit';
 
-type NaturalStructuredPayload = SearchStructuredRequest;
-
-type NaturalRequestBody = SearchNaturalLanguageRequest;
-
 export async function POST(req: NextRequest): Promise<Response> {
-  if (!llmEnabled()) {
-    return renderLlmDisabled();
-  }
+  const { mode, persist } = resolveFixtureModeFromRequest(req);
+  const isLlmAvailable = llmEnabled();
 
   const parsedBody = SearchNaturalLanguageRequestSchema.safeParse(await req.json());
   if (!parsedBody.success) {
-    return NextResponse.json({ error: parsedBody.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: parsedBody.error.issues }, { status: 400 });
   }
 
   const requestPayload = await buildNaturalPayload(parsedBody.data);
-  return handleNaturalSearchRequest({ req, requestPayload, prompt: parsedBody.data.q });
+
+  if (mode !== 'live') {
+    return handleNaturalFixtureRequest({
+      mode,
+      persist,
+      prompt: parsedBody.data.q,
+      requestPayload,
+    });
+  }
+
+  if (!isLlmAvailable) {
+    return renderLlmDisabled();
+  }
+
+  return handleNaturalLiveRequest({
+    req,
+    requestPayload,
+    prompt: parsedBody.data.q,
+    persist,
+  });
 }
 
 function renderLlmDisabled(): Response {
@@ -55,18 +69,13 @@ function buildNaturalFixture(mode: FixtureMode) {
   return buildSingleScopeFixture();
 }
 
-async function handleNaturalSearchRequest(params: {
+async function handleNaturalLiveRequest(params: {
   req: NextRequest;
-  requestPayload: NaturalStructuredPayload;
+  requestPayload: SearchStructuredRequest;
   prompt: string;
+  persist: FixtureMode | undefined;
 }): Promise<Response> {
-  const { req, requestPayload, prompt } = params;
-  const { mode, persist } = resolveFixtureModeFromRequest(req);
-
-  if (mode !== 'live') {
-    return handleNaturalFixtureRequest({ mode, persist, prompt, requestPayload });
-  }
-
+  const { req, requestPayload, prompt, persist } = params;
   const response = await forwardStructuredSearch(req, requestPayload);
   const text = await response.text();
   const bodyJson = safeJsonParse(text);
@@ -96,7 +105,7 @@ async function handleNaturalFixtureRequest(params: {
   mode: FixtureMode;
   persist: FixtureMode | undefined;
   prompt: string;
-  requestPayload: NaturalStructuredPayload;
+  requestPayload: SearchStructuredRequest;
 }): Promise<Response> {
   const { mode, persist, prompt, requestPayload } = params;
 
@@ -131,7 +140,7 @@ function buildNaturalFixtureSuccessResponse({
   lessonsFixture,
 }: {
   prompt: string;
-  requestPayload: NaturalStructuredPayload;
+  requestPayload: SearchStructuredRequest;
   lessonsFixture: ReturnType<typeof buildNaturalFixture>;
 }): NextResponse {
   return NextResponse.json({
@@ -157,7 +166,7 @@ async function logZeroHitForFixture({
   requestPayload,
   lessonsFixture,
 }: {
-  requestPayload: NaturalStructuredPayload;
+  requestPayload: SearchStructuredRequest;
   lessonsFixture: ReturnType<typeof buildNaturalFixture>;
 }): Promise<void> {
   const indexVersion = optionalEnv()?.SEARCH_INDEX_VERSION ?? 'v1';
@@ -175,7 +184,9 @@ async function logZeroHitForFixture({
   });
 }
 
-async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStructuredPayload> {
+async function buildNaturalPayload(
+  body: SearchNaturalLanguageRequest,
+): Promise<SearchStructuredRequest> {
   const parsed = await parseQuery(body.q);
   const intent = parsed.intent === LESSONS_SCOPE ? LESSONS_SCOPE : UNITS_SCOPE;
 
@@ -188,12 +199,12 @@ async function buildNaturalPayload(body: NaturalRequestBody): Promise<NaturalStr
     size: body.size,
     includeFacets: body.includeFacets ?? DEFAULT_INCLUDE_FACETS,
     phaseSlug: body.phaseSlug,
-  } satisfies NaturalStructuredPayload;
+  };
 }
 
 function forwardStructuredSearch(
   req: NextRequest,
-  payload: NaturalStructuredPayload,
+  payload: SearchStructuredRequest,
 ): Promise<Response> {
   return fetch(new URL('/api/search', req.url), {
     method: 'POST',
@@ -211,7 +222,7 @@ function safeJsonParse(text: string): unknown {
 }
 
 function resolveScope(
-  provided: NaturalRequestBody['scope'],
+  provided: SearchNaturalLanguageRequest['scope'],
   inferred: typeof LESSONS_SCOPE | typeof UNITS_SCOPE,
 ): SearchScopeWithAll {
   return provided ?? inferred;

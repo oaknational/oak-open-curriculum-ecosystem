@@ -16,6 +16,12 @@ import {
   type SearchSuggestionItem,
   type SearchUnitsResponse,
 } from '@oaknational/oak-curriculum-sdk';
+import {
+  LessonResultsSchema,
+  SequenceResultsSchema,
+  UnitResultsSchema,
+  type SearchResultItem,
+} from '../components/SearchResults.schemas';
 
 type HybridResponse = SearchLessonsResponse | SearchUnitsResponse | SearchSequencesResponse;
 
@@ -36,13 +42,13 @@ export interface SearchMeta {
 export interface MultiScopeBucketView {
   scope: SearchScope;
   meta: SearchMeta;
-  results: unknown[];
+  results: SearchResultItem[];
   facets: SearchFacets | null;
 }
 
 export type SearchController = {
   mode: 'idle' | 'single' | 'multi';
-  results: unknown[];
+  results: SearchResultItem[];
   facets: SearchFacets | null;
   meta: SearchMeta | null;
   multiBuckets: MultiScopeBucketView[] | null;
@@ -60,7 +66,7 @@ type ParsedHybridPayload =
 
 type SearchState = {
   mode: 'idle' | 'single' | 'multi';
-  results: unknown[];
+  results: SearchResultItem[];
   facets: SearchFacets | null;
   meta: SearchMeta | null;
   multiBuckets: MultiScopeBucketView[] | null;
@@ -72,7 +78,7 @@ type SearchState = {
 type SearchAction =
   | { type: 'start' }
   | { type: 'success'; payload: ParsedHybridPayload }
-  | { type: 'array'; results: unknown[] }
+  | { type: 'array'; results: SearchResultItem[] }
   | { type: 'reset' }
   | { type: 'error'; message: string | null };
 
@@ -150,7 +156,8 @@ export function useSearchController(): SearchController {
     }
 
     if (Array.isArray(payload)) {
-      dispatch({ type: 'array', results: payload });
+      const looseResults = parseLooseResultArray(payload);
+      dispatch(looseResults ? { type: 'array', results: looseResults } : { type: 'reset' });
       return;
     }
 
@@ -202,4 +209,20 @@ function toBucketView(bucket: SearchMultiScopeBucket): MultiScopeBucketView {
     results: bucket.result.results,
     facets: facetsResult && facetsResult.success ? facetsResult.data : null,
   };
+}
+
+function parseLooseResultArray(payload: unknown[]): SearchResultItem[] | null {
+  const lesson = LessonResultsSchema.safeParse(payload);
+  if (lesson.success) {
+    return lesson.data;
+  }
+  const units = UnitResultsSchema.safeParse(payload);
+  if (units.success) {
+    return units.data;
+  }
+  const sequences = SequenceResultsSchema.safeParse(payload);
+  if (sequences.success) {
+    return sequences.data;
+  }
+  return null;
 }

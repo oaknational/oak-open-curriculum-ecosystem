@@ -45,6 +45,7 @@ import { generateSearchFixtureModules } from './typegen/search/generate-search-f
 import { generateSearchIndexModule } from './typegen/search/generate-search-index.js';
 import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
+import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
 
 /**
  * Create a map of filenames to their content
@@ -80,6 +81,7 @@ export function createFileMap(
   const searchScopes = generateSearchScopeModules(sdkSchema);
   const searchFixtures = generateSearchFixtureModules(sdkSchema);
   const searchIndex = generateSearchIndexModule(sdkSchema);
+  const queryParserModules = generateQueryParserModules();
   const zeroHitFixtures = generateZeroHitFixtureModules(sdkSchema);
   const adminStreamFixtures = generateAdminStreamFixtureModules(sdkSchema);
 
@@ -94,6 +96,7 @@ export function createFileMap(
     ...searchScopes,
     ...searchFixtures,
     ...searchIndex,
+    ...queryParserModules,
     ...zeroHitFixtures,
     ...adminStreamFixtures,
   };

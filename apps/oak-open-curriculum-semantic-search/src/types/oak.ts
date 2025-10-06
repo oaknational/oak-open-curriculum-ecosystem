@@ -44,6 +44,13 @@ export {
   createSearchMultiScopeResponse,
 } from '@oaknational/oak-curriculum-sdk';
 
+export {
+  QueryParserRequestSchema,
+  QueryParserResponseSchema,
+  isQueryParserResponse,
+} from '@oaknational/oak-curriculum-sdk';
+export { QUERY_PARSER_INTENT_ENUM } from '@oaknational/oak-curriculum-sdk';
+
 export type {
   SearchStructuredRequest,
   SearchStructuredScope,
@@ -76,4 +83,9 @@ export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
+} from '@oaknational/oak-curriculum-sdk';
+export type {
+  QueryParserRequest,
+  QueryParserResponse,
+  QueryParserIntent,
 } from '@oaknational/oak-curriculum-sdk';

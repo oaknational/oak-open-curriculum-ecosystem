@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/**/*.ts'],
+  entry: ['src/index.ts'],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
   splitting: false,
@@ -9,7 +9,7 @@ export default defineConfig({
   clean: true,
   target: 'node22',
   minify: false,
-  bundle: false,
+  bundle: true,
   tsconfig: './tsconfig.build.json',
   // Exclude test files from build
   ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],

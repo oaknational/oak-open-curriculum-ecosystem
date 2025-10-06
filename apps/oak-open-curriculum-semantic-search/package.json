@@ -33,6 +33,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^2.0.24",
     "@elastic/elasticsearch": "^9.1.1",
+    "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/oak-components": "^1.143.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",

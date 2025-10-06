@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import type { SearchNaturalLanguageRequest } from '@oaknational/oak-curriculum-sdk';
+import type {
+  SearchNaturalLanguageRequest,
+  SearchStructuredRequest,
+} from '@oaknational/oak-curriculum-sdk';
 import {
   SearchStructuredRequestSchema,
   SearchNaturalLanguageRequestSchema,
@@ -8,7 +11,7 @@ import {
 const NaturalSearchSummarySchema = z
   .object({
     prompt: z.string(),
-    structured: SearchStructuredRequestSchema,
+    structured: z.unknown(),
   })
   .loose();
 
@@ -21,7 +24,11 @@ const NaturalSearchSuccessSchema = z
   })
   .loose();
 
-export type NaturalSearchSuccessPayload = z.infer<typeof NaturalSearchSuccessSchema>;
+type RawNaturalSearchSuccess = z.infer<typeof NaturalSearchSuccessSchema>;
+
+export type NaturalSearchSuccessPayload = RawNaturalSearchSuccess & {
+  summary: NaturalSearchSummary & { structured: SearchStructuredRequest };
+};
 
 const NaturalSearchErrorSchema = z
   .object({
@@ -38,6 +45,12 @@ function safeJsonParse(text: string): unknown {
   }
 }
 
+const KNOWN_ERROR_MESSAGES: Record<string, string> = {
+  FIXTURE_ERROR: 'Fixture mode requested an error response for natural-language search.',
+  LLM_DISABLED:
+    'Natural-language parsing is disabled on this deployment. Use /api/search with a structured body.',
+};
+
 export function parseResponse(
   responseOk: boolean,
   text: string,
@@ -45,12 +58,26 @@ export function parseResponse(
   const parsed = safeJsonParse(text);
   const success = NaturalSearchSuccessSchema.safeParse(parsed);
   if (success.success) {
-    return { error: null, payload: success.data };
+    const structured = SearchStructuredRequestSchema.safeParse(success.data.summary.structured);
+    if (!structured.success) {
+      return { error: 'Search failed', payload: null };
+    }
+
+    const payload: NaturalSearchSuccessPayload = {
+      ...success.data,
+      summary: {
+        ...success.data.summary,
+        structured: structured.data,
+      },
+    };
+    return { error: null, payload };
   }
 
   const error = NaturalSearchErrorSchema.safeParse(parsed);
   if (error.success) {
-    return { error: error.data.error, payload: null };
+    const resolvedMessage =
+      error.data.message ?? KNOWN_ERROR_MESSAGES[error.data.error] ?? error.data.error;
+    return { error: resolvedMessage, payload: null };
   }
 
   if (!responseOk) {

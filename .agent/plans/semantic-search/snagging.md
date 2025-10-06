@@ -49,11 +49,13 @@ The design does not make use of wide screens, and is not optimised for narrow sc
 - 2025-10-22: Captured Chromium Playwright artefacts for structured/natural journeys (light/dark, responsive, fixture toggles) – files under `apps/oak-open-curriculum-semantic-search/test-results/responsive-baseline-*` and `fixture-toggle-*`.
 - 2025-10-22: Documented mobile support accordion behaviour in `apps/oak-open-curriculum-semantic-search/docs/ARCHITECTURE.md#mobile-support-accordions` (focus order, aria attributes, analytics contract).
 - 2025-10-22: Playwright test helpers now remove the Next.js dev overlay and centralise matchMedia stubs so responsive and fixture journeys capture stable evidence.
+- 2025-10-06: Skeleton shimmer now uses semantic brand tones with reduced-motion guards (`SearchSkeletons.tsx` + new integration test). Verified via targeted Vitest run (`pnpm --filter @oaknational/open-curriculum-semantic-search exec vitest run app/ui/search/components/SearchSkeletons.integration.test.tsx`). Broader suite still blocked on missing generated types (pre-existing); see search scopes fixture gap tracked under Workstream 5.
 
 ### Natural Language Search
 
 - All of the structured search issues also apply to the natural language search page.
 - None of the fixtures work for natural language search, they all cause an error, see `.agent/plans/semantic-search/snagging_files/Screenshot 2025-10-03 at 16.17.32.png`
+- 2025-10-06: SDK now generates `QueryParserRequest/Response` schemas and intent enum; `parseQuery` consumes them, sanitising LLM output before canonical validation. Aragorn owns SDK surface maintenance while Legolas extends UI/banner coverage to confirm fixtures stay green.
 
 ### Admin Page
 

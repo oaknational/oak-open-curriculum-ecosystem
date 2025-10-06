@@ -3,6 +3,7 @@ export const structuredSearchFixture = {
   results: [
     {
       id: 'lesson-1',
+      rankScore: 1,
       lesson: {
         lesson_title: 'Decimals introduction',
         subject_slug: 'maths',
@@ -12,6 +13,7 @@ export const structuredSearchFixture = {
     },
     {
       id: 'lesson-2',
+      rankScore: 2,
       lesson: {
         lesson_title: 'Fractions recap',
         subject_slug: 'maths',
@@ -21,6 +23,7 @@ export const structuredSearchFixture = {
     },
     {
       id: 'lesson-3',
+      rankScore: 3,
       lesson: {
         lesson_title: 'Percentages and decimals',
         subject_slug: 'maths',

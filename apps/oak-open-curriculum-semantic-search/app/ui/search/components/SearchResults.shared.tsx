@@ -1,219 +1,15 @@
 'use client';
 
 import type { JSX } from 'react';
-import { OakBox, OakTypography, OakUL } from '@oaknational/oak-components';
-import styledComponents, { css } from 'styled-components';
-import { z } from 'zod';
 import { renderSafeHighlight } from './searchResultsHighlight';
-import { resolveBreakpoint } from '../../shared/breakpoints';
-import { getAppTheme } from '../../themes/app-theme-helpers';
-import { resolveUiColor } from '../../../lib/theme/ThemeGlobalStyle';
-
-const UnitSchema = z
-  .object({
-    unit_title: z.string().optional(),
-    subject_slug: z.string().optional(),
-    key_stage: z.string().optional(),
-  })
-  .partial();
-
-const LessonSchema = z
-  .object({
-    lesson_title: z.string().optional(),
-    subject_slug: z.string().optional(),
-    key_stage: z.string().optional(),
-  })
-  .partial();
-
-export const ItemSchema = z
-  .object({
-    id: z.union([z.string(), z.number()]).transform((v) => String(v)),
-    unit: UnitSchema.nullable().optional(),
-    lesson: LessonSchema.optional(),
-    highlights: z.array(z.string()).optional(),
-    rankScore: z.number().optional(),
-  })
-  .strict();
-
-export const ResultsSchema = z.array(ItemSchema);
-
-export function ResultItem({
-  title,
-  subject,
-  keyStage,
-  highlights,
-}: {
-  title: string;
-  subject: string;
-  keyStage: string;
-  highlights: string[];
-}): JSX.Element {
-  const metaEntries = buildMetaEntries(subject, keyStage);
-
-  return (
-    <ResultCard as="li">
-      <ResultHeading as="h3" $font="heading-6">
-        {title}
-      </ResultHeading>
-      {metaEntries.length > 0 ? (
-        <ResultMetaList data-testid="search-result-meta">
-          {metaEntries.map((entry) => (
-            <ResultMetaBadge key={entry.kind} data-testid={entry.testId}>
-              {entry.label}
-            </ResultMetaBadge>
-          ))}
-        </ResultMetaList>
-      ) : null}
-      {highlights.length > 0 ? (
-        <ResultHighlightList>
-          {highlights.map((h, i) => (
-            <ResultHighlightItem key={i} data-testid="search-result-highlight-item">
-              {renderSafeHighlight(String(h))}
-            </ResultHighlightItem>
-          ))}
-        </ResultHighlightList>
-      ) : null}
-    </ResultCard>
-  );
-}
-
-export const ResultsSection = styledComponents(OakBox)`
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--app-gap-section);
-`;
-
-export const ResultsSummaryContainer = styledComponents(OakBox).attrs({
-  'data-testid': 'search-results-summary',
-  'data-sticky': 'true',
-})`
-  display: flex;
-  flex-direction: column;
-  gap: var(--app-gap-inline, var(--app-gap-cluster));
-  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
-  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-  border: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderSubtle};
-  margin-bottom: var(--app-gap-section);
-
-  ${({ theme }) => {
-    const lg = resolveBreakpoint(theme, 'lg');
-    return css`
-      @media (min-width: ${lg}) {
-        position: sticky;
-        top: calc(var(--app-gap-section) * 0.5);
-      }
-    `;
-  }}
-`;
-
-export const ResultsGrid = styledComponents(OakUL).attrs({
-  'data-testid': 'search-results-grid',
-})`
-  display: grid;
-  row-gap: var(--app-gap-section);
-  column-gap: var(--app-gap-grid);
-  grid-template-columns: minmax(0, 1fr);
-
-  ${({ theme }) => {
-    const md = resolveBreakpoint(theme, 'md');
-    const xl = resolveBreakpoint(theme, 'xl');
-    return css`
-      @media (min-width: ${md}) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      @media (min-width: ${xl}) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    `;
-  }}
-`;
-
-const ResultCard = styledComponents(OakBox)`
-  display: flex;
-  flex-direction: column;
-  gap: var(--app-gap-cluster);
-  padding: ${({ theme }) => getAppTheme(theme).app.space.padding.card};
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.card};
-  border: 1px solid
-    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
-  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceCard};
-  box-shadow: 0 0.75rem 2.5rem -1.5rem
-    ${({ theme }) => resolveUiColor(getAppTheme(theme), 'border-decorative1-stronger')};
-
-  @media (prefers-contrast: more) {
-    border-color: ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
-    box-shadow: none;
-    outline: 2px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
-    outline-offset: 2px;
-  }
-`;
-
-const ResultHeading = styledComponents(OakTypography)`
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
-`;
-
-const ResultMetaList = styledComponents(OakBox)`
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--app-gap-inline, var(--app-gap-cluster));
-`;
-
-const ResultMetaBadge = styledComponents(OakTypography).attrs({ $font: 'body-4' })`
-  display: inline-flex;
-  align-items: center;
-  padding-inline: calc(var(--app-gap-inline, var(--app-gap-cluster)) / 2);
-  padding-block: 0.25rem;
-  border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
-  background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceEmphasisBg};
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
-
-  @media (prefers-contrast: more) {
-    background: ${({ theme }) => getAppTheme(theme).app.colors.surfaceRaised};
-    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
-    border: 1px solid ${({ theme }) => getAppTheme(theme).app.colors.borderStrong};
-  }
-`;
-
-const ResultHighlightList = styledComponents(OakUL)`
-  display: flex;
-  flex-direction: column;
-  gap: var(--app-gap-inline, var(--app-gap-cluster));
-  margin-top: var(--app-gap-inline, var(--app-gap-cluster));
-`;
-
-const ResultHighlightItem = styledComponents(OakTypography).attrs({
-  as: 'li',
-  $font: 'body-4',
-  'data-line-clamp': '3',
-})`
-  color: ${({ theme }) => getAppTheme(theme).app.colors.textSubdued};
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  mark {
-    background: ${({ theme }) => getAppTheme(theme).app.palette.brandPrimaryBright};
-    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
-    font-weight: 600;
-    border-radius: ${({ theme }) => getAppTheme(theme).app.radii.pill};
-    padding-inline: 0.25rem;
-    margin-inline: 0.125rem;
-  }
-
-  @media (prefers-contrast: more) {
-    color: ${({ theme }) => getAppTheme(theme).app.colors.textPrimary};
-
-    mark {
-      background: transparent;
-      color: inherit;
-      text-decoration: underline;
-    }
-  }
-`;
+import {
+  ResultCard,
+  ResultHeading,
+  ResultHighlightItem,
+  ResultHighlightList,
+  ResultMetaBadge,
+  ResultMetaList,
+} from './SearchResults.styles';
 
 function buildMetaEntries(
   subject: string,
@@ -245,36 +41,60 @@ function buildMetaEntries(
   return entries;
 }
 
-export function extractTitle(rec: z.infer<typeof ItemSchema>): string {
-  if (rec.lesson?.lesson_title) {
-    return rec.lesson.lesson_title;
-  }
-  if (rec.unit?.unit_title) {
-    return rec.unit.unit_title;
-  }
-  return rec.id;
+export function ResultItem({
+  title,
+  subject,
+  keyStage,
+  highlights,
+}: {
+  title: string;
+  subject: string;
+  keyStage: string;
+  highlights: string[];
+}): JSX.Element {
+  const metaEntries = buildMetaEntries(subject, keyStage);
+
+  return (
+    <ResultCard as="li">
+      <ResultHeading as="h3" $font="heading-6">
+        {title}
+      </ResultHeading>
+      {metaEntries.length > 0 ? (
+        <ResultMetaList data-testid="search-result-meta">
+          {metaEntries.map((entry) => (
+            <ResultMetaBadge key={entry.kind} data-testid={entry.testId}>
+              {entry.label}
+            </ResultMetaBadge>
+          ))}
+        </ResultMetaList>
+      ) : null}
+      {highlights.length > 0 ? (
+        <ResultHighlightList>
+          {highlights.map((highlight, index) => (
+            <ResultHighlightItem key={index} data-testid="search-result-highlight-item">
+              {renderSafeHighlight(String(highlight))}
+            </ResultHighlightItem>
+          ))}
+        </ResultHighlightList>
+      ) : null}
+    </ResultCard>
+  );
 }
 
-export function extractSubject(rec: z.infer<typeof ItemSchema>): string {
-  if (rec.lesson?.subject_slug) {
-    return rec.lesson.subject_slug;
-  }
-  if (rec.unit?.subject_slug) {
-    return rec.unit.subject_slug;
-  }
-  return '';
-}
+export { ResultsSection, ResultsSummaryContainer, ResultsGrid } from './SearchResults.styles';
 
-export function extractKeyStage(rec: z.infer<typeof ItemSchema>): string {
-  if (rec.lesson?.key_stage) {
-    return rec.lesson.key_stage;
-  }
-  if (rec.unit?.key_stage) {
-    return rec.unit.key_stage;
-  }
-  return '';
-}
+export {
+  extractTitle,
+  extractSubject,
+  extractKeyStage,
+  extractHighlights,
+} from './SearchResults.extractors';
 
-export function extractHighlights(rec: z.infer<typeof ItemSchema>): string[] {
-  return Array.isArray(rec.highlights) ? rec.highlights : [];
-}
+export {
+  LessonResultsSchema,
+  UnitResultsSchema,
+  SequenceResultsSchema,
+  parseResultsForScope,
+  type SearchResultItem,
+  type SearchResultArray,
+} from './SearchResults.schemas';

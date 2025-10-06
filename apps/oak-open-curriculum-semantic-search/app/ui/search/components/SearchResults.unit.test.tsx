@@ -4,6 +4,7 @@ import { OakThemeProvider, oakDefaultTheme } from '@oaknational/oak-components';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { SearchResults } from './SearchResults';
 import type { MultiScopeBucketView, SearchMeta } from '../hooks/useSearchController';
+import type { SearchResultItem } from './SearchResults.schemas';
 import { createLightTheme } from '../../themes/light';
 import { STRUCTURED_EMPTY_RESULTS_MESSAGE } from '../content/structured-search-messages';
 
@@ -15,8 +16,9 @@ describe('SearchResults', () => {
     timedOut: false,
   };
 
-  const sampleResult = {
+  const sampleResult: SearchResultItem = {
     id: 'lesson-1',
+    rankScore: 1,
     lesson: {
       lesson_title: 'Decimals introduction',
       subject_slug: 'maths',
@@ -28,7 +30,7 @@ describe('SearchResults', () => {
   function renderWithProviders(
     overrides: {
       mode?: 'idle' | 'single' | 'multi';
-      results?: unknown[];
+      results?: SearchResultItem[];
       meta?: SearchMeta | null;
       multiBuckets?: MultiScopeBucketView[] | null;
       loading?: boolean;
@@ -153,6 +155,7 @@ describe('SearchResults', () => {
       results: [
         {
           id: 'unit-1',
+          rankScore: 2,
           unit: {
             unit_title: 'Decimals unit',
             subject_slug: 'maths',

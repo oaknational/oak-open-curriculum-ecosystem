@@ -143,7 +143,7 @@ function validateArgs(
   }
   return {
     ok: false,
-    message: safeResult.error.errors.map((issue) => issue.message).join('; '),
+    message: safeResult.error.issues.map((issue) => issue.message).join('; '),
   };
 }
 
