@@ -10,7 +10,7 @@
  * This is an internal file, all types and utilities are created in the types.js file
  */
 
-import { type ToolDescriptor } from './types.js';
+import type { ToolDescriptor } from './types.js';
 
 // Import all tool definitions
 
@@ -73,6 +73,7 @@ export const MCP_TOOLS = {
 
 type ToolNameToToolDescriptor = typeof MCP_TOOLS;
 export type ToolName = keyof ToolNameToToolDescriptor;
+export type ToolDescriptorForName<TName extends ToolName> = ToolNameToToolDescriptor[TName];
 
 
 export function isToolName(value: unknown): value is ToolName {
@@ -82,7 +83,7 @@ export function isToolName(value: unknown): value is ToolName {
   return value in MCP_TOOLS;
 }
 
-export function getToolFromToolName(toolName: ToolName): ToolDescriptor {
+export function getToolFromToolName(toolName: ToolName): ToolDescriptorForName<ToolName> {
   return MCP_TOOLS[toolName];
 }
 
@@ -115,7 +116,11 @@ const OPERATION_ID_TO_TOOL_NAME = {
   'getRateLimit-getRateLimit': 'get-rate-limit',
 } as const;
 
-export type OperationId = keyof typeof OPERATION_ID_TO_TOOL_NAME;
+type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
+
+export type OperationId = keyof OperationIdToToolName;
+
+type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
 
 export function isOperationId(value: unknown): value is OperationId {
   if (typeof value !== 'string') {
@@ -135,4 +140,41 @@ export function getToolNameFromOperationId(operationId: OperationId): ToolName {
 export function getToolFromOperationId(operationId: OperationId): ToolDescriptor {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOLS[toolName];
+}
+
+const TOOL_NAME_TO_OPERATION_ID = {
+  'get-sequences-units': 'getSequences-getSequenceUnits',
+  'get-lessons-transcript': 'getLessonTranscript-getLessonTranscript',
+  'get-search-transcripts': 'searchTranscripts-searchTranscripts',
+  'get-sequences-assets': 'getAssets-getSequenceAssets',
+  'get-key-stages-subject-assets': 'getAssets-getSubjectAssets',
+  'get-lessons-assets': 'getAssets-getLessonAssets',
+  'get-lessons-assets-by-type': 'getAssets-getLessonAsset',
+  'get-subjects': 'getSubjects-getAllSubjects',
+  'get-subject-detail': 'getSubjects-getSubject',
+  'get-subjects-sequences': 'getSubjects-getSubjectSequence',
+  'get-subjects-key-stages': 'getSubjects-getSubjectKeyStages',
+  'get-subjects-years': 'getSubjects-getSubjectYears',
+  'get-key-stages': 'getKeyStages-getKeyStages',
+  'get-key-stages-subject-lessons': 'getKeyStageSubjectLessons-getKeyStageSubjectLessons',
+  'get-key-stages-subject-units': 'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits',
+  'get-lessons-quiz': 'getQuestions-getQuestionsForLessons',
+  'get-sequences-questions': 'getQuestions-getQuestionsForSequence',
+  'get-key-stages-subject-questions': 'getQuestions-getQuestionsForKeyStageAndSubject',
+  'get-lessons-summary': 'getLessons-getLesson',
+  'get-search-lessons': 'getLessons-searchByTextSimilarity',
+  'get-units-summary': 'getUnits-getUnit',
+  'get-threads': 'getThreads-getAllThreads',
+  'get-threads-units': 'getThreads-getThreadUnits',
+  'get-changelog': 'changelog-changelog',
+  'get-changelog-latest': 'changelog-latest',
+  'get-rate-limit': 'getRateLimit-getRateLimit',
+} as const;
+
+export function getOperationIdFromToolName(toolName: ToolName): OperationId {
+  const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
+  if (!operationId) {
+    throw new TypeError('Unknown tool: ' + String(toolName));
+  }
+  return operationId;
 }

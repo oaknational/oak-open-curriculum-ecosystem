@@ -35,6 +35,7 @@ function emitToolsLiteral(names: readonly string[]): string {
 const TOOL_NAME_BLOCK = `
 type ToolNameToToolDescriptor = typeof MCP_TOOLS;
 export type ToolName = keyof ToolNameToToolDescriptor;
+export type ToolDescriptorForName<TName extends ToolName> = ToolNameToToolDescriptor[TName];
 `;
 
 const IS_TOOL_NAME_BLOCK = `export function isToolName(value: unknown): value is ToolName {
@@ -44,7 +45,7 @@ const IS_TOOL_NAME_BLOCK = `export function isToolName(value: unknown): value is
   return value in MCP_TOOLS;
 }`;
 
-const GET_TOOL_FROM_TOOL_NAME_BLOCK = `export function getToolFromToolName(toolName: ToolName): ToolDescriptor {
+const GET_TOOL_FROM_TOOL_NAME_BLOCK = `export function getToolFromToolName(toolName: ToolName): ToolDescriptorForName<ToolName> {
   return MCP_TOOLS[toolName];
 }`;
 
@@ -63,6 +64,14 @@ const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId(
   return toolName;
 }`;
 
+const GET_ID_FROM_TOOL_NAME_BLOCK = `export function getOperationIdFromToolName(toolName: ToolName): OperationId {
+  const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
+  if (!operationId) {
+    throw new TypeError('Unknown tool: ' + String(toolName));
+  }
+  return operationId;
+}`;
+
 const GET_TOOL_FROM_ID_BLOCK = `export function getToolFromOperationId(operationId: OperationId): ToolDescriptor {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOLS[toolName];
@@ -78,9 +87,13 @@ export function generateDefinitionsFile(
     .map(({ operationId, toolName }) => `  '${operationId}': '${toolName}',`)
     .join('\n');
 
+  const toolNameToOperationIdCases = operationToTool
+    .map(({ operationId, toolName }) => `  '${toolName}': '${operationId}',`)
+    .join('\n');
+
   return [
     banner,
-    "import { type ToolDescriptor } from './types.js';",
+    "import type { ToolDescriptor } from './types.js';",
     '// Import all tool definitions',
     emitToolImports(names),
     emitToolsLiteral(names),
@@ -88,9 +101,13 @@ export function generateDefinitionsFile(
     IS_TOOL_NAME_BLOCK,
     GET_TOOL_FROM_TOOL_NAME_BLOCK,
     `const OPERATION_ID_TO_TOOL_NAME = {\n${operationIdToToolNameCases}\n} as const;`,
-    `export type OperationId = keyof typeof OPERATION_ID_TO_TOOL_NAME;`,
+    `type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;`,
+    `export type OperationId = keyof OperationIdToToolName;`,
+    `type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];`,
     IS_OPERATION_ID_BLOCK,
     GET_TOOL_NAME_FROM_ID_BLOCK,
     GET_TOOL_FROM_ID_BLOCK,
+    `const TOOL_NAME_TO_OPERATION_ID = {\n${toolNameToOperationIdCases}\n} as const;`,
+    GET_ID_FROM_TOOL_NAME_BLOCK,
   ].join('\n\n');
 }

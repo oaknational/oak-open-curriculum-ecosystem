@@ -13,12 +13,11 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { MCP_TOOLS } from '../types/generated/api-schema/mcp-tools/definitions.js';
 import {
+  getToolFromToolName,
   isToolName,
-  type AllToolNames,
-  type ToolArgs,
-} from '../types/generated/api-schema/mcp-tools/types.js';
+  type ToolName,
+} from '../types/generated/api-schema/mcp-tools/definitions.js';
 
 /**
  * Error types with proper cause chains
@@ -110,8 +109,8 @@ export async function executeToolCall(
     };
   }
 
-  const toolName: AllToolNames = maybeToolName;
-  const tool = MCP_TOOLS[toolName];
+  const toolName: ToolName = maybeToolName;
+  const tool = getToolFromToolName(toolName);
 
   const validation = tool.toolZodSchema.safeParse(maybeParams);
   if (!validation.success) {
