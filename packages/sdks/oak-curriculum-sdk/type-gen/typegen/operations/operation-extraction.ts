@@ -4,11 +4,11 @@
  */
 
 import type {
-  OpenAPI3,
+  OpenAPIObject,
   OperationObject,
   ParameterObject,
   ResponsesObject,
-} from 'openapi-typescript';
+} from 'openapi3-ts/oas31';
 import { getPropertyValue, isParameterObject, isOperationObject } from './operation-validators.js';
 
 export interface ExtractedParameter {
@@ -101,9 +101,9 @@ function extractOperationsForPath(
 
 /**
  * Extract all path operations from an OpenAPI schema
- * This runs at generation time with the full OpenAPI3 type
+ * This runs at generation time with the full OpenAPI schema
  */
-export function extractPathOperations(schema: OpenAPI3): ExtractedOperation[] {
+export function extractPathOperations(schema: OpenAPIObject): ExtractedOperation[] {
   const operations: ExtractedOperation[] = [];
   const httpMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 

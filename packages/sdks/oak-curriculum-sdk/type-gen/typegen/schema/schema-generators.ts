@@ -3,15 +3,14 @@
  * Pure functions for generating schema files
  */
 
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 /**
  * Generate JSON schema file content
  * @param schema - The OpenAPI schema object
  * @returns Formatted JSON string (pure OpenAPI without tool metadata)
  */
-export function generateJsonContent(schema: OpenAPI3): string {
-  // Return the schema as-is, without any tool metadata
+export function generateJsonContent(schema: OpenAPIObject): string {
   return JSON.stringify(schema, undefined, 2);
 }
 
@@ -38,7 +37,7 @@ export type Schema = typeof schema;
  * @param schema - The OpenAPI schema object
  * @returns TypeScript file content with base schema export
  */
-export function generateBaseSchemaContent(schema: OpenAPI3): string {
+export function generateBaseSchemaContent(schema: OpenAPIObject): string {
   // We serialize directly without creating an intermediate copy
   // since we're just re-serializing the same data
   const jsonSchema = JSON.stringify(schema, undefined, 2);

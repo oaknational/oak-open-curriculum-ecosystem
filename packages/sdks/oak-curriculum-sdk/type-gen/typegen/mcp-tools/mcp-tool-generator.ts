@@ -1,48 +1,71 @@
-import type { OpenAPI3, OperationObject, ParameterObject } from 'openapi-typescript';
-import { typeSafeEntries, isPlainObject, getOwnValue } from '../../../src/types/helpers.js';
+import type {
+  OperationObject,
+  ParameterObject,
+  PathItemObject,
+  SchemaObject,
+  OpenAPIObject,
+} from 'openapi3-ts/oas31';
 import { generateMcpToolName } from './name-generator.js';
 import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
-import { generateIndexFile } from './parts/generate-index-file.js';
+import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
+import { generateBarrelFile } from './parts/generate-index-file.js';
 import { generateSynonymsFile } from './parts/generate-synonyms-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
+import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
+import { createMutableParamMetadata } from './parts/param-metadata.js';
 
-export type PrimitiveType = 'string' | 'number' | 'boolean' | 'string[]' | 'number[]' | 'boolean[]';
-
-export interface ParamMetadata {
-  typePrimitive: PrimitiveType;
-  valueConstraint: boolean;
-  required: boolean;
-  allowedValues?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
+export type PrimitiveType = string | number | boolean | string[] | number[] | boolean[];
+export type PrimitiveTypeLabel =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'string[]'
+  | 'number[]'
+  | 'boolean[]';
 
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'] as const;
 
-function isPathItemObject(value: unknown): boolean {
-  return isPlainObject(value) && getOwnValue(value, '$ref') === undefined;
+function isPathItemObject(value: unknown): value is PathItemObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value) && !('$ref' in value);
 }
 
 function isOperationObject(value: unknown): value is OperationObject {
-  return isPlainObject(value) && getOwnValue(value, '$ref') === undefined;
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  if ('$ref' in value) {
+    return false;
+  }
+  const maybeOperation = value;
+  if ('operationId' in maybeOperation && typeof maybeOperation.operationId !== 'string') {
+    return false;
+  }
+  if ('parameters' in maybeOperation && !Array.isArray(maybeOperation.parameters)) {
+    return false;
+  }
+  return (
+    'responses' in maybeOperation &&
+    typeof maybeOperation.responses === 'object' &&
+    maybeOperation.responses !== null
+  );
 }
 
 function iterOperations(
-  schema: OpenAPI3,
+  schema: OpenAPIObject,
 ): { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] {
   const out: { path: string; method: (typeof HTTP_METHODS)[number]; operation: OperationObject }[] =
     [];
   if (!schema.paths) {
     return out;
   }
-  for (const [path, pathItem] of typeSafeEntries(schema.paths)) {
+  for (const [path, pathItem] of Object.entries(schema.paths)) {
     if (!isPathItemObject(pathItem)) {
       continue;
     }
     for (const method of HTTP_METHODS) {
-      const op: unknown = getOwnValue(pathItem, method);
+      const op = pathItem[method];
       if (!isOperationObject(op)) {
         continue;
       }
@@ -52,60 +75,65 @@ function iterOperations(
   return out;
 }
 
-function extractDefaultValue(schemaObj: unknown): unknown {
-  return getOwnValue(schemaObj, 'default');
-}
-
-function extractEnumValues(schemaObj: unknown): readonly unknown[] | undefined {
-  const raw: unknown = getOwnValue(schemaObj, 'enum');
-  return Array.isArray(raw) ? raw : undefined;
+function getSchema(param: ParameterObject): SchemaObject | undefined {
+  if (!param.schema) {
+    return undefined;
+  }
+  if (typeof param.schema !== 'object') {
+    return undefined;
+  }
+  if ('$ref' in param.schema) {
+    return undefined;
+  }
+  return param.schema;
 }
 
 function extractParamMetadata(param: ParameterObject): ParamMetadata {
+  // string representation of the primitive type
   const primitiveType = getParameterPrimitiveType(param);
   const isRequired = param.required === true;
-  const metadata: ParamMetadata = {
+  const schema = getSchema(param);
+  const enumValues = Array.isArray(schema?.enum) ? schema.enum : undefined;
+  const primitiveEnumValues = enumValues
+    ?.map((value) => {
+      if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+        return value;
+      }
+      return undefined;
+    })
+    .filter((value): value is string | number | boolean => value !== undefined);
+  const hasAllowedValues = Array.isArray(primitiveEnumValues) && primitiveEnumValues.length > 0;
+
+  return {
     typePrimitive: primitiveType,
-    valueConstraint: false,
+    valueConstraint: hasAllowedValues,
     required: isRequired,
+    allowedValues: hasAllowedValues ? [...primitiveEnumValues] : undefined,
+    description: typeof schema?.description === 'string' ? schema.description : undefined,
+    default: schema && 'default' in schema ? schema.default : undefined,
   };
-  const schemaObj = param.schema;
-  if (schemaObj && typeof schemaObj === 'object') {
-    const descDesc = Object.getOwnPropertyDescriptor(schemaObj, 'description');
-    if (typeof descDesc?.value === 'string') {
-      metadata.description = descDesc.value;
-    }
-    const defaultValue = extractDefaultValue(schemaObj);
-    if (defaultValue !== undefined) {
-      metadata.default = defaultValue;
-    }
-    const e = extractEnumValues(schemaObj);
-    if (e !== undefined) {
-      metadata.valueConstraint = true;
-      metadata.allowedValues = e;
-    }
-  }
-  return metadata;
 }
 
 function buildParamMetadataForOperation(operation: OperationObject): {
-  pathParamMetadata: Record<string, ParamMetadata>;
-  queryParamMetadata: Record<string, ParamMetadata>;
+  pathParamMetadata: ParamMetadataMap;
+  queryParamMetadata: ParamMetadataMap;
 } {
-  const pathParamMetadata: Record<string, ParamMetadata> = {};
-  const queryParamMetadata: Record<string, ParamMetadata> = {};
+  const pathParamMetadata: ParamMetadataMap = {};
+  const queryParamMetadata: ParamMetadataMap = {};
   const parameters = operation.parameters;
-  if (!parameters || !Array.isArray(parameters)) {
+  if (!parameters || parameters.length === 0) {
     return { pathParamMetadata, queryParamMetadata };
   }
   for (const param of parameters) {
     if ('$ref' in param) {
       continue;
     }
-    const metadata = extractParamMetadata(param);
+    const metadata = createMutableParamMetadata(extractParamMetadata(param));
     if (param.in === 'path') {
       pathParamMetadata[param.name] = metadata;
-    } else if (param.in === 'query') {
+      continue;
+    }
+    if (param.in === 'query') {
       queryParamMetadata[param.name] = metadata;
     }
   }
@@ -114,35 +142,39 @@ function buildParamMetadataForOperation(operation: OperationObject): {
 
 export interface GeneratedMcpToolFiles {
   'index.ts': string;
+  'definitions.ts': string;
   'types.ts': string;
   'lib.ts': string;
   'synonyms.ts': string;
   tools: Record<string, string>; // filename -> content
 }
 
-export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFiles {
+export interface McpToolGeneratorDeps {
+  readonly responseMapImportPath?: string;
+}
+
+export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToolFiles {
   const result: GeneratedMcpToolFiles = {
     'index.ts': '',
+    'definitions.ts': '',
     'types.ts': '',
     'lib.ts': '',
     'synonyms.ts': '',
     tools: {},
   };
 
-  const operationIdMap: Record<string, { toolName: string; operationId: string }> = {};
-  const toolNames: string[] = [];
+  const operationToToolEntries: { operationId: string; toolName: string }[] = [];
+  const toolNamesSet = new Set<string>();
   const subjectEnumValues = new Set<string>();
   const keyStageEnumValues = new Set<string>();
 
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
     const operationId = operation.operationId ?? `${method}-${path.replace(/[{}]/g, '')}`;
-    operationIdMap[operationId] = { toolName, operationId };
-    toolNames.push(toolName);
+    operationToToolEntries.push({ operationId, toolName });
+    toolNamesSet.add(toolName);
 
     const { pathParamMetadata, queryParamMetadata } = buildParamMetadataForOperation(operation);
-    collectSynonymCandidates(pathParamMetadata, subjectEnumValues, keyStageEnumValues);
-    collectSynonymCandidates(queryParamMetadata, subjectEnumValues, keyStageEnumValues);
     const toolFile = generateToolFile(
       toolName,
       path,
@@ -155,9 +187,14 @@ export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFile
     result.tools[`${toolName}.ts`] = toolFile;
   }
 
-  result['types.ts'] = generateTypesFile(operationIdMap);
+  const toolNames = Array.from(toolNamesSet).toSorted();
+
+  result['types.ts'] = generateTypesFile({
+    toolNames,
+  });
   result['lib.ts'] = generateLibFile();
-  result['index.ts'] = generateIndexFile(toolNames);
+  result['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
+  result['index.ts'] = generateBarrelFile();
 
   const synonymOutput = generateSynonymsFile(
     Array.from(subjectEnumValues),
@@ -192,33 +229,4 @@ export function generateCompleteMcpTools(schema: OpenAPI3): GeneratedMcpToolFile
   result['synonyms.ts'] = synonymOutput.content;
 
   return result;
-}
-
-const SUBJECT_FIELD_NAMES = new Set(['subject', 'subjectSlug']);
-const KEY_STAGE_FIELD_NAMES = new Set(['keyStage', 'keyStageSlug']);
-
-function collectSynonymCandidates(
-  metadata: Record<string, ParamMetadata>,
-  subjectValues: Set<string>,
-  keyStageValues: Set<string>,
-): void {
-  for (const [paramName, paramMeta] of typeSafeEntries(metadata)) {
-    if (!paramMeta.allowedValues) {
-      continue;
-    }
-    if (SUBJECT_FIELD_NAMES.has(paramName)) {
-      for (const value of paramMeta.allowedValues) {
-        if (typeof value === 'string') {
-          subjectValues.add(value);
-        }
-      }
-    }
-    if (KEY_STAGE_FIELD_NAMES.has(paramName)) {
-      for (const value of paramMeta.allowedValues) {
-        if (typeof value === 'string') {
-          keyStageValues.add(value);
-        }
-      }
-    }
-  }
 }

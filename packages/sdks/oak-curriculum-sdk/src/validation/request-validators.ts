@@ -4,34 +4,37 @@
  */
 
 import { z } from 'zod';
-import type { ValidationResult, HttpMethod } from './types.js';
-import { parseEndpointParameters } from './types.js';
-import { endpoints } from '../types/generated/zod/curriculumZodSchemas.js';
-import { typeSafeFromEntries, isPlainObject, getOwnValue } from '../types/helpers.js';
-import { toColon } from '../types/generated/api-schema/path-utils.js';
+import type { ValidationResult, HttpMethod } from './types';
+import { parseEndpointParameters } from './types';
+import { endpoints } from '../types/generated/zod/curriculumZodSchemas';
+import { toColon } from '../types/generated/api-schema/path-utils';
 import type {
   AllowedMethodsForPath,
   ValidPath,
-} from '../types/generated/api-schema/path-parameters.js';
+} from '../types/generated/api-schema/path-parameters';
 
 // Runtime type utilities (no assertions)
-function isObject(value: unknown): value is object {
-  return isPlainObject(value);
+function isNonArrayObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function get(o: unknown, key: string): unknown {
-  return getOwnValue(o, key);
+function getOwnProperty(value: unknown, key: string): unknown {
+  if (!isNonArrayObject(value)) {
+    return undefined;
+  }
+  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    return undefined;
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(value, key);
+  return descriptor?.value;
 }
 
 function hasFunction(o: unknown, key: string): boolean {
-  const v = getOwnValue(o, key);
-  return typeof v === 'function';
+  const candidate = getOwnProperty(o, key);
+  return typeof candidate === 'function';
 }
 
 function isZodSchema(value: unknown): value is z.ZodTypeAny {
-  if (!isObject(value)) {
-    return false;
-  }
   return hasFunction(value, 'parse') && hasFunction(value, 'safeParse');
 }
 
@@ -51,29 +54,28 @@ interface ParamDefinition {
 }
 
 function isParameterDefinition(value: unknown): value is ParamDefinition {
-  if (!isObject(value)) {
+  if (!isNonArrayObject(value)) {
     return false;
   }
-  const name = get(value, 'name');
-  const type = get(value, 'type');
-  const schema = get(value, 'schema');
+  const name = getOwnProperty(value, 'name');
+  const type = getOwnProperty(value, 'type');
+  const schema = getOwnProperty(value, 'schema');
   return (
     typeof name === 'string' &&
     (type === 'Path' || type === 'Query' || type === 'Body') &&
     isZodSchema(schema)
   );
 }
-
 function isEndpointDefinition(value: unknown): value is EndpointDefinition {
-  if (!isObject(value)) {
+  if (!isNonArrayObject(value)) {
     return false;
   }
-  const method = get(value, 'method');
-  const path = get(value, 'path');
+  const method = getOwnProperty(value, 'method');
+  const path = getOwnProperty(value, 'path');
   if (typeof method !== 'string' || typeof path !== 'string') {
     return false;
   }
-  const params = 'parameters' in value ? get(value, 'parameters') : undefined;
+  const params = getOwnProperty(value, 'parameters');
   if (params === undefined) {
     return true;
   }
@@ -95,7 +97,7 @@ function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
     const pairs: readonly (readonly [string, z.ZodSchema])[] = parameters.map(
       (p) => [p.name, p.schema] as const,
     );
-    const entries = typeSafeFromEntries(pairs);
+    const entries = Object.fromEntries(pairs);
     return z.object(entries);
   }
 

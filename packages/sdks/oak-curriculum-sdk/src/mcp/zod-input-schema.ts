@@ -1,9 +1,40 @@
 import { z } from 'zod';
-import { typeSafeEntries } from '../types/helpers.js';
 
-interface McpBaseToolInputSchemaBase {
+interface JsonSchemaPropertyString {
+  readonly type: 'string';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyNumber {
+  readonly type: 'number';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyBoolean {
+  readonly type: 'boolean';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyArray {
+  readonly type: 'array';
+  readonly items: JsonSchemaProperty;
+  readonly description?: string;
+  readonly default?: unknown;
+}
+type JsonSchemaProperty =
+  | JsonSchemaPropertyString
+  | JsonSchemaPropertyNumber
+  | JsonSchemaPropertyBoolean
+  | JsonSchemaPropertyArray;
+
+interface JsonSchemaObject {
   readonly type: 'object';
-  readonly required?: string[];
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly required?: readonly string[];
+  readonly additionalProperties?: boolean;
 }
 
 type Primitive = 'string' | 'number' | 'boolean';
@@ -35,11 +66,15 @@ type PropertySchema =
   | BooleanProperty
   | (ArrayProperty & { description?: string; default?: unknown });
 
-export type GenericToolInputJsonSchema = McpBaseToolInputSchemaBase & {
-  [key: string]: unknown;
-  // Narrower helper type for local schema-to-zod conversion when present
-  readonly properties?: Readonly<Record<string, PropertySchema>>;
-};
+export type JsonSchemaToZodSchema<TSchema extends ToolInputJsonSchema> =
+  ZodObjectFromJsonSchema<TSchema>;
+
+export interface GenericToolInputJsonSchema {
+  readonly type: 'object';
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly required?: readonly string[];
+  readonly additionalProperties?: boolean;
+}
 
 // Backwards-compatible alias used by generated files
 export type ToolInputJsonSchema = GenericToolInputJsonSchema;
@@ -54,18 +89,11 @@ function buildEnumNumberSchema(values: readonly unknown[]): z.ZodTypeAny {
   return z.number().refine((v) => allowed.includes(v), { message: 'Invalid enum value' });
 }
 
-function buildArraySchema(prop: ArrayProperty): z.ZodTypeAny {
-  const itemType = prop.items.type;
-  if (itemType === 'string') {
-    return z.array(z.string());
-  }
-  if (itemType === 'number') {
-    return z.array(z.number());
-  }
-  return z.array(z.boolean());
+function buildArraySchema(prop: JsonSchemaPropertyArray): z.ZodTypeAny {
+  return z.array(zodForProperty(prop.items));
 }
 
-function zodForProperty(prop: PropertySchema): z.ZodTypeAny {
+function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
   switch (prop.type) {
     case 'string': {
       return Array.isArray(prop.enum) ? buildEnumStringSchema(prop.enum) : z.string();
@@ -76,7 +104,7 @@ function zodForProperty(prop: PropertySchema): z.ZodTypeAny {
     case 'boolean':
       return z.boolean();
     case 'array':
-      return buildArraySchema({ type: 'array', items: prop.items });
+      return buildArraySchema(prop);
     default:
       return z.any();
   }
@@ -92,7 +120,7 @@ export function zodRawShapeFromToolInputJsonSchema(
   const shape: z.ZodRawShape = {};
   const required = new Set(schema.required ?? []);
   const props = schema.properties ?? {};
-  for (const [key, prop] of typeSafeEntries(props)) {
+  for (const [key, prop] of Object.entries(props)) {
     const base = zodForProperty(prop);
     shape[key] = required.has(key) ? base : base.optional();
   }

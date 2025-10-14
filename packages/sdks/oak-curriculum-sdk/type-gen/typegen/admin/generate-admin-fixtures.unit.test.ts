@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 import { generateAdminStreamFixtureModules } from './generate-admin-fixtures.js';
 
-const MINIMAL_SCHEMA: OpenAPI3 = {
+const MINIMAL_SCHEMA: OpenAPIObject = {
   openapi: '3.0.0',
-  info: { title: 'Test', version: '1.0.0' },
+  info: { title: 'Admin fixtures', version: '1.0.0' },
   paths: {},
 };
 

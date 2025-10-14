@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 import { generateSearchRequestModules } from './generate-search-requests.js';
 import { generateSearchResponseModules } from './generate-search-responses.js';
@@ -9,7 +9,7 @@ import { generateSearchScopeModules } from './generate-search-scopes.js';
 import { generateSearchFixtureModules } from './generate-search-fixtures.js';
 import { generateSearchIndexModule } from './generate-search-index.js';
 
-const MINIMAL_SCHEMA: OpenAPI3 = {
+const MINIMAL_SCHEMA: OpenAPIObject = {
   openapi: '3.0.0',
   info: { title: 'Test', version: '1.0.0' },
   paths: {},

@@ -11,7 +11,10 @@ export {
 } from './requests.js';
 export type { SearchStructuredRequest, SearchStructuredScope } from './requests.js';
 
-export { SearchNaturalLanguageRequestSchema, isSearchNaturalLanguageRequest } from './natural-requests.js';
+export {
+  SearchNaturalLanguageRequestSchema,
+  isSearchNaturalLanguageRequest,
+} from './natural-requests.js';
 export type { SearchNaturalLanguageRequest } from './natural-requests.js';
 
 export { SearchParsedQuerySchema, isSearchParsedQuery } from './parsed-query.js';

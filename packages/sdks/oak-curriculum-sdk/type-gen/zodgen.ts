@@ -4,7 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { generateZodSchemas } from './zodgen-core.js';
-import { loadSchemaFromFile } from './schema-separation-core.js';
+import fs from 'node:fs';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 const thisDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(thisDirectory, '..');
@@ -19,7 +20,7 @@ void (async () => {
     rootDirectory,
     'src/types/generated/api-schema/api-schema-sdk.json',
   );
-  const sdkSchema = loadSchemaFromFile(sdkSchemaPath);
+  const sdkSchema = JSON.parse(fs.readFileSync(sdkSchemaPath, 'utf8')) as OpenAPIObject;
   console.log('📖 Loaded SDK schema with canonicalUrl fields');
 
   // Generate endpoint definitions with parameter schemas using default template

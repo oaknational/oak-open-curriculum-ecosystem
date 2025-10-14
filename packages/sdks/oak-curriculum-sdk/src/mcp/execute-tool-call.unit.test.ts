@@ -6,211 +6,77 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import { executeToolCall } from './execute-tool-call.js';
+
+import { executeToolCall } from './execute-tool-call';
 import type { OakApiPathBasedClient } from '../client/oak-base-client';
 
-describe('executeToolCall with TOOL_GROUPINGS executors', () => {
-  describe('tool name validation', () => {
-    it('returns error for unknown tool name', async () => {
-      const mockClient = {} as OakApiPathBasedClient;
-      const result = await executeToolCall('unknown-tool', {}, mockClient);
+vi.mock('../types/generated/api-schema/mcp-tools/definitions.js', () => {
+  const toolZodSchema = {
+    safeParse: vi.fn((value: unknown) => {
+      if (value && typeof value === 'object') {
+        return { success: true, data: value };
+      }
+      return { success: false, error: { message: 'Invalid request parameters' } };
+    }),
+  };
 
-      expect(result).toHaveProperty('error');
-      expect(result.error?.message).toContain('Unknown tool');
-    });
+  const validateOutput = vi.fn((value: unknown) => ({ ok: true, data: value }));
+  const invoke = vi.fn(async (client: unknown, args: unknown) => ({ client, args }));
 
-    it('accepts valid tool name from TOOL_GROUPINGS', async () => {
-      const mockClient = {
-        '/sequences/{sequence}/units': {
-          GET: vi.fn().mockResolvedValue({ data: 'test' }),
-        },
-      } as unknown as OakApiPathBasedClient;
+  return {
+    MCP_TOOLS: {
+      'mock-tool': {
+        toolZodSchema,
+        validateOutput,
+        describeToolArgs: () => 'Invalid request parameters',
+        invoke,
+      },
+    },
+    __mocks__: {
+      toolZodSchema,
+      validateOutput,
+      invoke,
+    },
+  };
+});
 
-      const result = await executeToolCall(
-        'get-sequences-units',
-        { sequence: 'english-primary', year: '1' }, // year is required
-        mockClient,
-      );
+vi.mock('../types/generated/api-schema/mcp-tools/types.js', () => ({
+  isToolName: (value: unknown): value is 'mock-tool' => value === 'mock-tool',
+}));
 
-      expect(result).not.toHaveProperty('error');
-    });
+describe('executeToolCall with literal descriptors', () => {
+  it('returns error for unknown tool', async () => {
+    const result = await executeToolCall('other-tool', {}, {} as OakApiPathBasedClient);
+
+    expect(result).toHaveProperty('error');
+    expect(result.error?.message).toContain('Unknown tool');
   });
 
-  describe('parameter transformation', () => {
-    it('splits flat args into pathParams and queryParams', async () => {
-      // The TOOL_GROUPINGS executor handles parameter splitting internally
-      // We can't directly test the splitting without accessing internals
-      // Instead, we verify the behaviour through the result
-      const mockClient = {} as OakApiPathBasedClient;
+  it('invokes tool when validation succeeds', async () => {
+    const client = {} as OakApiPathBasedClient;
+    const params = { args: true };
+    const { toolZodSchema, validateOutput, invoke } = await import(
+      '../types/generated/api-schema/mcp-tools/definitions.js'
+    ).then(
+      (module: {
+        __mocks__: {
+          toolZodSchema: typeof vi.fn;
+          validateOutput: typeof vi.fn;
+          invoke: typeof vi.fn;
+        };
+      }) => module.__mocks__,
+    );
 
-      const result = await executeToolCall(
-        'get-sequences-units',
-        {
-          sequence: 'english-primary', // path param
-          year: '1', // query param
-        },
-        mockClient,
-      );
-
-      // The executor will be called with split params internally
-      // We verify by checking the response structure
-      expect(result).toBeDefined();
+    (toolZodSchema.safeParse as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      success: true,
+      data: params,
     });
-  });
+    validateOutput.mockReturnValueOnce({ ok: true, data: 'valid' });
 
-  describe('parameter validation', () => {
-    it('validates enum values for constrained parameters', async () => {
-      const mockClient = {} as OakApiPathBasedClient;
+    const result = await executeToolCall('mock-tool', params, client);
 
-      const result = await executeToolCall(
-        'get-sequences-units',
-        {
-          sequence: 'english-primary',
-          year: 'invalid-year', // Not in enum ['1', '2', '3', ...]
-        },
-        mockClient,
-      );
-
-      expect(result).toHaveProperty('error');
-      expect(result.error?.message).toContain(
-        'Invalid request parameters. Please match the following schema:',
-      );
-    });
-
-    it('accepts valid enum values', async () => {
-      const mockClient = {
-        '/sequences/{sequence}/units': {
-          GET: vi.fn().mockResolvedValue({ data: 'test' }),
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall(
-        'get-sequences-units',
-        {
-          sequence: 'english-primary',
-          year: '1', // Valid enum value
-        },
-        mockClient,
-      );
-
-      expect(result).not.toHaveProperty('error');
-    });
-  });
-
-  describe('executor invocation', () => {
-    it('calls the embedded executor function', async () => {
-      const mockResponse = { units: ['unit1', 'unit2'] };
-      const mockClient = {
-        '/sequences/{sequence}/units': {
-          GET: vi.fn().mockResolvedValue(mockResponse),
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall(
-        'get-sequences-units',
-        { sequence: 'english-primary', year: '1' }, // year is required
-        mockClient,
-      );
-
-      expect(result).toEqual({ data: mockResponse });
-    });
-
-    it('preserves type information through execution', async () => {
-      // This test verifies that no type assertions are used
-      // The type checker will fail if type information is lost
-      const mockClient = {
-        '/key-stages/{keyStage}/subject/{subject}/assets': {
-          GET: vi.fn().mockResolvedValue({ assets: [] }),
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall(
-        'get-key-stages-subject-assets',
-        {
-          keyStage: 'ks1', // Must be exact enum value
-          subject: 'maths', // Must be exact enum value
-          type: 'worksheet', // Optional but constrained
-        },
-        mockClient,
-      );
-
-      expect(result).toHaveProperty('data');
-    });
-  });
-
-  describe('error handling', () => {
-    it('handles executor errors gracefully', async () => {
-      const mockClient = {
-        '/sequences/{sequence}/units': {
-          GET: vi.fn().mockRejectedValue(new Error('API error')),
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall(
-        'get-sequences-units',
-        { sequence: 'english-primary', year: '1' }, // year is required
-        mockClient,
-      );
-
-      expect(result).toHaveProperty('error');
-      expect(result.error?.message).toContain('API error');
-    });
-  });
-
-  describe('argument mapping (string and JSON string inputs)', () => {
-    it('maps a plain string to the single required query param (q) for get-search-lessons', async () => {
-      const getSpy = vi.fn().mockImplementation((p: unknown) => {
-        const params = (p as { params?: { query?: Record<string, unknown> } }).params;
-        expect(params?.query?.q).toBe('frogs');
-        return { data: [] };
-      });
-      const mockClient = {
-        '/search/lessons': {
-          GET: getSpy,
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall('get-search-lessons', 'frogs', mockClient);
-
-      expect(result).toHaveProperty('data');
-      expect(getSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('parses a JSON string into structured arguments for get-search-lessons', async () => {
-      const getSpy = vi.fn().mockImplementation((p: unknown) => {
-        const params = (p as { params?: { query?: Record<string, unknown> } }).params;
-        expect(params?.query?.q).toBe('frogs');
-        return { data: [] };
-      });
-      const mockClient = {
-        '/search/lessons': {
-          GET: getSpy,
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const json = JSON.stringify({ q: 'frogs' });
-      const result = await executeToolCall('get-search-lessons', json, mockClient);
-
-      expect(result).toHaveProperty('data');
-      expect(getSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('maps a plain string to the single required path param for get-lessons-summary', async () => {
-      const getSpy = vi.fn().mockImplementation((p: unknown) => {
-        const params = (p as { params?: { path?: Record<string, unknown> } }).params;
-        expect(params?.path?.lesson).toBe('some-lesson-slug');
-        return { data: { slug: 'some-lesson-slug' } };
-      });
-      const mockClient = {
-        '/lessons/{lesson}/summary': {
-          GET: getSpy,
-        },
-      } as unknown as OakApiPathBasedClient;
-
-      const result = await executeToolCall('get-lessons-summary', 'some-lesson-slug', mockClient);
-
-      expect(result).toHaveProperty('data');
-      expect(getSpy).toHaveBeenCalledTimes(1);
-    });
+    expect(result).toEqual({ data: 'valid' });
+    expect(invoke).toHaveBeenCalledWith(client, params);
+    expect(validateOutput).toHaveBeenCalledWith({ client, args: params });
   });
 });

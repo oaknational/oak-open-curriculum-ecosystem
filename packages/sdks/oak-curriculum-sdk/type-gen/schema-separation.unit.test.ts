@@ -3,31 +3,16 @@
  * Following TDD approach - tests written before implementation
  */
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { describe, it, expect } from 'vitest';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { downloadOriginalSchema, createSdkSchema } from './schema-separation-core.js';
-import type { OpenAPI3 } from 'openapi-typescript';
-
-// Mock global fetch
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+import { createOpenCurriculumSchema } from './schema-separation-core.js';
+import { schemaWithNestedResponses } from './test-fixtures.js';
 
 describe('schema separation', () => {
-  beforeEach(() => {
-    process.env.OAK_API_KEY = 'test-api-key';
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    delete process.env.OAK_API_KEY;
-  });
-
-  // shouldUseOriginalSchema removed: pipeline always decorates and consumes SDK schema
-
-  describe('downloadOriginalSchema', () => {
-    it('should download schema from API and return a valid OpenAPI3 object', async () => {
-      const mockSchema = {
+  describe('createOpenCurriculumSchema', () => {
+    it('returns original clone and decorated SDK schema without mutating the input', () => {
+      const validatedSchema: OpenAPIObject = {
         openapi: '3.0.3',
         info: { title: 'Oak OpenAPI', version: '1.0.0' },
         paths: {},
@@ -43,69 +28,26 @@ describe('schema separation', () => {
         },
       };
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(mockSchema),
-      });
+      const { original, sdk } = createOpenCurriculumSchema(validatedSchema);
 
-      const result = await downloadOriginalSchema();
+      expect(original).toEqual(validatedSchema);
+      expect(original).not.toBe(validatedSchema);
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        'https://open-api.thenational.academy/api/v0/swagger.json',
-        expect.objectContaining({
-          headers: expect.any(Headers),
-        }),
-      );
-      expect(result).toBeDefined();
-      expect(result.openapi).toBe('3.0.3');
-      expect(result.info.title).toBe('Oak OpenAPI');
-      expect(result.info.version).toBe('1.0.0');
-    });
-
-    it('throws a helpful error when API returns an invalid schema', async () => {
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ openapi: '3.0.3', info: { title: 't' } }),
-      });
-
-      await expect(downloadOriginalSchema()).rejects.toThrow('Invalid schema response from API');
-    });
-  });
-
-  describe('createSdkSchema', () => {
-    it('should create SDK schema with canonicalUrl fields from original schema', () => {
-      const originalSchema: OpenAPI3 = {
-        openapi: '3.0.3',
-        info: { title: 'Oak OpenAPI', version: '1.0.0' },
-        paths: {},
-        components: {
-          schemas: {
-            LessonResponse: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-              },
-            },
-          },
-        },
-      };
-
-      const sdkSchema = createSdkSchema(originalSchema);
-
-      expect(sdkSchema.openapi).toBe('3.0.3');
-      expect(sdkSchema.info.title).toBe('Oak OpenAPI');
-      expect(sdkSchema.components?.schemas?.LessonResponse).toHaveProperty('properties');
-      const lessonResponse = sdkSchema.components?.schemas?.LessonResponse as Record<
-        string,
-        unknown
-      >;
+      const lessonResponse = sdk.components?.schemas?.LessonResponse as Record<string, unknown>;
       const properties = lessonResponse.properties as Record<string, unknown>;
       expect(properties).toHaveProperty('canonicalUrl');
       expect(properties.canonicalUrl).toHaveProperty('type', 'string');
+
+      const originalLesson = original.components?.schemas?.LessonResponse as Record<
+        string,
+        unknown
+      >;
+      const originalProperties = originalLesson.properties as Record<string, unknown>;
+      expect(originalProperties).not.toHaveProperty('canonicalUrl');
     });
 
-    it('should preserve all original schema fields while adding canonicalUrl', () => {
-      const originalSchema: OpenAPI3 = {
+    it('preserves all original schema fields while adding canonicalUrl', () => {
+      const validatedSchema: OpenAPIObject = {
         openapi: '3.0.3',
         info: { title: 'Oak OpenAPI', version: '1.0.0' },
         paths: {},
@@ -122,12 +64,9 @@ describe('schema separation', () => {
         },
       };
 
-      const sdkSchema = createSdkSchema(originalSchema);
+      const { original, sdk } = createOpenCurriculumSchema(validatedSchema);
 
-      const lessonResponse = sdkSchema.components?.schemas?.LessonResponse as Record<
-        string,
-        unknown
-      >;
+      const lessonResponse = sdk.components?.schemas?.LessonResponse as Record<string, unknown>;
       const properties = lessonResponse.properties as Record<string, unknown>;
       expect(properties.title).toEqual({ type: 'string' });
       expect(properties.description).toEqual({ type: 'string' });
@@ -136,6 +75,46 @@ describe('schema separation', () => {
         description: 'The canonical URL for this resource, generated by the SDK',
         example: 'https://www.thenational.academy/teachers/lessons/example-lesson',
       });
+
+      const originalLesson = original.components?.schemas?.LessonResponse as Record<
+        string,
+        unknown
+      >;
+      const originalProperties = originalLesson.properties as Record<string, unknown>;
+      expect(originalProperties).not.toHaveProperty('canonicalUrl');
+    });
+
+    it('should add canonicalUrl to nested response schemas without mutating input', () => {
+      const { original, sdk } = createOpenCurriculumSchema(schemaWithNestedResponses);
+
+      const originalLesson = original.components?.schemas?.LessonResponse;
+      const sdkLesson = sdk.components?.schemas?.LessonResponse;
+
+      if (!originalLesson || !sdkLesson || !('properties' in sdkLesson)) {
+        throw new Error('LessonResponse schema not present');
+      }
+
+      const originalProps = (originalLesson as { properties?: Record<string, unknown> }).properties;
+      const sdkProps = (sdkLesson as { properties?: Record<string, unknown> }).properties;
+      expect(originalProps?.canonicalUrl).toBeUndefined();
+      expect(sdkProps?.canonicalUrl).toEqual({
+        type: 'string',
+        description: 'The canonical URL for this resource, generated by the SDK',
+        example: 'https://www.thenational.academy/teachers/lessons/example-lesson',
+      });
+
+      const searchResponse = sdk.components?.schemas?.SearchResponse;
+      expect(searchResponse && 'properties' in searchResponse).toBe(true);
+      if (!searchResponse || !('properties' in searchResponse)) {
+        throw new Error('SearchResponse schema not present');
+      }
+
+      const summary = (searchResponse as { properties: Record<string, unknown> }).properties
+        .summary as { anyOf?: unknown };
+      if (!Array.isArray(summary?.anyOf)) {
+        throw new Error('SearchResponse.summary.anyOf missing');
+      }
+      expect(summary.anyOf).toHaveLength(2);
     });
   });
 });

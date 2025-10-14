@@ -9,7 +9,6 @@ export default defineConfig({
     'src/client/middleware/auth.ts',
     'src/config/index.ts',
     'src/types/index.ts',
-    'src/types/helpers.ts',
     'src/types/search-index.ts',
     'src/types/search-response-guards.ts',
     'src/types/generated/api-schema/api-paths-types.ts',
@@ -18,30 +17,42 @@ export default defineConfig({
     'src/types/generated/api-schema/path-utils.ts',
     'src/types/generated/api-schema/response-map.ts',
     'src/types/generated/api-schema/routing/url-helpers.ts',
+    'src/types/generated/api-schema/mcp-tools/definitions.ts',
     'src/types/generated/api-schema/mcp-tools/index.ts',
     'src/types/generated/api-schema/mcp-tools/types.ts',
     'src/types/generated/api-schema/mcp-tools/lib.ts',
     'src/types/generated/api-schema/mcp-tools/synonyms.ts',
     'src/types/generated/api-schema/mcp-tools/tools/*.ts',
-    'src/types/generated/search/*.ts',
+    'src/types/generated/search/index.ts',
+    'src/types/generated/search/fixtures.ts',
+    'src/types/generated/search/natural-requests.ts',
+    'src/types/generated/search/parsed-query.ts',
+    'src/types/generated/search/requests.ts',
+    'src/types/generated/search/responses.lessons.ts',
+    'src/types/generated/search/responses.units.ts',
+    'src/types/generated/search/responses.sequences.ts',
+    'src/types/generated/search/responses.multi.ts',
+    'src/types/generated/search/scopes.ts',
+    'src/types/generated/search/suggestions.ts',
     'src/types/generated/query-parser/index.ts',
-    'src/types/generated/observability/*.ts',
-    'src/types/generated/admin/*.ts',
+    'src/types/generated/observability/index.ts',
+    'src/types/generated/observability/zero-hit-fixtures.ts',
+    'src/types/generated/admin/index.ts',
+    'src/types/generated/admin/stream-fixtures.ts',
     'src/types/generated/zod/search/index.ts',
     'src/types/generated/zod/search/output/index.ts',
     'src/types/generated/zod/search/output/sequence-facets.ts',
+    'src/types/generated/zod/curriculumZodSchemas.ts',
+    'src/types/generated/openai-connector/index.ts',
     'src/validation/index.ts',
     'src/validation/request-validators.ts',
     'src/validation/curriculum-response-validators.ts',
     'src/validation/search-response-validators.ts',
     'src/validation/types.ts',
     'src/response-augmentation.ts',
-    'src/types/generated/zod/curriculumZodSchemas.ts',
     'src/mcp/execute-tool-call.ts',
-    'src/mcp/argument-normaliser.ts',
     'src/mcp/zod-input-schema.ts',
     'src/mcp/universal-tools.ts',
-    'src/types/generated/openai-connector/index.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations
@@ -60,19 +71,16 @@ export default defineConfig({
   tsconfig: './tsconfig.build.json',
   ignoreWatch: ['**/*.test.ts', '**/*.spec.ts'],
   outDir: 'dist',
-  // Enable proper ESM import rewriting
   esbuildOptions(options) {
-    // Force ESM imports to include .js extensions
     options.plugins = options.plugins ?? [];
     options.plugins.push({
-      name: 'add-js-extension',
+      name: 'ensure-js-extensions',
       setup(build) {
         build.onResolve({ filter: /^\./ }, (args) => {
-          // Only add .js for relative imports that don't already have an extension
-          if (!args.path.includes('.')) {
-            return { path: args.path + '.js', external: true };
+          if (args.path.endsWith('.js') || args.path.endsWith('.json')) {
+            return null;
           }
-          return { external: true };
+          return { path: `${args.path}.js` };
         });
       },
     });

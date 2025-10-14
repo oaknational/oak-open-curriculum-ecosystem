@@ -15,38 +15,29 @@ type MetaRecord = Record<string, ParamMetadataLike>;
 
 describe('emitErrorDescription (compile-time literal emitter)', () => {
   it('produces a compact literal with schema JSON and required list', () => {
-    const pathMeta: MetaRecord = {
-      lesson: {
-        typePrimitive: 'string',
-        valueConstraint: false,
-        required: true,
-        description: 'Lesson slug',
+    const code = emitErrorDescription(
+      {
+        lesson: { typePrimitive: 'string', valueConstraint: false, required: true },
       },
-    };
-    const queryMeta: MetaRecord = {
-      subject: {
-        typePrimitive: 'string',
-        valueConstraint: true,
-        required: false,
-        allowedValues: ['maths', 'english'],
+      {
+        q: { typePrimitive: 'string', valueConstraint: false, required: true },
       },
-    };
-    const block = emitErrorDescription(pathMeta, queryMeta);
+    );
 
-    // Basic shape (behavioural, not exact signature)
-    expect(block.includes('const getValidRequestParamsDescription= ')).toBe(true);
-    expect(block.trim().endsWith('};')).toBe(true);
+    expect(code).toContain('export const describeToolArgs = (): string => {');
+    expect(code).toContain('Invalid request parameters. Please match the following schema:');
+    expect(code).toContain('Schema:');
+    expect(code).toContain('Required:');
+    expect(code).not.toContain('getValidRequestParamsDescription');
 
-    // Content checks
-    expect(block).toContain('Invalid request parameters. Please match the following schema:');
-    expect(block).toContain('Schema:');
-    expect(block).toContain('Required:');
+    expect(code.trim().endsWith('};')).toBe(true);
 
-    // Compact JSON should include our keys
-    expect(block).toContain('"lesson"');
-    expect(block).toContain('"subject"');
+    expect(code).toContain('"lesson"');
+    expect(code).toContain('"q"');
 
-    // Required should list lesson, not subject
-    expect(block).toMatch(/Required: ([^\n]*)/);
+    const requiredMatch = /Required: ([^\n]*)/.exec(code);
+    expect(requiredMatch).not.toBeNull();
+    expect(requiredMatch?.[1]).toContain('lesson');
+    expect(requiredMatch?.[1]).toContain('q');
   });
 });

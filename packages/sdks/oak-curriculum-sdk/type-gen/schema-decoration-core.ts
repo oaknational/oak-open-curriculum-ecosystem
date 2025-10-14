@@ -10,7 +10,7 @@
 /* eslint-disable @typescript-eslint/no-restricted-types */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 
-import type { OpenAPI3, SchemaObject } from 'openapi-typescript';
+import type { OpenAPIObject, SchemaObject } from 'openapi3-ts/oas31';
 
 /**
  * Decorates a response schema with canonicalUrl field
@@ -105,8 +105,8 @@ function decorateUnionSchema(schemaObj: Record<string, unknown>): Record<string,
  * @param schema - The canonical OpenAPI schema
  * @returns Decorated schema with canonicalUrl fields added to response schemas
  */
-export function decorateOpenAPISchema(schema: OpenAPI3): OpenAPI3 {
-  const decorated = JSON.parse(JSON.stringify(schema)) as OpenAPI3;
+export function decorateOpenAPISchema(schema: OpenAPIObject): OpenAPIObject {
+  const decorated = JSON.parse(JSON.stringify(schema)) as OpenAPIObject;
 
   // Add canonicalUrl to all response schemas in components
   if (decorated.components?.schemas) {

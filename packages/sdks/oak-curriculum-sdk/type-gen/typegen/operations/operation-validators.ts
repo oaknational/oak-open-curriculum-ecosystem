@@ -5,28 +5,30 @@
  * @remarks get rid of these pointless wrapper functions, factor out the helpers, rename scripts as typegen, use the new helpers workspace
  */
 
-import type { ParameterObject, OperationObject } from 'openapi-typescript';
-import { isPlainObject, getOwnValue } from '../../../src/types/helpers.js';
+import type { ParameterObject, OperationObject } from 'openapi3-ts/oas31';
 
 /**
  * Type guard to check if a value is a non-null object (Record)
  */
 export function isRecord(value: unknown): value is object {
-  return isPlainObject(value);
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**
  * Type guard to check if an object has a specific property
  */
 export function hasProperty(obj: unknown, key: PropertyKey): boolean {
-  return getOwnValue(obj, key) !== undefined;
+  return isRecord(obj) && key in obj;
 }
 
 /**
  * Safely get a property value from an unknown object
  */
 export function getPropertyValue(obj: unknown, key: string): unknown {
-  return getOwnValue(obj, key);
+  if (!isRecord(obj)) {
+    return undefined;
+  }
+  return obj[key as keyof typeof obj];
 }
 
 /**
@@ -58,8 +60,7 @@ export function isOperationObject(op: unknown): op is OperationObject {
   }
 
   // Operations must have responses object
-  const responses = getPropertyValue(op, 'responses');
-  return isRecord(responses);
+  return 'responses' in op && isRecord(op.responses);
 }
 
 /**

@@ -52,6 +52,7 @@ From the repo root, via Turbo:
 
 ```bash
 pnpm install        # Setup
+pnpm clean          # Clean all build products
 pnpm type-gen       # Type generation
 pnpm build          # Build
 pnpm type-check     # Type check
@@ -62,6 +63,8 @@ pnpm test           # Unit and integration tests
 pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests
 pnpm dev:smoke      # Local smoke tests
+
+# All in one command
 pnpm check          # Clean all build products, then run all of the above
 ```
 

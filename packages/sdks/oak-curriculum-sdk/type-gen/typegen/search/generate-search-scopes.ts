@@ -1,4 +1,4 @@
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**
@@ -29,7 +29,7 @@ function createScopesModule(): string {
   );
 }
 
-export function generateSearchScopeModules(_schema: OpenAPI3): FileMap {
+export function generateSearchScopeModules(_schema: OpenAPIObject): FileMap {
   void _schema;
   return {
     '../search/scopes.ts': createScopesModule(),

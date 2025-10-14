@@ -4,32 +4,35 @@
  */
 
 import type {
-  OpenAPI3,
+  OpenAPIObject,
   ParameterObject,
-  PathItemObject,
   ReferenceObject,
-} from 'openapi-typescript';
-import { typeSafeKeys, isPlainObject, getOwnString, getOwnValue } from '../src/types/helpers.js';
-import type {
-  PathEntry,
-  ValidCombinations,
-  ExtractedParameters,
-  ExtractedPathData,
-  ParameterValueSets,
-  ExtractionContext,
-} from './typegen/extraction-types.js';
+  PathItemObject,
+} from 'openapi3-ts/oas31';
 import {
   initializePathParameters,
   processOperationParameters,
 } from './typegen-extraction-helpers.js';
+import {
+  type ExtractedParameters,
+  type ExtractedPathData,
+  type ExtractionContext,
+  type ParameterValueSets,
+  type PathEntry,
+  type ValidCombinations,
+} from './typegen/extraction-types.js';
+
+function isObject(value: unknown): value is Record<PropertyKey, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 export function isReferenceObject(value: unknown): value is ReferenceObject {
-  return isPlainObject(value) && typeof getOwnString(value, '$ref') === 'string';
+  return isObject(value) && typeof value.$ref === 'string' && value.$ref.length > 0;
 }
 
 export function dereferenceParameter(
   param: ParameterObject | ReferenceObject,
-  root: OpenAPI3,
+  root: OpenAPIObject,
 ): ParameterObject {
   if (!isReferenceObject(param)) {
     return param;
@@ -40,11 +43,21 @@ export function dereferenceParameter(
   let current: unknown = root;
 
   for (const segment of refPath) {
-    const next = getOwnValue(current, segment);
-    if (next === undefined) {
+    if (Array.isArray(current)) {
+      const index = Number(segment);
+      if (!Number.isInteger(index) || index < 0 || index >= current.length) {
+        throw new Error(`Cannot dereference ${ref}: invalid array index at ${segment}`);
+      }
+      current = current[index];
+      continue;
+    }
+    if (!isObject(current)) {
       throw new Error(`Cannot dereference ${ref}: invalid path at ${segment}`);
     }
-    current = next;
+    if (!(segment in current)) {
+      throw new Error(`Cannot dereference ${ref}: missing segment ${segment}`);
+    }
+    current = current[segment];
   }
 
   if (!isParameterObject(current)) {
@@ -55,11 +68,21 @@ export function dereferenceParameter(
 }
 
 export function isParameterObject(value: unknown): value is ParameterObject {
-  return typeof value === 'object' && value !== null && 'name' in value && 'in' in value;
+  return (
+    isObject(value) &&
+    typeof value.name === 'string' &&
+    (value.in === 'path' || value.in === 'query' || value.in === 'header' || value.in === 'cookie')
+  );
 }
 
 export function isPathItemObject(value: unknown): value is PathItemObject {
-  return isPlainObject(value);
+  if (!isObject(value)) {
+    return false;
+  }
+  if ('parameters' in value && value.parameters !== undefined && !Array.isArray(value.parameters)) {
+    return false;
+  }
+  return true;
 }
 
 export function extractParameterNamesFromPath(pathPattern: string): string[] {
@@ -71,10 +94,10 @@ export function extractParameterNamesFromPath(pathPattern: string): string[] {
 }
 
 export function processParameterDefinitions(
-  parameterNames: string[],
-  parameters: (ParameterObject | ReferenceObject)[],
+  parameterNames: readonly string[],
+  parameters: readonly (ParameterObject | ReferenceObject)[],
   pathParameters: ParameterValueSets,
-  root: OpenAPI3,
+  root: OpenAPIObject,
 ): void {
   for (const param of parameters) {
     const derefParam = dereferenceParameter(param, root);
@@ -101,7 +124,12 @@ export function extractEnumFromParameter(param: ParameterObject): string[] | und
     return undefined;
   }
 
-  const enumArray: unknown = getOwnValue(schema, 'enum');
+  // Enums exist on SchemaObject, not ReferenceObject
+  if (isReferenceObject(schema)) {
+    return undefined;
+  }
+
+  const enumArray: unknown = schema.enum;
   if (Array.isArray(enumArray)) {
     return enumArray.filter((v): v is string => typeof v === 'string');
   }
@@ -113,27 +141,32 @@ export function isParameterOrReference(value: unknown): value is ParameterObject
 }
 
 export function recordValidCombination(
-  parameterNames: string[],
+  parameterNames: readonly string[],
   pathPattern: string,
   validCombinations: ValidCombinations,
 ): void {
   if (parameterNames.length === 0) {
-    validCombinations.NO_PARAMS ??= {};
+    const paramsKey = 'NO_PARAMS';
+    const group = validCombinations[paramsKey] ?? {};
     const entry: PathEntry = {
-      path: pathPattern,
-      paramsKey: 'NO_PARAMS',
-    };
-    validCombinations.NO_PARAMS[pathPattern] = entry;
-  } else {
-    const paramsKey = parameterNames.sort().join('_');
-    validCombinations[paramsKey] ??= {};
-    const entry: PathEntry = {
-      params: parameterNames.join(', '),
       path: pathPattern,
       paramsKey,
     };
-    validCombinations[paramsKey][pathPattern] = entry;
+    group[pathPattern] = entry;
+    validCombinations[paramsKey] = group;
+    return;
   }
+
+  const sortedNames = [...parameterNames].sort();
+  const paramsKey = sortedNames.join('_');
+  const group = validCombinations[paramsKey] ?? {};
+  const entry: PathEntry = {
+    params: sortedNames.join(', '),
+    path: pathPattern,
+    paramsKey,
+  };
+  group[pathPattern] = entry;
+  validCombinations[paramsKey] = group;
 }
 
 /**
@@ -162,7 +195,7 @@ export function processParameter(
  * Process all parameters from a list
  */
 export function processParameterList(
-  parameters: (ParameterObject | ReferenceObject)[],
+  parameters: readonly (ParameterObject | ReferenceObject)[],
   context: ExtractionContext,
 ): void {
   for (const param of parameters) {
@@ -190,12 +223,12 @@ export function processPath(
   recordValidCombination(pathParameterNames, pathPattern, context.validCombinations);
 }
 
-export function extractPathParameters(schema: OpenAPI3): ExtractedPathData {
-  const paths = schema.paths;
+export function extractPathParameters(schema: OpenAPIObject): ExtractedPathData {
+  const { paths } = schema;
   const pathParameters: ParameterValueSets = {};
   const validCombinations: ValidCombinations = {};
 
-  const sortedPathNames = typeSafeKeys(paths ?? {}).sort((a, b) => a.localeCompare(b));
+  const sortedPathNames = Object.keys(paths ?? {}).sort((a, b) => a.localeCompare(b));
   for (const pathName of sortedPathNames) {
     const pathItem = paths?.[pathName];
     if (!isPathItemObject(pathItem)) {
@@ -212,7 +245,7 @@ export function extractPathParameters(schema: OpenAPI3): ExtractedPathData {
 
   const result: ExtractedParameters = {};
   for (const parameterName in pathParameters) {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- disable to allow runtime validation
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow runtime validation
     result[parameterName] = pathParameters[parameterName] ? [...pathParameters[parameterName]] : [];
   }
 

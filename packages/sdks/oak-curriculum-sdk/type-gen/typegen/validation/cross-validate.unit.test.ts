@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { crossValidateResponseMap, crossValidatePaths } from './cross-validate.js';
 
 describe('cross-validate', () => {
-  const base: OpenAPI3 = {
+  const base: OpenAPIObject = {
     openapi: '3.0.0',
     info: { title: 't', version: '1' },
     paths: {

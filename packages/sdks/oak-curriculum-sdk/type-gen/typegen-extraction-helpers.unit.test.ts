@@ -4,11 +4,11 @@ import {
   processOperationParameters,
   extractValidParameters,
 } from './typegen-extraction-helpers';
-import type { ExtractionContext } from './typegen/extraction-types';
-import type { OpenAPI3, PathItemObject } from 'openapi-typescript';
+import type { ExtractionContext } from './typegen/extraction-types.js';
+import type { OpenAPIObject, PathItemObject } from 'openapi3-ts/oas31';
 
-// Helper to create a minimal valid OpenAPI3 object
-function createMockOpenAPI3(): OpenAPI3 {
+// Helper to create a minimal valid OpenAPI object
+function createMockOpenAPIObject(): OpenAPIObject {
   return {
     openapi: '3.0.0',
     info: {
@@ -23,7 +23,7 @@ describe('typegen-extraction-helpers', () => {
   describe('initializePathParameters', () => {
     it('should initialize empty sets for each parameter name', () => {
       const context: ExtractionContext = {
-        root: createMockOpenAPI3(),
+        root: createMockOpenAPIObject(),
         pathParameters: {},
         validCombinations: {},
       };
@@ -40,7 +40,7 @@ describe('typegen-extraction-helpers', () => {
     it('should not overwrite existing sets', () => {
       const existingSet = new Set(['value1']);
       const context: ExtractionContext = {
-        root: createMockOpenAPI3(),
+        root: createMockOpenAPIObject(),
         pathParameters: { id: existingSet },
         validCombinations: {},
       };
@@ -98,7 +98,7 @@ describe('typegen-extraction-helpers', () => {
         delete: 'invalid',
       };
       const context: ExtractionContext = {
-        root: createMockOpenAPI3(),
+        root: createMockOpenAPIObject(),
         pathParameters: {},
         validCombinations: {},
       };
@@ -129,7 +129,7 @@ describe('typegen-extraction-helpers', () => {
         },
       };
       const context: ExtractionContext = {
-        root: createMockOpenAPI3(),
+        root: createMockOpenAPIObject(),
         pathParameters: {},
         validCombinations: {},
       };

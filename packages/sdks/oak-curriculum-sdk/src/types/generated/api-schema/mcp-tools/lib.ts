@@ -11,82 +11,83 @@ import {
   type CallToolRequest,
   type TextContent,
 } from '@modelcontextprotocol/sdk/types.js';
-import { isToolName, getToolNameFromOperationId, type AllOperationIds, type OakMcpToolBase } from './types.js';
-import { MCP_TOOLS } from './index.js';
+import { type ToolDescriptor } from './types.js';
+import {
+  getToolFromToolName,
+  getToolFromOperationId,
+  isToolName,
+  type OperationId,
+  type ToolName,
+} from './definitions.js';
 
-export function getToolFromToolName(toolName: string): typeof MCP_TOOLS[keyof typeof MCP_TOOLS] {
-  if (!isToolName(toolName)) throw new TypeError('Unknown tool: ' + String(toolName));
-  return MCP_TOOLS[toolName];
+type ToolRegistryEntry = {
+  readonly descriptor: ToolDescriptor;
+};
+
+type InvocationResult = { readonly content: readonly TextContent[]; readonly isError?: true };
+
+function textContent(text: string): TextContent {
+  return { type: 'text', text };
 }
 
-export function getToolFromOperationId(operationId: AllOperationIds): (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS] {
-  const name = getToolNameFromOperationId(operationId);
-  return MCP_TOOLS[name];
-}
 
-/**
- * Format content for MCP responses
- */
-export function formatStandardContent(
-  result: unknown,
-  isError = false,
-): { content: readonly TextContent[]; isError?: true } {
-  function textContent(text: string): { type: 'text'; text: string } {
-    return { type: 'text', text };
-  }
+
+function formatStandardContent(result: unknown, isError = false): InvocationResult {
   if (!isError) {
     return { content: [textContent(JSON.stringify(result, null, 2))] };
   }
   const message = result instanceof Error ? result.message : 'Unknown error';
-  const lines = message.split('\n');
-  const [first, ...rest] = lines;
-  const content = [textContent(`Error: ${first}`), ...rest.map((t) => textContent(t))];
+  const [firstLine, ...rest] = message.split('\n');
+  const header = firstLine.startsWith('Error:') ? firstLine : 'Error: ' + firstLine;
+  const content = [textContent(header)];
+  for (const line of rest) {
+    content.push(textContent(line));
+  }
   return { content, isError: true };
 }
 
-/**
- * MCP Tool Registry for managing and executing tools
- */
 export class McpToolRegistry {
-  private readonly tools = new Map<string, OakMcpToolBase<unknown, unknown>>();
+  private readonly tools = new Map<ToolName, ToolRegistryEntry>();
 
-  register(tool: OakMcpToolBase<unknown, unknown>): void {
-    this.tools.set(tool.name, tool);
+  register(name: ToolName, descriptor: ToolDescriptor): void {
+    this.tools.set(name, { descriptor });
   }
 
-  listTools(): readonly OakMcpToolBase<unknown, unknown>[] {
-    return Array.from(this.tools.values()).sort((a, b) => a.name.localeCompare(b.name));
+  listTools(): readonly ToolDescriptor[] {
+    return Array.from(this.tools.values())
+      .map((entry) => entry.descriptor)
+      .sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  async call(
-    name: string,
-    args: unknown,
-  ): Promise<{ content: readonly TextContent[]; isError?: true }> {
-    const tool = this.tools.get(name);
-    if (!tool) {
-      return formatStandardContent(new Error(`Unknown tool: ${name}`), true);
+  async call(name: string, args: unknown): Promise<InvocationResult> {
+      if (!isToolName(name)) {
+      return formatStandardContent(new Error('Unknown tool: ' + name), true);
     }
-    const result = tool.validateInput(args);
-    if (!result.ok) {
-      return formatStandardContent(new Error(`Validation error: ${result.message}`), true);
+    const entry = this.tools.get(name);
+    if (!entry) {
+      return formatStandardContent(new Error('Tool not registered: ' + name), true);
+    }
+    const { descriptor } = entry;
+    const parsed = descriptor.toolZodSchema.safeParse(args);
+    if (!parsed.success) {
+      const describe = descriptor.describeToolArgs;
+      const message = describe ? describe() : parsed.error.issues.map((issue) => issue.message).join('; ');
+      return formatStandardContent(new Error(message), true);
     }
     try {
-      const output = await tool.handle(result.data);
-      const outputValidation = tool.validateOutput(output);
+      const output = await descriptor.invoke(parsed.data);
+      const outputValidation = descriptor.validateOutput(output);
       if (!outputValidation.ok) {
-        return formatStandardContent(new Error(`Output validation error: ${outputValidation.message}`), true);
+        return formatStandardContent(new Error('Output validation error: ' + outputValidation.message), true);
       }
       return formatStandardContent(outputValidation.data);
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Unknown error');
-      return formatStandardContent(error, true);
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error('Unknown error: ' + String(error));
+      return formatStandardContent(err, true);
     }
   }
 }
 
-/**
- * Attach tool list and call handlers to a Server instance using a registry.
- */
 export function attachMcpHandlers(server: Server, registry: McpToolRegistry): void {
   server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: registry.listTools() }));
   server.setRequestHandler(CallToolRequestSchema, (request: CallToolRequest) => {

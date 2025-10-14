@@ -234,3 +234,8 @@ export const OPENAI_CONNECTOR_TOOL_DEFS = {
     } as const,
   },
 } as const;
+
+export const OPENAI_CONNECTOR_TOOL_ENTRIES = [
+  ['search', OPENAI_CONNECTOR_TOOL_DEFS.search],
+  ['fetch', OPENAI_CONNECTOR_TOOL_DEFS.fetch],
+] as const;

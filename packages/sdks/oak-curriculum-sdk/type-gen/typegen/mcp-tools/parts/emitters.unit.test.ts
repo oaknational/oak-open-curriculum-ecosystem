@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject, ParameterObject } from 'openapi-typescript';
-import { emitHeader, emitParams, emitSchema, emitIndex } from './emitters.js';
+import type { OperationObject, ParameterObject } from 'openapi3-ts/oas31';
+import { emitHeader, emitSchema, emitIndex } from './emitters.js';
 import type { ParamMetadata } from './generate-tool-file.js';
 
 function makeOp(params: ParameterObject[]): OperationObject {
@@ -15,49 +15,13 @@ describe('emitters', () => {
   it('emits header with constants and import', () => {
     const out = emitHeader('get-pets-id', '/pets/{id}', 'get', 'get-pets-id');
     expect(out).toContain('GENERATED FILE - DO NOT EDIT');
-    expect(out).toContain(
-      'import type { OakApiPathBasedClient } from "../../../../../client/index.js";',
-    );
-    expect(out).toContain("const operationId= 'get-pets-id' as const;");
-    expect(out).toContain("const method= 'GET' as const;");
+    expect(out).not.toContain('import type { OakApiPathBasedClient }');
+    expect(out).not.toContain('getDescriptorSchemaForEndpoint');
+    expect(out).toContain('const operationId =');
+    expect(out).toContain('const name =');
   });
 
-  it('emits params with enum guards and maps', () => {
-    const params: ParameterObject[] = [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: { enum: [1, 2, 3], type: 'integer' },
-      } as unknown as ParameterObject,
-      {
-        name: 'q',
-        in: 'query',
-        required: false,
-        schema: { type: 'string' },
-      } as unknown as ParameterObject,
-    ];
-    const op = makeOp(params);
-
-    const pathParamMetadata: Record<string, ParamMetadata> = {
-      id: {
-        typePrimitive: 'number',
-        valueConstraint: true,
-        required: true,
-        allowedValues: [1, 2, 3],
-      },
-    };
-    const queryParamMetadata: Record<string, ParamMetadata> = {
-      q: { typePrimitive: 'string', valueConstraint: false, required: false },
-    };
-
-    const out = emitParams(op, pathParamMetadata, queryParamMetadata);
-    expect(out).toContain('const allowedIdValues= [1,2,3] as const;');
-    expect(out).toContain('const pathParams= {');
-    expect(out).toContain('const queryParams= {');
-  });
-
-  it('emits schema block with types and guards', () => {
+  it('emits schema block with tool parameter types and helpers', () => {
     const params: ParameterObject[] = [
       {
         name: 'q',
@@ -72,27 +36,25 @@ describe('emitters', () => {
       {},
       { q: { typePrimitive: 'string', valueConstraint: false, required: false } },
     );
-    // Behavioural shape: ValidRequestParams interface with params container
-    expect(out).toContain('interface ValidRequestParams');
-    expect(out).toContain('params: {');
-    expect(out).toContain('function isValidRequestParams(');
-    // Behavioural: we emit a function to describe validation errors
-    expect(out).toContain('const getValidRequestParamsDescription= ');
+    expect(out).toContain('export interface ToolQueryParams');
+    expect(out).toContain('readonly q?: string;');
+    expect(out).toContain('export interface ToolArgs { readonly params: ToolParams; }');
+    expect(out).toContain('export const toolInputJsonSchema');
+    expect(out).toContain('export const toolZodSchema');
+    expect(out).toContain('export const describeToolArgs = () =>');
   });
 
   it('emits index/executor block exporting tool', () => {
-    const params: ParameterObject[] = [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: { type: 'integer' },
-      } as unknown as ParameterObject,
-    ];
-    const op = makeOp(params);
-    const out = emitIndex('get-pets-id', '/pets/{id}', 'get', op, ['id'], []);
-    expect(out).toContain('const executor= (client: OakApiPathBasedClient');
-    expect(out).toContain('export const getPetsId: ToolDescriptor = {');
-    expect(out).toContain('getExecutorFromGenericRequestParams');
+    const op = makeOp({
+      summary: 'Get a pet by id',
+    });
+    const out = emitIndex('get-pets-id', '/pets/{id}', 'get', op);
+    expect(out).not.toContain('import type { ToolDescriptor }');
+    expect(out).not.toContain('import { getDescriptorSchemaForEndpoint }');
+    expect(out).toContain('const responseDescriptor = getDescriptorSchemaForEndpoint');
+    expect(out).toContain('export const getPetsId = {');
+    expect(out).toContain('invoke: async (client: OakApiPathBasedClient, _params: unknown) => {');
+    expect(out).toContain('toolOutputJsonSchema: responseDescriptor.json');
+    expect(out).toContain('zodOutputSchema: responseDescriptor.zod');
   });
 });

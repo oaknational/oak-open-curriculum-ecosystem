@@ -3,6 +3,14 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+
+import { MCP_TOOLS, type AllToolNames } from '@oaknational/oak-curriculum-sdk';
+
+vi.mock(
+  '@modelcontextprotocol/sdk/types.ts',
+  () => ({ CallToolRequestSchema: {}, ListToolsRequestSchema: {} }),
+  { virtual: true },
+);
 import { createToolResponseHandlers } from './tool-response-handlers';
 import { pickPayloadForValidation, validateOutput, type OutputValidationResult } from './server';
 
@@ -106,5 +114,23 @@ describe('validation helpers', () => {
     }
     expect(result.message).toContain('Expected array');
     expect(result.message).toContain('received string');
+  });
+});
+
+describe('registerMcpTools literals', () => {
+  it('iterates over literal tool descriptors in alphabetical order', () => {
+    const toolNames = (Object.keys(MCP_TOOLS) as readonly AllToolNames[]).toSorted();
+    expect(toolNames).toEqual(
+      (Object.keys(MCP_TOOLS) as readonly AllToolNames[]).sort((a, b) => a.localeCompare(b)),
+    );
+
+    for (const [name, descriptor] of Object.entries(MCP_TOOLS) as readonly [
+      AllToolNames,
+      (typeof MCP_TOOLS)[AllToolNames],
+    ][]) {
+      expect(descriptor.name).toBe(name);
+      expect(descriptor.inputSchema).toBeDefined();
+      expect(descriptor.method.length).toBeGreaterThan(0);
+    }
   });
 });

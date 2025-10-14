@@ -3,14 +3,12 @@
  */
 
 import type { ValidCombinations } from './typegen/extraction-types.js';
-import { typeSafeKeys } from '../src/types/helpers.js';
-import { createSortedEntries } from './typegen-helpers.js';
 
 /**
  * Generate the path grouping keys type union
  */
 export function generatePathGroupingKeysType(validCombinations: ValidCombinations): string {
-  const otherKeys = typeSafeKeys(validCombinations)
+  const otherKeys = Object.keys(validCombinations)
     .filter((key) => key !== 'NO_PARAMS')
     .sort()
     .map((key) => `"${key}"`);
@@ -57,13 +55,29 @@ export type ValidPathGroupings = {
 /**
  * Generate the VALID_PATHS_BY_PARAMETERS constant entries
  */
-export function generateValidPathsEntries(validCombinations: ValidCombinations): string {
-  return typeSafeKeys(validCombinations)
-    .sort((a, b) => a.localeCompare(b))
-    .map((pathGroupingKey) => {
-      const group = validCombinations[pathGroupingKey] ?? {};
-      const sortedEntries = createSortedEntries(group);
-      return `"${pathGroupingKey}": ${JSON.stringify(sortedEntries, undefined, 2)}`;
+export function generateValidCombinations(validCombinations: ValidCombinations): string {
+  const sortedGroupKeys = [...Object.keys(validCombinations)].sort((a, b) => a.localeCompare(b));
+  return sortedGroupKeys
+    .map((pathGroupingKey, index) => {
+      const group = validCombinations[pathGroupingKey];
+      const entries = group ? Object.keys(group).sort((a, b) => a.localeCompare(b)) : [];
+
+      const objectLiteral = group
+        ? entries
+            .map((entryKey) => {
+              const value = group[entryKey];
+              return `    "${entryKey}": ${JSON.stringify(value, undefined, 4).replace(/\n/g, '\n    ')}`;
+            })
+            .join(',\n')
+        : '';
+
+      const suffix = index < sortedGroupKeys.length - 1 ? ',' : '';
+      if (group && entries.length > 0) {
+        return `  "${pathGroupingKey}": {
+${objectLiteral}
+  }${suffix}`;
+      }
+      return `  "${pathGroupingKey}": {}${suffix}`;
     })
-    .join(', ');
+    .join('\n');
 }

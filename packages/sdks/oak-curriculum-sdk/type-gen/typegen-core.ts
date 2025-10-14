@@ -7,7 +7,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import openapiTS, { astToString } from 'openapi-typescript';
 import {
   generateJsonContent,
@@ -33,7 +33,6 @@ import {
   generateCompleteMcpTools,
   type GeneratedMcpToolFiles,
 } from './typegen/mcp-tools/mcp-tool-generator.js';
-import { typeSafeEntries } from '../src/types/helpers.js';
 import { generateSearchFacetTypeModules } from './typegen/search/generate-search-facet-types.js';
 import { generateSearchFacetZodModules } from './typegen/search/generate-search-facet-zod.js';
 import { generateSearchRequestModules } from './typegen/search/generate-search-requests.js';
@@ -52,8 +51,8 @@ import { generateQueryParserModules } from './typegen/query-parser/generate-quer
  * Pure function - no side effects
  */
 export function createFileMap(
-  baseSchema: OpenAPI3,
-  sdkSchema: OpenAPI3,
+  baseSchema: OpenAPIObject,
+  sdkSchema: OpenAPIObject,
   tsTypesContent: string,
   pathParameterContent: string,
   pathUtilsContent: string,
@@ -107,7 +106,7 @@ export function createFileMap(
  * Side effect function - separated from pure logic
  */
 function writeFiles(outDirectory: string, fileMap: FileMap): void {
-  for (const [filename, content] of typeSafeEntries(fileMap)) {
+  for (const [filename, content] of Object.entries(fileMap)) {
     const target = path.resolve(outDirectory, filename);
     const dir = path.dirname(target);
     fs.mkdirSync(dir, { recursive: true });
@@ -118,22 +117,28 @@ function writeFiles(outDirectory: string, fileMap: FileMap): void {
 /**
  * Write MCP tools directory structure to disk
  */
-function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpToolFiles): void {
+export function writeMcpToolsDirectory(
+  outDirectory: string,
+  mcpTools: GeneratedMcpToolFiles,
+): void {
   const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
   const toolsDir = path.resolve(mcpToolsDir, 'tools');
 
-  // Create directories
   fs.mkdirSync(mcpToolsDir, { recursive: true });
   fs.mkdirSync(toolsDir, { recursive: true });
 
-  // Write main files
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools['index.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'types.ts'), mcpTools['types.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'lib.ts'), mcpTools['lib.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'synonyms.ts'), mcpTools['synonyms.ts']);
+  for (const [filename, content] of Object.entries(mcpTools)) {
+    if (filename === 'tools') {
+      continue;
+    }
+    if (typeof content !== 'string') {
+      throw new Error(`Content for ${filename} is not a string`);
+    }
+    const target = path.resolve(mcpToolsDir, filename);
+    fs.writeFileSync(target, content);
+  }
 
-  // Write tool files
-  for (const [filename, content] of typeSafeEntries(mcpTools.tools)) {
+  for (const [filename, content] of Object.entries(mcpTools.tools)) {
     fs.writeFileSync(path.resolve(toolsDir, filename), content);
   }
 }
@@ -143,7 +148,7 @@ function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpTool
  * Pure function - no side effects
  */
 export function generatePathParametersContent(
-  schema: OpenAPI3,
+  schema: OpenAPIObject,
   parameters: ReturnType<typeof extractPathParameters>['parameters'],
   validCombinations: ReturnType<typeof extractPathParameters>['validCombinations'],
 ): string {
@@ -171,15 +176,20 @@ function postProcessTypesSource(source: string): string {
 }
 
 export async function generateSchemaArtifacts(
-  baseSchema: OpenAPI3,
-  sdkSchema: OpenAPI3,
+  baseSchema: OpenAPIObject,
+  sdkSchema: OpenAPIObject,
   outDirectory: string,
   options: { generateMcpTools?: boolean } = {},
 ): Promise<void> {
   fs.mkdirSync(outDirectory, { recursive: true });
 
+  const sdkSchemaPath = path.resolve(outDirectory, 'api-schema-sdk.json');
+  const sdkSchemaContent = generateJsonContent(sdkSchema);
+  fs.writeFileSync(sdkSchemaPath, sdkSchemaContent);
+
   // Generate TypeScript types from original schema
-  const ast = await openapiTS(sdkSchema);
+  const schemaUrl = new URL(`file://${sdkSchemaPath}`);
+  const ast = await openapiTS(schemaUrl);
   const tsTypesContent = postProcessTypesSource(astToString(ast));
 
   // Extract path parameters and valid combinations from original schema

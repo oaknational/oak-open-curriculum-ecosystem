@@ -1,6 +1,16 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z, type ZodSchema } from "zod";
 
+function sanitizeSchemaKeys<T extends Record<string, ZodSchema>>(schemas: T, options?: { readonly rename?: (original: string) => string }): T {
+  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));
+  const entries = Object.entries(schemas).map(([key, value]) => {
+    const sanitized = rename(key);
+    return [sanitized, value] as const;
+  });
+  return Object.fromEntries(entries) as T;
+}
+
+
 const SequenceUnitsResponseSchema = z.array(
   z.union([
     z
@@ -1398,11 +1408,17 @@ const RateLimitResponseSchema = z
 
 export type CurriculumSchemaCollection = Record<string, ZodSchema>;
 
-/**
- * Generated Zod schema registry keyed by curriculum schema identifier.
- * @public
- */
-export const curriculumSchemas = {
+const renameInlineSchema = (original: string) => {
+  if (original === "changelog_changelog_200") {
+    return "ChangelogResponseSchema";
+  }
+  if (original === "changelog_latest_200") {
+    return "ChangelogLatestResponseSchema";
+  }
+  return original.replace(/[^A-Za-z0-9_]/g, "_");
+};
+
+const rawCurriculumSchemas = {
   SequenceUnitsResponseSchema,
   TranscriptResponseSchema,
   SearchTranscriptResponseSchema,
@@ -1429,34 +1445,24 @@ export const curriculumSchemas = {
   RateLimitResponseSchema,
 } as const satisfies CurriculumSchemaCollection;
 
-const curriculumSchemaNames = Object.keys(curriculumSchemas);
-const curriculumSchemaValues: readonly z.ZodTypeAny[] = Object.values(curriculumSchemas);
-
-/**
- * Registry map keyed by generated curriculum schema names.
- * @public
- */
-export type CurriculumSchemaRegistry = typeof curriculumSchemas;
-/**
- * Valid curriculum schema names derived from the OpenAPI specification.
- * @public
- */
-export type CurriculumSchemaName = keyof CurriculumSchemaRegistry;
-/**
- * Concrete Zod schema definition for a curriculum schema name.
- * @public
- */
-export type CurriculumSchemaDefinition<Name extends CurriculumSchemaName = CurriculumSchemaName> = CurriculumSchemaRegistry[Name];
-
-export function isCurriculumSchemaName(value: unknown): value is CurriculumSchemaName {
-  return typeof value === 'string' && curriculumSchemaNames.includes(value);
-}
-
-export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDefinition {
-  if (!(value instanceof z.ZodType)) {
-    return false;
+function buildCurriculumSchemas(endpoints: ReturnType<typeof makeApi>): CurriculumSchemaCollection {
+  const baseSchemas = sanitizeSchemaKeys(rawCurriculumSchemas, { rename: renameInlineSchema });
+  const changelogEndpoint = endpoints.find((candidate) => candidate.method === "get" && candidate.path === "/changelog");
+  const latestEndpoint = endpoints.find((candidate) => candidate.method === "get" && candidate.path === "/changelog/latest");
+  if (!changelogEndpoint && !latestEndpoint) {
+    return baseSchemas;
   }
-  return curriculumSchemaValues.includes(value);
+  const additionalSchemas: CurriculumSchemaCollection = {};
+  if (changelogEndpoint) {
+    additionalSchemas["changelog_changelog_200"] = changelogEndpoint.response;
+  }
+  if (latestEndpoint) {
+    additionalSchemas["changelog_latest_200"] = latestEndpoint.response;
+  }
+  return {
+    ...baseSchemas,
+    ...additionalSchemas,
+  };
 }
 
 export const endpoints = makeApi([
@@ -2066,6 +2072,41 @@ This endpoint contains licence information for any third-party content contained
     response: UnitSummaryResponseSchema,
   },
 ]);
+
+const curriculumSchemaCollection = buildCurriculumSchemas(endpoints);
+const curriculumSchemaNames = Object.keys(curriculumSchemaCollection);
+const curriculumSchemaValues: readonly z.ZodTypeAny[] = Object.values(curriculumSchemaCollection);
+
+export const curriculumSchemas = curriculumSchemaCollection;
+
+/**
+ * Registry map keyed by generated curriculum schema names.
+ * @public
+ */
+export type CurriculumSchemaRegistry = typeof curriculumSchemas;
+
+/**
+ * Valid curriculum schema names derived from the OpenAPI specification.
+ * @public
+ */
+export type CurriculumSchemaName = keyof CurriculumSchemaRegistry;
+
+/**
+ * Concrete Zod schema definition for a curriculum schema name.
+ * @public
+ */
+export type CurriculumSchemaDefinition<Name extends CurriculumSchemaName = CurriculumSchemaName> = CurriculumSchemaRegistry[Name];
+
+export function isCurriculumSchemaName(value: unknown): value is CurriculumSchemaName {
+  return typeof value === 'string' && curriculumSchemaNames.includes(value);
+}
+
+export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDefinition {
+  if (!(value instanceof z.ZodType)) {
+    return false;
+  }
+  return curriculumSchemaValues.includes(value);
+}
 
 export const api = new Zodios(endpoints);
 

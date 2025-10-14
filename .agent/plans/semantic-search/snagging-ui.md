@@ -1,9 +1,5 @@
 # Snagging of Search UX Work
 
-## Code
-
-The apps/oak-open-curriculum-semantic-search/app/ui directory is full of lone components without organisation. What is the principle here? Please pick an organisational principle and apply it, consistently.
-
 ## UI
 
 For each of these, put your visual design hat on, the needs to _look good_ AND be a great user experience.

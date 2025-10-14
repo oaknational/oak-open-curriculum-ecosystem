@@ -1,104 +1,101 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { generateZodSchemas } from './zodgen-core';
-import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
-import type { OpenAPI3 } from 'openapi-typescript';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
-vi.mock('node:fs');
+import { generateZodSchemas } from './zodgen-core.js';
+
+vi.mock('node:fs', async (original) => {
+  const actual = await original();
+  return Object.assign({}, actual, {
+    existsSync: vi.fn(() => true),
+    mkdirSync: vi.fn(),
+    writeFileSync: vi.fn(),
+  });
+});
+
 vi.mock('openapi-zod-client', () => ({
-  generateZodClientFromOpenAPI: vi.fn().mockResolvedValue('// Generated code'),
+  generateZodClientFromOpenAPI: vi.fn().mockResolvedValue(
+    `import { z } from "zod";
+const endpoints = makeApi([
+  {
+    method: "get",
+    path: "/changelog",
+    response: z.object({}),
+  },
+]);
+export const schemas = {
+  changelog_changelog_200: z.object({}),
+};
+export const api = new Zodios(endpoints);
+`,
+  ),
 }));
 
-// Local type guards to avoid unsafe assignments in tests
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
+const thisDir = path.dirname(fileURLToPath(import.meta.url));
+const outDir = path.join(thisDir, '__zod-test-output');
+const { existsSync, mkdirSync, writeFileSync } = await import('node:fs');
+const { generateZodClientFromOpenAPI } = await import('openapi-zod-client');
 
-function isOzcOptions(value: unknown): value is {
-  openApiDoc: unknown;
-  templatePath: string;
-  distPath: string;
-  options?: Record<string, unknown>;
-} {
-  if (!isRecord(value)) {
-    return false;
-  }
-  const v = value;
-  return typeof v.templatePath === 'string' && typeof v.distPath === 'string';
-}
-
-describe('zodgen-core', () => {
-  const mockOpenApiDoc: OpenAPI3 = {
-    openapi: '3.0.3',
-    info: { title: 'Test API', version: '1.0.0' },
-    paths: {
-      '/lessons/{lesson}/transcript': {
-        get: {
-          operationId: 'getLessonTranscript',
-          parameters: [
-            {
-              name: 'lesson',
-              in: 'path',
-              required: true,
-              schema: { type: 'string' },
-            },
-          ],
+const minimalSchema: OpenAPIObject = {
+  openapi: '3.0.3',
+  info: { title: 'Test API', version: '1.0.0' },
+  paths: {
+    '/ping': {
+      get: {
+        operationId: 'ping',
+        responses: {
+          '200': { description: 'OK' },
         },
       },
     },
-  };
+  },
+};
 
+describe('generateZodSchemas', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(existsSync).mockReturnValue(true);
   });
 
-  describe('generateZodSchemas', () => {
-    it('invokes the zod client generator with the provided OpenAPI doc', async () => {
-      await generateZodSchemas(mockOpenApiDoc, '/output');
-      const calls: unknown[][] = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
-      expect(calls.length).toBeGreaterThan(0);
-      const firstArg = calls[0][0];
-      expect(isOzcOptions(firstArg)).toBe(true);
-      if (isOzcOptions(firstArg)) {
-        expect(firstArg.openApiDoc).toStrictEqual(mockOpenApiDoc);
-      }
-    });
+  it('passes the provided OpenAPIObject directly to openapi-zod-client', async () => {
+    await generateZodSchemas(minimalSchema, outDir);
 
-    it('should reject invalid OpenAPI document', async () => {
-      await expect(
-        generateZodSchemas(
-          { openapi: '3.0.0', info: { title: 'Test API', version: '1.0.0' } },
-          '/output',
-        ),
-      ).rejects.toThrow('Invalid OpenAPI document');
-    });
+    const calls = vi.mocked(generateZodClientFromOpenAPI).mock.calls;
+    expect(calls).toHaveLength(1);
+    const [{ openApiDoc }] = calls[0];
+    expect(openApiDoc).toBe(minimalSchema);
   });
 
-  describe('generateZodSchemas', () => {
-    it('writes output when the generator returns a string', async () => {
-      vi.mocked(generateZodClientFromOpenAPI).mockResolvedValue('// Generated endpoints');
-      await generateZodSchemas(mockOpenApiDoc, '/output');
-      expect(writeFileSync).toHaveBeenCalled();
-    });
+  it('creates the output directory when it does not exist', async () => {
+    vi.mocked(existsSync).mockReturnValueOnce(false);
 
-    it('should create output directory if it does not exist', async () => {
-      vi.mocked(existsSync).mockReturnValue(false);
+    await generateZodSchemas(minimalSchema, outDir);
 
-      await generateZodSchemas(mockOpenApiDoc, '/output');
+    expect(mkdirSync).toHaveBeenCalledWith(outDir, { recursive: true });
+  });
 
-      expect(mkdirSync).toHaveBeenCalledWith('/output', { recursive: true });
-    });
+  it('writes the generated file to disk', async () => {
+    await generateZodSchemas(minimalSchema, outDir);
 
-    // path-specific assertions are implementation details; validated above by generic write call
+    expect(writeFileSync).toHaveBeenCalledWith(
+      expect.stringContaining('curriculumZodSchemas.ts'),
+      expect.any(String),
+    );
+  });
 
-    it('should reject invalid OpenAPI document', async () => {
-      await expect(
-        generateZodSchemas(
-          { openapi: '3.0.0', info: { title: 'Test API', version: '1.0.0' } },
-          '/output',
-        ),
-      ).rejects.toThrow('Invalid OpenAPI document');
-    });
+  it('emits endpoints before curriculumSchemas to keep ordering valid', async () => {
+    await generateZodSchemas(minimalSchema, outDir);
+
+    const [, content] = vi.mocked(writeFileSync).mock.lastCall ?? [];
+    expect(typeof content).toBe('string');
+    const stringContent = String(content);
+    const endpointsIndex = stringContent.indexOf('export const endpoints = makeApi');
+    const curriculumIndex = stringContent.indexOf(
+      'export const curriculumSchemas = curriculumSchemaCollection',
+    );
+    expect(endpointsIndex).toBeGreaterThanOrEqual(0);
+    expect(curriculumIndex).toBeGreaterThanOrEqual(0);
+    expect(endpointsIndex).toBeLessThan(curriculumIndex);
   });
 });

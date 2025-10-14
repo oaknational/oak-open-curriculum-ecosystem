@@ -10,7 +10,9 @@ Always apply the first question; **Ask: could it be simpler without compromising
 
 ### Cardinal Rule of This Repository
 
-ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST flow from the Open Curriculum OpenAPI schema in the SDK, and be generated at build/compile time, i.e. when `pnpm type-gen` is run. If the upstream OpenAPI schema changes, then running `pnpm type-gen` MUST be sufficient to bring all workspaces into alignment with the new schema.
+If the upstream OpenAPI schema changes, then running `pnpm type-gen` followed by a `pnpm build` MUST be sufficient to bring all workspaces into alignment with the new schema.
+
+We achieve this by ensuring that ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST be generated at compile time ONLY, and so flow from the Open Curriculum OpenAPI schema in the SDK, and from there to the apps. In other words, ALL the heavy lifting MUST happen at type-generation time, i.e. when `pnpm type-gen` is run. All the libraries, all the apps, all the MCP servers are simple consumers, the complexity is in the SDK and ONLY in the type-generation process.
 
 ### Code Patterns and Architectural Principles
 

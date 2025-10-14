@@ -1,12 +1,14 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { z } from 'zod';
-import type { SuggestQuery, SuggestionResponse } from '../../../../src/lib/suggestions/types';
-import { SearchSuggestionResponseSchema } from '@oaknational/oak-curriculum-sdk';
+import type { SuggestQuery } from '../../../../src/lib/suggestions/types';
+import {
+  SearchSuggestionResponseSchema,
+  type SearchSuggestionResponse,
+} from '@oaknational/oak-curriculum-sdk';
 import { LESSONS_SCOPE } from '../../../../src/lib/search-scopes';
 
 const runSuggestions = vi.hoisted(() =>
-  vi.fn<(query: SuggestQuery) => Promise<SuggestionResponse>>(),
+  vi.fn<(query: SuggestQuery) => Promise<SearchSuggestionResponse>>(),
 );
 
 vi.mock('next/cache', () => ({
@@ -122,7 +124,7 @@ describe('POST /api/search/suggest', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = (await response.json()) as SuggestionResponse;
+    const payload = SearchSuggestionResponseSchema.parse(await response.json());
     expect(payload.suggestions).toHaveLength(0);
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=empty');
@@ -138,10 +140,30 @@ describe('POST /api/search/suggest', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(503);
-    const payload = z.object({ error: z.string() }).parse(await response.json());
-    expect(payload.error).toBe('FIXTURE_ERROR');
+    const payloadJson: unknown = await response.json();
+    const errorPayload = ensureObject(
+      payloadJson,
+      'Suggestion fixture error payload must be an object',
+    );
+    const errorCode = readOwnProperty(errorPayload, 'error');
+    if (typeof errorCode !== 'string') {
+      throw new Error('Suggestion fixture error response is missing error code');
+    }
+    expect(errorCode).toBe('FIXTURE_ERROR');
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=error');
     expect(runSuggestions).not.toHaveBeenCalled();
   });
 });
+
+function ensureObject(value: unknown, errorMessage: string): object {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error(errorMessage);
+  }
+  return value;
+}
+
+function readOwnProperty(source: object, key: PropertyKey): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(source, key);
+  return descriptor?.value;
+}

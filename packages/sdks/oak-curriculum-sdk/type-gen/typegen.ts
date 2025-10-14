@@ -18,8 +18,9 @@ import { config as dotenvConfig } from 'dotenv';
 
 import { generateSchemaArtifacts } from './typegen-core.js';
 import { readSchemaCacheOrNull, writeSchemaCacheIfChanged } from './schema-cache.js';
-import { isOpenAPI3Schema } from './typegen-helpers.js';
-import { createSdkSchema, saveSchemaToFile } from './schema-separation-core.js';
+import { createOpenCurriculumSchema, saveSchemaToFile } from './schema-separation-core.js';
+import { validateOpenApiDocument } from './schema-validator.js';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 // Load environment variables from repo root .env (or .env.e2e) if not set
 function findRepoRoot(startDir: string): string {
@@ -62,32 +63,27 @@ const forceCi = args.includes('--ci') || process.env.SDK_TYPEGEN_MODE === 'ci';
 const isCiEnv = process.env.CI === 'true';
 const isCiMode = forceCi || (isCiEnv && !isVercel);
 
-// Load schema
-let maybeSchema: unknown;
-
 // In offline/CI mode we read the cached original schema
-const schemaCacheFile = path.resolve(rootDirectory, 'schema-cache/api-schema-original.json');
+const schemaCacheFilePath = path.resolve(rootDirectory, 'schema-cache/api-schema-original.json');
 
-async function readCachedSchemaOrThrow(): Promise<unknown> {
-  if (!existsSync(schemaCacheFile)) {
+interface LoadedSchema {
+  readonly original: OpenAPIObject;
+  readonly validated: OpenAPIObject;
+  readonly sdk: OpenAPIObject;
+}
+
+async function readCachedSchemaOrThrow(): Promise<OpenAPIObject> {
+  if (!existsSync(schemaCacheFilePath)) {
     throw new Error(
-      `CI/offline type-gen requires a cached SDK schema at ${schemaCacheFile}. ` +
+      `CI/offline type-gen requires a cached SDK schema at ${schemaCacheFilePath}. ` +
         `Run "pnpm -F @oaknational/oak-curriculum-sdk type-gen" locally to refresh ` +
         `the cache and commit the result.`,
     );
   }
-  console.log('🧰 Using cached original OpenAPI schema:', schemaCacheFile);
-  const raw = await readFile(schemaCacheFile, 'utf8');
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return parsed;
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    throw new Error(
-      `Cached original OpenAPI schema at ${schemaCacheFile} is not valid JSON. Re-generate locally and commit. ` +
-        `Original error: ${msg}`,
-    );
-  }
+  console.log('🧰 Using cached original OpenAPI schema:', schemaCacheFilePath);
+  const raw = await readFile(schemaCacheFilePath, 'utf8');
+  const parsed: unknown = JSON.parse(raw);
+  return validateOpenApiDocument(parsed);
 }
 
 async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<object | null> {
@@ -115,56 +111,58 @@ async function fetchSchemaOnlineOrNull(url: string, apiKey: string): Promise<obj
   }
 }
 
-if (isCiMode) {
-  // Strict offline in true CI (but not on Vercel, which is treated as online)
-  maybeSchema = await readCachedSchemaOrThrow();
-} else {
-  // Online: fetch fresh schema from API or use cache when necessary
+async function fetchValidatedSchema(
+  apiSchemaUrl: string,
+  apiKey: string,
+): Promise<OpenAPIObject | null> {
+  const raw = await fetchSchemaOnlineOrNull(apiSchemaUrl, apiKey);
+  if (!raw) {
+    return null;
+  }
+  return validateOpenApiDocument(raw);
+}
+
+async function loadSchema(): Promise<LoadedSchema> {
+  if (isCiMode) {
+    const cached = await readCachedSchemaOrThrow();
+    return createOpenCurriculumSchema(cached);
+  }
+
   const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
   const apiKey = process.env.OAK_API_KEY;
-
-  if (!apiKey) {
-    console.warn('⚠️  OAK_API_KEY not found; attempting to use cached SDK schema');
-    maybeSchema = await readCachedSchemaOrThrow();
-  } else {
-    const online = await fetchSchemaOnlineOrNull(apiSchemaUrl, apiKey);
-    if (online) {
-      // Update schema cache if version changed or missing
-      await writeSchemaCacheIfChanged(schemaCacheFile, online);
-      maybeSchema = online;
-    } else {
-      // Fallback order: schema cache file, then committed generated copy
-      const cached = await readSchemaCacheOrNull(schemaCacheFile);
-      maybeSchema = cached ?? (await readCachedSchemaOrThrow());
+  if (apiKey) {
+    const live = await fetchValidatedSchema(apiSchemaUrl, apiKey);
+    if (live) {
+      await writeSchemaCacheIfChanged(schemaCacheFilePath, live);
+      console.log('✅ Schema fetched successfully');
+      return createOpenCurriculumSchema(live);
     }
   }
 
-  if (maybeSchema === undefined) {
-    throw new Error('Failed to fetch API schema');
+  const cached = await readSchemaCacheOrNull(schemaCacheFilePath);
+  if (cached) {
+    const validated = validateOpenApiDocument(cached);
+    return createOpenCurriculumSchema(validated);
   }
 
-  console.log('✅ Schema fetched successfully');
+  const validated = await readCachedSchemaOrThrow();
+  return createOpenCurriculumSchema(validated);
 }
-
 console.log('🔨 Generating type artifacts...');
 
-if (!isOpenAPI3Schema(maybeSchema)) {
-  throw new Error('Schema is not a valid OpenAPI 3.x schema');
-}
-
-const downloadedSchema = maybeSchema;
+const { original: originalSchema, validated: validatedSchema, sdk: sdkSchema } = await loadSchema();
 
 // Save the original schema
 const originalSchemaPath = path.resolve(outDirectory, 'api-schema-original.json');
-saveSchemaToFile(downloadedSchema, originalSchemaPath);
+saveSchemaToFile(originalSchema, originalSchemaPath);
 console.log(`💾 Original schema saved to: ${path.relative(process.cwd(), originalSchemaPath)}`);
 
-// Create the SDK schema with our decorations
 console.log('🎨 Creating SDK schema with canonicalUrl fields...');
-const sdkSchema = createSdkSchema(downloadedSchema);
+
+// TODO: the canonical urls need to be added in ONE place. Should it be here?
 
 // Use the SDK schema for generation
-await generateSchemaArtifacts(downloadedSchema, sdkSchema, outDirectory, {
+await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory, {
   generateMcpTools: true,
 });
 

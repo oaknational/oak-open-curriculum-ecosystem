@@ -1,17 +1,14 @@
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import type { ZodTypeAny } from 'zod';
 import {
-  OPENAI_CONNECTOR_TOOL_DEFS,
+  OPENAI_CONNECTOR_TOOL_ENTRIES,
   isOpenAiToolName,
   type OpenAiToolName,
 } from '../types/generated/openai-connector/index.js';
-import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools/index.js';
-import type { AllToolNames } from '../types/generated/api-schema/mcp-tools/types.js';
-import { typeSafeEntries } from '../types/helpers.js';
-import { zodFromToolInputJsonSchema } from './zod-input-schema.js';
-import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
+import { MCP_TOOLS } from '../types/generated/api-schema/mcp-tools/definitions.js';
+import { isToolName, type AllToolNames } from '../types/generated/api-schema/mcp-tools/types.js';
+import { zodFromToolInputJsonSchema, type GenericToolInputJsonSchema } from './zod-input-schema.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
-import { normaliseMcpArgs, type NormaliseResult } from './argument-normaliser.js';
 
 export type UniversalToolName = OpenAiToolName | AllToolNames;
 
@@ -26,62 +23,42 @@ export interface UniversalToolExecutorDependencies {
   readonly executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown>;
 }
 
-interface ToolValidator {
-  readonly name: UniversalToolName;
+interface ToolMetadata {
   readonly schema: ZodTypeAny;
+  readonly inputSchema: GenericToolInputJsonSchema;
+  readonly description?: string;
+  readonly describeToolArgs?: () => string;
+  readonly outputJsonSchema: unknown;
 }
 
-interface InputSchemaLike {
-  readonly type: 'object';
-  readonly properties?: GenericToolInputJsonSchema['properties'];
-  readonly required?: readonly string[] | string[];
-  readonly additionalProperties?: boolean;
-}
+const toolMetadata: ReadonlyMap<UniversalToolName, ToolMetadata> = (() => {
+  const entries = new Map<UniversalToolName, ToolMetadata>();
 
-function cloneInputSchema(schema: InputSchemaLike): GenericToolInputJsonSchema {
-  const requiredValues = (() => {
-    if (!schema.required) {
-      return undefined;
-    }
-    const values: string[] = [];
-    for (const value of schema.required) {
-      values.push(value);
-    }
-    return values;
-  })();
-
-  const base: GenericToolInputJsonSchema = {
-    type: 'object',
-    ...(schema.properties ? { properties: schema.properties } : {}),
-    ...(schema.additionalProperties !== undefined
-      ? { additionalProperties: schema.additionalProperties }
-      : {}),
-    ...(requiredValues ? { required: requiredValues } : {}),
-  };
-  return base;
-}
-
-const openAiValidators: readonly ToolValidator[] = typeSafeEntries(OPENAI_CONNECTOR_TOOL_DEFS).map(
-  ([name, def]) => ({
-    name,
-    schema: zodFromToolInputJsonSchema(cloneInputSchema(def.inputSchema)),
-  }),
-);
-
-const mcpValidators: readonly ToolValidator[] = typeSafeEntries(MCP_TOOLS).map(([name, def]) => ({
-  name,
-  schema: zodFromToolInputJsonSchema(cloneInputSchema(def.inputSchema)),
-}));
-
-const validatorMap: ReadonlyMap<UniversalToolName, ZodTypeAny> = (() => {
-  const validators = new Map<UniversalToolName, ZodTypeAny>();
-  for (const validator of openAiValidators) {
-    validators.set(validator.name, validator.schema);
+  for (const [name, def] of OPENAI_CONNECTOR_TOOL_ENTRIES) {
+    const inputSchema = def.inputSchema;
+    entries.set(name, {
+      schema: zodFromToolInputJsonSchema(inputSchema),
+      inputSchema,
+      description: def.description,
+      describeToolArgs: undefined,
+      outputJsonSchema: undefined,
+    });
   }
-  for (const validator of mcpValidators) {
-    validators.set(validator.name, validator.schema);
+
+  for (const [name, descriptor] of Object.entries(MCP_TOOLS) as readonly [
+    AllToolNames,
+    (typeof MCP_TOOLS)[AllToolNames],
+  ][]) {
+    entries.set(name, {
+      schema: descriptor.toolZodSchema,
+      inputSchema: descriptor.inputSchema,
+      description: descriptor.description,
+      describeToolArgs: descriptor.describeToolArgs,
+      outputJsonSchema: descriptor.toolOutputJsonSchema,
+    });
   }
-  return validators;
+
+  return entries;
 })();
 
 function formatError(message: string): CallToolResult {
@@ -90,7 +67,8 @@ function formatError(message: string): CallToolResult {
 }
 
 function formatData(data: unknown): CallToolResult {
-  const content: TextContent = { type: 'text', text: JSON.stringify(data) };
+  const normalised = serialiseArg(data);
+  const content: TextContent = { type: 'text', text: JSON.stringify(normalised) };
   return { content: [content] };
 }
 
@@ -103,7 +81,7 @@ function formatUnknownTool(value: unknown): CallToolResult {
 
 function toErrorMessage(value: unknown): string {
   if (value instanceof Error) {
-    const message = value.message;
+    const { message } = value;
     if (message.length === 0) {
       return 'Unknown error';
     }
@@ -127,44 +105,54 @@ function validateArgs(
       ok: false;
       message: string;
     } {
-  const validator = validatorMap.get(name);
-  if (!validator) {
+  const metadata = toolMetadata.get(name);
+  if (!metadata) {
     return { ok: false, message: `Unknown tool: ${name}` };
   }
-  const normalisedArgs: NormaliseResult = isToolName(name)
-    ? normaliseMcpArgs(args)
-    : { ok: true as const, value: args };
-  if (!normalisedArgs.ok) {
-    return normalisedArgs;
-  }
-  const safeResult = validator.safeParse(normalisedArgs.value);
+  const safeResult = metadata.schema.safeParse(args);
   if (safeResult.success) {
     return { ok: true, value: safeResult.data };
   }
+  const describe = metadata.describeToolArgs;
+  const fallbackMessage = safeResult.error.issues.map((issue) => issue.message).join('; ');
   return {
     ok: false,
-    message: safeResult.error.issues.map((issue) => issue.message).join('; '),
+    message: describe ? describe() : fallbackMessage,
   };
 }
 
+function serialiseArg(value: unknown): unknown {
+  if (typeof value === 'bigint') {
+    return value.toString();
+  }
+  if (Array.isArray(value)) {
+    return value.map(serialiseArg);
+  }
+  if (typeof value === 'object' && value !== null) {
+    const entries: [string, unknown][] = [];
+    for (const key of Object.keys(value)) {
+      const nested = (value as Record<string, unknown>)[key];
+      entries.push([key, serialiseArg(nested)]);
+    }
+    const result: Record<string, unknown> = {};
+    for (const [key, nested] of entries) {
+      result[key] = nested;
+    }
+    return result;
+  }
+  return value;
+}
+
 export function listUniversalTools(): readonly UniversalToolListEntry[] {
-  const openAiTools: UniversalToolListEntry[] = typeSafeEntries(OPENAI_CONNECTOR_TOOL_DEFS).map(
-    ([name, def]) => ({
+  const entries: UniversalToolListEntry[] = [];
+  for (const [name, metadata] of toolMetadata.entries()) {
+    entries.push({
       name,
-      description: def.description,
-      inputSchema: cloneInputSchema(def.inputSchema),
-    }),
-  );
-
-  const curriculumTools: UniversalToolListEntry[] = typeSafeEntries(MCP_TOOLS).map(
-    ([name, def]) => ({
-      name,
-      description: def.description,
-      inputSchema: cloneInputSchema(def.inputSchema),
-    }),
-  );
-
-  return [...openAiTools, ...curriculumTools];
+      description: metadata.description,
+      inputSchema: metadata.inputSchema,
+    });
+  }
+  return entries;
 }
 
 export function isUniversalToolName(value: unknown): value is UniversalToolName {
@@ -180,8 +168,8 @@ async function runOpenAiTool(
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
   try {
-    const data = await deps.executeOpenAiTool(name, value);
-    return formatData(data);
+    const result = await deps.executeOpenAiTool(name, value);
+    return formatData(result);
   } catch (error) {
     return formatError(toErrorMessage(error));
   }
@@ -194,19 +182,10 @@ async function runMcpTool(
 ): Promise<CallToolResult> {
   try {
     const execution = await deps.executeMcpTool(name, value);
-    if (!('error' in execution)) {
-      return formatData(execution.data);
+    if ('error' in execution && execution.error) {
+      return formatError(toErrorMessage(execution.error));
     }
-
-    const errorDetails = execution.error;
-    if (!errorDetails) {
-      return formatError('Tool execution failed');
-    }
-    const message = errorDetails.message;
-    if (message.length === 0) {
-      return formatError('Tool execution failed');
-    }
-    return formatError(message);
+    return formatData(execution.data);
   } catch (error) {
     return formatError(toErrorMessage(error));
   }
@@ -220,8 +199,8 @@ export function createUniversalToolExecutor(
       return formatUnknownTool(name);
     }
 
-    const parsedArgs = args === undefined ? {} : args;
-    const validation = validateArgs(name, parsedArgs);
+    const input = args === undefined ? {} : args;
+    const validation = validateArgs(name, input);
     if (!validation.ok) {
       return formatError(validation.message);
     }

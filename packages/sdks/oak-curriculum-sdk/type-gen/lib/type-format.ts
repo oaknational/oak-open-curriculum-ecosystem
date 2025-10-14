@@ -1,7 +1,5 @@
 /* TypeDoc type formatting and guards (pure) */
 
-import { getOwnString, getOwnValue } from '../../src/types/helpers';
-
 function renderLiteral(value: unknown): string {
   return typeof value === 'string' ? JSON.stringify(value) : String(value);
 }
@@ -71,4 +69,20 @@ export function typeToString(t?: unknown): string {
     return `<${kind}>(…)`;
   }
   return 'unknown';
+}
+
+function getOwnValue(value: unknown, key: string): unknown {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return undefined;
+  }
+  if (!Object.prototype.hasOwnProperty.call(value, key)) {
+    return undefined;
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(value, key);
+  return descriptor?.value;
+}
+
+function getOwnString(value: unknown, key: string): string | undefined {
+  const candidate = getOwnValue(value, key);
+  return typeof candidate === 'string' ? candidate : undefined;
 }

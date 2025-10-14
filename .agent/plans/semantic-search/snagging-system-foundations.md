@@ -103,5 +103,5 @@ app/ui
 ## Process Notes
 
 - Run Workstreams sequentially where dependencies exist (global → header → search surfaces → ops).
-- After each workstream, update `snagging.md` with evidence (screenshots, logs) and record findings in `snagging.md` until items are resolved.
+- After each workstream, update `evidence-log.md` with evidence (screenshots, logs) and record findings in `evidence-log.md` until items are resolved.
 - Keep change sets small (one workstream per PR) to reduce review burden and maintain flow state.

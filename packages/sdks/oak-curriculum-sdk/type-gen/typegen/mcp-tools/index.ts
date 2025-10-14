@@ -8,3 +8,4 @@
 
 export { generateCompleteMcpTools } from './mcp-tool-generator.js';
 export { generateMcpToolName } from './name-generator.js';
+export { generateDefinitionsFile } from './parts/generate-definitions-file.js';

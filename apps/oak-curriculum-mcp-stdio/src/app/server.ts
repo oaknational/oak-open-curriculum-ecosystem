@@ -7,12 +7,11 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   MCP_TOOLS,
+  type AllToolNames,
   zodRawShapeFromToolInputJsonSchema,
-  createOakPathBasedClient,
   executeToolCall,
-  isToolName,
+  createOakPathBasedClient,
   isValidPath,
-  typeSafeEntries,
   validateCurriculumResponse,
   isValidationFailure,
   isAllowedMethod,
@@ -170,7 +169,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 function logToolDiscovery(logger: Logger): void {
   try {
-    const toolNames = Object.keys(MCP_TOOLS).sort();
+    const toolNames = (Object.keys(MCP_TOOLS) as readonly AllToolNames[]).toSorted();
     logger.info('MCP tool module initialised', {
       tools: toolNames.length,
       sample: toolNames.slice(0, 3),
@@ -185,7 +184,10 @@ function registerMcpTools(
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
 ): void {
-  for (const [name, def] of typeSafeEntries(MCP_TOOLS)) {
+  for (const [name, def] of Object.entries(MCP_TOOLS) as readonly [
+    AllToolNames,
+    (typeof MCP_TOOLS)[AllToolNames],
+  ][]) {
     const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
     const description = def.method.toUpperCase() + ' ' + def.path;
     const handlers = createToolResponseHandlers(logger, {
@@ -193,16 +195,13 @@ function registerMcpTools(
       description,
       inputSchemaRaw: def.inputSchema,
       inputSchemaZod: input,
-      outputSchemaRaw: def.outputSchema,
-      outputSchemaZod: def.outputSchema,
+      outputSchemaRaw: def.toolOutputJsonSchema,
+      outputSchemaZod: def.zodOutputSchema,
     });
     server.registerTool(
       name,
       { title: name, description, inputSchema: input },
       async (params: unknown) => {
-        if (!isToolName(name)) {
-          throw new Error('Unknown tool');
-        }
         const execResult = await executeToolCall(name, params, client);
         if (execResult.error) {
           return handlers.handleExecutionError(params, execResult.error);
@@ -216,3 +215,5 @@ function registerMcpTools(
     );
   }
 }
+
+export { logToolDiscovery, registerMcpTools };

@@ -1,15 +1,19 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject } from 'openapi-typescript';
+import type { OperationObject } from 'openapi3-ts/oas31';
 import { emitIndex } from './emit-index.js';
 
 describe('emitIndex (invoke wrapper emission)', () => {
-  it('includes an invoke(client, unknown) wrapper', () => {
-    const toolName = 'oak-get-lessons-transcript';
+  it('includes typed outputSchema wiring on the descriptor', () => {
+    const toolName = 'get-lessons-transcript';
     const path = '/lessons/{lesson}/transcript';
     const method = 'GET';
     const operation: OperationObject = { responses: {} };
-    const code = emitIndex(toolName, path, method, operation, ['lesson'], []);
-    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
-    expect(code).toContain('return executor(client)(_params);');
+    const code = emitIndex(toolName, path, method, operation);
+
+    expect(code).toContain('const responseDescriptor = getDescriptorSchemaForEndpoint');
+    expect(code).toContain("import type { ToolDescriptor } from '../definitions';");
+    expect(code).toContain('toolOutputJsonSchema: responseDescriptor.json');
+    expect(code).not.toContain('outputSchema: responseDescriptor.json');
+    expect(code).toContain('zodOutputSchema: responseDescriptor.zod');
   });
 });

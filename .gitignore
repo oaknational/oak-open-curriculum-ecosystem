@@ -174,3 +174,6 @@ vite.config.ts.timestamp-*
 
 # stryker temp files
 .stryker-tmp
+
+# Documentation helpers
+packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md

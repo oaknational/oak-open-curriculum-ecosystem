@@ -1,6 +1,12 @@
 import { NextRequest } from 'next/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { z } from 'zod';
+import {
+  createSearchLessonsResponse,
+  SearchLessonsResponseSchema,
+  SearchStructuredRequestSchema,
+  type SearchLessonsResponse,
+  type SearchStructuredRequest,
+} from '@oaknational/oak-curriculum-sdk';
 const LESSONS_SCOPE = 'lessons';
 
 type ParsedIntent = typeof LESSONS_SCOPE;
@@ -15,30 +21,36 @@ type ParsedQuery = {
 
 const parseQuery = vi.hoisted(() => vi.fn<(input: string) => Promise<ParsedQuery>>());
 const llmEnabled = vi.hoisted(() => vi.fn(() => true));
-const naturalFixtures = vi.hoisted(() => ({
-  fixture: {
-    scope: 'lessons',
-    results: [{ id: 'fixture-lesson-1' }],
+const suggestionCache = { version: 'fixture', ttlSeconds: 3600 } as const;
+const naturalFixtures = {
+  fixture: createSearchLessonsResponse({
+    results: [
+      {
+        id: 'fixture-lesson-1',
+        rankScore: 1,
+        lesson: null,
+        highlights: [],
+      },
+    ],
     total: 1,
     took: 0,
     timedOut: false,
     aggregations: {},
-    facets: [],
+    facets: null,
     suggestions: [],
-    suggestionCache: { version: 'fixture', ttlSeconds: 3600 },
-  },
-  empty: {
-    scope: 'lessons',
+    suggestionCache,
+  }),
+  empty: createSearchLessonsResponse({
     results: [],
     total: 0,
     took: 0,
     timedOut: false,
     aggregations: {},
-    facets: [],
+    facets: null,
     suggestions: [],
-    suggestionCache: { version: 'fixture', ttlSeconds: 3600 },
-  },
-}));
+    suggestionCache,
+  }),
+};
 
 vi.mock('../../../../src/lib/query-parser', () => ({
   parseQuery,
@@ -52,10 +64,9 @@ vi.mock('../../../../src/lib/env', () => ({
 }));
 
 vi.mock('../../../lib/search-fixtures/builders', () => {
-  const fixtures = naturalFixtures;
   return {
-    buildSingleScopeFixture: () => fixtures.fixture,
-    buildEmptyFixture: () => fixtures.empty,
+    buildSingleScopeFixture: () => naturalFixtures.fixture,
+    buildEmptyFixture: () => naturalFixtures.empty,
   };
 });
 
@@ -87,18 +98,7 @@ describe('POST /api/search/nl', () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
     const payloadJson: unknown = await response.json();
-    const payload = z
-      .object({
-        result: z.object({ results: z.array(z.unknown()) }).loose(),
-        summary: z
-          .object({
-            prompt: z.string(),
-            structured: z.object({ scope: z.string() }).loose(),
-          })
-          .loose(),
-      })
-      .loose()
-      .parse(payloadJson);
+    const payload = parseNaturalResponse(payloadJson);
 
     expect(payload.summary.prompt).toBe('fractions about ks2 maths');
     expect(payload.summary.structured.scope).toBe(LESSONS_SCOPE);
@@ -118,18 +118,7 @@ describe('POST /api/search/nl', () => {
     const response = await POST(request);
     expect(response.status).toBe(200);
     const payloadJson: unknown = await response.json();
-    const payload = z
-      .object({
-        result: z.object({ results: z.array(z.unknown()) }).loose(),
-        summary: z
-          .object({
-            prompt: z.string(),
-            structured: z.object({ scope: z.string() }).loose(),
-          })
-          .loose(),
-      })
-      .loose()
-      .parse(payloadJson);
+    const payload = parseNaturalResponse(payloadJson);
     expect(payload.result.results).toHaveLength(0);
     expect(payload.summary.prompt).toBe('fractions for ks3');
     const cookieHeader = response.headers.get('set-cookie') ?? '';
@@ -146,11 +135,18 @@ describe('POST /api/search/nl', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(503);
-    const payload = z
-      .object({ error: z.string(), message: z.string().optional() })
-      .parse(await response.json());
-    expect(payload.error).toBe('FIXTURE_ERROR');
-    expect(payload.message).toBe(
+    const payloadJson: unknown = await response.json();
+    const errorPayload = ensureObject(
+      payloadJson,
+      'Natural fixture error payload must be an object',
+    );
+    const errorCode = readOwnProperty(errorPayload, 'error');
+    if (typeof errorCode !== 'string') {
+      throw new Error('Natural search fixture error response is missing error code');
+    }
+    expect(errorCode).toBe('FIXTURE_ERROR');
+    const messageValue = readOwnProperty(errorPayload, 'message');
+    expect(typeof messageValue === 'string' ? messageValue : undefined).toBe(
       'Fixture mode requested an error response for natural-language search.',
     );
     const cookieHeader = response.headers.get('set-cookie') ?? '';
@@ -168,10 +164,7 @@ describe('POST /api/search/nl', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = z
-      .object({ result: z.object({ results: z.array(z.unknown()) }).loose() })
-      .loose()
-      .parse(await response.json());
+    const payload = parseNaturalResponse(await response.json());
     expect(payload.result.results.length).toBeGreaterThan(0);
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
@@ -186,13 +179,23 @@ describe('POST /api/search/nl', () => {
       body: JSON.stringify({ q: 'Plan primary fractions lessons with manipulatives' }),
     });
 
-    const structuredResponse = {
-      scope: LESSONS_SCOPE,
-      results: [{ id: 'lesson-1' }],
+    const structuredResponse = createSearchLessonsResponse({
+      results: [
+        {
+          id: 'lesson-1',
+          rankScore: 1,
+          lesson: null,
+          highlights: [],
+        },
+      ],
       total: 1,
       took: 12,
       timedOut: false,
-    } as const;
+      aggregations: {},
+      facets: null,
+      suggestions: [],
+      suggestionCache: { version: 'live', ttlSeconds: 3600 },
+    });
 
     (fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValue(
       new Response(JSON.stringify(structuredResponse), {
@@ -203,24 +206,40 @@ describe('POST /api/search/nl', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = z
-      .object({
-        result: z.object({ scope: z.string(), results: z.array(z.unknown()) }).loose(),
-        summary: z
-          .object({
-            prompt: z.string(),
-            structured: z.object({
-              scope: z.string(),
-              text: z.string(),
-            }),
-          })
-          .loose(),
-      })
-      .loose()
-      .parse(await response.json());
+    const payload = parseNaturalResponse(await response.json());
 
     expect(payload.result).toMatchObject(structuredResponse);
     expect(payload.summary.prompt).toBe('Plan primary fractions lessons with manipulatives');
     expect(payload.summary.structured.text).toBe('fractions');
   });
 });
+
+function parseNaturalResponse(value: unknown): {
+  result: SearchLessonsResponse;
+  summary: { prompt: string; structured: SearchStructuredRequest };
+} {
+  const responseObject = ensureObject(value, 'Natural response payload must be an object');
+  const result = SearchLessonsResponseSchema.parse(readOwnProperty(responseObject, 'result'));
+  const summaryValue = readOwnProperty(responseObject, 'summary');
+  const summaryObject = ensureObject(summaryValue, 'Natural response summary must be an object');
+  const promptValue = readOwnProperty(summaryObject, 'prompt');
+  if (typeof promptValue !== 'string' || promptValue.length === 0) {
+    throw new Error('Natural response summary is missing prompt');
+  }
+  const structured = SearchStructuredRequestSchema.parse(
+    readOwnProperty(summaryObject, 'structured'),
+  );
+  return { result, summary: { prompt: promptValue, structured } };
+}
+
+function ensureObject(value: unknown, errorMessage: string): object {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error(errorMessage);
+  }
+  return value;
+}
+
+function readOwnProperty(source: object, key: PropertyKey): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(source, key);
+  return descriptor?.value;
+}

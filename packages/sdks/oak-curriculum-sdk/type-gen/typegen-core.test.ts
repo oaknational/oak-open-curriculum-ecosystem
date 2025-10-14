@@ -1,11 +1,19 @@
 import { describe, it, expect } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
-import { createFileMap, generatePathParametersContent } from './typegen-core';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {
+  createFileMap,
+  generatePathParametersContent,
+  writeMcpToolsDirectory,
+} from './typegen-core';
+import type { GeneratedMcpToolFiles } from './typegen/mcp-tools/mcp-tool-generator.js';
 
 describe('typegen-core', () => {
   describe('createFileMap', () => {
     it('should create a map of filenames to content', () => {
-      const sourceSchema: OpenAPI3 = {
+      const sourceSchema: OpenAPIObject = {
         openapi: '3.0.0',
         info: { title: 'Test', version: '1.0.0' },
         paths: {},
@@ -36,7 +44,7 @@ describe('typegen-core', () => {
     });
 
     it('should generate TypeScript schema content for api-schema-base.ts', () => {
-      const sourceSchema: OpenAPI3 = {
+      const sourceSchema: OpenAPIObject = {
         openapi: '3.0.0',
         info: { title: 'Test', version: '1.0.0' },
         paths: {},
@@ -63,7 +71,7 @@ describe('typegen-core', () => {
 
   describe('generatePathParametersContent', () => {
     it('should combine all sections into a single string', () => {
-      const schema: OpenAPI3 = {
+      const schema: OpenAPIObject = {
         openapi: '3.0.0',
         info: { title: 'Test', version: '1.0.0' },
         paths: {
@@ -94,7 +102,7 @@ describe('typegen-core', () => {
     });
 
     it('should join sections with newlines', () => {
-      const schema: OpenAPI3 = {
+      const schema: OpenAPIObject = {
         openapi: '3.0.0',
         info: { title: 'Test', version: '1.0.0' },
         paths: {},
@@ -105,6 +113,36 @@ describe('typegen-core', () => {
       // Should have multiple sections separated by newlines
       const sections = result.split('\n\n');
       expect(sections.length).toBeGreaterThan(1);
+    });
+  });
+
+  describe('writeMcpToolsDirectory', () => {
+    it('writes every generated root file including definitions.ts', () => {
+      const outDir = mkdtempSync(path.join(os.tmpdir(), 'mcp-tools-writer-test-'));
+      const files: GeneratedMcpToolFiles = {
+        'index.ts': 'index content',
+        'definitions.ts': 'definitions content',
+        'types.ts': 'types content',
+        'lib.ts': 'lib content',
+        'synonyms.ts': 'synonyms content',
+        tools: {
+          'alpha.ts': 'alpha tool content',
+        },
+      };
+
+      try {
+        writeMcpToolsDirectory(outDir, files);
+
+        const definitionsPath = path.join(outDir, 'mcp-tools', 'definitions.ts');
+        const indexPath = path.join(outDir, 'mcp-tools', 'index.ts');
+        const toolPath = path.join(outDir, 'mcp-tools', 'tools', 'alpha.ts');
+
+        expect(readFileSync(definitionsPath, 'utf8')).toBe('definitions content');
+        expect(readFileSync(indexPath, 'utf8')).toBe('index content');
+        expect(readFileSync(toolPath, 'utf8')).toBe('alpha tool content');
+      } finally {
+        rmSync(outDir, { force: true, recursive: true });
+      }
     });
   });
 });

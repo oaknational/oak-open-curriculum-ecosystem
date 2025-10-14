@@ -1,5 +1,5 @@
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { describe, it, expect } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
 import {
   generateJsonContent,
   generateTsSchemaContent,
@@ -10,14 +10,14 @@ import {
   generateValidPathsByParameters,
 } from './typegen/index.js';
 import { generatePathGroupingsSection } from './typegen-writers';
-import { minimalSchema, parseAsOpenAPI3 } from './test-fixtures';
+import { minimalSchema, parseAsOpenAPIObject } from './test-fixtures';
 
 describe('generateJsonContent', () => {
   it('should generate formatted JSON string from schema', () => {
-    const schema: OpenAPI3 = minimalSchema;
+    const schema: OpenAPIObject = minimalSchema;
 
     const result = generateJsonContent(schema);
-    const parsed: OpenAPI3 = parseAsOpenAPI3(result);
+    const parsed: OpenAPIObject = parseAsOpenAPIObject(result);
 
     expect(parsed).toEqual(schema);
     expect(result).toContain('"openapi": "3.0.0"');

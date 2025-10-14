@@ -1,18 +1,4 @@
-import type { PrimitiveType } from './param-utils.js';
-import { typeSafeKeys } from '../../../../src/types/helpers.js';
-
-/**
- * Parameter metadata describing a tool parameter extracted from OpenAPI.
- * This shape is intentionally minimal and compile-time friendly.
- */
-export interface ParamMetadata {
-  readonly typePrimitive: PrimitiveType;
-  readonly valueConstraint: boolean;
-  readonly required: boolean;
-  readonly allowedValues?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
+import type { ParamMetadata, ParamMetadataMap } from './param-metadata.js';
 
 export interface JsonSchemaPropertyString {
   readonly type: 'string';
@@ -129,26 +115,20 @@ function jsonSchemaFromPrimitive(meta: ParamMetadata): JsonSchemaProperty {
  * Pure, compile-time friendly, no type assertions at call sites.
  */
 export function buildInputSchemaObject(
-  pathParams: Readonly<Record<string, ParamMetadata>>,
-  queryParams: Readonly<Record<string, ParamMetadata>>,
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
 ): JsonSchemaObject {
   const properties: Record<string, JsonSchemaProperty> = {};
   const required: string[] = [];
 
-  // Path params
-  for (const key of typeSafeKeys(pathParams)) {
-    const name = key;
-    const meta = pathParams[name];
+  for (const [name, meta] of Object.entries(pathParams)) {
     properties[name] = jsonSchemaFromPrimitive(meta);
     if (meta.required) {
       required.push(name);
     }
   }
 
-  // Query params
-  for (const key of typeSafeKeys(queryParams)) {
-    const name = key;
-    const meta = queryParams[name];
+  for (const [name, meta] of Object.entries(queryParams)) {
     properties[name] = jsonSchemaFromPrimitive(meta);
     if (meta.required) {
       required.push(name);
@@ -162,4 +142,67 @@ export function buildInputSchemaObject(
   };
 
   return required.length > 0 ? { ...base, required } : base;
+}
+
+function buildZodFields(entries: [string, ParamMetadata][]): string[] {
+  return entries.map(([name, meta]) => {
+    const base = buildZodType(meta);
+    return `${name}: ${base}${meta.required ? '' : '.optional()'}`;
+  });
+}
+
+export function buildZodObject(
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
+): string {
+  const pathEntries = Object.entries(pathParams);
+  const queryEntries = Object.entries(queryParams);
+  const hasPath = pathEntries.length > 0;
+  const hasQuery = queryEntries.length > 0;
+  const queryRequired = queryEntries.some(([, meta]) => meta.required);
+  const paramsOptional = !hasPath && !queryRequired;
+
+  const paramsShape: string[] = [];
+
+  if (hasPath) {
+    const fields = buildZodFields(pathEntries).join(', ');
+    paramsShape.push(`path: z.object({ ${fields} })`);
+  }
+
+  if (hasQuery) {
+    const fields = buildZodFields(queryEntries).join(', ');
+    const maybeOptional = queryRequired ? '' : '.optional()';
+    paramsShape.push(`query: z.object({ ${fields} })${maybeOptional}`);
+  }
+
+  const paramsSchema =
+    paramsShape.length > 0 ? `z.object({ ${paramsShape.join(', ')} })` : 'z.object({})';
+  const paramsField = paramsOptional
+    ? `params: ${paramsSchema}.optional()`
+    : `params: ${paramsSchema}`;
+
+  return `z.object({ ${paramsField} })`;
+}
+
+function buildZodType(meta: ParamMetadata): string {
+  if (meta.allowedValues && meta.allowedValues.length > 0) {
+    const literals = meta.allowedValues.map((value) => `z.literal(${JSON.stringify(value)})`);
+    return `z.union([${literals.join(', ')}])`;
+  }
+  switch (meta.typePrimitive) {
+    case 'string':
+      return 'z.string()';
+    case 'number':
+      return 'z.number()';
+    case 'boolean':
+      return 'z.boolean()';
+    case 'string[]':
+      return 'z.array(z.string())';
+    case 'number[]':
+      return 'z.array(z.number())';
+    case 'boolean[]':
+      return 'z.array(z.boolean())';
+    default:
+      return 'z.unknown()';
+  }
 }

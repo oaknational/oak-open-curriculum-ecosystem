@@ -18,17 +18,37 @@ import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-r
 // Import generated artifacts directly for endpoint/tool catalogs
 import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
 import { MCP_TOOLS } from '../src/types/generated/api-schema/mcp-tools/index.js';
-// typed helpers for safe object inspection
-import {
-  typeSafeKeys,
-  typeSafeEntries,
-  getOwnString,
-  getOwnBoolean,
-  getOwnArrayLength,
-  isPlainObject,
-  getOwnValue,
-} from '../src/types/helpers';
 import { ZodError, type ZodIssue } from 'zod';
+function isPlainObject(value: unknown): value is object {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getDescriptor(value: unknown, key: PropertyKey): PropertyDescriptor | undefined {
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
+  return Object.getOwnPropertyDescriptor(value, key);
+}
+
+function getOwnString(value: unknown, key: PropertyKey): string | undefined {
+  const descriptor = getDescriptor(value, key);
+  return typeof descriptor?.value === 'string' ? descriptor.value : undefined;
+}
+
+function getOwnBoolean(value: unknown, key: PropertyKey): boolean | undefined {
+  const descriptor = getDescriptor(value, key);
+  return typeof descriptor?.value === 'boolean' ? descriptor.value : undefined;
+}
+
+function getOwnArrayLength(value: unknown, key: PropertyKey): number | undefined {
+  const descriptor = getDescriptor(value, key);
+  return Array.isArray(descriptor?.value) ? descriptor.value.length : undefined;
+}
+
+function getOwnValue(value: unknown, key: PropertyKey): unknown {
+  const descriptor = getDescriptor(value, key);
+  return descriptor?.value;
+}
 
 function formatZodIssues(issues: ZodIssue[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
@@ -161,6 +181,7 @@ function buildConventionsSection(): string {
 }
 
 // Tool map helpers derived at use sites via typeSafeEntries
+// TODO: update documentation once helper utilities are removed completely
 
 interface RenderableParamInfo {
   loc: string;
@@ -241,15 +262,14 @@ function listParamObjectKeys(obj: unknown): string {
   if (!isPlainObject(obj)) {
     return '_None_';
   }
-  const keys = typeSafeKeys(obj);
+  const keys = Object.keys(obj);
   return keys.length === 0 ? '_None_' : keys.join(', ');
 }
 
 function renderToolCatalog(): string {
   const lines: string[] = [];
   lines.push('## MCP Tool Catalog');
-  const entries = typeSafeEntries(MCP_TOOLS);
-  entries.sort(([a], [b]) => a.localeCompare(b));
+  const entries = Object.entries(MCP_TOOLS).sort(([nameA], [nameB]) => nameA.localeCompare(nameB));
   for (const [name, base] of entries) {
     const opId = getOwnString(base, 'operationId') ?? '';
     const path = getOwnString(base, 'path') ?? '';

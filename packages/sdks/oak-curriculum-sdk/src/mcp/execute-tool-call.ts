@@ -13,15 +13,12 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import { MCP_TOOLS, isToolName } from '../types/generated/api-schema/mcp-tools/index.js';
-import type { AllToolNames } from '../types/generated/api-schema/mcp-tools/types.js';
+import { MCP_TOOLS } from '../types/generated/api-schema/mcp-tools/definitions.js';
 import {
-  isPlainObject,
-  getOwnBoolean,
-  typeSafeFromEntries,
-  typeSafeKeys,
-  getOwnValue,
-} from '../types/helpers.js';
+  isToolName,
+  type AllToolNames,
+  type ToolArgs,
+} from '../types/generated/api-schema/mcp-tools/types.js';
 
 /**
  * Error types with proper cause chains
@@ -69,119 +66,6 @@ export type ToolExecutionResult =
   | { readonly data?: never; readonly error: McpToolError | McpParameterError };
 
 /**
- * Build request params for tool execution.
- * Organises flat MCP args into the structure expected by executors.
- *
- * @remarks
- * This generic normaliser is intentionally conservative. It accepts either a JSON string or an
- * object and maps required single-parameter cases to a minimal `{ [name]: value }` structure.
- * The tool-specific validators enforce the exact types at the executor boundary.
- *
- * @remarks import the proper types from the generated tool files
- */
-function tryParseJsonObject(input: string): object | undefined {
-  try {
-    const parsed: unknown = JSON.parse(input);
-    return isPlainObject(parsed) ? parsed : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
-function ownKeys(obj: unknown): string[] {
-  return isPlainObject(obj) ? typeSafeKeys(obj) : [];
-}
-
-function extractToolMeta(tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS]): {
-  pathKeys: readonly string[];
-  queryKeys: readonly string[];
-  requiredPath: readonly string[];
-  requiredQuery: readonly string[];
-} {
-  const pathMeta = tool.pathParams;
-  const queryMeta = tool.queryParams;
-  const pathKeys = ownKeys(pathMeta);
-  const queryKeys = ownKeys(queryMeta);
-  const requiredPath: string[] = [];
-  for (const k of pathKeys) {
-    if (getOwnBoolean(pathMeta[k], 'required')) {
-      requiredPath.push(k);
-    }
-  }
-  const requiredQuery: string[] = [];
-  for (const k of queryKeys) {
-    if (getOwnBoolean(queryMeta[k], 'required')) {
-      requiredQuery.push(k);
-    }
-  }
-  return { pathKeys, queryKeys, requiredPath, requiredQuery };
-}
-
-function coerceArgsToObject(
-  args: unknown,
-  requiredPath: readonly string[],
-  requiredQuery: readonly string[],
-): unknown {
-  if (typeof args !== 'string') {
-    return args;
-  }
-  const trimmed = args.trim();
-  const parsedObj = tryParseJsonObject(trimmed);
-  if (parsedObj) {
-    return parsedObj;
-  }
-  if (requiredPath.length === 1 && requiredQuery.length === 0) {
-    return { [requiredPath[0]]: trimmed };
-  }
-  if (requiredQuery.length === 1 && requiredPath.length === 0) {
-    return { [requiredQuery[0]]: trimmed };
-  }
-  return args;
-}
-
-function splitParams(
-  argsObject: unknown,
-  pathKeys: readonly string[],
-  queryKeys: readonly string[],
-): { path?: object; query?: object } {
-  const result: { path?: object; query?: object } = {};
-  if (pathKeys.length > 0) {
-    const pathEntries: (readonly [string, unknown])[] = [];
-    for (const key of pathKeys) {
-      const v = getOwnValue(argsObject, key);
-      if (v !== undefined) {
-        pathEntries.push([key, v]);
-      }
-    }
-    result.path = typeSafeFromEntries(pathEntries);
-  }
-  if (queryKeys.length > 0) {
-    const queryEntries: (readonly [string, unknown])[] = [];
-    for (const key of queryKeys) {
-      const v = getOwnValue(argsObject, key);
-      if (v !== undefined) {
-        queryEntries.push([key, v]);
-      }
-    }
-    result.query = typeSafeFromEntries(queryEntries);
-  }
-  return result;
-}
-
-function buildGenericRequestParams(
-  tool: (typeof MCP_TOOLS)[keyof typeof MCP_TOOLS],
-  args: unknown,
-): { params: { path?: object; query?: object } } {
-  const { pathKeys, queryKeys, requiredPath, requiredQuery } = extractToolMeta(tool);
-  const maybeObject = coerceArgsToObject(args, requiredPath, requiredQuery);
-  if (!isPlainObject(maybeObject)) {
-    return { params: {} };
-  }
-  const params = splitParams(maybeObject, pathKeys, queryKeys);
-  return { params };
-}
-
-/**
  * Ultra-thin executor - just validation and delegation to embedded executor
  */
 function mapErrorToResult(error: unknown, toolName: string): ToolExecutionResult {
@@ -225,12 +109,30 @@ export async function executeToolCall(
       }),
     };
   }
+
   const toolName: AllToolNames = maybeToolName;
+  const tool = MCP_TOOLS[toolName];
+
+  const validation = tool.toolZodSchema.safeParse(maybeParams);
+  if (!validation.success) {
+    const message = tool.describeToolArgs ? tool.describeToolArgs() : validation.error.message;
+    return {
+      error: new McpParameterError(message, toolName, undefined, undefined),
+    };
+  }
+
   try {
-    const tool = MCP_TOOLS[toolName];
-    const genericRequestParams = buildGenericRequestParams(tool, maybeParams);
-    const response = await tool.invoke(client, genericRequestParams);
-    return { data: response };
+    const response = await tool.invoke(client, validation.data);
+    const outputValidation = tool.validateOutput(response);
+    if (!outputValidation.ok) {
+      return {
+        error: new McpToolError('Execution failed: ' + outputValidation.message, toolName, {
+          code: 'OUTPUT_VALIDATION_ERROR',
+        }),
+      };
+    }
+
+    return { data: outputValidation.data };
   } catch (error) {
     return mapErrorToResult(error, toolName);
   }

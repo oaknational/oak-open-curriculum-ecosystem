@@ -16,6 +16,46 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./client/*": {
+      "types": "./dist/client/*.d.ts",
+      "default": "./dist/client/*.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "default": "./dist/config/index.js"
+    },
+    "./config/*": {
+      "types": "./dist/config/*.d.ts",
+      "default": "./dist/config/*.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "default": "./dist/types/*.js"
+    },
+    "./mcp": {
+      "types": "./dist/mcp/execute-tool-call.d.ts",
+      "default": "./dist/mcp/execute-tool-call.js"
+    },
+    "./mcp/*": {
+      "types": "./dist/mcp/*.d.ts",
+      "default": "./dist/mcp/*.js"
+    },
+    "./validation": {
+      "types": "./dist/validation/index.d.ts",
+      "default": "./dist/validation/index.js"
+    },
+    "./validation/*": {
+      "types": "./dist/validation/*.d.ts",
+      "default": "./dist/validation/*.js"
     }
   },
   "scripts": {

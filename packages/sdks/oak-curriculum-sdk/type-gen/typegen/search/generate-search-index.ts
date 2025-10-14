@@ -1,4 +1,4 @@
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Aggregated search exports derived from the Open Curriculum schema.\n */\n\n`;
@@ -13,7 +13,10 @@ function createIndexModule(): string {
 } from './requests.js';
 export type { SearchStructuredRequest, SearchStructuredScope } from './requests.js';
 
-export { SearchNaturalLanguageRequestSchema, isSearchNaturalLanguageRequest } from './natural-requests.js';
+export {
+  SearchNaturalLanguageRequestSchema,
+  isSearchNaturalLanguageRequest,
+} from './natural-requests.js';
 export type { SearchNaturalLanguageRequest } from './natural-requests.js';
 
 export { SearchParsedQuerySchema, isSearchParsedQuery } from './parsed-query.js';
@@ -72,7 +75,7 @@ export {
   );
 }
 
-export function generateSearchIndexModule(_schema: OpenAPI3): FileMap {
+export function generateSearchIndexModule(_schema: OpenAPIObject): FileMap {
   void _schema;
   return {
     '../search/index.ts': createIndexModule(),

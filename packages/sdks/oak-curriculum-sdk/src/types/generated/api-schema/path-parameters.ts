@@ -206,7 +206,10 @@ export type PathParameterValues = {
 /**
  * Type guard for parameter types
  */
-export function isValidParameterType(parameterType: string): parameterType is keyof PathParameterValues {
+export function isValidParameterType(parameterType: unknown): parameterType is keyof PathParameterValues {
+  if (typeof parameterType !== 'string') {
+    return false;
+  }
   const keys = ['keyStage', 'subject', 'type'] as const;
   const keyList: readonly string[] = keys;
   return keyList.includes(parameterType);
@@ -215,12 +218,15 @@ export function isValidParameterType(parameterType: string): parameterType is ke
 /**
  * Function to validate if a value is a valid parameter for a given parameter type
  */
-export function isValidPathParameter(parameterType: string, value: string): boolean {
+export function isValidPathParameter(parameterType: unknown, value: unknown): boolean {
+  if (typeof parameterType !== 'string' || typeof value !== 'string') {
+    return false;
+  }
   if (parameterType === 'keyStage') { const allowed: readonly string[] = KEY_STAGES; return allowed.includes(value); }
   if (parameterType === 'subject') { const allowed: readonly string[] = SUBJECTS; return allowed.includes(value); }
   if (parameterType === 'type') { const allowed: readonly string[] = ASSET_TYPES; return allowed.includes(value); }
   // Open set (no enum emitted): accept any string for other parameter types
-  return typeof value === 'string';
+  return true;
 };
 
 /**
@@ -259,137 +265,144 @@ export type ValidPathGroupings = {
  * Valid combinations of parameters for different paths
  */
 export const VALID_PATHS_BY_PARAMETERS: ValidPathGroupings = {
-"keyStage_subject": {
-  "/key-stages/{keyStage}/subject/{subject}/assets": {
-    "params": "keyStage, subject",
-    "path": "/key-stages/{keyStage}/subject/{subject}/assets",
-    "paramsKey": "keyStage_subject"
+  "keyStage_subject": {
+    "/key-stages/{keyStage}/subject/{subject}/assets": {
+        "params": "keyStage, subject",
+        "path": "/key-stages/{keyStage}/subject/{subject}/assets",
+        "paramsKey": "keyStage_subject"
+    },
+    "/key-stages/{keyStage}/subject/{subject}/lessons": {
+        "params": "keyStage, subject",
+        "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
+        "paramsKey": "keyStage_subject"
+    },
+    "/key-stages/{keyStage}/subject/{subject}/questions": {
+        "params": "keyStage, subject",
+        "path": "/key-stages/{keyStage}/subject/{subject}/questions",
+        "paramsKey": "keyStage_subject"
+    },
+    "/key-stages/{keyStage}/subject/{subject}/units": {
+        "params": "keyStage, subject",
+        "path": "/key-stages/{keyStage}/subject/{subject}/units",
+        "paramsKey": "keyStage_subject"
+    }
   },
-  "/key-stages/{keyStage}/subject/{subject}/lessons": {
-    "params": "keyStage, subject",
-    "path": "/key-stages/{keyStage}/subject/{subject}/lessons",
-    "paramsKey": "keyStage_subject"
+  "lesson": {
+    "/lessons/{lesson}/assets": {
+        "params": "lesson",
+        "path": "/lessons/{lesson}/assets",
+        "paramsKey": "lesson"
+    },
+    "/lessons/{lesson}/quiz": {
+        "params": "lesson",
+        "path": "/lessons/{lesson}/quiz",
+        "paramsKey": "lesson"
+    },
+    "/lessons/{lesson}/summary": {
+        "params": "lesson",
+        "path": "/lessons/{lesson}/summary",
+        "paramsKey": "lesson"
+    },
+    "/lessons/{lesson}/transcript": {
+        "params": "lesson",
+        "path": "/lessons/{lesson}/transcript",
+        "paramsKey": "lesson"
+    }
   },
-  "/key-stages/{keyStage}/subject/{subject}/questions": {
-    "params": "keyStage, subject",
-    "path": "/key-stages/{keyStage}/subject/{subject}/questions",
-    "paramsKey": "keyStage_subject"
+  "lesson_type": {
+    "/lessons/{lesson}/assets/{type}": {
+        "params": "lesson, type",
+        "path": "/lessons/{lesson}/assets/{type}",
+        "paramsKey": "lesson_type"
+    }
   },
-  "/key-stages/{keyStage}/subject/{subject}/units": {
-    "params": "keyStage, subject",
-    "path": "/key-stages/{keyStage}/subject/{subject}/units",
-    "paramsKey": "keyStage_subject"
+  "NO_PARAMS": {
+    "/changelog": {
+        "path": "/changelog",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/changelog/latest": {
+        "path": "/changelog/latest",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/key-stages": {
+        "path": "/key-stages",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/rate-limit": {
+        "path": "/rate-limit",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/search/lessons": {
+        "path": "/search/lessons",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/search/transcripts": {
+        "path": "/search/transcripts",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/subjects": {
+        "path": "/subjects",
+        "paramsKey": "NO_PARAMS"
+    },
+    "/threads": {
+        "path": "/threads",
+        "paramsKey": "NO_PARAMS"
+    }
+  },
+  "sequence": {
+    "/sequences/{sequence}/assets": {
+        "params": "sequence",
+        "path": "/sequences/{sequence}/assets",
+        "paramsKey": "sequence"
+    },
+    "/sequences/{sequence}/questions": {
+        "params": "sequence",
+        "path": "/sequences/{sequence}/questions",
+        "paramsKey": "sequence"
+    },
+    "/sequences/{sequence}/units": {
+        "params": "sequence",
+        "path": "/sequences/{sequence}/units",
+        "paramsKey": "sequence"
+    }
+  },
+  "subject": {
+    "/subjects/{subject}": {
+        "params": "subject",
+        "path": "/subjects/{subject}",
+        "paramsKey": "subject"
+    },
+    "/subjects/{subject}/key-stages": {
+        "params": "subject",
+        "path": "/subjects/{subject}/key-stages",
+        "paramsKey": "subject"
+    },
+    "/subjects/{subject}/sequences": {
+        "params": "subject",
+        "path": "/subjects/{subject}/sequences",
+        "paramsKey": "subject"
+    },
+    "/subjects/{subject}/years": {
+        "params": "subject",
+        "path": "/subjects/{subject}/years",
+        "paramsKey": "subject"
+    }
+  },
+  "threadSlug": {
+    "/threads/{threadSlug}/units": {
+        "params": "threadSlug",
+        "path": "/threads/{threadSlug}/units",
+        "paramsKey": "threadSlug"
+    }
+  },
+  "unit": {
+    "/units/{unit}/summary": {
+        "params": "unit",
+        "path": "/units/{unit}/summary",
+        "paramsKey": "unit"
+    }
   }
-}, "lesson": {
-  "/lessons/{lesson}/assets": {
-    "params": "lesson",
-    "path": "/lessons/{lesson}/assets",
-    "paramsKey": "lesson"
-  },
-  "/lessons/{lesson}/quiz": {
-    "params": "lesson",
-    "path": "/lessons/{lesson}/quiz",
-    "paramsKey": "lesson"
-  },
-  "/lessons/{lesson}/summary": {
-    "params": "lesson",
-    "path": "/lessons/{lesson}/summary",
-    "paramsKey": "lesson"
-  },
-  "/lessons/{lesson}/transcript": {
-    "params": "lesson",
-    "path": "/lessons/{lesson}/transcript",
-    "paramsKey": "lesson"
-  }
-}, "lesson_type": {
-  "/lessons/{lesson}/assets/{type}": {
-    "params": "lesson, type",
-    "path": "/lessons/{lesson}/assets/{type}",
-    "paramsKey": "lesson_type"
-  }
-}, "NO_PARAMS": {
-  "/changelog": {
-    "path": "/changelog",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/changelog/latest": {
-    "path": "/changelog/latest",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/key-stages": {
-    "path": "/key-stages",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/rate-limit": {
-    "path": "/rate-limit",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/search/lessons": {
-    "path": "/search/lessons",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/search/transcripts": {
-    "path": "/search/transcripts",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/subjects": {
-    "path": "/subjects",
-    "paramsKey": "NO_PARAMS"
-  },
-  "/threads": {
-    "path": "/threads",
-    "paramsKey": "NO_PARAMS"
-  }
-}, "sequence": {
-  "/sequences/{sequence}/assets": {
-    "params": "sequence",
-    "path": "/sequences/{sequence}/assets",
-    "paramsKey": "sequence"
-  },
-  "/sequences/{sequence}/questions": {
-    "params": "sequence",
-    "path": "/sequences/{sequence}/questions",
-    "paramsKey": "sequence"
-  },
-  "/sequences/{sequence}/units": {
-    "params": "sequence",
-    "path": "/sequences/{sequence}/units",
-    "paramsKey": "sequence"
-  }
-}, "subject": {
-  "/subjects/{subject}": {
-    "params": "subject",
-    "path": "/subjects/{subject}",
-    "paramsKey": "subject"
-  },
-  "/subjects/{subject}/key-stages": {
-    "params": "subject",
-    "path": "/subjects/{subject}/key-stages",
-    "paramsKey": "subject"
-  },
-  "/subjects/{subject}/sequences": {
-    "params": "subject",
-    "path": "/subjects/{subject}/sequences",
-    "paramsKey": "subject"
-  },
-  "/subjects/{subject}/years": {
-    "params": "subject",
-    "path": "/subjects/{subject}/years",
-    "paramsKey": "subject"
-  }
-}, "threadSlug": {
-  "/threads/{threadSlug}/units": {
-    "params": "threadSlug",
-    "path": "/threads/{threadSlug}/units",
-    "paramsKey": "threadSlug"
-  }
-}, "unit": {
-  "/units/{unit}/summary": {
-    "params": "unit",
-    "path": "/units/{unit}/summary",
-    "paramsKey": "unit"
-  }
-}
 };
 
 /**

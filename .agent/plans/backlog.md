@@ -57,6 +57,7 @@
 - Resources/Prompts and cross‑server pipelines
 - Caching
 - Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
+- An agent lifecycle plugin that checks how many uncommitted changes there are, and if it is over a certain threshold, it will make sure current progress and goals are written to the plan, then run the quality gates, and estimate what work is required to bring the repo to a production ready state, do that work, then commit. So, e.g. as soon as the repo has changes in 10 files, a tidy up and commit process is automatically triggered. As long as the threshold number is kept small, the amount of work required to bring the repo to a production ready state should also be small, and the chaotic repo state should never be reached.
 
 ### Core References
 

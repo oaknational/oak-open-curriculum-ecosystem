@@ -1,16 +1,18 @@
-import type { OperationObject } from 'openapi-typescript';
-import { typeSafeKeys } from '../../../../src/types/helpers.js';
-import type { PrimitiveType } from './param-utils.js';
-import { emitHeader, emitParams, emitSchema, emitIndex, emitOakTool } from './emitters.js';
+import type { OperationObject } from 'openapi3-ts/oas31';
+import { emitHeader, emitSchema, emitIndex, emitOakTool } from './emitters.js';
+import type { ParamMetadataMap, ParamMetadata } from './param-metadata.js';
 
-export interface ParamMetadata {
-  typePrimitive: PrimitiveType;
-  valueConstraint: boolean;
-  required: boolean;
-  allowedValues?: readonly unknown[];
+export type { ParamMetadata };
+
+function buildImports(): string {
+  return [
+    "import { z } from 'zod';",
+    '',
+    "import type { ToolDescriptor } from '../types.js';",
+    "import type { OakApiPathBasedClient } from '../../../../../client/index.js';",
+    "import { getDescriptorSchemaForEndpoint } from '../../response-map.js';",
+  ].join('\n');
 }
-
-// primitive type resolution moved to param-utils
 
 export function generateToolFile(
   toolName: string,
@@ -18,28 +20,15 @@ export function generateToolFile(
   method: string,
   operationId: string,
   operation: OperationObject,
-  pathParamMetadata: Record<string, ParamMetadata>,
-  queryParamMetadata: Record<string, ParamMetadata>,
+  pathParamMetadata: ParamMetadataMap,
+  queryParamMetadata: ParamMetadataMap,
 ): string {
-  const pathParams = typeSafeKeys(pathParamMetadata);
-  const queryParams = typeSafeKeys(queryParamMetadata);
-
   const parts: string[] = [];
+  parts.push(buildImports());
   parts.push(emitHeader(toolName, path, method, operationId));
-  parts.push(emitParams(operation, pathParamMetadata, queryParamMetadata));
   parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
-  parts.push(emitIndex(toolName, path, method, operation, pathParams, queryParams));
-  parts.push(
-    emitOakTool(
-      toolName,
-      path,
-      method,
-      operationId,
-      operation,
-      pathParamMetadata,
-      queryParamMetadata,
-    ),
-  );
+  parts.push(emitIndex(toolName, path, method, operation));
+  parts.push(emitOakTool(toolName));
 
   return parts.join('\n');
 }

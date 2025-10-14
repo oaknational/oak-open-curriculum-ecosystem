@@ -4,7 +4,7 @@ import path from 'node:path';
 import { execSync } from 'child_process';
 
 import { generateZodSchemas } from '../../type-gen/zodgen-core';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 function assertNoForbiddenAssertions(content: string): void {
   const lines = content.split('\n');
@@ -21,7 +21,7 @@ function assertNoForbiddenAssertions(content: string): void {
 }
 
 // Minimal OpenAPI v3 doc with a single component schema to keep the test light
-const minimalOpenApi: OpenAPI3 = {
+const minimalOpenApi: OpenAPIObject = {
   openapi: '3.0.0',
   info: { title: 'Test', version: '1.0.0' },
   paths: {},

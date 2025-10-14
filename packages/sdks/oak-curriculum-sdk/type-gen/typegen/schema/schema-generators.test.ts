@@ -1,15 +1,15 @@
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { describe, it, expect } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
 import { generateJsonContent, generateTsSchemaContent } from './schema-generators';
-import { minimalSchema, schemaWithGetEndpoint, parseAsOpenAPI3 } from '../../test-fixtures';
+import { minimalSchema, schemaWithGetEndpoint, parseAsOpenAPIObject } from '../../test-fixtures';
 
 describe('Schema Generators', () => {
   describe('generateJsonContent', () => {
     it('should generate formatted JSON string from schema', () => {
-      const schema: OpenAPI3 = minimalSchema;
+      const schema: OpenAPIObject = minimalSchema;
 
       const result = generateJsonContent(schema);
-      const parsed: OpenAPI3 = parseAsOpenAPI3(result);
+      const parsed: OpenAPIObject = parseAsOpenAPIObject(result);
 
       expect(parsed).toEqual(schema);
       expect(result).toContain('"openapi": "3.0.0"');
@@ -17,10 +17,10 @@ describe('Schema Generators', () => {
     });
 
     it('should handle complex nested structures', () => {
-      const schema: OpenAPI3 = schemaWithGetEndpoint;
+      const schema: OpenAPIObject = schemaWithGetEndpoint;
 
       const result = generateJsonContent(schema);
-      const parsed: OpenAPI3 = parseAsOpenAPI3(result);
+      const parsed: OpenAPIObject = parseAsOpenAPIObject(result);
       const item = parsed.paths?.['/users'];
       // Ensure it's not a ReferenceObject before accessing path methods
       expect(item && !('$ref' in item)).toBe(true);
