@@ -35,7 +35,7 @@ function emitToolsLiteral(names: readonly string[]): string {
   `;
 }
 
-const TOOL_NAME_BLOCK = `
+const TOOL_TYPE_BLOCK = `
 export type ToolMap = typeof MCP_TOOLS;
 export type ToolName = keyof ToolMap;
 export type ToolDescriptorForName<TName extends ToolName> = ToolMap[TName];
@@ -59,6 +59,18 @@ const GET_TOOL_FROM_TOOL_NAME_BLOCK = `export function getToolFromToolName<TName
   return MCP_TOOLS[toolName];
 }`;
 
+const OPERATION_ID_MAP_BLOCK = (
+  operationIdToToolNameCases: string,
+): string => `const OPERATION_ID_TO_TOOL_NAME = {
+${operationIdToToolNameCases}
+} as const;`;
+
+const OPERATION_TYPES_BLOCK = `type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
+export type OperationId = keyof OperationIdToToolName;
+export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
+export type ToolDescriptorForOperationId<TId extends OperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
+`;
+
 const IS_OPERATION_ID_BLOCK = `export function isOperationId(value: unknown): value is OperationId {
   if (typeof value !== 'string') {
     return false;
@@ -66,7 +78,7 @@ const IS_OPERATION_ID_BLOCK = `export function isOperationId(value: unknown): va
   return value in OPERATION_ID_TO_TOOL_NAME;
 }`;
 
-const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId(operationId: OperationId): ToolName {
+const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId<TId extends OperationId>(operationId: TId): ToolNameForOperationId<TId> {
   const toolName = OPERATION_ID_TO_TOOL_NAME[operationId];
   if (!toolName) {
     throw new TypeError('Unknown operation: ' + String(operationId));
@@ -74,25 +86,30 @@ const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId(
   return toolName;
 }`;
 
-const GET_ID_FROM_TOOL_NAME_BLOCK = `export function getOperationIdFromToolName(toolName: ToolName): OperationId {
+const TOOL_NAME_TO_OPERATION_ID_BLOCK = (
+  toolNameToOperationIdCases: string,
+): string => `const TOOL_NAME_TO_OPERATION_ID = {
+${toolNameToOperationIdCases}
+} as const;`;
+
+const TOOL_NAME_OPERATION_TYPES_BLOCK = `type ToolNameToOperationId = typeof TOOL_NAME_TO_OPERATION_ID;
+export type OperationIdForToolName<TName extends ToolName> = ToolNameToOperationId[TName];
+`;
+
+const GET_TOOL_FROM_ID_BLOCK = `
+export function getToolFromOperationId<TId extends OperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
+  const toolName = getToolNameFromOperationId(operationId);
+  return MCP_TOOLS[toolName];
+}
+`;
+
+const GET_ID_FROM_TOOL_NAME_BLOCK = `export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): OperationIdForToolName<TName> {
   const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
   if (!operationId) {
     throw new TypeError('Unknown tool: ' + String(toolName));
   }
   return operationId;
 }`;
-
-const GET_TOOL_FROM_ID_BLOCK = `
-export function getToolFromOperationId(operationId: OperationId): ToolDescriptorForName<ToolNameForOperationId<OperationId>> {
-  const toolName = getToolNameFromOperationId(operationId);
-  return MCP_TOOLS[toolName];
-}
-`;
-
-const OPERATION_TYPE_BLOCK = `type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
-export type OperationId = keyof OperationIdToToolName;
-export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
-`;
 
 export function generateDefinitionsFile(
   toolNames: string[],
@@ -113,16 +130,17 @@ export function generateDefinitionsFile(
     '// Import all tool definitions',
     emitToolImports(names),
     emitToolsLiteral(names),
-    TOOL_NAME_BLOCK,
+    TOOL_TYPE_BLOCK,
     IS_TOOL_NAME_BLOCK,
     emitToolNames(names),
     GET_TOOL_FROM_TOOL_NAME_BLOCK,
-    `const OPERATION_ID_TO_TOOL_NAME = {\n${operationIdToToolNameCases}\n} as const;`,
-    OPERATION_TYPE_BLOCK,
+    OPERATION_ID_MAP_BLOCK(operationIdToToolNameCases),
+    OPERATION_TYPES_BLOCK,
     IS_OPERATION_ID_BLOCK,
     GET_TOOL_NAME_FROM_ID_BLOCK,
     GET_TOOL_FROM_ID_BLOCK,
-    `const TOOL_NAME_TO_OPERATION_ID = {\n${toolNameToOperationIdCases}\n} as const;`,
+    TOOL_NAME_TO_OPERATION_ID_BLOCK(toolNameToOperationIdCases),
+    TOOL_NAME_OPERATION_TYPES_BLOCK,
     GET_ID_FROM_TOOL_NAME_BLOCK,
   ].join('\n\n');
 }

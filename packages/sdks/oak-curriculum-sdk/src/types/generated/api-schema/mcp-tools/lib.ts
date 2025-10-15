@@ -11,7 +11,7 @@ import {
   type CallToolRequest,
   type TextContent,
 } from '@modelcontextprotocol/sdk/types.js';
-import { type ToolDescriptor } from './types.js';
+import { type ToolArgs, type ToolDescriptor, type ToolResult } from './types.js';
 import {
   getToolFromToolName,
   getToolFromOperationId,
@@ -19,12 +19,13 @@ import {
   type OperationId,
   type ToolName,
 } from './definitions.js';
+import type { OakApiPathBasedClient } from '../../../client/index.js';
 
-interface ToolRegistryEntry {
-  readonly descriptor: ToolDescriptor;
-}
+type ToolRegistryEntry<TName extends ToolName> = {
+  readonly descriptor: ToolDescriptor<TName>;
+};
 
-interface InvocationResult { readonly content: readonly TextContent[]; readonly isError?: true }
+type InvocationResult = { readonly content: readonly TextContent[]; readonly isError?: true };
 
 function textContent(text: string): TextContent {
   return { type: 'text', text };
@@ -47,9 +48,11 @@ function formatStandardContent(result: unknown, isError = false): InvocationResu
 }
 
 export class McpToolRegistry {
-  private readonly tools = new Map<ToolName, ToolRegistryEntry>();
+  private readonly tools = new Map<ToolName, ToolRegistryEntry<ToolName>>();
 
-  register(name: ToolName, descriptor: ToolDescriptor): void {
+  constructor(private readonly client: OakApiPathBasedClient) {}
+
+  register<TName extends ToolName>(name: TName, descriptor: ToolDescriptor<TName>): void {
     this.tools.set(name, { descriptor });
   }
 
@@ -75,8 +78,8 @@ export class McpToolRegistry {
       return formatStandardContent(new Error(message), true);
     }
     try {
-      const output = await descriptor.invoke(parsed.data);
-      const outputValidation = descriptor.validateOutput(output);
+      const output = await descriptor.invoke(this.client, parsed.data as ToolArgs<typeof name>);
+      const outputValidation = descriptor.validateOutput(output as ToolResult<typeof name>);
       if (!outputValidation.ok) {
         return formatStandardContent(new Error('Output validation error: ' + outputValidation.message), true);
       }

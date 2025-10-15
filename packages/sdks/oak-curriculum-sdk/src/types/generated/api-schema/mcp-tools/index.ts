@@ -5,4 +5,6 @@
  * Re-exports canonical literals and derived types.
  */
 
-export { toolNames, type ToolName, type ToolDescriptorForName, type ToolMap, type OperationId, type ToolNameForOperationId, isToolName, isOperationId, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName } from "./definitions.js";
+export { toolNames, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isOperationId, type OperationId, type OperationIdForToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolMap, type ToolName, type ToolNameForOperationId } from "./definitions.js";
+
+export { type ToolDescriptor, type ToolArgs, type ToolArgsForOperationId, type ToolDescriptors, type ToolInvoke, type ToolNameFromOperationId, type ToolOperationIdForName, type ToolResult, type ToolResultForOperationId, type RegisteredToolEntries } from "./types.js";

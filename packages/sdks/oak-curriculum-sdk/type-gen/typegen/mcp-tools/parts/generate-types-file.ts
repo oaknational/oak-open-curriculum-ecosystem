@@ -13,9 +13,10 @@ const GENERATED_BANNER = [
 const GENERATED_IMPORTS = [
   "import type { Tool } from '@modelcontextprotocol/sdk/types.js';",
   "import type { ZodTypeAny, ZodSchema } from 'zod';",
+  "import type { OperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, OperationIdForToolName } from './definitions.js';",
 ].join('\n');
 
-const TOOL_DESCRIPTORS_BLOCK = `export interface ToolDescriptor extends Tool {
+const TOOL_DESCRIPTOR_INTERFACE = `export interface ToolDescriptor extends Tool {
   readonly name: string;
   readonly description: string;
   readonly operationId: string;
@@ -23,7 +24,7 @@ const TOOL_DESCRIPTORS_BLOCK = `export interface ToolDescriptor extends Tool {
   readonly toolInputJsonSchema: {
     readonly type: 'object';
     readonly properties?: Readonly<Record<string, unknown>>;
-    readonly required?: readonly string[];
+    readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
   readonly toolOutputJsonSchema: unknown;
@@ -32,7 +33,7 @@ const TOOL_DESCRIPTORS_BLOCK = `export interface ToolDescriptor extends Tool {
   readonly inputSchema: {
     readonly type: 'object';
     readonly properties?: Readonly<Record<string, unknown>>;
-    readonly required?: string[];
+    readonly required?: readonly string[];
     readonly additionalProperties?: boolean;
   };
   readonly validateOutput: (value: unknown) =>
@@ -41,6 +42,23 @@ const TOOL_DESCRIPTORS_BLOCK = `export interface ToolDescriptor extends Tool {
   readonly path: string;
   readonly method: string;
 }`;
+
+const TOOL_TYPE_ALIASES = `export type ToolInvoke<TName extends ToolName> = ToolDescriptorForName<TName>['invoke'];
+export type ToolArgs<TName extends ToolName> = Parameters<ToolInvoke<TName>>[1];
+export type ToolResult<TName extends ToolName> = Awaited<ReturnType<ToolInvoke<TName>>>;
+export type ToolArgsForOperationId<TId extends OperationId> = Parameters<ToolDescriptorForOperationId<TId>['invoke']>[1];
+export type ToolResultForOperationId<TId extends OperationId> = Awaited<ReturnType<ToolDescriptorForOperationId<TId>['invoke']>>;
+export type ToolOperationIdForName<TName extends ToolName> = OperationIdForToolName<TName>;
+export type ToolNameFromOperationId<TId extends OperationId> = ToolNameForOperationId<TId>;
+export type RegisteredToolEntries = {
+  readonly [TName in ToolName]: {
+    readonly descriptor: ToolDescriptorForName<TName>;
+    readonly operationId: ToolOperationIdForName<TName>;
+  };
+};
+
+export type ToolDescriptors = ToolMap;
+`;
 
 export function generateTypesFile({
   toolNames,
@@ -51,5 +69,7 @@ export function generateTypesFile({
     throw new TypeError('toolNames must be a non-empty array');
   }
 
-  return [GENERATED_BANNER, GENERATED_IMPORTS, TOOL_DESCRIPTORS_BLOCK].join('\n\n');
+  return [GENERATED_BANNER, GENERATED_IMPORTS, TOOL_DESCRIPTOR_INTERFACE, TOOL_TYPE_ALIASES].join(
+    '\n\n',
+  );
 }

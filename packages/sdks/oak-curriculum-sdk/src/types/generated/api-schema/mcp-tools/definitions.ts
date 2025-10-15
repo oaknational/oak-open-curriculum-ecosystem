@@ -125,6 +125,7 @@ const OPERATION_ID_TO_TOOL_NAME = {
 type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
 export type OperationId = keyof OperationIdToToolName;
 export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
+export type ToolDescriptorForOperationId<TId extends OperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
 
 
 export function isOperationId(value: unknown): value is OperationId {
@@ -134,7 +135,7 @@ export function isOperationId(value: unknown): value is OperationId {
   return value in OPERATION_ID_TO_TOOL_NAME;
 }
 
-export function getToolNameFromOperationId(operationId: OperationId): ToolName {
+export function getToolNameFromOperationId<TId extends OperationId>(operationId: TId): ToolNameForOperationId<TId> {
   const toolName = OPERATION_ID_TO_TOOL_NAME[operationId];
   if (!toolName) {
     throw new TypeError('Unknown operation: ' + String(operationId));
@@ -143,7 +144,7 @@ export function getToolNameFromOperationId(operationId: OperationId): ToolName {
 }
 
 
-export function getToolFromOperationId(operationId: OperationId): ToolDescriptorForName<ToolNameForOperationId<OperationId>> {
+export function getToolFromOperationId<TId extends OperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOLS[toolName];
 }
@@ -178,7 +179,11 @@ const TOOL_NAME_TO_OPERATION_ID = {
   'get-rate-limit': 'getRateLimit-getRateLimit',
 } as const;
 
-export function getOperationIdFromToolName(toolName: ToolName): OperationId {
+type ToolNameToOperationId = typeof TOOL_NAME_TO_OPERATION_ID;
+export type OperationIdForToolName<TName extends ToolName> = ToolNameToOperationId[TName];
+
+
+export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): OperationIdForToolName<TName> {
   const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
   if (!operationId) {
     throw new TypeError('Unknown tool: ' + String(toolName));

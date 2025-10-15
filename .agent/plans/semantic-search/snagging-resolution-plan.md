@@ -6,6 +6,9 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
 
 1. **Regenerate canonical MCP helper surface**
    - **Current state (verified):** `definitions.ts` keeps `MCP_TOOLS` internal and exports accessor helpers, but signatures such as `getToolFromOperationId` widen the result to the full union, and there are no literal-driven aliases (`ToolArgsForName`, `ToolResultForName`, etc.). `types.ts` only defines the structural `ToolDescriptor` interface, so compiled consumers cannot derive argument/result types. There is no circular dependency today—keep it that way.
+   - **Update 2025-10-15:** Generator review complete; confirmed `generate-definitions-file.ts` lacks generic helper signatures and `generate-types-file.ts` remains structural-only. Implementation work will focus on emitting literal-driven helper types and runtime-safe generics.
+   - **Update 2025-10-15 (continued):** Additional review of emitted artefacts shows `definitions.ts` currently exports non-generic helpers and `types.ts` only defines `ToolDescriptor`; no `ToolArgs`/`ToolResult` aliases exist. Behavioural test coverage still expects `MCP_TOOLS` exports and must be rewritten before regeneration.
+   - **Update 2025-10-15 (synonyms):** Synonym lookups are not required for MCP tools. We will drop the synonym generator step (previous Item 7) and rely on canonical enums from `path-parameters.ts`; downstream agents can implement their own fuzzy matching if needed.
    - **Intended impact:** Extend the generator so `definitions.ts` emits fully generic helpers (`getToolFromOperationId<TId>()`, `getOperationIdFromToolName<TName>()`, etc.) and literal-driven readonly maps. Introduce a complementary `types.ts` output that derives precise `ToolArgs`, `ToolResult`, and related aliases strictly from the literal data (without importing `MCP_TOOLS`). This restores compile-time guarantees for every tool.
    - **Risks & mitigations:**
      - _Risk:_ Accidentally importing `ToolDescriptor` (from `types.ts`) back into `definitions.ts`, re-forming the previous circular dependency.
@@ -21,8 +24,7 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
      4. Regenerate via `pnpm type-gen`, confirm the emitted files preserve the one-way dependency graph, and log hashes.
      5. Ensure helpers such as `getToolFromOperationId` retain concrete `OperationId` narrowing by extending the generator templates and covering the behaviour through targeted helper invocations in tests.
      6. Emit additional helper aliases (e.g., `ToolArgs`, `ToolResult`, `ToolDescriptorForOperationId`) from `types.ts` via `import type` statements so consumers can derive argument and result types without touching literals.
-     7. Update the synonym generator so `standardiseSubject` and `standardiseKeyStage` return their map lookups, with behavioural tests asserting the observed canonical values.
-     8. Keep all generator regression tests behaviour-focused by importing the emitted modules and exercising their APIs instead of asserting on source text.
+     7. Keep all generator regression tests behaviour-focused by importing the emitted modules and exercising their APIs instead of asserting on source text.
 
 2. **Curate the public MCP barrel and top-level exports**
    - **Current state (verified):** `src/types/generated/api-schema/mcp-tools/index.ts` merely re-exports `definitions.ts`. The package root (`src/index.ts`) still exports `MCP_TOOLS`, even though it no longer exists—downstream packages import it and now fail to type-check.
@@ -37,7 +39,6 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
      2. Update `src/index.ts` to remove `MCP_TOOLS` and only export from the barrel.
      3. Add a behavioural regression test that imports the SDK entry point and verifies only the approved helper names exist (checking `Object.hasOwn` rather than asserting on raw code text).
      4. Demonstrate the curated surface by importing the package root and invoking helper functions (e.g., `getToolFromToolName`) inside behavioural tests, confirming downstream code paths succeed.
-     5. Capture evidence from those behavioural checks rather than asserting on absent symbols, keeping validation aligned with public interfaces.
 
 3. **Align runtime code with the accessor surface**
    - **Current state (verified):** `universal-tools.ts` pulls `typeSafeKeys` from `docs/_typedoc_src`, violating package boundaries, and it (along with MCP servers) still imports `MCP_TOOLS` directly. Runtime code bypasses the barrel, so the curated interface provides no benefit.
@@ -80,9 +81,8 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
    - **Implementation approach:**
      1. Update each generator unit test to import the generated module, run representative helper functions, and assert on their observable results (e.g., the correct descriptor key is returned, unknown keys throw typed errors).
      2. Update doc-generation scripts (e.g., `type-gen/generate-ai-doc.ts`) to use the curated accessor helpers and ensure they compile and lint without relying on `MCP_TOOLS`.
-     3. Add a compile-time check that both generated files and the doc-generation entry points type-check in isolation, reinforcing the absence of circular dependencies and confirming no extra tooling is required beyond lint/type-check.
-     4. Extend doc-generation and generator behavioural tests to enumerate tools through `toolNames`/helper functions, demonstrating literals remain internal.
-     5. Record automated evidence (e.g., scripted reports) showing only the internal literal definition references `MCP_TOOLS`, keeping verification detached from implementation specifics.
+     3. Amend doc-generation and generator behavioural tests to enumerate tools through `toolNames`/helper functions.
+     4. Add a compile-time check that both generated files and the doc-generation entry points type-check in isolation, reinforcing the absence of circular dependencies and confirming no extra tooling is required beyond lint/type-check. This is a prelude to moving the type-gen into a separate workspace, but that work is out of scope for this recovery plan.
 
 6. **Repair downstream consumers**
    - **Current state (verified):** Apps (`oak-curriculum-mcp-stdio`, CLI entry points, etc.) still import `MCP_TOOLS` and rely on implicit widening. Type-check currently fails because those exports no longer exist.
@@ -105,7 +105,7 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
      - _Risk:_ Documentation may lag behind code, encouraging future reintroduction of literals.
        - _Mitigation:_ As soon as gates turn green, capture the canonical export list and link supporting evidence in the docs. This can be achieved through generated documentation (pnpm doc-gen), but should also include authored documentation. Include behavioural test references so the documentation points to verified outcomes rather than implementation detail.
    - **Implementation approach:**
-     1. After completing Steps 1–6, update README content and evidence logs to reflect the new helpers. Confirm the updated doc-generation scripts pass type-check and lint.
+     1. After completing Steps 1–6, update README content and this plan document to reflect the new helpers. Confirm the updated doc-generation scripts pass type-check and lint.
      2. Record stakeholder acknowledgement once quality gates are green.
      3. Explicitly document the curated helper surface (e.g., `toolNames`, `getToolFromToolName`, generated alias types) as the supported API while marking `MCP_TOOLS` as internal-only, citing the behavioural tests that cover those helpers.
 

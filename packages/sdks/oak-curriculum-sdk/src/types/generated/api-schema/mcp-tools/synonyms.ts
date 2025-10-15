@@ -17,7 +17,7 @@ const SUBJECT_SYNONYM_MAP = new Map<string, SubjectCanonical>([
 
 export function standardiseSubject(value: string): SubjectCanonical | undefined {
   const key = normaliseSynonymKey(value);
-  SUBJECT_SYNONYM_MAP.get(key);
+  return SUBJECT_SYNONYM_MAP.get(key);
 }
 
 export function describeSubjectAllowed(): string {
@@ -33,7 +33,7 @@ const KEY_STAGE_SYNONYM_MAP = new Map<string, KeyStageCanonical>([
 
 export function standardiseKeyStage(value: string): KeyStageCanonical | undefined {
   const key = normaliseSynonymKey(value);
-  KEY_STAGE_SYNONYM_MAP.get(key);
+  return KEY_STAGE_SYNONYM_MAP.get(key);
 }
 
 export function describeKeyStageAllowed(): string {
