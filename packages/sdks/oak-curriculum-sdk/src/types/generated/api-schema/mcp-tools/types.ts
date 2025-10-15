@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-restricted-types */
 /**
  * GENERATED FILE - DO NOT EDIT
  *
@@ -8,9 +9,31 @@
 
 
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
+import type { ZodTypeAny, ZodSchema } from 'zod';
 
-// Tool definition which can be expanded with additional properties as necessary
 export interface ToolDescriptor extends Tool {
   readonly name: string;
   readonly description: string;
+  readonly operationId: string;
+  readonly toolZodSchema: ZodTypeAny;
+  readonly toolInputJsonSchema: {
+    readonly type: 'object';
+    readonly properties?: Readonly<Record<string, unknown>>;
+    readonly required?: readonly string[];
+    readonly additionalProperties?: boolean;
+  };
+  readonly toolOutputJsonSchema: unknown;
+  readonly zodOutputSchema: ZodSchema<unknown>;
+  readonly describeToolArgs: () => string;
+  readonly inputSchema: {
+    readonly type: 'object';
+    readonly properties?: Readonly<Record<string, unknown>>;
+    readonly required?: string[];
+    readonly additionalProperties?: boolean;
+  };
+  readonly validateOutput: (value: unknown) =>
+    | { readonly ok: true; readonly data: unknown }
+    | { readonly ok: false; readonly message: string };
+  readonly path: string;
+  readonly method: string;
 }

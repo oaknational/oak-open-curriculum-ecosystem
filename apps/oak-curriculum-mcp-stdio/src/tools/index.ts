@@ -13,7 +13,7 @@ import {
   isUniversalToolName,
   type ToolExecutionResult,
   type OpenAiToolName,
-  type AllToolNames,
+  type ToolName,
   type OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 
@@ -25,7 +25,7 @@ export interface McpToolsModule {
 }
 
 export interface UniversalToolExecutors {
-  readonly executeMcpTool?: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult>;
+  readonly executeMcpTool?: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
   readonly executeOpenAiTool?: (name: OpenAiToolName, args: unknown) => Promise<unknown>;
 }
 
@@ -51,7 +51,7 @@ export function createMcpToolsModule(
 ): McpToolsModule {
   const executeMcpTool =
     deps.executeMcpTool ??
-    ((name: AllToolNames, args: unknown) => executeToolCall(name, args, deps.client));
+    ((name: ToolName, args: unknown) => executeToolCall(name, args, deps.client));
 
   const executeOpenAiTool =
     deps.executeOpenAiTool ??

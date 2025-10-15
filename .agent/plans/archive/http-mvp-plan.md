@@ -40,7 +40,7 @@ core (generic base types) → SDK (specific) → apps (specific only).
 
 - Generators emit strict tool map and helpers:
   - `export const MCP_TOOLS` — canonical tool map (key equals literal `name`).
-  - `types.ts` exports `AllToolNames`, `isToolName`, `OakMcpToolBase<TIn,TOut>`; `OakMcpToolBase` continues to extend the MCP `Tool` type.
+  - `types.ts` exports `ToolName`, `isToolName`, `OakMcpToolBase<TIn,TOut>`; `OakMcpToolBase` continues to extend the MCP `Tool` type.
   - `lib.ts` exports `McpToolRegistry`, `attachMcpHandlers`, `formatStandardContent` (generated).
 - Validators: input/output schema validators are generated and will be attached to each tool definition; unknown at boundary, validated before execution via generated Zod.
 - Forbidden patterns removed in scripts and emitted code: no `Record<...>`, no `Object.*`, no vague index signatures, no `as` (except `as const` in emitted literals).
@@ -72,7 +72,7 @@ core (generic base types) → SDK (specific) → apps (specific only).
   - Generator unification: single `generateToolFile` path now used by all writers.
   - Output schema accessor generated: `getResponseSchemaForEndpoint(method, path)` returns typed `ZodSchema` and normalises path placeholders.
   - `generate-lib-file.ts`: removed unnecessary generic on `McpToolRegistry.call(...)`.
-  - Index generator: `MCP_TOOLS` emitted as `Readonly<Record<AllToolNames, ToolDescriptor>>`.
+  - Index generator: `MCP_TOOLS` emitted as `Readonly<Record<ToolName, ToolDescriptor>>`.
   - Params emitter: `Set` generics emitted via constructor type args; validators maps emitted as `Readonly<Record<...>>`.
   - OpenAI connector generator trimmed to satisfy `max-lines`.
   - Typegen runs clean (`pnpm type-gen` succeeds). Build and type-check pass.

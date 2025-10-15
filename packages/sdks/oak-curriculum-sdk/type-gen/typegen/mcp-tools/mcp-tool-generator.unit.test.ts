@@ -60,9 +60,9 @@ describe('generateCompleteMcpTools (descriptor schema threading)', () => {
       "import { MCP_TOOLS, type ToolDescriptor } from './definitions.js';",
     );
     expect(typesFile).toContain('export const TOOL_NAMES = [');
-    expect(typesFile).toContain('export type AllToolNames = typeof TOOL_NAMES[number];');
+    expect(typesFile).toContain('export type ToolName = typeof TOOL_NAMES[number];');
     expect(typesFile).toContain('const OPERATION_TO_TOOL = {');
-    expect(typesFile).toContain('export type AllOperationIds = keyof typeof OPERATION_TO_TOOL;');
+    expect(typesFile).toContain('export type OperationId = keyof typeof OPERATION_TO_TOOL;');
     expect(typesFile).not.toContain("export type { ToolDescriptor } from './definitions.js';");
     expect(typesFile).toContain(
       "export type ToolOutputJsonSchema = ReturnType<typeof getDescriptorSchemaForEndpoint>['json'];",

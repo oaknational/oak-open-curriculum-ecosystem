@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createMcpToolsModule } from './index.js';
 import type {
-  AllToolNames,
+  ToolName,
   OpenAiToolName,
   ToolExecutionResult,
 } from '@oaknational/oak-curriculum-sdk';
@@ -13,7 +13,7 @@ describe('createMcpToolsModule', () => {
     const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi
       .fn()
       .mockResolvedValue({ ok: true });
-    const executeMcpTool: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult> = vi
+    const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockResolvedValue({ data: { ok: true } });
 
@@ -33,7 +33,7 @@ describe('createMcpToolsModule', () => {
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {
     const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi.fn();
-    const executeMcpTool: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult> = vi
+    const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockResolvedValue({ data: { status: 'ok' } });
 
@@ -58,7 +58,7 @@ describe('createMcpToolsModule', () => {
   });
 
   it('propagates executor errors as structured MCP results', async () => {
-    const executeMcpTool: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult> = vi
+    const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockResolvedValue({ error: new Error('boom') });
     const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi.fn();

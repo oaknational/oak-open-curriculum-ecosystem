@@ -6,5 +6,8 @@ export function generateBarrelFile(): string {
  * Re-exports canonical literals and derived types.
  */`;
 
-  return [banner, 'TBD!'].join('\n\n');
+  return [
+    banner,
+    'export { toolNames, type ToolName, type ToolDescriptorForName, type ToolMap, type OperationId, type ToolNameForOperationId, isToolName, isOperationId, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName } from "./definitions.js";',
+  ].join('\n\n');
 }

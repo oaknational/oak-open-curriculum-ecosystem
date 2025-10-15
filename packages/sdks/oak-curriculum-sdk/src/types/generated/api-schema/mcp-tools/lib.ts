@@ -20,11 +20,11 @@ import {
   type ToolName,
 } from './definitions.js';
 
-type ToolRegistryEntry = {
+interface ToolRegistryEntry {
   readonly descriptor: ToolDescriptor;
-};
+}
 
-type InvocationResult = { readonly content: readonly TextContent[]; readonly isError?: true };
+interface InvocationResult { readonly content: readonly TextContent[]; readonly isError?: true }
 
 function textContent(text: string): TextContent {
   return { type: 'text', text };

@@ -3,24 +3,24 @@ export { createOakClient, createOakPathBasedClient } from './client/index.js';
 export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
 
 // Generated types
-export type { paths } from './types/generated/api-schema/api-paths-types';
-export type { components } from './types/generated/api-schema/api-paths-types';
+export type { paths } from './types/generated/api-schema/api-paths-types.js';
+export type { components } from './types/generated/api-schema/api-paths-types.js';
 /**
  * Public aliases for key generated types to appear clearly in documentation.
  */
-export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types';
+export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types.js';
 export type {
   Subject as OakSubject,
   KeyStage as OakKeyStage,
-} from './types/generated/api-schema/path-parameters';
+} from './types/generated/api-schema/path-parameters.js';
 
-export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './types/doc-bridges';
+export type { DocPaths as OpenApiPathsMap, DocSubject, DocKeyStage } from './types/doc-bridges.js';
 
 // Configuration
-export { apiUrl, apiSchemaUrl } from './config/index';
+export { apiUrl, apiSchemaUrl } from './config/index.js';
 
 // Create a convenience export for createApiClient (alias for createOakClient)
-export { createOakClient as createApiClient } from './client/index';
+export { createOakClient as createApiClient } from './client/index.js';
 
 // Type guards and allowed-values constants (additive public API exports)
 export {
@@ -38,12 +38,12 @@ export {
   SUBJECTS,
   ASSET_TYPES,
   VALID_PATHS_BY_PARAMETERS,
-} from './types/generated/api-schema/path-parameters';
+} from './types/generated/api-schema/path-parameters.js';
 
-export { schemaBase as schema } from './types/generated/api-schema/api-schema-base';
-export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters';
-export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters';
-export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters';
+export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
+export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters.js';
+export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters.js';
+export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
 export {
   validateRequest,
@@ -51,22 +51,22 @@ export {
   validateSearchResponse,
   isValidationFailure,
   isValidationSuccess,
-} from './validation/index';
+} from './validation/index.js';
 export type {
   ValidationResult,
   ValidationIssue,
   ValidatedClientOptions,
   HttpMethod,
 } from './validation/index';
-export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index';
-export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib';
-export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index';
-export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call';
-export type { ToolExecutionResult } from './mcp/execute-tool-call';
+export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
+export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib.js';
+export type { ToolName } from './types/generated/api-schema/mcp-tools/index.js';
+export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
+export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
 export {
   zodFromToolInputJsonSchema,
   zodRawShapeFromToolInputJsonSchema,
-} from './mcp/zod-input-schema';
+} from './mcp/zod-input-schema.js';
 
 // Generated URL helpers (deterministic canonical URLs)
 export {
@@ -75,7 +75,7 @@ export {
   CONTENT_TYPE_PREFIXES,
   extractSlug,
   type ContentType,
-} from './types/generated/api-schema/routing/url-helpers';
+} from './types/generated/api-schema/routing/url-helpers.js';
 
 // OpenAI Connector exports (SDK-generated facade helpers)
 export {
@@ -85,7 +85,7 @@ export {
   type OpenAiToolName,
   type OpenAiSearchArgs,
   type OpenAiFetchArgs,
-} from './types/generated/openai-connector/index';
+} from './types/generated/openai-connector/index.js';
 
 // Universal MCP tooling exports
 export {
@@ -95,7 +95,7 @@ export {
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
-} from './mcp/universal-tools';
+} from './mcp/universal-tools.js';
 
 // Hybrid search index types (SDK-owned to centralise downstream usage)
 export type { SearchIndex } from './types/search-index.js';
@@ -126,19 +126,19 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from './types/generated/search/index';
+} from './types/generated/search/index.js';
 
 export {
   QueryParserRequestSchema,
   QueryParserResponseSchema,
   isQueryParserResponse,
   QUERY_PARSER_INTENT_ENUM,
-} from './types/generated/query-parser/index';
+} from './types/generated/query-parser/index.js';
 export type {
   QueryParserRequest,
   QueryParserResponse,
   QueryParserIntent,
-} from './types/generated/query-parser/index';
+} from './types/generated/query-parser/index.js';
 
 export {
   ZERO_HIT_SCOPES,
@@ -156,7 +156,7 @@ export {
   type ZeroHitSummary,
   type ZeroHitEvent,
   type ZeroHitTelemetry,
-} from './types/generated/observability/index';
+} from './types/generated/observability/index.js';
 export {
   ADMIN_STREAM_ACTIONS,
   AdminStreamActionSchema,
@@ -172,7 +172,7 @@ export {
   type AdminStreamErrorFixture,
   type AdminStreamFixture,
   type AdminStreamFixtureMap,
-} from './types/generated/admin/index';
+} from './types/generated/admin/index.js';
 
 export type {
   SearchStructuredRequest,
@@ -198,7 +198,7 @@ export type {
   SearchSequencesResponse,
   SearchMultiScopeBucket,
   SearchMultiScopeResponse,
-} from './types/generated/search';
+} from './types/generated/search/index.js';
 export {
   lessonSummarySchema,
   unitSummarySchema,
@@ -215,16 +215,16 @@ export {
   type SearchLessonSummary,
   type SearchUnitSummary,
   type SearchSubjectSequences,
-} from './types/search-response-guards';
+} from './types/search-response-guards.js';
 export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
   SearchFacetsSchema,
-} from './types/generated/zod/search/output/index';
+} from './types/generated/zod/search/output/index.js';
 
 export {
   describeKeyStageAllowed,
   describeSubjectAllowed,
   standardiseKeyStage,
   standardiseSubject,
-} from './types/generated/api-schema/mcp-tools/synonyms';
+} from './types/generated/api-schema/mcp-tools/synonyms.js';

@@ -10,8 +10,6 @@
  * This is an internal file, all types and utilities are created in the types.js file
  */
 
-import type { ToolDescriptor } from './types.js';
-
 // Import all tool definitions
 
 import { getChangelog } from './tools/get-changelog.js';
@@ -41,7 +39,9 @@ import { getThreads } from './tools/get-threads.js';
 import { getThreadsUnits } from './tools/get-threads-units.js';
 import { getUnitsSummary } from './tools/get-units-summary.js';
 
-export const MCP_TOOLS = {
+
+  // DO NOT EXPORT
+  const MCP_TOOLS = {
   'get-changelog': getChangelog,
   'get-changelog-latest': getChangelogLatest,
   'get-key-stages': getKeyStages,
@@ -69,11 +69,12 @@ export const MCP_TOOLS = {
   'get-threads-units': getThreadsUnits,
   'get-units-summary': getUnitsSummary,
 } as const;
+  
 
 
-type ToolNameToToolDescriptor = typeof MCP_TOOLS;
-export type ToolName = keyof ToolNameToToolDescriptor;
-export type ToolDescriptorForName<TName extends ToolName> = ToolNameToToolDescriptor[TName];
+export type ToolMap = typeof MCP_TOOLS;
+export type ToolName = keyof ToolMap;
+export type ToolDescriptorForName<TName extends ToolName> = ToolMap[TName];
 
 
 export function isToolName(value: unknown): value is ToolName {
@@ -83,7 +84,12 @@ export function isToolName(value: unknown): value is ToolName {
   return value in MCP_TOOLS;
 }
 
-export function getToolFromToolName(toolName: ToolName): ToolDescriptorForName<ToolName> {
+
+  // THIS IS GENERATED FROM THE SAME DATA AS MCP_TOOLS, THEY ARE ALWAYS IN SYNC
+  export const toolNames = ['get-changelog', 'get-changelog-latest', 'get-key-stages', 'get-key-stages-subject-assets', 'get-key-stages-subject-lessons', 'get-key-stages-subject-questions', 'get-key-stages-subject-units', 'get-lessons-assets', 'get-lessons-assets-by-type', 'get-lessons-quiz', 'get-lessons-summary', 'get-lessons-transcript', 'get-rate-limit', 'get-search-lessons', 'get-search-transcripts', 'get-sequences-assets', 'get-sequences-questions', 'get-sequences-units', 'get-subject-detail', 'get-subjects', 'get-subjects-key-stages', 'get-subjects-sequences', 'get-subjects-years', 'get-threads', 'get-threads-units', 'get-units-summary'] as const;
+  
+
+export function getToolFromToolName<TName extends ToolName>(toolName: TName): ToolDescriptorForName<TName> {
   return MCP_TOOLS[toolName];
 }
 
@@ -117,10 +123,9 @@ const OPERATION_ID_TO_TOOL_NAME = {
 } as const;
 
 type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
-
 export type OperationId = keyof OperationIdToToolName;
+export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
 
-type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
 
 export function isOperationId(value: unknown): value is OperationId {
   if (typeof value !== 'string') {
@@ -137,10 +142,12 @@ export function getToolNameFromOperationId(operationId: OperationId): ToolName {
   return toolName;
 }
 
-export function getToolFromOperationId(operationId: OperationId): ToolDescriptor {
+
+export function getToolFromOperationId(operationId: OperationId): ToolDescriptorForName<ToolNameForOperationId<OperationId>> {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOLS[toolName];
 }
+
 
 const TOOL_NAME_TO_OPERATION_ID = {
   'get-sequences-units': 'getSequences-getSequenceUnits',

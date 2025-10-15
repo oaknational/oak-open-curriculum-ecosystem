@@ -5,12 +5,17 @@ import {
   isOpenAiToolName,
   type OpenAiToolName,
 } from '../types/generated/openai-connector/index.js';
-import { MCP_TOOLS } from '../types/generated/api-schema/mcp-tools/definitions.js';
-import { isToolName, type AllToolNames } from '../types/generated/api-schema/mcp-tools/types.js';
+import {
+  toolNames,
+  isToolName,
+  type ToolName,
+  getToolFromToolName,
+} from '../types/generated/api-schema/mcp-tools/index.js';
 import { zodFromToolInputJsonSchema, type GenericToolInputJsonSchema } from './zod-input-schema.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
+import { typeSafeKeys } from 'docs/_typedoc_src/types/helpers.js';
 
-export type UniversalToolName = OpenAiToolName | AllToolNames;
+export type UniversalToolName = OpenAiToolName | ToolName;
 
 export interface UniversalToolListEntry {
   readonly name: UniversalToolName;
@@ -19,7 +24,7 @@ export interface UniversalToolListEntry {
 }
 
 export interface UniversalToolExecutorDependencies {
-  readonly executeMcpTool: (name: AllToolNames, args: unknown) => Promise<ToolExecutionResult>;
+  readonly executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
   readonly executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown>;
 }
 
@@ -45,18 +50,16 @@ const toolMetadata: ReadonlyMap<UniversalToolName, ToolMetadata> = (() => {
     });
   }
 
-  for (const [name, descriptor] of Object.entries(MCP_TOOLS) as readonly [
-    AllToolNames,
-    (typeof MCP_TOOLS)[AllToolNames],
-  ][]) {
-    entries.set(name, {
+  toolNames.forEach((toolName) => {
+    const descriptor = getToolFromToolName(toolName);
+    entries.set(toolName, {
       schema: descriptor.toolZodSchema,
       inputSchema: descriptor.inputSchema,
       description: descriptor.description,
       describeToolArgs: descriptor.describeToolArgs,
       outputJsonSchema: descriptor.toolOutputJsonSchema,
     });
-  }
+  });
 
   return entries;
 })();
@@ -130,10 +133,11 @@ function serialiseArg(value: unknown): unknown {
   }
   if (typeof value === 'object' && value !== null) {
     const entries: [string, unknown][] = [];
-    for (const key of Object.keys(value)) {
-      const nested = (value as Record<string, unknown>)[key];
+    for (const key of typeSafeKeys(value)) {
+      const nested: unknown = value[key];
       entries.push([key, serialiseArg(nested)]);
     }
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- it really is unknown here
     const result: Record<string, unknown> = {};
     for (const [key, nested] of entries) {
       result[key] = nested;
@@ -176,7 +180,7 @@ async function runOpenAiTool(
 }
 
 async function runMcpTool(
-  name: AllToolNames,
+  name: ToolName,
   value: unknown,
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {

@@ -7,7 +7,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
   MCP_TOOLS,
-  type AllToolNames,
+  type ToolName,
   zodRawShapeFromToolInputJsonSchema,
   executeToolCall,
   createOakPathBasedClient,
@@ -169,7 +169,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 function logToolDiscovery(logger: Logger): void {
   try {
-    const toolNames = (Object.keys(MCP_TOOLS) as readonly AllToolNames[]).toSorted();
+    const toolNames = (Object.keys(MCP_TOOLS) as readonly ToolName[]).toSorted();
     logger.info('MCP tool module initialised', {
       tools: toolNames.length,
       sample: toolNames.slice(0, 3),
@@ -185,8 +185,8 @@ function registerMcpTools(
   logger: Logger,
 ): void {
   for (const [name, def] of Object.entries(MCP_TOOLS) as readonly [
-    AllToolNames,
-    (typeof MCP_TOOLS)[AllToolNames],
+    ToolName,
+    (typeof MCP_TOOLS)[ToolName],
   ][]) {
     const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
     const description = def.method.toUpperCase() + ' ' + def.path;
