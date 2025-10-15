@@ -11,7 +11,6 @@ import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
 import { generateBarrelFile } from './parts/generate-index-file.js';
-import { generateSynonymsFile } from './parts/generate-synonyms-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
@@ -145,7 +144,6 @@ export interface GeneratedMcpToolFiles {
   'definitions.ts': string;
   'types.ts': string;
   'lib.ts': string;
-  'synonyms.ts': string;
   tools: Record<string, string>; // filename -> content
 }
 
@@ -159,15 +157,11 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     'definitions.ts': '',
     'types.ts': '',
     'lib.ts': '',
-    'synonyms.ts': '',
     tools: {},
   };
 
   const operationToToolEntries: { operationId: string; toolName: string }[] = [];
   const toolNamesSet = new Set<string>();
-  const subjectEnumValues = new Set<string>();
-  const keyStageEnumValues = new Set<string>();
-
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
     const operationId = operation.operationId ?? `${method}-${path.replace(/[{}]/g, '')}`;
@@ -193,38 +187,6 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result['lib.ts'] = generateLibFile();
   result['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result['index.ts'] = generateBarrelFile();
-
-  const synonymOutput = generateSynonymsFile(
-    Array.from(subjectEnumValues),
-    Array.from(keyStageEnumValues),
-  );
-
-  if (synonymOutput.subjectReport.missingInConfig.length > 0) {
-    console.warn(
-      '[mcp-tool-generator] No subject synonyms configured for:',
-      synonymOutput.subjectReport.missingInConfig.join(', '),
-    );
-  }
-  if (synonymOutput.subjectReport.unusedConfigKeys.length > 0) {
-    console.warn(
-      '[mcp-tool-generator] Subject synonym config contains unused keys:',
-      synonymOutput.subjectReport.unusedConfigKeys.join(', '),
-    );
-  }
-  if (synonymOutput.keyStageReport.missingInConfig.length > 0) {
-    console.warn(
-      '[mcp-tool-generator] No key stage synonyms configured for:',
-      synonymOutput.keyStageReport.missingInConfig.join(', '),
-    );
-  }
-  if (synonymOutput.keyStageReport.unusedConfigKeys.length > 0) {
-    console.warn(
-      '[mcp-tool-generator] Key stage synonym config contains unused keys:',
-      synonymOutput.keyStageReport.unusedConfigKeys.join(', '),
-    );
-  }
-
-  result['synonyms.ts'] = synonymOutput.content;
 
   return result;
 }

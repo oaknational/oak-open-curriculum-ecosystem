@@ -124,7 +124,6 @@ describe('typegen-core', () => {
         'definitions.ts': 'definitions content',
         'types.ts': 'types content',
         'lib.ts': 'lib content',
-        'synonyms.ts': 'synonyms content',
         tools: {
           'alpha.ts': 'alpha tool content',
         },
