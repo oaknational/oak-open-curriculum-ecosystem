@@ -1,20 +1,15 @@
-const GENERATED_BANNER = [
-  '/* eslint-disable @typescript-eslint/no-restricted-types */',
-  '/**',
-  ' * GENERATED FILE - DO NOT EDIT',
-  ' *',
-  ' * Generated from packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-types-file.ts',
-  ' *',
-  ' * Tool type definitions and guards.',
-  ' */',
-  '',
-].join('\n');
+/* eslint-disable @typescript-eslint/no-restricted-types */
+/**
+ * GENERATED FILE - DO NOT EDIT
+ *
+ * Generated from packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-types-file.ts
+ *
+ * Tool type definitions and guards.
+ */
 
-const GENERATED_IMPORTS = [
-  "import type { OperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, OperationIdForToolName } from '../data/definitions.js';",
-].join('\n');
+import type { OperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, OperationIdForToolName } from '../data/definitions.js';
 
-const TOOL_TYPE_ALIASES = `export type ToolInvoke<TName extends ToolName> = ToolDescriptorForName<TName>['invoke'];
+export type ToolInvoke<TName extends ToolName> = ToolDescriptorForName<TName>['invoke'];
 export type ToolClient<TName extends ToolName> = Parameters<ToolInvoke<TName>>[0];
 export type ToolArgs<TName extends ToolName = ToolName> = Parameters<ToolInvoke<TName>>[1];
 export type ToolResult<TName extends ToolName> = Awaited<ReturnType<ToolInvoke<TName>>>;
@@ -32,8 +27,3 @@ export type RegisteredToolEntries = {
   };
 };
 export type ToolDescriptors = ToolMap;
-`;
-
-export function generateTypesFile(): string {
-  return [GENERATED_BANNER, GENERATED_IMPORTS, '', TOOL_TYPE_ALIASES].join('\n');
-}

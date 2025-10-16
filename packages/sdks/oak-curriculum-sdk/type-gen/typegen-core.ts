@@ -122,24 +122,36 @@ export function writeMcpToolsDirectory(
   mcpTools: GeneratedMcpToolFiles,
 ): void {
   const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
-  const toolsDir = path.resolve(mcpToolsDir, 'tools');
+  const contractDir = path.resolve(mcpToolsDir, 'contract');
+  const generatedDir = path.resolve(mcpToolsDir, 'generated');
+  const dataDir = path.resolve(generatedDir, 'data');
+  const dataToolsDir = path.resolve(dataDir, 'tools');
+  const aliasesDir = path.resolve(generatedDir, 'aliases');
+  const runtimeDir = path.resolve(generatedDir, 'runtime');
 
-  fs.mkdirSync(mcpToolsDir, { recursive: true });
-  fs.mkdirSync(toolsDir, { recursive: true });
+  fs.mkdirSync(contractDir, { recursive: true });
+  fs.mkdirSync(dataToolsDir, { recursive: true });
+  fs.mkdirSync(aliasesDir, { recursive: true });
+  fs.mkdirSync(runtimeDir, { recursive: true });
 
-  for (const [filename, content] of Object.entries(mcpTools)) {
-    if (filename === 'tools') {
-      continue;
-    }
-    if (typeof content !== 'string') {
-      throw new Error(`Content for ${filename} is not a string`);
-    }
-    const target = path.resolve(mcpToolsDir, filename);
-    fs.writeFileSync(target, content);
+  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools.index);
+
+  for (const [filename, content] of Object.entries(mcpTools.contract)) {
+    fs.writeFileSync(path.resolve(contractDir, filename), content);
   }
 
-  for (const [filename, content] of Object.entries(mcpTools.tools)) {
-    fs.writeFileSync(path.resolve(toolsDir, filename), content);
+  fs.writeFileSync(path.resolve(dataDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
+  fs.writeFileSync(path.resolve(dataDir, 'index.ts'), mcpTools.data['index.ts']);
+  for (const [filename, content] of Object.entries(mcpTools.data.tools)) {
+    fs.writeFileSync(path.resolve(dataToolsDir, filename), content);
+  }
+
+  for (const [filename, content] of Object.entries(mcpTools.aliases)) {
+    fs.writeFileSync(path.resolve(aliasesDir, filename), content);
+  }
+
+  for (const [filename, content] of Object.entries(mcpTools.runtime)) {
+    fs.writeFileSync(path.resolve(runtimeDir, filename), content);
   }
 }
 

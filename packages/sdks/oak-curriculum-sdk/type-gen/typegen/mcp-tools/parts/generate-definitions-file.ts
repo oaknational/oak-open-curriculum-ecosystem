@@ -31,19 +31,19 @@ function emitToolsLiteral(names: readonly string[]): string {
   const rows = names.map((toolName) => `  '${toolName}': ${toolNameToIdentifier(toolName)},`);
   return `
   // DO NOT EXPORT
-  const MCP_TOOLS = {\n${rows.join('\n')}\n} as const;
+  const MCP_TOOL_DEFINITIONS = {\n${rows.join('\n')}\n} as const;
   `;
 }
 
 const TOOL_TYPE_BLOCK = `
-export type ToolMap = typeof MCP_TOOLS;
+export type ToolMap = typeof MCP_TOOL_DEFINITIONS;
 export type ToolName = keyof ToolMap;
 export type ToolDescriptorForName<TName extends ToolName> = ToolMap[TName];
 `;
 
 function emitToolNames(names: readonly string[]): string {
   return `
-  // THIS IS GENERATED FROM THE SAME DATA AS MCP_TOOLS, THEY ARE ALWAYS IN SYNC
+  // THIS IS GENERATED FROM THE SAME DATA AS MCP_TOOL_DEFINITIONS, THEY ARE ALWAYS IN SYNC
   export const toolNames = [${names.map((name) => `'${name}'`).join(', ')}] as const;
   `;
 }
@@ -52,11 +52,11 @@ const IS_TOOL_NAME_BLOCK = `export function isToolName(value: unknown): value is
   if (typeof value !== 'string') {
     return false;
   }
-  return value in MCP_TOOLS;
+  return value in MCP_TOOL_DEFINITIONS;
 }`;
 
 const GET_TOOL_FROM_TOOL_NAME_BLOCK = `export function getToolFromToolName<TName extends ToolName>(toolName: TName): ToolDescriptorForName<TName> {
-  return MCP_TOOLS[toolName];
+  return MCP_TOOL_DEFINITIONS[toolName];
 }`;
 
 const OPERATION_ID_MAP_BLOCK = (
@@ -99,7 +99,7 @@ export type OperationIdForToolName<TName extends ToolName> = ToolNameToOperation
 const GET_TOOL_FROM_ID_BLOCK = `
 export function getToolFromOperationId<TId extends OperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
   const toolName = getToolNameFromOperationId(operationId);
-  return MCP_TOOLS[toolName];
+  return MCP_TOOL_DEFINITIONS[toolName];
 }
 `;
 

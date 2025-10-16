@@ -117,28 +117,57 @@ describe('typegen-core', () => {
   });
 
   describe('writeMcpToolsDirectory', () => {
-    it('writes every generated root file including definitions.ts', () => {
+    it('writes contract, data, aliases, and runtime artefacts into the expected structure', () => {
       const outDir = mkdtempSync(path.join(os.tmpdir(), 'mcp-tools-writer-test-'));
       const files: GeneratedMcpToolFiles = {
-        'index.ts': 'index content',
-        'definitions.ts': 'definitions content',
-        'types.ts': 'types content',
-        'lib.ts': 'lib content',
-        tools: {
-          'alpha.ts': 'alpha tool content',
+        index: 'root index content',
+        contract: {
+          'tool-descriptor.contract.ts': 'contract content',
+        },
+        data: {
+          'definitions.ts': 'definitions content',
+          'index.ts': 'data index content',
+          tools: {
+            'alpha.ts': 'alpha tool content',
+          },
+        },
+        aliases: {
+          'types.ts': 'types content',
+        },
+        runtime: {
+          'lib.ts': 'lib content',
         },
       };
 
       try {
         writeMcpToolsDirectory(outDir, files);
 
-        const definitionsPath = path.join(outDir, 'mcp-tools', 'definitions.ts');
-        const indexPath = path.join(outDir, 'mcp-tools', 'index.ts');
-        const toolPath = path.join(outDir, 'mcp-tools', 'tools', 'alpha.ts');
+        const rootIndexPath = path.join(outDir, 'mcp-tools', 'index.ts');
+        const contractPath = path.join(
+          outDir,
+          'mcp-tools',
+          'contract',
+          'tool-descriptor.contract.ts',
+        );
+        const definitionsPath = path.join(
+          outDir,
+          'mcp-tools',
+          'generated',
+          'data',
+          'definitions.ts',
+        );
+        const dataIndexPath = path.join(outDir, 'mcp-tools', 'generated', 'data', 'index.ts');
+        const toolPath = path.join(outDir, 'mcp-tools', 'generated', 'data', 'tools', 'alpha.ts');
+        const aliasesPath = path.join(outDir, 'mcp-tools', 'generated', 'aliases', 'types.ts');
+        const runtimePath = path.join(outDir, 'mcp-tools', 'generated', 'runtime', 'lib.ts');
 
+        expect(readFileSync(rootIndexPath, 'utf8')).toBe('root index content');
+        expect(readFileSync(contractPath, 'utf8')).toBe('contract content');
         expect(readFileSync(definitionsPath, 'utf8')).toBe('definitions content');
-        expect(readFileSync(indexPath, 'utf8')).toBe('index content');
+        expect(readFileSync(dataIndexPath, 'utf8')).toBe('data index content');
         expect(readFileSync(toolPath, 'utf8')).toBe('alpha tool content');
+        expect(readFileSync(aliasesPath, 'utf8')).toBe('types content');
+        expect(readFileSync(runtimePath, 'utf8')).toBe('lib content');
       } finally {
         rmSync(outDir, { force: true, recursive: true });
       }

@@ -1,5 +1,4 @@
-export function generateLibFile(): string {
-  return `/**
+/**
  * GENERATED FILE - DO NOT EDIT
  * 
  * Library functions for MCP tools
@@ -39,7 +38,7 @@ function formatStandardContent(result: unknown, isError = false): InvocationResu
     return { content: [textContent(JSON.stringify(result, null, 2))] };
   }
   const message = result instanceof Error ? result.message : 'Unknown error';
-  const [firstLine, ...rest] = message.split('\\n');
+  const [firstLine, ...rest] = message.split('\n');
   const header = firstLine.startsWith('Error:') ? firstLine : 'Error: ' + firstLine;
   const content = [textContent(header)];
   for (const line of rest) {
@@ -120,6 +119,4 @@ export function attachMcpHandlers(server: Server, registry: McpToolRegistry): vo
 
 export function createMcpToolRegistry(client: OakApiPathBasedClient): McpToolRegistry {
   return new McpToolRegistry(client);
-}
-`;
 }

@@ -1,5 +1,4 @@
-export function generateToolDescriptorFile(): string {
-  return `/**
+/**
  * GENERATED FILE - DO NOT EDIT
  *
  * Tool descriptor contract used by all generated MCP tools.
@@ -37,6 +36,4 @@ export interface ToolDescriptor<TClient = unknown, TArgs = unknown, TResult = un
     | { readonly ok: true; readonly data: TResult }
     | { readonly ok: false; readonly message: string };
   readonly invoke: (client: TClient, args: TArgs) => TResult | Promise<TResult>;
-}
-`;
 }

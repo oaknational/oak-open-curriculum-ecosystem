@@ -10,7 +10,7 @@ import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
-import { generateBarrelFile } from './parts/generate-index-file.js';
+import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
@@ -141,12 +141,15 @@ function buildParamMetadataForOperation(operation: OperationObject): {
 }
 
 export interface GeneratedMcpToolFiles {
-  'index.ts': string;
-  'definitions.ts': string;
-  'types.ts': string;
-  'lib.ts': string;
-  'tool-descriptor.ts': string;
-  tools: Record<string, string>; // filename -> content
+  readonly index: string;
+  readonly contract: Record<string, string>;
+  readonly data: {
+    readonly 'definitions.ts': string;
+    readonly 'index.ts': string;
+    readonly tools: Record<string, string>;
+  };
+  readonly aliases: Record<string, string>;
+  readonly runtime: Record<string, string>;
 }
 
 export interface McpToolGeneratorDeps {
@@ -155,12 +158,15 @@ export interface McpToolGeneratorDeps {
 
 export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToolFiles {
   const result: GeneratedMcpToolFiles = {
-    'index.ts': '',
-    'definitions.ts': '',
-    'types.ts': '',
-    'lib.ts': '',
-    'tool-descriptor.ts': '',
-    tools: {},
+    index: '',
+    contract: {},
+    data: {
+      'definitions.ts': '',
+      'index.ts': '',
+      tools: {},
+    },
+    aliases: {},
+    runtime: {},
   };
 
   const operationToToolEntries: { operationId: string; toolName: string }[] = [];
@@ -181,16 +187,17 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
       pathParamMetadata,
       queryParamMetadata,
     );
-    result.tools[`${toolName}.ts`] = toolFile;
+    result.data.tools[`${toolName}.ts`] = toolFile;
   }
 
   const toolNames = Array.from(toolNamesSet).toSorted();
 
-  result['types.ts'] = generateTypesFile({ toolNames });
-  result['lib.ts'] = generateLibFile();
-  result['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
-  result['index.ts'] = generateBarrelFile();
-  result['tool-descriptor.ts'] = generateToolDescriptorFile();
+  result.aliases['types.ts'] = generateTypesFile();
+  result.runtime['lib.ts'] = generateLibFile();
+  result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
+  result.data['index.ts'] = generateDataIndexFile();
+  result.index = generateRootIndexFile();
+  result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();
 
   return result;
 }

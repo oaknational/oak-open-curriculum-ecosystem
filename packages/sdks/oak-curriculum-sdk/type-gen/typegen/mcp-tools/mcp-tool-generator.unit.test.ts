@@ -3,27 +3,27 @@ import { generateCompleteMcpTools } from './mcp-tool-generator.js';
 import { schemaWithPathParams, buildSchemaWithEnumParam } from '../../test-fixtures.js';
 import { generateMcpToolName } from './name-generator.js';
 
-describe('generateCompleteMcpTools (descriptor schema threading)', () => {
-  it('emits standalone descriptor contract and curated exports', () => {
+describe('generateCompleteMcpTools (descriptor schema layering)', () => {
+  it('emits contract, data, alias, and runtime artefacts with correct dependencies', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
 
-    expect(output['tool-descriptor.ts']).toContain('export interface ToolDescriptor extends Tool');
-    expect(output['types.ts']).toContain(
-      "import type { ToolDescriptor } from './tool-descriptor.js';",
+    expect(output.contract['tool-descriptor.contract.ts']).toContain(
+      'export interface ToolDescriptor<TResult = unknown> extends Tool',
     );
-    expect(output['lib.ts']).toContain(
-      "import type { ToolDescriptor } from './tool-descriptor.js';",
+    expect(output.data['definitions.ts']).toContain('const MCP_TOOL_DEFINITIONS');
+    expect(output.data['index.ts']).toContain('export { toolNames, getToolFromToolName');
+    expect(output.aliases['types.ts']).toContain(
+      "import type { OperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, OperationIdForToolName } from '../data/definitions.js';",
     );
-    expect(output['index.ts']).toContain(
-      'export { type ToolDescriptor } from "./tool-descriptor.js";',
-    );
+    expect(output.runtime['lib.ts']).toContain('import { toolNames');
+    expect(output.index).toContain('generated/data/index.js');
   });
 
   it('captures enum parameter metadata when schema provides enum', () => {
     const schema = buildSchemaWithEnumParam();
     const files = generateCompleteMcpTools(schema);
     const toolName = generateMcpToolName('/courses', 'get');
-    const toolFile = files.tools[`${toolName}.ts`];
+    const toolFile = files.data.tools[`${toolName}.ts`];
 
     expect(toolFile).toBeDefined();
     expect(toolFile).toContain("'CourseA' | 'CourseB'");
