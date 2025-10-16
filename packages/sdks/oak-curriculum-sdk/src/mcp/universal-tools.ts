@@ -13,7 +13,7 @@ import {
 } from '../types/generated/api-schema/mcp-tools/index.js';
 import { zodFromToolInputJsonSchema, type GenericToolInputJsonSchema } from './zod-input-schema.js';
 import type { ToolExecutionResult } from './execute-tool-call.js';
-import { typeSafeKeys } from 'docs/_typedoc_src/types/helpers.js';
+import { typeSafeEntries } from '../types/helpers/type-helpers.js';
 
 export type UniversalToolName = OpenAiToolName | ToolName;
 
@@ -132,17 +132,13 @@ function serialiseArg(value: unknown): unknown {
     return value.map(serialiseArg);
   }
   if (typeof value === 'object' && value !== null) {
-    const entries: [string, unknown][] = [];
-    for (const key of typeSafeKeys(value)) {
-      const nested: unknown = value[key];
-      entries.push([key, serialiseArg(nested)]);
-    }
+    const entries = typeSafeEntries(value);
     // eslint-disable-next-line @typescript-eslint/no-restricted-types -- it really is unknown here
-    const result: Record<string, unknown> = {};
+    const accumulator: Record<string, unknown> = {};
     for (const [key, nested] of entries) {
-      result[key] = nested;
+      accumulator[String(key)] = serialiseArg(nested);
     }
-    return result;
+    return accumulator;
   }
   return value;
 }

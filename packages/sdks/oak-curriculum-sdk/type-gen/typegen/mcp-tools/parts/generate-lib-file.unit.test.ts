@@ -3,23 +3,23 @@ import { describe, expect, it } from 'vitest';
 import { generateLibFile } from './generate-lib-file.js';
 
 describe('generateLibFile', () => {
-  it('emits canonical imports using literal helpers', () => {
+  it('references only the curated helper surface', () => {
     const output = generateLibFile();
 
-    expect(output).toContain("import { MCP_TOOLS, type ToolDescriptor } from './definitions.js';");
     expect(output).toContain(
-      "import {\n  getToolNameFromOperationId,\n  isToolName,\n  type OperationId,\n  type ToolName,\n} from './types.js';",
+      "import {\n  toolNames,\n  getToolFromToolName,\n  getToolNameFromOperationId,\n  isToolName,\n} from './definitions.js';",
     );
-    expect(output).toContain(
-      'export function getToolFromOperationId(operationId: OperationId): ToolDescriptor {',
-    );
+    expect(output).toContain("import type { OperationId } from './types.js';");
+    expect(output).toContain("import type { ToolDescriptor } from './tool-descriptor.js';");
+    expect(output).not.toContain('MCP_TOOLS');
   });
 
-  it('guards tool invocation and output using literal descriptors', () => {
+  it('initialises the registry from canonical descriptors and forwards the client', () => {
     const output = generateLibFile();
 
-    expect(output).toContain('const entry = this.tools.get(name);');
-    expect(output).toContain('const parsed = descriptor.toolZodSchema.safeParse(args);');
-    expect(output).toContain('const outputValidation = descriptor.validateOutput(output);');
+    expect(output).toContain('this.tools.set(name, { descriptor: getToolFromToolName(name) });');
+    expect(output).toContain('const output = await descriptor.invoke(this.client, parsed.data);');
+    expect(output).toContain('export function createMcpToolRegistry');
+    expect(output).toContain('export function getToolDescriptorForOperationId');
   });
 });

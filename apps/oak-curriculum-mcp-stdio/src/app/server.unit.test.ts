@@ -4,7 +4,12 @@
 
 import { describe, it, expect, vi } from 'vitest';
 
-import { MCP_TOOLS, type ToolName } from '@oaknational/oak-curriculum-sdk';
+import {
+  toolNames,
+  getToolFromToolName,
+  type ToolName,
+  type ToolDescriptorForName,
+} from '@oaknational/oak-curriculum-sdk';
 
 vi.mock(
   '@modelcontextprotocol/sdk/types.ts',
@@ -119,15 +124,11 @@ describe('validation helpers', () => {
 
 describe('registerMcpTools literals', () => {
   it('iterates over literal tool descriptors in alphabetical order', () => {
-    const toolNames = (Object.keys(MCP_TOOLS) as readonly ToolName[]).toSorted();
-    expect(toolNames).toEqual(
-      (Object.keys(MCP_TOOLS) as readonly ToolName[]).sort((a, b) => a.localeCompare(b)),
-    );
+    const sortedToolNames = [...toolNames].toSorted((a, b) => a.localeCompare(b));
+    expect(sortedToolNames).toEqual(sortedToolNames.slice().sort((a, b) => a.localeCompare(b)));
 
-    for (const [name, descriptor] of Object.entries(MCP_TOOLS) as readonly [
-      ToolName,
-      (typeof MCP_TOOLS)[ToolName],
-    ][]) {
+    for (const name of toolNames) {
+      const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
       expect(descriptor.name).toBe(name);
       expect(descriptor.inputSchema).toBeDefined();
       expect(descriptor.method.length).toBeGreaterThan(0);

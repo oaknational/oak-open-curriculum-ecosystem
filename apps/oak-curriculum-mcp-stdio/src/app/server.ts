@@ -6,8 +6,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
-  MCP_TOOLS,
-  type ToolName,
+  toolNames,
+  getToolFromToolName,
+  type ToolDescriptorForName,
   zodRawShapeFromToolInputJsonSchema,
   executeToolCall,
   createOakPathBasedClient,
@@ -169,10 +170,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 function logToolDiscovery(logger: Logger): void {
   try {
-    const toolNames = (Object.keys(MCP_TOOLS) as readonly ToolName[]).toSorted();
+    const sortedToolNames = [...toolNames].toSorted((a, b) => a.localeCompare(b));
     logger.info('MCP tool module initialised', {
-      tools: toolNames.length,
-      sample: toolNames.slice(0, 3),
+      tools: sortedToolNames.length,
+      sample: sortedToolNames.slice(0, 3),
     });
   } catch (err: unknown) {
     logger.error('Failed to inspect tools', { error: err });
@@ -184,19 +185,17 @@ function registerMcpTools(
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
 ): void {
-  for (const [name, def] of Object.entries(MCP_TOOLS) as readonly [
-    ToolName,
-    (typeof MCP_TOOLS)[ToolName],
-  ][]) {
-    const input = zodRawShapeFromToolInputJsonSchema(def.inputSchema);
-    const description = def.method.toUpperCase() + ' ' + def.path;
+  for (const name of toolNames) {
+    const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
+    const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
+    const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;
     const handlers = createToolResponseHandlers(logger, {
       name,
       description,
-      inputSchemaRaw: def.inputSchema,
+      inputSchemaRaw: descriptor.inputSchema,
       inputSchemaZod: input,
-      outputSchemaRaw: def.toolOutputJsonSchema,
-      outputSchemaZod: def.zodOutputSchema,
+      outputSchemaRaw: descriptor.toolOutputJsonSchema,
+      outputSchemaZod: descriptor.zodOutputSchema,
     });
     server.registerTool(
       name,
@@ -206,7 +205,7 @@ function registerMcpTools(
         if (execResult.error) {
           return handlers.handleExecutionError(params, execResult.error);
         }
-        const out = validateOutput(def.path, def.method, execResult.data);
+        const out = validateOutput(descriptor.path, descriptor.method, execResult.data);
         if (!out.ok) {
           return handlers.handleValidationError(params, execResult.data, out.message);
         }

@@ -123,17 +123,10 @@ vi.mock(
 );
 
 vi.mock(
-  '../types/generated/api-schema/mcp-tools/definitions.js',
+  '../types/generated/api-schema/mcp-tools/index.js',
   () => ({
-    MCP_TOOLS: mcpTools,
-  }),
-  { virtual: true },
-);
-
-vi.mock(
-  '../types/generated/api-schema/mcp-tools/types.js',
-  () => ({
-    TOOL_NAMES: [sampleMcpToolName] as const,
+    toolNames: [sampleMcpToolName] as const,
+    getToolFromToolName: (name: string) => mcpTools[name],
     isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
   }),
   { virtual: true },
@@ -144,11 +137,15 @@ const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } =
 );
 
 const { OPENAI_CONNECTOR_TOOL_DEFS } = await import('../types/generated/openai-connector/index.js');
-const { MCP_TOOLS } = await import('../types/generated/api-schema/mcp-tools/definitions.js');
+const { getToolFromToolName: generatedGetToolFromToolName } = await import(
+  '../types/generated/api-schema/mcp-tools/index.js'
+);
 
 const SAMPLE_MCP_TOOL_NAME = sampleMcpToolName;
 
-if (!(SAMPLE_MCP_TOOL_NAME in MCP_TOOLS)) {
+const generatedDescriptor = generatedGetToolFromToolName(SAMPLE_MCP_TOOL_NAME);
+
+if (!generatedDescriptor) {
   throw new Error('Expected get-key-stages-subject-lessons tool to be generated');
 }
 

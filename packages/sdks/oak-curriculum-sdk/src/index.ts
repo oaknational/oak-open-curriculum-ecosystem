@@ -58,9 +58,36 @@ export type {
   ValidatedClientOptions,
   HttpMethod,
 } from './validation/index';
-export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
-export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib.js';
-export type { ToolName } from './types/generated/api-schema/mcp-tools/index.js';
+export {
+  toolNames,
+  isToolName,
+  getToolFromToolName,
+  getToolFromOperationId,
+  getToolNameFromOperationId,
+  getOperationIdFromToolName,
+  type OperationId,
+  type OperationIdForToolName,
+  type ToolDescriptorForName,
+  type ToolDescriptorForOperationId,
+  type ToolDescriptor,
+  type ToolMap,
+  type ToolName,
+  type ToolNameForOperationId,
+  type ToolArgs,
+  type ToolArgsForOperationId,
+  type ToolDescriptors,
+  type ToolInvoke,
+  type ToolNameFromOperationId,
+  type ToolOperationIdForName,
+  type ToolResult,
+  type ToolResultForOperationId,
+  type RegisteredToolEntries,
+} from './types/generated/api-schema/mcp-tools/index.js';
+export {
+  McpToolRegistry,
+  attachMcpHandlers,
+  createMcpToolRegistry,
+} from './types/generated/api-schema/mcp-tools/lib.js';
 export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
 export {
@@ -98,7 +125,6 @@ export {
 } from './mcp/universal-tools.js';
 
 // Hybrid search index types (SDK-owned to centralise downstream usage)
-export type { SearchIndex } from './types/search-index.js';
 export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
@@ -221,10 +247,3 @@ export {
   SequenceFacetSchema,
   SearchFacetsSchema,
 } from './types/generated/zod/search/output/index.js';
-
-export {
-  describeKeyStageAllowed,
-  describeSubjectAllowed,
-  standardiseKeyStage,
-  standardiseSubject,
-} from './types/generated/api-schema/mcp-tools/synonyms.js';

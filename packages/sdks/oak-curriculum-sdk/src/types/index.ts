@@ -13,14 +13,14 @@ export type { PathOperation, OperationId } from './generated/api-schema/path-par
 // Export the helpers
 
 // Hybrid search index types
-export {
+export type {
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
   SearchSubjectSlug,
   SearchCompletionSuggestPayload,
-} from './types/search-index';
+} from './search-index';
 
 // Hybrid search facet types and schemas
 export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index';
@@ -44,10 +44,3 @@ export type {
   SearchUnitSummary,
   SearchSubjectSequences,
 } from './search-response-guards';
-
-export {
-  describeKeyStageAllowed,
-  describeSubjectAllowed,
-  standardiseKeyStage,
-  standardiseSubject,
-} from './generated/api-schema/mcp-tools/synonyms';

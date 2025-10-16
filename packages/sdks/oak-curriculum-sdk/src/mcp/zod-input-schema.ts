@@ -30,44 +30,7 @@ type JsonSchemaProperty =
   | JsonSchemaPropertyBoolean
   | JsonSchemaPropertyArray;
 
-interface JsonSchemaObject {
-  readonly type: 'object';
-  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
-  readonly required?: readonly string[];
-  readonly additionalProperties?: boolean;
-}
-
-type Primitive = 'string' | 'number' | 'boolean';
-interface ArrayProperty {
-  type: 'array';
-  items: { type: Primitive };
-}
-interface StringProperty {
-  type: 'string';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-interface NumberProperty {
-  type: 'number';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-interface BooleanProperty {
-  type: 'boolean';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-type PropertySchema =
-  | StringProperty
-  | NumberProperty
-  | BooleanProperty
-  | (ArrayProperty & { description?: string; default?: unknown });
-
-export type JsonSchemaToZodSchema<TSchema extends ToolInputJsonSchema> =
-  ZodObjectFromJsonSchema<TSchema>;
+export type JsonSchemaToZodSchema<TSchema extends ToolInputJsonSchema> = z.ZodTypeAny;
 
 export interface GenericToolInputJsonSchema {
   readonly type: 'object';

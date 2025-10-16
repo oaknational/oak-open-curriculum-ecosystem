@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { generateKeyPair, SignJWT, exportJWK } from 'jose';
 import request from 'supertest';
 import { createApp } from '../src/index.js';
-import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
+import { toolNames } from '@oaknational/oak-curriculum-sdk';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
@@ -88,7 +88,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       (tool) => tool && typeof tool === 'object' && 'method' in (tool as Record<string, unknown>),
     );
     expect(containsMethodField).toBe(false);
-    const baseToolNames = Object.keys(MCP_TOOLS);
+    const baseToolNames = [...toolNames];
     const composedTools = ['fetch', 'search'];
     const expectedToolNames = [...baseToolNames, ...composedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());

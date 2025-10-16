@@ -17,7 +17,11 @@ import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
 // Import generated artifacts directly for endpoint/tool catalogs
 import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
-import { MCP_TOOLS } from '../src/types/generated/api-schema/mcp-tools/index.js';
+import {
+  toolNames,
+  getToolFromToolName,
+  type ToolDescriptorForName,
+} from '../src/types/generated/api-schema/mcp-tools/index.js';
 import { ZodError, type ZodIssue } from 'zod';
 function isPlainObject(value: unknown): value is object {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -269,19 +273,20 @@ function listParamObjectKeys(obj: unknown): string {
 function renderToolCatalog(): string {
   const lines: string[] = [];
   lines.push('## MCP Tool Catalog');
-  const entries = Object.entries(MCP_TOOLS).sort(([nameA], [nameB]) => nameA.localeCompare(nameB));
-  for (const [name, base] of entries) {
-    const opId = getOwnString(base, 'operationId') ?? '';
-    const path = getOwnString(base, 'path') ?? '';
-    const method = getOwnString(base, 'method') ?? '';
+  const entries = [...toolNames].sort((a, b) => a.localeCompare(b));
+  for (const name of entries) {
+    const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
+    const opId = getOwnString(descriptor, 'operationId') ?? '';
+    const path = getOwnString(descriptor, 'path') ?? '';
+    const method = getOwnString(descriptor, 'method') ?? '';
     lines.push(`### ${name}`);
     lines.push(`- path: ${path}`);
     lines.push(`- method: ${method}`);
     if (opId) {
       lines.push(`- operationId: ${opId}`);
     }
-    const pathParams = getOwnValue(base, 'pathParams');
-    const queryParams = getOwnValue(base, 'queryParams');
+    const pathParams = getOwnValue(descriptor, 'pathParams');
+    const queryParams = getOwnValue(descriptor, 'queryParams');
     lines.push(`- path params: ${listParamObjectKeys(pathParams)}`);
     lines.push(`- query params: ${listParamObjectKeys(queryParams)}`);
     lines.push('');

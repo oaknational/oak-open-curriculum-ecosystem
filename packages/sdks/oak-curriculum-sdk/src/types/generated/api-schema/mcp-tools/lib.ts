@@ -11,27 +11,28 @@ import {
   type CallToolRequest,
   type TextContent,
 } from '@modelcontextprotocol/sdk/types.js';
-import { type ToolArgs, type ToolDescriptor, type ToolResult } from './types.js';
 import {
+  toolNames,
   getToolFromToolName,
-  getToolFromOperationId,
+  getToolNameFromOperationId,
   isToolName,
-  type OperationId,
+  type ToolDescriptorForName,
+  type ToolDescriptorForOperationId,
   type ToolName,
 } from './definitions.js';
-import type { OakApiPathBasedClient } from '../../../client/index.js';
+import type { OperationId } from './types.js';
+import type { OakApiPathBasedClient } from '../../../../client/index.js';
+import type { ToolDescriptor } from './tool-descriptor.js';
 
-type ToolRegistryEntry<TName extends ToolName> = {
-  readonly descriptor: ToolDescriptor<TName>;
-};
+interface ToolRegistryEntry<TName extends ToolName> {
+  readonly descriptor: ToolDescriptorForName<TName>;
+}
 
 type InvocationResult = { readonly content: readonly TextContent[]; readonly isError?: true };
 
 function textContent(text: string): TextContent {
   return { type: 'text', text };
 }
-
-
 
 function formatStandardContent(result: unknown, isError = false): InvocationResult {
   if (!isError) {
@@ -48,29 +49,40 @@ function formatStandardContent(result: unknown, isError = false): InvocationResu
 }
 
 export class McpToolRegistry {
-  private readonly tools = new Map<ToolName, ToolRegistryEntry<ToolName>>();
+  private readonly tools: Map<ToolName, ToolRegistryEntry<ToolName>>;
+  private readonly client: OakApiPathBasedClient;
 
-  constructor(private readonly client: OakApiPathBasedClient) {}
+  constructor(client: OakApiPathBasedClient) {
+    this.client = client;
+    this.tools = new Map();
+    for (const name of toolNames) {
+      this.tools.set(name, { descriptor: getToolFromToolName(name) });
+    }
+  }
 
-  register<TName extends ToolName>(name: TName, descriptor: ToolDescriptor<TName>): void {
+  register<TName extends ToolName>(name: TName, descriptor: ToolDescriptorForName<TName>): void {
     this.tools.set(name, { descriptor });
   }
 
   listTools(): readonly ToolDescriptor[] {
-    return Array.from(this.tools.values())
-      .map((entry) => entry.descriptor)
-      .sort((a, b) => a.name.localeCompare(b.name));
+    return toolNames.map((name) => this.getDescriptor(name));
+  }
+
+  private getDescriptor<TName extends ToolName>(name: TName): ToolDescriptorForName<TName> {
+    const entry = this.tools.get(name);
+    if (entry) {
+      return entry.descriptor;
+    }
+    const descriptor = getToolFromToolName(name);
+    this.tools.set(name, { descriptor });
+    return descriptor;
   }
 
   async call(name: string, args: unknown): Promise<InvocationResult> {
-      if (!isToolName(name)) {
-      return formatStandardContent(new Error('Unknown tool: ' + name), true);
+    if (!isToolName(name)) {
+      return formatStandardContent(new Error('Unknown tool: ' + String(name)), true);
     }
-    const entry = this.tools.get(name);
-    if (!entry) {
-      return formatStandardContent(new Error('Tool not registered: ' + name), true);
-    }
-    const { descriptor } = entry;
+    const descriptor = this.getDescriptor(name);
     const parsed = descriptor.toolZodSchema.safeParse(args);
     if (!parsed.success) {
       const describe = descriptor.describeToolArgs;
@@ -78,8 +90,8 @@ export class McpToolRegistry {
       return formatStandardContent(new Error(message), true);
     }
     try {
-      const output = await descriptor.invoke(this.client, parsed.data as ToolArgs<typeof name>);
-      const outputValidation = descriptor.validateOutput(output as ToolResult<typeof name>);
+      const output = await descriptor.invoke(this.client, parsed.data);
+      const outputValidation = descriptor.validateOutput(output);
       if (!outputValidation.ok) {
         return formatStandardContent(new Error('Output validation error: ' + outputValidation.message), true);
       }
@@ -91,10 +103,21 @@ export class McpToolRegistry {
   }
 }
 
+export function getToolDescriptorForOperationId<TId extends OperationId>(
+  operationId: TId,
+): ToolDescriptorForOperationId<TId> {
+  const toolName = getToolNameFromOperationId(operationId);
+  return getToolFromToolName(toolName) as ToolDescriptorForOperationId<TId>;
+}
+
 export function attachMcpHandlers(server: Server, registry: McpToolRegistry): void {
   server.setRequestHandler(ListToolsRequestSchema, () => ({ tools: registry.listTools() }));
   server.setRequestHandler(CallToolRequestSchema, (request: CallToolRequest) => {
     const { name, arguments: args } = request.params;
     return registry.call(name, args);
   });
+}
+
+export function createMcpToolRegistry(client: OakApiPathBasedClient): McpToolRegistry {
+  return new McpToolRegistry(client);
 }

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
-import type { ToolDescriptor } from '../types.js';
-import type { OakApiPathBasedClient } from '../../../../../client/index.js';
+import type { ToolDescriptor } from '../tool-descriptor.js';
 import { getDescriptorSchemaForEndpoint } from '../../response-map.js';
+import type { OakApiPathBasedClient } from '../../../../../client/index.js';
 /**
  * GENERATED FILE - DO NOT EDIT
  * 
@@ -92,3 +92,35 @@ export const getSequencesAssets = {
  * @remarks Runtime execution flows through the ToolDescriptor entry; this stub will be replaced when tool handlers adopt schema-derived types.
  */
 export const getSequencesAssetsTool = getSequencesAssets;
+export const getSequencesAssets = {
+  invoke: async (client: OakApiPathBasedClient, args: ToolArgs) => {
+    const validation = toolZodSchema.safeParse(args);
+    if (!validation.success) {
+      throw new TypeError(describeToolArgs());
+    }
+    const endpoint = client["/sequences/{sequence}/assets"];
+    const call = endpoint ? endpoint.get : undefined;
+    if (typeof call !== 'function') {
+      throw new TypeError('Invalid method on endpoint: get for /sequences/{sequence}/assets');
+    }
+    return call(validation.data);
+  },
+  toolZodSchema,
+  toolInputJsonSchema,
+  toolOutputJsonSchema: responseDescriptor.json,
+  zodOutputSchema: responseDescriptor.zod,
+  describeToolArgs,
+  inputSchema: toolInputJsonSchema,
+  operationId,
+  name,
+  description,
+  path,
+  method,
+  validateOutput: (data: unknown) => {
+    const result = responseDescriptor.zod.safeParse(data);
+    if (result.success) {
+      return { ok: true, data: result.data };
+    }
+    return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };
+  },
+} as const satisfies ToolDescriptor;

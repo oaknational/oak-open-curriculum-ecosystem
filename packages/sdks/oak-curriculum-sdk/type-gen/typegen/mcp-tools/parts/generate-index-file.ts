@@ -9,6 +9,7 @@ export function generateBarrelFile(): string {
   return [
     banner,
     'export { toolNames, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isOperationId, type OperationId, type OperationIdForToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolMap, type ToolName, type ToolNameForOperationId } from "./definitions.js";',
-    'export { type ToolDescriptor, type ToolArgs, type ToolArgsForOperationId, type ToolDescriptors, type ToolInvoke, type ToolNameFromOperationId, type ToolOperationIdForName, type ToolResult, type ToolResultForOperationId, type RegisteredToolEntries } from "./types.js";',
+    'export { type ToolDescriptor } from "./tool-descriptor.js";',
+    'export { type ToolArgs, type ToolArgsForOperationId, type ToolDescriptors, type ToolInvoke, type ToolNameFromOperationId, type ToolOperationIdForName, type ToolResult, type ToolResultForOperationId, type RegisteredToolEntries } from "./types.js";',
   ].join('\n\n');
 }

@@ -14,6 +14,7 @@ import { generateBarrelFile } from './parts/generate-index-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
+import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
 
 export type PrimitiveType = string | number | boolean | string[] | number[] | boolean[];
 export type PrimitiveTypeLabel =
@@ -144,6 +145,7 @@ export interface GeneratedMcpToolFiles {
   'definitions.ts': string;
   'types.ts': string;
   'lib.ts': string;
+  'tool-descriptor.ts': string;
   tools: Record<string, string>; // filename -> content
 }
 
@@ -157,6 +159,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     'definitions.ts': '',
     'types.ts': '',
     'lib.ts': '',
+    'tool-descriptor.ts': '',
     tools: {},
   };
 
@@ -187,6 +190,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result['lib.ts'] = generateLibFile();
   result['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result['index.ts'] = generateBarrelFile();
+  result['tool-descriptor.ts'] = generateToolDescriptorFile();
 
   return result;
 }
