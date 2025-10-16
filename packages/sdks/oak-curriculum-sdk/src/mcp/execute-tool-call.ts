@@ -17,7 +17,7 @@ import {
   getToolFromToolName,
   isToolName,
   type ToolName,
-} from '../types/generated/api-schema/mcp-tools/definitions.js';
+} from '../types/generated/api-schema/mcp-tools/index.js';
 
 /**
  * Error types with proper cause chains
@@ -121,7 +121,11 @@ export async function executeToolCall(
   }
 
   try {
-    const response = await tool.invoke(client, validation.data);
+    const invoke = tool.invoke as (
+      client: OakApiPathBasedClient,
+      args: typeof validation.data,
+    ) => unknown;
+    const response = await invoke(client, validation.data);
     const outputValidation = tool.validateOutput(response);
     if (!outputValidation.ok) {
       return {

@@ -22,6 +22,8 @@ export interface LessonGroup {
   lessons: { lessonSlug: string; lessonTitle: string }[];
 }
 
+type UnitThread = NonNullable<SearchUnitSummary['threads']>[number];
+
 export async function buildUnitDocuments(
   client: OakClient,
   units: readonly { unitSlug: string; unitTitle: string }[],
@@ -200,7 +202,11 @@ async function buildLessonDocEntry(
 }
 
 function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
-  return summary.threads?.map((thread) => thread.slug).filter(Boolean);
+  return summary.threads
+    ?.map((thread: UnitThread) => thread.slug)
+    .filter(
+      (slug: UnitThread['slug']): slug is string => typeof slug === 'string' && slug.length > 0,
+    );
 }
 
 async function fetchLessonMaterials(

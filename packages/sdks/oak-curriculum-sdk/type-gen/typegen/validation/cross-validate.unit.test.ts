@@ -38,6 +38,10 @@ describe('cross-validate', () => {
         operationId: 'getThings-getThing',
         status: '200',
         componentName: 'Thing',
+        path: '/things/{id}',
+        colonPath: '/things/:id',
+        method: 'get',
+        source: 'component',
       },
     ] as const;
     expect(() => {
@@ -56,6 +60,10 @@ describe('cross-validate', () => {
         operationId: 'nonExistent-op',
         status: '200',
         componentName: 'Nope',
+        path: '/nowhere',
+        colonPath: '/nowhere',
+        method: 'get',
+        source: 'component',
       },
     ] as const;
     expect(() => {
@@ -71,6 +79,10 @@ describe('cross-validate', () => {
         operationId: 'nonExistent-op',
         status: '404',
         componentName: 'NotFound',
+        path: '/nowhere',
+        colonPath: '/nowhere',
+        method: 'get',
+        source: 'component',
       },
     ] as const;
     try {

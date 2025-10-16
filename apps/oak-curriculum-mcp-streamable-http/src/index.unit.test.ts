@@ -8,6 +8,8 @@ import {
   toolNames,
   getToolFromToolName,
   type ToolName,
+  type ToolExecutionResult,
+  McpToolError,
 } from '@oaknational/oak-curriculum-sdk';
 // Helpers to parse first SSE data frame from the Streamable HTTP transport
 function parseFirstSseData(text: string): unknown {
@@ -77,6 +79,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
       ? 'get-key-stages'
       : toolNames[0];
     const descriptor = getToolFromToolName(preferred);
+    expect(descriptor.name).toBe(preferred);
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
     vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({ data: { ok: true } });
 
@@ -104,9 +107,10 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
       ? 'get-key-stages'
       : toolNames[0];
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
-    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({
-      error: new Error('boom'),
-    } as never);
+    const errorResult: ToolExecutionResult = {
+      error: new McpToolError('boom', preferred),
+    };
+    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue(errorResult);
 
     const res = await request(app)
       .post('/mcp')

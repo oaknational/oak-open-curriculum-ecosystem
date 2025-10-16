@@ -25,5 +25,9 @@ describe('generateSearchIndexModule', () => {
     specifiers.forEach((specifier) => {
       expect(specifier.endsWith('.js')).toBe(true);
     });
+
+    expect(content).toContain('SearchLessonsIndexDocSchema');
+    expect(content).toContain('SearchUnitRollupDocSchema');
+    expect(content).toContain('SearchCompletionSuggestPayloadSchema');
   });
 });

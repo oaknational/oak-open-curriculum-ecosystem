@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { OperationObject, ParameterObject } from 'openapi3-ts/oas31';
 import { emitHeader, emitSchema, emitIndex } from './emitters.js';
-import type { ParamMetadata } from './generate-tool-file.js';
 
 function makeOp(params: ParameterObject[]): OperationObject {
   return {
@@ -45,9 +44,8 @@ describe('emitters', () => {
   });
 
   it('emits index/executor block exporting tool', () => {
-    const op = makeOp({
-      summary: 'Get a pet by id',
-    });
+    const op = makeOp([]);
+    op.summary = 'Get a pet by id';
     const out = emitIndex('get-pets-id', '/pets/{id}', 'get', op);
     expect(out).not.toContain('import type { ToolDescriptor }');
     expect(out).not.toContain('import { getDescriptorSchemaForEndpoint }');

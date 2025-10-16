@@ -1,5 +1,12 @@
 import type { SearchLessonSummary } from '../../types/oak';
-import { extractPassage } from './document-transforms';
+import { extractPassage, normaliseContentGuidanceEntries } from './document-transforms';
+
+type LessonKeyword = NonNullable<SearchLessonSummary['lessonKeywords']>[number];
+type LessonKeyLearningPoint = NonNullable<SearchLessonSummary['keyLearningPoints']>[number];
+type LessonTeacherTip = NonNullable<SearchLessonSummary['teacherTips']>[number];
+type LessonMisconception = NonNullable<
+  SearchLessonSummary['misconceptionsAndCommonMistakes']
+>[number];
 
 /** Parameters for selecting a formatted lesson-planning snippet. */
 export interface SelectLessonPlanningSnippetParams {
@@ -35,21 +42,23 @@ function collectLessonPlanningSections(summary: SearchLessonSummary): string[] {
 }
 
 function appendKeywordsSection(summary: SearchLessonSummary, sections: string[]): void {
-  const lessonKeywords = summary.lessonKeywords?.map((item) => item.keyword);
+  const lessonKeywords = summary.lessonKeywords?.map((item: LessonKeyword) => item.keyword);
   if (lessonKeywords && lessonKeywords.length > 0) {
     sections.push(`keywords: ${lessonKeywords.join('; ')}`);
   }
 }
 
 function appendKeyLearningPointsSection(summary: SearchLessonSummary, sections: string[]): void {
-  const keyLearningPoints = summary.keyLearningPoints?.map((item) => item.keyLearningPoint);
+  const keyLearningPoints = summary.keyLearningPoints?.map(
+    (item: LessonKeyLearningPoint) => item.keyLearningPoint,
+  );
   if (keyLearningPoints && keyLearningPoints.length > 0) {
     sections.push(`key learning points: ${keyLearningPoints.join('; ')}`);
   }
 }
 
 function appendTeacherTipsSection(summary: SearchLessonSummary, sections: string[]): void {
-  const teacherTips = summary.teacherTips?.map((item) => item.teacherTip);
+  const teacherTips = summary.teacherTips?.map((item: LessonTeacherTip) => item.teacherTip);
   if (teacherTips && teacherTips.length > 0) {
     sections.push(`teacher tips: ${teacherTips.join('; ')}`);
   }
@@ -57,7 +66,7 @@ function appendTeacherTipsSection(summary: SearchLessonSummary, sections: string
 
 function appendMisconceptionsSection(summary: SearchLessonSummary, sections: string[]): void {
   const misconceptions = summary.misconceptionsAndCommonMistakes?.map(
-    (item) => `${item.misconception} → ${item.response}`,
+    (item: LessonMisconception) => `${item.misconception} → ${item.response}`,
   );
   if (misconceptions && misconceptions.length > 0) {
     sections.push(`misconceptions: ${misconceptions.join('; ')}`);
@@ -65,9 +74,7 @@ function appendMisconceptionsSection(summary: SearchLessonSummary, sections: str
 }
 
 function appendContentGuidanceSection(summary: SearchLessonSummary, sections: string[]): void {
-  const contentGuidance = Array.isArray(summary.contentGuidance)
-    ? summary.contentGuidance.map((item) => item.contentGuidanceDescription)
-    : undefined;
+  const contentGuidance = normaliseContentGuidanceEntries(summary.contentGuidance);
   if (contentGuidance && contentGuidance.length > 0) {
     sections.push(`content guidance: ${contentGuidance.join('; ')}`);
   }

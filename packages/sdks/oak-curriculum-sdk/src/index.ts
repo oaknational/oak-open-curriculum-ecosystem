@@ -61,12 +61,13 @@ export type {
 export {
   toolNames,
   isToolName,
+  isToolOperationId,
   getToolFromToolName,
   getToolFromOperationId,
   getToolNameFromOperationId,
   getOperationIdFromToolName,
-  type OperationId,
-  type OperationIdForToolName,
+  type ToolOperationId,
+  type ToolOperationIdForName,
   type ToolDescriptorForName,
   type ToolDescriptorForOperationId,
   type ToolDescriptor,
@@ -78,7 +79,6 @@ export {
   type ToolDescriptors,
   type ToolInvoke,
   type ToolNameFromOperationId,
-  type ToolOperationIdForName,
   type ToolResult,
   type ToolResultForOperationId,
   type RegisteredToolEntries,
@@ -87,7 +87,7 @@ export {
   McpToolRegistry,
   attachMcpHandlers,
   createMcpToolRegistry,
-} from './types/generated/api-schema/mcp-tools/lib.js';
+} from './types/generated/api-schema/mcp-tools/generated/runtime/lib.js';
 export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
 export {
@@ -247,3 +247,23 @@ export {
   SequenceFacetSchema,
   SearchFacetsSchema,
 } from './types/generated/zod/search/output/index.js';
+export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from './types/generated/search/index.js';
+export type {
+  SearchCompletionSuggestPayload,
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+} from './types/generated/search/index.js';

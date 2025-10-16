@@ -30,8 +30,6 @@ type JsonSchemaProperty =
   | JsonSchemaPropertyBoolean
   | JsonSchemaPropertyArray;
 
-export type JsonSchemaToZodSchema<TSchema extends ToolInputJsonSchema> = z.ZodTypeAny;
-
 export interface GenericToolInputJsonSchema {
   readonly type: 'object';
   readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;

@@ -16,6 +16,19 @@ export {
 } from '@oaknational/oak-curriculum-sdk';
 
 export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from '@oaknational/oak-curriculum-sdk';
+
+export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
   isSearchStructuredRequest,

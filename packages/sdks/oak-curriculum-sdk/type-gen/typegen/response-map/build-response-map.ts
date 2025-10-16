@@ -5,6 +5,7 @@ import type {
   PathItemObject,
   ResponsesObject,
   SchemaObject,
+  ReferenceObject,
 } from 'openapi3-ts/oas31';
 
 export interface ResponseMapEntry {
@@ -109,7 +110,7 @@ function getJsonResponseInfo(
 export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMapEntry[] {
   const out: ResponseMapEntry[] = [];
   const inlineCounts = new Map<string, number>();
-  const schemaComponents = schema.components?.schemas ?? {};
+  const schemaComponents = normaliseSchemaComponents(schema.components?.schemas ?? {});
   const paths = schema.paths ?? {};
   const methods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
   const emptyBodyStatuses = new Set(['204', '304']);
@@ -160,6 +161,20 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
   }
 
   return out;
+}
+
+function normaliseSchemaComponents(
+  components: Record<string, SchemaObject | ReferenceObject>,
+): Record<string, SchemaObject | undefined> {
+  const result: Record<string, SchemaObject | undefined> = {};
+  for (const [name, definition] of Object.entries(components)) {
+    if (definition && typeof definition === 'object' && '$ref' in definition) {
+      result[name] = undefined;
+      continue;
+    }
+    result[name] = definition;
+  }
+  return result;
 }
 
 function collectResponses(

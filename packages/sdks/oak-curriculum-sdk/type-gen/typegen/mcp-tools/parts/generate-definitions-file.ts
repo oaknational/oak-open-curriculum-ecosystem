@@ -65,20 +65,20 @@ const OPERATION_ID_MAP_BLOCK = (
 ${operationIdToToolNameCases}
 } as const;`;
 
-const OPERATION_TYPES_BLOCK = `type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
-export type OperationId = keyof OperationIdToToolName;
-export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
-export type ToolDescriptorForOperationId<TId extends OperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
+const TOOL_OPERATION_TYPES_BLOCK = `type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
+export type ToolOperationId = keyof OperationIdToToolName;
+export type ToolNameForOperationId<TId extends ToolOperationId> = OperationIdToToolName[TId];
+export type ToolDescriptorForOperationId<TId extends ToolOperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
 `;
 
-const IS_OPERATION_ID_BLOCK = `export function isOperationId(value: unknown): value is OperationId {
+const IS_TOOL_OPERATION_ID_BLOCK = `export function isToolOperationId(value: unknown): value is ToolOperationId {
   if (typeof value !== 'string') {
     return false;
   }
   return value in OPERATION_ID_TO_TOOL_NAME;
 }`;
 
-const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId<TId extends OperationId>(operationId: TId): ToolNameForOperationId<TId> {
+const GET_TOOL_NAME_FROM_ID_BLOCK = `export function getToolNameFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolNameForOperationId<TId> {
   const toolName = OPERATION_ID_TO_TOOL_NAME[operationId];
   if (!toolName) {
     throw new TypeError('Unknown operation: ' + String(operationId));
@@ -93,17 +93,17 @@ ${toolNameToOperationIdCases}
 } as const;`;
 
 const TOOL_NAME_OPERATION_TYPES_BLOCK = `type ToolNameToOperationId = typeof TOOL_NAME_TO_OPERATION_ID;
-export type OperationIdForToolName<TName extends ToolName> = ToolNameToOperationId[TName];
+export type ToolOperationIdForName<TName extends ToolName> = ToolNameToOperationId[TName];
 `;
 
 const GET_TOOL_FROM_ID_BLOCK = `
-export function getToolFromOperationId<TId extends OperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
+export function getToolFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOL_DEFINITIONS[toolName];
 }
 `;
 
-const GET_ID_FROM_TOOL_NAME_BLOCK = `export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): OperationIdForToolName<TName> {
+const GET_ID_FROM_TOOL_NAME_BLOCK = `export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): ToolOperationIdForName<TName> {
   const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
   if (!operationId) {
     throw new TypeError('Unknown tool: ' + String(toolName));
@@ -135,8 +135,8 @@ export function generateDefinitionsFile(
     emitToolNames(names),
     GET_TOOL_FROM_TOOL_NAME_BLOCK,
     OPERATION_ID_MAP_BLOCK(operationIdToToolNameCases),
-    OPERATION_TYPES_BLOCK,
-    IS_OPERATION_ID_BLOCK,
+    TOOL_OPERATION_TYPES_BLOCK,
+    IS_TOOL_OPERATION_ID_BLOCK,
     GET_TOOL_NAME_FROM_ID_BLOCK,
     GET_TOOL_FROM_ID_BLOCK,
     TOOL_NAME_TO_OPERATION_ID_BLOCK(toolNameToOperationIdCases),

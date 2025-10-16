@@ -9,19 +9,20 @@ export function generateToolDescriptorFile(): string {
  * and must depend on this contract rather than the other way around.
  */
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
-import type { ZodSchema, ZodTypeAny } from 'zod';
+import type { ZodSchema, ZodType } from 'zod';
 
 export interface ToolDescriptor<TClient = unknown, TArgs = unknown, TResult = unknown> extends Tool {
   readonly name: string;
-  readonly description: string;
+  readonly description?: string;
   readonly operationId: string;
   readonly path: string;
   readonly method: string;
-  readonly toolZodSchema: ZodTypeAny;
+  readonly toolZodSchema: ZodType<TArgs>;
   readonly toolInputJsonSchema: {
     readonly type: 'object';
-    readonly properties?: Readonly<Record<string, unknown>>;
-    readonly required?: readonly string[];
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- genuine unknown at incoming boundary
+    readonly properties?: Record<string, unknown>;
+    readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
   readonly toolOutputJsonSchema: unknown;
@@ -29,8 +30,9 @@ export interface ToolDescriptor<TClient = unknown, TArgs = unknown, TResult = un
   readonly describeToolArgs: () => string;
   readonly inputSchema: {
     readonly type: 'object';
-    readonly properties?: Readonly<Record<string, unknown>>;
-    readonly required?: readonly string[];
+    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- genuine unknown at incoming boundary
+    readonly properties?: Record<string, unknown>;
+    readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
   readonly validateOutput: (value: unknown) =>

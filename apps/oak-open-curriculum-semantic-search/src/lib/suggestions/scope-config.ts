@@ -1,4 +1,9 @@
 import type { estypes } from '@elastic/elasticsearch';
+import {
+  isSearchLessonsIndexDoc,
+  isSearchSequenceIndexDoc,
+  isSearchUnitRollupDoc,
+} from '../../types/oak';
 import type {
   SearchLessonsIndexDoc,
   SearchUnitRollupDoc,
@@ -36,7 +41,7 @@ const scopeConfigBuilders = {
     sourceFields: ['lesson_title', 'lesson_url', 'subject_slug', 'key_stage', 'title_suggest'],
     buildCompletionContexts: (query) => buildSubjectContexts(query.subject, query.keyStage),
     buildFilters: (query) => buildFilters(query.subject, query.keyStage),
-    isDoc: isLessonDoc,
+    isDoc: isSearchLessonsIndexDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -62,7 +67,7 @@ const scopeConfigBuilders = {
     ],
     buildCompletionContexts: (query) => buildSubjectContexts(query.subject, query.keyStage),
     buildFilters: (query) => buildFilters(query.subject, query.keyStage),
-    isDoc: isUnitDoc,
+    isDoc: isSearchUnitRollupDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -81,7 +86,7 @@ const scopeConfigBuilders = {
     sourceFields: ['sequence_title', 'sequence_url', 'subject_slug', 'phase_slug', 'title_suggest'],
     buildCompletionContexts: (query) => buildSequenceContexts(query.subject, query.phaseSlug),
     buildFilters: (query) => buildSequenceFilters(query.subject, query.phaseSlug),
-    isDoc: isSequenceDoc,
+    isDoc: isSearchSequenceIndexDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -210,41 +215,4 @@ function createSuggestionHit(params: {
     item.keyStage = params.keyStage;
   }
   return { id: params.id, item };
-}
-
-function isLessonDoc(value: unknown): value is SearchLessonsIndexDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'lesson_title') &&
-    hasStringProperty(value, 'lesson_url') &&
-    hasStringProperty(value, 'subject_slug') &&
-    hasStringProperty(value, 'key_stage')
-  );
-}
-
-function isUnitDoc(value: unknown): value is SearchUnitRollupDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'unit_title') &&
-    hasStringProperty(value, 'unit_url') &&
-    hasStringProperty(value, 'subject_slug') &&
-    hasStringProperty(value, 'key_stage')
-  );
-}
-
-function isSequenceDoc(value: unknown): value is SearchSequenceIndexDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'sequence_title') &&
-    hasStringProperty(value, 'sequence_url') &&
-    hasStringProperty(value, 'subject_slug')
-  );
-}
-
-function hasStringProperty(value: object, key: string): boolean {
-  const propertyValue: unknown = Reflect.get(value, key);
-  return typeof propertyValue === 'string';
 }

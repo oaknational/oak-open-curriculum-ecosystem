@@ -45,6 +45,27 @@ export type {
   SearchSuggestionRequest,
 } from './suggestions.js';
 
+export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from './index-documents.js';
+export type {
+  SearchCompletionSuggestPayload,
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+} from './index-documents.js';
+
 export { SearchFacetsSchema } from '../zod/search/output/sequence-facets.js';
 export type { SearchFacets, SequenceFacet, SequenceFacetUnit } from './facets.js';
 

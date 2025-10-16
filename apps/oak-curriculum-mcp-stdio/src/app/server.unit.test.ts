@@ -7,15 +7,13 @@ import { describe, it, expect, vi } from 'vitest';
 import {
   toolNames,
   getToolFromToolName,
-  type ToolName,
   type ToolDescriptorForName,
 } from '@oaknational/oak-curriculum-sdk';
 
-vi.mock(
-  '@modelcontextprotocol/sdk/types.ts',
-  () => ({ CallToolRequestSchema: {}, ListToolsRequestSchema: {} }),
-  { virtual: true },
-);
+vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
+  CallToolRequestSchema: {},
+  ListToolsRequestSchema: {},
+}));
 import { createToolResponseHandlers } from './tool-response-handlers';
 import { pickPayloadForValidation, validateOutput, type OutputValidationResult } from './server';
 

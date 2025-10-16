@@ -38,3 +38,20 @@
 - 2025-10-19 (Codex): Preparing Step 1 restructuring.
   - Decision: apply the `contract/`, `generated/data`, `generated/aliases`, `generated/runtime` folder split with corresponding naming conventions (contract file `tool-descriptor.contract.ts`, internal literal `MCP_TOOL_DEFINITIONS`, helper aliases suffixed `ForName`, guard comments explaining the dependency flow).
   - Action plan: update generator templates to emit into the new directories, add guard comments, and capture the rationale in ADR `docs/architecture/architectural-decisions/050-mcp-tool-layering-dag.md`.
+
+- 2025-10-20 (Codex): Implemented layered generator outputs with `ToolOperationId*` aliases.
+  - Changes: `generate-definitions-file.ts`, `generate-index-file.ts`, `generate-types-file.ts`, and `generate-lib-file.ts` now emit to `contract/`, `generated/data`, `generated/aliases`, and `generated/runtime` directories, renaming `OperationId` to `ToolOperationId` and deriving invocation types via `ToolDescriptorInvocation<T>`.
+  - Commands: `pnpm type-gen` ✅ (multiple runs) to regenerate artefacts after each template adjustment.
+  - Verification: `src/types/generated/api-schema/mcp-tools/generated/data/definitions.ts` declares `export type ToolOperationId = ...` and `isToolOperationId`; `generated/runtime/lib.ts` initialises descriptors via the helper `storeDescriptor` without casts.
+  - Follow-up: `pnpm type-check --filter @oaknational/oak-curriculum-sdk` still fails because `execute-tool-call.ts` and the registry now need to narrow descriptor invocations to avoid intersecting every `ToolArgs` variant.
+- 2025-10-20 (Codex): Narrowed runtime invocations and normalised response-map fixtures.
+  - Changes: `generate-lib-file.ts` emits a validated-args comment and casts to `never` post-Zod validation; `execute-tool-call.ts` mirrors the same safety check. Response-map generation now strips `ReferenceObject` definitions via `normaliseSchemaComponents`, and cross-validation tests include the new `path`, `colonPath`, `method`, and `source` fields.
+  - Commands: `pnpm type-gen` ✅, `pnpm type-check --filter @oaknational/oak-curriculum-sdk` ✅.
+  - Outcome: Type-check no longer reports the `ToolArgs` intersection or response-map fixture errors, unblocking Step 2 of the recovery plan.
+
+## Semantic Search Recovery
+
+- 2025-10-21 (Codex): Generated canonical search index document schemas, guards, and doc re-exports; removed hand-written types and adopted the generated surface in the semantic search app.
+  - Changes: Added `generate-search-index-docs.ts` to emit `src/types/generated/search/index-documents.ts` and documentation aliases; updated SDK exports/tsup config; search workspace now imports `isSearch*IndexDoc` guards from the SDK and replaces implicit-`any` array iterations with typed helpers.
+  - Commands: `pnpm type-gen` ✅, `pnpm build --filter @oaknational/oak-curriculum-sdk` ✅, `pnpm type-check --filter @oaknational/open-curriculum-semantic-search` ✅.
+  - Outcome: Search index structures now flow entirely from type-gen, and the semantic search workspace type-checks cleanly without local guard duplicates.

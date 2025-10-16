@@ -42,6 +42,7 @@ import { generateSearchSuggestionModules } from './typegen/search/generate-searc
 import { generateSearchScopeModules } from './typegen/search/generate-search-scopes.js';
 import { generateSearchFixtureModules } from './typegen/search/generate-search-fixtures.js';
 import { generateSearchIndexModule } from './typegen/search/generate-search-index.js';
+import { generateSearchIndexDocumentModules } from './typegen/search/generate-search-index-docs.js';
 import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
@@ -80,6 +81,7 @@ export function createFileMap(
   const searchScopes = generateSearchScopeModules(sdkSchema);
   const searchFixtures = generateSearchFixtureModules(sdkSchema);
   const searchIndex = generateSearchIndexModule(sdkSchema);
+  const searchIndexDocuments = generateSearchIndexDocumentModules(sdkSchema);
   const queryParserModules = generateQueryParserModules();
   const zeroHitFixtures = generateZeroHitFixtureModules(sdkSchema);
   const adminStreamFixtures = generateAdminStreamFixtureModules(sdkSchema);
@@ -95,6 +97,7 @@ export function createFileMap(
     ...searchScopes,
     ...searchFixtures,
     ...searchIndex,
+    ...searchIndexDocuments,
     ...queryParserModules,
     ...zeroHitFixtures,
     ...adminStreamFixtures,

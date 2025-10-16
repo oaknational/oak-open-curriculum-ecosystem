@@ -12,15 +12,27 @@ export type { PathOperation, OperationId } from './generated/api-schema/path-par
 
 // Export the helpers
 
-// Hybrid search index types
+// Hybrid search index types and guards
+export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from './generated/search/index';
 export type {
+  SearchCompletionSuggestPayload,
   SearchLessonsIndexDoc,
   SearchUnitsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
   SearchSubjectSlug,
-  SearchCompletionSuggestPayload,
-} from './search-index';
+} from './generated/search/index';
 
 // Hybrid search facet types and schemas
 export type { SequenceFacetUnit, SequenceFacet, SearchFacets } from './generated/search/index';

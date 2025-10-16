@@ -8,6 +8,49 @@ import type {
   SearchUnitsIndexDoc,
 } from '../../types/oak';
 
+type UnitLesson = NonNullable<SearchUnitSummary['unitLessons']>[number];
+type UnitCategory = NonNullable<SearchUnitSummary['categories']>[number];
+type UnitThread = NonNullable<SearchUnitSummary['threads']>[number];
+type LessonKeyword = NonNullable<SearchLessonSummary['lessonKeywords']>[number];
+type LessonKeyLearningPoint = NonNullable<SearchLessonSummary['keyLearningPoints']>[number];
+type LessonMisconception = NonNullable<
+  SearchLessonSummary['misconceptionsAndCommonMistakes']
+>[number];
+type LessonTeacherTip = NonNullable<SearchLessonSummary['teacherTips']>[number];
+
+interface LessonContentGuidanceEntry {
+  readonly contentGuidanceDescription: string;
+}
+
+function isUnknownRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isLessonContentGuidanceEntry(value: unknown): value is LessonContentGuidanceEntry {
+  if (!isUnknownRecord(value)) {
+    return false;
+  }
+  const description = value.contentGuidanceDescription;
+  return typeof description === 'string' && description.length > 0;
+}
+
+export function normaliseContentGuidanceEntries(
+  value: SearchLessonSummary['contentGuidance'],
+): string[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  const descriptions = value
+    .map((entry: unknown) =>
+      isLessonContentGuidanceEntry(entry) ? entry.contentGuidanceDescription : null,
+    )
+    .filter(
+      (description: string | null): description is string =>
+        typeof description === 'string' && description.length > 0,
+    );
+  return descriptions.length > 0 ? descriptions : undefined;
+}
+
 export interface CreateUnitDocumentParams {
   summary: SearchUnitSummary;
   subject: SearchSubjectSlug;
@@ -26,10 +69,14 @@ export function createUnitDocument({
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
-  const lessonIds = summary.unitLessons?.map((lesson) => lesson.lessonSlug) ?? [];
-  const unitTopics = summary.categories?.map((category) => category.categoryTitle);
+  const lessonIds = summary.unitLessons?.map((lesson: UnitLesson) => lesson.lessonSlug) ?? [];
+  const unitTopics = summary.categories?.map((category: UnitCategory) => category.categoryTitle);
   const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug).filter(Boolean);
+  const sequenceIds = summary.threads
+    ?.map((thread: UnitThread) => thread.slug)
+    .filter(
+      (slug: UnitThread['slug']): slug is string => typeof slug === 'string' && slug.length > 0,
+    );
 
   return {
     unit_id: summary.unitSlug,
@@ -122,15 +169,15 @@ function extractLessonPlanningFields(summary: SearchLessonSummary): {
   teacherTips?: string[];
   contentGuidance?: string[];
 } {
-  const lessonKeywords = summary.lessonKeywords?.map((item) => item.keyword);
-  const keyLearningPoints = summary.keyLearningPoints?.map((item) => item.keyLearningPoint);
-  const misconceptions = summary.misconceptionsAndCommonMistakes?.map(
-    (item) => `${item.misconception} → ${item.response}`,
+  const lessonKeywords = summary.lessonKeywords?.map((item: LessonKeyword) => item.keyword);
+  const keyLearningPoints = summary.keyLearningPoints?.map(
+    (item: LessonKeyLearningPoint) => item.keyLearningPoint,
   );
-  const teacherTips = summary.teacherTips?.map((item) => item.teacherTip);
-  const contentGuidance = Array.isArray(summary.contentGuidance)
-    ? summary.contentGuidance.map((item) => item.contentGuidanceDescription)
-    : undefined;
+  const misconceptions = summary.misconceptionsAndCommonMistakes?.map(
+    (item: LessonMisconception) => `${item.misconception} → ${item.response}`,
+  );
+  const teacherTips = summary.teacherTips?.map((item: LessonTeacherTip) => item.teacherTip);
+  const contentGuidance = normaliseContentGuidanceEntries(summary.contentGuidance);
 
   return {
     lessonKeywords,
@@ -161,10 +208,14 @@ export function createRollupDocument({
     throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
   }
 
-  const lessonIds = summary.unitLessons?.map((lesson) => lesson.lessonSlug) ?? [];
-  const unitTopics = summary.categories?.map((category) => category.categoryTitle);
+  const lessonIds = summary.unitLessons?.map((lesson: UnitLesson) => lesson.lessonSlug) ?? [];
+  const unitTopics = summary.categories?.map((category: UnitCategory) => category.categoryTitle);
   const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug).filter(Boolean);
+  const sequenceIds = summary.threads
+    ?.map((thread: UnitThread) => thread.slug)
+    .filter(
+      (slug: UnitThread['slug']): slug is string => typeof slug === 'string' && slug.length > 0,
+    );
 
   const rollupText = snippets.join('\n\n');
 

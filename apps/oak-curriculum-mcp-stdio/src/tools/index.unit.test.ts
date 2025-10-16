@@ -4,6 +4,7 @@ import type {
   ToolName,
   OpenAiToolName,
   ToolExecutionResult,
+  OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 
 const TEST_TOOL_NAME = 'get-key-stages-subject-lessons';
@@ -18,9 +19,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue({ data: { ok: true } });
 
     const module = createMcpToolsModule({
-      client: {
-        /* not used */
-      } as never,
+      client: {} as OakApiPathBasedClient,
       executeMcpTool,
       executeOpenAiTool,
     });
@@ -38,9 +37,7 @@ describe('createMcpToolsModule', () => {
       .mockResolvedValue({ data: { status: 'ok' } });
 
     const module = createMcpToolsModule({
-      client: {
-        /* not used */
-      } as never,
+      client: {} as OakApiPathBasedClient,
       executeMcpTool,
       executeOpenAiTool,
     });
@@ -64,9 +61,7 @@ describe('createMcpToolsModule', () => {
     const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi.fn();
 
     const module = createMcpToolsModule({
-      client: {
-        /* not used */
-      } as never,
+      client: {} as OakApiPathBasedClient,
       executeMcpTool,
       executeOpenAiTool,
     });

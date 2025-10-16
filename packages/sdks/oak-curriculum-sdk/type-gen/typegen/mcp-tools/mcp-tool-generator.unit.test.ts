@@ -8,13 +8,15 @@ describe('generateCompleteMcpTools (descriptor schema layering)', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
 
     expect(output.contract['tool-descriptor.contract.ts']).toContain(
-      'export interface ToolDescriptor<TResult = unknown> extends Tool',
+      'export interface ToolDescriptor<TClient = unknown, TArgs = unknown, TResult = unknown> extends Tool',
     );
     expect(output.data['definitions.ts']).toContain('const MCP_TOOL_DEFINITIONS');
     expect(output.data['index.ts']).toContain('export { toolNames, getToolFromToolName');
-    expect(output.aliases['types.ts']).toContain(
-      "import type { OperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, OperationIdForToolName } from '../data/definitions.js';",
+    const aliasesFile = output.aliases['types.ts'];
+    expect(aliasesFile).toContain(
+      "import type { ToolOperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
     );
+    expect(aliasesFile).toContain('type ToolDescriptorInvocation<TDescriptor> =');
     expect(output.runtime['lib.ts']).toContain('import { toolNames');
     expect(output.index).toContain('generated/data/index.js');
   });

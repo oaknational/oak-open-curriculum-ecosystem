@@ -123,19 +123,19 @@ const OPERATION_ID_TO_TOOL_NAME = {
 } as const;
 
 type OperationIdToToolName = typeof OPERATION_ID_TO_TOOL_NAME;
-export type OperationId = keyof OperationIdToToolName;
-export type ToolNameForOperationId<TId extends OperationId> = OperationIdToToolName[TId];
-export type ToolDescriptorForOperationId<TId extends OperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
+export type ToolOperationId = keyof OperationIdToToolName;
+export type ToolNameForOperationId<TId extends ToolOperationId> = OperationIdToToolName[TId];
+export type ToolDescriptorForOperationId<TId extends ToolOperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
 
 
-export function isOperationId(value: unknown): value is OperationId {
+export function isToolOperationId(value: unknown): value is ToolOperationId {
   if (typeof value !== 'string') {
     return false;
   }
   return value in OPERATION_ID_TO_TOOL_NAME;
 }
 
-export function getToolNameFromOperationId<TId extends OperationId>(operationId: TId): ToolNameForOperationId<TId> {
+export function getToolNameFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolNameForOperationId<TId> {
   const toolName = OPERATION_ID_TO_TOOL_NAME[operationId];
   if (!toolName) {
     throw new TypeError('Unknown operation: ' + String(operationId));
@@ -144,7 +144,7 @@ export function getToolNameFromOperationId<TId extends OperationId>(operationId:
 }
 
 
-export function getToolFromOperationId<TId extends OperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
+export function getToolFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
   const toolName = getToolNameFromOperationId(operationId);
   return MCP_TOOL_DEFINITIONS[toolName];
 }
@@ -180,10 +180,10 @@ const TOOL_NAME_TO_OPERATION_ID = {
 } as const;
 
 type ToolNameToOperationId = typeof TOOL_NAME_TO_OPERATION_ID;
-export type OperationIdForToolName<TName extends ToolName> = ToolNameToOperationId[TName];
+export type ToolOperationIdForName<TName extends ToolName> = ToolNameToOperationId[TName];
 
 
-export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): OperationIdForToolName<TName> {
+export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): ToolOperationIdForName<TName> {
   const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
   if (!operationId) {
     throw new TypeError('Unknown tool: ' + String(toolName));

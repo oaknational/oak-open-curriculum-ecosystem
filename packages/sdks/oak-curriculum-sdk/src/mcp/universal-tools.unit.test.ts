@@ -112,25 +112,17 @@ const mcpTools: Record<string, McpToolDefinition> = {
   [sampleMcpToolName]: sampleMcpToolDef,
 };
 
-vi.mock(
-  '../types/generated/openai-connector/index.js',
-  () => ({
-    OPENAI_CONNECTOR_TOOL_DEFS: openAiToolDefs,
-    OPENAI_CONNECTOR_TOOL_ENTRIES: Object.entries(openAiToolDefs),
-    isOpenAiToolName: (value: unknown) => typeof value === 'string' && value in openAiToolDefs,
-  }),
-  { virtual: true },
-);
+vi.mock('../types/generated/openai-connector/index.js', () => ({
+  OPENAI_CONNECTOR_TOOL_DEFS: openAiToolDefs,
+  OPENAI_CONNECTOR_TOOL_ENTRIES: Object.entries(openAiToolDefs),
+  isOpenAiToolName: (value: unknown) => typeof value === 'string' && value in openAiToolDefs,
+}));
 
-vi.mock(
-  '../types/generated/api-schema/mcp-tools/index.js',
-  () => ({
-    toolNames: [sampleMcpToolName] as const,
-    getToolFromToolName: (name: string) => mcpTools[name],
-    isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
-  }),
-  { virtual: true },
-);
+vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
+  toolNames: [sampleMcpToolName] as const,
+  getToolFromToolName: (name: string) => mcpTools[name],
+  isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
+}));
 
 const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } = await import(
   './universal-tools.js'

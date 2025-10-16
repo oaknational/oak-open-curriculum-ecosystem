@@ -1,17 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { PrimitiveType } from './param-utils.js';
 import { emitErrorDescription } from './emit-error-description.js';
-
-interface ParamMetadataLike {
-  readonly typePrimitive: PrimitiveType;
-  readonly valueConstraint: boolean;
-  readonly required: boolean;
-  readonly allowedValues?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
-
-type MetaRecord = Record<string, ParamMetadataLike>;
 
 describe('emitErrorDescription (compile-time literal emitter)', () => {
   it('produces a compact literal with schema JSON and required list', () => {

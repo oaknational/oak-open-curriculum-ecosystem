@@ -9,651 +9,591 @@
 
 ## Executive Summary
 
-Implement production-ready OAuth 2.1 authentication for the Oak Curriculum MCP Streamable HTTP server using Clerk as the Authorization Server (AS). This approach unifies authentication across Oak applications (Aila, Semantic Search, and MCP Server), leverages battle-tested infrastructure, and maintains full MCP specification compliance.
+Replace the existing custom OAuth 2.1 demo implementation in the Oak Curriculum MCP Streamable HTTP server with production-ready Clerk authentication. The server already has a complete OAuth 2.1 Resource Server implementation with JWT verification, Protected Resource Metadata endpoints, and proper WWW-Authenticate headers. We're replacing the local demo Authorization Server with Clerk as the production AS, using Clerk's official `@clerk/mcp-tools` package.
+
+## Current State Analysis
+
+### ✅ What Already Exists (No Changes Needed)
+
+The MCP server at `apps/oak-curriculum-mcp-streamable-http` already has:
+
+1. **OAuth 2.1 Resource Server** - Complete implementation
+2. **Protected Resource Metadata** - `/.well-known/oauth-protected-resource` endpoint (RFC 9728)
+3. **Bearer Auth Middleware** - `bearerAuth` in `src/auth.ts`
+4. **WWW-Authenticate Headers** - Proper RFC 9728 format with `resource` and `authorization_uri`
+5. **JWT Verification** - Using `jose` library with audience and issuer validation
+6. **CORS & Security** - DNS rebinding protection, allowlist support
+7. **Test Infrastructure** - Unit and E2E tests in place
+8. **Environment Validation** - Zod schemas in `src/env.ts`
+9. **Logging** - Structured logging with `@oaknational/mcp-logger`
+10. **MCP Server** - Fully functional with SDK-generated tools
+
+### ❌ What Needs Replacing
+
+Per `README.md` line 133:
+
+> "Production OAuth is MANDATORY next step... there is no production Authorization Server yet."
+
+1. **Local Demo AS** (`src/oauth-metadata.ts` lines 18-56) → Clerk production AS
+2. **Custom Bearer Auth** (`src/auth.ts`) → `@clerk/mcp-tools` helpers
+3. **Custom JWT Verification** (`src/auth-jwt.ts`) → Clerk's token verification
+4. **Static dev/CI tokens** → OAuth-only in production
+5. **Manual JWKS management** → Clerk's automatic JWKS rotation
 
 ## Decision Rationale
 
-**Why Clerk over Custom AS:**
+**Why Clerk with `@clerk/mcp-tools`:**
 
-- **Simplicity**: Eliminates need to build/maintain custom OAuth infrastructure
-- **Security**: Battle-tested, SOC 2 compliant, professionally maintained
-- **Unified Auth**: Shares user base and policies with existing Aila application
-- **MCP Compliance**: Full OAuth 2.1 support via OIDC discovery proxy
-- **Maintenance**: Zero ongoing security patch burden for AS
-- **Time to Market**: ~80% reduction in implementation time vs custom AS
+- **Official MCP Support**: Clerk provides purpose-built MCP helpers
+- **Zero Custom Auth Code**: Replace ~200 lines with 3 helper functions
+- **Production Ready**: SOC 2 compliant, battle-tested
+- **Time Savings**: ~80% reduction in implementation time vs maintaining custom auth
+- **Client Compatibility**: Full MCP spec compliance, Dynamic Client Registration support
+- **Maintenance**: Zero ongoing security patches for AS infrastructure
 
 ## Core References
 
-- [Clerk Unified Auth Research](../../research/clerk-unified-auth-mcp-nextjs.md) (Primary implementation guide)
-- [AGENT.md](../../.agent/directives-and-memory/AGENT.md) (Development Practice, Testing Strategy)
-- [Testing Strategy](../../docs/agent-guidance/testing-strategy.md) (TDD/BDD approach)
-- [MCP TypeScript SDK README](../../.agent/reference-docs/mcp-typescript-sdk-readme.md)
-- `apps/oak-curriculum-mcp-streamable-http/src` (Current MCP server)
+- [Clerk Build MCP Server Guide](../../.agent/reference-docs/clerk-build-mcp-server.md) (**PRIMARY** - Official implementation)
+- [Clerk Express SDK](../../.agent/reference-docs/clerk-express-sdk.md) (Background on Express integration)
+- [MCP Authorization Specification](../../.agent/reference-docs/mcp-auth-spec.md) (OAuth 2.1 requirements)
+- [Understanding Authorization in MCP](../../.agent/reference-docs/mcp-understanding-auth-in-mcp.md) (OAuth flow tutorial)
+- Current codebase: `apps/oak-curriculum-mcp-streamable-http/src/`
 
 ## Goals
 
 ### Primary Goals
 
-- **Resource Server (RS)** implementation with Clerk token validation
-- **MCP Discovery Compliance** via Clerk OIDC proxy
-- **Unified Authentication** across Aila, Semantic Search, and MCP Server
-- **Production Hardening** with CI smoke checks and security controls
-- **Internal-First Access** with domain allowlist for `*.thenational.academy`
+- Replace local demo AS with Clerk production AS
+- Use `@clerk/mcp-tools` helpers for MCP-compliant auth
+- Configure Google SSO for `@thenational.academy` only
+- Enable Dynamic Client Registration in Clerk
+- Remove static token auth flows from production
+- Maintain all existing functionality and tests
 
 ### Secondary Goals
 
-- Remove static/dev token flows from production environments
-- Document complete OAuth flow with examples
-- Establish monitoring and observability for auth failures
+- Improve token refresh and error handling
+- Document Clerk integration patterns
+- Establish monitoring for Clerk auth failures
+- Create runbook for common Clerk issues
 
 ## Non-Goals
 
-- Building a custom Authorization Server (Clerk provides this)
-- Changing MCP transport protocol (SSE remains deprecated)
+- Building custom OAuth infrastructure (Clerk provides this)
+- Changing MCP transport, tools, or server logic
 - Altering SDK compile-time generation flows
-- Supporting non-OAuth authentication methods in production
-- Backwards compatibility with previous auth mechanisms
+- Supporting Microsoft SSO (future phase if needed)
+- Public access (internal `@thenational.academy` only for this phase)
 
 ## Architecture Overview
 
+### Before (Current State)
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         Clerk Instance                          │
-│                    (Shared across all apps)                     │
-│                                                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐        │
-│  │ User Store   │  │ Google SSO   │  │ Microsoft    │        │
-│  │ & Sessions   │  │ Integration  │  │ Entra ID SSO │        │
-│  └──────────────┘  └──────────────┘  └──────────────┘        │
-│                                                                 │
-│  ┌──────────────────────────────────────────────────┐         │
-│  │  OAuth 2.1 / OIDC Endpoints                      │         │
-│  │  - /.well-known/openid-configuration             │         │
-│  │  - /oauth/authorize                              │         │
-│  │  - /oauth/token                                  │         │
-│  │  - /.well-known/jwks.json                        │         │
-│  └──────────────────────────────────────────────────┘         │
-└─────────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-                    ┌─────────┴──────────┐
-                    │                    │
-           ┌────────▼────────┐  ┌────────▼────────┐
-           │  Semantic       │  │  Aila           │
-           │  Search App     │  │  (Existing)     │
-           │  Next.js        │  │  Next.js        │
-           │  @clerk/nextjs  │  │  @clerk/nextjs  │
-           └────────┬────────┘  └─────────────────┘
-                    │
-                    │ Authorization: Bearer <token>
-                    │
-           ┌────────▼────────────────────────────────┐
-           │  MCP Server (Resource Server)           │
-           │  Express on Vercel                      │
-           │  @clerk/express                         │
-           │                                         │
-           │  ┌───────────────────────────────────┐ │
-           │  │ Token Validation                  │ │
-           │  │ - Verify signature via JWKS       │ │
-           │  │ - Check iss/aud/exp/iat           │ │
-           │  │ - Enforce authorizedParties       │ │
-           │  └───────────────────────────────────┘ │
-           │                                         │
-           │  ┌───────────────────────────────────┐ │
-           │  │ Discovery Proxy                   │ │
-           │  │ /.well-known/oauth-authorization- │ │
-           │  │   server → Clerk OIDC discovery   │ │
-           │  └───────────────────────────────────┘ │
-           └─────────────────────────────────────────┘
+┌──────────────────┐
+│ MCP Client       │
+│ (Claude Desktop) │
+└────────┬─────────┘
+         │
+         │ Authorization: Bearer <token>
+         │
+         ▼
+┌────────────────────────────────────┐
+│ MCP Server (Resource Server)      │
+│ Express on Vercel                  │
+│                                    │
+│ ┌────────────────────────────────┐│
+│ │ Custom bearerAuth middleware   ││
+│ │ Custom JWT verification (jose) ││
+│ │ Local demo AS (dev only)       ││
+│ │ Static dev/CI tokens           ││
+│ └────────────────────────────────┘│
+└────────────────────────────────────┘
+```
+
+### After (With Clerk)
+
+```
+                              ┌─────────────────────────────┐
+                              │ Clerk (Authorization Server)│
+                              │ @thenational.academy only   │
+                              │                             │
+                              │ ┌─────────────────────────┐ │
+                              │ │ Google SSO Integration  │ │
+                              │ │ Dynamic Client Reg (DCR)│ │
+                              │ │ JWKS (auto-rotation)    │ │
+                              │ └─────────────────────────┘ │
+                              └─────────────────────────────┘
+                                           ▲
+                                           │
+                              OAuth Flow   │
+                              (via browser)│
+                                           │
+┌──────────────────┐                      │
+│ MCP Client       │◄─────────────────────┘
+│ (Claude Desktop) │
+│                  │
+│ 1. GET /mcp → 401│     (1) MCP Request (no token)
+│ 2. Fetch metadata│────────────────────────────────►
+│ 3. OAuth via     │                                 │
+│    Clerk         │     (2) 401 + WWW-Authenticate  │
+│ 4. Get token     │◄────────────────────────────────┤
+│ 5. Use token     │                                 │
+└────────┬─────────┘     (3) GET /.well-known/      │
+         │                   oauth-protected-resource│
+         │               ────────────────────────────►│
+         │                                            │
+         │               (4) Metadata (points to      │
+         │                   Clerk AS)                │
+         │               ◄────────────────────────────┤
+         │                                            │
+         │               (5) MCP Request + Bearer     │
+         └───────────────────────────────────────────►│
+                                                      │
+                         (6) MCP Response             │
+                       ◄─────────────────────────────┤
+                                                      │
+                       ┌──────────────────────────────┐
+                       │ MCP Server (Resource Server) │
+                       │ Express on Vercel            │
+                       │                              │
+                       │ ┌──────────────────────────┐ │
+                       │ │ @clerk/mcp-tools         │ │
+                       │ │ - mcpAuthClerk           │ │
+                       │ │ - protectedResourceHandler│ │
+                       │ │ - authServerMetadataHandler│ │
+                       │ └──────────────────────────┘ │
+                       └──────────────────────────────┘
 ```
 
 ## Implementation Phases
 
-### Phase 0: Prerequisites and Planning
+### Phase 0: Clerk Configuration & Credentials (2-3 hours)
 
-**Duration**: 1 day  
-**Owner**: Platform Team
+**Prerequisites**: Access to Clerk Dashboard
 
 #### Tasks
 
-1. **Document Current State** (30 min)
-   - [ ] Audit existing authentication code in `apps/oak-curriculum-mcp-streamable-http`
-   - [ ] Identify all static token flows to be removed
-   - [ ] Document current environment variables
-   - **Acceptance**: Markdown document listing all auth-related code paths
+1. **Configure Clerk Project** (45 min)
+   - [ ] Navigate to Clerk Dashboard (existing instance from Appendix A)
+   - [ ] Configuration → Restrictions → Enable **Allowlist**
+   - [ ] Add domain: `thenational.academy`
+   - [ ] Test: Sign-up with non-thenational.academy email should fail
+   - [ ] Test: Sign-up with thenational.academy email should succeed
+   - **Acceptance**: Only `@thenational.academy` emails allowed
 
-2. **Gather Clerk Credentials** (30 min)
-   - [ ] Access existing Aila Clerk Production instance
-   - [ ] Document Frontend API URL
-   - [ ] Document OIDC Discovery URL
-   - [ ] Obtain Publishable Key (will be `CLERK_PUBLISHABLE_KEY`)
-   - [ ] Obtain Secret Key (will be `CLERK_SECRET_KEY`)
-   - [ ] Obtain JWT Key for networkless verification (will be `CLERK_JWT_KEY`)
-   - **Acceptance**: All 5 credentials documented in secure notes
+2. **Configure Google SSO** (30 min)
+   - [ ] SSO Connections → Social → Add/verify Google
+   - [ ] Use Oak's production Google OAuth credentials
+   - [ ] Ensure status is "In production" (not "Testing")
+   - [ ] Enable "Block email subaddresses" option
+   - [ ] Test: Sign in with `user@thenational.academy` Google account
+   - **Acceptance**: Google SSO works, domain restricted
 
-3. **Create Feature Branch** (5 min)
-   - [ ] Create branch: `feature/clerk-oauth-integration`
-   - [ ] Push empty commit to trigger CI baseline
-   - **Acceptance**: Branch exists and CI runs successfully
+3. **Enable Dynamic Client Registration** (15 min)
+   - [ ] Navigate to OAuth Applications page
+   - [ ] Toggle ON **Dynamic client registration**
+   - [ ] Verify toggle is enabled and saved
+   - **Acceptance**: DCR enabled (required for MCP clients)
 
-4. **Set Up Local Environment** (15 min)
-   - [ ] Create `.env.local` in `apps/oak-curriculum-mcp-streamable-http`
-   - [ ] Add Clerk credentials for local development
-   - [ ] Add `CLERK_OIDC_DISCOVERY_URL` for discovery proxy
-   - [ ] Document expected environment variables in README
-   - **Acceptance**: Local env file works, documented in README
+4. **Gather Credentials** (30 min)
+   - [ ] Copy Frontend API URL (from Appendix A: `https://native-hippo-15.clerk.accounts.dev`)
+   - [ ] Copy `CLERK_PUBLISHABLE_KEY` (from Appendix A)
+   - [ ] Copy `CLERK_SECRET_KEY` (secure storage)
+   - [ ] Note JWKS URL: `<frontend-api>/.well-known/jwks.json`
+   - [ ] Create `.env.local` in `apps/oak-curriculum-mcp-streamable-http`:
+     ```bash
+     CLERK_PUBLISHABLE_KEY=pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ
+     CLERK_SECRET_KEY=<actual_secret_key>
+     BASE_URL=http://localhost:3333
+     MCP_CANONICAL_URI=http://localhost:3333/mcp
+     OAK_API_KEY=<your_oak_api_key>
+     ```
+   - **Acceptance**: All credentials documented, `.env.local` created
+
+5. **Create Feature Branch** (5 min)
+   - [ ] Create branch: `feature/clerk-production-auth`
+   - [ ] Push empty commit to trigger CI
+   - **Acceptance**: Branch exists, CI green
 
 **Phase 0 Definition of Done**:
 
-- ✅ Current state documented
-- ✅ All Clerk credentials obtained and secured
-- ✅ Feature branch created with green CI
-- ✅ Local environment configured
+- ✅ Clerk domain allowlist active for `@thenational.academy`
+- ✅ Google SSO configured and tested
+- ✅ Dynamic Client Registration enabled
+- ✅ All credentials gathered and secured
+- ✅ Feature branch created with baseline CI passing
 
 ---
 
-### Phase 1: Clerk Project Configuration
+### Phase 1: Replace Custom Auth with Clerk (1 day)
 
-**Duration**: 2-3 hours  
-**Owner**: Platform Team  
 **Prerequisites**: Phase 0 complete
 
 #### Tasks
 
-1. **Configure Domain Allowlist** (15 min)
-   - [ ] Navigate to Clerk Dashboard → Configuration → Restrictions
-   - [ ] Enable **Allowlist** mode
-   - [ ] Add domain: `thenational.academy`
-   - [ ] Test: Attempt sign-up with non-thenational.academy email (should fail)
-   - [ ] Test: Attempt sign-up with thenational.academy email (should succeed)
-   - **Acceptance**: Only `*.thenational.academy` emails can sign in
+1. **Install Clerk Dependencies** (5 min)
+   - [ ] Add `@clerk/mcp-tools` to `package.json`
+   - [ ] Add `@clerk/express` to `package.json`
+   - [ ] Remove `jose` dependency (no longer needed)
+   - [ ] Run `pnpm install`
+   - [ ] Verify `pnpm build` succeeds
+   - **Acceptance**: New dependencies installed, builds successfully
 
-2. **Configure Google Social Connection** (30 min)
-   - [ ] Navigate to Clerk Dashboard → SSO Connections → Social
-   - [ ] Add Google provider
-   - [ ] Use Oak's production Google OAuth credentials
-   - [ ] Ensure Google app status is "In production" (not "Testing")
-   - [ ] Enable "Block email subaddresses" option
-   - [ ] Test: Sign in with `user@thenational.academy` Google account
-   - **Acceptance**: Google SSO works with thenational.academy accounts
+2. **Update Environment Schema** (15 min)
+   - [ ] Open `src/env.ts`
+   - [ ] Add Clerk env vars to `EnvSchema`:
+     ```typescript
+     CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
+     CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
+     ```
+   - [ ] Remove: `ENABLE_LOCAL_AS`, `LOCAL_AS_JWK`, `OIDC_ISSUER`, `OIDC_CLIENT_ID`
+   - [ ] Keep: `BASE_URL`, `MCP_CANONICAL_URI`, `OAK_API_KEY`
+   - [ ] Run `pnpm type-check`
+   - **Acceptance**: Schema updated, type-checks pass
 
-3. **Configure Microsoft Social Connection** (45 min)
-   - [ ] Navigate to Clerk Dashboard → SSO Connections → Social
-   - [ ] Add Microsoft provider
-   - [ ] Create Azure AD app registration (if not exists)
-   - [ ] Configure redirect URI from Clerk to Azure app
-   - [ ] Configure client ID and secret in Clerk
-   - [ ] Test: Sign in with `user@thenational.academy` Microsoft account
-   - **Acceptance**: Microsoft SSO works with thenational.academy accounts
+3. **Replace Bearer Auth Middleware** (1 hour)
+   - [ ] Open `src/index.ts`
+   - [ ] Add imports:
+     ```typescript
+     import { clerkMiddleware } from '@clerk/express';
+     import {
+       mcpAuthClerk,
+       protectedResourceHandlerClerk,
+       authServerMetadataHandlerClerk,
+     } from '@clerk/mcp-tools/express';
+     ```
+   - [ ] In `createApp()`, replace:
 
-4. **Create OAuth Application in Clerk** (30 min)
-   - [ ] Navigate to Clerk Dashboard → OAuth Applications
-   - [ ] Create new OAuth Application: "Oak Curriculum MCP Server"
-   - [ ] Note the Discovery URL (OIDC configuration endpoint)
-   - [ ] Note the Authorize URL
-   - [ ] Note the Token URL
-   - [ ] Note the JWKS URL
-   - [ ] Configure redirect URIs for local, preview, and production
-   - **Acceptance**: OAuth app configured with all endpoints documented
+     ```typescript
+     // OLD:
+     app.use(bearerAuth);
 
-5. **Document Configuration** (30 min)
-   - [ ] Create `docs/architecture/clerk-oauth-configuration.md`
-   - [ ] Document all Clerk settings
-   - [ ] Document environment variables required
-   - [ ] Document testing procedures
-   - [ ] Add architecture diagrams
-   - **Acceptance**: Complete configuration documentation exists
+     // NEW:
+     app.use(clerkMiddleware());
+     ```
+
+   - [ ] Update MCP endpoint:
+
+     ```typescript
+     // OLD:
+     app.post('/mcp', createMcpHandler(coreTransport));
+
+     // NEW:
+     app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+     ```
+
+   - [ ] Same for `/openai_connector`
+   - [ ] Run `pnpm build`
+   - **Acceptance**: Builds successfully, `bearerAuth` replaced
+
+4. **Replace OAuth Metadata Endpoints** (1 hour)
+   - [ ] In `src/index.ts`, replace `setupOAuthMetadata(app, corsMw)` with:
+
+     ```typescript
+     // Protected Resource Metadata (RFC 9728)
+     app.get(
+       '/.well-known/oauth-protected-resource',
+       protectedResourceHandlerClerk({
+         scopes_supported: ['mcp:invoke', 'mcp:read'],
+       }),
+     );
+
+     // Authorization Server Metadata (for older MCP clients)
+     app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
+     ```
+
+   - [ ] Remove call to `setupLocalAuthorizationServer()` and its `asReady` promise
+   - [ ] Simplify `initializeCoreEndpoints` to only wait for `serverReady`
+   - [ ] Run `pnpm build`
+   - **Acceptance**: Builds successfully, endpoints replaced
+
+5. **Remove Custom Auth Files** (30 min)
+   - [ ] Delete `src/auth.ts` (replaced by `mcpAuthClerk`)
+   - [ ] Delete `src/auth-jwt.ts` (replaced by Clerk's verification)
+   - [ ] Delete `src/oauth-metadata.ts` (replaced by Clerk helpers)
+   - [ ] Delete `src/oauth-metadata.unit.test.ts` (will rewrite)
+   - [ ] Remove any imports of deleted files
+   - [ ] Run `pnpm type-check` to find remaining references
+   - [ ] Fix any remaining references
+   - **Acceptance**: No orphaned imports, type-check passes
+
+6. **Update Environment Variables** (15 min)
+   - [ ] Update `.env.local` to remove old vars:
+     ```bash
+     # Remove these:
+     REMOTE_MCP_DEV_TOKEN
+     REMOTE_MCP_CI_TOKEN
+     ENABLE_LOCAL_AS
+     LOCAL_AS_JWK
+     ```
+   - [ ] Ensure these exist:
+     ```bash
+     CLERK_PUBLISHABLE_KEY=pk_test_...
+     CLERK_SECRET_KEY=sk_...
+     BASE_URL=http://localhost:3333
+     MCP_CANONICAL_URI=http://localhost:3333/mcp
+     OAK_API_KEY=<your_key>
+     ALLOWED_HOSTS=localhost,127.0.0.1,::1
+     ```
+   - [ ] Run `pnpm dev`
+   - [ ] Verify server starts without errors
+   - **Acceptance**: Server runs with new env vars
+
+7. **Test Locally** (1 hour)
+   - [ ] Start server: `pnpm dev`
+   - [ ] Test metadata endpoint:
+     ```bash
+     curl http://localhost:3333/.well-known/oauth-protected-resource
+     ```
+   - [ ] Verify response points to Clerk:
+     ```json
+     {
+       "resource": "http://localhost:3333/mcp",
+       "authorization_servers": ["https://native-hippo-15.clerk.accounts.dev"],
+       "scopes_supported": ["mcp:invoke", "mcp:read"]
+     }
+     ```
+   - [ ] Test unauthorized request:
+     ```bash
+     curl -X POST http://localhost:3333/mcp \
+       -H "Accept: application/json, text/event-stream" \
+       -H "Content-Type: application/json" \
+       -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
+     ```
+   - [ ] Verify 401 with `WWW-Authenticate` header
+   - [ ] Document findings
+   - **Acceptance**: All endpoints respond correctly
 
 **Phase 1 Definition of Done**:
 
-- ✅ Domain allowlist active and tested
-- ✅ Google SSO configured and tested
-- ✅ Microsoft SSO configured and tested
-- ✅ OAuth application created in Clerk
-- ✅ Complete configuration documentation
+- ✅ `@clerk/mcp-tools` and `@clerk/express` installed
+- ✅ Custom auth files deleted (auth.ts, auth-jwt.ts, oauth-metadata.ts)
+- ✅ `mcpAuthClerk` middleware protecting MCP endpoints
+- ✅ Clerk metadata helpers serving discovery endpoints
+- ✅ Environment schema updated for Clerk
+- ✅ Server runs locally with Clerk integration
+- ✅ `pnpm build` and `pnpm type-check` pass
+- ✅ Static tokens removed from codebase
 
 ---
 
-### Phase 2: Resource Server Implementation (TDD)
+### Phase 2: Update Tests (4-6 hours)
 
-**Duration**: 1-2 days  
-**Owner**: Platform Team  
 **Prerequisites**: Phase 1 complete
 
 #### Tasks
 
-1. **Install Dependencies** (5 min)
-   - [ ] Add `@clerk/express` to `apps/oak-curriculum-mcp-streamable-http`
-   - [ ] Add `@clerk/backend` for networkless verification
-   - [ ] Add `cors` package if not present
-   - [ ] Run `pnpm install`
-   - [ ] Verify no dependency conflicts
-   - **Acceptance**: `pnpm build` succeeds with new dependencies
+1. **Update Unit Tests** (2 hours)
+   - [ ] Create `src/clerk-integration.unit.test.ts`:
 
-2. **Create Auth Middleware (TDD)** (2 hours)
-   - [ ] **RED**: Write test `src/middleware/auth.integration.test.ts`
-     - Test: Valid Clerk token passes through
-     - Test: Invalid token returns 401
-     - Test: Missing token returns 401
-     - Test: Expired token returns 401
-     - Test: Token with wrong `azp` (authorized parties) returns 401
-     - Test: `WWW-Authenticate: Bearer` header present on 401
-   - [ ] **GREEN**: Implement `src/middleware/auth.ts`
-     - Import `clerkMiddleware` from `@clerk/express`
-     - Configure `authorizedParties` with allowed origins
-     - Attach to Express app
-   - [ ] **GREEN**: Implement `src/middleware/require-auth.ts`
-     - Create guard that checks `getAuth(req).sessionId`
-     - Return 401 with `WWW-Authenticate: Bearer` if missing
-     - Pass through if valid
-   - [ ] **REFACTOR**: Extract configuration to `src/config/clerk.ts`
-   - [ ] Run tests: `pnpm test src/middleware/auth.integration.test.ts`
-   - **Acceptance**: All 6 tests pass, 100% coverage on middleware
+     ```typescript
+     import { describe, it, expect } from 'vitest';
+     import request from 'supertest';
+     import { createApp } from './index.js';
 
-3. **Implement Networkless Verification (TDD)** (2 hours)
-   - [ ] **RED**: Write test `src/middleware/verify-bearer.integration.test.ts`
-     - Test: Valid JWT signature passes
-     - Test: Invalid signature fails
-     - Test: Expired JWT fails
-     - Test: Missing required claims fails
-     - Test: `authorizedParties` enforcement works
-   - [ ] **GREEN**: Implement `src/middleware/verify-bearer.ts`
-     - Import `createClerkClient` from `@clerk/backend`
-     - Use `authenticateRequest()` with `jwtKey` option
-     - Enforce `authorizedParties`
-     - Attach `req.auth` with validated claims
-   - [ ] **REFACTOR**: Share token validation logic
-   - [ ] Run tests: `pnpm test src/middleware/verify-bearer.integration.test.ts`
-   - **Acceptance**: All 5 tests pass, networkless verification works
+     describe('Clerk OAuth Integration', () => {
+       it('serves protected resource metadata', async () => {
+         const app = createApp();
+         const res = await request(app).get('/.well-known/oauth-protected-resource');
 
-4. **Configure CORS** (1 hour)
-   - [ ] **RED**: Write test `src/middleware/cors.integration.test.ts`
-     - Test: Allowed origins can make requests
-     - Test: Disallowed origins are rejected
-     - Test: Preflight requests work correctly
-     - Test: `Authorization` header allowed
-     - Test: `MCP-Protocol-Version` header allowed
-   - [ ] **GREEN**: Implement `src/middleware/cors.ts`
-     - Configure allowed origins (Semantic Search, Aila, localhost)
-     - Add `Authorization` and `MCP-Protocol-Version` to allowed headers
-     - Set `credentials: true`
-   - [ ] **REFACTOR**: Extract origins to environment config
-   - [ ] Run tests: `pnpm test src/middleware/cors.integration.test.ts`
-   - **Acceptance**: All 5 tests pass, CORS properly configured
+         expect(res.status).toBe(200);
+         expect(res.body).toHaveProperty('resource');
+         expect(res.body).toHaveProperty('authorization_servers');
+         expect(Array.isArray(res.body.authorization_servers)).toBe(true);
+       });
 
-5. **Integrate into Express App** (1 hour)
-   - [ ] Update `src/server.ts` to use new middleware
-   - [ ] Apply CORS middleware first
-   - [ ] Apply `clerkMiddleware()` second
-   - [ ] Apply `requireAuth` to protected routes
-   - [ ] Keep health endpoint public (`GET /`)
-   - [ ] Protect MCP endpoint (`POST /mcp`)
-   - [ ] Run `pnpm build`
-   - **Acceptance**: Server starts successfully with all middleware
+       it('rejects unauthenticated MCP requests', async () => {
+         const app = createApp();
+         const res = await request(app)
+           .post('/mcp')
+           .set('Accept', 'application/json, text/event-stream')
+           .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
-6. **Add Environment Variable Validation** (1 hour)
-   - [ ] **RED**: Write test `src/config/env.unit.test.ts`
-     - Test: Missing `CLERK_PUBLISHABLE_KEY` throws
-     - Test: Missing `CLERK_SECRET_KEY` throws
-     - Test: Missing `CLERK_JWT_KEY` throws
-     - Test: Invalid key format throws
-     - Test: Valid config returns typed object
-   - [ ] **GREEN**: Implement `src/config/env.ts`
-     - Use `@oaknational/mcp-env` for validation
-     - Define Clerk-specific environment variables
-     - Fail fast if missing/invalid
-   - [ ] **REFACTOR**: Use typed config throughout
-   - [ ] Run tests: `pnpm test src/config/env.unit.test.ts`
-   - **Acceptance**: All 5 tests pass, env validation robust
+         expect(res.status).toBe(401);
+         expect(res.headers['www-authenticate']).toBeDefined();
+       });
+     });
+     ```
+
+   - [ ] Run `pnpm test`
+   - [ ] Fix any failing tests
+   - **Acceptance**: Unit tests pass
+
+2. **Update E2E Tests** (2 hours)
+   - [ ] Review existing E2E tests in `e2e-tests/`
+   - [ ] Update tests that use static tokens (if any)
+   - [ ] Add note about requiring real Clerk tokens for E2E
+   - [ ] Document how to generate test tokens from Clerk
+   - [ ] Skip E2E tests that require real tokens (for now)
+   - [ ] Run `pnpm test` (unit tests only)
+   - **Acceptance**: Unit tests pass, E2E tests documented
+
+3. **Update Smoke Tests** (1 hour)
+   - [ ] Open `scripts/smoke-dev.ts`
+   - [ ] Update to work with Clerk auth (may need real token)
+   - [ ] Add fallback for local dev without token
+   - [ ] Document smoke test requirements
+   - [ ] Test: `pnpm smoke:dev`
+   - **Acceptance**: Smoke tests documented, run without errors
+
+4. **Update README** (1 hour)
+   - [ ] Open `README.md`
+   - [ ] Remove references to:
+     - `REMOTE_MCP_DEV_TOKEN`
+     - `ENABLE_LOCAL_AS`
+     - `LOCAL_AS_JWK`
+   - [ ] Add Clerk configuration section:
+
+     ```markdown
+     ## Authentication
+
+     Production authentication uses Clerk OAuth 2.1.
+
+     ### Required Environment Variables
+
+     - `CLERK_PUBLISHABLE_KEY` - Clerk publishable key
+     - `CLERK_SECRET_KEY` - Clerk secret key
+     - `BASE_URL` - Server base URL (e.g., `https://mcp.oaknational.academy`)
+     - `MCP_CANONICAL_URI` - MCP endpoint URI (e.g., `https://mcp.oaknational.academy/mcp`)
+
+     ### MCP Client Connection
+
+     1. Client attempts to connect to MCP server
+     2. Server returns 401 with OAuth discovery metadata
+     3. Client fetches `/.well-known/oauth-protected-resource`
+     4. Client discovers Clerk as Authorization Server
+     5. Client opens browser for Google SSO via Clerk
+     6. User authenticates with `@thenational.academy` Google account
+     7. Clerk issues access token
+     8. Client uses token to access MCP server
+
+     ### Google SSO
+
+     Only `@thenational.academy` email addresses are allowed via Google SSO.
+     Clerk is configured with domain allowlist enforcement.
+     ```
+
+   - [ ] Update troubleshooting section
+   - [ ] Remove "Authentication status and next steps" section (now complete!)
+   - **Acceptance**: README updated with Clerk docs
 
 **Phase 2 Definition of Done**:
 
-- ✅ All dependencies installed successfully
-- ✅ Auth middleware implemented with passing tests
-- ✅ Networkless verification implemented with passing tests
-- ✅ CORS configured with passing tests
-- ✅ Middleware integrated into Express app
-- ✅ Environment validation implemented
-- ✅ `pnpm build` succeeds
-- ✅ `pnpm test` shows 100% coverage on new middleware
-- ✅ `pnpm lint` passes with no errors
+- ✅ Unit tests updated and passing
+- ✅ E2E test strategy documented
+- ✅ Smoke tests updated
+- ✅ README reflects Clerk integration
+- ✅ `pnpm test` passes
+- ✅ All old auth references removed from docs
 
 ---
 
-### Phase 3: MCP Discovery Endpoint Implementation (TDD)
+### Phase 3: Deployment & Monitoring (1 day)
 
-**Duration**: 4-6 hours  
-**Owner**: Platform Team  
-**Prerequisites**: Phase 2 complete
+**Prerequisites**: Phase 2 complete, all tests passing
 
 #### Tasks
 
-1. **Create Discovery Proxy (TDD)** (2 hours)
-   - [ ] **RED**: Write test `src/routes/discovery.integration.test.ts`
-     - Test: GET `/.well-known/oauth-authorization-server` returns 200
-     - Test: Response is valid JSON
-     - Test: Response contains required OAuth 2.1 fields:
-       - `issuer`
-       - `authorization_endpoint`
-       - `token_endpoint`
-       - `jwks_uri`
-     - Test: Response caching headers are appropriate
-     - Test: Clerk discovery URL failure handled gracefully
-   - [ ] **GREEN**: Implement `src/routes/discovery.ts`
-     - Create route handler for `/.well-known/oauth-authorization-server`
-     - Fetch from `process.env.CLERK_OIDC_DISCOVERY_URL`
-     - Return proxied response
-     - Add error handling for fetch failures
-     - Set appropriate cache headers (e.g., `Cache-Control: max-age=3600`)
-   - [ ] **REFACTOR**: Extract fetch logic to service layer
-   - [ ] Run tests: `pnpm test src/routes/discovery.integration.test.ts`
-   - **Acceptance**: All 5 tests pass, discovery endpoint works
+1. **Configure Vercel Environment Variables** (30 min)
+   - [ ] Navigate to Vercel project settings
+   - [ ] Add to Production environment:
+     ```
+     CLERK_PUBLISHABLE_KEY=pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ
+     CLERK_SECRET_KEY=<actual_secret>
+     BASE_URL=https://mcp.oaknational.academy
+     MCP_CANONICAL_URI=https://mcp.oaknational.academy/mcp
+     OAK_API_KEY=<production_key>
+     ALLOWED_HOSTS=mcp.oaknational.academy,*.vercel.app
+     ```
+   - [ ] Add to Preview environment (same values but preview URLs)
+   - [ ] Remove old env vars:
+     - `REMOTE_MCP_DEV_TOKEN`
+     - `REMOTE_MCP_CI_TOKEN`
+     - `ENABLE_LOCAL_AS`
+     - `LOCAL_AS_JWK`
+   - [ ] Save and trigger redeploy
+   - **Acceptance**: Environment variables configured
 
-2. **Add Discovery Service Layer (TDD)** (1 hour)
-   - [ ] **RED**: Write test `src/services/discovery.unit.test.ts`
-     - Test: `fetchClerkDiscovery()` returns parsed JSON
-     - Test: Network errors are caught and logged
-     - Test: Invalid JSON responses are handled
-     - Test: Discovery result is cached in memory
-     - Test: Cache expires after TTL
-   - [ ] **GREEN**: Implement `src/services/discovery.ts`
-     - Implement `fetchClerkDiscovery()` function
-     - Add in-memory caching with TTL (1 hour)
-     - Add retry logic with exponential backoff
-     - Use `@oaknational/mcp-logger` for errors
-   - [ ] **REFACTOR**: Use dependency injection for fetch
-   - [ ] Run tests: `pnpm test src/services/discovery.unit.test.ts`
-   - **Acceptance**: All 5 tests pass, service layer robust
-
-3. **Validate MCP Spec Compliance** (1 hour)
-   - [ ] **RED**: Write test `src/routes/discovery.spec.test.ts`
-     - Test: Endpoint is at exact path `/.well-known/oauth-authorization-server`
-     - Test: Response includes MCP-required fields
-     - Test: `issuer` matches expected Clerk issuer
-     - Test: All endpoint URLs are HTTPS
-     - Test: JWKS URI is accessible
-   - [ ] **GREEN**: Ensure implementation passes spec tests
-   - [ ] Run tests: `pnpm test src/routes/discovery.spec.test.ts`
-   - **Acceptance**: All MCP spec requirements validated
-
-4. **Add Observability** (1 hour)
-   - [ ] Add structured logging for discovery requests
-   - [ ] Add metrics for discovery endpoint latency
-   - [ ] Add alerts for discovery fetch failures
-   - [ ] Log cache hit/miss rates
-   - [ ] Use `@oaknational/mcp-logger` consistently
-   - **Acceptance**: All discovery activity is observable
-
-5. **Integration Test** (1 hour)
-   - [ ] Start local server with real Clerk credentials
-   - [ ] Test: `curl http://localhost:3000/.well-known/oauth-authorization-server`
-   - [ ] Verify response matches Clerk's discovery document
-   - [ ] Verify all URLs are absolute and correct
-   - [ ] Document manual testing procedure
-   - **Acceptance**: Manual curl test succeeds, documented
-
-**Phase 3 Definition of Done**:
-
-- ✅ Discovery endpoint implemented with passing tests
-- ✅ Service layer with caching and error handling
-- ✅ MCP specification compliance validated
-- ✅ Observability added (logging, metrics)
-- ✅ Manual integration test documented and passing
-- ✅ `pnpm test` passes with 100% coverage on discovery code
-- ✅ `pnpm lint` passes
-
----
-
-### Phase 4: Semantic Search Integration
-
-**Duration**: 1 day  
-**Owner**: Frontend Team  
-**Prerequisites**: Phase 3 complete, MCP server deployed to preview
-
-#### Tasks
-
-1. **Install Clerk in Semantic Search** (15 min)
-   - [ ] Navigate to `apps/oak-open-curriculum-semantic-search`
-   - [ ] Add `@clerk/nextjs` dependency
-   - [ ] Run `pnpm install`
-   - [ ] Verify build succeeds
-   - **Acceptance**: Package installed, builds successfully
-
-2. **Configure Clerk Provider** (30 min)
-   - [ ] Update `app/layout.tsx` with `<ClerkProvider>`
-   - [ ] Add `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` to `.env.local`
-   - [ ] Add `CLERK_SECRET_KEY` to `.env.local`
-   - [ ] Configure domain and paths as needed
-   - [ ] Test: Start dev server, verify no errors
-   - **Acceptance**: Clerk provider active, no console errors
-
-3. **Add Sign-In Flow (TDD)** (2 hours)
-   - [ ] **RED**: Write test `app/auth/signin/page.test.tsx`
-     - Test: Sign-in page renders
-     - Test: Google button present
-     - Test: Microsoft button present
-     - Test: Redirect to dashboard after sign-in
-   - [ ] **GREEN**: Create `app/auth/signin/page.tsx`
-     - Use `<SignIn />` component from Clerk
-     - Configure redirect to `/`
-     - Style according to Oak design system
-   - [ ] **REFACTOR**: Extract auth layout
-   - [ ] Run tests: `pnpm test app/auth/signin`
-   - **Acceptance**: Sign-in page works, tests pass
-
-4. **Protect Routes with Middleware** (1 hour)
-   - [ ] Create `middleware.ts` at app root
-   - [ ] Use `authMiddleware` from `@clerk/nextjs`
-   - [ ] Define public routes (e.g., `/`, `/about`)
-   - [ ] Protect all other routes by default
-   - [ ] Test: Unauthenticated access redirects to sign-in
-   - **Acceptance**: Route protection works as expected
-
-5. **Create MCP Client Wrapper (TDD)** (2 hours)
-   - [ ] **RED**: Write test `src/lib/mcp-client.test.ts`
-     - Test: `useMcpFetch` hook attaches Bearer token
-     - Test: Token refresh on 401 response
-     - Test: Error handling for auth failures
-     - Test: Request retries with new token
-   - [ ] **GREEN**: Implement `src/lib/mcp-client.ts`
-     - Create `useMcpFetch()` hook
-     - Use `useAuth()` from `@clerk/nextjs`
-     - Call `getToken()` and attach to `Authorization` header
-     - Handle 401 responses with token refresh
-   - [ ] **REFACTOR**: Extract to reusable hook
-   - [ ] Run tests: `pnpm test src/lib/mcp-client.test.ts`
-   - **Acceptance**: All tests pass, hook works correctly
-
-6. **Update Existing MCP Calls** (2 hours)
-   - [ ] Find all `fetch()` calls to MCP server
-   - [ ] Replace with `useMcpFetch()` hook
-   - [ ] Test each integration manually
-   - [ ] Verify Bearer tokens are sent
-   - [ ] Verify responses are correct
-   - **Acceptance**: All MCP calls use authenticated fetch
-
-7. **Integration Test** (1 hour)
-   - [ ] Sign in with thenational.academy account
-   - [ ] Make MCP request (e.g., search query)
-   - [ ] Verify request succeeds
-   - [ ] Open network inspector, verify `Authorization: Bearer` header
-   - [ ] Sign out, verify protected routes redirect
-   - **Acceptance**: End-to-end auth flow works
-
-**Phase 4 Definition of Done**:
-
-- ✅ Clerk installed in Semantic Search app
-- ✅ Sign-in flow implemented and tested
-- ✅ Routes protected with middleware
-- ✅ MCP client wrapper implemented with tests
-- ✅ All MCP calls updated to use authenticated fetch
-- ✅ Manual integration test passing
-- ✅ `pnpm test` passes in semantic-search app
-- ✅ `pnpm build` succeeds
-
----
-
-### Phase 5: Testing and CI Integration
-
-**Duration**: 1-2 days  
-**Owner**: Platform Team  
-**Prerequisites**: Phases 2, 3, 4 complete
-
-#### Tasks
-
-1. **Create E2E Tests for MCP Server** (3 hours)
-   - [ ] Create `apps/oak-curriculum-mcp-streamable-http/e2e-tests/auth.e2e.test.ts`
-   - [ ] Test: Unauthenticated request to `/mcp` returns 401
-   - [ ] Test: 401 includes `WWW-Authenticate: Bearer` header
-   - [ ] Test: Valid Clerk token allows MCP request
-   - [ ] Test: Expired token returns 401
-   - [ ] Test: Token with wrong `azp` returns 401
-   - [ ] Test: Discovery endpoint returns valid JSON
-   - [ ] Configure test environment with real Clerk tokens
-   - [ ] Run: `pnpm test:e2e`
-   - **Acceptance**: All 6 E2E tests pass
-
-2. **Create Smoke Tests for CI** (2 hours)
-   - [ ] Create `apps/oak-curriculum-mcp-streamable-http/scripts/smoke-test.ts`
-   - [ ] Test 1: `GET /` (health) returns 200
-   - [ ] Test 2: `GET /.well-known/oauth-authorization-server` returns 200 with valid JSON
-   - [ ] Test 3: `POST /mcp` without auth returns 401
-   - [ ] Test 4: `POST /mcp` with valid token returns 200 (or appropriate MCP response)
-   - [ ] Make script exit with code 1 on any failure
-   - [ ] Add timeout handling (30s max)
-   - **Acceptance**: Smoke test script runs successfully
-
-3. **Integrate Smoke Tests into CI Pipeline** (1 hour)
-   - [ ] Update `.github/workflows/deploy.yml` (or equivalent)
-   - [ ] Add smoke test step after Vercel deployment
-   - [ ] Pass deployment URL to smoke test script
-   - [ ] Configure Clerk test credentials for CI
-   - [ ] Test: Trigger deployment, verify smoke tests run
-   - **Acceptance**: CI runs smoke tests on every deployment
-
-4. **Add Monitoring Alerts** (1 hour)
-   - [ ] Configure Sentry error tracking for auth failures
-   - [ ] Add alert for high 401 rate (>5% of requests)
-   - [ ] Add alert for discovery endpoint failures
-   - [ ] Add alert for Clerk API failures
-   - [ ] Test alerts by triggering failure conditions
-   - **Acceptance**: Alerts configured and tested
-
-5. **Load Testing** (2 hours)
-   - [ ] Create load test script: `scripts/load-test-auth.ts`
-   - [ ] Simulate 100 concurrent authenticated requests
-   - [ ] Measure p50, p95, p99 latency
-   - [ ] Measure error rate
-   - [ ] Run against preview environment
-   - [ ] Document results and acceptable thresholds
-   - **Acceptance**: Load test passes with <500ms p95 latency
-
-6. **Security Testing** (2 hours)
-   - [ ] Test: Expired token is rejected
-   - [ ] Test: Tampered token signature is rejected
-   - [ ] Test: Token from different issuer is rejected
-   - [ ] Test: Token with missing claims is rejected
-   - [ ] Test: Token with wrong `azp` is rejected
-   - [ ] Test: CORS violation is prevented
-   - [ ] Document security test results
-   - **Acceptance**: All security tests pass
-
-**Phase 5 Definition of Done**:
-
-- ✅ E2E tests implemented and passing
-- ✅ Smoke test script created and working
-- ✅ CI pipeline runs smoke tests on deployment
-- ✅ Monitoring alerts configured
-- ✅ Load testing completed with acceptable results
-- ✅ Security testing completed, all tests pass
-- ✅ All test results documented
-
----
-
-### Phase 6: Production Hardening and Deployment
-
-**Duration**: 1-2 days  
-**Owner**: Platform Team  
-**Prerequisites**: Phase 5 complete, all tests green
-
-#### Tasks
-
-1. **Remove Static Token Flows** (2 hours)
-   - [ ] Audit codebase for static token authentication
-   - [ ] Remove all static token validation code
-   - [ ] Remove static token environment variables
-   - [ ] Update documentation to remove static token references
-   - [ ] Add migration guide for any existing users
-   - [ ] Verify no static token code remains: `grep -r "STATIC_TOKEN"`
-   - **Acceptance**: Zero static token references in production code
-
-2. **Configure Vercel Environment Variables** (30 min)
-   - [ ] Add `CLERK_PUBLISHABLE_KEY` to Vercel production
-   - [ ] Add `CLERK_SECRET_KEY` to Vercel production
-   - [ ] Add `CLERK_JWT_KEY` to Vercel production
-   - [ ] Add `CLERK_OIDC_DISCOVERY_URL` to Vercel production
-   - [ ] Configure allowed origins for CORS
-   - [ ] Configure `authorizedParties` list
-   - [ ] Test: Redeploy, verify environment variables load
-   - **Acceptance**: All environment variables set correctly
-
-3. **Deploy to Preview Environment** (1 hour)
-   - [ ] Merge feature branch to `preview` branch
-   - [ ] Trigger Vercel preview deployment
-   - [ ] Monitor deployment logs for errors
-   - [ ] Run smoke tests against preview URL
-   - [ ] Test sign-in flow end-to-end
-   - [ ] Test MCP request with authentication
-   - [ ] Verify discovery endpoint works
-   - **Acceptance**: Preview deployment successful, all tests pass
-
-4. **Staged Rollout to Production** (2 hours)
-   - [ ] Create release PR from `preview` to `main`
-   - [ ] Request peer review from 2+ engineers
+2. **Deploy to Preview** (1 hour)
+   - [ ] Create PR from `feature/clerk-production-auth` to `preview`
+   - [ ] Request review from 2+ engineers
    - [ ] Address review feedback
-   - [ ] Get approval from security team
+   - [ ] Merge to `preview`
+   - [ ] Wait for Vercel deployment
+   - [ ] Note preview URL
+   - [ ] Test metadata endpoint:
+     ```bash
+     curl https://mcp-<hash>.vercel.app/.well-known/oauth-protected-resource
+     ```
+   - [ ] Verify points to Clerk
+   - [ ] Test unauthorized request returns 401
+   - [ ] Document any issues
+   - **Acceptance**: Preview deployment successful, endpoints working
+
+3. **Test with Real MCP Client** (2 hours)
+   - [ ] Configure Claude Desktop to use preview URL
+   - [ ] Attempt to connect (should trigger OAuth flow)
+   - [ ] Verify browser opens to Clerk
+   - [ ] Sign in with `@thenational.academy` Google account
+   - [ ] Verify redirect back to Claude Desktop
+   - [ ] Test MCP tool invocation
+   - [ ] Verify tools execute successfully
+   - [ ] Document the flow with screenshots
+   - **Acceptance**: Full OAuth flow works with real client
+
+4. **Deploy to Production** (2 hours)
+   - [ ] Create release PR from `preview` to `main`
+   - [ ] Request security team review
+   - [ ] Address any feedback
+   - [ ] Get approvals (2+ engineers + security)
    - [ ] Merge to `main` with squash commit
    - [ ] Monitor Vercel production deployment
-   - [ ] Run smoke tests against production URL
+   - [ ] Test production endpoints
+   - [ ] Test with MCP client on production URL
    - **Acceptance**: Production deployment successful
 
 5. **Monitor Initial Traffic** (4 hours)
-   - [ ] Monitor Sentry for auth-related errors (first hour)
-   - [ ] Monitor Vercel logs for 401 responses
+   - [ ] Watch Vercel logs for 401 responses
    - [ ] Monitor Clerk dashboard for auth activity
-   - [ ] Check discovery endpoint cache hit rates
-   - [ ] Verify no unexpected error spikes
+   - [ ] Check for any error spikes
+   - [ ] Verify successful authentications
+   - [ ] Monitor MCP tool invocations
    - [ ] Document any issues and resolutions
-   - **Acceptance**: No critical errors, <1% error rate
+   - **Acceptance**: No critical errors, <1% auth error rate
 
-6. **Update Documentation** (2 hours)
-   - [ ] Update `apps/oak-curriculum-mcp-streamable-http/README.md`
-   - [ ] Document OAuth flow with diagrams
-   - [ ] Document environment variables required
-   - [ ] Document troubleshooting procedures
-   - [ ] Add curl examples for testing
-   - [ ] Document rate limits and quotas
-   - [ ] Create `docs/architecture/clerk-oauth-implementation.md`
-   - **Acceptance**: Complete, accurate documentation
-
-7. **Create Runbook** (1 hour)
-   - [ ] Document common auth failure scenarios
-   - [ ] Document how to rotate Clerk credentials
-   - [ ] Document how to investigate 401 errors
+6. **Create Runbook** (1 hour)
+   - [ ] Create `docs/runbooks/clerk-oauth-troubleshooting.md`
+   - [ ] Document common scenarios:
+     - User can't sign in → Check domain allowlist
+     - 401 errors → Check token expiry, Clerk service status
+     - No auth flow triggered → Check metadata endpoints
+     - Wrong domain → Check Clerk allowlist configuration
+   - [ ] Add troubleshooting flowchart
    - [ ] Document how to check Clerk service status
    - [ ] Document escalation procedures
-   - [ ] Add troubleshooting flowcharts
+   - [ ] Add Clerk dashboard URLs
    - **Acceptance**: Runbook created and reviewed
 
-**Phase 6 Definition of Done**:
+7. **Update Documentation** (1 hour)
+   - [ ] Create `docs/architecture/clerk-oauth-implementation.md`
+   - [ ] Document architecture decisions
+   - [ ] Add sequence diagrams
+   - [ ] Document Clerk configuration
+   - [ ] Add curl examples for testing
+   - [ ] Document MCP client setup
+   - [ ] List all environment variables
+   - **Acceptance**: Complete architecture documentation
 
-- ✅ Static token code completely removed
+**Phase 3 Definition of Done**:
+
 - ✅ Vercel environment variables configured
-- ✅ Preview deployment successful with passing tests
+- ✅ Preview deployment successful and tested
 - ✅ Production deployment successful
+- ✅ Full OAuth flow tested with real MCP client
 - ✅ Initial traffic monitored, no critical issues
-- ✅ Documentation complete and accurate
-- ✅ Runbook created for operational support
+- ✅ Runbook created for troubleshooting
+- ✅ Architecture documentation complete
 - ✅ Post-deployment retrospective completed
 
 ---
@@ -662,113 +602,101 @@ Implement production-ready OAuth 2.1 authentication for the Oak Curriculum MCP S
 
 ### Functional Requirements
 
-- ✅ MCP server validates Clerk-issued JWT tokens
-- ✅ Invalid/missing tokens return `401 Unauthorized` with `WWW-Authenticate: Bearer` header
-- ✅ Discovery endpoint at `/.well-known/oauth-authorization-server` returns Clerk OIDC configuration
-- ✅ Semantic Search app authenticates users via Clerk
-- ✅ Semantic Search app attaches Bearer tokens to MCP requests
-- ✅ Only `*.thenational.academy` users can sign in (initial rollout)
-- ✅ Google and Microsoft SSO work correctly
-- ✅ Authentication is unified with existing Aila application
+- ✅ MCP server uses `@clerk/mcp-tools` for OAuth
+- ✅ Protected Resource Metadata points to Clerk AS
+- ✅ MCP clients can complete OAuth flow via Clerk
+- ✅ Only `@thenational.academy` users can authenticate (Google SSO)
+- ✅ Dynamic Client Registration works for MCP clients
+- ✅ Tokens validated with Clerk's JWKS
+- ✅ 401 responses include proper `WWW-Authenticate` headers
+- ✅ All static token flows removed from production
 
 ### Non-Functional Requirements
 
-- ✅ Auth middleware adds <10ms latency to requests (p95)
-- ✅ Discovery endpoint cached, <100ms response time (p95)
-- ✅ System handles 100 concurrent authenticated requests without errors
+- ✅ Auth adds <10ms latency (p95)
+- ✅ System handles 100 concurrent authenticated requests
 - ✅ Auth error rate <1% in production
-- ✅ 100% test coverage on new auth code (unit + integration)
-- ✅ All E2E tests passing
-- ✅ CI smoke tests green on every deployment
+- ✅ All unit tests passing
+- ✅ E2E test strategy documented
 
-### Security Requirements
+### Security Requirements (Per MCP Auth Spec)
 
-- ✅ Tokens validated with signature verification
-- ✅ `authorizedParties` enforcement prevents subdomain attacks
-- ✅ CORS properly configured to prevent unauthorized origins
-- ✅ Expired tokens rejected
-- ✅ Tampered tokens rejected
-- ✅ No static tokens accepted in production
-- ✅ All secrets stored securely (Vercel environment variables)
-- ✅ HTTPS enforced on all endpoints
+- ✅ Tokens validated with signature verification (Clerk JWKS)
+- ✅ Audience binding enforced by Clerk
+- ✅ `iss`, `aud`, `exp`, `iat` claims validated by Clerk
+- ✅ No static tokens in production
+- ✅ HTTPS enforced on all production endpoints
+- ✅ Dynamic Client Registration available
 
 ### Documentation Requirements
 
 - ✅ Architecture documentation complete
-- ✅ Implementation documentation complete
-- ✅ API documentation with curl examples
-- ✅ Troubleshooting runbook created
-- ✅ Code comments and TSDoc on all auth functions
-- ✅ Migration guide for existing users (if applicable)
+- ✅ README updated with Clerk instructions
+- ✅ Runbook for troubleshooting
+- ✅ Code comments on integration points
 
 ### Operational Requirements
 
-- ✅ Monitoring and alerting configured
-- ✅ Error tracking in Sentry
-- ✅ Logs structured and queryable
+- ✅ Monitoring via Vercel logs
+- ✅ Clerk dashboard for auth metrics
 - ✅ Runbook for common issues
-- ✅ On-call team trained on new auth system
+- ✅ Team trained on Clerk integration
 
 ---
 
 ## Definition of Done
 
-The OAuth 2.1 implementation is **DONE** when:
+The Clerk OAuth 2.1 integration is **DONE** when:
 
-1. **All 6 implementation phases are complete** with their individual definitions of done met
-2. **All acceptance criteria above are satisfied** (functional, non-functional, security, documentation, operational)
+1. **All 3 implementation phases complete** with their definitions of done met
+2. **All acceptance criteria satisfied** (functional, non-functional, security, documentation, operational)
 3. **All quality gates pass**:
-   - `pnpm clean && pnpm check` succeeds across all workspaces
+   - `pnpm build` succeeds
+   - `pnpm type-check` passes
+   - `pnpm lint` passes
+   - `pnpm test` passes (unit tests)
    - Zero TypeScript errors
    - Zero ESLint errors
-   - 100% of unit tests passing
-   - 100% of integration tests passing
-   - 100% of E2E tests passing
-   - CI smoke tests green on preview and production
-4. **Production deployment successful** with no rollback needed
-5. **Monitoring shows healthy metrics** for 24 hours post-deployment:
+4. **Production deployment successful** with no rollback
+5. **MCP client can authenticate** via Clerk (tested with Claude Desktop)
+6. **Monitoring shows healthy metrics** for 24 hours:
    - Error rate <1%
    - p95 latency <500ms
-   - No critical Sentry alerts
-6. **Documentation complete** and reviewed by 2+ team members
-7. **Runbook tested** by on-call team
-8. **Post-deployment retrospective completed** with lessons learned documented
+   - Successful OAuth flows
+7. **Documentation complete** and reviewed
+8. **Runbook tested** by team
+9. **Post-deployment retrospective** completed
 
 ---
 
-## Rollout Plan
+## Timeline & Rollout
 
 ### Timeline
 
-- **Phase 0**: Day 1 (1 day)
-- **Phase 1**: Days 2-3 (1 day)
-- **Phase 2**: Days 4-5 (2 days)
-- **Phase 3**: Days 6-7 (2 days)
-- **Phase 4**: Days 8-9 (2 days)
-- **Phase 5**: Days 10-11 (2 days)
-- **Phase 6**: Days 12-13 (2 days)
-- **Total**: ~13 days (2.5 weeks)
+- **Phase 0**: Day 1 (2-3 hours - Clerk config & credentials)
+- **Phase 1**: Days 1-2 (1 day - Replace custom auth with Clerk)
+- **Phase 2**: Day 2 (4-6 hours - Update tests & docs)
+- **Phase 3**: Day 3 (1 day - Deploy & monitor)
+- **Total**: **~3 days** (24 hours of work)
 
 ### Risk Mitigation
 
 - **Risk**: Clerk service outage
-  - **Mitigation**: Implement circuit breaker, cache discovery, add retry logic
-- **Risk**: Token validation performance issues
-  - **Mitigation**: Use networkless verification with JWKS caching
-- **Risk**: Breaking changes to existing users
-  - **Mitigation**: Maintain backwards compatibility during transition, provide migration guide
-- **Risk**: CORS misconfiguration
-  - **Mitigation**: Comprehensive testing, explicit allowlist
-- **Risk**: Discovery endpoint caching issues
-  - **Mitigation**: Implement cache invalidation, monitor hit rates
+  - **Mitigation**: Monitor Clerk status page, have rollback ready
+- **Risk**: OAuth flow confusion for users
+  - **Mitigation**: Document flow with screenshots, provide support channel
+- **Risk**: Token validation issues
+  - **Mitigation**: Clerk handles this automatically, test thoroughly in preview
+- **Risk**: Breaking existing users
+  - **Mitigation**: No existing production OAuth users yet (currently demo AS only)
 
 ### Rollback Plan
 
-1. **Trigger**: Error rate >5% or critical functionality broken
+1. **Trigger**: Error rate >5% or OAuth flow broken
 2. **Action**: Revert to previous deployment via Vercel dashboard
 3. **Duration**: <5 minutes
-4. **Validation**: Run smoke tests against reverted deployment
-5. **Communication**: Notify team via Slack, post-mortem within 24 hours
+4. **Validation**: Confirm previous version running
+5. **Communication**: Notify team via Slack, schedule post-mortem
 
 ---
 
@@ -776,334 +704,115 @@ The OAuth 2.1 implementation is **DONE** when:
 
 ### Immediate (Day 1 Post-Launch)
 
-- Zero production incidents related to auth
-- Auth success rate >99%
+- Zero production incidents
+- OAuth success rate >95%
 - p95 latency <500ms
 - Zero rollbacks needed
 
 ### Short-Term (Week 1)
 
-- All Oak internal users successfully authenticated
-- <5 support tickets related to auth
-- Load tests passing with 200 concurrent users
-- Monitoring dashboards showing healthy metrics
+- All Oak internal users authenticated successfully
+- <3 support tickets
+- OAuth flow documented with screenshots
+- Team comfortable with Clerk dashboard
 
 ### Long-Term (Month 1)
 
 - Auth system stable with <0.1% error rate
 - No manual interventions required
-- Documentation rated 4+/5 by team
-- Ready for public rollout (Phase 2 initiative)
+- Ready to expand to other identity providers if needed
 
 ---
 
-## Appendix: Useful Commands
+## Appendix A: Clerk Data
+
+**Clerk Frontend API**: `https://native-hippo-15.clerk.accounts.dev`
+**Clerk Backend API**: `https://api.clerk.com`
+**JWKS URL**: `https://native-hippo-15.clerk.accounts.dev/.well-known/jwks.json`
+
+**JWKS Public Key**:
+
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzQCNgGV9fOZ2U33phijU
+s4RypLbtcpRe/g6irmTxlpFvppOA5WW5x8qHFsHXw0wkoVFBJx5Cu1V9qa3nDfL4
+ZB+eSfF5rQv0L3qyuRZuUGcVtV8YmOosfN+pu4nBnnFYl3Enad+O6y2QKoydTBuV
+5WFLblMT+Q6Cb+dAQiHJG9Xnc5BnMhtNvF7zz6ltzUsclaw+38+bQ4biytHhOKNA
+JjuaPovgQ9AJaLgrnBs2oMmaF+IWhqGbCzgg7rQbse45H4wo/EHPCIksxv0r0Ny2
+lZS6CwDSZxC+vUKNX/C7mdFhvbH9LimH+e1V1awBWTKIRuzQ+bXVg5KOOoVWCojB
+swIDAQAB
+-----END PUBLIC KEY-----
+```
+
+**Publishable Key**: `pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ`
+
+⚠️ **Secret Key**: Not stored in version control - obtain from secure storage
+
+---
+
+## Appendix B: Useful Commands
 
 ### Local Development
 
 ```bash
-# MCP Server
+# Start server
 cd apps/oak-curriculum-mcp-streamable-http
 pnpm dev
 
-# Semantic Search
-cd apps/oak-open-curriculum-semantic-search
-pnpm dev
+# Test metadata endpoint
+curl http://localhost:3333/.well-known/oauth-protected-resource | jq
 
-# Test with auth
-curl -H "Authorization: Bearer <token>" http://localhost:3000/mcp
+# Test unauthorized request (should return 401)
+curl -X POST http://localhost:3333/mcp \
+  -H "Accept: application/json, text/event-stream" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
 
 ### Testing
 
 ```bash
-# Run all tests
+# Run unit tests
 pnpm test
 
-# Run E2E tests
-pnpm test:e2e
+# Run with watch mode
+pnpm test:watch
 
-# Run smoke tests
-pnpm dev:smoke
+# Type check
+pnpm type-check
 
-# Load testing
-pnpm run load-test-auth
+# Lint
+pnpm lint
+
+# Build
+pnpm build
 ```
 
 ### Debugging
 
 ```bash
-# Check Clerk token locally
-node -e "console.log(JSON.parse(Buffer.from('TOKEN_PAYLOAD', 'base64').toString()))"
+# Check Clerk JWKS
+curl https://native-hippo-15.clerk.accounts.dev/.well-known/jwks.json | jq
 
-# Verify JWKS
-curl https://<clerk-frontend-api>/.well-known/jwks.json
+# Check Clerk OIDC discovery
+curl https://native-hippo-15.clerk.accounts.dev/.well-known/openid-configuration | jq
 
-# Check discovery
-curl https://mcp.oaknational.academy/.well-known/oauth-authorization-server
+# Check production metadata
+curl https://mcp.oaknational.academy/.well-known/oauth-protected-resource | jq
 ```
 
 ---
 
 ## References
 
-- [Clerk Unified Auth Research](../../research/clerk-unified-auth-mcp-nextjs.md)
-- [MCP Authorization Specification](https://spec.modelcontextprotocol.io/specification/architecture/authorization/)
-- [RFC 8414: OAuth 2.0 Authorization Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414)
-- [RFC 9068: JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens](https://datatracker.ietf.org/doc/html/rfc9068)
-- [Clerk Express Documentation](https://clerk.com/docs/references/express)
-- [Clerk Next.js Documentation](https://clerk.com/docs/references/nextjs)
-
----
-
-## Appendix A: Pre-Implementation Data Gathering Checklist
-
-> **Security Note**: Do NOT add actual secrets to this file. Document locations where secrets are stored (e.g., "Stored in 1Password vault 'Oak Production'") and verify access.
-
-Complete this checklist **before starting Phase 0** to accelerate implementation. Gathering this data in advance will reduce Phase 0 from 1 day to ~2 hours.
-
-### 1. Clerk Instance Information
-
-- [ ] **Clerk instance name**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] **Environment**: [ ] Production [ ] Development
-- [ ] **Clerk Dashboard URL**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] **Frontend API URL**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\*** (e.g., `clerk.oak.example.com` or `clerk-xyz.clerk.accounts.dev`)
-- [ ] **Current usage**: Used by Aila? [ ] Yes [ ] No
-
-**Quick Test**:
-
-```bash
-# Verify discovery endpoint is accessible
-curl https://<frontend-api>/.well-known/openid-configuration | jq
-```
-
-### 2. Clerk Credentials Location
-
-Document **where** credentials are stored (do not paste actual values):
-
-- [ ] **CLERK_PUBLISHABLE_KEY** location: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - Format: `pk_test_...` or `pk_live_...`
-  - Stored in: (e.g., "1Password vault 'Oak Secrets' → 'Clerk Production Keys'")
-- [ ] **CLERK_SECRET_KEY** location: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - Format: `sk_test_...` or `sk_live_...`
-  - Stored in: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] **CLERK_JWT_KEY** location: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - Format: PEM public key for networkless verification
-  - Stored in: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - Note: Can be obtained from Clerk Dashboard → API Keys → Show JWT public key
-
-**Verification**:
-
-- [ ] All three keys accessible by implementation team
-- [ ] Keys confirmed to work with existing Aila deployment
-- [ ] Access documented for on-call team
-
-### 3. OAuth Endpoints (from Clerk)
-
-Gather these URLs from Clerk Dashboard or by testing discovery endpoint:
-
-- [ ] **OIDC Discovery URL**: `https://<frontend-api>/.well-known/openid-configuration`
-- [ ] **Authorization endpoint**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] **Token endpoint**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] **JWKS URI**: `https://<frontend-api>/.well-known/jwks.json`
-- [ ] **Issuer**: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\*** (usually matches Frontend API)
-
-**Quick Gather**:
-
-```bash
-# Run this and document all relevant URLs
-curl https://<frontend-api>/.well-known/openid-configuration | jq '{
-  issuer,
-  authorization_endpoint,
-  token_endpoint,
-  jwks_uri
-}'
-```
-
-### 4. Domain and Origin Configuration
-
-Document all domains that need CORS and authorizedParties access:
-
-**Local Development**:
-
-- [ ] MCP Server local: `http://localhost:3000` (or different port?)
-- [ ] Semantic Search local: `http://localhost:3001` (or different port?)
-
-**Preview/Staging**:
-
-- [ ] MCP Server preview pattern: `https://mcp-*-<team>.vercel.app`
-- [ ] Semantic Search preview pattern: `https://search-*-<team>.vercel.app`
-- [ ] Aila preview pattern (if applicable): \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Production**:
-
-- [ ] MCP Server production: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Semantic Search production: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Aila production: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Summary for Configuration**:
-
-```bash
-# CORS allowed origins (comma-separated list to document)
-ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,...
-
-# Authorized parties (for token validation)
-AUTHORIZED_PARTIES=https://search.oaknational.academy,...
-```
-
-### 5. Current Authentication State Audit
-
-Document existing auth implementation to understand what will change:
-
-**In MCP Server** (`apps/oak-curriculum-mcp-streamable-http`):
-
-- [ ] Current auth method: [ ] Static tokens [ ] API keys [ ] None [ ] Other: **\_\_\_**
-- [ ] Environment variables currently used for auth: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Files containing auth logic (list): \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Auth middleware files to be modified: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Quick Audit**:
-
-```bash
-# Find current auth-related code
-cd apps/oak-curriculum-mcp-streamable-http
-grep -r "auth\|token\|API_KEY\|SECRET" src/ | grep -v node_modules
-```
-
-**In Semantic Search** (`apps/oak-open-curriculum-semantic-search`):
-
-- [ ] Current auth status: [ ] No auth [ ] Basic auth [ ] Other: **\_\_\_**
-- [ ] How does it call MCP server currently?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Any existing Clerk integration?: [ ] Yes [ ] No
-
-### 6. Clerk Dashboard Current Configuration
-
-**Check and document current settings** (screenshots recommended):
-
-**Restrictions** (Configuration → Restrictions):
-
-- [ ] Current mode: [ ] Allowlist [ ] Blocklist [ ] None
-- [ ] If Allowlist, current domains: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Needs modification?: [ ] Yes [ ] No
-
-**Social Connections** (SSO Connections → Social):
-
-- [ ] Google: [ ] Enabled [ ] Disabled
-  - [ ] Status: [ ] Testing [ ] Production
-  - [ ] Using custom credentials?: [ ] Yes [ ] No
-  - [ ] Email subaddress blocking enabled?: [ ] Yes [ ] No
-- [ ] Microsoft: [ ] Enabled [ ] Disabled
-  - [ ] Status: [ ] Testing [ ] Production
-  - [ ] Azure AD app configured?: [ ] Yes [ ] No
-
-**OAuth Applications**:
-
-- [ ] Existing OAuth applications in Clerk: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Need to create new OAuth app for MCP?: [ ] Yes [ ] No
-
-### 7. Deployment Infrastructure
-
-**Vercel Projects**:
-
-- [ ] MCP Server project name: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - [ ] Project URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - [ ] Team/organization: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Semantic Search project name: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - [ ] Project URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - [ ] Team/organization: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Environment Variable Access**:
-
-- [ ] Who can modify Vercel production env vars?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Process for env var changes: [ ] Direct [ ] PR required [ ] Other: **\_\_\_**
-- [ ] Where to document env var changes: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Deployment Process**:
-
-- [ ] Deployment trigger: [ ] Git push [ ] Manual [ ] CI/CD pipeline
-- [ ] Branch → environment mapping:
-  - `main` → \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - `preview` → \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-  - PRs → \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-### 8. Access and Permissions Audit
-
-**Clerk Dashboard**:
-
-- [ ] Team members with Clerk admin access: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Who can modify production settings?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Who can create OAuth applications?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Vercel**:
-
-- [ ] Team members with Vercel admin access: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Who can deploy to production?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Who can modify env vars?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Approval Process**:
-
-- [ ] Who must approve production auth changes?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Security team review required?: [ ] Yes [ ] No
-- [ ] Change management process: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-### 9. User Base and Testing Accounts
-
-**Current Users**:
-
-- [ ] Approximate user count in Clerk: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Are these internal or external users?: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Do they need to re-authenticate after changes?: [ ] Yes [ ] No
-
-**Test Accounts**:
-
-- [ ] Test account with `@thenational.academy` (Google): \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Test account with `@thenational.academy` (Microsoft): \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Test account stored in: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Can test accounts be used in development?: [ ] Yes [ ] No
-
-### 10. Monitoring and Observability
-
-**Current Setup**:
-
-- [ ] Error tracking tool: [ ] Sentry [ ] Other: **\_\_\_**
-- [ ] Logging infrastructure: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Metrics/dashboards: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] On-call team: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Access Required**:
-
-- [ ] Implementation team has Sentry access: [ ] Yes [ ] No
-- [ ] Implementation team can create alerts: [ ] Yes [ ] No
-- [ ] Implementation team can view production logs: [ ] Yes [ ] No
-
-### 11. Documentation and Communication
-
-**Documentation Locations**:
-
-- [ ] Where to document environment variables: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Where to store runbooks: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Where to document architecture: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-**Communication Channels**:
-
-- [ ] Team Slack channel: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Incident channel: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-- [ ] Deployment notifications: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
-
-### Pre-Implementation Checklist Complete
-
-When all items above are checked and documented, you are ready to begin **Phase 0** with significantly reduced friction. Estimated time savings: **~4-6 hours** during implementation.
-
-**Final Verification**:
-
-- [ ] All credentials accessible (locations documented)
-- [ ] All URLs and endpoints verified
-- [ ] All permissions and access confirmed
-- [ ] Test accounts ready
-- [ ] Team aligned on timeline and approach
+- [Clerk Build MCP Server Guide](https://clerk.com/docs/expressjs/guides/development/mcp/build-mcp-server)
+- [Clerk Express SDK Reference](https://clerk.com/docs/reference/express/overview)
+- [@clerk/mcp-tools Documentation](https://github.com/clerk/mcp-tools)
+- [MCP Authorization Specification](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization)
+- [RFC 9728: OAuth 2.0 Protected Resource Metadata](https://datatracker.ietf.org/doc/html/rfc9728)
 
 ---
 
 **Last Updated**: 2024-10-16  
 **Status**: ACTIVE  
-**Next Review**: After Phase 2 completion
+**Next Review**: After Phase 1 completion

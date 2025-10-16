@@ -141,15 +141,15 @@ function buildParamMetadataForOperation(operation: OperationObject): {
 }
 
 export interface GeneratedMcpToolFiles {
-  readonly index: string;
-  readonly contract: Record<string, string>;
-  readonly data: {
-    readonly 'definitions.ts': string;
-    readonly 'index.ts': string;
-    readonly tools: Record<string, string>;
+  index: string;
+  contract: Record<string, string>;
+  data: {
+    'definitions.ts': string;
+    'index.ts': string;
+    tools: Record<string, string>;
   };
-  readonly aliases: Record<string, string>;
-  readonly runtime: Record<string, string>;
+  aliases: Record<string, string>;
+  runtime: Record<string, string>;
 }
 
 export interface McpToolGeneratorDeps {

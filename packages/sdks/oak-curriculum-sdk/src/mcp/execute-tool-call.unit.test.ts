@@ -6,42 +6,57 @@
  */
 
 import { describe, it, expect, vi } from 'vitest';
+import { z } from 'zod';
 
 import { executeToolCall } from './execute-tool-call';
-import type { OakApiPathBasedClient } from '../client/oak-base-client';
+import type { OakApiPathBasedClient } from '../client/index.js';
+import type { ToolDescriptor, ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
 
-vi.mock('../types/generated/api-schema/mcp-tools/definitions.js', () => {
-  const toolZodSchema = {
-    safeParse: vi.fn((value: unknown) => {
-      if (value && typeof value === 'object') {
-        return { success: true, data: value };
-      }
-      return { success: false, error: { message: 'Invalid request parameters' } };
-    }),
-  };
+const MOCK_TOOL_NAME = 'mock-tool' as ToolName;
 
-  const validateOutput = vi.fn((value: unknown) => ({ ok: true, data: value }));
-  const invoke = vi.fn(async (client: unknown, args: unknown) => ({ client, args }));
-
-  return {
-    MCP_TOOLS: {
-      'mock-tool': {
-        toolZodSchema,
-        validateOutput,
-        describeToolArgs: () => 'Invalid request parameters',
-        invoke,
-      },
-    },
-    __mocks__: {
-      toolZodSchema,
-      validateOutput,
-      invoke,
-    },
-  };
+const toolZodSchema = z.object({
+  args: z.boolean(),
 });
 
-vi.mock('../types/generated/api-schema/mcp-tools/types.js', () => ({
-  isToolName: (value: unknown): value is 'mock-tool' => value === 'mock-tool',
+const validateOutput = vi.fn<
+  (
+    value: unknown,
+  ) =>
+    | { readonly ok: true; readonly data: unknown }
+    | { readonly ok: false; readonly message: string }
+>((value) => ({ ok: true as const, data: value }));
+const invoke = vi.fn(async (client: OakApiPathBasedClient, args: MockArgs) => ({ client, args }));
+
+interface MockArgs {
+  args: boolean;
+}
+type MockDescriptor = ToolDescriptor<OakApiPathBasedClient, MockArgs>;
+
+const descriptor: MockDescriptor = {
+  name: MOCK_TOOL_NAME,
+  description: 'Mock tool for executeToolCall unit tests',
+  operationId: 'mock-operation',
+  path: '/mock',
+  method: 'GET',
+  toolZodSchema,
+  toolInputJsonSchema: { type: 'object', properties: { args: { type: 'boolean' } } },
+  toolOutputJsonSchema: {},
+  zodOutputSchema: z.any(),
+  describeToolArgs: () => 'Invalid request parameters',
+  inputSchema: { type: 'object', properties: { args: { type: 'boolean' } } },
+  validateOutput,
+  invoke,
+};
+
+vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
+  toolNames: [MOCK_TOOL_NAME] as const,
+  getToolFromToolName: (name: ToolName) => {
+    if (name !== MOCK_TOOL_NAME) {
+      throw new Error(`Unknown tool requested in test: ${String(name)}`);
+    }
+    return descriptor;
+  },
+  isToolName: (value: unknown): value is ToolName => value === MOCK_TOOL_NAME,
 }));
 
 describe('executeToolCall with literal descriptors', () => {
@@ -55,23 +70,8 @@ describe('executeToolCall with literal descriptors', () => {
   it('invokes tool when validation succeeds', async () => {
     const client = {} as OakApiPathBasedClient;
     const params = { args: true };
-    const { toolZodSchema, validateOutput, invoke } = await import(
-      '../types/generated/api-schema/mcp-tools/definitions.js'
-    ).then(
-      (module: {
-        __mocks__: {
-          toolZodSchema: typeof vi.fn;
-          validateOutput: typeof vi.fn;
-          invoke: typeof vi.fn;
-        };
-      }) => module.__mocks__,
-    );
 
-    (toolZodSchema.safeParse as ReturnType<typeof vi.fn>).mockReturnValueOnce({
-      success: true,
-      data: params,
-    });
-    validateOutput.mockReturnValueOnce({ ok: true, data: 'valid' });
+    validateOutput.mockReturnValueOnce({ ok: true as const, data: 'valid' });
 
     const result = await executeToolCall('mock-tool', params, client);
 

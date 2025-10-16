@@ -30,6 +30,15 @@ interface CreateSequenceFacetDocumentsParams {
   unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
 }
 
+interface SequenceKeyStageEntryRecord {
+  readonly keyStageSlug: string;
+  readonly keyStageTitle?: string;
+}
+
+function isSequenceKeyStageEntryRecord(value: unknown): value is SequenceKeyStageEntryRecord {
+  return isUnknownObject(value) && typeof value.keyStageSlug === 'string';
+}
+
 export function createSequenceFacetDocuments({
   subject,
   keyStage,
@@ -93,7 +102,12 @@ function createSequenceFacetDocument({
 
 function findKeyStageEntry(sequence: SubjectSequenceEntry, keyStage: KeyStage) {
   const entries = Array.isArray(sequence.keyStages) ? sequence.keyStages : [];
-  return entries.find((entry) => entry.keyStageSlug === keyStage);
+  for (const candidate of entries) {
+    if (isSequenceKeyStageEntryRecord(candidate) && candidate.keyStageSlug === keyStage) {
+      return candidate;
+    }
+  }
+  return undefined;
 }
 
 function normaliseSequenceYears(sequence: SubjectSequenceEntry): string[] {
@@ -140,10 +154,10 @@ export function extractSequenceFacetSource(
 ): SequenceFacetSource {
   const unitSlugs = new Set<string>();
   const queue: unknown[] = [];
-  if (Array.isArray(payload)) {
-    for (const entry of payload) {
+  if (isUnknownArray(payload)) {
+    payload.forEach((entry: unknown) => {
       queue.push(entry);
-    }
+    });
   }
 
   while (queue.length > 0) {
@@ -176,6 +190,10 @@ export function extractSequenceFacetSource(
 
 interface UnknownObject {
   [key: string]: unknown;
+}
+
+function isUnknownArray(value: unknown): value is unknown[] {
+  return Array.isArray(value);
 }
 
 function isUnknownObject(value: unknown): value is UnknownObject {

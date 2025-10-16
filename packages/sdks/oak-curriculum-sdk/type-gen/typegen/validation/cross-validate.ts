@@ -161,16 +161,6 @@ function hasJsonSchema(value: unknown): boolean {
   return true;
 }
 
-function isSchemaObject(value: unknown): value is { readonly $ref?: string } {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return false;
-  }
-  if ('$ref' in value && typeof value.$ref !== 'string') {
-    return false;
-  }
-  return true;
-}
-
 function isPathItemObject(value: unknown): value is Record<PropertyKey, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

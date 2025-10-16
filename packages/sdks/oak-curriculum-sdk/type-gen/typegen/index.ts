@@ -48,5 +48,6 @@ export { generateSearchSuggestionModules } from './search/generate-search-sugges
 export { generateSearchScopeModules } from './search/generate-search-scopes.js';
 export { generateSearchFixtureModules } from './search/generate-search-fixtures.js';
 export { generateSearchIndexModule } from './search/generate-search-index.js';
+export { generateSearchIndexDocumentModules } from './search/generate-search-index-docs.js';
 export { generateZeroHitFixtureModules } from './observability/generate-zero-hit-fixtures.js';
 export { generateAdminStreamFixtureModules } from './admin/generate-admin-fixtures.js';
