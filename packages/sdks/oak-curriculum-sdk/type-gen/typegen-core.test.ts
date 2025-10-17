@@ -29,6 +29,7 @@ describe('typegen-core', () => {
         pathParameterContent,
         pathUtilsContent,
         'export const RESPONSE_MAP = new Map();',
+        'export const REQUEST_PARAMETER_SCHEMAS = {};',
       );
 
       expect(result).toHaveProperty('api-schema-original.json');
@@ -61,6 +62,7 @@ describe('typegen-core', () => {
         pathParameterContent,
         pathUtilsContent,
         'export const RESPONSE_MAP = new Map();',
+        'export const REQUEST_PARAMETER_SCHEMAS = {};',
       );
 
       expect(result['api-schema-base.ts']).toContain('export const schemaBase =');

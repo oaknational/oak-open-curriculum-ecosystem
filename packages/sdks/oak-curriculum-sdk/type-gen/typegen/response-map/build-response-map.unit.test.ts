@@ -24,7 +24,16 @@ describe('buildResponseMapData', () => {
           },
         },
       },
-      components: { schemas: {} },
+      components: {
+        schemas: {
+          LessonSummaryResponseSchema: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+      },
     };
 
     const entries = buildResponseMapData(schema);
@@ -33,7 +42,7 @@ describe('buildResponseMapData', () => {
         expect.objectContaining({
           operationId: 'getLessons-getLesson',
           status: '200',
-          componentName: 'getLessons_getLesson_200',
+          componentName: 'LessonSummaryResponseSchema',
           path: '/lessons/{lesson}/summary',
           method: 'get',
         }),
@@ -78,7 +87,13 @@ describe('buildResponseMapData', () => {
           },
         },
       },
-      components: { schemas: {} },
+      components: {
+        schemas: {
+          Thing: { type: 'object', properties: { id: { type: 'string' } } },
+          NotFound: { type: 'object', properties: { message: { type: 'string' } } },
+          InternalError: { type: 'object', properties: { message: { type: 'string' } } },
+        },
+      },
     };
 
     const entries = buildResponseMapData(schema);
@@ -87,21 +102,21 @@ describe('buildResponseMapData', () => {
         expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '200',
-          componentName: 'getThings_getThing_200',
+          componentName: 'Thing',
           path: '/things/{id}',
           method: 'get',
         }),
         expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '404',
-          componentName: 'getThings_getThing_404',
+          componentName: 'NotFound',
           path: '/things/{id}',
           method: 'get',
         }),
         expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '500',
-          componentName: 'getThings_getThing_500',
+          componentName: 'InternalError',
           path: '/things/{id}',
           method: 'get',
         }),

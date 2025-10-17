@@ -9,7 +9,6 @@ import type {
   ParameterObject,
   ResponsesObject,
 } from 'openapi3-ts/oas31';
-import { getPropertyValue, isParameterObject, isOperationObject } from './operation-validators.js';
 
 export interface ExtractedParameter {
   in: 'path' | 'query' | 'header' | 'cookie';
@@ -29,7 +28,31 @@ export interface ExtractedOperation {
   responses?: ResponsesObject;
 }
 
-// isParameterObject type guard moved to operation-validators.ts
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getPropertyValue(obj: unknown, key: string): unknown {
+  if (!isRecord(obj)) {
+    return undefined;
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(obj, key);
+  return descriptor?.value;
+}
+
+function isParameterObject(param: unknown): param is ParameterObject {
+  if (!isRecord(param)) {
+    return false;
+  }
+  const name = getPropertyValue(param, 'name');
+  const location = getPropertyValue(param, 'in');
+  if (typeof name !== 'string' || typeof location !== 'string') {
+    return false;
+  }
+  return (
+    location === 'path' || location === 'query' || location === 'header' || location === 'cookie'
+  );
+}
 
 /**
  * Extract parameter metadata from a ParameterObject
@@ -46,7 +69,12 @@ function extractParameter(param: ParameterObject): ExtractedParameter {
   };
 }
 
-// isOperationObject type guard moved to operation-validators.ts
+function isOperationObject(op: unknown): op is OperationObject {
+  if (!isRecord(op)) {
+    return false;
+  }
+  return isRecord(getPropertyValue(op, 'responses'));
+}
 
 /**
  * Extract parameters from an operation
@@ -107,8 +135,9 @@ export function extractPathOperations(schema: OpenAPIObject): ExtractedOperation
   const operations: ExtractedOperation[] = [];
   const httpMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
-  for (const path in schema.paths) {
-    const pathItem = schema.paths[path];
+  const paths = schema.paths ?? {};
+  for (const path in paths) {
+    const pathItem = paths[path];
     const pathOperations = extractOperationsForPath(path, pathItem, httpMethods);
     operations.push(...pathOperations);
   }

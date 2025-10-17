@@ -14,6 +14,7 @@ export default defineConfig({
     'src/types/generated/api-schema/api-schema-base.ts',
     'src/types/generated/api-schema/path-parameters.ts',
     'src/types/generated/api-schema/path-utils.ts',
+    'src/types/generated/api-schema/validation/request-parameter-map.ts',
     'src/types/generated/api-schema/response-map.ts',
     'src/types/generated/api-schema/routing/url-helpers.ts',
     'src/types/generated/api-schema/mcp-tools/contract/tool-descriptor.contract.ts',

@@ -27,6 +27,7 @@ import {
 import { generatePathUtilsFile } from './typegen/paths/generate-path-utils.js';
 import { buildResponseMapData } from './typegen/response-map/build-response-map.js';
 import { emitResponseValidators } from './typegen/response-map/emit-response-validators.js';
+import { emitRequestValidatorMap } from './typegen/validation/emit-request-validator-map.js';
 import { runAllCrossValidations } from './typegen/validation/cross-validate.js';
 import type { FileMap } from './typegen/extraction-types.js';
 import {
@@ -46,6 +47,7 @@ import { generateSearchIndexDocumentModules } from './typegen/search/generate-se
 import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
+import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
 
 /**
  * Create a map of filenames to their content
@@ -58,6 +60,7 @@ export function createFileMap(
   pathParameterContent: string,
   pathUtilsContent: string,
   responseValidatorsContent: string,
+  requestValidatorContent: string,
 ): FileMap {
   const baseFiles: FileMap = {
     'api-schema-original.json': generateJsonContent(baseSchema),
@@ -67,6 +70,7 @@ export function createFileMap(
     'path-parameters.ts': pathParameterContent,
     'path-utils.ts': pathUtilsContent,
     'response-map.ts': responseValidatorsContent,
+    'validation/request-parameter-map.ts': requestValidatorContent,
     'routing/url-helpers.ts': generateUrlHelpers(),
     // OpenAI connector helpers (code-generated module)
     '../openai-connector/index.ts': generateOpenAiConnectorContent(),
@@ -221,6 +225,14 @@ export async function generateSchemaArtifacts(
   // Cross-validation: fail fast on drift/mismatch
   runAllCrossValidations(sdkSchema, responseMapEntries);
   const responseValidatorsContent = emitResponseValidators(responseMapEntries);
+  const sdkSchemaWithPaths = ensurePathsOnSchema(sdkSchema);
+  const endpointContext = getZodiosEndpointDefinitionList(sdkSchemaWithPaths, {
+    shouldExportAllSchemas: true,
+    shouldExportAllTypes: true,
+    groupStrategy: 'none',
+    withAlias: false,
+  });
+  const requestValidatorContent = emitRequestValidatorMap(endpointContext.endpoints);
 
   const fileMap = createFileMap(
     baseSchema,
@@ -229,14 +241,28 @@ export async function generateSchemaArtifacts(
     pathParameterContent,
     pathUtilsContent,
     responseValidatorsContent,
+    requestValidatorContent,
   );
 
   // Write all files (side effect)
   writeFiles(outDirectory, fileMap);
 
   // Generate and write MCP tools if requested
+  // TODO: we always want the mcp tools, remove the conditional and the option
   if (options.generateMcpTools) {
     const mcpTools = generateCompleteMcpTools(sdkSchema);
     writeMcpToolsDirectory(outDirectory, mcpTools);
   }
+}
+
+type SchemaWithPaths = Omit<OpenAPIObject, 'paths'> & {
+  paths: NonNullable<OpenAPIObject['paths']>;
+};
+
+function ensurePathsOnSchema(schema: OpenAPIObject): SchemaWithPaths {
+  const { paths, ...rest } = schema;
+  if (paths) {
+    return { ...rest, paths };
+  }
+  return { ...rest, paths: {} };
 }

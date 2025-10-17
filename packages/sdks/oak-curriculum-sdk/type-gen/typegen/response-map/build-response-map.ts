@@ -55,68 +55,115 @@ interface ResponseInfo {
   readonly schema: SchemaObject;
 }
 
-function cloneSchema<T>(schema: T): T {
-  try {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JSON.parse returns the same type as the input
-    return JSON.parse(JSON.stringify(schema)) as T;
-  } catch (error: unknown) {
-    throw new Error(`Error cloning schema: ${String(error)}`, { cause: error });
+function isReferenceObject(value: unknown): value is ReferenceObject {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
   }
+  return typeof (value as { $ref?: unknown }).$ref === 'string';
+}
+
+function isSchemaObject(value: unknown): value is SchemaObject {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  return !isReferenceObject(value);
+}
+
+function cloneSchema(schema: SchemaObject): SchemaObject {
+  const cloned = structuredClone(schema);
+  if (!isSchemaObject(cloned)) {
+    throw new Error('Failed to clone schema.');
+  }
+  return cloned;
+}
+
+function ensureInlineMetadata(schema: SchemaObject, opId: string, status: string): SchemaObject {
+  const next = cloneSchema(schema);
+  if (!next.type) {
+    next.type = 'object';
+  }
+  if (!next.title) {
+    next.title = `${opId} ${status} response`;
+  }
+  return next;
+}
+
+function createComponentResolver(
+  components: Record<string, SchemaObject | ReferenceObject | undefined>,
+) {
+  const cache = new Map<string, SchemaObject | null>();
+  const resolving = new Set<string>();
+
+  function resolve(name: string): SchemaObject | undefined {
+    if (cache.has(name)) {
+      const cached = cache.get(name);
+      return cached ?? undefined;
+    }
+    if (resolving.has(name)) {
+      return undefined;
+    }
+    resolving.add(name);
+    const definition = components[name];
+    let resolved: SchemaObject | undefined;
+    if (isSchemaObject(definition)) {
+      resolved = cloneSchema(definition);
+    } else if (isReferenceObject(definition)) {
+      const refName = extractComponentNameFromRef(definition.$ref);
+      if (refName && refName !== name) {
+        resolved = resolve(refName);
+        if (resolved) {
+          resolved = cloneSchema(resolved);
+        }
+      }
+    }
+    resolving.delete(name);
+    cache.set(name, resolved ?? null);
+    return resolved;
+  }
+
+  return { resolve };
 }
 
 function getJsonResponseInfo(
   resp: ResponseObject,
   opId: string,
   status: string,
-  components: Record<string, SchemaObject | undefined>,
+  resolveComponent: (name: string) => SchemaObject | undefined,
 ): ResponseInfo | undefined {
   const json = resp.content?.['application/json'];
   if (typeof json !== 'object' || Array.isArray(json)) {
     return undefined;
   }
   const schema = 'schema' in json ? json.schema : undefined;
-  if (typeof schema !== 'object' || Array.isArray(schema)) {
+  if (!schema || typeof schema !== 'object' || Array.isArray(schema)) {
     return undefined;
   }
-  const ref = '$ref' in schema ? schema.$ref : undefined;
-  if (typeof ref === 'string') {
-    const name = extractComponentNameFromRef(ref);
+  if (isReferenceObject(schema)) {
+    const name = extractComponentNameFromRef(schema.$ref);
     if (name) {
-      const resolved = components[name];
+      const resolved = resolveComponent(name);
       if (resolved) {
         return { name, source: 'component', schema: cloneSchema(resolved) };
-      }
-      // TODO this needs narrowing to SchemaObject via a type-gen generated type-guard -- remember ALL heavy lifting and type definitions happen at type-gen time
-      const inlineSchema = resp.content?.['application/json']?.schema;
-      if (typeof inlineSchema === 'object' && !Array.isArray(inlineSchema)) {
-        const fallbackName = sanitizeIdentifier(`${opId}_${status}`);
-        const cloned = cloneSchema(inlineSchema);
-        if (!('type' in cloned)) {
-          cloned.type = 'object';
-        }
-        if (!('title' in cloned)) {
-          cloned.title = `${opId} ${status} response`;
-        }
-        return {
-          name: fallbackName,
-          source: 'inline',
-          schema: cloned,
-        };
       }
       return undefined;
     }
   }
+  if (!isSchemaObject(schema)) {
+    return undefined;
+  }
+  const name = sanitizeIdentifier(`${opId}_${status}`);
   return {
-    name: sanitizeIdentifier(`${opId}_${status}`),
+    name,
     source: 'inline',
-    schema: cloneSchema(schema),
+    schema: ensureInlineMetadata(schema, opId, status),
   };
 }
 
 export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMapEntry[] {
   const out: ResponseMapEntry[] = [];
   const inlineCounts = new Map<string, number>();
-  const schemaComponents = normaliseSchemaComponents(schema.components?.schemas ?? {});
+  const resolver = createComponentResolver(schema.components?.schemas ?? {});
+  const componentSchemas = new Map<string, SchemaObject>();
   const paths = schema.paths ?? {};
   const methods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
   const emptyBodyStatuses = new Set(['204', '304']);
@@ -133,7 +180,8 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
       out,
       emptyBodyStatuses,
       inlineCounts,
-      schemaComponents,
+      resolver.resolve,
+      componentSchemas,
     );
   }
 
@@ -153,11 +201,15 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
   for (const [status, componentSet] of byStatus) {
     if (componentSet.size === 1) {
       const [componentName] = componentSet;
+      const schemaForComponent = componentSchemas.get(componentName);
+      if (!schemaForComponent) {
+        continue;
+      }
       out.push({
         operationId: '*',
         status,
         componentName,
-        jsonSchema: cloneSchema(schemaComponents[componentName]),
+        jsonSchema: cloneSchema(schemaForComponent),
         path: '*',
         colonPath: '*',
         method: '*',
@@ -169,20 +221,6 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
   return out;
 }
 
-function normaliseSchemaComponents(
-  components: Record<string, SchemaObject | ReferenceObject>,
-): Record<string, SchemaObject | undefined> {
-  const result: Record<string, SchemaObject | undefined> = {};
-  for (const [name, definition] of Object.entries(components)) {
-    if (typeof definition === 'object' && '$ref' in definition) {
-      result[name] = undefined;
-      continue;
-    }
-    result[name] = definition;
-  }
-  return result;
-}
-
 function collectResponses(
   opId: string,
   path: string,
@@ -191,7 +229,8 @@ function collectResponses(
   out: ResponseMapEntry[],
   emptyBodyStatuses: Set<string>,
   inlineCounts: Map<string, number>,
-  schemaComponents: Record<string, SchemaObject | undefined>,
+  resolveComponent: (name: string) => SchemaObject | undefined,
+  componentSchemas: Map<string, SchemaObject>,
 ): void {
   if (!responses) {
     return;
@@ -200,7 +239,7 @@ function collectResponses(
     if (!isResponseObject(response)) {
       continue;
     }
-    const info = getJsonResponseInfo(response, opId, status, schemaComponents);
+    const info = getJsonResponseInfo(response, opId, status, resolveComponent);
     if (info) {
       let componentName = info.name;
       let zodIdentifier: string | undefined;
@@ -211,12 +250,16 @@ function collectResponses(
         componentName = seen === 0 ? baseName : `${baseName}_${String(seen)}`;
         zodIdentifier = componentName;
       }
+      const jsonSchema = cloneSchema(info.schema);
+      if (info.source === 'component') {
+        componentSchemas.set(componentName, jsonSchema);
+      }
       out.push({
         operationId: opId,
         status,
         componentName,
         zodIdentifier,
-        jsonSchema: cloneSchema(info.schema),
+        jsonSchema,
         path,
         colonPath: toColonPath(path),
         method,
@@ -248,7 +291,8 @@ function collectFromPathItem(
   out: ResponseMapEntry[],
   emptyBodyStatuses: Set<string>,
   inlineCounts: Map<string, number>,
-  components: Record<string, SchemaObject | undefined>,
+  resolveComponent: (name: string) => SchemaObject | undefined,
+  componentSchemas: Map<string, SchemaObject>,
 ): void {
   if (!isPathItemObject(pathItem)) {
     return;
@@ -271,7 +315,8 @@ function collectFromPathItem(
       out,
       emptyBodyStatuses,
       inlineCounts,
-      components,
+      resolveComponent,
+      componentSchemas,
     );
   }
 }

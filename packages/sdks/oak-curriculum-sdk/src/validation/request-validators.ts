@@ -1,127 +1,36 @@
 /**
  * Request validation functions using generated Zod schemas
- * Maps API operations to their validators from generated endpoints
+ * Maps API operations to their validators from generated data
  */
 
-import { z } from 'zod';
+import type { ZodSchema } from 'zod';
 import type { ValidationResult, HttpMethod } from './types';
 import { parseEndpointParameters } from './types';
-import { endpoints } from '../types/generated/zod/curriculumZodSchemas.js';
 import { toColon } from '../types/generated/api-schema/path-utils.js';
 import type {
   AllowedMethodsForPath,
   ValidPath,
 } from '../types/generated/api-schema/path-parameters';
+import { REQUEST_PARAMETER_SCHEMAS } from '../types/generated/api-schema/validation/request-parameter-map.js';
 
-// Runtime type utilities (no assertions)
-function isNonArrayObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
+const parameterSchemaEntries = Object.entries(REQUEST_PARAMETER_SCHEMAS);
+const parameterSchemaMap = new Map<string, ZodSchema>(parameterSchemaEntries);
 
-function getOwnProperty(value: unknown, key: string): unknown {
-  if (!isNonArrayObject(value)) {
-    return undefined;
-  }
-  if (!Object.prototype.hasOwnProperty.call(value, key)) {
-    return undefined;
-  }
-  const descriptor = Object.getOwnPropertyDescriptor(value, key);
-  return descriptor?.value;
-}
-
-function hasFunction(o: unknown, key: string): boolean {
-  const candidate = getOwnProperty(o, key);
-  return typeof candidate === 'function';
-}
-
-function isZodSchema(value: unknown): value is z.ZodTypeAny {
-  return hasFunction(value, 'parse') && hasFunction(value, 'safeParse');
-}
-
-/**
- * Type for endpoint definition from generated file
- */
-interface EndpointDefinition {
-  method: string;
-  path: string;
-  parameters?: ParamDefinition[];
-}
-
-interface ParamDefinition {
-  name: string;
-  type: 'Path' | 'Query' | 'Body';
-  schema: z.ZodSchema;
-}
-
-function isParameterDefinition(value: unknown): value is ParamDefinition {
-  if (!isNonArrayObject(value)) {
-    return false;
-  }
-  const name = getOwnProperty(value, 'name');
-  const type = getOwnProperty(value, 'type');
-  const schema = getOwnProperty(value, 'schema');
-  return (
-    typeof name === 'string' &&
-    (type === 'Path' || type === 'Query' || type === 'Body') &&
-    isZodSchema(schema)
-  );
-}
-function isEndpointDefinition(value: unknown): value is EndpointDefinition {
-  if (!isNonArrayObject(value)) {
-    return false;
-  }
-  const method = getOwnProperty(value, 'method');
-  const path = getOwnProperty(value, 'path');
-  if (typeof method !== 'string' || typeof path !== 'string') {
-    return false;
-  }
-  const params = getOwnProperty(value, 'parameters');
-  if (params === undefined) {
-    return true;
-  }
-  if (!Array.isArray(params)) {
-    return false;
-  }
-  return params.every(isParameterDefinition);
-}
-
-/**
- * Builds a map of path+method to parameter schemas from generated endpoints
- *
- * @deprecated move generation to type-gen, so this can be a static constant, with typ guards and a static type
- *
- */
-function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
-  const schemaMap = new Map<string, z.ZodSchema>();
-
-  function paramsToSchema(parameters: readonly ParamDefinition[]): z.ZodSchema {
-    const pairs: readonly (readonly [string, z.ZodSchema])[] = parameters.map(
-      (p) => [p.name, p.schema] as const,
-    );
-    const entries = Object.fromEntries(pairs);
-    return z.object(entries);
-  }
-
-  if (Array.isArray(endpoints)) {
-    for (const e of endpoints) {
-      if (!isEndpointDefinition(e)) {
-        continue;
-      }
-      const key = `${e.method.toUpperCase()}:${e.path}`;
-      const parameters = Array.isArray(e.parameters) ? e.parameters : [];
-      const schema = parameters.length > 0 ? paramsToSchema(parameters) : z.object({});
-      schemaMap.set(key, schema);
+const knownPaths = (() => {
+  const paths = new Set<string>();
+  for (const key of parameterSchemaMap.keys()) {
+    const separatorIndex = key.indexOf(':');
+    if (separatorIndex === -1) {
+      continue;
     }
+    const pathPart = key.slice(separatorIndex + 1);
+    paths.add(pathPart);
   }
-
-  return schemaMap;
-}
-
-// Build the schema map once at module load time
-const parameterSchemaMap = buildParameterSchemaMap();
+  return paths;
+})();
 
 function hasPathInMap(normalizedPath: string): boolean {
-  return Array.from(parameterSchemaMap.keys()).some((k) => k.endsWith(`:${normalizedPath}`));
+  return knownPaths.has(normalizedPath);
 }
 
 function makeUnsupportedMethod(
@@ -171,7 +80,6 @@ export function validateRequest<P extends ValidPath>(
   method: AllowedMethodsForPath<P>,
   args: unknown,
 ): ValidationResult<unknown> {
-  /** @remarks sort out proper types for schemas */
   // Normalize the path to match generated format
   const normalizedPath = toColon(path);
   const key = `${method.toUpperCase()}:${normalizedPath}`;
