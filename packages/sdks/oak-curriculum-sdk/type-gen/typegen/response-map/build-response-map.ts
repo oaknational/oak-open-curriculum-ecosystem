@@ -56,7 +56,12 @@ interface ResponseInfo {
 }
 
 function cloneSchema<T>(schema: T): T {
-  return JSON.parse(JSON.stringify(schema)) as T;
+  try {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- JSON.parse returns the same type as the input
+    return JSON.parse(JSON.stringify(schema)) as T;
+  } catch (error: unknown) {
+    throw new Error(`Error cloning schema: ${String(error)}`, { cause: error });
+  }
 }
 
 function getJsonResponseInfo(
@@ -81,10 +86,11 @@ function getJsonResponseInfo(
       if (resolved) {
         return { name, source: 'component', schema: cloneSchema(resolved) };
       }
+      // TODO this needs narrowing to SchemaObject via a type-gen generated type-guard -- remember ALL heavy lifting and type definitions happen at type-gen time
       const inlineSchema = resp.content?.['application/json']?.schema;
-      if (typeof inlineSchema === 'object' && inlineSchema && !Array.isArray(inlineSchema)) {
+      if (typeof inlineSchema === 'object' && !Array.isArray(inlineSchema)) {
         const fallbackName = sanitizeIdentifier(`${opId}_${status}`);
-        const cloned = cloneSchema(inlineSchema as SchemaObject);
+        const cloned = cloneSchema(inlineSchema);
         if (!('type' in cloned)) {
           cloned.type = 'object';
         }
@@ -103,7 +109,7 @@ function getJsonResponseInfo(
   return {
     name: sanitizeIdentifier(`${opId}_${status}`),
     source: 'inline',
-    schema: cloneSchema(schema as SchemaObject),
+    schema: cloneSchema(schema),
   };
 }
 
@@ -151,7 +157,7 @@ export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMa
         operationId: '*',
         status,
         componentName,
-        jsonSchema: cloneSchema(schemaComponents[componentName] ?? ({} as SchemaObject)),
+        jsonSchema: cloneSchema(schemaComponents[componentName]),
         path: '*',
         colonPath: '*',
         method: '*',
@@ -168,7 +174,7 @@ function normaliseSchemaComponents(
 ): Record<string, SchemaObject | undefined> {
   const result: Record<string, SchemaObject | undefined> = {};
   for (const [name, definition] of Object.entries(components)) {
-    if (definition && typeof definition === 'object' && '$ref' in definition) {
+    if (typeof definition === 'object' && '$ref' in definition) {
       result[name] = undefined;
       continue;
     }
@@ -202,7 +208,7 @@ function collectResponses(
         const baseName = sanitizeIdentifier(`${opId}_${status}`);
         const seen = inlineCounts.get(baseName) ?? 0;
         inlineCounts.set(baseName, seen + 1);
-        componentName = seen === 0 ? baseName : `${baseName}_${seen}`;
+        componentName = seen === 0 ? baseName : `${baseName}_${String(seen)}`;
         zodIdentifier = componentName;
       }
       out.push({

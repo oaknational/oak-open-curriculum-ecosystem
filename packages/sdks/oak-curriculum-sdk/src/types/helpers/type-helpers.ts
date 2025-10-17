@@ -3,7 +3,7 @@
 /**
  * Type safe object helpers
  *
- * These are last resort helpers, wherever possible refactor the code to use the more specific helpers.
+ * These are last resort helpers, wherever possible refactor the code to use the more specific types, type-guards, or type-helpers.
  */
 
 export function typeSafeKeys<T extends object>(obj: T): Extract<keyof T, string>[] {

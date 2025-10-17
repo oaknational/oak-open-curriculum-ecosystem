@@ -3,13 +3,7 @@ import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
-import {
-  isLessonSummary,
-  isSearchUnitsIndexDoc,
-  isTranscriptResponse,
-  isUnitSummary,
-} from '../../../src/types/oak';
-import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
+import { isLessonSummary, isSearchUnitsIndexDoc, isUnitSummary } from '../../../src/types/oak';
 import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
 import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
 import {
@@ -105,7 +99,7 @@ async function rollupUnit(
   if (!isUnitSummary(unitSummaryCandidate)) {
     throw new Error(`Unexpected unit summary response for ${unitDoc.unit_slug}`);
   }
-  const unitSummary = unitSummarySchema.parse(unitSummaryCandidate);
+  const unitSummary: unknown = unitSummaryCandidate;
 
   const snippets: string[] = [];
   for (const lessonId of unitDoc.lesson_ids) {
@@ -113,11 +107,8 @@ async function rollupUnit(
     if (!isLessonSummary(lessonSummaryCandidate)) {
       throw new Error(`Unexpected lesson summary response for ${lessonId}`);
     }
-    const lessonSummary = lessonSummarySchema.parse(lessonSummaryCandidate);
-    const transcriptResponse: unknown = await client.getLessonTranscript(lessonId);
-    if (!isTranscriptResponse(transcriptResponse)) {
-      throw new Error(`Unexpected transcript response for ${lessonId}`);
-    }
+    const lessonSummary: unknown = lessonSummaryCandidate;
+    const transcriptResponse = await client.getLessonTranscript(lessonId);
     snippets.push(
       selectLessonPlanningSnippet({
         summary: lessonSummary,

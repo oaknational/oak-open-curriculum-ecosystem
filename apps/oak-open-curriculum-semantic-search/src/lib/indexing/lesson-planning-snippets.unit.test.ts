@@ -1,10 +1,28 @@
 import { describe, expect, it } from 'vitest';
 import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
-import type { SearchLessonSummary } from '../../types/oak';
 
-function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
-  const base = {
+interface LessonSummaryFixture {
+  lessonTitle: string;
+  unitSlug: string;
+  unitTitle: string;
+  subjectSlug: string;
+  subjectTitle: string;
+  keyStageSlug: string;
+  keyStageTitle: string;
+  lessonKeywords: readonly { keyword: string; description: string }[];
+  keyLearningPoints: readonly { keyLearningPoint: string }[];
+  misconceptionsAndCommonMistakes: readonly { misconception: string; response: string }[];
+  pupilLessonOutcome: string;
+  teacherTips: readonly { teacherTip: string }[];
+  contentGuidance: readonly unknown[];
+  supervisionLevel: string;
+  downloadsAvailable: boolean;
+  canonicalUrl: string;
+}
+
+function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
+  const base: LessonSummaryFixture = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
@@ -21,8 +39,10 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-  } satisfies Partial<SearchLessonSummary>;
-  return lessonSummarySchema.parse({ ...base, ...overrides });
+  };
+  const summary: LessonSummaryFixture = { ...base, ...overrides };
+  void lessonSummarySchema.parse(summary);
+  return summary;
 }
 
 describe('selectLessonPlanningSnippet', () => {

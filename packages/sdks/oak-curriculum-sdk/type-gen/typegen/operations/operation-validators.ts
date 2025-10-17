@@ -1,6 +1,5 @@
 /**
  * Type validators for OpenAPI operation extraction
- * These functions eliminate the need for type assertions by providing proper type guards
  *
  * @remarks get rid of these pointless wrapper functions, factor out the helpers, rename scripts as typegen, use the new helpers workspace
  */

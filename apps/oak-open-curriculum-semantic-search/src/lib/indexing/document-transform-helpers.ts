@@ -1,8 +1,19 @@
-import type { SearchLessonSummary } from '../../types/oak';
-
 export interface UnitLessonInfo {
   readonly lessonSlug: string;
   readonly lessonTitle: string;
+}
+
+type UnknownObject = { readonly [key: string]: unknown };
+
+function isUnknownObject(value: unknown): value is UnknownObject {
+  return typeof value === 'object' && value !== null;
+}
+
+function ensureRecord(value: unknown, context: string): UnknownObject {
+  if (!isUnknownObject(value)) {
+    throw new Error(`Invalid ${context}: expected an object`);
+  }
+  return value;
 }
 
 function safeArray(value: unknown): readonly unknown[] {
@@ -32,14 +43,26 @@ function optionalStrings(values: string[]): string[] | undefined {
   return values.length > 0 ? values : undefined;
 }
 
+function readUnknownField(record: UnknownObject, key: string): unknown {
+  return record[key];
+}
+
+function requireStringField(record: UnknownObject, key: string, context: string): string {
+  const value = safeString(readUnknownField(record, key));
+  if (!value) {
+    throw new Error(`Missing ${context}`);
+  }
+  return value;
+}
+
 export function extractUnitLessons(value: unknown): UnitLessonInfo[] {
   const lessons: UnitLessonInfo[] = [];
   for (const entry of safeArray(value)) {
-    if (typeof entry !== 'object' || entry === null) {
+    if (!isUnknownObject(entry)) {
       continue;
     }
-    const lessonSlug = safeString(Reflect.get(entry, 'lessonSlug'));
-    const lessonTitle = safeString(Reflect.get(entry, 'lessonTitle'));
+    const lessonSlug = safeString(entry.lessonSlug);
+    const lessonTitle = safeString(entry.lessonTitle);
     if (!lessonSlug || !lessonTitle) {
       continue;
     }
@@ -59,11 +82,11 @@ export function extractSequenceIds(value: unknown): string[] | undefined {
 export function extractMisconceptions(value: unknown): string[] | undefined {
   const pairs: string[] = [];
   for (const entry of safeArray(value)) {
-    if (typeof entry !== 'object' || entry === null) {
+    if (!isUnknownObject(entry)) {
       continue;
     }
-    const misconception = safeString(Reflect.get(entry, 'misconception'));
-    const response = safeString(Reflect.get(entry, 'response'));
+    const misconception = safeString(entry.misconception);
+    const response = safeString(entry.response);
     if (!misconception || !response) {
       continue;
     }
@@ -75,10 +98,10 @@ export function extractMisconceptions(value: unknown): string[] | undefined {
 export function normaliseContentGuidanceEntries(value: unknown): string[] | undefined {
   const descriptions: string[] = [];
   for (const entry of safeArray(value)) {
-    if (typeof entry !== 'object' || entry === null) {
+    if (!isUnknownObject(entry)) {
       continue;
     }
-    const description = safeString(Reflect.get(entry, 'contentGuidanceDescription'));
+    const description = safeString(entry.contentGuidanceDescription);
     if (description) {
       descriptions.push(description);
     }
@@ -86,20 +109,29 @@ export function normaliseContentGuidanceEntries(value: unknown): string[] | unde
   return descriptions.length > 0 ? descriptions : undefined;
 }
 
-export function extractLessonPlanningFields(summary: SearchLessonSummary): {
+export function extractLessonPlanningFields(summary: unknown): {
   lessonKeywords?: string[];
   keyLearningPoints?: string[];
   misconceptions?: string[];
   teacherTips?: string[];
   contentGuidance?: string[];
 } {
-  const lessonKeywords = optionalStrings(pluckStrings(summary.lessonKeywords, 'keyword'));
-  const keyLearningPoints = optionalStrings(
-    pluckStrings(summary.keyLearningPoints, 'keyLearningPoint'),
+  const record = ensureRecord(summary, 'lesson summary');
+  const lessonKeywords = optionalStrings(
+    pluckStrings(readUnknownField(record, 'lessonKeywords'), 'keyword'),
   );
-  const misconceptions = extractMisconceptions(summary.misconceptionsAndCommonMistakes);
-  const teacherTips = optionalStrings(pluckStrings(summary.teacherTips, 'teacherTip'));
-  const contentGuidance = normaliseContentGuidanceEntries(summary.contentGuidance);
+  const keyLearningPoints = optionalStrings(
+    pluckStrings(readUnknownField(record, 'keyLearningPoints'), 'keyLearningPoint'),
+  );
+  const misconceptions = extractMisconceptions(
+    readUnknownField(record, 'misconceptionsAndCommonMistakes'),
+  );
+  const teacherTips = optionalStrings(
+    pluckStrings(readUnknownField(record, 'teacherTips'), 'teacherTip'),
+  );
+  const contentGuidance = normaliseContentGuidanceEntries(
+    readUnknownField(record, 'contentGuidance'),
+  );
 
   return {
     lessonKeywords,
@@ -108,4 +140,76 @@ export function extractLessonPlanningFields(summary: SearchLessonSummary): {
     teacherTips,
     contentGuidance,
   };
+}
+
+export interface UnitSummaryIdentifiers {
+  readonly unitSlug: string;
+  readonly unitTitle: string;
+  readonly canonicalUrl: string;
+}
+
+export function resolveUnitSummaryIdentifiers(summary: unknown): UnitSummaryIdentifiers {
+  const record = ensureRecord(summary, 'unit summary');
+  const unitSlug = requireStringField(record, 'unitSlug', 'unit summary slug');
+  const unitTitle = requireStringField(record, 'unitTitle', `unit summary ${unitSlug} title`);
+  const canonicalUrl = requireStringField(
+    record,
+    'canonicalUrl',
+    `canonical URL for unit ${unitSlug}`,
+  );
+  return { unitSlug, unitTitle, canonicalUrl };
+}
+
+export interface LessonSummaryIdentifiers {
+  readonly unitSlug: string;
+  readonly unitTitle: string;
+  readonly canonicalUrl: string;
+}
+
+export function resolveLessonSummaryIdentifiers(summary: unknown): LessonSummaryIdentifiers {
+  const record = ensureRecord(summary, 'lesson summary');
+  const unitSlug = requireStringField(record, 'unitSlug', 'lesson summary unit slug');
+  const unitTitle = requireStringField(
+    record,
+    'unitTitle',
+    `lesson summary ${unitSlug} unit title`,
+  );
+  const canonicalUrl = requireStringField(
+    record,
+    'canonicalUrl',
+    `canonical URL for lesson in unit ${unitSlug}`,
+  );
+  return { unitSlug, unitTitle, canonicalUrl };
+}
+
+export function readUnitSummaryValue(summary: unknown, key: string): unknown {
+  return readUnknownField(ensureRecord(summary, 'unit summary'), key);
+}
+
+export function readLessonSummaryValue(summary: unknown, key: string): unknown {
+  return readUnknownField(ensureRecord(summary, 'lesson summary'), key);
+}
+
+export function readUnitSummaryString(summary: unknown, key: string): string | undefined {
+  return safeString(readUnitSummaryValue(summary, key));
+}
+
+export function expectUnitSummaryString(summary: unknown, key: string, context: string): string {
+  const value = readUnitSummaryString(summary, key);
+  if (!value) {
+    throw new Error(`Missing ${context}`);
+  }
+  return value;
+}
+
+export function readLessonSummaryString(summary: unknown, key: string): string | undefined {
+  return safeString(readLessonSummaryValue(summary, key));
+}
+
+export function expectLessonSummaryString(summary: unknown, key: string, context: string): string {
+  const value = readLessonSummaryString(summary, key);
+  if (!value) {
+    throw new Error(`Missing ${context}`);
+  }
+  return value;
 }

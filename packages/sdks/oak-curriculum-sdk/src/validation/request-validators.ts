@@ -6,8 +6,8 @@
 import { z } from 'zod';
 import type { ValidationResult, HttpMethod } from './types';
 import { parseEndpointParameters } from './types';
-import { endpoints } from '../types/generated/zod/curriculumZodSchemas';
-import { toColon } from '../types/generated/api-schema/path-utils';
+import { endpoints } from '../types/generated/zod/curriculumZodSchemas.js';
+import { toColon } from '../types/generated/api-schema/path-utils.js';
 import type {
   AllowedMethodsForPath,
   ValidPath,
