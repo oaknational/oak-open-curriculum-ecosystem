@@ -27,18 +27,25 @@ function emitToolImports(names: readonly string[]): string {
     .join('\n');
 }
 
+function emitToolDefinitionMap(names: readonly string[]): string {
+  const rows = names.map(
+    (toolName) => `  readonly '${toolName}': typeof ${toolNameToIdentifier(toolName)};`,
+  );
+  return `type ToolDefinitionMap = {\n${rows.join('\n')}\n};`;
+}
+
 function emitToolsLiteral(names: readonly string[]): string {
   const rows = names.map((toolName) => `  '${toolName}': ${toolNameToIdentifier(toolName)},`);
   return `
   // DO NOT EXPORT
-  const MCP_TOOL_DEFINITIONS = {\n${rows.join('\n')}\n} as const;
+  const MCP_TOOL_DEFINITIONS = {\n${rows.join('\n')}\n} satisfies ToolDefinitionMap;
   `;
 }
 
 const TOOL_TYPE_BLOCK = `
 export type ToolMap = typeof MCP_TOOL_DEFINITIONS;
 export type ToolName = keyof ToolMap;
-export type ToolDescriptorForName<TName extends ToolName> = ToolMap[TName];
+export type ToolDescriptorForName<TName extends ToolName> = Extract<ToolMap[keyof ToolMap], { name: TName }>;
 `;
 
 function emitToolNames(names: readonly string[]): string {
@@ -129,6 +136,7 @@ export function generateDefinitionsFile(
     banner,
     '// Import all tool definitions',
     emitToolImports(names),
+    emitToolDefinitionMap(names),
     emitToolsLiteral(names),
     TOOL_TYPE_BLOCK,
     IS_TOOL_NAME_BLOCK,

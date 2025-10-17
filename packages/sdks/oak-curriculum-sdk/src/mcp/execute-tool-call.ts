@@ -17,7 +17,6 @@ import {
   getToolFromToolName,
   isToolName,
   type ToolDescriptorForName,
-  type ToolArgsForName,
   type ToolName,
 } from '../types/generated/api-schema/mcp-tools/index.js';
 
@@ -65,9 +64,6 @@ export class McpParameterError extends Error {
 export type ToolExecutionResult =
   | { readonly data: unknown; readonly error?: never }
   | { readonly data?: never; readonly error: McpToolError | McpParameterError };
-
-type ToolArgsOfDescriptor<TDescriptor extends ToolDescriptorForName<ToolName>> =
-  TDescriptor extends ToolDescriptorForName<infer TName> ? ToolArgsForName<TName> : never;
 
 /**
  * Ultra-thin executor - just validation and delegation to embedded executor
@@ -124,17 +120,15 @@ async function executeDescriptorForName<TName extends ToolName>(
   client: OakApiPathBasedClient,
 ): Promise<ToolExecutionResult> {
   const tool: ToolDescriptorForName<TName> = getToolFromToolName(toolName);
-  const validation = tool.toolZodSchema.safeParse(params);
-  if (!validation.success) {
-    const message = tool.describeToolArgs();
+  const parsed = tool.toolZodSchema.safeParse(params);
+  if (!parsed.success) {
     return {
-      error: new McpParameterError(message, toolName, undefined, undefined),
+      error: new McpParameterError(tool.describeToolArgs(), toolName, undefined, undefined),
     };
   }
 
   try {
-    const args: ToolArgsOfDescriptor<typeof tool> = validation.data;
-    const response = await tool.invoke(client, args);
+    const response = await tool.invoke(client, parsed.data);
     const outputValidation = tool.validateOutput(response);
     if (!outputValidation.ok) {
       return {
@@ -143,7 +137,6 @@ async function executeDescriptorForName<TName extends ToolName>(
         }),
       };
     }
-
     return { data: outputValidation.data };
   } catch (error) {
     return mapErrorToResult(error, toolName);

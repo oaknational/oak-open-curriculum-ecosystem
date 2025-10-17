@@ -17,7 +17,7 @@ import {
 
 type SpecialToolName = 'search' | 'fetch';
 
-type SearchObjectArgs = {
+interface SearchObjectArgs {
   readonly query?: string;
   readonly q?: string;
   readonly keyStage?: 'ks1' | 'ks2' | 'ks3' | 'ks4';
@@ -40,15 +40,15 @@ type SearchObjectArgs = {
     | 'science'
     | 'spanish';
   readonly unit?: string;
-};
+}
 
 type SearchArgs = string | SearchObjectArgs;
 type FetchArgs = string | { readonly id: string };
 
-type SpecialToolArgsMap = {
+interface SpecialToolArgsMap {
   readonly search: SearchArgs;
   readonly fetch: FetchArgs;
-};
+}
 
 interface SpecialToolDefinition<TSchema extends ZodTypeAny> {
   readonly description: string;
@@ -502,10 +502,20 @@ function normaliseFetchId(args: SpecialToolArgsMap['fetch']): string {
 }
 
 function detectTypeFromId(id: string): ContentType | undefined {
-  if (id.startsWith('lesson:')) return 'lesson';
-  if (id.startsWith('unit:')) return 'unit';
-  if (id.startsWith('subject:')) return 'subject';
-  if (id.startsWith('sequence:')) return 'sequence';
-  if (id.startsWith('thread:')) return 'thread';
+  if (id.startsWith('lesson:')) {
+    return 'lesson';
+  }
+  if (id.startsWith('unit:')) {
+    return 'unit';
+  }
+  if (id.startsWith('subject:')) {
+    return 'subject';
+  }
+  if (id.startsWith('sequence:')) {
+    return 'sequence';
+  }
+  if (id.startsWith('thread:')) {
+    return 'thread';
+  }
   return undefined;
 }

@@ -24,17 +24,7 @@ import {
 } from '../data/definitions.js';
 import type { OakApiPathBasedClient } from '../../../../../../client/index.js';
 
-type ToolDescriptorStore = {
-  [TName in ToolName]?: ToolDescriptorForName<TName>;
-};
-
-function storeDescriptor<TName extends ToolName>(
-  store: ToolDescriptorStore,
-  name: TName,
-  descriptor: ToolDescriptorForName<TName>,
-): void {
-  store[name] = descriptor;
-}
+type ToolOverrideStore = Map<ToolName, ToolDescriptorForName<ToolName>>;
 
 type InvocationResult = CallToolResult;
 
@@ -57,40 +47,35 @@ function formatStandardContent(result: unknown, isError = false): InvocationResu
 }
 
 export class McpToolRegistry {
-  private readonly descriptors: ToolDescriptorStore;
+  private readonly overrides: ToolOverrideStore;
   private readonly client: OakApiPathBasedClient;
 
   constructor(client: OakApiPathBasedClient) {
     this.client = client;
-    this.descriptors = {};
-    for (const name of toolNames) {
-      storeDescriptor(this.descriptors, name, getToolFromToolName(name));
-    }
+    this.overrides = new Map();
   }
 
   register<TName extends ToolName>(name: TName, descriptor: ToolDescriptorForName<TName>): void {
-    storeDescriptor(this.descriptors, name, descriptor);
+    this.overrides.set(name, descriptor);
   }
 
   listTools(): readonly ToolDescriptorForName<ToolName>[] {
-    return toolNames.map((name) => this.getDescriptor(name));
+    return toolNames.map((name) => this.resolveDescriptor(name));
   }
 
-  private getDescriptor<TName extends ToolName>(name: TName): ToolDescriptorForName<TName> {
-    const descriptor = this.descriptors[name];
-    if (descriptor) {
-      return descriptor;
+  private resolveDescriptor<TName extends ToolName>(name: TName): ToolDescriptorForName<TName> {
+    const override = this.overrides.get(name);
+    if (override) {
+      return override;
     }
-    const generated = getToolFromToolName(name);
-    storeDescriptor(this.descriptors, name, generated);
-    return generated;
+    return getToolFromToolName(name);
   }
 
   async call(name: string, args: unknown): Promise<InvocationResult> {
     if (!isToolName(name)) {
       return formatStandardContent(new Error('Unknown tool: ' + String(name)), true);
     }
-    const descriptor = this.getDescriptor(name);
+    const descriptor = this.resolveDescriptor(name);
     const parsed = descriptor.toolZodSchema.safeParse(args);
     if (!parsed.success) {
       const describe = descriptor.describeToolArgs;

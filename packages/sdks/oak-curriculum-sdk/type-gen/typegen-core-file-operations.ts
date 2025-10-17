@@ -72,6 +72,16 @@ export function calculateSdkSchemaPath(outDirectory: string): string {
   return path.resolve(outDirectory, 'api-schema-sdk.json');
 }
 
+export function writeSdkSchemaFile(
+  outDirectory: string,
+  sdkSchema: OpenAPIObject,
+  sdkSchemaPath: string,
+): void {
+  fs.mkdirSync(outDirectory, { recursive: true });
+  const sdkSchemaContent = generateJsonContent(sdkSchema);
+  fs.writeFileSync(sdkSchemaPath, sdkSchemaContent);
+}
+
 export function outputGeneratedFiles(
   outDirectory: string,
   fileMap: FileMap,
@@ -83,8 +93,7 @@ export function outputGeneratedFiles(
 
   // Write SDK schema to disk
 
-  const sdkSchemaContent = generateJsonContent(sdkSchema);
-  fs.writeFileSync(sdkSchemaPath, sdkSchemaContent);
+  writeSdkSchemaFile(outDirectory, sdkSchema, sdkSchemaPath);
 
   // Write all derived SDK files to disk
   writeFiles(outDirectory, fileMap);

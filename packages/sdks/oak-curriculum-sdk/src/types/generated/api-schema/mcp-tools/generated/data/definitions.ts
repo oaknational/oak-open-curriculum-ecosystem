@@ -39,6 +39,35 @@ import { getThreads } from './tools/get-threads.js';
 import { getThreadsUnits } from './tools/get-threads-units.js';
 import { getUnitsSummary } from './tools/get-units-summary.js';
 
+interface ToolDefinitionMap {
+  readonly 'get-changelog': typeof getChangelog;
+  readonly 'get-changelog-latest': typeof getChangelogLatest;
+  readonly 'get-key-stages': typeof getKeyStages;
+  readonly 'get-key-stages-subject-assets': typeof getKeyStagesSubjectAssets;
+  readonly 'get-key-stages-subject-lessons': typeof getKeyStagesSubjectLessons;
+  readonly 'get-key-stages-subject-questions': typeof getKeyStagesSubjectQuestions;
+  readonly 'get-key-stages-subject-units': typeof getKeyStagesSubjectUnits;
+  readonly 'get-lessons-assets': typeof getLessonsAssets;
+  readonly 'get-lessons-assets-by-type': typeof getLessonsAssetsByType;
+  readonly 'get-lessons-quiz': typeof getLessonsQuiz;
+  readonly 'get-lessons-summary': typeof getLessonsSummary;
+  readonly 'get-lessons-transcript': typeof getLessonsTranscript;
+  readonly 'get-rate-limit': typeof getRateLimit;
+  readonly 'get-search-lessons': typeof getSearchLessons;
+  readonly 'get-search-transcripts': typeof getSearchTranscripts;
+  readonly 'get-sequences-assets': typeof getSequencesAssets;
+  readonly 'get-sequences-questions': typeof getSequencesQuestions;
+  readonly 'get-sequences-units': typeof getSequencesUnits;
+  readonly 'get-subject-detail': typeof getSubjectDetail;
+  readonly 'get-subjects': typeof getSubjects;
+  readonly 'get-subjects-key-stages': typeof getSubjectsKeyStages;
+  readonly 'get-subjects-sequences': typeof getSubjectsSequences;
+  readonly 'get-subjects-years': typeof getSubjectsYears;
+  readonly 'get-threads': typeof getThreads;
+  readonly 'get-threads-units': typeof getThreadsUnits;
+  readonly 'get-units-summary': typeof getUnitsSummary;
+}
+
 
   // DO NOT EXPORT
   const MCP_TOOL_DEFINITIONS = {
@@ -68,13 +97,13 @@ import { getUnitsSummary } from './tools/get-units-summary.js';
   'get-threads': getThreads,
   'get-threads-units': getThreadsUnits,
   'get-units-summary': getUnitsSummary,
-} as const;
+} satisfies ToolDefinitionMap;
   
 
 
 export type ToolMap = typeof MCP_TOOL_DEFINITIONS;
 export type ToolName = keyof ToolMap;
-export type ToolDescriptorForName<TName extends ToolName> = ToolMap[TName];
+export type ToolDescriptorForName<TName extends ToolName> = Extract<ToolMap[keyof ToolMap], { name: TName }>;
 
 
 export function isToolName(value: unknown): value is ToolName {

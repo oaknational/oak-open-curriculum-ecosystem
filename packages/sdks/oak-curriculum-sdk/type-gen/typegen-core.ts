@@ -6,7 +6,7 @@
  */
 
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
-import openapiTS, { astToString, type OpenAPI3 } from 'openapi-typescript';
+import openapiTS, { astToString } from 'openapi-typescript';
 import {
   generateJsonContent,
   generateBaseSchemaContent,
@@ -42,7 +42,11 @@ import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admi
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
 import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
 import { ensurePathsOnSchema } from './typegen-core-helpers.js';
-import { calculateSdkSchemaPath, outputGeneratedFiles } from './typegen-core-file-operations.js';
+import {
+  calculateSdkSchemaPath,
+  outputGeneratedFiles,
+  writeSdkSchemaFile,
+} from './typegen-core-file-operations.js';
 
 /**
  * Create a map of filenames to their content
@@ -139,7 +143,8 @@ export async function generateSchemaArtifacts(
 ): Promise<void> {
   // Generate TypeScript types from original schema
   const sdkSchemaPath = calculateSdkSchemaPath(outDirectory);
-  const ast = await openapiTS(sdkSchema as unknown as OpenAPI3);
+  writeSdkSchemaFile(outDirectory, sdkSchema, sdkSchemaPath);
+  const ast = await openapiTS(new URL(`file://${sdkSchemaPath}`));
   const tsTypesContent = postProcessTypesSource(astToString(ast));
 
   // Extract path parameters and valid combinations from original schema

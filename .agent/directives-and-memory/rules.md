@@ -14,11 +14,12 @@ If the upstream OpenAPI schema changes, then running `pnpm type-gen` followed by
 
 We achieve this by ensuring that ALL static data structures, types, type guards, Zod schemas, Zod validators, and other type related information MUST be generated at compile time ONLY, and so flow from the Open Curriculum OpenAPI schema in the SDK, and from there to the apps. In other words, ALL the heavy lifting MUST happen at type-generation time, i.e. when `pnpm type-gen` is run. All the libraries, all the apps, all the MCP servers are simple consumers, the complexity is in the SDK and ONLY in the type-generation process.
 
-### Code Patterns and Architectural Principles
+### Code Design and Architectural Principles
 
 - **TDD** - ALWAYS use TDD, prefer pure functions and unit tests. Write tests **FIRST**. Red (run the test to _prove it fails_), Green (run the test to prove it passes, _because product code exists now_), Refactor (improve the product code implementation, now that the _behaviour_ at the interface will remain proven by the test)
 - **Keep it simple** - DRY, KISS, YAGNI, SOLID principles
 - **NEVER create compatibility layers, no backwards compatibility** - replace old approaches with new approaches, never create compatibility layers, never prioritise backwards compatibility
+- **Keep it strict** - don't invent optionality, don't add fallback options. We know exactly what is needed, and the proper functioning of the system depends on acknowledging and embracing those restrictions, and the valuing insights offered by the type system.
 - **Pure functions first** - Use TDD to design (_test first_, red, green, refactor), no side effects, no I/O
 - **Build up through scales** - Functions → Modules → Packages (`core`, `libs`, `apps`)
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files

@@ -4,28 +4,36 @@
  */
 
 import type {
+  ComponentsObject,
   OpenAPIObject,
   OperationObject,
   ParameterObject,
+  PathItemObject,
+  ReferenceObject,
   ResponsesObject,
+  SchemaObject,
 } from 'openapi3-ts/oas31';
 
 export interface ExtractedParameter {
-  in: 'path' | 'query' | 'header' | 'cookie';
-  name: string;
-  description?: string;
-  required?: boolean;
-  schema?: unknown;
+  readonly in: 'path' | 'query' | 'header' | 'cookie';
+  readonly name: string;
+  readonly description?: string;
+  readonly required?: boolean;
+  readonly schema?: SchemaObject;
 }
 
 export interface ExtractedOperation {
-  path: string;
-  method: string;
-  operationId?: string;
-  summary?: string;
-  description?: string;
-  parameters: ExtractedParameter[];
-  responses?: ResponsesObject;
+  readonly path: string;
+  readonly method: string;
+  readonly operationId?: string;
+  readonly summary?: string;
+  readonly description?: string;
+  readonly parameters: readonly ExtractedParameter[];
+  readonly responses?: ResponsesObject;
+}
+
+function isReferenceObject(value: unknown): value is ReferenceObject {
+  return Boolean(value && typeof value === 'object' && '$ref' in value);
 }
 
 function isParameterObject(param: unknown): param is ParameterObject {
@@ -35,10 +43,141 @@ function isParameterObject(param: unknown): param is ParameterObject {
   return typeof param.name === 'string' && typeof param.in === 'string';
 }
 
+function extractRefName(ref: string): string | undefined {
+  const parts = ref.split('/');
+  const name = parts[parts.length - 1];
+  return name && name.length > 0 ? name : undefined;
+}
+
+function isSchemaObject(value: unknown): value is SchemaObject {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    return false;
+  }
+  return !isReferenceObject(value);
+}
+
+function cloneSchema(schema: SchemaObject): SchemaObject {
+  const cloned = structuredClone(schema);
+  if (!isSchemaObject(cloned)) {
+    throw new TypeError('Failed to clone schema object.');
+  }
+  return cloned;
+}
+
+type ResolveSchemaFn = (
+  schema: SchemaObject | ReferenceObject | undefined,
+) => SchemaObject | undefined;
+
+type ResolveParameterFn = (
+  parameter: ParameterObject | ReferenceObject,
+) => ParameterObject | undefined;
+
+function createSchemaResolver(components: ComponentsObject | undefined): ResolveSchemaFn {
+  const schemas = components?.schemas ?? {};
+  const cache = new Map<string, SchemaObject | null>();
+  const resolving = new Set<string>();
+
+  function resolveByName(name: string): SchemaObject | undefined {
+    if (cache.has(name)) {
+      const cached = cache.get(name);
+      return cached ?? undefined;
+    }
+    if (resolving.has(name)) {
+      return undefined;
+    }
+    resolving.add(name);
+    const target = schemas[name];
+    let resolved: SchemaObject | undefined;
+    if (isSchemaObject(target)) {
+      resolved = cloneSchema(target);
+    } else if (isReferenceObject(target)) {
+      const refName = extractRefName(target.$ref);
+      if (refName && refName !== name) {
+        const nested = resolveByName(refName);
+        if (nested) {
+          resolved = cloneSchema(nested);
+        }
+      }
+    }
+    resolving.delete(name);
+    cache.set(name, resolved ?? null);
+    return resolved;
+  }
+
+  return (schema) => {
+    if (!schema) {
+      return undefined;
+    }
+    if (isReferenceObject(schema)) {
+      const name = extractRefName(schema.$ref);
+      if (!name) {
+        return undefined;
+      }
+      const resolved = resolveByName(name);
+      return resolved ? cloneSchema(resolved) : undefined;
+    }
+    return cloneSchema(schema);
+  };
+}
+
+function createParameterResolver(components: ComponentsObject | undefined): {
+  resolveParameter: ResolveParameterFn;
+  resolveSchema: ResolveSchemaFn;
+} {
+  const parameters = components?.parameters ?? {};
+  const schemaResolver = createSchemaResolver(components);
+  const cache = new Map<string, ParameterObject | null>();
+  const resolving = new Set<string>();
+
+  function resolveByName(name: string): ParameterObject | undefined {
+    if (cache.has(name)) {
+      const cached = cache.get(name);
+      return cached ?? undefined;
+    }
+    if (resolving.has(name)) {
+      return undefined;
+    }
+    resolving.add(name);
+    const target = parameters[name];
+    let resolved: ParameterObject | undefined;
+    if (isParameterObject(target)) {
+      resolved = structuredClone(target);
+    } else if (isReferenceObject(target)) {
+      const nestedName = extractRefName(target.$ref);
+      if (nestedName && nestedName !== name) {
+        const nested = resolveByName(nestedName);
+        if (nested) {
+          resolved = structuredClone(nested);
+        }
+      }
+    }
+    resolving.delete(name);
+    cache.set(name, resolved ?? null);
+    return resolved;
+  }
+
+  const resolveParameter: ResolveParameterFn = (parameter) => {
+    if (isReferenceObject(parameter)) {
+      const name = extractRefName(parameter.$ref);
+      if (!name) {
+        return undefined;
+      }
+      return resolveByName(name);
+    }
+    return structuredClone(parameter);
+  };
+
+  return { resolveParameter, resolveSchema: schemaResolver };
+}
+
 /**
  * Extract parameter metadata from a ParameterObject
  */
-function extractParameter(param: ParameterObject): ExtractedParameter {
+function extractParameter(
+  param: ParameterObject,
+  resolveSchema: ResolveSchemaFn,
+): ExtractedParameter {
+  const schema = resolveSchema(param.schema);
   // The ParameterObject type already has the correct 'in' type
   // We trust the OpenAPI TypeScript types here
   return {
@@ -46,32 +185,56 @@ function extractParameter(param: ParameterObject): ExtractedParameter {
     name: param.name,
     description: param.description,
     required: param.required,
-    schema: param.schema,
+    schema,
   };
 }
 
 function isOperationObject(op: unknown): op is OperationObject {
-  if (!op || typeof op !== 'object' || !('operationId' in op) || !('responses' in op)) {
+  if (!op || typeof op !== 'object' || Array.isArray(op) || isReferenceObject(op)) {
     return false;
   }
-  return typeof op.operationId === 'string' && typeof op.responses === 'object';
+  return (
+    'responses' in op &&
+    typeof (op as OperationObject).responses === 'object' &&
+    (op as OperationObject).responses !== null
+  );
 }
 
 /**
  * Extract parameters from an operation
  */
-function extractOperationParameters(operation: OperationObject): ExtractedParameter[] {
+function collectParametersFromList(
+  parameters: readonly (ParameterObject | ReferenceObject)[] | undefined,
+  resolveParameter: ResolveParameterFn,
+  resolveSchema: ResolveSchemaFn,
+): ExtractedParameter[] {
+  if (!parameters) {
+    return [];
+  }
+  const extracted: ExtractedParameter[] = [];
+  for (const parameter of parameters) {
+    if (!parameter) {
+      continue;
+    }
+    const resolved = resolveParameter(parameter);
+    if (!resolved) {
+      continue;
+    }
+    extracted.push(extractParameter(resolved, resolveSchema));
+  }
+  return extracted;
+}
+
+function extractOperationParameters(
+  operation: OperationObject,
+  resolveParameter: ResolveParameterFn,
+  resolveSchema: ResolveSchemaFn,
+): ExtractedParameter[] {
   if (!Array.isArray(operation.parameters)) {
     return [];
   }
 
-  const parameters: ExtractedParameter[] = [];
-  for (const param of operation.parameters) {
-    if (isParameterObject(param)) {
-      parameters.push(extractParameter(param));
-    }
-  }
-  return parameters;
+  return collectParametersFromList(operation.parameters, resolveParameter, resolveSchema);
 }
 
 /**
@@ -79,37 +242,53 @@ function extractOperationParameters(operation: OperationObject): ExtractedParame
  *
  * @deprecated replace with a helper function that uses the real types.
  */
+
+type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
+
 function extractOperationsForPath(
   path: string,
-  // TODO this is not unknown, it is a path item from an OpenAPI schema
-  pathItem: unknown,
-  // TODO these are not unknown, they are http methods, a known constant list and type
-  httpMethods: readonly string[],
+  pathItem: PathItemObject | undefined,
+  httpMethods: readonly HttpMethod[],
+  resolveParameter: ResolveParameterFn,
+  resolveSchema: ResolveSchemaFn,
 ): ExtractedOperation[] {
-  if (
-    !pathItem ||
-    typeof pathItem !== 'object' ||
-    !('parameters' in pathItem) ||
-    !('responses' in pathItem)
-  ) {
+  if (!pathItem || isReferenceObject(pathItem)) {
     return [];
   }
+
+  const sharedParameters = collectParametersFromList(
+    pathItem.parameters,
+    resolveParameter,
+    resolveSchema,
+  );
 
   const operations: ExtractedOperation[] = [];
 
   for (const method of httpMethods) {
     const operation = pathItem[method];
+    if (!operation || isReferenceObject(operation)) {
+      continue;
+    }
     if (!isOperationObject(operation)) {
       continue;
     }
 
+    const operationParameters = extractOperationParameters(
+      operation,
+      resolveParameter,
+      resolveSchema,
+    );
+    const parameters =
+      sharedParameters.length === 0
+        ? operationParameters
+        : [...sharedParameters, ...operationParameters];
     operations.push({
       path,
       method,
       operationId: operation.operationId,
       summary: operation.summary,
       description: operation.description,
-      parameters: extractOperationParameters(operation),
+      parameters,
       responses: operation.responses,
     });
   }
@@ -123,12 +302,28 @@ function extractOperationsForPath(
  */
 export function extractPathOperations(schema: OpenAPIObject): ExtractedOperation[] {
   const operations: ExtractedOperation[] = [];
-  const httpMethods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
+  const httpMethods: readonly HttpMethod[] = [
+    'get',
+    'put',
+    'post',
+    'delete',
+    'options',
+    'head',
+    'patch',
+    'trace',
+  ];
+  const { resolveParameter, resolveSchema } = createParameterResolver(schema.components);
 
   const paths = schema.paths ?? {};
   for (const path in paths) {
     const pathItem = paths[path];
-    const pathOperations = extractOperationsForPath(path, pathItem, httpMethods);
+    const pathOperations = extractOperationsForPath(
+      path,
+      pathItem,
+      httpMethods,
+      resolveParameter,
+      resolveSchema,
+    );
     operations.push(...pathOperations);
   }
 
