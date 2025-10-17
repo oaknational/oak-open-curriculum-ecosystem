@@ -1,7 +1,7 @@
 /**
  * Type validators for OpenAPI operation extraction
  *
- * @remarks get rid of these pointless wrapper functions, factor out the helpers, rename scripts as typegen, use the new helpers workspace
+ * @deprecated get rid of these pointless wrapper functions
  */
 
 import type { ParameterObject, OperationObject } from 'openapi3-ts/oas31';

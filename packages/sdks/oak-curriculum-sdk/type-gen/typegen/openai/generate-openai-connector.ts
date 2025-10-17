@@ -3,6 +3,8 @@
  *
  * This content is intentionally generated at type‑gen time to keep the
  * OpenAI-facing surface derived from the SDK’s generated tools and helpers.
+ *
+ * @deprecated 1. Is this still useful, 2. Can we remove it? 3. If we can't then it needs to be dynamically generated from values in the schema.
  */
 function emittedSource(): string {
   return `

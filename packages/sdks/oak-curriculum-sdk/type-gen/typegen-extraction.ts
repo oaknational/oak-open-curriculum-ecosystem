@@ -191,9 +191,6 @@ export function processParameter(
   }
 }
 
-/**
- * Process all parameters from a list
- */
 export function processParameterList(
   parameters: readonly (ParameterObject | ReferenceObject)[],
   context: ExtractionContext,

@@ -17,16 +17,12 @@ function readEnvFromProcess(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string |
   if (typeof process === 'undefined') {
     return undefined;
   }
-  const value = process.env?.[key];
+  const value = process.env[key];
   return typeof value === 'string' && value.length > 0 ? value : undefined;
 }
 
 function readEnvFromGlobal(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string | undefined {
-  const env = (globalThis as { env?: Record<string, unknown> }).env;
-  if (!env) {
-    return undefined;
-  }
-  const value = env[key];
+  const value = process.env[key];
   return typeof value === 'string' && value.length > 0 ? value : undefined;
 }
 

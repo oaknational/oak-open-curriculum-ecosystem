@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-restricted-types */
 /**
  * GENERATED FILE - DO NOT EDIT
  *

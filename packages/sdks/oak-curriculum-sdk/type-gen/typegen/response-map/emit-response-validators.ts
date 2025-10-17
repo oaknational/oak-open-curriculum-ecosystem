@@ -158,7 +158,7 @@ function buildSchemaExpression(entry: ResponseMapEntry): string {
   }
 
   if (entry.source === 'inline') {
-    return 'curriculumSchemas.' + entry.zodIdentifier;
+    return 'curriculumSchemas.' + (entry.zodIdentifier ?? '');
   }
 
   return 'curriculumSchemas.' + entry.componentName;

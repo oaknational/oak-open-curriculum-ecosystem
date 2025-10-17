@@ -88,7 +88,8 @@ function isEndpointDefinition(value: unknown): value is EndpointDefinition {
 /**
  * Builds a map of path+method to parameter schemas from generated endpoints
  *
- * @remarks move generation to compile-time, so this can be a static constant, with typ guards and a static type
+ * @deprecated move generation to type-gen, so this can be a static constant, with typ guards and a static type
+ *
  */
 function buildParameterSchemaMap(): Map<string, z.ZodSchema> {
   const schemaMap = new Map<string, z.ZodSchema>();

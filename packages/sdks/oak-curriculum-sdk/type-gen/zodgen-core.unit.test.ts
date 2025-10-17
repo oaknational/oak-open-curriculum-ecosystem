@@ -88,10 +88,11 @@ describe('generateZodSchemas', () => {
     await generateZodSchemas(minimalSchema, outDir);
 
     const [, content] = vi.mocked(writeFileSync).mock.lastCall ?? [];
-    expect(typeof content).toBe('string');
-    const stringContent = String(content);
-    const endpointsIndex = stringContent.indexOf('export const endpoints = makeApi');
-    const curriculumIndex = stringContent.indexOf(
+    if (typeof content !== 'string') {
+      throw new Error('Content is not a string');
+    }
+    const endpointsIndex = content.indexOf('export const endpoints = makeApi');
+    const curriculumIndex = content.indexOf(
       'export const curriculumSchemas = curriculumSchemaCollection',
     );
     expect(endpointsIndex).toBeGreaterThanOrEqual(0);

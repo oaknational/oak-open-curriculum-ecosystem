@@ -111,7 +111,7 @@ describe('schema separation', () => {
 
       const summary = (searchResponse as { properties: Record<string, unknown> }).properties
         .summary as { anyOf?: unknown };
-      if (!Array.isArray(summary?.anyOf)) {
+      if (!Array.isArray(summary.anyOf)) {
         throw new Error('SearchResponse.summary.anyOf missing');
       }
       expect(summary.anyOf).toHaveLength(2);

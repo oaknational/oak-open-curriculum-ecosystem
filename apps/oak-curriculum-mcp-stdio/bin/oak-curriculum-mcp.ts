@@ -51,6 +51,7 @@ try {
   const toolCount = toolNames.length;
   log(`[START-MCP] Tool count: ${String(toolCount)}`);
   const preview = toolNames.slice(0, 3).join(', ');
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- allow the run time check of tool count as a backup error catching mechanism
   log(`[START-MCP] Tools: ${preview}${toolCount > 3 ? ', …' : ''}`);
 } catch (err: unknown) {
   log(
