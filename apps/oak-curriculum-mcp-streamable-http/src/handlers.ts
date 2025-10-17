@@ -7,7 +7,6 @@ import {
   createOakPathBasedClient,
   executeToolCall,
   zodRawShapeFromToolInputJsonSchema,
-  executeOpenAiToolCall,
   listUniversalTools,
   createUniversalToolExecutor,
 } from '@oaknational/oak-curriculum-sdk';
@@ -15,14 +14,12 @@ import {
 export interface ToolHandlerDependencies {
   readonly createClient: typeof createOakPathBasedClient;
   readonly executeMcpTool: typeof executeToolCall;
-  readonly executeOpenAiTool: typeof executeOpenAiToolCall;
   readonly createExecutor: typeof createUniversalToolExecutor;
 }
 
 const defaultDependencies: ToolHandlerDependencies = {
   createClient: createOakPathBasedClient,
   executeMcpTool: executeToolCall,
-  executeOpenAiTool: executeOpenAiToolCall,
   createExecutor: createUniversalToolExecutor,
 };
 
@@ -44,7 +41,6 @@ export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverr
         const client = deps.createClient(env.OAK_API_KEY);
         const executor = deps.createExecutor({
           executeMcpTool: (name, args) => deps.executeMcpTool(name, args, client),
-          executeOpenAiTool: (name, args) => deps.executeOpenAiTool(name, args, client),
         });
         return executor(tool.name, params ?? {});
       },

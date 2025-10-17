@@ -2,7 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { createMcpToolsModule } from './index.js';
 import type {
   ToolName,
-  OpenAiToolName,
   ToolExecutionResult,
   OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
@@ -10,28 +9,45 @@ import type {
 const TEST_TOOL_NAME = 'get-key-stages-subject-lessons';
 
 describe('createMcpToolsModule', () => {
-  it('delegates search tool calls to the OpenAI executor dependency', async () => {
-    const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi
-      .fn()
-      .mockResolvedValue({ ok: true });
+  it('delegates search tool calls through the MCP executor dependency and returns aggregated data', async () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
-      .mockResolvedValue({ data: { ok: true } });
+      .mockImplementation(async (name) => {
+        if (name === ('get-search-lessons' as ToolName)) {
+          return { data: { lessons: ['lesson-a'] } };
+        }
+        if (name === ('get-search-transcripts' as ToolName)) {
+          return { data: { transcripts: ['transcript-a'] } };
+        }
+        return { data: null };
+      });
 
     const module = createMcpToolsModule({
       client: {} as OakApiPathBasedClient,
       executeMcpTool,
-      executeOpenAiTool,
     });
 
     const result = await module.handleTool('search', { query: 'photosynthesis' });
 
-    expect(executeOpenAiTool).toHaveBeenCalledWith('search', { query: 'photosynthesis' });
-    expect(result).toEqual({ ok: true });
+    expect(executeMcpTool).toHaveBeenCalledWith(
+      'get-search-lessons',
+      expect.objectContaining({ q: 'photosynthesis' }),
+    );
+    expect(executeMcpTool).toHaveBeenCalledWith(
+      'get-search-transcripts',
+      expect.objectContaining({ q: 'photosynthesis' }),
+    );
+    expect(result).toEqual({
+      q: 'photosynthesis',
+      keyStage: undefined,
+      subject: undefined,
+      unit: undefined,
+      lessons: { lessons: ['lesson-a'] },
+      transcripts: { transcripts: ['transcript-a'] },
+    });
   });
 
   it('delegates curriculum tools to the MCP executor dependency and returns parsed data', async () => {
-    const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi.fn();
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockResolvedValue({ data: { status: 'ok' } });
@@ -39,18 +55,20 @@ describe('createMcpToolsModule', () => {
     const module = createMcpToolsModule({
       client: {} as OakApiPathBasedClient,
       executeMcpTool,
-      executeOpenAiTool,
     });
 
-    const result = await module.handleTool(TEST_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'science',
-    });
+    const args = {
+      params: {
+        path: {
+          keyStage: 'ks3' as const,
+          subject: 'science' as const,
+        },
+      },
+    };
 
-    expect(executeMcpTool).toHaveBeenCalledWith(TEST_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'science',
-    });
+    const result = await module.handleTool(TEST_TOOL_NAME, args);
+
+    expect(executeMcpTool).toHaveBeenCalledWith(TEST_TOOL_NAME, args);
     expect(result).toEqual({ status: 'ok' });
   });
 
@@ -58,18 +76,22 @@ describe('createMcpToolsModule', () => {
     const executeMcpTool: (name: ToolName, args: unknown) => Promise<ToolExecutionResult> = vi
       .fn()
       .mockResolvedValue({ error: new Error('boom') });
-    const executeOpenAiTool: (name: OpenAiToolName, args: unknown) => Promise<unknown> = vi.fn();
 
     const module = createMcpToolsModule({
       client: {} as OakApiPathBasedClient,
       executeMcpTool,
-      executeOpenAiTool,
     });
 
-    const result = await module.handleTool(TEST_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'science',
-    });
+    const args = {
+      params: {
+        path: {
+          keyStage: 'ks3' as const,
+          subject: 'science' as const,
+        },
+      },
+    };
+
+    const result = await module.handleTool(TEST_TOOL_NAME, args);
 
     expect(result).toEqual({
       content: [{ type: 'text', text: 'boom' }],

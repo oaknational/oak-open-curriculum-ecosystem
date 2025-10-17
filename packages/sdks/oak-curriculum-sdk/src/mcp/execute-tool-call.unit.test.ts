@@ -12,7 +12,11 @@ import { executeToolCall } from './execute-tool-call';
 import type { OakApiPathBasedClient } from '../client/index.js';
 import type { ToolDescriptor, ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
 
-const MOCK_TOOL_NAME = 'mock-tool' as ToolName;
+const HOISTED = vi.hoisted(() => ({
+  toolName: 'get-changelog' as const,
+}));
+
+const MOCK_TOOL_NAME = HOISTED.toolName as ToolName;
 
 const toolZodSchema = z.object({
   args: z.boolean(),
@@ -48,16 +52,19 @@ const descriptor: MockDescriptor = {
   invoke,
 };
 
-vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
-  toolNames: [MOCK_TOOL_NAME] as const,
-  getToolFromToolName: (name: ToolName) => {
-    if (name !== MOCK_TOOL_NAME) {
-      throw new Error(`Unknown tool requested in test: ${String(name)}`);
-    }
-    return descriptor;
-  },
-  isToolName: (value: unknown): value is ToolName => value === MOCK_TOOL_NAME,
-}));
+vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => {
+  const toolName = HOISTED.toolName;
+  return {
+    toolNames: [toolName] as const,
+    getToolFromToolName: (name: ToolName) => {
+      if (name !== toolName) {
+        throw new Error(`Unknown tool requested in test: ${String(name)}`);
+      }
+      return descriptor;
+    },
+    isToolName: (value: unknown): value is ToolName => value === toolName,
+  };
+});
 
 describe('executeToolCall with literal descriptors', () => {
   it('returns error for unknown tool', async () => {
@@ -73,7 +80,7 @@ describe('executeToolCall with literal descriptors', () => {
 
     validateOutput.mockReturnValueOnce({ ok: true as const, data: 'valid' });
 
-    const result = await executeToolCall('mock-tool', params, client);
+    const result = await executeToolCall(MOCK_TOOL_NAME, params, client);
 
     expect(result).toEqual({ data: 'valid' });
     expect(invoke).toHaveBeenCalledWith(client, params);

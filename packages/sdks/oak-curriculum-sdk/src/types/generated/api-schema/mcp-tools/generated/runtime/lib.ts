@@ -98,11 +98,7 @@ export class McpToolRegistry {
       return formatStandardContent(new Error(message), true);
     }
     try {
-      const invoke = descriptor.invoke as (
-        client: OakApiPathBasedClient,
-        args: typeof parsed.data,
-      ) => unknown;
-      const output = await invoke(this.client, parsed.data);
+      const output = await descriptor.invoke(this.client, parsed.data);
       const outputValidation = descriptor.validateOutput(output);
       if (!outputValidation.ok) {
         return formatStandardContent(new Error('Output validation error: ' + outputValidation.message), true);

@@ -7,10 +7,8 @@ describe('generateLibFile', () => {
     const output = generateLibFile();
 
     expect(output).toContain(
-      "import {\n  toolNames,\n  getToolFromToolName,\n  getToolNameFromOperationId,\n  isToolName,\n} from './definitions.js';",
+      "import {\n  toolNames,\n  getToolFromToolName,\n  getToolNameFromOperationId,\n  isToolName,\n  type ToolDescriptorForName,\n  type ToolDescriptorForOperationId,\n  type ToolName,\n  type ToolOperationId,\n} from '../data/definitions.js';",
     );
-    expect(output).toContain('type ToolOperationId');
-    expect(output).toContain('type ToolDescriptorForName');
     expect(output).not.toContain('MCP_TOOLS');
   });
 

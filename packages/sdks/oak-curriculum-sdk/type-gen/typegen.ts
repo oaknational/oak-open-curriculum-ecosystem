@@ -159,12 +159,8 @@ console.log(`💾 Original schema saved to: ${path.relative(process.cwd(), origi
 
 console.log('🎨 Creating SDK schema with canonicalUrl fields...');
 
-// TODO: the canonical urls need to be added in ONE place. Should it be here?
-
 // Use the SDK schema for generation
-await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory, {
-  generateMcpTools: true,
-});
+await generateSchemaArtifacts(validatedSchema, sdkSchema, outDirectory);
 
 console.log('✅ Type generation complete!');
 console.log('✅ MCP tools generated from schema!');

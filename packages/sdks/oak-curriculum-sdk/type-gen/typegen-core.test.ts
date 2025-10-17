@@ -3,11 +3,8 @@ import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {
-  createFileMap,
-  generatePathParametersContent,
-  writeMcpToolsDirectory,
-} from './typegen-core';
+import { createFileMap, generatePathParametersContent } from './typegen-core';
+import { writeMcpToolsDirectory } from './typegen-core-file-operations.js';
 import type { GeneratedMcpToolFiles } from './typegen/mcp-tools/mcp-tool-generator.js';
 
 describe('typegen-core', () => {

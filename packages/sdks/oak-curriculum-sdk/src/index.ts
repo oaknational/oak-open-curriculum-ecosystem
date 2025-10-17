@@ -104,16 +104,6 @@ export {
   type ContentType,
 } from './types/generated/api-schema/routing/url-helpers.js';
 
-// OpenAI Connector exports (SDK-generated facade helpers)
-export {
-  executeOpenAiToolCall,
-  OPENAI_CONNECTOR_TOOL_DEFS,
-  isOpenAiToolName,
-  type OpenAiToolName,
-  type OpenAiSearchArgs,
-  type OpenAiFetchArgs,
-} from './types/generated/openai-connector/index.js';
-
 // Universal MCP tooling exports
 export {
   listUniversalTools,

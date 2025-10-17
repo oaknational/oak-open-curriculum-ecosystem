@@ -8,11 +8,9 @@
 import type { CallToolResult, TextContent } from '@modelcontextprotocol/sdk/types.js';
 import {
   executeToolCall,
-  executeOpenAiToolCall,
   createUniversalToolExecutor,
   isUniversalToolName,
   type ToolExecutionResult,
-  type OpenAiToolName,
   type ToolName,
   type OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
@@ -26,7 +24,6 @@ export interface McpToolsModule {
 
 export interface UniversalToolExecutors {
   readonly executeMcpTool?: (name: ToolName, args: unknown) => Promise<ToolExecutionResult>;
-  readonly executeOpenAiTool?: (name: OpenAiToolName, args: unknown) => Promise<unknown>;
 }
 
 function formatError(message: string): CallToolResult {
@@ -53,13 +50,8 @@ export function createMcpToolsModule(
     deps.executeMcpTool ??
     ((name: ToolName, args: unknown) => executeToolCall(name, args, deps.client));
 
-  const executeOpenAiTool =
-    deps.executeOpenAiTool ??
-    ((name: OpenAiToolName, args: unknown) => executeOpenAiToolCall(name, args, deps.client));
-
   const executor = createUniversalToolExecutor({
-    executeMcpTool: (name, args) => executeMcpTool(name, args),
-    executeOpenAiTool: (name, args) => executeOpenAiTool(name, args),
+    executeMcpTool,
   });
 
   return {

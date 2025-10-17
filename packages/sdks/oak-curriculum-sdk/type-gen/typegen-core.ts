@@ -5,10 +5,8 @@
  * Generates TypeScript types from OpenAPI schema
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
-import openapiTS, { astToString } from 'openapi-typescript';
+import openapiTS, { astToString, type OpenAPI3 } from 'openapi-typescript';
 import {
   generateJsonContent,
   generateBaseSchemaContent,
@@ -22,7 +20,6 @@ import {
   extractPathOperations,
   generateOperationConstants,
   generateUrlHelpers,
-  generateOpenAiConnectorContent,
 } from './typegen/index.js';
 import { generatePathUtilsFile } from './typegen/paths/generate-path-utils.js';
 import { buildResponseMapData } from './typegen/response-map/build-response-map.js';
@@ -30,10 +27,6 @@ import { emitResponseValidators } from './typegen/response-map/emit-response-val
 import { emitRequestValidatorMap } from './typegen/validation/emit-request-validator-map.js';
 import { runAllCrossValidations } from './typegen/validation/cross-validate.js';
 import type { FileMap } from './typegen/extraction-types.js';
-import {
-  generateCompleteMcpTools,
-  type GeneratedMcpToolFiles,
-} from './typegen/mcp-tools/mcp-tool-generator.js';
 import { generateSearchFacetTypeModules } from './typegen/search/generate-search-facet-types.js';
 import { generateSearchFacetZodModules } from './typegen/search/generate-search-facet-zod.js';
 import { generateSearchRequestModules } from './typegen/search/generate-search-requests.js';
@@ -48,6 +41,8 @@ import { generateZeroHitFixtureModules } from './typegen/observability/generate-
 import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
 import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
 import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
+import { ensurePathsOnSchema } from './typegen-core-helpers.js';
+import { calculateSdkSchemaPath, outputGeneratedFiles } from './typegen-core-file-operations.js';
 
 /**
  * Create a map of filenames to their content
@@ -72,8 +67,6 @@ export function createFileMap(
     'response-map.ts': responseValidatorsContent,
     'validation/request-parameter-map.ts': requestValidatorContent,
     'routing/url-helpers.ts': generateUrlHelpers(),
-    // OpenAI connector helpers (code-generated module)
-    '../openai-connector/index.ts': generateOpenAiConnectorContent(),
   };
 
   const searchFacetTypes = generateSearchFacetTypeModules();
@@ -109,62 +102,7 @@ export function createFileMap(
 }
 
 /**
- * Write files to disk
- * Side effect function - separated from pure logic
- */
-function writeFiles(outDirectory: string, fileMap: FileMap): void {
-  for (const [filename, content] of Object.entries(fileMap)) {
-    const target = path.resolve(outDirectory, filename);
-    const dir = path.dirname(target);
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(target, content);
-  }
-}
-
-/**
- * Write MCP tools directory structure to disk
- */
-export function writeMcpToolsDirectory(
-  outDirectory: string,
-  mcpTools: GeneratedMcpToolFiles,
-): void {
-  const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
-  const contractDir = path.resolve(mcpToolsDir, 'contract');
-  const generatedDir = path.resolve(mcpToolsDir, 'generated');
-  const dataDir = path.resolve(generatedDir, 'data');
-  const dataToolsDir = path.resolve(dataDir, 'tools');
-  const aliasesDir = path.resolve(generatedDir, 'aliases');
-  const runtimeDir = path.resolve(generatedDir, 'runtime');
-
-  fs.mkdirSync(contractDir, { recursive: true });
-  fs.mkdirSync(dataToolsDir, { recursive: true });
-  fs.mkdirSync(aliasesDir, { recursive: true });
-  fs.mkdirSync(runtimeDir, { recursive: true });
-
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools.index);
-
-  for (const [filename, content] of Object.entries(mcpTools.contract)) {
-    fs.writeFileSync(path.resolve(contractDir, filename), content);
-  }
-
-  fs.writeFileSync(path.resolve(dataDir, 'definitions.ts'), mcpTools.data['definitions.ts']);
-  fs.writeFileSync(path.resolve(dataDir, 'index.ts'), mcpTools.data['index.ts']);
-  for (const [filename, content] of Object.entries(mcpTools.data.tools)) {
-    fs.writeFileSync(path.resolve(dataToolsDir, filename), content);
-  }
-
-  for (const [filename, content] of Object.entries(mcpTools.aliases)) {
-    fs.writeFileSync(path.resolve(aliasesDir, filename), content);
-  }
-
-  for (const [filename, content] of Object.entries(mcpTools.runtime)) {
-    fs.writeFileSync(path.resolve(runtimeDir, filename), content);
-  }
-}
-
-/**
  * Generate path parameters file content
- * Pure function - no side effects
  */
 export function generatePathParametersContent(
   schema: OpenAPIObject,
@@ -198,17 +136,10 @@ export async function generateSchemaArtifacts(
   baseSchema: OpenAPIObject,
   sdkSchema: OpenAPIObject,
   outDirectory: string,
-  options: { generateMcpTools?: boolean } = {},
 ): Promise<void> {
-  fs.mkdirSync(outDirectory, { recursive: true });
-
-  const sdkSchemaPath = path.resolve(outDirectory, 'api-schema-sdk.json');
-  const sdkSchemaContent = generateJsonContent(sdkSchema);
-  fs.writeFileSync(sdkSchemaPath, sdkSchemaContent);
-
   // Generate TypeScript types from original schema
-  const schemaUrl = new URL(`file://${sdkSchemaPath}`);
-  const ast = await openapiTS(schemaUrl);
+  const sdkSchemaPath = calculateSdkSchemaPath(outDirectory);
+  const ast = await openapiTS(sdkSchema as unknown as OpenAPI3);
   const tsTypesContent = postProcessTypesSource(astToString(ast));
 
   // Extract path parameters and valid combinations from original schema
@@ -244,25 +175,5 @@ export async function generateSchemaArtifacts(
     requestValidatorContent,
   );
 
-  // Write all files (side effect)
-  writeFiles(outDirectory, fileMap);
-
-  // Generate and write MCP tools if requested
-  // TODO: we always want the mcp tools, remove the conditional and the option
-  if (options.generateMcpTools) {
-    const mcpTools = generateCompleteMcpTools(sdkSchema);
-    writeMcpToolsDirectory(outDirectory, mcpTools);
-  }
-}
-
-type SchemaWithPaths = Omit<OpenAPIObject, 'paths'> & {
-  paths: NonNullable<OpenAPIObject['paths']>;
-};
-
-function ensurePathsOnSchema(schema: OpenAPIObject): SchemaWithPaths {
-  const { paths, ...rest } = schema;
-  if (paths) {
-    return { ...rest, paths };
-  }
-  return { ...rest, paths: {} };
+  outputGeneratedFiles(outDirectory, fileMap, sdkSchema, sdkSchemaPath);
 }

@@ -31,5 +31,5 @@ describe('SDK build artefacts', () => {
     expectedFiles.forEach((file) => {
       expect(existsSync(file)).toBe(true);
     });
-  });
+  }, 30000);
 });

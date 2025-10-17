@@ -17,7 +17,9 @@ describe('generateCompleteMcpTools (descriptor schema layering)', () => {
       "import type { ToolOperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
     );
     expect(aliasesFile).toContain('type ToolDescriptorInvocation<TDescriptor> =');
-    expect(output.runtime['lib.ts']).toContain('import { toolNames');
+    expect(output.runtime['lib.ts']).toContain(
+      "import {\n  toolNames,\n  getToolFromToolName,\n  getToolNameFromOperationId,\n  isToolName,\n  type ToolDescriptorForName,\n  type ToolDescriptorForOperationId,\n  type ToolName,\n  type ToolOperationId,\n} from '../data/definitions.js';",
+    );
     expect(output.index).toContain('generated/data/index.js');
   });
 

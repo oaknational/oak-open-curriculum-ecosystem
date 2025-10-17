@@ -10,10 +10,12 @@ describe('emitIndex (invoke wrapper emission)', () => {
     const operation: OperationObject = { responses: {} };
     const code = emitIndex(toolName, path, method, operation);
 
-    expect(code).toContain('const responseDescriptor = getDescriptorSchemaForEndpoint');
-    expect(code).toContain("import type { ToolDescriptor } from '../definitions';");
+    expect(code).toContain(
+      "const responseDescriptor = getDescriptorSchemaForEndpoint('get', '/lessons/{lesson}/transcript');",
+    );
+    expect(code).toContain('export const getLessonsTranscript = {');
     expect(code).toContain('toolOutputJsonSchema: responseDescriptor.json');
-    expect(code).not.toContain('outputSchema: responseDescriptor.json');
     expect(code).toContain('zodOutputSchema: responseDescriptor.zod');
+    expect(code).toContain('validateOutput: (data: unknown) => {');
   });
 });

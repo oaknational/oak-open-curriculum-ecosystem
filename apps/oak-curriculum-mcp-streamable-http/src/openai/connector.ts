@@ -9,7 +9,6 @@ import type {
 import {
   createOakPathBasedClient,
   executeToolCall,
-  executeOpenAiToolCall,
   createUniversalToolExecutor,
   isUniversalToolName,
   listUniversalTools,
@@ -69,7 +68,6 @@ export function registerOpenAiConnectorHandlers(server: Server): void {
     const client = createOakPathBasedClient(apiKey);
     const executor = createUniversalToolExecutor({
       executeMcpTool: (toolName, toolArgs) => executeToolCall(toolName, toolArgs, client),
-      executeOpenAiTool: (toolName, toolArgs) => executeOpenAiToolCall(toolName, toolArgs, client),
     });
 
     try {

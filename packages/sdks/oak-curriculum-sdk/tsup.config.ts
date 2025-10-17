@@ -46,7 +46,6 @@ export default defineConfig({
     'src/types/generated/zod/search/output/index.ts',
     'src/types/generated/zod/search/output/sequence-facets.ts',
     'src/types/generated/zod/curriculumZodSchemas.ts',
-    'src/types/generated/openai-connector/index.ts',
     'src/validation/index.ts',
     'src/validation/request-validators.ts',
     'src/validation/curriculum-response-validators.ts',

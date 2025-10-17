@@ -41,7 +41,6 @@ export { generateValidPathsByParameters } from '../typegen-writers.js';
 export { extractPathParameters } from '../typegen-extraction.js';
 export { generateCompleteMcpTools } from './mcp-tools/index.js';
 export { generateUrlHelpers } from './routing/generate-url-helpers.js';
-export { generateOpenAiConnectorContent } from './openai/generate-openai-connector.js';
 export { generateSearchRequestModules } from './search/generate-search-requests.js';
 export { generateSearchResponseModules } from './search/generate-search-responses.js';
 export { generateSearchSuggestionModules } from './search/generate-search-suggestions.js';

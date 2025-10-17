@@ -56,10 +56,10 @@ interface ResponseInfo {
 }
 
 function isReferenceObject(value: unknown): value is ReferenceObject {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value) || !('$ref' in value)) {
     return false;
   }
-  return typeof (value as { $ref?: unknown }).$ref === 'string';
+  return typeof value.$ref === 'string';
 }
 
 function isSchemaObject(value: unknown): value is SchemaObject {
@@ -79,12 +79,8 @@ function cloneSchema(schema: SchemaObject): SchemaObject {
 
 function ensureInlineMetadata(schema: SchemaObject, opId: string, status: string): SchemaObject {
   const next = cloneSchema(schema);
-  if (!next.type) {
-    next.type = 'object';
-  }
-  if (!next.title) {
-    next.title = `${opId} ${status} response`;
-  }
+  next.type ??= 'object';
+  next.title ??= `${opId} ${status} response`;
   return next;
 }
 

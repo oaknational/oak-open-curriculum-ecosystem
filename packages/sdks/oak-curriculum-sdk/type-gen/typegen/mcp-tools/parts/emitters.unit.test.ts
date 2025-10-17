@@ -51,7 +51,7 @@ describe('emitters', () => {
     expect(out).not.toContain('import { getDescriptorSchemaForEndpoint }');
     expect(out).toContain('const responseDescriptor = getDescriptorSchemaForEndpoint');
     expect(out).toContain('export const getPetsId = {');
-    expect(out).toContain('invoke: async (client: OakApiPathBasedClient, _params: unknown) => {');
+    expect(out).toContain('invoke: async (client: OakApiPathBasedClient, args: ToolArgs) => {');
     expect(out).toContain('toolOutputJsonSchema: responseDescriptor.json');
     expect(out).toContain('zodOutputSchema: responseDescriptor.zod');
   });

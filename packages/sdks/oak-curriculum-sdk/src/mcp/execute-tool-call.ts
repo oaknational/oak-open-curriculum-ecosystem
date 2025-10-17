@@ -16,6 +16,8 @@ import type { OakApiPathBasedClient } from '../client/index.js';
 import {
   getToolFromToolName,
   isToolName,
+  type ToolDescriptorForName,
+  type ToolArgsForName,
   type ToolName,
 } from '../types/generated/api-schema/mcp-tools/index.js';
 
@@ -64,6 +66,9 @@ export type ToolExecutionResult =
   | { readonly data: unknown; readonly error?: never }
   | { readonly data?: never; readonly error: McpToolError | McpParameterError };
 
+type ToolArgsOfDescriptor<TDescriptor extends ToolDescriptorForName<ToolName>> =
+  TDescriptor extends ToolDescriptorForName<infer TName> ? ToolArgsForName<TName> : never;
+
 /**
  * Ultra-thin executor - just validation and delegation to embedded executor
  */
@@ -110,22 +115,26 @@ export async function executeToolCall(
   }
 
   const toolName: ToolName = maybeToolName;
-  const tool = getToolFromToolName(toolName);
+  return executeDescriptorForName(toolName, maybeParams, client);
+}
 
-  const validation = tool.toolZodSchema.safeParse(maybeParams);
+async function executeDescriptorForName<TName extends ToolName>(
+  toolName: TName,
+  params: unknown,
+  client: OakApiPathBasedClient,
+): Promise<ToolExecutionResult> {
+  const tool: ToolDescriptorForName<TName> = getToolFromToolName(toolName);
+  const validation = tool.toolZodSchema.safeParse(params);
   if (!validation.success) {
-    const message = tool.describeToolArgs ? tool.describeToolArgs() : validation.error.message;
+    const message = tool.describeToolArgs();
     return {
       error: new McpParameterError(message, toolName, undefined, undefined),
     };
   }
 
   try {
-    const invoke = tool.invoke as (
-      client: OakApiPathBasedClient,
-      args: typeof validation.data,
-    ) => unknown;
-    const response = await invoke(client, validation.data);
+    const args: ToolArgsOfDescriptor<typeof tool> = validation.data;
+    const response = await tool.invoke(client, args);
     const outputValidation = tool.validateOutput(response);
     if (!outputValidation.ok) {
       return {

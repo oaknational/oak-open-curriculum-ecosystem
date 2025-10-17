@@ -28,30 +28,11 @@ export interface ExtractedOperation {
   responses?: ResponsesObject;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-function getPropertyValue(obj: unknown, key: string): unknown {
-  if (!isRecord(obj)) {
-    return undefined;
-  }
-  const descriptor = Object.getOwnPropertyDescriptor(obj, key);
-  return descriptor?.value;
-}
-
 function isParameterObject(param: unknown): param is ParameterObject {
-  if (!isRecord(param)) {
+  if (!param || typeof param !== 'object' || !('name' in param) || !('in' in param)) {
     return false;
   }
-  const name = getPropertyValue(param, 'name');
-  const location = getPropertyValue(param, 'in');
-  if (typeof name !== 'string' || typeof location !== 'string') {
-    return false;
-  }
-  return (
-    location === 'path' || location === 'query' || location === 'header' || location === 'cookie'
-  );
+  return typeof param.name === 'string' && typeof param.in === 'string';
 }
 
 /**
@@ -70,10 +51,10 @@ function extractParameter(param: ParameterObject): ExtractedParameter {
 }
 
 function isOperationObject(op: unknown): op is OperationObject {
-  if (!isRecord(op)) {
+  if (!op || typeof op !== 'object' || !('operationId' in op) || !('responses' in op)) {
     return false;
   }
-  return isRecord(getPropertyValue(op, 'responses'));
+  return typeof op.operationId === 'string' && typeof op.responses === 'object';
 }
 
 /**
@@ -95,20 +76,29 @@ function extractOperationParameters(operation: OperationObject): ExtractedParame
 
 /**
  * Extract operations for a single path
+ *
+ * @deprecated replace with a helper function that uses the real types.
  */
 function extractOperationsForPath(
   path: string,
+  // TODO this is not unknown, it is a path item from an OpenAPI schema
   pathItem: unknown,
+  // TODO these are not unknown, they are http methods, a known constant list and type
   httpMethods: readonly string[],
 ): ExtractedOperation[] {
-  if (!pathItem || typeof pathItem !== 'object') {
+  if (
+    !pathItem ||
+    typeof pathItem !== 'object' ||
+    !('parameters' in pathItem) ||
+    !('responses' in pathItem)
+  ) {
     return [];
   }
 
   const operations: ExtractedOperation[] = [];
 
   for (const method of httpMethods) {
-    const operation = getPropertyValue(pathItem, method);
+    const operation = pathItem[method];
     if (!isOperationObject(operation)) {
       continue;
     }

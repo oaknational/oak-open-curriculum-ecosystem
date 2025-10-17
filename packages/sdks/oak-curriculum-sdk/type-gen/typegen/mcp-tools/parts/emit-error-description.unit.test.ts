@@ -12,13 +12,14 @@ describe('emitErrorDescription (compile-time literal emitter)', () => {
       },
     );
 
-    expect(code).toContain('export const describeToolArgs = (): string => {');
+    expect(code).toContain("const toolArgsDescription = '");
+    expect(code).toContain('export const describeToolArgs = () => toolArgsDescription;');
     expect(code).toContain('Invalid request parameters. Please match the following schema:');
     expect(code).toContain('Schema:');
     expect(code).toContain('Required:');
     expect(code).not.toContain('getValidRequestParamsDescription');
 
-    expect(code.trim().endsWith('};')).toBe(true);
+    expect(code.trim().endsWith(';')).toBe(true);
 
     expect(code).toContain('"lesson"');
     expect(code).toContain('"q"');

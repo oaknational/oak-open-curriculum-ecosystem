@@ -18,6 +18,14 @@ function createStubExecution(toolName: unknown): ToolExecutionResult {
       ],
     };
   }
+  if (toolName === 'get-search-transcripts') {
+    return {
+      data: [
+        { transcriptSlug: 'stub-transcript-1', transcriptTitle: 'Stub Transcript 1' },
+        { transcriptSlug: 'stub-transcript-2', transcriptTitle: 'Stub Transcript 2' },
+      ],
+    };
+  }
   if (toolName === 'get-sequences-units') {
     return {
       data: [
@@ -48,7 +56,6 @@ export function resolveToolExecutors(): UniversalToolExecutors {
     return {};
   }
   return {
-    executeMcpTool: (name) => Promise.resolve(createStubExecution(name)),
-    executeOpenAiTool: () => Promise.resolve({ result: 'stubbed' }),
+    executeMcpTool: (name, _args) => Promise.resolve(createStubExecution(name)),
   };
 }

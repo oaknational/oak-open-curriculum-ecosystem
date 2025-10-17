@@ -1,7 +1,3 @@
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
 interface ParameterDefinition {
   readonly name: string;
   readonly schema: string;
@@ -14,28 +10,28 @@ interface EndpointDefinition {
 }
 
 function isParameterDefinition(value: unknown): value is ParameterDefinition {
-  if (!isRecord(value)) {
+  if (!value || typeof value !== 'object' || !('name' in value) || !('schema' in value)) {
     return false;
   }
-  const { name, schema } = value;
-  return typeof name === 'string' && typeof schema === 'string';
+  return typeof value.name === 'string' && typeof value.schema === 'string';
 }
 
 function isEndpointDefinition(value: unknown): value is EndpointDefinition {
-  if (!isRecord(value)) {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    !('method' in value) ||
+    !('path' in value) ||
+    !('parameters' in value)
+  ) {
     return false;
   }
-  const { method, path, parameters } = value;
-  if (typeof method !== 'string' || typeof path !== 'string') {
-    return false;
-  }
-  if (parameters === undefined) {
-    return true;
-  }
-  if (!Array.isArray(parameters)) {
-    return false;
-  }
-  return parameters.every(isParameterDefinition);
+  return (
+    typeof value.method === 'string' &&
+    typeof value.path === 'string' &&
+    (value.parameters === undefined ||
+      (Array.isArray(value.parameters) && value.parameters.every(isParameterDefinition)))
+  );
 }
 
 function indentMultiline(value: string, spaces: number): string {
@@ -69,7 +65,7 @@ export function emitRequestValidatorMap(rawEndpoints: readonly unknown[]): strin
 
   const endpoints = rawEndpoints.map((endpoint, index) => {
     if (!isEndpointDefinition(endpoint)) {
-      throw new TypeError(`Invalid endpoint definition at index ${index}.`);
+      throw new TypeError(`Invalid endpoint definition at index ${String(index)}.`);
     }
     return endpoint;
   });
