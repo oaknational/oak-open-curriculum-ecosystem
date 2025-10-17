@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import type {
   KeyStage,
   SearchLessonSummary,
@@ -16,11 +17,11 @@ import {
   normaliseYears,
 } from './document-transforms';
 
-const mathsSubject = 'maths' as SearchSubjectSlug;
-const ks4 = 'ks4' as KeyStage;
+const mathsSubject: SearchSubjectSlug = 'maths';
+const ks4: KeyStage = 'ks4';
 
 function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
-  return {
+  const base = {
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
     yearSlug: 'year-10',
@@ -58,12 +59,12 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
       },
     ],
     canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
-    ...overrides,
-  };
+  } satisfies Partial<SearchUnitSummary>;
+  return unitSummarySchema.parse({ ...base, ...overrides });
 }
 
 function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
-  return {
+  const base = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
@@ -95,8 +96,8 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-    ...overrides,
-  };
+  } satisfies Partial<SearchLessonSummary>;
+  return lessonSummarySchema.parse({ ...base, ...overrides });
 }
 
 describe('normaliseYears', () => {

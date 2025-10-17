@@ -2,6 +2,10 @@
 
 _All work must uphold the Cardinal Rule: every static structure is generated from the Open Curriculum OpenAPI schema, with the SDK acting as the single source of truth. Sequencing follows `.agent/directives-and-memory/rules.md` and `docs/agent-guidance/testing-strategy.md`. Further guidance is available in `.agent/directives-and-memory/AGENT.md`._
 
+> **Reminder:** run every quality gate across the full workspace without package filters so cross-package regressions surface early. Pair each change with refreshed tests so the safer behaviour is locked in and future regressions are caught automatically.
+
+> **Companion notes:** detailed sanitisation status, lint fallout, and test updates are tracked in `.agent/plans/semantic-search/context.md`. Keep this plan lean; record granular progress there and surface only the key outcomes here.
+
 ## Recovery Plan
 
 1. **Stabilise canonical MCP helper surface**
@@ -141,7 +145,7 @@ _All work must uphold the Cardinal Rule: every static structure is generated fro
 
 ## Quality Gate Visibility Sequence
 
-_Run these commands from the repo root with zero edits between them. Each failure informs the recovery steps above; log outcomes in this plan document._
+_Run these commands from the repo root with zero edits between them and **without** package filters. Each failure informs the recovery steps above; log outcomes in this plan document._
 
 1. `pnpm install` — verify deterministic dependency graph.
 2. `pnpm clean` — surface reliance on stale artefacts.
@@ -166,10 +170,12 @@ _Run these commands from the repo root with zero edits between them. Each failur
 - **Update 2025-10-20 (Codex AM):** `pnpm type-gen` ✅ (post-layer-rename). `pnpm type-check --filter @oaknational/oak-curriculum-sdk` ❌ — descriptor invocations still collapse to the intersection of all tool arguments; response-map fixtures also require updates to satisfy stricter types. No further commands executed until the invocation narrowing is in place.
 - **Update 2025-10-20 (Codex PM):** `pnpm type-gen` ✅, `pnpm type-check --filter @oaknational/oak-curriculum-sdk` ✅ after introducing typed invocation helpers and normalising response-map fixtures. Blocking issues remain only in the semantic-search workspace (tracked under Step 4).
 - **Update 2025-10-21 (Codex):** Added generator output for search index documents and doc re-exports; `pnpm type-gen` ✅ regenerated the surface without manual types. `pnpm build --filter @oaknational/oak-curriculum-sdk` ✅ refreshed dist outputs with the new exports. `pnpm type-check --filter @oaknational/open-curriculum-semantic-search` ✅ after adopting generated search guards and eliminating implicit `any` diagnostics in indexing utilities.
+- **Action 2025-10-21 (Codex):** Re-run the quality gate sequence (`pnpm build`, `pnpm type-check`, `pnpm test`, etc.) unfiltered to validate cross-workspace behaviour now that semantic search types are generated.
+- **2025-10-21 (Codex PM):** First unfiltered `pnpm build` attempt surfaced extensive `@typescript-eslint/no-unsafe-*` violations across the semantic search indexing code (document transformers, bulk helpers, sandbox fixtures, API rebuild route, and unit tests). Introduced `document-transform-helpers.ts` and started routing callers through sanitised views, but the refactor is partial, and the existing tests still model the unsafe shapes. Build remains red until the helpers are fully adopted **and** the tests are updated to assert the safer behaviour.
 - **Next checkpoints:**
   - [x] Step 1 — Generator templates emit single, correctly typed descriptors **and** runtime invocations preserve literal tool names; documented invocation strategy in code comments and plan; `pnpm type-gen`/`pnpm type-check --filter @oaknational/oak-curriculum-sdk` green.
-  - [ ] Step 2 — `pnpm build --filter @oaknational/oak-curriculum-sdk` and targeted executor tests pass without casts.
-  - [ ] Step 3 — `pnpm test --filter @oaknational/oak-curriculum-sdk` green with behavioural generator tests.
-  - [x] Step 4 — Search workspace adopts generated search types, implicit `any` diagnostics removed; `pnpm type-check --filter @oaknational/open-curriculum-semantic-search` green.
+  - [ ] Step 2 — `pnpm build` (unfiltered, full workspace) and targeted executor tests pass without casts. _Current blockers:_ semantic search helpers/tests still consume raw OpenAPI data; complete the normalisation rollout and update fixtures before re-running.
+  - [ ] Step 3 — `pnpm test` (unfiltered, full workspace) green with behavioural generator tests. _Action:_ expand test coverage to reflect the sanitised data flow so the improved behaviour is locked in.
+  - [x] Step 4 — Search workspace adopts generated search types, implicit `any` diagnostics removed; filtered verification with `pnpm type-check --filter @oaknational/open-curriculum-semantic-search` green (full unfiltered gate tracked under Step 2/3).
   - [ ] Step 5 — Documentation updated; `pnpm lint -- --fix` and `pnpm markdownlint:root` green.
   - [ ] Step 6 — Full workspace gates (`pnpm build`, `pnpm type-check`, `pnpm test`, `pnpm test:ui`, `pnpm test:e2e`, `pnpm dev:smoke`) rerun and logged.

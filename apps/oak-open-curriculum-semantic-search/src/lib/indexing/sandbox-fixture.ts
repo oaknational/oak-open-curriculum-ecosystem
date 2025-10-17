@@ -46,21 +46,22 @@ function createFixtureClient(data: FixtureData): OakClient {
       if (!summary) {
         throw new Error(`Missing lesson summary for ${lessonSlug}`);
       }
-      return structuredClone(summary);
+      return summary;
     },
     async getUnitSummary(unitSlug) {
       const summary = data.unitSummaries.get(unitSlug);
       if (!summary) {
         throw new Error(`Missing unit summary for ${unitSlug}`);
       }
-      return structuredClone(summary);
+      return summary;
     },
     async getSubjectSequences(subject) {
       const sequences = data.subjectSequences.get(subject) ?? [];
-      return structuredClone(sequences);
+      return sequences;
     },
     async getSequenceUnits(sequenceSlug) {
-      return structuredClone(data.sequenceUnits.get(sequenceSlug) ?? []);
+      const units = data.sequenceUnits.get(sequenceSlug);
+      return units ?? [];
     },
   };
 }

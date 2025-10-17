@@ -1,5 +1,6 @@
 import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
 import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import { extractUnitLessons } from './document-transforms';
 
 export interface SequenceFacetSource {
   sequenceSlug: string;
@@ -36,7 +37,15 @@ interface SequenceKeyStageEntryRecord {
 }
 
 function isSequenceKeyStageEntryRecord(value: unknown): value is SequenceKeyStageEntryRecord {
-  return isUnknownObject(value) && typeof value.keyStageSlug === 'string';
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  const slug = safeString(Reflect.get(value, 'keyStageSlug'));
+  if (!slug) {
+    return false;
+  }
+  const title = Reflect.get(value, 'keyStageTitle');
+  return typeof title === 'string' || typeof title === 'undefined';
 }
 
 export function createSequenceFacetDocuments({
@@ -137,7 +146,7 @@ function collectUnitDetails(
     }
     collectedSlugs.push(slug);
     titles.push(summary.unitTitle);
-    const lessons = Array.isArray(summary.unitLessons) ? summary.unitLessons : [];
+    const lessons = extractUnitLessons(summary.unitLessons);
     lessonCount += lessons.length;
   }
 
@@ -153,27 +162,22 @@ export function extractSequenceFacetSource(
   payload: unknown,
 ): SequenceFacetSource {
   const unitSlugs = new Set<string>();
-  const queue: unknown[] = [];
-  if (isUnknownArray(payload)) {
-    payload.forEach((entry: unknown) => {
-      queue.push(entry);
-    });
-  }
+  const queue: unknown[] = [...safeArray(payload)];
 
   while (queue.length > 0) {
     const current = queue.shift();
-    if (!isUnknownObject(current)) {
+    if (typeof current !== 'object' || current === null) {
       continue;
     }
 
-    const maybeUnits = current.units;
-    if (Array.isArray(maybeUnits)) {
-      queue.push(...maybeUnits);
+    const units = getNestedArray(current, 'units');
+    if (units.length > 0) {
+      queue.push(...units);
     }
 
-    const maybeTiers = current.tiers;
-    if (Array.isArray(maybeTiers)) {
-      queue.push(...maybeTiers);
+    const tiers = getNestedArray(current, 'tiers');
+    if (tiers.length > 0) {
+      queue.push(...tiers);
     }
 
     const slug = getString(current, 'unitSlug');
@@ -188,19 +192,20 @@ export function extractSequenceFacetSource(
   };
 }
 
-interface UnknownObject {
-  [key: string]: unknown;
+function safeArray(value: unknown): readonly unknown[] {
+  return Array.isArray(value) ? value : [];
 }
 
-function isUnknownArray(value: unknown): value is unknown[] {
-  return Array.isArray(value);
-}
-
-function isUnknownObject(value: unknown): value is UnknownObject {
-  return typeof value === 'object' && value !== null;
-}
-
-function getString(record: UnknownObject, key: string): string | undefined {
-  const value = record[key];
+function safeString(value: unknown): string | undefined {
   return typeof value === 'string' && value.length > 0 ? value : undefined;
+}
+
+function getNestedArray(value: object, key: string): readonly unknown[] {
+  const candidate: unknown = Reflect.get(value, key);
+  return Array.isArray(candidate) ? candidate : [];
+}
+
+function getString(value: object, key: string): string | undefined {
+  const candidate: unknown = Reflect.get(value, key);
+  return safeString(candidate);
 }

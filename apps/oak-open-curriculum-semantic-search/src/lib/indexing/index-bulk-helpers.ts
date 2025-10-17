@@ -5,12 +5,14 @@ import type {
   SearchSubjectSlug,
   SearchUnitSummary,
 } from '../../types/oak';
-import { isLessonSummary, isUnitSummary } from '../../types/oak';
+import { isLessonSummary, isTranscriptResponse, isUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import {
   createLessonDocument,
   createRollupDocument,
   createUnitDocument,
+  extractSequenceIds,
+  extractUnitLessons,
   normaliseYears,
 } from './document-transforms';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
@@ -21,8 +23,6 @@ export interface LessonGroup {
   unitTitle: string;
   lessons: { lessonSlug: string; lessonTitle: string }[];
 }
-
-type UnitThread = NonNullable<SearchUnitSummary['threads']>[number];
 
 export async function buildUnitDocuments(
   client: OakClient,
@@ -35,10 +35,11 @@ export async function buildUnitDocuments(
   const unitOps: unknown[] = [];
 
   for (const unit of units) {
-    const summary = await client.getUnitSummary(unit.unitSlug);
-    if (!isUnitSummary(summary)) {
+    const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
+    if (!isUnitSummary(summaryCandidate)) {
       throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
     }
+    const summary = summaryCandidate;
     unitSummaries.set(unit.unitSlug, summary);
     unitOps.push(
       {
@@ -161,13 +162,17 @@ function createLessonBuildContext(
 
   ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
 
+  const normalisedLessons = extractUnitLessons(unitSummary.unitLessons);
+  const lessonCount = normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
+  const sequenceIds = extractUnitSequenceIds(unitSummary);
+
   return {
     unitCanonicalUrl,
     subject,
     keyStage,
     years: normaliseYears(unitSummary.year, unitSummary.yearSlug),
-    unitSequenceIds: extractUnitSequenceIds(unitSummary),
-    lessonCount: unitSummary.unitLessons?.length ?? group.lessons.length,
+    unitSequenceIds: sequenceIds,
+    lessonCount,
   };
 }
 
@@ -202,27 +207,26 @@ async function buildLessonDocEntry(
 }
 
 function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
-  return summary.threads
-    ?.map((thread: UnitThread) => thread.slug)
-    .filter(
-      (slug: UnitThread['slug']): slug is string => typeof slug === 'string' && slug.length > 0,
-    );
+  return extractSequenceIds(summary.threads);
 }
 
 async function fetchLessonMaterials(
   client: OakClient,
   lessonSlug: string,
 ): Promise<{ transcript: string; summary: SearchLessonSummary }> {
-  const [transcript, summary] = await Promise.all([
+  const [transcriptResponse, summaryCandidate] = await Promise.all([
     client.getLessonTranscript(lessonSlug),
     client.getLessonSummary(lessonSlug),
   ]);
 
-  if (!isLessonSummary(summary)) {
+  if (!isLessonSummary(summaryCandidate)) {
     throw new Error(`Unexpected lesson summary response for ${lessonSlug}`);
   }
+  if (!isTranscriptResponse(transcriptResponse)) {
+    throw new Error(`Unexpected lesson transcript response for ${lessonSlug}`);
+  }
 
-  return { transcript: transcript.transcript, summary };
+  return { transcript: transcriptResponse.transcript, summary: summaryCandidate };
 }
 
 function ensureUnitSummaryMatchesContext(

@@ -9,6 +9,7 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
   type CallToolRequest,
+  type CallToolResult,
   type TextContent,
 } from '@modelcontextprotocol/sdk/types.js';
 import {
@@ -35,7 +36,7 @@ function storeDescriptor<TName extends ToolName>(
   store[name] = descriptor;
 }
 
-interface InvocationResult { readonly content: readonly TextContent[]; readonly isError?: true }
+type InvocationResult = CallToolResult;
 
 function textContent(text: string): TextContent {
   return { type: 'text', text };

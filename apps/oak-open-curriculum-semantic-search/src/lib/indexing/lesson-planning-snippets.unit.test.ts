@@ -1,27 +1,28 @@
 import { describe, expect, it } from 'vitest';
+import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import type { SearchLessonSummary } from '../../types/oak';
 
 function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
-  return {
+  const base = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
-    subjectSlug: 'maths',
-    subjectTitle: 'Mathematics',
+    subjectSlug: 'history',
+    subjectTitle: 'History',
     keyStageSlug: 'ks4',
     keyStageTitle: 'Key Stage 4',
     lessonKeywords: [],
     keyLearningPoints: [],
     misconceptionsAndCommonMistakes: [],
-    pupilLessonOutcome: undefined,
+    pupilLessonOutcome: 'Learners can describe key ideas.',
     teacherTips: [],
-    contentGuidance: null,
-    supervisionLevel: null,
+    contentGuidance: [],
+    supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-    ...overrides,
-  } as SearchLessonSummary;
+  } satisfies Partial<SearchLessonSummary>;
+  return lessonSummarySchema.parse({ ...base, ...overrides });
 }
 
 describe('selectLessonPlanningSnippet', () => {

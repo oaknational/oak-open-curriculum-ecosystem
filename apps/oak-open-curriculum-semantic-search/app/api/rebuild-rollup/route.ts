@@ -3,7 +3,12 @@ import { env } from '../../../src/lib/env';
 import { esSearch, esBulk } from '../../../src/lib/elastic-http';
 import type { SearchUnitRollupDoc, SearchUnitsIndexDoc } from '../../../src/types/oak';
 import { createOakSdkClient } from '../../../src/adapters/oak-adapter-sdk';
-import { isLessonSummary, isUnitSummary } from '../../../src/types/oak';
+import {
+  isLessonSummary,
+  isSearchUnitsIndexDoc,
+  isTranscriptResponse,
+  isUnitSummary,
+} from '../../../src/types/oak';
 import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import { createRollupDocument } from '../../../src/lib/indexing/document-transforms';
 import { selectLessonPlanningSnippet } from '../../../src/lib/indexing/lesson-planning-snippets';
@@ -69,8 +74,11 @@ async function rollupAllUnits(
   let bulkOps: unknown[] = [];
   const unitsRes = await fetchAllUnits(size);
   for (const uh of unitsRes.hits.hits) {
-    const u = uh._source;
-    const roll = await rollupUnit(client, u);
+    const source: unknown = uh._source;
+    if (!isSearchUnitsIndexDoc(source)) {
+      throw new Error('Unexpected unit document in search results');
+    }
+    const roll = await rollupUnit(client, source);
     bulkOps.push(
       {
         index: {
@@ -93,25 +101,27 @@ async function rollupUnit(
   client: OakClient,
   unitDoc: SearchUnitsIndexDoc,
 ): Promise<SearchUnitRollupDoc> {
-  const unitSummary = await client.getUnitSummary(unitDoc.unit_slug);
-  if (!isUnitSummary(unitSummary)) {
+  const unitSummaryCandidate: unknown = await client.getUnitSummary(unitDoc.unit_slug);
+  if (!isUnitSummary(unitSummaryCandidate)) {
     throw new Error(`Unexpected unit summary response for ${unitDoc.unit_slug}`);
   }
-
-  unitSummarySchema.parse(unitSummary);
+  const unitSummary = unitSummarySchema.parse(unitSummaryCandidate);
 
   const snippets: string[] = [];
   for (const lessonId of unitDoc.lesson_ids) {
-    const lessonSummary = await client.getLessonSummary(lessonId);
-    if (!isLessonSummary(lessonSummary)) {
+    const lessonSummaryCandidate: unknown = await client.getLessonSummary(lessonId);
+    if (!isLessonSummary(lessonSummaryCandidate)) {
       throw new Error(`Unexpected lesson summary response for ${lessonId}`);
     }
-    lessonSummarySchema.parse(lessonSummary);
-    const transcriptRes = await client.getLessonTranscript(lessonId);
+    const lessonSummary = lessonSummarySchema.parse(lessonSummaryCandidate);
+    const transcriptResponse: unknown = await client.getLessonTranscript(lessonId);
+    if (!isTranscriptResponse(transcriptResponse)) {
+      throw new Error(`Unexpected transcript response for ${lessonId}`);
+    }
     snippets.push(
       selectLessonPlanningSnippet({
         summary: lessonSummary,
-        transcript: transcriptRes.transcript,
+        transcript: transcriptResponse.transcript,
       }),
     );
   }
