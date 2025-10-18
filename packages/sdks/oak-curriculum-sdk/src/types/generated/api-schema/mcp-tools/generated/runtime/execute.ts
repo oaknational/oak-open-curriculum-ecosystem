@@ -29,7 +29,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-changelog'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -45,7 +45,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-changelog-latest'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -61,7 +61,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-key-stages'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -77,7 +77,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-key-stages-subject-assets'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -93,7 +93,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-key-stages-subject-lessons'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -109,7 +109,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-key-stages-subject-questions'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -125,7 +125,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-key-stages-subject-units'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -141,7 +141,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-lessons-assets'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -157,7 +157,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-lessons-assets-by-type'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -173,7 +173,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-lessons-quiz'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -189,7 +189,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-lessons-summary'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -205,7 +205,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-lessons-transcript'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -221,7 +221,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-rate-limit'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -237,7 +237,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-search-lessons'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -253,7 +253,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-search-transcripts'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -269,7 +269,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-sequences-assets'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -285,7 +285,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-sequences-questions'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -301,7 +301,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-sequences-units'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -317,7 +317,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-subject-detail'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -333,7 +333,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-subjects'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -349,7 +349,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-subjects-key-stages'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -365,7 +365,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-subjects-sequences'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -381,7 +381,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-subjects-years'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -397,7 +397,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-threads'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -413,7 +413,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-threads-units'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);
@@ -429,7 +429,7 @@ async function invokeToolByName<TName extends ToolName>(
       if (!parsed.success) {
         throw new TypeError(descriptor.describeToolArgs());
       }
-      const args: ToolArgsForName<'get-units-summary'> = parsed.data;
+      const args = parsed.data;
       const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
       const output = await descriptor.invoke(clientForInvoke, args);
       const validation = descriptor.validateOutput(output);

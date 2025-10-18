@@ -36,7 +36,7 @@ export function generateExecuteFile(toolNames: string[]): string {
         '      if (!parsed.success) {',
         '        throw new TypeError(descriptor.describeToolArgs());',
         '      }',
-        `      const args: ToolArgsForName<'${toolName}'> = parsed.data;`,
+        '      const args = parsed.data;',
         '      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];',
         '      const output = await descriptor.invoke(clientForInvoke, args);',
         '      const validation = descriptor.validateOutput(output);',

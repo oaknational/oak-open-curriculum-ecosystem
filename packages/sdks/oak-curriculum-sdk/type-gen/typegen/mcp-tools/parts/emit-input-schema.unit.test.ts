@@ -25,7 +25,7 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       q: { typePrimitive: 'string', valueConstraint: false, required: true },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
 
     expect(schema.type).toBe('object');
     expect(schema.additionalProperties).toBe(false);
@@ -57,7 +57,7 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       z: { typePrimitive: 'boolean[]', valueConstraint: false, required: false },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
 
     const paramsSchema = schema.properties.params;
     const pathSchema = paramsSchema.properties.path;
@@ -83,7 +83,7 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
 
     const querySchema = schema.properties.params.properties.query;
     expect(querySchema.properties.subject).toEqual({
@@ -112,7 +112,7 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta);
+    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
 
     const paramsSchema = schema.properties.params;
     const pathSchema = paramsSchema.properties.path;

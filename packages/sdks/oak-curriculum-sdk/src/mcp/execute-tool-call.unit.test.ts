@@ -3,7 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { McpParameterError, McpToolError, executeToolCall } from './execute-tool-call';
 import type { OakApiPathBasedClient } from '../client/index.js';
 
-type RateLimitArgs = { readonly params: Record<string, never> };
+interface RateLimitArgs {
+  readonly params: Record<string, never>;
+}
 
 function createRateLimitClient(impl: (args: RateLimitArgs) => unknown | Promise<unknown>): {
   readonly client: OakApiPathBasedClient;

@@ -10,20 +10,28 @@ const GENERATED_BANNER = [
   '',
 ].join('\n');
 
-const GENERATED_IMPORTS = [
-  "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
-  "import type { ToolDescriptor } from '../../contract/tool-descriptor.contract.js';",
-].join('\n');
+const GENERATED_IMPORTS =
+  "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';";
 
-const TOOL_TYPE_ALIASES = `export type ToolDescriptorForName<TName extends ToolName> = ToolEntryForName<TName>['descriptor'];
-type ToolDescriptorInstance<TName extends ToolName> = ToolDescriptorForName<TName>;
-export type ToolInvoke<TName extends ToolName> = ToolDescriptorInstance<TName>['invoke'];
-export type ToolClientForName<TName extends ToolName> =
-  ToolDescriptorInstance<TName> extends ToolDescriptor<TName, infer TClient, any, any> ? TClient : never;
-export type ToolArgsForName<TName extends ToolName> =
-  ToolDescriptorInstance<TName> extends ToolDescriptor<TName, any, infer TArgs, any> ? TArgs : never;
-export type ToolResultForName<TName extends ToolName> =
-  ToolDescriptorInstance<TName> extends ToolDescriptor<TName, any, any, infer TResult> ? Awaited<TResult> : never;
+const TOOL_TYPE_ALIASES = `type ToolDescriptorMap = { readonly [TName in ToolName]: ToolEntryForName<TName>['descriptor'] };
+type ToolInvokeParametersMap = {
+  readonly [TName in ToolName]: Parameters<ToolDescriptorMap[TName]['invoke']>;
+};
+type ToolInvokeMap = { readonly [TName in ToolName]: ToolDescriptorMap[TName]['invoke'] };
+type ToolClientMap = {
+  readonly [TName in ToolName]: ToolInvokeParametersMap[TName][0];
+};
+type ToolArgsMap = {
+  readonly [TName in ToolName]: ToolInvokeParametersMap[TName][1];
+};
+type ToolResultMap = {
+  readonly [TName in ToolName]: Awaited<ReturnType<ToolDescriptorMap[TName]['invoke']>>;
+};
+export type ToolDescriptorForName<TName extends ToolName> = ToolDescriptorMap[TName];
+export type ToolInvoke<TName extends ToolName> = ToolInvokeMap[TName];
+export type ToolClientForName<TName extends ToolName> = ToolClientMap[TName];
+export type ToolArgsForName<TName extends ToolName> = ToolArgsMap[TName];
+export type ToolResultForName<TName extends ToolName> = ToolResultMap[TName];
 export type ToolArgs<TName extends ToolName = ToolName> = ToolArgsForName<TName>;
 export type ToolClient<TName extends ToolName = ToolName> = ToolClientForName<TName>;
 export type ToolResult<TName extends ToolName> = ToolResultForName<TName>;

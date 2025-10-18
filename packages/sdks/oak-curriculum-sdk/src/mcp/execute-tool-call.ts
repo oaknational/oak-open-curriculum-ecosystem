@@ -32,7 +32,8 @@ export class McpToolError extends Error {
 }
 
 export class McpParameterError extends Error {
-  toolName: string;
+  readonly toolName: string;
+  readonly code: string;
   readonly pathParameterName?: string;
   readonly queryParameterName?: string;
 
@@ -41,13 +42,14 @@ export class McpParameterError extends Error {
     toolName: string,
     pathParameterName?: string,
     queryParameterName?: string,
-    options?: { cause?: Error },
+    options?: { cause?: Error; code?: string },
   ) {
     super(message, options);
     this.name = 'McpParameterError';
     this.toolName = toolName;
     this.pathParameterName = pathParameterName;
     this.queryParameterName = queryParameterName;
+    this.code = options?.code ?? 'PARAMETER_ERROR';
   }
 }
 
@@ -81,6 +83,7 @@ function mapErrorToResult(error: unknown, toolName: ToolName): ToolExecutionResu
     return {
       error: new McpParameterError(error.message, toolName, undefined, undefined, {
         cause: error,
+        code: 'PARAMETER_ERROR',
       }),
     };
   }

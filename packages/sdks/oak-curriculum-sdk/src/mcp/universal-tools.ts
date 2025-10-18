@@ -329,13 +329,13 @@ async function runSearchTool(
   deps: UniversalToolExecutorDependencies,
 ): Promise<CallToolResult> {
   const { q, keyStage, subject, unit } = normaliseSearchArgs(args);
-  const lessonsResult = await deps.executeMcpTool('get-search-lessons' as ToolName, {
+  const lessonsResult = await deps.executeMcpTool('get-search-lessons', {
     q,
     keyStage,
     subject,
     unit,
   });
-  const transcriptsResult = await deps.executeMcpTool('get-search-transcripts' as ToolName, {
+  const transcriptsResult = await deps.executeMcpTool('get-search-transcripts', {
     q,
   });
 
@@ -436,23 +436,21 @@ async function executeFetchByType(
   switch (type) {
     case 'lesson':
       return extractExecutionData(
-        await deps.executeMcpTool('get-lessons-summary' as ToolName, { lesson: slug }),
+        await deps.executeMcpTool('get-lessons-summary', { lesson: slug }),
       );
     case 'unit':
-      return extractExecutionData(
-        await deps.executeMcpTool('get-units-summary' as ToolName, { unit: slug }),
-      );
+      return extractExecutionData(await deps.executeMcpTool('get-units-summary', { unit: slug }));
     case 'subject':
       return extractExecutionData(
-        await deps.executeMcpTool('get-subject-detail' as ToolName, { subject: slug }),
+        await deps.executeMcpTool('get-subject-detail', { subject: slug }),
       );
     case 'sequence':
       return extractExecutionData(
-        await deps.executeMcpTool('get-sequences-units' as ToolName, { sequence: slug }),
+        await deps.executeMcpTool('get-sequences-units', { sequence: slug }),
       );
     case 'thread':
       return extractExecutionData(
-        await deps.executeMcpTool('get-threads-units' as ToolName, { threadSlug: slug }),
+        await deps.executeMcpTool('get-threads-units', { threadSlug: slug }),
       );
     default:
       return { ok: false, error: new TypeError(`Unsupported content type: ${String(type)}`) };
