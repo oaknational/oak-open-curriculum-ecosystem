@@ -32,7 +32,8 @@ export type JsonSchemaProperty =
   | JsonSchemaPropertyString
   | JsonSchemaPropertyNumber
   | JsonSchemaPropertyBoolean
-  | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>;
+  | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>
+  | JsonSchemaObject;
 
 export interface JsonSchemaObject {
   readonly type: 'object';
@@ -118,30 +119,66 @@ export function buildInputSchemaObject(
   pathParams: ParamMetadataMap,
   queryParams: ParamMetadataMap,
 ): JsonSchemaObject {
-  const properties: Record<string, JsonSchemaProperty> = {};
-  const required: string[] = [];
-
-  for (const [name, meta] of Object.entries(pathParams)) {
-    properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) {
-      required.push(name);
+  const buildSection = (
+    entries: readonly (readonly [string, ParamMetadata])[],
+  ): {
+    readonly properties: Record<string, JsonSchemaProperty>;
+    readonly required: readonly string[];
+  } => {
+    const properties: Record<string, JsonSchemaProperty> = {};
+    const required: string[] = [];
+    for (const [name, meta] of entries) {
+      properties[name] = jsonSchemaFromPrimitive(meta);
+      if (meta.required) {
+        required.push(name);
+      }
     }
-  }
-
-  for (const [name, meta] of Object.entries(queryParams)) {
-    properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) {
-      required.push(name);
-    }
-  }
-
-  const base: JsonSchemaObject = {
-    type: 'object',
-    properties,
-    additionalProperties: false,
+    return { properties, required };
   };
 
-  return required.length > 0 ? { ...base, required } : base;
+  const pathEntries = Object.entries(pathParams);
+  const queryEntries = Object.entries(queryParams);
+  const pathSection = buildSection(pathEntries);
+  const querySection = buildSection(queryEntries);
+
+  const paramsProperties: Record<string, JsonSchemaProperty> = {};
+  const paramsRequired: string[] = [];
+
+  if (Object.keys(pathSection.properties).length > 0) {
+    paramsProperties.path = {
+      type: 'object',
+      properties: pathSection.properties,
+      additionalProperties: false,
+      ...(pathSection.required.length > 0 ? { required: pathSection.required } : {}),
+    };
+    paramsRequired.push('path');
+  }
+
+  if (Object.keys(querySection.properties).length > 0) {
+    paramsProperties.query = {
+      type: 'object',
+      properties: querySection.properties,
+      additionalProperties: false,
+      ...(querySection.required.length > 0 ? { required: querySection.required } : {}),
+    };
+    if (querySection.required.length > 0) {
+      paramsRequired.push('query');
+    }
+  }
+
+  const paramsSchema: JsonSchemaObject = {
+    type: 'object',
+    properties: paramsProperties,
+    additionalProperties: false,
+    ...(paramsRequired.length > 0 ? { required: paramsRequired } : {}),
+  };
+
+  return {
+    type: 'object',
+    properties: { params: paramsSchema },
+    required: ['params'],
+    additionalProperties: false,
+  };
 }
 
 function buildZodFields(entries: [string, ParamMetadata][]): string[] {
@@ -159,8 +196,10 @@ export function buildZodObject(
   const queryEntries = Object.entries(queryParams);
   const hasPath = pathEntries.length > 0;
   const hasQuery = queryEntries.length > 0;
-  const queryRequired = queryEntries.some(([, meta]) => meta.required);
-  const paramsOptional = !hasPath && !queryRequired;
+
+  if (!hasPath && !hasQuery) {
+    return 'z.object({ params: z.object({}) })';
+  }
 
   const paramsShape: string[] = [];
 
@@ -171,17 +210,14 @@ export function buildZodObject(
 
   if (hasQuery) {
     const fields = buildZodFields(queryEntries).join(', ');
-    const maybeOptional = queryRequired ? '' : '.optional()';
+    const maybeOptional = queryEntries.some(([, meta]) => meta.required) ? '' : '.optional()';
     paramsShape.push(`query: z.object({ ${fields} })${maybeOptional}`);
   }
 
   const paramsSchema =
     paramsShape.length > 0 ? `z.object({ ${paramsShape.join(', ')} })` : 'z.object({})';
-  const paramsField = paramsOptional
-    ? `params: ${paramsSchema}.optional()`
-    : `params: ${paramsSchema}`;
 
-  return `z.object({ ${paramsField} })`;
+  return `z.object({ params: ${paramsSchema} })`;
 }
 
 function buildZodType(meta: ParamMetadata): string {

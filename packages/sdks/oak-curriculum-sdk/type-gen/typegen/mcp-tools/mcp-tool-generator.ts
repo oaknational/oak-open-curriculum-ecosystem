@@ -9,6 +9,7 @@ import { generateMcpToolName } from './name-generator.js';
 import { generateToolFile } from './parts/generate-tool-file.js';
 import { generateTypesFile } from './parts/generate-types-file.js';
 import { generateLibFile } from './parts/generate-lib-file.js';
+import { generateExecuteFile } from './parts/generate-execute-file.js';
 import { generateDefinitionsFile } from './parts/generate-definitions-file.js';
 import { generateRootIndexFile, generateDataIndexFile } from './parts/generate-index-file.js';
 import { getParameterPrimitiveType } from './parts/param-utils.js';
@@ -193,6 +194,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   const toolNames = Array.from(toolNamesSet).toSorted();
 
   result.aliases['types.ts'] = generateTypesFile();
+  result.runtime['execute.ts'] = generateExecuteFile();
   result.runtime['lib.ts'] = generateLibFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result.data['index.ts'] = generateDataIndexFile();

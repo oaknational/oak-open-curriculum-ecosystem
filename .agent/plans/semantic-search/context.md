@@ -1,75 +1,92 @@
-# Semantic Search Recovery – Companion Notes
+# Semantic Search Recovery – Context Log
 
-> **Primary plan:** `.agent/plans/semantic-search/snagging-resolution-plan.md`. Keep that file focused; record supporting detail here so context survives across sessions without bloating the plan.
+This log complements `snagging-resolution-plan.md`. Use it to capture command outcomes, decisions, and loop-check reflections. Keep entries concise and dated.
 
-## Status At A Glance (2025-10-23)
+---
 
-- **Type generation:** ✅ – semantic search types now flow from the SDK. Manual definitions removed.
-- **Sanitisation helpers:** ✅ – all indexing modules, fixtures, and the rebuild-rollup route now normalise via `document-transform-helpers` / support utilities.
-- **Quality gates:** `pnpm build` ✅, workspace lint ✅. Repository-wide `pnpm lint` still red because `apps/oak-curriculum-mcp-stdio` and `packages/sdks/oak-curriculum-sdk` carry existing violations.
-- **Tests:** Full semantic-search Vitest suite now passes after aligning env handling with sandbox expectations.
+## Grounding Cadence
 
-## Helper Adoption Matrix
+- Every session begins by reading:
+  - `.agent/directives-and-memory/rules.md`
+  - `.agent/directives-and-memory/AGENT.md`
+  - `.agent/directives-and-memory/schema-first-execution.md`
+  - The recovery plan (latest revision)
+  - This context log
+- Redraw the schema-first DAG before touching code.
 
-| Area / file                                             | Status      | Notes / required follow-up                                                                        |
-| ------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------- |
-| `document-transforms.ts`                                | ✅ complete | Uses helpers + treats summary fields as `unknown`. Keep under 250 lines.                          |
-| `index-bulk-helpers.ts`                                 | ✅ complete | Migrated to helper-driven normalisation; new `index-bulk-support.ts` keeps helper logic isolated. |
-| `sequence-facets.ts` & `sequence-facet-index.ts`        | ✅ complete | Introduced `sequence-facet-utils.ts` to safely traverse sequence payloads.                        |
-| API route `app/api/rebuild-rollup/route.ts`             | ✅ complete | Accepts helper-normalised summaries and transcripts.                                              |
-| Fixture client `sandbox-fixture.ts`                     | ✅ complete | Returns helper-parsed results with array coercion to `unknown[]`.                                 |
-| Unit tests (document transforms, lesson planning, etc.) | ✅ complete | Builders now rely on schema validation; new helper-focused tests assert sanitised behaviour.      |
+---
 
-Legend: ✅ complete · ⚠️ in progress · ❌ not started
+## Current Status (2025-10-24)
 
-## Command Log (2025-10-22)
+- **Generator:** `generate-definitions-file.ts` now emits `MCP_TOOL_DESCRIPTORS` with explicit `ToolDescriptor` typing. Executor template and alias generation still widen `ToolArgsForName`, leading to intersection errors during `pnpm build`. No casts are checked in yet, but the generator needs another pass.
+- **Runtime:** `src/mcp/execute-tool-call.ts` delegates to the generated `callTool` while mapping errors. Zero-parameter coercion currently relies on generator narrowing that is missing, so runtime code cannot yet compile without the generator fix.
+- **Tests:** `execute-tool-call.unit.test.ts` exercises the generated descriptors (rate-limit tool) but will only pass once the executor arguments are typed correctly. Wider behavioural suite still pending.
+- **Quality gates:** `pnpm build --filter @oaknational/oak-curriculum-sdk` fails with TS2345 (`ToolArgs` intersection). Repo-wide commands are blocked until generator alignment is restored.
+- **Documentation:** The recovery plan is updated with the staged workflow and mandatory grounding checks. Architecture docs still need to capture the refined generator/executor flow once complete.
 
-| Command                                                                                                                                                                                                                                | Result | Notes                                                                                                                                                                                                       |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm build`                                                                                                                                                                                                                           | ✅     | Full workspace build succeeded post-sanitisation rollout.                                                                                                                                                   |
-| `pnpm --filter @oaknational/open-curriculum-semantic-search lint`                                                                                                                                                                      | ✅     | No remaining lint violations inside the semantic search app.                                                                                                                                                |
-| `pnpm --filter @oaknational/open-curriculum-semantic-search test -- src/lib/indexing/document-transform-helpers.unit.test.ts src/lib/indexing/document-transforms.unit.test.ts src/lib/indexing/lesson-planning-snippets.unit.test.ts` | ❌     | Only failing assertion in `src/lib/search-index-target.unit.test.ts`: expected `oak_sequences_sandbox`, received `oak_sequences`. Behaviour needs revisiting before running the full suite.                 |
-| `pnpm --filter @oaknational/open-curriculum-semantic-search test -- src/lib/env.unit.test.ts`                                                                                                                                          | ✅     | Vitest executed the full workspace suite and passed once the env helpers were simplified for the static Next.js/Vercel deployment model.                                                                    |
-| `pnpm test` (2025-10-24)                                                                                                                                                                                                               | ❌     | Still red because `@oaknational/oak-curriculum-sdk` generator tests expect pre-refactor artefacts (`emit-index`, `generate-lib-file`, `emit-error-description`, `emitters`, `mcp-tool-generator`).          |
-| `pnpm type-gen` (2025-10-24)                                                                                                                                                                                                           | ❌     | Latest run surfaced over-generalised `ToolParams`/`ToolArgs`; revert to strict schema-derived shapes instead of weakening the generated artefacts.                                                          |
-| `pnpm type-check` (2025-10-24)                                                                                                                                                                                                         | ❌     | Blocked by the same generator/runtime divergence; the compiler is correctly flagging the loosened tool argument types.                                                                                      |
-| `pnpm lint` (2025-10-24)                                                                                                                                                                                                               | ❌     | Remaining violations: `packages/sdks/oak-curriculum-sdk/src/index.ts` exceeds max-lines; `src/mcp/execute-tool-call.ts` still triggers `no-unnecessary-condition`/type assertion warnings pending refactor. |
-| `pnpm build` (2025-10-24)                                                                                                                                                                                                              | ❌     | SDK build currently fails because the relaxed `ToolArgs` types no longer align with the generated descriptors—restore precision before retrying.                                                            |
-| `pnpm type-gen` (2025-10-24)                                                                                                                                                                                                           | ✅     | Regenerated artefacts and emitted the new request-parameter map; SDK `dist/validation` now contains `request-parameter-map.js`.                                                                             |
-| `pnpm build` (2025-10-24)                                                                                                                                                                                                              | ✅     | Repo-wide build succeeds; semantic-search app now resolves the generated request-parameter map via the SDK dist bundle.                                                                                     |
-| `pnpm type-check` (2025-10-24)                                                                                                                                                                                                         | ✅     | All packages pass after the generator/runtime adjustments.                                                                                                                                                  |
-| `pnpm lint` (2025-10-24)                                                                                                                                                                                                               | ❌     | SDK: `src/index.ts` exceeds `max-lines`; `src/mcp/execute-tool-call.ts` triggers `no-unnecessary-condition` and `consistent-type-assertions`. Stdio app still reports the historic `always-true` branch.    |
-| `pnpm test:ui`                                                                                                                                                                                                                         | ❌     | Playwright visual regressions (17 failures) pending fixture refresh; unchanged from prior runs.                                                                                                             |
-| `pnpm test:e2e`                                                                                                                                                                                                                        | ❌     | `@oaknational/oak-curriculum-sdk` flags forbidden `as T` assertions; `@oaknational/oak-curriculum-mcp-stdio` cannot resolve generated request validator types (`dist/validation/types`).                    |
-| `pnpm dev:smoke`                                                                                                                                                                                                                       | ❌     | Script not defined in workspace; command exits with `Command "dev:smoke" not found`.                                                                                                                        |
-| `pnpm lint` (2025-10-24)                                                                                                                                                                                                               | ❌     | Remaining blockers: `packages/sdks/oak-curriculum-sdk/src/index.ts` (max-lines) and `src/mcp/execute-tool-call.ts` (needs assertion-free invocation). Legacy stdio/sdk lint debt unchanged.                 |
+---
 
-> **2025-10-24 Codex note:** The latest generator work regressed the SDK build by loosening schema-derived tool argument types. The action plan is to restore precision in the generated artefacts and simplify runtime consumers accordingly; treat the compiler failures as guidance, not obstacles.
+## Immediate Priorities
 
-## Testing Expectations
+1. **Stage 0 / Loop Check A:** Re-ground with rules + schema-first directive; capture the current failing state and intended generator fix.
+2. **Stage 1 Diagnostics:** Pinpoint exactly where `ToolArgsForName` widens (aliases vs. executor template) and record findings.
+3. **Stage 2 Design:** Draft a generator-first approach for descriptor-specific argument helpers that eliminates the union → intersection issue.
+4. **Stage 3 Implementation:** Update templates, regenerate (`pnpm type-gen`), and verify executor outputs are cast-free.
+5. **Stage 4 Runtime & Tests:** Once generator output is correct, keep `execute-tool-call.ts` thin and expand tests to cover zero-parameter validation plus error mapping.
+6. **Stage 5 Gates & Stage 6 Docs:** Run filtered/unfiltered quality commands, then refresh documentation and experience logs to describe the new flow.
 
-- Helper/unit tests now cover sanitised behaviour. Sandbox index naming aligns with updated env helpers; continue to guard against regressions while implementing the SDK generator work.
+---
 
-## Next Session Entry Checklist (to carry into fresh chat)
+## Command Log Template
 
-1. [x] Decide how to resolve the `search-index-target.unit.test.ts` sandbox expectation (update helper or fixture?).
-2. Coordinate with SDK/stdio owners on their lint backlogs blocking repo-wide `pnpm lint`.
-3. Execute the Step 3 SDK refinements (response-map narrowing, retire `operation-validators.ts`, generate request-validator map) and log the command outcomes above as each sub-step completes.
-4. Run the full quality gate sequence from the repo root (clean → type-gen → build → type-check → lint → test) and capture the outcomes, now that the generated request-parameter map is included in the SDK dist bundle but lint/tests are still red.
+Append entries in chronological order. Example format:
 
-Keep updates concise—when a checklist item is complete, tick it here and move the summary into the main plan or evidence log. This keeps the companion doc actionable without becoming another plan.
+```text
+2025-10-24 10:15 UTC
+- pnpm type-gen → ✅
+  Notes: Generated executor now exports callTool with literal result types.
+- Loop Check C → pass (no optional fallbacks detected).
+```
 
-### Step 3 Execution Checklist (SDK generator focus)
+If a command fails, capture diagnostics and the corrective action.
 
-1. Revert any runtime-side hacks in `build-response-map.ts`, `src/validation/request-validators.ts`, and `src/mcp/execute-tool-call.ts` so they reflect the last generator outputs.
-2. Step back and consider if we are following the spirit as well as the letter of `snagging-resolution-plan.md` and the `rules.md`.
-3. Extend the type-gen response-map pipeline to dereference `$ref`s via generated helpers, yielding pure `SchemaObject` data with no runtime assertions.
-4. Delete `type-gen/typegen/operations/operation-validators.ts`; migrate required guards into the generator flow.
-5. Step back and consider if we are following the spirit as well as the letter of `snagging-resolution-plan.md` and the `rules.md`.
-6. Emit a generated `(method, colonPath) → zod schema` map (plus types) during type-gen.
-7. Consume the generated map in `src/validation/request-validators.ts`, keeping the DAG flow (general types → constants → runtime helpers).
-8. Step back and consider if we are following the spirit as well as the letter of `snagging-resolution-plan.md` and the `rules.md`.
-9. Run `pnpm type-gen`, inspect artefacts, and ensure runtime modules only import generated code.
-10. Update generator/runtime tests to prove the new artefacts, then run the SDK test suite.
-11. Step back and consider if we are following the spirit as well as the letter of `snagging-resolution-plan.md` and the `rules.md`.
-12. Re-run `pnpm type-check` and `pnpm lint`; record outcomes and follow up on any remaining cross-workspace failures.
+---
+
+2025-10-24 14:05 UTC
+- Grounding Check (Stage 0) → ✅  
+  Notes: Re-read `.agent/directives-and-memory/rules.md` and `schema-first-execution.md`; reaffirmed the goal of removing all runtime widening and keeping fixes generator-first. Logged the target state for the MCP executor pipeline (no casts, no helper overrides).
+- Stage 1 Diagnostics → ✅  
+  Notes: `generate-types-file.ts` defines `ToolArgsForName` via `Parameters<ToolInvoke<TName>>[1]`, and because `ToolDescriptorForName<TName>` is indexed over the descriptor map, TypeScript widens to a union across all tools. `generate-execute-file.ts` therefore had to introduce a cast to satisfy `descriptor.invoke`, causing the TS2345 build error. `generate-definitions-file.ts` correctly types the literal map, so the fix must introduce per-tool arg aliases or helper types emitted by the generator to preserve specificity.
+
+---
+
+## Loop Check Ledger
+
+| Check | Purpose                                             | Last Status | Notes                                                                 |
+| ----- | --------------------------------------------------- | ----------- | --------------------------------------------------------------------- |
+| A     | Grounding anchor complete                           | ✅ 2025-10-24 | Grounding note captured; ready to proceed with design work.            |
+| B     | Generator design keeps all typing in templates      | _pending_   | Current alias approach still widens; design work not yet recorded.    |
+| C     | Runtime/tests remain generator-driven and cast-free | _pending_   | Façade thinness depends on Stage 3 fixes; tests incomplete.           |
+| D     | Quality gates green without runtime patches         | _pending_   | `pnpm build --filter …` fails with TS2345 union/intersection error.   |
+| E     | Documentation and knowledge capture complete        | _pending_   | Plan updated; architecture docs/experience notes still outstanding.   |
+
+Update rows as loop checks pass/fail; tie each update to a logged reflection.
+
+---
+
+## Notes & Decisions
+
+- Record architectural decisions, schema insights, grounding reflections, and deviations here.
+- Example entry:
+  - _2025-10-24:_ Decided to emit `callTool` from generator; runtime façade will become ~30 lines, only mapping errors.
+- _2025-10-24:_ Identified `ToolArgsForName` widening as the root cause of TS2345; solution must come from generator alias emission, not runtime casts.
+- _2025-10-24:_ Stage 1 diagnostics confirm that alias generation needs per-tool helper emission so `descriptor.invoke` receives fully narrowed argument types without casts.
+
+---
+
+## Backlog / Follow-ups
+
+- Update `docs/architecture/*` with schema-first execution diagram once generator fixes land.
+- Fix lint issues outside the SDK after MCP schema-first alignment.
+- Adjust semantic-search `search-index-target.unit.test.ts` once API expectation stabilises.
+- Ensure experience logs capture lessons learned from eliminating helper loops and enforcing the new workflow.

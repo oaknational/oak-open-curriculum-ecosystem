@@ -76,7 +76,9 @@ function buildExports({
     "    return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };",
   );
   lines.push('  },');
-  lines.push('} as const satisfies ToolDescriptor<OakApiPathBasedClient, ToolArgs>;');
+  lines.push(
+    '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;',
+  );
   lines.push('');
   return lines.join('\n');
 }

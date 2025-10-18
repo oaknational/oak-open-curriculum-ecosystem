@@ -11,25 +11,19 @@ const GENERATED_BANNER = [
 ].join('\n');
 
 const GENERATED_IMPORTS =
-  "import type { ToolOperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';";
+  "import type { ToolOperationId, ToolDescriptorForName, ToolMap, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';";
 
-const TOOL_TYPE_ALIASES = `type ToolDescriptorInvocation<TDescriptor> =
-  TDescriptor extends { invoke: (client: infer TClient, args: infer TArgs) => unknown }
-    ? { client: TClient; args: TArgs }
-    : never;
-
-type ToolDescriptorInvocationForName<TName extends ToolName> = ToolDescriptorInvocation<ToolDescriptorForName<TName>>;
-type ToolDescriptorInvocationForOperationId<TId extends ToolOperationId> = ToolDescriptorInvocation<ToolDescriptorForOperationId<TId>>;
-
-export type ToolInvoke<TName extends ToolName> = ToolDescriptorForName<TName>['invoke'];
-export type ToolClient<TName extends ToolName> = ToolDescriptorInvocationForName<TName>['client'];
-export type ToolArgs<TName extends ToolName = ToolName> = ToolDescriptorInvocationForName<TName>['args'];
-export type ToolResult<TName extends ToolName> = Awaited<ReturnType<ToolInvoke<TName>>>;
-export type ToolClientForName<TName extends ToolName> = ToolClient<TName>;
-export type ToolArgsForName<TName extends ToolName> = ToolArgs<TName>;
-export type ToolResultForName<TName extends ToolName> = ToolResult<TName>;
-export type ToolArgsForOperationId<TId extends ToolOperationId> = ToolDescriptorInvocationForOperationId<TId>['args'];
-export type ToolResultForOperationId<TId extends ToolOperationId> = Awaited<ReturnType<ToolDescriptorForOperationId<TId>['invoke']>>;
+const TOOL_TYPE_ALIASES = `export type ToolInvoke<TName extends ToolName> = ToolDescriptorForName<TName>['invoke'];
+export type ToolClientForName<TName extends ToolName> = Parameters<ToolInvoke<TName>>[0];
+export type ToolArgsForName<TName extends ToolName> = Parameters<ToolInvoke<TName>>[1];
+export type ToolResultForName<TName extends ToolName> = Awaited<ReturnType<ToolInvoke<TName>>>;
+export type ToolArgs<TName extends ToolName = ToolName> = ToolArgsForName<TName>;
+export type ToolClient<TName extends ToolName = ToolName> = ToolClientForName<TName>;
+export type ToolResult<TName extends ToolName> = ToolResultForName<TName>;
+export type ToolArgsForOperationId<TId extends ToolOperationId> =
+  Parameters<ToolInvoke<ToolNameForOperationId<TId>>>[1];
+export type ToolResultForOperationId<TId extends ToolOperationId> =
+  Awaited<ReturnType<ToolInvoke<ToolNameForOperationId<TId>>>>;
 export type ToolOperationIdForName<TName extends ToolName> = GeneratedToolOperationIdForName<TName>;
 export type ToolNameFromOperationId<TId extends ToolOperationId> = ToolNameForOperationId<TId>;
 export type RegisteredToolEntries = {

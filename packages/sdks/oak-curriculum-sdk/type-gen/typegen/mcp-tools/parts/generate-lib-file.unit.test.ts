@@ -3,26 +3,24 @@ import { describe, expect, it } from 'vitest';
 import { generateLibFile } from './generate-lib-file.js';
 
 describe('generateLibFile', () => {
-  it('references only the curated helper surface', () => {
+  it('imports the schema-first executor helpers', () => {
     const output = generateLibFile();
 
     expect(output).toContain(
-      "import {\n  toolNames,\n  getToolFromToolName,\n  getToolNameFromOperationId,\n  isToolName,\n  type ToolDescriptorForName,\n  type ToolDescriptorForOperationId,\n  type ToolName,\n  type ToolOperationId,\n} from '../data/definitions.js';",
+      "import { getToolFromOperationId, isToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolName, type ToolOperationId } from '../data/definitions.js';",
     );
-    expect(output).not.toContain('MCP_TOOLS');
+    expect(output).toContain("import { callTool, listAllToolDescriptors } from './execute.js';");
+    expect(output).not.toContain('override');
+    expect(output).not.toContain('switch (name)');
   });
 
-  it('initialises the registry from canonical descriptors and forwards the client', () => {
+  it('emits a registry that delegates directly to callTool', () => {
     const output = generateLibFile();
 
-    expect(output).toContain(
-      'type ToolOverrideStore = Map<ToolName, ToolDescriptorForName<ToolName>>;',
-    );
-    expect(output).toContain('this.overrides = new Map();');
-    expect(output).toContain('return toolNames.map((name) => this.resolveDescriptor(name));');
-    expect(output).toContain('const parsed = descriptor.toolZodSchema.safeParse(args);');
-    expect(output).toContain('const output = await descriptor.invoke(this.client, parsed.data);');
-    expect(output).toContain('export function createMcpToolRegistry');
-    expect(output).toContain('export function getToolDescriptorForOperationId');
+    expect(output).toContain('export class McpToolRegistry');
+    expect(output).toContain('const result = await callTool(name, this.client, args);');
+    expect(output).toContain('return listAllToolDescriptors();');
+    expect(output).toContain('return formatSuccess(result);');
+    expect(output).toContain('return formatError(error);');
   });
 });

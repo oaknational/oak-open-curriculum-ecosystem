@@ -17,14 +17,14 @@ const path = '/threads' as const;
 const method = 'GET' as const;
 
 
-export type ToolParams = Record<string, never>;
+export interface ToolParams {}
 
-export interface ToolArgs { readonly params?: ToolParams; }
+export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {} as const, additionalProperties: false as const };
-export const toolZodSchema = z.object({ params: z.object({}).optional() });
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{},"additionalProperties":false}} as const, additionalProperties: false as const, required: ["params"] };
+export const toolZodSchema = z.object({ params: z.object({}) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{},"additionalProperties":false}\nRequired: (none)';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{},"additionalProperties":false}},"required":["params"],"additionalProperties":false}\nRequired: params';
 export const describeToolArgs = () => toolArgsDescription;
 const responseDescriptor = getDescriptorSchemaForEndpoint('get', '/threads');
 /**
@@ -64,7 +64,7 @@ export const getThreads = {
     }
     return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };
   },
-} as const satisfies ToolDescriptor<OakApiPathBasedClient, ToolArgs>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;
 
 /**
  * @internal Generated Oak MCP tool stub kept for documentation and regression tests.

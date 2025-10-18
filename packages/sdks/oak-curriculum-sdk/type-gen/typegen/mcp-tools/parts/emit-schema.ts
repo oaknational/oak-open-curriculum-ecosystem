@@ -125,9 +125,9 @@ function buildHeaderBlock(
     sections.push('');
     sections.push('export interface ToolArgs { readonly params: ToolParams; }');
   } else {
-    sections.push('export type ToolParams = Record<string, never>;');
+    sections.push('export interface ToolParams {}');
     sections.push('');
-    sections.push('export interface ToolArgs { readonly params?: ToolParams; }');
+    sections.push('export interface ToolArgs { readonly params: ToolParams; }');
   }
   sections.push('');
   return sections.join('\n');

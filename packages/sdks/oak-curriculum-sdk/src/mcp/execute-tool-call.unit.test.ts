@@ -1,89 +1,81 @@
-/**
- * Unit tests for executeToolCall using TOOL_GROUPINGS executors
- *
- * Tests the pure function logic of tool execution without IO or side effects.
- * Following TDD - this is the Red phase where tests fail initially.
- */
+import { describe, expect, it, vi } from 'vitest';
 
-import { describe, it, expect, vi } from 'vitest';
-import { z } from 'zod';
-
-import { executeToolCall } from './execute-tool-call';
+import { McpParameterError, McpToolError, executeToolCall } from './execute-tool-call';
 import type { OakApiPathBasedClient } from '../client/index.js';
-import type { ToolDescriptor, ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
 
-const HOISTED = vi.hoisted(() => ({
-  toolName: 'get-changelog' as const,
-}));
+type RateLimitArgs = { readonly params: Record<string, never> };
 
-const MOCK_TOOL_NAME = HOISTED.toolName as ToolName;
-
-const toolZodSchema = z.object({
-  args: z.boolean(),
-});
-
-const validateOutput = vi.fn<
-  (
-    value: unknown,
-  ) =>
-    | { readonly ok: true; readonly data: unknown }
-    | { readonly ok: false; readonly message: string }
->((value) => ({ ok: true as const, data: value }));
-const invoke = vi.fn(async (client: OakApiPathBasedClient, args: MockArgs) => ({ client, args }));
-
-interface MockArgs {
-  args: boolean;
-}
-type MockDescriptor = ToolDescriptor<OakApiPathBasedClient, MockArgs>;
-
-const descriptor: MockDescriptor = {
-  name: MOCK_TOOL_NAME,
-  description: 'Mock tool for executeToolCall unit tests',
-  operationId: 'mock-operation',
-  path: '/mock',
-  method: 'GET',
-  toolZodSchema,
-  toolInputJsonSchema: { type: 'object', properties: { args: { type: 'boolean' } } },
-  toolOutputJsonSchema: {},
-  zodOutputSchema: z.any(),
-  describeToolArgs: () => 'Invalid request parameters',
-  inputSchema: { type: 'object', properties: { args: { type: 'boolean' } } },
-  validateOutput,
-  invoke,
-};
-
-vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => {
-  const toolName = HOISTED.toolName;
-  return {
-    toolNames: [toolName] as const,
-    getToolFromToolName: (name: ToolName) => {
-      if (name !== toolName) {
-        throw new Error(`Unknown tool requested in test: ${String(name)}`);
-      }
-      return descriptor;
+function createRateLimitClient(impl: (args: RateLimitArgs) => unknown | Promise<unknown>): {
+  readonly client: OakApiPathBasedClient;
+  readonly handler: ReturnType<typeof vi.fn>;
+} {
+  const handler = vi.fn(impl);
+  const client = {
+    '/rate-limit': {
+      GET: handler,
     },
-    isToolName: (value: unknown): value is ToolName => value === toolName,
-  };
-});
+  } as unknown as OakApiPathBasedClient;
+  return { client, handler };
+}
 
-describe('executeToolCall with literal descriptors', () => {
-  it('returns error for unknown tool', async () => {
-    const result = await executeToolCall('other-tool', {}, {} as OakApiPathBasedClient);
+describe('executeToolCall', () => {
+  it('returns an error when the tool name is unknown', async () => {
+    const result = await executeToolCall('not-a-tool', {}, {} as OakApiPathBasedClient);
 
-    expect(result).toHaveProperty('error');
-    expect(result.error?.message).toContain('Unknown tool');
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error).toMatchObject({
+      toolName: 'not-a-tool',
+      code: 'UNKNOWN_TOOL',
+    });
   });
 
-  it('invokes tool when validation succeeds', async () => {
-    const client = {} as OakApiPathBasedClient;
-    const params = { args: true };
+  it('requires zero-parameter tools to supply params', async () => {
+    const { client, handler } = createRateLimitClient(() => ({
+      limit: 10,
+      remaining: 9,
+      reset: Date.now(),
+    }));
 
-    validateOutput.mockReturnValueOnce({ ok: true as const, data: 'valid' });
+    const result = await executeToolCall('get-rate-limit', undefined, client);
 
-    const result = await executeToolCall(MOCK_TOOL_NAME, params, client);
+    expect(handler).not.toHaveBeenCalled();
+    expect(result.error).toBeInstanceOf(McpParameterError);
+    expect(result.error?.message).toContain('Invalid request parameters');
+  });
 
-    expect(result).toEqual({ data: 'valid' });
-    expect(invoke).toHaveBeenCalledWith(client, params);
-    expect(validateOutput).toHaveBeenCalledWith({ client, args: params });
+  it('invokes generated executors for zero-parameter tools', async () => {
+    const expected = { limit: 10, remaining: 9, reset: Date.now() };
+    const { client, handler } = createRateLimitClient(async (args) => {
+      expect(args).toEqual({ params: {} });
+      return expected;
+    });
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(handler).toHaveBeenCalledOnce();
+    expect(result).toEqual({ data: expected });
+  });
+
+  it('maps output validation failures to McpToolError with a helpful message', async () => {
+    const { client } = createRateLimitClient(() => ({}));
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.code).toBe('OUTPUT_VALIDATION_ERROR');
+    expect(result.error?.message).toContain('Invalid response payload');
+  });
+
+  it('propagates execution errors with context', async () => {
+    const { client } = createRateLimitClient(() => {
+      throw new Error('boom');
+    });
+
+    const result = await executeToolCall('get-rate-limit', { params: {} }, client);
+
+    expect(result.error).toBeInstanceOf(McpToolError);
+    expect(result.error?.message).toBe('Execution failed: boom');
+    expect(result.error?.toolName).toBe('get-rate-limit');
+    expect(result.error?.code).toBe('EXECUTION_ERROR');
   });
 });

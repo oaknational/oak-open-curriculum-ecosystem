@@ -29,9 +29,21 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
 
     expect(schema.type).toBe('object');
     expect(schema.additionalProperties).toBe(false);
-    expect(schema.properties.q).toEqual({ type: 'string' });
-    expect(Array.isArray(schema.required)).toBe(true);
-    expect(schema.required?.includes('q')).toBe(true);
+    const paramsSchema = schema.properties.params;
+    expect(paramsSchema).toEqual({
+      type: 'object',
+      properties: {
+        query: {
+          type: 'object',
+          properties: { q: { type: 'string' } },
+          additionalProperties: false,
+          required: ['q'],
+        },
+      },
+      additionalProperties: false,
+      required: ['query'],
+    });
+    expect(schema.required).toEqual(['params']);
   });
 
   it('maps primitive types and array variants correctly', () => {
@@ -47,13 +59,17 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
 
     const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    expect(schema.properties.a).toEqual({ type: 'number' });
-    expect(schema.properties.b).toEqual({ type: 'boolean' });
-    expect(schema.properties.s).toEqual({ type: 'array', items: { type: 'string' } });
-    expect(schema.properties.n).toEqual({ type: 'array', items: { type: 'number' } });
-    expect(schema.properties.z).toEqual({ type: 'array', items: { type: 'boolean' } });
-    expect(schema.required).toContain('a');
-    expect(schema.required).not.toContain('b');
+    const paramsSchema = schema.properties.params;
+    const pathSchema = paramsSchema.properties.path;
+    const querySchema = paramsSchema.properties.query;
+
+    expect(pathSchema.properties.a).toEqual({ type: 'number' });
+    expect(pathSchema.properties.b).toEqual({ type: 'boolean' });
+    expect(querySchema.properties.s).toEqual({ type: 'array', items: { type: 'string' } });
+    expect(querySchema.properties.n).toEqual({ type: 'array', items: { type: 'number' } });
+    expect(querySchema.properties.z).toEqual({ type: 'array', items: { type: 'boolean' } });
+    expect(pathSchema.required).toContain('a');
+    expect(pathSchema.required).not.toContain('b');
   });
 
   it('emits enum arrays when allowedValues are present', () => {
@@ -69,7 +85,11 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
 
     const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    expect(schema.properties.subject).toEqual({ type: 'string', enum: ['maths', 'english'] });
+    const querySchema = schema.properties.params.properties.query;
+    expect(querySchema.properties.subject).toEqual({
+      type: 'string',
+      enum: ['maths', 'english'],
+    });
   });
 
   it('propagates description and default when provided in metadata', () => {
@@ -94,13 +114,20 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
 
     const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    expect(schema.properties.sequence).toEqual({ type: 'string', description: 'Sequence slug' });
-    expect(schema.properties.year).toEqual({
+    const paramsSchema = schema.properties.params;
+    const pathSchema = paramsSchema.properties.path;
+    const querySchema = paramsSchema.properties.query;
+
+    expect(pathSchema.properties.sequence).toEqual({
+      type: 'string',
+      description: 'Sequence slug',
+    });
+    expect(querySchema.properties.year).toEqual({
       type: 'string',
       enum: ['1', '2', 'all-years'],
       description: 'Optional year filter',
       default: 'all-years',
     });
-    expect(schema.required).toContain('sequence');
+    expect(pathSchema.required).toContain('sequence');
   });
 });

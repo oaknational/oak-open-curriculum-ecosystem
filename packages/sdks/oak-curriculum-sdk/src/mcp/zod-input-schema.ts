@@ -24,11 +24,20 @@ interface JsonSchemaPropertyArray {
   readonly description?: string;
   readonly default?: unknown;
 }
+interface JsonSchemaPropertyObject {
+  readonly type: 'object';
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly required?: readonly string[];
+  readonly additionalProperties?: boolean;
+  readonly description?: string;
+  readonly default?: unknown;
+}
 type JsonSchemaProperty =
   | JsonSchemaPropertyString
   | JsonSchemaPropertyNumber
   | JsonSchemaPropertyBoolean
-  | JsonSchemaPropertyArray;
+  | JsonSchemaPropertyArray
+  | JsonSchemaPropertyObject;
 
 export interface GenericToolInputJsonSchema {
   readonly type: 'object';
@@ -54,6 +63,18 @@ function buildArraySchema(prop: JsonSchemaPropertyArray): z.ZodTypeAny {
   return z.array(zodForProperty(prop.items));
 }
 
+function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodTypeAny {
+  const required = new Set(prop.required ?? []);
+  const properties = prop.properties ?? {};
+  const shape: z.ZodRawShape = {};
+  for (const [key, property] of Object.entries(properties)) {
+    const base = zodForProperty(property);
+    shape[key] = required.has(key) ? base : base.optional();
+  }
+  const objectSchema = z.object(shape);
+  return prop.additionalProperties === false ? objectSchema.strict() : objectSchema;
+}
+
 function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
   switch (prop.type) {
     case 'string': {
@@ -66,6 +87,8 @@ function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
       return z.boolean();
     case 'array':
       return buildArraySchema(prop);
+    case 'object':
+      return buildObjectSchema(prop);
     default:
       return z.any();
   }

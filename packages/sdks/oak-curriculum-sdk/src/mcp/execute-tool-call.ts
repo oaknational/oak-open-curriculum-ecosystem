@@ -13,12 +13,8 @@
  */
 
 import type { OakApiPathBasedClient } from '../client/index.js';
-import {
-  getToolFromToolName,
-  isToolName,
-  type ToolDescriptorForName,
-  type ToolName,
-} from '../types/generated/api-schema/mcp-tools/index.js';
+import { isToolName, type ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import { callTool } from '../types/generated/api-schema/mcp-tools/generated/runtime/execute.js';
 
 /**
  * Error types with proper cause chains
@@ -68,18 +64,24 @@ export type ToolExecutionResult =
 /**
  * Ultra-thin executor - just validation and delegation to embedded executor
  */
-function mapErrorToResult(error: unknown, toolName: string): ToolExecutionResult {
+function mapErrorToResult(error: unknown, toolName: ToolName): ToolExecutionResult {
   if (error instanceof McpParameterError || error instanceof McpToolError) {
     return { error };
   }
-  if (
-    error instanceof TypeError &&
-    (error.message.includes('Invalid') || error.message.includes('Must be one of'))
-  ) {
-    const match = /Invalid (\w+):/.exec(error.message);
-    const paramName = match ? match[1] : undefined;
+  if (error instanceof TypeError) {
+    if (error.message.startsWith('Output validation error: ')) {
+      const message = error.message.replace('Output validation error: ', '');
+      return {
+        error: new McpToolError('Execution failed: ' + message, toolName, {
+          code: 'OUTPUT_VALIDATION_ERROR',
+          cause: error,
+        }),
+      };
+    }
     return {
-      error: new McpParameterError(error.message, toolName, paramName, undefined, { cause: error }),
+      error: new McpParameterError(error.message, toolName, undefined, undefined, {
+        cause: error,
+      }),
     };
   }
   if (error instanceof Error) {
@@ -111,33 +113,9 @@ export async function executeToolCall(
   }
 
   const toolName: ToolName = maybeToolName;
-  return executeDescriptorForName(toolName, maybeParams, client);
-}
-
-async function executeDescriptorForName<TName extends ToolName>(
-  toolName: TName,
-  params: unknown,
-  client: OakApiPathBasedClient,
-): Promise<ToolExecutionResult> {
-  const tool: ToolDescriptorForName<TName> = getToolFromToolName(toolName);
-  const parsed = tool.toolZodSchema.safeParse(params);
-  if (!parsed.success) {
-    return {
-      error: new McpParameterError(tool.describeToolArgs(), toolName, undefined, undefined),
-    };
-  }
-
   try {
-    const response = await tool.invoke(client, parsed.data);
-    const outputValidation = tool.validateOutput(response);
-    if (!outputValidation.ok) {
-      return {
-        error: new McpToolError('Execution failed: ' + outputValidation.message, toolName, {
-          code: 'OUTPUT_VALIDATION_ERROR',
-        }),
-      };
-    }
-    return { data: outputValidation.data };
+    const data = await callTool(toolName, client, maybeParams);
+    return { data };
   } catch (error) {
     return mapErrorToResult(error, toolName);
   }

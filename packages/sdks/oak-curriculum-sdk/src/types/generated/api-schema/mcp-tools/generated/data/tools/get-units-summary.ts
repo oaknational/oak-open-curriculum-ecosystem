@@ -30,10 +30,10 @@ export interface ToolParams {
 
 export interface ToolArgs { readonly params: ToolParams; }
 
-export const toolInputJsonSchema = { type: 'object' as const, properties: {"unit":{"type":"string","description":"The unit slug"}} as const, additionalProperties: false as const, required: ["unit"] };
+export const toolInputJsonSchema = { type: 'object' as const, properties: {"params":{"type":"object","properties":{"path":{"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}},"additionalProperties":false,"required":["path"]}} as const, additionalProperties: false as const, required: ["params"] };
 export const toolZodSchema = z.object({ params: z.object({ path: z.object({ unit: z.string() }) }) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
-const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}\nRequired: unit';
+const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{"path":{"type":"object","properties":{"unit":{"type":"string","description":"The unit slug"}},"additionalProperties":false,"required":["unit"]}},"additionalProperties":false,"required":["path"]}},"required":["params"],"additionalProperties":false}\nRequired: params';
 export const describeToolArgs = () => toolArgsDescription;
 const responseDescriptor = getDescriptorSchemaForEndpoint('get', '/units/{unit}/summary');
 /**
@@ -73,7 +73,7 @@ export const getUnitsSummary = {
     }
     return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };
   },
-} as const satisfies ToolDescriptor<OakApiPathBasedClient, ToolArgs>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;
 
 /**
  * @internal Generated Oak MCP tool stub kept for documentation and regression tests.

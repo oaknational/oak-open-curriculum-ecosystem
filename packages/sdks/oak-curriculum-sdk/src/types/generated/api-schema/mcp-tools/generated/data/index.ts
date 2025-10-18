@@ -5,4 +5,4 @@
  * Provides readonly helpers derived from the canonical descriptor map.
  */
 
-export { toolNames, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isToolOperationId, type ToolOperationId, type ToolOperationIdForName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolMap, type ToolName, type ToolNameForOperationId } from "./definitions.js";
+export { MCP_TOOL_DESCRIPTORS, toolNames, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isToolOperationId, type ToolDescriptorMap, type ToolMap, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolOperationId, type ToolOperationIdForName, type ToolName, type ToolNameForOperationId } from "./definitions.js";

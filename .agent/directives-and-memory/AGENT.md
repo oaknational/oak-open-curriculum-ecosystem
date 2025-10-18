@@ -45,6 +45,7 @@ These documents must be read.
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
 - [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
+- [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
 
 ## Development Commands
 

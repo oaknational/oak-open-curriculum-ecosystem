@@ -4,13 +4,16 @@
  * Generated from packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/generate-definitions-file.ts
  *
  * MCP Tools definitions
- * 
+ *
  * Canonical literal descriptors for every tool.
- * 
- * This is an internal file, all types and utilities are created in the types.js file
+ *
+ * This file participates in the schema-first execution DAG. See
+ * .agent/directives-and-memory/schema-first-execution.md for details.
  */
 
-// Import all tool definitions
+import type { ToolDescriptor } from '../../contract/tool-descriptor.contract.js';
+
+// Import canonical tool descriptors
 
 import { getChangelog } from './tools/get-changelog.js';
 import { getChangelogLatest } from './tools/get-changelog-latest.js';
@@ -39,38 +42,166 @@ import { getThreads } from './tools/get-threads.js';
 import { getThreadsUnits } from './tools/get-threads-units.js';
 import { getUnitsSummary } from './tools/get-units-summary.js';
 
-interface ToolDefinitionMap {
-  readonly 'get-changelog': typeof getChangelog;
-  readonly 'get-changelog-latest': typeof getChangelogLatest;
-  readonly 'get-key-stages': typeof getKeyStages;
-  readonly 'get-key-stages-subject-assets': typeof getKeyStagesSubjectAssets;
-  readonly 'get-key-stages-subject-lessons': typeof getKeyStagesSubjectLessons;
-  readonly 'get-key-stages-subject-questions': typeof getKeyStagesSubjectQuestions;
-  readonly 'get-key-stages-subject-units': typeof getKeyStagesSubjectUnits;
-  readonly 'get-lessons-assets': typeof getLessonsAssets;
-  readonly 'get-lessons-assets-by-type': typeof getLessonsAssetsByType;
-  readonly 'get-lessons-quiz': typeof getLessonsQuiz;
-  readonly 'get-lessons-summary': typeof getLessonsSummary;
-  readonly 'get-lessons-transcript': typeof getLessonsTranscript;
-  readonly 'get-rate-limit': typeof getRateLimit;
-  readonly 'get-search-lessons': typeof getSearchLessons;
-  readonly 'get-search-transcripts': typeof getSearchTranscripts;
-  readonly 'get-sequences-assets': typeof getSequencesAssets;
-  readonly 'get-sequences-questions': typeof getSequencesQuestions;
-  readonly 'get-sequences-units': typeof getSequencesUnits;
-  readonly 'get-subject-detail': typeof getSubjectDetail;
-  readonly 'get-subjects': typeof getSubjects;
-  readonly 'get-subjects-key-stages': typeof getSubjectsKeyStages;
-  readonly 'get-subjects-sequences': typeof getSubjectsSequences;
-  readonly 'get-subjects-years': typeof getSubjectsYears;
-  readonly 'get-threads': typeof getThreads;
-  readonly 'get-threads-units': typeof getThreadsUnits;
-  readonly 'get-units-summary': typeof getUnitsSummary;
-}
+type ToolDescriptorEntries = {
+  readonly 'get-changelog': ToolDescriptor<
+    typeof getChangelog['name'],
+    Parameters<typeof getChangelog['invoke']>[0],
+    Parameters<typeof getChangelog['invoke']>[1],
+    Awaited<ReturnType<typeof getChangelog['invoke']>>
+  >;
+  readonly 'get-changelog-latest': ToolDescriptor<
+    typeof getChangelogLatest['name'],
+    Parameters<typeof getChangelogLatest['invoke']>[0],
+    Parameters<typeof getChangelogLatest['invoke']>[1],
+    Awaited<ReturnType<typeof getChangelogLatest['invoke']>>
+  >;
+  readonly 'get-key-stages': ToolDescriptor<
+    typeof getKeyStages['name'],
+    Parameters<typeof getKeyStages['invoke']>[0],
+    Parameters<typeof getKeyStages['invoke']>[1],
+    Awaited<ReturnType<typeof getKeyStages['invoke']>>
+  >;
+  readonly 'get-key-stages-subject-assets': ToolDescriptor<
+    typeof getKeyStagesSubjectAssets['name'],
+    Parameters<typeof getKeyStagesSubjectAssets['invoke']>[0],
+    Parameters<typeof getKeyStagesSubjectAssets['invoke']>[1],
+    Awaited<ReturnType<typeof getKeyStagesSubjectAssets['invoke']>>
+  >;
+  readonly 'get-key-stages-subject-lessons': ToolDescriptor<
+    typeof getKeyStagesSubjectLessons['name'],
+    Parameters<typeof getKeyStagesSubjectLessons['invoke']>[0],
+    Parameters<typeof getKeyStagesSubjectLessons['invoke']>[1],
+    Awaited<ReturnType<typeof getKeyStagesSubjectLessons['invoke']>>
+  >;
+  readonly 'get-key-stages-subject-questions': ToolDescriptor<
+    typeof getKeyStagesSubjectQuestions['name'],
+    Parameters<typeof getKeyStagesSubjectQuestions['invoke']>[0],
+    Parameters<typeof getKeyStagesSubjectQuestions['invoke']>[1],
+    Awaited<ReturnType<typeof getKeyStagesSubjectQuestions['invoke']>>
+  >;
+  readonly 'get-key-stages-subject-units': ToolDescriptor<
+    typeof getKeyStagesSubjectUnits['name'],
+    Parameters<typeof getKeyStagesSubjectUnits['invoke']>[0],
+    Parameters<typeof getKeyStagesSubjectUnits['invoke']>[1],
+    Awaited<ReturnType<typeof getKeyStagesSubjectUnits['invoke']>>
+  >;
+  readonly 'get-lessons-assets': ToolDescriptor<
+    typeof getLessonsAssets['name'],
+    Parameters<typeof getLessonsAssets['invoke']>[0],
+    Parameters<typeof getLessonsAssets['invoke']>[1],
+    Awaited<ReturnType<typeof getLessonsAssets['invoke']>>
+  >;
+  readonly 'get-lessons-assets-by-type': ToolDescriptor<
+    typeof getLessonsAssetsByType['name'],
+    Parameters<typeof getLessonsAssetsByType['invoke']>[0],
+    Parameters<typeof getLessonsAssetsByType['invoke']>[1],
+    Awaited<ReturnType<typeof getLessonsAssetsByType['invoke']>>
+  >;
+  readonly 'get-lessons-quiz': ToolDescriptor<
+    typeof getLessonsQuiz['name'],
+    Parameters<typeof getLessonsQuiz['invoke']>[0],
+    Parameters<typeof getLessonsQuiz['invoke']>[1],
+    Awaited<ReturnType<typeof getLessonsQuiz['invoke']>>
+  >;
+  readonly 'get-lessons-summary': ToolDescriptor<
+    typeof getLessonsSummary['name'],
+    Parameters<typeof getLessonsSummary['invoke']>[0],
+    Parameters<typeof getLessonsSummary['invoke']>[1],
+    Awaited<ReturnType<typeof getLessonsSummary['invoke']>>
+  >;
+  readonly 'get-lessons-transcript': ToolDescriptor<
+    typeof getLessonsTranscript['name'],
+    Parameters<typeof getLessonsTranscript['invoke']>[0],
+    Parameters<typeof getLessonsTranscript['invoke']>[1],
+    Awaited<ReturnType<typeof getLessonsTranscript['invoke']>>
+  >;
+  readonly 'get-rate-limit': ToolDescriptor<
+    typeof getRateLimit['name'],
+    Parameters<typeof getRateLimit['invoke']>[0],
+    Parameters<typeof getRateLimit['invoke']>[1],
+    Awaited<ReturnType<typeof getRateLimit['invoke']>>
+  >;
+  readonly 'get-search-lessons': ToolDescriptor<
+    typeof getSearchLessons['name'],
+    Parameters<typeof getSearchLessons['invoke']>[0],
+    Parameters<typeof getSearchLessons['invoke']>[1],
+    Awaited<ReturnType<typeof getSearchLessons['invoke']>>
+  >;
+  readonly 'get-search-transcripts': ToolDescriptor<
+    typeof getSearchTranscripts['name'],
+    Parameters<typeof getSearchTranscripts['invoke']>[0],
+    Parameters<typeof getSearchTranscripts['invoke']>[1],
+    Awaited<ReturnType<typeof getSearchTranscripts['invoke']>>
+  >;
+  readonly 'get-sequences-assets': ToolDescriptor<
+    typeof getSequencesAssets['name'],
+    Parameters<typeof getSequencesAssets['invoke']>[0],
+    Parameters<typeof getSequencesAssets['invoke']>[1],
+    Awaited<ReturnType<typeof getSequencesAssets['invoke']>>
+  >;
+  readonly 'get-sequences-questions': ToolDescriptor<
+    typeof getSequencesQuestions['name'],
+    Parameters<typeof getSequencesQuestions['invoke']>[0],
+    Parameters<typeof getSequencesQuestions['invoke']>[1],
+    Awaited<ReturnType<typeof getSequencesQuestions['invoke']>>
+  >;
+  readonly 'get-sequences-units': ToolDescriptor<
+    typeof getSequencesUnits['name'],
+    Parameters<typeof getSequencesUnits['invoke']>[0],
+    Parameters<typeof getSequencesUnits['invoke']>[1],
+    Awaited<ReturnType<typeof getSequencesUnits['invoke']>>
+  >;
+  readonly 'get-subject-detail': ToolDescriptor<
+    typeof getSubjectDetail['name'],
+    Parameters<typeof getSubjectDetail['invoke']>[0],
+    Parameters<typeof getSubjectDetail['invoke']>[1],
+    Awaited<ReturnType<typeof getSubjectDetail['invoke']>>
+  >;
+  readonly 'get-subjects': ToolDescriptor<
+    typeof getSubjects['name'],
+    Parameters<typeof getSubjects['invoke']>[0],
+    Parameters<typeof getSubjects['invoke']>[1],
+    Awaited<ReturnType<typeof getSubjects['invoke']>>
+  >;
+  readonly 'get-subjects-key-stages': ToolDescriptor<
+    typeof getSubjectsKeyStages['name'],
+    Parameters<typeof getSubjectsKeyStages['invoke']>[0],
+    Parameters<typeof getSubjectsKeyStages['invoke']>[1],
+    Awaited<ReturnType<typeof getSubjectsKeyStages['invoke']>>
+  >;
+  readonly 'get-subjects-sequences': ToolDescriptor<
+    typeof getSubjectsSequences['name'],
+    Parameters<typeof getSubjectsSequences['invoke']>[0],
+    Parameters<typeof getSubjectsSequences['invoke']>[1],
+    Awaited<ReturnType<typeof getSubjectsSequences['invoke']>>
+  >;
+  readonly 'get-subjects-years': ToolDescriptor<
+    typeof getSubjectsYears['name'],
+    Parameters<typeof getSubjectsYears['invoke']>[0],
+    Parameters<typeof getSubjectsYears['invoke']>[1],
+    Awaited<ReturnType<typeof getSubjectsYears['invoke']>>
+  >;
+  readonly 'get-threads': ToolDescriptor<
+    typeof getThreads['name'],
+    Parameters<typeof getThreads['invoke']>[0],
+    Parameters<typeof getThreads['invoke']>[1],
+    Awaited<ReturnType<typeof getThreads['invoke']>>
+  >;
+  readonly 'get-threads-units': ToolDescriptor<
+    typeof getThreadsUnits['name'],
+    Parameters<typeof getThreadsUnits['invoke']>[0],
+    Parameters<typeof getThreadsUnits['invoke']>[1],
+    Awaited<ReturnType<typeof getThreadsUnits['invoke']>>
+  >;
+  readonly 'get-units-summary': ToolDescriptor<
+    typeof getUnitsSummary['name'],
+    Parameters<typeof getUnitsSummary['invoke']>[0],
+    Parameters<typeof getUnitsSummary['invoke']>[1],
+    Awaited<ReturnType<typeof getUnitsSummary['invoke']>>
+  >;
+};
 
-
-  // DO NOT EXPORT
-  const MCP_TOOL_DEFINITIONS = {
+export const MCP_TOOL_DESCRIPTORS = {
   'get-changelog': getChangelog,
   'get-changelog-latest': getChangelogLatest,
   'get-key-stages': getKeyStages,
@@ -97,29 +228,25 @@ interface ToolDefinitionMap {
   'get-threads': getThreads,
   'get-threads-units': getThreadsUnits,
   'get-units-summary': getUnitsSummary,
-} satisfies ToolDefinitionMap;
-  
+} as const satisfies ToolDescriptorEntries;
 
+export type ToolDescriptorMap = typeof MCP_TOOL_DESCRIPTORS;
+export type ToolMap = ToolDescriptorMap;
+export type ToolName = keyof ToolDescriptorMap;
+export type ToolDescriptorForName<TName extends ToolName> = ToolDescriptorMap[TName];
 
-export type ToolMap = typeof MCP_TOOL_DEFINITIONS;
-export type ToolName = keyof ToolMap;
-export type ToolDescriptorForName<TName extends ToolName> = Extract<ToolMap[keyof ToolMap], { name: TName }>;
-
+export const toolNames = ['get-changelog', 'get-changelog-latest', 'get-key-stages', 'get-key-stages-subject-assets', 'get-key-stages-subject-lessons', 'get-key-stages-subject-questions', 'get-key-stages-subject-units', 'get-lessons-assets', 'get-lessons-assets-by-type', 'get-lessons-quiz', 'get-lessons-summary', 'get-lessons-transcript', 'get-rate-limit', 'get-search-lessons', 'get-search-transcripts', 'get-sequences-assets', 'get-sequences-questions', 'get-sequences-units', 'get-subject-detail', 'get-subjects', 'get-subjects-key-stages', 'get-subjects-sequences', 'get-subjects-years', 'get-threads', 'get-threads-units', 'get-units-summary'] as const;
 
 export function isToolName(value: unknown): value is ToolName {
-  if (typeof value !== 'string') {
-    return false;
-  }
-  return value in MCP_TOOL_DEFINITIONS;
+  return typeof value === 'string' && value in MCP_TOOL_DESCRIPTORS;
 }
 
-
-  // THIS IS GENERATED FROM THE SAME DATA AS MCP_TOOL_DEFINITIONS, THEY ARE ALWAYS IN SYNC
-  export const toolNames = ['get-changelog', 'get-changelog-latest', 'get-key-stages', 'get-key-stages-subject-assets', 'get-key-stages-subject-lessons', 'get-key-stages-subject-questions', 'get-key-stages-subject-units', 'get-lessons-assets', 'get-lessons-assets-by-type', 'get-lessons-quiz', 'get-lessons-summary', 'get-lessons-transcript', 'get-rate-limit', 'get-search-lessons', 'get-search-transcripts', 'get-sequences-assets', 'get-sequences-questions', 'get-sequences-units', 'get-subject-detail', 'get-subjects', 'get-subjects-key-stages', 'get-subjects-sequences', 'get-subjects-years', 'get-threads', 'get-threads-units', 'get-units-summary'] as const;
-  
-
 export function getToolFromToolName<TName extends ToolName>(toolName: TName): ToolDescriptorForName<TName> {
-  return MCP_TOOL_DEFINITIONS[toolName];
+  const descriptor = MCP_TOOL_DESCRIPTORS[toolName];
+  if (!descriptor) {
+    throw new TypeError('Unknown tool: ' + String(toolName));
+  }
+  return descriptor;
 }
 
 const OPERATION_ID_TO_TOOL_NAME = {
@@ -156,12 +283,8 @@ export type ToolOperationId = keyof OperationIdToToolName;
 export type ToolNameForOperationId<TId extends ToolOperationId> = OperationIdToToolName[TId];
 export type ToolDescriptorForOperationId<TId extends ToolOperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;
 
-
 export function isToolOperationId(value: unknown): value is ToolOperationId {
-  if (typeof value !== 'string') {
-    return false;
-  }
-  return value in OPERATION_ID_TO_TOOL_NAME;
+  return typeof value === 'string' && value in OPERATION_ID_TO_TOOL_NAME;
 }
 
 export function getToolNameFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolNameForOperationId<TId> {
@@ -172,12 +295,10 @@ export function getToolNameFromOperationId<TId extends ToolOperationId>(operatio
   return toolName;
 }
 
-
 export function getToolFromOperationId<TId extends ToolOperationId>(operationId: TId): ToolDescriptorForOperationId<TId> {
   const toolName = getToolNameFromOperationId(operationId);
-  return MCP_TOOL_DEFINITIONS[toolName];
+  return getToolFromToolName(toolName);
 }
-
 
 const TOOL_NAME_TO_OPERATION_ID = {
   'get-sequences-units': 'getSequences-getSequenceUnits',
@@ -210,7 +331,6 @@ const TOOL_NAME_TO_OPERATION_ID = {
 
 type ToolNameToOperationId = typeof TOOL_NAME_TO_OPERATION_ID;
 export type ToolOperationIdForName<TName extends ToolName> = ToolNameToOperationId[TName];
-
 
 export function getOperationIdFromToolName<TName extends ToolName>(toolName: TName): ToolOperationIdForName<TName> {
   const operationId = TOOL_NAME_TO_OPERATION_ID[toolName];
