@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { typeSafeEntries } from '../types/helpers/type-helpers.js';
 
 interface JsonSchemaPropertyString {
   readonly type: 'string';
@@ -67,7 +68,7 @@ function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodTypeAny {
   const required = new Set(prop.required ?? []);
   const properties = prop.properties ?? {};
   const shape: z.ZodRawShape = {};
-  for (const [key, property] of Object.entries(properties)) {
+  for (const [key, property] of typeSafeEntries(properties)) {
     const base = zodForProperty(property);
     shape[key] = required.has(key) ? base : base.optional();
   }
@@ -104,7 +105,7 @@ export function zodRawShapeFromToolInputJsonSchema(
   const shape: z.ZodRawShape = {};
   const required = new Set(schema.required ?? []);
   const props = schema.properties ?? {};
-  for (const [key, prop] of Object.entries(props)) {
+  for (const [key, prop] of typeSafeEntries(props)) {
     const base = zodForProperty(prop);
     shape[key] = required.has(key) ? base : base.optional();
   }

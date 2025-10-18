@@ -17,7 +17,7 @@ const path = '/changelog/latest' as const;
 const method = 'GET' as const;
 
 
-export interface ToolParams {}
+export interface ToolParams { readonly __noParams?: never; }
 
 export interface ToolArgs { readonly params: ToolParams; }
 

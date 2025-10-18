@@ -56,6 +56,9 @@ export function resolveToolExecutors(): UniversalToolExecutors {
     return {};
   }
   return {
-    executeMcpTool: (name, _args) => Promise.resolve(createStubExecution(name)),
+    executeMcpTool: (name, _args) => {
+      console.log('executeMcpTool', name, _args);
+      return Promise.resolve(createStubExecution(name));
+    },
   };
 }

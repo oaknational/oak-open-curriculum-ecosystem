@@ -7,7 +7,7 @@ interface RateLimitArgs {
   readonly params: Record<string, never>;
 }
 
-function createRateLimitClient(impl: (args: RateLimitArgs) => unknown | Promise<unknown>): {
+function createRateLimitClient(impl: (args: RateLimitArgs) => unknown): {
   readonly client: OakApiPathBasedClient;
   readonly handler: ReturnType<typeof vi.fn>;
 } {
@@ -47,7 +47,7 @@ describe('executeToolCall', () => {
 
   it('invokes generated executors for zero-parameter tools', async () => {
     const expected = { limit: 10, remaining: 9, reset: Date.now() };
-    const { client, handler } = createRateLimitClient(async (args) => {
+    const { client, handler } = createRateLimitClient((args) => {
       expect(args).toEqual({ params: {} });
       return expected;
     });

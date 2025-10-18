@@ -1,5 +1,4 @@
 const GENERATED_BANNER = [
-  '/* eslint-disable @typescript-eslint/no-restricted-types */',
   '/**',
   ' * GENERATED FILE - DO NOT EDIT',
   ' *',

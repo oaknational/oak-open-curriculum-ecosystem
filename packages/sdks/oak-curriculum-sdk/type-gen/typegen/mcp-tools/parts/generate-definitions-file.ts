@@ -47,14 +47,13 @@ export type ToolEntry = ToolEntryByNameMap[keyof ToolEntryByNameMap];
 export type ToolName = keyof ToolEntryByNameMap;
 export type ToolOperationId = ToolEntry['operationId'];
 export type ToolEntryForName<TName extends ToolName> = ToolEntryByNameMap[TName];
-type ToolNameToDescriptorMap = { readonly [TName in ToolName]: ToolEntryForName<TName>['descriptor'] };
-type ToolNameToOperationIdMap = { readonly [TName in ToolName]: ToolEntryForName<TName>['operationId'] };
-type OperationIdToToolNameMap = { readonly [TId in ToolOperationId]: ToolName };
-export type ToolDescriptors = ToolNameToDescriptorMap;
+export type ToolDescriptors = { readonly [E in ToolEntry as E['name']]: E['descriptor'] };
 export type ToolDescriptorMap = ToolDescriptors;
 export type ToolMap = ToolDescriptorMap;
 export type ToolDescriptorForName<TName extends ToolName> = ToolEntryForName<TName>['descriptor'];
-export type ToolOperationIdForName<TName extends ToolName> = ToolEntryForName<TName>['operationId'];`;
+export type ToolOperationIdForName<TName extends ToolName> = ToolEntryForName<TName>['operationId'];
+type ToolNameToOperationIdMap = { readonly [E in ToolEntry as E['name']]: E['operationId'] };
+type OperationIdToToolNameMap = Readonly<Record<ToolOperationId, ToolName>>;`;
 
 const OPERATION_ID_TYPE_BLOCK = `export type ToolNameForOperationId<TId extends ToolOperationId> = OperationIdToToolNameMap[TId];
 export type ToolDescriptorForOperationId<TId extends ToolOperationId> = ToolDescriptorForName<ToolNameForOperationId<TId>>;`;

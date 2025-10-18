@@ -1454,10 +1454,10 @@ function buildCurriculumSchemas(endpoints: ReturnType<typeof makeApi>): Curricul
   }
   const additionalSchemas: CurriculumSchemaCollection = {};
   if (changelogEndpoint) {
-    additionalSchemas["changelog_changelog_200"] = changelogEndpoint.response;
+    additionalSchemas.changelog_changelog_200 = changelogEndpoint.response;
   }
   if (latestEndpoint) {
-    additionalSchemas["changelog_latest_200"] = latestEndpoint.response;
+    additionalSchemas.changelog_latest_200 = latestEndpoint.response;
   }
   return {
     ...baseSchemas,

@@ -30,8 +30,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -46,8 +45,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -62,8 +60,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -78,8 +75,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -94,8 +90,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -110,8 +105,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -126,8 +120,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -142,8 +135,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -158,8 +150,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -174,8 +165,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -190,8 +180,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -206,8 +195,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -222,8 +210,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -238,8 +225,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -254,8 +240,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -270,8 +255,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -286,8 +270,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -302,8 +285,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -318,8 +300,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -334,8 +315,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -350,8 +330,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -366,8 +345,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -382,8 +360,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -398,8 +375,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -414,8 +390,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);
@@ -430,8 +405,7 @@ async function invokeToolByName<TName extends ToolName>(
         throw new TypeError(descriptor.describeToolArgs());
       }
       const args = parsed.data;
-      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];
-      const output = await descriptor.invoke(clientForInvoke, args);
+      const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
         throw new TypeError('Output validation error: ' + validation.message);

@@ -5,7 +5,11 @@ import { describe, it, expect } from 'vitest';
 // The emitter will then stringify/embed this at generation time.
 import type { PrimitiveType } from './param-utils.js';
 // This module will be created as part of implementing the plan.
-import { buildInputSchemaObject } from './emit-input-schema.js';
+import {
+  buildInputSchemaObject,
+  type JsonSchemaObject,
+  type JsonSchemaProperty,
+} from './emit-input-schema.js';
 
 interface ParamMetadataLike {
   readonly typePrimitive: PrimitiveType;
@@ -18,6 +22,16 @@ interface ParamMetadataLike {
 
 type MetaRecord = Record<string, ParamMetadataLike>;
 
+function expectObjectSchema(
+  property: JsonSchemaProperty | undefined,
+  label: string,
+): JsonSchemaObject {
+  if (!property || property.type !== 'object') {
+    throw new Error(`Expected ${label} to be an object schema`);
+  }
+  return property;
+}
+
 describe('buildInputSchemaObject (compile-time schema generator helper)', () => {
   it('emits required string property with additionalProperties: false', () => {
     const pathMeta: MetaRecord = {};
@@ -25,11 +39,11 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       q: { typePrimitive: 'string', valueConstraint: false, required: true },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
+    const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
     expect(schema.type).toBe('object');
     expect(schema.additionalProperties).toBe(false);
-    const paramsSchema = schema.properties.params;
+    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
     expect(paramsSchema).toEqual({
       type: 'object',
       properties: {
@@ -57,11 +71,11 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       z: { typePrimitive: 'boolean[]', valueConstraint: false, required: false },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
+    const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    const paramsSchema = schema.properties.params;
-    const pathSchema = paramsSchema.properties.path;
-    const querySchema = paramsSchema.properties.query;
+    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
+    const pathSchema = expectObjectSchema(paramsSchema.properties.path, 'params.path');
+    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
 
     expect(pathSchema.properties.a).toEqual({ type: 'number' });
     expect(pathSchema.properties.b).toEqual({ type: 'boolean' });
@@ -83,9 +97,10 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
+    const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    const querySchema = schema.properties.params.properties.query;
+    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
+    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
     expect(querySchema.properties.subject).toEqual({
       type: 'string',
       enum: ['maths', 'english'],
@@ -112,11 +127,11 @@ describe('buildInputSchemaObject (compile-time schema generator helper)', () => 
       },
     };
 
-    const schema = buildInputSchemaObject(pathMeta, queryMeta) as any;
+    const schema = buildInputSchemaObject(pathMeta, queryMeta);
 
-    const paramsSchema = schema.properties.params;
-    const pathSchema = paramsSchema.properties.path;
-    const querySchema = paramsSchema.properties.query;
+    const paramsSchema = expectObjectSchema(schema.properties.params, 'params');
+    const pathSchema = expectObjectSchema(paramsSchema.properties.path, 'params.path');
+    const querySchema = expectObjectSchema(paramsSchema.properties.query, 'params.query');
 
     expect(pathSchema.properties.sequence).toEqual({
       type: 'string',

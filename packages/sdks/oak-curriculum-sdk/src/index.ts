@@ -58,6 +58,16 @@ export type {
   ValidatedClientOptions,
   HttpMethod,
 } from './validation/index';
+// Generated URL helpers (deterministic canonical URLs)
+export {
+  generateCanonicalUrlWithContext,
+  generateCanonicalUrl,
+  CONTENT_TYPE_PREFIXES,
+  extractSlug,
+  type ContentType,
+} from './types/generated/api-schema/routing/url-helpers.js';
+
+// MCP tools and universal executors
 export {
   toolNames,
   isToolName,
@@ -82,39 +92,24 @@ export {
   type ToolResult,
   type ToolResultForOperationId,
   type RegisteredToolEntries,
-} from './types/generated/api-schema/mcp-tools/index.js';
-export {
   McpToolRegistry,
   attachMcpHandlers,
   createMcpToolRegistry,
-} from './types/generated/api-schema/mcp-tools/generated/runtime/lib.js';
-export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
-export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
-export {
+  executeToolCall,
+  McpToolError,
+  McpParameterError,
+  type ToolExecutionResult,
   zodFromToolInputJsonSchema,
   zodRawShapeFromToolInputJsonSchema,
-} from './mcp/zod-input-schema.js';
-
-// Generated URL helpers (deterministic canonical URLs)
-export {
-  generateCanonicalUrlWithContext,
-  generateCanonicalUrl,
-  CONTENT_TYPE_PREFIXES,
-  extractSlug,
-  type ContentType,
-} from './types/generated/api-schema/routing/url-helpers.js';
-
-// Universal MCP tooling exports
-export {
   listUniversalTools,
   isUniversalToolName,
   createUniversalToolExecutor,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
-} from './mcp/universal-tools.js';
+} from './public/mcp-tools.js';
 
-// Hybrid search index types (SDK-owned to centralise downstream usage)
+// Hybrid search, query parser, observability, and admin exports
 export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
@@ -142,21 +137,10 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from './types/generated/search/index.js';
-
-export {
   QueryParserRequestSchema,
   QueryParserResponseSchema,
   isQueryParserResponse,
   QUERY_PARSER_INTENT_ENUM,
-} from './types/generated/query-parser/index.js';
-export type {
-  QueryParserRequest,
-  QueryParserResponse,
-  QueryParserIntent,
-} from './types/generated/query-parser/index.js';
-
-export {
   ZERO_HIT_SCOPES,
   ZeroHitScopeSchema,
   ZeroHitScopeBreakdownSchema,
@@ -167,13 +151,6 @@ export {
   createZeroHitSummary,
   createZeroHitTelemetry,
   summariseZeroHitEvents,
-  type ZeroHitScope,
-  type ZeroHitScopeBreakdown,
-  type ZeroHitSummary,
-  type ZeroHitEvent,
-  type ZeroHitTelemetry,
-} from './types/generated/observability/index.js';
-export {
   ADMIN_STREAM_ACTIONS,
   AdminStreamActionSchema,
   AdminStreamSuccessSchema,
@@ -183,39 +160,6 @@ export {
   createAdminStreamEmptyFixture,
   createAdminStreamErrorFixture,
   createAdminStreamFixtureMap,
-  type AdminStreamAction,
-  type AdminStreamSuccessFixture,
-  type AdminStreamErrorFixture,
-  type AdminStreamFixture,
-  type AdminStreamFixtureMap,
-} from './types/generated/admin/index.js';
-
-export type {
-  SearchStructuredRequest,
-  SearchStructuredScope,
-  SearchNaturalLanguageRequest,
-  SearchParsedQuery,
-  SearchParsedIntent,
-  SearchScope,
-  SearchScopeWithAll,
-  SearchSuggestionItem,
-  SearchSuggestionResponse,
-  SearchSuggestionRequest,
-  SequenceFacetUnit,
-  SequenceFacet,
-  SearchFacets,
-  SearchLessonResult,
-  SearchLessonsResponse,
-  SearchLessonsSuggestions,
-  SearchLessonsSuggestionCache,
-  SearchUnitResult,
-  SearchUnitsResponse,
-  SearchSequenceResult,
-  SearchSequencesResponse,
-  SearchMultiScopeBucket,
-  SearchMultiScopeResponse,
-} from './types/generated/search/index.js';
-export {
   lessonSummarySchema,
   unitSummarySchema,
   subjectSequencesSchema,
@@ -225,19 +169,9 @@ export {
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
-  type LessonSummaryResponseSchema,
-  type UnitSummaryResponseSchema,
-  type SubjectSequenceResponseSchema,
-  type SearchLessonSummary,
-  type SearchUnitSummary,
-  type SearchSubjectSequences,
-} from './types/search-response-guards.js';
-export {
   SequenceFacetUnitSchema,
   SequenceFacetSchema,
   SearchFacetsSchema,
-} from './types/generated/zod/search/output/index.js';
-export {
   SearchCompletionSuggestPayloadSchema,
   SearchLessonsIndexDocSchema,
   SearchUnitsIndexDocSchema,
@@ -248,12 +182,52 @@ export {
   isSearchUnitsIndexDoc,
   isSearchUnitRollupDoc,
   isSearchSequenceIndexDoc,
-} from './types/generated/search/index.js';
-export type {
-  SearchCompletionSuggestPayload,
-  SearchLessonsIndexDoc,
-  SearchUnitsIndexDoc,
-  SearchUnitRollupDoc,
-  SearchSequenceIndexDoc,
-  SearchSubjectSlug,
-} from './types/generated/search/index.js';
+  type QueryParserRequest,
+  type QueryParserResponse,
+  type QueryParserIntent,
+  type ZeroHitScope,
+  type ZeroHitScopeBreakdown,
+  type ZeroHitSummary,
+  type ZeroHitEvent,
+  type ZeroHitTelemetry,
+  type AdminStreamAction,
+  type AdminStreamSuccessFixture,
+  type AdminStreamErrorFixture,
+  type AdminStreamFixture,
+  type AdminStreamFixtureMap,
+  type SearchStructuredRequest,
+  type SearchStructuredScope,
+  type SearchNaturalLanguageRequest,
+  type SearchParsedQuery,
+  type SearchParsedIntent,
+  type SearchScope,
+  type SearchScopeWithAll,
+  type SearchSuggestionItem,
+  type SearchSuggestionResponse,
+  type SearchSuggestionRequest,
+  type SearchFacets,
+  type SequenceFacet,
+  type SequenceFacetUnit,
+  type SearchLessonsResponse,
+  type SearchUnitsResponse,
+  type SearchSequencesResponse,
+  type SearchLessonsSuggestions,
+  type SearchLessonsSuggestionCache,
+  type SearchLessonResult,
+  type SearchUnitResult,
+  type SearchSequenceResult,
+  type SearchMultiScopeBucket,
+  type SearchMultiScopeResponse,
+  type SearchCompletionSuggestPayload,
+  type SearchLessonsIndexDoc,
+  type SearchUnitsIndexDoc,
+  type SearchUnitRollupDoc,
+  type SearchSequenceIndexDoc,
+  type SearchSubjectSlug,
+  type LessonSummaryResponseSchema,
+  type UnitSummaryResponseSchema,
+  type SubjectSequenceResponseSchema,
+  type SearchLessonSummary,
+  type SearchUnitSummary,
+  type SearchSubjectSequences,
+} from './public/search.js';

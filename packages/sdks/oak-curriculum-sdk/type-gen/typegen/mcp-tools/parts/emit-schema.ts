@@ -125,7 +125,7 @@ function buildHeaderBlock(
     sections.push('');
     sections.push('export interface ToolArgs { readonly params: ToolParams; }');
   } else {
-    sections.push('export interface ToolParams {}');
+    sections.push('export interface ToolParams { readonly __noParams?: never; }');
     sections.push('');
     sections.push('export interface ToolArgs { readonly params: ToolParams; }');
   }

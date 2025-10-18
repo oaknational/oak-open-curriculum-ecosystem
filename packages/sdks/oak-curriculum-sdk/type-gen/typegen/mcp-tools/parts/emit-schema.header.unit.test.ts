@@ -63,4 +63,10 @@ describe('emitSchema header', () => {
     expect(code).toContain('readonly query?: ToolQueryParams;');
     expect(code).toContain('export interface ToolArgs { readonly params: ToolParams; }');
   });
+
+  it('emits sentinel ToolParams shape when no params exist', () => {
+    const code = emitSchema(op(), {}, {});
+    expect(code).toContain('export interface ToolParams');
+    expect(code).toContain('readonly __noParams?: never;');
+  });
 });

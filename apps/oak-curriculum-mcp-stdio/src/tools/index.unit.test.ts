@@ -14,12 +14,12 @@ describe('createMcpToolsModule', () => {
       .fn()
       .mockImplementation(async (name) => {
         if (name === ('get-search-lessons' as ToolName)) {
-          return { data: { lessons: ['lesson-a'] } };
+          return Promise.resolve({ data: { lessons: ['lesson-a'] } });
         }
         if (name === ('get-search-transcripts' as ToolName)) {
-          return { data: { transcripts: ['transcript-a'] } };
+          return Promise.resolve({ data: { transcripts: ['transcript-a'] } });
         }
-        return { data: null };
+        return Promise.resolve({ data: null });
       });
 
     const module = createMcpToolsModule({

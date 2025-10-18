@@ -1,12 +1,18 @@
 import type {
   OpenAPIObject,
   OperationObject,
-  ResponseObject,
   PathItemObject,
   ResponsesObject,
   SchemaObject,
-  ReferenceObject,
 } from 'openapi3-ts/oas31';
+import {
+  isResponseObject,
+  sanitizeIdentifier,
+  toColonPath,
+  createComponentResolver,
+  getJsonResponseInfo,
+  cloneSchema,
+} from './shared.js';
 
 export interface ResponseMapEntry {
   readonly operationId: string;
@@ -25,134 +31,6 @@ function isOperationObject(value: unknown): value is OperationObject {
     return false;
   }
   return 'responses' in value;
-}
-
-function isResponseObject(value: unknown): value is ResponseObject {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return false;
-  }
-  return 'description' in value || 'content' in value;
-}
-
-function extractComponentNameFromRef(ref: string): string | undefined {
-  // Expect format: #/components/schemas/Name
-  const parts = ref.split('/');
-  const name = parts[parts.length - 1];
-  return name && name.length > 0 ? name : undefined;
-}
-
-function sanitizeIdentifier(value: string): string {
-  return value.replace(/[^A-Za-z0-9_]/g, '_');
-}
-
-function toColonPath(path: string): string {
-  return path.replace(/\{([^}]+)\}/g, ':$1');
-}
-
-interface ResponseInfo {
-  readonly name: string;
-  readonly source: 'component' | 'inline';
-  readonly schema: SchemaObject;
-}
-
-function isReferenceObject(value: unknown): value is ReferenceObject {
-  if (typeof value !== 'object' || value === null || Array.isArray(value) || !('$ref' in value)) {
-    return false;
-  }
-  return typeof value.$ref === 'string';
-}
-
-function isSchemaObject(value: unknown): value is SchemaObject {
-  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-    return false;
-  }
-  return !isReferenceObject(value);
-}
-
-function cloneSchema(schema: SchemaObject): SchemaObject {
-  const cloned = structuredClone(schema);
-  if (!isSchemaObject(cloned)) {
-    throw new Error('Failed to clone schema.');
-  }
-  return cloned;
-}
-
-function ensureInlineMetadata(schema: SchemaObject, opId: string, status: string): SchemaObject {
-  const next = cloneSchema(schema);
-  next.type ??= 'object';
-  next.title ??= `${opId} ${status} response`;
-  return next;
-}
-
-function createComponentResolver(
-  components: Record<string, SchemaObject | ReferenceObject | undefined>,
-) {
-  const cache = new Map<string, SchemaObject | null>();
-  const resolving = new Set<string>();
-
-  function resolve(name: string): SchemaObject | undefined {
-    if (cache.has(name)) {
-      const cached = cache.get(name);
-      return cached ?? undefined;
-    }
-    if (resolving.has(name)) {
-      return undefined;
-    }
-    resolving.add(name);
-    const definition = components[name];
-    let resolved: SchemaObject | undefined;
-    if (isSchemaObject(definition)) {
-      resolved = cloneSchema(definition);
-    } else if (isReferenceObject(definition)) {
-      const refName = extractComponentNameFromRef(definition.$ref);
-      if (refName && refName !== name) {
-        resolved = resolve(refName);
-        if (resolved) {
-          resolved = cloneSchema(resolved);
-        }
-      }
-    }
-    resolving.delete(name);
-    cache.set(name, resolved ?? null);
-    return resolved;
-  }
-
-  return { resolve };
-}
-
-function getJsonResponseInfo(
-  resp: ResponseObject,
-  opId: string,
-  status: string,
-  resolveComponent: (name: string) => SchemaObject | undefined,
-): ResponseInfo | undefined {
-  const json = resp.content?.['application/json'];
-  if (typeof json !== 'object' || Array.isArray(json)) {
-    return undefined;
-  }
-  const schema = 'schema' in json ? json.schema : undefined;
-  if (!schema || typeof schema !== 'object' || Array.isArray(schema)) {
-    return undefined;
-  }
-  if (isReferenceObject(schema)) {
-    const name = extractComponentNameFromRef(schema.$ref);
-    if (name) {
-      const resolved = resolveComponent(name);
-      if (resolved) {
-        return { name, source: 'component', schema: cloneSchema(resolved) };
-      }
-      return undefined;
-    }
-  }
-  if (!isSchemaObject(schema)) {
-    return undefined;
-  }
-  const name = sanitizeIdentifier(`${opId}_${status}`);
-  return {
-    name,
-    source: 'inline',
-    schema: ensureInlineMetadata(schema, opId, status),
-  };
 }
 
 export function buildResponseMapData(schema: OpenAPIObject): readonly ResponseMapEntry[] {

@@ -7,13 +7,14 @@ import type { ZodSchema } from 'zod';
 import type { ValidationResult, HttpMethod } from './types';
 import { parseEndpointParameters } from './types';
 import { toColon } from '../types/generated/api-schema/path-utils.js';
+import { typeSafeEntries } from '../types/helpers/type-helpers.js';
 import type {
   AllowedMethodsForPath,
   ValidPath,
 } from '../types/generated/api-schema/path-parameters';
 import { REQUEST_PARAMETER_SCHEMAS } from '../types/generated/api-schema/validation/request-parameter-map.js';
 
-const parameterSchemaEntries = Object.entries(REQUEST_PARAMETER_SCHEMAS);
+const parameterSchemaEntries = typeSafeEntries(REQUEST_PARAMETER_SCHEMAS);
 const parameterSchemaMap = new Map<string, ZodSchema>(parameterSchemaEntries);
 
 const knownPaths = (() => {
