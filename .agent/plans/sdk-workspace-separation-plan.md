@@ -5,6 +5,7 @@
 - [GO.md](../../GO.md)
 - [AGENT.md](../directives-and-memory/AGENT.md)
 - [rules.md](../directives-and-memory/rules.md)
+- [Schema-First Execution Directive](../directives-and-memory/schema-first-execution.md) - **MANDATORY**
 - [ADR-029: No Manual API Data](../../docs/architecture/architectural-decisions/029-no-manual-api-data.md)
 - [ADR-030: SDK as Single Source of Truth](../../docs/architecture/architectural-decisions/030-sdk-single-source-truth.md)
 - [ADR-031: Generation-Time Extraction](../../docs/architecture/architectural-decisions/031-generation-time-extraction.md)
@@ -18,6 +19,59 @@ Separate the Oak Curriculum SDK into two distinct workspaces with clear separati
 2. **`@oaknational/oak-curriculum-sdk-runtime`**: API client implementation using generated artifacts
 
 This separation reduces complexity by establishing a clean architectural boundary: the generation workspace produces types as a build artifact, and the runtime workspace consumes these types through a well-defined public API. The top-level `pnpm build` command orchestrates both workspaces in sequence, eliminating the need for a separate `type-gen` step at the repository level.
+
+## Core Principle: Move and Expose, Don't Modify
+
+**This is a reorganization, not a refactor.** The implementation follows a strict principle:
+
+1. **Generated code is moved as-is** - No modifications to generated files. They move from `sdk/src/types/generated/` to `sdk-generation/src/types/` unchanged.
+
+2. **Type-gen code is moved as-is** - Generator scripts move from `sdk/type-gen/` to `sdk-generation/type-gen/` unchanged. Generation logic remains identical.
+
+3. **Runtime code updates only imports** - Runtime files change import paths but not their logic. `import from './types/generated/X'` becomes `import from '@oaknational/oak-curriculum-sdk-generation'`.
+
+4. **Only new code is the public API** - The sole new file is `sdk-generation/src/index.ts` (barrel export). This is pure re-export, no new logic.
+
+5. **Build output remains identical** - After separation, `pnpm build` produces functionally identical artifacts. The only difference is package boundaries.
+
+**What this is NOT:**
+
+- ❌ Refactoring generated code structure
+- ❌ Changing generation logic or templates
+- ❌ Modifying runtime behavior
+- ❌ Introducing new abstractions or wrappers
+- ❌ Optimizing or improving existing code
+
+**What this IS:**
+
+- ✅ Moving files between workspaces
+- ✅ Creating a public API barrel export
+- ✅ Updating import paths
+- ✅ Establishing workspace boundaries
+- ✅ Enforcing encapsulation via ESLint
+
+## Schema-First Execution Compliance
+
+This plan **strictly adheres** to the [Schema-First Execution Directive](../directives-and-memory/schema-first-execution.md):
+
+1. **Generated artifacts remain the single source of truth**: The generation workspace produces all tool descriptors, validators, and type definitions from the OpenAPI schema. The runtime workspace acts only as a thin facade.
+
+2. **No runtime duplication**: Runtime code in `sdk-runtime` never duplicates validation logic, type inference, or schema processing. It imports and delegates to generated artifacts.
+
+3. **Preserved execution flow**: The mandatory flow (Contract → Definitions → Aliases → Runtime → Facade) is maintained across workspace boundaries:
+   - **Contract**: `ToolDescriptor<TName, TClient, TArgs, TResult>` in generation workspace
+   - **Definitions**: `MCP_TOOL_DESCRIPTORS` map exported from generation public API
+   - **Aliases**: `ToolArgsForName`, `ToolResultForName`, etc. exported from generation
+   - **Runtime**: Generated helpers (`callTool`, `executeDescriptor`) in generation workspace
+   - **Facade**: Thin wrappers in runtime workspace (`execute-tool-call.ts`)
+
+4. **Public API includes all schema-first components**: The generation workspace public API exports:
+   - Tool descriptors and registry
+   - Generated executors and validators
+   - Type aliases that preserve exact types from schema
+   - No type widening or union collapsing
+
+5. **Generator-first changes**: Any modifications to tool execution behavior must be made to generator templates in `sdk-generation/type-gen/typegen/mcp-tools/`, never in runtime code.
 
 ## Success Criteria
 
@@ -92,11 +146,50 @@ This separation reduces complexity by establishing a clean architectural boundar
 - [ ] Create comprehensive `src/index.ts` barrel export with JSDoc
 - [ ] Design package.json exports (root only, no subpaths)
 
+**Critical requirement - Schema-First Execution Components**:
+
+The public API MUST export all components required for schema-first execution:
+
+```typescript
+// Contract
+export type { ToolDescriptor } from './types/api-schema/mcp-tools/contract/tool-descriptor.contract.js';
+
+// Definitions
+export {
+  MCP_TOOL_DESCRIPTORS,
+  getToolFromToolName,
+} from './types/api-schema/mcp-tools/generated/data/definitions.js';
+
+// Aliases
+export type {
+  ToolArgsForName,
+  ToolClientForName,
+  ToolResultForName,
+  ToolArgs,
+  ToolResult,
+} from './types/api-schema/mcp-tools/generated/aliases/types.js';
+
+// Runtime executors
+export {
+  callTool,
+  executeDescriptor,
+  listAllToolDescriptors,
+} from './types/api-schema/mcp-tools/generated/runtime/execute.js';
+
+// Registry and helpers
+export {
+  McpToolRegistry,
+  createMcpToolRegistry,
+  attachMcpHandlers,
+} from './types/api-schema/mcp-tools/generated/runtime/lib.js';
+```
+
 **Deliverables**:
 
 - `packages/sdks/oak-curriculum-sdk-generation/src/index.ts` (complete public API)
 - Public API documentation in generation workspace README
 - List of internal paths that will become private implementation details
+- Schema-first execution component checklist verified
 
 ### 1.3 Define Workspace Structure
 
@@ -212,11 +305,14 @@ mv packages/sdks/oak-curriculum-sdk/schema-cache \
 
 **Objective**: Relocate generated types to generation workspace source.
 
+**CRITICAL**: Generated files are **moved unchanged**. Do not modify any generated file content during the move. This is a pure file relocation operation.
+
 **Tasks**:
 
-- [ ] Move `src/types/generated/` to generation workspace
-- [ ] Update type-gen scripts to output to new location
+- [ ] Move `src/types/generated/` directory as-is to generation workspace
+- [ ] Update type-gen scripts to output to new location (paths only, not logic)
 - [ ] Verify all generation paths are correct
+- [ ] Verify generated file contents are byte-for-byte identical after move
 - [ ] Commit generated files in new location
 
 **Commands**:
@@ -224,7 +320,7 @@ mv packages/sdks/oak-curriculum-sdk/schema-cache \
 ```bash
 mkdir -p packages/sdks/oak-curriculum-sdk-generation/src
 
-# Move generated types
+# Move generated types (contents unchanged)
 mv packages/sdks/oak-curriculum-sdk/src/types/generated \
    packages/sdks/oak-curriculum-sdk-generation/src/types
 ```
@@ -232,7 +328,9 @@ mv packages/sdks/oak-curriculum-sdk/src/types/generated \
 **Validation**:
 
 - All generated files present in new location
+- Generated file contents identical to original (use `git diff` to verify)
 - type-gen scripts generate to correct paths
+- No changes to generated code structure or logic
 
 ### 2.3 Create Public API Barrel Export
 
@@ -410,6 +508,14 @@ mv packages/sdks/oak-curriculum-sdk \
 
 **Objective**: Change all imports to use generation package public API.
 
+**CRITICAL**: This is an **import-only** change. Runtime file logic remains unchanged. Only the `import` statements at the top of files are modified. No changes to:
+
+- Function implementations
+- Class methods
+- Variable assignments
+- Control flow
+- Type annotations (except import source)
+
 **Import transformation pattern**:
 
 ```typescript
@@ -419,11 +525,13 @@ import { KEY_STAGES, isKeyStage } from './types/generated/api-schema/path-parame
 import { curriculumSchemas } from './types/generated/zod/curriculumZodSchemas.js';
 import { getToolFromToolName } from './types/generated/api-schema/mcp-tools/index.js';
 
-// AFTER
+// AFTER - Only import source changes, symbols remain identical
 import type { paths } from '@oaknational/oak-curriculum-sdk-generation';
 import { KEY_STAGES, isKeyStage } from '@oaknational/oak-curriculum-sdk-generation';
 import { curriculumSchemas } from '@oaknational/oak-curriculum-sdk-generation';
 import { getToolFromToolName } from '@oaknational/oak-curriculum-sdk-generation';
+
+// Rest of file unchanged - same logic, same implementations
 ```
 
 **Files to update**:
@@ -459,6 +567,11 @@ rg "from ['\"]\.\.?/types/generated/" src/
 - TypeScript compilation succeeds
 - No imports from `./types/generated/` remain
 - All imports resolve from generation package
+- **No runtime logic changes**: Use `git diff` to verify only import lines changed
+  ```bash
+  # Should show ONLY import statement changes, no logic changes
+  git diff packages/sdks/oak-curriculum-sdk-runtime/src/
+  ```
 
 ### 3.3 Update Runtime Barrel Export
 
@@ -908,7 +1021,53 @@ rg "@oaknational/oak-curriculum-sdk-generation/[^'\"]" src/
 - ESLint enforces boundaries
 - Test attempt to add deep import fails lint
 
-### 5.6 Performance Testing
+### 5.6 Schema-First Execution Compliance Validation
+
+**Objective**: Verify that workspace separation maintains schema-first execution directive.
+
+**Compliance checks**:
+
+```bash
+# 1. Verify runtime doesn't duplicate validation logic
+cd packages/sdks/oak-curriculum-sdk-runtime
+rg "safeParse|parse\(" src/mcp/ src/validation/
+
+# Should only find thin wrappers that delegate to generated validators
+# NOT: New validation logic created in runtime
+
+# 2. Verify no type widening in runtime
+rg "unknown|any|as\s" src/mcp/ src/validation/
+
+# Should find minimal occurrences - only at boundaries
+# NOT: Type assertions or widening to work around generator types
+
+# 3. Verify tool execution delegates to generated helpers
+cat src/mcp/execute-tool-call.ts
+# Should import and call generated executors, not duplicate logic
+
+# 4. Verify all MCP components come from generation
+rg "from '@oaknational/oak-curriculum-sdk-generation'" src/mcp/
+# Should import: descriptors, executors, validators, type aliases
+```
+
+**Manual audit**:
+
+- [ ] Runtime `execute-tool-call.ts` is thin facade (< 150 lines)
+- [ ] No runtime code duplicates generated validation
+- [ ] Tool execution flow matches directive: Contract → Definitions → Aliases → Runtime → Facade
+- [ ] All MCP tool descriptors imported from generation workspace
+- [ ] Generated executors (`callTool`, `executeDescriptor`) used, not reimplemented
+- [ ] Type aliases (`ToolArgsForName`, etc.) imported and preserve exact types
+- [ ] No union collapsing or type widening in runtime code
+
+**Validation criteria**:
+
+- [ ] Schema-first execution flow preserved across workspaces
+- [ ] Runtime remains thin facade over generated artifacts
+- [ ] No prohibited practices detected (see directive)
+- [ ] Generator templates remain single source of execution logic
+
+### 5.7 Performance Testing
 
 **Objective**: Ensure build time and runtime performance unchanged.
 
@@ -1040,7 +1199,32 @@ time pnpm --filter @oaknational/oak-curriculum-sdk build
 
 **Objective**: Confirm all success criteria met.
 
-**Checklist**:
+**Move-and-Expose Verification**:
+
+```bash
+# Verify no logic changes to generated files
+cd packages/sdks/oak-curriculum-sdk-generation/src/types
+# Files should be identical to their original location (git history will show move only)
+
+# Verify no logic changes to runtime files (only imports changed)
+cd packages/sdks/oak-curriculum-sdk-runtime/src
+git log --all -p -- '*.ts' | grep -A5 -B5 '^[-+]' | grep -v '^[-+]import'
+# Should show minimal/no changes besides imports
+
+# Verify new code is only barrel export
+git log --diff-filter=A --name-only packages/sdks/oak-curriculum-sdk-generation/src/
+# Should show only: src/index.ts and package.json/config files
+```
+
+**Functional Equivalence**:
+
+- [ ] Build output for consuming apps is identical (compare dist/ contents)
+- [ ] Type definitions exported are identical
+- [ ] Runtime behavior is identical
+- [ ] Test results are identical
+- [ ] Performance metrics are equivalent
+
+**Separation Checklist**:
 
 - [ ] ✅ Clean workspace separation achieved
 - [ ] ✅ Public API enforced (no deep imports)
@@ -1056,6 +1240,7 @@ time pnpm --filter @oaknational/oak-curriculum-sdk build
 - [ ] ✅ Migration guide published
 - [ ] ✅ ADR published
 - [ ] ✅ High-level plan updated
+- [ ] ✅ **Core Principle Verified**: Only moves and re-exports, no modifications
 
 ## Rollback Strategy
 
@@ -1133,12 +1318,15 @@ If critical issues discovered during implementation:
 
 ## Notes
 
+- **Schema-First Execution**: This separation MUST preserve the mandatory schema-first execution pattern. Runtime code remains a thin facade over generated artifacts. See [Schema-First Execution Directive](../directives-and-memory/schema-first-execution.md).
 - Generated files remain committed in generation workspace for transparency and CI
 - Runtime package name stays `@oaknational/oak-curriculum-sdk` for consumer compatibility
 - Generation package published as `@oaknational/oak-curriculum-sdk-generation`
 - Both packages follow semantic versioning
 - For monorepo consumers, `workspace:*` links ensure always using local versions
 - External consumers automatically get generation as transitive dependency
+- All MCP tool execution components (Contract → Definitions → Aliases → Runtime → Facade) exported from generation public API
+- Generator templates in `sdk-generation/type-gen/` remain the single source of truth for tool execution behavior
 
 ## Related Plans
 

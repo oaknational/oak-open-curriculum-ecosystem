@@ -9,43 +9,81 @@ const BANNER = `/**
  * .agent/directives-and-memory/schema-first-execution.md. Do not hand-edit.
  */`;
 
-export function generateExecuteFile(): string {
+function emitCallToolOverloads(names: readonly string[]): string {
+  return names
+    .map((toolName) =>
+      [
+        'export function callTool(',
+        `  name: '${toolName}',`,
+        `  client: ToolClientForName<'${toolName}'>,`,
+        `  rawArgs: ToolArgsForName<'${toolName}'>,`,
+        `): Promise<ToolResultForName<'${toolName}'>>;`,
+      ].join('\n'),
+    )
+    .join('\n');
+}
+
+export function generateExecuteFile(toolNames: string[]): string {
+  const names = toolNames.slice().toSorted();
+
+  const switchCases = names
+    .map((toolName) =>
+      [
+        `    case '${toolName}': {`,
+        `      const entry = getToolEntryFromToolName('${toolName}');`,
+        `      const descriptor: ToolDescriptorForName<'${toolName}'> = entry.descriptor;`,
+        '      const parsed = descriptor.toolZodSchema.safeParse(rawArgs);',
+        '      if (!parsed.success) {',
+        '        throw new TypeError(descriptor.describeToolArgs());',
+        '      }',
+        `      const args: ToolArgsForName<'${toolName}'> = parsed.data;`,
+        '      const clientForInvoke = client as Parameters<typeof descriptor.invoke>[0];',
+        '      const output = await descriptor.invoke(clientForInvoke, args);',
+        '      const validation = descriptor.validateOutput(output);',
+        '      if (!validation.ok) {',
+        "        throw new TypeError('Output validation error: ' + validation.message);",
+        '      }',
+        '      return validation.data;',
+        '    }',
+      ].join('\n'),
+    )
+    .join('\n');
+
   return [
     BANNER,
     "import { CallToolRequestSchema, type CallToolRequest } from '@modelcontextprotocol/sdk/types.js';",
-    "import { getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../data/definitions.js';",
+    "import { getToolEntryFromToolName, getToolFromToolName, isToolName, toolNames, type ToolDescriptorForName, type ToolName } from '../data/definitions.js';",
     "import type { ToolArgsForName, ToolClientForName, ToolResultForName } from '../aliases/types.js';",
     '',
     'export function listAllToolDescriptors(): readonly ToolDescriptorForName<ToolName>[] {',
     '  return toolNames.map((name) => getToolFromToolName(name));',
     '}',
     '',
-    'export function parseToolArguments<TName extends ToolName>(name: TName, rawArgs: unknown): { readonly descriptor: ToolDescriptorForName<TName>; readonly args: ToolArgsForName<TName>; readonly run: (client: ToolClientForName<TName>) => Promise<ToolResultForName<TName>> } {',
-    '  const descriptor = getToolFromToolName(name);',
-    '  const parsed = descriptor.toolZodSchema.safeParse(rawArgs);',
-    '  if (!parsed.success) {',
-    '    throw new TypeError(descriptor.describeToolArgs());',
+    'async function invokeToolByName<TName extends ToolName>(',
+    '  name: TName,',
+    '  client: ToolClientForName<TName>,',
+    '  rawArgs: unknown,',
+    '): Promise<ToolResultForName<TName>> {',
+    '  switch (name) {',
+    switchCases,
+    '    default:',
+    "      throw new TypeError('Unknown tool: ' + String(name));",
     '  }',
-    '  const args = parsed.data;',
-    '  const run = async (client: ToolClientForName<TName>): Promise<ToolResultForName<TName>> => {',
-    '    // Safe: args already validated against descriptor.toolZodSchema.',
-    '    const output = await descriptor.invoke(client, args as Parameters<typeof descriptor.invoke>[1]);',
-    '    const validation = descriptor.validateOutput(output);',
-    '    if (!validation.ok) {',
-    "      throw new TypeError('Output validation error: ' + validation.message);",
-    '    }',
-    '    return validation.data;',
-    '  };',
-    '  return { descriptor, args, run };',
     '}',
+    '',
+    emitCallToolOverloads(names),
+    'export function callTool(',
+    '  name: ToolName,',
+    '  client: ToolClientForName<ToolName>,',
+    '  rawArgs: unknown,',
+    '): Promise<ToolResultForName<ToolName>>;',
     '',
     'export async function callTool<TName extends ToolName>(',
     '  name: TName,',
     '  client: ToolClientForName<TName>,',
     '  rawArgs: unknown,',
     '): Promise<ToolResultForName<TName>> {',
-    '  const invocation = parseToolArguments(name, rawArgs);',
-    '  return invocation.run(client);',
+    '  return invokeToolByName(name, client, rawArgs);',
     '}',
     '',
     'export async function callToolWithValidation(',
@@ -57,8 +95,7 @@ export function generateExecuteFile(): string {
     '  if (!isToolName(name)) {',
     "    throw new TypeError('Unknown tool: ' + String(name));",
     '  }',
-    '  const invocation = parseToolArguments(name, rawArgs);',
-    '  return invocation.run(client);',
+    '  return callTool(name, client, rawArgs);',
     '}',
   ].join('\n');
 }

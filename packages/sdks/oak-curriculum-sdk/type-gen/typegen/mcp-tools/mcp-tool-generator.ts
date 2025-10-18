@@ -194,7 +194,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   const toolNames = Array.from(toolNamesSet).toSorted();
 
   result.aliases['types.ts'] = generateTypesFile();
-  result.runtime['execute.ts'] = generateExecuteFile();
+  result.runtime['execute.ts'] = generateExecuteFile(toolNames);
   result.runtime['lib.ts'] = generateLibFile();
   result.data['definitions.ts'] = generateDefinitionsFile(toolNames, operationToToolEntries);
   result.data['index.ts'] = generateDataIndexFile();

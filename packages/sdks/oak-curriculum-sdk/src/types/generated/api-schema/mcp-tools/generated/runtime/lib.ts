@@ -12,7 +12,7 @@ import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { CallToolRequestSchema, ListToolsRequestSchema, type CallToolRequest, type CallToolResult, type TextContent } from '@modelcontextprotocol/sdk/types.js';
 import { getToolFromOperationId, isToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolName, type ToolOperationId } from '../data/definitions.js';
 import type { ToolClientForName } from '../aliases/types.js';
-import { callTool, listAllToolDescriptors, parseToolArguments } from './execute.js';
+import { callTool, listAllToolDescriptors } from './execute.js';
 
 type InvocationResult = CallToolResult;
 
@@ -55,8 +55,7 @@ export class McpToolRegistry {
       return formatError(new TypeError('Unknown tool: ' + String(name)));
     }
     try {
-      const { args } = parseToolArguments(name, rawArgs);
-      const result = await callTool(name, this.client, args);
+      const result = await callTool(name, this.client, rawArgs);
       return formatSuccess(result);
     } catch (error) {
       return formatError(error);

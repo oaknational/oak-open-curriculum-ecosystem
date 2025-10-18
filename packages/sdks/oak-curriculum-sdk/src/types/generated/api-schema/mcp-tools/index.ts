@@ -5,7 +5,7 @@
  * Re-exports canonical literals, descriptors, and derived types.
  */
 
-export { MCP_TOOL_DESCRIPTORS, toolNames, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isToolOperationId, type ToolDescriptorMap, type ToolMap, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolOperationId, type ToolOperationIdForName, type ToolName, type ToolNameForOperationId } from "./generated/data/index.js";
+export { MCP_TOOL_DESCRIPTORS, toolNames, getToolEntryFromToolName, getToolFromToolName, getToolFromOperationId, getToolNameFromOperationId, getOperationIdFromToolName, isToolName, isToolOperationId, type ToolDescriptorMap, type ToolMap, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolEntry, type ToolEntryForName, type ToolOperationId, type ToolOperationIdForName, type ToolName, type ToolNameForOperationId } from "./generated/data/index.js";
 
 export { type ToolDescriptor } from "./contract/tool-descriptor.contract.js";
 

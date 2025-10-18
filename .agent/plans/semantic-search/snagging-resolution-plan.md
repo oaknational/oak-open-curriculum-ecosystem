@@ -73,6 +73,15 @@ Follow this workflow end-to-end; do not skip steps. Grounding checkpoints are **
 
 **Grounding Check 2 (MANDATORY):** Re-read the directives and log whether the regenerated files now satisfy the cardinal rule. If not, undo and correct at the generator.
 
+### Stage 3.2 – Discriminated Generator Entries
+
+- Re-ground with rules + schema-first directive; note in the context log that Stage 3.2 aims to remove remaining type widening.
+- Update generator templates to emit discriminated tool entries (e.g. `MCP_TOOL_ENTRIES`) and derive `ToolDescriptorForName`, `ToolArgsForName`, etc., from those entries to keep name-to-descriptor associations literal.
+- Regenerate via `pnpm type-gen` and verify that generated files (`definitions.ts`, `aliases/types.ts`, `runtime/execute.ts`) compile without casts or unions. Re-run `pnpm build --filter @oaknational/oak-curriculum-sdk` before moving on.
+- **If TypeScript still widens after exhaustive generator refactors:** generate a switch-based dispatcher so each case operates on a single literal entry and inlines parse/invoke/validate logic. Remove any remaining assertions and document the rationale in the context log.
+
+**Loop Check C:** Do generator outputs provide exact per-tool types with no runtime casts? If not, redesign within the generator before advancing.
+
 ### Stage 4 – Runtime Façade & Tests
 
 - Simplify `src/mcp/execute-tool-call.ts` to rely solely on generated executors, mapping errors without additional validation.

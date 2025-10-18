@@ -11,17 +11,19 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
       'export interface ToolDescriptor<TName extends string, TClient, TArgs, TResult> extends Tool',
     );
     expect(output.data['definitions.ts']).toContain('export const MCP_TOOL_DESCRIPTORS');
+    expect(output.data['definitions.ts']).toContain('export const MCP_TOOL_ENTRIES = [');
     expect(output.data['definitions.ts']).toContain(
-      'export type ToolDescriptorMap = typeof MCP_TOOL_DESCRIPTORS;',
+      "export type ToolDescriptors = { readonly [E in ToolEntry as E['name']]: E['descriptor'] };",
     );
     const aliasesFile = output.aliases['types.ts'];
     expect(aliasesFile).toContain(
-      "import type { ToolOperationId, ToolDescriptorForName, ToolDescriptorForOperationId, ToolMap, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
+      "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
     );
     expect(output.runtime['execute.ts']).toContain(
-      'export async function callTool<TName extends ToolName>(',
+      "export function callTool(\n  name: 'get-changelog',",
     );
-    expect(output.runtime['execute.ts']).toContain('return callTool(name, client, args);');
+    expect(output.runtime['execute.ts']).toContain('switch (name) {');
+    expect(output.runtime['execute.ts']).not.toContain('callToolEntry(');
     expect(output.runtime['lib.ts']).toContain(
       "import { getToolFromOperationId, isToolName, type ToolDescriptorForName, type ToolDescriptorForOperationId, type ToolName, type ToolOperationId } from '../data/definitions.js';",
     );
@@ -29,7 +31,6 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
       "import { callTool, listAllToolDescriptors } from './execute.js';",
     );
     expect(output.runtime['lib.ts']).not.toContain('override');
-    expect(output.runtime['lib.ts']).not.toContain('switch (name)');
     expect(output.index).toContain('generated/data/index.js');
   });
 
