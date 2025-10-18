@@ -23,6 +23,7 @@ export default defineConfig({
     'src/types/generated/api-schema/mcp-tools/generated/data/index.ts',
     'src/types/generated/api-schema/mcp-tools/generated/data/tools/*.ts',
     'src/types/generated/api-schema/mcp-tools/generated/aliases/types.ts',
+    'src/types/generated/api-schema/mcp-tools/generated/runtime/execute.ts',
     'src/types/generated/api-schema/mcp-tools/generated/runtime/lib.ts',
     'src/types/helpers/type-helpers.ts',
     'src/types/generated/search/index.ts',
