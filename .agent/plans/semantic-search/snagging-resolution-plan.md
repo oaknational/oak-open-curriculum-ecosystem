@@ -26,19 +26,30 @@ Restore a fully schema-first pipeline where every runtime artefact—including s
 
 ## Stage 4 – Schema-Generated Stubs (In Progress)
 
-**Objective:** Generate canonical stub payloads during type generation so they automatically stay aligned with the OpenAPI schema.
+**Objective:** Generate canonical stub payloads during type generation so they automatically stay aligned with the OpenAPI schema, then expose helpers that transports can import directly.
 
-Tasks:
+**Progress:** Step 0 (re-establish the green baseline) completed on 2025-10-19 18:35 BST; proceed with Step 1.
 
-1. Extend `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` to:
-   - Resolve each tool’s 200-response schema (handling `$ref` via the existing component resolver).
-   - Build deterministic fixtures (choose the first enum value, include required arrays with a single entry, provide sensible primitives, etc.).
-   - Emit per-tool stub modules plus shared helpers (`createStubToolExecutor`, `createStubbedUniversalExecutors`).
-2. Ensure the generator writes these files under `src/types/generated/api-schema/mcp-tools/...` so `pnpm type-gen` remains the single source of truth.
-3. TDD:
-   - Keep `packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` failing until the generator emits valid fixtures.
-   - Add any needed template-focused tests inside `type-gen` to guard fixture structure.
-4. Once stubs are generated, run the full gate suite.
+Tasks (small, test-driven increments):
+
+1. **Re-establish the green baseline** _(completed 2025-10-19)_
+   - Revert `type-gen/typegen/mcp-tools/` to the last working structure (single generator file plus existing parts).
+   - Prove `pnpm type-gen` runs clean before introducing new helpers.
+2. **Introduce schema-sampling core with TDD**
+   - Add a focused unit test covering a minimal schema → sample conversion.
+   - Implement a small helper (e.g., `schema-sample-core.ts`) that passes the test while keeping lines-per-file within lint limits.
+3. **Layer stub-module emitters**
+   - Write a test that asserts the exact strings produced for a trivial tool map.
+   - Implement the emitter (`stub-modules.ts`) to satisfy the test without touching the main generator yet.
+4. **Thread helpers into `mcp-tool-generator.ts`**
+   - Add a generator-level test (or extend the existing one) that validates integration with the new helpers.
+   - Update the generator to use the helpers, keeping previously green tests passing.
+   - Reintroduce `stub-tool-executor.unit.test.ts` so the generated helpers drive the runtime acceptance.
+5. **Regenerate artefacts and re-run the unit scaffold**
+   - Execute `pnpm type-gen` and inspect outputs.
+   - Run `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` to confirm the scaffold moves from red to green.
+6. **Validate the full gate stack**
+   - Once the above steps pass, run the complete suite (`build`, `type-check`, `lint`, `test`, `test:e2e`, `test:ui`, `smoke:dev`).
 
 Exit Criteria:
 

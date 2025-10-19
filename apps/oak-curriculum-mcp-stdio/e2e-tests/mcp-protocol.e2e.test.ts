@@ -29,6 +29,16 @@ function expectSuccessfulResult(result: Awaited<ReturnType<Client['callTool']>>)
   return parsed;
 }
 
+function extractDataArray(payload: unknown): unknown[] {
+  if (Array.isArray((payload as { data?: unknown }).data)) {
+    return (payload as { data: unknown[] }).data;
+  }
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+  throw new Error('Tool response did not contain an array payload');
+}
+
 describe('MCP Protocol E2E', () => {
   let client: Client;
   let transport: StdioClientTransport;
@@ -100,11 +110,9 @@ describe('MCP Protocol E2E', () => {
           arguments: { params: {} },
         }),
       );
-      const dataArray = Array.isArray((payload as { data?: unknown }).data)
-        ? (payload as { data: unknown[] }).data
-        : payload;
+      const dataArray = extractDataArray(payload);
       expect(Array.isArray(dataArray)).toBe(true);
-      expect((dataArray as unknown[]).length).toBeGreaterThan(0);
+      expect(dataArray.length).toBeGreaterThan(0);
     });
 
     it('should execute tool with parameters', async () => {
@@ -119,8 +127,8 @@ describe('MCP Protocol E2E', () => {
             },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(payload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(payload))).toBe(true);
     });
 
     it('should handle optional parameters correctly', async () => {
@@ -136,8 +144,8 @@ describe('MCP Protocol E2E', () => {
             },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(basePayload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(basePayload))).toBe(true);
 
       // Call with optional parameters
       const optionalPayload = expectSuccessfulResult(
@@ -154,8 +162,8 @@ describe('MCP Protocol E2E', () => {
             },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(optionalPayload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(optionalPayload))).toBe(true);
     });
   });
 
