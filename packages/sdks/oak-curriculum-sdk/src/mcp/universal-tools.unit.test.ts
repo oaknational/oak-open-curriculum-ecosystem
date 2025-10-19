@@ -3,6 +3,7 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { McpToolError } from './execute-tool-call.js';
 import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
 import { SEARCH_INPUT_SCHEMA } from './aggregated-search.js';
+import type { UniversalToolName } from './universal-tools.js';
 import { generateCanonicalUrlWithContext } from '../types/generated/api-schema/routing/url-helpers.js';
 
 interface McpToolDefinition {
@@ -10,35 +11,41 @@ interface McpToolDefinition {
   readonly inputSchema: GenericToolInputJsonSchema;
 }
 
-const sampleMcpToolName = 'get-key-stages-subject-lessons';
-
-const sampleMcpToolDef: McpToolDefinition = {
-  description: 'List lessons for a subject',
-  inputSchema: {
-    type: 'object',
-    additionalProperties: false,
-    properties: {
-      params: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          path: {
-            type: 'object',
-            additionalProperties: false,
-            properties: {
-              keyStage: { type: 'string' },
-              subject: { type: 'string' },
+const { sampleMcpToolName, mcpTools } = vi.hoisted(() => {
+  const name = 'get-key-stages-subject-lessons' as const;
+  const definition: McpToolDefinition = {
+    description: 'List lessons for a subject',
+    inputSchema: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        params: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            path: {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                keyStage: { type: 'string' },
+                subject: { type: 'string' },
+              },
             },
           },
         },
       },
     },
-  },
-};
+  };
 
-const mcpTools: Record<string, McpToolDefinition> = {
-  [sampleMcpToolName]: sampleMcpToolDef,
-};
+  const tools: Record<string, McpToolDefinition> = {
+    [name]: definition,
+  };
+
+  return {
+    sampleMcpToolName: name,
+    mcpTools: tools,
+  };
+});
 
 vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
   toolNames: [sampleMcpToolName] as const,
@@ -66,7 +73,7 @@ const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } =
   './universal-tools.js'
 );
 
-const SAMPLE_MCP_TOOL_NAME = sampleMcpToolName;
+const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;
 
 describe('listUniversalTools', () => {
   it('includes aggregated helpers', () => {

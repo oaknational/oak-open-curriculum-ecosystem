@@ -87,6 +87,22 @@ Reflection: Loop check result, schema-first alignment notes.
 
 ---
 
+2025-10-18 21:34 UTC
+
+- `pnpm type-gen` → ✅  
+  Confirmed generator outputs remain unchanged after lint clean-up.
+- `pnpm build --filter @oaknational/oak-curriculum-sdk` → ✅  
+  Aggregated helpers, shared utilities, and public façades ship correctly in `dist`.
+- `pnpm type-check --filter @oaknational/oak-curriculum-sdk` → ✅  
+  Final verification that runtime/tests stay inference-free.
+- `pnpm lint --filter @oaknational/oak-curriculum-sdk` → ✅  
+  All runtime lint targets green; generator lint backlog remains deferred.
+- `pnpm build --filter @oaknational/open-curriculum-semantic-search` → ✅  
+   Downstream semantic-search workspace builds clean with the updated SDK artefacts.
+  Reflection: Loop Check E passed—Stage 3 integrity checks complete, and docs/plans now mirror the schema-first, generator-driven flow. Backlog limited to generator lint tidy-up and downstream app audits.
+
+---
+
 ## Next Steps
 
 1. Stage 2 – Lint hardening without widening types

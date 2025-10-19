@@ -20,7 +20,7 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
       "import type { ToolOperationId, ToolDescriptors as GeneratedToolDescriptors, ToolEntryForName, ToolName, ToolNameForOperationId, ToolOperationIdForName as GeneratedToolOperationIdForName } from '../data/definitions.js';",
     );
     expect(output.runtime['execute.ts']).toContain(
-      "export function callTool(\n  name: 'get-changelog',",
+      "export function callTool(\n  name: 'get-lessons-transcript',",
     );
     expect(output.runtime['execute.ts']).toContain('switch (name) {');
     expect(output.runtime['execute.ts']).not.toContain('callToolEntry(');

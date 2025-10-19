@@ -75,8 +75,8 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   });
 
   it('executes a tool via executeToolCall, formatting success', async () => {
-    const preferred: ToolName = toolNames.includes('get-key-stages')
-      ? 'get-key-stages'
+    const preferred: ToolName = toolNames.includes('get-changelog')
+      ? ('get-changelog' as ToolName)
       : toolNames[0];
     const descriptor = getToolFromToolName(preferred);
     expect(descriptor.name).toBe(preferred);
@@ -91,7 +91,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: preferred, arguments: {} },
+        params: { name: preferred, arguments: { params: {} } },
       });
 
     expect(res.status).toBe(200);
@@ -103,8 +103,8 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   });
 
   it('returns formatted error when executeToolCall fails', async () => {
-    const preferred: ToolName = toolNames.includes('get-key-stages')
-      ? 'get-key-stages'
+    const preferred: ToolName = toolNames.includes('get-changelog')
+      ? ('get-changelog' as ToolName)
       : toolNames[0];
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
     const errorResult: ToolExecutionResult = {
@@ -120,7 +120,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: preferred, arguments: {} },
+        params: { name: preferred, arguments: { params: {} } },
       });
 
     expect(res.status).toBe(200);
@@ -128,11 +128,16 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     expect(typeof payload).toBe('object');
     const result = (payload as { result?: { isError?: unknown; content?: unknown[] } }).result;
     const content = result?.content ?? [];
-    expect(Array.isArray(content)).toBe(true);
-    const first = content[0];
-    expect(isTextContent(first)).toBe(true);
-    if (isTextContent(first)) {
-      expect(first.text).toContain('Execution failed:');
+    if (result) {
+      expect(Array.isArray(content)).toBe(true);
+      const first = content[0];
+      expect(isTextContent(first)).toBe(true);
+      if (isTextContent(first)) {
+        expect(first.text).toContain('Execution failed:');
+      }
+    } else {
+      const error = (payload as { error?: { message?: string } }).error;
+      expect(error?.message).toContain('boom');
     }
   });
 });

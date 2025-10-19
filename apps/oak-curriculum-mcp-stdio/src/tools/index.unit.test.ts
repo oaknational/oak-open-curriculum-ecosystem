@@ -31,11 +31,11 @@ describe('createMcpToolsModule', () => {
 
     expect(executeMcpTool).toHaveBeenCalledWith(
       'get-search-lessons',
-      expect.objectContaining({ q: 'photosynthesis' }),
+      expect.objectContaining({ params: { query: { q: 'photosynthesis' } } }),
     );
     expect(executeMcpTool).toHaveBeenCalledWith(
       'get-search-transcripts',
-      expect.objectContaining({ q: 'photosynthesis' }),
+      expect.objectContaining({ params: { query: { q: 'photosynthesis' } } }),
     );
     expect(result).toEqual({
       q: 'photosynthesis',

@@ -18,7 +18,7 @@ describe('generateLibFile', () => {
     const output = generateLibFile();
 
     expect(output).toContain('export class McpToolRegistry');
-    expect(output).toContain('const result = await callTool(name, this.client, args);');
+    expect(output).toContain('const result = await callTool(name, this.client, rawArgs);');
     expect(output).toContain('return listAllToolDescriptors();');
     expect(output).toContain('return formatSuccess(result);');
     expect(output).toContain('return formatError(error);');
