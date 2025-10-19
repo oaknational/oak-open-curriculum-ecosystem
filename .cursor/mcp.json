@@ -12,14 +12,6 @@
       "type": "http",
       "url": "https://curriculum-mcp-alpha.oaknational.dev/mcp"
     },
-    "oak-remote-oai": {
-      "type": "http",
-      "url": "https://curriculum-mcp-alpha.oaknational.dev/openai_connector"
-    },
-    "oak-curriculum-http-remote-unprotected": {
-      "type": "http",
-      "url": "https://poc-oak-open-curriculum-gga0uzvz8.vercel.thenational.academy/openai_connector"
-    },
     "oak-curriculum-http-local": {
       "type": "http",
       "url": "http://localhost:3333/mcp",

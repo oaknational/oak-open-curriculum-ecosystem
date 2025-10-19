@@ -340,7 +340,7 @@ async function run(): Promise<void> {
           method: 'tools/call',
           params: {
             name: 'get-key-stages',
-            arguments: {},
+            arguments: { params: {} },
           },
         }),
       });
@@ -355,11 +355,13 @@ async function run(): Promise<void> {
       const payloadText = result?.content?.find((entry) => entry?.type === 'text')?.text ?? '';
       assert.notEqual(payloadText.length, 0, 'Successful tool call must return text content');
       const payload = JSON.parse(payloadText) as { data?: unknown };
-      assert.ok(Array.isArray(payload?.data), 'Tool payload should contain a data array');
-      assert.ok(
-        (payload!.data as unknown[]).length > 0,
-        'Tool payload data array should not be empty',
-      );
+      const dataValue = Array.isArray(payload?.data)
+        ? payload!.data
+        : Array.isArray((payload?.data as { data?: unknown })?.data)
+          ? (payload!.data as { data?: unknown }).data
+          : undefined;
+      assert.ok(Array.isArray(dataValue), 'Tool payload should contain a data array');
+      assert.ok((dataValue as unknown[]).length > 0, 'Tool payload data array should not be empty');
     }
 
     // 7) Synonym canonicalisation succeeds
@@ -378,8 +380,12 @@ async function run(): Promise<void> {
           params: {
             name: 'get-key-stages-subject-lessons',
             arguments: {
-              keyStage: 'Key Stage Four',
-              subject: 'Fine Art',
+              params: {
+                path: {
+                  keyStage: 'Key Stage Four',
+                  subject: 'Fine Art',
+                },
+              },
             },
           },
         }),

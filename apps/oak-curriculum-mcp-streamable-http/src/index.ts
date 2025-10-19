@@ -242,7 +242,7 @@ export async function startDevServer(): Promise<void> {
 
   logger.info('Streaming HTTP MCP dev server listening', {
     url: `http://localhost:${String(port)}`,
-    allowNoAuth: process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true',
+    allowNoAuth: true,
     nodeEnv: process.env.NODE_ENV ?? 'unset',
   });
 }

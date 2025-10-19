@@ -136,7 +136,21 @@ Reflection: Loop check result, schema-first alignment notes.
   TypeScript accepts the new helper without widening unions or relying on `as`.
 - `pnpm --filter @oaknational/oak-curriculum-sdk lint` → ✅  
    Lint passes with no regressions; generator output stays policy-compliant.
-  Reflection: Loop Check G confirms Stage 4’s first task is complete—the zod generator no longer violates the cardinal rule, and all core gates stay green. Next focus: validation import specifiers and downstream e2e realignment.
+Reflection: Loop Check G confirms Stage 4’s first task is complete—the zod generator no longer violates the cardinal rule, and all core gates stay green. Next focus: validation import specifiers and downstream e2e realignment.
+
+---
+
+2025-10-19 13:34 UTC
+
+- `pnpm test` → ✅  
+  Full unit/integration stack remains green with schema-compliant stubs.
+- `pnpm test:e2e` → ✅  
+  Streamable HTTP and stdio suites aligned on `{ params: … }`; only smoke harness outstanding (see below).
+- `pnpm test:ui` → ✅  
+  Playwright visual regressions pass; fixture workflow intentionally logs 503 error fixture but asserts correctly.
+- `pnpm smoke:dev` → ❌  
+  Fails by design while we keep `Accept: text/event-stream` mandatory. Script asserts “Successful tool call must not be flagged as error” when it intentionally omits the streaming header.
+Reflection: Loop Check H – all routine gates are green; remaining debt is the smoke harness vs. header policy decision. Record this for Stage 4 follow-up.
 
 ---
 

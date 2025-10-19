@@ -129,6 +129,7 @@ Tasks (for reference):
 - Refresh stdio/streamable HTTP e2e suites to use the new `{ params: … }` argument envelopes and updated error text.
 - After each corrective change: rerun `pnpm type-gen`, `pnpm build --filter @oaknational/oak-curriculum-sdk`, `pnpm type-check --filter ...`, `pnpm lint --filter ...`, and the targeted e2e suite.
 - Once both MCP apps and the SDK e2e suites are green, rerun `pnpm test:e2e` for the workspace and capture the results in the context log.
+- Resolve the `pnpm smoke:dev` failure: either keep the strict `text/event-stream` requirement and update the smoke harness/docs, or relax the server to fall back to JSON; record the decision and rerun the smoke check.
 
 **Exit Criteria:** All e2e suites pass (SDK, stdio, streamable HTTP); no outstanding module-resolution errors; context log records the green run.
 
