@@ -1,6 +1,6 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-18_
+_Last updated: 2025-10-19_
 
 ---
 
@@ -100,6 +100,27 @@ Reflection: Loop check result, schema-first alignment notes.
 - `pnpm build --filter @oaknational/open-curriculum-semantic-search` → ✅  
    Downstream semantic-search workspace builds clean with the updated SDK artefacts.
   Reflection: Loop Check E passed—Stage 3 integrity checks complete, and docs/plans now mirror the schema-first, generator-driven flow. Backlog limited to generator lint tidy-up and downstream app audits.
+
+---
+
+2025-10-19 09:47 UTC
+
+- `pnpm type-gen` → ✅  
+  Generator rerun clean; no schema drift detected.
+- `pnpm build --filter @oaknational/oak-curriculum-sdk` → ✅  
+  Fresh dist artifacts include updated validation exports and aggregated helpers.
+- `pnpm type-check --filter @oaknational/oak-curriculum-sdk` → ✅  
+  Runtime/tests compile after hoisted-const and import hygiene fixes.
+- `pnpm lint --filter @oaknational/oak-curriculum-sdk` → ✅  
+  No regressions introduced.
+- `pnpm test` → ✅  
+  Unit/integration suites pass with the refactored executors.
+- `pnpm test:e2e` → ❌  
+   Failures isolated to tests:  
+   • SDK `zodgen` guard now catches `Object.fromEntries(... ) as T` emitted by `sanitizeSchemaKeys`.  
+   • STDIO MCP CLI crashes because `dist/validation/request-validators.js` imports `./types` without `.js`, so Node can’t resolve the module.  
+   • Streamable HTTP e2e suites still assert legacy `{ arguments: { q: … } }` shapes and older error text; the executor now requires `{ arguments: { params: … } }` and returns refined validation messages.
+  Reflection: Loop Check F surfaced that runtime gates are green, but e2e coverage lags behind the schema-first refactor. Stage 4 will focus on generator hygiene and downstream test alignment to bring the suites back to green.
 
 ---
 

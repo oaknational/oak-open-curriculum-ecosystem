@@ -99,7 +99,9 @@ Validation (same sequence as Stage 1, log results):
 
 **Objective:** Prove the restored pipeline is stable and document the outcome.
 
-Tasks:
+Status: ✅ complete (see context log 2025-10-18 21:34 UTC).
+
+Tasks (for reference):
 
 - Re-run the full suite once more:
   1. `pnpm type-gen`
@@ -117,10 +119,25 @@ Tasks:
 
 ---
 
+## Stage 4 – Downstream Test Alignment
+
+**Objective:** Bring all downstream MCP integrations back to green using the generated executor semantics.
+
+- Update `type-gen/zodgen-core.ts` so `sanitizeSchemaKeys` no longer emits `as` assertions in generated output (use typed helpers instead).
+- Regenerate SDK artefacts (`pnpm type-gen`) and ensure the zod e2e guard passes.
+- Patch validation modules to emit `.js` specifiers (e.g. `./types.js`) so Node’s ESM loader resolves them in downstream apps, then rebuild.
+- Refresh stdio/streamable HTTP e2e suites to use the new `{ params: … }` argument envelopes and updated error text.
+- After each corrective change: rerun `pnpm type-gen`, `pnpm build --filter @oaknational/oak-curriculum-sdk`, `pnpm type-check --filter ...`, `pnpm lint --filter ...`, and the targeted e2e suite.
+- Once both MCP apps and the SDK e2e suites are green, rerun `pnpm test:e2e` for the workspace and capture the results in the context log.
+
+**Exit Criteria:** All e2e suites pass (SDK, stdio, streamable HTTP); no outstanding module-resolution errors; context log records the green run.
+
+---
+
 ## Backlog (post-plan)
 
-- Legacy operations/response-map lint debt (`type-gen/typegen/operations/**`, `type-gen/typegen/response-map/**`) once the generator façade is stable.
-- Downstream app adjustments after the SDK exports settle.
-- Broader test coverage for complex “orchestration” tools (search/fetch) if needed.
+- Legacy operations/response-map lint debt (`type-gen/typegen/operations/**`, `type-gen/typegen/response-map/**`) once e2e suites are stable.
+- Downstream app adjustments after the SDK exports settle (e.g. UI clients).
+- Broader test coverage for complex orchestration tools (search/fetch) if needed.
 
-_Do not pick up backlog items until all stages above are complete and logged._
+_Do not pick up backlog items until Stage 4 is complete and logged._
