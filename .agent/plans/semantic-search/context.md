@@ -1,27 +1,27 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-19_
+_Last updated: 2025-10-20_
 
 ---
 
 ## Current Snapshot
 
-- **Generator:** Templates now emit discriminator-safe aliases/maps; schema resolvers and response-map builders were split into dedicated modules. `pnpm type-gen` and `pnpm build --filter @oaknational/oak-curriculum-sdk` pass without casts.
-- **Runtime:** `src/mcp/universal-tools.ts` was recently rewritten to validate arguments manually (breaking the schema-first pipeline). Stage 1 will restore delegation to generated executors and delete the ad-hoc “special tool” layer.
-- **Tests:** Unit coverage for the universal façade exists but mirrors the regression. It will be updated once Stage 1 is complete.
-- **Quality Gates:** `type-gen`, `build`, and `type-check` are currently green. `pnpm lint --filter @oaknational/oak-curriculum-sdk` still fails on export-star usage, `Record<string, unknown>`, and optional chaining in tests.
-- **Documentation:** Plan file refreshed with the new multi-stage approach; architecture docs still require a post-fix update.
+- **Generator:** Templates and sanitiser still emit assertion-free output. Stub payloads, however, are authored by hand and drifted from the generated response schemas—`pnpm smoke:dev` now fails when the HTTP app streams stub data.
+- **Runtime:** SDK façades delegate to generated executors. Streamable HTTP honours `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`, but the backing stub implementation lives in the stdio app and is not schema-derived.
+- **Tests:** `pnpm test`, `pnpm test:e2e`, and `pnpm test:ui` remain green. `pnpm smoke:dev` fails on “Successful tool call must not be flagged as error” when stubs are active. No automated coverage exists for starting the dev server and listing tools.
+- **Documentation:** Cardinal-rule guidance is recorded, but we still need explicit instructions for SSE headers, stub vs live smoke flows, and Cursor dev setup.
+- **Tooling Debt:** `pnpm format:root` is pending. We also lack generated stub fixtures in the SDK, shared between transports.
 
 ---
 
 ## Immediate Priorities
 
-1. **Stage 0:** Re-ground, run the full quality suite, log results.
-2. **Stage 1:** Restore generator-driven universal execution, remove runtime validation layer, rerun full suite.
-3. **Stage 2:** Address remaining lint warnings without widening types; rerun full suite.
-4. **Stage 3:** Re-verify, update documentation, note completion in this log.
+1. Generate schema-driven stub payloads during `pnpm type-gen`, expose them via the SDK runtime, and update all consumers (stdio + streamable HTTP) to rely on the generated helpers.
+2. Add test coverage: SDK-level validation proving stub executors output schema-compliant data, plus supertest-based “sanity” suites showing both dev and production HTTP servers list tools and execute a stubbed call.
+3. Restructure smoke harnesses into stub/live/remote variants, keeping strict Accept-header enforcement and documenting the flows.
+4. Update developer documentation (context, plan, README) with SSE guidance, stub usage, and Cursor setup, then clear formatting debt (`pnpm format:root`) once changes settle.
 
-Backlog items (legacy operation/response lint debt, downstream app clean-up) remain out-of-scope until the stages above are complete.
+Backlog items (legacy operation/response lint debt, downstream app clean-up) stay paused until generated stubs and smoke harness work are complete.
 
 ---
 
@@ -150,22 +150,25 @@ Reflection: Loop Check G confirms Stage 4’s first task is complete—the zod
   Playwright visual regressions pass; fixture workflow intentionally logs 503 error fixture but asserts correctly.
 - `pnpm smoke:dev` → ❌  
   Fails by design while we keep `Accept: text/event-stream` mandatory. Script asserts “Successful tool call must not be flagged as error” when it intentionally omits the streaming header.
-Reflection: Loop Check H – all routine gates are green; remaining debt is the smoke harness vs. header policy decision. Record this for Stage 4 follow-up.
+ Reflection: Loop Check H – all routine gates are green; remaining debt is the smoke harness vs. header policy decision. Record this for Stage 4 follow-up.
+
+---
+
+2025-10-20 14:05 UTC
+
+- Observed: Streamable smoke run fails because stdio-authored stubs emit payloads that no longer match generated response schemas (`isError: true`). Cursor’s dev flow also fails without `Accept: text/event-stream`, despite auth bypass being enabled.
+- Decision: Generate stub fixtures during `pnpm type-gen`, surface them via the SDK, and reuse them across transports. Split smoke harnesses (stub/live/remote) and add supertest sanity tests for dev/prod servers.
+- Next Actions: Design generator templates for stubs, add SDK + app tests (failing first), then update streamable HTTP + scripts. Each meaningful change will be followed by `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, and the relevant smoke script.
+- Reflection: Aligns with the cardinal rule by keeping stubs schema-first, improves test coverage before runtime edits, and clarifies developer ergonomics for Accept headers and dev tokens.
 
 ---
 
 ## Next Steps
 
-1. Stage 2 – Lint hardening without widening types
-   - Replace remaining `Record<string, unknown>`/index signatures with precise helper types.
-   - Refactor `validateSearchArgs` into simpler helpers or compose with Zod so it meets complexity/length thresholds without reintroducing inference.
-   - Swap lingering optional chains and inline `JSON.parse` usage with typed helpers.
-   - Ensure all root exports are explicit (no `export *`).
-   - After each change, run the full suite (`pnpm type-gen`, `pnpm build --filter @oaknational/oak-curriculum-sdk`, `pnpm type-check --filter @oaknational/oak-curriculum-sdk`, `pnpm lint --filter @oaknational/oak-curriculum-sdk`) and log results.
-
-2. Stage 3 – Integrity & documentation
-   - Once lint is green, rerun the full gate cycle and update both the plan and context log with closing reflections.
-   - Capture any remaining backlog items (legacy operations/response lint) separately.
+1. Implement generator-driven stub fixtures and expose shared helpers through the SDK, updating stdio + HTTP apps to consume them. Follow with the full gate suite.
+2. Add SDK-level validation tests and HTTP supertest “sanity” suites covering dev + production bootstraps (stubbed vs live). Run the full gate suite after each test addition and corresponding implementation.
+3. Split the smoke harness into stub/live/remote entry points, keep strict Accept-header checks, and rerun all quality gates for each script update.
+4. Refresh documentation (plans, context, README) with SSE + stub guidance, then clear formatting debt via `pnpm format:root` and the complete gate suite.
 
 ---
 

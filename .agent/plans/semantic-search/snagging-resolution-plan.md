@@ -119,19 +119,36 @@ Tasks (for reference):
 
 ---
 
-## Stage 4 – Downstream Test Alignment
+## Stage 4 – Schema-Generated Stubs & Shared Runtime
 
-**Objective:** Bring all downstream MCP integrations back to green using the generated executor semantics.
+**Objective:** Replace handwritten stub executors with schema-generated fixtures that update automatically with the OpenAPI spec.
 
-- Update `type-gen/zodgen-core.ts` so `sanitizeSchemaKeys` no longer emits `as` assertions in generated output (use typed helpers instead).
-- Regenerate SDK artefacts (`pnpm type-gen`) and ensure the zod e2e guard passes.
-- Patch validation modules to emit `.js` specifiers (e.g. `./types.js`) so Node’s ESM loader resolves them in downstream apps, then rebuild.
-- Refresh stdio/streamable HTTP e2e suites to use the new `{ params: … }` argument envelopes and updated error text.
-- After each corrective change: rerun `pnpm type-gen`, `pnpm build --filter @oaknational/oak-curriculum-sdk`, `pnpm type-check --filter ...`, `pnpm lint --filter ...`, and the targeted e2e suite.
-- Once both MCP apps and the SDK e2e suites are green, rerun `pnpm test:e2e` for the workspace and capture the results in the context log.
-- Resolve the `pnpm smoke:dev` failure: either keep the strict `text/event-stream` requirement and update the smoke harness/docs, or relax the server to fall back to JSON; record the decision and rerun the smoke check.
+- Extend the type-generation pipeline to emit deterministic stub payloads and fixture builders for each tool. Fixtures must pass the generated output validators without `as` casts.
+- Surface the fixtures and a `createStubExecutors` helper via the SDK public API.
+- Update stdio and streamable HTTP apps to consume the shared helper when `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, removing local stub definitions.
+- Tests first:  
+  - Add SDK unit tests that execute each generated stub through `validateCurriculumResponse`.  
+  - Add vitest + supertest sanity suites proving both dev and prod HTTP servers list tools and execute stubbed calls without `isError`.
+- After each code or test change run the full gate list:  
+  `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev:stub` (once available).
+- Record all results in the context log.
 
-**Exit Criteria:** All e2e suites pass (SDK, stdio, streamable HTTP); no outstanding module-resolution errors; context log records the green run.
+**Exit Criteria:** Generated stubs exist, both transports rely on them, and all gates remain green with stub mode enabled.
+
+---
+
+## Stage 5 – Smoke Harness & Documentation Alignment
+
+**Objective:** Provide clear, deterministic smoke coverage for stub, live, and remote scenarios, and document Accept-header expectations.
+
+- Split the smoke runner into three entry points: local stub, local live, and remote live. Keep shared assertions and retain negative Accept-header cases.
+- Update package scripts/Turborepo config accordingly; add light unit coverage for shared smoke utilities (e.g. SSE parsing helpers).
+- Document SSE requirements, stub usage, and Cursor dev workflow in README + `.agent` plans.
+- After each harness/doc change, rerun the quality gates:  
+  `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, each smoke variant.
+- Finish with `pnpm format:root` and a final gate run.
+
+**Exit Criteria:** All smoke variants pass, documentation reflects the strict Accept-header requirement, and the context/snags logs capture the outcome.
 
 ---
 
