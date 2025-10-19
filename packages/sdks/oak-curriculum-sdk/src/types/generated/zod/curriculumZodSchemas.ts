@@ -1,13 +1,17 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z, type ZodSchema } from "zod";
 
-function sanitizeSchemaKeys<T extends Record<string, ZodSchema>>(schemas: T, options?: { readonly rename?: (original: string) => string }): T {
+function sanitizeSchemaKeys(
+  schemas: CurriculumSchemaCollection,
+  options?: { readonly rename?: (original: string) => string },
+): CurriculumSchemaCollection {
   const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));
-  const entries = Object.entries(schemas).map(([key, value]) => {
+  const result: Record<string, ZodSchema> = {};
+  for (const [key, value] of Object.entries(schemas)) {
     const sanitized = rename(key);
-    return [sanitized, value] as const;
-  });
-  return Object.fromEntries(entries) as T;
+    result[sanitized] = value;
+  }
+  return result;
 }
 
 

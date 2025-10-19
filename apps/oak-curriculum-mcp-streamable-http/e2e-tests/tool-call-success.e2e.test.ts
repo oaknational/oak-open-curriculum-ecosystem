@@ -19,14 +19,24 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
     executeMcpTool: (name, args, client) => {
-      void args;
       void client;
       captured.push({ tool: name, args });
       const data = {
-        data: [
-          { slug: 'ks1', title: 'Key Stage 1' },
-          { slug: 'ks2', title: 'Key Stage 2' },
-        ],
+        data: {
+          data: [
+            {
+              slug: 'ks1',
+              title: 'Key Stage 1',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+            },
+            {
+              slug: 'ks2',
+              title: 'Key Stage 2',
+              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+            },
+          ],
+          response: { status: 200 },
+        },
       };
       const result: ToolExecutionResult = { data };
       return Promise.resolve(result);
@@ -80,12 +90,12 @@ describe('Tool call success formatting', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
+        params: { name: 'get-key-stages', arguments: { params: {} } },
       });
 
     expect(res.status).toBe(200);
     expect(res.text).toContain('event: message');
-    expect(captured).toEqual([{ tool: 'get-key-stages', args: {} }]);
+    expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
 
     const payloadObject = parseSseLine(res.text);
     const content = extractTextContent(payloadObject);
@@ -93,7 +103,11 @@ describe('Tool call success formatting', () => {
     if (!isRecord(parsedValue)) {
       throw new Error('Tool payload must be an object');
     }
-    const dataField = parsedValue.data;
+    const dataWrapper = parsedValue.data;
+    if (!isRecord(dataWrapper)) {
+      throw new Error('Tool payload wrapper must be an object');
+    }
+    const dataField = dataWrapper.data;
     if (!Array.isArray(dataField)) {
       throw new Error('Tool payload data must be an array');
     }

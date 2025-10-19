@@ -110,7 +110,10 @@ function assertSuccessfulEnvelope(envelope: ToolEnvelope): void {
     throw new Error('Tool result missing textual payload');
   }
   const payload = parseJsonPayload(entry.text);
-  const dataValue = payload.data;
+  if (!isRecord(payload.data)) {
+    throw new Error('Tool payload data wrapper must be an object');
+  }
+  const dataValue = payload.data.data;
   if (!Array.isArray(dataValue)) {
     throw new Error('Tool payload data must be an array');
   }
@@ -125,10 +128,21 @@ describe('Tool response envelope formatting', () => {
         void args;
         void client;
         const data = {
-          data: [
-            { slug: 'ks1', title: 'Key Stage 1' },
-            { slug: 'ks2', title: 'Key Stage 2' },
-          ],
+          data: {
+            data: [
+              {
+                slug: 'ks1',
+                title: 'Key Stage 1',
+                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+              },
+              {
+                slug: 'ks2',
+                title: 'Key Stage 2',
+                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+              },
+            ],
+            response: { status: 200 },
+          },
           tool: name,
         };
         const result: ToolExecutionResult = { data };
@@ -147,7 +161,7 @@ describe('Tool response envelope formatting', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: {} },
+          params: { name: 'get-key-stages', arguments: { params: {} } },
         });
 
       expect(res.status).toBe(200);

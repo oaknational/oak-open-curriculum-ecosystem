@@ -97,7 +97,7 @@ describe('MCP Protocol E2E', () => {
       const payload = expectSuccessfulResult(
         await client.callTool({
           name: 'get-key-stages',
-          arguments: {},
+          arguments: { params: {} },
         }),
       );
       const dataArray = Array.isArray((payload as { data?: unknown }).data)
@@ -112,7 +112,11 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-search-lessons',
           arguments: {
-            q: 'fractions',
+            params: {
+              query: {
+                q: 'fractions',
+              },
+            },
           },
         }),
       ) as { data?: unknown };
@@ -125,7 +129,11 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            sequence: 'english-primary',
+            params: {
+              path: {
+                sequence: 'english-primary',
+              },
+            },
           },
         }),
       ) as { data?: unknown };
@@ -136,8 +144,14 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            sequence: 'english-primary',
-            year: '1',
+            params: {
+              path: {
+                sequence: 'english-primary',
+              },
+              query: {
+                year: '1',
+              },
+            },
           },
         }),
       ) as { data?: unknown };
@@ -147,22 +161,26 @@ describe('MCP Protocol E2E', () => {
 
   describe('Error Handling', () => {
     it('should handle unknown tool error', async () => {
-      await expect(client.callTool({ name: 'non-existent-tool', arguments: {} })).rejects.toThrow(
-        /Tool non-existent-tool not found/,
-      );
+      await expect(
+        client.callTool({ name: 'non-existent-tool', arguments: { params: {} } }),
+      ).rejects.toThrow(/Tool non-existent-tool not found/);
     });
 
     it('should handle missing required parameters', async () => {
-      await expect(client.callTool({ name: 'get-search-lessons', arguments: {} })).rejects.toThrow(
-        /Invalid arguments.*get-search-lessons/,
-      );
+      await expect(
+        client.callTool({ name: 'get-search-lessons', arguments: { params: {} } }),
+      ).rejects.toThrow(/Invalid arguments.*get-search-lessons/);
     });
 
     it('should handle invalid parameter values', async () => {
       await expect(
         client.callTool({
           name: 'get-key-stages-subject-lessons',
-          arguments: { keyStage: 'invalid-stage', subject: 'maths' },
+          arguments: {
+            params: {
+              path: { keyStage: 'invalid-stage', subject: 'maths' },
+            },
+          },
         }),
       ).rejects.toThrow(/Invalid arguments.*get-key-stages-subject-lessons/);
     });

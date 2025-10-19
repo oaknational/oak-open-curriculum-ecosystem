@@ -124,6 +124,22 @@ Reflection: Loop check result, schema-first alignment notes.
 
 ---
 
+2025-10-19 12:58 UTC
+
+- `pnpm --filter @oaknational/oak-curriculum-sdk test -- type-gen/zodgen-core.unit.test.ts` → ✅  
+  Existing generator unit suite re-run to confirm sanitiser refactor keeps prior guarantees.
+- `pnpm --filter @oaknational/oak-curriculum-sdk type-gen` → ✅  
+  Regenerated artefacts adopt the assertion-free sanitiser while preserving the schema-first DAG.
+- `pnpm build --filter @oaknational/oak-curriculum-sdk` → ✅  
+  Dist now includes the revised sanitiser, matching generated Zod schemas with no casts.
+- `pnpm type-check --filter @oaknational/oak-curriculum-sdk` → ✅  
+  TypeScript accepts the new helper without widening unions or relying on `as`.
+- `pnpm --filter @oaknational/oak-curriculum-sdk lint` → ✅  
+   Lint passes with no regressions; generator output stays policy-compliant.
+  Reflection: Loop Check G confirms Stage 4’s first task is complete—the zod generator no longer violates the cardinal rule, and all core gates stay green. Next focus: validation import specifiers and downstream e2e realignment.
+
+---
+
 ## Next Steps
 
 1. Stage 2 – Lint hardening without widening types

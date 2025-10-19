@@ -23,7 +23,11 @@ Scope: strategic overview. Details are in the individual plan documents.
      - Legacy docs (e.g. `semantic-search-service-plan.md`, `semantic-search-documentation-plan.md`) need review/retirement once the updated plan lands
    - Acceptance: Back-end implementation matches the definitive guide (indices, RRF queries, APIs); indexes populated; services deployed and reachable; end-to-end tests pass; documentation updated and onboarding flows updated.
 
-5. Separate the Curriculum SDK type generation from the Curriculum SDK runtime.
+5. Separate the Curriculum SDK type generation from the Curriculum SDK runtime — Status: Planned
+   - Plan: `.agent/plans/sdk-workspace-separation-plan.md`
+   - Scope: Split SDK into `@oaknational/oak-curriculum-sdk-generation` (types/validators/MCP tools) and `@oaknational/oak-curriculum-sdk-runtime` (API client) with clean public API boundaries enforced by ESLint
+   - Enables: Item #12 (OpenAPI-to-MCP Framework Extraction) by creating clear extraction target
+   - Acceptance: Two workspaces building in sequence via `pnpm build`; runtime imports only from generation public API root (no deep imports); all tests passing; zero consumer impact; ADR published; Schema-First Execution Directive maintained; documentation complete
 
 6. Curriculum MCP Auth Plan — Status: Deferred
    - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md` - needs updating
@@ -55,6 +59,14 @@ Scope: strategic overview. Details are in the individual plan documents.
 - Key deliverables: Test harness invokable via `pnpm test:contract`; synthetic schema repository with baseline + scenarios; schema sync utility (`refresh-scenarios.ts`) for drift detection; structured JSON/markdown reports; contribution guide; ADR documenting strategy
 - Acceptance: All 7 scenarios pass with clean violation detection; test harness executes in ≤8 minutes; repository state restored reliably; contribution guide validated by creating new scenario; ADR published; README and onboarding docs updated; fail-fast local execution operational
 
+12. OpenAPI-to-MCP Framework Extraction — Status: Blocked (prerequisite: #5)
+
+- Plan: `.agent/plans/openapi-to-mcp-framework-extraction-plan.md`
+- Prerequisite: **Must complete Item #5 (SDK Workspace Separation) first** - provides clear extraction boundary and validates architecture
+- Scope: Extract type-gen logic from `oak-curriculum-sdk-generation` into general-purpose `@oaknational/openapi-mcp-framework`; make Oak SDK a consumer of the framework; enable generation of SDKs/MCP servers for any OpenAPI spec via configuration
+- Key deliverables: Config-driven generation CLI (`openapi-mcp gen-sdk`); shared runtime kit for MCP servers; search service scaffolding; validated against Oak + two reference specs; documentation and examples
+- Acceptance: Framework generates working SDK + MCP servers for Oak spec and two non-Oak specs; all quality gates pass (format, lint, type-check, test, build, docs); onboarding dry-run completes in < 4 hours; coverage ≥ 85% for generated code, ≥ 90% for framework packages
+
 ## Milestones
 
 - M1: Typed MCP tools available from SDK — ✅ DONE
@@ -63,6 +75,8 @@ Scope: strategic overview. Details are in the individual plan documents.
 - M3: Semantic Search Back-End Alignment — Underway via `./semantic-search/semantic-search-target-alignment-plan.md`
 - M5: Curriculum MCP integrates semantic search tools — Pending backend/frontend alignment updates
 - M6: Contract Testing — Schema evolution validation automated via synthetic scenarios, fail-fast local execution, future CI integration planned (see `./contract-testing-schema-evolution-plan.md`)
+- M7: SDK Workspace Separation — Planned (Item #5) - enables framework extraction by creating clear generation/runtime boundaries
+- M8: OpenAPI Framework — Blocked by M7 (Item #12) - extracts type-gen into general-purpose framework for any OpenAPI spec
 
 ### Deferred
 

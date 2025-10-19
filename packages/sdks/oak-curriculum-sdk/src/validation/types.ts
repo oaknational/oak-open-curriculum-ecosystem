@@ -8,7 +8,7 @@ import {
   curriculumSchemas,
   type CurriculumSchemaDefinition,
   type CurriculumSchemaName,
-} from '../types/generated/zod/curriculumZodSchemas';
+} from '../types/generated/zod/curriculumZodSchemas.js';
 import {
   SearchLessonsResponseSchema,
   SearchMultiScopeResponseSchema,
@@ -16,8 +16,8 @@ import {
   SearchSuggestionResponseSchema,
   SearchUnitsResponseSchema,
   type SearchSuggestionResponse,
-} from '../types/generated/search/index';
-import { type SearchScopeWithAll } from '../types/generated/search/scopes';
+} from '../types/generated/search/index.js';
+import { type SearchScopeWithAll } from '../types/generated/search/scopes.js';
 
 /**
  * Result type for validation operations

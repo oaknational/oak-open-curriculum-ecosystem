@@ -1328,8 +1328,44 @@ If critical issues discovered during implementation:
 - All MCP tool execution components (Contract → Definitions → Aliases → Runtime → Facade) exported from generation public API
 - Generator templates in `sdk-generation/type-gen/` remain the single source of truth for tool execution behavior
 
+## Future: Framework Extraction Enablement
+
+This workspace separation is **designed to enable** future framework extraction (see [OpenAPI-to-MCP Framework Extraction Plan](./openapi-to-mcp-framework-extraction-plan.md)).
+
+By separating generation from runtime now, we:
+
+1. **Identify exact extraction scope** - The `sdk-generation` workspace contains the type-gen logic that will be generalized into `@oaknational/openapi-mcp-framework`
+2. **Validate decoupling** - Proves generation logic can operate independently of Oak-specific runtime code
+3. **Create reference implementation** - The separated generation workspace becomes the working example for the framework
+4. **Establish consumer pattern** - Oak SDK demonstrates how to consume the framework after extraction
+5. **Enable parallel work** - Once separated, framework extraction can proceed without disrupting runtime workspace
+
+### Post-Framework Extraction Architecture
+
+After framework extraction completes, the architecture will be:
+
+```
+@oaknational/openapi-mcp-framework (extracted from sdk-generation/type-gen/)
+  ├── Core generation logic (general-purpose)
+  ├── Configuration schema
+  └── CLI for any OpenAPI spec
+           ↓ consumed by
+@oaknational/oak-curriculum-sdk-generation
+  ├── Oak-specific configuration
+  ├── Oak-specific extensions (if any)
+  └── Uses framework to generate types
+           ↓ consumed by
+@oaknational/oak-curriculum-sdk (runtime)
+  ├── Oak API client
+  ├── Oak-specific utilities
+  └── Uses generated types
+```
+
+The workspace separation creates the middle layer in this architecture, making framework extraction straightforward.
+
 ## Related Plans
 
+- [OpenAPI-to-MCP Framework Extraction Plan](./openapi-to-mcp-framework-extraction-plan.md) - **This plan is a prerequisite** for framework extraction
 - [Contract Testing Plan](./contract-testing-schema-evolution-plan.md) - Will validate this separation maintains schema evolution contract
 - [High-Level Plan](./high-level-plan.md) - Item #5 tracks this work
 

@@ -7,6 +7,61 @@
 - [.agent/directives-and-memory/rules.md](../directives-and-memory/rules.md)
 - [docs/agent-guidance/testing-strategy.md](../../docs/agent-guidance/testing-strategy.md)
 
+## Prerequisites
+
+**BLOCKED**: This plan requires [SDK Workspace Separation](./sdk-workspace-separation-plan.md) (Item #5 in [High-Level Plan](./high-level-plan.md)) to complete first.
+
+### Why SDK Separation Must Come First
+
+The framework extraction depends on first separating Oak's SDK into generation and runtime workspaces:
+
+1. **Clear extraction boundary** - SDK separation identifies exactly what to extract: the `oak-curriculum-sdk-generation` workspace contains all type-gen logic that will become the framework
+2. **Validated architecture** - Separation proves generation logic can operate independently, which is essential for a reusable framework
+3. **Working reference** - The separated generation workspace provides a concrete, tested example of what the framework should produce
+4. **Clean separation** - Distinguishes Oak-specific code (stays in runtime) from general-purpose generation logic (becomes framework)
+5. **Risk reduction** - Attempting both simultaneously would mix "move and expose" with "generalize and extract," making validation much harder
+
+### Current State (Before Separation)
+
+```
+oak-curriculum-sdk/
+├── type-gen/              ← Mixed: general + Oak-specific, unclear boundaries
+├── src/
+│   ├── types/generated/   ← Generated artifacts
+│   ├── client/            ← Oak-specific runtime
+│   └── mcp/               ← Oak-specific MCP wiring
+```
+
+**Problem**: Cannot tell what's reusable vs Oak-specific. Extraction would require simultaneous refactoring.
+
+### After SDK Separation (Prerequisite Complete)
+
+```
+oak-curriculum-sdk-generation/
+├── type-gen/              ← CLEAR extraction target!
+│   ├── typegen.ts         ← OpenAPI → TypeScript (general)
+│   ├── zodgen.ts          ← OpenAPI → Zod (general)
+│   └── typegen/mcp-tools/ ← OpenAPI → MCP tools (general)
+└── src/types/             ← Generated artifacts
+
+oak-curriculum-sdk-runtime/
+├── src/client/            ← Oak-specific (not extracted)
+└── src/mcp/               ← Oak-specific (not extracted)
+```
+
+**Solution**: Clean extraction boundary. The `type-gen/` directory is the framework.
+
+### Extraction Strategy (Post-Separation)
+
+Once SDK separation completes:
+
+1. **Extract** `oak-curriculum-sdk-generation/type-gen/` → `openapi-mcp-framework/generators/`
+2. **Add** configuration layer to make it work with any OpenAPI spec
+3. **Convert** `oak-curriculum-sdk-generation` to consume the framework
+4. **Validate** against Oak spec + two reference specs
+
+**Status**: Do not begin implementation until SDK separation is complete and all its validation gates pass.
+
 ## Intent
 
 Deliver an extensible framework that transforms any OpenAPI specification, plus a declarative configuration, into a type-safe SDK, MCP servers (STDIO and streamable HTTP), a deterministic search service, and companion MCP tooling. The framework must embody Oak’s quality standards—type generation, validation, logging, and documentation—while remaining adaptable for non-Oak ecosystems.

@@ -21,6 +21,7 @@ import {
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig, Logger } from './wiring.js';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
+import type { UniversalToolExecutors } from '../tools/index.js';
 
 /**
  * Outcome of validating a tool response payload.
@@ -113,7 +114,7 @@ function setupShutdownHandler(server: { close: () => Promise<void> }, logger: Lo
  */
 export async function createServer(config?: ServerConfig): Promise<void> {
   // Wire dependencies
-  const { logger, config: serverConfig } = wireDependencies(config);
+  const { logger, config: serverConfig, toolExecutors } = wireDependencies(config);
 
   logToolDiscovery(logger);
 
@@ -123,7 +124,7 @@ export async function createServer(config?: ServerConfig): Promise<void> {
     version: serverConfig.serverVersion,
   });
   const client = createOakPathBasedClient(serverConfig.apiKey);
-  registerMcpTools(server, client, logger);
+  registerMcpTools(server, client, logger, toolExecutors);
 
   // Create transport and connect
   const transport = new StdioServerTransport();
@@ -184,6 +185,7 @@ function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
+  toolExecutors?: UniversalToolExecutors,
 ): void {
   for (const name of toolNames) {
     const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
@@ -201,7 +203,9 @@ function registerMcpTools(
       name,
       { title: name, description, inputSchema: input },
       async (params: unknown) => {
-        const execResult = await executeToolCall(name, params, client);
+        const execResult = toolExecutors?.executeMcpTool
+          ? await toolExecutors.executeMcpTool(name, params ?? {})
+          : await executeToolCall(name, params, client);
         if (execResult.error) {
           return handlers.handleExecutionError(params, execResult.error);
         }

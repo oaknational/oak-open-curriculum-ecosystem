@@ -101,7 +101,7 @@ export function isCurriculumSchema(value: unknown): value is CurriculumSchemaDef
 
   const sanitizedContent = withCurriculumSchemas.replace(
     'import { z, type ZodSchema } from "zod";',
-    'import { z, type ZodSchema } from "zod";\n\nfunction sanitizeSchemaKeys<T extends Record<string, ZodSchema>>(schemas: T, options?: { readonly rename?: (original: string) => string }): T {\n  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));\n  const entries = Object.entries(schemas).map(([key, value]) => {\n    const sanitized = rename(key);\n    return [sanitized, value] as const;\n  });\n  return Object.fromEntries(entries) as T;\n}\n',
+    'import { z, type ZodSchema } from "zod";\n\nfunction sanitizeSchemaKeys(\n  schemas: CurriculumSchemaCollection,\n  options?: { readonly rename?: (original: string) => string },\n): CurriculumSchemaCollection {\n  const rename = options?.rename ?? ((value: string) => value.replace(/[^A-Za-z0-9_]/g, "_"));\n  const result: Record<string, ZodSchema> = {};\n  for (const [key, value] of Object.entries(schemas)) {\n    const sanitized = rename(key);\n    result[sanitized] = value;\n  }\n  return result;\n}\n',
   );
 
   console.log('📝 Writing to file: ', outFile);
