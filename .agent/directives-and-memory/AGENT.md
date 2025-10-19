@@ -4,7 +4,7 @@ This file provides core directives for AI agents working with this codebase. Rea
 
 ## Grounding
 
-Commit to always using British spelling.
+Commit to always using British spelling, and British English grammar, and British date and time formats.
 
 Now reflect on what you are doing. Would you like to update your self-managed, internal tool task list? If you don't have one, you can create one, or simply move on.
 

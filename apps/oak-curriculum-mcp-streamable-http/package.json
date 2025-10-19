@@ -19,7 +19,7 @@
     "test:e2e": "vitest run --config vitest.e2e.config.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.2",
+    "@modelcontextprotocol/sdk": "^1.20.1",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/mcp-providers-node": "workspace:*",

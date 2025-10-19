@@ -111,8 +111,8 @@ importers:
   apps/oak-curriculum-mcp-stdio:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.17.2
-        version: 1.17.2
+        specifier: ^1.20.1
+        version: 1.20.1
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -154,8 +154,8 @@ importers:
   apps/oak-curriculum-mcp-streamable-http:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.17.2
-        version: 1.17.2
+        specifier: ^1.20.1
+        version: 1.20.1
       '@oaknational/mcp-env':
         specifier: workspace:*
         version: link:../../packages/libs/env
@@ -215,8 +215,8 @@ importers:
   apps/oak-notion-mcp:
     dependencies:
       '@modelcontextprotocol/sdk':
-        specifier: ^1.17.2
-        version: 1.17.2
+        specifier: ^1.20.1
+        version: 1.20.1
       '@notionhq/client':
         specifier: ^4.0.1
         version: 4.0.1
@@ -1393,8 +1393,8 @@ packages:
   '@liuli-util/fs-extra@0.1.0':
     resolution: {integrity: sha512-eaAyDyMGT23QuRGbITVY3SOJff3G9ekAAyGqB9joAnTBmqvFN+9a1FazOdO70G6IUqgpKV451eBHYSRcOJ/FNQ==}
 
-  '@modelcontextprotocol/sdk@1.17.2':
-    resolution: {integrity: sha512-EFLRNXR/ixpXQWu6/3Cu30ndDFIFNaqUXcTqsGebujeMan9FzhAaFFswLRiFj61rgygDRr8WO1N+UijjgRxX9g==}
+  '@modelcontextprotocol/sdk@1.20.1':
+    resolution: {integrity: sha512-j/P+yuxXfgxb+mW7OEoRCM3G47zCTDqUPivJo/VzpjbG8I9csTXtOprCf5FfOfHK4whOJny0aHuBEON+kS7CCA==}
     engines: {node: '>=18'}
 
   '@napi-rs/wasm-runtime@0.2.12':
@@ -3258,10 +3258,6 @@ packages:
 
   eventemitter3@5.0.1:
     resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
-
-  eventsource-parser@3.0.3:
-    resolution: {integrity: sha512-nVpZkTMM9rF6AQ9gPJpFsNAMt48wIzB5TQgiTLdHiuO8XEDhUgZEhqKlZWXbIzo9VmJ/HvysHqEaVeD5v9TPvA==}
-    engines: {node: '>=20.0.0'}
 
   eventsource-parser@3.0.6:
     resolution: {integrity: sha512-Vo1ab+QXPzZ4tCa8SwIHJFaSzy4R6SHf7BY79rFBDf0idraZWAkYrDjDj8uWaSm3S2TK+hJ7/t1CEmZ7jXw+pg==}
@@ -7158,14 +7154,14 @@ snapshots:
       '@types/fs-extra': 9.0.13
       fs-extra: 10.1.0
 
-  '@modelcontextprotocol/sdk@1.17.2':
+  '@modelcontextprotocol/sdk@1.20.1':
     dependencies:
       ajv: 6.12.6
       content-type: 1.0.5
       cors: 2.8.5
       cross-spawn: 7.0.6
       eventsource: 3.0.7
-      eventsource-parser: 3.0.3
+      eventsource-parser: 3.0.6
       express: 5.1.0
       express-rate-limit: 7.5.1(express@5.1.0)
       pkce-challenge: 5.0.0
@@ -9407,13 +9403,11 @@ snapshots:
 
   eventemitter3@5.0.1: {}
 
-  eventsource-parser@3.0.3: {}
-
   eventsource-parser@3.0.6: {}
 
   eventsource@3.0.7:
     dependencies:
-      eventsource-parser: 3.0.3
+      eventsource-parser: 3.0.6
 
   execa@5.1.1:
     dependencies:

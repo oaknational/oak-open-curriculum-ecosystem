@@ -2,160 +2,121 @@
 
 ## Mission
 
-Re-align the Oak Curriculum SDK with the schema-first, generator-driven DAG so that _every_ runtime consumer is a thin delegate of generated artefacts. No casts, no widened unions, no runtime re-validation.
+Restore a fully schema-first pipeline where every runtime artefact—including stub fixtures—is generated directly from the Open Curriculum OpenAPI schema. The goal: running `pnpm type-gen` should emit all files required by the SDK and both MCP transports so they remain in lockstep without manual intervention.
 
-## Cardinal Rule Checklist
+## Ground Rules
 
-Before every coding session:
+- Re-read `.agent/directives-and-memory/rules.md`, `.agent/directives-and-memory/schema-first-execution.md`, and `docs/agent-guidance/testing-strategy.md` before touching code.
+- After any meaningful change, run the full gate suite from the repo root:
 
-1. Re-read `.agent/directives-and-memory/rules.md`
-2. Re-read `.agent/directives-and-memory/schema-first-execution.md`
-3. Re-read this plan and the latest context log
+  ```bash
+  pnpm type-gen
+  pnpm build
+  pnpm type-check
+  pnpm lint
+  pnpm test
+  pnpm test:e2e
+  pnpm test:ui
+  pnpm smoke:dev (and additional smoke targets once split)
+  ```
 
-If the intent of a change is even slightly unclear, stop and re-ground.
-
-## DAG Reminder
-
-```
-OpenAPI Schema
-      ↓
-type-gen templates (type-gen/typegen/**)
-      ↓
-Generated contracts, descriptors, aliases, executors
-      ↓
-Runtime façade (sdk src/mcp/**)
-      ↓
-Apps & tests
-```
-
-All fixes must flow _down_ this DAG. If we touch something higher in the chain, we regenerate and reverify before moving on.
+- Prefer the high-level abstractions provided by `@modelcontextprotocol/sdk`; avoid custom protocol plumbing.
 
 ---
 
-## Stage 0 – Grounding & Baseline
+## Stage 4 – Schema-Generated Stubs (In Progress)
 
-**Objective:** Confirm the current state and capture it in the context log.
-
-- Re-read the directives (see checklist above).
-- Run the full quality suite:
-  - `pnpm type-gen`
-  - `pnpm build --filter @oaknational/oak-curriculum-sdk`
-  - `pnpm type-check --filter @oaknational/oak-curriculum-sdk`
-  - `pnpm lint --filter @oaknational/oak-curriculum-sdk`
-- Record results + observations in `context.md`.
-
-**Exit Criteria:** We have an up-to-date log of breakages (most notably the regression in `src/mcp/universal-tools.ts`) and a clear restatement of the schema-first target.
-
----
-
-## Stage 1 – Restore Generator-Driven Universal Execution
-
-**Objective:** Remove the runtime “special tool” detour and route everything back through generated executors.
+**Objective:** Generate canonical stub payloads during type generation so they automatically stay aligned with the OpenAPI schema.
 
 Tasks:
 
-- Delete/replace `special-tool-*.ts` runtime layers with thin helpers that only add orchestration (e.g. search/fetch) on top of generator-validated data.
-- Revert `src/mcp/universal-tools.ts` to:
-  - Delegate curriculum tools directly to the generated dispatcher.
-  - Use the small orchestration helpers _after_ argument validation.
-  - Avoid `safeParse` / unions / casts in runtime code.
-- Update `universal-tools.unit.test.ts` to reflect the restored behaviour (no `any`, no optional chaining on known values).
-- Ensure public exports (`src/public/mcp-tools.ts`, `src/index.ts`) expose the generator executors and façade explicitly—no `export *`.
+1. Extend `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/mcp-tool-generator.ts` to:
+   - Resolve each tool’s 200-response schema (handling `$ref` via the existing component resolver).
+   - Build deterministic fixtures (choose the first enum value, include required arrays with a single entry, provide sensible primitives, etc.).
+   - Emit per-tool stub modules plus shared helpers (`createStubToolExecutor`, `createStubbedUniversalExecutors`).
+2. Ensure the generator writes these files under `src/types/generated/api-schema/mcp-tools/...` so `pnpm type-gen` remains the single source of truth.
+3. TDD:
+   - Keep `packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` failing until the generator emits valid fixtures.
+   - Add any needed template-focused tests inside `type-gen` to guard fixture structure.
+4. Once stubs are generated, run the full gate suite.
 
-Validation (run in this order, capturing notes in context log):
+Exit Criteria:
 
-1. `pnpm type-gen`
-2. `pnpm build --filter @oaknational/oak-curriculum-sdk`
-3. `pnpm type-check --filter @oaknational/oak-curriculum-sdk`
-4. `pnpm lint --filter @oaknational/oak-curriculum-sdk`
-
-**Exit Criteria:** Build/type-check succeed, lint only reports the known style issues (export star, Record<…>, etc.), and the context log confirms the universal executor once again delegates to generator output (Loop Check C).
+- `pnpm type-gen` emits stub modules and helpers.
+- All gates pass with the new fixtures in place.
+- The new unit test turns green.
 
 ---
 
-## Stage 2 – Lint Compliance Without Widening Types
+## Stage 5 – SDK Runtime & App Integration
 
-**Objective:** Clear remaining lint warnings while keeping the schema-first flow untouched.
+**Objective:** Replace handwritten stubs in both apps with the generated helper and prove behaviour with supertest “sanity” suites.
 
 Tasks:
 
-- Replace `export *` with explicit named exports in `src/index.ts`, `src/mcp/special-tools.ts`, and any other public entry points.
-- Swap remaining `Record<string, unknown>` usage for strongly-typed helpers (`typeSafeEntries`, generated aliases, explicit interfaces).
-- Remove unnecessary optional chaining/unsafe assignments in tests and runtime code (e.g. use typed JSON parse helper in `universal-tools.unit.test.ts`).
-- Add explicit return types where lint demands them without loosening structural types.
+1. Update `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` to delegate to the generated helper. Adjust unit tests to validate complete responses via `validateCurriculumResponse`.
+2. Update streamable HTTP:
+   - Inject the helper whenever `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`.
+   - Ensure unit tests assert SSE success for stubbed `tools/call`.
+3. Add vitest + supertest suites that confirm:
+   - Dev mode (stubbed, auth bypass) lists tools and executes stub calls without `isError`.
+   - Production mode enforces auth and Accept headers (401/406 as appropriate).
+4. After each change set, run the full gate suite.
 
-Validation (same sequence as Stage 1, log results):
+Exit Criteria:
 
-1. `pnpm type-gen`
-2. `pnpm build --filter @oaknational/oak-curriculum-sdk`
-3. `pnpm type-check --filter @oaknational/oak-curriculum-sdk`
-4. `pnpm lint --filter @oaknational/oak-curriculum-sdk`
-
-**Exit Criteria:** Lint is green, runtime remains a thin delegate, and the context log notes the successful lint clean-up (Loop Check D).
-
----
-
-## Stage 3 – Final Integrity & Documentation
-
-**Objective:** Prove the restored pipeline is stable and document the outcome.
-
-Status: ✅ complete (see context log 2025-10-18 21:34 UTC).
-
-Tasks (for reference):
-
-- Re-run the full suite once more:
-  1. `pnpm type-gen`
-  2. `pnpm build --filter @oaknational/oak-curriculum-sdk`
-  3. `pnpm type-check --filter @oaknational/oak-curriculum-sdk`
-  4. `pnpm lint --filter @oaknational/oak-curriculum-sdk`
-  5. Targeted tests as needed (e.g. `pnpm test --filter @oaknational/oak-curriculum-sdk`)
-- Update `.agent/plans/semantic-search/context.md` with:
-  - Command outcomes
-  - Loop check reflections
-  - Any residual backlog items (legacy ops/response lint debt, downstream apps)
-- Verify documentation references (architecture notes, DAG explanation) align with the final state.
-
-**Exit Criteria:** All gates pass, documentation is synced, and the context log closes with a Loop Check E tying the work back to the cardinal rule.
+- Both transports rely solely on generated stubs.
+- New supertest suites pass.
+- The full gate suite stays green.
 
 ---
 
-## Stage 4 – Schema-Generated Stubs & Shared Runtime
+## Stage 6 – Smoke Harness, Documentation, and Formatting
 
-**Objective:** Replace handwritten stub executors with schema-generated fixtures that update automatically with the OpenAPI spec.
+**Objective:** Restructure smoke tests, document expectations, and polish the repo.
 
-- Extend the type-generation pipeline to emit deterministic stub payloads and fixture builders for each tool. Fixtures must pass the generated output validators without `as` casts.
-- Surface the fixtures and a `createStubExecutors` helper via the SDK public API.
-- Update stdio and streamable HTTP apps to consume the shared helper when `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, removing local stub definitions.
-- Tests first:  
-  - Add SDK unit tests that execute each generated stub through `validateCurriculumResponse`.  
-  - Add vitest + supertest sanity suites proving both dev and prod HTTP servers list tools and execute stubbed calls without `isError`.
-- After each code or test change run the full gate list:  
-  `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev:stub` (once available).
-- Record all results in the context log.
+Tasks:
 
-**Exit Criteria:** Generated stubs exist, both transports rely on them, and all gates remain green with stub mode enabled.
+1. Split smoke commands into:
+   - `pnpm smoke:dev:stub`
+   - `pnpm smoke:dev:live`
+   - `pnpm smoke:remote`
+2. Extract shared SSE/assertion utilities; keep negative Accept-header cases and add light unit coverage for helpers.
+3. Update documentation:
+   - `.agent/plans/semantic-search/context.md`
+   - `.agent/plans/semantic-search/snagging-resolution-plan.md`
+   - `apps/oak-curriculum-mcp-streamable-http/README.md`
+   - Emphasise Accept header requirements, `.env` fallback for `OAK_API_KEY`, and stub vs live smoke usage.
+4. Run `pnpm format:root`, then execute the full gate suite for each smoke variant.
 
----
+Exit Criteria:
 
-## Stage 5 – Smoke Harness & Documentation Alignment
-
-**Objective:** Provide clear, deterministic smoke coverage for stub, live, and remote scenarios, and document Accept-header expectations.
-
-- Split the smoke runner into three entry points: local stub, local live, and remote live. Keep shared assertions and retain negative Accept-header cases.
-- Update package scripts/Turborepo config accordingly; add light unit coverage for shared smoke utilities (e.g. SSE parsing helpers).
-- Document SSE requirements, stub usage, and Cursor dev workflow in README + `.agent` plans.
-- After each harness/doc change, rerun the quality gates:  
-  `pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, each smoke variant.
-- Finish with `pnpm format:root` and a final gate run.
-
-**Exit Criteria:** All smoke variants pass, documentation reflects the strict Accept-header requirement, and the context/snags logs capture the outcome.
+- All smoke variants pass.
+- Documentation reflects the new workflows and header requirements.
+- Formatting/linting remains clean.
 
 ---
 
-## Backlog (post-plan)
+## Stage 7 – Cursor Dev Flow Validation
 
-- Legacy operations/response-map lint debt (`type-gen/typegen/operations/**`, `type-gen/typegen/response-map/**`) once e2e suites are stable.
-- Downstream app adjustments after the SDK exports settle (e.g. UI clients).
-- Broader test coverage for complex orchestration tools (search/fetch) if needed.
+**Objective:** Provide automated assurance that Cursor (or any SSE client) can talk to the dev server in stub mode.
 
-_Do not pick up backlog items until Stage 4 is complete and logged._
+Tasks:
+
+1. Add a vitest or Playwright integration test that:
+   - Launches the streamable HTTP dev server with stubs enabled.
+   - Performs `initialize`, `tools/list`, and `tools/call` via fetch with `Accept: text/event-stream`.
+   - Asserts 200 responses and SSE envelopes without `isError`.
+2. Record the successful run in the context log and maintain a green gate suite.
+
+Exit Criteria:
+
+- Cursor-style integration test passes consistently.
+- Results captured in `.agent/plans/semantic-search/context.md`.
+
+---
+
+## Backlog (Defer Until Above Stages Complete)
+
+- Address generator lint debt under `type-gen/typegen/operations/**` and `type-gen/typegen/response-map/**`.
+- Align downstream UI clients once stub generation is complete and transports are stable.

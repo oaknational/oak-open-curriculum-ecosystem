@@ -3,6 +3,7 @@ import type {
   ParameterObject,
   PathItemObject,
   SchemaObject,
+  ReferenceObject,
   OpenAPIObject,
 } from 'openapi3-ts/oas31';
 import { generateMcpToolName } from './name-generator.js';
@@ -16,6 +17,13 @@ import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
+import {
+  createComponentResolver,
+  extractComponentNameFromRef,
+  getJsonResponseInfo,
+  isReferenceObject,
+  isResponseObject,
+} from '../response-map/shared.js';
 
 export type PrimitiveType = string | number | boolean | string[] | number[] | boolean[];
 export type PrimitiveTypeLabel =
@@ -151,6 +159,7 @@ export interface GeneratedMcpToolFiles {
   };
   aliases: Record<string, string>;
   runtime: Record<string, string>;
+  stubs: Record<string, string>;
 }
 
 export interface McpToolGeneratorDeps {
@@ -168,10 +177,13 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     },
     aliases: {},
     runtime: {},
+    stubs: {},
   };
 
   const operationToToolEntries: { operationId: string; toolName: string }[] = [];
   const toolNamesSet = new Set<string>();
+  const resolver = createComponentResolver(schema.components?.schemas ?? {});
+  const stubValues = new Map<string, unknown>();
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
     const operationId = operation.operationId ?? `${method}-${path.replace(/[{}]/g, '')}`;
@@ -189,6 +201,12 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
       queryParamMetadata,
     );
     result.data.tools[`${toolName}.ts`] = toolFile;
+
+    const stubValue = generateStubValueForOperation(operationId, operation, resolver.resolve);
+    if (stubValue === undefined) {
+      throw new Error(`Unable to generate stub payload for tool ${toolName} (${operationId})`);
+    }
+    stubValues.set(toolName, stubValue);
   }
 
   const toolNames = Array.from(toolNamesSet).toSorted();
@@ -200,6 +218,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result.data['index.ts'] = generateDataIndexFile();
   result.index = generateRootIndexFile();
   result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();
+  result.stubs = generateStubModules(stubValues);
 
   return result;
 }
