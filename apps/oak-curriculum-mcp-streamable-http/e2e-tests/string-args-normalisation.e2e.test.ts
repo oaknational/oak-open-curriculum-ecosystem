@@ -88,28 +88,23 @@ describe('HTTP boundary argument validation', () => {
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: () =>
         Promise.resolve({
-          data: {
-            data: {
-              data: [
+          data: [
+            {
+              lessonSlug: 'stub-lesson',
+              lessonTitle: 'Stub Lesson',
+              similarity: 0.75,
+              units: [
                 {
-                  lessonSlug: 'stub-lesson',
-                  lessonTitle: 'Stub Lesson',
-                  similarity: 0.75,
-                  units: [
-                    {
-                      unitSlug: 'stub-unit',
-                      unitTitle: 'Stub Unit',
-                      examBoardTitle: null,
-                      keyStageSlug: 'ks1',
-                      subjectSlug: 'english',
-                    },
-                  ],
-                  canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
+                  unitSlug: 'stub-unit',
+                  unitTitle: 'Stub Unit',
+                  examBoardTitle: null,
+                  keyStageSlug: 'ks1',
+                  subjectSlug: 'english',
                 },
               ],
-              response: { status: 200 },
+              canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
             },
-          },
+          ],
         }),
     };
     const app = createApp({ toolHandlerOverrides: overrides });

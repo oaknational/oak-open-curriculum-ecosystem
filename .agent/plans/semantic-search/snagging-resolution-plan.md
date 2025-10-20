@@ -25,54 +25,90 @@ Restore a fully schema-first pipeline where every runtime artefact—including s
 
 ---
 
-## Stage 4 – Schema-Generated Stubs (In Progress)
+## Stage 4 – Schema-Generated Stubs (Completed)
 
-**Objective:** Generate canonical stub payloads during type generation so they automatically stay aligned with the OpenAPI schema, then expose helpers that transports can import directly.
+**Objective:** Generate canonical stub payloads during type generation so they automatically stay aligned with the OpenAPI schema, then expose helpers that transports can import directly. ✅
 
-**Progress:** Step 0 (re-establish the green baseline) completed on 2025-10-19 18:35 BST; proceed with Step 1.
+Achievements:
 
-Tasks (small, test-driven increments):
+1. **Re-established the green baseline** (2025-10-19) ensuring `pnpm type-gen` succeeded before further changes.
+2. **Introduced schema-sampling core with TDD** covering `$ref`, enum, and default precedence.
+3. **Layered stub-module emitters** to generate `index.ts`, `tools/index.ts`, and per-tool modules.
+4. **Emitted high-fidelity stubs** by teaching `sampleSchemaObject` to retain optional properties such as `canonicalUrl`, then regenerating artefacts and keeping `stub-tool-executor.unit.test.ts` green.
+5. **Validated the full gate stack** via `pnpm qg`, confirming build, lint, tests, UI, E2E, and smoke suites (with stubs) all pass.
 
-1. **Re-establish the green baseline** _(completed 2025-10-19)_
-   - Revert `type-gen/typegen/mcp-tools/` to the last working structure (single generator file plus existing parts).
-   - Prove `pnpm type-gen` runs clean before introducing new helpers.
-2. **Introduce schema-sampling core with TDD** _(completed)_
-   - Added `schema-sample-core.unit.test.ts` covering refs/enum/default precedence.
-   - Implemented `schema-sample-core.ts` with recursion, `$ref` resolution, and deterministic defaults.
-3. **Layer stub-module emitters** _(completed)_
-   - Added `stub-modules.unit.test.ts` asserting exact file output for a test stub map.
-   - Implemented `stub-modules.ts` to generate `index.ts`, `tools/index.ts`, and per-tool modules.
-4. **Emit high-fidelity stubs** _(in progress)_
-   - Extend `sampleSchemaObject` so optional properties surfaced in the schema (e.g. `canonicalUrl`) are preserved in sampled payloads.
-   - Re-run `pnpm type-gen` and inspect representative files under `src/types/generated/api-schema/mcp-tools/generated/stubs/`.
-   - Keep `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` green.
-5. **Validate the full gate stack**
-   - Once Step 4 is green, run `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev`.
-   - Fix failures immediately—never progress to smoke-level work until unit/integration suites pass.
-
-Exit Criteria:
-
-- `pnpm type-gen` emits stub modules and helpers.
-- All gates pass with the new fixtures in place.
-- The new unit test turns green.
+Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites enforce schema fidelity, and the quality gates are green.
 
 ---
 
-## Stage 5 – SDK Runtime & App Integration
+## Stage 5 – SDK Runtime & App Integration (Planned)
 
-**Objective:** Replace handwritten stubs in both apps with the generated helper and prove behaviour with supertest “sanity” suites.
+**Objective:** Demonstrate that both MCP transports behave correctly when backed by the generated stub executor. Replace legacy test doubles, add supertest-driven regression coverage, and ensure all suites run green against schema-faithful payloads.
 
-Tasks:
+### Preconditions
 
-1. Keep `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` and the streamable HTTP handlers wired to the generated helper (already completed during Stage 4).
-2. Add vitest + supertest sanity suites (one for stubbed dev mode, one for prod/auth flows) covering `tools/list`, `tools/call`, Accept header enforcement, and auth rejection.
-3. After each incremental change, run the full gate suite—unit/integration first, then smoke—and keep it green.
+- Stage 4 complete (generator emits canonical stubs; `pnpm qg` green).
+- Wrapper-based fixtures (`{ data: { data: [...] } }`) removed from all tests/fixtures before this stage closes as part of Task 1 below.
 
-Exit Criteria:
+### Task 1 – Purge Wrapper Assumptions
 
-- Both transports rely solely on generated stubs.
-- New supertest suites pass.
-- The full gate suite stays green.
+- **Goal:** Ensure no test or helper expects the `{ data: { data: [...] } }` shape.
+- **Implementation steps:**
+  1. `rg "\"data\": { data\"" apps packages` to locate suspects.
+  2. Refactor affected tests to assert directly against schema-true payloads (arrays or objects as generated).
+  3. Update helper factories (e.g. `createStubOverrides` in `tool-call-success.e2e.test.ts`) to delegate to generated stubs or return raw schema-compliant structures.
+- **TDD expectations:** Write/adjust tests first to fail on wrapper detection (e.g. expect raw array). Then update fixtures to satisfy the new assertions.
+- **Validation:** `pnpm test apps/oak-curriculum-mcp-streamable-http`, `pnpm test apps/oak-curriculum-mcp-stdio`, `pnpm lint` must pass. No occurrences of the legacy wrapper remain (`rg "{ data: { data" -n` returns none).
+
+### Task 2 – Streamable HTTP Supertest Coverage (Stub Mode)
+
+- **Goal:** Prove the HTTP transport returns schema-valid results when stubs are enabled.
+- **Implementation steps:**
+  1. Add a test helper (e.g. `createStubbedHttpApp()`) that sets `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, clears API keys, and returns an Express app wired to the real stub executor.
+  2. Write supertest/Vitest cases covering:
+     - `tools/list` (assert roster matches `listUniversalTools()` output).
+     - `tools/call` success for at least one representative endpoint (validate canonical URL presence, SSE structure).
+     - `tools/call` validation failure (invalid args → 200 envelope with `isError` flagged via stub executor).
+     - Auth rejection (401 when header missing).
+     - Accept-header enforcement (406 when `text/event-stream` absent).
+  3. Ensure no spies/mocks replace the executor; rely on generated stubs only.
+- **TDD expectations:** For each scenario, write a failing test, then adjust server helpers/config until it passes.
+- **Validation:** `pnpm test apps/oak-curriculum-mcp-streamable-http` must succeed with the new suite; SSE assertions confirm raw payloads.
+
+### Task 3 – Streamable HTTP “Live-mode” Sanity (Optional Auth)
+
+- **Goal:** Prove the same suite works when stubs are disabled and a fake Oak client is injected.
+- **Implementation steps:**
+  1. Introduce an override factory that injects a controllable `executeMcpTool` returning schema-compliant data (no wrappers).
+  2. Replicate success/error scenarios ensuring the transport still formats responses correctly with live-mode hooks.
+- **Validation:** Extended tests pass, demonstrating parity between stubbed and live flows.
+
+### Task 4 – Stdio Transport Coverage
+
+- **Goal:** Add integration tests for the stdio server demonstrating stub-backed executions.
+- **Implementation steps:**
+  1. Expose a test harness (`createStubbedStdioServer`) that instantiates the stdio transport with `createStubToolExecutionAdapter()`; capture responses without network calls (e.g. using in-memory pipes or the existing MCP transport helpers).
+  2. Cover:
+     - `initialize` + `tools/list` (responses match generated descriptors).
+     - `tools/call` success (assert returned content contains schema-valid JSON with canonical fields).
+     - `tools/call` validation failure and missing stub scenarios.
+  3. Ensure no auth/header expectations (stdio is local only).
+- **TDD expectations:** Write failing tests first, verify they fail because stub wiring is missing, then implement harness until green.
+- **Validation:** `pnpm test apps/oak-curriculum-mcp-stdio` passes with new cases.
+
+### Task 5 – Cross-cutting Clean-ups
+
+- **Goals:** Keep implementation aligned with repository directives.
+- **Steps:**
+  1. Update shared test utilities if duplication arises (e.g. SSE parsing helper reused between unit and smoke tests).
+  2. Document stub-mode expectations in `apps/oak-curriculum-mcp-streamable-http/README.md` and equivalent stdio notes.
+- **Validation:** `pnpm lint`, `pnpm format:root`, and `pnpm test` run clean after documentation updates.
+
+### Task 6 – Gate Sweep & Sign-off
+
+- **Goal:** Ensure the repository remains compliant after Stage 5.
+- **Steps:** Run `pnpm qg` (format-check, type-check, lint, markdownlint, unit/UI/E2E tests, smoke:dev). Resolve regressions immediately.
+- **Exit criteria:** All new tests pass, smoke harness stays green, no `{ data: { data: ... } }` remnants, supertest coverage in place for both transports.
 
 ---
 

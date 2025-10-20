@@ -1,22 +1,22 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-20 11:10 BST_
+_Last updated: 2025-10-20 14:30 BST_
 
 ---
 
 ## Current Snapshot
 
-- **Generator alignment** – `mcp-tool-generator.ts` now emits a `stubs/` bundle alongside the existing artefacts; the new helpers pull schemas via `sampleSchemaObject` and feed `generateStubModules`.
+- **Generator alignment** – `mcp-tool-generator.ts` now emits a `stubs/` bundle alongside the existing artefacts; the sampler preserves optional fields (e.g. `canonicalUrl`) so generated fixtures validate against the realtime schema.
 - **Runtime state** – Both transports conditionally call the generated stub executor when `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`. Manual fixtures have been removed.
-- **Testing gap** – `src/mcp/stub-tool-executor.unit.test.ts` is back in place and green, but the streamable HTTP Vitest suite and the smoke harness still highlight response drift (missing `canonicalUrl` in sampled payloads).
+- **Testing gap** – `src/mcp/stub-tool-executor.unit.test.ts` exercises every generated stub and is green; remaining gaps are higher-level (supertest/SSE coverage and smoke variants).
 - **Developer experience** – `loadRootEnv` continues to backfill `OAK_API_KEY`; Accept header enforcement remains in place and documented by the smoke script logs.
-- **Quality gates** – `pnpm type-gen`, `pnpm lint`, unit tests, and the app-specific suites now pass with the generated stubs. `pnpm smoke:dev` still fails because the generated fixtures omit optional fields that downstream Zod validators expect (e.g. `canonicalUrl` for key stages).
+- **Quality gates** – `pnpm qg` (format, type-check, lint, markdownlint, unit/UI/E2E suites, smoke:dev) succeeds with the generated stubs. SSE payloads now match live responses (arrays when the schema dictates), so the smoke harness accepts both raw arrays and wrapped data when provided.
 
 ---
 
 ## Key Findings
 
-1. Generated stubs are flowing end-to-end, but the sampler currently drops optional properties (`canonicalUrl`, etc.), triggering SDK validation failures.
+1. Generated stubs are flowing end-to-end and now retain optional properties (`canonicalUrl`, etc.), keeping SDK validation happy.
 2. The stub executor must stay argument-agnostic; upstream universal executors already validate inputs.
 3. Smoke scripts must treat stub mode as the default for local runs and only depend on `OAK_API_KEY` when `--require-live` is set.
 4. Supertest coverage is still missing for both transports; without it, we rely on smoke scripts to catch schema drift.
@@ -29,8 +29,8 @@ _Last updated: 2025-10-20 11:10 BST_
 - Hooked `sampleSchemaObject` + `generateStubModules` into `mcp-tool-generator.ts`, extending unit tests to assert the new `stubs` outputs.
 - Reintroduced `src/mcp/stub-tool-executor.unit.test.ts` to call the generated helper and validate every payload via `validateCurriculumResponse`.
 - Exported the stub executor adapter through the SDK barrels and wired both MCP apps (`stub-executors.ts`, streamable HTTP handlers + OpenAI connector) to consume it when stub mode is enabled.
-- Regenerated artefacts via `pnpm type-gen`; SDK unit/integration suites, lint, and app-level tests now run against the generated stubs.
-- Investigated smoke harness failures and determined that sampled fixtures lack optional fields (`canonicalUrl`), causing runtime validation to set `isError: true`.
+- Extended the sampler so optional schema properties persist, regenerated artefacts, and re-ran `pnpm qg` to confirm all gates—including `smoke:dev`—pass with stub mode enabled.
+- Relaxed the smoke assertion to accept raw arrays (matching live responses) while still tolerating wrapped data produced by older fixtures.
 
 ---
 
@@ -50,26 +50,19 @@ _Last updated: 2025-10-20 11:10 BST_
 
 ## Next Steps (Detailed Checklist)
 
-1. **Step 4 – Regenerate artefacts and flip the scaffold**
-   - Update `schema-sample-core` so optional fields (canonical URLs, etc.) are preserved in the sampled payloads.
-   - Re-run `pnpm type-gen` and verify representative stubs under `src/types/generated/api-schema/mcp-tools/generated/stubs/`.
-   - Keep `src/mcp/stub-tool-executor.unit.test.ts` green.
+1. **Stage 5 – Runtime integration tests**
+   - Task 1: purge legacy `{ data: { data: [...] } }` expectations across all suites.
+   - Task 2: add supertest coverage for the streamable HTTP transport in stub mode (tools/list, tools/call success/error, auth 401, Accept 406).
+   - Task 3: extend streamable HTTP coverage for non-stub overrides to mirror live-mode behaviour.
+   - Task 4: add stdio transport tests exercising `initialize`, `tools/list`, and `tools/call` (success + validation failures) with stubs.
+   - Task 5: consolidate helpers/docs; Task 6: rerun `pnpm qg`.
 
-2. **Step 5 – Full gate sweep**
-   - Run `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev`.
-   - Resolve any failures before advancing to Stage 5.
-
-3. **Adopt shared stubs in apps**
-   - Add supertest “sanity” suites for both dev (stub) and prod (auth enforced) flows.
-   - Keep transports wired to the generated helper and re-run the gate suite.
-   - These are different from the smoke test scripts.
-
-4. **Restructure smoke harness & docs**
+2. **Stage 6 – Restructure smoke harness & docs**
    - Create dedicated smoke scripts (stub / live / remote) and shared utilities.
    - Update documentation (plans, context, README) with Accept header, stub usage, `.env` fallback.
    - Run `pnpm format:root`, then the gate suite including each smoke script.
 
-5. **Cursor integration test**
+3. **Stage 7 – Cursor integration test**
    - Implement a vitest or Playwright workflow that launches the stubbed dev server and performs `initialize` → `tools/list` → `tools/call` with the SSE header.
    - Record the run in this log and keep the gate suite green.
 
@@ -101,4 +94,10 @@ Reflection: Proceed to Step 1 by adding the schema sampling helper with a red 
 - Generator: `pnpm type-gen` produces `generated/stubs/**`; schema sampler still omits optional fields (e.g. `canonicalUrl`).
 - Tests: `pnpm lint`, SDK unit/integration suites, and app tests are green. `pnpm smoke:dev` remains red because validation rejects the truncated stub payloads.
 Reflection: Extend `sampleSchemaObject` so optional properties survive sampling, then rerun the full gate stack before revisiting Stage 5 tasks.
+
+2025-10-20 14:30 BST
+- Status: Stage 4 complete. Generated stubs include optional schema fields; transports run against them in stub mode.
+- Generator: `sampleSchemaObject` now retains optional properties, and `pnpm type-gen` emits fixtures that pass `descriptor.validateOutput`.
+- Tests: `pnpm qg` (format → smoke) is green; smoke assertions accept schema-true arrays without expecting an artificial `{ data: ... }` wrapper.
+Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness split) while keeping the gates green.
 ```

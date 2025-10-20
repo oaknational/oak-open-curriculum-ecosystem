@@ -85,27 +85,16 @@ describe('createToolResponseHandlers', () => {
 });
 
 describe('validation helpers', () => {
-  it('prefers the data property when present', () => {
-    const payload = {
-      data: [{ slug: 'ks1', title: 'Key Stage 1' }],
-      response: { status: 200 },
-    };
-    expect(pickPayloadForValidation(payload)).toEqual(payload.data);
-  });
-
-  it('returns the original payload when no data wrapper is present', () => {
+  it('returns the original payload when no wrapper is present', () => {
     const scalar = 'plain-value';
     expect(pickPayloadForValidation(scalar)).toBe(scalar);
   });
 
   it('validates curriculum responses once unwrapped', () => {
-    const ok: OutputValidationResult = validateOutput('/key-stages', 'GET', {
-      data: [
-        { slug: 'ks1', title: 'Key Stage 1' },
-        { slug: 'ks2', title: 'Key Stage 2' },
-      ],
-      response: {},
-    });
+    const ok: OutputValidationResult = validateOutput('/key-stages', 'GET', [
+      { slug: 'ks1', title: 'Key Stage 1' },
+      { slug: 'ks2', title: 'Key Stage 2' },
+    ]);
     expect(ok).toEqual({ ok: true });
   });
 

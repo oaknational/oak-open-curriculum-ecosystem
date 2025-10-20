@@ -353,16 +353,9 @@ async function run(): Promise<void> {
       assert.notEqual(result?.isError, true, 'Successful tool call must not be flagged as error');
       const payloadText = result?.content?.find((entry) => entry?.type === 'text')?.text ?? '';
       assert.notEqual(payloadText.length, 0, 'Successful tool call must return text content');
-      const payload = JSON.parse(payloadText) as { data?: unknown } | unknown[];
-      const dataValue = Array.isArray(payload)
-        ? payload
-        : Array.isArray(payload?.data)
-          ? payload.data
-          : Array.isArray((payload?.data as { data?: unknown })?.data)
-            ? (payload.data as { data?: unknown }).data
-            : undefined;
-      assert.ok(Array.isArray(dataValue), 'Tool payload should contain a data array');
-      assert.ok((dataValue as unknown[]).length > 0, 'Tool payload data array should not be empty');
+      const payload = JSON.parse(payloadText) as unknown;
+      assert.ok(Array.isArray(payload), 'Tool payload should be an array');
+      assert.ok(payload.length > 0, 'Tool payload data array should not be empty');
     }
 
     // 7) Synonym canonicalisation succeeds

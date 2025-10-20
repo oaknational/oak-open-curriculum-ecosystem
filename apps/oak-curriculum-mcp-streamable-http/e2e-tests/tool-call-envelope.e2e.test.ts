@@ -86,12 +86,16 @@ function isTextContent(entry: unknown): entry is ToolTextContent {
   return entry.type === 'text' && typeof entry.text === 'string';
 }
 
-function parseJsonPayload(raw: string): Record<string, unknown> {
-  const parsed = JSON.parse(raw) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('Tool payload was not an object');
+function parseJsonPayload(raw: string): unknown {
+  return JSON.parse(raw) as unknown;
+}
+
+function parsePayloadArray(text: string): unknown[] {
+  const payload = parseJsonPayload(text);
+  if (!Array.isArray(payload)) {
+    throw new Error('Tool payload must be an array');
   }
-  return parsed;
+  return payload;
 }
 
 function assertSuccessfulEnvelope(envelope: ToolEnvelope): void {
@@ -109,15 +113,8 @@ function assertSuccessfulEnvelope(envelope: ToolEnvelope): void {
   if (!entry) {
     throw new Error('Tool result missing textual payload');
   }
-  const payload = parseJsonPayload(entry.text);
-  if (!isRecord(payload.data)) {
-    throw new Error('Tool payload data wrapper must be an object');
-  }
-  const dataValue = payload.data.data;
-  if (!Array.isArray(dataValue)) {
-    throw new Error('Tool payload data must be an array');
-  }
-  expect(dataValue.length).toBeGreaterThan(0);
+  const arrayPayload = parsePayloadArray(entry.text);
+  expect(arrayPayload.length).toBeGreaterThan(0);
 }
 
 describe('Tool response envelope formatting', () => {
@@ -125,26 +122,21 @@ describe('Tool response envelope formatting', () => {
     const restoreEnv = configureRealApiEnvironment();
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: (name, args, client) => {
+        void name;
         void args;
         void client;
-        const data = {
-          data: {
-            data: [
-              {
-                slug: 'ks1',
-                title: 'Key Stage 1',
-                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
-              },
-              {
-                slug: 'ks2',
-                title: 'Key Stage 2',
-                canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
-              },
-            ],
-            response: { status: 200 },
+        const data = [
+          {
+            slug: 'ks1',
+            title: 'Key Stage 1',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
           },
-          tool: name,
-        };
+          {
+            slug: 'ks2',
+            title: 'Key Stage 2',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+          },
+        ];
         const result: ToolExecutionResult = { data };
         return Promise.resolve(result);
       },

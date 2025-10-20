@@ -21,23 +21,18 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
     executeMcpTool: (name, args, client) => {
       void client;
       captured.push({ tool: name, args });
-      const data = {
-        data: {
-          data: [
-            {
-              slug: 'ks1',
-              title: 'Key Stage 1',
-              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
-            },
-            {
-              slug: 'ks2',
-              title: 'Key Stage 2',
-              canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
-            },
-          ],
-          response: { status: 200 },
+      const data = [
+        {
+          slug: 'ks1',
+          title: 'Key Stage 1',
+          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
         },
-      };
+        {
+          slug: 'ks2',
+          title: 'Key Stage 2',
+          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+        },
+      ];
       const result: ToolExecutionResult = { data };
       return Promise.resolve(result);
     },
@@ -100,17 +95,10 @@ describe('Tool call success formatting', () => {
     const payloadObject = parseSseLine(res.text);
     const content = extractTextContent(payloadObject);
     const parsedValue: unknown = content ? JSON.parse(content) : {};
-    if (!isRecord(parsedValue)) {
-      throw new Error('Tool payload must be an object');
+    if (!Array.isArray(parsedValue)) {
+      throw new Error('Tool payload must be an array');
     }
-    const dataWrapper = parsedValue.data;
-    if (!isRecord(dataWrapper)) {
-      throw new Error('Tool payload wrapper must be an object');
-    }
-    const dataField = dataWrapper.data;
-    if (!Array.isArray(dataField)) {
-      throw new Error('Tool payload data must be an array');
-    }
-    expect(dataField.length).toBe(2);
+    expect(parsedValue.length).toBe(2);
+    expect(parsedValue[0]).toHaveProperty('canonicalUrl');
   });
 });

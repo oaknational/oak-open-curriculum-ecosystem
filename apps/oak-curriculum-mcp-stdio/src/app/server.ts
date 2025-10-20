@@ -31,32 +31,9 @@ export type OutputValidationResult =
   | { readonly ok: false; readonly message: string };
 
 /**
- * Represents the possible wrapper returned by MCP tool executions where
- * the transport response is nested under a `data` property alongside metadata.
- */
-interface ValidationPayloadWrapper {
-  readonly data?: unknown;
-  readonly response?: unknown;
-}
-
-/**
- * Determines whether the supplied payload conforms to the wrapper structure
- * that nests the response payload beneath `data`.
- */
-function hasValidationPayloadWrapper(candidate: unknown): candidate is ValidationPayloadWrapper {
-  if (typeof candidate !== 'object' || candidate === null) {
-    return false;
-  }
-  return 'data' in candidate && 'response' in candidate;
-}
-
-/**
- * Extracts the raw payload for downstream validation, accounting for wrapped responses.
+ * Extracts the raw payload for downstream validation.
  */
 export function pickPayloadForValidation(data: unknown): unknown {
-  if (hasValidationPayloadWrapper(data)) {
-    return data.data;
-  }
   return data;
 }
 

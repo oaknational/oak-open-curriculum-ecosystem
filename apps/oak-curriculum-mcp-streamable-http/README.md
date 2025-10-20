@@ -66,7 +66,7 @@ Note: The server automatically adds the required `Accept: application/json, text
 {
   "jsonrpc": "2.0",
   "id": "1",
-  "result": { "content": [{ "type": "text", "text": "{\n  \"ok\": true, \"data\": { ... }\n}" }] }
+  "result": { "content": [{ "type": "text", "text": "[\n  { ... }\n]" }] }
 }
 ```
 
