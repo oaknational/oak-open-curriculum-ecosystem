@@ -50,15 +50,18 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
 - Stage 4 complete (generator emits canonical stubs; `pnpm qg` green).
 - Wrapper-based fixtures (`{ data: { data: [...] } }`) removed from all tests/fixtures before this stage closes as part of Task 1 below.
 
-### Task 1 – Purge Wrapper Assumptions
+### Task 1 – Purge Wrapper Assumptions ✅
 
-- **Goal:** Ensure no test or helper expects the `{ data: { data: [...] } }` shape.
-- **Implementation steps:**
-  1. `rg "\"data\": { data\"" apps packages` to locate suspects.
-  2. Refactor affected tests to assert directly against schema-true payloads (arrays or objects as generated).
-  3. Update helper factories (e.g. `createStubOverrides` in `tool-call-success.e2e.test.ts`) to delegate to generated stubs or return raw schema-compliant structures.
-- **TDD expectations:** Write/adjust tests first to fail on wrapper detection (e.g. expect raw array). Then update fixtures to satisfy the new assertions.
-- **Validation:** `pnpm test apps/oak-curriculum-mcp-streamable-http`, `pnpm test apps/oak-curriculum-mcp-stdio`, `pnpm lint` must pass. No occurrences of the legacy wrapper remain (`rg "{ data: { data" -n` returns none).
+- **Status:** Completed 2025-10-20. All fixtures, helpers, and docs now rely solely on schema-faithful payloads.
+- **Key changes:**
+  - Replaced legacy `{ data: { data: [...] } }` stubs with raw schema arrays in HTTP e2e tests, smoke harness, and documentation.
+  - Removed wrapper-aware validation helper (`pickPayloadForValidation`) from the stdio server and updated the corresponding unit tests.
+  - Confirmed no `payload.data` fallbacks remain (`rg 'payload.data' -n` → no matches).
+- **Validation:**
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`
+  - `pnpm lint`
+  - `pnpm qg`
 
 ### Task 2 – Streamable HTTP Supertest Coverage (Stub Mode)
 

@@ -1,6 +1,6 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-20 14:30 BST_
+_Last updated: 2025-10-20 16:15 BST_
 
 ---
 
@@ -10,13 +10,13 @@ _Last updated: 2025-10-20 14:30 BST_
 - **Runtime state** – Both transports conditionally call the generated stub executor when `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`. Manual fixtures have been removed.
 - **Testing gap** – `src/mcp/stub-tool-executor.unit.test.ts` exercises every generated stub and is green; remaining gaps are higher-level (supertest/SSE coverage and smoke variants).
 - **Developer experience** – `loadRootEnv` continues to backfill `OAK_API_KEY`; Accept header enforcement remains in place and documented by the smoke script logs.
-- **Quality gates** – `pnpm qg` (format, type-check, lint, markdownlint, unit/UI/E2E suites, smoke:dev) succeeds with the generated stubs. SSE payloads now match live responses (arrays when the schema dictates), so the smoke harness accepts both raw arrays and wrapped data when provided.
+- **Quality gates** – `pnpm qg` (format, type-check, lint, markdownlint, unit/UI/E2E suites, smoke:dev) succeeds with the generated stubs. SSE payloads now match live responses (arrays when the schema dictates); no wrapper fallbacks remain anywhere in the repo.
 
 ---
 
 ## Key Findings
 
-1. Generated stubs are flowing end-to-end and now retain optional properties (`canonicalUrl`, etc.), keeping SDK validation happy.
+1. Generated stubs are flowing end-to-end, retain optional properties (`canonicalUrl`, etc.), and surface directly without wrapper indirection.
 2. The stub executor must stay argument-agnostic; upstream universal executors already validate inputs.
 3. Smoke scripts must treat stub mode as the default for local runs and only depend on `OAK_API_KEY` when `--require-live` is set.
 4. Supertest coverage is still missing for both transports; without it, we rely on smoke scripts to catch schema drift.
@@ -30,15 +30,12 @@ _Last updated: 2025-10-20 14:30 BST_
 - Reintroduced `src/mcp/stub-tool-executor.unit.test.ts` to call the generated helper and validate every payload via `validateCurriculumResponse`.
 - Exported the stub executor adapter through the SDK barrels and wired both MCP apps (`stub-executors.ts`, streamable HTTP handlers + OpenAI connector) to consume it when stub mode is enabled.
 - Extended the sampler so optional schema properties persist, regenerated artefacts, and re-ran `pnpm qg` to confirm all gates—including `smoke:dev`—pass with stub mode enabled.
-- Relaxed the smoke assertion to accept raw arrays (matching live responses) while still tolerating wrapped data produced by older fixtures.
+- Replaced the legacy `{ data: { data: [...] } }` wrapper in tests, smoke harness, docs, and stdio helpers with schema-faithful arrays, then reran `pnpm lint`, targeted app suites, and `pnpm qg`.
 
 ---
 
 ## In-Flight Work
 
-- **Stage 4 – Schema-generated stubs**
-  - Fix sampled fixtures so optional properties (e.g. `canonicalUrl`) are emitted when they appear in the schema.
-  - Repeat `pnpm type-gen`, unit suites, and ensure the stub executor test stays green.
 - **Stage 5 – Runtime adoption & tests**
   - Add supertest “sanity” suites for stubs vs live modes and ensure transports remain `isError: false`. Use supertest, these are different from the smoke test scripts.
 - **Stage 6 – Smoke harness & docs**
@@ -51,7 +48,7 @@ _Last updated: 2025-10-20 14:30 BST_
 ## Next Steps (Detailed Checklist)
 
 1. **Stage 5 – Runtime integration tests**
-   - Task 1: purge legacy `{ data: { data: [...] } }` expectations across all suites.
+   - ✅ Task 1: purge legacy `{ data: { data: [...] } }` expectations across all suites.
    - Task 2: add supertest coverage for the streamable HTTP transport in stub mode (tools/list, tools/call success/error, auth 401, Accept 406).
    - Task 3: extend streamable HTTP coverage for non-stub overrides to mirror live-mode behaviour.
    - Task 4: add stdio transport tests exercising `initialize`, `tools/list`, and `tools/call` (success + validation failures) with stubs.
