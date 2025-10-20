@@ -1,5 +1,5 @@
 import type { OperationObject } from 'openapi3-ts/oas31';
-import { emitHeader, emitSchema, emitIndex, emitOakTool } from './emitters.js';
+import { emitHeader, emitSchema, emitIndex } from './emitters.js';
 import type { ParamMetadataMap, ParamMetadata } from './param-metadata.js';
 
 export type { ParamMetadata };
@@ -28,6 +28,5 @@ export function generateToolFile(
   parts.push(emitHeader(toolName, path, method, operationId));
   parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
   parts.push(emitIndex(toolName, path, method, operation));
-  parts.push(emitOakTool(toolName));
   return parts.join('\n');
 }

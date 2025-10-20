@@ -86,9 +86,3 @@ export const getKeyStagesSubjectQuestions = {
     return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };
   },
 } as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;
-
-/**
- * @internal Generated Oak MCP tool stub kept for documentation and regression tests.
- * @remarks Runtime execution flows through the ToolDescriptor entry; this stub will be replaced when tool handlers adopt schema-derived types.
- */
-export const getKeyStagesSubjectQuestionsTool = getKeyStagesSubjectQuestions;

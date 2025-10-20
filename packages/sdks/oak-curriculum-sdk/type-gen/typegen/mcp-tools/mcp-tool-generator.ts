@@ -17,6 +17,9 @@ import { getParameterPrimitiveType } from './parts/param-utils.js';
 import type { ParamMetadata, ParamMetadataMap } from './parts/param-metadata.js';
 import { createMutableParamMetadata } from './parts/param-metadata.js';
 import { generateToolDescriptorFile } from './parts/generate-tool-descriptor-file.js';
+import { generateStubModules } from './stub-modules.js';
+import { sampleSchemaObject } from './schema-sample-core.js';
+import { createSchemaResolver, resolveResponseSchemaForOperation } from './response-schema.js';
 export type PrimitiveType = string | number | boolean | string[] | number[] | boolean[];
 export type PrimitiveTypeLabel =
   | 'string'
@@ -150,6 +153,11 @@ export interface GeneratedMcpToolFiles {
   };
   aliases: Record<string, string>;
   runtime: Record<string, string>;
+  stubs: {
+    'index.ts': string;
+    'tools/index.ts': string;
+    tools: Record<string, string>;
+  };
 }
 
 export interface McpToolGeneratorDeps {
@@ -167,10 +175,17 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
     },
     aliases: {},
     runtime: {},
+    stubs: {
+      'index.ts': '',
+      'tools/index.ts': '',
+      tools: {},
+    },
   };
 
   const operationToToolEntries: { operationId: string; toolName: string }[] = [];
   const toolNamesSet = new Set<string>();
+  const stubPayloads = new Map<string, unknown>();
+  const resolveSchemaRef = createSchemaResolver(schema);
 
   for (const { path, method, operation } of iterOperations(schema)) {
     const toolName = generateMcpToolName(path, method);
@@ -189,6 +204,12 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
       queryParamMetadata,
     );
     result.data.tools[`${toolName}.ts`] = toolFile;
+
+    const responseSchema = resolveResponseSchemaForOperation(schema, operation, resolveSchemaRef);
+    if (responseSchema) {
+      const sampled = sampleSchemaObject(responseSchema, resolveSchemaRef);
+      stubPayloads.set(toolName, sampled ?? null);
+    }
   }
 
   const toolNames = Array.from(toolNamesSet).toSorted();
@@ -200,6 +221,7 @@ export function generateCompleteMcpTools(schema: OpenAPIObject): GeneratedMcpToo
   result.data['index.ts'] = generateDataIndexFile();
   result.index = generateRootIndexFile();
   result.contract['tool-descriptor.contract.ts'] = generateToolDescriptorFile();
+  result.stubs = generateStubModules(toolNames, stubPayloads);
 
   return result;
 }

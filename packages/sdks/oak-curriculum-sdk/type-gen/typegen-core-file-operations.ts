@@ -28,11 +28,14 @@ export function writeMcpToolsDirectory(
   const dataToolsDir = path.resolve(dataDir, 'tools');
   const aliasesDir = path.resolve(generatedDir, 'aliases');
   const runtimeDir = path.resolve(generatedDir, 'runtime');
+  const stubsDir = path.resolve(generatedDir, 'stubs');
+  const stubsToolsDir = path.resolve(stubsDir, 'tools');
 
   fs.mkdirSync(contractDir, { recursive: true });
   fs.mkdirSync(dataToolsDir, { recursive: true });
   fs.mkdirSync(aliasesDir, { recursive: true });
   fs.mkdirSync(runtimeDir, { recursive: true });
+  fs.mkdirSync(stubsToolsDir, { recursive: true });
 
   fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools.index);
 
@@ -52,6 +55,12 @@ export function writeMcpToolsDirectory(
 
   for (const [filename, content] of Object.entries(mcpTools.runtime)) {
     fs.writeFileSync(path.resolve(runtimeDir, filename), content);
+  }
+
+  fs.writeFileSync(path.resolve(stubsDir, 'index.ts'), mcpTools.stubs['index.ts']);
+  fs.writeFileSync(path.resolve(stubsDir, 'tools/index.ts'), mcpTools.stubs['tools/index.ts']);
+  for (const [filename, content] of Object.entries(mcpTools.stubs.tools)) {
+    fs.writeFileSync(path.resolve(stubsToolsDir, filename), content);
   }
 }
 

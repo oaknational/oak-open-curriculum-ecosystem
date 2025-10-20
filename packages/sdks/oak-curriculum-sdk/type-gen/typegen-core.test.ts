@@ -136,6 +136,13 @@ describe('typegen-core', () => {
         runtime: {
           'lib.ts': 'lib content',
         },
+        stubs: {
+          'index.ts': 'stub index content',
+          'tools/index.ts': 'stub tools index content',
+          tools: {
+            'alpha.ts': 'stub alpha content',
+          },
+        },
       };
 
       try {
@@ -159,6 +166,23 @@ describe('typegen-core', () => {
         const toolPath = path.join(outDir, 'mcp-tools', 'generated', 'data', 'tools', 'alpha.ts');
         const aliasesPath = path.join(outDir, 'mcp-tools', 'generated', 'aliases', 'types.ts');
         const runtimePath = path.join(outDir, 'mcp-tools', 'generated', 'runtime', 'lib.ts');
+        const stubIndexPath = path.join(outDir, 'mcp-tools', 'generated', 'stubs', 'index.ts');
+        const stubToolsIndexPath = path.join(
+          outDir,
+          'mcp-tools',
+          'generated',
+          'stubs',
+          'tools',
+          'index.ts',
+        );
+        const stubToolPath = path.join(
+          outDir,
+          'mcp-tools',
+          'generated',
+          'stubs',
+          'tools',
+          'alpha.ts',
+        );
 
         expect(readFileSync(rootIndexPath, 'utf8')).toBe('root index content');
         expect(readFileSync(contractPath, 'utf8')).toBe('contract content');
@@ -167,6 +191,9 @@ describe('typegen-core', () => {
         expect(readFileSync(toolPath, 'utf8')).toBe('alpha tool content');
         expect(readFileSync(aliasesPath, 'utf8')).toBe('types content');
         expect(readFileSync(runtimePath, 'utf8')).toBe('lib content');
+        expect(readFileSync(stubIndexPath, 'utf8')).toBe('stub index content');
+        expect(readFileSync(stubToolsIndexPath, 'utf8')).toBe('stub tools index content');
+        expect(readFileSync(stubToolPath, 'utf8')).toBe('stub alpha content');
       } finally {
         rmSync(outDir, { force: true, recursive: true });
       }

@@ -32,6 +32,9 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
     );
     expect(output.runtime['lib.ts']).not.toContain('override');
     expect(output.index).toContain('generated/data/index.js');
+
+    expect(output.stubs['index.ts']).toContain('createStubToolExecutor');
+    expect(output.stubs['tools/index.ts']).toContain('stubbedToolResponses');
   });
 
   it('captures enum parameter metadata when schema provides enum', () => {

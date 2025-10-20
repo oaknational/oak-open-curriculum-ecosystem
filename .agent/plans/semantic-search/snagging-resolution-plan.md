@@ -35,21 +35,23 @@ Tasks (small, test-driven increments):
 1. **Re-establish the green baseline** _(completed 2025-10-19)_
    - Revert `type-gen/typegen/mcp-tools/` to the last working structure (single generator file plus existing parts).
    - Prove `pnpm type-gen` runs clean before introducing new helpers.
-2. **Introduce schema-sampling core with TDD**
-   - Add a focused unit test covering a minimal schema → sample conversion.
-   - Implement a small helper (e.g., `schema-sample-core.ts`) that passes the test while keeping lines-per-file within lint limits.
-3. **Layer stub-module emitters**
-   - Write a test that asserts the exact strings produced for a trivial tool map.
-   - Implement the emitter (`stub-modules.ts`) to satisfy the test without touching the main generator yet.
+2. **Introduce schema-sampling core with TDD** _(completed)_
+   - Added `schema-sample-core.unit.test.ts` covering refs/enum/default precedence.
+   - Implemented `schema-sample-core.ts` with recursion, `$ref` resolution, and deterministic defaults.
+3. **Layer stub-module emitters** _(completed)_
+   - Added `stub-modules.unit.test.ts` asserting exact file output for a test stub map.
+   - Implemented `stub-modules.ts` to generate `index.ts`, `tools/index.ts`, and per-tool modules.
 4. **Thread helpers into `mcp-tool-generator.ts`**
-   - Add a generator-level test (or extend the existing one) that validates integration with the new helpers.
-   - Update the generator to use the helpers, keeping previously green tests passing.
-   - Reintroduce `stub-tool-executor.unit.test.ts` so the generated helpers drive the runtime acceptance.
+   - Extend `mcp-tool-generator.unit.test.ts` (and `typegen-core.test.ts`) so `GeneratedMcpToolFiles` includes `stubs`.
+   - Import `sampleSchemaObject` / `generateStubModules`, delete the old placeholder map, and keep the dependency graph intact.
+   - Recreate `src/mcp/stub-tool-executor.unit.test.ts` to consume the generated helper (calls each tool, validates with `validateCurriculumResponse`).
+   - Run the generator/unit suites plus SDK lint to confirm coverage.
 5. **Regenerate artefacts and re-run the unit scaffold**
-   - Execute `pnpm type-gen` and inspect outputs.
-   - Run `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` to confirm the scaffold moves from red to green.
+   - Execute `pnpm type-gen`, inspect emitted stub files under `src/types/generated/api-schema/mcp-tools/generated/stubs/`.
+   - Run `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` and ensure it passes.
 6. **Validate the full gate stack**
-   - Once the above steps pass, run the complete suite (`build`, `type-check`, `lint`, `test`, `test:e2e`, `test:ui`, `smoke:dev`).
+   - Once Steps 1–5 are complete, run `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev`.
+   - Fix any failures immediately (expected: `smoke:dev` turns green when stubs align with schemas).
 
 Exit Criteria:
 
@@ -65,14 +67,12 @@ Exit Criteria:
 
 Tasks:
 
-1. Update `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` to delegate to the generated helper. Adjust unit tests to validate complete responses via `validateCurriculumResponse`.
-2. Update streamable HTTP:
-   - Inject the helper whenever `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`.
-   - Ensure unit tests assert SSE success for stubbed `tools/call`.
-3. Add vitest + supertest suites that confirm:
-   - Dev mode (stubbed, auth bypass) lists tools and executes stub calls without `isError`.
-   - Production mode enforces auth and Accept headers (401/406 as appropriate).
-4. After each change set, run the full gate suite.
+1. Update `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` to call the generated helper; delete manual fixtures and update `stub-executors.unit.test.ts` to validate via `validateCurriculumResponse`.
+2. Update streamable HTTP (`src/env.ts`, `src/handlers.ts`):
+   - Branch on `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` and wire the generated helper.
+   - Ensure existing unit tests assert `isError: false` responses for stub mode.
+3. Add vitest + supertest sanity suites (one for stubbed dev mode, one for prod/auth flows) covering `tools/list`, `tools/call`, Accept header enforcement, and auth rejection.
+4. After each incremental change, run the full gate suite and keep `pnpm smoke:dev` green.
 
 Exit Criteria:
 
@@ -92,7 +92,7 @@ Tasks:
    - `pnpm smoke:dev:stub`
    - `pnpm smoke:dev:live`
    - `pnpm smoke:remote`
-2. Extract shared SSE/assertion utilities; keep negative Accept-header cases and add light unit coverage for helpers.
+2. Extract shared SSE/assertion utilities; keep negative Accept-header cases and add unit coverage for the helpers.
 3. Update documentation:
    - `.agent/plans/semantic-search/context.md`
    - `.agent/plans/semantic-search/snagging-resolution-plan.md`
