@@ -25,6 +25,8 @@ export default defineConfig({
     'src/types/generated/api-schema/mcp-tools/generated/aliases/types.ts',
     'src/types/generated/api-schema/mcp-tools/generated/runtime/execute.ts',
     'src/types/generated/api-schema/mcp-tools/generated/runtime/lib.ts',
+    'src/types/generated/api-schema/mcp-tools/generated/stubs/index.ts',
+    'src/types/generated/api-schema/mcp-tools/generated/stubs/tools/*.ts',
     'src/types/helpers/type-helpers.ts',
     'src/public/mcp-tools.ts',
     'src/public/search.ts',
@@ -61,6 +63,7 @@ export default defineConfig({
     'src/mcp/aggregated-search.ts',
     'src/mcp/aggregated-fetch.ts',
     'src/mcp/universal-tools.ts',
+    'src/mcp/stub-tool-executor.ts',
   ],
   format: ['esm'],
   dts: false, // Let TypeScript handle declarations

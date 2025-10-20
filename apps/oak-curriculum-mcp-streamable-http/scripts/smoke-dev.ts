@@ -74,12 +74,11 @@ async function run(): Promise<void> {
     }
   }
 
-  if (!isRemote && !process.env.OAK_API_KEY) {
-    if (requireLive) {
-      throw new Error('OAK_API_KEY must be set for live smoke tests');
-    }
-    process.env.OAK_API_KEY = 'stub-test-key';
+  if (!isRemote && !requireLive) {
     process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
+    if (!process.env.OAK_API_KEY) {
+      process.env.OAK_API_KEY = 'stub-test-key';
+    }
   }
 
   let server: Server | undefined;
@@ -354,12 +353,14 @@ async function run(): Promise<void> {
       assert.notEqual(result?.isError, true, 'Successful tool call must not be flagged as error');
       const payloadText = result?.content?.find((entry) => entry?.type === 'text')?.text ?? '';
       assert.notEqual(payloadText.length, 0, 'Successful tool call must return text content');
-      const payload = JSON.parse(payloadText) as { data?: unknown };
-      const dataValue = Array.isArray(payload?.data)
-        ? payload!.data
-        : Array.isArray((payload?.data as { data?: unknown })?.data)
-          ? (payload!.data as { data?: unknown }).data
-          : undefined;
+      const payload = JSON.parse(payloadText) as { data?: unknown } | unknown[];
+      const dataValue = Array.isArray(payload)
+        ? payload
+        : Array.isArray(payload?.data)
+          ? payload.data
+          : Array.isArray((payload?.data as { data?: unknown })?.data)
+            ? (payload.data as { data?: unknown }).data
+            : undefined;
       assert.ok(Array.isArray(dataValue), 'Tool payload should contain a data array');
       assert.ok((dataValue as unknown[]).length > 0, 'Tool payload data array should not be empty');
     }

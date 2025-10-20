@@ -32,6 +32,14 @@ export {
   createMcpToolRegistry,
 } from '../types/generated/api-schema/mcp-tools/generated/runtime/lib.js';
 
+export {
+  createStubToolExecutionAdapter,
+  listAvailableStubTools,
+  hasStubForTool,
+  assertStubAvailable,
+} from '../mcp/stub-tool-executor.js';
+export type { StubbedToolName } from '../types/generated/api-schema/mcp-tools/generated/stubs/index.js';
+
 export { executeToolCall, McpToolError, McpParameterError } from '../mcp/execute-tool-call.js';
 export type { ToolExecutionResult } from '../mcp/execute-tool-call.js';
 

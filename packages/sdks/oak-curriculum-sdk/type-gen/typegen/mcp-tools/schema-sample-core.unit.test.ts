@@ -46,4 +46,35 @@ describe('schema-sample-core', () => {
       child: { id: 'child-id' },
     });
   });
+
+  it('includes optional properties defined via allOf compositions', () => {
+    const schema: SchemaObject = {
+      allOf: [
+        {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+          },
+          required: ['title'],
+        },
+        {
+          type: 'object',
+          properties: {
+            canonicalUrl: {
+              type: 'string',
+            },
+          },
+        },
+      ],
+    };
+
+    const sample = sampleSchemaObject(schema, () => {
+      throw new Error('No references expected');
+    });
+
+    expect(sample).toEqual({
+      title: 'string',
+      canonicalUrl: 'string',
+    });
+  });
 });

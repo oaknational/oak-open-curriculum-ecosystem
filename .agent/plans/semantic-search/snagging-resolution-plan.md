@@ -20,6 +20,7 @@ Restore a fully schema-first pipeline where every runtime artefact—including s
   pnpm smoke:dev (and additional smoke targets once split)
   ```
 
+- Honour the gate hierarchy: unit and integration suites must be green before investigating smoke or higher-level regressions.
 - Prefer the high-level abstractions provided by `@modelcontextprotocol/sdk`; avoid custom protocol plumbing.
 
 ---
@@ -41,17 +42,13 @@ Tasks (small, test-driven increments):
 3. **Layer stub-module emitters** _(completed)_
    - Added `stub-modules.unit.test.ts` asserting exact file output for a test stub map.
    - Implemented `stub-modules.ts` to generate `index.ts`, `tools/index.ts`, and per-tool modules.
-4. **Thread helpers into `mcp-tool-generator.ts`**
-   - Extend `mcp-tool-generator.unit.test.ts` (and `typegen-core.test.ts`) so `GeneratedMcpToolFiles` includes `stubs`.
-   - Import `sampleSchemaObject` / `generateStubModules`, delete the old placeholder map, and keep the dependency graph intact.
-   - Recreate `src/mcp/stub-tool-executor.unit.test.ts` to consume the generated helper (calls each tool, validates with `validateCurriculumResponse`).
-   - Run the generator/unit suites plus SDK lint to confirm coverage.
-5. **Regenerate artefacts and re-run the unit scaffold**
-   - Execute `pnpm type-gen`, inspect emitted stub files under `src/types/generated/api-schema/mcp-tools/generated/stubs/`.
-   - Run `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` and ensure it passes.
-6. **Validate the full gate stack**
-   - Once Steps 1–5 are complete, run `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev`.
-   - Fix any failures immediately (expected: `smoke:dev` turns green when stubs align with schemas).
+4. **Emit high-fidelity stubs** _(in progress)_
+   - Extend `sampleSchemaObject` so optional properties surfaced in the schema (e.g. `canonicalUrl`) are preserved in sampled payloads.
+   - Re-run `pnpm type-gen` and inspect representative files under `src/types/generated/api-schema/mcp-tools/generated/stubs/`.
+   - Keep `vitest run packages/sdks/oak-curriculum-sdk/src/mcp/stub-tool-executor.unit.test.ts` green.
+5. **Validate the full gate stack**
+   - Once Step 4 is green, run `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, `pnpm smoke:dev`.
+   - Fix failures immediately—never progress to smoke-level work until unit/integration suites pass.
 
 Exit Criteria:
 
@@ -67,12 +64,9 @@ Exit Criteria:
 
 Tasks:
 
-1. Update `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` to call the generated helper; delete manual fixtures and update `stub-executors.unit.test.ts` to validate via `validateCurriculumResponse`.
-2. Update streamable HTTP (`src/env.ts`, `src/handlers.ts`):
-   - Branch on `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` and wire the generated helper.
-   - Ensure existing unit tests assert `isError: false` responses for stub mode.
-3. Add vitest + supertest sanity suites (one for stubbed dev mode, one for prod/auth flows) covering `tools/list`, `tools/call`, Accept header enforcement, and auth rejection.
-4. After each incremental change, run the full gate suite and keep `pnpm smoke:dev` green.
+1. Keep `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.ts` and the streamable HTTP handlers wired to the generated helper (already completed during Stage 4).
+2. Add vitest + supertest sanity suites (one for stubbed dev mode, one for prod/auth flows) covering `tools/list`, `tools/call`, Accept header enforcement, and auth rejection.
+3. After each incremental change, run the full gate suite—unit/integration first, then smoke—and keep it green.
 
 Exit Criteria:
 

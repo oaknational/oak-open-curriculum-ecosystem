@@ -9,6 +9,7 @@ import {
   zodRawShapeFromToolInputJsonSchema,
   listUniversalTools,
   createUniversalToolExecutor,
+  createStubToolExecutionAdapter,
 } from '@oaknational/oak-curriculum-sdk';
 
 export interface ToolHandlerDependencies {
@@ -30,6 +31,8 @@ export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverr
     ...defaultDependencies,
     ...(overrides ?? {}),
   };
+  const useStubTools = process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS === 'true';
+  const stubExecutor = useStubTools ? createStubToolExecutionAdapter() : undefined;
   const tools = listUniversalTools();
   for (const tool of tools) {
     const input = zodRawShapeFromToolInputJsonSchema(tool.inputSchema);
@@ -40,7 +43,8 @@ export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverr
         const env = readEnv();
         const client = deps.createClient(env.OAK_API_KEY);
         const executor = deps.createExecutor({
-          executeMcpTool: (name, args) => deps.executeMcpTool(name, args, client),
+          executeMcpTool: (name, args) =>
+            stubExecutor ? stubExecutor(name, args ?? {}) : deps.executeMcpTool(name, args, client),
         });
         return executor(tool.name, params ?? {});
       },

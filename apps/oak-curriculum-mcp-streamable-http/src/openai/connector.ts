@@ -12,6 +12,7 @@ import {
   createUniversalToolExecutor,
   isUniversalToolName,
   listUniversalTools,
+  createStubToolExecutionAdapter,
 } from '@oaknational/oak-curriculum-sdk';
 
 export function formatOpenAiContent(
@@ -66,8 +67,13 @@ export function registerOpenAiConnectorHandlers(server: Server): void {
     }
     const apiKey = process.env.OAK_API_KEY ?? '';
     const client = createOakPathBasedClient(apiKey);
+    const useStubTools = process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS === 'true';
+    const stubExecutor = useStubTools ? createStubToolExecutionAdapter() : undefined;
     const executor = createUniversalToolExecutor({
-      executeMcpTool: (toolName, toolArgs) => executeToolCall(toolName, toolArgs, client),
+      executeMcpTool: (toolName, toolArgs) =>
+        stubExecutor
+          ? stubExecutor(toolName, toolArgs ?? {})
+          : executeToolCall(toolName, toolArgs, client),
     });
 
     try {
