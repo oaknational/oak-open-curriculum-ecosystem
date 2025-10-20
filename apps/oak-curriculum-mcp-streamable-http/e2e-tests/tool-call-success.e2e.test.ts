@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
-import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import type { ToolHandlerOverrides } from '../src/handlers.js';
 
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
@@ -71,34 +71,80 @@ function extractTextContent(payload: Record<string, unknown>): string {
   return first.text;
 }
 
+function configureDevEnvironment(): () => void {
+  const previousDevToken = process.env.REMOTE_MCP_DEV_TOKEN;
+  const previousBaseUrl = process.env.BASE_URL;
+  const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
+  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.BASE_URL = 'http://localhost:3333';
+  process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
+  return () => {
+    if (typeof previousDevToken === 'string') {
+      process.env.REMOTE_MCP_DEV_TOKEN = previousDevToken;
+    } else {
+      Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
+    }
+    if (typeof previousBaseUrl === 'string') {
+      process.env.BASE_URL = previousBaseUrl;
+    } else {
+      Reflect.deleteProperty(process.env, 'BASE_URL');
+    }
+    if (typeof previousCanonicalUri === 'string') {
+      process.env.MCP_CANONICAL_URI = previousCanonicalUri;
+    } else {
+      Reflect.deleteProperty(process.env, 'MCP_CANONICAL_URI');
+    }
+  };
+}
+
+async function executeToolCall(): Promise<{
+  readonly response: request.Response;
+  readonly captured: CapturedCall[];
+}> {
+  const captured: CapturedCall[] = [];
+  const overrides = createStubOverrides(captured);
+  const app = createApp({ toolHandlerOverrides: overrides });
+  const response = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Authorization', `Bearer ${DEV_TOKEN}`)
+    .set('Accept', ACCEPT)
+    .send({
+      jsonrpc: '2.0',
+      id: '1',
+      method: 'tools/call',
+      params: { name: 'get-key-stages', arguments: { params: {} } },
+    });
+  return { response, captured };
+}
+
+function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[]): void {
+  expect(res.status).toBe(200);
+  expect(res.text).toContain('event: message');
+  expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
+
+  const payloadObject = parseSseLine(res.text);
+  const content = extractTextContent(payloadObject);
+  const parsedValue: unknown = content ? JSON.parse(content) : {};
+  if (!Array.isArray(parsedValue)) {
+    throw new Error('Tool payload must be an array');
+  }
+  expect(parsedValue.length).toBe(2);
+  expect(parsedValue[0]).toHaveProperty('canonicalUrl');
+}
+
+async function exerciseToolCallSuccessScenario(): Promise<void> {
+  const restoreEnv = configureDevEnvironment();
+  try {
+    const { response, captured } = await executeToolCall();
+    assertSuccessfulResponse(response, captured);
+  } finally {
+    restoreEnv();
+  }
+}
+
 describe('Tool call success formatting', () => {
   it('returns 200 and formats the executor payload into SSE JSON', async () => {
-    const captured: CapturedCall[] = [];
-    const overrides = createStubOverrides(captured);
-    const app = createApp({ toolHandlerOverrides: overrides });
-    const res = await request(app)
-      .post('/mcp')
-      .set('Host', 'localhost')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
-      .set('Accept', ACCEPT)
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: { params: {} } },
-      });
-
-    expect(res.status).toBe(200);
-    expect(res.text).toContain('event: message');
-    expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
-
-    const payloadObject = parseSseLine(res.text);
-    const content = extractTextContent(payloadObject);
-    const parsedValue: unknown = content ? JSON.parse(content) : {};
-    if (!Array.isArray(parsedValue)) {
-      throw new Error('Tool payload must be an array');
-    }
-    expect(parsedValue.length).toBe(2);
-    expect(parsedValue[0]).toHaveProperty('canonicalUrl');
+    await exerciseToolCallSuccessScenario();
   });
 });
