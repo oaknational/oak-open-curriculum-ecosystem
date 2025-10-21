@@ -55,6 +55,12 @@ export async function assertSuccessfulToolCall(context: SmokeContext): Promise<v
   const result = ensureRecord(envelope.result, 'tool call result');
   const isError =
     result.isError === undefined ? false : ensureBoolean(result.isError, 'tool call isError');
+  if (isError) {
+    console.error(
+      '[smoke] Successful tool call returned error payload',
+      JSON.stringify(envelope, null, 2),
+    );
+  }
   assert.equal(isError, false, 'Successful tool call must not be flagged as error');
   const content = ensureArray(result.content ?? [], 'tool call content array');
   const payloadText = extractFirstText(content, 'tool call content');

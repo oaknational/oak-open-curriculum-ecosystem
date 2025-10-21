@@ -110,61 +110,66 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
 
 ## Stage 6 – Smoke Harness, Documentation, and Formatting
 
-**Objective:** Restructure smoke tests, document expectations, and polish the repo.
+**Objective:** Make the smoke harness deterministic, DRY, and well-documented across stub, live, and remote modes.
 
-Tasks:
+### Completed groundwork
 
-1. **Catalogue current smoke harness**
-   - Acceptance: Context log summarises existing scripts, env dependencies, and network touchpoints.
-   - Implementation: Inspect `package.json` smoke scripts, helper modules, and shell wrappers; document findings.
-   - Validation: Diff in context log linking to inspection notes and confirming no hidden network calls.
-2. **Design stub/live/remote command matrix**
-   - Acceptance: Plan lists proposed commands with env inputs, expected outputs, and CI usage.
-   - Implementation: Draft matrix covering `smoke:dev:stub`, `smoke:dev:live`, `smoke:remote`.
-   - Validation: Plan update recorded before implementation starts.
-   - Proposed mapping:
-     - `pnpm smoke:dev:stub` → local Express server, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, injects deterministic stub token, no `OAK_API_KEY` checks, zero outbound network.
-     - `pnpm smoke:dev:live` → local server in live mode, asserts `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` unset/false, requires `OAK_API_KEY`, verifies real API data paths.
-     - `pnpm smoke:remote` → no local server, requires `BASE_URL` (and optional `REMOTE_MCP_DEV_TOKEN`), targets deployed host as-is; optional flag to assert stub/live expectations delegated to environment.
-3. **Refactor smoke bootstrap/helpers for mode injection**
-   - Acceptance: Single helper exports factories for stub/live/remote without duplication.
-   - Implementation: Replace bespoke bootstrap code with configurable builder and shared assertions.
-   - Validation: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint` & helper unit tests pass.
-   - Notes: Shared assertion modules now live under `apps/oak-curriculum-mcp-streamable-http/scripts/smoke-assertions/`, and new entry scripts (`smoke-dev-stub.ts`, `smoke-dev-live.ts`, `smoke-remote.ts`) invoke `runSmokeSuite` with explicit mode configuration.
-4. **Implement `smoke:dev:stub` command**
-   - Acceptance: pnpm script runs entirely against generated stubs, no outbound network.
-   - Implementation: Wire helper with stub toggle, ensure deterministic responses, document env behaviour.
-   - Validation: Local run succeeding with network disabled recorded in context log.
-5. **Implement `smoke:dev:live` command**
-   - Acceptance: pnpm script exercises live API using `OAK_API_KEY`.
-   - Implementation: Reuse shared assertions, require explicit env, fail fast on missing credentials.
-   - Validation: Live run logged with timestamp; includes envelope proof.
-6. **Implement `smoke:remote` command**
-   - Acceptance: pnpm script targets configurable host/port for deployed environments.
-   - Implementation: Accept URL overrides, reuse helper, document required env vars.
-   - Validation: Run against remote/staging (or simulated) and capture success in context log.
-7. **Consolidate SSE assertion utilities**
-   - Acceptance: All smoke variants use shared SSE assertion module; no duplicated logic.
-   - Implementation: Move common checks into helper file, update imports across smoke suites.
-   - Validation: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e` plus all smoke commands green.
-8. **Update documentation**
-   - Acceptance: README, plan, and context describe new smoke matrix, env requirements, CI guidance.
-   - Implementation: Edit docs with British spelling, add step-by-step usage and risk notes.
-   - Validation: `pnpm markdownlint:root` passes; context log includes update timestamp.
-9. **Run full gates**
-   - Acceptance: `pnpm make` and `pnpm qg` succeed unfiltered post-refactor.
-   - Implementation: Execute gates once scripts land, resolve issues immediately.
-   - Validation: Command summaries (time, key logs) added to context log.
-10. **Document CI handoff recommendations**
-    - Acceptance: Plan lists actionable steps for wiring stub smoke into CI and live smoke into release pipeline.
-    - Implementation: Add checklist for triggers, env, and failure triage.
-    - Validation: Plan diff reflects guidance and is referenced in context log.
+1. **Catalogue current smoke harness** ✅
+   - Completed 2025-10-21 10:05 BST; context log summarises existing commands, environment dependencies, and network touchpoints.
+2. **Design stub/live/remote command matrix** ✅
+   - Completed 2025-10-21 11:22 BST; plan captures target commands, environment inputs, and CI hand-off expectations.
 
-Exit Criteria:
+### Remaining tasks
 
-- All smoke variants pass.
-- Documentation reflects the new workflows and header requirements.
-- Formatting/linting remains clean.
+1. **Refactor smoke environment bootstrap**
+   - **Acceptance:** `runSmokeSuite` calls a single `prepareEnvironment(mode)` helper that invokes `loadRootEnv` exactly once, seeds stub/live/remote behaviour, and returns the base URL plus deterministic token context for logging.
+   - **Implementation:**
+     1. Extract `prepareEnvironment` in `smoke-suite.ts` to handle snapshot/restore and mode-specific environment shaping.
+     2. Stub branch: avoid required keys, force `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, seed a reproducible dev token, and prevent outbound network assumptions.
+     3. Live branch: delegate credential loading to task 2 while ensuring the helper records `.env` provenance.
+     4. Remote branch: run `loadRootEnv` for repo discovery, capture the chosen base URL source, and reset stub overrides.
+   - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub`; log must state which `.env` file (if any) was loaded and the deterministic token that was applied.
+2. **Canonically load live-mode credentials**
+   - **Acceptance:** Live smoke runs succeed using `OAK_API_KEY` sourced from the repo-root `.env`, and missing credentials trigger a clear error message naming the key and searched files.
+   - **Implementation:**
+     1. In the live branch of `prepareEnvironment`, call `loadRootEnv({ startDir: process.cwd(), env: process.env, requiredKeys: ['OAK_API_KEY'] })`.
+     2. Guard against empty `OAK_API_KEY` after loading and throw with actionable guidance when absent.
+     3. Remove redundant credential-loading code from the entry scripts now that the helper owns the logic.
+   - **Validation:** Run `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` twice—once with `.env` populated (expect success) and once with the key temporarily unset (expect the friendly failure path).
+3. **Respect remote URL precedence**
+   - **Acceptance:** Remote smoke picks the base URL using CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` precedence, logging the final URL and its source.
+   - **Implementation:**
+     1. Extend `prepareEnvironment` to resolve and normalise the remote URL after invoking `loadRootEnv`.
+     2. Simplify `smoke-remote.ts` so it forwards the CLI hint only and relies on the helper for fallbacks.
+     3. Capture the precedence decision in the smoke logs for traceability.
+   - **Validation:** Execute `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote` three times (CLI override, environment override, default environment) and confirm logs report the expected priority, tolerating downstream remote instability.
+4. **Document new commands and environment flow**
+   - **Acceptance:** Updated documentation (HTTP README, Stage plan, context log) explains the three smoke commands, environment precedence (CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` → repo `.env`), deterministic tokens, and Accept header requirements.
+   - **Implementation:**
+     1. Revise `apps/oak-curriculum-mcp-streamable-http/README.md` with usage guidance, environment flow, and drift caveats.
+     2. Update Stage plan/context entries to reflect the refactor and log timestamps.
+     3. Ensure language follows British English and repository documentation style.
+   - **Validation:** `pnpm markdownlint:root`; spot-check docs for correct anchors and notation.
+5. **Run lint, tests, and smoke suites**
+   - **Acceptance:** Lint, unit, e2e, and all smoke variants run from the HTTP workspace; remote runs may fail due to environment drift but must log the selected base URL and failure cause.
+   - **Implementation:**
+     1. From the repo root run:
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub`
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`
+        - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote`
+     2. Capture timings and notable logs in `.agent/plans/semantic-search/context.md`.
+   - **Validation:** Ensure each command completes (remote failures acceptable with logged rationale) and update the context log accordingly.
+6. **Run full gate sweep**
+   - **Acceptance:** `pnpm make` and `pnpm qg` succeed unfiltered after the refactor.
+   - **Implementation:**
+     1. Execute both commands from the repo root with at least a five-minute timeout allowance.
+     2. Record start/end timestamps, durations, and key observations in the context log.
+   - **Validation:** Both commands finish green; context log reiterates gate health for Stage 6 closure.
+
+Exit Criteria: All smoke variants pass; documentation mirrors the new workflows; linting and formatting remain clean.
 
 ---
 

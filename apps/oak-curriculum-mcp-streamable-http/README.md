@@ -163,3 +163,11 @@ Temporary validation bypass (for smoke only):
 
 - Stub-mode and live-mode E2E coverage runs via Vitest: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
 - The suite relies on helpers that configure `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` for stub scenarios and injectable overrides for live parity; no manual env preparation is required.
+
+## Smoke testing
+
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – launches a local server in stub mode, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, and seeds the deterministic `REMOTE_MCP_DEV_TOKEN=stub-smoke-dev-token`. All responses are generated from schema-driven stubs, so the run is completely offline.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – starts the same local server in live mode. `loadRootEnv` searches the repo root for `.env.local`/`.env`, requires `OAK_API_KEY`, and logs which file was used. The harness fails fast with a clear message if the key is missing.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://example.dev]` – targets a deployed instance without starting a local server. Base URL precedence is CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` (from process env or the repo `.env`). Logs call out the chosen source before exercising the assertions.
+
+`runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.

@@ -1,16 +1,16 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-21 10:43 BST_
+_Last updated: 2025-10-21 12:05 BST_
 
 ---
 
 ## Current Snapshot
 
 - **Generator alignment** – `mcp-tool-generator.ts` continues to emit the `stubs/` bundle with optional fields intact; generator unit suites remain green.
-- **Runtime state** – Both transports toggle between stub and live execution via env; manual fixtures remain removed. HTTP Accept middleware enforces `text/event-stream`.
+- **Runtime state** – Both transports toggle between stub and live execution via env; `runSmokeSuite` now centralises stub/live/remote preparation via `prepareEnvironment` with deterministic stub tokens. HTTP Accept middleware enforces `text/event-stream`.
 - **Test coverage** – Stub-mode and live-mode supertest E2E suites assert SSE envelopes; stdio transport integration tests exercise initialise/list, success, validation, and missing-stub paths. The stubbed “SDK behaviours” suite now relies on lint-compliant helpers for JSON-RPC parsing.
-- **Developer experience** – `loadRootEnv` still backfills `OAK_API_KEY`. HTTP and stdio READMEs document Accept header requirements and test commands.
-- **Quality gates** – `pnpm make` and `pnpm qg` re-ran 21 October 2025 10:41 BST and completed cleanly (format, type-check, lint, markdownlint, unit/UI/E2E, smoke). Only smoke scripts require network access; all other suites run against generated stubs.
+- **Developer experience** – `loadRootEnv` still backfills `OAK_API_KEY`. Stage 6 plan now targets a central `prepareEnvironment` helper to consolidate env loading, and HTTP/stdio READMEs continue to document Accept header requirements and test commands.
+- **Quality gates** – `pnpm make` (13:00 BST) and `pnpm qg` (13:01 BST, rerun to clear a transient test exit) now stand green. Stub smoke passes with deterministic tokens; live/remote runs still require real credentials/targets before they can be marked green.
 
 ---
 
@@ -19,29 +19,33 @@ _Last updated: 2025-10-21 10:43 BST_
 1. `sdk-client-stub.e2e.test.ts` now uses helper functions (`withStubbedHttpApp`, `expectJsonRpcError`) to keep ESLint complexity and safety rules satisfied while asserting schema-shaped payloads.
 2. Repository search (`rg "fetch(" --glob "*.test.ts"`) confirms no non-smoke tests call live HTTP endpoints; network reliance is confined to the smoke scripts.
 3. Generated stubs continue to flow end-to-end, preserving optional schema fields such as `canonicalUrl`.
-4. Smoke harness refactor introduces dedicated stub/live/remote entry points and shared assertions; documentation updates remain outstanding.
+4. Smoke harness now routes through a dedicated `prepareEnvironment` helper, seeding a stub-only API key and deterministic tokens while enforcing remote URL precedence and keeping shared assertions DRY.
 5. Cursor integration test coverage remains absent; automation still queued for Stage 7.
 
 ---
 
 ## Work Completed This Session
 
+- Reworked `smoke-suite.ts` around `prepareEnvironment` to centralise `loadRootEnv` usage, seed a stub-only API key and deterministic dev token, and log `.env` provenance plus remote URL precedence.
+- Expanded the HTTP README smoke section with stub/live/remote command usage, env precedence (CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` → repo `.env`), and Accept header reminders.
 - Refactored `sdk-client-stub.e2e.test.ts` using `withStubbedHttpApp`, typed JSON-RPC error helpers, and schema-safe accessors to satisfy ESLint (complexity, optional chaining, unsafe assignments) while keeping assertions behaviour-led.
 - Added defensive utilities (`ensureOptionalString`, `expectJsonRpcError`) so payload parsing no longer relies on optional chaining or type assertions, and reused them across canonical URL checks.
 - Re-ran targeted commands for the HTTP app (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`) to verify the refactor preserves behaviour.
 - Audited tests with `rg "fetch(" --glob "*.test.ts"` confirming network traffic is confined to smoke scripts.
 - Executed `pnpm make` and `pnpm qg` (second invocation clean after local rerun) to close Stage 5 with an unfiltered green gate suite.
-- Captured Stage 6 task breakdown (catalogue baseline, design mode matrix, refactor helpers, implement stub/live/remote scripts, consolidate assertions, update docs, re-run gates, document CI handoff) in the Stage plan to guide the smoke harness split.
+- Refreshed the Stage 6 plan to emphasise the environment bootstrap helper, canonical credential loading, remote precedence, documentation updates, and validation gate sequencing.
 - Catalogued the existing smoke harness: `smoke:dev` and `smoke:dev:live-api` both invoke `scripts/smoke-dev.ts`, which switches between stub and live behaviour using `BASE_URL` and `--require-live`; local runs start an in-process Express server, stub mode toggles `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`, and live mode requires `OAK_API_KEY`. Remote execution relies solely on `BASE_URL`. Noted that network access occurs whenever the base URL resolves externally.
 - Defined the new smoke matrix: `smoke:dev:stub` (local + forced stubs, zero network), `smoke:dev:live` (local live mode requiring `OAK_API_KEY`), and `smoke:remote` (external base URL using provided dev token), to be implemented as distinct entry scripts without env-dependent switching.
 - Implemented modular smoke harness entry points (`smoke-dev-stub.ts`, `smoke-dev-live.ts`, `smoke-remote.ts`) backed by shared assertions in `scripts/smoke-assertions/`; `smoke:dev` now aliases to the stub-only variant for CI.
+- Ran `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `test`, `test:e2e`, `smoke:dev:stub`, `smoke:dev:live`, and `smoke:remote`; stub mode passes, live mode now fails with output validation because no real `OAK_API_KEY` is available, and the remote probe against https://example.com fails the health check whilst still logging CLI precedence.
+- Executed `pnpm make` and `pnpm qg`; the gate sweep is green after a single qg rerun to clear a transient `@oaknational/oak-curriculum-mcp-streamable-http` test exit.
 
 ---
 
 ## In-Flight Work
 
 - **Stage 6 – Smoke harness & docs**
-  - Split smoke scripts, share assertion helpers, and document Accept header expectations.
+  - Capture remaining smoke deltas (live credentials, remote target) and complete the gate sweep once documentation updates settle.
 - **Stage 7 – Cursor dev flow validation**
   - Automate the SSE initialise/list/call flow against the stubbed dev server.
 
@@ -57,10 +61,9 @@ _Last updated: 2025-10-21 10:43 BST_
    - ✅ Task 5: consolidate shared helpers, update documentation, and capture usage guidance.
    - ✅ Task 6: execute gate sweep commands (21 October 2025 10:41 BST – `pnpm make`, `pnpm qg` clean without filters).
 
-2. **Stage 6 – Restructure smoke harness & docs**
-   - Split smoke scripts into stub/live/remote variants and share SSE assertion utilities.
-   - Refresh documentation (plan/context, README, stdio notes) to explain Accept header rules and test commands.
-   - Run `pnpm format:root`, full lint/test suite, and smoke variants.
+2. **Stage 6 – Smoke harness & docs**
+   - Document the live/remote smoke limitations (missing real `OAK_API_KEY`, placeholder remote host) and keep context entries current.
+   - Execute `pnpm make` and `pnpm qg` once no further code changes are pending, noting timings and the resulting gate status.
 
 3. **Stage 7 – Cursor integration test**
    - Implement automated SSE initialise/list/call flow against stubbed dev server.
@@ -130,4 +133,19 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Stage 6 Task 2 (command matrix design) defined distinct entry points: `smoke:dev:stub` (local stub-only), `smoke:dev:live` (local live mode requiring `OAK_API_KEY`), `smoke:remote` (external host with supplied dev token).
 - Commands: None (planning/documentation updates only).
 - Reflection: Ready to implement new scripts and supporting helpers with no mode switching via environment heuristics.
+
+2025-10-21 12:05 BST
+- Status: Stage 6 plan refreshed; groundwork tasks marked complete and remaining six tasks defined (environment helper, live credential loading, remote precedence, documentation, validation runs, gate sweep).
+- Commands: None (planning/documentation updates only).
+- Reflection: Acceptance and validation criteria are locked, so implementation can proceed on the environment bootstrap refactor with clear quality gates.
+
+2025-10-21 12:52 BST
+- Status: Stage 6 validation runs executed. Lint, unit, and e2e tests pass; `smoke:dev:stub` passes with the new stub API key, `smoke:dev:live` now fails with output validation because no real `OAK_API_KEY` is present, and `smoke:remote https://example.com` fails the health check as expected.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `test`, `test:e2e`, `smoke:dev:stub`, `smoke:dev:live`, `smoke:remote https://example.com`.
+- Reflection: Harness changes behave as designed; record the credential/target gaps and proceed to the full gate sweep once the code diff stabilises.
+
+2025-10-21 13:02 BST
+- Status: Gate sweep complete. `pnpm make` succeeded; `pnpm qg` required one rerun after a transient `@oaknational/oak-curriculum-mcp-streamable-http` test exit, but the second attempt finished green (format ⇒ smoke).
+- Commands: `pnpm make`, `pnpm qg`, `pnpm qg |& tee /tmp/qg.log`.
+- Reflection: Gates are green again; retain the qg log for reference and revisit live/remote smoke once real credentials and targets are available.
 ```
