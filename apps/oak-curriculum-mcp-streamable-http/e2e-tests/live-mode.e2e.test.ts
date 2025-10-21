@@ -5,11 +5,13 @@ import {
   createLiveHttpApp,
   type CreateLiveHttpAppOptions,
 } from './helpers/create-live-http-app.js';
-import { parseSseEnvelope, readFirstTextContent } from './helpers/sse.js';
 import {
-  McpToolError,
-  type ToolExecutionResult,
-} from '@oaknational/oak-curriculum-sdk';
+  parseSseEnvelope,
+  parseJsonRpcResult,
+  getContentArray,
+  readFirstTextContent,
+} from './helpers/sse.js';
+import { McpToolError, type ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 
 const ACCEPT = 'application/json, text/event-stream';
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'live-mode-dev-token';
@@ -22,7 +24,7 @@ interface CapturedCall {
 function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      executeMcpTool: async (name, args, client) => {
+      executeMcpTool: (name, args, client) => {
         captured.push({ tool: name, args });
         void client;
         const data = [
@@ -38,7 +40,7 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
           },
         ];
         const result: ToolExecutionResult = { data };
-        return result;
+        return Promise.resolve(result);
       },
     },
   };
@@ -47,12 +49,12 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
 function createErrorOverrides(message: string): CreateLiveHttpAppOptions {
   return {
     overrides: {
-      executeMcpTool: async (name, args, client) => {
+      executeMcpTool: (name, args, client) => {
         void args;
         void client;
-        return {
+        return Promise.resolve({
           error: new McpToolError(message, String(name), { code: 'SIMULATED_ERROR' }),
-        };
+        });
       },
     },
   };
@@ -79,11 +81,13 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
       expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
 
       const envelope = parseSseEnvelope(res.text);
-      const result = envelope.result as { readonly isError?: boolean; readonly content?: unknown };
-      expect(result?.isError).not.toBe(true);
-
-      const text = readFirstTextContent(Array.isArray(result?.content) ? result?.content : []);
-      const payload = JSON.parse(text) as { readonly canonicalUrl?: string; readonly slug?: string }[];
+      const result = parseJsonRpcResult(envelope);
+      expect(result.isError).not.toBe(true);
+      const text = readFirstTextContent(getContentArray(result));
+      const payload = JSON.parse(text) as {
+        readonly canonicalUrl?: string;
+        readonly slug?: string;
+      }[];
       expect(Array.isArray(payload)).toBe(true);
       expect(payload[0]?.canonicalUrl).toContain('thenational.academy');
     } finally {
@@ -110,10 +114,9 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
 
       expect(res.status).toBe(200);
       const envelope = parseSseEnvelope(res.text);
-      const result = envelope.result as { readonly isError?: boolean; readonly content?: unknown };
-      expect(result?.isError).toBe(true);
-
-      const text = readFirstTextContent(Array.isArray(result?.content) ? result?.content : []);
+      const result = parseJsonRpcResult(envelope);
+      expect(result.isError).toBe(true);
+      const text = readFirstTextContent(getContentArray(result));
       expect(text).toContain('Simulated execution failure');
     } finally {
       restoreEnvironment();

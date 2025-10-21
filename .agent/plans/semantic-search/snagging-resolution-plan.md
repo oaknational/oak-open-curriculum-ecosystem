@@ -63,55 +63,48 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
   - `pnpm lint`
   - `pnpm qg`
 
-### Task 2 – Streamable HTTP Supertest Coverage (Stub Mode)
+### Task 2 – Streamable HTTP Supertest Coverage (Stub Mode) ✅
 
-- **Goal:** Prove the HTTP transport returns schema-valid results when stubs are enabled.
-- **Implementation steps:**
-  1. Add a test helper (e.g. `createStubbedHttpApp()`) that sets `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, clears API keys, and returns an Express app wired to the real stub executor.
-  2. Write supertest/Vitest cases covering:
-     - `tools/list` (assert roster matches `listUniversalTools()` output).
-     - `tools/call` success for at least one representative endpoint (validate canonical URL presence, SSE structure).
-     - `tools/call` validation failure (invalid args → 200 envelope with `isError` flagged via stub executor).
-     - Auth rejection (401 when header missing).
-     - Accept-header enforcement (406 when `text/event-stream` absent).
-  3. Ensure no spies/mocks replace the executor; rely on generated stubs only.
-- **TDD expectations:** For each scenario, write a failing test, then adjust server helpers/config until it passes.
-- **Validation:** `pnpm test apps/oak-curriculum-mcp-streamable-http` must succeed with the new suite; SSE assertions confirm raw payloads.
+- **Status:** Completed 2025-10-21. Supertest + Vitest suite now exercises stub mode end to end.
+- **Key changes:**
+  - Introduced `createStubbedHttpApp()` helper to enforce stub env wiring (`apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/create-stubbed-http-app.ts`).
+  - Added SSE parsing utilities consumed by the new test cases (`apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/sse.ts`).
+  - Wrote coverage for `tools/list`, successful `tools/call`, validation failures, 401, and 406 responses (`apps/oak-curriculum-mcp-streamable-http/e2e-tests/stub-mode.e2e.test.ts`).
+- **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
 
-### Task 3 – Streamable HTTP “Live-mode” Sanity (Optional Auth)
+### Task 3 – Streamable HTTP “Live-mode” Sanity (Optional Auth) ✅
 
-- **Goal:** Prove the same suite works when stubs are disabled and a fake Oak client is injected.
-- **Implementation steps:**
-  1. Introduce an override factory that injects a controllable `executeMcpTool` returning schema-compliant data (no wrappers).
-  2. Replicate success/error scenarios ensuring the transport still formats responses correctly with live-mode hooks.
-- **Validation:** Extended tests pass, demonstrating parity between stubbed and live flows.
+- **Status:** Completed 2025-10-21. Live-mode overrides now mirror stub-mode formatting.
+- **Key changes:**
+  - Added `createLiveHttpApp()` helper supporting controllable executor overrides (`apps/oak-curriculum-mcp-streamable-http/e2e-tests/helpers/create-live-http-app.ts`).
+  - Implemented success and simulated error parity tests (`apps/oak-curriculum-mcp-streamable-http/e2e-tests/live-mode.e2e.test.ts`).
+- **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
 
-### Task 4 – Stdio Transport Coverage
+### Task 4 – Stdio Transport Coverage ✅
 
-- **Goal:** Add integration tests for the stdio server demonstrating stub-backed executions.
-- **Implementation steps:**
-  1. Expose a test harness (`createStubbedStdioServer`) that instantiates the stdio transport with `createStubToolExecutionAdapter()`; capture responses without network calls (e.g. using in-memory pipes or the existing MCP transport helpers).
-  2. Cover:
-     - `initialize` + `tools/list` (responses match generated descriptors).
-     - `tools/call` success (assert returned content contains schema-valid JSON with canonical fields).
-     - `tools/call` validation failure and missing stub scenarios.
-  3. Ensure no auth/header expectations (stdio is local only).
-- **TDD expectations:** Write failing tests first, verify they fail because stub wiring is missing, then implement harness until green.
-- **Validation:** `pnpm test apps/oak-curriculum-mcp-stdio` passes with new cases.
+- **Status:** Completed 2025-10-21. In-memory stdio harness proves stub executor flows.
+- **Key changes:**
+  - Delivered `createStubbedStdioServer()` harness that wires the generated stub executor into the MCP server (`apps/oak-curriculum-mcp-stdio/src/app/test-helpers/create-stubbed-stdio-server.ts`).
+  - Added coverage for initialise/list, successful execution, validation errors, and missing stub payloads (`apps/oak-curriculum-mcp-stdio/src/app/stdio-transport.test.ts`).
+- **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
 
-### Task 5 – Cross-cutting Clean-ups
+### Task 5 – Cross-cutting Clean-ups ✅
 
-- **Goals:** Keep implementation aligned with repository directives.
-- **Steps:**
-  1. Update shared test utilities if duplication arises (e.g. SSE parsing helper reused between unit and smoke tests).
-  2. Document stub-mode expectations in `apps/oak-curriculum-mcp-streamable-http/README.md` and equivalent stdio notes.
-- **Validation:** `pnpm lint`, `pnpm format:root`, and `pnpm test` run clean after documentation updates.
+- **Status:** Completed 2025-10-21. Shared SSE helpers now live in `e2e-tests/helpers/sse.ts`, and documentation reflects stub/live guidance.
+- **Key changes:**
+  - Exported `parseJsonRpcResult` and `getContentArray` utilities, refactoring `tool-call-success.e2e.test.ts`, `tool-call-envelope.e2e.test.ts`, and `stub-mode.e2e.test.ts` to reuse them.
+  - Documented Accept header enforcement and test commands in the HTTP README; updated stdio README with the new in-memory harness details.
+  - 21 October 2025 10:34 BST – Refactored `sdk-client-stub.e2e.test.ts` to satisfy ESLint (complexity, unsafe assignments, unnecessary nullish checks) by introducing `withStubbedHttpApp`, typed JSON-RPC error helpers, and schema-safe accessors.
+- Added a stubbed “SDK behaviours” e2e suite under the streamable HTTP app to replace the SDK’s live network test.
+- Retired the legacy `client/api-calls.e2e.test.ts` and associated helpers so only smoke tests perform real HTTP requests.
+- **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`, `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+- **Follow-up:** None outstanding; lint target verified at 21 October 2025 10:36 BST and repository search confirmed no test suites execute live `fetch` calls.
 
-### Task 6 – Gate Sweep & Sign-off
+### Task 6 – Gate Sweep & Sign-off ✅
 
-- **Goal:** Ensure the repository remains compliant after Stage 5.
-- **Steps:** Run `pnpm qg` (format-check, type-check, lint, markdownlint, unit/UI/E2E tests, smoke:dev). Resolve regressions immediately.
-- **Exit criteria:** All new tests pass, smoke harness stays green, no `{ data: { data: ... } }` remnants, supertest coverage in place for both transports.
+- **Status:** Completed 2025-10-21. Full unfiltered gate suite executed via `pnpm make` and `pnpm qg`.
+- **Validation:** `pnpm make`, `pnpm qg` (format-check, type-check, lint, markdownlint, unit/UI/E2E suites, smoke:dev).
+- **Notes:** Previous timeout mitigated by addressing lint/test issues; aggregate `pnpm qg` command revalidated at 21 October 2025 10:41 BST after the stub suite refactor.
 
 ---
 

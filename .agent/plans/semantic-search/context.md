@@ -1,43 +1,41 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 2025-10-20 16:15 BST_
+_Last updated: 2025-10-21 10:43 BST_
 
 ---
 
 ## Current Snapshot
 
-- **Generator alignment** – `mcp-tool-generator.ts` now emits a `stubs/` bundle alongside the existing artefacts; the sampler preserves optional fields (e.g. `canonicalUrl`) so generated fixtures validate against the realtime schema.
-- **Runtime state** – Both transports conditionally call the generated stub executor when `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`. Manual fixtures have been removed.
-- **Testing gap** – `src/mcp/stub-tool-executor.unit.test.ts` exercises every generated stub and is green; remaining gaps are higher-level (supertest/SSE coverage and smoke variants).
-- **Developer experience** – `loadRootEnv` continues to backfill `OAK_API_KEY`; Accept header enforcement remains in place and documented by the smoke script logs.
-- **Quality gates** – `pnpm qg` (format, type-check, lint, markdownlint, unit/UI/E2E suites, smoke:dev) succeeds with the generated stubs. SSE payloads now match live responses (arrays when the schema dictates); no wrapper fallbacks remain anywhere in the repo.
+- **Generator alignment** – `mcp-tool-generator.ts` continues to emit the `stubs/` bundle with optional fields intact; generator unit suites remain green.
+- **Runtime state** – Both transports toggle between stub and live execution via env; manual fixtures remain removed. HTTP Accept middleware enforces `text/event-stream`.
+- **Test coverage** – Stub-mode and live-mode supertest E2E suites assert SSE envelopes; stdio transport integration tests exercise initialise/list, success, validation, and missing-stub paths. The stubbed “SDK behaviours” suite now relies on lint-compliant helpers for JSON-RPC parsing.
+- **Developer experience** – `loadRootEnv` still backfills `OAK_API_KEY`. HTTP and stdio READMEs document Accept header requirements and test commands.
+- **Quality gates** – `pnpm make` and `pnpm qg` re-ran 21 October 2025 10:41 BST and completed cleanly (format, type-check, lint, markdownlint, unit/UI/E2E, smoke). Only smoke scripts require network access; all other suites run against generated stubs.
 
 ---
 
 ## Key Findings
 
-1. Generated stubs are flowing end-to-end, retain optional properties (`canonicalUrl`, etc.), and surface directly without wrapper indirection.
-2. The stub executor must stay argument-agnostic; upstream universal executors already validate inputs.
-3. Smoke scripts must treat stub mode as the default for local runs and only depend on `OAK_API_KEY` when `--require-live` is set.
-4. Supertest coverage is still missing for both transports; without it, we rely on smoke scripts to catch schema drift.
-5. Cursor integrations continue to require explicit SSE headers; documentation and automated coverage remain outstanding.
+1. `sdk-client-stub.e2e.test.ts` now uses helper functions (`withStubbedHttpApp`, `expectJsonRpcError`) to keep ESLint complexity and safety rules satisfied while asserting schema-shaped payloads.
+2. Repository search (`rg "fetch(" --glob "*.test.ts"`) confirms no non-smoke tests call live HTTP endpoints; network reliance is confined to the smoke scripts.
+3. Generated stubs continue to flow end-to-end, preserving optional schema fields such as `canonicalUrl`.
+4. Smoke scripts still conflate stub vs live intent; restructuring remains part of Stage 6.
+5. Cursor integration test coverage remains absent; automation still queued for Stage 7.
 
 ---
 
 ## Work Completed This Session
 
-- Hooked `sampleSchemaObject` + `generateStubModules` into `mcp-tool-generator.ts`, extending unit tests to assert the new `stubs` outputs.
-- Reintroduced `src/mcp/stub-tool-executor.unit.test.ts` to call the generated helper and validate every payload via `validateCurriculumResponse`.
-- Exported the stub executor adapter through the SDK barrels and wired both MCP apps (`stub-executors.ts`, streamable HTTP handlers + OpenAI connector) to consume it when stub mode is enabled.
-- Extended the sampler so optional schema properties persist, regenerated artefacts, and re-ran `pnpm qg` to confirm all gates—including `smoke:dev`—pass with stub mode enabled.
-- Replaced the legacy `{ data: { data: [...] } }` wrapper in tests, smoke harness, docs, and stdio helpers with schema-faithful arrays, then reran `pnpm lint`, targeted app suites, and `pnpm qg`.
+- Refactored `sdk-client-stub.e2e.test.ts` using `withStubbedHttpApp`, typed JSON-RPC error helpers, and schema-safe accessors to satisfy ESLint (complexity, optional chaining, unsafe assignments) while keeping assertions behaviour-led.
+- Added defensive utilities (`ensureOptionalString`, `expectJsonRpcError`) so payload parsing no longer relies on optional chaining or type assertions, and reused them across canonical URL checks.
+- Re-ran targeted commands for the HTTP app (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`) to verify the refactor preserves behaviour.
+- Audited tests with `rg "fetch(" --glob "*.test.ts"` confirming network traffic is confined to smoke scripts.
+- Executed `pnpm make` and `pnpm qg` (second invocation clean after local rerun) to close Stage 5 with an unfiltered green gate suite.
 
 ---
 
 ## In-Flight Work
 
-- **Stage 5 – Runtime adoption & tests**
-  - Add supertest “sanity” suites for stubs vs live modes and ensure transports remain `isError: false`. Use supertest, these are different from the smoke test scripts.
 - **Stage 6 – Smoke harness & docs**
   - Split smoke scripts, share assertion helpers, and document Accept header expectations.
 - **Stage 7 – Cursor dev flow validation**
@@ -49,19 +47,20 @@ _Last updated: 2025-10-20 16:15 BST_
 
 1. **Stage 5 – Runtime integration tests**
    - ✅ Task 1: purge legacy `{ data: { data: [...] } }` expectations across all suites.
-   - Task 2: add supertest coverage for the streamable HTTP transport in stub mode (tools/list, tools/call success/error, auth 401, Accept 406).
-   - Task 3: extend streamable HTTP coverage for non-stub overrides to mirror live-mode behaviour.
-   - Task 4: add stdio transport tests exercising `initialize`, `tools/list`, and `tools/call` (success + validation failures) with stubs.
-   - Task 5: consolidate helpers/docs; Task 6: rerun `pnpm qg`.
+   - ✅ Task 2: supertest coverage for streamable HTTP in stub mode.
+   - ✅ Task 3: live-mode parity coverage with controllable overrides.
+   - ✅ Task 4: stdio transport harness and tests.
+   - ✅ Task 5: consolidate shared helpers, update documentation, and capture usage guidance.
+   - ✅ Task 6: execute gate sweep commands (21 October 2025 10:41 BST – `pnpm make`, `pnpm qg` clean without filters).
 
 2. **Stage 6 – Restructure smoke harness & docs**
-   - Create dedicated smoke scripts (stub / live / remote) and shared utilities.
-   - Update documentation (plans, context, README) with Accept header, stub usage, `.env` fallback.
-   - Run `pnpm format:root`, then the gate suite including each smoke script.
+   - Split smoke scripts into stub/live/remote variants and share SSE assertion utilities.
+   - Refresh documentation (plan/context, README, stdio notes) to explain Accept header rules and test commands.
+   - Run `pnpm format:root`, full lint/test suite, and smoke variants.
 
 3. **Stage 7 – Cursor integration test**
-   - Implement a vitest or Playwright workflow that launches the stubbed dev server and performs `initialize` → `tools/list` → `tools/call` with the SSE header.
-   - Record the run in this log and keep the gate suite green.
+   - Implement automated SSE initialise/list/call flow against stubbed dev server.
+   - Log the validated run here and keep gates green.
 
 ---
 
@@ -97,4 +96,14 @@ Reflection: Extend `sampleSchemaObject` so optional properties survive sampling,
 - Generator: `sampleSchemaObject` now retains optional properties, and `pnpm type-gen` emits fixtures that pass `descriptor.validateOutput`.
 - Tests: `pnpm qg` (format → smoke) is green; smoke assertions accept schema-true arrays without expecting an artificial `{ data: ... }` wrapper.
 Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness split) while keeping the gates green.
+
+2025-10-21 10:34 BST
+- Status: Stage 5 Task 5 clean-up. Refactored `sdk-client-stub.e2e.test.ts` to split responsibilities, added typed JSON-RPC helpers, and removed unsafe optional chaining.
+- Tests: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
+- Reflection: Lint now clean; ready to confirm no suites rely on live HTTP and rerun the full gate stack.
+
+2025-10-21 10:41 BST
+- Status: Stage 5 gate sweep sign-off. Repository search verified that only smoke scripts use network APIs; reran unfiltered gates.
+- Commands: `rg "fetch(" --glob "*.test.ts"`, `pnpm make`, `pnpm qg`.
+- Reflection: Stage 5 complete; Stage 6 smoke harness split is the next active workstream.
 ```

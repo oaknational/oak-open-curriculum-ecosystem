@@ -28,7 +28,7 @@ curl -sS \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
 
-Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
+Note: Requests must explicitly include `Accept: application/json, text/event-stream`. The server now rejects calls missing the SSE media type with `406 Not Acceptable`.
 
 ### Example payloads
 
@@ -158,3 +158,8 @@ Temporary validation bypass (for smoke only):
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec. Unknown tool and argument validation failures are returned as JSON‑RPC errors; execution and output‑validation failures are returned as a single text content item with a compact JSON error payload.
 - Successful results are SSE-wrapped JSON-RPC responses (Streamable HTTP).
 - `/openai_connector` uses the OpenAI Connector contract and returns a single text content item containing a JSON string for both success and error, via `formatOpenAiContent`.
+
+## Testing
+
+- Stub-mode and live-mode E2E coverage runs via Vitest: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
+- The suite relies on helpers that configure `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` for stub scenarios and injectable overrides for live parity; no manual env preparation is required.

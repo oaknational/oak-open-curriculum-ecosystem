@@ -3,16 +3,15 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import {
+  parseSseEnvelope,
+  parseJsonRpcResult,
+  getContentArray,
+  readFirstTextContent,
+} from './helpers/sse.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
-
-interface ToolTextContent {
-  readonly type: 'text';
-  readonly text: string;
-}
-
-type ToolEnvelope = Record<string, unknown>;
 
 function configureRealApiEnvironment(): () => void {
   const previous = {
@@ -59,61 +58,17 @@ function configureRealApiEnvironment(): () => void {
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function parseSseEnvelope(body: string): ToolEnvelope {
-  const dataLine = body
-    .split('\n')
-    .map((line) => line.trim())
-    .find((line) => line.startsWith('data: '));
-  if (!dataLine) {
-    throw new Error('No data line found in SSE payload');
-  }
-  const jsonText = dataLine.slice('data: '.length);
-  const parsed = JSON.parse(jsonText) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('SSE data line was not an object');
-  }
-  return parsed;
-}
-
-function isTextContent(entry: unknown): entry is ToolTextContent {
-  if (!isRecord(entry)) {
-    return false;
-  }
-  return entry.type === 'text' && typeof entry.text === 'string';
-}
-
-function parseJsonPayload(raw: string): unknown {
-  return JSON.parse(raw) as unknown;
-}
-
-function parsePayloadArray(text: string): unknown[] {
-  const payload = parseJsonPayload(text);
-  if (!Array.isArray(payload)) {
+function assertSuccessfulEnvelope(body: string): void {
+  const envelope = parseSseEnvelope(body);
+  expect(envelope.error).toBeUndefined();
+  const result = parseJsonRpcResult(envelope);
+  expect(result.isError).not.toBe(true);
+  const contents = getContentArray(result);
+  const entry = readFirstTextContent(contents);
+  const arrayPayload = JSON.parse(entry) as unknown;
+  if (!Array.isArray(arrayPayload)) {
     throw new Error('Tool payload must be an array');
   }
-  return payload;
-}
-
-function assertSuccessfulEnvelope(envelope: ToolEnvelope): void {
-  expect(envelope.error).toBeUndefined();
-  const result = envelope.result;
-  if (!isRecord(result)) {
-    throw new Error('Tool result must be an object');
-  }
-  expect(result.isError).not.toBe(true);
-  const contents = result.content;
-  if (!Array.isArray(contents)) {
-    throw new Error('Tool result content must be an array');
-  }
-  const entry = contents.find(isTextContent);
-  if (!entry) {
-    throw new Error('Tool result missing textual payload');
-  }
-  const arrayPayload = parsePayloadArray(entry.text);
   expect(arrayPayload.length).toBeGreaterThan(0);
 }
 
@@ -157,8 +112,7 @@ describe('Tool response envelope formatting', () => {
         });
 
       expect(res.status).toBe(200);
-      const envelope = parseSseEnvelope(res.text);
-      assertSuccessfulEnvelope(envelope);
+      assertSuccessfulEnvelope(res.text);
     } finally {
       restoreEnv();
     }

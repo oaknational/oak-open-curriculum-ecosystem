@@ -7,19 +7,16 @@ import {
   STUB_ACCEPT_HEADER,
   STUB_DEV_BEARER_TOKEN,
 } from './helpers/create-stubbed-http-app.js';
-import { parseSseEnvelope, readFirstTextContent } from './helpers/sse.js';
+import {
+  parseSseEnvelope,
+  parseJsonRpcResult,
+  getContentArray,
+  readFirstTextContent,
+} from './helpers/sse.js';
 import {
   listUniversalTools,
   createStubToolExecutionAdapter,
 } from '@oaknational/oak-curriculum-sdk';
-
-const JsonRpcResultSchema = z.object({
-  tools: z.unknown().optional(),
-  content: z.unknown().optional(),
-  isError: z.boolean().optional(),
-});
-
-type JsonRpcResultEnvelope = z.infer<typeof JsonRpcResultSchema>;
 
 const ToolEntrySchema = z.object({
   name: z.string(),
@@ -31,13 +28,9 @@ type JsonRpcToolRosterEntry = z.infer<typeof ToolEntrySchema>;
 
 const ToolRosterSchema = ToolEntrySchema.array();
 
-function expectJsonRpcResult(envelope: unknown): JsonRpcResultEnvelope {
-  return JsonRpcResultSchema.parse(envelope);
-}
-
 function assertToolRoster(responseText: string, expected: readonly JsonRpcToolRosterEntry[]): void {
   const envelope = parseSseEnvelope(responseText);
-  const result = expectJsonRpcResult(envelope.result);
+  const result = parseJsonRpcResult(envelope);
   const tools = ToolRosterSchema.parse(result.tools);
   const actualByName = new Map(tools.map((tool) => [tool.name, tool]));
 
@@ -56,12 +49,12 @@ function assertToolRoster(responseText: string, expected: readonly JsonRpcToolRo
 }
 
 function extractResultAndContent(responseText: string): {
-  readonly result: JsonRpcResultEnvelope;
+  readonly result: ReturnType<typeof parseJsonRpcResult>;
   readonly content: readonly unknown[];
 } {
   const envelope = parseSseEnvelope(responseText);
-  const result = expectJsonRpcResult(envelope.result);
-  const content = Array.isArray(result.content) ? result.content : [];
+  const result = parseJsonRpcResult(envelope);
+  const content = getContentArray(result);
   return { result, content };
 }
 
