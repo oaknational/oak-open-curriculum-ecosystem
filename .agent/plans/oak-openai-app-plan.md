@@ -31,13 +31,13 @@
 
 - **Goal:** Prove end‑to‑end invocation from ChatGPT (Developer Mode) to the existing MCP server over HTTPS, returning structured, summarizable results. No custom UI, **read‑only only**.
 
-1. **Deploy streamable HTTP MCP server to a public HTTPS endpoint**
+1. **Deploy streamable HTTP MCP server to a public HTTPS endpoint** (completed: <https://curriculum-mcp-alpha.oaknational.dev/mcp>)
    - **Intent:** Make the MCP endpoint reachable by ChatGPT’s connector (no localhost).
    - **What you do:** Deploy `apps/oak-curriculum-mcp-streamable-http` (e.g., Vercel/Fly/Render) and expose `/mcp` over TLS. Verify cold‑start and latency are acceptable.
    - **Docs alignment:** See [Connect from ChatGPT](https://developers.openai.com/docs/apps/get-started/connect-from-chatgpt) (Developer Mode connector requires a publicly reachable MCP URL). _Help Center → Custom MCP connectors_ (HTTP(S) only).
    - **Pass/Fail:** `GET/POST` reachability to `/mcp` (handshake succeeds when ChatGPT connects); logs show `initialize`, `listTools`.
 
-2. **Spec conformance + endpoint verification**
+2. **Spec conformance + endpoint verification** (complete)
    - **Intent:** Catch protocol/schema issues before testing in ChatGPT.
    - **What you do:** Run **MCP Inspector** against the deployed URL; exercise `listTools` and a minimal `invoke` with sample params.
    - **Docs alignment:** See [MCP Inspector](https://developers.openai.com/docs/mcp/get-started/inspector) testing guidance.

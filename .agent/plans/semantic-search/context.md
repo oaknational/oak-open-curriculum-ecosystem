@@ -19,7 +19,7 @@ _Last updated: 2025-10-21 10:43 BST_
 1. `sdk-client-stub.e2e.test.ts` now uses helper functions (`withStubbedHttpApp`, `expectJsonRpcError`) to keep ESLint complexity and safety rules satisfied while asserting schema-shaped payloads.
 2. Repository search (`rg "fetch(" --glob "*.test.ts"`) confirms no non-smoke tests call live HTTP endpoints; network reliance is confined to the smoke scripts.
 3. Generated stubs continue to flow end-to-end, preserving optional schema fields such as `canonicalUrl`.
-4. Smoke scripts still conflate stub vs live intent; restructuring remains part of Stage 6.
+4. Smoke harness refactor introduces dedicated stub/live/remote entry points and shared assertions; documentation updates remain outstanding.
 5. Cursor integration test coverage remains absent; automation still queued for Stage 7.
 
 ---
@@ -31,6 +31,10 @@ _Last updated: 2025-10-21 10:43 BST_
 - Re-ran targeted commands for the HTTP app (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`) to verify the refactor preserves behaviour.
 - Audited tests with `rg "fetch(" --glob "*.test.ts"` confirming network traffic is confined to smoke scripts.
 - Executed `pnpm make` and `pnpm qg` (second invocation clean after local rerun) to close Stage 5 with an unfiltered green gate suite.
+- Captured Stage 6 task breakdown (catalogue baseline, design mode matrix, refactor helpers, implement stub/live/remote scripts, consolidate assertions, update docs, re-run gates, document CI handoff) in the Stage plan to guide the smoke harness split.
+- Catalogued the existing smoke harness: `smoke:dev` and `smoke:dev:live-api` both invoke `scripts/smoke-dev.ts`, which switches between stub and live behaviour using `BASE_URL` and `--require-live`; local runs start an in-process Express server, stub mode toggles `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`, and live mode requires `OAK_API_KEY`. Remote execution relies solely on `BASE_URL`. Noted that network access occurs whenever the base URL resolves externally.
+- Defined the new smoke matrix: `smoke:dev:stub` (local + forced stubs, zero network), `smoke:dev:live` (local live mode requiring `OAK_API_KEY`), and `smoke:remote` (external base URL using provided dev token), to be implemented as distinct entry scripts without env-dependent switching.
+- Implemented modular smoke harness entry points (`smoke-dev-stub.ts`, `smoke-dev-live.ts`, `smoke-remote.ts`) backed by shared assertions in `scripts/smoke-assertions/`; `smoke:dev` now aliases to the stub-only variant for CI.
 
 ---
 
@@ -106,4 +110,24 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Stage 5 gate sweep sign-off. Repository search verified that only smoke scripts use network APIs; reran unfiltered gates.
 - Commands: `rg "fetch(" --glob "*.test.ts"`, `pnpm make`, `pnpm qg`.
 - Reflection: Stage 5 complete; Stage 6 smoke harness split is the next active workstream.
+
+2025-10-21 10:45 BST
+- Status: Stage 6 planning baseline. Documented atomic task list covering smoke harness redesign (baseline capture through CI handoff) and updated plan/context to reflect objectives and validation steps.
+- Commands: None (planning/documentation updates only).
+- Reflection: Ready to begin Stage 6 Task 1 catalogue of existing smoke scripts.
+
+2025-10-21 11:53 BST
+- Status: Stage 6 Task 3 refactor. Introduced shared smoke assertion modules, replaced `scripts/smoke-dev.ts` with mode-aware `smoke-suite.ts`, and added discrete entry scripts for stub/live/remote usage. Default `pnpm smoke:dev` now executes stub-only mode.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev`.
+- Reflection: Stub smoke passes without network access; live and remote runners ready for documentation and future verification.
+
+2025-10-21 11:17 BST
+- Status: Stage 6 Task 1 (smoke harness baseline) captured current behaviour. `pnpm smoke:dev`/`smoke:dev:live-api` share `scripts/smoke-dev.ts`, using env inspection (`BASE_URL`, `--require-live`, `OAK_CURRICULUM_MCP_USE_STUB_TOOLS`, `OAK_API_KEY`) to choose stub vs live flows; remote targets rely on `BASE_URL`.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev`.
+- Reflection: Baseline inventory complete; proceed to design three explicit entry scripts without env-based mode switching.
+
+2025-10-21 11:22 BST
+- Status: Stage 6 Task 2 (command matrix design) defined distinct entry points: `smoke:dev:stub` (local stub-only), `smoke:dev:live` (local live mode requiring `OAK_API_KEY`), `smoke:remote` (external host with supplied dev token).
+- Commands: None (planning/documentation updates only).
+- Reflection: Ready to implement new scripts and supporting helpers with no mode switching via environment heuristics.
 ```

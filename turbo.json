@@ -164,15 +164,37 @@
         "**/*.d.ts"
       ]
     },
-    "smoke:dev": {
-      "dependsOn": ["^smoke:dev"],
+    "smoke:dev:stub": {
+      "dependsOn": ["^smoke:dev:stub"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev-stub.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:dev:live": {
+      "dependsOn": ["^smoke:dev:live"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev.ts",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev-live.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:remote": {
+      "dependsOn": ["^smoke:remote"],
+      "cache": false,
+      "outputs": [],
+      "env": ["OAK_API_KEY"],
+      "passThroughEnv": ["OAK_API_KEY"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     }

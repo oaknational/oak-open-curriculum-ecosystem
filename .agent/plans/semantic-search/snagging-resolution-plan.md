@@ -114,17 +114,51 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
 
 Tasks:
 
-1. Split smoke commands into:
-   - `pnpm smoke:dev:stub`
-   - `pnpm smoke:dev:live`
-   - `pnpm smoke:remote`
-2. Extract shared SSE/assertion utilities; keep negative Accept-header cases and add unit coverage for the helpers.
-3. Update documentation:
-   - `.agent/plans/semantic-search/context.md`
-   - `.agent/plans/semantic-search/snagging-resolution-plan.md`
-   - `apps/oak-curriculum-mcp-streamable-http/README.md`
-   - Emphasise Accept header requirements, `.env` fallback for `OAK_API_KEY`, and stub vs live smoke usage.
-4. Run `pnpm format:root`, then execute the full gate suite for each smoke variant.
+1. **Catalogue current smoke harness**
+   - Acceptance: Context log summarises existing scripts, env dependencies, and network touchpoints.
+   - Implementation: Inspect `package.json` smoke scripts, helper modules, and shell wrappers; document findings.
+   - Validation: Diff in context log linking to inspection notes and confirming no hidden network calls.
+2. **Design stub/live/remote command matrix**
+   - Acceptance: Plan lists proposed commands with env inputs, expected outputs, and CI usage.
+   - Implementation: Draft matrix covering `smoke:dev:stub`, `smoke:dev:live`, `smoke:remote`.
+   - Validation: Plan update recorded before implementation starts.
+   - Proposed mapping:
+     - `pnpm smoke:dev:stub` → local Express server, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, injects deterministic stub token, no `OAK_API_KEY` checks, zero outbound network.
+     - `pnpm smoke:dev:live` → local server in live mode, asserts `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` unset/false, requires `OAK_API_KEY`, verifies real API data paths.
+     - `pnpm smoke:remote` → no local server, requires `BASE_URL` (and optional `REMOTE_MCP_DEV_TOKEN`), targets deployed host as-is; optional flag to assert stub/live expectations delegated to environment.
+3. **Refactor smoke bootstrap/helpers for mode injection**
+   - Acceptance: Single helper exports factories for stub/live/remote without duplication.
+   - Implementation: Replace bespoke bootstrap code with configurable builder and shared assertions.
+   - Validation: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint` & helper unit tests pass.
+   - Notes: Shared assertion modules now live under `apps/oak-curriculum-mcp-streamable-http/scripts/smoke-assertions/`, and new entry scripts (`smoke-dev-stub.ts`, `smoke-dev-live.ts`, `smoke-remote.ts`) invoke `runSmokeSuite` with explicit mode configuration.
+4. **Implement `smoke:dev:stub` command**
+   - Acceptance: pnpm script runs entirely against generated stubs, no outbound network.
+   - Implementation: Wire helper with stub toggle, ensure deterministic responses, document env behaviour.
+   - Validation: Local run succeeding with network disabled recorded in context log.
+5. **Implement `smoke:dev:live` command**
+   - Acceptance: pnpm script exercises live API using `OAK_API_KEY`.
+   - Implementation: Reuse shared assertions, require explicit env, fail fast on missing credentials.
+   - Validation: Live run logged with timestamp; includes envelope proof.
+6. **Implement `smoke:remote` command**
+   - Acceptance: pnpm script targets configurable host/port for deployed environments.
+   - Implementation: Accept URL overrides, reuse helper, document required env vars.
+   - Validation: Run against remote/staging (or simulated) and capture success in context log.
+7. **Consolidate SSE assertion utilities**
+   - Acceptance: All smoke variants use shared SSE assertion module; no duplicated logic.
+   - Implementation: Move common checks into helper file, update imports across smoke suites.
+   - Validation: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e` plus all smoke commands green.
+8. **Update documentation**
+   - Acceptance: README, plan, and context describe new smoke matrix, env requirements, CI guidance.
+   - Implementation: Edit docs with British spelling, add step-by-step usage and risk notes.
+   - Validation: `pnpm markdownlint:root` passes; context log includes update timestamp.
+9. **Run full gates**
+   - Acceptance: `pnpm make` and `pnpm qg` succeed unfiltered post-refactor.
+   - Implementation: Execute gates once scripts land, resolve issues immediately.
+   - Validation: Command summaries (time, key logs) added to context log.
+10. **Document CI handoff recommendations**
+    - Acceptance: Plan lists actionable steps for wiring stub smoke into CI and live smoke into release pipeline.
+    - Implementation: Add checklist for triggers, env, and failure triage.
+    - Validation: Plan diff reflects guidance and is referenced in context log.
 
 Exit Criteria:
 
