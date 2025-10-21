@@ -27,3 +27,18 @@ Coordinate the execution of all semantic search workstreams so the platform achi
 ### Phase 2 Pre-requisite: The search app must follow the cardinal rule
 
 Fully model the flow of information from the sdk to the search index, decide where ingest and output search schemas are defined, clearly define where the search types derive from the SDK schema, and where we decorate with original types. Fully define the source of truth for data shapes in the search app. We need the search app to follow the cardinal rule: if the upstream Oak Open Curriculum OpenAPI spec changes, the only thing required to bring all apps up to date, is to run `pnpm type-gen` to regenerate the SDK types, and then `pnpm build` to allow them to flow through the system.
+
+### MCP Integration Architecture (Post Phase 1)
+
+**When semantic search is ready for MCP integration (after Phase 1 completion)**:
+
+1. **Type-gen time generation**: Semantic search endpoints integrated into MCP `search` tool via type-gen configuration
+2. **Prerequisite**: Aggregated tools (`search`, `fetch`) must first be moved from runtime to type-gen generation (see `.agent/plans/curriculum-ontology-resource-plan.md` Sprint 0)
+3. **Configuration-driven**: Add semantic search API endpoints to aggregated tool config; generator composes curriculum + semantic APIs
+4. **Generated at build time**: Running `pnpm type-gen` produces complete `search` tool definition with semantic search integration
+5. **Runtime plumbing**: MCP servers import and expose generated tool definitions with zero hand-written composition logic
+6. **Testing**: E2E tests use stubbed semantic search responses (no network); integration tests validate generated tool structure
+
+**Rationale**: Maintains schema-first architecture; ensures semantic search integration follows same patterns as other MCP tools; enables evolution without manual code changes.
+
+**Tracking**: High-level plan Item #6 (Priority 6) blocked on Item #3 (ontology resource, which includes Sprint 0 aggregated tools refactor) and Item #5 (semantic search back-end alignment).

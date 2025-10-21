@@ -43,8 +43,6 @@ const config = defineConfig(
         'vitest.config.ts',
         '**/*.js',
         '**/*.mjs',
-        // Exclude local script from typed linting to avoid project service requirement
-        'scripts/smoke-dev.ts',
       ],
     },
     // no special ignores for vitest.e2e.config.ts; treat as config file below

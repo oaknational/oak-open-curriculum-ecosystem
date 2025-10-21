@@ -25,7 +25,7 @@ Dates may move if downstream partners need more time, but the goal is to remove 
 ## Action items
 
 1. Notify internal teams and external partners of the plan; update onboarding docs and samples.
-2. Maintain a weekly automated probe (see `apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev.ts`)
+2. Maintain a weekly automated probe (see `apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-suite.ts`)
    that exercises `/mcp` end to end: Accept-header enforcement, `initialize` failure/success paths,
    merged `tools/list` parity with the `/openai_connector` alias, and synonym-aware `tools/call`
    validation. This keeps the canonical surface healthy while the alias still exists.

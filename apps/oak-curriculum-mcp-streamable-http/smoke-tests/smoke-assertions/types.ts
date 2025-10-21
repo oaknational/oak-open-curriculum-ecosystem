@@ -1,0 +1,27 @@
+import type { Logger } from '@oaknational/mcp-logger';
+
+export type SmokeSuiteMode = 'local-stub' | 'local-live' | 'remote';
+
+export type RemoteUrlSource = 'cli' | 'smokeRemoteBaseUrl' | 'oakMcpUrl';
+export type DevTokenSource = 'stub-default' | 'cli' | 'env' | 'fallback';
+
+export interface SmokeMetadata {
+  readonly devTokenSource: DevTokenSource;
+  readonly envFilePath?: string;
+  readonly envFileLoaded: boolean;
+  readonly repoRoot: string;
+  readonly remoteUrlSource?: RemoteUrlSource;
+}
+
+export interface SmokeContext {
+  readonly baseUrl: string;
+  readonly devToken?: string;
+  readonly mode: SmokeSuiteMode;
+  readonly logger: Logger;
+  readonly metadata: SmokeMetadata;
+  readonly logToFile: boolean;
+  readonly logDirectory: string;
+}
+
+export const REQUIRED_ACCEPT = 'application/json, text/event-stream';
+export const EXPECTED_TOOLS = ['search', 'fetch', 'get-key-stages-subject-lessons'] as const;

@@ -171,3 +171,21 @@ Temporary validation bypass (for smoke only):
 - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://example.dev]` – targets a deployed instance without starting a local server. Base URL precedence is CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` (from process env or the repo `.env`). Logs call out the chosen source before exercising the assertions.
 
 `runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.
+
+### Structured logging, snapshots, and diffing
+
+- Logging honours `LOG_LEVEL` (defaults to `info`). Set `LOG_LEVEL=debug` to see request/response metadata, payload excerpts, and remote diagnostic warnings.
+- Enable file capture with `SMOKE_LOG_TO_FILE=true`. Each invocation writes JSON envelopes to `apps/oak-curriculum-mcp-streamable-http/tmp/smoke-logs/{mode}-{tool}.json`; the directory is ignored by git.
+- Suggested diff loop:
+
+  ```bash
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live
+  jq . tmp/smoke-logs/local-stub-get-key-stages.json > /tmp/stub.json
+  jq . tmp/smoke-logs/local-live-get-key-stages.json > /tmp/live.json
+  diff -u /tmp/stub.json /tmp/live.json
+  ```
+
+  Repeat for `get-key-stages-subject-lessons` (or any additional tools) to understand live/stub divergences before patching the formatter or schema.
+
+- Remote runs may receive 401/404 responses when credentials are missing or the deployment is stale. The harness now logs these status codes but keeps running so you can collect context instead of failing the entire script.

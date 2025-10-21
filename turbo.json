@@ -81,6 +81,7 @@
         "tsconfig.lint.json",
         "src/**/*.ts",
         "tests/**/*.ts",
+        "smoke-tests/**/*.ts",
         "**/*.test.ts",
         "**/*.spec.ts"
       ]
@@ -161,6 +162,7 @@
         "src/**/*.ts",
         "app/**/*.ts",
         "app/**/*.tsx",
+        "smoke-tests/**/*.ts",
         "**/*.d.ts"
       ]
     },
@@ -170,7 +172,7 @@
       "outputs": [],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev-stub.ts",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     },
@@ -182,7 +184,7 @@
       "passThroughEnv": ["OAK_API_KEY"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev-live.ts",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     },
@@ -194,7 +196,7 @@
       "passThroughEnv": ["OAK_API_KEY"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-remote.ts",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     }

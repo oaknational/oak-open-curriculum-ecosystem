@@ -32,7 +32,7 @@
 - **Goal:** Prove end‑to‑end invocation from ChatGPT (Developer Mode) to the existing MCP server over HTTPS, returning structured, summarizable results. No custom UI, **read‑only only**.
 
 1. **Deploy streamable HTTP MCP server to a public HTTPS endpoint** (completed: <https://curriculum-mcp-alpha.oaknational.dev/mcp>)
-   - **Intent:** Make the MCP endpoint reachable by ChatGPT’s connector (no localhost).
+   - **Intent:** Make the MCP endpoint reachable by ChatGPT's connector (no localhost).
    - **What you do:** Deploy `apps/oak-curriculum-mcp-streamable-http` (e.g., Vercel/Fly/Render) and expose `/mcp` over TLS. Verify cold‑start and latency are acceptable.
    - **Docs alignment:** See [Connect from ChatGPT](https://developers.openai.com/docs/apps/get-started/connect-from-chatgpt) (Developer Mode connector requires a publicly reachable MCP URL). _Help Center → Custom MCP connectors_ (HTTP(S) only).
    - **Pass/Fail:** `GET/POST` reachability to `/mcp` (handshake succeeds when ChatGPT connects); logs show `initialize`, `listTools`.
@@ -45,30 +45,76 @@
 
 3. **Create Developer Mode connector and wire the chat**
    - **Intent:** Enable non‑engineers to try the app inside ChatGPT.
-   - **What you do:** In ChatGPT → **Settings → Apps & Connectors → Create**, set **Name**, **Description** (include “when to use”), and **Connector URL** pointing to `https://…/mcp`. Open a new chat, click **+ → More…**, activate the connector, and run discovery prompts.
+   - **What you do:** In ChatGPT → **Settings → Apps & Connectors → Create**, set **Name**, **Description** (include "when to use"), and **Connector URL** pointing to `https://…/mcp`. Open a new chat, click **+ → More…**, activate the connector, and run discovery prompts.
    - **Docs alignment:** See [Connect from ChatGPT](https://developers.openai.com/docs/apps/get-started/connect-from-chatgpt) (Developer Mode flow) and [Developer Mode Setup](https://help.openai.com/en/articles/12515353-build-with-the-apps-sdk).
-   - **Pass/Fail:** Tools appear under the connector; invoking “search curriculum …” triggers your tool; response shows in chat; no admin/RBAC blockers for the chosen account.
+   - **Pass/Fail:** Tools appear under the connector; invoking "search curriculum …" triggers your tool; response shows in chat; no admin/RBAC blockers for the chosen account.
 
 4. **Minimal tool invocation tests (discovery & determinism)**
    - **Intent:** Validate that descriptions/schemas are sufficient for the model to choose the right tools, and results are stable.
-   - **What you do:** Prepare 6–8 prompts (e.g., “Find KS3 science lessons on photosynthesis…”) covering happy‑path, empty results, and invalid input. Confirm the model selects the correct tool, parameters align with schema, and outputs cite Oak resource IDs.
+   - **What you do:** Prepare 6–8 prompts (e.g., "Find KS3 science lessons on photosynthesis…") covering happy‑path, empty results, and invalid input. Confirm the model selects the correct tool, parameters align with schema, and outputs cite Oak resource IDs.
    - **Docs alignment:** See [Tool Discovery & Descriptions](https://developers.openai.com/docs/apps/guides/metadata).
    - **Pass/Fail:** ≥90% correct tool selection; no schema validation errors; responses include traceable IDs; assistant summaries match `structuredContent`.
 
-5. **Enhance MCP tool metadata for discoverability**
-   - **Intent:** Improve the richness and clarity of tool metadata to optimize discovery and behaviour as per the official Apps SDK documentation on “Optimize Metadata – Improve discovery and behaviour with rich metadata”.
-   - **What you do:** Enhance tool metadata by providing detailed tool descriptions, relevant examples, clear schema definitions, and user-facing naming to facilitate better model understanding and tool selection.
-   - **Docs alignment:** See [Optimize Metadata – Improve discovery and behaviour](https://developers.openai.com/docs/apps/guides/metadata#optimize-metadata).
-   - **Why optional:** This enhancement is not required for initial connectivity but can be incrementally improved to provide a better user and developer experience.
+5. **Fix STDIO tool description bug** ⚡ _5 minutes_
+   - **Intent:** STDIO server currently overrides rich OpenAPI descriptions with "GET /path" strings, breaking ChatGPT tool discovery.
+   - **What you do:** Update `apps/oak-curriculum-mcp-stdio/src/app/server.ts:170` to use `descriptor.description` instead of constructing generic path strings.
+   - **File:** `apps/oak-curriculum-mcp-stdio/src/app/server.ts`
+   - **Change:** Replace `const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;` with `const description = descriptor.description ?? \`${descriptor.method.toUpperCase()} ${descriptor.path}\`;`
+   - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`
+   - **Pass/Fail:** STDIO tools list shows descriptions matching OpenAPI schema (e.g., "This tool returns an array of all available subjects…" not "GET /subjects").
 
-6. **Logging + walkthrough capture**
-   - **Intent:** Produce a shareable artifact proving viability and aiding support.
-   - **What you do:** Capture connector creation screenshots, a short loom of a successful chat run, and server logs (sanitize IDs as needed). Store under `docs/development/`.
-   - **Docs alignment:** General guidance for preview‑phase apps (no public store yet).
-   - **Pass/Fail:** Reviewable bundle exists; others can reproduce the chat with the connector enabled.
+6. **Add MCP annotations to tool descriptors** 🔧 _30 minutes_
+   - **Intent:** Mark all 26 curriculum tools as read-only to streamline ChatGPT confirmations and improve model understanding.
+   - **What you do:** Update SDK generator to emit `annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false }` in tool descriptors.
+   - **File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
+   - **Implementation:** Add annotations field to tool descriptor export; all curriculum tools are read-only, idempotent (same query = same result), and operate in a closed domain.
+   - **Validation:** `pnpm type-gen`, verify generated tool files include annotations; run `pnpm build && pnpm test`.
+   - **Pass/Fail:** Generated tools expose `readOnlyHint: true` via MCP; ChatGPT reduces confirmation friction for read-only operations.
 
-> **Summary of unnecessary items for V0:**  
-> • **Enhanced metadata can be incrementally improved later but is not required for initial connectivity.**
+7. **Expose outputSchema in tool registration** 🔧 _30 minutes_
+   - **Intent:** Help ChatGPT understand response structure by including output schema in tool metadata.
+   - **What you do:** Update tool registration in both MCP servers to include `descriptor.toolOutputJsonSchema`.
+   - **Files:** `apps/oak-curriculum-mcp-stdio/src/app/server.ts`, `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+   - **Implementation:** Add `outputSchema: descriptor.toolOutputJsonSchema` to server.registerTool calls.
+   - **Validation:** MCP Inspector shows output schema for each tool; `pnpm test` passes for both servers.
+   - **Pass/Fail:** Tool listings include structured output schemas matching OpenAPI response definitions.
+
+8. **Create curriculum ontology resource (shimmed)** 🎯 _4 hours_
+   - **Intent:** Provide ChatGPT with curriculum structure knowledge (key stages, subjects, relationships) until upstream API delivers official endpoint.
+   - **What you do:** Implement MCP resource (not tool) exposing curriculum ontology as static/semi-static data. Two-layer architecture: schema-derived facts (auto-generated at type-gen) + educational guidance (hand-authored JSON).
+   - **Implementation plan:** See `.agent/plans/curriculum-ontology-resource-plan.md` for complete TDD implementation strategy
+   - **Files:**
+     - Type-gen: `packages/sdks/oak-curriculum-sdk/type-gen/typegen/ontology/schema-extractor.ts`
+     - Generated: `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/curriculum-ontology.schema.json`
+     - Guidance: `packages/sdks/oak-curriculum-sdk/docs/curriculum-ontology.guidance.json`
+     - Runtime: `packages/sdks/oak-curriculum-sdk/src/mcp/ontology-resource.ts`
+   - **Content:** Schema-derived entities/relationships/enumerations + educational context (ages, tool workflows, domain knowledge)
+   - **Resource URIs:** `curriculum://ontology/full`, `curriculum://ontology/schema`, `curriculum://ontology/guidance`, `curriculum://ontology/summary`
+   - **Validation:** TDD throughout; unit tests for extraction, integration tests for merge, E2E tests for MCP resource access; `pnpm type-gen && pnpm build && pnpm test`.
+   - **Pass/Fail:** Ontology resources accessible via MCP `resources/list` and `resources/read` in both servers; schema extraction succeeds during `pnpm type-gen`; responses include complete curriculum structure metadata.
+   - **Future:** Replace with upstream API endpoint when available (see `.agent/plans/upstream-api-metadata-wishlist.md` item 3).
+
+9. **Add tool title field** 💡 _1 hour_
+   - **Intent:** Provide human-readable display names for tools (e.g., "Search Lessons" instead of "get-search-lessons").
+   - **What you do:** Generate titles from OpenAPI `operation.summary` or transform tool names in SDK generator.
+   - **File:** `packages/sdks/oak-curriculum-sdk/type-gen/typegen/mcp-tools/parts/emit-index.ts`
+   - **Implementation:** Extract title from `operation.summary` or apply title-case transformation to tool name segments; emit as `title` field in descriptor.
+   - **Validation:** `pnpm type-gen`, verify generated tools include `title` field; MCP Inspector shows titles.
+   - **Pass/Fail:** Tools display user-friendly titles in ChatGPT interface.
+
+10. **Create golden prompt test suite** 📝 _2 hours_
+    - **Intent:** Systematic evaluation of tool discovery following OpenAI metadata optimization guidance.
+    - **What you do:** Create test dataset with direct prompts ("Find KS3 science lessons"), indirect prompts ("Help me teach photosynthesis to year 8"), and negative prompts ("Create a new lesson").
+    - **File:** New `docs/development/openai-app-golden-prompts.md`
+    - **Content:** Categorized prompts with expected tool selections and success criteria (≥90% accuracy).
+    - **Validation:** Manual testing in ChatGPT Developer Mode; document results alongside prompts.
+    - **Pass/Fail:** Tool selection accuracy meets threshold; negative prompts correctly avoid our tools.
+
+11. **Logging + walkthrough capture**
+    - **Intent:** Produce a shareable artifact proving viability and aiding support.
+    - **What you do:** Capture connector creation screenshots, a short loom of a successful chat run, and server logs (sanitize IDs as needed). Store under `docs/development/`.
+    - **Docs alignment:** General guidance for preview‑phase apps (no public store yet).
+    - **Pass/Fail:** Reviewable bundle exists; others can reproduce the chat with the connector enabled.
 
 ### Phase 1 — Requirements Alignment
 
@@ -81,13 +127,14 @@
 
 ### Phase 2 — Apps SDK Integration Architecture
 
-- Choose hosting pathway (likely adapt `apps/oak-curriculum-mcp-streamable-http` for HTTPS reachability) and define Apps SDK manifest binding to existing MCP endpoints.
-- Model tool exposure in Apps SDK components without widening types; rely on SDK-generated validators and avoid runtime schema duplication.
-- Design user interaction flows that respect intent, provide predictable behaviour, and clearly label write actions per guidelines.
-- Use accurate `description` and schema metadata for each tool to aid model discovery, referencing the Apps SDK guidance.
+- Document hosting pathway using `apps/oak-curriculum-mcp-streamable-http` deployed at `https://curriculum-mcp-alpha.oaknational.dev/mcp`.
+- Create architectural diagrams showing MCP tool exposure flow: OpenAPI schema → type-gen → SDK → MCP servers → ChatGPT.
+- Design user interaction flows that respect intent and provide predictable behaviour; document expected tool composition patterns (e.g., search → get-lesson-summary → get-lesson-quiz for lesson planning).
+- Model tool exposure patterns ensuring all types flow from SDK-generated validators; document any aggregated tools (search, fetch, ontology) and their composition strategy.
+- Create tool interaction examples showing how ChatGPT should compose multiple tool calls to achieve common pedagogical workflows.
 - **Docs alignment:** See [Tool Discovery & Descriptions](https://developers.openai.com/docs/apps/guides/metadata).
 
-**Acceptance**: Architectural diagram updated in `docs/architecture/` (behavioural focus); interface contracts captured with type-safe wrappers derived from generated SDK exports.
+**Acceptance**: Architectural diagram created in `docs/architecture/openai-app-architecture.md` showing schema-first flow; tool composition patterns documented with examples; type-safety contracts verified via existing SDK exports.
 
 ### Phase 3 — Privacy and Data Governance
 

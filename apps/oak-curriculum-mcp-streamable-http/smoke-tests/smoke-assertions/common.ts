@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
 
 export type JsonObject = Readonly<Record<PropertyKey, unknown>>;
 
@@ -99,6 +100,21 @@ export function ensureOptionalString(value: unknown, description: string): strin
 
 export function asOptionalRecord(value: unknown): JsonObject | undefined {
   return isJsonObject(value) ? value : undefined;
+}
+
+export function createAuthHeaders(context: SmokeContext): Record<string, string> {
+  if (!context.devToken) {
+    return {};
+  }
+  return { Authorization: `Bearer ${context.devToken}` };
+}
+
+export function createToolHeaders(context: SmokeContext): Record<string, string> {
+  return {
+    ...createAuthHeaders(context),
+    'Content-Type': 'application/json',
+    Accept: REQUIRED_ACCEPT,
+  };
 }
 
 function isJsonObject(value: unknown): value is JsonObject {

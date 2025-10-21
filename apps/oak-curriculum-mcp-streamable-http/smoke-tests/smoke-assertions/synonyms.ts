@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import type { Logger } from '@oaknational/mcp-logger';
 
 import {
   ensureArray,
@@ -8,15 +9,15 @@ import {
   fetchJson,
   parseFirstSsePayload,
   extractFirstText,
+  createToolHeaders,
 } from './common.js';
-import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
+import { type SmokeContext } from './types.js';
+import { createAssertionLogger } from './logging.js';
 
 export async function assertSynonymCanonicalisation(context: SmokeContext): Promise<void> {
-  const headers = {
-    Authorization: `Bearer ${context.devToken}`,
-    'Content-Type': 'application/json',
-    Accept: REQUIRED_ACCEPT,
-  };
+  const logger = createAssertionLogger(context, 'synonyms');
+  const headers = createToolHeaders(context);
+  logger.info('Executing synonym canonicalisation smoke check');
   const response = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
@@ -37,8 +38,19 @@ export async function assertSynonymCanonicalisation(context: SmokeContext): Prom
       },
     }),
   });
+  logger.debug('Received synonym response', {
+    status: response.res.status,
+    body: response.text,
+  });
+  if (context.mode === 'remote' && response.res.status !== 200) {
+    logger.warn('Remote synonym tool invocation failed', {
+      status: response.res.status,
+    });
+    return;
+  }
   assert.equal(response.res.status, 200, 'Synonym tool call should return 200');
   const envelope = parseFirstSsePayload(response.text);
+  logger.debug('Parsed synonym SSE envelope', { envelope });
   if (envelope.error !== undefined) {
     assertSynonymError(envelope.error);
     return;
@@ -49,7 +61,7 @@ export async function assertSynonymCanonicalisation(context: SmokeContext): Prom
     result.isError === undefined ? false : ensureBoolean(result.isError, 'synonym isError');
   assert.equal(isError, false, 'Synonym tool call should not be flagged as error');
   const content = ensureArray(result.content ?? [], 'synonym content array');
-  parseSynonymPayload(extractFirstText(content, 'synonym content'));
+  parseSynonymPayload(extractFirstText(content, 'synonym content'), logger);
 }
 
 function assertSynonymError(errorValue: unknown): void {
@@ -65,7 +77,7 @@ function assertSynonymError(errorValue: unknown): void {
   );
 }
 
-function parseSynonymPayload(payloadText: string): void {
+function parseSynonymPayload(payloadText: string, logger: Logger): void {
   try {
     const payload = ensureRecord(JSON.parse(payloadText), 'synonym payload');
     const subjectSlug = ensureOptionalString(payload.subjectSlug, 'subjectSlug');
@@ -77,6 +89,9 @@ function parseSynonymPayload(payloadText: string): void {
       assert.equal(keyStageSlug, 'ks4', 'Key stage synonym should canonise to ks4');
     }
   } catch (error) {
-    console.warn('Unable to parse canonicalised payload:', error);
+    logger.warn('Unable to parse canonicalised payload', {
+      error: error instanceof Error ? error.message : error,
+      payloadText,
+    });
   }
 }

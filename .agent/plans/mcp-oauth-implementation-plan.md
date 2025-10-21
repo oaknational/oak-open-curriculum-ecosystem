@@ -430,11 +430,11 @@ Per `README.md` line 133:
    - **Acceptance**: Unit tests pass, E2E tests documented
 
 3. **Update Smoke Tests** (1 hour)
-   - [ ] Open `scripts/smoke-dev.ts`
+   - [ ] Open `smoke-tests/smoke-suite.ts`
    - [ ] Update to work with Clerk auth (may need real token)
    - [ ] Add fallback for local dev without token
    - [ ] Document smoke test requirements
-   - [ ] Test: `pnpm smoke:dev`
+   - [ ] Test: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`
    - **Acceptance**: Smoke tests documented, run without errors
 
 4. **Update README** (1 hour)
