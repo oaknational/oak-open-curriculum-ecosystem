@@ -82,7 +82,7 @@ describe('Header', () => {
 
   it('renders the fixture mode toggle bound to the shared context', () => {
     renderHeader('fixtures');
-    const toggle = screen.getByRole('radiogroup', { name: 'Fixture mode' });
+    const toggle = screen.getByRole('group', { name: 'Fixture mode' });
     const fixtureOption = within(toggle).getByRole('radio', { name: 'Fixtures (success)' });
     expect(fixtureOption).toBeChecked();
   });

@@ -26,7 +26,7 @@ function expectObjectSchema(
   property: JsonSchemaProperty | undefined,
   label: string,
 ): JsonSchemaObject {
-  if (!property || property.type !== 'object') {
+  if (property?.type !== 'object') {
     throw new Error(`Expected ${label} to be an object schema`);
   }
   return property;

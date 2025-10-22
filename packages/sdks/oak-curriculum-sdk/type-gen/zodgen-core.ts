@@ -2,7 +2,7 @@ import path from 'node:path';
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { generateZodClientFromOpenAPI } from 'openapi-zod-client';
-import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import type { OpenAPIObject, PathsObject } from 'openapi3-ts/oas31';
 
 // Small helper type guards to keep complexity low and avoid assertions
 /**
@@ -23,8 +23,12 @@ export async function generateZodSchemas(openApiDoc: OpenAPIObject, outDir: stri
   const templatePath = path.join(ozcPkgDir, 'src/templates/default.hbs');
   const outFile = path.join(outDir, 'curriculumZodSchemas.ts');
 
+  const openApiDocWithPaths: Parameters<typeof generateZodClientFromOpenAPI>[0]['openApiDoc'] =
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- openapi-zod-client uses an outdated PathsObject definition, so we have to pretend that paths are no optional
+    openApiDoc as OpenAPIObject & { paths: PathsObject };
+
   const output = await generateZodClientFromOpenAPI({
-    openApiDoc,
+    openApiDoc: openApiDocWithPaths,
     templatePath,
     distPath: outFile,
     // Configure for endpoint generation with parameter schemas

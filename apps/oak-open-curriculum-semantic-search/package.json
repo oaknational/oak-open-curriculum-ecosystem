@@ -25,11 +25,6 @@
     "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",
     "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
   },
-  "overrides": {
-    "next": "$next",
-    "react": "$react",
-    "react-dom": "$react-dom"
-  },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.24",
     "@elastic/elasticsearch": "^9.1.1",

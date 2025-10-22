@@ -67,7 +67,7 @@ function collectValidationErrors(
   const errors: string[] = [];
   for (const [field, validator] of Object.entries(validators)) {
     const desc = Object.getOwnPropertyDescriptor(source, field);
-    if (desc && desc.value !== undefined) {
+    if (desc?.value !== undefined) {
       errors.push(...validator(desc.value));
     }
   }

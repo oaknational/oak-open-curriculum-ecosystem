@@ -36,7 +36,7 @@ test.describe('Primary navigation', () => {
     expect(focusStyles?.outlineStyle).not.toBe('none');
     expect(focusStyles?.outlineWidth).not.toBe('0px');
 
-    const fixtureToggle = page.getByRole('radiogroup', { name: /fixture mode/i });
+    const fixtureToggle = page.getByRole('group', { name: /fixture mode/i });
     await expect(fixtureToggle).toBeVisible();
     const fixturesOption = fixtureToggle.getByRole('radio', { name: /fixtures \(success\)/i });
     await expect(fixturesOption).toBeChecked();

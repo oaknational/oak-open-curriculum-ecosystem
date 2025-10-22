@@ -111,7 +111,6 @@ export interface paths {
          * Downloadable lesson assets
          * @description This endpoint returns the types of available assets for a given lesson, and the download endpoints for each.
          *             This endpoint contains licence information for any third-party content contained in the lesson’s downloadable resources. Third-party content is exempt from the open-government license, and users will need to consider whether their use is covered by the stated licence, or if they need to procure their own agreement.
-         *
          */
         get: operations["getAssets-getLessonAssets"];
         put?: never;
@@ -504,9 +503,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Check your current rate limit status (note that your rate limit is also included in the headers of every response).
+        /**
+         * @description Check your current rate limit status (note that your rate limit is also included in the headers of every response).
          *
-         *     This specific endpoint does not cost any requests. */
+         *     This specific endpoint does not cost any requests.
+         */
         get: operations["getRateLimit-getRateLimit"];
         put?: never;
         post?: never;
@@ -520,7 +521,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "year": 1,
          *         "units": [
@@ -543,7 +545,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         SequenceUnitsResponseSchema: ({
             /** @description The year group */
             year: number | "all-years";
@@ -776,10 +779,12 @@ export interface components {
              */
             canonicalUrl?: string;
         })[];
-        /** @example {
+        /**
+         * @example {
          *       "transcript": "Hello, I'm Mrs. Lashley. I'm looking forward to guiding you through your learning today...",
          *       "vtt": "WEBVTT\n\n1\n00:00:06.300 --> 00:00:08.070\n<v ->Hello, I'm Mrs. Lashley.</v>\n\n2\n00:00:08.070 --> 00:00:09.240\nI'm looking forward to guiding you\n\n3\n00:00:09.240 --> 00:00:10.980\nthrough your learning today..."
-         *     } */
+         *     }
+         */
         TranscriptResponseSchema: {
             /** @description The transcript for the lesson video */
             transcript: string;
@@ -791,7 +796,8 @@ export interface components {
              */
             canonicalUrl?: string;
         };
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonTitle": "The Roman invasion of Britain ",
          *         "lessonSlug": "the-roman-invasion-of-britain",
@@ -812,7 +818,8 @@ export interface components {
          *         "lessonSlug": "how-far-religion-changed-under-roman-rule",
          *         "transcriptSnippet": "for the Romans."
          *       }
-         *     ] */
+         *     ]
+         */
         SearchTranscriptResponseSchema: {
             /**
              * @description The lesson title
@@ -835,7 +842,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonSlug": "using-numerals",
          *         "lessonTitle": "Using numerals",
@@ -857,7 +865,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         SequenceAssetsResponseSchema: {
             /** @description The unique slug identifier for the lesson */
             lessonSlug: string;
@@ -883,7 +892,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonSlug": "using-numerals",
          *         "lessonTitle": "Using numerals",
@@ -905,7 +915,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         SubjectAssetsResponseSchema: {
             /** @description The unique slug identifier for the lesson */
             lessonSlug: string;
@@ -931,7 +942,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "attribution": [
          *         "Copyright XYZ Authors",
          *         "Creative Commons Attribution Example 4.0"
@@ -953,7 +965,8 @@ export interface components {
          *           "url": "https://open-api.thenational.academy/api/v0/lessons/using-numerals/assets/video"
          *         }
          *       ]
-         *     } */
+         *     }
+         */
         LessonAssetsResponseSchema: {
             /** @description Licence information for any third-party content contained in the lessons' downloadable resources */
             attribution?: string[];
@@ -977,7 +990,8 @@ export interface components {
         };
         /** @example {} */
         LessonAssetResponseSchema: unknown;
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "subjectTitle": "Art and design",
          *         "subjectSlug": "art",
@@ -1062,7 +1076,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         AllSubjectsResponseSchema: {
             /** @description The subject title */
             subjectTitle: string;
@@ -1106,7 +1121,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "subjectTitle": "Art and design",
          *       "subjectSlug": "art",
          *       "sequenceSlugs": [
@@ -1190,7 +1206,8 @@ export interface components {
          *           "keyStageSlug": "ks4"
          *         }
          *       ]
-         *     } */
+         *     }
+         */
         SubjectResponseSchema: {
             /** @description The subject title */
             subjectTitle: string;
@@ -1234,7 +1251,8 @@ export interface components {
              */
             canonicalUrl?: string;
         };
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "sequenceSlug": "art-primary",
          *         "years": [
@@ -1283,7 +1301,8 @@ export interface components {
          *         "phaseTitle": "Secondary",
          *         "ks4Options": null
          *       }
-         *     ] */
+         *     ]
+         */
         SubjectSequenceResponseSchema: {
             /** @description The unique identifier for each sequence */
             sequenceSlug: string;
@@ -1358,12 +1377,14 @@ export interface components {
          *     ]
          */
         SubjectYearsResponseSchema: number[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "slug": "ks1",
          *         "title": "Key Stage 1"
          *       }
-         *     ] */
+         *     ]
+         */
         KeyStageResponseSchema: {
             /**
              * @description The key stage slug identifier
@@ -1381,7 +1402,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "unitSlug": "simple-compound-and-adverbial-complex-sentences",
          *         "unitTitle": "Simple, compound and adverbial complex sentences",
@@ -1396,7 +1418,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         KeyStageSubjectLessonsResponseSchema: {
             /**
              * @description The unit slug identifier
@@ -1439,7 +1462,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "units": [
          *           {
@@ -1454,7 +1478,8 @@ export interface components {
          *         "yearSlug": "year-3",
          *         "yearTitle": "Year 3"
          *       }
-         *     ] */
+         *     ]
+         */
         AllKeyStageAndSubjectUnitsResponseSchema: {
             /**
              * @description The year identifier
@@ -1477,7 +1502,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "starterQuiz": [
          *         {
          *           "question": "Tick the sentence with the correct punctuation.",
@@ -1534,18 +1560,21 @@ export interface components {
          *           ]
          *         }
          *       ]
-         *     } */
+         *     }
+         */
         QuestionForLessonsResponseSchema: {
             /** @description The starter quiz questions - which test prior knowledge */
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -1645,12 +1674,14 @@ export interface components {
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -1752,7 +1783,8 @@ export interface components {
              */
             canonicalUrl?: string;
         };
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonTitle": "3D shapes can be composed from 2D nets",
          *         "lessonSlug": "3d-shapes-can-be-composed-from-2d-nets",
@@ -1808,7 +1840,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         QuestionsForSequenceResponseSchema: {
             /** @description The lesson slug identifier */
             lessonSlug: string;
@@ -1818,12 +1851,14 @@ export interface components {
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -1923,12 +1958,14 @@ export interface components {
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -2030,7 +2067,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonSlug": "predicting-the-size-of-a-product",
          *         "lessonTitle": "Predicting the size of a product",
@@ -2151,7 +2189,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         QuestionsForKeyStageAndSubjectResponseSchema: {
             /** @description The lesson slug identifier */
             lessonSlug: string;
@@ -2161,12 +2200,14 @@ export interface components {
             starterQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -2266,12 +2307,14 @@ export interface components {
             exitQuiz: ({
                 /** @description The question text */
                 question: string;
-                /** @description The type of quiz question which could be one of the following:
+                /**
+                 * @description The type of quiz question which could be one of the following:
                  *     - multiple-choice
                  *     - order
                  *     - match
                  *     - explanatory-text
-                 *     - short-answer */
+                 *     - short-answer
+                 */
                 questionType: "multiple-choice" | "short-answer" | "match" | "order";
                 questionImage?: {
                     url: string;
@@ -2373,7 +2416,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "lessonTitle": "Joining using 'and'",
          *       "unitSlug": "simple-sentences",
          *       "unitTitle": "Simple sentences",
@@ -2427,7 +2471,8 @@ export interface components {
          *       "contentGuidance": null,
          *       "supervisionLevel": null,
          *       "downloadsAvailable": true
-         *     } */
+         *     }
+         */
         LessonSummaryResponseSchema: {
             /** @description The lesson title */
             lessonTitle: string;
@@ -2488,7 +2533,8 @@ export interface components {
              */
             canonicalUrl?: string;
         };
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "lessonSlug": "performing-your-chosen-gothic-poem",
          *         "lessonTitle": "Performing your chosen Gothic poem",
@@ -2517,7 +2563,8 @@ export interface components {
          *           }
          *         ]
          *       }
-         *     ] */
+         *     ]
+         */
         LessonSearchResponseSchema: {
             /** @description The lesson slug identifier */
             lessonSlug: string;
@@ -2539,7 +2586,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "unitSlug": "simple-compound-and-adverbial-complex-sentences",
          *       "unitTitle": "Simple, compound and adverbial complex sentences",
          *       "yearSlug": "year-3",
@@ -2578,7 +2626,8 @@ export interface components {
          *           "state": "new"
          *         }
          *       ]
-         *     } */
+         *     }
+         */
         UnitSummaryResponseSchema: {
             /**
              * @description The unit slug identifier
@@ -2688,12 +2737,14 @@ export interface components {
              */
             canonicalUrl?: string;
         };
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "title": "Number: Multiplication and division",
          *         "slug": "number-multiplication-and-division"
          *       }
-         *     ] */
+         *     ]
+         */
         AllThreadsResponseSchema: {
             /** @description The thread title */
             title: string;
@@ -2705,7 +2756,8 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example [
+        /**
+         * @example [
          *       {
          *         "unitTitle": "Unitising and coin recognition - counting in 2s, 5s and 10s",
          *         "unitSlug": "unitising-and-coin-recognitions-counting-in-2s-5s-and-10s",
@@ -2716,7 +2768,8 @@ export interface components {
          *         "unitSlug": "unitising-and-coin-recognition-solving-problems-involving-money",
          *         "unitOrder": 2
          *       }
-         *     ] */
+         *     ]
+         */
         ThreadUnitsResponseSchema: {
             /** @description The unit title */
             unitTitle: string;
@@ -2730,11 +2783,13 @@ export interface components {
              */
             canonicalUrl?: string;
         }[];
-        /** @example {
+        /**
+         * @example {
          *       "limit": 1000,
          *       "remaining": 953,
          *       "reset": 1740164400000
-         *     } */
+         *     }
+         */
         RateLimitResponseSchema: {
             /**
              * @description The maximum number of requests you can make in the current window.
