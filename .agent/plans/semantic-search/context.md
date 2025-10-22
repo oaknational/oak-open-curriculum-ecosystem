@@ -245,3 +245,27 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Decomposed the smoke harness into mode-specific helpers (`modes/local-stub.ts`, `modes/local-live.ts`, `modes/remote.ts`, plus shared `local-server.ts`/`token-resolution.ts`) so `environment.ts` now orchestrates rather than embedding per-mode logic. Confirmed lint and unit suites stay green.
 - Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`.
 - Reflection: The live preparer still guards `OAK_API_KEY` before the server boots, so `smoke:dev:live` fails fast when the key is missing while mode-specific modules keep max-lines-per-function comfortably within limits.
+
+2025-10-22 10:32 BST
+
+- Status: Authored the Stage 5 Task 7 plan detailing STDIO description alignment (descriptor validation, registration change, TDD coverage, integration assertion, docs, and final sweeps).
+- Commands: none (planning update).
+- Reflection: Ready to execute the STDIO work once approved—plan ensures schema-first compliance and TDD coverage.
+
+2025-10-22 10:35 BST
+
+- Status: Confirmed generated MCP tool descriptors embed schema descriptions and ran the SDK unit/build suite to verify generator health.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-sdk test`.
+- Reflection: `ToolDescriptor.description` is emitted for every tool; any omission would now surface during STDIO registration via a fail-fast check.
+
+2025-10-22 10:40 BST
+
+- Status: STDIO server now sources tool descriptions directly from the generated descriptors with a fail-fast guard; unit and integration harnesses assert the advertised metadata matches the schema.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`, `pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint`.
+- Reflection: The new unit spec captures registration metadata, and the stdio transport test ensures `tools/list` exposes schema descriptions, preventing regressions back to HTTP verb fallbacks.
+
+2025-10-22 10:45 BST
+
+- Status: Stage 7 Cursor validation formally marked will-not-action; plan updated to note the prior decision that additional Cursor-specific automation adds no value beyond existing Streamable HTTP coverage.
+- Commands: none (documentation update).
+- Reflection: Streamable HTTP e2e suites already exercise initialise/list/call, so maintaining lean coverage takes precedence.

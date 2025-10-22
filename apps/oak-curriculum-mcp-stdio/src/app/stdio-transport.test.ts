@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from 'vitest';
-import { toolNames } from '@oaknational/oak-curriculum-sdk';
+import { toolNames, getToolFromToolName } from '@oaknational/oak-curriculum-sdk';
 import type { ToolName } from '@oaknational/oak-curriculum-sdk';
 
 import {
@@ -59,7 +59,7 @@ describe('Stdio transport with stub executors', () => {
     });
 
     const listResult = listResponse.result as
-      | { readonly tools?: { readonly name: string }[] }
+      | { readonly tools?: { readonly name: string; readonly description?: string }[] }
       | undefined;
     if (!listResult || !Array.isArray(listResult.tools)) {
       throw new Error('tools/list response did not include a tools array');
@@ -67,6 +67,10 @@ describe('Stdio transport with stub executors', () => {
     const names = listResult.tools.map((tool) => tool.name).sort();
     const expected = [...toolNames].sort();
     expect(names).toEqual(expected);
+
+    const sampleTool = listResult.tools.find((tool) => tool.name === 'get-changelog');
+    const descriptor = getToolFromToolName('get-changelog');
+    expect(sampleTool?.description).toBe(descriptor.description);
   });
 
   it('executes a curriculum tool and serialises the payload as JSON text content', async () => {

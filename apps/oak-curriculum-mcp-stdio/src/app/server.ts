@@ -158,6 +158,16 @@ function logToolDiscovery(logger: Logger): void {
   }
 }
 
+function ensureDescriptorDescription(
+  descriptor: { readonly description?: string },
+  toolName: string,
+): string {
+  if (typeof descriptor.description !== 'string' || descriptor.description.trim().length === 0) {
+    throw new Error(`Tool descriptor missing description for ${toolName}`);
+  }
+  return descriptor.description;
+}
+
 function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
@@ -167,7 +177,7 @@ function registerMcpTools(
   for (const name of toolNames) {
     const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
     const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
-    const description = descriptor.method.toUpperCase() + ' ' + descriptor.path;
+    const description = ensureDescriptorDescription(descriptor, name);
     const handlers = createToolResponseHandlers(logger, {
       name,
       description,

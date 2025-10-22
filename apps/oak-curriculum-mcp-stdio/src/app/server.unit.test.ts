@@ -8,14 +8,22 @@ import {
   toolNames,
   getToolFromToolName,
   type ToolDescriptorForName,
+  type OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
   CallToolRequestSchema: {},
   ListToolsRequestSchema: {},
 }));
 import { createToolResponseHandlers } from './tool-response-handlers';
-import { pickPayloadForValidation, validateOutput, type OutputValidationResult } from './server';
+import {
+  pickPayloadForValidation,
+  validateOutput,
+  registerMcpTools,
+  type OutputValidationResult,
+} from './server';
+import type { Logger } from './wiring.js';
 
 type ToolLogger = Parameters<typeof createToolResponseHandlers>[0];
 type ToolContext = Parameters<typeof createToolResponseHandlers>[1];
@@ -120,5 +128,47 @@ describe('registerMcpTools literals', () => {
       expect(descriptor.inputSchema).toBeDefined();
       expect(descriptor.method.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('registerMcpTools registration metadata', () => {
+  it('uses descriptor.description for tool registration', () => {
+    const registered = new Map<
+      string,
+      { readonly title: string; readonly description?: string; readonly inputSchema: unknown }
+    >();
+    const fakeServer = {
+      registerTool: vi.fn(
+        (
+          name: string,
+          definition: {
+            readonly title: string;
+            readonly description?: string;
+            readonly inputSchema: unknown;
+          },
+          ...handler: unknown[]
+        ) => {
+          void handler;
+          registered.set(name, {
+            title: definition.title,
+            description: definition.description,
+            inputSchema: definition.inputSchema,
+          });
+        },
+      ),
+    } as unknown as McpServer;
+    const fakeClient = {} as OakApiPathBasedClient;
+    const fakeLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+    } as unknown as Logger;
+
+    registerMcpTools(fakeServer, fakeClient, fakeLogger);
+
+    const targetName = 'get-changelog' as const;
+    const descriptor: ToolDescriptorForName<typeof targetName> = getToolFromToolName(targetName);
+    const registration = registered.get(targetName);
+    expect(registration).toBeDefined();
+    expect(registration?.description).toBe(descriptor.description);
   });
 });

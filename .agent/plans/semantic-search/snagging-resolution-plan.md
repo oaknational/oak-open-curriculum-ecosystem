@@ -148,37 +148,77 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
 
 ### Remaining Focus
 
-1. **Cursor SSE Parity (Stage 7 opener)**
-   - **Goal:** Add an automated Cursor-style integration test that proves the streamable HTTP server can be consumed by SSE clients (initialise → tools/list → tools/call) while running in stub mode. The test should parse the SSE frames, confirm `isError` stays `false`, and document the workflow in the context log.
-2. **Live Smoke: Fail Fast on Missing `OAK_API_KEY`**
+1. **Live Smoke: Fail Fast on Missing `OAK_API_KEY`**
    - **Goal:** Harden `smoke:dev:live` so it terminates immediately with a descriptive error if `OAK_API_KEY` is not found via `loadRootEnv`; with the key present (whether via `.env` or env var) the run must remain green.
-3. **Split Smoke Utilities for Maintainability**
+2. **Split Smoke Utilities for Maintainability**
    - **Goal:** Extract the stub/live/remote preparation logic out of `smoke-tests/smoke-suite.ts` into dedicated modules to satisfy lint ceilings and simplify future edits (e.g. `prepare-local.ts`, `prepare-remote.ts`).
-4. **Stdio Tool Description Fix (Stage 5 Task 7)**
-   - **Goal:** Update `apps/oak-curriculum-mcp-stdio/src/app/server.ts:170` to propagate `descriptor.description` instead of a “METHOD /path” fallback, ensuring the STDIO metadata that ChatGPT sees matches the schema-derived copy. Add/adjust tests and note the change in context.
+3. **Stdio Tool Description Fix (Stage 5 Task 7)**
+   - **Goal:** Update `apps/oak-curriculum-mcp-stdio/src/app/server.ts:170` so tool metadata descriptions come directly from the generated descriptor, with TDD coverage and documentation updates. The detailed execution steps are outlined below.
 
 Exit Criteria: Tasks above completed and validated; Stage 6/Stage 5 notes updated accordingly before moving into full Stage 7 execution.
 
 ---
 
-## Stage 7 – Cursor Dev Flow Validation
+## Stage 7 – Cursor Dev Flow Validation (Will Not Action)
 
-**Objective:** Provide automated assurance that Cursor (or any SSE client) can talk to the dev server in stub mode.
+**Decision:** Dropped. Existing Streamable HTTP e2e coverage already exercises initialise/list/call via the transport, and additional Cursor-specific automation offered no incremental assurance.
 
-Tasks:
-
-1. Add a vitest or Playwright integration test that:
-   - Launches the streamable HTTP dev server with stubs enabled.
-   - Performs `initialize`, `tools/list`, and `tools/call` via fetch with `Accept: text/event-stream`.
-   - Asserts 200 responses and SSE envelopes without `isError`.
-2. Record the successful run in the context log and maintain a green gate suite.
-
-Exit Criteria:
-
-- Cursor-style integration test passes consistently.
-- Results captured in `.agent/plans/semantic-search/context.md`.
+- 2025-10-22 10:05 BST context entry records the decision and rationale.
+- No further work planned for this stage.
 
 ---
+
+## Stage 5 Task 7 – STDIO Tool Description Alignment
+
+**Objective:** Ensure the STDIO transport advertises schema-derived tool descriptions without local fallbacks, supported by unit/integration coverage and documentation updates.
+
+### Step 1 – Confirm Descriptor Contract
+
+- **Acceptance criteria:** Documented evidence that every `ToolDescriptor` emitted by the generator supplies a description; any gaps identified for follow-up.
+- **Implementation tasks:**
+  1. Inspect the generated descriptor module within `@oaknational/oak-curriculum-sdk` to confirm `description` fields originate from the OpenAPI schema.
+  2. Note findings in `.agent/plans/semantic-search/context.md`.
+- **Validation tasks:** Run `pnpm --filter @oaknational/oak-curriculum-sdk test` to ensure the generator’s unit suite remains green after inspection.
+
+### Step 2 – Update STDIO Registration Logic
+
+- **Acceptance criteria:** `registerMcpTools` sets the tool description to `descriptor.description` only; no string concatenation remains.
+- **Implementation tasks:**
+  1. Modify `apps/oak-curriculum-mcp-stdio/src/app/server.ts` to remove the `"METHOD /path"` fallback and rely solely on the descriptor metadata.
+  2. Ensure the registration options still include the existing title and schema references.
+- **Validation tasks:** `pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint`.
+
+### Step 3 – Add Unit Coverage (TDD)
+
+- **Acceptance criteria:** A unit test fails before the product change and passes afterwards, asserting the registered description matches the generated descriptor text.
+- **Implementation tasks:**
+  1. Extend `apps/oak-curriculum-mcp-stdio/src/app/server.unit.test.ts` to capture the registration options, verifying the description matches the mocked descriptor.
+  2. Follow red → green → refactor, using simple fakes per testing strategy.
+- **Validation tasks:** `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+
+### Step 4 – Verify Integration Harness Behaviour
+
+- **Acceptance criteria:** The stubbed STDIO server used in tests advertises the schema description when enumerating tools.
+- **Implementation tasks:**
+  1. Update `apps/oak-curriculum-mcp-stdio/src/app/test-helpers/create-stubbed-stdio-server.ts` (or adjacent integration test) to assert `tools/list` responses expose the descriptor descriptions.
+- **Validation tasks:** Execute the affected integration/spec file via `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+
+### Step 5 – Update Documentation and Context
+
+- **Acceptance criteria:** Plan/context documents mention the change; any README references describing STDIO metadata are accurate.
+- **Implementation tasks:**
+  1. Add a context log entry.
+  2. Adjust relevant documentation if needed.
+- **Validation tasks:** `pnpm markdownlint:root` when docs change.
+
+### Step 6 – Final Validation Sweep
+
+- **Acceptance criteria:** All lint/test suites pass for the STDIO package; dependent Streamable HTTP e2e tests remain green if impacted.
+- **Implementation tasks:**
+  1. Run `pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint`.
+  2. Run `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+  3. Optionally re-run the streamable HTTP e2e suite if descriptors feed into shared helpers.
+- **Validation tasks:** Capture results in the context log.
 
 ## Backlog (Defer Until Above Stages Complete)
 
