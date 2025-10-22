@@ -25,6 +25,8 @@ export interface PreparedEnvironment {
   readonly devTokenSource: DevTokenSource;
 }
 
+export type LoadedEnvResult = ReturnType<typeof loadRootEnv>;
+
 export type EnvSnapshot = Pick<
   NodeJS.ProcessEnv,
   'OAK_CURRICULUM_MCP_USE_STUB_TOOLS' | 'OAK_API_KEY' | 'REMOTE_MCP_DEV_TOKEN' | 'PORT'
