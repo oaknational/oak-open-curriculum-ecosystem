@@ -52,7 +52,8 @@ function buildExports({
     `      throw new TypeError('Invalid method on endpoint: ${method.toUpperCase()} for ${path}');`,
   );
   lines.push('    }');
-  lines.push('    return call(validation.data);');
+  lines.push('    const response = await call(validation.data);');
+  lines.push('    return response.data;');
   lines.push('  },');
   lines.push('  toolZodSchema,');
   lines.push('  toolInputJsonSchema,');
@@ -72,9 +73,12 @@ function buildExports({
   lines.push('    if (result.success) {');
   lines.push('      return { ok: true, data: result.data };');
   lines.push('    }');
+  lines.push('    return {');
   lines.push(
-    "    return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };",
+    "      ok: false, message: 'Invalid response payload. Please match the generated output schema.',",
   );
+  lines.push('      issues: result.error.issues,');
+  lines.push('    };');
   lines.push('  },');
   lines.push(
     '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;',

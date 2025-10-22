@@ -3,7 +3,7 @@ import type { Server } from 'node:http';
 import { loadRootEnv } from '@oaknational/mcp-env';
 import type { Logger } from '@oaknational/mcp-logger';
 import type { EnvSnapshot, PrepareEnvironmentOptions, PreparedEnvironment } from './types.js';
-import type { SmokeSuiteMode } from './smoke-assertions/types.js';
+import type { SmokeSuiteMode, DevTokenSource } from './smoke-assertions/types.js';
 
 export const DEFAULT_PORT = 3333;
 export const STUB_DEV_TOKEN = 'stub-smoke-dev-token';
@@ -135,15 +135,14 @@ function prepareRemoteEnvironment(
       `Remote smoke tests require a base URL. Provide a CLI argument, set SMOKE_REMOTE_BASE_URL, or define OAK_MCP_URL in process env or the repo .env (root: ${envLoad.repoRoot}).`,
     );
   }
-  const devTokenResult = resolveDevToken(
-    options.remoteDevToken,
-    process.env.REMOTE_MCP_DEV_TOKEN,
-    {},
-  );
-  if (!devTokenResult.value) {
-    throw new TypeError('options.remoteDevToken or process.env.REMOTE_MCP_DEV_TOKEN is required');
+  const devTokenResult = resolveDevToken(options.remoteDevToken, process.env.REMOTE_MCP_DEV_TOKEN, {
+    allowEmpty: true,
+  });
+  if (devTokenResult.value) {
+    process.env.REMOTE_MCP_DEV_TOKEN = devTokenResult.value;
+  } else {
+    Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
   }
-  process.env.REMOTE_MCP_DEV_TOKEN = devTokenResult.value;
   return {
     baseUrl: remoteSelection.baseUrl,
     devToken: devTokenResult.value,
@@ -184,8 +183,8 @@ function normaliseBaseUrl(baseUrl: string): string {
 function resolveDevToken(
   explicitValue: string | undefined,
   envValue: string | undefined,
-  options: { readonly fallbackValue?: string },
-): { readonly value: string | undefined; readonly source: 'cli' | 'env' | 'fallback' } {
+  options: { readonly fallbackValue?: string; readonly allowEmpty?: boolean },
+): { readonly value: string | undefined; readonly source: DevTokenSource } {
   const candidate = explicitValue?.trim();
   if (candidate) {
     return { value: candidate, source: 'cli' };
@@ -198,6 +197,10 @@ function resolveDevToken(
 
   if (options.fallbackValue !== undefined) {
     return { value: options.fallbackValue, source: 'fallback' };
+  }
+
+  if (options.allowEmpty) {
+    return { value: undefined, source: 'not-required' };
   }
 
   return { value: undefined, source: 'fallback' };

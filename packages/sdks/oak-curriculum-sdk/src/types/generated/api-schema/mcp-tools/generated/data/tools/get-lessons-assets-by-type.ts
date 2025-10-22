@@ -55,7 +55,8 @@ export const getLessonsAssetsByType = {
     if (typeof call !== "function") {
       throw new TypeError('Invalid method on endpoint: GET for /lessons/{lesson}/assets/{type}');
     }
-    return call(validation.data);
+    const response = await call(validation.data);
+    return response.data;
   },
   toolZodSchema,
   toolInputJsonSchema,
@@ -73,6 +74,9 @@ export const getLessonsAssetsByType = {
     if (result.success) {
       return { ok: true, data: result.data };
     }
-    return { ok: false, message: 'Invalid response payload. Please match the generated output schema.' };
+    return {
+      ok: false, message: 'Invalid response payload. Please match the generated output schema.',
+      issues: result.error.issues,
+    };
   },
 } as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;

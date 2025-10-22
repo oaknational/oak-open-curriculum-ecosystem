@@ -92,5 +92,6 @@ function buildSmokeContext(
     },
     logToFile: logConfig.logToFile,
     logDirectory: logConfig.logDirectory,
+    captureAnalysis: logConfig.captureAnalysis,
   };
 }

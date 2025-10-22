@@ -18,7 +18,7 @@ export interface PrepareEnvironmentOptions {
 
 export interface PreparedEnvironment {
   readonly baseUrl: string;
-  readonly devToken: string;
+  readonly devToken?: string;
   readonly envLoad: ReturnType<typeof loadRootEnv>;
   readonly server?: Server;
   readonly remoteUrlSource?: RemoteUrlSource;

@@ -148,15 +148,15 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
 
 ### Remaining tasks
 
-1. **Introduce structured logging and payload capture** ⏳
+1. **Introduce structured logging and payload capture** ✅
    - **Acceptance:** Smoke harness routes logs through `@oaknational/mcp-logger`, emits structured context for environment setup and assertion phases, and—when `SMOKE_LOG_TO_FILE=true`—writes final SSE payloads to `tmp/smoke-logs/{mode}-{tool}.json` for stub, live MCP, and upstream REST captures.
    - **Implementation:**
      1. Finalise the logging split (`smoke-suite.ts` delegating to `environment.ts`, `logging.ts`, and assertion-specific loggers) and keep lint under threshold ✅ (2025-10-21).
      2. Ensure each assertion logs request/response metadata, raw SSE envelopes, and validation outcomes; remote modes should warn instead of failing on 4xx/5xx ✅ (2025-10-21).
-     3. Extend snapshot writer to tag source (`stub`, `mcp-live`, `rest`) and persist payloads for diffing ⏳.
-     4. Add instrumentation around output validation to log the failing payload and zod issues when `validateOutput` returns `{ ok: false }` ⏳.
-   - **Validation:** `LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` and `smoke:dev:live` produce structured console output plus JSON artefacts for at least `get-key-stages` and `get-key-stages-subject-lessons`; REST payload captured via SDK helper using the same key.
-   - **Progress:** 2025-10-21 – Helpers split and lint/test suites green; stub snapshots written. Live run captures failing payload for `get-key-stages`. REST payload confirmed via SDK but not yet stored alongside MCP output; validation error instrumentation pending.
+     3. Extend snapshot writer to tag source (`stub`, `local-live`, `rest`) and persist payloads for diffing ✅ (2025-10-21 18:04 BST via `SMOKE_CAPTURE_ANALYSIS=true`).
+     4. Add instrumentation around output validation to log the failing payload and Zod issues when `validateOutput` returns `{ ok: false }` ✅ (2025-10-21 17:55 BST, exercised in `handlers.unit.test.ts`).
+   - **Validation:** `LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true SMOKE_CAPTURE_ANALYSIS=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub`, `smoke:dev:live`, and `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:capture:rest` generate structured console output plus JSON artefacts for `get-key-stages` / `get-key-stages-subject-lessons` under `tmp/smoke-logs/analysis/`.
+   - **Progress:** 2025-10-21 18:05 BST – Local stub/live runs now emit analysis snapshots (`*-local-stub.sse.json`, `*-local-live.sse.json`) alongside REST captures (`*-rest.json`). Output-validation failures surface through `logger.warn('MCP tool validation failed', …)` with truncated payloads and Zod issue lists.
 2. **Canonically load live-mode credentials**
    - **Acceptance:** Live smoke runs succeed using `OAK_API_KEY` sourced from the repo-root `.env`, and missing credentials trigger a clear error message naming the key and searched files.
    - **Implementation:**
@@ -165,14 +165,14 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
      3. Remove redundant credential-loading code from entry points.
    - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` (expect success when `.env` populated) and an additional run with the key temporarily unset (expect descriptive failure).
    - **Progress:** 2025-10-21 – `loadRootEnv` loads `.env`; direct SDK call to `https://open-api.thenational.academy/api/v0/key-stages` succeeds, confirming the key is valid. Live smoke failure now attributed to output validation rather than missing credentials.
-3. **Analyse live-mode payload parity**
+3. **Analyse live-mode payload parity** ✅
    - **Acceptance:** Differences between stub outputs and live responses (e.g. canonical URLs) are documented and reconciled so the harness validates the correct shape.
    - **Implementation:**
-     1. Capture live responses during `smoke:dev:live` (before formatting) and compare against the schema-generated validators.
-     2. Patch the formatter or schema as required to make live data pass validation; update tests accordingly.
-     3. Record findings and decisions in the plan/context.
-   - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` exits successfully and logs the reconciled shape. Snapshot directory contains stub, MCP live, and REST payloads for key tools.
-   - **Progress:** 2025-10-21 – Stub and MCP live snapshots captured. `get-key-stages` live payload is rejected by `validateOutput`; REST payload retrieved via SDK shows `{ slug, title }` entries. Need to log the full validation error, compare against `KeyStageResponseSchema`, and decide whether generators, stubs, or formatters require adjustment before rerunning smoke:dev:live.
+     1. Capture live responses during `smoke:dev:live` (before formatting) and compare against the schema-generated validators ✅ (`tmp/smoke-logs/analysis/get-key-stages-local-live.sse.json`).
+     2. Patch the generator/runtime to unwrap OpenAPI `{ data, response }` envelopes so live data passes validation; update tests and stubs accordingly ✅ (`pnpm --filter @oaknational/oak-curriculum-sdk type-gen`, refreshed `execute-tool-call.unit.test.ts`).
+     3. Record findings and decisions in the plan/context ✅ (2025-10-21 18:10 BST).
+   - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` exits successfully and logs the reconciled shape; `tmp/smoke-logs/analysis/` holds stub, MCP live, and REST payloads for key tools.
+   - **Progress:** 2025-10-21 18:10 BST – MCP executors now emit schema-shaped arrays (no `{ data, response }` wrapper); live SSE payloads align with stubs, and REST captures document upstream fields for diffing.
 4. **Clarify remote-mode behaviour**
    - **Acceptance:** Remote smoke logs precedence (CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL`), records response codes when auth is disabled, and treats 401s as informative without masking legitimate failures.
    - **Implementation:**
@@ -180,6 +180,7 @@ Exit criteria satisfied: the generator emits stub modules, the SDK/unit suites e
      2. Add guidance to documentation about the unauthenticated production deployment.
      3. Ensure logging captures base URL source, status codes, and any schema validation results.
    - **Validation:** `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote` logs precedence and response summaries without raising avoidable assertion errors.
+   - **Progress:** 2025-10-21 18:25 BST – Remote environment now requires an explicit base URL and no longer mandates a bearer token; the Accept-header checks record remote responses instead of asserting on 401s, and the README explains that the alpha deployment is unauthenticated and drifted.
 5. **Document new commands and environment flow**
    - **Acceptance:** Updated documentation (HTTP README, Stage plan, context log) explains the three smoke commands, environment precedence (CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` → repo `.env`), deterministic tokens, and Accept header requirements.
    - **Implementation:**

@@ -8,16 +8,19 @@ import type { SmokeSuiteMode } from './smoke-assertions/types.js';
 export interface LogConfig {
   readonly logToFile: boolean;
   readonly logDirectory: string;
+  readonly captureAnalysis: boolean;
 }
 
 export const DEFAULT_LOG_DIRECTORY = path.resolve(process.cwd(), 'tmp', 'smoke-logs');
 
 export const SMOKE_LOG_TO_FILE_KEY = 'SMOKE_LOG_TO_FILE';
+export const SMOKE_CAPTURE_ANALYSIS_KEY = 'SMOKE_CAPTURE_ANALYSIS';
 
 export function resolveLogConfig(): LogConfig {
   return {
     logToFile: shouldWriteFiles(process.env[SMOKE_LOG_TO_FILE_KEY]),
     logDirectory: DEFAULT_LOG_DIRECTORY,
+    captureAnalysis: shouldWriteFiles(process.env[SMOKE_CAPTURE_ANALYSIS_KEY]),
   };
 }
 

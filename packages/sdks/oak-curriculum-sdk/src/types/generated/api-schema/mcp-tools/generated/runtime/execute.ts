@@ -33,7 +33,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -48,7 +50,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -63,7 +67,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -78,7 +84,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -93,7 +101,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -108,7 +118,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -123,7 +135,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -138,7 +152,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -153,7 +169,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -168,7 +186,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -183,7 +203,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -198,7 +220,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -213,7 +237,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -228,7 +254,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -243,7 +271,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -258,7 +288,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -273,7 +305,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -288,7 +322,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -303,7 +339,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -318,7 +356,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -333,7 +373,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -348,7 +390,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -363,7 +407,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -378,7 +424,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -393,7 +441,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }
@@ -408,7 +458,9 @@ async function invokeToolByName<TName extends ToolName>(
       const output = await descriptor.invoke(client, args);
       const validation = descriptor.validateOutput(output);
       if (!validation.ok) {
-        throw new TypeError('Output validation error: ' + validation.message);
+        throw new TypeError('Output validation error: ' + validation.message, {
+          cause: { raw: output, issues: validation.issues },
+        });
       }
       return validation.data;
     }

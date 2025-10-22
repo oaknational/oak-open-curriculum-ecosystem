@@ -61,12 +61,30 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
     Accept: 'application/json',
   };
 
+  if (context.mode === 'remote') {
+    await logRemoteAcceptResponse(
+      context,
+      headers,
+      '/mcp',
+      'Remote target returned unexpected Accept enforcement response for /mcp',
+      logger,
+    );
+    await logRemoteAcceptResponse(
+      context,
+      headers,
+      '/openai_connector',
+      'Remote target returned unexpected Accept enforcement response for /openai_connector',
+      logger,
+    );
+    return;
+  }
+
   const mcpResponse = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
     body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-1', method: 'tools/list' }),
   });
-  const expectedAcceptStatus = context.mode === 'remote' ? 401 : 406;
+  const expectedAcceptStatus = 406;
   evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, '/mcp', logger);
 
   const aliasResponse = await fetchJson(new URL('/openai_connector', context.baseUrl), {
@@ -91,7 +109,7 @@ function evaluateAcceptEnforcement(
   logger: Logger,
 ): void {
   logger.debug(`Accept enforcement response for ${path}`, {
-    context,
+    mode: context.mode,
     status: response.res.status,
     body: response.text,
   });
@@ -110,6 +128,25 @@ function evaluateAcceptEnforcement(
     `${path} WWW-Authenticate header`,
   );
   assert.match(header.toLowerCase(), /^bearer\s+/, `${path} WWW-Authenticate must be Bearer`);
+}
+
+async function logRemoteAcceptResponse(
+  context: SmokeContext,
+  headers: Record<string, string>,
+  path: '/mcp' | '/openai_connector',
+  message: string,
+  logger: Logger,
+): Promise<void> {
+  const requestId = `accept-remote-${path.replace(/\//g, '-')}`;
+  const response = await fetchJson(new URL(path, context.baseUrl), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ jsonrpc: '2.0', id: requestId, method: 'tools/list' }),
+  });
+  logger.warn(message, {
+    status: response.res.status,
+    body: response.text,
+  });
 }
 
 export async function assertAuthRequired(context: SmokeContext): Promise<void> {

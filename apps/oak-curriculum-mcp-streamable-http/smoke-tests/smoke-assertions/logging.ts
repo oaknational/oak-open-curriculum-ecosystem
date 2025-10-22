@@ -31,6 +31,9 @@ export async function recordSsePayload(
       filePath,
       mode: context.mode,
     });
+    if (context.captureAnalysis) {
+      await writeAnalysisSnapshot(context, toolName, envelope);
+    }
   } catch (error) {
     logger.error('Failed to write SSE payload snapshot', error, {
       tool: toolName,
@@ -42,4 +45,24 @@ export async function recordSsePayload(
 
 function sanitiseToolName(toolName: string): string {
   return toolName.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+}
+
+async function writeAnalysisSnapshot(
+  context: SmokeContext,
+  toolName: string,
+  envelope: JsonRpcEnvelope,
+): Promise<void> {
+  const analysisDirectory = path.join(context.logDirectory, 'analysis');
+  const analysisFile = path.join(
+    analysisDirectory,
+    `${sanitiseToolName(toolName)}-${context.mode}.sse.json`,
+  );
+  await fs.mkdir(analysisDirectory, { recursive: true });
+  await fs.writeFile(analysisFile, `${JSON.stringify(envelope, null, 2)}\n`, 'utf8');
+  const logger = createAssertionLogger(context, 'analysis-writer');
+  logger.info('Captured analysis snapshot', {
+    tool: toolName,
+    mode: context.mode,
+    filePath: analysisFile,
+  });
 }

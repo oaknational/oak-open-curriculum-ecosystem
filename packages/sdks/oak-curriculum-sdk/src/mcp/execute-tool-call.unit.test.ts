@@ -7,7 +7,9 @@ interface RateLimitArgs {
   readonly params: Record<string, never>;
 }
 
-function createRateLimitClient(impl: (args: RateLimitArgs) => unknown): {
+type RateLimitCall = (args: RateLimitArgs) => { readonly data: unknown };
+
+function createRateLimitClient(impl: RateLimitCall): {
   readonly client: OakApiPathBasedClient;
   readonly handler: ReturnType<typeof vi.fn>;
 } {
@@ -33,9 +35,11 @@ describe('executeToolCall', () => {
 
   it('requires zero-parameter tools to supply params', async () => {
     const { client, handler } = createRateLimitClient(() => ({
-      limit: 10,
-      remaining: 9,
-      reset: Date.now(),
+      data: {
+        limit: 10,
+        remaining: 9,
+        reset: Date.now(),
+      },
     }));
 
     const result = await executeToolCall('get-rate-limit', undefined, client);
@@ -49,7 +53,7 @@ describe('executeToolCall', () => {
     const expected = { limit: 10, remaining: 9, reset: Date.now() };
     const { client, handler } = createRateLimitClient((args) => {
       expect(args).toEqual({ params: {} });
-      return expected;
+      return { data: expected };
     });
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
@@ -59,7 +63,7 @@ describe('executeToolCall', () => {
   });
 
   it('maps output validation failures to McpToolError with a helpful message', async () => {
-    const { client } = createRateLimitClient(() => ({}));
+    const { client } = createRateLimitClient(() => ({ data: {} }));
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 

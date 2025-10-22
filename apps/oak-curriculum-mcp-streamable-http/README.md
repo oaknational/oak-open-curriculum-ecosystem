@@ -168,7 +168,7 @@ Temporary validation bypass (for smoke only):
 
 - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – launches a local server in stub mode, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, and seeds the deterministic `REMOTE_MCP_DEV_TOKEN=stub-smoke-dev-token`. All responses are generated from schema-driven stubs, so the run is completely offline.
 - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – starts the same local server in live mode. `loadRootEnv` searches the repo root for `.env.local`/`.env`, requires `OAK_API_KEY`, and logs which file was used. The harness fails fast with a clear message if the key is missing.
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://example.dev]` – targets a deployed instance without starting a local server. Base URL precedence is CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` (from process env or the repo `.env`). Logs call out the chosen source before exercising the assertions.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://curriculum-mcp-alpha.oaknational.dev/mcp]` – targets a deployed instance without starting a local server. A base URL is required; the harness resolves it in the order CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` and fails fast if none is available. The remote deployment currently runs without bearer authentication, so the smoke logs capture status codes and payloads for reference instead of asserting on them.
 
 `runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.
 
@@ -176,14 +176,18 @@ Temporary validation bypass (for smoke only):
 
 - Logging honours `LOG_LEVEL` (defaults to `info`). Set `LOG_LEVEL=debug` to see request/response metadata, payload excerpts, and remote diagnostic warnings.
 - Enable file capture with `SMOKE_LOG_TO_FILE=true`. Each invocation writes JSON envelopes to `apps/oak-curriculum-mcp-streamable-http/tmp/smoke-logs/{mode}-{tool}.json`; the directory is ignored by git.
+- Add `SMOKE_CAPTURE_ANALYSIS=true` to mirror SSE envelopes into `tmp/smoke-logs/analysis/`, tagged by mode (e.g. `get-key-stages-local-live.sse.json`). Pair with `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:capture:rest` to snapshot the upstream REST payloads (`*-rest.json`) for side-by-side comparison.
 - Suggested diff loop:
 
   ```bash
-  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub
-  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live
-  jq . tmp/smoke-logs/local-stub-get-key-stages.json > /tmp/stub.json
-  jq . tmp/smoke-logs/local-live-get-key-stages.json > /tmp/live.json
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true SMOKE_CAPTURE_ANALYSIS=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true SMOKE_CAPTURE_ANALYSIS=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:capture:rest
+  jq . tmp/smoke-logs/analysis/get-key-stages-local-stub.sse.json > /tmp/stub.json
+  jq . tmp/smoke-logs/analysis/get-key-stages-local-live.sse.json > /tmp/live.json
+  jq . tmp/smoke-logs/analysis/get-key-stages-rest.json > /tmp/rest.json
   diff -u /tmp/stub.json /tmp/live.json
+  diff -u /tmp/live.json /tmp/rest.json
   ```
 
   Repeat for `get-key-stages-subject-lessons` (or any additional tools) to understand live/stub divergences before patching the formatter or schema.
