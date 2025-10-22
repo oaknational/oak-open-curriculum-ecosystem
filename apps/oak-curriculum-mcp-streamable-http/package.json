@@ -36,7 +36,6 @@
     "@types/cors": "^2.8.19",
     "@types/node": "^22",
     "eslint": "^9.35.0",
-    "pnpm": "^10.17.1",
     "prettier": "^3.6.2",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",

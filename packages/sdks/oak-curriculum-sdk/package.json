@@ -87,7 +87,6 @@
   "dependencies": {
     "@oaknational/mcp-logger": "workspace:*",
     "openapi-fetch": "^0.15.0",
-    "pnpm": "^10.17.1",
     "zod": "^3"
   },
   "devDependencies": {

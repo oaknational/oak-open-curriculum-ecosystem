@@ -25,9 +25,6 @@
     "mutate": "stryker run"
   },
   "dependencies": {},
-  "devDependencies": {
-    "pnpm": "^10.17.0"
-  },
   "engines": {
     "node": ">=22.0.0"
   },
