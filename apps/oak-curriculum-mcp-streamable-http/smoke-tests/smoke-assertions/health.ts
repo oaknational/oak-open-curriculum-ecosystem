@@ -9,7 +9,7 @@ import {
   type JsonResponse,
 } from './common.js';
 import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
-import { createAssertionLogger } from './logging.js';
+import { createAssertionLogger, logAssertionSuccess } from './logging.js';
 
 export async function assertHealthEndpoints(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'health');
@@ -32,6 +32,7 @@ export async function assertHealthEndpoints(context: SmokeContext): Promise<void
     assert.equal(ensureString(payload.status, 'health status'), 'ok');
     assert.equal(ensureString(payload.mode, 'health mode'), 'streamable-http');
     assert.equal(ensureString(payload.auth, 'health auth descriptor'), 'required-for-post');
+    logAssertionSuccess(logger, 'GET /healthz returned expected payload');
   }
 
   const headResponse = await fetchJson(new URL('/healthz', context.baseUrl), { method: 'HEAD' });
@@ -50,6 +51,7 @@ export async function assertHealthEndpoints(context: SmokeContext): Promise<void
     }
   } else {
     assert.equal(headResponse.text, '', 'HEAD /healthz should not return a body');
+    logAssertionSuccess(logger, 'HEAD /healthz returned 200 with empty body');
   }
 }
 
@@ -61,16 +63,6 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
     Accept: 'application/json',
   };
 
-  if (context.mode === 'remote') {
-    await logRemoteAcceptResponse(
-      context,
-      headers,
-      'Remote target returned unexpected Accept enforcement response for /mcp',
-      logger,
-    );
-    return;
-  }
-
   const mcpResponse = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
@@ -78,6 +70,9 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
   });
   const expectedAcceptStatus = 406;
   evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, logger);
+  logAssertionSuccess(logger, 'POST /mcp without streaming Accept header rejected with 406', {
+    status: mcpResponse.res.status,
+  });
 }
 
 function evaluateAcceptEnforcement(
@@ -108,31 +103,8 @@ function evaluateAcceptEnforcement(
   assert.match(header.toLowerCase(), /^bearer\s+/, '/mcp WWW-Authenticate must be Bearer');
 }
 
-async function logRemoteAcceptResponse(
-  context: SmokeContext,
-  headers: Record<string, string>,
-  message: string,
-  logger: Logger,
-): Promise<void> {
-  const requestId = 'accept-remote-mcp';
-  const response = await fetchJson(new URL('/mcp', context.baseUrl), {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ jsonrpc: '2.0', id: requestId, method: 'tools/list' }),
-  });
-  logger.warn(message, {
-    status: response.res.status,
-    body: response.text,
-  });
-}
-
 export async function assertAuthRequired(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'auth');
-  if (context.mode === 'remote') {
-    logger.info('Remote target may enforce authentication upstream; skipping unauthorised checks');
-    return;
-  }
-
   const headers = {
     'Content-Type': 'application/json',
     Accept: REQUIRED_ACCEPT,
@@ -154,4 +126,5 @@ export async function assertAuthRequired(context: SmokeContext): Promise<void> {
     'mcp WWW-Authenticate header',
   );
   assert.match(mcpAuthenticate.toLowerCase(), /^bearer\s+/, 'WWW-Authenticate must be Bearer');
+  logAssertionSuccess(logger, 'POST /mcp without auth returns 401 Bearer challenge');
 }

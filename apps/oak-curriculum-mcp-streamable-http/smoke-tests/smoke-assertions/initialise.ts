@@ -9,7 +9,7 @@ import {
   createAuthHeaders,
 } from './common.js';
 import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
-import { createAssertionLogger } from './logging.js';
+import { createAssertionLogger, logAssertionSuccess } from './logging.js';
 import type { Logger } from '@oaknational/mcp-logger';
 
 export async function assertInitialiseHandshake(context: SmokeContext): Promise<void> {
@@ -63,6 +63,7 @@ async function assertInitialiseWithoutClientInfo(
     /clientinfo/,
     'Initialise error should mention clientInfo',
   );
+  logAssertionSuccess(logger, 'Initialise without clientInfo rejected with explanatory error');
 }
 
 async function assertInitialiseWithClientInfo(
@@ -105,4 +106,5 @@ async function assertInitialiseWithClientInfo(
     true,
     'Initialise should advertise listChanged capability',
   );
+  logAssertionSuccess(logger, 'Initialise with clientInfo succeeded and advertised listChanged');
 }

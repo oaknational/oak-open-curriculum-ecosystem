@@ -1,6 +1,6 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 23 October 2025 10:34 BST_
+_Last updated: 23 October 2025 11:56 BST_
 
 ---
 
@@ -9,8 +9,8 @@ _Last updated: 23 October 2025 10:34 BST_
 - **Generator alignment** – `mcp-tool-generator.ts` continues to emit the `stubs/` bundle with optional fields intact; generator unit suites remain green.
 - **HTTP surface** – `/mcp` is now the sole Streamable HTTP endpoint. Alias wiring, OpenAI connector handlers, and bypass env flags have been removed from runtime code.
 - **Runtime state** – `runSmokeSuite` lazily loads the HTTP app, isolates stub runs from the repo `.env`, enforces fail-fast credential loading, and resolves remote URLs by CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL`. HTTP Accept middleware continues to enforce `text/event-stream`.
-- **Test coverage** – Stub/live E2E suites and `smoke:dev:stub`/`smoke:dev:live` remain green with schema-aligned payloads. Remote smoke targets the preview stack at `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`, logging drift while verifying `/mcp` parity.
-- **Developer experience** – `smoke-remote.ts` now uses `commander`, supporting both positional and `--remote-base-url` flag inputs with unit coverage for each path.
+- **Test coverage** – Stub/live E2E suites and `smoke:dev:stub`/`smoke:dev:live` remain green with schema-aligned payloads. Remote smoke now exercises the preview stack at `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp` with the same assertions as live mode.
+- **Developer experience** – `smoke-remote.ts` now uses `commander`, supporting both positional and `--remote-base-url` flag inputs with unit coverage for each path; remote runs no longer downgrade assertions to warnings.
 - **Quality gates** – Lint, unit, and E2E suites re-ran clean after the alias removal. Analysis snapshots under `tmp/smoke-logs/analysis/` still capture stub/live/REST payload triplets.
 
 ---
@@ -20,8 +20,9 @@ _Last updated: 23 October 2025 10:34 BST_
 1. Alias wiring removed: runtime now mounts only `/mcp`, the OpenAI connector module is deleted, and auth bypass no longer inspects alias paths.
 2. Smoke assertions, E2E coverage, and documentation were pruned to focus solely on `/mcp`, confirming the aggregated tool catalogue continues to expose `search` and `fetch`.
 3. `smoke-remote.ts` adopts `commander` with unit coverage ensuring both positional and `--remote-base-url` flows resolve the same `SmokeSuiteOptions`; a new `--remote-dev-token` flag is exposed for future ergonomics.
-4. README, architecture notes, and the alias deprecation document now state the removal and point preview validation to the Vercel stack (`https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`).
-5. Post-change validation (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `type-check`, `test`, `test:e2e`) all pass, confirming no regressions from the alias removal or CLI refactor.
+4. Remote smoke assertions were tightened so Accept enforcement, unauthorised checks, and tool payload validation now match the local live expectations.
+5. README, architecture notes, and the alias deprecation document now state the removal and point preview validation to the Vercel stack (`https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`).
+6. Validation so far: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `type-check`, `test`, `test:e2e`, plus remote smoke via both commander flag and positional invocation—all pass without warnings.
 
 ---
 
@@ -31,7 +32,7 @@ _Last updated: 23 October 2025 10:34 BST_
 - Updated smoke assertions, Vitest E2E coverage, and repository documentation so every reference now targets `/mcp`; added an explicit alias removal note plus preview guidance.
 - Introduced a Commander-based CLI for `smoke-remote`, added unit coverage for positional/flag inputs, and wired the runner through the shared parser.
 - Reworked `smoke-suite.ts` around `prepareEnvironment` to centralise `loadRootEnv` usage, lazily import the Express app, seed a stub-only API key and deterministic dev token, and log `.env` provenance plus remote URL precedence.
-- Added mode-aware smoke assertions so remote runs skip unauthorised checks, log upstream 401 responses, and continue exercising the suite with clearer diagnostics.
+- Hardened smoke assertions so remote runs enforce the same Accept, 401, and payload guarantees as local live mode instead of downgrading to informational warnings.
 - Expanded the HTTP README smoke section with stub/live/remote command usage, env precedence (CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` → repo `.env`), and Accept header reminders.
 - Refactored `sdk-client-stub.e2e.test.ts` using `withStubbedHttpApp`, typed JSON-RPC error helpers, and schema-safe accessors to satisfy ESLint (complexity, optional chaining, unsafe assignments) while keeping assertions behaviour-led.
 - Added defensive utilities (`ensureOptionalString`, `expectJsonRpcError`) so payload parsing no longer relies on optional chaining or type assertions, and reused them across canonical URL checks.
@@ -68,7 +69,7 @@ _Last updated: 23 October 2025 10:34 BST_
 
 2. **Stage 6 – Smoke harness & docs**
    - Align live smoke output with schema-generated expectations (capture live payloads, compare with validators, patch formatter/schema).
-   - Harden remote smoke logging (precedence summary, status codes, unauthorised behaviour) and update documentation.
+  - ✅ Harden remote smoke logging (precedence summary, status codes, unauthorised behaviour) and update documentation; remote suite now shares live-mode assertions.
    - Split `smoke-suite.ts` into mode-specific helpers to meet lint guidance.
    - Refresh README/plan/context with the refactored command matrix, remote precedence and logging behaviour, and stub/live differences.
    - Rerun lint/tests/smoke suites, recording results and timestamps.
@@ -288,3 +289,9 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Removed the alias runtime surface, pruned smoke/E2E/doc references, and introduced a Commander-based `smoke-remote` CLI with unit coverage for positional and flag inputs.
 - Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
 - Reflection: `/mcp` is now the only HTTP endpoint, all quality gates stay green, and the remote smoke harness resolves base URLs ergonomically ahead of preview verification.
+
+23 October 2025 11:56 BST
+
+- Status: Aligned remote smoke assertions with local live expectations; preview run passes both commander flag and positional invocations with full Accept/auth/tool validation.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote -- --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`.
+- Reflection: Remote and live smoke suites now give identical answers; the preview deployment returns 406 for missing Accept and 401 without auth exactly as the local server does.

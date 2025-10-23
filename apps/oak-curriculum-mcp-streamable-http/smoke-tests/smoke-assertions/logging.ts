@@ -1,13 +1,20 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-import type { Logger } from '@oaknational/mcp-logger';
+import type { Logger, JsonObject } from '@oaknational/mcp-logger';
 
 import type { JsonRpcEnvelope } from './common.js';
 import type { SmokeContext } from './types.js';
 
 export function createAssertionLogger(context: SmokeContext, assertion: string): Logger {
   return context.logger.child?.({ assertion, mode: context.mode }) ?? context.logger;
+}
+
+export function logAssertionSuccess(logger: Logger, message: string, details?: JsonObject): void {
+  logger.info(message, details);
+  const detailText =
+    details && Object.keys(details).length > 0 ? ` ${JSON.stringify(details)}` : '';
+  console.log(`✅ ${message}${detailText}`);
 }
 
 export async function recordSsePayload(

@@ -12,7 +12,7 @@ import {
   createToolHeaders,
 } from './common.js';
 import { type SmokeContext } from './types.js';
-import { createAssertionLogger } from './logging.js';
+import { createAssertionLogger, logAssertionSuccess } from './logging.js';
 
 export async function assertSynonymCanonicalisation(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'synonyms');
@@ -62,6 +62,7 @@ export async function assertSynonymCanonicalisation(context: SmokeContext): Prom
   assert.equal(isError, false, 'Synonym tool call should not be flagged as error');
   const content = ensureArray(result.content ?? [], 'synonym content array');
   parseSynonymPayload(extractFirstText(content, 'synonym content'), logger);
+  logAssertionSuccess(logger, 'Synonym canonicalisation completed without errors');
 }
 
 function assertSynonymError(errorValue: unknown): void {

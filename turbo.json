@@ -192,8 +192,6 @@
       "dependsOn": ["^smoke:remote"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",

@@ -9,7 +9,7 @@ import {
   createToolHeaders,
 } from './common.js';
 import { type SmokeContext } from './types.js';
-import { createAssertionLogger, recordSsePayload } from './logging.js';
+import { createAssertionLogger, logAssertionSuccess, recordSsePayload } from './logging.js';
 import type { Logger } from '@oaknational/mcp-logger';
 
 export async function assertValidationFailures(context: SmokeContext): Promise<void> {
@@ -26,7 +26,9 @@ export async function assertValidationFailures(context: SmokeContext): Promise<v
   assertCanonicalValidationFailure(envelope, logger);
   await recordSsePayload(context, 'get-key-stages-subject-lessons', envelope);
 
-  logger.info('Validation assertions completed', { tool: 'get-key-stages-subject-lessons' });
+  logAssertionSuccess(logger, 'Validation assertions completed', {
+    tool: 'get-key-stages-subject-lessons',
+  });
 }
 
 function createInvalidArguments(): JsonObject {

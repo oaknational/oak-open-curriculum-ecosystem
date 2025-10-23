@@ -213,9 +213,202 @@ description: |
 
 ---
 
+## High Priority – Error Response Documentation
+
+### 4. Document All Error Responses Including Legitimate 404s
+
+**Current state:**
+
+Most endpoints only document `200` success responses. Error responses are undocumented in the OpenAPI schema, even though the API returns them in production.
+
+```yaml
+/lessons/{lesson}/transcript:
+  get:
+    responses:
+      '200':
+        description: 'Successful response'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptResponseSchema'
+      # No other responses documented
+```
+
+**Actual API behavior:**
+
+```bash
+# Lesson with transcript
+GET /api/v0/lessons/add-and-subtract-two-numbers-that-bridge-through-10/transcript
+→ HTTP 200 with {transcript, vtt}
+
+# Practical lesson without video content
+GET /api/v0/lessons/making-apple-flapjack-bites/transcript
+→ HTTP 404 with {"message": "Transcript not available for this query", "code": "NOT_FOUND"}
+```
+
+**Desired state:**
+
+Document all actual API responses, distinguishing between:
+
+1. **Legitimate resource absence** (404s that aren't errors - resource can't exist)
+2. **Client errors** (400, 401, 403, 404 for invalid IDs)
+3. **Server errors** (500, 502, 503)
+
+```yaml
+/lessons/{lesson}/transcript:
+  get:
+    responses:
+      '200':
+        description: 'Successful response - lesson has video transcript available'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptResponseSchema'
+      '404':
+        description: |
+          Transcript not available. This is expected for lessons without video content,
+          such as practical lessons (cooking, PE activities), lessons with only slides,
+          or lessons where video has not yet been produced.
+
+          This response indicates the lesson exists but has no transcript, not that
+          the lesson itself is missing.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotFoundResponse'
+            example:
+              message: 'Transcript not available for this query'
+              code: 'NOT_FOUND'
+              data:
+                code: 'NOT_FOUND'
+                httpStatus: 404
+                path: 'getLessonTranscript.getLessonTranscript'
+                zodError: null
+      '401':
+        $ref: '#/components/responses/Unauthorized'
+      '500':
+        $ref: '#/components/responses/InternalError'
+```
+
+**Create reusable error response schemas:**
+
+```yaml
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 'Human-readable error message'
+        code:
+          type: string
+          description: 'Machine-readable error code'
+        data:
+          type: object
+          properties:
+            code:
+              type: string
+            httpStatus:
+              type: integer
+            path:
+              type: string
+            zodError:
+              nullable: true
+              type: 'null'
+      required: [message, code, data]
+
+    NotFoundResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            code:
+              enum: [NOT_FOUND]
+
+  responses:
+    Unauthorized:
+      description: 'API key missing or invalid'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: 'API token not provided or invalid'
+            code: 'UNAUTHORIZED'
+
+    InternalError:
+      description: 'Server encountered an unexpected error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: 'Internal server error'
+            code: 'INTERNAL_ERROR'
+```
+
+**Why this matters:**
+
+1. **Type-safe client generation:** Tools like openapi-fetch, openapi-typescript, and code generators require documented responses to generate correct types
+2. **Better error handling:** Consumers can distinguish "resource unavailable" from "invalid request" from "server error"
+3. **Clearer API contract:** Documents actual production behavior, not just happy paths
+4. **Reduced confusion:** Makes it clear when 404 is expected (e.g., practical lessons have no transcripts) vs when it indicates an error
+5. **AI tool integration:** LLMs can provide helpful messages ("This lesson has no transcript") instead of generic errors
+
+**Real-world scenario:**
+
+A lesson planning app uses the API to fetch lesson details:
+
+- Without error documentation: Gets cryptic validation errors, assumes API is broken
+- With error documentation: Receives "no transcript available", understands this is expected for practical lessons, gracefully shows alternate content
+
+**Endpoints needing error documentation:**
+
+- **All authenticated endpoints:** Need 401 response documented
+- `/lessons/{lesson}/transcript` - Legitimate 404 for practical lessons
+- `/lessons/{lesson}/assets` - May return 404 if downloads not yet available
+- Any endpoint where resources are optional or conditional
+- All endpoints should document 500 responses for completeness
+
+**Differentiation pattern in descriptions:**
+
+- ✅ **"Resource not available"** / **"Not yet published"** = legitimate absence, expected
+- ❌ **"Resource not found"** / **"Invalid ID"** = client error, check your request
+
+**Benefits for API maintainers:**
+
+- Single source of truth for error responses
+- Easier to keep documentation and implementation in sync
+- Better API testing (can verify error responses match schema)
+- Reduced support burden (clearer error messages)
+
+**Benefits for all API consumers:**
+
+- SDKs and clients can properly type error handling
+- Better debugging (know which errors are expected)
+- Clearer integration paths (no trial-and-error to discover error responses)
+- Improved application reliability (proper error handling)
+
+**Impact:** Foundational improvement affecting every API consumer. Enables correct error handling in generated clients and AI tools.
+
+**Effort:** 2-3 hours for common error schemas + incremental per-endpoint review (15 minutes each).
+
+**Implementation approach:**
+
+1. Define `ErrorResponse` and `NotFoundResponse` component schemas
+2. Create reusable response objects for common errors (401, 500)
+3. Document 404 responses for endpoints where resource absence is legitimate
+4. Add standard 401, 500 responses to all authenticated endpoints
+5. Test that error responses match schema definitions
+
+**Priority:** High - affects correctness of all generated clients and error handling code.
+
+---
+
 ## Medium Priority – Parameter Richness
 
-### 4. Add Parameter Examples
+### 5. Add Parameter Examples
 
 **Current state:**
 
@@ -266,7 +459,7 @@ parameters:
 
 ---
 
-### 5. Add Custom Schema Extensions for Tool Metadata
+### 6. Add Custom Schema Extensions for Tool Metadata
 
 **What:** OpenAPI `x-oak-*` extensions providing tool-specific metadata.
 
@@ -315,7 +508,7 @@ parameters:
 
 ## Medium Priority – Response Metadata
 
-### 6. Add Response Schema Examples
+### 7. Add Response Schema Examples
 
 **Current state:**
 
@@ -370,7 +563,7 @@ responses:
 
 ---
 
-### 7. Document Canonical URL Patterns
+### 8. Document Canonical URL Patterns
 
 **Current state:**
 Canonical URLs calculated client-side based on implicit rules.
@@ -403,7 +596,7 @@ Included in `/ontology` response (see item 3).
 
 ## Low Priority – Performance Hints
 
-### 8. Add Performance and Caching Metadata
+### 9. Add Performance and Caching Metadata
 
 **What:** Extensions indicating response characteristics.
 
@@ -438,11 +631,12 @@ Included in `/ontology` response (see item 3).
 | 1. "Use this when" descriptions | **High** | Very High     | 2-4 hours | 70% fewer wrong-tool calls |
 | 2. Operation summaries          | **High** | Medium        | 1 hour    | Better UI/organisation     |
 | 3. `/ontology` endpoint         | **High** | **Very High** | 1-2 days  | 60% fewer discovery turns  |
-| 4. Parameter examples           | Medium   | Medium        | Ongoing   | Clearer semantics          |
-| 5. Custom schema extensions     | Medium   | Medium        | Low       | Auto-generated metadata    |
-| 6. Response examples            | Medium   | Low           | Ongoing   | Better error handling      |
-| 7. Canonical URL patterns       | Medium   | Medium        | 1 hour    | URL generation             |
-| 8. Performance hints            | Low      | Low           | Low       | Advanced optimisation      |
+| 4. Error response docs          | **High** | High          | 2-3 hours | Proper error handling      |
+| 5. Parameter examples           | Medium   | Medium        | Ongoing   | Clearer semantics          |
+| 6. Custom schema extensions     | Medium   | Medium        | Low       | Auto-generated metadata    |
+| 7. Response examples            | Medium   | Low           | Ongoing   | Better error handling      |
+| 8. Canonical URL patterns       | Medium   | Medium        | 1 hour    | URL generation             |
+| 9. Performance hints            | Low      | Low           | Low       | Advanced optimisation      |
 
 ---
 

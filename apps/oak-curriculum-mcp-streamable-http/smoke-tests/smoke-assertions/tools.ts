@@ -16,7 +16,7 @@ import {
   type JsonRpcEnvelope,
 } from './common.js';
 import { EXPECTED_TOOLS, type SmokeContext } from './types.js';
-import { createAssertionLogger, recordSsePayload } from './logging.js';
+import { createAssertionLogger, logAssertionSuccess, recordSsePayload } from './logging.js';
 
 export async function assertToolCatalogue(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'tools');
@@ -30,6 +30,10 @@ export async function assertToolCatalogue(context: SmokeContext): Promise<void> 
   for (const tool of EXPECTED_TOOLS) {
     assert.ok(names.includes(tool), `tools/list should include ${tool}`);
   }
+  logAssertionSuccess(logger, 'tools/list includes expected entries', {
+    expectedCount: EXPECTED_TOOLS.length,
+    receivedCount: names.length,
+  });
 }
 
 export async function assertSuccessfulToolCall(context: SmokeContext): Promise<void> {
@@ -47,20 +51,13 @@ export async function assertSuccessfulToolCall(context: SmokeContext): Promise<v
   const result = parseToolResult(response, logger);
   await recordSsePayload(context, 'get-key-stages', result.envelope);
 
-  if (context.mode === 'remote') {
-    logger.warn('Remote get-key-stages payload may drift from current schema', {
-      result: result.resultRecord,
-    });
-    return;
-  }
-
   const payload = extractToolPayload(result.resultRecord, logger);
   assert.ok(payload.length > 0, 'Tool payload array should not be empty');
   logger.debug('Parsed raw executor payload for get-key-stages', {
     records: payload,
     itemCount: payload.length,
   });
-  logger.info('Validated get-key-stages tool response', {
+  logAssertionSuccess(logger, 'Validated get-key-stages tool response', {
     itemCount: payload.length,
   });
 }
