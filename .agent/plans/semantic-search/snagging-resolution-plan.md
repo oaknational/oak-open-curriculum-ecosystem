@@ -141,16 +141,18 @@ Actual API Response: HTTP 404 with { "message": "NOT_FOUND", "statusCode": 404, 
 
 ### Status Summary
 
-- ⏳ **Phase 7.1** – Design and planning (READY FOR IMPLEMENTATION)
-- ⏳ **Phase 7.2** – Core decorator implementation
-- ⏳ **Phase 7.3** – Pipeline integration
-- ⏳ **Phase 7.4** – Test coverage
-- ⏳ **Phase 7.5** – Documentation and upstream tracking
-- ⏳ **Phase 7.6** – Final validation
+- ✅ **Phase 7.1** – Design and planning (completed 24 October 2025)
+- ✅ **Phase 7.2** – Core decorator implementation (completed 24 October 2025)
+- ✅ **Phase 7.3** – Pipeline integration (completed 24 October 2025)
+- ✅ **Phase 7.4** – Test coverage (completed 24 October 2025)
+- ✅ **Phase 7.5** – Documentation and upstream tracking (completed 24 October 2025)
+- ⏳ **Phase 7.6** – Final validation (remote smoke + full gate reruns outstanding)
 
 ---
 
 ## Phase 7.1 – Design and Planning
+
+**Status (24 October 2025):** Completed. Investigation findings, solution trade-offs, and upstream coordination notes have been locked in, providing the blueprint for schema decoration plus fail-fast expectations.
 
 ### Context
 
@@ -191,6 +193,8 @@ typegen.ts
 ---
 
 ## Phase 7.2 – Core Decorator Implementation
+
+**Status (24 October 2025):** Completed. `packages/sdks/oak-curriculum-sdk/type-gen/schema-enhancement-404.ts` now defines the configuration, collision detection, and response injection for legitimate 404s, with each entry citing `.agent/plans/upstream-api-metadata-wishlist.md` item #4. The decorator emits a standardised Oak error envelope and an explicit clean-up message for future upstream fixes.
 
 ### Implementation Tasks
 
@@ -389,6 +393,8 @@ function add404ToEndpoint(schema: OpenAPIObject, config: EndpointConfig): void {
 }
 ```
 
+**Outcome:** Implemented via `schema-enhancement-404.ts`, using `PathsObject` guards, Oak error envelope examples, and a structured collision summary that points directly to `.agent/plans/upstream-api-metadata-wishlist.md`. The decorator now ships alongside the configuration entry for `/lessons/{lesson}/transcript`.
+
 ### Validation
 
 - Create the file with all three components
@@ -398,6 +404,8 @@ function add404ToEndpoint(schema: OpenAPIObject, config: EndpointConfig): void {
 ---
 
 ## Phase 7.3 – Pipeline Integration
+
+**Status (24 October 2025):** Completed. `createOpenCurriculumSchema` now chains `decorateCanonicalUrls` and `add404ResponsesWhereExpected`, the ingest pipeline notes have been updated, and `pnpm --filter @oaknational/oak-curriculum-sdk type-gen` confirms the generated SDK schema carries the temporary 404 response.
 
 ### Implementation Tasks
 
@@ -452,304 +460,41 @@ After integration, run `pnpm type-gen` and verify:
 
 ## Phase 7.4 – Test Coverage
 
-### Implementation Tasks
+**Status (24 October 2025):** Completed. Coverage now lives inside `schema-separation.unit.test.ts`, asserting both the injected 404 payload and the fail-fast behaviour, with fixtures updated to expose the transcript path.
 
-#### Task 1: Unit Tests for Decorator
+### Completed Work
 
-**File:** `packages/sdks/oak-curriculum-sdk/type-gen/schema-enhancement-404.test.ts`
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import type { OpenAPIObject } from 'openapi-typescript';
-import { add404ResponsesWhereExpected } from './schema-enhancement-404.js';
-
-describe('add404ResponsesWhereExpected', () => {
-  function createMinimalSchema(): OpenAPIObject {
-    return {
-      openapi: '3.1.0',
-      info: { title: 'Test', version: '1.0.0' },
-      paths: {},
-    };
-  }
-
-  describe('success cases', () => {
-    it('should add 404 response to configured endpoint', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            operationId: 'getLessonTranscript',
-            responses: {
-              '200': {
-                description: 'Success',
-                content: {
-                  'application/json': {
-                    schema: {
-                      type: 'object',
-                      properties: {
-                        transcript: { type: 'string' },
-                        vtt: { type: 'string' },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      };
-
-      const enhanced = add404ResponsesWhereExpected(schema);
-
-      const responses = enhanced.paths?.['/lessons/{lesson}/transcript']?.get?.responses;
-      expect(responses).toBeDefined();
-      expect(responses?.['404']).toBeDefined();
-      expect(responses?.['404'].description).toContain('video transcript');
-    });
-
-    it('should not modify original schema', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            operationId: 'getLessonTranscript',
-            responses: { '200': { description: 'Success' } },
-          },
-        },
-      };
-
-      const enhanced = add404ResponsesWhereExpected(schema);
-
-      // Original should not have 404
-      expect(
-        schema.paths?.['/lessons/{lesson}/transcript']?.get?.responses?.['404'],
-      ).toBeUndefined();
-      // Enhanced should have 404
-      expect(
-        enhanced.paths?.['/lessons/{lesson}/transcript']?.get?.responses?.['404'],
-      ).toBeDefined();
-    });
-
-    it('should handle schema without configured paths', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/some-other-path': {
-          get: {
-            responses: { '200': { description: 'Success' } },
-          },
-        },
-      };
-
-      expect(() => add404ResponsesWhereExpected(schema)).not.toThrow();
-    });
-
-    it('should handle empty paths', () => {
-      const schema = createMinimalSchema();
-
-      expect(() => add404ResponsesWhereExpected(schema)).not.toThrow();
-    });
-  });
-
-  describe('fail-fast on divergence', () => {
-    it('should throw clear error if 404 already exists', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            operationId: 'getLessonTranscript',
-            responses: {
-              '200': { description: 'Success' },
-              '404': { description: 'Not found' }, // Already exists!
-            },
-          },
-        },
-      };
-
-      expect(() => add404ResponsesWhereExpected(schema)).toThrow(
-        /Schema Enhancement Cleanup Required/,
-      );
-      expect(() => add404ResponsesWhereExpected(schema)).toThrow(/Remove.*entry.*from/);
-      expect(() => add404ResponsesWhereExpected(schema)).toThrow(
-        /GET \/lessons\/\{lesson\}\/transcript/,
-      );
-    });
-
-    it('should provide helpful error with multiple collisions', () => {
-      const schema = createMinimalSchema();
-      // Add second endpoint to config first (for test purposes)
-      // This test assumes we might add more endpoints to the config in future
-
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            responses: {
-              '200': { description: 'Success' },
-              '404': { description: 'Not found' },
-            },
-          },
-        },
-      };
-
-      const error = expect(() => add404ResponsesWhereExpected(schema)).toThrow();
-      // Should mention the colliding endpoint
-      expect(() => add404ResponsesWhereExpected(schema)).toThrow(
-        /GET \/lessons\/\{lesson\}\/transcript/,
-      );
-    });
-
-    it('should succeed when no collisions exist', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            responses: {
-              '200': { description: 'Success' },
-              // No 404
-            },
-          },
-        },
-      };
-
-      expect(() => add404ResponsesWhereExpected(schema)).not.toThrow();
-    });
-  });
-
-  describe('404 response structure', () => {
-    it('should include required error fields', () => {
-      const schema = createMinimalSchema();
-      schema.paths = {
-        '/lessons/{lesson}/transcript': {
-          get: {
-            responses: { '200': { description: 'Success' } },
-          },
-        },
-      };
-
-      const enhanced = add404ResponsesWhereExpected(schema);
-
-      const response404 = enhanced.paths?.['/lessons/{lesson}/transcript']?.get?.responses?.['404'];
-      expect(response404).toBeDefined();
-
-      const content = response404?.content?.['application/json'];
-      expect(content).toBeDefined();
-
-      const schema404 = content?.schema;
-      expect(schema404).toBeDefined();
-      expect(schema404?.type).toBe('object');
-      expect(schema404?.properties).toHaveProperty('message');
-      expect(schema404?.properties).toHaveProperty('statusCode');
-      expect(schema404?.properties).toHaveProperty('error');
-      expect(schema404?.required).toEqual(['message', 'statusCode', 'error']);
-    });
-  });
-});
-```
-
-#### Task 2: Integration Tests
-
-Add test cases to existing SDK integration tests to verify 404 handling, and include a guard fixture that proves endpoints already documenting 404s remain untouched:
-
-**File:** `packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.test.ts` (or new file)
-
-```typescript
-describe('404 handling for legitimate cases', () => {
-  it('should handle 404 for lesson without transcript', async () => {
-    const client = createOakPathBasedClient(API_KEY);
-
-    // Call a lesson known to not have a transcript
-    const result = await executeToolCall(client, 'get-lessons-transcript', {
-      lesson: 'making-apple-flapjack-bites',
-    });
-
-    // Should not throw, should return empty/null result
-    expect(result).toBeDefined();
-    // Exact structure TBD based on implementation
-  });
-  it('should not duplicate 404 responses for endpoints that already define them', async () => {
-    // Use a fixture schema where upstream already documents 404 for a different endpoint
-    const schema = loadFixtureSchema('with-existing-404.json');
-    expect(() => add404ResponsesWhereExpected(schema)).not.toThrow();
-    // ensure no duplicate entries were added
-    const responses = schema.paths['/lessons/{lesson}/summary'].get.responses;
-    expect(Object.keys(responses).filter((key) => key === '404')).toHaveLength(1);
-  });
-});
-```
+- Extended `packages/sdks/oak-curriculum-sdk/type-gen/schema-separation.unit.test.ts` to prove the SDK-only 404 envelope and the fail-fast collision error.
+- Enriched `packages/sdks/oak-curriculum-sdk/type-gen/test-fixtures.ts` so shared fixtures expose the transcript endpoint required by the decorator tests.
 
 ### Validation
 
-- `pnpm --filter @oaknational/oak-curriculum-sdk test`
-- All unit tests pass
-- Integration tests confirm 404 handling works end-to-end
+- `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`
+- `pnpm --filter @oaknational/oak-curriculum-sdk lint`
+- `pnpm --filter @oaknational/oak-curriculum-sdk type-check`
 
 ---
 
 ## Phase 7.5 – Documentation and Upstream Tracking
 
-### Implementation Tasks
+**Status (24 October 2025):** Completed. Documentation now signposts the temporary decorator, its clean-up trigger, and the upstream wishlist thread, keeping future maintainers aligned with the schema-first contract.
 
-#### Task 1: Add Inline Documentation
+### Completed Work
 
-Ensure `schema-enhancement-404.ts` has comprehensive JSDoc:
-
-- Explain this is temporary
-- Link to upstream tracking issue
-- Document fail-fast behavior
-- Provide examples
-
-#### Task 2: Update Pipeline Documentation
-
-**File:** `packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md`
-
-Add section:
-
-```markdown
-### Schema Enhancement: Legitimate 404 Responses
-
-**Decorator:** `add404ResponsesWhereExpected` (in `schema-enhancement-404.ts`)
-
-**Purpose:** Temporarily adds 404 response definitions to endpoints that legitimately
-return 404 but aren't yet documented in the upstream OpenAPI schema.
-
-**Behavior:**
-
-1. Checks configuration in `ENDPOINTS_WITH_LEGITIMATE_404S`
-2. **Fails fast** if upstream has already added 404 documentation (prevents divergence)
-3. Adds standardized 404 response schema to configured endpoints
-4. Runs after `decorateCanonicalUrls` in the decorator chain
-
-**Lifecycle:**
-
-- This is TEMPORARY until upstream schema is updated
-- Each entry requires a tracking issue in `.agent/plans/upstream-api-metadata-wishlist.md`
-- Will self-destruct (fail with helpful error) when upstream is fixed
-
-**Example Error (when upstream improves):**
-```
-
-🎉 Schema Enhancement Cleanup Required!
-The upstream API schema now documents 404 responses for:
-• GET /lessons/{lesson}/transcript
-
-[... helpful instructions for cleanup ...]
-
-```
-
-```
-
-#### Task 3: Verify Upstream Wishlist Updated
-
-Confirm `.agent/plans/upstream-api-metadata-wishlist.md` item #4 exists and references this work.
+- Added comprehensive JSDoc to `packages/sdks/oak-curriculum-sdk/type-gen/schema-enhancement-404.ts`, including temporary status, wishlist reference, and fail-fast description.
+- Extended `packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md` with a dedicated "Schema Enhancement: Legitimate 404 Responses" section covering behaviour, lifecycle, and the celebratory collision error.
+- Confirmed `.agent/plans/upstream-api-metadata-wishlist.md` item #4 already tracks the upstream change; decorator text links back to it.
 
 ### Validation
 
-- Documentation is clear and complete
-- Links between tracking docs are bidirectional
-- Markdownlint passes: `pnpm markdownlint:root`
+- `pnpm --filter @oaknational/oak-curriculum-sdk lint`
+- `pnpm markdownlint:root`
 
 ---
 
 ## Phase 7.6 – Final Validation
+
+**Status (24 October 2025):** In progress. Local gates (lint, type-check, schema-separation tests, type-gen) are green; remote smoke and end-to-end verification remain outstanding for the next session.
 
 ### Implementation Tasks
 

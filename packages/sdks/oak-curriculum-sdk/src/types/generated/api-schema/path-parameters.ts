@@ -494,6 +494,44 @@ export const PATH_OPERATIONS = [
             }
           }
         }
+      },
+      "404": {
+        "description": "Temporary: Documented locally until the upstream schema captures this legitimate 404 response.\n\nLessons without accompanying video content legitimately return HTTP 404 so callers can distinguish \"no transcript available\" from invalid lesson slugs.\n\nTracking: .agent/plans/upstream-api-metadata-wishlist.md item #4",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "description": "Standard Oak API error envelope emitted for legitimate 404 responses.",
+              "required": [
+                "statusCode",
+                "message",
+                "error"
+              ],
+              "properties": {
+                "statusCode": {
+                  "type": "integer",
+                  "example": 404,
+                  "description": "HTTP status code indicating the type of error."
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Transcript not available for this lesson",
+                  "description": "Human-readable message describing why the resource is unavailable."
+                },
+                "error": {
+                  "type": "string",
+                  "example": "Not Found",
+                  "description": "Short error label returned by the API."
+                }
+              }
+            },
+            "example": {
+              "statusCode": 404,
+              "message": "Transcript not available for this lesson",
+              "error": "Not Found"
+            }
+          }
+        }
       }
     }
   },
@@ -1754,7 +1792,8 @@ export const RESPONSE_CODES = {
 export type PossibleResponseCode = typeof RESPONSE_CODES;
 
 export const VALID_RESPONSE_CODES = [
-  "200"
+  "200",
+  "404"
 ] as const;
 export type ValidResponseCode = typeof VALID_RESPONSE_CODES[number];
 export type ValidNumericResponseCode = PossibleResponseCode[ValidResponseCode]['numeric'];

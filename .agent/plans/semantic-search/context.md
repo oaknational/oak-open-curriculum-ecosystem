@@ -1,12 +1,13 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 23 October 2025 16:45 BST_
+_Last updated: 24 October 2025 18:20 BST_
 
 ---
 
 ## Current Snapshot
 
 - **Generator alignment** – `mcp-tool-generator.ts` continues to emit the `stubs/` bundle with optional fields intact; generator unit suites remain green.
+- **Schema enhancements** – `schema-enhancement-404.ts` injects documented 404 responses for `get-lessons-transcript`, preserving the original schema whilst enriching the SDK clone and emitting clear fail-fast guidance if upstream closes the gap.
 - **HTTP surface** – `/mcp` is now the sole Streamable HTTP endpoint. Alias wiring, OpenAI connector handlers, and bypass env flags have been removed from runtime code.
 - **Runtime state** – `runSmokeSuite` lazily loads the HTTP app, isolates stub runs from the repo `.env`, enforces fail-fast credential loading, and resolves remote URLs by CLI → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL`. HTTP Accept middleware continues to enforce `text/event-stream`.
 - **Test coverage** – Stub/live E2E suites and `smoke:dev:stub`/`smoke:dev:live` remain green with schema-aligned payloads. Remote smoke now exercises the preview stack at `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp` with the same assertions as live mode.
@@ -17,16 +18,19 @@ _Last updated: 23 October 2025 16:45 BST_
 
 ## Key Findings
 
-1. Alias wiring removed: runtime now mounts only `/mcp`, the OpenAI connector module is deleted, and auth bypass no longer inspects alias paths.
-2. Smoke assertions, E2E coverage, and documentation were pruned to focus solely on `/mcp`, confirming the aggregated tool catalogue continues to expose `search` and `fetch`.
-3. `smoke-remote.ts` adopts `commander` with unit coverage ensuring both positional and `--remote-base-url` flows resolve the same `SmokeSuiteOptions`; a new `--remote-dev-token` flag is exposed for future ergonomics.
-4. Remote smoke assertions were tightened so Accept enforcement, unauthorised checks, and tool payload validation now match the local live expectations.
-5. README, architecture notes, and the alias deprecation document now state the removal and point preview validation to the Vercel stack (`https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`).
-6. Validation so far: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `type-check`, `test`, `test:e2e`, plus remote smoke via both commander flag and positional invocation—all pass without warnings.
+1. Config-driven `add404ResponsesWhereExpected` decorator now injects legitimate 404 responses for transcripts, emitting an actionable clean-up message when upstream documentation appears.
+2. `createOpenCurriculumSchema` composes canonical URL decoration with the new 404 enhancer, so the SDK schema gains the temporary response whilst the original clone remains untouched; `pnpm --filter @oaknational/oak-curriculum-sdk type-gen` confirms the split.
+3. `schema-separation.unit.test.ts` exercises both the SDK-only 404 payload and the fail-fast collision path, with fixtures updated to expose the transcript route.
+4. Documentation updates (JSDoc plus ingest pipeline) signpost the temporary nature, wishlist item #4, and the celebratory collision guidance.
+5. Alias wiring remains removed: `/mcp` is the sole HTTP surface, keeping the remote smoke harness aligned with preview deployments.
+6. Remote smoke harness still leverages `commander` with parity between positional and flag-driven base URLs; previous remote validation remains green pending the refreshed run after 404 work.
 
 ---
 
 ## Work Completed This Session
+
+- Implemented `packages/sdks/oak-curriculum-sdk/type-gen/schema-enhancement-404.ts`, adding the config-driven decorator, collision detection, and Oak error envelope for legitimate transcript 404s.
+- Chained the decorator into `createOpenCurriculumSchema`, updated `schema-separation.unit.test.ts` and shared fixtures, and verified with `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`, `lint`, `type-check`, `type-gen`, plus `pnpm markdownlint:root`.
 
 - Removed the `/openai_connector` transport: deleted `src/openai/connector.ts`, simplified `src/index.ts` and `src/auth.ts`, and pruned alias-specific lint overrides.
 - Updated smoke assertions, Vitest E2E coverage, and repository documentation so every reference now targets `/mcp`; added an explicit alias removal note plus preview guidance.
@@ -51,10 +55,7 @@ _Last updated: 23 October 2025 16:45 BST_
 ## In-Flight Work
 
 - **Phase 7 – Schema Enhancement for Legitimate 404 Responses**
-  - Add decorator to SDK schema generation pipeline for handling legitimate 404 responses
-  - Implement fail-fast mechanism to prevent divergence from upstream schema
-  - Full test coverage and documentation
-  - Track upstream wishlist items for long-term resolution
+  - Decorator, pipeline integration, tests, and documentation now complete; awaiting Phase 7.6 remote smoke and gate reruns before closing the snagging item.
 
 ---
 
@@ -323,3 +324,9 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
   - 7.5: Documentation and upstream tracking
   - 7.6: Final validation and quality gates
 - Reflection: Solution maintains architectural integrity while providing immediate fix for production issue. Fail-fast design ensures temporary enhancement won't become permanent technical debt. Ready for implementation in fresh session with complete plan captured in snagging-resolution-plan.md.
+
+2025-10-24 18:20 BST
+
+- Status: Schema-first Phase 7 works delivered. Added the config-driven transcript 404 decorator, chained it into schema separation, refreshed pipeline docs, and extended schema separation tests to cover SDK-only 404 payloads and fail-fast collisions.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`, `pnpm --filter @oaknational/oak-curriculum-sdk lint`, `pnpm --filter @oaknational/oak-curriculum-sdk type-check`, `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`, `pnpm markdownlint:root`.
+- Reflection: SDK artefacts now document legitimate transcript 404s without mutating the original schema, and the fail-fast guard guarantees we retire the decorator as soon as upstream ships the fix. Remote smoke rerun remains on the to-do list for Phase 7.6.

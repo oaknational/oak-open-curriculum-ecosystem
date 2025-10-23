@@ -1804,6 +1804,23 @@ There is no response returned for this endpoint as it returns a content attachme
       },
     ],
     response: TranscriptResponseSchema,
+    errors: [
+      {
+        status: 404,
+        description: `Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
+
+Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish &quot;no transcript available&quot; from invalid lesson slugs.
+
+Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4`,
+        schema: z
+          .object({
+            statusCode: z.number().int(),
+            message: z.string(),
+            error: z.string(),
+          })
+          .passthrough(),
+      },
+    ],
   },
   {
     method: "get",

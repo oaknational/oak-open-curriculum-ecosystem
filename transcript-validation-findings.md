@@ -4,7 +4,7 @@
 
 The `get-lessons-transcript` tool returns a validation error for the `making-apple-flapjack-bites` lesson:
 
-```
+```text
 Execution failed: Invalid response payload. Please match the generated output schema.
 ```
 
@@ -24,7 +24,7 @@ GET /api/v0/lessons/making-apple-flapjack-bites/transcript
 
 **Response:**
 
-```
+```http
 HTTP/2 404
 Content-Type: application/json
 

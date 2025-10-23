@@ -4,25 +4,75 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import type {
+  MediaTypeObject,
+  OpenAPIObject,
+  ResponseObject,
+  SchemaObject,
+} from 'openapi3-ts/oas31';
 
 import { createOpenCurriculumSchema } from './schema-separation-core.js';
 import { schemaWithNestedResponses } from './test-fixtures.js';
 
+function buildTranscriptSchema(): OpenAPIObject {
+  return {
+    openapi: '3.0.3',
+    info: { title: 'Oak OpenAPI', version: '1.0.0' },
+    paths: {
+      '/lessons/{lesson}/transcript': {
+        get: {
+          operationId: 'getLessonTranscript',
+          responses: {
+            '200': {
+              description: 'Successful response',
+            },
+          },
+        },
+      },
+    },
+    components: {
+      schemas: {
+        TranscriptResponseSchema: {
+          type: 'object',
+          properties: {
+            transcript: { type: 'string' },
+          },
+        },
+      },
+    },
+  };
+}
+
+function isResponseObject(value: unknown): value is ResponseObject {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  return !Object.hasOwn(value as Record<string, unknown>, '$ref');
+}
+
+function isMediaTypeObject(value: unknown): value is MediaTypeObject {
+  return typeof value === 'object' && value !== null;
+}
+
+function isSchemaObject(value: unknown): value is SchemaObject {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  return !Object.hasOwn(value as Record<string, unknown>, '$ref');
+}
+
 describe('schema separation', () => {
   describe('createOpenCurriculumSchema', () => {
     it('returns original clone and decorated SDK schema without mutating the input', () => {
-      const validatedSchema: OpenAPIObject = {
-        openapi: '3.0.3',
-        info: { title: 'Oak OpenAPI', version: '1.0.0' },
-        paths: {},
-        components: {
-          schemas: {
-            LessonResponse: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-              },
+      const validatedSchema = buildTranscriptSchema();
+      validatedSchema.components = {
+        ...validatedSchema.components,
+        schemas: {
+          ...(validatedSchema.components?.schemas ?? {}),
+          LessonResponse: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
             },
           },
         },
@@ -47,18 +97,16 @@ describe('schema separation', () => {
     });
 
     it('preserves all original schema fields while adding canonicalUrl', () => {
-      const validatedSchema: OpenAPIObject = {
-        openapi: '3.0.3',
-        info: { title: 'Oak OpenAPI', version: '1.0.0' },
-        paths: {},
-        components: {
-          schemas: {
-            LessonResponse: {
-              type: 'object',
-              properties: {
-                title: { type: 'string' },
-                description: { type: 'string' },
-              },
+      const validatedSchema = buildTranscriptSchema();
+      validatedSchema.components = {
+        ...validatedSchema.components,
+        schemas: {
+          ...(validatedSchema.components?.schemas ?? {}),
+          LessonResponse: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' },
+              description: { type: 'string' },
             },
           },
         },
@@ -115,6 +163,91 @@ describe('schema separation', () => {
         throw new Error('SearchResponse.summary.anyOf missing');
       }
       expect(summary.anyOf).toHaveLength(2);
+    });
+
+    it('adds configured legitimate 404 responses to the SDK schema only', () => {
+      const validatedSchema = buildTranscriptSchema();
+
+      const { original, sdk } = createOpenCurriculumSchema(validatedSchema);
+
+      const originalResponses =
+        original.paths?.['/lessons/{lesson}/transcript']?.get?.responses ?? {};
+      expect(originalResponses).not.toHaveProperty('404');
+
+      const sdkResponses = sdk.paths?.['/lessons/{lesson}/transcript']?.get?.responses;
+      if (!sdkResponses || !Object.hasOwn(sdkResponses, '404')) {
+        throw new Error('Expected 404 response to be present');
+      }
+
+      const rawResponse: unknown = (sdkResponses as Record<string, unknown>)['404'];
+      if (!isResponseObject(rawResponse)) {
+        throw new Error('Expected inline 404 response object');
+      }
+
+      expect(rawResponse.description).toContain('Temporary');
+      expect(rawResponse.description).toContain(
+        'Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4',
+      );
+
+      const jsonMedia = rawResponse.content?.['application/json'];
+      if (!isMediaTypeObject(jsonMedia)) {
+        throw new Error('Expected JSON media type definition');
+      }
+
+      expect(jsonMedia.example).toEqual({
+        statusCode: 404,
+        message: 'Transcript not available for this lesson',
+        error: 'Not Found',
+      });
+
+      const schema = jsonMedia.schema;
+      if (!isSchemaObject(schema)) {
+        throw new Error('Expected schema object describing the 404 payload');
+      }
+
+      expect(schema).toStrictEqual({
+        type: 'object',
+        description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
+        required: ['statusCode', 'message', 'error'],
+        properties: {
+          statusCode: {
+            type: 'integer',
+            example: 404,
+            description: 'HTTP status code indicating the type of error.',
+          },
+          message: {
+            type: 'string',
+            example: 'Transcript not available for this lesson',
+            description: 'Human-readable message describing why the resource is unavailable.',
+          },
+          error: {
+            type: 'string',
+            example: 'Not Found',
+            description: 'Short error label returned by the API.',
+          },
+        },
+      });
+    });
+
+    it('fails fast when upstream schema already documents configured 404 responses', () => {
+      const validatedSchema = buildTranscriptSchema();
+      const operation =
+        validatedSchema.paths?.['/lessons/{lesson}/transcript']?.get ??
+        (() => {
+          throw new Error('Transcript GET operation not present');
+        })();
+
+      if (!operation.responses) {
+        throw new Error('Transcript GET operation has no responses object');
+      }
+
+      operation.responses['404'] = {
+        description: 'Already documented upstream',
+      };
+
+      expect(() => createOpenCurriculumSchema(validatedSchema)).toThrowError(
+        /upstream api schema already documents 404 responses/i,
+      );
     });
   });
 });

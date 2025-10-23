@@ -2863,6 +2863,42 @@ export interface operations {
                     "application/json": components["schemas"]["TranscriptResponseSchema"];
                 };
             };
+            /**
+             * @description Temporary: Documented locally until the upstream schema captures this legitimate 404 response.
+             *
+             *     Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish "no transcript available" from invalid lesson slugs.
+             *
+             *     Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4
+             */
+            404: {
+                headers?: never;
+                content: {
+                    /**
+                     * @example {
+                     *       "statusCode": 404,
+                     *       "message": "Transcript not available for this lesson",
+                     *       "error": "Not Found"
+                     *     }
+                     */
+                    "application/json": {
+                        /**
+                         * @description HTTP status code indicating the type of error.
+                         * @example 404
+                         */
+                        statusCode: number;
+                        /**
+                         * @description Human-readable message describing why the resource is unavailable.
+                         * @example Transcript not available for this lesson
+                         */
+                        message: string;
+                        /**
+                         * @description Short error label returned by the API.
+                         * @example Not Found
+                         */
+                        error: string;
+                    };
+                };
+            };
         };
     };
     "searchTranscripts-searchTranscripts": {

@@ -11,6 +11,7 @@ import path from 'node:path';
 import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { assertSchemaHasComponentsSchemas } from './schema-validator.js';
 import { decorateCanonicalUrls } from './schema-separation-decorators.js';
+import { add404ResponsesWhereExpected } from './schema-enhancement-404.js';
 
 export interface SeparatedSchema {
   readonly original: OpenAPIObject;
@@ -21,7 +22,8 @@ export interface SeparatedSchema {
 export function createOpenCurriculumSchema(validated: OpenAPIObject): SeparatedSchema {
   assertSchemaHasComponentsSchemas(validated);
   const original = structuredClone(validated);
-  const sdk = decorateCanonicalUrls(validated);
+  const canonicalised = decorateCanonicalUrls(validated);
+  const sdk = add404ResponsesWhereExpected(canonicalised);
   return { original, validated, sdk };
 }
 

@@ -185,9 +185,34 @@ export const schemaWithNestedResponses: OpenAPIObject = {
     title: 'Nested Response API',
     version: '1.0.0',
   },
-  paths: {},
+  paths: {
+    '/lessons/{lesson}/transcript': {
+      get: {
+        operationId: 'getLessonTranscript',
+        responses: {
+          '200': {
+            description: 'Successful response',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/TranscriptResponseSchema',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   components: {
     schemas: {
+      TranscriptResponseSchema: {
+        type: 'object',
+        properties: {
+          transcript: { type: 'string' },
+          vtt: { type: 'string' },
+        },
+      },
       SearchResponse: {
         type: 'object',
         properties: {
