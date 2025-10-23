@@ -330,3 +330,9 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Schema-first Phase 7 works delivered. Added the config-driven transcript 404 decorator, chained it into schema separation, refreshed pipeline docs, and extended schema separation tests to cover SDK-only 404 payloads and fail-fast collisions.
 - Commands: `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`, `pnpm --filter @oaknational/oak-curriculum-sdk lint`, `pnpm --filter @oaknational/oak-curriculum-sdk type-check`, `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`, `pnpm markdownlint:root`.
 - Reflection: SDK artefacts now document legitimate transcript 404s without mutating the original schema, and the fail-fast guard guarantees we retire the decorator as soon as upstream ships the fix. Remote smoke rerun remains on the to-do list for Phase 7.6.
+
+2025-10-24 18:35 BST
+
+- Status: Remote smoke against the Vercel preview is green using the flag-based base URL; positional invocation was verified previously.
+- Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`.
+- Reflection: Health, initialise, tools/list, and tool validation checks all passed remotely. Remaining work is to rerun `pnpm make` and `pnpm qg` for the final Phase 7.6 gate sweep.

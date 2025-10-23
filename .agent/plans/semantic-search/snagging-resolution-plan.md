@@ -146,7 +146,7 @@ Actual API Response: HTTP 404 with { "message": "NOT_FOUND", "statusCode": 404, 
 - ✅ **Phase 7.3** – Pipeline integration (completed 24 October 2025)
 - ✅ **Phase 7.4** – Test coverage (completed 24 October 2025)
 - ✅ **Phase 7.5** – Documentation and upstream tracking (completed 24 October 2025)
-- ⏳ **Phase 7.6** – Final validation (remote smoke + full gate reruns outstanding)
+- ✅ **Phase 7.6** – Final validation (completed 24 October 2025)
 
 ---
 
@@ -494,7 +494,7 @@ After integration, run `pnpm type-gen` and verify:
 
 ## Phase 7.6 – Final Validation
 
-**Status (24 October 2025):** In progress. Local gates (lint, type-check, schema-separation tests, type-gen) are green; remote smoke and end-to-end verification remain outstanding for the next session.
+**Status (24 October 2025):** Completed. Remote smoke against the preview build and the full gate sweep (`pnpm make`, `pnpm qg`) both succeeded, so Phase 7 is now closed.
 
 ### Implementation Tasks
 
@@ -509,8 +509,8 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live
 # Should now succeed for lessons without transcripts
 
 # Remote preview (flag and positional)
+# First run proved both invocation styles; ongoing verification uses the flag form
 LOG_LEVEL=info pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp
-LOG_LEVEL=info pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp
 ```
 
 #### Task 2: Quality Gates
@@ -548,7 +548,8 @@ pnpm --filter @oaknational/oak-curriculum-sdk type-gen
 
 ### Validation
 
-- ✅ All quality gates green
+- ✅ Remote smoke (flag invocation): `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`
+- ✅ All quality gates green (`pnpm make`, `pnpm qg`)
 - ✅ Original failing case now works
 - ✅ Fail-fast mechanism verified
 - ✅ Documentation complete
