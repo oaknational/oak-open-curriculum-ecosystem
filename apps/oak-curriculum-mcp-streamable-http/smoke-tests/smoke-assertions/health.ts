@@ -65,15 +65,7 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
     await logRemoteAcceptResponse(
       context,
       headers,
-      '/mcp',
       'Remote target returned unexpected Accept enforcement response for /mcp',
-      logger,
-    );
-    await logRemoteAcceptResponse(
-      context,
-      headers,
-      '/openai_connector',
-      'Remote target returned unexpected Accept enforcement response for /openai_connector',
       logger,
     );
     return;
@@ -85,30 +77,16 @@ export async function assertAcceptHeaderEnforcement(context: SmokeContext): Prom
     body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-1', method: 'tools/list' }),
   });
   const expectedAcceptStatus = 406;
-  evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, '/mcp', logger);
-
-  const aliasResponse = await fetchJson(new URL('/openai_connector', context.baseUrl), {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-2', method: 'tools/list' }),
-  });
-  evaluateAcceptEnforcement(
-    context,
-    aliasResponse,
-    expectedAcceptStatus,
-    '/openai_connector',
-    logger,
-  );
+  evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, logger);
 }
 
 function evaluateAcceptEnforcement(
   context: SmokeContext,
   response: JsonResponse,
   expectedStatus: number,
-  path: '/mcp' | '/openai_connector',
   logger: Logger,
 ): void {
-  logger.debug(`Accept enforcement response for ${path}`, {
+  logger.debug('Accept enforcement response for /mcp', {
     mode: context.mode,
     status: response.res.status,
     body: response.text,
@@ -116,7 +94,7 @@ function evaluateAcceptEnforcement(
   assert.equal(
     response.res.status,
     expectedStatus,
-    `POST ${path} without streaming Accept header should be ${String(expectedStatus)}`,
+    `POST /mcp without streaming Accept header should be ${String(expectedStatus)}`,
   );
   if (expectedStatus === 406) {
     assert.match(response.text, /Accept header must include text\/event-stream/);
@@ -125,20 +103,19 @@ function evaluateAcceptEnforcement(
 
   const header = ensureString(
     response.res.headers.get('www-authenticate') ?? '',
-    `${path} WWW-Authenticate header`,
+    '/mcp WWW-Authenticate header',
   );
-  assert.match(header.toLowerCase(), /^bearer\s+/, `${path} WWW-Authenticate must be Bearer`);
+  assert.match(header.toLowerCase(), /^bearer\s+/, '/mcp WWW-Authenticate must be Bearer');
 }
 
 async function logRemoteAcceptResponse(
   context: SmokeContext,
   headers: Record<string, string>,
-  path: '/mcp' | '/openai_connector',
   message: string,
   logger: Logger,
 ): Promise<void> {
-  const requestId = `accept-remote-${path.replace(/\//g, '-')}`;
-  const response = await fetchJson(new URL(path, context.baseUrl), {
+  const requestId = 'accept-remote-mcp';
+  const response = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
     body: JSON.stringify({ jsonrpc: '2.0', id: requestId, method: 'tools/list' }),
@@ -177,20 +154,4 @@ export async function assertAuthRequired(context: SmokeContext): Promise<void> {
     'mcp WWW-Authenticate header',
   );
   assert.match(mcpAuthenticate.toLowerCase(), /^bearer\s+/, 'WWW-Authenticate must be Bearer');
-
-  const aliasResponse = await fetchJson(new URL('/openai_connector', context.baseUrl), {
-    method: 'POST',
-    headers,
-    body,
-  });
-  logger.debug('Unauthorised response for /openai_connector', {
-    status: aliasResponse.res.status,
-    body: aliasResponse.text,
-  });
-  assert.equal(aliasResponse.res.status, 401, 'POST /openai_connector without auth should be 401');
-  const aliasAuthenticate = ensureString(
-    aliasResponse.res.headers.get('www-authenticate') ?? '',
-    'alias WWW-Authenticate header',
-  );
-  assert.match(aliasAuthenticate.toLowerCase(), /^bearer\s+/, 'WWW-Authenticate must be Bearer');
 }

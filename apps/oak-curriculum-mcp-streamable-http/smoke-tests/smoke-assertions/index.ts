@@ -4,7 +4,7 @@ import {
   assertHealthEndpoints,
 } from './health.js';
 import { assertInitialiseHandshake } from './initialise.js';
-import { assertSuccessfulToolCall, assertToolsAndAliases } from './tools.js';
+import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import type { SmokeContext } from './types.js';
@@ -30,7 +30,7 @@ async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertAcceptHeaderEnforcement(context);
   await assertAuthRequired(context);
   await assertInitialiseHandshake(context);
-  await assertToolsAndAliases(context);
+  await assertToolCatalogue(context);
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);
@@ -40,7 +40,7 @@ async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
   await assertInitialiseHandshake(context);
-  await assertToolsAndAliases(context);
+  await assertToolCatalogue(context);
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);

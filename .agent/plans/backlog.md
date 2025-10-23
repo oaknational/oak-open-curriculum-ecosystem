@@ -30,6 +30,7 @@
 - [ ] Extract all common code from the stdio and http servers into a shared library.
 - [ ] Production hardening, auth, caching, logging, tracing, error handling (Result<T,E>), error tracking (Sentry), etc.
 - [ ] Rename the type-gen code from scripts to something more meaningful.
+- [ ] Enhance the remote smoke harness CLI using `commander` so `--remote-base-url` style flags are supported in addition to positional arguments.
 - [ ] Consider putting the type-gen code in a separate package from the SDK runtime code, they are not tightly coupled and have different if related intentions. This could go either way, the typegen code essentially becomes a library of functions that are used within the SDK runtime code.
 - [ ] Should we extract the non-UI search logic so that other clients can use it? E.g. a search CLI or other UI. This would effectively be an Oak Open Search SDK, similar to the Oak Open Curriculum SDK, and similarly could build the appropriate MCP tools to expose via a server.
 - [ ] Add an MCP server to the semantic search app.

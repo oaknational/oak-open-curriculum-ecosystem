@@ -107,13 +107,6 @@ const config = defineConfig(
       },
     },
   ),
-  // File-specific relaxation for OpenAI connector handler
-  {
-    files: ['src/openai/connector.ts'],
-    rules: {
-      'max-lines-per-function': ['error', { max: 70, skipComments: true, skipBlankLines: true }],
-    },
-  },
 );
 
 export default config;

@@ -18,33 +18,17 @@ import {
 import { EXPECTED_TOOLS, type SmokeContext } from './types.js';
 import { createAssertionLogger, recordSsePayload } from './logging.js';
 
-export async function assertToolsAndAliases(context: SmokeContext): Promise<void> {
+export async function assertToolCatalogue(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'tools');
-  logger.info('Validating canonical and alias tool catalogues');
-  const canonicalNames = await fetchToolNames(context, '/mcp');
-  logger.debug('Canonical tools/list response captured', { tools: canonicalNames });
-  if (context.mode === 'remote' && canonicalNames.length === 0) {
+  logger.info('Validating tools/list response');
+  const names = await fetchToolNames(context);
+  logger.debug('Canonical tools/list response captured', { tools: names });
+  if (context.mode === 'remote' && names.length === 0) {
     logger.warn('Skipping tool catalogue assertions; remote /mcp tools/list failed');
     return;
   }
   for (const tool of EXPECTED_TOOLS) {
-    assert.ok(canonicalNames.includes(tool), `tools/list should include ${tool}`);
-  }
-
-  const aliasNames = await fetchToolNames(context, '/openai_connector');
-  logger.debug('Alias tools/list response captured', { tools: aliasNames });
-  if (context.mode === 'remote' && aliasNames.length === 0) {
-    logger.warn('Skipping alias catalogue comparison; remote /openai_connector tools/list failed');
-    return;
-  }
-  assert.equal(
-    aliasNames.length,
-    canonicalNames.length,
-    'Alias tools/list should match canonical length',
-  );
-  const canonicalSet = new Set(canonicalNames);
-  for (const name of aliasNames) {
-    assert.ok(canonicalSet.has(name), `Alias tools/list should not introduce ${name}`);
+    assert.ok(names.includes(tool), `tools/list should include ${tool}`);
   }
 }
 
@@ -81,31 +65,28 @@ export async function assertSuccessfulToolCall(context: SmokeContext): Promise<v
   });
 }
 
-async function fetchToolNames(context: SmokeContext, path: string): Promise<readonly string[]> {
+async function fetchToolNames(context: SmokeContext): Promise<readonly string[]> {
   const logger = createAssertionLogger(context, 'tools-fetch');
   const headers = createToolHeaders(context);
   logger.debug('Requesting tools/list', {
     mode: context.mode,
-    path,
     baseUrl: context.baseUrl,
   });
-  const { res, text } = await fetchJson(new URL(path, context.baseUrl), {
+  const { res, text } = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
-    body: JSON.stringify({ jsonrpc: '2.0', id: `list-${path}`, method: 'tools/list' }),
+    body: JSON.stringify({ jsonrpc: '2.0', id: 'list-/mcp', method: 'tools/list' }),
   });
   if (context.mode === 'remote' && res.status !== 200) {
     logger.warn('Remote tools/list request failed', {
-      path,
       status: res.status,
       body: text,
     });
     return [];
   }
-  assert.equal(res.status, 200, `POST ${path} tools/list should return 200`);
-  assert.match(text, /event: message/, `POST ${path} tools/list should be SSE formatted`);
+  assert.equal(res.status, 200, 'POST /mcp tools/list should return 200');
+  assert.match(text, /event: message/, 'POST /mcp tools/list should be SSE formatted');
   logger.debug('Received tools/list SSE payload', {
-    path,
     status: res.status,
     sse: text,
   });

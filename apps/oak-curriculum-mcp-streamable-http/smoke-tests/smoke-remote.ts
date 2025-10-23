@@ -1,8 +1,15 @@
+import { buildRemoteCommand, optionsToSmokeSuite } from './cli/remote-cli.js';
 import { runSmokeSuite } from './smoke-suite.js';
 
-const cliBaseUrl = process.argv[2];
+async function main(): Promise<void> {
+  const program = buildRemoteCommand(async (cliOptions) => {
+    await runSmokeSuite(optionsToSmokeSuite(cliOptions));
+  });
 
-runSmokeSuite({ mode: 'remote', remoteBaseUrl: cliBaseUrl }).catch((err: unknown) => {
+  await program.parseAsync(process.argv);
+}
+
+main().catch((err: unknown) => {
   console.error('Remote smoke failed:', err);
   process.exit(1);
 });

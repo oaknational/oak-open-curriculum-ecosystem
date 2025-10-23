@@ -1,12 +1,8 @@
 import assert from 'node:assert/strict';
 
 import {
-  asOptionalRecord,
-  ensureArray,
-  ensureRecord,
   fetchJson,
   parseFirstSsePayload,
-  extractFirstText,
   type JsonObject,
   type JsonRpcEnvelope,
   type JsonResponse,
@@ -22,54 +18,15 @@ export async function assertValidationFailures(context: SmokeContext): Promise<v
   const invalidArguments = createInvalidArguments();
 
   logger.info('Asserting validation failure for get-key-stages-subject-lessons');
-  const mcpResponse = await postValidationRequest(
-    context,
-    headers,
-    invalidArguments,
-    '/mcp',
-    logger,
-  );
-  if (!mcpResponse) {
+  const response = await postValidationRequest(context, headers, invalidArguments, logger);
+  if (!response) {
     return;
   }
-  const mcpEnvelope = parseValidationEnvelope(mcpResponse, logger, '/mcp');
-  assertCanonicalValidationFailure(mcpEnvelope, logger);
-  await recordSsePayload(context, 'get-key-stages-subject-lessons', mcpEnvelope);
+  const envelope = parseValidationEnvelope(response, logger);
+  assertCanonicalValidationFailure(envelope, logger);
+  await recordSsePayload(context, 'get-key-stages-subject-lessons', envelope);
 
-  const aliasResponse = await postValidationRequest(
-    context,
-    headers,
-    invalidArguments,
-    '/openai_connector',
-    logger,
-  );
-  if (!aliasResponse) {
-    return;
-  }
-  const aliasEnvelope = parseValidationEnvelope(aliasResponse, logger, '/openai_connector');
-  analyseAliasValidation(aliasEnvelope, logger);
-
-  logger.info('Validation assertions completed', {
-    tool: 'get-key-stages-subject-lessons',
-    aliasError: Boolean(aliasEnvelope.error),
-  });
-}
-
-function assertAliasValidationResult(envelope: JsonRpcEnvelope): void {
-  const result = asOptionalRecord(envelope.result);
-  if (!result) {
-    throw new Error('Alias validation failure should include result content');
-  }
-  const contentEntries = ensureArray(result.content ?? [], 'alias validation content array');
-  if (contentEntries.length === 0) {
-    throw new Error('Alias validation failure should include error details');
-  }
-  const message = extractFirstText(contentEntries, 'alias validation content');
-  assert.match(
-    message.toLowerCase(),
-    /error|invalid/,
-    'Validation failure should describe the error',
-  );
+  logger.info('Validation assertions completed', { tool: 'get-key-stages-subject-lessons' });
 }
 
 function createInvalidArguments(): JsonObject {
@@ -88,43 +45,31 @@ async function postValidationRequest(
   context: SmokeContext,
   headers: Record<string, string>,
   body: unknown,
-  path: '/mcp' | '/openai_connector',
   logger: Logger,
 ): Promise<JsonResponse | null> {
-  const response = await fetchJson(new URL(path, context.baseUrl), {
+  const response = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
     body: JSON.stringify(body),
   });
-  logger.debug(`Received validation response from ${path}`, {
+  logger.debug('Received validation response from /mcp', {
     status: response.res.status,
     body: response.text,
   });
   if (context.mode === 'remote' && response.res.status !== 200) {
-    logger.warn(`Remote validation call to ${path} failed`, {
+    logger.warn('Remote validation call to /mcp failed', {
       status: response.res.status,
       body: response.text,
     });
     return null;
   }
-  assert.equal(response.res.status, 200, `Validation failure via ${path} should return 200`);
-  if (path === '/openai_connector') {
-    assert.match(
-      response.text,
-      /event: message/,
-      'Alias validation failure should be SSE formatted',
-    );
-  }
+  assert.equal(response.res.status, 200, 'Validation failure via /mcp should return 200');
   return response;
 }
 
-function parseValidationEnvelope(
-  response: JsonResponse,
-  logger: Logger,
-  path: '/mcp' | '/openai_connector',
-): JsonRpcEnvelope {
+function parseValidationEnvelope(response: JsonResponse, logger: Logger): JsonRpcEnvelope {
   const envelope = parseFirstSsePayload(response.text);
-  logger.debug(`Parsed validation SSE envelope from ${path}`, { envelope });
+  logger.debug('Parsed validation SSE envelope from /mcp', { envelope });
   return envelope;
 }
 
@@ -135,20 +80,4 @@ function assertCanonicalValidationFailure(envelope: JsonRpcEnvelope, logger: Log
     });
   }
   assert.ok(envelope.error, 'Validation failure should produce an error envelope');
-}
-
-function analyseAliasValidation(envelope: JsonRpcEnvelope, logger: Logger): void {
-  if (!envelope.error) {
-    logger.warn('Alias validation returned result instead of error', { envelope });
-    assertAliasValidationResult(envelope);
-    return;
-  }
-
-  const aliasError = ensureRecord(envelope.error, 'alias error');
-  const aliasData = asOptionalRecord(aliasError.data);
-  const aliasContent = aliasData?.content;
-  if (Array.isArray(aliasContent) && aliasContent.length > 0) {
-    const message = extractFirstText(aliasContent, 'alias validation content');
-    assert.match(message, /error/i, 'Validation failure should describe the error');
-  }
 }
