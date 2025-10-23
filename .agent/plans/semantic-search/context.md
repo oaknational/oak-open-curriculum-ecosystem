@@ -1,6 +1,6 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 23 October 2025 11:56 BST_
+_Last updated: 23 October 2025 16:45 BST_
 
 ---
 
@@ -50,10 +50,11 @@ _Last updated: 23 October 2025 11:56 BST_
 
 ## In-Flight Work
 
-- **Stage 6 – Smoke harness & docs**
-  - Capture remaining smoke deltas (live credentials, remote target) and complete the gate sweep once documentation updates settle.
-- **Stage 7 – Cursor dev flow validation**
-  - Automate the SSE initialise/list/call flow against the stubbed dev server.
+- **Phase 7 – Schema Enhancement for Legitimate 404 Responses**
+  - Add decorator to SDK schema generation pipeline for handling legitimate 404 responses
+  - Implement fail-fast mechanism to prevent divergence from upstream schema
+  - Full test coverage and documentation
+  - Track upstream wishlist items for long-term resolution
 
 ---
 
@@ -69,11 +70,12 @@ _Last updated: 23 October 2025 11:56 BST_
 
 2. **Stage 6 – Smoke harness & docs**
    - Align live smoke output with schema-generated expectations (capture live payloads, compare with validators, patch formatter/schema).
-  - ✅ Harden remote smoke logging (precedence summary, status codes, unauthorised behaviour) and update documentation; remote suite now shares live-mode assertions.
-   - Split `smoke-suite.ts` into mode-specific helpers to meet lint guidance.
-   - Refresh README/plan/context with the refactored command matrix, remote precedence and logging behaviour, and stub/live differences.
-   - Rerun lint/tests/smoke suites, recording results and timestamps.
-   - Execute `pnpm make` and `pnpm qg` once refactors settle, noting timings.
+
+- ✅ Harden remote smoke logging (precedence summary, status codes, unauthorised behaviour) and update documentation; remote suite now shares live-mode assertions.
+- Split `smoke-suite.ts` into mode-specific helpers to meet lint guidance.
+- Refresh README/plan/context with the refactored command matrix, remote precedence and logging behaviour, and stub/live differences.
+- Rerun lint/tests/smoke suites, recording results and timestamps.
+- Execute `pnpm make` and `pnpm qg` once refactors settle, noting timings.
 
 3. **Stage 7 – Cursor integration test**
    - Implement automated SSE initialise/list/call flow against stubbed dev server.
@@ -295,3 +297,29 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Aligned remote smoke assertions with local live expectations; preview run passes both commander flag and positional invocations with full Accept/auth/tool validation.
 - Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote -- --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`, `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`.
 - Reflection: Remote and live smoke suites now give identical answers; the preview deployment returns 406 for missing Accept and 401 without auth exactly as the local server does.
+
+23 October 2025 16:45 BST
+
+- Status: Investigated `get-lessons-transcript` validation failure for "making-apple-flapjack-bites" lesson; root cause identified as upstream OpenAPI schema only documenting 200 responses while API legitimately returns 404 for lessons without transcripts. Designed comprehensive solution using schema decorator pattern with fail-fast collision detection.
+- Commands: Manual API testing via `curl`, schema inspection, validation debugging via temporary test scripts (`debug-flapjack-transcript.ts`, `test-actual-api-response.ts`, `debug-transcript-validation.ts`).
+- Investigation findings:
+  - Upstream schema (`api-schema-original.json`) only defines 200 response for `/lessons/{lesson}/transcript`
+  - Actual API returns HTTP 404 with `{ message: "NOT_FOUND", statusCode: 404, error: "Not Found" }` for lessons without videos
+  - SDK validation rejects 404 as invalid because schema doesn't document it
+  - Empty strings for `transcript`/`vtt` would pass validation but API never returns them
+  - Root cause is incomplete upstream OpenAPI documentation, not SDK bug
+- Design decision: Approach 1 (Schema Enhancement)
+  - Add temporary decorator `add404ResponsesWhereExpected` to schema generation pipeline
+  - Configuration-driven with explicit rationale per endpoint
+  - Fail-fast mechanism prevents silent divergence if upstream adds 404 documentation
+  - Maintains Cardinal Rule: all types flow from schema at compile time
+  - No runtime shims or validation bypasses
+- Updated `.agent/plans/upstream-api-metadata-wishlist.md` item #4 to track need for upstream error response documentation
+- Created Phase 7 implementation plan in `snagging-resolution-plan.md` with 6 sub-phases:
+  - 7.1: Design and planning (COMPLETE)
+  - 7.2: Core decorator implementation (configuration, fail-fast validator, decorator logic)
+  - 7.3: Pipeline integration (update `schema-separation-core.ts` to chain decorators)
+  - 7.4: Test coverage (unit tests for decorator, integration tests for 404 handling)
+  - 7.5: Documentation and upstream tracking
+  - 7.6: Final validation and quality gates
+- Reflection: Solution maintains architectural integrity while providing immediate fix for production issue. Fail-fast design ensures temporary enhancement won't become permanent technical debt. Ready for implementation in fresh session with complete plan captured in snagging-resolution-plan.md.
