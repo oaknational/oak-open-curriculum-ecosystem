@@ -9,7 +9,7 @@ function buildImports(): string {
     "import { z } from 'zod';",
     '',
     "import type { ToolDescriptor } from '../../../contract/tool-descriptor.contract.js';",
-    "import { getDescriptorSchemaForEndpoint } from '../../../../response-map.js';",
+    "import { getResponseDescriptorsByOperationId } from '../../../../response-map.js';",
     "import type { OakApiPathBasedClient } from '../../../../../../../client/index.js';",
   ].join('\n');
 }
@@ -27,6 +27,6 @@ export function generateToolFile(
   parts.push(buildImports());
   parts.push(emitHeader(toolName, path, method, operationId));
   parts.push(emitSchema(operation, pathParamMetadata, queryParamMetadata));
-  parts.push(emitIndex(toolName, path, method, operation));
+  parts.push(emitIndex(toolName, path, method, operationId, operation));
   return parts.join('\n');
 }

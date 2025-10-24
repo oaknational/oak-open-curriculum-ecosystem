@@ -6,7 +6,7 @@ function makeOp(params: ParameterObject[]): OperationObject {
   return {
     operationId: 'get-pets-id',
     parameters: params,
-    responses: {},
+    responses: { '200': { description: 'ok' } },
   } as unknown as OperationObject;
 }
 
@@ -46,13 +46,15 @@ describe('emitters', () => {
   it('emits index/executor block exporting tool', () => {
     const op = makeOp([]);
     op.summary = 'Get a pet by id';
-    const out = emitIndex('get-pets-id', '/pets/{id}', 'get', op);
+    const out = emitIndex('get-pets-id', '/pets/{id}', 'get', 'get-pets-id', op);
     expect(out).not.toContain('import type { ToolDescriptor }');
-    expect(out).not.toContain('import { getDescriptorSchemaForEndpoint }');
-    expect(out).toContain('const responseDescriptor = getDescriptorSchemaForEndpoint');
+    expect(out).toContain(
+      'const responseDescriptors = getResponseDescriptorsByOperationId(operationId);',
+    );
+    expect(out).toContain("const documentedStatuses = ['200'] as const;");
     expect(out).toContain('export const getPetsId = {');
     expect(out).toContain('invoke: async (client: OakApiPathBasedClient, args: ToolArgs) => {');
-    expect(out).toContain('toolOutputJsonSchema: responseDescriptor.json');
-    expect(out).toContain('zodOutputSchema: responseDescriptor.zod');
+    expect(out).toContain('toolOutputJsonSchema: primaryResponseDescriptor.json');
+    expect(out).toContain('zodOutputSchema: primaryResponseDescriptor.zod');
   });
 });

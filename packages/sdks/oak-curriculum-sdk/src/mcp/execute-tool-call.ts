@@ -117,7 +117,7 @@ export async function executeToolCall(
 
   const toolName: ToolName = maybeToolName;
   try {
-    const data = await callTool(toolName, client, maybeParams);
+    const data: unknown = await callTool(toolName, client, maybeParams);
     return { data };
   } catch (error) {
     return mapErrorToResult(error, toolName);

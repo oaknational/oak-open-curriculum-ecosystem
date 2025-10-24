@@ -7,7 +7,13 @@ interface RateLimitArgs {
   readonly params: Record<string, never>;
 }
 
-type RateLimitCall = (args: RateLimitArgs) => { readonly data: unknown };
+interface MockResponse {
+  readonly data?: unknown;
+  readonly error?: unknown;
+  readonly response: { readonly status: number };
+}
+
+type RateLimitCall = (args: RateLimitArgs) => MockResponse;
 
 function createRateLimitClient(impl: RateLimitCall): {
   readonly client: OakApiPathBasedClient;
@@ -40,6 +46,7 @@ describe('executeToolCall', () => {
         remaining: 9,
         reset: Date.now(),
       },
+      response: { status: 200 },
     }));
 
     const result = await executeToolCall('get-rate-limit', undefined, client);
@@ -53,7 +60,7 @@ describe('executeToolCall', () => {
     const expected = { limit: 10, remaining: 9, reset: Date.now() };
     const { client, handler } = createRateLimitClient((args) => {
       expect(args).toEqual({ params: {} });
-      return { data: expected };
+      return { data: expected, response: { status: 200 } };
     });
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
@@ -63,13 +70,13 @@ describe('executeToolCall', () => {
   });
 
   it('maps output validation failures to McpToolError with a helpful message', async () => {
-    const { client } = createRateLimitClient(() => ({ data: {} }));
+    const { client } = createRateLimitClient(() => ({ data: {}, response: { status: 200 } }));
 
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
     expect(result.error).toBeInstanceOf(McpToolError);
     expect(result.error?.code).toBe('OUTPUT_VALIDATION_ERROR');
-    expect(result.error?.message).toContain('Invalid response payload');
+    expect(result.error?.message).toContain('Response does not match any documented schema');
   });
 
   it('propagates execution errors with context', async () => {

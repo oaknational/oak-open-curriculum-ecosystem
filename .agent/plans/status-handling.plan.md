@@ -92,6 +92,7 @@
   - `pnpm --filter @oaknational/oak-curriculum-sdk type-check`
   - `pnpm --filter @oaknational/oak-curriculum-sdk lint`
   - Repository-wide gates: `pnpm make`, `pnpm qg`
+- **Status**: ✅ Completed 24 October 2025 23:10 BST — generated invoke logic now branches on documented statuses, fail-fast messaging includes operation identifiers, validation aggregates attempted status issues, tests updated to reflect new executor shape, and type/lint/test suites rerun.
 
 ### Phase 4 – Runtime and Behavioural Proof
 

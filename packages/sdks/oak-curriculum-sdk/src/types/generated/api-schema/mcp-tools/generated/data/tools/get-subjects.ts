@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import type { ToolDescriptor } from '../../../contract/tool-descriptor.contract.js';
-import { getDescriptorSchemaForEndpoint } from '../../../../response-map.js';
+import { getResponseDescriptorsByOperationId } from '../../../../response-map.js';
 import type { OakApiPathBasedClient } from '../../../../../../../client/index.js';
 /**
  * GENERATED FILE - DO NOT EDIT
@@ -26,7 +26,29 @@ export const toolZodSchema = z.object({ params: z.object({}) });
 export type ToolInputSchema = z.infer<typeof toolZodSchema>;
 const toolArgsDescription = 'Invalid request parameters. Please match the following schema:\nSchema: {"type":"object","properties":{"params":{"type":"object","properties":{},"additionalProperties":false}},"required":["params"],"additionalProperties":false}\nRequired: params';
 export const describeToolArgs = () => toolArgsDescription;
-const responseDescriptor = getDescriptorSchemaForEndpoint('get', '/subjects');
+const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
+const documentedStatuses = ['200'] as const;
+const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];
+if (!primaryResponseDescriptor) {
+  throw new TypeError('Missing response descriptor for documented status 200 on getSubjects-getAllSubjects.');
+}
+const resolveDescriptorForStatus = (status: number) => {
+  const directKey = String(status);
+  const direct = responseDescriptors[directKey as keyof typeof responseDescriptors];
+  if (direct) {
+    return direct;
+  }
+  const rangeKey = `${String(Math.trunc(status / 100))}XX` as keyof typeof responseDescriptors;
+  const range = responseDescriptors[rangeKey];
+  if (range) {
+    return range;
+  }
+  return responseDescriptors["default" as keyof typeof responseDescriptors];
+};
+const toStatusDiscriminant = (status: string) => {
+  const numeric = Number(status);
+  return Number.isNaN(numeric) ? status : numeric;
+};
 /**
  * Tool descriptor consumed by MCP_TOOLS.
  *
@@ -45,12 +67,18 @@ export const getSubjects = {
       throw new TypeError('Invalid method on endpoint: GET for /subjects');
     }
     const response = await call(validation.data);
-    return response.data;
+    const status = response.response.status;
+    const descriptorForStatus = resolveDescriptorForStatus(status);
+    if (!descriptorForStatus) {
+      throw new TypeError(`Undocumented response status ${String(status)} for getSubjects-getAllSubjects. Documented statuses: 200`);
+    }
+    const payload = status >= 200 && status < 300 ? response.data : response.error;
+    return payload as z.infer<typeof descriptorForStatus.zod>;
   },
   toolZodSchema,
   toolInputJsonSchema,
-  toolOutputJsonSchema: responseDescriptor.json,
-  zodOutputSchema: responseDescriptor.zod,
+  toolOutputJsonSchema: primaryResponseDescriptor.json,
+  zodOutputSchema: primaryResponseDescriptor.zod,
   describeToolArgs,
   inputSchema: toolInputJsonSchema,
   operationId,
@@ -59,13 +87,22 @@ export const getSubjects = {
   path,
   method,
   validateOutput: (data: unknown) => {
-    const result = responseDescriptor.zod.safeParse(data);
-    if (result.success) {
-      return { ok: true, data: result.data };
+    const attemptedStatuses: { status: number | string; issues: unknown[] }[] = [];
+    for (const statusKey of documentedStatuses) {
+      const descriptor = responseDescriptors[statusKey as keyof typeof responseDescriptors];
+      if (!descriptor) {
+        continue;
+      }
+      const result = descriptor.zod.safeParse(data);
+      if (result.success) {
+        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };
+      }
+      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });
     }
     return {
-      ok: false, message: 'Invalid response payload. Please match the generated output schema.',
-      issues: result.error.issues,
+      ok: false, message: 'Response does not match any documented schema for statuses: 200' ,
+      issues: attemptedStatuses.flatMap((entry) => entry.issues),
+      attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof responseDescriptor.zod>>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>>;
