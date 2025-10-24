@@ -13,6 +13,7 @@ import type {
   PathsObject,
   ResponseObject,
 } from 'openapi3-ts/oas31';
+import { assertResponseStatusSlotAvailable } from './schema-status-guard.js';
 
 type HttpMethod = 'delete' | 'get' | 'head' | 'options' | 'patch' | 'post' | 'put' | 'trace';
 
@@ -51,12 +52,6 @@ export const ENDPOINTS_WITH_LEGITIMATE_404S: readonly Legitimate404Descriptor[] 
   transcript404Descriptor,
 ] as const;
 
-interface CollisionSummary {
-  readonly method: HttpMethod;
-  readonly path: string;
-  readonly upstreamReference: string;
-}
-
 /**
  * Adds temporary 404 response documentation for known endpoints where the API legitimately
  * returns 404 but the upstream schema has not yet been updated. The decorator fails fast if
@@ -67,11 +62,9 @@ export function add404ResponsesWhereExpected(
   schema: OpenAPIObject,
   overrides: readonly Legitimate404Descriptor[] = ENDPOINTS_WITH_LEGITIMATE_404S,
 ): OpenAPIObject {
-  const collisions = collectCollisions(schema, overrides);
-  if (collisions.length > 0) {
-    throw new Error(formatCollisionMessage(collisions));
+  if (!hasPaths(schema)) {
+    throw new Error('OpenAPI schema is missing paths object; cannot decorate responses.');
   }
-
   const decorated = structuredClone(schema);
   if (!hasPaths(decorated)) {
     throw new Error('OpenAPI schema is missing paths object; cannot decorate responses.');
@@ -83,9 +76,26 @@ export function add404ResponsesWhereExpected(
         `Configured legitimate 404 endpoint ${descriptor.method.toUpperCase()} ${descriptor.path} was not found in the schema.`,
       );
     }
+    if (!Object.hasOwn(schema.paths, descriptor.path)) {
+      throw new Error(
+        `Configured legitimate 404 endpoint ${descriptor.method.toUpperCase()} ${descriptor.path} was not found in the schema.`,
+      );
+    }
+
+    const guardContext = {
+      decorator: 'add404ResponsesWhereExpected',
+      method: descriptor.method,
+      path: descriptor.path,
+      statusCode: '404',
+      upstreamReference: descriptor.upstreamReference,
+    };
+
+    const originalOperation = readOperation(schema.paths[descriptor.path], descriptor);
+    assertResponseStatusSlotAvailable(originalOperation, guardContext);
 
     const pathItem = decorated.paths[descriptor.path];
     const operation = readOperation(pathItem, descriptor);
+    assertResponseStatusSlotAvailable(operation, guardContext);
     const responses = operation.responses ?? {};
     const media: MediaTypeObject = {
       schema: {
@@ -130,31 +140,6 @@ export function add404ResponsesWhereExpected(
   return decorated;
 }
 
-function collectCollisions(
-  schema: OpenAPIObject,
-  descriptors: readonly Legitimate404Descriptor[],
-): CollisionSummary[] {
-  if (!hasPaths(schema)) {
-    return [];
-  }
-  const collisions: CollisionSummary[] = [];
-  for (const descriptor of descriptors) {
-    if (!Object.hasOwn(schema.paths, descriptor.path)) {
-      continue;
-    }
-    const pathItem = schema.paths[descriptor.path];
-    const operation = readOperation(pathItem, descriptor);
-    if (operation.responses && Object.hasOwn(operation.responses, '404')) {
-      collisions.push({
-        method: descriptor.method,
-        path: descriptor.path,
-        upstreamReference: descriptor.upstreamReference,
-      });
-    }
-  }
-  return collisions;
-}
-
 function readOperation(
   pathItem: PathItemObject,
   descriptor: Legitimate404Descriptor,
@@ -166,20 +151,6 @@ function readOperation(
     );
   }
   return candidate;
-}
-
-function formatCollisionMessage(collisions: readonly CollisionSummary[]): string {
-  const intro =
-    '🎉 Schema enhancement cleanup required!\n\nThe upstream API schema already documents 404 responses for endpoints configured in add404ResponsesWhereExpected:';
-  const bulletList = collisions
-    .map(
-      (collision) =>
-        `• ${collision.method.toUpperCase()} ${collision.path} (tracked via ${collision.upstreamReference})`,
-    )
-    .join('\n');
-  const guidance =
-    '\n\nPlease remove the matching entries from ENDPOINTS_WITH_LEGITIMATE_404S in schema-enhancement-404.ts and delete the temporary decorator.';
-  return `${intro}\n${bulletList}${guidance}`;
 }
 
 function hasPaths(schema: OpenAPIObject): schema is OpenAPIObject & { paths: PathsObject } {

@@ -11,6 +11,10 @@ import type {
   SchemaObject,
 } from 'openapi3-ts/oas31';
 
+import {
+  add404ResponsesWhereExpected,
+  ENDPOINTS_WITH_LEGITIMATE_404S,
+} from './schema-enhancement-404.js';
 import { createOpenCurriculumSchema } from './schema-separation-core.js';
 import { schemaWithNestedResponses } from './test-fixtures.js';
 
@@ -246,8 +250,22 @@ describe('schema separation', () => {
       };
 
       expect(() => createOpenCurriculumSchema(validatedSchema)).toThrowError(
-        /upstream api schema already documents 404 responses/i,
+        /Cannot add HTTP 404 response via add404ResponsesWhereExpected for GET \/lessons\/\{lesson\}\/transcript/i,
       );
     });
+  });
+});
+
+describe('add404ResponsesWhereExpected', () => {
+  it('fails fast when configuration attempts to add the same status twice', () => {
+    const validatedSchema = buildTranscriptSchema();
+    const duplicateOverrides = [
+      ...ENDPOINTS_WITH_LEGITIMATE_404S,
+      ...ENDPOINTS_WITH_LEGITIMATE_404S,
+    ] as const;
+
+    expect(() => add404ResponsesWhereExpected(validatedSchema, duplicateOverrides)).toThrowError(
+      /Cannot add HTTP 404 response via add404ResponsesWhereExpected/,
+    );
   });
 });

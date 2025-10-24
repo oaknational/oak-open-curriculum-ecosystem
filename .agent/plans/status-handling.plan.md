@@ -65,6 +65,7 @@
   - `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`
   - `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`
   - `pnpm --filter @oaknational/oak-curriculum-sdk lint`
+- **Status**: ✅ Completed 24 October 2025 22:20 BST — shared status guard introduced, decorator updated to use it, duplicate-config tests added, and regeneration/lint suite confirmed green.
 
 ### Phase 3 – Invoke and Validation Generation
 
