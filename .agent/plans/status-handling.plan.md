@@ -32,56 +32,102 @@
 ### Phase 1 – Response Map Status Projection
 
 - **Goal**: Emit `getResponseDescriptorsByOperationId` returning a readonly map of every documented status for an operation.
-- **Actions**:
-  - Extend `build-response-map.ts` template to generate the helper using `RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS`.
-  - Ensure emitted object preserves literal status codes (no `string` keys widened to `number` unions).
-- **Acceptance**: Helper returns every documented status without duplicating schema data; attempting to mutate the map at runtime is impossible (frozen/readonly export).
-- **Validation**: `pnpm --filter @oaknational/oak-curriculum-sdk test -- mcp-tool-generator`
+- **Implementation Tasks**:
+  1. Add failing generator unit tests in `mcp-tool-generator` that assert:
+     - All documented statuses are returned as literal numeric keys.
+     - Returned descriptors are referentially equal to the existing `RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS` entries.
+  2. Extend `build-response-map.ts` to generate `getResponseDescriptorsByOperationId` by reusing the existing descriptor map and freezing the result (e.g. `Object.freeze`) to prevent mutation.
+  3. Regenerate artefacts via `pnpm --filter @oaknational/oak-curriculum-sdk type-gen` and inspect the generated helper for literal status keys and readonly enforcement.
+  4. Update or add exports in `response-map.ts` consumers so later phases can import the helper without circular dependencies.
+- **Acceptance**:
+  - Generated helper lists every documented status without widening to `number`.
+  - Helper export is readonly both at type level (`Readonly<Record<...>>`) and runtime (`Object.freeze` or equivalent).
+  - No duplication of schema data; helper returns references to the existing descriptor objects.
+- **Validation Commands**:
+  - `pnpm --filter @oaknational/oak-curriculum-sdk test -- mcp-tool-generator`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk lint`
+- **Status**: ✅ Completed 24 October 2025 21:55 BST — helper emitted with deterministic literals, new unit coverage added, regenerated artefacts include frozen descriptor map, and lint/test suite confirmed clean.
 
 ### Phase 2 – Schema Decoration Guardrails
 
 - **Goal**: Guarantee the decoration pipeline can append new statuses but never overwrite existing ones.
-- **Actions**:
-  - Update `schema-enhancement-404.ts` and shared decorators to assert that `(operationId, status)` pairs are new before insertion.
-  - Surface a descriptive error if a decorator collides with an existing status, guiding engineers to adjust upstream schema instead.
-- **Acceptance**: Running decorations against an unchanged schema succeeds; duplicating a status throws during type-gen with clear guidance.
-- **Validation**: `pnpm --filter @oaknational/oak-curriculum-sdk type-gen` (expect pass) and targeted decorator unit tests.
+- **Implementation Tasks**:
+  1. Introduce a shared guard utility (e.g. `assertStatusCollisionFree`) that verifies `(operationId, status)` pairs are unique before decoration mutation.
+  2. Add failing unit tests around the decorator pipeline to prove the guard throws with descriptive messaging when a collision occurs.
+  3. Apply the guard to existing decorators, including `schema-enhancement-404.ts`, ensuring legitimate additions still succeed.
+  4. Regenerate schemas to confirm the pipeline remains stable and to capture any necessary fixture updates.
+- **Acceptance**:
+  - Running decorations against the current schema passes without modification.
+  - Unit tests confirm collisions raise actionable errors referencing method, path, and status, nudging engineers toward upstream schema fixes.
+  - No new duplication appears in generated schema outputs.
+- **Validation Commands**:
+  - `pnpm --filter @oaknational/oak-curriculum-sdk test -- schema-separation`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk lint`
 
 ### Phase 3 – Invoke and Validation Generation
 
 - **Goal**: Rewrite generated executors so method + path + status drive payload selection and validation.
-- **Actions**:
-  - Update `emit-index.ts` to:
-    - Read `response.response.status` and select payload from `.data` (2xx) or `.error` (non-2xx).
-    - Throw a fail-fast `TypeError` when the status is undocumented, listing known statuses.
-  - Generate `validateOutput` that iterates every documented schema, returning structured success `{ data, status }` or detailed failure diagnostics.
-  - Emit discriminated union result types keyed by literal status or schema-specific discriminants.
-- **Acceptance**: Generated code contains no runtime `if` branches keyed on inferred unions; all status checks resolve against generated literal tables.
-- **Validation**: `pnpm --filter @oaknational/oak-curriculum-sdk test -- mcp-tool-generator`, followed by `pnpm --filter @oaknational/oak-curriculum-sdk type-check`
+- **Implementation Tasks**:
+  1. Extend generator tests to cover:
+     - Successful handling of multi-status operations (e.g. transcript 200/404).
+     - Single-status operations remaining unchanged.
+     - Undocumented status triggering the fail-fast TypeError with documented statuses listed.
+  2. Update `emit-index.ts` (and any supporting templates) to:
+     - Import the Phase 1 helper and derive a readonly array of documented statuses per tool.
+     - Select payload from `.data` for 2xx responses and `.error` otherwise.
+     - Throw a descriptive TypeError when actual status is absent from the documented set.
+  3. Regenerate `validateOutput` logic to iterate documented schemas and return `{ ok: true, data, status }` on first match, otherwise accumulate structured issues for debugging.
+  4. Emit discriminated union result types (status-tagged or schema-specific discriminant) with no runtime assertions; ensure type aliases for `ToolResultForName` reflect the union.
+  5. Regenerate artefacts and review diffs, confirming no manual narrowing remains in authored runtime code.
+- **Acceptance**:
+  - Generator unit tests pass, covering success, failure, and regression scenarios.
+  - Generated code references only literal status descriptors and contains no ad-hoc branching or assertions.
+  - TypeScript compilation succeeds with new unions, and consumers require no manual casting.
+- **Validation Commands**:
+  - `pnpm --filter @oaknational/oak-curriculum-sdk test -- mcp-tool-generator`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk type-check`
+  - `pnpm --filter @oaknational/oak-curriculum-sdk lint`
+  - Repository-wide gates: `pnpm make`, `pnpm qg`
 
 ### Phase 4 – Runtime and Behavioural Proof
 
 - **Goal**: Demonstrate multi-status support across SDK and MCP surfaces.
-- **Actions**:
-  - Regenerate artefacts with `pnpm --filter @oaknational/oak-curriculum-sdk type-gen`.
-  - Run SDK integration tests ensuring `get-lessons-transcript` handles both 200 and 404.
-  - Execute smoke suites (`smoke:dev:live`, `smoke:remote`) capturing payloads for both statuses.
-  - Add a targeted integration test that simulates an undocumented status and asserts the fail-fast error message.
-- **Acceptance**: Transcript tool succeeds for both documented statuses; undocumented status test fails fast with actionable messaging.
-- **Validation**:
+- **Implementation Tasks**:
+  1. Add integration tests verifying generated executors handle transcript 200/404 responses, plus a test simulating an undocumented status to assert fail-fast behaviour.
+  2. Run full SDK test suite post-generation to cover broader regression surface.
+  3. Execute smoke suites in stub, live, and remote modes capturing payload snapshots for both transcript outcomes.
+  4. Spot-check other high-use tools (e.g. search/fetch) through smoke output to confirm no regressions introduced.
+- **Acceptance**:
+  - Transcript tool succeeds for documented statuses with recorded analysis artefacts.
+  - Undocumented status test fails fast with the generated error message.
+  - Smoke suites and SDK tests remain green, showing no regressions across the MCP surface.
+- **Validation Commands**:
   - `pnpm --filter @oaknational/oak-curriculum-sdk test`
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub`
   - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`
   - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url <preview>`
+  - Repository-wide gates: `pnpm make`, `pnpm qg`
 
 ### Phase 5 – Documentation and Quality Gates
 
 - **Goal**: Capture architectural intent and confirm repository-wide health.
-- **Actions**:
-  - Update generator documentation, schema-first directive annotations, and MCP architecture notes with the method + path + status flow.
-  - Refresh `.agent/plans/semantic-search/context.md` with outcomes and next steps.
-  - Run full gates to guarantee compliance.
-- **Acceptance**: Documentation explicitly diagrams original → decorated → generated flow, including the new collision guard; quality gates all green.
-- **Validation**: `pnpm make`, `pnpm qg`
+- **Implementation Tasks**:
+  1. Update generator documentation, schema-first directive annotations, and MCP architecture notes to describe the method + path + status branching and collision guard.
+  2. Refresh `.agent/plans/semantic-search/context.md` with completed outcomes, residual risks, and verification notes; mark phases complete in this plan.
+  3. Run markdown lint across documentation updates.
+  4. Execute final full quality gates to ensure every workspace remains compliant.
+- **Acceptance**:
+  - Documentation clearly states original → decorated → generated flow and the immutable status handling requirements.
+  - Context log reflects latest state, and plan checkboxes or summaries indicate completion.
+  - `pnpm make` and `pnpm qg` succeed without manual intervention.
+- **Validation Commands**:
+  - `pnpm markdownlint:root`
+  - `pnpm make`
+  - `pnpm qg`
 
 ## Testing Matrix
 

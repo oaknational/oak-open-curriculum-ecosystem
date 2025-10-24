@@ -25,15 +25,16 @@ _Last updated: 24 October 2025 21:15 BST_
 
 ## Active Tasks
 
-1. Emit status descriptor helper and supporting generator tests.
-2. Enforce decoration collision protection for method/path/status tuples.
-3. Generate status-aware invoke logic and multi-schema validation.
-4. Prove behaviour through SDK tests, smoke suites, and fail-fast checks for undocumented statuses.
-5. Refresh documentation and run `pnpm make` / `pnpm qg`.
+- [x] Emit status descriptor helper and supporting generator tests.
+- [ ] Enforce decoration collision protection for method/path/status tuples.
+- [ ] Generate status-aware invoke logic and multi-schema validation.
+- [ ] Prove behaviour through SDK tests, smoke suites, and fail-fast checks for undocumented statuses.
+- [ ] Refresh documentation and run `pnpm make` / `pnpm qg`.
 
 ---
 
 ## Historical Notes
 
+- 24 October 2025 21:55 BST — Phase 1 complete: generated frozen descriptor map keyed by operation/status, added generator unit coverage, regenerated artefacts, and confirmed lint/tests clean.
 - Phase 7 wrapped on 24 October 2025 with schema decorations, smoke harness upgrades, and remote validation all green.
 - Stub/live/REST payload captures remain available under `tmp/smoke-logs/analysis/` for regression analysis during status-handling delivery.

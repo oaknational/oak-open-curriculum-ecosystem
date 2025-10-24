@@ -428,3 +428,176 @@ export function getDescriptorSchemaForEndpoint(method: AllowedMethods, path: Val
   const json = RESPONSE_DESCRIPTOR_JSON[key];
   return { zod, json };
 }
+
+interface ResponseDescriptorRecord { readonly zod: CurriculumSchemaDefinition; readonly json: unknown; }
+
+const RESPONSE_DESCRIPTORS_BY_OPERATION_ID = Object.freeze({
+  'changelog-changelog': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['changelog-changelog:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['changelog-changelog:200'].jsonSchema,
+    }),
+  }),
+  'changelog-latest': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['changelog-latest:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['changelog-latest:200'].jsonSchema,
+    }),
+  }),
+  'getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits:200'].jsonSchema,
+    }),
+  }),
+  'getAssets-getLessonAsset': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getLessonAsset:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getLessonAsset:200'].jsonSchema,
+    }),
+  }),
+  'getAssets-getLessonAssets': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getLessonAssets:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getLessonAssets:200'].jsonSchema,
+    }),
+  }),
+  'getAssets-getSequenceAssets': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getSequenceAssets:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getSequenceAssets:200'].jsonSchema,
+    }),
+  }),
+  'getAssets-getSubjectAssets': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getSubjectAssets:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getAssets-getSubjectAssets:200'].jsonSchema,
+    }),
+  }),
+  'getKeyStages-getKeyStages': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStages-getKeyStages:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStages-getKeyStages:200'].jsonSchema,
+    }),
+  }),
+  'getKeyStageSubjectLessons-getKeyStageSubjectLessons': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStageSubjectLessons-getKeyStageSubjectLessons:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getKeyStageSubjectLessons-getKeyStageSubjectLessons:200'].jsonSchema,
+    }),
+  }),
+  'getLessons-getLesson': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessons-getLesson:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessons-getLesson:200'].jsonSchema,
+    }),
+  }),
+  'getLessons-searchByTextSimilarity': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessons-searchByTextSimilarity:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessons-searchByTextSimilarity:200'].jsonSchema,
+    }),
+  }),
+  'getLessonTranscript-getLessonTranscript': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessonTranscript-getLessonTranscript:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessonTranscript-getLessonTranscript:200'].jsonSchema,
+    }),
+    404: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessonTranscript-getLessonTranscript:404'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getLessonTranscript-getLessonTranscript:404'].jsonSchema,
+    }),
+  }),
+  'getQuestions-getQuestionsForKeyStageAndSubject': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForKeyStageAndSubject:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForKeyStageAndSubject:200'].jsonSchema,
+    }),
+  }),
+  'getQuestions-getQuestionsForLessons': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForLessons:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForLessons:200'].jsonSchema,
+    }),
+  }),
+  'getQuestions-getQuestionsForSequence': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForSequence:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getQuestions-getQuestionsForSequence:200'].jsonSchema,
+    }),
+  }),
+  'getRateLimit-getRateLimit': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getRateLimit-getRateLimit:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getRateLimit-getRateLimit:200'].jsonSchema,
+    }),
+  }),
+  'getSequences-getSequenceUnits': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSequences-getSequenceUnits:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSequences-getSequenceUnits:200'].jsonSchema,
+    }),
+  }),
+  'getSubjects-getAllSubjects': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getAllSubjects:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getAllSubjects:200'].jsonSchema,
+    }),
+  }),
+  'getSubjects-getSubject': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubject:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubject:200'].jsonSchema,
+    }),
+  }),
+  'getSubjects-getSubjectKeyStages': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectKeyStages:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectKeyStages:200'].jsonSchema,
+    }),
+  }),
+  'getSubjects-getSubjectSequence': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectSequence:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectSequence:200'].jsonSchema,
+    }),
+  }),
+  'getSubjects-getSubjectYears': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectYears:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getSubjects-getSubjectYears:200'].jsonSchema,
+    }),
+  }),
+  'getThreads-getAllThreads': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getThreads-getAllThreads:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getThreads-getAllThreads:200'].jsonSchema,
+    }),
+  }),
+  'getThreads-getThreadUnits': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getThreads-getThreadUnits:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getThreads-getThreadUnits:200'].jsonSchema,
+    }),
+  }),
+  'getUnits-getUnit': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getUnits-getUnit:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['getUnits-getUnit:200'].jsonSchema,
+    }),
+  }),
+  'searchTranscripts-searchTranscripts': Object.freeze({
+    200: Object.freeze({
+      zod: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['searchTranscripts-searchTranscripts:200'].schema,
+      json: RESPONSE_SCHEMA_BY_OPERATION_ID_AND_STATUS['searchTranscripts-searchTranscripts:200'].jsonSchema,
+    }),
+  }),
+}) as Readonly<Record<OperationId, Readonly<Record<string, ResponseDescriptorRecord>>>>;
+
+export function getResponseDescriptorsByOperationId(operationId: OperationId): Readonly<Record<string, ResponseDescriptorRecord>> {
+  const record = RESPONSE_DESCRIPTORS_BY_OPERATION_ID[operationId];
+  if (!record) {
+    throw new TypeError('No response descriptors for operationId: ' + String(operationId));
+  }
+  return record;
+}

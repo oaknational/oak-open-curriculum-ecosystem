@@ -1,4 +1,5 @@
 import type { ResponseMapEntry } from './build-response-map.js';
+import { buildResponseDescriptorHelpers } from './build-response-descriptor-helpers.js';
 
 /**
  * Emit the TypeScript source for response schema validators derived from the response map entries.
@@ -143,7 +144,11 @@ export function getDescriptorSchemaForEndpoint(method: AllowedMethods, path: Val
 }
 `;
 
-  return header + responseMapBlock + helperFunctions + descriptorHelpers;
+  const descriptorsByOperationHelpers = buildResponseDescriptorHelpers(entries);
+
+  return (
+    header + responseMapBlock + helperFunctions + descriptorHelpers + descriptorsByOperationHelpers
+  );
 }
 
 function buildSchemaExpression(entry: ResponseMapEntry): string {
