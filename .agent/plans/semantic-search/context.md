@@ -1,6 +1,6 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 24 October 2025 18:20 BST_
+_Last updated: 24 October 2025 20:00 BST_
 
 ---
 
@@ -54,8 +54,12 @@ _Last updated: 24 October 2025 18:20 BST_
 
 ## In-Flight Work
 
-- **Phase 7 – Schema Enhancement for Legitimate 404 Responses**
-  - Decorator, pipeline integration, tests, and documentation now complete; awaiting Phase 7.6 remote smoke and gate reruns before closing the snagging item.
+- **Phase 8 – Generic Multi-Status Response Handler**
+  - Eliminate hardcoded status code assumptions from MCP tool generator
+  - Generate code that handles ANY documented response status automatically
+  - Enable full compliance with Cardinal Rule: schema changes → `pnpm type-gen` → automatic runtime support
+  - Status: Planning complete; ready for TDD implementation
+  - See `.agent/plans/semantic-search/snagging-resolution-plan.md` Phase 8 for detailed design
 
 ---
 
@@ -336,3 +340,32 @@ Reflection: Move on to Stage 5 (supertest suites) and Stage 6 (smoke harness
 - Status: Remote smoke against the Vercel preview is green using the flag-based base URL; positional invocation was verified previously.
 - Commands: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`.
 - Reflection: Health, initialise, tools/list, and tool validation checks all passed remotely. Remaining work is to rerun `pnpm make` and `pnpm qg` for the final Phase 7.6 gate sweep.
+
+2025-10-24 20:00 BST
+
+- Status: Deep investigation into tool generator revealed fundamental limitation: hardcoded 200 status assumptions prevent Phase 7's 404 enhancement from working at runtime. Designed comprehensive generic multi-status response handler as Phase 8.
+- Investigation findings:
+  - `emit-index.ts` (lines 55-56): Generated `invoke` blindly returns `response.data`, ignoring `response.error` and actual HTTP status
+  - `response-map.ts` (line 427): `getDescriptorSchemaForEndpoint` hardcodes lookup to status 200 only
+  - `validateOutput`: Generated validation only tries 200 response schema, fails for any other documented status
+  - openapi-fetch returns `{ data, error, response }` structure where `data` is for 2xx, `error` is for others
+  - Phase 7 successfully adds 404 to schema, but generated runtime code cannot handle it
+- Root cause: Generator makes assumptions about which status codes exist, violating Cardinal Rule that ALL behavior should flow from schema
+- Proposed solution (Phase 8):
+  - Add `getResponseDescriptorsByOperationId` to response-map generation (returns ALL documented statuses)
+  - Update tool generator to emit status-checking logic: verify actual status is documented, return appropriate payload
+  - Generate multi-schema validation: try all documented schemas until one matches
+  - Generate union types for operations with multiple response statuses
+  - Zero hardcoded assumptions—works for ANY status codes (200, 201, 204, 404, 409, 422, etc.)
+- Design rationale:
+  - ✅ Fully schema-driven: upstream adds status → `pnpm type-gen` → automatic support
+  - ✅ Cardinal Rule compliant: no runtime shims, no generator updates per status code
+  - ✅ Type-safe: TypeScript knows result is union of all possible responses
+  - ✅ Fail-fast: undocumented statuses throw with actionable error pointing to schema/API mismatch
+- Alternatives rejected:
+  - Hardcode 404 handling (doesn't scale to other statuses, violates "no assumptions")
+  - Runtime status registry (violates schema-first execution, duplicates type info)
+  - Accept Phase 7 as sufficient (doesn't actually fix the runtime failure)
+- Implementation strategy: TDD across 5 phases (response-map enhancement, tool generator update, contract changes, integration tests, docs)
+- Commands: Code analysis via read_file and codebase_search (read-only investigation)
+- Reflection: Phase 7 was necessary but insufficient—it adds 404 to the schema but runtime code can't use it. Phase 8 completes the solution by making generators fully generic and schema-driven. This ensures ANY future status codes (201, 204, 409, 422) work automatically without generator changes. Plan captured in `.agent/plans/semantic-search/snagging-resolution-plan.md` Phase 8 with complete context for fresh-chat implementation.
