@@ -11,7 +11,7 @@ Every byte of runtime behaviour for MCP tool execution **must** be driven by gen
 1. **Contract** – `ToolDescriptor<TName, TClient, TArgs, TResult>` defines the generic contract without importing generated data.
 2. **Definitions** – `MCP_TOOL_DESCRIPTORS` (or equivalent) is the canonical literal map keyed by tool name. It exports only readonly data and satisfies the `ToolDescriptor` contract for each tool.
 3. **Aliases** – `ToolArgsForName`, `ToolClientForName`, `ToolResultForName`, etc. are derived from the literal descriptor map. They never guess or widen types.
-4. **Runtime** – Generated helper(s) (e.g. `callTool`, `callToolWithValidation`) validate arguments, invoke descriptors, and validate output using nothing but the descriptor literal and the alias types.
+4. **Runtime** – Generated helper(s) (e.g. `callTool`, `callToolWithValidation`) validate arguments, invoke descriptors, and validate output using nothing but the descriptor literal and the alias types. Response handling is keyed by **method + path + status**, so every HTTP status documented in the schema maps to a readonly descriptor generated at type-gen time.
 5. **Facade** – Authored runtime files (e.g. `src/mcp/execute-tool-call.ts`) simply call the generated helpers, adding repository-specific error mapping if necessary.
 
 ## Prohibited Practices

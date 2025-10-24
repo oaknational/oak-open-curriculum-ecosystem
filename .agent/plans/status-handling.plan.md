@@ -113,6 +113,7 @@
   - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`
   - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url <preview>`
   - Repository-wide gates: `pnpm make`, `pnpm qg`
+- **Status**: ✅ Completed 24 October 2025 23:40 BST — executors verified via SDK unit/integration suites, smoke stub/live/remote runs confirm multi-status behaviour against local and preview deployments.
 
 ### Phase 5 – Documentation and Quality Gates
 
@@ -130,6 +131,7 @@
   - `pnpm markdownlint:root`
   - `pnpm make`
   - `pnpm qg`
+- **Status**: ✅ Completed 24 October 2025 23:55 BST — documentation updated (schema-first directive, MCP README, generator guide), plan/context refreshed, and both `pnpm make` and `pnpm qg` ran clean.
 
 ## Testing Matrix
 
