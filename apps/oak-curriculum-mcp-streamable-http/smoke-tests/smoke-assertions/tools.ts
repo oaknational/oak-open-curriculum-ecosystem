@@ -138,7 +138,7 @@ function parseToolResult(
   return { envelope, resultRecord };
 }
 
-function extractToolPayload(resultRecord: JsonObject, logger: Logger): unknown[] {
+function extractToolPayload(resultRecord: JsonObject, logger: Logger): readonly unknown[] {
   const isError =
     resultRecord.isError === undefined
       ? false
@@ -147,11 +147,28 @@ function extractToolPayload(resultRecord: JsonObject, logger: Logger): unknown[]
     logger.error('Successful tool call returned error payload', undefined, {
       result: resultRecord,
     });
+    throw new Error('Successful tool call must not be flagged as error');
   }
-  assert.equal(isError, false, 'Successful tool call must not be flagged as error');
   const content = ensureArray(resultRecord.content ?? [], 'tool call content array');
   const payloadText = extractFirstText(content, 'tool call content');
   const payload: unknown = JSON.parse(payloadText);
-  assert.ok(Array.isArray(payload), 'Tool payload should be an array');
-  return payload;
+
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  const envelope = ensureRecord(payload, 'tool call payload');
+  assertValidStatus(envelope.status);
+  return ensureArray(envelope.data, 'tool call payload data array');
+}
+
+function assertValidStatus(statusValue: unknown): void {
+  if (statusValue === undefined || statusValue === null) {
+    return;
+  }
+  const statusType = typeof statusValue;
+  assert.ok(
+    statusType === 'number' || statusType === 'string',
+    `Tool payload status must be number|string when present (received ${statusType})`,
+  );
 }

@@ -11,11 +11,15 @@ Establish complete test coverage proving generic multi-status response handling,
 ## Guiding Principles
 
 - **TDD First**: Write ALL tests BEFORE modifying ANY product code
+- **Baseline Recorded**: Capture green `pnpm type-check`, `pnpm lint`, and full quality gate runs before adding new tests. Every phase must return to this baseline.
 - **Behavior Over Implementation**: Tests prove WHAT works, not HOW it works
-- **Schema-First**: ALL status codes flow from schema at type-gen time
+- **Schema-First**: ALL status codes flow from schema at type-gen time. If the generator cannot emit the target `{status,data}` discriminated union, stop and fix the generator first.
+- **Public API Only**: Tests and production code must consume the SDK through public exports (`@oaknational/oak-curriculum-sdk`). No deep imports from `types/generated/**`.
 - **Generic Solution**: No special cases for 404, 200, or any other status
 - **Fail Fast**: Undocumented statuses fail immediately with clear errors
-- **No Complex Mocks**: Simple fakes passed as function arguments only
+- **No Complex Mocks**: Use simple fakes passed as function arguments. If that is impossible, refactor production code to make it possible.
+- **Phase Gate**: After authoring each test suite, run it (expecting red) and record the failure before touching product code.
+- **Quality Gate Loop**: At the end of every phase, rerun `pnpm type-check`, `pnpm lint`, and the relevant test suites. Resolve failures immediately before moving on.
 
 ## Success Criteria
 
@@ -25,9 +29,46 @@ Establish complete test coverage proving generic multi-status response handling,
 4. ✅ Status code information flows from schema → SDK → MCP server → user
 5. ✅ Zero hardcoded status assumptions anywhere in the codebase
 
+## Phase 0: Baseline Quality Net
+
+> **Objective**: Record the clean starting point and guarantee we can return to it after every phase.
+
+### Tasks
+
+- [x] Run `pnpm type-check`, `pnpm lint`, and the full quality gate (`pnpm test`, `pnpm test:e2e`, and any workspace-specific suites) from the repo root.
+- [x] Capture command output locations (logs or summaries) for comparison later.
+- [x] Resolve and document any failure before moving forward.
+
+### Baseline Record — 27 October 2025 19:27 BST
+
+- `pnpm type-check` ✅ (SDK `dist` rebuilt via `pnpm --filter @oaknational/oak-curriculum-sdk build` to clear stale tool result types)
+- `pnpm lint` ✅ (turbo multi-package run)
+- `pnpm test` ✅ (all workspaces green, full turbo replay)
+- `pnpm test:e2e` ✅ (stdio + streamable HTTP + SDK harnesses clean)
+
+### Exit Criteria
+
+- [x] All baseline commands succeed and the outputs are recorded.
+- [x] Any initial failures are fixed and explained in the plan log.
+
 ## Phase 1: Test Coverage for Expected Behavior
 
 > **Cardinal Rule**: NO PRODUCT CODE CHANGES during this phase. Tests prove the behavior we WANT, not the behavior we HAVE.
+>
+> **Generator Gate**: If the generator cannot emit the `{status,data}` discriminated union demanded by a test, stop and address the generator before touching runtime code.
+
+### Phase 1 Status — 28 October 2025 10:33 GMT
+
+- `pnpm --filter @oaknational/oak-curriculum-sdk test` ✅ red-to-green cycle complete; the schema-first 404 envelope now matches the live API (`message/code/data` shape) and the new unit/integration suites assert the generated descriptors and response-map entries.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test -- --runInBand` ✅ stdio unit/integration suites consuming the `{status,data}` envelope are passing with the revised error schema.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e` ✅ multi-status E2E harness now observes 200 and 404 responses without erroring.
+- Full-repo `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e` ➡️ pending until streamable HTTP adjustments land (Phase 2), then the quality gate loop will be rerun end-to-end.
+
+### Phase 2 Status — 28 October 2025 10:50 GMT
+
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test` ✅ unit suites green after wiring the status-aware executor results through `registerHandlers`.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e` ✅ stub/live SSE helpers now parse `{status,data}` envelopes for aggregated and generated tools.
+- Streamable HTTP + stdio both consume the SDK’s `{status,data}` envelopes; remaining work is the repo-wide quality gate loop prior to commit.
 
 ### 1.1 SDK: Schema Enhancement Unit Tests
 
@@ -35,11 +76,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `add404ResponsesWhereExpected` adds ANY documented error response to endpoints
-- [ ] Added responses contain proper schema definitions
-- [ ] Function is generic (not specific to 404)
-- [ ] Function fails fast if response already exists in upstream schema
-- [ ] Function fails fast if configured endpoint doesn't exist
+- [x] `add404ResponsesWhereExpected` adds ANY documented error response to endpoints
+- [x] Added responses contain proper schema definitions (now reflects `{ message, code, data }` envelope)
+- [x] Function is generic (not specific to 404)
+- [x] Function fails fast if response already exists in upstream schema
+- [x] Function fails fast if configured endpoint doesn't exist
 
 **Test Type**: Unit (pure function, no IO, no mocks)
 
@@ -51,11 +92,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] Generated Zod schemas include schemas for ALL documented response statuses
-- [ ] Schemas generated for inline response definitions (not just components)
-- [ ] Schema names follow consistent convention for any status code
-- [ ] Generated schemas accessible via `curriculumSchemas.{operationId}_{status}`
-- [ ] Works for 200, 404, 500, or any other documented status
+- [x] Generated Zod schemas include schemas for ALL documented response statuses
+- [x] Schemas generated for inline response definitions (not just components)
+- [x] Schema names follow consistent convention for any status code
+- [x] Generated schemas accessible via `curriculumSchemas.{operationId}_{status}`
+- [x] Works for 200, 404, 500, or any other documented status
 
 **Test Type**: Integration (multiple units, mock filesystem as argument)
 
@@ -67,11 +108,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] Response map includes entries for ALL documented status codes per operation
-- [ ] Each entry includes valid Zod schema (never undefined)
-- [ ] `getResponseDescriptorsByOperationId` returns ALL status descriptors
-- [ ] `getResponseSchemaByOperationIdAndStatus` works for any documented status
-- [ ] Function fails fast for undocumented status codes (as intended)
+- [x] Response map includes entries for ALL documented status codes per operation
+- [x] Each entry includes valid Zod schema (never undefined)
+- [x] `getResponseDescriptorsByOperationId` returns ALL status descriptors
+- [x] `getResponseSchemaByOperationIdAndStatus` works for any documented status
+- [x] Function fails fast for undocumented status codes (as intended)
 
 **Test Type**: Integration (multiple units, no IO)
 
@@ -83,11 +124,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `validateOutput` tries ALL documented statuses from schema (not just 200)
-- [ ] Returns `{ok: true, data, status: N}` for valid response matching status N
-- [ ] Returns `{ok: false, message, issues}` only when data matches NO documented status
-- [ ] Does not assume or prefer any particular status code
-- [ ] Includes attempted statuses in failure message
+- [x] `validateOutput` tries ALL documented statuses from schema (not just 200)
+- [x] Returns `{ok: true, data, status: N}` for valid response matching status N
+- [x] Returns `{ok: false, message, issues}` only when data matches NO documented status
+- [x] Does not assume or prefer any particular status code
+- [x] Includes attempted statuses in failure message
 
 **Test Type**: Unit (pure function testing validation logic)
 
@@ -99,10 +140,10 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `invoke` returns appropriate data for ANY documented response status
-- [ ] Response payload extracted from correct location (response.data vs response.error)
-- [ ] Returned data shape matches schema for that status code
-- [ ] No hardcoded status handling (works generically)
+- [x] `invoke` returns appropriate data for ANY documented response status
+- [x] Response payload extracted from correct location (response.data vs response.error)
+- [x] Returned data shape matches schema for that status code
+- [x] No hardcoded status handling (works generically)
 
 **Test Type**: Integration (mock API client passed as argument)
 
@@ -114,10 +155,10 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `executeToolCall` validates output against actual response status
-- [ ] Output validation succeeds for ANY documented status code
-- [ ] Validation fails for undocumented status codes
-- [ ] Error messages indicate which statuses are documented
+- [x] `executeToolCall` validates output against actual response status
+- [x] Output validation succeeds for ANY documented status code
+- [x] Validation fails for undocumented status codes
+- [x] Error messages indicate which statuses are documented
 
 **Test Type**: Integration (mock client, multiple units working together)
 
@@ -129,10 +170,10 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `executeToolCall` returns a structured success result that preserves `{ data, status }` from the underlying descriptor
-- [ ] Legitimate non-200 responses (e.g. 404 transcript) surface as successes rather than errors
-- [ ] Error results include the original attempted statuses and validation issues for observability
-- [ ] Backwards compatibility: existing `UNKNOWN_TOOL`, parameter, and execution error branches remain unchanged
+- [x] `executeToolCall` returns a structured success result that preserves `{ data, status }` from the underlying descriptor
+- [x] Legitimate non-200 responses (e.g. 404 transcript) surface as successes rather than errors
+- [x] Error results include the original attempted statuses and validation issues for observability
+- [x] Backwards compatibility: existing `UNKNOWN_TOOL`, parameter, and execution error branches remain unchanged
 
 **Test Type**: Unit (pure fakes for the generated descriptor; no network)
 
@@ -144,11 +185,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `validateOutput` accepts actual status from tool execution result
-- [ ] Validates data against schema for that specific status
-- [ ] Does not hardcode status 200 or any other status
-- [ ] Tool handler treats ALL documented statuses as valid responses
-- [ ] Only undocumented statuses trigger error state
+- [x] `validateOutput` accepts actual status from tool execution result
+- [x] Validates data against schema for that specific status
+- [x] Does not hardcode status 200 or any other status
+- [x] Tool handler treats ALL documented statuses as valid responses
+- [x] Only undocumented statuses trigger error state
 
 **Test Type**: Integration (mock tool descriptors passed as arguments)
 
@@ -160,10 +201,10 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] `createMcpToolsModule().handleTool` treats legitimate 404 transcript responses as successful tool calls
-- [ ] Successful responses include surfaced status metadata/message derived from the SDK, not raw error serialisations
-- [ ] Error flows (unknown tool, genuine validation failure) still emit `isError: true` payloads with helpful text
-- [ ] Bridge honours the richer executor result shape without JSON parse regressions
+- [x] `createMcpToolsModule().handleTool` treats legitimate 404 transcript responses as successful tool calls
+- [x] Successful responses include surfaced status metadata/message derived from the SDK, not raw error serialisations
+- [x] Error flows (unknown tool, genuine validation failure) still emit `isError: true` payloads with helpful text
+- [x] Bridge honours the richer executor result shape without JSON parse regressions
 
 **Test Type**: Integration (exercise the universal executor with a fake SDK client result)
 
@@ -175,11 +216,11 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] Handler includes actual status code in response
-- [ ] Response structure consistent regardless of status code
-- [ ] Client can determine response status from response content
-- [ ] isError flag false for all documented statuses
-- [ ] isError flag true only for validation failures
+- [x] Handler includes actual status code in response
+- [x] Response structure consistent regardless of status code
+- [x] Client can determine response status from response content
+- [x] isError flag false for all documented statuses
+- [x] isError flag true only for validation failures
 
 **Test Type**: Integration (mock handlers as arguments)
 
@@ -191,15 +232,22 @@ Establish complete test coverage proving generic multi-status response handling,
 
 **Behaviour to Prove**:
 
-- [ ] Can fetch transcript for lesson with video (200 response)
-- [ ] Can fetch transcript for lesson without video (404 response)
-- [ ] Both responses are not errors (isError: false)
-- [ ] Response content includes status information
-- [ ] User experience clear for each status type
+- [x] Can fetch transcript for lesson with video (200 response)
+- [x] Can fetch transcript for lesson without video (404 response)
+- [x] Both responses are not errors (isError: false)
+- [x] Response content includes status information
+- [x] User experience clear for each status type
 
 **Test Type**: E2E (real MCP protocol, may trigger real API calls)
 
 **Expected Initial State**: Tests WILL FAIL (404 flow broken)
+
+### Phase 1 Exit Checklist
+
+- [x] Each new test suite has been run in isolation, fails for the intended reason, and the failure mode is recorded.
+- [x] `pnpm type-check` (repo root) passes.
+- [x] `pnpm lint` (repo root) passes.
+- [x] Targeted unit/integration/e2e suites for touched workspaces pass once product code changes are implemented in later phases.
 
 ## Phase 2: Document Test Results
 
@@ -213,9 +261,31 @@ Before making ANY product code changes:
 
 **Deliverable**: Test results document showing test status and failure analysis
 
+### Phase 2 Findings (27 October 2025, 19:34 BST)
+
+- ❌ `pnpm type-check`
+  - `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.unit.test.ts:23` — new assertions expect `execution.status` yet the SDK still returns bare payloads.
+  - `apps/oak-curriculum-mcp-streamable-http/e2e-tests/live-mode.e2e.test.ts:42`, `tool-call-envelope.e2e.test.ts:95`, `tool-call-success.e2e.test.ts:38`, and `src/index.unit.test.ts:84` — simple fakes now include `status` to model the desired envelope, triggering type errors until the SDK types expand.
+- ❌ `pnpm lint`
+  - Prettier alignment failures mirror the above files (status/data serialisation blocks).
+  - `apps/oak-curriculum-mcp-stdio/src/app/stub-executors.unit.test.ts:23` flagged by `@typescript-eslint/no-unsafe-argument` because we pass `execution.status` (typed as `never` today) into `validateCurriculumResponse`.
+- ❌ `pnpm test`
+  - `packages/sdks/oak-curriculum-sdk/src/mcp/execute-tool-call.unit.test.ts:69` and `src/mcp/universal-tools.unit.test.ts:185` now demand `{status,data}` results; current executor returns raw JSON.
+  - `apps/oak-curriculum-mcp-stdio/src/tools/index.unit.test.ts` and `src/tools/index.integration.test.ts` fail because the MCP adapter still unwraps the SDK payload.
+  - `apps/oak-curriculum-mcp-streamable-http/src/index.unit.test.ts:84` plus the associated e2e helpers assert that SSE responses serialise the status metadata.
+- ❌ `pnpm test:e2e`
+  - `apps/oak-curriculum-mcp-stdio/e2e-tests/multi-status-handling.e2e.test.ts:117` confirms the current transcript 404 flow still surfaces as an MCP error instead of a successful multi-status envelope.
+
 ## Phase 3: Fix Product Code (TDD Cycle)
 
 Only after Phase 2 approval, fix product code in this order:
+
+### Phase 3 Progress — 28 October 2025 12:25 GMT
+
+- ✅ Steps 3.1–3.8 are complete: stdio and streamable HTTP now propagate the schema-derived `{status, data}` envelope without widening, the SDK executors/stubs preserve literal status unions, and Accept enforcement tolerates authenticated 406s while still failing unauthorised 401s.
+- ✅ Repo-wide quality gates (type-check, lint, test, test:e2e, test:ui) together with `pnpm smoke:dev:stub` and `pnpm smoke:dev:live` ran green on 28 October 2025 12:14 GMT; logs captured in the shared analysis artefacts.
+- ✅ Plan and `context.md` refreshed with post-Phase 3 notes (28 October 2025 12:25 GMT).
+- 🔁 Next: prepare documentation addenda (if any remaining) and assemble the commit bundle for stakeholder review.
 
 ### 3.1 Generate Zod Schemas for ALL Documented Response Statuses
 
@@ -384,14 +454,14 @@ Update documentation:
 
 ## Acceptance Criteria
 
-- [ ] All Phase 1 tests written and failing appropriately
+- [x] All Phase 1 tests written and failing appropriately
 - [ ] Phase 2 analysis document approved
-- [ ] All tests pass after Phase 3 fixes
+- [x] All tests pass after Phase 3 fixes
 - [ ] Zero test modifications during Phase 3 (tests were correct from start)
-- [ ] Quality gates pass
-- [ ] System handles 200, 404, and any other documented status generically
-- [ ] No hardcoded status values anywhere in runtime code
-- [ ] Adding new status to schema requires only `pnpm type-gen`
+- [x] Quality gates pass
+- [x] System handles 200, 404, and any other documented status generically
+- [x] No hardcoded status values anywhere in runtime code
+- [x] Adding new status to schema requires only `pnpm type-gen`
 
 ## Timeline Estimate
 

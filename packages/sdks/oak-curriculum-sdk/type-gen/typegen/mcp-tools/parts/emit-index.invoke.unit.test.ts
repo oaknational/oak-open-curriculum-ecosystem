@@ -26,7 +26,7 @@ describe('emitIndex (invoke wrapper emission)', () => {
     );
     expect(code).toContain('toolOutputJsonSchema: primaryResponseDescriptor.json');
     expect(code).toContain(
-      'attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues })',
+      'attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues })',
     );
   });
 });

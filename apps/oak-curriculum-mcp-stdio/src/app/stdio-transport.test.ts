@@ -93,9 +93,15 @@ describe('Stdio transport with stub executors', () => {
       throw new Error('tools/call success response missing structured content');
     }
     expect(successResult.isError).not.toBe(true);
-    const payload = JSON.parse(extractFirstTextContent(successResult)) as unknown;
-    expect(Array.isArray(payload)).toBe(true);
-    const title = (payload as { title?: string }[])[0]?.title;
+    const payload = JSON.parse(extractFirstTextContent(successResult)) as {
+      readonly status: number | string;
+      readonly data: unknown;
+    };
+    expect(payload.status).toBe(200);
+    if (!Array.isArray(payload.data)) {
+      throw new Error('Stubbed response missing curriculum data array');
+    }
+    const title = (payload.data as { title?: string }[])[0]?.title;
     if (typeof title !== 'string') {
       throw new Error('Stubbed response missing lesson title');
     }

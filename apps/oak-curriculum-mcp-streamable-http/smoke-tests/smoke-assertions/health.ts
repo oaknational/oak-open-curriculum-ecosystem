@@ -57,22 +57,34 @@ export async function assertHealthEndpoints(context: SmokeContext): Promise<void
 
 export async function assertAcceptHeaderEnforcement(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'accept');
-  const headers = {
+  const headers: Record<string, string> = {
     ...createAuthHeaders(context),
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
+  if (!headers.Authorization && process.env.REMOTE_MCP_DEV_TOKEN) {
+    headers.Authorization = `Bearer ${process.env.REMOTE_MCP_DEV_TOKEN}`;
+  }
+  logger.info('Sending Accept enforcement request', {
+    devTokenPresent: Boolean(context.devToken),
+    envDevTokenPresent: Boolean(process.env.REMOTE_MCP_DEV_TOKEN),
+    headers,
+  });
 
   const mcpResponse = await fetchJson(new URL('/mcp', context.baseUrl), {
     method: 'POST',
     headers,
     body: JSON.stringify({ jsonrpc: '2.0', id: 'accept-1', method: 'tools/list' }),
   });
-  const expectedAcceptStatus = 406;
+  const expectedAcceptStatus = headers.Authorization ? 406 : 401;
   evaluateAcceptEnforcement(context, mcpResponse, expectedAcceptStatus, logger);
-  logAssertionSuccess(logger, 'POST /mcp without streaming Accept header rejected with 406', {
-    status: mcpResponse.res.status,
-  });
+  logAssertionSuccess(
+    logger,
+    `POST /mcp without streaming Accept header rejected with ${String(expectedAcceptStatus)}`,
+    {
+      status: mcpResponse.res.status,
+    },
+  );
 }
 
 function evaluateAcceptEnforcement(

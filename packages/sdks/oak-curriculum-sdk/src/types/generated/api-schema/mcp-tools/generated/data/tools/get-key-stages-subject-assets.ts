@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { ToolDescriptor } from '../../../contract/tool-descriptor.contract.js';
+import type { StatusDiscriminant, ToolDescriptor } from '../../../contract/tool-descriptor.contract.js';
 import { getResponseDescriptorsByOperationId } from '../../../../response-map.js';
 import type { OakApiPathBasedClient } from '../../../../../../../client/index.js';
 /**
@@ -49,6 +49,8 @@ const toolArgsDescription = 'Invalid request parameters. Please match the follow
 export const describeToolArgs = () => toolArgsDescription;
 const responseDescriptors = getResponseDescriptorsByOperationId(operationId);
 const documentedStatuses = ['200'] as const;
+type DocumentedStatus = typeof documentedStatuses[number];
+type DocumentedStatusDiscriminant = StatusDiscriminant<DocumentedStatus>;
 const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];
 if (!primaryResponseDescriptor) {
   throw new TypeError('Missing response descriptor for documented status 200 on getAssets-getSubjectAssets.');
@@ -107,8 +109,9 @@ export const getKeyStagesSubjectAssets = {
   description: "This tool returns signed download URLs and types for available assets for a given key stage and subject, grouped by lesson. You can also optionally filter by type and unit.",
   path,
   method,
+  documentedStatuses,
   validateOutput: (data: unknown) => {
-    const attemptedStatuses: { status: number | string; issues: unknown[] }[] = [];
+    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];
     for (const statusKey of documentedStatuses) {
       const descriptor = responseDescriptors[statusKey as keyof typeof responseDescriptors];
       if (!descriptor) {
@@ -116,9 +119,9 @@ export const getKeyStagesSubjectAssets = {
       }
       const result = descriptor.zod.safeParse(data);
       if (result.success) {
-        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };
+        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant };
       }
-      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });
+      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues });
     }
     return {
       ok: false, message: 'Response does not match any documented schema for statuses: 200' ,
@@ -126,4 +129,4 @@ export const getKeyStagesSubjectAssets = {
       attemptedStatuses,
     };
   },
-} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>>;
+} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;

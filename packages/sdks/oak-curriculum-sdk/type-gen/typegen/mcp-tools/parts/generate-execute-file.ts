@@ -41,10 +41,10 @@ export function generateExecuteFile(toolNames: string[]): string {
         '      const validation = descriptor.validateOutput(output);',
         '      if (!validation.ok) {',
         "        throw new TypeError('Output validation error: ' + validation.message, {",
-        '          cause: { raw: output, issues: validation.issues },',
+        '          cause: { raw: output, issues: validation.issues, attemptedStatuses: validation.attemptedStatuses },',
         '        });',
         '      }',
-        '      return validation.data;',
+        `      return { status: validation.status, data: validation.data } as unknown as ToolResultForName<TName>;`,
         '    }',
       ].join('\n'),
     )

@@ -12,67 +12,12 @@ import {
   zodRawShapeFromToolInputJsonSchema,
   executeToolCall,
   createOakPathBasedClient,
-  isValidPath,
-  validateCurriculumResponse,
-  isValidationFailure,
-  isAllowedMethod,
-  type ValidationIssue,
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig, Logger } from './wiring.js';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
-
-/**
- * Outcome of validating a tool response payload.
- */
-export type OutputValidationResult =
-  | { readonly ok: true }
-  | { readonly ok: false; readonly message: string };
-
-/**
- * Extracts the raw payload for downstream validation.
- */
-export function pickPayloadForValidation(data: unknown): unknown {
-  return data;
-}
-
-/**
- * Formats the first validation failure into a concise error description for logging.
- */
-function formatValidationFailure(details: { readonly issues: readonly ValidationIssue[] }): string {
-  if (details.issues.length === 0) {
-    return 'Output validation failed';
-  }
-  const [firstIssue] = details.issues;
-  const detail = firstIssue.details;
-  const expected = detail?.expected ?? 'unknown';
-  const received = detail?.received ?? 'unknown';
-  return `${firstIssue.message ?? 'Output validation failed'} (expected ${expected}, received ${received})`;
-}
-
-export function validateOutput(
-  path: string,
-  maybeHttpMethod: string,
-  data: unknown,
-): OutputValidationResult {
-  if (!isValidPath(path)) {
-    return { ok: false, message: 'Invalid path: ' + path };
-  }
-  const httpMethod = maybeHttpMethod.toLowerCase();
-  if (!isAllowedMethod(httpMethod)) {
-    return { ok: false, message: 'Unsupported method: ' + httpMethod };
-  }
-  const payload = pickPayloadForValidation(data);
-  const validationResult = validateCurriculumResponse(path, httpMethod, 200, payload);
-  if (isValidationFailure(validationResult)) {
-    return {
-      ok: false,
-      message: formatValidationFailure(validationResult),
-    };
-  }
-  return { ok: true };
-}
+import { validateOutput } from './validation.js';
 
 /**
  * Setup shutdown handler
@@ -196,11 +141,11 @@ function registerMcpTools(
         if (execResult.error) {
           return handlers.handleExecutionError(params, execResult.error);
         }
-        const out = validateOutput(descriptor.path, descriptor.method, execResult.data);
-        if (!out.ok) {
-          return handlers.handleValidationError(params, execResult.data, out.message);
+        const validation = validateOutput(descriptor, execResult);
+        if (!validation.ok) {
+          return handlers.handleValidationError(params, execResult, validation.message);
         }
-        return handlers.handleSuccess(execResult.data);
+        return handlers.handleSuccess(execResult);
       },
     );
   }

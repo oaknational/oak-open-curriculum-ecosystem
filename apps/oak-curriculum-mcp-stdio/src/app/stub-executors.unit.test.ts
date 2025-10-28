@@ -1,34 +1,37 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, beforeEach, afterEach } from 'vitest';
 import { resolveToolExecutors } from './stub-executors.js';
 import {
   validateCurriculumResponse,
   isValidationFailure,
   type ToolName,
+  type paths,
+  type ToolExecutionResult,
 } from '@oaknational/oak-curriculum-sdk';
 
-function extractPayload(result: unknown): unknown {
-  if (typeof result !== 'object' || result === null) {
-    return result;
-  }
-  if ('data' in result && result.data !== undefined) {
-    return extractPayload(result.data);
-  }
-  return result;
-}
+type ValidPath = keyof paths;
 
 async function expectSchemaCompliantExecution(
   toolName: ToolName,
   args: unknown,
-  request: { path: string; method: 'get' },
+  request: { path: ValidPath; method: 'get' },
 ): Promise<void> {
   const executors = resolveToolExecutors();
   if (!executors.executeMcpTool) {
     throw new Error('executeMcpTool is not defined');
   }
   const execution = await executors.executeMcpTool(toolName, args);
-  expect(execution.error).toBeUndefined();
-  const payload = extractPayload(execution.data);
-  const validation = validateCurriculumResponse(request.path, request.method, 200, payload);
+  if ('error' in execution && execution.error) {
+    throw new Error(`Stub execution for ${toolName} failed: ${execution.error.message}`);
+  }
+  assertSuccessfulExecution(execution);
+  const { status, data: payload } = execution as {
+    status: number | string;
+    data: unknown;
+  };
+  if (typeof status !== 'number') {
+    throw new Error(`Stub execution for ${toolName} produced a non-numeric status: ${status}`);
+  }
+  const validation = validateCurriculumResponse(request.path, request.method, status, payload);
   if (isValidationFailure(validation)) {
     throw new Error(
       `Stub execution for ${toolName} failed schema validation: ${validation.firstMessage ?? 'unknown test error'}`,
@@ -89,3 +92,13 @@ describe('resolveToolExecutors', () => {
     );
   });
 });
+
+type SuccessfulExecution = Extract<ToolExecutionResult, { status: number | string; data: unknown }>;
+
+function assertSuccessfulExecution(
+  execution: ToolExecutionResult,
+): asserts execution is SuccessfulExecution {
+  if (!('status' in execution) || !('data' in execution)) {
+    throw new Error('Execution did not return a successful payload');
+  }
+}

@@ -81,7 +81,10 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     const descriptor = getToolFromToolName(preferred);
     expect(descriptor.name).toBe(preferred);
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
-    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({ data: { ok: true } });
+    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({
+      status: 200,
+      data: { ok: true },
+    });
 
     const res = await request(app)
       .post('/mcp')

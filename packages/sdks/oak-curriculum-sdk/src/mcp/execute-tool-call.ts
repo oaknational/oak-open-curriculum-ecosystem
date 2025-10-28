@@ -14,6 +14,7 @@
 
 import type { OakApiPathBasedClient } from '../client/index.js';
 import { isToolName, type ToolName } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { ToolResultForName } from '../types/generated/api-schema/mcp-tools/generated/aliases/types.js';
 import { callTool } from '../types/generated/api-schema/mcp-tools/generated/runtime/execute.js';
 
 /**
@@ -59,9 +60,17 @@ export class McpParameterError extends Error {
  * @remarks Specialise the `data` shape per tool (e.g. `ToolExecutionResult<ToolName>`) by
  * threading the OpenAPI-derived response types through the executor layer along with Zod validators.
  */
+export type ToolExecutionSuccess<TName extends ToolName = ToolName> = ToolResultForName<TName> & {
+  readonly error?: never;
+};
+
 export type ToolExecutionResult =
-  | { readonly data: unknown; readonly error?: never }
-  | { readonly data?: never; readonly error: McpToolError | McpParameterError };
+  | ToolExecutionSuccess
+  | {
+      readonly status?: never;
+      readonly data?: never;
+      readonly error: McpToolError | McpParameterError;
+    };
 
 /**
  * Ultra-thin executor - just validation and delegation to embedded executor
@@ -117,8 +126,8 @@ export async function executeToolCall(
 
   const toolName: ToolName = maybeToolName;
   try {
-    const data: unknown = await callTool(toolName, client, maybeParams);
-    return { data };
+    const result = await callTool(toolName, client, maybeParams);
+    return result;
   } catch (error) {
     return mapErrorToResult(error, toolName);
   }

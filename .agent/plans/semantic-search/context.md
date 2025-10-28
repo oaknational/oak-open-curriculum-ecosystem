@@ -1,15 +1,17 @@
 # Semantic Search Recovery – Context Log
 
-_Last updated: 24 October 2025 21:15 BST_
+_Last updated: 28 October 2025 12:25 GMT_
 
 ---
 
 ## Current Snapshot
 
 - **Snagging plan** – `snagging-resolution-plan.md` is now closed; remaining multi-status work is tracked in `../status-handling.plan.md`.
-- **Schema decorations** – `schema-enhancement-404.ts` continues to inject documented transcript 404 payloads whilst leaving the original schema untouched.
-- **Generator readiness** – `mcp-tool-generator` and schema separation suites are green and positioned to drive the new status-handling TDD effort.
-- **Runtime surface** – `/mcp` remains the sole HTTP endpoint; smoke harnesses (stub/live/remote) are healthy and ready to verify multi-status behaviour.
+- **Schema decorations** – `schema-enhancement-404.ts` mirrors the live 404 envelope (`message`, `code`, nested `data`) while leaving the upstream schema untouched.
+- **Generator readiness** – `mcp-tool-generator`, response-map, and schema separation suites are green; regenerated artefacts expose `{status, data}` unions for every documented response.
+- **Runtime surface** – `/mcp` stdio server publishes status-aware envelopes end-to-end; streamable HTTP serialises the same `{status,data}` envelope and the Accept guard now distinguishes missing auth (401) from missing event-stream (406) as per smoke findings.
+- **Quality gates** – Repo-wide `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`, `pnpm test:ui`, and both `pnpm smoke:dev:stub`/`pnpm smoke:dev:live` completed successfully on 28 October 2025 12:14 GMT.
+- **Next focus** – Assemble the commit package and any remaining documentation addenda for review.
 - **Remote verification** – Preview URL `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp` stays green via the commander-based smoke runner.
 
 ---
@@ -29,7 +31,7 @@ _Last updated: 24 October 2025 21:15 BST_
 - [x] Enforce decoration collision protection for method/path/status tuples.
 - [x] Generate status-aware invoke logic and multi-schema validation.
 - [x] Prove behaviour through SDK tests, smoke suites, and fail-fast checks for undocumented statuses.
-- [ ] Refresh documentation and run `pnpm make` / `pnpm qg`.
+- [ ] Refresh documentation and prepare the release bundle (`pnpm make`/`pnpm qg` if required by reviewers).
 
 ---
 
@@ -39,3 +41,8 @@ _Last updated: 24 October 2025 21:15 BST_
 - 24 October 2025 21:55 BST — Phase 1 complete: generated frozen descriptor map keyed by operation/status, added generator unit coverage, regenerated artefacts, and confirmed lint/tests clean.
 - Phase 7 wrapped on 24 October 2025 with schema decorations, smoke harness upgrades, and remote validation all green.
 - Stub/live/REST payload captures remain available under `tmp/smoke-logs/analysis/` for regression analysis during status-handling delivery.
+- 28 October 2025 10:50 GMT — Streamable HTTP handlers/tests emit status-aware envelopes; stdio + streamable apps and SDK suites green. Full repo quality gates remain to be rerun.
+- 28 October 2025 10:33 GMT — SDK + stdio status-aware pipeline green (unit/integration/e2e); streamable HTTP adaptation + repo-wide quality gate reruns pending.
+- 27 October 2025 19:34 BST — Phase 0 baseline re-established; Phase 1 multi-status regression tests applied (SDK/stdio/streamable HTTP) and red as expected pending runtime implementation.
+- 27 October 2025 19:10 GMT — Generator/runtime tightened to preserve literal status unions, `pnpm type-gen`, `pnpm type-check`, and `pnpm lint` rerun successfully; stdio server integration tests remain red awaiting status-aware response handling (plan steps 3.6–3.8).
+- 28 October 2025 12:25 GMT — Plan/context refreshed post-Phase 3; commit packaging is the final outstanding task.

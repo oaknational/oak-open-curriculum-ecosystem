@@ -176,10 +176,18 @@ describe('validateCurriculumResponse', () => {
       }).toThrow();
     });
 
-    it('should throw for unsupported status code (fail-fast)', () => {
-      expect(() =>
-        validateCurriculumResponse('/lessons/{lesson}/transcript', 'get', 404, {}),
-      ).toThrow();
+    it('should surface validation errors for documented non-200 statuses', () => {
+      const result = validateCurriculumResponse('/lessons/{lesson}/transcript', 'get', 404, {});
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        const issuePaths = result.issues.map((issue) => issue.path.join('.'));
+        expect(issuePaths).toContain('message');
+        expect(issuePaths).toContain('code');
+        expect(issuePaths).toContain('data');
+      } else {
+        throw new Error('Expected validation to fail for incomplete 404 payload');
+      }
     });
   });
 });

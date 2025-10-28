@@ -12,6 +12,7 @@ import {
   formatData,
   formatError,
   formatUnknownTool,
+  extractExecutionData,
   toErrorMessage,
   type UniversalToolExecutorDependencies,
 } from './universal-tool-shared.js';
@@ -48,10 +49,11 @@ function isAggregatedToolName(value: unknown): value is AggregatedToolName {
 }
 
 function mapExecutionResult(result: ToolExecutionResult): CallToolResult {
-  if ('error' in result && result.error) {
-    return formatError(toErrorMessage(result.error));
+  const outcome = extractExecutionData(result);
+  if (!outcome.ok) {
+    return formatError(toErrorMessage(outcome.error));
   }
-  return formatData(result.data);
+  return formatData({ status: outcome.status, data: outcome.data });
 }
 
 export function listUniversalTools(): UniversalToolListEntry[] {

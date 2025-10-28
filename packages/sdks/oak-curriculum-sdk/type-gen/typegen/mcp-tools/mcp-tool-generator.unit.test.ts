@@ -7,9 +7,10 @@ describe('generateCompleteMcpTools (schema-first execution DAG)', () => {
   it('emits contract, data, aliases, and runtime executors with strict dependencies', () => {
     const output = generateCompleteMcpTools(schemaWithPathParams);
 
-    expect(output.contract['tool-descriptor.contract.ts']).toContain(
-      'export interface ToolDescriptor<TName extends string, TClient, TArgs, TResult> extends Tool',
-    );
+    const contractFile = output.contract['tool-descriptor.contract.ts'];
+    expect(contractFile).toContain('export type StatusDiscriminant<T extends string>');
+    expect(contractFile).toContain('export interface ToolDescriptor<');
+    expect(contractFile).toContain('readonly documentedStatuses: readonly TDocumentedStatus[];');
     expect(output.data['definitions.ts']).toContain('export const MCP_TOOL_DESCRIPTORS');
     expect(output.data['definitions.ts']).toContain('export const MCP_TOOL_ENTRIES = [');
     expect(output.data['definitions.ts']).toContain(

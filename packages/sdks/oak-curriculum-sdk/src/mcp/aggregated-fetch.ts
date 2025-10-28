@@ -76,7 +76,15 @@ export async function runFetchTool(
     return formatError(toErrorMessage(result.error));
   }
   const canonicalUrl = generateCanonicalUrlWithContext(type, args.id);
-  return formatData({ id: args.id, type, canonicalUrl, data: result.data });
+  return formatData({
+    status: result.status,
+    data: {
+      id: args.id,
+      type,
+      canonicalUrl,
+      data: result.data,
+    },
+  });
 }
 
 function detectTypeFromId(id: string): ContentType | undefined {
@@ -102,7 +110,7 @@ async function executeFetchByType(
   type: ContentType,
   slug: string,
   deps: UniversalToolExecutorDependencies,
-): Promise<{ ok: true; data: unknown } | { ok: false; error: unknown }> {
+): Promise<{ ok: true; status: number | string; data: unknown } | { ok: false; error: unknown }> {
   switch (type) {
     case 'lesson': {
       return extractExecutionData(

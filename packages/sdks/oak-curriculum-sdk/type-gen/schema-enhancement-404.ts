@@ -22,11 +22,7 @@ interface Legitimate404Descriptor {
   readonly path: string;
   readonly reason: string;
   readonly upstreamReference: string;
-  readonly example: {
-    readonly statusCode: number;
-    readonly message: string;
-    readonly error: string;
-  };
+  readonly media: MediaTypeObject;
 }
 
 const transcript404Descriptor: Legitimate404Descriptor = {
@@ -35,10 +31,65 @@ const transcript404Descriptor: Legitimate404Descriptor = {
   reason:
     'Lessons without accompanying video content legitimately return HTTP 404 so callers can distinguish "no transcript available" from invalid lesson slugs.',
   upstreamReference: '.agent/plans/upstream-api-metadata-wishlist.md item #4',
-  example: {
-    statusCode: 404,
-    message: 'Transcript not available for this lesson',
-    error: 'Not Found',
+  media: {
+    schema: {
+      type: 'object',
+      description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
+      required: ['message', 'code', 'data'],
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Transcript not available for this query',
+          description: 'Human-readable message describing why the resource is unavailable.',
+        },
+        code: {
+          type: 'string',
+          example: 'NOT_FOUND',
+          description: 'API error code describing the failure classification.',
+        },
+        data: {
+          type: 'object',
+          description:
+            'Additional metadata describing the failure as emitted by the Oak API gateway.',
+          required: ['code', 'httpStatus', 'path'],
+          additionalProperties: true,
+          properties: {
+            code: {
+              type: 'string',
+              example: 'NOT_FOUND',
+              description: 'Reiterated error code for downstream tools.',
+            },
+            httpStatus: {
+              type: 'integer',
+              example: 404,
+              description: 'HTTP status code returned by the upstream API.',
+            },
+            path: {
+              type: 'string',
+              example: 'getLessonTranscript.getLessonTranscript',
+              description: 'Identifier of the upstream operation emitting the error.',
+            },
+            zodError: {
+              description:
+                'Optional validation payload describing schema mismatches. Present when the API returns validation metadata.',
+              anyOf: [{ type: 'object', additionalProperties: true }, { type: 'null' }],
+              example: null,
+            },
+          },
+        },
+      },
+      additionalProperties: true,
+    },
+    example: {
+      message: 'Transcript not available for this query',
+      code: 'NOT_FOUND',
+      data: {
+        code: 'NOT_FOUND',
+        httpStatus: 404,
+        path: 'getLessonTranscript.getLessonTranscript',
+        zodError: null,
+      },
+    },
   },
 };
 
@@ -97,31 +148,6 @@ export function add404ResponsesWhereExpected(
     const operation = readOperation(pathItem, descriptor);
     assertResponseStatusSlotAvailable(operation, guardContext);
     const responses = operation.responses ?? {};
-    const media: MediaTypeObject = {
-      schema: {
-        type: 'object',
-        description: 'Standard Oak API error envelope emitted for legitimate 404 responses.',
-        required: ['statusCode', 'message', 'error'],
-        properties: {
-          statusCode: {
-            type: 'integer',
-            example: descriptor.example.statusCode,
-            description: 'HTTP status code indicating the type of error.',
-          },
-          message: {
-            type: 'string',
-            example: descriptor.example.message,
-            description: 'Human-readable message describing why the resource is unavailable.',
-          },
-          error: {
-            type: 'string',
-            example: descriptor.example.error,
-            description: 'Short error label returned by the API.',
-          },
-        },
-      },
-      example: descriptor.example,
-    };
 
     const response: ResponseObject = {
       description: [
@@ -130,7 +156,7 @@ export function add404ResponsesWhereExpected(
         `Tracking: ${descriptor.upstreamReference}`,
       ].join('\n\n'),
       content: {
-        'application/json': media,
+        'application/json': descriptor.media,
       },
     };
 

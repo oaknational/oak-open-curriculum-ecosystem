@@ -81,7 +81,7 @@ export function createStubToolExecutionAdapter(): (
         }),
       };
     }
-    return { data: outputValidation.data };
+    return { status: outputValidation.status, data: outputValidation.data };
   };
 }
 

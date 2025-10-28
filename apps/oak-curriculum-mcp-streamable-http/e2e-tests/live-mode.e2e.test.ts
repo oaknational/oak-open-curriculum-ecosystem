@@ -8,6 +8,7 @@ import {
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
+  parseToolSuccessPayload,
   getContentArray,
   readFirstTextContent,
 } from './helpers/sse.js';
@@ -39,7 +40,7 @@ function createOverrides(captured: CapturedCall[]): CreateLiveHttpAppOptions {
             canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
           },
         ];
-        const result: ToolExecutionResult = { data };
+        const result: ToolExecutionResult = { status: 200, data };
         return Promise.resolve(result);
       },
     },
@@ -83,13 +84,13 @@ describe('Streamable HTTP server (live mode with overrides)', () => {
       const envelope = parseSseEnvelope(res.text);
       const result = parseJsonRpcResult(envelope);
       expect(result.isError).not.toBe(true);
-      const text = readFirstTextContent(getContentArray(result));
-      const payload = JSON.parse(text) as {
-        readonly canonicalUrl?: string;
-        readonly slug?: string;
-      }[];
-      expect(Array.isArray(payload)).toBe(true);
-      expect(payload[0]?.canonicalUrl).toContain('thenational.academy');
+      const payload = parseToolSuccessPayload(result);
+      expect(payload.status).toBe(200);
+      if (!Array.isArray(payload.data)) {
+        throw new Error('Expected array response from tool');
+      }
+      const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
+      expect(first?.canonicalUrl).toContain('thenational.academy');
     } finally {
       restoreEnvironment();
     }

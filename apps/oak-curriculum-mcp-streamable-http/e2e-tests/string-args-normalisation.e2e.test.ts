@@ -88,6 +88,7 @@ describe('HTTP boundary argument validation', () => {
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: () =>
         Promise.resolve({
+          status: 200,
           data: [
             {
               lessonSlug: 'stub-lesson',

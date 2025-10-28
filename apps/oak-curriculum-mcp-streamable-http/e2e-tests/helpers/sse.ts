@@ -20,6 +20,13 @@ const TextContentSchema = z.object({
   text: z.string(),
 });
 
+const ToolSuccessSchema = z.object({
+  status: z.union([z.number(), z.string()]),
+  data: z.unknown(),
+});
+
+export type ToolSuccessPayload = z.infer<typeof ToolSuccessSchema>;
+
 function findFirstDataLine(raw: string): string {
   const lines = raw.split('\n');
   for (const line of lines) {
@@ -53,4 +60,11 @@ export function readFirstTextContent(content: readonly unknown[]): string {
     }
   }
   throw new Error('SSE envelope missing text content entry');
+}
+
+export function parseToolSuccessPayload(result: JsonRpcResult): ToolSuccessPayload {
+  const content = getContentArray(result);
+  const textEntry = readFirstTextContent(content);
+  const parsed: unknown = JSON.parse(textEntry);
+  return ToolSuccessSchema.parse(parsed);
 }

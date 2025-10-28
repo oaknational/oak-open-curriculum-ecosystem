@@ -66,7 +66,7 @@ describe('executeToolCall', () => {
     const result = await executeToolCall('get-rate-limit', { params: {} }, client);
 
     expect(handler).toHaveBeenCalledOnce();
-    expect(result).toEqual({ data: expected });
+    expect(result).toEqual({ status: 200, data: expected });
   });
 
   it('maps output validation failures to McpToolError with a helpful message', async () => {

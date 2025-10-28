@@ -2875,27 +2875,56 @@ export interface operations {
                 content: {
                     /**
                      * @example {
-                     *       "statusCode": 404,
-                     *       "message": "Transcript not available for this lesson",
-                     *       "error": "Not Found"
+                     *       "message": "Transcript not available for this query",
+                     *       "code": "NOT_FOUND",
+                     *       "data": {
+                     *         "code": "NOT_FOUND",
+                     *         "httpStatus": 404,
+                     *         "path": "getLessonTranscript.getLessonTranscript",
+                     *         "zodError": null
+                     *       }
                      *     }
                      */
                     "application/json": {
                         /**
-                         * @description HTTP status code indicating the type of error.
-                         * @example 404
-                         */
-                        statusCode: number;
-                        /**
                          * @description Human-readable message describing why the resource is unavailable.
-                         * @example Transcript not available for this lesson
+                         * @example Transcript not available for this query
                          */
                         message: string;
                         /**
-                         * @description Short error label returned by the API.
-                         * @example Not Found
+                         * @description API error code describing the failure classification.
+                         * @example NOT_FOUND
                          */
-                        error: string;
+                        code: string;
+                        /** @description Additional metadata describing the failure as emitted by the Oak API gateway. */
+                        data: {
+                            /**
+                             * @description Reiterated error code for downstream tools.
+                             * @example NOT_FOUND
+                             */
+                            code: string;
+                            /**
+                             * @description HTTP status code returned by the upstream API.
+                             * @example 404
+                             */
+                            httpStatus: number;
+                            /**
+                             * @description Identifier of the upstream operation emitting the error.
+                             * @example getLessonTranscript.getLessonTranscript
+                             */
+                            path: string;
+                            /**
+                             * @description Optional validation payload describing schema mismatches. Present when the API returns validation metadata.
+                             * @example null
+                             */
+                            zodError?: {
+                                [key: string]: unknown;
+                            } | null;
+                        } & {
+                            [key: string]: unknown;
+                        };
+                    } & {
+                        [key: string]: unknown;
                     };
                 };
             };

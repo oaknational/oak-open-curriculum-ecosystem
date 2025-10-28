@@ -3,12 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
-import {
-  parseSseEnvelope,
-  parseJsonRpcResult,
-  getContentArray,
-  readFirstTextContent,
-} from './helpers/sse.js';
+import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
@@ -35,7 +30,7 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
           canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
         },
       ];
-      const result: ToolExecutionResult = { data };
+      const result: ToolExecutionResult = { status: 200, data };
       return Promise.resolve(result);
     },
   };
@@ -96,13 +91,14 @@ function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[
   const envelope = parseSseEnvelope(res.text);
   const result = parseJsonRpcResult(envelope);
   expect(result.isError).not.toBe(true);
-  const content = readFirstTextContent(getContentArray(result));
-  const parsedValue: unknown = content ? JSON.parse(content) : {};
-  if (!Array.isArray(parsedValue)) {
+  const payload = parseToolSuccessPayload(result);
+  expect(payload.status).toBe(200);
+  if (!Array.isArray(payload.data)) {
     throw new Error('Tool payload must be an array');
   }
-  expect(parsedValue.length).toBe(2);
-  expect(parsedValue[0]).toHaveProperty('canonicalUrl');
+  expect(payload.data.length).toBe(2);
+  const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
+  expect(first).toHaveProperty('canonicalUrl');
 }
 
 async function exerciseToolCallSuccessScenario(): Promise<void> {

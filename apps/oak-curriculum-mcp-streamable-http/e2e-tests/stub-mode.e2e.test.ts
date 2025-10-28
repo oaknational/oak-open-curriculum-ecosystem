@@ -12,6 +12,7 @@ import {
   parseJsonRpcResult,
   getContentArray,
   readFirstTextContent,
+  parseToolSuccessPayload,
 } from './helpers/sse.js';
 import {
   listUniversalTools,
@@ -63,11 +64,14 @@ async function assertFetchLessonResponse(
   lessonId: string,
   lessonSlug: string,
 ): Promise<void> {
-  const { result, content } = extractResultAndContent(responseText);
+  const { result } = extractResultAndContent(responseText);
   expect(result.isError).not.toBe(true);
 
-  const text = readFirstTextContent(content);
-  const payload = JSON.parse(text) as {
+  const envelope = parseToolSuccessPayload(result);
+  if (envelope.status !== 200 && envelope.status !== '200') {
+    throw new Error(`Unexpected status in payload: ${String(envelope.status)}`);
+  }
+  const payload = envelope.data as {
     readonly canonicalUrl?: string;
     readonly data?: unknown;
     readonly id?: string;

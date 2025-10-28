@@ -18,10 +18,7 @@
     },
     "oak-curriculum-http-local": {
       "type": "http",
-      "url": "http://localhost:3333/mcp",
-      "headers": {
-        "Authorization": "Bearer dev-token"
-      }
+      "url": "http://localhost:3333/mcp"
     },
     "playwright": {
       "command": "npx",

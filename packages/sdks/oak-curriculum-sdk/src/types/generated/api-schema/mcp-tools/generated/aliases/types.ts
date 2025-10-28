@@ -19,14 +19,22 @@ type ToolClientMap = {
 type ToolArgsMap = {
   readonly [TName in ToolName]: ToolInvokeParametersMap[TName][1];
 };
-type ToolResultMap = {
-  readonly [TName in ToolName]: Awaited<ReturnType<ToolDescriptorMap[TName]['invoke']>>;
-};
+type ToolValidationResult<TName extends ToolName> = ReturnType<
+  ToolDescriptorMap[TName]['validateOutput']
+>;
+type ToolValidationSuccess<TName extends ToolName> = Extract<
+  ToolValidationResult<TName>,
+  { readonly ok: true }
+>;
 export type ToolDescriptorForName<TName extends ToolName> = ToolDescriptorMap[TName];
 export type ToolInvoke<TName extends ToolName> = ToolInvokeMap[TName];
 export type ToolClientForName<TName extends ToolName> = ToolClientMap[TName];
 export type ToolArgsForName<TName extends ToolName> = ToolArgsMap[TName];
-export type ToolResultForName<TName extends ToolName> = ToolResultMap[TName];
+export type ToolStatusForName<TName extends ToolName> = ToolValidationSuccess<TName>['status'];
+export interface ToolResultForName<TName extends ToolName> {
+  readonly status: ToolStatusForName<TName>;
+  readonly data: ToolValidationSuccess<TName>['data'];
+}
 export type ToolArgs<TName extends ToolName = ToolName> = ToolArgsForName<TName>;
 export type ToolClient<TName extends ToolName = ToolName> = ToolClientForName<TName>;
 export type ToolResult<TName extends ToolName> = ToolResultForName<TName>;

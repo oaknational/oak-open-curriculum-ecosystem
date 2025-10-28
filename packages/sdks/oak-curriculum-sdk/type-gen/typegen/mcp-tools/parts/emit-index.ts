@@ -40,6 +40,8 @@ function buildExports({
   const lines: string[] = [];
   lines.push('const responseDescriptors = getResponseDescriptorsByOperationId(operationId);');
   lines.push(`const documentedStatuses = ${documentedStatusLiterals};`);
+  lines.push('type DocumentedStatus = typeof documentedStatuses[number];');
+  lines.push('type DocumentedStatusDiscriminant = StatusDiscriminant<DocumentedStatus>;');
   lines.push('const primaryResponseDescriptor = responseDescriptors[documentedStatuses[0]];');
   lines.push('if (!primaryResponseDescriptor) {');
   lines.push(
@@ -112,8 +114,11 @@ function buildExports({
   }
   lines.push('  path,');
   lines.push('  method,');
+  lines.push('  documentedStatuses,');
   lines.push('  validateOutput: (data: unknown) => {');
-  lines.push('    const attemptedStatuses: { status: number | string; issues: unknown[] }[] = [];');
+  lines.push(
+    '    const attemptedStatuses: { status: DocumentedStatusDiscriminant; issues: unknown[] }[] = [];',
+  );
   lines.push('    for (const statusKey of documentedStatuses) {');
   lines.push(
     '      const descriptor = responseDescriptors[statusKey as keyof typeof responseDescriptors];',
@@ -124,11 +129,11 @@ function buildExports({
   lines.push('      const result = descriptor.zod.safeParse(data);');
   lines.push('      if (result.success) {');
   lines.push(
-    '        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) };',
+    '        return { ok: true, data: result.data, status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant };',
   );
   lines.push('      }');
   lines.push(
-    '      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey), issues: result.error.issues });',
+    '      attemptedStatuses.push({ status: toStatusDiscriminant(statusKey) as DocumentedStatusDiscriminant, issues: result.error.issues });',
   );
   lines.push('    }');
   lines.push('    return {');
@@ -140,7 +145,7 @@ function buildExports({
   lines.push('    };');
   lines.push('  },');
   lines.push(
-    '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>>;',
+    '} as const satisfies ToolDescriptor<typeof name, OakApiPathBasedClient, ToolArgs, z.infer<typeof primaryResponseDescriptor.zod>, DocumentedStatus>;',
   );
   lines.push('');
   return lines.join('\n');

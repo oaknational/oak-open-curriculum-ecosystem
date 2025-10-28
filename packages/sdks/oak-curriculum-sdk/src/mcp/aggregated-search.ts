@@ -209,11 +209,16 @@ export async function runSearchTool(
   }
 
   return formatData({
-    q: args.q,
-    keyStage: args.keyStage,
-    subject: args.subject,
-    unit: args.unit,
-    lessons: lessonsData.data,
-    transcripts: transcriptsData.data,
+    status: 200,
+    data: {
+      q: args.q,
+      keyStage: args.keyStage,
+      subject: args.subject,
+      unit: args.unit,
+      lessonsStatus: lessonsData.status,
+      lessons: lessonsData.data,
+      transcriptsStatus: transcriptsData.status,
+      transcripts: transcriptsData.data,
+    },
   });
 }

@@ -154,32 +154,73 @@ export const schemaBase = {
                   "type": "object",
                   "description": "Standard Oak API error envelope emitted for legitimate 404 responses.",
                   "required": [
-                    "statusCode",
                     "message",
-                    "error"
+                    "code",
+                    "data"
                   ],
                   "properties": {
-                    "statusCode": {
-                      "type": "integer",
-                      "example": 404,
-                      "description": "HTTP status code indicating the type of error."
-                    },
                     "message": {
                       "type": "string",
-                      "example": "Transcript not available for this lesson",
+                      "example": "Transcript not available for this query",
                       "description": "Human-readable message describing why the resource is unavailable."
                     },
-                    "error": {
+                    "code": {
                       "type": "string",
-                      "example": "Not Found",
-                      "description": "Short error label returned by the API."
+                      "example": "NOT_FOUND",
+                      "description": "API error code describing the failure classification."
+                    },
+                    "data": {
+                      "type": "object",
+                      "description": "Additional metadata describing the failure as emitted by the Oak API gateway.",
+                      "required": [
+                        "code",
+                        "httpStatus",
+                        "path"
+                      ],
+                      "additionalProperties": true,
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "example": "NOT_FOUND",
+                          "description": "Reiterated error code for downstream tools."
+                        },
+                        "httpStatus": {
+                          "type": "integer",
+                          "example": 404,
+                          "description": "HTTP status code returned by the upstream API."
+                        },
+                        "path": {
+                          "type": "string",
+                          "example": "getLessonTranscript.getLessonTranscript",
+                          "description": "Identifier of the upstream operation emitting the error."
+                        },
+                        "zodError": {
+                          "description": "Optional validation payload describing schema mismatches. Present when the API returns validation metadata.",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "additionalProperties": true
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "example": null
+                        }
+                      }
                     }
-                  }
+                  },
+                  "additionalProperties": true
                 },
                 "example": {
-                  "statusCode": 404,
-                  "message": "Transcript not available for this lesson",
-                  "error": "Not Found"
+                  "message": "Transcript not available for this query",
+                  "code": "NOT_FOUND",
+                  "data": {
+                    "code": "NOT_FOUND",
+                    "httpStatus": 404,
+                    "path": "getLessonTranscript.getLessonTranscript",
+                    "zodError": null
+                  }
                 }
               }
             }

@@ -13,7 +13,16 @@
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import type { ZodSchema, ZodType, ZodTypeDef } from 'zod';
 
-export interface ToolDescriptor<TName extends string, TClient, TArgs, TResult> extends Tool {
+export type StatusDiscriminant<T extends string> = T extends `${infer N extends number}` ? N : T;
+
+export interface ToolDescriptor<
+  TName extends string,
+  TClient,
+  TArgs,
+  TResult,
+  TDocumentedStatus extends string,
+  TStatus extends number | string = StatusDiscriminant<TDocumentedStatus>,
+> extends Tool {
   readonly name: TName;
   readonly description?: string;
   readonly operationId: string;
@@ -22,7 +31,7 @@ export interface ToolDescriptor<TName extends string, TClient, TArgs, TResult> e
   readonly toolZodSchema: ZodType<TArgs, ZodTypeDef, unknown>;
   readonly toolInputJsonSchema: {
     readonly type: 'object';
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- genuine unknown at incoming boundary
+     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
@@ -32,13 +41,22 @@ export interface ToolDescriptor<TName extends string, TClient, TArgs, TResult> e
   readonly describeToolArgs: () => string;
   readonly inputSchema: {
     readonly type: 'object';
-    // eslint-disable-next-line @typescript-eslint/no-restricted-types -- genuine unknown at incoming boundary
+     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
   };
+  readonly documentedStatuses: readonly TDocumentedStatus[];
   readonly validateOutput: (value: unknown) =>
-    | { readonly ok: true; readonly data: TResult }
-    | { readonly ok: false; readonly message: string };
+    | { readonly ok: true; readonly data: TResult; readonly status: TStatus }
+    | {
+        readonly ok: false;
+        readonly message: string;
+        readonly issues: readonly unknown[];
+        readonly attemptedStatuses: readonly {
+          readonly status: TStatus;
+          readonly issues: readonly unknown[];
+        }[];
+      };
   readonly invoke: (client: TClient, args: TArgs) => TResult | Promise<TResult>;
 }

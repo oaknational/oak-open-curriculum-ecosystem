@@ -15,11 +15,8 @@ import {
   type OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 
-/**
- * MCP tools module interface
- */
 export interface McpToolsModule {
-  handleTool: (name: string, args: unknown) => Promise<unknown>;
+  handleTool: (name: string, args: unknown) => Promise<CallToolResult>;
 }
 
 export interface UniversalToolExecutors {
@@ -29,18 +26,6 @@ export interface UniversalToolExecutors {
 function formatError(message: string): CallToolResult {
   const content: TextContent = { type: 'text', text: `Error: ${message}` };
   return { content: [content], isError: true };
-}
-
-function decodeSuccessfulResult(result: CallToolResult): unknown {
-  const first = result.content.length > 0 ? result.content[0] : undefined;
-  if (first?.type === 'text') {
-    try {
-      return JSON.parse(first.text);
-    } catch {
-      return first.text;
-    }
-  }
-  return { content: [] };
 }
 
 export function createMcpToolsModule(
@@ -60,11 +45,7 @@ export function createMcpToolsModule(
         return formatError(`Unknown tool: ${name}`);
       }
       try {
-        const result = await executor(name, args ?? {});
-        if (result.isError) {
-          return result;
-        }
-        return decodeSuccessfulResult(result);
+        return await executor(name, args ?? {});
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         return formatError(message);

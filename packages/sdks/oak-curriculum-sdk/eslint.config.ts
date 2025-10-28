@@ -133,6 +133,8 @@ const config = defineConfig(
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-redundant-type-constituents': 'off',
+      '@typescript-eslint/consistent-indexed-object-style': 'off',
+      '@typescript-eslint/no-restricted-types': 'off',
       'no-restricted-properties': 'off',
       // Temporarily disabled rules for generated code -- some are probably permanent, some are just during MVP
       'max-lines': 'off',

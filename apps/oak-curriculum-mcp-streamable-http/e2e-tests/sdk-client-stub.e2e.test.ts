@@ -9,8 +9,8 @@ import {
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
-  getContentArray,
   readFirstTextContent,
+  parseToolSuccessPayload,
 } from './helpers/sse.js';
 import type { JsonRpcEnvelope, JsonRpcResult } from './helpers/sse.js';
 import type { Express } from 'express';
@@ -97,9 +97,8 @@ async function callTool(
 
 function readSuccessfulPayload(result: JsonRpcResult): unknown {
   expect(result.isError).not.toBe(true);
-  const content = getContentArray(result);
-  const text = readFirstTextContent(content);
-  return JSON.parse(text) as unknown;
+  const payload = parseToolSuccessPayload(result);
+  return payload.data;
 }
 
 function expectSuccessfulPayload(result: JsonRpcResult | undefined): unknown {

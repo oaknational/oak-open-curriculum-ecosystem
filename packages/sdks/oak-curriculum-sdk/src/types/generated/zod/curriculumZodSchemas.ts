@@ -1,6 +1,72 @@
 import { makeApi, Zodios, type ZodiosOptions } from "@zodios/core";
 import { z, type ZodSchema } from "zod";
 
+const OPERATION_ID_BY_METHOD_AND_PATH = {
+  "get /sequences/:sequence/units": "getSequences-getSequenceUnits",
+  "get /lessons/:lesson/transcript": "getLessonTranscript-getLessonTranscript",
+  "get /search/transcripts": "searchTranscripts-searchTranscripts",
+  "get /sequences/:sequence/assets": "getAssets-getSequenceAssets",
+  "get /key-stages/:keyStage/subject/:subject/assets": "getAssets-getSubjectAssets",
+  "get /lessons/:lesson/assets": "getAssets-getLessonAssets",
+  "get /lessons/:lesson/assets/:type": "getAssets-getLessonAsset",
+  "get /subjects": "getSubjects-getAllSubjects",
+  "get /subjects/:subject": "getSubjects-getSubject",
+  "get /subjects/:subject/sequences": "getSubjects-getSubjectSequence",
+  "get /subjects/:subject/key-stages": "getSubjects-getSubjectKeyStages",
+  "get /subjects/:subject/years": "getSubjects-getSubjectYears",
+  "get /key-stages": "getKeyStages-getKeyStages",
+  "get /key-stages/:keyStage/subject/:subject/lessons": "getKeyStageSubjectLessons-getKeyStageSubjectLessons",
+  "get /key-stages/:keyStage/subject/:subject/units": "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits",
+  "get /lessons/:lesson/quiz": "getQuestions-getQuestionsForLessons",
+  "get /sequences/:sequence/questions": "getQuestions-getQuestionsForSequence",
+  "get /key-stages/:keyStage/subject/:subject/questions": "getQuestions-getQuestionsForKeyStageAndSubject",
+  "get /lessons/:lesson/summary": "getLessons-getLesson",
+  "get /search/lessons": "getLessons-searchByTextSimilarity",
+  "get /units/:unit/summary": "getUnits-getUnit",
+  "get /threads": "getThreads-getAllThreads",
+  "get /threads/:threadSlug/units": "getThreads-getThreadUnits",
+  "get /changelog": "changelog-changelog",
+  "get /changelog/latest": "changelog-latest",
+  "get /rate-limit": "getRateLimit-getRateLimit",
+} as const;
+const PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID = {
+  "getSequences-getSequenceUnits": "200",
+  "getLessonTranscript-getLessonTranscript": "200",
+  "searchTranscripts-searchTranscripts": "200",
+  "getAssets-getSequenceAssets": "200",
+  "getAssets-getSubjectAssets": "200",
+  "getAssets-getLessonAssets": "200",
+  "getAssets-getLessonAsset": "200",
+  "getSubjects-getAllSubjects": "200",
+  "getSubjects-getSubject": "200",
+  "getSubjects-getSubjectSequence": "200",
+  "getSubjects-getSubjectKeyStages": "200",
+  "getSubjects-getSubjectYears": "200",
+  "getKeyStages-getKeyStages": "200",
+  "getKeyStageSubjectLessons-getKeyStageSubjectLessons": "200",
+  "getAllKeyStageAndSubjectUnits-getAllKeyStageAndSubjectUnits": "200",
+  "getQuestions-getQuestionsForLessons": "200",
+  "getQuestions-getQuestionsForSequence": "200",
+  "getQuestions-getQuestionsForKeyStageAndSubject": "200",
+  "getLessons-getLesson": "200",
+  "getLessons-searchByTextSimilarity": "200",
+  "getUnits-getUnit": "200",
+  "getThreads-getAllThreads": "200",
+  "getThreads-getThreadUnits": "200",
+  "changelog-changelog": "200",
+  "changelog-latest": "200",
+  "getRateLimit-getRateLimit": "200",
+} as const;
+
+function getOperationIdForEndpoint(method: string, path: string): string | undefined {
+  const key = `${method.toLowerCase()} ${path}` as keyof typeof OPERATION_ID_BY_METHOD_AND_PATH;
+  return OPERATION_ID_BY_METHOD_AND_PATH[key];
+}
+
+function getPrimaryStatusForOperation(operationId: string): string | undefined {
+  return PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID[operationId as keyof typeof PRIMARY_RESPONSE_STATUS_BY_OPERATION_ID];
+}
+
 function sanitizeSchemaKeys(
   schemas: CurriculumSchemaCollection,
   options?: { readonly rename?: (original: string) => string },
@@ -1451,11 +1517,27 @@ const rawCurriculumSchemas = {
 
 function buildCurriculumSchemas(endpoints: ReturnType<typeof makeApi>): CurriculumSchemaCollection {
   const baseSchemas = sanitizeSchemaKeys(rawCurriculumSchemas, { rename: renameInlineSchema });
+  const statusSchemas: CurriculumSchemaCollection = {};
+  for (const endpoint of endpoints) {
+    const operationId = getOperationIdForEndpoint(endpoint.method, endpoint.path);
+    if (!operationId) {
+      continue;
+    }
+    const primaryStatus = getPrimaryStatusForOperation(operationId);
+    if (primaryStatus) {
+      const primaryKey = renameInlineSchema(`${operationId}_${primaryStatus}`);
+      statusSchemas[primaryKey] = endpoint.response;
+    }
+    if (Array.isArray(endpoint.errors)) {
+      for (const error of endpoint.errors) {
+        const statusValue = error.status === "default" ? "default" : String(error.status);
+        const errorKey = renameInlineSchema(`${operationId}_${statusValue}`);
+        statusSchemas[errorKey] = error.schema;
+      }
+    }
+  }
   const changelogEndpoint = endpoints.find((candidate) => candidate.method === "get" && candidate.path === "/changelog");
   const latestEndpoint = endpoints.find((candidate) => candidate.method === "get" && candidate.path === "/changelog/latest");
-  if (!changelogEndpoint && !latestEndpoint) {
-    return baseSchemas;
-  }
   const additionalSchemas: CurriculumSchemaCollection = {};
   if (changelogEndpoint) {
     additionalSchemas.changelog_changelog_200 = changelogEndpoint.response;
@@ -1465,6 +1547,7 @@ function buildCurriculumSchemas(endpoints: ReturnType<typeof makeApi>): Curricul
   }
   return {
     ...baseSchemas,
+    ...statusSchemas,
     ...additionalSchemas,
   };
 }
@@ -1814,9 +1897,18 @@ Lessons without accompanying video content legitimately return HTTP 404 so calle
 Tracking: .agent/plans/upstream-api-metadata-wishlist.md item #4`,
         schema: z
           .object({
-            statusCode: z.number().int(),
             message: z.string(),
-            error: z.string(),
+            code: z.string(),
+            data: z
+              .object({
+                code: z.string(),
+                httpStatus: z.number().int(),
+                path: z.string(),
+                zodError: z
+                  .union([z.object({}).partial().passthrough(), z.null()])
+                  .optional(),
+              })
+              .passthrough(),
           })
           .passthrough(),
       },

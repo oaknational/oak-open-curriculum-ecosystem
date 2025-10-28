@@ -116,10 +116,10 @@ describe('createUniversalToolExecutor', () => {
   it('aggregates search results using the MCP executor', async () => {
     const executeMcpTool = vi.fn().mockImplementation((name: string) => {
       if (name === 'get-search-lessons') {
-        return Promise.resolve({ data: { lessons: ['lesson-a'] } });
+        return Promise.resolve({ status: 200, data: { lessons: ['lesson-a'] } });
       }
       if (name === 'get-search-transcripts') {
-        return Promise.resolve({ data: { transcripts: ['transcript-a'] } });
+        return Promise.resolve({ status: 200, data: { transcripts: ['transcript-a'] } });
       }
       return Promise.resolve({ data: null });
     });
@@ -136,21 +136,26 @@ describe('createUniversalToolExecutor', () => {
     expect(result.isError).toBeUndefined();
     const payload = parseTextContent(result);
     expect(payload).toEqual({
-      q: 'photosynthesis',
-      keyStage: undefined,
-      subject: undefined,
-      unit: undefined,
-      lessons: { lessons: ['lesson-a'] },
-      transcripts: { transcripts: ['transcript-a'] },
+      status: 200,
+      data: {
+        q: 'photosynthesis',
+        keyStage: undefined,
+        subject: undefined,
+        unit: undefined,
+        lessonsStatus: 200,
+        lessons: { lessons: ['lesson-a'] },
+        transcriptsStatus: 200,
+        transcripts: { transcripts: ['transcript-a'] },
+      },
     });
   });
 
   it('aggregates fetch results using the MCP executor', async () => {
     const executeMcpTool = vi.fn().mockImplementation((name: string) => {
       if (name === 'get-lessons-summary') {
-        return Promise.resolve({ data: { lesson: { id: 'lesson-slug' } } });
+        return Promise.resolve({ status: 200, data: { lesson: { id: 'lesson-slug' } } });
       }
-      return Promise.resolve({ data: null });
+      return Promise.resolve({ status: 200, data: null });
     });
     const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
@@ -162,15 +167,18 @@ describe('createUniversalToolExecutor', () => {
     const payload = parseTextContent(result);
     const expectedCanonicalUrl = generateCanonicalUrlWithContext('lesson', 'lesson:maths-lesson');
     expect(payload).toEqual({
-      id: 'lesson:maths-lesson',
-      type: 'lesson',
-      canonicalUrl: expectedCanonicalUrl,
-      data: { lesson: { id: 'lesson-slug' } },
+      status: 200,
+      data: {
+        id: 'lesson:maths-lesson',
+        type: 'lesson',
+        canonicalUrl: expectedCanonicalUrl,
+        data: { lesson: { id: 'lesson-slug' } },
+      },
     });
   });
 
   it('delegates curriculum tools directly to the MCP executor', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
+    const executeMcpTool = vi.fn().mockResolvedValue({ status: 200, data: { status: 'ok' } });
     const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
     const args = {
@@ -182,7 +190,7 @@ describe('createUniversalToolExecutor', () => {
 
     expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, args);
     const payload = parseTextContent(result);
-    expect(payload).toEqual({ status: 'ok' });
+    expect(payload).toEqual({ status: 200, data: { status: 'ok' } });
   });
 
   it('maps executor errors to CallToolResult', async () => {

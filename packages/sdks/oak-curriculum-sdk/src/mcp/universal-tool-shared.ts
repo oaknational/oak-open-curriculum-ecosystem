@@ -62,9 +62,11 @@ export function toErrorMessage(value: unknown): string {
 
 export function extractExecutionData(
   result: ToolExecutionResult,
-): { readonly ok: true; readonly data: unknown } | { readonly ok: false; readonly error: unknown } {
+):
+  | { readonly ok: true; readonly status: number | string; readonly data: unknown }
+  | { readonly ok: false; readonly error: unknown } {
   if ('error' in result && result.error) {
     return { ok: false, error: result.error };
   }
-  return { ok: true, data: result.data };
+  return { ok: true, status: result.status, data: result.data };
 }
