@@ -15,7 +15,7 @@ Owner: Engineering (MCP/Oak SDK)
 ## New Type-Layering Approach (Adopted)
 
 - Define base MCP types in a shared low‑level workspace (target: `packages/core/mcp-core`). These extend official `@modelcontextprotocol/sdk` `Tool` types minimally to capture the shapes we actually use (e.g., input schema structure), remaining strictly compatible.
-- In the SDK, compose domain‑specific generic types from these bases (e.g., Zod builders for input schemas) and emit strict mapped types keyed by generated unions (e.g., `{ [K in AllToolNames]: ToolDescriptor & { name: K } }`).
+- In the SDK, compose domain‑specific generic types from these bases (e.g., Zod builders for input schemas) and emit strict mapped types keyed by generated unions (e.g., `{ [K in ToolName]: ToolDescriptor & { name: K } }`).
 - Emit `MCP_TOOLS` as a strict mapped type; each value embeds `name: K` so key and value identities are enforced at compile time.
 
 - Guaranteeing precision beyond JSON:
@@ -35,7 +35,7 @@ Refinements (naming, boundaries, and adapters)
   - Rule: No `@modelcontextprotocol/sdk` imports outside core; all other workspaces import the base types from core.
 
 - SDK:
-  - Export `OakCurriculumMcpTools: McpBaseToolsMap<AllToolNames>` (strict mapped type with key↔name equality).
+  - Export `OakCurriculumMcpTools: McpBaseToolsMap<ToolName>` (strict mapped type with key↔name equality).
   - Generators emit `name: 'literal'` per tool to satisfy the mapped type.
 
 - Server‑kit:
@@ -236,7 +236,7 @@ Status summary (completed for MVP scope)
   - Switched enum validators to Set‑based membership checks (`Set.has`) and typed sets as `Set<string|number|boolean>`.
   - Added explicit return types to all emitted helpers; simplified boolean comparisons and control flow for readability.
   - Broke `index.ts`/`lib.ts` import cycle with dynamic imports for `MCP_TOOLS`; typed getters to return entries of `MCP_TOOLS`.
-  - Introduced coupled map types: `OperationIdToToolNameMap` with derived `AllOperationIds` and `AllToolNames`, and guard functions that use maps instead of array scans.
+  - Introduced coupled map types: `OperationIdToToolNameMap` with derived `OperationId` and `ToolName`, and guard functions that use maps instead of array scans.
   - Widened generated `ValidRequestParams` shape at call‑sites to include an index signature for compatibility with executors.
   - Added whitespace sanitiser in core type‑gen to strip non‑breaking spaces; added `posttype-gen` to run workspace formatting after generation.
   - Stabilised `MCP_TOOLS` surface via a `ToolDescriptor` type (including typed `inputSchema: ToolInputJsonSchema`) to avoid leaking per‑tool internals.

@@ -1,4 +1,5 @@
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
+import { isLessonSummary, isUnitSummary } from '../../types/oak';
 import { loadSandboxFixtureData, type FixtureData } from './sandbox-fixture-data';
 
 /**
@@ -20,47 +21,86 @@ export async function createFixtureOakClient(fixtureRoot: string): Promise<Fixtu
 
 function createFixtureClient(data: FixtureData): OakClient {
   return {
-    async getUnitsByKeyStageAndSubject(keyStage, subject) {
-      return data.units
-        .filter((unit) => unit.keyStage === keyStage && unit.subject === subject)
-        .map((unit) => ({ unitSlug: unit.unitSlug, unitTitle: unit.unitTitle }));
-    },
-    async getLessonsByKeyStageAndSubject(keyStage, subject) {
-      return data.lessons
-        .filter((group) => group.keyStage === keyStage && group.subject === subject)
-        .map(({ unitSlug, unitTitle, lessons }) => ({
-          unitSlug,
-          unitTitle,
-          lessons: lessons.map((lesson) => ({ ...lesson })),
-        }));
-    },
-    async getLessonTranscript(lessonSlug) {
-      const entry = data.lessonTranscripts.get(lessonSlug);
-      if (!entry) {
-        throw new Error(`Missing transcript for ${lessonSlug}`);
-      }
-      return { transcript: entry.transcript, vtt: entry.vtt };
-    },
-    async getLessonSummary(lessonSlug) {
-      const summary = data.lessonSummaries.get(lessonSlug);
-      if (!summary) {
-        throw new Error(`Missing lesson summary for ${lessonSlug}`);
-      }
-      return structuredClone(summary);
-    },
-    async getUnitSummary(unitSlug) {
-      const summary = data.unitSummaries.get(unitSlug);
-      if (!summary) {
-        throw new Error(`Missing unit summary for ${unitSlug}`);
-      }
-      return structuredClone(summary);
-    },
-    async getSubjectSequences(subject) {
-      const sequences = data.subjectSequences.get(subject) ?? [];
-      return structuredClone(sequences);
-    },
-    async getSequenceUnits(sequenceSlug) {
-      return structuredClone(data.sequenceUnits.get(sequenceSlug) ?? []);
-    },
+    getUnitsByKeyStageAndSubject: makeFixtureUnitsFn(data),
+    getLessonsByKeyStageAndSubject: makeFixtureLessonsFn(data),
+    getLessonTranscript: makeFixtureTranscriptFn(data),
+    getLessonSummary: makeFixtureLessonSummaryFn(data),
+    getUnitSummary: makeFixtureUnitSummaryFn(data),
+    getSubjectSequences: makeFixtureSubjectSequencesFn(data),
+    getSequenceUnits: makeFixtureSequenceUnitsFn(data),
+  };
+}
+
+function makeFixtureUnitsFn(data: FixtureData): OakClient['getUnitsByKeyStageAndSubject'] {
+  return async (keyStage, subject) =>
+    data.units
+      .filter((unit) => unit.keyStage === keyStage && unit.subject === subject)
+      .map((unit) => ({ unitSlug: unit.unitSlug, unitTitle: unit.unitTitle }));
+}
+
+function makeFixtureLessonsFn(data: FixtureData): OakClient['getLessonsByKeyStageAndSubject'] {
+  return async (keyStage, subject) =>
+    data.lessons
+      .filter((group) => group.keyStage === keyStage && group.subject === subject)
+      .map(({ unitSlug, unitTitle, lessons }) => ({
+        unitSlug,
+        unitTitle,
+        lessons: lessons.map((lesson) => ({ ...lesson })),
+      }));
+}
+
+function makeFixtureTranscriptFn(data: FixtureData): OakClient['getLessonTranscript'] {
+  return async (lessonSlug) => {
+    const entry = data.lessonTranscripts.get(lessonSlug);
+    if (!entry) {
+      throw new Error(`Missing transcript for ${lessonSlug}`);
+    }
+    return { transcript: entry.transcript, vtt: entry.vtt };
+  };
+}
+
+function makeFixtureLessonSummaryFn(data: FixtureData): OakClient['getLessonSummary'] {
+  return async (lessonSlug) => {
+    const summary = data.lessonSummaries.get(lessonSlug);
+    if (!summary) {
+      throw new Error(`Missing lesson summary for ${lessonSlug}`);
+    }
+    if (!isLessonSummary(summary)) {
+      throw new Error(`Invalid lesson summary in sandbox fixture for ${lessonSlug}`);
+    }
+    return summary;
+  };
+}
+
+function makeFixtureUnitSummaryFn(data: FixtureData): OakClient['getUnitSummary'] {
+  return async (unitSlug) => {
+    const summary = data.unitSummaries.get(unitSlug);
+    if (!summary) {
+      throw new Error(`Missing unit summary for ${unitSlug}`);
+    }
+    if (!isUnitSummary(summary)) {
+      throw new Error(`Invalid unit summary in sandbox fixture for ${unitSlug}`);
+    }
+    return summary;
+  };
+}
+
+function makeFixtureSubjectSequencesFn(data: FixtureData): OakClient['getSubjectSequences'] {
+  return async (subject) => {
+    const sequences = data.subjectSequences.get(subject);
+    if (!Array.isArray(sequences)) {
+      return [];
+    }
+    return sequences.map((entry): unknown => entry);
+  };
+}
+
+function makeFixtureSequenceUnitsFn(data: FixtureData): OakClient['getSequenceUnits'] {
+  return async (sequenceSlug) => {
+    const units = data.sequenceUnits.get(sequenceSlug);
+    if (!Array.isArray(units)) {
+      return [];
+    }
+    return units.map((entry): unknown => entry);
   };
 }

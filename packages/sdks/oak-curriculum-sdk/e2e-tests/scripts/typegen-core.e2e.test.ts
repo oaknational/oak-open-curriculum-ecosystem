@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { generateSchemaArtifacts } from '../../type-gen/typegen-core';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 describe('generateSchemaArtifacts functionality tests', () => {
   const testDir = path.resolve(__dirname, '../../test-cache/typegen-out');
@@ -22,7 +22,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should generate all expected files', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -76,7 +76,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should generate valid JSON schema file', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -94,7 +94,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
 
     // Test that JSON is valid and contains expected structure
     const jsonContent = fs.readFileSync(path.join(testDir, 'api-schema-sdk.json'), 'utf-8');
-    const parsed: OpenAPI3 = JSON.parse(jsonContent) as OpenAPI3; // Will throw if invalid JSON
+    const parsed: OpenAPIObject = JSON.parse(jsonContent) as OpenAPIObject; // Will throw if invalid JSON
 
     expect(parsed).toBeDefined();
     expect(parsed.openapi).toBe('3.0.0');
@@ -103,7 +103,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should generate valid TypeScript files', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -132,7 +132,6 @@ describe('generateSchemaArtifacts functionality tests', () => {
         expect(content).toContain('export');
         expect(content).toContain('const');
       } else if (file === 'api-paths-types.ts') {
-        // openapi-typescript generates interface/type definitions
         expect(content).toMatch(/export (interface|type)/);
       } else if (file === 'path-parameters.ts') {
         expect(content).toContain('export');
@@ -143,7 +142,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should generate usable exports in TypeScript schema file', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {},
@@ -160,7 +159,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should handle paths with parameters correctly', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -191,7 +190,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should handle query parameters with enums', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -226,7 +225,7 @@ describe('generateSchemaArtifacts functionality tests', () => {
   });
 
   it('should generate modules with proper exports', async () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {

@@ -258,7 +258,7 @@ Next up
 
 ## TDD Plan (Strict Unit Tests)
 
-REMINDER: UseBritish spelling
+REMINDER: Use british spelling
 
 - A.1 `emit-input-schema.unit.test.ts`: correct types/enums/required/additionalProperties for representative operations.
 - A.2 Server `tools-list.unit.test.ts`: server lists `inputSchema` exactly as generated (no transformation).

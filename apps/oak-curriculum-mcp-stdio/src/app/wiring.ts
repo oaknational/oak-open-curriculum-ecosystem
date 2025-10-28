@@ -123,6 +123,7 @@ export interface WiredDependencies {
     storage: ReturnType<typeof createInMemoryStorage>;
     clock: ReturnType<typeof createNodeClock>;
   };
+  toolExecutors: ReturnType<typeof resolveToolExecutors>;
 }
 
 /**
@@ -200,5 +201,6 @@ export function wireDependencies(config?: ServerConfig): WiredDependencies {
     mcpOrgan,
     config: serverConfig,
     runtime,
+    toolExecutors,
   };
 }

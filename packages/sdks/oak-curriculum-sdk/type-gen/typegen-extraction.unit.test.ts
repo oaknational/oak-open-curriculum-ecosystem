@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { extractPathParameters } from './typegen-extraction';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
+
+import { validateOpenApiDocument } from './schema-validator.js';
+import { extractPathParameters } from './typegen-extraction.js';
 
 describe('extractPathParameters', () => {
   it('should extract query parameters with enum values', () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -30,7 +32,7 @@ describe('extractPathParameters', () => {
       },
     };
 
-    const result = extractPathParameters(schema);
+    const result = extractPathParameters(validateOpenApiDocument(schema));
 
     // This test should pass - query parameters should be extracted
     expect(result.parameters).toHaveProperty('keyStage');
@@ -38,7 +40,7 @@ describe('extractPathParameters', () => {
   });
 
   it('should extract both path and query parameters', () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {
@@ -83,7 +85,7 @@ describe('extractPathParameters', () => {
   });
 
   it('should handle multiple query parameters from different operations', () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 'Test API', version: '1.0.0' },
       paths: {

@@ -1,50 +1,63 @@
-import { z } from 'zod';
 import { env } from './env';
-import { generateObject } from 'ai';
+import { generateObject, zodSchema } from 'ai';
+import { z } from 'zod';
 import { createOpenAI } from '@ai-sdk/openai';
 import { isKeyStage, isSubject } from '../adapters/sdk-guards';
-import type { KeyStage, SearchSubjectSlug as Subject } from '../types/oak';
+import {
+  QueryParserRequestSchema,
+  QueryParserResponseSchema,
+  QUERY_PARSER_INTENT_ENUM,
+  type QueryParserIntent,
+  type QueryParserResponse,
+} from '../types/oak';
 
-/** Structured output schema for parsed teacher queries. */
-export const ParsedQuerySchema = z.object({
-  intent: z.enum(['units', 'lessons']).describe('Whether the user wants units or lessons.'),
-  text: z.string().describe('Topical text suitable for semantic search.').default(''),
-  subject: z.string().optional(),
-  keyStage: z.string().optional(),
-  minLessons: z.number().int().min(0).optional(),
-});
-
-export type ParsedQueryRaw = z.infer<typeof ParsedQuerySchema>;
-export interface ParsedQuery {
-  intent: 'units' | 'lessons';
-  text: string;
-  subject?: Subject;
-  keyStage?: KeyStage;
-  minLessons?: number;
-}
-
-export async function parseQuery(q: string): Promise<ParsedQuery> {
+export async function parseQuery(query: string): Promise<QueryParserResponse> {
   const e = env();
   const openai = createOpenAI({ apiKey: e.OPENAI_API_KEY });
-  const { object } = await generateObject({
+  const request = QueryParserRequestSchema.parse({ query });
+
+  type Generation = {
+    intent: QueryParserIntent;
+    text: QueryParserResponse['text'];
+    subject?: string;
+    keyStage?: string;
+    minLessons?: QueryParserResponse['minLessons'];
+  };
+
+  const GenerationSchema = z
+    .object({
+      intent: z.enum(QUERY_PARSER_INTENT_ENUM),
+      text: z.string().default(''),
+      subject: z.string().optional(),
+      keyStage: z.string().optional(),
+      minLessons: z.number().int().min(0).optional(),
+    })
+    .strict();
+
+  const { object: rawObject } = await generateObject({
     model: openai('gpt-4o-mini'),
     temperature: 0,
     prompt: [
       'You convert teacher queries into parameters for a curriculum search engine.',
       'Return intent=lessons|units, optional subject and keyStage (ks1-ks4), optional minLessons, and the topical text for search.',
       "Be conservative with subject/keyStage unless strongly implied. For phrases like 'KS4 geography', set both.",
-      `\nUser query: ${q}`,
+      `\nUser query: ${request.query}`,
     ].join('\n'),
-    schema: ParsedQuerySchema,
+    schema: zodSchema(GenerationSchema),
+    output: 'object',
   });
 
-  // Validate subject/keyStage with SDK guards; drop invalid values.
-  const clean: ParsedQuery = {
-    intent: object.intent,
-    text: object.text,
-    subject: object.subject && isSubject(object.subject) ? object.subject : undefined,
-    keyStage: object.keyStage && isKeyStage(object.keyStage) ? object.keyStage : undefined,
-    minLessons: object.minLessons,
+  const provisional: Generation = GenerationSchema.parse(rawObject);
+
+  const sanitized: QueryParserResponse = {
+    intent: provisional.intent,
+    text: provisional.text,
+    subject:
+      provisional.subject && isSubject(provisional.subject) ? provisional.subject : undefined,
+    keyStage:
+      provisional.keyStage && isKeyStage(provisional.keyStage) ? provisional.keyStage : undefined,
+    minLessons: provisional.minLessons,
   };
-  return clean;
+
+  return QueryParserResponseSchema.parse(sanitized);
 }

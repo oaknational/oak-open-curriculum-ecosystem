@@ -7,11 +7,13 @@ lint-profile.json
 dist
 **/dist
 
+# Agent Interactions
+collaboration.txt
+
 # Generated docs
 **/docs/api
 **/.typedoc
 **/_typedoc_*
-
 
 # Type declarations
 **/*.d.ts
@@ -32,6 +34,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+tmp/smoke-logs/
+apps/oak-curriculum-mcp-streamable-http/tmp/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -172,3 +176,6 @@ vite.config.ts.timestamp-*
 
 # stryker temp files
 .stryker-tmp
+
+# Documentation helpers
+packages/sdks/oak-curriculum-sdk/type-gen/utils/ingest-pipeline.md

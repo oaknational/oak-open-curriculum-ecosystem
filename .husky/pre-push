@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Disable turbo TUI
+export TURBO_UI=0
+
 echo "🚀 Running pre-push checks..."
 
 # Check formatting (don't modify files)

@@ -3,13 +3,11 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { renderLandingPageHtml } from './landing-page.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { parseCsv } from './env.js';
 import { bearerAuth } from './auth.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
-import { registerOpenAiConnectorHandlers } from './openai/connector.js';
 import { setupOAuthMetadata, setupLocalAuthorizationServer } from './oauth-metadata.js';
 import { loadRootEnv } from '@oaknational/mcp-env';
 import { logger } from './logging.js';
@@ -63,13 +61,6 @@ export function createApp(options?: CreateAppOptions): express.Express {
   app.use('/mcp', ensureMcpAcceptHeader);
   app.post('/mcp', createMcpHandler(coreTransport));
   app.get('/mcp', createMcpHandler(coreTransport));
-
-  // OpenAI Connector: mirror security and Accept handling, separate server+transport
-  const openAi = initializeServer();
-  registerOpenAiConnectorHandlers(openAi.server);
-  app.use('/openai_connector', ensureMcpAcceptHeader);
-  app.post('/openai_connector', createMcpHandler(openAi.transport));
-  app.get('/openai_connector', createMcpHandler(openAi.transport));
 
   // Gate request handling on readiness
   app.use(async (_req, _res, next) => {
@@ -212,20 +203,6 @@ function initializeCoreMcpServer(): {
   return { server, transport };
 }
 
-function initializeServer(): {
-  server: Server;
-  transport: StreamableHTTPServerTransport;
-  ready: Promise<void>;
-} {
-  const server = new Server(
-    { name: 'oak-curriculum-http', version: '0.1.0' },
-    { capabilities: { tools: {} } },
-  );
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  const ready = server.connect(transport);
-  return { server, transport, ready };
-}
-
 // handlers are registered via handlers.ts
 
 // http handler moved to handlers.ts
@@ -242,7 +219,7 @@ export async function startDevServer(): Promise<void> {
 
   logger.info('Streaming HTTP MCP dev server listening', {
     url: `http://localhost:${String(port)}`,
-    allowNoAuth: process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true',
+    allowNoAuth: true,
     nodeEnv: process.env.NODE_ENV ?? 'unset',
   });
 }

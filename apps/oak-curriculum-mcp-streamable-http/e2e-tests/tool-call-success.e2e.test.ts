@@ -1,8 +1,9 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
-import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import type { ToolHandlerOverrides } from '../src/handlers.js';
+import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
@@ -12,91 +13,106 @@ interface CapturedCall {
   readonly args: unknown;
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
 function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
   return {
     executeMcpTool: (name, args, client) => {
-      void args;
       void client;
       captured.push({ tool: name, args });
-      const data = {
-        data: [
-          { slug: 'ks1', title: 'Key Stage 1' },
-          { slug: 'ks2', title: 'Key Stage 2' },
-        ],
-      };
-      const result: ToolExecutionResult = { data };
+      const data = [
+        {
+          slug: 'ks1',
+          title: 'Key Stage 1',
+          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+        },
+        {
+          slug: 'ks2',
+          title: 'Key Stage 2',
+          canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+        },
+      ];
+      const result: ToolExecutionResult = { status: 200, data };
       return Promise.resolve(result);
     },
   };
 }
 
-function parseSseLine(text: string): Record<string, unknown> {
-  const line = text
-    .split('\n')
-    .map((value) => value.trim())
-    .find((value) => value.startsWith('data: '));
-  if (!line) {
-    throw new Error('SSE payload missing data line');
-  }
-  const parsed = JSON.parse(line.replace(/^data: /, '')) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('SSE payload must be an object');
-  }
-  return parsed;
+function configureDevEnvironment(): () => void {
+  const previousDevToken = process.env.REMOTE_MCP_DEV_TOKEN;
+  const previousBaseUrl = process.env.BASE_URL;
+  const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
+  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.BASE_URL = 'http://localhost:3333';
+  process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
+  return () => {
+    if (typeof previousDevToken === 'string') {
+      process.env.REMOTE_MCP_DEV_TOKEN = previousDevToken;
+    } else {
+      Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
+    }
+    if (typeof previousBaseUrl === 'string') {
+      process.env.BASE_URL = previousBaseUrl;
+    } else {
+      Reflect.deleteProperty(process.env, 'BASE_URL');
+    }
+    if (typeof previousCanonicalUri === 'string') {
+      process.env.MCP_CANONICAL_URI = previousCanonicalUri;
+    } else {
+      Reflect.deleteProperty(process.env, 'MCP_CANONICAL_URI');
+    }
+  };
 }
 
-function extractTextContent(payload: Record<string, unknown>): string {
-  const result = payload.result;
-  if (!isRecord(result)) {
-    throw new Error('SSE result must be an object');
+async function executeToolCall(): Promise<{
+  readonly response: request.Response;
+  readonly captured: CapturedCall[];
+}> {
+  const captured: CapturedCall[] = [];
+  const overrides = createStubOverrides(captured);
+  const app = createApp({ toolHandlerOverrides: overrides });
+  const response = await request(app)
+    .post('/mcp')
+    .set('Host', 'localhost')
+    .set('Authorization', `Bearer ${DEV_TOKEN}`)
+    .set('Accept', ACCEPT)
+    .send({
+      jsonrpc: '2.0',
+      id: '1',
+      method: 'tools/call',
+      params: { name: 'get-key-stages', arguments: { params: {} } },
+    });
+  return { response, captured };
+}
+
+function assertSuccessfulResponse(res: request.Response, captured: CapturedCall[]): void {
+  expect(res.status).toBe(200);
+  expect(res.text).toContain('event: message');
+  expect(captured).toEqual([{ tool: 'get-key-stages', args: { params: {} } }]);
+
+  const envelope = parseSseEnvelope(res.text);
+  const result = parseJsonRpcResult(envelope);
+  expect(result.isError).not.toBe(true);
+  const payload = parseToolSuccessPayload(result);
+  expect(payload.status).toBe(200);
+  if (!Array.isArray(payload.data)) {
+    throw new Error('Tool payload must be an array');
   }
-  const contentArrayRaw = result.content;
-  if (!Array.isArray(contentArrayRaw) || contentArrayRaw.length === 0) {
-    throw new Error('SSE result content must include at least one entry');
+  expect(payload.data.length).toBe(2);
+  const first = payload.data[0] as { readonly canonicalUrl?: string } | undefined;
+  expect(first).toHaveProperty('canonicalUrl');
+}
+
+async function exerciseToolCallSuccessScenario(): Promise<void> {
+  const restoreEnv = configureDevEnvironment();
+  try {
+    const { response, captured } = await executeToolCall();
+    assertSuccessfulResponse(response, captured);
+  } finally {
+    restoreEnv();
   }
-  const contentArray: readonly unknown[] = contentArrayRaw;
-  const first = contentArray[0];
-  if (!isRecord(first) || typeof first.text !== 'string') {
-    throw new Error('SSE text content entry missing');
-  }
-  return first.text;
 }
 
 describe('Tool call success formatting', () => {
   it('returns 200 and formats the executor payload into SSE JSON', async () => {
-    const captured: CapturedCall[] = [];
-    const overrides = createStubOverrides(captured);
-    const app = createApp({ toolHandlerOverrides: overrides });
-    const res = await request(app)
-      .post('/mcp')
-      .set('Host', 'localhost')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
-      .set('Accept', ACCEPT)
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'get-key-stages', arguments: {} },
-      });
-
-    expect(res.status).toBe(200);
-    expect(res.text).toContain('event: message');
-    expect(captured).toEqual([{ tool: 'get-key-stages', args: {} }]);
-
-    const payloadObject = parseSseLine(res.text);
-    const content = extractTextContent(payloadObject);
-    const parsedValue: unknown = content ? JSON.parse(content) : {};
-    if (!isRecord(parsedValue)) {
-      throw new Error('Tool payload must be an object');
-    }
-    const dataField = parsedValue.data;
-    if (!Array.isArray(dataField)) {
-      throw new Error('Tool payload data must be an array');
-    }
-    expect(dataField.length).toBe(2);
+    await exerciseToolCallSuccessScenario();
   });
 });

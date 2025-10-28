@@ -1,9 +1,9 @@
 import { performance } from 'node:perf_hooks';
-import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import {
   createSequenceFacetDocuments,
   extractSequenceFacetSource,
+  resolveSequenceSlug,
   type SequenceFacetSource,
 } from './sequence-facets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
@@ -28,28 +28,29 @@ interface BuildSequenceFacetSourcesOptions {
 
 export async function buildSequenceFacetSources(
   fetchSequenceUnits: SequenceUnitsFetcher,
-  sequences: readonly SubjectSequenceEntry[],
+  sequences: readonly unknown[],
   options?: BuildSequenceFacetSourcesOptions,
 ): Promise<Map<string, SequenceFacetSource>> {
   const sources = new Map<string, SequenceFacetSource>();
 
   for (const sequence of sequences) {
     const fetchStart = performance.now();
-    const payload = await fetchSequenceUnits(sequence.sequenceSlug);
+    const sequenceSlug = resolveSequenceSlug(sequence);
+    const payload = await fetchSequenceUnits(sequenceSlug);
     const fetchDurationMs = performance.now() - fetchStart;
 
     const extractionStart = performance.now();
-    const source = extractSequenceFacetSource(sequence.sequenceSlug, payload);
+    const source = extractSequenceFacetSource(sequenceSlug, payload);
     const extractionDurationMs = performance.now() - extractionStart;
     const unitCount = source.unitSlugs.length;
     const included = unitCount > 0;
 
     if (included) {
-      sources.set(sequence.sequenceSlug, source);
+      sources.set(sequenceSlug, source);
     }
 
     options?.instrumentation?.record({
-      sequenceSlug: sequence.sequenceSlug,
+      sequenceSlug,
       fetchDurationMs,
       extractionDurationMs,
       unitCount,
@@ -63,9 +64,9 @@ export async function buildSequenceFacetSources(
 interface BuildSequenceFacetOpsArgs {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
-  sequences: readonly SubjectSequenceEntry[];
+  sequences: readonly unknown[];
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
+  unitSummaries: ReadonlyMap<string, unknown>;
 }
 
 export function buildSequenceFacetOps({

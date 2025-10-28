@@ -5,10 +5,11 @@ import { cookies } from 'next/headers';
 
 import Script from 'next/script';
 
-import { lexend, workSans } from './ui/fonts';
+import { lexend, workSans } from './ui/global/Theme';
 import StyledComponentsRegistry from './lib/registry';
 import { Providers } from './lib/Providers';
-import HeaderStyles from './ui/client/HeaderStyles';
+import { resolveFixtureModeFromCookies } from './lib/fixture-mode';
+import { Header } from './ui/global/client';
 import { WebVitals } from './ui/web-vitals';
 
 /**
@@ -75,6 +76,7 @@ export default async function RootLayout({
   /** @todo move all of this into an appropriate theme helper */
   const cookieStore = await cookies();
   const cookieValue = cookieStore.get('theme-mode')?.value;
+  const initialFixtureMode = resolveFixtureModeFromCookies(cookieStore);
   const initialMode =
     cookieValue === 'light' || cookieValue === 'dark' || cookieValue === 'system'
       ? cookieValue
@@ -94,8 +96,8 @@ export default async function RootLayout({
       <body className={`${lexend.className} ${workSans.className}`}>
         <WebVitals />
         <StyledComponentsRegistry>
-          <Providers initialMode={initialMode}>
-            <HeaderStyles />
+          <Providers initialMode={initialMode} initialFixtureMode={initialFixtureMode}>
+            <Header />
             {children}
           </Providers>
         </StyledComponentsRegistry>

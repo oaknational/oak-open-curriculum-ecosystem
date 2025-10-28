@@ -1,15 +1,29 @@
 import type {
   KeyStage,
   SearchLessonsIndexDoc,
-  SearchLessonSummary,
   SearchSubjectSlug,
   SearchUnitRollupDoc,
-  SearchUnitSummary,
   SearchUnitsIndexDoc,
 } from '../../types/oak';
+import {
+  extractLessonPlanningFields,
+  extractSequenceIds,
+  extractUnitLessons,
+  extractUnitTopics,
+  readUnitSummaryValue,
+  resolveLessonSummaryIdentifiers,
+  resolveUnitSummaryIdentifiers,
+  type UnitLessonInfo,
+} from './document-transform-helpers';
+
+export {
+  extractLessonPlanningFields,
+  extractSequenceIds,
+  extractUnitLessons,
+} from './document-transform-helpers';
 
 export interface CreateUnitDocumentParams {
-  summary: SearchUnitSummary;
+  summary: unknown;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
   subjectProgrammesUrl: string;
@@ -21,20 +35,26 @@ export function createUnitDocument({
   keyStage,
   subjectProgrammesUrl,
 }: CreateUnitDocumentParams): SearchUnitsIndexDoc {
-  const canonicalUrl = summary.canonicalUrl;
-  if (!canonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
-  }
-
-  const lessonIds = summary.unitLessons?.map((lesson) => lesson.lessonSlug) ?? [];
-  const unitTopics = summary.categories?.map((category) => category.categoryTitle);
-  const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug).filter(Boolean);
+  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
+  const unitLessons: UnitLessonInfo[] = extractUnitLessons(
+    readUnitSummaryValue(summary, 'unitLessons'),
+  );
+  const lessonIds: string[] = unitLessons.map((lesson) => lesson.lessonSlug);
+  const unitTopics: string[] | undefined = extractUnitTopics(
+    readUnitSummaryValue(summary, 'categories'),
+  );
+  const years = normaliseYears(
+    readUnitSummaryValue(summary, 'year'),
+    readUnitSummaryValue(summary, 'yearSlug'),
+  );
+  const sequenceIds: string[] | undefined = extractSequenceIds(
+    readUnitSummaryValue(summary, 'threads'),
+  );
 
   return {
-    unit_id: summary.unitSlug,
-    unit_slug: summary.unitSlug,
-    unit_title: summary.unitTitle,
+    unit_id: unitSlug,
+    unit_slug: unitSlug,
+    unit_title: unitTitle,
     subject_slug: subject,
     key_stage: keyStage,
     years,
@@ -45,7 +65,7 @@ export function createUnitDocument({
     subject_programmes_url: subjectProgrammesUrl,
     sequence_ids: sequenceIds,
     title_suggest: {
-      input: [summary.unitTitle],
+      input: [unitTitle],
       contexts: {
         subject: [subject],
         key_stage: [keyStage],
@@ -58,7 +78,7 @@ export function createUnitDocument({
 export interface CreateLessonDocumentParams {
   lesson: { lessonSlug: string; lessonTitle: string };
   transcript: string;
-  summary: SearchLessonSummary;
+  summary: unknown;
   unitCanonicalUrl: string;
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -78,10 +98,7 @@ export function createLessonDocument({
   unitSequenceIds,
   lessonCount,
 }: CreateLessonDocumentParams): SearchLessonsIndexDoc {
-  const canonicalUrl = summary.canonicalUrl;
-  if (!canonicalUrl) {
-    throw new Error(`Missing canonical URL for lesson ${lesson.lessonSlug}`);
-  }
+  const { unitSlug, unitTitle, canonicalUrl } = resolveLessonSummaryIdentifiers(summary);
 
   const { lessonKeywords, keyLearningPoints, misconceptions, teacherTips, contentGuidance } =
     extractLessonPlanningFields(summary);
@@ -93,8 +110,8 @@ export function createLessonDocument({
     subject_slug: subject,
     key_stage: keyStage,
     years,
-    unit_ids: [summary.unitSlug],
-    unit_titles: [summary.unitTitle],
+    unit_ids: [unitSlug],
+    unit_titles: [unitTitle],
     unit_count: lessonCount,
     unit_urls: [unitCanonicalUrl],
     lesson_keywords: lessonKeywords,
@@ -115,34 +132,8 @@ export function createLessonDocument({
   };
 }
 
-function extractLessonPlanningFields(summary: SearchLessonSummary): {
-  lessonKeywords?: string[];
-  keyLearningPoints?: string[];
-  misconceptions?: string[];
-  teacherTips?: string[];
-  contentGuidance?: string[];
-} {
-  const lessonKeywords = summary.lessonKeywords?.map((item) => item.keyword);
-  const keyLearningPoints = summary.keyLearningPoints?.map((item) => item.keyLearningPoint);
-  const misconceptions = summary.misconceptionsAndCommonMistakes?.map(
-    (item) => `${item.misconception} → ${item.response}`,
-  );
-  const teacherTips = summary.teacherTips?.map((item) => item.teacherTip);
-  const contentGuidance = Array.isArray(summary.contentGuidance)
-    ? summary.contentGuidance.map((item) => item.contentGuidanceDescription)
-    : undefined;
-
-  return {
-    lessonKeywords,
-    keyLearningPoints,
-    misconceptions,
-    teacherTips,
-    contentGuidance,
-  };
-}
-
 export interface CreateRollupDocumentParams {
-  summary: SearchUnitSummary;
+  summary: unknown;
   snippets: string[];
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
@@ -156,22 +147,28 @@ export function createRollupDocument({
   keyStage,
   subjectProgrammesUrl,
 }: CreateRollupDocumentParams): SearchUnitRollupDoc {
-  const canonicalUrl = summary.canonicalUrl;
-  if (!canonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${summary.unitSlug}`);
-  }
-
-  const lessonIds = summary.unitLessons?.map((lesson) => lesson.lessonSlug) ?? [];
-  const unitTopics = summary.categories?.map((category) => category.categoryTitle);
-  const years = normaliseYears(summary.year, summary.yearSlug);
-  const sequenceIds = summary.threads?.map((thread) => thread.slug).filter(Boolean);
+  const { unitSlug, unitTitle, canonicalUrl } = resolveUnitSummaryIdentifiers(summary);
+  const rollupLessons: UnitLessonInfo[] = extractUnitLessons(
+    readUnitSummaryValue(summary, 'unitLessons'),
+  );
+  const lessonIds = rollupLessons.map((lesson) => lesson.lessonSlug);
+  const unitTopics: string[] | undefined = extractUnitTopics(
+    readUnitSummaryValue(summary, 'categories'),
+  );
+  const years = normaliseYears(
+    readUnitSummaryValue(summary, 'year'),
+    readUnitSummaryValue(summary, 'yearSlug'),
+  );
+  const sequenceIds: string[] | undefined = extractSequenceIds(
+    readUnitSummaryValue(summary, 'threads'),
+  );
 
   const rollupText = snippets.join('\n\n');
 
   return {
-    unit_id: summary.unitSlug,
-    unit_slug: summary.unitSlug,
-    unit_title: summary.unitTitle,
+    unit_id: unitSlug,
+    unit_slug: unitSlug,
+    unit_title: unitTitle,
     subject_slug: subject,
     key_stage: keyStage,
     years,

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** Strict runtime env validation (no unsafe process.env). */
+/** Strict runtime env validation aligned with Next.js defaults. */
 export const BaseEnvSchema = z.object({
   ELASTICSEARCH_URL: z.url(),
   ELASTICSEARCH_API_KEY: z.string().min(10),
@@ -24,11 +24,14 @@ export const BaseEnvSchema = z.object({
   ZERO_HIT_INDEX_RETENTION_DAYS: z.coerce.number().int().min(7).max(365).default(30),
 });
 
-export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
-  if (!v.OAK_API_KEY) {
+export const EnvSchema = BaseEnvSchema.superRefine((value, ctx) => {
+  if (!value.OAK_API_KEY) {
     ctx.addIssue({ code: 'custom', message: 'Set OAK_API_KEY.' });
   }
-  if (v.AI_PROVIDER === 'openai' && (!v.OPENAI_API_KEY || v.OPENAI_API_KEY.length < 10)) {
+  if (
+    value.AI_PROVIDER === 'openai' &&
+    (!value.OPENAI_API_KEY || value.OPENAI_API_KEY.length < 10)
+  ) {
     ctx.addIssue({
       code: 'custom',
       message: 'OPENAI_API_KEY is required when AI_PROVIDER=openai.',
@@ -37,35 +40,43 @@ export const EnvSchema = BaseEnvSchema.superRefine((v, ctx) => {
 });
 
 export type Env = z.infer<typeof EnvSchema>;
-let cached: (Env & { OAK_EFFECTIVE_KEY: string }) | null = null;
 
-export function env(): Env & { OAK_EFFECTIVE_KEY: string } {
-  if (cached) {
-    return cached;
-  }
-  const parsed = EnvSchema.safeParse({
+type EnvResult = Env & { OAK_EFFECTIVE_KEY: string };
+
+function readProcessEnv(): Record<string, string | undefined> {
+  return {
     ELASTICSEARCH_URL: process.env.ELASTICSEARCH_URL,
     ELASTICSEARCH_API_KEY: process.env.ELASTICSEARCH_API_KEY,
     OAK_API_KEY: process.env.OAK_API_KEY,
     SEARCH_API_KEY: process.env.SEARCH_API_KEY,
     SEARCH_INDEX_VERSION: process.env.SEARCH_INDEX_VERSION,
     ZERO_HIT_WEBHOOK_URL: process.env.ZERO_HIT_WEBHOOK_URL,
-    LOG_LEVEL: process.env.LOG_LEVEL ?? 'info',
-    AI_PROVIDER: process.env.AI_PROVIDER ?? 'openai',
+    LOG_LEVEL: process.env.LOG_LEVEL,
+    AI_PROVIDER: process.env.AI_PROVIDER,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     SEARCH_INDEX_TARGET: process.env.SEARCH_INDEX_TARGET,
     ZERO_HIT_PERSISTENCE_ENABLED: process.env.ZERO_HIT_PERSISTENCE_ENABLED,
     ZERO_HIT_INDEX_RETENTION_DAYS: process.env.ZERO_HIT_INDEX_RETENTION_DAYS,
-  });
+  };
+}
+
+function parseEnv(raw: Record<string, string | undefined>): EnvResult {
+  const parsed = EnvSchema.safeParse(raw);
   if (!parsed.success) {
     throw new Error(parsed.error.message);
   }
-  const key = parsed.data.OAK_API_KEY ?? '';
-  cached = Object.assign(parsed.data, { OAK_EFFECTIVE_KEY: key });
-  return cached;
+  const key = parsed.data.OAK_API_KEY;
+  if (typeof key !== 'string' || key.length === 0) {
+    throw new Error('Set OAK_API_KEY.');
+  }
+  return { ...parsed.data, OAK_EFFECTIVE_KEY: key };
 }
 
-export function optionalEnv(): (Env & { OAK_EFFECTIVE_KEY: string }) | null {
+export function env(): EnvResult {
+  return parseEnv(readProcessEnv());
+}
+
+export function optionalEnv(): EnvResult | null {
   try {
     return env();
   } catch {
@@ -75,10 +86,10 @@ export function optionalEnv(): (Env & { OAK_EFFECTIVE_KEY: string }) | null {
 
 /** True when natural-language parsing (OpenAI) is available. */
 export function llmEnabled(): boolean {
-  const e = env();
+  const current = env();
   return (
-    e.AI_PROVIDER === 'openai' &&
-    typeof e.OPENAI_API_KEY === 'string' &&
-    e.OPENAI_API_KEY.length > 0
+    current.AI_PROVIDER === 'openai' &&
+    typeof current.OPENAI_API_KEY === 'string' &&
+    current.OPENAI_API_KEY.length > 0
   );
 }

@@ -1,4 +1,4 @@
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**\n * GENERATED FILE - DO NOT EDIT\n *\n * Search fixture helpers derived from the Open Curriculum schema.\n */\n\n`;
@@ -161,7 +161,7 @@ export type {
   );
 }
 
-export function generateSearchFixtureModules(_schema: OpenAPI3): FileMap {
+export function generateSearchFixtureModules(_schema: OpenAPIObject): FileMap {
   void _schema;
   return {
     '../search/fixtures.ts': createFixturesModule(),

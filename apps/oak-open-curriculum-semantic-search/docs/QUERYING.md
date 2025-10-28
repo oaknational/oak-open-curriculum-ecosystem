@@ -1,8 +1,10 @@
 # Query Patterns
 
-The definitive architecture uses **server-side Reciprocal Rank Fusion (RRF)** to combine lexical and semantic relevance in a single Elasticsearch `_search` per scope. This guide documents the canonical request bodies and highlights, facet, and suggestion behaviour.
+The definitive architecture uses **server-side Reciprocal Rank Fusion (RRF)** to combine lexical and semantic relevance in a single Elasticsearch `_search` per scope. RRF allows us to keep lexical lesson-planning fields and semantic embeddings in sync without multiple network hops, and it produces stable scoring even when one signal is sparse. This guide documents the canonical request bodies, highlights, facets, suggestions, and how fixture modes interact with the query layer.
 
 ## Lessons (`oak_lessons`)
+
+> Fixture mode: when `SEMANTIC_SEARCH_USE_FIXTURES` is set (or `?fixtures=` is present), the API returns SDK-generated lesson results that already match the schema below. Use this to iterate on UI copy and zero-hit handling without Elasticsearch.
 
 ```json
 {
@@ -66,6 +68,8 @@ Notes:
 
 ## Units (`oak_unit_rollup`)
 
+> Fixture mode mirrors the live schema, including rollup snippets and facets, so UI and Playwright tests can exercise success / empty / error flows offline.
+
 ```json
 {
   "size": 25,
@@ -122,6 +126,8 @@ Notes:
 
 ## Sequences (`oak_sequences`)
 
+> Sequence fixtures default to semantic data when available; in `fixtures-empty` mode the API returns an empty array with deterministic cache headers.
+
 ```json
 {
   "size": 25,
@@ -159,6 +165,8 @@ Notes:
 
 ## Suggestion / type-ahead (`POST /api/search/suggest`)
 
+> Suggestions also honour fixture modes. In `fixtures` mode responses are seeded from the SDK fixture builders; `fixtures-empty` returns an empty list with the default cache contract; `fixtures-error` produces a `503` with `FIXTURE_ERROR`.
+
 ```json
 {
   "prefix": "mount",
@@ -191,6 +199,8 @@ Response structure:
 ```
 
 ## Zero-hit logging
+
+Zero-hit telemetry fires regardless of fixture mode so UI flows remain consistent during development. The admin dashboard reads from the same pipeline, and persistence can be enabled via `ZERO_HIT_PERSISTENCE_ENABLED=true`.
 
 Whenever a search returns zero hits, log:
 
@@ -236,6 +246,7 @@ The script issues a `delete_by_query` request targeting `@timestamp < now-<days>
 
 - Build queries using pure functions (see `src/lib/queries`) so they are unit testable.
 - Always normalise filters (lowercase slugs) before hashing for caching.
-- Update this document and corresponding tests whenever mappings or query logic change.
+- Honour `SEARCH_INDEX_TARGET` when constructing index names so sandbox runs stay isolated.
+- Update this document, SDK fixtures, and corresponding tests whenever mappings or query logic change.
 
-For more context, review `semantic-search-api-plan.md` and the caching plan to see how queries integrate with versioned caching.
+For more context, review `semantic-search-api-plan.md`, the caching plan, and the fixtures module to see how queries integrate with versioned caching and deterministic data.

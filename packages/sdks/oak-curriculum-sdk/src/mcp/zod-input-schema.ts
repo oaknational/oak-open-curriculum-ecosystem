@@ -1,45 +1,51 @@
 import { z } from 'zod';
-import { typeSafeEntries } from '../types/helpers.js';
+import { typeSafeEntries } from '../types/helpers/type-helpers.js';
 
-interface McpBaseToolInputSchemaBase {
+interface JsonSchemaPropertyString {
+  readonly type: 'string';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyNumber {
+  readonly type: 'number';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyBoolean {
+  readonly type: 'boolean';
+  readonly enum?: readonly unknown[];
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyArray {
+  readonly type: 'array';
+  readonly items: JsonSchemaProperty;
+  readonly description?: string;
+  readonly default?: unknown;
+}
+interface JsonSchemaPropertyObject {
   readonly type: 'object';
-  readonly required?: string[];
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly required?: readonly string[];
+  readonly additionalProperties?: boolean;
+  readonly description?: string;
+  readonly default?: unknown;
 }
+type JsonSchemaProperty =
+  | JsonSchemaPropertyString
+  | JsonSchemaPropertyNumber
+  | JsonSchemaPropertyBoolean
+  | JsonSchemaPropertyArray
+  | JsonSchemaPropertyObject;
 
-type Primitive = 'string' | 'number' | 'boolean';
-interface ArrayProperty {
-  type: 'array';
-  items: { type: Primitive };
+export interface GenericToolInputJsonSchema {
+  readonly type: 'object';
+  readonly properties?: Readonly<Record<string, JsonSchemaProperty>>;
+  readonly required?: readonly string[];
+  readonly additionalProperties?: boolean;
 }
-interface StringProperty {
-  type: 'string';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-interface NumberProperty {
-  type: 'number';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-interface BooleanProperty {
-  type: 'boolean';
-  enum?: readonly unknown[];
-  description?: string;
-  default?: unknown;
-}
-type PropertySchema =
-  | StringProperty
-  | NumberProperty
-  | BooleanProperty
-  | (ArrayProperty & { description?: string; default?: unknown });
-
-export type GenericToolInputJsonSchema = McpBaseToolInputSchemaBase & {
-  [key: string]: unknown;
-  // Narrower helper type for local schema-to-zod conversion when present
-  readonly properties?: Readonly<Record<string, PropertySchema>>;
-};
 
 // Backwards-compatible alias used by generated files
 export type ToolInputJsonSchema = GenericToolInputJsonSchema;
@@ -54,18 +60,23 @@ function buildEnumNumberSchema(values: readonly unknown[]): z.ZodTypeAny {
   return z.number().refine((v) => allowed.includes(v), { message: 'Invalid enum value' });
 }
 
-function buildArraySchema(prop: ArrayProperty): z.ZodTypeAny {
-  const itemType = prop.items.type;
-  if (itemType === 'string') {
-    return z.array(z.string());
-  }
-  if (itemType === 'number') {
-    return z.array(z.number());
-  }
-  return z.array(z.boolean());
+function buildArraySchema(prop: JsonSchemaPropertyArray): z.ZodTypeAny {
+  return z.array(zodForProperty(prop.items));
 }
 
-function zodForProperty(prop: PropertySchema): z.ZodTypeAny {
+function buildObjectSchema(prop: JsonSchemaPropertyObject): z.ZodTypeAny {
+  const required = new Set(prop.required ?? []);
+  const properties = prop.properties ?? {};
+  const shape: z.ZodRawShape = {};
+  for (const [key, property] of typeSafeEntries(properties)) {
+    const base = zodForProperty(property);
+    shape[key] = required.has(key) ? base : base.optional();
+  }
+  const objectSchema = z.object(shape);
+  return prop.additionalProperties === false ? objectSchema.strict() : objectSchema;
+}
+
+function zodForProperty(prop: JsonSchemaProperty): z.ZodTypeAny {
   switch (prop.type) {
     case 'string': {
       return Array.isArray(prop.enum) ? buildEnumStringSchema(prop.enum) : z.string();
@@ -76,7 +87,9 @@ function zodForProperty(prop: PropertySchema): z.ZodTypeAny {
     case 'boolean':
       return z.boolean();
     case 'array':
-      return buildArraySchema({ type: 'array', items: prop.items });
+      return buildArraySchema(prop);
+    case 'object':
+      return buildObjectSchema(prop);
     default:
       return z.any();
   }

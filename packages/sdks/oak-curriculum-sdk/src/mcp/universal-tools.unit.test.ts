@@ -1,42 +1,104 @@
 import { describe, it, expect, vi } from 'vitest';
-import {
-  listUniversalTools,
-  isUniversalToolName,
-  createUniversalToolExecutor,
-} from './universal-tools.js';
-import { OPENAI_CONNECTOR_TOOL_DEFS } from '../types/generated/openai-connector/index.js';
-import { MCP_TOOLS } from '../types/generated/api-schema/mcp-tools/index.js';
+import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { McpToolError } from './execute-tool-call.js';
+import type { GenericToolInputJsonSchema } from './zod-input-schema.js';
+import { SEARCH_INPUT_SCHEMA } from './aggregated-search.js';
+import type { UniversalToolName } from './universal-tools.js';
+import { generateCanonicalUrlWithContext } from '../types/generated/api-schema/routing/url-helpers.js';
 
-const SAMPLE_MCP_TOOL_NAME = 'get-key-stages-subject-lessons';
-
-if (!(SAMPLE_MCP_TOOL_NAME in MCP_TOOLS)) {
-  throw new Error('Expected get-key-stages-subject-lessons tool to be generated');
+interface McpToolDefinition {
+  readonly description?: string;
+  readonly inputSchema: GenericToolInputJsonSchema;
 }
 
+const { sampleMcpToolName, mcpTools } = vi.hoisted(() => {
+  const name = 'get-key-stages-subject-lessons' as const;
+  const definition: McpToolDefinition = {
+    description: 'List lessons for a subject',
+    inputSchema: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        params: {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            path: {
+              type: 'object',
+              additionalProperties: false,
+              properties: {
+                keyStage: { type: 'string' },
+                subject: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const tools: Record<string, McpToolDefinition> = {
+    [name]: definition,
+  };
+
+  return {
+    sampleMcpToolName: name,
+    mcpTools: tools,
+  };
+});
+
+vi.mock('../types/generated/api-schema/mcp-tools/index.js', () => ({
+  toolNames: [sampleMcpToolName] as const,
+  getToolFromToolName: (name: string) => mcpTools[name],
+  isToolName: (value: unknown) => typeof value === 'string' && value in mcpTools,
+}));
+
+function assertIsRecord(value: unknown): asserts value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error('Expected object payload');
+  }
+}
+
+function parseTextContent(result: CallToolResult): Record<string, unknown> {
+  const firstContent = result.content[0];
+  if (firstContent.type !== 'text') {
+    throw new Error(`Expected text content but received ${firstContent.type}`);
+  }
+  const parsed: unknown = JSON.parse(firstContent.text);
+  assertIsRecord(parsed);
+  return parsed;
+}
+
+const { listUniversalTools, isUniversalToolName, createUniversalToolExecutor } = await import(
+  './universal-tools.js'
+);
+
+const SAMPLE_MCP_TOOL_NAME: UniversalToolName = sampleMcpToolName;
+
 describe('listUniversalTools', () => {
-  it('includes generated openai tools', () => {
+  it('includes aggregated helpers', () => {
     const tools = listUniversalTools();
-    const names = tools.map((tool) => tool.name);
+    const names = tools.map((tool) => tool.name as string);
     expect(names).toContain('search');
     expect(names).toContain('fetch');
   });
 
   it('includes generated curriculum tools', () => {
     const tools = listUniversalTools();
-    const names = tools.map((tool) => tool.name);
+    const names = tools.map((tool) => tool.name as string);
     expect(names).toContain(SAMPLE_MCP_TOOL_NAME);
   });
 
-  it('preserves schema metadata from generated definitions', () => {
+  it('preserves aggregator schema metadata', () => {
     const tools = listUniversalTools();
     const searchTool = tools.find((tool) => tool.name === 'search');
     expect(searchTool).toBeDefined();
-    expect(searchTool?.inputSchema).toEqual(OPENAI_CONNECTOR_TOOL_DEFS.search.inputSchema);
+    expect(searchTool?.inputSchema).toEqual(SEARCH_INPUT_SCHEMA);
   });
 });
 
 describe('isUniversalToolName', () => {
-  it('matches search and fetch', () => {
+  it('matches aggregated tool names', () => {
     expect(isUniversalToolName('search')).toBe(true);
     expect(isUniversalToolName('fetch')).toBe(true);
   });
@@ -51,174 +113,95 @@ describe('isUniversalToolName', () => {
 });
 
 describe('createUniversalToolExecutor', () => {
-  it('delegates to openai executor for search', async () => {
-    const executeMcpTool = vi.fn();
-    const executeOpenAiTool = vi.fn().mockResolvedValue({ result: 'ok' });
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+  it('aggregates search results using the MCP executor', async () => {
+    const executeMcpTool = vi.fn().mockImplementation((name: string) => {
+      if (name === 'get-search-lessons') {
+        return Promise.resolve({ status: 200, data: { lessons: ['lesson-a'] } });
+      }
+      if (name === 'get-search-transcripts') {
+        return Promise.resolve({ status: 200, data: { transcripts: ['transcript-a'] } });
+      }
+      return Promise.resolve({ data: null });
+    });
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
     const result = await callUniversalTool('search', { query: 'photosynthesis' });
 
-    expect(executeOpenAiTool).toHaveBeenCalledWith('search', { query: 'photosynthesis' });
-    expect(result.isError).toBeUndefined();
-    expect(result.content[0]).toEqual({ type: 'text', text: JSON.stringify({ result: 'ok' }) });
-  });
-
-  it('delegates to mcp executor for curriculum tools', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'science',
+    expect(executeMcpTool).toHaveBeenCalledWith('get-search-lessons', {
+      params: { query: { q: 'photosynthesis' } },
     });
-
-    expect(executeMcpTool).toHaveBeenCalledTimes(1);
-    const callArgs = executeMcpTool.mock.calls[0];
-    expect(callArgs[0]).toBe(SAMPLE_MCP_TOOL_NAME);
-    expect(callArgs[1]).toEqual({
-      keyStage: 'ks3',
-      subject: 'science',
+    expect(executeMcpTool).toHaveBeenCalledWith('get-search-transcripts', {
+      params: { query: { q: 'photosynthesis' } },
     });
     expect(result.isError).toBeUndefined();
-    expect(result.content[0]).toEqual({ type: 'text', text: JSON.stringify({ status: 'ok' }) });
-  });
-
-  it('standardises subject and key stage synonyms before validation', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'Key Stage 3',
-      subject: 'math',
-    });
-
-    expect(executeMcpTool).toHaveBeenCalledTimes(1);
-    const callArgs = executeMcpTool.mock.calls[0];
-    expect(callArgs[1]).toEqual({
-      keyStage: 'ks3',
-      subject: 'maths',
+    const payload = parseTextContent(result);
+    expect(payload).toEqual({
+      status: 200,
+      data: {
+        q: 'photosynthesis',
+        keyStage: undefined,
+        subject: undefined,
+        unit: undefined,
+        lessonsStatus: 200,
+        lessons: { lessons: ['lesson-a'] },
+        transcriptsStatus: 200,
+        transcripts: { transcripts: ['transcript-a'] },
+      },
     });
   });
 
-  it.each([
-    ['Fine Art', 'art'],
-    ['Civics', 'citizenship'],
-    ['Food and Nutrition', 'cooking-nutrition'],
-    ['Design and Technology', 'design-technology'],
-    ['French Language', 'french'],
-    ['Geo', 'geography'],
-    ['German Language', 'german'],
-    ['Historical Studies', 'history'],
-    ['Music Education', 'music'],
-    ['PE', 'physical-education'],
-    ['Religious Studies', 'religious-education'],
-    ['PSHE', 'rshe-pshe'],
-    ['Spanish Language', 'spanish'],
-  ])('normalises subject synonym %s to %s', async (input, expected) => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: input,
+  it('aggregates fetch results using the MCP executor', async () => {
+    const executeMcpTool = vi.fn().mockImplementation((name: string) => {
+      if (name === 'get-lessons-summary') {
+        return Promise.resolve({ status: 200, data: { lesson: { id: 'lesson-slug' } } });
+      }
+      return Promise.resolve({ status: 200, data: null });
     });
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
-    expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: expected,
+    const result = await callUniversalTool('fetch', { id: 'lesson:maths-lesson' });
+
+    expect(executeMcpTool).toHaveBeenCalledWith('get-lessons-summary', {
+      params: { path: { lesson: 'maths-lesson' } },
+    });
+    const payload = parseTextContent(result);
+    const expectedCanonicalUrl = generateCanonicalUrlWithContext('lesson', 'lesson:maths-lesson');
+    expect(payload).toEqual({
+      status: 200,
+      data: {
+        id: 'lesson:maths-lesson',
+        type: 'lesson',
+        canonicalUrl: expectedCanonicalUrl,
+        data: { lesson: { id: 'lesson-slug' } },
+      },
     });
   });
 
-  it.each([
-    ['KS 1', 'ks1'],
-    ['Key Stage Two', 'ks2'],
-    ['ks 3', 'ks3'],
-    ['Key Stage Four', 'ks4'],
-    ['KS-2', 'ks2'],
-  ])('normalises key stage synonym %s to %s', async (input, expected) => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { status: 'ok' } });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+  it('delegates curriculum tools directly to the MCP executor', async () => {
+    const executeMcpTool = vi.fn().mockResolvedValue({ status: 200, data: { status: 'ok' } });
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
-    await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: input,
-      subject: 'science',
-    });
+    const args = {
+      params: {
+        path: { keyStage: 'ks3', subject: 'science' },
+      },
+    };
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, args);
 
-    expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: expected,
-      subject: 'science',
-    });
+    expect(executeMcpTool).toHaveBeenCalledWith(SAMPLE_MCP_TOOL_NAME, args);
+    const payload = parseTextContent(result);
+    expect(payload).toEqual({ status: 200, data: { status: 'ok' } });
   });
 
-  it('returns an error result when validation fails', async () => {
-    const executeMcpTool = vi.fn();
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
+  it('maps executor errors to CallToolResult', async () => {
+    const executeMcpTool = vi
+      .fn()
+      .mockResolvedValue({ error: new McpToolError('Execution failed', SAMPLE_MCP_TOOL_NAME) });
+    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool });
 
-    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, { subject: 'science' });
+    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {});
 
     expect(result.isError).toBe(true);
-    expect(result.content[0]?.type).toBe('text');
-    expect(result.content[0]?.text).toContain('Required');
-    expect(executeMcpTool).not.toHaveBeenCalled();
-  });
-
-  it('rejects plain string arguments for get-search-lessons', async () => {
-    const executeMcpTool = vi.fn();
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    const result = await callUniversalTool('get-search-lessons', 'trees');
-
-    expect(result.isError).toBe(true);
-    const message = result.content[0]?.type === 'text' ? result.content[0].text : '';
-    expect(message).toContain('Expected object, received string');
-    expect(executeMcpTool).not.toHaveBeenCalled();
-  });
-
-  it('accepts structured arguments for get-search-lessons', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ data: { data: [] } });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    const result = await callUniversalTool('get-search-lessons', { q: 'trees' });
-
-    expect(result.isError).toBeUndefined();
-    expect(executeMcpTool).toHaveBeenCalledWith('get-search-lessons', { q: 'trees' });
-  });
-
-  it('returns an error when subject cannot be standardised', async () => {
-    const executeMcpTool = vi.fn();
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'matematico',
-    });
-
-    expect(result.isError).toBe(true);
-    const text = result.content[0] && 'text' in result.content[0] ? result.content[0].text : '';
-    expect(text).toContain('Unknown subject');
-    expect(text).toContain('Allowed subjects');
-    expect(executeMcpTool).not.toHaveBeenCalled();
-  });
-
-  it('returns an error result when executors throw', async () => {
-    const executeMcpTool = vi.fn().mockResolvedValue({ error: new Error('failure') });
-    const executeOpenAiTool = vi.fn();
-    const callUniversalTool = createUniversalToolExecutor({ executeMcpTool, executeOpenAiTool });
-
-    const result = await callUniversalTool(SAMPLE_MCP_TOOL_NAME, {
-      keyStage: 'ks3',
-      subject: 'science',
-    });
-
-    expect(result.isError).toBe(true);
-    expect(result.content[0]?.text).toContain('failure');
+    expect(result.content[0]).toEqual({ type: 'text', text: 'Execution failed' });
   });
 });

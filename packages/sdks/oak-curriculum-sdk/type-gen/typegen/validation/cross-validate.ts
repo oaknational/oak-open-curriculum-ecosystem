@@ -1,12 +1,7 @@
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject, OperationObject } from 'openapi3-ts/oas31';
 import type { ResponseMapEntry } from '../response-map/build-response-map.js';
-import { typeSafeKeys, isPlainObject, getOwnValue } from '../../../src/types/helpers.js';
 
 const ALLOWED_METHODS = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options'] as const;
-
-function isObject(value: unknown): value is object {
-  return isPlainObject(value);
-}
 
 function toColon(path: string): string {
   return path.replace(/{([^}]+)}/g, ':$1');
@@ -36,40 +31,40 @@ function isAllowedMethodKey(k: string): boolean {
 }
 
 function validatePathMethods(p: string, pathItem: unknown): void {
-  if (!isObject(pathItem)) {
+  if (!isPathItemObject(pathItem)) {
     return;
   }
-  for (const k of typeSafeKeys(pathItem)) {
-    if (isAllowedMethodKey(k)) {
+  for (const key of Object.keys(pathItem)) {
+    if (isAllowedMethodKey(key)) {
       continue;
     }
-    if (k === 'parameters' || k === 'summary' || k === 'description' || k === 'servers') {
+    if (key === 'parameters' || key === 'summary' || key === 'description' || key === 'servers') {
       continue;
     }
-    throw new Error(`Unknown HTTP method key on path ${p}: ${String(k)}`);
+    throw new Error(`Unknown HTTP method key on path ${p}: ${key}`);
   }
 }
 
-export function crossValidatePaths(schema: OpenAPI3): void {
+export function crossValidatePaths(schema: OpenAPIObject): void {
   const paths = schema.paths ?? {};
-  for (const p of typeSafeKeys(paths)) {
-    validatePathTransform(p);
-    const pathItem = getOwnValue(paths, p);
-    validatePathMethods(p, pathItem);
+  for (const [path, pathItem] of Object.entries(paths)) {
+    validatePathTransform(path);
+    validatePathMethods(path, pathItem);
   }
 }
 
 export function crossValidateResponseMap(
-  schema: OpenAPI3,
+  schema: OpenAPIObject,
   entries: readonly ResponseMapEntry[],
 ): void {
-  const expected = collectExpectedResponseKeys(schema);
+  const validated = schema;
+  const expected = collectExpectedResponseKeys(validated);
   const actual = new Set<string>(entries.map((e) => `${e.operationId}:${e.status}`));
   reportDiffIfAny(expected, actual);
 }
 
 export function runAllCrossValidations(
-  schema: OpenAPI3,
+  schema: OpenAPIObject,
   responseEntries: readonly ResponseMapEntry[],
 ): void {
   crossValidatePaths(schema);
@@ -78,20 +73,19 @@ export function runAllCrossValidations(
 
 // getOwnValue imported
 
-function collectExpectedResponseKeys(schema: OpenAPI3): Set<string> {
+function collectExpectedResponseKeys(schema: OpenAPIObject): Set<string> {
   const out = new Set<string>();
   const paths = schema.paths ?? {};
-  for (const p of typeSafeKeys(paths)) {
-    const pathItem = getOwnValue(paths, p);
-    if (!isObject(pathItem)) {
+  for (const [, pathItem] of Object.entries(paths)) {
+    if (!isPathItemObject(pathItem)) {
       continue;
     }
-    for (const m of ALLOWED_METHODS) {
-      const opUnknown = getOwnValue(pathItem, m);
-      if (!isObject(opUnknown)) {
+    for (const method of ALLOWED_METHODS) {
+      const candidate = pathItem[method];
+      if (!isOperationObject(candidate)) {
         continue;
       }
-      addExpectedFromOperation(opUnknown, out);
+      addExpectedFromOperation(candidate, out);
     }
   }
   return out;
@@ -104,7 +98,7 @@ function computeMissing(expected: Set<string>, actual: Set<string>): string[] {
       missing.push(key);
     }
   }
-  return missing;
+  return missing.sort();
 }
 
 function computeExtra(expected: Set<string>, actual: Set<string>): string[] {
@@ -133,39 +127,53 @@ function reportDiffIfAny(expected: Set<string>, actual: Set<string>): void {
   throw new Error(lines.join('\n'));
 }
 
-function addExpectedFromOperation(op: unknown, out: Set<string>): void {
-  const opIdVal = getOwnValue(op, 'operationId');
-  if (typeof opIdVal !== 'string') {
+function addExpectedFromOperation(op: OperationObject, out: Set<string>): void {
+  if (!op.operationId) {
     return;
   }
-  const responses = getOwnValue(op, 'responses');
-  if (!isObject(responses)) {
-    return;
-  }
-  for (const status of typeSafeKeys(responses)) {
-    const resp = getOwnValue(responses, status);
-    if (hasJsonRef(resp)) {
-      out.add(`${opIdVal}:${String(status)}`);
+  const responses = op.responses ?? {};
+  for (const [status, resp] of Object.entries(responses)) {
+    if (hasJsonSchema(resp)) {
+      out.add(`${op.operationId}:${status}`);
     }
   }
 }
 
-function hasJsonRef(value: unknown): boolean {
-  if (!isObject(value)) {
+function hasJsonSchema(value: unknown): boolean {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return false;
   }
-  const content = getOwnValue(value, 'content');
-  if (!isObject(content)) {
+  const content = 'content' in value ? value.content : undefined;
+  if (typeof content !== 'object' || content === null || Array.isArray(content)) {
     return false;
   }
-  const json = getOwnValue(content, 'application/json');
-  if (!isObject(json)) {
+  const json = 'application/json' in content ? content['application/json'] : undefined;
+  if (typeof json !== 'object' || json === null || Array.isArray(json)) {
     return false;
   }
-  const sObj = getOwnValue(json, 'schema');
-  if (!isObject(sObj)) {
+  if (!('schema' in json)) {
     return false;
   }
-  const ref = getOwnValue(sObj, '$ref');
-  return typeof ref === 'string';
+  const schema = json.schema;
+  if (typeof schema !== 'object' || schema === null || Array.isArray(schema)) {
+    return false;
+  }
+  return true;
+}
+
+function isPathItemObject(value: unknown): value is Record<PropertyKey, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isOperationObject(value: unknown): value is OperationObject {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  if ('operationId' in value && typeof value.operationId !== 'string') {
+    return false;
+  }
+  if ('parameters' in value && !Array.isArray(value.parameters)) {
+    return false;
+  }
+  return 'responses' in value && typeof value.responses === 'object' && value.responses !== null;
 }

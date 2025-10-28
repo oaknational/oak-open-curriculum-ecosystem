@@ -27,8 +27,6 @@
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
     "dev": "tsup --watch",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
     "lint": "eslint  .",
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -39,7 +37,6 @@
     "@oaknational/mcp-logger": "workspace:*"
   },
   "devDependencies": {
-    "pnpm": "^10.17.1",
     "typescript": "^5.9.2"
   },
   "engines": {

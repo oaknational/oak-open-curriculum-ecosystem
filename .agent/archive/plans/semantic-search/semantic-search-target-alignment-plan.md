@@ -140,7 +140,7 @@ Objective: showcase a complete hybrid search experience with first-class filteri
 3. ACTION: Add failing tests that lock header spacing, responsive search grids, and extended theme palette exports (including deeper `oakGreen` shades).
 4. REVIEW: QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx` to observe failing assertions.
 5. QUALITY-GATE: Capture baseline notes/snapshots from failing tests to guide implementation.
-6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+6. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
 7. ACTION: Implement responsive layout + spacing changes driven by theme CSS variables, introduce additional brand palette shades, and remove hard-coded styles from header/search components.
 8. REVIEW: Inspect updated components to ensure spacing/colour rules flow exclusively via Oak tokens or bridge variables; adjust any residual hard-coded values.
 9. QUALITY-GATE: run `pnpm -C apps/oak-open-curriculum-semantic-search test SearchPageClient.integration.test.tsx HeaderStyles.integration.test.tsx theme-factory.unit.test.ts` to confirm green state.

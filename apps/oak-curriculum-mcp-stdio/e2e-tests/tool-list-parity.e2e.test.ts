@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
-import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
+import { toolNames } from '@oaknational/oak-curriculum-sdk';
 
 process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
 
@@ -34,10 +34,10 @@ describe('Tool list parity with SDK', () => {
     await transport.close();
   });
 
-  it('lists exactly the tools available in SDK.MCP_TOOLS', async () => {
+  it('lists exactly the tools available in @oaknational/oak-curriculum-sdk', async () => {
     const toolsResponse = await client.listTools();
     const listedNames = toolsResponse.tools.map((t) => t.name).sort();
-    const sdkNames = Object.keys(MCP_TOOLS).sort();
+    const sdkNames = [...toolNames].sort();
     expect(listedNames).toEqual(sdkNames);
   });
 });

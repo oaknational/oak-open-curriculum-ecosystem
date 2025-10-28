@@ -3,16 +3,10 @@ import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
-
-interface ToolTextContent {
-  readonly type: 'text';
-  readonly text: string;
-}
-
-type ToolEnvelope = Record<string, unknown>;
 
 function configureRealApiEnvironment(): () => void {
   const previous = {
@@ -59,62 +53,17 @@ function configureRealApiEnvironment(): () => void {
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function parseSseEnvelope(body: string): ToolEnvelope {
-  const dataLine = body
-    .split('\n')
-    .map((line) => line.trim())
-    .find((line) => line.startsWith('data: '));
-  if (!dataLine) {
-    throw new Error('No data line found in SSE payload');
-  }
-  const jsonText = dataLine.slice('data: '.length);
-  const parsed = JSON.parse(jsonText) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('SSE data line was not an object');
-  }
-  return parsed;
-}
-
-function isTextContent(entry: unknown): entry is ToolTextContent {
-  if (!isRecord(entry)) {
-    return false;
-  }
-  return entry.type === 'text' && typeof entry.text === 'string';
-}
-
-function parseJsonPayload(raw: string): Record<string, unknown> {
-  const parsed = JSON.parse(raw) as unknown;
-  if (!isRecord(parsed)) {
-    throw new Error('Tool payload was not an object');
-  }
-  return parsed;
-}
-
-function assertSuccessfulEnvelope(envelope: ToolEnvelope): void {
+function assertSuccessfulEnvelope(body: string): void {
+  const envelope = parseSseEnvelope(body);
   expect(envelope.error).toBeUndefined();
-  const result = envelope.result;
-  if (!isRecord(result)) {
-    throw new Error('Tool result must be an object');
-  }
+  const result = parseJsonRpcResult(envelope);
   expect(result.isError).not.toBe(true);
-  const contents = result.content;
-  if (!Array.isArray(contents)) {
-    throw new Error('Tool result content must be an array');
+  const payload = parseToolSuccessPayload(result);
+  expect(payload.status).toBe(200);
+  if (!Array.isArray(payload.data)) {
+    throw new Error('Tool payload must be an array');
   }
-  const entry = contents.find(isTextContent);
-  if (!entry) {
-    throw new Error('Tool result missing textual payload');
-  }
-  const payload = parseJsonPayload(entry.text);
-  const dataValue = payload.data;
-  if (!Array.isArray(dataValue)) {
-    throw new Error('Tool payload data must be an array');
-  }
-  expect(dataValue.length).toBeGreaterThan(0);
+  expect(payload.data.length).toBeGreaterThan(0);
 }
 
 describe('Tool response envelope formatting', () => {
@@ -122,16 +71,22 @@ describe('Tool response envelope formatting', () => {
     const restoreEnv = configureRealApiEnvironment();
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: (name, args, client) => {
+        void name;
         void args;
         void client;
-        const data = {
-          data: [
-            { slug: 'ks1', title: 'Key Stage 1' },
-            { slug: 'ks2', title: 'Key Stage 2' },
-          ],
-          tool: name,
-        };
-        const result: ToolExecutionResult = { data };
+        const data = [
+          {
+            slug: 'ks1',
+            title: 'Key Stage 1',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+          },
+          {
+            slug: 'ks2',
+            title: 'Key Stage 2',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+          },
+        ];
+        const result: ToolExecutionResult = { status: 200, data };
         return Promise.resolve(result);
       },
     };
@@ -147,12 +102,11 @@ describe('Tool response envelope formatting', () => {
           jsonrpc: '2.0',
           id: '1',
           method: 'tools/call',
-          params: { name: 'get-key-stages', arguments: {} },
+          params: { name: 'get-key-stages', arguments: { params: {} } },
         });
 
       expect(res.status).toBe(200);
-      const envelope = parseSseEnvelope(res.text);
-      assertSuccessfulEnvelope(envelope);
+      assertSuccessfulEnvelope(res.text);
     } finally {
       restoreEnv();
     }

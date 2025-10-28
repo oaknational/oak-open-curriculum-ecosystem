@@ -1,7 +1,9 @@
+import type { SearchScope } from '../../types/oak';
+
 /** Maximum number of zero-hit events retained in memory. */
 const MAX_EVENTS = 200;
 
-type ZeroHitScope = 'lessons' | 'units' | 'sequences';
+type ZeroHitScope = SearchScope;
 
 /**
  * Represents a single zero-hit telemetry event stored for dashboard consumption.

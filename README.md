@@ -44,8 +44,8 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 4. **Regenerate types & run quality gates**
 
    ```bash
-   pnpm make   # install → type-gen → build → type-check → doc-gen → lint → format
-   pnpm qg     # format-check → type-check → lint → markdownlint → test suites → smoke
+   pnpm make   # install -> type-gen -> build -> type-check -> doc-gen -> lint -> format
+   pnpm qg     # format-check -> type-check -> lint -> markdownlint -> test suites -> smoke
    ```
 
 5. **Explore the workspaces**
@@ -66,8 +66,8 @@ pnpm test           # Run unit + integration tests
 pnpm test:ui        # Run Playwright suites
 pnpm test:e2e       # Run end-to-end tests
 pnpm dev:smoke      # Local smoke harness for MCP servers
-pnpm make           # Full pipeline (install → type-gen → build → docs → lint → format)
-pnpm qg             # Quality gate (format-check → type-check → lint → markdownlint → tests → smoke)
+pnpm make           # Full pipeline (install -> type-gen -> build -> docs -> lint -> format)
+pnpm qg             # Quality gate (format-check -> type-check -> lint -> markdownlint -> tests -> smoke)
 ```
 
 ## Type Safety & Validation
@@ -93,11 +93,8 @@ We are iterating internally but welcome interest. Before starting work:
 Quality gate checklist:
 
 ```bash
-pnpm format
-pnpm type-check
-pnpm lint
-pnpm test
-pnpm doc-gen
+pnpm make
+pnpm qg
 ```
 
 ## Support & Licensing

@@ -18,7 +18,7 @@
 - Boundaries enforced by ESLint rules under `eslint-rules/`
 - Provider injection replaces runtime auto‑detection
 - Apps compose a `CoreRuntime` and inject dependencies (DI) into servers and tools
-- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio, aliases such as `/openai_connector`) shares the same schema-derived contract
+- A universal MCP translation layer (generated in the SDK) normalises tool inputs/outputs so every transport (`/mcp`, stdio) shares the same schema-derived contract
 - Provider system overview: see [Provider System](./provider-system.md)
 - Onboarding guide: see [Onboarding](../onboarding.md)
 
@@ -49,4 +49,4 @@
 - [Architectural Refinements Plan](../../.agent/plans/architectural-refinements-plan.md)
 - [Workspace Structure Options (analysis)](../../.agent/plans/workspace-structure-options.md)
 - [Serverless Hosting Plan (deferred)](../../.agent/plans/serverless-hosting-plan.md)
-- [`/openai_connector` Deprecation Plan](./openai-connector-deprecation.md)
+- [OpenAI Connector Alias Removal](./openai-connector-deprecation.md)

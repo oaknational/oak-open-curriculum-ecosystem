@@ -1,14 +1,14 @@
 /**
- * Properly typed test fixtures for OpenAPI3 schemas
+ * Properly typed test fixtures for OpenAPI schemas
  * These fixtures eliminate the need for 'any' types in tests
  */
 
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 /**
- * Minimal valid OpenAPI3 schema for testing
+ * Minimal valid OpenAPI schema for testing
  */
-export const minimalSchema: OpenAPI3 = {
+export const minimalSchema: OpenAPIObject = {
   openapi: '3.0.0',
   info: {
     title: 'Test API',
@@ -20,7 +20,7 @@ export const minimalSchema: OpenAPI3 = {
 /**
  * Schema with a simple GET endpoint
  */
-export const schemaWithGetEndpoint: OpenAPI3 = {
+export const schemaWithGetEndpoint: OpenAPIObject = {
   openapi: '3.0.0',
   info: {
     title: 'Test API with Endpoint',
@@ -43,7 +43,7 @@ export const schemaWithGetEndpoint: OpenAPI3 = {
 /**
  * Schema with path parameters
  */
-export const schemaWithPathParams: OpenAPI3 = {
+export const schemaWithPathParams: OpenAPIObject = {
   openapi: '3.0.0',
   info: {
     title: 'Test API with Parameters',
@@ -76,7 +76,7 @@ export const schemaWithPathParams: OpenAPI3 = {
 /**
  * Schema with query parameters and enums
  */
-export const schemaWithQueryParams: OpenAPI3 = {
+export const schemaWithQueryParams: OpenAPIObject = {
   openapi: '3.0.0',
   info: {
     title: 'Test API with Query Parameters',
@@ -117,7 +117,7 @@ export const schemaWithQueryParams: OpenAPI3 = {
 /**
  * Complex schema with multiple operations
  */
-export const complexSchema: OpenAPI3 = {
+export const complexSchema: OpenAPIObject = {
   openapi: '3.0.0',
   info: {
     title: 'Complex Test API',
@@ -179,11 +179,95 @@ export const complexSchema: OpenAPI3 = {
   },
 };
 
+export const schemaWithNestedResponses: OpenAPIObject = {
+  openapi: '3.0.3',
+  info: {
+    title: 'Nested Response API',
+    version: '1.0.0',
+  },
+  paths: {
+    '/lessons/{lesson}/transcript': {
+      get: {
+        operationId: 'getLessonTranscript',
+        responses: {
+          '200': {
+            description: 'Successful response',
+            content: {
+              'application/json': {
+                schema: {
+                  $ref: '#/components/schemas/TranscriptResponseSchema',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  components: {
+    schemas: {
+      TranscriptResponseSchema: {
+        type: 'object',
+        properties: {
+          transcript: { type: 'string' },
+          vtt: { type: 'string' },
+        },
+      },
+      SearchResponse: {
+        type: 'object',
+        properties: {
+          results: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/LessonResponse',
+            },
+          },
+          summary: {
+            type: 'object',
+            anyOf: [
+              {
+                $ref: '#/components/schemas/LessonResponse',
+              },
+              {
+                $ref: '#/components/schemas/UnitResponse',
+              },
+            ],
+          },
+        },
+      },
+      LessonResponse: {
+        type: 'object',
+        properties: {
+          title: { type: 'string' },
+        },
+      },
+      UnitResponse: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          lessons: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/LessonResponse',
+            },
+          },
+        },
+      },
+      MetaInfo: {
+        type: 'object',
+        properties: {
+          generatedAt: { type: 'string', format: 'date-time' },
+        },
+      },
+    },
+  },
+};
+
 /**
  * Type-safe JSON parsing helper
- * Validates that parsed JSON matches expected OpenAPI3 structure
+ * Validates that parsed JSON matches expected OpenAPI structure
  */
-export function parseAsOpenAPI3(json: string): OpenAPI3 {
+export function parseAsOpenAPIObject(json: string): OpenAPIObject {
   const parsed = JSON.parse(json) as unknown;
 
   // Basic validation - in real code, use a proper validator
@@ -194,8 +278,40 @@ export function parseAsOpenAPI3(json: string): OpenAPI3 {
     !('info' in parsed) ||
     !('paths' in parsed)
   ) {
-    throw new TypeError('Invalid OpenAPI3 schema');
+    throw new TypeError('Invalid OpenAPI schema');
   }
 
-  return parsed as OpenAPI3;
+  return parsed as OpenAPIObject;
+}
+
+export function buildSchemaWithEnumParam(): OpenAPIObject {
+  return {
+    openapi: '3.0.0',
+    info: {
+      title: 'Enum param schema',
+      version: '1.0.0',
+    },
+    paths: {
+      '/courses': {
+        get: {
+          operationId: 'getCourses',
+          parameters: [
+            {
+              name: 'courseId',
+              in: 'query',
+              schema: {
+                type: 'string',
+                enum: ['CourseA', 'CourseB'],
+              },
+            },
+          ],
+          responses: {
+            '200': {
+              description: 'Success',
+            },
+          },
+        },
+      },
+    },
+  };
 }

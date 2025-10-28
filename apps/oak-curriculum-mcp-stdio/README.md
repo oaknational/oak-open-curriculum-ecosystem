@@ -68,7 +68,8 @@ Add to your Claude Desktop configuration:
 
 ## Testing
 
-- E2E tests use the MCP client over STDIO; validation failure and enum‑violation cases are covered.
+- Run the suite with `pnpm --filter @oaknational/oak-curriculum-mcp-stdio test`.
+- Tests spin up an in-memory STDIO transport using the generated stub executor (`src/app/test-helpers/create-stubbed-stdio-server.ts`), covering initialise/list, success, validation, and missing stub flows without additional configuration.
 
 ## Development
 

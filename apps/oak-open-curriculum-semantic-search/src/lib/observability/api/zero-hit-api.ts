@@ -6,8 +6,9 @@ import {
   persistZeroHitEvent,
   zeroHitPersistenceEnabled,
 } from '../zero-hit-persistence';
+import type { SearchScope } from '../../../types/oak';
 
-type ZeroHitScope = 'lessons' | 'units' | 'sequences';
+type ZeroHitScope = SearchScope;
 
 interface WebhookPayload {
   scope: ZeroHitScope;
@@ -80,7 +81,11 @@ function buildDisabledTelemetryPayload(): { summary: DisabledSummary; recent: []
   return {
     summary: {
       total: 0,
-      byScope: { lessons: 0, units: 0, sequences: 0 },
+      byScope: {
+        lessons: 0,
+        units: 0,
+        sequences: 0,
+      },
       latestIndexVersion: null,
     },
     recent: [],
@@ -89,7 +94,7 @@ function buildDisabledTelemetryPayload(): { summary: DisabledSummary; recent: []
 
 interface DisabledSummary {
   total: number;
-  byScope: { lessons: number; units: number; sequences: number };
+  byScope: Record<ZeroHitScope, number>;
   latestIndexVersion: string | null;
 }
 
@@ -172,7 +177,9 @@ function isJsonObject(value: unknown): value is JsonObject {
 }
 
 function isScope(value: unknown): value is ZeroHitScope {
-  return value === 'lessons' || value === 'units' || value === 'sequences';
+  return (
+    typeof value === 'string' && (value === 'lessons' || value === 'units' || value === 'sequences')
+  );
 }
 
 function isValidString(value: unknown): value is string {

@@ -16,6 +16,19 @@ export {
 } from '@oaknational/oak-curriculum-sdk';
 
 export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from '@oaknational/oak-curriculum-sdk';
+
+export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
   isSearchStructuredRequest,
@@ -43,6 +56,13 @@ export {
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
 } from '@oaknational/oak-curriculum-sdk';
+
+export {
+  QueryParserRequestSchema,
+  QueryParserResponseSchema,
+  isQueryParserResponse,
+} from '@oaknational/oak-curriculum-sdk';
+export { QUERY_PARSER_INTENT_ENUM } from '@oaknational/oak-curriculum-sdk';
 
 export type {
   SearchStructuredRequest,
@@ -76,4 +96,9 @@ export type {
   SearchLessonSummary,
   SearchUnitSummary,
   SearchSubjectSequences,
+} from '@oaknational/oak-curriculum-sdk';
+export type {
+  QueryParserRequest,
+  QueryParserResponse,
+  QueryParserIntent,
 } from '@oaknational/oak-curriculum-sdk';

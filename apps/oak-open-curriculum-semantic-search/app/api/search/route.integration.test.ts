@@ -1,7 +1,17 @@
 import { NextRequest } from 'next/server';
 import { describe, expect, it, beforeEach, vi } from 'vitest';
-import { z } from 'zod';
 import type { HybridSearchResult, StructuredQuery } from '../../../src/lib/run-hybrid-search';
+import { SEQUENCES_SCOPE, LESSONS_SCOPE } from '../../../src/lib/search-scopes';
+import {
+  SearchLessonsResponseSchema,
+  SearchUnitsResponseSchema,
+  SearchSequencesResponseSchema,
+  SearchMultiScopeResponseSchema,
+  type SearchLessonsResponse,
+  type SearchUnitsResponse,
+  type SearchSequencesResponse,
+  type SearchMultiScopeResponse,
+} from '@oaknational/oak-curriculum-sdk';
 
 const runHybridSearch = vi.hoisted(() =>
   vi.fn<(query: StructuredQuery) => Promise<HybridSearchResult>>(),
@@ -23,17 +33,6 @@ vi.mock('../../../src/lib/observability/zero-hit', () => ({
 
 import { POST } from './route';
 
-const HybridResponse = z
-  .object({
-    scope: z.enum(['lessons', 'units', 'sequences']),
-    results: z.array(z.unknown()),
-    total: z.number(),
-    took: z.number(),
-    timedOut: z.boolean(),
-    aggregations: z.record(z.string(), z.unknown()).optional(),
-  })
-  .loose();
-
 describe('POST /api/search', () => {
   beforeEach(() => {
     runHybridSearch.mockReset();
@@ -43,7 +42,7 @@ describe('POST /api/search', () => {
 
   it('allows the sequences scope and calls the hybrid search with phase filters', async () => {
     runHybridSearch.mockResolvedValueOnce({
-      scope: 'sequences',
+      scope: SEQUENCES_SCOPE,
       results: [],
       total: 0,
       took: 7,
@@ -55,7 +54,7 @@ describe('POST /api/search', () => {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        scope: 'sequences',
+        scope: SEQUENCES_SCOPE,
         text: 'fractions',
         subject: 'maths',
         phaseSlug: 'primary',
@@ -64,9 +63,9 @@ describe('POST /api/search', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = HybridResponse.parse(await response.json());
+    const payload = parseHybridPayload(await response.json());
     expect(payload).toMatchObject({
-      scope: 'sequences',
+      scope: SEQUENCES_SCOPE,
       results: [],
       total: 0,
       took: 7,
@@ -74,7 +73,7 @@ describe('POST /api/search', () => {
     });
     expect(runHybridSearch).toHaveBeenCalledWith(
       expect.objectContaining({
-        scope: 'sequences',
+        scope: SEQUENCES_SCOPE,
         text: 'fractions',
         phaseSlug: 'primary',
       }),
@@ -112,7 +111,7 @@ describe('POST /api/search', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = HybridResponse.parse(await response.json());
+    const payload = parseHybridPayload(await response.json());
     expect(payload).toMatchObject({
       scope: 'lessons',
       total: 0,
@@ -148,11 +147,162 @@ describe('POST /api/search', () => {
 
     const response = await POST(request);
     expect(response.status).toBe(200);
-    const payload = HybridResponse.parse(await response.json());
-    expect(payload.scope).toBe('lessons');
+    const payload = expectLessonsPayload(parseHybridPayload(await response.json()));
     expect(payload.results.length).toBeGreaterThan(0);
     expect(runHybridSearch).not.toHaveBeenCalled();
     const cookieHeader = response.headers.get('set-cookie') ?? '';
     expect(cookieHeader).toContain('semantic-search-fixtures=on');
   });
+
+  it('returns fixture payload when the fixtures cookie is set', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=on',
+      },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    expectLessonsPayload(parseHybridPayload(await response.json()));
+    expect(runHybridSearch).not.toHaveBeenCalled();
+  });
+
+  it('returns an empty-state fixture payload when the fixtures query requests empty mode', async () => {
+    const request = new NextRequest('http://localhost/api/search?fixtures=empty', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = expectLessonsPayload(parseHybridPayload(await response.json()));
+    expect(payload.total).toBe(0);
+    expect(payload.results).toHaveLength(0);
+    expect(runHybridSearch).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=empty');
+  });
+
+  it('returns an empty-state fixture payload when the fixtures cookie requests empty mode', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=empty',
+      },
+      body: JSON.stringify({ scope: LESSONS_SCOPE, text: 'fractions' }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(200);
+    const payload = expectLessonsPayload(parseHybridPayload(await response.json()));
+    expect(payload.total).toBe(0);
+    expect(payload.results).toHaveLength(0);
+    expect(runHybridSearch).not.toHaveBeenCalled();
+  });
+
+  it('returns an error payload when the fixtures query requests error mode', async () => {
+    const request = new NextRequest('http://localhost/api/search?fixtures=error', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        scope: LESSONS_SCOPE,
+        text: 'fractions',
+      }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(503);
+    const payloadJson: unknown = await response.json();
+    const errorPayload = ensureObject(
+      payloadJson,
+      'Structured fixture error payload must be an object',
+    );
+    const errorCode = readOwnProperty(errorPayload, 'error');
+    if (typeof errorCode !== 'string') {
+      throw new Error('Structured search fixture error response is missing error code');
+    }
+    expect(errorCode).toBe('FIXTURE_ERROR');
+    expect(runHybridSearch).not.toHaveBeenCalled();
+    const cookieHeader = response.headers.get('set-cookie') ?? '';
+    expect(cookieHeader).toContain('semantic-search-fixtures=error');
+  });
+
+  it('returns an error payload when the fixtures cookie requests error mode', async () => {
+    const request = new NextRequest('http://localhost/api/search', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        cookie: 'semantic-search-fixtures=error',
+      },
+      body: JSON.stringify({ scope: LESSONS_SCOPE, text: 'fractions' }),
+    });
+
+    const response = await POST(request);
+    expect(response.status).toBe(503);
+    const payloadJson: unknown = await response.json();
+    const errorPayload = ensureObject(
+      payloadJson,
+      'Structured fixture error payload must be an object',
+    );
+    const errorCode = readOwnProperty(errorPayload, 'error');
+    if (typeof errorCode !== 'string') {
+      throw new Error('Structured search fixture error response is missing error code');
+    }
+    expect(errorCode).toBe('FIXTURE_ERROR');
+    expect(runHybridSearch).not.toHaveBeenCalled();
+  });
 });
+
+type HybridResponsePayload =
+  | SearchLessonsResponse
+  | SearchUnitsResponse
+  | SearchSequencesResponse
+  | SearchMultiScopeResponse;
+
+function expectLessonsPayload(payload: HybridResponsePayload): SearchLessonsResponse {
+  if (payload.scope !== 'lessons') {
+    throw new Error('Structured search payload did not resolve to lessons scope');
+  }
+  return payload;
+}
+
+function parseHybridPayload(value: unknown): HybridResponsePayload {
+  const payloadObject = ensureObject(value, 'Hybrid response payload must be an object');
+  const scope = readOwnProperty(payloadObject, 'scope');
+  if (scope === 'all') {
+    return SearchMultiScopeResponseSchema.parse(value);
+  }
+  if (scope === 'lessons') {
+    return SearchLessonsResponseSchema.parse(value);
+  }
+  if (scope === 'units') {
+    return SearchUnitsResponseSchema.parse(value);
+  }
+  if (scope === 'sequences') {
+    return SearchSequencesResponseSchema.parse(value);
+  }
+  throw new Error('Received search payload with unsupported scope');
+}
+
+function ensureObject(value: unknown, errorMessage: string): object {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error(errorMessage);
+  }
+  return value;
+}
+
+function readOwnProperty(source: object, key: PropertyKey): unknown {
+  const descriptor = Object.getOwnPropertyDescriptor(source, key);
+  return descriptor?.value;
+}

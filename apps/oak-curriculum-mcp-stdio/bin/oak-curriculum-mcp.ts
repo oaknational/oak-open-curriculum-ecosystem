@@ -3,7 +3,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 // Updated path after mechanical renaming: app wiring centralised under src/app
 import { createStartupLogger, defaultStartupLoggerDeps } from '../src/app/startup.js';
-import { MCP_TOOLS, typeSafeKeys } from '@oaknational/oak-curriculum-sdk';
+import { toolNames } from '@oaknational/oak-curriculum-sdk';
 import { loadRootEnv, findRepoRoot } from '@oaknational/mcp-env';
 function safeStringify(value: unknown): string {
   try {
@@ -48,9 +48,11 @@ log(`[START-MCP] LOG_LEVEL: ${logLevelValue}`);
 
 // Emit tool diagnostics early so issues are visible even if startup fails later
 try {
-  const toolCount = typeSafeKeys(MCP_TOOLS).length;
+  const toolCount = toolNames.length;
   log(`[START-MCP] Tool count: ${String(toolCount)}`);
-  log(`[START-MCP] Tools: ${String(toolCount)}`);
+  const preview = toolNames.slice(0, 3).join(', ');
+
+  log(`[START-MCP] Tools: ${preview}${toolCount > 3 ? ', …' : ''}`);
 } catch (err: unknown) {
   log(
     `[START-MCP ERROR] Failed to read tool list: ${err instanceof Error ? err.message : String(err)}`,

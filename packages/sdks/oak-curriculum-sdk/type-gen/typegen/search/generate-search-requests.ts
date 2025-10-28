@@ -1,4 +1,4 @@
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import type { FileMap } from '../extraction-types.js';
 
 const HEADER = `/**
@@ -104,7 +104,7 @@ function createParsedQueryModule(): string {
   );
 }
 
-export function generateSearchRequestModules(_schema: OpenAPI3): FileMap {
+export function generateSearchRequestModules(_schema: OpenAPIObject): FileMap {
   void _schema;
   return {
     '../search/requests.ts': createStructuredRequestModule(),

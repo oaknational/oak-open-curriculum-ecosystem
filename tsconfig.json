@@ -4,6 +4,6 @@
     "rootDir": ".",
     "baseUrl": "."
   },
-  "include": ["*.config.ts", "*.config.base.ts", "stryker.config.mjs"],
+  "include": ["*.config.ts", "*.config.base.ts", "stryker.config.mjs", "eslint-rules/**/*.ts"],
   "exclude": ["node_modules", "dist", "reference/**"]
 }

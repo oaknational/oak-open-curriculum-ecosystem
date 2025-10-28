@@ -1,7 +1,11 @@
 import { z } from 'zod';
 import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi';
+import { SEARCH_SCOPES } from '../types/oak';
 
 extendZodWithOpenApi(z);
+
+const NARROW_SCOPE_TUPLE = SEARCH_SCOPES;
+const [LESSONS_SCOPE, UNITS_SCOPE, SEQUENCES_SCOPE] = SEARCH_SCOPES;
 
 export const Subject = z.string().openapi({ description: "Subject slug, e.g. 'geography'" });
 export const KeyStage = z.string().openapi({ description: 'Key stage code (ks1|ks2|ks3|ks4)' });
@@ -46,7 +50,7 @@ export const SequenceDoc = z
 
 export const StructuredQuerySchema = z
   .object({
-    scope: z.enum(['units', 'lessons', 'sequences']),
+    scope: z.enum(NARROW_SCOPE_TUPLE),
     text: z.string().min(1),
     subject: Subject.optional(),
     keyStage: KeyStage.optional(),
@@ -117,7 +121,7 @@ export const SearchFacets = z
 
 export const HybridMeta = z
   .object({
-    scope: z.enum(['lessons', 'units', 'sequences']),
+    scope: z.enum(NARROW_SCOPE_TUPLE),
     total: z.number().int().nonnegative(),
     took: z.number().int().nonnegative(),
     timedOut: z.boolean(),
@@ -127,17 +131,17 @@ export const HybridMeta = z
   .openapi('HybridMeta');
 
 export const HybridResponseLessons = HybridMeta.extend({
-  scope: z.literal('lessons'),
+  scope: z.literal(LESSONS_SCOPE),
   results: z.array(LessonResult),
 }).openapi('HybridResponseLessons');
 
 export const HybridResponseUnits = HybridMeta.extend({
-  scope: z.literal('units'),
+  scope: z.literal(UNITS_SCOPE),
   results: z.array(UnitResult),
 }).openapi('HybridResponseUnits');
 
 export const HybridResponseSequences = HybridMeta.extend({
-  scope: z.literal('sequences'),
+  scope: z.literal(SEQUENCES_SCOPE),
   results: z.array(SequenceResult),
 }).openapi('HybridResponseSequences');
 
@@ -155,7 +159,7 @@ export const ErrorSchema = z
 export const NaturalLanguageBody = z
   .object({
     q: z.string().min(1),
-    scope: z.enum(['units', 'lessons', 'sequences']).optional(),
+    scope: z.enum(NARROW_SCOPE_TUPLE).optional(),
     size: z.number().int().min(1).max(100).optional(),
     includeFacets: z.boolean().optional(),
     phaseSlug: z.string().optional(),
@@ -186,7 +190,7 @@ export const SdkArrayAny = z.array(z.any()).openapi('SdkArrayAny');
 export const SuggestionRequestSchema = z
   .object({
     prefix: z.string().min(1),
-    scope: z.enum(['lessons', 'units', 'sequences']),
+    scope: z.enum(NARROW_SCOPE_TUPLE),
     subject: Subject.optional(),
     keyStage: KeyStage.optional(),
     phaseSlug: z.string().optional(),
@@ -204,7 +208,7 @@ export const SuggestionContext = z
 export const SuggestionItem = z
   .object({
     label: z.string(),
-    scope: z.enum(['lessons', 'units', 'sequences']),
+    scope: z.enum(NARROW_SCOPE_TUPLE),
     url: z.string(),
     subject: Subject.optional(),
     keyStage: KeyStage.optional(),

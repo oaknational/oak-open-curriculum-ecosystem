@@ -12,8 +12,8 @@ core (base types) → SDK (specific) → apps (specific only).
 
 - Core/server-kit: removed; required helpers integrated elsewhere. OakMcp types are maintained in the SDK for compatibility and validators.
 - SDK:
-  - Generates `MCP_TOOLS` map with literal `name` (now emitted as `Readonly<Record<AllToolNames, ToolDescriptor>>`).
-  - Emits `types.ts` with `AllToolNames`, `isToolName`, `OakMcpToolBase<TIn,TOut>`, and `getResponseSchemaForEndpoint(...)` returning a `ZodSchema`.
+  - Generates `MCP_TOOLS` map with literal `name` (now emitted as `Readonly<Record<ToolName, ToolDescriptor>>`).
+  - Emits `types.ts` with `ToolName`, `isToolName`, `OakMcpToolBase<TIn,TOut>`, and `getResponseSchemaForEndpoint(...)` returning a `ZodSchema`.
   - Emits `lib.ts` (`McpToolRegistry`, `attachMcpHandlers`, `formatStandardContent`); removed unnecessary generic from `call(...)`.
   - Zod: input/output schemas generated; per‑tool `...Tool: OakMcpToolBase<In,Out>` emitted; `zodOutputSchema` defers, resolution done inside `validateOutput`.
   - Emissions updated to avoid index signatures (use `Record`) and use generic constructors for `Set`.

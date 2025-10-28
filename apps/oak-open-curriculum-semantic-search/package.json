@@ -13,7 +13,6 @@
     "start": "next start",
     "lint": "eslint  .",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
-    "format": "prettier --write --cache .",
     "test": "vitest run",
     "test:ui": "playwright test",
     "test:watch": "vitest",
@@ -26,14 +25,10 @@
     "docs:verify": "node -e \"const fs=require('node:fs'); const ok = fs.existsSync('docs/api/typedoc.json'); if(!ok){console.error('typedoc.json missing'); process.exit(1)}; console.log('Docs OK')\"",
     "doc-gen": "pnpm -s docs:api:html && pnpm -s docs:api:json && pnpm -s docs:verify"
   },
-  "overrides": {
-    "next": "$next",
-    "react": "$react",
-    "react-dom": "$react-dom"
-  },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.24",
     "@elastic/elasticsearch": "^9.1.1",
+    "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
     "@oaknational/oak-components": "^1.143.0",
     "@oaknational/oak-curriculum-sdk": "workspace:*",
@@ -50,7 +45,7 @@
     "@axe-core/playwright": "^4.10.2",
     "@eslint/eslintrc": "^3.2.0",
     "@next/eslint-plugin-next": "^15.5.4",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.56.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -63,7 +58,6 @@
     "eslint": "^9.35.0",
     "eslint-config-next": "^15.5.3",
     "jsdom": "^25.0.1",
-    "pnpm": "^10.17.1",
     "prettier": "^3.6.2",
     "typedoc": "^0.28.12",
     "typedoc-plugin-markdown": "^4.4.2",

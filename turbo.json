@@ -6,26 +6,6 @@
   },
   "globalDependencies": ["**/.env.*local", "tsconfig.base.json"],
   "tasks": {
-    "//#format:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
-    },
-    "//#format-check:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.prettier*", "$TURBO_ROOT$/prettier.config.*"]
-    },
-    "//#markdownlint:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
-    },
-    "//#markdownlint-check:root": {
-      "cache": true,
-      "outputs": [],
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/.markdownlint*", "**/*.md"]
-    },
     "type-gen": {
       "dependsOn": ["^type-gen"],
       "cache": true,
@@ -101,6 +81,7 @@
         "tsconfig.lint.json",
         "src/**/*.ts",
         "tests/**/*.ts",
+        "smoke-tests/**/*.ts",
         "**/*.test.ts",
         "**/*.spec.ts"
       ]
@@ -181,18 +162,39 @@
         "src/**/*.ts",
         "app/**/*.ts",
         "app/**/*.tsx",
+        "smoke-tests/**/*.ts",
         "**/*.d.ts"
       ]
     },
-    "smoke:dev": {
-      "dependsOn": ["^smoke:dev"],
+    "smoke:dev:stub": {
+      "dependsOn": ["^smoke:dev:stub"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:dev:live": {
+      "dependsOn": ["^smoke:dev:live"],
       "cache": false,
       "outputs": [],
       "env": ["OAK_API_KEY"],
       "passThroughEnv": ["OAK_API_KEY"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "apps/oak-curriculum-mcp-streamable-http/scripts/smoke-dev.ts",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:remote": {
+      "dependsOn": ["^smoke:remote"],
+      "cache": false,
+      "outputs": [],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     }

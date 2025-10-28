@@ -1,10 +1,4 @@
-import type {
-  KeyStage,
-  SearchSubjectSlug,
-  SearchLessonSummary,
-  SearchUnitSummary,
-  SearchSubjectSequences,
-} from '../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchSubjectSequences } from '../types/oak';
 import { isLessonSummary, isUnitSummary, isSubjectSequences } from '../types/oak';
 import { env } from '../lib/env';
 import { createOakClient, type OakApiClient } from '@oaknational/oak-curriculum-sdk';
@@ -40,15 +34,13 @@ export type GetLessonsFn = (
  */
 export type GetTranscriptFn = (lessonSlug: string) => Promise<{ transcript: string; vtt: string }>;
 
-export type GetLessonSummaryFn = (lessonSlug: string) => Promise<SearchLessonSummary>;
+export type GetLessonSummaryFn = (lessonSlug: string) => Promise<unknown>;
 
-export type GetUnitSummaryFn = (unitSlug: string) => Promise<SearchUnitSummary>;
+export type GetUnitSummaryFn = (unitSlug: string) => Promise<unknown>;
 
 export type SubjectSequenceEntry = SearchSubjectSequences[number];
 
-export type GetSubjectSequencesFn = (
-  subject: SearchSubjectSlug,
-) => Promise<readonly SubjectSequenceEntry[]>;
+export type GetSubjectSequencesFn = (subject: SearchSubjectSlug) => Promise<readonly unknown[]>;
 
 export type GetSequenceUnitsFn = (sequenceSlug: string) => Promise<unknown>;
 

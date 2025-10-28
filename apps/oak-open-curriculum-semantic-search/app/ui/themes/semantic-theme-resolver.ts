@@ -89,7 +89,7 @@ export interface ResolvedAppTokens {
     readonly surfaceEmphasisBg: string;
   };
   readonly space: {
-    readonly gap: Record<'grid' | 'section' | 'cluster', string>;
+    readonly gap: Record<'grid' | 'section' | 'cluster' | 'stack', string>;
     readonly padding: Record<'card' | 'pill', string>;
   };
   readonly radii: Record<'card' | 'pill', string>;
@@ -152,6 +152,7 @@ function resolveSpace(spec: SemanticAppSpec['space']): ResolvedAppTokens['space'
       grid: pxToRem(resolveSpaceBetween(spec.gap.grid)),
       section: pxToRem(resolveSpaceBetween(spec.gap.section)),
       cluster: pxToRem(resolveSpaceBetween(spec.gap.cluster)),
+      stack: pxToRem(resolveSpaceBetween(spec.gap.stack)),
     },
     padding: {
       card: pxToRem(resolveInnerPadding(spec.padding.card)),

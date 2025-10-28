@@ -1,13 +1,19 @@
 import type { estypes } from '@elastic/elasticsearch';
+import {
+  isSearchLessonsIndexDoc,
+  isSearchSequenceIndexDoc,
+  isSearchUnitRollupDoc,
+} from '../../types/oak';
 import type {
   SearchLessonsIndexDoc,
   SearchUnitRollupDoc,
   SearchSequenceIndexDoc,
   KeyStage,
   SearchSubjectSlug,
+  SearchScope,
 } from '../../types/oak';
 import { resolveCurrentSearchIndexName } from '../search-index-target';
-import type { SuggestQuery, SuggestScope, SuggestionContext, SuggestionItem } from './types';
+import type { SuggestQuery, SuggestionContext, SuggestionItem } from './types';
 
 /** Internal representation of a mapped suggestion hit. */
 export interface SuggestionHit {
@@ -27,13 +33,7 @@ export interface ScopeConfig<TDoc> {
   toSuggestion(doc: TDoc, id: string): SuggestionHit | null;
 }
 
-type ConfigBuilderMap = {
-  lessons: () => ScopeConfig<SearchLessonsIndexDoc>;
-  units: () => ScopeConfig<SearchUnitRollupDoc>;
-  sequences: () => ScopeConfig<SearchSequenceIndexDoc>;
-};
-
-const scopeConfigBuilders: ConfigBuilderMap = {
+const scopeConfigBuilders = {
   lessons: () => ({
     index: resolveCurrentSearchIndexName('lessons'),
     completionField: 'title_suggest',
@@ -41,7 +41,7 @@ const scopeConfigBuilders: ConfigBuilderMap = {
     sourceFields: ['lesson_title', 'lesson_url', 'subject_slug', 'key_stage', 'title_suggest'],
     buildCompletionContexts: (query) => buildSubjectContexts(query.subject, query.keyStage),
     buildFilters: (query) => buildFilters(query.subject, query.keyStage),
-    isDoc: isLessonDoc,
+    isDoc: isSearchLessonsIndexDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -67,7 +67,7 @@ const scopeConfigBuilders: ConfigBuilderMap = {
     ],
     buildCompletionContexts: (query) => buildSubjectContexts(query.subject, query.keyStage),
     buildFilters: (query) => buildFilters(query.subject, query.keyStage),
-    isDoc: isUnitDoc,
+    isDoc: isSearchUnitRollupDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -86,7 +86,7 @@ const scopeConfigBuilders: ConfigBuilderMap = {
     sourceFields: ['sequence_title', 'sequence_url', 'subject_slug', 'phase_slug', 'title_suggest'],
     buildCompletionContexts: (query) => buildSequenceContexts(query.subject, query.phaseSlug),
     buildFilters: (query) => buildSequenceFilters(query.subject, query.phaseSlug),
-    isDoc: isSequenceDoc,
+    isDoc: isSearchSequenceIndexDoc,
     toSuggestion: (doc, id) =>
       createSuggestionHit({
         id,
@@ -97,13 +97,27 @@ const scopeConfigBuilders: ConfigBuilderMap = {
         contexts: phaseContext(doc.phase_slug),
       }),
   }),
+} as const satisfies {
+  lessons: () => ScopeConfig<SearchLessonsIndexDoc>;
+  units: () => ScopeConfig<SearchUnitRollupDoc>;
+  sequences: () => ScopeConfig<SearchSequenceIndexDoc>;
 };
-
 export function getScopeConfig(scope: 'lessons'): ScopeConfig<SearchLessonsIndexDoc>;
 export function getScopeConfig(scope: 'units'): ScopeConfig<SearchUnitRollupDoc>;
 export function getScopeConfig(scope: 'sequences'): ScopeConfig<SearchSequenceIndexDoc>;
-export function getScopeConfig(scope: SuggestScope): ScopeConfig<unknown> {
-  return scopeConfigBuilders[scope]();
+export function getScopeConfig(scope: SearchScope): ScopeConfig<unknown> {
+  switch (scope) {
+    case 'lessons':
+      return scopeConfigBuilders.lessons();
+    case 'units':
+      return scopeConfigBuilders.units();
+    case 'sequences':
+      return scopeConfigBuilders.sequences();
+    default: {
+      const unexpectedScope: never = scope;
+      throw new Error(`Unsupported suggestion scope: ${unexpectedScope}`);
+    }
+  }
 }
 
 function buildSubjectContexts(
@@ -178,7 +192,7 @@ function phaseContext(phaseSlug: string | undefined): SuggestionContext {
 
 function createSuggestionHit(params: {
   id: string;
-  scope: SuggestScope;
+  scope: SearchScope;
   label: string;
   url: string;
   subject?: SearchSubjectSlug;
@@ -201,41 +215,4 @@ function createSuggestionHit(params: {
     item.keyStage = params.keyStage;
   }
   return { id: params.id, item };
-}
-
-function isLessonDoc(value: unknown): value is SearchLessonsIndexDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'lesson_title') &&
-    hasStringProperty(value, 'lesson_url') &&
-    hasStringProperty(value, 'subject_slug') &&
-    hasStringProperty(value, 'key_stage')
-  );
-}
-
-function isUnitDoc(value: unknown): value is SearchUnitRollupDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'unit_title') &&
-    hasStringProperty(value, 'unit_url') &&
-    hasStringProperty(value, 'subject_slug') &&
-    hasStringProperty(value, 'key_stage')
-  );
-}
-
-function isSequenceDoc(value: unknown): value is SearchSequenceIndexDoc {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    hasStringProperty(value, 'sequence_title') &&
-    hasStringProperty(value, 'sequence_url') &&
-    hasStringProperty(value, 'subject_slug')
-  );
-}
-
-function hasStringProperty(value: object, key: string): boolean {
-  const propertyValue: unknown = Reflect.get(value, key);
-  return typeof propertyValue === 'string';
 }

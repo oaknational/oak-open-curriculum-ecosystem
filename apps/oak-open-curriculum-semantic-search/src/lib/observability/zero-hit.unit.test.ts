@@ -122,4 +122,25 @@ describe('logZeroHit', () => {
       }),
     );
   });
+
+  it('allows skipping log, persistence, and webhook', async () => {
+    zeroHitPersistenceEnabled.mockReturnValue(true);
+    fetchMock.mockResolvedValueOnce(new Response(null, { status: 202 }));
+
+    await logZeroHit({
+      total: 0,
+      scope: 'lessons',
+      text: 'fixture zero hit',
+      indexVersion: 'v-fixture',
+      webhookUrl: 'https://hooks.example.com/zero-hit',
+      skipLog: true,
+      skipPersistence: true,
+      skipWebhook: true,
+    });
+
+    expect(info).not.toHaveBeenCalled();
+    expect(persistZeroHitEvent).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(getZeroHitSummary().total).toBe(1);
+  });
 });

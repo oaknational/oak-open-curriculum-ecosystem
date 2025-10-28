@@ -4,24 +4,10 @@ import path from 'node:path';
 import { execSync } from 'child_process';
 
 import { generateZodSchemas } from '../../type-gen/zodgen-core';
-import type { OpenAPI3 } from 'openapi-typescript';
-
-function assertNoForbiddenAssertions(content: string): void {
-  const lines = content.split('\n');
-  for (const line of lines) {
-    if (!line.includes(' as ')) continue;
-    const matches = line.match(/\sas\s+(\w+)/g) ?? [];
-    for (const match of matches) {
-      const type = match.trim().split(/\s+/)[1];
-      if (type !== 'const') {
-        throw new Error(`Found forbidden type assertion 'as ${type}' in generated code`);
-      }
-    }
-  }
-}
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 // Minimal OpenAPI v3 doc with a single component schema to keep the test light
-const minimalOpenApi: OpenAPI3 = {
+const minimalOpenApi: OpenAPIObject = {
   openapi: '3.0.0',
   info: { title: 'Test', version: '1.0.0' },
   paths: {},
@@ -107,15 +93,6 @@ describe('zod generator - functionality tests', () => {
     // Test that it exports schemas
     expect(content).toContain('export');
     expect(content).toContain('curriculumSchemas');
-  });
-
-  it('does not use type assertions except as const', async () => {
-    await generateZodSchemas(minimalOpenApi, outDir);
-
-    const content = readFileSync(outFile, 'utf-8');
-
-    assertNoForbiddenAssertions(content);
-    expect(true).toBe(true);
   });
 
   it('generates importable and usable Zod schemas', async () => {

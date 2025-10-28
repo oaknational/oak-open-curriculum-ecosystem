@@ -49,6 +49,7 @@ const sharedAppSpec: Omit<SemanticAppSpec, 'colors' | 'palette'> = {
       grid: 'space-between-m',
       section: 'space-between-xl',
       cluster: 'space-between-s',
+      stack: 'space-between-l',
     },
     padding: {
       card: 'inner-padding-l',
@@ -124,6 +125,7 @@ export const semanticThemeSpec: Record<SemanticMode, SemanticThemeDefinition> = 
       'text-link-hover': 'mint110',
       'text-link-pressed': 'oakGreen',
       'text-link-visited': 'lavender110',
+      'text-inverted': 'white',
       'bg-primary': 'mint30',
       'bg-neutral': 'grey20',
       'bg-neutral-stronger': 'grey30',

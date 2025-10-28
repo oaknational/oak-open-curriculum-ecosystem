@@ -43,8 +43,6 @@ const config = defineConfig(
         'vitest.config.ts',
         '**/*.js',
         '**/*.mjs',
-        // Exclude local script from typed linting to avoid project service requirement
-        'scripts/smoke-dev.ts',
       ],
     },
     // no special ignores for vitest.e2e.config.ts; treat as config file below
@@ -109,13 +107,6 @@ const config = defineConfig(
       },
     },
   ),
-  // File-specific relaxation for OpenAI connector handler
-  {
-    files: ['src/openai/connector.ts'],
-    rules: {
-      'max-lines-per-function': ['error', { max: 70, skipComments: true, skipBlankLines: true }],
-    },
-  },
 );
 
 export default config;

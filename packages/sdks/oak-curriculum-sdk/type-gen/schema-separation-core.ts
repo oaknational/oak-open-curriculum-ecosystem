@@ -8,186 +8,23 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import type { OpenAPI3, SchemaObject, ReferenceObject } from 'openapi-typescript';
-import { isOpenAPI3Schema } from './typegen-helpers';
-import { typeSafeEntries, getOwnString } from 'src/types/helpers';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
+import { assertSchemaHasComponentsSchemas } from './schema-validator.js';
+import { decorateCanonicalUrls } from './schema-separation-decorators.js';
+import { add404ResponsesWhereExpected } from './schema-enhancement-404.js';
 
-/**
- * Downloads the original API schema from the API endpoint
- * @returns The original API schema
- */
-export async function downloadOriginalSchema(): Promise<OpenAPI3> {
-  const apiSchemaUrl = 'https://open-api.thenational.academy/api/v0/swagger.json';
-  const apiKey = process.env.OAK_API_KEY;
-
-  if (!apiKey) {
-    throw new Error('OAK_API_KEY is required to download the original schema');
-  }
-
-  const headers = new Headers();
-  headers.set('Accept', 'application/json');
-  headers.set('Authorization', `Bearer ${apiKey}`);
-
-  const response = await fetch(apiSchemaUrl, { headers });
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch API schema: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-
-  const schema = await response.json();
-  if (!isOpenAPI3Schema(schema)) {
-    throw new Error('Invalid schema response from API');
-  }
-
-  return schema;
+export interface SeparatedSchema {
+  readonly original: OpenAPIObject;
+  readonly validated: OpenAPIObject;
+  readonly sdk: OpenAPIObject;
 }
 
-/**
- * Creates the SDK schema by decorating the original schema with canonicalUrl fields
- * @param originalSchema - The original API schema
- * @returns The SDK-enhanced schema
- */
-export function createSdkSchema(originalSchema: OpenAPI3): OpenAPI3 {
-  // Deep clone the original schema
-  const maybeSdkSchema: unknown = JSON.parse(JSON.stringify(originalSchema));
-  if (!isOpenAPI3Schema(maybeSdkSchema)) {
-    throw new Error('Schema is not a valid OpenAPI 3.x schema');
-  }
-  const sdkSchema = maybeSdkSchema;
-
-  // Add canonicalUrl to all response schemas
-  if (sdkSchema.components?.schemas) {
-    const schemas = sdkSchema.components.schemas;
-    const schemaEntries = typeSafeEntries(schemas);
-    for (const [schemaName, schemaDef] of schemaEntries) {
-      // Only decorate response schemas (those that end with "Response" or "Schema")
-      if (!(schemaName.includes('Response') || schemaName.includes('Schema'))) {
-        continue;
-      }
-      const decorated = decorateSchema(schemaDef);
-      if (!isReferenceObject(decorated)) {
-        sdkSchema.components.schemas[schemaName] = decorated;
-      }
-    }
-  }
-
-  return sdkSchema;
-}
-
-/**
- * Type guard for OpenAPI ReferenceObject (has a $ref string)
- */
-function isReferenceObject(value: unknown): value is ReferenceObject {
-  return getOwnString(value, '$ref') !== undefined;
-}
-
-/**
- * Decorates a response schema (SchemaObject) with canonicalUrl; leaves ReferenceObject unchanged
- */
-function decorateSchema(schema: SchemaObject | ReferenceObject): SchemaObject | ReferenceObject {
-  if (isReferenceObject(schema)) {
-    return schema;
-  }
-
-  const working: SchemaObject = schema;
-
-  if (hasPropertiesField(working)) {
-    return decorateObjectWithCanonicalUrl(working);
-  }
-
-  if (isArraySchemaWithItems(working)) {
-    return decorateArrayItems(working);
-  }
-
-  if (hasAnyOf(working)) {
-    return decorateWithCombinator(working, 'anyOf');
-  }
-  if (hasOneOf(working)) {
-    return decorateWithCombinator(working, 'oneOf');
-  }
-  if (hasAllOf(working)) {
-    return decorateWithCombinator(working, 'allOf');
-  }
-
-  return working;
-}
-
-type SchemaDict = Record<string, SchemaObject | ReferenceObject>;
-type SchemaProperties = SchemaDict;
-type SchemaItems = SchemaObject | ReferenceObject | (SchemaObject | ReferenceObject)[];
-type CombinatorArray = (SchemaObject | ReferenceObject)[];
-
-function hasPropertiesField(
-  schema: SchemaObject,
-): schema is SchemaObject & { properties: SchemaProperties } {
-  return (
-    schema.type === 'object' &&
-    'properties' in schema &&
-    schema.properties !== undefined &&
-    typeof schema.properties === 'object'
-  );
-}
-
-function isArraySchemaWithItems(
-  schema: SchemaObject,
-): schema is SchemaObject & { items: SchemaItems } {
-  return schema.type === 'array' && 'items' in schema && schema.items !== undefined;
-}
-
-function hasAnyOf(schema: SchemaObject): schema is SchemaObject & { anyOf: CombinatorArray } {
-  return Array.isArray(schema.anyOf);
-}
-
-function hasOneOf(schema: SchemaObject): schema is SchemaObject & { oneOf: CombinatorArray } {
-  return Array.isArray(schema.oneOf);
-}
-
-function hasAllOf(schema: SchemaObject): schema is SchemaObject & { allOf: CombinatorArray } {
-  return Array.isArray(schema.allOf);
-}
-
-function decorateObjectWithCanonicalUrl(
-  schema: SchemaObject & { properties: SchemaProperties },
-): SchemaObject {
-  const canonical: SchemaObject = {
-    type: 'string',
-    description: 'The canonical URL for this resource, generated by the SDK',
-    example: 'https://www.thenational.academy/teachers/lessons/example-lesson',
-  };
-  const nextProps: SchemaProperties = { ...schema.properties, canonicalUrl: canonical };
-  // Assign back and return the same object to avoid widening object literal unions
-  schema.properties = nextProps;
-  return schema;
-}
-
-function decorateArrayItems(schema: SchemaObject & { items: SchemaItems }): SchemaObject {
-  const items = schema.items;
-  if (Array.isArray(items)) {
-    schema.items = items.map(decorateSchema);
-    return schema;
-  }
-  schema.items = decorateSchema(items);
-  return schema;
-}
-
-function decorateWithCombinator(
-  schema: SchemaObject,
-  key: 'anyOf' | 'oneOf' | 'allOf',
-): SchemaObject {
-  if (key === 'anyOf' && Array.isArray(schema.anyOf)) {
-    schema.anyOf = schema.anyOf.map(decorateSchema);
-    return schema;
-  }
-  if (key === 'oneOf' && Array.isArray(schema.oneOf)) {
-    schema.oneOf = schema.oneOf.map(decorateSchema);
-    return schema;
-  }
-  if (key === 'allOf' && Array.isArray(schema.allOf)) {
-    schema.allOf = schema.allOf.map(decorateSchema);
-    return schema;
-  }
-  return schema;
+export function createOpenCurriculumSchema(validated: OpenAPIObject): SeparatedSchema {
+  assertSchemaHasComponentsSchemas(validated);
+  const original = structuredClone(validated);
+  const canonicalised = decorateCanonicalUrls(validated);
+  const sdk = add404ResponsesWhereExpected(canonicalised);
+  return { original, validated, sdk };
 }
 
 /**
@@ -200,25 +37,11 @@ function decorateWithCombinator(
  * @param schema - The schema to save
  * @param filePath - The file path to save to
  */
-export function saveSchemaToFile(schema: OpenAPI3, filePath: string): void {
+export function saveSchemaToFile(schema: OpenAPIObject, filePath: string): void {
   // Ensure the directory exists
   const dir = path.dirname(filePath);
   fs.mkdirSync(dir, { recursive: true });
 
   const content = JSON.stringify(schema, undefined, 2);
   fs.writeFileSync(filePath, content, 'utf-8');
-}
-
-/**
- * Loads a schema from a file
- * @param filePath - The file path to load from
- * @returns The loaded schema
- */
-export function loadSchemaFromFile(filePath: string): OpenAPI3 {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const schema: unknown = JSON.parse(content);
-  if (!isOpenAPI3Schema(schema)) {
-    throw new Error('Invalid schema response from file');
-  }
-  return schema;
 }

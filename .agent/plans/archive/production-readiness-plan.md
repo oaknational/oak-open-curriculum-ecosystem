@@ -105,7 +105,7 @@ Impact: repository builds cleanly; deterministic tests green; type safety improv
 
 ## TODOs (Grounded, Atomic, Actionable)
 
-REMINDER: UseBritish spelling
+REMINDER: Use british spelling
 
 1. ACTION: SDK generator — split monolith into parts (delegate to `emit-*`), remove legacy path, and drop below max-lines without behaviour changes
 2. REVIEW: code-reviewer + type-reviewer audit the generator split; confirm types still schema-derived
@@ -129,7 +129,7 @@ REMINDER: UseBritish spelling
 
 ### Immediate Next Steps (surgical)
 
-- REMINDER: UseBritish spelling
+- REMINDER: Use british spelling
 - ACTION: SDK generator — emit real executor and parameter validator
   - Implement executor emission to call `client[PATH][METHOD](request)` with zero assertions.
   - Emit `isValidRequestParams(..)` using generated `pathParams`/`queryParams` metadata and enum typeguards.
@@ -170,7 +170,7 @@ Open items (focused):
 
 ### Next Actions (tight, incremental)
 
-- REMINDER: UseBritish spelling
+- REMINDER: Use british spelling
 - ACTION: Curriculum MCP — refactor `createLogger` into tiny helper(s) to drop below max-lines without behaviour change
 - REVIEW: code-reviewer confirm logger behaviour preserved; verify `??` usage
 - GROUNDING: read GO.md and follow all instructions

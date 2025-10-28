@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   validateSearchResponse,
   validateSearchSuggestionResponse,
-} from './search-response-validators.js';
+} from './search-response-validators';
 import {
   createSearchLessonsResponse,
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from '../types/generated/search/fixtures.js';
-import { SearchSuggestionResponseSchema } from '../types/generated/search/index.js';
+} from '../types/generated/search/fixtures';
+import { SearchSuggestionResponseSchema } from '../types/generated/search/index';
 
 describe('validateSearchResponse', () => {
   it('validates lesson responses', () => {

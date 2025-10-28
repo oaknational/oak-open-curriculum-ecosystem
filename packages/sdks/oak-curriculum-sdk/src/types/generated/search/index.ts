@@ -11,7 +11,10 @@ export {
 } from './requests.js';
 export type { SearchStructuredRequest, SearchStructuredScope } from './requests.js';
 
-export { SearchNaturalLanguageRequestSchema, isSearchNaturalLanguageRequest } from './natural-requests.js';
+export {
+  SearchNaturalLanguageRequestSchema,
+  isSearchNaturalLanguageRequest,
+} from './natural-requests.js';
 export type { SearchNaturalLanguageRequest } from './natural-requests.js';
 
 export { SearchParsedQuerySchema, isSearchParsedQuery } from './parsed-query.js';
@@ -39,6 +42,27 @@ export type {
   SearchSuggestionResponse,
   SearchSuggestionRequest,
 } from './suggestions.js';
+
+export {
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+} from './index-documents.js';
+export type {
+  SearchCompletionSuggestPayload,
+  SearchLessonsIndexDoc,
+  SearchUnitsIndexDoc,
+  SearchUnitRollupDoc,
+  SearchSequenceIndexDoc,
+  SearchSubjectSlug,
+} from './index-documents.js';
 
 export { SearchFacetsSchema } from '../zod/search/output/sequence-facets.js';
 export type { SearchFacets, SequenceFacet, SequenceFacetUnit } from './facets.js';

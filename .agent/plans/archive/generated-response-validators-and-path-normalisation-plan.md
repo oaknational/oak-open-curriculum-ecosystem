@@ -58,7 +58,7 @@ Generate response validators and path-handling utilities at compile time as part
 
 ## TDD Plan (Strict Unit Tests)
 
-REMINDER: UseBritish spelling
+REMINDER: Use british spelling
 
 1. Unit tests for response map generator (pure function)
    - File: `packages/sdks/oak-curriculum-sdk/scripts/typegen/response-map/response-map.unit.test.ts`

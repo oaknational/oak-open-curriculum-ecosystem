@@ -52,7 +52,10 @@ export type PathParameterValues = {
 /**
  * Type guard for parameter types
  */
-export function isValidParameterType(parameterType: string): parameterType is keyof PathParameterValues {
+export function isValidParameterType(parameterType: unknown): parameterType is keyof PathParameterValues {
+  if (typeof parameterType !== 'string') {
+    return false;
+  }
   const keys = [${included.map((cfg) => `'${cfg.singular}'`).join(', ')}] as const;
   const keyList: readonly string[] = keys;
   return keyList.includes(parameterType);
@@ -61,7 +64,10 @@ export function isValidParameterType(parameterType: string): parameterType is ke
 /**
  * Function to validate if a value is a valid parameter for a given parameter type
  */
-export function isValidPathParameter(parameterType: string, value: string): boolean {
+export function isValidPathParameter(parameterType: unknown, value: unknown): boolean {
+  if (typeof parameterType !== 'string' || typeof value !== 'string') {
+    return false;
+  }
 ${included
   .map((cfg) => {
     const constName = cfg.constant;
@@ -69,6 +75,6 @@ ${included
   })
   .join('\n')}
   // Open set (no enum emitted): accept any string for other parameter types
-  return typeof value === 'string';
+  return true;
 };`;
 }

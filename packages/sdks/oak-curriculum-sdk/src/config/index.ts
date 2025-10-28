@@ -13,35 +13,26 @@ const defaultApiSchemaUrl = {
   v0: new URL('api/v0/swagger.json', defaultBaseUrl).href,
 };
 
-import { getOwnValue } from '../types/helpers.js';
-
-function getEnvironmentVariable(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string | undefined {
-  // Try Node.js environment first
-  if (typeof process !== 'undefined') {
-    const value = process.env[key];
-    if (typeof value === 'string') {
-      return value;
-    }
+function readEnvFromProcess(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string | undefined {
+  if (typeof process === 'undefined') {
+    return undefined;
   }
-
-  // Try Cloudflare Workers environment
-  // Check if globalThis has an env property dynamically
-  const env = getOwnValue(globalThis, 'env');
-  const val = getOwnValue(env, key);
-  if (typeof val === 'string') {
-    return val;
-  }
-
-  return undefined;
+  const value = process.env[key];
+  return typeof value === 'string' && value.length > 0 ? value : undefined;
 }
 
-// Allow environment override but provide defaults
-const apiSchemaUrlOverride = getEnvironmentVariable('OAK_API_SCHEMA_URL');
-const apiUrlOverride = getEnvironmentVariable('OAK_API_URL');
+function readEnvFromGlobal(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL'): string | undefined {
+  const value = process.env[key];
+  return typeof value === 'string' && value.length > 0 ? value : undefined;
+}
 
-const apiSchemaUrl: string = new URL(apiSchemaUrlOverride ?? defaultApiSchemaUrl.v0).href;
+function readEnvironmentUrl(key: 'OAK_API_SCHEMA_URL' | 'OAK_API_URL', fallback: string): string {
+  const override = readEnvFromProcess(key) ?? readEnvFromGlobal(key);
+  return new URL(override ?? fallback).href;
+}
 
-const apiUrl: string = new URL(apiUrlOverride ?? defaultApiUrl.v0).href;
+const apiSchemaUrl = readEnvironmentUrl('OAK_API_SCHEMA_URL', defaultApiSchemaUrl.v0);
+const apiUrl = readEnvironmentUrl('OAK_API_URL', defaultApiUrl.v0);
 
 interface Config {
   apiSchemaUrl: typeof apiSchemaUrl;

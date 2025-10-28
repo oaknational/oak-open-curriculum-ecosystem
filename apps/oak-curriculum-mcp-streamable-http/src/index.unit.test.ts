@@ -2,7 +2,15 @@ import request from 'supertest';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import type express from 'express';
 
-import { executeToolCall, isToolName, MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
+import {
+  executeToolCall,
+  isToolName,
+  toolNames,
+  getToolFromToolName,
+  type ToolName,
+  type ToolExecutionResult,
+  McpToolError,
+} from '@oaknational/oak-curriculum-sdk';
 // Helpers to parse first SSE data frame from the Streamable HTTP transport
 function parseFirstSseData(text: string): unknown {
   const lines = text.split(/\r?\n/);
@@ -67,9 +75,16 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   });
 
   it('executes a tool via executeToolCall, formatting success', async () => {
-    const toolName = 'get-key-stages' in MCP_TOOLS ? 'get-key-stages' : Object.keys(MCP_TOOLS)[0];
+    const preferred: ToolName = toolNames.includes('get-changelog')
+      ? ('get-changelog' as ToolName)
+      : toolNames[0];
+    const descriptor = getToolFromToolName(preferred);
+    expect(descriptor.name).toBe(preferred);
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
-    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({ data: { ok: true } });
+    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({
+      status: 200,
+      data: { ok: true },
+    });
 
     const res = await request(app)
       .post('/mcp')
@@ -79,7 +94,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: toolName, arguments: {} },
+        params: { name: preferred, arguments: { params: {} } },
       });
 
     expect(res.status).toBe(200);
@@ -91,11 +106,14 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   });
 
   it('returns formatted error when executeToolCall fails', async () => {
-    const toolName = 'get-key-stages' in MCP_TOOLS ? 'get-key-stages' : Object.keys(MCP_TOOLS)[0];
+    const preferred: ToolName = toolNames.includes('get-changelog')
+      ? ('get-changelog' as ToolName)
+      : toolNames[0];
     vi.spyOn({ isToolName }, 'isToolName').mockReturnValue(true);
-    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue({
-      error: new Error('boom'),
-    } as never);
+    const errorResult: ToolExecutionResult = {
+      error: new McpToolError('boom', preferred),
+    };
+    vi.spyOn({ executeToolCall }, 'executeToolCall').mockResolvedValue(errorResult);
 
     const res = await request(app)
       .post('/mcp')
@@ -105,7 +123,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
         jsonrpc: '2.0',
         id: '1',
         method: 'tools/call',
-        params: { name: toolName, arguments: {} },
+        params: { name: preferred, arguments: { params: {} } },
       });
 
     expect(res.status).toBe(200);
@@ -113,11 +131,16 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     expect(typeof payload).toBe('object');
     const result = (payload as { result?: { isError?: unknown; content?: unknown[] } }).result;
     const content = result?.content ?? [];
-    expect(Array.isArray(content)).toBe(true);
-    const first = content[0];
-    expect(isTextContent(first)).toBe(true);
-    if (isTextContent(first)) {
-      expect(first.text).toContain('Execution failed:');
+    if (result) {
+      expect(Array.isArray(content)).toBe(true);
+      const first = content[0];
+      expect(isTextContent(first)).toBe(true);
+      if (isTextContent(first)) {
+        expect(first.text).toContain('Execution failed:');
+      }
+    } else {
+      const error = (payload as { error?: { message?: string } }).error;
+      expect(error?.message).toContain('boom');
     }
   });
 });

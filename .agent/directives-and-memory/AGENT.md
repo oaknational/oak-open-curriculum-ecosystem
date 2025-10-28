@@ -4,7 +4,7 @@ This file provides core directives for AI agents working with this codebase. Rea
 
 ## Grounding
 
-Commit to always using British spelling.
+Commit to always using British spelling, and British English grammar, and British date and time formats.
 
 Now reflect on what you are doing. Would you like to update your self-managed, internal tool task list? If you don't have one, you can create one, or simply move on.
 
@@ -45,6 +45,7 @@ These documents must be read.
 - [TypeScript Practice](../../docs/agent-guidance/typescript-practice.md) - Type safety
 - [Curriculum Tools, Guidance and Playbooks](../../docs/agent-guidance/curriculum-tools-guidance-and-playbooks.md) - Categories, tags, playbooks, commands
 - [Architecture](../../docs/architecture/README.md) - Architecture overview
+- [Schema-First MCP Execution Directive](./schema-first-execution.md) - Non-negotiable runtime/generator contract
 
 ## Development Commands
 
@@ -52,6 +53,7 @@ From the repo root, via Turbo:
 
 ```bash
 pnpm install        # Setup
+pnpm clean          # Clean all build products
 pnpm type-gen       # Type generation
 pnpm build          # Build
 pnpm type-check     # Type check
@@ -62,6 +64,8 @@ pnpm test           # Unit and integration tests
 pnpm test:ui        # UI tests
 pnpm test:e2e       # E2E tests
 pnpm dev:smoke      # Local smoke tests
+
+# All in one command
 pnpm check          # Clean all build products, then run all of the above
 ```
 
