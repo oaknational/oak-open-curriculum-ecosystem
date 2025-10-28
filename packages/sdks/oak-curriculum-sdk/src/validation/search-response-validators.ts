@@ -2,8 +2,10 @@
  * Validation helpers for search API responses generated from the Open Curriculum schema.
  */
 
+/** @remark Could and should these types and helpers be moved to generator code? */
 import type { ValidationResult, SearchResponseForScope } from './types.js';
 import { parseSearchResponse, parseSearchSuggestionResponse } from './types.js';
+
 import { type SearchScopeWithAll } from '../types/generated/search/scopes.js';
 import type { SearchSuggestionResponse } from '../types/generated/search/index.js';
 

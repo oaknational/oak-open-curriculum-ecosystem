@@ -1,4 +1,4 @@
-import type { ParameterObject } from 'openapi-typescript';
+import type { ParameterObject } from 'openapi3-ts/oas31';
 
 export type PrimitiveType = 'string' | 'number' | 'boolean' | 'string[]' | 'number[]' | 'boolean[]';
 
@@ -50,4 +50,22 @@ function primitiveFromType(param: ParameterObject): PrimitiveType | undefined {
 
 export function getParameterPrimitiveType(param: ParameterObject): PrimitiveType {
   return primitiveFromEnum(param) ?? primitiveFromType(param) ?? 'string';
+}
+
+function segmentsFromName(value: string): readonly string[] {
+  return value.split(/[^a-zA-Z0-9]+/).filter(Boolean);
+}
+
+export function toCamelCase(value: string): string {
+  const segments = segmentsFromName(value);
+  if (segments.length === 0) {
+    return '';
+  }
+  return (
+    segments[0].toLowerCase() +
+    segments
+      .slice(1)
+      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+      .join('')
+  );
 }

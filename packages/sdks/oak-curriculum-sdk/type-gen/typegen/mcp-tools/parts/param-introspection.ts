@@ -1,4 +1,4 @@
-import type { OperationObject, ParameterObject, ReferenceObject } from 'openapi-typescript';
+import type { OperationObject, ParameterObject, ReferenceObject } from 'openapi3-ts/oas31';
 import type { PrimitiveType } from './param-utils.js';
 
 export interface ParamDetails {

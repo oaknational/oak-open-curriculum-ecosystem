@@ -6,6 +6,10 @@
 - Ensure server behaviour, admin tooling, and API documentation remain in lockstep with the SDK so downstream consumers gain type-safe, predictable responses.
 - Maintain rigorous quality gates (TDD, type checks, linting, observability) while iterating on Phase 1 feature completeness.
 
+## Prep
+
+Make sure the [Cardinal Rule of the repository](../../directives-and-memory/rules.md) is applied. Specifically the types in apps/oak-open-curriculum-semantic-search/app/lib/search-fixtures/data/index.ts should be defined in the SDK and generated at compile time.
+
 ## Phase Focus – Service Hardening & Operations
 
 Phase 1 functionality work cements the back-end and operational experience:
@@ -76,12 +80,12 @@ Phase 1 functionality work cements the back-end and operational experience:
 3. ACTION: Add failing automated tests covering ingestion resilience (mocked retries, alias swaps) and telemetry output contracts.
 4. REVIEW: Inspect failures to confirm they represent real gaps (retry logging, zero-hit summaries, health diagnostics).
 5. QUALITY-GATE: Run `pnpm -C apps/oak-open-curriculum-semantic-search test src/lib/indexing` (or equivalent suites) to baseline current behaviour.
-6. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+6. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
 7. ACTION: Implement ingestion/rollup hardening (batched retries, alias swap verification, logging) with accompanying tests and admin status updates.
 8. REVIEW: Conduct peer review focusing on failure handling, observability hooks, and admin feedback loops.
 9. ACTION: Enhance telemetry + health endpoints (structured responses, docs, dashboards) and wire into redesigned UX.
 10. REVIEW: Validate telemetry outputs end-to-end (service → admin UI → documentation) and adjust SDK/OpenAPI artefacts.
 11. QUALITY-GATE: Execute `pnpm format:root`, `pnpm lint`, `pnpm type-check`, full `pnpm test`, and relevant doc-gen/visual regression commands to confirm stability.
-12. GROUNDING: read GO.md and follow all instructions. REMINDER: UseBritish spelling.
+12. GROUNDING: read GO.md and follow all instructions. REMINDER: Use british spelling.
 13. ACTION: Finalise runbooks and deployment notes (env vars, cron schedules, alerting) and share with operations.
 14. REVIEW: Ensure documentation, telemetry dashboards, and CI gates align; archive completed tasks and signal readiness for Phase 2.

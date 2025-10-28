@@ -1,27 +1,48 @@
 import { describe, expect, it } from 'vitest';
+import { lessonSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
-import type { SearchLessonSummary } from '../../types/oak';
 
-function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
-  return {
+interface LessonSummaryFixture {
+  lessonTitle: string;
+  unitSlug: string;
+  unitTitle: string;
+  subjectSlug: string;
+  subjectTitle: string;
+  keyStageSlug: string;
+  keyStageTitle: string;
+  lessonKeywords: readonly { keyword: string; description: string }[];
+  keyLearningPoints: readonly { keyLearningPoint: string }[];
+  misconceptionsAndCommonMistakes: readonly { misconception: string; response: string }[];
+  pupilLessonOutcome: string;
+  teacherTips: readonly { teacherTip: string }[];
+  contentGuidance: readonly unknown[];
+  supervisionLevel: string;
+  downloadsAvailable: boolean;
+  canonicalUrl: string;
+}
+
+function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
+  const base: LessonSummaryFixture = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
-    subjectSlug: 'maths',
-    subjectTitle: 'Mathematics',
+    subjectSlug: 'history',
+    subjectTitle: 'History',
     keyStageSlug: 'ks4',
     keyStageTitle: 'Key Stage 4',
     lessonKeywords: [],
     keyLearningPoints: [],
     misconceptionsAndCommonMistakes: [],
-    pupilLessonOutcome: undefined,
+    pupilLessonOutcome: 'Learners can describe key ideas.',
     teacherTips: [],
-    contentGuidance: null,
-    supervisionLevel: null,
+    contentGuidance: [],
+    supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-    ...overrides,
-  } as SearchLessonSummary;
+  };
+  const summary: LessonSummaryFixture = { ...base, ...overrides };
+  void lessonSummarySchema.parse(summary);
+  return summary;
 }
 
 describe('selectLessonPlanningSnippet', () => {

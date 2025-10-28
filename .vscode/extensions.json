@@ -5,6 +5,7 @@
     "davidanson.vscode-markdownlint",
     "esbenp.prettier-vscode",
     "christian-kohler.npm-intellisense",
-    "mechatroner.rainbow-csv"
+    "mechatroner.rainbow-csv",
+    "christian-kohler.path-intellisense"
   ]
 }

@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
+import { lessonSummarySchema, unitSummarySchema } from '@oaknational/oak-curriculum-sdk';
 import type {
   KeyStage,
-  SearchLessonSummary,
   SearchLessonsIndexDoc,
   SearchSubjectSlug,
   SearchUnitRollupDoc,
-  SearchUnitSummary,
   SearchUnitsIndexDoc,
 } from '../../types/oak';
 import {
@@ -16,11 +15,61 @@ import {
   normaliseYears,
 } from './document-transforms';
 
-const mathsSubject = 'maths' as SearchSubjectSlug;
-const ks4 = 'ks4' as KeyStage;
+const mathsSubject: SearchSubjectSlug = 'maths';
+const ks4: KeyStage = 'ks4';
 
-function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUnitSummary {
-  return {
+interface UnitSummaryFixture {
+  unitSlug: string;
+  unitTitle: string;
+  yearSlug: string;
+  year: string | number;
+  phaseSlug: string;
+  subjectSlug: SearchSubjectSlug;
+  keyStageSlug: KeyStage;
+  notes?: string;
+  description?: string;
+  priorKnowledgeRequirements: readonly string[];
+  nationalCurriculumContent: readonly string[];
+  whyThisWhyNow?: string;
+  threads?: readonly { slug: string; title: string; order: number }[];
+  categories?: readonly { categoryTitle: string; categorySlug?: string }[];
+  unitLessons: readonly {
+    lessonSlug: string;
+    lessonTitle: string;
+    lessonOrder?: number;
+    state: 'published' | 'new';
+  }[];
+  canonicalUrl?: string;
+}
+
+interface LessonSummaryFixture {
+  lessonTitle: string;
+  unitSlug: string;
+  unitTitle: string;
+  subjectSlug: SearchSubjectSlug;
+  subjectTitle: string;
+  keyStageSlug: KeyStage;
+  keyStageTitle: string;
+  lessonKeywords?: readonly { keyword: string; description: string }[];
+  keyLearningPoints?: readonly { keyLearningPoint: string }[];
+  misconceptionsAndCommonMistakes?: readonly { misconception: string; response: string }[];
+  pupilLessonOutcome?: string;
+  teacherTips?: readonly { teacherTip: string }[];
+  contentGuidance?:
+    | readonly {
+        contentGuidanceArea: string;
+        supervisionlevel_id: number;
+        contentGuidanceLabel: string;
+        contentGuidanceDescription: string;
+      }[]
+    | null;
+  supervisionLevel?: string | null;
+  downloadsAvailable: boolean;
+  canonicalUrl?: string;
+}
+
+function buildUnitSummary(overrides: Partial<UnitSummaryFixture> = {}): UnitSummaryFixture {
+  const base: UnitSummaryFixture = {
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
     yearSlug: 'year-10',
@@ -58,12 +107,14 @@ function buildUnitSummary(overrides: Partial<SearchUnitSummary> = {}): SearchUni
       },
     ],
     canonicalUrl: 'https://teachers.thenational.academy/units/unit-slug',
-    ...overrides,
   };
+  const summary: UnitSummaryFixture = { ...base, ...overrides };
+  void unitSummarySchema.parse(summary);
+  return summary;
 }
 
-function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): SearchLessonSummary {
-  return {
+function buildLessonSummary(overrides: Partial<LessonSummaryFixture> = {}): LessonSummaryFixture {
+  const base: LessonSummaryFixture = {
     lessonTitle: 'Lesson Title',
     unitSlug: 'unit-slug',
     unitTitle: 'Unit Title',
@@ -95,8 +146,10 @@ function buildLessonSummary(overrides: Partial<SearchLessonSummary> = {}): Searc
     supervisionLevel: 'low',
     downloadsAvailable: true,
     canonicalUrl: 'https://teachers.thenational.academy/lessons/lesson-slug',
-    ...overrides,
   };
+  const summary: LessonSummaryFixture = { ...base, ...overrides };
+  void lessonSummarySchema.parse(summary);
+  return summary;
 }
 
 describe('normaliseYears', () => {
@@ -181,10 +234,10 @@ describe('createLessonDocument', () => {
 
   it('omits optional string arrays when the summary values are nullish', () => {
     const lessonSummary = buildLessonSummary({
-      lessonKeywords: undefined,
-      keyLearningPoints: undefined,
-      misconceptionsAndCommonMistakes: undefined,
-      teacherTips: undefined,
+      lessonKeywords: [],
+      keyLearningPoints: [],
+      misconceptionsAndCommonMistakes: [],
+      teacherTips: [],
       contentGuidance: null,
     });
 

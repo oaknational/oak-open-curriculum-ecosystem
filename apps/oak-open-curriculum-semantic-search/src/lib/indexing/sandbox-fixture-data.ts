@@ -5,13 +5,7 @@ import {
   subjectSequencesSchema,
   unitSummarySchema,
 } from '@oaknational/oak-curriculum-sdk';
-import type {
-  KeyStage,
-  SearchLessonSummary,
-  SearchSubjectSlug,
-  SearchUnitSummary,
-} from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 import { isKeyStage, isSubject } from '../../adapters/sdk-guards';
 
 /**
@@ -53,10 +47,10 @@ export interface FixtureData {
   readonly subjects: readonly SearchSubjectSlug[];
   readonly units: readonly FixtureUnitDescriptor[];
   readonly lessons: readonly FixtureLessonGroup[];
-  readonly unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
-  readonly lessonSummaries: ReadonlyMap<string, SearchLessonSummary>;
+  readonly unitSummaries: ReadonlyMap<string, unknown>;
+  readonly lessonSummaries: ReadonlyMap<string, unknown>;
   readonly lessonTranscripts: ReadonlyMap<string, FixtureLessonTranscript>;
-  readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, readonly SubjectSequenceEntry[]>;
+  readonly subjectSequences: ReadonlyMap<SearchSubjectSlug, readonly unknown[]>;
   readonly sequenceUnits: ReadonlyMap<string, unknown>;
 }
 
@@ -152,18 +146,18 @@ function parseLessonDescriptor(value: unknown): { lessonSlug: string; lessonTitl
   };
 }
 
-function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, SearchUnitSummary> {
+function parseUnitSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
   const record = assertRecord(value, 'unit summaries must be an object keyed by slug');
-  const entries = new Map<string, SearchUnitSummary>();
+  const entries = new Map<string, unknown>();
   for (const [slug, summary] of Object.entries(record)) {
     entries.set(slug, unitSummarySchema.parse(summary));
   }
   return entries;
 }
 
-function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, SearchLessonSummary> {
+function parseLessonSummaryMap(value: unknown): ReadonlyMap<string, unknown> {
   const record = assertRecord(value, 'lesson summaries must be an object keyed by slug');
-  const entries = new Map<string, SearchLessonSummary>();
+  const entries = new Map<string, unknown>();
   for (const [slug, summary] of Object.entries(record)) {
     entries.set(slug, lessonSummarySchema.parse(summary));
   }
@@ -188,9 +182,9 @@ function parseTranscriptMap(value: unknown): ReadonlyMap<string, FixtureLessonTr
 
 function parseSubjectSequenceMap(
   value: unknown,
-): ReadonlyMap<SearchSubjectSlug, readonly SubjectSequenceEntry[]> {
+): ReadonlyMap<SearchSubjectSlug, readonly unknown[]> {
   const record = assertRecord(value, 'subject sequences must be an object keyed by subject');
-  const entries = new Map<SearchSubjectSlug, readonly SubjectSequenceEntry[]>();
+  const entries = new Map<SearchSubjectSlug, readonly unknown[]>();
   for (const [slug, sequences] of Object.entries(record)) {
     const subject = ensureSubject(
       slug,

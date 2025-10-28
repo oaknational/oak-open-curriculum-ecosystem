@@ -1,4 +1,4 @@
-<!-- cSpell:disable -->
+<!-- markdownlint-disable -->
 <!-- https://modelcontextprotocol.io/llms-full.txt -->
 
 # Model Context Protocol
@@ -6,6 +6,101 @@
 Source: https://modelcontextprotocol.io/about/index
 
 The open protocol that connects AI applications to the systems where context lives
+
+<div className="landing-page">
+  <section className="intro-video-section">
+    <div className="intro-logo">
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=532f106faedf9079b75d2bdb69426588" alt="MCP Logo" data-og-width="1024" width="1024" data-og-height="1024" height="1024" data-path="mcp.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=037ef1df099e670b03fb91f6e976f152 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8a6dbc4df8d808d98ac569887466726e 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d176cf89440f18ae110a7e1843040480 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=fc83c85802998c592cdabe9789541140 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=777d825ac0e80aaa4e2bddfc7e55e629 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/mcp.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=994b7b625177d67fcd1cd21159897407 2500w" />
+    </div>
+
+    <div className="intro-content">
+      <h2 className="intro-title">Connect your AI applications to the world</h2>
+
+      <p className="intro-description">
+        AI-enabled tools are powerful, but they're often limited to the
+        information you manually provide or require bespoke integrations.
+      </p>
+
+      <p className="intro-description">
+        Whether it's reading files from your computer, searching through an
+        internal or external knowledge base, or updating tasks in an project
+        management tool, MCP provides a secure, standardized, *simple* way to
+        give AI systems the context they need.
+      </p>
+    </div>
+
+  </section>
+
+  <section className="how-section">
+    <h2 className="section-title">How it works</h2>
+
+    <div className="steps-container">
+      <div className="step-number">1</div>
+
+      <div className="step-content">
+        <h3>Choose MCP servers</h3>
+
+        <p>
+          Pick from pre-built servers for popular tools like GitHub, Google
+          Drive, Slack and hundreds of others. Combine multiple servers for
+          complete workflows, or easily build your own for custom integrations.
+        </p>
+      </div>
+
+      <div className="step-number">2</div>
+
+      <div className="step-content">
+        <h3>Connect your AI application</h3>
+
+        <p>
+          Configure your AI application (like Claude, VS Code, or ChatGPT) to
+          connect to your MCP servers. The application can now see available
+          tools, resources and prompts from all connected servers.
+        </p>
+      </div>
+
+      <div className="step-number">3</div>
+
+      <div className="step-content">
+        <h3>Work with context</h3>
+
+        <p>
+          Your AI-powered application can now access real data, execute actions,
+          and provide more helpful responses based on your actual context.
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <section className="ecosystem-section">
+    <h2 className="section-title">Join a growing ecosystem</h2>
+
+    <div className="stats-grid">
+      <a href="/docs/sdk" target="_blank" className="stat-card">
+        <div className="stat-number">10</div>
+        <div className="stat-label">Official SDKs</div>
+      </a>
+
+      <a href="/clients" target="_blank" className="stat-card">
+        <div className="stat-number">80+</div>
+        <div className="stat-label">Compatible Clients</div>
+      </a>
+
+      <a href="https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#%EF%B8%8F-official-integrations" target="_blank" rel="noopener noreferrer" className="stat-card">
+        <div className="stat-number">1000+</div>
+        <div className="stat-label">Available Servers</div>
+      </a>
+    </div>
+
+  </section>
+
+  <section className="cta-buttons">
+    <a href="/docs/getting-started/intro" className="cta-primary">
+      Get Started
+    </a>
+  </section>
+</div>
 
 # Example Clients
 
@@ -18,90 +113,97 @@ This page provides an overview of applications that support the Model Context Pr
 ## Feature support matrix
 
 <div id="feature-support-matrix-wrapper">
-  {/* prettier-ignore-start */}
-
-| Client                                                     | [Resources] | [Prompts] | [Tools] | [Discovery] | [Sampling] | [Roots] | [Elicitation] |
-| ---------------------------------------------------------- | ----------- | --------- | ------- | ----------- | ---------- | ------- | ------------- |
-| [5ire][5ire]                                               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [AgentAI][AgentAI]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [AgenticFlow][AgenticFlow]                                 | ✅          | ✅        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [AIQL TUUI][AIQL TUUI]                                     | ✅          | ✅        | ✅      | ✅          | ✅         | ❌      | ❓            |
-| [Amazon Q CLI][Amazon Q CLI]                               | ❌          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Amazon Q IDE][Amazon Q IDE]                               | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Amp][Amp]                                                 | ✅          | ❌        | ✅      | ❌          | ✅         | ❌      | ❓            |
-| [Apify MCP Tester][Apify MCP Tester]                       | ❌          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Augment Code][AugmentCode]                                | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [BeeAI Framework][BeeAI Framework]                         | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [BoltAI][BoltAI]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Call Chirp][Call Chirp]                                   | ❌          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [ChatGPT][ChatGPT]                                         | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [ChatWise][ChatWise]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Claude.ai][Claude.ai]                                     | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Claude Code][Claude Code]                                 | ✅          | ✅        | ✅      | ❌          | ❌         | ✅      | ❓            |
-| [Claude Desktop App][Claude Desktop]                       | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Chorus][Chorus]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Cline][Cline]                                             | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [CodeGPT][CodeGPT]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Continue][Continue]                                       | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Copilot-MCP][CopilotMCP]                                  | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Cursor][Cursor]                                           | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Daydreams Agents][Daydreams]                              | ✅          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Emacs Mcp][Mcp.el]                                        | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [fast-agent][fast-agent]                                   | ✅          | ✅        | ✅      | ✅          | ✅         | ✅      | ✅            |
-| [FlowDown][FlowDown]                                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❌            |
-| [FLUJO][FLUJO]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Genkit][Genkit]                                           | ⚠️          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Glama][Glama]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Gemini CLI][Gemini CLI]                                   | ❌          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [GenAIScript][GenAIScript]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [GitHub Copilot coding agent][GitHubCopilotCodingAgent]    | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❌            |
-| [Goose][Goose]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [gptme][gptme]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [HyperAgent][HyperAgent]                                   | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [JetBrains AI Assistant][JetBrains AI Assistant]           | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Kilo Code][Kilo Code]                                     | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Klavis AI Slack/Discord/Web][Klavis AI]                   | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [LibreChat][LibreChat]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [LM Studio][LM Studio]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Lutra][Lutra]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [mcp-agent][mcp-agent]                                     | ✅          | ✅        | ✅      | ❓          | ⚠️         | ✅      | ✅            |
-| [mcp-client-chatbot][mcp-client-chatbot]                   | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [mcp-use][mcp-use]                                         | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [modelcontextchat.com][modelcontextchat.com]               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MCPHub][MCPHub]                                           | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MCPOmni-Connect][MCPOmni-Connect]                         | ✅          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Memex][Memex]                                             | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Microsoft Copilot Studio]                                 | ❌          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [MindPal][MindPal]                                         | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [MooPoint][MooPoint]                                       | ❌          | ❌        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Msty Studio][Msty Studio]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [NVIDIA Agent Intelligence toolkit][AIQ toolkit]           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [OpenSumi][OpenSumi]                                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [oterm][oterm]                                             | ❌          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Postman][postman]                                         | ✅          | ✅        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [RecurseChat][RecurseChat]                                 | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Roo Code][Roo Code]                                       | ✅          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Shortwave][Shortwave]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Slack MCP Client][Slack MCP Client]                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Sourcegraph Cody][Cody]                                   | ✅          | ❌        | ❌      | ❓          | ❌         | ❌      | ❓            |
-| [SpinAI][SpinAI]                                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Superinterface][Superinterface]                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Superjoin][Superjoin]                                     | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [systemprompt][systemprompt]                               | ✅          | ✅        | ✅      | ❓          | ✅         | ❌      | ❓            |
-| [Tambo][Tambo]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Tencent CloudBase AI DevKit][Tencent CloudBase AI DevKit] | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [TheiaAI/TheiaIDE][TheiaAI/TheiaIDE]                       | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Tome][Tome]                                               | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [TypingMind App][TypingMind App]                           | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [VS Code GitHub Copilot][VS Code]                          | ✅          | ✅        | ✅      | ✅          | ✅         | ✅      | ✅            |
-| [Warp][Warp]                                               | ✅          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [WhatsMCP][WhatsMCP]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Windsurf Editor][Windsurf]                                | ❌          | ❌        | ✅      | ✅          | ❌         | ❌      | ❓            |
-| [Witsy][Witsy]                                             | ❌          | ❌        | ✅      | ❓          | ❌         | ❌      | ❓            |
-| [Zed][Zed]                                                 | ❌          | ✅        | ✅      | ❌          | ❌         | ❌      | ❓            |
-| [Zencoder][Zencoder]                                       | ❌          | ❌        | ✅      | ❌          | ❌         | ❌      | ❓            |
-
-{/_ prettier-ignore-end _/}
+  | Client                                                     | [Resources] | [Prompts] | [Tools] | [Discovery] | [Sampling] | [Roots] | [Elicitation] |
+  | ---------------------------------------------------------- | ----------- | --------- | ------- | ----------- | ---------- | ------- | ------------- |
+  | [5ire][5ire]                                               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [AgentAI][AgentAI]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [AgenticFlow][AgenticFlow]                                 | ✅           | ✅         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [AIQL TUUI][AIQL TUUI]                                     | ✅           | ✅         | ✅       | ✅           | ✅          | ❌       | ✅             |
+  | [Amazon Q CLI][Amazon Q CLI]                               | ❌           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Amazon Q IDE][Amazon Q IDE]                               | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Amp][Amp]                                                 | ✅           | ✅         | ✅       | ❌           | ✅          | ❌       | ❓             |
+  | [Apify MCP Tester][Apify MCP Tester]                       | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Augment Code][AugmentCode]                                | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [BeeAI Framework][BeeAI Framework]                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [BoltAI][BoltAI]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Call Chirp][Call Chirp]                                   | ❌           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Chatbox][Chatbox]                                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❌             |
+  | [ChatFrame][ChatFrame]                                     | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❌             |
+  | [ChatGPT][ChatGPT]                                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [ChatWise][ChatWise]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Claude.ai][Claude.ai]                                     | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Claude Code][Claude Code]                                 | ✅           | ✅         | ✅       | ❌           | ❌          | ✅       | ❓             |
+  | [Claude Desktop App][Claude Desktop]                       | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Chorus][Chorus]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Cline][Cline]                                             | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [CodeGPT][CodeGPT]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Continue][Continue]                                       | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Copilot-MCP][CopilotMCP]                                  | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Cursor][Cursor]                                           | ✅           | ✅         | ✅       | ❌           | ✅          | ✅       | ✅             |
+  | [Daydreams Agents][Daydreams]                              | ✅           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [ECA][ECA]                                                 | ✅           | ✅         | ✅       | ❌           | ❌          | ✅       | ❓             |
+  | [Emacs Mcp][Mcp.el]                                        | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [fast-agent][fast-agent]                                   | ✅           | ✅         | ✅       | ✅           | ✅          | ✅       | ✅             |
+  | [FlowDown][FlowDown]                                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❌             |
+  | [FLUJO][FLUJO]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Genkit][Genkit]                                           | ⚠️          | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Glama][Glama]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Gemini CLI][Gemini CLI]                                   | ❌           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [GenAIScript][GenAIScript]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [GitHub Copilot coding agent][GitHubCopilotCodingAgent]    | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❌             |
+  | [Goose][Goose]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [gptme][gptme]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [HyperAgent][HyperAgent]                                   | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Jenova][Jenova]                                           | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [JetBrains AI Assistant][JetBrains AI Assistant]           | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [JetBrains Junie][JetBrains Junie]                         | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❌             |
+  | [Kilo Code][Kilo Code]                                     | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Klavis AI Slack/Discord/Web][Klavis AI]                   | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Langflow][Langflow]                                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [LibreChat][LibreChat]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [LM Studio][LM Studio]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Lutra][Lutra]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [mcp-agent][mcp-agent]                                     | ✅           | ✅         | ✅       | ❓           | ⚠️         | ✅       | ✅             |
+  | [mcp-client-chatbot][mcp-client-chatbot]                   | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [MCPJam][MCPJam]                                           | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ✅             |
+  | [mcp-use][mcp-use]                                         | ✅           | ✅         | ✅       | ✅           | ✅          | ❌       | ✅             |
+  | [modelcontextchat.com][modelcontextchat.com]               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MCPHub][MCPHub]                                           | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [MCPOmni-Connect][MCPOmni-Connect]                         | ✅           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Memex][Memex]                                             | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Microsoft Copilot Studio]                                 | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [MindPal][MindPal]                                         | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Mistral AI: Le Chat][Mistral AI: Le Chat]                 | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [MooPoint][MooPoint]                                       | ❌           | ❌         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Msty Studio][Msty Studio]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Needle][Needle]                                           | ✅           | ✅         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [NVIDIA Agent Intelligence toolkit][AIQ toolkit]           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [OpenSumi][OpenSumi]                                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [oterm][oterm]                                             | ❌           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Postman][postman]                                         | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [RecurseChat][RecurseChat]                                 | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Roo Code][Roo Code]                                       | ✅           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Shortwave][Shortwave]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Simtheory][Simtheory]                                     | ✅           | ✅         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Slack MCP Client][Slack MCP Client]                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Smithery Playground][Smithery Playground]                 | ✅           | ✅         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [SpinAI][SpinAI]                                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Superinterface][Superinterface]                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Superjoin][Superjoin]                                     | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Swarms][Swarms]                                           | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [systemprompt][systemprompt]                               | ✅           | ✅         | ✅       | ❓           | ✅          | ❌       | ❓             |
+  | [Tambo][Tambo]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Tencent CloudBase AI DevKit][Tencent CloudBase AI DevKit] | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [TheiaAI/TheiaIDE][TheiaAI/TheiaIDE]                       | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Tome][Tome]                                               | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [TypingMind App][TypingMind App]                           | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [VS Code GitHub Copilot][VS Code]                          | ✅           | ✅         | ✅       | ✅           | ✅          | ✅       | ✅             |
+  | [Warp][Warp]                                               | ✅           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [WhatsMCP][WhatsMCP]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Windsurf Editor][Windsurf]                                | ❌           | ❌         | ✅       | ✅           | ❌          | ❌       | ❓             |
+  | [Witsy][Witsy]                                             | ❌           | ❌         | ✅       | ❓           | ❌          | ❌       | ❓             |
+  | [Zed][Zed]                                                 | ❌           | ✅         | ✅       | ❌           | ❌          | ❌       | ❓             |
+  | [Zencoder][Zencoder]                                       | ❌           | ❌         | ✅       | ❌           | ❌          | ❌       | ❓             |
 
 [Resources]: /docs/concepts/resources
 [Prompts]: /docs/concepts/prompts
@@ -123,10 +225,12 @@ This page provides an overview of applications that support the Model Context Pr
 [BeeAI Framework]: https://i-am-bee.github.io/beeai-framework
 [BoltAI]: https://boltai.com
 [Call Chirp]: https://www.call-chirp.com
+[Chatbox]: https://chatboxai.app
+[ChatFrame]: https://chatframe.co
 [ChatGPT]: https://chatgpt.com
 [ChatWise]: https://chatwise.app
 [Claude.ai]: https://claude.ai
-[Claude Code]: https://claude.ai/code
+[Claude Code]: https://claude.com/product/claude-code
 [Claude Desktop]: https://claude.ai/download
 [Chorus]: https://chorus.sh
 [Cline]: https://github.com/cline/cline
@@ -135,6 +239,7 @@ This page provides an overview of applications that support the Model Context Pr
 [CopilotMCP]: https://github.com/VikashLoomba/copilot-mcp
 [Cursor]: https://cursor.com
 [Daydreams]: https://github.com/daydreamsai/daydreams
+[ECA]: https://eca.dev
 [Klavis AI]: https://www.klavis.ai/
 [Mcp.el]: https://github.com/lizqwerscott/mcp.el
 [fast-agent]: https://github.com/evalstate/fast-agent
@@ -146,13 +251,17 @@ This page provides an overview of applications that support the Model Context Pr
 [GenAIScript]: https://microsoft.github.io/genaiscript/reference/scripts/mcp-tools/
 [GitHubCopilotCodingAgent]: https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/about-copilot-coding-agent
 [Goose]: https://block.github.io/goose/docs/goose-architecture/#interoperability-with-extensions
+[Jenova]: https://www.jenova.ai
 [JetBrains AI Assistant]: https://plugins.jetbrains.com/plugin/22282-jetbrains-ai-assistant
+[JetBrains Junie]: https://www.jetbrains.com/junie
 [Kilo Code]: https://github.com/Kilo-Org/kilocode
+[Langflow]: https://github.com/langflow-ai/langflow
 [LibreChat]: https://github.com/danny-avila/LibreChat
 [LM Studio]: https://lmstudio.ai
 [Lutra]: https://lutra.ai
 [mcp-agent]: https://github.com/lastmile-ai/mcp-agent
 [mcp-client-chatbot]: https://github.com/cgoinglove/mcp-client-chatbot
+[MCPJam]: https://github.com/MCPJam/inspector
 [mcp-use]: https://github.com/pietrozullo/mcp-use
 [modelcontextchat.com]: https://modelcontextchat.com
 [MCPHub]: https://github.com/ravitemer/mcphub.nvim
@@ -160,19 +269,23 @@ This page provides an overview of applications that support the Model Context Pr
 [Memex]: https://memex.tech/
 [Microsoft Copilot Studio]: https://learn.microsoft.com/en-us/microsoft-copilot-studio/agent-extend-action-mcp
 [MindPal]: https://mindpal.io
+[Mistral AI: Le Chat]: https://chat.mistral.ai
 [MooPoint]: https://moopoint.io
 [Msty Studio]: https://msty.ai
+[Needle]: https://needle.app
 [OpenSumi]: https://github.com/opensumi/core
 [oterm]: https://github.com/ggozad/oterm
 [Postman]: https://postman.com/downloads
 [RecurseChat]: https://recurse.chat/
 [Roo Code]: https://roocode.com
 [Shortwave]: https://www.shortwave.com
+[Simtheory]: https://simtheory.ai
 [Slack MCP Client]: https://github.com/tuannvm/slack-mcp-client
-[Cody]: https://sourcegraph.com/cody
+[Smithery Playground]: https://smithery.ai/playground
 [SpinAI]: https://spinai.dev
 [Superinterface]: https://superinterface.ai
 [Superjoin]: https://superjoin.ai
+[Swarms]: https://github.com/kyegomez/swarms
 [systemprompt]: https://systemprompt.io
 [Tambo]: https://tambo.co
 [Tencent CloudBase AI DevKit]: https://docs.cloudbase.net/ai/agent/mcp
@@ -263,7 +376,7 @@ This page provides an overview of applications that support the Model Context Pr
 
 **Get Started**
 
-```bash
+```bash theme={null}
 brew install amazon-q
 ```
 
@@ -291,7 +404,7 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 
 ### Amp
 
-[Amp](https://ampcode.com) is an agentic coding tool built by Sourcegraph. It runs in VS Code (and compatible forks like Cursor, Windsurf, and VSCodium) and as a command-line tool. It’s also multiplayer — you can share threads and collaborate with your team.
+[Amp](https://ampcode.com) is an agentic coding tool built by Sourcegraph. It runs in VS Code (and compatible forks like Cursor, Windsurf, and VSCodium), JetBrains IDEs, Neovim, and as a command-line tool. It’s also multiplayer — you can share threads and collaborate with your team.
 
 **Key features:**
 
@@ -348,6 +461,27 @@ It uses plain JavaScript (old-school style) and is hosted on Apify, allowing you
 - Save transcriptions from Zoom, Google Meet, and more
 - MCP Tools for voice AI agents
 - Remote MCP servers support
+
+### Chatbox
+
+Chatbox is a better UI and desktop app for ChatGPT, Claude, and other LLMs, available on Windows, Mac, Linux, and the web. It's open-source and has garnered 37K stars⭐ on GitHub.
+
+**Key features:**
+
+- Tools support for MCP servers
+- Support both local and remote MCP servers
+- Built-in MCP servers marketplace
+
+### ChatFrame
+
+A cross-platform desktop chatbot that unifies access to multiple AI language models, supports custom tool integration via MCP servers, and enables RAG conversations with your local files—all in a single, polished app for macOS and Windows.
+
+**Key features:**
+
+- Unified access to top LLM providers (OpenAI, Anthropic, DeepSeek, xAI, and more) in one interface
+- Built-in retrieval-augmented generation (RAG) for instant, private search across your PDFs, text, and code files
+- Plug-in system for custom tools via Model Context Protocol (MCP) servers
+- Multimodal chat: supports images, text, and live interactive artifacts
 
 ### ChatGPT
 
@@ -458,11 +592,14 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 ### Cursor
 
-[Cursor](https://docs.cursor.com/advanced/model-context-protocol) is an AI code editor.
+[Cursor](https://docs.cursor.com/context/mcp#protocol-support) is an AI code editor.
 
 **Key features:**
 
 - Support for MCP tools in Cursor Composer
+- Support for roots
+- Support for prompts
+- Support for elicitation
 - Support for both STDIO and SSE
 
 ### Daydreams
@@ -473,6 +610,25 @@ The Claude desktop application provides comprehensive support for MCP, enabling 
 
 - Supports MCP Servers in config
 - Exposes MCP Client
+
+### ECA - Editor Code Assistant
+
+[ECA](https://eca.dev) is a Free and open-source editor-agnostic tool that aims to easily link LLMs and Editors, giving the best UX possible for AI pair programming using a well-defined protocol
+
+**Key features:**
+
+- **Editor-agnostic**: protocol for any editor to integrate.
+- **Single configuration**: Configure eca making it work the same in any editor via global or local configs.
+- **Chat** interface: ask questions, review code, work together to code.
+- **Agentic**: let LLM work as an agent with its native tools and MCPs you can configure.
+- **Context**: support: giving more details about your code to the LLM, including MCP resources and prompts.
+- **Multi models**: Login to OpenAI, Anthropic, Copilot, Ollama local models and many more.
+- **OpenTelemetry**: Export metrics of tools, prompts, server usage.
+
+**Learn more:**
+
+- [ECA website](https://eca.dev)
+- [ECA source code](https://github.com/editor-code-assistant/eca)
 
 ### Emacs Mcp
 
@@ -600,6 +756,20 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 - Cloud Ready – Instantly scale to hundreds of sessions via [Hyperbrowser](https://www.hyperbrowser.ai/)
 - MCP Client – Connect to tools like Composio for full workflows (e.g. writing web data to Google Sheets)
 
+### Jenova
+
+[Jenova](https://jenova.ai) is the best MCP client for non-technical users, especially on mobile.
+
+**Key features:**
+
+- 30+ pre-integrated MCP servers with one-click integration of custom servers
+- MCP recommendation capability that suggests the best servers for specific tasks
+- Multi-agent architecture with leading tool use reliability and scalability, supporting unlimited concurrent MCP server connections through RAG-powered server metadata
+- Model agnostic platform supporting any leading LLMs (OpenAI, Anthropic, Google, etc.)
+- Unlimited chat history and global persistent memory powered by RAG
+- Easy creation of custom agents with custom models, instructions, knowledge bases, and MCP servers
+- Local MCP server (STDIO) support coming soon with desktop apps
+
 ### JetBrains AI Assistant
 
 [JetBrains AI Assistant](https://plugins.jetbrains.com/plugin/22282-jetbrains-ai-assistant) plugin provides AI-powered features for software development available in all JetBrains IDEs.
@@ -611,6 +781,16 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 - Access to top-tier models from OpenAI, Anthropic, and Google.
 - Offline mode with connected local LLMs via Ollama or LM Studio.
 - Deep integration into IDE workflows, including code suggestions in the editor, VCS assistance, runtime error explanation, and more.
+
+### JetBrains Junie
+
+[Junie](https://www.jetbrains.com/junie) is JetBrains’ AI coding agent for JetBrains IDEs and Android Studio.
+
+**Key features:**
+
+- Connects to MCP servers over **stdio** to use external tools and data sources.
+- Per-command approval with an optional allowlist.
+- Config via `mcp.json` (global `~/.junie/mcp.json` or project `.junie/mcp/`).
 
 ### Kilo Code
 
@@ -638,6 +818,20 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 **Learn more:**
 
 - [Demo video showing MCP usage in Slack/Discord](https://youtu.be/9-QQAhrQWw8)
+
+### Langflow
+
+Langflow is an open-source visual builder that lets developers rapidly prototype and build AI applications, it integrates with the Model Context Protocol (MCP) as both an MCP server and an MCP client.
+
+**Key features:**
+
+- Full support for using MCP server tools to build agents and flows.
+- Export agents and flows as MCP server
+- Local & remote server connections for enhanced privacy and security
+
+**Learn more:**
+
+- [Demo video showing how to use Langflow as both an MCP client & server](https://www.youtube.com/watch?v=pEjsaVVPjdI)
 
 ### LibreChat
 
@@ -703,6 +897,18 @@ Delegate tasks to [GitHub Copilot coding agent](https://docs.github.com/en/copil
 - It supports standard MCP tool calling and includes both a custom MCP server and a standalone UI for testing MCP tools outside the chat flow.
 - All MCP tools are provided to the LLM by default, but the project also includes an optional `@toolname` mention feature to make tool invocation more explicit—particularly useful when connecting to multiple MCP servers with many tools.
 - Visual workflow builder that lets you create custom tools by chaining LLM nodes and MCP tools together. Published workflows become callable as `@workflow_name` tools in chat, enabling complex multi-step automation sequences.
+
+### MCPJam
+
+[MCPJam] is an open source testing and debugging tool for MCP servers - Postman for MCP servers.
+
+**Key features:**
+
+- Test your MCP server's tools, resources, prompts, and OAuth. MCP spec compliant.
+- LLM playground to test your server against different LLMs.
+- Tracing and logging error messages.
+- Connect and test multiple MCP servers simultaneously.
+- Supports all transports - STDIO, SSE, and Streamable HTTP.
 
 ### mcp-use
 
@@ -808,6 +1014,20 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 - OAuth and sampling support
 - New features added daily
 
+### Mistral AI: Le Chat
+
+[Mistral AI: Le Chat](https://mistral.ai) is Mistral AI assistant with MCP support for remote servers and enterprise workflows.
+
+**Key features:**
+
+- Remote MCP server integration
+- Enterprise-grade security
+- Low-latency, high-throughput interactions with structured data
+
+**Learn more:**
+
+- [Mistral MCP Documentation](https://help.mistral.ai/en/collections/911943-connectors)
+
 ### Msty Studio
 
 [Msty Studio](https://msty.ai) is a privacy-first AI productivity platform that seamlessly integrates local and online language models (LLMs) into customizable workflows. Designed for both technical and non-technical users, Msty Studio offers a suite of tools to enhance AI interactions, automate tasks, and maintain full control over data and model behavior.
@@ -822,6 +1042,22 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 **Learn more:**
 
 - [Msty Studio Documentation](https://docs.msty.studio/features/toolbox/tools)
+
+### Needle
+
+[Needle](https://needle.app) is a RAG worflow platform that also works as an MCP client, letting you connect and use MCP servers in seconds.
+
+**Key features:**
+
+- **Instant MCP integration:** Connect any remote MCP server to your collection in seconds
+- **Built-in RAG:** Automatically get retrieval-augmented generation out of the box
+- **Secure OAuth:** Safe, token-based authorization when connecting to servers
+- **Smart previews:** See what each MCP server can do and selectively enable the tools you need
+
+**Learn more:**
+
+- [Getting Started](https://docs.needle.app/docs/guides/hello-needle/getting-started/)
+- [Needle MCP Client](https://docs.needle.app/docs/guides/mcp/getting-started/)
 
 ### NVIDIA Agent Intelligence (AIQ) toolkit
 
@@ -903,6 +1139,23 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 - Support for both remote (Streamable HTTP and SSE) and local (Stdio) MCP servers
 - AI assistance for managing your emails, calendar, tasks and other third-party services
 
+### Simtheory
+
+Simtheory is an agentic AI workspace that unifies multiple AI models, tools, and capabilities under a single subscription. It provides comprehensive MCP support through its MCP Store, allowing users to extend their workspace with productivity tools and integrations.
+
+**Key features:**
+
+- **MCP Store**: Marketplace for productivity tools and MCP server integrations
+- **Parallel Tasking**: Run multiple AI tasks simultaneously with MCP tool support
+- **Model Catalogue**: Access to frontier models with MCP tool integration
+- **Hosted MCP Servers**: Plug-and-play MCP integrations with no technical setup
+- **Advanced MCPs**: Specialized tools like Tripo3D (3D creation), Podcast Maker, and Video Maker
+- **Enterprise Ready**: Flexible workspaces with granular access control for MCP tools
+
+**Learn more:**
+
+- [Simtheory website](https://simtheory.ai)
+
 ### Slack MCP Client
 
 [Slack MCP Client](https://github.com/tuannvm/slack-mcp-client) acts as a bridge between Slack and Model Context Protocol (MCP) servers. Using Slack as the interface, it enables large language models (LLMs) to connect and interact with various MCP servers through standardized MCP tools.
@@ -913,16 +1166,17 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 - **Dynamic and Secure Integration:** Supports dynamic registration of MCP tools, works in both channels and direct messages and manages credentials securely via environment variables or Kubernetes secrets.
 - **Easy Deployment and Extensibility:** Offers official Docker images, a Helm chart for Kubernetes, and Docker Compose for local development, making it simple to deploy, configure, and extend with additional MCP servers or tools.
 
-### Sourcegraph Cody
+### Smithery Playground
 
-[Cody](https://openctx.org/docs/providers/modelcontextprotocol) is Sourcegraph's AI coding assistant, which implements MCP through OpenCTX.
+Smithery Playground is a developer-first MCP client for exploring, testing and debugging MCP servers against LLMs. It provides detailed traces of MCP RPCs to help troubleshoot implementation issues.
 
 **Key features:**
 
-- Support for MCP resources
-- Integration with Sourcegraph's code intelligence
-- Uses OpenCTX as an abstraction layer
-- Future support planned for additional MCP features
+- One-click connect to MCP servers via URL or from Smithery's registry
+- Develop MCP servers that are running on localhost
+- Inspect tools, prompts, resources, and sampling configurations with live previews
+- Run conversational or raw tool calls to verify MCP behavior before shipping
+- Full OAuth MCP-spec support
 
 ### SpinAI
 
@@ -955,6 +1209,23 @@ MooPoint is a web-based AI chat platform built for developers and advanced users
 - Supports OAuth 2.1 and header-based authentication for secure and flexible connections
 - Compatible with both SSE and Streamable HTTP transport for efficient, real-time streaming communication
 - Fully web-based, cross-platform client requiring no additional software installation
+
+### Swarms
+
+[Swarms](https://github.com/kyegomez/swarms) is a production-grade multi-agent orchestration framework that supports MCP integration for dynamic tool discovery and execution.
+
+**Key features:**
+
+- Connects to MCP servers via SSE transport for real-time tool integration
+- Automatic tool discovery and loading from MCP servers
+- Support for distributed tool functionality across multiple agents
+- Enterprise-ready with high availability and observability features
+- Modular architecture supporting multiple AI model providers
+
+**Learn more:**
+
+- [Swarms MCP Integration Documentation](https://docs.swarms.world/en/latest/swarms/tools/tools_examples/)
+- [GitHub Repository](https://github.com/kyegomez/swarms)
 
 ### systemprompt
 
@@ -1132,6 +1403,62 @@ To get started with implementing MCP in your application, check out our [Python]
 
 This list is maintained by the community. If you notice any inaccuracies or would like to update information about MCP support in your application, please submit a pull request or [open an issue in our documentation repository](https://github.com/modelcontextprotocol/modelcontextprotocol/issues).
 
+# Antitrust Policy
+
+Source: https://modelcontextprotocol.io/community/antitrust
+
+MCP Project Antitrust Policy for participants and contributors
+
+**Effective: September 29, 2025**
+
+## Introduction
+
+The goal of the Model Context Protocol open source project (the "Project") is to develop a universal standard for model-to-world interactions, including enabling LLMs and agents to seamlessly connect with and utilize external data sources and tools. The purpose of this Antitrust Policy (the "Policy") is to avoid antitrust risks in carrying out this pro-competitive mission.
+
+Participants in and contributors to the Project (collectively, "participants") will use their best reasonable efforts to comply in all respects with all applicable state and federal antitrust and trade regulation laws, and applicable antitrust/competition laws of other countries (collectively, the "Antitrust Laws").
+
+The goal of Antitrust Laws is to encourage vigorous competition. Nothing in this Policy prohibits or limits the ability of participants to make, sell or use any product, or otherwise to compete in the marketplace. This Policy provides general guidance on compliance with Antitrust Law. Participants should contact their respective legal counsel to address specific questions.
+
+This Policy is conservative and is intended to promote compliance with the Antitrust Laws, not to create duties or obligations beyond what the Antitrust Laws actually require. In the event of any inconsistency between this Policy and the Antitrust Laws, the Antitrust Laws preempt and control.
+
+## Participation
+
+Technical participation in the Project shall be open to all, subject only to compliance with the provisions of the Project's charter and other governance documents.
+
+## Conduct of Meetings
+
+At meetings among actual or potential competitors, there is a risk that participants in those meetings may improperly disclose or discuss information in violation of the Antitrust Laws or otherwise act in an anti-competitive manner. To avoid this risk, participants must adhere to the following policies when participating in Project-related or sponsored meetings, conference calls, or other forums (collectively, "Project Meetings").
+
+Participants must not, in fact or appearance, discuss or exchange information regarding:
+
+- An individual company's current or projected prices, price changes, price differentials, markups, discounts, allowances, terms and conditions of sale, including credit terms, etc., or data that bear on prices, including profits, margins or cost.
+- Industry-wide pricing policies, price levels, price changes, differentials, or the like.
+- Actual or projected changes in industry production, capacity or inventories.
+- Matters relating to bids or intentions to bid for particular products, procedures for responding to bid invitations or specific contractual arrangements.
+- Plans of individual companies concerning the design, characteristics, production, distribution, marketing or introduction dates of particular products, including proposed territories or customers.
+- Matters relating to actual or potential individual suppliers that might have the effect of excluding them from any market or of influencing the business conduct of firms toward such suppliers.
+- Matters relating to actual or potential customers that might have the effect of influencing the business conduct of firms toward such customers.
+- Individual company current or projected cost of procurement, development or manufacture of any product.
+- Individual company market shares for any product or for all products.
+- Confidential or otherwise sensitive business plans or strategy.
+
+In connection with all Project Meetings, participants must do the following:
+
+- Adhere to prepared agendas.
+- Insist that meeting minutes be prepared and distributed to all participants, and that meeting minutes accurately reflect the matters that transpired.
+- Consult with their respective counsel on all antitrust questions related to Project Meetings.
+- Protest against any discussions that appear to violate these policies or the Antitrust Laws, leave any meeting in which such discussions continue, and either insist that such protest be noted in the minutes.
+
+## Requirements/Standard Setting
+
+The Project may establish standards, technical requirements and/or specifications for use (collectively, "requirements"). Participants shall not enter into agreements that prohibit or restrict any participant from establishing or adopting any other requirements. Participants shall not undertake any efforts, directly or indirectly, to prevent any firm from manufacturing, selling, or supplying any product not conforming to a requirement.
+
+The Project shall not promote standardization of commercial terms, such as terms for license and sale.
+
+## Contact Information
+
+To contact the Project regarding matters addressed by this Antitrust Policy, please send an email to [antitrust@modelcontextprotocol.io](mailto:antitrust@modelcontextprotocol.io), and reference "Antitrust Policy" in the subject line.
+
 # Contributor Communication
 
 Source: https://modelcontextprotocol.io/community/communication
@@ -1165,9 +1492,7 @@ The Discord server will have both public and private channels.
 - **Purpose**: Open community engagement, collaborative development, and transparent project coordination.
 - Primary use cases:
   - **Public SDK and tooling development**: All development, from ideation to release planning, happens in public channels (e.g., `#typescript-sdk-dev`, `#inspector-dev`).
-  - **Working and interest group discussions** (`#client-implementors`, `#agents-wg`, etc.)
-    - **Working Group**: Some specific goal or project in mind (such as an SDK, inspector, registry, server-identity, load-balancing, etc).
-    - **Interest Group**: An abstract gathering of folks that might raise a range of various topics. Some might get actioned on as one-offs, others might spin into Working Groups.
+  - **[Working and Interest Group](/community/working-interest-groups) discussions**
   - **Community onboarding** and contribution guidance.
   - **Community feedback** and collaborative brainstorming.
   - Public **office hours** and **maintainer availability**.
@@ -1267,7 +1592,7 @@ Technical Governance is facilitated through a shared [Discord server](/community
 
 ### Maintainers
 
-Maintainers are responsible for individual projects or technical working groups within the MCP project. These generally are independent repositories such as language-specific SDKs, but can also extend to subdirectories of a repository, such as the MCP documentation. Maintainers may adopt their own rules and procedures for making decisions. Maintainers are expected to make decisions for their respective projects independently, but can defer or escalate to the core maintainers when needed.
+Maintainers are responsible for [Working or Interest Groups](/community/working-interest-groups) within the MCP project. These generally are independent repositories such as language-specific SDKs, but can also extend to subdirectories of a repository, such as the MCP documentation. Maintainers may adopt their own rules and procedures for making decisions. Maintainers are expected to make decisions for their respective projects independently, but can defer or escalate to the core maintainers when needed.
 
 Maintainers are responsible for the:
 
@@ -1312,17 +1637,17 @@ The lead maintainer, core maintainer, and maintainer group should attempt to mee
 
 Core and lead maintainers are responsible for all aspects of Model Context Protocol, including documentation, issues, suggestions for content, and all other parts under the [MCP project](https://github.com/modelcontextprotocol). Maintainers are responsible for documentation, issues, and suggestions of content for their area of the MCP project, but are encouraged to partake in general maintenance of the MCP projects. Maintainers, core maintainers, and lead maintainers should use the same contribution process as external contributors, rather than making direct changes to repos. This provides insight into intent and opportunity for discussion.
 
-### Projects and Working Groups
+### Working and Interest Groups
 
-The MCP project is organized into two main structures: projects and working groups.
+MCP collaboration and contributions are organized around two structures: [Working Groups and Interest Groups](/community/working-interest-groups).
 
-Projects are concrete components maintained in dedicated repositories. These include the Specification, TypeScript SDK, Go SDK, Inspector, and other implementation artifacts.
+Interest Groups are responsible for identifying and articulating problems that MCP should address, primarily by facilitating open discussions within the community. In contrast, Working Groups focus on developing concrete solutions by collaboratively producing deliverables, such as SEPs or community-owned implementations of the specification. While input from Interest Groups can help justify the formation of a Working Group, it is not a strict requirement. Similarly, contributions from either Interest Groups or Working Groups are encouraged, but not mandatory, when submitting SEPs or other community proposals.
 
-Working groups are forums for collaboration where interested parties discuss specific aspects of MCP without maintaining code repositories. These include groups focused on transport protocols, client implementation, and other cross-cutting concerns.
+We strongly encourage all contributors interested in working on a specific SEP to first collaborate within an Interest Group. This collaborative process helps ensure that the proposed SEP aligns with protocol needs and is the right direction for its adopters.
 
 #### Governance Principles
 
-All projects and working groups are self-governed while adhering to these core principles:
+All groups are self-governed while adhering to these core principles:
 
 1. Clear contribution and decision-making processes
 2. Open communication and transparent decisions
@@ -1331,7 +1656,7 @@ Both must:
 
 - Document their contribution process
 - Maintain transparent communication
-- Make decisions publicly (working groups must publish meeting notes and proposals)
+- Make decisions publicly (groups must publish meeting notes and proposals)
 
 Projects and working groups without specified processes default to:
 
@@ -1387,7 +1712,7 @@ If a Maintainer (or Core / Lead Maintainer) wishes to propose a nomination for t
 2. Discuss among maintainers of the relevant group(s) as to whether they would be supportive of approving the nomination.
 3. DM a Community Moderator or Core Maintainer to create a private channel in Discord, in the format `nomination-{name}-{group}`. Add all core maintainers, lead maintainers, and co-maintainers on the relevant group.
 4. Provide context for the individual under nomination. See below for suggestions on what to include here.
-5. Create a Discord Poll and ask Core / Lead Maintainers to vote Yes / No on the nomination. Reaching conesensus is encouraged though not required.
+5. Create a Discord Poll and ask Core / Lead Maintainers to vote Yes / No on the nomination. Reaching consensus is encouraged though not required.
 6. After Core / Lead Maintainers discuss and/or vote, if the nomination is favorable, relevant members with permissions to update GitHub an Discord roles will add the nominee to the appropriate groups. The nominator should announce the new maintainership in the relevant Discord channel.
 7. The temporary Discord channel will be deleted a week later.
 
@@ -1522,6 +1847,137 @@ It occasionally becomes necessary to transfer ownership of SEPs to a new SEP aut
 
 This document is placed in the public domain or under the CC0-1.0-Universal license, whichever is more permissive.
 
+# Working and Interest Groups
+
+Source: https://modelcontextprotocol.io/community/working-interest-groups
+
+Learn about the two forms of collaborative groups within the Model Context Protocol's governance structure - Working Groups and Interest Groups.
+
+Within the MCP contributor community we maintain two types of collaboration formats - **Interest** and **Working** groups.
+
+**Interest Groups** are responsible for identifying and articulating problems that MCP should address, primarily by facilitating open discussions within the community. In contrast, **Working Groups** focus on developing concrete solutions by collaboratively producing deliverables, such as SEPs or community-owned implementations of the specification.
+
+While input from Interest Groups can help justify the formation of a Working Group, it is not a strict requirement. Similarly, contributions from either Interest Groups or Working Groups are encouraged, but not mandatory, when submitting SEPs or other community proposals.
+
+We strongly encourage all contributors interested in working on a specific SEP to first collaborate within an Interest Group. This collaborative process helps ensure that the proposed SEP aligns with community needs and is the right direction for the protocol.
+
+Long-term projects in the MCP ecosystem, such as SDKs, Inspector, or Registry are maintained by dedicated Working Groups.
+
+## Purpose
+
+These groups exist to:
+
+- **Facilitate high-signal spaces for focused discussions** - contributors who opt into notifications, expertise sharing, and regular meetings can engage with topics that are highly relevant to them, enabling meaningful contributions and opportunities to learn from others.
+- **Establish clear expectations and leadership roles** - guide collaborative efforts and ensure steady progress toward concrete deliverables that advance MCP evolution and adoption.
+
+## Mechanisms
+
+## Meeting Calendar
+
+All Interest Group and Working Group meetings are published on the public MCP community calendar at [meet.modelcontextprotocol.io](https://meet.modelcontextprotocol.io/).
+
+Facilitators are responsible for posting their meeting schedules to this calendar in advance to ensure discoverability and enable broader community participation.
+
+### Interest Groups (IGs)
+
+**Goal:** Facilitate discussion and knowledge-sharing among MCP contributors who share interests in a specific MCP sub-topic or context. The primary focus is on identifying and gathering problems that may be worth addressing through SEPs or other community artifacts, while encouraging open exploration of protocol issues and opportunities.
+
+**Expectations**:
+
+- Regular conversations in the Interest Group Discord channel
+- **AND/OR** a recurring live meeting regularly attended by Interest Group members
+- Meeting dates and times published in advance on the [MCP community calendar](https://meet.modelcontextprotocol.io/) when applicable, and tagged with their primary topic and interest group Discord channel name (e.g. `auth-ig`)
+- Notes publicly shared after meetings, as a GitHub issue ([example](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1629)) and/or public Google Doc
+
+**Examples**:
+
+- Security in MCP
+- Auth in MCP
+- Using MCP in enterprise settings
+- Tooling and practices surrounding hosting MCP servers
+- Tooling and practices surrounding implementing MCP clients
+
+**Lifecycle**:
+
+- Creation begins by filling out a template in the #wg-ig-group-creation [Discord](/community/communication#discord) channel
+- A community moderator will review and call for a vote in the (private) #community-moderators Discord channel. Majority positive vote by members over a 72h period approves creation of the group.
+  - The creation of the group can be reversed at any time (e.g., after new information surfaces). Core and lead maintainers can veto.
+- Facilitator(s) and Maintainer(s) responsible for organizing IG into meeting expectations
+  - Facilitator is an informal role responsible for shepherding or speaking for a group
+  - Maintainer is an official representative from the MCP steering group. A maintainer is not required for every group, but can help advocate for specific changes or initiatives.
+- IG is retired only when community moderators or Core or Lead Maintainers determine it's no longer active and/or needed
+  - Successful IGs do not have a time limit or expiration date - as long as they are active and maintained, they will remain available
+
+**Creation Template**:
+
+- Facilitator(s)
+- Maintainer(s) (optional)
+- IGs with potentially similar goals/discussions
+- How this IG differentiates itself from the related IGs
+- First topic you to discuss within the IG
+
+Participation in an Interest Group (IG) is not required to start a Working Group (WG) or to create a SEP. However, building consensus within IGs can be valuable when justifying the formation of a WG. Likewise, referencing support from IGs or WGs can strengthen a SEP and its chances of success.
+
+### Working Groups (WG)
+
+**Goal:** Facilitate collaboration within the MCP community on a SEP, a themed series of SEPs, or an otherwise officially endorsed project.
+
+**Expectations**:
+
+- Meaningful progress towards at least one SEP or spec-related implementation **OR** hold maintenance responsibilities for a project (e.g., Inspector, Registry, SDKs)
+- Facilitators are responsible for keeping track of progress and communicating status when appropriate
+- Meeting dates and times published in advance on the [MCP community calendar](https://meet.modelcontextprotocol.io/) when applicable, and tagged with their primary topic and working group Discord channel name (e.g. `agents-wg`)
+- Notes publicly shared after meetings, as a GitHub issue ([example](https://github.com/modelcontextprotocol/modelcontextprotocol/issues/1629)) and/or public Google Doc
+
+**Examples**:
+
+- Registry
+- Inspector
+- Tool Filtering
+- Server Identity
+
+**Lifecycle**:
+
+- Creation begins by filling out a template in #wg-ig-group-creation Discord channel
+- A community moderator will review and call for a vote in the (private) #community-moderators Discord channel. Majority positive vote by members over a 72h period approves creation of the group.
+  - The creation of the group can be reversed at any time (e.g., after new information surfaces). Core and lead maintainers can veto.
+- Facilitator(s) and Maintainer(s) responsible for organizing WG into meeting expectations
+  - Facilitator is an informal role responsible for shepherding or speaking for a group
+  - Maintainer is an official representative from the MCP steering group. A maintainer is not required for every group, but can help advocate for specific changes or initiatives
+- WG is retired when either:
+  - Community moderators or Core and Lead Maintainers decide it is no longer active and/or needed
+  - The WG no longer has an active Issue/PR for a month or more, or has completed all Issues/PRs it intended to pursue.
+
+**Creation Template**:
+
+- Facilitator(s)
+- Maintainer(s) (optional)
+- Explanation of interest/use cases, ideally originating from an IG discussion; however that is not a requirement
+- First Issue/PR/SEP that the WG will work on
+
+## WG/IG Facilitators
+
+A **Facilitator** role in a WG or IG does _not_ result in a [maintainership role](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/MAINTAINERS.md) across the MCP organization. It is an informal role into which anyone can self-nominate.
+
+A Facilitator is responsible for helping shepherd discussions and collaboration within an Interest or Working Group.
+
+Lead and Core Maintainers reserve the right to modify the list of Facilitators and Maintainers for any WG/IG at any time.
+
+## FAQ
+
+### How do I get involved contributing to MCP?
+
+These IG and WG abstractions help provide an elegant on-ramp:
+
+1. [Join the Discord](/community/communication#discord) and follow conversations in IGs relevant to you. Attend [live calls](https://meet.modelcontextprotocol.io/). Participate.
+2. Offer to facilitate calls. Contribute your use cases in SEP proposals and other work.
+3. When you're comfortable contributing to deliverables, jump in to contribute to WG work.
+4. Active and valuable contributors will be nominated by WG maintainers as new maintainers.
+
+### Where can I find a list of all current WGs and IGs?
+
+On the [MCP Contributor Discord](/community/communication#discord) there is a section of channels for each Working and Interest Group.
+
 # Roadmap
 
 Source: https://modelcontextprotocol.io/development/roadmap
@@ -1609,32 +2065,49 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, create a new Python project with `uv`:
 
-    ```bash
-    # Create project directory
-    uv init mcp-client
-    cd mcp-client
+    <CodeGroup>
+      ```bash macOS/Linux theme={null}
+      # Create project directory
+      uv init mcp-client
+      cd mcp-client
 
-    # Create virtual environment
-    uv venv
+      # Create virtual environment
+      uv venv
 
-    # Activate virtual environment
-    # On Windows:
-    .venv\Scripts\activate
-    # On Unix or macOS:
-    source .venv/bin/activate
+      # Activate virtual environment
+      source .venv/bin/activate
 
-    # Install required packages
-    uv add mcp anthropic python-dotenv
+      # Install required packages
+      uv add mcp anthropic python-dotenv
 
-    # Remove boilerplate files
-    # On Windows:
-    del main.py
-    # On Unix or macOS:
-    rm main.py
+      # Remove boilerplate files
+      rm main.py
 
-    # Create our main file
-    touch client.py
-    ```
+      # Create our main file
+      touch client.py
+      ```
+
+      ```powershell Windows theme={null}
+      # Create project directory
+      uv init mcp-client
+      cd mcp-client
+
+      # Create virtual environment
+      uv venv
+
+      # Activate virtual environment
+      .venv\Scripts\activate
+
+      # Install required packages
+      uv add mcp anthropic python-dotenv
+
+      # Remove boilerplate files
+      del main.py
+
+      # Create our main file
+      new-item client.py
+      ```
+    </CodeGroup>
 
     ## Setting Up Your API Key
 
@@ -1642,20 +2115,13 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Create a `.env` file to store it:
 
-    ```bash
-    # Create .env file
-    touch .env
-    ```
-
-    Add your key to the `.env` file:
-
-    ```bash
-    ANTHROPIC_API_KEY=<your key here>
+    ```bash  theme={null}
+    echo "ANTHROPIC_API_KEY=<your key here>" > .env
     ```
 
     Add `.env` to your `.gitignore`:
 
-    ```bash
+    ```bash  theme={null}
     echo ".env" >> .gitignore
     ```
 
@@ -1669,7 +2135,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, let's set up our imports and create the basic client class:
 
-    ```python
+    ```python  theme={null}
     import asyncio
     from typing import Optional
     from contextlib import AsyncExitStack
@@ -1695,7 +2161,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Next, we'll implement the method to connect to an MCP server:
 
-    ```python
+    ```python  theme={null}
     async def connect_to_server(self, server_script_path: str):
         """Connect to an MCP server
 
@@ -1730,7 +2196,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now let's add the core functionality for processing queries and handling tool calls:
 
-    ```python
+    ```python  theme={null}
     async def process_query(self, query: str) -> str:
         """Process a query using Claude and available tools"""
         messages = [
@@ -1804,7 +2270,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now we'll add the chat loop and cleanup functionality:
 
-    ```python
+    ```python  theme={null}
     async def chat_loop(self):
         """Run an interactive chat loop"""
         print("\nMCP Client Started!")
@@ -1832,7 +2298,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Finally, we'll add the main execution logic:
 
-    ```python
+    ```python  theme={null}
     async def main():
         if len(sys.argv) < 2:
             print("Usage: python client.py <path_to_server_script>")
@@ -1850,7 +2316,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
         asyncio.run(main())
     ```
 
-    You can find the complete `client.py` file [here.](https://gist.github.com/zckly/f3f28ea731e096e53b39b47bf0a2d4b1)
+    You can find the complete `client.py` file [here](https://github.com/modelcontextprotocol/quickstart-resources/blob/main/mcp-client-python/client.py).
 
     ## Key Components Explained
 
@@ -1908,13 +2374,13 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     To run your client with any MCP server:
 
-    ```bash
+    ```bash  theme={null}
     uv run client.py path/to/server.py # python server
     uv run client.py path/to/build/index.js # node server
     ```
 
     <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `python client.py .../quickstart-resources/weather-server-python/weather.py`
+      If you're continuing [the weather tutorial from the server quickstart](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-python), your command might look something like this: `python client.py .../quickstart-resources/weather-server-python/weather.py`
     </Note>
 
     The client will:
@@ -1929,7 +2395,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     Here's an example of what it should look like if connected to the weather server from the server quickstart:
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=686d6e0ae7c54f807827db111eaed7d4" width="1932" height="1739" data-path="images/client-claude-cli-python.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=48ff45c4ca51501589d9f20f060daa56 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b35ca5d8a67c2f08efec9c6519efcfe2 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=51b8f5c7fa48db6ccd30aa9988a8c917 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9e1b01bc4c324a7e5100674f63f36b13 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e3e961bd5b5506fed6c860f70df9bf9d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=da01c2527db68cb0c99d29d20751a868 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=686d6e0ae7c54f807827db111eaed7d4" data-og-width="1932" width="1932" data-og-height="1739" height="1739" data-path="images/client-claude-cli-python.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=48ff45c4ca51501589d9f20f060daa56 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b35ca5d8a67c2f08efec9c6519efcfe2 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=51b8f5c7fa48db6ccd30aa9988a8c917 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9e1b01bc4c324a7e5100674f63f36b13 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e3e961bd5b5506fed6c860f70df9bf9d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/client-claude-cli-python.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=da01c2527db68cb0c99d29d20751a868 2500w" />
     </Frame>
 
     ## How It Works
@@ -1961,6 +2427,10 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
        * Validate server responses
        * Be cautious with tool permissions
 
+    4. **Tool Names**
+       * Tool names can be validated according to the format specified [here](/specification/draft/server/tools#tool-names)
+       * If a tool name conforms to the specified format, it should not fail validation by an MCP client
+
     ## Troubleshooting
 
     ### Server Path Issues
@@ -1972,7 +2442,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Example of correct path usage:
 
-    ```bash
+    ```bash  theme={null}
     # Relative path
     uv run client.py ./server/weather.py
 
@@ -2022,7 +2492,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     First, let's create and set up our project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create project directory
       mkdir mcp-client-typescript
       cd mcp-client-typescript
@@ -2040,7 +2510,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
       touch index.ts
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create project directory
       md mcp-client-typescript
       cd mcp-client-typescript
@@ -2061,7 +2531,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Update your `package.json` to set `type: "module"` and a build script:
 
-    ```json package.json
+    ```json package.json theme={null}
     {
       "type": "module",
       "scripts": {
@@ -2072,12 +2542,12 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Create a `tsconfig.json` in the root of your project:
 
-    ```json tsconfig.json
+    ```json tsconfig.json theme={null}
     {
       "compilerOptions": {
-        "target": "ES2023",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "module": "Node16",
+        "moduleResolution": "Node16",
         "outDir": "./build",
         "rootDir": "./",
         "strict": true,
@@ -2096,13 +2566,13 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Create a `.env` file to store it:
 
-    ```bash
+    ```bash  theme={null}
     echo "ANTHROPIC_API_KEY=<your key here>" > .env
     ```
 
     Add `.env` to your `.gitignore`:
 
-    ```bash
+    ```bash  theme={null}
     echo ".env" >> .gitignore
     ```
 
@@ -2116,7 +2586,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, let's set up our imports and create the basic client class in `index.ts`:
 
-    ```typescript
+    ```typescript  theme={null}
     import { Anthropic } from "@anthropic-ai/sdk";
     import {
       MessageParam,
@@ -2154,7 +2624,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Next, we'll implement the method to connect to an MCP server:
 
-    ```typescript
+    ```typescript  theme={null}
     async connectToServer(serverScriptPath: string) {
       try {
         const isJs = serverScriptPath.endsWith(".js");
@@ -2197,7 +2667,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now let's add the core functionality for processing queries and handling tool calls:
 
-    ```typescript
+    ```typescript  theme={null}
     async processQuery(query: string) {
       const messages: MessageParam[] = [
         {
@@ -2255,7 +2725,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now we'll add the chat loop and cleanup functionality:
 
-    ```typescript
+    ```typescript  theme={null}
     async chatLoop() {
       const rl = readline.createInterface({
         input: process.stdin,
@@ -2288,7 +2758,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Finally, we'll add the main execution logic:
 
-    ```typescript
+    ```typescript  theme={null}
     async function main() {
       if (process.argv.length < 3) {
         console.log("Usage: node index.ts <path_to_server_script>");
@@ -2311,7 +2781,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     To run your client with any MCP server:
 
-    ```bash
+    ```bash  theme={null}
     # Build TypeScript
     npm run build
 
@@ -2321,7 +2791,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     ```
 
     <Note>
-      If you're continuing the weather tutorial from the server quickstart, your command might look something like this: `node build/index.js .../quickstart-resources/weather-server-typescript/build/index.js`
+      If you're continuing [the weather tutorial from the server quickstart](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-typescript), your command might look something like this: `node build/index.js .../quickstart-resources/weather-server-typescript/build/index.js`
     </Note>
 
     **The client will:**
@@ -2337,23 +2807,23 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     When you submit a query:
 
-    4. The client gets the list of available tools from the server
-    5. Your query is sent to Claude along with tool descriptions
-    6. Claude decides which tools (if any) to use
-    7. The client executes any requested tool calls through the server
-    8. Results are sent back to Claude
-    9. Claude provides a natural language response
-    10. The response is displayed to you
+    1. The client gets the list of available tools from the server
+    2. Your query is sent to Claude along with tool descriptions
+    3. Claude decides which tools (if any) to use
+    4. The client executes any requested tool calls through the server
+    5. Results are sent back to Claude
+    6. Claude provides a natural language response
+    7. The response is displayed to you
 
     ## Best practices
 
-    11. **Error Handling**
+    1. **Error Handling**
        * Use TypeScript's type system for better error detection
        * Wrap tool calls in try-catch blocks
        * Provide meaningful error messages
        * Gracefully handle connection issues
 
-    12. **Security**
+    2. **Security**
        * Store API keys securely in `.env`
        * Validate server responses
        * Be cautious with tool permissions
@@ -2369,7 +2839,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Example of correct path usage:
 
-    ```bash
+    ```bash  theme={null}
     # Relative path
     node build/index.js ./server/build/index.js
 
@@ -2428,32 +2898,32 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
        First, make sure to install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
        and then run:
 
-       ```bash
+       ```bash  theme={null}
        npm install -g npx
        ```
 
     2. Clone the repository:
 
-       ```bash
+       ```bash  theme={null}
        git clone https://github.com/spring-projects/spring-ai-examples.git
        cd model-context-protocol/brave-chatbot
        ```
 
     3. Set up your API keys:
 
-       ```bash
+       ```bash  theme={null}
        export ANTHROPIC_API_KEY='your-anthropic-api-key-here'
        export BRAVE_API_KEY='your-brave-api-key-here'
        ```
 
     4. Build the application:
 
-       ```bash
+       ```bash  theme={null}
        ./mvnw clean install
        ```
 
     5. Run the application using Maven:
-       ```bash
+       ```bash  theme={null}
        ./mvnw spring-boot:run
        ```
 
@@ -2469,7 +2939,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     1. Required dependencies in pom.xml:
 
-    ```xml
+    ```xml  theme={null}
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-client</artifactId>
@@ -2482,7 +2952,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     2. Application properties (application.yml):
 
-    ```yml
+    ```yml  theme={null}
     spring:
       ai:
         mcp:
@@ -2507,7 +2977,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     3. MCP Server Configuration (`mcp-servers-config.json`):
 
-    ```json
+    ```json  theme={null}
     {
       "mcpServers": {
         "brave-search": {
@@ -2525,17 +2995,13 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     The chatbot is implemented using Spring AI's ChatClient with MCP tool integration:
 
-    ```java
+    ```java  theme={null}
     var chatClient = chatClientBuilder
         .defaultSystem("You are useful assistant, expert in AI and Java.")
         .defaultToolCallbacks((Object[]) mcpToolAdapter.toolCallbacks())
         .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
         .build();
     ```
-
-    <Warning>
-      Breaking change: From SpringAI 1.0.0-M8 onwards, use `.defaultToolCallbacks(...)` instead of `.defaultTool(...)` to register MCP tools.
-    </Warning>
 
     Key features:
 
@@ -2546,14 +3012,14 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     ### Build and run
 
-    ```bash
+    ```bash  theme={null}
     ./mvnw clean install
     java -jar ./target/ai-mcp-brave-chatbot-0.0.1-SNAPSHOT.jar
     ```
 
     or
 
-    ```bash
+    ```bash  theme={null}
     ./mvnw spring-boot:run
     ```
 
@@ -2577,7 +3043,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     For WebFlux-based applications, you can use the WebFlux starter instead:
 
-    ```xml
+    ```xml  theme={null}
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-mcp-client-webflux-spring-boot-starter</artifactId>
@@ -2604,14 +3070,14 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     You can download `java` from [official Oracle JDK website](https://www.oracle.com/java/technologies/downloads/).
     Verify your `java` installation:
 
-    ```bash
+    ```bash  theme={null}
     java --version
     ```
 
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create a new directory for our project
       mkdir kotlin-mcp-client
       cd kotlin-mcp-client
@@ -2620,7 +3086,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
       gradle init
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create a new directory for our project
       md kotlin-mcp-client
       cd kotlin-mcp-client
@@ -2637,7 +3103,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     After creating the project, add the following dependencies:
 
     <CodeGroup>
-      ```kotlin build.gradle.kts
+      ```kotlin build.gradle.kts theme={null}
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
       val anthropicVersion = "0.8.0"
@@ -2649,7 +3115,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
       }
       ```
 
-      ```groovy build.gradle
+      ```groovy build.gradle theme={null}
       def mcpVersion = '0.3.0'
       def slf4jVersion = '2.0.9'
       def anthropicVersion = '0.8.0'
@@ -2664,13 +3130,13 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     Also, add the following plugins to your build script:
 
     <CodeGroup>
-      ```kotlin build.gradle.kts
+      ```kotlin build.gradle.kts theme={null}
       plugins {
           id("com.github.johnrengelman.shadow") version "8.1.1"
       }
       ```
 
-      ```groovy build.gradle
+      ```groovy build.gradle theme={null}
       plugins {
           id 'com.github.johnrengelman.shadow' version '8.1.1'
       }
@@ -2683,7 +3149,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Set up your API key:
 
-    ```bash
+    ```bash  theme={null}
     export ANTHROPIC_API_KEY='your-anthropic-api-key-here'
     ```
 
@@ -2697,7 +3163,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, let's create the basic client class:
 
-    ```kotlin
+    ```kotlin  theme={null}
     class MCPClient : AutoCloseable {
         private val anthropic = AnthropicOkHttpClient.fromEnv()
         private val mcp: Client = Client(clientInfo = Implementation(name = "mcp-client-cli", version = "1.0.0"))
@@ -2717,7 +3183,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Next, we'll implement the method to connect to an MCP server:
 
-    ```kotlin
+    ```kotlin  theme={null}
     suspend fun connectToServer(serverScriptPath: String) {
         try {
             val command = buildList {
@@ -2764,7 +3230,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Also create a helper function to convert from `JsonObject` to `JsonValue` for Anthropic:
 
-    ```kotlin
+    ```kotlin  theme={null}
     private fun JsonObject.toJsonValue(): JsonValue {
         val mapper = ObjectMapper()
         val node = mapper.readTree(this.toString())
@@ -2776,7 +3242,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now let's add the core functionality for processing queries and handling tool calls:
 
-    ```kotlin
+    ```kotlin  theme={null}
     private val messageParamsBuilder: MessageCreateParams.Builder = MessageCreateParams.builder()
         .model(Model.CLAUDE_3_5_SONNET_20241022)
         .maxTokens(1024)
@@ -2844,7 +3310,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     We'll add the chat loop:
 
-    ```kotlin
+    ```kotlin  theme={null}
     suspend fun chatLoop() {
         println("\nMCP Client Started!")
         println("Type your queries or 'quit' to exit.")
@@ -2863,7 +3329,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Finally, we'll add the main execution function:
 
-    ```kotlin
+    ```kotlin  theme={null}
     fun main(args: Array<String>) = runBlocking {
         if (args.isEmpty()) throw IllegalArgumentException("Usage: java -jar <your_path>/build/libs/kotlin-mcp-client-0.1.0-all.jar <path_to_server_script>")
         val serverPath = args.first()
@@ -2879,7 +3345,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     To run your client with any MCP server:
 
-    ```bash
+    ```bash  theme={null}
     ./gradlew build
 
     # Run the client
@@ -2905,7 +3371,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Here's a high-level workflow schema:
 
-    ```mermaid
+    ```mermaid  theme={null}
     ---
     config:
         theme: neutral
@@ -2965,7 +3431,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Example of correct path usage:
 
-    ```bash
+    ```bash  theme={null}
     # Relative path
     java -jar build/libs/client.jar ./server/build/libs/server.jar
 
@@ -3012,14 +3478,14 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, create a new .NET project:
 
-    ```bash
+    ```bash  theme={null}
     dotnet new console -n QuickstartClient
     cd QuickstartClient
     ```
 
     Then, add the required dependencies to your project:
 
-    ```bash
+    ```bash  theme={null}
     dotnet add package ModelContextProtocol --prerelease
     dotnet add package Anthropic.SDK
     dotnet add package Microsoft.Extensions.Hosting
@@ -3030,7 +3496,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     You'll need an Anthropic API key from the [Anthropic Console](https://console.anthropic.com/settings/keys).
 
-    ```bash
+    ```bash  theme={null}
     dotnet user-secrets init
     dotnet user-secrets set "ANTHROPIC_API_KEY" "<your key here>"
     ```
@@ -3041,7 +3507,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     First, let's setup the basic client class in the file `Program.cs`:
 
-    ```csharp
+    ```csharp  theme={null}
     using Anthropic.SDK;
     using Microsoft.Extensions.AI;
     using Microsoft.Extensions.Configuration;
@@ -3060,7 +3526,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Next, we'll setup the MCP Client:
 
-    ```csharp
+    ```csharp  theme={null}
     var (command, arguments) = GetCommandAndArguments(args);
 
     var clientTransport = new StdioClientTransport(new()
@@ -3081,7 +3547,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Add this function at the end of the `Program.cs` file:
 
-    ```csharp
+    ```csharp  theme={null}
     static (string command, string[] arguments) GetCommandAndArguments(string[] args)
     {
         return args switch
@@ -3100,7 +3566,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     Now let's add the core functionality for processing queries and handling tool calls:
 
-    ```csharp
+    ```csharp  theme={null}
     using var anthropicClient = new AnthropicClient(new APIAuthentication(builder.Configuration["ANTHROPIC_API_KEY"]))
         .Messages
         .AsBuilder()
@@ -3170,7 +3636,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
 
     To run your client with any MCP server:
 
-    ```bash
+    ```bash  theme={null}
     dotnet run -- path/to/server.csproj # dotnet server
     dotnet run -- path/to/server.py # python server
     dotnet run -- path/to/server.js # node server
@@ -3193,7 +3659,7 @@ Before you begin, it helps to have gone through our [Build an MCP Server](/docs/
     Here's an example of what it should look like it connected to a weather server quickstart:
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=fcf28dde150d6db879402ad8150c6b23" width="1115" height="666" data-path="images/quickstart-dotnet-client.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0c82cdfe1350b4a924a44d7beaa39f70 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4fd6f3ed867741b44ae12940788be646 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1b5fcfaf8b63b9ea71bf36aa20388a28 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=cb969889d05ec8771c12b887f2940c7d 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=81b2cb62f60a9f3afb2d66cf3ee3df79 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ac9271a3dd0d7b424bb390ad0c31e14e 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=fcf28dde150d6db879402ad8150c6b23" data-og-width="1115" width="1115" data-og-height="666" height="666" data-path="images/quickstart-dotnet-client.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0c82cdfe1350b4a924a44d7beaa39f70 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4fd6f3ed867741b44ae12940788be646 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1b5fcfaf8b63b9ea71bf36aa20388a28 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=cb969889d05ec8771c12b887f2940c7d 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=81b2cb62f60a9f3afb2d66cf3ee3df79 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-dotnet-client.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ac9271a3dd0d7b424bb390ad0c31e14e 2500w" />
     </Frame>
 
   </Tab>
@@ -3224,7 +3690,7 @@ In this tutorial, we'll build a simple MCP weather server and connect it to a ho
 We'll build a server that exposes two tools: `get_alerts` and `get_forecast`. Then we'll connect the server to an MCP host (in this case, Claude for Desktop):
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dce7b2f8a06c20ba358e4bd2e75fa4c7" width="2780" height="1849" data-path="images/current-weather.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=bbb19f34c5df59f66bc6bbb75d2bc5ed 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2392d7e765b897c5b78f9f53d41439d4 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dc349e75341b046d35a649762774da49 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=deeb99214d9383ee4a0c8aaacb120049 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5c6f948059635e376deeadce3893e9b9 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3922160478785cc88d5e98d418e8f7dd 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dce7b2f8a06c20ba358e4bd2e75fa4c7" data-og-width="2780" width="2780" data-og-height="1849" height="1849" data-path="images/current-weather.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=bbb19f34c5df59f66bc6bbb75d2bc5ed 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2392d7e765b897c5b78f9f53d41439d4 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dc349e75341b046d35a649762774da49 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=deeb99214d9383ee4a0c8aaacb120049 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5c6f948059635e376deeadce3893e9b9 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3922160478785cc88d5e98d418e8f7dd 2500w" />
 </Frame>
 
 <Note>
@@ -3270,10 +3736,11 @@ This tutorial will primarily focus on tools.
     ### Best Practices
 
     1. Use a logging library that writes to stderr or files.
+    2. Tool names should follow the format specified [here](/specification/draft/server/tools#tool-names).
 
     ### Quick Examples
 
-    ```python
+    ```python  theme={null}
     # ❌ Bad (STDIO)
     print("Processing request")
 
@@ -3292,11 +3759,11 @@ This tutorial will primarily focus on tools.
     First, let's install `uv` and set up our Python project and environment:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       curl -LsSf https://astral.sh/uv/install.sh | sh
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
       ```
     </CodeGroup>
@@ -3306,7 +3773,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up our project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create a new directory for our project
       uv init weather
       cd weather
@@ -3322,7 +3789,7 @@ This tutorial will primarily focus on tools.
       touch weather.py
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create a new directory for our project
       uv init weather
       cd weather
@@ -3347,7 +3814,7 @@ This tutorial will primarily focus on tools.
 
     Add these to the top of your `weather.py`:
 
-    ```python
+    ```python  theme={null}
     from typing import Any
     import httpx
     from mcp.server.fastmcp import FastMCP
@@ -3366,7 +3833,7 @@ This tutorial will primarily focus on tools.
 
     Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
 
-    ```python
+    ```python  theme={null}
     async def make_nws_request(url: str) -> dict[str, Any] | None:
         """Make a request to the NWS API with proper error handling."""
         headers = {
@@ -3397,7 +3864,7 @@ This tutorial will primarily focus on tools.
 
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
 
-    ```python
+    ```python  theme={null}
     @mcp.tool()
     async def get_alerts(state: str) -> str:
         """Get weather alerts for a US state.
@@ -3458,10 +3925,13 @@ This tutorial will primarily focus on tools.
 
     Finally, let's initialize and run the server:
 
-    ```python
-    if __name__ == "__main__":
+    ```python  theme={null}
+    def main():
         # Initialize and run the server
         mcp.run(transport='stdio')
+
+    if __name__ == "__main__":
+        main()
     ```
 
     Your server is complete! Run `uv run weather.py` to start the MCP server, which will listen for messages from MCP hosts.
@@ -3482,11 +3952,11 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       code $env:AppData\Claude\claude_desktop_config.json
       ```
     </CodeGroup>
@@ -3496,7 +3966,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json macOS/Linux
+      ```json macOS/Linux theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -3512,7 +3982,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -3578,7 +4048,7 @@ This tutorial will primarily focus on tools.
 
     ### Quick Examples
 
-    ```javascript
+    ```javascript  theme={null}
     // ❌ Bad (STDIO)
     console.log("Server started");
 
@@ -3595,7 +4065,7 @@ This tutorial will primarily focus on tools.
     First, let's install Node.js and npm if you haven't already. You can download them from [nodejs.org](https://nodejs.org/).
     Verify your Node.js installation:
 
-    ```bash
+    ```bash  theme={null}
     node --version
     npm --version
     ```
@@ -3605,7 +4075,7 @@ This tutorial will primarily focus on tools.
     Now, let's create and set up our project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -3622,7 +4092,7 @@ This tutorial will primarily focus on tools.
       touch src/index.ts
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create a new directory for our project
       md weather
       cd weather
@@ -3642,7 +4112,7 @@ This tutorial will primarily focus on tools.
 
     Update your package.json to add type: "module" and a build script:
 
-    ```json package.json
+    ```json package.json theme={null}
     {
       "type": "module",
       "bin": {
@@ -3657,12 +4127,12 @@ This tutorial will primarily focus on tools.
 
     Create a `tsconfig.json` in the root of your project:
 
-    ```json tsconfig.json
+    ```json tsconfig.json theme={null}
     {
       "compilerOptions": {
-        "target": "ES2023",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "module": "Node16",
+        "moduleResolution": "Node16",
         "outDir": "./build",
         "rootDir": "./src",
         "strict": true,
@@ -3683,7 +4153,7 @@ This tutorial will primarily focus on tools.
 
     Add these to the top of your `src/index.ts`:
 
-    ```typescript
+    ```typescript  theme={null}
     import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
     import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
     import { z } from "zod";
@@ -3706,7 +4176,7 @@ This tutorial will primarily focus on tools.
 
     Next, let's add our helper functions for querying and formatting the data from the National Weather Service API:
 
-    ```typescript
+    ```typescript  theme={null}
     // Helper function for making NWS API requests
     async function makeNWSRequest<T>(url: string): Promise<T | null> {
       const headers = {
@@ -3779,7 +4249,7 @@ This tutorial will primarily focus on tools.
 
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
 
-    ```typescript
+    ```typescript  theme={null}
     // Register weather tools
     server.tool(
       "get_alerts",
@@ -3922,7 +4392,7 @@ This tutorial will primarily focus on tools.
 
     Finally, implement the main function to run the server:
 
-    ```typescript
+    ```typescript  theme={null}
     async function main() {
       const transport = new StdioServerTransport();
       await server.connect(transport);
@@ -3953,11 +4423,11 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       code $env:AppData\Claude\claude_desktop_config.json
       ```
     </CodeGroup>
@@ -3967,7 +4437,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json macOS/Linux
+      ```json macOS/Linux theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -3978,7 +4448,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -4043,7 +4513,7 @@ This tutorial will primarily focus on tools.
     You will need to add the following dependencies:
 
     <CodeGroup>
-      ```xml Maven
+      ```xml Maven theme={null}
       <dependencies>
             <dependency>
                 <groupId>org.springframework.ai</groupId>
@@ -4057,7 +4527,7 @@ This tutorial will primarily focus on tools.
       </dependencies>
       ```
 
-      ```groovy Gradle
+      ```groovy Gradle theme={null}
       dependencies {
         implementation platform("org.springframework.ai:spring-ai-starter-mcp-server")
         implementation platform("org.springframework:spring-web")
@@ -4068,12 +4538,12 @@ This tutorial will primarily focus on tools.
     Then configure your application by setting the application properties:
 
     <CodeGroup>
-      ```bash application.properties
+      ```bash application.properties theme={null}
       spring.main.bannerMode=off
       logging.pattern.console=
       ```
 
-      ```yaml application.yml
+      ```yaml application.yml theme={null}
       logging:
         pattern:
           console:
@@ -4093,7 +4563,7 @@ This tutorial will primarily focus on tools.
 
     Let's implement a [WeatherService.java](https://github.com/spring-projects/spring-ai-examples/blob/main/model-context-protocol/weather/starter-stdio-server/src/main/java/org/springframework/ai/mcp/sample/server/WeatherService.java) that uses a REST client to query the data from the National Weather Service API:
 
-    ```java
+    ```java  theme={null}
     @Service
     public class WeatherService {
 
@@ -4141,7 +4611,7 @@ This tutorial will primarily focus on tools.
 
     ### Create your Boot Application
 
-    ```java
+    ```java  theme={null}
     @SpringBootApplication
     public class McpServerApplication {
 
@@ -4162,7 +4632,7 @@ This tutorial will primarily focus on tools.
 
     Finally, let's build the server:
 
-    ```bash
+    ```bash  theme={null}
     ./mvnw clean install
     ```
 
@@ -4186,11 +4656,11 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       code $env:AppData\Claude\claude_desktop_config.json
       ```
     </CodeGroup>
@@ -4201,7 +4671,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json macOS/Linux
+      ```json macOS/Linux theme={null}
       {
         "mcpServers": {
           "spring-ai-mcp-weather": {
@@ -4216,7 +4686,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "spring-ai-mcp-weather": {
@@ -4249,7 +4719,7 @@ This tutorial will primarily focus on tools.
 
     Use the `McpClient` to connect to the server:
 
-    ```java
+    ```java  theme={null}
     var stdioParams = ServerParameters.builder("java")
       .args("-jar", "/ABSOLUTE/PATH/TO/PARENT/FOLDER/mcp-weather-stdio-server-0.0.1-SNAPSHOT.jar")
       .build();
@@ -4276,7 +4746,7 @@ This tutorial will primarily focus on tools.
 
     Create a new boot starter application using the `spring-ai-starter-mcp-client` dependency:
 
-    ```xml
+    ```xml  theme={null}
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-client</artifactId>
@@ -4286,7 +4756,7 @@ This tutorial will primarily focus on tools.
     and set the `spring.ai.mcp.client.stdio.servers-configuration` property to point to your `claude_desktop_config.json`.
     You can reuse the existing Anthropic Desktop configuration:
 
-    ```properties
+    ```properties  theme={null}
     spring.ai.mcp.client.stdio.servers-configuration=file:PATH/TO/claude_desktop_config.json
     ```
 
@@ -4321,14 +4791,14 @@ This tutorial will primarily focus on tools.
     You can download `java` from [official Oracle JDK website](https://www.oracle.com/java/technologies/downloads/).
     Verify your `java` installation:
 
-    ```bash
+    ```bash  theme={null}
     java --version
     ```
 
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -4337,7 +4807,7 @@ This tutorial will primarily focus on tools.
       gradle init
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create a new directory for our project
       md weather
       cd weather
@@ -4355,7 +4825,7 @@ This tutorial will primarily focus on tools.
     After creating the project, add the following dependencies:
 
     <CodeGroup>
-      ```kotlin build.gradle.kts
+      ```kotlin build.gradle.kts theme={null}
       val mcpVersion = "0.4.0"
       val slf4jVersion = "2.0.9"
       val ktorVersion = "3.1.1"
@@ -4368,7 +4838,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```groovy build.gradle
+      ```groovy build.gradle theme={null}
       def mcpVersion = '0.3.0'
       def slf4jVersion = '2.0.9'
       def ktorVersion = '3.1.1'
@@ -4385,14 +4855,14 @@ This tutorial will primarily focus on tools.
     Also, add the following plugins to your build script:
 
     <CodeGroup>
-      ```kotlin build.gradle.kts
+      ```kotlin build.gradle.kts theme={null}
       plugins {
           kotlin("plugin.serialization") version "your_version_of_kotlin"
           id("com.github.johnrengelman.shadow") version "8.1.1"
       }
       ```
 
-      ```groovy build.gradle
+      ```groovy build.gradle theme={null}
       plugins {
           id 'org.jetbrains.kotlin.plugin.serialization' version 'your_version_of_kotlin'
           id 'com.github.johnrengelman.shadow' version '8.1.1'
@@ -4408,7 +4878,7 @@ This tutorial will primarily focus on tools.
 
     Add a server initialization function:
 
-    ```kotlin
+    ```kotlin  theme={null}
     // Main function to run the MCP server
     fun `run mcp server`() {
         // Create the MCP Server instance with a basic implementation
@@ -4443,7 +4913,7 @@ This tutorial will primarily focus on tools.
 
     Next, let's add functions and data classes for querying and converting responses from the National Weather Service API:
 
-    ```kotlin
+    ```kotlin  theme={null}
     // Extension function to fetch forecast information for given latitude and longitude
     suspend fun HttpClient.getForecast(latitude: Double, longitude: Double): List<String> {
         val points = this.get("/points/$latitude,$longitude").body<Points>()
@@ -4518,7 +4988,7 @@ This tutorial will primarily focus on tools.
 
     The tool execution handler is responsible for actually executing the logic of each tool. Let's add it:
 
-    ```kotlin
+    ```kotlin  theme={null}
     // Create an HTTP client with a default request configuration and JSON content negotiation
     val httpClient = HttpClient {
         defaultRequest {
@@ -4593,7 +5063,7 @@ This tutorial will primarily focus on tools.
 
     Finally, implement the main function to run the server:
 
-    ```kotlin
+    ```kotlin  theme={null}
     fun main() = `run mcp server`()
     ```
 
@@ -4617,11 +5087,11 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       code $env:AppData\Claude\claude_desktop_config.json
       ```
     </CodeGroup>
@@ -4632,7 +5102,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json macOS/Linux
+      ```json macOS/Linux theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -4646,7 +5116,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -4708,14 +5178,14 @@ This tutorial will primarily focus on tools.
 
     First, let's install `dotnet` if you haven't already. You can download `dotnet` from [official Microsoft .NET website](https://dotnet.microsoft.com/download/). Verify your `dotnet` installation:
 
-    ```bash
+    ```bash  theme={null}
     dotnet --version
     ```
 
     Now, let's create and set up your project:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -4723,7 +5193,7 @@ This tutorial will primarily focus on tools.
       dotnet new console
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       # Create a new directory for our project
       mkdir weather
       cd weather
@@ -4737,7 +5207,7 @@ This tutorial will primarily focus on tools.
     Alternatively, you can create a C# application using the [Visual Studio project wizard](https://learn.microsoft.com/en-us/visualstudio/get-started/csharp/tutorial-console?view=vs-2022).
     After creating the project, add NuGet package for the Model Context Protocol SDK and hosting:
 
-    ```bash
+    ```bash  theme={null}
     # Add the Model Context Protocol SDK NuGet package
     dotnet add package ModelContextProtocol --prerelease
     # Add the .NET Hosting NuGet package
@@ -4750,7 +5220,7 @@ This tutorial will primarily focus on tools.
 
     Open the `Program.cs` file in your project and replace its contents with the following code:
 
-    ```csharp
+    ```csharp  theme={null}
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using ModelContextProtocol;
@@ -4784,7 +5254,7 @@ This tutorial will primarily focus on tools.
 
     Create an extension class for `HttpClient` which helps simplify JSON request handling:
 
-    ```csharp
+    ```csharp  theme={null}
     using System.Text.Json;
 
     internal static class HttpClientExt
@@ -4800,7 +5270,7 @@ This tutorial will primarily focus on tools.
 
     Next, define a class with the tool execution handlers for querying and converting responses from the National Weather Service API:
 
-    ```csharp
+    ```csharp  theme={null}
     using ModelContextProtocol.Server;
     using System.ComponentModel;
     using System.Globalization;
@@ -4866,7 +5336,7 @@ This tutorial will primarily focus on tools.
 
     Finally, run the server using the following command:
 
-    ```bash
+    ```bash  theme={null}
     dotnet run
     ```
 
@@ -4884,11 +5354,11 @@ This tutorial will primarily focus on tools.
     For example, if you have [VS Code](https://code.visualstudio.com/) installed:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       code ~/Library/Application\ Support/Claude/claude_desktop_config.json
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       code $env:AppData\Claude\claude_desktop_config.json
       ```
     </CodeGroup>
@@ -4897,7 +5367,7 @@ This tutorial will primarily focus on tools.
     In this case, we'll add our single weather server like so:
 
     <CodeGroup>
-      ```json macOS/Linux
+      ```json macOS/Linux theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -4908,7 +5378,7 @@ This tutorial will primarily focus on tools.
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "weather": {
@@ -4936,16 +5406,16 @@ This tutorial will primarily focus on tools.
 
 ### Test with commands
 
-Let's make sure Claude for Desktop is picking up the two tools we've exposed in our `weather` server. You can do this by looking for the "Search and tools" <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2742ec3fb97067e8591e68546c90221e" style={{display: 'inline', margin: 0, height: '1.3em'}} width="24" height="24" data-path="images/claude-desktop-mcp-slider.svg" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=52839f8519f476623c4fb5bb87ee24bd 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f0491976e108286441fc6554309c5c4f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=08e83eb102eda755a7db1eb27d16ebff 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2524a80752928b0206e68e8e1890d1aa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3c0dc88dadad5ed8e8af316965d00e0b 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=702363a955a631c40c342f9557d5cfdd 2500w" data-optimize="true" data-opv="2" /> icon:
+Let's make sure Claude for Desktop is picking up the two tools we've exposed in our `weather` server. You can do this by looking for the "Search and tools" <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2742ec3fb97067e8591e68546c90221e" style={{display: 'inline', margin: 0, height: '1.3em'}} data-og-width="24" width="24" data-og-height="24" height="24" data-path="images/claude-desktop-mcp-slider.svg" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=52839f8519f476623c4fb5bb87ee24bd 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f0491976e108286441fc6554309c5c4f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=08e83eb102eda755a7db1eb27d16ebff 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2524a80752928b0206e68e8e1890d1aa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3c0dc88dadad5ed8e8af316965d00e0b 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=702363a955a631c40c342f9557d5cfdd 2500w" /> icon:
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dee15f1044586f26f7c8f489d1b1bea1" width="2250" height="462" data-path="images/visual-indicator-mcp-tools.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7d5a49e662150224cacc011f27310bd0 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8f4d36114ab38529374b8ed651bec92d 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6e0145760586e28c8d45e11424653912 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=17d958bc6c8ac8260c2b18d5e6e033bb 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0bdb3a92e0e7721921d77288c5594fd4 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5eabd994c742cc7379e99b908e9dea3e 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dee15f1044586f26f7c8f489d1b1bea1" data-og-width="2250" width="2250" data-og-height="462" height="462" data-path="images/visual-indicator-mcp-tools.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7d5a49e662150224cacc011f27310bd0 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8f4d36114ab38529374b8ed651bec92d 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6e0145760586e28c8d45e11424653912 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=17d958bc6c8ac8260c2b18d5e6e033bb 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0bdb3a92e0e7721921d77288c5594fd4 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/visual-indicator-mcp-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5eabd994c742cc7379e99b908e9dea3e 2500w" />
 </Frame>
 
 After clicking on the slider icon, you should see two tools listed:
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=040f7b6ec62f24b8fa0aaf4c5cab2d29" width="638" height="240" data-path="images/available-mcp-tools.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=588fae5b4ba6c310a527e91eb20d83bf 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d277a424f541ff9a901072a4103ff05e 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d12c286d06565cd45e175ea08c59fcf4 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e30982d8fea169d8559777facd1a07e3 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d90eaa83029d8ae66dec21d632c118b5 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f89e9bb7244323d208cf367bcd45f4ef 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=040f7b6ec62f24b8fa0aaf4c5cab2d29" data-og-width="638" width="638" data-og-height="240" height="240" data-path="images/available-mcp-tools.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=588fae5b4ba6c310a527e91eb20d83bf 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d277a424f541ff9a901072a4103ff05e 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d12c286d06565cd45e175ea08c59fcf4 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e30982d8fea169d8559777facd1a07e3 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d90eaa83029d8ae66dec21d632c118b5 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/available-mcp-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f89e9bb7244323d208cf367bcd45f4ef 2500w" />
 </Frame>
 
 If your server isn't being picked up by Claude for Desktop, proceed to the [Troubleshooting](#troubleshooting) section for debugging tips.
@@ -4956,11 +5426,11 @@ If the tool settings icon has shown up, you can now test your server by running 
 - What are the active weather alerts in Texas?
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dce7b2f8a06c20ba358e4bd2e75fa4c7" width="2780" height="1849" data-path="images/current-weather.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=bbb19f34c5df59f66bc6bbb75d2bc5ed 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2392d7e765b897c5b78f9f53d41439d4 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dc349e75341b046d35a649762774da49 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=deeb99214d9383ee4a0c8aaacb120049 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5c6f948059635e376deeadce3893e9b9 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3922160478785cc88d5e98d418e8f7dd 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dce7b2f8a06c20ba358e4bd2e75fa4c7" data-og-width="2780" width="2780" data-og-height="1849" height="1849" data-path="images/current-weather.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=bbb19f34c5df59f66bc6bbb75d2bc5ed 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2392d7e765b897c5b78f9f53d41439d4 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=dc349e75341b046d35a649762774da49 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=deeb99214d9383ee4a0c8aaacb120049 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5c6f948059635e376deeadce3893e9b9 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/current-weather.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3922160478785cc88d5e98d418e8f7dd 2500w" />
 </Frame>
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c4762bf2bd84a8781846d2965af3e4a4" width="2809" height="1850" data-path="images/weather-alerts.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e25afdd84f6ae9c612b898c6eb9c518d 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1e7ef678cbc93c0966789e61d5209092 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4dbaeb8840a7b1aeb73b188804877d71 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=68f5e0cb428c8b9cb53d28ec1108073b 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=56025243c2b8c6413f8da087122e848d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=12f50039e4a1c9544a22a9bdae46f719 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c4762bf2bd84a8781846d2965af3e4a4" data-og-width="2809" width="2809" data-og-height="1850" height="1850" data-path="images/weather-alerts.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e25afdd84f6ae9c612b898c6eb9c518d 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1e7ef678cbc93c0966789e61d5209092 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4dbaeb8840a7b1aeb73b188804877d71 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=68f5e0cb428c8b9cb53d28ec1108073b 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=56025243c2b8c6413f8da087122e848d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/weather-alerts.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=12f50039e4a1c9544a22a9bdae46f719 2500w" />
 </Frame>
 
 <Note>
@@ -4991,7 +5461,7 @@ When you ask a question:
 
     You can run the following command to list recent logs and follow along with any new ones:
 
-    ```bash
+    ```bash  theme={null}
     # Check Claude's logs for errors
     tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
     ```
@@ -5001,6 +5471,15 @@ When you ask a question:
     1. Check your `claude_desktop_config.json` file syntax
     2. Make sure the path to your project is absolute and not relative
     3. Restart Claude for Desktop completely
+
+    <Warning>
+      To properly restart Claude for Desktop, you must fully quit the application:
+
+      * **Windows**: Right-click the Claude icon in the system tray (which may be hidden in the "hidden icons" menu) and select "Quit" or "Exit".
+      * **macOS**: Use Cmd+Q or select "Quit Claude" from the menu bar.
+
+      Simply closing the window does not fully quit the application, and your MCP server configuration changes will not take effect.
+    </Warning>
 
     **Tool calls failing silently**
 
@@ -5073,7 +5552,7 @@ Model Context Protocol (MCP) servers extend AI applications' capabilities by pro
 This guide demonstrates how to connect to local MCP servers using Claude Desktop as an example, one of the [many clients that support MCP](/clients). While we focus on Claude Desktop's implementation, the concepts apply broadly to other MCP-compatible clients. By the end of this tutorial, Claude will be able to interact with files on your computer, create new documents, organize folders, and search through your file system—all with your explicit permission for each action.
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=629d7e754dc358d71a408d6ce970c1b1" alt="Claude Desktop with filesystem integration showing file management capabilities" width="1732" height="2060" data-path="images/quickstart-filesystem.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0758ee60aee8acc3035727957612351f 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3bc6d3ea4a3cd38b6d031ac386700c62 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9d75e8729b08b452f2e0d08bff8ce393 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b35c6b531daa84b4ba4b06c9223b1ee2 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c4bb491d17a65e038120b5c39031ab7f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ea7a0ad5ae5eeb866222f4020dc7bba3 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=629d7e754dc358d71a408d6ce970c1b1" alt="Claude Desktop with filesystem integration showing file management capabilities" data-og-width="1732" width="1732" data-og-height="2060" height="2060" data-path="images/quickstart-filesystem.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0758ee60aee8acc3035727957612351f 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3bc6d3ea4a3cd38b6d031ac386700c62 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9d75e8729b08b452f2e0d08bff8ce393 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b35c6b531daa84b4ba4b06c9223b1ee2 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c4bb491d17a65e038120b5c39031ab7f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-filesystem.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ea7a0ad5ae5eeb866222f4020dc7bba3 2500w" />
 </Frame>
 
 ## Prerequisites
@@ -5082,7 +5561,7 @@ Before starting this tutorial, ensure you have the following installed on your s
 
 ### Claude Desktop
 
-Download and install [Claude Desktop](https://claude.ai/download) for your operating system. Claude Desktop is currently available for macOS and Windows. Linux support is coming soon.
+Download and install [Claude Desktop](https://claude.ai/download) for your operating system. Claude Desktop is available for macOS and Windows.
 
 If you already have Claude Desktop installed, verify you're running the latest version by clicking the Claude menu and selecting "Check for Updates..."
 
@@ -5090,7 +5569,7 @@ If you already have Claude Desktop installed, verify you're running the latest v
 
 The Filesystem Server and many other MCP servers require Node.js to run. Verify your Node.js installation by opening a terminal or command prompt and running:
 
-```bash
+```bash theme={null}
 node --version
 ```
 
@@ -5118,7 +5597,7 @@ The process involves configuring Claude Desktop to automatically start the Files
     On macOS, this appears in the top menu bar:
 
     <Frame style={{ textAlign: "center" }}>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0c8b57e0e17af3624b6762a3ea944c8e" width="400" alt="Claude Desktop menu showing Settings option" width="644" height="568" data-path="images/quickstart-menu.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f997b6f31398840d3a824fa0eb9fec43 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=062b0b3c342e4e02a8f2d690a48bcb24 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ae9b08052b7ea30b31d27432d8edf19e 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7962cc4fb841fa0a04a3c6de03cf4d3d 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=86bd79431e35b133d0ae4f74265f3d60 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1b300ae527efb4744aa08d5df94299a0 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0c8b57e0e17af3624b6762a3ea944c8e" width="400" alt="Claude Desktop menu showing Settings option" data-og-width="644" data-og-height="568" data-path="images/quickstart-menu.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f997b6f31398840d3a824fa0eb9fec43 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=062b0b3c342e4e02a8f2d690a48bcb24 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ae9b08052b7ea30b31d27432d8edf19e 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7962cc4fb841fa0a04a3c6de03cf4d3d 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=86bd79431e35b133d0ae4f74265f3d60 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-menu.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1b300ae527efb4744aa08d5df94299a0 2500w" />
     </Frame>
 
     This opens the Claude Desktop configuration window, which is separate from your Claude account settings.
@@ -5131,7 +5610,7 @@ The process involves configuring Claude Desktop to automatically start the Files
     Click the "Edit Config" button to open the configuration file:
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0fb595490a2f9e15c0301e771a57446c" alt="Developer settings showing Edit Config button" width="1688" height="534" data-path="images/quickstart-developer.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0a7e615ee50a27a4e514668f7cbd9f57 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=16d6d4721219afd7e2bfa41f0795e7e0 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=612b1de5516ed7321d5b6939b5b3c823 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=840a428450dc0ec97538eb4e05050bcd 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=59ae3a95918ff7f7b15e777c2d606496 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7838d7f023a281053786870336914f03 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0fb595490a2f9e15c0301e771a57446c" alt="Developer settings showing Edit Config button" data-og-width="1688" width="1688" data-og-height="534" height="534" data-path="images/quickstart-developer.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0a7e615ee50a27a4e514668f7cbd9f57 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=16d6d4721219afd7e2bfa41f0795e7e0 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=612b1de5516ed7321d5b6939b5b3c823 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=840a428450dc0ec97538eb4e05050bcd 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=59ae3a95918ff7f7b15e777c2d606496 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-developer.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7838d7f023a281053786870336914f03 2500w" />
     </Frame>
 
     This action creates a new configuration file if one doesn't exist, or opens your existing configuration. The file is located at:
@@ -5145,7 +5624,7 @@ The process involves configuring Claude Desktop to automatically start the Files
     Replace the contents of the configuration file with the following JSON structure. This configuration tells Claude Desktop to start the Filesystem Server with access to specific directories:
 
     <CodeGroup>
-      ```json macOS
+      ```json macOS theme={null}
       {
         "mcpServers": {
           "filesystem": {
@@ -5161,7 +5640,7 @@ The process involves configuring Claude Desktop to automatically start the Files
       }
       ```
 
-      ```json Windows
+      ```json Windows theme={null}
       {
         "mcpServers": {
           "filesystem": {
@@ -5201,16 +5680,16 @@ The process involves configuring Claude Desktop to automatically start the Files
   <Step title="Restart Claude Desktop">
     After saving the configuration file, completely quit Claude Desktop and restart it. The application needs to restart to load the new configuration and start the MCP server.
 
-    Upon successful restart, you'll see an MCP server indicator <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2742ec3fb97067e8591e68546c90221e" style={{display: 'inline', margin: 0, height: '1.3em'}} width="24" height="24" data-path="images/claude-desktop-mcp-slider.svg" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=52839f8519f476623c4fb5bb87ee24bd 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f0491976e108286441fc6554309c5c4f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=08e83eb102eda755a7db1eb27d16ebff 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2524a80752928b0206e68e8e1890d1aa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3c0dc88dadad5ed8e8af316965d00e0b 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=702363a955a631c40c342f9557d5cfdd 2500w" data-optimize="true" data-opv="2" /> in the bottom-right corner of the conversation input box:
+    Upon successful restart, you'll see an MCP server indicator <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2742ec3fb97067e8591e68546c90221e" style={{display: 'inline', margin: 0, height: '1.3em'}} data-og-width="24" width="24" data-og-height="24" height="24" data-path="images/claude-desktop-mcp-slider.svg" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=52839f8519f476623c4fb5bb87ee24bd 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f0491976e108286441fc6554309c5c4f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=08e83eb102eda755a7db1eb27d16ebff 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2524a80752928b0206e68e8e1890d1aa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=3c0dc88dadad5ed8e8af316965d00e0b 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/claude-desktop-mcp-slider.svg?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=702363a955a631c40c342f9557d5cfdd 2500w" /> in the bottom-right corner of the conversation input box:
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f80a38b720fc0519079bae26e2aae312" alt="Claude Desktop interface showing MCP server indicator" width="1414" height="410" data-path="images/quickstart-slider.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=24a0dc6f30664e953cc185ed0c7abc64 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d670a5fd82405775d7bc1e5f20a9a847 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5f66fa4bcaaf50ca905415f15af2e276 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4aecd3c4b45c3aaac75a118d2d6edda5 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c7d321e2d25aa34552057a8866782549 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=25dc1761b40b11ccb727b36183efa57f 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f80a38b720fc0519079bae26e2aae312" alt="Claude Desktop interface showing MCP server indicator" data-og-width="1414" width="1414" data-og-height="410" height="410" data-path="images/quickstart-slider.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=24a0dc6f30664e953cc185ed0c7abc64 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d670a5fd82405775d7bc1e5f20a9a847 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5f66fa4bcaaf50ca905415f15af2e276 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4aecd3c4b45c3aaac75a118d2d6edda5 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c7d321e2d25aa34552057a8866782549 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-slider.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=25dc1761b40b11ccb727b36183efa57f 2500w" />
     </Frame>
 
     Click on this indicator to view the available tools provided by the Filesystem Server:
 
     <Frame style={{ textAlign: "center" }}>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=18f045f27f31f40896d3710ce9a4a0a0" width="400" alt="Available filesystem tools in Claude Desktop" width="978" height="902" data-path="images/quickstart-tools.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=298fc5cf79822ee781d15cf6374d8542 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c1e39ca66d9191dbe493cdcb52ad3fcb 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d797f46eb55126de14328ede4b735967 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=fcb9d89b6cef95bf9a3ffcd9231a4026 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=23097f8f8b52a255246aeb83f85f949d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0007b81f22a6a9b9a117981091e0221f 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=18f045f27f31f40896d3710ce9a4a0a0" width="400" alt="Available filesystem tools in Claude Desktop" data-og-width="978" data-og-height="902" data-path="images/quickstart-tools.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=298fc5cf79822ee781d15cf6374d8542 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c1e39ca66d9191dbe493cdcb52ad3fcb 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d797f46eb55126de14328ede4b735967 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=fcb9d89b6cef95bf9a3ffcd9231a4026 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=23097f8f8b52a255246aeb83f85f949d 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0007b81f22a6a9b9a117981091e0221f 2500w" />
     </Frame>
 
     If the server indicator doesn't appear, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
@@ -5233,7 +5712,7 @@ With the Filesystem Server connected, Claude can now interact with your file sys
 Before executing any file system operation, Claude will request your approval. This ensures you maintain control over all actions:
 
 <Frame style={{ textAlign: "center" }}>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=98cc6e9dfe885fbd6e9bfae40601e494" width="500" alt="Claude requesting approval to perform a file operation" width="962" height="464" data-path="images/quickstart-approve.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d5ab1456f7728dcf93652b6542377ca3 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=06809ba885f94726178efefed355395c 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a437dd1dd46c0d7cae1767f846eb100a 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d4323361de72398163de4500fd398cf3 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b7f5117fb238e9e7e455b58e1637cca1 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ab48fb927eaaf919c5ccf063a958bab6 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=98cc6e9dfe885fbd6e9bfae40601e494" width="500" alt="Claude requesting approval to perform a file operation" data-og-width="962" data-og-height="464" data-path="images/quickstart-approve.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d5ab1456f7728dcf93652b6542377ca3 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=06809ba885f94726178efefed355395c 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a437dd1dd46c0d7cae1767f846eb100a 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=d4323361de72398163de4500fd398cf3 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b7f5117fb238e9e7e455b58e1637cca1 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-approve.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ab48fb927eaaf919c5ccf063a958bab6 2500w" />
 </Frame>
 
 Review each request carefully before approving. You can always deny a request if you're not comfortable with the proposed action.
@@ -5251,11 +5730,11 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     5. In your command line, try manually running the server (replacing `username` as you did in `claude_desktop_config.json`) to see if you get any errors:
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       npx -y @modelcontextprotocol/server-filesystem /Users/username/Desktop /Users/username/Downloads
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       npx -y @modelcontextprotocol/server-filesystem C:\Users\username\Desktop C:\Users\username\Downloads
       ```
     </CodeGroup>
@@ -5276,11 +5755,11 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
     You can run the following command to list recent logs and follow along with any new ones (on Windows, it will only show recent logs):
 
     <CodeGroup>
-      ```bash macOS/Linux
+      ```bash macOS/Linux theme={null}
       tail -n 20 -f ~/Library/Logs/Claude/mcp*.log
       ```
 
-      ```powershell Windows
+      ```powershell Windows theme={null}
       type "%APPDATA%\Claude\logs\mcp*.log"
       ```
     </CodeGroup>
@@ -5303,7 +5782,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
   <Accordion title="ENOENT error and `${APPDATA}` in paths on Windows">
     If your configured server fails to load, and you see within its logs an error referring to `${APPDATA}` within a path, you may need to add the expanded value of `%APPDATA%` to your `env` key in `claude_desktop_config.json`:
 
-    ```json
+    ```json  theme={null}
     {
       "brave-search": {
         "command": "npx",
@@ -5323,7 +5802,7 @@ If you encounter issues setting up or using the Filesystem Server, these solutio
 
       The `npx` command may continue to fail if you have not installed NPM globally. If NPM is already installed globally, you will find `%APPDATA%\npm` exists on your system. If not, you can install NPM globally by running the following command:
 
-      ```bash
+      ```bash  theme={null}
       npm install -g npm
       ```
     </Warning>
@@ -5397,13 +5876,13 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     In the Connectors section, scroll to the bottom where you'll find the "Add custom connector" button. Click this button to begin the connection process.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b5ae9b23164875bbaa3aff4c178cdc64" alt="Add custom connector button in Claude settings" width="1038" height="809" data-path="images/quickstart-remote/1-add-connector.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=df494c13492290da8cbf33320405bc60 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a2dce224fb5e1636218ea2806962c89f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=de18294dd3cad23989c04cedbacff74f 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c55cb3531701df2b5dfd721dcd3f48dc 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b0d3e56c4c445ba6896d49997dcdf2c0 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9d83f4f2db7441a39ff8733d97243ab9 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b5ae9b23164875bbaa3aff4c178cdc64" alt="Add custom connector button in Claude settings" data-og-width="1038" width="1038" data-og-height="809" height="809" data-path="images/quickstart-remote/1-add-connector.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=df494c13492290da8cbf33320405bc60 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a2dce224fb5e1636218ea2806962c89f 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=de18294dd3cad23989c04cedbacff74f 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c55cb3531701df2b5dfd721dcd3f48dc 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b0d3e56c4c445ba6896d49997dcdf2c0 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/1-add-connector.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9d83f4f2db7441a39ff8733d97243ab9 2500w" />
     </Frame>
 
     A dialog will appear prompting you to enter the remote MCP server URL. This URL should be provided by the server developer or administrator. Enter the complete URL, ensuring it includes the proper protocol (https\://) and any necessary path components.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0934f16d8e016cade8e560c8f89d011b" alt="Dialog for entering remote MCP server URL" width="1616" height="282" data-path="images/quickstart-remote/2-connect.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e3d7318b0b8e691d25e1887e80200b60 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=be3edc7b361eecaabf688c2058b5e466 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=31be86114b31e1c5e813d92a4c0cb1c3 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=15b6cd3819fabd3655a52b930d384b51 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5ef180101a7fb0901f7ecf1b5efd254f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c024f625ec6ee3f7959513ba15adf524 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0934f16d8e016cade8e560c8f89d011b" alt="Dialog for entering remote MCP server URL" data-og-width="1616" width="1616" data-og-height="282" height="282" data-path="images/quickstart-remote/2-connect.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e3d7318b0b8e691d25e1887e80200b60 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=be3edc7b361eecaabf688c2058b5e466 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=31be86114b31e1c5e813d92a4c0cb1c3 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=15b6cd3819fabd3655a52b930d384b51 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=5ef180101a7fb0901f7ecf1b5efd254f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/2-connect.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c024f625ec6ee3f7959513ba15adf524 2500w" />
     </Frame>
 
     After entering the URL, click "Add" to proceed with the connection.
@@ -5414,7 +5893,7 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     Most remote MCP servers require authentication to ensure secure access to their resources. The authentication process varies depending on the server implementation but commonly involves OAuth, API keys, or username/password combinations.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=89af6e1b85718637231388697cc7b015" alt="Authentication screen for remote MCP server" width="490" height="806" data-path="images/quickstart-remote/3-auth.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=cde1e30b4c3b99b5edc5575c5958e9e7 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e2cef2daadce577ce335949d3f425257 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4e06599391ebf6bcb521cb4000469844 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e78e71303fd5bb7d1e5c1602dca7641b 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2e49d390bddf2a37fef4cba409e9950f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=47ec70901a76a3209267b2078f9f8011 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=89af6e1b85718637231388697cc7b015" alt="Authentication screen for remote MCP server" data-og-width="490" width="490" data-og-height="806" height="806" data-path="images/quickstart-remote/3-auth.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=cde1e30b4c3b99b5edc5575c5958e9e7 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e2cef2daadce577ce335949d3f425257 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4e06599391ebf6bcb521cb4000469844 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=e78e71303fd5bb7d1e5c1602dca7641b 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=2e49d390bddf2a37fef4cba409e9950f 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/3-auth.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=47ec70901a76a3209267b2078f9f8011 2500w" />
     </Frame>
 
     Follow the authentication prompts provided by the server. This may redirect you to a third-party authentication provider or display a form within Claude. Once authentication is complete, Claude will establish a secure connection to the remote server.
@@ -5425,13 +5904,13 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     After successful connection, the remote server's resources and prompts become available in your Claude conversations. You can access these by clicking the paperclip icon in the message input area, which opens the attachment menu.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ecc6234b0fe5625e24cc2b02b7893c67" alt="Attachment menu showing available resources" width="735" height="666" data-path="images/quickstart-remote/4-select-resources-menu.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6e853446286f2c2caf1c7137e4293db4 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7c3c5b7d2f8d078bc263b0603a4136d1 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=280e1d1547925f73f33fcf404eac5ba2 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=00fc5842c2d6592f41f96c2051b016e2 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=505d4ec95d83f4e52cf9c60780b225fe 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=07178c22a89472b962639854dc029953 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ecc6234b0fe5625e24cc2b02b7893c67" alt="Attachment menu showing available resources" data-og-width="735" width="735" data-og-height="666" height="666" data-path="images/quickstart-remote/4-select-resources-menu.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6e853446286f2c2caf1c7137e4293db4 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7c3c5b7d2f8d078bc263b0603a4136d1 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=280e1d1547925f73f33fcf404eac5ba2 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=00fc5842c2d6592f41f96c2051b016e2 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=505d4ec95d83f4e52cf9c60780b225fe 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/4-select-resources-menu.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=07178c22a89472b962639854dc029953 2500w" />
     </Frame>
 
     The menu displays all available resources and prompts from your connected servers. Select the items you want to include in your conversation. These resources provide Claude with context and information from your external tools.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=30c522540c7ff5abd8617d20b329eca2" alt="Selecting specific resources and prompts from the menu" width="648" height="920" data-path="images/quickstart-remote/5-select-prompts-resources.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7361585026d3dd1f0c218232ce475d59 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=eb5162947ac8110569225e4ff36ac54c 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=93b0b1de76b11785deb6cd2b8bbbb33e 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=19d1f1de9b7b38dff6fabaea260fc700 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=587ee6b0f0831f7b9c827db58e4c53a6 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a875a3599b478977e1322c07b82a5879 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=30c522540c7ff5abd8617d20b329eca2" alt="Selecting specific resources and prompts from the menu" data-og-width="648" width="648" data-og-height="920" height="920" data-path="images/quickstart-remote/5-select-prompts-resources.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7361585026d3dd1f0c218232ce475d59 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=eb5162947ac8110569225e4ff36ac54c 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=93b0b1de76b11785deb6cd2b8bbbb33e 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=19d1f1de9b7b38dff6fabaea260fc700 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=587ee6b0f0831f7b9c827db58e4c53a6 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/5-select-prompts-resources.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a875a3599b478977e1322c07b82a5879 2500w" />
     </Frame>
 
   </Step>
@@ -5440,7 +5919,7 @@ The process of connecting Claude to a remote MCP server involves adding a Custom
     Remote MCP servers often expose multiple tools with varying capabilities. You can control which tools Claude is allowed to use by configuring permissions in the connector settings. This ensures Claude only performs actions you've explicitly authorized.
 
     <Frame>
-      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1e55fd2f7da85150bfcf9dfbd7a31f44" alt="Tool permission configuration interface" width="604" height="745" data-path="images/quickstart-remote/6-configure-tools.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6ece557353a2b8227cfc033ee7533fbc 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=aa954f4a018077d6a4a3c9406cdd4a63 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=309fd1583dd23081ed93eca4fb85c5e0 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8b7ea5b326ea5cf8947e9b9aba28f2f7 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7e02024cdcae2b7c41aab3d5c4f4e75e 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f953404ab1cb149e160eaa139c53d701 2500w" data-optimize="true" data-opv="2" />
+      <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=1e55fd2f7da85150bfcf9dfbd7a31f44" alt="Tool permission configuration interface" data-og-width="604" width="604" data-og-height="745" height="745" data-path="images/quickstart-remote/6-configure-tools.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=6ece557353a2b8227cfc033ee7533fbc 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=aa954f4a018077d6a4a3c9406cdd4a63 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=309fd1583dd23081ed93eca4fb85c5e0 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8b7ea5b326ea5cf8947e9b9aba28f2f7 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7e02024cdcae2b7c41aab3d5c4f4e75e 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/quickstart-remote/6-configure-tools.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=f953404ab1cb149e160eaa139c53d701 2500w" />
     </Frame>
 
     Navigate back to the Connectors settings and click on your connected server. Here you can enable or disable specific tools, set usage limits, and configure other security parameters according to your needs.
@@ -5493,7 +5972,7 @@ Using MCP, AI applications like Claude or ChatGPT can connect to data sources (e
 Think of MCP like a USB-C port for AI applications. Just as USB-C provides a standardized way to connect electronic devices, MCP provides a standardized way to connect AI applications to external systems.
 
 <Frame>
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=9337f8096debc55621adcaf8ca563695" width="3840" height="1500" data-path="images/mcp-simple-diagram.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=147db2e81f434cae3ba44da988154fe5 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=16251036cd56dc50e8ef32918b99d1da 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8b44b031c68d1c10fb0c443f09d237f1 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=0a319cb6a2504659377de862e889b8da 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=37d50a5429a8f662c1beb564b4df8e65 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-simple-diagram.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ce4f99af2930b3b992909963a284c874 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=35268aa0ad50b8c385913810e7604550" data-og-width="3840" width="3840" data-og-height="1500" height="1500" data-path="images/mcp-simple-diagram.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=280&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=0cea440365b03c2f2a299b0104375b8b 280w, https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=560&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=2391513484df96fa7203739dae5e53b0 560w, https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=840&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=96f5e553bee1051dc882db6c832b15bc 840w, https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=1100&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=341b88d6308188ab06bf05748c80a494 1100w, https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=1650&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=a131a609c7b6a70f342f493bbad57fcb 1650w, https://mintcdn.com/mcp/bEUxYpZqie0DsluH/images/mcp-simple-diagram.png?w=2500&fit=max&auto=format&n=bEUxYpZqie0DsluH&q=85&s=dc4ab238184b6c70e06e871681c921c5 2500w" />
 </Frame>
 
 ## What can MCP enable?
@@ -5571,7 +6050,7 @@ The key participants in the MCP architecture are:
 When Visual Studio Code subsequently connects to another MCP server, such as the [local filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem), the Visual Studio Code runtime instantiates an additional MCP client object to maintain this connection, hence maintaining a one-to-one
 relationship of MCP clients to MCP servers.
 
-```mermaid
+```mermaid theme={null}
 graph TB
     subgraph "MCP Host (AI Application)"
         Client1["MCP Client 1"]
@@ -5586,13 +6065,6 @@ graph TB
     Client1 ---|"One-to-one<br/>connection"| Server1
     Client2 ---|"One-to-one<br/>connection"| Server2
     Client3 ---|"One-to-one<br/>connection"| Server3
-
-    style Client1 fill:#e1f5fe
-    style Client2 fill:#e1f5fe
-    style Client3 fill:#e1f5fe
-    style Server1 fill:#f3e5f5
-    style Server2 fill:#f3e5f5
-    style Server3 fill:#f3e5f5
 ```
 
 Note that **MCP server** refers to the program that serves context data, regardless of
@@ -5685,7 +6157,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     MCP begins with lifecycle management through a capability negotiation handshake. As described in the [lifecycle management](#lifecycle-management) section, the client sends an `initialize` request to establish the connection and negotiate supported features.
 
     <CodeGroup>
-      ```json Initialize Request
+      ```json Initialize Request theme={null}
       {
         "jsonrpc": "2.0",
         "id": 1,
@@ -5703,7 +6175,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
       }
       ```
 
-      ```json Initialize Response
+      ```json Initialize Response theme={null}
       {
         "jsonrpc": "2.0",
         "id": 1,
@@ -5747,7 +6219,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     After successful initialization, the client sends a notification to indicate it's ready:
 
-    ```json Notification
+    ```json Notification theme={null}
     {
       "jsonrpc": "2.0",
       "method": "notifications/initialized"
@@ -5758,7 +6230,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     During initialization, the AI application's MCP client manager establishes connections to configured servers and stores their capabilities for later use. The application uses this information to determine which servers can provide specific types of functionality (tools, resources, prompts) and whether they support real-time updates.
 
-    ```python Pseudo-code for AI application initialization
+    ```python Pseudo-code for AI application initialization theme={null}
     # Pseudo Code
     async with stdio_client(server_config) as (read, write):
         async with ClientSession(read, write) as session:
@@ -5774,7 +6246,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     Now that the connection is established, the client can discover available tools by sending a `tools/list` request. This request is fundamental to MCP's tool discovery mechanism — it allows clients to understand what tools are available on the server before attempting to use them.
 
     <CodeGroup>
-      ```json Tools List Request
+      ```json Tools List Request theme={null}
       {
         "jsonrpc": "2.0",
         "id": 2,
@@ -5782,7 +6254,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
       }
       ```
 
-      ```json Tools List Response
+      ```json Tools List Response theme={null}
       {
         "jsonrpc": "2.0",
         "id": 2,
@@ -5849,7 +6321,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     The AI application fetches available tools from all connected MCP servers and combines them into a unified tool registry that the language model can access. This allows the LLM to understand what actions it can perform and automatically generates the appropriate tool calls during conversations.
 
-    ```python Pseudo-code for AI application tool discovery
+    ```python Pseudo-code for AI application tool discovery theme={null}
     # Pseudo-code using MCP Python SDK patterns
     available_tools = []
     for session in app.mcp_server_sessions():
@@ -5868,7 +6340,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
     The `tools/call` request follows a structured format that ensures type safety and clear communication between client and server. Note that we're using the proper tool name from the discovery response (`weather_current`) rather than a simplified name:
 
     <CodeGroup>
-      ```json Tool Call Request
+      ```json Tool Call Request theme={null}
       {
         "jsonrpc": "2.0",
         "id": 3,
@@ -5883,7 +6355,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
       }
       ```
 
-      ```json Tool Call Response
+      ```json Tool Call Response theme={null}
       {
         "jsonrpc": "2.0",
         "id": 3,
@@ -5927,7 +6399,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     When the language model decides to use a tool during a conversation, the AI application intercepts the tool call, routes it to the appropriate MCP server, executes it, and returns the results back to the LLM as part of the conversation flow. This enables the LLM to access real-time data and perform actions in the external world.
 
-    ```python
+    ```python  theme={null}
     # Pseudo-code for AI application tool execution
     async def handle_tool_call(conversation, tool_name, arguments):
         session = app.find_mcp_session_for_tool(tool_name)
@@ -5944,7 +6416,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     When the server's available tools change—such as when new functionality becomes available, existing tools are modified, or tools become temporarily unavailable—the server can proactively notify connected clients:
 
-    ```json Request
+    ```json Request theme={null}
     {
       "jsonrpc": "2.0",
       "method": "notifications/tools/list_changed"
@@ -5963,7 +6435,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     Upon receiving this notification, the client typically reacts by requesting the updated tool list. This creates a refresh cycle that keeps the client's understanding of available tools current:
 
-    ```json Request
+    ```json Request theme={null}
     {
       "jsonrpc": "2.0",
       "id": 4,
@@ -5986,7 +6458,7 @@ This section provides a step-by-step walkthrough of an MCP client-server interac
 
     When the AI application receives a notification about changed tools, it immediately refreshes its tool registry and updates the LLM's available capabilities. This ensures that ongoing conversations always have access to the most current set of tools, and the LLM can dynamically adapt to new functionality as it becomes available.
 
-    ```python
+    ```python  theme={null}
     # Pseudo-code for AI application notification handling
     async def handle_tools_changed_notification(session):
         tools_response = await session.list_tools()
@@ -6013,7 +6485,7 @@ In addition to making use of context provided by servers, clients may provide se
 | Feature         | Explanation                                                                                                                                                                                       | Example                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | **Sampling**    | Sampling allows servers to request LLM completions through the client, enabling an agentic workflow. This approach puts the client in complete control of user permissions and security measures. | A server for booking travel may send a list of flights to an LLM and request that the LLM pick the best flight for the user.           |
-| **Roots**       | Roots allow clients to specify which files servers can access, guiding them to relevant directories while maintaining security boundaries.                                                        | A server for booking travel may be given access to a specific directory, from which it can read a user's calendar.                     |
+| **Roots**       | Roots allow clients to specify which directories servers should focus on, communicating intended scope through a coordination mechanism.                                                          | A server for booking travel may be given access to a specific directory, from which it can read a user's calendar.                     |
 | **Elicitation** | Elicitation enables servers to request specific information from users during interactions, providing a structured way for servers to gather information on demand.                               | A server booking travel may ask for the user's preferences on airplane seats, room type or their contact number to finalise a booking. |
 
 ### Elicitation
@@ -6026,7 +6498,7 @@ Elicitation provides a structured way for servers to gather necessary informatio
 
 **Elicitation flow:**
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant User
     participant Client
@@ -6049,7 +6521,7 @@ The flow enables dynamic information gathering. Servers can request specific dat
 
 **Elicitation components example:**
 
-```typescript
+```typescript theme={null}
 {
   method: "elicitation/requestInput",
   params: {
@@ -6107,11 +6579,11 @@ Roots define filesystem boundaries for server operations, allowing clients to sp
 
 #### Overview
 
-Roots are a mechanism for clients to communicate filesystem access boundaries to servers. They consist of file URIs that indicate directories where servers can operate, helping servers understand the scope of available files and folders. Rather than giving servers unrestricted filesystem access, roots guide them to relevant working directories while maintaining security boundaries.
+Roots are a mechanism for clients to communicate filesystem access boundaries to servers. They consist of file URIs that indicate directories where servers can operate, helping servers understand the scope of available files and folders. While roots communicate intended boundaries, they do not enforce security restrictions. Actual security must be enforced at the operating system level, via file permissions and/or sandboxing.
 
 **Root structure:**
 
-```json
+```json theme={null}
 {
   "uri": "file:///Users/agent/travel-planning",
   "name": "Travel Planning Workspace"
@@ -6119,8 +6591,6 @@ Roots are a mechanism for clients to communicate filesystem access boundaries to
 ```
 
 Roots are exclusively filesystem paths and always use the `file://` URI scheme. They help servers understand project boundaries, workspace organization, and accessible directories. The roots list can be updated dynamically as users work with different projects or folders, with servers receiving notifications through `roots/list_changed` when boundaries change.
-
-It's important to note that while roots provide guidance to servers about where to operate, the client is always in full control of file access. Roots simply communicate intended boundaries—actual file access is always mediated by the client's security policies.
 
 #### Example: Travel Planning Workspace
 
@@ -6132,15 +6602,23 @@ The client provides filesystem roots to the travel planning server:
 - `file:///Users/agent/travel-templates` - Reusable itinerary templates and resources
 - `file:///Users/agent/client-documents` - Client passports and travel documents
 
-When the agent creates a Barcelona itinerary, the server works within these boundaries—accessing templates, saving the new itinerary, and referencing client documents. It cannot access files outside these roots. Servers typically access files within roots by using relative paths from the root directories or by utilizing file search tools that respect the root boundaries.
+When the agent creates a Barcelona itinerary, well-behaved servers respect these boundaries—accessing templates, saving the new itinerary, and referencing client documents within the specified roots. Servers typically access files within roots by using relative paths from the root directories or by utilizing file search tools that respect the root boundaries.
 
 If the agent opens an archive folder like `file:///Users/agent/archive/2023-trips`, the client updates the roots list via `roots/list_changed`.
+
+For a complete implementation of a server that respects roots, see the [filesystem server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) in the official servers repository.
+
+#### Design Philosophy
+
+Roots serve as a coordination mechanism between clients and servers, not a security boundary. The specification requires that servers "SHOULD respect root boundaries," and not that they "MUST enforce" them, because servers run code the client cannot control.
+
+Roots work best when servers are trusted or vetted, users understand their advisory nature, and the goal is preventing accidents rather than stopping malicious behavior. They excel at context scoping (telling servers where to focus), accident prevention (helping well-behaved servers stay in bounds), and workflow organization (such as managing project boundaries automatically).
 
 #### User Interaction Model
 
 Roots are typically managed automatically by host applications based on user actions, though some applications may expose manual root management:
 
-**Automatic root detection**: When users open folders, clients automatically expose them as roots. Opening a travel workspace gives servers access to itineraries and documents within that directory.
+**Automatic root detection**: When users open folders, clients automatically expose them as roots. Opening a travel workspace allows the client to expose that directory as a root, helping servers understand which itineraries and documents are in scope for the current work.
 
 **Manual root configuration**: Advanced users can specify roots through configuration. For example, adding `/travel-templates` for reusable resources while excluding directories with financial records.
 
@@ -6154,7 +6632,7 @@ Sampling enables servers to perform AI-dependent tasks without directly integrat
 
 **Sampling flow:**
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant LLM
     participant User
@@ -6184,7 +6662,7 @@ The flow ensures security through multiple human-in-the-loop checkpoints. Users 
 
 **Request parameters example:**
 
-```typescript
+```typescript theme={null}
 {
   messages: [
     {
@@ -6264,7 +6742,7 @@ Tools are schema-defined interfaces that LLMs can invoke. MCP uses JSON Schema f
 
 **Example tool definition:**
 
-```typescript
+```typescript theme={null}
 {
   name: "searchFlights",
   description: "Search for available flights",
@@ -6359,7 +6837,7 @@ In this case, it provides calendar data, weather information, and travel prefere
 
 **Resource Template Examples:**
 
-```json
+```json theme={null}
 {
   "uriTemplate": "weather://forecast/{city}/{date}",
   "name": "weather-forecast",
@@ -6420,7 +6898,7 @@ Prompts provide structured templates for common tasks. In the travel planning co
 
 **"Plan a vacation" prompt:**
 
-```json
+```json theme={null}
 {
   "name": "plan-vacation",
   "title": "Plan a vacation",
@@ -6472,7 +6950,7 @@ Consider a personalized AI travel planner application, with three connected serv
 
 1. **User invokes a prompt with parameters:**
 
-   ```json
+   ```json theme={null}
    {
      "prompt": "plan-vacation",
      "arguments": {
@@ -6541,10 +7019,10 @@ Build MCP servers and clients using our official SDKs. All SDKs provide the same
 
 Each SDK provides the same functionality but follows the idioms and best practices of its language. All SDKs support:
 
-• Creating MCP servers that expose tools, resources, and prompts
-• Building MCP clients that can connect to any MCP server
-• Local and remote transport protocols
-• Protocol compliance with type safety
+- Creating MCP servers that expose tools, resources, and prompts
+- Building MCP clients that can connect to any MCP server
+- Local and remote transport protocols
+- Protocol compliance with type safety
 
 Visit the SDK page for your chosen language to find installation instructions, documentation, and examples.
 
@@ -6562,124 +7040,9 @@ Ready to start building with MCP? Choose your path:
   </Card>
 </CardGroup>
 
-# Example Servers
-
-Source: https://modelcontextprotocol.io/examples
-
-A list of example servers and implementations
-
-This page showcases various Model Context Protocol (MCP) servers that demonstrate the protocol's capabilities and versatility. These servers enable Large Language Models (LLMs) to securely access tools and data sources.
-
-## Reference implementations
-
-These official reference servers demonstrate core MCP features and SDK usage:
-
-### Current reference servers
-
-- **[Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything)** - Reference / test server with prompts, resources, and tools
-- **[Fetch](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)** - Web content fetching and conversion for efficient LLM usage
-- **[Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)** - Secure file operations with configurable access controls
-- **[Git](https://github.com/modelcontextprotocol/servers/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
-- **[Memory](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)** - Knowledge graph-based persistent memory system
-- **[Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)** - Dynamic and reflective problem-solving through thought sequences
-- **[Time](https://github.com/modelcontextprotocol/servers/tree/main/src/time)** - Time and timezone conversion capabilities
-
-### Archived servers (historical reference)
-
-⚠️ **Note**: The following servers have been moved to the [servers-archived repository](https://github.com/modelcontextprotocol/servers-archived) and are no longer actively maintained. They are provided for historical reference only.
-
-#### Data and file systems
-
-- **[PostgreSQL](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)** - Read-only database access with schema inspection capabilities
-- **[SQLite](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite)** - Database interaction and business intelligence features
-- **[Google Drive](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive)** - File access and search capabilities for Google Drive
-
-#### Development tools
-
-- **[Git](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
-- **[GitHub](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)** - Repository management, file operations, and GitHub API integration
-- **[GitLab](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gitlab)** - GitLab API integration enabling project management
-- **[Sentry](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sentry)** - Retrieving and analyzing issues from Sentry.io
-
-#### Web and browser automation
-
-- **[Brave Search](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search)** - Web and local search using Brave's Search API
-- **[Puppeteer](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer)** - Browser automation and web scraping capabilities
-
-#### Productivity and communication
-
-- **[Slack](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)** - Channel management and messaging capabilities
-- **[Google Maps](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps)** - Location services, directions, and place details
-
-#### AI and specialized tools
-
-- **[EverArt](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/everart)** - AI image generation using various models
-- **[AWS KB Retrieval](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/aws-kb-retrieval-server)** - Retrieval from AWS Knowledge Base using Bedrock Agent Runtime
-
-## Official integrations
-
-Visit the [MCP Servers Repository (Official Integrations section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#%EF%B8%8F-official-integrations) for a list of MCP servers maintained by companies for their platforms.
-
-## Community implementations
-
-Visit the [MCP Servers Repository (Community section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#-community-servers) for a list of MCP servers maintained by community members.
-
-## Getting started
-
-### Using reference servers
-
-TypeScript-based servers can be used directly with `npx`:
-
-```bash
-npx -y @modelcontextprotocol/server-memory
-```
-
-Python-based servers can be used with `uvx` (recommended) or `pip`:
-
-```bash
-# Using uvx
-uvx mcp-server-git
-
-# Using pip
-pip install mcp-server-git
-python -m mcp_server_git
-```
-
-### Configuring with Claude
-
-To use an MCP server with Claude, add it to your configuration:
-
-```json
-{
-  "mcpServers": {
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"]
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/files"]
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
-      }
-    }
-  }
-}
-```
-
-## Additional resources
-
-Visit the [MCP Servers Repository (Resources section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#-resources) for a collection of other resources and projects related to MCP.
-
-Visit our [GitHub Discussions](https://github.com/orgs/modelcontextprotocol/discussions) to engage with the MCP community.
-
 # MCP Inspector
 
-Source: https://modelcontextprotocol.io/legacy/tools/inspector
+Source: https://modelcontextprotocol.io/docs/tools/inspector
 
 In-depth guide to using the MCP Inspector for testing and debugging Model Context Protocol servers
 
@@ -6691,11 +7054,11 @@ The [MCP Inspector](https://github.com/modelcontextprotocol/inspector) is an int
 
 The Inspector runs directly through `npx` without requiring installation:
 
-```bash
+```bash theme={null}
 npx @modelcontextprotocol/inspector <command>
 ```
 
-```bash
+```bash theme={null}
 npx @modelcontextprotocol/inspector <command> <arg1> <arg2>
 ```
 
@@ -6705,7 +7068,7 @@ A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](ht
 
 <Tabs>
   <Tab title="NPM package">
-    ```bash
+    ```bash  theme={null}
     npx -y @modelcontextprotocol/inspector npx <package-name> <args>
     # For example
     npx -y @modelcontextprotocol/inspector npx @modelcontextprotocol/server-filesystem /Users/username/Desktop
@@ -6713,7 +7076,7 @@ A common way to start server packages from [NPM](https://npmjs.com) or [PyPi](ht
   </Tab>
 
   <Tab title="PyPi package">
-    ```bash
+    ```bash  theme={null}
     npx @modelcontextprotocol/inspector uvx <package-name> <args>
     # For example
     npx @modelcontextprotocol/inspector uvx mcp-server-git --repository ~/code/mcp/servers.git
@@ -6728,13 +7091,13 @@ way is:
 
 <Tabs>
   <Tab title="TypeScript">
-    ```bash
+    ```bash  theme={null}
     npx @modelcontextprotocol/inspector node path/to/server/index.js args...
     ```
   </Tab>
 
   <Tab title="Python">
-    ```bash
+    ```bash  theme={null}
     npx @modelcontextprotocol/inspector \
       uv \
       --directory path/to/server \
@@ -6750,7 +7113,7 @@ Please carefully read any attached README for the most accurate instructions.
 ## Feature overview
 
 <Frame caption="The MCP Inspector interface">
-  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=83b12e2a457c96ef4ad17c7357236290" width="2888" height="1761" data-path="images/mcp-inspector.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=63e7263fbdf5f473064f37dac99ae8e5 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=78dcf971172e8790fc672f19ead2796d 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8c4ce11c7901888cd967f461df66a0f3 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=279b84d4729737f1241514cb30de3b40 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ac5dcc45e291ba2f2954d3a22c918029 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4fbcddae467e84daef4739e0816ab698 2500w" data-optimize="true" data-opv="2" />
+  <img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=83b12e2a457c96ef4ad17c7357236290" data-og-width="2888" width="2888" data-og-height="1761" height="1761" data-path="images/mcp-inspector.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=63e7263fbdf5f473064f37dac99ae8e5 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=78dcf971172e8790fc672f19ead2796d 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8c4ce11c7901888cd967f461df66a0f3 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=279b84d4729737f1241514cb30de3b40 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=ac5dcc45e291ba2f2954d3a22c918029 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/images/mcp-inspector.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=4fbcddae467e84daef4739e0816ab698 2500w" />
 </Frame>
 
 The Inspector provides several features for interacting with your MCP server:
@@ -6820,6 +7183,1190 @@ The Inspector provides several features for interacting with your MCP server:
   </Card>
 </CardGroup>
 
+# Understanding Authorization in MCP
+
+Source: https://modelcontextprotocol.io/docs/tutorials/security/authorization
+
+Learn how to implement secure authorization for MCP servers using OAuth 2.1 to protect sensitive resources and operations
+
+Authorization in the Model Context Protocol (MCP) secures access to sensitive resources and operations exposed by MCP servers. If your MCP server handles user data or administrative actions, authorization ensures only permitted users can access its endpoints.
+
+MCP uses standardized authorization flows to build trust between MCP clients and MCP servers. Its design doesn't focus on one specific authorization or identity system, but rather follows the conventions outlined for [OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13). For detailed information, see the [Authorization specification](/specification/2025-06-18/basic/authorization).
+
+## When Should You Use Authorization?
+
+While authorization for MCP servers is **optional**, it is strongly recommended when:
+
+- Your server accesses user-specific data (emails, documents, databases)
+- You need to audit who performed which actions
+- Your server grants access to its APIs that require user consent
+- You're building for enterprise environments with strict access controls
+- You want to implement rate limiting or usage tracking per user
+
+<Tip>
+  **Authorization for Local MCP Servers**
+
+For MCP servers using the [STDIO transport](/specification/2025-06-18/basic/transports#stdio), you can use environment-based credentials or credentials provided by third-party libraries embedded directly in the MCP server instead. Because a STDIO-built MCP server runs locally, it has access to a range of flexible options when it comes to acquiring user credentials that may or may not rely on in-browser authentication and authorization flows.
+
+OAuth flows, in turn, are designed for HTTP-based transports where the MCP server is remotely-hosted and the client uses OAuth to establish that a user is authorized to access said remote server.
+</Tip>
+
+## The Authorization Flow: Step by Step
+
+Let's walk through what happens when a client wants to connect to your protected MCP server:
+
+<Steps>
+  <Step title="Initial Handshake">
+    When your MCP client first tries to connect, your server responds with a `401 Unauthorized` and tells the client where to find authorization information, captured in a [Protected Resource Metadata (PRM) document](https://datatracker.ietf.org/doc/html/rfc9728). The document is hosted by the MCP server, follows a predictable path pattern, and is provided to the client in the `resource_metadata` parameter within the `WWW-Authenticate` header.
+
+    ```http  theme={null}
+    HTTP/1.1 401 Unauthorized
+    WWW-Authenticate: Bearer realm="mcp",
+      resource_metadata="https://your-server.com/.well-known/oauth-protected-resource"
+    ```
+
+    This tells the client that authorization is required for the MCP server and where to get the necessary information to kickstart the authorization flow.
+
+  </Step>
+
+  <Step title="Protected Resource Metadata Discovery">
+    With the URI pointer to the PRM document, the client will fetch the metadata to learn about the authorization server, supported scopes, and other resource information. The data is typically encapsulated in a JSON blob, similar to the one below.
+
+    ```json  theme={null}
+    {
+      "resource": "https://your-server.com/mcp",
+      "authorization_servers": ["https://auth.your-server.com"],
+      "scopes_supported": ["mcp:tools", "mcp:resources"]
+    }
+    ```
+
+    You can see a more comprehensive example in [RFC 9278 Section 3.2](https://datatracker.ietf.org/doc/html/rfc9728#name-protected-resource-metadata-r).
+
+  </Step>
+
+  <Step title="Authorization Server Discovery">
+    Next, the client discovers what the authorization server can do by fetching its metadata. If the PRM document lists more than one authorization server, the client can decide which one to use.
+
+    With an authorization server selected, the client will then construct a standard metadata URI and issue a request to the [OpenID Connect (OIDC) Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html) or [OAuth 2.0 Auth Server Metadata](https://datatracker.ietf.org/doc/html/rfc8414) endpoints (depending on authorization server support)
+    and retrieve another set of metadata properties that will allow it to know the endpoints it needs to complete the authorization flow.
+
+    ```json  theme={null}
+    {
+      "issuer": "https://auth.your-server.com",
+      "authorization_endpoint": "https://auth.your-server.com/authorize",
+      "token_endpoint": "https://auth.your-server.com/token",
+      "registration_endpoint": "https://auth.your-server.com/register"
+    }
+    ```
+
+  </Step>
+
+  <Step title="Client Registration">
+    With all the metadata out of the way, the client now needs to make sure that it's registered with the authorization server. This can be done in two ways.
+
+    First, the client can be **pre-registered** with a given authorization server, in which case it can have embedded client registration information that it uses to complete the authorization flow.
+
+    Alternatively, the client can use **Dynamic Client Registration** (DCR) to dynamically register itself with the authorization server. The latter scenario requires the authorization server to support DCR. If the authorization server does support DCR, the client will send a request to the `registration_endpoint` with its information:
+
+    ```json  theme={null}
+    {
+      "client_name": "My MCP Client",
+      "redirect_uris": ["http://localhost:3000/callback"],
+      "grant_types": ["authorization_code", "refresh_token"],
+      "response_types": ["code"]
+    }
+    ```
+
+    If the registration succeeds, the authorization server will return a JSON blob with client registration information.
+
+    <Tip>
+      **No DCR or Pre-Registration**
+
+      In case a MCP client connects to a MCP server that doesn't use an authorization server that supports DCR and the client is not pre-registered with said authorization server, it's the responsibility of the client developer to provide an affordance for the end-user to enter client information manually.
+    </Tip>
+
+  </Step>
+
+  <Step title="User Authorization">
+    The client will now need to open a browser to the `/authorize` endpoint, where the user can log in and grant the required permissions. The authorization server will then redirect back to the client with an authorization code that the client exchanges for tokens:
+
+    ```json  theme={null}
+    {
+      "access_token": "REDACTED",
+      "refresh_token": "def502...",
+      "token_type": "Bearer",
+      "expires_in": 3600
+    }
+    ```
+
+    The access token is what the client will use to authenticate requests to the MCP server. This step follows standard [OAuth 2.1 authorization code with PKCE](https://oauth.net/2/grant-types/authorization-code/) conventions.
+
+  </Step>
+
+  <Step title="Making Authenticated Requests">
+    Finally, the client can make requests to your MCP server using the access token embedded in the `Authorization` header:
+
+    ```http  theme={null}
+    GET /mcp HTTP/1.1
+    Host: your-server.com
+    Authorization: Bearer REDACTED
+    ```
+
+    The MCP server will need to validate the token and process the request if the token is valid and has the required permissions.
+
+  </Step>
+</Steps>
+
+## Implementation Example
+
+To get started with a practical implementation, we will use a [Keycloak](https://www.keycloak.org/) authorization server hosted in a Docker container. Keycloak is an open-source authorization server that can be easily deployed locally for testing and experimentation.
+
+Make sure that you download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/). We will need it to deploy Keycloak on our development machine.
+
+### Keycloak Setup
+
+From your terminal application, run the following command to start the Keycloak container:
+
+```bash theme={null}
+docker run -p 127.0.0.1:8080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak start-dev
+```
+
+This command will pull the Keycloak container image locally and bootstrap the basic configuration. It will run on port `8080` and have an `admin` user with `admin` password.
+
+<Warning>
+  **Not for Production**
+
+The configuration above may be suitable for testing and experimentation; however, you should never use it in production. Refer to the [Configuring Keycloak for production](https://www.keycloak.org/server/configuration-production) guide for additional details on how to deploy the authorization server for scenarios that require reliability, security, and high availability.
+</Warning>
+
+You will be able to access the Keycloak authorization server from your browser at `http://localhost:8080`.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=cba689d986e113cbe937d732ac0558b6" alt="Keycloak admin dashboard authentication dialog." data-og-width="1834" width="1834" data-og-height="1450" height="1450" data-path="images/tutorial-authorization/keycloak-browser.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=280&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=6f32c1c9aa75a0533213ef708e0486f9 280w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=560&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=a93c454733e5d23dea996ac4243b5ba7 560w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=840&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=08f456b670f8c07ec91489abd44e1102 840w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=1100&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=6f38eebb04db868078b62adc377c673d 1100w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=1650&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=5e6ab1e9d62b82781152096fe6ee4c62 1650w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-browser.png?w=2500&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=26faaf97617cb789b0492ea580245dc0 2500w" />
+</Frame>
+
+When running with the default configuration, Keycloak will already support many of the capabilities that we need for MCP servers, including Dynamic Client Registration. You can check this by looking at the OIDC configuration, available at:
+
+```http theme={null}
+http://localhost:8080/realms/master/.well-known/openid-configuration
+```
+
+We will also need to set up Keycloak to support our scopes and allow our host (local machine) to dynamically register clients, as the default policies restrict anonymous dynamic client registration.
+
+Go to **Client scopes** in the Keycloak dashboard and create a new `mcp:tools` scope. We will use this to access all of the tools on our MCP server.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=3cd49dc2e070027609ae495751e0db58" alt="Configuring Keycloak scopes." data-og-width="1999" width="1999" data-og-height="1710" height="1710" data-path="images/tutorial-authorization/keycloak-scopes.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=280&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=63647c72d96cc867eff23f6f193c97a3 280w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=560&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=d28690bb063e22a3f677c23df8a338bf 560w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=840&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=4e9dc9972f1449f20c2a5559fbfdde06 840w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=1100&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=b3a21b321612781d41ab018fcd19bca0 1100w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=1650&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=345993151f644fe6aca724a605c168f6 1650w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-scopes.png?w=2500&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=ac6152d64434b7cf8a8e74a4128b0f4f 2500w" />
+</Frame>
+
+After creating the scope, make sure that you assign its type to **Default** and have flipped the **Include in token scope** switch, as this will be needed for token validation.
+
+Let's now also set up an **audience** for our Keycloak-issued tokens. An audience is important to configure because it embeds the intended destination directly into the issued access token. This helps your MCP server to verify that the token it got was actually meant for it rather than some other API. This is key to help avoid token passthrough scenarios.
+
+To do this, open your `mcp:tools` client scope and click on **Mappers**, followed by **Configure a new mapper**. Select **Audience**.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/scope-add-audience.gif?s=6ea9cf20c397f4c79c491c2e39019272" alt="Configuring an audience for a token in Keycloak." data-og-width="1080" width="1080" data-og-height="921" height="921" data-path="images/tutorial-authorization/scope-add-audience.gif" data-optimize="true" data-opv="3" />
+</Frame>
+
+For **Name**, use `audience-config`. Add a value for **Included Custom Audience**, set to `http://localhost:3000`. This will be the URI of our test server.
+
+<Warning>
+  **Not for Production**
+
+The audience configuration above is meant for testing. For production scenarios, additional set-up and configuration will be required to ensure that audiences are properly constrained for issued tokens. Specifically, the audience needs to be based on the resource parameter passed from the client, not a fixed value.
+</Warning>
+
+Now, navigate to **Clients**, then **Client registration**, and then **Trusted Hosts**. Disable the **Client URIs Must Match** setting and add the hosts from which you're testing. You can get your current host IP by running the `ifconfig` command on Linux or macOS, or `ipconfig` on Windows. You can see the IP address you need to add by looking at the keycloak logs for a line that looks like `Failed to verify remote host : 192.168.215.1`. Check that the IP address is associated with your host. This may be for a bridge network depending on your docker setup.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-client.gif?s=b5d40b36a5f1ea1e818821bb8ea77f6b" alt="Setting up client registration details in Keycloak." data-og-width="1199" width="1199" data-og-height="1027" height="1027" data-path="images/tutorial-authorization/keycloak-client.gif" data-optimize="true" data-opv="3" />
+</Frame>
+
+<Warning>
+  **Getting the Host**
+
+If you are running Keycloak from a container, you will also be able to see the host IP from the Terminal in the container logs.
+</Warning>
+
+Lastly, we need to register a new client that we can use with the **MCP server itself** to talk to Keycloak for things like [token introspection](https://oauth.net/2/token-introspection/). To do that:
+
+1. Go to **Clients**.
+2. Click **Create client**.
+3. Give your client a unique **Client ID** and click **Next**.
+4. Enable **Client authentication** and click **Next**.
+5. Click **Save**.
+
+Worth noting that token introspection is just _one of_ the available approaches to validate tokens. This can also be done with the help of standalone libraries, specific to each language and platform.
+
+When you open the client details, go to **Credentials** and take note of the **Client Secret**.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-client-auth.gif?s=7152c41a5746994fd399024bc4659e40" alt="Creating a new client in Keycloak." data-og-width="1200" width="1200" data-og-height="1023" height="1023" data-path="images/tutorial-authorization/keycloak-client-auth.gif" data-optimize="true" data-opv="3" />
+</Frame>
+
+<Warning>
+  **Handling Secrets**
+
+Never embed client credentials directly in your code. We recommend using environment variables or specialized solutions for secret storage.
+</Warning>
+
+With Keycloak configured, every time the authorization flow is triggered, your MCP server will receive a token like this:
+
+```text theme={null}
+REDACTED
+```
+
+Decoded, it will look like this:
+
+```json theme={null}
+{
+  "alg": "RS256",
+  "typ": "JWT",
+  "kid": "5N710l5YnLZMwXfuVRJXkBKvY36sorgDnlrirgkeLys"
+}.{
+  "exp": 1755540817,
+  "iat": 1755540757,
+  "auth_time": 1755538888,
+  "jti": "onrtac:b34080ff-8404-6867-81be-1231b50593a8",
+  "iss": "http://localhost:8080/realms/master",
+  "aud": "http://localhost:3000",
+  "sub": "33ed6c6b-c6e0-4928-a161-f2f69c7a03b9",
+  "typ": "Bearer",
+  "azp": "7975a5b6-8b59-4a85-9cba-8faebdab8974",
+  "sid": "8f7ec276-358f-4ccc-b313-db08290f376f",
+  "scope": "mcp:tools"
+}.[Signature]
+```
+
+<Warning>
+  **Embedded Audience**
+
+Notice the `aud` claim embedded in the token - it's currently set to be the URI of the test MCP server and it's inferred from the scope that we've previously configured. This will be important in our implementation to validate.
+</Warning>
+
+### MCP Server Setup
+
+We will now set up our MCP server to use the locally-running Keycloak authorization server. Depending on your programming language preference, you can use one of the supported [MCP SDKs](/docs/sdk).
+
+For our testing purposes, we will create an extremely simple MCP server that exposes two tools - one for addition and another for multiplication. The server will require authorization to access these.
+
+<Tabs>
+  <Tab title="TypeScript">
+    You can see the complete TypeScript project in the [sample repository](https://github.com/localden/min-ts-mcp-auth).
+
+    Prior to running the code below, ensure that you have a `.env` file with the following content:
+
+    ```env  theme={null}
+    # Server host/port
+    HOST=localhost
+    PORT=3000
+
+    # Auth server location
+    AUTH_HOST=localhost
+    AUTH_PORT=8080
+    AUTH_REALM=master
+
+    # Keycloak OAuth client credentials
+    OAUTH_CLIENT_ID=<YOUR_SERVER_CLIENT_ID>
+    OAUTH_CLIENT_SECRET=<YOUR_SERVER_CLIENT_SECRET>
+    ```
+
+    `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` are associated with the MCP server client we created earlier.
+
+    In addition to implementing the MCP authorization specification, the server below also does token introspection via Keycloak to make sure that the token it receives from the client is valid. It also implements basic logging to allow you to easily diagnose any issues.
+
+    ```typescript  theme={null}
+    import "dotenv/config";
+    import express from "express";
+    import { randomUUID } from "node:crypto";
+    import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+    import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+    import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
+    import { z } from "zod";
+    import cors from "cors";
+    import {
+      mcpAuthMetadataRouter,
+      getOAuthProtectedResourceMetadataUrl,
+    } from "@modelcontextprotocol/sdk/server/auth/router.js";
+    import { requireBearerAuth } from "@modelcontextprotocol/sdk/server/auth/middleware/bearerAuth.js";
+    import { OAuthMetadata } from "@modelcontextprotocol/sdk/shared/auth.js";
+    import { checkResourceAllowed } from "@modelcontextprotocol/sdk/shared/auth-utils.js";
+    const CONFIG = {
+      host: process.env.HOST || "localhost",
+      port: Number(process.env.PORT) || 3000,
+      auth: {
+        host: process.env.AUTH_HOST || process.env.HOST || "localhost",
+        port: Number(process.env.AUTH_PORT) || 8080,
+        realm: process.env.AUTH_REALM || "master",
+        clientId: process.env.OAUTH_CLIENT_ID || "mcp-server",
+        clientSecret: process.env.OAUTH_CLIENT_SECRET || "",
+      },
+    };
+
+    function createOAuthUrls() {
+      const authBaseUrl = new URL(
+        `http://${CONFIG.auth.host}:${CONFIG.auth.port}/realms/${CONFIG.auth.realm}/`,
+      );
+      return {
+        issuer: authBaseUrl.toString(),
+        introspection_endpoint: new URL(
+          "protocol/openid-connect/token/introspect",
+          authBaseUrl,
+        ).toString(),
+        authorization_endpoint: new URL(
+          "protocol/openid-connect/auth",
+          authBaseUrl,
+        ).toString(),
+        token_endpoint: new URL(
+          "protocol/openid-connect/token",
+          authBaseUrl,
+        ).toString(),
+      };
+    }
+
+    function createRequestLogger() {
+      return (req: any, res: any, next: any) => {
+        const start = Date.now();
+        res.on("finish", () => {
+          const ms = Date.now() - start;
+          console.log(
+            `${req.method} ${req.originalUrl} -> ${res.statusCode} ${ms}ms`,
+          );
+        });
+        next();
+      };
+    }
+
+    const app = express();
+
+    app.use(
+      express.json({
+        verify: (req: any, _res, buf) => {
+          req.rawBody = buf?.toString() ?? "";
+        },
+      }),
+    );
+
+    app.use(
+      cors({
+        origin: "*",
+        exposedHeaders: ["Mcp-Session-Id"],
+      }),
+    );
+
+    app.use(createRequestLogger());
+
+    const mcpServerUrl = new URL(`http://${CONFIG.host}:${CONFIG.port}`);
+    const oauthUrls = createOAuthUrls();
+
+    const oauthMetadata: OAuthMetadata = {
+      ...oauthUrls,
+      response_types_supported: ["code"],
+    };
+
+    const tokenVerifier = {
+      verifyAccessToken: async (token: string) => {
+        const endpoint = oauthMetadata.introspection_endpoint;
+
+        if (!endpoint) {
+          console.error("[auth] no introspection endpoint in metadata");
+          throw new Error("No token verification endpoint available in metadata");
+        }
+
+        const params = new URLSearchParams({
+          token: token,
+          client_id: CONFIG.auth.clientId,
+        });
+
+        if (CONFIG.auth.clientSecret) {
+          params.set("client_secret", CONFIG.auth.clientSecret);
+        }
+
+        let response: Response;
+        try {
+          response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: params.toString(),
+          });
+        } catch (e) {
+          console.error("[auth] introspection fetch threw", e);
+          throw e;
+        }
+
+        if (!response.ok) {
+          const txt = await response.text();
+          console.error("[auth] introspection non-OK", { status: response.status });
+
+          try {
+            const obj = JSON.parse(txt);
+            console.log(JSON.stringify(obj, null, 2));
+          } catch {
+            console.error(txt);
+          }
+          throw new Error(`Invalid or expired token: ${txt}`);
+        }
+
+        let data: any;
+        try {
+          data = await response.json();
+        } catch (e) {
+          const txt = await response.text();
+          console.error("[auth] failed to parse introspection JSON", {
+            error: String(e),
+            body: txt,
+          });
+          throw e;
+        }
+
+        if (data.active === false) {
+          throw new Error("Inactive token");
+        }
+
+        if (!data.aud) {
+          throw new Error("Resource indicator (aud) missing");
+        }
+
+        const audiences: string[] = Array.isArray(data.aud) ? data.aud : [data.aud];
+        const allowed = audiences.some((a) =>
+          checkResourceAllowed({
+            requestedResource: a,
+            configuredResource: mcpServerUrl,
+          }),
+        );
+        if (!allowed) {
+          throw new Error(
+            `None of the provided audiences are allowed. Expected ${mcpServerUrl}, got: ${audiences.join(", ")}`,
+          );
+        }
+
+        return {
+          token,
+          clientId: data.client_id,
+          scopes: data.scope ? data.scope.split(" ") : [],
+          expiresAt: data.exp,
+        };
+      },
+    };
+    app.use(
+      mcpAuthMetadataRouter({
+        oauthMetadata,
+        resourceServerUrl: mcpServerUrl,
+        scopesSupported: ["mcp:tools"],
+        resourceName: "MCP Demo Server",
+      }),
+    );
+
+    const authMiddleware = requireBearerAuth({
+      verifier: tokenVerifier,
+      requiredScopes: [],
+      resourceMetadataUrl: getOAuthProtectedResourceMetadataUrl(mcpServerUrl),
+    });
+
+    const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
+
+    function createMcpServer() {
+      const server = new McpServer({
+        name: "example-server",
+        version: "1.0.0",
+      });
+
+      server.registerTool(
+        "add",
+        {
+          title: "Addition Tool",
+          description: "Add two numbers together",
+          inputSchema: {
+            a: z.number().describe("First number to add"),
+            b: z.number().describe("Second number to add"),
+          },
+        },
+        async ({ a, b }) => ({
+          content: [{ type: "text", text: `${a} + ${b} = ${a + b}` }],
+        }),
+      );
+
+      server.registerTool(
+        "multiply",
+        {
+          title: "Multiplication Tool",
+          description: "Multiply two numbers together",
+          inputSchema: {
+            x: z.number().describe("First number to multiply"),
+            y: z.number().describe("Second number to multiply"),
+          },
+        },
+        async ({ x, y }) => ({
+          content: [{ type: "text", text: `${x} × ${y} = ${x * y}` }],
+        }),
+      );
+
+      return server;
+    }
+
+    const mcpPostHandler = async (req: express.Request, res: express.Response) => {
+      const sessionId = req.headers["mcp-session-id"] as string | undefined;
+      let transport: StreamableHTTPServerTransport;
+
+      if (sessionId && transports[sessionId]) {
+        transport = transports[sessionId];
+      } else if (!sessionId && isInitializeRequest(req.body)) {
+        transport = new StreamableHTTPServerTransport({
+          sessionIdGenerator: () => randomUUID(),
+          onsessioninitialized: (sessionId) => {
+            transports[sessionId] = transport;
+          },
+        });
+
+        transport.onclose = () => {
+          if (transport.sessionId) {
+            delete transports[transport.sessionId];
+          }
+        };
+
+        const server = createMcpServer();
+        await server.connect(transport);
+      } else {
+        res.status(400).json({
+          jsonrpc: "2.0",
+          error: {
+            code: -32000,
+            message: "Bad Request: No valid session ID provided",
+          },
+          id: null,
+        });
+        return;
+      }
+
+      await transport.handleRequest(req, res, req.body);
+    };
+
+    const handleSessionRequest = async (
+      req: express.Request,
+      res: express.Response,
+    ) => {
+      const sessionId = req.headers["mcp-session-id"] as string | undefined;
+      if (!sessionId || !transports[sessionId]) {
+        res.status(400).send("Invalid or missing session ID");
+        return;
+      }
+
+      const transport = transports[sessionId];
+      await transport.handleRequest(req, res);
+    };
+
+    app.post("/", authMiddleware, mcpPostHandler);
+    app.get("/", authMiddleware, handleSessionRequest);
+    app.delete("/", authMiddleware, handleSessionRequest);
+
+    app.listen(CONFIG.port, CONFIG.host, () => {
+      console.log(`🚀 MCP Server running on ${mcpServerUrl.origin}`);
+      console.log(`📡 MCP endpoint available at ${mcpServerUrl.origin}`);
+      console.log(
+        `🔐 OAuth metadata available at ${getOAuthProtectedResourceMetadataUrl(mcpServerUrl)}`,
+      );
+    });
+    ```
+
+    When you run the server, you can add it to your MCP client, such as Visual Studio Code, by providing the MCP server endpoint.
+
+    For more details about implementing MCP servers in TypeScript, refer to the [TypeScript SDK documentation](https://github.com/modelcontextprotocol/typescript-sdk).
+
+  </Tab>
+
+  <Tab title="Python">
+    You can see the complete Python project in the [sample repository](https://github.com/localden/min-py-mcp-auth).
+
+    To simplify our authorization interaction, in Python scenarios we rely on [FastMCP](https://gofastmcp.com/getting-started/welcome). A lot of the conventions around authorization, like the endpoints and token validation logic, are consistent across languages, but some offer simpler ways in integrating them in production scenarios.
+
+    Prior to writing the actual server, we need to set up our configuration in `config.py` - the contents are entirely based on your local server setup:
+
+    ```python  theme={null}
+    """Configuration settings for the MCP auth server."""
+
+    import os
+    from typing import Optional
+
+
+    class Config:
+        """Configuration class that loads from environment variables with sensible defaults."""
+
+        # Server settings
+        HOST: str = os.getenv("HOST", "localhost")
+        PORT: int = int(os.getenv("PORT", "3000"))
+
+        # Auth server settings
+        AUTH_HOST: str = os.getenv("AUTH_HOST", "localhost")
+        AUTH_PORT: int = int(os.getenv("AUTH_PORT", "8080"))
+        AUTH_REALM: str = os.getenv("AUTH_REALM", "master")
+
+        # OAuth client settings
+        OAUTH_CLIENT_ID: str = os.getenv("OAUTH_CLIENT_ID", "mcp-server")
+        OAUTH_CLIENT_SECRET: str = os.getenv("OAUTH_CLIENT_SECRET", "REDACTED")
+
+        # Server settings
+        MCP_SCOPE: str = os.getenv("MCP_SCOPE", "mcp:tools")
+        OAUTH_STRICT: bool = os.getenv("OAUTH_STRICT", "false").lower() in ("true", "1", "yes")
+        TRANSPORT: str = os.getenv("TRANSPORT", "streamable-http")
+
+        @property
+        def server_url(self) -> str:
+            """Build the server URL."""
+            return f"http://{self.HOST}:{self.PORT}"
+
+        @property
+        def auth_base_url(self) -> str:
+            """Build the auth server base URL."""
+            return f"http://{self.AUTH_HOST}:{self.AUTH_PORT}/realms/{self.AUTH_REALM}/"
+
+        def validate(self) -> None:
+            """Validate configuration."""
+            if self.TRANSPORT not in ["sse", "streamable-http"]:
+                raise ValueError(f"Invalid transport: {self.TRANSPORT}. Must be 'sse' or 'streamable-http'")
+
+
+    # Global configuration instance
+    config = Config()
+
+    ```
+
+    The server implementation is as follows:
+
+    ```python  theme={null}
+    import datetime
+    import logging
+    from typing import Any
+
+    from pydantic import AnyHttpUrl
+
+    from mcp.server.auth.settings import AuthSettings
+    from mcp.server.fastmcp.server import FastMCP
+
+    from .config import config
+    from .token_verifier import IntrospectionTokenVerifier
+
+    logger = logging.getLogger(__name__)
+
+
+    def create_oauth_urls() -> dict[str, str]:
+        """Create OAuth URLs based on configuration (Keycloak-style)."""
+        from urllib.parse import urljoin
+
+        auth_base_url = config.auth_base_url
+
+        return {
+            "issuer": auth_base_url,
+            "introspection_endpoint": urljoin(auth_base_url, "protocol/openid-connect/token/introspect"),
+            "authorization_endpoint": urljoin(auth_base_url, "protocol/openid-connect/auth"),
+            "token_endpoint": urljoin(auth_base_url, "protocol/openid-connect/token"),
+        }
+
+
+    def create_server() -> FastMCP:
+        """Create and configure the FastMCP server."""
+
+        config.validate()
+
+        oauth_urls = create_oauth_urls()
+
+        token_verifier = IntrospectionTokenVerifier(
+            introspection_endpoint=oauth_urls["introspection_endpoint"],
+            server_url=config.server_url,
+            client_id=config.OAUTH_CLIENT_ID,
+            client_secret=config.OAUTH_CLIENT_SECRET,
+        )
+
+        app = FastMCP(
+            name="MCP Resource Server",
+            instructions="Resource Server that validates tokens via Authorization Server introspection",
+            host=config.HOST,
+            port=config.PORT,
+            debug=True,
+            streamable_http_path="/",
+            token_verifier=token_verifier,
+            auth=AuthSettings(
+                issuer_url=AnyHttpUrl(oauth_urls["issuer"]),
+                required_scopes=[config.MCP_SCOPE],
+                resource_server_url=AnyHttpUrl(config.server_url),
+            ),
+        )
+
+        @app.tool()
+        async def add_numbers(a: float, b: float) -> dict[str, Any]:
+            """
+            Add two numbers together.
+            This tool demonstrates basic arithmetic operations with OAuth authentication.
+
+            Args:
+                a: The first number to add
+                b: The second number to add
+            """
+            result = a + b
+            return {
+                "operation": "addition",
+                "operand_a": a,
+                "operand_b": b,
+                "result": result,
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+
+        @app.tool()
+        async def multiply_numbers(x: float, y: float) -> dict[str, Any]:
+            """
+            Multiply two numbers together.
+            This tool demonstrates basic arithmetic operations with OAuth authentication.
+
+            Args:
+                x: The first number to multiply
+                y: The second number to multiply
+            """
+            result = x * y
+            return {
+                "operation": "multiplication",
+                "operand_x": x,
+                "operand_y": y,
+                "result": result,
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+
+        return app
+
+
+    def main() -> int:
+        """
+        Run the MCP Resource Server.
+
+        This server:
+        - Provides RFC 9728 Protected Resource Metadata
+        - Validates tokens via Authorization Server introspection
+        - Serves MCP tools requiring authentication
+
+        Configuration is loaded from config.py and environment variables.
+        """
+        logging.basicConfig(level=logging.INFO)
+
+        try:
+            config.validate()
+            oauth_urls = create_oauth_urls()
+
+        except ValueError as e:
+            logger.error("Configuration error: %s", e)
+            return 1
+
+        try:
+            mcp_server = create_server()
+
+            logger.info("Starting MCP Server on %s:%s", config.HOST, config.PORT)
+            logger.info("Authorization Server: %s", oauth_urls["issuer"])
+            logger.info("Transport: %s", config.TRANSPORT)
+
+            mcp_server.run(transport=config.TRANSPORT)
+            return 0
+
+        except Exception:
+            logger.exception("Server error")
+            return 1
+
+
+    if __name__ == "__main__":
+        exit(main())
+    ```
+
+    Lastly, the token verification logic is delegated entirely to `token_verifier.py`, ensuring that we can use the Keycloak introspection endpoint to verify the validity of any credential artifacts
+
+    ```python  theme={null}
+    """Token verifier implementation using OAuth 2.0 Token Introspection (RFC 7662)."""
+
+    import logging
+    from typing import Any
+
+    from mcp.server.auth.provider import AccessToken, TokenVerifier
+    from mcp.shared.auth_utils import check_resource_allowed, resource_url_from_server_url
+
+    logger = logging.getLogger(__name__)
+
+
+    class IntrospectionTokenVerifier(TokenVerifier):
+        """Token verifier that uses OAuth 2.0 Token Introspection (RFC 7662).
+        """
+
+        def __init__(
+            self,
+            introspection_endpoint: str,
+            server_url: str,
+            client_id: str,
+            client_secret: str,
+        ):
+            self.introspection_endpoint = introspection_endpoint
+            self.server_url = server_url
+            self.client_id = client_id
+            self.client_secret = client_secret
+            self.resource_url = resource_url_from_server_url(server_url)
+
+        async def verify_token(self, token: str) -> AccessToken | None:
+            """Verify token via introspection endpoint."""
+            import httpx
+
+            if not self.introspection_endpoint.startswith(("https://", "http://localhost", "http://127.0.0.1")):
+                return None
+
+            timeout = httpx.Timeout(10.0, connect=5.0)
+            limits = httpx.Limits(max_connections=10, max_keepalive_connections=5)
+
+            async with httpx.AsyncClient(
+                timeout=timeout,
+                limits=limits,
+                verify=True,
+            ) as client:
+                try:
+                    form_data = {
+                        "token": token,
+                        "client_id": self.client_id,
+                        "client_secret": self.client_secret,
+                    }
+                    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+                    response = await client.post(
+                        self.introspection_endpoint,
+                        data=form_data,
+                        headers=headers,
+                    )
+
+                    if response.status_code != 200:
+                        return None
+
+                    data = response.json()
+                    if not data.get("active", False):
+                        return None
+
+                    if not self._validate_resource(data):
+                        return None
+
+                    return AccessToken(
+                        token=token,
+                        client_id=data.get("client_id", "unknown"),
+                        scopes=data.get("scope", "").split() if data.get("scope") else [],
+                        expires_at=data.get("exp"),
+                        resource=data.get("aud"),  # Include resource in token
+                    )
+
+                except Exception as e:
+                    return None
+
+        def _validate_resource(self, token_data: dict[str, Any]) -> bool:
+            """Validate token was issued for this resource server.
+
+            Rules:
+            - Reject if 'aud' missing.
+            - Accept if any audience entry matches the derived resource URL.
+            - Supports string or list forms per JWT spec.
+            """
+            if not self.server_url or not self.resource_url:
+                return False
+
+            aud: list[str] | str | None = token_data.get("aud")
+            if isinstance(aud, list):
+                return any(self._is_valid_resource(a) for a in aud)
+            if isinstance(aud, str):
+                return self._is_valid_resource(aud)
+            return False
+
+        def _is_valid_resource(self, resource: str) -> bool:
+            """Check if the given resource matches our server."""
+            return check_resource_allowed(self.resource_url, resource)
+    ```
+
+    For more details, see the [Python SDK documentation](https://github.com/modelcontextprotocol/python-sdk).
+
+  </Tab>
+
+  <Tab title="C#">
+    You can see the complete C# project in the [sample repository](https://github.com/localden/min-cs-mcp-auth).
+
+    To set up authorization in your MCP server using the MCP C# SDK, you can lean on the standard ASP.NET Core builder pattern. Instead of using the introspection endpoint provided by Keycloak, we will use built-in ASP.NET Core capabilities for token validation.
+
+    ```csharp  theme={null}
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.IdentityModel.Tokens;
+    using ModelContextProtocol.AspNetCore.Authentication;
+    using ProtectedMcpServer.Tools;
+    using System.Security.Claims;
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    var serverUrl = "http://localhost:3000/";
+    var authorizationServerUrl = "http://localhost:8080/realms/master/";
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultChallengeScheme = McpAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.Authority = authorizationServerUrl;
+        var normalizedServerAudience = serverUrl.TrimEnd('/');
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = authorizationServerUrl,
+            ValidAudiences = new[] { normalizedServerAudience, serverUrl },
+            AudienceValidator = (audiences, securityToken, validationParameters) =>
+            {
+                if (audiences == null) return false;
+                foreach (var aud in audiences)
+                {
+                    if (string.Equals(aud.TrimEnd('/'), normalizedServerAudience, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+
+        options.RequireHttpsMetadata = false; // Set to true in production
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = context =>
+            {
+                var name = context.Principal?.Identity?.Name ?? "unknown";
+                var email = context.Principal?.FindFirstValue("preferred_username") ?? "unknown";
+                Console.WriteLine($"Token validated for: {name} ({email})");
+                return Task.CompletedTask;
+            },
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+        };
+    })
+    .AddMcp(options =>
+    {
+        options.ResourceMetadata = new()
+        {
+            Resource = new Uri(serverUrl),
+            ResourceDocumentation = new Uri("https://docs.example.com/api/math"),
+            AuthorizationServers = { new Uri(authorizationServerUrl) },
+            ScopesSupported = ["mcp:tools"]
+        };
+    });
+
+    builder.Services.AddAuthorization();
+
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddMcpServer()
+        .WithTools<MathTools>()
+        .WithHttpTransport();
+
+    var app = builder.Build();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapMcp().RequireAuthorization();
+
+    Console.WriteLine($"Starting MCP server with authorization at {serverUrl}");
+    Console.WriteLine($"Using Keycloak server at {authorizationServerUrl}");
+    Console.WriteLine($"Protected Resource Metadata URL: {serverUrl}.well-known/oauth-protected-resource");
+    Console.WriteLine("Exposed Math tools: Add, Multiply");
+    Console.WriteLine("Press Ctrl+C to stop the server");
+
+    app.Run(serverUrl);
+    ```
+
+    For more details, see the [C# SDK documentation](https://github.com/modelcontextprotocol/csharp-sdk).
+
+  </Tab>
+</Tabs>
+
+## Testing the MCP Server
+
+For testing purposes, we will be using [Visual Studio Code](https://code.visualstudio.com), but any client that supports MCP and the new authorization specification will fit.
+
+Press <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and select **MCP: Add server...**. Select **HTTP** and enter `http://localhost:3000`. Give the server a unique name to be used inside Visual Studio Code. In `mcp.json` you should now see an entry like this:
+
+```json theme={null}
+"my-mcp-server-18676652": {
+  "url": "http://localhost:3000",
+  "type": "http"
+}
+```
+
+On connection, you will be taken to the browser, where you will be prompted to consent to Visual Studio Code having access to the `mcp:tools` scope.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=d5183fb7c257993aed1b2246f0bbbb27" alt="Keycloak consent form for VS Code." data-og-width="1915" width="1915" data-og-height="1536" height="1536" data-path="images/tutorial-authorization/keycloak-vscode.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=280&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=93bb132878b75189c0cf198a59d3b053 280w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=560&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=155520f0a1b88422247d9910cb59899f 560w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=840&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=4fd24398061374fd940b05d97701dcbc 840w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=1100&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=e949784fc78e1f44bc8d3edeb218220b 1100w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=1650&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=30fc4dbf14307aac8a2ae938b112ef5b 1650w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/keycloak-vscode.png?w=2500&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=3a0b543da5988dd95b1a447b138c83be 2500w" />
+</Frame>
+
+After consenting, you will see the tools listed right above the server entry in `mcp.json`.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=f7c34d1bf115fe6934e01b4a5a91168b" alt="Tools listed in VS Code." data-og-width="496" width="496" data-og-height="160" height="160" data-path="images/tutorial-authorization/tools-vs-code.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=280&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=9e66d87c84323d4efafb9fa80b58b611 280w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=560&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=4b2ef221709a1696272241badcfd7c42 560w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=840&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=ce16053621cc5b24a5f5a83fe541feaa 840w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=1100&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=59f05ee1ee685b60b0b3fe884cd732f8 1100w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=1650&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=ea1afa55bd8f26278d2317ef0ef1a8fb 1650w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code.png?w=2500&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=1f6dd6a4d23ee579f73421689c4c2daa 2500w" />
+</Frame>
+
+You will be able to invoke individual tools with the help of the `#` sign in the chat view.
+
+<Frame>
+  <img src="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=76cbef68e48821a3c5467bd20c7e89fe" alt="Invoking MCP tools in VS Code." data-og-width="1276" width="1276" data-og-height="396" height="396" data-path="images/tutorial-authorization/tools-vs-code-invoke.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=280&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=7f5687389fe8bf48369a45738ec07795 280w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=560&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=dcc4a1857264bda9f2566e50db51704f 560w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=840&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=2774a73e612220975ee6d491430b9ee5 840w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=1100&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=014f88a40adddb9faf5f93306dea376c 1100w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=1650&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=d938978e4507cd933695cce01ee49901 1650w, https://mintcdn.com/mcp/sAd4SGUO-cEUqgzn/images/tutorial-authorization/tools-vs-code-invoke.png?w=2500&fit=max&auto=format&n=sAd4SGUO-cEUqgzn&q=85&s=0250d29b2e115324e0b94a4796938bad 2500w" />
+</Frame>
+
+## Common Pitfalls and How to Avoid Them
+
+For comprehensive security guidance, including attack vectors, mitigation strategies, and implementation best practices, make sure to read through [Security Best Practices](/specification/draft/basic/security_best_practices). A few key issues are called out below.
+
+- **Do not implement token validation or authorization logic by yourself**. Use off-the-shelf, well-tested, and secure libraries for things like token validation or authorization decisions. Doing everything from scratch means that you're more likely to implement things incorrectly unless you are a security expert.
+- **Use short-lived access tokens**. Depending on the authorization server used, this setting might be customizable. We recommend to not use long-lived tokens - if a malicious actor steals them, they will be able to maintain their access for longer periods.
+- **Always validate tokens**. Just because your server received a token does not mean that the token is valid or that it's meant for your server. Always verify that what your MCP server is getting from the client matches the required constraints.
+- **Store tokens in secure, encrypted storage**. In certain scenarios, you might need to cache tokens server-side. If that is the case, ensure that the storage has the right access controls and cannot be easily exfiltrated by malicious parties with access to your server. You should also implement robust cache eviction policies to ensure that your MCP server is not re-using expired or otherwise invalid tokens.
+- **Enforce HTTPS in production**. Do not accept tokens or redirect callbacks over plain HTTP except for `localhost` during development.
+- **Least-privilege scopes**. Don't use catch‑all scopes. Split access per tool or capability where possible and verify required scopes per route/tool on the resource server.
+- **Don't log credentials**. Never log `Authorization` headers, tokens, codes, or secrets. Scrub query strings and headers. Redact sensitive fields in structured logs.
+- **Separate app vs. resource server credentials**. Don't reuse your MCP server's client secret for end‑user flows. Store all secrets in a proper secret manager, not in source control.
+- **Return proper challenges**. On 401, include `WWW-Authenticate` with `Bearer`, `realm`, and `resource_metadata` so clients can discover how to authenticate.
+- **DCR (Dynamic Client Registration) controls**. If enabled, be aware of constraints specific to your organization, such as trusted hosts, required vetting, and audited registrations. Unauthenticated DCR means that anyone can register any client with your authorization server.
+- **Multi‑tenant/realm mix-ups**. Pin to a single issuer/tenant unless explicitly multi‑tenant. Reject tokens from other realms even if signed by the same authorization server.
+- **Audience/resource indicator misuse**. Don't configure or accept generic audiences (like `api`) or unrelated resources. Require the audience/resource to match your configured server.
+- **Error detail leakage**. Return generic messages to clients, but log detailed reasons with correlation IDs internally to aid troubleshooting without exposing internals.
+- **Session identifier hardening**. Treat `Mcp-Session-Id` as untrusted input; never tie authorization to it. Regenerate on auth changes and validate lifecycle server‑side.
+
+## Related Standards and Documentation
+
+MCP authorization builds on these well-established standards:
+
+- **[OAuth 2.1](https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-13)**: The core authorization framework
+- **[RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414)**: Authorization Server Metadata discovery
+- **[RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591)**: Dynamic Client Registration
+- **[RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728)**: Protected Resource Metadata
+- **[RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707)**: Resource Indicators
+
+For additional details, refer to:
+
+- [Authorization Specification](/specification/draft/basic/authorization)
+- [Security Best Practices](/specification/draft/basic/security_best_practices)
+- [Available MCP SDKs](/docs/sdk)
+
+Understanding these standards will help you implement authorization correctly and troubleshoot issues when they arise.
+
+# Example Servers
+
+Source: https://modelcontextprotocol.io/examples
+
+A list of example servers and implementations
+
+This page showcases various Model Context Protocol (MCP) servers that demonstrate the protocol's capabilities and versatility. These servers enable Large Language Models (LLMs) to securely access tools and data sources.
+
+## Reference implementations
+
+These official reference servers demonstrate core MCP features and SDK usage:
+
+### Current reference servers
+
+- **[Everything](https://github.com/modelcontextprotocol/servers/tree/main/src/everything)** - Reference / test server with prompts, resources, and tools
+- **[Fetch](https://github.com/modelcontextprotocol/servers/tree/main/src/fetch)** - Web content fetching and conversion for efficient LLM usage
+- **[Filesystem](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem)** - Secure file operations with configurable access controls
+- **[Git](https://github.com/modelcontextprotocol/servers/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
+- **[Memory](https://github.com/modelcontextprotocol/servers/tree/main/src/memory)** - Knowledge graph-based persistent memory system
+- **[Sequential Thinking](https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking)** - Dynamic and reflective problem-solving through thought sequences
+- **[Time](https://github.com/modelcontextprotocol/servers/tree/main/src/time)** - Time and timezone conversion capabilities
+
+### Archived servers (historical reference)
+
+⚠️ **Note**: The following servers have been moved to the [servers-archived repository](https://github.com/modelcontextprotocol/servers-archived) and are no longer actively maintained. They are provided for historical reference only.
+
+#### Data and file systems
+
+- **[PostgreSQL](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres)** - Read-only database access with schema inspection capabilities
+- **[SQLite](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite)** - Database interaction and business intelligence features
+- **[Google Drive](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive)** - File access and search capabilities for Google Drive
+
+#### Development tools
+
+- **[Git](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/git)** - Tools to read, search, and manipulate Git repositories
+- **[GitHub](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/github)** - Repository management, file operations, and GitHub API integration
+- **[GitLab](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gitlab)** - GitLab API integration enabling project management
+- **[Sentry](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sentry)** - Retrieving and analyzing issues from Sentry.io
+
+#### Web and browser automation
+
+- **[Brave Search](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/brave-search)** - Web and local search using Brave's Search API
+- **[Puppeteer](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer)** - Browser automation and web scraping capabilities
+
+#### Productivity and communication
+
+- **[Slack](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack)** - Channel management and messaging capabilities
+- **[Google Maps](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps)** - Location services, directions, and place details
+
+#### AI and specialized tools
+
+- **[EverArt](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/everart)** - AI image generation using various models
+- **[AWS KB Retrieval](https://github.com/modelcontextprotocol/servers-archived/tree/main/src/aws-kb-retrieval-server)** - Retrieval from AWS Knowledge Base using Bedrock Agent Runtime
+
+## Official integrations
+
+Visit the [MCP Servers Repository (Official Integrations section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#%EF%B8%8F-official-integrations) for a list of MCP servers maintained by companies for their platforms.
+
+## Community implementations
+
+Visit the [MCP Servers Repository (Community section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#-community-servers) for a list of MCP servers maintained by community members.
+
+## Getting started
+
+### Using reference servers
+
+TypeScript-based servers can be used directly with `npx`:
+
+```bash theme={null}
+npx -y @modelcontextprotocol/server-memory
+```
+
+Python-based servers can be used with `uvx` (recommended) or `pip`:
+
+```bash theme={null}
+# Using uvx
+uvx mcp-server-git
+
+# Using pip
+pip install mcp-server-git
+python -m mcp_server_git
+```
+
+### Configuring with Claude
+
+To use an MCP server with Claude, add it to your configuration:
+
+```json theme={null}
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/files"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
+      }
+    }
+  }
+}
+```
+
+## Additional resources
+
+Visit the [MCP Servers Repository (Resources section)](https://github.com/modelcontextprotocol/servers?tab=readme-ov-file#-resources) for a collection of other resources and projects related to MCP.
+
+Visit our [GitHub Discussions](https://github.com/orgs/modelcontextprotocol/discussions) to engage with the MCP community.
+
 # Architecture
 
 Source: https://modelcontextprotocol.io/specification/2025-06-18/architecture/index
@@ -6834,7 +8381,7 @@ on context exchange and sampling coordination between clients and servers.
 
 ## Core Components
 
-```mermaid
+```mermaid theme={null}
 graph LR
     subgraph "Application Host Process"
         H[Host]
@@ -6945,7 +8492,7 @@ determine which protocol features and primitives are available during a session.
 - Both parties must respect declared capabilities throughout the session
 - Additional capabilities can be negotiated through extensions to the protocol
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Host
     participant Client
@@ -7097,7 +8644,7 @@ specification to obtain the information required to interact with the authorizat
 
 The following diagram outlines an example flow:
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant C as Client
     participant M as MCP Server (Resource Server)
@@ -7151,7 +8698,7 @@ these authorization servers, MCP clients will have to either:
 
 The complete Authorization flow proceeds as follows:
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant B as User-Agent (Browser)
     participant C as Client
@@ -7249,7 +8796,7 @@ even if they are part of the same logical session.
 
 Example request:
 
-```http
+```http theme={null}
 GET /mcp HTTP/1.1
 Host: mcp.example.com
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -7407,7 +8954,7 @@ these types of messages:
 
 Requests are sent from the client to the server or vice versa, to initiate an operation.
 
-```typescript
+```typescript theme={null}
 {
   jsonrpc: "2.0";
   id: string | number;
@@ -7427,7 +8974,7 @@ Requests are sent from the client to the server or vice versa, to initiate an op
 
 Responses are sent in reply to requests, containing the result or error of the operation.
 
-```typescript
+```typescript theme={null}
 {
   jsonrpc: "2.0";
   id: string | number;
@@ -7455,7 +9002,7 @@ Responses are sent in reply to requests, containing the result or error of the o
 Notifications are sent from the client to the server or vice versa, as a one-way message.
 The receiver **MUST NOT** send a response.
 
-```typescript
+```typescript theme={null}
 {
   jsonrpc: "2.0";
   method: string;
@@ -7536,7 +9083,7 @@ connections that ensures proper capability negotiation and state management.
 2. **Operation**: Normal protocol communication
 3. **Shutdown**: Graceful termination of the connection
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -7575,7 +9122,7 @@ The client **MUST** initiate this phase by sending an `initialize` request conta
 - Client capabilities
 - Client implementation information
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -7600,7 +9147,7 @@ The client **MUST** initiate this phase by sending an `initialize` request conta
 
 The server **MUST** respond with its own capabilities and information:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -7632,7 +9179,7 @@ The server **MUST** respond with its own capabilities and information:
 After successful initialization, the client **MUST** send an `initialized` notification
 to indicate it is ready to begin normal operations:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/initialized"
@@ -7752,7 +9299,7 @@ Implementations **SHOULD** be prepared to handle these error cases:
 
 Example initialization error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -7811,7 +9358,7 @@ which MCP client initiated the request.
 
 ##### Normal OAuth proxy usage (preserves user consent)
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant UA as User-Agent (Browser)
     participant MC as MCP Client
@@ -7839,7 +9386,7 @@ sequenceDiagram
 
 ##### Malicious OAuth proxy usage (skips user consent)
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant UA as User-Agent (Browser)
     participant M as MCP Proxy Server
@@ -7917,7 +9464,7 @@ Session hijacking is an attack vector where a client is provided a session ID by
 
 #### Session Hijack Prompt Injection
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant ServerA
@@ -7943,7 +9490,7 @@ sequenceDiagram
 
 #### Session Hijack Impersonation
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -8037,7 +9584,7 @@ In the **stdio** transport:
 - The client **MUST NOT** write anything to the server's `stdin` that is not a valid MCP
   message.
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server Process
@@ -8201,7 +9748,7 @@ servers which want to establish stateful sessions:
 
 ### Sequence Diagram
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -8318,7 +9865,7 @@ notification containing:
 - The ID of the request to cancel
 - An optional reason string that can be logged or displayed
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/cancelled",
@@ -8353,7 +9900,7 @@ has completed, and potentially after a response has already been sent.
 
 Both parties **MUST** handle these race conditions gracefully:
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
    participant Client
    participant Server
@@ -8404,7 +9951,7 @@ the client or server can initiate a ping by sending a `ping` request.
 
 A ping request is a standard JSON-RPC request with no parameters:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": "123",
@@ -8416,7 +9963,7 @@ A ping request is a standard JSON-RPC request with no parameters:
 
 1. The receiver **MUST** respond promptly with an empty response:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": "123",
@@ -8431,7 +9978,7 @@ A ping request is a standard JSON-RPC request with no parameters:
 
 ## Usage Patterns
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Sender
     participant Receiver
@@ -8474,7 +10021,7 @@ When a party wants to _receive_ progress updates for a request, it includes a
 - Progress tokens can be chosen by the sender using any means, but **MUST** be unique
   across all active requests.
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8494,7 +10041,7 @@ The receiver **MAY** then send progress notifications containing:
 - An optional "total" value
 - An optional "message" value
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/progress",
@@ -8523,7 +10070,7 @@ The receiver **MAY** then send progress notifications containing:
    - Send notifications at whatever frequency they deem appropriate
    - Omit the total value if unknown
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Sender
     participant Receiver
@@ -8636,7 +10183,7 @@ Applications **SHOULD**:
 Clients that support elicitation **MUST** declare the `elicitation` capability during
 [initialization](/specification/2025-06-18/basic/lifecycle#initialization):
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "elicitation": {}
@@ -8654,7 +10201,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8676,7 +10223,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8693,7 +10240,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -8726,7 +10273,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -8743,7 +10290,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Reject Response Example:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -8755,7 +10302,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 **Cancel Response Example:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -8767,7 +10314,7 @@ To request information from a user, servers send an `elicitation/create` request
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant User
     participant Client
@@ -8790,7 +10337,7 @@ sequenceDiagram
 
 The `requestedSchema` field allows servers to define the structure of the expected response using a restricted subset of JSON Schema. To simplify implementation for clients, elicitation schemas are limited to flat objects with primitive properties only:
 
-```json
+```json theme={null}
 "requestedSchema": {
   "type": "object",
   "properties": {
@@ -8815,7 +10362,7 @@ The schema is restricted to these primitive types:
 
 1. **String Schema**
 
-   ```json
+   ```json theme={null}
    {
      "type": "string",
      "title": "Display Name",
@@ -8830,7 +10377,7 @@ The schema is restricted to these primitive types:
 
 2. **Number Schema**
 
-   ```json
+   ```json theme={null}
    {
      "type": "number", // or "integer"
      "title": "Display Name",
@@ -8842,7 +10389,7 @@ The schema is restricted to these primitive types:
 
 3. **Boolean Schema**
 
-   ```json
+   ```json theme={null}
    {
      "type": "boolean",
      "title": "Display Name",
@@ -8852,7 +10399,7 @@ The schema is restricted to these primitive types:
    ```
 
 4. **Enum Schema**
-   ```json
+   ```json theme={null}
    {
      "type": "string",
      "title": "Display Name",
@@ -8874,7 +10421,7 @@ Note that complex nested structures, arrays of objects, and other advanced JSON 
 
 Elicitation responses use a three-action model to clearly distinguish between different user actions:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8949,7 +10496,7 @@ interaction model.
 Clients that support roots **MUST** declare the `roots` capability during
 [initialization](/specification/2025-06-18/basic/lifecycle#initialization):
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "roots": {
@@ -8970,7 +10517,7 @@ To retrieve roots, servers send a `roots/list` request:
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8980,7 +10527,7 @@ To retrieve roots, servers send a `roots/list` request:
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -8999,7 +10546,7 @@ To retrieve roots, servers send a `roots/list` request:
 
 When roots change, clients that support `listChanged` **MUST** send a notification:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/roots/list_changed"
@@ -9008,7 +10555,7 @@ When roots change, clients that support `listChanged` **MUST** send a notificati
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Server
     participant Client
@@ -9037,7 +10584,7 @@ Example roots for different use cases:
 
 #### Project Directory
 
-```json
+```json theme={null}
 {
   "uri": "file:///home/user/projects/myproject",
   "name": "My Project"
@@ -9046,7 +10593,7 @@ Example roots for different use cases:
 
 #### Multiple Repositories
 
-```json
+```json theme={null}
 [
   {
     "uri": "file:///home/user/repos/frontend",
@@ -9068,7 +10615,7 @@ Clients **SHOULD** return standard JSON-RPC errors for common failure cases:
 
 Example error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -9149,7 +10696,7 @@ Applications **SHOULD**:
 Clients that support sampling **MUST** declare the `sampling` capability during
 [initialization](/specification/2025-06-18/basic/lifecycle#initialization):
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "sampling": {}
@@ -9165,7 +10712,7 @@ To request a language model generation, servers send a `sampling/createMessage` 
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -9197,7 +10744,7 @@ To request a language model generation, servers send a `sampling/createMessage` 
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -9215,7 +10762,7 @@ To request a language model generation, servers send a `sampling/createMessage` 
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Server
     participant Client
@@ -9249,7 +10796,7 @@ Sampling messages can contain:
 
 #### Text Content
 
-```json
+```json theme={null}
 {
   "type": "text",
   "text": "The message content"
@@ -9258,7 +10805,7 @@ Sampling messages can contain:
 
 #### Image Content
 
-```json
+```json theme={null}
 {
   "type": "image",
   "data": "base64-encoded-image-data",
@@ -9268,7 +10815,7 @@ Sampling messages can contain:
 
 #### Audio Content
 
-```json
+```json theme={null}
 {
   "type": "audio",
   "data": "base64-encoded-audio-data",
@@ -9307,7 +10854,7 @@ suggest specific models or model families:
 
 For example:
 
-```json
+```json theme={null}
 {
   "hints": [
     { "name": "claude-3-sonnet" }, // Prefer Sonnet-class models
@@ -9329,7 +10876,7 @@ Clients **SHOULD** return errors for common failure cases:
 
 Example error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -9483,7 +11030,7 @@ Explore the detailed specification for each protocol component:
 
   <Card title="Client Features" icon="user" href="/specification/2025-06-18/client" />
 
-  <Card title="Contributing" icon="pencil" href="/development/contributing" />
+  <Card title="Contributing" icon="pencil" href="/community/communication" />
 </CardGroup>
 
 # Schema Reference
@@ -9908,7 +11455,7 @@ or file that the server can operate on.</p> </div><section class="tsd-panel tsd-
 
 ### `CreateMessageRequest`
 
-<div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">CreateMessageRequest</span> <span class="tsd-signature-symbol">\{</span><br />  <a class="tsd-kind-property" href="#">method</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"sampling/createMessage"</span><span class="tsd-signature-symbol">;</span><br />  <a class="tsd-kind-property" href="#createmessagerequest-params">params</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">\{</span><br />    <span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">:</span> <a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?:</span> <a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">;</span><br /><span class="tsd-signature-symbol">}</span></div><div class="tsd-comment tsd-typography"><p>A request from the server to sample an LLM via the client. The client has full discretion over which model to select. The client should also inform the user before beginning sampling, to allow them to inspect the request (human in the loop) and decide whether to approve it.</p> </div><section class="tsd-panel tsd-member"><div data-typedoc-h="3" class="tsd-anchor-link" id="createmessagerequest-params"><span>params</span><a href="#createmessagerequest-params" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor" /></svg></a></div><div class="tsd-signature"><span class="tsd-kind-property">params</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">\{</span><br />  <span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">:</span> <a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?:</span> <a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br /><span class="tsd-signature-symbol">}</span></div><div class="tsd-type-declaration"><div data-typedoc-h="4">Type declaration</div><ul class="tsd-parameters"><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span></div><div class="tsd-comment tsd-typography"><p>A request to include context from one or more MCP servers (including the caller), to be attached to the prompt. The client MAY ignore this request.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></div><div class="tsd-comment tsd-typography"><p>The maximum number of tokens to sample, as requested by the server. The client MAY choose to sample fewer tokens than requested.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">: </span><a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span></div></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span></div><div class="tsd-comment tsd-typography"><p>Optional metadata to pass through to the LLM provider. The format of this metadata is provider-specific.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?: </span><a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a></div><div class="tsd-comment tsd-typography"><p>The server's preferences for which model to select. The client MAY ignore these preferences.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span></div></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></div><div class="tsd-comment tsd-typography"><p>An optional system prompt the server wants to use for sampling. The client MAY modify or omit this prompt.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></div><div class="tsd-comment tsd-typography"><div class="tsd-tag-TJS-type"><div data-typedoc-h="4" class="tsd-anchor-link" id="tjs-type">TJS-type<a href="#tjs-type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor" /></svg></a></div><p>number</p> </div></div></li></ul></div><aside class="tsd-sources"><p>Overrides Request.params</p></aside></section>
+<div class="tsd-signature"><span class="tsd-signature-keyword">interface</span> <span class="tsd-kind-interface">CreateMessageRequest</span> <span class="tsd-signature-symbol">\{</span><br />  <a class="tsd-kind-property" href="#">method</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"sampling/createMessage"</span><span class="tsd-signature-symbol">;</span><br />  <a class="tsd-kind-property" href="#createmessagerequest-params">params</a><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">\{</span><br />    <span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">:</span> <a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?:</span> <a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br />    <span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol">;</span><br /><span class="tsd-signature-symbol">}</span></div><div class="tsd-comment tsd-typography"><p>A request from the server to sample an LLM via the client. The client has full discretion over which model to select. The client should also inform the user before beginning sampling, to allow them to inspect the request (human in the loop) and decide whether to approve it.</p> </div><section class="tsd-panel tsd-member"><div data-typedoc-h="3" class="tsd-anchor-link" id="createmessagerequest-params"><span>params</span><a href="#createmessagerequest-params" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor" /></svg></a></div><div class="tsd-signature"><span class="tsd-kind-property">params</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">\{</span><br />  <span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">:</span> <a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?:</span> <a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">;</span><br />  <span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">;</span><br /><span class="tsd-signature-symbol">}</span></div><div class="tsd-type-declaration"><div data-typedoc-h="4">Type declaration</div><ul class="tsd-parameters"><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">includeContext</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">"none"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"thisServer"</span> <span class="tsd-signature-symbol">|</span> <span class="tsd-signature-type">"allServers"</span></div><div class="tsd-comment tsd-typography"><p>A request to include context from one or more MCP servers (including the caller), to be attached to the prompt. The client MAY ignore this request.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><span class="tsd-kind-property">maxTokens</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></div><div class="tsd-comment tsd-typography"><p>The requested maximum number of tokens to sample (to prevent runaway completions).</p> <p>The client MAY choose to sample fewer tokens than the requested maximum.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><span class="tsd-kind-property">messages</span><span class="tsd-signature-symbol">: </span><a href="#samplingmessage" class="tsd-signature-type tsd-kind-interface">SamplingMessage</a><span class="tsd-signature-symbol">\[]</span></div></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">metadata</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span></div><div class="tsd-comment tsd-typography"><p>Optional metadata to pass through to the LLM provider. The format of this metadata is provider-specific.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">modelPreferences</span><span class="tsd-signature-symbol">?: </span><a href="#modelpreferences" class="tsd-signature-type tsd-kind-interface">ModelPreferences</a></div><div class="tsd-comment tsd-typography"><p>The server's preferences for which model to select. The client MAY ignore these preferences.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">stopSequences</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">\[]</span></div></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">systemPrompt</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></div><div class="tsd-comment tsd-typography"><p>An optional system prompt the server wants to use for sampling. The client MAY modify or omit this prompt.</p> </div><div class="tsd-comment tsd-typography" /></li><li class="tsd-parameter"><div data-typedoc-h="5"><code class="tsd-tag">Optional</code><span class="tsd-kind-property">temperature</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></div><div class="tsd-comment tsd-typography"><div class="tsd-tag-TJS-type"><div data-typedoc-h="4" class="tsd-anchor-link" id="tjs-type">TJS-type<a href="#tjs-type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor" /></svg></a></div><p>number</p> </div></div></li></ul></div><aside class="tsd-sources"><p>Overrides Request.params</p></aside></section>
 
 ### `CreateMessageResult`
 
@@ -9998,7 +11545,7 @@ interface, which allows users to naturally discover and invoke available prompts
 
 For example, as slash commands:
 
-<img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7f003e36d881dd6f3e5b8cbdd85e5ca5" alt="Example of prompt exposed as slash command" width="293" height="106" data-path="specification/2025-06-18/server/slash-command.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=603a7ec1db6f7630749e0b6d0558ea43 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b9e7dae545ed3b1ffbe8dde360883993 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8c25c68eebccb025ffe8aed6d58f19f2 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a19b889ed688569f49a68311d5e88dfa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=571df0a228861e612304c2ebe829b06c 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8d315246806794b5496c4aaa2cf28e51 2500w" data-optimize="true" data-opv="2" />
+<img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7f003e36d881dd6f3e5b8cbdd85e5ca5" alt="Example of prompt exposed as slash command" data-og-width="293" width="293" data-og-height="106" height="106" data-path="specification/2025-06-18/server/slash-command.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=603a7ec1db6f7630749e0b6d0558ea43 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=b9e7dae545ed3b1ffbe8dde360883993 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8c25c68eebccb025ffe8aed6d58f19f2 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=a19b889ed688569f49a68311d5e88dfa 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=571df0a228861e612304c2ebe829b06c 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/slash-command.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=8d315246806794b5496c4aaa2cf28e51 2500w" />
 
 However, implementors are free to expose prompts through any interface pattern that suits
 their needs—the protocol itself does not mandate any specific user interaction
@@ -10009,7 +11556,7 @@ model.
 Servers that support prompts **MUST** declare the `prompts` capability during
 [initialization](/specification/2025-06-18/basic/lifecycle#initialization):
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "prompts": {
@@ -10031,7 +11578,7 @@ supports [pagination](/specification/2025-06-18/server/utilities/pagination).
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10044,7 +11591,7 @@ supports [pagination](/specification/2025-06-18/server/utilities/pagination).
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10075,7 +11622,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10091,7 +11638,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10115,7 +11662,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 When the list of available prompts changes, servers that declared the `listChanged`
 capability **SHOULD** send a notification:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/prompts/list_changed"
@@ -10124,7 +11671,7 @@ capability **SHOULD** send a notification:
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -10173,7 +11720,7 @@ Messages in a prompt can contain:
 
 Text content represents plain text messages:
 
-```json
+```json theme={null}
 {
   "type": "text",
   "text": "The text content of the message"
@@ -10186,7 +11733,7 @@ This is the most common content type used for natural language interactions.
 
 Image content allows including visual information in messages:
 
-```json
+```json theme={null}
 {
   "type": "image",
   "data": "base64-encoded-image-data",
@@ -10201,7 +11748,7 @@ multi-modal interactions where visual context is important.
 
 Audio content allows including audio information in messages:
 
-```json
+```json theme={null}
 {
   "type": "audio",
   "data": "base64-encoded-audio-data",
@@ -10216,7 +11763,7 @@ multi-modal interactions where audio context is important.
 
 Embedded resources allow referencing server-side resources directly in messages:
 
-```json
+```json theme={null}
 {
   "type": "resource",
   "resource": {
@@ -10283,7 +11830,7 @@ For example, applications could:
 - Allow the user to search through and filter available resources
 - Implement automatic context inclusion, based on heuristics or the AI model's selection
 
-<img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=133fa885ef6e9c2e20049da5c33f4386" alt="Example of resource context picker" width="174" height="181" data-path="specification/2025-06-18/server/resource-picker.png" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=206f6dcc471323787199d7539a16b7d3 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=576d4587b4fdfe91bb14d8f77eb40e35 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c0d19d08d43fe75f27ee43fb89d5e31b 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=463f52a7f01214ad65731626bedc4a50 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7478600400e55427ba7d3649ae7e8c88 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c7ec8e376a75bf1aa5d5fcc235a74d2b 2500w" data-optimize="true" data-opv="2" />
+<img src="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=133fa885ef6e9c2e20049da5c33f4386" alt="Example of resource context picker" data-og-width="174" width="174" data-og-height="181" height="181" data-path="specification/2025-06-18/server/resource-picker.png" data-optimize="true" data-opv="3" srcset="https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=280&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=206f6dcc471323787199d7539a16b7d3 280w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=560&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=576d4587b4fdfe91bb14d8f77eb40e35 560w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=840&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c0d19d08d43fe75f27ee43fb89d5e31b 840w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=1100&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=463f52a7f01214ad65731626bedc4a50 1100w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=1650&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=7478600400e55427ba7d3649ae7e8c88 1650w, https://mintcdn.com/mcp/4ZXF1PrDkEaJvXpn/specification/2025-06-18/server/resource-picker.png?w=2500&fit=max&auto=format&n=4ZXF1PrDkEaJvXpn&q=85&s=c7ec8e376a75bf1aa5d5fcc235a74d2b 2500w" />
 
 However, implementations are free to expose resources through any interface pattern that
 suits their needs—the protocol itself does not mandate any specific user
@@ -10293,7 +11840,7 @@ interaction model.
 
 Servers that support resources **MUST** declare the `resources` capability:
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "resources": {
@@ -10314,7 +11861,7 @@ The capability supports two optional features:
 Both `subscribe` and `listChanged` are optional—servers can support neither,
 either, or both:
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "resources": {} // Neither feature supported
@@ -10322,7 +11869,7 @@ either, or both:
 }
 ```
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "resources": {
@@ -10332,7 +11879,7 @@ either, or both:
 }
 ```
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "resources": {
@@ -10351,7 +11898,7 @@ supports [pagination](/specification/2025-06-18/server/utilities/pagination).
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10364,7 +11911,7 @@ supports [pagination](/specification/2025-06-18/server/utilities/pagination).
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10389,7 +11936,7 @@ To retrieve resource contents, clients send a `resources/read` request:
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10402,7 +11949,7 @@ To retrieve resource contents, clients send a `resources/read` request:
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10428,7 +11975,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 3,
@@ -10438,7 +11985,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 3,
@@ -10461,7 +12008,7 @@ auto-completed through [the completion API](/specification/2025-06-18/server/uti
 When the list of available resources changes, servers that declared the `listChanged`
 capability **SHOULD** send a notification:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/resources/list_changed"
@@ -10475,7 +12022,7 @@ to specific resources and receive notifications when they change:
 
 **Subscribe Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 4,
@@ -10488,7 +12035,7 @@ to specific resources and receive notifications when they change:
 
 **Update Notification:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/resources/updated",
@@ -10501,7 +12048,7 @@ to specific resources and receive notifications when they change:
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -10543,7 +12090,7 @@ Resources can contain either text or binary data:
 
 #### Text Content
 
-```json
+```json theme={null}
 {
   "uri": "file:///example.txt",
   "name": "example.txt",
@@ -10555,7 +12102,7 @@ Resources can contain either text or binary data:
 
 #### Binary Content
 
-```json
+```json theme={null}
 {
   "uri": "file:///example.png",
   "name": "example.png",
@@ -10575,7 +12122,7 @@ Resources, resource templates and content blocks support optional annotations th
 
 Example resource with annotations:
 
-```json
+```json theme={null}
 {
   "uri": "file:///project/README.md",
   "name": "README.md",
@@ -10640,7 +12187,7 @@ Servers **SHOULD** return standard JSON-RPC errors for common failure cases:
 
 Example error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 5,
@@ -10700,7 +12247,7 @@ Applications **SHOULD**:
 
 Servers that support tools **MUST** declare the `tools` capability:
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "tools": {
@@ -10722,7 +12269,7 @@ To discover available tools, clients send a `tools/list` request. This operation
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10735,7 +12282,7 @@ To discover available tools, clients send a `tools/list` request. This operation
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -10768,7 +12315,7 @@ To invoke a tool, clients send a `tools/call` request:
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10784,7 +12331,7 @@ To invoke a tool, clients send a `tools/call` request:
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 2,
@@ -10805,7 +12352,7 @@ To invoke a tool, clients send a `tools/call` request:
 When the list of available tools changes, servers that declared the `listChanged`
 capability **SHOULD** send a notification:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/tools/list_changed"
@@ -10814,7 +12361,7 @@ capability **SHOULD** send a notification:
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant LLM
     participant Client
@@ -10872,7 +12419,7 @@ Tool results may contain [**structured**](#structured-content) or **unstructured
 
 #### Text Content
 
-```json
+```json theme={null}
 {
   "type": "text",
   "text": "Tool result text"
@@ -10881,7 +12428,7 @@ Tool results may contain [**structured**](#structured-content) or **unstructured
 
 #### Image Content
 
-```json
+```json theme={null}
 {
   "type": "image",
   "data": "base64-encoded-data",
@@ -10898,7 +12445,7 @@ This example demonstrates the use of an optional Annotation.
 
 #### Audio Content
 
-```json
+```json theme={null}
 {
   "type": "audio",
   "data": "base64-encoded-audio-data",
@@ -10911,7 +12458,7 @@ This example demonstrates the use of an optional Annotation.
 A tool **MAY** return links to [Resources](/specification/2025-06-18/server/resources), to provide additional context
 or data. In this case, the tool will return a URI that can be subscribed to or fetched by the client:
 
-```json
+```json theme={null}
 {
   "type": "resource_link",
   "uri": "file:///project/src/main.rs",
@@ -10937,7 +12484,7 @@ Resource links support the same [Resource annotations](/specification/2025-06-18
 [Resources](/specification/2025-06-18/server/resources) **MAY** be embedded to provide additional context
 or data using a suitable [URI scheme](./resources#common-uri-schemes). Servers that use embedded resources **SHOULD** implement the `resources` capability:
 
-```json
+```json theme={null}
 {
   "type": "resource",
   "resource": {
@@ -10972,7 +12519,7 @@ If an output schema is provided:
 
 Example tool with output schema:
 
-```json
+```json theme={null}
 {
   "name": "get_weather_data",
   "title": "Weather Data Retriever",
@@ -11010,7 +12557,7 @@ Example tool with output schema:
 
 Example valid response for this tool:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 5,
@@ -11053,7 +12600,7 @@ Tools use two error reporting mechanisms:
 
 Example protocol error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 3,
@@ -11066,7 +12613,7 @@ Example protocol error:
 
 Example tool execution error:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 4,
@@ -11127,7 +12674,7 @@ interaction model.
 
 Servers that support completions **MUST** declare the `completions` capability:
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "completions": {}
@@ -11144,7 +12691,7 @@ what is being completed through a reference type:
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -11164,7 +12711,7 @@ what is being completed through a reference type:
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -11182,7 +12729,7 @@ For prompts or URI templates with multiple arguments, clients should include pre
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -11207,7 +12754,7 @@ For prompts or URI templates with multiple arguments, clients should include pre
 
 **Response:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -11240,7 +12787,7 @@ Servers return an array of completion values ranked by relevance, with:
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -11325,7 +12872,7 @@ needs—the protocol itself does not mandate any specific user interaction model
 
 Servers that emit log message notifications **MUST** declare the `logging` capability:
 
-```json
+```json theme={null}
 {
   "capabilities": {
     "logging": {}
@@ -11357,7 +12904,7 @@ To configure the minimum log level, clients **MAY** send a `logging/setLevel` re
 
 **Request:**
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -11372,7 +12919,7 @@ To configure the minimum log level, clients **MAY** send a `logging/setLevel` re
 
 Servers send log messages using `notifications/message` notifications:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "method": "notifications/message",
@@ -11392,7 +12939,7 @@ Servers send log messages using `notifications/message` notifications:
 
 ## Message Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server
@@ -11477,7 +13024,7 @@ Pagination starts when the server sends a **response** that includes:
 - The current page of results
 - An optional `nextCursor` field if more results exist
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
   "id": "123",
@@ -11493,9 +13040,10 @@ Pagination starts when the server sends a **response** that includes:
 After receiving a cursor, the client can _continue_ paginating by issuing a request
 including that cursor:
 
-```json
+```json theme={null}
 {
   "jsonrpc": "2.0",
+  "id": "124",
   "method": "resources/list",
   "params": {
     "cursor": "eyJwYWdlIjogMn0="
@@ -11505,7 +13053,7 @@ including that cursor:
 
 ## Pagination Flow
 
-```mermaid
+```mermaid theme={null}
 sequenceDiagram
     participant Client
     participant Server

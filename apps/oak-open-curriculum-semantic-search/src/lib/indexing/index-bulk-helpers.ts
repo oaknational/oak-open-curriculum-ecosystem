@@ -1,20 +1,21 @@
-import type {
-  KeyStage,
-  SearchLessonSummary,
-  SearchLessonsIndexDoc,
-  SearchSubjectSlug,
-  SearchUnitSummary,
-} from '../../types/oak';
-import { isLessonSummary, isUnitSummary } from '../../types/oak';
+import type { KeyStage, SearchLessonsIndexDoc, SearchSubjectSlug } from '../../types/oak';
+import { isUnitSummary } from '../../types/oak';
 import type { OakClient } from '../../adapters/oak-adapter-sdk';
 import {
   createLessonDocument,
   createRollupDocument,
   createUnitDocument,
+  extractUnitLessons,
   normaliseYears,
 } from './document-transforms';
+import { readUnitSummaryValue, resolveUnitSummaryIdentifiers } from './document-transform-helpers';
 import { selectLessonPlanningSnippet } from './lesson-planning-snippets';
 import { resolvePrimarySearchIndexName } from '../search-index-target';
+import {
+  ensureUnitSummaryMatchesContext,
+  extractUnitSequenceIds,
+  fetchLessonMaterials,
+} from './index-bulk-support';
 
 export interface LessonGroup {
   unitSlug: string;
@@ -28,21 +29,23 @@ export async function buildUnitDocuments(
   subject: SearchSubjectSlug,
   ks: KeyStage,
   subjectProgrammesUrl: string,
-): Promise<{ unitSummaries: Map<string, SearchUnitSummary>; unitOps: unknown[] }> {
-  const unitSummaries = new Map<string, SearchUnitSummary>();
+): Promise<{ unitSummaries: Map<string, unknown>; unitOps: unknown[] }> {
+  const unitSummaries = new Map<string, unknown>();
   const unitOps: unknown[] = [];
 
   for (const unit of units) {
-    const summary = await client.getUnitSummary(unit.unitSlug);
-    if (!isUnitSummary(summary)) {
+    const summaryCandidate: unknown = await client.getUnitSummary(unit.unitSlug);
+    if (!isUnitSummary(summaryCandidate)) {
       throw new Error(`Unexpected unit summary response for ${unit.unitSlug}`);
     }
-    unitSummaries.set(unit.unitSlug, summary);
+    const summary: unknown = summaryCandidate;
+    const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
+    unitSummaries.set(unitSlug, summary);
     unitOps.push(
       {
         index: {
           _index: resolvePrimarySearchIndexName('units'),
-          _id: summary.unitSlug,
+          _id: unitSlug,
         },
       },
       createUnitDocument({
@@ -60,7 +63,7 @@ export async function buildUnitDocuments(
 export async function buildLessonDocuments(
   client: OakClient,
   groups: readonly LessonGroup[],
-  unitSummaries: Map<string, SearchUnitSummary>,
+  unitSummaries: Map<string, unknown>,
   subject: SearchSubjectSlug,
   ks: KeyStage,
 ): Promise<{ lessonOps: unknown[]; rollupSnippets: Map<string, string[]> }> {
@@ -81,7 +84,7 @@ export async function buildLessonDocuments(
 }
 
 export function buildRollupDocuments(
-  unitSummaries: Map<string, SearchUnitSummary>,
+  unitSummaries: Map<string, unknown>,
   rollupSnippets: Map<string, string[]>,
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
@@ -90,7 +93,8 @@ export function buildRollupDocuments(
   const ops: unknown[] = [];
   for (const summary of unitSummaries.values()) {
     ensureUnitSummaryMatchesContext(summary, subject, keyStage);
-    const snippets = rollupSnippets.get(summary.unitSlug) ?? [];
+    const { unitSlug } = resolveUnitSummaryIdentifiers(summary);
+    const snippets = rollupSnippets.get(unitSlug) ?? [];
     const rollupDoc = createRollupDocument({
       summary,
       snippets,
@@ -102,7 +106,7 @@ export function buildRollupDocuments(
       {
         index: {
           _index: resolvePrimarySearchIndexName('unit_rollup'),
-          _id: summary.unitSlug,
+          _id: unitSlug,
         },
       },
       rollupDoc,
@@ -114,7 +118,7 @@ export function buildRollupDocuments(
 async function buildLessonDocsForGroup(
   client: OakClient,
   group: LessonGroup,
-  unitSummary: SearchUnitSummary,
+  unitSummary: unknown,
   subject: SearchSubjectSlug,
   ks: KeyStage,
 ): Promise<{ ops: unknown[]; snippets: string[] }> {
@@ -147,25 +151,30 @@ interface LessonDocEntry {
 }
 
 function createLessonBuildContext(
-  unitSummary: SearchUnitSummary,
+  unitSummary: unknown,
   group: LessonGroup,
   subject: SearchSubjectSlug,
   keyStage: KeyStage,
 ): LessonBuildContext {
-  const unitCanonicalUrl = unitSummary.canonicalUrl;
-  if (!unitCanonicalUrl) {
-    throw new Error(`Missing canonical URL for unit ${unitSummary.unitSlug}`);
-  }
-
   ensureUnitSummaryMatchesContext(unitSummary, subject, keyStage);
+
+  const { canonicalUrl: unitCanonicalUrl } = resolveUnitSummaryIdentifiers(unitSummary);
+
+  const normalisedLessons = extractUnitLessons(readUnitSummaryValue(unitSummary, 'unitLessons'));
+  const lessonCount =
+    normalisedLessons.length > 0 ? normalisedLessons.length : group.lessons.length;
+  const sequenceIds = extractUnitSequenceIds(unitSummary);
 
   return {
     unitCanonicalUrl,
     subject,
     keyStage,
-    years: normaliseYears(unitSummary.year, unitSummary.yearSlug),
-    unitSequenceIds: extractUnitSequenceIds(unitSummary),
-    lessonCount: unitSummary.unitLessons?.length ?? group.lessons.length,
+    years: normaliseYears(
+      readUnitSummaryValue(unitSummary, 'year'),
+      readUnitSummaryValue(unitSummary, 'yearSlug'),
+    ),
+    unitSequenceIds: sequenceIds,
+    lessonCount,
   };
 }
 
@@ -197,41 +206,4 @@ async function buildLessonDocEntry(
     },
   };
   return { operation, document, snippet };
-}
-
-function extractUnitSequenceIds(summary: SearchUnitSummary): string[] | undefined {
-  return summary.threads?.map((thread) => thread.slug).filter(Boolean);
-}
-
-async function fetchLessonMaterials(
-  client: OakClient,
-  lessonSlug: string,
-): Promise<{ transcript: string; summary: SearchLessonSummary }> {
-  const [transcript, summary] = await Promise.all([
-    client.getLessonTranscript(lessonSlug),
-    client.getLessonSummary(lessonSlug),
-  ]);
-
-  if (!isLessonSummary(summary)) {
-    throw new Error(`Unexpected lesson summary response for ${lessonSlug}`);
-  }
-
-  return { transcript: transcript.transcript, summary };
-}
-
-function ensureUnitSummaryMatchesContext(
-  summary: SearchUnitSummary,
-  subject: SearchSubjectSlug,
-  keyStage: KeyStage,
-): void {
-  if (summary.subjectSlug !== subject) {
-    throw new Error(
-      `Unit summary subject mismatch for ${summary.unitSlug}: expected ${subject}, received ${summary.subjectSlug}`,
-    );
-  }
-  if (summary.keyStageSlug !== keyStage) {
-    throw new Error(
-      `Unit summary key stage mismatch for ${summary.unitSlug}: expected ${keyStage}, received ${summary.keyStageSlug}`,
-    );
-  }
 }

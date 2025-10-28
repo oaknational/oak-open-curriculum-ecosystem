@@ -30,9 +30,9 @@ Last updated: 2025-09-16 (post-Phase B adoption; Phase C partially complete; MVP
 ### Recent technical updates (to be carried forward)
 
 - SDK MCP tools surface:
-  - Introduced `ToolDescriptor` (invoke, path/query params, `inputSchema: ToolInputJsonSchema`, metadata) and `Readonly<Record<AllToolNames, ToolDescriptor>>` for `MCP_TOOLS`.
+  - Introduced `ToolDescriptor` (invoke, path/query params, `inputSchema: ToolInputJsonSchema`, metadata) and `Readonly<Record<ToolName, ToolDescriptor>>` for `MCP_TOOLS`.
   - `lib.ts` getters return entries of `MCP_TOOLS` via dynamic import to break init cycles.
-  - Types regenerated with coupled maps: `OperationIdToToolNameMap` → derived `AllOperationIds`, `AllToolNames`, and name/id guards using the map.
+  - Types regenerated with coupled maps: `OperationIdToToolNameMap` → derived `OperationId`, `ToolName`, and name/id guards using the map.
 
 - Generators and emitted code hardening:
   - Eliminated `as` assertions by using `getOwnValue`/type guards and Set‑based enum validation.
@@ -47,7 +47,7 @@ Last updated: 2025-09-16 (post-Phase B adoption; Phase C partially complete; MVP
 
 ### Next steps (handover focus)
 
-- Verify the SDK’s published declaration file for `MCP_TOOLS` exposes the strict mapped type `{ [K in AllToolNames]: ToolDescriptor & { name: K } }` with `inputSchema` typed from the shared base type.
+- Verify the SDK’s published declaration file for `MCP_TOOLS` exposes the strict mapped type `{ [K in ToolName]: ToolDescriptor & { name: K } }` with `inputSchema` typed from the shared base type.
 - Add parity tests that assert tool `inputSchema` presence in both transports and that `/openai_connector` list excludes internal tools.
 - Extend the coupled‑map pattern to response validator maps and path groupings to preserve relationships at the type level.
 - Keep CI gates green on each change: `pnpm make` then `pnpm qg` from repo root (all workspaces coupled).

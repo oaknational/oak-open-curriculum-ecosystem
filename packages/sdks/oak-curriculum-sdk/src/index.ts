@@ -1,21 +1,14 @@
-/**
- * Oak Curriculum SDK
- *
- * TypeScript SDK for accessing Oak National Academy's Curriculum API.
- * This SDK provides a type-safe client using openapi-fetch with generated types.
- */
-
 // Main client factories
 export { createOakClient, createOakPathBasedClient } from './client/index.js';
 export type { OakApiClient, OakApiPathBasedClient } from './client/index.js';
 
 // Generated types
-export type { paths } from './types/generated/api-schema/api-paths-types';
-export type { components } from './types/generated/api-schema/api-paths-types';
+export type { paths } from './types/generated/api-schema/api-paths-types.js';
+export type { components } from './types/generated/api-schema/api-paths-types.js';
 /**
  * Public aliases for key generated types to appear clearly in documentation.
  */
-export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types';
+export type { paths as OakApiPaths } from './types/generated/api-schema/api-paths-types.js';
 export type {
   Subject as OakSubject,
   KeyStage as OakKeyStage,
@@ -47,13 +40,11 @@ export {
   VALID_PATHS_BY_PARAMETERS,
 } from './types/generated/api-schema/path-parameters.js';
 
-// Schema and operation exports
 export { schemaBase as schema } from './types/generated/api-schema/api-schema-base.js';
 export { PATH_OPERATIONS, OPERATIONS_BY_ID } from './types/generated/api-schema/path-parameters.js';
 export type { PathOperation, OperationId } from './types/generated/api-schema/path-parameters.js';
 export type { KeyStage, Subject } from './types/generated/api-schema/path-parameters.js';
 
-// Validation module exports (explicit for tree-shaking)
 export {
   validateRequest,
   validateCurriculumResponse,
@@ -66,26 +57,7 @@ export type {
   ValidationIssue,
   ValidatedClientOptions,
   HttpMethod,
-} from './validation/index.js';
-
-// MCP (Model Context Protocol) Tool Support
-// These exports enable SDK+MCP unified type generation where everything flows from the OpenAPI schema
-export { MCP_TOOLS, isToolName } from './types/generated/api-schema/mcp-tools/index.js';
-export { getToolFromToolName } from './types/generated/api-schema/mcp-tools/lib.js';
-export type { AllToolNames } from './types/generated/api-schema/mcp-tools/index';
-
-// Note: Parameter validation now happens via schema.parameters directly
-// in the MCP server implementation. Response validation is handled
-// via the SDK's built-in response structures.
-
-// MCP executor - static function using path-based client
-export { executeToolCall, McpToolError, McpParameterError } from './mcp/execute-tool-call.js';
-export type { ToolExecutionResult } from './mcp/execute-tool-call.js';
-export {
-  zodFromToolInputJsonSchema,
-  zodRawShapeFromToolInputJsonSchema,
-} from './mcp/zod-input-schema.js';
-
+} from './validation/index';
 // Generated URL helpers (deterministic canonical URLs)
 export {
   generateCanonicalUrlWithContext,
@@ -95,50 +67,54 @@ export {
   type ContentType,
 } from './types/generated/api-schema/routing/url-helpers.js';
 
-// OpenAI Connector exports (SDK-generated facade helpers)
+// MCP tools and universal executors
 export {
-  executeOpenAiToolCall,
-  OPENAI_CONNECTOR_TOOL_DEFS,
-  isOpenAiToolName,
-  type OpenAiToolName,
-  type OpenAiSearchArgs,
-  type OpenAiFetchArgs,
-} from './types/generated/openai-connector/index.js';
-
-// Universal MCP tooling exports
-export {
+  toolNames,
+  isToolName,
+  isToolOperationId,
+  getToolFromToolName,
+  getToolFromOperationId,
+  getToolNameFromOperationId,
+  getOperationIdFromToolName,
+  type ToolOperationId,
+  type ToolOperationIdForName,
+  type ToolDescriptorForName,
+  type ToolDescriptorForOperationId,
+  type ToolDescriptor,
+  type ToolMap,
+  type ToolName,
+  type ToolNameForOperationId,
+  type ToolArgs,
+  type ToolArgsForOperationId,
+  type ToolDescriptors,
+  type ToolInvoke,
+  type ToolNameFromOperationId,
+  type ToolResult,
+  type ToolResultForOperationId,
+  type RegisteredToolEntries,
+  McpToolRegistry,
+  attachMcpHandlers,
+  createMcpToolRegistry,
+  executeToolCall,
+  McpToolError,
+  McpParameterError,
+  type ToolExecutionResult,
+  createStubToolExecutionAdapter,
+  listAvailableStubTools,
+  hasStubForTool,
+  assertStubAvailable,
+  type StubbedToolName,
+  zodFromToolInputJsonSchema,
+  zodRawShapeFromToolInputJsonSchema,
   listUniversalTools,
   isUniversalToolName,
   createUniversalToolExecutor,
   type UniversalToolName,
   type UniversalToolExecutorDependencies,
   type UniversalToolListEntry,
-} from './mcp/universal-tools.js';
+} from './public/mcp-tools.js';
 
-// Export the type-safe object helpers
-export {
-  typeSafeKeys,
-  typeSafeValues,
-  typeSafeEntries,
-  typeSafeFromEntries,
-  typeSafeGet,
-  typeSafeSet,
-  typeSafeHas,
-  typeSafeHasOwn,
-  typeSafeOwnKeys,
-  isPlainObject,
-  getOwnString,
-} from './types/helpers.js';
-
-// Hybrid search index types (SDK-owned to centralise downstream usage)
-export type {
-  SearchLessonsIndexDoc,
-  SearchUnitsIndexDoc,
-  SearchUnitRollupDoc,
-  SearchSequenceIndexDoc,
-  SearchSubjectSlug,
-  SearchCompletionSuggestPayload,
-} from './types/search-index.js';
+// Hybrid search, query parser, observability, and admin exports
 export {
   DEFAULT_INCLUDE_FACETS,
   SearchStructuredRequestSchema,
@@ -166,58 +142,97 @@ export {
   createSearchUnitsResponse,
   createSearchSequencesResponse,
   createSearchMultiScopeResponse,
-} from './types/generated/search/index.js';
-
-export type {
-  SearchStructuredRequest,
-  SearchStructuredScope,
-  SearchNaturalLanguageRequest,
-  SearchParsedQuery,
-  SearchParsedIntent,
-  SearchScope,
-  SearchScopeWithAll,
-  SearchSuggestionItem,
-  SearchSuggestionResponse,
-  SearchSuggestionRequest,
-  SequenceFacetUnit,
-  SequenceFacet,
-  SearchFacets,
-  SearchLessonResult,
-  SearchLessonsResponse,
-  SearchLessonsSuggestions,
-  SearchLessonsSuggestionCache,
-  SearchUnitResult,
-  SearchUnitsResponse,
-  SearchSequenceResult,
-  SearchSequencesResponse,
-  SearchMultiScopeBucket,
-  SearchMultiScopeResponse,
-} from './types/generated/search/index.js';
-export type {
-  SearchLessonSummary,
-  SearchUnitSummary,
-  SearchSubjectSequences,
-} from './types/search-response-guards.js';
-export type {
-  LessonSummaryResponseSchema,
-  UnitSummaryResponseSchema,
-  SubjectSequenceResponseSchema,
-} from './types/search-response-guards.js';
-export {
+  QueryParserRequestSchema,
+  QueryParserResponseSchema,
+  isQueryParserResponse,
+  QUERY_PARSER_INTENT_ENUM,
+  ZERO_HIT_SCOPES,
+  ZeroHitScopeSchema,
+  ZeroHitScopeBreakdownSchema,
+  ZeroHitSummarySchema,
+  ZeroHitEventSchema,
+  ZeroHitTelemetrySchema,
+  createZeroHitEvent,
+  createZeroHitSummary,
+  createZeroHitTelemetry,
+  summariseZeroHitEvents,
+  ADMIN_STREAM_ACTIONS,
+  AdminStreamActionSchema,
+  AdminStreamSuccessSchema,
+  AdminStreamErrorSchema,
+  AdminStreamFixtureSchema,
+  createAdminStreamFixture,
+  createAdminStreamEmptyFixture,
+  createAdminStreamErrorFixture,
+  createAdminStreamFixtureMap,
   lessonSummarySchema,
   unitSummarySchema,
   subjectSequencesSchema,
-} from './types/search-response-guards.js';
-export {
-  SequenceFacetUnitSchema,
-  SequenceFacetSchema,
-  SearchFacetsSchema,
-} from './types/generated/zod/search/output/index.js';
-export {
   isUnitsGrouped,
   isLessonGroups,
   isTranscriptResponse,
   isLessonSummary,
   isUnitSummary,
   isSubjectSequences,
-} from './types/search-response-guards.js';
+  SequenceFacetUnitSchema,
+  SequenceFacetSchema,
+  SearchFacetsSchema,
+  SearchCompletionSuggestPayloadSchema,
+  SearchLessonsIndexDocSchema,
+  SearchUnitsIndexDocSchema,
+  SearchUnitRollupDocSchema,
+  SearchSequenceIndexDocSchema,
+  isSearchCompletionSuggestPayload,
+  isSearchLessonsIndexDoc,
+  isSearchUnitsIndexDoc,
+  isSearchUnitRollupDoc,
+  isSearchSequenceIndexDoc,
+  type QueryParserRequest,
+  type QueryParserResponse,
+  type QueryParserIntent,
+  type ZeroHitScope,
+  type ZeroHitScopeBreakdown,
+  type ZeroHitSummary,
+  type ZeroHitEvent,
+  type ZeroHitTelemetry,
+  type AdminStreamAction,
+  type AdminStreamSuccessFixture,
+  type AdminStreamErrorFixture,
+  type AdminStreamFixture,
+  type AdminStreamFixtureMap,
+  type SearchStructuredRequest,
+  type SearchStructuredScope,
+  type SearchNaturalLanguageRequest,
+  type SearchParsedQuery,
+  type SearchParsedIntent,
+  type SearchScope,
+  type SearchScopeWithAll,
+  type SearchSuggestionItem,
+  type SearchSuggestionResponse,
+  type SearchSuggestionRequest,
+  type SearchFacets,
+  type SequenceFacet,
+  type SequenceFacetUnit,
+  type SearchLessonsResponse,
+  type SearchUnitsResponse,
+  type SearchSequencesResponse,
+  type SearchLessonsSuggestions,
+  type SearchLessonsSuggestionCache,
+  type SearchLessonResult,
+  type SearchUnitResult,
+  type SearchSequenceResult,
+  type SearchMultiScopeBucket,
+  type SearchMultiScopeResponse,
+  type SearchCompletionSuggestPayload,
+  type SearchLessonsIndexDoc,
+  type SearchUnitsIndexDoc,
+  type SearchUnitRollupDoc,
+  type SearchSequenceIndexDoc,
+  type SearchSubjectSlug,
+  type LessonSummaryResponseSchema,
+  type UnitSummaryResponseSchema,
+  type SubjectSequenceResponseSchema,
+  type SearchLessonSummary,
+  type SearchUnitSummary,
+  type SearchSubjectSequences,
+} from './public/search.js';

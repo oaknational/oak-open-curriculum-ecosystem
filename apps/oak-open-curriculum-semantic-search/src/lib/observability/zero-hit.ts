@@ -1,4 +1,4 @@
-import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import type { KeyStage, SearchSubjectSlug, SearchScope } from '../../types/oak';
 import { searchLogger } from '../logger';
 import { recordZeroHitEvent } from './zero-hit-store';
 import { persistZeroHitEvent, zeroHitPersistenceEnabled } from './zero-hit-persistence';
@@ -9,7 +9,7 @@ import type { ZeroHitEvent } from './zero-hit-store';
  */
 export interface ZeroHitPayload {
   total: number;
-  scope: 'lessons' | 'units' | 'sequences';
+  scope: SearchScope;
   text: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
@@ -21,6 +21,9 @@ export interface ZeroHitPayload {
   timedOut?: boolean;
   requestId?: string;
   sessionId?: string;
+  skipLog?: boolean;
+  skipPersistence?: boolean;
+  skipWebhook?: boolean;
 }
 
 /**
@@ -40,11 +43,13 @@ export async function logZeroHit(payload: ZeroHitPayload): Promise<void> {
     indexVersion: payload.indexVersion,
   };
 
-  searchLogger.info('semantic-search.zero-hit', logContext);
+  if (!payload.skipLog) {
+    searchLogger.info('semantic-search.zero-hit', logContext);
+  }
 
   const event = buildZeroHitEvent(payload, filters, timestamp);
   recordZeroHitEvent(event);
-  await persistZeroHitIfEnabled(event);
+  await persistZeroHitIfEnabled(event, payload.skipPersistence === true);
   await dispatchZeroHitWebhook(payload, filters);
 }
 
@@ -80,8 +85,8 @@ function buildZeroHitEvent(
   };
 }
 
-async function persistZeroHitIfEnabled(event: ZeroHitEvent): Promise<void> {
-  if (!zeroHitPersistenceEnabled()) {
+async function persistZeroHitIfEnabled(event: ZeroHitEvent, skip: boolean): Promise<void> {
+  if (skip || !zeroHitPersistenceEnabled()) {
     return;
   }
   await persistZeroHitEvent(event);
@@ -91,6 +96,9 @@ async function dispatchZeroHitWebhook(
   payload: ZeroHitPayload,
   filters: Record<string, string>,
 ): Promise<void> {
+  if (payload.skipWebhook) {
+    return;
+  }
   const url = payload.webhookUrl;
   if (!url || url === 'none') {
     return;

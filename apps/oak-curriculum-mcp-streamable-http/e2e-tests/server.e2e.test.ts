@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { generateKeyPair, SignJWT, exportJWK } from 'jose';
 import request from 'supertest';
 import { createApp } from '../src/index.js';
-import { MCP_TOOLS } from '@oaknational/oak-curriculum-sdk';
+import { toolNames } from '@oaknational/oak-curriculum-sdk';
 
 /* eslint max-lines-per-function: ["error", 300] */
 
@@ -88,7 +88,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       (tool) => tool && typeof tool === 'object' && 'method' in (tool as Record<string, unknown>),
     );
     expect(containsMethodField).toBe(false);
-    const baseToolNames = Object.keys(MCP_TOOLS);
+    const baseToolNames = [...toolNames];
     const composedTools = ['fetch', 'search'];
     const expectedToolNames = [...baseToolNames, ...composedTools];
     expect(names.sort()).toEqual(expectedToolNames.sort());
@@ -156,50 +156,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
       | { capabilities?: { tools?: { listChanged?: boolean } } }
       | undefined;
     expect(result?.capabilities?.tools?.listChanged).toBe(true);
-  });
-
-  it('OpenAI connector: returns 200 with dev bearer token and responds to tools/list', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/openai_connector')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText);
-    const names = toolNamesFromResult(payload);
-    expect(Array.isArray(names)).toBe(true);
-    expect(names.length).toBeGreaterThan(0);
-    // Includes OpenAI connector tools
-    expect(names).toContain('search');
-    expect(names).toContain('fetch');
-  });
-
-  it('OpenAI connector: returns 200 and formats unknown tool error', async () => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/openai_connector')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
-      .set('Accept', ACCEPT)
-      .send({
-        jsonrpc: '2.0',
-        id: '1',
-        method: 'tools/call',
-        params: { name: 'non-existent-tool', arguments: {} },
-      });
-    expect(res.status).toBe(200);
-    const payloadText = typeof res.text === 'string' ? res.text : JSON.stringify({});
-    const payload = parseFirstSseData(payloadText) as { error?: unknown; result?: unknown };
-    // OpenAI connector wraps as result with isError; HTTP /mcp uses JSON-RPC error
-    const isOpenAiWrappedError =
-      (payload as { result?: { isError?: boolean } }).result?.isError === true;
-    const hasJsonRpcError = typeof (payload as { error?: unknown }).error !== 'undefined';
-    expect(isOpenAiWrappedError || hasJsonRpcError).toBe(true);
   });
 
   it('returns JSON-RPC error when calling an unknown tool (error path)', async () => {

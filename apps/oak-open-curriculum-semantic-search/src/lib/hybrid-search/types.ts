@@ -6,11 +6,12 @@ import type {
   KeyStage,
   SequenceFacet,
   SearchFacets,
+  SearchScope,
 } from '../../types/oak';
 import type { estypes } from '@elastic/elasticsearch';
 
 export interface StructuredQuery {
-  scope: 'units' | 'lessons' | 'sequences';
+  scope: SearchScope;
   text: string;
   subject?: SearchSubjectSlug;
   keyStage?: KeyStage;
@@ -52,9 +53,20 @@ export interface HybridSearchMeta {
   facets?: SearchFacets;
 }
 
-export type HybridSearchResult =
-  | (HybridSearchMeta & { scope: 'units'; results: UnitResult[] })
-  | (HybridSearchMeta & { scope: 'lessons'; results: LessonResult[] })
-  | (HybridSearchMeta & { scope: 'sequences'; results: SequenceResult[] });
+/**
+ * @internal Helper type for mapping search scopes to their result types
+ */
+export type ScopeResultMap = {
+  units: UnitResult[];
+  lessons: LessonResult[];
+  sequences: SequenceResult[];
+};
+
+export type HybridSearchResult = {
+  [Scope in SearchScope]: HybridSearchMeta & {
+    scope: Scope;
+    results: ScopeResultMap[Scope];
+  };
+}[SearchScope];
 
 export type { SequenceFacet, SearchFacets };

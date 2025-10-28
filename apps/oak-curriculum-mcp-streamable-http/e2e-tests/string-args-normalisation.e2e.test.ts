@@ -88,9 +88,24 @@ describe('HTTP boundary argument validation', () => {
     const overrides: ToolHandlerOverrides = {
       executeMcpTool: () =>
         Promise.resolve({
-          data: {
-            data: [{ lessonSlug: 'stub-lesson', lessonTitle: 'Stub Lesson' }],
-          },
+          status: 200,
+          data: [
+            {
+              lessonSlug: 'stub-lesson',
+              lessonTitle: 'Stub Lesson',
+              similarity: 0.75,
+              units: [
+                {
+                  unitSlug: 'stub-unit',
+                  unitTitle: 'Stub Unit',
+                  examBoardTitle: null,
+                  keyStageSlug: 'ks1',
+                  subjectSlug: 'english',
+                },
+              ],
+              canonicalUrl: 'https://www.thenational.academy/teachers/lessons/stub-lesson',
+            },
+          ],
         }),
     };
     const app = createApp({ toolHandlerOverrides: overrides });
@@ -103,7 +118,10 @@ describe('HTTP boundary argument validation', () => {
         jsonrpc: '2.0',
         id: 'structured-success',
         method: 'tools/call',
-        params: { name: 'get-search-lessons', arguments: { q: 'trees' } },
+        params: {
+          name: 'get-search-lessons',
+          arguments: { params: { query: { q: 'trees' } } },
+        },
       });
 
     expect(res.status).toBe(200);

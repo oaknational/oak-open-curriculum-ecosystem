@@ -5,7 +5,9 @@ import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import {
   structuredSearchFixture,
   suggestionFixture,
-} from '../../app/ui/__fixtures__/search-structured';
+} from '../../app/ui/search/__fixtures__/search-structured';
+import { NARROW_SEARCH_SCOPES, MULTI_SCOPE } from '../../src/lib/search-scopes';
+import { dismissNextDevOverlay } from './devtools';
 
 type Viewport = {
   readonly width: number;
@@ -33,6 +35,16 @@ async function captureAccessibility(
   testInfo: TestInfo,
 ): Promise<AxeResults> {
   const results = await new AxeBuilderModule({ page }).analyze();
+  if (results.violations.length > 0) {
+    console.warn(
+      `axe detected ${results.violations.length} violation(s) for ${name}:`,
+      results.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact,
+        targets: violation.nodes.map((node) => JSON.stringify(node.target)),
+      })),
+    );
+  }
   await testInfo.attach(`${name}-axe`, {
     body: Buffer.from(JSON.stringify(results, null, 2)),
     contentType: 'application/json',
@@ -90,6 +102,14 @@ function countTracks(template: string): number {
 }
 
 async function mockSearchEndpoints(page: Page): Promise<void> {
+  await page.context().addCookies([
+    {
+      name: 'semantic-search-fixtures',
+      value: 'on',
+      url: 'http://localhost:3000',
+    },
+  ]);
+
   await page.route('**/api/search', async (route) => {
     if (route.request().method() === 'POST') {
       const raw = route.request().postData();
@@ -102,11 +122,13 @@ async function mockSearchEndpoints(page: Page): Promise<void> {
       }
 
       const payload = (() => {
-        if (parsedBody && parsedBody.scope === 'all') {
-          const scopes = ['lessons', 'units', 'sequences'] as const;
+        if (parsedBody && parsedBody.scope === MULTI_SCOPE) {
           return {
-            scope: 'all',
-            buckets: scopes.map((scope) => ({ scope, result: structuredSearchFixture })),
+            scope: MULTI_SCOPE,
+            buckets: NARROW_SEARCH_SCOPES.map((scope) => ({
+              scope,
+              result: structuredSearchFixture,
+            })),
             suggestions: suggestionFixture.suggestions,
           };
         }
@@ -146,14 +168,11 @@ async function setThemeMode(page: Page, mode: 'light' | 'dark' | 'system'): Prom
   ]);
 }
 
-async function runStructuredSearch(page: Page): Promise<void> {
-  const queryInputs = page.getByLabel('Query');
-  await queryInputs.first().fill('decimals');
+async function submitStructuredSearch(page: Page, query = 'decimals'): Promise<void> {
+  const queryField = page.getByLabel('Query');
+  await expect(queryField).toBeVisible();
+  await queryField.first().fill(query);
   await page.getByRole('button', { name: 'Search' }).first().click();
-
-  await expect(page.getByTestId('search-results-grid').locator(':scope > li')).toHaveCount(
-    structuredSearchFixture.results.length,
-  );
 }
 
 // Search page regressions ----------------------------------------------------
@@ -162,11 +181,14 @@ test.describe('Search page responsive regressions', () => {
   test.describe('bp-xs (360px)', () => {
     test.use({ viewport: VIEWPORTS.bpXs });
 
-    test('Structured and natural panels stack vertically', async ({ page }, testInfo) => {
+    test('Structured controls stack vertically', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
       await expect(page.getByTestId('search-page')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const controls = page.getByLabel('Search controls');
       const template = await controls.evaluate((el) => getComputedStyle(el).gridTemplateAreas);
@@ -183,13 +205,16 @@ test.describe('Search page responsive regressions', () => {
   test.describe('bp-md (800px)', () => {
     test.use({ viewport: VIEWPORTS.bpMd });
 
-    test('Structured panels align side by side and results grid spans two columns', async ({
+    test('Structured controls stay single-column and results grid spans two columns', async ({
       page,
     }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
       await expect(page.getByTestId('search-page')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const controls = page.getByLabel('Search controls');
       const controlAreas = await controls.evaluate((el) => getComputedStyle(el).gridTemplateAreas);
@@ -204,7 +229,7 @@ test.describe('Search page responsive regressions', () => {
       await captureScreenshot(page, 'search-controls-bp-md', testInfo);
       const axe = await captureAccessibility(page, 'search-controls-bp-md', testInfo);
 
-      expect.soft(controlColumns).toBe(2);
+      expect.soft(controlColumns).toBe(1);
       expect.soft(resultsColumns).toBe(2);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
@@ -215,9 +240,12 @@ test.describe('Search page responsive regressions', () => {
 
     test('Hero copy is clamped for readability', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
       await expect(page.getByTestId('search-hero')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const hero = page.getByTestId('search-hero');
       const maxInline = await hero.evaluate((el) =>
@@ -238,9 +266,12 @@ test.describe('Search page responsive regressions', () => {
     test('Hero copy is clamped for readability in dark mode', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
       await setThemeMode(page, 'dark');
-      await page.goto('/');
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
       await expect(page.getByTestId('search-hero')).toBeVisible();
-      await runStructuredSearch(page);
+      await submitStructuredSearch(page);
+      const resultItems = page.getByTestId('search-results-grid').locator(':scope > li');
+      await expect(resultItems).toHaveCount(structuredSearchFixture.results.length);
 
       const hero = page.getByTestId('search-hero');
       const html = page.locator('html');
@@ -255,13 +286,59 @@ test.describe('Search page responsive regressions', () => {
     });
   });
 
+  test.describe('Natural language route', () => {
+    test.use({ viewport: VIEWPORTS.bpMd });
+
+    test('Hero and skip links emphasise conversational flow', async ({ page }, testInfo) => {
+      await page.goto('/natural_language_search');
+      await dismissNextDevOverlay(page);
+      await expect(page.getByTestId('search-hero')).toBeVisible();
+
+      const heroHeading = page.getByRole('heading', { level: 1, name: 'Natural language search' });
+      await expect(heroHeading).toBeVisible();
+
+      const heroCopy = page.getByText(
+        'Describe what you need in plain language and we will translate it into a structured query for you.',
+      );
+      await expect(heroCopy).toBeVisible();
+
+      const skipLinksNav = page.getByRole('navigation', {
+        name: 'Skip links',
+        includeHidden: true,
+      });
+      const skipToForm = skipLinksNav.getByRole('link', {
+        name: 'Skip to natural language search form',
+        includeHidden: true,
+      });
+      const skipToResults = skipLinksNav.getByRole('link', {
+        name: 'Skip to natural language results',
+        includeHidden: true,
+      });
+
+      await skipToForm.focus();
+      await expect(skipToForm).toBeVisible();
+      await expect(skipToForm).toHaveAccessibleName('Skip to natural language search form');
+
+      await skipToResults.focus();
+      await expect(skipToResults).toBeVisible();
+      await expect(skipToResults).toHaveAccessibleName('Skip to natural language results');
+
+      await captureScreenshot(page, 'natural-hero-bp-md', testInfo);
+      const axe = await captureAccessibility(page, 'natural-hero-bp-md', testInfo);
+
+      expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
+    });
+  });
+
   test.describe('Overflow guard 1100px', () => {
     test.use({ viewport: { width: 1_100, height: 900 } });
 
     test('Content does not overflow the viewport at 1100px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
-      await runStructuredSearch(page);
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
+      await submitStructuredSearch(page);
+      await expect(page.getByTestId('search-results-grid')).toBeVisible();
 
       await captureScreenshot(page, 'search-overflow-1100', testInfo);
       const overflow = await page.evaluate(() => ({
@@ -278,8 +355,10 @@ test.describe('Search page responsive regressions', () => {
 
     test('Content does not overflow the viewport at 1380px', async ({ page }, testInfo) => {
       await mockSearchEndpoints(page);
-      await page.goto('/');
-      await runStructuredSearch(page);
+      await page.goto('/structured_search');
+      await dismissNextDevOverlay(page);
+      await submitStructuredSearch(page);
+      await expect(page.getByTestId('search-results-grid')).toBeVisible();
 
       await captureScreenshot(page, 'search-overflow-1380', testInfo);
       const overflow = await page.evaluate(() => ({
@@ -326,6 +405,7 @@ test.describe('Admin page responsive regressions', () => {
 
     test('Admin actions grid forms responsive columns', async ({ page }, testInfo) => {
       await page.goto('/admin');
+      await dismissNextDevOverlay(page);
       await expect(page.getByRole('heading', { level: 1, name: 'Admin tools' })).toBeVisible();
 
       const actionsGrid = page.getByTestId('admin-actions-grid');
@@ -347,6 +427,7 @@ test.describe('Admin page responsive regressions', () => {
 
     test('Admin main width expands with viewport', async ({ page }, testInfo) => {
       await page.goto('/admin');
+      await dismissNextDevOverlay(page);
       await expect(page.getByRole('heading', { level: 1, name: 'Admin tools' })).toBeVisible();
 
       const mainWidth = await page
@@ -371,6 +452,7 @@ test.describe('Docs page responsive regressions', () => {
 
     test('API docs container remains centred and wide enough', async ({ page }, testInfo) => {
       await page.goto('/api/docs');
+      await dismissNextDevOverlay(page);
       await expect(
         page.getByRole('heading', { level: 1, name: 'Oak Curriculum Search API' }),
       ).toBeVisible();
@@ -389,22 +471,23 @@ test.describe('Docs page responsive regressions', () => {
   });
 });
 
-// Health surface regressions -------------------------------------------------
+// Status surface regressions -------------------------------------------------
 
-test.describe('Health surface regressions', () => {
+test.describe('Status surface regressions', () => {
   test.describe('bp-xs (360px)', () => {
     test.use({ viewport: VIEWPORTS.bpXs });
 
-    test('Health page renders Oak UI shell', async ({ page }, testInfo) => {
-      test.fail();
-      await page.goto('/healthz');
+    test('Status page renders Oak UI shell', async ({ page }, testInfo) => {
+      await page.goto('/status');
+      await dismissNextDevOverlay(page);
 
-      const mainCount = await page.locator('main').count();
+      const main = page.getByTestId('status-page');
+      await expect(main).toBeVisible();
+      await expect(page.getByRole('heading', { level: 1, name: /Platform status/i })).toBeVisible();
 
-      await captureScreenshot(page, 'healthz-bp-xs', testInfo);
-      const axe = await captureAccessibility(page, 'healthz-bp-xs', testInfo);
+      await captureScreenshot(page, 'status-bp-xs', testInfo);
+      const axe = await captureAccessibility(page, 'status-bp-xs', testInfo);
 
-      expect.soft(mainCount).toBeGreaterThan(0);
       expect.soft(axe.violations.length, 'axe violations must be resolved').toBe(0);
     });
   });

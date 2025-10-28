@@ -8,21 +8,21 @@ const operationIDToToolName = {
   // and all the rest
 } as const;
 
-type AllOperationIds = keyof typeof operationIDToToolName;
-type AllToolNames = (typeof operationIDToToolName)[AllOperationIds]['toolName'];
+type OperationId = keyof typeof operationIDToToolName;
+type ToolName = (typeof operationIDToToolName)[OperationId]['toolName'];
 
 // I feel like this contraint is useful, but I'm not sure how to apply it
-interface ToolNameForOperationId<OperationId extends AllOperationIds> {
-  toolName: AllToolNames;
+interface ToolNameForOperationId<OperationId extends OperationId> {
+  toolName: ToolName;
   operationIdKey: OperationId;
 }
 
-function isOperationId(operationId: string): operationId is AllOperationIds {
+function isOperationId(operationId: string): operationId is OperationId {
   const stringOperationId: string = operationId;
   return Object.keys(operationIDToToolName).includes(stringOperationId);
 }
 
-export function getToolNameFromOperationId(operationId: AllOperationIds): AllToolNames {
+export function getToolNameFromOperationId(operationId: OperationId): ToolName {
   if (!isOperationId(operationId)) {
     throw new TypeError(
       `Invalid operation ID: ${operationId}. Allowed values: ${Object.keys(operationIDToToolName).join(', ')}`,
@@ -59,12 +59,12 @@ export const mcpTools = {
 
 type ToolsMap = typeof mcpTools;
 
-export function getToolFromToolName<ToolName extends AllToolNames>(
+export function getToolFromToolName<ToolName extends ToolName>(
   toolName: ToolName,
 ): ToolsMap[ToolName] {
   return mcpTools[toolName];
 }
 
-export function getToolFromOperationId(operationId: AllOperationIds): ToolsMap[AllToolNames] {
+export function getToolFromOperationId(operationId: OperationId): ToolsMap[ToolName] {
   return mcpTools[getToolNameFromOperationId(operationId)];
 }

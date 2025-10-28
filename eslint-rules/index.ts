@@ -5,6 +5,8 @@
  * for the standardised architecture (core, libs, apps)
  */
 
+import { noExportTrivialTypeAliasesRule } from './no-export-trivial-type-aliases.js';
+
 export {
   coreBoundaryRules,
   coreTestConfigRules,
@@ -14,6 +16,7 @@ export {
   LIB_PACKAGES,
   getOtherLibs,
 } from './boundary-rules.js';
+export { noExportTrivialTypeAliasesRule };
 
 // Re-export common settings for convenience
 export const commonSettings = {
@@ -23,3 +26,9 @@ export const commonSettings = {
     },
   },
 } as const;
+
+export const oakCustomRulesPlugin = {
+  rules: {
+    'no-export-trivial-type-aliases': noExportTrivialTypeAliasesRule,
+  },
+};

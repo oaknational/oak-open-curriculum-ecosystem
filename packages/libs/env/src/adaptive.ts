@@ -13,14 +13,39 @@ export interface EnvironmentProvider {
   has(key: string): boolean;
 }
 
-function isPlainObject(value: unknown): value is Record<PropertyKey, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+interface JsonRecord {
+  readonly [key: string]: JsonValue;
+}
+
+type JsonValue = string | number | boolean | null | JsonRecord | JsonValue[];
+
+function isJsonRecord(value: unknown): value is JsonRecord {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  return Object.values(value).every((entry) => isJsonValue(entry));
+}
+
+function isJsonValue(value: unknown): value is JsonValue {
+  if (value === null) {
+    return true;
+  }
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return true;
+  }
+  if (Array.isArray(value)) {
+    return value.every((item) => isJsonValue(item));
+  }
+  if (typeof value === 'object') {
+    return isJsonRecord(value);
+  }
+  return false;
 }
 
 function isEnvironmentObject(
   value: unknown,
 ): value is Readonly<Record<string, string | undefined>> {
-  if (!isPlainObject(value)) {
+  if (!isJsonRecord(value)) {
     return false;
   }
   for (const k in value) {
@@ -39,7 +64,7 @@ function hasNestedProperty(value: unknown, path: readonly string[]): boolean {
   if (path.length === 0) {
     return true;
   }
-  if (!isPlainObject(value)) {
+  if (!isJsonRecord(value)) {
     return false;
   }
   const [first, ...rest] = path;
@@ -53,7 +78,7 @@ function extractNestedProperty(value: unknown, path: readonly string[]): unknown
   if (path.length === 0) {
     return value;
   }
-  if (!isPlainObject(value)) {
+  if (!isJsonRecord(value)) {
     return undefined;
   }
   const [first, ...rest] = path;
@@ -63,12 +88,12 @@ function extractNestedProperty(value: unknown, path: readonly string[]): unknown
   return extractNestedProperty(value[first], rest);
 }
 
-function hasProperty(value: unknown, property: string): value is Record<PropertyKey, unknown> {
-  return isPlainObject(value) && property in value;
+function hasProperty(value: unknown, property: string): value is JsonRecord {
+  return isJsonRecord(value) && property in value;
 }
 
 function extractProperty(value: unknown, property: string): unknown {
-  return isPlainObject(value) ? value[property] : undefined;
+  return isJsonRecord(value) ? value[property] : undefined;
 }
 
 /**

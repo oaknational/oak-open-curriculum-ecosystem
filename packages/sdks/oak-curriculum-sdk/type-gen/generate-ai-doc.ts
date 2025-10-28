@@ -17,18 +17,42 @@ import type { TDProject, TDReflection } from './lib/ai-doc-types';
 import { ensureDir, groupByKind, renderReflection, nowIso } from './lib/ai-doc-render';
 // Import generated artifacts directly for endpoint/tool catalogs
 import { PATH_OPERATIONS } from '../src/types/generated/api-schema/path-parameters.js';
-import { MCP_TOOLS } from '../src/types/generated/api-schema/mcp-tools/index.js';
-// typed helpers for safe object inspection
 import {
-  typeSafeKeys,
-  typeSafeEntries,
-  getOwnString,
-  getOwnBoolean,
-  getOwnArrayLength,
-  isPlainObject,
-  getOwnValue,
-} from '../src/types/helpers';
+  toolNames,
+  getToolFromToolName,
+  type ToolDescriptorForName,
+} from '../src/types/generated/api-schema/mcp-tools/index.js';
 import { ZodError, type ZodIssue } from 'zod';
+function isPlainObject(value: unknown): value is object {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getDescriptor(value: unknown, key: PropertyKey): PropertyDescriptor | undefined {
+  if (!isPlainObject(value)) {
+    return undefined;
+  }
+  return Object.getOwnPropertyDescriptor(value, key);
+}
+
+function getOwnString(value: unknown, key: PropertyKey): string | undefined {
+  const descriptor = getDescriptor(value, key);
+  return typeof descriptor?.value === 'string' ? descriptor.value : undefined;
+}
+
+function getOwnBoolean(value: unknown, key: PropertyKey): boolean | undefined {
+  const descriptor = getDescriptor(value, key);
+  return typeof descriptor?.value === 'boolean' ? descriptor.value : undefined;
+}
+
+function getOwnArrayLength(value: unknown, key: PropertyKey): number | undefined {
+  const descriptor = getDescriptor(value, key);
+  return Array.isArray(descriptor?.value) ? descriptor.value.length : undefined;
+}
+
+function getOwnValue(value: unknown, key: PropertyKey): unknown {
+  const descriptor = getDescriptor(value, key);
+  return descriptor?.value;
+}
 
 function formatZodIssues(issues: ZodIssue[]): string {
   return issues.map((i) => `- ${i.path.join('.') || '<root>'}: ${i.message}`).join('\n');
@@ -161,6 +185,7 @@ function buildConventionsSection(): string {
 }
 
 // Tool map helpers derived at use sites via typeSafeEntries
+// TODO: update documentation once helper utilities are removed completely
 
 interface RenderableParamInfo {
   loc: string;
@@ -241,27 +266,27 @@ function listParamObjectKeys(obj: unknown): string {
   if (!isPlainObject(obj)) {
     return '_None_';
   }
-  const keys = typeSafeKeys(obj);
+  const keys = Object.keys(obj);
   return keys.length === 0 ? '_None_' : keys.join(', ');
 }
 
 function renderToolCatalog(): string {
   const lines: string[] = [];
   lines.push('## MCP Tool Catalog');
-  const entries = typeSafeEntries(MCP_TOOLS);
-  entries.sort(([a], [b]) => a.localeCompare(b));
-  for (const [name, base] of entries) {
-    const opId = getOwnString(base, 'operationId') ?? '';
-    const path = getOwnString(base, 'path') ?? '';
-    const method = getOwnString(base, 'method') ?? '';
+  const entries = [...toolNames].sort((a, b) => a.localeCompare(b));
+  for (const name of entries) {
+    const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
+    const opId = getOwnString(descriptor, 'operationId') ?? '';
+    const path = getOwnString(descriptor, 'path') ?? '';
+    const method = getOwnString(descriptor, 'method') ?? '';
     lines.push(`### ${name}`);
     lines.push(`- path: ${path}`);
     lines.push(`- method: ${method}`);
     if (opId) {
       lines.push(`- operationId: ${opId}`);
     }
-    const pathParams = getOwnValue(base, 'pathParams');
-    const queryParams = getOwnValue(base, 'queryParams');
+    const pathParams = getOwnValue(descriptor, 'pathParams');
+    const queryParams = getOwnValue(descriptor, 'queryParams');
     lines.push(`- path params: ${listParamObjectKeys(pathParams)}`);
     lines.push(`- query params: ${listParamObjectKeys(queryParams)}`);
     lines.push('');

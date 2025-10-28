@@ -1,6 +1,6 @@
 # Oak Curriculum MCP – Streamable HTTP (Vercel-ready)
 
-This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport and the MCP `McpServer` for the `/mcp` endpoint. It defaults to stateless mode (no SSE) and is designed for Vercel’s Node runtime. The `/openai_connector` endpoint intentionally retains the OpenAI Connector contract and low‑level Server.
+This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport and the MCP `McpServer` for the `/mcp` endpoint. It defaults to stateless mode (no SSE) and is designed for Vercel’s Node runtime.
 
 ## Quick start (local)
 
@@ -28,7 +28,7 @@ curl -sS \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
 
-Note: The server automatically adds the required `Accept: application/json, text/event-stream` header if missing, improving UX for simple curl commands and UI integrations.
+Note: Requests must explicitly include `Accept: application/json, text/event-stream`. The server now rejects calls missing the SSE media type with `406 Not Acceptable`.
 
 ### Example payloads
 
@@ -60,28 +60,9 @@ Note: The server automatically adds the required `Accept: application/json, text
 }
 ```
 
-- `/openai_connector` success (single text item containing JSON string):
+### `/openai_connector` decommissioning
 
-```json
-{
-  "jsonrpc": "2.0",
-  "id": "1",
-  "result": { "content": [{ "type": "text", "text": "{\n  \"ok\": true, \"data\": { ... }\n}" }] }
-}
-```
-
-- `/openai_connector` error (single text item containing compact JSON error string):
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": "1",
-  "result": {
-    "isError": true,
-    "content": [{ "type": "text", "text": "{\"error\":{\"message\":\"Invalid arguments\"}}" }]
-  }
-}
-```
+The historical `/openai_connector` alias has been removed. All clients must target `/mcp`, which now exposes the complete curriculum and OpenAI-compatible toolset (`search`, `fetch`, etc.). Update any remaining scripts, integrations, or documentation references to call `/mcp` directly.
 
 ## Vercel deployment
 
@@ -99,7 +80,6 @@ Note: The server automatically adds the required `Accept: application/json, text
 ### Health endpoints
 
 - `/mcp`: `HEAD`, `GET`, and `OPTIONS` respond for health and metadata checks
-- `/openai_connector`: `HEAD`, `GET`, and `OPTIONS` respond for health and metadata checks
 
 ### Smoke-test checklist (post-deploy)
 
@@ -108,7 +88,6 @@ Note: The server automatically adds the required `Accept: application/json, text
 - Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
 - POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
 - POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
-- POST `/openai_connector` with a valid Bearer token returns 200 with OpenAI single‑text content response
 
 ### OAuth discovery
 
@@ -157,4 +136,39 @@ Temporary validation bypass (for smoke only):
 - `/mcp` is implemented with MCP `McpServer`; tools are registered directly from SDK‑generated metadata.
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec. Unknown tool and argument validation failures are returned as JSON‑RPC errors; execution and output‑validation failures are returned as a single text content item with a compact JSON error payload.
 - Successful results are SSE-wrapped JSON-RPC responses (Streamable HTTP).
-- `/openai_connector` uses the OpenAI Connector contract and returns a single text content item containing a JSON string for both success and error, via `formatOpenAiContent`.
+- Aggregated OpenAI-compatible tools (`search`, `fetch`) are registered alongside curriculum tools via the generated universal executor, so `/mcp` returns the complete catalogue from a single endpoint.
+
+## Testing
+
+- Stub-mode and live-mode E2E coverage runs via Vitest: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
+- The suite relies on helpers that configure `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` for stub scenarios and injectable overrides for live parity; no manual env preparation is required.
+
+## Smoke testing
+
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – launches a local server in stub mode, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, and seeds the deterministic `REMOTE_MCP_DEV_TOKEN=stub-smoke-dev-token`. All responses are generated from schema-driven stubs, so the run is completely offline.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – starts the same local server in live mode. `loadRootEnv` searches the repo root for `.env.local`/`.env`, requires `OAK_API_KEY`, and logs which file was used. The harness fails fast with a clear message if the key is missing.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://curriculum-mcp-alpha.oaknational.dev/mcp]` – targets a deployed instance without starting a local server. A base URL is required; the harness resolves it in the order CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` and fails fast if none is available. Remote runs now assert the same documented status handling as local smoke (including 404 fallbacks), so discrepancies usually indicate stale deployments or missing credentials. Preview deployments (for example, `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`) update roughly five minutes after each push.
+
+`runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.
+
+### Structured logging, snapshots, and diffing
+
+- Logging honours `LOG_LEVEL` (defaults to `info`). Set `LOG_LEVEL=debug` to see request/response metadata, payload excerpts, and remote diagnostic warnings.
+- Enable file capture with `SMOKE_LOG_TO_FILE=true`. Each invocation writes JSON envelopes to `apps/oak-curriculum-mcp-streamable-http/tmp/smoke-logs/{mode}-{tool}.json`; the directory is ignored by git.
+- Add `SMOKE_CAPTURE_ANALYSIS=true` to mirror SSE envelopes into `tmp/smoke-logs/analysis/`, tagged by mode (e.g. `get-key-stages-local-live.sse.json`). Pair with `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:capture:rest` to snapshot the upstream REST payloads (`*-rest.json`) for side-by-side comparison.
+- Suggested diff loop:
+
+  ```bash
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true SMOKE_CAPTURE_ANALYSIS=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub
+  LOG_LEVEL=debug SMOKE_LOG_TO_FILE=true SMOKE_CAPTURE_ANALYSIS=true pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:capture:rest
+  jq . tmp/smoke-logs/analysis/get-key-stages-local-stub.sse.json > /tmp/stub.json
+  jq . tmp/smoke-logs/analysis/get-key-stages-local-live.sse.json > /tmp/live.json
+  jq . tmp/smoke-logs/analysis/get-key-stages-rest.json > /tmp/rest.json
+  diff -u /tmp/stub.json /tmp/live.json
+  diff -u /tmp/live.json /tmp/rest.json
+  ```
+
+  Repeat for `get-key-stages-subject-lessons` (or any additional tools) to understand live/stub divergences before patching the formatter or schema.
+
+- Remote runs may receive 401/404 responses when credentials are missing or the deployment is stale. The harness now logs these status codes but keeps running so you can collect context instead of failing the entire script.

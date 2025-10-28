@@ -30,6 +30,7 @@
 - [ ] Extract all common code from the stdio and http servers into a shared library.
 - [ ] Production hardening, auth, caching, logging, tracing, error handling (Result<T,E>), error tracking (Sentry), etc.
 - [ ] Rename the type-gen code from scripts to something more meaningful.
+- [ ] Enhance the remote smoke harness CLI using `commander` so `--remote-base-url` style flags are supported in addition to positional arguments.
 - [ ] Consider putting the type-gen code in a separate package from the SDK runtime code, they are not tightly coupled and have different if related intentions. This could go either way, the typegen code essentially becomes a library of functions that are used within the SDK runtime code.
 - [ ] Should we extract the non-UI search logic so that other clients can use it? E.g. a search CLI or other UI. This would effectively be an Oak Open Search SDK, similar to the Oak Open Curriculum SDK, and similarly could build the appropriate MCP tools to expose via a server.
 - [ ] Add an MCP server to the semantic search app.
@@ -57,6 +58,7 @@
 - Resources/Prompts and cross‑server pipelines
 - Caching
 - Accurate versioning of MCP servers surfaced from the repo root `package.json` and reflected in server metadata and docs; align release pipeline to propagate the version consistently
+- An agent lifecycle plugin that checks how many uncommitted changes there are, and if it is over a certain threshold, it will make sure current progress and goals are written to the plan, then run the quality gates, and estimate what work is required to bring the repo to a production ready state, do that work, then commit. So, e.g. as soon as the repo has changes in 10 files, a tidy up and commit process is automatically triggered. As long as the threshold number is kept small, the amount of work required to bring the repo to a production ready state should also be small, and the chaotic repo state should never be reached.
 
 ### Core References
 
@@ -69,3 +71,4 @@
 
 - [+] Open Curriculum API MCP server including hybrid lexical+semantic search and all the API endpoints IN PROGRESS
 - [ ] An fan-out-fan-in MCP server that takes a JSON array of well defined tasks `[{name: string, prompt: string}]`, uses Claude Typescript SDK to execute them in parallel, and collates and returns the results to the calling MCP client. E.g. fixing linting issues, if there are many issues, but approximately five _groups_ of issues, we could run five agent tasks in parallel, and collate the results. Five Sonnet instances could be given prompts specify the files, issues, and likely solutions, and told that all fixes need to align with the rules in .agent/directives-and-memory/AGENT.md, and that all fixes need to be self-contained, i.e. not dependent on other fixes, and that once their individual fixes are made the instances should stop, not pick up other tasks or make any other changes. If the changes are isolated, atomic, and precise, then the agents should be able to act in parallel without issue, and the calling agent can review the results.
+- [ ] As above but much simpler, single purpose review agents, narrow scope, low power models, short highly specific tasks, built on top of coding specific CLIs/SDKs, Codex, Gemini, Claude, Cursor, all the Cs.

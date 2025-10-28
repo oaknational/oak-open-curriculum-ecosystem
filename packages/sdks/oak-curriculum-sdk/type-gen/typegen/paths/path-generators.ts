@@ -3,8 +3,7 @@
  * Pure functions for generating path-related TypeScript code
  */
 
-import type { OpenAPI3 } from 'openapi-typescript';
-import { typeSafeKeys } from '../../../src/types/helpers.js';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 /**
  * Generate path parameters file header
@@ -38,10 +37,10 @@ import { schemaBase as schema } from "./api-schema-base.js";
  * @param schema - OpenAPI schema object
  * @returns TypeScript code for PATHS constant
  */
-export function generatePathsConstant(schema: Pick<OpenAPI3, 'paths'>): string {
-  const paths = typeSafeKeys(schema.paths ?? {})
+export function generatePathsConstant(schema: Pick<OpenAPIObject, 'paths'>): string {
+  const pathEntries = Object.keys(schema.paths ?? {})
     .sort((a, b) => a.localeCompare(b))
-    .map((p) => `  '${p}': '${p}'`)
+    .map((path) => `  '${path}': '${path}'`)
     .join(',\n');
 
   return `export type ValidPath = keyof Paths;
@@ -49,7 +48,7 @@ export function generatePathsConstant(schema: Pick<OpenAPI3, 'paths'>): string {
  * Convenience map for all the paths
  */
 export const PATHS = {
-${paths}
+${pathEntries}
 } as const;`;
 }
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 import { generateSearchRequestModules } from './generate-search-requests.js';
 import { generateSearchResponseModules } from './generate-search-responses.js';
@@ -8,8 +8,9 @@ import { generateSearchSuggestionModules } from './generate-search-suggestions.j
 import { generateSearchScopeModules } from './generate-search-scopes.js';
 import { generateSearchFixtureModules } from './generate-search-fixtures.js';
 import { generateSearchIndexModule } from './generate-search-index.js';
+import { generateSearchIndexDocumentModules } from './generate-search-index-docs.js';
 
-const MINIMAL_SCHEMA: OpenAPI3 = {
+const MINIMAL_SCHEMA: OpenAPIObject = {
   openapi: '3.0.0',
   info: { title: 'Test', version: '1.0.0' },
   paths: {},
@@ -104,5 +105,24 @@ describe('search index module generation', () => {
     expect(content).toContain('export type {\n  SearchSuggestionItem');
     expect(content).toContain('export { SearchLessonsResponseSchema }');
     expect(content).toContain('export {\n  createSearchLessonsResponse');
+    expect(content).toContain('SearchLessonsIndexDocSchema');
+  });
+});
+
+describe('search index document module generation', () => {
+  it('emits index document schemas, guards, and doc re-exports', () => {
+    const files = generateSearchIndexDocumentModules(MINIMAL_SCHEMA);
+    expect(Object.keys(files).sort()).toEqual(
+      [
+        '../search/index-documents.ts',
+        '../../../../docs/_typedoc_src/types/search-index.ts',
+      ].sort(),
+    );
+    const runtimeModule = files['../search/index-documents.ts'];
+    expect(runtimeModule).toContain('SearchLessonsIndexDocSchema');
+    expect(runtimeModule).toContain('isSearchSequenceIndexDoc');
+    const docsModule = files['../../../../docs/_typedoc_src/types/search-index.ts'];
+    expect(docsModule).toContain('SearchCompletionSuggestPayloadSchema');
+    expect(docsModule).toContain("from '../../../src/types/generated/search/index-documents.js'");
   });
 });

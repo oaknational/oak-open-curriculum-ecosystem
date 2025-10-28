@@ -8,22 +8,21 @@ import type {
   ParameterObject,
   ReferenceObject,
   OperationObject,
-} from 'openapi-typescript';
-import type { ExtractionContext } from './typegen/extraction-types';
-import { isPlainObject, getOwnString } from '../src/types/helpers';
+} from 'openapi3-ts/oas31';
+import type { ExtractionContext } from './typegen/extraction-types.js';
 
 /**
  * Narrow unknown to a non-null object record
  */
-function isObject(value: unknown): value is object {
-  return isPlainObject(value);
+function isObject(value: unknown): value is Record<PropertyKey, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 /**
  * Check if value is a ReferenceObject
  */
 function isReferenceObject(obj: unknown): obj is ReferenceObject {
-  return isObject(obj) && typeof getOwnString(obj, '$ref') === 'string';
+  return isObject(obj) && typeof obj.$ref === 'string' && obj.$ref.length > 0;
 }
 
 /**
@@ -36,24 +35,29 @@ function isParameterOrReference(p: unknown): p is ParameterObject | ReferenceObj
   if (isReferenceObject(p)) {
     return true;
   }
-  const nameVal = getOwnString(p, 'name');
-  const inVal = getOwnString(p, 'in');
-  return (
-    typeof nameVal === 'string' &&
-    typeof inVal === 'string' &&
-    ['path', 'query', 'header', 'cookie'].includes(inVal)
-  );
+  if (typeof p.name !== 'string' || p.name.length === 0) {
+    return false;
+  }
+  if (p.in !== 'path' && p.in !== 'query' && p.in !== 'header' && p.in !== 'cookie') {
+    return false;
+  }
+  if ('required' in p && p.required !== undefined && typeof p.required !== 'boolean') {
+    return false;
+  }
+  return true;
 }
 
 /**
  * Initialize path parameter sets in the context
  */
 export function initializePathParameters(
-  parameterNames: string[],
+  parameterNames: readonly string[],
   context: ExtractionContext,
 ): void {
   for (const parameterName of parameterNames) {
-    context.pathParameters[parameterName] ??= new Set<string>();
+    if (!(parameterName in context.pathParameters)) {
+      context.pathParameters[parameterName] = new Set<string>();
+    }
   }
 }
 
@@ -61,7 +65,7 @@ export function initializePathParameters(
  * Extract valid parameters from a parameter list
  */
 export function extractValidParameters(
-  parameters: unknown[] | undefined,
+  parameters: readonly unknown[] | undefined,
 ): (ParameterObject | ReferenceObject)[] {
   if (!parameters) {
     return [];
@@ -79,7 +83,7 @@ export function processOperationParameters(
   pathItem: PathItemObject,
   context: ExtractionContext,
   processParameterList: (
-    params: (ParameterObject | ReferenceObject)[],
+    params: readonly (ParameterObject | ReferenceObject)[],
     ctx: ExtractionContext,
   ) => void,
 ): void {
@@ -99,5 +103,27 @@ export function processOperationParameters(
  * Check if a value is a valid operation object
  */
 function isValidOperation(operation: unknown): operation is OperationObject {
-  return isObject(operation) && !isReferenceObject(operation);
+  if (!isObject(operation)) {
+    return false;
+  }
+  if (isReferenceObject(operation)) {
+    return false;
+  }
+  if ('operationId' in operation && operation.operationId !== undefined) {
+    if (typeof operation.operationId !== 'string' || operation.operationId.length === 0) {
+      return false;
+    }
+  }
+  if ('parameters' in operation && operation.parameters !== undefined) {
+    if (!Array.isArray(operation.parameters)) {
+      return false;
+    }
+    if (!operation.parameters.every((param) => isParameterOrReference(param))) {
+      return false;
+    }
+  }
+  if (!('responses' in operation) || !isObject(operation.responses)) {
+    return false;
+  }
+  return true;
 }

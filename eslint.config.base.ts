@@ -7,16 +7,20 @@
 
 import type { Linter } from 'eslint';
 import { defineConfig } from 'eslint/config';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { configs as tsEslintConfigs, parser as tsEslintParser } from 'typescript-eslint';
 import eslint from '@eslint/js';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX } from 'eslint-plugin-import-x';
 import globals from 'globals';
 
+const baseDir = dirname(fileURLToPath(import.meta.url));
+const eslintRulesProjectConfig = `${baseDir}/tsconfig.eslint-rules.json`;
+
 export const ignores = [
   'dist/',
   'node_modules/',
-  'coverage/',
   '**/*.d.ts',
   'commitlint.config.js',
   '**/tsup.config.ts',
@@ -29,6 +33,9 @@ export const ignores = [
   '**/docs/_typedoc_src/**',
   '**/docs/api/',
   '**/docs/api-md/',
+  // Test results
+  '**/test-results/',
+  '**/coverage/',
 ];
 
 export const baseRules: readonly Linter.Config[] = [
@@ -162,6 +169,7 @@ export const baseConfig = defineConfig(
       parser: tsEslintParser,
       parserOptions: {
         projectService: true,
+        allowDefaultProject: true,
       },
       /**
        * @todo the code base is supposed to be edge compatible, so we need to remove these globals, move the Node reliant code to a specific space, and add the Node globals there
@@ -171,7 +179,9 @@ export const baseConfig = defineConfig(
         ...globals.es2021,
       },
     },
-    rules: tsRules,
+    rules: {
+      ...tsRules,
+    },
   },
   // Test files - common rules
   {
@@ -203,6 +213,24 @@ export const baseConfig = defineConfig(
         projectService: true,
         allowDefaultProject: true,
       },
+    },
+  },
+  {
+    files: ['eslint-rules/**/*.ts'],
+    languageOptions: {
+      parser: tsEslintParser,
+      parserOptions: {
+        projectService: true,
+        project: [eslintRulesProjectConfig],
+        tsconfigRootDir: baseDir,
+        allowDefaultProject: true,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-deprecated': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unnecessary-condition': 'off',
     },
   },
 );

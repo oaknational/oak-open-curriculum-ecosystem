@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import { buildResponseMapData } from './build-response-map.js';
 
 describe('buildResponseMapData', () => {
   it('extracts operationId, status, and component names from $ref JSON responses', () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 't', version: '1' },
       paths: {
@@ -24,25 +24,34 @@ describe('buildResponseMapData', () => {
           },
         },
       },
-      components: { schemas: {} },
+      components: {
+        schemas: {
+          LessonSummaryResponseSchema: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+            },
+          },
+        },
+      },
     };
 
     const entries = buildResponseMapData(schema);
     expect(entries).toEqual(
       expect.arrayContaining([
-        {
+        expect.objectContaining({
           operationId: 'getLessons-getLesson',
           status: '200',
           componentName: 'LessonSummaryResponseSchema',
           path: '/lessons/{lesson}/summary',
           method: 'get',
-        },
+        }),
       ]),
     );
   });
 
   it('includes non-200 $ref responses (e.g., 404, 500)', () => {
-    const schema: OpenAPI3 = {
+    const schema: OpenAPIObject = {
       openapi: '3.0.0',
       info: { title: 't', version: '1' },
       paths: {
@@ -78,33 +87,39 @@ describe('buildResponseMapData', () => {
           },
         },
       },
-      components: { schemas: {} },
+      components: {
+        schemas: {
+          Thing: { type: 'object', properties: { id: { type: 'string' } } },
+          NotFound: { type: 'object', properties: { message: { type: 'string' } } },
+          InternalError: { type: 'object', properties: { message: { type: 'string' } } },
+        },
+      },
     };
 
     const entries = buildResponseMapData(schema);
     expect(entries).toEqual(
       expect.arrayContaining([
-        {
+        expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '200',
           componentName: 'Thing',
           path: '/things/{id}',
           method: 'get',
-        },
-        {
+        }),
+        expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '404',
           componentName: 'NotFound',
           path: '/things/{id}',
           method: 'get',
-        },
-        {
+        }),
+        expect.objectContaining({
           operationId: 'getThings-getThing',
           status: '500',
           componentName: 'InternalError',
           path: '/things/{id}',
           method: 'get',
-        },
+        }),
       ]),
     );
   });

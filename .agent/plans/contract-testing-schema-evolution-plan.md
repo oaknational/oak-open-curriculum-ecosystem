@@ -170,8 +170,9 @@ Validate the Cardinal Rule through automated contract testing: prove that when t
     commit; generated paths (`src/types/generated/**`) may change while
     hand-authored code must remain untouched (fixtures excluded via allowlist)
   - Stage 3 – Runtime smoke assertions: execute MCP server smoke tests to
-    confirm tool catalogue reflects schema-driven updates (leverages existing
-    `scripts/smoke-dev.ts --require-live` semantics)
+    confirm tool catalogue reflects schema-driven updates (leverages
+    `smoke-tests/smoke-suite.ts` live-mode semantics invoked via
+    `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`)
   - Stage 4 – Aggregation: merge findings into a single JSON report with
     severity labels and remediation tips referencing relevant ADRs/test docs
 - **Reporting**:

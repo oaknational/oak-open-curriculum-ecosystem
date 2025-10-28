@@ -9,7 +9,11 @@ import { createDarkTheme } from '../../ui/themes/dark.js';
 import { resolveUiColor } from './ThemeGlobalStyle.js';
 
 function Providers({ children }: { children: React.ReactNode }) {
-  return <AppProviders initialMode="light">{children}</AppProviders>;
+  return (
+    <AppProviders initialMode="light" initialFixtureMode="live">
+      {children}
+    </AppProviders>
+  );
 }
 
 function flattenCssRules(sheet: CSSStyleSheet): string[] {
@@ -44,7 +48,9 @@ describe('Bridge theming (ADR-045)', () => {
     );
     const styleEl = document.getElementById('app-theme-vars');
     expect(styleEl).toBeTruthy();
-    expect(styleEl?.textContent || '').toMatch(/--app-gap-section/);
+    const text = styleEl?.textContent || '';
+    expect(text).toMatch(/--app-gap-section/);
+    expect(text).toMatch(/--app-gap-stack/);
   });
 
   it('exposes theme.app tokens to styled-components consumers', () => {

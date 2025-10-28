@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import type { OperationObject } from 'openapi-typescript';
+import type { OperationObject } from 'openapi3-ts/oas31';
 import { generateToolFile, type ParamMetadata } from './generate-tool-file.js';
 
 function op(): OperationObject {
-  return { responses: {} };
+  return { responses: {} } as OperationObject;
 }
 
 describe('generateToolFile header shapes and invoke wrapper', () => {
@@ -26,11 +26,16 @@ describe('generateToolFile header shapes and invoke wrapper', () => {
       queryMeta,
     );
 
-    expect(code).toContain('interface PathParamsShape');
-    expect(code).toContain('lesson: string;');
-    expect(code).toContain('path: PathParamsShape;');
-    expect(code).not.toContain('interface QueryParamsShape');
-    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
+    expect(code).toContain("import { z } from 'zod';");
+    expect(code).toContain('export interface ToolPathParams');
+    expect(code).toContain('readonly lesson: string;');
+    expect(code).toContain('export interface ToolParams');
+    expect(code).toContain('readonly path: ToolPathParams;');
+    expect(code).not.toContain('ToolQueryParams');
+    expect(code).toContain('export const toolInputJsonSchema');
+    expect(code).toContain('export const toolZodSchema');
+    expect(code).toContain('export const describeToolArgs = () =>');
+    expect(code).toContain('invoke: async (client: OakApiPathBasedClient, args: ToolArgs) => {');
   });
 
   it('emits required query only for search lessons tool with q and includes literal unions', () => {
@@ -58,11 +63,14 @@ describe('generateToolFile header shapes and invoke wrapper', () => {
       queryMeta,
     );
 
-    expect(code).toContain('interface QueryParamsShape');
-    expect(code).toContain('q: string;');
-    expect(code).toContain("keyStage?: 'ks1' | 'ks2'");
-    expect(code).toContain('query: QueryParamsShape;');
-    expect(code).not.toContain('PathParamsShape');
-    expect(code).toContain('const invoke = async (client: OakApiPathBasedClient');
+    expect(code).toContain('export interface ToolQueryParams');
+    expect(code).toContain('readonly q: string;');
+    expect(code).toContain("readonly keyStage?: 'ks1' | 'ks2';");
+    expect(code).toContain('export interface ToolParams');
+    expect(code).toContain('readonly query: ToolQueryParams;');
+    expect(code).not.toContain('ToolPathParams');
+    expect(code).toContain('export const toolInputJsonSchema');
+    expect(code).toContain('export const toolZodSchema');
+    expect(code).toContain('export const describeToolArgs = () =>');
   });
 });

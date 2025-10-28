@@ -1,8 +1,3 @@
-/**
- * Operation code generators
- * Generates TypeScript code strings for path operations
- */
-
 import type { ExtractedOperation } from './operation-extraction.js';
 
 /**
@@ -26,7 +21,7 @@ export type PathOperation = (typeof PATH_OPERATIONS)[number];
  * Generate TypeScript code for OPERATIONS_BY_ID map
  */
 export function generateOperationsByIdConstant(operations: ExtractedOperation[]): string {
-  const operationsWithId = operations.filter((op) => op.operationId);
+  const operationsWithId = operations.filter((operation) => operation.operationId);
 
   if (operationsWithId.length === 0) {
     return `
@@ -41,9 +36,9 @@ export type OperationId = never;
   }
 
   const entries = operationsWithId
-    .map((op) => {
-      const originalIndex = operations.indexOf(op);
-      return `  "${op.operationId ?? ''}": PATH_OPERATIONS[${String(originalIndex)}]`;
+    .map((operation) => {
+      const originalIndex = operations.indexOf(operation);
+      return `  "${operation.operationId ?? ''}": PATH_OPERATIONS[${String(originalIndex)}]`;
     })
     .join(',\n');
 

@@ -13,15 +13,10 @@ export function emitHeader(
  * Method: ${method.toUpperCase()}
  */
 
-import type { OakApiPathBasedClient } from "../../../../../client/index.js";
-import { getOwnValue } from "../../../../helpers.js";
-import { getResponseSchemaForEndpoint } from "../types.js";
-import type { OakMcpToolBase, ToolDescriptor } from "../types.js";
-
-const operationId= '${operationId}' as const;
-const name= '${toolName}' as const;
-const path= '${path}' as const;
-const method= '${method.toUpperCase()}' as const;
+const operationId = '${operationId}' as const;
+const name = '${toolName}' as const;
+const path = '${path}' as const;
+const method = '${method.toUpperCase()}' as const;
 
 `);
   return lines.join('\n');

@@ -18,6 +18,7 @@ coverage/
 *.lcov
 playwright-report/
 test-results/
+test-artifacts/
 
 # Local env files
 .env*

@@ -1,5 +1,19 @@
-import type { KeyStage, SearchSubjectSlug, SearchUnitSummary } from '../../types/oak';
-import type { SubjectSequenceEntry } from '../../adapters/oak-adapter-sdk';
+import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
+import {
+  expectUnitSummaryString,
+  extractUnitLessons,
+  readUnitSummaryValue,
+} from './document-transform-helpers';
+import {
+  ensureSequenceRecord,
+  findKeyStageEntry,
+  isUnknownObject,
+  normaliseSequenceYears,
+  requireSequenceString,
+  safeArray,
+  safeString,
+  type UnknownObject,
+} from './sequence-facet-utils';
 
 export interface SequenceFacetSource {
   sequenceSlug: string;
@@ -25,9 +39,9 @@ export interface SequenceFacetDocument {
 interface CreateSequenceFacetDocumentsParams {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
-  sequences: readonly SubjectSequenceEntry[];
+  sequences: readonly unknown[];
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
+  unitSummaries: ReadonlyMap<string, unknown>;
 }
 
 export function createSequenceFacetDocuments({
@@ -47,9 +61,9 @@ export function createSequenceFacetDocuments({
 interface CreateSequenceFacetDocumentParams {
   subject: SearchSubjectSlug;
   keyStage: KeyStage;
-  sequence: SubjectSequenceEntry;
+  sequence: unknown;
   sequenceSources: ReadonlyMap<string, SequenceFacetSource>;
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>;
+  unitSummaries: ReadonlyMap<string, unknown>;
 }
 
 function createSequenceFacetDocument({
@@ -59,12 +73,14 @@ function createSequenceFacetDocument({
   sequenceSources,
   unitSummaries,
 }: CreateSequenceFacetDocumentParams): SequenceFacetDocument | null {
-  const keyStageEntry = findKeyStageEntry(sequence, keyStage);
+  const sequenceRecord = ensureSequenceRecord(sequence, 'sequence entry');
+  const sequenceSlug = requireSequenceString(sequenceRecord, 'sequenceSlug', 'sequence slug');
+  const keyStageEntry = findKeyStageEntry(sequenceRecord, keyStage);
   if (!keyStageEntry) {
     return null;
   }
 
-  const source = sequenceSources.get(sequence.sequenceSlug);
+  const source = sequenceSources.get(sequenceSlug);
   if (!source) {
     return null;
   }
@@ -76,40 +92,37 @@ function createSequenceFacetDocument({
 
   return {
     subject_slug: subject,
-    sequence_slug: sequence.sequenceSlug,
+    sequence_slug: sequenceSlug,
     key_stage: keyStage,
     key_stage_title: keyStageEntry.keyStageTitle,
-    phase_slug: sequence.phaseSlug,
-    phase_title: sequence.phaseTitle,
-    years: normaliseSequenceYears(sequence),
+    phase_slug: requireSequenceString(
+      sequenceRecord,
+      'phaseSlug',
+      `phase slug for ${sequenceSlug}`,
+    ),
+    phase_title: requireSequenceString(
+      sequenceRecord,
+      'phaseTitle',
+      `phase title for ${sequenceSlug}`,
+    ),
+    years: normaliseSequenceYears(sequenceRecord),
     unit_slugs: unitDetails.slugs,
     unit_titles: unitDetails.titles,
     unit_count: unitDetails.slugs.length,
     lesson_count: unitDetails.lessonCount,
-    has_ks4_options: Boolean(sequence.ks4Options),
-    sequence_canonical_url: sequence.canonicalUrl,
+    has_ks4_options: Boolean(sequenceRecord.ks4Options),
+    sequence_canonical_url: safeString(sequenceRecord.canonicalUrl),
   };
 }
 
-function findKeyStageEntry(sequence: SubjectSequenceEntry, keyStage: KeyStage) {
-  const entries = Array.isArray(sequence.keyStages) ? sequence.keyStages : [];
-  return entries.find((entry) => entry.keyStageSlug === keyStage);
-}
-
-function normaliseSequenceYears(sequence: SubjectSequenceEntry): string[] {
-  if (!Array.isArray(sequence.years)) {
-    return [];
-  }
-  const unique = new Set<string>();
-  for (const year of sequence.years) {
-    unique.add(String(year));
-  }
-  return Array.from(unique).sort();
+export function resolveSequenceSlug(sequence: unknown): string {
+  const record = ensureSequenceRecord(sequence, 'sequence entry');
+  return requireSequenceString(record, 'sequenceSlug', 'sequence slug');
 }
 
 function collectUnitDetails(
   unitSlugs: readonly string[],
-  unitSummaries: ReadonlyMap<string, SearchUnitSummary>,
+  unitSummaries: ReadonlyMap<string, unknown>,
 ): { slugs: string[]; titles: string[]; lessonCount: number } | null {
   const uniqueSlugs = Array.from(new Set(unitSlugs));
   const collectedSlugs: string[] = [];
@@ -122,8 +135,9 @@ function collectUnitDetails(
       continue;
     }
     collectedSlugs.push(slug);
-    titles.push(summary.unitTitle);
-    const lessons = Array.isArray(summary.unitLessons) ? summary.unitLessons : [];
+    const unitTitle = expectUnitSummaryString(summary, 'unitTitle', `unit title for ${slug}`);
+    titles.push(unitTitle);
+    const lessons = extractUnitLessons(readUnitSummaryValue(summary, 'unitLessons'));
     lessonCount += lessons.length;
   }
 
@@ -139,12 +153,7 @@ export function extractSequenceFacetSource(
   payload: unknown,
 ): SequenceFacetSource {
   const unitSlugs = new Set<string>();
-  const queue: unknown[] = [];
-  if (Array.isArray(payload)) {
-    for (const entry of payload) {
-      queue.push(entry);
-    }
-  }
+  const queue: unknown[] = [...safeArray(payload)];
 
   while (queue.length > 0) {
     const current = queue.shift();
@@ -152,14 +161,14 @@ export function extractSequenceFacetSource(
       continue;
     }
 
-    const maybeUnits = current.units;
-    if (Array.isArray(maybeUnits)) {
-      queue.push(...maybeUnits);
+    const units = getNestedArray(current, 'units');
+    if (units.length > 0) {
+      queue.push(...units);
     }
 
-    const maybeTiers = current.tiers;
-    if (Array.isArray(maybeTiers)) {
-      queue.push(...maybeTiers);
+    const tiers = getNestedArray(current, 'tiers');
+    if (tiers.length > 0) {
+      queue.push(...tiers);
     }
 
     const slug = getString(current, 'unitSlug');
@@ -174,15 +183,11 @@ export function extractSequenceFacetSource(
   };
 }
 
-interface UnknownObject {
-  [key: string]: unknown;
+function getNestedArray(value: UnknownObject, key: string): readonly unknown[] {
+  const candidate = value[key];
+  return Array.isArray(candidate) ? candidate : [];
 }
 
-function isUnknownObject(value: unknown): value is UnknownObject {
-  return typeof value === 'object' && value !== null;
-}
-
-function getString(record: UnknownObject, key: string): string | undefined {
-  const value = record[key];
-  return typeof value === 'string' && value.length > 0 ? value : undefined;
+function getString(value: UnknownObject, key: string): string | undefined {
+  return safeString(value[key]);
 }

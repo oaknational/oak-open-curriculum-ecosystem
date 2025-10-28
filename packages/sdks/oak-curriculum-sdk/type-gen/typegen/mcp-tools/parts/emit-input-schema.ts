@@ -1,18 +1,4 @@
-import type { PrimitiveType } from './param-utils.js';
-import { typeSafeKeys } from '../../../../src/types/helpers.js';
-
-/**
- * Parameter metadata describing a tool parameter extracted from OpenAPI.
- * This shape is intentionally minimal and compile-time friendly.
- */
-export interface ParamMetadata {
-  readonly typePrimitive: PrimitiveType;
-  readonly valueConstraint: boolean;
-  readonly required: boolean;
-  readonly allowedValues?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
+import type { ParamMetadata, ParamMetadataMap } from './param-metadata.js';
 
 export interface JsonSchemaPropertyString {
   readonly type: 'string';
@@ -46,7 +32,8 @@ export type JsonSchemaProperty =
   | JsonSchemaPropertyString
   | JsonSchemaPropertyNumber
   | JsonSchemaPropertyBoolean
-  | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>;
+  | JsonSchemaPropertyArray<'string' | 'number' | 'boolean'>
+  | JsonSchemaObject;
 
 export interface JsonSchemaObject {
   readonly type: 'object';
@@ -129,37 +116,129 @@ function jsonSchemaFromPrimitive(meta: ParamMetadata): JsonSchemaProperty {
  * Pure, compile-time friendly, no type assertions at call sites.
  */
 export function buildInputSchemaObject(
-  pathParams: Readonly<Record<string, ParamMetadata>>,
-  queryParams: Readonly<Record<string, ParamMetadata>>,
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
 ): JsonSchemaObject {
-  const properties: Record<string, JsonSchemaProperty> = {};
-  const required: string[] = [];
-
-  // Path params
-  for (const key of typeSafeKeys(pathParams)) {
-    const name = key;
-    const meta = pathParams[name];
-    properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) {
-      required.push(name);
+  const buildSection = (
+    entries: readonly (readonly [string, ParamMetadata])[],
+  ): {
+    readonly properties: Record<string, JsonSchemaProperty>;
+    readonly required: readonly string[];
+  } => {
+    const properties: Record<string, JsonSchemaProperty> = {};
+    const required: string[] = [];
+    for (const [name, meta] of entries) {
+      properties[name] = jsonSchemaFromPrimitive(meta);
+      if (meta.required) {
+        required.push(name);
+      }
     }
-  }
-
-  // Query params
-  for (const key of typeSafeKeys(queryParams)) {
-    const name = key;
-    const meta = queryParams[name];
-    properties[name] = jsonSchemaFromPrimitive(meta);
-    if (meta.required) {
-      required.push(name);
-    }
-  }
-
-  const base: JsonSchemaObject = {
-    type: 'object',
-    properties,
-    additionalProperties: false,
+    return { properties, required };
   };
 
-  return required.length > 0 ? { ...base, required } : base;
+  const pathEntries = Object.entries(pathParams);
+  const queryEntries = Object.entries(queryParams);
+  const pathSection = buildSection(pathEntries);
+  const querySection = buildSection(queryEntries);
+
+  const paramsProperties: Record<string, JsonSchemaProperty> = {};
+  const paramsRequired: string[] = [];
+
+  if (Object.keys(pathSection.properties).length > 0) {
+    paramsProperties.path = {
+      type: 'object',
+      properties: pathSection.properties,
+      additionalProperties: false,
+      ...(pathSection.required.length > 0 ? { required: pathSection.required } : {}),
+    };
+    paramsRequired.push('path');
+  }
+
+  if (Object.keys(querySection.properties).length > 0) {
+    paramsProperties.query = {
+      type: 'object',
+      properties: querySection.properties,
+      additionalProperties: false,
+      ...(querySection.required.length > 0 ? { required: querySection.required } : {}),
+    };
+    if (querySection.required.length > 0) {
+      paramsRequired.push('query');
+    }
+  }
+
+  const paramsSchema: JsonSchemaObject = {
+    type: 'object',
+    properties: paramsProperties,
+    additionalProperties: false,
+    ...(paramsRequired.length > 0 ? { required: paramsRequired } : {}),
+  };
+
+  return {
+    type: 'object',
+    properties: { params: paramsSchema },
+    required: ['params'],
+    additionalProperties: false,
+  };
+}
+
+function buildZodFields(entries: [string, ParamMetadata][]): string[] {
+  return entries.map(([name, meta]) => {
+    const base = buildZodType(meta);
+    return `${name}: ${base}${meta.required ? '' : '.optional()'}`;
+  });
+}
+
+export function buildZodObject(
+  pathParams: ParamMetadataMap,
+  queryParams: ParamMetadataMap,
+): string {
+  const pathEntries = Object.entries(pathParams);
+  const queryEntries = Object.entries(queryParams);
+  const hasPath = pathEntries.length > 0;
+  const hasQuery = queryEntries.length > 0;
+
+  if (!hasPath && !hasQuery) {
+    return 'z.object({ params: z.object({}) })';
+  }
+
+  const paramsShape: string[] = [];
+
+  if (hasPath) {
+    const fields = buildZodFields(pathEntries).join(', ');
+    paramsShape.push(`path: z.object({ ${fields} })`);
+  }
+
+  if (hasQuery) {
+    const fields = buildZodFields(queryEntries).join(', ');
+    const maybeOptional = queryEntries.some(([, meta]) => meta.required) ? '' : '.optional()';
+    paramsShape.push(`query: z.object({ ${fields} })${maybeOptional}`);
+  }
+
+  const paramsSchema =
+    paramsShape.length > 0 ? `z.object({ ${paramsShape.join(', ')} })` : 'z.object({})';
+
+  return `z.object({ params: ${paramsSchema} })`;
+}
+
+function buildZodType(meta: ParamMetadata): string {
+  if (meta.allowedValues && meta.allowedValues.length > 0) {
+    const literals = meta.allowedValues.map((value) => `z.literal(${JSON.stringify(value)})`);
+    return `z.union([${literals.join(', ')}])`;
+  }
+  switch (meta.typePrimitive) {
+    case 'string':
+      return 'z.string()';
+    case 'number':
+      return 'z.number()';
+    case 'boolean':
+      return 'z.boolean()';
+    case 'string[]':
+      return 'z.array(z.string())';
+    case 'number[]':
+      return 'z.array(z.number())';
+    case 'boolean[]':
+      return 'z.array(z.boolean())';
+    default:
+      return 'z.unknown()';
+  }
 }

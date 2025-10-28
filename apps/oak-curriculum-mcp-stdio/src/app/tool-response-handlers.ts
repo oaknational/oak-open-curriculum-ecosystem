@@ -3,8 +3,10 @@
  */
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import type { ToolResult, ToolName } from '@oaknational/oak-curriculum-sdk';
 
 import type { Logger } from './wiring.js';
+import type { ToolExecutionSuccessEnvelope } from './validation.js';
 
 type ToolResponse = CallToolResult;
 
@@ -19,8 +21,12 @@ export interface ToolHandlerContext {
 
 export interface ToolResponseHandlers {
   handleExecutionError(params: unknown, error: unknown): ToolResponse;
-  handleValidationError(params: unknown, output: unknown, message: string): ToolResponse;
-  handleSuccess(data: unknown): ToolResponse;
+  handleValidationError(
+    params: unknown,
+    output: ToolExecutionSuccessEnvelope,
+    message: string,
+  ): ToolResponse;
+  handleSuccess<TName extends ToolName>(result: ToolResult<TName>): ToolResponse;
 }
 
 type LoggerForToolHandlers = Pick<Logger, 'info' | 'error'>;
@@ -63,8 +69,11 @@ function createErrorResponse(
   return { content: [{ type: 'text', text: serialised }], isError: true };
 }
 
-function createSuccessResponse(logger: LoggerForToolHandlers, data: unknown): ToolResponse {
-  const serialised = serialisePayload(data);
+function createSuccessResponse(
+  logger: LoggerForToolHandlers,
+  result: ToolExecutionSuccessEnvelope,
+): ToolResponse {
+  const serialised = serialisePayload({ status: result.status, data: result.data });
   logger.info(`Tool output validated successfully: ${serialised}`);
   return { content: [{ type: 'text', text: serialised }] };
 }
@@ -89,7 +98,11 @@ export function createToolResponseHandlers(
         toolExecutionError: { message },
       });
     },
-    handleValidationError(params: unknown, output: unknown, message: string): ToolResponse {
+    handleValidationError(
+      params: unknown,
+      output: ToolExecutionSuccessEnvelope,
+      message: string,
+    ): ToolResponse {
       return createErrorResponse(logger, 'Tool output validation failed', {
         ...sharedMetadata,
         toolInput: params,
@@ -99,8 +112,8 @@ export function createToolResponseHandlers(
         outputValidationFailed: { message },
       });
     },
-    handleSuccess(data: unknown): ToolResponse {
-      return createSuccessResponse(logger, data);
+    handleSuccess(result: ToolExecutionSuccessEnvelope): ToolResponse {
+      return createSuccessResponse(logger, result);
     },
   };
 }

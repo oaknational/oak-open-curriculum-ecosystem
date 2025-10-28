@@ -16,6 +16,46 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./client": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./client/*": {
+      "types": "./dist/client/*.d.ts",
+      "default": "./dist/client/*.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "default": "./dist/config/index.js"
+    },
+    "./config/*": {
+      "types": "./dist/config/*.d.ts",
+      "default": "./dist/config/*.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/types/index.js"
+    },
+    "./types/*": {
+      "types": "./dist/types/*.d.ts",
+      "default": "./dist/types/*.js"
+    },
+    "./mcp": {
+      "types": "./dist/mcp/execute-tool-call.d.ts",
+      "default": "./dist/mcp/execute-tool-call.js"
+    },
+    "./mcp/*": {
+      "types": "./dist/mcp/*.d.ts",
+      "default": "./dist/mcp/*.js"
+    },
+    "./validation": {
+      "types": "./dist/validation/index.d.ts",
+      "default": "./dist/validation/index.js"
+    },
+    "./validation/*": {
+      "types": "./dist/validation/*.d.ts",
+      "default": "./dist/validation/*.js"
     }
   },
   "scripts": {
@@ -46,20 +86,19 @@
   },
   "dependencies": {
     "@oaknational/mcp-logger": "workspace:*",
-    "openapi-fetch": "^0.14.0",
-    "pnpm": "^10.17.1",
+    "openapi-fetch": "^0.15.0",
     "zod": "^3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^15.5.3",
     "@types/node": "^22.10.5",
     "dotenv": "^17.2.1",
-    "openapi-typescript": "^7.9.1",
+    "openapi-typescript": "^7.10.1",
     "openapi-zod-client": "^1.18.3",
     "openapi3-ts": "^4.5.0",
+    "tsx": "^4.20.5",
     "typedoc": "^0.28.12",
     "typedoc-plugin-markdown": "^4.8.1",
-    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },

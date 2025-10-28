@@ -25,14 +25,12 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint  .",
-    "quality": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test"
+    "lint": "eslint  ."
   },
   "dependencies": {
     "dotenv": "^17.2.2"
   },
   "devDependencies": {
-    "pnpm": "^10.17.1",
     "typescript": "^5.9.2"
   },
   "engines": {

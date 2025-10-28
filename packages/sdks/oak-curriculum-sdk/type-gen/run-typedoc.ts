@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 // Allowed warning symbol fragments we plan to address long-term.
 // See: .agent/plans/generated-document-enhancements-plan.md
 const ALLOWLIST = [
-  'allToolNames',
+  'ToolName',
   'AssetTypes',
   'KeyStages',
   'Lessons',

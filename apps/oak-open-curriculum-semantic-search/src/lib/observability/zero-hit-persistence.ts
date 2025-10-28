@@ -20,6 +20,7 @@ import {
   parseSearchResponse,
   type SearchResponse,
 } from './zero-hit-persistence-search';
+import type { SearchScope } from '../../types/oak';
 
 const JSON_REQUEST_OPTIONS: TransportRequestOptions = {
   headers: { 'content-type': 'application/json' },
@@ -36,14 +37,11 @@ export function __resetZeroHitPersistenceCachesForTests(): void {
   ensuredPolicies.clear();
 }
 
-/** Alias describing the event persisted to Elasticsearch. */
-export type PersistedZeroHitEvent = ZeroHitEvent;
-
 /** Telemetry snapshot consumed by the dashboard. */
 export interface ZeroHitTelemetry {
   summary: {
     total: number;
-    byScope: Record<'lessons' | 'units' | 'sequences', number>;
+    byScope: Record<SearchScope, number>;
     latestIndexVersion: string | null;
   };
   recent: ZeroHitEvent[];
@@ -55,7 +53,7 @@ export function zeroHitPersistenceEnabled(): boolean {
 }
 
 /** Persist a zero-hit event to the Serverless Elasticsearch index. */
-export async function persistZeroHitEvent(event: PersistedZeroHitEvent): Promise<void> {
+export async function persistZeroHitEvent(event: ZeroHitEvent): Promise<void> {
   const envVars = optionalEnv();
   if (!envVars?.ZERO_HIT_PERSISTENCE_ENABLED) {
     return;
@@ -179,7 +177,11 @@ function createEmptyTelemetry(): ZeroHitTelemetry {
   return {
     summary: {
       total: 0,
-      byScope: { lessons: 0, units: 0, sequences: 0 },
+      byScope: {
+        lessons: 0,
+        units: 0,
+        sequences: 0,
+      },
       latestIndexVersion: null,
     },
     recent: [],

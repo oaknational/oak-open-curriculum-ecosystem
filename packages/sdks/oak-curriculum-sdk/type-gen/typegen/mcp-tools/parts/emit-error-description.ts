@@ -1,14 +1,5 @@
-import type { PrimitiveType } from './param-utils.js';
 import { buildInputSchemaObject, type JsonSchemaObject } from './emit-input-schema.js';
-
-export interface ParamMetadata {
-  readonly typePrimitive: PrimitiveType;
-  readonly valueConstraint: boolean;
-  readonly required: boolean;
-  readonly allowedValues?: readonly unknown[];
-  readonly description?: string;
-  readonly default?: unknown;
-}
+import type { ParamMetadataMap } from './param-metadata.js';
 
 function buildRequiredList(schema: JsonSchemaObject): string {
   if (!schema.required || schema.required.length === 0) {
@@ -18,17 +9,12 @@ function buildRequiredList(schema: JsonSchemaObject): string {
 }
 
 function escapeForSingleQuotedJsString(text: string): string {
-  // Escape backslashes and single quotes, preserve newlines as \n
   return text.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n');
 }
 
-/**
- * Emit a compile-time function literal for parameter validation errors.
- * The returned string is a JS/TS snippet defining `getValidRequestParamsDescription`.
- */
 export function emitErrorDescription(
-  pathParamMetadata: Readonly<Record<string, ParamMetadata>>,
-  queryParamMetadata: Readonly<Record<string, ParamMetadata>>,
+  pathParamMetadata: ParamMetadataMap,
+  queryParamMetadata: ParamMetadataMap,
 ): string {
   const schema = buildInputSchemaObject(pathParamMetadata, queryParamMetadata);
 
@@ -44,8 +30,7 @@ export function emitErrorDescription(
   const escaped = escapeForSingleQuotedJsString(content);
 
   return [
-    'const getValidRequestParamsDescription= (): string => {',
-    `  return '${escaped}';`,
-    '};',
+    "const toolArgsDescription = '" + escaped + "';",
+    'export const describeToolArgs = () => toolArgsDescription;',
   ].join('\n');
 }

@@ -7,7 +7,7 @@
  * of data we BUILD by processing the OpenAPI schema.
  */
 
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 
 /**
  * A single path entry with its parameters
@@ -57,5 +57,5 @@ export type FileMap = Record<string, string>;
 export interface ExtractionContext {
   pathParameters: ParameterValueSets;
   validCombinations: ValidCombinations;
-  root: OpenAPI3;
+  root: OpenAPIObject;
 }

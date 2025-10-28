@@ -56,7 +56,7 @@ function getBearerToken(header: string | undefined): string | undefined {
   return header.startsWith('Bearer ') ? header.slice('Bearer '.length) : undefined;
 }
 
-function allowsNoAuth(path: string): boolean {
+function allowsNoAuth(): boolean {
   // ⚠️ DANGEROUS: This bypasses ALL authentication checks, including in production
   // Only use for testing/debugging - never in production with real data
   if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
@@ -64,12 +64,6 @@ function allowsNoAuth(path: string): boolean {
   }
   // Local dev only bypass
   if (isLocalDev && process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true') {
-    return true;
-  }
-  if (
-    path.startsWith('/openai_connector') &&
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH_OPENAI === 'true'
-  ) {
     return true;
   }
   return false;
@@ -104,7 +98,7 @@ interface AuthContext {
 export const bearerAuth: RequestHandler = async (req, res, next) => {
   const authorizationHeader = getAuthHeader(req);
   const token = getBearerToken(authorizationHeader);
-  const allowBypass = allowsNoAuth(req.path);
+  const allowBypass = allowsNoAuth();
 
   logger.debug('bearerAuth evaluating request', {
     method: req.method,

@@ -5,9 +5,7 @@
  * Generates TypeScript types from OpenAPI schema
  */
 
-import fs from 'node:fs';
-import path from 'node:path';
-import type { OpenAPI3 } from 'openapi-typescript';
+import type { OpenAPIObject } from 'openapi3-ts/oas31';
 import openapiTS, { astToString } from 'openapi-typescript';
 import {
   generateJsonContent,
@@ -22,18 +20,13 @@ import {
   extractPathOperations,
   generateOperationConstants,
   generateUrlHelpers,
-  generateOpenAiConnectorContent,
 } from './typegen/index.js';
 import { generatePathUtilsFile } from './typegen/paths/generate-path-utils.js';
 import { buildResponseMapData } from './typegen/response-map/build-response-map.js';
 import { emitResponseValidators } from './typegen/response-map/emit-response-validators.js';
+import { emitRequestValidatorMap } from './typegen/validation/emit-request-validator-map.js';
 import { runAllCrossValidations } from './typegen/validation/cross-validate.js';
 import type { FileMap } from './typegen/extraction-types.js';
-import {
-  generateCompleteMcpTools,
-  type GeneratedMcpToolFiles,
-} from './typegen/mcp-tools/mcp-tool-generator.js';
-import { typeSafeEntries } from '../src/types/helpers.js';
 import { generateSearchFacetTypeModules } from './typegen/search/generate-search-facet-types.js';
 import { generateSearchFacetZodModules } from './typegen/search/generate-search-facet-zod.js';
 import { generateSearchRequestModules } from './typegen/search/generate-search-requests.js';
@@ -43,18 +36,30 @@ import { generateSearchSuggestionModules } from './typegen/search/generate-searc
 import { generateSearchScopeModules } from './typegen/search/generate-search-scopes.js';
 import { generateSearchFixtureModules } from './typegen/search/generate-search-fixtures.js';
 import { generateSearchIndexModule } from './typegen/search/generate-search-index.js';
+import { generateSearchIndexDocumentModules } from './typegen/search/generate-search-index-docs.js';
+import { generateZeroHitFixtureModules } from './typegen/observability/generate-zero-hit-fixtures.js';
+import { generateAdminStreamFixtureModules } from './typegen/admin/generate-admin-fixtures.js';
+import { generateQueryParserModules } from './typegen/query-parser/generate-query-parser.js';
+import { getZodiosEndpointDefinitionList } from 'openapi-zod-client';
+import { ensurePathsOnSchema } from './typegen-core-helpers.js';
+import {
+  calculateSdkSchemaPath,
+  outputGeneratedFiles,
+  writeSdkSchemaFile,
+} from './typegen-core-file-operations.js';
 
 /**
  * Create a map of filenames to their content
  * Pure function - no side effects
  */
 export function createFileMap(
-  baseSchema: OpenAPI3,
-  sdkSchema: OpenAPI3,
+  baseSchema: OpenAPIObject,
+  sdkSchema: OpenAPIObject,
   tsTypesContent: string,
   pathParameterContent: string,
   pathUtilsContent: string,
   responseValidatorsContent: string,
+  requestValidatorContent: string,
 ): FileMap {
   const baseFiles: FileMap = {
     'api-schema-original.json': generateJsonContent(baseSchema),
@@ -64,9 +69,8 @@ export function createFileMap(
     'path-parameters.ts': pathParameterContent,
     'path-utils.ts': pathUtilsContent,
     'response-map.ts': responseValidatorsContent,
+    'validation/request-parameter-map.ts': requestValidatorContent,
     'routing/url-helpers.ts': generateUrlHelpers(),
-    // OpenAI connector helpers (code-generated module)
-    '../openai-connector/index.ts': generateOpenAiConnectorContent(),
   };
 
   const searchFacetTypes = generateSearchFacetTypeModules();
@@ -78,6 +82,10 @@ export function createFileMap(
   const searchScopes = generateSearchScopeModules(sdkSchema);
   const searchFixtures = generateSearchFixtureModules(sdkSchema);
   const searchIndex = generateSearchIndexModule(sdkSchema);
+  const searchIndexDocuments = generateSearchIndexDocumentModules(sdkSchema);
+  const queryParserModules = generateQueryParserModules();
+  const zeroHitFixtures = generateZeroHitFixtureModules(sdkSchema);
+  const adminStreamFixtures = generateAdminStreamFixtureModules(sdkSchema);
 
   return {
     ...baseFiles,
@@ -90,51 +98,18 @@ export function createFileMap(
     ...searchScopes,
     ...searchFixtures,
     ...searchIndex,
+    ...searchIndexDocuments,
+    ...queryParserModules,
+    ...zeroHitFixtures,
+    ...adminStreamFixtures,
   };
 }
 
 /**
- * Write files to disk
- * Side effect function - separated from pure logic
- */
-function writeFiles(outDirectory: string, fileMap: FileMap): void {
-  for (const [filename, content] of typeSafeEntries(fileMap)) {
-    const target = path.resolve(outDirectory, filename);
-    const dir = path.dirname(target);
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(target, content);
-  }
-}
-
-/**
- * Write MCP tools directory structure to disk
- */
-function writeMcpToolsDirectory(outDirectory: string, mcpTools: GeneratedMcpToolFiles): void {
-  const mcpToolsDir = path.resolve(outDirectory, 'mcp-tools');
-  const toolsDir = path.resolve(mcpToolsDir, 'tools');
-
-  // Create directories
-  fs.mkdirSync(mcpToolsDir, { recursive: true });
-  fs.mkdirSync(toolsDir, { recursive: true });
-
-  // Write main files
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'index.ts'), mcpTools['index.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'types.ts'), mcpTools['types.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'lib.ts'), mcpTools['lib.ts']);
-  fs.writeFileSync(path.resolve(mcpToolsDir, 'synonyms.ts'), mcpTools['synonyms.ts']);
-
-  // Write tool files
-  for (const [filename, content] of typeSafeEntries(mcpTools.tools)) {
-    fs.writeFileSync(path.resolve(toolsDir, filename), content);
-  }
-}
-
-/**
  * Generate path parameters file content
- * Pure function - no side effects
  */
 export function generatePathParametersContent(
-  schema: OpenAPI3,
+  schema: OpenAPIObject,
   parameters: ReturnType<typeof extractPathParameters>['parameters'],
   validCombinations: ReturnType<typeof extractPathParameters>['validCombinations'],
 ): string {
@@ -162,15 +137,14 @@ function postProcessTypesSource(source: string): string {
 }
 
 export async function generateSchemaArtifacts(
-  baseSchema: OpenAPI3,
-  sdkSchema: OpenAPI3,
+  baseSchema: OpenAPIObject,
+  sdkSchema: OpenAPIObject,
   outDirectory: string,
-  options: { generateMcpTools?: boolean } = {},
 ): Promise<void> {
-  fs.mkdirSync(outDirectory, { recursive: true });
-
   // Generate TypeScript types from original schema
-  const ast = await openapiTS(sdkSchema);
+  const sdkSchemaPath = calculateSdkSchemaPath(outDirectory);
+  writeSdkSchemaFile(outDirectory, sdkSchema, sdkSchemaPath);
+  const ast = await openapiTS(new URL(`file://${sdkSchemaPath}`));
   const tsTypesContent = postProcessTypesSource(astToString(ast));
 
   // Extract path parameters and valid combinations from original schema
@@ -187,6 +161,14 @@ export async function generateSchemaArtifacts(
   // Cross-validation: fail fast on drift/mismatch
   runAllCrossValidations(sdkSchema, responseMapEntries);
   const responseValidatorsContent = emitResponseValidators(responseMapEntries);
+  const sdkSchemaWithPaths = ensurePathsOnSchema(sdkSchema);
+  const endpointContext = getZodiosEndpointDefinitionList(sdkSchemaWithPaths, {
+    shouldExportAllSchemas: true,
+    shouldExportAllTypes: true,
+    groupStrategy: 'none',
+    withAlias: false,
+  });
+  const requestValidatorContent = emitRequestValidatorMap(endpointContext.endpoints);
 
   const fileMap = createFileMap(
     baseSchema,
@@ -195,14 +177,8 @@ export async function generateSchemaArtifacts(
     pathParameterContent,
     pathUtilsContent,
     responseValidatorsContent,
+    requestValidatorContent,
   );
 
-  // Write all files (side effect)
-  writeFiles(outDirectory, fileMap);
-
-  // Generate and write MCP tools if requested
-  if (options.generateMcpTools) {
-    const mcpTools = generateCompleteMcpTools(sdkSchema);
-    writeMcpToolsDirectory(outDirectory, mcpTools);
-  }
+  outputGeneratedFiles(outDirectory, fileMap, sdkSchema, sdkSchemaPath);
 }

@@ -3,8 +3,9 @@
 ## Tooling
 
 - Vitest
-- TypeScript
-- Supertest if needed
+- React Testing Library
+- Supertest
+- Playwright
 
 ## Philosophy
 

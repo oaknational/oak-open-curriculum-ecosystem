@@ -11,8 +11,12 @@ import {
   type SearchSuggestionRequest,
   type SearchSuggestionResponse,
 } from '../../../../src/types/oak';
-import { resolveFixtureModeFromRequest, applyFixtureModeCookie } from '../../../lib/fixture-mode';
-import { buildSingleScopeFixture } from '../../../ui/search-fixtures/builders';
+import {
+  resolveFixtureModeFromRequest,
+  applyFixtureModeCookie,
+  type FixtureMode,
+} from '../../../lib/fixture-mode';
+import { buildSingleScopeFixture } from '../../../lib/search-fixtures/builders';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -20,7 +24,7 @@ export const revalidate = 0;
 export async function POST(req: NextRequest): Promise<Response> {
   const parsed = SearchSuggestionRequestSchema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: parsed.error.issues }, { status: 400 });
   }
 
   const trimmedPrefix = parsed.data.prefix.trim();
@@ -29,17 +33,43 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const { mode, persist } = resolveFixtureModeFromRequest(req);
-  const payload =
-    mode === 'fixtures'
-      ? buildFixtureSuggestions(parsed.data)
-      : await fetchSuggestionsFromIndex({ request: parsed.data, prefix: trimmedPrefix });
 
+  if (mode !== 'live') {
+    if (mode === 'fixtures-error') {
+      const response = NextResponse.json(
+        {
+          error: 'FIXTURE_ERROR',
+          message: 'Fixture mode requested an error response for suggestion search.',
+        },
+        { status: 503 },
+      );
+      applyFixtureModeCookie(response, persist);
+      return response;
+    }
+
+    const payload = buildFixtureSuggestions(parsed.data, mode);
+    const response = NextResponse.json(payload);
+    applyFixtureModeCookie(response, persist);
+    return response;
+  }
+
+  const payload = await fetchSuggestionsFromIndex({ request: parsed.data, prefix: trimmedPrefix });
   const response = NextResponse.json(payload);
   applyFixtureModeCookie(response, persist);
   return response;
 }
 
-function buildFixtureSuggestions(request: SearchSuggestionRequest): SearchSuggestionResponse {
+function buildFixtureSuggestions(
+  request: SearchSuggestionRequest,
+  mode: FixtureMode,
+): SearchSuggestionResponse {
+  if (mode === 'fixtures-empty') {
+    return SearchSuggestionResponseSchema.parse({
+      suggestions: [],
+      cache: DEFAULT_SUGGESTION_CACHE,
+    });
+  }
+
   const baseFixture = buildSingleScopeFixture();
   const suggestions = (baseFixture.suggestions ?? []).filter(
     (item) => item.scope === request.scope,

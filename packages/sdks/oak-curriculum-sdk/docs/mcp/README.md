@@ -19,6 +19,15 @@ Each tool name corresponds to an OpenAPI operation id. For example:
 
 From the SDK docs, you can locate the endpoint’s types and then relate them to a tool via the authored mapping above.
 
+### Response handling
+
+- Response descriptors are generated for **every documented status code**. At type‑gen time we emit a frozen map keyed by operation id → status → `{ zod, json }` descriptor.
+- The generated executor imports that map, determines the actual HTTP status returned by `openapi-fetch`, and then:
+  - selects the matching descriptor (`2xx` maps to `.data`, everything else uses `.error`),
+  - fails fast if the status wasn’t documented, pointing to the operation id and the known statuses,
+  - validates the payload against each documented schema and returns the discriminant `{ status, data }` when a match succeeds.
+- Authored runtime code does **not** guess or branch on status codes; it simply forwards to the generated executor and surfaces the resulting success or failure envelope.
+
 ### Why separate?
 
 Keeping MCP internals out of the main API docs preserves a clear, stable public surface. This deep‑dive exists for curious readers who want to understand the executor pattern, parameter guards, and how tools are generated from the schema.

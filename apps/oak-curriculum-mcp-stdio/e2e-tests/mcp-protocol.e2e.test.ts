@@ -29,6 +29,16 @@ function expectSuccessfulResult(result: Awaited<ReturnType<Client['callTool']>>)
   return parsed;
 }
 
+function extractDataArray(payload: unknown): unknown[] {
+  if (Array.isArray((payload as { data?: unknown }).data)) {
+    return (payload as { data: unknown[] }).data;
+  }
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+  throw new Error('Tool response did not contain an array payload');
+}
+
 describe('MCP Protocol E2E', () => {
   let client: Client;
   let transport: StdioClientTransport;
@@ -97,14 +107,12 @@ describe('MCP Protocol E2E', () => {
       const payload = expectSuccessfulResult(
         await client.callTool({
           name: 'get-key-stages',
-          arguments: {},
+          arguments: { params: {} },
         }),
       );
-      const dataArray = Array.isArray((payload as { data?: unknown }).data)
-        ? (payload as { data: unknown[] }).data
-        : payload;
+      const dataArray = extractDataArray(payload);
       expect(Array.isArray(dataArray)).toBe(true);
-      expect((dataArray as unknown[]).length).toBeGreaterThan(0);
+      expect(dataArray.length).toBeGreaterThan(0);
     });
 
     it('should execute tool with parameters', async () => {
@@ -112,11 +120,15 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-search-lessons',
           arguments: {
-            q: 'fractions',
+            params: {
+              query: {
+                q: 'fractions',
+              },
+            },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(payload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(payload))).toBe(true);
     });
 
     it('should handle optional parameters correctly', async () => {
@@ -125,44 +137,58 @@ describe('MCP Protocol E2E', () => {
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            sequence: 'english-primary',
+            params: {
+              path: {
+                sequence: 'english-primary',
+              },
+            },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(basePayload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(basePayload))).toBe(true);
 
       // Call with optional parameters
       const optionalPayload = expectSuccessfulResult(
         await client.callTool({
           name: 'get-sequences-units',
           arguments: {
-            sequence: 'english-primary',
-            year: '1',
+            params: {
+              path: {
+                sequence: 'english-primary',
+              },
+              query: {
+                year: '1',
+              },
+            },
           },
         }),
-      ) as { data?: unknown };
-      expect(Array.isArray(optionalPayload.data)).toBe(true);
+      );
+      expect(Array.isArray(extractDataArray(optionalPayload))).toBe(true);
     });
   });
 
   describe('Error Handling', () => {
     it('should handle unknown tool error', async () => {
-      await expect(client.callTool({ name: 'non-existent-tool', arguments: {} })).rejects.toThrow(
-        /Tool non-existent-tool not found/,
-      );
+      await expect(
+        client.callTool({ name: 'non-existent-tool', arguments: { params: {} } }),
+      ).rejects.toThrow(/Tool non-existent-tool not found/);
     });
 
     it('should handle missing required parameters', async () => {
-      await expect(client.callTool({ name: 'get-search-lessons', arguments: {} })).rejects.toThrow(
-        /Invalid arguments.*get-search-lessons/,
-      );
+      await expect(
+        client.callTool({ name: 'get-search-lessons', arguments: { params: {} } }),
+      ).rejects.toThrow(/Invalid arguments.*get-search-lessons/);
     });
 
     it('should handle invalid parameter values', async () => {
       await expect(
         client.callTool({
           name: 'get-key-stages-subject-lessons',
-          arguments: { keyStage: 'invalid-stage', subject: 'maths' },
+          arguments: {
+            params: {
+              path: { keyStage: 'invalid-stage', subject: 'maths' },
+            },
+          },
         }),
       ).rejects.toThrow(/Invalid arguments.*get-key-stages-subject-lessons/);
     });

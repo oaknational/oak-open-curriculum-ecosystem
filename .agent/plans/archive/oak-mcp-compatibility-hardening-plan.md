@@ -24,7 +24,7 @@ This document consolidates everything learned in our testing to make the Oak MCP
 
 ## Todo
 
-- [x] REMINDER: UseBritish spelling (2025-09-22)
+- [x] REMINDER: Use british spelling (2025-09-22)
 - [x] Extend smoke probe coverage for Accept enforcement, handshake checks, and `/openai_connector` alias behaviour. (2025-09-22) `smoke-dev.ts` now parses SSE payloads for both endpoints, asserts merged tool lists, and verifies synonym canonicalisation.
 
 ---

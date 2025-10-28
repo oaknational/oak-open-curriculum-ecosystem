@@ -1,25 +1,34 @@
 import type { NextRequest, NextResponse } from 'next/server';
 
-export type FixtureMode = 'fixtures' | 'live';
+export type FixtureMode = 'fixtures' | 'fixtures-empty' | 'fixtures-error' | 'live';
 
 const FIXTURE_QUERY_PARAM = 'fixtures';
 export const FIXTURE_MODE_COOKIE = 'semantic-search-fixtures';
 
-const ENABLED_VALUES = new Set(['1', 'true', 'on']);
-const DISABLED_VALUES = new Set(['0', 'false', 'off']);
+const MODE_LOOKUP = buildModeLookup();
+
+function buildModeLookup(): Map<string, FixtureMode> {
+  const entries: Array<[FixtureMode, readonly string[]]> = [
+    ['fixtures', ['1', 'true', 'on', 'fixture', 'fixtures', 'success']],
+    ['fixtures-empty', ['empty', 'none', 'no-results', 'fixtures-empty']],
+    ['fixtures-error', ['error', 'fail', 'failure', 'fixtures-error']],
+    ['live', ['0', 'false', 'off', 'live']],
+  ];
+  const lookup = new Map<string, FixtureMode>();
+  for (const [mode, values] of entries) {
+    for (const value of values) {
+      lookup.set(value, mode);
+    }
+  }
+  return lookup;
+}
 
 function parseMode(value: string | null | undefined): FixtureMode | undefined {
   if (!value) {
     return undefined;
   }
   const normalised = value.trim().toLowerCase();
-  if (ENABLED_VALUES.has(normalised)) {
-    return 'fixtures';
-  }
-  if (DISABLED_VALUES.has(normalised)) {
-    return 'live';
-  }
-  return undefined;
+  return MODE_LOOKUP.get(normalised);
 }
 
 export function resolveFixtureMode({
@@ -32,7 +41,7 @@ export function resolveFixtureMode({
   envValue?: string | undefined;
 }): {
   mode: FixtureMode;
-  persist?: 'fixtures' | 'live';
+  persist?: FixtureMode;
 } {
   const queryMode = parseMode(queryValue);
   if (queryMode) {
@@ -54,7 +63,7 @@ export function resolveFixtureMode({
 
 export function resolveFixtureModeFromRequest(req: NextRequest): {
   mode: FixtureMode;
-  persist?: 'fixtures' | 'live';
+  persist?: FixtureMode;
 } {
   const url = new URL(req.url);
   const queryValue = url.searchParams.get(FIXTURE_QUERY_PARAM);
@@ -72,26 +81,17 @@ export function resolveFixtureModeFromEnv(): FixtureMode {
 
 export function applyFixtureModeCookie(
   response: NextResponse,
-  persist: 'fixtures' | 'live' | undefined,
+  persist: FixtureMode | undefined,
 ): void {
-  if (persist === 'fixtures') {
-    response.cookies.set(FIXTURE_MODE_COOKIE, 'on', {
-      sameSite: 'lax',
-      httpOnly: false,
-      path: '/',
-      maxAge: 60 * 60 * 24 * 180,
-    });
+  if (!persist) {
     return;
   }
-  if (persist === 'live') {
-    response.cookies.set(FIXTURE_MODE_COOKIE, 'off', {
-      sameSite: 'lax',
-      httpOnly: false,
-      path: '/',
-      maxAge: 60 * 60 * 24 * 180,
-    });
-    return;
-  }
+  response.cookies.set(FIXTURE_MODE_COOKIE, modeToCookieValue(persist), {
+    sameSite: 'lax',
+    httpOnly: false,
+    path: '/',
+    maxAge: 60 * 60 * 24 * 180,
+  });
 }
 
 export function resolveFixtureModeFromCookies(cookieStore: {
@@ -105,5 +105,15 @@ export function resolveFixtureModeFromCookies(cookieStore: {
 }
 
 export function modeToCookieValue(mode: FixtureMode): string {
-  return mode === 'fixtures' ? 'on' : 'off';
+  switch (mode) {
+    case 'fixtures':
+      return 'on';
+    case 'fixtures-empty':
+      return 'empty';
+    case 'fixtures-error':
+      return 'error';
+    case 'live':
+    default:
+      return 'off';
+  }
 }
