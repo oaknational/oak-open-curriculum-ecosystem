@@ -1,45 +1,63 @@
 # High-Level Plan
 
-Scope: strategic overview. Details are in the individual plan documents.
+**Last Updated**: 2025-10-28  
+**Scope**: Strategic overview. Details are in individual plan documents.
+
+## Current Priorities (2025-10-28)
+
+**Active Work**:
+
+1. Semantic Search (Phase 1 in progress)
+2. Ontology Resource Implementation (planned)
+3. OAuth/Clerk Integration (planned)
+
+**Future Work**: 4. Advanced MCP Tooling (deferred until priorities 1-3 complete)
+
+---
 
 ## Active / Planned (Priority Order)
 
-1. **SDK Quality Gates & Snagging Resolution** — Status: In Progress (Priority 1)
-   - Plan: `.agent/plans/semantic-search/snagging-resolution-plan.md`
-   - Current: Stage 5 complete; Stage 6 remaining tasks (smoke harness, payload parity analysis); Task 7 (STDIO tool description bug) identified
-   - Acceptance: All quality gates green (`pnpm type-gen`, `pnpm build`, `pnpm type-check`, `pnpm lint`, `pnpm test`, `pnpm test:e2e`); smoke tests pass in stub/live/remote modes
+1. **Semantic Search Phase 1** — Status: ✅ NEAR COMPLETE (Priority 1)
+   - Plans: `.agent/plans/semantic-search/semantic-search-high-level-plan.md`, `.agent/plans/semantic-search/context.md`
+   - Current: Status-aware response handling complete; quality gates green; remote verification passing
+   - Remaining: Documentation refresh, commit packaging
+   - Acceptance: Four indices live; search/nl/suggest endpoints operational; UI functional; admin telemetry working; zero-hit observability in place
 
-2. **OpenAI Apps SDK Integration (Non-UI)** — Status: Planned (Priority 2)
+2. **Curriculum Ontology MCP Resource** — Status: Planned (Priority 2 - ACTIVE)
+   - Plan: `.agent/plans/curriculum-ontology-resource-plan.md`
+   - Prerequisite: Sprint 0 (Aggregated tools refactor) — see `.agent/plans/mcp-aggregated-tools-type-gen-refactor-plan.md`
+   - Scope: Schema-derived ontology (type-gen) + educational guidance (hand-authored); exposed as MCP resources; TDD throughout
+   - Current State: NOT STARTED (aggregated tools still hand-written runtime code)
+   - Enables: OpenAI App SDK by providing curriculum structure knowledge; advanced MCP tools
+   - Acceptance: Resources accessible via MCP; schema extraction during `pnpm type-gen` succeeds; ontology includes entities/relationships/tool workflows; all tests pass
+
+3. **OAuth 2.1 / Clerk Integration** — Status: Planned (Priority 3 - ACTIVE)
+   - Plan: `.agent/plans/mcp-oauth-implementation-plan.md`
+   - Scope: Replace local demo OAuth AS with Clerk production AS; use `@clerk/mcp-tools` helpers; Google SSO for @thenational.academy
+   - Current State: OAuth 2.1 Resource Server already implemented; need to replace Authorization Server
+   - Acceptance: Clerk AS integrated; Google SSO working; static tokens removed from production; all tests pass; runbook documented
+
+4. **OpenAI Apps SDK Integration (Non-UI)** — Status: Planned (Priority 4)
    - Plan: `.agent/plans/oak-openai-app-plan.md`
+   - Prerequisites: Items #1 (semantic search), #2 (ontology resource)
    - Scope: Metadata optimization for ChatGPT Developer Mode; fix STDIO bug; add MCP annotations; expose outputSchema; add tool titles; create golden prompt test suite
    - Related: `.agent/plans/upstream-api-metadata-wishlist.md` (wishlist for API team)
    - Acceptance: Tools discoverable in ChatGPT; descriptions rich and accurate; ≥90% tool selection accuracy; negative prompts avoid our tools
 
-2a. **Refactor Aggregated MCP Tools to Type-Gen** — Status: Planned (Priority 2a - Prerequisite for 3 & 6) - Plan: `.agent/plans/mcp-aggregated-tools-type-gen-refactor-plan.md` - Scope: Move `search` and `fetch` from runtime to type-gen generation; establish config-driven pattern for composite MCP primitives - Architecture: Declarative JSON config defines composition rules; generators emit descriptors/validators/executors; runtime imports generated code - Enables: Item #3 (ontology resources follow same pattern); Item #6 (semantic search integration via config) - Acceptance: Aggregated tools generated at `pnpm type-gen` time; runtime code is thin plumbing; all tests pass; MCP behaviour unchanged
-
-3. **Curriculum Ontology MCP Resource** — Status: Planned (Priority 3)
-   - Plan: `.agent/plans/curriculum-ontology-resource-plan.md`
-   - Scope: Schema-derived ontology (type-gen) + educational guidance (hand-authored); exposed as MCP resources; TDD throughout
-   - Enables: Item #2 (OpenAI App SDK) by providing curriculum structure knowledge
-   - Acceptance: Resources accessible via MCP; schema extraction during `pnpm type-gen` succeeds; ontology includes entities/relationships/tool workflows; all tests pass
-
-4. **Semantic Search UI & Evidence** — Status: Deferred (Priority 4)
-   - Plan: `.agent/plans/semantic-search/snagging-resolution-ui-plan.md`
-   - Blocked by: Item #1 (SDK quality gates must be green)
-   - Scope: Resume Workstreams 4–8; refresh Playwright evidence; admin/status redesign
-   - Acceptance: UI tests pass; accessibility validated; visual evidence captured
-
-5. **Semantic Search Back-End Alignment** — Status: Ready (Priority 5)
-   - Plans: `.agent/plans/semantic-search/semantic-search-target-alignment-plan.md`
-   - Scope: Implement definitive guide (indices, RRF queries, APIs); populate indexes; deploy services
-   - Notes: Plan refresh needed to align with target architecture
-   - Acceptance: Back-end matches definitive guide; services deployed; E2E tests pass; documentation updated
-
-6. **Integrate Semantic Search into Oak Curriculum MCP** — Status: Planned (Priority 6)
+5. **Semantic Search MCP Integration** — Status: Planned (Priority 5)
    - Scope: Add semantic search to type-gen-generated `search` MCP tool; compose with curriculum data + semantic search APIs
-   - Prerequisites: Item #3 (aggregated tools moved to type-gen); Item #5 (semantic search back-end)
+   - Prerequisites: Item #1 (semantic search Phase 1), Item #2 (ontology + aggregated tools refactor)
    - Architecture: Semantic search integration defined in type-gen configuration; generated at `pnpm type-gen` time
    - Acceptance: Generated `search` tool composes curriculum + semantic search APIs; E2E tests (no network) pass; documentation updated
+
+6. **Advanced MCP Tools** — Status: FUTURE (Priority 6 - DEFERRED)
+   - Plan: `.agent/plans/advanced-mcp-tools-plan.md`
+   - Prerequisites: Items #1-3 (semantic search, ontology, OAuth) MUST complete first
+   - Scope: Bulk operations, intelligent filtering, comparative analysis, export capabilities
+   - Current State: NOT STARTED (prerequisites not met)
+   - Note: Consolidates and supersedes `.agent/plans/curriculum-tools-guidance-playbooks-plan.md` (Phase 1 complete, rest deferred)
+   - Note: `.agent/plans/mcp-enhancements-plan.md` deleted (low quality, superseded)
+   - Acceptance: Advanced tools generated at type-gen time; schema-first architecture maintained; comprehensive test coverage
 
 7. **Contract Testing with API Schema Evolution** — Status: Planned
    - Plan: `.agent/plans/contract-testing-schema-evolution-plan.md`
@@ -55,7 +73,8 @@ Scope: strategic overview. Details are in the individual plan documents.
 
 9. **Enhance MCP Tools/Resources/Prompts** — Status: Planned
    - Scope: Leverage MCP resources and prompts beyond tools; reclassify some tools as resources where appropriate
-   - Related: Item #3 (ontology as resource); <https://modelcontextprotocol.io/docs/learn/server-concepts>
+   - Related: Item #2 (ontology as resource); <https://modelcontextprotocol.io/docs/learn/server-concepts>
+   - Note: Partially covered by ontology resource (Item #2) and advanced tools (Item #6)
    - Acceptance: Resources/prompts exposed; E2E tests pass
 
 10. **OpenAPI-to-MCP Framework Extraction** — Status: Blocked (prerequisite: #8)
@@ -83,10 +102,11 @@ Scope: strategic overview. Details are in the individual plan documents.
 
 ## Deferred / Won't Implement
 
-14. **Curriculum MCP Auth Plan** — Status: ⏸ Deferred
-    - Plan: `.agent/plans/curriculum-mcp-enhancements-plan.md` (needs updating)
-    - Scope: Authentication using Clerk
-    - Note: Deferred pending clearer requirement signal
+14. **Semantic Search UI & Evidence** — Status: ⏸ Deferred (Priority 7)
+    - Plan: `.agent/plans/semantic-search/snagging-resolution-ui-plan.md`
+    - Scope: Resume Workstreams 4–8; refresh Playwright evidence; admin/status redesign
+    - Note: Phase 1 UI already functional; this is polish/evidence work
+    - Acceptance: UI tests pass; accessibility validated; visual evidence captured
 
 15. **Serverless Hosting (Cloudflare Workers)** — Status: ⏸ Won't Implement For Now
     - Plan: `.agent/plans/icebox/serverless-hosting-plan.md`
@@ -98,10 +118,24 @@ Scope: strategic overview. Details are in the individual plan documents.
 - M1: Typed MCP tools available from SDK — ✅ DONE
 - M2: Broad MCP platform compatibility — ✅ DONE
 - M3: Remote Streaming HTTP live (Vercel) — ✅ DONE
-- M4: SDK Quality Gates — In Progress (Item #1, Priority 1)
-- M5: OpenAI Apps SDK Integration — Planned (Items #2-3, Priority 2-3)
-- M6: Semantic Search Back-End Alignment — Ready (Item #5, Priority 5)
-- M7: Semantic Search MCP Integration — Planned (Item #6, Priority 6)
-- M8: Contract Testing — Planned (Item #7)
-- M9: SDK Workspace Separation — Planned (Item #8) - enables framework extraction
-- M10: OpenAPI Framework — Blocked by M9 (Item #10) - general-purpose framework for any OpenAPI spec
+- M4: Semantic Search Phase 1 — ✅ NEAR COMPLETE (Item #1, Priority 1)
+- M5: Ontology Resource Implementation — 🔄 ACTIVE (Item #2, Priority 2)
+- M6: OAuth/Clerk Integration — 🔄 ACTIVE (Item #3, Priority 3)
+- M7: OpenAI Apps SDK Integration — Planned (Item #4, Priority 4)
+- M8: Semantic Search MCP Integration — Planned (Item #5, Priority 5)
+- M9: Advanced MCP Tools — ⏸ DEFERRED (Item #6, Priority 6 - after M5, M6, M7)
+- M10: Contract Testing — Planned (Item #7)
+- M11: SDK Workspace Separation — Planned (Item #8) - enables framework extraction
+- M12: OpenAPI Framework — Blocked by M11 (Item #10) - general-purpose framework for any OpenAPI spec
+
+## Priority Notes (2025-10-28)
+
+**Current Focus**: Semantic search (finishing), ontology resource, OAuth integration are the immediate priorities. Advanced tooling is explicitly deferred until these foundational pieces are complete.
+
+**Rationale**: The ontology resource and OAuth provide the infrastructure required for AI integration, while advanced tools build higher-level workflows on top of that infrastructure.
+
+**Plan Updates**:
+
+- Created `.agent/plans/advanced-mcp-tools-plan.md` (comprehensive plan for future advanced tooling)
+- Deleted `.agent/plans/mcp-enhancements-plan.md` (low quality, superseded)
+- Marked `.agent/plans/curriculum-tools-guidance-playbooks-plan.md` Phase 2+ as deferred (overlaps with advanced tools)
