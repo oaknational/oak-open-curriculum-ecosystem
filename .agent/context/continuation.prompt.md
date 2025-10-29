@@ -38,21 +38,34 @@ Remember:
 ### If Resuming OAuth Implementation
 
 ```text
-I want to begin implementing the Clerk OAuth 2.1 integration plan.
+I want to continue the Clerk OAuth 2.1 integration (currently on Phase 3: Deployment).
 
 Please read:
-1. @.agent/plans/mcp-oauth-implementation-plan.md - Comprehensive implementation plan
-2. @.agent/reference-docs/clerk-build-mcp-server.md - Clerk MCP guide
+1. @.agent/plans/mcp-oauth-implementation-plan.md - Implementation plan with deviations documented
+2. @.agent/context/context.md - Current state including critical corrections applied
 
-Current status:
-- Plan is complete, validated, and production-ready
-- Branch `feat/oauth_support` exists with updated plan
-- Ready to begin Phase 0: Clerk Configuration
+Current status (2025-10-29):
+- Phases 0-2: ✅ COMPLETE (with critical corrections applied)
+- Deep review revealed and fixed 5 major issues:
+  1. Test skipping anti-pattern eliminated
+  2. Missing integration test created
+  3. README completely updated
+  4. Server teardown fixed
+  5. Quality gate expanded
+- Branch: `feat/oauth_support`
+- All corrections committed
+- Ready for Phase 3: Deployment & Monitoring
+
+Critical realities to understand:
+- Tests now FAIL when config is wrong (don't skip) - this is CORRECT behavior
+- oak-notion-mcp E2E fails if NOTION_API_KEY empty - reveals real config issue
+- smoke:dev:live:auth requires REAL Clerk keys (dummy keys don't enforce auth)
+- Documentation now accurately reflects Clerk OAuth (no more demo AS content)
 
 Please:
-1. Summarize the plan's 3 phases
-2. Confirm understanding of Phase 0 tasks (2.5 hours, 5 tasks)
-3. Ask if I'm ready to begin Phase 0.1: Configure Clerk Project
+1. Acknowledge the corrections that were applied
+2. Confirm understanding of current test status (what passes, what fails, and WHY)
+3. Ask if ready to proceed with Phase 3 deployment
 ```
 
 ### If Resuming Ontology Work

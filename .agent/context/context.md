@@ -53,20 +53,47 @@
 - `docs/architecture/curriculum-ontology.md` - Separated Sequence and Programme, elevated Threads
 - `.agent/plans/upstream-api-metadata-wishlist.md` - 15 items with examples, references to OpenAPI learning site
 
-### 2. Clerk OAuth 2.1 Implementation (✅ PHASES 0-2 COMPLETE - Ready for Deployment)
+### 2. Clerk OAuth 2.1 Implementation (✅ PHASES 0-2 COMPLETE - Critical Corrections Applied)
 
 **What**: Production-ready Clerk OAuth integration replacing custom demo.
 
-**Status**: **Phases 0-2 COMPLETE** - All quality gates passing, ready for Phase 3 (deployment).
+**Status**: **Phases 0-2 COMPLETE (with critical corrections 2025-10-29)** - Ready for Phase 3 after addressing deviations.
 
 **Scope**: `apps/oak-curriculum-mcp-streamable-http` (Express MCP server on Vercel) ONLY
 
 **Timeline**: ~29 hours (recommend 2 weeks with buffer)
 
 - Phase 0: ✅ COMPLETE (2.5 hours - Clerk config)
-- Phase 1: ✅ COMPLETE (6.5 hours - Implementation with TDD)
-- Phase 2: ✅ COMPLETE (10 hours - Comprehensive test implementation)
+- Phase 1: ✅ COMPLETE (6.5 hours - Implementation with TDD) + Corrections applied
+- Phase 2: ✅ COMPLETE (10 hours - Comprehensive test implementation) + Critical corrections applied
 - Phase 3: ⏳ PENDING (11 hours - Deploy & monitor)
+
+**Critical Issues Discovered and Fixed** (2025-10-29 Deep Review):
+
+1. **Test Skipping Anti-Pattern**:
+   - PROBLEM: Tests used `describe.skipIf()` and `process.exit(0)` - hid configuration problems
+   - FIX: Removed all skipping - tests now FAIL with clear errors when config wrong
+   - IMPACT: oak-notion-mcp E2E now fails if NOTION_API_KEY empty (reveals real config problem)
+
+2. **Missing Integration Test**:
+   - PROBLEM: Plan specified `oauth-metadata-clerk.integration.test.ts` but file was never created
+   - FIX: Created file with 2 tests, proper type guards (no assertions/Reflect)
+   - IMPACT: Test count 12→14, better coverage of OAuth metadata endpoints
+
+3. **README Severely Outdated**:
+   - PROBLEM: README still described demo AS, referenced removed env vars (ENABLE_LOCAL_AS, REMOTE_MCP_DEV_TOKEN, etc.)
+   - FIX: Completely rewrote 5 major sections (Authentication, Troubleshooting, Quick Start, Vercel, Smoke Testing)
+   - IMPACT: Documentation now accurate, onboarding won't mislead developers
+
+4. **Server Teardown Failures**:
+   - PROBLEM: Smoke tests passed assertions but failed cleanup with ERR_SERVER_NOT_RUNNING
+   - FIX: Added `closeAllConnections()` + proper error handling with type guard
+   - IMPACT: All smoke tests pass cleanly (dev:stub, dev:live, remote)
+
+5. **Incomplete Quality Gate**:
+   - PROBLEM: QG only ran smoke:dev:stub, missing smoke:dev:live and smoke:remote
+   - FIX: Added both to root package.json qg script
+   - IMPACT: More comprehensive automated testing
 
 **Phase 1 Completed**:
 
@@ -99,28 +126,42 @@ Valid scenarios:
 3. **`dev + stub + noauth`** ✅ RECOMMENDED - Fast MCP protocol testing
 4. **`dev + live + noauth`** ✅ RECOMMENDED - Oak API integration with bypass
 
-**Test Files Created**:
+**Test Files Created/Updated**:
 
-- ✅ `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing (5 tests passing)
-- ✅ `auth-bypass.e2e.test.ts` - DX feature validation + safety checks (3 tests passing)
-- ✅ Updated `server.e2e.test.ts` - Migrated to Clerk auth + auth bypass (18 tests passing)
-- ✅ Updated `stub-mode.e2e.test.ts` - Auth bypass in stub mode (18 tests passing)
-- ✅ `smoke-dev-live-auth.ts` - Skipped (requires real Clerk credentials for full validation)
-- ✅ `local-live-auth.ts` - Smoke test mode for auth enforcement
-- ✅ `TESTING.md` - Comprehensive testing strategy documentation
+- ✅ `auth-enforcement.e2e.test.ts` - Production-equivalent auth (7 tests)
+- ✅ `auth-bypass.e2e.test.ts` - DX feature validation + safety (4 tests)
+- ✅ `server.e2e.test.ts` - Migrated to Clerk auth (10 tests)
+- ✅ `stub-mode.e2e.test.ts` - Auth bypass in stub mode (4 tests)
+- ✅ `oauth-metadata-clerk.integration.test.ts` - **NEW** OAuth metadata endpoints (2 tests)
+- ✅ `smoke-dev-live-auth.ts` - Manual-only (needs real Clerk keys, FAILS deterministically with dummy keys)
+- ✅ `local-live-auth.ts` - Smoke mode for auth enforcement
+- ✅ `TESTING.md` - Comprehensive testing strategy
+- ✅ `local-server.ts` - Fixed teardown with closeAllConnections()
 
-**E2E Test Results**: 44/44 tests passing ✅
+**Test Results** (oak-curriculum-mcp-streamable-http):
 
-**Quality Gate Status**: ALL PASSING ✅
+- Unit/Integration: **14/14 ✅** (was 12/12)
+- E2E: **44/44 ✅**
+- Smoke: dev:stub ✅, dev:live ✅, remote ✅
+
+**Quality Gate Status** (for oak-curriculum-mcp-streamable-http):
+
+✅ **PASSING** (oak-curriculum-mcp-streamable-http)
 
 - format-check ✅
 - type-check ✅
 - lint ✅
 - markdownlint-check ✅
-- test (unit + integration) ✅
+- test (unit + integration) ✅ 14/14
 - test:ui (Playwright) ✅ 21/21
 - test:e2e ✅ 44/44
 - smoke:dev:stub ✅ 8 assertions
+- smoke:dev:live ✅ 8 assertions
+- smoke:remote ✅ 8 assertions
+
+⚠️ **INTENTIONALLY FAILING** (other workspaces):
+
+- oak-notion-mcp test:e2e: **FAILS if NOTION_API_KEY empty** (CORRECT deterministic behavior - reveals config problem)
 
 **Auth Bypass Mechanism**:
 
@@ -163,6 +204,46 @@ const shouldBypassAuth =
 - ✅ Added MCP server configuration (BASE_URL, MCP_CANONICAL_URI)
 - ✅ Added security configuration (ALLOWED_HOSTS, ALLOWED_ORIGINS)
 - ✅ Organized by purpose with helpful comments
+
+---
+
+## Current Issues Requiring Attention
+
+### 1. oak-notion-mcp Configuration (⚠️ BLOCKING E2E TESTS)
+
+**Issue**: `NOTION_API_KEY` is set in `.env` but has empty value  
+**Impact**: oak-notion-mcp E2E tests fail deterministically (correct behavior per testing strategy)  
+**Resolution Options**:
+
+1. Add valid NOTION_API_KEY to `.env` file → E2E tests will pass
+2. Remove NOTION_API_KEY from `.env` entirely → E2E tests will fail with clear error
+3. Accept that oak-notion-mcp E2E fails in current state (reveals configuration problem)
+
+**Recommendation**: Option 1 or 3. The failure is revealing a real configuration issue, which is the intended behavior after eliminating test skipping anti-pattern.
+
+### 2. smoke:dev:live:auth Cannot Run in CI (ℹ️ BY DESIGN)
+
+**Issue**: Test requires REAL Clerk production keys to validate auth enforcement  
+**Reality**: Dummy Clerk test credentials allow all requests through (Clerk design for DX)  
+**Current State**: Test excluded from automated QG, runs manually before deployment  
+**Alternative Approaches Considered**:
+
+1. Mock Clerk middleware → Doesn't test real Clerk behavior
+2. Add real Clerk keys to CI → Security risk, keys in CI environment
+3. Skip test when credentials invalid → Violates deterministic test principle (REJECTED)
+
+**Current Solution**: Test FAILS deterministically when run with dummy credentials, with clear error message explaining need for real keys. Kept for manual pre-deployment validation. Auth enforcement validated by E2E tests (mock) and smoke:remote (real deployment).
+
+**Principle**: Tests never skip. They either pass or fail. A failing test that reveals truth is better than a skipped test that hides problems.
+
+### 3. Quality Gate Conditionally Passes
+
+**Reality Check**: The quality gate (`pnpm qg`) will:
+
+- ✅ PASS for oak-curriculum-mcp-streamable-http (all tests deterministic with available config)
+- ❌ FAIL for oak-notion-mcp if NOTION_API_KEY empty (deterministic failure revealing config problem)
+
+**This is CORRECT behavior**: Tests are deterministic and idempotent. They reveal configuration problems. The alternative (skipping) creates false confidence.
 
 ---
 
