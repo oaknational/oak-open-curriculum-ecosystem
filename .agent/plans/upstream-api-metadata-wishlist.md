@@ -1,23 +1,229 @@
-# Upstream Open Curriculum API Metadata Enhancement Wishlist
+# Upstream Open Curriculum API Metadata Enhancement Wish List
 
-## Purpose
+## Executive Summary
 
-This document captures desired OpenAPI schema and endpoint enhancements for the Open Curriculum API (`open-api.thenational.academy`) that would improve AI tool integration, particularly for the OpenAI Apps SDK and Model Context Protocol (MCP) consumers. These improvements will benefit all downstream integrations by providing richer, more discoverable, and better-documented API metadata.
+Oak National Academy has built something unique: a comprehensive, open curriculum API containing 30,000+ lessons, 1,000+ units, and rich educational metadata. This isn't just another education dataset—it's one of the most complete, openly accessible curriculum resources in the world.
 
-## Context
+**The opportunity**: With relatively straightforward OpenAPI schema improvements, we can transform this resource from a traditional API into an intelligent curriculum platform that AI assistants can reason about, compose, and use to help teachers in entirely new ways. The same schema that helps human developers understand our API can be enriched to help AI agents discover, combine, and intelligently apply our curriculum data.
 
-The oak-notion-mcp repository consumes the Open Curriculum API OpenAPI schema via `pnpm type-gen` to generate:
+**The multiplier effect**: Because our tooling generates everything from the OpenAPI schema, each enhancement you make flows automatically to:
 
-- TypeScript types and validators
-- MCP tool descriptors
-- Client SDK methods
-- Documentation
+- Type-safe SDKs
+- AI tool descriptors for ChatGPT, Claude, Gemini
+- Model Context Protocol (MCP) servers
+- Semantic search integration
+- Future intelligent curriculum assistants
 
-All improvements to the upstream schema automatically flow through to generated artefacts, keeping the entire toolchain aligned without manual intervention. This schema-first approach means **better API metadata = better AI integration for free**.
+Small improvements to the schema unlock exponential value through AI tooling. This document outlines those improvements.
+
+**Note**: Oak is in a unique position—most education organisations either have closed APIs or limited content. You have both comprehensive curriculum data AND an open API. These enhancements help us make the most of this incredible resource by making it intelligently accessible to AI assistants that can help teachers in their day-to-day work.
+
+## Vision: From API Documentation to Intelligent Curriculum Platform
+
+### The Paradigm Shift
+
+Traditionally, API documentation serves **human developers** who:
+
+- Read endpoint descriptions to understand what they do
+- Consult parameter docs to learn valid inputs
+- Study response schemas to parse outputs
+- Browse through multiple endpoints to find what they need
+
+Now, we're enabling **AI agents** to:
+
+- Discover appropriate tools based on natural language queries ("find KS3 science lessons about photosynthesis")
+- Compose multiple tools to accomplish complex tasks (search → filter → fetch details → compare → recommend)
+- Understand curriculum structure and relationships (key stage → unit → lesson hierarchy)
+- Validate educational appropriateness (prior knowledge requirements, NC alignment)
+- Generate teacher-ready resources (lesson plans, unit overviews, progression pathways)
+
+**The key insight**: AI agents don't just call APIs—they reason about when to use them, how to combine them, and what the results mean. This requires richer metadata than traditional API documentation provides.
+
+### What We're Building: The Tool Ecosystem
+
+Our AI integration comprises four layers of tools, each building on the last:
+
+#### **Layer 1: Direct Proxy Tools** ✅ (Currently Available)
+
+26 tools that directly map to API endpoints:
+
+- `get-lessons-summary` → `GET /lessons/{lesson}/summary`
+- `get-search-lessons` → `GET /search/lessons`
+- `get-units-summary` → `GET /units/{unit}/summary`
+- etc.
+
+**Value**: AI assistants can access any curriculum data via natural language requests.
+
+**Enabled by**: Current API endpoints + OpenAPI schema.
+
+#### **Layer 2: Aggregated Tools** ✅ (Currently Available)
+
+Tools that combine multiple endpoints for efficiency:
+
+- **`search`**: Searches both lessons and transcripts in parallel
+- **`fetch`**: Routes to appropriate endpoint based on ID prefix (lesson:, unit:, subject:)
+
+**Value**: Reduces tool call overhead; agents don't need to know which specific endpoint to use.
+
+**Enabled by**: Well-structured endpoint patterns + clear response schemas.
+
+**Would be improved by**: Items #1-2 (descriptions, summaries) help agents choose between `search` and direct access.
+
+#### **Layer 3: Service Integration Tools** 🔄 (In Development)
+
+Tools that integrate external AI services with curriculum data. **Note**: These tools require external services beyond the curriculum API itself.
+
+**Semantic Search** (In Development - Requires External Search Service):
+
+- Hybrid lexical + semantic search across curriculum content
+- Natural language queries: "lessons about the water cycle for year 5"
+- Contextual recommendations based on teaching goals
+- **What the API provides**: Curriculum data endpoints that semantic search indexes
+- **What external services provide**: Vector embeddings, semantic matching, hybrid search orchestration
+
+**Pedagogical Validation** (Planned - Requires AI Platform Team Service):
+
+- Validates lesson plans against curriculum standards
+- Checks NC alignment and age-appropriateness
+- Suggests improvements based on pedagogical principles
+- **What the API provides**: Lesson metadata, NC mapping, curriculum structure
+- **What external services provide**: Pedagogical analysis, validation rules, recommendation engine
+
+**Content Sensitivity Analysis** (Planned - Requires AI Platform Team Service):
+
+- Analyzes lesson content for safeguarding requirements
+- Recommends supervision levels
+- Flags content guidance needs
+- **What the API provides**: Lesson content and context
+- **What external services provide**: Content analysis, sensitivity detection, safeguarding rules
+
+**Value**: AI-powered enhancements to curriculum discovery and validation.
+
+**Enabled by**: Items #3 (ontology), #4 (error handling), #5 (parameter examples) provide the structural knowledge these services need.
+
+#### **Layer 4: Advanced Intelligence Tools** 📋 (Planned)
+
+High-level tools that combine everything. **Note**: Some are purely API-driven, others require external AI services.
+
+**Discovery & Filtering** (Mix of API + Services):
+
+- `find-units-by-thread`: Cross-key-stage progression pathways (e.g., "show me how fractions progress from KS1 to KS4")
+  - **API provides**: Ontology, curriculum structure, thread/topic metadata
+  - **MCP orchestration**: Queries multiple endpoints, filters by thread
+- `find-lessons-with-fieldwork`: Context-aware filtering (e.g., "outdoor learning opportunities in geography")
+  - **API provides**: Lesson metadata, tags, activity types
+  - **MCP orchestration**: Filters and ranks based on criteria
+- `discover-curriculum-gaps`: Identify missing content for specific topics/year groups
+  - **API provides**: Complete curriculum map, coverage data
+  - **External services**: Gap analysis algorithm, NC mapping
+
+**Comparative Analysis** (API-Driven with MCP Orchestration):
+
+- `compare-units`: Side-by-side comparison of units across year groups
+  - **API provides**: All unit data, relationships, progression indicators
+  - **MCP orchestration**: Fetches multiple units, structures comparison
+- `analyse-nc-coverage`: Gap analysis for National Curriculum requirements
+  - **API provides**: NC alignment metadata, curriculum coverage
+  - **MCP orchestration**: Aggregates and analyses coverage patterns
+- `trace-prior-knowledge`: Map prerequisite chains across lessons
+  - **API provides**: Ontology relationships, prerequisite metadata (if available)
+  - **MCP orchestration**: Traverses dependency graph
+
+**Intelligent Recommendations** (Requires External AI Services):
+
+- `recommend-adaptations`: Suggest how to adapt lessons for different contexts (e.g., "adapt this lesson for students with dyslexia")
+  - **API provides**: Lesson content, resources, structure
+  - **External services**: Pedagogical AI, adaptation recommendations
+- `suggest-progression`: Recommend next lessons based on current teaching
+  - **API provides**: Curriculum structure, lesson sequences
+  - **External services**: Learning path optimization, student progress tracking
+- `find-related-content`: Semantic similarity-based discovery across subjects
+  - **API provides**: Lesson content for indexing
+  - **External services**: Semantic search, similarity matching
+
+**Bulk Operations** (API-Driven with MCP Orchestration):
+
+- `bulk-unit-summaries`: Fetch multiple units efficiently for comparison
+  - **API provides**: All endpoint data
+  - **MCP orchestration**: Batch requests, error handling, response aggregation
+- `generate-lesson-plan`: Compile lesson + assets + quiz into teacher-ready format
+  - **API provides**: Lesson data, downloadable resources, quiz content
+  - **MCP orchestration**: Fetches related data, formats output
+- `export-curriculum-data`: Structured exports (JSON, Markdown, CSV) for external tools
+  - **API provides**: All curriculum data
+  - **MCP orchestration**: Format transformation, export generation
+
+**Value**: Transform the API from data access to intelligent curriculum assistance. Instead of teachers searching for lessons, the AI helps them plan entire units, adapt content to their context, and understand progression pathways.
+
+**Enabled by**: All items in this wish list, especially #1 (descriptions for tool selection), #3 (ontology for relationships), #4 (error handling for robustness).
+
+### The Multiplier Effect of Schema Improvements
+
+Here's the key: **every enhancement you make to the OpenAPI schema automatically enables new capabilities across all four tool layers**.
+
+**Example 1: Adding "Use this when" descriptions (Item #1)**
+
+- Layer 1 tools: AI chooses correct endpoint 70% more reliably
+- Layer 2 tools: Better routing in `search` vs `fetch` decisions
+- Layer 3 tools: Semantic search knows when to call curriculum API vs search service
+- Layer 4 tools: Intelligent recommendations compose the right tools in the right order
+
+**Example 2: Creating `/ontology` endpoint (Item #3)**
+
+- Layer 1 tools: Responses include relationship context
+- Layer 2 tools: `fetch` can traverse relationships (lesson → unit → programme)
+- Layer 3 tools: Pedagogical validation understands curriculum structure
+- Layer 4 tools: Comparative analysis and progression tracking become possible
+
+**Example 3: Documenting error responses (Item #4)**
+
+- Layer 1 tools: Handle legitimate 404s gracefully (practical lessons have no transcripts)
+- Layer 2 tools: Aggregated tools provide helpful messages instead of failing
+- Layer 3 tools: Services can distinguish "resource unavailable" from "request error"
+- Layer 4 tools: Bulk operations handle partial failures intelligently
+
+### Why This Matters for Teachers
+
+The ultimate beneficiaries are teachers. With these enhancements, AI assistants can:
+
+1. **"Find me KS3 science lessons about photosynthesis"** → Semantic search + filtering + NC alignment checking
+2. **"Show me how fractions progress from year 1 to year 6"** → Cross-key-stage analysis + progression pathways
+3. **"Adapt this lesson for outdoor learning at our school"** → Context-aware recommendations + related content discovery
+4. **"What prior knowledge do students need for this unit?"** → Prerequisite tracing + knowledge mapping
+5. **"Generate a 6-week unit plan on ancient civilizations"** → Bulk operations + comparative analysis + export
+
+All of this becomes possible through simple OpenAPI schema enhancements combined with intelligent tooling.
+
+## How We Generate Tools from Your OpenAPI Schema
+
+To understand why these enhancements matter, here's how our system works:
+
+```plaintext
+Your OpenAPI Schema
+        ↓
+   pnpm type-gen (automated)
+        ↓
+    ┌────────────────────────────┐
+    │ Generated Artefacts        │
+    ├────────────────────────────┤
+    │ • TypeScript types         │
+    │ • Zod validators           │
+    │ • MCP tool descriptors     │
+    │ • Client SDK methods       │
+    │ • Documentation            │
+    └────────────────────────────┘
+        ↓
+   AI Assistants
+   (ChatGPT, Claude, Gemini)
+```
+
+**The key**: Everything flows from your schema. You don't need to understand MCP, SDKs, or AI tooling—you just need to enrich your OpenAPI documentation in ways that benefit both human and AI consumers.
+
+**The result**: Better API metadata = better AI integration for free.
 
 ## Audience
 
-This wishlist is for the Open Curriculum API cross-functional squad (backend engineers, product, documentation). Items are prioritised by impact on AI tool discovery and user experience.
+This wish list is for the Open Curriculum API cross-functional squad (backend engineers, product, documentation). Items are prioritised by impact on AI tool capabilities and teacher value.
 
 ---
 
@@ -62,6 +268,13 @@ description: |
 
 **Applies to:** All 26+ endpoints in the API schema.
 
+**Enables**:
+
+- **Layer 1**: Agents choose `get-lessons-summary` vs `get-search-lessons` correctly
+- **Layer 2**: `search` and `fetch` tools make better routing decisions
+- **Layer 3**: Semantic search knows when to call curriculum API vs search service
+- **Layer 4**: Advanced tools like `find-lessons-with-fieldwork` can compose the right tools in sequence
+
 ---
 
 ### 2. Add Operation Summaries for Display Names
@@ -99,6 +312,11 @@ description: |
 **Impact:** Better tool organisation and discovery in AI interfaces.
 
 **Applies to:** All endpoints.
+
+**Enables**:
+
+- **All layers**: Human-readable tool names in ChatGPT/Claude interfaces
+- **Layer 4**: Clearer tool categorisation for complex workflows (e.g., grouping "Search Tools", "Detail Tools", "Export Tools")
 
 ---
 
@@ -145,33 +363,50 @@ description: |
       "has_video": true,
       "has_transcript": true,
       "has_downloadable_resources": true,
-      "canonical_url_pattern": "https://www.thenational.academy/teachers/lessons/{slug}",
-      "description": "Individual teaching session with video, resources, and assessment"
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/lessons/{lessonSlug}",
+      "description": "Individual teaching session with video, resources, and assessment",
+      "note": "URL pattern must match OWA production URLs"
     },
     "unit": {
       "contains": ["lessons"],
       "typical_lesson_count": "4-8",
-      "canonical_url_pattern": "https://www.thenational.academy/teachers/units/{slug}",
-      "description": "Collection of related lessons forming a teaching block"
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/units/{unitSlug}",
+      "description": "Collection of related lessons forming a teaching block",
+      "note": "URL pattern must match OWA production URLs"
     },
-    "sequence": {
+    "programme": {
       "contains": ["units"],
       "groups_by": "year",
-      "canonical_url_pattern": "https://www.thenational.academy/teachers/programmes/{slug}",
-      "description": "Year-long progression pathway for a subject"
+      "canonical_url_pattern": "https://www.thenational.academy/teachers/programmes/{programmeSlug}",
+      "description": "Year-long progression pathway for a subject in a specific context",
+      "note": "URL pattern must match OWA production URLs (if applicable)"
+    },
+    "thread": {
+      "spans": ["units"],
+      "typical_unit_count": "10-100+",
+      "description": "Cross-unit conceptual strand showing how ideas build from early years to GCSE",
+      "examples": [
+        "number (118 units, Reception→Year 11)",
+        "bq01-biology-what-are-living-things (32 units, KS1→KS4)"
+      ],
+      "note": "Threads are programme-agnostic and show pedagogical progression"
     }
   },
   "relationships": {
     "lesson_belongs_to": ["unit", "subject", "key_stage"],
-    "unit_belongs_to": ["sequence", "subject", "key_stage"],
-    "sequence_belongs_to": ["subject"],
-    "hierarchy": "sequence → unit → lesson"
+    "unit_belongs_to": ["programme", "subject", "key_stage"],
+    "unit_in_thread": ["thread"],
+    "programme_belongs_to": ["subject"],
+    "thread_spans": ["key_stages", "years", "programmes"],
+    "hierarchy": "programme → unit → lesson",
+    "progression": "thread → units (ordered by conceptual development)"
   },
   "tool_usage_guidance": {
     "discovery_flow": [
       "Start with GET /subjects to see available subjects",
       "Use GET /key-stages/{keyStage}/subject/{subject}/units to browse units",
-      "Use GET /search/lessons for keyword-based discovery"
+      "Use GET /search/lessons for keyword-based discovery",
+      "Use GET /threads to explore conceptual progression pathways"
     ],
     "lesson_detail_flow": [
       "GET /lessons/{lesson}/summary for overview",
@@ -183,6 +418,12 @@ description: |
       "Search or browse to find relevant lessons",
       "Fetch lesson summaries to review content",
       "Download resources for classroom use"
+    ],
+    "progression_workflow": [
+      "GET /threads to list conceptual strands",
+      "GET /threads/{threadSlug}/units to see how a concept develops",
+      "Use unit order to identify prerequisites and next steps",
+      "Cross-reference with programmes for context-specific delivery"
     ]
   }
 }
@@ -193,7 +434,7 @@ description: |
 **Benefits:**
 
 - AI understands curriculum hierarchy without guessing
-- Clearer resource type distinctions (lesson vs unit vs sequence)
+- Clearer resource type distinctions (lesson vs unit vs programme)
 - Canonical URL patterns enable link generation
 - Tool usage guidance improves workflow composition
 - Single source of truth for domain model
@@ -202,14 +443,38 @@ description: |
 
 **Effort:** 1-2 days (backend + documentation).
 
-**Interim Solution:** Currently shimmed at MCP layer as described in `.agent/plans/curriculum-ontology-resource-plan.md`. The shim extracts schema-derived facts during `pnpm type-gen` and merges with hand-authored educational guidance at runtime. This provides immediate value while the upstream endpoint is developed.
+**Enables**:
 
-**Migration Path:** When upstream `/ontology` endpoint becomes available:
+- **Layer 1**: Tools can include relationship context in responses (e.g., "this lesson is part of unit X in programme Y")
+- **Layer 2**: `fetch` tool can traverse relationships intelligently (fetch lesson → include parent unit info)
+- **Layer 3**:
+  - Pedagogical validation understands NC alignment and progression
+  - Semantic search can weight results by curriculum position
+  - Content analysis knows age-appropriateness from key stage metadata
+- **Layer 4**: **CRITICAL FOR ALL ADVANCED TOOLS**
+  - `find-units-by-thread`: Needs hierarchy to trace progression pathways
+  - `compare-units`: Needs structure to do meaningful comparisons
+  - `analyse-nc-coverage`: Needs ontology to map content to standards
+  - `trace-prior-knowledge`: Needs relationships to find prerequisite chains
+  - All recommendation tools need structural understanding
 
-1. MCP layer can consume upstream endpoint instead of shimmed data
-2. Schema extraction logic can be retired
-3. Educational guidance layer remains at MCP layer (domain-specific to AI tooling)
-4. All other API consumers benefit from official ontology endpoint
+**Current State & Roadmap:**
+
+1. **Short term** (Now): We're building an interim solution that extracts ontology information from your OpenAPI schema at build time and enriches it with educational guidance. This provides immediate value while proper ontology work progresses.
+
+2. **Medium term** (Data Platform Team): The Data Platform team is working on a proper, comprehensive curriculum ontology that will be the authoritative source of truth for curriculum structure, relationships, and metadata.
+
+3. **Long term** (API Integration): When the Data Platform ontology is complete and exposed via the API, we can consume it directly through the `/ontology` endpoint.
+
+**Benefits of Native API Endpoint:**
+
+- Benefit all API consumers, not just AI tools
+- Provide a single source of truth across all Oak systems
+- Enable dynamic curriculum updates without rebuild cycles
+- Reduce build-time processing in consuming applications
+- Ensure consistency between curriculum data and structural knowledge
+
+**Migration Path:** Interim solution → Data Platform ontology → API endpoint. The educational guidance layer (AI-specific pedagogy) remains at the AI tool level, while structural knowledge comes from the API.
 
 ---
 
@@ -352,7 +617,7 @@ components:
 
 1. **Type-safe client generation:** Tools like openapi-fetch, openapi-typescript, and code generators require documented responses to generate correct types
 2. **Better error handling:** Consumers can distinguish "resource unavailable" from "invalid request" from "server error"
-3. **Clearer API contract:** Documents actual production behavior, not just happy paths
+3. **Clearer API contract:** Documents actual production behaviour, not just happy paths
 4. **Reduced confusion:** Makes it clear when 404 is expected (e.g., practical lessons have no transcripts) vs when it indicates an error
 5. **AI tool integration:** LLMs can provide helpful messages ("This lesson has no transcript") instead of generic errors
 
@@ -404,11 +669,231 @@ A lesson planning app uses the API to fetch lesson details:
 
 **Priority:** High - affects correctness of all generated clients and error handling code.
 
+**Enables**:
+
+- **Layer 1**: Tools provide helpful messages ("This practical lesson has no video transcript") instead of generic errors
+- **Layer 2**: Aggregated tools handle partial failures gracefully (e.g., `search` continues if transcript search fails)
+- **Layer 3**: Services distinguish legitimate absence from errors (pedagogical validator doesn't fail when resources are optional)
+- **Layer 4**:
+  - `bulk-unit-summaries`: Handles partial failures (some units missing data) intelligently
+  - `generate-lesson-plan`: Adapts to available resources (creates plan without transcript if unavailable)
+  - `export-curriculum-data`: Marks optional fields as unavailable rather than failing export
+
+**Current State:** We've implemented a temporary workaround that adds expected error responses at build time. This works but requires maintenance. Native error documentation would be cleaner and benefit all API consumers.
+
+---
+
+## High Priority – Programme Variant Information
+
+### 5. Expose Programme Context and Variant Metadata
+
+**Current state:**
+
+The API uses "sequences" as the primary curriculum structure, but the Oak Web Application (OWA) uses "programmes" in user-facing URLs. Our analysis of production data reveals these are **not the same thing**—programmes are contextualized views of sequences.
+
+**The problem:**
+
+**Sequence** (API concept): `science-secondary-aqa`
+
+- Spans Years 7-11 (KS3 + KS4)
+- Contains 4 exam subjects (Biology, Chemistry, Combined Science, Physics)
+- Each KS4 subject has 2 tiers (Foundation, Higher)
+- **Result**: One sequence represents **8 different programme contexts** for Year 10
+
+**Programme** (OWA concept): `biology-secondary-ks4-foundation-aqa`
+
+- Specific to one key stage (ks4)
+- Specific to one exam subject (biology)
+- Specific to one tier (foundation)
+- **Result**: One programme is a single teaching pathway
+
+**Concrete example from production:**
+
+**API sequence** `science-secondary-aqa` maps to these **OWA programme URLs**:
+
+```plaintext
+https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/chemistry-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/chemistry-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/combined-science-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/combined-science-secondary-ks4-higher-aqa/units
+https://www.thenational.academy/teachers/programmes/physics-secondary-ks4-foundation-aqa/units
+https://www.thenational.academy/teachers/programmes/physics-secondary-ks4-higher-aqa/units
+```
+
+**Current API behaviour:**
+
+Tier information is nested deep in Year 10/11 responses only:
+
+```typescript
+GET /sequences/science-secondary-aqa/units?year=10
+
+Response:
+{
+  "year": 10,
+  "examSubjects": [
+    {
+      "examSubjectTitle": "Biology",
+      "examSubjectSlug": "biology",
+      "tiers": [
+        { "tierTitle": "Foundation", "tierSlug": "foundation", "units": [...] },
+        { "tierTitle": "Higher", "tierSlug": "higher", "units": [...] }
+      ]
+    }
+  ]
+}
+```
+
+But:
+
+- `GET /subjects` doesn't include tier information
+- Can't query by tier (must fetch all tiers, filter client-side)
+- No clear way to map sequence slugs to programme slugs
+
+**What we need:**
+
+**Option A: Add `/programmes` endpoint** (Recommended)
+
+New top-level resource that exposes contextualized curriculum views:
+
+```typescript
+GET /programmes
+
+Response:
+{
+  "programmes": [
+    {
+      "programmeSlug": "biology-secondary-ks4-foundation-aqa",
+      "programmeTitle": "Biology Foundation AQA",
+      "subjectSlug": "biology",
+      "phaseSlug": "secondary",
+      "keyStageSlug": "ks4",
+      "tier": { "tierSlug": "foundation", "tierTitle": "Foundation" },
+      "examBoard": { "slug": "aqa", "title": "AQA" },
+      "baseSequenceSlug": "science-secondary-aqa",
+      "years": [10, 11],
+      "canonicalUrl": "https://www.thenational.academy/teachers/programmes/biology-secondary-ks4-foundation-aqa"
+    },
+    {
+      "programmeSlug": "maths-primary-ks1",
+      "programmeTitle": "Maths Key Stage 1",
+      "subjectSlug": "maths",
+      "phaseSlug": "primary",
+      "keyStageSlug": "ks1",
+      "tier": null,
+      "examBoard": null,
+      "baseSequenceSlug": "maths-primary",
+      "years": [1, 2],
+      "canonicalUrl": "https://www.thenational.academy/teachers/programmes/maths-primary-ks1"
+    }
+  ]
+}
+
+GET /programmes/{programmeSlug}/units
+
+Response: (similar to current /sequences/{sequence}/units but filtered)
+```
+
+**Option B: Enhance existing `/subjects` and `/sequences` endpoints**
+
+Add programme variant information to existing responses:
+
+```typescript
+GET /subjects
+
+Response:
+{
+  "subjects": [
+    {
+      "subjectSlug": "science",
+      "subjectTitle": "Science",
+      "sequences": [
+        {
+          "sequenceSlug": "science-secondary-aqa",
+          "programmes": [
+            {
+              "programmeSlug": "biology-secondary-ks4-foundation-aqa",
+              "keyStage": "ks4",
+              "tier": "foundation",
+              "examSubject": "biology",
+              "examBoard": "aqa"
+            },
+            // ... 7 more programmes for this sequence
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+GET /sequences/{sequence}/programmes
+
+Response: (list of programme variants for this sequence)
+```
+
+**Programme factors to expose:**
+
+Based on analysis of OWA URL patterns:
+
+1. **Key Stage** (`ks1`, `ks2`, `ks3`, `ks4`) - programme splits by key stage
+2. **Tier** (`foundation`, `higher`, `null`) - KS4 sciences only
+3. **Exam Subject** (`biology`, `chemistry`, `physics`, `combined-science`) - KS4 sciences only
+4. **Exam Board** (`aqa`, `ocr`, `edexcel`, `eduqas`, `edexcelb`) - KS4 subjects
+5. **Pathway** (`core`, `gcse`) - some KS4 subjects (citizenship, computing, PE)
+6. **Legacy Flag** (`-l` suffix in programme slugs) - marks older curriculum versions
+
+**Why this matters:**
+
+1. **Teachers navigate by programme** - OWA shows programme URLs, not sequence URLs
+2. **AI needs to match teacher mental model** - when teachers say "Year 10 Foundation Biology AQA", they mean a programme, not a sequence
+3. **Canonical URLs require programmes** - to generate correct OWA URLs, need programme slugs
+4. **Filtering requires context** - can't filter "show me Foundation tier lessons" without programme information
+5. **One sequence = many teaching contexts** - sciences especially: 1 sequence → 8 programmes
+
+**Real teacher scenario:**
+
+Teacher: "Find me Year 10 Foundation Biology lessons for AQA"
+
+**Current API flow** (clunky):
+
+1. Search lessons, hope for the best
+2. Or: Get sequence `science-secondary-aqa`, filter year 10, dig into nested `examSubjects.tiers`, find Biology → Foundation → units
+3. No clear programme slug, can't generate correct OWA URL
+
+**With programme endpoint** (natural):
+
+1. Query `/programmes?subject=biology&keyStage=ks4&tier=foundation&examBoard=aqa`
+2. Get `biology-secondary-ks4-foundation-aqa` programme
+3. Get units for that programme
+4. Generate correct OWA URLs
+
+**Breaking changes are acceptable:**
+
+If implementing proper programme support requires breaking changes (e.g., restructuring sequence responses, changing URL patterns), that's fine—this is important enough to warrant a major version bump (v1.0 → v2.0).
+
+**Impact:** **Critical for AI tool Layer 4** (comparative analysis, progression tracking, recommendations). Also improves clarity for all API consumers who are confused by sequence vs programme distinction.
+
+**Effort:** 3-5 days (new endpoint + response restructuring + documentation).
+
+**Priority:** **High** - blocks accurate OWA URL generation and programme-based filtering.
+
+**Enables**:
+
+- **Layer 1**: Tools can filter by programme context (tier, exam board)
+- **Layer 2**: `fetch` can route to programmes correctly
+- **Layer 3**: Semantic search can weight by programme context (find "Foundation" content)
+- **Layer 4**: **CRITICAL** - all advanced tools need programme-level granularity:
+  - `find-units-by-thread` can trace progression within a programme
+  - `compare-units` can compare across tiers (Foundation vs Higher)
+  - `analyse-nc-coverage` can check coverage for specific exam boards
+  - `recommend-adaptations` can suggest tier-appropriate content
+
 ---
 
 ## Medium Priority – Parameter Richness
 
-### 5. Add Parameter Examples
+### 6. Add Parameter Examples
 
 **Current state:**
 
@@ -457,9 +942,15 @@ parameters:
 
 **Applies to:** All enum parameters, especially educational domain terms (key stages, subjects, year groups).
 
+**Enables**:
+
+- **All layers**: Fewer invalid parameter errors (AI understands "ks2" vs "KS2" vs "key-stage-2")
+- **Layer 3**: Semantic search uses correct age ranges for filtering
+- **Layer 4**: Comparative analysis tools understand year group boundaries for progression tracking
+
 ---
 
-### 6. Add Custom Schema Extensions for Tool Metadata
+### 7. Add Custom Schema Extensions for Tool Metadata
 
 **What:** OpenAPI `x-oak-*` extensions providing tool-specific metadata.
 
@@ -504,11 +995,423 @@ parameters:
 
 **Effort:** Low (add fields to existing schema); can be done incrementally.
 
+**Enables**:
+
+- **Layer 1**: Canonical URLs auto-generated (no hard-coding in SDK)
+- **Layer 2**: Aggregated tools use metadata for routing decisions
+- **Layer 4**: Advanced tools can optimise based on performance hints (batch slow operations, parallelise fast ones)
+
+---
+
+### 8. Add Behavioural Metadata for Tool Safety and Retry Logic
+
+**What:** Custom OpenAPI extensions indicating tool behaviour characteristics for AI safety and orchestration.
+
+**Examples:**
+
+```yaml
+/lessons/{lesson}/summary:
+  get:
+    x-oak-behavior:
+      readOnly: true # Tool doesn't modify environment
+      idempotent: true # Safe to call multiple times
+      requiresConfirmation: false # Can execute without user approval
+      retryable: true # Safe to retry on failure
+```
+
+```yaml
+/lessons/{lesson}/assets:
+  post:
+    x-oak-behavior:
+      readOnly: false # Modifies state
+      idempotent: false # Each call has additional effect
+      destructive: false # Additive, not destructive
+      requiresConfirmation: true # Should prompt user before execution
+      retryable: false # Don't auto-retry (may duplicate data)
+```
+
+**Behavioural Properties:**
+
+- **`readOnly`** (boolean, default: `true` for GET, `false` for POST/PUT/DELETE/PATCH): Tool doesn't modify its environment. AI agents can call freely without confirmation.
+
+- **`idempotent`** (boolean, default: `false`): Calling repeatedly with the same arguments has no additional effect. Safe to retry on network errors.
+
+- **`destructive`** (boolean, default: `false` for additive operations): If `true`, may delete or overwrite existing data. Requires explicit user confirmation in most AI interfaces.
+
+- **`requiresConfirmation`** (boolean, default: `false` for reads, `true` for writes): AI should prompt user before executing. Helps prevent unintended actions.
+
+- **`retryable`** (boolean, default: `idempotent` value): Safe to automatically retry on transient failures.
+
+**Why:** AI agents need to understand tool safety characteristics to make appropriate orchestration decisions. This metadata enables:
+
+1. **Automatic Retry Logic**: Agents can safely retry idempotent operations without risk of duplication
+2. **User Confirmation Flows**: Destructive operations can trigger confirmation prompts
+3. **Parallel Execution**: Read-only tools can be safely parallelised
+4. **Error Recovery**: Retryable operations can be automatically retried; non-retryable operations fail gracefully
+5. **Security & Trust**: Clear labeling of write operations builds user confidence
+
+**Benefits:**
+
+- Safer AI agent behaviour (fewer accidental destructive actions)
+- Better error handling and recovery
+- More efficient orchestration (parallelise reads, serialise writes)
+- Clearer API contract for all consumers
+
+**Effort:** Low (add to existing endpoints); mechanical process once properties are defined.
+
+**Applies to:** All endpoints, but especially important for POST/PUT/DELETE/PATCH operations.
+
+**Enables**:
+
+- **Layer 1**: Tools clearly labelled with safety characteristics
+- **Layer 2**: Aggregated tools can implement smart retry logic
+- **Layer 3**: Services distinguish safe operations from risky ones
+- **Layer 4**:
+  - `bulk-unit-summaries`: Can parallelise all requests (read-only, retryable)
+  - `generate-lesson-plan`: Can retry failed fetches without duplication
+  - Export tools: Can safely retry chunks without confirmation
+
+**Industry Standards:** These properties align with:
+
+- **MCP Specification**: `ToolAnnotations` interface (`readOnlyHint`, `idempotentHint`, `destructiveHint`)
+- **OpenAI Apps SDK Guidelines**: "Mark any tool that changes external state as a write action. Read-only tools must be side-effect-free and safe to retry."
+- **HTTP Semantics (RFC 9110)**: GET/HEAD are safe (read-only); PUT/DELETE are idempotent; POST is neither
+
+**Current Workaround:** We infer behaviour from HTTP method (GET = read-only, POST = write), but this is imprecise. Explicit metadata would be more accurate.
+
+**Example Use Case:**
+
+A teacher asks: "Find 10 KS3 science lessons about cells and download the assets for each."
+
+- **Without behavioural metadata**: AI agent downloads assets one by one, doesn't retry failures (risk of duplication), asks for confirmation before each download (10 prompts)
+- **With behavioural metadata**: AI knows `get-lessons-assets` is read-only and retryable, so it parallelises requests, automatically retries failures, and doesn't prompt user (trusted read operation)
+
+---
+
+### 9. Enhance Thread Endpoints for Progression Analysis
+
+**What:** Enrich thread endpoints with metadata about conceptual progression and cross-programme relationships.
+
+**Current state:**
+
+```typescript
+GET / threads;
+Response: [{ title: 'Number', slug: 'number' }]; // Minimal metadata
+
+GET / threads / { threadSlug } / units;
+Response: [{ unitTitle: '...', unitSlug: '...', unitOrder: 5 }]; // No progression context
+```
+
+**Desired state:**
+
+```typescript
+GET /threads
+
+Response:
+{
+  "threads": [
+    {
+      "slug": "number",
+      "title": "Number",
+      "description": "Core number concepts from counting to surds",
+      "subjectSlug": "maths",
+      "keyStagesCovered": ["ks1", "ks2", "ks3", "ks4"],
+      "unitCount": 118,
+      "ageRange": "5-16",
+      "conceptualProgression": "Concrete counting → Abstract mathematical concepts"
+    },
+    {
+      "slug": "bq01-biology-what-are-living-things-and-what-are-they-made-of",
+      "title": "BQ01 Biology: What are living things and what are they made of?",
+      "description": "Progression from observable features to cellular/molecular biology",
+      "subjectSlug": "science",
+      "keyStagesCovered": ["ks1", "ks2", "ks3", "ks4"],
+      "unitCount": 32,
+      "ageRange": "5-16",
+      "conceptualProgression": "Observable features → Systems → Molecular & cellular"
+    }
+  ]
+}
+
+GET /threads/{threadSlug}/units
+
+Response:
+{
+  "threadSlug": "number",
+  "threadTitle": "Number",
+  "units": [
+    {
+      "unitSlug": "counting-recognising-and-comparing-numbers-0-10",
+      "unitTitle": "Counting, recognising and comparing numbers 0-10",
+      "unitOrder": 15,
+      "keyStageSlug": "ks1",
+      "year": 1,
+      "conceptualLevel": "concrete",
+      "prerequisiteUnits": [], // First in progression
+      "nextUnits": [16, 19], // Unit orders that follow
+      "appearsInProgrammes": ["maths-primary-ks1"]
+    },
+    {
+      "unitSlug": "surds",
+      "unitTitle": "Surds",
+      "unitOrder": 8,
+      "keyStageSlug": "ks4",
+      "year": 11,
+      "conceptualLevel": "abstract",
+      "prerequisiteUnits": [1, 2, 7], // Earlier units in progression
+      "nextUnits": [], // Terminal unit
+      "appearsInProgrammes": ["maths-secondary-ks4-higher-aqa", "maths-secondary-ks4-higher-ocr"]
+    }
+  ]
+}
+```
+
+**Additional enhancement: Thread filtering**
+
+```typescript
+GET /threads?subject=maths&keyStage=ks2
+// Returns only threads relevant to KS2 maths
+
+GET /threads?contains=unit-slug-here
+// Returns threads containing a specific unit (reverse lookup)
+```
+
+**Why:** Threads are Oak's pedagogical backbone—they show how concepts build over time. Currently, thread endpoints provide minimal metadata, making it hard for AI tools to:
+
+- Understand what a thread represents conceptually
+- Identify prerequisites for a unit
+- Trace progression pathways
+- Compare coverage across programmes
+
+**Benefits:**
+
+- **Progression tracking**: AI can trace how "fractions" develop from Year 1 to Year 11
+- **Prerequisite identification**: Find what students should know before a unit
+- **Cross-key-stage continuity**: Support transitions (primary → secondary, KS3 → KS4)
+- **Programme-agnostic planning**: Show conceptual coherence independent of exam board/tier
+- **Gap analysis**: Identify missing units in a thread for specific contexts
+
+**Impact:** **High for Layer 4 tools**. Threads enable the most sophisticated AI capabilities:
+
+- `trace-concept-progression`: Show how ideas build across years
+- `find-prerequisites`: Map prerequisite chains
+- `compare-programme-paths`: Compare Foundation vs Higher progression
+- `discover-curriculum-gaps`: Identify missing content
+
+**Effort:** 2-3 days (metadata enhancement + filtering endpoints).
+
+**Priority:** **Medium-High** - threads are crucial for pedagogical intelligence, but current endpoints are usable (just limited).
+
+**Enables**:
+
+- **Layer 4**: **CRITICAL FOR PROGRESSION TOOLS**
+  - `find-units-by-thread`: Needs thread metadata to filter and present progression pathways
+  - `trace-prior-knowledge`: Needs `prerequisiteUnits` to build dependency graphs
+  - `compare-units`: Needs `conceptualLevel` and `unitOrder` to show progression differences
+  - `analyse-nc-coverage`: Can map threads to NC statements for coherence checking
+  - All recommendation tools benefit from understanding conceptual progression
+
+**Example use case:**
+
+Teacher: "Show me how fractions progress from Year 1 to Year 6"
+
+**Current flow** (clunky):
+
+1. Search for "fractions" → get mixed results
+2. Try to manually order by year
+3. No clear progression pathway
+
+**With enhanced threads** (natural):
+
+1. Query `/threads?subject=maths&contains=fraction`
+2. Get `number` thread
+3. Query `/threads/number/units`
+4. Filter by `year` 1-6, `unitTitle` contains "fraction"
+5. See clear progression with order, prerequisites, and next steps
+
+---
+
+## Medium Priority – Schema Validation & Type Safety
+
+### 10. Expose Zod Validators for Perfect Type Fidelity
+
+**Current state:**
+
+The API maintains rich, hand-written Zod schemas internally using `zod-openapi/extend`:
+
+```typescript
+// reference/oak-openapi/src/lib/handlers/sequences/types.ts
+import { z } from 'zod';
+import 'zod-openapi/extend';
+
+const categorySchema = z.object({
+  categoryTitle: z.string().openapi({ description: 'The title of the category' }),
+  categorySlug: z.string().optional().openapi({
+    description: 'The unique identifier for the category',
+  }),
+});
+```
+
+These schemas:
+
+- Define request/response validation
+- Include field descriptions and examples
+- Power the tRPC procedures
+- Generate the OpenAPI specification via `trpc-to-openapi`
+
+**The duplication problem:**
+
+Currently, consuming applications:
+
+1. Fetch the generated OpenAPI JSON
+2. Re-generate Zod schemas from OpenAPI
+3. Use those schemas for validation
+
+**This creates**:
+
+- Round-trip conversion losses (Zod → OpenAPI → Zod)
+- Potential type fidelity issues (nullable handling, discriminated unions)
+- Duplicated maintenance effort
+- Version synchronisation challenges
+
+**Desired state (Option A): Export as npm package**
+
+```typescript
+// API repo publishes:
+// @oaknational/curriculum-api-schemas
+
+{
+  "name": "@oaknational/curriculum-api-schemas",
+  "version": "1.0.0",
+  "exports": {
+    "./lesson": "./dist/handlers/lesson/schemas/index.js",
+    "./units": "./dist/handlers/units/schemas/index.js",
+    "./sequences": "./dist/handlers/sequences/schemas/index.js",
+    "./subjects": "./dist/handlers/subjects/schemas/index.js",
+    // ... all schemas
+  }
+}
+```
+
+```typescript
+// Consuming applications use directly:
+import {
+  lessonSummaryRequestSchema,
+  lessonSummaryResponseSchema,
+} from '@oaknational/curriculum-api-schemas/lesson';
+
+// Perfect type fidelity, no round-trip conversion
+const validatedData = lessonSummaryResponseSchema.parse(apiResponse);
+```
+
+**Desired state (Option B): Expose via API endpoint**
+
+```typescript
+GET /api/v0/schemas/{schemaName}
+
+// Returns the Zod schema as JSON Schema or TypeScript code
+{
+  "schemaName": "LessonSummaryResponse",
+  "zodSchema": "z.object({ lessonTitle: z.string(), ... })",
+  "jsonSchema": { "type": "object", "properties": { ... } },
+  "typescript": "export interface LessonSummaryResponse { ... }"
+}
+```
+
+Or even simpler:
+
+```typescript
+GET /api/v0/schemas
+
+// Returns all schemas as a bundle
+{
+  "version": "1.0.0",
+  "schemas": {
+    "LessonSummaryRequest": { zodSchema: "...", jsonSchema: {...} },
+    "LessonSummaryResponse": { zodSchema: "...", jsonSchema: {...} },
+    // ... all schemas
+  }
+}
+```
+
+**Why this matters:**
+
+1. **Perfect Type Fidelity**: No round-trip conversion means no data loss
+2. **Single Source of Truth**: API's internal schemas ARE the public schemas
+3. **Better DX**: Consuming apps get exact validation that API uses
+4. **Reduced Duplication**: Stop regenerating what already exists
+5. **Version Alignment**: Schema version matches API version automatically
+6. **Better Error Messages**: Zod's validation errors are more helpful than OpenAPI validation errors
+
+**Benefits for API team:**
+
+- Schemas already exist (minimal additional work)
+- Forces good schema maintenance (public-facing)
+- Better API contract clarity
+- Enables type-safe client libraries
+
+**Benefits for all consumers:**
+
+- Type-safe SDKs without code generation
+- Runtime validation with excellent error messages
+- Perfect alignment with API behaviour
+- Easier integration testing
+
+**Implementation options:**
+
+**Option A (npm package):**
+
+- **Pros**: Standard distribution method, versioned, npm ecosystem
+- **Cons**: Requires package maintenance, breaking change management
+- **Effort**: 1-2 days initial setup + ongoing maintenance
+
+**Option B (API endpoint):**
+
+- **Pros**: Always in sync with API, no separate publishing, simpler versioning
+- **Cons**: Non-standard, requires schema serialisation, runtime fetching
+- **Effort**: 2-3 days (endpoint creation + serialisation logic)
+
+**Option C (Hybrid):**
+
+- Expose via API endpoint for discovery/debugging
+- Also publish as npm package for production use
+- **Pros**: Best of both worlds
+- **Effort**: Combined effort of both approaches
+
+**Recommendation**: Option A (npm package) with Option B as future enhancement
+
+**Priority**: Medium-High (solves real duplication problem, benefits all consumers)
+
+**Enables**:
+
+- **All layers**: Perfect type safety from API through to AI tools
+- **Layer 1**: Generated tools use exact API validation logic
+- **SDKs**: Type-safe client libraries without code generation step
+- **Testing**: Consuming apps can validate test fixtures against API schemas
+
+**Example use case:**
+
+Current workflow:
+
+```typescript
+// 1. Fetch OpenAPI spec
+// 2. Run type-gen to regenerate Zod schemas
+// 3. Use generated schemas
+import { lessonSummaryResponseSchema } from './generated/schemas';
+```
+
+With exposed schemas:
+
+```typescript
+// Just import and use
+import { lessonSummaryResponseSchema } from '@oaknational/curriculum-api-schemas/lesson';
+```
+
 ---
 
 ## Medium Priority – Response Metadata
 
-### 7. Add Response Schema Examples
+### 11. Add Response Schema Examples
 
 **Current state:**
 
@@ -561,12 +1464,19 @@ responses:
 
 **Applies to:** Major list/search endpoints.
 
+**Enables**:
+
+- **Layer 1**: Better handling of empty result sets (AI knows when no results is normal vs. error)
+- **Layer 4**: Export tools can format data correctly based on example structure
+
 ---
 
-### 8. Document Canonical URL Patterns
+### 12. Document Canonical URL Patterns
 
 **Current state:**
 Canonical URLs calculated client-side based on implicit rules.
+
+**Critical requirement:** Canonical URL patterns **must match** the Oak Web Application (OWA) at [https://www.thenational.academy/](https://www.thenational.academy/). These are the user-facing URLs teachers will see when viewing resources on the Oak website.
 
 **Desired state (option A – in schema):**
 
@@ -583,20 +1493,34 @@ components:
       x-oak-canonical-url-template: 'https://www.thenational.academy/teachers/lessons/{slug}'
 ```
 
+**Example URL patterns** (must match OWA production URLs):
+
+- Lessons: `https://www.thenational.academy/teachers/lessons/{lessonSlug}`
+- Units: `https://www.thenational.academy/teachers/units/{unitSlug}`
+- Programmes: `https://www.thenational.academy/teachers/programmes/{programmeSlug}` (if applicable)
+- Curriculum plans: `https://www.thenational.academy/teachers/curriculum-plans/{subject}/{keyStage}` (if applicable)
+
+**Note**: These are example patterns. The API team should document the **actual** OWA URL patterns used in production to ensure generated links work correctly for teachers.
+
 **Desired state (option B – in ontology endpoint):**
 Included in `/ontology` response (see item 3).
 
-**Why:** Enables generated clients to construct user-facing URLs without hard-coding patterns.
+**Why:** Enables generated clients to construct user-facing URLs without hard-coding patterns. Teachers can click links in AI-generated lesson plans and go directly to the correct Oak website page.
 
-**Current workaround:** SDK generator adds canonical URLs at type-gen time using hard-coded patterns.
+**Current workaround:** SDK generator adds canonical URLs at type-gen time using hard-coded patterns that attempt to match OWA structure.
 
-**Impact:** Single source of truth for URLs; easier updates when URL patterns change.
+**Impact:** Single source of truth for URLs that's guaranteed to match OWA; easier updates when URL patterns change; ensures teachers always get working links.
+
+**Enables**:
+
+- **All layers**: Tools can include links to Oak website for teacher convenience
+- **Layer 4**: Export tools can generate clickable lesson plans with correct URLs
 
 ---
 
 ## Low Priority – Performance Hints
 
-### 9. Add Performance and Caching Metadata
+### 13. Add Performance and Caching Metadata
 
 **What:** Extensions indicating response characteristics.
 
@@ -622,21 +1546,29 @@ Included in `/ontology` response (see item 3).
 
 **Priority:** Low (nice-to-have for advanced optimisation).
 
+**Enables**:
+
+- **Layer 4**: `bulk-unit-summaries` can optimise batching based on rate limits; tools can cache stable data (lesson content) vs. dynamic data (user progress)
+
 ---
 
 ## Summary Table
 
-| Item                            | Priority | Impact        | Effort    | AI Benefit                 |
-| ------------------------------- | -------- | ------------- | --------- | -------------------------- |
-| 1. "Use this when" descriptions | **High** | Very High     | 2-4 hours | 70% fewer wrong-tool calls |
-| 2. Operation summaries          | **High** | Medium        | 1 hour    | Better UI/organisation     |
-| 3. `/ontology` endpoint         | **High** | **Very High** | 1-2 days  | 60% fewer discovery turns  |
-| 4. Error response docs          | **High** | High          | 2-3 hours | Proper error handling      |
-| 5. Parameter examples           | Medium   | Medium        | Ongoing   | Clearer semantics          |
-| 6. Custom schema extensions     | Medium   | Medium        | Low       | Auto-generated metadata    |
-| 7. Response examples            | Medium   | Low           | Ongoing   | Better error handling      |
-| 8. Canonical URL patterns       | Medium   | Medium        | 1 hour    | URL generation             |
-| 9. Performance hints            | Low      | Low           | Low       | Advanced optimisation      |
+| Item                            | Priority        | Impact        | Effort    | AI Benefit                            |
+| ------------------------------- | --------------- | ------------- | --------- | ------------------------------------- |
+| 1. "Use this when" descriptions | **High**        | Very High     | 2-4 hours | 70% fewer wrong-tool calls            |
+| 2. Operation summaries          | **High**        | Medium        | 1 hour    | Better UI/organisation                |
+| 3. `/ontology` endpoint         | **High**        | **Very High** | 1-2 days  | 60% fewer discovery turns             |
+| 4. Error response docs          | **High**        | High          | 2-3 hours | Proper error handling                 |
+| 5. Programme variant metadata   | **High**        | **Very High** | 3-5 days  | Programme-based filtering & OWA URLs  |
+| 6. Parameter examples           | Medium          | Medium        | Ongoing   | Clearer semantics                     |
+| 7. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
+| 8. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
+| 9. Thread enhancements          | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
+| 10. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
+| 11. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
+| 12. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
+| 13. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
 
 ---
 
@@ -670,13 +1602,48 @@ After each schema change:
 
 ## Related Documentation
 
-- OpenAI Apps SDK Metadata Guidance: <https://developers.openai.com/apps-sdk/guides/optimize-metadata/>
-- MCP Tool Specification: <https://spec.modelcontextprotocol.io/>
-- Oak MCP Implementation Plan: `.agent/plans/oak-openai-app-plan.md`
-- Schema-First Execution: `.agent/directives-and-memory/schema-first-execution.md`
+### External Resources
+
+- **OpenAI Apps SDK Metadata Guidance**: <https://developers.openai.com/apps-sdk/guides/optimize-metadata/>
+  - Best practices for API metadata that AI models can understand
+  - Tool selection accuracy improvements
+  - Real-world impact metrics
+
+- **Model Context Protocol (MCP) Specification**: <https://spec.modelcontextprotocol.io/>
+  - Open standard for AI tool integration
+  - Supported by Anthropic (Claude), OpenAI (ChatGPT), and others
+  - Tool descriptor format and capabilities
+
+- **OpenAPI 3.1 Specification**: <https://spec.openapis.org/oas/v3.1.0>
+  - Schema extensions (`x-*` fields)
+  - Response examples and error documentation
+  - Parameter metadata
+
+### Oak AI Integration
+
+- **Live Demo**: Try the current MCP tools at `https://open-api.thenational.academy/mcp` (requires API key)
+- **Example ChatGPT Session**: [To be added - show real teacher using curriculum tools]
+- **GitHub**: [oak-notion-mcp repository link - if public]
+
+---
+
+## Next Steps
+
+We'd welcome the opportunity to:
+
+1. **Demo the current AI tools** - Show you what's already possible and what becomes possible with these enhancements
+2. **Discuss implementation priority** - Especially Items #3 (ontology) and #4 (error docs) which have the biggest impact
+3. **Collaborate on metadata patterns** - We can provide draft descriptions/examples for your review
+4. **Share success metrics** - Once improvements are live, we'll track and share tool selection accuracy and teacher satisfaction
 
 ---
 
 ## Contact
 
-For questions or to propose additional enhancements, contact the oak-notion-mcp maintainers or raise issues in the API schema repository.
+For questions, demos, or to discuss implementation:
+
+- AI Integration Team: [contact details]
+- API Squad: [contact details]
+- Slack: [channel]
+
+For proposing additional enhancements or reporting issues, please [raise an issue in the API schema repository / contact relevant team].
