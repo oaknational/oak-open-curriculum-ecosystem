@@ -65,6 +65,13 @@ export async function prepareLocalLiveAuthEnvironment(
   delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
   delete process.env.VERCEL; // Local but with auth enforced
 
+  // Debug logging
+  console.log('[local-live-auth] Environment configured:', {
+    NODE_ENV: process.env.NODE_ENV,
+    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
+    VERCEL: process.env.VERCEL,
+  });
+
   // Verify required environment variables
   validateRequiredEnvVars(envLoad);
 
