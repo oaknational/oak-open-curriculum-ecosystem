@@ -64,16 +64,20 @@ export async function prepareLocalLiveAuthEnvironment(
   delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
   delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
   delete process.env.VERCEL; // Local but with auth enforced
-
-  // Debug logging
-  console.log('[local-live-auth] Environment configured:', {
-    NODE_ENV: process.env.NODE_ENV,
-    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
-    VERCEL: process.env.VERCEL,
-  });
+  process.env.LOG_LEVEL = 'debug'; // Enable debug logging to diagnose auth issues
 
   // Verify required environment variables
   validateRequiredEnvVars(envLoad);
+
+  // Log configuration for debugging
+  console.log('[local-live-auth] Environment configuration:', {
+    NODE_ENV: process.env.NODE_ENV,
+    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
+    VERCEL: process.env.VERCEL,
+    CLERK_PUBLISHABLE_KEY_SET: !!process.env.CLERK_PUBLISHABLE_KEY,
+    CLERK_SECRET_KEY_SET: !!process.env.CLERK_SECRET_KEY,
+  });
 
   return {
     baseUrl: `http://localhost:${String(options.port)}`,

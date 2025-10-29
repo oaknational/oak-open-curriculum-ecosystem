@@ -4,12 +4,17 @@ This app exposes the Curriculum MCP server over Streamable HTTP using the offici
 
 ## Quick start (local)
 
-1. Set env vars (minimal):
+### Option 1: With Auth Bypass (Fastest for Development)
+
+1. Create `.env` file in repository root:
 
 ```bash
-export OAK_API_KEY=your_api_key
-export REMOTE_MCP_DEV_TOKEN=dev-token
-export ALLOWED_HOSTS=localhost,127.0.0.1,::1
+OAK_API_KEY=your_api_key
+CLERK_PUBLISHABLE_KEY=pk_test_your_key_here
+CLERK_SECRET_KEY=sk_test_your_key_here
+REMOTE_MCP_ALLOW_NO_AUTH=true
+NODE_ENV=development
+ALLOWED_HOSTS=localhost,127.0.0.1,::1
 ```
 
 2. Run dev server:
@@ -18,17 +23,21 @@ export ALLOWED_HOSTS=localhost,127.0.0.1,::1
 pnpm -C apps/oak-curriculum-mcp-streamable-http dev
 ```
 
-3. List tools (dev token):
+3. Call MCP endpoint (no auth required when bypass enabled):
 
 ```bash
 curl -sS \
-  -H "Authorization: Bearer $REMOTE_MCP_DEV_TOKEN" \
+  -H "Accept: application/json, text/event-stream" \
   -H 'Content-Type: application/json' \
   -X POST http://localhost:3333/mcp \
   -d '{"jsonrpc":"2.0","id":"1","method":"tools/list"}'
 ```
 
-Note: Requests must explicitly include `Accept: application/json, text/event-stream`. The server now rejects calls missing the SSE media type with `406 Not Acceptable`.
+### Option 2: With Real Clerk OAuth (Production-Equivalent)
+
+Follow Option 1 but **omit** `REMOTE_MCP_ALLOW_NO_AUTH` and set `NODE_ENV=test`. Server will enforce Clerk OAuth. Use an MCP client like Claude Desktop to complete the OAuth flow.
+
+**Note**: All requests must include `Accept: application/json, text/event-stream`. The server rejects calls missing the SSE media type with `406 Not Acceptable`.
 
 ### Example payloads
 
@@ -67,15 +76,16 @@ The historical `/openai_connector` alias has been removed. All clients must targ
 ## Vercel deployment
 
 - Use Node runtime (not Edge)
-- Minimal env:
-  - `OAK_API_KEY`
+- **Required environment variables**:
+  - `CLERK_PUBLISHABLE_KEY` - Clerk public key from Clerk Dashboard
+  - `CLERK_SECRET_KEY` - Clerk secret key from Clerk Dashboard
+  - `OAK_API_KEY` - Oak Curriculum API key
   - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards)
-  - `BASE_URL` (recommended; if omitted we derive from request host)
-  - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
-- Optional:
+  - `BASE_URL` (e.g., `https://open-api.thenational.academy`)
+  - `MCP_CANONICAL_URI` (e.g., `https://open-api.thenational.academy/mcp`)
+- **Optional**:
   - `ALLOWED_ORIGINS` for browser CORS
   - `LOG_LEVEL` (default `info`)
-  - `ENABLE_LOCAL_AS` for demo JWKS endpoints
 
 ### Health endpoints
 
@@ -83,11 +93,17 @@ The historical `/openai_connector` alias has been removed. All clients must targ
 
 ### Smoke-test checklist (post-deploy)
 
-- Confirm Node runtime (not Edge) in project settings
-- Verify envs set: `OAK_API_KEY`, `ALLOWED_HOSTS` (+ optionally `BASE_URL`, `MCP_CANONICAL_URI`)
-- Curl `/.well-known/oauth-protected-resource` returns resource + auth servers
-- POST `/mcp` without auth returns 401 with `WWW-Authenticate` containing `resource` and `authorization_uri`
-- POST `/mcp` with a valid Bearer token returns 200 and SSE-wrapped JSON-RPC
+- Confirm Node runtime (not Edge) in Vercel project settings
+- Verify required environment variables set in Vercel:
+  - `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` (from Clerk Dashboard)
+  - `OAK_API_KEY` (Oak Curriculum API key)
+  - `ALLOWED_HOSTS` (must include deployment hostname)
+  - `BASE_URL` and `MCP_CANONICAL_URI` (recommended)
+- Run: `pnpm smoke:remote` to test deployed instance
+- Manual verification:
+  - `curl <deployment-url>/.well-known/oauth-protected-resource` returns Clerk AS URLs (not localhost!)
+  - `POST <deployment-url>/mcp` without auth returns 401 with `WWW-Authenticate` header
+  - OAuth flow works in Claude Desktop (user can authenticate and call tools)
 
 ### OAuth discovery
 
@@ -107,29 +123,74 @@ The historical `/openai_connector` alias has been removed. All clients must targ
 
 If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for diagnostics.
 
-## Authentication status and next steps
+## Authentication
 
-- Production OAuth is MANDATORY next step. The server already validates RFC 9068 JWTs against a co‑hosted demo AS when `ENABLE_LOCAL_AS=true`, but there is no production Authorization Server yet. Implement:
-  - Authorization Code + PKCE for UI users (Google OIDC restricted to `*.thenational.academy`).
-  - Device Authorization Grant for headless/MCP clients. AS mints short‑lived JWT access tokens (`iss=BASE_URL`, `aud=MCP_CANONICAL_URI`).
-- Until production OAuth exists, Vercel deploys will return 401 unless you provide a valid JWT minted by the demo AS. Dev tokens are intentionally ignored on Vercel.
+**Status**: ✅ **Production OAuth 2.1 via Clerk**
 
-Temporary validation bypass (for smoke only):
+The server uses [Clerk](https://clerk.com/) as the OAuth 2.1 Authorization Server, providing secure, production-ready authentication for MCP clients.
 
-- **Dangerous override**: set `DANGEROUSLY_DISABLE_AUTH=true` to bypass all authentication (works everywhere, including production - use with extreme caution)
-- Preview/CI only: set `CI=true` and `REMOTE_MCP_CI_TOKEN=<secret>` and call with `Authorization: Bearer <secret>`. Remove after validation.
-- Local only: set `REMOTE_MCP_ALLOW_NO_AUTH=true` (ignored on Vercel) or use `REMOTE_MCP_DEV_TOKEN`.
+### How it Works
+
+1. MCP client (e.g., Claude Desktop) attempts to call `/mcp`
+2. Server returns `401` with `WWW-Authenticate` header pointing to Clerk
+3. Client fetches OAuth metadata from `/.well-known/oauth-protected-resource`
+4. Client initiates OAuth flow with Clerk (opens browser for user auth)
+5. User authenticates via Google SSO (restricted to `@thenational.academy` only)
+6. Clerk issues JWT access token to client
+7. Client includes token in subsequent `/mcp` requests: `Authorization: Bearer <token>`
+
+### Required Environment Variables
+
+**Production/Vercel**:
+
+- `CLERK_PUBLISHABLE_KEY` - Clerk public key (starts with `pk_test_` or `pk_live_`)
+- `CLERK_SECRET_KEY` - Clerk secret key (starts with `sk_test_` or `sk_live_`)
+- `BASE_URL` - Server base URL (e.g., `https://open-api.thenational.academy`)
+- `MCP_CANONICAL_URI` - MCP endpoint URL (e.g., `https://open-api.thenational.academy/mcp`)
+- `OAK_API_KEY` - Oak Curriculum API key
+- `ALLOWED_HOSTS` - DNS rebinding protection
+
+**Local Development Bypass** (optional):
+
+- `REMOTE_MCP_ALLOW_NO_AUTH=true` - Bypass OAuth for local testing (only works when `NODE_ENV=development` and not on Vercel)
+- `DANGEROUSLY_DISABLE_AUTH=true` - Bypass ALL auth **everywhere** (use with extreme caution, never in production)
 
 ## Troubleshooting
 
-- 500 on `/.well-known/oauth-protected-resource` or `/mcp`:
-  - Ensure Vercel framework is Express and the app default‑exports an Express instance (this repo does in `src/index.ts`).
-  - Verify `ALLOWED_HOSTS` includes your alias host (e.g. `curriculum-mcp-alpha.oaknational.dev`).
-  - If using local demo AS, ensure `ENABLE_LOCAL_AS=true` and `LOCAL_AS_JWK` is present or allow the app to generate it.
-- 401 without `Authorization`: client must send a Bearer token; see OAuth metadata endpoint. For demo: enable `ENABLE_LOCAL_AS=true` and mint a short‑lived JWT.
-- CORS blocked: set `ALLOWED_ORIGINS` to include your origin
-- Host blocked: add host to `ALLOWED_HOSTS`
-- Dev local AS: set `ENABLE_LOCAL_AS=true` and provide `LOCAL_AS_JWK` or let the app generate one
+### Authentication Issues
+
+- **401 Unauthorized on `/mcp` requests**:
+  - **Expected behavior**: Without a valid Clerk OAuth token, all `/mcp` requests return 401
+  - **For local dev**: Set `REMOTE_MCP_ALLOW_NO_AUTH=true` and `NODE_ENV=development` to bypass auth
+  - **For MCP clients**: Client must complete OAuth flow via Clerk (see OAuth discovery section)
+  - **Check Clerk status**: <https://status.clerk.com/>
+
+- **OAuth flow doesn't start in MCP client**:
+  - Verify `/.well-known/oauth-protected-resource` returns Clerk URLs (not localhost)
+  - Check `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY` are set in environment
+  - Verify Dynamic Client Registration is enabled in Clerk Dashboard
+
+- **User can't sign in** ("Email not allowed" error):
+  - Only `@thenational.academy` emails are allowed
+  - Verify user's email domain is correct
+  - Check Clerk Dashboard → Configure → Restrictions → Allowlist
+
+### Server Issues
+
+- **500 errors on `/mcp` or `/.well-known/*`**:
+  - Check Vercel logs for specific error details
+  - Verify all required environment variables are set (see Authentication section)
+  - Ensure Clerk keys are valid (check Clerk Dashboard → API Keys)
+
+- **CORS blocked**: Set `ALLOWED_ORIGINS` to include your origin
+- **Host blocked**: Add host to `ALLOWED_HOSTS` (comma-separated list)
+
+### Local Development
+
+- **Server won't start**:
+  - Verify `.env` file exists in repository root with `OAK_API_KEY`
+  - For Clerk auth testing: Add `CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`
+  - For no-auth testing: Add `REMOTE_MCP_ALLOW_NO_AUTH=true` and `NODE_ENV=development`
 
 ## How it works
 
@@ -163,9 +224,12 @@ See [TESTING.md](./TESTING.md) for detailed documentation on:
 
 ## Smoke testing
 
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – launches a local server in stub mode, forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true`, and seeds the deterministic `REMOTE_MCP_DEV_TOKEN=stub-smoke-dev-token`. All responses are generated from schema-driven stubs, so the run is completely offline.
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – starts the same local server in live mode. `loadRootEnv` searches the repo root for `.env.local`/`.env`, requires `OAK_API_KEY`, and logs which file was used. The harness fails fast with a clear message if the key is missing.
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://curriculum-mcp-alpha.oaknational.dev/mcp]` – targets a deployed instance without starting a local server. A base URL is required; the harness resolves it in the order CLI argument → `SMOKE_REMOTE_BASE_URL` → `OAK_MCP_URL` and fails fast if none is available. Remote runs now assert the same documented status handling as local smoke (including 404 fallbacks), so discrepancies usually indicate stale deployments or missing credentials. Preview deployments (for example, `https://poc-oak-open-curriculum-mcp-git-feat-searchuxcontinuation.vercel.thenational.academy/mcp`) update roughly five minutes after each push.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – Launches local server in stub mode with auth bypass enabled. Forces `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true` and `REMOTE_MCP_ALLOW_NO_AUTH=true`. All responses are generated from schema-driven stubs, so the run is completely offline (no network calls to Oak API or Clerk).
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – Starts local server in live mode with auth bypass enabled. Requires `OAK_API_KEY` from `.env` file. Makes real API calls to Oak Curriculum API but bypasses Clerk OAuth for testing convenience.
+
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://open-api.thenational.academy/mcp]` – Tests deployed instance (Vercel) with real Clerk OAuth enforcement. Requires base URL as CLI argument, `SMOKE_REMOTE_BASE_URL`, or `OAK_MCP_URL`. Fails fast if none provided. Remote runs validate production configuration including auth enforcement.
+
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` - **Manual test only** (not in automated quality gate). Requires REAL Clerk production keys to test auth enforcement locally. Dummy test credentials don't enforce authentication. Use before production deployment to validate auth works.
 
 `runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.
 
