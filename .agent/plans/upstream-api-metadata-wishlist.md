@@ -1233,7 +1233,132 @@ Teacher: "Show me how fractions progress from Year 1 to Year 6"
 
 ## Medium Priority – Schema Validation & Type Safety
 
-### 10. Expose Zod Validators for Perfect Type Fidelity
+### 10. Standardise Parameter and Schema Types with `$ref`
+
+**What:** Use OpenAPI `$ref` to define reusable parameter and schema components, ensuring type consistency across all endpoints.
+
+**Current state:**
+
+The same semantic concept has inconsistent types across the spec:
+
+```yaml
+# /sequences/{sequence}/units - year is STRING enum
+parameters:
+  - name: year
+    schema:
+      type: string
+      enum: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "all-years"]
+
+# /sequences/{sequence}/assets - year is NUMBER
+parameters:
+  - name: year
+    schema:
+      type: number
+
+# Response schemas - MIXED
+year:
+  anyOf:
+    - type: number
+    - type: string
+      enum: ["all-years"]
+# OR
+year:
+  anyOf:
+    - type: number
+    - type: string  # Too broad!
+```
+
+**Problems:**
+
+1. **Code generators produce inconsistent types** - TypeScript/Zod can't decide if `year` is `number | string` or `1 | 2 | ... | 11 | "all-years"`
+2. **Runtime validation breaks** - A valid `year: 5` might fail validation on one endpoint but succeed on another
+3. **Client confusion** - Should I send `5` or `"5"`?
+4. **Maintenance nightmare** - Changing year representation requires hunting through the entire spec
+
+**Desired state:**
+
+Define reusable components:
+
+```yaml
+components:
+  parameters:
+    YearQueryParameter:
+      name: year
+      in: query
+      description: "The year group to filter by. Accepts year numbers 1-11 or 'all-years' for content spanning multiple years."
+      schema:
+        $ref: '#/components/schemas/Year'
+      examples:
+        year3:
+          value: 3
+          summary: 'Year 3 (age 7-8)'
+        allYears:
+          value: 'all-years'
+          summary: 'Content spanning multiple year groups'
+
+  schemas:
+    Year:
+      oneOf:
+        - type: integer
+          minimum: 1
+          maximum: 11
+          description: 'Year group (1-11)'
+        - type: string
+          const: 'all-years'
+          description: 'Content spanning multiple years'
+```
+
+Then reference consistently:
+
+```yaml
+# In path definitions
+paths:
+  /sequences/{sequence}/units:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/YearQueryParameter'
+
+  /sequences/{sequence}/assets:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/YearQueryParameter'
+
+# In response schemas
+SequenceUnitsResponseSchema:
+  properties:
+    year:
+      $ref: '#/components/schemas/Year'
+```
+
+**Other candidates for standardisation:**
+
+- `keyStage`: Sometimes has description, sometimes doesn't, casing notes vary
+- `subject`: Enum values identical across ~12 endpoints but duplicated
+- `lessonSlug`, `unitSlug`, `sequenceSlug`: Pattern is `[a-z0-9-]+` but not documented
+- `offset`, `limit`: Pagination params duplicated on every list endpoint
+
+**Why:** Single source of truth for types → consistent codegen → fewer runtime errors.
+
+**Benefits:**
+
+- **Type-safe client generation**: Zod/TypeScript/etc. generate correct union types
+- **DRY principle**: Define once, reference everywhere
+- **Easier API evolution**: Change `Year` schema in one place, all endpoints update
+- **Better validation**: Code generators can create proper validators
+- **Self-documenting**: Clear that these are the same concept across endpoints
+
+**Effort:** Low-Medium (mostly find-replace, but requires careful review)
+
+**Enables**:
+
+- **All layers**: Reliable type inference and validation
+- **Layer 1**: Direct proxy tools use correct types in function signatures
+- **Layer 2**: Aggregated tools can confidently pass parameters between endpoints
+- **Layer 3/4**: Advanced tools can reason about parameter compatibility across endpoints
+
+---
+
+### 11. Expose Zod Validators for Perfect Type Fidelity
 
 **Current state:**
 
@@ -1411,7 +1536,7 @@ import { lessonSummaryResponseSchema } from '@oaknational/curriculum-api-schemas
 
 ## Medium Priority – Response Metadata
 
-### 11. Add Response Schema Examples
+### 12. Add Response Schema Examples
 
 **Current state:**
 
@@ -1471,7 +1596,7 @@ responses:
 
 ---
 
-### 12. Document Canonical URL Patterns
+### 13. Document Canonical URL Patterns
 
 **Current state:**
 Canonical URLs calculated client-side based on implicit rules.
@@ -1520,7 +1645,7 @@ Included in `/ontology` response (see item 3).
 
 ## Low Priority – Performance Hints
 
-### 13. Add Performance and Caching Metadata
+### 14. Add Performance and Caching Metadata
 
 **What:** Extensions indicating response characteristics.
 
@@ -1552,6 +1677,447 @@ Included in `/ontology` response (see item 3).
 
 ---
 
+### 15. Complete OpenAPI Best Practices Checklist
+
+**What:** Fill gaps in OpenAPI spec completeness following [OpenAPI Initiative best practices](https://learn.openapis.org/best-practices.html).
+
+**References:**
+
+- [OpenAPI Best Practices](https://learn.openapis.org/best-practices.html)
+- [Providing Documentation and Examples](https://learn.openapis.org/specification/docs.html)
+- [Describing API Security](https://learn.openapis.org/specification/security.html)
+- [API Servers](https://learn.openapis.org/specification/servers.html)
+
+---
+
+#### **Section A: Core Metadata (High Priority)**
+
+**A1. Complete `info` object:**
+
+```json
+{
+  "info": {
+    "title": "Oak National Academy Curriculum API",
+    "version": "0.5.0",
+    "description": "Access the UK's largest open curriculum with 40,000+ lessons across all key stages. This API provides programmatic access to lessons, units, quiz questions, transcripts, and downloadable resources aligned with the National Curriculum.",
+    "contact": {
+      "name": "Oak National Academy Developer Support",
+      "email": "developers@thenational.academy",
+      "url": "https://github.com/oaknational/oak-curriculum-api"
+    },
+    "license": {
+      "name": "Open Government Licence v3.0",
+      "url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+    },
+    "termsOfService": "https://www.thenational.academy/legal/terms-and-conditions"
+  }
+}
+```
+
+**Why:** Per [OpenAPI structure guidelines](https://learn.openapis.org/specification/structure.html), complete `info` metadata is essential for discoverability and legal clarity.
+
+**Current state:** Missing `description`, `contact`, `license`, `termsOfService`
+
+---
+
+**A2. Enhanced tag descriptions:**
+
+```yaml
+tags:
+  - name: lessons
+    description: |
+      Retrieve comprehensive lesson content including:
+      - **Summaries**: Learning objectives, keywords, misconceptions
+      - **Transcripts**: Full video transcripts with VTT captions
+      - **Quizzes**: Starter and exit quizzes with answers
+      - **Assets**: Downloadable slide decks, worksheets, videos
+    externalDocs:
+      url: 'https://docs.thenational.academy/api/lessons'
+  - name: search
+    description: |
+      Discover lessons using:
+      - **Title search**: Keyword matching on lesson titles
+      - **Transcript search**: Semantic search across video content
+  - name: units
+    description: 'Access curriculum units - thematic collections of 4-8 related lessons'
+  - name: sequences
+    description: 'Browse multi-year curriculum sequences spanning key stages'
+  - name: threads
+    description: 'Follow conceptual progression strands across the entire curriculum'
+```
+
+**Why:** [Enhanced tags](https://learn.openapis.org/specification/tags.html) with descriptions and external docs improve navigation in generated documentation.
+
+**Current state:** Tags exist but have no descriptions or external documentation links.
+
+---
+
+#### **Section B: Documentation Best Practices (Medium-High Priority)**
+
+**B1. Use `summary` AND `description` pattern:**
+
+Per [OpenAPI documentation guidelines](https://learn.openapis.org/specification/docs.html), operations should have both fields:
+
+```yaml
+/sequences/{sequence}/units:
+  get:
+    summary: 'List units in a curriculum sequence'
+    description: |
+      ## Overview
+      Returns all units within a curriculum sequence, grouped by year.
+
+      ## Use Cases
+      - Building year-by-year curriculum overviews
+      - Filtering units for specific year groups
+      - Understanding unit progression through key stages
+
+      ## Ordering
+      Units are returned in **pedagogical order** as defined by curriculum experts.
+
+      ## Thread Associations
+      Each unit includes thread memberships showing conceptual progression.
+
+      ## Special Cases
+      - PE Primary: Supports `year: "all-years"` for cross-year content
+      - KS4 Science: Units are grouped by tier (Foundation/Higher)
+```
+
+**Why:**
+
+- `summary`: Short (for list views, API explorers)
+- `description`: Long with CommonMark formatting (for detail views)
+
+**Current state:** Most operations only have `description`, not `summary`
+
+---
+
+**B2. Leverage CommonMark in descriptions:**
+
+Descriptions support [CommonMark 0.27](https://learn.openapis.org/specification/docs.html#the-commonmark-syntax):
+
+```yaml
+description: |
+  ### What This Returns
+  A paginated list of lessons grouped by unit.
+
+  ### Filtering Options
+  - `unit`: Filter to a specific unit slug
+  - `offset`/`limit`: Pagination (max 100 per page)
+
+  ### Response Structure
+  [
+    {
+      "unitSlug": "...",
+      "unitTitle": "...",
+      "lessons": [...]
+    }
+  ]
+
+  **Note**: Only published lessons are returned.
+```
+
+**Why:** Richer formatting creates better auto-generated documentation.
+
+**Current state:** Descriptions are plain text, not using CommonMark features.
+
+---
+
+**B3. Use `examples` (plural) over `example` (singular):**
+
+Per [OpenAPI examples guide](https://learn.openapis.org/specification/docs.html#adding-examples), prefer `examples` (with Example Objects):
+
+```yaml
+responses:
+  '400':
+    description: Invalid request parameters
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/ErrorResponse'
+        examples:
+          invalidYear:
+            summary: 'Year out of range'
+            description: 'Year must be 1-11 or "all-years"'
+            value:
+              message: 'Invalid year parameter'
+              code: 'INVALID_PARAMETER'
+              data:
+                parameter: 'year'
+                provided: '99'
+                allowed: ['1', '2', ..., '11', 'all-years']
+          invalidKeyStage:
+            summary: 'Unknown key stage'
+            value:
+              message: 'Invalid keyStage parameter'
+              code: 'INVALID_PARAMETER'
+```
+
+**Why:** Multiple named examples with summaries improve documentation and enable mock servers.
+
+**Current state:** Some endpoints use `example` (singular), most have none.
+
+---
+
+#### **Section C: Error Handling (High Priority)**
+
+**C1. Document all HTTP responses:**
+
+Current spec only documents `200` (and `404` for transcript). Should add:
+
+```yaml
+responses:
+  '200':
+    # ... existing
+  '400':
+    $ref: '#/components/responses/BadRequest'
+  '401':
+    $ref: '#/components/responses/Unauthorised'
+  '403':
+    $ref: '#/components/responses/Forbidden'
+  '429':
+    $ref: '#/components/responses/RateLimitExceeded'
+  '500':
+    $ref: '#/components/responses/InternalServerError'
+  '503':
+    $ref: '#/components/responses/ServiceUnavailable'
+```
+
+**C2. Define reusable error response components:**
+
+```yaml
+components:
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            invalidParameter:
+              summary: 'Parameter validation failed'
+              value:
+                message: 'Invalid year parameter'
+                code: 'INVALID_PARAMETER'
+    RateLimitExceeded:
+      description: Too many requests
+      headers:
+        X-RateLimit-Limit:
+          schema: { type: integer }
+        X-RateLimit-Remaining:
+          schema: { type: integer }
+        X-RateLimit-Reset:
+          schema: { type: integer }
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+```
+
+**Why:** Consistent error handling per [OpenAPI best practices](https://learn.openapis.org/best-practices.html).
+
+---
+
+#### **Section D: Response Headers (Medium Priority)**
+
+**D1. Document rate limit headers:**
+
+```yaml
+responses:
+  '200':
+    headers:
+      X-RateLimit-Limit:
+        schema:
+          type: integer
+          example: 1000
+        description: 'Maximum requests per time window'
+      X-RateLimit-Remaining:
+        schema:
+          type: integer
+          example: 953
+        description: 'Requests remaining in current window'
+      X-RateLimit-Reset:
+        schema:
+          type: integer
+          example: 1740164400000
+        description: 'Time when rate limit resets (milliseconds since Unix epoch)'
+```
+
+**Why:** Oak has `/rate-limit` endpoint but headers aren't documented in spec!
+
+**D2. Add caching headers:**
+
+```yaml
+Cache-Control:
+  schema:
+    type: string
+    example: 'public, max-age=300'
+  description: 'Cache control directives (lesson content is cacheable)'
+ETag:
+  schema:
+    type: string
+  description: 'Entity tag for cache validation'
+```
+
+---
+
+#### **Section E: Schema Constraints (Medium Priority)**
+
+**E1. Add string patterns and constraints:**
+
+```yaml
+components:
+  schemas:
+    LessonSlug:
+      type: string
+      pattern: '^[a-z0-9]+(-[a-z0-9]+)*$'
+      minLength: 3
+      maxLength: 200
+      example: 'the-roman-invasion-of-britain'
+      description: 'URL-safe lesson identifier (lowercase, hyphen-separated)'
+```
+
+**E2. Use `format` validators:**
+
+```yaml
+properties:
+  canonicalUrl:
+    type: string
+    format: uri
+    readOnly: true
+    example: 'https://www.thenational.academy/teachers/lessons/example'
+```
+
+**E3. Mark response-only fields:**
+
+```yaml
+properties:
+  lessonSlug:
+    type: string
+    readOnly: true
+  canonicalUrl:
+    type: string
+    format: uri
+    readOnly: true
+```
+
+**Why:** Better code generation and validation per [reusing descriptions](https://learn.openapis.org/specification/reusing-descriptions.html).
+
+---
+
+#### **Section F: Pagination (Medium Priority)**
+
+**F1. Include pagination metadata in responses:**
+
+```yaml
+KeyStageSubjectLessonsResponse:
+  type: object
+  properties:
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/LessonUnit'
+    pagination:
+      type: object
+      required: [offset, limit, total, hasMore]
+      properties:
+        offset:
+          type: integer
+          example: 0
+        limit:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 247
+          description: 'Total number of results available'
+        hasMore:
+          type: boolean
+          example: true
+          description: 'Whether more results are available beyond current page'
+```
+
+**Why:** Clients need to know if there are more results.
+
+---
+
+#### **Section G: Additional Best Practices (Low-Medium Priority)**
+
+**G1. Server variables for environments:**
+
+```yaml
+servers:
+  - url: 'https://{environment}.thenational.academy/api/{version}'
+    description: 'Oak Curriculum API'
+    variables:
+      environment:
+        default: open-api
+        enum: [open-api, open-api-staging]
+        description: 'API environment'
+      version:
+        default: v0
+        enum: [v0]
+        description: 'API version'
+```
+
+**G2. Deprecation markers (when needed):**
+
+```yaml
+/legacy-endpoint:
+  get:
+    deprecated: true
+    summary: 'Legacy endpoint'
+    description: |
+      **DEPRECATED**: Use `/new-endpoint` instead.
+
+      This endpoint will be removed in v1.0 (December 2025).
+
+      Migration guide: https://docs.thenational.academy/api/migration
+```
+
+**G3. Security scheme documentation:**
+
+```yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Obtain bearer tokens from https://open-api.thenational.academy/api/v0/auth
+
+        Token lifetime: 1 hour
+        Rate limit: 1000 requests/hour
+```
+
+---
+
+### Summary
+
+**Why:** Complete, well-documented specs following [OpenAPI best practices](https://learn.openapis.org/best-practices.html) enable:
+
+- **Better tooling**: Swagger UI, Redoc, Postman, code generators
+- **Clearer expectations**: Developers know what to expect
+- **Standards compliance**: Passes linters/validators
+- **Professional polish**: Shows API maturity
+
+**Effort:** Low-Medium per item, comprehensive overall
+
+**Priority breakdown:**
+
+- **High**: Error responses, `info` metadata, rate limit headers, `summary` + `description` pattern
+- **Medium**: Tag descriptions, CommonMark formatting, string constraints, pagination metadata
+- **Low**: Server variables, deprecation markers (when needed)
+
+**Enables**:
+
+- **All layers**: More robust error handling, better validation
+- **Tool ecosystem**: Better integration with OpenAPI toolchains
+- **Documentation**: Auto-generated docs are comprehensive and navigable
+
+---
+
 ## Summary Table
 
 | Item                            | Priority        | Impact        | Effort    | AI Benefit                            |
@@ -1565,10 +2131,12 @@ Included in `/ontology` response (see item 3).
 | 7. Custom schema extensions     | Medium          | Medium        | Low       | Auto-generated metadata               |
 | 8. Behavioural metadata         | **Medium**      | **High**      | Low       | Safety & retry logic                  |
 | 9. Thread enhancements          | **Medium-High** | **High**      | 2-3 days  | Progression tracking & prerequisites  |
-| 10. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
-| 11. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
-| 12. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
-| 13. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
+| 10. Standardise types with refs | **Medium**      | **High**      | Low-Med   | Consistent types & validation         |
+| 11. Expose Zod validators       | **Medium-High** | **High**      | 1-2 days  | Perfect type fidelity, no duplication |
+| 12. Response examples           | Medium          | Low           | Ongoing   | Better error handling                 |
+| 13. Canonical URL patterns      | Medium          | Medium        | 1 hour    | URL generation                        |
+| 14. Performance hints           | Low             | Low           | Low       | Advanced optimisation                 |
+| 15. OpenAPI best practices      | Low-Medium      | Medium        | Low-Med   | Better tooling & docs                 |
 
 ---
 
@@ -1618,6 +2186,23 @@ After each schema change:
   - Schema extensions (`x-*` fields)
   - Response examples and error documentation
   - Parameter metadata
+
+- **OpenAPI Learning Site** (Official OpenAPI Initiative):
+  - **Best Practices**: <https://learn.openapis.org/best-practices.html>
+    - Design-first approach, single source of truth, version control
+  - **Providing Documentation and Examples**: <https://learn.openapis.org/specification/docs.html>
+    - `summary` vs `description` pattern
+    - CommonMark 0.27 syntax for rich formatting
+    - `examples` (plural) with Example Objects
+  - **API Structure**: <https://learn.openapis.org/specification/structure.html>
+    - Required vs optional fields in `info` object
+    - Minimal viable OpenAPI description
+  - **Describing Security**: <https://learn.openapis.org/specification/security.html>
+    - Security schemes and requirements
+  - **Enhanced Tags**: <https://learn.openapis.org/specification/tags.html>
+    - Tag descriptions and external documentation
+  - **Reusing Descriptions**: <https://learn.openapis.org/specification/reusing-descriptions.html>
+    - `$ref` patterns and component reuse
 
 ### Oak AI Integration
 
