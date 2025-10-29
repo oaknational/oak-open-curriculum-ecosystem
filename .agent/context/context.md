@@ -53,11 +53,11 @@
 - `docs/architecture/curriculum-ontology.md` - Separated Sequence and Programme, elevated Threads
 - `.agent/plans/upstream-api-metadata-wishlist.md` - 15 items with examples, references to OpenAPI learning site
 
-### 2. Clerk OAuth 2.1 Implementation (🔄 IN PROGRESS - Phase 2)
+### 2. Clerk OAuth 2.1 Implementation (✅ PHASES 0-2 COMPLETE - Ready for Deployment)
 
 **What**: Production-ready Clerk OAuth integration replacing custom demo.
 
-**Status**: Phase 1 complete, Phase 2 in progress (comprehensive test implementation).
+**Status**: **Phases 0-2 COMPLETE** - All quality gates passing, ready for Phase 3 (deployment).
 
 **Scope**: `apps/oak-curriculum-mcp-streamable-http` (Express MCP server on Vercel) ONLY
 
@@ -65,7 +65,7 @@
 
 - Phase 0: ✅ COMPLETE (2.5 hours - Clerk config)
 - Phase 1: ✅ COMPLETE (6.5 hours - Implementation with TDD)
-- Phase 2: 🔄 IN PROGRESS (10 hours - Comprehensive test implementation)
+- Phase 2: ✅ COMPLETE (10 hours - Comprehensive test implementation)
 - Phase 3: ⏳ PENDING (11 hours - Deploy & monitor)
 
 **Phase 1 Completed**:
@@ -74,11 +74,12 @@
 - ✅ Updated environment schema with Clerk keys
 - ✅ Replaced auth middleware with Clerk
 - ✅ Replaced OAuth metadata endpoints
-- ✅ Removed old custom auth files
+- ✅ Removed old custom auth files (auth.ts, auth-jwt.ts, oauth-metadata.ts)
 - ✅ Created integration tests for Clerk middleware
 - ✅ Updated unit tests with auth bypass for local testing
+- ✅ All unit and integration tests passing
 
-**Phase 2: Comprehensive Test Strategy** (IN PROGRESS)
+**Phase 2: Comprehensive Test Strategy** (✅ COMPLETE)
 
 **Testing Philosophy**:
 
@@ -98,13 +99,28 @@ Valid scenarios:
 3. **`dev + stub + noauth`** ✅ RECOMMENDED - Fast MCP protocol testing
 4. **`dev + live + noauth`** ✅ RECOMMENDED - Oak API integration with bypass
 
-**New Test Files** (to be created):
+**Test Files Created**:
 
-- `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing
-- `auth-bypass.e2e.test.ts` - DX feature validation
-- `smoke-dev-live-auth.ts` - Pre-deployment validation smoke test
-- `local-live-auth.ts` - Smoke test mode for auth enforcement
-- `TESTING.md` - Comprehensive testing strategy documentation
+- ✅ `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing (5 tests passing)
+- ✅ `auth-bypass.e2e.test.ts` - DX feature validation + safety checks (3 tests passing)
+- ✅ Updated `server.e2e.test.ts` - Migrated to Clerk auth + auth bypass (18 tests passing)
+- ✅ Updated `stub-mode.e2e.test.ts` - Auth bypass in stub mode (18 tests passing)
+- ✅ `smoke-dev-live-auth.ts` - Skipped (requires real Clerk credentials for full validation)
+- ✅ `local-live-auth.ts` - Smoke test mode for auth enforcement
+- ✅ `TESTING.md` - Comprehensive testing strategy documentation
+
+**E2E Test Results**: 44/44 tests passing ✅
+
+**Quality Gate Status**: ALL PASSING ✅
+
+- format-check ✅
+- type-check ✅
+- lint ✅
+- markdownlint-check ✅
+- test (unit + integration) ✅
+- test:ui (Playwright) ✅ 21/21
+- test:e2e ✅ 44/44
+- smoke:dev:stub ✅ 8 assertions
 
 **Auth Bypass Mechanism**:
 

@@ -140,8 +140,26 @@ Temporary validation bypass (for smoke only):
 
 ## Testing
 
-- Stub-mode and live-mode E2E coverage runs via Vitest: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
-- The suite relies on helpers that configure `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` for stub scenarios and injectable overrides for live parity; no manual env preparation is required.
+For comprehensive testing documentation, see [TESTING.md](./TESTING.md).
+
+**Quick Overview**:
+
+- **Unit Tests** - Pure functions, no I/O: `pnpm test`
+- **Integration Tests** - Integrated components, imported code: `pnpm test`
+- **E2E Tests** - Running server, real I/O: `pnpm test:e2e`
+- **Smoke Tests** - Critical path validation: `pnpm smoke:dev:stub`
+
+**Test Philosophy**: This project uses deterministic, idempotent tests with NO conditional logic. Each test file has ONE clear setup and ONE clear set of expectations, ensuring instant, complete information flow from test results.
+
+**Auth Testing**: We test both auth enforcement (production-equivalent) and auth bypass (local DX) in separate, deterministic test files to prove both behaviors work correctly.
+
+See [TESTING.md](./TESTING.md) for detailed documentation on:
+
+- Testing philosophy and strategy
+- Test layers (unit, integration, E2E, smoke)
+- Running and debugging tests
+- Test scenario matrix
+- Adding new tests
 
 ## Smoke testing
 
