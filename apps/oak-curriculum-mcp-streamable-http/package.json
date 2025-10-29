@@ -21,6 +21,8 @@
     "test:e2e": "vitest run --config vitest.e2e.config.ts"
   },
   "dependencies": {
+    "@clerk/express": "^1.7.43",
+    "@clerk/mcp-tools": "^0.3.1",
     "@modelcontextprotocol/sdk": "^1.20.1",
     "@oaknational/mcp-env": "workspace:*",
     "@oaknational/mcp-logger": "workspace:*",
@@ -29,19 +31,18 @@
     "commander": "^12.1.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "jose": "^6.1.0",
     "zod": "^4"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
     "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
     "@types/node": "^22",
     "eslint": "^9.35.0",
     "prettier": "^3.6.2",
+    "supertest": "^7.1.4",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4",
-    "supertest": "^7.1.4"
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=22.0.0"

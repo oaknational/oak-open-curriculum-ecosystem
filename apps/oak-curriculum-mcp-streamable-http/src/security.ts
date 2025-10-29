@@ -69,7 +69,8 @@ export function createCorsMiddleware(
     allowedHeaders: isSession
       ? ['Content-Type', 'Authorization', 'mcp-session-id']
       : ['Content-Type', 'Authorization'],
-    exposedHeaders: isSession ? ['Mcp-Session-Id'] : [],
+    // CRITICAL: MCP clients need WWW-Authenticate header for OAuth discovery
+    exposedHeaders: isSession ? ['Mcp-Session-Id', 'WWW-Authenticate'] : ['WWW-Authenticate'],
     maxAge: 600,
     optionsSuccessStatus: 204,
   });

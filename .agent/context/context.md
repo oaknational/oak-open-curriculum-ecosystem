@@ -8,7 +8,7 @@
 
 ## Recent Completed Work
 
-### 1. Upstream API Metadata Wishlist (✅ COMPLETE - Merged to main)
+### 1. Upstream API Metadata Wish list (✅ COMPLETE - Merged to main)
 
 **What**: Comprehensive enhancement proposals for Oak Curriculum API OpenAPI specification.
 

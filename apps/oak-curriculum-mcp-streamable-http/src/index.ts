@@ -5,10 +5,14 @@ import { renderLandingPageHtml } from './landing-page.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { parseCsv } from './env.js';
-import { bearerAuth } from './auth.js';
+import { clerkMiddleware } from '@clerk/express';
+import {
+  mcpAuthClerk,
+  protectedResourceHandlerClerk,
+  authServerMetadataHandlerClerk,
+} from '@clerk/mcp-tools/express';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
-import { setupOAuthMetadata, setupLocalAuthorizationServer } from './oauth-metadata.js';
 import { loadRootEnv } from '@oaknational/mcp-env';
 import { logger } from './logging.js';
 
@@ -53,14 +57,24 @@ export function createApp(options?: CreateAppOptions): express.Express {
   const corsMw = applySecurity(app, mode, allowedHosts, allowedOrigins);
 
   const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw, options);
-  // Static assets for favicon/logo (works locally and on Vercel)
-  mountStaticAssets(app);
+  mountStaticAssets(app); // Static assets for favicon/logo (works locally and on Vercel)
   addRootLandingPage(app);
-  app.use(bearerAuth);
-  // Add middleware to ensure proper Accept header for MCP requests
-  app.use('/mcp', ensureMcpAcceptHeader);
-  app.post('/mcp', createMcpHandler(coreTransport));
-  app.get('/mcp', createMcpHandler(coreTransport));
+  app.use(clerkMiddleware()); // Clerk middleware (attaches auth to req.auth if authenticated)
+  app.use('/mcp', ensureMcpAcceptHeader); // Ensure proper Accept header for MCP requests
+  // Conditional auth: bypass for local dev if REMOTE_MCP_ALLOW_NO_AUTH=true
+  const shouldBypassAuth =
+    process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true' &&
+    process.env.NODE_ENV === 'development' &&
+    !process.env.VERCEL;
+  // MCP endpoints with conditional Clerk auth enforcement
+  if (shouldBypassAuth) {
+    logger.info('Auth bypass enabled (REMOTE_MCP_ALLOW_NO_AUTH=true, dev mode, not on Vercel)');
+    app.post('/mcp', createMcpHandler(coreTransport));
+    app.get('/mcp', createMcpHandler(coreTransport));
+  } else {
+    app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+    app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+  }
 
   // Gate request handling on readiness
   app.use(async (_req, _res, next) => {
@@ -79,19 +93,22 @@ function initializeCoreEndpoints(
   // Register tools BEFORE connecting the transport to satisfy MCP SDK constraints
   registerHandlers(server, options?.toolHandlerOverrides);
   const serverReady = server.connect(transport);
-  // Expose resource metadata immediately
-  setupOAuthMetadata(app, corsMw);
+
+  // OAuth metadata endpoints (RFC 9728 - Protected Resource Metadata)
+  app.get(
+    '/.well-known/oauth-protected-resource',
+    protectedResourceHandlerClerk({
+      scopes_supported: ['mcp:invoke', 'mcp:read'],
+    }),
+  );
+
+  // Authorization Server Metadata (for older MCP clients)
+  app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
+
   // Lightweight unauthenticated health endpoints for tooling/UI probes
   addHealthEndpoints(app, corsMw);
-  // Ensure local AS endpoints are registered before handling requests
-  const asReady = setupLocalAuthorizationServer(app, corsMw).catch((err: unknown) => {
-    if (err instanceof Error) {
-      console.error('Error setting up local authorization server:', err.message);
-    } else {
-      console.error('Error setting up local authorization server:', err);
-    }
-  });
-  return { transport, ready: Promise.all([serverReady, asReady]).then(() => undefined) };
+
+  return { transport, ready: serverReady };
 }
 
 function addRootLandingPage(app: express.Express): void {

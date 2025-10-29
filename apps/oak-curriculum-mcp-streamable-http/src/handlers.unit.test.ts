@@ -27,6 +27,8 @@ describe('registerHandlers validation logging', () => {
       MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
     };
     process.env.OAK_API_KEY = 'test-key';
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
     process.env.BASE_URL = 'http://localhost:3333';
     process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
     warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => undefined);

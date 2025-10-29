@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { generateKeyPair, SignJWT, exportJWK } from 'jose';
 import request from 'supertest';
 import { createApp } from '../src/index.js';
 import { toolNames } from '@oaknational/oak-curriculum-sdk';
@@ -230,49 +229,9 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect([401, 500]).toContain(res.status);
   });
 
-  it('accepts JWT access token when local AS is enabled', async () => {
-    process.env.ENABLE_LOCAL_AS = 'true';
-    process.env.BASE_URL = 'http://localhost:3333';
-    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-
-    // Generate ephemeral key pair and install public JWK for the RS
-    const { publicKey, privateKey } = await generateKeyPair('RS256');
-    const publicJwk = await exportJWK(publicKey);
-    (publicJwk as { alg?: string; use?: string }).alg = 'RS256';
-    (publicJwk as { alg?: string; use?: string }).use = 'sig';
-    process.env.LOCAL_AS_JWK = JSON.stringify(publicJwk);
-
-    // Start app after env is prepared
-    const app = createApp();
-
-    // Mint a valid access token
-    const now = Math.floor(Date.now() / 1000);
-    const issuerEnv = process.env.BASE_URL;
-    const audienceEnv = process.env.MCP_CANONICAL_URI;
-    if (!issuerEnv || !audienceEnv) {
-      throw new Error('Missing BASE_URL or MCP_CANONICAL_URI for test');
-    }
-    const issuer = issuerEnv;
-    const audience = audienceEnv;
-    const token = await new SignJWT({
-      sub: 'user-123',
-      email: 'user@thenational.academy',
-      org: 'thenational.academy',
-      scope: 'mcp:invoke mcp:read',
-    })
-      .setProtectedHeader({ alg: 'RS256' })
-      .setIssuer(issuer)
-      .setAudience(audience)
-      .setIssuedAt(now)
-      .setExpirationTime(now + 5 * 60)
-      .sign(privateKey);
-
-    const res = await request(app)
-      .post('/mcp')
-      .set('Authorization', `Bearer ${token}`)
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
+  // TODO: Add E2E test with real Clerk token
+  // Requires: OAuth Device Flow to get actual token
+  // See: https://clerk.com/docs/guides/development/mcp/connect-mcp-client
+  // For now, use DANGEROUSLY_DISABLE_AUTH for E2E testing
+  // Old test that generated JWT with jose has been removed (Clerk generates tokens now)
 });
