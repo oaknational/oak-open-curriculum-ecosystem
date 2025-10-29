@@ -499,7 +499,7 @@ Most endpoints only document `200` success responses. Error responses are undocu
       # No other responses documented
 ```
 
-**Actual API behaviour:**
+**Actual API behavior:**
 
 ```bash
 # Lesson with transcript
