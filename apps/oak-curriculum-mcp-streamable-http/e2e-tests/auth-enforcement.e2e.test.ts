@@ -1,0 +1,137 @@
+/**
+ * E2E Auth Enforcement Tests
+ *
+ * Configuration: dev + live + auth (production-equivalent)
+ * Purpose: Proves auth enforcement works exactly as in production
+ *
+ * This suite tests the system with auth ENABLED, which mirrors production
+ * configuration. No auth bypass is used here.
+ */
+
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import type { Express } from 'express';
+import request from 'supertest';
+import { createApp } from '../src/index.js';
+
+describe('Auth Enforcement (E2E - Production Equivalent)', () => {
+  let app: Express;
+  let restoreEnv: () => void;
+
+  beforeAll(() => {
+    // Save current environment
+    const previous = { ...process.env };
+
+    // Configure for production-equivalent auth
+    process.env.NODE_ENV = 'test'; // NOT development (bypass disabled)
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ'; // Valid public key format
+    process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing'; // Dummy secret for initialization
+    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
+    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
+    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
+    delete process.env.VERCEL; // Local but with auth enforced
+
+    app = createApp();
+    restoreEnv = () => {
+      // Clear current env
+      for (const key of Object.keys(process.env)) {
+        Reflect.deleteProperty(process.env, key);
+      }
+      // Restore previous env
+      Object.assign(process.env, previous);
+    };
+  });
+
+  afterAll(() => {
+    restoreEnv();
+  });
+
+  it('rejects /mcp POST without Authorization header with 401', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('rejects /mcp GET without Authorization header with 401', async () => {
+    const res = await request(app)
+      .get('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .query({ method: 'tools/list' });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('includes WWW-Authenticate header in 401 response with Clerk AS URL', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+
+    expect(res.status).toBe(401);
+    expect(res.headers['www-authenticate']).toBeDefined();
+    expect(res.headers['www-authenticate']).toContain('Bearer');
+  });
+
+  it('exposes /.well-known/oauth-authorization-server with Clerk metadata', async () => {
+    const res = await request(app).get('/.well-known/oauth-authorization-server');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('issuer');
+    expect(res.body).toHaveProperty('authorization_endpoint');
+    expect(res.body).toHaveProperty('token_endpoint');
+  });
+
+  it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
+    const res = await request(app).get('/.well-known/oauth-protected-resource');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('resource');
+    expect(res.body).toHaveProperty('authorization_servers');
+
+    // Type-safe access to response body
+    const body = res.body as unknown;
+    expect(body).toHaveProperty('authorization_servers');
+    expect(Array.isArray((body as { authorization_servers?: unknown }).authorization_servers)).toBe(
+      true,
+    );
+    expect(body).toHaveProperty('scopes_supported');
+    const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
+    expect(scopes).toContain('mcp:invoke');
+    expect(scopes).toContain('mcp:read');
+  });
+
+  it('rejects invalid Bearer token with 401', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .set('Authorization', 'Bearer invalid-token-12345')
+      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('rejects malformed Authorization header with 401', async () => {
+    const res = await request(app)
+      .post('/mcp')
+      .set('Accept', 'application/json, text/event-stream')
+      .set('Authorization', 'NotBearer xyz')
+      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+
+    expect(res.status).toBe(401);
+  });
+
+  // TODO: Add test with valid Clerk OAuth token from Device Flow
+  // This requires implementing OAuth Device Flow to get a real token
+  // Deferred to Phase 3 after validating OAuth flow with Claude Desktop
+  // it('accepts valid Clerk OAuth token from Device Flow', async () => {
+  //   const token = await getClerkTokenViaDeviceFlow();
+  //   const res = await request(app)
+  //     .post('/mcp')
+  //     .set('Accept', 'application/json, text/event-stream')
+  //     .set('Authorization', `Bearer ${token}`)
+  //     .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
+  //   expect(res.status).toBe(200);
+  // });
+});

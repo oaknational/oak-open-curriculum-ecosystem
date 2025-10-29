@@ -25,7 +25,7 @@
     "markdownlint:root": "markdownlint --fix .",
     "markdownlint-check:root": "markdownlint .",
     "make": "pnpm i && pnpm type-gen && pnpm build && pnpm type-check && pnpm doc-gen && pnpm markdownlint:root && pnpm lint -- --fix && pnpm format:root",
-    "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub",
+    "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub && pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth",
     "re-build": "pnpm clean && pnpm install && pnpm type-gen && pnpm build",
     "fix": "pnpm format:root && pnpm markdownlint:root && pnpm lint -- --fix ",
     "check": "pnpm clean && pnpm lint:clean && pnpm make && pnpm qg",

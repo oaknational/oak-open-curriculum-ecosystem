@@ -1115,456 +1115,525 @@ Per `README.md` line 133:
 
 ---
 
-### Phase 2: Update Tests & Documentation (6-8 hours)
+### Phase 2: Comprehensive Test Implementation (8-10 hours)
 
 **Prerequisites**: Phase 1 complete, all Phase 1 tests passing
 
-**Note**: Phase 1 already created integration tests (`clerk-auth-middleware.integration.test.ts`, `oauth-metadata-clerk.integration.test.ts`, `env.unit.test.ts`). This phase updates **existing** tests that relied on old auth mechanisms.
+**Overview**: This phase implements a comprehensive, deterministic test strategy across all testing layers (unit, integration, E2E, smoke). Each test scenario is **fully deterministic with no conditional logic**, ensuring instant clarity on failures.
+
+**Testing Philosophy**:
+
+- **Auth bypass is DX convenience** - doesn't change what validation logic exists, just bypasses calling it
+- **No conditional logic in tests** - each test file has ONE clear setup, ONE clear set of expectations
+- **Comprehensive coverage** - prove ALL behaviors at appropriate layers
+- **TDD always** - tests describe ideal behavior first, then implement
+- **Production-equivalent testing** - `dev + live + auth` configuration is critical (identical to production)
+
+#### Test Scenario Matrix Analysis
+
+**Production Configuration**: `remote + live + auth` (Vercel + Oak API + Clerk OAuth)
+
+**Valid Test Scenarios**:
+
+1. **`dev + live + auth`** ✅ **CRITICAL** - Proves complete stack works exactly as production
+2. **`remote + live + auth`** ✅ **CRITICAL** - Proves Vercel deployment successful
+3. **`dev + stub + noauth`** ✅ **RECOMMENDED** - Fast MCP protocol testing, no network calls
+4. **`dev + live + noauth`** ✅ **RECOMMENDED** - Oak API integration testing with auth bypass
+
+**Invalid/Redundant Scenarios**:
+
+- **`dev + stub + auth`** ❌ **SKIP** - Would need Clerk stub (complex), no unique value
+
+#### Test Implementation Strategy
+
+**Unit & Integration Tests** (already complete in Phase 1):
+
+- `env.unit.test.ts` - Environment schema validation
+- `clerk-auth-middleware.integration.test.ts` - Clerk middleware behavior
+- `handlers.unit.test.ts` - Tool handlers with bypass enabled
+- `index.unit.test.ts` - Core app logic with bypass enabled
+
+**E2E Test Suites** (new in Phase 2):
+
+1. `auth-enforcement.e2e.test.ts` - Tests `dev + live + auth` (production-equivalent)
+2. `auth-bypass.e2e.test.ts` - Tests `dev + live + noauth` (confirms DX feature works)
+3. `mcp-protocol-stub.e2e.test.ts` - Tests `dev + stub + noauth` (refactored, MCP protocol focus)
+4. `mcp-protocol-live.e2e.test.ts` - Tests `dev + live + noauth` (refactored, Oak API integration)
+
+**Smoke Test Scenarios** (updated in Phase 2):
+
+1. `smoke:dev:stub` - Quick local check (`dev + stub + noauth`)
+2. `smoke:dev:live:auth` - **KEY** Pre-deployment validation (`dev + live + auth`)
+3. `smoke:remote` - Production health (`remote + live + auth`)
 
 #### Tasks
 
-1. **Audit Existing Tests** (30 min)
-   - [ ] **List all test files**:
+1. **Create E2E Auth Enforcement Tests** (2 hours) - **NEW FILE**
 
+   **File**: `e2e-tests/auth-enforcement.e2e.test.ts`
+
+   **Configuration**: `dev + live + auth` (production-equivalent)
+
+   **Purpose**: Proves auth enforcement works exactly as in production
+
+   **Test Suite** (TDD - write tests first):
+
+   ```typescript
+   describe('Auth Enforcement (E2E - Production Equivalent)', () => {
+     let app: Express;
+     let restoreEnv: () => void;
+
+     beforeAll(() => {
+       // Configure for production-equivalent auth
+       const previous = { ...process.env };
+       process.env.NODE_ENV = 'test'; // NOT development (bypass disabled)
+       process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_...'; // Valid test key
+       process.env.CLERK_SECRET_KEY = 'sk_test_...'; // Valid test key
+       process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+       delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
+       delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
+       delete process.env.VERCEL; // Local but with auth
+
+       app = createApp();
+       restoreEnv = () => {
+         process.env = previous;
+       };
+     });
+
+     afterAll(() => restoreEnv());
+
+     it('rejects /mcp POST without Authorization header with 401');
+     it('rejects /mcp GET without Authorization header with 401');
+     it('includes WWW-Authenticate header in 401 response with Clerk AS URL');
+     it('exposes /.well-known/oauth-authorization-server with Clerk metadata');
+     it('exposes /.well-known/oauth-protected-resource with correct scopes');
+     it('rejects invalid Bearer token with 401');
+     it('rejects expired Bearer token with 401');
+     // TODO: it('accepts valid Clerk OAuth token from Device Flow');
+     // Requires OAuth Device Flow implementation - deferred to Phase 3
+   });
+   ```
+
+   - [ ] Write failing tests (Red phase)
+   - [ ] Verify tests fail for expected reasons
+   - [ ] Tests should pass with existing Phase 1 implementation (Green phase)
+   - [ ] Run `pnpm test:e2e`
+   - [ ] Commit:
      ```bash
-     cd apps/oak-curriculum-mcp-streamable-http
-     find . -name "*.test.ts" -type f | sort
+     git add e2e-tests/auth-enforcement.e2e.test.ts
+     git commit -m "test(e2e): add auth enforcement tests (production-equivalent)"
      ```
 
-     - Should find ~15 test files
+2. **Create E2E Auth Bypass Tests** (1 hour) - **NEW FILE**
 
-   - [ ] **Identify tests using old auth**:
+   **File**: `e2e-tests/auth-bypass.e2e.test.ts`
 
+   **Configuration**: `dev + live + noauth` (DX feature validation)
+
+   **Purpose**: Confirms auth bypass works for local development
+
+   **Test Suite** (TDD):
+
+   ```typescript
+   describe('Auth Bypass for Development (E2E)', () => {
+     let app: Express;
+     let restoreEnv: () => void;
+
+     beforeAll(() => {
+       // Configure for auth bypass
+       const previous = { ...process.env };
+       process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true'; // Bypass ENABLED
+       process.env.NODE_ENV = 'development'; // Required for bypass
+       process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
+       delete process.env.VERCEL; // Required for bypass
+
+       app = createApp();
+       restoreEnv = () => {
+         process.env = previous;
+       };
+     });
+
+     afterAll(() => restoreEnv());
+
+     it('allows /mcp POST without Authorization when bypass enabled');
+     it('allows /mcp GET without Authorization when bypass enabled');
+     it('still exposes OAuth discovery endpoints (for testing)');
+     it('disables bypass on Vercel even if REMOTE_MCP_ALLOW_NO_AUTH=true');
+     it('disables bypass in production even if REMOTE_MCP_ALLOW_NO_AUTH=true');
+   });
+   ```
+
+   - [ ] Write failing tests (Red phase)
+   - [ ] Verify tests fail for expected reasons
+   - [ ] Tests should pass with existing Phase 1 implementation (Green phase)
+   - [ ] Run `pnpm test:e2e`
+   - [ ] Commit:
      ```bash
-     grep -r "REMOTE_MCP_DEV_TOKEN" . --include="*.test.ts"
-     grep -r "REMOTE_MCP_CI_TOKEN" . --include="*.test.ts"
-     grep -r "ENABLE_LOCAL_AS" . --include="*.test.ts"
-     grep -r "generateKeyPair" . --include="*.test.ts"
-     grep -r "SignJWT" . --include="*.test.ts"
+     git add e2e-tests/auth-bypass.e2e.test.ts
+     git commit -m "test(e2e): add auth bypass tests (DX feature validation)"
      ```
 
-     - Note which files need updates (likely `src/server.e2e.test.ts` based on code review)
+3. **Refactor Existing E2E Tests** (2 hours) - **UPDATE EXISTING FILES**
 
-   - [ ] **Create audit document**:
+   **Purpose**: Update existing E2E tests to use deterministic setups (no conditional logic)
 
+   **3a. Update `stub-mode.e2e.test.ts`** (30 min)
+   - [ ] Ensure uses `OAK_CURRICULUM_MCP_USE_STUB_TOOLS=true` and `REMOTE_MCP_ALLOW_NO_AUTH=true`
+   - [ ] Remove any conditional auth logic
+   - [ ] Verify focuses on MCP protocol, not auth
+   - [ ] Run `pnpm test:e2e`
+   - [ ] Commit:
      ```bash
-     cat > TEST_AUDIT.md << EOF
-     # Test Audit for Clerk Integration
-     Date: $(date)
-
-     ## Files Using Old Auth (Need Updates)
-     [List files from grep results]
-
-     ## Files NOT Using Auth (No Changes Needed)
-     [List other test files]
-
-     ## Update Strategy
-     - Unit/Integration tests: Already created in Phase 1
-     - E2E tests using static tokens: Update to use DANGEROUSLY_DISABLE_AUTH or skip
-     - E2E tests using JWT generation: Delete or skip (Clerk generates tokens)
-     - Smoke tests: Update to handle Clerk auth
-     EOF
+     git add e2e-tests/stub-mode.e2e.test.ts
+     git commit -m "test(e2e): refactor stub mode tests for deterministic setup"
      ```
 
-   - **Acceptance**: Test audit complete, update strategy documented
-
-2. **Update E2E Tests** (3 hours)
-
-   **Context**: The file `e2e-tests/server.e2e.test.ts` contains 7 tests. Based on code review:
-   - 3 tests use `REMOTE_MCP_DEV_TOKEN` (static token)
-   - 1 test uses `REMOTE_MCP_CI_TOKEN` (static token)
-   - 1 test generates JWT with `jose` (custom AS)
-   - 2 tests check security (CORS, DNS rebinding) - don't need auth changes
-
-   **2a. Update `server.e2e.test.ts`** (2 hours)
-   - [ ] Open `e2e-tests/server.e2e.test.ts`
-   - [ ] **Test 1**: "returns 401 when missing Authorization" (lines 46-70)
-     - **Status**: ✅ Should work as-is (tests unauthorized access)
-     - **Action**: No changes needed
-   - [ ] **Test 2**: "returns 200 with dev bearer token" (lines 72-95)
-     - **Current**: Uses `REMOTE_MCP_DEV_TOKEN` (line 73, 78)
-     - **Action**: Update to use `DANGEROUSLY_DISABLE_AUTH` bypass for local testing:
-       ```typescript
-       it('returns 200 when auth is bypassed (local dev only)', async () => {
-         process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-         process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-         const app = createApp();
-         const res = await request(app)
-           .post('/mcp')
-           .set('Accept', ACCEPT)
-           .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-         expect(res.status).toBe(200);
-         // ... rest of assertions unchanged
-       });
-       ```
-   - [ ] **Test 3**: "rejects missing Accept header with 406" (lines 97-109)
-     - **Current**: Uses `REMOTE_MCP_DEV_TOKEN`
-     - **Action**: Update to use `DANGEROUSLY_DISABLE_AUTH`:
-       ```typescript
-       it('rejects missing Accept header with 406', async () => {
-         process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-         // ... rest unchanged
-       });
-       ```
-   - [ ] **Test 4**: "rejects initialize without clientInfo" (lines 111-133)
-     - **Current**: Uses `REMOTE_MCP_DEV_TOKEN`
-     - **Action**: Update to use `DANGEROUSLY_DISABLE_AUTH`
-   - [ ] **Test 5**: "accepts initialize with clientInfo" (lines 135-159)
-     - **Current**: Uses `REMOTE_MCP_DEV_TOKEN`
-     - **Action**: Update to use `DANGEROUSLY_DISABLE_AUTH`
-   - [ ] **Test 6**: "returns JSON-RPC error when calling unknown tool" (lines 161-180)
-     - **Current**: Uses `REMOTE_MCP_DEV_TOKEN`
-     - **Action**: Update to use `DANGEROUSLY_DISABLE_AUTH`
-   - [ ] **Test 7**: "allows no-auth in local dev when REMOTE_MCP_ALLOW_NO_AUTH=true" (lines 182-193)
-     - **Current**: Tests `REMOTE_MCP_ALLOW_NO_AUTH` feature
-     - **Action**: Keep as-is (this feature still exists for local dev)
-   - [ ] **Test 8**: "accepts CI token only when CI=true" (lines 195-206)
-     - **Current**: Uses `REMOTE_MCP_CI_TOKEN`
-     - **Action**: DELETE this test (CI tokens removed)
-   - [ ] **Test 9**: "blocks unknown Host" (lines 208-217)
-     - **Status**: ✅ Should work as-is (tests DNS rebinding)
-     - **Action**: No changes needed
-   - [ ] **Test 10**: "blocks disallowed origin" (lines 219-231)
-     - **Status**: ✅ Should work as-is (tests CORS)
-     - **Action**: No changes needed
-   - [ ] **Test 11**: "accepts JWT access token when local AS is enabled" (lines 233-277)
-     - **Current**: Generates JWT using `jose`, requires `ENABLE_LOCAL_AS=true`
-     - **Action**: DELETE this test (local AS removed, Clerk generates real tokens)
-     - **Alternative**: Create TODO comment:
-       ```typescript
-       // TODO: Add E2E test with real Clerk token
-       // Requires: OAuth Device Flow to get actual token
-       // See: https://clerk.com/docs/guides/development/mcp/connect-mcp-client
-       // For now, use DANGEROUSLY_DISABLE_AUTH for E2E testing
-       ```
-   - [ ] **Remove `jose` imports** (no longer needed):
-     ```typescript
-     // DELETE (line 2):
-     import { generateKeyPair, SignJWT, exportJWK } from 'jose';
-     ```
-   - [ ] **Run E2E tests**:
-
-     ```bash
-     pnpm test:e2e
-     ```
-
-     - **Expected**: Tests pass (using `DANGEROUSLY_DISABLE_AUTH`)
-     - **If fails**: Debug and fix issues
-
-   - [ ] **Commit E2E test updates**:
-     ```bash
-     git add e2e-tests/server.e2e.test.ts
-     git commit -m "test(e2e): update server tests for Clerk OAuth (use bypass for local testing)"
-     git push
-     ```
-
-   **2b. Review Other E2E Tests** (30 min)
-   - [ ] Check each file in `e2e-tests/` (11 files):
-     - `cors-hosts-positive.e2e.test.ts` - ✅ Security test, no auth changes needed
-     - `enum-validation-failure.e2e.test.ts` - Check if uses auth
-     - `live-mode.e2e.test.ts` - Check if uses auth
-     - `sdk-client-stub.e2e.test.ts` - ✅ Stub mode, no auth needed
-     - `string-args-normalisation.e2e.test.ts` - Check if uses auth
-     - `stub-mode.e2e.test.ts` - ✅ Stub mode, no auth needed
-     - `tool-call-envelope.e2e.test.ts` - Check if uses auth
-     - `tool-call-success.e2e.test.ts` - Check if uses auth
-     - `validation-failure.e2e.test.ts` - Check if uses auth
-   - [ ] **For each file that requires auth**:
-     - Add `process.env.DANGEROUSLY_DISABLE_AUTH = 'true'` in test setup
-     - Or verify they already use stub mode (which bypasses auth)
-   - [ ] **Run full E2E suite**:
-
-     ```bash
-     pnpm test:e2e
-     ```
-
-     - **Expected**: All E2E tests pass
-
-   - [ ] **Commit any updates**:
+   **3b. Update other E2E files** (1 hour 30 min)
+   - [ ] Review each file:
+     - `cors-hosts-positive.e2e.test.ts` - Security test, ensure no auth dependency
+     - `enum-validation-failure.e2e.test.ts` - Add bypass if needed
+     - `live-mode.e2e.test.ts` - Add bypass if needed
+     - `sdk-client-stub.e2e.test.ts` - Stub mode, ensure bypass set
+     - `string-args-normalisation.e2e.test.ts` - Add bypass if needed
+     - `tool-call-envelope.e2e.test.ts` - Add bypass if needed
+     - `tool-call-success.e2e.test.ts` - Add bypass if needed
+     - `validation-failure.e2e.test.ts` - Add bypass if needed
+   - [ ] For each file: Set ONE deterministic environment at the top
+   - [ ] Run `pnpm test:e2e`
+   - [ ] Commit:
      ```bash
      git add e2e-tests/
-     git commit -m "test(e2e): ensure all E2E tests work with Clerk (use auth bypass)"
-     git push
-     ```
-   - **Acceptance**: All E2E tests passing, using auth bypass for local testing
-
-3. **Update Smoke Tests** (1.5 hours)
-
-   **Context**: Three smoke test modes exist:
-   - `smoke:dev:stub` - Uses stub tools (offline, no real API calls) - ✅ No auth needed
-   - `smoke:dev:live` - Calls real Oak API - ❌ Needs auth update
-   - `smoke:remote` - Tests deployed server - ❌ Needs auth update
-
-   **3a. Verify Stub Mode Works** (15 min)
-   - [ ] **Run stub smoke test**:
-
-     ```bash
-     pnpm smoke:dev:stub
+     git commit -m "test(e2e): ensure all E2E tests have deterministic auth setup"
      ```
 
-     - **Expected**: Passes (stub mode bypasses auth, no network calls)
-     - **If fails**: Should NOT be auth-related (stub mode is offline)
+4. **Update Smoke Tests** (2 hours)
 
-   - **Acceptance**: Stub smoke tests pass unchanged
+   **4a. Verify `smoke:dev:stub` works** (15 min)
+   - [ ] Run `pnpm smoke:dev:stub`
+   - [ ] Verify passes (stub mode bypasses auth automatically)
+   - [ ] No changes needed if passing
 
-   **3b. Update Live Smoke Tests** (1 hour)
-   - [ ] Open `smoke-tests/modes/local-live.ts`
-   - [ ] Review current token resolution logic
-   - [ ] **Update to handle Clerk auth**:
-     - Option A: Use `DANGEROUSLY_DISABLE_AUTH=true` for local dev
-     - Option B: Set `REMOTE_MCP_ALLOW_NO_AUTH=true` (already supported)
-     - Recommendation: Use Option B (less dangerous)
-   - [ ] **Update smoke test environment setup**:
-     ```typescript
-     // In smoke-tests/environment.ts or local-live.ts
-     // Ensure this env var is set for local live smoke:
-     process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-     process.env.NODE_ENV = 'development';
-     delete process.env.VERCEL; // Ensure we're detected as local
-     ```
-   - [ ] **Test live smoke**:
+   **4b. Create `smoke:dev:live:auth` scenario** (1 hour) - **NEW SCRIPT**
 
-     ```bash
-     pnpm smoke:dev:live
-     ```
+   **File**: `smoke-tests/smoke-dev-live-auth.ts` (NEW)
 
-     - **Expected**: Passes (uses `REMOTE_MCP_ALLOW_NO_AUTH` bypass)
-     - **Expected log**: Should show "bypassing authentication" in debug logs
-     - **If fails with 401**: Auth bypass not working, check environment setup
+   ```typescript
+   import { runSmokeSuite } from './smoke-suite.js';
 
-   - [ ] **Add documentation comment** in `smoke-tests/README.md` (create if doesn't exist):
+   runSmokeSuite({ mode: 'local-live-auth' }).catch((err: unknown) => {
+     console.error('Live auth smoke failed:', err);
+     process.exit(1);
+   });
+   ```
 
-     ````markdown
-     # Smoke Tests
+   **File**: `smoke-tests/modes/local-live-auth.ts` (NEW)
 
-     ## Authentication
+   ```typescript
+   export async function prepareLocalLiveAuthEnvironment(
+     options: PrepareEnvironmentOptions,
+     envLoad: LoadedEnvResult,
+   ): Promise<PreparedEnvironment> {
+     // Configure for production-equivalent auth
+     process.env.NODE_ENV = 'test'; // NOT development (bypass disabled)
+     process.env.PORT = String(options.port);
+     delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
+     delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
+     delete process.env.VERCEL; // Local but with auth enforced
+     // Clerk keys should come from envLoad
 
-     - `smoke:dev:stub`: No auth needed (offline stubs)
-     - `smoke:dev:live`: Uses `REMOTE_MCP_ALLOW_NO_AUTH=true` bypass (local dev only)
-     - `smoke:remote`: Requires real Clerk OAuth token (see Phase 3 for production testing)
+     return {
+       baseUrl: `http://localhost:${String(options.port)}`,
+       devToken: undefined, // No bypass token
+       envLoad,
+       server: await startSmokeServer(options.port),
+       devTokenSource: 'none-auth-required',
+     };
+   }
+   ```
 
-     ## Running Smoke Tests Locally
-
-     ```bash
-     # Stub mode (fastest, no auth, no network):
-     pnpm smoke:dev:stub
-
-     # Live mode (real API calls, auth bypassed):
-     pnpm smoke:dev:live
-
-     # Remote mode (NOT for local dev):
-     # Requires deployed server and real Clerk token
-     # See Phase 3 for production testing strategy
-     ```
-     ````
-
-     ```
-
-     ```
-
-   - [ ] **Commit smoke test updates**:
+   - [ ] Update `smoke-tests/environment.ts` to handle `local-live-auth` mode
+   - [ ] Update `smoke-tests/smoke-assertions/index.ts` to run auth assertions for this mode
+   - [ ] Write tests (TDD)
+   - [ ] Run `pnpm smoke:dev:live:auth`
+   - [ ] Commit:
      ```bash
      git add smoke-tests/
-     git commit -m "test(smoke): update live smoke tests to use auth bypass for local dev"
-     git push
+     git commit -m "test(smoke): add smoke:dev:live:auth for production-equivalent testing"
      ```
 
-   **3c. Document Remote Smoke Testing Strategy** (15 min)
-   - [ ] Create `smoke-tests/CLERK_AUTH_NOTES.md`:
-
-     ```markdown
-     # Smoke Tests with Clerk OAuth
-
-     ## Local Development
-
-     For local dev testing, smoke tests use `REMOTE_MCP_ALLOW_NO_AUTH=true` to bypass auth.
-     This is safe because:
-
-     - Only works when `NODE_ENV=development` AND not on Vercel
-     - Vercel deployments ignore this variable
-     - Production requires real OAuth tokens
-
-     ## Production/Remote Testing
-
-     Remote smoke tests (`pnpm smoke:remote`) require a real Clerk OAuth token.
-
-     ### How to Get a Test Token (for Phase 3)
-
-     1. Use Clerk's OAuth Device Flow
-     2. Or manually sign in via browser and extract token from Clerk session
-     3. Or use `@clerk/testing` utilities (if available)
-
-     Details TBD in Phase 3 after testing with real MCP client.
-
-     ### Current Status
-
-     - Phase 1-2: Remote smoke tests SKIPPED (no token acquisition implemented yet)
-     - Phase 3: Will add token acquisition after validating OAuth flow with Claude Desktop
+   **4c. Update package.json scripts** (15 min)
+   - [ ] Open `apps/oak-curriculum-mcp-streamable-http/package.json`
+   - [ ] Add new script:
+     ```json
+     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts"
      ```
-
-   - [ ] **Commit documentation**:
+   - [ ] Commit:
      ```bash
-     git add smoke-tests/CLERK_AUTH_NOTES.md smoke-tests/README.md
-     git commit -m "docs(smoke): document Clerk auth strategy for smoke tests"
-     git push
+     git add apps/oak-curriculum-mcp-streamable-http/package.json
+     git commit -m "chore(scripts): add smoke:dev:live:auth script"
      ```
-   - **Acceptance**: Local smoke tests pass, remote smoke testing strategy documented
 
-4. **Update README** (2 hours)
-   - [ ] Open `README.md` in `apps/oak-curriculum-mcp-streamable-http/`
-   - [ ] **Find and DELETE "Authentication status and next steps" section** (lines 110-133):
+   **4d. Update root package.json quality gate** (15 min)
+   - [ ] Open root `package.json`
+   - [ ] Update `qg` script to include new smoke test:
+     ```json
+     "qg": "pnpm format-check:root && pnpm type-check && pnpm lint && pnpm markdownlint-check:root && pnpm test && pnpm test:ui && pnpm test:e2e && pnpm smoke:dev:stub && pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth"
+     ```
+   - [ ] Commit:
      ```bash
-     # This entire section can be deleted (OAuth is now production-ready):
-     ## Authentication status and next steps
-     - Production OAuth is MANDATORY next step...
-     [... entire section through line 133 ...]
+     git add package.json
+     git commit -m "chore(qg): add smoke:dev:live:auth to quality gate"
      ```
-   - [ ] **REPLACE with new "Authentication" section**:
 
-     ````markdown
-     ## Authentication
+5. **Create Testing Documentation** (2 hours) - **NEW FILES**
 
-     Production authentication uses **Clerk OAuth 2.1** with Google SSO restricted to `@thenational.academy` email addresses.
+   **5a. Create `TESTING.md` in workspace** (1 hour)
 
-     ### Architecture
+   **File**: `apps/oak-curriculum-mcp-streamable-http/TESTING.md` (NEW)
 
-     - **Authorization Server**: Clerk (https://native-hippo-15.clerk.accounts.dev)
-     - **Resource Server**: This Express app on Vercel
-     - **OAuth Flow**: Authorization Code + PKCE
-     - **Token Format**: JWT (verified via Clerk's JWKS)
-     - **Allowed Users**: `@thenational.academy` only (via Google SSO)
+   ````markdown
+   # Testing Strategy: Oak Curriculum MCP Streamable HTTP
 
-     ### Required Environment Variables
+   ## Overview
 
-     **Production** (set in Vercel):
+   This MCP server uses a comprehensive, multi-layered testing approach that proves correctness at different scales while maintaining deterministic, easy-to-understand test scenarios.
 
-     - `CLERK_PUBLISHABLE_KEY` - Clerk publishable key (e.g., `pk_test_...`)
-     - `CLERK_SECRET_KEY` - Clerk secret key (e.g., `sk_test_...`)
-     - `BASE_URL` - Server base URL (e.g., `https://open-api.thenational.academy`)
-     - `MCP_CANONICAL_URI` - MCP endpoint URI (e.g., `https://open-api.thenational.academy/mcp`)
-     - `OAK_API_KEY` - Oak Curriculum API key
-     - `ALLOWED_HOSTS` - DNS rebinding protection (e.g., `open-api.thenational.academy,*.vercel.app`)
+   ## Testing Philosophy
 
-     **Local Development** (set in `.env.local`):
+   1. **No Conditional Logic in Tests** - Each test file has ONE clear setup and ONE clear set of expectations
+   2. **Deterministic Outcomes** - Test results provide instant, complete information about failures
+   3. **TDD Always** - Tests written first (Red), implementation second (Green), refactored third
+   4. **Production-Equivalent Testing** - Critical tests mirror production configuration exactly
 
-     - Same as production, but `BASE_URL=http://localhost:3333` and `MCP_CANONICAL_URI=http://localhost:3333/mcp`
-     - Optional: `REMOTE_MCP_ALLOW_NO_AUTH=true` to bypass auth for local testing
-     - Optional: `DANGEROUSLY_DISABLE_AUTH=true` to bypass ALL auth (use with extreme caution)
+   ## Test Layers
 
-     ### MCP Client Connection Flow
+   ### Unit Tests (`*.unit.test.ts`)
 
-     When an MCP client (e.g., Claude Desktop) connects to this server:
+   - **Purpose**: Test pure functions in isolation
+   - **Characteristics**: No I/O, no side effects, no mocks
+   - **Run**: `pnpm test` (filtered to `*.unit.test.ts`)
+   - **Examples**:
+     - `env.unit.test.ts` - Environment schema validation
+     - `handlers.unit.test.ts` - Tool handler logic
 
-     1. **Client attempts connection**: `POST /mcp` without credentials
-     2. **Server returns 401**: With `WWW-Authenticate` header containing discovery metadata
-     3. **Client fetches metadata**: `GET /.well-known/oauth-protected-resource`
-     4. **Server returns**: `{"authorization_servers": ["https://native-hippo-15.clerk.accounts.dev"], ...}`
-     5. **Client discovers Clerk**: Fetches `https://native-hippo-15.clerk.accounts.dev/.well-known/oauth-authorization-server`
-     6. **OAuth flow begins**: Client opens browser to Clerk authorization endpoint
-     7. **User authenticates**: Via Google SSO (must be `@thenational.academy`)
-     8. **Clerk issues token**: Short-lived JWT access token
-     9. **Client uses token**: `POST /mcp` with `Authorization: Bearer <token>`
-     10. **Server validates**: Verifies JWT signature via Clerk's JWKS, checks audience/issuer
-     11. **Success**: MCP tools available to client
+   ### Integration Tests (`*.integration.test.ts`)
 
-     ### Google SSO Restriction
+   - **Purpose**: Test multiple units working together as imported code
+   - **Characteristics**: Code runs in test process, simple mocks allowed
+   - **Run**: `pnpm test` (filtered to `*.integration.test.ts`)
+   - **Examples**:
+     - `clerk-auth-middleware.integration.test.ts` - Clerk middleware behavior
+     - `index.unit.test.ts` - App initialization with all components
 
-     Only `@thenational.academy` email addresses can authenticate. This is enforced by:
+   ### E2E Tests (`*.e2e.test.ts`)
 
-     - Clerk's domain allowlist configuration
-     - Google SSO connection restricted to Oak's Google Workspace
+   - **Purpose**: Test running system behavior (server in separate process)
+   - **Characteristics**: Real I/O, side effects, minimal mocks
+   - **Run**: `pnpm test:e2e`
+   - **Examples**:
+     - `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing
+     - `auth-bypass.e2e.test.ts` - DX feature validation
+     - `stub-mode.e2e.test.ts` - MCP protocol with stubs
 
-     Attempting to sign in with other email domains will fail with: "This email address is not allowed to sign up"
+   ### Smoke Tests (`smoke-tests/`)
 
-     ### Local Development Auth Bypass
+   - **Purpose**: Quick production-like validation (fastest E2E subset)
+   - **Characteristics**: Tests critical paths only
+   - **Run**: `pnpm smoke:dev:stub`, `pnpm smoke:dev:live:auth`, `pnpm smoke:remote`
+   - **Key Scenarios**: See "Smoke Test Matrix" below
 
-     For local development and testing, you can bypass authentication:
+   ## Test Scenario Matrix
 
+   Tests are organized across three dimensions:
+
+   - **Environment**: `dev` (local) vs `remote` (Vercel)
+   - **Data Source**: `stub` (canned) vs `live` (Oak API)
+   - **Auth**: `auth` (Clerk enforced) vs `noauth` (bypass enabled)
+
+   ### Production Configuration
+
+   `remote + live + auth` - This is what runs on Vercel
+
+   ### Valid Test Scenarios
+
+   | Scenario                  | Environment | Data | Auth   | Purpose                      | Critical?   |
+   | ------------------------- | ----------- | ---- | ------ | ---------------------------- | ----------- |
+   | **Production-Equivalent** | dev         | live | auth   | Proves complete stack works  | ✅ YES      |
+   | **Remote Health**         | remote      | live | auth   | Proves deployment successful | ✅ YES      |
+   | **MCP Protocol**          | dev         | stub | noauth | Fast protocol testing        | Recommended |
+   | **Oak API Integration**   | dev         | live | noauth | API integration testing      | Recommended |
+
+   ### Auth Bypass Mechanism
+
+   **Purpose**: Developer convenience for local testing
+
+   **How it works**:
+
+   ```typescript
+   const shouldBypassAuth =
+     process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true' &&
+     process.env.NODE_ENV === 'development' &&
+     !process.env.VERCEL;
+   ```
+   ````
+
+   **Safety**:
+   - Only works in `NODE_ENV=development`
+   - Automatically disabled on Vercel
+   - Automatically disabled in production
+
+   **Testing Implications**:
+   - Auth validation logic still exists (tested in integration tests)
+   - Bypass just skips calling the middleware
+   - E2E tests prove both auth enforcement AND bypass work correctly
+
+   ## Running Tests
+
+   ### Local Development
+
+   ```bash
+   # Fast iteration (unit + integration only)
+   pnpm test
+
+   # Full test suite (includes E2E)
+   pnpm test:e2e
+
+   # Quick smoke test (stub mode, no network)
+   pnpm smoke:dev:stub
+
+   # Production-equivalent smoke (CRITICAL before deploy)
+   pnpm smoke:dev:live:auth
+
+   # Full quality gate (all checks)
+   pnpm qg
+   ```
+
+   ### CI/CD
+
+   ```bash
+   # GitHub Actions runs (from root):
+   pnpm qg
+   ```
+
+   ## Test File Organization
+
+   ```
+   apps/oak-curriculum-mcp-streamable-http/
+   ├── src/
+   │   ├── *.unit.test.ts          # Unit tests (colocated with source)
+   │   └── *.integration.test.ts   # Integration tests (colocated)
+   ├── e2e-tests/
+   │   ├── auth-enforcement.e2e.test.ts    # Auth enforcement (critical)
+   │   ├── auth-bypass.e2e.test.ts         # Auth bypass (DX feature)
+   │   ├── stub-mode.e2e.test.ts           # MCP protocol with stubs
+   │   ├── live-mode.e2e.test.ts           # Oak API integration
+   │   └── ... (other E2E tests)
+   └── smoke-tests/
+       ├── smoke-dev-stub.ts               # Fast local check
+       ├── smoke-dev-live-auth.ts          # Pre-deployment validation
+       ├── smoke-remote.ts                 # Production health
+       └── modes/
+           ├── local-stub.ts
+           ├── local-live-auth.ts
+           └── remote.ts
+   ```
+
+   ## What Each Layer Proves
+
+   ### Unit Tests Prove:
+   - ✅ Environment schema validates Clerk keys
+   - ✅ Pure functions work correctly
+   - ✅ Tool handlers can be called
+
+   ### Integration Tests Prove:
+   - ✅ Clerk middleware rejects unauthorized requests (401)
+   - ✅ Clerk middleware accepts valid tokens
+   - ✅ OAuth discovery endpoints expose correct metadata
+   - ✅ App initialization works with all components
+
+   ### E2E Tests Prove:
+   - ✅ Running server enforces auth (production-equivalent)
+   - ✅ Running server allows bypass for local dev
+   - ✅ MCP protocol works end-to-end
+   - ✅ Oak API integration works
+   - ✅ Security features work (CORS, DNS rebinding)
+
+   ### Smoke Tests Prove:
+   - ✅ Quick smoke: System boots and responds
+   - ✅ Auth smoke: Production config works locally
+   - ✅ Remote smoke: Deployment is healthy
+
+   ## Troubleshooting Test Failures
+
+   ### "401 Unauthorized" in tests that should pass
+   - **Check**: Is auth bypass properly configured?
+   - **Fix**: Verify `REMOTE_MCP_ALLOW_NO_AUTH=true` and `NODE_ENV=development`
+
+   ### "Expected 401, got 200" in auth enforcement tests
+   - **Check**: Is auth bypass accidentally enabled?
+   - **Fix**: Verify `NODE_ENV=test` (not `development`)
+
+   ### "Cannot find module '@clerk/...'"
+   - **Check**: Are dependencies installed?
+   - **Fix**: Run `pnpm install`
+
+   ### Tests pass locally but fail in CI
+   - **Check**: Environment variables differ between local and CI
+   - **Fix**: Review `.env.example` and CI configuration
+
+   ## Adding New Tests
+
+   **Always use TDD**:
+   1. Write failing test (Red)
+   2. Run test to prove it fails
+   3. Implement feature (Green)
+   4. Run test to prove it passes
+   5. Refactor if needed
+
+   **Choose the right layer**:
+   - Pure function? → Unit test
+   - Multiple units? → Integration test
+   - Running system? → E2E test
+   - Critical path? → Smoke test
+
+   **Keep tests deterministic**:
+   - ONE setup per file
+   - NO conditional logic
+   - Clear, instant failure signals
+
+   ````
+
+   - [ ] Create file
+   - [ ] Commit:
      ```bash
-     # .env.local
-     REMOTE_MCP_ALLOW_NO_AUTH=true  # Safe: Only works in NODE_ENV=development, not on Vercel
-     ```
-     ````
+     git add apps/oak-curriculum-mcp-streamable-http/TESTING.md
+     git commit -m "docs(testing): add comprehensive testing strategy documentation"
+   ````
 
-     Or for testing specific scenarios:
-
+   **5b. Update workspace README** (1 hour)
+   - [ ] Open `apps/oak-curriculum-mcp-streamable-http/README.md`
+   - [ ] Add link to TESTING.md in "Testing" section
+   - [ ] Add brief overview of test layers
+   - [ ] Commit:
      ```bash
-     # Use with EXTREME caution (bypasses ALL security checks)
-     DANGEROUSLY_DISABLE_AUTH=true
+     git add apps/oak-curriculum-mcp-streamable-http/README.md
+     git commit -m "docs(readme): link to comprehensive testing documentation"
      ```
-
-     ```
-
-     ```
-
-   - [ ] **Update troubleshooting section** (currently lines 123-132):
-     - DELETE: References to `ENABLE_LOCAL_AS`, `LOCAL_AS_JWK`, `REMOTE_MCP_DEV_TOKEN`
-     - ADD: Clerk-specific troubleshooting:
-
-       ```markdown
-       ## Troubleshooting
-
-       ### 401 Unauthorized
-
-       - **Symptom**: MCP client receives 401 when trying to connect
-       - **Solution**:
-         1. Check Clerk service status: https://status.clerk.com/
-         2. Verify environment variables are set correctly in Vercel
-         3. Check Clerk dashboard for failed authentications
-         4. Verify `WWW-Authenticate` header points to correct Clerk instance
-
-       ### User Can't Authenticate
-
-       - **Symptom**: "This email address is not allowed" error
-       - **Solution**:
-         1. Verify user's email domain is `@thenational.academy`
-         2. Check Clerk allowlist includes `thenational.academy`
-         3. Verify Google SSO is enabled and in "Production" status
-
-       ### OAuth Flow Doesn't Start
-
-       - **Symptom**: MCP client doesn't open browser for OAuth
-       - **Solution**:
-         1. Test metadata endpoints manually (see "Local Testing" section above)
-         2. Verify `/.well-known/oauth-protected-resource` returns Clerk URL
-         3. Check MCP client logs for metadata fetch errors
-         4. Verify Dynamic Client Registration is enabled in Clerk
-
-       ### Server Errors (500)
-
-       - **Symptom**: Internal server error on MCP requests
-       - **Solution**:
-         1. Check Vercel logs for specific error
-         2. Verify Clerk secret key is correct and not expired
-         3. Check Clerk JWKS URL is accessible: https://native-hippo-15.clerk.accounts.dev/.well-known/jwks.json
-         4. Verify `ALLOWED_HOSTS` includes deployment domain
-
-       ### Local Development Issues
-
-       - **Symptom**: Can't run server locally
-       - **Solution**:
-         1. Verify `.env.local` exists with all required variables
-         2. Check Clerk keys are valid (test in Clerk Dashboard)
-         3. For testing without OAuth: Set `REMOTE_MCP_ALLOW_NO_AUTH=true` in `.env.local`
-         4. Verify `NODE_ENV=development` (set automatically by `pnpm dev`)
-       ```
-
-   - [ ] **Commit README updates**:
-     ```bash
-     git add README.md
-     git commit -m "docs(readme): replace custom OAuth docs with Clerk integration guide"
-     git push
-     ```
-   - **Acceptance**: README reflects Clerk OAuth, old auth references removed, troubleshooting updated
 
 **Phase 2 Definition of Done**:
 
-- ✅ Unit tests updated and passing
-- ✅ E2E test strategy documented
-- ✅ Smoke tests updated
-- ✅ README reflects Clerk integration
+- ✅ E2E auth enforcement tests created (production-equivalent)
+- ✅ E2E auth bypass tests created (DX feature validation)
+- ✅ All existing E2E tests refactored (deterministic setups)
+- ✅ Smoke test `smoke:dev:live:auth` created (pre-deployment validation)
+- ✅ Package.json scripts updated
+- ✅ Comprehensive testing documentation created (TESTING.md)
+- ✅ README updated with testing overview
 - ✅ `pnpm test` passes
-- ✅ All old auth references removed from docs
+- ✅ `pnpm test:e2e` passes
+- ✅ `pnpm smoke:dev:stub` passes
+- ✅ `pnpm smoke:dev:live:auth` passes
+- ✅ `pnpm qg` passes
 
 ---
 

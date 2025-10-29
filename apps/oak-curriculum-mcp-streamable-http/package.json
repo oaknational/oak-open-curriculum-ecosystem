@@ -12,6 +12,7 @@
     "start": "node dist/index.js",
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",
+    "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
     "smoke:remote": "tsx smoke-tests/smoke-remote.ts",
     "smoke:capture:rest": "tsx smoke-tests/capture-rest-analysis.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",

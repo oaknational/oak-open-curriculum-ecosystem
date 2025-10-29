@@ -19,6 +19,8 @@ export async function runSmokeAssertions(context: SmokeContext): Promise<void> {
   });
   if (context.mode === 'remote') {
     await runRemoteSmokeAssertions(context);
+  } else if (context.mode === 'local-live-auth') {
+    await runLocalLiveAuthSmokeAssertions(context);
   } else {
     await runLocalSmokeAssertions(context);
   }
@@ -34,6 +36,16 @@ async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);
+}
+
+async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<void> {
+  // For auth enforcement mode, we only test auth and discovery
+  // MCP protocol tests would fail without a real Clerk token
+  await assertHealthEndpoints(context);
+  await assertAcceptHeaderEnforcement(context);
+  await assertAuthRequired(context);
+  // TODO: Add OAuth discovery assertions
+  // Skip MCP protocol tests - they require real Clerk token
 }
 
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {

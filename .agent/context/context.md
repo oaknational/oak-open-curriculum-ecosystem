@@ -53,28 +53,71 @@
 - `docs/architecture/curriculum-ontology.md` - Separated Sequence and Programme, elevated Threads
 - `.agent/plans/upstream-api-metadata-wishlist.md` - 15 items with examples, references to OpenAPI learning site
 
-### 2. Clerk OAuth 2.1 Implementation Plan (✅ COMPLETE - Ready for Implementation)
+### 2. Clerk OAuth 2.1 Implementation (🔄 IN PROGRESS - Phase 2)
 
-**What**: Production-ready plan to replace custom OAuth demo with Clerk.
+**What**: Production-ready Clerk OAuth integration replacing custom demo.
 
-**Status**: Comprehensive plan created, validated against code, aligned with all strategic directives. Branch `feat/oauth_support` pushed with updated plan.
+**Status**: Phase 1 complete, Phase 2 in progress (comprehensive test implementation).
 
 **Scope**: `apps/oak-curriculum-mcp-streamable-http` (Express MCP server on Vercel) ONLY
 
-**Timeline**: ~27 hours (recommend 2 weeks with buffer)
+**Timeline**: ~29 hours (recommend 2 weeks with buffer)
 
-- Phase 0: 2.5 hours (Clerk config, 5 screenshots)
-- Phase 1: 6.5 hours (Implementation with TDD, 7 tasks)
-- Phase 2: 7 hours (Tests & docs, 4 tasks)
-- Phase 3: 11 hours (Deploy & monitor, 7 tasks, 13 screenshots)
+- Phase 0: ✅ COMPLETE (2.5 hours - Clerk config)
+- Phase 1: ✅ COMPLETE (6.5 hours - Implementation with TDD)
+- Phase 2: 🔄 IN PROGRESS (10 hours - Comprehensive test implementation)
+- Phase 3: ⏳ PENDING (11 hours - Deploy & monitor)
 
-**Critical Fixes Identified**:
+**Phase 1 Completed**:
 
-1. ⚠️ **CORS doesn't expose `WWW-Authenticate` header** - Fixed in Phase 1, task 3b
-2. ⚠️ **env.ts cleanup incomplete** - Now removes 6 vars (was 4)
-3. ⚠️ **TDD violation** - Restructured with interleaved Red→Green→Refactor cycles
-4. ⚠️ **E2E test strategy vague** - Now specific: 11 tests in `server.e2e.test.ts` with line numbers
-5. ⚠️ **Monitoring undefined** - Added 4-hour checklist with decision framework
+- ✅ Installed Clerk dependencies (`@clerk/express`, `@clerk/mcp-tools`)
+- ✅ Updated environment schema with Clerk keys
+- ✅ Replaced auth middleware with Clerk
+- ✅ Replaced OAuth metadata endpoints
+- ✅ Removed old custom auth files
+- ✅ Created integration tests for Clerk middleware
+- ✅ Updated unit tests with auth bypass for local testing
+
+**Phase 2: Comprehensive Test Strategy** (IN PROGRESS)
+
+**Testing Philosophy**:
+
+- **No conditional logic in tests** - Each test file has ONE clear setup, ONE clear set of expectations
+- **Deterministic outcomes** - Test results provide instant, complete information
+- **TDD always** - Tests written first (Red), implementation second (Green), refactored third
+- **Production-equivalent testing** - `dev + live + auth` configuration is critical
+
+**Test Scenario Matrix**:
+
+Production = `remote + live + auth` (Vercel + Oak API + Clerk OAuth)
+
+Valid scenarios:
+
+1. **`dev + live + auth`** ✅ CRITICAL - Proves complete stack works (production-equivalent)
+2. **`remote + live + auth`** ✅ CRITICAL - Proves deployment successful
+3. **`dev + stub + noauth`** ✅ RECOMMENDED - Fast MCP protocol testing
+4. **`dev + live + noauth`** ✅ RECOMMENDED - Oak API integration with bypass
+
+**New Test Files** (to be created):
+
+- `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing
+- `auth-bypass.e2e.test.ts` - DX feature validation
+- `smoke-dev-live-auth.ts` - Pre-deployment validation smoke test
+- `local-live-auth.ts` - Smoke test mode for auth enforcement
+- `TESTING.md` - Comprehensive testing strategy documentation
+
+**Auth Bypass Mechanism**:
+
+```typescript
+const shouldBypassAuth =
+  process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true' &&
+  process.env.NODE_ENV === 'development' &&
+  !process.env.VERCEL;
+```
+
+- Purpose: Developer convenience for local testing
+- Safety: Only works in development, automatically disabled on Vercel
+- Testing: Both enforcement AND bypass are proven by separate E2E suites
 
 **Key Insights from Clerk Docs**:
 
