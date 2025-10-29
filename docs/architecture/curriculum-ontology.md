@@ -33,7 +33,7 @@ Oak's curriculum is organized along three complementary dimensions:
 
 1. **Programmes**: Teacher-facing navigation (what to teach when, in what context)
 2. **Threads**: Conceptual progression (how ideas build over time)
-3. **Sequences**: API data organization (efficient storage and retrieval)
+3. **Sequences**: API data organisation (efficient storage and retrieval)
 
 **Note**: While sequences exist in the API as an organizational structure, they are not necessarily the canonical internal concept. Programmes and threads are the primary user-facing and pedagogical structures.
 
