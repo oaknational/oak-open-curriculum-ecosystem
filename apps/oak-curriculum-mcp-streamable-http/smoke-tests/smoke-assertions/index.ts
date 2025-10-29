@@ -28,9 +28,11 @@ export async function runSmokeAssertions(context: SmokeContext): Promise<void> {
 }
 
 async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
+  // local-stub and local-live modes have auth bypass enabled
+  // so we skip auth enforcement assertions
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  await assertAuthRequired(context);
+  // Auth bypass enabled - skip assertAuthRequired
   await assertInitialiseHandshake(context);
   await assertToolCatalogue(context);
   await assertValidationFailures(context);

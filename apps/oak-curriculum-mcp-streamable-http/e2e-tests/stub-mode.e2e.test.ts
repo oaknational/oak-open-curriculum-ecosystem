@@ -2,11 +2,7 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { z } from 'zod';
 
-import {
-  createStubbedHttpApp,
-  STUB_ACCEPT_HEADER,
-  STUB_DEV_BEARER_TOKEN,
-} from './helpers/create-stubbed-http-app.js';
+import { createStubbedHttpApp, STUB_ACCEPT_HEADER } from './helpers/create-stubbed-http-app.js';
 import {
   parseSseEnvelope,
   parseJsonRpcResult,
@@ -100,7 +96,6 @@ describe('Streamable HTTP server (stub mode)', () => {
     try {
       const response = await request(app)
         .post('/mcp')
-        .set('Authorization', `Bearer ${STUB_DEV_BEARER_TOKEN}`)
         .set('Accept', STUB_ACCEPT_HEADER)
         .send({ jsonrpc: '2.0', id: 'list-1', method: 'tools/list' });
 
@@ -118,7 +113,6 @@ describe('Streamable HTTP server (stub mode)', () => {
     try {
       const response = await request(app)
         .post('/mcp')
-        .set('Authorization', `Bearer ${STUB_DEV_BEARER_TOKEN}`)
         .set('Accept', STUB_ACCEPT_HEADER)
         .send({
           jsonrpc: '2.0',
@@ -142,7 +136,6 @@ describe('Streamable HTTP server (stub mode)', () => {
     try {
       const response = await request(app)
         .post('/mcp')
-        .set('Authorization', `Bearer ${STUB_DEV_BEARER_TOKEN}`)
         .set('Accept', STUB_ACCEPT_HEADER)
         .send({
           jsonrpc: '2.0',
@@ -165,26 +158,14 @@ describe('Streamable HTTP server (stub mode)', () => {
     }
   });
 
-  it('rejects requests without an authorisation header', async () => {
-    const { app, restoreEnvironment } = createStubbedHttpApp();
-    try {
-      const response = await request(app)
-        .post('/mcp')
-        .set('Accept', STUB_ACCEPT_HEADER)
-        .send({ jsonrpc: '2.0', id: 'missing-auth', method: 'tools/list' });
-
-      expect(response.status).toBe(401);
-    } finally {
-      restoreEnvironment();
-    }
-  });
+  // Auth enforcement tests moved to auth-enforcement.e2e.test.ts
+  // Stub mode uses auth bypass for convenience
 
   it('rejects requests missing text/event-stream in Accept header', async () => {
     const { app, restoreEnvironment } = createStubbedHttpApp();
     try {
       const response = await request(app)
         .post('/mcp')
-        .set('Authorization', `Bearer ${STUB_DEV_BEARER_TOKEN}`)
         .set('Accept', 'application/json')
         .send({ jsonrpc: '2.0', id: 'missing-accept', method: 'tools/list' });
 
