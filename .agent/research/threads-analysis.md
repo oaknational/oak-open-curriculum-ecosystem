@@ -93,7 +93,7 @@ From `GET /threads`, there are **~200 threads** across all subjects:
 
 **Thread**: `number`
 
-**Total units**: 118 units (one of the largest!)
+**Total units**: 118 units (one of the largest threads)
 
 **Progression example** (selected units in order):
 
