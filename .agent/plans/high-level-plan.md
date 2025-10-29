@@ -19,7 +19,7 @@
 
 1. **Semantic Search Phase 1** — Status: ✅ NEAR COMPLETE (Priority 1)
    - Plans: `.agent/plans/semantic-search/semantic-search-high-level-plan.md`, `.agent/plans/semantic-search/context.md`
-   - Current: Status-aware response handling complete; quality gates green; remote verification passing
+   - Current: Status-aware response handling complete; quality gates green; remote verification passing; four indices live; search/nl/suggest endpoints operational; UI functional; admin telemetry working; zero-hit observability in place
    - Remaining: Documentation refresh, commit packaging
    - Acceptance: Four indices live; search/nl/suggest endpoints operational; UI functional; admin telemetry working; zero-hit observability in place
 
