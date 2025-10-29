@@ -29,10 +29,54 @@ This section maps ontology nodes and edges to the SDK schema. Each entry is eith
 
 ### Core Curriculum Entities
 
-- **Sequence** (synonyms: Programme)
-  - Definition: A pedagogically ordered collection of Units (and associated Threads) for a Subject across specified Key Stages/Years.
+Oak's curriculum is organized along three complementary dimensions:
+
+1. **Programmes**: Teacher-facing navigation (what to teach when, in what context)
+2. **Threads**: Conceptual progression (how ideas build over time)
+3. **Sequences**: API data organisation (efficient storage and retrieval)
+
+**Note**: While sequences exist in the API as an organizational structure, they are not necessarily the canonical internal concept. Programmes and threads are the primary user-facing and pedagogical structures.
+
+- **Programme**
+  - Definition: A contextualized, user-facing curriculum pathway for a subject in a specific teaching context. Programmes are what teachers navigate by on the Oak Web Application. They represent "what to teach when" for a specific year/key stage/tier/exam board combination.
+  - Key fields: `programmeSlug` (string - used in OWA URLs), `programmeTitle` (string), `keyStageSlug` (string), `tier` (object|null), `examBoard` (object|null), `examSubject` (string|null), `pathway` (string|null)
+  - Programme factors (context filters):
+    - **Key Stage**: `ks1`, `ks2`, `ks3`, `ks4` (all programmes)
+    - **Tier**: `foundation`, `higher` (KS4 sciences only)
+    - **Exam Subject**: `biology`, `chemistry`, `physics`, `combined-science` (KS4 sciences only)
+    - **Exam Board**: `aqa`, `ocr`, `edexcel`, `eduqas`, `edexcelb` (KS4 subjects)
+    - **Pathway**: `core`, `gcse` (some KS4 subjects like citizenship, computing, PE)
+    - **Legacy Flag**: `-l` suffix in slug (marks older curriculum versions)
+  - Examples:
+    - `maths-primary-ks1` (Year 1-2 maths)
+    - `biology-secondary-ks4-foundation-aqa` (Year 10-11 Foundation Biology for AQA exam board)
+  - OWA URL pattern: `https://www.thenational.academy/teachers/programmes/{programmeSlug}`
+  - Relationships: Programme → Units (contains); Programme → KeyStage (belongs_to); Programme → Subject (belongs_to)
+
+- **Thread**
+  - Definition: A cross-unit conceptual strand showing how specific concepts, skills, or themes develop over time—from early years through to GCSE. Threads provide the pedagogical coherence that makes Oak's curriculum progressive rather than just a collection of lessons.
+  - **Critical insight**: Threads are programme-agnostic. A single thread can span multiple programmes, key stages, and years, showing how the same concept deepens across contexts.
+  - Key fields: `threadSlug` (string), `threadTitle` (string)
+  - Unit relationship: `unitOrder` (number) - units within a thread are ordered to show progression
+  - Examples:
+    - `number` (118 units spanning Reception → Year 11, from "Counting 0-10" to "Surds and standard form")
+    - `bq01-biology-what-are-living-things-and-what-are-they-made-of` (32 units spanning KS1 → KS4, from "Naming animals" to "Eukaryotic and prokaryotic cells")
+    - `developing-reading-preferences` (English progression strand across key stages)
+  - Pedagogical purpose:
+    - Shows **how ideas build** (not just what to teach)
+    - Enables prerequisite identification
+    - Supports cross-key-stage transitions
+    - Makes curriculum progression explicit
+  - Relationships: Thread → Units (spans, ordered); Thread → KeyStages (crosses); Thread → Programmes (independent of); Unit → Thread (belongs_to, with order)
+
+- **Sequence**
+  - Definition: An API organizational structure for curriculum data storage and retrieval. Sequences are a pragmatic grouping of units for data management purposes. They span multiple contexts and can generate multiple programme views.
+  - **Note**: Sequences are primarily a technical/API concept rather than a canonical pedagogical concept. The canonical user-facing structures are programmes (navigation) and threads (progression).
   - Key fields: `sequenceSlug` (string), `years` (number[]), `keyStages` [{`keyStageTitle`, `keyStageSlug`}], `phaseSlug` (string), `phaseTitle` (string), `ks4Options` ({title, slug}|null)
-  - Relationships: Sequence → Units; Sequence → KeyStages (covers); Sequence → Years (covers); Sequence → Phase (belongs_to); Subject → Sequence (has)
+  - Examples:
+    - `maths-primary` (API structure spanning KS1 + KS2, generates multiple programme views)
+    - `science-secondary-aqa` (API structure spanning KS3 + KS4, generates 8+ programme contexts for Years 10-11)
+  - Relationships: Sequence → Units (organizes); Sequence → KeyStages (covers); Sequence → Years (covers); Sequence → Phase (belongs_to); Subject → Sequence (has); Sequence → Programmes (generates)
 
 - **Subject**
   - Definition: An academic discipline (e.g., Maths).
@@ -40,15 +84,12 @@ This section maps ontology nodes and edges to the SDK schema. Each entry is eith
   - Relationships: Subject → Sequences; Subject → KeyStages (coverage lists); Subject → Years (coverage lists)
 
 - **Unit**
-  - Definition: A themed set of Lessons within a Sequence.
-  - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number)
+  - Definition: A themed set of Lessons forming a cohesive teaching block (typically 4-8 lessons). Units are the fundamental building blocks that appear in both programmes (navigation) and threads (progression).
+  - **Key insight**: A single unit can appear in multiple contexts: multiple programmes (filtered by tier/exam board), multiple threads (showing different conceptual progressions), and may have variants (unitOptions).
+  - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number - position within a thread)
   - Additional fields (where available): `year` (number|string), `yearSlug` (string), `phaseSlug` (string), `subjectSlug` (string), `keyStageSlug` (string), `notes` (string|nullable)
-  - Relationships: Sequence → Unit (has); Unit → Lessons (has); Unit ↔ Thread (membership via `ThreadUnitsResponseSchema`); Unit → Categories (has)
-
-- **Thread**
-  - Definition: A cross-unit conceptual strand.
-  - Key fields: `slug` (string), `title` (string)
-  - Relationships: Thread → Units (has); Units ↔ Thread (membership)
+  - Educational metadata: `priorKnowledgeRequirements` (string[]), `nationalCurriculumContent` (string[]), `whyThisWhyNow` (string)
+  - Relationships: Unit → Lessons (contains); Unit → Thread (belongs_to, with order); Unit → Categories (has); Unit → Programme (appears_in); Unit → Unit (alternatives via unitOptions)
 
 - **Category**
   - Definition: A classification label for Units.
@@ -178,32 +219,52 @@ This section maps ontology nodes and edges to the SDK schema. Each entry is eith
 
 ### Schema-Backed Relationships
 
-- Subject HAS_MANY Sequence
-- Subject HAS_MANY KeyStage (coverage)
-- Subject HAS_MANY YearGroup (coverage)
+#### Navigation & Organization (Teacher-Facing)
+
+- Subject HAS_MANY Programme
+- Programme BELONGS_TO Subject
+- Programme BELONGS_TO KeyStage (specific)
+- Programme HAS_MANY Unit (contextualized view)
+- Unit APPEARS_IN_MANY Programme (filtered by context)
+- Unit HAS_MANY Lesson
+- Lesson BELONGS_TO Unit
+
+#### Progression & Pedagogy (Conceptual)
+
+- Thread HAS_MANY Unit (ordered by conceptual development)
+- Unit IN_THREAD Thread (with unitOrder showing progression)
+- Thread SPANS_MANY KeyStage (cross-stage progression)
+- Thread SPANS_MANY Programme (programme-agnostic)
+- Unit PROVIDES EducationalMetadata (priorKnowledgeRequirements, nationalCurriculumContent, whyThisWhyNow)
+
+#### Data Organization (API Structure)
+
+- Subject HAS_MANY Sequence (API storage structure)
 - Sequence BELONGS_TO Subject
-- Sequence HAS_MANY Unit
+- Sequence HAS_MANY Unit (organizational grouping)
 - Sequence BELONGS_TO Phase
 - Sequence COVERS_MANY YearGroup
 - Sequence COVERS_MANY KeyStage
 - Sequence HAS_OPTIONAL Ks4Option
+- Sequence GENERATES_MANY Programme (one sequence → multiple programme views)
 - Sequence (KS4) HAS_MANY ExamSubject; ExamSubject HAS_MANY Tier; Tier HAS_MANY Unit
-- Unit HAS_MANY Lesson
+
+#### Content & Resources
+
 - Unit HAS_MANY Category
-- Unit BELONGS_TO Sequence
 - Unit BELONGS_TO KeyStage/Subject/Phase/YearGroup (via summary fields)
 - Unit HAS_MANY Unit options (variants)
-- Thread HAS_MANY Unit; Unit IN_THREAD Thread
-- Lesson BELONGS_TO Unit
 - Lesson HAS_MANY Asset
 - Lesson HAS Transcript
 - Lesson HAS_MANY Quiz; Quiz HAS_MANY Question
 - Question HAS_MANY Answer (with distractor logic)
-- Search CONTAINS_MANY SearchResult; SearchResult REFERENCES Lesson
-- Lesson REQUIRES ContentGuidance; ContentGuidance HAS SupervisionLevel
-- Unit PROVIDES EducationalMetadata (priorKnowledgeRequirements, nationalCurriculumContent, whyThisWhyNow)
-- Transcript SUPPORTS SearchResult (snippet matching)
 - Answer HAS Format (text | image)
+
+#### Assessment & Guidance
+
+- Lesson REQUIRES ContentGuidance; ContentGuidance HAS SupervisionLevel
+- Search CONTAINS_MANY SearchResult; SearchResult REFERENCES Lesson
+- Transcript SUPPORTS SearchResult (snippet matching)
 
 ### Relationship Diagram
 
@@ -648,14 +709,3 @@ The diagram organizes entities into logical sections for clarity:
   }
 }
 ```
-
-## Maintenance
-
-This ontology document should be updated when:
-
-1. The OpenAPI schema changes (via `pnpm type-gen`)
-2. New semantic search endpoints are added
-3. Additional content guidance or educational metadata is required
-4. New assessment types or structures are introduced
-
-The ontology serves as the foundation for curriculum tools, ensuring consistent understanding of the domain across all implementations.
