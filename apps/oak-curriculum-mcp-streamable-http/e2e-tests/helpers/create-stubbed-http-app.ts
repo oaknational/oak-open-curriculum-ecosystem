@@ -38,7 +38,7 @@ export function createStubbedHttpApp(): StubbedHttpApp {
 
   // Disable auth for E2E tests
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  
+
   // Clerk keys not needed when auth disabled, but set for completeness
   process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
   process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';

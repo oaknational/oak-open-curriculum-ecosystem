@@ -3,7 +3,14 @@ import type { Logger } from '@oaknational/mcp-logger';
 export type SmokeSuiteMode = 'local-stub' | 'local-live' | 'local-live-auth' | 'remote';
 
 export type RemoteUrlSource = 'cli' | 'smokeRemoteBaseUrl' | 'oakMcpUrl';
-export type DevTokenSource = 'stub-default' | 'cli' | 'env' | 'fallback' | 'not-required';
+export type DevTokenSource =
+  | 'stub-default'
+  | 'cli'
+  | 'env'
+  | 'fallback'
+  | 'not-required'
+  | 'not-applicable-auth-disabled'
+  | 'not-applicable-remote-uses-oauth';
 
 export interface SmokeMetadata {
   readonly devTokenSource: DevTokenSource;

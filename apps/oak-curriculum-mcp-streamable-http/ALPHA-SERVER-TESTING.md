@@ -24,14 +24,16 @@ pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote https
 The remote smoke suite now exercises **10 different tools**:
 
 ### Basic Tools (via tool catalogue)
+
 1. ✅ `search` - Listed in catalogue
-2. ✅ `fetch` - Listed in catalogue  
+2. ✅ `fetch` - Listed in catalogue
 3. ✅ `get-key-stages-subject-lessons` - Listed in catalogue
 4. ✅ `get-lessons-assets` - Listed in catalogue
 5. ✅ `get-lessons-summary` - Listed in catalogue
 6. ✅ `get-units-summary` - Listed in catalogue
 
 ### Executed Tools (actually called)
+
 1. ✅ `get-key-stages` - Returns list of key stages
 2. ✅ `get-lessons-summary` - Returns lesson metadata
 3. ✅ `get-lessons-assets` - Returns downloadable assets for a lesson
@@ -62,6 +64,7 @@ These are real curriculum IDs that should exist in the Oak API.
 ### No Auth Headers
 
 Remote smoke tests do **not** send authentication headers:
+
 - ✅ Works with your no-auth alpha server
 - ✅ Gracefully skip Clerk JWKS check (logs warning if OAuth not configured)
 - ✅ All MCP protocol tests execute without authentication
@@ -69,6 +72,7 @@ Remote smoke tests do **not** send authentication headers:
 ### After OAuth Deployment
 
 Once you deploy OAuth to the alpha server:
+
 - Tests will fail with 401 (expected - auth is required)
 - You'll need to use Cursor or Claude Desktop as MCP client to test OAuth flow manually
 - Or: Implement OAuth client flow in smoke tests (future enhancement)
@@ -76,9 +80,11 @@ Once you deploy OAuth to the alpha server:
 ### Lesson/Unit IDs
 
 If the test IDs don't exist in your deployment, the tests will fail. You can update the IDs in:
+
 - `smoke-tests/smoke-assertions/tools.ts` (lines 184, 249)
 
 To find valid IDs:
+
 ```bash
 # Get key stages
 curl https://curriculum-mcp-alpha.oaknational.dev/mcp -X POST \
@@ -91,7 +97,7 @@ curl https://curriculum-mcp-alpha.oaknational.dev/mcp -X POST \
 
 ## Expected Output
 
-```
+```text
 ✅ GET /healthz returned expected payload
 ✅ HEAD /healthz returned 200 with empty body
 ✅ POST /mcp without streaming Accept header rejected with 406
@@ -126,9 +132,9 @@ curl https://curriculum-mcp-alpha.oaknational.dev/mcp -X POST \
 ### Clerk JWKS warnings
 
 **Expected**: Remote tests log a warning if OAuth isn't configured yet:
-```
+
+```text
 ⚠️  Remote deployment does not have Clerk OAuth configured
 ```
 
 This is normal for pre-OAuth deployments and won't fail the tests.
-

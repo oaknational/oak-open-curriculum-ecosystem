@@ -65,7 +65,10 @@ function setupAuthRoutes(app: express.Express, coreTransport: StreamableHTTPServ
 
   if (authDisabled) {
     logger.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
-    app.post('/mcp', createMcpHandler(coreTransport));
+    app.post('/mcp', (_req, _res, next) => {
+      logger.debug('🔓 POST /mcp route hit (auth disabled)');
+      next();
+    }, createMcpHandler(coreTransport));
     app.get('/mcp', createMcpHandler(coreTransport));
   } else {
     logger.info('🔒 OAuth enforcement enabled via Clerk');
@@ -216,6 +219,7 @@ function initializeCoreMcpServer(): {
 
 // http handler moved to handlers.ts
 
-// createApp is already exported above as 'export function createApp'
-// Default export for Vercel compatibility
-export default createApp();
+// Note: Vercel expects a default export
+// We export the createApp FUNCTION (not a call) to avoid module-level side effects
+// Vercel will call this function when handling requests
+export default createApp;

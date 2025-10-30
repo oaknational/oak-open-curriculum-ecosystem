@@ -19,7 +19,7 @@ export function prepareRemoteEnvironment(
       `Remote smoke tests require a base URL. Provide a CLI argument, set SMOKE_REMOTE_BASE_URL, or define OAK_MCP_URL in process env or the repo .env (root: ${envLoad.repoRoot}).`,
     );
   }
-  
+
   // Remote servers use OAuth (no dev token)
   // Tests work without auth headers for pre-OAuth deployments
   return {
