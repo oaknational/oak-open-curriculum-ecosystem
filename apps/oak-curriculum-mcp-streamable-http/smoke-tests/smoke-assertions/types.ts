@@ -25,4 +25,11 @@ export interface SmokeContext {
 }
 
 export const REQUIRED_ACCEPT = 'application/json, text/event-stream';
-export const EXPECTED_TOOLS = ['search', 'fetch', 'get-key-stages-subject-lessons'] as const;
+export const EXPECTED_TOOLS = [
+  'search',
+  'fetch',
+  'get-key-stages-subject-lessons',
+  'get-lessons-assets',
+  'get-lessons-summary',
+  'get-units-summary',
+] as const;

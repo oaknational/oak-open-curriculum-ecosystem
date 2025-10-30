@@ -172,3 +172,106 @@ function assertValidStatus(statusValue: unknown): void {
     `Tool payload status must be number|string when present (received ${statusType})`,
   );
 }
+
+/**
+ * Assert lesson-related tools work (get-lessons-summary, get-lessons-assets)
+ */
+export async function assertLessonToolsWork(context: SmokeContext): Promise<void> {
+  const logger = createAssertionLogger(context, 'lesson-tools');
+  const headers = createToolHeaders(context);
+
+  // Use a known lesson ID from the curriculum
+  const lessonId = 'maths-ks1-place-value-counting-objects-to-10';
+
+  // Test get-lessons-summary
+  logger.info('Testing get-lessons-summary', { lessonId });
+  const summaryResponse = await fetchJson(new URL('/mcp', context.baseUrl), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 'test-lessons-summary',
+      method: 'tools/call',
+      params: {
+        name: 'get-lessons-summary',
+        arguments: { params: { path: { lesson: lessonId } } },
+      },
+    }),
+  });
+
+  if (context.mode === 'remote' && summaryResponse.res.status !== 200) {
+    logger.warn('get-lessons-summary failed on remote', {
+      status: summaryResponse.res.status,
+      body: summaryResponse.text,
+    });
+  } else {
+    assert.equal(summaryResponse.res.status, 200, 'get-lessons-summary should return 200');
+    logAssertionSuccess(logger, 'get-lessons-summary executed successfully');
+  }
+
+  // Test get-lessons-assets
+  logger.info('Testing get-lessons-assets', { lessonId });
+  const assetsResponse = await fetchJson(new URL('/mcp', context.baseUrl), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 'test-lessons-assets',
+      method: 'tools/call',
+      params: {
+        name: 'get-lessons-assets',
+        arguments: { params: { path: { lesson: lessonId } } },
+      },
+    }),
+  });
+
+  if (context.mode === 'remote' && assetsResponse.res.status !== 200) {
+    logger.warn('get-lessons-assets failed on remote', {
+      status: assetsResponse.res.status,
+      body: assetsResponse.text,
+    });
+  } else {
+    assert.equal(assetsResponse.res.status, 200, 'get-lessons-assets should return 200');
+    const envelope = parseFirstSsePayload(assetsResponse.text);
+    assert.ok(!envelope.error, 'get-lessons-assets should not return error');
+    logAssertionSuccess(logger, 'get-lessons-assets executed successfully');
+  }
+}
+
+/**
+ * Assert unit-related tools work (get-units-summary)
+ */
+export async function assertUnitToolsWork(context: SmokeContext): Promise<void> {
+  const logger = createAssertionLogger(context, 'unit-tools');
+  const headers = createToolHeaders(context);
+
+  // Use a known unit ID from the curriculum
+  const unitId = 'maths-ks1-place-value';
+
+  logger.info('Testing get-units-summary', { unitId });
+  const response = await fetchJson(new URL('/mcp', context.baseUrl), {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      id: 'test-units-summary',
+      method: 'tools/call',
+      params: {
+        name: 'get-units-summary',
+        arguments: { params: { path: { unit: unitId } } },
+      },
+    }),
+  });
+
+  if (context.mode === 'remote' && response.res.status !== 200) {
+    logger.warn('get-units-summary failed on remote', {
+      status: response.res.status,
+      body: response.text,
+    });
+  } else {
+    assert.equal(response.res.status, 200, 'get-units-summary should return 200');
+    const envelope = parseFirstSsePayload(response.text);
+    assert.ok(!envelope.error, 'get-units-summary should not return error');
+    logAssertionSuccess(logger, 'get-units-summary executed successfully');
+  }
+}

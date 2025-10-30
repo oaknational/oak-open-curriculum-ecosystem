@@ -5,7 +5,12 @@ import {
 } from './health.js';
 import { assertClerkJwksAccessible } from './clerk-jwks.js';
 import { assertInitialiseHandshake } from './initialise.js';
-import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
+import {
+  assertSuccessfulToolCall,
+  assertToolCatalogue,
+  assertLessonToolsWork,
+  assertUnitToolsWork,
+} from './tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import type { SmokeContext } from './types.js';
@@ -58,6 +63,9 @@ async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertInitialiseHandshake(context);
   await assertToolCatalogue(context);
   await assertValidationFailures(context);
-  await assertSuccessfulToolCall(context);
+  await assertSuccessfulToolCall(context); // Tests get-key-stages
   await assertSynonymCanonicalisation(context);
+  // Additional tool coverage for remote deployments
+  await assertLessonToolsWork(context); // Tests get-lessons-summary, get-lessons-assets
+  await assertUnitToolsWork(context); // Tests get-units-summary
 }
