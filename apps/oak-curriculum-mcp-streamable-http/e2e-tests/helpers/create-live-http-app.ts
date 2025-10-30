@@ -23,26 +23,24 @@ export function createLiveHttpApp(options?: CreateLiveHttpAppOptions): LiveHttpA
   const previous = {
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
     OAK_API_KEY: process.env.OAK_API_KEY,
-    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
     CLERK_PUBLISHABLE_KEY: process.env.CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     BASE_URL: process.env.BASE_URL,
     MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
-    NODE_ENV: process.env.NODE_ENV,
     ALLOWED_HOSTS: process.env.ALLOWED_HOSTS,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
-    VERCEL: process.env.VERCEL,
   } as const;
 
   setEnv('OAK_CURRICULUM_MCP_USE_STUB_TOOLS', undefined);
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'live-mode-api-key';
 
-  // Enable auth bypass for E2E tests
-  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-  process.env.NODE_ENV = 'development'; // Required for bypass
+  // Disable auth for E2E tests
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
+  
+  // Clerk keys not needed when auth disabled, but set for completeness
   process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
   process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-  setEnv('VERCEL', undefined); // Not on Vercel
 
   process.env.BASE_URL = 'http://localhost:3333';
   process.env.MCP_CANONICAL_URI = previous.MCP_CANONICAL_URI ?? 'http://localhost:3333/mcp';
@@ -54,15 +52,13 @@ export function createLiveHttpApp(options?: CreateLiveHttpAppOptions): LiveHttpA
   const restoreEnvironment = (): void => {
     setEnv('OAK_CURRICULUM_MCP_USE_STUB_TOOLS', previous.OAK_CURRICULUM_MCP_USE_STUB_TOOLS);
     setEnv('OAK_API_KEY', previous.OAK_API_KEY);
-    setEnv('REMOTE_MCP_ALLOW_NO_AUTH', previous.REMOTE_MCP_ALLOW_NO_AUTH);
+    setEnv('DANGEROUSLY_DISABLE_AUTH', previous.DANGEROUSLY_DISABLE_AUTH);
     setEnv('CLERK_PUBLISHABLE_KEY', previous.CLERK_PUBLISHABLE_KEY);
     setEnv('CLERK_SECRET_KEY', previous.CLERK_SECRET_KEY);
     setEnv('BASE_URL', previous.BASE_URL);
     setEnv('MCP_CANONICAL_URI', previous.MCP_CANONICAL_URI);
-    setEnv('NODE_ENV', previous.NODE_ENV);
     setEnv('ALLOWED_HOSTS', previous.ALLOWED_HOSTS);
     setEnv('ALLOWED_ORIGINS', previous.ALLOWED_ORIGINS);
-    setEnv('VERCEL', previous.VERCEL);
   };
 
   return { app, restoreEnvironment };

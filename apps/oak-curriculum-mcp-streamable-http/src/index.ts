@@ -216,4 +216,6 @@ function initializeCoreMcpServer(): {
 
 // http handler moved to handlers.ts
 
+// createApp is already exported above as 'export function createApp'
+// Default export for Vercel compatibility
 export default createApp();

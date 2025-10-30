@@ -18,7 +18,7 @@ function parseFirstSseData(raw: string): unknown {
 }
 
 async function callWithBadArgs(): Promise<{ status: number; text: string }> {
-  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
   process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
   const app = createApp();

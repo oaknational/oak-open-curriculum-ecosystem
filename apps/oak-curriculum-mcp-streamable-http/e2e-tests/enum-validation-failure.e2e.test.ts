@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 function parseFirstSseData(raw: string): unknown {
@@ -30,16 +29,11 @@ function makeInvalidEnumBody() {
 }
 
 async function post(body: Record<string, unknown>) {
-  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
   process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
   const app = createApp();
-  return request(app)
-    .post('/mcp')
-    .set('Host', 'localhost')
-    .set('Authorization', `Bearer ${DEV_TOKEN}`)
-    .set('Accept', ACCEPT)
-    .send(body);
+  return request(app).post('/mcp').set('Host', 'localhost').set('Accept', ACCEPT).send(body);
 }
 
 describe('HTTP /mcp enum validation failure', () => {

@@ -5,7 +5,6 @@ import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 import { parseSseEnvelope, parseJsonRpcResult, parseToolSuccessPayload } from './helpers/sse.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 interface CapturedCall {
@@ -37,17 +36,17 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
 }
 
 function configureDevEnvironment(): () => void {
-  const previousDevToken = process.env.REMOTE_MCP_DEV_TOKEN;
+  const previousAuth = process.env.DANGEROUSLY_DISABLE_AUTH;
   const previousBaseUrl = process.env.BASE_URL;
   const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
-  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for testing
   process.env.BASE_URL = 'http://localhost:3333';
   process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
   return () => {
-    if (typeof previousDevToken === 'string') {
-      process.env.REMOTE_MCP_DEV_TOKEN = previousDevToken;
+    if (typeof previousAuth === 'string') {
+      process.env.DANGEROUSLY_DISABLE_AUTH = previousAuth;
     } else {
-      Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
+      Reflect.deleteProperty(process.env, 'DANGEROUSLY_DISABLE_AUTH');
     }
     if (typeof previousBaseUrl === 'string') {
       process.env.BASE_URL = previousBaseUrl;

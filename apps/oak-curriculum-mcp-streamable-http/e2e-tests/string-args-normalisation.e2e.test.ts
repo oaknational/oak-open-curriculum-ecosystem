@@ -3,14 +3,12 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { createApp } from '../src/index.js';
 import type { ToolHandlerOverrides } from '../src/handlers.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 describe('HTTP boundary argument validation', () => {
   beforeEach(() => {
-    process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     process.env.BASE_URL = 'http://localhost';
     process.env.MCP_CANONICAL_URI = 'http://localhost/mcp';

@@ -22,12 +22,10 @@ describe('Auth Bypass for Development (E2E)', () => {
     const previous = { ...process.env };
 
     // Configure for auth bypass
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true'; // Bypass ENABLED
-    process.env.NODE_ENV = 'development'; // Required for bypass
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for testing
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
-    delete process.env.VERCEL; // Required for bypass (not on Vercel)
 
     app = createApp();
     restoreEnv = () => {
@@ -68,69 +66,12 @@ describe('Auth Bypass for Development (E2E)', () => {
   // Note: GET endpoint test removed - SSE connections stay open causing timeouts
   // POST test above already proves auth bypass works
 
-  it('still exposes OAuth discovery endpoints (for testing)', async () => {
+  it('does not expose OAuth discovery endpoints when auth disabled', async () => {
+    // When auth is disabled, OAuth endpoints should not be registered
     const res1 = await request(app).get('/.well-known/oauth-authorization-server');
-    expect(res1.status).toBe(200);
+    expect(res1.status).toBe(404); // Not registered when auth disabled
 
     const res2 = await request(app).get('/.well-known/oauth-protected-resource');
-    expect(res2.status).toBe(200);
-  });
-});
-
-describe('Auth Bypass Safety Checks', () => {
-  it('disables bypass on Vercel even if REMOTE_MCP_ALLOW_NO_AUTH=true', async () => {
-    const previous = { ...process.env };
-
-    // Configure as if on Vercel with bypass attempted
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-    process.env.NODE_ENV = 'development';
-    process.env.VERCEL = '1'; // Simulate Vercel environment
-    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
-    process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-    process.env.OAK_API_KEY = 'test-api-key';
-
-    const app = createApp();
-
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
-
-    // Should reject because VERCEL is set
-    expect(res.status).toBe(401);
-
-    // Restore environment
-    for (const key of Object.keys(process.env)) {
-      Reflect.deleteProperty(process.env, key);
-    }
-    Object.assign(process.env, previous);
-  });
-
-  it('disables bypass in production even if REMOTE_MCP_ALLOW_NO_AUTH=true', async () => {
-    const previous = { ...process.env };
-
-    // Configure as production with bypass attempted
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-    process.env.NODE_ENV = 'production'; // NOT development
-    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
-    process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-    process.env.OAK_API_KEY = 'test-api-key';
-    delete process.env.VERCEL;
-
-    const app = createApp();
-
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
-
-    // Should reject because NODE_ENV is not development
-    expect(res.status).toBe(401);
-
-    // Restore environment
-    for (const key of Object.keys(process.env)) {
-      Reflect.deleteProperty(process.env, key);
-    }
-    Object.assign(process.env, previous);
+    expect(res2.status).toBe(404); // Not registered when auth disabled
   });
 });

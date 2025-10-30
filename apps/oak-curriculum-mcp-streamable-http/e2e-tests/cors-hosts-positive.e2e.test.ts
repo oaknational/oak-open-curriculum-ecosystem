@@ -8,14 +8,13 @@ describe('CORS/Hosts positive path', () => {
   it('allows allowed host and origin', async () => {
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
-    process.env.REMOTE_MCP_DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'dev-token';
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'localhost')
       .set('Origin', 'http://localhost:3000')
-      .set('Authorization', `Bearer ${process.env.REMOTE_MCP_DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(200);
@@ -26,14 +25,13 @@ describe('CORS/Hosts positive path', () => {
   it('allows wildcard host pattern for dynamic Vercel preview URLs', async () => {
     process.env.ALLOWED_HOSTS = 'poc-oak-open-curriculum-*.vercel.thenational.academy,localhost';
     process.env.ALLOWED_ORIGINS = 'https://curriculum-mcp-alpha.oaknational.dev';
-    process.env.REMOTE_MCP_DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'dev-token';
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
       .set('Host', 'poc-oak-open-curriculum-8qwhtqr6o.vercel.thenational.academy')
       .set('Origin', 'https://curriculum-mcp-alpha.oaknational.dev')
-      .set('Authorization', `Bearer ${process.env.REMOTE_MCP_DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     expect(res.status).toBe(200);
