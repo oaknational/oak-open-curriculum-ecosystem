@@ -1,5 +1,4 @@
 import type { PrepareEnvironmentOptions, PreparedEnvironment, LoadedEnvResult } from '../types.js';
-import { resolveDevToken } from '../token-resolution.js';
 import { startSmokeServer } from '../local-server.js';
 
 export async function prepareLocalLiveEnvironment(
@@ -18,16 +17,12 @@ export async function prepareLocalLiveEnvironment(
       `OAK_API_KEY is required for live smoke tests. ${sourceHint}. Repository root: ${envLoad.repoRoot}`,
     );
   }
-  const devTokenResult = resolveDevToken(options.remoteDevToken, process.env.REMOTE_MCP_DEV_TOKEN, {
-    fallbackValue: 'dev-token',
-  });
-  process.env.REMOTE_MCP_DEV_TOKEN = devTokenResult.value ?? 'dev-token';
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for local testing
   return {
     baseUrl: `http://localhost:${String(options.port)}`,
-    devToken: devTokenResult.value ?? 'dev-token',
+    devToken: undefined, // No dev token - auth is disabled
     envLoad,
     server: await startSmokeServer(options.port),
-    devTokenSource: devTokenResult.source,
+    devTokenSource: 'not-applicable-auth-disabled',
   };
 }

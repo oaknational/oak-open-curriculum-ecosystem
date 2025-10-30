@@ -7,10 +7,6 @@ Add to `.env` in repository root:
 ```bash
 # Alpha Server URL (no auth required yet)
 SMOKE_REMOTE_BASE_URL=https://curriculum-mcp-alpha.oaknational.dev/mcp
-
-# DO NOT set REMOTE_MCP_DEV_TOKEN - alpha server has no auth
-# (comment out or delete this line if it exists)
-# REMOTE_MCP_DEV_TOKEN=...
 ```
 
 ## Running Smoke Tests
@@ -65,17 +61,17 @@ These are real curriculum IDs that should exist in the Oak API.
 
 ### No Auth Headers
 
-When `REMOTE_MCP_DEV_TOKEN` is **not set** in `.env`, the smoke tests will:
-- ✅ NOT send `Authorization` header
-- ✅ Work with your no-auth alpha server
-- ✅ Gracefully skip Clerk JWKS check (since no OAuth is configured)
+Remote smoke tests do **not** send authentication headers:
+- ✅ Works with your no-auth alpha server
+- ✅ Gracefully skip Clerk JWKS check (logs warning if OAuth not configured)
+- ✅ All MCP protocol tests execute without authentication
 
 ### After OAuth Deployment
 
-Once you deploy OAuth to the alpha server, you'll need to:
-
-1. **Either**: Set `REMOTE_MCP_DEV_TOKEN` in `.env` for testing
-2. **Or**: Remove smoke:remote from the quality gate (requires manual testing with Cursor/Claude Desktop)
+Once you deploy OAuth to the alpha server:
+- Tests will fail with 401 (expected - auth is required)
+- You'll need to use Cursor or Claude Desktop as MCP client to test OAuth flow manually
+- Or: Implement OAuth client flow in smoke tests (future enhancement)
 
 ### Lesson/Unit IDs
 
@@ -117,13 +113,22 @@ curl https://curriculum-mcp-alpha.oaknational.dev/mcp -X POST \
 
 ### "401 Unauthorized"
 
-**Problem**: Auth headers are being sent but alpha server doesn't support them yet
+**Problem**: Alpha server now has OAuth enabled (deployment changed)
 
-**Solution**: Ensure `REMOTE_MCP_DEV_TOKEN` is NOT set in `.env`
+**Solution**: This is expected. Remote smoke tests will fail once OAuth is deployed. Use Cursor/Claude Desktop to test OAuth flow manually.
 
 ### "404 Not Found" for lesson/unit IDs
 
 **Problem**: The test IDs don't exist in your deployment
 
 **Solution**: Update the IDs in `smoke-tests/smoke-assertions/tools.ts` to match your curriculum data
+
+### Clerk JWKS warnings
+
+**Expected**: Remote tests log a warning if OAuth isn't configured yet:
+```
+⚠️  Remote deployment does not have Clerk OAuth configured
+```
+
+This is normal for pre-OAuth deployments and won't fail the tests.
 

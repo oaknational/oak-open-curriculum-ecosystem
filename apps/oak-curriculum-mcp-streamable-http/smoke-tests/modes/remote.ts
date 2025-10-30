@@ -1,5 +1,4 @@
 import type { PrepareEnvironmentOptions, PreparedEnvironment, LoadedEnvResult } from '../types.js';
-import { resolveDevToken } from '../token-resolution.js';
 
 type RemoteSource = 'cli' | 'smokeRemoteBaseUrl' | 'oakMcpUrl';
 
@@ -20,20 +19,15 @@ export function prepareRemoteEnvironment(
       `Remote smoke tests require a base URL. Provide a CLI argument, set SMOKE_REMOTE_BASE_URL, or define OAK_MCP_URL in process env or the repo .env (root: ${envLoad.repoRoot}).`,
     );
   }
-  const devTokenResult = resolveDevToken(options.remoteDevToken, process.env.REMOTE_MCP_DEV_TOKEN, {
-    allowEmpty: true,
-  });
-  if (devTokenResult.value) {
-    process.env.REMOTE_MCP_DEV_TOKEN = devTokenResult.value;
-  } else {
-    Reflect.deleteProperty(process.env, 'REMOTE_MCP_DEV_TOKEN');
-  }
+  
+  // Remote servers use OAuth (no dev token)
+  // Tests work without auth headers for pre-OAuth deployments
   return {
     baseUrl: remoteSelection.baseUrl,
-    devToken: devTokenResult.value,
+    devToken: undefined, // No dev token - remote uses OAuth or no auth
     envLoad,
     remoteUrlSource: remoteSelection.source,
-    devTokenSource: devTokenResult.source,
+    devTokenSource: 'not-applicable-remote-uses-oauth',
   };
 }
 
