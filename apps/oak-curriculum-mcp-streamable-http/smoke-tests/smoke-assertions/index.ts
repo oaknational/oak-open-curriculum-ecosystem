@@ -11,6 +11,7 @@ import {
   assertLessonToolsWork,
   assertUnitToolsWork,
 } from './tools.js';
+import { assertAllToolsWork } from './comprehensive-tools.js';
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
 import type { SmokeContext } from './types.js';
@@ -59,13 +60,9 @@ async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<v
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
-  await assertClerkJwksAccessible(context); // Test #4: Verify Clerk JWKS is reachable
+  await assertClerkJwksAccessible(context); // Verify Clerk JWKS is reachable (if OAuth configured)
   await assertInitialiseHandshake(context);
   await assertToolCatalogue(context);
-  await assertValidationFailures(context);
-  await assertSuccessfulToolCall(context); // Tests get-key-stages
-  await assertSynonymCanonicalisation(context);
-  // Additional tool coverage for remote deployments
-  await assertLessonToolsWork(context); // Tests get-lessons-summary, get-lessons-assets
-  await assertUnitToolsWork(context); // Tests get-units-summary
+  // Comprehensive validation: ALL 28 tools with happy + unhappy paths
+  await assertAllToolsWork(context);
 }
