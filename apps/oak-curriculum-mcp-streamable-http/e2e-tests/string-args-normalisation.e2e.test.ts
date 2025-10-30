@@ -32,7 +32,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -50,7 +49,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -68,7 +66,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp();
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .send({
         jsonrpc: '2.0',
@@ -109,7 +106,6 @@ describe('HTTP boundary argument validation', () => {
     const app = createApp({ toolHandlerOverrides: overrides });
     const res = await request(app)
       .post('/mcp')
-      .set('Authorization', `Bearer ${DEV_TOKEN}`)
       .set('Accept', ACCEPT)
       .set('Host', 'localhost')
       .send({

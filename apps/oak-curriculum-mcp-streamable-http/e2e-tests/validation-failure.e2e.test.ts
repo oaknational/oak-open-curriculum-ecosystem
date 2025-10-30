@@ -2,7 +2,6 @@ import request from 'supertest';
 import { describe, it, expect } from 'vitest';
 import { createApp } from '../src/index.js';
 
-const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 const ACCEPT = 'application/json, text/event-stream';
 
 function parseFirstSseData(raw: string): unknown {
@@ -31,7 +30,6 @@ async function callWithBadArgs(): Promise<{ status: number; text: string }> {
   const res = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
-    .set('Authorization', `Bearer ${DEV_TOKEN}`)
     .set('Accept', ACCEPT)
     .send(body);
   return { status: res.status, text: typeof res.text === 'string' ? res.text : JSON.stringify({}) };

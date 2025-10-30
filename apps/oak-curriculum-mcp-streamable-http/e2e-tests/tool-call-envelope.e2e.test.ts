@@ -89,7 +89,6 @@ describe('Tool response envelope formatting', () => {
         .post('/mcp')
         .set('Accept', ACCEPT)
         .set('Host', 'localhost')
-        .set('Authorization', `Bearer ${DEV_TOKEN}`)
         .send({
           jsonrpc: '2.0',
           id: '1',

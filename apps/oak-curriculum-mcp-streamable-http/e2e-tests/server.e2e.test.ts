@@ -12,11 +12,9 @@ const ACCEPT = 'application/json, text/event-stream';
  * This allows tests to run without needing Clerk OAuth tokens
  */
 function enableAuthBypass(): void {
-  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-  process.env.NODE_ENV = 'development';
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
   process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
   process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
-  delete process.env.VERCEL;
 }
 
 interface JsonRpcEnvelope {
@@ -65,9 +63,8 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   });
 
   it('returns 401 when missing Authorization (auth enforcement test)', async () => {
-    // Override: disable bypass to test auth enforcement
-    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
-    process.env.NODE_ENV = 'test'; // NOT development
+    // Override: enable auth enforcement for this test
+    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
 
     const app = createApp();
     const res = await request(app)
@@ -179,31 +176,7 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
     expect(typeof payload.error !== 'undefined').toBe(true);
   });
 
-  it('allows no-auth in local dev when REMOTE_MCP_ALLOW_NO_AUTH=true', async () => {
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
-    process.env.NODE_ENV = 'development';
-    delete process.env.VERCEL;
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
-
-  it('accepts CI token only when CI=true', async () => {
-    process.env.CI = 'true';
-    process.env.REMOTE_MCP_CI_TOKEN = 'ci-token';
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Authorization', 'Bearer ci-token')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect(res.status).toBe(200);
-  });
+  // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)
 
   it('blocks unknown Host by DNS-rebinding protection', async () => {
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';

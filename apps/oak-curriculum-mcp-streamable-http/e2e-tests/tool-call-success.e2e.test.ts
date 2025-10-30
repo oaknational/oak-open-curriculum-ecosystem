@@ -71,7 +71,6 @@ async function executeToolCall(): Promise<{
   const response = await request(app)
     .post('/mcp')
     .set('Host', 'localhost')
-    .set('Authorization', `Bearer ${DEV_TOKEN}`)
     .set('Accept', ACCEPT)
     .send({
       jsonrpc: '2.0',
