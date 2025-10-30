@@ -224,21 +224,4 @@ function initializeCoreMcpServer(): {
 
 // http handler moved to handlers.ts
 
-export async function startDevServer(): Promise<void> {
-  const app = createApp();
-  const port = Number(process.env.PORT ?? 3333);
-  await new Promise<void>((resolve, reject) => {
-    const server = app.listen(port, () => {
-      resolve();
-    });
-    server.on('error', reject);
-  });
-
-  logger.info('Streaming HTTP MCP dev server listening', {
-    url: `http://localhost:${String(port)}`,
-    allowNoAuth: true,
-    nodeEnv: process.env.NODE_ENV ?? 'unset',
-  });
-}
-
 export default createApp();
