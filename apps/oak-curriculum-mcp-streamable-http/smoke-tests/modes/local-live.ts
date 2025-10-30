@@ -22,6 +22,8 @@ export async function prepareLocalLiveEnvironment(
     fallbackValue: 'dev-token',
   });
   process.env.REMOTE_MCP_DEV_TOKEN = devTokenResult.value ?? 'dev-token';
+  process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
+  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true'; // Enable auth bypass for local testing
   return {
     baseUrl: `http://localhost:${String(options.port)}`,
     devToken: devTokenResult.value ?? 'dev-token',

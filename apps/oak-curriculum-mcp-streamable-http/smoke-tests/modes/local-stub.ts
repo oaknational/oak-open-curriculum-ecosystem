@@ -14,6 +14,7 @@ export async function prepareLocalStubEnvironment(
   process.env.REMOTE_MCP_DEV_TOKEN = STUB_DEV_TOKEN;
   process.env.OAK_API_KEY = STUB_API_KEY;
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
+  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true'; // Enable auth bypass for stub testing
   return {
     baseUrl: `http://localhost:${String(options.port)}`,
     devToken: STUB_DEV_TOKEN,
