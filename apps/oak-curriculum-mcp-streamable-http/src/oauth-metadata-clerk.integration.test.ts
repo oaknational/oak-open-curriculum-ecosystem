@@ -97,3 +97,79 @@ describe('Clerk OAuth Metadata Endpoints', () => {
     }
   });
 });
+
+// Test #7: BASE_URL Propagation Tests
+// These are in a separate describe block because they need different env setup
+describe('Clerk OAuth Metadata Endpoints - BASE_URL Propagation', () => {
+  const originalEnv = { ...process.env };
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  it('accepts BASE_URL and MCP_CANONICAL_URI env vars without error', async () => {
+    // Set minimum required env
+    process.env.OAK_API_KEY = 'test-key';
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
+    // Set specific BASE_URL and MCP_CANONICAL_URI
+    process.env.BASE_URL = 'https://test-server.example.com';
+    process.env.MCP_CANONICAL_URI = 'https://test-server.example.com/mcp';
+    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    process.env.NODE_ENV = 'test';
+
+    const app = createApp();
+    const res = await request(app).get('/.well-known/oauth-protected-resource');
+
+    expect(res.status).toBe(200);
+
+    // Note: @clerk/mcp-tools protectedResourceHandlerClerk derives resource URL from
+    // the incoming request (req.protocol, req.get('host'), req.originalUrl), not from
+    // BASE_URL/MCP_CANONICAL_URI env vars.
+    //
+    // In integration tests with supertest, the URL will be http://127.0.0.1:<random-port>/
+    // In real deployment, it will be derived from actual request (which matches env vars in production)
+    //
+    // This test just verifies that HAVING these env vars doesn't break the app
+    expect(res.body).toHaveProperty('resource');
+    const body: unknown = res.body;
+    if (body && typeof body === 'object' && 'resource' in body) {
+      expect(typeof body.resource).toBe('string');
+      expect(String(body.resource)).toMatch(/^https?:\/\//);
+    }
+
+    // Authorization servers should always point to Clerk
+    assertAuthServersPointToClerk(body);
+  });
+
+  it('works when BASE_URL and MCP_CANONICAL_URI are not set (derives from request)', async () => {
+    // Set minimum required env
+    process.env.OAK_API_KEY = 'test-key';
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
+    // Explicitly delete optional URL env vars
+    delete process.env.BASE_URL;
+    delete process.env.MCP_CANONICAL_URI;
+    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    process.env.NODE_ENV = 'test';
+
+    const app = createApp();
+    const res = await request(app).get('/.well-known/oauth-protected-resource');
+
+    expect(res.status).toBe(200);
+
+    // Server should derive URLs from the incoming request
+    // The exact URL will be dynamic (supertest assigns random port)
+    // We just verify the response is valid
+    expect(res.body).toHaveProperty('resource');
+    const body: unknown = res.body;
+    if (body && typeof body === 'object' && 'resource' in body) {
+      expect(typeof body.resource).toBe('string');
+      // Should be a valid URL (http://127.0.0.1:<random-port>/ format)
+      expect(String(body.resource)).toMatch(/^https?:\/\//);
+    }
+
+    // Authorization servers should still point to Clerk regardless of BASE_URL
+    assertAuthServersPointToClerk(body);
+  });
+});

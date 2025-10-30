@@ -3,6 +3,7 @@ import {
   assertAuthRequired,
   assertHealthEndpoints,
 } from './health.js';
+import { assertClerkJwksAccessible } from './clerk-jwks.js';
 import { assertInitialiseHandshake } from './initialise.js';
 import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 import { assertValidationFailures } from './validation.js';
@@ -53,6 +54,7 @@ async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<v
 async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
+  await assertClerkJwksAccessible(context); // Test #4: Verify Clerk JWKS is reachable
   await assertInitialiseHandshake(context);
   await assertToolCatalogue(context);
   await assertValidationFailures(context);
