@@ -20,18 +20,35 @@ import { createAssertionLogger, logAssertionSuccess } from './logging.js';
  */
 export async function assertAllToolsWork(context: SmokeContext): Promise<void> {
   const logger = createAssertionLogger(context, 'comprehensive-tools');
-  logger.info('Starting comprehensive tool validation (28 tools x 2 paths = 56 tests)');
+  logger.info('🔍 Starting comprehensive tool validation (28 tools)');
+  console.log('   Testing all 28 curriculum tools...');
 
-  // Test tools in logical groups
+  // Test tools in logical groups with progress feedback
+  console.log('   [1/8] Metadata tools (changelog, rate-limit)...');
   await testMetadataTools(context, logger);
+  
+  console.log('   [2/8] Key Stage tools (5 tools)...');
   await testKeyStageTools(context, logger);
+  
+  console.log('   [3/8] Lesson tools (5 tools)...');
   await testLessonTools(context, logger);
+  
+  console.log('   [4/8] Sequence tools (3 tools)...');
   await testSequenceTools(context, logger);
+  
+  console.log('   [5/8] Subject tools (5 tools)...');
   await testSubjectTools(context, logger);
+  
+  console.log('   [6/8] Thread tools (2 tools)...');
   await testThreadTools(context, logger);
+  
+  console.log('   [7/8] Search tools (2 tools)...');
   await testSearchTools(context, logger);
+  
+  console.log('   [8/8] Aggregated tools (search, fetch)...');
   await testAggregatedTools(context, logger);
 
+  console.log('   ✅ All tool groups validated');
   logAssertionSuccess(logger, 'All 28 tools validated (happy + unhappy paths)');
 }
 
@@ -393,6 +410,10 @@ async function callTool(
 ): Promise<{ res: Response; text: string } | null> {
   const { name, args, expectSuccess, errorPattern, allowRemoteFailure, returnResult } = options;
 
+  // Show progress for each tool test
+  const pathType = expectSuccess ? '✓' : '✗';
+  console.log(`      ${pathType} ${name}`);
+  
   logger.debug(`Testing ${name}`, { expectSuccess, args });
 
   const response = await fetchJson(new URL('/mcp', context.baseUrl), {

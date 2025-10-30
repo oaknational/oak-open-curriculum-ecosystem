@@ -41,7 +41,7 @@ async function runLocalSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertAcceptHeaderEnforcement(context);
   // Auth bypass enabled - skip assertAuthRequired
   await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context);
+  await assertToolCatalogue(context, { expectedMinimum: 6 }); // Stub mode has limited tools
   await assertValidationFailures(context);
   await assertSuccessfulToolCall(context);
   await assertSynonymCanonicalisation(context);
@@ -62,7 +62,7 @@ async function runRemoteSmokeAssertions(context: SmokeContext): Promise<void> {
   await assertAcceptHeaderEnforcement(context);
   await assertClerkJwksAccessible(context); // Verify Clerk JWKS is reachable (if OAuth configured)
   await assertInitialiseHandshake(context);
-  await assertToolCatalogue(context);
+  await assertToolCatalogue(context, { expectedMinimum: 28 }); // Remote has all tools
   // Comprehensive validation: ALL 28 tools with happy + unhappy paths
   await assertAllToolsWork(context);
 }

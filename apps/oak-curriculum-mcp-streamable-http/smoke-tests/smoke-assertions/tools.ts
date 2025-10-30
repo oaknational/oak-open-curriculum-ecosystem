@@ -18,20 +18,32 @@ import {
 import { EXPECTED_TOOLS, type SmokeContext } from './types.js';
 import { createAssertionLogger, logAssertionSuccess, recordSsePayload } from './logging.js';
 
-export async function assertToolCatalogue(context: SmokeContext): Promise<void> {
+export async function assertToolCatalogue(
+  context: SmokeContext,
+  options?: { readonly expectedMinimum?: number },
+): Promise<void> {
   const logger = createAssertionLogger(context, 'tools');
-  logger.info('Validating tools/list response');
+  const expectedMin = options?.expectedMinimum ?? EXPECTED_TOOLS.length;
+  logger.info('Validating tools/list response', { expectedMinimum: expectedMin });
   const names = await fetchToolNames(context);
   logger.debug('Canonical tools/list response captured', { tools: names });
   if (context.mode === 'remote' && names.length === 0) {
     logger.warn('Skipping tool catalogue assertions; remote /mcp tools/list failed');
     return;
   }
+  
+  // Verify minimum tool count
+  assert.ok(
+    names.length >= expectedMin,
+    `tools/list should include at least ${expectedMin} tools (got ${names.length})`,
+  );
+  
+  // Verify critical tools are present
   for (const tool of EXPECTED_TOOLS) {
     assert.ok(names.includes(tool), `tools/list should include ${tool}`);
   }
   logAssertionSuccess(logger, 'tools/list includes expected entries', {
-    expectedCount: EXPECTED_TOOLS.length,
+    expectedMinimum: expectedMin,
     receivedCount: names.length,
   });
 }
