@@ -1,8 +1,36 @@
 # Context: Oak MCP Ecosystem - Current State
 
-**Last Updated**: 2025-10-29  
-**Branch**: `main`  
-**Current Focus**: OAuth implementation planning complete, ready for next priority
+**Last Updated**: 2025-10-30  
+**Branch**: `feat/oauth_support`  
+**Current Focus**: 🚨 **BLOCKING** - Auth architecture refactoring required (module-level side effects)
+
+---
+
+## 🚨 CURRENT BLOCKING ISSUE (2025-10-30)
+
+**Problem**: Module-level side effects prevent environment-based configuration from working reliably.
+
+**Root Cause**: `src/index.ts` line 218 contains `export default createApp()` which:
+
+- Creates Express app as side effect at module import time
+- Reads `process.env` when module loads, not when app is created
+- Makes it impossible for tests to set env vars before app reads them
+
+**Symptom**: Smoke tests set `DANGEROUSLY_DISABLE_AUTH=true`, logs confirm it's detected, but requests still get 401.
+
+**Impact**:
+
+- ❌ Smoke tests failing (dev:stub, dev:live)
+- ❌ Cannot reliably test auth disabled mode
+- ❌ Cannot proceed to Phase 3 deployment
+- ✅ E2E tests still pass (they use different mechanism)
+- ✅ OAuth enforcement tests still pass
+
+**Solution**: Architectural refactoring to remove side effects (see `.agent/plans/auth-architecture-refactor.md`)
+
+**Status**: Plan created, implementation pending
+
+**Estimated Fix Time**: 2-3 hours
 
 ---
 

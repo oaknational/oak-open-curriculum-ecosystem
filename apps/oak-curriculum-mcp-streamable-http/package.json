@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
-    "dev": "NODE_ENV=development DEBUG=true LOG_LEVEL=debug REMOTE_MCP_ALLOW_NO_AUTH=true BASE_URL=http://localhost:3333 MCP_CANONICAL_URI=http://localhost:3333/mcp tsx dev.ts",
+    "dev": "DANGEROUSLY_DISABLE_AUTH=true DEBUG=true LOG_LEVEL=debug BASE_URL=http://localhost:3333 MCP_CANONICAL_URI=http://localhost:3333/mcp tsx server.ts",
     "start": "node dist/index.js",
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",

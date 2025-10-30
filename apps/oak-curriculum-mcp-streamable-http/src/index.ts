@@ -13,24 +13,7 @@ import {
 } from '@clerk/mcp-tools/express';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
-import { loadRootEnv } from '@oaknational/mcp-env';
 import { logger } from './logging.js';
-
-// Ensure critical env is available in local/dev by loading from repo root when missing
-/** @todo this should be handled by the mcp-env package or the shared MCP library, fix */
-(() => {
-  if (!process.env.OAK_API_KEY) {
-    try {
-      loadRootEnv({ requiredKeys: ['OAK_API_KEY'], startDir: process.cwd(), env: process.env });
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      throw new Error(
-        `Failed to load OAK_API_KEY from ENV variables and from dotenv, exiting: ${message}`,
-        { cause: err },
-      );
-    }
-  }
-})();
 
 function addHealthEndpoints(app: express.Express, corsMw: express.RequestHandler): void {
   app.head('/healthz', corsMw, (_req, res) => {
@@ -59,22 +42,9 @@ export function createApp(options?: CreateAppOptions): express.Express {
   const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw, options);
   mountStaticAssets(app); // Static assets for favicon/logo (works locally and on Vercel)
   addRootLandingPage(app);
-  app.use(clerkMiddleware()); // Clerk middleware (attaches auth to req.auth if authenticated)
   app.use('/mcp', ensureMcpAcceptHeader); // Ensure proper Accept header for MCP requests
-  // Conditional auth: bypass for local dev if REMOTE_MCP_ALLOW_NO_AUTH=true
-  const shouldBypassAuth =
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true' &&
-    process.env.NODE_ENV === 'development' &&
-    !process.env.VERCEL;
-  // MCP endpoints with conditional Clerk auth enforcement
-  if (shouldBypassAuth) {
-    logger.info('Auth bypass enabled (REMOTE_MCP_ALLOW_NO_AUTH=true, dev mode, not on Vercel)');
-    app.post('/mcp', createMcpHandler(coreTransport));
-    app.get('/mcp', createMcpHandler(coreTransport));
-  } else {
-    app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
-    app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
-  }
+
+  setupAuthRoutes(app, coreTransport);
 
   // Gate request handling on readiness
   app.use(async (_req, _res, next) => {
@@ -82,6 +52,39 @@ export function createApp(options?: CreateAppOptions): express.Express {
     next();
   });
   return app;
+}
+
+function setupAuthRoutes(app: express.Express, coreTransport: StreamableHTTPServerTransport): void {
+  // Auth enforcement: disable ONLY when explicitly requested via DANGEROUSLY_DISABLE_AUTH=true
+  const authDisabled = process.env.DANGEROUSLY_DISABLE_AUTH === 'true';
+
+  logger.debug('Auth decision', {
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH ?? null,
+    authDisabled,
+  });
+
+  if (authDisabled) {
+    logger.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
+    app.post('/mcp', createMcpHandler(coreTransport));
+    app.get('/mcp', createMcpHandler(coreTransport));
+  } else {
+    logger.info('🔒 OAuth enforcement enabled via Clerk');
+
+    // OAuth metadata endpoints (RFC 9728 - Protected Resource Metadata)
+    app.get(
+      '/.well-known/oauth-protected-resource',
+      protectedResourceHandlerClerk({
+        scopes_supported: ['mcp:invoke', 'mcp:read'],
+      }),
+    );
+
+    // Authorization Server Metadata (for older MCP clients)
+    app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
+
+    app.use(clerkMiddleware()); // Clerk middleware (attaches auth to req.auth if authenticated)
+    app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+    app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+  }
 }
 
 function initializeCoreEndpoints(
@@ -93,17 +96,6 @@ function initializeCoreEndpoints(
   // Register tools BEFORE connecting the transport to satisfy MCP SDK constraints
   registerHandlers(server, options?.toolHandlerOverrides);
   const serverReady = server.connect(transport);
-
-  // OAuth metadata endpoints (RFC 9728 - Protected Resource Metadata)
-  app.get(
-    '/.well-known/oauth-protected-resource',
-    protectedResourceHandlerClerk({
-      scopes_supported: ['mcp:invoke', 'mcp:read'],
-    }),
-  );
-
-  // Authorization Server Metadata (for older MCP clients)
-  app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
 
   // Lightweight unauthenticated health endpoints for tooling/UI probes
   addHealthEndpoints(app, corsMw);

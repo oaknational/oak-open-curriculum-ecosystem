@@ -9,7 +9,7 @@
     "**/*.test.ts",
     "e2e-tests/**/*.ts",
     "*.config.ts",
-    "*.ts",
+    "server.ts",
     "vitest.e2e.config.ts",
     "bin/**/*.ts"
   ],

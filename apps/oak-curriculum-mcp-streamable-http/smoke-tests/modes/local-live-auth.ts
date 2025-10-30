@@ -59,10 +59,8 @@ export async function prepareLocalLiveAuthEnvironment(
 ): Promise<PreparedEnvironment> {
   // Configure for production-equivalent auth
   delete process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS;
-  process.env.NODE_ENV = 'test'; // NOT development (bypass disabled)
+  delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED (this is the test!)
   process.env.PORT = String(options.port);
-  delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
-  delete process.env.VERCEL; // Local but with auth enforced
   process.env.LOG_LEVEL = 'debug'; // Enable debug logging to diagnose auth issues
 
   // Verify required environment variables
@@ -70,9 +68,7 @@ export async function prepareLocalLiveAuthEnvironment(
 
   // Log configuration for debugging
   console.log('[local-live-auth] Environment configuration:', {
-    NODE_ENV: process.env.NODE_ENV,
-    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
-    VERCEL: process.env.VERCEL,
+    DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
     CLERK_PUBLISHABLE_KEY_SET: !!process.env.CLERK_PUBLISHABLE_KEY,
     CLERK_SECRET_KEY_SET: !!process.env.CLERK_SECRET_KEY,
   });
