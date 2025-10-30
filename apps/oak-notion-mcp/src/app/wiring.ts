@@ -1,6 +1,6 @@
 import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import type { Client } from '@notionhq/client';
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import type { MinimalNotionClient } from '../types/notion-types/notion-client.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
 import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
 /** @todo why are there logger types in the core package instead of the logger package? */
@@ -98,9 +98,27 @@ function validateRuntimeConfig(): void {
   }
 }
 
+/**
+ * Creates Notion client - either real or mock depending on environment
+ */
+async function createNotionClient(
+  notionConfig: { apiKey: string },
+  log: ServerSetupDependencies['log'],
+): Promise<MinimalNotionClient> {
+  if (process.env.NOTION_USE_MOCK_CLIENT === 'true') {
+    log('[STARTUP] Using MOCK Notion client for E2E testing (no real API calls)');
+    const { createMockNotionClientForE2E } = await import('../test/mocks/mock-notion-client.js');
+    return createMockNotionClientForE2E();
+  }
+
+  log('[STARTUP] Using REAL Notion client');
+  const { Client } = await import('@notionhq/client');
+  return new Client({ auth: notionConfig.apiKey });
+}
+
 async function createServerDependencies(log: ServerSetupDependencies['log']): Promise<{
   logger: Logger;
-  notionClient: Client;
+  notionClient: MinimalNotionClient;
   server: Server;
   runtime: ReturnType<typeof createRuntime>;
 }> {
@@ -108,22 +126,18 @@ async function createServerDependencies(log: ServerSetupDependencies['log']): Pr
 
   const { getNotionConfig } = await import('../config/notion-config/notion-config');
   const { env: notionEnv } = await import('../config/notion-config/environment');
-  const { Client } = await import('@notionhq/client');
   const { createMcpServer } = await import('./server');
   const { createNotionOperations } = await import('../integrations/notion');
 
-  // Minimal runtime config validation (mechanical, no external deps)
   validateRuntimeConfig();
 
   log('[STARTUP] Creating logger...');
   const logger = createLoggerFromConfig();
-
-  // Bridge application logger to core logger for runtime composition
   const runtime = createCoreRuntime(logger);
 
   log('[STARTUP] Creating Notion client...');
   const notionConfig = getNotionConfig(notionEnv);
-  const notionClient = new Client({ auth: notionConfig.apiKey });
+  const notionClient = await createNotionClient(notionConfig, log);
 
   const serverConfig = { name: runtimeConfig.serverName, version: runtimeConfig.serverVersion };
 
