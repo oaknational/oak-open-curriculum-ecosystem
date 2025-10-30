@@ -152,8 +152,12 @@ The server uses [Clerk](https://clerk.com/) as the OAuth 2.1 Authorization Serve
 
 **Local Development Bypass** (optional):
 
-- `REMOTE_MCP_ALLOW_NO_AUTH=true` - Bypass OAuth for local testing (only works when `NODE_ENV=development` and not on Vercel)
-- `DANGEROUSLY_DISABLE_AUTH=true` - Bypass ALL auth **everywhere** (use with extreme caution, never in production)
+- `REMOTE_MCP_ALLOW_NO_AUTH=true` - Bypass OAuth for local testing
+  - Only works when ALL THREE conditions are met:
+    1. `REMOTE_MCP_ALLOW_NO_AUTH=true`
+    2. `NODE_ENV=development`
+    3. NOT on Vercel (no `VERCEL` env var)
+  - Safe: Automatically disabled in production and on Vercel
 
 ## Troubleshooting
 

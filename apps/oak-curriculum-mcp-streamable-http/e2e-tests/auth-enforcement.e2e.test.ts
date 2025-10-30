@@ -98,7 +98,6 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing'; // Dummy secret for initialization
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
     delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
-    delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
     delete process.env.VERCEL; // Local but with auth enforced
 
     app = createApp();

@@ -270,7 +270,6 @@ process.env.NODE_ENV = 'test'; // NOT development
 process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_...';
 process.env.CLERK_SECRET_KEY = 'sk_test_dummy';
 delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
-delete process.env.DANGEROUSLY_DISABLE_AUTH; // Auth ENABLED
 delete process.env.VERCEL;
 ```
 

@@ -14,7 +14,6 @@ const EnvSchema = z.object({
   REMOTE_MCP_MODE: ModeSchema.optional(),
   // Security & Development
   REMOTE_MCP_ALLOW_NO_AUTH: z.enum(['true', 'false']).optional(),
-  DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
   ALLOWED_HOSTS: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   // Logging

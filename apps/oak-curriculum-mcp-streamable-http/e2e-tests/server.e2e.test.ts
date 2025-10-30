@@ -231,6 +231,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   // TODO: Add E2E test with real Clerk token
   // Requires: OAuth Device Flow to get actual token
   // See: https://clerk.com/docs/guides/development/mcp/connect-mcp-client
-  // For now, use DANGEROUSLY_DISABLE_AUTH for E2E testing
+  // For now, E2E tests use REMOTE_MCP_ALLOW_NO_AUTH=true bypass (local dev only)
   // Old test that generated JWT with jose has been removed (Clerk generates tokens now)
 });
