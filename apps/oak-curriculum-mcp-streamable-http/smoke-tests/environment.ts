@@ -56,11 +56,19 @@ export function captureEnvSnapshot(): EnvSnapshot {
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
     OAK_API_KEY: process.env.OAK_API_KEY,
     PORT: process.env.PORT,
+    SMOKE_USE_HEADLESS_OAUTH: process.env.SMOKE_USE_HEADLESS_OAUTH,
   };
 }
 
 export function restoreEnv(snapshot: EnvSnapshot): void {
-  (['OAK_CURRICULUM_MCP_USE_STUB_TOOLS', 'OAK_API_KEY', 'PORT'] as const).forEach((key) => {
+  (
+    [
+      'OAK_CURRICULUM_MCP_USE_STUB_TOOLS',
+      'OAK_API_KEY',
+      'PORT',
+      'SMOKE_USE_HEADLESS_OAUTH',
+    ] as const
+  ).forEach((key) => {
     restoreKey(key, snapshot[key]);
   });
 }

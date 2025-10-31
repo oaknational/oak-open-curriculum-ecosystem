@@ -9,6 +9,7 @@ import { assertSuccessfulToolCall, assertToolCatalogue } from './tools.js';
 // import { assertAllToolsWork } from './comprehensive-tools.js'; // TODO: Fix linting and re-enable
 import { assertValidationFailures } from './validation.js';
 import { assertSynonymCanonicalisation } from './synonyms.js';
+import { assertAuthenticatedToolCall } from './authenticated.js';
 import type { SmokeContext } from './types.js';
 
 export { type SmokeContext } from './types.js';
@@ -48,6 +49,7 @@ async function runLocalLiveAuthSmokeAssertions(context: SmokeContext): Promise<v
   await assertHealthEndpoints(context);
   await assertAcceptHeaderEnforcement(context);
   await assertAuthRequired(context);
+  await assertAuthenticatedToolCall(context);
   // TODO: Add OAuth discovery assertions
   // Skip MCP protocol tests - they require real Clerk token
 }

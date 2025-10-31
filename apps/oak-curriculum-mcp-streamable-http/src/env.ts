@@ -19,6 +19,8 @@ const EnvSchema = z.object({
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
   NODE_ENV: z.string().optional(),
+  // Debugging
+  TRACE_MCP_FLOW: z.enum(['true', 'false']).optional(),
 });
 
 export type Env = z.infer<typeof EnvSchema>;

@@ -3,7 +3,8 @@ import path from 'node:path';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-type LogContextInput = Readonly<Record<string, string | number | boolean | null>>;
+// eslint-disable-next-line @typescript-eslint/no-restricted-types -- this is a debug logger, allow unknown context.
+type LogContextInput = Readonly<Record<string, unknown>>;
 
 const DEFAULT_LOG_PATH = path.resolve(
   process.cwd(),
@@ -25,9 +26,14 @@ try {
 function writeLog(level: LogLevel, message: string, context?: LogContextInput): void {
   const timestamp = new Date().toISOString();
   const payload = { timestamp, level, message, context };
-  const consoleMethod =
-    level === 'error' ? console.error : level === 'warn' ? console.warn : console.log;
-  consoleMethod(`[${timestamp}] [${level.toUpperCase()}] ${message}`, context ?? {});
+  const fullMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}: ${JSON.stringify(context ?? {})}`;
+  if (level === 'error') {
+    console.error(message, context ?? {});
+  } else if (level === 'warn') {
+    console.warn(fullMessage);
+  } else {
+    console.log(fullMessage);
+  }
   if (logStream) {
     logStream.write(`${JSON.stringify(payload)}\n`);
   }
@@ -46,4 +52,7 @@ export const logger = {
   error(message: string, context?: LogContextInput): void {
     writeLog('error', message, context);
   },
-};
+} as const;
+
+type Logger = typeof logger;
+export type { Logger };

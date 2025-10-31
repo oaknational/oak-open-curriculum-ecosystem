@@ -1,4 +1,47 @@
-# Auth Architecture Refactoring Plan
+# Auth Architecture Refactor
+
+**Status**: 🟠 In progress — smoke harness stable, M2M auth path outstanding  
+**Updated**: 2025-10-31
+
+## Signals
+
+- ✅ `smoke:dev:stub`, `smoke:dev:live`, `smoke:remote`, unit, integration, E2E, build, lint, type-check and test suites all pass after the latest fixes.
+- ✅ Local smoke harness now guards port binding, injects stub Clerk keys, and defaults to deterministic behaviour.
+- ⚠️ `smoke:dev:live:auth` currently skips the happy-path assertion unless `SMOKE_CLERK_PROGRAMMATIC_AUTH=true`. Clerk still returns `401` with `x-clerk-auth-reason: dev-browser-missing` when we mint a session-only token; we now aim to use Clerk service tokens (M2M) for automation and reserve the browser flow for tagged manual runs.
+
+## Recent Improvements
+
+- Added hard port availability checks and deterministic shutdown in `startSmokeServer`.
+- Seeded stub Clerk credentials to avoid accidental production secret usage.
+- Introduced optional programmatic auth assertion scaffolding plus cleanup helpers.
+- Normalised the debug scripts so they lint and participate in the build.
+
+## Next Focus
+
+1. **Capture a manual browser handshake trace**
+   - Use `prepare-browser-handshake.ts` to snapshot the dev-browser tokens and enumerate the redirect chain.
+   - Store artefacts and notes so future automation work can reference the handshake requirements.
+2. **Wire Clerk machine-to-machine tokens into the smoke harness**
+   - Add environment plumbing for service-token credentials and issue an authenticated call without a browser handshake.
+   - Promote `SMOKE_CLERK_PROGRAMMATIC_AUTH` to `true` by default once M2M succeeds, retaining an opt-out for local DX.
+3. **Document the split between manual and automated auth checks**
+   - Update README/TESTING/guides to flag the tagged `@auth-smoke` browser run versus the default M2M-powered smoke assertions.
+   - Outline secret management expectations for CI and local developers.
+
+## Done
+
+- Removed module-level Express side effects; `createApp` is now pure and lazy.
+- Simplified auth switch to `DANGEROUSLY_DISABLE_AUTH`.
+- Consolidated server entry point (`server.ts`) for local runs.
+- Expanded smoke tooling with tracing + exact replication scripts for diagnostics.
+
+---
+
+## Archived Investigation Notes (2025-10-30)
+
+> Historical snapshot retained for posterity. The statuses and metrics below describe the pre-M2M investigation that uncovered the 401 issue in local smoke runs. They no longer reflect the current system state but document the debugging process.
+
+### Auth Architecture Refactoring Plan (Archived 2025-10-30)
 
 **Status**: 🟡 PARTIAL RESOLUTION - Major Progress, 1 Issue Remains  
 **Date**: 2025-10-30  
@@ -6,14 +49,14 @@
 
 ## Quick Status (TL;DR)
 
-| Metric | Status | Details |
-|--------|--------|---------|
-| **E2E Tests** | ✅ **45/45 PASS** | Complete auth coverage |
-| **Unit Tests** | ✅ **16/16 PASS** | All migrated |
-| **Remote Smoke** | ✅ **8/8 PASS** | Alpha server validated |
-| **Local Smoke** | ❌ **FAIL** | 401 mystery |
-| **Deployment Ready** | ✅ **YES** | E2E + remote sufficient |
-| **QG Blocked** | ❌ **YES** | By local smoke tests |
+| Metric               | Status            | Details                 |
+| -------------------- | ----------------- | ----------------------- |
+| **E2E Tests**        | ✅ **45/45 PASS** | Complete auth coverage  |
+| **Unit Tests**       | ✅ **16/16 PASS** | All migrated            |
+| **Remote Smoke**     | ✅ **8/8 PASS**   | Alpha server validated  |
+| **Local Smoke**      | ❌ **FAIL**       | 401 mystery             |
+| **Deployment Ready** | ✅ **YES**        | E2E + remote sufficient |
+| **QG Blocked**       | ❌ **YES**        | By local smoke tests    |
 
 **The Mystery**: Logs show auth disabled correctly, but route handler never reached, 401 returned from unknown source.
 
@@ -41,45 +84,49 @@
 
 - ✅ `createApp()` correctly reads `DANGEROUSLY_DISABLE_AUTH='true'`
 - ✅ Auth decision executes: logs show `authDisabled: true`
-- ✅ Warning logged: "⚠️  AUTH DISABLED"
+- ✅ Warning logged: "⚠️ AUTH DISABLED"
 - ✅ Routes registered in auth-disabled branch
 - ❌ Route handler **NEVER REACHED**: `🔓 POST /mcp route hit` debug log never appears
 - ❌ 401 returned from unknown middleware/source
 
 **What We've Ruled Out**:
+
 - ❌ NOT env var timing (logs prove it's read correctly)
 - ❌ NOT route registration (logs prove if-block executes)
 - ❌ NOT the side effect (removed it, tests still fail same way)
 - ❌ NOT dotenv override (dotenv doesn't override by default)
 
 **What Remains To Investigate**:
+
 - Where exactly is the 401 coming from?
 - Why does route handler middleware never execute?
 - Why do E2E tests work but smoke tests don't (same pattern)?
 
 ### Test Results Detailed Matrix
 
-| Test Suite | Files | Tests | Status | Notes |
-|------------|-------|-------|--------|-------|
-| **Unit Tests** | 5/5 | 16/16 | ✅ **PASS** | Migrated to DANGEROUSLY_DISABLE_AUTH |
-| **Integration Tests** | - | 4/4 | ✅ **PASS** | OAuth metadata endpoints validated |
-| **E2E Tests** | 12/12 | 45/45 | ✅ **PASS** | All auth scenarios proven |
-| **Smoke: Remote** | - | 8/8 | ✅ **PASS** | Alpha server fully validated |
-| **Smoke: Dev:Stub** | - | 8 | ❌ **FAIL** | 401 error despite auth disabled |
-| **Smoke: Dev:Live** | - | 8 | ❌ **FAIL** | Same 401 mystery |
-| **Smoke: Dev:Live:Auth** | - | - | ⏭️ **SKIP** | Manual only (needs real Clerk keys) |
+| Test Suite               | Files | Tests | Status      | Notes                                |
+| ------------------------ | ----- | ----- | ----------- | ------------------------------------ |
+| **Unit Tests**           | 5/5   | 16/16 | ✅ **PASS** | Migrated to DANGEROUSLY_DISABLE_AUTH |
+| **Integration Tests**    | -     | 4/4   | ✅ **PASS** | OAuth metadata endpoints validated   |
+| **E2E Tests**            | 12/12 | 45/45 | ✅ **PASS** | All auth scenarios proven            |
+| **Smoke: Remote**        | -     | 8/8   | ✅ **PASS** | Alpha server fully validated         |
+| **Smoke: Dev:Stub**      | -     | 8     | ❌ **FAIL** | 401 error despite auth disabled      |
+| **Smoke: Dev:Live**      | -     | 8     | ❌ **FAIL** | Same 401 mystery                     |
+| **Smoke: Dev:Live:Auth** | -     | -     | ⏭️ **SKIP** | Manual only (needs real Clerk keys)  |
 
 ### Impact - Can We Deploy?
 
 **YES - Deployment Not Blocked**
 
 **Evidence**:
+
 - ✅ **E2E tests comprehensively prove both auth modes work** (45 tests covering all scenarios)
 - ✅ **Remote smoke tests prove real deployment works** (alpha server validated)
 - ✅ **Unit tests prove core logic correct** (16 tests)
 - ❌ **Local smoke tests fail** but duplicate E2E test coverage
 
 **Risk Assessment**: **LOW**
+
 - E2E tests prove the code works
 - Remote tests prove deployment works
 - Local smoke test failures are infrastructure/test-harness issue, not product issue
@@ -538,6 +585,7 @@ After removing the module-level side effect, smoke tests still fail with identic
 ### Comparative Analysis: Why E2E Works But Smoke Fails
 
 **E2E Test Pattern** (✅ WORKS):
+
 ```typescript
 // e2e-tests/auth-bypass.e2e.test.ts
 beforeAll(() => {
@@ -552,6 +600,7 @@ it('allows POST without auth', async () => {
 ```
 
 **Smoke Test Pattern** (❌ FAILS):
+
 ```typescript
 // smoke-tests/local-server.ts
 export async function startSmokeServer(port: number) {
@@ -569,11 +618,13 @@ expect(res.status).toBe(200); // ❌ FAILS - gets 401
 ```
 
 **Key Differences**:
+
 1. **Import type**: Static vs dynamic (`await import()`)
 2. **Server startup**: In-process (supertest) vs actual HTTP server (`app.listen()`)
 3. **Environment loading**: E2E doesn't call `loadRootEnv()`, smoke tests do
 
 **Dotenv Evidence**:
+
 ```
 [dotenv@17.2.3] injecting env (11) from ../../.env
 ```
@@ -583,12 +634,13 @@ This message appears in smoke tests but not E2E tests, proving `.env` is being l
 ### The Dotenv Timing Hypothesis
 
 **Sequence in Smoke Tests**:
+
 1. `smoke-dev-stub.ts` starts
 2. Imports `runSmokeSuite` → imports `prepareEnvironment`
 3. `prepareEnvironment` calls `loadEnvironment({ envFileOrder: [] })`
 4. `loadEnvironment` calls `loadRootEnv()`
 5. **DESPITE `envFileOrder: []`, `.env` loads** (dotenv message proves it)
-6. Test sets `DANGEROUSLY_DISABLE_AUTH='true'` 
+6. Test sets `DANGEROUSLY_DISABLE_AUTH='true'`
 7. **BUT**: If `.env` has `# DANGEROUSLY_DISABLE_AUTH=true` (commented), it's NOT set
 8. App reads env var → gets `undefined` (NOT 'true')
 9. Auth enabled → 401
@@ -598,6 +650,7 @@ This message appears in smoke tests but not E2E tests, proving `.env` is being l
 ### The Real Mystery: Where Is The 401 Coming From?
 
 Evidence from middleware logging:
+
 ```
 [DEBUG] Auth decision { DANGEROUSLY_DISABLE_AUTH: 'true', authDisabled: true }
 [WARN] ⚠️  AUTH DISABLED
@@ -608,6 +661,7 @@ Evidence from middleware logging:
 ```
 
 **Middleware execution order**:
+
 1. ✅ `express.json()` - executes (request has body)
 2. ✅ `dnsRebindingProtection` - executes (no host error)
 3. ✅ `corsMw` - executes (CORS headers present)
@@ -618,6 +672,7 @@ Evidence from middleware logging:
 **Hypothesis**: There's middleware between `ensureMcpAcceptHeader` (line 45) and the route registration (line 68) that's returning 401.
 
 Looking at the code:
+
 - Line 45: `app.use('/mcp', ensureMcpAcceptHeader)`
 - Line 47: `setupAuthRoutes(app, coreTransport)` - registers POST handler
 - Line 50-53: `app.use(async => await ready)` - global readiness gate
@@ -800,14 +855,14 @@ Make smoke tests set ALL env vars programmatically (no file loading):
 // smoke-tests/environment.ts
 export async function prepareEnvironment(options) {
   // NO loadEnvironment() call
-  
+
   if (options.mode === 'local-stub') {
     return prepareLocalStubEnvironment(options);
   }
   // ...
 }
 
-// smoke-tests/modes/local-stub.ts  
+// smoke-tests/modes/local-stub.ts
 export async function prepareLocalStubEnvironment(options) {
   // Set EVERYTHING explicitly
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
@@ -817,7 +872,7 @@ export async function prepareLocalStubEnvironment(options) {
   process.env.ALLOWED_HOSTS = 'localhost';
   process.env.PORT = String(options.port);
   // NO dotenv loading
-  
+
   const server = await startSmokeServer(options.port);
   return { server, baseUrl, ... };
 }
@@ -831,10 +886,10 @@ Add diagnostic code to verify routes are actually registered:
 
 ```typescript
 // After setupAuthRoutes()
-const routes = app._router?.stack?.filter(r => r.route?.path === '/mcp') || [];
-logger.debug('Routes registered for /mcp', { 
+const routes = app._router?.stack?.filter((r) => r.route?.path === '/mcp') || [];
+logger.debug('Routes registered for /mcp', {
   count: routes.length,
-  methods: routes.map(r => r.route?.methods)
+  methods: routes.map((r) => r.route?.methods),
 });
 ```
 
@@ -843,16 +898,19 @@ This would prove if routes are being registered correctly.
 ### Recommended Approach
 
 **Step 1**: Try Option 3 (eliminate `loadRootEnv` from smoke tests)
+
 - Simplest change
 - Matches E2E pattern exactly
 - E2E tests prove this pattern works
 - Honors "could it be simpler" rule
 
 **Step 2**: If still fails, try Option 2 (use supertest instead of real HTTP server)
+
 - Isolates whether the issue is HTTP server vs test harness
 - Still proves smoke test scenarios
 
 **Step 3**: If still fails, use Option 1 (comprehensive tracing)
+
 - Last resort - adds temporary debugging code
 - Reveals exactly where 401 comes from
 - Then fix root cause
@@ -860,11 +918,13 @@ This would prove if routes are being registered correctly.
 ## Files Modified Summary
 
 ### Source Code
+
 - `src/index.ts` - Removed side effect, added `setupAuthRoutes()` function, simplified auth
 - `src/index.unit.test.ts` - Migrated to DANGEROUSLY_DISABLE_AUTH
 - `server.ts` - Created for local dev entry point
 
 ### E2E Tests (12 files)
+
 - `e2e-tests/helpers/create-stubbed-http-app.ts` - Use DANGEROUSLY_DISABLE_AUTH
 - `e2e-tests/helpers/create-live-http-app.ts` - Use DANGEROUSLY_DISABLE_AUTH
 - `e2e-tests/auth-bypass.e2e.test.ts` - Updated, removed safety check tests
@@ -878,6 +938,7 @@ This would prove if routes are being registered correctly.
 - `e2e-tests/server.e2e.test.ts` - Simplified, removed redundant tests
 
 ### Smoke Tests
+
 - `smoke-tests/modes/local-stub.ts` - Use DANGEROUSLY_DISABLE_AUTH, remove dev token
 - `smoke-tests/modes/local-live.ts` - Use DANGEROUSLY_DISABLE_AUTH, remove dev token
 - `smoke-tests/modes/local-live-auth.ts` - Updated config logging
@@ -889,12 +950,14 @@ This would prove if routes are being registered correctly.
 - `smoke-tests/smoke-assertions/tools.ts` - Template literal fixes, removed lesson/unit helpers
 
 ### Documentation
+
 - `ALPHA-SERVER-TESTING.md` - Created for alpha server validation guide
 - `COMPREHENSIVE-TEST-COVERAGE.md` - Created for tool coverage documentation
 - `.agent/context/context.md` - Updated with blocking issue section
 - `.agent/plans/auth-architecture-refactor.md` - This file (complete analysis)
 
 ### Removed
+
 - `apps/oak-curriculum-mcp-streamable-http/dev.ts` - Redundant dev server
 - `smoke-tests/smoke-assertions/comprehensive-tools.ts` - Too complex, needs refactoring
 - `smoke-tests/smoke-assertions/comprehensive-tools-helper.ts` - Helper for above
@@ -907,29 +970,31 @@ Once this refactoring is complete and verified working, **IMMEDIATELY RETURN** t
 
 ### Verification Criteria - Current Status
 
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| All E2E tests pass | ✅ **DONE** | 45/45 passing |
-| All unit/integration tests pass | ✅ **DONE** | 16/16 + 4/4 passing |
-| Remote smoke tests pass | ✅ **DONE** | Alpha server validated |
-| Local smoke:dev:stub pass | ❌ **BLOCKED** | 401 mystery remains |
-| Local smoke:dev:live pass | ❌ **BLOCKED** | Same 401 mystery |
-| Local smoke:dev:live:auth | ⏭️ **N/A** | Manual only, real Clerk keys needed |
-| `qa:oauth` works | ⏸️ **PENDING** | Not tested yet |
-| Environment variables reliable | ✅ **DONE** | Works in E2E, remote smoke |
-| Complete QG passes | ❌ **BLOCKED** | By local smoke tests |
+| Criteria                        | Status         | Notes                               |
+| ------------------------------- | -------------- | ----------------------------------- |
+| All E2E tests pass              | ✅ **DONE**    | 45/45 passing                       |
+| All unit/integration tests pass | ✅ **DONE**    | 16/16 + 4/4 passing                 |
+| Remote smoke tests pass         | ✅ **DONE**    | Alpha server validated              |
+| Local smoke:dev:stub pass       | ❌ **BLOCKED** | 401 mystery remains                 |
+| Local smoke:dev:live pass       | ❌ **BLOCKED** | Same 401 mystery                    |
+| Local smoke:dev:live:auth       | ⏭️ **N/A**     | Manual only, real Clerk keys needed |
+| `qa:oauth` works                | ⏸️ **PENDING** | Not tested yet                      |
+| Environment variables reliable  | ✅ **DONE**    | Works in E2E, remote smoke          |
+| Complete QG passes              | ❌ **BLOCKED** | By local smoke tests                |
 
 **Overall Progress**: 5/7 complete (71%), 2 blocked by same root cause
 
 ### Decision Point: Can We Handoff Without Local Smoke Tests?
 
 **Option A - Deploy Now** (Recommended):
+
 - E2E tests prove everything works
 - Remote smoke tests validate real deployment
 - Local smoke tests prove same things as E2E (redundant coverage)
 - Fix local smoke tests in parallel to deployment
 
 **Option B - Fix Smoke Tests First**:
+
 - Investigate and fix 401 mystery
 - Get all smoke tests green
 - Then deploy
@@ -938,6 +1003,7 @@ Once this refactoring is complete and verified working, **IMMEDIATELY RETURN** t
 **Recommendation**: **Option A**
 
 **Rationale**:
+
 - E2E test coverage is comprehensive (45 tests)
 - Remote smoke tests prove alpha deployment works
 - Local smoke test failure is test harness issue, not product issue

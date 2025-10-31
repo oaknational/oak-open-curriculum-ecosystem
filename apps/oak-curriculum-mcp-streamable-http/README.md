@@ -159,6 +159,16 @@ The server uses [Clerk](https://clerk.com/) as the OAuth 2.1 Authorization Serve
     3. NOT on Vercel (no `VERCEL` env var)
   - Safe: Automatically disabled in production and on Vercel
 
+### Smoke Tests: Programmatic Tokens
+
+- Set `SMOKE_CLERK_PROGRAMMATIC_AUTH=true` (default) to exercise authenticated smoke assertions.
+- Set `SMOKE_USE_HEADLESS_OAUTH=true` to route smoke tests through the Playwright helper instead of the backend API flow. The helper:
+  1. Invokes `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http headless:oauth`.
+  2. Creates a synthetic user/session/OAuth app via the Clerk backend API.
+  3. Launches headless Chromium with the generated dev-browser cookies + `__clerk_testing_token` to capture the authorization code.
+  4. Exchanges the code for an access token, writes a JSON artefact to `apps/oak-curriculum-mcp-streamable-http/temp-secrets/`, then revokes the temporary Clerk resources.
+- Leave `SMOKE_USE_HEADLESS_OAUTH` unset/false to keep using the backend API programmatic flow (requires a trusted dev browser handshake; useful for debugging).
+
 ## Troubleshooting
 
 ### Authentication Issues
@@ -233,7 +243,7 @@ See [TESTING.md](./TESTING.md) for detailed documentation on:
 
 - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote [https://open-api.thenational.academy/mcp]` – Tests deployed instance (Vercel) with real Clerk OAuth enforcement. Requires base URL as CLI argument, `SMOKE_REMOTE_BASE_URL`, or `OAK_MCP_URL`. Fails fast if none provided. Remote runs validate production configuration including auth enforcement.
 
-- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` - **Manual test only** (not in automated quality gate). Requires REAL Clerk production keys to test auth enforcement locally. Dummy test credentials don't enforce authentication. Use before production deployment to validate auth works.
+- `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` - **Manual test only** (not in automated quality gate). Requires REAL Clerk production keys to test auth enforcement locally. Dummy test credentials don't enforce authentication. Use before production deployment to validate auth works. Headless automation is in design; once implemented the manual browser run will move under the tagged `@auth-smoke` scenario.
 
 `runSmokeSuite` calls `loadRootEnv({ startDir: process.cwd() })` exactly once per run so the logs always show which `.env` file (if any) was applied. Remember to set `Accept: application/json, text/event-stream` when replaying the HTTP calls manually; the smoke harness enforces the header and expects matching behaviour remotely. Remote runs surface drift in downstream deployments, so failures there are often due to an older release rather than the harness itself.
 

@@ -45,8 +45,10 @@ This MCP server uses a comprehensive, multi-layered testing approach that proves
 
 - **Purpose**: Quick production-like validation (fastest E2E subset)
 - **Characteristics**: Tests critical paths only
-- **Run**: `pnpm smoke:dev:stub`, `pnpm smoke:dev:live:auth`, `pnpm smoke:remote`
+- **Run**: `pnpm smoke:dev:stub`, `pnpm smoke:dev:live`, `pnpm smoke:remote` (plus `pnpm smoke:dev:live:auth` when exercising the manual auth flow)
 - **Key Scenarios**: See "Smoke Test Matrix" below
+
+> ℹ️ Set `SMOKE_USE_HEADLESS_OAUTH=true` to let the smoke harness mint Clerk access tokens headlessly via Playwright. Leave it unset to fall back to the backend API flow (or manual trace capture) for debugging.
 
 ## Test Scenario Matrix
 
@@ -108,8 +110,8 @@ pnpm test:e2e
 # Quick smoke test (stub mode, no network)
 pnpm smoke:dev:stub
 
-# Production-equivalent smoke (CRITICAL before deploy)
-pnpm smoke:dev:live:auth
+# Production-equivalent smoke (set SMOKE_USE_HEADLESS_OAUTH=true for automated headless flow)
+SMOKE_USE_HEADLESS_OAUTH=true pnpm smoke:dev:live:auth
 
 # Full quality gate (all checks)
 pnpm qg
@@ -171,7 +173,7 @@ apps/oak-curriculum-mcp-streamable-http/
 ### Smoke Tests Prove
 
 - ✅ Quick smoke: System boots and responds
-- ✅ Auth smoke: Production config works locally
+- ✅ Auth smoke: Production config works locally (headless Playwright helper by default; manual trace remains available by unsetting `SMOKE_USE_HEADLESS_OAUTH`)
 - ✅ Remote smoke: Deployment is healthy
 
 ## Troubleshooting Test Failures
@@ -232,7 +234,7 @@ Auth enforcement happens when:
 Tests that prove auth enforcement:
 
 - `auth-enforcement.e2e.test.ts` - Full E2E suite
-- `smoke:dev:live:auth` - Production-equivalent smoke
+- `smoke:dev:live:auth` - Production-equivalent smoke (manual today, will automate once headless OAuth capture is in place)
 - Integration tests in `clerk-auth-middleware.integration.test.ts`
 
 ### When Auth is Bypassed
@@ -295,9 +297,16 @@ The quality gate (`pnpm qg`) runs all checks in order:
 6. **UI tests** - Playwright (if configured)
 7. **E2E tests** - `pnpm test:e2e`
 8. **Stub smoke** - `pnpm smoke:dev:stub`
-9. **Auth smoke** - `pnpm smoke:dev:live:auth` ⭐ **CRITICAL**
+9. **Live smoke** - `pnpm smoke:dev:live`
+10. **Remote smoke** - `pnpm smoke:remote`
 
-All gates must pass before deploying to production.
+Run `smoke:dev:live:auth` before deploying to production or when validating Clerk changes. It will join the automated gate once the headless OAuth path eliminates the manual browser prerequisite.
+
+### Authenticated smoke automation roadmap
+
+- Today the authenticated assertion (`assertAuthenticatedToolCall`) is gated behind `SMOKE_CLERK_PROGRAMMATIC_AUTH=true`. Without a trusted browser handshake Clerk rejects programmatic tokens with `x-clerk-auth-reason: dev-browser-missing`.
+- We will develop a headless OAuth flow so the smoke harness can mint a bearer without any manual browser hops. Expect new env vars (for example Playwright storage state paths) once this lands.
+- The browser-based flow will remain available as a tagged scenario (`@auth-smoke`) with manual instructions captured from `prepare-browser-handshake.ts`. Use it for pre-deploy confidence or investigative work that must mirror the real OAuth journey.
 
 ## Future Enhancements
 

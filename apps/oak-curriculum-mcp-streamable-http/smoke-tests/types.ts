@@ -29,5 +29,5 @@ export type LoadedEnvResult = ReturnType<typeof loadRootEnv>;
 
 export type EnvSnapshot = Pick<
   NodeJS.ProcessEnv,
-  'OAK_CURRICULUM_MCP_USE_STUB_TOOLS' | 'OAK_API_KEY' | 'PORT'
+  'OAK_CURRICULUM_MCP_USE_STUB_TOOLS' | 'OAK_API_KEY' | 'PORT' | 'SMOKE_USE_HEADLESS_OAUTH'
 >;

@@ -8,13 +8,15 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
-    "dev": "DANGEROUSLY_DISABLE_AUTH=true DEBUG=true LOG_LEVEL=debug BASE_URL=http://localhost:3333 MCP_CANONICAL_URI=http://localhost:3333/mcp tsx server.ts",
+    "dev": "DANGEROUSLY_DISABLE_AUTH=false DEBUG=true LOG_LEVEL=debug BASE_URL=http://localhost:3333 MCP_CANONICAL_URI=http://localhost:3333/mcp tsx server.ts",
     "start": "node dist/index.js",
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",
     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
     "smoke:remote": "tsx smoke-tests/smoke-remote.ts",
     "smoke:capture:rest": "tsx smoke-tests/capture-rest-analysis.ts",
+    "trace:oauth": "tsx smoke-tests/auth/capture-browser-trace.ts",
+    "headless:oauth": "tsx smoke-tests/auth/headless-oauth-token.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint  .",
     "test": "vitest run",
@@ -32,9 +34,11 @@
     "commander": "^12.1.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "express-list-routes": "^1.3.1",
     "zod": "^4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.48.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^22",

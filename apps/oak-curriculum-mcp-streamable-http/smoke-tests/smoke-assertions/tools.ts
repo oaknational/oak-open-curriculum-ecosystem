@@ -102,7 +102,7 @@ async function fetchToolNames(context: SmokeContext): Promise<readonly string[]>
   return extractToolNames(text);
 }
 
-async function fetchToolResponse(
+export async function fetchToolResponse(
   context: SmokeContext,
   headers: Record<string, string>,
   logger: Logger,
@@ -139,7 +139,7 @@ async function fetchToolResponse(
   return response;
 }
 
-function parseToolResult(
+export function parseToolResult(
   response: JsonResponse,
   logger: Logger,
 ): { readonly envelope: JsonRpcEnvelope; readonly resultRecord: JsonObject } {
@@ -150,7 +150,7 @@ function parseToolResult(
   return { envelope, resultRecord };
 }
 
-function extractToolPayload(resultRecord: JsonObject, logger: Logger): readonly unknown[] {
+export function extractToolPayload(resultRecord: JsonObject, logger: Logger): readonly unknown[] {
   const isError =
     resultRecord.isError === undefined
       ? false

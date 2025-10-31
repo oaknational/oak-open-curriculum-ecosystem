@@ -16,9 +16,10 @@
     "mutate": "turbo run --continue mutate",
     "test:e2e": "turbo run --continue test:e2e",
     "test:ui": "turbo run --continue test:ui",
-    "smoke:dev:stub": "turbo run smoke:dev:stub",
-    "smoke:dev:live": "turbo run smoke:dev:live",
-    "smoke:remote": "turbo run smoke:remote",
+    "smoke:dev:stub": "LOG_LEVEL=debug TRACE_MCP_FLOW=true turbo run smoke:dev:stub",
+    "smoke:dev:live": "LOG_LEVEL=debug TRACE_MCP_FLOW=true turbo run smoke:dev:live",
+    "smoke:dev:live:auth": "LOG_LEVEL=debug TRACE_MCP_FLOW=true turbo run smoke:dev:live:auth",
+    "smoke:remote": "LOG_LEVEL=debug TRACE_MCP_FLOW=true turbo run smoke:remote",
     "type-check": "turbo run --continue type-check",
     "format:root": "prettier --write --cache .",
     "format-check:root": "prettier --check .",
@@ -57,7 +58,14 @@
   "pnpm": {
     "overrides": {
       "axios": "^1.12.2"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@clerk/shared",
+      "core-js",
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

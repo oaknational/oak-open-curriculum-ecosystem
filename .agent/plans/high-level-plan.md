@@ -34,8 +34,8 @@
 3. **OAuth 2.1 / Clerk Integration** — Status: Planned (Priority 3 - ACTIVE)
    - Plan: `.agent/plans/mcp-oauth-implementation-plan.md`
    - Scope: Replace local demo OAuth AS with Clerk production AS; use `@clerk/mcp-tools` helpers; Google SSO for @thenational.academy
-   - Current State: OAuth 2.1 Resource Server already implemented; need to replace Authorization Server
-   - Acceptance: Clerk AS integrated; Google SSO working; static tokens removed from production; all tests pass; runbook documented
+   - Current State: Clerk AS is live with metadata endpoints, auth middleware, and smoke/e2e coverage; remote and local smoke passes with auth bypass, while authenticated smoke awaits M2M bearer support.
+   - Acceptance: Clerk AS integrated; Google SSO working; static tokens removed from production; service-token powered smoke assertions in CI; manual browser trace documented; runbook updated.
 
 4. **OpenAI Apps SDK Integration (Non-UI)** — Status: Planned (Priority 4)
    - Plan: `.agent/plans/oak-openai-app-plan.md`

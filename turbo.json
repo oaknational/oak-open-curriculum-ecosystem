@@ -174,17 +174,31 @@
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-stub.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
+      ],
+      "env": ["TRACE_MCP_FLOW", "LOG_LEVEL"],
+      "passThroughEnv": ["TRACE_MCP_FLOW", "LOG_LEVEL"]
     },
     "smoke:dev:live": {
       "dependsOn": ["^smoke:dev:live"],
       "cache": false,
       "outputs": [],
-      "env": ["OAK_API_KEY"],
-      "passThroughEnv": ["OAK_API_KEY"],
+      "env": ["OAK_API_KEY", "TRACE_MCP_FLOW", "LOG_LEVEL"],
+      "passThroughEnv": ["OAK_API_KEY", "TRACE_MCP_FLOW", "LOG_LEVEL"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live.ts",
+        "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
+      ]
+    },
+    "smoke:dev:live:auth": {
+      "dependsOn": ["^smoke:dev:live:auth"],
+      "cache": false,
+      "outputs": [],
+      "env": ["OAK_API_KEY", "TRACE_MCP_FLOW", "LOG_LEVEL"],
+      "passThroughEnv": ["OAK_API_KEY", "TRACE_MCP_FLOW", "LOG_LEVEL"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-dev-live-auth.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
       ]
     },
@@ -196,7 +210,9 @@
         "$TURBO_DEFAULT$",
         "apps/oak-curriculum-mcp-streamable-http/smoke-tests/smoke-remote.ts",
         "apps/oak-curriculum-mcp-streamable-http/src/**/*.ts"
-      ]
+      ],
+      "env": ["TRACE_MCP_FLOW", "LOG_LEVEL"],
+      "passThroughEnv": ["TRACE_MCP_FLOW", "LOG_LEVEL"]
     }
   }
 }
