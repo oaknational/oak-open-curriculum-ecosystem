@@ -37,28 +37,14 @@ function createStubOverrides(captured: CapturedCall[]): ToolHandlerOverrides {
 
 function configureDevEnvironment(): () => void {
   const previousAuth = process.env.DANGEROUSLY_DISABLE_AUTH;
-  const previousBaseUrl = process.env.BASE_URL;
-  const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
   // Disable auth – this suite validates success envelope formatting.
   // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
-  process.env.BASE_URL = 'http://localhost:3333';
-  process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
   return () => {
     if (typeof previousAuth === 'string') {
       process.env.DANGEROUSLY_DISABLE_AUTH = previousAuth;
     } else {
       Reflect.deleteProperty(process.env, 'DANGEROUSLY_DISABLE_AUTH');
-    }
-    if (typeof previousBaseUrl === 'string') {
-      process.env.BASE_URL = previousBaseUrl;
-    } else {
-      Reflect.deleteProperty(process.env, 'BASE_URL');
-    }
-    if (typeof previousCanonicalUri === 'string') {
-      process.env.MCP_CANONICAL_URI = previousCanonicalUri;
-    } else {
-      Reflect.deleteProperty(process.env, 'MCP_CANONICAL_URI');
     }
   };
 }

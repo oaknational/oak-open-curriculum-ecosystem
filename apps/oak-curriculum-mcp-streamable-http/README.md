@@ -64,6 +64,23 @@ Only use this flag for protocol-level or tool-behaviour testing. All auth-focuse
 - Set to `true` only when auth is explicitly out of scope (protocol verification, stubbed tool flows, DX harnesses).
 - Every bypassed test includes an inline comment explaining the rationale and naming the complementary auth-covered suite.
 
+## Configuration Overview
+
+| Variable                            | Required? | Default Behaviour                                                                                                        | Notes                                                                                                       |
+| ----------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `OAK_API_KEY`                       | ✅        | None – must be provided                                                                                                  | Used when executing curriculum tools against the live API.                                                  |
+| `CLERK_PUBLISHABLE_KEY`             | ✅        | None – must be provided                                                                                                  | Read implicitly by `@clerk/express`; not referenced directly in app code.                                   |
+| `CLERK_SECRET_KEY`                  | ✅        | None – must be provided                                                                                                  | Required by Clerk middleware for JWT validation and metadata routes.                                        |
+| `ALLOWED_HOSTS`                     | ❌        | `['localhost','127.0.0.1','::1']`, or `VERCEL_URL` + locals when `VERCEL_URL` is present                                 | Drives DNS-rebinding protection in `security.ts`.                                                           |
+| `ALLOWED_ORIGINS`                   | ❌        | `['http://localhost:3000','http://localhost:3333']`, or `https://${VERCEL_URL}` plus locals when `VERCEL_URL` is present | Configures the CORS allow-list.                                                                             |
+| `REMOTE_MCP_MODE`                   | ❌        | `stateless`                                                                                                              | Switching to `session` enables session headers in CORS responses.                                           |
+| `OAK_CURRICULUM_MCP_USE_STUB_TOOLS` | ❌        | `false`                                                                                                                  | When `true`, tool handlers return schema-driven stubs (used by smoke/e2e harnesses).                        |
+| `DANGEROUSLY_DISABLE_AUTH`          | ❌        | `false`                                                                                                                  | Only set to `true` in local development to bypass Clerk authentication.                                     |
+| `TRACE_MCP_FLOW`                    | ❌        | `false`                                                                                                                  | Enables verbose HTTP tracing middleware for debugging.                                                      |
+| `LOG_LEVEL`                         | ❌        | `info` (when consumed)                                                                                                   | Currently respected by the smoke-test logger; the server still uses a bespoke logger (see tidy-up backlog). |
+| `MCP_STREAMABLE_HTTP_LOG_FILE`      | ❌        | `apps/oak-curriculum-mcp-streamable-http/.logs/dev-server.log`                                                           | Overrides the file sink used by the in-process logger.                                                      |
+| `SMOKE_REMOTE_BASE_URL`             | ❌        | None                                                                                                                     | Convenience for `pnpm smoke:remote`.                                                                        |
+
 ## Smoke and Quality Gates
 
 | Scenario                  | Command                                                                                                | Notes                                                                           |
@@ -90,12 +107,10 @@ Stub auth deliberately keeps the hard-coded Clerk keys shown in `smoke-tests/mod
   - `CLERK_PUBLISHABLE_KEY`
   - `CLERK_SECRET_KEY`
   - `OAK_API_KEY`
-  - `ALLOWED_HOSTS` (comma-separated; include deployment hostname)
-  - `BASE_URL` (e.g. `https://open-api.thenational.academy`)
-  - `MCP_CANONICAL_URI` (e.g. `https://open-api.thenational.academy/mcp`)
 - Optional:
-  - `ALLOWED_ORIGINS` for CORS
-  - `LOG_LEVEL` (defaults to `info`)
+  - `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` (defaults cover localhost or `VERCEL_URL` automatically)
+  - `LOG_LEVEL` (diagnostic logging for smoke harness)
+  - `MCP_STREAMABLE_HTTP_LOG_FILE` (override default log file path)
 - Post-deploy checklist:
   - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote --remote-base-url https://<host>/mcp`
   - Ensure `curl https://<host>/.well-known/oauth-protected-resource` resolves to Clerk endpoints.

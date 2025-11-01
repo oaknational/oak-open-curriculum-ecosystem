@@ -9,31 +9,15 @@ const ACCEPT = 'application/json, text/event-stream';
 
 function configureRealApiEnvironment(): () => void {
   const previous = {
-    BASE_URL: process.env.BASE_URL,
-    MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
     DANGEROUSLY_DISABLE_AUTH: process.env.DANGEROUSLY_DISABLE_AUTH,
     OAK_API_KEY: process.env.OAK_API_KEY,
   };
-  delete process.env.BASE_URL;
-  delete process.env.MCP_CANONICAL_URI;
   // Disable auth – this test focuses on response formatting.
   // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'stub-test-key';
 
   return () => {
-    if (typeof previous.BASE_URL === 'string') {
-      process.env.BASE_URL = previous.BASE_URL;
-    } else {
-      delete process.env.BASE_URL;
-    }
-
-    if (typeof previous.MCP_CANONICAL_URI === 'string') {
-      process.env.MCP_CANONICAL_URI = previous.MCP_CANONICAL_URI;
-    } else {
-      delete process.env.MCP_CANONICAL_URI;
-    }
-
     if (typeof previous.DANGEROUSLY_DISABLE_AUTH === 'string') {
       process.env.DANGEROUSLY_DISABLE_AUTH = previous.DANGEROUSLY_DISABLE_AUTH;
     } else {

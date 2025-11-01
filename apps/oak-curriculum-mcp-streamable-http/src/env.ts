@@ -8,12 +8,8 @@ const EnvSchema = z.object({
   CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
   CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
   // MCP Server Configuration
-  BASE_URL: z.url().optional(),
-  MCP_CANONICAL_URI: z.url().optional(),
-  // Transport Mode
   REMOTE_MCP_MODE: ModeSchema.optional(),
   // Security & Development
-  REMOTE_MCP_ALLOW_NO_AUTH: z.enum(['true', 'false']).optional(),
   ALLOWED_HOSTS: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   // Logging

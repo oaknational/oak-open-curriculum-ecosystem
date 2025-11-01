@@ -40,8 +40,6 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
   let app: express.Express;
 
   beforeEach(() => {
-    delete process.env.BASE_URL;
-    delete process.env.MCP_CANONICAL_URI;
     process.env.OAK_API_KEY = 'test-key';
     // Use real Clerk key format for middleware initialization
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';

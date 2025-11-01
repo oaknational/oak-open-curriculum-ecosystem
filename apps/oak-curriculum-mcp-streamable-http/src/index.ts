@@ -7,7 +7,6 @@ import fs from 'node:fs';
 import { renderLandingPageHtml } from './landing-page.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { parseCsv } from './env.js';
 import { clerkMiddleware } from '@clerk/express';
 import {
   mcpAuthClerk,
@@ -23,6 +22,7 @@ import {
   dumpRouteStack,
   logRequestRoute,
 } from './trace-mcp-flow.js';
+import { readSecurityEnv } from './security-config.js';
 
 function addHealthEndpoints(app: Express, corsMw: RequestHandler): void {
   app.head('/healthz', corsMw, (_req, res) => {
@@ -249,20 +249,6 @@ function mountStaticAssets(app: Express): void {
   if (chosen) {
     app.use(expressStatic(chosen, { etag: true, maxAge: '1d' }));
   }
-}
-
-function readSecurityEnv(): {
-  mode: 'stateless' | 'session';
-  allowedHosts: readonly string[];
-  allowedOrigins: readonly string[] | undefined;
-} {
-  const mode = (process.env.REMOTE_MCP_MODE ?? 'stateless') === 'session' ? 'session' : 'stateless';
-  const allowedHosts = parseCsv(process.env.ALLOWED_HOSTS) ?? ['localhost', '127.0.0.1', '::1'];
-  const allowedOrigins = parseCsv(process.env.ALLOWED_ORIGINS) ?? [
-    'http://localhost:3000',
-    'http://localhost:3333',
-  ];
-  return { mode, allowedHosts, allowedOrigins };
 }
 
 function applySecurity(

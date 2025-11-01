@@ -12,8 +12,6 @@ describe('HTTP boundary argument validation', () => {
     process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
-    process.env.BASE_URL = 'http://localhost';
-    process.env.MCP_CANONICAL_URI = 'http://localhost/mcp';
   });
 
   function extractErrorText(body: string): string {

@@ -10,27 +10,27 @@ This reference lists the environment variables and platform settings required to
 
 ## Required Environment Variables
 
-| Variable                | Production | Preview | Notes                                                                                                 |
-| ----------------------- | ---------- | ------- | ----------------------------------------------------------------------------------------------------- |
-| `CLERK_PUBLISHABLE_KEY` | ✅         | ✅      | Clerk publishable key for the deployed application                                                    |
-| `CLERK_SECRET_KEY`      | ✅         | ✅      | Clerk secret key used by server-side auth middleware                                                  |
-| `OAK_API_KEY`           | ✅         | ✅      | Oak Curriculum API key for live data                                                                  |
-| `ALLOWED_HOSTS`         | ✅         | ✅      | Comma-separated host allowlist (include the deployment hostname, e.g. `open-api.thenational.academy`) |
-| `BASE_URL`              | ✅         | ✅      | Base REST API URL (e.g. `https://open-api.thenational.academy`)                                       |
-| `MCP_CANONICAL_URI`     | ✅         | ✅      | Canonical MCP endpoint (e.g. `https://open-api.thenational.academy/mcp`)                              |
+| Variable                | Production | Preview | Notes                                                |
+| ----------------------- | ---------- | ------- | ---------------------------------------------------- |
+| `CLERK_PUBLISHABLE_KEY` | ✅         | ✅      | Clerk publishable key for the deployed application   |
+| `CLERK_SECRET_KEY`      | ✅         | ✅      | Clerk secret key used by server-side auth middleware |
+| `OAK_API_KEY`           | ✅         | ✅      | Oak Curriculum API key for live data                 |
 
 ## Optional Environment Variables
 
-| Variable                   | Default                       | Usage                                                                                         |
-| -------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
-| `ALLOWED_ORIGINS`          | unset                         | Enable CORS for browser clients (comma-separated origins)                                     |
-| `LOG_LEVEL`                | `info`                        | Set to `debug` temporarily when troubleshooting                                               |
-| `DANGEROUSLY_DISABLE_AUTH` | **must remain unset/`false`** | Only used for local development. Never enable in Vercel environments (preview or production). |
+| Variable                       | Default Behaviour                                                                 | Usage                                                                                    |
+| ------------------------------ | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`                | Localhost allow-list, or `VERCEL_URL` + localhost entries if `VERCEL_URL` present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
+| `ALLOWED_ORIGINS`              | Localhost origins, or `https://${VERCEL_URL}` + localhost if `VERCEL_URL` present | Override to expand the CORS allow-list                                                   |
+| `REMOTE_MCP_MODE`              | `stateless`                                                                       | Switch to `session` to enable session headers in CORS responses                          |
+| `LOG_LEVEL`                    | `info`                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
+| `MCP_STREAMABLE_HTTP_LOG_FILE` | `apps/oak-curriculum-mcp-streamable-http/.logs/dev-server.log`                    | Override the file sink used by the in-process logger                                     |
+| `DANGEROUSLY_DISABLE_AUTH`     | **Must remain unset/`false`**                                                     | Local development only; never enable in Vercel environments                              |
 
 ## Preview vs Production Notes
 
-- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist (`ALLOWED_HOSTS` should include the `*.vercel.app` preview domain if needed). Keep `DANGEROUSLY_DISABLE_AUTH` unset so OAuth remains enforced.
-- **Production Deployment**: Mirrors the preview configuration but with the final hostnames in `ALLOWED_HOSTS`, `BASE_URL`, and `MCP_CANONICAL_URI`.
+- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist. If you rely on the automatic defaults, Vercel will supply `VERCEL_URL`, which becomes the allow-listed host/origin.
+- **Production Deployment**: Mirrors the preview configuration. Provide explicit `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` only when you need to extend beyond the defaults derived from `VERCEL_URL`.
 
 ## Verification Checklist
 

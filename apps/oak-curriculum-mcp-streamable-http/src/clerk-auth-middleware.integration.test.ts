@@ -12,8 +12,6 @@ describe('Clerk Auth Middleware Integration', () => {
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     // Secret key can be fake for integration tests (not used for validation logic)
     process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
-    process.env.BASE_URL = 'http://localhost:3333';
-    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
   });
 
   afterEach(() => {

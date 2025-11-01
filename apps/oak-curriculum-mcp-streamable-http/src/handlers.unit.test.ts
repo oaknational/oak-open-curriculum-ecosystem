@@ -16,21 +16,15 @@ describe('registerHandlers validation logging', () => {
   let warnSpy: ReturnType<typeof vi.spyOn>;
   let previousEnv: {
     readonly OAK_API_KEY?: string;
-    readonly BASE_URL?: string;
-    readonly MCP_CANONICAL_URI?: string;
   };
 
   beforeEach(() => {
     previousEnv = {
       OAK_API_KEY: process.env.OAK_API_KEY,
-      BASE_URL: process.env.BASE_URL,
-      MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
     };
     process.env.OAK_API_KEY = 'test-key';
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
-    process.env.BASE_URL = 'http://localhost:3333';
-    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
     warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => undefined);
   });
 
@@ -39,16 +33,6 @@ describe('registerHandlers validation logging', () => {
       delete process.env.OAK_API_KEY;
     } else {
       process.env.OAK_API_KEY = previousEnv.OAK_API_KEY;
-    }
-    if (previousEnv.BASE_URL === undefined) {
-      delete process.env.BASE_URL;
-    } else {
-      process.env.BASE_URL = previousEnv.BASE_URL;
-    }
-    if (previousEnv.MCP_CANONICAL_URI === undefined) {
-      delete process.env.MCP_CANONICAL_URI;
-    } else {
-      process.env.MCP_CANONICAL_URI = previousEnv.MCP_CANONICAL_URI;
     }
     vi.restoreAllMocks();
   });
