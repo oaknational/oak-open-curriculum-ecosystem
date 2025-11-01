@@ -12,7 +12,6 @@ export function prepareRemoteEnvironment(
   const remoteSelection = resolveRemoteBaseUrl(
     options.remoteBaseUrl,
     process.env.SMOKE_REMOTE_BASE_URL,
-    process.env.OAK_MCP_URL,
   );
   if (!remoteSelection) {
     throw new Error(
