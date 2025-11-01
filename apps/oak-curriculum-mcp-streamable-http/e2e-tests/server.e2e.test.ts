@@ -8,11 +8,12 @@ import { toolNames } from '@oaknational/oak-curriculum-sdk';
 const ACCEPT = 'application/json, text/event-stream';
 
 /**
- * Configure environment for auth bypass in E2E tests
- * This allows tests to run without needing Clerk OAuth tokens
+ * Configure environment for auth bypass in E2E tests.
+ * These scenarios target protocol behaviour; auth enforcement is asserted in
+ * auth-enforcement.e2e.test.ts and the smoke-dev-auth run.
  */
 function enableAuthBypass(): void {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
   process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
 }
@@ -52,8 +53,7 @@ function toolNamesFromResult(value: unknown): string[] {
 
 describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
   beforeEach(() => {
-    // Default: enable auth bypass for all E2E tests
-    // Individual tests can override if needed
+    // Default: enable auth bypass; individual tests re-enable auth when required.
     enableAuthBypass();
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     delete process.env.BASE_URL;

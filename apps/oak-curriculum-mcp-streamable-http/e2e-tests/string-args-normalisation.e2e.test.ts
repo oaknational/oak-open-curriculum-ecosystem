@@ -7,7 +7,9 @@ const ACCEPT = 'application/json, text/event-stream';
 
 describe('HTTP boundary argument validation', () => {
   beforeEach(() => {
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+    // Disable auth – this suite inspects HTTP argument validation only.
+    // Auth enforcement has dedicated coverage in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     process.env.BASE_URL = 'http://localhost';

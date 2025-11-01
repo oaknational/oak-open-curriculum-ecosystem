@@ -35,7 +35,8 @@ export function createLiveHttpApp(options?: CreateLiveHttpAppOptions): LiveHttpA
   setEnv('OAK_CURRICULUM_MCP_USE_STUB_TOOLS', undefined);
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'live-mode-api-key';
 
-  // Disable auth for E2E tests
+  // Disable auth – live-mode E2E tests assert Oak API integration, not Clerk enforcement.
+  // Auth coverage lives in auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 
   // Clerk keys not needed when auth disabled, but set for completeness

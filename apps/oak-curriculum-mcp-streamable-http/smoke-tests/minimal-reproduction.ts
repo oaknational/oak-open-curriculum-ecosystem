@@ -15,6 +15,8 @@ console.log('🔍 Minimal Reproduction Test - E2E vs Smoke Comparison');
 console.log('====================================================');
 
 // Set up environment
+// Disable auth – this comparison isolates transport differences.
+// Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
 process.env.TRACE_MCP_FLOW = 'true';

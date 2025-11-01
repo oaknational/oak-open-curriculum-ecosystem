@@ -1,3 +1,5 @@
+> **ARCHIVED**: This document describes a headless OAuth automation approach that was explored but not implemented. The project uses mock-based testing for authentication behavior instead. See `TESTING.md` for current auth testing strategy. This document is retained for historical reference only.
+
 # Headless OAuth Automation – Feasibility Notes
 
 ## Goals

@@ -1,6 +1,11 @@
 import type { Logger } from '@oaknational/mcp-logger';
 
-export type SmokeSuiteMode = 'local-stub' | 'local-live' | 'local-live-auth' | 'remote';
+export type SmokeSuiteMode =
+  | 'local-stub'
+  | 'local-stub-auth'
+  | 'local-live'
+  | 'local-live-auth'
+  | 'remote';
 
 export type RemoteUrlSource = 'cli' | 'smokeRemoteBaseUrl' | 'oakMcpUrl';
 export type DevTokenSource =

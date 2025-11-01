@@ -4,27 +4,7 @@ import { extractToolPayload, fetchToolResponse, parseToolResult } from './tools.
 import { REQUIRED_ACCEPT, type SmokeContext } from './types.js';
 import { createAssertionLogger, logAssertionSuccess } from './logging.js';
 import { createClerkOAuthAccessToken } from '../auth/clerk-oauth-token.js';
-import { acquireHeadlessOAuthToken } from '../auth/headless-oauth-token.js';
 import { createToolHeaders } from './common.js';
-
-async function resolveSmokeAccess(
-  logger: ReturnType<typeof createAssertionLogger>,
-): Promise<
-  | Awaited<ReturnType<typeof createClerkOAuthAccessToken>>
-  | Awaited<ReturnType<typeof acquireHeadlessOAuthToken>>
-> {
-  if (process.env.SMOKE_USE_HEADLESS_OAUTH === 'true') {
-    const headlessAccess = await acquireHeadlessOAuthToken();
-    logger.debug('Using headless Playwright OAuth helper', {
-      issuedAt: headlessAccess.metadata.issuedAt,
-      oauthApplicationId: headlessAccess.metadata.oauthApplicationId,
-    });
-    return headlessAccess;
-  }
-
-  logger.debug('Using backend API OAuth helper (programmatic PKCE flow)');
-  return createClerkOAuthAccessToken();
-}
 
 export async function assertAuthenticatedToolCall(context: SmokeContext): Promise<void> {
   if (process.env.SMOKE_CLERK_PROGRAMMATIC_AUTH === 'false') {
@@ -36,7 +16,8 @@ export async function assertAuthenticatedToolCall(context: SmokeContext): Promis
   }
 
   const logger = createAssertionLogger(context, 'auth-happy-path');
-  const access = await resolveSmokeAccess(logger);
+  logger.debug('Using backend API OAuth helper (programmatic PKCE flow)');
+  const access = await createClerkOAuthAccessToken();
 
   const accessToken = access.accessToken;
   const headers = {

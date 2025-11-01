@@ -316,16 +316,14 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     });
   });
 
-  // TODO: Add test with valid Clerk OAuth token from Device Flow
-  // This requires implementing OAuth Device Flow to get a real token
-  // Deferred to Phase 3 after validating OAuth flow with Claude Desktop
-  // it('accepts valid Clerk OAuth token from Device Flow', async () => {
-  //   const token = await getClerkTokenViaDeviceFlow();
-  //   const res = await request(app)
-  //     .post('/mcp')
-  //     .set('Accept', 'application/json, text/event-stream')
-  //     .set('Authorization', `Bearer ${token}`)
-  //     .send({ jsonrpc: '2.0', id: '1', method: 'initialize', params: {} });
-  //   expect(res.status).toBe(200);
-  // });
+  // Note: Authenticated request testing with real Clerk tokens requires
+  // OAuth Device Flow implementation. For deterministic testing of authenticated
+  // scenarios without external dependencies, see mock-based tests in:
+  // - src/test-fixtures/mock-clerk-middleware.integration.test.ts
+  // - src/clerk-auth-middleware.integration.test.ts (uses real Clerk but with DANGEROUSLY_DISABLE_AUTH)
+  //
+  // These E2E tests focus on proving auth enforcement at the system boundary
+  // (rejecting unauthenticated requests). Authenticated happy-path testing
+  // is covered by mock-based integration tests which provide deterministic,
+  // fast validation without external service dependencies.
 });

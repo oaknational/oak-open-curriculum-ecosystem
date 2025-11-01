@@ -22,7 +22,7 @@ export async function runSmokeAssertions(context: SmokeContext): Promise<void> {
   });
   if (context.mode === 'remote') {
     await runRemoteSmokeAssertions(context);
-  } else if (context.mode === 'local-live-auth') {
+  } else if (context.mode === 'local-live-auth' || context.mode === 'local-stub-auth') {
     await runLocalLiveAuthSmokeAssertions(context);
   } else {
     await runLocalSmokeAssertions(context);

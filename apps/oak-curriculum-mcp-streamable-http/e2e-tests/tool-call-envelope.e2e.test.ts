@@ -16,7 +16,9 @@ function configureRealApiEnvironment(): () => void {
   };
   delete process.env.BASE_URL;
   delete process.env.MCP_CANONICAL_URI;
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+  // Disable auth – this test focuses on response formatting.
+  // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'stub-test-key';
 
   return () => {

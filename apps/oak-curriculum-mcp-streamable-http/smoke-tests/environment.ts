@@ -11,6 +11,7 @@ import { closeSmokeServer } from './local-server.js';
 import { prepareLocalStubEnvironment, STUB_API_KEY } from './modes/local-stub.js';
 import { prepareLocalLiveEnvironment } from './modes/local-live.js';
 import { prepareLocalLiveAuthEnvironment } from './modes/local-live-auth.js';
+import { prepareLocalStubAuthEnvironment } from './modes/local-stub-auth.js';
 import { prepareRemoteEnvironment as prepareRemoteModeEnvironment } from './modes/remote.js';
 
 export const DEFAULT_PORT = 3333;
@@ -22,6 +23,11 @@ export async function prepareEnvironment(
   if (options.mode === 'local-stub') {
     const envLoad = loadEnvironment({ envFileOrder: [] });
     return prepareLocalStubEnvironment(options, envLoad);
+  }
+
+  if (options.mode === 'local-stub-auth') {
+    const envLoad = loadEnvironment({ envFileOrder: [] });
+    return prepareLocalStubAuthEnvironment(options, envLoad);
   }
 
   const requiredKeys =
@@ -56,19 +62,11 @@ export function captureEnvSnapshot(): EnvSnapshot {
     OAK_CURRICULUM_MCP_USE_STUB_TOOLS: process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS,
     OAK_API_KEY: process.env.OAK_API_KEY,
     PORT: process.env.PORT,
-    SMOKE_USE_HEADLESS_OAUTH: process.env.SMOKE_USE_HEADLESS_OAUTH,
   };
 }
 
 export function restoreEnv(snapshot: EnvSnapshot): void {
-  (
-    [
-      'OAK_CURRICULUM_MCP_USE_STUB_TOOLS',
-      'OAK_API_KEY',
-      'PORT',
-      'SMOKE_USE_HEADLESS_OAUTH',
-    ] as const
-  ).forEach((key) => {
+  (['OAK_CURRICULUM_MCP_USE_STUB_TOOLS', 'OAK_API_KEY', 'PORT'] as const).forEach((key) => {
     restoreKey(key, snapshot[key]);
   });
 }

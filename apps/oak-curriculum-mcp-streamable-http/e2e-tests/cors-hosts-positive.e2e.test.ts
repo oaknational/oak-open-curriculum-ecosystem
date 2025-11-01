@@ -8,7 +8,9 @@ describe('CORS/Hosts positive path', () => {
   it('allows allowed host and origin', async () => {
     process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
     process.env.ALLOWED_ORIGINS = 'http://localhost:3000';
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+    // Disable auth – this assertion isolates host/CORS handling.
+    // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)
@@ -25,7 +27,9 @@ describe('CORS/Hosts positive path', () => {
   it('allows wildcard host pattern for dynamic Vercel preview URLs', async () => {
     process.env.ALLOWED_HOSTS = 'poc-oak-open-curriculum-*.vercel.thenational.academy,localhost';
     process.env.ALLOWED_ORIGINS = 'https://curriculum-mcp-alpha.oaknational.dev';
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+    // Disable auth – this assertion isolates host/CORS handling.
+    // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
     const app = createApp();
     const res = await request(app)

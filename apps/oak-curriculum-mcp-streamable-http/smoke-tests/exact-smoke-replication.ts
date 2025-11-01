@@ -12,6 +12,8 @@ console.log('🔍 Exact Smoke Test Replication');
 console.log('================================');
 
 // Set up environment exactly like smoke test
+// Disable auth – this diagnostic mirrors the bypassed smoke scenario.
+// Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
 process.env.TRACE_MCP_FLOW = 'true';

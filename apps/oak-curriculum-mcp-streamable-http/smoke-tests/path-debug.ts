@@ -12,6 +12,8 @@ console.log('🔍 Path Debug Test');
 console.log('==================');
 
 // Set up environment
+// Disable auth – this debug script inspects routing only.
+// Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
 process.env.TRACE_MCP_FLOW = 'true';

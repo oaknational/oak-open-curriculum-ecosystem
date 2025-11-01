@@ -36,7 +36,8 @@ export function createStubbedHttpApp(): StubbedHttpApp {
   process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS = 'true';
   process.env.OAK_API_KEY = STUB_API_KEY;
 
-  // Disable auth for E2E tests
+  // Disable auth – stub-mode E2E tests focus on protocol responses.
+  // Auth enforcement is proven by auth-enforcement.e2e.test.ts and smoke-dev-auth.
   process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 
   // Clerk keys not needed when auth disabled, but set for completeness

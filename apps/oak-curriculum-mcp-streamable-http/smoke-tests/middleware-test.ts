@@ -6,6 +6,8 @@ import { startSmokeServer } from './local-server.js';
 
 console.log('[TEST] Starting middleware registration test');
 
+// Disable auth – this probe only verifies middleware ordering.
+// Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
 process.env.TRACE_MCP_FLOW = 'true';

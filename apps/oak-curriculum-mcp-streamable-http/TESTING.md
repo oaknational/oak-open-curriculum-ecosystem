@@ -2,323 +2,99 @@
 
 ## Overview
 
-This MCP server uses a comprehensive, multi-layered testing approach that proves correctness at different scales while maintaining deterministic, easy-to-understand test scenarios.
+- Authentication is proven through two complementary paths: a manual Clerk verification flow for configuration changes, and deterministic mock-driven suites for everyday development.
+- All tests follow TDD discipline: write the failing test first, keep arrangements simple, and favour pure functions at unit scale.
+- IO appears only in E2E and smoke suites; unit and integration tests import code directly and inject tiny fakes where required.
 
-## Testing Philosophy
+## Two-Tier Authentication Testing
 
-1. **No Conditional Logic in Tests** - Each test file has ONE clear setup and ONE clear set of expectations
-2. **Deterministic Outcomes** - Test results provide instant, complete information about failures
-3. **TDD Always** - Tests written first (Red), implementation second (Green), refactored third
-4. **Production-Equivalent Testing** - Critical tests mirror production configuration exactly
+### Tier 1 – Manual Clerk verification
+
+- **Command**: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`
+- Run when wiring Clerk for the first time, rotating OAuth credentials, or investigating real sign-in issues.
+- Outputs Playwright traces, HAR files, and handshake snapshots into `apps/oak-curriculum-mcp-streamable-http/temp-secrets/`.
+- Not part of CI; only rerun after Clerk configuration changes.
+
+### Tier 2 – Automated mock coverage
+
+- Fixtures live in `src/test-fixtures/`:
+  - `auth-scenarios.ts` captures canonical requests, responses, and enforcement expectations.
+  - `mock-clerk-middleware.ts` exposes deterministic middleware helpers.
+- Tests consuming these fixtures:
+  - `auth-scenarios.unit.test.ts`
+  - `mock-clerk-middleware.integration.test.ts`
+  - `clerk-auth-middleware.integration.test.ts`
+  - `auth-enforcement.e2e.test.ts`
+  - `smoke-tests/smoke-dev-auth.ts` via `pnpm smoke:dev:auth`
+- These suites keep `DANGEROUSLY_DISABLE_AUTH` unset so real middleware paths execute; only bypass-specific scenarios set the flag deliberately.
 
 ## Test Layers
 
-### Unit Tests (`*.unit.test.ts`)
+### Unit tests (`*.unit.test.ts`)
 
-- **Purpose**: Test pure functions in isolation
-- **Characteristics**: No I/O, no side effects, no mocks
-- **Run**: `pnpm test` (filtered to `*.unit.test.ts`)
-- **Examples**:
-  - `env.unit.test.ts` - Environment schema validation
-  - `handlers.unit.test.ts` - Tool handler logic
+- Purpose: prove pure functions with no IO.
+- Run: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test` (Vitest auto-detects `*.unit.test.ts`).
+- Examples: `env.unit.test.ts`, `handlers.unit.test.ts`, `test-fixtures/auth-scenarios.unit.test.ts`.
 
-### Integration Tests (`*.integration.test.ts`)
+### Integration tests (`*.integration.test.ts`)
 
-- **Purpose**: Test multiple units working together as imported code
-- **Characteristics**: Code runs in test process, simple mocks allowed
-- **Run**: `pnpm test` (filtered to `*.integration.test.ts`)
-- **Examples**:
-  - `clerk-auth-middleware.integration.test.ts` - Clerk middleware behavior
-  - `index.unit.test.ts` - App initialization with all components
+- Purpose: exercise multiple units as imported code with tiny injected fakes.
+- Run: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test` (Vitest groups these by filename).
+- Examples: `mock-clerk-middleware.integration.test.ts`, `clerk-auth-middleware.integration.test.ts`, `oauth-metadata-clerk.integration.test.ts`.
 
-### E2E Tests (`*.e2e.test.ts`)
+### E2E tests (`*.e2e.test.ts`)
 
-- **Purpose**: Test running system behavior (server in separate process)
-- **Characteristics**: Real I/O, side effects, minimal mocks
-- **Run**: `pnpm test:e2e`
-- **Examples**:
-  - `auth-enforcement.e2e.test.ts` - Production-equivalent auth testing
-  - `auth-bypass.e2e.test.ts` - DX feature validation
-  - `stub-mode.e2e.test.ts` - MCP protocol with stubs
+- Purpose: exercise a running server in-process spawned by the Vitest harness.
+- Run: `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`.
+- Key files: `auth-enforcement.e2e.test.ts`, `auth-bypass.e2e.test.ts`, `tool-call-envelope.e2e.test.ts`, `server.e2e.test.ts`.
 
-### Smoke Tests (`smoke-tests/`)
+### Smoke tests (`smoke-tests/`)
 
-- **Purpose**: Quick production-like validation (fastest E2E subset)
-- **Characteristics**: Tests critical paths only
-- **Run**: `pnpm smoke:dev:stub`, `pnpm smoke:dev:live`, `pnpm smoke:remote` (plus `pnpm smoke:dev:live:auth` when exercising the manual auth flow)
-- **Key Scenarios**: See "Smoke Test Matrix" below
+- Purpose: quickest regression sweep over a running server with production-like wiring.
+- Commands:
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub` – protocol checks with stub tools and auth bypass.
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live` – live Oak API with bypass enabled.
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth` – stub tools with auth enforced (uses `local-stub-auth` mode and hard-coded fake Clerk keys to keep the run network-free).
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` – full production equivalent; run manually after Clerk changes.
+  - `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote` – target deployed instance.
 
-> ℹ️ Set `SMOKE_USE_HEADLESS_OAUTH=true` to let the smoke harness mint Clerk access tokens headlessly via Playwright. Leave it unset to fall back to the backend API flow (or manual trace capture) for debugging.
+## Fixture Catalogue
 
-## Test Scenario Matrix
+- `src/test-fixtures/auth-scenarios.ts` – immutable map of valid/invalid tokens, headers, and enforcement expectations. Update via TDD alongside schema changes.
+- `src/test-fixtures/mock-clerk-middleware.ts` – deterministic middleware wiring used by integration tests and the smoke harness.
+- `smoke-tests/smoke-suite.ts` – shared runner for smoke modes; ensures auth assertions execute even when tools are stubbed.
+- Whenever fixtures evolve, extend the unit and integration suites first, then layer in corresponding E2E or smoke assertions if behaviour changes at system scale.
 
-Tests are organized across three dimensions:
+## Using `DANGEROUSLY_DISABLE_AUTH`
 
-- **Environment**: `dev` (local) vs `remote` (Vercel)
-- **Data Source**: `stub` (canned) vs `live` (Oak API)
-- **Auth**: `auth` (Clerk enforced) vs `noauth` (bypass enabled)
+- Leave the flag unset (or explicitly `false`) for any test that is meant to prove auth enforcement.
+- Set the flag **only** when the scenario’s purpose is unrelated to auth (tool execution flows, protocol validation, Oak API integration, DX fixtures).
+- Every remaining usage must carry an inline comment explaining why auth is intentionally bypassed and which auth-focused test exercises the behaviour instead.
+- The smoke harness defaults to auth enabled in `smoke:dev:auth` and `smoke:dev:live:auth`. Other modes enable the flag to prioritise non-auth assertions, and they document the rationale inline.
+- `smoke:dev:auth` intentionally injects the fake Clerk keys defined in `smoke-tests/modes/local-stub-auth.ts` so the stub run never leaves the process. Use `smoke:dev:live:auth` (or enable `SMOKE_CLERK_PROGRAMMATIC_AUTH` while running live modes) when you need to exercise the real PKCE flow with valid credentials.
 
-### Production Configuration
+## Command Reference
 
-`remote + live + auth` - This is what runs on Vercel
+| Goal                      | Command                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------- |
+| Unit + integration suites | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test`                |
+| System suites             | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e`            |
+| Auth smoke (stub tools)   | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth`      |
+| Auth smoke (live tools)   | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live:auth` |
+| Stub smoke                | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:stub`      |
+| Live smoke (bypass)       | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:live`      |
+| Deployed smoke            | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote`        |
+| Manual Clerk validation   | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`         |
 
-### Valid Test Scenarios
+## Quality Gates
 
-| Scenario                  | Environment | Data | Auth   | Purpose                      | Critical?   |
-| ------------------------- | ----------- | ---- | ------ | ---------------------------- | ----------- |
-| **Production-Equivalent** | dev         | live | auth   | Proves complete stack works  | ✅ YES      |
-| **Remote Health**         | remote      | live | auth   | Proves deployment successful | ✅ YES      |
-| **MCP Protocol**          | dev         | stub | noauth | Fast protocol testing        | Recommended |
-| **Oak API Integration**   | dev         | live | noauth | API integration testing      | Recommended |
+- Run `pnpm qg` at the workspace root after documentation or code changes.
+- After auth-related changes, also run `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth` to confirm the stub-auth harness.
+- Before shipping, repeat `pnpm qg` at the repo root to ensure no other workspaces regressed.
+- Manual Clerk validation (`trace:oauth`) is required after rotating credentials or adjusting redirect URIs; store artefacts in `temp-secrets/` for audit history.
 
-### Auth Bypass Mechanism
+## Troubleshooting
 
-**Purpose**: Developer convenience for local testing
-
-**How it works**:
-
-```typescript
-const shouldBypassAuth =
-  process.env.REMOTE_MCP_ALLOW_NO_AUTH === 'true' &&
-  process.env.NODE_ENV === 'development' &&
-  !process.env.VERCEL;
-```
-
-**Safety**:
-
-- Only works in `NODE_ENV=development`
-- Automatically disabled on Vercel
-- Automatically disabled in production
-
-**Testing Implications**:
-
-- Auth validation logic still exists (tested in integration tests)
-- Bypass just skips calling the middleware
-- E2E tests prove both auth enforcement AND bypass work correctly
-
-## Running Tests
-
-### Local Development
-
-```bash
-# Fast iteration (unit + integration only)
-pnpm test
-
-# Full test suite (includes E2E)
-pnpm test:e2e
-
-# Quick smoke test (stub mode, no network)
-pnpm smoke:dev:stub
-
-# Production-equivalent smoke (set SMOKE_USE_HEADLESS_OAUTH=true for automated headless flow)
-SMOKE_USE_HEADLESS_OAUTH=true pnpm smoke:dev:live:auth
-
-# Full quality gate (all checks)
-pnpm qg
-```
-
-### CI/CD
-
-```bash
-# GitHub Actions runs (from root):
-pnpm qg
-```
-
-## Test File Organization
-
-```text
-apps/oak-curriculum-mcp-streamable-http/
-├── src/
-│   ├── *.unit.test.ts          # Unit tests (colocated with source)
-│   └── *.integration.test.ts   # Integration tests (colocated)
-├── e2e-tests/
-│   ├── auth-enforcement.e2e.test.ts    # Auth enforcement (critical)
-│   ├── auth-bypass.e2e.test.ts         # Auth bypass (DX feature)
-│   ├── stub-mode.e2e.test.ts           # MCP protocol with stubs
-│   ├── live-mode.e2e.test.ts           # Oak API integration
-│   └── ... (other E2E tests)
-└── smoke-tests/
-    ├── smoke-dev-stub.ts               # Fast local check
-    ├── smoke-dev-live-auth.ts          # Pre-deployment validation
-    ├── smoke-remote.ts                 # Production health
-    └── modes/
-        ├── local-stub.ts
-        ├── local-live-auth.ts
-        └── remote.ts
-```
-
-## What Each Layer Proves
-
-### Unit Tests Prove
-
-- ✅ Environment schema validates Clerk keys
-- ✅ Pure functions work correctly
-- ✅ Tool handlers can be called
-
-### Integration Tests Prove
-
-- ✅ Clerk middleware rejects unauthorized requests (401)
-- ✅ Clerk middleware accepts valid tokens
-- ✅ OAuth discovery endpoints expose correct metadata
-- ✅ App initialization works with all components
-
-### E2E Tests Prove
-
-- ✅ Running server enforces auth (production-equivalent)
-- ✅ Running server allows bypass for local dev
-- ✅ MCP protocol works end-to-end
-- ✅ Oak API integration works
-- ✅ Security features work (CORS, DNS rebinding)
-
-### Smoke Tests Prove
-
-- ✅ Quick smoke: System boots and responds
-- ✅ Auth smoke: Production config works locally (headless Playwright helper by default; manual trace remains available by unsetting `SMOKE_USE_HEADLESS_OAUTH`)
-- ✅ Remote smoke: Deployment is healthy
-
-## Troubleshooting Test Failures
-
-### "401 Unauthorized" in tests that should pass
-
-- **Check**: Is auth bypass properly configured?
-- **Fix**: Verify `REMOTE_MCP_ALLOW_NO_AUTH=true` and `NODE_ENV=development`
-
-### "Expected 401, got 200" in auth enforcement tests
-
-- **Check**: Is auth bypass accidentally enabled?
-- **Fix**: Verify `NODE_ENV=test` (not `development`)
-
-### "Cannot find module '@clerk/...'"
-
-- **Check**: Are dependencies installed?
-- **Fix**: Run `pnpm install`
-
-### Tests pass locally but fail in CI
-
-- **Check**: Environment variables differ between local and CI
-- **Fix**: Review `.env.example` and CI configuration
-
-## Adding New Tests
-
-**Always use TDD**:
-
-1. Write failing test (Red)
-2. Run test to prove it fails
-3. Implement feature (Green)
-4. Run test to prove it passes
-5. Refactor if needed
-
-**Choose the right layer**:
-
-- Pure function? → Unit test
-- Multiple units? → Integration test
-- Running system? → E2E test
-- Critical path? → Smoke test
-
-**Keep tests deterministic**:
-
-- ONE setup per file
-- NO conditional logic
-- Clear, instant failure signals
-
-## Auth Enforcement vs Auth Bypass
-
-### When Auth is Enforced
-
-Auth enforcement happens when:
-
-- `NODE_ENV` is NOT `development`, OR
-- `VERCEL` environment variable is set, OR
-- `REMOTE_MCP_ALLOW_NO_AUTH` is not `'true'`
-
-Tests that prove auth enforcement:
-
-- `auth-enforcement.e2e.test.ts` - Full E2E suite
-- `smoke:dev:live:auth` - Production-equivalent smoke (manual today, will automate once headless OAuth capture is in place)
-- Integration tests in `clerk-auth-middleware.integration.test.ts`
-
-### When Auth is Bypassed
-
-Auth bypass happens when ALL of:
-
-- `REMOTE_MCP_ALLOW_NO_AUTH === 'true'`, AND
-- `NODE_ENV === 'development'`, AND
-- `VERCEL` is not set
-
-Tests that prove auth bypass works:
-
-- `auth-bypass.e2e.test.ts` - DX feature validation
-- `smoke:dev:stub` - Uses bypass implicitly
-- Unit tests - Use bypass for testing logic
-
-## Environment Variables for Testing
-
-### Required for ALL tests
-
-- `CLERK_PUBLISHABLE_KEY` - Valid Clerk public key
-- `CLERK_SECRET_KEY` - Valid Clerk secret key (or dummy for tests)
-- `OAK_API_KEY` - Oak Curriculum API key (for live tests)
-
-### Optional for specific scenarios
-
-- `REMOTE_MCP_ALLOW_NO_AUTH=true` - Enable auth bypass (dev only)
-- `NODE_ENV=development` - Required for bypass to work
-- `VERCEL=1` - Simulates Vercel environment (disables bypass)
-
-### Example: E2E Auth Enforcement Setup
-
-```typescript
-process.env.NODE_ENV = 'test'; // NOT development
-process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_...';
-process.env.CLERK_SECRET_KEY = 'sk_test_dummy';
-delete process.env.REMOTE_MCP_ALLOW_NO_AUTH; // Auth ENABLED
-delete process.env.VERCEL;
-```
-
-### Example: E2E Auth Bypass Setup
-
-```typescript
-process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true'; // Bypass ENABLED
-process.env.NODE_ENV = 'development'; // Required
-process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_...';
-process.env.CLERK_SECRET_KEY = 'sk_test_dummy';
-delete process.env.VERCEL; // Required for bypass
-```
-
-## Quality Gate
-
-The quality gate (`pnpm qg`) runs all checks in order:
-
-1. **Format check** - Prettier formatting
-2. **Type check** - TypeScript compilation
-3. **Lint** - ESLint rules
-4. **Markdown lint** - Markdown formatting
-5. **Unit + Integration tests** - `pnpm test`
-6. **UI tests** - Playwright (if configured)
-7. **E2E tests** - `pnpm test:e2e`
-8. **Stub smoke** - `pnpm smoke:dev:stub`
-9. **Live smoke** - `pnpm smoke:dev:live`
-10. **Remote smoke** - `pnpm smoke:remote`
-
-Run `smoke:dev:live:auth` before deploying to production or when validating Clerk changes. It will join the automated gate once the headless OAuth path eliminates the manual browser prerequisite.
-
-### Authenticated smoke automation roadmap
-
-- Today the authenticated assertion (`assertAuthenticatedToolCall`) is gated behind `SMOKE_CLERK_PROGRAMMATIC_AUTH=true`. Without a trusted browser handshake Clerk rejects programmatic tokens with `x-clerk-auth-reason: dev-browser-missing`.
-- We will develop a headless OAuth flow so the smoke harness can mint a bearer without any manual browser hops. Expect new env vars (for example Playwright storage state paths) once this lands.
-- The browser-based flow will remain available as a tagged scenario (`@auth-smoke`) with manual instructions captured from `prepare-browser-handshake.ts`. Use it for pre-deploy confidence or investigative work that must mirror the real OAuth journey.
-
-## Future Enhancements
-
-### Phase 3 TODO
-
-- Add E2E test with real Clerk OAuth token via Device Flow
-- Add OAuth discovery assertions to smoke tests
-- Implement token acquisition helper for remote smoke tests
-- Add performance benchmarks
-
-### Deferred
-
-- Contract testing with Pact (if needed)
-- Mutation testing with Stryker (already configured)
-- Visual regression testing (not applicable to API)
+- **Auth test failing with bypass enabled** – confirm `DANGEROUSLY_DISABLE_AUTH` is explicitly set to `'false'` (string) in the test harness, or removed entirely.
+- **Smoke harness choking on Clerk config** – re-run `pnpm smoke:dev:auth` after exporting fresh Clerk environment variables; the stub mode still uses real middleware.
+- **Fixture drift** – update `auth-scenarios.ts` and its unit test first, then propagate to integration/E2E/smoke suites so expectations stay aligned.

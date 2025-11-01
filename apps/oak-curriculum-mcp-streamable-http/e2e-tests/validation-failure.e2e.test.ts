@@ -17,7 +17,9 @@ function parseFirstSseData(raw: string): unknown {
 }
 
 async function callWithBadArgs(): Promise<{ status: number; text: string }> {
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for E2E testing
+  // Disable auth – validation tests isolate Zod enforcement.
+  // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1';
   process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
   const app = createApp();

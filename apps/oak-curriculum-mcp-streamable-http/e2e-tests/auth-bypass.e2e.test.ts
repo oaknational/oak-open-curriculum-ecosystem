@@ -21,11 +21,13 @@ describe('Auth Bypass for Development (E2E)', () => {
     // Save current environment
     const previous = { ...process.env };
 
-    // Configure for auth bypass
-    process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for testing
+    // Configure for auth bypass – this suite proves the DX helper works.
+    // Auth enforcement is asserted in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     process.env.CLERK_SECRET_KEY = 'sk_test_dummy_for_testing';
     process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test-api-key';
+    process.env.ALLOWED_HOSTS = 'localhost,127.0.0.1,::1'; // Allow localhost for DNS rebinding protection
 
     app = createApp();
     restoreEnv = () => {

@@ -2,22 +2,8 @@
 
 > Purpose: produce a reproducible set of artefacts that describes the Clerk OAuth PKCE flow end to end.  
 > Output: captured network trace (HAR), Playwright trace, `.tmp/clerk-handshake.json` snapshot, and automated summary document covering each redirect hop.
-
-## Headless Automation Shortcut
-
-When you do not need a full trace and simply want a valid OAuth access token for smoke tests, use the new headless helper:
-
-```bash
-pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http headless:oauth
-```
-
-This command:
-
-1. Creates a synthetic Clerk user/session/OAuth application via the backend API.
-2. Launches headless Chromium, injects the generated dev-browser cookies plus `__clerk_testing_token`, and follows the authorize redirect automatically.
-3. Exchanges the authorization code for an access token, writes a JSON artefact (`temp-secrets/headless-oauth-token-<timestamp>.json`), prints the token to stdout, and revokes the temporary Clerk resources.
-
-Set `SMOKE_USE_HEADLESS_OAUTH=true` before running `smoke:dev:live:auth` to have the harness call this helper automatically. Leave the flag unset to continue using the backend API flow or the manual trace workflow described below.
+>
+> **Note**: This tool is for one-off Clerk configuration validation. Regular authentication behaviour testing uses mocked Clerk responses in automated tests. See `TESTING.md` for details.
 
 ## Prerequisites
 
@@ -147,7 +133,7 @@ The only manual step required is:
 
 ## Viewing Traces
 
-- **HAR files**: Can be opened in Chrome DevTools (Network tab → Import HAR), or HAR viewers like [HAR Analyzer](https://toolbox.googleapps.com/apps/har_analyzer/)
+- **HAR files**: Can be opened in Chrome DevTools (Network tab → Import HAR), or HAR viewers like [HAR Analyser](https://toolbox.googleapps.com/apps/har_analyzer/)
 - **Playwright traces**: View interactively with:
 
   ```bash

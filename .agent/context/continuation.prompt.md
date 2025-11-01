@@ -1,120 +1,39 @@
 # Continuation Prompt: Oak MCP Ecosystem
 
-**Use this prompt in a fresh chat session to resume work efficiently.**
+Use this prompt to spin up a fresh chat and regain the current working context quickly.
 
----
+## Startup Checklist
 
-## Context Loading Prompt
+1. Read:
+   - `@.agent/context/context.md`
+   - `@.agent/directives-and-memory/rules.md`
+   - `@.agent/directives-and-memory/schema-first-execution.md`
+   - `@docs/agent-guidance/testing-strategy.md`
+   - `@.agent/plans/mcp-oauth-implementation-plan.md`
+2. Summarise the current state (≤4 sentences) – highlight mock coverage, refreshed documentation, bypass audit outcome, and pending quality gates.
+3. List the top three priorities (`pnpm qg` at repo root, `pnpm smoke:dev:auth`, log outcomes – unless direction changes).
+4. Confirm with user which priority (or alternative) to pick up.
 
-```text
-I'm working on the Oak MCP Ecosystem monorepo. It contains MCP servers, SDKs, and support libraries
-that expose Oak's open curriculum data.
+_Remember to apply the "could it be simpler?" first-question rule and maintain TDD discipline._
 
-Please read:
-1. @.agent/context/context.md – latest state snapshot
-2. @.agent/directives-and-memory/rules.md – repository rules (mandatory)
-3. @.agent/directives-and-memory/schema-first-execution.md – schema-first mandate
-4. @docs/agent-guidance/testing-strategy.md – TDD/testing guidelines
-5. @.agent/plans/high-level-plan.md – active strategic priorities
+## Current Highlights
 
-After reading, please:
-- Summarise the current state in ≤4 sentences.
-- List the top 3 priorities.
-- Ask which priority to tackle (or if there's a different task).
+- Two-tier auth testing: `trace:oauth` for one-off Clerk validation; mocks everywhere else (unit/integration/E2E/smoke).
+- Mock fixtures + tests are in place (`auth-scenarios.*`, `mock-clerk-middleware.*`, `auth-enforcement.e2e.test.ts`).
+- New `smoke:dev:auth` (local-stub-auth mode) exercises auth enforcement on running server with stub tools.
+- Outstanding work: rerun repo-level quality gate, execute `pnpm smoke:dev:auth`, and log both results.
 
-Reminders:
-- Always apply TDD (Red → Green → Refactor).
-- All runtime types flow from the Open Curriculum OpenAPI via `pnpm type-gen`.
-- Avoid type shortcuts (`any`, `as`, `!`, broad records).
-- Prefer clarity and specificity over speed.
-```
+## Resuming Clerk OAuth Work
 
----
+- Review `.agent/plans/mcp-oauth-implementation-plan.md` & `context.md` for latest status and quality-gate expectations.
+- Execute quality gates: `pnpm qg` (repo root) and `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth`.
+- Record outcomes in the plan/context documents and flag any regressions.
 
-## Quick Start Snippets
+## Quality Gate Reminder
 
-### Resume Auth Refactor / Smoke Automation
+- Post-changes, run `pnpm qg` (repo root) followed by `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth` (stub-auth mode).
+- Manual `pnpm smoke:dev:live:auth` remains optional for real Clerk validation; not part of CI/CD.
 
-```text
-I want to continue the auth refactor work around Clerk.
+## Archives
 
-Read:
-1. @.agent/plans/auth-architecture-refactor.md – up-to-date auth plan
-2. @.agent/context/context.md – current state summary
-
-Context:
-- All quality gates and smoke modes (stub/live/remote) pass.
-- Headless Playwright helper (`headless:oauth`) provisions the Clerk handshake and launches Chromium, but Clerk still redirects to the hosted sign-in page and times out without provider credentials.
-- Clerk M2M tokens aren’t suitable for `mcpAuthClerk`; the harness still switches between API and headless flows via `SMOKE_USE_HEADLESS_OAUTH`, with manual `@auth-smoke` traces as fallback.
-- Automated trace capture (`pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`) already produced HAR + Playwright traces under `apps/oak-curriculum-mcp-streamable-http/temp-secrets/`.
-- Phase 3A plan now needs a strategy to satisfy the hosted login (inject provider creds, attach to Chrome, or backend acknowledgement) before we can mark the headless automation complete.
-
-Please:
-1. Recommend how to unblock the hosted login (e.g. env vars for provider credentials vs Chrome connection).
-2. Describe how `SMOKE_USE_HEADLESS_OAUTH` toggles the harness between helper and API flows, including artefact handling and cleanup.
-3. Confirm whether to implement the automation fix immediately or capture updated documentation/prompts first.
-```
-
-### Resume Curriculum Ontology Work
-
-```text
-I want to pick up the Curriculum Ontology resource work.
-
-Read:
-1. @.agent/plans/curriculum-ontology-resource-plan.md
-2. @docs/architecture/curriculum-ontology.md
-3. @.agent/plans/mcp-aggregated-tools-type-gen-refactor-plan.md
-
-Please:
-1. Recap why the aggregated tools refactor is still a prerequisite.
-2. Ask whether to tackle the refactor first, prototype a shimmed ontology resource, or pause.
-```
-
-### Resume API Wishlist Work
-
-```text
-I want to continue the Upstream API metadata wishlist.
-
-Read:
-1. @.agent/plans/upstream-api-metadata-wishlist.md
-
-Please:
-1. Summarise the highest-priority wishlist items.
-2. Ask if the next step is sharing with the API team, expanding the list, or drafting
-   implementation plans.
-```
-
-### Starting Something New
-
-```text
-I have a new task: [describe task].
-
-Please:
-- Read @.agent/context/context.md and the repository rules.
-- Check for related plans in .agent/plans/.
-- Confirm alignment with @.agent/plans/high-level-plan.md.
-- Ask clarifying questions before proceeding.
-```
-
----
-
-## Quality Gate Checklist
-
-- `pnpm format:root`
-- `pnpm markdownlint:root`
-- `pnpm type-gen`
-- `pnpm build`
-- `pnpm type-check`
-- `pnpm lint`
-- `pnpm test`
-
-Run sequentially; all must pass before committing or opening a PR.
-
----
-
-## Common Pitfalls to Avoid
-
-- Reintroducing module-level side effects in Express apps.
-- Skipping tests or using `process.exit` to hide failing assertions.
-- Forgetting to clean up temporary Clerk users/sessions in smoke helpers.
-- Assuming session tokens are sufficient for OAuth-protected endpoints—use real OAuth access tokens generated through the approved flow.
+Legacy quick-start snippets and historical prompts are stored in `.agent/context/archive/prompts/continuation.prompt.archive.md`.

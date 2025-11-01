@@ -39,7 +39,9 @@ function configureDevEnvironment(): () => void {
   const previousAuth = process.env.DANGEROUSLY_DISABLE_AUTH;
   const previousBaseUrl = process.env.BASE_URL;
   const previousCanonicalUri = process.env.MCP_CANONICAL_URI;
-  process.env.DANGEROUSLY_DISABLE_AUTH = 'true'; // Disable auth for testing
+  // Disable auth – this suite validates success envelope formatting.
+  // Auth enforcement is exercised in auth-enforcement.e2e.test.ts and smoke-dev-auth.
+  process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
   process.env.BASE_URL = 'http://localhost:3333';
   process.env.MCP_CANONICAL_URI = previousCanonicalUri ?? 'http://localhost:3333/mcp';
   return () => {

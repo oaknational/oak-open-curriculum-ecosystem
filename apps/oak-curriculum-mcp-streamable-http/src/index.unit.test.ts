@@ -46,7 +46,8 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     // Use real Clerk key format for middleware initialization
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
-    // Disable auth for unit tests (testing tool execution, not auth)
+    // Disable auth for unit tests – auth enforcement is proven in auth-enforcement.e2e.test.ts
+    // and smoke-dev-auth; these unit tests only exercise handler wiring.
     process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     vi.restoreAllMocks();
     app = createApp();
