@@ -16,7 +16,7 @@ console.log('================================');
 // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
-process.env.TRACE_MCP_FLOW = 'true';
+process.env.LOG_LEVEL = 'debug';
 
 async function testExactSmokeRequest() {
   console.log('\n🔥 Starting server...');

@@ -16,12 +16,7 @@ import {
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
 import { logger } from './logging.js';
-import {
-  isTracingEnabled,
-  createTracingMiddleware,
-  dumpRouteStack,
-  logRequestRoute,
-} from './trace-mcp-flow.js';
+import { createTracingMiddleware, dumpRouteStack, logRequestRoute } from './trace-mcp-flow.js';
 import { readSecurityEnv } from './security-config.js';
 
 function addHealthEndpoints(app: Express, corsMw: RequestHandler): void {
@@ -52,8 +47,9 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   app.__appId = appId;
   app.use(expressJson({ limit: '1mb' }));
 
-  // Add tracing middleware if enabled
-  if (isTracingEnabled()) {
+  const debugLoggingEnabled = logger.isLevelEnabled?.('DEBUG') ?? false;
+
+  if (debugLoggingEnabled) {
     logger.debug(`[TRACE] Registering global request logger on app #${String(appId)}`);
     app.use((req, res, next) => {
       logger.debug(
@@ -66,9 +62,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
       };
       next();
     });
-    app.use(createTracingMiddleware('express.json'));
-  } else {
-    console.debug('Tracing disabled');
+    app.use(createTracingMiddleware('express.json', logger));
   }
 
   const { mode, allowedHosts, allowedOrigins } = readSecurityEnv();
@@ -78,9 +72,9 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   mountStaticAssets(app); // Static assets for favicon/logo (works locally and on Vercel)
   addRootLandingPage(app);
   // Add tracing middleware to /mcp path BEFORE any other middleware
-  if (isTracingEnabled()) {
+  if (debugLoggingEnabled) {
     logger.debug('[TRACE] Registering /mcp tracing middleware');
-    app.use('/mcp', createTracingMiddleware('ensureMcpAcceptHeader'));
+    app.use('/mcp', createTracingMiddleware('ensureMcpAcceptHeader', logger));
   }
 
   app.use('/mcp', ensureMcpAcceptHeader); // Ensure proper Accept header for MCP requests
@@ -94,13 +88,13 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   });
 
   // Add tracing around readiness gate
-  if (isTracingEnabled()) {
-    app.use(createTracingMiddleware('readiness-gate'));
+  if (debugLoggingEnabled) {
+    app.use(createTracingMiddleware('readiness-gate', logger));
   }
 
   // Dump route stack if tracing enabled
-  if (isTracingEnabled()) {
-    dumpRouteStack(app);
+  if (debugLoggingEnabled) {
+    dumpRouteStack(app, logger);
   }
 
   return app;
@@ -119,10 +113,7 @@ function setupAuthRoutes(app: Express, coreTransport: StreamableHTTPServerTransp
       '/mcp',
       (_req, _res, next) => {
         logger.debug('🔓 POST /mcp route hit (auth disabled)');
-        if (isTracingEnabled()) {
-          logger.debug('[TRACE] -> POST /mcp route handler (auth disabled)');
-          logRequestRoute(logger, _req);
-        }
+        logRequestRoute(logger, _req);
         next();
       },
       createMcpHandler(coreTransport),
@@ -131,10 +122,7 @@ function setupAuthRoutes(app: Express, coreTransport: StreamableHTTPServerTransp
     app.get(
       '/mcp',
       (_req, _res, next) => {
-        if (isTracingEnabled()) {
-          logger.debug('[TRACE] -> GET /mcp route handler (auth disabled)');
-          logRequestRoute(logger, _req);
-        }
+        logRequestRoute(logger, _req);
         next();
       },
       createMcpHandler(coreTransport),

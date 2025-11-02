@@ -1,136 +1,88 @@
 <!-- markdownlint-disable -->
 
-# MCP OAuth 2.1 Implementation Plan (Clerk Integration)
+# MCP Streamable HTTP Observability Plan
 
-**Status**: Phase 3 (Authentication Behaviour Testing) – documentation and bypass audit completed; final quality gates outstanding  
-**Last Reviewed**: 2025-11-01  
-**Scope**: `apps/oak-curriculum-mcp-streamable-http`
+**Status**: Phase 1 – logging consolidation & instrumentation design  
+**Last Reviewed**: 2025-11-02  
+**Scope**: `apps/oak-curriculum-mcp-streamable-http`, `apps/oak-curriculum-mcp-stdio`, `packages/libs/logger`
 
 ## Snapshot
 
-- Phases 0–2 (Clerk setup, integration, comprehensive testing) remain complete; last full `pnpm qg` pass was 2025-10-30.
-- Automation strategy confirmed: `trace:oauth` retained for one-off Clerk validation; all routine auth verification is mock-based.
-- Mock fixtures (`auth-scenarios.ts`, `mock-clerk-middleware.ts`) plus unit/integration/E2E suites are green; documentation now reflects the fixture catalogue and two-tier auth strategy.
-- New smoke mode (`local-stub-auth`) and `pnpm smoke:dev:auth` cover auth enforcement with stub tools and mocks; README/TESTING link directly to these flows.
-- `DANGEROUSLY_DISABLE_AUTH` usage audited – every bypass site documents its intent and references auth-enforcement coverage.
-- Remaining work: rerun the repo-level quality gate and capture the results alongside the stub-auth smoke run.
+- The ad-hoc TRACE flag is retired; debug verbosity now flows purely through `LOG_LEVEL`. Remaining trace helpers will be deleted in favour of standard logging.
+- The HTTP server wraps the shared logger, but the stdio server still ships its own bespoke implementation. We will migrate both onto an enhanced `@oaknational/mcp-logger` that supports opt-in file sinks and runtime-configured destinations.
+- Hosted deployments (Vercel) must default to stdout-only logging, while the stdio server must default to file-only logging so its stdout remains reserved for MCP protocol frames. Configuration must remain simple and well documented.
+- Goal: deliver shared logging primitives that satisfy both runtime requirements, expose structured examples/docs, and unblock deeper transport instrumentation for diagnosing hosted timeouts.
 
-## Two-Tier Testing Approach
+## Phase Outline
 
-### Tier 1: One-Off Clerk Configuration Validation
+| Phase   | Focus                     | Definition of Done                                                                                                                                                                                |
+| ------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 | Logging consolidation     | Shared logger gains opt-in file sink support (doc+tsdoc examples); HTTP and stdio servers consume the shared implementation; legacy trace module removed; configuration documented.               |
+| Phase 2 | Transport instrumentation | Integration tests stub `StreamableHTTPServerTransport` to simulate slow responses and errors, asserting structured logs. Implementation wires timing/error hooks and leverages the shared logger. |
+| Phase 3 | Documentation & rollout   | README / Vercel config / `.env.example` updated; SDK logging guidance added; quality gates rerun; deployment observations captured.                                                               |
 
-**Purpose**: Verify Clerk is wired correctly during initial setup or when Clerk configuration changes.
+## Tranches & SMART Tasks (Phase 1)
 
-**Tool**: `pnpm trace:oauth` (manual browser flow with HAR + Playwright trace capture)
+### Tranche 1 – Retire Trace Middleware
 
-**Characteristics**:
+| Task                            | Acceptance Criteria                                                                                                           | Implementation Steps                                                                    | Validation                                                                                                                            |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.1 Delete trace module         | `trace-mcp-flow.*` removed; build succeeds with no missing imports; docs contain no trace references                          | Remove files; update `index.ts`, tests, and smoke scripts; regenerate typings as needed | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint && type-check`; content search confirms absence of `TRACE` prefix |
+| 1.2 Replace residual trace logs | All former trace calls routed through `logger.debug`; no `[TRACE]` literals remain unless part of message content requirement | Audit logging statements; rewrite to concise debug messages; update tests/snapshots     | `pnpm vitest run apps/oak-curriculum-mcp-streamable-http/src/**/*.test.ts`; grep to confirm absence of `[TRACE]`                      |
 
-- Manual browser interaction required
-- Captures complete OAuth flow for analysis
-- Validates that Clerk metadata endpoints, redirect URIs, and scopes are correctly configured
-- Produces artefacts in `temp-secrets/` for troubleshooting
+### Tranche 2 – Enhance Shared Logger
 
-**Frequency**: Once during setup, or when Clerk config changes
+| Task                                                          | Acceptance Criteria                                                                                                                          | Implementation Steps                                                                                       | Validation                                                                                                                 |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 2.1 Implement configurable sinks in `@oaknational/mcp-logger` | New factory exposes stdout-only and file-only modes; file sink initialises path safely; tsdoc includes example snippets for HTTP/stdio usage | Extend logger package with optional sink config, including env-driven defaults; add tsdoc + README section | `pnpm --filter @oaknational/mcp-logger lint && test`; run generated docs (`pnpm --filter @oaknational/mcp-logger doc-gen`) |
+| 2.2 Document configuration                                    | Authored docs and `.env.example` entries describe `LOG_LEVEL`, `MCP_STREAMABLE_HTTP_FILE_LOGS`, and stdio-specific flags                     | Update logging package docs + app READMEs; ensure instructions highlight Vercel vs local differences       | `pnpm markdownlint:root`; manual review for clarity                                                                        |
 
-**CI/CD Status**: Not required in automated pipelines
+### Tranche 3 – Adopt Shared Logger in Apps
 
-**Usage**: Run manually when:
+| Task                            | Acceptance Criteria                                                                                          | Implementation Steps                                                                                    | Validation                                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 3.1 Migrate streamable HTTP app | Local logger module deleted; app imports shared helper; unit tests cover stdout default & optional file sink | Replace logger wiring, adjust tests, update env schema                                                  | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint && test && type-check`             |
+| 3.2 Migrate stdio app           | Stdio app relies solely on shared helper configured for file-only logging; stdout remains clean              | Replace logger wiring in stdio server; remove bespoke code; add/adjust tests for file logging behaviour | `pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint && test`; manual run to confirm stdout empty |
+| 3.3 Configuration parity        | `.env.example`, docs, and deployment guides reflect new logger usage across both apps                        | Synchronise env samples, docs, and scripts                                                              | `pnpm markdownlint:root`; manual doc review                                                            |
 
-- Setting up Clerk integration for the first time
-- Changing Clerk application configuration
-- Debugging OAuth flow issues
+## Upcoming Work (Phase 2)
 
-### Tier 2: Regular Authentication Behavior Testing (Mocked)
+- Create `handlers.integration.test.ts` to drive transport timing/error instrumentation.
+- Implement request duration measurement, transport hook logging, and session metadata emission via the shared logger.
+- Evaluate SDK-level logging enhancements once server-side visibility improves.
 
-**Purpose**: Verify OUR code handles authentication correctly at each layer.
+## Phase 3 Checklist
 
-**Approach**: Mock Clerk responses at system boundaries using test fixtures
-
-**Layers**:
-
-- **Unit Tests**: `auth-scenarios.unit.test.ts` proves fixtures stay consistent across schema churn
-- **Integration Tests**: `mock-clerk-middleware.integration.test.ts` validates middleware wiring and failure responses
-- **E2E Tests**: `auth-enforcement.e2e.test.ts` documents enforcement path; future mocked-token happy-path to be layered on fixtures
-- **Smoke Tests**: `smoke:dev:auth` (local-stub-auth) hits running server with stub tools while leaving auth enabled; it always uses the fake Clerk keys baked into `local-stub-auth` so the run never reaches out to Clerk. Use `smoke:dev:live:auth` when the real PKCE helper needs to be exercised.
-
-**Characteristics**:
-
-- Fast and deterministic (no external network calls)
-- No dependency on external Clerk service
-- Tests run on every commit in CI/CD
-- Proves our code handles valid/invalid tokens, missing headers, etc. correctly
-
-**Test Fixtures**: Located in `src/test-fixtures/`:
-
-- `auth-scenarios.ts` – Predefined auth test scenarios
-- `auth-scenarios.unit.test.ts` – Fixture regression tests (5 core scenarios)
-- `mock-clerk-middleware.ts` – Mock Clerk middleware helpers
-- `mock-clerk-middleware.integration.test.ts` – Middleware composition tests
-
-## Objectives
-
-1. Complete Phase 3 by rerunning the repo-level quality gate after documentation/audit updates
-2. Keep auth scenario coverage aligned with SDK schema updates (extend fixtures as needed)
-3. Maintain `DANGEROUSLY_DISABLE_AUTH` guidance (inline comments + TESTING/README) as new scenarios appear
-4. Record outcomes of `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth` alongside the repo-level `pnpm qg`
-
-## Phase 3: Authentication Behavior Testing
-
-### Status: In Progress (quality gates pending)
-
-Mock coverage and documentation are aligned; bypass audit is complete. Final step is rerunning quality gates and recording the results.
-
-### Tasks
-
-1. ~~Remove headless OAuth automation code (no longer needed)~~ ✅ 2025-10-31
-2. ~~Create authentication test fixtures for mocking Clerk behavior~~ ✅ (`auth-scenarios.ts`, `mock-clerk-middleware.ts`)
-3. ~~Implement mock-based tests at unit, integration, E2E, and smoke levels~~ ✅ (`auth-scenarios.unit.test.ts`, `mock-clerk-middleware.integration.test.ts`, `smoke:dev:auth`)
-4. ~~Audit and optimise `DANGEROUSLY_DISABLE_AUTH` usage~~ ✅ Inline comments now reference auth-enforcement coverage and rationale (2025-11-01)
-5. ~~Update documentation to reflect two-tier approach~~ ✅ README + TESTING refreshed with manual vs mock strategy and command matrix (2025-11-01)
-6. Run repo-level `pnpm qg` after tests/docs and record it with `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth` ➡️ **Pending**
-
-### When to Use DANGEROUSLY_DISABLE_AUTH
-
-Based on what each test is trying to prove:
-
-**Use it when**:
-
-- Testing tool execution logic (auth not the focus)
-- Testing MCP protocol compliance (auth not the focus)
-- Testing Oak API integration (auth not the focus)
-- Fast iteration during development
-
-**Don't use it when**:
-
-- Testing authentication behavior (auth is the focus)
-- Testing OAuth discovery endpoints (auth is the focus)
-- Testing security features (auth is the focus)
-- Proving auth enforcement works correctly
-
-All bypass usage is now annotated with inline comments describing the intent and naming the complementary auth-enforcing suite.
+- Update app docs & env samples for the unified logger configuration.
+- Document logging usage patterns in the SDK (tsdoc + authored guide).
+- Run `pnpm qg` and smoke suites; capture outcomes here.
+- Observe hosted deployments post-release and note follow-up actions.
 
 ## Deliverables
 
-- Authentication test fixtures (`src/test-fixtures/`)
-- Mock-based tests covering all auth scenarios
-- Updated documentation clearly explaining two-tier approach
-- Clean removal of headless OAuth automation code
-- Audit report on `DANGEROUSLY_DISABLE_AUTH` usage with refactoring recommendations
+- Shared logging package supporting configurable sinks with extensive tsdoc & authored documentation.
+- HTTP and stdio servers consuming the shared logger without bespoke implementations.
+- Legacy trace code removed; debug logging governed entirely by `LOG_LEVEL`.
+- Transport instrumentation tests & implementation (Phase 2).
+- Updated project documentation for logging configuration.
 
-## Risks & Considerations
+## Risks & Mitigations
 
-- Tests must properly simulate Clerk behavior to catch integration issues
-- Mock middleware must continue to mirror Clerk’s observable behavior (headers, auth attachment, errors)
-- Manual `trace:oauth` remains the single point of real Clerk validation; documentation must highlight when to run it
-- Token expiry/refresh scenarios are not yet modelled; add fixtures when Clerk schema exposes them (tracked follow-up)
+- **Risk**: Stdio server logging to stdout breaks the protocol.  
+  **Mitigation**: Default the shared helper to file-only mode for stdio and cover with tests.
+- **Risk**: File logging unsupported on Vercel.  
+  **Mitigation**: Keep HTTP default to stdout only; make file sink opt-in via documented flag.
+- **Risk**: Configuration complexity.  
+  **Mitigation**: Provide simple env-driven toggles and detailed examples in docs/tsdoc.
 
 ## References
 
-- Detailed historical checklists and phase breakdowns: `.agent/plans/archive/mcp-oauth-implementation-plan.archive.md`
-- Supporting docs: `apps/oak-curriculum-mcp-streamable-http/docs/clerk-oauth-trace-instructions.md`
-- Auth refactor context: `.agent/plans/auth-architecture-refactor.md`
+- Logging utilities: `packages/libs/logger`
+- Stdio server wiring: `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`
+- HTTP server wiring: `apps/oak-curriculum-mcp-streamable-http/src/index.ts`
+- MCP transport reference: `@modelcontextprotocol/sdk/server/streamableHttp`
 - Testing strategy: `apps/oak-curriculum-mcp-streamable-http/TESTING.md`
 
 ---
 
-_For the full historical record and exhaustive task lists, see the archive file referenced above._
+_For historical Clerk/OAuth work, consult `.agent/plans/archive/mcp-oauth-implementation-plan.archive.md`._

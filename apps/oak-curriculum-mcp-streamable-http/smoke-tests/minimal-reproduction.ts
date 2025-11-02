@@ -19,12 +19,12 @@ console.log('====================================================');
 // Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
-process.env.TRACE_MCP_FLOW = 'true';
+process.env.LOG_LEVEL = 'debug';
 
 console.log('\n📋 Environment Setup:');
 console.log('DANGEROUSLY_DISABLE_AUTH:', process.env.DANGEROUSLY_DISABLE_AUTH);
 console.log('OAK_API_KEY:', process.env.OAK_API_KEY);
-console.log('TRACE_MCP_FLOW:', process.env.TRACE_MCP_FLOW);
+console.log('LOG_LEVEL:', process.env.LOG_LEVEL);
 
 async function testE2EPattern() {
   console.log('\n🧪 Testing E2E Pattern (supertest):');
