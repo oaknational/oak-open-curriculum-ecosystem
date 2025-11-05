@@ -8,8 +8,21 @@ const EnvSchema = z.object({
   CLERK_PUBLISHABLE_KEY: z.string().min(1, 'CLERK_PUBLISHABLE_KEY required'),
   CLERK_SECRET_KEY: z.string().min(1, 'CLERK_SECRET_KEY required'),
   // MCP Server Configuration
-  BASE_URL: z.url().optional(),
-  MCP_CANONICAL_URI: z.url().optional(),
+  // Accept empty strings or relative paths as undefined (Vercel may set BASE_URL="/")
+  BASE_URL: z.preprocess(
+    (val) =>
+      val === '' || val === '/' || (typeof val === 'string' && val.startsWith('/'))
+        ? undefined
+        : val,
+    z.url().optional(),
+  ),
+  MCP_CANONICAL_URI: z.preprocess(
+    (val) =>
+      val === '' || val === '/' || (typeof val === 'string' && val.startsWith('/'))
+        ? undefined
+        : val,
+    z.url().optional(),
+  ),
   // Transport Mode
   REMOTE_MCP_MODE: ModeSchema.optional(),
   // Security & Development
