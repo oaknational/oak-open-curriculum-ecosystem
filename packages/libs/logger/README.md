@@ -1,17 +1,6 @@
 # @oaknational/mcp-logger
 
-## Overview
-
-An adaptive logging library that provides structured logging across different runtime environments using Consola as the underlying engine.
-
-## Features
-
-- **Universal Compatibility**: Works in Node.js, Edge, Browser environments
-- **Structured Logging**: Rich context and metadata support
-- **Pure Functions**: Core logic extracted for testability
-- **Dependency Injection**: Flexible logger instance injection
-- **Child Loggers**: Create scoped loggers with inherited context
-- **Level Control**: Configurable log levels (TRACE, DEBUG, INFO, WARN, ERROR, FATAL)
+Adaptive logging library for multi-runtime MCP (Model Context Protocol) applications. Supports configurable output destinations (stdout, file, or both) and provides utilities for JSON sanitization and Express middleware integration.
 
 ## Installation
 
@@ -19,147 +8,184 @@ An adaptive logging library that provides structured logging across different ru
 pnpm add @oaknational/mcp-logger
 ```
 
-## Usage
+For Express middleware support, also install Express as a peer dependency:
 
-### Basic Usage
+```bash
+pnpm add express
+```
+
+## Quick Start
 
 ```typescript
 import { createAdaptiveLogger } from '@oaknational/mcp-logger';
 
-// Create a logger
-const logger = createAdaptiveLogger({
-  level: 'INFO',
-  name: 'my-app',
-  context: { version: '1.0.0' },
-});
+const logger = createAdaptiveLogger({ level: 'INFO' });
 
-// Log messages
 logger.info('Application started');
-logger.error('Connection failed', new Error('Timeout'), { retry: 3 });
-logger.debug('Processing item', { id: 123 });
+logger.debug('Debug information', { userId: '123' });
+logger.error('An error occurred', error, { context: 'additional info' });
 ```
 
-### Dependency Injection
+## Configuration
+
+The logger can be configured via environment variables:
+
+### Environment Variables
+
+| Variable                 | Type   | Default | Description                                                        |
+| ------------------------ | ------ | ------- | ------------------------------------------------------------------ |
+| `LOG_LEVEL`              | string | `INFO`  | Minimum log level to emit (TRACE, DEBUG, INFO, WARN, ERROR, FATAL) |
+| `MCP_LOGGER_STDOUT`      | string | `true`  | Enable/disable stdout output (`true` or `false`)                   |
+| `MCP_LOGGER_FILE_PATH`   | string | -       | Path to log file (enables file logging when set)                   |
+| `MCP_LOGGER_FILE_APPEND` | string | `true`  | Append to file (`true`) or overwrite (`false`)                     |
+
+### Log Levels
+
+Log levels are hierarchical (TRACE < DEBUG < INFO < WARN < ERROR < FATAL). Setting a log level will emit logs at that level and above.
+
+- `TRACE`: Most verbose, for detailed tracing
+- `DEBUG`: Debug information for development
+- `INFO`: General informational messages
+- `WARN`: Warning messages for potentially harmful situations
+- `ERROR`: Error messages for error events
+- `FATAL`: Critical errors that may cause the application to abort
+
+## Core Concepts
+
+### Sinks
+
+A sink is a destination where logs are written. The logger supports three sink configurations:
+
+- **stdout only**: Logs written to console/stdout (default for HTTP servers, Vercel-compatible)
+- **file only**: Logs written to a file (required for stdio servers to keep stdout clean for MCP protocol)
+- **both**: Logs written to both stdout and file (useful for local development)
+
+### Log Levels
+
+Log levels control the verbosity of logging. Set `LOG_LEVEL` to filter logs below the specified level.
+
+### JSON Sanitisation
+
+All logged data is automatically sanitised to ensure JSON-safety. The library converts:
+
+- `undefined` → `null`
+- `Date` objects → ISO string format
+- `Error` objects → object with `message`, `name`, and `stack` properties
+- Circular references → `'[Circular]'` string
+- Unserializable values → `'[unserializable]'` string
+
+## Usage Examples
+
+### HTTP Server (Vercel-compatible)
+
+For HTTP servers deployed on Vercel or similar platforms, use stdout-only logging:
 
 ```typescript
-import { ConsolaLogger } from '@oaknational/mcp-logger';
-import { createConsola } from 'consola';
+import { createAdaptiveLogger, DEFAULT_HTTP_SINK_CONFIG } from '@oaknational/mcp-logger';
+import { createRequestLogger, createErrorLogger } from '@oaknational/mcp-logger';
+import express from 'express';
 
-// Inject your own Consola instance
-const consola = createConsola({
-  level: 3,
-  fancy: true,
-});
+const app = express();
 
-const logger = new ConsolaLogger(consola, {
-  app: 'custom-app',
-});
+// Create logger with stdout-only configuration
+const logger = createAdaptiveLogger({ level: 'INFO' }, undefined, DEFAULT_HTTP_SINK_CONFIG);
+
+// Add Express middleware
+app.use(createRequestLogger(logger, { level: 'info' }));
+// ... your routes ...
+app.use(createErrorLogger(logger));
+
+app.listen(3000);
 ```
 
-### Child Loggers
-
-```typescript
-const parentLogger = createAdaptiveLogger({
-  context: { service: 'api' },
-});
-
-// Create child with additional context
-const childLogger = parentLogger.child?.({
-  endpoint: '/users',
-  method: 'GET',
-});
-
-childLogger?.info('Request received');
-// Logs with combined context: { service: 'api', endpoint: '/users', method: 'GET' }
-```
-
-### Pure Functions
-
-The logger exports pure utility functions:
-
-```typescript
-import {
-  convertLogLevel,
-  toConsolaLevel,
-  mergeLogContext,
-  normalizeError,
-  isLevelEnabled,
-} from '@oaknational/mcp-logger';
-
-// Convert semantic level to numeric
-const level = convertLogLevel('DEBUG'); // Returns 10
-
-// Check if level is enabled
-const enabled = isLevelEnabled(20, 10); // true (INFO enabled for DEBUG)
-
-// Merge contexts
-const merged = mergeLogContext({ app: 'test' }, { user: 'alice' }); // { app: 'test', user: 'alice' }
-```
-
-## Architecture
-
-### Dependency Injection Pattern
-
-```typescript
-export class ConsolaLogger implements Logger {
-  constructor(
-    private readonly consola: ConsolaInstance, // Injected
-    private readonly contextData: Record<string, unknown> = {},
-  ) {}
-}
-```
-
-### Pure Functions
-
-All business logic is extracted into pure functions:
-
-- `convertLogLevel`: Convert semantic levels to numeric
-- `toConsolaLevel`: Map to Consola's scale
-- `mergeLogContext`: Combine context objects
-- `normalizeError`: Convert various error types to Error objects
-- `isLevelEnabled`: Check if a log level should output
-
-## Log Levels
-
-| Level | Numeric | Description                    |
-| ----- | ------- | ------------------------------ |
-| TRACE | 0       | Detailed debugging information |
-| DEBUG | 10      | Debug information              |
-| INFO  | 20      | General information            |
-| WARN  | 30      | Warning messages               |
-| ERROR | 40      | Error messages                 |
-| FATAL | 50      | Fatal errors                   |
-
-## Testing
-
-### Unit Tests (Pure Functions)
+**Environment variables:**
 
 ```bash
-pnpm test tests/pure-functions.unit.test.ts
+LOG_LEVEL=INFO
+MCP_LOGGER_STDOUT=true
 ```
 
-### Integration Tests
+### Stdio Server (Protocol-correct)
+
+For stdio servers, use file-only logging to keep stdout clean for MCP protocol frames:
+
+```typescript
+import { createAdaptiveLogger, DEFAULT_STDIO_SINK_CONFIG } from '@oaknational/mcp-logger';
+
+const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, DEFAULT_STDIO_SINK_CONFIG);
+
+logger.info('Stdio server started');
+// All logs go to file, stdout remains clean for MCP protocol
+```
+
+**Environment variables:**
 
 ```bash
-pnpm test tests/adaptive.integration.test.ts
+LOG_LEVEL=DEBUG
+MCP_LOGGER_STDOUT=false
+MCP_LOGGER_FILE_PATH=./logs/stdio-mcp-server.log
+MCP_LOGGER_FILE_APPEND=true
 ```
+
+### Local Development (Both Sinks)
+
+For local development, you might want logs in both console and file:
+
+```typescript
+import { createAdaptiveLogger, parseSinkConfigFromEnv } from '@oaknational/mcp-logger';
+
+const sinkConfig = parseSinkConfigFromEnv(process.env);
+const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, sinkConfig);
+
+logger.debug('Development log', { environment: 'local' });
+```
+
+**Environment variables:**
+
+```bash
+LOG_LEVEL=DEBUG
+MCP_LOGGER_STDOUT=true
+MCP_LOGGER_FILE_PATH=./logs/dev.log
+MCP_LOGGER_FILE_APPEND=true
+```
+
+### Express Middleware Integration
+
+The logger provides Express middleware for request and error logging:
+
+```typescript
+import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import { createRequestLogger, createErrorLogger } from '@oaknational/mcp-logger';
+import express from 'express';
+
+const app = express();
+const logger = createAdaptiveLogger({ level: 'INFO' });
+
+// Log all incoming requests (register before routes)
+app.use(createRequestLogger(logger, { level: 'debug' }));
+
+// Your routes here
+app.get('/api/test', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Log errors (register after all routes)
+app.use(createErrorLogger(logger));
+
+app.listen(3000);
+```
+
+The request logger extracts and sanitises:
+
+- HTTP method
+- URL and path
+- Headers
+- Query parameters
+- Route parameters
+- Client IP address
+- Request body (optional, via `includeBody` option)
 
 ## API Reference
-
-### createAdaptiveLogger
-
-```typescript
-function createAdaptiveLogger(
-  options?: LoggerOptions & { consolaOptions?: Partial<ConsolaOptions> },
-  consolaInstance?: ConsolaInstance, // For testing
-): Logger;
-
-interface LoggerOptions {
-  level?: number | LogLevel;
-  name?: string;
-  context?: Record<string, unknown>;
-}
-```
 
 ### Logger Interface
 
@@ -172,45 +198,157 @@ interface Logger {
   error(message: string, error?: unknown, context?: unknown): void;
   fatal(message: string, error?: unknown, context?: unknown): void;
   isLevelEnabled?(level: number): boolean;
-  child?(context: Record<string, unknown>): Logger;
+  child?(context: JsonObject): Logger;
 }
 ```
 
-## Environment Adaptation
+### Sink Configuration
 
-The logger automatically adapts to different environments:
+```typescript
+interface LoggerSinkConfig {
+  readonly stdout: boolean;
+  readonly file?: FileSinkConfig;
+}
 
-- **Node.js**: Full console output with colors
-- **Browser**: Browser console integration
-- **Edge Runtime**: Structured JSON output
-- **Testing**: Controllable output for test assertions
+interface FileSinkConfig {
+  readonly path: string;
+  readonly append?: boolean;
+}
+```
 
-## Consumption: Source vs Bundled
+Functions:
 
-- In development and app builds (e.g. Next.js), imports resolve to the TypeScript sources via monorepo path mapping:
-  - `@oaknational/mcp-logger` → `packages/libs/logger/src`
-  - Internal imports in `src/` are extensionless (e.g. `./pure-functions`) to keep TS and bundlers happy.
-- At runtime (Node, tests, packaged usage), the library ships a single bundled ESM entry at `dist/index.js`:
-  - Package `exports` maps `import`/`default` to `./dist/index.js`.
-  - This avoids nested relative ESM resolution issues in child processes/e2e.
+- `parseSinkConfigFromEnv(env: LoggerSinkEnvironment): LoggerSinkConfig` - Parse environment variables into sink config
+- `createAdaptiveLogger(options?, consolaInstance?, sinkConfig?): Logger` - Create logger with sink configuration
 
-Guidance:
+Constants:
 
-- **Next.js / web apps**: depend on `@oaknational/mcp-logger` normally. The app will consume source during build and bundle it.
-- **Node CLIs / e2e**: also depend normally; at runtime the bundled `dist/index.js` is used automatically via `exports`.
-- Do not deep‑import internal files; always import from the package root.
+- `DEFAULT_HTTP_SINK_CONFIG` - Stdout-only configuration for HTTP servers
+- `DEFAULT_STDIO_SINK_CONFIG` - File-only configuration for stdio servers
 
-## Design Decisions
+### JSON Sanitisation Functions
 
-1. **Consola-based**: Leverages Consola's built-in environment detection
-2. **Pure Function Extraction**: All logic that can be pure is extracted
-3. **Dependency Injection**: ConsolaInstance can be injected for testing
-4. **No Global State**: Each logger instance is independent
-5. **Context Inheritance**: Child loggers inherit parent context
+```typescript
+function sanitiseForJson(value: unknown): JsonValue;
+function isJsonValue(value: unknown): value is JsonValue;
+function sanitiseObject(value: unknown): JsonObject | null;
+```
 
-## Contributing
+### Express Middleware Functions
 
-This library is part of the Oak MCP workspace. See the main repository for contribution guidelines.
+```typescript
+function createRequestLogger(logger: Logger, options?: RequestLoggerOptions): RequestHandler;
+
+function createErrorLogger(logger: Logger): ErrorRequestHandler;
+
+function extractRequestMetadata(req: Request): JsonObject;
+
+interface RequestLoggerOptions {
+  level?: 'trace' | 'debug' | 'info';
+  includeBody?: boolean;
+}
+```
+
+## Migration Guide
+
+### From Legacy `MCP_STREAMABLE_HTTP_*` Variables
+
+The following environment variables have been replaced:
+
+| Legacy Variable                 | New Variable               | Notes                       |
+| ------------------------------- | -------------------------- | --------------------------- |
+| `MCP_STREAMABLE_HTTP_LOG_LEVEL` | `LOG_LEVEL`                | Shared across all apps      |
+| `MCP_STREAMABLE_HTTP_FILE_LOGS` | Set `MCP_LOGGER_FILE_PATH` | More explicit configuration |
+| `MCP_STREAMABLE_HTTP_LOG_PATH`  | `MCP_LOGGER_FILE_PATH`     | Shared configuration        |
+
+**Migration Steps:**
+
+1. Replace `MCP_STREAMABLE_HTTP_LOG_LEVEL` with `LOG_LEVEL`
+2. If `MCP_STREAMABLE_HTTP_FILE_LOGS=true`, set `MCP_LOGGER_FILE_PATH` to your desired log file path
+3. Replace `MCP_STREAMABLE_HTTP_LOG_PATH` with `MCP_LOGGER_FILE_PATH`
+4. Remove all legacy variable references from your codebase
+
+**Example:**
+
+```bash
+# Before
+MCP_STREAMABLE_HTTP_LOG_LEVEL=DEBUG
+MCP_STREAMABLE_HTTP_FILE_LOGS=true
+MCP_STREAMABLE_HTTP_LOG_PATH=./logs/app.log
+
+# After
+LOG_LEVEL=DEBUG
+MCP_LOGGER_FILE_PATH=./logs/app.log
+MCP_LOGGER_STDOUT=true
+MCP_LOGGER_FILE_APPEND=true
+```
+
+### From App-Specific Loggers
+
+If you have custom logger implementations in your application:
+
+1. Replace custom logger creation with `createAdaptiveLogger()`
+2. Update imports to use `@oaknational/mcp-logger`
+3. Use `parseSinkConfigFromEnv()` to configure sinks from environment
+4. Remove custom logging utilities (they're now in the shared package)
+
+## Troubleshooting
+
+### File Path Issues
+
+**Problem:** Log file is not being created.
+
+**Solutions:**
+
+- Ensure the directory path exists or can be created
+- Check file system permissions
+- Verify `MCP_LOGGER_FILE_PATH` is set correctly
+- On some platforms (e.g., Vercel), file system may be read-only - use stdout-only logging
+
+### Permission Errors
+
+**Problem:** Permission denied when writing to log file.
+
+**Solutions:**
+
+- Check directory and file permissions
+- Ensure the application has write access to the log directory
+- Consider using a directory like `./logs/` that your application owns
+
+### Vercel Considerations
+
+**Problem:** File logging doesn't work on Vercel.
+
+**Solution:** Vercel's file system is read-only. Use stdout-only logging:
+
+```typescript
+const logger = createAdaptiveLogger({ level: 'INFO' }, undefined, DEFAULT_HTTP_SINK_CONFIG);
+```
+
+Vercel automatically captures stdout logs, so no file configuration is needed.
+
+### Stdio Protocol Issues
+
+**Problem:** MCP protocol frames are corrupted by log output.
+
+**Solution:** Ensure stdio servers use file-only logging:
+
+```typescript
+const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, DEFAULT_STDIO_SINK_CONFIG);
+```
+
+Never write to stdout in stdio servers - it's reserved for MCP protocol JSON-RPC frames.
+
+### Log Level Not Working
+
+**Problem:** Changing `LOG_LEVEL` doesn't affect log output.
+
+**Solutions:**
+
+- Verify the environment variable is set correctly
+- Check for typos in log level value (must be uppercase: `DEBUG`, not `debug`)
+- Ensure you're not overriding the log level in code
+- Restart your application after changing environment variables
 
 ## License
 

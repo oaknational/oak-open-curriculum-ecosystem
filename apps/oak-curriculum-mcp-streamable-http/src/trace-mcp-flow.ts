@@ -1,119 +1,120 @@
-/**
- * MCP Flow Debug Utilities
- *
- * Preserve the diagnostic helpers originally built for TRACE logging,
- * but route everything through the shared logger. Output is automatically
- * gated by the configured log level (set `LOG_LEVEL=debug` to enable).
- */
+import request from 'supertest';
+import { describe, it, expect } from 'vitest';
+import { createApp } from '../src/index.js';
+import type { ToolHandlerOverrides } from '../src/handlers.js';
+import type { ToolExecutionResult } from '@oaknational/oak-curriculum-sdk';
+import {
+  parseSseEnvelope,
+  parseJsonRpcResult,
+  getContentArray,
+  readFirstTextContent,
+} from './helpers/sse.js';
 
-import type { Request, Response, NextFunction, Express } from 'express';
-import listRoutes from 'express-list-routes';
+const ACCEPT = 'application/json, text/event-stream';
+const DEV_TOKEN = process.env.REMOTE_MCP_DEV_TOKEN ?? 'test-dev-token';
 
-import type { Logger } from './logging.js';
+function configureRealApiEnvironment(): () => void {
+  const previous = {
+    BASE_URL: process.env.BASE_URL,
+    MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
+    REMOTE_MCP_ALLOW_NO_AUTH: process.env.REMOTE_MCP_ALLOW_NO_AUTH,
+    REMOTE_MCP_DEV_TOKEN: process.env.REMOTE_MCP_DEV_TOKEN,
+    OAK_API_KEY: process.env.OAK_API_KEY,
+  };
+  delete process.env.BASE_URL;
+  delete process.env.MCP_CANONICAL_URI;
+  process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
+  process.env.REMOTE_MCP_DEV_TOKEN = DEV_TOKEN;
+  process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'stub-test-key';
 
-function shouldLogDebug(logger: Logger): boolean {
-  return logger.isLevelEnabled?.('DEBUG') ?? false;
-}
-
-interface ExpressRouteLike {
-  readonly path?: unknown;
-  readonly methods?: unknown;
-}
-
-function extractRouteDetails(route: Request['route']): ExpressRouteLike {
-  if (!route || typeof route !== 'object') {
-    return {};
-  }
-  return {
-    path: Reflect.get(route, 'path'),
-    methods: Reflect.get(route, 'methods'),
-  } satisfies ExpressRouteLike;
-}
-
-export function createTracingMiddleware(stage: string, logger: Logger) {
-  return (req: Request, res: Response, next: NextFunction): void => {
-    if (!shouldLogDebug(logger)) {
-      next();
-      return;
+  return () => {
+    if (typeof previous.BASE_URL === 'string') {
+      process.env.BASE_URL = previous.BASE_URL;
+    } else {
+      delete process.env.BASE_URL;
     }
 
-    logger.debug(`[TRACE] -> ${stage}`, {
-      method: req.method,
-      path: req.path,
-      url: req.url,
-      headers: {
-        accept: req.get('Accept'),
-        authorization: req.get('Authorization') ? '[PRESENT]' : '[MISSING]',
-        origin: req.get('Origin'),
-        host: req.get('Host'),
-      },
-    });
+    if (typeof previous.MCP_CANONICAL_URI === 'string') {
+      process.env.MCP_CANONICAL_URI = previous.MCP_CANONICAL_URI;
+    } else {
+      delete process.env.MCP_CANONICAL_URI;
+    }
 
-    const originalSend = res.send.bind(res);
-    const originalJson = res.json.bind(res);
-
-    res.send = (body?: unknown) => {
-      if (shouldLogDebug(logger)) {
-        logger.debug(`[TRACE] <- ${stage}`, {
-          status: res.statusCode,
-          sentHeaders: res.headersSent,
-          bodyType: typeof body,
-          bodyLength: body ? JSON.stringify(body).length : 0,
-        });
-      }
-      return originalSend(body);
-    };
-
-    res.json = (obj: unknown) => {
-      if (shouldLogDebug(logger)) {
-        logger.debug(`[TRACE] <- ${stage}`, {
-          status: res.statusCode,
-          sentHeaders: res.headersSent,
-          bodyType: 'json',
-          bodyLength: obj ? JSON.stringify(obj).length : 0,
-        });
-      }
-      return originalJson(obj);
-    };
-
-    next();
+    if (typeof previous.REMOTE_MCP_ALLOW_NO_AUTH === 'string') {
+      process.env.REMOTE_MCP_ALLOW_NO_AUTH = previous.REMOTE_MCP_ALLOW_NO_AUTH;
+    } else {
+      delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    }
+    if (typeof previous.REMOTE_MCP_DEV_TOKEN === 'string') {
+      process.env.REMOTE_MCP_DEV_TOKEN = previous.REMOTE_MCP_DEV_TOKEN;
+    } else {
+      delete process.env.REMOTE_MCP_DEV_TOKEN;
+    }
+    if (typeof previous.OAK_API_KEY === 'string') {
+      process.env.OAK_API_KEY = previous.OAK_API_KEY;
+    } else {
+      delete process.env.OAK_API_KEY;
+    }
   };
 }
 
-export function dumpRouteStack(app: Express, logger: Logger): void {
-  if (!shouldLogDebug(logger)) {
-    return;
+function assertSuccessfulEnvelope(body: string): void {
+  const envelope = parseSseEnvelope(body);
+  expect(envelope.error).toBeUndefined();
+  const result = parseJsonRpcResult(envelope);
+  expect(result.isError).not.toBe(true);
+  const contents = getContentArray(result);
+  const entry = readFirstTextContent(contents);
+  const arrayPayload = JSON.parse(entry) as unknown;
+  if (!Array.isArray(arrayPayload)) {
+    throw new Error('Tool payload must be an array');
   }
-
-  const strictRouting: unknown = app.get('strict routing');
-  const trustProxy: unknown = app.get('trust proxy');
-
-  logger.debug('[TRACE] Express Route Stack', {
-    strictRouting,
-    trustProxy,
-    routes: listRoutes(app),
-  });
+  expect(arrayPayload.length).toBeGreaterThan(0);
 }
 
-export function logRequestRoute(logger: Logger, req: Request): void {
-  if (!shouldLogDebug(logger)) {
-    return;
-  }
+describe('Tool response envelope formatting', () => {
+  it('wraps successful tool executions in SSE JSON', async () => {
+    const restoreEnv = configureRealApiEnvironment();
+    const overrides: ToolHandlerOverrides = {
+      executeMcpTool: (name, args, client) => {
+        void name;
+        void args;
+        void client;
+        const data = [
+          {
+            slug: 'ks1',
+            title: 'Key Stage 1',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks1',
+          },
+          {
+            slug: 'ks2',
+            title: 'Key Stage 2',
+            canonicalUrl: 'https://www.thenational.academy/teachers/key-stages/ks2',
+          },
+        ];
+        const result: ToolExecutionResult = { status: 200, data };
+        return Promise.resolve(result);
+      },
+    };
 
-  const routeDetails = extractRouteDetails(req.route);
-  const pathInfo: unknown = routeDetails.path ?? '[no path]';
-  const methods: unknown = routeDetails.methods ?? '[no methods]';
-  const params = req.params;
-  const query = req.query;
-  const baseUrl = req.baseUrl;
-  const originalUrl = req.originalUrl;
+    const app = createApp({ toolHandlerOverrides: overrides });
+    try {
+      const res = await request(app)
+        .post('/mcp')
+        .set('Accept', ACCEPT)
+        .set('Host', 'localhost')
+        .set('Authorization', `Bearer ${DEV_TOKEN}`)
+        .send({
+          jsonrpc: '2.0',
+          id: '1',
+          method: 'tools/call',
+          params: { name: 'get-key-stages', arguments: { params: {} } },
+        });
 
-  logger.debug('[TRACE] Request route info', {
-    path: pathInfo,
-    methods,
-    params,
-    query,
-    baseUrl,
-    originalUrl,
+      expect(res.status).toBe(200);
+      assertSuccessfulEnvelope(res.text);
+    } finally {
+      restoreEnv();
+    }
   });
-}
+});

@@ -32,6 +32,8 @@ describe('Environment Schema', () => {
       OAK_API_KEY: 'test-key',
       CLERK_PUBLISHABLE_KEY: 'pk_test_123',
       CLERK_SECRET_KEY: 'sk_test_123',
+      BASE_URL: 'http://localhost:3333',
+      MCP_CANONICAL_URI: 'http://localhost:3333/mcp',
     };
     const result = readEnv(validEnv);
     expect(result.CLERK_PUBLISHABLE_KEY).toBe('pk_test_123');

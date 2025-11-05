@@ -11,11 +11,15 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.js",
+      "default": "./dist/node.js"
     }
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
@@ -28,6 +32,9 @@
   },
   "dependencies": {
     "consola": "^3.4.2"
+  },
+  "peerDependencies": {
+    "express": "^4.0.0 || ^5.0.0"
   },
   "devDependencies": {
     "typescript": "^5.9.2"

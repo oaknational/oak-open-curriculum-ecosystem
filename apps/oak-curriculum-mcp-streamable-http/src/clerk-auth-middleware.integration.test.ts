@@ -1,31 +1,36 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
+
 import { createApp } from './index.js';
+import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
+
+function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeConfig {
+  return loadRuntimeConfig({
+    OAK_API_KEY: 'test-key',
+    CLERK_PUBLISHABLE_KEY: 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ',
+    CLERK_SECRET_KEY: 'sk_test_' + 'x'.repeat(40),
+    BASE_URL: 'http://localhost:3333',
+    MCP_CANONICAL_URI: 'http://localhost:3333/mcp',
+    ...overrides,
+  } as NodeJS.ProcessEnv);
+}
 
 describe('Clerk Auth Middleware Integration', () => {
-  const originalEnv = { ...process.env };
+  let runtimeConfig: RuntimeConfig;
 
   beforeEach(() => {
-    // Set minimum required env for app to start
-    process.env.OAK_API_KEY = 'test-key';
-    // Use real publishable key format (public, not secret - per Clerk docs)
-    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
-    // Secret key can be fake for integration tests (not used for validation logic)
-    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
-  });
-
-  afterEach(() => {
-    process.env = { ...originalEnv };
+    runtimeConfig = createRuntimeConfig();
   });
 
   it('rejects unauthenticated requests to /mcp with 401', async () => {
-    const app = createApp();
+    const app = createApp({
+      runtimeConfig: createRuntimeConfig({ DANGEROUSLY_DISABLE_AUTH: 'false' }),
+    });
     const res = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
 
-    // Log error details for debugging
     if (res.status !== 401) {
       console.log('Unexpected status:', res.status);
       console.log('Response body:', res.body);
@@ -38,7 +43,7 @@ describe('Clerk Auth Middleware Integration', () => {
   });
 
   it('allows GET /healthz without auth', async () => {
-    const app = createApp();
+    const app = createApp({ runtimeConfig });
     const res = await request(app).get('/healthz');
 
     expect(res.status).toBe(200);
@@ -46,7 +51,7 @@ describe('Clerk Auth Middleware Integration', () => {
   });
 
   it('allows GET /.well-known/oauth-protected-resource without auth', async () => {
-    const app = createApp();
+    const app = createApp({ runtimeConfig });
     const res = await request(app).get('/.well-known/oauth-protected-resource');
 
     expect(res.status).toBe(200);

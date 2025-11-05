@@ -40,40 +40,39 @@ function isTextContent(c: unknown): c is { type: string; text?: string } {
   return c.type === 'text';
 }
 
-// Use test API key for E2E tests
-// Network calls to Notion will be mocked/stubbed, so this is just for initialization
-const NOTION_API_KEY = 'test-notion-api-key-e2e-mocked';
+// Validate NOTION_API_KEY is present - FAIL if missing (don't skip)
+const NOTION_API_KEY = process.env.NOTION_API_KEY;
+if (!NOTION_API_KEY || NOTION_API_KEY.trim().length === 0) {
+  throw new Error(
+    'NOTION_API_KEY is required for E2E tests. Set it in .env file in repository root. ' +
+      'Tests must FAIL when configuration is wrong, not skip.',
+  );
+}
 
-logger.info('Running E2E tests with mocked Notion API', {
-  note: 'Network calls to Notion are stubbed - this tests our code, not Notion service',
-});
+logger.info('Running E2E tests with Notion API', { keyPresent: !!NOTION_API_KEY });
 
-describe('E2E: MCP Server with Mocked Notion API', () => {
+describe('E2E: MCP Server with Real Notion API', () => {
   let serverProcess: ChildProcess;
   let client: Client;
 
   beforeAll(async () => {
-    // Spawn the server process with mock Notion client
-    // NOTION_USE_MOCK_CLIENT=true triggers mock mode in wiring.ts
-    // This exercises all our code without making real Notion API calls
+    // Spawn the server process
     serverProcess = spawn('node', ['dist/index.js'], {
       env: {
         ...process.env,
-        NOTION_API_KEY, // Test key, not used with mock client
-        NOTION_USE_MOCK_CLIENT: 'true', // Enable mock mode
+        NOTION_API_KEY, // Already validated to be non-empty
         LOG_LEVEL: 'error', // Reduce noise in tests
       },
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
-    // Create MCP client (also uses mock mode)
+    // Create MCP client
     const transport = new StdioClientTransport({
       command: 'node',
       args: ['dist/index.js'],
       env: {
         ...process.env,
-        NOTION_API_KEY, // Test key, not used with mock client
-        NOTION_USE_MOCK_CLIENT: 'true', // Enable mock mode
+        NOTION_API_KEY, // Already validated to be non-empty
         LOG_LEVEL: 'error',
       },
     });

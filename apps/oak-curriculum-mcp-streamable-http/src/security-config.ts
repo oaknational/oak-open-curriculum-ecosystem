@@ -1,4 +1,5 @@
 import { parseCsv } from './env.js';
+import type { RuntimeConfig } from './runtime-config.js';
 
 const BASE_HOSTS = ['localhost', '127.0.0.1', '::1'] as const;
 const BASE_ORIGINS = ['http://localhost:3000', 'http://localhost:3333'] as const;
@@ -29,15 +30,15 @@ function resolveAllowedOrigins(
   return BASE_ORIGINS;
 }
 
-export function readSecurityEnv(): {
+export function createSecurityConfig(config: RuntimeConfig): {
   mode: 'stateless' | 'session';
   allowedHosts: readonly string[];
   allowedOrigins: readonly string[] | undefined;
 } {
-  const mode = (process.env.REMOTE_MCP_MODE ?? 'stateless') === 'session' ? 'session' : 'stateless';
-  const configuredHosts = parseCsv(process.env.ALLOWED_HOSTS);
-  const configuredOrigins = parseCsv(process.env.ALLOWED_ORIGINS);
-  const vercelHost = process.env.VERCEL_URL?.toLowerCase();
+  const mode = config.env.REMOTE_MCP_MODE === 'session' ? 'session' : 'stateless';
+  const configuredHosts = parseCsv(config.env.ALLOWED_HOSTS);
+  const configuredOrigins = parseCsv(config.env.ALLOWED_ORIGINS);
+  const vercelHost = config.vercelHostname;
   const allowedHosts = resolveAllowedHosts(configuredHosts, vercelHost);
   const allowedOrigins = resolveAllowedOrigins(configuredOrigins, vercelHost);
   return { mode, allowedHosts, allowedOrigins };

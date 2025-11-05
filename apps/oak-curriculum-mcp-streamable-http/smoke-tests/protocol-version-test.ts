@@ -13,11 +13,9 @@ console.log('🔍 Protocol Version Test');
 console.log('========================');
 
 // Set up environment
-// Disable auth – this probe isolates protocol-version negotiation.
-// Auth enforcement is covered by auth-enforcement.e2e.test.ts and smoke-dev-auth.
 process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
 process.env.OAK_API_KEY = 'test-key';
-process.env.LOG_LEVEL = 'debug';
+process.env.TRACE_MCP_FLOW = 'true';
 
 const app = createApp();
 
@@ -37,9 +35,9 @@ async function testProtocolVersion(version: string) {
       },
     });
 
-  console.log('   Status:', res.status);
+  console.log(`   Status: ${res.status}`);
   if (res.status !== 200) {
-    console.log('   Body:', JSON.stringify(res.body).substring(0, 200), '...');
+    console.log(`   Body: ${JSON.stringify(res.body).substring(0, 200)}...`);
   }
 
   return res.status;
@@ -51,7 +49,7 @@ async function main() {
 
     for (const version of versions) {
       const status = await testProtocolVersion(version);
-      console.log('   Result:', status === 200 ? '✅ PASS' : '❌ FAIL');
+      console.log(`   Result: ${status === 200 ? '✅ PASS' : '❌ FAIL'}`);
     }
   } catch (error) {
     console.error('💥 Test failed:', error);
@@ -59,4 +57,4 @@ async function main() {
   }
 }
 
-void main();
+main();

@@ -2,9 +2,8 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import type { MinimalNotionClient } from '../types/notion-types/notion-client.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
-import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger';
-/** @todo why are there logger types in the core package instead of the logger package? */
-import type { Logger } from '@oaknational/mcp-logger';
+import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger/node';
+import type { Logger } from '@oaknational/mcp-logger/node';
 
 interface CoreLogger {
   debug: (message: string, context?: unknown) => void;

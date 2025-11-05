@@ -5,7 +5,8 @@
 
 import type { ConsolaInstance } from 'consola';
 import type { Logger, JsonObject } from './types';
-import { mergeLogContext, normalizeError } from './pure-functions';
+import { mergeLogContext } from './context-merging';
+import { normalizeError } from './error-normalisation';
 
 export class ConsolaLogger implements Logger {
   private readonly consola: ConsolaInstance;

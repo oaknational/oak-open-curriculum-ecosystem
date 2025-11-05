@@ -1,10 +1,7 @@
-/* eslint max-lines: ["error", { "max": 300 }] */
-
 import express, { static as expressStatic, json as expressJson } from 'express';
 import type { Express, RequestHandler, NextFunction, Request, Response } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
-import { renderLandingPageHtml } from './landing-page.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
@@ -13,221 +10,226 @@ import {
   protectedResourceHandlerClerk,
   authServerMetadataHandlerClerk,
 } from '@clerk/mcp-tools/express';
+import {
+  createRequestLogger,
+  createErrorLogger,
+  convertLogLevel,
+  type Logger,
+} from '@oaknational/mcp-logger';
+
+import { renderLandingPageHtml } from './landing-page.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, createMcpHandler, type ToolHandlerOverrides } from './handlers.js';
-import { logger } from './logging.js';
-import { createTracingMiddleware, dumpRouteStack, logRequestRoute } from './trace-mcp-flow.js';
-import { readSecurityEnv } from './security-config.js';
+import { createHttpLogger } from './logging/index.js';
+import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
+import { createSecurityConfig } from './security-config.js';
+
+export interface CreateAppOptions {
+  readonly toolHandlerOverrides?: ToolHandlerOverrides;
+  readonly runtimeConfig?: RuntimeConfig;
+  readonly logger?: Logger;
+}
+
+type ExpressWithAppId = Express & { __appId?: number };
+
+let appCounter = 0;
+
+export function createApp(options?: CreateAppOptions): ExpressWithAppId {
+  appCounter++;
+  const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
+  const log =
+    options?.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
+
+  log.debug(`Creating app #${String(appCounter)}`);
+  const app: ExpressWithAppId = express();
+  app.__appId = appCounter;
+  app.use(expressJson({ limit: '1mb' }));
+
+  const debugEnabled = log.isLevelEnabled?.(convertLogLevel('DEBUG')) ?? false;
+  if (debugEnabled) {
+    app.use(createRequestLogger(log, { level: 'debug' }));
+  }
+  app.use(createErrorLogger(log));
+
+  const security = createSecurityConfig(runtimeConfig);
+  const corsMw = applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins);
+
+  const { transport: coreTransport, ready } = initializeCoreEndpoints(
+    app,
+    corsMw,
+    options,
+    runtimeConfig,
+    log,
+  );
+
+  mountStaticAssets(app);
+  addRootLandingPage(app, runtimeConfig.vercelHostname);
+
+  app.use('/mcp', createEnsureMcpAcceptHeader(log));
+
+  setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+
+  app.use(async (_req, _res, next) => {
+    await ready;
+    next();
+  });
+
+  return app;
+}
+
+function registerUnauthenticatedRoutes(
+  app: Express,
+  coreTransport: StreamableHTTPServerTransport,
+  log: Logger,
+): void {
+  log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
+  log.debug('Registering POST /mcp route (auth disabled)');
+  app.post('/mcp', createMcpHandler(coreTransport));
+  log.debug('Registering GET /mcp route (auth disabled)');
+  app.get('/mcp', createMcpHandler(coreTransport));
+}
+
+function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConfig): void {
+  app.get(
+    '/.well-known/oauth-protected-resource',
+    protectedResourceHandlerClerk({ scopes_supported: ['mcp:invoke', 'mcp:read'] }),
+  );
+  app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
+
+  if (runtimeConfig.useStubTools) {
+    // In stub mode we expose additional metadata for tooling to detect bypass scenarios
+    app.get('/.well-known/mcp-stub-mode', (_req, res) => {
+      res.json({ stubMode: true });
+    });
+  }
+}
+
+function registerAuthenticatedRoutes(
+  app: Express,
+  coreTransport: StreamableHTTPServerTransport,
+  log: Logger,
+): void {
+  log.debug('Registering global clerkMiddleware');
+  app.use(clerkMiddleware());
+  log.debug('Registering POST /mcp route (auth ENABLED with mcpAuthClerk)');
+  app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+  log.debug('Registering GET /mcp route (auth ENABLED with mcpAuthClerk)');
+  app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+}
+
+function setupAuthRoutes(
+  app: Express,
+  coreTransport: StreamableHTTPServerTransport,
+  runtimeConfig: RuntimeConfig,
+  log: Logger,
+): void {
+  log.debug(
+    `Auth decision: DANGEROUSLY_DISABLE_AUTH=${String(runtimeConfig.dangerouslyDisableAuth)}`,
+  );
+
+  if (runtimeConfig.dangerouslyDisableAuth) {
+    registerUnauthenticatedRoutes(app, coreTransport, log);
+    return;
+  }
+
+  log.info('🔒 OAuth enforcement enabled via Clerk');
+  log.debug('Registering OAuth routes (auth ENABLED)');
+  registerOAuthMetadataEndpoints(app, runtimeConfig);
+  registerAuthenticatedRoutes(app, coreTransport, log);
+}
+
+function initializeCoreEndpoints(
+  app: Express,
+  corsMw: RequestHandler,
+  options: CreateAppOptions | undefined,
+  runtimeConfig: RuntimeConfig,
+  log: Logger,
+): { transport: StreamableHTTPServerTransport; ready: Promise<void> } {
+  const { transport, server } = initializeCoreMcpServer();
+  registerHandlers(server, {
+    overrides: options?.toolHandlerOverrides,
+    runtimeConfig,
+    logger: log,
+  });
+  const serverReady = server.connect(transport);
+
+  addHealthEndpoints(app, corsMw);
+
+  return { transport, ready: serverReady };
+}
 
 function addHealthEndpoints(app: Express, corsMw: RequestHandler): void {
-  app.head('/healthz', corsMw, (_req, res) => {
+  app.head('/healthz', corsMw, (req, res) => {
+    void req;
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end();
   });
-  app.get('/healthz', corsMw, (_req, res) => {
+  app.get('/healthz', corsMw, (req, res) => {
+    void req;
     res
       .type('application/json')
       .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
   });
 }
 
-export interface CreateAppOptions {
-  readonly toolHandlerOverrides?: ToolHandlerOverrides;
-}
-
-type ExpressWithAppId = Express & { __appId?: number };
-
-let appCounter = 0;
-// eslint-disable-next-line max-statements -- disable while debugging.
-export function createApp(options?: CreateAppOptions): ExpressWithAppId {
-  appCounter++;
-  const appId = appCounter;
-  logger.debug(`[TRACE] createApp() called - creating app #${String(appId)}`);
-  const app: ExpressWithAppId = express();
-  app.__appId = appId;
-  app.use(expressJson({ limit: '1mb' }));
-
-  const debugLoggingEnabled = logger.isLevelEnabled?.('DEBUG') ?? false;
-
-  if (debugLoggingEnabled) {
-    logger.debug(`[TRACE] Registering global request logger on app #${String(appId)}`);
-    app.use((req, res, next) => {
-      logger.debug(
-        `[TRACE] -> GLOBAL on app #${String(appId)}: ${req.method} ${req.path} - accept: ${req.get('Accept') ?? 'undefined'}, contentType: ${req.get('Content-Type') ?? 'undefined'}`,
-      );
-      const originalStatus = res.status.bind(res);
-      res.status = (code: number) => {
-        logger.debug(`[TRACE] <- GLOBAL: ${req.method} ${req.path} -> ${String(code)}`);
-        return originalStatus(code);
-      };
-      next();
-    });
-    app.use(createTracingMiddleware('express.json', logger));
-  }
-
-  const { mode, allowedHosts, allowedOrigins } = readSecurityEnv();
-  const corsMw = applySecurity(app, mode, allowedHosts, allowedOrigins);
-
-  const { transport: coreTransport, ready } = initializeCoreEndpoints(app, corsMw, options);
-  mountStaticAssets(app); // Static assets for favicon/logo (works locally and on Vercel)
-  addRootLandingPage(app);
-  // Add tracing middleware to /mcp path BEFORE any other middleware
-  if (debugLoggingEnabled) {
-    logger.debug('[TRACE] Registering /mcp tracing middleware');
-    app.use('/mcp', createTracingMiddleware('ensureMcpAcceptHeader', logger));
-  }
-
-  app.use('/mcp', ensureMcpAcceptHeader); // Ensure proper Accept header for MCP requests
-
-  setupAuthRoutes(app, coreTransport);
-
-  // Gate request handling on readiness
-  app.use(async (_req, _res, next) => {
-    await ready;
-    next();
-  });
-
-  // Add tracing around readiness gate
-  if (debugLoggingEnabled) {
-    app.use(createTracingMiddleware('readiness-gate', logger));
-  }
-
-  // Dump route stack if tracing enabled
-  if (debugLoggingEnabled) {
-    dumpRouteStack(app, logger);
-  }
-
-  return app;
-}
-
-function setupAuthRoutes(app: Express, coreTransport: StreamableHTTPServerTransport): void {
-  // Auth enforcement: disable ONLY when explicitly requested via DANGEROUSLY_DISABLE_AUTH=true
-  const authDisabled = (process.env.DANGEROUSLY_DISABLE_AUTH ?? 'false') === 'true';
-
-  logger.debug(`Auth decision: DANGEROUSLY_DISABLE_AUTH=${String(authDisabled)}`);
-
-  if (authDisabled) {
-    logger.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
-    logger.debug('[TRACE] Registering POST /mcp route (auth disabled)');
-    app.post(
-      '/mcp',
-      (_req, _res, next) => {
-        logger.debug('🔓 POST /mcp route hit (auth disabled)');
-        logRequestRoute(logger, _req);
-        next();
-      },
-      createMcpHandler(coreTransport),
-    );
-    logger.debug('[TRACE] Registering GET /mcp route (auth disabled)');
-    app.get(
-      '/mcp',
-      (_req, _res, next) => {
-        logRequestRoute(logger, _req);
-        next();
-      },
-      createMcpHandler(coreTransport),
-    );
-  } else {
-    logger.info('🔒 OAuth enforcement enabled via Clerk');
-    logger.debug('[TRACE] Registering OAuth routes (auth ENABLED)');
-
-    // OAuth metadata endpoints (RFC 9728 - Protected Resource Metadata)
-    app.get(
-      '/.well-known/oauth-protected-resource',
-      protectedResourceHandlerClerk({
-        scopes_supported: ['mcp:invoke', 'mcp:read'],
-      }),
-    );
-
-    // Authorization Server Metadata (for older MCP clients)
-    app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
-
-    logger.debug('[TRACE] Registering global clerkMiddleware');
-    app.use(clerkMiddleware()); // Clerk middleware (attaches auth to req.auth if authenticated)
-    logger.debug('[TRACE] Registering POST /mcp route (auth ENABLED with mcpAuthClerk)');
-    app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
-    logger.debug('[TRACE] Registering GET /mcp route (auth ENABLED with mcpAuthClerk)');
-    app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
-  }
-}
-
-function initializeCoreEndpoints(
-  app: Express,
-  corsMw: RequestHandler,
-  options?: CreateAppOptions,
-): { transport: StreamableHTTPServerTransport; ready: Promise<void> } {
-  const { transport, server } = initializeCoreMcpServer();
-  // Register tools BEFORE connecting the transport to satisfy MCP SDK constraints
-  registerHandlers(server, options?.toolHandlerOverrides);
-  const serverReady = server.connect(transport);
-
-  // Lightweight unauthenticated health endpoints for tooling/UI probes
-  addHealthEndpoints(app, corsMw);
-
-  return { transport, ready: serverReady };
-}
-
-function addRootLandingPage(app: Express): void {
+function addRootLandingPage(app: Express, vercelHostname?: string): void {
   app.get('/', (_req, res) => {
-    res.type('text/html').send(renderLandingPageHtml());
+    res.type('text/html').send(renderLandingPageHtml(vercelHostname));
   });
 }
 
-/**
- * Middleware to ensure MCP requests have the required Accept header.
- * This improves UX by automatically adding the header if missing.
- */
-function ensureMcpAcceptHeader(req: Request, res: Response, next: NextFunction): void {
-  const accept = req.get('Accept') ?? '';
-  const hasJson = accept.includes('application/json');
-  const hasEventStream = accept.includes('text/event-stream');
-  const requiresJson = req.method !== 'GET';
+function createEnsureMcpAcceptHeader(
+  log: Logger,
+): (req: Request, res: Response, next: NextFunction) => void {
+  return (req, res, next) => {
+    const accept = req.get('Accept') ?? '';
+    const hasJson = accept.includes('application/json');
+    const hasEventStream = accept.includes('text/event-stream');
+    const requiresJson = req.method !== 'GET';
 
-  logger.debug('ensureMcpAcceptHeader evaluating request', {
-    method: req.method,
-    path: req.path,
-    acceptHeader: accept,
-    hasJson,
-    hasEventStream,
-    requiresJson,
-  });
-
-  if (!hasEventStream) {
-    logger.warn('ensureMcpAcceptHeader rejecting request: missing text/event-stream', {
+    log.debug('ensureMcpAcceptHeader evaluating request', {
       method: req.method,
       path: req.path,
       acceptHeader: accept,
+      hasJson,
+      hasEventStream,
+      requiresJson,
     });
-    res
-      .status(406)
-      .type('application/json')
-      .send({ error: 'Accept header must include text/event-stream' });
-    return;
-  }
 
-  if (requiresJson && !hasJson) {
-    logger.warn('ensureMcpAcceptHeader rejecting request: missing application/json', {
+    if (!hasEventStream) {
+      log.warn('ensureMcpAcceptHeader rejecting request: missing text/event-stream', {
+        method: req.method,
+        path: req.path,
+        acceptHeader: accept,
+      });
+      res
+        .status(406)
+        .type('application/json')
+        .send({ error: 'Accept header must include text/event-stream' });
+      return;
+    }
+
+    if (requiresJson && !hasJson) {
+      log.warn('ensureMcpAcceptHeader rejecting request: missing application/json', {
+        method: req.method,
+        path: req.path,
+        acceptHeader: accept,
+      });
+      res
+        .status(406)
+        .type('application/json')
+        .send({ error: 'Accept header must include application/json and text/event-stream' });
+      return;
+    }
+
+    log.debug('ensureMcpAcceptHeader allowing request', {
       method: req.method,
       path: req.path,
-      acceptHeader: accept,
     });
-    res
-      .status(406)
-      .type('application/json')
-      .send({ error: 'Accept header must include application/json and text/event-stream' });
-    return;
-  }
-
-  logger.debug('ensureMcpAcceptHeader allowing request', {
-    method: req.method,
-    path: req.path,
-  });
-  next();
+    next();
+  };
 }
 
-/**
- * Mount static assets for favicon/logo (works locally and on Vercel (and probably would without this complexity))
- */
 function mountStaticAssets(app: Express): void {
   const candidates = [
     path.resolve(process.cwd(), 'public'),
@@ -260,11 +262,4 @@ function initializeCoreMcpServer(): {
   return { server, transport };
 }
 
-// handlers are registered via handlers.ts
-
-// http handler moved to handlers.ts
-
-// Note: Vercel expects a default export
-// We export the createApp FUNCTION (not a call) to avoid module-level side effects
-// Vercel will call this function when handling requests
 export default createApp;

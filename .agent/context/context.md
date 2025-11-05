@@ -1,46 +1,104 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-02  
+**Updated**: 2025-11-05  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
-- Consolidate logging across the streamable HTTP and stdio servers by enhancing `@oaknational/mcp-logger` to support configurable sinks (stdout-only vs file-only) and rich tsdoc/documentation.
-- Delete the legacy trace middleware and standardise on `LOG_LEVEL`-driven debug logging.
-- Prepare to instrument the Streamable HTTP transport once logging is unified.
+🚨 **RESCUE MODE ACTIVE** – Git disaster recovery left stdio server in broken state. Executing rescue plan (`.agent/plans/rescue-plan-2025-11-05.md`) to restore working baseline before resuming Phase 2 work. The stdio logging migration was partially complete (new modules exist) but critical `runtime-config.ts` is missing and old logger still in use.
+
+## Strategic Goal
+
+Deliver a unified, type-safe, well-documented logging foundation that enables transport instrumentation for diagnosing production timeouts and errors while maintaining protocol correctness (stdout-only for HTTP/Vercel; file-only for stdio).
+
+## Recent Milestones
+
+- ✅ Logger package split into browser (`@oaknational/mcp-logger`) and Node (`@oaknational/mcp-logger/node`) entry points
+- ✅ Adaptive logger updated with browser guardrails; Node runtime gains `adaptive-node`
+- ✅ Integration tests added to prove entry-point separation
+- ✅ JSON sanitisation refactor eliminated long-standing lint violations
+- ✅ Tranche 1.2.6 and 1.3 closed on 2025-11-03, aligning HTTP server to shared logger
+- ✅ Full quality gate sweep (`pnpm qg`) run on 2025-11-04 (HTTP server validated)
+- ✅ HTTP server `src/runtime-config.ts` introduced and logging/handler wiring refactored
+- 🚨 **2025-11-05**: Git disaster recovery revealed stdio Tranche 1.4 was incomplete - new logging modules exist but `runtime-config.ts` missing and old logger still active
+- 🔧 **2025-11-05**: Rescue plan created to complete stdio migration and restore working baseline
+
+## Architectural Guardrails (Still Enforced)
+
+1. **Tree-shakeable design**: browser entry stays free of Node built-ins; Node-only features live under `/node`
+2. **Runtime typing discipline**: no `any`, `as`, `Record<string, unknown>`, non-specific guards, or other type eroders
+3. **Public API only**: consumers import via package exports, never `src/`
+4. **Validated data**: all runtime data originates from validated schemas; no type broadening after validation
+5. **TDD + fail fast**: keep Red → Green → Refactor loop, prefer `parse` with crisp errors, handle `safeParse` results immediately when used
+
+## Next Steps (Execute in Order)
+
+### 1. 🚨 ACTIVE: Execute Rescue Plan (2025-11-05)
+
+Follow `.agent/plans/rescue-plan-2025-11-05.md` to:
+
+- Create missing `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`
+- Complete stdio logger migration (update `wiring.ts` to use shared logger)
+- Clean build and validate stdio server
+- Run full quality gates to restore green baseline
+- Update planning documents
+- Hand off back to main plan
+
+**Exit Criteria**: All tranches R.1 through R.6 complete, `pnpm qg` passes
+
+### 2. Phase 2 – Transport Instrumentation (Queued, resumes after rescue)
+
+- Define tracing/span model leveraging the consolidated logger outputs
+- Instrument priority transports (stdio, HTTP) with structured correlation IDs
+- Validation: targeted package builds/tests plus bespoke transport diagnostics (see plan)
+
+### 3. Phase 3 – Rollout & Monitoring (Queued)
+
+- Prepare production rollout plan for instrumentation
+- Establish dashboards/alerts consuming new telemetry
+- Validation: full `pnpm qg` + environment-specific smoke checks
 
 ## State Snapshot
 
-- Trace-specific flags/environment have been removed; some helper code remains and will be purged next.
-- The HTTP server currently wraps the shared logger with bespoke file-sink logic; the stdio server still uses its own logger implementation. Both will migrate onto the enhanced shared logger to reduce duplication and ensure consistent behaviour.
-- Hosted deployments (Vercel) must default to stdout logging; stdio deployments must default to file logging. Config needs to stay simple and well documented.
+| Tranche     | Description                  | Status / Notes                     |
+| ----------- | ---------------------------- | ---------------------------------- |
+| 1.1         | Legacy trace system removal  | ✅ Complete                        |
+| 1.2         | Shared logger enhancements   | ✅ Complete                        |
+| 1.2.5       | Logger package restructure   | ✅ Complete (2025-11-03)           |
+| 1.2.6       | Logger consumer audit & docs | ✅ Complete (2025-11-03)           |
+| 1.3         | HTTP server clean-up         | ✅ Complete (2025-11-03)           |
+| 1.4         | Stdio server migration       | 🚨 INCOMPLETE (rescue in progress) |
+| 1.5         | Integration & quality gates  | ⏸️ Blocked (pending rescue)        |
+| **R.1-R.6** | **Rescue tranches**          | 🔧 **ACTIVE (2025-11-05)**         |
 
-## Active Work Streams
+## Quality Gate Status
 
-1. **Shared logger enhancement**
-   - Add opt-in file sink support (path override, append mode) to `packages/libs/logger`.
-   - Supply tsdoc-rich helpers and authored docs covering HTTP vs stdio usage.
+🚨 **Current state**: BROKEN (stdio server has missing dependencies)
 
-2. **App adoption**
-   - Remove `trace-mcp-flow` and the HTTP app’s bespoke logger, refactoring to the shared helper.
-   - Update the stdio server to use the helper in file-only mode, deleting local logging code.
+Latest successful run (2025-11-04, HTTP server only):
 
-3. **Transport instrumentation (next)**
-   - Once logging is unified, add tests that stub the transport to capture timing/errors, then implement logging hooks.
+```bash
+pnpm format-check:root
+pnpm markdownlint-check:root
+pnpm build
+pnpm type-check
+pnpm lint
+pnpm doc-gen
+pnpm test
+pnpm test:e2e
+pnpm smoke:dev:stub
+pnpm smoke:dev:live
+pnpm qg
+```
 
-## Immediate Next Steps
+Re-run the full suite after rescue completion and before every hand-off.
 
-1. Delete the trace module and adjust imports/tests to rely solely on `logger.debug`.
-2. Implement shared logger enhancements with documentation.
-3. Refactor HTTP and stdio servers onto the shared helper, updating tests.
+## Reference Rules & Documents
 
-## Quality Gate Reminder
-
-- After refactors, run `pnpm qg` and `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:dev:auth`; record outcomes in the plan.
-
-## References
-
-- Plan: `.agent/plans/mcp-oauth-implementation-plan.md`
-- Logging utilities: `packages/libs/logger`
-- Stdio logger wiring: `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts`
-- HTTP logger wiring: `apps/oak-curriculum-mcp-streamable-http/src/index.ts`
+- 🚨 **`.agent/plans/rescue-plan-2025-11-05.md`** – **ACTIVE rescue plan (execute first)**
+- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap (resume after rescue)
+- `.agent/context/continuation.prompt.md` – quick-start hand-off prompt (kept in sync with this file)
+- `.agent/directives-and-memory/rules.md` – cardinal rules (must follow)
+- `docs/agent-guidance/testing-strategy.md` – mandated TDD approach
+- `packages/libs/logger/README.md` – logger usage, entry points, sink configuration
+- `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance

@@ -2,51 +2,6 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 import { createApp } from './index.js';
 
-/**
- * Validates that authorization servers array contains Clerk URL
- */
-function assertAuthServersPointToClerk(body: unknown): void {
-  expect(body).toHaveProperty('authorization_servers');
-  if (body && typeof body === 'object' && 'authorization_servers' in body) {
-    const authServers = body.authorization_servers;
-    expect(Array.isArray(authServers)).toBe(true);
-    if (Array.isArray(authServers) && authServers.length > 0) {
-      const firstServer = String(authServers[0]);
-      expect(firstServer).toContain('clerk.accounts.dev');
-    } else {
-      throw new Error('Expected at least one authorization server');
-    }
-  }
-}
-
-/**
- * Validates that resource URL is a valid HTTP(S) URL
- */
-function assertResourceIsValidUrl(body: unknown): void {
-  expect(body).toHaveProperty('resource');
-  if (body && typeof body === 'object' && 'resource' in body) {
-    expect(typeof body.resource).toBe('string');
-    const resource = String(body.resource);
-    expect(resource).toMatch(/^https?:\/\//);
-  }
-}
-
-/**
- * Validates that scopes include required MCP scopes
- */
-function assertScopesIncludeMcpScopes(body: unknown): void {
-  expect(body).toHaveProperty('scopes_supported');
-  if (body && typeof body === 'object' && 'scopes_supported' in body) {
-    const scopes = body.scopes_supported;
-    expect(Array.isArray(scopes)).toBe(true);
-    if (Array.isArray(scopes)) {
-      const scopeStrings = scopes.map((s) => String(s));
-      expect(scopeStrings).toContain('mcp:invoke');
-      expect(scopeStrings).toContain('mcp:read');
-    }
-  }
-}
-
 describe('Clerk OAuth Metadata Endpoints', () => {
   const originalEnv = { ...process.env };
 
@@ -57,6 +12,10 @@ describe('Clerk OAuth Metadata Endpoints', () => {
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     // Secret key can be dummy for integration tests
     process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
+    process.env.BASE_URL = 'http://localhost:3333';
+    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
+    // Ensure auth bypass is disabled for these tests
+    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
     process.env.NODE_ENV = 'test';
   });
 
@@ -69,11 +28,42 @@ describe('Clerk OAuth Metadata Endpoints', () => {
     const res = await request(app).get('/.well-known/oauth-protected-resource');
 
     expect(res.status).toBe(200);
+
     const body: unknown = res.body;
 
-    assertResourceIsValidUrl(body);
-    assertAuthServersPointToClerk(body);
-    assertScopesIncludeMcpScopes(body);
+    // Verify resource property exists and is a valid URL
+    expect(body).toHaveProperty('resource');
+    if (body && typeof body === 'object' && 'resource' in body) {
+      expect(typeof body.resource).toBe('string');
+      const resource = String(body.resource);
+      expect(resource).toMatch(/^https?:\/\//);
+    }
+
+    // Verify authorization_servers points to Clerk
+    expect(body).toHaveProperty('authorization_servers');
+    if (body && typeof body === 'object' && 'authorization_servers' in body) {
+      const authServers = body.authorization_servers;
+      expect(Array.isArray(authServers)).toBe(true);
+      if (Array.isArray(authServers) && authServers.length > 0) {
+        // CRITICAL: Should point to Clerk, not localhost
+        const firstServer = String(authServers[0]);
+        expect(firstServer).toContain('clerk.accounts.dev');
+      } else {
+        throw new Error('Expected at least one authorization server');
+      }
+    }
+
+    // Verify scopes_supported includes required scopes
+    expect(body).toHaveProperty('scopes_supported');
+    if (body && typeof body === 'object' && 'scopes_supported' in body) {
+      const scopes = body.scopes_supported;
+      expect(Array.isArray(scopes)).toBe(true);
+      if (Array.isArray(scopes)) {
+        const scopeStrings = scopes.map((s) => String(s));
+        expect(scopeStrings).toContain('mcp:invoke');
+        expect(scopeStrings).toContain('mcp:read');
+      }
+    }
   });
 
   it('registers authorization server metadata endpoint (route exists)', async () => {
