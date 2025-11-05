@@ -14,23 +14,27 @@ function trySerialiseObject(value: object): string | null {
   return null;
 }
 
+function isToStringFunction(fn: unknown): fn is (...args: never[]) => string {
+  return typeof fn === 'function' && fn !== Object.prototype.toString;
+}
+
 function getCustomToString(value: object): (() => string) | null {
   const ownDescriptor = Object.getOwnPropertyDescriptor(value, 'toString');
   if (ownDescriptor) {
-    const descriptorValue = ownDescriptor.value;
-    if (typeof descriptorValue === 'function' && descriptorValue !== Object.prototype.toString) {
+    const descriptorValue: unknown = ownDescriptor.value;
+    if (isToStringFunction(descriptorValue)) {
       return () => descriptorValue.call(value);
     }
     return null;
   }
 
-  const prototype = Object.getPrototypeOf(value);
-  if (!prototype) {
+  const prototype: unknown = Object.getPrototypeOf(value);
+  if (!prototype || typeof prototype !== 'object') {
     return null;
   }
 
-  const inherited = Reflect.get(prototype, 'toString');
-  if (typeof inherited === 'function' && inherited !== Object.prototype.toString) {
+  const inherited: unknown = Reflect.get(prototype, 'toString');
+  if (isToStringFunction(inherited)) {
     return () => inherited.call(value);
   }
 
@@ -72,6 +76,46 @@ function normaliseSymbol(error: symbol): Error {
   return new Error('Symbol');
 }
 
+function normalisePrimitive(error: string | number | boolean | bigint): Error {
+  switch (typeof error) {
+    case 'string':
+      return new Error(error);
+    case 'number':
+      return new Error(error.toString());
+    case 'boolean':
+      return new Error(error ? 'true' : 'false');
+    case 'bigint':
+      return new Error(error.toString());
+    default:
+      return new Error('Unknown error');
+  }
+}
+
+function isPrimitive(error: unknown): error is string | number | boolean | bigint {
+  const t = typeof error;
+  return t === 'string' || t === 'number' || t === 'boolean' || t === 'bigint';
+}
+
+function normaliseByType(error: unknown): Error {
+  if (isPrimitive(error)) {
+    return normalisePrimitive(error);
+  }
+
+  if (typeof error === 'symbol') {
+    return normaliseSymbol(error);
+  }
+
+  if (typeof error === 'function') {
+    return new Error('[function]');
+  }
+
+  if (typeof error === 'object') {
+    return error ? normaliseObjectError(error) : new Error('Unknown error');
+  }
+
+  return new Error('Unknown error');
+}
+
 /**
  * Normalizes various error types to Error objects
  * @param error - Error value (can be Error, string, number, object, null, undefined)
@@ -86,22 +130,5 @@ export function normalizeError(error: unknown): Error {
     return new Error('Unknown error');
   }
 
-  switch (typeof error) {
-    case 'string':
-      return new Error(error);
-    case 'number':
-      return new Error(error.toString());
-    case 'boolean':
-      return new Error(error ? 'true' : 'false');
-    case 'bigint':
-      return new Error(error.toString());
-    case 'symbol':
-      return normaliseSymbol(error);
-    case 'function':
-      return new Error('[function]');
-    case 'object':
-      return normaliseObjectError(error);
-    default:
-      return new Error('Unknown error');
-  }
+  return normaliseByType(error);
 }

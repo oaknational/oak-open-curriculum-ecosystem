@@ -24,18 +24,24 @@ const createdLoggers = hoisted.createdLoggers;
 const createdSinkConfigs = hoisted.createdSinkConfigs;
 
 vi.mock('@oaknational/mcp-logger', async () => {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  const actual =
-    await vi.importActual<typeof import('@oaknational/mcp-logger')>('@oaknational/mcp-logger');
+  const actualModule = await vi.importActual('@oaknational/mcp-logger');
+  // vitest's importActual has inconsistent type inference across different TS/turbo contexts
+  // We need to use the actual module but TypeScript sees it as 'unknown' in some builds
+  // Using `any` here for mocking is pragmatic - the mock behavior is validated by tests
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
+  const actual = actualModule as any;
 
   type AdaptiveLoggerParams = Parameters<typeof actual.createAdaptiveLogger>;
   type AdaptiveLoggerReturn = ReturnType<typeof actual.createAdaptiveLogger>;
 
   const createAdaptiveLoggerMock = vi.fn((...args: AdaptiveLoggerParams): AdaptiveLoggerReturn => {
-    const [_options, _instance, _sinkConfig] = args;
+    const [_options, _instance, sinkConfig] = args;
     void _options;
     void _instance;
-    void _sinkConfig;
+    // Capture the actual sink config passed to createAdaptiveLogger
+    if (sinkConfig) {
+      createdSinkConfigs.push(sinkConfig as TestSinkConfig);
+    }
     const logger: Logger = {
       trace: vi.fn(),
       debug: vi.fn(),
@@ -49,8 +55,10 @@ vi.mock('@oaknational/mcp-logger', async () => {
     return logger;
   }) as (...args: AdaptiveLoggerParams) => AdaptiveLoggerReturn;
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const parseLogLevelMock = vi.fn(actual.parseLogLevel);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const parseSinkConfigFromEnvMock = vi.fn((env: TestSinkEnvironment) => {
     const config: TestSinkConfig = env.MCP_LOGGER_FILE_PATH
       ? {
@@ -63,16 +71,19 @@ vi.mock('@oaknational/mcp-logger', async () => {
       : {
           stdout: env.MCP_LOGGER_STDOUT !== 'false',
         };
-    createdSinkConfigs.push(config);
+    // Don't push here - we capture the actual config passed to createAdaptiveLogger
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return config as ReturnType<typeof actual.parseSinkConfigFromEnv>;
   }) as typeof actual.parseSinkConfigFromEnv;
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...actual,
     createAdaptiveLogger: createAdaptiveLoggerMock,
     parseLogLevel: parseLogLevelMock,
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     parseSinkConfigFromEnv: parseSinkConfigFromEnvMock,
-  } satisfies typeof actual;
+  };
 });
 
 function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeConfig {

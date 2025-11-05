@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { Logger } from '@oaknational/mcp-logger';
 import {
   McpToolError,
   type ToolExecutionResult,
@@ -8,50 +9,49 @@ import {
   type OakApiPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 
-import { logger } from './logging.js';
-import { registerHandlers, type ToolHandlerDependencies } from './handlers.js';
+import {
+  registerHandlers,
+  type ToolHandlerDependencies,
+  type RegisterHandlersOptions,
+} from './handlers.js';
+import type { RuntimeConfig } from './runtime-config.js';
+import type { Env } from './env.js';
+
+function createMockLogger(): Logger {
+  return {
+    trace: vi.fn(),
+    debug: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    fatal: vi.fn(),
+    isLevelEnabled: vi.fn(() => false),
+  };
+}
+
+function createMockRuntimeConfig(): RuntimeConfig {
+  const env: Env = {
+    OAK_API_KEY: 'test-key',
+    BASE_URL: 'http://localhost:3333',
+    MCP_CANONICAL_URI: 'http://localhost:3333/mcp',
+    CLERK_PUBLISHABLE_KEY: 'pk_test_mock',
+    CLERK_SECRET_KEY: 'sk_test_mock',
+  };
+  return {
+    env,
+    dangerouslyDisableAuth: false,
+    useStubTools: false,
+    vercelHostname: undefined,
+  };
+}
 
 describe('registerHandlers validation logging', () => {
   const TOOL_NAME = 'get-key-stages';
-  let warnSpy: ReturnType<typeof vi.spyOn>;
-  let previousEnv: {
-    readonly OAK_API_KEY?: string;
-    readonly BASE_URL?: string;
-    readonly MCP_CANONICAL_URI?: string;
-  };
-
-  beforeEach(() => {
-    previousEnv = {
-      OAK_API_KEY: process.env.OAK_API_KEY,
-      BASE_URL: process.env.BASE_URL,
-      MCP_CANONICAL_URI: process.env.MCP_CANONICAL_URI,
-    };
-    process.env.OAK_API_KEY = 'test-key';
-    process.env.BASE_URL = 'http://localhost:3333';
-    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
-    warnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => undefined);
-  });
-
-  afterEach(() => {
-    if (previousEnv.OAK_API_KEY === undefined) {
-      delete process.env.OAK_API_KEY;
-    } else {
-      process.env.OAK_API_KEY = previousEnv.OAK_API_KEY;
-    }
-    if (previousEnv.BASE_URL === undefined) {
-      delete process.env.BASE_URL;
-    } else {
-      process.env.BASE_URL = previousEnv.BASE_URL;
-    }
-    if (previousEnv.MCP_CANONICAL_URI === undefined) {
-      delete process.env.MCP_CANONICAL_URI;
-    } else {
-      process.env.MCP_CANONICAL_URI = previousEnv.MCP_CANONICAL_URI;
-    }
-    vi.restoreAllMocks();
-  });
 
   it('logs validation failures with payload context', async () => {
+    const mockLogger = createMockLogger();
+    const mockConfig = createMockRuntimeConfig();
+
     const toolHandlers = new Map<string, (params: unknown, extra?: unknown) => Promise<unknown>>();
     const server = {
       registerTool(name: string, _descriptor: unknown, handler: (...args: unknown[]) => unknown) {
@@ -79,13 +79,19 @@ describe('registerHandlers validation logging', () => {
       }),
     };
 
-    registerHandlers(server as unknown as McpServer, overrides);
+    const options: RegisterHandlersOptions = {
+      overrides,
+      runtimeConfig: mockConfig,
+      logger: mockLogger,
+    };
+
+    registerHandlers(server as unknown as McpServer, options);
 
     const handler = toolHandlers.get(TOOL_NAME);
     expect(handler).toBeTruthy();
     await handler?.({}, {});
 
-    expect(warnSpy).toHaveBeenCalledWith(
+    expect(mockLogger.warn).toHaveBeenCalledWith(
       'MCP tool validation failed',
       expect.objectContaining({
         toolName: TOOL_NAME,

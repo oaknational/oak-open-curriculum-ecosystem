@@ -1,9 +1,9 @@
 import type express from 'express';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import type { Logger } from '@oaknational/mcp-logger';
 
-import { readEnv } from './env.js';
-import { logger } from './logging.js';
+import type { RuntimeConfig } from './runtime-config.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -29,12 +29,18 @@ const defaultDependencies: ToolHandlerDependencies = {
 
 export type ToolHandlerOverrides = Partial<ToolHandlerDependencies>;
 
-export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverrides): void {
+export interface RegisterHandlersOptions {
+  readonly overrides?: ToolHandlerOverrides;
+  readonly runtimeConfig: RuntimeConfig;
+  readonly logger: Logger;
+}
+
+export function registerHandlers(server: McpServer, options: RegisterHandlersOptions): void {
   const deps: ToolHandlerDependencies = {
     ...defaultDependencies,
-    ...(overrides ?? {}),
+    ...(options.overrides ?? {}),
   };
-  const useStubTools = process.env.OAK_CURRICULUM_MCP_USE_STUB_TOOLS === 'true';
+  const useStubTools = options.runtimeConfig.useStubTools;
   const stubExecutor = useStubTools ? createStubToolExecutionAdapter() : undefined;
   const tools = listUniversalTools();
   for (const tool of tools) {
@@ -43,14 +49,13 @@ export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverr
       tool.name,
       { title: tool.name, description: tool.description ?? tool.name, inputSchema: input },
       async (params: unknown) => {
-        const env = readEnv();
-        const client = deps.createClient(env.OAK_API_KEY);
+        const client = deps.createClient(options.runtimeConfig.env.OAK_API_KEY);
         const executor = deps.createExecutor({
           executeMcpTool: async (name, args) => {
             const execution = await (stubExecutor
               ? stubExecutor(name, args ?? {})
               : deps.executeMcpTool(name, args, client));
-            logValidationFailureIfPresent(name, execution);
+            logValidationFailureIfPresent(name, execution, options.logger);
             return execution;
           },
         });
@@ -60,7 +65,11 @@ export function registerHandlers(server: McpServer, overrides?: ToolHandlerOverr
   }
 }
 
-function logValidationFailureIfPresent(name: string, execution: ToolExecutionResult): void {
+function logValidationFailureIfPresent(
+  name: string,
+  execution: ToolExecutionResult,
+  logger: Logger,
+): void {
   const cause = extractValidationCause(execution);
   if (!cause) {
     return;

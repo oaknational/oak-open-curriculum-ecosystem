@@ -64,10 +64,12 @@ describe('createFileSink', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {
       // swallow log
     });
-    mockWrite.mockImplementationOnce((_chunk, _encoding, cb) => {
-      cb?.(new Error('write error'));
-      return true;
-    });
+    mockWrite.mockImplementationOnce(
+      (_chunk: unknown, _encoding: unknown, cb?: (error?: Error | null) => void) => {
+        cb?.(new Error('write error'));
+        return true;
+      },
+    );
     const sink = createFileSink(baseConfig, mockFs);
     sink?.write({ level: 'ERROR', message: 'test error' });
     expect(consoleError).toHaveBeenCalledWith('Failed to write log payload to file', {

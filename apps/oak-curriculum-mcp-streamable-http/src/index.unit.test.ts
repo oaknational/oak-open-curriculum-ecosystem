@@ -48,7 +48,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
     process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
     process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
     // Bypass auth for unit tests (testing tool execution, not auth) - safe for local dev only
-    process.env.REMOTE_MCP_ALLOW_NO_AUTH = 'true';
+    process.env.DANGEROUSLY_DISABLE_AUTH = 'true';
     process.env.NODE_ENV = 'development';
     delete process.env.VERCEL; // Ensure bypass works (only works when NOT on Vercel)
     vi.restoreAllMocks();
@@ -57,9 +57,9 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
 
   it('returns 401 with Clerk auth when bypass not enabled', async () => {
     // Save current bypass setting
-    const originalBypass = process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    const originalBypass = process.env.DANGEROUSLY_DISABLE_AUTH;
     // Disable bypass temporarily
-    delete process.env.REMOTE_MCP_ALLOW_NO_AUTH;
+    delete process.env.DANGEROUSLY_DISABLE_AUTH;
     const authApp = createApp();
     const res = await request(authApp)
       .post('/mcp')
@@ -67,7 +67,7 @@ describe('Oak Curriculum MCP Streamable HTTP', () => {
       .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
     // Restore bypass setting for other tests
     if (originalBypass) {
-      process.env.REMOTE_MCP_ALLOW_NO_AUTH = originalBypass;
+      process.env.DANGEROUSLY_DISABLE_AUTH = originalBypass;
     }
     expect(res.status).toBe(401);
   });

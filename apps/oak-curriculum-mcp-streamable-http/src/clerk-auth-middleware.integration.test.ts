@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 
 import { createApp } from './index.js';
@@ -17,9 +17,21 @@ function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeCon
 
 describe('Clerk Auth Middleware Integration', () => {
   let runtimeConfig: RuntimeConfig;
+  const originalEnv = { ...process.env };
 
   beforeEach(() => {
+    // Clerk middleware reads from process.env, so we must set it here
+    process.env.OAK_API_KEY = 'test-key';
+    process.env.CLERK_PUBLISHABLE_KEY = 'pk_test_bmF0aXZlLWhpcHBvLTE1LmNsZXJrLmFjY291bnRzLmRldiQ';
+    process.env.CLERK_SECRET_KEY = 'sk_test_' + 'x'.repeat(40);
+    process.env.BASE_URL = 'http://localhost:3333';
+    process.env.MCP_CANONICAL_URI = 'http://localhost:3333/mcp';
+
     runtimeConfig = createRuntimeConfig();
+  });
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
   });
 
   it('rejects unauthenticated requests to /mcp with 401', async () => {
@@ -53,6 +65,12 @@ describe('Clerk Auth Middleware Integration', () => {
   it('allows GET /.well-known/oauth-protected-resource without auth', async () => {
     const app = createApp({ runtimeConfig });
     const res = await request(app).get('/.well-known/oauth-protected-resource');
+
+    if (res.status !== 200) {
+      console.log('Unexpected status:', res.status);
+      console.log('Response body:', res.body);
+      console.log('Response text:', res.text);
+    }
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('resource');
