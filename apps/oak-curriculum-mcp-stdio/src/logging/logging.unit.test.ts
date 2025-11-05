@@ -32,10 +32,13 @@ vi.mock('@oaknational/mcp-logger/node', async () => {
   type AdaptiveLoggerReturn = ReturnType<typeof actual.createAdaptiveLogger>;
 
   const createAdaptiveLoggerMock = vi.fn((...args: AdaptiveLoggerParams): AdaptiveLoggerReturn => {
-    const [_options, _name, _sinkConfig] = args;
+    const [_options, _name, sinkConfig] = args;
     void _options;
     void _name;
-    void _sinkConfig;
+    // Capture the actual sink config passed to createAdaptiveLogger
+    if (sinkConfig) {
+      createdSinkConfigs.push(sinkConfig as TestSinkConfig);
+    }
     const logger: Logger = {
       trace: vi.fn(),
       debug: vi.fn(),
@@ -63,7 +66,7 @@ vi.mock('@oaknational/mcp-logger/node', async () => {
       : {
           stdout: env.MCP_LOGGER_STDOUT !== 'false',
         };
-    createdSinkConfigs.push(config);
+    // Don't push here - we capture the actual config passed to createAdaptiveLogger
     return config as ReturnType<typeof actual.parseSinkConfigFromEnv>;
   }) as typeof actual.parseSinkConfigFromEnv;
 
