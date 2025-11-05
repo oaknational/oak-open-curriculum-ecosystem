@@ -23,7 +23,7 @@ import {
   validateOutput,
   type ToolExecutionSuccessEnvelope,
 } from './validation.js';
-import type { Logger } from './wiring.js';
+import { type Logger } from '@oaknational/mcp-logger/node';
 
 type ToolLogger = Parameters<typeof createToolResponseHandlers>[0];
 type ToolContext = Parameters<typeof createToolResponseHandlers>[1];

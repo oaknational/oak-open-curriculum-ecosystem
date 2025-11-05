@@ -14,7 +14,8 @@ import {
   createOakPathBasedClient,
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
-import type { ServerConfig, Logger } from './wiring.js';
+import type { ServerConfig } from './wiring.js';
+import { type Logger } from '@oaknational/mcp-logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';

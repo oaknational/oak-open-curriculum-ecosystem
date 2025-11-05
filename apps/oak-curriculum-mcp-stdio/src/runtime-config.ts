@@ -30,7 +30,11 @@ const VALID_LOG_LEVELS = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'] as
 type ValidLogLevel = (typeof VALID_LOG_LEVELS)[number];
 
 function isValidLogLevel(value: unknown): value is ValidLogLevel {
-  return typeof value === 'string' && VALID_LOG_LEVELS.includes(value as ValidLogLevel);
+  if (typeof value !== 'string') {
+    return false;
+  }
+  const validLevels: readonly string[] = VALID_LOG_LEVELS;
+  return validLevels.includes(value);
 }
 
 function toBooleanFlag(value: string | undefined): boolean {

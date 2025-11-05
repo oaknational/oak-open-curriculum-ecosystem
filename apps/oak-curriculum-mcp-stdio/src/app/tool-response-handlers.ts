@@ -4,8 +4,7 @@
 
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import type { ToolResult, ToolName } from '@oaknational/oak-curriculum-sdk';
-
-import type { Logger } from './wiring.js';
+import { type Logger } from '@oaknational/mcp-logger/node';
 import type { ToolExecutionSuccessEnvelope } from './validation.js';
 
 type ToolResponse = CallToolResult;
