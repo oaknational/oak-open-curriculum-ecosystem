@@ -31,6 +31,7 @@ export interface ToolDescriptor<
   readonly toolZodSchema: ZodType<TArgs, ZodTypeDef, unknown>;
   readonly toolInputJsonSchema: {
     readonly type: 'object';
+     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
@@ -40,6 +41,7 @@ export interface ToolDescriptor<
   readonly describeToolArgs: () => string;
   readonly inputSchema: {
     readonly type: 'object';
+     
     readonly properties?: Record<string, unknown>;
     readonly required?: string[];
     readonly additionalProperties?: boolean;
