@@ -116,4 +116,3 @@ git show --stat safety/pre-rescue-2025-11-05
 ---
 
 **Remember**: The safety snapshot is your lifeline. Don't delete it until the rescue is complete and validated!
-

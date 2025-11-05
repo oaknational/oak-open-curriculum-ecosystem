@@ -24,6 +24,7 @@ Following a destructive git operation and partial recovery from dangling blobs, 
 ### Root Cause
 
 Git disaster recovery restored:
+
 - ✅ New logging modules expecting RuntimeConfig
 - ✅ Updated tests expecting new pattern
 - ❌ Missing runtime-config.ts that ties it together
@@ -37,6 +38,7 @@ The recovery got **newer** code (logging modules) mixed with **older** code (wir
 ## Recovery Strategy
 
 We will:
+
 1. Create the missing `runtime-config.ts` for stdio server
 2. Complete the stdio logger migration by updating `wiring.ts`
 3. Clean and rebuild to clear stale artifacts
@@ -289,31 +291,37 @@ The rescue is complete when ALL of these are true:
 Record outcomes here as tranches complete:
 
 ### Tranche R.1 Evidence
+
 ```
 [To be filled during execution]
 ```
 
 ### Tranche R.2 Evidence
+
 ```
 [To be filled during execution]
 ```
 
 ### Tranche R.3 Evidence
+
 ```
 [To be filled during execution]
 ```
 
 ### Tranche R.4 Evidence
+
 ```
 [To be filled during execution]
 ```
 
 ### Tranche R.5 Evidence
+
 ```
 [To be filled during execution]
 ```
 
 ### Tranche R.6 Evidence
+
 ```
 [To be filled during execution]
 ```
@@ -331,6 +339,7 @@ Record outcomes here as tranches complete:
 5. The goal (better debug logging in SDK/HTTP, consistency in stdio) is now achieved
 
 **The next agent should:**
+
 - Read `.agent/context/continuation.prompt.md` (will be updated to reflect rescue completion)
 - Proceed directly to Phase 2, Session 2.A (Timing & Error Instrumentation)
 - NOT revisit logging consolidation or runtime config (it's done)
@@ -339,6 +348,7 @@ Record outcomes here as tranches complete:
 
 ## References
 
+- 🛟 **RECOVERY**: `.agent/RECOVERY.md` – Instructions to restore safety snapshot if rescue fails
 - **Main Plan**: `.agent/plans/mcp-oauth-implementation-plan.md`
 - **Context Snapshot**: `.agent/context/context.md`
 - **Continuation Prompt**: `.agent/context/continuation.prompt.md`
@@ -348,7 +358,23 @@ Record outcomes here as tranches complete:
 
 ---
 
+## Safety Snapshot
+
+Before executing this rescue plan, a complete safety snapshot was created:
+
+- **Branch**: `safety/pre-rescue-2025-11-05`
+- **Commit**: `66e6115`
+- **Files**: 66 files changed, 5773 insertions, 1479 deletions
+- **Recovery**: See `.agent/RECOVERY.md` for restore instructions
+
+If anything goes wrong during rescue operations, you can restore this exact state by running:
+
+```bash
+git checkout safety/pre-rescue-2025-11-05
+```
+
+---
+
 **Rescue Plan Owner**: Current Agent Session  
 **Next Review**: After Tranche R.5 completes (before documentation updates)  
 **Escalation**: If any tranche fails validation, stop and reassess before proceeding
-
