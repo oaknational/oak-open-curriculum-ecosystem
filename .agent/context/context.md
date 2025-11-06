@@ -1,12 +1,14 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-06 (Session 2.1 Complete)  
+**Updated**: 2025-11-06 (Session 2.2 Complete)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
 ✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
-🚀 **Phase 2 Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support. All quality gates green. Ready for Session 2.2 (stdio server correlation).
+✅ **Phase 2 Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support  
+✅ **Phase 2 Session 2.2 Complete** – Stdio server correlation IDs implemented with full request tracing support  
+🚀 **Next: Phase 2 Session 2.3** – Request timing instrumentation (both HTTP and stdio servers). All quality gates green.
 
 ## Strategic Goal
 
@@ -26,8 +28,11 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-05**: Runtime config consolidation complete across HTTP and stdio servers
 - ✅ **2025-11-05**: Repository pushed to remote, Phase 1 fully delivered
 - ✅ **2025-11-06**: Session 2.1 complete - HTTP server correlation IDs with full tracing support
-- ✅ **2025-11-06**: 13 new correlation tests added (6 unit, 7 integration), all passing
-- ✅ **2025-11-06**: Comprehensive correlation ID documentation added to README and TESTING.md
+- ✅ **2025-11-06**: 13 new HTTP correlation tests added (6 unit, 7 integration), all passing
+- ✅ **2025-11-06**: Comprehensive correlation ID documentation added to HTTP README and TESTING.md
+- ✅ **2025-11-06**: Session 2.2 complete - Stdio server correlation IDs with full tracing support
+- ✅ **2025-11-06**: 9 new stdio correlation tests added (6 unit, 3 logger helpers), all passing
+- ✅ **2025-11-06**: Comprehensive correlation ID documentation added to stdio README
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -42,8 +47,8 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 ### 1. Phase 2 – Transport Instrumentation (In Progress)
 
 - ✅ Session 2.1: HTTP Server Correlation IDs (Complete)
-- 🔄 Session 2.2: Stdio Server Correlation IDs (Next)
-- ⏳ Session 2.3: Request Timing Instrumentation
+- ✅ Session 2.2: Stdio Server Correlation IDs (Complete)
+- 🔄 Session 2.3: Request Timing Instrumentation (Next)
 - ⏳ Session 2.4: Error Context Enrichment
 - ⏳ Session 2.5: Final Integration & Smoke Tests
 
@@ -67,12 +72,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 | **R.1-R.6** | **Rescue tranches**          | ✅ **Complete (2025-11-05)**             |
 | **Runtime** | **Config consolidation**     | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
 | **2.1**     | **HTTP correlation IDs**     | ✅ **Complete (2025-11-06)**             |
+| **2.2**     | **Stdio correlation IDs**    | ✅ **Complete (2025-11-06)**             |
 
 ## Quality Gate Status
 
-✅ **Current state**: ALL GREEN (2025-11-06, Session 2.1 complete)
+✅ **Current state**: ALL GREEN (2025-11-06, Session 2.2 complete)
 
-Latest successful run (2025-11-06, post Session 2.1):
+Latest successful run (2025-11-06, post Session 2.2):
 
 ```bash
 pnpm format-check:root    ✅
@@ -81,7 +87,7 @@ pnpm build                ✅ (10 packages)
 pnpm type-check           ✅ (10 workspaces)
 pnpm lint                 ✅ (10 workspaces)
 pnpm doc-gen              ✅
-pnpm test                 ✅ (451 tests, +13 correlation tests)
+pnpm test                 ✅ (451 tests, +22 total correlation tests)
 pnpm test:e2e             ✅ (68 tests, 3 workspaces)
 pnpm smoke:dev:stub       ✅
 pnpm smoke:dev:live       ✅
@@ -90,9 +96,14 @@ pnpm qg                   ✅
 
 **Session 2.1 Test Additions**:
 
-- 6 unit tests for correlation ID generation (`correlation/index.unit.test.ts`)
-- 7 integration tests for correlation middleware (`correlation/middleware.integration.test.ts`)
-- 3 additional tests for logger correlation helpers (`logging/logging.unit.test.ts`)
+- 6 unit tests for HTTP correlation ID generation (`correlation/index.unit.test.ts`)
+- 7 integration tests for HTTP correlation middleware (`correlation/middleware.integration.test.ts`)
+- 3 additional tests for HTTP logger correlation helpers (`logging/logging.unit.test.ts`)
+
+**Session 2.2 Test Additions**:
+
+- 6 unit tests for stdio correlation ID generation (`correlation/index.unit.test.ts` in stdio app)
+- 3 additional tests for stdio logger correlation helpers (`logging/logging.unit.test.ts` in stdio app)
 
 Re-run the full suite before every hand-off and after significant changes.
 

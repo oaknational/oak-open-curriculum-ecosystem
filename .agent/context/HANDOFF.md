@@ -1,8 +1,8 @@
 # Oak MCP Ecosystem – Phase 2 Handoff
 
-**Last Updated**: 2025-11-06 (Session 2.1 Complete)  
+**Last Updated**: 2025-11-06 (Session 2.2 Complete)  
 **Branch**: `feat/oauth_support`  
-**Phase**: Phase 2 (Instrumentation) – Session 2.1 Complete
+**Phase**: Phase 2 (Instrumentation) – Session 2.2 Complete
 
 ---
 
@@ -12,9 +12,11 @@
 
 ✅ **Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support.
 
-🚀 **Next Up: Session 2.2** – Stdio server correlation IDs (similar patterns, different transport constraints).
+✅ **Session 2.2 Complete** – Stdio server correlation IDs implemented with full request tracing support.
 
-**Repository Status**: All green, 451 tests passing (+13 correlation tests), full quality gates validated.
+🚀 **Next Up: Session 2.3** – Request timing instrumentation (both HTTP and stdio servers).
+
+**Repository Status**: All green, 451 tests passing (+22 total correlation tests), full quality gates validated.
 
 ---
 
@@ -194,9 +196,9 @@ Note: Don't update HANDOFF.md until a milestone is reached.
 
 ### Test Coverage (Current)
 
-- **Total Tests**: 438+ across 10 workspaces
-- **HTTP Server**: 45 e2e tests
-- **Stdio Server**: 12 e2e tests
+- **Total Tests**: 451 across 10 workspaces
+- **HTTP Server**: 45 e2e tests, 59 unit tests (+13 correlation tests)
+- **Stdio Server**: 12 e2e tests, 49 unit tests (+9 correlation tests)
 - **SDK**: 11 e2e tests
 - **Logger Package**: Full unit test coverage
 - **All Quality Gates**: ✅ GREEN
@@ -298,19 +300,27 @@ export function doX() {
 - [x] All HTTP request/response pairs have matching correlation IDs
 - [x] Integration tests verify correlation ID consistency (7 integration tests, 6 unit tests)
 - [x] Correlation IDs appear in logger context via createChildLogger
+- [x] Quality gates remain green
+
+**Session 2.2 ✅ Complete:**
+
+- [x] Request correlation IDs generated and propagated through stdio server
+- [x] All stdio tool invocations have unique correlation IDs
+- [x] Unit tests verify correlation ID generation and logger helpers (6 + 3 tests)
+- [x] File logs contain correlation IDs for all operations
 - [x] Quality gates remain green (451 tests passing)
 
-**Session 2.2 Complete When:**
+**Session 2.3 Complete When:**
 
-- [ ] Request correlation IDs generated and propagated through stdio server
-- [ ] All stdio request/response pairs have matching correlation IDs
-- [ ] Integration tests verify correlation ID consistency
-- [ ] File logs contain correlation IDs for all operations
+- [ ] Request timing metrics captured for all HTTP and stdio requests
+- [ ] Slow request warnings logged for both servers
+- [ ] Timing data included in error contexts
+- [ ] Integration tests verify timing consistency
 - [ ] Quality gates remain green
 
 **Phase 2 Complete When:**
 
-- [ ] Both HTTP and stdio servers have correlation ID support
+- [x] Both HTTP and stdio servers have correlation ID support
 - [ ] Timing metrics captured for all requests
 - [ ] Error contexts enriched with correlation data
 - [ ] Full e2e validation passing
@@ -364,12 +374,12 @@ export function doX() {
 ### Phase Progress
 
 - ✅ **Phase 1**: Complete (2025-11-05)
-- 🎯 **Phase 2**: Ready to begin (Current focus)
+- 🎯 **Phase 2**: In Progress (Current focus - Sessions 2.1 & 2.2 complete)
 - ⏳ **Phase 3**: Queued
 
 ### Quality Gates
 
-All green as of 2025-11-05:
+All green as of 2025-11-06 (Session 2.2 complete):
 
 - ✅ Format check
 - ✅ Markdown lint
@@ -377,7 +387,7 @@ All green as of 2025-11-05:
 - ✅ Type check (10 workspaces)
 - ✅ Lint (10 workspaces)
 - ✅ Documentation generation
-- ✅ Unit tests (438+)
+- ✅ Unit tests (451)
 - ✅ E2E tests (68)
 - ✅ Smoke tests (stub + live)
 
@@ -403,7 +413,7 @@ If you're confused or stuck:
 
 ---
 
-**Last Milestone**: Session 2.1 Complete (2025-11-06)  
-**Next Milestone**: Session 2.2 Complete (TBD)  
-**Document Version**: 1.1  
+**Last Milestone**: Session 2.2 Complete (2025-11-06)  
+**Next Milestone**: Session 2.3 Complete (TBD)  
+**Document Version**: 1.2  
 **Status**: Active

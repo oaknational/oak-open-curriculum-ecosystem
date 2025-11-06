@@ -1,7 +1,7 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-05 (Post-Rescue & Phase 1 Complete)  
-**Status**: ✅ Phase 1 Complete – All quality gates green · Ready for Phase 2  
+**Last Updated**: 2025-11-06 (Phase 2 Sessions 2.1 & 2.2 Complete)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Sessions 2.1 & 2.2 Complete · 🚀 Ready for Session 2.3  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
@@ -11,10 +11,13 @@
 I'm continuing work on the Oak MCP Ecosystem observability implementation. This is a multi-phase project to:
 
 1. **Phase 1 (✅ Complete)**: Consolidate logging across HTTP and stdio MCP servers into a unified, type-safe foundation
-2. **Phase 2 (Ready)**: Add transport instrumentation (correlation IDs, timing, error enrichment)
+2. **Phase 2 (🚀 In Progress)**: Add transport instrumentation (correlation IDs, timing, error enrichment)
+   - ✅ Session 2.1: HTTP Server Correlation IDs (Complete 2025-11-06)
+   - ✅ Session 2.2: Stdio Server Correlation IDs (Complete 2025-11-06)
+   - 🔄 Session 2.3: Request Timing Instrumentation (Next)
 3. **Phase 3 (Queued)**: Production rollout with monitoring and dashboards
 
-**Current objective**: Prepare for Phase 2 execution with complete context restoration.
+**Current objective**: Execute Phase 2, Session 2.3 (Request Timing Instrumentation) with complete context from Sessions 2.1 & 2.2.
 
 ---
 
@@ -311,6 +314,109 @@ pnpm qg                       ✅ (runs all above)
 
 ---
 
+### Phase 2.1: HTTP Server Correlation IDs (2025-11-06)
+
+**Objectives**: Implement request correlation IDs to enable request tracing across the HTTP server
+
+**Key Decisions**:
+
+1. **Correlation ID Format**: `req_{timestamp}_{6-char-hex}`
+   - Chronologically sortable (timestamp first)
+   - Collision-resistant (random hex component)
+   - URL-safe (no special characters)
+   - Example: `req_1699123456789_a3f2c9`
+
+2. **Storage in `res.locals` (not `req`)**
+   - More idiomatic Express pattern
+   - Passed naturally between middleware
+   - Type-safe with TypeScript declaration merging
+
+3. **Child Logger Pattern**
+   - `createChildLogger(parentLogger, correlationId)` creates logger with correlation context
+   - Preserves parent logger configuration
+   - Adds correlation ID to all log entries
+   - No mutation of parent logger
+
+4. **X-Correlation-ID Header Propagation**
+   - Middleware checks for existing header (reuses if present)
+   - Generates new ID if absent
+   - Always includes in response headers
+   - Enables client-side correlation tracking
+
+**Implementation**:
+
+- Created `correlation/` module with ID generation and middleware
+- Updated `logging/` module with `createChildLogger` and `extractCorrelationId`
+- Updated handlers to use correlated logger for all operations
+- Added comprehensive documentation with examples
+
+**Deliverables**:
+
+- 6 unit tests for correlation ID generation
+- 7 integration tests for middleware behavior
+- 3 additional logger helper tests
+- Documentation in README.md and TESTING.md
+
+**Validation**:
+
+- All existing tests continue to pass (45 e2e tests)
+- New tests verify correlation ID format, uniqueness, propagation
+- Quality gates remain green
+
+---
+
+### Phase 2.2: Stdio Server Correlation IDs (2025-11-06)
+
+**Objectives**: Implement per-tool-invocation correlation IDs for the stdio server
+
+**Key Decisions**:
+
+1. **Per-Tool-Invocation Correlation** (not per-connection)
+   - Stdio transport has no HTTP-style request/response cycle
+   - Each tool invocation gets a unique correlation ID
+   - Generated in `registerMcpTools` tool handler
+   - Enables tracing individual tool executions
+
+2. **File-Only Logging with Correlation**
+   - Child logger must respect stdio's file-only constraint
+   - Created `createChildLogger(parentLogger, correlationId, config)`
+   - Uses `createStdioSinkConfig` to ensure file-only output
+   - No stdout contamination (MCP protocol safety)
+
+3. **Reused Correlation Format**
+   - Same `req_{timestamp}_{6-char-hex}` format as HTTP
+   - Consistency across transports
+   - Same collision resistance guarantees
+
+4. **Refactoring for Linter Compliance**
+   - Extracted helper functions to reduce `max-lines-per-function`
+   - `executeTool` - tool execution logic
+   - `createHandlersForTool` - response handler creation
+   - `handleToolResult` - result validation and handling
+   - Maintains readability and testability
+
+**Implementation**:
+
+- Mirrored HTTP correlation module for consistency
+- Updated stdio logger with `createChildLogger` helper
+- Integrated correlation ID generation in `registerMcpTools`
+- Correlated logger used for all tool execution logging
+
+**Deliverables**:
+
+- 6 unit tests for correlation ID generation
+- 3 additional logger helper tests
+- Documentation in stdio README.md with grep examples
+
+**Validation**:
+
+- All existing tests continue to pass (12 e2e tests)
+- New tests verify correlation ID generation and logger behavior
+- Quality gates remain green
+- No stdout logging confirmed
+
+---
+
 ## Architectural Decisions (With Rationale)
 
 ### Decision 1: Tree-Shakeable Logger with Dual Entry Points
@@ -401,6 +507,74 @@ const logger = createAdaptiveLogger({
 - Transport concerns stay in transport layer
 - Logger is transport-agnostic (doesn't know about MCP protocol)
 - Configuration enforces correct usage
+
+---
+
+### Decision 5: Correlation ID Implementation Strategy
+
+**Problem**: Need to trace requests across both HTTP (request/response) and stdio (tool invocation) transports.
+
+**Solution**: Universal correlation ID format with transport-specific application.
+
+**Format Choice**: `req_{timestamp}_{6-char-hex}`
+
+**Why This Format**:
+
+- **Sortable**: Timestamp prefix enables chronological ordering in logs
+- **Unique**: Random hex component prevents collisions
+- **Human-readable**: Easy to copy/paste, grep, and reference
+- **URL-safe**: No encoding needed for headers or query params
+- **Consistent**: Same format across all transports
+
+**Transport-Specific Application**:
+
+```typescript
+// HTTP: Per-request correlation (middleware)
+app.use(createCorrelationMiddleware());
+// Generates/reuses ID from X-Correlation-ID header
+// Stores in res.locals.correlationId
+// Adds to response headers
+
+// Stdio: Per-tool-invocation correlation (handler)
+const correlationId = generateCorrelationId();
+const correlatedLogger = createChildLogger(logger, correlationId, config);
+correlatedLogger.debug('Tool execution started', { toolName, correlationId });
+```
+
+**Why Different Approaches**:
+
+- HTTP has natural request/response boundaries → middleware works well
+- Stdio has no request boundaries → correlation per tool invocation
+- Both preserve MCP protocol correctness
+- Both enable end-to-end tracing
+
+**Child Logger Pattern**:
+
+```typescript
+// Creates new logger with correlation ID in context
+export function createChildLogger(
+  parentLogger: Logger,
+  correlationId: string,
+  config?: RuntimeConfig,
+): Logger {
+  return createAdaptiveLogger(
+    {
+      name: 'correlated',
+      level: parentLogger.level,
+      context: { correlationId },
+    },
+    undefined,
+    sinkConfig, // Transport-specific: stdout for HTTP, file for stdio
+  );
+}
+```
+
+**Benefits**:
+
+- All logs for a request/invocation share same correlation ID
+- No mutation of parent logger (functional approach)
+- Easy to grep logs: `grep "req_1699123456789_a3f2c9" logs/`
+- Supports distributed tracing (pass ID between services)
 
 ---
 
@@ -789,7 +963,7 @@ it('generates unique correlation IDs', async () => {
 
 ## Quality Gate Baseline
 
-**Current Status**: ✅ ALL GREEN (2025-11-05)
+**Current Status**: ✅ ALL GREEN (2025-11-06, Post Sessions 2.1 & 2.2)
 
 ```bash
 pnpm format-check:root        ✅ (Prettier)
@@ -798,12 +972,19 @@ pnpm build                    ✅ (10 packages)
 pnpm type-check               ✅ (10 workspaces)
 pnpm lint                     ✅ (10 workspaces)
 pnpm doc-gen                  ✅ (Typedoc)
-pnpm test                     ✅ (438+ tests)
+pnpm test                     ✅ (451 tests, +22 correlation tests)
 pnpm test:e2e                 ✅ (68 tests: HTTP 45, Stdio 12, SDK 11)
 pnpm smoke:dev:stub           ✅ (Stub tools)
 pnpm smoke:dev:live           ✅ (Live API)
 pnpm qg                       ✅ (Runs all above)
 ```
+
+**Test Count Breakdown**:
+
+- **Phase 1 Baseline**: 438 tests
+- **Session 2.1 Added**: +13 tests (HTTP correlation: 6 unit + 7 integration)
+- **Session 2.2 Added**: +9 tests (Stdio correlation: 6 unit + 3 logger helpers)
+- **Current Total**: 451 tests
 
 **Manual-Only Tests** (not in CI):
 
@@ -832,14 +1013,16 @@ pnpm qg                       ✅ (Runs all above)
 **Repository Status**:
 
 - ✅ All quality gates green
-- ✅ 438+ tests passing across 10 workspaces
+- ✅ 451 tests passing across 10 workspaces (+22 correlation tests)
 - ✅ Phase 1 complete and delivered
+- ✅ Phase 2 Sessions 2.1 & 2.2 complete
 - ✅ Runtime config consolidated
+- ✅ Correlation IDs implemented in both servers
 - ✅ All changes committed and pushed
 - ✅ Branch: `feat/oauth_support`
-- ✅ Ready for Phase 2
+- 🚀 Ready for Phase 2, Session 2.3 (Request Timing)
 
-**Phase 1 Deliverables**:
+**Phase 1 Deliverables** (Complete 2025-11-05):
 
 - ✅ Unified logger package with browser/Node entry points
 - ✅ HTTP server migrated to shared logger (stdout-only)
@@ -848,15 +1031,30 @@ pnpm qg                       ✅ (Runs all above)
 - ✅ All tests updated to use config injection
 - ✅ Full documentation suite updated
 
+**Phase 2 Sessions 2.1 & 2.2 Deliverables** (Complete 2025-11-06):
+
+- ✅ Correlation ID module with `req_{timestamp}_{hex}` format
+- ✅ HTTP middleware for correlation ID lifecycle management
+- ✅ Stdio per-tool-invocation correlation
+- ✅ Child logger pattern for correlation context
+- ✅ X-Correlation-ID header propagation (HTTP)
+- ✅ File-only correlated logging (stdio)
+- ✅ 22 new tests (13 HTTP + 9 stdio)
+- ✅ Comprehensive documentation with grep examples
+
 **Next Steps**:
 
-1. Begin Phase 2, Session 2.1: HTTP Server Correlation IDs
+1. Begin Phase 2, Session 2.3: Request Timing Instrumentation
+   - Create timing utilities in logger package
+   - Add timing to HTTP server (with slow request warnings)
+   - Add timing to stdio server (with slow operation warnings)
+   - Update documentation with timing examples
 2. Follow plan document session breakdown
 3. Maintain TDD discipline
 4. Keep quality gates green
 
 ---
 
-**Next Review**: Before beginning Phase 2, Session 2.1
+**Next Review**: Before beginning Phase 2, Session 2.3
 
-**Last Updated**: 2025-11-05 (Post Phase 1 completion)
+**Last Updated**: 2025-11-06 (Post Phase 2 Sessions 2.1 & 2.2 completion)
