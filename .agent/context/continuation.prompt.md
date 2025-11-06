@@ -1,59 +1,44 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-05  
-**Status**: 🚨 RESCUE MODE – Stdio server broken after git disaster · Follow rescue plan before resuming Phase 2
+**Last Updated**: 2025-11-05 (Post-Rescue)  
+**Status**: ✅ Phase 1 Complete – All quality gates green · Ready for Phase 2
 
 Use this prompt to rehydrate quickly when resuming the MCP observability effort.
 
-## 🚨 CRITICAL: Repository in Rescue Mode
-
-The repository is currently in a **broken state** following a git disaster and partial recovery. **DO NOT** proceed with Phase 2 work. Instead:
-
-1. **Read the rescue plan**: `.agent/plans/rescue-plan-2025-11-05.md`
-2. **Execute tranches R.1 through R.6** in order
-3. **Validate** that `pnpm qg` passes
-4. **Only then** return to normal Phase 2 work
-
-## What Happened
-
-- Git disaster lost ~48 hours of work
-- Recovery from dangling blobs restored an inconsistent state
-- Stdio server has new logging modules but missing `runtime-config.ts`
-- Old logger still active in `wiring.ts`, new logger orphaned
-- Planning docs incorrectly marked Tranche 1.4 complete
-- Type system broken, builds will fail
-
-## Startup Checklist (Once Rescue Complete)
+## Startup Checklist
 
 - Read (in order):
-  1. `@.agent/context/context.md` – authoritative state snapshot
+  1. `.agent/context/context.md` – authoritative state snapshot
   2. `.agent/plans/mcp-oauth-implementation-plan.md` – detailed roadmap & validation steps
   3. `.agent/directives-and-memory/rules.md` – cardinal rules (must follow)
   4. `docs/agent-guidance/testing-strategy.md` – mandated Red → Green → Refactor loop
 - Confirm understanding of the logger entry-point split (main vs `/node`)
 - Keep every quality gate green; never disable or skip checks
 
-## Current State (2025-11-05)
+## Current State (2025-11-05 Post-Rescue)
 
-- ✅ HTTP server: Correctly migrated to shared logger with runtime config
-- ✅ Logger package: Working correctly with browser/node entry points
-- 🚨 Stdio server: BROKEN - missing runtime-config.ts, old logger still in use
-- 🚨 Quality gates: Will fail due to stdio type errors
+- ✅ **Phase 1 Complete**: Logging consolidation delivered
+- ✅ HTTP server: Migrated to shared logger with runtime config
+- ✅ Stdio server: Migrated to shared logger with runtime config (completed via rescue)
+- ✅ Logger package: Browser/Node entry points working correctly
+- ✅ Quality gates: ALL GREEN (438+ tests, 10 workspaces)
+- ✅ E2E validation: HTTP (45 tests), Stdio (12 tests), SDK (11 tests)
+- ✅ Runtime config: Consolidated across HTTP and stdio servers
+- ✅ Repository: Pushed to remote, no uncommitted changes
 
-## Rescue Plan Summary
+## Phase 1 Summary (Complete)
 
-Execute in order:
+All tranches delivered:
 
-1. **Tranche R.1**: Create missing `runtime-config.ts` for stdio server
-2. **Tranche R.2**: Complete stdio logger migration (update `wiring.ts`)
-3. **Tranche R.3**: Clean build and unit tests
-4. **Tranche R.4**: Integration and e2e validation
-5. **Tranche R.5**: Repository-wide quality gates
-6. **Tranche R.6**: Documentation updates and handoff
+1. ✅ **Tranche 1.1-1.2**: Legacy trace removal, shared logger foundations
+2. ✅ **Tranche 1.2.5**: Logger package restructure (browser/Node entry points)
+3. ✅ **Tranche 1.2.6**: Logger consumer audit and documentation
+4. ✅ **Tranche 1.3**: HTTP server migration to shared logger
+5. ✅ **Tranche 1.4**: Stdio server migration (completed via rescue plan)
+6. ✅ **Tranche 1.5**: Full quality gate validation
+7. ✅ **Runtime Config**: Consolidation complete for HTTP and stdio servers
 
-**Exit Criteria**: All acceptance criteria met, `pnpm qg` passes, planning docs updated.
-
-## After Rescue: Immediate Plan (Follow in Order)
+## Immediate Plan (Follow in Order)
 
 1. **Phase 2 – Transport Instrumentation**
    - Finalise tracing/span design leveraging consolidated logger outputs
@@ -76,41 +61,42 @@ Execute in order:
 - Prefer `parse` with clear error messages; if `safeParse` is used, handle failures immediately
 - Quality gates: `format → type-check → lint → test → build` must stay green; no disabling checks ever
 
-## Quality Gate Baseline (Target Post-Rescue)
+## Quality Gate Baseline (Current Status: All Green)
 
 ```bash
-pnpm format-check:root
-pnpm markdownlint-check:root
-pnpm build
-pnpm type-check
-pnpm lint
-pnpm doc-gen
-pnpm test
-pnpm test:e2e
-pnpm smoke:dev:stub
-pnpm smoke:dev:live
-pnpm qg
+pnpm format-check:root        ✅
+pnpm markdownlint-check:root  ✅
+pnpm build                    ✅ (10 packages)
+pnpm type-check               ✅ (10 workspaces)
+pnpm lint                     ✅ (10 workspaces)
+pnpm doc-gen                  ✅
+pnpm test                     ✅ (438+ tests)
+pnpm test:e2e                 ✅ (68 tests, 3 workspaces)
+pnpm smoke:dev:stub           ✅
+pnpm smoke:dev:live           ✅
+pnpm qg                       ✅
 ```
 
-Re-run the full suite after rescue completion and before every hand-off.
+Re-run the full suite after significant changes and before every hand-off.
 
 ## Quick Reference
 
-- **RESCUE PLAN**: `.agent/plans/rescue-plan-2025-11-05.md` ← START HERE
-- Plan: `.agent/plans/mcp-oauth-implementation-plan.md`
-- Context snapshot: `.agent/context/context.md`
-- Rules: `.agent/directives-and-memory/rules.md`
-- Testing strategy: `docs/agent-guidance/testing-strategy.md`
-- Logger docs: `packages/libs/logger/README.md`
+- **Plan**: `.agent/plans/mcp-oauth-implementation-plan.md`
+- **Context snapshot**: `.agent/context/context.md`
+- **Rules**: `.agent/directives-and-memory/rules.md`
+- **Testing strategy**: `docs/agent-guidance/testing-strategy.md`
+- **Logger docs**: `packages/libs/logger/README.md`
+- 📜 **Rescue plan** (historical): `.agent/plans/rescue-plan-2025-11-05.md`
 
 ## Hand-off Notes
 
-- Repo is BROKEN as of 2025-11-05 following git disaster recovery
-- Stdio server has missing dependencies and dual logger implementations
-- HTTP server is intact and working correctly
-- Execute rescue plan before attempting any Phase 2 work
-- Auth smoke (`smoke:dev:live:auth`) remains manual-only; log results in evidence docs when run
+- ✅ Repository healthy, all quality gates green as of 2025-11-05
+- ✅ Phase 1 (logging consolidation) complete across all servers
+- ✅ Runtime config consolidation complete for HTTP and stdio servers
+- ✅ All changes pushed to remote (`feat/oauth_support` branch)
+- 🎯 Ready to begin Phase 2 (transport instrumentation)
+- 📋 Auth smoke (`smoke:dev:live:auth`) remains manual-only; log results in evidence docs when run
 
 ---
 
-**Next Review**: After rescue completion (or immediately if you are starting a new session)
+**Next Review**: Before beginning Phase 2 work

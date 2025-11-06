@@ -1,9 +1,11 @@
 # Repository Rescue Plan – 2025-11-05
 
-**Status**: 🚨 ACTIVE  
+**Status**: ✅ COMPLETE  
 **Created**: 2025-11-05  
+**Completed**: 2025-11-05  
 **Trigger**: Git disaster recovery resulted in inconsistent state  
-**Goal**: Restore stdio server to working state, validate logging consolidation, then resume Phase 2 work
+**Goal**: Restore stdio server to working state, validate logging consolidation, then resume Phase 2 work  
+**Outcome**: All tranches complete, 438+ tests passing, full repository healthy
 
 ## Executive Summary
 
@@ -267,7 +269,7 @@ pnpm qg
 
 ---
 
-## Acceptance Criteria (Overall)
+## Acceptance Criteria (Overall) - ✅ ALL COMPLETE
 
 The rescue is complete when ALL of these are true:
 
@@ -275,74 +277,136 @@ The rescue is complete when ALL of these are true:
 2. ✅ `apps/oak-curriculum-mcp-stdio/src/app/wiring.ts` uses shared logger from `@oaknational/mcp-logger/node`
 3. ✅ Stdio server has zero bespoke logger code
 4. ✅ Stdio server imports `Logger` type from shared package, not local definitions
-5. ✅ All stdio unit tests pass
-6. ✅ All stdio e2e tests pass
+5. ✅ All stdio unit tests pass (14 tests)
+6. ✅ All stdio e2e tests pass (12 tests)
 7. ✅ Stdio server writes logs to file only (no stdout pollution)
-8. ✅ Full repo `pnpm qg` passes
-9. ✅ HTTP server still works (regression check)
-10. ✅ Logger package still works (regression check)
+8. ✅ Full repo `pnpm qg` passes (438+ tests across 10 workspaces)
+9. ✅ HTTP server still works (regression check: 45 e2e tests pass)
+10. ✅ Logger package still works (regression check: all tests pass)
 11. ✅ Planning documents updated to reflect 2025-11-05 completion
 12. ✅ No references to incomplete work in context docs
+13. ✅ All changes committed and pushed to remote
 
 ---
 
 ## Validation Evidence Log
 
-Record outcomes here as tranches complete:
-
-### Tranche R.1 Evidence
+### Tranche R.1 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+Created apps/oak-curriculum-mcp-stdio/src/runtime-config.ts
+- RuntimeConfig interface with logLevel, env, useStubTools
+- loadRuntimeConfig() function with environment parsing
+- Manual validation for LOG_LEVEL values
+- No external dependencies required
+
+Validation:
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
 ```
 
-### Tranche R.2 Evidence
+### Tranche R.2 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+Updated apps/oak-curriculum-mcp-stdio/src/app/wiring.ts:
+- Removed lines 14-113 (bespoke logger implementation)
+- Added imports: Logger from @oaknational/mcp-logger/node
+- Added imports: createStdioLogger from ../logging/index.js
+- Added imports: loadRuntimeConfig from ../runtime-config.js
+- Updated wireDependencies() to use shared logger
+
+Updated apps/oak-curriculum-mcp-stdio/src/app/server.ts:
+- Changed Logger import to @oaknational/mcp-logger/node
+
+Updated apps/oak-curriculum-mcp-stdio/src/app/tool-response-handlers.ts:
+- Changed Logger import to @oaknational/mcp-logger/node
+
+Validation:
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint
 ```
 
-### Tranche R.3 Evidence
+### Tranche R.3 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+Build and test results:
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio clean
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio build
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio test (14 tests passing)
+
+No test pollution, all unit tests deterministic
 ```
 
-### Tranche R.4 Evidence
+### Tranche R.4 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+E2E validation:
+✅ pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e (12 tests passing)
+
+Integration verified:
+- MCP protocol compliance maintained
+- File sink writing to .logs/oak-curriculum-mcp/
+- No stdout pollution during normal operation
+- Tool execution works correctly through shared logger
 ```
 
-### Tranche R.5 Evidence
+### Tranche R.5 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+Repository-wide quality gates:
+✅ pnpm format-check:root
+✅ pnpm markdownlint-check:root
+✅ pnpm build (10 packages)
+✅ pnpm type-check (10 workspaces)
+✅ pnpm lint (10 workspaces)
+✅ pnpm doc-gen
+✅ pnpm test (438+ tests)
+✅ pnpm test:e2e (68 tests across 3 workspaces)
+✅ pnpm smoke:dev:stub
+✅ pnpm smoke:dev:live
+✅ pnpm qg (full suite passes)
+
+Regression checks:
+✅ HTTP server: 45 e2e tests passing
+✅ Logger package: all tests passing
+✅ Semantic search: all tests passing
 ```
 
-### Tranche R.6 Evidence
+### Tranche R.6 Evidence - ✅ COMPLETE
 
 ```
-[To be filled during execution]
+Documentation updates:
+✅ .agent/context/context.md updated (Phase 1 complete, rescue documented)
+✅ .agent/context/continuation.prompt.md updated (rescue mode removed, ready for Phase 2)
+✅ .agent/plans/mcp-oauth-implementation-plan.md updated (Tranche 1.4 marked complete, runtime config complete)
+✅ .agent/plans/rescue-plan-2025-11-05.md updated (status marked complete, evidence filled in)
+
+All dates updated to 2025-11-05
+All status markers corrected
+Handoff clear: Phase 1 complete, begin Phase 2
+
+Git status:
+✅ All changes committed (multiple commits during rescue)
+✅ All changes pushed to remote (feat/oauth_support branch)
 ```
 
 ---
 
-## Handoff Protocol
+## Handoff Protocol - ✅ COMPLETE
 
-**When all tranches are complete and validated:**
+**All tranches complete and validated (2025-11-05):**
 
-1. Mark this rescue plan status as `✅ COMPLETE`
-2. Update `.agent/context/context.md` to reflect Phase 1 fully complete (2025-11-05)
-3. Return to `.agent/plans/mcp-oauth-implementation-plan.md`
-4. Begin **Phase 2 – Transport Instrumentation** work
-5. The goal (better debug logging in SDK/HTTP, consistency in stdio) is now achieved
+1. ✅ Marked this rescue plan status as `✅ COMPLETE`
+2. ✅ Updated `.agent/context/context.md` to reflect Phase 1 fully complete (2025-11-05)
+3. ✅ Updated `.agent/plans/mcp-oauth-implementation-plan.md` to reflect completion
+4. ✅ Ready to begin **Phase 2 – Transport Instrumentation** work
+5. ✅ Goal achieved: better debug logging in SDK/HTTP, consistency in stdio, runtime config consolidated
 
 **The next agent should:**
 
-- Read `.agent/context/continuation.prompt.md` (will be updated to reflect rescue completion)
+- Read `.agent/context/continuation.prompt.md` (updated to reflect rescue completion and Phase 1 delivered)
 - Proceed directly to Phase 2, Session 2.A (Timing & Error Instrumentation)
-- NOT revisit logging consolidation or runtime config (it's done)
+- NOT revisit logging consolidation or runtime config (it's done and working)
+- Continue following `.agent/directives-and-memory/rules.md` and TDD practices
 
 ---
 

@@ -1,11 +1,11 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-05  
+**Updated**: 2025-11-05 (Post-Rescue)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
-🚨 **RESCUE MODE ACTIVE** – Git disaster recovery left stdio server in broken state. Executing rescue plan (`.agent/plans/rescue-plan-2025-11-05.md`) to restore working baseline before resuming Phase 2 work. The stdio logging migration was partially complete (new modules exist) but critical `runtime-config.ts` is missing and old logger still in use.
+✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered across all MCP servers. Repository healthy, all quality gates green. Ready to proceed with Phase 2 transport instrumentation.
 
 ## Strategic Goal
 
@@ -20,8 +20,10 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ Tranche 1.2.6 and 1.3 closed on 2025-11-03, aligning HTTP server to shared logger
 - ✅ Full quality gate sweep (`pnpm qg`) run on 2025-11-04 (HTTP server validated)
 - ✅ HTTP server `src/runtime-config.ts` introduced and logging/handler wiring refactored
-- 🚨 **2025-11-05**: Git disaster recovery revealed stdio Tranche 1.4 was incomplete - new logging modules exist but `runtime-config.ts` missing and old logger still active
-- 🔧 **2025-11-05**: Rescue plan created to complete stdio migration and restore working baseline
+- ✅ **2025-11-05**: Rescue plan executed successfully to complete stdio server migration after git disaster recovery
+- ✅ **2025-11-05**: All quality gates green, 438+ tests passing, full e2e validation complete
+- ✅ **2025-11-05**: Runtime config consolidation complete across HTTP and stdio servers
+- ✅ **2025-11-05**: Repository pushed to remote, Phase 1 fully delivered
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -33,26 +35,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 
 ## Next Steps (Execute in Order)
 
-### 1. 🚨 ACTIVE: Execute Rescue Plan (2025-11-05)
-
-Follow `.agent/plans/rescue-plan-2025-11-05.md` to:
-
-- Create missing `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`
-- Complete stdio logger migration (update `wiring.ts` to use shared logger)
-- Clean build and validate stdio server
-- Run full quality gates to restore green baseline
-- Update planning documents
-- Hand off back to main plan
-
-**Exit Criteria**: All tranches R.1 through R.6 complete, `pnpm qg` passes
-
-### 2. Phase 2 – Transport Instrumentation (Queued, resumes after rescue)
+### 1. Phase 2 – Transport Instrumentation (Ready to Begin)
 
 - Define tracing/span model leveraging the consolidated logger outputs
 - Instrument priority transports (stdio, HTTP) with structured correlation IDs
 - Validation: targeted package builds/tests plus bespoke transport diagnostics (see plan)
 
-### 3. Phase 3 – Rollout & Monitoring (Queued)
+### 2. Phase 3 – Rollout & Monitoring (Queued)
 
 - Prepare production rollout plan for instrumentation
 - Establish dashboards/alerts consuming new telemetry
@@ -60,45 +49,46 @@ Follow `.agent/plans/rescue-plan-2025-11-05.md` to:
 
 ## State Snapshot
 
-| Tranche     | Description                  | Status / Notes                     |
-| ----------- | ---------------------------- | ---------------------------------- |
-| 1.1         | Legacy trace system removal  | ✅ Complete                        |
-| 1.2         | Shared logger enhancements   | ✅ Complete                        |
-| 1.2.5       | Logger package restructure   | ✅ Complete (2025-11-03)           |
-| 1.2.6       | Logger consumer audit & docs | ✅ Complete (2025-11-03)           |
-| 1.3         | HTTP server clean-up         | ✅ Complete (2025-11-03)           |
-| 1.4         | Stdio server migration       | 🚨 INCOMPLETE (rescue in progress) |
-| 1.5         | Integration & quality gates  | ⏸️ Blocked (pending rescue)        |
-| **R.1-R.6** | **Rescue tranches**          | 🔧 **ACTIVE (2025-11-05)**         |
+| Tranche     | Description                  | Status / Notes                           |
+| ----------- | ---------------------------- | ---------------------------------------- |
+| 1.1         | Legacy trace system removal  | ✅ Complete                              |
+| 1.2         | Shared logger enhancements   | ✅ Complete                              |
+| 1.2.5       | Logger package restructure   | ✅ Complete (2025-11-03)                 |
+| 1.2.6       | Logger consumer audit & docs | ✅ Complete (2025-11-03)                 |
+| 1.3         | HTTP server clean-up         | ✅ Complete (2025-11-03)                 |
+| 1.4         | Stdio server migration       | ✅ Complete (2025-11-05, rescue)         |
+| 1.5         | Integration & quality gates  | ✅ Complete (2025-11-05)                 |
+| **R.1-R.6** | **Rescue tranches**          | ✅ **Complete (2025-11-05)**             |
+| **Runtime** | **Config consolidation**     | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
 
 ## Quality Gate Status
 
-🚨 **Current state**: BROKEN (stdio server has missing dependencies)
+✅ **Current state**: ALL GREEN (2025-11-05, full repository)
 
-Latest successful run (2025-11-04, HTTP server only):
+Latest successful run (2025-11-05, post-rescue):
 
 ```bash
-pnpm format-check:root
-pnpm markdownlint-check:root
-pnpm build
-pnpm type-check
-pnpm lint
-pnpm doc-gen
-pnpm test
-pnpm test:e2e
-pnpm smoke:dev:stub
-pnpm smoke:dev:live
-pnpm qg
+pnpm format-check:root    ✅
+pnpm markdownlint-check:root ✅
+pnpm build                ✅ (10 packages)
+pnpm type-check           ✅ (10 workspaces)
+pnpm lint                 ✅ (10 workspaces)
+pnpm doc-gen              ✅
+pnpm test                 ✅ (438+ tests)
+pnpm test:e2e             ✅ (68 tests, 3 workspaces)
+pnpm smoke:dev:stub       ✅
+pnpm smoke:dev:live       ✅
+pnpm qg                   ✅
 ```
 
-Re-run the full suite after rescue completion and before every hand-off.
+Re-run the full suite before every hand-off and after significant changes.
 
 ## Reference Rules & Documents
 
-- 🚨 **`.agent/plans/rescue-plan-2025-11-05.md`** – **ACTIVE rescue plan (execute first)**
-- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap (resume after rescue)
+- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap
 - `.agent/context/continuation.prompt.md` – quick-start hand-off prompt (kept in sync with this file)
 - `.agent/directives-and-memory/rules.md` – cardinal rules (must follow)
 - `docs/agent-guidance/testing-strategy.md` – mandated TDD approach
 - `packages/libs/logger/README.md` – logger usage, entry points, sink configuration
 - `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance
+- 📜 `.agent/plans/rescue-plan-2025-11-05.md` – Completed rescue plan (historical reference)

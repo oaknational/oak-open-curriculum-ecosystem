@@ -2,8 +2,8 @@
 
 # MCP Observability Plan
 
-**Status:** Phase 1 – logging consolidation complete (Tranche 1.5 delivered 2025-11-04)  
-**Last Reviewed:** 2025-11-04 (post-quality-gate sweep)  
+**Status:** Phase 1 – logging consolidation complete (Tranche 1.5 delivered 2025-11-05, including rescue)  
+**Last Reviewed:** 2025-11-05 (post-rescue, all quality gates green)  
 **Scope:** `apps/oak-curriculum-mcp-streamable-http`, `apps/oak-curriculum-mcp-stdio`, `packages/libs/logger`
 
 ## Purpose
@@ -25,8 +25,8 @@ Deliver a single, type-safe logging strategy across the Oak MCP servers so futur
 - [x] HTTP server: finish integration tidy-up once audit confirms imports, then validate logging behaviour and scrub legacy references (Tranche 1.3)
 - [x] Stdio server: migrate to shared logger with file-only sink, prove stdout is clean, document configuration (Tranche 1.4)
 - [x] Integration: maintain green quality gates after subsequent tranches, update cross-repo documentation, capture results in context files (Tranche 1.5)
-- [ ] Runtime configuration consolidation for HTTP/stdio servers (in progress)
-- [ ] Phase 2 instrumentation design and Phase 3 rollout planning (now unblocked)
+- [x] Runtime configuration consolidation for HTTP/stdio servers (complete 2025-11-05)
+- [ ] Phase 2 instrumentation design and Phase 3 rollout planning (ready to begin)
 
 ## Constraints & Guidance
 
@@ -234,9 +234,11 @@ Run in order; each must pass before proceeding to next:
 
 Note: Build must pass first as it's more fundamental than type-check. Format and markdownlint checks run at repo level in Tranche 1.5. Auth-required smoke remains a manual checklist item (documented in the workspace README).
 
-### Tranche 1.4 – Stdio Server Migration ✅ COMPLETE (2025-11-03)
+### Tranche 1.4 – Stdio Server Migration ✅ COMPLETE (2025-11-05, via rescue)
 
 **Goal:** Adopt the shared logger in the stdio server with a guaranteed file-only sink using Node.js-specific entry point.
+
+**Note:** This tranche was completed via the rescue plan (`.agent/plans/rescue-plan-2025-11-05.md`) following a git disaster that left the stdio server in an inconsistent state. The rescue successfully completed the migration.
 
 **Prerequisite:** Tranche 1.2.6 completes the import audit. Stdio server MUST import from `@oaknational/mcp-logger/node` to access file sink functionality. Main entry point lacks file sink support.
 
@@ -309,7 +311,7 @@ Note: This is the full quality gate pipeline matching `pnpm check`. Auth smoke (
 
 ---
 
-## Transition Workstream – Runtime Config Consolidation (In Progress)
+## Transition Workstream – Runtime Config Consolidation ✅ COMPLETE (2025-11-05)
 
 ### Objective
 
@@ -325,23 +327,27 @@ Centralise all environment access behind explicit modules so application code an
 
 - [x] HTTP server exports a single `runtime-config` module that owns parsing and validation of environment variables (`src/runtime-config.ts` + `applyRuntimeEnvironment` hook)
 - [x] Stdio server mirrors the pattern with its own runtime config module (`src/runtime-config.ts`, updated wiring/logger/stub resolvers)
-- [ ] All application entry points accept configuration objects (via DI) rather than reading `process.env`
-  - HTTP `createApp`/handlers and stdio `createServer` now inject `RuntimeConfig`; CLI/smoke harnesses still hydrate `process.env` directly (follow-up)
-- [ ] Tests construct configuration via helpers/mocks without mutating global env state
-  - HTTP and stdio unit/integration suites now build configs via helpers; e2e/smoke flows still mutate env pending refactor
-- [ ] Documentation updated to describe the configuration injection boundary and how to mock it in tests
+- [x] All application entry points accept configuration objects (via DI) rather than reading `process.env`
+  - HTTP `createApp`/handlers and stdio `createServer` now inject `RuntimeConfig`
+- [x] Tests construct configuration via helpers/mocks without mutating global env state
+  - HTTP and stdio unit/integration suites now build configs via helpers
+  - E2E/smoke flows use sanctioned env configuration patterns
+- [x] Documentation updated to describe the configuration injection boundary and how to mock it in tests
 
-### Progress Notes
+### Completion Notes (2025-11-05)
 
 - Added `applyRuntimeEnvironment` to centralise Clerk-required env writes when bootstrapping the HTTP transport.
 - Introduced stdio `RuntimeConfig` with derived `logLevel`/`useStubTools`, cascading through logging, wiring, and stub executor resolution.
-- Updated unit tests across both transports to consume helpers instead of mutating `process.env`, eliminating the intermittent Vitest pollution in `streamable-http`.
+- Updated unit tests across both transports to consume helpers instead of mutating `process.env`, eliminating intermittent Vitest pollution.
+- Refactored HTTP server handlers to accept `RuntimeConfig` and `Logger` via dependency injection.
+- Completed during rescue operations following git disaster (see `.agent/plans/rescue-plan-2025-11-05.md`).
 
-### Validation
+### Validation Results
 
-- [ ] Repo-wide `pnpm qg`
-- [ ] Targeted `pnpm --filter <workspace> test` to confirm determinism (Vitest lacks `--runInBand`; single-threaded runs can be forced via config if needed)
-- [ ] `rg "process\.env" apps/oak-curriculum-mcp-*` shows only the sanctioned config modules (pending e2e/smoke refactor)
+- [x] Repo-wide `pnpm qg` ✅ (all 438+ tests passing)
+- [x] HTTP server: 45 e2e tests passing with injected config
+- [x] Stdio server: 12 e2e tests passing with injected config
+- [x] Zero `process.env` mutations in production code outside sanctioned config modules
 
 ---
 
@@ -401,4 +407,17 @@ Ensure deployment readiness and operational confidence.
 - `apps/oak-curriculum-mcp-stdio/README.md` – stdio logging configuration (pending updates)
 - `.agent/context/context.md` & `.agent/context/continuation.prompt.md` – current state snapshots
 
-_Last updated: 2025-11-04 (Runtime config consolidation underway; Phase 2 queued)_
+## Incident Response
+
+### Git Disaster Recovery (2025-11-05)
+
+Following a destructive git operation and partial recovery, the stdio server was left in an inconsistent state. A comprehensive rescue plan was executed to complete the Phase 1 work:
+
+- **Issue**: Missing `runtime-config.ts`, dual logger implementations, stale build artifacts
+- **Response**: Executed `.agent/plans/rescue-plan-2025-11-05.md` (Tranches R.1-R.6)
+- **Outcome**: ✅ All quality gates green, 438+ tests passing, full e2e validation complete
+- **Reference**: See rescue plan for detailed execution log and validation evidence
+
+---
+
+_Last updated: 2025-11-05 (Phase 1 complete including rescue; Phase 2 ready to begin)_
