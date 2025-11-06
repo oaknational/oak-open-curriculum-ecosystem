@@ -56,6 +56,55 @@ Note: The server automatically adds the required `Accept: application/json, text
 - `GET /.well-known/oauth-protected-resource` returns the canonical resource and authorisation servers
 - 401 responses include a `WWW-Authenticate` header with `resource` and `authorization_uri` to guide clients
 
+## Request Tracing with Correlation IDs
+
+The HTTP server automatically generates unique correlation IDs for each request to enable end-to-end request tracing and debugging.
+
+### How it works
+
+- Each incoming request receives a unique correlation ID in the format `req_{timestamp}_{randomHex}` (e.g., `req_1699123456789_a3f2c9`)
+- If a client provides an `X-Correlation-ID` header, that ID is preserved and reused
+- The correlation ID is included in the `X-Correlation-ID` response header
+- All logs for a request include the correlation ID, making it easy to trace request flows
+
+### Using correlation IDs
+
+**Making a request:**
+
+```bash
+curl -i http://localhost:3333/healthz
+# Response includes: X-Correlation-ID: req_1699123456789_a3f2c9
+```
+
+**Providing your own correlation ID:**
+
+```bash
+curl -i -H "X-Correlation-ID: my-trace-123" http://localhost:3333/healthz
+# Response includes: X-Correlation-ID: my-trace-123
+```
+
+**Debugging with correlation IDs:**
+
+1. Find the correlation ID from the response header or logs
+2. Filter server logs by that correlation ID
+3. See all operations for that specific request
+
+**Example log filtering:**
+
+```bash
+# If logs are in stdout (Vercel):
+grep "req_1699123456789_a3f2c9" logs.txt
+
+# If using structured logging (JSON), filter by correlationId field
+```
+
+### Benefits
+
+- **Distributed tracing**: Track requests across multiple services
+- **Debugging**: Quickly find all logs related to a specific request
+- **Error investigation**: Trace the full context of errors
+- **Performance analysis**: Measure request latency by following correlation IDs
+
 ## Cursor (local STDIO) configuration
 
 - The local STDIO server is configured via `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:

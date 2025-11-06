@@ -1,8 +1,8 @@
 # Oak MCP Ecosystem – Phase 2 Handoff
 
-**Last Updated**: 2025-11-05 (Post Phase 1 Completion)  
+**Last Updated**: 2025-11-06 (Session 2.1 Complete)  
 **Branch**: `feat/oauth_support`  
-**Phase**: Transition from Phase 1 (Logging) → Phase 2 (Instrumentation)
+**Phase**: Phase 2 (Instrumentation) – Session 2.1 Complete
 
 ---
 
@@ -10,9 +10,11 @@
 
 ✅ **Phase 1 Complete** – Unified logging foundation delivered and validated across the entire MCP ecosystem.
 
-🚀 **Phase 2 Ready** – Transport instrumentation can now begin, leveraging the consolidated logging infrastructure to diagnose production timeouts and errors.
+✅ **Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support.
 
-**Repository Status**: All green, 438+ tests passing, full e2e validation complete, changes pushed to remote.
+🚀 **Next Up: Session 2.2** – Stdio server correlation IDs (similar patterns, different transport constraints).
+
+**Repository Status**: All green, 451 tests passing (+13 correlation tests), full quality gates validated.
 
 ---
 
@@ -288,15 +290,15 @@ export function doX() {
 
 ## ✅ Success Criteria
 
-### Phase 2 Success Criteria (Upcoming)
+### Phase 2 Success Criteria
 
-**Session 2.1 Complete When:**
+**Session 2.1 ✅ Complete:**
 
-- [ ] Request correlation IDs generated and propagated through HTTP server
-- [ ] All HTTP request/response pairs have matching correlation IDs
-- [ ] Integration tests verify correlation ID consistency
-- [ ] Correlation IDs appear in all log entries for a request
-- [ ] Quality gates remain green
+- [x] Request correlation IDs generated and propagated through HTTP server
+- [x] All HTTP request/response pairs have matching correlation IDs
+- [x] Integration tests verify correlation ID consistency (7 integration tests, 6 unit tests)
+- [x] Correlation IDs appear in logger context via createChildLogger
+- [x] Quality gates remain green (451 tests passing)
 
 **Session 2.2 Complete When:**
 
@@ -401,7 +403,7 @@ If you're confused or stuck:
 
 ---
 
-**Last Milestone**: Phase 1 Complete (2025-11-05)  
-**Next Milestone**: Phase 2.1 Complete (TBD)  
-**Document Version**: 1.0  
+**Last Milestone**: Session 2.1 Complete (2025-11-06)  
+**Next Milestone**: Session 2.2 Complete (TBD)  
+**Document Version**: 1.1  
 **Status**: Active

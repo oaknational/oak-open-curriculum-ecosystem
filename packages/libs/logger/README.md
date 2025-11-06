@@ -185,6 +185,28 @@ The request logger extracts and sanitises:
 - Client IP address
 - Request body (optional, via `includeBody` option)
 
+### Correlation ID Support
+
+The HTTP server (`@oaknational/oak-curriculum-mcp-streamable-http`) includes built-in correlation ID support for request tracing. The logger package provides helper functions for working with correlation IDs:
+
+```typescript
+import {
+  createChildLogger,
+  extractCorrelationId,
+} from '@oaknational/oak-curriculum-mcp-streamable-http/logging';
+
+// Extract correlation ID from Express response
+const correlationId = extractCorrelationId(res);
+
+// Create a child logger with correlation ID in context
+if (correlationId) {
+  const correlatedLogger = createChildLogger(logger, correlationId);
+  correlatedLogger.info('Processing request'); // Logs include correlationId
+}
+```
+
+For more details on correlation IDs, see the [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md#request-tracing-with-correlation-ids).
+
 ## API Reference
 
 ### Logger Interface

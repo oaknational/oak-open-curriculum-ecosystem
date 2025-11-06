@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Logger } from '@oaknational/mcp-logger';
+import type { Response } from 'express';
 
-import { createHttpLogger } from './index.js';
+import { createHttpLogger, createChildLogger, extractCorrelationId } from './index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
 
 interface TestSinkConfig {
@@ -138,5 +139,68 @@ describe('createHttpLogger', () => {
     const createdLogger = createdLoggers.at(-1);
     expect(createdLogger).toBeDefined();
     expect(createdLogger?.error).toHaveBeenCalledWith('test message', testError, testContext);
+  });
+});
+
+describe('createChildLogger', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    createdLoggers.length = 0;
+    createdSinkConfigs.length = 0;
+  });
+
+  it('creates a logger with correlation ID in context', () => {
+    const runtimeConfig = createRuntimeConfig();
+    const parentLogger = createHttpLogger(runtimeConfig);
+    const correlationId = 'req_123456789_abc123';
+
+    const childLogger = createChildLogger(parentLogger, correlationId);
+
+    expect(childLogger).toBeDefined();
+    expect(typeof childLogger.info).toBe('function');
+  });
+
+  it('child logger includes correlation ID in all log calls', () => {
+    const runtimeConfig = createRuntimeConfig();
+    const parentLogger = createHttpLogger(runtimeConfig);
+    const correlationId = 'req_123456789_abc123';
+
+    const childLogger = createChildLogger(parentLogger, correlationId);
+    childLogger.info('Test message', { extra: 'data' });
+
+    const childLoggerInstance = createdLoggers.at(-1);
+    expect(childLoggerInstance?.info).toHaveBeenCalled();
+  });
+});
+
+describe('extractCorrelationId', () => {
+  it('extracts correlation ID from res.locals', () => {
+    const mockRes = {
+      locals: {
+        correlationId: 'req_123456789_abc123',
+      },
+    } as Response;
+
+    const correlationId = extractCorrelationId(mockRes);
+
+    expect(correlationId).toBe('req_123456789_abc123');
+  });
+
+  it('returns undefined when correlation ID is not in res.locals', () => {
+    const mockRes = {
+      locals: {},
+    } as Response;
+
+    const correlationId = extractCorrelationId(mockRes);
+
+    expect(correlationId).toBeUndefined();
+  });
+
+  it('returns undefined when res.locals is undefined', () => {
+    const mockRes = {} as Response;
+
+    const correlationId = extractCorrelationId(mockRes);
+
+    expect(correlationId).toBeUndefined();
   });
 });

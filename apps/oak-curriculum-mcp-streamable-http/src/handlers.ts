@@ -4,6 +4,7 @@ import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/se
 import type { Logger } from '@oaknational/mcp-logger';
 
 import type { RuntimeConfig } from './runtime-config.js';
+import { extractCorrelationId, createChildLogger } from './logging/index.js';
 import {
   createOakPathBasedClient,
   executeToolCall,
@@ -140,10 +141,37 @@ function truncateForLog(value: unknown, maxLength = 2000): string | undefined {
   return `${serialised.slice(0, maxLength)}...`;
 }
 
+/**
+ * Creates an MCP request handler with correlation ID support.
+ *
+ * @param transport - MCP server transport
+ * @param logger - Base logger instance
+ * @returns Express request handler for MCP protocol
+ *
+ * @public
+ */
 export function createMcpHandler(
   transport: StreamableHTTPServerTransport,
+  logger?: Logger,
 ): (req: express.Request, res: express.Response) => Promise<void> {
   return async (req: express.Request, res: express.Response) => {
+    // Extract correlation ID and create correlated logger if available
+    const correlationId = extractCorrelationId(res);
+    if (logger && correlationId) {
+      const correlatedLogger = createChildLogger(logger, correlationId);
+      correlatedLogger.debug('MCP request received', {
+        method: req.method,
+        path: req.path,
+      });
+    }
+
     await transport.handleRequest(req, res, req.body);
+
+    if (logger && correlationId) {
+      const correlatedLogger = createChildLogger(logger, correlationId);
+      correlatedLogger.debug('MCP request completed', {
+        statusCode: res.statusCode,
+      });
+    }
   };
 }

@@ -11,6 +11,8 @@ import {
   type Logger,
 } from '@oaknational/mcp-logger';
 
+import { createCorrelationMiddleware } from './correlation/middleware.js';
+
 import { renderLandingPageHtml } from './landing-page.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
@@ -30,6 +32,17 @@ type ExpressWithAppId = Express & { __appId?: number };
 
 let appCounter = 0;
 
+function setupBaseMiddleware(app: Express, log: Logger): void {
+  app.use(expressJson({ limit: '1mb' }));
+  app.use(createCorrelationMiddleware(log));
+
+  const debugEnabled = log.isLevelEnabled?.(convertLogLevel('DEBUG')) ?? false;
+  if (debugEnabled) {
+    app.use(createRequestLogger(log, { level: 'debug' }));
+  }
+  app.use(createErrorLogger(log));
+}
+
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   appCounter++;
   const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
@@ -39,13 +52,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   log.debug(`Creating app #${String(appCounter)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appCounter;
-  app.use(expressJson({ limit: '1mb' }));
-
-  const debugEnabled = log.isLevelEnabled?.(convertLogLevel('DEBUG')) ?? false;
-  if (debugEnabled) {
-    app.use(createRequestLogger(log, { level: 'debug' }));
-  }
-  app.use(createErrorLogger(log));
+  setupBaseMiddleware(app, log);
 
   const security = createSecurityConfig(runtimeConfig);
   const corsMw = applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins);

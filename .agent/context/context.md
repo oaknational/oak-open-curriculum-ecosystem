@@ -1,11 +1,12 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-05 (Post-Rescue)  
+**Updated**: 2025-11-06 (Session 2.1 Complete)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
-✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered across all MCP servers. Repository healthy, all quality gates green. Ready to proceed with Phase 2 transport instrumentation.
+✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
+🚀 **Phase 2 Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support. All quality gates green. Ready for Session 2.2 (stdio server correlation).
 
 ## Strategic Goal
 
@@ -24,6 +25,9 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-05**: All quality gates green, 438+ tests passing, full e2e validation complete
 - ✅ **2025-11-05**: Runtime config consolidation complete across HTTP and stdio servers
 - ✅ **2025-11-05**: Repository pushed to remote, Phase 1 fully delivered
+- ✅ **2025-11-06**: Session 2.1 complete - HTTP server correlation IDs with full tracing support
+- ✅ **2025-11-06**: 13 new correlation tests added (6 unit, 7 integration), all passing
+- ✅ **2025-11-06**: Comprehensive correlation ID documentation added to README and TESTING.md
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -35,11 +39,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 
 ## Next Steps (Execute in Order)
 
-### 1. Phase 2 – Transport Instrumentation (Ready to Begin)
+### 1. Phase 2 – Transport Instrumentation (In Progress)
 
-- Define tracing/span model leveraging the consolidated logger outputs
-- Instrument priority transports (stdio, HTTP) with structured correlation IDs
-- Validation: targeted package builds/tests plus bespoke transport diagnostics (see plan)
+- ✅ Session 2.1: HTTP Server Correlation IDs (Complete)
+- 🔄 Session 2.2: Stdio Server Correlation IDs (Next)
+- ⏳ Session 2.3: Request Timing Instrumentation
+- ⏳ Session 2.4: Error Context Enrichment
+- ⏳ Session 2.5: Final Integration & Smoke Tests
 
 ### 2. Phase 3 – Rollout & Monitoring (Queued)
 
@@ -60,12 +66,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 | 1.5         | Integration & quality gates  | ✅ Complete (2025-11-05)                 |
 | **R.1-R.6** | **Rescue tranches**          | ✅ **Complete (2025-11-05)**             |
 | **Runtime** | **Config consolidation**     | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
+| **2.1**     | **HTTP correlation IDs**     | ✅ **Complete (2025-11-06)**             |
 
 ## Quality Gate Status
 
-✅ **Current state**: ALL GREEN (2025-11-05, full repository)
+✅ **Current state**: ALL GREEN (2025-11-06, Session 2.1 complete)
 
-Latest successful run (2025-11-05, post-rescue):
+Latest successful run (2025-11-06, post Session 2.1):
 
 ```bash
 pnpm format-check:root    ✅
@@ -74,12 +81,18 @@ pnpm build                ✅ (10 packages)
 pnpm type-check           ✅ (10 workspaces)
 pnpm lint                 ✅ (10 workspaces)
 pnpm doc-gen              ✅
-pnpm test                 ✅ (438+ tests)
+pnpm test                 ✅ (451 tests, +13 correlation tests)
 pnpm test:e2e             ✅ (68 tests, 3 workspaces)
 pnpm smoke:dev:stub       ✅
 pnpm smoke:dev:live       ✅
 pnpm qg                   ✅
 ```
+
+**Session 2.1 Test Additions**:
+
+- 6 unit tests for correlation ID generation (`correlation/index.unit.test.ts`)
+- 7 integration tests for correlation middleware (`correlation/middleware.integration.test.ts`)
+- 3 additional tests for logger correlation helpers (`logging/logging.unit.test.ts`)
 
 Re-run the full suite before every hand-off and after significant changes.
 

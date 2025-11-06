@@ -86,6 +86,78 @@
 | Deployed smoke            | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote`        |
 | Manual Clerk validation   | `pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http trace:oauth`         |
 
+## Testing Correlation IDs
+
+Correlation IDs enable request tracing across the system. All tests should verify correlation ID propagation where applicable.
+
+### Asserting Correlation ID Presence
+
+```typescript
+import request from 'supertest';
+
+it('includes correlation ID in response headers', async () => {
+  const response = await request(app).get('/healthz');
+
+  // Correlation ID should be in response headers
+  expect(response.headers['x-correlation-id']).toBeDefined();
+  expect(response.headers['x-correlation-id']).toMatch(/^req_\d+_[a-f0-9]{6}$/);
+});
+```
+
+### Testing Correlation ID Reuse
+
+```typescript
+it('preserves client-provided correlation ID', async () => {
+  const clientCorrelationId = 'test-trace-123';
+
+  const response = await request(app).get('/healthz').set('X-Correlation-ID', clientCorrelationId);
+
+  // Server should reuse the provided ID
+  expect(response.headers['x-correlation-id']).toBe(clientCorrelationId);
+});
+```
+
+### Verifying Correlation in Logs
+
+```typescript
+it('logs include correlation ID', async () => {
+  const mockLogger = createMockLogger();
+  const app = createTestApp({ logger: mockLogger });
+
+  await request(app).get('/test');
+
+  // Find log call with correlation ID
+  const logCalls = vi.mocked(mockLogger.debug).mock.calls;
+  const correlatedLog = logCalls.find(
+    (call) => typeof call[1] === 'object' && call[1] !== null && 'correlationId' in call[1],
+  );
+
+  expect(correlatedLog).toBeDefined();
+});
+```
+
+### Correlation ID Test Patterns
+
+**Unit tests**: Verify correlation ID generation and format
+
+- Test: IDs match expected pattern
+- Test: IDs are unique across calls
+- Test: IDs are URL-safe
+
+**Integration tests**: Verify middleware behavior
+
+- Test: Middleware generates IDs when absent
+- Test: Middleware reuses client-provided IDs
+- Test: Middleware sets response header
+- Test: Logger receives correlation ID
+
+**E2E tests**: Verify end-to-end correlation
+
+- Test: Request without ID gets generated ID
+- Test: Request with ID preserves that ID
+- Test: All logs for one request share same ID
+- Test: Concurrent requests have different IDs
+
 ## Quality Gates
 
 - Run `pnpm qg` at the workspace root after documentation or code changes.

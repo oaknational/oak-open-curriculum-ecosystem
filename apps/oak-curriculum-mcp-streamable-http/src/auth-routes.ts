@@ -21,9 +21,9 @@ function registerUnauthenticatedRoutes(
 ): void {
   log.warn('⚠️  AUTH DISABLED - DANGEROUSLY_DISABLE_AUTH=true (DO NOT USE IN PRODUCTION)');
   log.debug('Registering POST /mcp route (auth disabled)');
-  app.post('/mcp', createMcpHandler(coreTransport));
+  app.post('/mcp', createMcpHandler(coreTransport, log));
   log.debug('Registering GET /mcp route (auth disabled)');
-  app.get('/mcp', createMcpHandler(coreTransport));
+  app.get('/mcp', createMcpHandler(coreTransport, log));
 }
 
 /**
@@ -53,9 +53,9 @@ function registerAuthenticatedRoutes(
   log: Logger,
 ): void {
   log.debug('Registering POST /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+  app.post('/mcp', mcpAuthClerk, createMcpHandler(coreTransport, log));
   log.debug('Registering GET /mcp route (auth ENABLED with mcpAuthClerk)');
-  app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport));
+  app.get('/mcp', mcpAuthClerk, createMcpHandler(coreTransport, log));
 }
 
 /**
