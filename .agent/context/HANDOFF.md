@@ -27,7 +27,7 @@ Start here, then dive deeper as needed:
    - Quick start guide
    - Architecture overview
 
-2. **`.agent/context/continuation_prompt.md`**
+2. **`.agent/context/continuation.prompt.md`**
    - Complete technical context with full history
    - Architectural decisions and rationale
    - Pattern catalog and anti-patterns
@@ -68,7 +68,7 @@ Start here, then dive deeper as needed:
 I'm continuing work on the Oak MCP Ecosystem Phase 2. Please read:
 
 @.agent/context/HANDOFF.md
-@.agent/context/continuation_prompt.md
+@.agent/context/continuation.prompt.md
 @.agent/context/context.md
 @.agent/plans/mcp-oauth-implementation-plan.md
 @.agent/directives-and-memory/rules.md
@@ -90,7 +90,7 @@ No need to reload documents – context is already loaded. Just continue working
 Session complete. Please update documentation:
 
 1. Update @.agent/context/context.md (session log, next actions, quality gates)
-2. Update @.agent/context/continuation_prompt.md (insights, decisions, patterns)
+2. Update @.agent/context/continuation.prompt.md (insights, decisions, patterns)
 3. Update @.agent/plans/mcp-oauth-implementation-plan.md (mark session complete)
 4. Commit all changes
 
@@ -325,7 +325,7 @@ export function doX() {
 | ------------------------------------ | ----------------------------------------------- |
 | "What's the big picture?"            | This file (HANDOFF.md)                          |
 | "What changed recently?"             | `.agent/context/context.md`                     |
-| "What's the full technical context?" | `.agent/context/continuation_prompt.md`         |
+| "What's the full technical context?" | `.agent/context/continuation.prompt.md`         |
 | "What are the detailed tasks?"       | `.agent/plans/mcp-oauth-implementation-plan.md` |
 | "What are the rules?"                | `.agent/directives-and-memory/rules.md`         |
 
@@ -333,10 +333,10 @@ export function doX() {
 
 | Frequency                 | Document                                         |
 | ------------------------- | ------------------------------------------------ |
-| Every session             | `context.md`, `continuation_prompt.md`, plan doc |
+| Every session             | `context.md`, `continuation.prompt.md`, plan doc |
 | At milestones             | This file (HANDOFF.md)                           |
 | When rules change         | `rules.md`                                       |
-| When architecture changes | This file + `continuation_prompt.md`             |
+| When architecture changes | This file + `continuation.prompt.md`             |
 
 ---
 
@@ -351,7 +351,7 @@ export function doX() {
 
 ### For Understanding MCP Protocol
 
-1. **MCP Specification**: See references in continuation_prompt.md
+1. **MCP Specification**: See references in continuation.prompt.md
 2. **SDK Documentation**: `packages/sdks/oak-curriculum-sdk/README.md`
 3. **Integration Tests**: Look in `e2e-tests/` directories
 
@@ -385,7 +385,7 @@ None currently. Repository is in excellent health.
 
 ### Active Decisions
 
-None pending. Phase 1 decisions are complete and documented in `continuation_prompt.md`.
+None pending. Phase 1 decisions are complete and documented in `continuation.prompt.md`.
 
 ---
 
@@ -394,7 +394,7 @@ None pending. Phase 1 decisions are complete and documented in `continuation_pro
 If you're confused or stuck:
 
 1. **Check `context.md`** for recent changes
-2. **Check `continuation_prompt.md`** for architectural decisions
+2. **Check `continuation.prompt.md`** for architectural decisions
 3. **Check plan document** for detailed task breakdown
 4. **Check `rules.md`** for coding standards
 5. **Review test files** for examples of expected patterns

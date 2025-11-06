@@ -1029,7 +1029,7 @@ Validate complete Phase 2 implementation across all servers and update all docum
   - Mark Phase 2 complete
   - Update quality gate status
   - Document Phase 2 deliverables
-- [ ] Update `.agent/context/continuation_prompt.md`:
+- [ ] Update `.agent/context/continuation.prompt.md`:
   - Add Phase 2 to historical record
   - Document architectural decisions
   - Update patterns and examples
@@ -1133,7 +1133,7 @@ git log -1 # Should show comprehensive commit message
 - [x] HTTP server README updated
 - [x] Stdio server README updated
 - [x] TESTING.md guides updated
-- [x] Context documents updated (context.md, continuation_prompt.md, HANDOFF.md)
+- [x] Context documents updated (context.md, continuation.prompt.md, HANDOFF.md)
 - [x] Plan document updated with completion status
 
 **Validation**:

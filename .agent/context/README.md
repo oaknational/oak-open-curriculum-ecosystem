@@ -46,7 +46,7 @@ This system uses three complementary documents to enable seamless context switch
 
 ---
 
-### 2. **`continuation_prompt.md`** - AI Rehydration 🤖
+### 2. **`continuation.prompt.md`** - AI Rehydration 🤖
 
 **Audience:** AI assistants in fresh contexts (not for human reading)  
 **Purpose:** Complete AI context restoration with full history
@@ -123,7 +123,7 @@ This system uses three complementary documents to enable seamless context switch
 
 ## 📊 Clear Separation Matrix
 
-| Aspect           | `context.md`      | `HANDOFF.md`    | `continuation_prompt.md` |
+| Aspect           | `context.md`      | `HANDOFF.md`    | `continuation.prompt.md` |
 | ---------------- | ----------------- | --------------- | ------------------------ |
 | **Purpose**      | Session changelog | Orientation hub | AI rehydration           |
 | **Audience**     | Everyone          | Humans + AI     | AI only                  |
@@ -147,7 +147,7 @@ When resuming work in a completely fresh AI chat with no prior context:
 I'm continuing development on openapi-zod-client. Please read these documents:
 
 @HANDOFF.md
-@continuation_prompt.md
+@continuation.prompt.md
 @context.md
 @PHASE-2-MCP-ENHANCEMENTS.md
 @RULES.md
@@ -167,14 +167,14 @@ Follow all standards in @RULES.md including TDD, type safety, and comprehensive 
 **What happens:**
 
 - AI reads `HANDOFF.md` → gets big picture orientation (5 min)
-- AI reads `continuation_prompt.md` → understands full technical context with history
+- AI reads `continuation.prompt.md` → understands full technical context with history
 - AI reads `context.md` → knows recent changes and current status
 - AI reads plan document → knows session objectives and acceptance criteria
 - AI reads `RULES.md` → knows quality standards (TDD, TSDoc, etc.)
 - AI creates detailed implementation plan for the session
 - AI can begin work immediately with full context
 
-**Note:** You can skip `HANDOFF.md` if you're short on time and jump straight to `continuation_prompt.md` + `context.md`, but HANDOFF provides helpful orientation for complex projects.
+**Note:** You can skip `HANDOFF.md` if you're short on time and jump straight to `continuation.prompt.md` + `context.md`, but HANDOFF provides helpful orientation for complex projects.
 
 ---
 
@@ -208,7 +208,7 @@ Excellent work. Please update the documentation for handoff:
    - Update quality gate status with timestamps
    - Note any new blockers or active decisions
 
-2. Update @continuation_prompt.md:
+2. Update @continuation.prompt.md:
    - Add any new architectural insights to "Architectural Decisions"
    - Document critical decisions made with rationale
    - Add new patterns or anti-patterns discovered
@@ -232,7 +232,7 @@ Excellent work. Please update the documentation for handoff:
 **What happens:**
 
 - `context.md` updated with session changelog (updated EVERY session)
-- `continuation_prompt.md` updated with new insights (updated EVERY session)
+- `continuation.prompt.md` updated with new insights (updated EVERY session)
 - Plan document marked complete with results
 - `HANDOFF.md` updated if milestone reached (updated at MILESTONES only)
 - Next AI session will have complete context
@@ -250,7 +250,7 @@ I want to add [NEW FEATURE]. Please:
 
 1. Read the current documentation:
    @HANDOFF.md
-   @continuation_prompt.md
+   @continuation.prompt.md
    @context.md
    @RULES.md
 
@@ -266,7 +266,7 @@ I want to add [NEW FEATURE]. Please:
 **What happens:**
 
 - AI reads `HANDOFF.md` → understands current project state and deliverables
-- AI reads `continuation_prompt.md` → understands existing architecture and patterns
+- AI reads `continuation.prompt.md` → understands existing architecture and patterns
 - AI reads `context.md` → knows recent work and current status
 - AI reads `RULES.md` → knows quality standards to follow
 - AI creates new plan document following established format
@@ -306,7 +306,7 @@ I want to add [NEW FEATURE]. Please:
            │
            ▼
 ┌──────────────────────────────┐
-│  Update continuation_prompt  │
+│  Update continuation.prompt  │
 │  (Add insights if any)       │
 └──────────┬───────────────────┘
            │
@@ -319,7 +319,7 @@ I want to add [NEW FEATURE]. Please:
 **Update every session:**
 
 - ✅ `context.md` - Add to session log, update "Right Now", update quality gates
-- ✅ `continuation_prompt.md` - Add new insights, patterns, or decisions (if any)
+- ✅ `continuation.prompt.md` - Add new insights, patterns, or decisions (if any)
 - ⚠️ Plan document - Mark tasks complete as you go
 
 ---
@@ -346,7 +346,7 @@ I want to add [NEW FEATURE]. Please:
            │
            ▼
 ┌────────────────────────────────┐
-│  Update continuation_prompt.md │
+│  Update continuation.prompt.md │
 │  (Add session to history)      │
 └──────────┬─────────────────────┘
            │
@@ -365,7 +365,7 @@ I want to add [NEW FEATURE]. Please:
 **Update after each session:**
 
 - ✅ `context.md` - Session log entry, next actions, blockers
-- ✅ `continuation_prompt.md` - Architectural insights, decisions, patterns
+- ✅ `continuation.prompt.md` - Architectural insights, decisions, patterns
 - ✅ Plan document - Mark session complete with validation results
 - ❌ `HANDOFF.md` - NOT updated (wait for milestone)
 
@@ -406,7 +406,7 @@ I want to add [NEW FEATURE]. Please:
 **Update at milestones:**
 
 - ✅ `context.md` - Updated as usual
-- ✅ `continuation_prompt.md` - Updated as usual
+- ✅ `continuation.prompt.md` - Updated as usual
 - ✅ Plan document - Updated as usual
 - ✅ **`HANDOFF.md`** - NOW update (phase progress, deliverables, architecture)
 
@@ -418,7 +418,7 @@ I want to add [NEW FEATURE]. Please:
 .agent/
 ├── context/
 │   ├── README.md                    ← This file
-│   ├── continuation_prompt.md       ← AI rehydration prompt
+│   ├── continuation.prompt.md       ← AI rehydration prompt
 │   ├── context.md                   ← Living status document
 │   └── archive/
 │       └── CONTINUE-PHASE-0.md      ← Archived old prompts
@@ -444,14 +444,14 @@ I want to add [NEW FEATURE]. Please:
 
 ### 2. **Optimized for Different Audiences**
 
-- `continuation_prompt.md` → AI technical context
+- `continuation.prompt.md` → AI technical context
 - `context.md` → Quick human + AI status
 - Plan docs → Structured session planning
 
 ### 3. **Progressive Disclosure**
 
 - Start with `context.md` (quick scan)
-- Read `continuation_prompt.md` (full context)
+- Read `continuation.prompt.md` (full context)
 - Reference plan docs (detailed work breakdown)
 
 ### 4. **Living Documentation**
@@ -473,7 +473,7 @@ I want to add [NEW FEATURE]. Please:
 
 Before starting a new session, verify:
 
-- [ ] `continuation_prompt.md` reflects all major decisions
+- [ ] `continuation.prompt.md` reflects all major decisions
 - [ ] `context.md` shows current state accurately
 - [ ] Plan document has clear next session
 - [ ] Quality gate status is accurate
@@ -483,7 +483,7 @@ Before starting a new session, verify:
 Before completing a session, verify:
 
 - [ ] Plan document marked COMPLETE with results
-- [ ] `continuation_prompt.md` updated with insights
+- [ ] `continuation.prompt.md` updated with insights
 - [ ] `context.md` updated with next actions
 - [ ] All quality gates passing (type/lint/test)
 - [ ] All changes committed with good messages
@@ -499,7 +499,7 @@ Before completing a session, verify:
 
 ### AI doesn't understand architectural decisions
 
-**Solution:** Check `continuation_prompt.md` has sufficient background and "why" behind decisions
+**Solution:** Check `continuation.prompt.md` has sufficient background and "why" behind decisions
 
 ### AI creates poor implementation plans
 

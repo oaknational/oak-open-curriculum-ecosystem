@@ -63,7 +63,7 @@ Sequence of work to replace in-app semantic search schemas with SDK-generated ar
 
 - **Fixture Mode Resolver**: Ensure generated guard exports integrate with forthcoming fixture toggle work.
 - **Testing**: Expand tests to cover generated guard functions; maintain Playwright coverage with fixtures on/off.
-- **Documentation**: Update `continuation_prompt_ux.md`, `semantic-search-phase-1-ux.md`, and `semantic-search-phase-1-ux-context.md` to reflect compile-time schema flow.
+- **Documentation**: Update `continuation.prompt_ux.md`, `semantic-search-phase-1-ux.md`, and `semantic-search-phase-1-ux-context.md` to reflect compile-time schema flow.
 
 ## Dependencies Summary
 
