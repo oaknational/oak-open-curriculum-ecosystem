@@ -30,6 +30,51 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
 }
 
 /**
+ * Creates a child logger with correlation ID in the context.
+ *
+ * The child logger includes the correlation ID in all log entries,
+ * enabling request tracing across the system. All logs are written
+ * to file only (stdout reserved for MCP protocol).
+ *
+ * @param parentLogger - Parent logger instance to inherit configuration from
+ * @param correlationId - Correlation ID to include in log context
+ * @param config - Runtime configuration for file sink setup
+ * @returns Logger instance with correlation ID in context
+ *
+ * @example
+ * ```typescript
+ * const logger = createStdioLogger(config);
+ * const correlatedLogger = createChildLogger(logger, 'req_123456789_abc123', config);
+ * correlatedLogger.info('Processing request'); // Logs include correlationId
+ * ```
+ *
+ * @public
+ */
+export function createChildLogger(
+  parentLogger: Logger,
+  correlationId: string,
+  config: RuntimeConfig,
+): Logger {
+  // Explicitly mark parentLogger as intentionally unused (for now)
+  // In future, we could inherit configuration from parentLogger
+  void parentLogger;
+
+  // Use INFO as default level (could be extracted from parent in future)
+  const level = 'INFO';
+  const sinkConfig = createStdioSinkConfig(config);
+
+  return createAdaptiveLogger(
+    {
+      level,
+      name: 'stdio:correlated',
+      context: { correlationId },
+    },
+    undefined,
+    sinkConfig,
+  );
+}
+
+/**
  * Re-export Logger type from shared package for convenience
  */
 export type { Logger } from '@oaknational/mcp-logger/node';

@@ -18,6 +18,7 @@ vi.mock('@modelcontextprotocol/sdk/types.ts', () => ({
 }));
 import { createToolResponseHandlers } from './tool-response-handlers';
 import { registerMcpTools } from './server';
+import { loadRuntimeConfig } from '../runtime-config';
 import {
   pickPayloadForValidation,
   validateOutput,
@@ -193,8 +194,9 @@ describe('registerMcpTools registration metadata', () => {
       info: vi.fn(),
       error: vi.fn(),
     } as unknown as Logger;
+    const runtimeConfig = loadRuntimeConfig();
 
-    registerMcpTools(fakeServer, fakeClient, fakeLogger);
+    registerMcpTools(fakeServer, fakeClient, fakeLogger, runtimeConfig);
 
     const targetName = 'get-changelog' as const;
     const descriptor: ToolDescriptorForName<typeof targetName> = getToolFromToolName(targetName);

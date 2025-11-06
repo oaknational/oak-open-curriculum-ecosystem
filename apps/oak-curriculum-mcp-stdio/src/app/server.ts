@@ -19,6 +19,9 @@ import { type Logger } from '@oaknational/mcp-logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
+import { generateCorrelationId } from '../correlation/index.js';
+import { createChildLogger } from '../logging/index.js';
+import { loadRuntimeConfig } from '../runtime-config.js';
 
 /**
  * Setup shutdown handler
@@ -38,6 +41,7 @@ function setupShutdownHandler(server: { close: () => Promise<void> }, logger: Lo
 export async function createServer(config?: ServerConfig): Promise<void> {
   // Wire dependencies
   const { logger, config: serverConfig, toolExecutors } = wireDependencies(config);
+  const runtimeConfig = loadRuntimeConfig();
 
   logToolDiscovery(logger);
 
@@ -47,7 +51,7 @@ export async function createServer(config?: ServerConfig): Promise<void> {
     version: serverConfig.serverVersion,
   });
   const client = createOakPathBasedClient(serverConfig.apiKey);
-  registerMcpTools(server, client, logger, toolExecutors);
+  registerMcpTools(server, client, logger, runtimeConfig, toolExecutors);
 
   // Create transport and connect
   const transport = new StdioServerTransport();
@@ -114,39 +118,85 @@ function ensureDescriptorDescription(
   return descriptor.description;
 }
 
+function createHandlersForTool(
+  correlatedLogger: Logger,
+  name: string,
+  description: string,
+  descriptor: ReturnType<typeof getToolFromToolName>,
+  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+): ReturnType<typeof createToolResponseHandlers> {
+  return createToolResponseHandlers(correlatedLogger, {
+    name,
+    description,
+    inputSchemaRaw: descriptor.inputSchema,
+    inputSchemaZod: input,
+    outputSchemaRaw: descriptor.toolOutputJsonSchema,
+    outputSchemaZod: descriptor.zodOutputSchema,
+  });
+}
+
+function handleToolResult(
+  execResult: Awaited<ReturnType<typeof executeToolCall>>,
+  params: unknown,
+  descriptor: ReturnType<typeof getToolFromToolName>,
+  handlers: ReturnType<typeof createToolResponseHandlers>,
+): ReturnType<ReturnType<typeof createToolResponseHandlers>['handleSuccess']> {
+  if (execResult.error) {
+    return handlers.handleExecutionError(params, execResult.error);
+  }
+  const validation = validateOutput(descriptor, execResult);
+  if (!validation.ok) {
+    return handlers.handleValidationError(params, execResult, validation.message);
+  }
+  return handlers.handleSuccess(execResult);
+}
+
 function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
+  runtimeConfig: ReturnType<typeof loadRuntimeConfig>,
   toolExecutors?: UniversalToolExecutors,
 ): void {
   for (const name of toolNames) {
     const descriptor: ToolDescriptorForName<typeof name> = getToolFromToolName(name);
     const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
     const description = ensureDescriptorDescription(descriptor, name);
-    const handlers = createToolResponseHandlers(logger, {
-      name,
-      description,
-      inputSchemaRaw: descriptor.inputSchema,
-      inputSchemaZod: input,
-      outputSchemaRaw: descriptor.toolOutputJsonSchema,
-      outputSchemaZod: descriptor.zodOutputSchema,
-    });
+
     server.registerTool(
       name,
       { title: name, description, inputSchema: input },
       async (params: unknown) => {
+        const correlationId = generateCorrelationId();
+        const correlatedLogger = createChildLogger(logger, correlationId, runtimeConfig);
+
+        correlatedLogger.debug('Tool execution started', { toolName: name, correlationId });
+
+        const handlers = createHandlersForTool(
+          correlatedLogger,
+          name,
+          description,
+          descriptor,
+          input,
+        );
+
         const execResult = toolExecutors?.executeMcpTool
           ? await toolExecutors.executeMcpTool(name, params ?? {})
           : await executeToolCall(name, params, client);
-        if (execResult.error) {
-          return handlers.handleExecutionError(params, execResult.error);
-        }
-        const validation = validateOutput(descriptor, execResult);
-        if (!validation.ok) {
-          return handlers.handleValidationError(params, execResult, validation.message);
-        }
-        return handlers.handleSuccess(execResult);
+
+        const result = handleToolResult(execResult, params, descriptor, handlers);
+
+        const status = execResult.error
+          ? 'with error'
+          : validateOutput(descriptor, execResult).ok
+            ? 'success'
+            : 'with validation error';
+        correlatedLogger.debug(`Tool execution completed ${status}`, {
+          toolName: name,
+          correlationId,
+        });
+
+        return result;
       },
     );
   }

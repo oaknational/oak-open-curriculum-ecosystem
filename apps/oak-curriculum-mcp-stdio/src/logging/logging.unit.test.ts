@@ -203,3 +203,58 @@ describe('createStdioLogger', () => {
     stdoutWriteSpy.mockRestore();
   });
 });
+
+describe('createChildLogger', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.clearAllMocks();
+    createdLoggers.length = 0;
+    createdSinkConfigs.length = 0;
+  });
+
+  it('creates logger with correlation ID in context', async () => {
+    const { createStdioLogger, createChildLogger } = await importLoggingModule();
+    const parentLogger = createStdioLogger(createRuntimeConfig());
+    const correlationId = 'req_1699123456789_a3f2c9';
+    const config = createRuntimeConfig();
+
+    const childLogger = createChildLogger(parentLogger, correlationId, config);
+
+    expect(childLogger).toBeDefined();
+    expect(typeof childLogger.info).toBe('function');
+  });
+
+  it('child logger logs to file not stdout', async () => {
+    const stdoutWriteSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => {
+      throw new Error('stdout.write should never be called by child logger');
+    });
+
+    const { createStdioLogger, createChildLogger } = await importLoggingModule();
+    const parentLogger = createStdioLogger(createRuntimeConfig());
+    const config = createRuntimeConfig();
+    const childLogger = createChildLogger(parentLogger, 'req_test_abc123', config);
+
+    childLogger.info('test message');
+    childLogger.debug('test debug');
+    childLogger.error('test error');
+
+    expect(stdoutWriteSpy).not.toHaveBeenCalled();
+    stdoutWriteSpy.mockRestore();
+  });
+
+  it('child logger has file sink configured', async () => {
+    const { createStdioLogger, createChildLogger } = await importLoggingModule();
+    const parentLogger = createStdioLogger(createRuntimeConfig());
+    const config = createRuntimeConfig({ MCP_LOGGER_FILE_PATH: '/tmp/child-test.log' });
+
+    createChildLogger(parentLogger, 'req_test_abc123', config);
+
+    const sinkConfig = createdSinkConfigs.at(-1);
+    expect(sinkConfig).toBeDefined();
+    if (!sinkConfig) {
+      throw new Error('Expected sink config to be created');
+    }
+    expect(sinkConfig.stdout).toBe(false);
+    expect(sinkConfig.file?.path).toBe('/tmp/child-test.log');
+  });
+});
