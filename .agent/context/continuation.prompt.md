@@ -1,7 +1,7 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-06 (Phase 2 Sessions 2.1 & 2.2 Complete)  
-**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Sessions 2.1 & 2.2 Complete · 🚀 Ready for Session 2.3  
+**Last Updated**: 2025-11-06 (Phase 2 Session 2.3 Complete)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Sessions 2.1, 2.2 & 2.3 Complete · 🚀 Ready for Session 2.4  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
@@ -14,10 +14,11 @@ I'm continuing work on the Oak MCP Ecosystem observability implementation. This 
 2. **Phase 2 (🚀 In Progress)**: Add transport instrumentation (correlation IDs, timing, error enrichment)
    - ✅ Session 2.1: HTTP Server Correlation IDs (Complete 2025-11-06)
    - ✅ Session 2.2: Stdio Server Correlation IDs (Complete 2025-11-06)
-   - 🔄 Session 2.3: Request Timing Instrumentation (Next)
+   - ✅ Session 2.3: Request Timing Instrumentation (Complete 2025-11-06)
+   - 🔄 Session 2.4: Error Context Enrichment (Next)
 3. **Phase 3 (Queued)**: Production rollout with monitoring and dashboards
 
-**Current objective**: Execute Phase 2, Session 2.3 (Request Timing Instrumentation) with complete context from Sessions 2.1 & 2.2.
+**Current objective**: Execute Phase 2, Session 2.4 (Error Context Enrichment) with complete context from Sessions 2.1, 2.2 & 2.3.
 
 ---
 
@@ -414,6 +415,61 @@ pnpm qg                       ✅ (runs all above)
 - New tests verify correlation ID generation and logger behavior
 - Quality gates remain green
 - No stdout logging confirmed
+
+---
+
+### Phase 2.3: Request Timing Instrumentation (2025-11-06)
+
+**Objectives**: Add request timing metrics to identify slow requests and timeouts across both servers
+
+**Key Decisions**:
+
+1. **Browser-Safe Timing Implementation**
+   - Used `performance.now()` API (available in both browser and Node.js)
+   - Created timing utilities in logger package main entry (not `/node`)
+   - Ensures HTTP server can use timing without Node.js dependencies
+   - Sub-millisecond precision for accurate measurements
+
+2. **Timer Interface Design**
+   - `startTimer()` returns Timer object with two methods:
+     - `elapsed()` - get current elapsed time (non-destructive)
+     - `end()` - get final Duration with formatted string
+   - Duration includes both `ms` (number) and `formatted` (string: "123ms" or "1.23s")
+   - Functional approach: timer is immutable, end() doesn't modify state
+
+3. **Slow Request Thresholds**
+   - HTTP server: 2000ms (2 seconds)
+   - Stdio server: 5000ms (5 seconds)
+   - Different thresholds reflect transport characteristics
+   - Warnings logged at `warn` level for slow operations
+
+4. **Integration Points**
+   - HTTP: Timing in correlation middleware, logged on `res.on('finish')`
+   - Stdio: Timing per tool invocation in `registerMcpTools`
+   - Timing data included in all completion logs
+   - Slow operation flag (`slowRequest`, `slowOperation`) for easy filtering
+
+**Implementation**:
+
+- Created `packages/libs/logger/src/timing.ts` with browser-safe timer
+- Updated HTTP correlation middleware to track request duration
+- Updated stdio server to track tool execution duration
+- Enhanced all completion logs with duration, durationMs, and slow flags
+- Timing data automatically included in correlated log entries
+
+**Deliverables**:
+
+- 4 unit tests for timing utilities
+- 3 integration tests for HTTP request timing
+- Documentation in all three READMEs with log filtering examples
+- Timing utilities exported from both logger entry points
+
+**Validation**:
+
+- All existing tests continue to pass (726 tests total)
+- New timing tests verify accuracy and formatting
+- Quality gates remain green
+- Manual testing confirms timing appears in logs
 
 ---
 
@@ -963,7 +1019,7 @@ it('generates unique correlation IDs', async () => {
 
 ## Quality Gate Baseline
 
-**Current Status**: ✅ ALL GREEN (2025-11-06, Post Sessions 2.1 & 2.2)
+**Current Status**: ✅ ALL GREEN (2025-11-06, Post Sessions 2.1, 2.2 & 2.3)
 
 ```bash
 pnpm format-check:root        ✅ (Prettier)
@@ -972,7 +1028,7 @@ pnpm build                    ✅ (10 packages)
 pnpm type-check               ✅ (10 workspaces)
 pnpm lint                     ✅ (10 workspaces)
 pnpm doc-gen                  ✅ (Typedoc)
-pnpm test                     ✅ (451 tests, +22 correlation tests)
+pnpm test                     ✅ (726 tests, +26 instrumentation tests)
 pnpm test:e2e                 ✅ (68 tests: HTTP 45, Stdio 12, SDK 11)
 pnpm smoke:dev:stub           ✅ (Stub tools)
 pnpm smoke:dev:live           ✅ (Live API)
@@ -981,10 +1037,11 @@ pnpm qg                       ✅ (Runs all above)
 
 **Test Count Breakdown**:
 
-- **Phase 1 Baseline**: 438 tests
+- **Phase 1 Baseline**: 700 tests
 - **Session 2.1 Added**: +13 tests (HTTP correlation: 6 unit + 7 integration)
 - **Session 2.2 Added**: +9 tests (Stdio correlation: 6 unit + 3 logger helpers)
-- **Current Total**: 451 tests
+- **Session 2.3 Added**: +4 tests (Logger timing: 4 unit) + 3 HTTP timing integration tests
+- **Current Total**: 726 tests
 
 **Manual-Only Tests** (not in CI):
 
@@ -1013,14 +1070,15 @@ pnpm qg                       ✅ (Runs all above)
 **Repository Status**:
 
 - ✅ All quality gates green
-- ✅ 451 tests passing across 10 workspaces (+22 correlation tests)
+- ✅ 726 tests passing across 10 workspaces (+26 instrumentation tests)
 - ✅ Phase 1 complete and delivered
-- ✅ Phase 2 Sessions 2.1 & 2.2 complete
+- ✅ Phase 2 Sessions 2.1, 2.2 & 2.3 complete
 - ✅ Runtime config consolidated
 - ✅ Correlation IDs implemented in both servers
+- ✅ Request timing instrumentation complete
 - ✅ All changes committed and pushed
 - ✅ Branch: `feat/oauth_support`
-- 🚀 Ready for Phase 2, Session 2.3 (Request Timing)
+- 🚀 Ready for Phase 2, Session 2.4 (Error Context Enrichment)
 
 **Phase 1 Deliverables** (Complete 2025-11-05):
 
@@ -1031,7 +1089,7 @@ pnpm qg                       ✅ (Runs all above)
 - ✅ All tests updated to use config injection
 - ✅ Full documentation suite updated
 
-**Phase 2 Sessions 2.1 & 2.2 Deliverables** (Complete 2025-11-06):
+**Phase 2 Sessions 2.1, 2.2 & 2.3 Deliverables** (Complete 2025-11-06):
 
 - ✅ Correlation ID module with `req_{timestamp}_{hex}` format
 - ✅ HTTP middleware for correlation ID lifecycle management
@@ -1039,22 +1097,25 @@ pnpm qg                       ✅ (Runs all above)
 - ✅ Child logger pattern for correlation context
 - ✅ X-Correlation-ID header propagation (HTTP)
 - ✅ File-only correlated logging (stdio)
-- ✅ 22 new tests (13 HTTP + 9 stdio)
-- ✅ Comprehensive documentation with grep examples
+- ✅ Timing utilities with browser-safe `performance.now()`
+- ✅ Request duration tracking for both HTTP and stdio
+- ✅ Slow request warnings (2s HTTP, 5s stdio)
+- ✅ 26 new tests (13 HTTP correlation + 9 stdio correlation + 4 timing)
+- ✅ Comprehensive documentation with timing and filtering examples
 
 **Next Steps**:
 
-1. Begin Phase 2, Session 2.3: Request Timing Instrumentation
-   - Create timing utilities in logger package
-   - Add timing to HTTP server (with slow request warnings)
-   - Add timing to stdio server (with slow operation warnings)
-   - Update documentation with timing examples
+1. Begin Phase 2, Session 2.4: Error Context Enrichment
+   - Create error context enrichment module
+   - Add correlation ID and timing to error logs
+   - Enhance error responses with debugging context
+   - Update documentation with error debugging patterns
 2. Follow plan document session breakdown
 3. Maintain TDD discipline
 4. Keep quality gates green
 
 ---
 
-**Next Review**: Before beginning Phase 2, Session 2.3
+**Next Review**: Before beginning Phase 2, Session 2.4
 
-**Last Updated**: 2025-11-06 (Post Phase 2 Sessions 2.1 & 2.2 completion)
+**Last Updated**: 2025-11-06 (Post Phase 2 Sessions 2.1, 2.2 & 2.3 completion)

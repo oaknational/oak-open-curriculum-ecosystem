@@ -1,6 +1,6 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-06 (Session 2.2 Complete)  
+**Updated**: 2025-11-06 (Session 2.3 Complete)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
@@ -8,7 +8,8 @@
 ✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
 ✅ **Phase 2 Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support  
 ✅ **Phase 2 Session 2.2 Complete** – Stdio server correlation IDs implemented with full request tracing support  
-🚀 **Next: Phase 2 Session 2.3** – Request timing instrumentation (both HTTP and stdio servers). All quality gates green.
+✅ **Phase 2 Session 2.3 Complete** – Request timing instrumentation implemented for both HTTP and stdio servers  
+🚀 **Next: Phase 2 Session 2.4** – Error context enrichment. All quality gates green.
 
 ## Strategic Goal
 
@@ -33,6 +34,10 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-06**: Session 2.2 complete - Stdio server correlation IDs with full tracing support
 - ✅ **2025-11-06**: 9 new stdio correlation tests added (6 unit, 3 logger helpers), all passing
 - ✅ **2025-11-06**: Comprehensive correlation ID documentation added to stdio README
+- ✅ **2025-11-06**: Session 2.3 complete - Request timing instrumentation for HTTP and stdio servers
+- ✅ **2025-11-06**: Timing utilities added to logger package with browser-safe implementation
+- ✅ **2025-11-06**: Slow request warnings implemented (2s HTTP, 5s stdio)
+- ✅ **2025-11-06**: 4 new timing tests added, comprehensive documentation with log filtering examples
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -48,8 +53,8 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 
 - ✅ Session 2.1: HTTP Server Correlation IDs (Complete)
 - ✅ Session 2.2: Stdio Server Correlation IDs (Complete)
-- 🔄 Session 2.3: Request Timing Instrumentation (Next)
-- ⏳ Session 2.4: Error Context Enrichment
+- ✅ Session 2.3: Request Timing Instrumentation (Complete)
+- 🔄 Session 2.4: Error Context Enrichment (Next)
 - ⏳ Session 2.5: Final Integration & Smoke Tests
 
 ### 2. Phase 3 – Rollout & Monitoring (Queued)
@@ -73,12 +78,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 | **Runtime** | **Config consolidation**     | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
 | **2.1**     | **HTTP correlation IDs**     | ✅ **Complete (2025-11-06)**             |
 | **2.2**     | **Stdio correlation IDs**    | ✅ **Complete (2025-11-06)**             |
+| **2.3**     | **Request timing**           | ✅ **Complete (2025-11-06)**             |
 
 ## Quality Gate Status
 
-✅ **Current state**: ALL GREEN (2025-11-06, Session 2.2 complete)
+✅ **Current state**: ALL GREEN (2025-11-06, Session 2.3 complete)
 
-Latest successful run (2025-11-06, post Session 2.2):
+Latest successful run (2025-11-06, post Session 2.3):
 
 ```bash
 pnpm format-check:root    ✅
@@ -87,7 +93,7 @@ pnpm build                ✅ (10 packages)
 pnpm type-check           ✅ (10 workspaces)
 pnpm lint                 ✅ (10 workspaces)
 pnpm doc-gen              ✅
-pnpm test                 ✅ (451 tests, +22 total correlation tests)
+pnpm test                 ✅ (726 tests, +26 timing/correlation tests total)
 pnpm test:e2e             ✅ (68 tests, 3 workspaces)
 pnpm smoke:dev:stub       ✅
 pnpm smoke:dev:live       ✅
@@ -104,6 +110,12 @@ pnpm qg                   ✅
 
 - 6 unit tests for stdio correlation ID generation (`correlation/index.unit.test.ts` in stdio app)
 - 3 additional tests for stdio logger correlation helpers (`logging/logging.unit.test.ts` in stdio app)
+
+**Session 2.3 Test Additions**:
+
+- 4 unit tests for timing utilities (`packages/libs/logger/src/timing.unit.test.ts`)
+- 3 integration tests for HTTP timing middleware (`correlation/middleware.integration.test.ts`)
+- Timing validated in existing e2e tests
 
 Re-run the full suite before every hand-off and after significant changes.
 

@@ -5,7 +5,7 @@
  */
 
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
-import type { Logger } from '@oaknational/mcp-logger';
+import { startTimer, type Logger, type Timer } from '@oaknational/mcp-logger';
 
 import { generateCorrelationId } from './index.js';
 
@@ -17,7 +17,15 @@ import { generateCorrelationId } from './index.js';
 export const CORRELATION_ID_HEADER = 'X-Correlation-ID';
 
 /**
- * Augment Express Response.locals to include correlation ID.
+ * Threshold in milliseconds for slow request warnings.
+ * Requests exceeding this duration will be logged at WARN level.
+ *
+ * @internal
+ */
+const SLOW_REQUEST_THRESHOLD_MS = 2000;
+
+/**
+ * Augment Express Response.locals to include correlation ID and timer.
  */
 declare module 'express-serve-static-core' {
   interface Locals {
@@ -25,6 +33,10 @@ declare module 'express-serve-static-core' {
      * Unique identifier for correlating logs and operations across a request lifecycle.
      */
     correlationId?: string;
+    /**
+     * Timer for measuring request duration.
+     */
+    timer?: Timer;
   }
 }
 
@@ -56,6 +68,9 @@ declare module 'express-serve-static-core' {
  */
 export function createCorrelationMiddleware(logger: Logger): RequestHandler {
   return (req: Request, res: Response, next: NextFunction): void => {
+    // Start timing the request
+    const timer = startTimer();
+
     // Get correlation ID from header or generate new one
     const incomingCorrelationId = req.headers[CORRELATION_ID_HEADER.toLowerCase()];
     const correlationId =
@@ -65,6 +80,7 @@ export function createCorrelationMiddleware(logger: Logger): RequestHandler {
 
     // Store in res.locals for downstream middleware and handlers
     res.locals.correlationId = correlationId;
+    res.locals.timer = timer;
 
     // Add to response headers
     res.setHeader(CORRELATION_ID_HEADER, correlationId);
@@ -74,6 +90,25 @@ export function createCorrelationMiddleware(logger: Logger): RequestHandler {
       correlationId,
       method: req.method,
       path: req.path,
+    });
+
+    // Log request completion with timing when response finishes
+    res.on('finish', () => {
+      const duration = timer.end();
+      const isSlowRequest = duration.ms > SLOW_REQUEST_THRESHOLD_MS;
+
+      const logMethod = isSlowRequest ? 'warn' : 'debug';
+      const logData = {
+        correlationId,
+        duration: duration.formatted,
+        durationMs: duration.ms,
+        method: req.method,
+        path: req.path,
+        statusCode: res.statusCode,
+        ...(isSlowRequest && { slowRequest: true }),
+      };
+
+      logger[logMethod]('Request completed', logData);
     });
 
     next();

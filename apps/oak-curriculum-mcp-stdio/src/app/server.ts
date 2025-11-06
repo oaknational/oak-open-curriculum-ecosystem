@@ -15,13 +15,21 @@ import {
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import { type Logger } from '@oaknational/mcp-logger/node';
+import { startTimer, type Logger } from '@oaknational/mcp-logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
 import { generateCorrelationId } from '../correlation/index.js';
 import { createChildLogger } from '../logging/index.js';
 import { loadRuntimeConfig } from '../runtime-config.js';
+
+/**
+ * Threshold in milliseconds for slow operation warnings.
+ * Tool executions exceeding this duration will be logged at WARN level.
+ *
+ * @internal
+ */
+const SLOW_OPERATION_THRESHOLD_MS = 5000;
 
 /**
  * Setup shutdown handler
@@ -151,6 +159,55 @@ function handleToolResult(
   return handlers.handleSuccess(execResult);
 }
 
+function createToolHandler<TName extends (typeof toolNames)[number]>(
+  name: TName,
+  description: string,
+  descriptor: ToolDescriptorForName<TName>,
+  input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
+  client: ReturnType<typeof createOakPathBasedClient>,
+  logger: Logger,
+  runtimeConfig: ReturnType<typeof loadRuntimeConfig>,
+  toolExecutors?: UniversalToolExecutors,
+) {
+  return async (params: unknown) => {
+    const timer = startTimer();
+    const correlationId = generateCorrelationId();
+    const correlatedLogger = createChildLogger(logger, correlationId, runtimeConfig);
+
+    correlatedLogger.debug('Tool execution started', { toolName: name, correlationId });
+
+    const handlers = createHandlersForTool(correlatedLogger, name, description, descriptor, input);
+
+    const execResult = toolExecutors?.executeMcpTool
+      ? await toolExecutors.executeMcpTool(name, params ?? {})
+      : await executeToolCall(name, params, client);
+
+    const result = handleToolResult(execResult, params, descriptor, handlers);
+
+    const duration = timer.end();
+    const isSlowOperation = duration.ms > SLOW_OPERATION_THRESHOLD_MS;
+
+    const status = execResult.error
+      ? 'with error'
+      : validateOutput(descriptor, execResult).ok
+        ? 'success'
+        : 'with validation error';
+
+    const logMethod = isSlowOperation ? 'warn' : 'debug';
+    const logData = {
+      toolName: name,
+      correlationId,
+      duration: duration.formatted,
+      durationMs: duration.ms,
+      ...(isSlowOperation && { slowOperation: true }),
+    };
+
+    correlatedLogger[logMethod](`Tool execution completed ${status}`, logData);
+
+    return result;
+  };
+}
+
 function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
@@ -163,42 +220,18 @@ function registerMcpTools(
     const input = zodRawShapeFromToolInputJsonSchema(descriptor.inputSchema);
     const description = ensureDescriptorDescription(descriptor, name);
 
-    server.registerTool(
+    const handler = createToolHandler(
       name,
-      { title: name, description, inputSchema: input },
-      async (params: unknown) => {
-        const correlationId = generateCorrelationId();
-        const correlatedLogger = createChildLogger(logger, correlationId, runtimeConfig);
-
-        correlatedLogger.debug('Tool execution started', { toolName: name, correlationId });
-
-        const handlers = createHandlersForTool(
-          correlatedLogger,
-          name,
-          description,
-          descriptor,
-          input,
-        );
-
-        const execResult = toolExecutors?.executeMcpTool
-          ? await toolExecutors.executeMcpTool(name, params ?? {})
-          : await executeToolCall(name, params, client);
-
-        const result = handleToolResult(execResult, params, descriptor, handlers);
-
-        const status = execResult.error
-          ? 'with error'
-          : validateOutput(descriptor, execResult).ok
-            ? 'success'
-            : 'with validation error';
-        correlatedLogger.debug(`Tool execution completed ${status}`, {
-          toolName: name,
-          correlationId,
-        });
-
-        return result;
-      },
+      description,
+      descriptor,
+      input,
+      client,
+      logger,
+      runtimeConfig,
+      toolExecutors,
     );
+
+    server.registerTool(name, { title: name, description, inputSchema: input }, handler);
   }
 }
 

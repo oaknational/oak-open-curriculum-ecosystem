@@ -41,3 +41,5 @@ export type { RequestLoggerOptions } from './express-middleware.js';
 export type { FileSinkConfig, LoggerSinkConfig, LoggerSinkEnvironment } from './sink-config.js';
 export type { LogLevel, BaseLoggingEnvironment } from './log-levels.js';
 export type { FileSinkInterface, FileSystem, SimpleWriteStream } from './file-sink.js';
+export { startTimer } from './timing.js';
+export type { Duration, Timer } from './timing.js';

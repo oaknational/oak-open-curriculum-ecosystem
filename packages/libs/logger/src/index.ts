@@ -52,3 +52,6 @@ export {
   type LogLevel,
   type BaseLoggingEnvironment,
 } from './log-levels';
+
+// Timing utilities
+export { startTimer, type Duration, type Timer } from './timing';

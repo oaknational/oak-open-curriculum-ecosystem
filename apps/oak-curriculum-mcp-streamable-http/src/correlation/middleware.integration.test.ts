@@ -159,4 +159,78 @@ describe('createCorrelationMiddleware', () => {
       }),
     );
   });
+
+  it('logs request duration on completion at DEBUG level', async () => {
+    const logger = createMockLogger();
+    const app = createTestApp(logger);
+
+    await request(app).get('/test');
+
+    // Should have been called for both "Request started" and "Request completed"
+    expect(logger.debug).toHaveBeenCalled();
+    const calls = vi.mocked(logger.debug).mock.calls;
+
+    const completedCall = calls.find(
+      (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+    );
+    expect(completedCall).toBeDefined();
+
+    if (completedCall?.[1]) {
+      const metadata = completedCall[1];
+      expect(metadata).toHaveProperty('duration');
+      expect(metadata).toHaveProperty('durationMs');
+      expect(metadata).toHaveProperty('correlationId');
+    }
+  });
+
+  it('logs slow request warning for requests exceeding 2s threshold', async () => {
+    const logger = createMockLogger();
+    const app = express();
+    app.use(createCorrelationMiddleware(logger));
+
+    // Add a slow endpoint that takes >2s
+    app.get('/slow', async (_req, res) => {
+      await new Promise((resolve) => setTimeout(resolve, 2100));
+      res.json({ status: 'slow' });
+    });
+
+    await request(app).get('/slow');
+
+    // Should log at WARN level for slow requests
+    expect(logger.warn).toHaveBeenCalled();
+    const warnCalls = vi.mocked(logger.warn).mock.calls;
+
+    const slowRequestCall = warnCalls.find(
+      (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+    );
+    expect(slowRequestCall).toBeDefined();
+
+    if (slowRequestCall?.[1]) {
+      const metadata = slowRequestCall[1];
+      expect(metadata).toHaveProperty('slowRequest', true);
+      expect(metadata).toHaveProperty('durationMs');
+    }
+  });
+
+  it('includes timing data in all request completion logs', async () => {
+    const logger = createMockLogger();
+    const app = createTestApp(logger);
+
+    await request(app).get('/test');
+
+    const debugCalls = vi.mocked(logger.debug).mock.calls;
+    const completedCall = debugCalls.find(
+      (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+    );
+
+    expect(completedCall).toBeDefined();
+    if (completedCall?.[1]) {
+      const metadata = completedCall[1];
+      expect(metadata).toHaveProperty('duration');
+      expect(metadata).toHaveProperty('durationMs');
+      expect(metadata).toHaveProperty('method');
+      expect(metadata).toHaveProperty('path');
+      expect(metadata).toHaveProperty('statusCode');
+    }
+  });
 });

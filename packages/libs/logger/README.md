@@ -185,6 +185,60 @@ The request logger extracts and sanitises:
 - Client IP address
 - Request body (optional, via `includeBody` option)
 
+### Timing Utilities
+
+The logger provides high-precision timing utilities for measuring operation duration:
+
+```typescript
+import { startTimer } from '@oaknational/mcp-logger';
+
+const timer = startTimer();
+
+// Do some work...
+await performOperation();
+
+// Check elapsed time without stopping
+console.log(`Elapsed: ${timer.elapsed()}ms`);
+
+// Get final duration
+const duration = timer.end();
+console.log(`Operation took ${duration.formatted}`); // "123ms" or "1.23s"
+console.log(`Precise duration: ${duration.ms}ms`); // 1234.56
+```
+
+**Key Features:**
+
+- **Sub-millisecond precision**: Uses `performance.now()` for accurate timing
+- **Human-readable formatting**: Durations < 1s show as "123ms", >= 1s show as "1.23s"
+- **Browser and Node compatible**: Works in all JavaScript runtimes
+- **Non-destructive**: Can check `elapsed()` multiple times before calling `end()`
+
+**Example: Timing with logging**
+
+```typescript
+import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+
+const logger = createAdaptiveLogger({ level: 'INFO' });
+const timer = startTimer();
+
+try {
+  await processRequest();
+  const duration = timer.end();
+
+  logger.info('Request processed successfully', {
+    duration: duration.formatted,
+    durationMs: duration.ms,
+  });
+} catch (error) {
+  const duration = timer.end();
+
+  logger.error('Request failed', error, {
+    duration: duration.formatted,
+    durationMs: duration.ms,
+  });
+}
+```
+
 ### Correlation ID Support
 
 The HTTP server (`@oaknational/oak-curriculum-mcp-streamable-http`) includes built-in correlation ID support for request tracing. The logger package provides helper functions for working with correlation IDs:

@@ -105,6 +105,80 @@ grep "req_1699123456789_a3f2c9" logs.txt
 - **Error investigation**: Trace the full context of errors
 - **Performance analysis**: Measure request latency by following correlation IDs
 
+## Request Timing
+
+All HTTP requests are automatically timed and logged with duration information. Slow requests (>2 seconds) are logged at WARN level for easy identification.
+
+### How it works
+
+- Every request starts a high-precision timer when received
+- Duration is logged when the response completes
+- Timing data includes both formatted ("1.23s") and precise (1234.56ms) values
+- Slow requests are automatically flagged with `slowRequest: true`
+
+### Example logs
+
+**Normal request** (DEBUG level):
+
+```json
+{
+  "level": "debug",
+  "message": "Request completed",
+  "correlationId": "req_1699123456789_a3f2c9",
+  "duration": "145ms",
+  "durationMs": 145.23,
+  "method": "POST",
+  "path": "/",
+  "statusCode": 200
+}
+```
+
+**Slow request** (WARN level):
+
+```json
+{
+  "level": "warn",
+  "message": "Request completed",
+  "correlationId": "req_1699123456790_b4e3d0",
+  "duration": "2.34s",
+  "durationMs": 2340.12,
+  "method": "POST",
+  "path": "/",
+  "statusCode": 200,
+  "slowRequest": true
+}
+```
+
+### Filtering and analyzing timing logs
+
+**Find all slow requests:**
+
+```bash
+# Using grep
+grep '"slowRequest":true' logs/server.log
+
+# Using jq for better formatting
+grep '"slowRequest":true' logs/server.log | jq .
+```
+
+**Find requests over 1 second:**
+
+```bash
+jq 'select(.durationMs > 1000)' logs/server.log
+```
+
+**Average request duration:**
+
+```bash
+jq -s 'map(.durationMs) | add/length' logs/server.log
+```
+
+**Find slowest requests:**
+
+```bash
+jq -s 'sort_by(.durationMs) | reverse | .[0:10]' logs/server.log
+```
+
 ## Cursor (local STDIO) configuration
 
 - The local STDIO server is configured via `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:

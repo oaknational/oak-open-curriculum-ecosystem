@@ -136,3 +136,81 @@ grep -o '"correlationId":"req_[^"]*"' .logs/oak-curriculum-mcp/server.log | sort
 - Debug errors by filtering logs
 - Identify slow operations
 - Correlate client requests with server logs
+
+## Tool Execution Timing
+
+All tool executions are automatically timed and logged with duration information. Slow operations (>5 seconds) are logged at WARN level for easy identification.
+
+### How it works
+
+- Every tool invocation starts a high-precision timer
+- Duration is logged when execution completes
+- Timing data includes both formatted ("1.23s") and precise (1234.56ms) values
+- Slow operations are automatically flagged with `slowOperation: true`
+- All timing logs include correlation IDs for request tracing
+
+### Example logs
+
+Tool executions are logged to `.logs/oak-curriculum-mcp/server.log` with timing information:
+
+**Normal execution** (DEBUG level):
+
+```json
+{
+  "level": "debug",
+  "message": "Tool execution completed success",
+  "toolName": "get-lessons-transcript",
+  "correlationId": "req_1699123456789_a3f2c9",
+  "duration": "234ms",
+  "durationMs": 234.56
+}
+```
+
+**Slow execution** (WARN level):
+
+```json
+{
+  "level": "warn",
+  "message": "Tool execution completed success",
+  "toolName": "get-lessons-by-topic",
+  "correlationId": "req_1699123456790_b4e3d0",
+  "duration": "5.42s",
+  "durationMs": 5420.12,
+  "slowOperation": true
+}
+```
+
+### Filtering and analyzing timing logs
+
+**Find all slow operations:**
+
+```bash
+grep '"slowOperation":true' .logs/oak-curriculum-mcp/server.log
+```
+
+**Find all operations over 1 second:**
+
+```bash
+grep "Tool execution completed" .logs/oak-curriculum-mcp/server.log | \
+  jq 'select(.durationMs > 1000)'
+```
+
+**Find slow operations for a specific tool:**
+
+```bash
+grep '"toolName":"get-lessons-by-topic"' .logs/oak-curriculum-mcp/server.log | \
+  jq 'select(.durationMs > 1000)'
+```
+
+**Average execution time per tool:**
+
+```bash
+grep "Tool execution completed" .logs/oak-curriculum-mcp/server.log | \
+  jq -s 'group_by(.toolName) | map({tool: .[0].toolName, avgMs: (map(.durationMs) | add/length)})'
+```
+
+**Trace a specific request by correlation ID:**
+
+```bash
+grep "req_1699123456789_a3f2c9" .logs/oak-curriculum-mcp/server.log
+```
