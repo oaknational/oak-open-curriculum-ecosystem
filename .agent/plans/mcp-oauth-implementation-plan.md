@@ -351,23 +351,805 @@ Centralise all environment access behind explicit modules so application code an
 
 ---
 
-## Phase 2 – Transport Instrumentation (Queued)
+## Phase 2 – Transport Instrumentation (Ready to Begin)
 
-Focus on structured transport logs once logging foundations are stable.
+Focus on structured transport logs to diagnose production timeouts and errors, leveraging the consolidated logging infrastructure from Phase 1.
 
-### Session 2.A – Timing & Error Instrumentation
+**Goal**: Add correlation IDs, timing metrics, and enriched error contexts to both HTTP and stdio servers to enable production debugging and performance analysis.
 
-- [ ] Author integration tests covering normal, slow, and timed-out responses
-- [ ] Implement timing hooks in transport layer
-- [ ] Emit structured error logs with sanitised context
-- [ ] Verify performance impact remains acceptable
+**Prerequisites**: ✅ Phase 1 complete, all quality gates green
 
-### Session 2.B – Session Tracking & Correlation
+---
 
-- [ ] Introduce correlation IDs across request lifecycle
-- [ ] Log session lifecycle events (connect, disconnect, errors)
-- [ ] Extend integration tests to cover correlation flows
-- [ ] Update documentation with tracing guidance
+### Session 2.1 – HTTP Server Correlation IDs
+
+**Duration Estimate**: 4-6 hours  
+**Complexity**: Medium  
+**Risk**: Low (isolated to HTTP server, no protocol changes)
+
+#### Objectives
+
+Implement request correlation IDs in the HTTP server to enable request tracing across the system.
+
+#### Tasks
+
+**Task 2.1.1 – Create Correlation ID Module**
+
+- [ ] Create `apps/oak-curriculum-mcp-streamable-http/src/correlation/index.ts`
+- [ ] Implement `generateCorrelationId(): string` function
+  - Use format: `req_{timestamp}_{randomHex}` (e.g., `req_1699123456789_a3f2c9`)
+  - Ensure collision resistance (timestamp + 6-char random hex)
+  - Add TSDoc documentation
+- [ ] Export `CorrelationContext` type with `correlationId` property
+- [ ] Write unit tests verifying ID format and uniqueness
+  - Test: generates IDs with correct format
+  - Test: generates unique IDs across multiple calls
+  - Test: IDs are URL-safe (no special characters)
+
+**Acceptance Criteria**:
+
+- Module exports `generateCorrelationId()` function
+- Function returns IDs matching pattern `/^req_\d+_[a-f0-9]{6}$/`
+- Unit tests pass with >95% coverage
+- TSDoc complete and accurate
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+# Should see correlation/index.unit.test.ts passing
+```
+
+---
+
+**Task 2.1.2 – Add Correlation Middleware**
+
+- [ ] Create `apps/oak-curriculum-mcp-streamable-http/src/correlation/middleware.ts`
+- [ ] Implement Express middleware that:
+  - Generates correlation ID for each request
+  - Checks for `X-Correlation-ID` header (reuse if present)
+  - Stores ID in `req.correlationId` property
+  - Adds `X-Correlation-ID` to response headers
+  - Logs request start with correlation ID
+- [ ] Extend Express Request type to include `correlationId?: string`
+- [ ] Write integration tests:
+  - Test: middleware generates ID when header absent
+  - Test: middleware reuses ID when header present
+  - Test: response includes X-Correlation-ID header
+  - Test: concurrent requests get different IDs
+
+**Acceptance Criteria**:
+
+- Middleware function exported and typed correctly
+- All requests get correlation IDs
+- IDs propagate to response headers
+- Type augmentation works without errors
+- Integration tests pass
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+# Should see correlation/middleware.integration.test.ts passing
+```
+
+---
+
+**Task 2.1.3 – Integrate Correlation with Logger**
+
+- [ ] Update `apps/oak-curriculum-mcp-streamable-http/src/logging/index.ts`
+- [ ] Modify logger creation to accept optional `correlationId` parameter
+- [ ] Add correlation ID to all log metadata when present
+- [ ] Update request/error logging middleware to include correlation ID
+- [ ] Write integration tests:
+  - Test: logs include correlationId field when set
+  - Test: all logs for a request share same correlation ID
+  - Test: logs without correlation context don't error
+
+**Acceptance Criteria**:
+
+- Logger accepts correlation ID in context
+- All logs for a request contain matching correlation ID
+- Log format includes `correlationId` field
+- No breaking changes to existing logging
+- Integration tests validate correlation in logs
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+# Check test output for log entries with correlationId
+```
+
+---
+
+**Task 2.1.4 – Update Handlers to Use Correlation**
+
+- [ ] Update `apps/oak-curriculum-mcp-streamable-http/src/handlers.ts`
+- [ ] Extract correlation ID from request in `createMcpHandler`
+- [ ] Pass correlation ID to logger calls
+- [ ] Ensure correlation ID flows through SDK calls
+- [ ] Write e2e tests:
+  - Test: MCP tool call logs include correlation ID
+  - Test: error responses include correlation ID
+  - Test: validation failures log with correlation ID
+
+**Acceptance Criteria**:
+
+- All handler logs include correlation ID
+- SDK operations inherit correlation ID
+- Error scenarios maintain correlation ID
+- E2E tests verify end-to-end correlation
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+# All tests pass, e2e logs show correlation IDs
+```
+
+---
+
+**Task 2.1.5 – Update Documentation**
+
+- [ ] Update `apps/oak-curriculum-mcp-streamable-http/README.md` with correlation ID docs
+- [ ] Document X-Correlation-ID header usage
+- [ ] Add examples of using correlation IDs for debugging
+- [ ] Update TESTING.md with correlation ID test patterns
+- [ ] Run markdownlint
+
+**Acceptance Criteria**:
+
+- README documents correlation ID feature
+- Examples show header usage and log filtering
+- TESTING.md shows how to test correlation
+- Markdown lint passes
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+#### Session 2.1 Definition of Done
+
+**Required**:
+
+- [x] All tasks (2.1.1 through 2.1.5) complete
+- [x] Correlation module created and tested
+- [x] Middleware generates and propagates IDs
+- [x] Logger includes correlation IDs in all entries
+- [x] Handlers use correlation throughout request lifecycle
+- [x] Documentation updated with examples
+- [x] All quality gates pass:
+  ```bash
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http build
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http type-check
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http lint
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+  pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+  pnpm markdownlint-check:root
+  ```
+- [x] Manual verification:
+  - Start HTTP server locally
+  - Make request without X-Correlation-ID header → logs show generated ID
+  - Make request with X-Correlation-ID: test-123 → logs show test-123
+  - All log entries for one request show same correlation ID
+- [x] Code committed with message: "feat(http): add request correlation IDs"
+
+**Optional** (if time permits):
+
+- [ ] Add correlation ID to error response payloads
+- [ ] Add correlation metrics (IDs per minute, reused IDs)
+- [ ] Add correlation ID visualization in smoke tests
+
+---
+
+### Session 2.2 – Stdio Server Correlation IDs
+
+**Duration Estimate**: 3-5 hours  
+**Complexity**: Medium  
+**Risk**: Low (similar to HTTP, isolated changes)
+
+#### Objectives
+
+Implement request correlation IDs in the stdio server to enable request tracing in local development.
+
+#### Tasks
+
+**Task 2.2.1 – Create Correlation ID Module**
+
+- [ ] Create `apps/oak-curriculum-mcp-stdio/src/correlation/index.ts`
+- [ ] Implement `generateCorrelationId(): string` function (same format as HTTP)
+- [ ] Export `CorrelationContext` type
+- [ ] Write unit tests verifying ID format and uniqueness
+
+**Acceptance Criteria**:
+
+- Module matches HTTP server pattern
+- Function returns IDs matching pattern `/^req_\d+_[a-f0-9]{6}$/`
+- Unit tests pass with >95% coverage
+- TSDoc complete
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+```
+
+---
+
+**Task 2.2.2 – Integrate Correlation in Server**
+
+- [ ] Update `apps/oak-curriculum-mcp-stdio/src/app/server.ts`
+- [ ] Generate correlation ID for each incoming MCP request
+- [ ] Store in request context/metadata
+- [ ] Pass to logger for all operations in request scope
+- [ ] Write integration tests:
+  - Test: each request gets unique correlation ID
+  - Test: correlation ID included in file logs
+  - Test: concurrent requests have different IDs
+
+**Acceptance Criteria**:
+
+- Correlation ID generated per request
+- ID available throughout request lifecycle
+- File logs include correlationId field
+- Integration tests verify correlation
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+```
+
+---
+
+**Task 2.2.3 – Update Tool Handlers**
+
+- [ ] Update `apps/oak-curriculum-mcp-stdio/src/app/tool-response-handlers.ts`
+- [ ] Pass correlation ID through tool execution
+- [ ] Ensure SDK calls inherit correlation ID
+- [ ] Write e2e tests:
+  - Test: tool execution logs include correlation ID
+  - Test: validation errors log with correlation ID
+  - Test: all logs for one tool call share same ID
+
+**Acceptance Criteria**:
+
+- Tool handlers log with correlation ID
+- SDK operations inherit correlation ID
+- Error scenarios maintain correlation ID
+- E2E tests verify end-to-end correlation
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e
+```
+
+---
+
+**Task 2.2.4 – Update Documentation**
+
+- [ ] Update `apps/oak-curriculum-mcp-stdio/README.md` with correlation ID docs
+- [ ] Document how to filter logs by correlation ID
+- [ ] Add debugging examples using correlation IDs
+- [ ] Run markdownlint
+
+**Acceptance Criteria**:
+
+- README documents correlation feature
+- Examples show log filtering by correlation ID
+- Markdown lint passes
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+#### Session 2.2 Definition of Done
+
+**Required**:
+
+- [x] All tasks (2.2.1 through 2.2.4) complete
+- [x] Correlation module created and tested
+- [x] Server generates and propagates IDs
+- [x] Logger includes correlation IDs in file logs
+- [x] Tool handlers use correlation throughout execution
+- [x] Documentation updated with examples
+- [x] All quality gates pass:
+  ```bash
+  pnpm --filter @oaknational/oak-curriculum-mcp-stdio build
+  pnpm --filter @oaknational/oak-curriculum-mcp-stdio type-check
+  pnpm --filter @oaknational/oak-curriculum-mcp-stdio lint
+  pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+  pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e
+  ```
+- [x] Manual verification:
+  - Run stdio server with MCP Inspector
+  - Execute tool call → check `.logs/oak-curriculum-mcp/server.log`
+  - Verify all log entries for one request share same correlation ID
+  - Execute multiple tool calls → verify different correlation IDs
+- [x] Code committed with message: "feat(stdio): add request correlation IDs"
+
+---
+
+### Session 2.3 – Request Timing Instrumentation
+
+**Duration Estimate**: 4-6 hours  
+**Complexity**: Medium  
+**Risk**: Low (additive changes, no breaking changes)
+
+#### Objectives
+
+Add request timing metrics to both HTTP and stdio servers to identify slow requests and timeouts.
+
+#### Tasks
+
+**Task 2.3.1 – Create Timing Utilities**
+
+- [ ] Create `packages/libs/logger/src/timing.ts`
+- [ ] Implement `startTimer(): Timer` function that returns:
+  - `elapsed(): number` - milliseconds since start
+  - `end(): Duration` - final duration with formatted string
+- [ ] Export `Duration` type with `ms: number` and `formatted: string`
+- [ ] Write unit tests:
+  - Test: timer tracks elapsed time accurately
+  - Test: duration format matches "123ms" or "1.23s"
+  - Test: end() returns final duration
+
+**Acceptance Criteria**:
+
+- Timing utilities exported from logger package
+- Timer works with sub-millisecond precision
+- Duration formatting is human-readable
+- Unit tests pass
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/mcp-logger type-check
+pnpm --filter @oaknational/mcp-logger lint
+pnpm --filter @oaknational/mcp-logger test
+```
+
+---
+
+**Task 2.3.2 – Add Timing to HTTP Server**
+
+- [ ] Update HTTP correlation middleware to start timer
+- [ ] Log request duration on response finish
+- [ ] Log slow request warnings (>2s)
+- [ ] Add timing to error logs
+- [ ] Write integration tests:
+  - Test: normal requests log duration
+  - Test: slow requests log warning
+  - Test: errors include timing
+
+**Acceptance Criteria**:
+
+- All HTTP requests log duration
+- Slow requests (>2s) log warnings
+- Timing included in all request logs
+- Integration tests verify timing
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+```
+
+---
+
+**Task 2.3.3 – Add Timing to Stdio Server**
+
+- [ ] Update stdio server to start timer on request
+- [ ] Log request duration on response
+- [ ] Log slow request warnings (>5s)
+- [ ] Add timing to error logs
+- [ ] Write integration tests:
+  - Test: tool calls log duration
+  - Test: slow operations log warning
+  - Test: errors include timing
+
+**Acceptance Criteria**:
+
+- All stdio requests log duration
+- Slow operations (>5s) log warnings
+- Timing included in all operation logs
+- Integration tests verify timing
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e
+```
+
+---
+
+**Task 2.3.4 – Update Documentation**
+
+- [ ] Document timing feature in logger README
+- [ ] Add timing examples to HTTP server README
+- [ ] Add timing examples to stdio server README
+- [ ] Document slow request thresholds
+
+**Acceptance Criteria**:
+
+- Documentation explains timing feature
+- Examples show how to use timing utilities
+- Thresholds are documented
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+#### Session 2.3 Definition of Done
+
+**Required**:
+
+- [x] All tasks (2.3.1 through 2.3.4) complete
+- [x] Timing utilities in logger package
+- [x] HTTP server logs request durations
+- [x] Stdio server logs operation durations
+- [x] Slow request warnings implemented
+- [x] Documentation updated
+- [x] All quality gates pass:
+  ```bash
+  pnpm build
+  pnpm type-check
+  pnpm lint
+  pnpm test
+  pnpm test:e2e
+  ```
+- [x] Manual verification:
+  - HTTP: Make fast request → see duration ~50ms
+  - HTTP: Make slow request → see warning with duration
+  - Stdio: Execute tool → see duration in file log
+- [x] Code committed with message: "feat: add request timing instrumentation"
+
+---
+
+### Session 2.4 – Error Context Enrichment
+
+**Duration Estimate**: 3-5 hours  
+**Complexity**: Medium  
+**Risk**: Low (enhances existing error handling)
+
+#### Objectives
+
+Enrich error logs with correlation IDs, timing, and additional context to improve debugging.
+
+#### Tasks
+
+**Task 2.4.1 – Create Error Context Module**
+
+- [ ] Create `packages/libs/logger/src/error-context.ts`
+- [ ] Implement `enrichError(error, context)` function that:
+  - Adds correlation ID to error
+  - Adds timing information
+  - Adds request context (method, path, etc.)
+  - Preserves original error stack
+- [ ] Write unit tests for error enrichment
+
+**Acceptance Criteria**:
+
+- Error enrichment preserves original error
+- Context data attached to error object
+- Stack trace maintained
+- Unit tests pass
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/mcp-logger test
+```
+
+---
+
+**Task 2.4.2 – Update HTTP Error Handling**
+
+- [ ] Update error middleware to use enrichError
+- [ ] Log enriched errors with full context
+- [ ] Ensure correlation ID in error responses
+- [ ] Write integration tests for error scenarios
+
+**Acceptance Criteria**:
+
+- All errors logged with full context
+- Error logs include correlation ID + timing
+- Error responses maintain correlation ID
+- Tests verify enriched error logging
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+```
+
+---
+
+**Task 2.4.3 – Update Stdio Error Handling**
+
+- [ ] Update error handlers to use enrichError
+- [ ] Log enriched errors to file
+- [ ] Ensure correlation ID in error responses
+- [ ] Write integration tests for error scenarios
+
+**Acceptance Criteria**:
+
+- All errors logged with full context
+- File logs include correlation ID + timing
+- Error responses maintain correlation ID
+- Tests verify enriched error logging
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test:e2e
+```
+
+---
+
+**Task 2.4.4 – Documentation**
+
+- [ ] Document error enrichment in logger README
+- [ ] Add debugging guide using enriched errors
+- [ ] Update server READMEs with error examples
+
+**Acceptance Criteria**:
+
+- Error enrichment documented
+- Debugging guide complete
+- Markdown lint passes
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+#### Session 2.4 Definition of Done
+
+**Required**:
+
+- [x] All tasks (2.4.1 through 2.4.4) complete
+- [x] Error context module in logger package
+- [x] HTTP errors enriched with context
+- [x] Stdio errors enriched with context
+- [x] Documentation updated
+- [x] All quality gates pass
+- [x] Manual verification:
+  - HTTP: Trigger error → log shows correlation ID + timing
+  - Stdio: Trigger error → file log shows full context
+- [x] Code committed with message: "feat: enrich error context with correlation and timing"
+
+---
+
+### Session 2.5 – Phase 2 Integration & Validation
+
+**Duration Estimate**: 2-4 hours  
+**Complexity**: Low  
+**Risk**: Low (validation only, no new features)
+
+#### Objectives
+
+Validate complete Phase 2 implementation across all servers and update all documentation.
+
+#### Tasks
+
+**Task 2.5.1 – Full Quality Gate Sweep**
+
+- [ ] Run complete quality gate suite:
+  ```bash
+  pnpm format-check:root
+  pnpm markdownlint-check:root
+  pnpm build
+  pnpm type-check
+  pnpm lint
+  pnpm doc-gen
+  pnpm test
+  pnpm test:e2e
+  pnpm smoke:dev:stub
+  pnpm smoke:dev:live
+  pnpm qg
+  ```
+- [ ] Fix any issues that arise
+- [ ] Document quality gate results
+
+**Acceptance Criteria**:
+
+- All quality gates pass
+- No regressions from Phase 1
+- Test count maintained or increased
+
+**Validation Steps**: Commands above must all pass
+
+---
+
+**Task 2.5.2 – End-to-End Validation**
+
+- [ ] HTTP server:
+  - Start server with debug logging
+  - Make multiple requests with/without correlation IDs
+  - Verify all logs include correlation + timing
+  - Trigger errors and verify enriched context
+- [ ] Stdio server:
+  - Run server with MCP Inspector
+  - Execute multiple tool calls
+  - Verify file logs include correlation + timing
+  - Trigger errors and verify enriched context
+- [ ] Document validation results
+
+**Acceptance Criteria**:
+
+- Manual testing confirms all features working
+- Correlation IDs work end-to-end
+- Timing appears in all logs
+- Errors are properly enriched
+- Documentation captures evidence
+
+**Validation Steps**: Manual testing checklist above
+
+---
+
+**Task 2.5.3 – Documentation Finalization**
+
+- [ ] Update `.agent/context/context.md`:
+  - Mark Phase 2 complete
+  - Update quality gate status
+  - Document Phase 2 deliverables
+- [ ] Update `.agent/context/continuation_prompt.md`:
+  - Add Phase 2 to historical record
+  - Document architectural decisions
+  - Update patterns and examples
+- [ ] Update `.agent/context/HANDOFF.md`:
+  - Update phase progress
+  - Add Phase 2 deliverables
+  - Update architecture diagrams if needed
+- [ ] Update main plan document:
+  - Mark all Phase 2 sessions complete
+  - Add completion dates
+  - Record validation results
+
+**Acceptance Criteria**:
+
+- All documentation updated
+- Historical record complete
+- Phase 2 marked as delivered
+- Next phase (Phase 3) clearly defined
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+**Task 2.5.4 – Commit and Push**
+
+- [ ] Review all changes
+- [ ] Commit with comprehensive message:
+
+  ```
+  feat: complete Phase 2 transport instrumentation
+
+  - Added correlation IDs to HTTP and stdio servers
+  - Implemented request timing metrics
+  - Enriched error contexts with debugging information
+  - Updated all documentation
+  - All 438+ tests passing, quality gates green
+
+  Phase 2 complete. Ready for Phase 3 (rollout).
+  ```
+
+- [ ] Push to remote
+
+**Acceptance Criteria**:
+
+- All changes committed
+- Commit message follows conventional commits
+- Changes pushed to remote
+- Branch status clean
+
+**Validation Steps**:
+
+```bash
+git status # Should show clean working tree
+git log -1 # Should show comprehensive commit message
+```
+
+---
+
+#### Session 2.5 Definition of Done
+
+**Required**:
+
+- [x] All tasks (2.5.1 through 2.5.4) complete
+- [x] Full quality gate sweep passes
+- [x] End-to-end validation complete
+- [x] All documentation updated and current
+- [x] Changes committed and pushed
+- [x] Phase 2 marked complete in all docs
+- [x] Repository ready for Phase 3
+
+---
+
+### Phase 2 Complete Definition of Done
+
+**Phase 2 is complete when ALL of these are true:**
+
+**Features Delivered**:
+
+- [x] HTTP server has correlation ID support
+- [x] Stdio server has correlation ID support
+- [x] Request timing captured for all operations
+- [x] Error contexts enriched with correlation + timing
+- [x] All features tested with integration tests
+- [x] All features tested with e2e tests
+
+**Quality**:
+
+- [x] All quality gates pass (build, type-check, lint, test, e2e)
+- [x] No regressions from Phase 1 functionality
+- [x] Test coverage maintained (438+ tests)
+- [x] No linter warnings or errors
+- [x] Documentation lint passes
+
+**Documentation**:
+
+- [x] Logger package README updated
+- [x] HTTP server README updated
+- [x] Stdio server README updated
+- [x] TESTING.md guides updated
+- [x] Context documents updated (context.md, continuation_prompt.md, HANDOFF.md)
+- [x] Plan document updated with completion status
+
+**Validation**:
+
+- [x] Manual testing confirms all features work
+- [x] Correlation IDs propagate correctly
+- [x] Timing metrics are accurate
+- [x] Errors are properly enriched
+- [x] No performance degradation observed
+
+**Repository State**:
+
+- [x] All changes committed with good messages
+- [x] All changes pushed to remote
+- [x] Branch is clean (no uncommitted changes)
+- [x] Ready for Phase 3 work
 
 ---
 
