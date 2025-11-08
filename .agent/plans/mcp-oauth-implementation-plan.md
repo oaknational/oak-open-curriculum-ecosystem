@@ -2,13 +2,13 @@
 
 # MCP Observability Plan
 
-**Status:** Phase 1 – logging consolidation complete (Tranche 1.5 delivered 2025-11-05, including rescue)  
-**Last Reviewed:** 2025-11-05 (post-rescue, all quality gates green)  
+**Status:** ✅ Phase 2 Complete – Transport instrumentation delivered (2025-11-08)  
+**Last Reviewed:** 2025-11-08 (Phase 2 validation complete, all quality gates green)  
 **Scope:** `apps/oak-curriculum-mcp-streamable-http`, `apps/oak-curriculum-mcp-stdio`, `packages/libs/logger`
 
 ## Purpose
 
-Deliver a single, type-safe logging strategy across the Oak MCP servers so future transport instrumentation (Phase 2) and rollout (Phase 3) build on a stable foundation.
+Deliver a single, type-safe logging strategy across the Oak MCP servers with comprehensive transport instrumentation (correlation IDs, timing metrics, error enrichment) to enable production debugging and monitoring.
 
 ## Snapshot
 
@@ -18,15 +18,19 @@ Deliver a single, type-safe logging strategy across the Oak MCP servers so futur
 - [x] `@oaknational/mcp-logger` provides adaptive multi-sink logging, JSON sanitisation, and Express middleware
 - [x] Shared logger documentation published (`README.md`, migration guidance, `.env` sample)
 
-### Outstanding Focus Areas
+### Phase 2 Accomplishments (Complete 2025-11-08)
 
-- [x] Logger consumers: audit every workspace to ensure browser runtimes import `@oaknational/mcp-logger` and Node runtimes import `@oaknational/mcp-logger/node`; update configs/tests where needed (Tranche 1.2.6)
-- [x] Documentation: extend README and wider observability docs with entry-point guidance and migration notes (Tranche 1.2.6)
-- [x] HTTP server: finish integration tidy-up once audit confirms imports, then validate logging behaviour and scrub legacy references (Tranche 1.3)
-- [x] Stdio server: migrate to shared logger with file-only sink, prove stdout is clean, document configuration (Tranche 1.4)
-- [x] Integration: maintain green quality gates after subsequent tranches, update cross-repo documentation, capture results in context files (Tranche 1.5)
-- [x] Runtime configuration consolidation for HTTP/stdio servers (complete 2025-11-05)
-- [ ] Phase 2 instrumentation design and Phase 3 rollout planning (ready to begin)
+- [x] Correlation IDs implemented for HTTP and stdio servers with `req_{timestamp}_{hex}` format
+- [x] Request timing instrumentation with sub-millisecond precision using `performance.now()`
+- [x] Slow request warnings (2s threshold for HTTP, 5s for stdio)
+- [x] Error context enrichment with correlation ID, timing, and request/tool context
+- [x] 38 new instrumentation tests added (100% passing)
+- [x] Comprehensive documentation updated across all affected packages
+- [x] Full integration validation with zero regressions (738 total tests passing)
+
+### Next Focus
+
+- [ ] Phase 3: Production rollout and monitoring (ready to begin)
 
 ## Constraints & Guidance
 
@@ -1389,4 +1393,4 @@ Following a destructive git operation and partial recovery, the stdio server was
 
 ---
 
-_Last updated: 2025-11-05 (Phase 1 complete including rescue; Phase 2 ready to begin)_
+_Last updated: 2025-11-08 (Phase 2 complete; ready for Phase 3)_
