@@ -55,3 +55,6 @@ export {
 
 // Timing utilities
 export { startTimer, type Duration, type Timer } from './timing';
+
+// Error Context Enrichment
+export { enrichError, type ErrorContext } from './error-context';

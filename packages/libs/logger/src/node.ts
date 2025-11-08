@@ -43,3 +43,5 @@ export type { LogLevel, BaseLoggingEnvironment } from './log-levels.js';
 export type { FileSinkInterface, FileSystem, SimpleWriteStream } from './file-sink.js';
 export { startTimer } from './timing.js';
 export type { Duration, Timer } from './timing.js';
+export { enrichError } from './error-context.js';
+export type { ErrorContext } from './error-context.js';

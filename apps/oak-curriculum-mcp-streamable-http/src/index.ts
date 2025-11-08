@@ -4,19 +4,14 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import {
-  createRequestLogger,
-  createErrorLogger,
-  convertLogLevel,
-  type Logger,
-} from '@oaknational/mcp-logger';
+import { createRequestLogger, convertLogLevel, type Logger } from '@oaknational/mcp-logger';
 
 import { createCorrelationMiddleware } from './correlation/middleware.js';
 
 import { renderLandingPageHtml } from './landing-page.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { createHttpLogger } from './logging/index.js';
+import { createHttpLogger, createEnrichedErrorLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
 import { setupAuthRoutes } from './auth-routes.js';
@@ -40,7 +35,7 @@ function setupBaseMiddleware(app: Express, log: Logger): void {
   if (debugEnabled) {
     app.use(createRequestLogger(log, { level: 'debug' }));
   }
-  app.use(createErrorLogger(log));
+  app.use(createEnrichedErrorLogger(log));
 }
 
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {

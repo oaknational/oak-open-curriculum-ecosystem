@@ -261,6 +261,111 @@ if (correlationId) {
 
 For more details on correlation IDs, see the [HTTP Server README](../../apps/oak-curriculum-mcp-streamable-http/README.md#request-tracing-with-correlation-ids).
 
+### Error Context Enrichment
+
+The logger package provides error enrichment utilities to add debugging context (correlation IDs, timing, request details) to errors before logging. This enables better production debugging and request tracing.
+
+```typescript
+import { enrichError, startTimer, type ErrorContext } from '@oaknational/mcp-logger';
+
+const timer = startTimer();
+const correlationId = 'req_1699123456789_a3f2c9';
+
+try {
+  await riskyOperation();
+} catch (error) {
+  const duration = timer.end();
+
+  // Enrich error with context
+  const errorContext: ErrorContext = {
+    correlationId,
+    duration,
+    requestMethod: 'POST',
+    requestPath: '/api/search',
+  };
+
+  const enrichedError = enrichError(error as Error, errorContext);
+
+  // Log enriched error with full context
+  logger.error('Operation failed', {
+    message: enrichedError.message,
+    stack: enrichedError.stack,
+    correlationId,
+    duration: duration.formatted,
+    durationMs: duration.ms,
+  });
+}
+```
+
+**ErrorContext Interface:**
+
+```typescript
+interface ErrorContext {
+  readonly correlationId?: string; // Correlation ID for request tracing
+  readonly duration?: Duration; // Timing information
+  readonly requestMethod?: string; // HTTP method (for HTTP servers)
+  readonly requestPath?: string; // HTTP path (for HTTP servers)
+  readonly toolName?: string; // MCP tool name (for stdio servers)
+}
+```
+
+**Key Features:**
+
+- **Preserves original error**: Stack trace and message remain intact
+- **Non-enumerable attachment**: Context attached as non-enumerable property
+- **JSON-serializable**: Context can be safely serialized for logging
+- **Type-safe**: Structured context with specific field types
+- **Optional fields**: Include only the context available at error time
+
+**Example: Stdio server error enrichment**
+
+```typescript
+import { enrichError, startTimer, type ErrorContext } from '@oaknational/mcp-logger/node';
+
+const timer = startTimer();
+const correlationId = generateCorrelationId();
+
+try {
+  const result = await executeToolCall('searchLessons', params);
+} catch (error) {
+  const duration = timer.end();
+
+  const errorContext: ErrorContext = {
+    correlationId,
+    duration,
+    toolName: 'searchLessons',
+  };
+
+  const enrichedError = enrichError(error as Error, errorContext);
+
+  logger.error('Tool execution failed', {
+    message: enrichedError.message,
+    correlationId,
+    duration: duration.formatted,
+    toolName: 'searchLessons',
+  });
+}
+```
+
+**Example enriched error log output:**
+
+```json
+{
+  "level": "error",
+  "message": "Tool execution failed",
+  "context": {
+    "message": "Invalid input parameters",
+    "correlationId": "req_1699123456789_a3f2c9",
+    "duration": "145ms",
+    "durationMs": 145.23,
+    "toolName": "searchLessons"
+  },
+  "timestamp": "2024-11-06T12:34:56.789Z"
+}
+```
+
+For implementation examples, see the HTTP and Stdio server READMEs for detailed error debugging workflows.
+
 ## API Reference
 
 ### Logger Interface

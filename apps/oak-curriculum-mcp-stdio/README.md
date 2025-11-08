@@ -214,3 +214,116 @@ grep "Tool execution completed" .logs/oak-curriculum-mcp/server.log | \
 ```bash
 grep "req_1699123456789_a3f2c9" .logs/oak-curriculum-mcp/server.log
 ```
+
+## Error Debugging
+
+The stdio server enriches all tool execution errors with correlation IDs, timing information, and tool context for improved production debugging. Error logs are written to `.logs/oak-curriculum-mcp/server.log` (never to stdout, which is reserved for MCP protocol).
+
+Error logs include:
+
+- **Correlation ID**: Unique identifier for tracing tool executions
+- **Timing**: Tool execution duration when the error occurred
+- **Tool name**: The MCP tool that failed
+- **Error details**: Original error message and execution/validation failure details
+
+### Example enriched error logs
+
+**Tool execution error:**
+
+```json
+{
+  "level": "error",
+  "message": "Tool execution failed",
+  "context": {
+    "payload": "{\"toolName\":\"searchLessons\",\"toolInput\":{...},\"toolExecutionError\":{\"message\":\"Invalid input parameters\"}}",
+    "correlationId": "req_1699123456789_a3f2c9",
+    "duration": "145ms",
+    "durationMs": 145.23,
+    "toolName": "searchLessons"
+  },
+  "timestamp": "2024-11-06T12:34:56.789Z"
+}
+```
+
+**Tool validation error:**
+
+```json
+{
+  "level": "error",
+  "message": "Tool output validation failed",
+  "context": {
+    "payload": "{\"toolName\":\"getLessonPlan\",\"toolOutput\":{...},\"outputValidationFailed\":{\"message\":\"Missing required field: title\"}}",
+    "correlationId": "req_1699123456790_b4e3d0",
+    "duration": "2.34s",
+    "durationMs": 2340.56,
+    "toolName": "getLessonPlan"
+  },
+  "timestamp": "2024-11-06T12:34:57.123Z"
+}
+```
+
+### Filtering errors by correlation ID
+
+Each tool execution has a unique correlation ID. Use it to trace all logs for a specific execution:
+
+```bash
+# Find all logs for a specific tool execution
+grep 'req_1699123456789_a3f2c9' .logs/oak-curriculum-mcp/server.log
+
+# Pretty-print with jq
+grep 'req_1699123456789_a3f2c9' .logs/oak-curriculum-mcp/server.log | jq .
+
+# Find just the error for a specific execution
+grep 'req_1699123456789_a3f2c9' .logs/oak-curriculum-mcp/server.log | jq 'select(.level == "error")'
+```
+
+### Troubleshooting workflow for tool errors
+
+1. **Identify failing tool** → Check MCP client error or tool name in logs
+2. **Find recent errors** → `grep -i "error" .logs/oak-curriculum-mcp/server.log | tail -20`
+3. **Get correlation ID** → Note the `correlationId` from the error log
+4. **Trace execution** → `grep '<correlation-id>' .logs/oak-curriculum-mcp/server.log | jq .`
+5. **Review timing** → Check if error correlates with slow operation warnings
+6. **Analyze payload** → Examine tool input/output in the error payload
+7. **Check validation** → For validation errors, review the schema requirements
+
+### Finding all errors
+
+**All tool execution errors:**
+
+```bash
+grep '"level":"error"' .logs/oak-curriculum-mcp/server.log | jq .
+```
+
+**Errors for a specific tool:**
+
+```bash
+grep '"level":"error"' .logs/oak-curriculum-mcp/server.log | \
+  jq 'select(.context.toolName == "searchLessons")'
+```
+
+**Errors with slow execution (over 2 seconds):**
+
+```bash
+grep '"level":"error"' .logs/oak-curriculum-mcp/server.log | \
+  jq 'select(.context.durationMs > 2000)'
+```
+
+**Group errors by tool:**
+
+```bash
+grep '"level":"error"' .logs/oak-curriculum-mcp/server.log | \
+  jq -s 'group_by(.context.toolName) | map({tool: .[0].context.toolName, count: length})'
+```
+
+**Recent errors (last 10):**
+
+```bash
+grep '"level":"error"' .logs/oak-curriculum-mcp/server.log | tail -10 | jq .
+```
+
+### Log file location
+
+All logs are written to: `.logs/oak-curriculum-mcp/server.log`
+
+The log file path is configurable via `MCP_LOGGER_FILE_PATH` environment variable. Never change the stdio server to log to stdout, as this will corrupt the MCP JSON-RPC protocol stream.

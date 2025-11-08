@@ -1,15 +1,13 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-06 (Session 2.3 Complete)  
+**Updated**: 2025-11-08 (Phase 2 Complete)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
 ✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
-✅ **Phase 2 Session 2.1 Complete** – HTTP server correlation IDs implemented with full request tracing support  
-✅ **Phase 2 Session 2.2 Complete** – Stdio server correlation IDs implemented with full request tracing support  
-✅ **Phase 2 Session 2.3 Complete** – Request timing instrumentation implemented for both HTTP and stdio servers  
-🚀 **Next: Phase 2 Session 2.4** – Error context enrichment. All quality gates green.
+✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
+🚀 **Next: Phase 3** – Production rollout and monitoring
 
 ## Strategic Goal
 
@@ -38,6 +36,14 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-06**: Timing utilities added to logger package with browser-safe implementation
 - ✅ **2025-11-06**: Slow request warnings implemented (2s HTTP, 5s stdio)
 - ✅ **2025-11-06**: 4 new timing tests added, comprehensive documentation with log filtering examples
+- ✅ **2025-11-07**: Session 2.4 complete - Error context enrichment for HTTP and stdio servers
+- ✅ **2025-11-07**: Error context module added to logger package with enrichError function
+- ✅ **2025-11-07**: HTTP and stdio error handling updated to include correlation ID and timing
+- ✅ **2025-11-07**: 12 new error enrichment tests added (5 unit, 7 integration), comprehensive documentation
+- ✅ **2025-11-08**: Session 2.5 complete - Phase 2 Integration & Validation
+- ✅ **2025-11-08**: Full quality gate validation confirms 738 tests passing, all gates green
+- ✅ **2025-11-08**: Phase 2 milestone reached - complete observability instrumentation delivered
+- ✅ **2025-11-08**: All documentation updated to reflect Phase 2 completion
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -49,19 +55,20 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 
 ## Next Steps (Execute in Order)
 
-### 1. Phase 2 – Transport Instrumentation (In Progress)
+### 1. Phase 2 – Transport Instrumentation ✅ COMPLETE
 
-- ✅ Session 2.1: HTTP Server Correlation IDs (Complete)
-- ✅ Session 2.2: Stdio Server Correlation IDs (Complete)
-- ✅ Session 2.3: Request Timing Instrumentation (Complete)
-- 🔄 Session 2.4: Error Context Enrichment (Next)
-- ⏳ Session 2.5: Final Integration & Smoke Tests
+- ✅ Session 2.1: HTTP Server Correlation IDs
+- ✅ Session 2.2: Stdio Server Correlation IDs
+- ✅ Session 2.3: Request Timing Instrumentation
+- ✅ Session 2.4: Error Context Enrichment
+- ✅ Session 2.5: Phase 2 Integration & Validation
 
-### 2. Phase 3 – Rollout & Monitoring (Queued)
+### 2. Phase 3 – Rollout & Monitoring (Next)
 
 - Prepare production rollout plan for instrumentation
 - Establish dashboards/alerts consuming new telemetry
 - Validation: full `pnpm qg` + environment-specific smoke checks
+- Production deployment and monitoring setup
 
 ## State Snapshot
 
@@ -79,12 +86,14 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 | **2.1**     | **HTTP correlation IDs**     | ✅ **Complete (2025-11-06)**             |
 | **2.2**     | **Stdio correlation IDs**    | ✅ **Complete (2025-11-06)**             |
 | **2.3**     | **Request timing**           | ✅ **Complete (2025-11-06)**             |
+| **2.4**     | **Error context enrichment** | ✅ **Complete (2025-11-07)**             |
+| **2.5**     | **Integration & validation** | ✅ **Complete (2025-11-08)**             |
 
 ## Quality Gate Status
 
-✅ **Current state**: ALL GREEN (2025-11-06, Session 2.3 complete)
+✅ **Current state**: ALL GREEN (2025-11-08, Phase 2 Complete)
 
-Latest successful run (2025-11-06, post Session 2.3):
+Latest successful run (2025-11-08, Session 2.5 validation):
 
 ```bash
 pnpm format-check:root    ✅
@@ -93,8 +102,8 @@ pnpm build                ✅ (10 packages)
 pnpm type-check           ✅ (10 workspaces)
 pnpm lint                 ✅ (10 workspaces)
 pnpm doc-gen              ✅
-pnpm test                 ✅ (726 tests, +26 timing/correlation tests total)
-pnpm test:e2e             ✅ (68 tests, 3 workspaces)
+pnpm test                 ✅ (738 tests, +38 instrumentation tests total)
+pnpm test:e2e             ✅ (68 tests: HTTP 45, Stdio 12, SDK 11)
 pnpm smoke:dev:stub       ✅
 pnpm smoke:dev:live       ✅
 pnpm qg                   ✅
@@ -116,6 +125,22 @@ pnpm qg                   ✅
 - 4 unit tests for timing utilities (`packages/libs/logger/src/timing.unit.test.ts`)
 - 3 integration tests for HTTP timing middleware (`correlation/middleware.integration.test.ts`)
 - Timing validated in existing e2e tests
+
+**Session 2.4 Test Additions**:
+
+- 5 unit tests for error enrichment (`packages/libs/logger/src/error-context.unit.test.ts`)
+- 7 integration tests for HTTP error enrichment (`apps/oak-curriculum-mcp-streamable-http/src/error-handling.integration.test.ts`)
+- 5 integration tests for stdio error enrichment (`apps/oak-curriculum-mcp-stdio/src/app/error-enrichment.integration.test.ts`)
+- Error enrichment validated in existing e2e tests
+
+**Session 2.5 Validation Results**:
+
+- ✅ Full quality gate sweep completed successfully
+- ✅ All 738 tests passing (700 baseline + 38 Phase 2 instrumentation tests)
+- ✅ All 68 e2e tests passing across 3 workspaces
+- ✅ No regressions detected from Phase 1 or Phase 2 work
+- ✅ Build, type-check, lint, and documentation all passing
+- ✅ Smoke tests (stub and live) verified
 
 Re-run the full suite before every hand-off and after significant changes.
 

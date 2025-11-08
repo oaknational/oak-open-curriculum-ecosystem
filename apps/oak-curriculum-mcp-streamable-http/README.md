@@ -179,6 +179,98 @@ jq -s 'map(.durationMs) | add/length' logs/server.log
 jq -s 'sort_by(.durationMs) | reverse | .[0:10]' logs/server.log
 ```
 
+## Error Debugging
+
+The HTTP server enriches all errors with correlation IDs, timing information, and request context for improved production debugging. Error logs include:
+
+- **Correlation ID**: Unique identifier for tracing requests across the system
+- **Timing**: Request duration when the error occurred
+- **Request details**: HTTP method, path, and status code
+- **Error context**: Original error message and stack trace
+
+### Example enriched error log
+
+```json
+{
+  "level": "error",
+  "message": "Request error",
+  "context": {
+    "message": "Database connection timeout",
+    "stack": "Error: Database connection timeout\n    at ...",
+    "correlationId": "req_1699123456789_a3f2c9",
+    "duration": "2.34s",
+    "durationMs": 2340.56,
+    "method": "POST",
+    "path": "/mcp/v1/messages",
+    "statusCode": 500
+  },
+  "timestamp": "2024-11-06T12:34:56.789Z"
+}
+```
+
+### Filtering errors by correlation ID
+
+When a client reports an error, use the correlation ID (returned in the `X-Correlation-ID` response header) to find all logs for that request:
+
+```bash
+# Find all logs for a specific request
+grep 'req_1699123456789_a3f2c9' logs/server.log
+
+# Pretty-print with jq
+grep 'req_1699123456789_a3f2c9' logs/server.log | jq .
+
+# Find the error and surrounding context
+grep -C 5 'req_1699123456789_a3f2c9.*error' logs/server.log
+```
+
+### Example curl request with error response
+
+```bash
+curl -v https://your-server.com/mcp/v1/messages \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"invalid": "request"}'
+
+# Response includes X-Correlation-ID header
+< HTTP/1.1 500 Internal Server Error
+< X-Correlation-ID: req_1699123456789_a3f2c9
+< Content-Type: application/json
+{
+  "error": "Internal Server Error",
+  "message": "Invalid request format",
+  "correlationId": "req_1699123456789_a3f2c9"
+}
+```
+
+### Troubleshooting workflow for errors
+
+1. **Client reports error** → Note the `X-Correlation-ID` from the response headers
+2. **Search logs** → `grep '<correlation-id>' logs/server.log | jq .`
+3. **Review request** → Check the "Request started" log for request details
+4. **Find error** → Look for error log with same correlation ID
+5. **Check timing** → Compare duration to identify timeout or slow operations
+6. **Analyze stack trace** → Error log includes full stack trace for debugging
+
+### Finding all errors
+
+**All errors in logs:**
+
+```bash
+jq 'select(.level == "error")' logs/server.log
+```
+
+**Errors with timing over 2 seconds (slow request timeouts):**
+
+```bash
+jq 'select(.level == "error" and .context.durationMs > 2000)' logs/server.log
+```
+
+**Group errors by path:**
+
+```bash
+jq -s 'group_by(.context.path) | map({path: .[0].context.path, count: length})' logs/server.log
+```
+
 ## Cursor (local STDIO) configuration
 
 - The local STDIO server is configured via `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:

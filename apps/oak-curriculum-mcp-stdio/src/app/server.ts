@@ -15,7 +15,7 @@ import {
 } from '@oaknational/oak-curriculum-sdk';
 import { wireDependencies } from './wiring.js';
 import type { ServerConfig } from './wiring.js';
-import { startTimer, type Logger } from '@oaknational/mcp-logger/node';
+import { startTimer, type Logger, type ErrorContext } from '@oaknational/mcp-logger/node';
 import { createToolResponseHandlers } from './tool-response-handlers.js';
 import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
@@ -148,17 +148,19 @@ function handleToolResult(
   params: unknown,
   descriptor: ReturnType<typeof getToolFromToolName>,
   handlers: ReturnType<typeof createToolResponseHandlers>,
+  errorContext?: ErrorContext,
 ): ReturnType<ReturnType<typeof createToolResponseHandlers>['handleSuccess']> {
   if (execResult.error) {
-    return handlers.handleExecutionError(params, execResult.error);
+    return handlers.handleExecutionError(params, execResult.error, errorContext);
   }
   const validation = validateOutput(descriptor, execResult);
   if (!validation.ok) {
-    return handlers.handleValidationError(params, execResult, validation.message);
+    return handlers.handleValidationError(params, execResult, validation.message, errorContext);
   }
   return handlers.handleSuccess(execResult);
 }
 
+// eslint-disable-next-line max-lines-per-function -- Error enrichment adds necessary context
 function createToolHandler<TName extends (typeof toolNames)[number]>(
   name: TName,
   description: string,
@@ -182,9 +184,16 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
       ? await toolExecutors.executeMcpTool(name, params ?? {})
       : await executeToolCall(name, params, client);
 
-    const result = handleToolResult(execResult, params, descriptor, handlers);
-
     const duration = timer.end();
+
+    // Build error context for enrichment
+    const errorContext: ErrorContext = {
+      correlationId,
+      duration,
+      toolName: name,
+    };
+
+    const result = handleToolResult(execResult, params, descriptor, handlers, errorContext);
     const isSlowOperation = duration.ms > SLOW_OPERATION_THRESHOLD_MS;
 
     const status = execResult.error
