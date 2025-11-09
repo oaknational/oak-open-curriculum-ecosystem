@@ -1,14 +1,14 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-08 (Phase 2 Complete)  
-**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · 🚀 Ready for Phase 3  
+**Last Updated**: 2025-11-08 (Session 3.A Complete)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · 🚀 Ready for Session 3.B  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
 
 ## I'm Working On...
 
-I've completed the Oak MCP Ecosystem observability implementation Phase 2. This was a multi-phase project:
+I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Session 3.A. This is a multi-phase project:
 
 1. **Phase 1 (✅ Complete)**: Consolidate logging across HTTP and stdio MCP servers into a unified, type-safe foundation
 2. **Phase 2 (✅ Complete)**: Add transport instrumentation (correlation IDs, timing, error enrichment)
@@ -17,9 +17,13 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2. This 
    - ✅ Session 2.3: Request Timing Instrumentation (Complete 2025-11-06)
    - ✅ Session 2.4: Error Context Enrichment (Complete 2025-11-07)
    - ✅ Session 2.5: Phase 2 Integration & Validation (Complete 2025-11-08)
-3. **Phase 3 (Next)**: Production rollout with monitoring and dashboards
+3. **Phase 3 (In Progress)**: Production rollout with monitoring and dashboards
+   - ✅ Session 3.A: Documentation Finalization (Complete 2025-11-08)
+   - 🚀 Session 3.B: OpenTelemetry-Compliant Single-Line Logging (Next)
+   - [ ] Session 3.C: Staging Deployment & Validation
+   - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Phase 2 complete. All instrumentation delivered, validated, and documented. Ready to begin Phase 3 planning.
+**Current status**: Session 3.A complete. Documentation finalized, dev server validated, multi-line logging issue discovered. ADR-051 created for OpenTelemetry-compliant single-line logging. Ready to begin Session 3.B implementation.
 
 ---
 
@@ -582,6 +586,111 @@ pnpm qg                       ✅ (runs all above)
 
 ---
 
+### Session 3.A: Documentation Finalization & Production Readiness (2025-11-08)
+
+**Objectives**: Finalize all documentation, validate observability features in development, and prepare for production rollout.
+
+**Key Activities**:
+
+1. **Comprehensive Documentation**
+   - Created SDK logging guide (`packages/sdks/oak-curriculum-sdk/docs/logging-guide.md`)
+   - Updated SDK README with Logging section and code examples
+   - Added Production Logging section to HTTP server README
+   - Added Log File Management section to stdio server README
+   - Created production debugging runbook for operational teams
+   - Created AI agent logging guidance
+   - Updated development and agent-guidance indexes
+
+2. **Development Server Validation**
+   - Configured dev command with `LOG_LEVEL=debug` and observability features
+   - Fixed deprecated `REMOTE_MCP_ALLOW_NO_AUTH` → `DANGEROUSLY_DISABLE_AUTH` everywhere
+   - Started dev server and validated OAuth authentication via Clerk
+   - Confirmed all 28 tools reporting correctly
+   - Validated correlation IDs appearing in logs
+   - Confirmed timing metrics working (5.47s request logged with slowRequest flag)
+   - Verified error enrichment context available
+
+3. **Critical Discovery: Multi-Line Logging Issue**
+   - **Problem**: Consola outputs multi-line, pretty-printed logs
+   - **Impact**: Incompatible with production log aggregation (Datadog, Kibana, etc.)
+   - **Evidence**: Dev server logs showed multi-line output breaking parser compatibility
+   - **Root Cause**: Consola designed for development, not production
+   - **Solution Required**: Single-line JSON everywhere
+
+4. **OpenTelemetry Research & Decision**
+   - Researched canonical log format standards
+   - OpenTelemetry Logs Data Model identified as industry standard
+   - Supported by all major observability platforms (Datadog, Kibana, Splunk, etc.)
+   - Created ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging
+   - Updated ADR-017 to mark as superseded
+   - Decision: Remove Consola, implement OpenTelemetry format everywhere
+
+**Deliverables**:
+
+Documentation Created/Updated:
+
+- SDK logging guide (628 lines)
+- Production debugging runbook
+- AI agent logging guidance
+- 4 README updates across HTTP, stdio, SDK, and guidance docs
+- All markdown lint passing
+
+Configuration Updates:
+
+- Environment variable deprecation fix (REMOTE_MCP_ALLOW_NO_AUTH → DANGEROUSLY_DISABLE_AUTH)
+- Dev server command enhanced with observability features
+- Log capture working with `tee` to `.logs/http-dev.log`
+
+Architecture Decision:
+
+- ADR-051 created and documented
+- Detailed implementation plan prepared for Session 3.B
+- Clear rationale for Consola removal (~200KB bundle reduction)
+- OpenTelemetry format specification defined
+
+**Validation Results**:
+
+- ✅ All documentation markdown lint passing
+- ✅ Dev server running with all observability features working
+- ✅ Correlation IDs appearing in logs
+- ✅ Timing metrics capturing request durations
+- ✅ Error enrichment context available
+- ✅ 28 MCP tools correctly registered and available
+- ⚠️ Multi-line log format identified as production blocker
+- ✅ Solution path identified (OpenTelemetry + single-line JSON)
+
+**Key Insights**:
+
+1. **Consola Trade-off**: Beautiful dev logs vs. production compatibility
+   - Consola optimized for human readability (multi-line, colors, emojis)
+   - Production needs machine-readable (single-line JSON, parseable)
+   - No way to make Consola output single-line JSON
+   - Decision: Remove Consola entirely, use native `process.stdout.write()`
+
+2. **OpenTelemetry as Universal Standard**
+   - Every major observability platform supports OpenTelemetry
+   - Future-proof: ready for full OTel SDK integration later
+   - Semantic conventions provide standard attribute names
+   - Built-in support for distributed tracing (TraceId, SpanId)
+
+3. **Single-Line JSON Everywhere**
+   - Same format in development and production (no environment drift)
+   - Works with all Unix tools (`jq`, `grep`, `awk`)
+   - Easy to parse and ingest
+   - Human readability via `tail -f logs | jq` when needed
+
+**Implementation Decision**:
+
+Approved for Session 3.B:
+
+- Remove Consola dependency completely
+- Implement UnifiedLogger with OpenTelemetry format
+- Single-line JSON output to all sinks (stdout, file)
+- Resource attributes from environment (ENVIRONMENT_OVERRIDE → VERCEL_ENV → 'development')
+- No backwards compatibility (per project rules)
+
+---
+
 ## Architectural Decisions (With Rationale)
 
 ### Decision 1: Tree-Shakeable Logger with Dual Entry Points
@@ -740,6 +849,198 @@ export function createChildLogger(
 - No mutation of parent logger (functional approach)
 - Easy to grep logs: `grep "req_1699123456789_a3f2c9" logs/`
 - Supports distributed tracing (pass ID between services)
+
+---
+
+### Decision 6: OpenTelemetry-Compliant Single-Line JSON Logging
+
+**Problem**: Consola outputs multi-line, pretty-printed logs that are incompatible with production log aggregation platforms.
+
+**Solution**: Remove Consola and implement OpenTelemetry-compliant single-line JSON logging everywhere.
+
+**Why Not Alternatives**:
+
+- ❌ Configure Consola for JSON: Consola doesn't support single-line JSON output
+- ❌ Keep Consola for dev only: Creates environment drift and dual code paths
+- ❌ Use pino/winston: Adds unnecessary complexity; we just need simple JSON output
+- ✅ Direct stdout writes + OpenTelemetry format: Simple, standard, universal
+
+**Implementation**:
+
+```typescript
+// UnifiedLogger writes OpenTelemetry format to any sink
+const record = {
+  Timestamp: new Date().toISOString(),
+  ObservedTimestamp: new Date().toISOString(),
+  SeverityNumber: 9, // INFO
+  SeverityText: 'INFO',
+  Body: 'Request completed',
+  Attributes: { correlationId: 'req_123', duration: '1.23s' },
+  Resource: {
+    'service.name': 'oak-curriculum-mcp-http',
+    'service.version': '0.5.0',
+    'deployment.environment': 'production',
+  },
+};
+process.stdout.write(JSON.stringify(record) + '\n');
+```
+
+**Benefits**:
+
+- Universal compatibility (works with all log aggregation platforms)
+- ~200KB smaller bundle (Consola removed)
+- Single code path (no environment-specific logic)
+- Future-proof (ready for OpenTelemetry SDK integration)
+- Standard format (industry best practice)
+
+**For More Details**: See ADR-051 (`docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md`)
+
+---
+
+### Decision 7: Logger Architecture Refactoring (Critical - 2025-11-08)
+
+**Problem**: During Session 3.B implementation, discovered critical architecture violations:
+
+- `process.env` accessed directly in logger (violates DI principle)
+- `process.stdout` in core files (should be Node-only)
+- Tests mutating global `process.stdout.write` (should inject mocks)
+- Multiple logger types instead of ONE logger with config variations
+- Function complexity >8 (rule violation)
+
+**Solution**: Complete architecture refactor with proper dependency injection
+
+**Correct Architecture**:
+
+```typescript
+// Core Logger (Runtime-Agnostic)
+packages/libs/logger/src/
+├── unified-logger.ts       // ONE logger class, accepts sinks
+├── otel-format.ts          // Pure formatting function
+├── resource-attributes.ts  // Pure function (takes env object)
+├── log-levels.ts          // Pure severity mapping
+├── types.ts               // Shared interfaces
+└── context-merging.ts     // Pure context merge
+
+// Node Entry Point ONLY
+packages/libs/logger/src/node.ts
+export { UnifiedLogger, createLogger };
+export { createNodeStdoutSink };  // Only place with process.stdout.write
+export { createFileSink };         // Already correct
+
+// Browser Entry Point
+packages/libs/logger/src/index.ts
+export { UnifiedLogger, createLogger };
+export { createBrowserStdoutSink }; // Uses console API
+
+// Application Layer (HTTP/Stdio servers)
+apps/.../src/
+├── runtime-config.ts      // Reads process.env ONCE
+├── logging/index.ts       // Creates logger with injected config + sinks
+└── handlers/              // Receive logger instance
+```
+
+**Key Refactoring Principles**:
+
+1. **ONE Logger, Multiple Configurations**:
+
+   ```typescript
+   // Same UnifiedLogger class everywhere
+   const logger = new UnifiedLogger({
+     minSeverity: 9,
+     resourceAttributes: buildResourceAttributes(env, 'my-service', '1.0.0'),
+     context: {},
+     stdoutSink: createNodeStdoutSink(),  // Or null
+     fileSink: createFileSink(config),    // Or null
+   });
+   ```
+
+2. **Dependency Injection Throughout**:
+
+   ```typescript
+   // ❌ BAD - Direct access
+   function formatLog() {
+     const version = process.env.npm_package_version;
+     process.stdout.write(JSON.stringify(log) + '\n');
+   }
+
+   // ✅ GOOD - Injected dependencies
+   function formatLog(
+     message: string,
+     resourceAttributes: ResourceAttributes
+   ): string {
+     return JSON.stringify({ message, ...resourceAttributes });
+   }
+
+   // Sink receives formatted string
+   stdoutSink.write(formatted);
+   ```
+
+3. **Test Safety**:
+
+   ```typescript
+   // ❌ BAD - Mutates global
+   vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+
+   // ✅ GOOD - Injects mock
+   const mockSink = { write: vi.fn() };
+   const logger = new UnifiedLogger({
+     /* config */
+     stdoutSink: mockSink,
+     fileSink: null,
+   });
+   expect(mockSink.write).toHaveBeenCalledWith(expect.stringContaining('INFO'));
+   ```
+
+4. **Node API Confinement**:
+
+   ```typescript
+   // packages/libs/logger/src/node.ts - ONLY place with Node APIs
+   export function createNodeStdoutSink(): StdoutSink {
+     return {
+       write(line: string): void {
+         process.stdout.write(line);
+       },
+     };
+   }
+   ```
+
+5. **Pure Functions**:
+
+   ```typescript
+   // All core logic is pure (no side effects)
+   export function formatOtelLogRecord(params: FormatParams): OtelLogRecord {
+     // Pure transformation, no I/O
+     return { Timestamp, SeverityText, Body, Attributes, Resource };
+   }
+
+   export function buildResourceAttributes(
+     env: Record<string, string | undefined>,
+     serviceName: string,
+     serviceVersion: string
+   ): ResourceAttributes {
+     // Pure function, no process.env access
+     return { 'service.name': serviceName, /* ... */ };
+   }
+   ```
+
+**Implementation Impact**:
+
+- Existing OTel format code is correct (pure functions)
+- `adaptive.ts` and `adaptive-node.ts` need complete rewrite
+- `stdout-sink.ts` needs to move to node.ts as factory function
+- All tests updated to inject mocks, never mutate globals
+- Applications updated to build config once and inject
+
+**Benefits**:
+
+- Passes all linting rules (no restricted globals)
+- Testable without global mutation
+- Works in any JS runtime (Deno, Cloudflare Workers, browser, Node)
+- Single responsibility (functions ≤8 complexity)
+- Clear boundaries (Node APIs only in node.ts)
+
+**Why This Matters**:
+The original Session 3.B plan failed because it violated fundamental project rules. This refactoring is MANDATORY before documentation, not optional cleanup. The logger must exemplify correct architecture for the entire project.
 
 ---
 
@@ -1223,17 +1524,27 @@ pnpm qg                       ✅ (Runs all above)
 
 **Next Steps**:
 
-1. Begin Phase 3: Production Rollout & Monitoring
-   - Develop production rollout plan
-   - Establish monitoring dashboards
-   - Set up alerting for instrumentation metrics
-   - Plan gradual rollout strategy
-2. Leverage Phase 2 instrumentation for production debugging
-3. Monitor correlation IDs, timing, and error enrichment in production
-4. Iterate based on production feedback
+1. **Session 3.B: OpenTelemetry-Compliant Single-Line Logging** (Immediate Next)
+   - Implement UnifiedLogger with OpenTelemetry format
+   - Remove Consola dependency completely
+   - Single-line JSON output to all sinks
+   - Resource attributes from environment variables
+   - Update all tests for new format
+   - See detailed plan in Session 3.B of main plan document
+
+2. **Session 3.C: Staging Deployment & Validation**
+   - Deploy to staging environment
+   - Validate log ingestion by observability platforms
+   - Smoke tests with real log aggregation
+
+3. **Session 3.D: Production Rollout & Observation**
+   - Gradual production rollout
+   - Monitor log volume and costs
+   - Establish dashboards and alerts
+   - Iterate based on production feedback
 
 ---
 
-**Next Review**: Before beginning Phase 3
+**Next Review**: Before beginning Session 3.B
 
-**Last Updated**: 2025-11-08 (Phase 2 Complete)
+**Last Updated**: 2025-11-08 (Session 3.A Complete)

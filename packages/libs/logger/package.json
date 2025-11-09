@@ -30,9 +30,7 @@
     "lint": "eslint  .",
     "clean": "rm -rf dist .turbo"
   },
-  "dependencies": {
-    "consola": "^3.4.2"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "express": "^4.0.0 || ^5.0.0"
   },

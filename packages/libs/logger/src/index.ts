@@ -2,13 +2,13 @@
  * @oaknational/mcp-logger
  *
  * Adaptive logging library for multi-runtime MCP applications
- * Uses Consola with feature detection to adapt configuration
+ * Outputs OpenTelemetry-compliant single-line JSON logs
  */
 
 export { createAdaptiveLogger } from './adaptive';
-export { ConsolaLogger } from './consola-logger';
-// Log Level Conversion
-export { convertLogLevel, toConsolaLevel } from './log-level-conversion';
+
+// Unified Logger
+export { UnifiedLogger } from './unified-logger';
 
 // Context Merging
 export { mergeLogContext } from './context-merging';
@@ -27,8 +27,9 @@ export {
   type RequestLoggerOptions,
 } from './express-middleware';
 
-// Legacy exports from pure-functions (deprecated)
+// Legacy exports from pure-functions
 export { isLevelEnabled } from './pure-functions';
+
 export type { LoggerOptions } from './types';
 export type { Logger } from './types';
 export type { JsonObject } from './types';
@@ -58,3 +59,10 @@ export { startTimer, type Duration, type Timer } from './timing';
 
 // Error Context Enrichment
 export { enrichError, type ErrorContext } from './error-context';
+
+// Resource Attributes
+export { buildResourceAttributes, getDeploymentEnvironment } from './resource-attributes';
+export type { ResourceAttributes } from './resource-attributes';
+
+// OpenTelemetry Format
+export type { OtelLogRecord } from './otel-format';

@@ -1,8 +1,8 @@
-# Oak MCP Ecosystem – Phase 2 Complete
+# Oak MCP Ecosystem – Session 3.A Complete
 
-**Last Updated**: 2025-11-08 (Phase 2 Complete)  
+**Last Updated**: 2025-11-08 (Session 3.A Complete)  
 **Branch**: `feat/oauth_support`  
-**Phase**: Phase 2 (Instrumentation) – Complete
+**Phase**: Phase 3 (Rollout) – In Progress
 
 ---
 
@@ -18,9 +18,16 @@
 - ✅ Session 2.4: Error context enrichment
 - ✅ Session 2.5: Integration & validation
 
-🚀 **Next Up: Phase 3** – Production rollout and monitoring.
+✅ **Session 3.A Complete** – Documentation finalization and production readiness validation.
 
-**Repository Status**: All green, 738 tests passing (+38 Phase 2 instrumentation tests), full quality gates validated, Phase 2 milestone complete.
+- ✅ Comprehensive documentation created (SDK logging guide, debugging runbook, agent guidance)
+- ✅ Dev server validated with all observability features working
+- ✅ Multi-line logging issue discovered (Consola incompatible with production)
+- ✅ ADR-051 created: OpenTelemetry-compliant single-line JSON logging
+
+🚀 **Next Up: Session 3.B** – Logger architecture refactoring for DI compliance, then OpenTelemetry logging.
+
+**Repository Status**: Architecture review complete. Critical violations identified (process/env access, global mutation in tests). Must refactor logger for proper DI before final OpenTelemetry implementation. ADR-051 approved.
 
 ---
 
@@ -73,18 +80,19 @@ Start here, then dive deeper as needed:
 ### Starting a New Session (Fresh Chat)
 
 ```text
-I'm continuing work on the Oak MCP Ecosystem Phase 2. Please read:
+I'm continuing work on the Oak MCP Ecosystem. Please read:
 
 @.agent/context/HANDOFF.md
 @.agent/context/continuation.prompt.md
 @.agent/context/context.md
 @.agent/plans/mcp-oauth-implementation-plan.md
 @.agent/directives-and-memory/rules.md
+@docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md
 
 Once ready:
-1. Summarize where we are in Phase 2
-2. Identify the next session to work on
-3. Create a detailed implementation plan for that session
+1. Summarize current status (Session 3.A complete)
+2. Review Session 3.B plan (OpenTelemetry logging)
+3. Confirm understanding of ADR-051 and implementation approach
 4. Begin work following TDD practices
 ```
 
@@ -163,15 +171,19 @@ Note: Don't update HANDOFF.md until a milestone is reached.
 - `@oaknational/mcp-logger` → Browser-safe (no `fs`)
 - `@oaknational/mcp-logger/node` → Full Node.js features
 
-#### 2. Runtime Config Dependency Injection
+#### 2. Runtime Config Dependency Injection (CRITICAL - Under Refactoring)
 
-**Problem**: Direct `process.env` access makes testing hard and creates coupling.
+**Problem**: Direct `process.env` access makes testing hard and creates coupling. Logger package was violating this principle.
 
-**Solution**: Centralized `runtime-config.ts` modules
+**Solution**: Centralized `runtime-config.ts` modules + ALL dependencies injected
 
-- Configuration parsed once at startup
-- Injected into all handlers and services
-- Tests use config builders instead of mutating `process.env`
+- Configuration parsed once at startup in application layer
+- Logger receives config objects, NEVER accesses `process.env`
+- Sinks injected as dependencies (`createNodeStdoutSink`, `createFileSink`)
+- Tests inject simple mocks, never mutate globals
+- ONE logger class (`UnifiedLogger`) with varying configurations
+
+**Current Status**: Session 3.B in progress - refactoring logger architecture to comply with DI principles
 
 #### 3. Protocol-Aware Logging
 

@@ -3,11 +3,13 @@
  *
  * Provides safe file logging with automatic directory creation and error handling.
  * Uses dependency injection for testability.
+ *
+ * The sink writes pre-formatted log strings directly to files without any
+ * additional formatting. The caller is responsible for formatting and adding newlines.
  */
 
 import { dirname } from 'node:path';
 import type { FileSinkConfig } from './sink-config';
-import type { JsonObject } from './types';
 
 /**
  * Minimal write stream interface for file sink
@@ -34,9 +36,11 @@ export interface FileSystem {
  */
 export interface FileSinkInterface {
   /**
-   * Writes a log payload to the file
+   * Writes a pre-formatted log line to the file
+   *
+   * @param line - Pre-formatted log string (should include newline if desired)
    */
-  write(payload: Readonly<JsonObject>): void;
+  write(line: string): void;
   /**
    * Closes the file sink
    */
@@ -55,7 +59,8 @@ export interface FileSinkInterface {
  * const fs = require('fs');
  * const sink = createFileSink({ path: '/tmp/app.log', append: true }, fs);
  * if (sink) {
- *   sink.write({ level: 'INFO', message: 'App started' });
+ *   // Write pre-formatted log line (with newline)
+ *   sink.write('{"Timestamp":"2025-11-08T12:00:00.000Z","Body":"App started"}\n');
  * }
  * ```
  */
@@ -72,19 +77,18 @@ export function createFileSink(config: FileSinkConfig, fs: FileSystem): FileSink
     const stream = fs.createWriteStream(filePath, { flags });
 
     return {
-      write(payload: Readonly<JsonObject>): void {
+      write(line: string): void {
         try {
-          const line = JSON.stringify(payload) + '\n';
           stream.write(line, 'utf8', (error?: Error | null) => {
             if (error) {
-              console.error('Failed to write log payload to file', {
+              console.error('Failed to write log line to file', {
                 path: filePath,
                 error: error instanceof Error ? error.message : String(error),
               });
             }
           });
         } catch (writeError) {
-          console.error('Failed to write log payload to file', {
+          console.error('Failed to write log line to file', {
             path: filePath,
             error: writeError instanceof Error ? writeError.message : String(writeError),
           });

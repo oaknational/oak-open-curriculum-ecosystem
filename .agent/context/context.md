@@ -1,13 +1,14 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-08 (Phase 2 Complete)  
+**Updated**: 2025-11-08 (Session 3.A Complete, Ready for 3.B)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
 
 ✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
 ✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
-🚀 **Next: Phase 3** – Production rollout and monitoring
+✅ **Session 3.A Complete** – Documentation finalization and dev server validation  
+🚀 **Next: Session 3.B** – OpenTelemetry-compliant single-line JSON logging
 
 ## Strategic Goal
 
@@ -44,6 +45,68 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-08**: Full quality gate validation confirms 738 tests passing, all gates green
 - ✅ **2025-11-08**: Phase 2 milestone reached - complete observability instrumentation delivered
 - ✅ **2025-11-08**: All documentation updated to reflect Phase 2 completion
+- ✅ **2025-11-08**: Session 3.A complete - Documentation finalization and production readiness validation
+- ✅ **2025-11-08**: SDK logging guide created with patterns and best practices
+- ✅ **2025-11-08**: Production debugging runbook created for operational teams
+- ✅ **2025-11-08**: Dev server validated with observability features (correlation IDs, timing, error enrichment)
+- ✅ **2025-11-08**: Deprecated `REMOTE_MCP_ALLOW_NO_AUTH` replaced with `DANGEROUSLY_DISABLE_AUTH`
+- ✅ **2025-11-08**: Discovery: Consola outputs multi-line logs incompatible with production log aggregation
+- ✅ **2025-11-08**: ADR-051 created: OpenTelemetry-compliant single-line JSON logging (supersedes ADR-017)
+- ⚠️ **2025-11-08**: Critical architecture review revealed rule violations (process/env access, test globals mutation)
+- 🚀 **Next**: Session 3.B - Refactor logger architecture for proper DI, then implement OpenTelemetry logging
+
+## Critical Architecture Discovery (2025-11-08)
+
+During Session 3.B planning, a comprehensive architecture review revealed violations of project rules:
+
+**Problems Identified:**
+
+- Logger package accessing `process.env` directly (violates DI principle)
+- `process.stdout` in core logger files (not confined to node.ts)
+- Tests mutating `process.stdout.write` global (should inject mocks)
+- `createAdaptiveLogger` complexity 11 (max is 8)
+- Type union passed to internal functions (loses type information)
+- Multiple sinks/loggers instead of ONE logger with varying config
+
+**Correct Architecture:**
+
+```text
+Core (Runtime-agnostic):
+├── unified-logger.ts       # ONE logger class
+├── otel-format.ts          # OpenTelemetry formatting (pure function)
+├── resource-attributes.ts  # Build resource attributes (pure function)
+├── log-levels.ts          # Severity mapping (pure)
+└── types.ts               # Shared types
+
+Node Entry (packages/libs/logger/src/node.ts):
+├── createNodeStdoutSink   # Only place process.stdout.write exists
+├── createFileSink         # Already correct
+└── createLogger           # Factory with injected sinks + config
+
+Browser Entry (packages/libs/logger/src/index.ts):
+├── createBrowserStdoutSink # Uses console API
+└── createLogger            # Factory with injected sinks + config
+
+Application Layer:
+├── config.ts              # Reads process.env ONCE
+└── Passes config + sinks to logger factory
+```
+
+**Key Principles:**
+
+1. **ONE Logger**: `UnifiedLogger` class with identical behavior, only sinks vary
+2. **Dependency Injection**: All config, sinks, resource attributes injected
+3. **Pure Functions**: Core formatting/mapping functions have zero side effects
+4. **Single Responsibility**: All functions complexity ≤8
+5. **Node API Confinement**: `process.stdout` only in `createNodeStdoutSink` in node.ts
+6. **Test Safety**: Never mutate globals, inject simple mocks
+
+**Implementation Strategy:**
+
+- Refactor existing code to match correct architecture
+- Keep OpenTelemetry format (already implemented correctly)
+- Fix all DI and testability issues before documentation
+- Ensure ONE logger with multiple configurations (not multiple logger types)
 
 ## Architectural Guardrails (Still Enforced)
 
@@ -63,31 +126,39 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ Session 2.4: Error Context Enrichment
 - ✅ Session 2.5: Phase 2 Integration & Validation
 
-### 2. Phase 3 – Rollout & Monitoring (Next)
+### 2. Phase 3 – Production Rollout & Monitoring (In Progress)
 
-- Prepare production rollout plan for instrumentation
-- Establish dashboards/alerts consuming new telemetry
-- Validation: full `pnpm qg` + environment-specific smoke checks
-- Production deployment and monitoring setup
+- ✅ Session 3.A: Documentation Finalization (Complete 2025-11-08)
+- 🚀 **Next: Session 3.B** – OpenTelemetry-Compliant Single-Line Logging
+  - Remove Consola dependency (~200KB bundle reduction)
+  - Implement OpenTelemetry log record format
+  - Single-line JSON output everywhere (development + production)
+  - Resource attributes from environment (ENVIRONMENT_OVERRIDE → VERCEL_ENV → 'development')
+  - ADR-051 approved and documented
+  - See detailed plan in Session 3.B of main plan document
+- [ ] Session 3.C: Staging Deployment & Validation
+- [ ] Session 3.D: Production Rollout & Observation
 
 ## State Snapshot
 
-| Tranche     | Description                  | Status / Notes                           |
-| ----------- | ---------------------------- | ---------------------------------------- |
-| 1.1         | Legacy trace system removal  | ✅ Complete                              |
-| 1.2         | Shared logger enhancements   | ✅ Complete                              |
-| 1.2.5       | Logger package restructure   | ✅ Complete (2025-11-03)                 |
-| 1.2.6       | Logger consumer audit & docs | ✅ Complete (2025-11-03)                 |
-| 1.3         | HTTP server clean-up         | ✅ Complete (2025-11-03)                 |
-| 1.4         | Stdio server migration       | ✅ Complete (2025-11-05, rescue)         |
-| 1.5         | Integration & quality gates  | ✅ Complete (2025-11-05)                 |
-| **R.1-R.6** | **Rescue tranches**          | ✅ **Complete (2025-11-05)**             |
-| **Runtime** | **Config consolidation**     | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
-| **2.1**     | **HTTP correlation IDs**     | ✅ **Complete (2025-11-06)**             |
-| **2.2**     | **Stdio correlation IDs**    | ✅ **Complete (2025-11-06)**             |
-| **2.3**     | **Request timing**           | ✅ **Complete (2025-11-06)**             |
-| **2.4**     | **Error context enrichment** | ✅ **Complete (2025-11-07)**             |
-| **2.5**     | **Integration & validation** | ✅ **Complete (2025-11-08)**             |
+| Tranche     | Description                    | Status / Notes                           |
+| ----------- | ------------------------------ | ---------------------------------------- |
+| 1.1         | Legacy trace system removal    | ✅ Complete                              |
+| 1.2         | Shared logger enhancements     | ✅ Complete                              |
+| 1.2.5       | Logger package restructure     | ✅ Complete (2025-11-03)                 |
+| 1.2.6       | Logger consumer audit & docs   | ✅ Complete (2025-11-03)                 |
+| 1.3         | HTTP server clean-up           | ✅ Complete (2025-11-03)                 |
+| 1.4         | Stdio server migration         | ✅ Complete (2025-11-05, rescue)         |
+| 1.5         | Integration & quality gates    | ✅ Complete (2025-11-05)                 |
+| **R.1-R.6** | **Rescue tranches**            | ✅ **Complete (2025-11-05)**             |
+| **Runtime** | **Config consolidation**       | ✅ **Complete (HTTP+Stdio, 2025-11-05)** |
+| **2.1**     | **HTTP correlation IDs**       | ✅ **Complete (2025-11-06)**             |
+| **2.2**     | **Stdio correlation IDs**      | ✅ **Complete (2025-11-06)**             |
+| **2.3**     | **Request timing**             | ✅ **Complete (2025-11-06)**             |
+| **2.4**     | **Error context enrichment**   | ✅ **Complete (2025-11-07)**             |
+| **2.5**     | **Integration & validation**   | ✅ **Complete (2025-11-08)**             |
+| **3.A**     | **Documentation finalization** | ✅ **Complete (2025-11-08)**             |
+| **3.B**     | **OpenTelemetry logging**      | 🚀 **Next (Ready to begin)**             |
 
 ## Quality Gate Status
 
@@ -142,14 +213,43 @@ pnpm qg                   ✅
 - ✅ Build, type-check, lint, and documentation all passing
 - ✅ Smoke tests (stub and live) verified
 
+**Session 3.A Deliverables** (2025-11-08):
+
+Documentation Updates:
+
+- Created `packages/sdks/oak-curriculum-sdk/docs/logging-guide.md` - Comprehensive SDK logging patterns
+- Updated `packages/sdks/oak-curriculum-sdk/README.md` - Added Logging section with examples
+- Updated `apps/oak-curriculum-mcp-streamable-http/README.md` - Added Production Logging section
+- Updated `apps/oak-curriculum-mcp-stdio/README.md` - Added Log File Management section
+- Created `docs/development/production-debugging-runbook.md` - Operational debugging guide
+- Created `docs/agent-guidance/logging-guidance.md` - AI agent logging guidance
+- Updated `docs/development/README.md` - Added link to debugging runbook
+- Updated `docs/agent-guidance/README.md` - Added link to logging guidance
+
+Environment & Configuration:
+
+- Fixed deprecated `REMOTE_MCP_ALLOW_NO_AUTH` → `DANGEROUSLY_DISABLE_AUTH` everywhere
+- Updated HTTP server dev command with LOG_LEVEL=debug and observability features
+- Validated dev server with correlation IDs, timing metrics, and error enrichment working
+
+Discovery & Planning:
+
+- Identified Consola multi-line logging incompatible with production log aggregation
+- Researched OpenTelemetry Logs Data Model for industry-standard compliance
+- Created ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging
+- Updated ADR-017: Marked as superseded by ADR-051
+- Prepared comprehensive implementation plan for Session 3.B
+
 Re-run the full suite before every hand-off and after significant changes.
 
 ## Reference Rules & Documents
 
-- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap
+- `.agent/plans/mcp-oauth-implementation-plan.md` – authoritative roadmap (includes Session 3.B plan)
 - `.agent/context/continuation.prompt.md` – quick-start hand-off prompt (kept in sync with this file)
 - `.agent/directives-and-memory/rules.md` – cardinal rules (must follow)
 - `docs/agent-guidance/testing-strategy.md` – mandated TDD approach
+- `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md` – ADR for OpenTelemetry format
 - `packages/libs/logger/README.md` – logger usage, entry points, sink configuration
 - `apps/oak-curriculum-mcp-streamable-http/TESTING.md` – HTTP testing guidance
+- `docs/development/production-debugging-runbook.md` – operational debugging guide
 - 📜 `.agent/plans/rescue-plan-2025-11-05.md` – Completed rescue plan (historical reference)

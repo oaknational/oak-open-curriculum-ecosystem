@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
     "clean": "rm -rf dist .turbo",
-    "dev": "DANGEROUSLY_DISABLE_AUTH=false DEBUG=true LOG_LEVEL=debug tsx server.ts",
+    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx server.ts",
+    "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx server.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
     "start": "node dist/index.js",
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",

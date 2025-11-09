@@ -2,8 +2,8 @@
 
 # MCP Observability Plan
 
-**Status:** ✅ Phase 2 Complete – Transport instrumentation delivered (2025-11-08)  
-**Last Reviewed:** 2025-11-08 (Phase 2 validation complete, all quality gates green)  
+**Status:** ✅ Phase 2 Complete · ✅ Session 3.A Complete · 🚀 Ready for Session 3.B  
+**Last Reviewed:** 2025-11-08 (Session 3.A complete, Session 3.B planned)  
 **Scope:** `apps/oak-curriculum-mcp-streamable-http`, `apps/oak-curriculum-mcp-stdio`, `packages/libs/logger`
 
 ## Purpose
@@ -1348,14 +1348,408 @@ git log -1 # Should show comprehensive commit message
 
 Ensure deployment readiness and operational confidence.
 
-### Session 3.A – Documentation Finalisation
+### Session 3.A – Documentation Finalisation ✅ COMPLETE (2025-11-08)
 
-- [ ] Review and update app READMEs with final logging instructions
-- [ ] Document SDK logging patterns and best practices
-- [ ] Verify Vercel configuration for stdout logging
-- [ ] Run markdown lint across updated docs
+**Duration Estimate**: 2-3 hours  
+**Actual Duration**: ~3 hours  
+**Complexity**: Low  
+**Risk**: Low (documentation only)
 
-### Session 3.B – Staging Deployment & Validation
+#### Objectives
+
+Finalize all documentation for Phase 2 observability features and validate production readiness.
+
+#### Tasks Completed
+
+- [x] Review and update app READMEs with final logging instructions
+- [x] Document SDK logging patterns and best practices
+- [x] Verify Vercel configuration for stdout logging
+- [x] Run markdown lint across updated docs
+- [x] Validate dev server with observability features
+- [x] Fix deprecated environment variables
+
+#### Deliverables
+
+**Documentation Created**:
+
+- `packages/sdks/oak-curriculum-sdk/docs/logging-guide.md` (628 lines) - Comprehensive logging patterns
+- `docs/development/production-debugging-runbook.md` - Operational debugging guide
+- `docs/agent-guidance/logging-guidance.md` - AI agent logging guidance
+
+**Documentation Updated**:
+
+- `packages/sdks/oak-curriculum-sdk/README.md` - Added Logging section with examples
+- `apps/oak-curriculum-mcp-streamable-http/README.md` - Added Production Logging section
+- `apps/oak-curriculum-mcp-stdio/README.md` - Added Log File Management section
+- `docs/development/README.md` - Added link to debugging runbook
+- `docs/agent-guidance/README.md` - Added link to logging guidance
+
+**Configuration Fixes**:
+
+- Replaced deprecated `REMOTE_MCP_ALLOW_NO_AUTH` with `DANGEROUSLY_DISABLE_AUTH`
+- Updated HTTP server dev command with `LOG_LEVEL=debug` and observability features
+- Configured log capture with `tee` to `.logs/http-dev.log`
+
+**Critical Discovery**:
+
+- Identified Consola multi-line logging incompatible with production log aggregation
+- Dev server logs showed pretty-printed multi-line output breaking parsers
+- Researched industry-standard log formats
+- Determined OpenTelemetry Logs Data Model is universal standard
+
+**Architecture Decision**:
+
+- Created ADR-051: OpenTelemetry-Compliant Single-Line JSON Logging
+- Updated ADR-017: Marked as superseded by ADR-051
+- Decision: Remove Consola, implement OpenTelemetry format everywhere
+- Rationale: Production compatibility, ~200KB bundle reduction, industry standard
+
+#### Validation Results
+
+- ✅ All documentation markdown lint passing
+- ✅ Dev server running with all observability features working
+- ✅ Correlation IDs appearing in logs (format: `req_{timestamp}_{hex}`)
+- ✅ Timing metrics capturing durations (e.g., 5.47s request with slowRequest flag)
+- ✅ Error enrichment context available
+- ✅ 28 MCP tools correctly registered
+- ⚠️ Multi-line log format identified as production blocker
+- ✅ Solution path approved (OpenTelemetry + single-line JSON)
+
+#### Session 3.A Complete
+
+**State**: All documentation finalized, dev server validated, production blocker identified and solution approved. Ready for Session 3.B implementation.
+
+---
+
+### Session 3.B – Logger Architecture Refactoring & OpenTelemetry Logging
+
+**Duration Estimate**: 8-12 hours (increased due to architecture refactoring)  
+**Complexity**: High (breaking changes + architecture refactoring)  
+**Risk**: Medium (breaking changes, but no external consumers)  
+**Status**: ⚠️ Architecture Review Complete - Ready to Refactor
+
+#### Critical Discovery (2025-11-08)
+
+**Architecture Violations Identified**:
+
+During initial Session 3.B implementation, comprehensive code review revealed critical violations of project rules:
+
+1. **Direct `process.env` Access**: Logger package accessing `process.env` directly violates DI principle
+2. **Node API Leakage**: `process.stdout` in core files instead of confined to node.ts entry point
+3. **Test Global Mutation**: Tests mutating `process.stdout.write` instead of injecting mocks
+4. **Function Complexity**: `createAdaptiveLogger` complexity 11 (max allowed is 8)
+5. **Multiple Loggers**: Multiple logger types instead of ONE logger with config variations
+6. **Type Information Loss**: Passing union types to internal functions
+
+**Decision**: Complete architecture refactoring MANDATORY before OpenTelemetry implementation can proceed.
+
+#### Objectives (Updated)
+
+**Phase 1**: Refactor existing logger architecture for proper dependency injection and rule compliance
+
+**Phase 2**: Implement OpenTelemetry-compliant single-line JSON logging with unified logger logic
+
+#### Background
+
+**Problem 1**: Consola outputs multi-line, pretty-printed logs incompatible with production log aggregation platforms (Datadog, Kibana, Splunk, etc.).
+
+**Problem 2**: Logger package violates fundamental project architecture principles (DI, no globals, Node API confinement).
+
+**Solution**: 
+1. Refactor for proper DI and architecture compliance
+2. Implement OpenTelemetry Logs Data Model format with single-line JSON output everywhere
+
+**ADR**: See `docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md`
+
+**Architectural Requirements**: See Decision 7 in `.agent/context/continuation.prompt.md`
+
+#### Tasks
+
+**Task 3.B.1 – Create OpenTelemetry Log Format Module**
+
+- [ ] Create `packages/libs/logger/src/otel-format.ts`
+- [ ] Implement `formatOtelLogRecord()` function with OpenTelemetry format
+  - `Timestamp` and `ObservedTimestamp` (ISO 8601)
+  - `SeverityNumber` (1-24 enum) and `SeverityText` (DEBUG, INFO, WARN, ERROR, FATAL)
+  - `Body` (message string)
+  - `Attributes` (context object with semantic conventions)
+  - `Resource` (service identification)
+  - Optional `TraceId`, `SpanId`, `TraceFlags` (for distributed tracing)
+- [ ] Map log levels to OpenTelemetry severity numbers:
+  - TRACE → 1, DEBUG → 5, INFO → 9, WARN → 13, ERROR → 17, FATAL → 21
+- [ ] Convert correlationId to TraceId using MD5 hash
+- [ ] Add semantic convention attributes (http.method, http.status_code, exception.\*)
+- [ ] Write unit tests (>95% coverage)
+
+**Acceptance Criteria**:
+
+- Function returns OpenTelemetry-compliant log record
+- All required fields populated
+- Severity mapping correct
+- Semantic conventions applied
+- Unit tests pass
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/mcp-logger type-check
+pnpm --filter @oaknational/mcp-logger lint
+pnpm --filter @oaknational/mcp-logger test
+```
+
+---
+
+**Task 3.B.2 – Create Resource Attributes Module**
+
+- [ ] Create `packages/libs/logger/src/resource-attributes.ts`
+- [ ] Implement `buildResourceAttributes()` function
+  - Extract `service.name` and `service.version` from parameters
+  - Read `ENVIRONMENT_OVERRIDE` env var (highest priority)
+  - Fallback to Vercel env vars (`VERCEL_ENV`, `VERCEL_REGION`, etc.)
+  - Final fallback to `'development'`
+- [ ] Implement `getDeploymentEnvironment()` helper
+- [ ] Map Vercel environment variables:
+  - `VERCEL_REGION` → `host.name`, `cloud.region`
+  - `VERCEL_DEPLOYMENT_ID` → `host.id`
+  - `VERCEL='1'` → `cloud.provider='vercel'`
+- [ ] Write unit tests for all environment scenarios
+
+**Acceptance Criteria**:
+
+- Resource attributes populated from environment
+- Priority order correct (ENVIRONMENT_OVERRIDE > VERCEL_ENV > 'development')
+- Vercel mappings accurate
+- Unit tests cover all scenarios
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/mcp-logger test
+# Verify tests for resource attributes
+```
+
+---
+
+**Task 3.B.3 – Create Unified Logger Class**
+
+- [ ] Create `packages/libs/logger/src/unified-logger.ts`
+- [ ] Implement `UnifiedLogger` class with:
+  - Constructor accepting sinks (stdout, file), severity, context, resource attributes
+  - `shouldLog()` method for severity filtering
+  - `writeToSinks()` method that writes single-line JSON
+  - Log methods: `debug()`, `info()`, `warn()`, `error()`, `fatal()`
+  - `child()` method for creating child loggers with merged context
+- [ ] Format logs using `formatOtelLogRecord()` from Task 3.B.1
+- [ ] Write single-line JSON to all sinks (no pretty-printing)
+- [ ] Write comprehensive unit tests
+
+**Acceptance Criteria**:
+
+- Single logger class, multiple sinks
+- All sinks receive identical format
+- Log level filtering works
+- Child logger context merging works
+- Unit tests pass (>95% coverage)
+
+**Validation Steps**:
+
+```bash
+pnpm --filter @oaknational/mcp-logger test
+# All UnifiedLogger tests pass
+```
+
+---
+
+**Task 3.B.4 – Create Stdout Sink**
+
+- [ ] Create `packages/libs/logger/src/stdout-sink.ts`
+- [ ] Implement `StdoutSink` interface with `write(line: string)` method
+- [ ] Use `process.stdout.write()` for output
+- [ ] Write unit tests
+
+**Acceptance Criteria**:
+
+- Simple sink writing pre-formatted strings
+- No formatting logic in sink
+- Unit tests pass
+
+---
+
+**Task 3.B.5 – Update File Sink Interface**
+
+- [ ] Update `packages/libs/logger/src/file-sink.ts`
+- [ ] Change signature from `write(payload: JsonObject)` to `write(line: string)`
+- [ ] Remove JSON.stringify from sink (expect pre-formatted strings)
+- [ ] Update unit tests
+
+**Acceptance Criteria**:
+
+- File sink accepts pre-formatted strings
+- Existing tests updated and passing
+- No formatting logic in sink
+
+---
+
+**Task 3.B.6 – Rewrite Entry Points**
+
+- [ ] Rewrite `packages/libs/logger/src/adaptive.ts`
+  - Remove Consola imports
+  - Use `UnifiedLogger` instead
+  - Build resource attributes
+  - Configure stdout sink
+- [ ] Rewrite `packages/libs/logger/src/adaptive-node.ts`
+  - Remove Consola imports
+  - Use `UnifiedLogger` instead
+  - Build resource attributes
+  - Configure stdout and/or file sinks
+- [ ] Update exports in `src/index.ts` and `src/node.ts`
+- [ ] Update unit tests
+
+**Acceptance Criteria**:
+
+- Entry points use UnifiedLogger
+- No Consola references
+- Resource attributes built from environment
+- Unit tests pass
+
+---
+
+**Task 3.B.7 – Remove Consola Files and Dependency**
+
+- [ ] Delete `packages/libs/logger/src/consola-logger.ts`
+- [ ] Delete `packages/libs/logger/src/multi-sink-logger.ts` (replaced by UnifiedLogger)
+- [ ] Delete any other Consola-specific files
+- [ ] Remove `consola` from `package.json` dependencies
+- [ ] Update `README.md` to remove Consola references
+- [ ] Verify no Consola imports remain
+
+**Acceptance Criteria**:
+
+- All Consola files deleted
+- Consola dependency removed
+- No remaining references
+- Build succeeds without Consola
+
+**Validation Steps**:
+
+```bash
+grep -r "consola" packages/libs/logger/src/
+# Should return no results
+pnpm --filter @oaknational/mcp-logger build
+```
+
+---
+
+**Task 3.B.8 – Update Environment Schema**
+
+- [ ] Update `apps/oak-curriculum-mcp-streamable-http/src/env.ts`
+  - Add `ENVIRONMENT_OVERRIDE` to schema
+- [ ] Update `apps/oak-curriculum-mcp-stdio/src/runtime-config.ts`
+  - Add `ENVIRONMENT_OVERRIDE` to schema
+- [ ] Update tests to use new environment variable
+
+**Acceptance Criteria**:
+
+- Environment schemas include ENVIRONMENT_OVERRIDE
+- Tests updated
+- Type-check passes
+
+---
+
+**Task 3.B.9 – Update All Tests**
+
+- [ ] Update logger package tests for OpenTelemetry format
+- [ ] Update HTTP server tests for new log format
+- [ ] Update stdio server tests for new log format
+- [ ] Update test assertions to expect:
+  - `Timestamp`, `SeverityNumber`, `SeverityText`, `Body`, `Attributes`, `Resource`
+  - Single-line JSON output
+- [ ] Ensure all 738+ tests pass
+
+**Acceptance Criteria**:
+
+- All tests updated for new format
+- No test failures
+- Quality gates pass
+
+**Validation Steps**:
+
+```bash
+pnpm test
+# All 738+ tests pass
+```
+
+---
+
+**Task 3.B.10 – Update Documentation**
+
+- [ ] Update `packages/libs/logger/README.md`
+  - Document OpenTelemetry format
+  - Add `jq` examples for log inspection
+  - Update severity level documentation
+  - Document resource attributes
+- [ ] Update HTTP server README with new log format examples
+- [ ] Update stdio server README with new log format examples
+- [ ] Add `jq` cheat sheet for common log queries
+- [ ] Run markdown lint
+
+**Acceptance Criteria**:
+
+- Documentation reflects OpenTelemetry format
+- `jq` examples provided
+- Markdown lint passes
+
+**Validation Steps**:
+
+```bash
+pnpm markdownlint-check:root
+```
+
+---
+
+#### Session 3.B Definition of Done
+
+**Required**:
+
+- [ ] All tasks (3.B.1 through 3.B.10) complete
+- [ ] Consola dependency removed completely
+- [ ] UnifiedLogger implemented and tested
+- [ ] OpenTelemetry format implemented
+- [ ] Resource attributes built from environment
+- [ ] Single-line JSON output to all sinks
+- [ ] All 738+ tests passing (updated for new format)
+- [ ] All quality gates pass:
+  ```bash
+  pnpm format-check:root
+  pnpm markdownlint-check:root
+  pnpm build
+  pnpm type-check
+  pnpm lint
+  pnpm doc-gen
+  pnpm test
+  pnpm test:e2e
+  pnpm smoke:dev:stub
+  pnpm smoke:dev:live
+  pnpm qg
+  ```
+- [ ] Documentation updated with OpenTelemetry format and `jq` examples
+- [ ] Manual verification:
+  - HTTP server logs single-line JSON: `tail -f .logs/http-dev.log | jq .`
+  - Stdio server logs single-line JSON: `tail -f .logs/oak-curriculum-mcp/server.log | jq .`
+  - All required OpenTelemetry fields present
+  - Resource attributes populated correctly
+- [ ] Bundle size reduced by ~200KB (Consola removed)
+- [ ] Code committed with message: "feat: implement OpenTelemetry-compliant single-line logging"
+
+**Optional** (if time permits):
+
+- [ ] Add log volume metrics
+- [ ] Add performance benchmarks (vs previous implementation)
+- [ ] Create `jq` filter library for common queries
+
+---
+
+### Session 3.C – Staging Deployment & Validation
 
 - [ ] Run quality gates prior to deployment
 - [ ] Deploy HTTP server to staging and verify health

@@ -31,6 +31,7 @@ const EnvSchema = z.object({
   ALLOWED_ORIGINS: z.string().optional(),
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
+  ENVIRONMENT_OVERRIDE: z.string().optional(),
   NODE_ENV: z.string().optional(),
 });
 

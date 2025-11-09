@@ -49,15 +49,12 @@ describe('createFileSink', () => {
     expect(mockFs.mkdirSync).toHaveBeenCalledWith('/deep/nested/path', { recursive: true });
   });
 
-  it('writes JSON payloads to the stream with newline', () => {
+  it('writes pre-formatted strings to the stream', () => {
     const sink = createFileSink({ path: '/tmp/test.log' }, mockFs);
     expect(sink).not.toBeNull();
-    sink?.write({ level: 'INFO', message: 'test', context: { key: 'value' } });
-    expect(mockWrite).toHaveBeenCalledWith(
-      '{"level":"INFO","message":"test","context":{"key":"value"}}\n',
-      'utf8',
-      expect.any(Function),
-    );
+    const preFormattedLine = '{"level":"INFO","message":"test","context":{"key":"value"}}\n';
+    sink?.write(preFormattedLine);
+    expect(mockWrite).toHaveBeenCalledWith(preFormattedLine, 'utf8', expect.any(Function));
   });
 
   it('logs errors when write callback receives error', () => {
@@ -71,8 +68,8 @@ describe('createFileSink', () => {
       },
     );
     const sink = createFileSink(baseConfig, mockFs);
-    sink?.write({ level: 'ERROR', message: 'test error' });
-    expect(consoleError).toHaveBeenCalledWith('Failed to write log payload to file', {
+    sink?.write('{"level":"ERROR","message":"test error"}\n');
+    expect(consoleError).toHaveBeenCalledWith('Failed to write log line to file', {
       path: '/tmp/test.log',
       error: 'write error',
     });
@@ -87,8 +84,8 @@ describe('createFileSink', () => {
       throw new Error('write throw');
     });
     const sink = createFileSink(baseConfig, mockFs);
-    sink?.write({ level: 'ERROR', message: 'test error' });
-    expect(consoleError).toHaveBeenCalledWith('Failed to write log payload to file', {
+    sink?.write('{"level":"ERROR","message":"test error"}\n');
+    expect(consoleError).toHaveBeenCalledWith('Failed to write log line to file', {
       path: '/tmp/test.log',
       error: 'write throw',
     });

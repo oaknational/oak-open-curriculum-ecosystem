@@ -10,6 +10,7 @@
  */
 export interface StdioEnv {
   readonly LOG_LEVEL?: string;
+  readonly ENVIRONMENT_OVERRIDE?: string;
   readonly MCP_LOGGER_STDOUT?: string;
   readonly MCP_LOGGER_FILE_PATH?: string;
   readonly MCP_LOGGER_FILE_APPEND?: string;
@@ -53,6 +54,7 @@ export function loadRuntimeConfig(source: NodeJS.ProcessEnv = process.env): Runt
 
   const env: StdioEnv = {
     LOG_LEVEL: source.LOG_LEVEL,
+    ENVIRONMENT_OVERRIDE: source.ENVIRONMENT_OVERRIDE,
     MCP_LOGGER_STDOUT: source.MCP_LOGGER_STDOUT,
     MCP_LOGGER_FILE_PATH: source.MCP_LOGGER_FILE_PATH,
     MCP_LOGGER_FILE_APPEND: source.MCP_LOGGER_FILE_APPEND,

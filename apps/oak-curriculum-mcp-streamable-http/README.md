@@ -271,6 +271,271 @@ jq 'select(.level == "error" and .context.durationMs > 2000)' logs/server.log
 jq -s 'group_by(.context.path) | map({path: .[0].context.path, count: length})' logs/server.log
 ```
 
+## Production Logging
+
+The HTTP server uses structured JSON logging with comprehensive instrumentation for production monitoring and debugging.
+
+### Log Structure
+
+All logs follow a consistent JSON structure with correlation IDs, timing data, and contextual information:
+
+```json
+{
+  "level": "info|debug|warn|error",
+  "message": "Human-readable message",
+  "correlationId": "req_1699123456789_a3f2c9",
+  "duration": "145ms",
+  "durationMs": 145.23,
+  "method": "POST",
+  "path": "/mcp",
+  "statusCode": 200,
+  "timestamp": "2024-11-06T12:34:56.789Z",
+  "context": {}
+}
+```
+
+### Log Levels
+
+The server uses the following log levels:
+
+- **DEBUG**: Request start/complete, detailed operation traces (development only)
+- **INFO**: Normal operations, successful requests, service lifecycle events
+- **WARN**: Slow requests (>2s), recoverable errors, performance warnings
+- **ERROR**: Failed requests, unhandled errors, service degradation
+
+**Production recommendation**: Set `LOG_LEVEL=INFO` or `LOG_LEVEL=WARN` to reduce log volume.
+
+### Log Volume Estimates
+
+Typical production log volume (per request):
+
+- **Minimal (INFO level)**: 1-2 log entries per request (lifecycle events only)
+- **Standard (INFO level with timing)**: 2-3 log entries per request
+- **Debug (DEBUG level)**: 5-10 log entries per request (includes all operations)
+
+Expected daily volume for 1M requests/day at INFO level: ~2-3 GB uncompressed JSON logs.
+
+### Log Retention Recommendations
+
+**Vercel**:
+
+- Vercel stores logs for 1 hour by default (hobby/pro plans)
+- Consider using Log Drains to export logs to external storage (Datadog, LogDNA, S3)
+- Recommended retention: 30 days for operational logs, 90+ days for compliance
+
+**Log Drains Setup** (Vercel Dashboard):
+
+1. Project Settings → Integrations → Add Integration
+2. Search for log drain provider (Datadog, Logplex, etc.)
+3. Configure with provider credentials
+4. Logs are automatically streamed in real-time
+
+### Filtering Techniques
+
+**By Correlation ID** (find all logs for a specific request):
+
+```bash
+grep 'req_1699123456789_a3f2c9' logs.txt | jq .
+```
+
+**By Timing** (find slow requests):
+
+```bash
+jq 'select(.durationMs > 2000)' logs.txt
+```
+
+**By Error** (find all errors):
+
+```bash
+jq 'select(.level == "error")' logs.txt
+```
+
+**By Path** (analyze specific endpoints):
+
+```bash
+jq 'select(.path == "/mcp")' logs.txt
+```
+
+**By Date Range** (using ISO timestamps):
+
+```bash
+jq 'select(.timestamp >= "2024-11-06T00:00:00Z" and .timestamp < "2024-11-07T00:00:00Z")' logs.txt
+```
+
+### Vercel Logging Configuration
+
+The server automatically logs to stdout, which Vercel captures and makes available in the dashboard.
+
+**Environment Variables:**
+
+- `LOG_LEVEL`: Set log verbosity
+  - Development/Staging: `DEBUG` or `INFO`
+  - Production: `INFO` or `WARN` (recommended)
+
+**Vercel Dashboard Configuration:**
+
+In the Vercel UI, verify/configure:
+
+1. **Environment Variables** → Confirm `LOG_LEVEL` is set appropriately for each environment
+2. **Logs Tab** → Confirm log retention settings match your requirements
+3. **Log Drains** → Configure if using external log aggregation (Datadog, LogDNA, etc.)
+4. **Runtime Logs** → Verify structured JSON format appears correctly
+5. **Search/Filter** → Test filtering logs by `correlationId` field
+
+**Vercel Log Drains Documentation**: [https://vercel.com/docs/observability/log-drains](https://vercel.com/docs/observability/log-drains)
+
+### Operational Debugging Workflows
+
+#### Workflow 1: Investigating a Slow Request
+
+**Scenario**: Client reports a request that took over 5 seconds to complete.
+
+**Steps:**
+
+1. **Get correlation ID** from the response headers: `X-Correlation-ID: req_1699123456789_a3f2c9`
+2. **Search logs** for that correlation ID:
+
+   ```bash
+   grep 'req_1699123456789_a3f2c9' logs.txt | jq .
+   ```
+
+3. **Analyze timing**:
+   - Check "Request started" log for request details
+   - Check "Request completed" log for total duration
+   - Look for `slowRequest: true` flag
+
+4. **Identify bottleneck**:
+   - Review operations between start and complete
+   - Check for external API calls or database queries
+   - Compare with average request duration
+
+5. **Take action**:
+   - If consistently slow: optimize the operation
+   - If intermittent: check for timeouts or rate limiting
+   - If specific to certain requests: analyze request patterns
+
+#### Workflow 2: Investigating a Failed Request
+
+**Scenario**: Client reports a 500 error when calling the API.
+
+**Steps:**
+
+1. **Get correlation ID** from client (response header or error response body)
+2. **Find all logs** for that request:
+
+   ```bash
+   grep '<correlation-id>' logs.txt | jq .
+   ```
+
+3. **Review sequence**:
+   - Find "Request started" log → See what was requested
+   - Find error log → See what failed and why
+   - Check timing → See if timeout was involved
+
+4. **Extract error context**:
+
+   ```json
+   {
+     "level": "error",
+     "correlationId": "req_1699123456789_a3f2c9",
+     "context": {
+       "message": "Database connection timeout",
+       "stack": "...",
+       "duration": "5.23s",
+       "method": "POST",
+       "path": "/mcp"
+     }
+   }
+   ```
+
+5. **Take action**:
+   - Check error message and stack trace
+   - Review request timing for timeouts
+   - Verify external dependencies (database, APIs)
+   - Look for similar errors in logs
+
+#### Workflow 3: Investigating Intermittent Issues
+
+**Scenario**: Users report occasional slow responses or timeouts, but not consistently.
+
+**Steps:**
+
+1. **Collect correlation IDs** from affected and unaffected requests
+2. **Compare timing patterns**:
+
+   ```bash
+   # Fast requests
+   grep 'req_1699123456789_a3f2c9' logs.txt | jq '.durationMs'
+
+   # Slow requests
+   grep 'req_1699123456790_b4e3d0' logs.txt | jq '.durationMs'
+   ```
+
+3. **Analyze patterns**:
+   - Time of day (peak vs off-peak)
+   - Request type or path
+   - Geographic region (if available)
+   - Request size or complexity
+
+4. **Find commonalities**:
+
+   ```bash
+   # Find all slow requests
+   jq 'select(.slowRequest == true)' logs.txt | jq -s 'group_by(.path) | map({path: .[0].path, count: length})'
+   ```
+
+5. **Take action**:
+   - If time-based: consider auto-scaling
+   - If path-specific: optimize that endpoint
+   - If random: check for external service issues
+
+#### Workflow 4: Client-Reported Issues
+
+**Scenario**: Support team receives a user complaint about an error or unexpected behavior.
+
+**Steps:**
+
+1. **Request correlation ID** from client:
+   - Check response headers: `X-Correlation-ID`
+   - Check error response body: `correlationId` field
+
+2. **Search logs** with correlation ID:
+
+   ```bash
+   grep 'req_1699123456789_a3f2c9' logs.txt | jq .
+   ```
+
+3. **Reconstruct request lifecycle**:
+
+   ```json
+   // Request started
+   {"level":"debug","message":"Request started","correlationId":"req_...","method":"POST","path":"/mcp"}
+
+   // Request completed (or error)
+   {"level":"warn","message":"Request completed","correlationId":"req_...","duration":"2.34s","slowRequest":true}
+   ```
+
+4. **Identify root cause**:
+   - Check for errors in the log sequence
+   - Review timing for performance issues
+   - Examine request parameters and context
+
+5. **Provide resolution**:
+   - Share specific error details with client
+   - Document issue for engineering team
+   - Apply fix or workaround
+
+### Monitoring and Alerting
+
+Consider setting up alerts for:
+
+- **High error rate**: `level == "error"` count exceeds threshold
+- **Slow requests**: `slowRequest == true` frequency increases
+- **Request volume**: Total request count anomalies
+- **Failed authentications**: 401 responses spike
+
+Use log drain integrations to send logs to monitoring platforms that support alerting (Datadog, New Relic, CloudWatch, etc.).
+
 ## Cursor (local STDIO) configuration
 
 - The local STDIO server is configured via `.mcp.json` / `.cursor/mcp.json`. Ensure the command path points to:
@@ -295,7 +560,7 @@ Temporary validation bypass (for smoke only):
 
 - **Dangerous override**: set `DANGEROUSLY_DISABLE_AUTH=true` to bypass all authentication (works everywhere, including production - use with extreme caution)
 - Preview/CI only: set `CI=true` and `REMOTE_MCP_CI_TOKEN=<secret>` and call with `Authorization: Bearer <secret>`. Remove after validation.
-- Local only: set `REMOTE_MCP_ALLOW_NO_AUTH=true` (ignored on Vercel) or use `REMOTE_MCP_DEV_TOKEN`.
+- Local only: use `DANGEROUSLY_DISABLE_AUTH=true` or `REMOTE_MCP_DEV_TOKEN`.
 
 ## Troubleshooting
 

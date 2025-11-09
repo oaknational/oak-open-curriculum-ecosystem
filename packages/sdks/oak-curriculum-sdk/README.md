@@ -204,6 +204,33 @@ const units = await client.listUnits('programme-id');
 - Error handling with detailed messages
 - Runtime-agnostic design
 
+## Logging
+
+The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide structured logging, request tracing, and observability.
+
+```typescript
+import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
+import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+
+const logger = createAdaptiveLogger({ level: 'INFO' });
+const client = new OakCurriculumClient({ apiKey: process.env.OAK_API_KEY });
+
+const timer = startTimer();
+try {
+  const lessons = await client.searchLessons({ subject: 'maths' });
+  const duration = timer.end();
+
+  logger.info('Search completed', {
+    resultCount: lessons.length,
+    duration: duration.formatted,
+  });
+} catch (error) {
+  logger.error('Search failed', error);
+}
+```
+
+For comprehensive logging patterns, integration examples, and best practices, see the [Logging Guide](docs/logging-guide.md).
+
 ## Documentation
 
 - SDK Docs Pipeline Guide: `packages/oak-curriculum-sdk/docs/docs-pipeline.md` — how to generate, verify, and extend HTML/JSON/MD/AI docs.
