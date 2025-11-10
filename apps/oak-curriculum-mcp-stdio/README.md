@@ -2,6 +2,8 @@
 
 MCP server that provides AI assistants with access to Oak National Academy's curriculum content.
 
+**Architecture**: This server imports all MCP tool definitions from `@oaknational/oak-curriculum-sdk`. The tools are generated at compile time from the OpenAPI schema - no manual tool definitions exist in this application. When the API changes, `pnpm type-gen` updates the SDK, and this server automatically has access to new/changed tools.
+
 ## Quick start
 
 ```bash
@@ -24,8 +26,10 @@ This application follows the standard structure:
 ### Compile-time SDK Tool Generation
 
 - The `@oaknational/oak-curriculum-sdk` generates MCP tool metadata and validators at compile time from the OpenAPI schema.
-- This server lists tools from the SDK’s generated `MCP_TOOLS`, and delegates execution via `executeToolCall` with the injected client.
-- No runtime schema fetching and no manual mapping layers.
+- This server lists tools from the SDK's generated `MCP_TOOLS`, and delegates execution via `executeToolCall` with the injected client.
+- **No runtime schema fetching and no manual mapping layers** - everything is pre-generated and fully typed.
+- **Key benefit**: When the OpenAPI schema changes upstream, running `pnpm type-gen` automatically updates all tool definitions. This server immediately has access to new endpoints without any code changes.
+- See [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md) for the complete pattern.
 
 ## Tool surface
 

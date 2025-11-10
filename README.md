@@ -1,13 +1,29 @@
 # Oak MCP Ecosystem
 
-This monorepo contains Oak National Academy’s Model Context Protocol (MCP) ecosystem:
+**A type-safe, compile-time pipeline for generating SDKs and MCP servers from OpenAPI specifications.**
 
-- **`packages/sdks/oak-curriculum-sdk`** – the generated TypeScript SDK for the Oak Open Curriculum API. It exports runtime clients, Zod schemas, MCP tool metadata, and the shared `parseSchema` helper that validates every request/response boundary.
-- **`apps/oak-open-curriculum-semantic-search`** – a Next.js App Router workspace that indexes curriculum content into Elasticsearch Serverless and serves hybrid (lexical + semantic) search, suggestions, admin tooling, and telemetry.
-- **`apps/oak-curriculum-mcp-*`** – MCP servers (stdio and streamable HTTP) that surface the SDK to AI assistants such as Codex, Claude, and Gemini.
-- **Supporting libraries** under `packages/libs/` for logging, configuration, storage, and transport.
+## What This Is
 
-If the curriculum API changes, run `pnpm type-gen`. The SDK, MCP tool catalogues, search validators, and docs regenerate automatically and continue to rely on the shared parsing helpers without manual updates.
+This monorepo demonstrates and implements a pattern where:
+
+1. **OpenAPI Schema** (single source of truth)
+2. **→ TypeScript SDK** (generated at `pnpm type-gen`)
+3. **→ MCP Tools** (generated from the same schema)
+4. **→ Type-safe everything** (no manual type definitions, no runtime assertions)
+
+**Key principle**: If the OpenAPI schema changes, running `pnpm type-gen` updates the SDK, types, validators, and MCP tools automatically. Zero manual intervention.
+
+## Implementation: Oak Open Curriculum
+
+This pattern is implemented for the [Oak National Academy Curriculum API](https://www.thenational.academy/):
+
+- **`packages/sdks/oak-curriculum-sdk`** – Generated SDK with runtime clients, Zod schemas, MCP tool metadata, and shared `parseSchema` helper that validates every request/response boundary
+- **`apps/oak-curriculum-mcp-stdio`** – MCP server over stdio (for Claude Desktop, Cursor)
+- **`apps/oak-curriculum-mcp-streamable-http`** – MCP server over HTTP (for web clients, Vercel deployment)
+- **`apps/oak-open-curriculum-semantic-search`** – Hybrid search application using the SDK
+- **Supporting libraries** under `packages/libs/` for logging, configuration, storage, and transport
+
+**Architectural reference**: `apps/oak-notion-mcp` demonstrates the pattern isn't Oak-specific.
 
 ## Architecture Overview
 
@@ -41,6 +57,19 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
 
    Each workspace README provides its own `.env.local` hints.
 
+   > **Note**: Many development tasks work without environment variables:
+   >
+   > - `pnpm test` (unit tests)
+   > - `pnpm type-check` (type checking)
+   > - `pnpm lint` (linting)
+   > - `pnpm build` (SDK and library builds)
+   >
+   > Environment variables are only required for:
+   >
+   > - Running dev servers (`pnpm dev`)
+   > - Integration/E2E tests (`pnpm test:e2e`)
+   > - Smoke tests (`pnpm dev:smoke`)
+
 4. **Regenerate types & run quality gates**
 
    ```bash
@@ -48,10 +77,20 @@ Architectural decisions are recorded as ADRs in [docs/architecture/architectural
    pnpm qg     # format-check -> type-check -> lint -> markdownlint -> test suites -> smoke
    ```
 
-5. **Explore the workspaces**
-   - `packages/sdks/oak-curriculum-sdk/README.md` – SDK usage, MCP tool generation, shared parsing helper guidance.
-   - `apps/oak-open-curriculum-semantic-search/README.md` – indexing pipeline, admin endpoints, zero-hit observability, hybrid search contracts.
-   - `apps/oak-curriculum-mcp-stdio/` & `apps/oak-curriculum-mcp-streamable-http/` – running MCP servers locally or via Vercel.
+5. **Choose your starting point**
+
+   **For SDK/Library contributors** (no env vars needed):
+   - Start with `packages/sdks/oak-curriculum-sdk/README.md` – SDK generation, MCP tool generation, shared parsing helpers
+   - Work on type generation scripts, runtime clients, or validation helpers
+
+   **For search application contributors** (requires Elasticsearch + API keys):
+   - Start with `apps/oak-open-curriculum-semantic-search/README.md` – hybrid search, admin endpoints, telemetry
+   - Requires: `OAK_API_KEY`, `ELASTICSEARCH_URL`, `ELASTICSEARCH_API_KEY`
+
+   **For MCP server contributors** (requires OAK_API_KEY minimum):
+   - Stdio: `apps/oak-curriculum-mcp-stdio/README.md` – for Claude Desktop, Cursor
+   - HTTP: `apps/oak-curriculum-mcp-streamable-http/README.md` – OAuth-enabled, Vercel-ready
+   - Both import generated tools from the SDK - no manual tool definitions
 
 ## Key Commands (root)
 

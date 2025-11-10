@@ -1,8 +1,8 @@
 # Quick Start Guide
 
-For experienced developers who want to jump straight in.
+Fast-track guide for developers who want to understand and contribute to the OpenAPI→SDK→MCP pipeline.
 
-> New here? See the architecture overview in `docs/architecture/README.md` and the deprecation note `docs/architecture/greek-ecosystem-deprecation.md`.
+> **New here?** This guide gets you running quickly. For comprehensive details, see the [architecture overview](architecture/openapi-pipeline.md) and [onboarding guide](development/onboarding.md).
 
 ## 🤖 Working with AI Agents
 
@@ -16,208 +16,298 @@ This ensures the agent maintains focus, quality, and regular grounding. See [AI 
 
 ## Architecture TL;DR
 
+This repository implements a type-safe, compile-time pipeline:
+
 ```text
-Claude/AI Agent → MCP Protocol → Our Server → Notion API
-                                       ↓
-                              Pure Functions Core
+OpenAPI Spec (single source of truth)
+         ↓
+    pnpm type-gen (compile time)
+         ↓
+    ┌────────────────────────────────┐
+    ↓                                ↓
+TypeScript SDK                  MCP Tools
+(types, clients,              (metadata, validators,
+ Zod schemas)                  input/output shapes)
+    ↓                                ↓
+Runtime Apps                   MCP Servers
+(search, admin)              (stdio, HTTP)
 ```
+
+**Key Insight**: The OpenAPI schema is the only definition. Everything else is generated. If the API changes, `pnpm type-gen` updates everything automatically.
+
+## Zero-Setup Quick Start (0 minutes)
+
+You can start contributing immediately without any API keys:
+
+```bash
+# Clone and install
+git clone <repo> && cd oak-notion-mcp
+pnpm install
+
+# Run tests and quality checks (no env vars required)
+pnpm test           # All unit tests
+pnpm type-check     # Type checking
+pnpm lint           # Linting
+pnpm build          # Build SDK and libraries
+```
+
+This is perfect for:
+
+- Adding or improving unit tests
+- Fixing TypeScript errors
+- Refactoring pure functions
+- Updating documentation
+- Reviewing pull requests
+
+## Full Development Setup (10-15 minutes)
+
+To run dev servers and integration tests, you need the Oak API key:
+
+```bash
+# 1. Configure environment
+cp .env.example .env
+# Edit .env and set: OAK_API_KEY=your_key_here
+
+# 2. Run full quality gates
+pnpm make    # install → type-gen → build → docs → lint → format
+pnpm qg      # All quality gates
+
+# 3. Start a dev server (choose one)
+pnpm -C apps/oak-curriculum-mcp-stdio dev              # Stdio MCP server
+pnpm -C apps/oak-curriculum-mcp-streamable-http dev   # HTTP MCP server
+pnpm -C apps/oak-open-curriculum-semantic-search dev  # Search application
+```
+
+See [environment variables guide](development/environment-variables.md) for complete setup details.
 
 ## Key Concepts
 
-**MCP (Model Context Protocol)**: Like REST API but for AI-to-tool communication
+### OpenAPI-First Pipeline
 
-- **Resources**: URI-based data access (`notion://pages/123`)
-- **Tools**: Callable functions (`notion-search`, `notion-get-page`)
-- **Transport**: stdio (JSON-RPC over stdin/stdout)
+Everything flows from the OpenAPI specification:
 
-## Code Map (current)
+1. **Source**: API provider hosts OpenAPI schema (e.g., Oak Curriculum API)
+2. **Generation**: `pnpm type-gen` fetches schema and generates TypeScript, Zod, MCP tools
+3. **Consumption**: Apps import the generated types and tools - no manual definitions
+4. **Updates**: API changes? Run `pnpm type-gen` - everything updates automatically
 
-```text
-src/
-├── app/              # Application wiring and bootstrap
-├── config/           # Runtime configuration (e.g. runtime.json)
-├── integrations/     # External integrations (e.g. Notion)
-├── logging/          # Logging helpers
-├── test/             # Test utilities and mocks
-├── tools/            # MCP tools and resources
-└── types/            # Shared types
+### Type Generation is Critical
+
+The `pnpm type-gen` command is the heart of the system:
+
+```bash
+pnpm type-gen
 ```
 
-> See `docs/architecture/README.md` for structure details and links.
+This command:
 
-## Quick Start
+- Fetches the latest OpenAPI schema
+- Generates TypeScript types
+- Creates Zod validators
+- Builds MCP tool definitions
+- Generates URL helpers
+- Updates all consuming code
 
-```shell
-# Setup
-git clone <repo> && cd oak-notion-mcp
-pnpm install
-cp .env.example .env  # Add NOTION_API_KEY
-pnpm dev             # Start server
+**The Cardinal Rule**: If the API schema changes, `pnpm type-gen` is sufficient. No manual code changes required.
 
-# Development
-pnpm test:watch      # TDD mode
-pnpm test           # Run all tests
-pnpm format && pnpm lint && pnpm type-check  # Quality gates
-```
+### No Manual Type Definitions
 
-## Adding a New Tool
-
-1. **Define Zod Schema** in `src/mcp/tools/handlers.ts`:
+You will **never** see code like this in this repository:
 
 ```typescript
-const MyToolArgsSchema = z.object({
-  param: z.string().min(1),
-});
-```
-
-2. **Add Handler Function**:
-
-```typescript
-async function handleMyTool(args: unknown, deps: Dependencies) {
-  const validated = MyToolArgsSchema.parse(args);
-  // Implementation using deps.notionClient
+// ❌ WRONG - manually defining API types
+interface LessonSummary {
+  id: string;
+  title: string;
+  // ...
 }
 ```
 
-3. **Register Tool**:
+Instead, types are imported from the generated SDK:
 
 ```typescript
-tools.set('notion-my-tool', {
-  description: 'Does something useful',
-  inputSchema: zodToJsonSchema(MyToolArgsSchema),
-  handler: handleMyTool,
-});
+// ✅ CORRECT - imported from generated SDK
+import type { LessonSummary } from '@oaknational/oak-curriculum-sdk';
 ```
 
-4. **Write Tests** in `handlers.integration.test.ts`
+This ensures types always match the API schema exactly.
 
-## Adding a New Resource
+### Generated Files Are Read-Only
 
-1. **Add URI Pattern** in `src/mcp/resources/handlers.ts`
-2. **Implement Handler** using pure functions from transformers
-3. **Update Tests**
+When you see files marked `DO NOT EDIT MANUALLY` or in `src/types/generated/` directories, this is not a suggestion:
+
+- These files are regenerated on every `pnpm type-gen` run
+- Manual edits would be overwritten
+- Changes must happen in the generation scripts or upstream OpenAPI schema
+
+## Development Workflows
+
+### Adding a Feature (General Pattern)
+
+```bash
+# 1. Make sure types are up to date
+pnpm type-gen
+
+# 2. Write a test first (TDD)
+# Create test in appropriate *.unit.test.ts or *.integration.test.ts
+
+# 3. Implement the feature
+# Use generated types from the SDK
+
+# 4. Run quality gates
+pnpm test          # Does it pass?
+pnpm type-check    # Any type errors?
+pnpm lint          # Follows code style?
+
+# 5. Commit with conventional format
+git commit -m "feat: add amazing feature"
+```
+
+### Updating After API Changes
+
+```bash
+# 1. Regenerate from updated schema
+pnpm type-gen
+
+# 2. Fix any type errors
+pnpm type-check
+# TypeScript will show exactly what changed
+
+# 3. Update consuming code
+# Fix the errors TypeScript found
+
+# 4. Verify everything works
+pnpm build
+pnpm test
+```
+
+### Working on Generation Scripts
+
+```bash
+# 1. Make changes to generation scripts
+# Edit files in packages/sdks/oak-curriculum-sdk/type-gen/
+
+# 2. Regenerate
+pnpm type-gen
+
+# 3. Review generated output
+# Check src/types/generated/ for expected changes
+
+# 4. Test the generated code
+pnpm build
+pnpm test
+```
+
+## Common Tasks
+
+### Run All Quality Gates
+
+```bash
+pnpm make    # Build everything from scratch
+pnpm qg      # Run all quality checks
+```
+
+### Test a Specific Workspace
+
+```bash
+pnpm --filter @oaknational/oak-curriculum-sdk test
+pnpm --filter @oaknational/oak-curriculum-mcp-stdio test
+```
+
+### Debug Type Generation
+
+```bash
+# Run with verbose logging
+LOG_LEVEL=debug pnpm type-gen
+
+# Check the generated output
+cat packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema.ts | head -100
+```
+
+### Update Documentation
+
+```bash
+# Generate TypeDoc and API docs
+pnpm doc-gen
+
+# Preview documentation
+open packages/sdks/oak-curriculum-sdk/docs/index.html
+```
+
+## Repository Structure
+
+```text
+oak-notion-mcp/
+├── packages/
+│   ├── sdks/
+│   │   └── oak-curriculum-sdk/      # Generated SDK (THE SOURCE)
+│   │       ├── type-gen/             # Generation scripts
+│   │       └── src/
+│   │           ├── types/generated/  # Generated types (DO NOT EDIT)
+│   │           └── tool-generation/  # Generated MCP tools (DO NOT EDIT)
+│   └── libs/                         # Shared libraries (logger, storage, etc.)
+├── apps/
+│   ├── oak-curriculum-mcp-stdio/     # MCP server for Claude Desktop
+│   ├── oak-curriculum-mcp-streamable-http/  # MCP server for web
+│   ├── oak-open-curriculum-semantic-search/ # Search application
+│   └── oak-notion-mcp/               # Architectural reference
+└── docs/
+    ├── architecture/                 # Architecture decisions
+    └── development/                  # Development guides
+```
+
+## Type Safety Rules
+
+This repository enforces strict type safety:
+
+- **Never use `any`** - Use `unknown` at boundaries, then validate
+- **Never use `as`** - No type assertions (except `as const` for literals)
+- **Always validate** - Use Zod schemas from the SDK at all boundaries
+- **Use type guards** - Functions with `is` keyword for type narrowing
+- **Import from SDK** - Never manually define API types
 
 ## Testing Strategy
 
 ```typescript
 // Unit test (pure function) - *.unit.test.ts
-test('scrubEmail hides PII', () => {
-  expect(scrubEmail('john@example.com')).toBe('joh...@example.com');
+test('extractSlug removes domain and path', () => {
+  expect(extractSlug('/lessons/add-two-numbers')).toBe('add-two-numbers');
 });
 
-// Integration test (with mocks) - *.integration.test.ts
-test('search returns formatted results', async () => {
-  const mockClient = { search: vi.fn().mockResolvedValue(mockResults) };
-  const result = await handleSearch({ query: 'test' }, { notionClient: mockClient });
-  expect(result).toMatchSnapshot();
+// Integration test (with SDK) - *.integration.test.ts
+test('MCP server lists all generated tools', async () => {
+  const response = await server.request({ method: 'tools/list' });
+  expect(response.tools).toHaveLength(MCP_TOOLS.length);
 });
 ```
 
-## Common Patterns
+## Getting Help
 
-### Pure Functions First
+### Documentation
 
-```typescript
-// ❌ Avoid
-async function getPageTitle(pageId: string) {
-  const page = await notion.pages.retrieve({ page_id: pageId });
-  return page.properties.title.title[0].plain_text;
-}
+1. **Architecture**: [OpenAPI Pipeline](architecture/openapi-pipeline.md)
+2. **Setup**: [Environment Variables](development/environment-variables.md)
+3. **Onboarding**: [Developer Onboarding](development/onboarding.md)
+4. **Contributing**: [CONTRIBUTING.md](../CONTRIBUTING.md)
 
-// ✅ Prefer
-function extractPageTitle(page: PageObjectResponse): string {
-  return getPlainTextFromRichText(page.properties.title.title);
-}
-```
+### Troubleshooting
 
-### Dependency Injection
+- **Build fails**: Run `pnpm type-gen` to ensure types are current
+- **Type errors**: Generated types changed? Update your imports
+- **Tests fail**: Check if integration tests need `OAK_API_KEY`
+- **Linting errors**: Run `pnpm lint -- --fix` to auto-fix
 
-```typescript
-interface Dependencies {
-  notionClient: NotionClientWrapper;
-  logger: Logger;
-}
+### Community
 
-async function handleTool(args: unknown, deps: Dependencies) {
-  // Use deps instead of imports
-}
-```
+- **Issues**: [GitHub Issues](https://github.com/oaknational/oak-mcp-ecosystem/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/oaknational/oak-mcp-ecosystem/discussions)
 
-### Error Handling
+## Next Steps
 
-```typescript
-try {
-  const result = await notion.pages.retrieve({ page_id });
-  return { content: [{ type: 'text', text: formatPage(result) }] };
-} catch (error) {
-  const handled = ErrorHandler.handle(error);
-  throw new McpError(handled.code, handled.message);
-}
-```
+1. **Understand the architecture**: Read [OpenAPI Pipeline](architecture/openapi-pipeline.md)
+2. **Set up your environment**: Follow [Environment Variables](development/environment-variables.md)
+3. **Read the contribution guide**: See [CONTRIBUTING.md](../CONTRIBUTING.md)
+4. **Pick an issue**: Browse [good first issues](https://github.com/oaknational/oak-mcp-ecosystem/labels/good%20first%20issue)
+5. **Start coding**: Follow the TDD workflow above
 
-## Type Safety Rules
-
-- **Never use `any`** - Use `unknown` at boundaries
-- **Never use `as`** - No type assertions
-- **Always validate** - Zod schemas at all boundaries
-- **Use type guards** - `is` functions for narrowing
-
-## Git Workflow
-
-```shell
-git checkout -b feat/your-feature
-# Make changes with TDD
-pnpm test:watch
-
-# Before commit - quality gates
-pnpm format && pnpm type-check && pnpm lint && pnpm test && pnpm build
-
-# Commit with conventional format
-git commit -m "feat: add amazing feature"
-git push origin feat/your-feature
-# Create PR
-```
-
-## Debugging
-
-```shell
-# Enable debug logs
-LOG_LEVEL=debug pnpm dev
-
-# Test specific tool
-echo '{"method":"tools/call","params":{"name":"notion-search","arguments":{"query":"test"}}}' | pnpm dev
-
-# Check types
-pnpm type-check --noEmit --watch
-```
-
-## Performance Notes
-
-- Pure functions are cached by tests
-- Notion API has rate limits (3 req/sec)
-- Default page size is 10, max is 100
-- E2E tests require real API key
-
-## Security Reminders
-
-- Never log API keys
-- All emails are auto-scrubbed
-- Read-only operations only (Phase 2)
-- Validate all inputs with Zod
-
-## Where to Contribute
-
-1. **Tests**: Add edge cases
-2. **Types**: Remove any `unknown` types with proper guards
-3. **Performance**: Add caching TODO comments
-4. **Docs**: Improve examples
-5. **Features**: See Phase 2.5 plan
-
-## Getting Unstuck
-
-1. **Read the tests** - They document behavior
-2. **Check types** - Let TypeScript guide you
-3. **Use pure functions** - Easier to test and reason about
-4. **Ask questions** - Create GitHub issues
-
-Ready? Pick an issue and start coding! 🚀
+Ready? Let's build type-safe, schema-driven APIs! 🚀

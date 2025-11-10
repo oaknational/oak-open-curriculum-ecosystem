@@ -4,7 +4,11 @@ TypeScript SDK for accessing Oak National Academy's Curriculum API.
 
 ## Overview
 
-This SDK provides a type-safe, runtime-agnostic client for the Oak Curriculum API. It is designed to be reusable across different environments and applications.
+This SDK implements the **OpenAPI-First Pipeline** pattern: a type-safe, compile-time approach where everything is generated from the OpenAPI schema. It provides a fully-typed, runtime-agnostic client for the Oak Curriculum API.
+
+**Key principle**: This SDK is generated, not hand-written. When the API schema changes, `pnpm type-gen` regenerates all types, validators, and MCP tools automatically.
+
+For the full architectural explanation, see: [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md)
 
 ## Architecture
 
@@ -39,6 +43,8 @@ This is achieved through:
 - **ADR-029**: No manual API data structures - everything flows from OpenAPI
 - **ADR-030**: SDK as the single source of truth - consumers import SDK types directly
 - **ADR-031**: Generation at build time - all transformations happen during SDK build
+
+> **This SDK demonstrates the compile-time generation pattern that works for any OpenAPI-compliant API.** The same pattern can be applied to other APIs, different versions, or custom implementations. See [OpenAPI Pipeline Architecture](../../docs/architecture/openapi-pipeline.md) for how to extend this to new APIs.
 
 #### Key Components:
 

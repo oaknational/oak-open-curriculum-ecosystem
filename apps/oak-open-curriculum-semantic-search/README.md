@@ -1,8 +1,8 @@
 # Oak Open Curriculum Semantic Search
 
-A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **four Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK’s legacy search by providing canonical URLs, lesson-planning metadata, and robust zero-hit logging.
+A Next.js App Router workspace that ingests Oak Curriculum content via the official SDK, stores enriched documents across **four Elasticsearch Serverless indices**, and serves **server-side RRF** (lexical + semantic) queries with suggestions, facets, and observability telemetry. This project supersedes the SDK's legacy search by providing canonical URLs, lesson-planning metadata, and robust zero-hit logging.
 
-> All curriculum data flows through `@oaknational/oak-curriculum-sdk`; types are generated via `pnpm type-gen`.
+> **All curriculum data flows through `@oaknational/oak-curriculum-sdk`; types and validators are generated via `pnpm type-gen` from the OpenAPI schema.** When the API changes, `pnpm type-gen` regenerates types, and this application automatically uses the updated definitions. No manual type definitions exist - everything imports from the generated SDK.
 
 ---
 
