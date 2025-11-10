@@ -206,13 +206,29 @@ const units = await client.listUnits('programme-id');
 
 ## Logging
 
-The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide structured logging, request tracing, and observability.
+The SDK integrates seamlessly with `@oaknational/mcp-logger` to provide OpenTelemetry-compliant structured logging, request tracing, and observability.
 
 ```typescript
 import { OakCurriculumClient } from '@oaknational/oak-curriculum-sdk';
-import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  startTimer,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({ level: 'INFO' });
+// Create logger with explicit dependency injection
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'my-app', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
+
 const client = new OakCurriculumClient({ apiKey: process.env.OAK_API_KEY });
 
 const timer = startTimer();
@@ -225,7 +241,7 @@ try {
     duration: duration.formatted,
   });
 } catch (error) {
-  logger.error('Search failed', error);
+  logger.error('Search failed', error as Error);
 }
 ```
 

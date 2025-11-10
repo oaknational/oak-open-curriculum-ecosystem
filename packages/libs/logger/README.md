@@ -1,6 +1,20 @@
 # @oaknational/mcp-logger
 
-Adaptive logging library for multi-runtime MCP (Model Context Protocol) applications. Supports configurable output destinations (stdout, file, or both) and provides utilities for JSON sanitization and Express middleware integration.
+OpenTelemetry-compliant structured logging library for multi-runtime MCP (Model Context Protocol) applications.
+
+## Current Architecture (Session 3.B Complete)
+
+This logger has been refactored to use **explicit Dependency Injection (DI)** with the `UnifiedLogger` class. The previous `createAdaptiveLogger()` convenience function has been removed in favor of direct instantiation with explicit dependencies.
+
+### Key Changes
+
+- **OpenTelemetry Format**: All logs follow the OTel Logs Data Model (JSON with PascalCase fields)
+- **Pure Dependency Injection**: Sinks and configuration are explicitly injected, no hidden dependencies
+- **Node.js API Confinement**: All Node.js-specific APIs (`process.stdout`, `fs`) confined to `@oaknational/mcp-logger/node` entry point
+- **Child Logger Support**: Create scoped loggers with `logger.child({ correlationId })`
+- **Type-Safe Context**: All context must be `JsonObject` (no `unknown` or `any`)
+
+For migration from the old API, see the examples below.
 
 ## Installation
 
@@ -17,13 +31,27 @@ pnpm add express
 ## Quick Start
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({ level: 'INFO' });
+// Create logger with explicit dependency injection
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'my-service', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
 
 logger.info('Application started');
 logger.debug('Debug information', { userId: '123' });
-logger.error('An error occurred', error, { context: 'additional info' });
+logger.error('An error occurred', new Error('Something failed'));
 ```
 
 ## Configuration
@@ -81,14 +109,32 @@ All logged data is automatically sanitised to ensure JSON-safety. The library co
 For HTTP servers deployed on Vercel or similar platforms, use stdout-only logging:
 
 ```typescript
-import { createAdaptiveLogger, DEFAULT_HTTP_SINK_CONFIG } from '@oaknational/mcp-logger';
-import { createRequestLogger, createErrorLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+  createRequestLogger,
+  createErrorLogger,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import express from 'express';
 
 const app = express();
 
-// Create logger with stdout-only configuration
-const logger = createAdaptiveLogger({ level: 'INFO' }, undefined, DEFAULT_HTTP_SINK_CONFIG);
+// Create logger with explicit DI (stdout-only for Vercel)
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(
+    process.env,
+    'http-server',
+    process.env.npm_package_version ?? '1.0.0',
+  ),
+  context: {},
+  stdoutSink: createNodeStdoutSink(), // Stdout only for HTTP/Vercel
+  fileSink: null, // No file logging on serverless
+});
 
 // Add Express middleware
 app.use(createRequestLogger(logger, { level: 'info' }));
@@ -102,7 +148,6 @@ app.listen(3000);
 
 ```bash
 LOG_LEVEL=INFO
-MCP_LOGGER_STDOUT=true
 ```
 
 ### Stdio Server (Protocol-correct)
@@ -110,9 +155,30 @@ MCP_LOGGER_STDOUT=true
 For stdio servers, use file-only logging to keep stdout clean for MCP protocol frames:
 
 ```typescript
-import { createAdaptiveLogger, DEFAULT_STDIO_SINK_CONFIG } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+} from '@oaknational/mcp-logger';
+import { createNodeFileSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, DEFAULT_STDIO_SINK_CONFIG);
+// Create logger with file-only sink (NEVER stdout for stdio servers)
+const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(
+    process.env,
+    'stdio-server',
+    process.env.npm_package_version ?? '1.0.0',
+  ),
+  context: {},
+  stdoutSink: null, // MUST be null - stdout is for MCP protocol only
+  fileSink: createNodeFileSink({
+    path: '.logs/oak-curriculum-mcp/server.log',
+    append: true,
+  }),
+});
 
 logger.info('Stdio server started');
 // All logs go to file, stdout remains clean for MCP protocol
@@ -122,9 +188,6 @@ logger.info('Stdio server started');
 
 ```bash
 LOG_LEVEL=DEBUG
-MCP_LOGGER_STDOUT=false
-MCP_LOGGER_FILE_PATH=./logs/stdio-mcp-server.log
-MCP_LOGGER_FILE_APPEND=true
 ```
 
 ### Local Development (Both Sinks)
@@ -132,10 +195,26 @@ MCP_LOGGER_FILE_APPEND=true
 For local development, you might want logs in both console and file:
 
 ```typescript
-import { createAdaptiveLogger, parseSinkConfigFromEnv } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink, createNodeFileSink } from '@oaknational/mcp-logger/node';
 
-const sinkConfig = parseSinkConfigFromEnv(process.env);
-const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, sinkConfig);
+// Create logger with both stdout and file sinks
+const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'dev-server', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(), // Console output for immediate feedback
+  fileSink: createNodeFileSink({
+    path: '.logs/dev.log',
+    append: true,
+  }),
+});
 
 logger.debug('Development log', { environment: 'local' });
 ```
@@ -144,9 +223,6 @@ logger.debug('Development log', { environment: 'local' });
 
 ```bash
 LOG_LEVEL=DEBUG
-MCP_LOGGER_STDOUT=true
-MCP_LOGGER_FILE_PATH=./logs/dev.log
-MCP_LOGGER_FILE_APPEND=true
 ```
 
 ### Express Middleware Integration
@@ -154,12 +230,28 @@ MCP_LOGGER_FILE_APPEND=true
 The logger provides Express middleware for request and error logging:
 
 ```typescript
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
-import { createRequestLogger, createErrorLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+  createRequestLogger,
+  createErrorLogger,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import express from 'express';
 
 const app = express();
-const logger = createAdaptiveLogger({ level: 'INFO' });
+
+// Create logger with explicit DI
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'api-server', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
 
 // Log all incoming requests (register before routes)
 app.use(createRequestLogger(logger, { level: 'debug' }));
@@ -216,9 +308,25 @@ console.log(`Precise duration: ${duration.ms}ms`); // 1234.56
 **Example: Timing with logging**
 
 ```typescript
-import { createAdaptiveLogger, startTimer } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  buildResourceAttributes,
+  startTimer,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
-const logger = createAdaptiveLogger({ level: 'INFO' });
+// Create logger
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'my-service', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null,
+});
+
 const timer = startTimer();
 
 try {
@@ -232,9 +340,10 @@ try {
 } catch (error) {
   const duration = timer.end();
 
-  logger.error('Request failed', error, {
+  logger.error('Request failed', {
     duration: duration.formatted,
     durationMs: duration.ms,
+    error: error instanceof Error ? error : new Error(String(error)),
   });
 }
 ```
@@ -383,29 +492,51 @@ interface Logger {
 }
 ```
 
-### Sink Configuration
+### Logger Creation
+
+**UnifiedLogger Class:**
 
 ```typescript
-interface LoggerSinkConfig {
-  readonly stdout: boolean;
-  readonly file?: FileSinkConfig;
+class UnifiedLogger implements Logger {
+  constructor(options: UnifiedLoggerOptions);
+  child(context: JsonObject): Logger;
+  // ... logging methods
 }
 
+interface UnifiedLoggerOptions {
+  readonly minSeverity: number;
+  readonly resourceAttributes: ResourceAttributes;
+  readonly context: JsonObject;
+  readonly stdoutSink: StdoutSink | null;
+  readonly fileSink: FileSinkInterface | null;
+}
+```
+
+**Node.js Sink Factories** (`@oaknational/mcp-logger/node`):
+
+- `createNodeStdoutSink(): StdoutSink` - Creates stdout sink using `process.stdout.write`
+- `createNodeFileSink(config: FileSinkConfig): FileSinkInterface` - Creates file sink using Node.js `fs`
+
+**Helper Functions:**
+
+- `parseLogLevel(input: string | undefined, fallback: LogLevel): LogLevel` - Parse log level string
+- `logLevelToSeverityNumber(level: LogLevel): number` - Convert to OTel severity number
+- `buildResourceAttributes(env: NodeJS.ProcessEnv, serviceName: string, serviceVersion: string): ResourceAttributes` - Build OTel resource attributes
+
+**Interfaces:**
+
+```typescript
 interface FileSinkConfig {
   readonly path: string;
   readonly append?: boolean;
 }
+
+interface ResourceAttributes {
+  readonly 'service.name': string;
+  readonly 'service.version': string;
+  readonly 'deployment.environment': string;
+}
 ```
-
-Functions:
-
-- `parseSinkConfigFromEnv(env: LoggerSinkEnvironment): LoggerSinkConfig` - Parse environment variables into sink config
-- `createAdaptiveLogger(options?, consolaInstance?, sinkConfig?): Logger` - Create logger with sink configuration
-
-Constants:
-
-- `DEFAULT_HTTP_SINK_CONFIG` - Stdout-only configuration for HTTP servers
-- `DEFAULT_STDIO_SINK_CONFIG` - File-only configuration for stdio servers
 
 ### JSON Sanitisation Functions
 
@@ -503,7 +634,14 @@ If you have custom logger implementations in your application:
 **Solution:** Vercel's file system is read-only. Use stdout-only logging:
 
 ```typescript
-const logger = createAdaptiveLogger({ level: 'INFO' }, undefined, DEFAULT_HTTP_SINK_CONFIG);
+const level = parseLogLevel(process.env.LOG_LEVEL, 'INFO');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'my-service', '1.0.0'),
+  context: {},
+  stdoutSink: createNodeStdoutSink(),
+  fileSink: null, // No file logging on Vercel
+});
 ```
 
 Vercel automatically captures stdout logs, so no file configuration is needed.
@@ -515,7 +653,17 @@ Vercel automatically captures stdout logs, so no file configuration is needed.
 **Solution:** Ensure stdio servers use file-only logging:
 
 ```typescript
-const logger = createAdaptiveLogger({ level: 'DEBUG' }, undefined, DEFAULT_STDIO_SINK_CONFIG);
+const level = parseLogLevel(process.env.LOG_LEVEL, 'DEBUG');
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber(level),
+  resourceAttributes: buildResourceAttributes(process.env, 'stdio-server', '1.0.0'),
+  context: {},
+  stdoutSink: null, // MUST be null for stdio servers
+  fileSink: createNodeFileSink({
+    path: '.logs/server.log',
+    append: true,
+  }),
+});
 ```
 
 Never write to stdout in stdio servers - it's reserved for MCP protocol JSON-RPC frames.
