@@ -139,6 +139,6 @@ function isIndexAction(value: unknown): value is IndexAction {
   return typeof action._index === 'string';
 }
 
-function isUnknownObject(value: unknown): value is { [key: string]: unknown } {
+function isUnknownObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }

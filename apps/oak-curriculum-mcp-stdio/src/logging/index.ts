@@ -5,7 +5,14 @@
  * All logging goes to a file sink only.
  */
 
-import { createAdaptiveLogger, parseLogLevel, type Logger } from '@oaknational/mcp-logger/node';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
+import { createNodeFileSink } from '@oaknational/mcp-logger/node';
 import { createStdioSinkConfig } from './config.js';
 import type { RuntimeConfig } from '../runtime-config.js';
 
@@ -23,10 +30,31 @@ import type { RuntimeConfig } from '../runtime-config.js';
  * @returns Logger instance configured for file-only logging
  */
 export function createStdioLogger(config: RuntimeConfig): Logger {
-  const logLevel = parseLogLevel(config.logLevel.toUpperCase(), 'INFO');
-  const sinkConfig = createStdioSinkConfig(config);
+  const levelInput = config.logLevel.toUpperCase();
+  const level = parseLogLevel(levelInput, 'INFO');
+  const minSeverity = logLevelToSeverityNumber(level);
 
-  return createAdaptiveLogger({ level: logLevel }, undefined, sinkConfig);
+  const serviceName = 'stdio-mcp';
+  const resourceAttributes = buildResourceAttributes(
+    process.env, // App wiring owns env access
+    serviceName,
+    process.env.npm_package_version ?? '0.0.0',
+  );
+
+  const sinkConfig = createStdioSinkConfig(config);
+  const fileSinkConfig = sinkConfig.file;
+
+  if (!fileSinkConfig) {
+    throw new Error('Stdio server requires file sink configuration');
+  }
+
+  return new UnifiedLogger({
+    minSeverity,
+    resourceAttributes,
+    context: {},
+    stdoutSink: null, // No stdout (MCP protocol)
+    fileSink: createNodeFileSink(fileSinkConfig),
+  });
 }
 
 /**
@@ -38,43 +66,28 @@ export function createStdioLogger(config: RuntimeConfig): Logger {
  *
  * @param parentLogger - Parent logger instance to inherit configuration from
  * @param correlationId - Correlation ID to include in log context
- * @param config - Runtime configuration for file sink setup
  * @returns Logger instance with correlation ID in context
  *
  * @example
  * ```typescript
  * const logger = createStdioLogger(config);
- * const correlatedLogger = createChildLogger(logger, 'req_123456789_abc123', config);
+ * const correlatedLogger = createChildLogger(logger, 'req_123456789_abc123');
  * correlatedLogger.info('Processing request'); // Logs include correlationId
  * ```
  *
  * @public
  */
-export function createChildLogger(
-  parentLogger: Logger,
-  correlationId: string,
-  config: RuntimeConfig,
-): Logger {
-  // Explicitly mark parentLogger as intentionally unused (for now)
-  // In future, we could inherit configuration from parentLogger
-  void parentLogger;
+export function createChildLogger(parentLogger: Logger, correlationId: string): Logger {
+  // Use parent's child() method to inherit all configuration and sinks
+  if (parentLogger.child) {
+    return parentLogger.child({ correlationId });
+  }
 
-  // Use INFO as default level (could be extracted from parent in future)
-  const level = 'INFO';
-  const sinkConfig = createStdioSinkConfig(config);
-
-  return createAdaptiveLogger(
-    {
-      level,
-      name: 'stdio:correlated',
-      context: { correlationId },
-    },
-    undefined,
-    sinkConfig,
-  );
+  // Fallback if parent doesn't support child() (shouldn't happen with UnifiedLogger)
+  throw new Error('Parent logger does not support child() method');
 }
 
 /**
  * Re-export Logger type from shared package for convenience
  */
-export type { Logger } from '@oaknational/mcp-logger/node';
+export type { Logger } from '@oaknational/mcp-logger';

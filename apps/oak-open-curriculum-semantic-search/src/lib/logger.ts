@@ -1,10 +1,22 @@
-import { createAdaptiveLogger, type Logger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
 
 /**
  * Shared semantic search logger instance.
- * Centralising creation avoids multiple Consola bindings in Next.js.
+ * Centralising creation avoids multiple logger bindings in Next.js.
+ * Uses console for browser compatibility.
  */
-const baseLogger = createAdaptiveLogger({ name: 'SemanticSearch' });
+const baseLogger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber('INFO'),
+  resourceAttributes: buildResourceAttributes({}, 'SemanticSearch', '1.0.0'),
+  context: {},
+  stdoutSink: { write: (line: string) => console.log(line) }, // Browser console
+  fileSink: null,
+});
 
 function child(name: string): Logger {
   if (typeof baseLogger.child === 'function') {

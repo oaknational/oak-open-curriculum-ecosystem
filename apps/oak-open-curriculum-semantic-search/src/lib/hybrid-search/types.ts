@@ -56,11 +56,11 @@ export interface HybridSearchMeta {
 /**
  * @internal Helper type for mapping search scopes to their result types
  */
-export type ScopeResultMap = {
+export interface ScopeResultMap {
   units: UnitResult[];
   lessons: LessonResult[];
   sequences: SequenceResult[];
-};
+}
 
 export type HybridSearchResult = {
   [Scope in SearchScope]: HybridSearchMeta & {

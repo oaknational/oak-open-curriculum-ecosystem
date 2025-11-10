@@ -21,7 +21,6 @@ import type { UniversalToolExecutors } from '../tools/index.js';
 import { validateOutput } from './validation.js';
 import { generateCorrelationId } from '../correlation/index.js';
 import { createChildLogger } from '../logging/index.js';
-import { loadRuntimeConfig } from '../runtime-config.js';
 
 /**
  * Threshold in milliseconds for slow operation warnings.
@@ -49,7 +48,6 @@ function setupShutdownHandler(server: { close: () => Promise<void> }, logger: Lo
 export async function createServer(config?: ServerConfig): Promise<void> {
   // Wire dependencies
   const { logger, config: serverConfig, toolExecutors } = wireDependencies(config);
-  const runtimeConfig = loadRuntimeConfig();
 
   logToolDiscovery(logger);
 
@@ -59,7 +57,7 @@ export async function createServer(config?: ServerConfig): Promise<void> {
     version: serverConfig.serverVersion,
   });
   const client = createOakPathBasedClient(serverConfig.apiKey);
-  registerMcpTools(server, client, logger, runtimeConfig, toolExecutors);
+  registerMcpTools(server, client, logger, toolExecutors);
 
   // Create transport and connect
   const transport = new StdioServerTransport();
@@ -168,13 +166,12 @@ function createToolHandler<TName extends (typeof toolNames)[number]>(
   input: ReturnType<typeof zodRawShapeFromToolInputJsonSchema>,
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
-  runtimeConfig: ReturnType<typeof loadRuntimeConfig>,
   toolExecutors?: UniversalToolExecutors,
 ) {
   return async (params: unknown) => {
     const timer = startTimer();
     const correlationId = generateCorrelationId();
-    const correlatedLogger = createChildLogger(logger, correlationId, runtimeConfig);
+    const correlatedLogger = createChildLogger(logger, correlationId);
 
     correlatedLogger.debug('Tool execution started', { toolName: name, correlationId });
 
@@ -221,7 +218,6 @@ function registerMcpTools(
   server: McpServer,
   client: ReturnType<typeof createOakPathBasedClient>,
   logger: Logger,
-  runtimeConfig: ReturnType<typeof loadRuntimeConfig>,
   toolExecutors?: UniversalToolExecutors,
 ): void {
   for (const name of toolNames) {
@@ -236,7 +232,6 @@ function registerMcpTools(
       input,
       client,
       logger,
-      runtimeConfig,
       toolExecutors,
     );
 

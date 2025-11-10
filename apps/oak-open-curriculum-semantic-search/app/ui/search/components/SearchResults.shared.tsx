@@ -14,16 +14,16 @@ import {
 function buildMetaEntries(
   subject: string,
   keyStage: string,
-): Array<{
+): {
   kind: 'subject' | 'key-stage';
   label: string;
   testId: `search-result-meta-${string}`;
-}> {
-  const entries: Array<{
+}[] {
+  const entries: {
     kind: 'subject' | 'key-stage';
     label: string;
     testId: `search-result-meta-${string}`;
-  }> = [];
+  }[] = [];
   if (subject) {
     entries.push({
       kind: 'subject',
@@ -70,8 +70,8 @@ export function ResultItem({
       ) : null}
       {highlights.length > 0 ? (
         <ResultHighlightList>
-          {highlights.map((highlight, index) => (
-            <ResultHighlightItem key={index} data-testid="search-result-highlight-item">
+          {highlights.map((highlight) => (
+            <ResultHighlightItem key={String(highlight)} data-testid="search-result-highlight-item">
               {renderSafeHighlight(String(highlight))}
             </ResultHighlightItem>
           ))}

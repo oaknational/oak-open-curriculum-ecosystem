@@ -9,8 +9,25 @@
 
 import { generateCanonicalUrlWithContext } from './types/generated/api-schema/routing/url-helpers.js';
 import type { ResponseContext, ContentType } from './types/response-augmentation.js';
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+} from '@oaknational/mcp-logger';
 import type { HttpMethod } from './validation/types.js';
+
+// Module-level logger for warnings (browser-compatible)
+const logger = new UnifiedLogger({
+  minSeverity: logLevelToSeverityNumber('WARN'),
+  resourceAttributes: buildResourceAttributes({}, 'response-augmentation', '1.0.0'),
+  context: {},
+  stdoutSink: {
+    write: (line: string) => {
+      console.log(line);
+    },
+  },
+  fileSink: null,
+});
 
 function isReadonlyStringArray(value: unknown): value is readonly string[] {
   return Array.isArray(value) && value.every((v) => typeof v === 'string');
@@ -131,7 +148,6 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
 
   const id = extractIdFromResponse(response, path);
   if (!id) {
-    const logger = createAdaptiveLogger({ name: 'response-augmentation' });
     logger.warn(`Could not extract ID from response`, { path, contentType });
     return response;
   }
@@ -140,7 +156,6 @@ export function augmentResponseWithCanonicalUrl<T extends object>(
   const canonicalUrl = generateCanonicalUrlWithContext(contentType, id, context);
 
   if (!canonicalUrl) {
-    const logger = createAdaptiveLogger({ name: 'response-augmentation' });
     logger.warn(`Could not generate canonical URL`, { contentType, id, context });
     return response;
   }

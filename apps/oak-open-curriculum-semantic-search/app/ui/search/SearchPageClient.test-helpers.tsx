@@ -23,19 +23,19 @@ vi.mock('../global/Fixture/fixture-mode-toggle.actions', () => ({
   setFixtureMode: setFixtureModeMock,
 }));
 
-type StructuredComponentProps = {
+interface StructuredComponentProps {
   onResults: (result: unknown | null) => void;
   onError: (message: string | null) => void;
   setLoading: (isLoading: boolean) => void;
   onScopeChange?: (scope: SearchStructuredRequest['scope']) => void;
   onSubmitPayload?: (payload: SearchStructuredRequest) => void;
   action?: StructuredSearchAction;
-};
+}
 
-type FacetComponentProps = {
+interface FacetComponentProps {
   facets: unknown;
   onSelectSequence?: (facet: SequenceFacet) => void;
-};
+}
 
 export const structuredPropsRef: { current: StructuredComponentProps | null } = { current: null };
 export const facetPropsRef: { current: FacetComponentProps | null } = { current: null };

@@ -191,16 +191,16 @@ function toHighlightMap(value: unknown): HighlightMap | undefined {
   return highlight;
 }
 
-type HighlightMap = { [field: string]: string[] };
+type HighlightMap = Record<string, string[]>;
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((item) => typeof item === 'string');
 }
 
-type EsRankDefinition = {
+interface EsRankDefinition {
   rrf: { window_size: number; rank_constant: number };
   queries: estypes.QueryDslQueryContainer[];
-};
+}
 
 /**
  * Bulk helper — accepts classic action/line pairs (same shape we already used),

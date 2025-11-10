@@ -110,8 +110,8 @@ export function isHeaderUtilityItem(v: IHeaderUtilityItem): v is HeaderUtilityIt
  */
 export interface HeaderNavMetadata {
   readonly home: HeaderHomeLink;
-  readonly primary: ReadonlyArray<HeaderNavItemsType>;
-  readonly utilities: ReadonlyArray<HeaderUtilityItemType>;
+  readonly primary: readonly HeaderNavItemsType[];
+  readonly utilities: readonly HeaderUtilityItemType[];
 }
 
 /**

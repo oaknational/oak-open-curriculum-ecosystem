@@ -1,10 +1,13 @@
 import {
-  createAdaptiveLogger,
+  UnifiedLogger,
   parseLogLevel,
   enrichError,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
   type Logger,
   type ErrorContext,
 } from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import type { Request, Response, ErrorRequestHandler } from 'express';
 
 import type { RuntimeConfig } from '../runtime-config.js';
@@ -16,6 +19,11 @@ export interface HttpLoggerOptions {
 /**
  * Creates an HTTP logger instance for the streamable HTTP server.
  *
+ * Builds logger with explicit dependency injection:
+ * - Stdout sink only (no file logging for HTTP server)
+ * - Resource attributes for service identification
+ * - Configured severity level from environment
+ *
  * @param config - Runtime configuration containing log level settings
  * @param options - Optional configuration for logger name
  * @returns Logger instance configured for HTTP server (stdout-only)
@@ -25,22 +33,33 @@ export interface HttpLoggerOptions {
 export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOptions): Logger {
   const levelInput = config.env.LOG_LEVEL?.toUpperCase();
   const level = parseLogLevel(levelInput, 'INFO');
-  const loggerName = options?.name ?? 'streamable-http';
+  const minSeverity = logLevelToSeverityNumber(level);
 
-  return createAdaptiveLogger({ level, name: loggerName, context: {} }, undefined, {
-    stdout: true,
+  const serviceName = options?.name ?? 'streamable-http';
+  const resourceAttributes = buildResourceAttributes(
+    process.env, // App wiring owns env access
+    serviceName,
+    process.env.npm_package_version ?? '0.0.0',
+  );
+
+  return new UnifiedLogger({
+    minSeverity,
+    resourceAttributes,
+    context: {},
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
   });
 }
 
 /**
  * Creates a child logger with correlation ID in the context.
  *
- * The child logger includes the correlation ID in all log entries,
- * enabling request tracing across the system.
+ * The child logger inherits all configuration from the parent logger
+ * and adds the correlation ID to the context for request tracing.
  *
  * @param parentLogger - Parent logger instance to inherit configuration from
  * @param correlationId - Correlation ID to include in log context
- * @returns Logger instance with correlation ID in context
+ * @returns Child logger with correlation ID in context
  *
  * @example
  * ```typescript
@@ -52,24 +71,13 @@ export function createHttpLogger(config: RuntimeConfig, options?: HttpLoggerOpti
  * @public
  */
 export function createChildLogger(parentLogger: Logger, correlationId: string): Logger {
-  // Explicitly mark parentLogger as intentionally unused (for now)
-  // In future, we could inherit configuration from parentLogger
-  void parentLogger;
+  // Use parent's child() method to inherit all configuration and sinks
+  if (parentLogger.child) {
+    return parentLogger.child({ correlationId });
+  }
 
-  // Use INFO as default level (could be extracted from parent in future)
-  const level = 'INFO';
-
-  return createAdaptiveLogger(
-    {
-      level,
-      name: 'streamable-http:correlated',
-      context: { correlationId },
-    },
-    undefined,
-    {
-      stdout: true,
-    },
-  );
+  // Fallback if parent doesn't support child() (shouldn't happen with UnifiedLogger)
+  throw new Error('Parent logger does not support child() method');
 }
 
 /**

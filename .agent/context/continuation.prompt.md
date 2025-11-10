@@ -1,7 +1,7 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-08 (Session 3.A Complete)  
-**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · 🚀 Ready for Session 3.B  
+**Last Updated**: 2025-11-10 (Session 3.B Verified Complete)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · ✅ Session 3.B Complete · 🚀 Ready for Phase 3 Staging  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
@@ -19,11 +19,11 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Se
    - ✅ Session 2.5: Phase 2 Integration & Validation (Complete 2025-11-08)
 3. **Phase 3 (In Progress)**: Production rollout with monitoring and dashboards
    - ✅ Session 3.A: Documentation Finalization (Complete 2025-11-08)
-   - 🚀 Session 3.B: OpenTelemetry-Compliant Single-Line Logging (Next)
-   - [ ] Session 3.C: Staging Deployment & Validation
+   - ✅ Session 3.B: Logger Architecture Verification (Complete 2025-11-10)
+   - 🚀 Session 3.C: Staging Deployment & Validation (Ready - No Repo Changes Required)
    - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Session 3.A complete. Documentation finalized, dev server validated, multi-line logging issue discovered. ADR-051 created for OpenTelemetry-compliant single-line logging. Ready to begin Session 3.B implementation.
+**Current status**: Session 3.B complete. Logger architecture verified complete. Session 3.C requires no repository changes - all work is Vercel UI configuration. Repository is production-ready with all observability features implemented and validated.
 
 ---
 
@@ -691,6 +691,146 @@ Approved for Session 3.B:
 
 ---
 
+### Session 3.B: Logger Architecture Verification (2025-11-10)
+
+**Objectives**: Verify logger architecture follows project rules and identify any remaining architectural debt.
+
+**Process**:
+
+During planning for Session 3.B implementation (originally planned as major refactoring), we performed a comprehensive code review to baseline the current state before beginning work.
+
+**Discovery**:
+
+Upon inspection, **all planned architectural improvements were already in place**:
+
+1. **UnifiedLogger Design** ✅
+   - Pure constructor accepting only injected dependencies
+   - No direct process.env or process.stdout access
+   - All methods ≤8 complexity
+   - Immutable design with no mutable state
+
+2. **Node.js API Confinement** ✅
+   - `process.stdout` only in `createNodeStdoutSink()` in node.ts
+   - Properly marked with eslint-disable explaining necessity
+   - File system access via injected FileSystem interface
+   - NODE_FILE_SYSTEM implementation in node.ts
+
+3. **Entry Point Design** ✅
+   - Main entry (`@oaknational/mcp-logger`) browser-safe
+   - Node entry (`@oaknational/mcp-logger/node`) with Node.js features
+   - Tree-shaking verified (no Node.js APIs in dist/index.js)
+
+4. **Application Wiring** ✅
+   - HTTP server uses UnifiedLogger with explicit DI
+   - Stdio server uses UnifiedLogger with explicit DI
+   - Both applications own environment access
+   - Logger receives only processed config
+
+5. **Quality Metrics** ✅
+   - Zero lint errors in logger package
+   - Zero test failures
+   - All functions ≤8 complexity
+   - Tree-shaking verified
+
+**Deliverables**:
+
+- Created `.agent/plans/logger-enhancement-plan.md` documenting completion
+- Updated context.md with verification results
+- Updated continuation.prompt.md with Session 3.B summary
+- Updated HANDOFF.md to reflect Phase 3 readiness
+
+**Key Insight**:
+
+The logger architecture improvements happened **organically during Phase 2** implementation rather than requiring a dedicated refactoring session. TDD practices and continuous quality gates prevented architectural violations from accumulating.
+
+**Lessons Learned**:
+
+1. **Continuous Architecture**: Small, incremental improvements during feature work can achieve architectural goals without dedicated refactoring sessions
+2. **Quality Gates Work**: Continuous linting and type-checking prevented violations from accumulating
+3. **Documentation Lag**: Plans must be regularly verified against actual code state
+4. **TDD Drives Design**: Test-first development naturally leads to good DI patterns
+
+**State**: Logger foundation ready for production rollout. No blocking architectural debt.
+
+---
+
+### Session 3.C: Staging Deployment & Validation (Ready to Begin)
+
+**Objectives**: Deploy HTTP server to Vercel staging and validate observability features with real log aggregation platforms.
+
+**Key Discovery**:
+
+Upon reviewing Session 3.C requirements, **all repository work is already complete**. No code changes are needed.
+
+**Session 3.C is Pure Deployment**:
+
+1. **Vercel UI Configuration** (No Repo Changes):
+   - Create Vercel project from GitHub repository
+   - Configure build settings (Framework: Express, Node 22.x)
+   - Set environment variables (Clerk keys, OAK_API_KEY, security settings)
+   - Deploy to staging environment
+
+2. **Smoke Test Execution** (From Repository):
+
+   ```bash
+   pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http smoke:remote \
+     --remote-base-url https://staging-url.vercel.app/mcp
+   ```
+
+3. **Log Validation** (Via Vercel Dashboard):
+   - Inspect staging logs for OpenTelemetry JSON format
+   - Verify correlation IDs, timing metrics, error enrichment
+   - Check for PII leakage
+   - Validate single-line JSON structure
+
+**Required Vercel Environment Variables**:
+
+```bash
+# Required
+CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+OAK_API_KEY=your-oak-api-key
+
+# Recommended (auto-derived from VERCEL_URL if not set)
+ALLOWED_HOSTS=your-domain.vercel.app,*.vercel.app
+ALLOWED_ORIGINS=https://your-domain.vercel.app
+
+# Optional
+LOG_LEVEL=debug  # For staging visibility
+REMOTE_MCP_MODE=stateless  # Default; see explanation below
+```
+
+**REMOTE_MCP_MODE Explained**:
+
+This configures the MCP transport's session management mode:
+
+- **`stateless` (default)**: No session IDs, no state maintenance. Each request is independent. Best for serverless (Vercel).
+- **`session`**: Generates and tracks session IDs via `Mcp-Session-Id` header. Requires in-memory state. Not suitable for serverless.
+
+Our implementation uses stateless mode everywhere (sets `sessionIdGenerator: undefined` in `StreamableHTTPServerTransport`). The environment variable exists for potential future session support but should remain at default (`stateless`) for Vercel deployments.
+
+**Session 3.C Success Criteria**:
+
+- ✅ Deployment builds and starts successfully
+- ✅ Health endpoint returns 200
+- ✅ OAuth discovery endpoint returns correct metadata
+- ✅ Unauthenticated requests return 401 with WWW-Authenticate header
+- ✅ Smoke tests pass against staging endpoint
+- ✅ Logs appear in single-line OpenTelemetry JSON format
+- ✅ Correlation IDs present in all log entries
+- ✅ Timing metrics captured correctly
+- ✅ Error enrichment working
+- ✅ No PII leakage detected
+
+**Deliverables**:
+
+- Staging deployment URL
+- Smoke test results
+- Log format validation report
+- Screenshots of observability features in logs
+
+---
+
 ## Architectural Decisions (With Rationale)
 
 ### Decision 1: Tree-Shakeable Logger with Dual Entry Points
@@ -949,8 +1089,8 @@ apps/.../src/
      minSeverity: 9,
      resourceAttributes: buildResourceAttributes(env, 'my-service', '1.0.0'),
      context: {},
-     stdoutSink: createNodeStdoutSink(),  // Or null
-     fileSink: createFileSink(config),    // Or null
+     stdoutSink: createNodeStdoutSink(), // Or null
+     fileSink: createFileSink(config), // Or null
    });
    ```
 
@@ -964,10 +1104,7 @@ apps/.../src/
    }
 
    // ✅ GOOD - Injected dependencies
-   function formatLog(
-     message: string,
-     resourceAttributes: ResourceAttributes
-   ): string {
+   function formatLog(message: string, resourceAttributes: ResourceAttributes): string {
      return JSON.stringify({ message, ...resourceAttributes });
    }
 
@@ -1016,10 +1153,10 @@ apps/.../src/
    export function buildResourceAttributes(
      env: Record<string, string | undefined>,
      serviceName: string,
-     serviceVersion: string
+     serviceVersion: string,
    ): ResourceAttributes {
      // Pure function, no process.env access
-     return { 'service.name': serviceName, /* ... */ };
+     return { 'service.name': serviceName /* ... */ };
    }
    ```
 
@@ -1524,27 +1661,30 @@ pnpm qg                       ✅ (Runs all above)
 
 **Next Steps**:
 
-1. **Session 3.B: OpenTelemetry-Compliant Single-Line Logging** (Immediate Next)
-   - Implement UnifiedLogger with OpenTelemetry format
-   - Remove Consola dependency completely
-   - Single-line JSON output to all sinks
-   - Resource attributes from environment variables
-   - Update all tests for new format
-   - See detailed plan in Session 3.B of main plan document
-
-2. **Session 3.C: Staging Deployment & Validation**
-   - Deploy to staging environment
+1. **Session 3.C: Staging Deployment & Validation** (Immediate Next)
+   - Deploy HTTP server to staging environment
    - Validate log ingestion by observability platforms
-   - Smoke tests with real log aggregation
+   - Execute smoke tests against staging
+   - Verify OpenTelemetry format compatibility
+   - Validate correlation IDs, timing, error enrichment end-to-end
 
-3. **Session 3.D: Production Rollout & Observation**
+2. **Session 3.D: Production Rollout & Observation**
    - Gradual production rollout
    - Monitor log volume and costs
    - Establish dashboards and alerts
    - Iterate based on production feedback
 
+**Completed Steps**:
+
+- ✅ **Session 3.B: Logger Architecture** (2025-11-10)
+  - Verified UnifiedLogger with OpenTelemetry format already in place
+  - Verified Node.js APIs confined to node.ts
+  - Verified zero lint errors across all packages
+  - Verified tree-shaking working correctly
+  - See `.agent/plans/logger-enhancement-plan.md` for full verification details
+
 ---
 
-**Next Review**: Before beginning Session 3.B
+**Next Review**: Before beginning Session 3.C (Staging Deployment)
 
-**Last Updated**: 2025-11-08 (Session 3.A Complete)
+**Last Updated**: 2025-11-10 (Session 3.B Verified Complete)

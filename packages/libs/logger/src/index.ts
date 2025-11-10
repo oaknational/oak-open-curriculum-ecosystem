@@ -1,11 +1,9 @@
 /**
  * @oaknational/mcp-logger
  *
- * Adaptive logging library for multi-runtime MCP applications
+ * Runtime-agnostic logging library for multi-runtime MCP applications
  * Outputs OpenTelemetry-compliant single-line JSON logs
  */
-
-export { createAdaptiveLogger } from './adaptive';
 
 // Unified Logger
 export { UnifiedLogger } from './unified-logger';
@@ -65,4 +63,5 @@ export { buildResourceAttributes, getDeploymentEnvironment } from './resource-at
 export type { ResourceAttributes } from './resource-attributes';
 
 // OpenTelemetry Format
+export { logLevelToSeverityNumber, logLevelToSeverityText } from './otel-format';
 export type { OtelLogRecord } from './otel-format';

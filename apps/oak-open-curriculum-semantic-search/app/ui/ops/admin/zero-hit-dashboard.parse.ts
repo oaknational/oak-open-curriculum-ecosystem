@@ -23,9 +23,7 @@ export interface ZeroHitResponse {
   recent: DashboardEvent[];
 }
 
-interface JsonObject {
-  [key: string]: unknown;
-}
+type JsonObject = Record<string, unknown>;
 
 export function parseZeroHitResponse(value: unknown): ZeroHitResponse | null {
   if (!isJsonObject(value)) {

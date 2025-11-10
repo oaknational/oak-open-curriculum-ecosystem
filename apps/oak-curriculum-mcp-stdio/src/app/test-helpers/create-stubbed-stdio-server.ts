@@ -11,7 +11,6 @@ import {
 
 import { registerMcpTools } from '../server.js';
 import type { UniversalToolExecutors } from '../../tools/index.js';
-import { loadRuntimeConfig } from '../../runtime-config.js';
 
 interface JsonRpcMessage {
   readonly jsonrpc: '2.0';
@@ -107,23 +106,28 @@ export interface StubbedStdioServer {
   close(): Promise<void>;
 }
 
-function createNoopLogger(): {
+interface NoopLogger {
   trace: () => void;
   debug: () => void;
   info: () => void;
   warn: () => void;
   error: () => void;
   fatal: () => void;
-} {
+  child: () => NoopLogger;
+}
+
+function createNoopLogger(): NoopLogger {
   const noop = (): void => undefined;
-  return {
+  const logger: NoopLogger = {
     trace: noop,
     debug: noop,
     info: noop,
     warn: noop,
     error: noop,
     fatal: noop,
+    child: () => logger, // Return self for noop logger
   };
+  return logger;
 }
 
 function buildToolExecutors(missingTools: ReadonlySet<ToolName>): UniversalToolExecutors {
@@ -150,13 +154,11 @@ export async function createStubbedStdioServer(
   const transport = new StdioServerTransport(stdin, stdout);
   const server = new McpServer({ name: 'test-stdio-server', version: 'test' });
   const missingTools = new Set(options?.missingTools ?? []);
-  const runtimeConfig = loadRuntimeConfig();
 
   registerMcpTools(
     server,
     createOakPathBasedClient('stub-api-key'),
     createNoopLogger(),
-    runtimeConfig,
     buildToolExecutors(missingTools),
   );
 

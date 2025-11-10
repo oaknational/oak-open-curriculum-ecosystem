@@ -17,7 +17,20 @@ const REQUIRED_ENV = {
   SEARCH_INDEX_VERSION: 'v2025-03-18',
 };
 
+type TestEnvKey = keyof typeof REQUIRED_ENV | 'AI_PROVIDER' | 'SEARCH_INDEX_TARGET';
+
+let originalEnv: Map<TestEnvKey, string | undefined>;
+
 beforeEach(() => {
+  // Save original environment
+  const keys: TestEnvKey[] = [
+    ...(Object.keys(REQUIRED_ENV) as (keyof typeof REQUIRED_ENV)[]),
+    'AI_PROVIDER',
+    'SEARCH_INDEX_TARGET',
+  ];
+  originalEnv = new Map(keys.map((key) => [key, process.env[key]]));
+
+  // Set test environment
   for (const [key, value] of Object.entries(REQUIRED_ENV)) {
     process.env[key] = value;
   }
@@ -26,8 +39,15 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  for (const key of [...Object.keys(REQUIRED_ENV), 'AI_PROVIDER', 'SEARCH_INDEX_TARGET']) {
-    delete process.env[key];
+  // Restore original environment without mutation
+  for (const [key, value] of originalEnv.entries()) {
+    if (value === undefined) {
+      // Using type assertion to work around readonly constraint in test
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Cleanup only
+      delete process.env[key];
+    } else {
+      process.env[key] = value;
+    }
   }
 });
 

@@ -4,7 +4,11 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { createRequestLogger, convertLogLevel, type Logger } from '@oaknational/mcp-logger';
+import {
+  createRequestLogger,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
 
 import { createCorrelationMiddleware } from './correlation/middleware.js';
 
@@ -31,7 +35,7 @@ function setupBaseMiddleware(app: Express, log: Logger): void {
   app.use(expressJson({ limit: '1mb' }));
   app.use(createCorrelationMiddleware(log));
 
-  const debugEnabled = log.isLevelEnabled?.(convertLogLevel('DEBUG')) ?? false;
+  const debugEnabled = log.isLevelEnabled?.(logLevelToSeverityNumber('DEBUG')) ?? false;
   if (debugEnabled) {
     app.use(createRequestLogger(log, { level: 'debug' }));
   }

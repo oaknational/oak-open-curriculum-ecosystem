@@ -98,13 +98,9 @@ interface DisabledSummary {
   latestIndexVersion: string | null;
 }
 
-interface JsonObject {
-  [key: string]: unknown;
-}
+type JsonObject = Record<string, unknown>;
 
-interface StringMap {
-  [key: string]: string;
-}
+type StringMap = Record<string, string>;
 
 function parseWebhookPayload(value: unknown): WebhookPayload | null {
   if (!isJsonObject(value)) {

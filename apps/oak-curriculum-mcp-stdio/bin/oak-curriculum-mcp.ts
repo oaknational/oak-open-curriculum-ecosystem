@@ -52,7 +52,7 @@ try {
   log(`[START-MCP] Tool count: ${String(toolCount)}`);
   const preview = toolNames.slice(0, 3).join(', ');
 
-  log(`[START-MCP] Tools: ${preview}${toolCount > 3 ? ', …' : ''}`);
+  log(`[START-MCP] Tools: ${String(toolCount)} (${preview}${toolCount > 3 ? ', …' : ''})`);
 } catch (err: unknown) {
   log(
     `[START-MCP ERROR] Failed to read tool list: ${err instanceof Error ? err.message : String(err)}`,

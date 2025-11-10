@@ -5,10 +5,10 @@ import type { KeyStage, SearchSubjectSlug } from '../../types/oak';
 
 type QueryContainer = estypes.QueryDslQueryContainer;
 
-type LessonRank = {
+interface LessonRank {
   rrf: { window_size: number; rank_constant: number };
   queries: QueryContainer[];
-};
+}
 
 type UnitRank = LessonRank;
 

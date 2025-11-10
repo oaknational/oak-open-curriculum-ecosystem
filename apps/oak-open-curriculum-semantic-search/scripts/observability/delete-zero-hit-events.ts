@@ -18,10 +18,10 @@ interface CliFlags {
   force?: boolean;
 }
 
-type FlagHandler = {
+interface FlagHandler {
   consumesValue: boolean;
   apply: (flags: CliFlags, value: string | undefined) => void;
-};
+}
 
 const FLAG_HANDLERS: Record<string, FlagHandler> = {
   '--target': {

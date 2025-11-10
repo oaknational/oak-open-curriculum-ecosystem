@@ -3,10 +3,21 @@
  */
 
 import type { Readable, Writable } from 'stream';
-// eslint-disable-next-line import-x/no-restricted-paths -- @todo resolve this, the logger is fundamental, or use composition, or something.
-import type { Logger } from '@oaknational/mcp-logger';
 
-export type { Logger };
+/**
+ * Minimal logger interface for transport library
+ * Libraries should not depend on each other, so we define this locally
+ *
+ * Context can be an Error or any structured data
+ */
+export interface Logger {
+  trace(message: string, context?: Error | object): void;
+  debug(message: string, context?: Error | object): void;
+  info(message: string, context?: Error | object): void;
+  warn(message: string, context?: Error | object): void;
+  error(message: string, context?: Error | object): void;
+  fatal(message: string, context?: Error | object): void;
+}
 
 /**
  * JSON-RPC message structure

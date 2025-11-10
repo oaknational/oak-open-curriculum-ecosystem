@@ -4,8 +4,6 @@
 * Canonical URL helpers for teachers-site resources (deterministic, no network).
 */
 
-import { createAdaptiveLogger } from '@oaknational/mcp-logger';
-
 export const CONTENT_TYPE_PREFIXES = {
   lesson: { prefix: 'lesson:', contentType: 'lesson' },
   unit: { prefix: 'unit:', contentType: 'unit' },
@@ -75,20 +73,10 @@ export function generateCanonicalUrl(
   if (type === 'lesson') return urlForLesson(slug);
   if (type === 'sequence') return urlForSequence(slug);
   if (type === 'unit') {
-    const canonicalUrl = urlForUnit(slug, context?.unit);
-    if (!canonicalUrl) {
-      const logger = createAdaptiveLogger({ name: 'url-helpers' });
-      logger.warn('Could not generate canonical URL for unit', { id, context: context?.unit });
-    }
-    return canonicalUrl;
+    return urlForUnit(slug, context?.unit);
   }
   if (type === 'subject') {
-    const canonicalUrl = urlForSubject(slug, context?.subject?.keyStageSlugs);
-    if (!canonicalUrl) {
-      const logger = createAdaptiveLogger({ name: 'url-helpers' });
-      logger.warn('Could not generate canonical URL for subject', { id, context: context?.subject?.keyStageSlugs });
-    }
-    return canonicalUrl;
+    return urlForSubject(slug, context?.subject?.keyStageSlugs);
   }
   throw new TypeError('Unsupported content type: ' + String(type));
 }

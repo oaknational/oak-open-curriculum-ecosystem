@@ -1,7 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import express, { type Express, type NextFunction, type Request, type Response } from 'express';
 import request from 'supertest';
-import { createAdaptiveLogger, type Logger } from '@oaknational/mcp-logger';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 import { createEnrichedErrorLogger } from './logging/index';
 import { createCorrelationMiddleware } from './correlation/middleware';
 
@@ -12,8 +18,12 @@ describe('HTTP Error Handling Integration', () => {
 
   beforeEach(() => {
     // Create logger with spy
-    logger = createAdaptiveLogger({ name: 'test-logger', level: 'DEBUG' }, undefined, {
-      stdout: true,
+    logger = new UnifiedLogger({
+      minSeverity: logLevelToSeverityNumber('DEBUG'),
+      resourceAttributes: buildResourceAttributes({}, 'test-logger', '1.0.0'),
+      context: {},
+      stdoutSink: createNodeStdoutSink(),
+      fileSink: null,
     });
     logSpy = vi.spyOn(logger, 'error');
 

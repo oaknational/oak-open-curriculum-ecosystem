@@ -1,7 +1,7 @@
 import type { ZeroHitEvent } from './zero-hit-store';
 
 /** Generic record helper for dynamic Elasticsearch payloads. */
-export type UnknownRecord = { [key: string]: unknown };
+export type UnknownRecord = Record<string, unknown>;
 
 /**
  * Shape of the document persisted to the zero-hit Elasticsearch index.

@@ -2,8 +2,14 @@ import type { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdi
 import type { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import type { MinimalNotionClient } from '../types/notion-types/notion-client.js';
 import runtimeConfig from '../config/runtime.json' with { type: 'json' };
-import { parseLogLevel, createAdaptiveLogger } from '@oaknational/mcp-logger/node';
-import type { Logger } from '@oaknational/mcp-logger/node';
+import {
+  UnifiedLogger,
+  buildResourceAttributes,
+  parseLogLevel,
+  logLevelToSeverityNumber,
+  type Logger,
+} from '@oaknational/mcp-logger';
+import { createNodeStdoutSink } from '@oaknational/mcp-logger/node';
 
 interface CoreLogger {
   debug: (message: string, context?: unknown) => void;
@@ -54,15 +60,23 @@ async function loadEnvironment(log: ServerSetupDependencies['log']) {
  * Creates all server dependencies
  */
 function createLoggerFromConfig() {
-  return createAdaptiveLogger({
-    level: parseLogLevel(
-      typeof runtimeConfig.logLevel === 'string' ? runtimeConfig.logLevel : undefined,
-    ),
-    name: runtimeConfig.serverName,
-    consolaOptions: {
-      stdout: process.stderr,
-      stderr: process.stderr,
-    },
+  const levelInput =
+    typeof runtimeConfig.logLevel === 'string' ? runtimeConfig.logLevel : undefined;
+  const level = parseLogLevel(levelInput, 'INFO');
+  const minSeverity = logLevelToSeverityNumber(level);
+
+  const resourceAttributes = buildResourceAttributes(
+    process.env,
+    runtimeConfig.serverName,
+    process.env.npm_package_version ?? '0.0.0',
+  );
+
+  return new UnifiedLogger({
+    minSeverity,
+    resourceAttributes,
+    context: {},
+    stdoutSink: createNodeStdoutSink(),
+    fileSink: null,
   });
 }
 

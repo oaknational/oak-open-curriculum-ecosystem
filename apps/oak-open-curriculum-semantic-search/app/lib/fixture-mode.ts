@@ -8,7 +8,7 @@ export const FIXTURE_MODE_COOKIE = 'semantic-search-fixtures';
 const MODE_LOOKUP = buildModeLookup();
 
 function buildModeLookup(): Map<string, FixtureMode> {
-  const entries: Array<[FixtureMode, readonly string[]]> = [
+  const entries: [FixtureMode, readonly string[]][] = [
     ['fixtures', ['1', 'true', 'on', 'fixture', 'fixtures', 'success']],
     ['fixtures-empty', ['empty', 'none', 'no-results', 'fixtures-empty']],
     ['fixtures-error', ['error', 'fail', 'failure', 'fixtures-error']],

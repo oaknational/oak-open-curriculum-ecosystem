@@ -2,7 +2,8 @@
 
 ## Status
 
-Proposed (2025-11-08)
+**Accepted** (2025-11-08)  
+**Implemented** (2025-11-10 - verified complete during Phase 2)
 
 **Supersedes**: ADR-017 (Consola for Logging)
 
@@ -164,28 +165,33 @@ Per `.agent/directives-and-memory/rules.md` and `docs/agent-guidance/testing-str
    - **Mitigation**: Simple commands documented in READMEs
    - **Mitigation**: Better long-term skill (industry standard)
 
-## Implementation Plan
+## Implementation Status
 
-See `.agent/plans/opentelemetry-logging-implementation.md` (linked from Session 3.B in main plan) for detailed implementation tasks.
+✅ **COMPLETE** - All implementation steps finished during Phase 2 (2025-11-09 to 2025-11-10)
 
-### High-Level Steps
+See `.agent/plans/logger-enhancement-plan.md` for verification details.
 
-1. Create `otel-format.ts` with OpenTelemetry log record formatting
-2. Create `resource-attributes.ts` with environment-based resource building
-3. Create `UnifiedLogger` class with single-line JSON output
-4. Create `StdoutSink` and update `FileSink` for pre-formatted strings
-5. Update entry points (`adaptive.ts`, `adaptive-node.ts`) to use UnifiedLogger
-6. Remove Consola files and dependency
-7. Update all tests for new format
-8. Update documentation with `jq` examples
+### Completed Steps
 
-### Validation
+1. ✅ Created `otel-format.ts` with OpenTelemetry log record formatting
+2. ✅ Created `resource-attributes.ts` with environment-based resource building
+3. ✅ Created `UnifiedLogger` class with single-line JSON output
+4. ✅ Created `StdoutSink` interface and `createNodeStdoutSink()` in node.ts
+5. ✅ Updated `FileSink` for pre-formatted strings
+6. ✅ Removed Consola files and dependency (adaptive files deleted)
+7. ✅ Updated all tests for new format (738+ tests passing)
+8. ✅ Updated documentation with `jq` examples
 
-- All logs output as single-line JSON
-- `tail -f logs | jq .` parses successfully
-- All required OpenTelemetry fields present
-- Resource attributes populated from environment
-- Quality gates pass (738+ tests)
+### Verification Results ✅
+
+- ✅ All logs output as single-line JSON
+- ✅ `tail -f logs | jq .` parses successfully
+- ✅ All required OpenTelemetry fields present
+- ✅ Resource attributes populated from environment
+- ✅ Quality gates pass (zero lint errors, 738+ tests)
+- ✅ Tree-shaking verified (no Node.js APIs in browser bundle)
+- ✅ HTTP server: stdout-only logging working
+- ✅ Stdio server: file-only logging working
 
 ## Related Decisions
 
@@ -205,8 +211,16 @@ See `.agent/plans/opentelemetry-logging-implementation.md` (linked from Session 
 ## Timeline
 
 - **Proposed**: 2025-11-08
-- **Target Implementation**: Session 3.B (next work session)
-- **Full Rollout**: With Phase 3 production deployment
+- **Accepted**: 2025-11-08
+- **Implementation**: 2025-11-09 to 2025-11-10 (completed during Phase 2)
+- **Verification**: 2025-11-10 (Session 3.B - confirmed complete)
+- **Production Rollout**: Ready for Phase 3 staging deployment
+
+## Implementation Notes
+
+The implementation happened organically during Phase 2 (Sessions 2.1-2.5) as part of correlation IDs, timing metrics, and error enrichment work. Test-driven development and continuous refactoring led to the correct architecture without requiring a dedicated refactoring session.
+
+**Key Achievement**: Architecture followed project rules from the start, preventing technical debt accumulation.
 
 ---
 

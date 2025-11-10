@@ -4,11 +4,11 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 
 export type ColorMode = 'light' | 'dark';
 
-type ModeContextValue = {
+interface ModeContextValue {
   mode: ColorMode;
   setMode: (mode: ColorMode) => void;
   toggle: () => void;
-};
+}
 
 const ModeCtx = createContext<ModeContextValue | undefined>(undefined);
 

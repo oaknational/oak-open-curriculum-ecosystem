@@ -104,7 +104,6 @@ export const tsRules: Linter.RulesRecord = {
   'max-depth': ['error', 3],
   'max-statements': ['error', 20],
   'max-lines-per-function': ['error', 50],
-  // Reduce to 150, encourage collections of small, focused files
   'max-lines': ['error', 250],
 
   // To turn back on
@@ -155,6 +154,8 @@ export const testRules: Linter.RulesRecord = {
       assertionStyle: 'as',
     },
   ],
+  '@typescript-eslint/consistent-indexed-object-style': 'off',
+  '@typescript-eslint/consistent-type-definitions': 'off',
   '@typescript-eslint/no-restricted-types': 'off',
   '@typescript-eslint/unbound-method': 'off',
   'import-x/no-named-as-default-member': 'off',
