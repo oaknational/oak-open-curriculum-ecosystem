@@ -1,6 +1,6 @@
 # Oak Curriculum MCP – Streamable HTTP (Vercel-ready)
 
-This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It defaults to stateless mode (no SSE) and is designed for Vercel’s Node runtime.
+This app exposes the Curriculum MCP server over Streamable HTTP using the official TypeScript SDK transport. It uses **stateless session management** (no server-side state) and is designed for Vercel's serverless Node runtime. Responses are streamed using Server-Sent Events (SSE) as per the MCP specification.
 
 ## Quick start (local)
 
@@ -33,15 +33,19 @@ Note: The server automatically adds the required `Accept: application/json, text
 ## Vercel deployment
 
 - Use Node runtime (not Edge)
-- Minimal env:
-  - `OAK_API_KEY`
+- Required env:
+  - `CLERK_PUBLISHABLE_KEY` - Clerk publishable key for OAuth
+  - `CLERK_SECRET_KEY` - Clerk secret key for auth middleware
+  - `OAK_API_KEY` - Oak Curriculum API key
+- Optional env:
   - `ALLOWED_HOSTS` (comma-separated, must include your primary hostname; supports `*` wildcards)
+  - `ALLOWED_ORIGINS` for browser CORS
+  - `LOG_LEVEL` (default `info`, use `debug` for staging)
+  - `REMOTE_MCP_MODE` (default `stateless`, recommended for Vercel - see `docs/vercel-environment-config.md`)
   - `BASE_URL` (recommended; if omitted we derive from request host)
   - `MCP_CANONICAL_URI` (recommended; defaults to `${BASE_URL}/mcp` if `BASE_URL` is set)
-- Optional:
-  - `ALLOWED_ORIGINS` for browser CORS
-  - `LOG_LEVEL` (default `info`)
-  - `ENABLE_LOCAL_AS` for demo JWKS endpoints
+
+**Important**: This server uses **stateless mode** by default, which is correct for Vercel's serverless architecture. Session state is not maintained between requests. See `docs/vercel-environment-config.md` for detailed explanation of transport modes.
 
 ### Smoke-test checklist (post-deploy)
 
@@ -549,18 +553,34 @@ Use log drain integrations to send logs to monitoring platforms that support ale
 
 If tools do not appear, check `.logs/oak-curriculum-mcp-startup/startup.log` for diagnostics.
 
-## Authentication status and next steps
+## Authentication
 
-- Production OAuth is MANDATORY next step. The server already validates RFC 9068 JWTs against a co‑hosted demo AS when `ENABLE_LOCAL_AS=true`, but there is no production Authorization Server yet. Implement:
-  - Authorization Code + PKCE for UI users (Google OIDC restricted to `*.thenational.academy`).
-  - Device Authorization Grant for headless/MCP clients. AS mints short‑lived JWT access tokens (`iss=BASE_URL`, `aud=MCP_CANONICAL_URI`).
-- Until production OAuth exists, Vercel deploys will return 401 unless you provide a valid JWT minted by the demo AS. Dev tokens are intentionally ignored on Vercel.
+The server uses **Clerk OAuth** for production authentication. All requests to `/mcp` must include a valid Bearer token in the `Authorization` header.
 
-Temporary validation bypass (for smoke only):
+### OAuth Flow
 
-- **Dangerous override**: set `DANGEROUSLY_DISABLE_AUTH=true` to bypass all authentication (works everywhere, including production - use with extreme caution)
-- Preview/CI only: set `CI=true` and `REMOTE_MCP_CI_TOKEN=<secret>` and call with `Authorization: Bearer <secret>`. Remove after validation.
-- Local only: use `DANGEROUSLY_DISABLE_AUTH=true` or `REMOTE_MCP_DEV_TOKEN`.
+1. Unauthenticated requests return `401` with `WWW-Authenticate` header containing OAuth discovery information
+2. Client discovers authorization server via `/.well-known/oauth-protected-resource` endpoint
+3. Client follows OAuth Authorization Code + PKCE flow to obtain access token
+4. Client includes token in `Authorization: Bearer <token>` header
+
+### Development Authentication
+
+For local development only:
+
+- Set `DANGEROUSLY_DISABLE_AUTH=true` to bypass authentication
+- **NEVER** enable this in production or preview environments
+
+### MCP Client Configuration
+
+When configuring MCP clients (like Claude Desktop), they will automatically:
+
+1. Detect the OAuth requirement from the 401 response
+2. Follow the OAuth discovery flow
+3. Redirect users to Clerk for authentication
+4. Store and use the resulting access token
+
+See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentation.
 
 ## Troubleshooting
 
