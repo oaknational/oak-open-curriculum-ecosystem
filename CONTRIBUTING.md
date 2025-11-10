@@ -262,6 +262,10 @@ This repository is fundamentally about **code generation from OpenAPI schemas**.
 - ❌ Use type assertions (`as`) or `any` types
 - ❌ Duplicate schema knowledge across workspaces
 - ❌ Edit files in `src/types/generated/` directories
+- ❌ Re-validate or re-parse in runtime code (use generated helpers)
+- ❌ Widen types or add fallbacks for "missing" descriptors
+
+> **Critical**: Read [Schema-First Execution Directive](../.agent/directives-and-memory/schema-first-execution.md) before working on MCP tool execution, argument validation, or response handling. All runtime behavior must flow from generated artifacts.
 
 ### Layer Boundaries
 

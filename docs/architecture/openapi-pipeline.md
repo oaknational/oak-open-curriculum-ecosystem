@@ -219,6 +219,58 @@ This pattern is formalized in several ADRs:
 - [SDK Documentation](../../packages/sdks/oak-curriculum-sdk/README.md) - Runtime usage of the generated SDK
 - [Development Onboarding](../development/onboarding.md) - Getting started guide
 
+## Execution Model: Schema-First Tool Invocation
+
+The OpenAPI pipeline doesn't stop at type generation - it extends to **runtime execution**. Every MCP tool call follows a schema-driven execution path:
+
+### The Execution Layers
+
+```text
+1. Contract
+   ↓ ToolDescriptor<TName, TClient, TArgs, TResult>
+
+2. Definitions (GENERATED)
+   ↓ MCP_TOOL_DESCRIPTORS literal map
+
+3. Type Aliases (GENERATED)
+   ↓ ToolArgsForName, ToolResultForName
+
+4. Runtime Helpers (GENERATED)
+   ↓ callTool(), callToolWithValidation()
+
+5. Façade (AUTHORED)
+   ↓ Thin wrapper, repository-specific error mapping only
+```
+
+### Key Constraints
+
+From [Schema-First Execution Directive](.agent/directives-and-memory/schema-first-execution.md):
+
+- **No manual tool registration** - All tools come from `MCP_TOOL_DESCRIPTORS`
+- **No type widening** - Runtime code never returns `unknown` or widens unions
+- **No manual validation** - Arguments validated by generated helpers only
+- **No overrides or fallbacks** - Missing descriptors are generator bugs, fail fast
+
+### Why This Matters
+
+This execution model ensures that:
+
+1. **Type safety extends to runtime** - Not just compile-time types, but runtime behavior
+2. **API changes propagate automatically** - New endpoints → new tool descriptors → automatic registration
+3. **Zero manual mapping** - No hand-written glue code between SDK and MCP layer
+4. **Generator is the single authority** - One place to update when patterns change
+
+### Generator-First Mindset
+
+When behavior needs to change:
+
+1. ✅ Update generator templates in `type-gen/typegen/mcp-tools/`
+2. ✅ Run `pnpm type-gen` to regenerate
+3. ❌ Never edit generated files manually
+4. ❌ Never add runtime workarounds for "missing" descriptors
+
+See [Schema-First Execution Directive](.agent/directives-and-memory/schema-first-execution.md) for complete implementation requirements.
+
 ## Key Takeaway
 
 **The OpenAPI schema is the single source of truth. Everything else is generated.**

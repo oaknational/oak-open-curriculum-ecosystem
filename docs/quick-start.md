@@ -110,6 +110,21 @@ This command:
 
 **The Cardinal Rule**: If the API schema changes, `pnpm type-gen` is sufficient. No manual code changes required.
 
+### The Execution Model
+
+The pipeline doesn't stop at types - it extends to **runtime execution**:
+
+1. **Generated Tool Descriptors** - Each OpenAPI endpoint becomes an MCP tool descriptor
+2. **Generated Validators** - Zod schemas validate inputs and outputs
+3. **Generated Execution Helpers** - Type-safe tool invocation with automatic validation
+4. **Authored Façade** - Thin wrapper that calls generated helpers (no logic duplication)
+
+Example: When you see MCP servers "registering tools", they're importing `MCP_TOOL_DESCRIPTORS` from the generated SDK. There's no manual tool registration code - it's all derived from the OpenAPI schema.
+
+**Key constraint**: Runtime code never re-validates, never widens types, and never works around "missing" descriptors. If a descriptor is missing, that's a generator bug - fail fast.
+
+See [Architecture: OpenAPI Pipeline](architecture/openapi-pipeline.md#execution-model-schema-first-tool-invocation) for the complete execution flow.
+
 ### No Manual Type Definitions
 
 You will **never** see code like this in this repository:
@@ -139,6 +154,10 @@ When you see files marked `DO NOT EDIT MANUALLY` or in `src/types/generated/` di
 - These files are regenerated on every `pnpm type-gen` run
 - Manual edits would be overwritten
 - Changes must happen in the generation scripts or upstream OpenAPI schema
+
+**This extends to runtime behavior**: Not just types, but MCP tool descriptors, validators, and execution helpers are all generated. Runtime code is a thin façade that calls generated helpers - it never re-implements validation or widens types.
+
+See [Schema-First Execution Directive](../.agent/directives-and-memory/schema-first-execution.md) for implementation requirements.
 
 ## Development Workflows
 
