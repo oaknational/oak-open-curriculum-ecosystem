@@ -27,6 +27,11 @@
     "next-devtools": {
       "command": "npx",
       "args": ["-y", "next-devtools-mcp@latest"]
+    },
+    "Vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com",
+      "headers": {}
     }
   }
 }
