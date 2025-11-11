@@ -1,10 +1,21 @@
 # Search Schema Migration Order
 
-_Last updated: 2025-09-30_
+_Last updated: 2025-11-11_  
+_Status: REFERENCE DOCUMENT_
 
 ## Overview
 
-Sequence of work to replace in-app semantic search schemas with SDK-generated artefacts while minimising regressions. Each phase lists prerequisites, affected modules, and validation checkpoints.
+This document outlines the phased migration strategy for replacing runtime-defined search schemas with SDK-generated artifacts, ensuring minimal regression. For detailed implementation sessions, see [Search Service Implementation Plan](search-service/schema-first-ontology-implementation.md).
+
+**Migration Phases Summary:**
+
+- **Phase 0**: SDK generator updates
+- **Phase 1**: Central SDK re-exports
+- **Phase 2**: Application type replacement
+- **Phase 3**: Fixture builder alignment
+- **Phase 4**: Search library updates
+- **Phase 5**: OpenAPI registration & docs
+- **Phase 6**: Cleanup & verification
 
 ## Phase 0 – SDK Generator Updates
 
@@ -63,7 +74,7 @@ Sequence of work to replace in-app semantic search schemas with SDK-generated ar
 
 - **Fixture Mode Resolver**: Ensure generated guard exports integrate with forthcoming fixture toggle work.
 - **Testing**: Expand tests to cover generated guard functions; maintain Playwright coverage with fixtures on/off.
-- **Documentation**: Update `continuation.prompt_ux.md`, `semantic-search-phase-1-ux.md`, and `semantic-search-phase-1-ux-context.md` to reflect compile-time schema flow.
+- **Documentation**: Update project documentation to reflect compile-time schema flow and migration completion.
 
 ## Dependencies Summary
 

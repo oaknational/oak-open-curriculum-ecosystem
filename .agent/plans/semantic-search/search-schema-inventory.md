@@ -1,6 +1,13 @@
-# Search Schema Inventory – Runtime Definitions (2025-09-30)
+# Search Schema Inventory – Runtime Definitions
 
-Catalogue of search-related types, Zod schemas, and guards defined inside `apps/oak-open-curriculum-semantic-search` that currently originate in the application runtime rather than the SDK compile step. Each entry notes the construct, its purpose, and immediate consumers to support migration into SDK-generated artefacts.
+_Last updated: 2025-11-11_  
+_Status: REFERENCE DOCUMENT_
+
+## Purpose
+
+This document catalogs all search-related types, Zod schemas, and type guards currently defined at runtime in `apps/oak-open-curriculum-semantic-search`. Each entry documents the construct's purpose and consumers, supporting the migration to SDK-generated artifacts.
+
+**Migration Strategy**: See [Search Service Implementation Plan](search-service/schema-first-ontology-implementation.md#phase-1-schema-first-migration) for sessions that migrate these runtime schemas to type-gen.
 
 ## apps/oak-open-curriculum-semantic-search/app/ui/structured-search.shared.ts
 
@@ -116,7 +123,18 @@ Catalogue of search-related types, Zod schemas, and guards defined inside `apps/
 
 Current gap: all other request/response Zod schemas, hybrid result types, suggestion contracts, and controller helpers remain runtime-defined within the app.
 
-## Baseline Checks
+## Migration Target
 
-- `pnpm type-check`: fails in `apps/oak-open-curriculum-semantic-search` with fixture/search schema errors (see 2025-09-30 baseline).
-- `pnpm lint`: fails in the same workspace; key errors include unused fixture exports, disallowed `Record<string, unknown>`, unsafe assignments in fixtures/actions, and deprecated `ZodIssueCode` usage.
+**Goal**: Replace all runtime schemas with SDK-generated equivalents, ensuring:
+
+- ✅ Single source of truth (OpenAPI → SDK type-gen → app imports)
+- ✅ No duplicate schema definitions
+- ✅ Type guards generated at compile time
+- ✅ Cardinal Rule compliance (schema changes flow automatically)
+
+**Success Criteria**:
+
+- `pnpm type-check` passes with generated types
+- `pnpm lint` passes with no schema-related errors
+- All tests pass with SDK-generated schemas
+- OpenAPI docs reflect generated schemas

@@ -49,6 +49,36 @@ Oak's curriculum is organized along three complementary dimensions:
 
 **Threads in Practice**: Threads are used as primary navigation tools on the Oak website. For example, the "geometry-and-measure" thread in primary maths groups units across years 1-6, showing clear progression. See: <https://www.thenational.academy/teachers/curriculum/maths-primary/units?threads=geometry-and-measure>
 
+### Programme Factor Hierarchy
+
+**How Programmes are Filtered** (Official Oak API): Programmes are defined by a hierarchical set of factors that progressively narrow the curriculum context:
+
+```text
+Subject
+  ↓ (determines)
+Phase (primary | secondary)
+  ↓ (determines)
+Key Stage (ks1 | ks2 | ks3 | ks4)
+  ↓ (determines)
+Year Group (1-11)
+  ↓ (for some KS4 subjects)
+Pathway (core | gcse)
+  ↓ (for KS4 exam subjects)
+Exam Board (aqa | ocr | edexcel | eduqas | edexcelb)
+  ↓ (for some KS4 subjects)
+Exam Subject (biology | chemistry | physics | combined-science)
+  ↓ (for KS4 sciences)
+Tier (foundation | higher)
+```
+
+**Examples of Factor Flow**:
+
+- **Primary Maths Year 3**: Subject → Phase (primary) → Key Stage (ks1/ks2) → Year (3) = `maths-primary-ks2-year-3`
+- **KS4 Foundation Biology (AQA)**: Subject → Phase (secondary) → Key Stage (ks4) → Exam Board (aqa) → Exam Subject (biology) → Tier (foundation) = `biology-secondary-ks4-foundation-aqa`
+- **KS4 GCSE PE**: Subject → Phase (secondary) → Key Stage (ks4) → Year (10/11) → Pathway (gcse) = `physical-education-secondary-ks4-gcse`
+
+**Key insight**: Not all factors apply to all subjects. Primary subjects typically use Subject → Phase → Key Stage → Year, while KS4 exam subjects may use the full hierarchy with exam boards and tiers.
+
 - **Programme**
   - Definition: A contextualized, user-facing curriculum pathway for a subject in a specific teaching context. Programmes are what teachers navigate by on the Oak Web Application. They represent "what to teach when" for a specific year/key stage/tier/exam board combination.
   - Key fields: `programmeSlug` (string - used in OWA URLs), `programmeTitle` (string), `keyStageSlug` (string), `tier` (object|null), `examBoard` (object|null), `examSubject` (string|null), `pathway` (string|null)
@@ -72,9 +102,12 @@ Oak's curriculum is organized along three complementary dimensions:
   - Unit relationship: `unitOrder` (number) - units within a thread are ordered to show progression
   - Examples:
     - `number` (118 units spanning Reception → Year 11, from "Counting 0-10" to "Surds and standard form")
-    - `bq01-biology-what-are-living-things-and-what-are-they-made-of` (32 units spanning KS1 → KS4, from "Naming animals" to "Eukaryotic and prokaryotic cells")
+    - `bq01-biology-what-are-living-things-and-what-are-they-made-of` (32 units spanning KS1 → KS4, from "Naming animals" to "Eukaryotic and prokaryotic cells" - Official Oak API example showing vertical progression)
     - `developing-reading-preferences` (English progression strand across key stages)
     - `geometry-and-measure` (Primary maths: groups units across years showing progression in spatial understanding)
+    - **Official Oak API Examples**:
+      - Biology thread "BQ01 - Introduction to biology" shows how foundational biology concepts build from primary through to GCSE
+      - Maths threads demonstrate clear numerical and spatial progression across 11 years of education
   - Pedagogical purpose:
     - Shows **how ideas build** (not just what to teach)
     - Enables prerequisite identification
@@ -94,9 +127,14 @@ Oak's curriculum is organized along three complementary dimensions:
   - Relationships: Sequence → Units (organizes); Sequence → KeyStages (covers); Sequence → Years (covers); Sequence → Phase (belongs_to); Subject → Sequence (has); Sequence → Programmes (generates)
 
 - **Subject**
-  - Definition: An academic discipline (e.g., Maths).
-  - Key fields: `subjectSlug` (string), `subjectTitle` (string)
-  - Relationships: Subject → Sequences; Subject → KeyStages (coverage lists); Subject → Years (coverage lists)
+  - Definition: An academic discipline (e.g., Maths, English, Science).
+  - **Subject Hierarchy** (Official Oak API):
+    - **Parent Subject**: Top-level subjects (e.g., "Science" at KS1-3)
+    - **Child Subject**: Specialization within a parent subject (e.g., "Biology", "Chemistry", "Physics" within Science at KS4)
+    - **Exam Subject**: A child subject with an associated examination board and qualification (e.g., "AQA Biology GCSE")
+  - Note: The distinction between child subjects and exam subjects is critical for KS4 sciences, where "Science" splits into Biology, Chemistry, Physics, and Combined Science, each with exam board variants.
+  - Key fields: `subjectSlug` (string), `subjectTitle` (string), `parentSubject` (string|null - for child subjects)
+  - Relationships: Subject → Sequences; Subject → KeyStages (coverage lists); Subject → Years (coverage lists); ParentSubject → ChildSubject (has); ChildSubject → ExamSubject (becomes with exam board)
 
 - **Unit**
   - Definition: A topic of study associated with a sequence of lessons, typically taking 1-6 weeks to complete. Units are the fundamental building blocks that appear in both programmes (navigation) and threads (progression).
@@ -104,6 +142,10 @@ Oak's curriculum is organized along three complementary dimensions:
     1. **Simple units**: Standard units with a fixed sequence of lessons
     2. **Units with variants**: Units that have different lesson sequences depending on context (e.g., tier-based variants for foundation vs higher)
     3. **Optionality units**: Units with multiple options allowing teachers to personalize content (e.g., different historical landmarks to study)
+  - **Unit Sequence** (ordering concept): The ordered arrangement of units within a programme or thread. Note the distinction:
+    - "Sequence" (capitalized) = API entity organizing units
+    - "unit sequence" (lowercase) = the ordering of units within a programme showing pedagogical flow
+    - Units have `unitOrder` field indicating their position in a thread's progression
   - **Key insight**: A single unit can appear in multiple contexts: multiple programmes (filtered by tier/exam board), multiple threads (showing different conceptual progressions), and may have variants (unitOptions).
   - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number - position within a thread), `unitType` (inferred from structure)
   - Additional fields (where available): `year` (number|string), `yearSlug` (string), `phaseSlug` (string), `subjectSlug` (string), `keyStageSlug` (string), `notes` (string|nullable)
@@ -112,12 +154,16 @@ Oak's curriculum is organized along three complementary dimensions:
 
 - **Category** (synonyms: Subject Category)
   - Definition: A well-established, high-level division within a subject that helps filter and group units based on their content, signpost teachers, and provide a framework for the subject.
-  - **Applicability**: Not all subjects have categories. Currently applies to:
-    - Key stages 1-4 science
-    - Key stages 1, 2, and 4 English
-    - Key stages 1-3 religious education
+  - **Applicability** (Official Oak API Glossary): Not all subjects have categories. Categories are currently used by:
+    - **Science**: Key stages 1-4 (e.g., "Biology", "Chemistry", "Physics", "Working Scientifically")
+    - **English**: Key stages 1, 2, and 4 (e.g., "Reading", "Writing", "Spoken Language", "Grammar") - Note: KS3 English does NOT use categories
+    - **Religious Education**: Key stages 1-3 (e.g., "Christianity", "Islam", "Hinduism", "Buddhism")
+  - **Examples**:
+    - Science KS3: Units are categorized as Biology, Chemistry, or Physics to help teachers navigate
+    - English KS2: "Spelling" category groups all spelling-focused units across years 3-6
+    - RE KS2: "Islam" category groups units exploring Islamic faith and practice
   - Fields: `categoryTitle` (string), `categorySlug` (string, optional)
-  - Relationships: Unit → Category (has)
+  - Relationships: Unit → Category (has); Category → Subject (belongs_to)
 
 - **Lesson**
   - Definition: An individual teaching session with specific learning objectives, typically taking one hour to deliver.
@@ -138,8 +184,13 @@ Oak's curriculum is organized along three complementary dimensions:
 
 - **Asset**
   - Definition: Downloadable or viewable resource, including `video`.
-  - Fields: `type` (enum), `label` (string), `url` (string); attribution at lesson/subject/sequence scope
-  - Relationships: Lesson → Asset (has)
+  - **Attribution Scopes** (Official Oak API): Assets have copyright/licensing attribution at three possible scopes:
+    1. **Lesson-level attribution**: Attribution specific to a single lesson (most common, e.g., images in a specific lesson's slides)
+    2. **Subject-level attribution**: Attribution shared across all lessons in a subject (e.g., standard diagrams used throughout maths)
+    3. **Sequence-level attribution**: Attribution shared across an entire sequence (e.g., video presenter credits for all videos in a sequence)
+  - The scope determines where attribution metadata is stored and retrieved - check lesson assets endpoint, subject assets endpoint, or sequence assets endpoint accordingly.
+  - Fields: `type` (enum), `label` (string), `url` (string), `attribution` (attribution metadata at appropriate scope)
+  - Relationships: Lesson → Asset (has); Subject → Asset (has); Sequence → Asset (has)
 
 - **Transcript**
   - Definition: Video transcript and captions timing.
