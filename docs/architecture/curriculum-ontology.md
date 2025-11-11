@@ -4,6 +4,16 @@
 
 This document defines an ontology for the Oak Curriculum data, derived from the OpenAPI schema at `packages/sdks/oak-curriculum-sdk/src/types/generated/api-schema/api-schema-sdk.json`. The ontology maps entities, relationships, and enumerations that form the foundation for curriculum data tools, guidance systems, and playbooks. It is not the definitive Oak Curriculum ontology, but rather a working document that will be refined over time.
 
+## Official Documentation References
+
+This ontology aligns with and extends the official Oak Curriculum API documentation:
+
+- [Glossary](https://open-api.thenational.academy/docs/about-oaks-data/glossary) - Authoritative definitions of all curriculum terms
+- [Ontology Diagrams](https://open-api.thenational.academy/docs/about-oaks-data/ontology-diagrams) - Visual representation of data structure
+- [Data Examples](https://open-api.thenational.academy/docs/about-oaks-data/data-examples) - Practical illustrations of curriculum data
+
+Where terminology or structure differs from official documentation, this document provides additional context for SDK implementation and distinguishes between API internal structure (Sequence) and user-facing navigation (Programme).
+
 ## Schema Index
 
 This section maps ontology nodes and edges to the SDK schema. Each entry is either explicit in the schema or an implied link with a specific schema reference.
@@ -32,10 +42,12 @@ This section maps ontology nodes and edges to the SDK schema. Each entry is eith
 Oak's curriculum is organized along three complementary dimensions:
 
 1. **Programmes**: Teacher-facing navigation (what to teach when, in what context)
-2. **Threads**: Conceptual progression (how ideas build over time)
+2. **Threads**: Conceptual progression (how ideas build over time) - **Critical for vertical connections across year groups**
 3. **Sequences**: API data organisation (efficient storage and retrieval)
 
 **Note**: While sequences exist in the API as an organizational structure, they are not necessarily the canonical internal concept. Programmes and threads are the primary user-facing and pedagogical structures.
+
+**Threads in Practice**: Threads are used as primary navigation tools on the Oak website. For example, the "geometry-and-measure" thread in primary maths groups units across years 1-6, showing clear progression. See: <https://www.thenational.academy/teachers/curriculum/maths-primary/units?threads=geometry-and-measure>
 
 - **Programme**
   - Definition: A contextualized, user-facing curriculum pathway for a subject in a specific teaching context. Programmes are what teachers navigate by on the Oak Web Application. They represent "what to teach when" for a specific year/key stage/tier/exam board combination.
@@ -54,19 +66,22 @@ Oak's curriculum is organized along three complementary dimensions:
   - Relationships: Programme → Units (contains); Programme → KeyStage (belongs_to); Programme → Subject (belongs_to)
 
 - **Thread**
-  - Definition: A cross-unit conceptual strand showing how specific concepts, skills, or themes develop over time—from early years through to GCSE. Threads provide the pedagogical coherence that makes Oak's curriculum progressive rather than just a collection of lessons.
-  - **Critical insight**: Threads are programme-agnostic. A single thread can span multiple programmes, key stages, and years, showing how the same concept deepens across contexts.
+  - Definition: An attribute assigned to units that groups together units across the curriculum building a common body of knowledge. **Threads are important for making vertical connections across year groups in each subject.** (Official Oak API Glossary)
+  - **Critical insight**: Threads are programme-agnostic. A single thread can span multiple programmes, key stages, and years, showing how the same concept deepens across contexts. Threads provide the pedagogical coherence that makes Oak's curriculum progressive rather than just a collection of lessons.
   - Key fields: `threadSlug` (string), `threadTitle` (string)
   - Unit relationship: `unitOrder` (number) - units within a thread are ordered to show progression
   - Examples:
     - `number` (118 units spanning Reception → Year 11, from "Counting 0-10" to "Surds and standard form")
     - `bq01-biology-what-are-living-things-and-what-are-they-made-of` (32 units spanning KS1 → KS4, from "Naming animals" to "Eukaryotic and prokaryotic cells")
     - `developing-reading-preferences` (English progression strand across key stages)
+    - `geometry-and-measure` (Primary maths: groups units across years showing progression in spatial understanding)
   - Pedagogical purpose:
     - Shows **how ideas build** (not just what to teach)
     - Enables prerequisite identification
     - Supports cross-key-stage transitions
     - Makes curriculum progression explicit
+    - Enables filtering and navigation on Oak website
+  - Usage: Primary navigation tool on Oak website for browsing curriculum by conceptual progression
   - Relationships: Thread → Units (spans, ordered); Thread → KeyStages (crosses); Thread → Programmes (independent of); Unit → Thread (belongs_to, with order)
 
 - **Sequence**
@@ -84,23 +99,40 @@ Oak's curriculum is organized along three complementary dimensions:
   - Relationships: Subject → Sequences; Subject → KeyStages (coverage lists); Subject → Years (coverage lists)
 
 - **Unit**
-  - Definition: A themed set of Lessons forming a cohesive teaching block (typically 4-8 lessons). Units are the fundamental building blocks that appear in both programmes (navigation) and threads (progression).
+  - Definition: A topic of study associated with a sequence of lessons, typically taking 1-6 weeks to complete. Units are the fundamental building blocks that appear in both programmes (navigation) and threads (progression).
+  - **Unit Types** (from Official Oak API):
+    1. **Simple units**: Standard units with a fixed sequence of lessons
+    2. **Units with variants**: Units that have different lesson sequences depending on context (e.g., tier-based variants for foundation vs higher)
+    3. **Optionality units**: Units with multiple options allowing teachers to personalize content (e.g., different historical landmarks to study)
   - **Key insight**: A single unit can appear in multiple contexts: multiple programmes (filtered by tier/exam board), multiple threads (showing different conceptual progressions), and may have variants (unitOptions).
-  - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number - position within a thread)
+  - Key fields: `unitSlug` (string), `unitTitle` (string), `unitOrder` (number - position within a thread), `unitType` (inferred from structure)
   - Additional fields (where available): `year` (number|string), `yearSlug` (string), `phaseSlug` (string), `subjectSlug` (string), `keyStageSlug` (string), `notes` (string|nullable)
   - Educational metadata: `priorKnowledgeRequirements` (string[]), `nationalCurriculumContent` (string[]), `whyThisWhyNow` (string)
   - Relationships: Unit → Lessons (contains); Unit → Thread (belongs_to, with order); Unit → Categories (has); Unit → Programme (appears_in); Unit → Unit (alternatives via unitOptions)
 
-- **Category**
-  - Definition: A classification label for Units.
+- **Category** (synonyms: Subject Category)
+  - Definition: A well-established, high-level division within a subject that helps filter and group units based on their content, signpost teachers, and provide a framework for the subject.
+  - **Applicability**: Not all subjects have categories. Currently applies to:
+    - Key stages 1-4 science
+    - Key stages 1, 2, and 4 English
+    - Key stages 1-3 religious education
   - Fields: `categoryTitle` (string), `categorySlug` (string, optional)
   - Relationships: Unit → Category (has)
 
 - **Lesson**
-  - Definition: A single teaching session within a Unit.
+  - Definition: An individual teaching session with specific learning objectives, typically taking one hour to deliver.
+  - **8 Lesson Components** (from Official Oak API):
+    1. Curriculum information (lesson summary with metadata)
+    2. Slide deck
+    3. Video
+    4. Video transcript
+    5. Prior knowledge starter quiz
+    6. Assessment exit quiz
+    7. Worksheet and answers
+    8. Additional materials
   - Key fields: `lessonSlug` (string), `lessonTitle` (string), `subjectSlug` (string), `keyStageSlug` (string), `unitSlug` (string), `downloadsAvailable` (boolean)
   - Summary fields: `lessonKeywords` [{`keyword`, `description`}], `keyLearningPoints` [{`keyLearningPoint`}], `misconceptionsAndCommonMistakes` [{`misconception`, `response`}], `teacherTips` [{`teacherTip`}], `contentGuidance` (array|null), `supervisionLevel` (string|null)
-  - Relationships: Unit → Lesson (has); Lesson → Assets (has); Lesson → Transcript (has)
+  - Relationships: Unit → Lesson (has); Lesson → Assets (has); Lesson → Transcript (has); Lesson → Quiz (has)
 
 ### Content and Media Entities
 
@@ -129,6 +161,7 @@ Oak's curriculum is organized along three complementary dimensions:
 
 - **Answer**
   - Definition: A response option for a Question, supporting distractor logic and rich media.
+  - **Distractor Logic** (from Official Oak API): Distractors are incorrect answers designed to be conceptually similar to the correct answer to challenge pupils' understanding. The `distractor` field is marked `true` if the answer is incorrect (a distractor), and `false` if the answer is correct.
   - Types: `text` (content string), `image` (url, width, height, alt, attribution)
   - Fields: `distractor` (boolean: true=incorrect, false=correct), `content` (string or image object)
   - Relationships: Question → Answer (has)
@@ -144,9 +177,20 @@ Oak's curriculum is organized along three complementary dimensions:
 ### Content Guidance Entities
 
 - **ContentGuidance**
-  - Definition: Content sensitivity classification system for lessons.
+  - Definition: Warnings to teachers about lesson content requiring awareness or supervision.
+  - **Four Content Guidance Categories** (from Official Oak API):
+    1. Language and discrimination
+    2. Upsetting, disturbing and sensitive content
+    3. Nudity and sex
+    4. Physical activity and equipment requiring safe use
   - Types: `ContentGuidanceArea`, `SupervisionLevel`, `ContentGuidanceLabel`
   - Fields: `contentGuidanceArea` (string), `supervisionlevel_id` (number), `contentGuidanceLabel` (string), `contentGuidanceDescription` (string)
+  - **Supervision Levels** (from Official Oak API):
+    - Level 1: Adult supervision suggested
+    - Level 2: Adult supervision recommended
+    - Level 3: Adult supervision required
+    - Level 4: Adult support required
+  - Note: Use `supervisionLevel` field rather than relying on sub-guidance levels
   - Relationships: Lesson → ContentGuidance (requires); ContentGuidance → SupervisionLevel (has)
 
 - **EducationalMetadata**

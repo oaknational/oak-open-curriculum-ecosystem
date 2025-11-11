@@ -76,7 +76,7 @@ function dispatcherSection(): string {
   if (type === 'sequence') return urlForSequence(slug);
   if (type === 'unit') return urlForUnit(slug, context?.unit);
   if (type === 'subject') return urlForSubject(slug, context?.subject?.keyStageSlugs);
-  return undefined;
+  throw new TypeError('Unsupported content type: ' + String(type));
 }
 `;
 }
