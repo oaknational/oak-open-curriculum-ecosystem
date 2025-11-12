@@ -67,14 +67,31 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   mountStaticAssets(app);
   addRootLandingPage(app, runtimeConfig.vercelHostname);
 
-  app.use('/mcp', createEnsureMcpAcceptHeader(log));
+  // Ensure MCP connection is ready before processing MCP routes
+  // Note: Health checks and landing page are NOT blocked by this
+  const ensureMcpReady: RequestHandler = async (_req, _res, next) => {
+    try {
+      await Promise.race([
+        ready,
+        new Promise((_, reject) => {
+          setTimeout(() => {
+            reject(new Error('MCP connection timeout'));
+          }, 5000);
+        }),
+      ]);
+      next();
+    } catch (error) {
+      log.error('MCP connection failed', { error });
+      _res.status(503).json({
+        error: 'MCP server not ready',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+  };
+
+  app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
 
   setupAuthRoutes(app, coreTransport, runtimeConfig, log);
-
-  app.use(async (_req, _res, next) => {
-    await ready;
-    next();
-  });
 
   return app;
 }
