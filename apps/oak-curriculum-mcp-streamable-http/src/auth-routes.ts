@@ -231,7 +231,11 @@ export function setupAuthRoutes(
   );
   const clerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
-    app.use(clerkMw);
+    // FIX: Scope Clerk middleware to /mcp routes only
+    // Health checks and landing page should remain publicly accessible
+    // OAuth metadata endpoints (/.well-known/*) don't require Clerk middleware
+    authLog.info('Installing Clerk middleware scoped to /mcp routes only');
+    app.use('/mcp', clerkMw);
   });
   authLog.debug('Registering OAuth routes (auth ENABLED)');
   measureAuthSetupStep(authLog, 'oauth.metadata.register', () => {

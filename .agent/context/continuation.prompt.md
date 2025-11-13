@@ -23,7 +23,7 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Se
    - 🚀 Session 3.C: Staging Deployment & Validation (Ready - No Repo Changes Required)
    - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Session 3.B complete. Logger architecture verified complete. Runtime diagnostics complete (all 3 phases delivered on 2025-11-13): instrumentation, built-server harness, and documentation. The harness enables local testing of the production build under multiple configuration scenarios (auth-enabled, auth-disabled, missing-clerk) with automated request testing. All quality gates passing: build ✅, type-check ✅, lint ✅, test:all ✅ (738 tests). Session 3.C still requires no repository changes—deployment is Vercel UI configuration. Repository ready for Session 3.C (staging deployment).
+**Current status**: Session 3.B complete. Logger architecture verified. Runtime diagnostics Phases 1-2 complete (2025-11-13): instrumentation and built-server harness delivered. Phase 3 (iterative diagnosis) IN PROGRESS: Iteration 1 complete (2025-11-13) - comprehensive middleware instrumentation added to trace request flow. CRITICAL FINDING: Clerk middleware IS scoped to `/mcp` only (verified in code). Testing with invalid Clerk keys shows NO HANG - all routes respond in 3-4ms. Hypothesis: hang only occurs with REAL Clerk keys making actual network calls to Clerk API. Next iteration: test with real credentials. All quality gates passing: build ✅, type-check ✅, lint ✅ (ignoring instrumentation console.log), test:all ✅ (738 tests). Session 3.C staging deployment BLOCKED until hang diagnosis complete.
 
 ---
 

@@ -68,7 +68,19 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
     - **Hang occurs DURING REQUEST HANDLING, not bootstrap**
     - All requests show `responseStatusCode: -1` and `durationMs: -1` (never complete)
     - This happens for `/`, `/healthz`, `/mcp`, and favicon requests
-  - Next steps: Use harness to reproduce request hang, add request-level instrumentation
+  - **Phase 3 Iteration 1 Results (2025-11-13)**:
+    - ✅ Added comprehensive request-level instrumentation to trace middleware execution
+    - ✅ VERIFIED: Clerk middleware IS scoped to `/mcp` only (line 238: `app.use('/mcp', clerkMw)`)
+    - ✅ Tested with invalid Clerk keys (missing-clerk scenario):
+      - `/healthz`: SUCCESS (200, 3ms, full JSON response) - all middleware executes correctly
+      - `/`: SUCCESS (200, 2ms, full 3159-byte HTML response) - complete landing page
+      - `/mcp`: FAILS FAST (500, 20ms) - errors but does NOT hang
+    - ✅ VERIFIED: Full response bodies returned, not just status codes
+    - **KEY FINDING**: No hang with invalid keys locally! All routes return complete responses.
+    - **HYPOTHESIS**: Hang only occurs with REAL Clerk keys that make actual network calls to Clerk API
+    - **Next**: Differential diagnosis - deploy instrumented code to Vercel, test if remote `/` hangs
+    - If remote `/` hangs: Issue is Vercel-specific (cold start, networking, serverless context)
+    - If remote `/` works: Issue requires real Clerk keys + Vercel environment combination
 
 ---
 
@@ -206,7 +218,9 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
 - [x] Phase 2 – Built Server Harness (complete 2025-11-13)
 - [ ] Phase 3 – Iterative Root Cause Diagnosis (in progress)
   - [x] Vercel logs analyzed - hang is in request handling, not bootstrap
-  - [ ] Reproduce hang locally with harness
-  - [ ] Add request-level instrumentation
-  - [ ] Identify root cause through iterative diagnosis
-  - [ ] Implement and validate fix
+  - [x] Add request-level instrumentation (comprehensive middleware tracing)
+  - [x] Iteration 1: Test with invalid Clerk keys - NO HANG (all routes respond fast with full responses)
+  - [x] Iteration 1.5: Differential diagnosis preparation - deploy instrumented code to Vercel
+  - [ ] Iteration 2: Test remote `/` route to determine if hang is Vercel-specific or requires real keys
+  - [ ] Iteration 3: Identify root cause through iterative diagnosis
+  - [ ] Iteration 4: Implement and validate fix

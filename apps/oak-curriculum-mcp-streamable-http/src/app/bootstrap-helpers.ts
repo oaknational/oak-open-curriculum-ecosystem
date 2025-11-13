@@ -67,9 +67,22 @@ export function runBootstrapPhase<T>(
 }
 
 /**
+ * Adds diagnostic instrumentation checkpoints to base middleware.
+ * TEMPORARY: For debugging Vercel hang issue.
+ */
+function addBaseMiddlewareInstrumentation(app: Express, log: Logger): void {
+  app.use((req, res, next) => {
+    void res;
+    log.info('→→→ REQUEST ENTRY', { method: req.method, path: req.path, url: req.url });
+    next();
+  });
+}
+
+/**
  * Sets up base Express middleware (JSON parsing, correlation, logging, error handling).
  */
 export function setupBaseMiddleware(app: Express, log: Logger): void {
+  addBaseMiddlewareInstrumentation(app, log);
   app.use(expressJson({ limit: '1mb' }));
   app.use(createCorrelationMiddleware(log));
 
@@ -78,6 +91,16 @@ export function setupBaseMiddleware(app: Express, log: Logger): void {
     app.use(createRequestLogger(log, { level: 'debug' }));
   }
   app.use(createEnrichedErrorLogger(log));
+
+  // INSTRUMENTATION: Final checkpoint
+  app.use((req, res, next) => {
+    log.info('✓✓✓ BASE MIDDLEWARE COMPLETE', {
+      correlationId: res.locals.correlationId,
+      method: req.method,
+      path: req.path,
+    });
+    next();
+  });
 }
 
 /**

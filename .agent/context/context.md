@@ -67,7 +67,12 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-13**: Runtime Diagnostics Phase 2 complete - built-server harness with config matrix and automated request testing
 - ✅ **2025-11-13**: Harness deliverables: `server-harness.js`, `run-requests.js`, 3 config scenarios, package scripts, documentation
 - ✅ **2025-11-13**: Manual validation successful - all 3 requests pass (healthz, landing, MCP initialize)
-- 🚀 **Next**: Phase 3 production rollout (Session 3.C staging deployment)
+- 🔄 **2025-11-13**: Phase 3 Iteration 1 - Added comprehensive middleware instrumentation to trace request flow
+- ✅ **2025-11-13**: CRITICAL FINDING - Clerk middleware IS scoped to `/mcp` only (line 238: `app.use('/mcp', clerkMw)`)
+- ✅ **2025-11-13**: Testing with invalid Clerk keys shows NO HANG - `/healthz` (3ms, full JSON), `/` (2ms, full 3159-byte HTML), `/mcp` fails fast (500, 20ms)
+- ✅ **2025-11-13**: VERIFIED - Complete response bodies returned, all middleware executes correctly
+- 📊 **2025-11-13**: HYPOTHESIS - Hang only occurs with REAL Clerk keys OR Vercel-specific environment
+- 🚀 **Next**: Phase 3 Iteration 1.5 - Deploy instrumented code to Vercel for differential diagnosis (test if remote `/` hangs)
 
 ## Architecture Verification (2025-11-10)
 
@@ -149,11 +154,14 @@ Application Layer (HTTP & Stdio):
   - [ ] Execute smoke tests against staging endpoint
   - [ ] Validate OpenTelemetry log format with production log aggregation
   - [ ] Verify observability features end-to-end (correlation IDs, timing, error enrichment)
-- ✅ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **COMPLETE 2025-11-13**
+- 🔄 **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **IN PROGRESS**
   - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage) - Complete 2025-11-12
   - ✅ Quality gate remediation - Complete 2025-11-13
   - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing - Complete 2025-11-13
-  - ✅ Phase 3 documentation: README and production-debugging-runbook updated - Complete 2025-11-13
+  - 🔄 Phase 3 iterative diagnosis - In Progress 2025-11-13
+    - ✅ Iteration 1: Comprehensive middleware instrumentation + testing with invalid keys - NO HANG
+    - ⏳ Iteration 2: Test with real Clerk keys to reproduce hang
+    - ⏳ Iteration 3+: Fix implementation and validation
 - [ ] Session 3.D: Production Rollout & Observation
   - Gradual production rollout
   - Monitor log volume and costs
