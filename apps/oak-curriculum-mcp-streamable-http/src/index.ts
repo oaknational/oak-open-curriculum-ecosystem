@@ -164,28 +164,8 @@ function applySecurity(
   allowedOrigins: readonly string[] | undefined,
 ): RequestHandler {
   app.use(dnsRebindingProtection(allowedHosts));
-
-  // INSTRUMENTATION: Checkpoint after DNS rebinding protection
-  app.use((req, res, next) => {
-    void res;
-    console.log(
-      `[${new Date().toISOString()}] ✓ DNS protection complete: ${req.method} ${req.path}`,
-    );
-    next();
-  });
-
   const corsMw = createCorsMiddleware(mode, allowedOrigins);
   app.use(corsMw);
-
-  // INSTRUMENTATION: Checkpoint after CORS
-  app.use((req, res, next) => {
-    void res;
-    console.log(
-      `[${new Date().toISOString()}] ✓✓✓ SECURITY MIDDLEWARE COMPLETE: ${req.method} ${req.path}`,
-    );
-    next();
-  });
-
   return corsMw;
 }
 
