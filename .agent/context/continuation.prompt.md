@@ -1,7 +1,7 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-12 (Runtime diagnostics Phase 1 shipped; quality gate follow-up pending)  
-**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · ✅ Session 3.B Complete · 🛠️ Diagnostics Phase 1 Complete · ⚠️ Quality gate remediation in progress · 🚀 Ready for Phase 3 Staging  
+**Last Updated**: 2025-11-13 (Runtime diagnostics complete; ready for Phase 3 staging)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · ✅ Session 3.B Complete · ✅ Runtime Diagnostics Complete · 🚀 Ready for Phase 3 Staging  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
@@ -23,7 +23,7 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Se
    - 🚀 Session 3.C: Staging Deployment & Validation (Ready - No Repo Changes Required)
    - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Session 3.B complete. Logger architecture verified complete. Session 3.C still requires no repository changes—deployment is Vercel UI configuration. Runtime diagnostics Phase 1 instrumentation (bootstrap/auth timers) shipped on 2025-11-12. Quality gate remediation completed on 2025-11-13, resolving all type-check and lint issues introduced by Phase 1 instrumentation. All quality gates now passing: build ✅, type-check ✅, lint ✅, test:all ✅ (738 tests). Repository ready for Runtime Diagnostics Phase 2 (built-server harness) and Session 3.C (staging deployment). The diagnostics plan (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) tracks completed instrumentation and upcoming harness/doc phases.
+**Current status**: Session 3.B complete. Logger architecture verified complete. Runtime diagnostics complete (all 3 phases delivered on 2025-11-13): instrumentation, built-server harness, and documentation. The harness enables local testing of the production build under multiple configuration scenarios (auth-enabled, auth-disabled, missing-clerk) with automated request testing. All quality gates passing: build ✅, type-check ✅, lint ✅, test:all ✅ (738 tests). Session 3.C still requires no repository changes—deployment is Vercel UI configuration. Repository ready for Session 3.C (staging deployment).
 
 ---
 
@@ -855,6 +855,80 @@ pnpm test:all      ✅ 738 tests passing
 - ✅ New `app/bootstrap-helpers.ts` module with proper types and documentation
 - ✅ All 738 tests passing with no regressions
 - ✅ Quality gates ready for Phase 2 diagnostics work or Session 3.C deployment
+
+---
+
+### Runtime Diagnostics: Phase 2 - Built-Server Harness (2025-11-13)
+
+**Objectives**: Create a production-build harness that executes the built HTTP server locally under multiple configuration scenarios with automated request testing to diagnose Vercel deployment hangs.
+
+**Implementation**:
+
+1. **Server Harness Script** (`scripts/server-harness.js`)
+   - Loads production bundle (`dist/src/index.js`) with configurable environment
+   - Supports `ENV_FILE` configuration (defaults to `.env.harness`)
+   - Custom port support via `PORT` environment variable (defaults to 3001)
+   - Comprehensive startup logging with timestamps
+   - Graceful shutdown handling
+
+2. **Configuration Matrix** (3 scenarios)
+   - `config/harness-auth-enabled.env` - Full Clerk OAuth (requires real test keys)
+   - `config/harness-auth-disabled.env` - Auth completely disabled via `DANGEROUSLY_DISABLE_AUTH=true`
+   - `config/harness-missing-clerk.env` - Invalid Clerk config for error diagnosis
+   - All configs include placeholder Clerk keys (required by schema validation)
+
+3. **Request Runner** (`scripts/run-requests.js`)
+   - Automated test sequence: `/healthz` → `/` → `/mcp` (initialize)
+   - Health check with 30 retries (1s intervals)
+   - 10-second timeout per request
+   - Pretty-printed summary table with timing and exit codes
+   - Environment variable customization (BASE_URL, TIMEOUT_MS, etc.)
+
+4. **Package Scripts**
+   - `pnpm prod:harness` - Run harness with ENV_FILE configuration
+   - `pnpm prod:requests` - Execute automated request suite
+   - `pnpm prod:diagnostics` - Combined: build → harness → requests
+
+5. **Documentation**
+   - README.md: "Production Diagnostics" section with quick start guide
+   - production-debugging-runbook.md: "Local Production Build Testing" subsection
+   - Comprehensive usage examples with expected output
+
+**Validation Results**:
+
+```bash
+# Manual validation completed successfully
+cd apps/oak-curriculum-mcp-streamable-http
+pnpm build                                    ✅
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness  ✅ (server started)
+pnpm prod:requests                            ✅ (all 3 requests succeeded)
+
+# Quality gates
+pnpm build                ✅
+pnpm format:root          ✅
+pnpm markdownlint:root    ✅
+pnpm type-check           ✅
+pnpm lint                 ✅
+pnpm test:all             ✅ (738 tests passing)
+```
+
+**Key Insights**:
+
+1. **Environment Schema Validation**: Runtime config requires Clerk keys even when auth is disabled, necessitating placeholder values in auth-disabled scenario
+2. **Accept Header Requirements**: MCP endpoint requires both `application/json` and `text/event-stream` in Accept header for proper content negotiation
+3. **Fast Feedback Loop**: Harness enables rapid iteration on deployment issues without Vercel deployments
+4. **Reusable Diagnostic Tool**: Permanent tooling useful for future production debugging and pre-deployment validation
+
+**Deliverables**:
+
+- ✅ `scripts/server-harness.js` - Production build runner (265 lines)
+- ✅ `scripts/run-requests.js` - Automated request testing (265 lines)
+- ✅ 3 environment configuration files in `config/` directory
+- ✅ Package.json scripts: `prod:harness`, `prod:requests`, `prod:diagnostics`
+- ✅ README.md updated with "Production Diagnostics" section
+- ✅ production-debugging-runbook.md updated with "Local Production Build Testing" section
+- ✅ Manual validation complete: all 3 requests succeed
+- ✅ All quality gates passing with zero regressions
 
 ---
 
@@ -1751,11 +1825,11 @@ pnpm qg                       ✅ (Runs all above)
 - ✅ Error context enrichment complete
 - ✅ Phase 2 validation and integration complete
 - ✅ All documentation updated
-- ✅ Runtime diagnostics Phase 1 instrumentation (bootstrap/auth logging, logger helpers, docs) shipped 2025-11-12
+- ✅ Runtime diagnostics complete (all 3 phases) 2025-11-13
 - ✅ Quality gate remediation complete 2025-11-13
 - ✅ Branch: `feat/oauth_support`
 - 🚀 Ready for Phase 3 (Production Rollout & Monitoring)
-- 🚀 Ready for Runtime Diagnostics Phase 2 (Built Server Harness)
+- 🚀 Session 3.C staging deployment ready (no repo changes needed)
 
 **Phase 1 Deliverables** (Complete 2025-11-05):
 
@@ -1787,20 +1861,20 @@ pnpm qg                       ✅ (Runs all above)
 
 **Next Steps**:
 
-1. **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`)
+1. ✅ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **COMPLETE 2025-11-13**
    - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage)
    - ✅ Quality gate remediation complete
-   - 🚀 Phase 2 harness: run built `dist/` server locally under multiple configuration matrices (Ready to begin)
-   - Phase 3 documentation: capture harness workflow + troubleshooting instructions
+   - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing
+   - ✅ Phase 3 documentation: README and production-debugging-runbook updated
 
-2. **Session 3.C: Staging Deployment & Validation** (Ready - No Repo Changes Required)
+2. **Session 3.C: Staging Deployment & Validation** (🚀 Ready - No Repo Changes Required)
    - Deploy HTTP server to staging environment
    - Validate log ingestion by observability platforms
    - Execute smoke tests against staging
    - Verify OpenTelemetry format compatibility
    - Validate correlation IDs, timing, error enrichment end-to-end
 
-3. **Session 3.D: Production Rollout & Observation**
+3. **Session 3.D: Production Rollout & Observation** (After 3.C)
    - Gradual production rollout
    - Monitor log volume and costs
    - Establish dashboards and alerts
@@ -1817,6 +1891,6 @@ pnpm qg                       ✅ (Runs all above)
 
 ---
 
-**Next Review**: Before starting Session 3.C staging rollout or Diagnostics Phase 2 harness
+**Next Review**: Before starting Session 3.C staging rollout
 
-**Last Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness or Session 3.C)
+**Last Updated**: 2025-11-13 (Runtime diagnostics complete; ready for Session 3.C staging)

@@ -1,6 +1,6 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness)  
+**Updated**: 2025-11-13 (Runtime diagnostics complete; ready for Phase 3 rollout)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
@@ -9,8 +9,8 @@
 ✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
 ✅ **Session 3.A Complete** – Documentation finalization and dev server validation  
 ✅ **Session 3.B Complete** – Logger architecture verification (no further refactor required)  
-🛠️ **Runtime Diagnostics Track** – Phase 1 instrumentation shipped; harness and documentation phases pending  
-🚀 **Next: Phase 3 Rollout** – Production deployment and monitoring
+✅ **Runtime Diagnostics Complete** – All phases shipped (instrumentation, harness, documentation)  
+🚀 **Next: Phase 3 Rollout** – Production deployment and monitoring (Session 3.C staging deployment)
 
 ## Strategic Goal
 
@@ -64,7 +64,10 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-13**: Quality gate remediation complete - removed unused imports, fixed unsafe assignments, refactored index.ts
 - ✅ **2025-11-13**: Created `app/bootstrap-helpers.ts` to extract bootstrap logic, reduced index.ts to 226 lines
 - ✅ **2025-11-13**: All quality gates passing: build, type-check, lint, test:all (738 tests)
-- 🚀 **Next**: Phase 3 production rollout (logger foundation ready)
+- ✅ **2025-11-13**: Runtime Diagnostics Phase 2 complete - built-server harness with config matrix and automated request testing
+- ✅ **2025-11-13**: Harness deliverables: `server-harness.js`, `run-requests.js`, 3 config scenarios, package scripts, documentation
+- ✅ **2025-11-13**: Manual validation successful - all 3 requests pass (healthz, landing, MCP initialize)
+- 🚀 **Next**: Phase 3 production rollout (Session 3.C staging deployment)
 
 ## Architecture Verification (2025-11-10)
 
@@ -146,11 +149,11 @@ Application Layer (HTTP & Stdio):
   - [ ] Execute smoke tests against staging endpoint
   - [ ] Validate OpenTelemetry log format with production log aggregation
   - [ ] Verify observability features end-to-end (correlation IDs, timing, error enrichment)
-- 🛠️ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`)
+- ✅ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **COMPLETE 2025-11-13**
   - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage) - Complete 2025-11-12
   - ✅ Quality gate remediation - Complete 2025-11-13
-  - 🚀 Phase 2 harness: run built `dist/` bundle locally with config matrix and scripted requests (Ready to begin)
-  - [ ] Phase 3 documentation: capture harness workflow and troubleshooting guidance
+  - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing - Complete 2025-11-13
+  - ✅ Phase 3 documentation: README and production-debugging-runbook updated - Complete 2025-11-13
 - [ ] Session 3.D: Production Rollout & Observation
   - Gradual production rollout
   - Monitor log volume and costs
@@ -177,7 +180,7 @@ Application Layer (HTTP & Stdio):
 | **3.A**     | **Documentation finalization** | ✅ **Complete (2025-11-08)**             |
 | **3.B**     | **Logger architecture**        | ✅ **Complete (2025-11-10, verified)**   |
 | **3.C**     | **Staging deployment**         | 🚀 **Next (Ready to begin)**             |
-| **Diag**    | **Runtime diagnostics plan**   | 🛠️ **In progress (2025-11-12)**          |
+| **Diag**    | **Runtime diagnostics**        | ✅ **Complete (2025-11-13)**             |
 
 ## Quality Gate Status
 

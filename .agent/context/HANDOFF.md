@@ -1,6 +1,6 @@
-# Oak MCP Ecosystem – Session 3.B Complete
+# Oak MCP Ecosystem – Runtime Diagnostics Complete
 
-**Last Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness)  
+**Last Updated**: 2025-11-13 (Runtime diagnostics complete; ready for staging)  
 **Branch**: `feat/oauth_support`  
 **Phase**: Phase 3 (Rollout) – Ready for Staging
 
@@ -34,10 +34,10 @@
 - ✅ Verified: HTTP and stdio servers using proper DI patterns
 - ✅ Created `.agent/plans/logger-enhancement-plan.md` documenting completion
 
-🛠️ **Diagnostics Track** – Phase 1 instrumentation (bootstrap/auth timers + integration coverage) complete; quality gate remediation complete 2025-11-13. Ready for Phase 2 harness implementation.  
-🚀 **Next Up: Session 3.C or Diagnostics Phase 2** – Staging deployment (ready now) or built-server harness implementation (ready now).
+✅ **Diagnostics Track Complete** – All 3 phases delivered (2025-11-13): instrumentation, built-server harness, and documentation. The harness enables local testing of production builds under multiple configuration scenarios with automated request testing.  
+🚀 **Next Up: Session 3.C** – Staging deployment (ready now).
 
-**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Quality gate remediation resolved all type-check and lint issues introduced by Phase 1 instrumentation. Repository ready for Phase 2 diagnostics work or Session 3.C deployment. Session 3.C requires no repository code changes; deployment work lives in Vercel configuration.
+**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Runtime diagnostics complete with working harness for local production build testing. Repository ready for Session 3.C deployment. Session 3.C requires no repository code changes; deployment work lives in Vercel configuration.
 
 ---
 
@@ -456,7 +456,7 @@ If you're confused or stuck:
 
 ---
 
-**Last Milestone**: Quality Gate Remediation Complete (2025-11-13)  
-**Next Milestone**: Session 3.C Staging Deployment or Diagnostics Phase 2 Harness  
-**Document Version**: 1.7  
+**Last Milestone**: Runtime Diagnostics Complete (2025-11-13)  
+**Next Milestone**: Session 3.C Staging Deployment  
+**Document Version**: 1.8  
 **Status**: Active

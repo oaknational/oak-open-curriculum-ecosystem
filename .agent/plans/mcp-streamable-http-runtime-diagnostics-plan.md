@@ -53,8 +53,22 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
   - Refactored `src/index.ts`: extracted bootstrap helpers to `app/bootstrap-helpers.ts`, reducing file to 226 lines (under 250 limit)
   - Fixed max-statements violation in bootstrap test by extracting helper functions
   - All quality gates now passing: build ✅, type-check ✅, lint ✅, test:all ✅
-- ⏳ Phase 2 (built-server harness) not yet started.
-- ⏳ Phase 3 (documentation & validation) pending harness delivery.
+- ✅ Phase 2 (built-server harness) complete (2025-11-13):
+  - Server harness script (`scripts/server-harness.js`) loads built dist/ with configurable env
+  - Request runner script (`scripts/run-requests.js`) automates test sequence with timing/exit codes
+  - Config matrix (3 scenarios: auth-enabled, auth-disabled, missing-clerk) with sample .env files
+  - Package scripts added: `prod:harness`, `prod:requests`, `prod:diagnostics`
+  - README and production-debugging-runbook documentation updated
+  - Manual validation complete: all 3 requests succeed (healthz, landing, MCP initialize)
+  - All quality gates passing after implementation
+- 🔄 Phase 3 (iterative diagnosis) in progress:
+  - **Critical finding from Vercel logs analysis**:
+    - Bootstrap completes successfully in all cases ("Creating app #1/2/3" logs present)
+    - All auth setup completes (Clerk middleware, OAuth routes registered)
+    - **Hang occurs DURING REQUEST HANDLING, not bootstrap**
+    - All requests show `responseStatusCode: -1` and `durationMs: -1` (never complete)
+    - This happens for `/`, `/healthz`, `/mcp`, and favicon requests
+  - Next steps: Use harness to reproduce request hang, add request-level instrumentation
 
 ---
 
@@ -97,19 +111,57 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
    - Add script to send sequence: `/healthz`, `/`, `/mcp` (initialize payload) using `node` + `undici` or `supertest` against started harness server.
    - Record durations and exit codes.
 
-### Phase 3 – Validation & Documentation
+### Phase 3 – Iterative Root Cause Diagnosis
 
-1. **Diagnostics README Updates**
-   - Update `apps/oak-curriculum-mcp-streamable-http/README.md` with new diagnostics section.
-   - Add quickstart snippet to `docs/development/production-debugging-runbook.md`.
+**Objective**: Use the built-server harness with enhanced instrumentation to identify and fix the request hang through iterative measurement-analysis cycles.
 
-2. **Testing & Quality Gates**
-   - Extend e2e test suite if practical to cover new instrumentation (assert log emission through sink mocks).
-   - Run full quality gates, capture results.
+**Vercel Log Analysis (Starting Point)**:
 
-3. **Lessons Learned & Next Steps**
-   - Summarise findings in `context.md`.
-   - Propose follow-up tasks (e.g., targeted retries, Clerk stubs) if needed.
+- ✅ Bootstrap succeeds (all "Creating app #X" logs present)
+- ✅ Auth setup completes (Clerk middleware registered)
+- ❌ **All requests hang** - never return a response (`responseStatusCode: -1`, `durationMs: -1`)
+- ❌ Affects ALL routes: `/`, `/healthz`, `/mcp`, favicons
+- **Hypothesis**: Hang is in Express middleware chain or route handler, NOT in bootstrap
+
+**Iteration Cycle** (repeat until root cause found):
+
+1. **Measure**: Run harness with current instrumentation
+
+   ```bash
+   ENV_FILE=.env.harness.auth-enabled pnpm prod:harness
+   # In another terminal:
+   pnpm prod:requests
+   ```
+
+2. **Analyze**: Examine logs for:
+   - Last log entry before hang
+   - Missing "request finished" logs
+   - Middleware execution order
+   - Async operations that never complete
+
+3. **Theorize**: Form hypothesis about hang location:
+   - Clerk middleware blocking?
+   - Express middleware not calling `next()`?
+   - Route handler async operation deadlock?
+   - Event loop blocked by synchronous operation?
+
+4. **Instrument**: Add targeted logging to test theory:
+   - Add `req.start` / `req.finish` logs in suspected middleware
+   - Log before/after each `await` in route handlers
+   - Add timeout detection for slow operations
+
+5. **Test**: Re-run harness with new instrumentation
+   - Validate theory: did logs confirm/refute hypothesis?
+   - If confirmed: implement fix
+   - If refuted: form new theory and iterate
+
+**Exit Criteria**:
+
+- Request hang reproduced locally with harness
+- Root cause identified through logs
+- Fix implemented and validated
+- All harness scenarios pass (auth-enabled, auth-disabled, missing-clerk)
+- Quality gates remain green
 
 ---
 
@@ -150,6 +202,11 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
 
 ## Tracking
 
-- [x] Phase 1 – Instrumentation Foundations
-- [ ] Phase 2 – Built Server Harness
-- [ ] Phase 3 – Validation & Documentation
+- [x] Phase 1 – Instrumentation Foundations (complete 2025-11-13)
+- [x] Phase 2 – Built Server Harness (complete 2025-11-13)
+- [ ] Phase 3 – Iterative Root Cause Diagnosis (in progress)
+  - [x] Vercel logs analyzed - hang is in request handling, not bootstrap
+  - [ ] Reproduce hang locally with harness
+  - [ ] Add request-level instrumentation
+  - [ ] Identify root cause through iterative diagnosis
+  - [ ] Implement and validate fix
