@@ -1,7 +1,8 @@
 /**
  * Production server entry point
  *
- * Starts the MCP server on the configured port.
+ * Exports the Express app for Vercel serverless deployment.
+ * When run locally (not on Vercel), starts the server on the configured port.
  * Configure via environment variables.
  */
 
@@ -14,14 +15,23 @@ if (!process.env.OAK_API_KEY) {
 }
 
 const app = createApp();
-const port = Number(process.env.PORT ?? 3333);
 
-app.listen(port, () => {
-  console.log(`🚀 Oak Curriculum MCP Server listening on port ${String(port)}`);
-  console.log(`   MCP endpoint: http://localhost:${String(port)}/mcp`);
-  if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
-    console.log(`   ⚠️  AUTH DISABLED (DANGEROUSLY_DISABLE_AUTH=true)`);
-  } else {
-    console.log(`   🔒 OAuth enforced via Clerk`);
-  }
-});
+// For local development with 'node server.js' or 'pnpm start'
+// On Vercel, skip app.listen() - Vercel wraps the exported app
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT ?? 3333);
+
+  app.listen(port, () => {
+    console.log(`🚀 Oak Curriculum MCP Server listening on port ${String(port)}`);
+    console.log(`   MCP endpoint: http://localhost:${String(port)}/mcp`);
+    if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
+      console.log(`   ⚠️  AUTH DISABLED (DANGEROUSLY_DISABLE_AUTH=true)`);
+    } else {
+      console.log(`   🔒 OAuth enforced via Clerk`);
+    }
+  });
+}
+
+// Export for Vercel serverless deployment
+// See: https://vercel.com/docs/frameworks/backend/express
+export default app;
