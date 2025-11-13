@@ -62,12 +62,6 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
   - Manual validation complete: all 3 requests succeed (healthz, landing, MCP initialize)
   - All quality gates passing after implementation
 - 🔄 Phase 3 (iterative diagnosis) in progress:
-  - **Critical finding from Vercel logs analysis**:
-    - Bootstrap completes successfully in all cases ("Creating app #1/2/3" logs present)
-    - All auth setup completes (Clerk middleware, OAuth routes registered)
-    - **Hang occurs DURING REQUEST HANDLING, not bootstrap**
-    - All requests show `responseStatusCode: -1` and `durationMs: -1` (never complete)
-    - This happens for `/`, `/healthz`, `/mcp`, and favicon requests
   - **Phase 3 Iteration 1 Results (2025-11-13)**:
     - ✅ Added comprehensive request-level instrumentation to trace middleware execution
     - ✅ VERIFIED: Clerk middleware IS scoped to `/mcp` only (line 238: `app.use('/mcp', clerkMw)`)
@@ -77,10 +71,15 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
       - `/mcp`: FAILS FAST (500, 20ms) - errors but does NOT hang
     - ✅ VERIFIED: Full response bodies returned, not just status codes
     - **KEY FINDING**: No hang with invalid keys locally! All routes return complete responses.
-    - **HYPOTHESIS**: Hang only occurs with REAL Clerk keys that make actual network calls to Clerk API
-    - **Next**: Differential diagnosis - deploy instrumented code to Vercel, test if remote `/` hangs
-    - If remote `/` hangs: Issue is Vercel-specific (cold start, networking, serverless context)
-    - If remote `/` works: Issue requires real Clerk keys + Vercel environment combination
+  - **Phase 3 Iteration 2 Results (2025-11-13)**:
+    - ❌ HYPOTHESIS TESTED: Modified `server.ts` to export Express app as default (per Vercel docs)
+    - ❌ FIX FAILED: Vercel logs show bootstrap still completes but requests still hang
+    - ⚠️ CRITICAL FINDING: Bootstrap logs appear ("Creating app", auth setup complete), but **ZERO request-level logs**
+    - 🔍 NEW INSIGHT: No "→→→ REQUEST ENTRY" or "✓✓✓ BASE MIDDLEWARE COMPLETE" logs in Vercel
+    - **ROOT CAUSE NARROWED**: Vercel IS creating the Express app (bootstrap succeeds), but somehow requests never reach the middleware chain
+    - **HYPOTHESIS DISPROVEN**: Issue is NOT about Express app export format
+    - **NEW THEORY**: There may be a mismatch between how Vercel invokes the exported function and what we're exporting
+    - **Next**: Investigate Vercel's serverless function invocation model more deeply
 
 ---
 
@@ -220,7 +219,10 @@ Add deeper runtime instrumentation to the Vercel-hosted MCP HTTP server and esta
   - [x] Vercel logs analyzed - hang is in request handling, not bootstrap
   - [x] Add request-level instrumentation (comprehensive middleware tracing)
   - [x] Iteration 1: Test with invalid Clerk keys - NO HANG (all routes respond fast with full responses)
-  - [x] Iteration 1.5: Differential diagnosis preparation - deploy instrumented code to Vercel
-  - [ ] Iteration 2: Test remote `/` route to determine if hang is Vercel-specific or requires real keys
-  - [ ] Iteration 3: Identify root cause through iterative diagnosis
-  - [ ] Iteration 4: Implement and validate fix
+  - [x] Iteration 2: Attempted Vercel export fix - FIX FAILED (bootstrap works but requests still don't reach middleware)
+  - [ ] Iteration 3: Investigate Vercel serverless function invocation model
+    - Bootstrap succeeds (app is created)
+    - Request instrumentation never fires (requests don't reach middleware)
+    - Need to understand how Vercel wraps/invokes Express apps
+  - [ ] Iteration 4: Implement and validate correct fix
+  - [ ] Iteration 5: Final validation on Vercel

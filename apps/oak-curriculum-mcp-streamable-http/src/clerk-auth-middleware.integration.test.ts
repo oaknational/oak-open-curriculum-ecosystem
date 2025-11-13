@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 
-import { createApp } from './index.js';
+import { createApp } from './application.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 
 function createRuntimeConfig(overrides: Record<string, string> = {}): RuntimeConfig {

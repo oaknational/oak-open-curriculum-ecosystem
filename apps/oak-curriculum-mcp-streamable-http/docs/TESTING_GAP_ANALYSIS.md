@@ -44,11 +44,11 @@ import { createApp } from '../src/index.js'; // ❌ Source
 - Deployed to Vercel ✅
 - **Server never responded** ❌
 
-**Actual Issues**:
+**Actual Issues** (Historical - Now Resolved):
 
-1. `tsup.config.ts` only built `src/index.ts`, not `server.ts`
-2. `package.json` `main: "dist/index.js"` but file was at `dist/src/index.js`
-3. `start` script tried to run non-existent `dist/index.js`
+1. `tsup.config.ts` had incorrect entry points
+2. `package.json` `main` field pointed to wrong location
+3. Server entry point pattern was not canonical for Vercel
 
 **Result**: Complete production outage despite passing all tests.
 
@@ -64,10 +64,10 @@ import { createApp } from '../src/index.js'; // ❌ Source
 
 ```javascript
 ✓ dist/src/index.js exists
-✓ dist/server.js exists
+✓ dist/src/index.d.ts exists
 ✓ package.json main points to valid file
-✓ Vercel entry exports function as default
-✓ Server entry imports createApp and calls app.listen()
+✓ Entry point exports Express app instance as default
+✓ Entry point exports createApp factory function
 ✓ TypeScript declarations generated
 ```
 
@@ -91,7 +91,7 @@ Exit code: 1  ← Build would fail
 **Tests**:
 
 ```typescript
-✓ Server starts from dist/server.js
+✓ Server starts from dist/src/index.js
 ✓ Server listens on configured port
 ✓ Healthcheck endpoint responds
 ✓ Landing page serves
@@ -101,7 +101,7 @@ Exit code: 1  ← Build would fail
 
 **Tests real deployment behavior**:
 
-- Spawns actual `node dist/server.js` process
+- Spawns actual `node dist/src/index.js` process
 - Makes real HTTP requests
 - Verifies server stays alive
 - Tests with production-like configuration
@@ -167,8 +167,7 @@ $ pnpm build
 ✅ Build artifact verification PASSED
 
 All required files present and correctly structured:
-  • Vercel entry: dist/src/index.js (exports Express app)
-  • Traditional: dist/server.js (calls app.listen())
+  • Entry point: dist/src/index.js (exports Express app instance)
   • Package main: dist/src/index.js
 ============================================================
 ```
@@ -179,11 +178,11 @@ All required files present and correctly structured:
 $ pnpm test:e2e:built
 
  ✓ e2e-tests/built-server.e2e.test.ts (5 tests) 3048ms
-   ✓ Built Server (dist/server.js) > should start and listen on configured port
-   ✓ Built Server (dist/server.js) > should respond to healthcheck
-   ✓ Built Server (dist/server.js) > should serve root landing page
-   ✓ Built Server (dist/server.js) > should have MCP endpoint available
-   ✓ Built Server (dist/server.js) > should handle CORS preflight requests
+   ✓ Built Server (dist/src/index.js) > should start and listen on configured port
+   ✓ Built Server (dist/src/index.js) > should respond to healthcheck
+   ✓ Built Server (dist/src/index.js) > should serve root landing page
+   ✓ Built Server (dist/src/index.js) > should have MCP endpoint available
+   ✓ Built Server (dist/src/index.js) > should handle CORS preflight requests
 
  Test Files  1 passed (1)
       Tests  5 passed (5)

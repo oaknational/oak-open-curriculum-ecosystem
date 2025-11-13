@@ -24,10 +24,10 @@ A **two-layer verification system** that maintains conceptual separation:
 **When**: Runs automatically after every `pnpm build` via npm lifecycle hook  
 **What it checks**:
 
-- ✅ Required files exist (`dist/src/index.js`, `dist/server.js`, etc.)
+- ✅ Required files exist (`dist/src/index.js`, `dist/src/index.d.ts`)
 - ✅ `package.json` `main` field points to valid file
-- ✅ Vercel entry point exports correctly (default export is function)
-- ✅ Traditional hosting entry point imports `createApp` and calls `app.listen()`
+- ✅ Entry point exports Express app instance as default
+- ✅ Entry point exports `createApp` factory function
 - ✅ TypeScript declarations are generated
 
 **Script**: `scripts/verify-build-artifacts.js`
@@ -38,8 +38,7 @@ A **two-layer verification system** that maintains conceptual separation:
 ✅ Build artifact verification PASSED
 
 All required files present and correctly structured:
-  • Vercel entry: dist/src/index.js (exports Express app)
-  • Traditional: dist/server.js (calls app.listen())
+  • Entry point: dist/src/index.js (exports Express app instance)
   • Package main: dist/src/index.js
 ```
 
@@ -49,7 +48,7 @@ All required files present and correctly structured:
 **When**: Run as part of quality gate (`pnpm qg`)  
 **What it tests**:
 
-- ✅ Server starts from `dist/server.js`
+- ✅ Server starts from `dist/src/index.js`
 - ✅ Server listens on configured port
 - ✅ Endpoints respond correctly (healthcheck, landing page, MCP)
 - ✅ CORS works
@@ -159,7 +158,7 @@ pnpm build
 ```bash
 pnpm test:e2e:built
 # Output:
-#  ✓ Built Server (dist/server.js) (5 tests)
+#  ✓ Built Server (dist/src/index.js) (5 tests)
 #    ✓ should start and listen on configured port
 #    ✓ should respond to healthcheck
 #    ✓ should serve root landing page

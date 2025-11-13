@@ -11,7 +11,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import type { Express } from 'express';
 import request from 'supertest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 
 describe('Auth Bypass for Development (E2E)', () => {
   let app: Express;

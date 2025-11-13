@@ -311,7 +311,7 @@ describe('MCP Connection Timeout E2E', () => {
     let app: Express;
 
     beforeAll(async () => {
-      const { createApp } = await import('../src/index.js');
+      const { createApp } = await import('../src/application.js');
 
       // Auth is already disabled in test env via DANGEROUSLY_DISABLE_AUTH=true
       app = createApp();

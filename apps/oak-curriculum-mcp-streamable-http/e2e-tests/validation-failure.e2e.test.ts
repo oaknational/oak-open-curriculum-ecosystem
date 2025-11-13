@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { describe, it, expect } from 'vitest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 
 const ACCEPT = 'application/json, text/event-stream';
 

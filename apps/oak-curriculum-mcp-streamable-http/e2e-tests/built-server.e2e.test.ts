@@ -5,7 +5,7 @@
  * This is separate from postbuild verification (which checks structure)
  * because this tests BEHAVIOR of the built system.
  *
- * This test spawns the actual dist/server.js file and verifies it:
+ * This test spawns the actual dist/src/index.js file and verifies it:
  * - Starts successfully
  * - Listens on configured port
  * - Responds to HTTP requests
@@ -18,9 +18,9 @@ import { dirname, resolve } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const serverPath = resolve(__dirname, '../dist/server.js');
+const serverPath = resolve(__dirname, '../dist/src/index.js');
 
-describe('Built Server (dist/server.js)', () => {
+describe('Built Server (dist/src/index.js)', () => {
   let server: ChildProcess | undefined;
   const testPort = 9999;
   const startupTimeMs = 3000;

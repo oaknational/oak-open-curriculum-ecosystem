@@ -1,13 +1,13 @@
 # Deployment Architecture
 
-This document describes how the Oak Curriculum MCP Streamable HTTP server is structured for deployment in **two modes**: Vercel serverless and traditional hosting.
+This document describes how the Oak Curriculum MCP Streamable HTTP server is structured for deployment following the canonical Vercel Express pattern.
 
 ## Architecture Overview
 
-The application uses a **dual-mode deployment pattern**:
+The application uses a **single entry point** (`src/index.ts`) that:
 
-1. **Vercel Serverless (Production)** - Exports Express app for serverless functions
-2. **Traditional Hosting (Local Dev & Alternative Deployment)** - Starts Express server with `app.listen()`
+1. **Exports Express app instance** - Works with Vercel serverless automatically
+2. **Conditionally starts server** - Calls `app.listen()` when not on Vercel (local dev)
 
 ## Build Output Structure
 
@@ -15,25 +15,22 @@ After running `pnpm build`, the `dist/` directory contains:
 
 ```text
 dist/
-├── server.js              # Entry point for traditional hosting (calls app.listen)
-├── server.d.ts
-├── server.js.map
 ├── src/
-│   ├── index.js          # Entry point for Vercel (exports Express app)
+│   ├── index.js          # Single entry point (exports Express app instance)
 │   ├── index.d.ts
 │   └── index.js.map
-└── chunk-YS6TDL2K.js     # Shared application code
+└── chunk-*.js            # Bundled application code
 ```
 
-## Deployment Mode 1: Vercel Serverless
+## Vercel Deployment
 
 ### How It Works
 
 Vercel's Express framework support automatically:
 
 1. Reads `vercel.json` and detects `"framework": "express"`
-2. Resolves the `main` field in `package.json` → `dist/src/index.js`
-3. Imports the **default export** (the `createApp` function)
+2. Looks for entry point at canonical location: `src/index.{js,ts}` → `dist/src/index.js`
+3. Imports the **default export** (the Express app instance)
 4. Wraps the Express app in serverless infrastructure
 5. Routes all requests to the Express app
 
@@ -66,15 +63,24 @@ import express from 'express';
 export function createApp(options?: CreateAppOptions): Express {
   const app = express();
   // Setup middleware, routes, etc.
-  return app; // ✅ Return app WITHOUT calling app.listen()
+  return app;
 }
 
-export default createApp; // ✅ Default export for Vercel
+// Module-level instantiation (canonical Vercel pattern)
+const app = createApp();
+
+// Conditional listening - exactly one place that checks VERCEL
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT ?? 3333);
+  app.listen(port, () => console.log(`Server on port ${port}`));
+}
+
+export default app; // ✅ Export app instance for Vercel
 ```
 
 ### What Vercel Does
 
-- **No app.listen()** - Vercel handles server binding automatically
+- **Sets VERCEL environment variable** - Detected by the app to skip `app.listen()`
 - **Serverless wrapping** - Each request may hit a new/recycled function instance
 - **Environment variables** - Provided via Vercel project settings
 - **Automatic scaling** - Scales based on traffic
@@ -89,50 +95,29 @@ Set in Vercel Project Settings → Environment Variables:
 
 See [vercel-environment-config.md](./vercel-environment-config.md) for complete details.
 
-## Deployment Mode 2: Traditional Hosting
+## Local Development
 
 ### How It Works
 
-For local development or traditional VPS/container deployments:
+For local development:
+
+1. Run `pnpm dev` which executes `tsx src/index.ts`
+2. The module-level code detects `!process.env.VERCEL` and calls `app.listen()`
+3. Server starts on port from `PORT` env var (default 3333)
+
+Or for testing the built production bundle:
 
 1. Build the project: `pnpm build`
-2. Run `pnpm start` which executes `node dist/server.js`
-3. The `server.js` file imports `createApp` and calls `app.listen()`
-
-### Key Files
-
-**server.ts** (Source)
-
-```typescript
-import { loadRootEnv } from '@oaknational/mcp-env';
-import { createApp } from './src/index.js';
-
-// Load .env from repo root if OAK_API_KEY not already set
-if (!process.env.OAK_API_KEY) {
-  loadRootEnv({ requiredKeys: ['OAK_API_KEY'], startDir: process.cwd(), env: process.env });
-}
-
-const app = createApp();
-const port = Number(process.env.PORT ?? 3333);
-
-app.listen(port, () => {
-  console.log(`🚀 Oak Curriculum MCP Server listening on port ${String(port)}`);
-  console.log(`   MCP endpoint: http://localhost:${String(port)}/mcp`);
-  if (process.env.DANGEROUSLY_DISABLE_AUTH === 'true') {
-    console.log(`   ⚠️  AUTH DISABLED (DANGEROUSLY_DISABLE_AUTH=true)`);
-  } else {
-    console.log(`   🔒 OAuth enforced via Clerk`);
-  }
-});
-```
+2. Run `pnpm start` which executes `node dist/src/index.js`
+3. Same conditional listening logic applies
 
 **package.json**
 
 ```json
 {
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx server.ts"
+    "start": "node dist/src/index.js",
+    "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts"
   }
 }
 ```
@@ -160,7 +145,7 @@ LOG_LEVEL=debug
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/index.ts', 'server.ts'], // ✅ Build both entry points
+  entry: ['src/index.ts'], // ✅ Single entry point
   sourcemap: true,
   clean: true,
   format: ['esm'],
@@ -170,10 +155,9 @@ export default defineConfig({
 });
 ```
 
-This configuration ensures both deployment modes are built:
+This configuration builds the single canonical entry point:
 
-- `src/index.ts` → `dist/src/index.js` (for Vercel)
-- `server.ts` → `dist/server.js` (for traditional hosting)
+- `src/index.ts` → `dist/src/index.js` (works for both Vercel and local dev)
 
 ## Async Initialization
 
@@ -203,19 +187,19 @@ This pattern ensures:
 - **Warm starts** - Promise already resolved, requests pass through immediately
 - **Serverless safety** - No race conditions between initialization and request handling
 
-## Testing Both Modes
+## Testing the Build
 
-### Test Vercel Mode Locally
+### Test Entry Point
 
-The built artifacts can be imported and tested:
+The built artifact can be imported and tested:
 
 ```bash
 node -e "import('./dist/src/index.js').then(m => console.log('✅ Module loads:', typeof m.default, typeof m.createApp))"
 ```
 
-Should output: `✅ Module loads: function function`
+Should output: `✅ Module loads: object function` (default is the app instance, createApp is the factory)
 
-### Test Traditional Mode Locally
+### Test Server Startup
 
 ```bash
 pnpm build
@@ -233,17 +217,13 @@ pnpm start
 
 **Solution**: ✅ Fixed - `main` now correctly points to `dist/src/index.js`
 
-### Issue: Server builds but doesn't respond on Vercel
+### Issue: Server builds but doesn't respond on Vercel (Historical)
 
 **Symptom**: Vercel deployment succeeds but requests timeout or get no response
 
-**Cause**: The `tsup` config was only building `src/index.ts`, not `server.ts`, AND the start script was trying to run `dist/index.js` (which doesn't exist) instead of using Vercel's framework mode
+**Cause**: Build configuration was incorrect and didn't follow canonical Vercel Express pattern
 
-**Solution**: ✅ Fixed:
-
-1. Updated `tsup.config.ts` to build both entry points
-2. Corrected `package.json` `main` field to point to correct Vercel entry point
-3. Vercel uses `main` field for framework mode, not the `start` script
+**Solution**: ✅ Fixed - Migrated to canonical pattern with single entry point at `src/index.ts`
 
 ### Issue: Async initialization causes timeouts
 
@@ -259,10 +239,10 @@ According to [Vercel's Express documentation](https://vercel.com/docs/frameworks
 
 ✅ **DO:**
 
-- Export the Express app as default export
-- Let Vercel handle server binding
+- Export the Express app instance as default export
+- Use canonical entry point location (`src/index.{js,ts}`)
+- Conditionally call `app.listen()` only when not on Vercel
 - Use `"framework": "express"` in `vercel.json`
-- Point `main` in `package.json` to the file with the default export
 - Handle async initialization in middleware
 
 ❌ **DON'T:**

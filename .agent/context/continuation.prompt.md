@@ -23,7 +23,7 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Se
    - 🚀 Session 3.C: Staging Deployment & Validation (Ready - No Repo Changes Required)
    - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Session 3.B complete. Logger architecture verified. Runtime diagnostics Phases 1-2 complete (2025-11-13): instrumentation and built-server harness delivered. Phase 3 (iterative diagnosis) IN PROGRESS: Iteration 1 complete (2025-11-13) - comprehensive middleware instrumentation added to trace request flow. CRITICAL FINDING: Clerk middleware IS scoped to `/mcp` only (verified in code). Testing with invalid Clerk keys shows NO HANG - all routes respond in 3-4ms. Hypothesis: hang only occurs with REAL Clerk keys making actual network calls to Clerk API. Next iteration: test with real credentials. All quality gates passing: build ✅, type-check ✅, lint ✅ (ignoring instrumentation console.log), test:all ✅ (738 tests). Session 3.C staging deployment BLOCKED until hang diagnosis complete.
+**Current status**: Session 3.B complete. Logger architecture verified. Runtime diagnostics Phases 1-2 complete (2025-11-13): instrumentation and built-server harness delivered. Phase 3 (iterative diagnosis) IN PROGRESS: Iteration 1 complete - comprehensive middleware instrumentation added. Iteration 2 FAILED (2025-11-13) - attempted Vercel export fix (modified server.ts to export app as default) but issue persists. CRITICAL FINDINGS: (1) Locally with invalid keys: all routes work perfectly, (2) On Vercel: bootstrap succeeds but ZERO request-level instrumentation logs, (3) Requests never reach Express middleware chain despite successful app creation. ROOT CAUSE UNKNOWN: Vercel creates the app but somehow requests don't flow through. Hypothesis disproven: issue is NOT Express export format. Next: investigate Vercel's serverless function invocation model. All quality gates passing: build ✅, type-check ✅, lint ✅, test:all ✅ (738 tests). Session 3.C staging deployment BLOCKED until hang diagnosis complete.
 
 ---
 
@@ -929,6 +929,111 @@ pnpm test:all             ✅ (738 tests passing)
 - ✅ production-debugging-runbook.md updated with "Local Production Build Testing" section
 - ✅ Manual validation complete: all 3 requests succeed
 - ✅ All quality gates passing with zero regressions
+
+---
+
+### Runtime Diagnostics: Phase 3 Iteration 2 - Vercel Export Fix Attempt (2025-11-13)
+
+**Objectives**: Address suspected Vercel Express app detection issue by ensuring proper export format per Vercel documentation.
+
+**Problem Diagnosis**:
+
+Based on Vercel logs showing successful bootstrap but no request-level instrumentation logs, initial hypothesis was that Vercel couldn't properly detect/wrap the Express app because `server.ts` was calling `app.listen()` instead of exporting the app instance.
+
+**Implementation**:
+
+Modified `server.ts` to follow canonical Vercel Express pattern:
+
+```typescript
+// Export app as default (required by Vercel)
+export default app;
+
+// Only call app.listen() when NOT on Vercel
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT ?? 3333);
+  app.listen(port, () => {
+    console.log(`🚀 Oak Curriculum MCP Server listening on port ${port}`);
+    // ...
+  });
+}
+```
+
+**Validation**:
+
+- ✅ Build passed successfully
+- ✅ Built artifacts verified (`dist/server.js` exports app as default)
+- ✅ Pre-commit checks passed
+- ✅ Changes committed and pushed to `feat/oauth_support`
+- ✅ Vercel deployment triggered
+
+**Results**:
+
+❌ **FIX FAILED** - Issue persists after deployment
+
+**Vercel Logs Analysis**:
+
+```
+2025-11-13 15:58:10.473 - "Creating app #1"
+2025-11-13 15:58:10.475 - "bootstrap.phase.start" (setupBaseMiddleware)
+2025-11-13 15:58:10.477 - "bootstrap.phase.finish" (setupBaseMiddleware, 2ms)
+2025-11-13 15:58:10.478 - "bootstrap.phase.start" (applySecurity)
+2025-11-13 15:58:10.479 - "bootstrap.phase.finish" (applySecurity, 0ms)
+2025-11-13 15:58:10.484 - "bootstrap.phase.finish" (initializeCoreEndpoints, 6ms)
+2025-11-13 15:58:10.487 - "auth.bootstrap.step.finish" (clerkMiddleware.create, 0ms)
+2025-11-13 15:58:10.489 - "bootstrap.complete" (15ms)
+... BUT NO REQUEST-LEVEL INSTRUMENTATION LOGS ...
+```
+
+**Critical Findings**:
+
+1. ✅ Bootstrap **succeeds** - all "Creating app", "bootstrap.\*" logs present
+2. ✅ Auth setup **completes** - Clerk middleware registered successfully
+3. ❌ Request instrumentation **never fires** - no "→→→ REQUEST ENTRY" logs
+4. ❌ Middleware chain **never executes** - no "✓✓✓ BASE MIDDLEWARE COMPLETE" logs
+5. ❌ All requests **hang** - `responseStatusCode: -1`, `durationMs: -1`
+
+**Root Cause Analysis**:
+
+The issue is **NOT** about Express export format. Vercel IS successfully:
+
+- Importing our code
+- Running bootstrap (app creation)
+- Creating the Express app instance
+
+However, requests somehow **never reach the Express middleware chain**. This suggests:
+
+1. **Vercel might be creating the app on every request** (cold start pattern)
+   - Bootstrap logs appear multiple times ("Creating app #1", "#2", "#3")
+   - Each request might be creating a new app instance
+   - But then never routing the request through that instance
+
+2. **There may be a mismatch in how Vercel invokes the handler**
+   - Vercel expects a specific function signature for serverless functions
+   - Our export might not match what Vercel's Express adapter expects
+   - The app is created but never receives the actual HTTP request
+
+**Hypothesis Disproven**:
+
+- ❌ Issue is NOT about missing default export (we added it, issue persists)
+- ❌ Issue is NOT about `app.listen()` blocking (we made it conditional, issue persists)
+
+**New Theory**:
+
+Vercel's Express support might require more than just exporting the app. The framework detection might be working (bootstrap runs), but the actual request routing might need additional integration code or specific export patterns we're missing.
+
+**Next Steps**:
+
+1. Research Vercel's Express framework adapter implementation
+2. Check if Vercel requires specific environment variables or configuration
+3. Investigate whether Vercel needs a request handler function wrapper
+4. Consider if the issue is related to ESM vs CommonJS module formats
+
+**Deliverables**:
+
+- ✅ Modified `server.ts` with Vercel-compatible exports
+- ✅ Build validation confirming correct structure
+- ❌ Fix validation - issue NOT resolved
+- 📊 Enhanced understanding: bootstrap works, request routing doesn't
 
 ---
 

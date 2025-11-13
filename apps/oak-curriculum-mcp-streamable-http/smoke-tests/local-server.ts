@@ -12,7 +12,7 @@ const PORT_CHECK_TIMEOUT_MS = 250;
 export async function startSmokeServer(port: number): Promise<Server> {
   await assertPortAvailable(port);
   console.log(`[TRACE] startSmokeServer: importing createApp`);
-  const { createApp } = await import('../src/index.js');
+  const { createApp } = await import('../src/application.js');
   console.log(`[TRACE] startSmokeServer: calling createApp()`);
   const app = createApp();
   const appId = app.__appId;

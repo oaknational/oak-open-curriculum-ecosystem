@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
-import { createApp } from './index.js';
+import { createApp } from './application.js';
 
 /**
  * Validates the resource property in the OAuth metadata response

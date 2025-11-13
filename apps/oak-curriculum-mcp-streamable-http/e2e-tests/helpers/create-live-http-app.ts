@@ -1,5 +1,5 @@
 import type express from 'express';
-import { createApp } from '../../src/index.js';
+import { createApp } from '../../src/application.js';
 import type { ToolHandlerOverrides } from '../../src/handlers.js';
 
 export interface LiveHttpApp {

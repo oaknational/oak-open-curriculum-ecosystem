@@ -35,10 +35,15 @@
 - ✅ Created `.agent/plans/logger-enhancement-plan.md` documenting completion
 
 ✅ **Diagnostics Track Phases 1-2 Complete** (2025-11-13) – Instrumentation and built-server harness delivered. Harness enables local testing of production builds under multiple configuration scenarios.  
-🔄 **Diagnostics Phase 3 In Progress** (2025-11-13) – Iterative root cause diagnosis active. Iteration 1 complete: comprehensive middleware instrumentation added, verified Clerk middleware scoped correctly, confirmed no hang with invalid keys locally. Hypothesis: hang requires REAL Clerk keys making network calls. Next: test with real credentials.  
-🚀 **Session 3.C** – Staging deployment (blocked until hang diagnosis complete).
+🔄 **Diagnostics Phase 3 In Progress** (2025-11-13) – Iterative root cause diagnosis active.
 
-**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Runtime diagnostics complete with working harness for local production build testing. Repository ready for Session 3.C deployment. Session 3.C requires no repository code changes; deployment work lives in Vercel configuration.
+- ✅ **Iteration 1**: Comprehensive middleware instrumentation added, verified Clerk middleware scoped correctly, confirmed no hang with invalid keys locally.
+- ❌ **Iteration 2**: Attempted Vercel export fix (modified server.ts to export app as default) - **FIX FAILED**. Bootstrap succeeds on Vercel but requests never reach Express middleware.
+- 🔍 **Current Status**: ROOT CAUSE UNKNOWN. Vercel creates the app successfully (bootstrap logs present) but somehow requests don't flow through the middleware chain (zero request-level logs).
+- ⏳ **Next**: Investigate Vercel's serverless function invocation model more deeply.  
+  ⚠️ **Session 3.C** – Staging deployment **BLOCKED** until hang diagnosis complete and root cause identified.
+
+**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Runtime diagnostics in progress with Vercel deployment hanging on all requests despite successful app bootstrap. Session 3.C blocked until deployment hang is resolved.
 
 ---
 

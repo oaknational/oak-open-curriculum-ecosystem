@@ -1,6 +1,6 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-13 (Runtime diagnostics complete; ready for Phase 3 rollout)  
+**Updated**: 2025-11-13 (Runtime diagnostics Phase 3 in progress; Vercel export fix failed)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
@@ -9,8 +9,9 @@
 ✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
 ✅ **Session 3.A Complete** – Documentation finalization and dev server validation  
 ✅ **Session 3.B Complete** – Logger architecture verification (no further refactor required)  
-✅ **Runtime Diagnostics Complete** – All phases shipped (instrumentation, harness, documentation)  
-🚀 **Next: Phase 3 Rollout** – Production deployment and monitoring (Session 3.C staging deployment)
+🔄 **Runtime Diagnostics Phase 3 In Progress** – Iterative diagnosis of Vercel deployment hang  
+⚠️ **BLOCKER**: Vercel deployment hang persists after attempted fix - root cause still unknown  
+🚀 **Next**: Continue Phase 3 diagnosis - Vercel export fix didn't resolve the issue
 
 ## Strategic Goal
 
@@ -69,10 +70,13 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-13**: Manual validation successful - all 3 requests pass (healthz, landing, MCP initialize)
 - 🔄 **2025-11-13**: Phase 3 Iteration 1 - Added comprehensive middleware instrumentation to trace request flow
 - ✅ **2025-11-13**: CRITICAL FINDING - Clerk middleware IS scoped to `/mcp` only (line 238: `app.use('/mcp', clerkMw)`)
-- ✅ **2025-11-13**: Testing with invalid Clerk keys shows NO HANG - `/healthz` (3ms, full JSON), `/` (2ms, full 3159-byte HTML), `/mcp` fails fast (500, 20ms)
-- ✅ **2025-11-13**: VERIFIED - Complete response bodies returned, all middleware executes correctly
-- 📊 **2025-11-13**: HYPOTHESIS - Hang only occurs with REAL Clerk keys OR Vercel-specific environment
-- 🚀 **Next**: Phase 3 Iteration 1.5 - Deploy instrumented code to Vercel for differential diagnosis (test if remote `/` hangs)
+- ✅ **2025-11-13**: Testing with invalid Clerk keys shows NO HANG locally - `/healthz` (3ms), `/` (2ms), `/mcp` fails fast (500, 20ms)
+- ✅ **2025-11-13**: VERIFIED - Complete response bodies returned locally, all middleware executes correctly
+- ❌ **2025-11-13**: Phase 3 Iteration 2 - Attempted Vercel export fix (modified server.ts to export app as default)
+- ❌ **2025-11-13**: FIX FAILED - Vercel logs show bootstrap completes but requests still hang (responseStatusCode: -1)
+- ⚠️ **2025-11-13**: ROOT CAUSE UNKNOWN - Bootstrap succeeds, but NO request-level instrumentation logs appear
+- 🔍 **2025-11-13**: NEW FINDING - Vercel IS creating the app (bootstrap logs present) but requests never reach Express middleware
+- 🚀 **Next**: Phase 3 Iteration 3 - Deeper investigation needed to understand why requests don't reach middleware chain
 
 ## Architecture Verification (2025-11-10)
 
@@ -138,7 +142,7 @@ Application Layer (HTTP & Stdio):
 - ✅ Session 2.4: Error Context Enrichment
 - ✅ Session 2.5: Phase 2 Integration & Validation
 
-### 2. Phase 3 – Production Rollout & Monitoring (Ready to Begin)
+### 2. Phase 3 – Production Rollout & Monitoring (BLOCKED by deployment hang)
 
 - ✅ Session 3.A: Documentation Finalization (Complete 2025-11-08)
 - ✅ **Session 3.B: Logger Architecture** (Complete 2025-11-10 - work already done)
@@ -147,25 +151,20 @@ Application Layer (HTTP & Stdio):
   - Verified: Zero lint errors ✅
   - Verified: OpenTelemetry format working ✅
   - See `.agent/plans/logger-enhancement-plan.md` for details
-- 🚀 **Session 3.C: Staging Deployment & Validation** (Ready - No Repo Changes Needed)
-  - ✅ All repository work complete - deployment is Vercel configuration only
-  - [ ] Deploy HTTP server to Vercel staging via UI configuration
-  - [ ] Configure required environment variables (Clerk keys, OAK_API_KEY, security settings)
-  - [ ] Execute smoke tests against staging endpoint
-  - [ ] Validate OpenTelemetry log format with production log aggregation
-  - [ ] Verify observability features end-to-end (correlation IDs, timing, error enrichment)
+- ⚠️ **Session 3.C: Staging Deployment & Validation** (BLOCKED - hang diagnosis required)
+  - Deployment attempted but server hangs on all requests
+  - Cannot proceed until root cause identified and fixed
 - 🔄 **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **IN PROGRESS**
   - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage) - Complete 2025-11-12
   - ✅ Quality gate remediation - Complete 2025-11-13
   - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing - Complete 2025-11-13
   - 🔄 Phase 3 iterative diagnosis - In Progress 2025-11-13
-    - ✅ Iteration 1: Comprehensive middleware instrumentation + testing with invalid keys - NO HANG
-    - ⏳ Iteration 2: Test with real Clerk keys to reproduce hang
-    - ⏳ Iteration 3+: Fix implementation and validation
-- [ ] Session 3.D: Production Rollout & Observation
-  - Gradual production rollout
-  - Monitor log volume and costs
-  - Establish dashboards and alerts
+    - ✅ Iteration 1: Comprehensive middleware instrumentation + testing with invalid keys - NO HANG locally
+    - ❌ Iteration 2: Vercel export fix attempt (server.ts exports app as default) - FIX FAILED
+    - 🔍 Current Status: Bootstrap completes on Vercel, but requests never reach Express middleware
+    - ⏳ Iteration 3: Need to investigate why Vercel can't route requests to Express despite successful bootstrap
+- [ ] Session 3.D: Production Rollout & Observation (BLOCKED until hang fixed)
+  - Cannot begin until deployment hang is resolved
 
 ## State Snapshot
 

@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { createApp } from '../index.js';
+import { createApp } from '../application.js';
 import { loadRuntimeConfig, type RuntimeConfig } from '../runtime-config.js';
 import { createTestLogger } from './test-helpers/create-test-logger.js';
 

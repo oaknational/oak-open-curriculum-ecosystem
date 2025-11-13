@@ -34,7 +34,7 @@ function isTextContent(value: unknown): value is { type: string; text: string } 
     typeof (value as { text?: unknown }).text === 'string'
   );
 }
-import { createApp } from './index.js';
+import { createApp } from './application.js';
 
 describe('Oak Curriculum MCP Streamable HTTP', () => {
   let app: express.Express;

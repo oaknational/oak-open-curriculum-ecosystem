@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../src/index.js';
+import { createApp } from '../src/application.js';
 import { toolNames } from '@oaknational/oak-curriculum-sdk';
 
 /* eslint max-lines-per-function: ["error", 300] */

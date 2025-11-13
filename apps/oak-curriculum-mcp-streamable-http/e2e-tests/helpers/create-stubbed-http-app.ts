@@ -1,5 +1,5 @@
 import type express from 'express';
-import { createApp } from '../../src/index.js';
+import { createApp } from '../../src/application.js';
 
 export const STUB_ACCEPT_HEADER = 'application/json, text/event-stream';
 // No longer using bearer tokens - using auth bypass instead

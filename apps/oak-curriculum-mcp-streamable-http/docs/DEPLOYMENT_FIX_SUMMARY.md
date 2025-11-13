@@ -1,5 +1,7 @@
 # Deployment Fix Summary
 
+> **Note**: This document describes a historical deployment issue and fix. The codebase has since been refactored to follow the canonical Vercel Express pattern with a single entry point at `src/index.ts`. See [deployment-architecture.md](./deployment-architecture.md) for current architecture.
+
 ## Original Problem
 
 The Vercel deployment was building successfully but **the server never responded** to requests.
