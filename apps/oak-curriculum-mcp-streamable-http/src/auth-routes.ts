@@ -7,6 +7,7 @@ import {
   authServerMetadataHandlerClerk,
 } from '@clerk/mcp-tools/express';
 import type { Logger, JsonObject } from '@oaknational/mcp-logger';
+import { measureAuthSetupStep } from './auth-instrumentation.js';
 
 import { createMcpHandler } from './handlers.js';
 import type { RuntimeConfig } from './runtime-config.js';
@@ -217,16 +218,27 @@ export function setupAuthRoutes(
   );
 
   if (runtimeConfig.dangerouslyDisableAuth) {
-    registerUnauthenticatedRoutes(app, coreTransport, authLog);
+    measureAuthSetupStep(authLog, 'auth.disabled.register', () => {
+      registerUnauthenticatedRoutes(app, coreTransport, authLog);
+    });
     return;
   }
 
   authLog.info('🔒 OAuth enforcement enabled via Clerk');
   authLog.debug('Registering global clerkMiddleware (required for Clerk OAuth handlers)');
-  const clerkMw = instrumentMiddleware('clerkMiddleware', clerkMiddleware(), authLog);
-  app.use(clerkMw);
+  const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
+    clerkMiddleware(),
+  );
+  const clerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
+  measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
+    app.use(clerkMw);
+  });
   authLog.debug('Registering OAuth routes (auth ENABLED)');
-  registerOAuthMetadataEndpoints(app, runtimeConfig);
+  measureAuthSetupStep(authLog, 'oauth.metadata.register', () => {
+    registerOAuthMetadataEndpoints(app, runtimeConfig);
+  });
   const mcpAuthMw = instrumentMiddleware('mcpAuthClerk', mcpAuthClerk, authLog);
-  registerAuthenticatedRoutes(app, coreTransport, authLog, mcpAuthMw);
+  measureAuthSetupStep(authLog, 'mcp.auth.register', () => {
+    registerAuthenticatedRoutes(app, coreTransport, authLog, mcpAuthMw);
+  });
 }

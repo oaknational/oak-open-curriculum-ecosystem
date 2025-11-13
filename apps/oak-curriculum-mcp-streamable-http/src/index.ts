@@ -1,25 +1,24 @@
-import express, { static as expressStatic, json as expressJson } from 'express';
+import express, { static as expressStatic } from 'express';
 import type { Express, RequestHandler } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import {
-  createRequestLogger,
-  logLevelToSeverityNumber,
-  type Logger,
-} from '@oaknational/mcp-logger';
-
-import { createCorrelationMiddleware } from './correlation/middleware.js';
+import { createPhasedTimer, startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
 
 import { renderLandingPageHtml } from './landing-page.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
-import { createHttpLogger, createEnrichedErrorLogger } from './logging/index.js';
+import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
 import { setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
+import {
+  runBootstrapPhase,
+  setupBaseMiddleware,
+  createMcpReadinessMiddleware,
+} from './app/bootstrap-helpers.js';
 
 export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
@@ -31,17 +30,6 @@ type ExpressWithAppId = Express & { __appId?: number };
 
 let appCounter = 0;
 
-function setupBaseMiddleware(app: Express, log: Logger): void {
-  app.use(expressJson({ limit: '1mb' }));
-  app.use(createCorrelationMiddleware(log));
-
-  const debugEnabled = log.isLevelEnabled?.(logLevelToSeverityNumber('DEBUG')) ?? false;
-  if (debugEnabled) {
-    app.use(createRequestLogger(log, { level: 'debug' }));
-  }
-  app.use(createEnrichedErrorLogger(log));
-}
-
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   appCounter++;
   const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
@@ -51,47 +39,42 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   log.debug(`Creating app #${String(appCounter)}`);
   const app: ExpressWithAppId = express();
   app.__appId = appCounter;
-  setupBaseMiddleware(app, log);
+
+  const bootstrapTimer = createPhasedTimer();
+
+  runBootstrapPhase(log, bootstrapTimer, 'setupBaseMiddleware', appCounter, () => {
+    setupBaseMiddleware(app, log);
+  });
 
   const security = createSecurityConfig(runtimeConfig);
-  const corsMw = applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins);
+  const corsMw = runBootstrapPhase(log, bootstrapTimer, 'applySecurity', appCounter, () =>
+    applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins),
+  );
 
-  const { transport: coreTransport, ready } = initializeCoreEndpoints(
-    app,
-    corsMw,
-    options,
-    runtimeConfig,
+  const { transport: coreTransport, ready } = runBootstrapPhase(
     log,
+    bootstrapTimer,
+    'initializeCoreEndpoints',
+    appCounter,
+    () => initializeCoreEndpoints(app, corsMw, options, runtimeConfig, log),
   );
 
   mountStaticAssets(app);
   addRootLandingPage(app, runtimeConfig.vercelHostname);
 
-  // Ensure MCP connection is ready before processing MCP routes
-  // Note: Health checks and landing page are NOT blocked by this
-  const ensureMcpReady: RequestHandler = async (_req, _res, next) => {
-    try {
-      await Promise.race([
-        ready,
-        new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('MCP connection timeout'));
-          }, 5000);
-        }),
-      ]);
-      next();
-    } catch (error) {
-      log.error('MCP connection failed', { error });
-      _res.status(503).json({
-        error: 'MCP server not ready',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      });
-    }
-  };
-
+  const ensureMcpReady = createMcpReadinessMiddleware(ready, log);
   app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
 
-  setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+  runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appCounter, () => {
+    setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+  });
+
+  const totalDuration = bootstrapTimer.end();
+  log.info('bootstrap.complete', {
+    appId: appCounter,
+    duration: totalDuration.formatted,
+    durationMs: totalDuration.ms,
+  });
 
   return app;
 }
@@ -109,7 +92,34 @@ function initializeCoreEndpoints(
     runtimeConfig,
     logger: log,
   });
-  const serverReady = server.connect(transport);
+  log.debug('bootstrap.mcp.transport.connect.start');
+  const connectionTimer = startTimer();
+  let connectionDuration: Duration | undefined;
+  const ensureConnectionDuration = (): Duration => {
+    connectionDuration ??= connectionTimer.end();
+    return connectionDuration;
+  };
+  const serverReady = server.connect(transport).then(
+    () => {
+      const duration = ensureConnectionDuration();
+      log.info('bootstrap.mcp.transport.connect.finish', {
+        duration: duration.formatted,
+        durationMs: duration.ms,
+      });
+    },
+    (error: unknown) => {
+      const duration = ensureConnectionDuration();
+      const errorAsError =
+        error instanceof Error
+          ? error
+          : new Error(`MCP transport connect failed with non-error value: ${String(error)}`);
+      log.error('bootstrap.mcp.transport.connect.error', errorAsError, {
+        duration: duration.formatted,
+        durationMs: duration.ms,
+      });
+      throw error;
+    },
+  );
 
   addHealthEndpoints(app, corsMw);
 

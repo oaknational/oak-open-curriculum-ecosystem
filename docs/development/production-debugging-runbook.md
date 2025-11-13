@@ -60,6 +60,38 @@ The Oak MCP servers include comprehensive instrumentation for production debuggi
 }
 ```
 
+### Bootstrap Diagnostics
+
+The HTTP server now logs explicit bootstrap phases so you can pinpoint where startup time is spent (or where it fails):
+
+- `bootstrap.phase.start` / `bootstrap.phase.finish` wrap `setupBaseMiddleware`, `applySecurity`, `initializeCoreEndpoints`, and `setupAuthRoutes`
+- `bootstrap.mcp.transport.connect.start` / `bootstrap.mcp.transport.connect.finish` measure the MCP transport handshake (`server.connect`)
+- Logs include `appId`, human-readable duration, and raw `durationMs`
+
+```bash
+# Inspect the most recent bootstrap phases
+jq 'select(.message == "bootstrap.phase.finish") | {appId, phase, duration, durationMs}' vercel-logs.txt | tail -8
+
+# Confirm transport connection latency
+jq 'select(.message == "bootstrap.mcp.transport.connect.finish") | {duration, durationMs}' vercel-logs.txt | tail -5
+```
+
+### Authentication Setup Diagnostics
+
+Authentication wiring now emits dedicated instrumentation:
+
+- `auth.bootstrap.step.start` / `auth.bootstrap.step.finish` for `clerkMiddleware.create`, `clerkMiddleware.install`, `oauth.metadata.register`, `mcp.auth.register`
+- `auth.bootstrap.step.error` when any step throws (includes duration and error context)
+- When `DANGEROUSLY_DISABLE_AUTH=true`, the unauthenticated path is recorded as `auth.disabled.register`
+
+```bash
+# Validate Clerk instrumentation completed
+jq 'select(.message == "auth.bootstrap.step.finish" and .step == "clerkMiddleware.create")' vercel-logs.txt | tail -5
+
+# Detect configuration failures
+jq 'select(.message == "auth.bootstrap.step.error")' vercel-logs.txt
+```
+
 ## Common Scenarios
 
 ### Scenario 1: Slow Request Investigation
@@ -657,6 +689,359 @@ done
 - Educate clients on capturing correlation IDs
 - Search wider time window (±5 minutes)
 - Search by approximate request parameters
+
+## Further Reading
+
+## Local Production Build Testing
+
+The built-server harness allows you to test the production build locally before deploying to Vercel, helping diagnose deployment issues and validate instrumentation in a production-like environment.
+
+### When to Use the Harness
+
+Use the built-server harness when:
+
+- **Pre-deployment validation**: Test production build before pushing to Vercel
+- **Deployment hang diagnosis**: Reproduce and diagnose server startup issues
+- **Configuration testing**: Validate different auth scenarios (enabled, disabled, misconfigured)
+- **Instrumentation verification**: Confirm Phase 1 bootstrap logs work in production build
+- **Performance baseline**: Measure bootstrap timing before deploying
+
+**Don't use the harness for:**
+
+- Active development (use `pnpm dev` instead - faster with hot reload)
+- Load testing (harness is single-instance, not representative of Vercel scaling)
+- Integration testing (e2e tests are better for this)
+
+### Quick Start
+
+```bash
+# Navigate to HTTP server directory
+cd apps/oak-curriculum-mcp-streamable-http
+
+# Build production bundle
+pnpm build
+
+# Set up environment (first time only)
+cp config/harness-auth-disabled.env .env.harness.auth-disabled
+
+# Run harness
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+
+# In separate terminal, test with automated requests
+pnpm prod:requests
+```
+
+### Comparing Dev Server vs Built Harness
+
+| Aspect      | Dev Server (`pnpm dev`)       | Built Harness (`pnpm prod:harness`) |
+| ----------- | ----------------------------- | ----------------------------------- |
+| Purpose     | Active development            | Pre-deployment validation           |
+| Build       | TypeScript via tsx (no build) | Production bundle (dist/)           |
+| Speed       | Fast (hot reload)             | Slower (requires build)             |
+| Environment | Development                   | Production-like                     |
+| Auth        | Usually disabled              | Configurable scenarios              |
+| Logs        | Debug level, verbose          | Production format (JSON)            |
+| Use case    | Feature development           | Deployment diagnosis                |
+
+### Available Configuration Scenarios
+
+The harness supports three pre-configured test scenarios:
+
+**1. Auth Disabled** (Recommended for initial testing)
+
+- Verifies core functionality without Clerk dependencies
+- File: `config/harness-auth-disabled.env`
+- Use case: Test MCP handlers, instrumentation, basic routes
+
+**2. Auth Enabled with Clerk**
+
+- Tests full OAuth flow with Clerk
+- File: `config/harness-auth-enabled.env` (requires real Clerk test keys)
+- Use case: Validate authentication middleware, token handling
+
+**3. Missing Clerk Configuration**
+
+- Reproduces error conditions when Clerk is misconfigured
+- File: `config/harness-missing-clerk.env`
+- Use case: Diagnose deployment hangs, validate error handling
+
+### Interpreting Harness Logs
+
+The harness emits structured JSON logs. Key patterns to look for:
+
+**Successful startup:**
+
+```bash
+# Harness starts and loads environment
+{"level":"INFO","message":"Server harness starting"}
+{"level":"INFO","message":"Environment loaded successfully"}
+
+# Bootstrap phases complete (from Phase 1 instrumentation)
+{"level":"INFO","message":"bootstrap.phase.finish","phase":"setupBaseMiddleware","durationMs":12.34}
+{"level":"INFO","message":"bootstrap.phase.finish","phase":"applySecurity","durationMs":5.67}
+
+# Server ready
+{"level":"INFO","message":"Server listening","port":3001}
+{"level":"INFO","message":"Harness ready for requests"}
+```
+
+**Hang during startup:**
+
+```bash
+# Last bootstrap phase logged
+{"level":"DEBUG","message":"bootstrap.phase.start","phase":"setupAuthRoutes"}
+
+# No corresponding finish log - indicates hang in auth setup
+# Check for auth.bootstrap.step logs to identify exact step
+```
+
+**Auth configuration error:**
+
+```bash
+{"level":"ERROR","message":"auth.bootstrap.step.error","step":"clerkMiddleware.create"}
+# Check error details and verify Clerk keys in environment
+```
+
+### Common Scenarios and Solutions
+
+#### Scenario 1: Diagnosing Vercel Deployment Hang
+
+**Symptoms:**
+
+- Vercel deployment starts but never becomes ready
+- Health check timeouts
+- No requests processed
+
+**Diagnosis workflow:**
+
+```bash
+# Step 1: Build locally
+pnpm build
+
+# Step 2: Run harness with same config as Vercel
+cp config/harness-missing-clerk.env .env.harness.missing-clerk
+ENV_FILE=.env.harness.missing-clerk pnpm prod:harness 2>&1 | tee harness-hang.log
+
+# Step 3: Monitor bootstrap phases
+# In another terminal:
+tail -f harness-hang.log | grep bootstrap
+
+# Step 4: Identify which phase hangs
+# If hang occurs, find last logged phase
+grep 'bootstrap.phase.start' harness-hang.log | tail -1
+```
+
+**Expected findings:**
+
+If the harness reproduces the hang:
+
+- Identify last completed bootstrap phase
+- Check auth.bootstrap.step logs for auth initialization issues
+- Verify Clerk keys are valid (or intentionally missing to test error handling)
+
+**Resolution:**
+
+- Missing Clerk keys: Add keys to Vercel environment variables
+- Invalid keys: Verify keys match environment (test vs production)
+- Auth middleware hang: Check Clerk service status, network connectivity
+
+#### Scenario 2: Validating Instrumentation Before Deploy
+
+**Goal:** Confirm Phase 1 instrumentation logs work correctly in production build.
+
+**Workflow:**
+
+```bash
+# Build and run with debug logging
+pnpm build
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness 2>&1 | tee validation.log
+
+# Verify bootstrap phases logged
+grep 'bootstrap.phase.finish' validation.log | jq '{phase: .phase, duration: .duration}'
+
+# Verify auth setup logged
+grep 'auth.bootstrap.step' validation.log | jq '{step: .step, duration: .duration}'
+
+# Check for errors
+grep '"level":"ERROR"' validation.log
+```
+
+**Expected output:**
+
+```json
+{"phase":"setupBaseMiddleware","duration":"12.34ms"}
+{"phase":"applySecurity","duration":"5.67ms"}
+{"phase":"initializeCoreEndpoints","duration":"8.90ms"}
+{"phase":"setupAuthRoutes","duration":"45.67ms"}
+{"step":"auth.disabled.register","duration":"2.34ms"}
+```
+
+**If instrumentation is working:** You're ready to deploy to Vercel with confidence that logs will be visible.
+
+#### Scenario 3: Testing Configuration Changes
+
+**Goal:** Validate environment variable changes before deploying.
+
+**Workflow:**
+
+```bash
+# Create custom environment file
+cp config/harness-auth-disabled.env .env.harness.custom
+
+# Edit with your changes
+vim .env.harness.custom
+# Example: Change LOG_LEVEL=info, add new FEATURE_FLAG=true
+
+# Test with custom config
+ENV_FILE=.env.harness.custom pnpm prod:harness
+
+# Run automated tests
+pnpm prod:requests
+```
+
+**Validation checklist:**
+
+- [ ] Server starts successfully
+- [ ] All requests return expected status codes
+- [ ] Logs show correct configuration values
+- [ ] No unexpected errors or warnings
+- [ ] Bootstrap completes within acceptable time (<5s typically)
+
+### Integration with Automated Request Testing
+
+The request runner (`pnpm prod:requests`) sends a sequence of test requests:
+
+**Usage:**
+
+```bash
+# Terminal 1: Start harness
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+
+# Terminal 2: Wait for "Harness ready" message, then run tests
+pnpm prod:requests
+```
+
+**Expected output:**
+
+```text
+================================================================================
+REQUEST SUMMARY
+================================================================================
+Name                    | Method | Status | Duration | Result
+--------------------------------------------------------------------------------
+Health Check            | GET    | 200    | 45ms     | ✅ OK
+Landing Page            | GET    | 200    | 67ms     | ✅ OK
+MCP Initialize          | POST   | 200    | 234ms    | ✅ OK
+================================================================================
+```
+
+Exit code: `0` = all tests passed, `1` = one or more tests failed
+
+**Troubleshooting test failures:**
+
+- **Health check fails**: Server not ready, check harness logs
+- **Landing page fails**: Base middleware issue, check setupBaseMiddleware logs
+- **MCP initialize fails**: Auth or handler issue, check auth.bootstrap and MCP handler logs
+
+### Harness Limitations and Considerations
+
+**What the harness simulates:**
+
+- ✅ Production bundle execution
+- ✅ Environment variable configuration
+- ✅ Bootstrap sequence and timing
+- ✅ Request handling logic
+- ✅ Logging format and content
+
+**What the harness does NOT simulate:**
+
+- ❌ Vercel cold starts (harness stays warm)
+- ❌ Vercel's network layer (CDN, edge network)
+- ❌ Vercel's automatic scaling (harness is single-instance)
+- ❌ Vercel's environment variable encryption
+- ❌ Production traffic load
+
+**Implications:**
+
+- Bootstrap timing may differ (Vercel cold starts add ~100-500ms)
+- Network latency to external APIs different (Vercel datacenter vs your location)
+- Memory/CPU resources different (Vercel's function limits vs your machine)
+
+**Best practice:** Use harness for functional validation and basic timing, but always validate in Vercel staging before production.
+
+### Advanced Harness Usage
+
+**Background execution with log capture:**
+
+```bash
+# Run harness in background, capture logs
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness 2>&1 > harness.log &
+HARNESS_PID=$!
+
+# Run tests
+pnpm prod:requests
+
+# Stop harness gracefully
+kill $HARNESS_PID
+
+# Analyze logs
+cat harness.log | jq 'select(.message | contains("bootstrap"))'
+```
+
+**Custom port to avoid conflicts:**
+
+```bash
+# Edit env file to use different port
+cp config/harness-auth-disabled.env .env.harness.custom
+echo "PORT=4000" >> .env.harness.custom
+
+# Run harness on custom port
+ENV_FILE=.env.harness.custom pnpm prod:harness
+
+# Test on custom port
+BASE_URL=http://localhost:4000 pnpm prod:requests
+```
+
+**Comparing multiple configurations:**
+
+```bash
+# Run tests for each scenario, capture results
+for scenario in auth-disabled auth-enabled missing-clerk; do
+  echo "Testing $scenario..."
+
+  # Start harness
+  ENV_FILE=.env.harness.$scenario pnpm prod:harness 2>&1 > harness-$scenario.log &
+  PID=$!
+
+  # Wait for ready
+  sleep 5
+
+  # Run tests
+  pnpm prod:requests > requests-$scenario.log 2>&1
+  EXIT_CODE=$?
+
+  # Stop harness
+  kill $PID
+
+  # Report
+  echo "Scenario $scenario: exit code $EXIT_CODE"
+done
+```
+
+### Related Documentation
+
+For detailed harness documentation, see the HTTP server README:
+
+- Quick start guide: `apps/oak-curriculum-mcp-streamable-http/README.md#production-diagnostics`
+- Configuration scenarios: Details on each test scenario
+- Manual testing: curl examples for testing specific endpoints
+- Troubleshooting: Common issues and solutions
+
+For tracking diagnostic improvements, see:
+
+- Implementation plan: `.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`
+- Phase 1 instrumentation: Bootstrap and auth timing (complete)
+- Phase 2 harness: Built-server testing (complete)
 
 ## Further Reading
 

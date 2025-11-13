@@ -1,6 +1,6 @@
 # Oak MCP Ecosystem – Session 3.B Complete
 
-**Last Updated**: 2025-11-10 (Session 3.B Verified Complete)  
+**Last Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness)  
 **Branch**: `feat/oauth_support`  
 **Phase**: Phase 3 (Rollout) – Ready for Staging
 
@@ -34,9 +34,10 @@
 - ✅ Verified: HTTP and stdio servers using proper DI patterns
 - ✅ Created `.agent/plans/logger-enhancement-plan.md` documenting completion
 
-🚀 **Next Up: Session 3.C** – Staging deployment and validation (Vercel configuration only).
+🛠️ **Diagnostics Track** – Phase 1 instrumentation (bootstrap/auth timers + integration coverage) complete; quality gate remediation complete 2025-11-13. Ready for Phase 2 harness implementation.  
+🚀 **Next Up: Session 3.C or Diagnostics Phase 2** – Staging deployment (ready now) or built-server harness implementation (ready now).
 
-**Repository Status**: Production-ready. All repository work complete. Session 3.C requires no code changes - deployment is pure Vercel UI configuration (environment variables, build settings). All observability features implemented and validated locally.
+**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Quality gate remediation resolved all type-check and lint issues introduced by Phase 1 instrumentation. Repository ready for Phase 2 diagnostics work or Session 3.C deployment. Session 3.C requires no repository code changes; deployment work lives in Vercel configuration.
 
 ---
 
@@ -66,18 +67,22 @@ Start here, then dive deeper as needed:
    - Validation steps for each session
    - Phase 3 rollout plan
 
+5. **`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`**
+   - Instrumentation roadmap for app bootstrap and Clerk middleware
+   - Built-artifact harness tasks and validation criteria
+
 ### Supporting Documents
 
-5. **`.agent/directives-and-memory/rules.md`**
+6. **`.agent/directives-and-memory/rules.md`**
    - Cardinal rules (MUST follow)
    - Type safety requirements
    - TDD workflow
 
-6. **`docs/agent-guidance/testing-strategy.md`**
+7. **`docs/agent-guidance/testing-strategy.md`**
    - Red → Green → Refactor loop
    - Test organization patterns
 
-7. **`packages/libs/logger/README.md`**
+8. **`packages/libs/logger/README.md`**
    - Logger API documentation
    - Entry point usage (main vs `/node`)
    - Sink configuration
@@ -95,6 +100,7 @@ I'm continuing work on the Oak MCP Ecosystem. Please read:
 @.agent/context/continuation.prompt.md
 @.agent/context/context.md
 @.agent/plans/mcp-oauth-implementation-plan.md
+@.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md
 @.agent/directives-and-memory/rules.md
 @docs/architecture/architectural-decisions/051-opentelemetry-compliant-logging.md
 
@@ -226,7 +232,7 @@ Note: Don't update HANDOFF.md until a milestone is reached.
 - **Stdio Server**: 12 e2e tests, 54 unit tests (+9 correlation, +5 error enrichment tests)
 - **SDK**: 11 e2e tests
 - **Logger Package**: Full unit test coverage (+4 timing, +5 error enrichment tests)
-- **All Quality Gates**: ✅ GREEN
+- **Quality Gate Status**: ✅ All passing as of 2025-11-13 (build, type-check, lint, test:all)
 
 ---
 
@@ -412,21 +418,25 @@ export function doX() {
 
 ### Quality Gates
 
-All green as of 2025-11-08 (Phase 2 complete):
+- ✅ **2025-11-13 all gates passing**
+  - `pnpm build` ✅
+  - `pnpm format:root` ✅
+  - `pnpm markdownlint:root` ✅
+  - `pnpm type-check` ✅
+  - `pnpm lint` ✅
+  - `pnpm test:all` ✅ (738 tests passing)
 
-- ✅ Format check
-- ✅ Markdown lint
-- ✅ Build (10 packages)
-- ✅ Type check (10 workspaces)
-- ✅ Lint (10 workspaces)
-- ✅ Documentation generation
-- ✅ Unit tests (738)
-- ✅ E2E tests (68)
-- ✅ Smoke tests (stub + live)
+### Quality Gate Remediation (2025-11-13)
+
+1. ✅ Removed unused `LoggedEntry` import from `bootstrap.instrumentation.integration.test.ts`
+2. ✅ Fixed unsafe `any` assignments in diagnostics tests (eliminated intermediate variables)
+3. ✅ Refactored `src/index.ts` → extracted `app/bootstrap-helpers.ts` (reduced from 278 to 226 lines)
+4. ✅ Fixed catch parameter typing and array type syntax
+5. ✅ All quality gates now passing with zero regressions
 
 ### Known Issues
 
-None currently. Repository is in excellent health.
+None. All quality gates passing.
 
 ### Active Decisions
 
@@ -446,7 +456,7 @@ If you're confused or stuck:
 
 ---
 
-**Last Milestone**: Session 3.B Complete (2025-11-10)  
-**Next Milestone**: Session 3.C Staging Deployment  
-**Document Version**: 1.6  
+**Last Milestone**: Quality Gate Remediation Complete (2025-11-13)  
+**Next Milestone**: Session 3.C Staging Deployment or Diagnostics Phase 2 Harness  
+**Document Version**: 1.7  
 **Status**: Active

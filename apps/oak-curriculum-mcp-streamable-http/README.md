@@ -185,6 +185,41 @@ jq -s 'map(.durationMs) | add/length' logs/server.log
 jq -s 'sort_by(.durationMs) | reverse | .[0:10]' logs/server.log
 ```
 
+## Runtime Bootstrap Diagnostics
+
+The server emits structured diagnostics while building the Express app so you can identify which stage is slow or failing in production.
+
+- `bootstrap.phase.start` / `bootstrap.phase.finish` – wraps key startup phases (`setupBaseMiddleware`, `applySecurity`, `initializeCoreEndpoints`, `setupAuthRoutes`)
+- `bootstrap.mcp.transport.connect.start` / `bootstrap.mcp.transport.connect.finish` – measures the MCP transport handshake (`server.connect`)
+- `auth.bootstrap.step.start` / `auth.bootstrap.step.finish` / `auth.bootstrap.step.error` – instruments Clerk/OAuth setup (middleware creation, registration, unauthenticated fallback)
+
+> Tip: set `LOG_LEVEL=debug` locally or in staging to see the corresponding `*.start` entries. Finish/error logs are emitted at `info`/`error` regardless of log level so they remain visible in production.
+
+### Inspecting bootstrap performance
+
+```bash
+# Most recent bootstrap phases with duration
+jq 'select(.message == "bootstrap.phase.finish") | {appId, phase, duration, durationMs}' vercel-logs.txt | tail -8
+
+# Total startup time per app instance
+jq 'select(.message == "bootstrap.complete") | {appId, duration, durationMs}' vercel-logs.txt | tail -5
+
+# MCP transport connection timing
+jq 'select(.message == "bootstrap.mcp.transport.connect.finish") | {duration, durationMs}' vercel-logs.txt | tail -5
+```
+
+### Inspecting authentication setup
+
+```bash
+# Clerk middleware lifecycle
+jq 'select(.message == "auth.bootstrap.step.finish" and .step == "clerkMiddleware.create")' vercel-logs.txt | tail -5
+
+# Detect auth setup failures
+jq 'select(.message == "auth.bootstrap.step.error")' vercel-logs.txt
+```
+
+These diagnostics help distinguish between Express wiring issues, MCP transport delays, and authentication configuration problems (e.g., missing Clerk keys).
+
 ## Error Debugging
 
 The HTTP server enriches all errors with correlation IDs, timing information, and request context for improved production debugging. Error logs include:
@@ -541,6 +576,338 @@ Consider setting up alerts for:
 - **Failed authentications**: 401 responses spike
 
 Use log drain integrations to send logs to monitoring platforms that support alerting (Datadog, New Relic, CloudWatch, etc.).
+
+## Production Diagnostics
+
+The built-server harness allows you to test the production build locally under multiple configuration scenarios to diagnose deployment issues and validate instrumentation before deploying to Vercel.
+
+### Quick Start
+
+The harness executes the built production bundle (`dist/src/index.js`) with configurable environment files, mirroring Vercel's invocation pattern:
+
+```bash
+# Step 1: Build the production bundle
+cd apps/oak-curriculum-mcp-streamable-http
+pnpm build
+
+# Step 2: Set up environment configuration (first time only)
+cp config/harness-auth-disabled.env .env.harness.auth-disabled
+
+# Step 3: Run the harness
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+```
+
+The server starts on port 3001 (configurable via `PORT` in the env file) and emits structured JSON logs showing bootstrap timing, authentication setup, and runtime diagnostics.
+
+### Configuration Scenarios
+
+Three pre-configured scenarios are available to test different authentication and configuration states:
+
+#### 1. Auth Disabled (Recommended for Initial Testing)
+
+Tests the server without Clerk dependencies:
+
+```bash
+# Setup (first time)
+cp config/harness-auth-disabled.env .env.harness.auth-disabled
+
+# Run
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+```
+
+**Use case**: Verify core server functionality, MCP handlers, and instrumentation without authentication complexity.
+
+#### 2. Auth Enabled with Clerk Keys
+
+Tests the full authentication flow with Clerk:
+
+```bash
+# Setup (first time)
+cp config/harness-auth-enabled.env .env.harness.auth-enabled
+# Edit .env.harness.auth-enabled and replace Clerk keys with real test keys
+
+# Run
+ENV_FILE=.env.harness.auth-enabled pnpm prod:harness
+```
+
+**Use case**: Validate OAuth flow, Clerk middleware initialization, and authenticated requests.
+
+#### 3. Missing Clerk Configuration
+
+Tests error handling when auth is enabled but Clerk keys are missing:
+
+```bash
+# Setup (first time)
+cp config/harness-missing-clerk.env .env.harness.missing-clerk
+
+# Run
+ENV_FILE=.env.harness.missing-clerk pnpm prod:harness
+```
+
+**Use case**: Reproduce deployment hangs or initialization failures when Clerk is misconfigured.
+
+**Expected behavior**: Server should fail fast with a clear error message or demonstrate the hang condition for diagnosis.
+
+### Automated Request Testing
+
+The request runner script sends a sequence of test requests and reports timing and success/failure:
+
+```bash
+# In a separate terminal (while harness is running)
+pnpm prod:requests
+```
+
+**Request sequence:**
+
+1. `GET /healthz` - Basic health check
+2. `GET /` - Landing page (exercises base middleware)
+3. `POST /mcp` - MCP initialize message (exercises full auth + MCP handler stack)
+
+**Output example:**
+
+```text
+================================================================================
+REQUEST SUMMARY
+================================================================================
+Name                    | Method | Status | Duration | Result
+--------------------------------------------------------------------------------
+Health Check            | GET    | 200    | 45ms     | ✅ OK
+Landing Page            | GET    | 200    | 67ms     | ✅ OK
+MCP Initialize          | POST   | 200    | 234ms    | ✅ OK
+================================================================================
+```
+
+Exit code: 0 if all requests succeed, 1 if any fail.
+
+### Manual Request Testing
+
+You can also test requests manually using curl:
+
+**Health check:**
+
+```bash
+curl -i http://localhost:3001/healthz
+```
+
+**Landing page:**
+
+```bash
+curl -i http://localhost:3001/
+```
+
+**MCP initialize (no auth):**
+
+```bash
+curl -i -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {},
+      "clientInfo": {
+        "name": "test-client",
+        "version": "1.0.0"
+      }
+    }
+  }'
+```
+
+**MCP initialize (with auth):**
+
+```bash
+curl -i -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-test-token>" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {},
+      "clientInfo": {
+        "name": "test-client",
+        "version": "1.0.0"
+      }
+    }
+  }'
+```
+
+### Interpreting Harness Logs
+
+The harness emits structured JSON logs. Key log messages to look for:
+
+**Server startup:**
+
+```json
+{"timestamp":"...","level":"INFO","message":"Server harness starting","harness":"production-build"}
+{"timestamp":"...","level":"INFO","message":"Environment loaded successfully","fileLoaded":true}
+{"timestamp":"...","level":"INFO","message":"Configuration snapshot","PORT":"3001","LOG_LEVEL":"debug"}
+```
+
+**Bootstrap phases (from Phase 1 instrumentation):**
+
+```json
+{"timestamp":"...","level":"DEBUG","message":"bootstrap.phase.start","phase":"setupBaseMiddleware"}
+{"timestamp":"...","level":"INFO","message":"bootstrap.phase.finish","phase":"setupBaseMiddleware","durationMs":12.34}
+```
+
+**Authentication setup:**
+
+```json
+{"timestamp":"...","level":"DEBUG","message":"auth.bootstrap.step.start","step":"clerkMiddleware.create"}
+{"timestamp":"...","level":"INFO","message":"auth.bootstrap.step.finish","step":"clerkMiddleware.create","durationMs":45.67}
+```
+
+**Server ready:**
+
+```json
+{"timestamp":"...","level":"INFO","message":"Server listening","port":3001,"totalBootstrapMs":234}
+{"timestamp":"...","level":"INFO","message":"Harness ready for requests","healthCheck":"http://localhost:3001/healthz"}
+```
+
+### Troubleshooting Common Issues
+
+#### Server Fails to Start
+
+**Symptom**: Harness exits with error during startup.
+
+**Check:**
+
+1. **Build artifacts exist**: Verify `dist/src/index.js` exists (run `pnpm build`)
+2. **Environment file loaded**: Look for "Environment loaded successfully" in logs
+3. **Configuration issues**: Check "Configuration snapshot" log for missing/invalid values
+4. **Port already in use**: Change `PORT=3001` to another port in env file
+
+#### Server Hangs During Startup
+
+**Symptom**: Harness starts but never reaches "Server listening" message.
+
+**Check:**
+
+1. **Bootstrap phase logs**: Find which phase is last logged before hang
+2. **Auth setup logs**: Look for `auth.bootstrap.step.start` without matching `finish`
+3. **Clerk middleware**: If using auth-enabled scenario, verify Clerk keys are valid
+4. **Missing config**: If using missing-clerk scenario, this may be the expected behavior
+
+**Diagnosis workflow:**
+
+```bash
+# Run harness with debug logging
+ENV_FILE=.env.harness.missing-clerk pnpm prod:harness 2>&1 | tee harness-debug.log
+
+# In another terminal, monitor bootstrap phases
+tail -f harness-debug.log | grep bootstrap.phase
+```
+
+#### Requests Timeout or Fail
+
+**Symptom**: `pnpm prod:requests` reports failures or timeouts.
+
+**Check:**
+
+1. **Server is ready**: Wait for "Harness ready for requests" log before running requests
+2. **Port mismatch**: Ensure request runner uses same port as harness (default 3001)
+3. **Auth requirements**: MCP requests may require Bearer token in auth-enabled scenario
+4. **Request timeout**: Increase `TIMEOUT_MS` env var for request runner if needed
+
+**Manual test:**
+
+```bash
+# Test health check first
+curl -v http://localhost:3001/healthz
+
+# If health check works but MCP fails, check auth requirements
+curl -v -X POST http://localhost:3001/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'
+```
+
+#### Auth Middleware Errors
+
+**Symptom**: Logs show `auth.bootstrap.step.error` or auth-related failures.
+
+**Common causes:**
+
+1. **Invalid Clerk keys**: Verify keys start with `pk_test_` and `sk_test_` in env file
+2. **Missing Clerk keys**: If auth is enabled, both keys must be present
+3. **Network issues**: Clerk middleware may attempt to fetch public keys on init
+4. **Environment mismatch**: Test keys only work in development; use production keys in production
+
+**Resolution:**
+
+- For testing without Clerk: Use `harness-auth-disabled.env` scenario
+- For testing with Clerk: Use valid test keys from Clerk dashboard
+- For reproducing hang: Use `harness-missing-clerk.env` to test error handling
+
+### Comparing with Vercel Behavior
+
+The harness mirrors Vercel's invocation pattern:
+
+| Aspect           | Vercel Serverless                    | Local Harness                   |
+| ---------------- | ------------------------------------ | ------------------------------- |
+| Entry point      | `dist/src/index.js` default export   | Same (imported via `createApp`) |
+| Node version     | Configurable (Node 22+ recommended)  | Uses local Node version         |
+| Environment      | Vercel env vars                      | Local `.env.harness.*` files    |
+| Logging          | stdout captured by Vercel            | stdout to terminal              |
+| Request handling | Per-request invocation (cold starts) | Long-running server (warm)      |
+
+**Key differences:**
+
+- **Cold starts**: Vercel may create new instances per request; harness reuses same instance
+- **Network**: Harness runs on localhost; Vercel uses public endpoints
+- **Secrets**: Harness uses local env files; Vercel uses encrypted environment variables
+
+### Advanced Usage
+
+**Custom port:**
+
+```bash
+# Modify PORT in env file, then run
+PORT=4000 ENV_FILE=.env.harness.auth-disabled pnpm prod:harness
+```
+
+**Custom environment file:**
+
+```bash
+# Create your own .env.harness.custom file, then run
+ENV_FILE=.env.harness.custom pnpm prod:harness
+```
+
+**Background execution:**
+
+```bash
+# Run harness in background
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness &
+HARNESS_PID=$!
+
+# Run requests
+pnpm prod:requests
+
+# Stop harness
+kill $HARNESS_PID
+```
+
+**Capture logs to file:**
+
+```bash
+ENV_FILE=.env.harness.auth-disabled pnpm prod:harness 2>&1 | tee harness-$(date +%Y%m%d-%H%M%S).log
+```
+
+**One-liner (build + run):**
+
+```bash
+ENV_FILE=.env.harness.auth-disabled pnpm prod:diagnostics
+```
+
+### Related Documentation
+
+- Phase 1 instrumentation details: See "Runtime Bootstrap Diagnostics" section above
+- Production debugging workflows: See `docs/development/production-debugging-runbook.md`
+- Vercel deployment guide: See "Vercel deployment" section above
 
 ## Cursor (local STDIO) configuration
 

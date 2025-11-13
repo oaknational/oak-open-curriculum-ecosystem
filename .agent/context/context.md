@@ -1,6 +1,6 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-10 (Logger Architecture Verified Complete)  
+**Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
@@ -8,7 +8,8 @@
 ✅ **Phase 1 Complete** – Logging consolidation and runtime config refactoring delivered  
 ✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
 ✅ **Session 3.A Complete** – Documentation finalization and dev server validation  
-✅ **Session 3.B Complete** – Logger architecture refactoring (discovered already done)  
+✅ **Session 3.B Complete** – Logger architecture verification (no further refactor required)  
+🛠️ **Runtime Diagnostics Track** – Phase 1 instrumentation shipped; harness and documentation phases pending  
 🚀 **Next: Phase 3 Rollout** – Production deployment and monitoring
 
 ## Strategic Goal
@@ -57,6 +58,12 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ✅ **2025-11-10**: Architecture verification: All Session 3.B work already complete during Phase 2
 - ✅ **2025-11-10**: Logger package verified: Zero lint errors, proper DI, Node.js APIs confined to node.ts
 - ✅ **2025-11-10**: Application wiring verified: HTTP and stdio both use UnifiedLogger with explicit DI
+- 🛠️ **2025-11-12**: Created `mcp-streamable-http-runtime-diagnostics-plan.md` to track bootstrap instrumentation and built-server harness work
+- ✅ **2025-11-12**: Runtime diagnostics Phase 1 delivered – new bootstrap/auth instrumentation with logger helpers, logger build + HTTP suite updated (197 logger tests, 74 HTTP tests)
+- ⚠️ **2025-11-12**: Quality gate sweep exposed new lint/type-check gaps and missing scripts; remediation required
+- ✅ **2025-11-13**: Quality gate remediation complete - removed unused imports, fixed unsafe assignments, refactored index.ts
+- ✅ **2025-11-13**: Created `app/bootstrap-helpers.ts` to extract bootstrap logic, reduced index.ts to 226 lines
+- ✅ **2025-11-13**: All quality gates passing: build, type-check, lint, test:all (738 tests)
 - 🚀 **Next**: Phase 3 production rollout (logger foundation ready)
 
 ## Architecture Verification (2025-11-10)
@@ -139,6 +146,11 @@ Application Layer (HTTP & Stdio):
   - [ ] Execute smoke tests against staging endpoint
   - [ ] Validate OpenTelemetry log format with production log aggregation
   - [ ] Verify observability features end-to-end (correlation IDs, timing, error enrichment)
+- 🛠️ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`)
+  - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage) - Complete 2025-11-12
+  - ✅ Quality gate remediation - Complete 2025-11-13
+  - 🚀 Phase 2 harness: run built `dist/` bundle locally with config matrix and scripted requests (Ready to begin)
+  - [ ] Phase 3 documentation: capture harness workflow and troubleshooting guidance
 - [ ] Session 3.D: Production Rollout & Observation
   - Gradual production rollout
   - Monitor log volume and costs
@@ -165,12 +177,33 @@ Application Layer (HTTP & Stdio):
 | **3.A**     | **Documentation finalization** | ✅ **Complete (2025-11-08)**             |
 | **3.B**     | **Logger architecture**        | ✅ **Complete (2025-11-10, verified)**   |
 | **3.C**     | **Staging deployment**         | 🚀 **Next (Ready to begin)**             |
+| **Diag**    | **Runtime diagnostics plan**   | 🛠️ **In progress (2025-11-12)**          |
 
 ## Quality Gate Status
 
-✅ **Current state**: ALL GREEN (2025-11-08, Phase 2 Complete)
+✅ **Current state**: 2025-11-13 all quality gates passing after remediation
 
-Latest successful run (2025-11-08, Session 2.5 validation):
+**Latest run (2025-11-13)**
+
+- `pnpm build` ✅
+- `pnpm format:root` ✅
+- `pnpm markdownlint:root` ✅
+- `pnpm type-check` ✅
+- `pnpm lint` ✅
+- `pnpm test:all` ✅ (738 tests passing)
+
+**Remediation completed (2025-11-13)**:
+
+1. ✅ Removed unused `LoggedEntry` import from `bootstrap.instrumentation.integration.test.ts`
+2. ✅ Fixed unsafe `any` assignments in diagnostics tests by eliminating intermediate variables
+3. ✅ Refactored `src/index.ts` to address lint violations:
+   - Extracted bootstrap-related functions to `app/bootstrap-helpers.ts`
+   - Reduced file size from 278 lines to 226 lines (under 250 limit)
+   - Fixed catch parameter typing with explicit `: unknown`
+   - Resolved max-statements violation in bootstrap test
+4. ✅ Fixed array type syntax (`T[]` instead of `Array<T>`) per linting rules
+
+**Most recent all-green sweep (2025-11-08, Session 2.5 validation):**
 
 ```bash
 pnpm format-check:root    ✅

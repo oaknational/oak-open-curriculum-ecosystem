@@ -53,7 +53,15 @@ export {
 } from './log-levels';
 
 // Timing utilities
-export { startTimer, type Duration, type Timer } from './timing';
+export {
+  startTimer,
+  createPhasedTimer,
+  type Duration,
+  type Timer,
+  type PhaseHandle,
+  type PhasedTimer,
+  type PhaseResult,
+} from './timing';
 
 // Error Context Enrichment
 export { enrichError, type ErrorContext } from './error-context';

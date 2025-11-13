@@ -2,7 +2,7 @@
  * Unit tests for timing utilities
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { startTimer } from './timing';
+import { startTimer, createPhasedTimer } from './timing';
 
 describe('startTimer', () => {
   beforeEach(() => {
@@ -97,5 +97,77 @@ describe('startTimer', () => {
 
     const duration = timer.end();
     expect(duration.formatted).toBe('1.23s');
+  });
+});
+
+describe('createPhasedTimer', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('measures sequential phases and total duration independently', () => {
+    const timer = createPhasedTimer();
+
+    const middlewarePhase = timer.startPhase('setupBaseMiddleware');
+    vi.advanceTimersByTime(75);
+    const middlewareResult = middlewarePhase.end();
+
+    const securityPhase = timer.startPhase('applySecurity');
+    vi.advanceTimersByTime(125);
+    const securityResult = securityPhase.end();
+
+    const total = timer.end();
+
+    expect(middlewareResult.name).toBe('setupBaseMiddleware');
+    expect(middlewareResult.duration.ms).toBeCloseTo(75, 0);
+    expect(middlewareResult.duration.formatted).toBe('75ms');
+
+    expect(securityResult.name).toBe('applySecurity');
+    expect(securityResult.duration.ms).toBeCloseTo(125, 0);
+    expect(securityResult.duration.formatted).toBe('125ms');
+
+    expect(total.ms).toBeCloseTo(200, 0);
+    expect(total.formatted).toBe('200ms');
+  });
+
+  it('supports measuring an in-flight phase without ending it', () => {
+    const timer = createPhasedTimer();
+
+    const phase = timer.startPhase('initializeCoreEndpoints');
+    vi.advanceTimersByTime(90);
+
+    const inFlightElapsed = phase.elapsed();
+    expect(inFlightElapsed).toBeCloseTo(90, 0);
+
+    vi.advanceTimersByTime(10);
+    const result = phase.end();
+    expect(result.duration.ms).toBeCloseTo(100, 0);
+  });
+
+  it('allows ending timer without active phase', () => {
+    const timer = createPhasedTimer();
+
+    vi.advanceTimersByTime(30);
+
+    const total = timer.end();
+
+    expect(total.ms).toBeCloseTo(30, 0);
+    expect(total.formatted).toBe('30ms');
+  });
+
+  it('throws when ending a phase more than once to avoid inconsistent metrics', () => {
+    const timer = createPhasedTimer();
+    const phase = timer.startPhase('setup');
+
+    vi.advanceTimersByTime(10);
+    phase.end();
+
+    expect(() => {
+      phase.end();
+    }).toThrowError(new Error('Phase "setup" has already ended'));
   });
 });

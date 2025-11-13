@@ -1,7 +1,7 @@
 # Continuation Prompt: Oak MCP Observability Implementation
 
-**Last Updated**: 2025-11-10 (Session 3.B Verified Complete)  
-**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · ✅ Session 3.B Complete · 🚀 Ready for Phase 3 Staging  
+**Last Updated**: 2025-11-12 (Runtime diagnostics Phase 1 shipped; quality gate follow-up pending)  
+**Status**: ✅ Phase 1 Complete · ✅ Phase 2 Complete · ✅ Session 3.A Complete · ✅ Session 3.B Complete · 🛠️ Diagnostics Phase 1 Complete · ⚠️ Quality gate remediation in progress · 🚀 Ready for Phase 3 Staging  
 **Audience**: AI assistants in fresh contexts (optimized for complete context restoration)
 
 ---
@@ -23,7 +23,7 @@ I've completed the Oak MCP Ecosystem observability implementation Phase 2 and Se
    - 🚀 Session 3.C: Staging Deployment & Validation (Ready - No Repo Changes Required)
    - [ ] Session 3.D: Production Rollout & Observation
 
-**Current status**: Session 3.B complete. Logger architecture verified complete. Session 3.C requires no repository changes - all work is Vercel UI configuration. Repository is production-ready with all observability features implemented and validated.
+**Current status**: Session 3.B complete. Logger architecture verified complete. Session 3.C still requires no repository changes—deployment is Vercel UI configuration. Runtime diagnostics Phase 1 instrumentation (bootstrap/auth timers) shipped on 2025-11-12. Quality gate remediation completed on 2025-11-13, resolving all type-check and lint issues introduced by Phase 1 instrumentation. All quality gates now passing: build ✅, type-check ✅, lint ✅, test:all ✅ (738 tests). Repository ready for Runtime Diagnostics Phase 2 (built-server harness) and Session 3.C (staging deployment). The diagnostics plan (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) tracks completed instrumentation and upcoming harness/doc phases.
 
 ---
 
@@ -751,6 +751,110 @@ The logger architecture improvements happened **organically during Phase 2** imp
 4. **TDD Drives Design**: Test-first development naturally leads to good DI patterns
 
 **State**: Logger foundation ready for production rollout. No blocking architectural debt.
+
+---
+
+### Runtime Diagnostics: Quality Gate Remediation (2025-11-13)
+
+**Objectives**: Restore quality gates to green status after Phase 1 instrumentation introduced type-check and lint violations.
+
+**Problem**: 2025-11-12 quality gate sweep revealed:
+
+1. **Type-check failure**: Unused `LoggedEntry` import in `bootstrap.instrumentation.integration.test.ts`
+2. **Lint failures** (11 errors):
+   - Unsafe `any` assignments from `Reflect.get()` in diagnostics tests
+   - `max-statements` violation (22 > 20) in bootstrap integration test
+   - `max-lines` violation (278 > 250) in `src/index.ts`
+   - `max-lines-per-function` violation (56 > 50) in `createApp` function
+   - Catch parameter missing explicit typing
+   - Array type syntax (`Array<T>` instead of `T[]`)
+
+**Solution Strategy**:
+
+1. **Remove Unused Import**: Delete `LoggedEntry` type from bootstrap test import
+2. **Fix Unsafe Assignments**: Eliminate intermediate variables, use `Reflect.get()` result directly in comparisons
+3. **Extract Helper Functions**: Move bootstrap-related logic to separate module
+4. **Reduce Function Complexity**: Break down large test functions into smaller helpers
+
+**Implementation**:
+
+**File: `bootstrap.instrumentation.integration.test.ts`**
+
+- Removed unused `LoggedEntry` type import
+- Eliminated intermediate variables that captured `Reflect.get()` results (were implicitly `any`)
+- Used direct comparison: `return Reflect.get(context, 'phase') === phase;`
+- Extracted helper functions `verifyPhaseLogging` and `verifyTotalBootstrapLogging` to reduce main test complexity
+- Fixed array type syntax to `T[]` style
+
+**File: `auth-instrumentation.unit.test.ts` and `auth.instrumentation.integration.test.ts`**
+
+- Applied same pattern: eliminated intermediate variables from `Reflect.get()` calls
+- Direct comparison approach prevents unsafe `any` assignments
+
+**File: `src/index.ts`**
+
+- Extracted bootstrap-related functions to new `app/bootstrap-helpers.ts` module:
+  - `BootstrapPhaseName` type
+  - `BootstrapPhaseContext` interface
+  - `runBootstrapPhase()` function
+  - `setupBaseMiddleware()` function
+  - `createMcpReadinessMiddleware()` function
+- Updated imports to use new module
+- Reduced file from 278 lines to 226 lines (under 250 limit)
+- Fixed catch parameter typing with explicit `: unknown`
+- Used nullish coalescing operator (`??=`) for cleaner code
+
+**File: `app/bootstrap-helpers.ts` (new)**
+
+- Created dedicated module for bootstrap orchestration
+- Exports bootstrap types and helper functions
+- Keeps `src/index.ts` focused on app creation and wiring
+- All functions properly typed with TSDoc comments
+
+**Benefits**:
+
+1. **Better Separation of Concerns**: Bootstrap logic now isolated in dedicated module
+2. **Improved Testability**: Helper functions can be tested independently
+3. **Reduced Complexity**: `src/index.ts` now under all linting thresholds
+4. **Type Safety Maintained**: No shortcuts taken, all types preserved
+5. **Code Quality**: Follows project rules (no `any`, no type assertions)
+
+**Validation Results**:
+
+```bash
+pnpm build         ✅ All packages compile
+pnpm type-check    ✅ Zero TypeScript errors
+pnpm lint          ✅ Zero linting violations
+pnpm test:all      ✅ 738 tests passing
+```
+
+**Key Insights**:
+
+1. **Reflect.get() Returns Any**: Must handle carefully to avoid unsafe assignments
+   - ❌ BAD: `const x = Reflect.get(obj, 'key');` (x is implicitly any)
+   - ✅ GOOD: `return Reflect.get(obj, 'key') === expected;` (no intermediate variable)
+
+2. **File Size Matters**: Linting rules enforce modular design
+   - Extract related functions to dedicated modules
+   - Keep main files focused on orchestration, not implementation
+
+3. **Test Complexity**: Long test functions should extract helpers
+   - Reduces statement count
+   - Improves readability
+   - Makes tests more maintainable
+
+4. **Incremental Quality**: Quality gates catch issues immediately
+   - Prevents technical debt accumulation
+   - Forces good practices from the start
+   - TDD + linting = clean architecture
+
+**Deliverables**:
+
+- ✅ Zero type-check errors across entire codebase
+- ✅ Zero linting violations across entire codebase
+- ✅ New `app/bootstrap-helpers.ts` module with proper types and documentation
+- ✅ All 738 tests passing with no regressions
+- ✅ Quality gates ready for Phase 2 diagnostics work or Session 3.C deployment
 
 ---
 
@@ -1566,7 +1670,26 @@ it('generates unique correlation IDs', async () => {
 
 ## Quality Gate Baseline
 
-**Current Status**: ✅ ALL GREEN (2025-11-08, Phase 2 Complete)
+**Current Status**: ✅ 2025-11-13 all quality gates passing after remediation
+
+**Latest run (2025-11-13):**
+
+- `pnpm build` ✅
+- `pnpm format:root` ✅
+- `pnpm markdownlint:root` ✅
+- `pnpm type-check` ✅
+- `pnpm lint` ✅
+- `pnpm test:all` ✅ (738 tests passing)
+
+**Remediation Summary (2025-11-13)**:
+
+1. Removed unused `LoggedEntry` import
+2. Fixed unsafe `any` assignments by eliminating intermediate variables
+3. Refactored `src/index.ts` → extracted `app/bootstrap-helpers.ts` (reduced from 278 to 226 lines)
+4. Fixed array type syntax and catch parameter typing
+5. All tests passing, zero regressions
+
+**Previous green sweep (2025-11-08, Session 2.5 validation):**
 
 ```bash
 pnpm format-check:root        ✅ (Prettier)
@@ -1618,8 +1741,8 @@ pnpm qg                       ✅ (Runs all above)
 
 **Repository Status**:
 
-- ✅ All quality gates green
-- ✅ 738 tests passing across 10 workspaces (+38 instrumentation tests)
+- ✅ Quality gates green (all passing as of 2025-11-13)
+- ✅ `pnpm test` / `pnpm test:e2e` passing (738 unit/integration tests; 57 e2e as of 2025-11-12)
 - ✅ Phase 1 complete and delivered
 - ✅ Phase 2 complete and delivered (all 5 sessions)
 - ✅ Runtime config consolidated
@@ -1628,8 +1751,11 @@ pnpm qg                       ✅ (Runs all above)
 - ✅ Error context enrichment complete
 - ✅ Phase 2 validation and integration complete
 - ✅ All documentation updated
+- ✅ Runtime diagnostics Phase 1 instrumentation (bootstrap/auth logging, logger helpers, docs) shipped 2025-11-12
+- ✅ Quality gate remediation complete 2025-11-13
 - ✅ Branch: `feat/oauth_support`
 - 🚀 Ready for Phase 3 (Production Rollout & Monitoring)
+- 🚀 Ready for Runtime Diagnostics Phase 2 (Built Server Harness)
 
 **Phase 1 Deliverables** (Complete 2025-11-05):
 
@@ -1661,14 +1787,20 @@ pnpm qg                       ✅ (Runs all above)
 
 **Next Steps**:
 
-1. **Session 3.C: Staging Deployment & Validation** (Immediate Next)
+1. **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`)
+   - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage)
+   - ✅ Quality gate remediation complete
+   - 🚀 Phase 2 harness: run built `dist/` server locally under multiple configuration matrices (Ready to begin)
+   - Phase 3 documentation: capture harness workflow + troubleshooting instructions
+
+2. **Session 3.C: Staging Deployment & Validation** (Ready - No Repo Changes Required)
    - Deploy HTTP server to staging environment
    - Validate log ingestion by observability platforms
    - Execute smoke tests against staging
    - Verify OpenTelemetry format compatibility
    - Validate correlation IDs, timing, error enrichment end-to-end
 
-2. **Session 3.D: Production Rollout & Observation**
+3. **Session 3.D: Production Rollout & Observation**
    - Gradual production rollout
    - Monitor log volume and costs
    - Establish dashboards and alerts
@@ -1685,6 +1817,6 @@ pnpm qg                       ✅ (Runs all above)
 
 ---
 
-**Next Review**: Before beginning Session 3.C (Staging Deployment)
+**Next Review**: Before starting Session 3.C staging rollout or Diagnostics Phase 2 harness
 
-**Last Updated**: 2025-11-10 (Session 3.B Verified Complete)
+**Last Updated**: 2025-11-13 (Quality gate remediation complete; ready for Phase 2 harness or Session 3.C)
