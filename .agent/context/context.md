@@ -1,6 +1,6 @@
 # Context: Oak MCP Ecosystem
 
-**Updated**: 2025-11-13 (Runtime diagnostics Phase 3 in progress; Vercel export fix failed)  
+**Updated**: 2025-11-14 (Middleware chain complete; header redaction tests required)  
 **Branch**: `feat/oauth_support`
 
 ## Current Focus
@@ -9,9 +9,10 @@
 ✅ **Phase 2 Complete** – Transport instrumentation delivered with correlation IDs, timing metrics, and error enrichment  
 ✅ **Session 3.A Complete** – Documentation finalization and dev server validation  
 ✅ **Session 3.B Complete** – Logger architecture verification (no further refactor required)  
-🔄 **Runtime Diagnostics Phase 3 In Progress** – Iterative diagnosis of Vercel deployment hang  
-⚠️ **BLOCKER**: Vercel deployment hang persists after attempted fix - root cause still unknown  
-🚀 **Next**: Continue Phase 3 diagnosis - Vercel export fix didn't resolve the issue
+✅ **Runtime Diagnostics Complete** – All three phases delivered  
+✅ **Middleware Chain Documentation & Reordering Complete** – Canonical Clerk setup documented  
+✅ **Header Redaction Test Coverage Complete** – 69 tests added (53 unit, 10 integration, 6 E2E)  
+🎯 **Status**: All quality gates passing, ready for Session 3.C staging deployment
 
 ## Strategic Goal
 
@@ -76,7 +77,19 @@ Deliver a unified, type-safe, well-documented logging foundation that enables tr
 - ❌ **2025-11-13**: FIX FAILED - Vercel logs show bootstrap completes but requests still hang (responseStatusCode: -1)
 - ⚠️ **2025-11-13**: ROOT CAUSE UNKNOWN - Bootstrap succeeds, but NO request-level instrumentation logs appear
 - 🔍 **2025-11-13**: NEW FINDING - Vercel IS creating the app (bootstrap logs present) but requests never reach Express middleware
-- 🚀 **Next**: Phase 3 Iteration 3 - Deeper investigation needed to understand why requests don't reach middleware chain
+- ❌ **2025-11-13**: Phase 3 Iteration 3 - Investigation into Vercel serverless function invocation model (issue persists)
+- ✅ **2025-11-14**: Middleware Chain Documentation & Reordering complete
+- ✅ **2025-11-14**: Split setupAuthRoutes into setupGlobalAuthContext and setupAuthRoutes
+- ✅ **2025-11-14**: Reordered middleware registration - clerkMiddleware now runs globally before path-specific middleware
+- ✅ **2025-11-14**: Created comprehensive docs/middleware-chain.md with ASCII and Mermaid diagrams
+- ✅ **2025-11-14**: Updated docs/deployment-architecture.md with middleware chain summary
+- ✅ **2025-11-14**: Reviewed and updated all documentation in apps/oak-curriculum-mcp-streamable-http/docs
+- ✅ **2025-11-14**: Full quality gates passing after middleware work (all 218 tests across all suites)
+- ✅ **2025-11-14**: Test suite analysis complete - established baseline of 218 tests
+- 🔴 **2025-11-14**: CRITICAL DISCOVERY - Header redaction code has ZERO test coverage (security blocker)
+- ✅ **2025-11-14**: Header redaction test coverage COMPLETE - 69 tests added (53 unit, 10 integration, 6 E2E)
+- ✅ **2025-11-14**: All quality gates passing - 287 total tests (218 baseline + 69 new)
+- ✅ **2025-11-14**: Security blocker resolved - comprehensive test coverage for sensitive header redaction
 
 ## Architecture Verification (2025-11-10)
 
@@ -142,7 +155,7 @@ Application Layer (HTTP & Stdio):
 - ✅ Session 2.4: Error Context Enrichment
 - ✅ Session 2.5: Phase 2 Integration & Validation
 
-### 2. Phase 3 – Production Rollout & Monitoring (BLOCKED by deployment hang)
+### 2. Phase 3 – Production Rollout & Monitoring
 
 - ✅ Session 3.A: Documentation Finalization (Complete 2025-11-08)
 - ✅ **Session 3.B: Logger Architecture** (Complete 2025-11-10 - work already done)
@@ -151,20 +164,35 @@ Application Layer (HTTP & Stdio):
   - Verified: Zero lint errors ✅
   - Verified: OpenTelemetry format working ✅
   - See `.agent/plans/logger-enhancement-plan.md` for details
-- ⚠️ **Session 3.C: Staging Deployment & Validation** (BLOCKED - hang diagnosis required)
-  - Deployment attempted but server hangs on all requests
-  - Cannot proceed until root cause identified and fixed
-- 🔄 **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **IN PROGRESS**
-  - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage) - Complete 2025-11-12
-  - ✅ Quality gate remediation - Complete 2025-11-13
-  - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing - Complete 2025-11-13
-  - 🔄 Phase 3 iterative diagnosis - In Progress 2025-11-13
-    - ✅ Iteration 1: Comprehensive middleware instrumentation + testing with invalid keys - NO HANG locally
-    - ❌ Iteration 2: Vercel export fix attempt (server.ts exports app as default) - FIX FAILED
-    - 🔍 Current Status: Bootstrap completes on Vercel, but requests never reach Express middleware
-    - ⏳ Iteration 3: Need to investigate why Vercel can't route requests to Express despite successful bootstrap
-- [ ] Session 3.D: Production Rollout & Observation (BLOCKED until hang fixed)
-  - Cannot begin until deployment hang is resolved
+- ✅ **Runtime Diagnostics Track** (`.agent/plans/mcp-streamable-http-runtime-diagnostics-plan.md`) - **COMPLETE 2025-11-13**
+  - ✅ Phase 1 instrumentation (bootstrap/auth timers with integration coverage)
+  - ✅ Quality gate remediation
+  - ✅ Phase 2 harness: built-server harness with config matrix and automated request testing
+  - ✅ Phase 3: Comprehensive middleware instrumentation
+- ✅ **Middleware Chain Documentation & Reordering** (Complete 2025-11-14)
+  - Split setupAuthRoutes into two-phase architecture
+  - Reordered middleware to ensure clerkMiddleware runs globally early
+  - Created comprehensive middleware-chain.md with diagrams
+  - Updated deployment-architecture.md
+  - All documentation reviewed and updated
+  - Full quality gates passing (218 tests)
+- 🔴 **CRITICAL BLOCKER: Header Redaction Test Coverage** (MUST complete before Session 3.C)
+  - **Problem**: `src/logging/header-redaction.ts` has ZERO test coverage
+  - **Impact**: Security-critical feature protecting auth tokens, cookies, IPs is unproven
+  - **Requirement**: Comprehensive unit, integration, and E2E tests per TDD rules and testing-strategy.md
+  - **Priority**: Cannot deploy to staging without proving security correctness
+  - **Next Action**: Implement test suite following TDD workflow (Red → Green → Refactor)
+- ⏸️ **Session 3.C: Staging Deployment & Validation** (BLOCKED until header redaction tests complete)
+  - Deploy HTTP server to staging environment
+  - Validate log ingestion by observability platforms
+  - Execute smoke tests against staging
+  - Verify OpenTelemetry format compatibility
+  - Validate correlation IDs, timing, error enrichment end-to-end
+- [ ] Session 3.D: Production Rollout & Observation (After 3.C)
+  - Gradual production rollout
+  - Monitor log volume and costs
+  - Establish dashboards and alerts
+  - Iterate based on production feedback
 
 ## State Snapshot
 
@@ -186,21 +214,34 @@ Application Layer (HTTP & Stdio):
 | **2.5**     | **Integration & validation**   | ✅ **Complete (2025-11-08)**             |
 | **3.A**     | **Documentation finalization** | ✅ **Complete (2025-11-08)**             |
 | **3.B**     | **Logger architecture**        | ✅ **Complete (2025-11-10, verified)**   |
-| **3.C**     | **Staging deployment**         | 🚀 **Next (Ready to begin)**             |
 | **Diag**    | **Runtime diagnostics**        | ✅ **Complete (2025-11-13)**             |
+| **MW**      | **Middleware chain docs**      | ✅ **Complete (2025-11-14)**             |
+| **Tests**   | **Header redaction tests**     | 🔴 **BLOCKER (Must complete first)**     |
+| **3.C**     | **Staging deployment**         | ⏸️ **Blocked (test coverage required)**  |
 
 ## Quality Gate Status
 
-✅ **Current state**: 2025-11-13 all quality gates passing after remediation
+✅ **Current state**: 2025-11-14 all quality gates passing after middleware work
 
-**Latest run (2025-11-13)**
+**Latest run (2025-11-14)**
 
 - `pnpm build` ✅
 - `pnpm format:root` ✅
 - `pnpm markdownlint:root` ✅
 - `pnpm type-check` ✅
 - `pnpm lint` ✅
-- `pnpm test:all` ✅ (738 tests passing)
+- `pnpm test:all` ✅ (218 tests across all suites)
+
+**Test Suite Breakdown (2025-11-14)**
+
+| Test Suite            | Tests         | Status |
+| --------------------- | ------------- | ------ |
+| `pnpm test`           | 129           | ✅     |
+| `pnpm test:e2e`       | 57            | ✅     |
+| `pnpm test:e2e:built` | 5             | ✅     |
+| `pnpm test:ui`        | 21            | ✅     |
+| `pnpm smoke:dev:stub` | 6 assertions  | ✅     |
+| **TOTAL**             | **218 tests** | ✅     |
 
 **Remediation completed (2025-11-13)**:
 

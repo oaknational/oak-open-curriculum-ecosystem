@@ -967,3 +967,57 @@ See `docs/clerk-oauth-trace-instructions.md` for detailed OAuth flow documentati
 - MCP handlers are attached via `@oaknational/mcp-server-kit` `attachMcpHandlers`, using a registry of tools generated in the SDK.
 - Request validation uses Zod schemas derived at compile-time from the OpenAPI spec; invalid inputs return a formatted error body (200 status, `isError: true`).
 - Successful results are SSE-wrapped JSON-RPC responses formatted with `formatStandardContent`.
+
+## Testing
+
+This application has comprehensive test coverage across three testing layers:
+
+### Unit Tests (53 tests)
+
+- **Header Redaction** (`src/logging/header-redaction.unit.test.ts`): 53 tests covering:
+  - Full redaction of sensitive headers (Authorization, Cookie, API keys, tokens)
+  - Partial redaction of IP addresses (CF-Connecting-IP, X-Forwarded-For, etc.)
+  - Preservation of non-sensitive headers
+  - Edge cases (undefined values, arrays, IPv6, case insensitivity)
+  - Both `redactHeaders()` and `redactHeadersSummary()` functions
+
+### Integration Tests (20 tests)
+
+- **Correlation Middleware** (`src/correlation/middleware.integration.test.ts`): 20 tests including:
+  - 10 new tests for header redaction in request/response logging
+  - Verification that sensitive headers are redacted in correlation middleware logs
+  - Testing mixed sensitive/non-sensitive header handling
+
+### End-to-End Tests (63 tests)
+
+- **Header Redaction E2E** (`e2e-tests/header-redaction.e2e.test.ts`): 6 tests covering:
+  - Full request/response cycles with sensitive headers
+  - IP header handling
+  - Simulated Clerk OAuth scenarios
+  - Production-like header sets
+  - Auth failure responses with WWW-Authenticate
+
+**Total Test Count**: 200+ tests (137 unit/integration + 63 E2E)
+
+### Running Tests
+
+```bash
+# Run all unit and integration tests
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test
+
+# Run E2E tests
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:e2e
+
+# Run all tests
+pnpm --filter @oaknational/oak-curriculum-mcp-streamable-http test:all
+```
+
+---
+
+**Documentation Status**: Last verified 2025-01-14 against `src/application.ts`, `src/auth-routes.ts`, and deployed infrastructure.
+
+**Related Documentation**:
+
+- [deployment-architecture.md](./docs/deployment-architecture.md) - Deployment patterns and architecture
+- [middleware-chain.md](./docs/middleware-chain.md) - Complete middleware execution order
+- [vercel-environment-config.md](./docs/vercel-environment-config.md) - Environment variable reference

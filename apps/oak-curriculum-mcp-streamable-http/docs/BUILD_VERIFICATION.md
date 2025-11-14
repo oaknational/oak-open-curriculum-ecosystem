@@ -1,5 +1,10 @@
 # Build Artifact Verification System
 
+> **Historical Note**: The postbuild verification script (`scripts/verify-build-artifacts.js`) described in this document has been **removed** as it was constraining implementation rather than proving behavior. The behavioral verification (Layer 2: `test:e2e:built`) remains and provides sufficient deployment testing. This document is preserved for historical context.
+>
+> **Last Updated**: 2025-01-14
+> **Status**: Historical / Archived
+
 ## Overview
 
 This document describes the build artifact verification system that was added to catch deployment configuration errors before they reach production.

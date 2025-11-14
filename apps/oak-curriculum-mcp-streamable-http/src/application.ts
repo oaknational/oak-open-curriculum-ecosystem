@@ -12,7 +12,7 @@ import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
-import { setupAuthRoutes } from './auth-routes.js';
+import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
 import {
   runBootstrapPhase,
@@ -30,6 +30,21 @@ type ExpressWithAppId = Express & { __appId?: number };
 
 let appCounter = 0;
 
+/**
+ * Creates and configures an Express application instance for MCP over HTTP.
+ *
+ * Middleware Registration Order (critical for OAuth to work correctly):
+ * 1. Base middleware - JSON parsing, correlation, logging, error handling
+ * 2. Security - DNS rebinding protection, CORS
+ * 3. Global auth context - clerkMiddleware for auth context (before path-specific middleware!)
+ * 4. Core endpoints - MCP server initialization, health checks
+ * 5. Static assets & landing page
+ * 6. Path-specific /mcp middleware - Accept header validation, readiness checks
+ * 7. Auth routes - OAuth metadata endpoints, protected /mcp routes
+ *
+ * @param options - Optional configuration for tool handlers, runtime config, and logger
+ * @returns Configured Express application instance
+ */
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   appCounter++;
   const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
@@ -42,15 +57,26 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
   const bootstrapTimer = createPhasedTimer();
 
+  // Phase 1: Base middleware (request entry, JSON parsing, correlation, logging, error handling)
   runBootstrapPhase(log, bootstrapTimer, 'setupBaseMiddleware', appCounter, () => {
     setupBaseMiddleware(app, log);
   });
 
+  // Phase 2: Security (DNS rebinding protection, CORS with WWW-Authenticate exposed)
   const security = createSecurityConfig(runtimeConfig);
   const corsMw = runBootstrapPhase(log, bootstrapTimer, 'applySecurity', appCounter, () =>
     applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins),
   );
 
+  // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
+  // CRITICAL: This must run early so auth context is available to all subsequent middleware.
+  // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
+  // Actual enforcement happens later via mcpAuthClerk on specific routes.
+  runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appCounter, () => {
+    setupGlobalAuthContext(app, runtimeConfig, log);
+  });
+
+  // Phase 4: Core endpoints (MCP server init, health checks, OAuth metadata discovery)
   const { transport: coreTransport, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
@@ -59,12 +85,17 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     () => initializeCoreEndpoints(app, corsMw, options, runtimeConfig, log),
   );
 
+  // Phase 5: Static assets and landing page
   mountStaticAssets(app);
   addRootLandingPage(app, runtimeConfig.vercelHostname);
 
+  // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
+  // This runs AFTER clerkMiddleware, so auth context is available here.
   const ensureMcpReady = createMcpReadinessMiddleware(ready, log);
   app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
 
+  // Phase 7: Auth routes (OAuth metadata endpoints, protected /mcp route handlers)
+  // Needs coreTransport, so must run after initializeCoreEndpoints.
   runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appCounter, () => {
     setupAuthRoutes(app, coreTransport, runtimeConfig, log);
   });

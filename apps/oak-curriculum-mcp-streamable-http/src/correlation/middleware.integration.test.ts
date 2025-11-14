@@ -234,3 +234,267 @@ describe('createCorrelationMiddleware', () => {
     }
   });
 });
+
+describe('createCorrelationMiddleware - header redaction', () => {
+  describe('request header redaction', () => {
+    it('should redact Authorization header in request logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app).get('/test').set('Authorization', 'Bearer secret-token-12345');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestStartedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request started'),
+      );
+
+      expect(requestStartedCall).toBeDefined();
+      if (requestStartedCall?.[1]) {
+        const metadata = requestStartedCall[1];
+        expect(metadata).toHaveProperty('requestHeaders');
+        const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
+        expect(headers?.authorization).toBe('[REDACTED]');
+      }
+    });
+
+    it('should redact Cookie header in request logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app).get('/test').set('Cookie', 'session=abc123; user=john');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestStartedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request started'),
+      );
+
+      expect(requestStartedCall).toBeDefined();
+      if (requestStartedCall?.[1]) {
+        const metadata = requestStartedCall[1];
+        expect(metadata).toHaveProperty('requestHeaders');
+        const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
+        expect(headers?.cookie).toBe('[REDACTED]');
+      }
+    });
+
+    it('should partially redact CF-Connecting-IP header in request logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app).get('/test').set('CF-Connecting-IP', '192.168.1.100');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestStartedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request started'),
+      );
+
+      expect(requestStartedCall).toBeDefined();
+      if (requestStartedCall?.[1]) {
+        const metadata = requestStartedCall[1];
+        expect(metadata).toHaveProperty('requestHeaders');
+        const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
+        // CF-Connecting-IP is not in the "interesting" headers list, so won't be logged
+        expect(headers?.['cf-connecting-ip']).toBeUndefined();
+      }
+    });
+
+    it('should redact X-API-Key header in request logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app).get('/test').set('X-API-Key', 'api-key-secret-12345');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestStartedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request started'),
+      );
+
+      expect(requestStartedCall).toBeDefined();
+      if (requestStartedCall?.[1]) {
+        const metadata = requestStartedCall[1];
+        expect(metadata).toHaveProperty('requestHeaders');
+        const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
+        // X-API-Key is not in the "interesting" headers list, so won't be logged
+        expect(headers?.['x-api-key']).toBeUndefined();
+      }
+    });
+
+    it('should handle mixed sensitive and non-sensitive headers in request logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app)
+        .get('/test')
+        .set('Authorization', 'Bearer secret')
+        .set('Accept', 'application/json')
+        .set('Cookie', 'session=abc')
+        .set('User-Agent', 'TestAgent/1.0');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestStartedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request started'),
+      );
+
+      expect(requestStartedCall).toBeDefined();
+      if (requestStartedCall?.[1]) {
+        const metadata = requestStartedCall[1];
+        expect(metadata).toHaveProperty('requestHeaders');
+        const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
+
+        // Sensitive headers redacted
+        expect(headers?.authorization).toBe('[REDACTED]');
+        expect(headers?.cookie).toBe('[REDACTED]');
+
+        // Non-sensitive headers preserved
+        expect(headers?.accept).toBe('application/json');
+        expect(headers?.['user-agent']).toBe('TestAgent/1.0');
+      }
+    });
+  });
+
+  describe('response header redaction', () => {
+    it('should redact Set-Cookie header in response logs', async () => {
+      const logger = createMockLogger();
+      const app = express();
+      app.use(createCorrelationMiddleware(logger));
+
+      app.get('/test', (_req, res) => {
+        res.setHeader('Set-Cookie', 'session=xyz; HttpOnly');
+        res.json({ ok: true });
+      });
+
+      await request(app).get('/test');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestCompletedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+      );
+
+      expect(requestCompletedCall).toBeDefined();
+      if (requestCompletedCall?.[1]) {
+        const metadata = requestCompletedCall[1];
+        expect(metadata).toHaveProperty('responseHeaders');
+        const headers = (metadata as { responseHeaders?: Record<string, string> }).responseHeaders;
+        // Set-Cookie is not in the "interesting" headers list, so won't be logged
+        expect(headers?.['set-cookie']).toBeUndefined();
+      }
+    });
+
+    it('should preserve X-Correlation-ID header in response logs', async () => {
+      const logger = createMockLogger();
+      const app = createTestApp(logger);
+
+      await request(app).get('/test');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestCompletedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+      );
+
+      expect(requestCompletedCall).toBeDefined();
+      if (requestCompletedCall?.[1]) {
+        const metadata = requestCompletedCall[1];
+        expect(metadata).toHaveProperty('responseHeaders');
+        const headers = (metadata as { responseHeaders?: Record<string, string> }).responseHeaders;
+
+        // X-Correlation-ID should be preserved (it's in interesting headers)
+        expect(headers?.['x-correlation-id']).toBeDefined();
+        expect(headers?.['x-correlation-id']).toMatch(/^req_\d+_[a-f0-9]{6}$/);
+      }
+    });
+
+    it('should handle multiple response headers with proper redaction', async () => {
+      const logger = createMockLogger();
+      const app = express();
+      app.use(createCorrelationMiddleware(logger));
+
+      app.get('/test', (_req, res) => {
+        res.setHeader('Set-Cookie', 'session=xyz');
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('X-Custom-Header', 'custom-value');
+        res.json({ ok: true });
+      });
+
+      await request(app).get('/test');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestCompletedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+      );
+
+      expect(requestCompletedCall).toBeDefined();
+      if (requestCompletedCall?.[1]) {
+        const metadata = requestCompletedCall[1];
+        expect(metadata).toHaveProperty('responseHeaders');
+        const headers = (metadata as { responseHeaders?: Record<string, string> }).responseHeaders;
+
+        // Only interesting headers should be in summary
+        expect(headers?.['content-type']).toBe('application/json; charset=utf-8');
+        expect(headers?.['x-correlation-id']).toBeDefined();
+
+        // Non-interesting headers should not be logged
+        expect(headers?.['set-cookie']).toBeUndefined();
+        expect(headers?.['x-custom-header']).toBeUndefined();
+      }
+    });
+
+    it('should preserve WWW-Authenticate header in response logs', async () => {
+      const logger = createMockLogger();
+      const app = express();
+      app.use(createCorrelationMiddleware(logger));
+
+      app.get('/test', (_req, res) => {
+        res.setHeader('WWW-Authenticate', 'Bearer realm="api"');
+        res.status(401).json({ error: 'Unauthorized' });
+      });
+
+      await request(app).get('/test');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestCompletedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+      );
+
+      expect(requestCompletedCall).toBeDefined();
+      if (requestCompletedCall?.[1]) {
+        const metadata = requestCompletedCall[1];
+        expect(metadata).toHaveProperty('responseHeaders');
+        const headers = (metadata as { responseHeaders?: Record<string, string> }).responseHeaders;
+
+        // WWW-Authenticate is in interesting headers and should be preserved
+        expect(headers?.['www-authenticate']).toBe('Bearer realm="api"');
+      }
+    });
+
+    it('should preserve Clerk auth status headers in response logs', async () => {
+      const logger = createMockLogger();
+      const app = express();
+      app.use(createCorrelationMiddleware(logger));
+
+      app.get('/test', (_req, res) => {
+        res.setHeader('X-Clerk-Auth-Status', 'signed_out');
+        res.setHeader('X-Clerk-Auth-Reason', 'no_session');
+        res.json({ ok: true });
+      });
+
+      await request(app).get('/test');
+
+      const debugCalls = vi.mocked(logger.debug).mock.calls;
+      const requestCompletedCall = debugCalls.find(
+        (call) => typeof call[0] === 'string' && call[0].includes('Request completed'),
+      );
+
+      expect(requestCompletedCall).toBeDefined();
+      if (requestCompletedCall?.[1]) {
+        const metadata = requestCompletedCall[1];
+        expect(metadata).toHaveProperty('responseHeaders');
+        const headers = (metadata as { responseHeaders?: Record<string, string> }).responseHeaders;
+
+        // Clerk headers are in interesting headers and should be preserved
+        // Note: headers are normalized to lowercase in Node.js
+        expect(headers?.['x-clerk-auth-status']).toBe('signed_out');
+        expect(headers?.['x-clerk-auth-reason']).toBe('no_session');
+      }
+    });
+  });
+});

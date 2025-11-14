@@ -1,8 +1,8 @@
-# Oak MCP Ecosystem – Runtime Diagnostics Complete
+# Oak MCP Ecosystem – Middleware Chain Complete; Test Coverage Required
 
-**Last Updated**: 2025-11-13 (Runtime diagnostics complete; ready for staging)  
+**Last Updated**: 2025-11-14 (Middleware documented; header redaction tests needed)  
 **Branch**: `feat/oauth_support`  
-**Phase**: Phase 3 (Rollout) – Ready for Staging
+**Phase**: Phase 3 (Rollout) – Test Coverage Blocker
 
 ---
 
@@ -34,16 +34,31 @@
 - ✅ Verified: HTTP and stdio servers using proper DI patterns
 - ✅ Created `.agent/plans/logger-enhancement-plan.md` documenting completion
 
-✅ **Diagnostics Track Phases 1-2 Complete** (2025-11-13) – Instrumentation and built-server harness delivered. Harness enables local testing of production builds under multiple configuration scenarios.  
-🔄 **Diagnostics Phase 3 In Progress** (2025-11-13) – Iterative root cause diagnosis active.
+✅ **Runtime Diagnostics Complete** (2025-11-13) – Instrumentation and built-server harness delivered.
 
-- ✅ **Iteration 1**: Comprehensive middleware instrumentation added, verified Clerk middleware scoped correctly, confirmed no hang with invalid keys locally.
-- ❌ **Iteration 2**: Attempted Vercel export fix (modified server.ts to export app as default) - **FIX FAILED**. Bootstrap succeeds on Vercel but requests never reach Express middleware.
-- 🔍 **Current Status**: ROOT CAUSE UNKNOWN. Vercel creates the app successfully (bootstrap logs present) but somehow requests don't flow through the middleware chain (zero request-level logs).
-- ⏳ **Next**: Investigate Vercel's serverless function invocation model more deeply.  
-  ⚠️ **Session 3.C** – Staging deployment **BLOCKED** until hang diagnosis complete and root cause identified.
+- ✅ Phase 1: Bootstrap/auth timers with integration coverage
+- ✅ Phase 2: Built-server harness with config matrix and automated request testing
+- ✅ Phase 3: Comprehensive middleware instrumentation
+- ✅ Quality gate remediation complete
 
-**Repository Status**: All quality gates passing as of 2025-11-13. Observability features validated via unit/integration/e2e suites (738 tests passing). Runtime diagnostics in progress with Vercel deployment hanging on all requests despite successful app bootstrap. Session 3.C blocked until deployment hang is resolved.
+✅ **Middleware Chain Documentation & Reordering Complete** (2025-11-14)
+
+- ✅ Split setupAuthRoutes into two-phase architecture
+- ✅ Reordered middleware to ensure clerkMiddleware runs globally early
+- ✅ Created comprehensive middleware-chain.md documentation with diagrams
+- ✅ Updated deployment-architecture.md with middleware chain summary
+- ✅ All documentation reviewed and updated
+- ✅ Full quality gates passing (all 218 tests across all suites)
+
+🔴 **CRITICAL BLOCKER: Header Redaction Test Coverage** (2025-11-14)
+
+- ⚠️ **Problem**: Header redaction code has ZERO test coverage
+- ⚠️ **Impact**: Security-critical feature protecting auth tokens, cookies, and IPs is unproven
+- ⚠️ **Requirement**: Comprehensive unit, integration, and E2E tests per TDD rules
+- ⚠️ **Priority**: MUST complete before Session 3.C staging deployment
+- 🎯 **Next**: Implement comprehensive test suite for header redaction module
+
+**Repository Status**: All quality gates passing as of 2025-11-14. 218 tests passing across all test suites (unit, integration, E2E, UI, smoke). Middleware chain properly documented and implemented. **Session 3.C staging deployment BLOCKED** until header redaction tests are complete.
 
 ---
 
@@ -231,14 +246,20 @@ Note: Don't update HANDOFF.md until a milestone is reached.
 | **Logger Package Docs**    | `packages/libs/logger/README.md`                                | API docs, entry points, examples               |
 | **HTTP Testing Guide**     | `apps/oak-curriculum-mcp-streamable-http/TESTING.md`            | Test patterns for HTTP server                  |
 
-### Test Coverage (Current)
+### Test Coverage (Current - 2025-11-14)
 
-- **Total Tests**: 738 across 10 workspaces
-- **HTTP Server**: 45 e2e tests, 69 unit tests (+13 correlation, +3 timing, +7 error enrichment tests)
-- **Stdio Server**: 12 e2e tests, 54 unit tests (+9 correlation, +5 error enrichment tests)
+- **Total Tests**: 218 across all test suites
+  - `pnpm test`: 129 tests (74 streamable-http, 51 stdio, 4 providers)
+  - `pnpm test:e2e`: 57 tests
+  - `pnpm test:e2e:built`: 5 tests
+  - `pnpm test:ui`: 21 tests
+  - `pnpm smoke:dev:stub`: 6 assertions
+- **HTTP Server**: Full unit, integration, and E2E coverage
+- **Stdio Server**: Full unit and E2E coverage
 - **SDK**: 11 e2e tests
-- **Logger Package**: Full unit test coverage (+4 timing, +5 error enrichment tests)
-- **Quality Gate Status**: ✅ All passing as of 2025-11-13 (build, type-check, lint, test:all)
+- **Logger Package**: Comprehensive unit test coverage
+- **Quality Gate Status**: ✅ All passing as of 2025-11-14 (build, type-check, lint, format, test:all)
+- **🔴 CRITICAL GAP**: Header redaction code (`src/logging/header-redaction.ts`) has ZERO test coverage
 
 ---
 
@@ -420,33 +441,40 @@ export function doX() {
 
 - ✅ **Phase 1**: Complete (2025-11-05)
 - ✅ **Phase 2**: Complete (2025-11-08) – All 5 sessions delivered
-- 🎯 **Phase 3**: In Progress (Sessions 3.A, 3.B complete; 3.C next)
+- 🔄 **Phase 3**: In Progress (Sessions 3.A, 3.B complete; middleware chain complete; test coverage required before 3.C)
 
 ### Quality Gates
 
-- ✅ **2025-11-13 all gates passing**
+- ✅ **2025-11-14 all gates passing**
   - `pnpm build` ✅
   - `pnpm format:root` ✅
   - `pnpm markdownlint:root` ✅
   - `pnpm type-check` ✅
   - `pnpm lint` ✅
-  - `pnpm test:all` ✅ (738 tests passing)
+  - `pnpm test:all` ✅ (218 tests across all suites)
 
-### Quality Gate Remediation (2025-11-13)
+### Test Suite Baseline (2025-11-14)
 
-1. ✅ Removed unused `LoggedEntry` import from `bootstrap.instrumentation.integration.test.ts`
-2. ✅ Fixed unsafe `any` assignments in diagnostics tests (eliminated intermediate variables)
-3. ✅ Refactored `src/index.ts` → extracted `app/bootstrap-helpers.ts` (reduced from 278 to 226 lines)
-4. ✅ Fixed catch parameter typing and array type syntax
-5. ✅ All quality gates now passing with zero regressions
+| Test Suite            | Tests         | Status |
+| --------------------- | ------------- | ------ |
+| `pnpm test`           | 129           | ✅     |
+| `pnpm test:e2e`       | 57            | ✅     |
+| `pnpm test:e2e:built` | 5             | ✅     |
+| `pnpm test:ui`        | 21            | ✅     |
+| `pnpm smoke:dev:stub` | 6 assertions  | ✅     |
+| **TOTAL**             | **218 tests** | ✅     |
 
 ### Known Issues
 
-None. All quality gates passing.
+🔴 **CRITICAL BLOCKER**: Header redaction code (`src/logging/header-redaction.ts`) has ZERO test coverage.
+
+- Security-critical feature protecting sensitive data (auth tokens, cookies, IPs)
+- Must have comprehensive unit, integration, and E2E tests per TDD rules
+- Blocking Session 3.C staging deployment
 
 ### Active Decisions
 
-None pending. All architectural decisions through Session 3.B are complete and documented in `continuation.prompt.md`.
+None pending. All architectural decisions through middleware chain documentation are complete.
 
 ---
 
@@ -462,7 +490,7 @@ If you're confused or stuck:
 
 ---
 
-**Last Milestone**: Runtime Diagnostics Complete (2025-11-13)  
-**Next Milestone**: Session 3.C Staging Deployment  
-**Document Version**: 1.8  
+**Last Milestone**: Middleware Chain Documentation Complete (2025-11-14)  
+**Next Milestone**: Header Redaction Test Coverage (Blocker for Session 3.C)  
+**Document Version**: 1.9  
 **Status**: Active

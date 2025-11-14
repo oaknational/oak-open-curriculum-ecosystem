@@ -187,6 +187,129 @@ This pattern ensures:
 - **Warm starts** - Promise already resolved, requests pass through immediately
 - **Serverless safety** - No race conditions between initialization and request handling
 
+## Middleware Chain
+
+The application uses a carefully ordered middleware chain that is **critical for OAuth authentication to work correctly**. The middleware is registered in phases during application bootstrap.
+
+### High-Level Middleware Order
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 1: Base Middleware                                    │
+│  • Request Entry Logging                                    │
+│  • JSON Body Parser                                         │
+│  • Correlation ID Assignment                                │
+│  • Request Logger (debug only)                              │
+│  • Error Logger                                             │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 2: Security                                           │
+│  • DNS Rebinding Protection (Host header validation)       │
+│  • CORS (with WWW-Authenticate exposed)                    │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 3: Global Auth Context (CRITICAL!)                   │
+│  • clerkMiddleware (provides auth context to ALL routes)   │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 4: Core Endpoints                                     │
+│  • MCP Server Initialization                                │
+│  • Health Check Handlers (/healthz)                         │
+│  • OAuth Metadata Endpoints (/.well-known/*)               │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 5: Static Assets & Landing Page                       │
+│  • Static File Serving (/public)                           │
+│  • Landing Page Handler (/)                                 │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 6: Path-Specific /mcp Middleware                     │
+│  • Accept Header Validation (text/event-stream required)   │
+│  • MCP Readiness Check (waits up to 5s)                    │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+┌─────────────────────────────────────────────────────────────┐
+│ Phase 7: Auth Routes                                        │
+│  • Protected MCP Routes (POST/GET /mcp with mcpAuthClerk)  │
+│  OR Unprotected (if DANGEROUSLY_DISABLE_AUTH=true)         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Critical Ordering: clerkMiddleware MUST Run Early
+
+Per [Clerk's best practices](https://clerk.com/docs/expressjs/guides/development/mcp/build-mcp-server), `clerkMiddleware()` must be registered globally **before any path-specific middleware**:
+
+```typescript
+// ✅ CORRECT - clerkMiddleware registered globally first
+app.use(clerkMiddleware()); // Phase 3 - Provides auth context
+app.use('/mcp', acceptHeaderCheck); // Phase 6 - Uses auth context
+app.post('/mcp', mcpAuthClerk, handler); // Phase 7 - Validates OAuth token
+
+// ❌ INCORRECT - Scoped to path, auth context unavailable elsewhere
+app.use('/mcp', clerkMiddleware()); // Too late!
+app.post('/mcp', mcpAuthClerk, handler); // mcpAuthClerk will fail
+```
+
+**Why this matters**:
+
+- `clerkMiddleware` provides authentication context without blocking requests
+- `mcpAuthClerk` later validates OAuth tokens **using the auth context**
+- If `clerkMiddleware` runs too late, `mcpAuthClerk` cannot access auth state
+- Result: All authenticated requests fail with 401, even with valid tokens
+
+### Implementation in Code
+
+The middleware registration happens in `src/application.ts`:
+
+```typescript
+export function createApp(options?: CreateAppOptions): ExpressWithAppId {
+  const app = express();
+
+  // Phase 1: Base middleware
+  setupBaseMiddleware(app, log);
+
+  // Phase 2: Security
+  applySecurity(app, ...);
+
+  // Phase 3: Global auth context (CRITICAL - runs before path-specific middleware)
+  if (!runtimeConfig.dangerouslyDisableAuth) {
+    setupGlobalAuthContext(app, runtimeConfig, log);
+  }
+
+  // Phase 4: Core endpoints
+  initializeCoreEndpoints(app, ...);
+
+  // Phase 5: Static assets & landing page
+  mountStaticAssets(app);
+  addRootLandingPage(app, ...);
+
+  // Phase 6: Path-specific /mcp middleware
+  app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
+
+  // Phase 7: Auth routes
+  setupAuthRoutes(app, coreTransport, runtimeConfig, log);
+
+  return app;
+}
+```
+
+### Complete Middleware Documentation
+
+For comprehensive middleware documentation including:
+
+- Detailed execution order for each route
+- Request flow diagrams (Mermaid)
+- Per-route middleware stacks
+- Authentication flow details
+- Troubleshooting common issues
+
+See **[middleware-chain.md](./middleware-chain.md)**.
+
 ## Testing the Build
 
 ### Test Entry Point

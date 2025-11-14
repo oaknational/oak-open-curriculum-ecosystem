@@ -13,6 +13,7 @@ import { createEnrichedErrorLogger } from '../logging/index.js';
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
   | 'applySecurity'
+  | 'setupGlobalAuthContext'
   | 'initializeCoreEndpoints'
   | 'setupAuthRoutes';
 
