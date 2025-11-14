@@ -51,6 +51,11 @@ function redactHeaderValue(name: string, value: string | string[] | number | und
     return '[REDACTED]';
   }
 
+  // Redact ANY header containing "token" in the name (catches all token variations)
+  if (normalizedName.includes('token')) {
+    return '[REDACTED]';
+  }
+
   // Partial redaction for IP addresses and similar
   if (PARTIALLY_REDACTED_HEADERS.has(normalizedName)) {
     if (stringValue.length <= 8) {
@@ -118,6 +123,15 @@ export function redactHeadersSummary(
     'x-correlation-id',
     'x-forwarded-for',
     'x-real-ip',
+    // Vercel caching and infrastructure headers
+    'x-vercel-cache',
+    'x-vercel-id',
+    'x-vercel-ip-country',
+    // Cloudflare caching and security headers
+    'cf-cache-status',
+    'cf-ray',
+    'cf-ipcountry',
+    'cf-connecting-ip',
   ];
 
   const redacted: Record<string, string> = {};

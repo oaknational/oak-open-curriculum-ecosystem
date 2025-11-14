@@ -3,6 +3,7 @@
  */
 
 import type { Request, Response, NextFunction, RequestHandler, ErrorRequestHandler } from 'express';
+import type { IncomingHttpHeaders } from 'node:http';
 import type { Logger, JsonObject } from './types.js';
 import { sanitiseForJson } from './json-sanitisation.js';
 
@@ -14,12 +15,16 @@ export interface RequestLoggerOptions {
   level?: 'trace' | 'debug' | 'info';
   /** Whether to include request body in logs (default: false) */
   includeBody?: boolean;
+  /** Optional function to redact sensitive headers before logging */
+  redactHeaders?: (headers: IncomingHttpHeaders) => Record<string, string>;
 }
 
 /**
  * Safely extracts JSON-safe metadata from an Express Request
  * Handles undefined values and ParsedQs types from query parameters
  * @param req - Express Request object
+ * @param options - Optional configuration
+ * @param options.redactHeaders - Optional function to redact sensitive headers
  * @returns JSON-safe metadata object
  *
  * @example
@@ -28,13 +33,18 @@ export interface RequestLoggerOptions {
  * // Returns: { method: 'GET', url: '/api/test', query: {...}, ... }
  * ```
  */
-export function extractRequestMetadata(req: Request): JsonObject {
+export function extractRequestMetadata(
+  req: Request,
+  options?: { redactHeaders?: (headers: IncomingHttpHeaders) => Record<string, string> },
+): JsonObject {
+  const headers = options?.redactHeaders ? options.redactHeaders(req.headers) : req.headers;
+
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return sanitiseForJson({
     method: req.method,
     url: req.url,
     path: req.path,
-    headers: req.headers,
+    headers,
     query: req.query,
     params: req.params,
     ip: req.ip,
@@ -62,7 +72,9 @@ export function createRequestLogger(
   const level = options.level ?? 'debug';
 
   return (req: Request, _res: Response, next: NextFunction): void => {
-    const metadata = extractRequestMetadata(req);
+    const metadata = extractRequestMetadata(req, {
+      redactHeaders: options.redactHeaders,
+    });
 
     if (options.includeBody && req.body) {
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions

@@ -293,8 +293,8 @@ describe('createCorrelationMiddleware - header redaction', () => {
         const metadata = requestStartedCall[1];
         expect(metadata).toHaveProperty('requestHeaders');
         const headers = (metadata as { requestHeaders?: Record<string, string> }).requestHeaders;
-        // CF-Connecting-IP is not in the "interesting" headers list, so won't be logged
-        expect(headers?.['cf-connecting-ip']).toBeUndefined();
+        // CF-Connecting-IP is in the "interesting" headers list and should be partially redacted
+        expect(headers?.['cf-connecting-ip']).toBe('192.....100');
       }
     });
 

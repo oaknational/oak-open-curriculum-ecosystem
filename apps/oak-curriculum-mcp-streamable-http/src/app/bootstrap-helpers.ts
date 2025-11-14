@@ -9,6 +9,7 @@ import {
 
 import { createCorrelationMiddleware } from '../correlation/middleware.js';
 import { createEnrichedErrorLogger } from '../logging/index.js';
+import { redactHeaders } from '../logging/header-redaction.js';
 
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
@@ -89,7 +90,12 @@ export function setupBaseMiddleware(app: Express, log: Logger): void {
 
   const debugEnabled = log.isLevelEnabled?.(logLevelToSeverityNumber('DEBUG')) ?? false;
   if (debugEnabled) {
-    app.use(createRequestLogger(log, { level: 'debug' }));
+    app.use(
+      createRequestLogger(log, {
+        level: 'debug',
+        redactHeaders,
+      }),
+    );
   }
   app.use(createEnrichedErrorLogger(log));
 
