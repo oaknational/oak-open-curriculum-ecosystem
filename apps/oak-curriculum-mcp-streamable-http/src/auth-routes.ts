@@ -225,17 +225,18 @@ export function setupAuthRoutes(
   }
 
   authLog.info('🔒 OAuth enforcement enabled via Clerk');
-  authLog.debug('Registering global clerkMiddleware (required for Clerk OAuth handlers)');
+  authLog.debug('Creating and installing global clerkMiddleware');
   const rawClerkMiddleware = measureAuthSetupStep(authLog, 'clerkMiddleware.create', () =>
     clerkMiddleware(),
   );
   const clerkMw = instrumentMiddleware('clerkMiddleware', rawClerkMiddleware, authLog);
   measureAuthSetupStep(authLog, 'clerkMiddleware.install', () => {
-    // FIX: Scope Clerk middleware to /mcp routes only
-    // Health checks and landing page should remain publicly accessible
-    // OAuth metadata endpoints (/.well-known/*) don't require Clerk middleware
-    authLog.info('Installing Clerk middleware scoped to /mcp routes only');
-    app.use('/mcp', clerkMw);
+    // Apply clerkMiddleware() globally to all routes per Clerk best practices.
+    // This provides authentication context without blocking access.
+    // Selective protection is then applied via mcpAuthClerk on /mcp routes.
+    // OAuth metadata endpoints (/.well-known/*) remain publicly accessible.
+    authLog.info('Installing Clerk middleware globally (all routes)');
+    app.use(clerkMw);
   });
   authLog.debug('Registering OAuth routes (auth ENABLED)');
   measureAuthSetupStep(authLog, 'oauth.metadata.register', () => {

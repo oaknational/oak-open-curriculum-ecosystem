@@ -8,6 +8,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import { startTimer, type Logger, type Timer } from '@oaknational/mcp-logger';
 
 import { generateCorrelationId } from './index.js';
+import { redactHeadersSummary } from '../logging/header-redaction.js';
 
 /**
  * HTTP header name for correlation ID.
@@ -85,11 +86,12 @@ export function createCorrelationMiddleware(logger: Logger): RequestHandler {
     // Add to response headers
     res.setHeader(CORRELATION_ID_HEADER, correlationId);
 
-    // Log request start with correlation ID
+    // Log request start with correlation ID and headers
     logger.debug('Request started', {
       correlationId,
       method: req.method,
       path: req.path,
+      requestHeaders: redactHeadersSummary(req.headers),
     });
 
     // Log request completion with timing when response finishes
@@ -105,6 +107,7 @@ export function createCorrelationMiddleware(logger: Logger): RequestHandler {
         method: req.method,
         path: req.path,
         statusCode: res.statusCode,
+        responseHeaders: redactHeadersSummary(res.getHeaders()),
         ...(isSlowRequest && { slowRequest: true }),
       };
 
