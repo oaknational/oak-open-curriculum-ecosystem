@@ -17,9 +17,8 @@ import type { Logger } from '@oaknational/mcp-logger';
  */
 export function createClerkBugWorkaroundMiddleware(log: Logger): RequestHandler {
   return (req, res, next) => {
-    const originalSend = res.send;
-
-    res.send = function (body) {
+    // Create a function to fix the header before any response is sent
+    const fixHeader = () => {
       const wwwAuth = res.get('WWW-Authenticate');
 
       if (wwwAuth && typeof wwwAuth === 'string') {
@@ -37,9 +36,29 @@ export function createClerkBugWorkaroundMiddleware(log: Logger): RequestHandler 
           res.set('WWW-Authenticate', corrected);
         }
       }
-
-      return originalSend.call(this, body);
     };
+
+    // Patch all response methods that could send the response
+    const originalSend = res.send.bind(res);
+    const originalJson = res.json.bind(res);
+    const originalEnd = res.end.bind(res);
+
+    res.send = function (body) {
+      fixHeader();
+      return originalSend(body);
+    };
+
+    res.json = function (body) {
+      fixHeader();
+      return originalJson(body);
+    };
+
+    // Type assertion needed for Express overload compatibility
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    res.end = function (...args: Parameters<typeof originalEnd>) {
+      fixHeader();
+      return originalEnd(...args);
+    } as typeof originalEnd;
 
     next();
   };
