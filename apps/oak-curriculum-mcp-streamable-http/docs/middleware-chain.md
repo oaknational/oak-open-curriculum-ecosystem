@@ -15,7 +15,7 @@ The middleware chain follows Express conventions where:
 
 **IMPORTANT**: `clerkMiddleware()` MUST be registered globally BEFORE any path-specific middleware. This ensures Clerk's authentication context is available throughout the request lifecycle.
 
-```
+```text
 ✅ CORRECT:   app.use(clerkMiddleware()) → app.use('/mcp', ...) → app.post('/mcp', mcpAuthClerk, ...)
 ❌ INCORRECT: app.use('/mcp', clerkMiddleware()) → app.post('/mcp', mcpAuthClerk, ...)
 ```
@@ -24,7 +24,7 @@ The middleware chain follows Express conventions where:
 
 For any incoming HTTP request, middleware executes in this order:
 
-```
+```text
 1. Request Entry Logging
 2. JSON Body Parser (express.json())
 3. Correlation ID Assignment
@@ -121,7 +121,7 @@ sequenceDiagram
 
 #### POST /mcp (with auth enabled)
 
-```
+```text
 Client Request
     ↓
 [1] Request Entry Log
@@ -144,7 +144,7 @@ Response
 
 #### POST /mcp (with DANGEROUSLY_DISABLE_AUTH=true)
 
-```
+```text
 Client Request
     ↓
 [1] Request Entry Log
@@ -166,7 +166,7 @@ Response
 
 #### GET /healthz
 
-```
+```text
 Client Request
     ↓
 [1] Request Entry Log
@@ -186,7 +186,7 @@ Response (200 OK + JSON)
 
 #### GET /.well-known/oauth-protected-resource
 
-```
+```text
 Client Request
     ↓
 [1] Request Entry Log
@@ -207,7 +207,7 @@ Response (200 OK + OAuth metadata JSON)
 
 #### GET /
 
-```
+```text
 Client Request
     ↓
 [1] Request Entry Log
@@ -349,7 +349,7 @@ flowchart TD
 
 Execution follows registration order, but path-specific middleware only runs for matching paths:
 
-```
+```text
 Every request:
   → Base Middleware (phases 1-2)
   → clerkMiddleware (phase 3)

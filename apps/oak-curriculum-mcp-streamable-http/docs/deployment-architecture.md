@@ -193,7 +193,7 @@ The application uses a carefully ordered middleware chain that is **critical for
 
 ### High-Level Middleware Order
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │ Phase 1: Base Middleware                                    │
 │  • Request Entry Logging                                    │
