@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createPhasedTimer, startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
+import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page.js';
 import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
@@ -86,8 +87,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   );
 
   // Phase 5: Static assets and landing page
-  mountStaticAssets(app);
-  addRootLandingPage(app, runtimeConfig.vercelHostname);
+  mountStaticContentRoutes(app, runtimeConfig.vercelHostname);
 
   // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
   // This runs AFTER clerkMiddleware, so auth context is available here.
@@ -105,7 +105,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     appId: appCounter,
     duration: totalDuration.formatted,
     durationMs: totalDuration.ms,
+    routeCount: listRoutes(app).length,
   });
+
+  log.debug('bootstrap.routes.registered', { appId: appCounter, routes: listRoutes(app) });
 
   return app;
 }
@@ -169,6 +172,11 @@ function addHealthEndpoints(app: Express, corsMw: RequestHandler): void {
       .type('application/json')
       .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
   });
+}
+
+function mountStaticContentRoutes(app: Express, vercelHostname?: string): void {
+  mountStaticAssets(app);
+  addRootLandingPage(app, vercelHostname);
 }
 
 function addRootLandingPage(app: Express, vercelHostname?: string): void {
