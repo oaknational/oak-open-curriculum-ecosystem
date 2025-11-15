@@ -15,7 +15,7 @@ import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
-import { createClerkBugWorkaroundMiddleware } from './clerk-workaround.js';
+// import { createClerkBugWorkaroundMiddleware } from './clerk-workaround.js';
 import {
   runBootstrapPhase,
   setupBaseMiddleware,
@@ -47,7 +47,7 @@ let appCounter = 0;
  * @param options - Optional configuration for tool handlers, runtime config, and logger
  * @returns Configured Express application instance
  */
-// eslint-disable-next-line max-statements -- Bootstrap function requires precise phase ordering
+
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   appCounter++;
   const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
@@ -73,7 +73,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
   // Phase 2.5: Clerk bug workaround (fix WWW-Authenticate header)
   // WORKAROUND: Must run after security setup but before auth to intercept 401 responses
-  app.use(createClerkBugWorkaroundMiddleware(log));
+  // app.use(createClerkBugWorkaroundMiddleware(log));
 
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.

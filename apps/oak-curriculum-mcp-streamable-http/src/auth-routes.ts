@@ -29,6 +29,29 @@ function registerUnauthenticatedRoutes(
 }
 
 /**
+ * Middleware that adds explicit no-cache headers to prevent caching at any level.
+ *
+ * These headers ensure that OAuth metadata is never cached by:
+ * - Origin servers
+ * - CDN/proxy layers
+ * - Client browsers
+ * - Any intermediate caches
+ *
+ * This is critical for OAuth metadata endpoints to ensure clients always receive
+ * current authentication configuration.
+ */
+function addNoCacheHeaders(handler: RequestHandler): RequestHandler {
+  return (req, res, next) => {
+    // Prevent caching at all levels (origin, CDN, browser, proxies)
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache'); // HTTP/1.0 compatibility
+    res.setHeader('Expires', '0'); // Legacy clients
+
+    handler(req, res, next);
+  };
+}
+
+/**
  * Registers OAuth 2.0 metadata endpoints required by MCP spec
  *
  * WORKAROUND: Serves metadata at both /.well-known/oauth-protected-resource
@@ -46,11 +69,16 @@ function registerUnauthenticatedRoutes(
  * RFC 9470: https://www.rfc-editor.org/rfc/rfc9470.html#section-3
  *
  * TODO: Remove /mcp route when Clerk fixes upstream bug
+ *
+ * NOTE: All OAuth metadata endpoints explicitly set no-cache headers to prevent
+ * caching at origin, CDN, client, or any intermediate layer.
  */
 function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConfig): void {
-  const metadataHandler = protectedResourceHandlerClerk({
-    scopes_supported: ['mcp:invoke', 'mcp:read'],
-  });
+  const metadataHandler = addNoCacheHeaders(
+    protectedResourceHandlerClerk({
+      scopes_supported: ['mcp:invoke', 'mcp:read'],
+    }),
+  );
 
   // Correct OAuth metadata location per RFC 9470
   app.get('/.well-known/oauth-protected-resource', metadataHandler);
@@ -59,13 +87,19 @@ function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConf
   // This allows clients to fetch metadata from the broken URL the _something_ is caching
   app.get('/.well-known/oauth-protected-resource/mcp', metadataHandler);
 
-  app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
+  app.get(
+    '/.well-known/oauth-authorization-server',
+    addNoCacheHeaders(authServerMetadataHandlerClerk),
+  );
 
   if (runtimeConfig.useStubTools) {
     // In stub mode we expose additional metadata for tooling to detect bypass scenarios
-    app.get('/.well-known/mcp-stub-mode', (_req, res) => {
-      res.json({ stubMode: true });
-    });
+    app.get(
+      '/.well-known/mcp-stub-mode',
+      addNoCacheHeaders((_req, res) => {
+        res.json({ stubMode: true });
+      }),
+    );
   }
 }
 
