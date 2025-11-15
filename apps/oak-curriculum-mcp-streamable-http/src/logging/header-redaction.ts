@@ -134,6 +134,16 @@ export function redactHeadersSummary(
     'cf-connecting-ip',
   ];
 
+  // Conditionally add body if the content-type is application/json or text/plain or text/html
+  const shouldAddBody =
+    headers['content-type'] === 'application/json' ||
+    headers['content-type'] === 'text/plain' ||
+    headers['content-type'] === 'text/html';
+
+  if (shouldAddBody) {
+    interestingHeaders.push('body');
+  }
+
   const redacted: Record<string, string> = {};
 
   for (const name of interestingHeaders) {
