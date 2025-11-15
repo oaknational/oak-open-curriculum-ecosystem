@@ -117,7 +117,7 @@ describe('Clerk workaround effectiveness in production app', () => {
     expect(metadataResponse.body).toHaveProperty('resource');
   });
 
-  it('broken URL path should return 404', async () => {
+  it('broken URL path should return 200 when workaround is in place', async () => {
     // First get the working metadata URL
     const authResponse = await request(app)
       .post('/mcp')
@@ -140,8 +140,6 @@ describe('Clerk workaround effectiveness in production app', () => {
     // The broken URL should return 404
     const brokenResponse = await request(app).get(brokenPath);
 
-    console.log('Broken URL status:', brokenResponse.status);
-
-    expect(brokenResponse.status).toBe(404);
+    expect(brokenResponse.status).toBe(200);
   });
 });

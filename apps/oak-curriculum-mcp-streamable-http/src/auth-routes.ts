@@ -55,9 +55,9 @@ function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConf
   // Correct OAuth metadata location per RFC 9470
   app.get('/.well-known/oauth-protected-resource', metadataHandler);
 
-  // WORKAROUND: Also serve at /mcp suffix due to Clerk bug
-  // This allows clients to fetch metadata from the broken URL Clerk generates
-  // app.get('/.well-known/oauth-protected-resource/mcp', metadataHandler);
+  // HACK: Also serve at /mcp suffix due to something insisting on calling this route
+  // This allows clients to fetch metadata from the broken URL the _something_ is caching
+  app.get('/.well-known/oauth-protected-resource/mcp', metadataHandler);
 
   app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
 
