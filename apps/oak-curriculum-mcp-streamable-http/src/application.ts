@@ -15,12 +15,12 @@ import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
 import { createSecurityConfig } from './security-config.js';
 import { setupGlobalAuthContext, setupAuthRoutes } from './auth-routes.js';
 import { createEnsureMcpAcceptHeader } from './mcp-middleware.js';
-// import { createClerkBugWorkaroundMiddleware } from './clerk-workaround.js';
 import {
   runBootstrapPhase,
   setupBaseMiddleware,
   createMcpReadinessMiddleware,
 } from './app/bootstrap-helpers.js';
+import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 
 export interface CreateAppOptions {
   readonly toolHandlerOverrides?: ToolHandlerOverrides;
@@ -38,11 +38,13 @@ let appCounter = 0;
  * Middleware Registration Order (critical for OAuth to work correctly):
  * 1. Base middleware - JSON parsing, correlation, logging, error handling
  * 2. Security - DNS rebinding protection, CORS
+ * 2.5. PUBLIC OAuth metadata endpoints - registered BEFORE auth middleware
+ * 2.6. Global no-cache headers on errors - prevent Vercel caching
  * 3. Global auth context - clerkMiddleware for auth context (before path-specific middleware!)
  * 4. Core endpoints - MCP server initialization, health checks
  * 5. Static assets & landing page
  * 6. Path-specific /mcp middleware - Accept header validation, readiness checks
- * 7. Auth routes - OAuth metadata endpoints, protected /mcp routes
+ * 7. Auth routes - protected /mcp routes (OAuth metadata now in Phase 2.5)
  *
  * @param options - Optional configuration for tool handlers, runtime config, and logger
  * @returns Configured Express application instance
@@ -71,9 +73,10 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins),
   );
 
-  // Phase 2.5: Clerk bug workaround (fix WWW-Authenticate header)
-  // WORKAROUND: Must run after security setup but before auth to intercept 401 responses
-  // app.use(createClerkBugWorkaroundMiddleware(log));
+  // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
+  // These endpoints MUST be publicly accessible without authentication per RFC 9470.
+  // Registering them before clerkMiddleware ensures they never go through auth checks.
+  setupOAuthAndCaching(app, runtimeConfig, log, bootstrapTimer, appCounter);
 
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.
@@ -97,8 +100,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
   // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
   // This runs AFTER clerkMiddleware, so auth context is available here.
-  const ensureMcpReady = createMcpReadinessMiddleware(ready, log);
-  app.use('/mcp', createEnsureMcpAcceptHeader(log), ensureMcpReady);
+  app.use('/mcp', createEnsureMcpAcceptHeader(log), createMcpReadinessMiddleware(ready, log));
 
   // Phase 7: Auth routes (OAuth metadata endpoints, protected /mcp route handlers)
   // Needs coreTransport, so must run after initializeCoreEndpoints.

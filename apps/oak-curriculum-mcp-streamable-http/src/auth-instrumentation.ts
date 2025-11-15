@@ -5,7 +5,7 @@ export type AuthSetupStep =
   | 'auth.disabled.register'
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'
-  | 'oauth.metadata.register'
+  | 'registerPublicOAuthMetadata'
   | 'mcp.auth.register';
 
 /**

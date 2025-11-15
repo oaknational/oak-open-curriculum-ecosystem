@@ -52,41 +52,33 @@ function addNoCacheHeaders(handler: RequestHandler): RequestHandler {
 }
 
 /**
- * Registers OAuth 2.0 metadata endpoints required by MCP spec
+ * Registers PUBLIC OAuth metadata endpoints BEFORE clerkMiddleware.
  *
- * WORKAROUND: Serves metadata at both /.well-known/oauth-protected-resource
- * and /.well-known/oauth-protected-resource/mcp due to Clerk bug.
- *
- * Bug in @clerk/mcp-tools@0.3.1:
- * The getPRMUrl() function incorrectly appends req.originalUrl to the metadata path:
- * - Request to /mcp generates: /.well-known/oauth-protected-resource/mcp (404)
- * - Should generate: /.well-known/oauth-protected-resource (200)
- *
- * This workaround serves the OAuth metadata at both locations so clients can
- * fetch metadata regardless of which URL they receive in the WWW-Authenticate header.
- *
- * Bug location: @clerk/mcp-tools@0.3.1/dist/express/index.js getPRMUrl()
- * RFC 9470: https://www.rfc-editor.org/rfc/rfc9470.html#section-3
- *
- * TODO: Remove /mcp route when Clerk fixes upstream bug
+ * These endpoints MUST be publicly accessible without authentication per RFC 9470.
+ * They are registered BEFORE clerkMiddleware to avoid any authentication checks.
  *
  * NOTE: All OAuth metadata endpoints explicitly set no-cache headers to prevent
- * caching at origin, CDN, client, or any intermediate layer.
+ * caching at origin, CDN, client, or any intermediate layer (including Vercel).
  */
-function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConfig): void {
+export function registerPublicOAuthMetadataEndpoints(
+  app: Express,
+  runtimeConfig: RuntimeConfig,
+  log: Logger,
+): void {
+  const authLog = typeof log.child === 'function' ? log.child({ scope: 'auth' }) : log;
+
+  authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
+
   const metadataHandler = addNoCacheHeaders(
     protectedResourceHandlerClerk({
       scopes_supported: ['mcp:invoke', 'mcp:read'],
     }),
   );
 
-  // Correct OAuth metadata location per RFC 9470
+  // RFC 9470 compliant OAuth Protected Resource Metadata endpoint
   app.get('/.well-known/oauth-protected-resource', metadataHandler);
 
-  // HACK: Also serve at /mcp suffix due to something insisting on calling this route
-  // This allows clients to fetch metadata from the broken URL the _something_ is caching
-  app.get('/.well-known/oauth-protected-resource/mcp', metadataHandler);
-
+  // RFC 8414 OAuth Authorization Server Metadata endpoint
   app.get(
     '/.well-known/oauth-authorization-server',
     addNoCacheHeaders(authServerMetadataHandlerClerk),
@@ -168,15 +160,17 @@ export function setupGlobalAuthContext(
 }
 
 /**
- * Registers authentication-related routes and endpoint protection.
+ * Registers PROTECTED MCP routes with authentication.
  *
- * This function is called AFTER core MCP endpoints are initialized because
- * it needs the transport instance to create MCP handlers.
+ * This function is called AFTER OAuth metadata endpoints are registered (in Phase 2.5)
+ * and AFTER clerkMiddleware is installed (in Phase 3).
  *
  * Registers:
- * - OAuth 2.0 metadata endpoints (/.well-known/*)
  * - Protected /mcp routes with mcpAuthClerk enforcement (if auth enabled)
  * - Unprotected /mcp routes (if DANGEROUSLY_DISABLE_AUTH is true)
+ *
+ * NOTE: OAuth metadata endpoints are registered separately in Phase 2.5 by
+ * registerPublicOAuthMetadataEndpoints() to ensure they are publicly accessible.
  *
  * @param app - Express application instance
  * @param coreTransport - MCP StreamableHTTP transport for request handling
@@ -184,6 +178,7 @@ export function setupGlobalAuthContext(
  * @param log - Logger instance for auth-related events
  *
  * @see {@link setupGlobalAuthContext} for global auth middleware (called earlier)
+ * @see {@link registerPublicOAuthMetadataEndpoints} for OAuth metadata endpoints (called before auth middleware)
  */
 export function setupAuthRoutes(
   app: Express,
@@ -200,14 +195,9 @@ export function setupAuthRoutes(
     return;
   }
 
-  // Register OAuth metadata endpoints (publicly accessible)
-  authLog.debug('Registering OAuth metadata endpoints');
-  measureAuthSetupStep(authLog, 'oauth.metadata.register', () => {
-    registerOAuthMetadataEndpoints(app, runtimeConfig);
-  });
-
-  // Register protected MCP routes with OAuth enforcement
-  authLog.debug('Registering protected MCP routes');
+  // OAuth metadata endpoints are now registered BEFORE clerkMiddleware (in Phase 2.5)
+  // This function ONLY registers the protected /mcp routes
+  authLog.debug('Registering protected MCP routes (with auth enforcement)');
   const mcpAuthMw = instrumentMiddleware('mcpAuthClerk', mcpAuthClerk, authLog);
   measureAuthSetupStep(authLog, 'mcp.auth.register', () => {
     registerAuthenticatedRoutes(app, coreTransport, authLog, mcpAuthMw);

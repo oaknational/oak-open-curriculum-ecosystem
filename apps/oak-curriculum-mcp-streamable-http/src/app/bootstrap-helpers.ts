@@ -14,6 +14,8 @@ import { redactHeaders } from '../logging/header-redaction.js';
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
   | 'applySecurity'
+  | 'registerPublicOAuthMetadata'
+  | 'addNoCacheToErrors'
   | 'setupGlobalAuthContext'
   | 'initializeCoreEndpoints'
   | 'setupAuthRoutes';

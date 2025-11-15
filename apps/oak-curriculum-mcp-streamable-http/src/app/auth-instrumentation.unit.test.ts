@@ -37,7 +37,7 @@ describe('measureAuthSetupStep', () => {
     const { logger, entries } = createTestLogger();
 
     expect(() =>
-      measureAuthSetupStep(logger, 'oauth.metadata.register', () => {
+      measureAuthSetupStep(logger, 'registerPublicOAuthMetadata', () => {
         throw new Error('boom');
       }),
     ).toThrowError(new Error('boom'));
@@ -45,7 +45,7 @@ describe('measureAuthSetupStep', () => {
     const errorEntry = entries.find(
       (entry) =>
         entry.message === 'auth.bootstrap.step.error' &&
-        contextMatchesStep(entry.context, 'oauth.metadata.register'),
+        contextMatchesStep(entry.context, 'registerPublicOAuthMetadata'),
     );
     expect(errorEntry).toBeDefined();
   });

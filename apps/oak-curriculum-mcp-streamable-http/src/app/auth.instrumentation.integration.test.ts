@@ -8,7 +8,6 @@ type StepName =
   | 'auth.disabled.register'
   | 'clerkMiddleware.create'
   | 'clerkMiddleware.install'
-  | 'oauth.metadata.register'
   | 'mcp.auth.register';
 
 function createRuntimeConfig(overrides: NodeJS.ProcessEnv = {}): RuntimeConfig {
@@ -74,10 +73,11 @@ describe('auth instrumentation', () => {
 
     createApp({ runtimeConfig, logger });
 
+    // Note: 'registerPublicOAuthMetadata' is now a bootstrap phase (logged via runBootstrapPhase)
+    // rather than an auth setup step (measureAuthSetupStep), so it's not in this list
     const expectedSteps: StepName[] = [
       'clerkMiddleware.create',
       'clerkMiddleware.install',
-      'oauth.metadata.register',
       'mcp.auth.register',
     ];
 
