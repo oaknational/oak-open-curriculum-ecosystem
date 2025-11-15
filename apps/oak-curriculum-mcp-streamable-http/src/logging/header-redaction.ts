@@ -135,10 +135,13 @@ export function redactHeadersSummary(
   ];
 
   // Conditionally add body if the content-type is application/json or text/plain or text/html
+  const contentType = headers['content-type'];
   const shouldAddBody =
-    headers['content-type'] === 'application/json' ||
-    headers['content-type'] === 'text/plain' ||
-    headers['content-type'] === 'text/html';
+    contentType &&
+    typeof contentType === 'string' &&
+    (contentType.startsWith('application/json') ||
+      contentType.startsWith('text/plain') ||
+      contentType.startsWith('text/html'));
 
   if (shouldAddBody) {
     interestingHeaders.push('body');
