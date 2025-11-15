@@ -24,6 +24,7 @@ We achieve this by ensuring that ALL static data structures, types, type guards,
 - **Build up through scales** - Functions → Modules → Packages (`core`, `libs`, `apps`)
 - **Clear boundaries at each scale** - Define boundaries between and within scales CLEARLY with index.ts files
 - **Fail FAST** - Fail fast and hard with helpful errors, never silently
+- **Handle All Cases Explicitly** - Prefer `Result<T, E>` over exceptions, and handle all cases explicitly.
 - **Inline docs everywhere** - ALL files, modules, functions, data structures, classes, constants, and type information MUST have inline jsdoc/tsdoc comments that can be compiled by `typedoc` to generate documentation.
 
 ### Refactoring

@@ -1062,6 +1062,36 @@ We removed all workarounds and fixed the root cause:
 
 4. **Test What You Ship**: Our comprehensive workaround tests were testing the wrong behavior. After removing workarounds, we added a skip annotation to one test that relied on the Clerk bug to explain why it no longer works.
 
+### Bringing Auth Code In-House (Implemented 2025-01-15)
+
+After removing the workarounds, we discovered a persistent bug in `@clerk/mcp-tools@0.3.1` where `getPRMUrl()` incorrectly appends `req.originalUrl` to the OAuth metadata path, generating URLs like `/.well-known/oauth-protected-resource/mcp` instead of `/.well-known/oauth-protected-resource`.
+
+Rather than wait for an upstream fix, we brought the essential authentication code in-house:
+
+**Implementation** (`src/auth/mcp-auth/`):
+
+1. **`types.ts`**: Type definitions including Express `Request` augmentation via declaration merging
+2. **`get-prm-url.ts`**: Fixed implementation of OAuth metadata URL generation (without the `/mcp` suffix bug)
+3. **`verify-clerk-token.ts`**: Pure function to convert Clerk's `MachineAuthObject` to MCP SDK's `AuthInfo` structure
+4. **`mcp-auth.ts`**: Generic MCP authentication middleware using the fixed `getPRMUrl`
+5. **`mcp-auth-clerk.ts`**: Clerk-specific integration wrapping the generic middleware
+6. **`index.ts`**: Clean public API boundary exporting only `mcpAuthClerk`
+
+**Development Process**:
+
+- Followed strict TDD (Test-Driven Development) with red-green-refactor cycles
+- Implemented as pure functions with comprehensive unit tests (13 test cases)
+- Used type-guards and library types instead of type assertions
+- Maintained type information flow without broadening types
+- All type manipulation contained to `types.ts` for easy iteration
+
+**Result**:
+
+- All tests pass (162 passed, 2 skipped)
+- Zero type assertions or workarounds
+- Complete control over authentication behavior
+- No dependency on external bug fixes
+
 ### References
 
 - RFC 9470: OAuth 2.0 Protected Resource Metadata - <https://www.rfc-editor.org/rfc/rfc9470.html>

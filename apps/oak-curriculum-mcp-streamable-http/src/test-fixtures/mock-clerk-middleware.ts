@@ -48,14 +48,16 @@ export function createMockClerkMiddleware(
 
     const token = authHeader.replace(/^Bearer\s+/i, '');
     if (validTokens.includes(token)) {
-      // Simulate authenticated state (Clerk attaches auth to req)
-      // Clerk extends Express Request with auth property, but TypeScript doesn't know about it
-      // We need to use type assertion to assign to req.auth
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Clerk extends Express Request with auth property
-      const reqWithAuth = req as { auth?: { userId: string; sessionId: string } };
+      // Simulate authenticated state with AuthInfo structure that mcpAuthClerk expects
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
+      const reqWithAuth = req as {
+        auth?: { token: string; clientId: string; scopes: string[]; extra?: unknown };
+      };
       reqWithAuth.auth = {
-        userId: 'test-user-123',
-        sessionId: 'test-session-456',
+        token,
+        clientId: `client-${token}`,
+        scopes: ['mcp:invoke', 'mcp:read'],
+        extra: { userId: 'test-user-123', sessionId: 'test-session-456' },
       };
     }
 
@@ -71,13 +73,13 @@ export function createMockClerkMiddleware(
  */
 export function createMockMcpAuthClerk(): RequestHandler {
   return (req, res, next) => {
-    // Clerk extends Express Request with auth property, but TypeScript doesn't know about it
-    // We need to use type assertion to access req.auth
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Clerk extends Express Request with auth property
-    const reqWithAuth = req as { auth?: { userId?: string } };
+    // Check if req.auth is present (AuthInfo from MCP SDK)
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions -- Express Request augmented with auth property
+    const reqWithAuth = req as { auth?: { token?: string; clientId?: string; scopes?: string[] } };
     const auth = reqWithAuth.auth;
 
-    if (!auth?.userId) {
+    // AuthInfo requires token, clientId, and scopes - if any are missing, reject
+    if (!(auth?.token && auth.clientId && auth.scopes)) {
       res.setHeader(
         'WWW-Authenticate',
         'Bearer resource_metadata="/.well-known/oauth-protected-resource"',

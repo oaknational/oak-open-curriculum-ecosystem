@@ -2,10 +2,10 @@ import type { Express, RequestHandler } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
 import {
-  mcpAuthClerk,
   protectedResourceHandlerClerk,
   authServerMetadataHandlerClerk,
 } from '@clerk/mcp-tools/express';
+import { mcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
 import { instrumentMiddleware } from './auth-middleware-instrumentation.js';

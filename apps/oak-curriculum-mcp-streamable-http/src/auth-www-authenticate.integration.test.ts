@@ -41,18 +41,9 @@ describe('WWW-Authenticate header integration test', () => {
     expect(response.headers['www-authenticate']).toBeDefined();
   });
 
-  it.skip('should point to a valid resource_metadata URL in WWW-Authenticate header', async () => {
-    // KNOWN ISSUE: Clerk's mcpAuthClerk middleware has a bug in getPRMUrl() that appends
-    // req.originalUrl to the metadata path, generating URLs like:
-    // /.well-known/oauth-protected-resource/mcp (incorrect)
-    // instead of:
-    // /.well-known/oauth-protected-resource (correct per RFC 9470)
-    //
-    // The OAuth metadata IS correctly available at /.well-known/oauth-protected-resource,
-    // but this test validates the URL in the WWW-Authenticate header, which Clerk generates
-    // incorrectly. We removed the workaround route that served the buggy URL.
-    //
-    // This test is skipped until Clerk fixes the bug in @clerk/mcp-tools.
+  it('should point to a valid resource_metadata URL in WWW-Authenticate header', async () => {
+    // This test verifies our in-house mcpAuthClerk middleware generates correct
+    // resource_metadata URLs in WWW-Authenticate headers (without the /mcp suffix bug)
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')
@@ -81,7 +72,7 @@ describe('WWW-Authenticate header integration test', () => {
     expect(metadataResponse.body).toHaveProperty('resource');
   });
 
-  it.skip('should NOT include /mcp suffix in resource_metadata URL', async () => {
+  it('should NOT include /mcp suffix in resource_metadata URL', async () => {
     const response = await request(app)
       .post('/mcp')
       .set('Accept', 'application/json, text/event-stream')

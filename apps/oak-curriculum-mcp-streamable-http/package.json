@@ -6,7 +6,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "build": "tsup",
     "clean": "rm -rf dist .turbo",
     "dev": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=false ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts",
     "dev:observe": "LOG_LEVEL=debug DANGEROUSLY_DISABLE_AUTH=true ALLOWED_HOSTS=localhost,127.0.0.1,::1 tsx src/index.ts 2>&1 | tee .logs/http-dev-$(date +%Y%m%d-%H%M%S).log",
