@@ -1,6 +1,14 @@
+import { loadRootEnv } from '@oaknational/mcp-env';
 import { createApp } from './application.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig } from './runtime-config.js';
+
+// Load .env from repo root if required environment variables are missing
+loadRootEnv({
+  requiredKeys: ['OAK_API_KEY', 'CLERK_PUBLISHABLE_KEY', 'CLERK_SECRET_KEY'],
+  startDir: process.cwd(),
+  env: process.env,
+});
 
 const app = createApp();
 const bootstrapLog = createHttpLogger(loadRuntimeConfig(), { name: 'streamable-http:bootstrap' });

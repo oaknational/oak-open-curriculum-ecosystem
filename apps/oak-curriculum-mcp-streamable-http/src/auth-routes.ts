@@ -30,12 +30,35 @@ function registerUnauthenticatedRoutes(
 
 /**
  * Registers OAuth 2.0 metadata endpoints required by MCP spec
+ *
+ * WORKAROUND: Serves metadata at both /.well-known/oauth-protected-resource
+ * and /.well-known/oauth-protected-resource/mcp due to Clerk bug.
+ *
+ * Bug in @clerk/mcp-tools@0.3.1:
+ * The getPRMUrl() function incorrectly appends req.originalUrl to the metadata path:
+ * - Request to /mcp generates: /.well-known/oauth-protected-resource/mcp (404)
+ * - Should generate: /.well-known/oauth-protected-resource (200)
+ *
+ * This workaround serves the OAuth metadata at both locations so clients can
+ * fetch metadata regardless of which URL they receive in the WWW-Authenticate header.
+ *
+ * Bug location: @clerk/mcp-tools@0.3.1/dist/express/index.js getPRMUrl()
+ * RFC 9470: https://www.rfc-editor.org/rfc/rfc9470.html#section-3
+ *
+ * TODO: Remove /mcp route when Clerk fixes upstream bug
  */
 function registerOAuthMetadataEndpoints(app: Express, runtimeConfig: RuntimeConfig): void {
-  app.get(
-    '/.well-known/oauth-protected-resource',
-    protectedResourceHandlerClerk({ scopes_supported: ['mcp:invoke', 'mcp:read'] }),
-  );
+  const metadataHandler = protectedResourceHandlerClerk({
+    scopes_supported: ['mcp:invoke', 'mcp:read'],
+  });
+
+  // Correct OAuth metadata location per RFC 9470
+  app.get('/.well-known/oauth-protected-resource', metadataHandler);
+
+  // WORKAROUND: Also serve at /mcp suffix due to Clerk bug
+  // This allows clients to fetch metadata from the broken URL Clerk generates
+  // app.get('/.well-known/oauth-protected-resource/mcp', metadataHandler);
+
   app.get('/.well-known/oauth-authorization-server', authServerMetadataHandlerClerk);
 
   if (runtimeConfig.useStubTools) {

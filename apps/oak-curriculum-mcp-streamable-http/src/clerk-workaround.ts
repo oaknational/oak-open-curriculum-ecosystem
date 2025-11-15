@@ -4,16 +4,22 @@ import type { Logger } from '@oaknational/mcp-logger';
 /**
  * WORKAROUND: Fix @clerk/mcp-tools@0.3.1 bug in WWW-Authenticate header
  *
+ * Bug in @clerk/mcp-tools@0.3.1:
  * The library's getPRMUrl() function incorrectly appends req.originalUrl to the
- * OAuth metadata path, producing /.well-known/oauth-protected-resource/mcp (404)
- * instead of /.well-known/oauth-protected-resource (200).
+ * OAuth metadata path, producing /.well-known/oauth-protected-resource/mcp
+ * instead of /.well-known/oauth-protected-resource.
  *
- * This middleware intercepts responses and removes the erroneous /mcp suffix.
+ * PRIMARY FIX: We now serve OAuth metadata at BOTH paths (see auth-routes.ts)
+ * so clients can fetch metadata regardless of which URL they receive.
  *
- * Bug location: @clerk/mcp-tools@0.3.1/dist/express/index.js:6567-6571
- * RFC 9470: https://www.rfc-editor.org/rfc/rfc9470.html
+ * SECONDARY FIX (this middleware): Corrects the WWW-Authenticate header itself
+ * to point to the canonical RFC 9470 compliant URL. This is defensive - clients
+ * will work either way, but this ensures they receive the correct URL.
  *
- * TODO: Remove this when Clerk fixes upstream (track issue: TBD)
+ * Bug location: @clerk/mcp-tools@0.3.1/dist/express/index.js getPRMUrl()
+ * RFC 9470: https://www.rfc-editor.org/rfc/rfc9470.html#section-3
+ *
+ * TODO: Remove both workarounds when Clerk fixes upstream bug
  */
 export function createClerkBugWorkaroundMiddleware(log: Logger): RequestHandler {
   return (req, res, next) => {
