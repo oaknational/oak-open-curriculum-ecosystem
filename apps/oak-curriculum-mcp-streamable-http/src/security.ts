@@ -1,6 +1,36 @@
 import type express from 'express';
 import cors from 'cors';
 
+/**
+ * Extracts the hostname from a Host header value, handling IPv6 addresses.
+ *
+ * Examples:
+ * - "localhost:3333" → "localhost"
+ * - "127.0.0.1:8080" → "127.0.0.1"
+ * - "[::1]:3333" → "::1"
+ * - "[2001:db8::1]:8080" → "2001:db8::1"
+ * - "example.com" → "example.com"
+ *
+ * @param hostHeader - The value of the Host header
+ * @returns The hostname portion, or empty string if invalid
+ */
+function extractHostname(hostHeader: string): string {
+  // IPv6 addresses are wrapped in brackets: [::1]:port
+  if (hostHeader.startsWith('[')) {
+    const closeBracket = hostHeader.indexOf(']');
+    if (closeBracket === -1) {
+      return ''; // Invalid format
+    }
+    return hostHeader.slice(1, closeBracket);
+  }
+  // IPv4 and regular hostnames: split on first colon
+  const colonIndex = hostHeader.indexOf(':');
+  if (colonIndex === -1) {
+    return hostHeader;
+  }
+  return hostHeader.slice(0, colonIndex);
+}
+
 function compileHostMatchers(allowedHosts: readonly string[]): ((host: string) => boolean)[] {
   const matchers: ((host: string) => boolean)[] = [];
   for (const raw of allowedHosts) {
@@ -30,7 +60,11 @@ export function dnsRebindingProtection(allowedHosts: readonly string[]): express
       res.status(403).json({ error: 'Forbidden: missing Host header' });
       return;
     }
-    const hostname = hostHeader.split(':')[0]?.toLowerCase();
+    const hostname = extractHostname(hostHeader).toLowerCase();
+    if (!hostname) {
+      res.status(403).json({ error: 'Forbidden: invalid Host header format' });
+      return;
+    }
     const isAllowed = matchers.length === 0 || matchers.some((m) => m(hostname));
     if (!isAllowed) {
       res.status(403).json({ error: 'Forbidden: host not allowed' });

@@ -65,6 +65,62 @@ describe('createWebSecurityMiddleware', () => {
       expect(res.json).toHaveBeenCalledWith({ error: 'Forbidden: missing Host header' });
       expect(next).not.toHaveBeenCalled();
     });
+
+    it('should allow requests with IPv6 Host header', () => {
+      const middleware = createWebSecurityMiddleware('stateless', ['::1'], undefined);
+
+      const req = {
+        headers: { host: '[::1]:3333' },
+      } as Request;
+      const res = {
+        setHeader: vi.fn(),
+        getHeader: vi.fn(),
+      } as unknown as Response;
+      const next = vi.fn() as NextFunction;
+
+      middleware(req, res, next);
+
+      // Should NOT be blocked by DNS rebinding protection
+      expect(next).toHaveBeenCalled();
+    });
+
+    it('should block requests with invalid IPv6 Host header', () => {
+      const middleware = createWebSecurityMiddleware('stateless', ['localhost'], undefined);
+
+      const req = {
+        headers: { host: '[::1]:3333' },
+      } as Request;
+      const res = {
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnThis(),
+      } as unknown as Response;
+      const next = vi.fn() as NextFunction;
+
+      middleware(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith({ error: 'Forbidden: host not allowed' });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it('should block requests with malformed IPv6 Host header', () => {
+      const middleware = createWebSecurityMiddleware('stateless', ['::1'], undefined);
+
+      const req = {
+        headers: { host: '[::1:3333' }, // Missing closing bracket
+      } as Request;
+      const res = {
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn().mockReturnThis(),
+      } as unknown as Response;
+      const next = vi.fn() as NextFunction;
+
+      middleware(req, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(res.json).toHaveBeenCalledWith({ error: 'Forbidden: invalid Host header format' });
+      expect(next).not.toHaveBeenCalled();
+    });
   });
 
   describe('CORS behavior', () => {
