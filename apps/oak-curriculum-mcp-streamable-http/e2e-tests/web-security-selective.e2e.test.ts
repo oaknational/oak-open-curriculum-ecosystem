@@ -18,7 +18,20 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
         .set('Origin', 'http://example.com');
 
       // Should have CORS headers (web security applied)
-      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.headers['access-control-allow-origin']).toBe('http://example.com');
+      expect(res.headers.vary).toContain('Origin');
+      expect(res.status).toBe(200);
+    });
+
+    it('applies CORS headers with different origin (allow-all mode)', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/')
+        .set('Host', 'localhost')
+        .set('Origin', 'http://totally-different.com');
+
+      // Allow-all mode reflects any origin back
+      expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
       expect(res.status).toBe(200);
     });
 
@@ -38,6 +51,38 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       const res = await request(app).get('/').set('Host', 'localhost');
 
       // Should not be blocked (valid host)
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('text/html');
+    });
+
+    it('allows requests with localhost:port Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost:3333');
+
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('text/html');
+    });
+
+    it('allows requests with 127.0.0.1:port Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', '127.0.0.1:3333');
+
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('text/html');
+    });
+
+    it('allows requests with IPv6 [::1]:port Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', '[::1]:3333');
+
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('text/html');
+    });
+
+    it('allows requests with IPv6 [::1] Host header (no port)', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', '[::1]');
+
       expect(res.status).toBe(200);
       expect(res.type).toBe('text/html');
     });
@@ -102,6 +147,20 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
 
       // Should NOT be blocked - no DNS rebinding protection on health checks
       expect(res.status).toBe(200);
+    });
+
+    it('/mcp allows any Host header (no DNS protection)', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .post('/mcp')
+        .set('Host', 'evil.com')
+        .set('Accept', 'application/json, text/event-stream')
+        .set('Content-Type', 'application/json')
+        .send({ jsonrpc: '2.0', id: 1, method: 'tools/list' });
+
+      // Should NOT be blocked - protocol routes need to work from any host
+      // Auth will handle security (401), but not DNS rebinding (403)
+      expect(res.status).not.toBe(403);
     });
 
     it('OAuth metadata allows any Host header (no DNS protection)', async () => {
