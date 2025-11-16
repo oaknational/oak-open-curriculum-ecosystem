@@ -1,10 +1,7 @@
 import type { Express, RequestHandler } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
-import {
-  protectedResourceHandlerClerk,
-  authServerMetadataHandlerClerk,
-} from '@clerk/mcp-tools/express';
+import { protectedResourceHandlerClerk } from '@clerk/mcp-tools/express';
 import { mcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
@@ -77,12 +74,6 @@ export function registerPublicOAuthMetadataEndpoints(
 
   // RFC 9470 compliant OAuth Protected Resource Metadata endpoint
   app.get('/.well-known/oauth-protected-resource', metadataHandler);
-
-  // RFC 8414 OAuth Authorization Server Metadata endpoint
-  app.get(
-    '/.well-known/oauth-authorization-server',
-    addNoCacheHeaders(authServerMetadataHandlerClerk),
-  );
 
   if (runtimeConfig.useStubTools) {
     // In stub mode we expose additional metadata for tooling to detect bypass scenarios

@@ -17,6 +17,8 @@
     "smoke:dev:stub": "tsx smoke-tests/smoke-dev-stub.ts",
     "smoke:dev:live": "tsx smoke-tests/smoke-dev-live.ts",
     "smoke:dev:live:auth": "tsx smoke-tests/smoke-dev-live-auth.ts",
+    "smoke:oauth-inspector": "tsx smoke-tests/smoke-oauth-mcp-inspector.ts",
+    "smoke:oauth-curl": "./smoke-tests/OAUTH-CURL-TESTS.sh",
     "smoke:remote": "tsx smoke-tests/smoke-remote.ts",
     "type-check": "tsc -p tsconfig.lint.json --noEmit",
     "lint": "eslint  .",

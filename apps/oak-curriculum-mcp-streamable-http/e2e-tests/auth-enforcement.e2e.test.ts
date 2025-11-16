@@ -30,26 +30,6 @@ function isOAuthMetadata(value: unknown): value is {
 }
 
 /**
- * Type guard for AS metadata response
- */
-function isASMetadata(value: unknown): value is {
-  issuer: string;
-  authorization_endpoint: string;
-  token_endpoint: string;
-  jwks_uri: string;
-} {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    'issuer' in value &&
-    typeof value.issuer === 'string' &&
-    'authorization_endpoint' in value &&
-    'token_endpoint' in value &&
-    'jwks_uri' in value
-  );
-}
-
-/**
  * Helper: Validates OAuth metadata step in discovery chain
  */
 async function validateOAuthMetadataStep(app: Express): Promise<string> {
@@ -66,22 +46,6 @@ async function validateOAuthMetadataStep(app: Express): Promise<string> {
   expect(asUrl).toContain('clerk.accounts.dev');
 
   return asUrl;
-}
-
-/**
- * Helper: Validates AS metadata step in discovery chain
- */
-async function validateASMetadataStep(app: Express, expectedIssuer: string): Promise<void> {
-  const res = await request(app).get('/.well-known/oauth-authorization-server');
-  expect(res.status).toBe(200);
-
-  const asMetadata: unknown = res.body;
-  if (!isASMetadata(asMetadata)) {
-    throw new Error('Invalid AS metadata response');
-  }
-
-  expect(asMetadata.issuer).toContain('clerk.accounts.dev');
-  expect(asMetadata.issuer).toBe(expectedIssuer);
 }
 
 describe('Auth Enforcement (E2E - Production Equivalent)', () => {
@@ -143,13 +107,40 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(res.headers['www-authenticate']).toContain('Bearer');
   });
 
-  it('exposes /.well-known/oauth-authorization-server with Clerk metadata', async () => {
+  it('does not proxy authorization server metadata', async () => {
+    // Per MCP spec 2025-06-18: clients fetch AS metadata directly from
+    // authorization server, not from resource server proxy
     const res = await request(app).get('/.well-known/oauth-authorization-server');
 
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('issuer');
-    expect(res.body).toHaveProperty('authorization_endpoint');
-    expect(res.body).toHaveProperty('token_endpoint');
+    // Expect 404 - we should NOT have this endpoint
+    expect(res.status).toBe(404);
+  });
+
+  it('protected resource metadata contains valid authorization_servers array', async () => {
+    const prRes = await request(app).get('/.well-known/oauth-protected-resource');
+    expect(prRes.status).toBe(200);
+
+    const metadata: unknown = prRes.body;
+
+    // Verify RFC 9728 structure
+    expect(metadata).toHaveProperty('resource');
+    expect(metadata).toHaveProperty('authorization_servers');
+
+    // Use type guard for safe access
+    if (!isOAuthMetadata(metadata)) {
+      throw new Error('Invalid OAuth metadata response');
+    }
+
+    expect(Array.isArray(metadata.authorization_servers)).toBe(true);
+    expect(metadata.authorization_servers.length).toBeGreaterThan(0);
+
+    // Verify Clerk URL format (structure validation only)
+    const clerkAsUrl = metadata.authorization_servers[0];
+    expect(clerkAsUrl).toContain('clerk');
+    expect(clerkAsUrl).toMatch(/^https:\/\//);
+
+    // CRITICAL: Do NOT fetch from this URL in automated tests
+    // Clerk accessibility is validated manually with Inspector CLI
   });
 
   it('exposes /.well-known/oauth-protected-resource with correct scopes', async () => {
@@ -191,8 +182,8 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(res.status).toBe(401);
   });
 
-  // Test #3: Complete OAuth Discovery Chain (End-to-End Flow)
-  it('supports complete OAuth discovery chain as MCP clients would follow', async () => {
+  // Test #3: OAuth Discovery Flow (Protected Resource Metadata)
+  it('supports OAuth discovery via protected resource metadata', async () => {
     // Step 1: Client calls /mcp without auth → 401 with WWW-Authenticate
     const step1 = await request(app)
       .post('/mcp')
@@ -208,8 +199,12 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     // Step 2: Client fetches OAuth metadata and extracts AS URL
     const asUrl = await validateOAuthMetadataStep(app);
 
-    // Step 3: Client fetches AS metadata and validates it matches
-    await validateASMetadataStep(app, asUrl);
+    // Step 3: MCP clients fetch AS metadata directly from Clerk (not tested here)
+    // Per test boundaries: we do NOT make external network calls to Clerk
+    // The AS URL structure is validated above; actual accessibility is
+    // validated manually with Inspector CLI per Phase 2 and Phase 6
+    expect(asUrl).toContain('clerk');
+    expect(asUrl).toMatch(/^https:\/\//);
   });
 
   // Test #5: RFC Compliance Validation
