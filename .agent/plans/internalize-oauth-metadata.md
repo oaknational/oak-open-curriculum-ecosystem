@@ -1,335 +1,231 @@
 # Plan: Internalize OAuth Metadata Generation
 
-**Status:** Draft  
+**Status:** Ready for Implementation  
 **Created:** 2024-11-15  
+**Revised:** 2024-11-16  
 **Priority:** Medium  
-**Effort:** ~1-2 hours (pure TDD work)
+**Effort:** ~30 minutes (pure TDD work)
 
 ---
 
 ## Executive Summary
 
-Remove the `@clerk/mcp-tools` dependency by internalizing OAuth metadata generation functionality. We only use two functions from this package (`protectedResourceHandlerClerk` and `authServerMetadataHandlerClerk`), and we've already fixed their bugs and internalized the authentication middleware. This completes the internalization work, giving us full control, better quality, and eliminating an external dependency.
+Remove the `@clerk/mcp-tools` dependency by implementing two simple Express handlers. We only use two functions from this immature package, and we can implement them in ~80 lines of code with full test coverage. This gives us complete control, eliminates supply chain risk, and removes unnecessary complexity (caching we don't want).
+
+**Architectural Principle:** "Could it be simpler?" - Yes. Two files, pure TDD, no premature abstraction.
 
 ---
 
-## Intentions
+## Problem Statement
 
-### Primary Goals
+### Current State
 
-1. **Remove External Dependency**: Eliminate `@clerk/mcp-tools` from our codebase
-2. **Fix Known Issues**: Resolve User-Agent and caching problems in the upstream library
-3. **Maintain Quality**: Use TDD to ensure correctness of all new code
-4. **Improve Performance**: Add intelligent caching for OAuth metadata (1-hour TTL)
-5. **Follow Best Practices**: Align with @rules.md and @testing-strategy.md principles
+**Dependency:** `@clerk/mcp-tools@^0.3.1`  
+**Usage:** 2 Express handlers in `auth-routes.ts`:
 
-### Secondary Goals
+- `protectedResourceHandlerClerk` - Generates RFC 9728 metadata (static JSON)
+- `authServerMetadataHandlerClerk` - Proxies Clerk's RFC 8414 metadata
 
-1. **Educational Value**: Demonstrate pure function TDD workflow
-2. **Code Ownership**: Understand and control all OAuth flows
-3. **Documentation**: Comprehensive inline docs for future maintainers
+**Issues:**
 
----
+1. 🔴 **Immature package** - Not production-ready, rapid API changes
+2. 🔴 **Supply chain risk** - External dependency we don't control
+3. 🔴 **Unwanted caching** - Package caches metadata, we want fresh fetches
+4. 🔴 **Minimal value** - These are trivial functions (~80 lines total)
 
-## Current State Analysis
+### Desired State
 
-### What We Use from `@clerk/mcp-tools`
+**Zero dependencies** for OAuth metadata generation.
 
-Located in `apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts`:
+**Two simple functions we control:**
 
-```typescript
-import {
-  protectedResourceHandlerClerk, // Line 5
-  authServerMetadataHandlerClerk, // Line 6
-} from '@clerk/mcp-tools/express';
-```
+- Generate RFC 9728 metadata (pure data transformation)
+- Fetch RFC 8414 metadata from Clerk (simple HTTP proxy)
 
-**Usage:**
+**Benefits:**
 
-1. **`protectedResourceHandlerClerk`** (line 73-76) - Generates RFC 9728 Protected Resource Metadata
-2. **`authServerMetadataHandlerClerk`** (line 84) - Fetches RFC 8414 Authorization Server Metadata from Clerk
-
-### What We've Already Internalized
-
-In `apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/`:
-
-- ✅ `mcpAuth()` - Generic OAuth middleware
-- ✅ `mcpAuthClerk()` - Clerk-specific OAuth middleware
-- ✅ `getPRMUrl()` - Fixed URL generation (fixing their bug)
-- ✅ `verifyClerkToken()` - Pure token verification function
-- ✅ **Full unit test coverage** for all the above
-
-### Known Issues in `@clerk/mcp-tools`
-
-1. **Missing User-Agent**: `fetchClerkAuthorizationServerMetadata` uses Node's default User-Agent (`node`) instead of identifying the library
-2. **No Caching**: Fetches OAuth metadata on every request (wasteful)
-3. **No Error Handling**: No timeout, no HTTP status checking, no retry logic
-4. **No Validation**: Doesn't validate response content-type or structure
+- ✅ No supply chain risk
+- ✅ No caching (fresh data every request)
+- ✅ Full control over implementation
+- ✅ Simpler codebase (less code than before)
 
 ---
 
-## Desired Impact
+## Goals
 
-### Immediate Benefits
+### Primary Goals (Must Have)
 
-1. ✅ **Dependency Reduction**: One fewer package to maintain/audit
-2. ✅ **Bug Fixes**: Proper User-Agent, error handling, timeouts
-3. ✅ **Performance**: 1-hour metadata cache (OAuth metadata rarely changes)
-4. ✅ **Code Quality**: TDD-driven, fully tested pure functions
+1. **Remove Dependency**: Eliminate `@clerk/mcp-tools` from package.json
+2. **Maintain Functionality**: OAuth metadata endpoints work identically
+3. **No Caching**: Fresh metadata fetches (no TTL, no cache module)
+4. **Code Ownership**: Simple, testable code we fully control
 
-### Long-term Benefits
+### Non-Goals (Explicitly Out of Scope)
 
-1. ✅ **Maintainability**: Code we understand and control
-2. ✅ **Flexibility**: Easy to customize for our needs
-3. ✅ **Security**: No supply chain risk from this dependency
-4. ✅ **Standards Compliance**: Direct RFC implementation we can verify
+- ❌ Adding caching (we want direct fetches)
+- ❌ Complex architecture (keep it simple)
+- ❌ Performance optimization (not needed)
+- ❌ Changing OAuth flow (only replacing handlers)
 
 ---
 
 ## Architecture Design
 
+### First Question: "Could it be simpler?"
+
+**Answer:** Yes. Two files is sufficient.
+
 ### File Structure
 
 ```text
 apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/
-├── index.ts                                    # Existing - public API
-├── mcp-auth.ts                                 # Existing
-├── mcp-auth-clerk.ts                           # Existing
-├── get-prm-url.ts                              # Existing
-├── types.ts                                    # Existing
-├── verify-clerk-token.ts                       # Existing
-├── *.unit.test.ts                              # Existing tests
-│
-└── metadata/                                   # NEW FOLDER
-    ├── index.ts                                # Public API
-    │
-    ├── core/                                   # Pure functions
-    │   ├── derive-fapi-url.ts                  # NEW - Pure function
-    │   ├── derive-fapi-url.unit.test.ts        # NEW - Tests FIRST
-    │   ├── generate-protected-resource-metadata.ts  # NEW - Pure function
-    │   ├── generate-protected-resource-metadata.unit.test.ts  # NEW - Tests FIRST
-    │   └── index.ts                            # Exports
-    │
-    ├── fetch/                                  # IO functions
-    │   ├── fetch-authorization-server-metadata.ts  # NEW - With caching
-    │   ├── fetch-authorization-server-metadata.integration.test.ts  # NEW - Mocked tests
-    │   ├── metadata-cache.ts                   # NEW - Simple in-memory cache
-    │   ├── metadata-cache.unit.test.ts         # NEW - Tests FIRST
-    │   └── index.ts                            # Exports
-    │
-    ├── handlers/                               # Express handlers
-    │   ├── protected-resource-handler.ts       # NEW - Express handler
-    │   ├── protected-resource-handler.unit.test.ts  # NEW - Tests FIRST
-    │   ├── auth-server-metadata-handler.ts     # NEW - Express handler
-    │   ├── auth-server-metadata-handler.unit.test.ts  # NEW - Tests FIRST
-    │   └── index.ts                            # Exports
-    │
-    └── types/                                  # Type definitions
-        ├── protected-resource-metadata.ts      # NEW - RFC 9728 types
-        ├── authorization-server-metadata.ts    # NEW - RFC 8414 types
-        └── index.ts                            # Exports
+├── oauth-metadata-handlers.ts              # NEW - ~80 lines
+└── oauth-metadata-handlers.integration.test.ts  # NEW - ~100 lines
 ```
+
+**That's it. No folders. No premature abstraction.**
 
 ### Design Principles
 
-Following @rules.md:
+From `@rules.md`:
 
-1. **TDD**: Write tests FIRST (Red → Green → Refactor)
-2. **Pure Functions First**: All core logic is pure, testable functions
-3. **Clear Boundaries**: Each folder has explicit public API via index.ts
-4. **Fail Fast**: Explicit error handling with helpful messages
-5. **Type Safety**: No `any`, `as`, or type shortcuts
-6. **Inline Documentation**: Full JSDoc for all functions
+- ✅ **TDD**: Write tests FIRST (Red → Green → Refactor)
+- ✅ **Keep it simple**: KISS, YAGNI, DRY
+- ✅ **Pure functions first**: `deriveFapiUrl` is pure, testable
+- ✅ **Fail fast**: Explicit error handling with context
+- ✅ **Type safety**: No `any`, `as`, or shortcuts
+- ✅ **Inline docs**: JSDoc for all exported functions
+
+From `@testing-strategy.md`:
+
+- ✅ **Test behavior, not implementation**
+- ✅ **Integration tests for handlers** (they integrate multiple units)
+- ✅ **Simple mocks**: Mock Express req/res and global fetch
+- ✅ **No useless tests**: Each test proves something useful
 
 ---
 
-## Implementation Plan
+## Implementation Plan (TDD)
 
-### Phase 1: Pure Functions (Core Logic)
+### Phase 1: Tests First (RED) - 10 minutes
 
-**Goal**: Implement RFC-compliant metadata generation with zero I/O
+**Create:** `oauth-metadata-handlers.integration.test.ts`
 
-#### Step 1.1: `derive-fapi-url` (TDD)
+Write failing tests for:
 
-**Test First** (`derive-fapi-url.unit.test.ts`):
+#### `protectedResourceHandler` (3 tests)
 
-```typescript
-- Test valid pk_test_ key decoding
-- Test valid pk_live_ key decoding
-- Test invalid key format throws error
-- Test empty key throws error
-- Test malformed base64 throws error
-```
+1. ✅ Generates RFC 9728 compliant metadata
+2. ✅ Uses request protocol and host for resource URL
+3. ✅ Throws helpful error if `CLERK_PUBLISHABLE_KEY` missing
 
-**Implementation** (`derive-fapi-url.ts`):
+#### `authServerMetadataHandler` (4 tests)
 
-- Pure function: `publishableKey: string → URL: string`
-- Decodes base64 Clerk domain from publishable key
-- Removes trailing `$` character
-- Returns `https://{domain}`
+1. ✅ Fetches Clerk metadata from correct URL
+2. ✅ Sets User-Agent header identifying our app
+3. ✅ Has 10-second timeout (uses AbortSignal)
+4. ✅ Handles HTTP errors gracefully
 
-#### Step 1.2: `generate-protected-resource-metadata` (TDD)
-
-**Test First** (`generate-protected-resource-metadata.unit.test.ts`):
-
-```typescript
-- Test RFC 9728 compliant structure
-- Test all required fields present
-- Test custom properties merge correctly
-- Test URL formatting
-```
-
-**Implementation** (`generate-protected-resource-metadata.ts`):
-
-- Pure function: `(authServerUrl, resourceUrl, properties?) → Metadata`
-- Returns RFC 9728 compliant metadata object
-- Merges custom properties (e.g., scopes_supported)
-
-#### Step 1.3: `metadata-cache` (TDD)
-
-**Test First** (`metadata-cache.unit.test.ts`):
-
-```typescript
-- Test cache miss returns undefined
-- Test cache hit returns cached value
-- Test cache expiry after TTL
-- Test cache clear removes all entries
-- Test different keys don't collide
-```
-
-**Implementation** (`metadata-cache.ts`):
-
-- Pure data structure: Map-based cache with TTL
-- `get(key): value | undefined`
-- `set(key, value, ttl?): void`
-- `clear(): void`
-- Default TTL: 1 hour (3600000ms)
-
-**Quality Gate After Phase 1:**
+**Quality Check:**
 
 ```bash
-pnpm test                          # All tests pass
-pnpm type-check                    # No type errors
-pnpm lint -- --fix                 # No lint errors
+pnpm test oauth-metadata-handlers  # All tests FAIL (RED) ✅
 ```
 
 ---
 
-### Phase 2: Fetch Functions (I/O with Mocks)
+### Phase 2: Implementation (GREEN) - 15 minutes
 
-**Goal**: Implement OAuth metadata fetching with proper error handling and caching
+**Create:** `oauth-metadata-handlers.ts`
 
-#### Step 2.1: `fetch-authorization-server-metadata` (TDD with Mocks)
+Implement minimal code to make tests pass:
 
-**Test First** (`fetch-authorization-server-metadata.integration.test.ts`):
-
-```typescript
-- Mock global fetch
-- Test successful fetch returns metadata
-- Test sets correct User-Agent header
-- Test adds Accept: application/json header
-- Test caching prevents duplicate fetches
-- Test HTTP 404 throws helpful error
-- Test HTTP 500 throws helpful error
-- Test timeout after 10 seconds
-- Test invalid content-type throws error
-- Test malformed JSON throws error
-- Test cache expiry causes refetch
-```
-
-**Implementation** (`fetch-authorization-server-metadata.ts`):
+#### Pure Function: `deriveFapiUrl`
 
 ```typescript
-- Async function with proper error handling
-- Sets User-Agent: @oaknational/oak-curriculum-mcp-streamable-http@{version}
-- Sets Accept: application/json
-- 10-second timeout using AbortController
-- Validates HTTP status (res.ok)
-- Validates content-type is application/json
-- Uses metadata-cache for 1-hour caching
-- Throws detailed errors with context
+/**
+ * Derives Clerk FAPI URL from publishable key.
+ *
+ * @param publishableKey - pk_test_* or pk_live_*
+ * @returns Clerk FAPI URL
+ * @throws Error if key format invalid
+ */
+function deriveFapiUrl(publishableKey: string): string {
+  // Decode base64-encoded domain from key
+  // Remove trailing $ character
+  // Return https://{domain}
+}
 ```
 
-**Quality Gate After Phase 2:**
+#### Express Handler: `protectedResourceHandler`
+
+```typescript
+/**
+ * RFC 9728 Protected Resource Metadata handler.
+ *
+ * Generates static metadata pointing OAuth clients to Clerk.
+ * No caching - metadata is computed from env vars and request.
+ */
+export function protectedResourceHandler(req: express.Request, res: express.Response): void {
+  // Read CLERK_PUBLISHABLE_KEY from env
+  // Derive Clerk FAPI URL
+  // Build resource URL from request
+  // Return RFC 9728 JSON
+}
+```
+
+#### Express Handler: `authServerMetadataHandler`
+
+```typescript
+/**
+ * RFC 8414 Authorization Server Metadata handler.
+ *
+ * Fetches Clerk's OAuth metadata. No caching - proxies every request.
+ */
+export async function authServerMetadataHandler(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+): Promise<void> {
+  // Read CLERK_PUBLISHABLE_KEY from env
+  // Derive Clerk metadata URL
+  // Fetch with timeout and User-Agent
+  // Return JSON or call next(error)
+}
+```
+
+**Quality Check:**
 
 ```bash
-pnpm test                          # All tests pass
-pnpm type-check                    # No type errors
-pnpm lint -- --fix                 # No lint errors
+pnpm test oauth-metadata-handlers  # All tests PASS (GREEN) ✅
 ```
 
 ---
 
-### Phase 3: Express Handlers
+### Phase 3: Refactor - 5 minutes
 
-**Goal**: Create Express route handlers that use the pure functions
+Improve code quality while keeping tests green:
 
-#### Step 3.1: `protected-resource-handler` (TDD)
+- Add comprehensive JSDoc comments
+- Extract error messages as constants
+- Ensure type safety (no `any`, no `as`)
+- Format and lint
 
-**Test First** (`protected-resource-handler.unit.test.ts`):
-
-```typescript
-- Mock Express req/res objects
-- Test handler generates correct metadata
-- Test derives FAPI URL from env var
-- Test uses request protocol and host
-- Test merges custom properties
-- Test throws on missing CLERK_PUBLISHABLE_KEY
-- Test response is JSON
-```
-
-**Implementation** (`protected-resource-handler.ts`):
-
-```typescript
-- Express RequestHandler
-- Reads CLERK_PUBLISHABLE_KEY from env
-- Derives authServerUrl via deriveFapiUrl
-- Gets resourceUrl from req (protocol + host + path)
-- Calls generateProtectedResourceMetadata
-- Returns JSON response
-```
-
-#### Step 3.2: `auth-server-metadata-handler` (TDD)
-
-**Test First** (`auth-server-metadata-handler.unit.test.ts`):
-
-```typescript
-- Mock Express req/res objects
-- Mock fetch (via fetchAuthorizationServerMetadata)
-- Test handler fetches and returns metadata
-- Test derives FAPI URL from env var
-- Test throws on missing CLERK_PUBLISHABLE_KEY
-- Test response is JSON
-- Test caching works across requests
-```
-
-**Implementation** (`auth-server-metadata-handler.ts`):
-
-```typescript
-- Express RequestHandler
-- Reads CLERK_PUBLISHABLE_KEY from env
-- Derives fapiUrl via deriveFapiUrl
-- Calls fetchAuthorizationServerMetadata
-- Returns JSON response
-```
-
-**Quality Gate After Phase 3:**
+**Quality Check:**
 
 ```bash
-pnpm test                          # All tests pass
-pnpm type-check                    # No type errors
-pnpm lint -- --fix                 # No lint errors
+pnpm type-check                    # No errors ✅
+pnpm lint -- --fix                 # No errors ✅
+pnpm test oauth-metadata-handlers  # Still PASS ✅
 ```
 
 ---
 
-### Phase 4: Integration & Cleanup
-
-**Goal**: Replace imports and remove dependency
+### Phase 4: Integration - 5 minutes
 
 #### Step 4.1: Update `auth-routes.ts`
 
-**Changes:**
+Replace imports:
 
 ```typescript
 // BEFORE:
@@ -342,10 +238,10 @@ import {
 import {
   protectedResourceHandler,
   authServerMetadataHandler,
-} from './auth/mcp-auth/metadata/index.js';
+} from './auth/mcp-auth/oauth-metadata-handlers.js';
 ```
 
-**Update usages:**
+Update usages:
 
 ```typescript
 // Line 73: protectedResourceHandlerClerk → protectedResourceHandler
@@ -358,7 +254,11 @@ import {
 pnpm remove @clerk/mcp-tools
 ```
 
-**Quality Gate After Phase 4:**
+#### Step 4.3: Update exports in `index.ts` (if needed)
+
+Ensure new handlers are exported from `auth/mcp-auth/index.ts` if required by other modules.
+
+**Quality Gate:**
 
 ```bash
 pnpm i                             # Clean install
@@ -366,7 +266,7 @@ pnpm type-gen                      # Regenerate types
 pnpm build                         # Build succeeds
 pnpm type-check                    # No type errors
 pnpm lint -- --fix                 # No lint errors
-pnpm format                        # Format check
+pnpm format                        # Format code
 pnpm markdownlint                  # Markdown lint
 pnpm test                          # All tests pass
 pnpm test:e2e                      # E2E tests pass
@@ -376,29 +276,30 @@ pnpm test:e2e                      # E2E tests pass
 
 ## Acceptance Criteria
 
-### Functional Requirements
+### Functional Requirements (Must Pass)
 
-- [ ] All new pure functions have unit tests (written first)
-- [ ] All fetch functions have integration tests with mocks
-- [ ] All Express handlers have unit tests with mocked dependencies
-- [ ] OAuth metadata generation follows RFC 9728 exactly
-- [ ] Authorization server metadata fetch follows RFC 8414
-- [ ] Metadata caching reduces network calls (1-hour TTL)
-- [ ] User-Agent header identifies our application
-- [ ] Timeouts prevent hanging requests (10 seconds)
-- [ ] HTTP errors produce helpful error messages
-- [ ] Missing env vars produce clear errors
+- [ ] `protectedResourceHandler` generates RFC 9728 compliant JSON
+- [ ] Handler reads `CLERK_PUBLISHABLE_KEY` from environment
+- [ ] Handler derives correct Clerk FAPI URL from key
+- [ ] Handler builds resource URL from request (protocol + host)
+- [ ] Handler includes `scopes_supported: ['mcp:invoke', 'mcp:read']`
+- [ ] Handler throws helpful error if env var missing
+- [ ] `authServerMetadataHandler` fetches from Clerk's `/.well-known/openid-configuration`
+- [ ] Handler sets `User-Agent: @oaknational/oak-curriculum-mcp-streamable-http`
+- [ ] Handler has 10-second timeout via `AbortSignal`
+- [ ] Handler calls `next(error)` on failures (proper Express error handling)
+- [ ] No caching - every request fetches fresh metadata
 
-### Non-Functional Requirements
+### Non-Functional Requirements (Must Pass)
 
-- [ ] `@clerk/mcp-tools` completely removed from package.json
-- [ ] No runtime errors when starting the server
-- [ ] OAuth flow still works end-to-end
+- [ ] `@clerk/mcp-tools` completely removed from `package.json`
+- [ ] No runtime errors when starting server
+- [ ] OAuth discovery flow works end-to-end
 - [ ] All quality gate commands pass
 - [ ] Test coverage ≥ 95% for new code
 - [ ] All functions have JSDoc documentation
-- [ ] All types are explicit (no `any`, `as`, etc.)
-- [ ] Code follows TDD: tests written first
+- [ ] All types explicit (no `any`, `as`, `!`, etc.)
+- [ ] Total LOC < 200 lines (implementation + tests)
 
 ### Quality Gates (Must Pass in Order)
 
@@ -415,73 +316,122 @@ pnpm test:e2e                      # E2E tests pass
 
 ---
 
+## Definition of Done
+
+### Code Complete When:
+
+1. ✅ Two files created (`oauth-metadata-handlers.ts` and `.integration.test.ts`)
+2. ✅ 7 tests written and passing
+3. ✅ All functions have JSDoc documentation
+4. ✅ `auth-routes.ts` updated to use new handlers
+5. ✅ `@clerk/mcp-tools` removed from `package.json`
+6. ✅ All quality gates pass
+
+### Functionality Proven When:
+
+1. ✅ Unit/integration tests pass (7 tests)
+2. ✅ E2E tests pass (existing OAuth tests)
+3. ✅ Manual smoke test successful:
+
+   ```bash
+   # Start server
+   pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev
+
+   # Test protected resource metadata
+   curl http://localhost:3333/.well-known/oauth-protected-resource | jq
+   # Expected: RFC 9728 JSON with authorization_servers array
+
+   # Test auth server metadata
+   curl http://localhost:3333/.well-known/oauth-authorization-server | jq
+   # Expected: RFC 8414 JSON from Clerk
+   ```
+
+### Ready to Ship When:
+
+1. ✅ All acceptance criteria met
+2. ✅ All quality gates passed
+3. ✅ Manual smoke test successful
+4. ✅ No regression in existing E2E tests
+5. ✅ Code reviewed (if required)
+
+---
+
 ## Validation Strategy
 
-### Unit Test Validation
+### Test Strategy
 
-**Pure Functions (No I/O):**
+**Integration Tests** (`.integration.test.ts`) - 7 tests total:
 
-- `derive-fapi-url`: 5 test cases minimum
-- `generate-protected-resource-metadata`: 4 test cases minimum
-- `metadata-cache`: 5 test cases minimum
+- Mock Express `req`/`res` objects
+- Mock global `fetch` for HTTP calls
+- Test behavior at handler level
+- Verify error handling
 
-**Integration Tests (Mocked I/O):**
+**E2E Tests** (existing) - 0 new tests needed:
 
-- `fetch-authorization-server-metadata`: 10 test cases minimum
-- `protected-resource-handler`: 7 test cases minimum
-- `auth-server-metadata-handler`: 6 test cases minimum
+- `auth-enforcement.e2e.test.ts` already validates OAuth flow
+- `web-security-selective.e2e.test.ts` already validates metadata endpoints
+- No new E2E tests required (functionality unchanged)
 
-### End-to-End Validation
+### Manual Validation Checklist
 
-**Smoke Test Checklist:**
+**Before Starting:**
 
-1. [ ] Start dev server with auth enabled
-2. [ ] Hit `/.well-known/oauth-protected-resource` → 200 OK, valid JSON
-3. [ ] Hit `/.well-known/oauth-authorization-server` → 200 OK, valid JSON
-4. [ ] Verify User-Agent in logs shows our app name
-5. [ ] Hit metadata endpoint twice → verify only 1 fetch call (caching works)
-6. [ ] Verify OAuth flow completes successfully with real Clerk credentials
+1. [ ] Verify current implementation works:
+   ```bash
+   curl http://localhost:3333/.well-known/oauth-protected-resource
+   curl http://localhost:3333/.well-known/oauth-authorization-server
+   ```
+2. [ ] Save current responses for comparison
 
-### Quality Gate Validation
+**After Implementation:**
 
-Run full quality gate after each phase AND at the end:
+1. [ ] Start dev server: `pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev`
+2. [ ] Test protected resource endpoint - response matches original
+3. [ ] Test auth server endpoint - response matches original
+4. [ ] Check logs - User-Agent appears in requests
+5. [ ] Test error case - remove `CLERK_PUBLISHABLE_KEY`, expect 500 with helpful message
+6. [ ] Verify no `@clerk/mcp-tools` in `node_modules`
+
+### Quality Gate Execution
+
+Run full quality gate sequence:
 
 ```bash
 #!/bin/bash
-# quality-gate.sh
+# From repository root
 
-set -e
+echo "=== OAuth Metadata Internalization Quality Gate ==="
 
-echo "=== Quality Gate ==="
 echo "1. Clean install..."
-pnpm i
+pnpm i || exit 1
 
 echo "2. Type generation..."
-pnpm type-gen
+pnpm type-gen || exit 1
 
 echo "3. Build..."
-pnpm build
+pnpm build || exit 1
 
 echo "4. Type check..."
-pnpm type-check
+pnpm type-check || exit 1
 
 echo "5. Lint..."
-pnpm lint -- --fix
+pnpm lint -- --fix || exit 1
 
 echo "6. SDK docs..."
-pnpm -F @oaknational/oak-curriculum-sdk docs:all
+pnpm -F @oaknational/oak-curriculum-sdk docs:all || exit 1
 
 echo "7. Format..."
-pnpm format
+pnpm format || exit 1
 
 echo "8. Markdown lint..."
-pnpm markdownlint
+pnpm markdownlint || exit 1
 
 echo "9. Unit tests..."
-pnpm test
+pnpm test || exit 1
 
 echo "10. E2E tests..."
-pnpm test:e2e
+pnpm test:e2e || exit 1
 
 echo "✅ All quality gates passed!"
 ```
@@ -492,28 +442,26 @@ echo "✅ All quality gates passed!"
 
 ### If Issues Arise
 
-**Immediate Rollback:**
+**Immediate Rollback (< 2 minutes):**
 
 ```bash
-# 1. Revert auth-routes.ts changes
-git checkout HEAD -- apps/oak-curriculum-mcp-streamable-http/src/auth-routes.ts
+# 1. Revert all changes
+git checkout HEAD -- apps/oak-curriculum-mcp-streamable-http/src/
 
-# 2. Reinstall @clerk/mcp-tools
+# 2. Reinstall dependency
 pnpm add @clerk/mcp-tools@^0.3.1
 
-# 3. Remove new metadata folder
-rm -rf apps/oak-curriculum-mcp-streamable-http/src/auth/mcp-auth/metadata
-
-# 4. Run quality gate
+# 3. Verify
 pnpm i && pnpm build && pnpm test
 ```
 
-**Prevention:**
+### Prevention
 
-- Each phase has quality gate checkpoint
-- Tests written first ensure correctness
-- No changes to existing auth middleware (already working)
-- New code is isolated in `metadata/` folder
+- Small, focused change (2 files only)
+- Tests written first (TDD)
+- Quality gates after each phase
+- No changes to existing auth middleware
+- OAuth E2E tests catch regressions
 
 ---
 
@@ -521,79 +469,76 @@ pnpm i && pnpm build && pnpm test
 
 ### Risks: MINIMAL ⭐
 
-| Risk                   | Probability | Impact | Mitigation                           |
-| ---------------------- | ----------- | ------ | ------------------------------------ |
-| Breaking OAuth flow    | Low         | High   | Full E2E tests, gradual rollout      |
-| Type errors            | Very Low    | Low    | Strict TypeScript, no shortcuts      |
-| Cache bugs             | Low         | Medium | Unit tests for cache, TTL validation |
-| Metadata format errors | Very Low    | Medium | RFC compliance tests, validation     |
-| Missing dependencies   | Very Low    | Low    | Explicit error messages              |
+| Risk                      | Probability | Impact | Mitigation                       |
+| ------------------------- | ----------- | ------ | -------------------------------- |
+| Breaking OAuth flow       | Very Low    | High   | E2E tests catch this immediately |
+| Incorrect metadata format | Very Low    | Medium | RFC compliance tests             |
+| Missing env var handling  | Very Low    | Low    | Explicit tests for this          |
+| Type errors               | Very Low    | Low    | Strict TypeScript                |
 
-### Why Low Risk?
+### Why Very Low Risk?
 
-1. ✅ **Simple Logic**: Just data transformation and HTTP
-2. ✅ **Well-Defined Standards**: RFC 9728 and RFC 8414 are clear
-3. ✅ **Comprehensive Tests**: TDD ensures correctness
-4. ✅ **No Breaking Changes**: Existing auth middleware unchanged
-5. ✅ **Easy Rollback**: Can revert in < 2 minutes
-
----
-
-## Success Metrics
-
-### Code Quality Metrics
-
-- [ ] Test coverage ≥ 95% for new code
-- [ ] Zero linter errors
-- [ ] Zero type errors
-- [ ] All functions documented with JSDoc
-- [ ] All tests pass consistently
-
-### Performance Metrics
-
-- [ ] OAuth metadata cached (1-hour TTL)
-- [ ] Network calls reduced by ~99% (due to caching)
-- [ ] No increase in response time
-- [ ] Timeout protection prevents hangs
-
-### Maintainability Metrics
-
-- [ ] Code is self-documenting via types and docs
-- [ ] Pure functions are easy to reason about
-- [ ] Tests serve as living documentation
-- [ ] No external dependency on `@clerk/mcp-tools`
+1. ✅ **Trivial logic**: Just data transformation and HTTP proxy
+2. ✅ **Well-defined RFCs**: RFC 9728 and RFC 8414 are clear specs
+3. ✅ **TDD approach**: Tests prove correctness before shipping
+4. ✅ **No auth changes**: Existing middleware untouched
+5. ✅ **Easy rollback**: Single git revert + pnpm add
 
 ---
 
 ## Timeline Estimate
 
-### Development (TDD)
+### TDD Development
 
-- **Phase 1** (Pure Functions): 30 minutes
-  - Write 14 tests
-  - Implement 3 pure functions
-  - Run quality gate
+- **Phase 1** (Tests First): 10 minutes
+  - Write 7 failing integration tests
+  - Verify they fail (RED)
 
-- **Phase 2** (Fetch Functions): 30 minutes
-  - Write 10 mocked integration tests
-  - Implement fetch with caching
-  - Run quality gate
+- **Phase 2** (Implementation): 15 minutes
+  - Implement 3 functions (~80 lines)
+  - Make all tests pass (GREEN)
 
-- **Phase 3** (Express Handlers): 20 minutes
-  - Write 13 tests
-  - Implement 2 handlers
-  - Run quality gate
+- **Phase 3** (Refactor): 5 minutes
+  - Add JSDoc
+  - Improve error messages
+  - Run quality checks (GREEN)
 
-- **Phase 4** (Integration & Cleanup): 10 minutes
-  - Update imports
+- **Phase 4** (Integration): 5 minutes
+  - Update imports in `auth-routes.ts`
   - Remove dependency
   - Run full quality gate
 
-**Total Estimated Time: 90 minutes**
+**Total Estimated Time: 35 minutes**
 
-### Buffer: 30 minutes for unexpected issues
+### No Buffer Needed
 
-**Total with Buffer: 2 hours**
+This is simple work with clear steps. 35 minutes is realistic.
+
+---
+
+## Success Metrics
+
+### Code Quality
+
+- ✅ Test coverage ≥ 95% for new code
+- ✅ Zero linter errors
+- ✅ Zero type errors
+- ✅ JSDoc on all exported functions
+- ✅ LOC < 200 (simpler than original package)
+
+### Functionality
+
+- ✅ OAuth metadata endpoints return identical responses
+- ✅ User-Agent header identifies our application
+- ✅ Timeout protection prevents hangs
+- ✅ Error messages are helpful and actionable
+
+### Maintainability
+
+- ✅ Code is self-documenting
+- ✅ No external dependency
+- ✅ Tests serve as living documentation
+- ✅ Easy to modify in future
 
 ---
 
@@ -601,59 +546,60 @@ pnpm i && pnpm build && pnpm test
 
 ### TDD Workflow (CRITICAL)
 
-For each function, follow this exact workflow:
+**For EACH function:**
 
 ```text
 1. RED:   Write test(s) first → Run → Confirm they FAIL
 2. GREEN: Write minimal code to make tests PASS
-3. REFACTOR: Improve code while keeping tests GREEN
-4. QUALITY GATE: Run full suite after each function
+3. REFACTOR: Improve code quality while keeping tests GREEN
 ```
 
-**Never write code before tests!**
+**Never write code before tests.**
 
 ### Type Safety
 
+From `@rules.md`:
+
 - Use `readonly` for all data structures
-- Use `as const` for literal values
 - Never use `any`, `as`, `!`, `Record<string, unknown>`
-- Import types with `type` keyword: `import type { ... }`
+- Import types with `type` keyword: `import type { Request } from 'express'`
+- Let TypeScript infer where possible
 
 ### Error Messages
 
-All errors should be:
+All errors must be:
 
-- **Specific**: Include the failing value/context
+- **Specific**: Include the failing value
 - **Actionable**: Tell user what to do
-- **Helpful**: Link to docs or RFCs when appropriate
+- **Helpful**: Link to docs if appropriate
 
 Example:
 
 ```typescript
 throw new Error(
-  `Invalid Clerk publishable key format. Expected pk_test_* or pk_live_*, got: ${key}. ` +
+  `CLERK_PUBLISHABLE_KEY environment variable is required. ` +
     `See: https://clerk.com/docs/references/backend/overview#publishable-key`,
 );
 ```
 
 ### Documentation
 
-Every function needs:
+Every exported function needs JSDoc:
 
 ````typescript
 /**
- * Brief one-line description.
+ * One-line description.
  *
  * Longer explanation if needed. Mention RFC compliance.
  *
- * @param paramName - Description
+ * @param name - Description
  * @returns Description
- * @throws Error description and when
+ * @throws Error description
  *
  * @example
  * ```typescript
- * const result = myFunction('input');
- * // Returns: expected output
+ * const url = deriveFapiUrl('pk_test_xyz');
+ * // Returns: 'https://clerk.domain'
  * ```
  */
 ````
@@ -662,7 +608,7 @@ Every function needs:
 
 ## References
 
-### RFCs
+### Standards
 
 - [RFC 9728](https://datatracker.ietf.org/doc/html/rfc9728) - OAuth 2.0 Protected Resource Metadata
 - [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414) - OAuth 2.0 Authorization Server Metadata
@@ -671,34 +617,59 @@ Every function needs:
 
 - `.agent/directives-and-memory/rules.md` - Code quality rules
 - `docs/agent-guidance/testing-strategy.md` - Testing approach
-- Existing `auth/mcp-auth/` code - Reference implementation
+- `.agent/experience/2025-11-16-execution-vs-architecture.md` - "Could it be simpler?" principle
 
 ### Clerk Documentation
 
-- [Clerk Publishable Keys](https://clerk.com/docs/references/backend/overview#publishable-key)
-- [Clerk OAuth](https://clerk.com/docs/authentication/social-connections/oauth)
+- [Publishable Keys](https://clerk.com/docs/references/backend/overview#publishable-key)
+- [OAuth Configuration](https://clerk.com/docs/authentication/social-connections/oauth)
+
+---
+
+## Architectural Lessons Applied
+
+### From Recent Experience
+
+**The First Question:** "Could it be simpler?"
+
+- ✅ Yes - 2 files instead of 13
+- ✅ Yes - no caching (we don't want it)
+- ✅ Yes - flat structure (no premature folders)
+
+**Show the Thinking:**
+
+- This plan explicitly states WHY we chose 2 files
+- It explains WHAT we're optimizing for (simplicity)
+- It shows HOW this aligns with principles
+
+**Test Pyramid Discipline:**
+
+- Pure function → tested through handlers
+- Handlers → integration tests (they integrate units)
+- Full flow → existing E2E tests (no new tests needed)
 
 ---
 
 ## Approval Checklist
 
-Before starting implementation:
+### Before Starting
 
 - [ ] Plan reviewed and approved
-- [ ] Architecture design validated
-- [ ] Test strategy confirmed
-- [ ] Quality gate process understood
-- [ ] Rollback strategy documented
-- [ ] Time estimate reasonable
+- [ ] Goals clearly understood (no caching, remove dependency)
+- [ ] Architecture validated (2 files is sufficient)
+- [ ] TDD approach confirmed
+- [ ] Time estimate reasonable (35 minutes)
 
-After implementation:
+### After Completion
 
 - [ ] All acceptance criteria met
 - [ ] All quality gates passed
-- [ ] E2E validation successful
-- [ ] Documentation complete
-- [ ] Code reviewed (if applicable)
+- [ ] Manual smoke test successful
+- [ ] No regressions in E2E tests
+- [ ] Ready to merge
 
 ---
 
 **END OF PLAN**
+
+**Remember:** Simplicity is a feature, not a limitation. Two files. Zero caching. Full control.
