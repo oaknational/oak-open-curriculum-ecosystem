@@ -106,7 +106,7 @@
 
 ## Backlog / Tidy-ups
 
-- **Logging standardisation** — Adopt the shared `@oaknational/mcp-logger` in `apps/oak-curriculum-mcp-streamable-http`, wire `LOG_LEVEL` and `MCP_STREAMABLE_HTTP_LOG_FILE` through the central logger factory, and delete the bespoke logger once feature parity is reached.
+- **Logging standardisation** — Adopt the shared `@oaknational/mcp-logger` in `apps/oak-curriculum-mcp-streamable-http`, wire `LOG_LEVEL` through the central logger factory, and delete the bespoke logger once feature parity is reached.
 
 ## Completed
 

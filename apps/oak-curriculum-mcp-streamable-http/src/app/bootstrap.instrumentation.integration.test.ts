@@ -83,9 +83,13 @@ describe('bootstrap instrumentation', () => {
 
     createApp({ runtimeConfig, logger });
 
+    // Note: registerPublicOAuthMetadata phase is skipped when DANGEROUSLY_DISABLE_AUTH is true
     const phases = [
       'setupBaseMiddleware',
-      'applySecurity',
+      'createCorsMiddleware',
+      'createDnsRebindingMiddleware',
+      'addNoCacheToErrors',
+      'setupGlobalAuthContext',
       'initializeCoreEndpoints',
       'setupAuthRoutes',
     ];

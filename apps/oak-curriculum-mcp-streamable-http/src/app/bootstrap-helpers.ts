@@ -13,7 +13,8 @@ import { redactHeaders } from '../logging/header-redaction.js';
 
 export type BootstrapPhaseName =
   | 'setupBaseMiddleware'
-  | 'applySecurity'
+  | 'createCorsMiddleware'
+  | 'createDnsRebindingMiddleware'
   | 'registerPublicOAuthMetadata'
   | 'addNoCacheToErrors'
   | 'setupGlobalAuthContext'

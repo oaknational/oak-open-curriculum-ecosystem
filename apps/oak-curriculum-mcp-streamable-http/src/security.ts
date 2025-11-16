@@ -101,8 +101,8 @@ export function createCorsMiddleware(
     },
     credentials: false,
     allowedHeaders: isSession
-      ? ['Content-Type', 'Authorization', 'mcp-session-id']
-      : ['Content-Type', 'Authorization'],
+      ? ['Content-Type', 'Authorization', 'mcp-protocol-version', 'mcp-session-id']
+      : ['Content-Type', 'Authorization', 'mcp-protocol-version'],
     // CRITICAL: MCP clients need WWW-Authenticate header for OAuth discovery
     exposedHeaders: isSession ? ['Mcp-Session-Id', 'WWW-Authenticate'] : ['WWW-Authenticate'],
     maxAge: 600,

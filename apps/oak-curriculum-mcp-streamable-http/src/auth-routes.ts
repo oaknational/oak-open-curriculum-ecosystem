@@ -44,7 +44,7 @@ export function registerPublicOAuthMetadataEndpoints(
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
   const metadataHandler = protectedResourceHandlerClerk({
-    scopes_supported: ['mcp:invoke', 'mcp:read'],
+    scopes_supported: ['openid', 'email'],
   });
 
   // RFC 9470 compliant OAuth Protected Resource Metadata endpoint

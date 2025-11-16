@@ -48,6 +48,8 @@ function deriveMcpCanonicalUri(
   return undefined;
 }
 
+const CorsModeSchema = z.enum(['allow_all', 'explicit', 'automatic']).default('automatic');
+
 const EnvSchema = z.object({
   OAK_API_KEY: z.string().min(1, 'OAK_API_KEY is required'),
   // Clerk Authentication
@@ -62,6 +64,7 @@ const EnvSchema = z.object({
   DANGEROUSLY_DISABLE_AUTH: z.enum(['true', 'false']).optional(),
   ALLOWED_HOSTS: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
+  CORS_MODE: CorsModeSchema.optional(),
   // Logging
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info').optional(),
   ENVIRONMENT_OVERRIDE: z.string().optional(),

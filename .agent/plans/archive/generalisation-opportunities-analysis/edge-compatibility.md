@@ -219,7 +219,7 @@ strategy:
         command: 'npm test'
       - name: deno
         version: '1.x'
-        command: 'deno test --allow-all'
+        command: 'deno test --allow_all'
       - name: bun
         version: '1.x'
         command: 'bun test'

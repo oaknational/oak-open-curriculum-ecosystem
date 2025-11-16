@@ -23,14 +23,14 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.status).toBe(200);
     });
 
-    it('applies CORS headers with different origin (allow-all mode)', async () => {
+    it('applies CORS headers with different origin (allow_all mode)', async () => {
       const app = createApp();
       const res = await request(app)
         .get('/')
         .set('Host', 'localhost')
         .set('Origin', 'http://totally-different.com');
 
-      // Allow-all mode reflects any origin back
+      // allow_all mode reflects any origin back
       expect(res.headers['access-control-allow-origin']).toBe('http://totally-different.com');
       expect(res.status).toBe(200);
     });

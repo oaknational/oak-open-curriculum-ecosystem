@@ -18,14 +18,13 @@ This reference lists the environment variables and platform settings required to
 
 ## Optional Environment Variables
 
-| Variable                       | Default Behaviour                                                                 | Usage                                                                                    |
-| ------------------------------ | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ALLOWED_HOSTS`                | Localhost allow-list, or `VERCEL_URL` + localhost entries if `VERCEL_URL` present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
-| `ALLOWED_ORIGINS`              | Localhost origins, or `https://${VERCEL_URL}` + localhost if `VERCEL_URL` present | Override to expand the CORS allow-list                                                   |
-| `REMOTE_MCP_MODE`              | `stateless` (recommended)                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
-| `LOG_LEVEL`                    | `info`                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
-| `MCP_STREAMABLE_HTTP_LOG_FILE` | `apps/oak-curriculum-mcp-streamable-http/.logs/dev-server.log`                    | Override the file sink used by the in-process logger                                     |
-| `DANGEROUSLY_DISABLE_AUTH`     | **Must remain unset/`false`**                                                     | Local development only; never enable in Vercel environments                              |
+| Variable                   | Default Behaviour                                                                 | Usage                                                                                    |
+| -------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`            | Localhost allow-list, or `VERCEL_URL` + localhost entries if `VERCEL_URL` present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
+| `ALLOWED_ORIGINS`          | Localhost origins, or `https://${VERCEL_URL}` + localhost if `VERCEL_URL` present | Override to expand the CORS allow-list                                                   |
+| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
+| `LOG_LEVEL`                | `info`                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
+| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                     | Local development only; never enable in Vercel environments                              |
 
 ## Preview vs Production Notes
 

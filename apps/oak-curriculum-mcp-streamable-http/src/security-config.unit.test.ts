@@ -1,49 +1,101 @@
 import { describe, it, expect } from 'vitest';
-import { resolveAllowedOrigins } from './security-config.js';
+import { resolveAllowedOrigins, resolveCorsMode } from './security-config.js';
 
 /**
- * Unit tests for resolveAllowedOrigins pure function.
+ * Unit tests for CORS configuration resolution.
  *
- * This function determines CORS origin allow-list based on:
- * 1. Explicit configuration (highest priority)
- * 2. Vercel deployment detection (production)
- * 3. Undefined (local dev - enables allow-all mode)
+ * Tests prove that three explicit CORS modes work correctly:
+ * 1. 'allow_all' - permits all origins (headers, origins, everything)
+ * 2. 'explicit' - only allows specified origins from ALLOWED_ORIGINS
+ * 3. 'automatic' - smart default (all in dev, self-only in Vercel)
  */
+
+describe('resolveCorsMode', () => {
+  it('returns "allow_all" when CORS_MODE is "allow_all"', () => {
+    const result = resolveCorsMode('allow_all');
+    expect(result).toBe('allow_all');
+  });
+
+  it('returns "explicit" when CORS_MODE is "explicit"', () => {
+    const result = resolveCorsMode('explicit');
+    expect(result).toBe('explicit');
+  });
+
+  it('returns "automatic" when CORS_MODE is "automatic"', () => {
+    const result = resolveCorsMode('automatic');
+    expect(result).toBe('automatic');
+  });
+
+  it('returns "automatic" when CORS_MODE is undefined (default)', () => {
+    const result = resolveCorsMode(undefined);
+    expect(result).toBe('automatic');
+  });
+
+  it('returns "automatic" when CORS_MODE is empty string', () => {
+    const result = resolveCorsMode('');
+    expect(result).toBe('automatic');
+  });
+});
+
 describe('resolveAllowedOrigins', () => {
-  it('returns undefined for local dev (enables allow-all CORS)', () => {
-    const result = resolveAllowedOrigins(undefined, undefined);
-
-    // Local dev should allow any origin for good DX
-    expect(result).toBeUndefined();
+  describe('allow_all mode', () => {
+    it('returns undefined (allow_all) in all scenarios', () => {
+      expect(resolveAllowedOrigins('allow_all', undefined, undefined)).toBeUndefined();
+      expect(
+        resolveAllowedOrigins('allow_all', ['https://example.com'], undefined),
+      ).toBeUndefined();
+      expect(resolveAllowedOrigins('allow_all', undefined, 'myapp.vercel.app')).toBeUndefined();
+      expect(
+        resolveAllowedOrigins('allow_all', ['https://example.com'], 'myapp.vercel.app'),
+      ).toBeUndefined();
+    });
   });
 
-  it('returns configured origins when explicitly provided', () => {
-    const configured = ['https://example.com', 'https://test.com'];
-    const result = resolveAllowedOrigins(configured, undefined);
+  describe('explicit mode', () => {
+    it('returns configured origins when provided', () => {
+      const configured = ['https://example.com', 'https://test.com'];
+      const result = resolveAllowedOrigins('explicit', configured, undefined);
+      expect(result).toBe(configured);
+    });
 
-    // Explicit config always wins
-    expect(result).toBe(configured);
+    it('returns empty array when no origins configured (blocks all)', () => {
+      const result = resolveAllowedOrigins('explicit', undefined, 'myapp.vercel.app');
+      expect(result).toEqual([]);
+    });
+
+    it('ignores Vercel host when origins are explicitly configured', () => {
+      const configured = ['https://explicit.com'];
+      const result = resolveAllowedOrigins('explicit', configured, 'myapp.vercel.app');
+      expect(result).toBe(configured);
+    });
   });
 
-  it('returns Vercel URL for Vercel deployments', () => {
-    const result = resolveAllowedOrigins(undefined, 'myapp.vercel.app');
+  describe('automatic mode', () => {
+    it('returns undefined for local dev (enables allow_all CORS)', () => {
+      const result = resolveAllowedOrigins('automatic', undefined, undefined);
+      expect(result).toBeUndefined();
+    });
 
-    // Vercel deployments get tight security - only allow their own URL
-    expect(result).toEqual(['https://myapp.vercel.app']);
-  });
+    it('returns configured origins when explicitly provided', () => {
+      const configured = ['https://example.com', 'https://test.com'];
+      const result = resolveAllowedOrigins('automatic', configured, undefined);
+      expect(result).toBe(configured);
+    });
 
-  it('prefers explicit configuration over Vercel host', () => {
-    const configured = ['https://explicit.com'];
-    const result = resolveAllowedOrigins(configured, 'myapp.vercel.app');
+    it('returns Vercel URL for Vercel deployments', () => {
+      const result = resolveAllowedOrigins('automatic', undefined, 'myapp.vercel.app');
+      expect(result).toEqual(['https://myapp.vercel.app']);
+    });
 
-    // Explicit config has highest priority
-    expect(result).toBe(configured);
-  });
+    it('prefers explicit configuration over Vercel host', () => {
+      const configured = ['https://explicit.com'];
+      const result = resolveAllowedOrigins('automatic', configured, 'myapp.vercel.app');
+      expect(result).toBe(configured);
+    });
 
-  it('returns undefined when Vercel host is empty string', () => {
-    const result = resolveAllowedOrigins(undefined, '');
-
-    // Empty Vercel host is effectively no Vercel host
-    expect(result).toBeUndefined();
+    it('returns undefined when Vercel host is empty string', () => {
+      const result = resolveAllowedOrigins('automatic', undefined, '');
+      expect(result).toBeUndefined();
+    });
   });
 });

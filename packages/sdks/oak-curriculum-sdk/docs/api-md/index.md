@@ -1,6 +1,6 @@
 # Oak Curriculum SDK — API (Markdown)
 
-Generated: 2025-11-16T17:03:56.874Z
+Generated: 2025-11-16T23:08:30.826Z
 
 ## Contents
 
@@ -9,9 +9,7 @@ Generated: 2025-11-16T17:03:56.874Z
 ```ts
 import { createOakClient } from '@oaknational/oak-curriculum-sdk';
 const client = createOakClient('YOUR_API_KEY');
-const res = await client.GET('/lessons/{lesson}/transcript', {
-  params: { path: { lesson: 'lesson-slug' } },
-});
+const res = await client.GET('/lessons/{lesson}/transcript', { params: { path: { lesson: 'lesson-slug' } } });
 if (res.error) throw res.error;
 console.log(res.data);
 ```

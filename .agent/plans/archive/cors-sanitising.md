@@ -337,7 +337,7 @@ describe('resolveAllowedOrigins', () => {
   // ... existing tests ...
 
   describe('desired behavior (allow all origins when not configured)', () => {
-    it('returns undefined when no config and no vercelHost (to enable allow-all mode)', () => {
+    it('returns undefined when no config and no vercelHost (to enable allow_all mode)', () => {
       const result = resolveAllowedOrigins(undefined, undefined);
 
       // DESIRED: undefined to signal "allow all origins"
@@ -400,7 +400,7 @@ import { describe, it, expect } from 'vitest';
 import { resolveAllowedOrigins } from './security-config.js';
 
 describe('resolveAllowedOrigins', () => {
-  it('returns undefined when no configuration (enables allow-all CORS)', () => {
+  it('returns undefined when no configuration (enables allow_all CORS)', () => {
     const result = resolveAllowedOrigins(undefined, undefined);
 
     expect(result).toBeUndefined();
@@ -472,7 +472,7 @@ it('should add CORS headers when Origin is present and no allow-list', () => {
 **After**: Update comment to clarify this is an edge case test:
 
 ```typescript
-it('adds CORS headers in allow-all mode (edge case: manual undefined pass)', () => {
+it('adds CORS headers in allow_all mode (edge case: manual undefined pass)', () => {
   // NOTE: In production, resolveAllowedOrigins() returns undefined when no config is set.
   // This tests the CORS middleware behavior when it receives undefined.
   const middleware = createWebSecurityMiddleware('stateless', ['localhost'], undefined);
@@ -492,7 +492,7 @@ it('adds CORS headers in allow-all mode (edge case: manual undefined pass)', () 
 
   middleware(req, res, next);
 
-  // In allow-all mode, CORS headers should be added
+  // In allow_all mode, CORS headers should be added
   expect(res.setHeader).toHaveBeenCalledWith('Access-Control-Allow-Origin', 'http://example.com');
   expect(next).toHaveBeenCalled();
 });
@@ -501,7 +501,7 @@ it('adds CORS headers in allow-all mode (edge case: manual undefined pass)', () 
 **Better yet**: Create explicit test for the CORS middleware with undefined:
 
 ```typescript
-describe('createCorsMiddleware - allow-all mode', () => {
+describe('createCorsMiddleware - allow_all mode', () => {
   it('allows any origin when allowedOrigins is undefined', () => {
     const corsMiddleware = createCorsMiddleware('stateless', undefined);
 
@@ -574,7 +574,7 @@ describe('createCorsMiddleware - allow-all mode', () => {
 
 **Integration Tests**:
 
-- [ ] Update `security.unit.test.ts` to clarify allow-all mode test
+- [ ] Update `security.unit.test.ts` to clarify allow_all mode test
 - [ ] Add explicit CORS middleware tests for `undefined` input
 - [ ] All integration tests pass
 
@@ -609,7 +609,7 @@ describe('createCorsMiddleware - allow-all mode', () => {
 
 **File**: `apps/oak-curriculum-mcp-streamable-http/src/security.unit.test.ts`
 
-- [ ] Update/clarify allow-all mode test
+- [ ] Update/clarify allow_all mode test
 - [ ] Add explicit tests for `createCorsMiddleware(mode, undefined)`
 
 ### Test Deletions
@@ -682,7 +682,7 @@ pnpm test security-config.unit.test.ts
 
 ### Step 2: Update Integration Tests
 
-1. Update `security.unit.test.ts` to clarify allow-all mode
+1. Update `security.unit.test.ts` to clarify allow_all mode
 2. Add explicit tests for CORS middleware with `undefined`
 
 **After changes**:
@@ -749,7 +749,7 @@ Commit, with an information commit message.
 # Start server
 pnpm -F @oaknational/oak-curriculum-mcp-streamable-http dev
 
-# Test 1: Landing page HAS CORS with allow-all mode (no ALLOWED_ORIGINS set)
+# Test 1: Landing page HAS CORS with allow_all mode (no ALLOWED_ORIGINS set)
 curl -v http://localhost:3333/ \
   -H "Origin: http://example.com" \
   -H "Host: localhost"
