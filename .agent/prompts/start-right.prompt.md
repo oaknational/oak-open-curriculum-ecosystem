@@ -1,0 +1,1 @@
+read @rules.md @testing-strategy.md and take to heart that it is encouraged to take a step back and consider if work is delivering value through impact at the system level, not just fixing the problem right in front of you

@@ -191,54 +191,6 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     expect(res.status).toBe(401);
   });
 
-  // Test #1: CORS WWW-Authenticate Header Exposure (CRITICAL for OAuth Discovery)
-  it('exposes WWW-Authenticate header via CORS for OAuth discovery', async () => {
-    const res = await request(app)
-      .post('/mcp')
-      .set('Origin', 'http://localhost:3000')
-      .set('Accept', 'application/json, text/event-stream')
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-
-    expect(res.status).toBe(401);
-
-    // CRITICAL: Verify Access-Control-Expose-Headers includes WWW-Authenticate
-    // Without this, browser-based MCP clients cannot read the header for OAuth discovery
-    const exposedHeaders = res.headers['access-control-expose-headers'];
-    expect(exposedHeaders).toBeDefined();
-    if (typeof exposedHeaders === 'string') {
-      expect(exposedHeaders.toLowerCase()).toContain('www-authenticate');
-    }
-
-    // Also verify the WWW-Authenticate header itself is present
-    expect(res.headers['www-authenticate']).toBeDefined();
-    expect(res.headers['www-authenticate']).toContain('Bearer');
-  });
-
-  // Test #2: OPTIONS Preflight Requests (Required for CORS)
-  it('allows OPTIONS preflight requests without authentication for CORS', async () => {
-    const res = await request(app)
-      .options('/mcp')
-      .set('Origin', 'http://localhost:3000')
-      .set('Access-Control-Request-Method', 'POST')
-      .set('Access-Control-Request-Headers', 'content-type,authorization,accept');
-
-    // OPTIONS should succeed without auth (CORS preflight)
-    expect([200, 204]).toContain(res.status);
-
-    // Verify CORS headers are present
-    const allowMethods = res.headers['access-control-allow-methods'];
-    expect(allowMethods).toBeDefined();
-    if (typeof allowMethods === 'string') {
-      expect(allowMethods.toUpperCase()).toContain('POST');
-    }
-
-    const allowHeaders = res.headers['access-control-allow-headers'];
-    expect(allowHeaders).toBeDefined();
-    if (typeof allowHeaders === 'string') {
-      expect(allowHeaders.toLowerCase()).toContain('authorization');
-    }
-  });
-
   // Test #3: Complete OAuth Discovery Chain (End-to-End Flow)
   it('supports complete OAuth discovery chain as MCP clients would follow', async () => {
     // Step 1: Client calls /mcp without auth → 401 with WWW-Authenticate

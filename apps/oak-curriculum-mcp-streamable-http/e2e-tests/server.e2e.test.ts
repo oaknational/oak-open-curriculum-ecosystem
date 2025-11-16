@@ -176,29 +176,6 @@ describe('Oak Curriculum MCP Streamable HTTP - E2E', () => {
 
   // Auth bypass tests moved to auth-bypass.e2e.test.ts (dedicated test file)
 
-  it('blocks unknown Host by DNS-rebinding protection', async () => {
-    process.env.OAK_API_KEY = process.env.OAK_API_KEY ?? 'test';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Host', 'malicious.example.com')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    expect([403, 401]).toContain(res.status);
-  });
-
-  it('blocks disallowed origin by CORS', async () => {
-    process.env.ALLOWED_ORIGINS = 'https://allowed.example.com';
-    const app = createApp();
-    const res = await request(app)
-      .post('/mcp')
-      .set('Origin', 'https://not-allowed.example.com')
-      .set('Accept', ACCEPT)
-      .send({ jsonrpc: '2.0', id: '1', method: 'tools/list' });
-    // Express CORS denies request before our handler; status can be 500 or 401 depending on flow
-    expect([401, 500]).toContain(res.status);
-  });
-
   // TODO: Add E2E test with real Clerk token once automated flow is available.
   // Requires: OAuth Device / programmatic flow support from Clerk.
 });

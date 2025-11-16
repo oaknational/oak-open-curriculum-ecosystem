@@ -75,3 +75,35 @@ export function createCorsMiddleware(
     optionsSuccessStatus: 204,
   });
 }
+
+/**
+ * Creates a combined web security middleware that applies both DNS rebinding
+ * protection and CORS in a single middleware chain.
+ *
+ * For debugging: Apply this ONLY to browser-accessible routes (landing page).
+ * Protocol routes don't need browser security.
+ *
+ * @param mode - The mode for CORS configuration ('stateless' or 'session')
+ * @param allowedHosts - Array of allowed hostnames for DNS rebinding protection
+ * @param allowedOrigins - Optional array of allowed origins for CORS
+ * @returns Express middleware that chains DNS rebinding protection and CORS
+ */
+export function createWebSecurityMiddleware(
+  mode: 'stateless' | 'session',
+  allowedHosts: readonly string[],
+  allowedOrigins: readonly string[] | undefined,
+): express.RequestHandler {
+  const dnsProtection = dnsRebindingProtection(allowedHosts);
+  const corsMiddleware = createCorsMiddleware(mode, allowedOrigins);
+
+  // Chain both middlewares together
+  return (req, res, next) => {
+    dnsProtection(req, res, (err) => {
+      if (err) {
+        next(err);
+        return;
+      }
+      corsMiddleware(req, res, next);
+    });
+  };
+}

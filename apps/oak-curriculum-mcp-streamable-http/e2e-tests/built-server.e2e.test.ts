@@ -111,17 +111,4 @@ describe('Built Server (dist/src/index.js)', () => {
     // With auth disabled, should get 200 or similar success
     expect(response.status).toBeLessThan(400);
   });
-
-  it('should handle CORS preflight requests', async () => {
-    const response = await fetch(`http://localhost:${String(testPort)}/healthz`, {
-      method: 'OPTIONS',
-      headers: {
-        Origin: 'http://localhost:3000',
-        'Access-Control-Request-Method': 'GET',
-      },
-    });
-
-    expect(response.status).toBe(204);
-    expect(response.headers.get('access-control-allow-origin')).toBeTruthy();
-  });
 });

@@ -1,0 +1,149 @@
+import request from 'supertest';
+import { describe, it, expect } from 'vitest';
+import { createApp } from '../src/application.js';
+
+/**
+ * E2E tests for selective web security application.
+ *
+ * Tests that web security (CORS + DNS rebinding protection) is applied
+ * ONLY to the landing page (/) and NOT to protocol routes.
+ */
+describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
+  describe('Landing page (/) - HAS web security', () => {
+    it('applies CORS headers to landing page', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/')
+        .set('Host', 'localhost')
+        .set('Origin', 'http://example.com');
+
+      // Should have CORS headers (web security applied)
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.status).toBe(200);
+    });
+
+    it('blocks requests with invalid Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'evil.com');
+
+      // Should be blocked by DNS rebinding protection
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(res.body.error).toContain('host not allowed');
+    });
+
+    it('allows requests with valid Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'localhost');
+
+      // Should not be blocked (valid host)
+      expect(res.status).toBe(200);
+      expect(res.type).toBe('text/html');
+    });
+  });
+
+  describe('Protocol routes - NO web security', () => {
+    it('/healthz does NOT have CORS headers', async () => {
+      const app = createApp();
+      const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
+
+      // Should NOT have CORS headers (no web security)
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.status).toBe(200);
+    });
+
+    it('/healthz HEAD does NOT have CORS headers', async () => {
+      const app = createApp();
+      const res = await request(app).head('/healthz').set('Origin', 'http://example.com');
+
+      // Should NOT have CORS headers (no web security)
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.status).toBe(200);
+    });
+
+    it('/.well-known/oauth-protected-resource does NOT have CORS headers', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Origin', 'http://example.com');
+
+      // Should NOT have CORS headers (no web security)
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.status).toBe(200);
+    });
+
+    it('/.well-known/oauth-authorization-server does NOT have CORS headers', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Origin', 'http://example.com');
+
+      // Should NOT have CORS headers (no web security)
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('DNS rebinding protection - ONLY on landing page', () => {
+    it('landing page blocks evil.com Host header', async () => {
+      const app = createApp();
+      const res = await request(app).get('/').set('Host', 'evil.com');
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty('error');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      expect(res.body.error).toContain('host not allowed');
+    });
+
+    it('/healthz allows any Host header (no DNS protection)', async () => {
+      const app = createApp();
+      const res = await request(app).get('/healthz').set('Host', 'evil.com');
+
+      // Should NOT be blocked - no DNS rebinding protection on health checks
+      expect(res.status).toBe(200);
+    });
+
+    it('OAuth metadata allows any Host header (no DNS protection)', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-protected-resource')
+        .set('Host', 'evil.com');
+
+      // Should NOT be blocked - no DNS rebinding protection on OAuth metadata
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('CORS behavior - ONLY on landing page', () => {
+    it('landing page has CORS with allowed origin', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/')
+        .set('Host', 'localhost')
+        .set('Origin', 'http://allowed-origin.com');
+
+      // CORS allows all origins when no explicit allow-list
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.status).toBe(200);
+    });
+
+    it('/healthz has NO CORS headers even with Origin', async () => {
+      const app = createApp();
+      const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
+
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.headers['access-control-expose-headers']).toBeUndefined();
+    });
+
+    it('OAuth metadata has NO CORS headers even with Origin', async () => {
+      const app = createApp();
+      const res = await request(app)
+        .get('/.well-known/oauth-authorization-server')
+        .set('Origin', 'http://example.com');
+
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.headers['access-control-expose-headers']).toBeUndefined();
+    });
+  });
+});

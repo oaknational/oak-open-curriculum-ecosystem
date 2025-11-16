@@ -8,7 +8,7 @@ import { createPhasedTimer, startTimer, type Duration, type Logger } from '@oakn
 import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page.js';
-import { dnsRebindingProtection, createCorsMiddleware } from './security.js';
+import { createWebSecurityMiddleware } from './security.js';
 import { registerHandlers, type ToolHandlerOverrides } from './handlers.js';
 import { createHttpLogger } from './logging/index.js';
 import { loadRuntimeConfig, type RuntimeConfig } from './runtime-config.js';
@@ -67,10 +67,17 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     setupBaseMiddleware(app, log);
   });
 
-  // Phase 2: Security (DNS rebinding protection, CORS with WWW-Authenticate exposed)
-  const security = createSecurityConfig(runtimeConfig);
-  const corsMw = runBootstrapPhase(log, bootstrapTimer, 'applySecurity', appCounter, () =>
-    applySecurity(app, security.mode, security.allowedHosts, security.allowedOrigins),
+  // Phase 2: Security - Create web security middleware (DNS rebinding + CORS)
+  // NOT applied globally - only to browser-accessible routes (landing page)
+  // For debugging: Remove web security middleware from protocol routes to eliminate them
+  // as potential sources of issues. Protocol routes are protected by OAuth.
+  const securityConfig = createSecurityConfig(runtimeConfig);
+  const webSecurityMw = runBootstrapPhase(log, bootstrapTimer, 'applySecurity', appCounter, () =>
+    createWebSecurityMiddleware(
+      securityConfig.mode,
+      securityConfig.allowedHosts,
+      securityConfig.allowedOrigins,
+    ),
   );
 
   // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
@@ -87,16 +94,18 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   });
 
   // Phase 4: Core endpoints (MCP server init, health checks, OAuth metadata discovery)
+  // Health checks have NO web security middleware
   const { transport: coreTransport, ready } = runBootstrapPhase(
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
     appCounter,
-    () => initializeCoreEndpoints(app, corsMw, options, runtimeConfig, log),
+    () => initializeCoreEndpoints(app, options, runtimeConfig, log),
   );
 
   // Phase 5: Static assets and landing page
-  mountStaticContentRoutes(app, runtimeConfig.vercelHostname);
+  // Web security applied ONLY to landing page (/)
+  mountStaticContentRoutes(app, webSecurityMw, log, runtimeConfig.vercelHostname);
 
   // Phase 6: Path-specific /mcp middleware (Accept header validation, MCP readiness check)
   // This runs AFTER clerkMiddleware, so auth context is available here.
@@ -123,7 +132,6 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
 function initializeCoreEndpoints(
   app: Express,
-  corsMw: RequestHandler,
   options: CreateAppOptions | undefined,
   runtimeConfig: RuntimeConfig,
   log: Logger,
@@ -163,32 +171,46 @@ function initializeCoreEndpoints(
     },
   );
 
-  addHealthEndpoints(app, corsMw);
+  addHealthEndpoints(app, log);
 
   return { transport, ready: serverReady };
 }
 
-function addHealthEndpoints(app: Express, corsMw: RequestHandler): void {
-  app.head('/healthz', corsMw, (req, res) => {
-    void req;
+function addHealthEndpoints(app: Express, log: Logger): void {
+  // No web security middleware - monitoring tools don't need browser security
+  app.head('/healthz', (req, res) => {
+    log.debug('healthz.head', { path: req.path, method: req.method });
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end();
   });
-  app.get('/healthz', corsMw, (req, res) => {
-    void req;
+  app.get('/healthz', (req, res) => {
+    log.debug('healthz.get', { path: req.path, method: req.method });
     res
       .type('application/json')
       .send(JSON.stringify({ status: 'ok', mode: 'streamable-http', auth: 'required-for-post' }));
   });
 }
 
-function mountStaticContentRoutes(app: Express, vercelHostname?: string): void {
-  mountStaticAssets(app);
-  addRootLandingPage(app, vercelHostname);
+function mountStaticContentRoutes(
+  app: Express,
+  webSecurityMw: RequestHandler,
+  log: Logger,
+  vercelHostname?: string,
+): void {
+  addRootLandingPage(app, webSecurityMw, log, vercelHostname); // Web security ONLY here - register route first
+  mountStaticAssets(app); // No web security - register static middleware after routes
 }
 
-function addRootLandingPage(app: Express, vercelHostname?: string): void {
-  app.get('/', (_req, res) => {
+function addRootLandingPage(
+  app: Express,
+  webSecurityMw: RequestHandler,
+  log: Logger,
+  vercelHostname?: string,
+): void {
+  // Landing page is the ONLY browser-accessible route
+  // Apply web security (DNS rebinding + CORS) here only
+  app.get('/', webSecurityMw, (req, res) => {
+    log.debug('landing.get', { path: req.path, method: req.method });
     res.type('text/html').send(renderLandingPageHtml(vercelHostname));
   });
 }
@@ -202,18 +224,6 @@ function mountStaticAssets(app: Express): void {
   if (chosen) {
     app.use(expressStatic(chosen, { etag: true, maxAge: '1d' }));
   }
-}
-
-function applySecurity(
-  app: Express,
-  mode: 'stateless' | 'session',
-  allowedHosts: readonly string[],
-  allowedOrigins: readonly string[] | undefined,
-): RequestHandler {
-  app.use(dnsRebindingProtection(allowedHosts));
-  const corsMw = createCorsMiddleware(mode, allowedOrigins);
-  app.use(corsMw);
-  return corsMw;
 }
 
 function initializeCoreMcpServer(): {
