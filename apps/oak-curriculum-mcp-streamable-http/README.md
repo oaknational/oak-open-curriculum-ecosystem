@@ -1044,7 +1044,7 @@ We removed all workarounds and fixed the root cause:
 
 1. **Middleware Re-ordering**: Moved OAuth metadata endpoint registration to Phase 2.5 (BEFORE `clerkMiddleware` in Phase 3). This ensures these endpoints are never subject to authentication checks, making them truly public per RFC 9470.
 
-2. **Global No-Cache Headers**: Added Phase 2.6 middleware that intercepts ALL responses with status codes >= 300 (redirects, errors) and adds strict no-cache headers. This prevents Vercel from caching error responses and enables proper logging and diagnosis.
+2. **Error Response No-Cache Headers**: Added Phase 2.6 middleware that intercepts error responses (status codes >= 400) and adds strict no-cache headers. This prevents Vercel from caching error responses and enables proper logging and diagnosis.
 
 3. **Removed Workaround Code**:
    - Deleted `clerk-workaround.ts` and its middleware

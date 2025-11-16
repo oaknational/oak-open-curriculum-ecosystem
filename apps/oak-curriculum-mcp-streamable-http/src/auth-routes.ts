@@ -26,36 +26,13 @@ function registerUnauthenticatedRoutes(
 }
 
 /**
- * Middleware that adds explicit no-cache headers to prevent caching at any level.
- *
- * These headers ensure that OAuth metadata is never cached by:
- * - Origin servers
- * - CDN/proxy layers
- * - Client browsers
- * - Any intermediate caches
- *
- * This is critical for OAuth metadata endpoints to ensure clients always receive
- * current authentication configuration.
- */
-function addNoCacheHeaders(handler: RequestHandler): RequestHandler {
-  return (req, res, next) => {
-    // Prevent caching at all levels (origin, CDN, browser, proxies)
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.setHeader('Pragma', 'no-cache'); // HTTP/1.0 compatibility
-    res.setHeader('Expires', '0'); // Legacy clients
-
-    handler(req, res, next);
-  };
-}
-
-/**
  * Registers PUBLIC OAuth metadata endpoints BEFORE clerkMiddleware.
  *
  * These endpoints MUST be publicly accessible without authentication per RFC 9470.
  * They are registered BEFORE clerkMiddleware to avoid any authentication checks.
  *
- * NOTE: All OAuth metadata endpoints explicitly set no-cache headers to prevent
- * caching at origin, CDN, client, or any intermediate layer (including Vercel).
+ * Standard HTTP caching applies (no evidence that preventing caching helps).
+ * RFC 9728 has no requirements regarding cache headers.
  */
 export function registerPublicOAuthMetadataEndpoints(
   app: Express,
@@ -66,23 +43,18 @@ export function registerPublicOAuthMetadataEndpoints(
 
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
-  const metadataHandler = addNoCacheHeaders(
-    protectedResourceHandlerClerk({
-      scopes_supported: ['mcp:invoke', 'mcp:read'],
-    }),
-  );
+  const metadataHandler = protectedResourceHandlerClerk({
+    scopes_supported: ['mcp:invoke', 'mcp:read'],
+  });
 
   // RFC 9470 compliant OAuth Protected Resource Metadata endpoint
   app.get('/.well-known/oauth-protected-resource', metadataHandler);
 
   if (runtimeConfig.useStubTools) {
     // In stub mode we expose additional metadata for tooling to detect bypass scenarios
-    app.get(
-      '/.well-known/mcp-stub-mode',
-      addNoCacheHeaders((_req, res) => {
-        res.json({ stubMode: true });
-      }),
-    );
+    app.get('/.well-known/mcp-stub-mode', (_req, res) => {
+      res.json({ stubMode: true });
+    });
   }
 }
 

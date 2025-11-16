@@ -69,20 +69,17 @@ curl -s https://native-hippo-15.clerk.accounts.dev/.well-known/oauth-authorizati
 
 ---
 
-### Test 4: No-Cache Headers Present (✅ PASS)
+### Test 4: OAuth Metadata Accessible (✅ PASS)
 
 ```bash
-curl -i http://localhost:3333/.well-known/oauth-protected-resource | grep -i cache
+curl -I http://localhost:3333/.well-known/oauth-protected-resource
 ```
 
-**Result**:
+**Result**: `HTTP/1.1 200 OK`
 
-```text
-Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate
-Pragma: no-cache
-```
+✅ **Proves**: OAuth metadata endpoint is publicly accessible without authentication.
 
-✅ **Proves**: OAuth metadata is correctly marked as non-cacheable per RFC 9728.
+**Note**: We previously added no-cache headers without evidence or RFC requirement. Removed in favor of standard HTTP caching semantics. RFC 9728 and RFC 9470 have no caching requirements. Error responses still use no-cache (see README.md for documented rationale).
 
 ---
 
@@ -127,7 +124,7 @@ The OAuth discovery chain works correctly without the Authorization Server Metad
 2. ✅ Clerk AS metadata is directly accessible (no proxy)
 3. ✅ Proxy endpoint correctly returns 404 (removed)
 4. ✅ OAuth enforcement works (401 challenges)
-5. ✅ No-cache headers present
+5. ✅ OAuth metadata endpoint publicly accessible
 
 **The proxy endpoint was unnecessary and has been successfully removed.**
 

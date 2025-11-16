@@ -46,8 +46,8 @@ curl -s http://localhost:3333/.well-known/oauth-protected-resource | jq .
 # 3. Verify Clerk AS metadata is directly accessible (no proxy)
 curl -s https://[your-clerk-domain]/.well-known/oauth-authorization-server | jq .
 
-# 4. Verify no-cache headers
-curl -i http://localhost:3333/.well-known/oauth-protected-resource | grep -i cache
+# 4. Verify OAuth metadata is accessible
+curl -I http://localhost:3333/.well-known/oauth-protected-resource
 ```
 
 ### Inspector CLI Test (Note: Limited by OAuth flow)

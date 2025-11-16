@@ -12,7 +12,6 @@ import { createApp } from './application.js';
  * Instead, we verify the code path executes successfully.
  *
  * The actual HTTP behavior of these routes is tested in E2E tests.
- * The no-cache header middleware wrapper is tested in auth-routes-no-cache.integration.test.ts
  */
 
 describe('OAuth Metadata Endpoints - Code Integration', () => {

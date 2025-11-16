@@ -78,18 +78,16 @@ echo ""
 echo "───────────────────────────────────────────────────────"
 echo ""
 
-# Test 4: No-cache headers present
-echo -e "${BLUE}Test 4: No-cache headers present${NC}"
-echo "Command: curl -i http://localhost:3333/.well-known/oauth-protected-resource | grep -i cache"
+# Test 4: OAuth metadata accessible
+echo -e "${BLUE}Test 4: OAuth metadata returns 200 OK${NC}"
+echo "Command: curl -I http://localhost:3333/.well-known/oauth-protected-resource"
 echo ""
-CACHE_HEADERS=$(curl -s -i http://localhost:3333/.well-known/oauth-protected-resource | grep -i cache)
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333/.well-known/oauth-protected-resource)
 
-if echo "$CACHE_HEADERS" | grep -q "no-cache" && echo "$CACHE_HEADERS" | grep -q "no-store"; then
-    echo "$CACHE_HEADERS"
-    echo ""
-    echo -e "${GREEN}✅ PASS${NC}: No-cache headers present"
+if [ "$STATUS" = "200" ]; then
+    echo -e "${GREEN}✅ PASS${NC}: OAuth metadata endpoint accessible"
 else
-    echo -e "${RED}❌ FAIL${NC}: Missing no-cache headers"
+    echo -e "${RED}❌ FAIL${NC}: Expected 200, got $STATUS"
     exit 1
 fi
 echo ""
@@ -104,7 +102,7 @@ echo ""
 echo "✅ Proxy endpoint removed (404)"
 echo "✅ Protected resource metadata works (200)"
 echo "✅ Clerk AS metadata directly accessible (200)"
-echo "✅ No-cache headers present"
+echo "✅ OAuth metadata endpoint accessible (200)"
 echo ""
 echo "🎯 Conclusion: OAuth discovery works without the proxy!"
 echo ""
