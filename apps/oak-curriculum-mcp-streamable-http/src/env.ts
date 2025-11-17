@@ -4,12 +4,20 @@ const ModeSchema = z.enum(['stateless', 'session']).default('stateless');
 
 /**
  * Derives BASE_URL from Vercel system environment variables if not explicitly set.
+ *
  * Priority:
  * 1. Explicit BASE_URL (if valid URL)
  * 2. VERCEL_URL (with https:// prefix)
  * 3. undefined (will be derived from request host at runtime)
  *
- * See: https://vercel.com/docs/environment-variables/system-environment-variables
+ * Note: This function uses only VERCEL_URL for BASE_URL derivation. The security
+ * configuration (DNS rebinding protection and CORS) separately uses all three Vercel
+ * URL variables (VERCEL_URL, VERCEL_BRANCH_URL, VERCEL_PROJECT_PRODUCTION_URL) to
+ * allow access from all deployment URLs.
+ *
+ * @param env - Environment variables object
+ * @returns Derived base URL or undefined
+ * @see https://vercel.com/docs/environment-variables/system-environment-variables
  */
 function deriveBaseUrl(env: NodeJS.ProcessEnv): string | undefined {
   const explicit = env.BASE_URL;
@@ -70,8 +78,9 @@ const EnvSchema = z.object({
   ENVIRONMENT_OVERRIDE: z.string().optional(),
   NODE_ENV: z.string().optional(),
   // Vercel System Environment Variables (read-only, for derivation logic)
-  VERCEL_URL: z.string().optional(),
   VERCEL_ENV: z.enum(['production', 'preview', 'development']).optional(),
+  VERCEL_URL: z.string().optional(),
+  VERCEL_BRANCH_URL: z.string().optional(),
   VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
 });
 

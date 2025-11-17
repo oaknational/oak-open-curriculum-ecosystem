@@ -18,18 +18,36 @@ This reference lists the environment variables and platform settings required to
 
 ## Optional Environment Variables
 
-| Variable                   | Default Behaviour                                                                 | Usage                                                                                    |
-| -------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `ALLOWED_HOSTS`            | Localhost allow-list, or `VERCEL_URL` + localhost entries if `VERCEL_URL` present | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
-| `ALLOWED_ORIGINS`          | Localhost origins, or `https://${VERCEL_URL}` + localhost if `VERCEL_URL` present | Override to expand the CORS allow-list                                                   |
-| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                         | See "MCP Transport Modes" section below for detailed explanation                         |
-| `LOG_LEVEL`                | `info`                                                                            | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
-| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                     | Local development only; never enable in Vercel environments                              |
+| Variable                   | Default Behaviour                                                                                              | Usage                                                                                    |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `ALLOWED_HOSTS`            | Localhost allow-list, or all Vercel deployment URLs + localhost entries if any Vercel URL present              | Override to provide a custom DNS allow-list for the DNS-rebinding guard                  |
+| `ALLOWED_ORIGINS`          | Localhost origins, or all Vercel deployment URLs (as `https://` origins) + localhost if any Vercel URL present | Override to expand the CORS allow-list                                                   |
+| `REMOTE_MCP_MODE`          | `stateless` (recommended)                                                                                      | See "MCP Transport Modes" section below for detailed explanation                         |
+| `LOG_LEVEL`                | `info`                                                                                                         | Useful for smoke harness diagnostics; server-side logging tidy-up tracked in the backlog |
+| `DANGEROUSLY_DISABLE_AUTH` | **Must remain unset/`false`**                                                                                  | Local development only; never enable in Vercel environments                              |
 
 ## Preview vs Production Notes
 
-- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist. If you rely on the automatic defaults, Vercel will supply `VERCEL_URL`, which becomes the allow-listed host/origin.
-- **Production Deployment**: Mirrors the preview configuration. Provide explicit `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` only when you need to extend beyond the defaults derived from `VERCEL_URL`.
+- **Preview Deployments**: Configure the same keys as production. Clerk restricts tokens by domain, so ensure preview URLs are present in the Clerk allowlist. If you rely on the automatic defaults, Vercel automatically supplies three deployment URLs (`VERCEL_URL`, `VERCEL_BRANCH_URL`, `VERCEL_PROJECT_PRODUCTION_URL`), and all of them become allow-listed hosts/origins.
+- **Production Deployment**: Mirrors the preview configuration. All three Vercel deployment URLs are automatically allow-listed. Provide explicit `ALLOWED_HOSTS` / `ALLOWED_ORIGINS` only when you need to extend beyond or replace the defaults derived from Vercel's system environment variables.
+
+## Vercel Deployment URLs
+
+Vercel provides three system environment variables for deployment URLs. When deployed on Vercel, all three URLs are automatically included in the allowed hosts for DNS rebinding protection and CORS origins (in automatic mode):
+
+| Variable                        | Description                                                | Example                           |
+| ------------------------------- | ---------------------------------------------------------- | --------------------------------- |
+| `VERCEL_URL`                    | Unique URL for this specific deployment                    | `myapp-abc123.vercel.app`         |
+| `VERCEL_BRANCH_URL`             | Branch-specific URL (same for all deployments of a branch) | `myapp-git-feat-oauth.vercel.app` |
+| `VERCEL_PROJECT_PRODUCTION_URL` | Production URL (same across all production deployments)    | `myapp.vercel.app`                |
+
+This ensures that:
+
+- Preview deployments work via their unique deployment URL and branch URL
+- Production deployments are accessible via the unique deployment URL, production URL, and any custom domains
+- You don't need to manually configure `ALLOWED_HOSTS` or `ALLOWED_ORIGINS` for standard Vercel deployments
+
+For more information, see [Vercel's System Environment Variables documentation](https://vercel.com/docs/environment-variables/system-environment-variables).
 
 ## MCP Transport Modes
 

@@ -41,7 +41,7 @@ function createMockRuntimeConfig(): RuntimeConfig {
     env,
     dangerouslyDisableAuth: false,
     useStubTools: false,
-    vercelHostname: undefined,
+    vercelHostnames: [],
   };
 }
 
