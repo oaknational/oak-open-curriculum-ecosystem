@@ -1,8 +1,9 @@
-import { json as expressJson } from 'express';
+import express, { json as expressJson } from 'express';
 import type { Express, RequestHandler } from 'express';
 import {
   createRequestLogger,
   logLevelToSeverityNumber,
+  createPhasedTimer,
   type Logger,
   type PhasedTimer,
 } from '@oaknational/mcp-logger';
@@ -137,4 +138,62 @@ export function createMcpReadinessMiddleware(ready: Promise<void>, log: Logger):
       });
     }
   };
+}
+
+/**
+ * Logs bootstrap completion with timing and route count information.
+ *
+ * @param log - Logger instance
+ * @param appId - Application instance identifier
+ * @param timer - Phased timer tracking bootstrap phases
+ * @param routeCount - Number of registered routes
+ */
+export function logBootstrapComplete(
+  log: Logger,
+  appId: number,
+  timer: PhasedTimer,
+  routeCount: number,
+): void {
+  const totalDuration = timer.end();
+  log.info('bootstrap.complete', {
+    appId,
+    duration: totalDuration.formatted,
+    durationMs: totalDuration.ms,
+    routeCount,
+  });
+}
+
+/**
+ * Logs registered routes for diagnostic purposes.
+ *
+ * @param log - Logger instance
+ * @param appId - Application instance identifier
+ * @param routes - Array of route objects from express-list-routes
+ */
+export function logRegisteredRoutes(log: Logger, appId: number, routes: unknown[]): void {
+  log.debug('bootstrap.routes.registered', { appId, routes });
+}
+
+/**
+ * Type for Express app with app ID tracking.
+ */
+export type ExpressWithAppId = Express & { __appId?: number };
+
+/**
+ * Initializes a new Express app instance with tracking and timing infrastructure.
+ *
+ * @param appCounter - Current app instance counter (will be incremented)
+ * @param log - Logger instance
+ * @returns Object containing the initialized app, timer, and app ID
+ */
+export function initializeAppInstance(
+  appCounter: number,
+  log: Logger,
+): { app: ExpressWithAppId; timer: PhasedTimer; appId: number } {
+  const appId = appCounter + 1;
+  log.debug(`Creating app #${String(appId)}`);
+  const app: ExpressWithAppId = express();
+  app.__appId = appId;
+  const timer = createPhasedTimer();
+  return { app, timer, appId };
 }

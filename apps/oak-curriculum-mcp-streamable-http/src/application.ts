@@ -1,10 +1,10 @@
-import express, { static as expressStatic } from 'express';
+import { static as expressStatic } from 'express';
 import type { Express, RequestHandler } from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
-import { createPhasedTimer, startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
+import { startTimer, type Duration, type Logger } from '@oaknational/mcp-logger';
 import listRoutes from 'express-list-routes';
 
 import { renderLandingPageHtml } from './landing-page.js';
@@ -19,6 +19,10 @@ import {
   runBootstrapPhase,
   setupBaseMiddleware,
   createMcpReadinessMiddleware,
+  logBootstrapComplete,
+  logRegisteredRoutes,
+  initializeAppInstance,
+  type ExpressWithAppId,
 } from './app/bootstrap-helpers.js';
 import { setupOAuthAndCaching } from './app/oauth-and-caching-setup.js';
 
@@ -27,8 +31,6 @@ export interface CreateAppOptions {
   readonly runtimeConfig?: RuntimeConfig;
   readonly logger?: Logger;
 }
-
-type ExpressWithAppId = Express & { __appId?: number };
 
 let appCounter = 0;
 
@@ -51,19 +53,15 @@ let appCounter = 0;
  */
 
 export function createApp(options?: CreateAppOptions): ExpressWithAppId {
-  appCounter++;
   const runtimeConfig = options?.runtimeConfig ?? loadRuntimeConfig();
   const log =
     options?.logger ?? createHttpLogger(runtimeConfig, { name: 'streamable-http:app-instance' });
 
-  log.debug(`Creating app #${String(appCounter)}`);
-  const app: ExpressWithAppId = express();
-  app.__appId = appCounter;
-
-  const bootstrapTimer = createPhasedTimer();
+  const { app, timer: bootstrapTimer, appId } = initializeAppInstance(appCounter, log);
+  appCounter = appId;
 
   // Phase 1: Base middleware (request entry, JSON parsing, correlation, logging, error handling)
-  runBootstrapPhase(log, bootstrapTimer, 'setupBaseMiddleware', appCounter, () => {
+  runBootstrapPhase(log, bootstrapTimer, 'setupBaseMiddleware', appId, () => {
     setupBaseMiddleware(app, log);
   });
 
@@ -71,18 +69,14 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // CORS: Applied globally to ALL routes (protocol routes need it for browser clients)
   // DNS rebinding: Only applied to browser-accessible routes (landing page)
   const securityConfig = createSecurityConfig(runtimeConfig);
-  const corsMiddleware = runBootstrapPhase(
-    log,
-    bootstrapTimer,
-    'createCorsMiddleware',
-    appCounter,
-    () => createCorsMiddleware(securityConfig.mode, securityConfig.allowedOrigins),
+  const corsMiddleware = runBootstrapPhase(log, bootstrapTimer, 'createCorsMiddleware', appId, () =>
+    createCorsMiddleware(securityConfig.mode, securityConfig.allowedOrigins),
   );
   const dnsRebindingMiddleware = runBootstrapPhase(
     log,
     bootstrapTimer,
     'createDnsRebindingMiddleware',
-    appCounter,
+    appId,
     () => dnsRebindingProtection(securityConfig.allowedHosts),
   );
 
@@ -92,13 +86,13 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
   // Phase 2.5 & 2.6: OAuth metadata endpoints and error caching prevention
   // These endpoints MUST be publicly accessible without authentication per RFC 9470.
   // Registering them before clerkMiddleware ensures they never go through auth checks.
-  setupOAuthAndCaching(app, runtimeConfig, log, bootstrapTimer, appCounter);
+  setupOAuthAndCaching(app, runtimeConfig, log, bootstrapTimer, appId);
 
   // Phase 3: Global auth context (clerkMiddleware registered globally - BEFORE path-specific middleware)
   // CRITICAL: This must run early so auth context is available to all subsequent middleware.
   // Per Clerk best practices, clerkMiddleware is applied globally but doesn't block any requests.
   // Actual enforcement happens later via mcpAuthClerk on specific routes.
-  runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appCounter, () => {
+  runBootstrapPhase(log, bootstrapTimer, 'setupGlobalAuthContext', appId, () => {
     setupGlobalAuthContext(app, runtimeConfig, log);
   });
 
@@ -108,7 +102,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     log,
     bootstrapTimer,
     'initializeCoreEndpoints',
-    appCounter,
+    appId,
     () => initializeCoreEndpoints(app, options, runtimeConfig, log),
   );
 
@@ -123,19 +117,13 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
 
   // Phase 7: Auth routes (OAuth metadata endpoints, protected /mcp route handlers)
   // Needs coreTransport, so must run after initializeCoreEndpoints.
-  runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appCounter, () => {
+  runBootstrapPhase(log, bootstrapTimer, 'setupAuthRoutes', appId, () => {
     setupAuthRoutes(app, coreTransport, runtimeConfig, log);
   });
 
-  const totalDuration = bootstrapTimer.end();
-  log.info('bootstrap.complete', {
-    appId: appCounter,
-    duration: totalDuration.formatted,
-    durationMs: totalDuration.ms,
-    routeCount: listRoutes(app).length,
-  });
-
-  log.debug('bootstrap.routes.registered', { appId: appCounter, routes: listRoutes(app) });
+  const routes = listRoutes(app);
+  logBootstrapComplete(log, appId, bootstrapTimer, routes.length);
+  logRegisteredRoutes(log, appId, routes);
 
   return app;
 }

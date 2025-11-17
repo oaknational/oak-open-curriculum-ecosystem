@@ -158,8 +158,7 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
     );
     expect(body).toHaveProperty('scopes_supported');
     const scopes = (body as { scopes_supported?: string[] }).scopes_supported;
-    expect(scopes).toContain('mcp:invoke');
-    expect(scopes).toContain('mcp:read');
+    expect(scopes).toEqual(['openid', 'email']);
   });
 
   it('rejects invalid Bearer token with 401', async () => {

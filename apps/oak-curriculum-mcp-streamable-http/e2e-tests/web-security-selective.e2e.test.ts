@@ -88,33 +88,33 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
     });
   });
 
-  describe('Protocol routes - NO web security', () => {
-    it('/healthz does NOT have CORS headers', async () => {
+  describe('Protocol routes - CORS enabled for browser clients', () => {
+    it('/healthz has CORS headers for browser access', async () => {
       const app = createApp();
       const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
 
-      // Should NOT have CORS headers (no web security)
-      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      // CORS is applied globally to all routes (protocol routes need it for browser clients)
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
       expect(res.status).toBe(200);
     });
 
-    it('/healthz HEAD does NOT have CORS headers', async () => {
+    it('/healthz HEAD has CORS headers for browser access', async () => {
       const app = createApp();
       const res = await request(app).head('/healthz').set('Origin', 'http://example.com');
 
-      // Should NOT have CORS headers (no web security)
-      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      // CORS is applied globally to all routes (protocol routes need it for browser clients)
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
       expect(res.status).toBe(200);
     });
 
-    it('/.well-known/oauth-protected-resource does NOT have CORS headers', async () => {
+    it('/.well-known/oauth-protected-resource has CORS headers for browser access', async () => {
       const app = createApp();
       const res = await request(app)
         .get('/.well-known/oauth-protected-resource')
         .set('Origin', 'http://example.com');
 
-      // Should NOT have CORS headers (no web security)
-      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      // CORS is applied globally to all routes (protocol routes need it for browser clients)
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
       expect(res.status).toBe(200);
     });
   });
@@ -176,12 +176,12 @@ describe('Web Security (CORS + DNS Rebinding) - Selective Application', () => {
       expect(res.status).toBe(200);
     });
 
-    it('/healthz has NO CORS headers even with Origin', async () => {
+    it('/healthz has CORS headers (global CORS policy)', async () => {
       const app = createApp();
       const res = await request(app).get('/healthz').set('Origin', 'http://example.com');
 
-      expect(res.headers['access-control-allow-origin']).toBeUndefined();
-      expect(res.headers['access-control-expose-headers']).toBeUndefined();
+      expect(res.headers['access-control-allow-origin']).toBeDefined();
+      expect(res.headers['access-control-expose-headers']).toBeDefined();
     });
   });
 });

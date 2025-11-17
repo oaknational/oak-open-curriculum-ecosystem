@@ -46,6 +46,52 @@ function resolveAllowedHosts(
 }
 
 /**
+ * Resolves allowed origins for 'allow_all' mode.
+ * Always returns undefined to permit all origins.
+ *
+ * @returns undefined (enables allow_all CORS)
+ */
+function resolveAllowAll(): undefined {
+  return undefined;
+}
+
+/**
+ * Resolves allowed origins for 'explicit' mode.
+ * Returns configured origins, or empty array to block all if none provided.
+ *
+ * @param configured - Explicitly configured allowed origins from env
+ * @returns Array of allowed origins, or empty array to block all
+ */
+function resolveExplicitOrigins(configured: readonly string[] | undefined): readonly string[] {
+  if (configured && configured.length > 0) {
+    return configured;
+  }
+  return []; // Block all origins
+}
+
+/**
+ * Resolves allowed origins for 'automatic' mode.
+ * Smart behavior: uses explicit config if provided, Vercel host in production,
+ * or undefined in local dev (allows all).
+ *
+ * @param configured - Explicitly configured allowed origins from env
+ * @param vercelHost - Vercel deployment hostname (from VERCEL_URL)
+ * @returns Array of allowed origins, or undefined for local dev
+ */
+function resolveAutomaticOrigins(
+  configured: readonly string[] | undefined,
+  vercelHost: string | undefined,
+): readonly string[] | undefined {
+  if (configured && configured.length > 0) {
+    return configured;
+  }
+  if (vercelHost && vercelHost.length > 0) {
+    return [`https://${vercelHost}`];
+  }
+  return undefined; // Local dev - allow all
+}
+
+/**
  * Resolves the allowed origins for CORS configuration based on the mode.
  *
  * Three modes:
@@ -66,27 +112,14 @@ export function resolveAllowedOrigins(
   configured: readonly string[] | undefined,
   vercelHost: string | undefined,
 ): readonly string[] | undefined {
-  // Mode 1: allow_all always returns undefined (permits all origins)
   if (mode === 'allow_all') {
+    resolveAllowAll();
     return undefined;
   }
-
-  // Mode 2: explicit only uses configured origins, blocks all if none
   if (mode === 'explicit') {
-    if (configured && configured.length > 0) {
-      return configured;
-    }
-    return []; // Block all origins
+    return resolveExplicitOrigins(configured);
   }
-
-  // Mode 3: automatic - smart defaults
-  if (configured && configured.length > 0) {
-    return configured;
-  }
-  if (vercelHost && vercelHost.length > 0) {
-    return [`https://${vercelHost}`];
-  }
-  return undefined; // Local dev - allow all
+  return resolveAutomaticOrigins(configured, vercelHost);
 }
 
 export function createSecurityConfig(config: RuntimeConfig): {
