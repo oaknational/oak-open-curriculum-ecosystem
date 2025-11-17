@@ -1,7 +1,7 @@
 import type { Express, RequestHandler } from 'express';
 import type { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { clerkMiddleware } from '@clerk/express';
-import { protectedResourceHandlerClerk } from '@clerk/mcp-tools/express';
+import { generateClerkProtectedResourceMetadata } from '@clerk/mcp-tools/server';
 import { mcpAuthClerk } from './auth/mcp-auth/index.js';
 import type { Logger } from '@oaknational/mcp-logger';
 import { measureAuthSetupStep } from './auth-instrumentation.js';
@@ -43,12 +43,32 @@ export function registerPublicOAuthMetadataEndpoints(
 
   authLog.debug('Registering PUBLIC OAuth metadata endpoints (before auth middleware)');
 
-  const metadataHandler = protectedResourceHandlerClerk({
-    scopes_supported: ['openid', 'email'],
-  });
+  // Custom handler that sets resource field to canonical MCP server URI per MCP spec
+  app.get('/.well-known/oauth-protected-resource', (req, res) => {
+    const publishableKey = process.env.CLERK_PUBLISHABLE_KEY;
+    if (!publishableKey) {
+      throw new Error('CLERK_PUBLISHABLE_KEY environment variable is required');
+    }
 
-  // RFC 9470 compliant OAuth Protected Resource Metadata endpoint
-  app.get('/.well-known/oauth-protected-resource', metadataHandler);
+    const host = req.get('host');
+    if (!host) {
+      throw new Error('Cannot generate OAuth metadata: missing host header');
+    }
+
+    // Per MCP Authorization Spec: resource field must be the canonical URI of the MCP server
+    // Examples: https://mcp.example.com/mcp, http://localhost:3333/mcp
+    const resourceUrl = `${req.protocol}://${host}/mcp`;
+
+    const metadata = generateClerkProtectedResourceMetadata({
+      publishableKey,
+      resourceUrl,
+      properties: {
+        scopes_supported: ['openid', 'email'],
+      },
+    });
+
+    res.json(metadata);
+  });
 
   if (runtimeConfig.useStubTools) {
     // In stub mode we expose additional metadata for tooling to detect bypass scenarios

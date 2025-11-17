@@ -51,7 +51,7 @@ For any incoming HTTP request, middleware executes in this order:
    9b. Health Check Handler
    ↓
    [For GET /.well-known/oauth-protected-resource:]
-   9a. protectedResourceHandlerClerk (publicly accessible)
+   9a. Custom OAuth metadata handler (publicly accessible)
    ↓
    [For GET /.well-known/oauth-authorization-server:]
    9a. authServerMetadataHandlerClerk (publicly accessible)
@@ -198,7 +198,7 @@ Client Request
 [7] CORS
 [8] clerkMiddleware (global)
     ↓
-[9] protectedResourceHandlerClerk
+[9] Custom OAuth metadata handler
     ↓
 Response (200 OK + OAuth metadata JSON)
 ```
@@ -239,7 +239,7 @@ Response (200 OK + HTML)
 | Accept Header Validation       | MCP      | Ensures correct Accept header        | Yes (if invalid) | -                   |
 | MCP Readiness Check            | MCP      | Waits for server ready               | Yes (timeout)    | -                   |
 | mcpAuthClerk                   | Auth     | Validates OAuth tokens               | Yes (if invalid) | req.auth            |
-| protectedResourceHandlerClerk  | OAuth    | Returns OAuth metadata               | Yes              | -                   |
+| Custom OAuth metadata handler  | OAuth    | Returns OAuth metadata with /mcp URI | Yes              | -                   |
 | authServerMetadataHandlerClerk | OAuth    | Returns OAuth server metadata        | Yes              | -                   |
 | streamableHttpHandlerClerk     | MCP      | Handles MCP requests                 | Yes              | -                   |
 | Health Check Handler           | Health   | Returns health status                | Yes              | -                   |

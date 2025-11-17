@@ -240,6 +240,33 @@ describe('Auth Enforcement (E2E - Production Equivalent)', () => {
       }
     });
 
+    it('resource URL identifies the /mcp endpoint as the protected resource', async () => {
+      const res = await request(app).get('/.well-known/oauth-protected-resource');
+
+      expect(res.status).toBe(200);
+
+      const body: unknown = res.body;
+      expect(body).toHaveProperty('resource');
+
+      const resource = (body as { resource: unknown }).resource;
+      expect(typeof resource).toBe('string');
+
+      // Per RFC 9728, the resource field identifies what is actually protected
+      // The /mcp endpoint is the MCP resource being protected, not the whole server
+      expect(resource).toMatch(/^https?:\/\/127\.0\.0\.1:\d+\/mcp$/);
+
+      // The resource URL should specifically identify the /mcp endpoint
+      expect(resource).toContain('/mcp');
+
+      // Extract and validate the resource URL components
+      const resourceUrl = new URL(resource as string);
+      expect(resourceUrl.hostname).toBe('127.0.0.1');
+      expect(resourceUrl.pathname).toBe('/mcp');
+
+      // Auxiliary routes like / and /healthz are NOT part of the protected MCP resource
+      // Only the /mcp endpoint requires OAuth authentication
+    });
+
     it('WWW-Authenticate header conforms to RFC 6750 Bearer scheme', async () => {
       const res = await request(app)
         .post('/mcp')
