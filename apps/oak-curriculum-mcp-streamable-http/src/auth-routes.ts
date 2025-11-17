@@ -57,7 +57,7 @@ export function registerPublicOAuthMetadataEndpoints(
 
     // Per MCP Authorization Spec: resource field must be the canonical URI of the MCP server
     // Examples: https://mcp.example.com/mcp, http://localhost:3333/mcp
-    const resourceUrl = `${req.protocol}://${host}/mcp`;
+    const resourceUrl = `https://${host}/mcp`;
 
     const metadata = generateClerkProtectedResourceMetadata({
       publishableKey,

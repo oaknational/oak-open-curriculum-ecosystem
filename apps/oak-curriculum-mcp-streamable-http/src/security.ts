@@ -1,5 +1,6 @@
 import type express from 'express';
 import cors from 'cors';
+import type { Logger } from '@oaknational/mcp-logger';
 
 /**
  * Extracts the hostname from a Host header value, handling IPv6 addresses.
@@ -52,22 +53,30 @@ function compileHostMatchers(allowedHosts: readonly string[]): ((host: string) =
   return matchers;
 }
 
-export function dnsRebindingProtection(allowedHosts: readonly string[]): express.RequestHandler {
+export function dnsRebindingProtection(
+  log: Logger,
+  allowedHosts: readonly string[],
+): express.RequestHandler {
   const matchers = compileHostMatchers(allowedHosts);
   return (req, res, next) => {
     const hostHeader = req.headers.host;
     if (!hostHeader) {
+      log.warn('Forbidden: missing Host header');
       res.status(403).json({ error: 'Forbidden: missing Host header' });
       return;
     }
     const hostname = extractHostname(hostHeader).toLowerCase();
     if (!hostname) {
+      log.warn('Forbidden: invalid Host header format');
       res.status(403).json({ error: 'Forbidden: invalid Host header format' });
       return;
     }
     const isAllowed = matchers.length === 0 || matchers.some((m) => m(hostname));
     if (!isAllowed) {
-      res.status(403).json({ error: 'Forbidden: host not allowed' });
+      log.warn(
+        `Forbidden: host not allowed: ${hostname}. Allowed hosts: ${allowedHosts.join(', ')}`,
+      );
+      res.status(403).json({ error: `Forbidden: host not allowed: ${hostname}` });
       return;
     }
     next();
@@ -108,36 +117,4 @@ export function createCorsMiddleware(
     maxAge: 600,
     optionsSuccessStatus: 204,
   });
-}
-
-/**
- * Creates a combined web security middleware that applies both DNS rebinding
- * protection and CORS in a single middleware chain.
- *
- * For debugging: Apply this ONLY to browser-accessible routes (landing page).
- * Protocol routes don't need browser security.
- *
- * @param mode - The mode for CORS configuration ('stateless' or 'session')
- * @param allowedHosts - Array of allowed hostnames for DNS rebinding protection
- * @param allowedOrigins - Optional array of allowed origins for CORS
- * @returns Express middleware that chains DNS rebinding protection and CORS
- */
-export function createWebSecurityMiddleware(
-  mode: 'stateless' | 'session',
-  allowedHosts: readonly string[],
-  allowedOrigins: readonly string[] | undefined,
-): express.RequestHandler {
-  const dnsProtection = dnsRebindingProtection(allowedHosts);
-  const corsMiddleware = createCorsMiddleware(mode, allowedOrigins);
-
-  // Chain both middlewares together
-  return (req, res, next) => {
-    dnsProtection(req, res, (err) => {
-      if (err) {
-        next(err);
-        return;
-      }
-      corsMiddleware(req, res, next);
-    });
-  };
 }

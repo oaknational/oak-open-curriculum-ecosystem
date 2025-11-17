@@ -77,7 +77,7 @@ export function createApp(options?: CreateAppOptions): ExpressWithAppId {
     bootstrapTimer,
     'createDnsRebindingMiddleware',
     appId,
-    () => dnsRebindingProtection(securityConfig.allowedHosts),
+    () => dnsRebindingProtection(log, securityConfig.allowedHosts),
   );
 
   // Apply CORS globally to ALL routes

@@ -31,7 +31,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       // The resource URL should identify the /mcp endpoint as the protected resource
       // Per RFC 9728, the resource field identifies what is actually protected
-      expect(resource).toBe('http://example.com/mcp');
+      expect(resource).toBe('https://example.com/mcp');
     });
 
     it('resource URL uses http protocol for local development', async () => {
@@ -47,17 +47,17 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
       const resource = (body as { resource: unknown }).resource;
 
       // Local development should use http and include /mcp
-      expect(resource).toBe('http://localhost:3333/mcp');
+      expect(resource).toBe('https://localhost:3333/mcp');
     });
 
     it('resource URL matches request host header and includes /mcp path', async () => {
       const app = createApp();
 
       const testCases = [
-        { host: 'example.com', expected: 'http://example.com/mcp' },
-        { host: 'api.example.com', expected: 'http://api.example.com/mcp' },
-        { host: 'localhost:3333', expected: 'http://localhost:3333/mcp' },
-        { host: 'example.com:8080', expected: 'http://example.com:8080/mcp' },
+        { host: 'example.com', expected: 'https://example.com/mcp' },
+        { host: 'api.example.com', expected: 'https://api.example.com/mcp' },
+        { host: 'localhost:3333', expected: 'https://localhost:3333/mcp' },
+        { host: 'example.com:8080', expected: 'https://example.com:8080/mcp' },
       ];
 
       for (const { host, expected } of testCases) {
@@ -89,7 +89,7 @@ describe('OAuth Protected Resource Metadata (Integration)', () => {
 
       // Per RFC 9728, the resource field identifies what is actually protected
       // The /mcp endpoint is the MCP resource, auxiliary routes (/, /healthz) are not
-      expect(resource).toBe('http://api.example.com/mcp');
+      expect(resource).toBe('https://api.example.com/mcp');
 
       // The resource specifically identifies the MCP endpoint
       expect(resource).toMatch(/\/mcp$/);
