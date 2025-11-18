@@ -184,6 +184,9 @@ importers:
         specifier: ^4
         version: 4.1.12
     devDependencies:
+      '@axe-core/playwright':
+        specifier: ^4.10.2
+        version: 4.11.0(playwright-core@1.56.1)
       '@playwright/test':
         specifier: ^1.48.0
         version: 1.56.1

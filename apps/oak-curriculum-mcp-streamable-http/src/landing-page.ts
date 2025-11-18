@@ -65,8 +65,9 @@ const BODY_START = `
   <body>
     <main class="wrap" aria-labelledby="title">
       <img class="logo" src="/oak-national-academy-logo-512.png" alt="Oak National Academy logo" width="120" height="120" />
-      <h1 id="title">Oak Curriculum MCP - HTTP Server</h1>
-      <p class="meta">Status: ok • Route: <code>/mcp</code> • Auth: Bearer token required for POST</p>
+      <h1 id="title">Oak Curriculum MCP - Internal Alpha</h1>
+      <p>Access Oak National Academy's open curriculum resources via MCP directly in your favourite AI tool.</p>
+      <p class="meta">Status: ok • Route: <code>/mcp</code> • Auth: OAuth 2.1</p>
       <section class="card" aria-labelledby="snippet-title">
         <h2 id="snippet-title" class="sr-only">Client configuration snippet</h2>
         <p>Connect using this MCP client snippet:</p>
@@ -74,7 +75,7 @@ const BODY_START = `
 
 const BODY_END = `}
 </code></pre>
-        <p>See <a href="/.well-known/oauth-protected-resource">resource metadata</a> and POST to <code>/mcp</code> with a valid bearer token.</p>
+        <p>This server uses <a href="/.well-known/oauth-protected-resource">OAuth 2.1 authorization</a>. You will be prompted to log in. Currently only Oak staff have access. For details about the underlying curriculum data, see the <a href="https://open-api.thenational.academy/docs/about-oaks-api/api-overview">Oak Curriculum API documentation</a>.</p>
       </section>
     </main>
   </body>

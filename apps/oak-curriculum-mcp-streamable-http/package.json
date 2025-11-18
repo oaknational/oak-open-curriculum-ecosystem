@@ -25,7 +25,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "vitest run --config vitest.e2e.config.ts",
-    "test:e2e:built": "vitest run --config vitest.e2e.config.ts e2e-tests/built-server.e2e.test.ts"
+    "test:e2e:built": "vitest run --config vitest.e2e.config.ts e2e-tests/built-server.e2e.test.ts",
+    "test:ui": "playwright test"
   },
   "dependencies": {
     "@clerk/express": "^1.7.43",
@@ -42,6 +43,7 @@
     "zod": "^4"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.48.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
